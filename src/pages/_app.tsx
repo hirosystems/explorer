@@ -3,7 +3,9 @@ import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';
 import App, { AppContext } from 'next/app';
 import { Provider } from 'react-redux';
-import { store, RootState } from '../store';
+
+import { store } from '@store';
+import { RootState } from '@store/reducer';
 
 class MyApp extends App<ReduxWrapperAppProps<RootState>> {
   static async getInitialProps({ Component, ctx }: AppContext) {
