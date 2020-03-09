@@ -1,0 +1,42 @@
+{
+  "name": "@blockstack/explorer",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build && next export -o build",
+    "start": "NODE_ENV=production next start",
+    "lint": "yarn run lint:eslint && yarn run lint:prettier",
+    "lint:eslint": "eslint --ext .ts,.tsx ./src/ -f unix",
+    "lint:fix": "eslint --ext .ts,.tsx ./src/ -f unix --fix && prettier --write src/**/*.{ts,tsx} *.js",
+    "lint:prettier": "prettier --check src/**/*.{ts,tsx} *.js"
+  },
+  "dependencies": {
+    "@blockstack/ui": "^1.0.0-alpha.37",
+    "@reduxjs/toolkit": "^1.2.5",
+    "next": "canary",
+    "next-redux-wrapper": "^5.0.0",
+    "preact": "^10.2.1",
+    "preact-render-to-string": "^5.1.4",
+    "react": "github:preact-compat/react#1.0.0",
+    "react-dom": "github:preact-compat/react-dom#1.0.0",
+    "react-redux": "^7.2.0",
+    "react-ssr-prepass": "npm:preact-ssr-prepass@^1.0.1",
+    "styled-components": "^5.0.1"
+  },
+  "license": "LICENSE",
+  "prettier": "@blockstack/prettier-config",
+  "devDependencies": {
+    "@blockstack/prettier-config": "^0.0.5",
+    "@types/node": "^13.7.7",
+    "@types/react": "^16.9.23",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.18.3",
+    "prettier": "^1.19.1",
+    "typescript": "^3.8.3"
+  }
+}
