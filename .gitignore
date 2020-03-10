@@ -6,3 +6,5 @@ tests/screenshots/*
 .next
 .idea
 .DS_Store
+.now
+build

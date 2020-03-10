@@ -28,6 +28,7 @@
   "devDependencies": {
     "@blockstack/prettier-config": "^0.0.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "@types/next": "^9.0.0",
     "@types/node": "^13.7.7",
     "@types/react": "^16.9.23",
     "@types/react-redux": "^7.1.7",
