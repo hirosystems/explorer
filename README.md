@@ -1,2 +1,9 @@
-# .github
-Repository to hold defaults such as CONTRIBUTING and CODE_OF_CONDUCT
+# Stacks 2.0 Explorer
+
+### Getting started 
+
+To run in development mode:
+
+```sh
+yarn dev
+```
