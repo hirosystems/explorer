@@ -27,18 +27,26 @@
   "prettier": "@blockstack/prettier-config",
   "devDependencies": {
     "@blockstack/prettier-config": "^0.0.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/node": "^13.7.7",
     "@types/react": "^16.9.23",
     "@types/react-redux": "^7.1.7",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
+    "commitlint": "^8.3.5",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-jest": "^23.7.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.18.3",
+    "husky": "^4.2.3",
     "prettier": "^1.19.1",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.8.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
