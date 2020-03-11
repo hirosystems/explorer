@@ -3,6 +3,9 @@ import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';
 import App, { AppContext } from 'next/app';
 import { Provider } from 'react-redux';
+import { createGlobalStyle } from 'styled-components';
+
+const Fonts = createGlobalStyle`@import url('https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap');`;
 
 import { store } from '@store';
 import { RootState } from '@store/reducer';
@@ -20,6 +23,7 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <>
+            <Fonts />
             <CSSReset />
             <Component {...pageProps} />
           </>
