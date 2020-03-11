@@ -11,7 +11,7 @@
     "lint:prettier": "prettier --check src/**/*.{ts,tsx} *.js"
   },
   "dependencies": {
-    "@blockstack/ui": "^1.0.0-alpha.37",
+    "@blockstack/ui": "^1.1.0",
     "@reduxjs/toolkit": "^1.2.5",
     "next": "canary",
     "next-redux-wrapper": "^5.0.0",
