@@ -5,6 +5,9 @@ module.exports = {
     modern: true,
     polyfillsOptimization: true,
   },
+  env: {
+    apiServer: 'http://localhost:3000/api',
+  },
   webpack(config) {
     const splitChunks = config.optimization && config.optimization.splitChunks;
     if (splitChunks) {
