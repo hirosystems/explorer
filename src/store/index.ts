@@ -1,7 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { reducer } from '@store/reducer';
+import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-export const store = () =>
+import { transactionReducer } from './transactions';
+
+const middleware = getDefaultMiddleware({ thunk: true });
+
+const rootReducer = combineReducers({
+  transactions: transactionReducer,
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
+
+export const initStore = (preloadedState: RootState) =>
   configureStore({
-    reducer,
+    reducer: rootReducer,
+    devTools: true,
+    preloadedState,
+    middleware,
   });

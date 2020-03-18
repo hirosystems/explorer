@@ -7,13 +7,11 @@ import { createGlobalStyle } from 'styled-components';
 
 const Fonts = createGlobalStyle`@import url('https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap');`;
 
-import { store } from '@store';
-import { RootState } from '@store/reducer';
+import { RootState, initStore } from '@store';
 
 class MyApp extends App<ReduxWrapperAppProps<RootState>> {
   static async getInitialProps({ Component, ctx }: AppContext) {
     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-
     return { pageProps };
   }
 
@@ -33,4 +31,4 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
   }
 }
 
-export default withRedux(store)(MyApp);
+export default withRedux(initStore)(MyApp);

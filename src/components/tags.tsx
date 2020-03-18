@@ -31,7 +31,7 @@ const Label: React.FC = props => (
   <Text display="block" lineHeight="16px" fontSize="11px" fontWeight={600} color="white" {...props} />
 );
 
-export const Tag: React.FC<TagProps> = ({ type, ...rest }) => {
+export const Tag = ({ type, ...rest }: TagProps) => {
   return (
     <Flex
       height="24px"
