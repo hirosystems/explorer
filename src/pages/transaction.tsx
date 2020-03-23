@@ -21,7 +21,7 @@ const data = {
   post_conditions: 'lskdjfs',
   sponsored: true,
   state: 'success',
-  timestamp: 1583933098,
+  timestamp: 1584990894060,
 };
 
 const TransactionDetailsSection: React.FC = () => (

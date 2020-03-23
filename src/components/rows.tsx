@@ -3,22 +3,12 @@ import { Box, Flex, Text } from '@blockstack/ui';
 import { Badge } from '@components/badge';
 import { Caption } from '@components/typography';
 import { Card } from '@components/card';
+import { Timestamp } from '@components/timestamp';
 import { toSnakeCase } from '@common/utils';
 
-interface TxSchema {
-  txid: string;
-  sender: string;
-  recipient: string;
-  type: number;
-  fees: {
-    amount: string | number;
-    currency: string;
-  };
-  block: number;
-  post_conditions: string;
-  sponsored: boolean;
-  state: string;
-  timestamp: number;
+interface Fees {
+  amount: string | number;
+  currency: string;
 }
 
 interface TxSchema {
@@ -26,10 +16,7 @@ interface TxSchema {
   sender: string;
   recipient: string;
   type: number;
-  fees: {
-    amount: string | number;
-    currency: string;
-  };
+  fees: Fees;
   block: number;
   post_conditions: string;
   sponsored: boolean;
@@ -59,15 +46,6 @@ const FeesComponent = ({
       </Badge>
     ) : null}
   </>
-);
-
-const Timestamp = ({ ts }: { ts: number }) => (
-  <Flex>
-    <Box>icon</Box>
-    <Box>
-      <Text>{ts}</Text>
-    </Box>
-  </Flex>
 );
 
 const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) => (
