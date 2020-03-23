@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Flex, Text, FlexProps } from '@blockstack/ui';
+import { FlexProps } from '@blockstack/ui';
+import { Badge } from '@components/badge';
 
 export enum Transaction {
   CONTRACT_CREATION = 'contact_creation',
@@ -27,23 +28,10 @@ interface TagProps extends FlexProps {
   type: Transaction;
 }
 
-const Label: React.FC = props => (
-  <Text display="block" lineHeight="16px" fontSize="11px" fontWeight={600} color="white" {...props} />
-);
-
 export const Tag = ({ type, ...rest }: TagProps) => {
   return (
-    <Flex
-      height="24px"
-      align="center"
-      justify="center"
-      borderRadius="24px"
-      py="extra-tight"
-      px="base"
-      background={colorMap[type]}
-      {...rest}
-    >
-      <Label>{labelMap[type]}</Label>
-    </Flex>
+    <Badge background={colorMap[type]} {...rest}>
+      {labelMap[type]}
+    </Badge>
   );
 };

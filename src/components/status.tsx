@@ -20,8 +20,12 @@ const labelMap = {
   [Statuses.FAILED]: 'Failed',
 };
 
+const SpinnerComponent = ({ color }: { color: string }) => (
+  <Spinner color={color} speed="1s" thickness="2px" size="sm" />
+);
+
 const iconMap = {
-  [Statuses.PENDING]: ({ color }: { color: string }) => <Spinner color={color} speed="1s" thickness="2px" size="sm" />,
+  [Statuses.PENDING]: SpinnerComponent,
   [Statuses.SUCCESS]: CheckmarkCircleIcon,
   [Statuses.FAILED]: ExclamationMarkCircleIcon,
 };
