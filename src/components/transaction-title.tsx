@@ -21,9 +21,11 @@ const TitleDetail: React.FC<TitleProps> = ({ status, type, ...rest }) => {
 };
 
 export const TransactionTitle: React.FC<TitleProps> = ({ status, type, ...rest }) => (
-  <Stack {...rest}>
+  <Stack spacing="base-loose" {...rest}>
     <Box>
-      <Text textStyle="display.large">Transaction details</Text>
+      <Text textStyle="display.large" fontSize="36px">
+        Transaction details
+      </Text>
     </Box>
     <TitleDetail status={status} type={type} />
   </Stack>

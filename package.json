@@ -28,7 +28,9 @@
     "react-ssr-prepass": "npm:preact-ssr-prepass@^1.0.1",
     "redux-thunk": "^2.3.0",
     "store": "^2.0.12",
-    "styled-components": "^5.0.1"
+    "styled-components": "^5.0.1",
+    "use-events": "^1.4.1"
+
   },
   "devDependencies": {
     "@blockstack/prettier-config": "^0.0.5",

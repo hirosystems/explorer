@@ -4,3 +4,17 @@ import lclStorage from 'store/storages/localStorage';
 export const store = engine.createStore([lclStorage]);
 
 export const dedupe = (array: string[]) => [...new Set(array)];
+
+export const toSnakeCase = (str: string) => {
+  const hasSpaces = str.includes(' ');
+  const hasUnderscore = str.includes('_');
+  let string = str;
+  if (hasSpaces) {
+    string = string.replace(' ', '-');
+  }
+  if (hasUnderscore) {
+    string = string.replace('_', '-');
+  }
+
+  return string.toLowerCase();
+};
