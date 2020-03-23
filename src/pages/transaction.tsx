@@ -44,7 +44,7 @@ const PageWrapper: React.FC<BoxProps> = props => (
 
 const PageTop: React.FC<BoxProps> = props => (
   <Box width="100%" {...props}>
-    <TransactionTitle mb="extra-loose" status={Statuses.SUCCESS} type={Transaction.CONTRACT_CREATION} />
+    <TransactionTitle mb="extra-loose" status={Statuses.PENDING} type={[Transaction.CONTRACT_CREATION, Transaction.TOKEN_TRANSFER]} />
   </Box>
 );
 
