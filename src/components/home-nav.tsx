@@ -7,8 +7,6 @@ export const HomeNav = () => (
     <Box>
       <BlockstackLogo />
     </Box>
-    <Box>
-      <div>dropdown component</div>
-    </Box>
+    <Box>Testnet</Box>
   </Flex>
 );

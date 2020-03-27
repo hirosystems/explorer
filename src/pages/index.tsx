@@ -28,7 +28,7 @@ export const Home = () => {
         justify="center"
         onSubmit={handleSubmit}
       >
-        <Text as="h1" fontSize="36px" display="block" width="100%" textAlign={['center', 'left']} mb={6}>
+        <Text as="h1" fontSize="36px" display="block" width="100%" textAlign={['center', 'left']} mb="extra-loose">
           Stacks Explorer
         </Text>
         <SearchBar onChange={e => setQuery(e.target.value)} />
