@@ -14,8 +14,9 @@ export const transactionReducer = createReducer(initialState, {
   [fetchTransactionDone.type]: (state, action) => txAdapter.addOne(state, action.payload),
 });
 
-const { selectEntities } = txAdapter.getSelectors();
+const selectors = txAdapter.getSelectors();
 
 const selectTransactionsSlice = (state: RootState) => state.transactions;
 
-export const selectTransaction = createSelector(selectTransactionsSlice, selectEntities);
+export const selectTransaction = (id: string) =>
+  createSelector(selectTransactionsSlice, state => selectors.selectById(state, id));

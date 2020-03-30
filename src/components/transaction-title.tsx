@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { Status, Statuses } from '@components/status';
-import { Tag, Transaction } from '@components/tags';
+import { Tag } from '@components/tags';
 
 import { Box, Stack, Text, BoxProps } from '@blockstack/ui';
+import { TransactionType } from '../models/transaction.interface';
 
 interface TitleProps extends BoxProps {
   status: Statuses;
-  type: Transaction | Transaction[];
+  type: TransactionType | TransactionType[];
 }
 
-const Tags = ({ type, ...rest }: { type: Transaction | Transaction[] }) =>
+const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] }) =>
   Array.isArray(type) ? (
     <Box {...rest}>
       <Stack isInline spacing="tight">
-        {type.map((t: Transaction) => (
+        {type.map((t: TransactionType) => (
           <Tag type={t} />
         ))}
       </Stack>

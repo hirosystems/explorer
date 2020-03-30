@@ -6,6 +6,8 @@ import { Page } from '@components/page';
 import { SearchBar } from '@components/search-bar';
 import { HomeNav } from '@components/home-nav';
 import { DevLinks } from '@components/dev-links';
+import { RecentlyViewed } from '@components/recently-viewed';
+import { useRecentlyViewedTx } from '../common/hooks/use-recently-viewed-tx';
 
 export const Home = () => {
   const [query, setQuery] = useState('');
@@ -15,6 +17,8 @@ export const Home = () => {
     if (!query.trim().length) return;
     await Router.push('/txid/' + query);
   };
+
+  const recentTxs = useRecentlyViewedTx();
 
   return (
     <Page>
@@ -32,6 +36,7 @@ export const Home = () => {
           Stacks Explorer
         </Text>
         <SearchBar onChange={e => setQuery(e.target.value)} />
+        <RecentlyViewed transactions={recentTxs} mt="base" />
       </Flex>
       <DevLinks />
     </Page>

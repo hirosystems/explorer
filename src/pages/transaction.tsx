@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Box, BoxProps, Text, Flex } from '@blockstack/ui';
 import { TransactionTitle } from '@components/transaction-title';
 import { Statuses } from '@components/status';
-import { Transaction } from '@components/tags';
 import { TokenTransfers } from '@components/token-transfer';
 import { SectionTitle } from '@components/typography';
 import { TransactionDetails } from '@components/transaction-details';
+import { TransactionType } from '../models/transaction.interface';
 
 const PageWrapper: React.FC<BoxProps> = props => (
   <Box pb="extra-loose" mb="extra-loose" px="base" maxWidth="1100px" mx="auto" pt={16} {...props} />
@@ -16,7 +16,7 @@ const PageTop: React.FC<BoxProps> = props => (
     <TransactionTitle
       mb="extra-loose"
       status={Statuses.PENDING}
-      type={[Transaction.CONTRACT_CREATION, Transaction.TOKEN_TRANSFER]}
+      type={[TransactionType.SMART_CONTRACT, TransactionType.TOKEN_TRANSFER]}
     />
   </Box>
 );

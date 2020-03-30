@@ -7,7 +7,7 @@ interface SearchBarProps {
 }
 
 export const SearchBar = ({ onChange }: SearchBarProps) => (
-  <Box position="relative" width="100%">
+  <Box position="relative" width="100%" height="64px">
     <Input
       cursor="pointer"
       position="absolute"
