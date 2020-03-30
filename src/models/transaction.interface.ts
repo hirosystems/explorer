@@ -1,3 +1,11 @@
+export enum TransactionType {
+  SMART_CONTRACT = 'smart_contract',
+  CONTRACT_CALL = 'contract_call',
+  TOKEN_TRANSFER = 'token_transfer',
+  COINBASE = 'coinbase',
+  POISON_MICROBLOCK = 'poison_microblock',
+}
+
 export interface Transaction {
   block_hash: string;
   block_height: number;
@@ -5,7 +13,7 @@ export interface Transaction {
   tx_id: string;
   tx_index: number;
   tx_status: 'success' | 'pending' | 'failed';
-  tx_type: 'token_transfer' | 'smart_contract' | 'contract_call' | 'poison_microblock' | 'coinbase';
+  tx_type: TransactionType;
 
   // TODO: store as array of conditions and success status
   /** Hex encoded portion of the post-conditions in the raw tx. */

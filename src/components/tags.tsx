@@ -1,31 +1,26 @@
 import * as React from 'react';
 import { FlexProps } from '@blockstack/ui';
-import { Badge } from '@components/badge';
 
-export enum Transaction {
-  CONTRACT_CREATION = 'contact_creation',
-  CONTRACT_CALL = 'contract_call',
-  TOKEN_TRANSFER = 'token_transfer',
-  COINBASE = 'coinbase',
-  POISON_MICROBLOCK = 'poison_microblock',
-}
+import { Badge } from '@components/badge';
+import { TransactionType } from '@models/transaction.interface';
+
 const colorMap = {
-  [Transaction.CONTRACT_CREATION]: '#0F5257',
-  [Transaction.CONTRACT_CALL]: '#F9A14D',
-  [Transaction.TOKEN_TRANSFER]: 'blue',
-  [Transaction.COINBASE]: '#6014B8',
-  [Transaction.POISON_MICROBLOCK]: '#AAA9DD',
+  [TransactionType.SMART_CONTRACT]: '#0F5257',
+  [TransactionType.CONTRACT_CALL]: '#F9A14D',
+  [TransactionType.TOKEN_TRANSFER]: 'blue',
+  [TransactionType.COINBASE]: '#6014B8',
+  [TransactionType.POISON_MICROBLOCK]: '#AAA9DD',
 };
 const labelMap = {
-  [Transaction.CONTRACT_CREATION]: 'Contract creation',
-  [Transaction.CONTRACT_CALL]: 'Contract call',
-  [Transaction.TOKEN_TRANSFER]: 'Token transfer',
-  [Transaction.COINBASE]: 'Coinbase',
-  [Transaction.POISON_MICROBLOCK]: 'Poison-microblock',
+  [TransactionType.SMART_CONTRACT]: 'Contract creation',
+  [TransactionType.CONTRACT_CALL]: 'Contract call',
+  [TransactionType.TOKEN_TRANSFER]: 'Token transfer',
+  [TransactionType.COINBASE]: 'Coinbase',
+  [TransactionType.POISON_MICROBLOCK]: 'Poison-microblock',
 };
 
 interface TagProps extends FlexProps {
-  type: Transaction;
+  type: TransactionType;
 }
 
 export const Tag = ({ type, ...rest }: TagProps) => {

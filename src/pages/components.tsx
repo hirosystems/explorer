@@ -1,9 +1,10 @@
 import React from 'react';
-import { Tag, Transaction } from '@components/tags';
+import { Tag } from '@components/tags';
 import { Status, Statuses } from '@components/status';
 import { TransactionTitle } from '@components/transaction-title';
 
 import { Box, Flex, Stack, Text, BoxProps } from '@blockstack/ui';
+import { TransactionType } from '@models/transaction.interface';
 
 const BoxWrapper = ({
   children,
@@ -24,10 +25,10 @@ const BoxWrapper = ({
 const TitleComponents: React.FC = props => {
   return (
     <BoxWrapper childrenProps={{ as: Flex, flexWrap: 'wrap', maxWidth: '500px' }} label="Title" {...props}>
-      {Object.keys(Transaction).map(label =>
+      {Object.keys(TransactionType).map(label =>
         Object.keys(Statuses).map(status => (
           <TransactionTitle
-            type={Transaction[label as keyof typeof Transaction]}
+            type={TransactionType[label as keyof typeof TransactionType]}
             status={Statuses[status as keyof typeof Statuses]}
             mb="tight"
             mr="base"
@@ -41,8 +42,8 @@ const TitleComponents: React.FC = props => {
 const TagComponents: React.FC = props => (
   <BoxWrapper label="Transaction Tags" {...props}>
     <Stack spacing="loose">
-      {Object.keys(Transaction).map(label => (
-        <Tag type={Transaction[label as keyof typeof Transaction]} />
+      {Object.keys(TransactionType).map(label => (
+        <Tag type={TransactionType[label as keyof typeof TransactionType]} />
       ))}
     </Stack>
   </BoxWrapper>
