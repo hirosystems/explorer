@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { store } from '@common/utils';
+import { store, dedupe } from '@common/utils';
 
 const storageKey = 'recentlyViewedTx';
 
@@ -11,7 +11,7 @@ export const useRecentlyViewedTx = (txid?: string) => {
 
   useEffect(() => {
     if (txid) {
-      const newTxList = [...viewedTransactions, txid];
+      const newTxList = dedupe([...viewedTransactions, txid]);
       setViewedTransactions(newTxList);
       store.set(storageKey, newTxList);
     }
