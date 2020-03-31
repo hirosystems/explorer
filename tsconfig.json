@@ -19,7 +19,8 @@
       "@store": ["store/index"],
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
-      "@common/*": ["common/*"]
+      "@common/*": ["common/*"],
+      "@models/*": ["models/*"],
     },
     "baseUrl": "src"
   },
