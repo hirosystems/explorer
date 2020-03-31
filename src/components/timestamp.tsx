@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { format } from 'timeago.js';
-import { Flex,  Text, FlexProps } from '@blockstack/ui';
+import { Flex, Text, FlexProps } from '@blockstack/ui';
 import { ClockIcon } from '@components/svg';
 
 interface TimestampProps extends FlexProps {
@@ -13,7 +13,7 @@ interface TimestampProps extends FlexProps {
 export const Timestamp: React.FC<TimestampProps> = ({ ts, ...props }) => {
   return (
     <Flex color="ink" align="center" {...props}>
-      <ClockIcon mr="extra-tight" />
+      <ClockIcon mt="1px" mr="extra-tight" />
       <Text>{format(ts)}</Text>
     </Flex>
   );

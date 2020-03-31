@@ -39,6 +39,20 @@ const BottomButton: React.FC<BottomButtonProps> = ({ label, icon: Icon, ...props
 const Cell = (props: FlexProps) => {
   return <Flex px="tight" direction="column" justify="center" {...props} />;
 };
+
+const CellItem = ({ value, label }: { value: string; label: string }) => {
+  return (
+    <Cell>
+      <Box>
+        <Text>{value}</Text>
+      </Box>
+      <Box>
+        <Caption>{label}</Caption>
+      </Box>
+    </Cell>
+  );
+};
+
 const Item = () => (
   <Flex flexWrap="wrap" borderBottom="1px solid" borderColor="inherit" px="base-loose" py="loose">
     <Flex align="center" pr="base">
@@ -46,30 +60,8 @@ const Item = () => (
       <Text>Stacks Token</Text>
     </Flex>
     <Flex flexGrow={1} justify={['space-between', 'space-between', 'space-evenly']} pt={['base', 'base', 'unset']}>
-      <Cell>
-        <Box>
-          <Text>100,000.0000 STX</Text>
-        </Box>
-        <Box>
-          <Caption>Transferred</Caption>
-        </Box>
-      </Cell>
-      <Cell>
-        <Box>
-          <Text>SP1P7...R9GZS</Text>
-        </Box>
-        <Box>
-          <Caption>From</Caption>
-        </Box>
-      </Cell>
-      <Cell>
-        <Box>
-          <Text>SP1P7...R9GZS</Text>
-        </Box>
-        <Box>
-          <Caption>To</Caption>
-        </Box>
-      </Cell>
+      <CellItem value="SP1P7...R9GZS" label="From" />
+      <CellItem value="SP1P7...R9GZS" label="To" />
     </Flex>
   </Flex>
 );

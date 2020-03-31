@@ -38,7 +38,14 @@ interface ContractCardProps extends FlexProps {
 export const ContractCard: React.FC<ContractCardProps> = ({ title, meta }) => {
   return (
     <Card flexShrink={['unset', 'unset', 0]} width={['100%', '100%', '262px']} height={['unset', 'unset', '262px']}>
-      <Flex py="base" direction={['row', 'row', 'column']} flexGrow={1} align="center" justify="center">
+      <Flex
+        px="base"
+        py="base"
+        flexGrow={1}
+        align="center"
+        direction={['row', 'row', 'column']}
+        justify={['flex-start', 'flex-start', 'center']}
+      >
         <Box
           mt={['unset', 'unset', 'base-tight']}
           mb={['unset', 'unset', 'base']}
