@@ -1,123 +1,92 @@
 import * as React from 'react';
-import { Box, Flex, Text } from '@blockstack/ui';
-import { Badge } from '@components/badge';
+import { Box, Flex, FlexProps } from '@blockstack/ui';
 import { Caption } from '@components/typography';
 import { Card } from '@components/card';
-import { Timestamp } from '@components/timestamp';
 import { toSnakeCase } from '@common/utils';
-
-interface Fees {
-  amount: string | number;
-  currency: string;
-}
-
-interface TxSchema {
-  txid: string;
-  sender: string;
-  recipient: string;
-  type: number;
-  fees: Fees;
-  block: number;
-  post_conditions: string;
-  sponsored: boolean;
-  state: string;
-  timestamp: number;
-}
-
-const FeesComponent = ({
-  fees: { amount, currency },
-  sponsored,
-}: {
-  fees: {
-    amount: string | number;
-    currency: string;
-  };
-  sponsored: boolean;
-}) => (
-  <>
-    <Box>
-      <Text>
-        {amount} {currency}
-      </Text>
-    </Box>
-    {sponsored ? (
-      <Badge ml="base" bg="ink.300">
-        Sponsored
-      </Badge>
-    ) : null}
-  </>
-);
-
-const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) => (
-  <>
-    <Box>{block}</Box>
-    <Box ml="base">
-      <Timestamp ts={ts} />
-    </Box>
-  </>
-);
-
-const transformDataToRowData = (d: TxSchema) => {
-  return [
-    {
-      label: 'Transaction ID',
-      children: d.txid,
-    },
-    {
-      label: 'Contract address',
-      children: d.sender,
-    },
-    {
-      label: 'Called by',
-      children: d.recipient,
-    },
-    {
-      label: 'Transaction fees',
-      children: <FeesComponent fees={d.fees} sponsored={d.sponsored} />,
-    },
-    {
-      label: 'Block',
-      children: <BlockComponent block={d.block} ts={d.timestamp} />,
-    },
-  ];
-};
+import { useHover } from 'use-events';
+import { CopyIcon } from '@components/svg';
 
 interface RowProps {
   card?: boolean;
   isFirst?: boolean;
   isLast?: boolean;
-  label: string;
+  copy?: string;
+  label: {
+    children: any;
+  };
   render: any;
 }
-const Row: React.FC<RowProps> = ({ card, isFirst, isLast, label, render }) => {
-  const id = toSnakeCase(label);
-  return (
+
+const RowWrapper: React.FC<FlexProps> = ({ borderColor = 'inherit', ...props }) => (
+  <Flex
+    direction={['column', 'column', 'row']}
+    py={['base', 'base', 'loose']}
+    width="100%"
+    align={['unset', 'unset', 'center']}
+    {...props}
+    borderColor={borderColor}
+  />
+);
+
+const RowLabel = ({ label, id }: { label: string; id: string }) => (
+  <Box flexShrink={0} width="140px">
+    <Caption id={id} aria-label={label} pb={['extra-tight', 'extra-tight', 'unset']}>
+      {label}
+    </Caption>
+  </Box>
+);
+interface RowContentProps {
+  isHovered: boolean;
+  copy?: string;
+}
+const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest }) => (
+  <Flex pr="base" width="100%" align="center" justify="space-between" {...rest}>
     <Flex
-      direction={['column', 'column', 'row']}
-      py={['base', 'base', 'loose']}
+      color={isHovered ? 'blue' : undefined}
+      textStyle="body.small.medium"
+      style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
+      align="center"
+    >
+      {children}
+    </Flex>
+    <Box transition="75ms all ease-in-out" opacity={isHovered ? 1 : 0} color="ink.400" pl="base" ml="auto">
+      <CopyIcon />
+    </Box>
+  </Flex>
+);
+
+const Row: React.FC<RowProps> = ({ card, isFirst, isLast, label, render, copy }) => {
+  const id = toSnakeCase(label.children);
+  const [hovered, bind] = useHover();
+  const isHovered = !!copy && hovered;
+  return (
+    <RowWrapper
       borderTop={isFirst && !card ? '1px solid' : undefined}
       borderBottom={isLast && card ? undefined : '1px solid'}
-      borderColor="inherit"
       px={card ? 'base' : 'unset'}
-      width="100%"
-      align={['unset', 'unset', 'center']}
+      cursor={isHovered ? 'pointer' : undefined}
+      {...bind}
     >
-      <Box flexShrink={0} width="140px">
-        <Caption id={id} aria-label={label} pb={['extra-tight', 'extra-tight', 'unset']}>
-          {label}
-        </Caption>
-      </Box>
-      <Flex aria-labelledby={id} style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
+      <RowLabel label={label.children} id={id} />
+      <RowContent isHovered={isHovered} aria-labelledby={id}>
         {render}
-      </Flex>
-    </Flex>
+      </RowContent>
+    </RowWrapper>
   );
 };
+
+interface Item {
+  label: {
+    children: any;
+  };
+  children: any;
+  copy?: string; // the value to copy
+}
 
 interface RowsProps {
   card?: boolean;
   childComponent?: React.FC<RowProps>;
-  items: TxSchema;
+  items: Item[];
 }
 
 export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, ...props }) => {
@@ -125,7 +94,7 @@ export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, ...prop
   const ChildComponent = childComponent || Row;
   return (
     <Component width="100%" {...props}>
-      {transformDataToRowData(items).map(({ label, children }, key, arr) => (
+      {items.map(({ label, children, copy }, key, arr) => (
         <ChildComponent
           card={card}
           isFirst={key === 0}
@@ -133,6 +102,7 @@ export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, ...prop
           label={label}
           render={children}
           key={key}
+          copy={copy}
         />
       ))}
     </Component>

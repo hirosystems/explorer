@@ -6,6 +6,7 @@ export const store = engine.createStore([lclStorage]);
 export const dedupe = (array: string[]) => [...new Set(array)];
 
 export const toSnakeCase = (str: string) => {
+  if (!str) return '';
   const hasSpaces = str.includes(' ');
   const hasUnderscore = str.includes('_');
   let string = str;
