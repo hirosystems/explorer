@@ -1,10 +1,11 @@
 import { createReducer, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
 
+import { Transaction } from '@models/transaction.interface';
 import { RootState } from '@store';
 import { fetchTransactionDone } from './actions';
 
 const txAdapter = createEntityAdapter({
-  selectId: (transaction: any) => transaction.txid,
+  selectId: (transaction: Transaction) => transaction.tx_id,
 });
 
 const initialState = txAdapter.getInitialState();
