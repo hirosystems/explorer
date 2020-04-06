@@ -81,6 +81,58 @@ const EventsSection = () => (
   </Box>
 );
 
+const FunctionSummarySection = () => (
+  <Box mt="extra-loose">
+    <SectionTitle mb="base-loose">Function summary</SectionTitle>
+    <Rows
+      items={[
+        {
+          label: {
+            children: 'Name',
+          },
+          children: 'bid(uint256)',
+        },
+        {
+          label: {
+            children: 'Method',
+          },
+          children: 'transfer-nft',
+        },
+        {
+          label: {
+            children: 'Parameters',
+          },
+          children: (
+            <Rows
+              inline
+              items={[
+                {
+                  label: {
+                    children: 'From',
+                  },
+                  children: 'SPJT598WY1RJN792HRKRHRQYFB7RJ5ZCG6J6GEZ4',
+                },
+                {
+                  label: {
+                    children: 'To',
+                  },
+                  children: 'SP2837ZMC89J40K4YTS64B00M7065C6X46JX6ARG0',
+                },
+                {
+                  label: {
+                    children: 'Amount',
+                  },
+                  children: '1',
+                },
+              ]}
+            />
+          ),
+        },
+      ]}
+    />
+  </Box>
+);
+
 const TransactionPage: React.FC = () => {
   return (
     <PageWrapper>
@@ -89,7 +141,7 @@ const TransactionPage: React.FC = () => {
         <TransactionDetails />
         <TokenTransfers />
         <ContractSource />
-        <OtherContracts />
+        <FunctionSummarySection />
         <PostConditionsSection />
         <EventsSection />
       </Stack>
