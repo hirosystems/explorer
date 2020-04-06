@@ -2,16 +2,15 @@ import * as React from 'react';
 import { Box, Flex, FlexProps } from '@blockstack/ui';
 import { Caption } from '@components/typography';
 import { Card } from '@components/card';
-import { toSnakeCase } from '@common/utils';
 import { useHover } from 'use-events';
 import { CopyIcon } from '@components/svg';
 
-interface RowProps {
+interface RowProps extends FlexProps {
   card?: boolean;
   isFirst?: boolean;
   isLast?: boolean;
   copy?: string;
-  label: {
+  label?: {
     children: any;
   };
   render: any;
@@ -28,11 +27,9 @@ const RowWrapper: React.FC<FlexProps> = ({ borderColor = 'inherit', ...props }) 
   />
 );
 
-const RowLabel = ({ label, id }: { label: string; id: string }) => (
+const RowLabel = ({ label }: { label: string }) => (
   <Box flexShrink={0} width="140px">
-    <Caption id={id} aria-label={label} pb={['extra-tight', 'extra-tight', 'unset']}>
-      {label}
-    </Caption>
+    <Caption pb={['extra-tight', 'extra-tight', 'unset']}>{label}</Caption>
   </Box>
 );
 interface RowContentProps {
@@ -55,8 +52,7 @@ const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest })
   </Flex>
 );
 
-const Row: React.FC<RowProps> = ({ card, isFirst, isLast, label, render, copy }) => {
-  const id = toSnakeCase(label.children);
+export const Row: React.FC<RowProps> = ({ card, isFirst, isLast, label, render, copy, ...rest }) => {
   const [hovered, bind] = useHover();
   const isHovered = !!copy && hovered;
   return (
@@ -66,17 +62,16 @@ const Row: React.FC<RowProps> = ({ card, isFirst, isLast, label, render, copy })
       px={card ? 'base' : 'unset'}
       cursor={isHovered ? 'pointer' : undefined}
       {...bind}
+      {...rest}
     >
-      <RowLabel label={label.children} id={id} />
-      <RowContent isHovered={isHovered} aria-labelledby={id}>
-        {render}
-      </RowContent>
+      {label ? <RowLabel label={label.children} /> : null}
+      <RowContent isHovered={isHovered}>{render}</RowContent>
     </RowWrapper>
   );
 };
 
 interface Item {
-  label: {
+  label?: {
     children: any;
   };
   children: any;
@@ -87,13 +82,22 @@ interface RowsProps {
   card?: boolean;
   childComponent?: React.FC<RowProps>;
   items: Item[];
+  columnLabels?: string[];
 }
 
-export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, ...props }) => {
+export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, columnLabels, ...props }) => {
   const Component = card ? Card : Box;
   const ChildComponent = childComponent || Row;
   return (
     <Component width="100%" {...props}>
+      {columnLabels?.length ? (
+        <Row
+          py="tight"
+          borderBottom="0"
+          label={{ children: columnLabels[0] }}
+          render={columnLabels[1] ? <RowLabel label={columnLabels[1]} /> : undefined}
+        />
+      ) : null}
       {items.map(({ label, children, copy }, key, arr) => (
         <ChildComponent
           card={card}
