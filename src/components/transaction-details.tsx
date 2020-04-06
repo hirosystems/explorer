@@ -93,16 +93,16 @@ const transformDataToRowData = (d: TxSchema) => {
   ];
 };
 
-export const TransactionDetails: React.FC = () => (
+export const TransactionDetails = ({ hideContract }: { hideContract?: boolean }) => (
   <Flex align="flex-start" flexDirection={['column', 'column', 'row']}>
     <Box
       width={['100%']}
       order={[2, 2, 0]}
       mt={['extra-loose', 'extra-loose', 'unset']}
-      mr={['unset', 'unset', '72px']}
+      mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
     >
       <Rows items={transformDataToRowData(data)} />
     </Box>
-    <ContractCard title="Stack-o-puppers" meta="stackopuppers.co" order={[0, 0, 2]} />
+    {hideContract ? null : <ContractCard title="Stack-o-puppers" meta="stackopuppers.co" order={[0, 0, 2]} />}
   </Flex>
 );
