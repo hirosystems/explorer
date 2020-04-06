@@ -59,7 +59,11 @@ const Item = () => (
       <Box mr="tight" size="24px" borderRadius="6px" bg={'blue'} />
       <Text>Stacks Token</Text>
     </Flex>
-    <Flex flexGrow={1} justify={['space-between', 'space-between', 'space-evenly']} pt={['base', 'base', 'unset']}>
+    <Flex
+      flexGrow={1}
+      justify={['space-between', 'space-between', 'space-evenly']}
+      pt={['base', 'base', 'unset']}
+    >
       <CellItem value="SP1P7...R9GZS" label="From" />
       <CellItem value="SP1P7...R9GZS" label="To" />
     </Flex>

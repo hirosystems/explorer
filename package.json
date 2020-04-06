@@ -32,10 +32,10 @@
     "styled-components": "^5.0.1",
     "timeago.js": "^4.0.2",
     "use-events": "^1.4.1"
-
   },
   "devDependencies": {
-    "@blockstack/prettier-config": "^0.0.5",
+    "@blockstack/prettier-config": "^0.0.6",
+    "@blockstack/stacks-blockchain-sidecar-types": "^0.0.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@types/express": "^4.17.3",
     "@types/next": "^9.0.0",

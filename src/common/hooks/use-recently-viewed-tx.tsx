@@ -4,9 +4,7 @@ import { Transaction } from '@models/transaction.interface';
 
 const storageKey = 'recentlyViewedTx';
 
-interface CachedTx extends Transaction {
-  viewedDate: string;
-}
+type CachedTx = { viewedDate: string } & Transaction;
 
 export const useRecentlyViewedTx = (transaction?: Transaction) => {
   if (!process.browser) return [];
@@ -24,5 +22,5 @@ export const useRecentlyViewedTx = (transaction?: Transaction) => {
     }
   }, [transaction?.tx_id]);
 
-  return viewedTransactions;
+  return Array.isArray(viewedTransactions) ? viewedTransactions : [];
 };

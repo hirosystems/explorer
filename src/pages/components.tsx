@@ -24,7 +24,11 @@ const BoxWrapper = ({
 
 const TitleComponents: React.FC = props => {
   return (
-    <BoxWrapper childrenProps={{ as: Flex, flexWrap: 'wrap', maxWidth: '500px' }} label="Title" {...props}>
+    <BoxWrapper
+      childrenProps={{ as: Flex, flexWrap: 'wrap', maxWidth: '500px' }}
+      label="Title"
+      {...props}
+    >
       {Object.keys(TransactionType).map(label =>
         Object.keys(Statuses).map(status => (
           <TransactionTitle
