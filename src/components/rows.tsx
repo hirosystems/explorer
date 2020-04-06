@@ -14,14 +14,19 @@ interface RowProps extends FlexProps {
     children: any;
   };
   render: any;
+  inline?: boolean;
 }
 
-const RowWrapper: React.FC<FlexProps> = ({ borderColor = 'inherit', ...props }) => (
+interface RowWrapperProps extends FlexProps {
+  inline?: boolean;
+}
+
+const RowWrapper: React.FC<RowWrapperProps> = ({ borderColor = 'inherit', inline, ...props }) => (
   <Flex
-    direction={['column', 'column', 'row']}
+    direction={inline ? 'column' : ['column', 'column', 'row']}
     py={['base', 'base', 'loose']}
     width="100%"
-    align={['unset', 'unset', 'center']}
+    align={inline ? 'unset' : ['unset', 'unset', 'flex-start']}
     {...props}
     borderColor={borderColor}
   />
@@ -43,6 +48,7 @@ const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest })
       textStyle="body.small.medium"
       style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
       align="center"
+      width="100%"
     >
       {children}
     </Flex>
@@ -89,9 +95,10 @@ interface RowsProps {
   childComponent?: React.FC<RowProps>;
   items: Item[];
   columnLabels?: string[];
+  inline?: boolean;
 }
 
-export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, columnLabels, ...props }) => {
+export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, columnLabels, inline, ...props }) => {
   const Component = card ? Card : Box;
   const ChildComponent = childComponent || Row;
   return (
@@ -113,6 +120,7 @@ export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, columnL
           render={children}
           key={key}
           copy={copy}
+          inline={inline}
         />
       ))}
     </Component>
