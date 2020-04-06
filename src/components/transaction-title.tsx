@@ -3,9 +3,9 @@ import { Status, Statuses } from '@components/status';
 import { Tag } from '@components/tags';
 
 import { Box, Stack, Text, BoxProps } from '@blockstack/ui';
-import { TransactionType } from '../models/transaction.interface';
+import { TransactionType } from '@models/transaction.interface';
 
-interface TitleProps extends BoxProps {
+export interface TitleProps extends BoxProps {
   status: Statuses;
   type: TransactionType | TransactionType[];
 }
