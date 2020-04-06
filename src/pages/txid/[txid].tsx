@@ -3,7 +3,11 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import { RootState } from '@store';
-import { fetchTransactionDone, fetchTransactionFailed, selectTransaction } from '@store/transactions';
+import {
+  fetchTransactionDone,
+  fetchTransactionFailed,
+  selectTransaction,
+} from '@store/transactions';
 import { ReduxNextPageContext } from '@common/types/next-store';
 import { fetchTx } from '@common/api/transactions';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';

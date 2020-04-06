@@ -8,6 +8,7 @@ import { Tag } from '@components/tags';
 import { truncateMiddle } from '@common/utils';
 import { Transaction } from '@models/transaction.interface';
 import Link from 'next/link';
+import { TransactionType } from '../models/transaction.interface';
 
 dayjs.extend(relativeTime);
 
@@ -29,7 +30,13 @@ export const RecentlyViewed = ({ transactions, ...rest }: RecentlyViewedProps) =
       {...rest}
     >
       <Box mx="base" mt={['base-tight', 'base-loose']} mb="tight">
-        <Text color="#677282" fontWeight={600} fontSize="11px" lineHeight="base" style={{ textTransform: 'uppercase' }}>
+        <Text
+          color="#677282"
+          fontWeight={600}
+          fontSize="11px"
+          lineHeight="base"
+          style={{ textTransform: 'uppercase' }}
+        >
           Recently Viewed
         </Text>
       </Box>
@@ -88,7 +95,7 @@ export const RecentlyViewedListItem = ({ transaction, isLast }: RecentlyViewedLi
           </Text>
         </Flex>
         <Box>
-          <Tag type={transaction.tx_type} />
+          <Tag type={transaction.tx_type as TransactionType} />
         </Box>
       </Flex>
     </Link>

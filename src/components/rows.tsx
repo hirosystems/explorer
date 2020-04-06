@@ -49,7 +49,13 @@ const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest })
     >
       {children}
     </Flex>
-    <Box transition="75ms all ease-in-out" opacity={isHovered ? 1 : 0} color="ink.400" pl="base" ml="auto">
+    <Box
+      transition="75ms all ease-in-out"
+      opacity={isHovered ? 1 : 0}
+      color="ink.400"
+      pl="base"
+      ml="auto"
+    >
       <CopyIcon />
     </Box>
   </Flex>

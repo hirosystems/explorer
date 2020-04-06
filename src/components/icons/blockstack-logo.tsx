@@ -8,7 +8,13 @@ interface BlockstackLogoProps extends BoxProps {
 
 export const BlockstackLogo = ({ size = 24, ...props }: BlockstackLogoProps) => (
   <Box {...props}>
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill="none" viewBox="0 0 24 24">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
       <path
         fill="#222933"
         fillRule="evenodd"
