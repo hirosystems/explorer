@@ -7,13 +7,18 @@ import { Rows } from '@components/rows';
 import { TransactionType } from '@models/transaction.interface';
 import { Statuses } from '@components/status';
 import { TransactionDetails } from '@components/transaction-details';
+import { CoinbaseTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
-const TransactionPage: React.FC = () => {
+interface CoinbasePageProps {
+  transaction: CoinbaseTransaction;
+}
+
+const CoinbasePage = ({ transaction }: CoinbasePageProps) => {
   return (
     <PageWrapper>
       <PageTop status={Statuses.SUCCESS} type={[TransactionType.COINBASE]} />
       <Stack shouldWrapChildren spacing="extra-loose">
-        <TransactionDetails hideContract />
+        <TransactionDetails transaction={transaction} hideContract />
         <Rows
           items={[
             {
@@ -29,4 +34,4 @@ const TransactionPage: React.FC = () => {
   );
 };
 
-export default TransactionPage;
+export default CoinbasePage;
