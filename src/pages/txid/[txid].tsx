@@ -1,7 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
 import { useSelector } from 'react-redux';
-
+import { Transaction } from '@models/transaction.interface';
 import { RootState } from '@store';
 import {
   fetchTransactionDone,
@@ -11,7 +10,11 @@ import {
 import { ReduxNextPageContext } from '@common/types/next-store';
 import { fetchTx } from '@common/api/transactions';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
-import { Transaction } from '@models/transaction.interface';
+import CoinbasePage from '../tx/coinbase';
+import TokenTransferPage from '../tx/token-transfer';
+import SmartContractPage from '../tx/smart-contract';
+import PoisonMicroblockPage from '../tx/poison-microblock';
+import ContractCallPage from '../tx/contract-call';
 
 const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
   const { transaction } = useSelector((state: RootState) => ({
@@ -20,15 +23,22 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
 
   useRecentlyViewedTx(transaction);
 
-  return (
-    <>
-      <Link href="/">Home</Link>
-      <h1>Transaction Page</h1>
-      <code>
-        <pre>{JSON.stringify(transaction, null, 2)}</pre>
-      </code>
-    </>
-  );
+  if (!transaction) return null;
+
+  switch (transaction.tx_type) {
+    case 'coinbase':
+      return <CoinbasePage transaction={transaction} />;
+    case 'token_transfer':
+      return <TokenTransferPage transaction={transaction} />;
+    case 'contract_call':
+      return <ContractCallPage transaction={transaction} />;
+    case 'smart_contract':
+      return <SmartContractPage transaction={transaction} />;
+    case 'poison_microblock':
+      return <PoisonMicroblockPage transaction={transaction} />;
+    default:
+      throw new Error('Must pass valid transaction type');
+  }
 };
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {

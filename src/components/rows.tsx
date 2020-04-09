@@ -64,7 +64,15 @@ const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest })
   </Flex>
 );
 
-export const Row: React.FC<RowProps> = ({ card, isFirst, isLast, label, render, copy, ...rest }) => {
+export const Row: React.FC<RowProps> = ({
+  card,
+  isFirst,
+  isLast,
+  label,
+  render,
+  copy,
+  ...rest
+}) => {
   const [hovered, bind] = useHover();
   const isHovered = !!copy && hovered;
   return (
@@ -98,7 +106,14 @@ interface RowsProps {
   inline?: boolean;
 }
 
-export const Rows: React.FC<RowsProps> = ({ card, childComponent, items, columnLabels, inline, ...props }) => {
+export const Rows: React.FC<RowsProps> = ({
+  card,
+  childComponent,
+  items,
+  columnLabels,
+  inline,
+  ...props
+}) => {
   const Component = card ? Card : Box;
   const ChildComponent = childComponent || Row;
   return (

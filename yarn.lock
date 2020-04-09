@@ -983,10 +983,10 @@
   resolved "https://registry.yarnpkg.com/@blockstack/prettier-config/-/prettier-config-0.0.6.tgz#8a41cd378ba061b79770987f2a6ad0c92b64bd72"
   integrity sha512-ke0MdyblmoUqSJBEutsG8/6G7KAjCB+uOcgZHPJvJr4R+i5yRhT4GSe5nV/wREINuK0jj2GvaA6qlx4PQTKQUA==
 
-"@blockstack/stacks-blockchain-sidecar-types@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-sidecar-types/-/stacks-blockchain-sidecar-types-0.0.5.tgz#752a91948b434a77b3b4b4f4e17cadf6672b4fa5"
-  integrity sha512-S4oGn+cI9UESiAP+PQbcT4r7dRhcucYBmFw0a/VwRcHqrVfu3qlZnj4LEZDeX7R8uMHfefSAbEfFLN4t9LWvIA==
+"@blockstack/stacks-blockchain-sidecar-types@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-sidecar-types/-/stacks-blockchain-sidecar-types-0.0.6.tgz#85f24e94b956af4ba115a0c5a59900c9c369cf6e"
+  integrity sha512-era6iX2cLWvZdD42iomvzoD5ynNe+a8F4Zw1sGGKIaLnZPHFxtaH5FfP1qp1/MxtVvef75hVQKrlmB8sDo0BLw==
 
 "@blockstack/ui@^1.1.0":
   version "1.1.0"

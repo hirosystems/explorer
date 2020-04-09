@@ -9,6 +9,7 @@ import { CheckmarkCircleIcon, ExclamationMarkCircleIcon } from '@components/svg'
 import { TransactionType } from '@models/transaction.interface';
 import { Statuses } from '@components/status';
 import { TransactionDetails } from '@components/transaction-details';
+import { ContractCallTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
 const ContractSource = () => (
   <Box mt="extra-loose">
@@ -17,25 +18,11 @@ const ContractSource = () => (
   </Box>
 );
 
-const ContractItem = () => (
-  <Flex pb="base" align="center" pr="base">
-    <Box mr="tight" size="24px" borderRadius="6px" bg="ink.200" />
-    <Text textStyle="body.small.medium">ContractName</Text>
-  </Flex>
-);
-const OtherContracts = () => (
-  <Box mt="extra-loose">
-    <SectionTitle mb="base-loose">Other contracts called</SectionTitle>
-    <ContractItem />
-    <ContractItem />
-    <ContractItem />
-    <ContractItem />
-  </Box>
-);
-
 const PostConditionStatus = ({ status }: { status: 'success' | 'failed' }) => (
   <Flex align="center" color={status === 'success' ? 'green' : 'red'}>
-    <Box mr="tight">{status === 'success' ? <CheckmarkCircleIcon /> : <ExclamationMarkCircleIcon />}</Box>
+    <Box mr="tight">
+      {status === 'success' ? <CheckmarkCircleIcon /> : <ExclamationMarkCircleIcon />}
+    </Box>
     <Text textStyle="body.small.medium" fontWeight="600">
       {status === 'success' ? 'Success' : 'Failed'}
     </Text>
@@ -133,12 +120,19 @@ const FunctionSummarySection = () => (
   </Box>
 );
 
-const TransactionPage: React.FC = () => {
+interface ContractCallPageProps {
+  transaction: ContractCallTransaction;
+}
+
+const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
   return (
     <PageWrapper>
-      <PageTop status={Statuses.PENDING} type={[TransactionType.CONTRACT_CALL, TransactionType.TOKEN_TRANSFER]} />
+      <PageTop
+        status={Statuses.PENDING}
+        type={[TransactionType.CONTRACT_CALL, TransactionType.TOKEN_TRANSFER]}
+      />
       <Stack spacing="extra-loose">
-        <TransactionDetails />
+        <TransactionDetails transaction={transaction} />
         <TokenTransfers />
         <ContractSource />
         <FunctionSummarySection />
@@ -149,4 +143,4 @@ const TransactionPage: React.FC = () => {
   );
 };
 
-export default TransactionPage;
+export default ContractCallPage;

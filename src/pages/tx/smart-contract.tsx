@@ -7,6 +7,7 @@ import { PageTop, PageWrapper } from '@components/page';
 import { TransactionType } from '@models/transaction.interface';
 import { Statuses } from '@components/status';
 import { TransactionDetails } from '@components/transaction-details';
+import { SmartContractTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
 const ContractSource = () => (
   <Box mt="extra-loose">
@@ -31,12 +32,16 @@ const OtherContracts = () => (
   </Box>
 );
 
-const TransactionPage: React.FC = () => {
+interface SmartContractPageProps {
+  transaction: SmartContractTransaction;
+}
+
+const SmartContractPage = ({ transaction }: SmartContractPageProps) => {
   return (
     <PageWrapper>
       <PageTop status={Statuses.SUCCESS} type={TransactionType.SMART_CONTRACT} />
       <Stack spacing="extra-loose">
-        <TransactionDetails />
+        <TransactionDetails transaction={transaction} />
         <ContractSource />
         <OtherContracts />
       </Stack>
@@ -44,4 +49,4 @@ const TransactionPage: React.FC = () => {
   );
 };
 
-export default TransactionPage;
+export default SmartContractPage;
