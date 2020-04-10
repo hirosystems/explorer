@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "NODE_ENV=production next start",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
-    "lint:eslint": "eslint --ext .ts,.tsx ./src/ -f unix",
+    "lint:eslint": "eslint --ext .ts,.tsx ./src",
     "lint:fix": "eslint --ext .ts,.tsx ./src/ -f unix --fix && prettier --write src/**/*.{ts,tsx} *.js",
     "lint:prettier": "prettier --check src/**/*.{ts,tsx} *.js"
   },
@@ -34,6 +34,7 @@
     "use-events": "^1.4.1"
   },
   "devDependencies": {
+    "@blockstack/eslint-config": "^1.0.3",
     "@blockstack/prettier-config": "^0.0.6",
     "@blockstack/stacks-blockchain-sidecar-types": "^0.0.6",
     "@commitlint/config-conventional": "^8.3.4",
@@ -42,14 +43,8 @@
     "@types/node": "^13.9.3",
     "@types/react": "^16.9.25",
     "@types/react-redux": "^7.1.7",
-    "@typescript-eslint/eslint-plugin": "^2.25.0",
-    "@typescript-eslint/parser": "^2.25.0",
     "commitlint": "^8.3.5",
     "eslint": "^6.7.2",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-plugin-jest": "^23.7.0",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-react": "^7.18.3",
     "husky": "^4.2.3",
     "prettier": "^2.0.2",
     "typescript": "^3.8.3"
