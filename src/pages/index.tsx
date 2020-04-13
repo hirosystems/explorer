@@ -4,25 +4,19 @@ import { Flex, Text } from '@blockstack/ui';
 
 import { Page } from '@components/page';
 import { SearchBar } from '@components/search-bar';
-import { HomeNav } from '@components/home-nav';
+import { HomeNavigation } from '@components/home-nav';
 import { DevLinks } from '@components/dev-links';
 import { RecentlyViewed } from '@components/recently-viewed';
-import { useRecentlyViewedTx } from '../common/hooks/use-recently-viewed-tx';
+import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
+import { search } from '@common/search';
 
 export const Home = () => {
   const [query, setQuery] = useState('');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!query.trim().length) return;
-    await Router.push('/txid/' + query);
-  };
-
   const recentTxs = useRecentlyViewedTx();
 
   return (
     <Page>
-      <HomeNav />
+      <HomeNavigation />
       <Flex
         as="form"
         flexDirection="column"
@@ -30,7 +24,7 @@ export const Home = () => {
         maxWidth="544px"
         mt="20vh"
         justify="center"
-        onSubmit={handleSubmit}
+        onSubmit={search(query)}
       >
         <Text
           as="h1"
