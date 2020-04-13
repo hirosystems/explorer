@@ -1,27 +1,39 @@
 import React from 'react';
-import { Box, Input } from '@blockstack/ui';
+import { Box, Input, BoxProps } from '@blockstack/ui';
 import { MagnifyingGlass } from './icons/magnifying-glass';
 
-interface SearchBarProps {
+interface SearchBarProps extends BoxProps {
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
+  inputOffset?: string;
 }
 
-export const SearchBar = ({ onChange }: SearchBarProps) => (
-  <Box position="relative" width="100%" height="64px">
+export const SearchBar = ({ onChange, inputOffset = '50px', ...rest }: SearchBarProps) => (
+  <Box position="relative" width="100%" height="64px" borderRadius="6px" {...rest}>
     <Input
+      type="text"
       cursor="pointer"
       position="absolute"
       top={0}
       bottom={0}
       left={0}
       right={0}
-      pl="50px"
-      height="64px"
-      placeholder="Search for transactions or contracts"
-      type="text"
+      lineHeight="20px"
+      p={0}
+      pl={inputOffset}
+      height="100%"
+      placeholder="Search for transactions"
       onChange={onChange}
-      fontSize="16px"
+      fontSize="inherit"
+      backgroundColor="transparent"
+      _placeholder={{ color: '#677282', lineHeight: '20px' }}
     />
-    <MagnifyingGlass zIndex={2} top="22px" left="22px" style={{ pointerEvents: 'none' }} />
+    <MagnifyingGlass
+      position="absolute"
+      zIndex={2}
+      top="50%"
+      transform="translateY(-50%)"
+      left={`calc(${inputOffset} / 2 - 6px)`}
+      style={{ pointerEvents: 'none' }}
+    />
   </Box>
 );
