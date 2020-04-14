@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Flex, Text, Stack } from '@blockstack/ui';
 
 import { SectionTitle } from '@components/typography';
-import { PageTop, PageWrapper } from '@components/page';
+import { PageTop } from '@components/page';
 
 import { TransactionType } from '@models/transaction.interface';
 import { Statuses } from '@components/status';
@@ -38,14 +38,14 @@ interface SmartContractPageProps {
 
 const SmartContractPage = ({ transaction }: SmartContractPageProps) => {
   return (
-    <PageWrapper>
+    <>
       <PageTop status={Statuses.SUCCESS} type={TransactionType.SMART_CONTRACT} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} />
         <ContractSource />
         <OtherContracts />
       </Stack>
-    </PageWrapper>
+    </>
   );
 };
 

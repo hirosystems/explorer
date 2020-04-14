@@ -3,7 +3,7 @@ import { Box, Flex, Text, Stack } from '@blockstack/ui';
 
 import { TokenTransfers } from '@components/token-transfer';
 import { SectionTitle } from '@components/typography';
-import { PageTop, PageWrapper } from '@components/page';
+import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { CheckmarkCircleIcon, ExclamationMarkCircleIcon } from '@components/svg';
 import { TransactionType } from '@models/transaction.interface';
@@ -126,7 +126,7 @@ interface ContractCallPageProps {
 
 const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
   return (
-    <PageWrapper>
+    <>
       <PageTop
         status={Statuses.PENDING}
         type={[TransactionType.CONTRACT_CALL, TransactionType.TOKEN_TRANSFER]}
@@ -139,7 +139,7 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
         <PostConditionsSection />
         <EventsSection />
       </Stack>
-    </PageWrapper>
+    </>
   );
 };
 
