@@ -5,7 +5,7 @@ module.exports = {
     jsconfigPaths: true,
   },
   env: {
-    apiServer: 'http://localhost:3999',
+    API_SERVER: process.env.API_SERVER || 'http://localhost:3999',
   },
   webpack(config, { dev, isServer }) {
     const splitChunks = config.optimization && config.optimization.splitChunks;
