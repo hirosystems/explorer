@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Stack } from '@blockstack/ui';
 
-import { PageTop, PageWrapper } from '@components/page';
+import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 
 import { TransactionType } from '@models/transaction.interface';
@@ -15,7 +15,7 @@ interface PoisonMicroblockPageProps {
 
 const PoisonMicroblockPage = ({ transaction }: PoisonMicroblockPageProps) => {
   return (
-    <PageWrapper>
+    <>
       <PageTop status={Statuses.PENDING} type={[TransactionType.POISON_MICROBLOCK]} />
       <Stack shouldWrapChildren spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
@@ -36,7 +36,7 @@ const PoisonMicroblockPage = ({ transaction }: PoisonMicroblockPageProps) => {
           ]}
         />
       </Stack>
-    </PageWrapper>
+    </>
   );
 };
 

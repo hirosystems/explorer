@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Stack } from '@blockstack/ui';
 
-import { PageTop, PageWrapper } from '@components/page';
+import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 
 import { TransactionType } from '@models/transaction.interface';
@@ -15,7 +15,7 @@ interface CoinbasePageProps {
 
 const CoinbasePage = ({ transaction }: CoinbasePageProps) => {
   return (
-    <PageWrapper>
+    <>
       <PageTop status={Statuses.SUCCESS} type={[TransactionType.COINBASE]} />
       <Stack shouldWrapChildren spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
@@ -30,7 +30,7 @@ const CoinbasePage = ({ transaction }: CoinbasePageProps) => {
           ]}
         />
       </Stack>
-    </PageWrapper>
+    </>
   );
 };
 

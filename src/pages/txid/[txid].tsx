@@ -15,15 +15,11 @@ import TokenTransferPage from '../tx/token-transfer';
 import SmartContractPage from '../tx/smart-contract';
 import PoisonMicroblockPage from '../tx/poison-microblock';
 import ContractCallPage from '../tx/contract-call';
+import { TxNotFound } from '@pages/tx/not-found';
+import { PageWrapper } from '@components/page';
 
-const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
-  const { transaction } = useSelector((state: RootState) => ({
-    transaction: selectTransaction(tx_id)(state),
-  }));
-
-  useRecentlyViewedTx(transaction);
-
-  if (!transaction) return null;
+const getTxComponent = (transaction?: Transaction) => {
+  if (!transaction) return <TxNotFound />;
 
   switch (transaction.tx_type) {
     case 'coinbase':
@@ -39,6 +35,16 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
     default:
       throw new Error('Must pass valid transaction type');
   }
+};
+
+const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
+  const { transaction } = useSelector((state: RootState) => ({
+    transaction: selectTransaction(tx_id)(state),
+  }));
+
+  useRecentlyViewedTx(transaction);
+
+  return <PageWrapper>{getTxComponent(transaction)}</PageWrapper>;
 };
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
