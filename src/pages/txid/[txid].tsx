@@ -17,10 +17,10 @@ import PoisonMicroblockPage from '../tx/poison-microblock';
 import ContractCallPage from '../tx/contract-call';
 import { TxNotFound } from '@pages/tx/not-found';
 import { PageWrapper } from '@components/page';
+import { Helmet } from 'react-helmet';
+import { truncateMiddle } from '@common/utils';
 
-const getTxComponent = (transaction?: Transaction) => {
-  if (!transaction) return <TxNotFound />;
-
+const getTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'coinbase':
       return <CoinbasePage transaction={transaction} />;
@@ -42,9 +42,28 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
     transaction: selectTransaction(tx_id)(state),
   }));
 
+  if (!transaction)
+    return (
+      <PageWrapper>
+        <TxNotFound />;
+      </PageWrapper>
+    );
+
   useRecentlyViewedTx(transaction);
 
-  return <PageWrapper>{getTxComponent(transaction)}</PageWrapper>;
+  return (
+    <PageWrapper>
+      <Helmet>
+        <meta
+          property="og:title"
+          content={`Stacks 2.0 explorer: Tx: ${truncateMiddle(tx_id, 10)}`}
+        />
+        <meta property="og:url" content={`${process.env.API_SERVER}/txid/${transaction.tx_id}`} />
+        <meta property="og:description" content={`Stacks transaction: ${transaction.tx_id}`} />
+      </Helmet>
+      {getTxComponent(transaction)}
+    </PageWrapper>
+  );
 };
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {

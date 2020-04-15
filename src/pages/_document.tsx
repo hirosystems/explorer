@@ -17,6 +17,7 @@ export default class MyDocument extends Document<any> {
 
       return {
         ...initialProps,
+        helmet: Helmet.renderStatic(),
         styles: (
           <>
             {initialProps.styles}

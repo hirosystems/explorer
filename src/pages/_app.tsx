@@ -24,6 +24,11 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
           <>
             <Head>
               <title>Stacks 2.0 explorer</title>
+              <meta property="og:type" content="website" />
+              <meta property="og:site_name" content="Stacks 2.0 blockchain explorer" />
+              <meta name="twitter:card" content="summary" />
+              <meta name="twitter:site" content="@blockstack" />
+              <meta name="twitter:creator" content="@blockstack" />
             </Head>
             <Fonts />
             <CSSReset />
