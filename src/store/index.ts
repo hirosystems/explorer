@@ -1,11 +1,11 @@
 import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/toolkit';
 
-import { transactionReducer } from './transactions';
+import { transactions } from './transactions';
 
 const middleware = getDefaultMiddleware({ thunk: true });
 
 const rootReducer = combineReducers({
-  transactions: transactionReducer,
+  transactions,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

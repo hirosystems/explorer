@@ -49,7 +49,10 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
   return (
     <PageWrapper>
       <Head>
-        <meta property="og:title" content={`Stacks 2.0 explorer: Tx: ${truncateMiddle(tx_id, 10)}`} />
+        <meta
+          property="og:title"
+          content={`Stacks 2.0 explorer: Tx: ${truncateMiddle(tx_id, 10)}`}
+        />
         <meta property="og:url" content={`${API_SERVER}/txid/${transaction?.tx_id}`} />
         <meta property="og:description" content={`Stacks transaction: ${transaction?.tx_id}`} />
       </Head>
@@ -60,8 +63,7 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
   const txid = query?.txid.toString();
-  // @ts-ignore
-  await store.dispatch(fetchTransaction(txid));
+  await Promise.all([store.dispatch(fetchTransaction(txid))]);
   return { tx_id: txid };
 };
 
