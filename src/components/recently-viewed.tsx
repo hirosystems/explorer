@@ -6,9 +6,9 @@ import { Flex, Box, Text, FlexProps, BoxProps } from '@blockstack/ui';
 
 import { Tag } from '@components/tags';
 import { truncateMiddle } from '@common/utils';
-import { Transaction } from '@models/transaction.interface';
+import { Transaction, TransactionType } from '@models/transaction.interface';
+
 import Link from 'next/link';
-import { TransactionType } from '../models/transaction.interface';
 
 dayjs.extend(relativeTime);
 
@@ -30,13 +30,7 @@ export const RecentlyViewed = ({ transactions, ...rest }: RecentlyViewedProps) =
       {...rest}
     >
       <Box mx="base" mt={['base-tight', 'base-loose']} mb="tight">
-        <Text
-          color="#677282"
-          fontWeight={600}
-          fontSize="11px"
-          lineHeight="base"
-          style={{ textTransform: 'uppercase' }}
-        >
+        <Text color="#677282" fontWeight={600} fontSize="11px" lineHeight="base" style={{ textTransform: 'uppercase' }}>
           Recently Viewed
         </Text>
       </Box>
@@ -52,9 +46,11 @@ interface RecentlyViewedListProps extends BoxProps {
 export const RecentlyViewedList = ({ transactions, ...rest }: RecentlyViewedListProps) => {
   return (
     <Box width="100%" {...rest}>
-      {transactions.map((tx, i) => (
-        <RecentlyViewedListItem transaction={tx} isLast={transactions.length - 1 === i} />
-      ))}
+      {transactions
+        .sort((a, b) => -(a as any).viewedDate.localeCompare((b as any).viewedDate))
+        .map((tx, i) => (
+          <RecentlyViewedListItem transaction={tx} isLast={transactions.length - 1 === i} />
+        ))}
     </Box>
   );
 };
