@@ -17,8 +17,8 @@ import PoisonMicroblockPage from '../tx/poison-microblock';
 import ContractCallPage from '../tx/contract-call';
 import { TxNotFound } from '@pages/tx/not-found';
 import { PageWrapper } from '@components/page';
-import { Helmet } from 'react-helmet';
 import { truncateMiddle } from '@common/utils';
+import Head from 'next/head';
 
 const getTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
@@ -53,14 +53,14 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
 
   return (
     <PageWrapper>
-      <Helmet>
+      <Head>
         <meta
           property="og:title"
           content={`Stacks 2.0 explorer: Tx: ${truncateMiddle(tx_id, 10)}`}
         />
         <meta property="og:url" content={`${process.env.API_SERVER}/txid/${transaction.tx_id}`} />
         <meta property="og:description" content={`Stacks transaction: ${transaction.tx_id}`} />
-      </Helmet>
+      </Head>
       {getTxComponent(transaction)}
     </PageWrapper>
   );
@@ -69,7 +69,7 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
   const txid = query.txid.toString();
   try {
-    const { transaction } = await fetchTx({ txid });
+    const transaction = await fetchTx({ txid });
     store.dispatch(fetchTransactionDone(transaction));
   } catch (e) {
     store.dispatch(fetchTransactionFailed({ txid }));
