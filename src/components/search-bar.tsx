@@ -13,7 +13,7 @@ export const SearchBar = ({ onChange, inputOffset = '50px', ...rest }: SearchBar
     width="100%"
     height="64px"
     borderRadius="6px"
-    background="white"
+    bg="white"
     {...rest}
   >
     <label>
@@ -22,7 +22,6 @@ export const SearchBar = ({ onChange, inputOffset = '50px', ...rest }: SearchBar
       </Text>
       <Input
         type="text"
-        cursor="pointer"
         position="absolute"
         top={0}
         bottom={0}
@@ -31,6 +30,7 @@ export const SearchBar = ({ onChange, inputOffset = '50px', ...rest }: SearchBar
         lineHeight="20px"
         p={0}
         pl={inputOffset}
+        pr="base"
         height="100%"
         placeholder="Search for transactions"
         onChange={onChange}
