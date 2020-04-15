@@ -1,7 +1,8 @@
 import React from 'react';
-import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
-import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';
 import App, { AppContext } from 'next/app';
+import Head from 'next/head';
+import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';
+import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 
@@ -21,6 +22,9 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <>
+            <Head>
+              <title>Stacks 2.0 explorer</title>
+            </Head>
             <Fonts />
             <CSSReset />
             <Component {...pageProps} />
