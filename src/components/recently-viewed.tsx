@@ -30,7 +30,13 @@ export const RecentlyViewed = ({ transactions, ...rest }: RecentlyViewedProps) =
       {...rest}
     >
       <Box mx="base" mt={['base-tight', 'base-loose']} mb="tight">
-        <Text color="#677282" fontWeight={600} fontSize="11px" lineHeight="base" style={{ textTransform: 'uppercase' }}>
+        <Text
+          color="#677282"
+          fontWeight={600}
+          fontSize="11px"
+          lineHeight="base"
+          style={{ textTransform: 'uppercase' }}
+        >
           Recently Viewed
         </Text>
       </Box>
