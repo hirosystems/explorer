@@ -4,10 +4,10 @@ import { BlockstackLogo } from './icons/blockstack-logo';
 import Link from 'next/link';
 
 export const HomeNavigation: React.FC = () => (
-  <Flex justifyContent="space-between" alignItems="center" height="64px">
+  <Flex as="nav" justifyContent="space-between" alignItems="center" height="64px">
     <Box>
       <Link href="/" passHref>
-        <a>
+        <a aria-label="Homepage">
           <BlockstackLogo />
         </a>
       </Link>
