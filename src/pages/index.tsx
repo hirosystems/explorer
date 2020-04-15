@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Router from 'next/router';
 import { Flex, Text } from '@blockstack/ui';
 
 import { Page } from '@components/page';
