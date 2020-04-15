@@ -1,6 +1,7 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Transaction } from '@models/transaction.interface';
+import { fetchTx } from '@common/api/transactions';
 
-export const fetchTransaction = createAction<{ txid: number }>('ADD_TRANSACTION');
-export const fetchTransactionDone = createAction<Transaction>('ADD_TRANSACTION_DONE');
-export const fetchTransactionFailed = createAction<{ txid: string }>('ADD_TRANSACTION_FAILED');
+export const fetchTransaction = createAsyncThunk<Transaction, Transaction['tx_id']>('transaction/fetch', async txid =>
+  fetchTx(txid)
+);

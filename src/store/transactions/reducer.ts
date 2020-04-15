@@ -1,22 +1,34 @@
-import { createReducer, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
-
+import { createEntityAdapter, createReducer } from '@reduxjs/toolkit';
 import { Transaction } from '@models/transaction.interface';
-import { RootState } from '@store';
-import { fetchTransactionDone } from './actions';
+import { fetchTransaction } from './actions';
 
-const txAdapter = createEntityAdapter({
+export const txAdapter = createEntityAdapter({
   selectId: (transaction: Transaction) => transaction.tx_id,
 });
 
-const initialState = txAdapter.getInitialState();
-
-export const transactionReducer = createReducer(initialState, {
-  [fetchTransactionDone.type]: (state, action) => txAdapter.addOne(state, action.payload),
+const initialState = txAdapter.getInitialState({
+  loading: 'idle',
+  error: null,
 });
 
-const selectors = txAdapter.getSelectors();
-
-const selectTransactionsSlice = (state: RootState) => state.transactions;
-
-export const selectTransaction = (id: string) =>
-  createSelector(selectTransactionsSlice, state => selectors.selectById(state, id));
+export const transactionReducer = createReducer(initialState, builder => {
+  builder.addCase(fetchTransaction.pending, state => {
+    if (state.loading === 'idle') {
+      state.loading = 'pending';
+    }
+  });
+  builder.addCase(fetchTransaction.fulfilled, (state, action) => {
+    if (state.loading === 'pending') {
+      txAdapter.addOne(state, action.payload);
+      state.loading = 'idle';
+      state.error = null;
+    }
+  });
+  builder.addCase(fetchTransaction.rejected, (state, action) => {
+    if (state.loading === 'pending') {
+      state.loading = 'idle';
+      // @ts-ignore
+      state.error = action.error;
+    }
+  });
+});

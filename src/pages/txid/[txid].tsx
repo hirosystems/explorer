@@ -1,23 +1,23 @@
 import React from 'react';
+import Head from 'next/head';
+
 import { Transaction } from '@models/transaction.interface';
-import { fetchTransactionDone, fetchTransactionFailed } from '@store/transactions';
+import { fetchTransaction } from '@store/transactions';
+import { API_SERVER } from '@common/constants';
 import { ReduxNextPageContext } from '@common/types/next-store';
-import { fetchTx } from '@common/api/transactions';
 import { useTransactionState } from '@common/hooks/use-transaction-state';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
+import { truncateMiddle } from '@common/utils';
+
+import { PageWrapper } from '@components/page';
 import CoinbasePage from '@components/tx/coinbase';
 import TokenTransferPage from '@components/tx/token-transfer';
 import SmartContractPage from '@components/tx/smart-contract';
 import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
-import { PageWrapper } from '@components/page';
-import { truncateMiddle } from '@common/utils';
-import Head from 'next/head';
 
-const renderTxComponent = (transaction?: Transaction) => {
-  if (!transaction) return <TxNotFound />;
-
+const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'coinbase':
       return <CoinbasePage transaction={transaction} />;
@@ -35,12 +35,12 @@ const renderTxComponent = (transaction?: Transaction) => {
 };
 
 const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
-  const transaction = useTransactionState(tx_id);
+  const { transaction, error } = useTransactionState(tx_id);
 
-  if (!transaction)
+  if (error)
     return (
       <PageWrapper>
-        <TxNotFound />;
+        <TxNotFound />
       </PageWrapper>
     );
 
@@ -50,22 +50,18 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
     <PageWrapper>
       <Head>
         <meta property="og:title" content={`Stacks 2.0 explorer: Tx: ${truncateMiddle(tx_id, 10)}`} />
-        <meta property="og:url" content={`${process.env.API_SERVER}/txid/${transaction.tx_id}`} />
-        <meta property="og:description" content={`Stacks transaction: ${transaction.tx_id}`} />
+        <meta property="og:url" content={`${API_SERVER}/txid/${transaction?.tx_id}`} />
+        <meta property="og:description" content={`Stacks transaction: ${transaction?.tx_id}`} />
       </Head>
-      {renderTxComponent(transaction)}
+      {transaction && renderTxComponent(transaction)}
     </PageWrapper>
   );
 };
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
   const txid = query?.txid.toString();
-  try {
-    const transaction = await fetchTx({ txid });
-    store.dispatch(fetchTransactionDone(transaction));
-  } catch (e) {
-    store.dispatch(fetchTransactionFailed({ txid }));
-  }
+  // @ts-ignore
+  await store.dispatch(fetchTransaction(txid));
   return { tx_id: txid };
 };
 
