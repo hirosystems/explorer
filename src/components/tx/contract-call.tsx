@@ -20,9 +20,7 @@ const ContractSource = () => (
 
 const PostConditionStatus = ({ status }: { status: 'success' | 'failed' }) => (
   <Flex align="center" color={status === 'success' ? 'green' : 'red'}>
-    <Box mr="tight">
-      {status === 'success' ? <CheckmarkCircleIcon /> : <ExclamationMarkCircleIcon />}
-    </Box>
+    <Box mr="tight">{status === 'success' ? <CheckmarkCircleIcon /> : <ExclamationMarkCircleIcon />}</Box>
     <Text textStyle="body.small.medium" fontWeight="600">
       {status === 'success' ? 'Success' : 'Failed'}
     </Text>
@@ -127,10 +125,7 @@ interface ContractCallPageProps {
 const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
   return (
     <>
-      <PageTop
-        status={Statuses.PENDING}
-        type={[TransactionType.CONTRACT_CALL, TransactionType.TOKEN_TRANSFER]}
-      />
+      <PageTop status={Statuses.PENDING} type={[TransactionType.CONTRACT_CALL, TransactionType.TOKEN_TRANSFER]} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} />
         <TokenTransfers />
