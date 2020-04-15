@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Flex, Text } from '@blockstack/ui';
-
 import { Page } from '@components/page';
 import { SearchBar } from '@components/search-bar';
 import { HomeNavigation } from '@components/home-nav';
