@@ -3,6 +3,7 @@ import { FlexProps } from '@blockstack/ui';
 
 import { Badge } from '@components/badge';
 import { TransactionType } from '@models/transaction.interface';
+import { getTxTypeName } from '@common/transaction-names';
 
 const colorMap = {
   [TransactionType.SMART_CONTRACT]: '#0F5257',
@@ -10,13 +11,6 @@ const colorMap = {
   [TransactionType.TOKEN_TRANSFER]: 'blue',
   [TransactionType.COINBASE]: '#6014B8',
   [TransactionType.POISON_MICROBLOCK]: '#AAA9DD',
-};
-const labelMap = {
-  [TransactionType.SMART_CONTRACT]: 'Contract creation',
-  [TransactionType.CONTRACT_CALL]: 'Contract call',
-  [TransactionType.TOKEN_TRANSFER]: 'Token transfer',
-  [TransactionType.COINBASE]: 'Coinbase',
-  [TransactionType.POISON_MICROBLOCK]: 'Poison-microblock',
 };
 
 interface TagProps extends FlexProps {
@@ -26,7 +20,7 @@ interface TagProps extends FlexProps {
 export const Tag = ({ type, ...rest }: TagProps) => {
   return (
     <Badge background={colorMap[type]} {...rest}>
-      {labelMap[type]}
+      {getTxTypeName(type)}
     </Badge>
   );
 };
