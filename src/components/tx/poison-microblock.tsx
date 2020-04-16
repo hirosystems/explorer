@@ -17,7 +17,7 @@ const PoisonMicroblockPage = ({ transaction }: PoisonMicroblockPageProps) => {
   return (
     <>
       <PageTop status={Statuses.PENDING} type={[TransactionType.POISON_MICROBLOCK]} />
-      <Stack shouldWrapChildren spacing="extra-loose">
+      <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
         <Rows
           items={[
