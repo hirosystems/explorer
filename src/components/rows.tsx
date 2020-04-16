@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Flex, FlexProps } from '@blockstack/ui';
+import { Box, Flex, FlexProps, Tooltip } from '@blockstack/ui';
 import { Caption } from '@components/typography';
 import { Card } from '@components/card';
 import { useHover } from 'use-events';
@@ -52,15 +52,17 @@ const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest })
     >
       {children}
     </Flex>
-    <Box
-      transition="75ms all ease-in-out"
-      opacity={isHovered ? 1 : 0}
-      color="ink.400"
-      pl="base"
-      ml="auto"
-    >
-      <CopyIcon />
-    </Box>
+    <Tooltip label="Copy to clipboard" hasArrow>
+      <Box
+        transition="75ms all ease-in-out"
+        opacity={isHovered ? 1 : 0}
+        color="ink.400"
+        pl="base"
+        ml="auto"
+      >
+        <CopyIcon />
+      </Box>
+    </Tooltip>
   </Flex>
 );
 

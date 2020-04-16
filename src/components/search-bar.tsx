@@ -10,7 +10,15 @@ interface SearchBarProps extends BoxProps {
 
 export const SearchBar = forwardRef(
   ({ onChange, inputOffset = '50px', ...rest }: SearchBarProps, ref: Ref<HTMLDivElement>) => (
-    <Box position="relative" width="100%" height="64px" borderRadius="6px" bg="white" ref={ref} {...rest}>
+    <Box
+      position="relative"
+      width="100%"
+      height="64px"
+      borderRadius="6px"
+      bg="white"
+      ref={ref}
+      {...rest}
+    >
       <label>
         <Text display="block" position="absolute" zIndex={-1}>
           Search for transactions on the Stacks blockchain
