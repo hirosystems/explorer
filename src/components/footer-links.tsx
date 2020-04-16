@@ -26,12 +26,15 @@ export const FooterLinks = () => (
         await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
       }}
     >
-      <a>Random transaction</a>
+      <a href="#">Random transaction</a>
     </FooterLink>
     <FooterLink>
       <Link href="/components">
         <a>Colophon</a>
       </Link>
+    </FooterLink>
+    <FooterLink>
+      <a href="https://docs.blockstack.org/">Docs</a>
     </FooterLink>
     <FooterLink>
       <a href="https://blockstack.github.io/stacks-blockchain-sidecar/">API</a>

@@ -16,6 +16,7 @@ import SmartContractPage from '@components/tx/smart-contract';
 import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
+import { getTxTypeName } from '@common/transaction-names';
 
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
@@ -37,7 +38,7 @@ const renderTxComponent = (transaction: Transaction) => {
 const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
   const { transaction, error } = useTransactionState(tx_id);
 
-  if (error)
+  if (error || !transaction)
     return (
       <PageWrapper>
         <TxNotFound />
@@ -46,15 +47,18 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
 
   useRecentlyViewedTx(transaction);
 
+  const ogTitle = `${getTxTypeName(transaction.tx_type)} transaction: ${truncateMiddle(tx_id, 10)}`;
+  const ogUrl = `${API_SERVER}/txid/${transaction.tx_id}`;
+  const subject = transaction.sponsored ? 'Sponsored transaction' : 'Transaction';
+  const ogDescription = `
+    ${subject} initiated by ${transaction.sender_address} confirmed in block #${transaction.block_height}`;
+
   return (
     <PageWrapper>
       <Head>
-        <meta
-          property="og:title"
-          content={`Stacks 2.0 explorer: Tx: ${truncateMiddle(tx_id, 10)}`}
-        />
-        <meta property="og:url" content={`${API_SERVER}/txid/${transaction?.tx_id}`} />
-        <meta property="og:description" content={`Stacks transaction: ${transaction?.tx_id}`} />
+        <meta property="og:title" content={ogTitle} />
+        <meta property="og:url" content={ogUrl} />
+        <meta property="og:description" content={ogDescription} />
       </Head>
       {transaction && renderTxComponent(transaction)}
     </PageWrapper>
