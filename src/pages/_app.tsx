@@ -5,10 +5,13 @@ import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';
 import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
-
-const Fonts = createGlobalStyle`@import url('https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap');`;
-
 import { RootState, initStore } from '@store';
+
+const Fonts = createGlobalStyle`
+  html, body, #__next {
+    height: 100%;
+  }
+`;
 
 class MyApp extends App<ReduxWrapperAppProps<RootState>> {
   static async getInitialProps({ Component, ctx }: AppContext) {
@@ -23,6 +26,10 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
         <ThemeProvider theme={theme}>
           <>
             <Head>
+              <link
+                href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap"
+                rel="stylesheet"
+              />
               <title>Stacks 2.0 explorer</title>
               <meta property="og:type" content="website" />
               <meta property="og:site_name" content="Stacks 2.0 blockchain explorer" />
