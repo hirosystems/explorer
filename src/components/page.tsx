@@ -55,7 +55,9 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
 );
 
 export const Page: React.FC = ({ children }) => (
-  <Box as="main" maxWidth="1280px" mx="auto">
-    <Box mx={['base', 'extra-loose']}>{children}</Box>
+  <Box as="main" height="100%" maxWidth="1280px" mx="auto">
+    <Flex flexDirection="column" height="100%" mx={['base', 'extra-loose']}>
+      {children}
+    </Flex>
   </Box>
 );
