@@ -17,7 +17,7 @@ const CoinbasePage = ({ transaction }: CoinbasePageProps) => {
   return (
     <>
       <PageTop status={Statuses.SUCCESS} type={[TransactionType.COINBASE]} />
-      <Stack shouldWrapChildren spacing="extra-loose">
+      <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
         <Rows
           items={[
