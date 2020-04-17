@@ -29,7 +29,7 @@ export const SearchBar = ({ onChange, inputOffset = '50px', ...rest }: SearchBar
         onChange={onChange}
         fontSize="inherit"
         backgroundColor="transparent"
-        _placeholder={{ color: '#677282', lineHeight: '20px' }}
+        _placeholder={{ color: '#677282' }}
       />
       <MagnifyingGlass
         position="absolute"

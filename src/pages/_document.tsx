@@ -32,6 +32,7 @@ export default class MyDocument extends Document<any> {
   render() {
     return (
       <html lang="en">
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <Head />
         <body>
           <Main />
