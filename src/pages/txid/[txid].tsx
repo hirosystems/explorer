@@ -56,6 +56,7 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
   return (
     <PageWrapper>
       <Head>
+        <title>Stacks 2.0 explorer – {getTxTypeName(transaction.tx_type)}</title>
         <meta property="og:title" content={ogTitle} />
         <meta property="og:url" content={ogUrl} />
         <meta property="og:description" content={ogDescription} />
