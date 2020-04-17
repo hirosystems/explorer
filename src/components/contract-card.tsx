@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Box, Flex, FlexProps, Text } from '@blockstack/ui';
 import { Card } from '@components/card';
+import { DefaultContract } from '@components/icons/default-contract';
 import { CodeIcon } from '@components/svg';
 import { useHover } from 'use-events';
 
@@ -56,8 +57,9 @@ export const ContractCard: React.FC<ContractCardProps> = ({ title, meta }) => {
           mr={['base-tight', 'base-tight', 'unset']}
           size={10}
           borderRadius="12px"
-          bg="blue"
-        />
+        >
+          <DefaultContract />
+        </Box>
         <Box textAlign={['left', 'left', 'center']}>
           <Text width="100%" textStyle="body.large.medium" display="block">
             {title}
