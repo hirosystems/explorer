@@ -23,6 +23,14 @@ export const FooterLinks = () => (
       onClick={async () => {
         const { results } = await fetchTxList();
         const randomTx = results[Math.floor(Math.random() * results.length)];
+        const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
+        if (hasNonCoinbaseTxs) {
+          const nonCoinbaseResults = results.filter(tx => tx.tx_type !== 'coinbase');
+          const randomNonCoinbaseTx =
+            nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
+          await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id}`);
+          return;
+        }
         await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
       }}
     >
