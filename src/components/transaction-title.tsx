@@ -8,6 +8,7 @@ import { TransactionType } from '@models/transaction.interface';
 export interface TitleProps extends BoxProps {
   status: Statuses;
   type: TransactionType | TransactionType[];
+  contractName?: string;
 }
 
 const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] }) =>
