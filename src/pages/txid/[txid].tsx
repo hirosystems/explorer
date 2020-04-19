@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-
+import { useRouter } from 'next/router';
 import { Transaction } from '@models/transaction.interface';
 import { fetchTransaction } from '@store/transactions';
 import { API_SERVER } from '@common/constants';
@@ -35,8 +35,9 @@ const renderTxComponent = (transaction: Transaction) => {
   }
 };
 
-const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
-  const { transaction, error } = useTransactionState(tx_id);
+const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
+  const { transaction, tx_id, error } = useTransactionState();
+  const router = useRouter();
 
   if (error || !transaction)
     return (
@@ -45,9 +46,17 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
       </PageWrapper>
     );
 
+  React.useEffect(() => {
+    if (searchQuery !== tx_id && router.pathname !== tx_id) {
+      router.push('/txid/[txid]', `/txid/${tx_id}`, { shallow: true });
+    }
+  }, [router.pathname]);
+
   useRecentlyViewedTx(transaction);
 
-  const ogTitle = `${getTxTypeName(transaction.tx_type)} transaction: ${truncateMiddle(tx_id, 10)}`;
+  const ogTitle = `${getTxTypeName(transaction.tx_type)}${
+    tx_id && ` transaction: ${truncateMiddle(tx_id, 10)}`
+  }`;
   const ogUrl = `${API_SERVER}/txid/${transaction.tx_id}`;
   const subject = transaction.sponsored ? 'Sponsored transaction' : 'Transaction';
   const ogDescription = `
@@ -67,9 +76,9 @@ const TransactionPage = ({ tx_id }: Pick<Transaction, 'tx_id'>) => {
 };
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
-  const txid = query?.txid.toString();
-  await Promise.all([store.dispatch(fetchTransaction(txid))]);
-  return { tx_id: txid };
+  const searchQuery = query?.txid.toString();
+  await Promise.all([store.dispatch(fetchTransaction(searchQuery))]);
+  return { searchQuery };
 };
 
 export default TransactionPage;

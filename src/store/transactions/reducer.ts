@@ -9,9 +9,11 @@ export const txAdapter = createEntityAdapter({
 const initialState = txAdapter.getInitialState<{
   loading: 'idle' | 'pending' | 'rejected';
   error?: SerializedError;
+  lastTxId?: string;
 }>({
   loading: 'idle',
   error: undefined,
+  lastTxId: undefined,
 });
 
 export const transactions = createReducer(initialState, builder => {
@@ -25,6 +27,7 @@ export const transactions = createReducer(initialState, builder => {
       txAdapter.addOne(state, action.payload);
       state.loading = 'idle';
       state.error = undefined;
+      state.lastTxId = action.payload.tx_id;
     }
   });
   builder.addCase(fetchTransaction.rejected, (state, action) => {
