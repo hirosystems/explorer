@@ -1,7 +1,25 @@
 import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
+import { c32addressDecode } from 'c32check';
 
 export const store = engine.createStore([lclStorage]);
+
+/**
+ * validateStacksAddress
+ *
+ * @param {String} stacksAddress - the STX address to validate
+ */
+const validateStacksAddress = (stacksAddress: string) => {
+  let valid = false;
+  try {
+    if (c32addressDecode(stacksAddress)) {
+      valid = true;
+    }
+  } catch (e) {
+    throw new Error('Not a valid Stacks address.');
+  }
+  return valid;
+};
 
 export const dedupe = (array: any[], key: string) =>
   Array.from(new Set(array.map(a => a[key]))).map(id => {
@@ -32,4 +50,13 @@ export const truncateMiddle = (input: string, offset = 5) => {
 export const validateTxId = (txid: string) => {
   const regex = /0x[A-Fa-f0-9]{64}/;
   return regex.exec(txid);
+};
+
+export const validateContractName = (contract: string) => {
+  const stxAddress = contract.split('.')[0];
+  const contractName = contract.split('.')[1];
+  const nameRegex = /[a-zA-Z]([a-zA-Z0-9]|[-_!?+<>=/*])*$|^[-+=/*]$|^[<>]=?$/;
+  const validStacksAddress = validateStacksAddress(stxAddress);
+  const validName = nameRegex.exec(contractName);
+  return validName && validStacksAddress;
 };
