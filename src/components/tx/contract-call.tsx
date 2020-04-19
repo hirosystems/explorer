@@ -133,7 +133,7 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
       />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} />
-        <TokenTransfers />
+        <TokenTransfers events={transaction.events} />
         <ContractSource />
         <FunctionSummarySection />
         <PostConditionsSection />
