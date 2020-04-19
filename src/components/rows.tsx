@@ -93,6 +93,7 @@ export const Row: React.FC<RowProps> = ({
 };
 
 interface Item {
+  condition?: boolean;
   label?: {
     children: any;
   };
@@ -128,18 +129,21 @@ export const Rows: React.FC<RowsProps> = ({
           render={columnLabels[1] ? <RowLabel label={columnLabels[1]} /> : undefined}
         />
       ) : null}
-      {items.map(({ label, children, copy }, key, arr) => (
-        <ChildComponent
-          card={card}
-          isFirst={key === 0}
-          isLast={key === arr.length - 1}
-          label={label}
-          render={children}
-          key={key}
-          copy={copy}
-          inline={inline}
-        />
-      ))}
+      {items.map(
+        ({ label, children, copy, condition = true }, key, arr) =>
+          condition && (
+            <ChildComponent
+              card={card}
+              isFirst={key === 0}
+              isLast={key === arr.length - 1}
+              label={label}
+              render={children}
+              key={key}
+              copy={copy}
+              inline={inline}
+            />
+          )
+      )}
     </Component>
   );
 };

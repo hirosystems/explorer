@@ -43,6 +43,7 @@ const transformDataToRowData = (d: Transaction) => {
       copy: d.tx_id,
     },
     {
+      condition: d.tx_type === 'smart_contract',
       label: {
         children: 'Contract address',
       },
@@ -66,7 +67,7 @@ const transformDataToRowData = (d: Transaction) => {
       label: {
         children: 'Block',
       },
-      children: <BlockComponent block={d.block_hash} ts={d.block_height} />,
+      children: <BlockComponent block={d.block_height} ts={d.block_height} />,
     },
   ];
 };
