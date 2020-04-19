@@ -26,7 +26,7 @@ export const dedupe = (array: any[], key: string) =>
     return array.find(a => a[key] === id);
   });
 
-export const toSnakeCase = (str: string) => {
+export const toKebabCase = (str: string) => {
   if (!str) return '';
   const hasSpaces = str.includes(' ');
   const hasUnderscore = str.includes('_');
