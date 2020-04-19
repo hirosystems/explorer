@@ -32,7 +32,7 @@ const ContractCardButton: React.FC<FlexProps> = props => {
 
 interface ContractCardProps extends FlexProps {
   title: string;
-  meta: string;
+  meta?: string;
   icon?: string;
 }
 
@@ -64,9 +64,11 @@ export const ContractCard: React.FC<ContractCardProps> = ({ title, meta }) => {
           <Text width="100%" textStyle="body.large.medium" display="block">
             {title}
           </Text>
-          <Text width="100%" textStyle="body.small" color="ink.600" display="block">
-            {meta}
-          </Text>
+          {meta ? (
+            <Text width="100%" textStyle="body.small" color="ink.600" display="block">
+              {meta}
+            </Text>
+          ) : null}
         </Box>
       </Flex>
       <ContractCardButton />

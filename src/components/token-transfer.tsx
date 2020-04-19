@@ -116,7 +116,14 @@ const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransfer
   >
     <Flex align="center" pr="base">
       <Box mr="tight" size="24px" borderRadius="6px" bg={'blue'} />
-      <Text>{renderName(data.event_type)}</Text>
+      {data.asset?.asset_id ? (
+        <CellItem
+          value={data.asset?.asset_id.split('.')[1].split('::')[1]}
+          label={data.asset?.asset_id.split('.')[1].split('::')[0]}
+        />
+      ) : (
+        <Text>{renderName(data.event_type)}</Text>
+      )}
     </Flex>
     <Flex
       flexGrow={1}
@@ -124,6 +131,7 @@ const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransfer
       pt={['base', 'base', 'unset']}
     >
       <CellItem value={data.asset?.amount} label={renderLabel(data.asset?.asset_event_type)} />
+      {/*{data.asset?.asset_id ? <CellItem value={truncateMiddle(data.asset?.sender)} label="From" /> : null}*/}
       {data.asset?.sender ? (
         <CellItem value={truncateMiddle(data.asset?.sender)} label="From" />
       ) : null}
@@ -143,26 +151,36 @@ interface TokenTransferProps extends BoxProps {
  */
 export const TokenTransfers = ({ events, ...boxProps }: TokenTransferProps) => {
   const limit = 5;
-  return events?.length ? (
+  const sortedEvents =
+    events && events.length
+      ? events.slice().sort((a: EventSingle, b: EventSingle) => {
+          return a.event_index - b.event_index;
+        })
+      : [];
+  return sortedEvents?.length ? (
     <Box mt="extra-loose" {...boxProps}>
       <SectionTitle mb="base-loose">Token transfers</SectionTitle>
       <Card>
-        {events.map(
-          (event: EventSingle, key) =>
-            key <= limit && (
-              <TokenTransferItem
-                noBottomBorder={
-                  (key === limit - 1 && events?.length > limit) || key === events?.length - 1
-                }
-                data={event}
-                key={key}
-              />
-            )
+        {sortedEvents.map((event: EventSingle, key) =>
+          event && key <= limit ? (
+            <TokenTransferItem
+              noBottomBorder={
+                sortedEvents?.length - 1 >= limit
+                  ? false
+                  : (key === limit - 1 && sortedEvents?.length - 1 > limit) ||
+                    key === sortedEvents?.length - 1
+              }
+              data={event}
+              key={key}
+            />
+          ) : (
+            'nothing'
+          )
         )}
-        {events.length > limit ? (
+        {sortedEvents.length > limit ? (
           <BottomButton
             icon={() => <ChevronIcon direction="down" size={6} color="currentColor" />}
-            label={`${events.length + 1 - limit} more transfers`}
+            label={`${sortedEvents.length + 1 - limit} more transfers`}
           />
         ) : null}
       </Card>

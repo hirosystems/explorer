@@ -75,9 +75,16 @@ const transformDataToRowData = (d: Transaction) => {
 interface TransactionDetailsProps {
   transaction: Transaction;
   hideContract?: boolean;
+  contractName?: string;
+  contractMeta?: string;
 }
 
-export const TransactionDetails = ({ transaction, hideContract }: TransactionDetailsProps) => (
+export const TransactionDetails = ({
+  transaction,
+  hideContract,
+  contractName,
+  contractMeta,
+}: TransactionDetailsProps) => (
   <Flex align="flex-start" flexDirection={['column', 'column', 'row']}>
     <Box
       width={['100%']}
@@ -87,8 +94,8 @@ export const TransactionDetails = ({ transaction, hideContract }: TransactionDet
     >
       <Rows items={transformDataToRowData(transaction)} />
     </Box>
-    {hideContract ? null : (
-      <ContractCard title="Stack-o-puppers" meta="stackopuppers.co" order={[0, 0, 2]} />
+    {hideContract || !contractName ? null : (
+      <ContractCard title={contractName} meta={contractMeta} order={[0, 0, 2]} />
     )}
   </Flex>
 );

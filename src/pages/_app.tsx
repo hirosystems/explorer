@@ -7,10 +7,12 @@ import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { RootState, initStore } from '@store';
 
-const Fonts = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`
+
   html, body, #__next {
     height: 100%;
   }
+  
 `;
 
 class MyApp extends App<ReduxWrapperAppProps<RootState>> {
@@ -27,7 +29,7 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
           <>
             <Head>
               <link
-                href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap"
+                href="https://fonts.googleapis.com/css2?family=Fira+Code&family=Inter:wght@400;500;600;700&display=swap"
                 rel="stylesheet"
               />
               <title>Stacks 2.0 explorer</title>
@@ -37,7 +39,7 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
               <meta name="twitter:site" content="@blockstack" />
               <meta name="twitter:creator" content="@blockstack" />
             </Head>
-            <Fonts />
+            <GlobalStyles />
             <CSSReset />
             <Component {...pageProps} />
           </>
