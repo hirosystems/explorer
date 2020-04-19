@@ -15,3 +15,7 @@ export const selectTransactionLoading = createSelector(
   state => state.loading
 );
 export const selectTransactionError = createSelector(selectTransactionsSlice, state => state.error);
+export const selectTransactionLastTxId = createSelector(
+  selectTransactionsSlice,
+  state => state.lastTxId
+);
