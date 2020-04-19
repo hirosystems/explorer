@@ -23,7 +23,7 @@ export const toSnakeCase = (str: string) => {
   return string.toLowerCase();
 };
 
-export const truncateMiddle = (input: string, offset: number) => {
+export const truncateMiddle = (input: string, offset: number = 5) => {
   const start = input.substr(0, offset);
   const end = input.substr(input.length - offset, input.length);
   return `${start}…${end}`;
