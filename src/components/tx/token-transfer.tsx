@@ -18,8 +18,8 @@ const TokenTransferPage = ({ transaction }: TokenTransferPageProps) => {
     <>
       <PageTop status={Statuses.SUCCESS} type={[TransactionType.TOKEN_TRANSFER]} />
       <Stack>
-        <TransactionDetails transaction={transaction} />
-        <TokenTransfers />
+        <TransactionDetails transaction={transaction} hideContract />
+        <TokenTransfers events={transaction.events} />
       </Stack>
     </>
   );
