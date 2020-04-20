@@ -2,8 +2,10 @@ import * as React from 'react';
 import { forwardRef, Ref } from 'react';
 import { Box, Input, Text, BoxProps } from '@blockstack/ui';
 import { MagnifyingGlass } from './icons/magnifying-glass';
-
-interface SearchBarProps extends BoxProps {
+import { useFocus, useHover } from 'use-events';
+import { RecentlyViewed } from '@components/recently-viewed';
+import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
+export interface SearchBarProps extends BoxProps {
   onChange(e: React.ChangeEvent<HTMLInputElement>): void;
   inputOffset?: string;
 }
@@ -53,3 +55,37 @@ export const SearchBar = forwardRef(
     </Box>
   )
 );
+
+export const SearchBarWithDropdown: React.FC<SearchBarProps> = ({ onChange, ...props }) => {
+  const [isHovered, hoverBind] = useHover();
+  const [isFocused, focusBind] = useFocus();
+  const transactions = useRecentlyViewedTx();
+  const visible = isHovered || isFocused;
+  return (
+    <Box pr="base-loose" position="relative" width={['100%', '100%', '320px']}>
+      <SearchBar
+        height="40px"
+        width="100%"
+        inputOffset="36px"
+        backgroundColor="#F0F0F5"
+        fontSize="14px"
+        onChange={onChange}
+        {...props}
+        {...focusBind}
+      />
+      <Box
+        style={{ pointerEvents: visible ? 'unset' : 'none' }}
+        pt="tight"
+        position="absolute"
+        zIndex={10000}
+        width="100%"
+        pr="base-loose"
+        left={0}
+        top="100%"
+        {...hoverBind}
+      >
+        <RecentlyViewed opacity={visible ? 1 : 0} transactions={transactions} />
+      </Box>
+    </Box>
+  );
+};
