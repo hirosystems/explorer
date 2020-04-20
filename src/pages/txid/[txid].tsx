@@ -78,9 +78,12 @@ const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
 };
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
-  const searchQuery = query?.txid.toString();
-  await Promise.all([store.dispatch(fetchTransaction(searchQuery))]);
-  return { searchQuery };
+  const { txid } = query;
+  if (txid) {
+    await Promise.all([store.dispatch(fetchTransaction(txid.toString()))]);
+    return { searchQuery: txid.toString() };
+  }
+  return {};
 };
 
 export default TransactionPage;
