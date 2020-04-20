@@ -6,6 +6,7 @@ import { fetchTransaction } from '@store/transactions';
 import { API_SERVER } from '@common/constants';
 import { ReduxNextPageContext } from '@common/types/next-store';
 import { useTransactionState } from '@common/hooks/use-transaction-state';
+import { useMostRecentTxId } from '@common/hooks/use-most-recent-tx';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { truncateMiddle } from '@common/utils';
 
@@ -36,7 +37,8 @@ const renderTxComponent = (transaction: Transaction) => {
 };
 
 const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
-  const { transaction, tx_id, error } = useTransactionState();
+  const tx_id = useMostRecentTxId();
+  const { transaction, error } = useTransactionState(tx_id as string);
   const router = useRouter();
 
   if (error || !transaction)

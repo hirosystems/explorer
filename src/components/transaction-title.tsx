@@ -15,8 +15,8 @@ const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] }) 
   Array.isArray(type) ? (
     <Box {...rest}>
       <Stack isInline spacing="tight">
-        {type.map((t: TransactionType) => (
-          <Tag type={t} />
+        {type.map((t: TransactionType, key) => (
+          <Tag type={t} key={key} />
         ))}
       </Stack>
     </Box>
