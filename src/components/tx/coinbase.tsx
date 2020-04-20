@@ -19,16 +19,19 @@ const CoinbasePage = ({ transaction }: CoinbasePageProps) => {
       <PageTop status={Statuses.SUCCESS} type={[TransactionType.COINBASE]} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
-        <Rows
-          items={[
-            {
-              label: {
-                children: 'Scratch space',
+        {transaction.coinbase_payload.data ? (
+          <Rows
+            noTopBorder
+            items={[
+              {
+                label: {
+                  children: 'Scratch space',
+                },
+                children: transaction.coinbase_payload.data,
               },
-              children: 'Lorem ipsum dolor sit amet',
-            },
-          ]}
-        />
+            ]}
+          />
+        ) : null}
       </Stack>
     </>
   );
