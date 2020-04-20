@@ -60,3 +60,15 @@ export const validateContractName = (contract: string) => {
   const validName = nameRegex.exec(contractName);
   return validName && validStacksAddress;
 };
+
+/**
+ * microToStacks
+ *
+ * @param {Number} amountInMicroStacks - the amount of microStacks to convert
+ */
+export const microToStacks = (amountInMicroStacks: string | number) =>
+  amountInMicroStacks ? Number(amountInMicroStacks) / Math.pow(10, 6) : 0;
+
+export const getContractName = (fullyRealizedName: string) => fullyRealizedName.split('.')[1];
+export const getFungibleAssetName = (assetName: string) =>
+  getContractName(assetName).split('::')[1];

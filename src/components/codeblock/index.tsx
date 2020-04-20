@@ -56,7 +56,7 @@ export const CodeBlock = ({ code }: { code: string }) => {
         whiteSpace: 'pre',
         fontFamily: 'Fira Code',
         overflowX: 'auto',
-        fontSize: '14px'
+        fontSize: '14px',
       }}
     >
       <Highlighter code={editorCode} />

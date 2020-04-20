@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Flex, Text, Stack } from '@blockstack/ui';
+import { Box, Stack } from '@blockstack/ui';
 
 import { CodeBlock } from '@components/codeblock';
 import { SectionTitle } from '@components/typography';
@@ -18,21 +18,22 @@ const ContractSource = ({ source }: { source: string }) => (
   </Box>
 );
 
-const ContractItem = () => (
-  <Flex pb="base" align="center" pr="base">
-    <Box mr="tight" size="24px" borderRadius="6px" bg="ink.200" />
-    <Text textStyle="body.small.medium">ContractName</Text>
-  </Flex>
-);
-const OtherContracts = () => (
-  <Box mt="extra-loose">
-    <SectionTitle mb="base-loose">Other contracts called</SectionTitle>
-    <ContractItem />
-    <ContractItem />
-    <ContractItem />
-    <ContractItem />
-  </Box>
-);
+// const ContractItem = () => (
+//   <Flex pb="base" align="center" pr="base">
+//     <Box mr="tight" size="24px" borderRadius="6px" bg="ink.200" />
+//     <Text textStyle="body.small.medium">ContractName</Text>
+//   </Flex>
+// );
+
+// const OtherContracts = () => (
+//   <Box mt="extra-loose">
+//     <SectionTitle mb="base-loose">Other contracts called</SectionTitle>
+//     <ContractItem />
+//     <ContractItem />
+//     <ContractItem />
+//     <ContractItem />
+//   </Box>
+// );
 
 interface SmartContractPageProps {
   transaction: SmartContractTransaction;
@@ -49,7 +50,6 @@ const SmartContractPage = ({ transaction }: SmartContractPageProps) => {
         />
         <TokenTransfers events={transaction.events} />
         <ContractSource source={transaction.smart_contract.source_code} />
-        <OtherContracts />
       </Stack>
     </>
   );

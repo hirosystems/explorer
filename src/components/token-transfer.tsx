@@ -1,10 +1,25 @@
 import * as React from 'react';
-import { Box, Flex, ChevronIcon, FlexProps, Text, BoxProps } from '@blockstack/ui';
+import {
+  Box,
+  Flex,
+  Grid,
+  ChevronIcon,
+  FlexProps,
+  Text,
+  BlockstackIcon,
+  BoxProps,
+} from '@blockstack/ui';
 import { Card } from '@components/card';
 import { Caption, SectionTitle } from '@components/typography';
 import { useHover } from 'use-events';
 import { TokenTransferTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { truncateMiddle } from '@common/utils';
+import {
+  truncateMiddle,
+  microToStacks,
+  getContractName,
+  getFungibleAssetName,
+} from '@common/utils';
+import { DefaultContract } from '@components/icons/default-contract';
 
 interface BottomButtonProps extends FlexProps {
   label: string;
@@ -105,6 +120,23 @@ const renderLabel = (value: AssetType['asset_event_type']) => {
       return 'Burned';
   }
 };
+
+const ItemIcon = ({ type }: { type: EventSingle['event_type'] }) => {
+  switch (type) {
+    case 'smart_contract_log':
+      return (
+        <Box mr="tight">
+          <DefaultContract size="24px" />
+        </Box>
+      );
+    default:
+      return (
+        <Box color="blue" mr="tight">
+          <BlockstackIcon size="24px" />
+        </Box>
+      );
+  }
+};
 const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransferItemProps) => (
   <Flex
     flexWrap="wrap"
@@ -114,31 +146,36 @@ const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransfer
     py="loose"
     {...flexProps}
   >
-    <Flex align="center" pr="base">
-      <Box mr="tight" size="24px" borderRadius="6px" bg={'blue'} />
+    <Flex align="center" pr="base" width={['100%', '100%', '25%']}>
+      <ItemIcon type={data.event_type} />
       {data.asset?.asset_id ? (
         <CellItem
-          value={data.asset?.asset_id.split('.')[1].split('::')[1]}
-          label={data.asset?.asset_id.split('.')[1].split('::')[0]}
+          value={getFungibleAssetName(data.asset.asset_id)}
+          label={getContractName(data.asset.asset_id).split('::')[0]}
         />
       ) : (
         <Text>{renderName(data.event_type)}</Text>
       )}
     </Flex>
-    <Flex
+    <Grid
+      width={['100%', '100%', '75%']}
+      gridTemplateColumns="repeat(3,1fr)"
       flexGrow={1}
-      justify={['space-between', 'space-between', 'space-evenly']}
       pt={['base', 'base', 'unset']}
     >
-      <CellItem value={data.asset?.amount} label={renderLabel(data.asset?.asset_event_type)} />
-      {/*{data.asset?.asset_id ? <CellItem value={truncateMiddle(data.asset?.sender)} label="From" /> : null}*/}
+      {data.asset?.amount ? (
+        <CellItem
+          value={`${microToStacks(data.asset.amount)} STX`}
+          label={renderLabel(data.asset?.asset_event_type)}
+        />
+      ) : null}
       {data.asset?.sender ? (
         <CellItem value={truncateMiddle(data.asset?.sender)} label="From" />
       ) : null}
       {data.asset?.recipient ? (
         <CellItem value={truncateMiddle(data.asset?.recipient)} label="To" />
       ) : null}
-    </Flex>
+    </Grid>
   </Flex>
 );
 
@@ -162,10 +199,10 @@ export const TokenTransfers = ({ events, ...boxProps }: TokenTransferProps) => {
       <SectionTitle mb="base-loose">Token transfers</SectionTitle>
       <Card>
         {sortedEvents.map((event: EventSingle, key) =>
-          event && key <= limit ? (
+          event ? (
             <TokenTransferItem
               noBottomBorder={
-                sortedEvents?.length - 1 >= limit
+                sortedEvents?.length - 1 > limit
                   ? false
                   : (key === limit - 1 && sortedEvents?.length - 1 > limit) ||
                     key === sortedEvents?.length - 1
@@ -173,11 +210,9 @@ export const TokenTransfers = ({ events, ...boxProps }: TokenTransferProps) => {
               data={event}
               key={key}
             />
-          ) : (
-            'nothing'
-          )
+          ) : null
         )}
-        {sortedEvents.length > limit ? (
+        {sortedEvents.length - 1 > limit ? (
           <BottomButton
             icon={() => <ChevronIcon direction="down" size={6} color="currentColor" />}
             label={`${sortedEvents.length + 1 - limit} more transfers`}
