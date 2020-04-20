@@ -52,7 +52,7 @@ const transformDataToRowData = (d: Transaction) => {
     },
     {
       label: {
-        children: 'Called by',
+        children: 'Sender address',
       },
       children: d.sender_address,
       copy: d.sender_address,
