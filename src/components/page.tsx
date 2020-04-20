@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Box, BoxProps, Flex } from '@blockstack/ui';
-
 import { TransactionTitle, TitleProps } from '@components/transaction-title';
 import { BlockstackLogo } from '@components/icons/blockstack-logo';
-import { SearchBar } from '@components/search-bar';
 import { search } from '@common/search';
+import { SearchBarWithDropdown } from '@components/search-bar';
 
 export const PageWrapper: React.FC<BoxProps> = props => {
   const [query, setQuery] = useState('');
+
+  const handleQueryUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setQuery(e.target.value);
+  };
+
+  const updateQuery = React.useCallback(handleQueryUpdate, []);
+
   return (
     <>
       <Flex
@@ -24,16 +31,7 @@ export const PageWrapper: React.FC<BoxProps> = props => {
             <BlockstackLogo m="base-loose" />
           </a>
         </Link>
-
-        <SearchBar
-          onChange={e => setQuery(e.target.value)}
-          height="40px"
-          inputOffset="36px"
-          width={['100%', '100%', '320px']}
-          backgroundColor="#F0F0F5"
-          fontSize="14px"
-          mr="base-loose"
-        />
+        <SearchBarWithDropdown onChange={updateQuery} />
       </Flex>
       <Box
         pb="extra-loose"

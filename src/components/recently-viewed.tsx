@@ -27,6 +27,7 @@ export const RecentlyViewed = ({ transactions, ...rest }: RecentlyViewedProps) =
       boxShadow="0px 8px 16px rgba(27, 39, 51, 0.08)"
       maxHeight="308px"
       style={{ overflowY: 'auto' }}
+      bg="white"
       {...rest}
     >
       <Box mx="base" mt={['base-tight', 'base-loose']} mb="tight">
