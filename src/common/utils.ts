@@ -1,6 +1,8 @@
 import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
 import { c32addressDecode } from 'c32check';
+import { deserializeMemoString } from '@blockstack/stacks-transactions';
+import { BufferReader } from '@blockstack/stacks-transactions/lib/src/bufferReader';
 
 export const store = engine.createStore([lclStorage]);
 
@@ -91,3 +93,11 @@ export const microToStacks = (amountInMicroStacks: string | number) =>
 export const getContractName = (fullyRealizedName: string) => fullyRealizedName.split('.')[1];
 export const getFungibleAssetName = (assetName: string) =>
   getContractName(assetName).split('::')[1];
+
+const generateBufferReader = (string: string) => {
+  const buffer = Buffer.from(string.replace('0x', ''), 'hex');
+  return new BufferReader(buffer);
+};
+
+export const getMemoString = (string: string) =>
+  deserializeMemoString(generateBufferReader(string)).content;

@@ -4,7 +4,8 @@ import { Badge } from '@components/badge';
 import { Timestamp } from '@components/timestamp';
 import { Rows } from '@components/rows';
 import { ContractCard } from '@components/contract-card';
-import { Transaction } from '@models/transaction.interface';
+import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { getMemoString } from '@common/utils';
 
 interface FeeComponentProps {
   fees: string;
@@ -34,7 +35,7 @@ const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) =
 );
 
 const transformDataToRowData = (d: Transaction) => {
-  return [
+  const defaultData = [
     {
       label: {
         children: 'Transaction ID',
@@ -70,6 +71,18 @@ const transformDataToRowData = (d: Transaction) => {
       children: <BlockComponent block={d.block_height} ts={d.block_height} />,
     },
   ];
+  switch (d.tx_type) {
+    case 'token_transfer':
+      return [
+        ...defaultData,
+        {
+          label: { children: 'Memo' },
+          children: getMemoString(d.token_transfer.memo),
+        },
+      ];
+    default:
+      return defaultData;
+  }
 };
 
 interface TransactionDetailsProps {
