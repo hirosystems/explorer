@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Box, Flex, FlexProps, Tooltip } from '@blockstack/ui';
+import { Ref } from 'react';
+import { Box, Flex, FlexProps, useClipboard, Tooltip } from '@blockstack/ui';
 import { Caption } from '@components/typography';
 import { Card } from '@components/card';
 import { useHover } from 'use-events';
@@ -15,6 +16,7 @@ interface RowProps extends FlexProps {
   };
   render: any;
   inline?: boolean;
+  noTopBorder?: boolean;
 }
 
 interface RowWrapperProps extends FlexProps {
@@ -33,38 +35,54 @@ const RowWrapper: React.FC<RowWrapperProps> = ({ borderColor = 'inherit', inline
 );
 
 const RowLabel = ({ label }: { label: string }) => (
-  <Box flexShrink={0} width="140px">
+  <Flex align="baseline" pt="2px" flexShrink={0} width="140px">
     <Caption pb={['extra-tight', 'extra-tight', 'unset']}>{label}</Caption>
-  </Box>
+  </Flex>
 );
 interface RowContentProps {
   isHovered: boolean;
   copy?: string;
 }
-const RowContent: React.FC<RowContentProps> = ({ children, isHovered, ...rest }) => (
-  <Flex pr="base" width="100%" align="center" justify="space-between" {...rest}>
-    <Flex
-      color={isHovered ? 'blue' : undefined}
-      textStyle="body.small.medium"
-      style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
-      align="center"
-      width="100%"
+interface CopyProps {
+  isHovered?: boolean;
+  onClick?: () => void;
+}
+const CopyButton = React.forwardRef((props: CopyProps, ref: Ref<HTMLDivElement>) => {
+  return (
+    <Box
+      transition="75ms all ease-in-out"
+      color="ink.400"
+      ml="auto"
+      ref={ref}
+      opacity={props.isHovered ? 1 : 0}
+      {...props}
     >
-      {children}
-    </Flex>
-    <Tooltip label="Copy to clipboard" hasArrow>
-      <Box
-        transition="75ms all ease-in-out"
-        opacity={isHovered ? 1 : 0}
-        color="ink.400"
-        pl="base"
-        ml="auto"
+      <CopyIcon />
+    </Box>
+  );
+});
+
+const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovered, ...rest }) => {
+  const { onCopy, hasCopied } = useClipboard(copy || '');
+
+  return (
+    <Flex pr="base" width="100%" align="center" justify="space-between" {...rest}>
+      <Flex
+        color={isHovered ? 'blue' : undefined}
+        textStyle="body.small.medium"
+        style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
+        align="baseline"
+        width="100%"
+        pr="base"
       >
-        <CopyIcon />
-      </Box>
-    </Tooltip>
-  </Flex>
-);
+        {children}
+      </Flex>
+      <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'} hasArrow>
+        <CopyButton onClick={onCopy} isHovered={isHovered} />
+      </Tooltip>
+    </Flex>
+  );
+};
 
 export const Row: React.FC<RowProps> = ({
   card,
@@ -73,13 +91,14 @@ export const Row: React.FC<RowProps> = ({
   label,
   render,
   copy,
+  noTopBorder,
   ...rest
 }) => {
   const [hovered, bind] = useHover();
   const isHovered = !!copy && hovered;
   return (
     <RowWrapper
-      borderTop={isFirst && !card ? '1px solid' : undefined}
+      borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
       borderBottom={isLast && card ? undefined : '1px solid'}
       px={card ? 'base' : 'unset'}
       cursor={isHovered ? 'pointer' : undefined}
@@ -87,7 +106,9 @@ export const Row: React.FC<RowProps> = ({
       {...rest}
     >
       {label ? <RowLabel label={label.children} /> : null}
-      <RowContent isHovered={isHovered}>{render}</RowContent>
+      <RowContent isHovered={isHovered} copy={copy}>
+        {render}
+      </RowContent>
     </RowWrapper>
   );
 };
@@ -107,6 +128,7 @@ interface RowsProps {
   items: Item[];
   columnLabels?: string[];
   inline?: boolean;
+  noTopBorder?: boolean;
 }
 
 export const Rows: React.FC<RowsProps> = ({
@@ -115,6 +137,7 @@ export const Rows: React.FC<RowsProps> = ({
   items,
   columnLabels,
   inline,
+  noTopBorder,
   ...props
 }) => {
   const Component = card ? Card : Box;
@@ -134,6 +157,7 @@ export const Rows: React.FC<RowsProps> = ({
           condition && (
             <ChildComponent
               card={card}
+              noTopBorder={noTopBorder}
               isFirst={key === 0}
               isLast={key === arr.length - 1}
               label={label}
