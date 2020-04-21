@@ -10,8 +10,8 @@ export enum Statuses {
 
 const colorMap = {
   [Statuses.PENDING]: 'ink.600',
-  [Statuses.SUCCESS]: 'green',
-  [Statuses.FAILED]: 'red',
+  [Statuses.SUCCESS]: '#008832',
+  [Statuses.FAILED]: '#D4001A',
 };
 
 const labelMap = {
