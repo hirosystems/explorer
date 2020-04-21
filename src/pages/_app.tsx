@@ -6,13 +6,16 @@ import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { RootState, initStore } from '@store';
+import '@components/highlighter/language-definition';
 
 const GlobalStyles = createGlobalStyle`
-
   html, body, #__next {
     height: 100%;
   }
-  
+  .prism-code *::selection{
+    background-color: #AAB3FF;
+    color: white !important;
+  }
 `;
 
 class MyApp extends App<ReduxWrapperAppProps<RootState>> {
