@@ -42,6 +42,7 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
               <meta name="twitter:card" content="summary" />
               <meta name="twitter:site" content="@blockstack" />
               <meta name="twitter:creator" content="@blockstack" />
+              <link rel="preconnect" href="https://fonts.googleapis.com" />
             </Head>
             <GlobalStyles />
             <CSSReset />
