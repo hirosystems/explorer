@@ -45,6 +45,8 @@ module.exports = withBundleAnalyzer({
         });
     }
 
+    if (process.env.NODE_ENV === 'production') config.externals.push('elliptic');
+
     return config;
   },
 });
