@@ -1,4 +1,8 @@
-module.exports = {
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
   experimental: {
     modern: true,
     polyfillsOptimization: true,
@@ -7,25 +11,40 @@ module.exports = {
   env: {
     API_SERVER: process.env.API_SERVER || 'http://localhost:3999',
   },
+
   webpack(config, { dev, isServer }) {
     const splitChunks = config.optimization && config.optimization.splitChunks;
     if (splitChunks) {
       const cacheGroups = splitChunks.cacheGroups;
-      const reactModules = /[\\/]node_modules[\\/](react|react-dom)[\\/]/;
+      const preactModules = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
       if (cacheGroups.framework) {
-        cacheGroups.react = Object.assign({}, cacheGroups.framework, {
-          test: reactModules,
+        cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
+          test: preactModules,
         });
         cacheGroups.commons.name = 'framework';
       } else {
-        cacheGroups.react = {
+        cacheGroups.preact = {
           name: 'commons',
           chunks: 'all',
-          test: reactModules,
+          test: preactModules,
         };
       }
     }
 
+    // Install webpack aliases:
+    const aliases = config.resolve.alias || (config.resolve.alias = {});
+    aliases.react = aliases['react-dom'] = 'preact/compat';
+
+    // inject Preact DevTools
+    if (dev && !isServer) {
+      const entry = config.entry;
+      config.entry = () =>
+        entry().then(entries => {
+          entries['main.js'] = ['preact/debug'].concat(entries['main.js'] || []);
+          return entries;
+        });
+    }
+
     return config;
   },
-};
+});
