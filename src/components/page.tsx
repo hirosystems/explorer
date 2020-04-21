@@ -27,7 +27,7 @@ export const PageWrapper: React.FC<BoxProps> = props => {
         boxShadow="0px 1px 2px rgba(27, 39, 51, 0.04), 0px 4px 8px rgba(27, 39, 51, 0.04);"
       >
         <Link href="/" passHref>
-          <a>
+          <a aria-label="Homepage" title="Stacks Explorer Homepage">
             <BlockstackLogo m="base-loose" />
           </a>
         </Link>
