@@ -7,45 +7,33 @@ module.exports = withBundleAnalyzer({
     modern: true,
     polyfillsOptimization: true,
     jsconfigPaths: true,
+    reactRefresh: true,
   },
   env: {
     API_SERVER: process.env.API_SERVER || 'http://localhost:3999',
   },
 
   webpack(config, { dev, isServer }) {
-    const splitChunks = config.optimization && config.optimization.splitChunks;
-    if (splitChunks) {
-      const cacheGroups = splitChunks.cacheGroups;
-      const preactModules = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
-      if (cacheGroups.framework) {
-        cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
-          test: preactModules,
-        });
-        cacheGroups.commons.name = 'framework';
-      } else {
-        cacheGroups.preact = {
-          name: 'commons',
-          chunks: 'all',
-          test: preactModules,
-        };
+    if (!dev) {
+      const splitChunks = config.optimization && config.optimization.splitChunks;
+      if (splitChunks) {
+        const cacheGroups = splitChunks.cacheGroups;
+        const reactModules = /[\\/]node_modules[\\/](react|react-dom)[\\/]/;
+        if (cacheGroups.framework) {
+          cacheGroups.react = Object.assign({}, cacheGroups.framework, {
+            test: reactModules,
+          });
+          cacheGroups.commons.name = 'framework';
+        } else {
+          cacheGroups.react = {
+            name: 'commons',
+            chunks: 'all',
+            test: reactModules,
+          };
+        }
       }
+      config.externals.push('elliptic');
     }
-
-    // Install webpack aliases:
-    const aliases = config.resolve.alias || (config.resolve.alias = {});
-    aliases.react = aliases['react-dom'] = 'preact/compat';
-
-    // inject Preact DevTools
-    if (dev && !isServer) {
-      const entry = config.entry;
-      config.entry = () =>
-        entry().then(entries => {
-          entries['main.js'] = ['preact/debug'].concat(entries['main.js'] || []);
-          return entries;
-        });
-    }
-
-    if (process.env.NODE_ENV === 'production') config.externals.push('elliptic');
 
     return config;
   },
