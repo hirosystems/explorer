@@ -5,7 +5,6 @@ import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 
 import { TransactionType } from '@models/transaction.interface';
-import { Statuses } from '@components/status';
 import { TransactionDetails } from '@components/transaction-details';
 import { PoisonMicroblockTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
@@ -16,7 +15,7 @@ interface PoisonMicroblockPageProps {
 const PoisonMicroblockPage = ({ transaction }: PoisonMicroblockPageProps) => {
   return (
     <>
-      <PageTop status={Statuses.PENDING} type={[TransactionType.POISON_MICROBLOCK]} />
+      <PageTop status={transaction.tx_status} type={[TransactionType.POISON_MICROBLOCK]} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
         <Rows

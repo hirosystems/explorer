@@ -24,10 +24,12 @@ export const transactions = createReducer(initialState, builder => {
   });
   builder.addCase(fetchTransaction.fulfilled, (state, action) => {
     if (state.loading === 'pending') {
-      txAdapter.addOne(state, action.payload);
+      action.payload.forEach(tx => {
+        txAdapter.addOne(state, tx);
+      });
       state.loading = 'idle';
       state.error = undefined;
-      state.lastTxId = action.payload.tx_id;
+      state.lastTxId = action.payload[0].tx_id;
     }
   });
   builder.addCase(fetchTransaction.rejected, (state, action) => {

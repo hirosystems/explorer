@@ -12,7 +12,10 @@ import {
 import { Card } from '@components/card';
 import { Caption, SectionTitle } from '@components/typography';
 import { useHover } from 'use-events';
-import { TokenTransferTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import {
+  TokenTransferTransaction,
+  SmartContractTransaction,
+} from '@blockstack/stacks-blockchain-sidecar-types';
 import {
   truncateMiddle,
   microToStacks,
@@ -20,6 +23,7 @@ import {
   getFungibleAssetName,
 } from '@common/utils';
 import { DefaultContract } from '@components/icons/default-contract';
+import { deserializeCV, addressToString } from '@blockstack/stacks-transactions';
 
 interface BottomButtonProps extends FlexProps {
   label: string;
@@ -137,6 +141,40 @@ const ItemIcon = ({ type }: { type: EventSingle['event_type'] }) => {
       );
   }
 };
+interface EventShape {
+  event_index: number;
+  event_type:
+    | 'smart_contract_log'
+    | 'stx_asset'
+    | 'fungible_token_asset'
+    | 'non_fungible_token_asset';
+  asset?: {
+    asset_event_type?: 'transfer' | 'mint' | 'burn';
+    asset_id?: string;
+    sender?: string;
+    recipient?: string;
+    amount?: string;
+    value?: string;
+  };
+  contract_log?: {
+    contract_id: string;
+    topic: string;
+    value: string;
+  };
+}
+const ContractLogCellItem = ({ event }: { event: EventShape }) => {
+  if (event.contract_log) {
+    let value = event.contract_log.value;
+    const thing = deserializeCV(Buffer.from(event.contract_log.value.replace('0x', ''), 'hex'));
+
+    if (thing.type === 5 && 'address' in thing) {
+      value = addressToString(thing.address);
+    }
+    return <CellItem value={value} label={event.contract_log.topic} />;
+  }
+  return null;
+};
+
 const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransferItemProps) => (
   <Flex
     flexWrap="wrap"
@@ -175,6 +213,7 @@ const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransfer
       {data.asset?.recipient ? (
         <CellItem value={truncateMiddle(data.asset?.recipient)} label="To" />
       ) : null}
+      <ContractLogCellItem event={data} />
     </Grid>
   </Flex>
 );

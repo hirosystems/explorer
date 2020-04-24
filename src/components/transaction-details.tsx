@@ -5,7 +5,7 @@ import { Timestamp } from '@components/timestamp';
 import { Rows } from '@components/rows';
 import { ContractCard } from '@components/contract-card';
 import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { getMemoString } from '@common/utils';
+import { getMemoString, getContractName, microToStacks } from '@common/utils';
 
 interface FeeComponentProps {
   fees: string;
@@ -15,7 +15,7 @@ interface FeeComponentProps {
 const FeesComponent = ({ fees, sponsored }: FeeComponentProps) => (
   <>
     <Box>
-      <Text>{fees}</Text>
+      <Text>{microToStacks(fees)} STX</Text>
     </Box>
     {sponsored ? (
       <Badge ml="base" bg="ink.300">
@@ -92,23 +92,42 @@ interface TransactionDetailsProps {
   contractMeta?: string;
 }
 
+const getContractId = (transaction: Transaction) => {
+  switch (transaction.tx_type) {
+    case 'contract_call':
+      return transaction.contract_call.contract_id;
+    case 'smart_contract':
+      return transaction.smart_contract.contract_id;
+    default:
+      return undefined;
+  }
+};
+
 export const TransactionDetails = ({
   transaction,
   hideContract,
-  contractName,
+
   contractMeta,
-}: TransactionDetailsProps) => (
-  <Flex align="flex-start" flexDirection={['column', 'column', 'row']}>
-    <Box
-      width={['100%']}
-      order={[2, 2, 0]}
-      mt={['extra-loose', 'extra-loose', 'unset']}
-      mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
-    >
-      <Rows items={transformDataToRowData(transaction)} />
-    </Box>
-    {hideContract || !contractName ? null : (
-      <ContractCard title={contractName} meta={contractMeta} order={[0, 0, 2]} />
-    )}
-  </Flex>
-);
+}: TransactionDetailsProps) => {
+  const contractId = getContractId(transaction);
+  return (
+    <Flex align="flex-start" flexDirection={['column', 'column', 'row']}>
+      <Box
+        width={['100%']}
+        order={[2, 2, 0]}
+        mt={['extra-loose', 'extra-loose', 'unset']}
+        mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
+      >
+        <Rows items={transformDataToRowData(transaction)} />
+      </Box>
+      {hideContract || !contractId ? null : (
+        <ContractCard
+          title={getContractName(contractId)}
+          meta={contractMeta}
+          contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
+          order={[0, 0, 2]}
+        />
+      )}
+    </Flex>
+  );
+};
