@@ -16,7 +16,7 @@ interface CoinbasePageProps {
 const CoinbasePage = ({ transaction }: CoinbasePageProps) => {
   return (
     <>
-      <PageTop status={Statuses.SUCCESS} type={[TransactionType.COINBASE]} />
+      <PageTop status={transaction.tx_status} type={[TransactionType.COINBASE]} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
         {transaction.coinbase_payload.data ? (

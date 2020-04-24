@@ -2,22 +2,18 @@ import * as React from 'react';
 import { Flex, Text, Box, Spinner, BoxProps } from '@blockstack/ui';
 import { CheckmarkCircleIcon, ExclamationMarkCircleIcon } from '@components/svg';
 
-export enum Statuses {
-  PENDING = 'pending',
-  SUCCESS = 'success',
-  FAILED = 'failed',
-}
+export type Statuses = 'success' | 'pending' | 'failed';
 
 const colorMap = {
-  [Statuses.PENDING]: 'ink.600',
-  [Statuses.SUCCESS]: '#008832',
-  [Statuses.FAILED]: '#D4001A',
+  pending: 'ink.600',
+  success: '#008832',
+  failed: '#D4001A',
 };
 
 const labelMap = {
-  [Statuses.PENDING]: 'Pending',
-  [Statuses.SUCCESS]: 'Success',
-  [Statuses.FAILED]: 'Failed',
+  pending: 'Pending',
+  success: 'Success',
+  failed: 'Failed',
 };
 
 const SpinnerComponent = ({ color }: { color: string }) => (
@@ -25,9 +21,9 @@ const SpinnerComponent = ({ color }: { color: string }) => (
 );
 
 const iconMap = {
-  [Statuses.PENDING]: SpinnerComponent,
-  [Statuses.SUCCESS]: CheckmarkCircleIcon,
-  [Statuses.FAILED]: ExclamationMarkCircleIcon,
+  pending: SpinnerComponent,
+  success: CheckmarkCircleIcon,
+  failed: ExclamationMarkCircleIcon,
 };
 
 interface StatusProps extends BoxProps {

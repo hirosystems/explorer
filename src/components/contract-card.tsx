@@ -4,39 +4,56 @@ import { Card } from '@components/card';
 import { DefaultContract } from '@components/icons/default-contract';
 import { CodeIcon } from '@components/svg';
 import { useHover } from 'use-events';
+import Link from 'next/link';
 
-const ContractCardButton: React.FC<FlexProps> = props => {
+const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
+  contractId,
+  ...props
+}) => {
   const [hover, bind] = useHover();
   return (
-    <Flex
-      borderBottomLeftRadius="12px"
-      borderBottomRightRadius="12px"
-      py="base"
-      align="center"
-      justify="center"
-      borderTop="1px solid"
-      cursor={hover ? 'pointer' : 'unset'}
-      bg={hover ? 'ink.50' : 'transparent'}
-      borderColor="inherit"
-      style={{
-        userSelect: 'none',
+    <Link
+      href={{
+        pathname: '/txid/[txid]',
+        query: {
+          txid: contractId,
+        },
       }}
-      {...props}
-      {...bind}
+      as={`/txid/${contractId}`}
+      passHref
     >
-      <CodeIcon mr="tight" />
-      <Text textStyle="body.small">View contract</Text>
-    </Flex>
+      <Flex
+        borderBottomLeftRadius="12px"
+        borderBottomRightRadius="12px"
+        py="base"
+        align="center"
+        justify="center"
+        borderTop="1px solid"
+        cursor={hover ? 'pointer' : 'unset'}
+        bg={hover ? 'ink.50' : 'transparent'}
+        borderColor="inherit"
+        style={{
+          userSelect: 'none',
+        }}
+        as="a"
+        {...props}
+        {...bind}
+      >
+        <CodeIcon mr="tight" />
+        <Text textStyle="body.small">View contract</Text>
+      </Flex>
+    </Link>
   );
 };
 
 interface ContractCardProps extends FlexProps {
   title: string;
+  contractId?: string;
   meta?: string;
   icon?: string;
 }
 
-export const ContractCard: React.FC<ContractCardProps> = ({ title, meta }) => {
+export const ContractCard: React.FC<ContractCardProps> = ({ title, meta, contractId }) => {
   return (
     <Card
       flexShrink={['unset', 'unset', 0]}
@@ -71,7 +88,7 @@ export const ContractCard: React.FC<ContractCardProps> = ({ title, meta }) => {
           ) : null}
         </Box>
       </Flex>
-      <ContractCardButton />
+      {contractId ? <ContractCardButton contractId={contractId} /> : null}
     </Card>
   );
 };

@@ -1,22 +1,13 @@
 import * as React from 'react';
-import { Box, Stack } from '@blockstack/ui';
+import { Stack } from '@blockstack/ui';
 
-import { CodeBlock } from '@components/codeblock';
-import { SectionTitle } from '@components/typography';
+import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
-
-import { TransactionType } from '@models/transaction.interface';
-import { Statuses } from '@components/status';
-import { TransactionDetails } from '@components/transaction-details';
-import { SmartContractTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 import { TokenTransfers } from '@components/token-transfer';
+import { TransactionDetails } from '@components/transaction-details';
 
-const ContractSource = ({ source }: { source: string }) => (
-  <Box mt="extra-loose">
-    <SectionTitle mb="base-loose">Contract source</SectionTitle>
-    <CodeBlock code={source} />
-  </Box>
-);
+import { SmartContractTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { TransactionType } from '@models/transaction.interface';
 
 interface SmartContractPageProps {
   transaction: SmartContractTransaction;
@@ -25,7 +16,7 @@ interface SmartContractPageProps {
 const SmartContractPage = ({ transaction }: SmartContractPageProps) => {
   return (
     <>
-      <PageTop status={Statuses.SUCCESS} type={TransactionType.SMART_CONTRACT} />
+      <PageTop status={transaction.tx_status} type={TransactionType.SMART_CONTRACT} />
       <Stack spacing="extra-loose">
         <TransactionDetails
           contractName={transaction.smart_contract.contract_id.split('.')[1]}

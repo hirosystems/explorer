@@ -1,7 +1,7 @@
 import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
 import { c32addressDecode } from 'c32check';
-import { deserializeMemoString } from '@blockstack/stacks-transactions';
+import { deserializeMemoString, deserializeCV } from '@blockstack/stacks-transactions';
 import { BufferReader } from '@blockstack/stacks-transactions/lib/src/bufferReader';
 
 export const store = engine.createStore([lclStorage]);
@@ -101,3 +101,6 @@ const generateBufferReader = (string: string) => {
 
 export const getMemoString = (string: string) =>
   deserializeMemoString(generateBufferReader(string)).content;
+
+export const startPad = (n: number, z = 2, s = '0') =>
+  (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';

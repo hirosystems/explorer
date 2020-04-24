@@ -6,7 +6,6 @@ import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { RootState, initStore } from '@store';
-import '@components/highlighter/language-definition';
 import { handleFontLoading } from '@common/fonts';
 
 const GlobalStyles = createGlobalStyle`

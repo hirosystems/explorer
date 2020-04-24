@@ -1,22 +1,19 @@
 import * as React from 'react';
 import { Box, Flex, Text, Stack } from '@blockstack/ui';
+import { useSelector } from 'react-redux';
+import { ContractCallTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+
+import { RootState } from '@store';
+import { selectOriginContractSource } from '@store/transactions';
+import { TransactionType } from '@models/transaction.interface';
 
 import { TokenTransfers } from '@components/token-transfer';
 import { SectionTitle } from '@components/typography';
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { CheckmarkCircleIcon, ExclamationMarkCircleIcon } from '@components/svg';
-import { TransactionType } from '@models/transaction.interface';
-import { Statuses } from '@components/status';
 import { TransactionDetails } from '@components/transaction-details';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
-
-const ContractSource = () => (
-  <Box mt="extra-loose">
-    <SectionTitle mb="base-loose">Contract source</SectionTitle>
-    <Box width="100%" height="422px" bg="ink" borderRadius="12px" />
-  </Box>
-);
+import { ContractSource } from '@components/contract-source';
 
 const PostConditionStatus = ({ status }: { status: 'success' | 'failed' }) => (
   <Flex align="center" color={status === 'success' ? 'green' : 'red'}>
@@ -52,23 +49,7 @@ const PostConditionsSection = () => (
   </Box>
 );
 
-const EventsSection = () => (
-  <Box mt="extra-loose">
-    <SectionTitle mb="base-loose">Events</SectionTitle>
-    <Rows
-      items={[
-        {
-          children: 'AuctionSuccessful(uint256: 31, bid: 7000)',
-        },
-        {
-          children: 'Transfer(address: SP1P72Z3704VMT3DMHPP2CB8TGQWGDBHD3RPR9GZS)',
-        },
-      ]}
-    />
-  </Box>
-);
-
-const FunctionSummarySection = () => (
+const FunctionSummarySection = ({ summary }: { summary: any }) => (
   <Box mt="extra-loose">
     <SectionTitle mb="base-loose">Function summary</SectionTitle>
     <Rows
@@ -77,41 +58,22 @@ const FunctionSummarySection = () => (
           label: {
             children: 'Name',
           },
-          children: 'bid(uint256)',
+          children: summary.function_name,
         },
+
         {
           label: {
-            children: 'Method',
-          },
-          children: 'transfer-nft',
-        },
-        {
-          label: {
-            children: 'Parameters',
+            children: 'Arguments',
           },
           children: (
             <Rows
               inline
-              items={[
-                {
-                  label: {
-                    children: 'From',
-                  },
-                  children: 'SPJT598WY1RJN792HRKRHRQYFB7RJ5ZCG6J6GEZ4',
+              items={summary.function_args.map((arg: any) => ({
+                label: {
+                  children: '',
                 },
-                {
-                  label: {
-                    children: 'To',
-                  },
-                  children: 'SP2837ZMC89J40K4YTS64B00M7065C6X46JX6ARG0',
-                },
-                {
-                  label: {
-                    children: 'Amount',
-                  },
-                  children: '1',
-                },
-              ]}
+                children: arg.toString(),
+              }))}
             />
           ),
         },
@@ -125,19 +87,17 @@ interface ContractCallPageProps {
 }
 
 const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
+  const { contractSource } = useSelector((state: RootState) => ({
+    contractSource: selectOriginContractSource(transaction.contract_call.contract_id)(state),
+  }));
   return (
     <>
-      <PageTop
-        status={Statuses.PENDING}
-        type={[TransactionType.CONTRACT_CALL, TransactionType.TOKEN_TRANSFER]}
-      />
+      <PageTop status={transaction.tx_status} type={[TransactionType.CONTRACT_CALL]} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} />
         <TokenTransfers events={transaction.events} />
-        <ContractSource />
-        <FunctionSummarySection />
-        <PostConditionsSection />
-        <EventsSection />
+        <ContractSource source={contractSource} />
+        <FunctionSummarySection summary={transaction.contract_call} />
       </Stack>
     </>
   );

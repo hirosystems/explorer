@@ -67,7 +67,7 @@ const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
   return (
     <PageWrapper>
       <Head>
-        <title>Stacks 2.0 explorer – {getTxTypeName(transaction.tx_type)}</title>
+        <title>{getTxTypeName(transaction.tx_type)} - Stacks 2.0 explorer</title>
         <meta property="og:title" content={ogTitle} />
         <meta property="og:url" content={ogUrl} />
         <meta property="og:description" content={ogDescription} />
