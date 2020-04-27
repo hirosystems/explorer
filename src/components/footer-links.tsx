@@ -37,11 +37,6 @@ export const FooterLinks = () => (
       <a href="#">Random transaction</a>
     </FooterLink>
     <FooterLink>
-      <Link href="/components">
-        <a>Colophon</a>
-      </Link>
-    </FooterLink>
-    <FooterLink>
       <a href="https://docs.blockstack.org/">Docs</a>
     </FooterLink>
     <FooterLink>
