@@ -7,7 +7,6 @@ import { createGlobalStyle } from 'styled-components';
 import { RootState, initStore } from '@store';
 import { handleFontLoading } from '@common/fonts';
 
-
 const GlobalStyles = createGlobalStyle`
   html, body, #__next {
     height: 100%;

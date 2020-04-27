@@ -1,5 +1,4 @@
 import React from 'react';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Transaction } from '@models/transaction.interface';
 import { fetchTransaction } from '@store/transactions';
@@ -11,6 +10,7 @@ import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { truncateMiddle } from '@common/utils';
 
 import { PageWrapper } from '@components/page';
+import { Meta } from '@components/meta-head';
 import CoinbasePage from '@components/tx/coinbase';
 import TokenTransferPage from '@components/tx/token-transfer';
 import SmartContractPage from '@components/tx/smart-contract';
@@ -36,6 +36,28 @@ const renderTxComponent = (transaction: Transaction) => {
   }
 };
 
+const TransactionMeta = ({ transaction }: any) => {
+  const ogTitle = `${getTxTypeName(transaction.tx_type)}${
+    transaction.tx_id && ` transaction: ${truncateMiddle(transaction.tx_id, 10)}`
+  }`;
+  const ogUrl = `${API_SERVER}/txid/${transaction.tx_id}`;
+  const subject = transaction.sponsored ? 'Sponsored transaction' : 'Transaction';
+  const ogDescription = `
+    ${subject} initiated by ${transaction.sender_address}`;
+
+  return (
+    <Meta
+      title={`${getTxTypeName(transaction.tx_type)} - Stacks 2.0 explorer`}
+      ogTitle={ogTitle}
+      description={ogDescription}
+      url={ogUrl}
+      status={transaction.tx_status}
+      key={transaction.tx_status}
+      labels={[{ label: 'Confirmation', data: `Block #${transaction.block_height}` }]}
+    />
+  );
+};
+
 const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
   const tx_id = useMostRecentTxId();
   const { transaction, error } = useTransactionState(tx_id as string);
@@ -56,22 +78,9 @@ const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
 
   useRecentlyViewedTx(transaction);
 
-  const ogTitle = `${getTxTypeName(transaction.tx_type)}${
-    tx_id && ` transaction: ${truncateMiddle(tx_id, 10)}`
-  }`;
-  const ogUrl = `${API_SERVER}/txid/${transaction.tx_id}`;
-  const subject = transaction.sponsored ? 'Sponsored transaction' : 'Transaction';
-  const ogDescription = `
-    ${subject} initiated by ${transaction.sender_address} confirmed in block #${transaction.block_height}`;
-
   return (
     <PageWrapper>
-      <Head>
-        <title>{getTxTypeName(transaction.tx_type)} - Stacks 2.0 explorer</title>
-        <meta property="og:title" content={ogTitle} />
-        <meta property="og:url" content={ogUrl} />
-        <meta property="og:description" content={ogDescription} />
-      </Head>
+      <TransactionMeta transaction={transaction} />
       {transaction && renderTxComponent(transaction)}
     </PageWrapper>
   );
