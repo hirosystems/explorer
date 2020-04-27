@@ -14,7 +14,7 @@ import { Caption, SectionTitle } from '@components/typography';
 import { useHover } from 'use-events';
 import {
   TokenTransferTransaction,
-  SmartContractTransaction,
+  TransactionEvent,
 } from '@blockstack/stacks-blockchain-sidecar-types';
 import {
   truncateMiddle,
@@ -83,26 +83,13 @@ interface AssetType {
   amount?: string;
   value?: string;
 }
-interface EventSingle {
-  event_index: number;
-  event_type:
-    | 'smart_contract_log'
-    | 'stx_asset'
-    | 'fungible_token_asset'
-    | 'non_fungible_token_asset';
-  asset?: AssetType;
-  contract_log?: {
-    contract_id: string;
-    topic: string;
-    value: string;
-  };
-}
+
 interface TokenTransferItemProps extends FlexProps {
-  data: EventSingle;
+  data: TransactionEvent;
   noBottomBorder?: boolean;
 }
 
-const renderName = (value: EventSingle['event_type']) => {
+const renderName = (value: TransactionEvent['event_type']) => {
   switch (value) {
     case 'stx_asset':
       return 'Stacks Token';
@@ -125,7 +112,7 @@ const renderLabel = (value: AssetType['asset_event_type']) => {
   }
 };
 
-const ItemIcon = ({ type }: { type: EventSingle['event_type'] }) => {
+const ItemIcon = ({ type }: { type: TransactionEvent['event_type'] }) => {
   switch (type) {
     case 'smart_contract_log':
       return (
@@ -141,34 +128,17 @@ const ItemIcon = ({ type }: { type: EventSingle['event_type'] }) => {
       );
   }
 };
-interface EventShape {
-  event_index: number;
-  event_type:
-    | 'smart_contract_log'
-    | 'stx_asset'
-    | 'fungible_token_asset'
-    | 'non_fungible_token_asset';
-  asset?: {
-    asset_event_type?: 'transfer' | 'mint' | 'burn';
-    asset_id?: string;
-    sender?: string;
-    recipient?: string;
-    amount?: string;
-    value?: string;
-  };
-  contract_log?: {
-    contract_id: string;
-    topic: string;
-    value: string;
-  };
-}
-const ContractLogCellItem = ({ event }: { event: EventShape }) => {
+
+const ContractLogCellItem = ({ event }: { event: TransactionEvent }) => {
   if (event.contract_log) {
     let value = event.contract_log.value;
-    const thing = deserializeCV(Buffer.from(event.contract_log.value.replace('0x', ''), 'hex'));
 
-    if (thing.type === 5 && 'address' in thing) {
-      value = addressToString(thing.address);
+    const deserializeAsset = deserializeCV(
+      Buffer.from(event.contract_log.value.replace('0x', ''), 'hex')
+    );
+
+    if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {
+      value = addressToString(deserializeAsset.address);
     }
     return <CellItem value={value} label={event.contract_log.topic} />;
   }
@@ -229,7 +199,7 @@ export const TokenTransfers = ({ events, ...boxProps }: TokenTransferProps) => {
   const limit = 5;
   const sortedEvents =
     events && events.length
-      ? events.slice().sort((a: EventSingle, b: EventSingle) => {
+      ? events.slice().sort((a: TransactionEvent, b: TransactionEvent) => {
           return a.event_index - b.event_index;
         })
       : [];
@@ -237,7 +207,7 @@ export const TokenTransfers = ({ events, ...boxProps }: TokenTransferProps) => {
     <Box mt="extra-loose" {...boxProps}>
       <SectionTitle mb="base-loose">Token transfers</SectionTitle>
       <Card>
-        {sortedEvents.map((event: EventSingle, key) =>
+        {sortedEvents.map((event: TransactionEvent, key) =>
           event ? (
             <TokenTransferItem
               noBottomBorder={
