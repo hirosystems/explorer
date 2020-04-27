@@ -39,7 +39,6 @@ export const Home = () => {
         </Text>
         <SearchBarWithDropdown onChange={e => setQuery(e.target.value)} />
       </Flex>
-      <FooterLinks />
     </Page>
   );
 };

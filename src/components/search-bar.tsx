@@ -38,14 +38,18 @@ export const SearchBar = forwardRef(
           lineHeight="20px"
           p={0}
           pl={inputOffset}
+          pr="base"
           height="100%"
           placeholder="Search for transactions"
           onChange={onChange}
           fontSize="inherit"
           backgroundColor="transparent"
-          border={0}
+          borderColor="var(--colors-border)"
           color="var(--colors-text-body)"
-          _placeholder={{ color: '#677282' }}
+          _hover={{
+            borderColor: 'var(--colors-border)',
+          }}
+          _placeholder={{ color: 'var(--colors-text-caption)' }}
         />
         <MagnifyingGlass
           position="absolute"

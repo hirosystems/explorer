@@ -13,6 +13,10 @@ export const Caption: React.FC<BoxProps> = props => (
   />
 );
 
+export const Title: React.FC<BoxProps> = props => (
+  <Text color="var(--colors-text-title)" display="inline-block" {...props} />
+);
+
 export const SectionTitle: React.FC<BoxProps> = props => (
-  <Text lineHeight="28px" fontSize="20px" fontWeight="500" display="inline-block" {...props} />
+  <Title lineHeight="28px" fontSize="20px" fontWeight="500" {...props} />
 );

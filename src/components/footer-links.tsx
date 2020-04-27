@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Text, Flex, BoxProps } from '@blockstack/ui';
+import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
 
@@ -9,7 +9,7 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
     cursor="pointer"
     textStyle="body.small"
     mr="base"
-    color="ink.600"
+    color="var(--colors-text-caption)"
     _hover={{ textDecoration: 'underline' }}
     {...rest}
   >
@@ -17,8 +17,8 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   </Text>
 );
 
-export const FooterLinks = () => (
-  <Flex flex={1} alignItems="flex-end" mb={['base', 'base-loose', 'loose']}>
+export const FooterLinks = (props: FlexProps) => (
+  <Flex flex={1} alignItems="flex-end" mb={['base', 'base-loose', 'loose']} {...props}>
     <FooterLink
       onClick={async () => {
         const { results } = await fetchTxList();
@@ -37,8 +37,8 @@ export const FooterLinks = () => (
       <a href="#">Random transaction</a>
     </FooterLink>
     <FooterLink>
-      <Link href="/components">
-        <a>Colophon</a>
+      <Link href="/debug" passHref>
+        <a>Debug</a>
       </Link>
     </FooterLink>
     <FooterLink>

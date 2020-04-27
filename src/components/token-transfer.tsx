@@ -65,7 +65,7 @@ const CellItem = ({ value, label }: { value?: string; label?: string }) => {
   return value ? (
     <Cell>
       <Box>
-        <Text>{value}</Text>
+        <Text color="var(--colors-text-body)">{value}</Text>
       </Box>
       {label ? (
         <Box>
@@ -116,13 +116,13 @@ const ItemIcon = ({ type }: { type: TransactionEvent['event_type'] }) => {
   switch (type) {
     case 'smart_contract_log':
       return (
-        <Box mr="tight">
+        <Box color="var(--colors-invert)" mr="base">
           <DefaultContract size="24px" />
         </Box>
       );
     default:
       return (
-        <Box color="blue" mr="tight">
+        <Box color="var(--colors-invert)" mr="tight">
           <BlockstackIcon size="24px" />
         </Box>
       );
@@ -149,7 +149,7 @@ const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransfer
   <Flex
     flexWrap="wrap"
     borderBottom={noBottomBorder ? 'unset' : '1px solid'}
-    borderColor="inherit"
+    borderColor="var(--colors-border)"
     px="base-loose"
     py="loose"
     {...flexProps}
@@ -162,7 +162,7 @@ const TokenTransferItem = ({ data, noBottomBorder, ...flexProps }: TokenTransfer
           label={getContractName(data.asset.asset_id).split('::')[0]}
         />
       ) : (
-        <Text>{renderName(data.event_type)}</Text>
+        <Text color="var(--colors-text-title)">{renderName(data.event_type)}</Text>
       )}
     </Flex>
     <Grid
