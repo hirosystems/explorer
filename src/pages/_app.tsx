@@ -8,8 +8,60 @@ import { RootState, initStore } from '@store';
 import { handleFontLoading } from '@common/fonts';
 
 const GlobalStyles = createGlobalStyle`
+@media (prefers-color-scheme: dark) {
+  html, body {
+    --colors-bg: ${
+      // @ts-ignore
+      theme.colors.ink
+    };
+    --colors-bg-alt: #2C2E33;
+    --colors-invert: white;
+    --colors-text-hover: white;
+    --colors-text-title: white;
+    --colors-text-caption: ${
+      // @ts-ignore
+      '#A7A7AD'
+    };
+    --colors-text-body: ${
+      // @ts-ignore
+      theme.colors.ink['300']
+    };
+    --colors-border: ${
+      'rgb(39, 41, 46)'
+    };
+    background: var(--colors-bg);
+  }
+}
+@media (prefers-color-scheme: light) {
+  html, body {
+    --colors-bg: white;
+    --colors-bg-alt: #2C2E33;
+    --colors-invert: ${
+      // @ts-ignore
+      theme.colors.ink
+    };
+    --colors-text-title: ${
+      // @ts-ignore
+      theme.colors.ink
+    };
+    --colors-text-caption: ${
+      // @ts-ignore
+      theme.colors.ink['600']
+    };
+    --colors-text-body: ${
+      // @ts-ignore
+      theme.colors.ink['900']
+    };
+    --colors-border: ${
+      // @ts-ignore
+      theme.colors.ink['600']
+    };
+  }
+}
   html, body, #__next {
     height: 100%;
+    background: var(--colors-bg);
+    border-color: var(--colors-border);
   }
   .prism-code *::selection{
     background-color: #AAB3FF;

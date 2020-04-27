@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Flex, Text } from '@blockstack/ui';
 import { Page } from '@components/page';
-import { SearchBar } from '@components/search-bar';
+import { SearchBarWithDropdown } from '@components/search-bar';
 import { HomeNavigation } from '@components/home-nav';
 import { FooterLinks } from '@components/footer-links';
 import { RecentlyViewed } from '@components/recently-viewed';
@@ -33,11 +33,11 @@ export const Home = () => {
           width="100%"
           textAlign={['center', 'left']}
           mb="extra-loose"
+          color="var(--colors-text-title)"
         >
           Stacks Explorer
         </Text>
-        <SearchBar onChange={e => setQuery(e.target.value)} />
-        <RecentlyViewed transactions={recentTxs} mt="base" />
+        <SearchBarWithDropdown onChange={e => setQuery(e.target.value)} />
       </Flex>
       <FooterLinks />
     </Page>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box } from '@blockstack/ui';
+import { Flex, Box, Text } from '@blockstack/ui';
 import { BlockstackLogo } from './icons/blockstack-logo';
 import Link from 'next/link';
 
@@ -12,6 +12,8 @@ export const HomeNavigation: React.FC = () => (
         </a>
       </Link>
     </Box>
-    <Box>Testnet</Box>
+    <Box>
+      <Text color="var(--colors-text-body)">Testnet</Text>
+    </Box>
   </Flex>
 );

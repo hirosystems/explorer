@@ -5,7 +5,7 @@ import { Text } from '@blockstack/ui';
 export const TxNotFound = () => {
   return (
     <>
-      <Text textStyle="display.large" fontSize="36px">
+      <Text textStyle="display.large" fontSize="36px" color="var(--colors-text-title)">
         Transaction details
       </Text>
       <Text display="block" mt="base">
