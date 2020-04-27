@@ -6,6 +6,6 @@ export const ContractSource = ({ source, ...rest }: { source?: string } & BoxPro
   source ? (
     <Box {...rest}>
       <SectionTitle mb="base-loose">Contract source</SectionTitle>
-      <CodeBlock showLineNumbers code={source} />
+      <CodeBlock border="1px solid var(--colors-border)" showLineNumbers code={source} />
     </Box>
   ) : null;

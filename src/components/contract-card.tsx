@@ -5,6 +5,7 @@ import { DefaultContract } from '@components/icons/default-contract';
 import { CodeIcon } from '@components/svg';
 import { useHover } from 'use-events';
 import Link from 'next/link';
+import { Title } from '@components/typography';
 
 const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
   contractId,
@@ -30,8 +31,8 @@ const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
         justify="center"
         borderTop="1px solid"
         cursor={hover ? 'pointer' : 'unset'}
-        bg={hover ? 'ink.50' : 'transparent'}
-        borderColor="inherit"
+        bg={hover ? 'var(--colors-bg-alt)' : 'transparent'}
+        borderColor="var(--colors-border)"
         style={{
           userSelect: 'none',
         }}
@@ -39,8 +40,10 @@ const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
         {...props}
         {...bind}
       >
-        <CodeIcon mr="tight" />
-        <Text textStyle="body.small">View contract</Text>
+        <CodeIcon color="var(--colors-invert)" mr="tight" />
+        <Text color="var(--colors-text-body)" textStyle="body.small">
+          View contract
+        </Text>
       </Flex>
     </Link>
   );
@@ -74,15 +77,21 @@ export const ContractCard: React.FC<ContractCardProps> = ({ title, meta, contrac
           mr={['base-tight', 'base-tight', 'unset']}
           size={10}
           borderRadius="12px"
+          color="var(--colors-invert)"
         >
           <DefaultContract />
         </Box>
         <Box textAlign={['left', 'left', 'center']}>
-          <Text width="100%" textStyle="body.large.medium" display="block">
+          <Title width="100%" textStyle="body.large.medium" display="block">
             {title}
-          </Text>
+          </Title>
           {meta ? (
-            <Text width="100%" textStyle="body.small" color="ink.600" display="block">
+            <Text
+              width="100%"
+              textStyle="body.small"
+              color="var(--colors-text-caption)"
+              display="block"
+            >
               {meta}
             </Text>
           ) : null}

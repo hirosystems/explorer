@@ -10,7 +10,8 @@ module.exports = withBundleAnalyzer({
     reactRefresh: true,
   },
   env: {
-    API_SERVER: process.env.API_SERVER || 'http://localhost:3999',
+    API_SERVER: process.env.API_SERVER || 'http://localhost:3999/sidecar/v1',
+    API_ROUTE: `https://${process.env.VERCEL_URL}/api` || 'http://localhost:3000/api',
   },
 
   webpack(config, { dev, isServer }) {

@@ -8,7 +8,7 @@ export const TxNotFound = () => {
       <Text textStyle="display.large" fontSize="36px" color="var(--colors-text-title)">
         Transaction details
       </Text>
-      <Text display="block" mt="base">
+      <Text display="block" mt="base" color="var(--colors-text-body)">
         There is no record of a transaction with this hash.
       </Text>
     </>
