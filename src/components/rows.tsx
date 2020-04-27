@@ -23,7 +23,7 @@ interface RowWrapperProps extends FlexProps {
   inline?: boolean;
 }
 
-const RowWrapper: React.FC<RowWrapperProps> = ({ borderColor = 'inherit', inline, ...props }) => (
+const RowWrapper: React.FC<RowWrapperProps> = ({ borderColor = 'var(--colors-border)', inline, ...props }) => (
   <Flex
     direction={inline ? 'column' : ['column', 'column', 'row']}
     py={['base', 'base', 'loose']}
@@ -68,7 +68,7 @@ const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovered, ...r
   return (
     <Flex pr="base" width="100%" align="center" justify="space-between" {...rest}>
       <Flex
-        color={isHovered ? 'blue' : undefined}
+        color={isHovered ? 'var(--colors-text-hover)' : 'var(--colors-text-body)'}
         textStyle="body.small.medium"
         style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
         align="baseline"

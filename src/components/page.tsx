@@ -31,7 +31,7 @@ export const PageWrapper: React.FC<BoxProps> = props => {
             <BlockstackLogo m="base-loose" />
           </a>
         </Link>
-        <SearchBarWithDropdown onChange={updateQuery} />
+        <SearchBarWithDropdown height="40px" maxWidth="544px" onChange={updateQuery} />
       </Flex>
       <Box
         pb="extra-loose"
@@ -53,9 +53,18 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
 );
 
 export const Page: React.FC = ({ children }) => (
-  <Box as="main" height="100%" maxWidth="1280px" mx="auto">
-    <Flex flexDirection="column" height="100%" mx={['base', 'extra-loose']}>
+  <Flex flexDirection="column" width="100%" bg="ink" minHeight="100%">
+    <Flex
+      as="main"
+      height="100%"
+      maxWidth="1280px"
+      mx="auto"
+      flexGrow={1}
+      width="100%"
+      flexDirection="column"
+      px={['base', 'extra-loose']}
+    >
       {children}
     </Flex>
-  </Box>
+  </Flex>
 );
