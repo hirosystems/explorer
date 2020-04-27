@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 dayjs.extend(relativeTime);
 
-interface RecentlyViewedProps extends FlexProps {
+export interface RecentlyViewedProps extends FlexProps {
   transactions: Transaction[];
 }
 

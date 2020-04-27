@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Text, BoxProps } from '@blockstack/ui';
+import { useDarkMode } from '@common/hooks/use-dark-mode';
 
 export const Caption: React.FC<BoxProps> = props => (
   <Text
     style={{ userSelect: 'none' }}
-    color="ink.600"
+    color="var(--colors-text-caption)"
     fontSize="12px"
     lineHeight="16px"
     display="inline-block"
