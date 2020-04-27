@@ -7,6 +7,7 @@ import { FooterLinks } from '@components/footer-links';
 import { RecentlyViewed } from '@components/recently-viewed';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { search } from '@common/search';
+import { Meta } from '@components/meta-head';
 
 export const Home = () => {
   const [query, setQuery] = useState('');
@@ -14,6 +15,7 @@ export const Home = () => {
 
   return (
     <Page>
+      <Meta />
       <HomeNavigation />
       <Flex
         as="form"
