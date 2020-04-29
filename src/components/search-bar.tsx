@@ -29,27 +29,27 @@ export const SearchBar = forwardRef(
           Search for transactions on the Stacks blockchain
         </Text>
         <Input
-          type="text"
-          position="absolute"
-          top={0}
-          bottom={0}
-          left={0}
-          right={0}
-          lineHeight="20px"
           p={0}
-          pl={inputOffset}
+          top={0}
+          left={0}
           pr="base"
+          right={0}
+          bottom={0}
+          type="text"
           height="100%"
-          placeholder="Search for transactions"
-          onChange={onChange}
+          pl={inputOffset}
+          lineHeight="20px"
           fontSize="inherit"
+          position="absolute"
+          onChange={onChange}
           backgroundColor="transparent"
-          borderColor="var(--colors-border)"
           color="var(--colors-text-body)"
+          borderColor="var(--colors-border)"
+          _placeholder={{ color: 'var(--colors-text-caption)' }}
+          placeholder="Search for transactions on the Stacks blockchain"
           _hover={{
             borderColor: 'var(--colors-border)',
           }}
-          _placeholder={{ color: 'var(--colors-text-caption)' }}
         />
         <MagnifyingGlass
           position="absolute"

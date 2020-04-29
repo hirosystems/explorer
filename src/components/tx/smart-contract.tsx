@@ -13,20 +13,18 @@ interface SmartContractPageProps {
   transaction: SmartContractTransaction;
 }
 
-const SmartContractPage = ({ transaction }: SmartContractPageProps) => {
-  return (
-    <>
-      <PageTop status={transaction.tx_status} type={TransactionType.SMART_CONTRACT} />
-      <Stack spacing="extra-loose">
-        <TransactionDetails
-          contractName={transaction.smart_contract.contract_id.split('.')[1]}
-          transaction={transaction}
-        />
-        <TokenTransfers events={transaction.events} />
-        <ContractSource source={transaction.smart_contract.source_code} />
-      </Stack>
-    </>
-  );
-};
+const SmartContractPage = ({ transaction }: SmartContractPageProps) => (
+  <>
+    <PageTop status={transaction.tx_status} type={TransactionType.SMART_CONTRACT} />
+    <Stack spacing="extra-loose">
+      <TransactionDetails
+        contractName={transaction.smart_contract.contract_id.split('.')[1]}
+        transaction={transaction}
+      />
+      <TokenTransfers events={transaction.events} />
+      <ContractSource source={transaction.smart_contract.source_code} />
+    </Stack>
+  </>
+);
 
 export default SmartContractPage;

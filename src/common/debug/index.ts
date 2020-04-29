@@ -13,7 +13,7 @@ export const submitToSidecar = async (formData: FormData, path: string) => {
   return text;
 };
 export const handleDebugFormSubmit = async (values: object, path: string) => {
-  let formData = new FormData();
+  const formData = new FormData();
   Object.keys(values).forEach(key => {
     formData.append(key, (values as any)[key]);
   });

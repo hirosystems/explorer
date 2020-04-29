@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { Text } from '@blockstack/ui';
+import { Box, Stack, BoxProps } from '@blockstack/ui';
+
 import { Status, Statuses } from '@components/status';
 import { Tag } from '@components/tags';
+import { Title } from '@components/typography';
 
-import { Box, Stack, BoxProps } from '@blockstack/ui';
 import { TransactionType } from '@models/transaction.interface';
 
 export interface TitleProps extends BoxProps {
@@ -25,23 +26,21 @@ const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] }) 
     <Tag type={type} {...rest} />
   );
 
-const TitleDetail: React.FC<TitleProps> = ({ status, type, ...rest }) => {
-  return (
-    <Box {...rest}>
-      <Stack isInline spacing="tight">
-        <Tags type={type} />
-        <Status status={status} />
-      </Stack>
-    </Box>
-  );
-};
+const TitleDetail = ({ status, type, ...rest }: TitleProps) => (
+  <Box {...rest}>
+    <Stack isInline spacing="tight">
+      <Tags type={type} />
+      <Status status={status} />
+    </Stack>
+  </Box>
+);
 
-export const TransactionTitle: React.FC<TitleProps> = ({ status, type, ...rest }) => (
+export const TransactionTitle = ({ status, type, ...rest }: TitleProps) => (
   <Stack spacing="base" {...rest}>
     <Box>
-      <Text as="h1" textStyle="display.large" fontSize="36px" color="var(--colors-text-title)">
+      <Title as="h1" textStyle="display.large" fontSize="36px">
         Transaction details
-      </Text>
+      </Title>
     </Box>
     <TitleDetail status={status} type={type} />
   </Stack>

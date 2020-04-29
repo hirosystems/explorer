@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
-import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
+import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
+
+import { fetchTxList } from '@common/api/transactions';
 
 const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   <Text
@@ -17,35 +18,48 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   </Text>
 );
 
+const navgiateToRandomTx = async () => {
+  const { results } = await fetchTxList();
+  const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
+
+  if (hasNonCoinbaseTxs) {
+    const nonCoinbaseResults = results.filter(tx => tx.tx_type !== 'coinbase');
+    const randomNonCoinbaseTx =
+      nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
+
+    await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id}`);
+
+    return;
+  }
+
+  const randomTx = results[Math.floor(Math.random() * results.length)];
+  await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
+};
+
+const LinkInNewWindow = (props: any) => (
+  <Text as="a" target="_blank" rel="noopener noreferrer" {...props} />
+);
+
 export const FooterLinks = (props: FlexProps) => (
   <Flex flex={1} alignItems="flex-end" mb={['base', 'base-loose', 'loose']} {...props}>
-    <FooterLink
-      onClick={async () => {
-        const { results } = await fetchTxList();
-        const randomTx = results[Math.floor(Math.random() * results.length)];
-        const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
-        if (hasNonCoinbaseTxs) {
-          const nonCoinbaseResults = results.filter(tx => tx.tx_type !== 'coinbase');
-          const randomNonCoinbaseTx =
-            nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
-          await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id}`);
-          return;
-        }
-        await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
-      }}
-    >
+    <FooterLink onClick={navgiateToRandomTx}>
       <a href="#">Random transaction</a>
     </FooterLink>
     <FooterLink>
       <Link href="/debug" passHref>
-        <a>Debug</a>
+        <LinkInNewWindow>Debug</LinkInNewWindow>
       </Link>
     </FooterLink>
     <FooterLink>
-      <a href="https://docs.blockstack.org/">Docs</a>
+      <LinkInNewWindow href="https://docs.blockstack.org/">Docs</LinkInNewWindow>
     </FooterLink>
     <FooterLink>
-      <a href="https://blockstack.github.io/stacks-blockchain-sidecar/">API</a>
+      <LinkInNewWindow href="https://blockstack.github.io/stacks-blockchain-sidecar/">
+        API
+      </LinkInNewWindow>
+    </FooterLink>
+    <FooterLink>
+      <LinkInNewWindow href="https://github.com/blockstack/explorer/">GitHub</LinkInNewWindow>
     </FooterLink>
   </Flex>
 );

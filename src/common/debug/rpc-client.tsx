@@ -75,22 +75,14 @@ export class RPCClient {
     return response;
   }
 
-  async fetchContractInterface({
-    contractAddress,
-    contractName,
-  }: FetchContractInterface) {
+  async fetchContractInterface({ contractAddress, contractName }: FetchContractInterface) {
     const url = `${this.url}/v2/contracts/interface/${contractAddress}/${contractName}`;
     const response = await fetch(url);
     const contractInterface: ContractInterface = await response.json();
     return contractInterface;
   }
 
-  async callReadOnly({
-    contractName,
-    contractAddress,
-    functionName,
-    args,
-  }: CallReadOnly) {
+  async callReadOnly({ contractName, contractAddress, functionName, args }: CallReadOnly) {
     const url = `${this.url}/v2/contracts/call-read/${contractAddress}/${contractName}/${functionName}`;
     const argsStrings = args.map(arg => {
       return `0x${serializeCV(arg).toString('hex')}`;

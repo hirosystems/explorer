@@ -1,8 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
+import { useSafeLayoutEffect } from '@blockstack/ui';
+
 import { useMediaQuery } from '@common/hooks/use-media-query';
 import { Statuses } from '@components/status';
-import { useSafeLayoutEffect } from '@blockstack/ui';
 
 const defaultTitle = 'Stacks 2.0 explorer';
 

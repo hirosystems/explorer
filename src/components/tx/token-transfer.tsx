@@ -12,16 +12,14 @@ interface TokenTransferPageProps {
   transaction: TokenTransferTransaction;
 }
 
-const TokenTransferPage = ({ transaction }: TokenTransferPageProps) => {
-  return (
-    <>
-      <PageTop status={transaction.tx_status} type={[TransactionType.TOKEN_TRANSFER]} />
-      <Stack>
-        <TransactionDetails transaction={transaction} hideContract />
-        <TokenTransfers events={transaction.events} />
-      </Stack>
-    </>
-  );
-};
+const TokenTransferPage = ({ transaction }: TokenTransferPageProps) => (
+  <>
+    <PageTop status={transaction.tx_status} type={[TransactionType.TOKEN_TRANSFER]} />
+    <Stack>
+      <TransactionDetails transaction={transaction} hideContract />
+      <TokenTransfers events={transaction.events} />
+    </Stack>
+  </>
+);
 
 export default TokenTransferPage;

@@ -1218,10 +1218,10 @@
   dependencies:
     webpack-bundle-analyzer "3.6.1"
 
-"@next/react-refresh-utils@9.3.6-canary.11":
-  version "9.3.6-canary.11"
-  resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-9.3.6-canary.11.tgz#1020f142c228e9ecc3b254e8f793110a318e8651"
-  integrity sha512-wIj2jz0t/MGW7A2Aqz6OihUauQcKHxbBAJsp6JO37sT9jfinmn1nqyjO2g+MHrS4SEcVloyTgKl/pvOLElpiKw==
+"@next/react-refresh-utils@9.3.6":
+  version "9.3.6"
+  resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-9.3.6.tgz#a5eb91b4b8270fecb5fcf2d1319d8d04f0cf6f75"
+  integrity sha512-XgxPc3WAkNpzD9xYtN4bd3wpV39WhnHYSwXGovVVcImXY6yn1as6hDgwkbuLADY/SHLIu2AI6CTVq0JDoTC/+g==
 
 "@popperjs/core@^2.3.3":
   version "2.3.3"
@@ -1335,6 +1335,13 @@
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/@styled-system/space/-/space-5.1.2.tgz#38925d2fa29a41c0eb20e65b7c3efb6e8efce953"
   integrity sha512-+zzYpR8uvfhcAbaPXhH8QgDAV//flxqxSjHiS9cDFQQUSznXMQmxJegbhcdEF7/eNnJgHeIXv1jmny78kipgBA==
+  dependencies:
+    "@styled-system/core" "^5.1.2"
+
+"@styled-system/theme-get@^5.1.2":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@styled-system/theme-get/-/theme-get-5.1.2.tgz#b40a00a44da63b7a6ed85f73f737c4defecd6049"
+  integrity sha512-afAYdRqrKfNIbVgmn/2Qet1HabxmpRnzhFwttbGr6F/mJ4RDS/Cmn+KHwHvNXangQsWw/5TfjpWV+rgcqqIcJQ==
   dependencies:
     "@styled-system/core" "^5.1.2"
 
@@ -1635,6 +1642,11 @@
   integrity sha512-skv+daDje8vWQ8wnqVV0GCzgWVKx4gI9lJpAxWE77s52Ne6k/SCPP8HGE4BFbWDvK+qi5O3p89BGWVOQ1VHjMg==
   dependencies:
     csstype "^2.6.6"
+
+"@types/styled-system__theme-get@^5.0.0":
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/@types/styled-system__theme-get/-/styled-system__theme-get-5.0.0.tgz#639edd3d39aad91b47746db1cbc4f5a0c6e640a7"
+  integrity sha512-Q8B2vdj78SpPjvresEZbEgnPb7TBTFD0S8sz2HJCd1mn1xjnXzJZhXJFdfZb2KrybfjuJ0Suu3jg4hZz3SyVtg==
 
 "@typescript-eslint/eslint-plugin@2.26.0":
   version "2.26.0"
@@ -3243,10 +3255,10 @@ css-loader@3.3.0:
     postcss-value-parser "^4.0.2"
     schema-utils "^2.6.0"
 
-css-loader@3.5.2:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-3.5.2.tgz#6483ae56f48a7f901fbe07dde2fc96b01eafab3c"
-  integrity sha512-hDL0DPopg6zQQSRlZm0hyeaqIRnL0wbWjay9BZxoiJBpbfOW4WHfbaYQhwnDmEa0kZUc1CJ3IFo15ot1yULMIQ==
+css-loader@3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-3.5.3.tgz#95ac16468e1adcd95c844729e0bb167639eb0bcf"
+  integrity sha512-UEr9NH5Lmi7+dguAm+/JSPovNjYbm2k3TK58EiwQHzOHH5Jfq1Y+XoP2bQO6TMn7PptMd0opxxedAWcaSTRKHw==
   dependencies:
     camelcase "^5.3.1"
     cssesc "^3.0.0"
@@ -3259,7 +3271,7 @@ css-loader@3.5.2:
     postcss-modules-scope "^2.2.0"
     postcss-modules-values "^3.0.0"
     postcss-value-parser "^4.0.3"
-    schema-utils "^2.6.5"
+    schema-utils "^2.6.6"
     semver "^6.3.0"
 
 css-select-base-adapter@^0.1.1:
@@ -5882,10 +5894,10 @@ next@*:
     webpack "4.42.1"
     webpack-sources "1.4.3"
 
-next@^9.3.6-canary.11:
-  version "9.3.6-canary.11"
-  resolved "https://registry.yarnpkg.com/next/-/next-9.3.6-canary.11.tgz#eb15ff6e3418cb8b4a11302e26d9c25114633687"
-  integrity sha512-5iYueLcTGkl8FW1H1N/1LM6IIP132UMmxpUG45iWn6saoo6Vxi8nT/RSwbEVJHZvoB55JVLGm8vWqaczweARCQ==
+next@^9.3.6:
+  version "9.3.6"
+  resolved "https://registry.yarnpkg.com/next/-/next-9.3.6.tgz#2bfd76f835606db3840adf07b51b052514ef3709"
+  integrity sha512-b46i+qw2SYMVTOObc7GqUizt1zH1fB3T5qcOiCpl9utD7/LcWZkSxSPe7ZJtpAdFnl8V/7A58ADSvU1oxDDWug==
   dependencies:
     "@ampproject/toolbox-optimizer" "2.2.0"
     "@babel/core" "7.7.2"
@@ -5903,12 +5915,12 @@ next@^9.3.6-canary.11:
     "@babel/preset-react" "7.7.0"
     "@babel/preset-typescript" "7.7.2"
     "@babel/runtime" "7.7.2"
-    "@next/react-refresh-utils" "9.3.6-canary.11"
+    "@next/react-refresh-utils" "9.3.6"
     babel-plugin-syntax-jsx "6.18.0"
     babel-plugin-transform-define "2.0.0"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
     browserslist "4.8.3"
-    css-loader "3.5.2"
+    css-loader "3.5.3"
     find-cache-dir "3.3.1"
     fork-ts-checker-webpack-plugin "3.1.1"
     jest-worker "24.9.0"
@@ -5924,7 +5936,7 @@ next@^9.3.6-canary.11:
     react-refresh "0.8.1"
     resolve-url-loader "3.1.1"
     sass-loader "8.0.2"
-    style-loader "1.1.4"
+    style-loader "1.2.0"
     styled-jsx "3.2.5"
     use-subscription "1.1.1"
     watchpack "2.0.0-beta.13"
@@ -7161,11 +7173,6 @@ readdirp@~3.3.0:
   dependencies:
     picomatch "^2.0.7"
 
-redaxios@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/redaxios/-/redaxios-0.2.0.tgz#acf6f50607d232cda407d1e06f4bd043adba1992"
-  integrity sha512-lrDld2bVWIBrW+S1HPMyP8OvEtpHPIfmXyW7T7xTox1SM4/M3aC5X55xa2vRR3LZHwCvpMQAgCye8IyICzkKpA==
-
 redent@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/redent/-/redent-2.0.0.tgz#c1b2007b42d57eb1389079b3c8333639d5e1ccaa"
@@ -7536,7 +7543,7 @@ schema-utils@^1.0.0:
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
 
-schema-utils@^2.0.1, schema-utils@^2.6.0, schema-utils@^2.6.1, schema-utils@^2.6.5:
+schema-utils@^2.0.1, schema-utils@^2.6.0, schema-utils@^2.6.1, schema-utils@^2.6.6:
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-2.6.6.tgz#299fe6bd4a3365dc23d99fd446caff8f1d6c330c"
   integrity sha512-wHutF/WPSbIi9x6ctjGGk2Hvl0VOz5l3EKEuKbjPlB30mKZUzb9A5k9yEXRX3pwyqVLPvpfZZEllaFq/M718hA==
@@ -8024,13 +8031,13 @@ style-loader@1.0.0:
     loader-utils "^1.2.3"
     schema-utils "^2.0.1"
 
-style-loader@1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-1.1.4.tgz#1ad81283cefe51096756fd62697258edad933230"
-  integrity sha512-SbBHRD8fwK3pX+4UDF4ETxUF0+rCvk29LWTTI7Rt0cgsDjAj3SWM76ByTe6u2+4IlJ/WwluB7wuslWETCoPQdg==
+style-loader@1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-1.2.0.tgz#f78e4d49caf5018f7c03ae1886e1270124feeb0a"
+  integrity sha512-HC8WcGnjwNrKji7HSBqFOhGNUSt7UDU/jHxT6bA83Gk+JWJBmgitWlGihc0V1w6ZvwlzcX5LJOsofZzSP7b1tQ==
   dependencies:
     loader-utils "^2.0.0"
-    schema-utils "^2.6.5"
+    schema-utils "^2.6.6"
 
 styled-components@^5.0.1:
   version "5.1.0"
