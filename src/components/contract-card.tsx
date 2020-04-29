@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Box, Flex, FlexProps, Text } from '@blockstack/ui';
-import { Card } from '@components/card';
-import { DefaultContract } from '@components/icons/default-contract';
-import { CodeIcon } from '@components/svg';
-import { useHover } from 'use-events';
 import Link from 'next/link';
+import { Box, Flex, FlexProps, Text } from '@blockstack/ui';
+import { useHover } from 'use-events';
+
+import { Card } from '@components/card';
+import { CodeIcon } from '@components/svg';
+import { DefaultContract } from '@components/icons/default-contract';
 import { Title } from '@components/typography';
 
 const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({

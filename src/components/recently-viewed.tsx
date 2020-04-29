@@ -1,5 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useHover, useFocus } from 'use-events';
 import { Flex, Box, Text, FlexProps, BoxProps } from '@blockstack/ui';
@@ -7,8 +8,6 @@ import { Flex, Box, Text, FlexProps, BoxProps } from '@blockstack/ui';
 import { Tag } from '@components/tags';
 import { truncateMiddle } from '@common/utils';
 import { Transaction, TransactionType } from '@models/transaction.interface';
-
-import Link from 'next/link';
 
 dayjs.extend(relativeTime);
 

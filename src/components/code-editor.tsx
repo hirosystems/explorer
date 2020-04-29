@@ -1,9 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React from 'react';
 
 import Editor from 'react-simple-code-editor';
-import { Box, BoxProps, Highlighter } from '@blockstack/ui';
-
 import { createGlobalStyle } from 'styled-components';
+import { Box, Highlighter } from '@blockstack/ui';
 
 const TextAreaOverrides = createGlobalStyle`
 .code-editor{
@@ -22,11 +21,11 @@ const TextAreaOverrides = createGlobalStyle`
     outline: transparent;
   }
   & > div{
-  overflow: initial !important;
+    overflow: initial !important;
   }
   textarea, pre {
-  white-space: pre !important;
-  overflow-wrap: unset !important;
+    white-space: pre !important;
+    overflow-wrap: unset !important;
   }
 }
 `;
@@ -40,7 +39,8 @@ interface CodeEditorProps {
   name?: string;
   id?: string;
 }
-const CodeEditor = (props: CodeEditorProps) => {
+
+export const CodeEditor = (props: CodeEditorProps) => {
   const [state, setState] = React.useState({ code: props.code || '' });
 
   const updateContent = (code: string) => {
@@ -58,7 +58,6 @@ const CodeEditor = (props: CodeEditorProps) => {
     <Highlighter code={code} showLineNumbers language={language as any} />
   );
 
-  // eslint-disable-next-line no-unused-vars
   const { style, code: _code, onChange, language, id, ...rest } = props;
   const { code } = state;
 
@@ -84,5 +83,3 @@ const CodeEditor = (props: CodeEditorProps) => {
     </>
   );
 };
-
-export { CodeEditor };

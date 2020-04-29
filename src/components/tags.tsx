@@ -17,10 +17,8 @@ interface TagProps extends FlexProps {
   type: TransactionType;
 }
 
-export const Tag = ({ type, ...rest }: TagProps) => {
-  return (
-    <Badge background={colorMap[type]} {...rest}>
-      {getTxTypeName(type)}
-    </Badge>
-  );
-};
+export const Tag = ({ type, ...rest }: TagProps) => (
+  <Badge background={colorMap[type]} {...rest}>
+    {getTxTypeName(type)}
+  </Badge>
+);

@@ -11,7 +11,9 @@ module.exports = withBundleAnalyzer({
   },
   env: {
     API_SERVER: process.env.API_SERVER || 'http://localhost:3999/sidecar/v1',
-    API_ROUTE: `https://${process.env.VERCEL_URL}/api` || 'http://localhost:3000/api',
+    API_ROUTE: process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}/api`
+      : 'http://localhost:3000/api',
   },
 
   webpack(config, { dev, isServer }) {

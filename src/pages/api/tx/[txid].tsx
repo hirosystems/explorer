@@ -11,6 +11,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { txid },
   } = req;
+  console.log(txid);
   const tx = await fetchTx(txid as string);
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
