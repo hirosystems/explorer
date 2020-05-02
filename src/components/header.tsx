@@ -7,10 +7,10 @@ import { search } from '@common/search';
 import { SearchBarWithDropdown } from '@components/search-bar';
 
 export const LogoNavItem = (props: BoxProps) => (
-  <Box {...props}>
+  <Box mr="base" {...props}>
     <Link href="/" passHref>
       <a aria-label="Homepage" title="Stacks Explorer">
-        <BlockstackLogo m="base-loose" />
+        <BlockstackLogo />
       </a>
     </Link>
   </Box>
@@ -21,6 +21,7 @@ const HeaderForm = (props: FlexProps) => (
     top={0}
     as="form"
     width="100%"
+    zIndex={9999}
     height="64px"
     position="fixed"
     alignItems="center"
@@ -29,6 +30,7 @@ const HeaderForm = (props: FlexProps) => (
     borderBottom="1px solid"
     borderColor="var(--colors-border)"
     boxShadow="0px 1px 2px rgba(27, 39, 51, 0.04), 0px 4px 8px rgba(27, 39, 51, 0.04)"
+    px={['tight', 'base', 'extra-loose']}
     {...props}
   />
 );
@@ -46,7 +48,11 @@ export const Header = (props: FlexProps) => {
   return (
     <HeaderForm onSubmit={search(query)} {...props}>
       <LogoNavItem />
-      <SearchBarWithDropdown height="40px" maxWidth="544px" onChange={updateQuery} />
+      <SearchBarWithDropdown
+        height="40px"
+        maxWidth={['100%', '100%', '544px']}
+        onChange={updateQuery}
+      />
     </HeaderForm>
   );
 };

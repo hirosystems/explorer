@@ -1,10 +1,13 @@
+import React from 'react';
 import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
+import cookieStorage from 'store/storages/cookieStorage';
 import { c32addressDecode } from 'c32check';
-import { deserializeMemoString, deserializeCV } from '@blockstack/stacks-transactions';
-import { BufferReader } from '@blockstack/stacks-transactions/lib/src/bufferReader';
+import { deserializeMemoString } from '@blockstack/stacks-transactions';
+import { BufferReader } from '@blockstack/stacks-transactions/lib/bufferReader';
 
 export const store = engine.createStore([lclStorage]);
+export const identityStorage = engine.createStore([cookieStorage]);
 
 /**
  * validateStacksAddress
@@ -51,9 +54,14 @@ export const toKebabCase = (str: string) => {
  * @param {number} offset - the number of chars to keep on either end
  */
 export const truncateMiddle = (input: string, offset = 5) => {
+  if (!input) return;
   const start = input.substr(0, offset);
   const end = input.substr(input.length - offset, input.length);
-  return `${start}…${end}`;
+  return (
+    <>
+      {start}&#8230;{end}
+    </>
+  );
 };
 
 /**

@@ -1,116 +1,93 @@
 import * as React from 'react';
-import { Text, Flex, Box, Stack, Button } from '@blockstack/ui';
-import { Input, FormLabel } from '@components/debug/common';
-import { Title } from '@components/typography';
-import { handleDebugFormSubmit, Key } from '@common/debug';
-import { useFormik } from 'formik';
-import Link from 'next/link';
-import { CodeEditor } from '@components/code-editor';
+import BigNum from 'bn.js';
+import { Formik } from 'formik';
+import { Flex, Stack, Button } from '@blockstack/ui';
+import { Field, Wrapper } from '@components/debug/common';
 import { SampleContracts } from '@common/debug/examples';
+import { fetchTransaction } from '@store/transactions';
+import { useDebugState, network } from '@common/debug';
+import { broadcastTransaction, fetchAccount } from '@store/debug';
+import {
+  makeSmartContractDeploy,
+  makeStandardSTXPostCondition,
+  FungibleConditionCode,
+} from '@blockstack/stacks-transactions';
+import { useDispatch } from 'react-redux';
 
 export const ContractDeploy = (props: any) => {
-  const path = '/debug/broadcast/contract-deploy';
-  const [txid, setTxid] = React.useState('');
-  const formik = useFormik({
-    initialValues: {
-      origin_key: '',
-      contract_name: SampleContracts[0].contractName,
-      source_code: SampleContracts[0].contractSource,
-      fee_rate: 123456,
-    },
-    onSubmit: async values => {
-      const text = await handleDebugFormSubmit(values, path);
-      const regex = /0x[A-Fa-f0-9]{64}/;
-      // @ts-ignore
-      const txid = regex.exec(text);
-      if (txid && txid.length) {
-        setTxid(txid[0]);
-      }
-    },
-  });
+  const { identity } = useDebugState();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
+
+  const initialValues = {
+    senderKey: identity?.privateKey,
+    contractName: SampleContracts[0].contractName,
+    codeBody: SampleContracts[0].contractSource,
+    fee: 2000,
+  };
+
+  const onSubmit = async ({ senderKey, contractName, codeBody, fee, memo }: any) => {
+    const address = identity?.address;
+    if (!address) return;
+    try {
+      setLoading(true);
+      await dispatch(fetchAccount(identity?.address));
+
+      // hardcode some post conditions for now :)
+      const postConditions = [
+        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(1)),
+        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(2)),
+        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(3)),
+        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(4)),
+      ];
+
+      const tx = await makeSmartContractDeploy({
+        senderKey,
+        contractName,
+        codeBody,
+        fee: new BigNum(fee),
+        postConditions,
+        network,
+      });
+
+      const { payload, error } = await dispatch(
+        broadcastTransaction({ principal: identity?.address, tx })
+      );
+      if (error) return setLoading(false);
+
+      setTimeout(async () => {
+        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
+        // @ts-ignore
+        if (initialFetch.error) {
+          await dispatch(fetchTransaction(payload.transactions[0].txId));
+        }
+        await dispatch(fetchAccount(identity?.address));
+        setLoading(false);
+      }, 3500);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
-    <Flex
-      as="form"
-      //@ts-ignore
-      onSubmit={formik.handleSubmit}
-      action=""
-      method="post"
-    >
-      <Stack isInline>
-        <Box flexShrink={0} pr="base" minWidth="400px">
-          <Stack spacing="base">
-            <Title as="h2">Contract Deploy</Title>
-            <Box>
-              <FormLabel htmlFor="origin_key">Sender key</FormLabel>
-              <Input
-                list="origin_keys"
-                name="origin_key"
-                placeholder="Secret key hash"
-                onChange={formik.handleChange}
-                value={formik.values.origin_key}
-              />
-            </Box>
-
-            <Box>
-              <FormLabel htmlFor="fee_rate">uSTX tx fee</FormLabel>
-              <Input
-                type="number"
-                id="fee_rate"
-                name="fee_rate"
-                onChange={formik.handleChange}
-                value={formik.values.fee_rate}
-              />
-            </Box>
-
-            <Box>
-              <FormLabel htmlFor="contract_name">Contract name</FormLabel>
-              <Input
-                type="text"
-                id="contract_name"
-                name="contract_name"
-                onChange={formik.handleChange}
-                value={formik.values.contract_name}
-                pattern="^[a-zA-Z]([a-zA-Z0-9]|[-_!?+&lt;&gt;=/*])*$|^[-+=/*]$|^[&lt;&gt;]=?$"
-                maxLength={128}
-              />
-            </Box>
-            <Box>
-              <Button type="submit">Submit</Button>
-            </Box>
-          </Stack>
-        </Box>
-        <Box width="calc(100% - 400px)">
-          <Stack>
-            <Box>
-              <FormLabel htmlFor="source_code">Contract source code (Clarity)</FormLabel>
-              <CodeEditor
-                id="source_code"
-                name="source_code"
-                onChange={formik.handleChange}
-                code={formik.values.source_code}
-              />
-            </Box>
-
-            {txid !== '' ? (
-              <Box pt="extra-loose">
-                <Box mb="base-tight">
-                  <Text as="h3" fontWeight="bold">
-                    Transaction
-                  </Text>
-                </Box>
-                <Box>
-                  <Link href="/txid/[txid]" as={`/txid/${txid}`} passHref>
-                    <a href={`/txid/${txid}`} target="_blank">
-                      {txid}
-                    </a>
-                  </Link>
-                </Box>
-              </Box>
-            ) : null}
-          </Stack>
-        </Box>
-      </Stack>
-    </Flex>
+    <Wrapper loading={loading} title="Contract deploy" {...props}>
+      <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
+        {({ handleSubmit }) => (
+          <form onSubmit={handleSubmit} method="post">
+            <Flex width="100%">
+              <Stack spacing="base" width="100%">
+                <Field label="Sender key" name="senderKey" />
+                <Field type="number" name="fee" label="Fee rate" />
+                <Field name="contractName" label="Contract name" />
+                <Field label="Contract source code" name="codeBody" type="code" />
+                <Button type="submit" isLoading={loading}>
+                  Submit
+                </Button>
+              </Stack>
+            </Flex>
+          </form>
+        )}
+      </Formik>
+    </Wrapper>
   );
 };
