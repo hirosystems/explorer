@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Ref } from 'react';
-import { Box, Flex, useClipboard, Tooltip } from '@blockstack/ui';
+import { Box, Flex, useClipboard } from '@blockstack/ui';
+import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
 import { useHover } from 'use-events';
 import { CopyIcon } from '@components/svg';
@@ -57,7 +58,11 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
       >
         {children}
       </Flex>
-      <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'} hasArrow>
+      <Tooltip
+        label={hasCopied ? 'Copied!' : 'Copy to clipboard'}
+        hasArrow={false}
+        placement="bottom"
+      >
         <CopyButton onClick={onCopy} isHovered={isHovered} />
       </Tooltip>
     </Flex>
@@ -72,6 +77,7 @@ export const Row: React.FC<RowProps> = ({
   render,
   copy,
   noTopBorder,
+  children,
   ...rest
 }) => {
   const [hovered, bind] = useHover();
@@ -87,7 +93,7 @@ export const Row: React.FC<RowProps> = ({
     >
       {label ? <RowLabel label={label.children} /> : null}
       <RowContent isHovered={isHovered} copy={copy}>
-        {render}
+        {render || children}
       </RowContent>
     </RowWrapper>
   );

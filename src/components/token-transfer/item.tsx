@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Box, Flex, Grid, FlexProps, Text, BlockstackIcon } from '@blockstack/ui';
+import { Ref } from 'react';
+import { Box, Flex, Grid, FlexProps, Text, BlockstackIcon, BoxProps } from '@blockstack/ui';
 import { TransactionEvent } from '@blockstack/stacks-blockchain-sidecar-types';
 import { deserializeCV, addressToString } from '@blockstack/stacks-transactions';
-
+import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
 
 import {
@@ -20,12 +21,32 @@ const Cell = (props: FlexProps) => (
   <Flex px="tight" direction="column" justify="center" {...props} />
 );
 
-const CellItem = ({ value, label }: { value?: string; label?: string }) =>
-  value ? (
-    <Cell>
-      <Box>
-        <Text color="var(--colors-text-body)">{value}</Text>
-      </Box>
+const Value = React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (
+  <Box>
+    <Text ref={ref} {...rest} color="var(--colors-text-body)">
+      {children}
+    </Text>
+  </Box>
+));
+
+const ValueWrapped = ({ truncate, value, ...rest }: any) =>
+  truncate ? (
+    <Tooltip label={value}>
+      <Value {...rest}>{truncateMiddle(value)}</Value>
+    </Tooltip>
+  ) : (
+    <Value {...rest}>{value}</Value>
+  );
+export const CellItem = ({
+  value,
+  label,
+  textProps = {},
+  truncate,
+  ...rest
+}: { value?: any; label?: string; truncate?: boolean; textProps?: BoxProps } & FlexProps) => {
+  return value ? (
+    <Cell {...rest}>
+      <ValueWrapped truncate={truncate} value={value} {...textProps} />
       {label ? (
         <Box>
           <Caption>{label}</Caption>
@@ -33,6 +54,7 @@ const CellItem = ({ value, label }: { value?: string; label?: string }) =>
       ) : null}
     </Cell>
   ) : null;
+};
 
 const ItemIcon = ({ type }: { type: TransactionEvent['event_type'] }) => {
   switch (type) {
@@ -52,7 +74,7 @@ const ItemIcon = ({ type }: { type: TransactionEvent['event_type'] }) => {
 };
 
 const ContractLogCellItem = ({ event }: { event: TransactionEvent }) => {
-  if (event.contract_log) {
+  if (event.event_type === 'smart_contract_log' && event.contract_log) {
     let value = event.contract_log.value;
 
     const deserializeAsset = deserializeCV(
@@ -83,9 +105,9 @@ const EventAsset = ({ event, ...rest }: { event: TransactionEvent } & FlexProps)
   ) : null;
 
 const StxAmount = ({ event, ...rest }: { event: TransactionEvent }) =>
-  event.asset ? (
+  event.event_type === 'smart_contract_log' || event.event_type === 'stx_asset' ? (
     <CellItem
-      value={`${microToStacks(event?.asset.amount as string)} STX`}
+      value={`${microToStacks(event?.asset?.amount as string)} STX`}
       label={getAssetEventTypeLabel(event.asset?.asset_event_type)}
       {...rest}
     />
@@ -93,12 +115,12 @@ const StxAmount = ({ event, ...rest }: { event: TransactionEvent }) =>
 
 const Sender = ({ event, ...rest }: { event: TransactionEvent }) =>
   event.asset?.sender ? (
-    <CellItem value={truncateMiddle(event.asset?.sender as string)} label="From" {...rest} />
+    <CellItem value={event.asset?.sender as string} truncate label="From" {...rest} />
   ) : null;
 
 const Recipient = ({ event, ...rest }: { event: TransactionEvent }) =>
   event.asset?.recipient ? (
-    <CellItem value={truncateMiddle(event.asset?.recipient as string)} label="From" {...rest} />
+    <CellItem value={event.asset?.recipient as string} truncate label="From" {...rest} />
   ) : null;
 
 export const TokenTransferItem = ({

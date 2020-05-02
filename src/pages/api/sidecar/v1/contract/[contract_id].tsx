@@ -3,7 +3,7 @@ import { fetchFromRootApi } from '@common/api/fetch';
 import { Contract } from '@models/contract.interface';
 
 async function fetchContract(contract_id: string): Promise<Contract> {
-  const resp = await fetchFromRootApi(`/contract/${contract_id}`);
+  const resp = await fetchFromRootApi(`/sidecar/v1/contract/${contract_id}`);
   return resp.json();
 }
 

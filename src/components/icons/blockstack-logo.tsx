@@ -1,14 +1,9 @@
 import React from 'react';
-
 import { Box, BoxProps } from '@blockstack/ui';
 
-interface BlockstackLogoProps extends BoxProps {
-  size?: number;
-}
-
-export const BlockstackLogo = ({ size = 24, ...props }: BlockstackLogoProps) => (
-  <Box color="var(--colors-invert)" {...props}>
-    <svg width={size} height={size} fill="none" viewBox="0 0 24 24">
+export const BlockstackLogo = ({ size = '24px', ...props }: BoxProps) => (
+  <Box width={size} height={size} color="var(--colors-invert)" {...props}>
+    <svg fill="none" viewBox="0 0 24 24">
       <path
         fill="currentColor"
         fillRule="evenodd"

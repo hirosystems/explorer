@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { RootState, initStore } from '@store';
 import { handleFontLoading } from '@common/fonts';
-import '@common/clarity-language-definition';
 import { ColorModes } from '@components/color-modes';
 
 const GlobalStyles = createGlobalStyle`

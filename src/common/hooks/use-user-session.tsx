@@ -24,6 +24,8 @@ export const useUserSession = () => {
   return {
     userSession,
     userData,
+    // @ts-ignore
+    address: userData?.profile?.stxAddress,
     signedIn,
     appConfig,
   };

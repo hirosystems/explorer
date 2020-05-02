@@ -78,13 +78,13 @@ export const SearchBarWithDropdown: React.FC<SearchBarProps> = ({
     <Box position="relative" width="100%" {...boxProps}>
       <SearchBar width="100%" onChange={onChange} {...props} {...focusBind} />
       <Box
-        style={{ pointerEvents: visible ? 'unset' : 'none' }}
-        pt="tight"
-        position="absolute"
-        zIndex={10000}
-        width="100%"
         left={0}
+        pt="tight"
         top="100%"
+        zIndex={10000}
+        position="absolute"
+        width="100%"
+        style={{ pointerEvents: visible ? 'unset' : 'none' }}
         {...hoverBind}
       >
         <RecentlyViewed

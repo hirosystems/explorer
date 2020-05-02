@@ -7,7 +7,8 @@ const colorGet = (path: string, fallback?: string) => themeGet('colors.' + path,
 export const ColorModes = createGlobalStyle`
 html, body{
     --colors-bg: white;
-    --colors-bg-alt: ${colorGet('ink.50')};
+    --colors-bg-alt: ${colorGet('white')};
+    --colors-bg-light: ${colorGet('ink.600')};
     --colors-invert: ${colorGet('ink')};
     --colors-text-hover: ${colorGet('blue')};
     --colors-text-title:  ${colorGet('ink')};
@@ -18,9 +19,10 @@ html, body{
 @media (prefers-color-scheme: dark) {
   html, body {
     --colors-bg: ${colorGet('ink')};
+    --colors-bg-light: ${colorGet('ink.800')};
     --colors-bg-alt: #2C2E33;
     --colors-invert: white;
-    --colors-text-hover: white;
+    --colors-text-hover: ${colorGet('blue.300')};
     --colors-text-title: white;
     --colors-text-caption: #A7A7AD;
     --colors-text-body: ${colorGet('ink.300')};
@@ -30,7 +32,8 @@ html, body{
 @media (prefers-color-scheme: light) {
   html, body {
     --colors-bg: white;
-    --colors-bg-alt: ${colorGet('ink.50')};
+    --colors-bg-alt: ${colorGet('white')};
+    --colors-bg-light: ${colorGet('ink.50')};
     --colors-invert: ${colorGet('ink')};
     --colors-text-hover: ${colorGet('blue')};
     --colors-text-title:  ${colorGet('ink')};

@@ -9,7 +9,7 @@ export interface RowProps extends FlexProps {
   label?: {
     children: any;
   };
-  render: any;
+  render?: any;
   inline?: boolean;
   noTopBorder?: boolean;
 }

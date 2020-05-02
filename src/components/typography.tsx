@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Text, BoxProps } from '@blockstack/ui';
-import { useDarkMode } from '@common/hooks/use-dark-mode';
+import { Text as BaseText, BoxProps } from '@blockstack/ui';
+
+export const Text = (props: BoxProps) => <BaseText color="var(--colors-text-body)" {...props} />
 
 export const Caption: React.FC<BoxProps> = props => (
   <Text
@@ -14,7 +15,7 @@ export const Caption: React.FC<BoxProps> = props => (
 );
 
 export const Title: React.FC<BoxProps> = props => (
-  <Text color="var(--colors-text-title)" display="inline-block" {...props} />
+  <Text display="inline-block" {...props} color="var(--colors-text-title)" />
 );
 
 export const SectionTitle: React.FC<BoxProps> = props => (
