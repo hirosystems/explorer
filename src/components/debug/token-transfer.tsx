@@ -1,120 +1,74 @@
 import * as React from 'react';
-import { Text, Box, Stack, Button } from '@blockstack/ui';
-import { Input, FormLabel } from '@components/debug/common';
-import { Title } from '@components/typography';
-
-import { handleDebugFormSubmit, Key } from '@common/debug';
-import { useFormik } from 'formik';
-import Link from 'next/link';
+import { Formik } from 'formik';
+import { Flex, Stack, Button } from '@blockstack/ui';
+import { Field, Wrapper } from '@components/debug/common';
+import { useDebugState, network } from '@common/debug';
+import { broadcastTransaction, fetchAccount } from '@store/debug';
+import { fetchTransaction } from '@store/transactions';
+import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
+import BigNum from 'bn.js';
+import { useDispatch } from 'react-redux';
 
 export const TokenTransfer = (props: any) => {
-  const path = '/debug/broadcast/token-transfer';
-  const [txid, setTxid] = React.useState('');
-  const formik = useFormik({
-    initialValues: {
-      origin_key: '',
-      recipient_address: '',
-      stx_amount: 100,
-      fee_rate: 123456,
-      memo: 'hello world!',
-    },
-    onSubmit: async values => {
-      const text = await handleDebugFormSubmit(values, path);
-      const regex = /0x[A-Fa-f0-9]{64}/;
-      // @ts-ignore
-      const txid = regex.exec(text);
-      if (txid && txid.length) {
-        setTxid(txid[0]);
-      }
-    },
-  });
+  const [loading, setLoading] = React.useState(false);
+  const { identity } = useDebugState();
+  const dispatch = useDispatch();
+  const initialValues = {
+    senderKey: identity?.privateKey,
+    recipient: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
+    amount: 100,
+    memo: 'hello world!',
+  };
+
+  const onSubmit = async ({ senderKey, recipient, amount, fee, memo }: any) => {
+    try {
+      setLoading(true);
+      await dispatch(fetchAccount(identity?.address));
+      const tx = await makeSTXTokenTransfer({
+        senderKey,
+        recipient,
+        amount: new BigNum(amount),
+        memo,
+        network,
+      });
+
+      const { payload, error } = await dispatch(
+        broadcastTransaction({ principal: identity?.address, tx })
+      );
+      if (error) return setLoading(false);
+      setTimeout(async () => {
+        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
+        // @ts-ignore
+        if (initialFetch.error) {
+          await dispatch(fetchTransaction(payload.transactions[0].txId));
+        }
+        await dispatch(fetchAccount(identity?.address));
+        setLoading(false);
+      }, 3500);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
-    <Box
-      as="form"
-      //@ts-ignore
-      onSubmit={formik.handleSubmit}
-      action=""
-      method="post"
-    >
-      <Stack spacing="base">
-        <Title as="h2">Token Transfer</Title>
-        <Box>
-          <FormLabel htmlFor="origin_key">Sender key</FormLabel>
-          <Input
-            name="origin_key"
-            placeholder="Secret key hash"
-            onChange={formik.handleChange}
-            value={formik.values.origin_key}
-            isRequired
-          />
-        </Box>
-
-        <Box>
-          <FormLabel htmlFor="recipient_address">Recipient address</FormLabel>
-          <Input
-            list="recipient_addresses"
-            name="recipient_address"
-            placeholder="Stacks address"
-            onChange={formik.handleChange}
-            value={formik.values.recipient_address}
-            isRequired
-          />
-        </Box>
-
-        <Box>
-          <FormLabel htmlFor="stx_amount">uSTX amount</FormLabel>
-          <Input
-            type="number"
-            id="stx_amount"
-            name="stx_amount"
-            onChange={formik.handleChange}
-            value={formik.values.stx_amount}
-          />
-        </Box>
-
-        <Box>
-          <FormLabel htmlFor="fee_rate">uSTX tx fee</FormLabel>
-          <Input
-            type="number"
-            id="fee_rate"
-            name="fee_rate"
-            onChange={formik.handleChange}
-            value={formik.values.fee_rate}
-          />
-        </Box>
-
-        <Box>
-          <FormLabel htmlFor="memo">Memo</FormLabel>
-          <Input
-            type="text"
-            id="memo"
-            name="memo"
-            onChange={formik.handleChange}
-            value={formik.values.memo}
-            maxLength={34}
-          />
-        </Box>
-        <Box>
-          <Button type="submit">Submit</Button>
-        </Box>
-        {txid !== '' ? (
-          <Box pt="extra-loose">
-            <Box mb="base-tight">
-              <Text as="h3" fontWeight="bold">
-                Transaction
-              </Text>
-            </Box>
-            <Box>
-              <Link href="/txid/[txid]" as={`/txid/${txid}`} passHref>
-                <a href={`/txid/${txid}`} target="_blank">
-                  {txid}
-                </a>
-              </Link>
-            </Box>
-          </Box>
-        ) : null}
-      </Stack>
-    </Box>
+    <Wrapper loading={loading} {...props}>
+      <Formik initialValues={initialValues as any} onSubmit={onSubmit}>
+        {({ handleSubmit }) => (
+          <form onSubmit={handleSubmit} method="post">
+            <Flex width="100%">
+              <Stack spacing="base" width="100%">
+                <Field label="Sender key" name="senderKey" />
+                <Field type="number" name="amount" label="uSTX amount" />
+                <Field name="memo" label="Memo (message)" />
+                <Field name="recipient" label="Recipient address" />
+                <Button type="submit" isLoading={loading}>
+                  Submit
+                </Button>
+              </Stack>
+            </Flex>
+          </form>
+        )}
+      </Formik>
+    </Wrapper>
   );
 };

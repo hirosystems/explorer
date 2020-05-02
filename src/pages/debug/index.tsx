@@ -1,20 +1,35 @@
 import * as React from 'react';
-import { Text, Box, Flex, Input, FormLabel, Stack, Button } from '@blockstack/ui';
+import { Box, Flex, Stack, Button } from '@blockstack/ui';
+import { Text } from '@components/typography';
+import { useDispatch, useSelector } from 'react-redux';
 import { PageWrapper } from '@components/page';
 import { TokenTransfer } from '@components/debug/token-transfer';
 import { ContractDeploy } from '@components/debug/contract-deploy';
 import { ContractCall } from '@components/debug/contract-call';
+import { Faucet } from '@components/debug/faucet';
 
-// @ts-ignore
-import { Connect, useConnect, ContractCallArgumentType } from '@blockstack/connect';
-import { useUserSession } from '@common/hooks/use-user-session';
+import { ReduxNextPageContext } from '@common/types';
+
+import { useDebugState } from '@common/debug';
+import { parseCookies } from 'nookies';
+
+import {
+  fetchAccount,
+  selectAccountBalance,
+  selectAccountLoading,
+  selectIdentity,
+  selectLastFetch,
+  generateIdentity,
+  setIdentity,
+} from '@store/debug';
+import { truncateMiddle } from '@common/utils';
 
 const debugPaths = [
+  { path: 'faucet', label: 'STX Faucet', component: Faucet },
   { path: 'token-transfer', label: 'Token Transfer', component: TokenTransfer },
   { path: 'contract-deploy', label: 'Contract Deploy', component: ContractDeploy },
   { path: 'contract-call', label: 'Contract Call', component: ContractCall },
 ];
-const authOrigin = 'https://deploy-preview-301--stacks-authenticator.netlify.app';
 
 const Tab = ({
   currentTab,
@@ -53,7 +68,7 @@ const Tab = ({
   );
 };
 
-const Tabs = (props: any) => {
+const Tabs = ({ identity }: any) => {
   const [currentTab, setTab] = React.useState(0);
   const handleClick = (index: number) => setTab(index);
   const Component = debugPaths[currentTab].component;
@@ -72,30 +87,14 @@ const Tabs = (props: any) => {
         </Stack>
       </Box>
       <Box py="base">
-        <Component />
+        <Component identity={identity} title={debugPaths[currentTab].label} />
       </Box>
     </Box>
   );
 };
-interface UserData {
-  loaded: boolean;
-}
-const PageContent = ({ userData, signedIn, ...props }: any) => {
-  const { doOpenAuth, doContractCall } = useConnect();
 
-  const handleContractCall = async () => {
-    await doContractCall({
-      authOrigin,
-      contractAddress: 'STRYYQQ9M8KAF4NS7WNZQYY59X93XEKR31JP64CP',
-      functionName: 'set-value',
-      functionArgs: [{ value: 'testing', type: ContractCallArgumentType.BUFFER }],
-      contractName: 'testing-asdasda',
-      finished: (data: any) => {
-        console.log('finished!', data);
-      },
-    });
-  };
-
+const PageContent = ({ userData, handleGenerateKey, ...props }: any) => {
+  const { identity, balance } = useDebugState();
   return (
     <PageWrapper>
       <Flex align="flex-end" justifyContent="space-between">
@@ -103,46 +102,51 @@ const PageContent = ({ userData, signedIn, ...props }: any) => {
           Stacks Explorer Debugger
         </Text>
         <Box>
-          {signedIn ? (
-            // @ts-ignore
-            <Text color="var(--colors-text-body)" fontWeight={500}>
-              {userData?.username}
-            </Text>
+          {identity ? (
+            <Box textAlign="right">
+              <Box>
+                <Text>{truncateMiddle(identity.address, 10)}</Text>
+              </Box>
+              <Box>
+                <Text>{balance || 0} uSTX</Text>
+              </Box>
+            </Box>
           ) : (
-            <Button onClick={doOpenAuth}>Sign In</Button>
+            <Button onClick={handleGenerateKey}>Generate address</Button>
           )}
         </Box>
       </Flex>
       <Box width="100%" py="base">
-        <Tabs />
+        <Tabs identity={identity} />
       </Box>
     </PageWrapper>
   );
 };
-const DebugPage = (props: any) => {
-  // @ts-ignore
+const DebugPage = ({ identity: preloadedIdentity }: any) => {
+  const dispatch = useDispatch();
 
-  const { userSession, userData, signedIn } = useUserSession();
+  const { lastFetch, loading, identity, error } = useDebugState();
 
-  const authOptions = {
-    authOrigin,
-    redirectTo: '/',
-    // @ts-ignore
-    finished: ({ userSession }) => {
-      console.log(userSession.loadUserData());
-    },
-    appDetails: {
-      name: 'Stacks Explorer',
-      icon: 'https://example.com/icon.png',
-    },
-    userSession,
+  if (!error && !lastFetch && loading !== 'pending' && identity) {
+    dispatch(fetchAccount(identity.address));
+  }
+
+  const handleGenerateId = async () => {
+    await dispatch(generateIdentity());
   };
 
-  return (
-    <Connect authOptions={authOptions}>
-      <PageContent signedIn={signedIn} userData={userData} />
-    </Connect>
-  );
+  return <PageContent handleGenerateKey={handleGenerateId} />;
+};
+
+DebugPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
+  const cookies = parseCookies(ctx);
+  if (cookies && cookies.debug_identity) {
+    ctx.store.dispatch(setIdentity(JSON.parse(cookies.debug_identity)));
+    return {
+      identity: cookies.debug_identity,
+    };
+  }
+  return {};
 };
 
 export default DebugPage;

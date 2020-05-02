@@ -21,7 +21,7 @@ export const Page: React.FC<BoxProps> = ({ children, ...rest }) => (
       height="100%"
       maxWidth="1280px"
       flexDirection="column"
-      px={['base', 'extra-loose']}
+      px={['tight', 'base', 'extra-loose']}
       {...rest}
     >
       <>

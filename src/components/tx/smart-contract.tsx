@@ -5,6 +5,7 @@ import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
 import { TokenTransfers } from '@components/token-transfer';
 import { TransactionDetails } from '@components/transaction-details';
+import { PostConditions } from '@components/post-conditions';
 
 import { SmartContractTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 import { TransactionType } from '@models/transaction.interface';
@@ -23,6 +24,9 @@ const SmartContractPage = ({ transaction }: SmartContractPageProps) => (
       />
       <TokenTransfers events={transaction.events} />
       <ContractSource source={transaction.smart_contract.source_code} />
+      {transaction.post_conditions ? (
+        <PostConditions conditions={transaction.post_conditions} />
+      ) : null}
     </Stack>
   </>
 );

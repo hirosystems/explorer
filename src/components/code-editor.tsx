@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Editor from 'react-simple-code-editor';
 import { createGlobalStyle } from 'styled-components';
@@ -11,10 +11,13 @@ const TextAreaOverrides = createGlobalStyle`
   [contenteditable] {
     caret-color: white;
   }
+  & * {
+      font-size: 14px !important;
+  }
   textarea{
     width: calc(100%) !important;
     margin-left: 76px !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
     padding-top: 2px !important;
     font-family: 'Fira Code',monospace !important;
     line-height: 24px !important;
@@ -31,7 +34,7 @@ const TextAreaOverrides = createGlobalStyle`
 `;
 
 interface CodeEditorProps {
-  code: string;
+  value: string;
   disabled?: boolean;
   language?: string;
   onChange?: (code: string) => void;
@@ -40,46 +43,50 @@ interface CodeEditorProps {
   id?: string;
 }
 
-export const CodeEditor = (props: CodeEditorProps) => {
-  const [state, setState] = React.useState({ code: props.code || '' });
+export const CodeEditor = React.memo((props: CodeEditorProps) => {
+  const { style, value, onChange, language, id, disabled, ...rest } = props;
+  const [code, setState] = React.useState(value);
 
-  const updateContent = (code: string) => {
+  const updateContent = (c: string) => {
+    if (c === code) {
+      return;
+    }
     setState(s => {
       if (props.onChange) {
-        props.onChange(code);
+        props.onChange(c);
       }
-      return {
-        code,
-      };
+      return c;
     });
   };
-
-  const highlightCode = (code: string) => (
-    <Highlighter code={code} showLineNumbers language={language as any} />
-  );
-
-  const { style, code: _code, onChange, language, id, ...rest } = props;
-  const { code } = state;
 
   return (
     <>
       <TextAreaOverrides />
-      <Box className="code-editor" bg="ink" py="base-tight" overflowX="auto" minWidth="100%">
+      <Box
+        className="code-editor"
+        bg="ink"
+        borderRadius="6px"
+        py="base-tight"
+        border="1px solid var(--colors-border)"
+        overflowX="auto"
+        minWidth="100%"
+      >
         <Editor
-          //@ts-ignore
-          value={code}
-          highlight={highlightCode}
+          id={id}
+          language={language}
           onValueChange={updateContent}
+          highlight={c => <Highlighter code={c} showLineNumbers language={language as any} />}
           style={{
             ...style,
             overflowWrap: 'unset',
+            maxHeight: 500,
             //@ts-ignore
             whiteSpace: 'pre !important',
           }}
-          textareaId={id}
+          value={code}
           {...rest}
         />
       </Box>
     </>
   );
-};
+});
