@@ -79,7 +79,6 @@ export const CodeEditor = React.memo((props: CodeEditorProps) => {
           style={{
             ...style,
             overflowWrap: 'unset',
-            maxHeight: 500,
             //@ts-ignore
             whiteSpace: 'pre !important',
           }}

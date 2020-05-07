@@ -14,6 +14,7 @@ import {
   broadcastTransaction,
 } from './actions';
 import { RootState } from '@store';
+import { dedupe } from '@common/utils';
 
 export const accountAdapter = createEntityAdapter<Account>({
   selectId: (account: Account) => account.principal,
@@ -35,7 +36,7 @@ const addAccountToState = (state: RootState['accounts'], action: any) => {
     const txs = state.entities[action.payload.principal]?.transactions;
     accountAdapter.upsertOne(state, {
       ...action.payload,
-      transactions: [...txs, ...action.payload.transactions],
+      transactions: dedupe([...txs, ...action.payload.transactions], 'txId'),
     });
     state.loading = 'idle';
     state.error = undefined;

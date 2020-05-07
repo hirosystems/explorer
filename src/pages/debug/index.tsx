@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Flex, Stack, Button } from '@blockstack/ui';
+import { Box, Flex, Stack, Button, ToastProvider } from '@blockstack/ui';
 import { Text } from '@components/typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { PageWrapper } from '@components/page';
@@ -135,7 +135,11 @@ const DebugPage = ({ identity: preloadedIdentity }: any) => {
     await dispatch(generateIdentity());
   };
 
-  return <PageContent handleGenerateKey={handleGenerateId} />;
+  return (
+    <ToastProvider>
+      <PageContent handleGenerateKey={handleGenerateId} />
+    </ToastProvider>
+  );
 };
 
 DebugPage.getInitialProps = async (ctx: ReduxNextPageContext) => {

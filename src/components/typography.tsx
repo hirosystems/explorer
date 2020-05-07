@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text as BaseText, BoxProps } from '@blockstack/ui';
 
-export const Text = (props: BoxProps) => <BaseText color="var(--colors-text-body)" {...props} />
+export const Text = (props: BoxProps) => <BaseText color="var(--colors-text-body)" {...props} />;
 
 export const Caption: React.FC<BoxProps> = props => (
   <Text

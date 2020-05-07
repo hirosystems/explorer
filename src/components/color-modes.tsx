@@ -2,7 +2,7 @@ import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
 
-const colorGet = (path: string, fallback?: string) => themeGet('colors.' + path, fallback);
+export const colorGet = (path: string, fallback?: string) => themeGet('colors.' + path, fallback);
 
 export const ColorModes = createGlobalStyle`
 html, body{
