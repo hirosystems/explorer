@@ -1,11 +1,14 @@
 import fetch from 'isomorphic-unfetch';
-import { API_SERVER, API_SERVER_ENV } from '@common/constants';
+import { withApiServer } from '@common/constants';
 
 export const fetchFromApi = async (path: string, opts: object = {}) =>
-  fetch(API_SERVER + path, opts);
+  fetch(withApiServer(path), opts);
 
-export const fetchFromRootApi = async (path: string, opts: object = {}) =>
-  fetch(API_SERVER_ENV + path, opts);
+export const fetchFromSidecar = async (path: string, opts: object = {}) =>
+  fetch(withApiServer('/sidecar/v1' + path), opts);
 
-export const postToRootApi = async (path: string, opts: object = {}) =>
-  fetchFromRootApi(path, { method: 'POST', ...opts });
+export const postToApi = async (path: string, opts: object = {}) =>
+  fetchFromApi(path, { method: 'POST', ...opts });
+
+export const postToSidecar = async (path: string, opts: object = {}) =>
+  fetchFromSidecar(path, { method: 'POST', ...opts });

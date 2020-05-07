@@ -131,7 +131,7 @@ export const TransactionsCard = ({ loading, identity, ...rest }: any) => {
         height="36px"
       >
         <Caption fontWeight="bold">Recent transactions</Caption>
-        {loading ? <Loading /> : null}
+        {/*{loading ? <Loading /> : null}*/}
       </Flex>
 
       {transactions?.length ? (

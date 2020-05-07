@@ -13,9 +13,11 @@ interface TimestampProps extends FlexProps {
 export const Timestamp: React.FC<TimestampProps> = ({ ts, ...props }) => {
   const [count, setCount] = React.useState(0);
   React.useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       setCount(count + 1);
     }, 1000);
+
+    return clearTimeout(timeout);
   }, [count]);
   return (
     <Flex align="center" {...props}>

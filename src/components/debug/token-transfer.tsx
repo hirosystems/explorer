@@ -8,9 +8,10 @@ import { fetchTransaction } from '@store/transactions';
 import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
 import BigNum from 'bn.js';
 import { useDispatch } from 'react-redux';
+import { useLoading } from '@common/hooks/use-loading';
 
 export const TokenTransfer = (props: any) => {
-  const [loading, setLoading] = React.useState(false);
+  const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const { identity } = useDebugState();
   const dispatch = useDispatch();
   const initialValues = {
@@ -20,10 +21,12 @@ export const TokenTransfer = (props: any) => {
     memo: 'hello world!',
   };
 
-  const onSubmit = async ({ senderKey, recipient, amount, fee, memo }: any) => {
+  const onSubmit = async ({ senderKey, recipient, amount, memo }: any) => {
     try {
-      setLoading(true);
+      doStartLoading();
+      console.log('identity', identity);
       await dispatch(fetchAccount(identity?.address));
+
       const tx = await makeSTXTokenTransfer({
         senderKey,
         recipient,
@@ -31,11 +34,12 @@ export const TokenTransfer = (props: any) => {
         memo,
         network,
       });
+      console.log('tx', tx);
 
       const { payload, error } = await dispatch(
         broadcastTransaction({ principal: identity?.address, tx })
       );
-      if (error) return setLoading(false);
+      if (error) return doFinishLoading();
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
         // @ts-ignore
@@ -43,7 +47,7 @@ export const TokenTransfer = (props: any) => {
           await dispatch(fetchTransaction(payload.transactions[0].txId));
         }
         await dispatch(fetchAccount(identity?.address));
-        setLoading(false);
+        doFinishLoading();
       }, 3500);
     } catch (e) {
       console.log(e);
@@ -51,7 +55,7 @@ export const TokenTransfer = (props: any) => {
   };
 
   return (
-    <Wrapper loading={loading} {...props}>
+    <Wrapper loading={isLoading} {...props}>
       <Formik initialValues={initialValues as any} onSubmit={onSubmit}>
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit} method="post">
@@ -61,7 +65,7 @@ export const TokenTransfer = (props: any) => {
                 <Field type="number" name="amount" label="uSTX amount" />
                 <Field name="memo" label="Memo (message)" />
                 <Field name="recipient" label="Recipient address" />
-                <Button type="submit" isLoading={loading}>
+                <Button type="submit" isLoading={isLoading}>
                   Submit
                 </Button>
               </Stack>

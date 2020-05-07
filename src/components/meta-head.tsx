@@ -36,7 +36,7 @@ export const Meta = ({
   const filename = useFaviconName(status);
   return (
     <Head>
-      <title>{title}</title>
+      <title>{title} - Stacks Explorer</title>
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Stacks 2.0 blockchain explorer" />
       <meta name="twitter:card" content="summary" />

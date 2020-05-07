@@ -22,6 +22,5 @@ export const selectAccountTransactions = (id: Account['principal']) =>
 export const selectLastFetch = createSelector(selectAccountsSlice, state => state.lastFetch);
 export const selectAccountLoading = createSelector(selectAccountsSlice, state => state.loading);
 
-
 export const selectIdentity = createSelector(selectAccountsSlice, state => state.identity);
 export const selectErrorState = createSelector(selectAccountsSlice, state => state.error);

@@ -2,13 +2,12 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Transaction } from '@models/transaction.interface';
 import { fetchTransaction } from '@store/transactions';
-import { API_SERVER } from '@common/constants';
 import { ReduxNextPageContext } from '@common/types/next-store';
 import { useTransactionState } from '@common/hooks/use-transaction-state';
 import { useMostRecentTxId } from '@common/hooks/use-most-recent-tx';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { truncateMiddle } from '@common/utils';
-
+import { useDispatch } from 'react-redux';
 import { PageWrapper } from '@components/page';
 import { Meta } from '@components/meta-head';
 import CoinbasePage from '@components/tx/coinbase';
@@ -40,7 +39,7 @@ const TransactionMeta = ({ transaction }: any) => {
   const ogTitle = `${getTxTypeName(transaction.tx_type)}${
     transaction.tx_id && ` transaction: ${truncateMiddle(transaction.tx_id, 10)}`
   }`;
-  const ogUrl = `${API_SERVER}/txid/${transaction.tx_id}`;
+  const ogUrl = `/txid/${transaction.tx_id}`;
   const subject = transaction.sponsored ? 'Sponsored transaction' : 'Transaction';
   const ogDescription = `
     ${subject} initiated by ${transaction.sender_address}`;
@@ -62,21 +61,26 @@ const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
   const tx_id = useMostRecentTxId();
   const { transaction, error } = useTransactionState(tx_id as string);
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handleRefresh = async () => dispatch(fetchTransaction(searchQuery));
+
+  React.useEffect(() => {
+    if (transaction) {
+      if (searchQuery !== tx_id && router.pathname !== tx_id) {
+        router.push('/txid/[txid]', `/txid/${tx_id}`, { shallow: true });
+      }
+    }
+  }, [router.pathname, transaction]);
+
+  useRecentlyViewedTx(transaction);
 
   if (error || !transaction)
     return (
       <PageWrapper>
-        <TxNotFound />
+        <TxNotFound refresh={handleRefresh} />
       </PageWrapper>
     );
-
-  React.useEffect(() => {
-    if (searchQuery !== tx_id && router.pathname !== tx_id) {
-      router.push('/txid/[txid]', `/txid/${tx_id}`, { shallow: true });
-    }
-  }, [router.pathname]);
-
-  useRecentlyViewedTx(transaction);
 
   return (
     <PageWrapper>
