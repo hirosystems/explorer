@@ -48,6 +48,7 @@ export const ClockIcon: React.FC<BoxProps> = props => (
     </svg>
   </Box>
 );
+
 export const CopyIcon: React.FC<BoxProps> = props => (
   <Box {...props}>
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

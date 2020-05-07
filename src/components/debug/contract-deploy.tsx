@@ -13,11 +13,12 @@ import {
   FungibleConditionCode,
 } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
+import { useLoading } from '@common/hooks/use-loading';
 
 export const ContractDeploy = (props: any) => {
   const { identity } = useDebugState();
   const dispatch = useDispatch();
-  const [loading, setLoading] = React.useState(false);
+  const { isLoading, doFinishLoading, doStartLoading } = useLoading();
 
   const initialValues = {
     senderKey: identity?.privateKey,
@@ -30,7 +31,7 @@ export const ContractDeploy = (props: any) => {
     const address = identity?.address;
     if (!address) return;
     try {
-      setLoading(true);
+      doStartLoading();
       await dispatch(fetchAccount(identity?.address));
 
       // hardcode some post conditions for now :)
@@ -53,7 +54,7 @@ export const ContractDeploy = (props: any) => {
       const { payload, error } = await dispatch(
         broadcastTransaction({ principal: identity?.address, tx })
       );
-      if (error) return setLoading(false);
+      if (error) return doFinishLoading();
 
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
@@ -62,7 +63,7 @@ export const ContractDeploy = (props: any) => {
           await dispatch(fetchTransaction(payload.transactions[0].txId));
         }
         await dispatch(fetchAccount(identity?.address));
-        setLoading(false);
+        doFinishLoading();
       }, 3500);
     } catch (e) {
       console.log(e);
@@ -70,7 +71,7 @@ export const ContractDeploy = (props: any) => {
   };
 
   return (
-    <Wrapper loading={loading} title="Contract deploy" {...props}>
+    <Wrapper loading={isLoading} title="Contract deploy" {...props}>
       <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit} method="post">
@@ -80,7 +81,7 @@ export const ContractDeploy = (props: any) => {
                 <Field type="number" name="fee" label="Fee rate" />
                 <Field name="contractName" label="Contract name" />
                 <Field label="Contract source code" name="codeBody" type="code" />
-                <Button type="submit" isLoading={loading}>
+                <Button type="submit" isLoading={isLoading}>
                   Submit
                 </Button>
               </Stack>

@@ -22,8 +22,8 @@ import {
 } from '@store/debug';
 import { RootState } from '@store';
 import { IdentityPayload } from '@store/debug/types';
-import { API_SERVER_ENV } from '@common/constants';
-import { fetchFromRootApi } from '@common/api/fetch';
+import { withApiServer } from '@common/constants';
+import { fetchFromSidecar } from '@common/api/fetch';
 
 export const useDebugState = (): {
   lastFetch?: number;
@@ -66,16 +66,20 @@ export const doGenerateIdentity = async () => {
   };
 };
 
+const broadcastApiUrl = withApiServer('/v2/transactions');
+const transferFeeEstimateApiUrl = withApiServer('/v2/fees/transfer');
+const balanceApiUrl = withApiServer('/v2/accounts');
+
 export const network: StacksNetwork = {
   version: TransactionVersion.Testnet,
   chainId: ChainID.Testnet,
-  coreApiUrl: API_SERVER_ENV,
-  broadcastApiUrl: API_SERVER_ENV + '/v2/transactions',
-  transferFeeEstimateApiUrl: API_SERVER_ENV + '/v2/fees/transfer',
-  balanceApiUrl: API_SERVER_ENV + '/v2/accounts',
+  coreApiUrl: withApiServer(),
+  broadcastApiUrl,
+  transferFeeEstimateApiUrl,
+  balanceApiUrl,
 };
 
 export const fetchContractInterface = async (contractAddress: string, contractName: string) => {
-  const res = await fetchFromRootApi(`/sidecar/v1/contract/${contractAddress}.${contractName}`);
+  const res = await fetchFromSidecar(`/contract/${contractAddress}.${contractName}`);
   return res.json();
 };

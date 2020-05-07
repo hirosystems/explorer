@@ -7,6 +7,7 @@ import { createGlobalStyle } from 'styled-components';
 import { RootState, initStore } from '@store';
 import { handleFontLoading } from '@common/fonts';
 import { ColorModes } from '@components/color-modes';
+import { ProgressBar } from '@components/progress-bar';
 
 const GlobalStyles = createGlobalStyle`
   html, body, #__next {
@@ -37,6 +38,7 @@ class MyApp extends App<ReduxWrapperAppProps<RootState>> {
             <CSSReset />
             <ColorModes />
             <GlobalStyles />
+            <ProgressBar />
             <Component {...pageProps} />
           </>
         </ThemeProvider>

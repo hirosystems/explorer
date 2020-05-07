@@ -6,9 +6,10 @@ import { Field, Wrapper } from '@components/debug/common';
 import { fetchContractInterface } from '@common/debug';
 import { Function } from '@components/debug/contract-call/functions';
 import { Title } from '@components/typography';
+import { useLoading } from '@common/hooks/use-loading';
 
 export const ContractCall = (props: any) => {
-  const [loading, setLoading] = React.useState(false);
+  const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const [error, setError] = React.useState<string | undefined>(undefined);
   const [abi, setAbi] = React.useState(null);
 
@@ -23,16 +24,16 @@ export const ContractCall = (props: any) => {
     }
     try {
       setError(undefined);
-      setLoading(true);
+      doStartLoading();
       const functions = await fetchContractInterface(
         contractAddress,
         contractAddress.split('.')[1]
       );
       setAbi(JSON.parse(functions.abi));
-      setLoading(false);
+      doFinishLoading();
     } catch (e) {
       setError('Something went wrong!');
-      setLoading(false);
+      doFinishLoading();
     }
   };
 
@@ -63,7 +64,7 @@ export const ContractCall = (props: any) => {
                     placeholder="STRYYQQ9M8KAF4NS7WNZQYY59X93XEKR31JP64CP.hello-world-contract"
                     name="contractAddress"
                   />
-                  <Button type="submit" isLoading={loading}>
+                  <Button type="submit" isLoading={isLoading}>
                     Submit
                   </Button>
                 </Stack>

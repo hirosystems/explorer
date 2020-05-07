@@ -1068,10 +1068,10 @@
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
 
-"@blockstack/ui@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.4.0.tgz#26e3a78f4990c0f854fb2837203a5b8bac11feb6"
-  integrity sha512-JVURiaJlSUH504CjXHzBQirBW9YJG45VzjilabOJ3R/JqES2h9jSa+3jjv492o/CRr+KLtHcHZF4vJQCR9yTRw==
+"@blockstack/ui@^1.5.0-beta.0":
+  version "1.5.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.5.0-beta.0.tgz#b37964ce83c35f93392e08818f6a3bbd55a9ea01"
+  integrity sha512-EejjbMCr2bL5/vibt781PZm4RLnFi40j2Nd/HswcM9Md3fOT9eANTPKkHcTC+JEo1B+Vn9bbRXfHSbWVvXiBxg==
   dependencies:
     "@popperjs/core" "^2.3.3"
     "@reach/auto-id" "^0.10.0"
@@ -1564,6 +1564,11 @@
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
+
+"@types/nprogress@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@types/nprogress/-/nprogress-0.2.0.tgz#86c593682d4199212a0509cc3c4d562bbbd6e45f"
+  integrity sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -6188,6 +6193,11 @@ normalize-url@~5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-5.0.0.tgz#f46c9dc20670495e4e18fbd1b4396e41d199f63c"
   integrity sha512-bAEm2fx8Dq/a35Z6PIRkkBBJvR56BbEJvhpNtvCZ4W9FyORSna77fn+xtYFjqk5JpBS+fMnAOG/wFgkQBmB7hw==
+
+nprogress@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/nprogress/-/nprogress-0.2.0.tgz#cb8f34c53213d895723fcbab907e9422adbcafb1"
+  integrity sha1-y480xTIT2JVyP8urkH6UIq28r7E=
 
 nth-check@^1.0.2:
   version "1.0.2"

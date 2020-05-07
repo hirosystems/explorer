@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { fetchFromRootApi } from '@common/api/fetch';
+import { fetchFromSidecar } from '@common/api/fetch';
 import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
 export async function fetchTxList(): Promise<{ results: Transaction[] }> {
-  const resp = await fetchFromRootApi('/sidecar/v1/tx');
-  console.log(resp)
+  const resp = await fetchFromSidecar('/tx');
+  console.log(resp);
   return resp.json();
 }
 

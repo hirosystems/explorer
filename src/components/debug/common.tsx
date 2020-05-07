@@ -9,7 +9,7 @@ import {
   Flex,
   Stack,
 } from '@blockstack/ui';
-import { Field as FormikField, FieldProps } from 'formik';
+import { Field as FormikField, FieldProps, useField } from 'formik';
 
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
@@ -61,8 +61,6 @@ type InputType =
   | 'week';
 
 export const FieldBase = ({
-  field,
-  form,
   label,
   inputComponent,
   type,
@@ -76,16 +74,29 @@ export const FieldBase = ({
     type: InputType;
   }) => {
   const Component = type === 'code' ? CodeEditor : Input;
+  const [field, { touched, error }, helpers] = useField({ name: rest.field.name, ...rest } as any);
+
+  const { onChange, ...fieldProps } = field;
+
+  const handleChange = (value: string | React.FormEvent<HTMLFormElement>) => {
+    type === 'code' ? helpers.setValue(value.toString().trim()) : onChange(value);
+  };
+
   return (
     <Box {...rest}>
-      {label ? <FormLabel htmlFor={field?.name}>{label}</FormLabel> : null}
-      <Component type={type === 'code' ? undefined : type} placeholder={placeholder} {...field} />
-      {form?.errors[field.name] && form?.touched[field.name] && form?.errors[field.name]}
+      {label ? <FormLabel htmlFor={field.name}>{label}</FormLabel> : null}
+      <Component
+        type={type === 'code' ? undefined : type}
+        placeholder={placeholder}
+        onChange={handleChange as any}
+        {...fieldProps}
+      />
+      {touched && error}
     </Box>
   );
 };
 
-export const Field = ({ name, ...props }: any) => (
+export const Field = ({ name, handleChange, value, ...props }: any) => (
   <FormikField name={name} {...props} component={FieldBase} />
 );
 

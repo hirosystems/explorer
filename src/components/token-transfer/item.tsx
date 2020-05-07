@@ -115,7 +115,7 @@ const StxAmount = ({ event, ...rest }: { event: TransactionEvent }) =>
 
 const Sender = ({ event, ...rest }: { event: TransactionEvent }) =>
   event.asset?.sender ? (
-    <CellItem value={event.asset?.sender as string} truncate label="From" {...rest} />
+    <CellItem value={event.asset?.sender} truncate label="From" {...rest} />
   ) : null;
 
 const Recipient = ({ event, ...rest }: { event: TransactionEvent }) =>
