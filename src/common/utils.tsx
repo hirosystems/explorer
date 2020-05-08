@@ -84,9 +84,48 @@ export const validateContractName = (contractString: string) => {
   const stxAddress = contractString.split('.')[0];
   const contractName = contractString.split('.')[1];
   const nameRegex = /[a-zA-Z]([a-zA-Z0-9]|[-_!?+<>=/*])*$|^[-+=/*]$|^[<>]=?$/;
-  const validStacksAddress = validateStacksAddress(stxAddress);
-  const validName = nameRegex.exec(contractName);
-  return validName && validStacksAddress;
+  try {
+    const validStacksAddress = validateStacksAddress(stxAddress);
+    const validName = nameRegex.exec(contractName);
+    return validName && validStacksAddress;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const queryWith0x = (query: string) => (!query.includes('0x') ? '0x' + query : query);
+
+export const handleValidation = (query?: string) => {
+  if (!query || !query.trim().length) {
+    return {
+      success: false,
+      message: 'No query provided',
+    };
+  }
+
+  if (query.includes('.') && validateContractName(query)) {
+    return {
+      success: true,
+    };
+  }
+
+  if (query.includes('.') && !validateContractName(query)) {
+    return {
+      success: false,
+      message: 'Contract name seems invalid.',
+    };
+  }
+
+  if (validateTxId(queryWith0x(query))) {
+    return {
+      success: true,
+    };
+  } else {
+    return {
+      success: false,
+      message: 'Transaction ID hash seems invalid.',
+    };
+  }
 };
 
 /**

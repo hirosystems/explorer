@@ -10,7 +10,7 @@ const colors = (props: any) => ({
   light: {
     ['accent']: colorGet('blue')(props),
     ['bg']: 'white',
-    ['bg-alt']: colorGet('white')(props),
+    ['bg-alt']: colorGet('ink.150')(props),
     ['bg-light']: colorGet('ink.600')(props),
     ['invert']: colorGet('ink')(props),
     ['text-hover']: colorGet('blue')(props),

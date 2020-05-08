@@ -4,6 +4,7 @@ import { Box, BoxProps, Flex } from '@blockstack/ui';
 import { Header } from '@components/header';
 import { TransactionTitle, TitleProps } from '@components/transaction-title';
 import { FooterLinks } from '@components/footer-links';
+import { Notice } from '@components/notice';
 
 export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
   <Box width="100%" {...props}>
@@ -11,8 +12,9 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
   </Box>
 );
 
-export const Page: React.FC<BoxProps> = ({ children, ...rest }) => (
-  <Flex flexDirection="column" width="100%" minHeight="100%">
+export const Page = ({ children, notice, ...rest }: { notice?: any } & BoxProps) => (
+  <Flex flexDirection="column" width="100%" minHeight="100%" pt="64px">
+    {notice ? <Notice>{notice}</Notice> : null}
     <Flex
       as="main"
       mx="auto"
@@ -21,7 +23,7 @@ export const Page: React.FC<BoxProps> = ({ children, ...rest }) => (
       height="100%"
       maxWidth="1280px"
       flexDirection="column"
-      px={['tight', 'base', 'extra-loose']}
+      px={['base', 'base', 'extra-loose']}
       {...rest}
     >
       <>
@@ -32,9 +34,9 @@ export const Page: React.FC<BoxProps> = ({ children, ...rest }) => (
   </Flex>
 );
 
-export const PageWrapper: React.FC<BoxProps> = props => (
+export const PageWrapper = (props: { isHome?: boolean; notice?: any } & BoxProps) => (
   <>
-    <Header />
-    <Page pt="extra-loose" mt="64px" {...props} />
+    <Header isHome={props.isHome} />
+    <Page pt="extra-loose" {...props} />
   </>
 );

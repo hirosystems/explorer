@@ -10,14 +10,11 @@ import {
   Stack,
 } from '@blockstack/ui';
 import { Field as FormikField, FieldProps, useField } from 'formik';
-
+import { Alert } from '@components/alert';
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
-import { Title, Text } from '@components/typography';
-import { ExclamationMarkCircleIcon } from '@components/svg';
+import { Title } from '@components/typography';
 import { TransactionsCard } from '@components/debug/transactions-card';
-
-import { useDebugState } from '@common/debug';
 
 export const Input = (props: InputProps) => (
   <InputBase
@@ -100,50 +97,6 @@ export const Field = ({ name, handleChange, value, ...props }: any) => (
   <FormikField name={name} {...props} component={FieldBase} />
 );
 
-const renderErrorMessage = ({
-  reason,
-  reason_data,
-}: {
-  reason: 'FeeTooLow' | 'NotEnoughFunds';
-  reason_data: any;
-}) => {
-  switch (reason) {
-    case 'FeeTooLow':
-      return `Fee was too low, expected ${reason_data?.expected} uSTX.`;
-    case 'NotEnoughFunds':
-      return `Not enough funds at address provided, expected ${BigInt(
-        reason_data?.expected
-      ).toString()} uSTX.`;
-  }
-};
-
-export const Error = ({ error: _error, ...rest }: any) => {
-  const { error } = useDebugState();
-  const hasError = error || _error;
-  return hasError ? (
-    <Flex
-      p="base"
-      borderRadius="6px"
-      border="1px solid var(--colors-border)"
-      align="center"
-      color="#F9A14D"
-      {...rest}
-    >
-      <Box mr="tight">
-        <ExclamationMarkCircleIcon />
-      </Box>
-      <Box>
-        {error ? (
-          <Title as="h4" style={{ textTransform: 'capitalize' }}>
-            {error?.error || error?.name}:{' '}
-          </Title>
-        ) : null}
-        <Text pl="tight">{_error ? _error : error?.message || renderErrorMessage(error)}</Text>
-      </Box>
-    </Flex>
-  ) : null;
-};
-
 export const Wrapper = ({
   title,
   children,
@@ -158,7 +111,7 @@ export const Wrapper = ({
         <Box flexShrink={0} width="100%" maxWidth="60%" flexGrow={1} {...rest}>
           <Stack spacing="base">
             <Title as="h2">{title}</Title>
-            <Error error={error} />
+            <Alert error={error} />
             {children}
           </Stack>
         </Box>

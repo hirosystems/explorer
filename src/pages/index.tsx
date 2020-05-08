@@ -1,44 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Flex, Text } from '@blockstack/ui';
-import { Page } from '@components/page';
+import { PageWrapper } from '@components/page';
 import { SearchBarWithDropdown } from '@components/search-bar';
-import { HomeNavigation } from '@components/home-nav';
-import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
-import { search } from '@common/search';
 import { Meta } from '@components/meta-head';
 
-export const Home = () => {
-  const [query, setQuery] = useState('');
-  const recentTxs = useRecentlyViewedTx();
-
-  return (
-    <Page>
-      <Meta />
-      <HomeNavigation />
-      <Flex
-        as="form"
-        flexDirection="column"
-        align="center"
-        maxWidth="544px"
-        mt="20vh"
-        justify="center"
-        onSubmit={search(query)}
+export const Home = () => (
+  <PageWrapper isHome>
+    <Meta />
+    <Flex
+      as="form"
+      flexDirection="column"
+      align="center"
+      maxWidth="544px"
+      mt="20vh"
+      justify="center"
+    >
+      <Text
+        as="h1"
+        fontSize="36px"
+        display="block"
+        width="100%"
+        textAlign={['center', 'left']}
+        mb="extra-loose"
+        color="var(--colors-text-title)"
       >
-        <Text
-          as="h1"
-          fontSize="36px"
-          display="block"
-          width="100%"
-          textAlign={['center', 'left']}
-          mb="extra-loose"
-          color="var(--colors-text-title)"
-        >
-          Stacks Explorer
-        </Text>
-        <SearchBarWithDropdown onChange={e => setQuery(e.target.value)} />
-      </Flex>
-    </Page>
-  );
-};
+        Stacks Explorer
+      </Text>
+      <SearchBarWithDropdown />
+    </Flex>
+  </PageWrapper>
+);
 
 export default Home;
