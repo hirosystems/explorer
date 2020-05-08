@@ -4,7 +4,7 @@ import Link from 'next/link';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { useHover, useFocus } from 'use-events';
 import { Flex, Box, Text, FlexProps, BoxProps } from '@blockstack/ui';
-
+import { DialogCard } from '@components/dialog-card';
 import { Tag } from '@components/tags';
 import { truncateMiddle } from '@common/utils';
 import { Transaction, TransactionType } from '@models/transaction.interface';
@@ -15,20 +15,10 @@ export interface RecentlyViewedProps extends FlexProps {
   transactions: Transaction[];
 }
 
-export const RecentlyViewed = ({ transactions, ...rest }: RecentlyViewedProps) => {
+export const RecentlyViewed = ({ transactions, style = {}, ...rest }: RecentlyViewedProps) => {
   if (!transactions.length) return null;
   return (
-    <Flex
-      flexDirection="column"
-      border="1px solid #E1E3E8"
-      width={['100%', '100%', '544px']}
-      borderRadius="6px"
-      boxShadow="0px 8px 16px rgba(27, 39, 51, 0.08)"
-      maxHeight="308px"
-      style={{ overflowY: 'auto' }}
-      bg="white"
-      {...rest}
-    >
+    <DialogCard width={['100%', '100%', '544px']} maxHeight="308px" style={style} {...rest}>
       <Box mx="base" mt={['base-tight', 'base-loose']} mb="tight">
         <Text
           color="#677282"
@@ -41,7 +31,7 @@ export const RecentlyViewed = ({ transactions, ...rest }: RecentlyViewedProps) =
         </Text>
       </Box>
       <RecentlyViewedList transactions={transactions} />
-    </Flex>
+    </DialogCard>
   );
 };
 

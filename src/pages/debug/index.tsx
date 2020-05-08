@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Flex, Stack, Button, ToastProvider } from '@blockstack/ui';
 import { Text } from '@components/typography';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { PageWrapper } from '@components/page';
 import { TokenTransfer } from '@components/debug/token-transfer';
 import { ContractDeploy } from '@components/debug/contract-deploy';
@@ -13,15 +13,7 @@ import { ReduxNextPageContext } from '@common/types';
 import { useDebugState } from '@common/debug';
 import { parseCookies } from 'nookies';
 
-import {
-  fetchAccount,
-  selectAccountBalance,
-  selectAccountLoading,
-  selectIdentity,
-  selectLastFetch,
-  generateIdentity,
-  setIdentity,
-} from '@store/debug';
+import { fetchAccount, generateIdentity, setIdentity } from '@store/debug';
 import { truncateMiddle } from '@common/utils';
 
 const debugPaths = [
@@ -96,7 +88,10 @@ const Tabs = ({ identity }: any) => {
 const PageContent = ({ userData, handleGenerateKey, ...props }: any) => {
   const { identity, balance } = useDebugState();
   return (
-    <PageWrapper>
+    <PageWrapper
+      notice="This is for test use only. Any address generated here can and will be lost very easily."
+      {...props}
+    >
       <Flex align="flex-end" justifyContent="space-between">
         <Text color="var(--colors-text-title)" as="h1">
           Stacks Explorer Debugger
@@ -122,7 +117,7 @@ const PageContent = ({ userData, handleGenerateKey, ...props }: any) => {
     </PageWrapper>
   );
 };
-const DebugPage = ({ identity: preloadedIdentity }: any) => {
+const DebugPage = () => {
   const dispatch = useDispatch();
 
   const { lastFetch, loading, identity, error } = useDebugState();

@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Transaction } from '@models/transaction.interface';
 import { fetchContract } from '@common/api/contracts';
 import { fetchTx } from '@common/api/transactions';
+import { queryWith0x } from '@common/utils';
 import type { ContractCallTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
 const handleContractTx = async (query: string) => {
@@ -29,7 +30,7 @@ export const fetchTransaction = createAsyncThunk<Transaction[], string>(
       return txs;
     }
     // searching by a valid id hash
-    const tx = await fetchTx(query);
+    const tx = await fetchTx(queryWith0x(query));
     txs.push(tx);
     if (tx.tx_type === 'contract_call') {
       const originTx = await handleContractCallTx(tx);

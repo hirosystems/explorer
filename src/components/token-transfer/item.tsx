@@ -23,7 +23,7 @@ const Cell = (props: FlexProps) => (
 
 const Value = React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (
   <Box>
-    <Text ref={ref} {...rest} color="var(--colors-text-body)">
+    <Text style={{ whiteSpace: 'nowrap' }} ref={ref} {...rest} color="var(--colors-text-body)">
       {children}
     </Text>
   </Box>
@@ -32,7 +32,7 @@ const Value = React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElem
 const ValueWrapped = ({ truncate, value, ...rest }: any) =>
   truncate ? (
     <Tooltip label={value}>
-      <Value {...rest}>{truncateMiddle(value)}</Value>
+      <Value {...rest}>{truncateMiddle(value, 4)}</Value>
     </Tooltip>
   ) : (
     <Value {...rest}>{value}</Value>
@@ -120,7 +120,7 @@ const Sender = ({ event, ...rest }: { event: TransactionEvent }) =>
 
 const Recipient = ({ event, ...rest }: { event: TransactionEvent }) =>
   event.asset?.recipient ? (
-    <CellItem value={event.asset?.recipient as string} truncate label="From" {...rest} />
+    <CellItem value={event.asset?.recipient as string} truncate label="To" {...rest} />
   ) : null;
 
 export const TokenTransferItem = ({
