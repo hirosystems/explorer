@@ -17,6 +17,7 @@ export interface AssetType {
 export interface TokenTransferItemProps extends FlexProps {
   data: TransactionEvent;
   noBottomBorder?: boolean;
+  length?: number;
 }
 
 export interface BottomButtonProps extends FlexProps {
