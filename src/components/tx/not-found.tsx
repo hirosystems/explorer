@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 
-import { Button, Box, Stack } from '@blockstack/ui';
+import { Button, Box, Flex } from '@blockstack/ui';
 import { Title, Text } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { useProgressBar } from '@components/progress-bar';
+import { useRouter } from 'next/router';
 
+const Pre = (props: any) => (
+  <Text
+    fontFamily={`"Fira Code", monospace`}
+    bg="var(--colors-bg-light)"
+    borderRadius="3px"
+    px="extra-tight"
+    border="1px solid var(--colors-border)"
+    fontSize="14px"
+    {...props}
+  />
+);
 export const TxNotFound = ({ refresh }: { refresh: () => Promise<any> }) => {
+  const buttonRef = React.useRef();
+  const { query } = useRouter();
+
   const [loading, setLoading] = React.useState(false);
   const { start, done } = useProgressBar();
   const handleRefresh = async () => {
@@ -20,20 +35,43 @@ export const TxNotFound = ({ refresh }: { refresh: () => Promise<any> }) => {
   return (
     <>
       <Meta title="Transaction not found" />
-      <Title as="h1" textStyle="display.large" fontSize="36px">
-        Transaction not found!
-      </Title>
-      <Stack spacing="base">
-        <Text maxWidth="650px" display="block" mt="base">
-          There is no record of a transaction with this ID. Transactions can take 60 or more seconds
-          to confirm. If the you know the transaction was recently broadcast, feel free to refresh.
-        </Text>
+      <Flex
+        maxWidth="700px"
+        flexDirection="column"
+        align="flex-start"
+        justify="center"
+        flexGrow={1}
+      >
+        <Title mb="base" as="h1" fontSize="36px">
+          Transaction not found
+        </Title>
         <Box>
-          <Button onClick={handleRefresh} isLoading={loading}>
-            Refresh
-          </Button>
+          <Text maxWidth="544px">
+            There is no current record of a transaction with ID: <Pre>{query.txid}</Pre>
+          </Text>
         </Box>
-      </Stack>
+        <Box mt="base">
+          <Text maxWidth="460px">
+            Transactions can take 60 or more seconds to confirm. If the you know the transaction was
+            sent recently, feel free to refresh.
+          </Text>
+        </Box>
+        <Button
+          mt="loose"
+          // @ts-ignore
+          ref={buttonRef}
+          onClick={async () => {
+            if (!loading) {
+              // @ts-ignore
+              buttonRef?.current.blur();
+              await handleRefresh();
+            }
+          }}
+          isLoading={loading}
+        >
+          Refresh
+        </Button>
+      </Flex>
     </>
   );
 };
