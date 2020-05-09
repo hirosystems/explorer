@@ -53,10 +53,10 @@ const Value = React.memo(
   ))
 );
 
-const ValueWrapped = React.memo(({ truncate, value, ...rest }: any) =>
+export const ValueWrapped = React.memo(({ truncate, offset = 4, value, ...rest }: any) =>
   truncate ? (
     <Tooltip label={value}>
-      <Value {...rest}>{truncateMiddle(value, 4)}</Value>
+      <Value {...rest}>{truncateMiddle(value, offset)}</Value>
     </Tooltip>
   ) : (
     <Value {...rest}>{value}</Value>
