@@ -1068,10 +1068,10 @@
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
 
-"@blockstack/ui@^1.5.0-beta.0":
-  version "1.5.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.5.0-beta.0.tgz#b37964ce83c35f93392e08818f6a3bbd55a9ea01"
-  integrity sha512-EejjbMCr2bL5/vibt781PZm4RLnFi40j2Nd/HswcM9Md3fOT9eANTPKkHcTC+JEo1B+Vn9bbRXfHSbWVvXiBxg==
+"@blockstack/ui@^1.5.0-beta.1":
+  version "1.5.0-beta.1"
+  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.5.0-beta.1.tgz#3dcf9b229dc4a36ebbf838455caa16f92f824119"
+  integrity sha512-cm0vkSe8mj/FxWLXy/tU1NcDuvccSLwUVL8t1IwFltWNJcMluO3dzYBO4G5kfD7iEfIkEcda30GL+sZB2Y7gQw==
   dependencies:
     "@popperjs/core" "^2.3.3"
     "@reach/auto-id" "^0.10.0"

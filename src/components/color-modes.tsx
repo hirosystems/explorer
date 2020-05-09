@@ -15,7 +15,7 @@ const colors = (props: any) => ({
     ['invert']: colorGet('ink')(props),
     ['text-hover']: colorGet('blue')(props),
     ['text-title']: colorGet('ink')(props),
-    ['text-caption']: colorGet('ink.400')(props),
+    ['text-caption']: colorGet('ink.600')(props),
     ['text-body']: colorGet('ink.900')(props),
     ['border']: 'rgb(229, 229, 236)',
     ['feedback-alert']: colorGet('orange')(props),
@@ -23,7 +23,7 @@ const colors = (props: any) => ({
     ['feeback-success']: colorGet('green')(props),
   },
   dark: {
-    ['accent']: colorGet('cyan')(props),
+    ['accent']: colorGet('blue.400')(props),
     ['bg']: colorGet('ink')(props),
     ['bg-alt']: colorGet('ink.800')(props),
     ['bg-light']: '#2c2e33',
