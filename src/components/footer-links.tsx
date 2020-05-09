@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
-import Router from 'next/router';
 import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
-import { fetchTxList } from '@common/api/transactions';
+import { navgiateToRandomTx } from '@common/utils';
 
 const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   <Text
@@ -25,24 +24,6 @@ const ColorModeLink = () => {
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
     </FooterLink>
   );
-};
-
-const navgiateToRandomTx = async () => {
-  const { results } = await fetchTxList();
-  const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
-
-  if (hasNonCoinbaseTxs) {
-    const nonCoinbaseResults = results.filter(tx => tx.tx_type !== 'coinbase');
-    const randomNonCoinbaseTx =
-      nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
-
-    await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id}`);
-
-    return;
-  }
-
-  const randomTx = results[Math.floor(Math.random() * results.length)];
-  await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
 };
 
 const LinkInNewWindow = (props: any) => (
