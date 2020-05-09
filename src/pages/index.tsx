@@ -3,8 +3,6 @@ import { Flex, Text } from '@blockstack/ui';
 import { Page } from '@components/page';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import { HomeNavigation } from '@components/home-nav';
-import { FooterLinks } from '@components/footer-links';
-import { RecentlyViewed } from '@components/recently-viewed';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { search } from '@common/search';
 import { Meta } from '@components/meta-head';

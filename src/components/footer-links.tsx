@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
 import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
-
+import { useColorMode } from '@common/hooks/use-color-mode';
 import { fetchTxList } from '@common/api/transactions';
 
 const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
@@ -17,6 +17,15 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
     {children}
   </Text>
 );
+
+const ColorModeLink = () => {
+  const { toggleColorMode, colorMode } = useColorMode();
+  return (
+    <FooterLink onClick={toggleColorMode}>
+      {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
+    </FooterLink>
+  );
+};
 
 const navgiateToRandomTx = async () => {
   const { results } = await fetchTxList();
@@ -61,5 +70,6 @@ export const FooterLinks = (props: FlexProps) => (
     <FooterLink>
       <LinkInNewWindow href="https://github.com/blockstack/explorer/">GitHub</LinkInNewWindow>
     </FooterLink>
+    <ColorModeLink />
   </Flex>
 );

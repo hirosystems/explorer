@@ -9,6 +9,9 @@ import { BufferReader } from '@blockstack/stacks-transactions/lib/bufferReader';
 export const store = engine.createStore([lclStorage]);
 export const identityStorage = engine.createStore([cookieStorage]);
 
+export const COLOR_MODE_COOKIE = 'color_mode';
+export const colorModeStorage = engine.createStore([cookieStorage]);
+
 /**
  * validateStacksAddress
  *
