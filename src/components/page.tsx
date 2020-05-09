@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, BoxProps, Flex } from '@blockstack/ui';
+import { Box, BoxProps, Flex, FlexProps } from '@blockstack/ui';
 
 import { Header } from '@components/header';
 import { TransactionTitle, TitleProps } from '@components/transaction-title';
@@ -26,15 +26,13 @@ export const Page = ({ children, notice, ...rest }: { notice?: any } & BoxProps)
       px={['base', 'base', 'extra-loose']}
       {...rest}
     >
-      <>
-        {children}
-        <FooterLinks mt="extra-loose" />
-      </>
+      {children}
+      <FooterLinks mt="extra-loose" />
     </Flex>
   </Flex>
 );
 
-export const PageWrapper = (props: { isHome?: boolean; notice?: any } & BoxProps) => (
+export const PageWrapper = (props: { isHome?: boolean; notice?: any } & FlexProps) => (
   <>
     <Header isHome={props.isHome} />
     <Page pt="extra-loose" {...props} />
