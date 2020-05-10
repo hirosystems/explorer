@@ -16,7 +16,6 @@ export interface RecentlyViewedProps extends FlexProps {
 }
 
 export const RecentlyViewed = ({ transactions, style = {}, ...rest }: RecentlyViewedProps) => {
-  if (!transactions.length) return null;
   return (
     <DialogCard width={['100%', '100%', '544px']} maxHeight="308px" style={style} {...rest}>
       <Box mx="base" mt={['base-tight', 'base-loose']} mb="tight">
@@ -30,7 +29,9 @@ export const RecentlyViewed = ({ transactions, style = {}, ...rest }: RecentlyVi
           Recently Viewed
         </Text>
       </Box>
-      <RecentlyViewedList transactions={transactions} />
+      {transactions.length && transactions.length > 1 ? (
+        <RecentlyViewedList transactions={transactions} />
+      ) : null}
     </DialogCard>
   );
 };
@@ -40,15 +41,15 @@ interface RecentlyViewedListProps extends BoxProps {
 }
 
 export const RecentlyViewedList = ({ transactions, ...rest }: RecentlyViewedListProps) => {
-  return (
+  return transactions.length ? (
     <Box width="100%" {...rest}>
       {transactions
         .sort((a, b) => -(a as any).viewedDate.localeCompare((b as any).viewedDate))
         .map((tx, i) => (
-          <RecentlyViewedListItem transaction={tx} isLast={transactions.length - 1 === i} />
+          <RecentlyViewedListItem key={i} transaction={tx} isLast={transactions.length - 1 === i} />
         ))}
     </Box>
-  );
+  ) : null;
 };
 
 interface RecentlyViewedListItemProps extends BoxProps {
@@ -93,3 +94,5 @@ export const RecentlyViewedListItem = ({ transaction, isLast }: RecentlyViewedLi
     </Link>
   );
 };
+
+export default RecentlyViewed;

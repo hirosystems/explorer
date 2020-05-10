@@ -1639,6 +1639,11 @@
   dependencies:
     redux-thunk "*"
 
+"@types/resize-observer-browser@^0.1.2":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@types/resize-observer-browser/-/resize-observer-browser-0.1.3.tgz#5cca2445e6fc34a380760bd6ef8c492863469c47"
+  integrity sha512-3tGjLIDH8L57fWOfC7NVn/BbGQD7pXwbkk2+8Z4hK/S7kOIv1MUN4nkKjfx0qg4ctkukjzp3Bgr/Z+Hq5ZQZTQ==
+
 "@types/ripemd160@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@types/ripemd160/-/ripemd160-2.0.0.tgz#d33e49cf66edf4668828030d4aa80116bbf8ae81"
@@ -9022,6 +9027,13 @@ watchpack@^1.6.0, watchpack@^1.6.1:
     chokidar "^2.1.8"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+
+web-api-hooks@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/web-api-hooks/-/web-api-hooks-3.0.1.tgz#4024bd2ab61998973a4282e80a4bece6ada0b17e"
+  integrity sha512-scWRgsw1IJtyPOxbOXoj75wE2IEKWCpy3mdMh2LehvFNryl7Ad1ZF2DRsermP+GCAsTHMWUl7Tf7e1TERVduSw==
+  dependencies:
+    "@types/resize-observer-browser" "^0.1.2"
 
 webidl-conversions@^4.0.2:
   version "4.0.2"
