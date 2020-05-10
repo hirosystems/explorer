@@ -27,8 +27,8 @@ export const Page = ({ children, notice, ...rest }: { notice?: any } & BoxProps)
       {...rest}
     >
       {children}
-      <FooterLinks mt="extra-loose" />
     </Flex>
+    <FooterLinks mx="auto" width="100%" maxWidth="1280px" mt="extra-loose" />
   </Flex>
 );
 

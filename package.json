@@ -47,7 +47,8 @@
     "store": "^2.0.12",
     "styled-components": "^5.0.1",
     "timeago.js": "^4.0.2",
-    "use-events": "^1.4.1"
+    "use-events": "^1.4.1",
+    "web-api-hooks": "^3.0.1"
   },
   "devDependencies": {
     "@blockstack/eslint-config": "^1.0.3",

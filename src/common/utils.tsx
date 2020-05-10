@@ -5,7 +5,7 @@ import cookieStorage from 'store/storages/cookieStorage';
 import { c32addressDecode } from 'c32check';
 import { deserializeMemoString } from '@blockstack/stacks-transactions';
 import { BufferReader } from '@blockstack/stacks-transactions/lib/bufferReader';
-import {fetchTxList} from "@common/api/transactions";
+import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
 
 export const store = engine.createStore([lclStorage]);
@@ -152,7 +152,6 @@ export const getMemoString = (string: string) =>
 
 export const startPad = (n: number, z = 2, s = '0') =>
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
-
 
 export const navgiateToRandomTx = async () => {
   const { results } = await fetchTxList();
