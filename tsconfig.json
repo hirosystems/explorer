@@ -20,7 +20,7 @@
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
       "@common/*": ["common/*"],
-      "@models/*": ["models/*"],
+      "@models/*": ["models/*"]
     },
     "baseUrl": "src"
   },
