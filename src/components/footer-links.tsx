@@ -2,8 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
-import { navgiateToRandomTx } from '@common/utils';
-import { useToast } from '@common/hooks/use-toast';
+import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 
 const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   <Text
@@ -32,17 +31,8 @@ const LinkInNewWindow = React.forwardRef((props: any, ref: any) => (
 ));
 
 export const FooterLinks = (props: FlexProps) => {
-  const { addCriticalToast } = useToast();
-  const handleRandomTxClick = async () => {
-    try {
-      await navgiateToRandomTx();
-    } catch (e) {
-      addCriticalToast({
-        message: e.name,
-        description: e.message,
-      });
-    }
-  };
+  const handleRandomTxClick = useNavigateToRandomTx();
+
   return (
     <Flex flexGrow={1} alignItems="flex-end" mb={['base', 'base-loose', 'loose']} {...props}>
       <FooterLink onClick={handleRandomTxClick}>
