@@ -5,8 +5,8 @@ import { Text, Title } from '@components/typography';
 import { FormLabel } from '@components/debug/common';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import NextLink from 'next/link';
-import { navgiateToRandomTx } from '@common/utils';
 import { Meta } from '@components/meta-head';
+import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 
 const Link = ({ href, target, ...rest }: { href?: string; target?: string } & BoxProps) => {
   return (
@@ -27,6 +27,8 @@ const Link = ({ href, target, ...rest }: { href?: string; target?: string } & Bo
 };
 
 const NotFound = () => {
+  const handleRandomTxClick = useNavigateToRandomTx();
+
   return (
     <PageWrapper>
       <Meta title="Page not found - Stacks Explorer" />
@@ -64,7 +66,7 @@ const NotFound = () => {
             </NextLink>
           </Box>
           <Box>
-            <Link textDecoration="underline" fontSize="14px" onClick={navgiateToRandomTx}>
+            <Link textDecoration="underline" fontSize="14px" onClick={handleRandomTxClick}>
               Random transaction
             </Link>
           </Box>
