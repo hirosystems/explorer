@@ -3,13 +3,15 @@ import { forwardRef, Ref } from 'react';
 import { Box, Input, Text } from '@blockstack/ui';
 import { MagnifyingGlass } from './icons/magnifying-glass';
 import { useFocus, useHover } from 'use-events';
-import { RecentlyViewed } from '@components/recently-viewed';
+import dynamic from 'next/dynamic';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import debounce from 'just-debounce-it';
 import { SearchBarProps, ErrorType } from '@components/search-bar/types';
 import { handleValidation } from '@common/utils';
 import { Error } from '@components/search-bar/error';
 import Router from 'next/router';
+
+const RecentlyViewed = dynamic(() => import('../components/recently-viewed'), { ssr: false });
 
 export const SearchBar = forwardRef(
   (

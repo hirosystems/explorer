@@ -7,14 +7,7 @@ import { Meta } from '@components/meta-head';
 export const Home = () => (
   <PageWrapper isHome>
     <Meta />
-    <Flex
-      as="form"
-      flexDirection="column"
-      align="center"
-      maxWidth="544px"
-      mt="20vh"
-      justify="center"
-    >
+    <Flex flexDirection="column" align="center" maxWidth="544px" mt="20vh" justify="center">
       <Text
         as="h1"
         fontSize="36px"

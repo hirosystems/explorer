@@ -2,12 +2,14 @@ import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/
 
 import { transactions } from './transactions';
 import { accounts } from '@store/debug';
+import { uiReducer } from '@store/ui';
 
 const middleware = getDefaultMiddleware({ thunk: true });
 
 const rootReducer = combineReducers({
   transactions,
   accounts,
+  ui: uiReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
