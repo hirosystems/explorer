@@ -1,4 +1,5 @@
 import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/toolkit';
+import { MakeStore, createWrapper, Context, HYDRATE } from 'next-redux-wrapper';
 
 import { transactions } from './transactions';
 import { accounts } from '@store/debug';
@@ -12,12 +13,24 @@ const rootReducer = combineReducers({
   ui: uiReducer,
 });
 
+// @ts-ignore
+const reducer = (state, action) => {
+  if (action.type === HYDRATE) {
+    return { ...state, ...action.payload };
+  } else {
+    return rootReducer(state, action);
+  }
+};
+
 export type RootState = ReturnType<typeof rootReducer>;
 
-export const initStore = (preloadedState: RootState) =>
+// create a makeStore function
+const makeStore: MakeStore<RootState> = (context: Context) =>
   configureStore({
-    reducer: rootReducer,
+    reducer,
     devTools: true,
-    preloadedState,
     middleware,
   });
+
+// export an assembled wrapper
+export const wrapper = createWrapper<RootState>(makeStore, { debug: true });

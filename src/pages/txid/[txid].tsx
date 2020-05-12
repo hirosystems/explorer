@@ -17,6 +17,7 @@ import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
 import { getTxTypeName } from '@common/transaction-names';
+import { wrapper } from '@store';
 
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
@@ -90,7 +91,7 @@ const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
   );
 };
 
-TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
+TransactionPage.getInitialProps = async ({ store, query, ...rest }: ReduxNextPageContext) => {
   const { txid } = query;
   if (txid) {
     await Promise.all([store.dispatch(fetchTransaction(txid.toString()))]);
@@ -99,4 +100,4 @@ TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext)
   return {};
 };
 
-export default TransactionPage;
+export default wrapper.withRedux(TransactionPage);

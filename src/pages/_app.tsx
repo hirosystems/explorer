@@ -1,8 +1,6 @@
 import React from 'react';
-import App, { AppContext } from 'next/app';
-import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';
-import { Provider } from 'react-redux';
-import { RootState, initStore } from '@store';
+import { AppContext } from 'next/app';
+import { wrapper } from '@store';
 import { AppWrapper } from '@components/app-init';
 import { parseCookies } from 'nookies';
 
@@ -11,29 +9,25 @@ interface MyAppProps {
 }
 
 // @ts-ignore
-class MyApp extends App<MyAppProps & ReduxWrapperAppProps<RootState>> {
-  static async getInitialProps({ Component, ctx }: AppContext) {
-    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-    const cookies = parseCookies(ctx);
-    if (cookies && cookies.color_mode) {
-      return {
-        ...pageProps,
-        colorMode: JSON.parse(cookies.color_mode),
-      };
-    }
-    return { pageProps };
-  }
+const MyApp = wrapper.withRedux(({ Component, pageProps, colorMode, store, ctx, ...rest }) => {
+  return (
+    <AppWrapper colorMode={colorMode}>
+      <Component {...pageProps} />
+    </AppWrapper>
+  );
+});
 
-  render() {
-    const { Component, pageProps, colorMode, store } = this.props;
-    return (
-      <Provider store={store}>
-        <AppWrapper colorMode={colorMode}>
-          <Component {...pageProps} />
-        </AppWrapper>
-      </Provider>
-    );
+// @ts-ignore
+MyApp.getInitialProps = async ({ Component, ctx }: AppContext) => {
+  const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+  const cookies = parseCookies(ctx);
+  if (cookies && cookies.color_mode) {
+    return {
+      ...pageProps,
+      colorMode: JSON.parse(cookies.color_mode),
+    };
   }
-}
+  return { pageProps };
+};
 
-export default withRedux(initStore)(MyApp);
+export default MyApp;

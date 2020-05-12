@@ -7,7 +7,7 @@ import { TokenTransfer } from '@components/debug/token-transfer';
 import { ContractDeploy } from '@components/debug/contract-deploy';
 import { ContractCall } from '@components/debug/contract-call';
 import { Faucet } from '@components/debug/faucet';
-
+import { wrapper } from '@store';
 import { ReduxNextPageContext } from '@common/types';
 
 import { useDebugState } from '@common/debug';
@@ -148,4 +148,4 @@ DebugPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
   return {};
 };
 
-export default DebugPage;
+export default wrapper.withRedux(DebugPage);
