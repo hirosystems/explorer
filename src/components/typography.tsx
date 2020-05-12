@@ -23,3 +23,16 @@ export const Title: React.FC<BoxProps> = props => (
 export const SectionTitle: React.FC<BoxProps> = props => (
   <Title lineHeight="28px" fontSize="20px" fontWeight="500" {...props} />
 );
+
+export const Pre = React.forwardRef((props: BoxProps, ref) => (
+  <Text
+    fontFamily={`"Fira Code", monospace`}
+    bg="var(--colors-bg-light)"
+    borderRadius="3px"
+    px="extra-tight"
+    border="1px solid var(--colors-border)"
+    fontSize="12px"
+    ref={ref}
+    {...props}
+  />
+));

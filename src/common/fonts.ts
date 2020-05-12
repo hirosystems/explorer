@@ -10,6 +10,5 @@ export const handleFontLoading = async () => {
   const fira = new FontFaceObserver('Fira Code');
 
   await Promise.all([inter.load(), fira.load()]);
-  console.log('fonts loaded');
   document.documentElement.classList.add('fonts-loaded');
 };

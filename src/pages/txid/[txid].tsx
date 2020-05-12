@@ -60,18 +60,9 @@ const TransactionMeta = ({ transaction }: any) => {
 const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
   const tx_id = useMostRecentTxId();
   const { transaction, error } = useTransactionState(tx_id as string);
-  const router = useRouter();
   const dispatch = useDispatch();
 
-  const handleRefresh = async () => dispatch(fetchTransaction(searchQuery));
-
-  React.useEffect(() => {
-    if (transaction) {
-      if (searchQuery !== tx_id && router.pathname !== tx_id) {
-        router.push('/txid/[txid]', `/txid/${tx_id}`, { shallow: true });
-      }
-    }
-  }, [router.pathname, transaction]);
+  const handleRefresh = async (query?: string) => dispatch(fetchTransaction(query || searchQuery));
 
   useRecentlyViewedTx(transaction);
 

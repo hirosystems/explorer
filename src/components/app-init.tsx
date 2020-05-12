@@ -1,16 +1,19 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
 import { createGlobalStyle } from 'styled-components';
 import { ProgressBar } from '@components/progress-bar';
 import { ColorModeProvider } from '@components/color-modes';
-import { Toaster } from '@components/toaster';
+
 import { useDispatch } from 'react-redux';
 import { appTime } from '@store/ui/actions';
 import { useDocumentVisibility } from 'web-api-hooks';
 import { handleFontLoading } from '@common/fonts';
 import { useInterval } from 'react-use';
 
-const delay = 10000;
+const Toaster = dynamic(() => import('../components/toaster'), { ssr: false });
+
+const delay = 20000;
 
 const GlobalStyles = createGlobalStyle`
   html, body, #__next {
@@ -19,6 +22,11 @@ const GlobalStyles = createGlobalStyle`
   .prism-code *::selection{
     background-color: #AAB3FF;
     color: white !important;
+  }
+  
+  .portal{
+  position: relative;
+  z-index: 99;
   }
 `;
 

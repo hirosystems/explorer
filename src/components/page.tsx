@@ -12,9 +12,13 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
   </Box>
 );
 
-export const Page = ({ children, notice, ...rest }: { notice?: any } & BoxProps) => (
+export const Page = ({
+  children,
+  notice,
+  ...rest
+}: { notice?: { label?: string; message?: string } } & BoxProps) => (
   <Flex flexDirection="column" width="100%" minHeight="100%" pt="64px">
-    {notice ? <Notice>{notice}</Notice> : null}
+    {notice ? <Notice label={notice.label} message={notice.message} /> : null}
     <Flex
       as="main"
       mx="auto"
@@ -28,7 +32,14 @@ export const Page = ({ children, notice, ...rest }: { notice?: any } & BoxProps)
     >
       {children}
     </Flex>
-    <FooterLinks mx="auto" width="100%" maxWidth="1280px" mt="extra-loose" />
+    <FooterLinks
+      mx="auto"
+      width="100%"
+      maxWidth="1280px"
+      mt="extra-loose"
+      mb={['base', 'base', 'extra-loose']}
+      px={['base', 'base', 'extra-loose']}
+    />
   </Flex>
 );
 

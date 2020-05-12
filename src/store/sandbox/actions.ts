@@ -1,22 +1,36 @@
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { toBN } from '@blockstack/rpc-client';
-import { Account, AccountPayload, FaucetResponse, IdentityPayload } from '@store/debug/types';
+import { Account, AccountPayload, FaucetResponse, IdentityPayload } from '@store/sandbox/types';
 import { fetchFromApi, postToSidecar } from '@common/api/fetch';
-import { identityStorage } from '@common/utils';
-import { doGenerateIdentity } from '@common/debug';
+import { identityStorage, truncateMiddle } from '@common/utils';
+import { doGenerateIdentity } from '@common/sandbox';
 import {
   StacksTransaction,
   broadcastTransaction as broadcastTransactionBase,
 } from '@blockstack/stacks-transactions';
-import { network } from '@common/debug';
+import { network } from '@common/sandbox';
+import { doAddToast } from '@store/ui/actions';
+
+let errorCount = 0;
 
 export const setIdentity = createAction<IdentityPayload>('account/identity/set');
 export const generateIdentity = createAsyncThunk<IdentityPayload>(
   'account',
   // @ts-ignore
-  async () => {
+  async (thing, { dispatch }) => {
     const identity = await doGenerateIdentity();
     identityStorage.set('debug_identity', identity);
+    setTimeout(() => {
+      dispatch(
+        doAddToast({
+          id: 'address-toast',
+          tone: 'positive',
+          message: 'Identity generated',
+          description: `
+      An identity with testnet ${truncateMiddle(identity.address)} address has been generated!`,
+        })
+      );
+    }, 300);
     return identity;
   }
 );
@@ -26,22 +40,47 @@ export const eraseIdentity = createAction('account/identity/erase');
 export const fetchAccount = createAsyncThunk<AccountPayload, string>(
   'account/fetch',
   // @ts-ignore
-  async (principal, { rejectWithValue }) => {
-    const resp = await fetchFromApi(`/v2/accounts/${principal}`, {
-      credentials: 'omit',
-    });
-    if (!resp.ok) {
+  async (principal, { rejectWithValue, dispatch }) => {
+    try {
+      const resp = await fetchFromApi(`/v2/accounts/${principal}`, {
+        credentials: 'omit',
+      });
+      if (!resp.ok) {
+        dispatch(
+          doAddToast({
+            tone: 'critical',
+            message: `Status ${resp.status}`,
+            description: resp.statusText,
+            id: `account-error-${errorCount++}`,
+          })
+        );
+        return rejectWithValue({
+          name: `Status ${resp.status}`,
+          message: resp.statusText,
+        });
+      }
+      const data = await resp.json();
+      return {
+        balance: toBN(data.balance).toNumber(),
+        nonce: data.nonce,
+        principal,
+      };
+    } catch (e) {
+      setTimeout(() => {
+        dispatch(
+          doAddToast({
+            tone: 'critical',
+            message: 'Account error',
+            description: `Could not get account balance, reason: ${e.message}.`,
+            id: `account-error-${errorCount++}`,
+          })
+        );
+      }, 200);
       return rejectWithValue({
-        name: `Status ${resp.status}`,
-        message: resp.statusText,
+        name: 'Error!',
+        message: e.message,
       });
     }
-    const data = await resp.json();
-    return {
-      balance: toBN(data.balance).toNumber(),
-      nonce: data.nonce,
-      principal,
-    };
   }
 );
 
@@ -92,3 +131,5 @@ export const broadcastTransaction = createAsyncThunk<
     }
   }
 );
+
+export const clearAccountError = createAction('account/clear-error');

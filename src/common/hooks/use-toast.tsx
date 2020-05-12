@@ -28,7 +28,10 @@ export const useToast = () => {
     []
   );
 
-  const removeToast = useCallback((id: string) => dispatch(doRemoveToast(id)), []);
+  const removeToast = useCallback((id: string) => {
+    dispatch(doRemoveToast(id));
+    console.log('remove toast', id);
+  }, []);
 
   const { toasts } = useSelector((state: RootState) => ({
     toasts: selectToasts(state),

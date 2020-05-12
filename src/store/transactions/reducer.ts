@@ -1,6 +1,6 @@
 import { createEntityAdapter, createReducer, SerializedError } from '@reduxjs/toolkit';
 import { Transaction } from '@models/transaction.interface';
-import { fetchTransaction } from './actions';
+import { fetchTransaction, clearTransactionsError } from './actions';
 
 export const txAdapter = createEntityAdapter({
   selectId: (transaction: Transaction) => transaction.tx_id,
@@ -17,9 +17,16 @@ const initialState = txAdapter.getInitialState<{
 });
 
 export const transactions = createReducer(initialState, builder => {
+  builder.addCase(clearTransactionsError, state => {
+    if (state.loading === 'idle') {
+      state.error = undefined;
+    }
+  });
+
   builder.addCase(fetchTransaction.pending, state => {
     if (state.loading === 'idle') {
       state.loading = 'pending';
+      state.error = undefined;
     }
   });
   builder.addCase(fetchTransaction.fulfilled, (state, action) => {

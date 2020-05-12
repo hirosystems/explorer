@@ -19,6 +19,7 @@ export const Home = () => (
       >
         Stacks Explorer
       </Text>
+
       <SearchBarWithDropdown />
     </Flex>
   </PageWrapper>

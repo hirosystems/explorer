@@ -19,11 +19,32 @@ import {
   selectLastFetch,
   selectErrorState,
   selectAccountTransactions,
-} from '@store/debug';
+} from '@store/sandbox';
 import { RootState } from '@store';
-import { IdentityPayload } from '@store/debug/types';
+import { IdentityPayload } from '@store/sandbox/types';
 import { withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
+import { useToast } from '@common/hooks/use-toast';
+import { truncateMiddle } from '@common/utils';
+import { useRouter } from 'next/router';
+
+export const useTxToast = () => {
+  const router = useRouter();
+  const { addPositiveToast } = useToast();
+
+  const showToast = (txid: string) =>
+    addPositiveToast({
+      message: `Transaction: ${truncateMiddle(txid)} submitted!`,
+      description: `Transactions can take 60 or more seconds to confirm.`,
+      action: {
+        label: 'View transaction',
+        onClick: () => {
+          router.push('/txid/[txid]', `/txid/${txid}`);
+        },
+      },
+    });
+  return showToast;
+};
 
 export const useDebugState = (): {
   lastFetch?: number;
