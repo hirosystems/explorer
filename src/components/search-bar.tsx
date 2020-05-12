@@ -11,6 +11,7 @@ import { handleValidation } from '@common/utils';
 import { Error } from '@components/search-bar/error';
 import Router from 'next/router';
 
+// @ts-ignore
 const RecentlyViewed = dynamic(() => import('../components/recently-viewed'), { ssr: false });
 
 export const SearchBar = forwardRef(
@@ -23,12 +24,13 @@ export const SearchBar = forwardRef(
       clearError,
       value = '',
       small,
+      transform,
       ...rest
     }: SearchBarProps,
     ref: Ref<HTMLDivElement>
   ) => {
     return (
-      <Box position="relative" {...rest}>
+      <Box position="relative" transform={transform} {...rest}>
         <Box
           position="relative"
           width="100%"

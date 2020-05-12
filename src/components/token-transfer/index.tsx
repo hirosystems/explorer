@@ -68,7 +68,7 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
     });
 
   return (
-    <Box mt="extra-loose" {...boxProps}>
+    <Box {...boxProps}>
       <SectionTitle mb="base-loose">Token transfers</SectionTitle>
       <Card>
         <Box borderBottom="1px solid var(--colors-border)">

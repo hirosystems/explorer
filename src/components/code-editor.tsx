@@ -72,7 +72,7 @@ export const CodeEditor = React.memo((props: CodeEditorProps) => {
         minWidth="100%"
       >
         <Editor
-          id={id}
+          textareaId={id}
           language={language}
           onValueChange={updateContent}
           highlight={c => <Highlighter code={c} showLineNumbers language={language as any} />}

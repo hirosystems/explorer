@@ -2,22 +2,39 @@ import React from 'react';
 import { Box, Flex, ExclamationMarkCircleIcon, FlexProps } from '@blockstack/ui';
 import { Text } from '@components/typography';
 
-export const Notice = ({ children, ...rest }: FlexProps) => (
-  <Flex
-    p="tight"
-    align="center"
-    justify="center"
-    bg="rgba(249, 161, 77, 0.5)"
+export const Notice = ({
+  label,
+  message,
+  ...rest
+}: { label?: string; message?: string } & FlexProps) => (
+  <Box
+    bg="var(--colors-bg-alt)"
     borderBottom="1px solid"
-    borderTop="1px solid"
-    borderColor="rgba(249, 161, 77, 0.5)"
+    borderColor="var(--colors-border)"
     {...rest}
   >
-    <Box mr="tight" color="var(--colors-text-title)">
-      <ExclamationMarkCircleIcon size="16px" />
-    </Box>
-    <Text fontWeight="500" fontSize="14px" color="var(--colors-text-title)">
-      {children}
-    </Text>
-  </Flex>
+    <Flex
+      p="tight"
+      align="center"
+      justify="flex-start"
+      mx="auto"
+      width="100%"
+      maxWidth="1280px"
+      px={['base', 'base', 'extra-loose']}
+    >
+      <Box mr="tight" color="orange">
+        <ExclamationMarkCircleIcon size="14px" />
+      </Box>
+      {label ? (
+        <Text mr="tight" fontWeight="600" fontSize="14px" color="var(--colors-text-title)">
+          {label}
+        </Text>
+      ) : null}
+      {message ? (
+        <Text fontSize="14px" color="var(--colors-text-caption)">
+          {message}
+        </Text>
+      ) : null}
+    </Flex>
+  </Box>
 );

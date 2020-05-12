@@ -4,8 +4,10 @@ import { Button, Box, Flex } from '@blockstack/ui';
 import { Title, Text } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { useProgressBar } from '@components/progress-bar';
+import { useLoading } from '@common/hooks/use-loading';
 import { useRouter } from 'next/router';
 import { validateTxId, validateContractName } from '@common/utils';
+import { useToast } from '@common/hooks/use-toast';
 
 const Pre = (props: any) => (
   <Text
@@ -37,13 +39,18 @@ const GenericMessage = ({ value }: { value?: string }) => (
   </>
 );
 
-export const TxNotFound = ({ refresh }: { refresh: () => Promise<any> }) => {
+export const TxNotFound = ({ refresh }: { refresh: (query?: string) => Promise<any> }) => {
   const buttonRef = React.useRef();
   const { query } = useRouter();
+  const { isLoading, doFinishLoading, doStartLoading } = useLoading();
+  const { addCriticalToast } = useToast();
+  const refreshTimer = React.useRef<any>(false);
+  const toastTimer = React.useRef<any>(false);
   const [validity, setValidity] = React.useState<
     { valid: boolean; type?: 'contract' | 'txid' } | undefined
   >();
   const searchQuery = query?.txid?.toString().trim();
+
   if (searchQuery) {
     if (searchQuery.includes('.')) {
       const isValidContract = validateContractName(searchQuery);
@@ -68,17 +75,30 @@ export const TxNotFound = ({ refresh }: { refresh: () => Promise<any> }) => {
     }
   }
 
-  const [loading, setLoading] = React.useState(false);
-  const { start, done } = useProgressBar();
-  const handleRefresh = async () => {
-    setLoading(true);
-    start();
-    setTimeout(async () => {
-      await refresh();
-      setLoading(false);
-      done();
+  const handleRefresh = React.useCallback(async () => {
+    doStartLoading();
+    // @ts-ignore
+    refreshTimer.current = setTimeout(async () => {
+      const action = await refresh(searchQuery);
+      if (action.error) {
+        toastTimer.current = setTimeout(() => {
+          addCriticalToast({
+            message: 'Transaction not found',
+            description: 'There is no record of this transaction, try refreshing again soon.',
+          });
+        }, 500);
+      }
+      doFinishLoading();
     }, 3500);
-  };
+  }, [searchQuery]);
+
+  // clear timeout if component unmounts
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(toastTimer.current);
+      clearTimeout(refreshTimer.current);
+    };
+  }, []);
   return (
     <>
       <Meta title="Transaction not found" />
@@ -114,13 +134,13 @@ export const TxNotFound = ({ refresh }: { refresh: () => Promise<any> }) => {
           // @ts-ignore
           ref={buttonRef}
           onClick={async () => {
-            if (!loading) {
+            if (!isLoading) {
               // @ts-ignore
               buttonRef?.current.blur();
               await handleRefresh();
             }
           }}
-          isLoading={loading}
+          isLoading={isLoading}
         >
           Refresh
         </Button>

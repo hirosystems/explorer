@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Flex, Box, Stack, Spinner, BlockstackIcon } from '@blockstack/ui';
+import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@blockstack/ui';
 import { Tooltip } from '@components/tooltip';
 import { Caption, Title, Text } from '@components/typography';
-import { useDebugState } from '@common/debug';
+import { useDebugState } from '@common/sandbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store';
 import { selectTransaction } from '@store/transactions';
@@ -14,6 +14,7 @@ import { CellItem } from '@components/token-transfer/item';
 import { Timestamp } from '@components/timestamp';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 import { DefaultContract } from '@components/icons/default-contract';
+import useOnClickOutside from 'use-onclickoutside';
 
 export const Loading = (props: any) => (
   <Box opacity={0.2} {...props}>
@@ -40,23 +41,36 @@ const TruncatedTitle = ({ value, ...rest }: { value: string }) => (
   </Tooltip>
 );
 export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
+  const dispatch = useDispatch();
   const [localFetchLoading, setLocalFetchLoading] = React.useState(false);
   const { tx } = useSelector((state: RootState) => ({
     tx: selectTransaction(txid)(state) as Transaction,
   }));
+  const loadingRef = React.useRef<number | undefined>(undefined);
+  const handleFetch = React.useCallback(async () => {
+    if (!localFetchLoading) {
+      setLocalFetchLoading(true);
 
-  const dispatch = useDispatch();
+      loadingRef.current = setTimeout(async () => {
+        await dispatch(fetchTransaction(txid));
+        setLocalFetchLoading(false);
+      }, 8000);
+    }
+  }, [txid]);
 
-  const onClick = async () => {
-    setLocalFetchLoading(true);
-    await dispatch(fetchTransaction(txid));
-    setLocalFetchLoading(false);
-  };
+  React.useEffect(() => {
+    handleFetch().then(() => null);
+    return () => clearTimeout(loadingRef.current);
+  }, []);
 
   const Icon = tx?.tx_type === 'smart_contract' ? DefaultContract : BlockstackIcon;
 
   return (
-    <Box width="100%" borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}>
+    <Box
+      width="100%"
+      borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}
+      {...rest}
+    >
       <Stack isInline spacing="base" align="center" p="base">
         <Flex align="center" flexGrow={1} flexShrink={0} width="40%">
           <Flex
@@ -104,8 +118,8 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
             {!loading && localFetchLoading ? (
               <Loading />
             ) : !tx && !loading ? (
-              <Box onClick={onClick}>
-                <Text>Try again</Text>
+              <Box _hover={{ cursor: 'pointer' }} onClick={handleFetch}>
+                <Text>Refresh</Text>
               </Box>
             ) : (
               <Loading />
@@ -117,43 +131,78 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
   );
 };
 
-export const TransactionsCard = ({ loading, identity, ...rest }: any) => {
+export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: any) => {
   const { transactions } = useDebugState();
-
+  const ref = React.useRef(null);
+  useOnClickOutside(ref, hide);
   return (
-    <Card flexGrow={0} {...rest}>
-      <Flex
-        justify="space-between"
-        align="center"
-        px="base"
-        py="tight"
-        borderBottom="1px solid var(--colors-border)"
-        height="36px"
-      >
-        <Caption fontWeight="bold">Recent transactions</Caption>
-        {/*{loading ? <Loading /> : null}*/}
-      </Flex>
+    <Transition
+      styles={{
+        init: {
+          opacity: 0,
+          pointerEvents: 'none',
+          transform: 'translateY(10px)',
+        },
+        entered: {
+          opacity: 1,
+          pointerEvents: 'all',
+          transform: 'none',
+        },
+        exiting: {
+          opacity: 0,
+          pointerEvents: 'none',
+          transform: 'translateY(10px)',
+        },
+      }}
+      in={visible}
+      onExit={hide}
+      timeout={220}
+    >
+      {style => (
+        <Box ref={ref} style={style} {...rest}>
+          <Card boxShadow="high" flexGrow={0}>
+            <Flex
+              justify="space-between"
+              align="center"
+              px="base"
+              py="tight"
+              borderBottom="1px solid var(--colors-border)"
+              height="36px"
+            >
+              <Caption fontWeight="bold">Recent transactions</Caption>
+              <Box
+                onClick={hide}
+                opacity={0.5}
+                _hover={{ opacity: 1, cursor: 'pointer' }}
+                size="12px"
+              >
+                <CloseIcon />
+              </Box>
+            </Flex>
 
-      {transactions?.length ? (
-        transactions
-          .slice()
-          .reverse()
-          // @ts-ignore
-          .map((tx, key, arr) => (
-            <TxItem
-              isLast={key === arr.length - 1}
-              txid={tx.txId}
-              key={tx.txId}
-              loading={loading}
-            />
-          ))
-      ) : (
-        <Flex p="loose" flexGrow={1} align="center" justify="center">
-          <Box>
-            <Caption>No Transactions</Caption>
-          </Box>
-        </Flex>
+            {transactions?.length ? (
+              transactions
+                .slice()
+                .reverse()
+                // @ts-ignore
+                .map((tx, key, arr) => (
+                  <TxItem
+                    isLast={key === arr.length - 1}
+                    txid={tx.txId}
+                    key={tx.txId}
+                    loading={loading}
+                  />
+                ))
+            ) : (
+              <Flex p="loose" flexGrow={1} align="center" justify="center">
+                <Box>
+                  <Caption>No Transactions</Caption>
+                </Box>
+              </Flex>
+            )}
+          </Card>
+        </Box>
       )}
-    </Card>
+    </Transition>
   );
 };

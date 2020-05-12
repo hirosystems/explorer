@@ -1,12 +1,12 @@
 import * as React from 'react';
 import BigNum from 'bn.js';
 import { Formik } from 'formik';
-import { Flex, Stack, Button } from '@blockstack/ui';
-import { Field, Wrapper } from '@components/debug/common';
-import { SampleContracts } from '@common/debug/examples';
+import { Flex, Stack, Box, Button } from '@blockstack/ui';
+import { Field, FieldBase, Wrapper } from '@components/sandbox/common';
+import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
-import { useDebugState, network } from '@common/debug';
-import { broadcastTransaction, fetchAccount } from '@store/debug';
+import { useDebugState, network } from '@common/sandbox';
+import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import {
   makeSmartContractDeploy,
   makeStandardSTXPostCondition,
@@ -14,16 +14,33 @@ import {
 } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
+import { useTxToast } from '@common/sandbox';
+
+const Sample = (props: any) => {
+  return (
+    <Box {...props}>
+      <FieldBase
+        label="Sample contracts"
+        type="text"
+        value={SampleContracts[0].contractName}
+        name="sampleContracts"
+        list="contract-samples"
+        datalist={SampleContracts.map(({ contractName }) => contractName)}
+      />
+    </Box>
+  );
+};
 
 export const ContractDeploy = (props: any) => {
   const { identity } = useDebugState();
+  const showToast = useTxToast();
   const dispatch = useDispatch();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
 
   const initialValues = {
     senderKey: identity?.privateKey,
     contractName: SampleContracts[0].contractName,
-    codeBody: SampleContracts[0].contractSource,
+    codeBody: SampleContracts[3].contractSource,
     fee: 2000,
   };
 
@@ -36,10 +53,11 @@ export const ContractDeploy = (props: any) => {
 
       // hardcode some post conditions for now :)
       const postConditions = [
+        makeStandardSTXPostCondition(address, FungibleConditionCode.Less, new BigNum(2)),
+        makeStandardSTXPostCondition(address, FungibleConditionCode.LessEqual, new BigNum(3)),
+        makeStandardSTXPostCondition(address, FungibleConditionCode.Equal, new BigNum(4)),
+        makeStandardSTXPostCondition(address, FungibleConditionCode.GreaterEqual, new BigNum(4)),
         makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(1)),
-        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(2)),
-        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(3)),
-        makeStandardSTXPostCondition(address, FungibleConditionCode.Greater, new BigNum(4)),
       ];
 
       const tx = await makeSmartContractDeploy({
@@ -56,6 +74,7 @@ export const ContractDeploy = (props: any) => {
       );
       if (error) return doFinishLoading();
 
+      showToast(payload.transactions[0].txId);
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
         // @ts-ignore
@@ -76,14 +95,21 @@ export const ContractDeploy = (props: any) => {
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit} method="post">
             <Flex width="100%">
-              <Stack spacing="base" width="100%">
-                <Field label="Sender key" name="senderKey" />
-                <Field type="number" name="fee" label="Fee rate" />
-                <Field name="contractName" label="Contract name" />
-                <Field label="Contract source code" name="codeBody" type="code" />
-                <Button type="submit" isLoading={isLoading}>
-                  Submit
-                </Button>
+              <Stack isInline spacing="base" width="100%">
+                <Stack spacing="base" width="100%">
+                  <Field label="Sender key" name="senderKey" />
+                  <Field type="number" name="fee" label="Fee rate" />
+                  <Field name="contractName" label="Contract name" />
+                  <Button type="submit" isLoading={isLoading}>
+                    Submit
+                  </Button>
+                </Stack>
+                <Box maxWidth="60%" width="100%" flexShrink={0}>
+                  <Stack spacing="base" width="100%">
+                    <Sample />
+                    <Field label="Contract source code (editable)" name="codeBody" type="code" />
+                  </Stack>
+                </Box>
               </Stack>
             </Flex>
           </form>

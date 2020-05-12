@@ -14,6 +14,6 @@ export async function fetchTx(txid: Transaction['tx_id']): Promise<Transaction> 
 }
 
 export async function fetchTxList(): Promise<{ results: Transaction[] }> {
-  const resp = await fetchFromSidecar('/tx');
+  const resp = await fetchFromSidecar('/tx?limit=200');
   return resp.json();
 }

@@ -1,30 +1,22 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { Transaction } from '@models/transaction.interface';
-import { fetchContract } from '@common/api/contracts';
+import { Contract } from '@models/contract.interface';
 import { fetchTx } from '@common/api/transactions';
 import { queryWith0x } from '@common/utils';
-import type { ContractCallTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
-
-const handleContractTx = async (query: string) => {
-  const contract = await fetchContract(query);
-  return fetchTx(contract.tx_id);
-};
-
-const handleContractCallTx = async (tx: ContractCallTransaction) => {
-  const { contract_id } = tx.contract_call;
-  const originContract = await fetchContract(contract_id);
-  return fetchTx(originContract.tx_id);
-};
+import { fetchContract } from '@store/contracts';
 
 export const fetchTransaction = createAsyncThunk<Transaction[], string>(
   'transaction/fetch',
-  async query => {
+  async (query, { dispatch, rejectWithValue }) => {
+    if (!query) return rejectWithValue({ name: 'Error!', message: 'No query provided' });
     const txs = [];
     if (query.includes('.')) {
-      const tx = await handleContractTx(query);
+      const action = await dispatch(fetchContract(query));
+      const tx = await fetchTx((action.payload as Contract).tx_id);
       txs.push(tx);
       if (tx.tx_type === 'contract_call') {
-        const originTx = await handleContractCallTx(tx);
+        const originAction = await dispatch(fetchContract(tx.contract_call.contract_id));
+        const originTx = await fetchTx((originAction.payload as Contract).tx_id);
         txs.push(originTx);
       }
       return txs;
@@ -33,9 +25,12 @@ export const fetchTransaction = createAsyncThunk<Transaction[], string>(
     const tx = await fetchTx(queryWith0x(query));
     txs.push(tx);
     if (tx.tx_type === 'contract_call') {
-      const originTx = await handleContractCallTx(tx);
+      const originAction = await dispatch(fetchContract(tx.contract_call.contract_id));
+      const originTx = await fetchTx((originAction.payload as Contract).tx_id);
       txs.push(originTx);
     }
     return txs;
   }
 );
+
+export const clearTransactionsError = createAction('transaction/clear-error');

@@ -16,10 +16,9 @@ import {
   TransactionEvent,
   TransactionEventAssetType,
 } from '@blockstack/stacks-blockchain-sidecar-types';
-import { deserializeCV, addressToString } from '@blockstack/stacks-transactions';
+import { clarityValuetoHumanReadable } from '@common/utils';
 import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
-import BN from 'bn.js';
 
 import { truncateMiddle, getFungibleAssetName } from '@common/utils';
 
@@ -129,11 +128,11 @@ const EventAsset = React.memo(
         </Flex>
         <ItemIcon type={event.event_type} />
         {event.asset?.asset_id ? (
-          <Text fontSize="16px" fontWeight="500" color="var(--colors-text-title)">
+          <Text fontSize="14px" fontWeight="500" color="var(--colors-text-title)">
             {getFungibleAssetName(event.asset.asset_id)}
           </Text>
         ) : (
-          <Text fontSize="16px" fontWeight="500" color="var(--colors-text-title)">
+          <Text fontSize="14px" fontWeight="500" color="var(--colors-text-title)">
             {getEventTypeName(event.event_type)}
           </Text>
         )}
@@ -141,33 +140,19 @@ const EventAsset = React.memo(
     ) : null
 );
 
-const clarityValue = (value: string) => {
-  const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
-
-  if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {
-    return addressToString(deserializeAsset.address);
-  }
-  if (deserializeAsset.type === 1 && 'value' in deserializeAsset) {
-    return (deserializeAsset.value as BN).toString();
-  }
-  if (deserializeAsset.type === 2 && 'buffer' in deserializeAsset) {
-    return (deserializeAsset.buffer as Buffer).toString();
-  }
-};
-
 const AssetEventAmount = React.memo(
   ({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
     if (event.event_type === 'smart_contract_log') {
       return (
         <Text fontWeight="500" {...rest}>
-          {clarityValue(event.contract_log.value)}
+          {clarityValuetoHumanReadable(event.contract_log.value)}
         </Text>
       );
     }
 
     let value = event?.asset?.value;
-    if (value && clarityValue(value)) {
-      value = clarityValue(value);
+    if (value && clarityValuetoHumanReadable(value)) {
+      value = clarityValuetoHumanReadable(value);
     }
     if (event.asset?.amount || value) {
       return (
@@ -232,7 +217,7 @@ export const TokenTransferItem = ({
     openCode(!isOpen);
   }, [isOpen]);
   return (
-    <Box>
+    <Box fontSize="14px">
       <Stack
         isInline
         borderBottom={!isOpen && noBottomBorder ? 'unset' : '1px solid'}

@@ -1,17 +1,12 @@
-import {
-  AsyncThunkAction,
-  createEntityAdapter,
-  createReducer,
-  SerializedError,
-} from '@reduxjs/toolkit';
-import { Account, IdentityPayload } from '@store/debug/types';
+import { createEntityAdapter, createReducer } from '@reduxjs/toolkit';
+import { Account, IdentityPayload } from '@store/sandbox/types';
 import {
   fetchAccount,
   requestFaucetFunds,
   setIdentity,
   generateIdentity,
-  eraseIdentity,
   broadcastTransaction,
+  clearAccountError,
 } from './actions';
 import { RootState } from '@store';
 import { dedupe } from '@common/utils';
@@ -54,6 +49,11 @@ const setLoading = (state: RootState['accounts']) => {
   }
 };
 export const accounts = createReducer(initialState, builder => {
+  builder.addCase(clearAccountError, state => {
+    if (state.loading === 'idle') {
+      state.error = undefined;
+    }
+  });
   /**
    * Set Identity
    */

@@ -3,7 +3,7 @@ import { NextPageContext } from 'next';
 import { PageWrapper } from '@components/page';
 import { Text, Title } from '@components/typography';
 import { Flex, Box, Stack, BoxProps } from '@blockstack/ui';
-import { FormLabel } from '@components/debug/common';
+import { FormLabel } from '@components/sandbox/common';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import NextLink from 'next/link';
 import { navgiateToRandomTx } from '@common/utils';

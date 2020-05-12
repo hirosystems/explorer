@@ -7,15 +7,8 @@ module.exports = withBundleAnalyzer({
     modern: true,
     polyfillsOptimization: true,
     jsconfigPaths: true,
-    reactRefresh: true,
   },
-  env: {
-    API_SERVER: process.env.API_SERVER || 'http://localhost:3999',
-    API_ROUTE:
-      process.env.NODE_ENV === 'production' ? process.env.API_SERVER : 'http://localhost:3000/api',
-  },
-
-  webpack(config, { dev, isServer }) {
+  webpack(config, { dev }) {
     if (!dev) {
       const splitChunks = config.optimization && config.optimization.splitChunks;
       if (splitChunks) {

@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Formik } from 'formik';
 import { Flex, Stack, Button } from '@blockstack/ui';
-import { Field, Wrapper } from '@components/debug/common';
-import { useDebugState, network } from '@common/debug';
-import { broadcastTransaction, fetchAccount } from '@store/debug';
+import { Field, Wrapper } from '@components/sandbox/common';
+import { useDebugState, network } from '@common/sandbox';
+import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';
 import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
 import BigNum from 'bn.js';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
+import { useTxToast } from '@common/sandbox';
 
 export const TokenTransfer = (props: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
@@ -20,6 +21,7 @@ export const TokenTransfer = (props: any) => {
     amount: 100,
     memo: 'hello world!',
   };
+  const showToast = useTxToast();
 
   const onSubmit = async ({ senderKey, recipient, amount, memo }: any) => {
     try {
@@ -40,6 +42,11 @@ export const TokenTransfer = (props: any) => {
         broadcastTransaction({ principal: identity?.address, tx })
       );
       if (error) return doFinishLoading();
+
+      props.showTransactionDialog();
+
+      showToast(payload.transactions[0].txId);
+
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
         // @ts-ignore
@@ -51,6 +58,7 @@ export const TokenTransfer = (props: any) => {
       }, 3500);
     } catch (e) {
       console.log(e);
+      doFinishLoading();
     }
   };
 
@@ -60,11 +68,11 @@ export const TokenTransfer = (props: any) => {
         {({ handleSubmit }) => (
           <form onSubmit={handleSubmit} method="post">
             <Flex width="100%">
-              <Stack spacing="base" width="100%">
+              <Stack spacing="base" maxWidth="560px" width="100%">
                 <Field label="Sender key" name="senderKey" />
+                <Field name="recipient" label="Recipient address" />
                 <Field type="number" name="amount" label="uSTX amount" />
                 <Field name="memo" label="Memo (message)" />
-                <Field name="recipient" label="Recipient address" />
                 <Button type="submit" isLoading={isLoading}>
                   Submit
                 </Button>

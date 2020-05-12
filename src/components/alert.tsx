@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Box, Flex } from '@blockstack/ui';
+import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon } from '@blockstack/ui';
 import { Title, Text } from '@components/typography';
-import { ExclamationMarkCircleIcon } from '@components/svg';
-import { useDebugState } from '@common/debug';
+import { useClearErrors } from '@common/hooks/use-clear-errors';
+import { useDebugState } from '@common/sandbox';
 
 const renderErrorMessage = ({
   reason,
@@ -22,28 +22,54 @@ const renderErrorMessage = ({
 };
 
 export const Alert = ({ error: _error, ...rest }: any) => {
+  const clearErrors = useClearErrors();
   const { error } = useDebugState();
   const hasError = error || _error;
   return hasError ? (
     <Flex
-      p="base"
       borderRadius="6px"
       border="1px solid var(--colors-border)"
       align="center"
       color="#F9A14D"
       {...rest}
     >
-      <Box mr="tight">
-        <ExclamationMarkCircleIcon />
-      </Box>
-      <Box>
+      <Flex
+        borderRadius="6px 0 0 6px"
+        bg="var(--colors-bg-alt)"
+        p="base"
+        align="center"
+        borderRight="1px solid var(--colors-border)"
+      >
+        <Box mr="tight" color="red">
+          <ExclamationMarkCircleIcon size="20px" />
+        </Box>
         {error ? (
-          <Title as="h4" style={{ textTransform: 'capitalize' }}>
-            {error?.error || error?.name}:{' '}
+          <Title as="h4" style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}>
+            {error?.error || error?.name || 'Error!'}
           </Title>
         ) : null}
-        <Text pl="tight">{_error ? _error : error?.message || renderErrorMessage(error)}</Text>
-      </Box>
+      </Flex>
+      <Flex align="center" width="100%" p="base" pr="none">
+        <Box>
+          <Text pl="tight">{_error ? _error : error?.message || renderErrorMessage(error)}</Text>
+        </Box>
+        <Box
+          opacity={0.5}
+          _hover={{
+            cursor: 'pointer',
+            opacity: 1,
+          }}
+          px="base"
+          ml="auto"
+          color="var(--colors-text-caption)"
+          role="button"
+          title="Clear error"
+          aria-label="Clear error"
+          onClick={clearErrors}
+        >
+          <CloseIcon size="12px" />
+        </Box>
+      </Flex>
     </Flex>
   ) : null;
 };
