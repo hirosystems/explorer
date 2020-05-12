@@ -3,11 +3,15 @@ import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
 import cookieStorage from 'store/storages/cookieStorage';
 import { c32addressDecode } from 'c32check';
-import { deserializeMemoString } from '@blockstack/stacks-transactions';
+import {
+  deserializeMemoString,
+  deserializeCV,
+  addressToString,
+} from '@blockstack/stacks-transactions';
 import { BufferReader } from '@blockstack/stacks-transactions/lib/bufferReader';
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
-
+import BN from 'bn.js';
 export const store = engine.createStore([lclStorage]);
 export const identityStorage = engine.createStore([cookieStorage]);
 
@@ -169,4 +173,18 @@ export const navgiateToRandomTx = async () => {
 
   const randomTx = results[Math.floor(Math.random() * results.length)];
   await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
+};
+
+export const clarityValuetoHumanReadable = (value: string) => {
+  const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
+
+  if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {
+    return addressToString(deserializeAsset.address);
+  }
+  if (deserializeAsset.type === 1 && 'value' in deserializeAsset) {
+    return (deserializeAsset.value as BN).toString();
+  }
+  if (deserializeAsset.type === 2 && 'buffer' in deserializeAsset) {
+    return (deserializeAsset.buffer as Buffer).toString();
+  }
 };

@@ -7,7 +7,7 @@ const Label: React.FC<BoxProps> = props => (
     lineHeight="16px"
     fontSize="11px"
     fontWeight={600}
-    color="white"
+    color="currentColor"
     {...props}
   />
 );
@@ -20,6 +20,7 @@ export const Badge: React.FC<FlexProps> = ({ children, ...rest }) => (
     borderRadius="24px"
     py="extra-tight"
     px="base"
+    color="white"
     {...rest}
   >
     <Label>{children}</Label>

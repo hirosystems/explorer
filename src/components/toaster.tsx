@@ -11,3 +11,5 @@ export const Toaster: React.FC = () => {
     </Portal>
   );
 };
+
+export default Toaster;

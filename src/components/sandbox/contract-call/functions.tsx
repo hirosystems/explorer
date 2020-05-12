@@ -2,14 +2,16 @@ import React from 'react';
 import { Box, Flex, Button, Stack } from '@blockstack/ui';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
 
+import { Formik } from 'formik';
+
 import { Text } from '@components/typography';
-import { FieldBase } from '@components/debug/common';
+import { FieldBase } from '@components/sandbox/common';
 import { Card } from '@components/card';
 
 interface FunctionProps {
   func: ContractInterfaceFunction;
-  contractName: string;
-  contractAddress: string;
+  contractName?: string;
+  contractAddress?: string;
 }
 
 interface Arg extends ContractInterfaceFunctionArg {
@@ -45,6 +47,7 @@ const Arguments = ({ args, state, ...rest }: any) =>
               // @ts-ignore
               field={{
                 value: arg.value,
+                name: arg.name,
               }}
               name={arg.name}
               placeholder={argType}
@@ -61,20 +64,25 @@ const Arguments = ({ args, state, ...rest }: any) =>
     : null;
 
 const ArgumentsForm = ({ state, loading, onSubmit }: any) => (
-  <Box
-    as="form"
+  <Formik
+    enableReinitialize
     // @ts-ignore
+    initialValues={Object.keys(state).reduce((a, b) => ((a[b] = ''), a), {})}
     onSubmit={onSubmit}
   >
-    <Stack spacing="base">
-      <Arguments args={Object.keys(state)} state={state} />
-      <Box>
-        <Button isLoading={loading} loadingText="Loading" size="md">
-          Submit
-        </Button>
-      </Box>
-    </Stack>
-  </Box>
+    {({ handleSubmit }) => (
+      <form onSubmit={handleSubmit} method="post">
+        <Stack spacing="base">
+          <Arguments args={Object.keys(state)} state={state} />
+          <Box>
+            <Button isLoading={loading} loadingText="Loading" size="md">
+              Submit
+            </Button>
+          </Box>
+        </Stack>
+      </form>
+    )}
+  </Formik>
 );
 
 export const Function = ({ func }: FunctionProps) => {

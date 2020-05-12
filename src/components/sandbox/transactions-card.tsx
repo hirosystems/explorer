@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Flex, Box, Stack, Spinner, BlockstackIcon } from '@blockstack/ui';
 import { Tooltip } from '@components/tooltip';
 import { Caption, Title, Text } from '@components/typography';
-import { useDebugState } from '@common/debug';
+import { useDebugState } from '@common/sandbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store';
 import { selectTransaction } from '@store/transactions';
@@ -40,23 +40,36 @@ const TruncatedTitle = ({ value, ...rest }: { value: string }) => (
   </Tooltip>
 );
 export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
+  const dispatch = useDispatch();
   const [localFetchLoading, setLocalFetchLoading] = React.useState(false);
   const { tx } = useSelector((state: RootState) => ({
     tx: selectTransaction(txid)(state) as Transaction,
   }));
+  const loadingRef = React.useRef<number | undefined>(undefined);
+  const handleFetch = React.useCallback(async () => {
+    if (!localFetchLoading) {
+      setLocalFetchLoading(true);
 
-  const dispatch = useDispatch();
+      loadingRef.current = setTimeout(async () => {
+        await dispatch(fetchTransaction(txid));
+        setLocalFetchLoading(false);
+      }, 8000);
+    }
+  }, [txid]);
 
-  const onClick = async () => {
-    setLocalFetchLoading(true);
-    await dispatch(fetchTransaction(txid));
-    setLocalFetchLoading(false);
-  };
+  React.useEffect(() => {
+    handleFetch().then(() => null);
+    return () => clearTimeout(loadingRef.current);
+  }, []);
 
   const Icon = tx?.tx_type === 'smart_contract' ? DefaultContract : BlockstackIcon;
 
   return (
-    <Box width="100%" borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}>
+    <Box
+      width="100%"
+      borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}
+      {...rest}
+    >
       <Stack isInline spacing="base" align="center" p="base">
         <Flex align="center" flexGrow={1} flexShrink={0} width="40%">
           <Flex
@@ -104,8 +117,8 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
             {!loading && localFetchLoading ? (
               <Loading />
             ) : !tx && !loading ? (
-              <Box onClick={onClick}>
-                <Text>Try again</Text>
+              <Box _hover={{ cursor: 'pointer' }} onClick={handleFetch}>
+                <Text>Refresh</Text>
               </Box>
             ) : (
               <Loading />

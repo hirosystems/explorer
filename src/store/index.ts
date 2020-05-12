@@ -1,13 +1,15 @@
 import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 import { transactions } from './transactions';
-import { accounts } from '@store/debug';
+import { accounts } from '@store/sandbox';
 import { uiReducer } from '@store/ui';
+import { contracts } from '@store/contracts';
 
 const middleware = getDefaultMiddleware({ thunk: true });
 
 const rootReducer = combineReducers({
   transactions,
+  contracts,
   accounts,
   ui: uiReducer,
 });

@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import { withApiServer } from '@common/constants';
 
 export const fetchFromApi = async (path: string, opts: object = {}) =>

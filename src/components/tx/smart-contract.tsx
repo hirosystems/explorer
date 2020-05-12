@@ -24,9 +24,7 @@ const SmartContractPage = ({ transaction }: SmartContractPageProps) => (
       />
       <TokenTransfers events={transaction.events} />
       <ContractSource source={transaction.smart_contract.source_code} />
-      {transaction.post_conditions ? (
-        <PostConditions conditions={transaction.post_conditions} />
-      ) : null}
+      <PostConditions conditions={transaction.post_conditions} />
     </Stack>
   </>
 );

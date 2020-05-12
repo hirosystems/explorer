@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { accountAdapter } from '@store/debug/reducer';
+import { accountAdapter } from '@store/sandbox/reducer';
 import { RootState } from '@store';
-import { Account } from '@store/debug/types';
+import { Account } from '@store/sandbox/types';
 
 const selectors = accountAdapter.getSelectors();
 

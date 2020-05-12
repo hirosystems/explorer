@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Text, Flex, BoxProps, FlexProps } from '@blockstack/ui';
+import { Text, Stack, Box, BoxProps, FlexProps } from '@blockstack/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
 import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 
@@ -8,7 +8,6 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   <Text
     cursor="pointer"
     textStyle="body.small"
-    mr="base"
     color="var(--colors-text-caption)"
     _hover={{ textDecoration: 'underline' }}
     {...rest}
@@ -17,10 +16,10 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   </Text>
 );
 
-const ColorModeLink = () => {
+const ColorModeLink = ({ ...rest }) => {
   const { toggleColorMode, colorMode } = useColorMode();
   return (
-    <FooterLink onClick={toggleColorMode}>
+    <FooterLink onClick={toggleColorMode} {...rest}>
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
     </FooterLink>
   );
@@ -34,27 +33,37 @@ export const FooterLinks = (props: FlexProps) => {
   const handleRandomTxClick = useNavigateToRandomTx();
 
   return (
-    <Flex flexGrow={1} alignItems="flex-end" mb={['base', 'base-loose', 'loose']} {...props}>
-      <FooterLink onClick={handleRandomTxClick}>
-        <a href="#">Random transaction</a>
-      </FooterLink>
-      <FooterLink>
-        <Link href="/debug" passHref>
-          <LinkInNewWindow>Debug</LinkInNewWindow>
-        </Link>
-      </FooterLink>
-      <FooterLink>
-        <LinkInNewWindow href="https://docs.blockstack.org/">Docs</LinkInNewWindow>
-      </FooterLink>
-      <FooterLink>
-        <LinkInNewWindow href="https://blockstack.github.io/stacks-blockchain-sidecar/">
-          API
-        </LinkInNewWindow>
-      </FooterLink>
-      <FooterLink>
-        <LinkInNewWindow href="https://github.com/blockstack/explorer/">GitHub</LinkInNewWindow>
-      </FooterLink>
-      <ColorModeLink />
-    </Flex>
+    <Box {...props}>
+      <Stack
+        isInline
+        borderTop="1px solid var(--colors-border)"
+        flexGrow={1}
+        alignItems="flex-end"
+        pt="base"
+        spacing="base"
+      >
+        <FooterLink onClick={handleRandomTxClick} role="link">
+          <Text>Random tx</Text>
+        </FooterLink>
+        <FooterLink>
+          <Link href="/sandbox" passHref>
+            <Box as="a">Sandbox</Box>
+          </Link>
+        </FooterLink>
+
+        <ColorModeLink />
+        <FooterLink ml="auto">
+          <LinkInNewWindow href="https://github.com/blockstack/explorer/">GitHub</LinkInNewWindow>
+        </FooterLink>
+        <FooterLink>
+          <LinkInNewWindow href="https://blockstack.org/legal/privacy-policy">
+            Privacy policy
+          </LinkInNewWindow>
+        </FooterLink>
+        <FooterLink>
+          <LinkInNewWindow href="https://blockstack.org/legal/terms-of-use">Terms</LinkInNewWindow>
+        </FooterLink>
+      </Stack>
+    </Box>
   );
 };

@@ -14,11 +14,10 @@ import { Alert } from '@components/alert';
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
 import { Title } from '@components/typography';
-import { TransactionsCard } from '@components/debug/transactions-card';
 
 export const Input = (props: InputProps) => (
   <InputBase
-    bg="var(--colors-bg-alt)"
+    bg="transparent"
     color="var(--colors-text-body)"
     borderColor="var(--colors-border)"
     _hover={{ borderColor: 'var(--colors-border)' }}
@@ -62,16 +61,76 @@ export const FieldBase = ({
   inputComponent,
   type,
   placeholder,
+  touched,
+  error,
+  value,
+  name,
+  list,
+  datalist,
+  onChange,
+  multiple,
+  checked,
+  onBlur,
   ...rest
-}: FieldProps &
-  BoxProps & {
-    inputComponent?: React.ReactNode;
-    label: string | any;
-    placeholder?: string | any;
-    type: InputType;
-  }) => {
-  const Component = type === 'code' ? CodeEditor : Input;
-  const [field, { touched, error }, helpers] = useField({ name: rest.field.name, ...rest } as any);
+}: {
+  inputComponent?: React.ReactNode;
+  label: string | any;
+  placeholder?: string | any;
+  type: InputType;
+  field?: FieldProps['field'];
+  onChange?: any;
+  touched?: boolean;
+  error?: string;
+  value: string;
+  name: string;
+  datalist?: string[];
+  list?: string;
+  multiple?: any;
+  checked?: any;
+  onBlur?: any;
+}) => {
+  // @ts-ignore
+
+  return (
+    <Box {...rest}>
+      {label ? (
+        <FormLabel mb="extra-tight" htmlFor={name}>
+          {label}
+        </FormLabel>
+      ) : null}
+      {type === 'code' ? (
+        <CodeEditor name={name} value={value} {...rest} />
+      ) : (
+        <>
+          <Input
+            name={name}
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            list={list}
+            id={name}
+            onChange={onChange}
+            multiple={multiple}
+            onBlur={onBlur}
+          />
+          {list && datalist?.length ? (
+            <datalist id={list}>
+              {datalist.map(option => (
+                <option value={option} key={option} />
+              ))}
+            </datalist>
+          ) : null}
+        </>
+      )}
+    </Box>
+  );
+};
+
+const FieldForFormik = ({ label, type, ...rest }: any) => {
+  const [field, { touched, error }, helpers] = useField({
+    ...rest,
+    name: rest.field.name,
+  } as any);
 
   const { onChange, ...fieldProps } = field;
 
@@ -80,21 +139,20 @@ export const FieldBase = ({
   };
 
   return (
-    <Box {...rest}>
-      {label ? <FormLabel htmlFor={field.name}>{label}</FormLabel> : null}
-      <Component
-        type={type === 'code' ? undefined : type}
-        placeholder={placeholder}
-        onChange={handleChange as any}
-        {...fieldProps}
-      />
-      {touched && error}
-    </Box>
+    <FieldBase
+      label={label}
+      type={type}
+      onChange={handleChange}
+      touched={touched}
+      error={error}
+      {...rest}
+      {...fieldProps}
+    />
   );
 };
 
-export const Field = ({ name, handleChange, value, ...props }: any) => (
-  <FormikField name={name} {...props} component={FieldBase} />
+export const Field = ({ name, value, ...props }: any) => (
+  <FormikField name={name} {...props} component={FieldForFormik} />
 );
 
 export const Wrapper = ({
@@ -108,15 +166,12 @@ export const Wrapper = ({
     <>
       <Meta title={`${title} - Stacks Debugger`} />
       <Flex>
-        <Box flexShrink={0} width="100%" maxWidth="60%" flexGrow={1} {...rest}>
+        <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
           <Stack spacing="base">
             <Title as="h2">{title}</Title>
             <Alert error={error} />
             {children}
           </Stack>
-        </Box>
-        <Box flexGrow={1} ml="base">
-          <TransactionsCard width="100%" loading={loading} />
         </Box>
       </Flex>
     </>

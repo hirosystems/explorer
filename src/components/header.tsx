@@ -6,7 +6,7 @@ import { Text } from '@components/typography';
 import { SearchBarWithDropdown } from '@components/search-bar';
 
 export const LogoNavItem = (props: BoxProps) => (
-  <Box mr="base" {...props}>
+  <Box {...props}>
     <Link href="/" passHref>
       <a aria-label="Homepage" title="Stacks Explorer">
         <BlockstackIcon color="var(--colors-invert)" size="24px" />
@@ -39,11 +39,19 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
     <Flex
       mx="auto"
       width="100%"
+      px={['base', 'base', 'extra-loose']}
       justifyContent={isHome ? 'space-between' : 'unset'}
       maxWidth={isHome ? 'unset' : '1280px'}
     >
       {!isHome ? (
-        <SearchBarWithDropdown small height="40px" maxWidth={['100%', '100%', '544px']} />
+        <SearchBarWithDropdown
+          boxProps={{
+            transform: 'translateX(-11px)',
+          }}
+          small
+          height="40px"
+          maxWidth={['100%', '100%', '544px']}
+        />
       ) : (
         <Box ml="auto">
           <Text>Testnet</Text>

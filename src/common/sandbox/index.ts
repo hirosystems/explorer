@@ -19,9 +19,9 @@ import {
   selectLastFetch,
   selectErrorState,
   selectAccountTransactions,
-} from '@store/debug';
+} from '@store/sandbox';
 import { RootState } from '@store';
-import { IdentityPayload } from '@store/debug/types';
+import { IdentityPayload } from '@store/sandbox/types';
 import { withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
 

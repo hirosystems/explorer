@@ -114,12 +114,12 @@ const getContractId = (transaction: Transaction) => {
 export const TransactionDetails = ({
   transaction,
   hideContract,
-
   contractMeta,
+  ...rest
 }: TransactionDetailsProps) => {
   const contractId = getContractId(transaction);
   return (
-    <Flex align="flex-start" flexDirection={['column', 'column', 'row']}>
+    <Flex align="flex-start" flexDirection={['column', 'column', 'row']} {...rest}>
       <Box
         width={['100%']}
         order={[2, 2, 0]}
