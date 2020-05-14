@@ -59,6 +59,12 @@ export const CodeEditor = React.memo((props: CodeEditorProps) => {
     });
   };
 
+  React.useEffect(() => {
+    if (value !== code) {
+      updateContent(value);
+    }
+  }, [value]);
+
   return (
     <>
       <TextAreaOverrides />

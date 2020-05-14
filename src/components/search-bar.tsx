@@ -112,7 +112,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
   const [isHovered, hoverBind] = useHover();
   const [isFocused, focusBind] = useFocus();
   const transactions = useRecentlyViewedTx();
-  const visible = isHovered || isFocused;
+  const visible = transactions?.length && (isHovered || isFocused);
 
   const hideDropDown = () => {
     inputRef?.current?.blur();
