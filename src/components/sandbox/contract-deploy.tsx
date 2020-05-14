@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BigNum from 'bn.js';
 import { Formik } from 'formik';
-import { Flex, Stack, Box, Button } from '@blockstack/ui';
+import { Flex, Stack, Box, Button, ChevronIcon } from '@blockstack/ui';
 import { Field, FieldBase, Wrapper } from '@components/sandbox/common';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
@@ -15,18 +15,49 @@ import {
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
+import { Popover } from '@components/popover';
 
 const Sample = (props: any) => {
+  const [value, setValue] = React.useState(0);
+  const handleValueClick = (value: number) => {
+    setValue(value);
+    props.setFieldValue('codeBody', SampleContracts[value].source);
+  };
+  const inputValue = SampleContracts[value].name;
   return (
     <Box {...props}>
-      <FieldBase
-        label="Sample contracts"
-        type="text"
-        value={SampleContracts[0].contractName}
-        name="sampleContracts"
-        list="contract-samples"
-        datalist={SampleContracts.map(({ contractName }) => contractName)}
-      />
+      <Popover
+        onOptionClick={handleValueClick}
+        options={SampleContracts.map(({ name }, key: number) => ({
+          label: name,
+          value: key,
+        }))}
+      >
+        <Box position="relative">
+          <FieldBase
+            label="Sample contracts"
+            type="text"
+            value={inputValue}
+            name="sampleContracts"
+            // @ts-ignore
+            style={{
+              pointerEvents: 'none',
+            }}
+          />
+          <Flex
+            color="var(--colors-invert)"
+            p="base"
+            pt="40px"
+            alignItems="center"
+            position="absolute"
+            bottom="0"
+            right={0}
+            height="100%"
+          >
+            <ChevronIcon size="22px" direction="down" />
+          </Flex>
+        </Box>
+      </Popover>
     </Box>
   );
 };
@@ -39,8 +70,8 @@ export const ContractDeploy = (props: any) => {
 
   const initialValues = {
     senderKey: identity?.privateKey,
-    contractName: SampleContracts[0].contractName,
-    codeBody: SampleContracts[3].contractSource,
+    contractName: SampleContracts[0].name,
+    codeBody: SampleContracts[0].source,
     fee: 2000,
   };
 
@@ -74,6 +105,7 @@ export const ContractDeploy = (props: any) => {
       );
       if (error) return doFinishLoading();
 
+      props.showTransactionDialog();
       showToast(payload.transactions[0].txId);
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
@@ -92,7 +124,7 @@ export const ContractDeploy = (props: any) => {
   return (
     <Wrapper loading={isLoading} title="Contract deploy" {...props}>
       <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
-        {({ handleSubmit }) => (
+        {({ handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit} method="post">
             <Flex width="100%">
               <Stack isInline spacing="base" width="100%">
@@ -106,7 +138,7 @@ export const ContractDeploy = (props: any) => {
                 </Stack>
                 <Box maxWidth="60%" width="100%" flexShrink={0}>
                   <Stack spacing="base" width="100%">
-                    <Sample />
+                    <Sample setFieldValue={setFieldValue} />
                     <Field label="Contract source code (editable)" name="codeBody" type="code" />
                   </Stack>
                 </Box>

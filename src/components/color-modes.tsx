@@ -33,8 +33,8 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   light: {
     ['accent']: colorGet('blue')(props),
     ['bg']: 'white',
-    ['bg-alt']: colorGet('ink.150')(props),
-    ['bg-light']: colorGet('ink.150')(props),
+    ['bg-alt']: colorGet('ink.50')(props),
+    ['bg-light']: 'white',
     ['invert']: colorGet('ink')(props),
     ['text-hover']: colorGet('blue')(props),
     ['text-title']: colorGet('ink')(props),
@@ -49,8 +49,8 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   dark: {
     ['accent']: colorGet('blue.400')(props),
     ['bg']: colorGet('ink')(props),
-    ['bg-alt']: 'rgba(255,255,255,0.05)',
-    ['bg-light']: '#2c2e33',
+    ['bg-light']: 'rgba(255,255,255,0.05)',
+    ['bg-alt']: 'rgba(255,255,255,0.08)',
     ['invert']: 'white',
     ['text-hover']: colorGet('blue.300')(props),
     ['text-title']: 'white',
@@ -71,6 +71,8 @@ const colorMap = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =>
   Object.keys(colors(props)[props.colorMode]);
 
 export const ColorModes = createGlobalStyle`
+
+:root{
 ${({ colorMode = 'light', ...rest }: any) =>
   colorMap({ colorMode, ...rest }).map(key => {
     return `--colors-${key}: ${
@@ -78,10 +80,9 @@ ${({ colorMode = 'light', ...rest }: any) =>
       colorModeStyles({ colorMode, ...rest })[key as string]
     };`;
   })}
-
+}
   @media (prefers-color-scheme: dark) {
-    html,
-    body {
+    :root {
     ${({ colorMode = 'dark', ...rest }: any) =>
       colorMap({ colorMode, ...rest }).map(key => {
         return `--colors-${key}: ${
@@ -93,8 +94,7 @@ ${({ colorMode = 'light', ...rest }: any) =>
   }
   
   @media (prefers-color-scheme: light) {
-    html,
-    body {
+    :root {
     ${({ colorMode = 'light', ...rest }: any) =>
       colorMap({ colorMode, ...rest }).map(key => {
         return `--colors-${key}: ${

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/router';
 import { Transaction } from '@models/transaction.interface';
 import { fetchTransaction } from '@store/transactions';
 import { ReduxNextPageContext } from '@common/types/next-store';
@@ -17,7 +16,7 @@ import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
 import { getTxTypeName } from '@common/transaction-names';
-
+import * as timeago from 'timeago.js';
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'coinbase':
@@ -44,6 +43,15 @@ const TransactionMeta = ({ transaction }: any) => {
   const ogDescription = `
     ${subject} initiated by ${transaction.sender_address}`;
 
+  const labels = [
+    {
+      label: 'Confirmation',
+      data: `${timeago.format(transaction?.burn_block_time * 1000)}, in block #${
+        transaction.block_height
+      }`,
+    },
+  ];
+
   return (
     <Meta
       title={`${getTxTypeName(transaction.tx_type)} - Stacks 2.0 explorer`}
@@ -52,7 +60,7 @@ const TransactionMeta = ({ transaction }: any) => {
       url={ogUrl}
       status={transaction.tx_status}
       key={transaction.tx_status}
-      labels={[{ label: 'Confirmation', data: `Block #${transaction.block_height}` }]}
+      labels={labels}
     />
   );
 };

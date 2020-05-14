@@ -4,10 +4,12 @@ import { ToastType } from '@blockstack/ui';
 import { doAddToast, doRemoveToast } from '@store/ui/actions';
 import { RootState } from '@store';
 import { selectToasts } from '@store/ui/selectors';
+
 let toastCounter = 0;
 
 export const useToast = () => {
   const dispatch = useDispatch();
+
   const addToast = useCallback(
     (toast: Omit<ToastType, 'id'>) =>
       dispatch(
@@ -30,7 +32,6 @@ export const useToast = () => {
 
   const removeToast = useCallback((id: string) => {
     dispatch(doRemoveToast(id));
-    console.log('remove toast', id);
   }, []);
 
   const { toasts } = useSelector((state: RootState) => ({

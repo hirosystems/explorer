@@ -152,7 +152,7 @@ const generateBufferReader = (string: string) => {
 };
 
 export const getMemoString = (string: string) =>
-  deserializeMemoString(generateBufferReader(string)).content;
+  string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;
 
 export const startPad = (n: number, z = 2, s = '0') =>
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';

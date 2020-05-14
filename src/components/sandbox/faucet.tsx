@@ -63,7 +63,7 @@ export const Faucet = (props: any) => {
   };
 
   return (
-    <Wrapper loading={loading} title="Contract deploy" {...props}>
+    <Wrapper loading={loading} {...props}>
       <Formik
         enableReinitialize
         initialValues={{
