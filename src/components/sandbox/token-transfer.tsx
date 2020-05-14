@@ -9,6 +9,7 @@ import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
 import BigNum from 'bn.js';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
+import { useTxToast } from '@common/sandbox';
 
 export const TokenTransfer = (props: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
@@ -20,6 +21,7 @@ export const TokenTransfer = (props: any) => {
     amount: 100,
     memo: 'hello world!',
   };
+  const showToast = useTxToast();
 
   const onSubmit = async ({ senderKey, recipient, amount, memo }: any) => {
     try {
@@ -40,6 +42,11 @@ export const TokenTransfer = (props: any) => {
         broadcastTransaction({ principal: identity?.address, tx })
       );
       if (error) return doFinishLoading();
+
+      props.showTransactionDialog();
+
+      showToast(payload.transactions[0].txId);
+
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
         // @ts-ignore

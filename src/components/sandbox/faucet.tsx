@@ -4,22 +4,20 @@ import { Flex, Stack, Button, Box } from '@blockstack/ui';
 import { useDebugState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
 import { fetchAccount, requestFaucetFunds } from '@store/sandbox';
-import { useRouter } from 'next/router';
-import { fetchTransaction } from '@store/transactions';
 
-import { useToast } from '@common/hooks/use-toast';
+import { fetchTransaction } from '@store/transactions';
 
 import { Formik } from 'formik';
 import { Field, Wrapper } from '@components/sandbox/common';
-import { truncateMiddle } from '@common/utils';
+
 import { useProgressBar } from '@components/progress-bar';
+import { useTxToast } from '@common/sandbox';
 
 export const Faucet = (props: any) => {
   const { identity } = useDebugState();
   const { start, done } = useProgressBar();
-  const router = useRouter();
 
-  const { addPositiveToast } = useToast();
+  const showToast = useTxToast();
 
   const [loading, setLoading] = React.useState(false);
 
@@ -48,16 +46,8 @@ export const Faucet = (props: any) => {
 
       const txid = payload.transactions[0].txId;
 
-      addPositiveToast({
-        message: `Transaction: ${truncateMiddle(txid)} submitted!`,
-        description: `Transactions can take 60 or more seconds to confirm.`,
-        action: {
-          label: 'View transaction',
-          onClick: () => {
-            router.push('/txid/[txid]', `/txid/${txid}`);
-          },
-        },
-      });
+      props.showTransactionDialog();
+      showToast(txid);
 
       stopLoading();
 

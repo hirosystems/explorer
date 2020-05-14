@@ -7,9 +7,8 @@ import { TokenTransfer } from '@components/sandbox/token-transfer';
 import { ContractDeploy } from '@components/sandbox/contract-deploy';
 import { ContractCall } from '@components/sandbox/contract-call';
 import { Faucet } from '@components/sandbox/faucet';
-
+import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { ReduxNextPageContext } from '@common/types';
-
 import { useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
 
@@ -61,40 +60,70 @@ const Tab = ({
   );
 };
 
-const Tabs = ({ identity }: any) => {
+const Tabs = ({
+  identity,
+  transactionsVisible,
+  hideTransactionDialog,
+  showTransactionDialog,
+}: any) => {
   const [currentTab, setTab] = React.useState(0);
   const handleClick = (index: number) => setTab(index);
   const Component = paths[currentTab].component;
+  const { transactions } = useDebugState();
   return (
-    <Box>
-      <Flex width="100%" borderBottom="1px solid" borderBottomColor="var(--colors-border)">
-        <Stack isInline spacing="0px">
-          {paths.map(({ label, path }, index) => (
+    <>
+      <Box position="relative" zIndex={99}>
+        <Flex width="100%" borderBottom="1px solid" borderBottomColor="var(--colors-border)">
+          <Stack isInline spacing="0px">
+            {paths.map(({ label, path }, index) => (
+              <Tab
+                onClick={() => handleClick(index)}
+                label={label}
+                currentTab={currentTab}
+                index={index}
+                key={index}
+              />
+            ))}
+          </Stack>
+          <Box transform="translateY(1px)" ml="auto" position="relative" zIndex={99}>
             <Tab
-              onClick={() => handleClick(index)}
-              label={label}
-              currentTab={currentTab}
-              index={index}
-              key={index}
+              label={`(${transactions?.length ?? 0}) Recent Txs`}
+              currentTab={0}
+              index={1}
+              onClick={() => showTransactionDialog()}
             />
-          ))}
-        </Stack>
-        <Tab
-          ml="auto"
-          label="Recent Txs"
-          currentTab={0}
-          index={1}
-          onClick={() => console.log('show')}
-        />
-      </Flex>
-      <Box py="base">
-        <Component identity={identity} title={paths[currentTab].label} />
+            <TransactionsCard
+              visible={transactionsVisible}
+              hide={hideTransactionDialog}
+              bg="var(--colors-bg)"
+              position="absolute"
+              top="calc(100% - 37px)"
+              right="0"
+              minWidth="544px"
+            />
+          </Box>
+        </Flex>
+        <Box py="base">
+          <Component
+            showTransactionDialog={showTransactionDialog}
+            identity={identity}
+            title={paths[currentTab].label}
+          />
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
-const PageContent = ({ userData, handleGenerateKey, ...props }: any) => {
+const PageContent = ({
+  userData,
+  handleGenerateKey,
+  transactionsVisible,
+  hideTransactionDialog,
+  showTransactionDialog,
+  lastViewedNumber,
+  ...props
+}: any) => {
   const { identity, balance } = useDebugState();
   return (
     <PageWrapper
@@ -122,12 +151,28 @@ const PageContent = ({ userData, handleGenerateKey, ...props }: any) => {
         </Box>
       </Flex>
       <Box width="100%" py="base">
-        <Tabs identity={identity} />
+        <Tabs
+          hideTransactionDialog={hideTransactionDialog}
+          showTransactionDialog={showTransactionDialog}
+          transactionsVisible={transactionsVisible}
+          identity={identity}
+          lastViewedNumber={lastViewedNumber}
+        />
       </Box>
     </PageWrapper>
   );
 };
 const SandboxPage = () => {
+  const [transactionsVisible, setShowTransactions] = React.useState(false);
+  const [lastViewedNumber, setLastViewed] = React.useState(0);
+
+  const hideTransactionDialog = () => {
+    setShowTransactions(false);
+  };
+  const showTransactionDialog = () => {
+    setShowTransactions(true);
+  };
+
   const dispatch = useDispatch();
 
   const { lastFetch, loading, identity, error } = useDebugState();
@@ -142,7 +187,13 @@ const SandboxPage = () => {
 
   return (
     <ToastProvider>
-      <PageContent handleGenerateKey={handleGenerateId} />
+      <PageContent
+        hideTransactionDialog={hideTransactionDialog}
+        showTransactionDialog={showTransactionDialog}
+        transactionsVisible={transactionsVisible}
+        handleGenerateKey={handleGenerateId}
+        lastViewedNumber={lastViewedNumber}
+      />
     </ToastProvider>
   );
 };

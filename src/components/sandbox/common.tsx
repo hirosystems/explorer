@@ -81,7 +81,7 @@ export const FieldBase = ({
   onChange?: any;
   touched?: boolean;
   error?: string;
-  value: string;
+  value?: string;
   name: string;
   datalist?: string[];
   list?: string;
@@ -99,7 +99,7 @@ export const FieldBase = ({
         </FormLabel>
       ) : null}
       {type === 'code' ? (
-        <CodeEditor name={name} value={value} {...rest} />
+        <CodeEditor name={name} value={value || ''} {...rest} />
       ) : (
         <>
           <Input

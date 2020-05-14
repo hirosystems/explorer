@@ -1374,10 +1374,10 @@
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
 
-"@blockstack/ui@^1.5.0-beta.7":
-  version "1.5.0-beta.7"
-  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.5.0-beta.7.tgz#b440437d1586c9800ef1189b7c7ed4eff4bcd2f8"
-  integrity sha512-mKzWPHcYUHNPQZYBoTOrCjVlBUq9x0cZ8f3TXFwtnU3xsrE85Ytay43oBmtL+CBDKMcyPX1+abxXNnkIvLfasQ==
+"@blockstack/ui@^1.5.0-beta.8":
+  version "1.5.0-beta.8"
+  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.5.0-beta.8.tgz#04ee2dbff4d4558c922e24002af35201268ee5b2"
+  integrity sha512-ZDn66TL6BB/kNDJQ0HvsmkmkFjZ4ZDW4ZiwB3gva6FpFpeUtH0kGp3zp9iJ5XpaLvdJhQtYsgAE1t/5ElcozEQ==
   dependencies:
     "@popperjs/core" "^2.3.3"
     "@reach/alert" "^0.10.2"

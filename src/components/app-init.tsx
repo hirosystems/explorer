@@ -23,6 +23,11 @@ const GlobalStyles = createGlobalStyle`
     background-color: #AAB3FF;
     color: white !important;
   }
+  
+  .portal{
+  position: relative;
+  z-index: 99;
+  }
 `;
 
 export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = ({ children, colorMode }) => {

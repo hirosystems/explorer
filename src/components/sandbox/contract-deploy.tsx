@@ -2,7 +2,7 @@ import * as React from 'react';
 import BigNum from 'bn.js';
 import { Formik } from 'formik';
 import { Flex, Stack, Box, Button } from '@blockstack/ui';
-import { Field, Wrapper } from '@components/sandbox/common';
+import { Field, FieldBase, Wrapper } from '@components/sandbox/common';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
 import { useDebugState, network } from '@common/sandbox';
@@ -14,16 +14,33 @@ import {
 } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
+import { useTxToast } from '@common/sandbox';
+
+const Sample = (props: any) => {
+  return (
+    <Box {...props}>
+      <FieldBase
+        label="Sample contracts"
+        type="text"
+        value={SampleContracts[0].contractName}
+        name="sampleContracts"
+        list="contract-samples"
+        datalist={SampleContracts.map(({ contractName }) => contractName)}
+      />
+    </Box>
+  );
+};
 
 export const ContractDeploy = (props: any) => {
   const { identity } = useDebugState();
+  const showToast = useTxToast();
   const dispatch = useDispatch();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
 
   const initialValues = {
     senderKey: identity?.privateKey,
     contractName: SampleContracts[0].contractName,
-    codeBody: SampleContracts[0].contractSource,
+    codeBody: SampleContracts[3].contractSource,
     fee: 2000,
   };
 
@@ -57,6 +74,7 @@ export const ContractDeploy = (props: any) => {
       );
       if (error) return doFinishLoading();
 
+      showToast(payload.transactions[0].txId);
       setTimeout(async () => {
         const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
         // @ts-ignore
@@ -86,8 +104,11 @@ export const ContractDeploy = (props: any) => {
                     Submit
                   </Button>
                 </Stack>
-                <Box maxWidth="60%">
-                  <Field label="Contract source code (editable)" name="codeBody" type="code" />
+                <Box maxWidth="60%" width="100%" flexShrink={0}>
+                  <Stack spacing="base" width="100%">
+                    <Sample />
+                    <Field label="Contract source code (editable)" name="codeBody" type="code" />
+                  </Stack>
                 </Box>
               </Stack>
             </Flex>
