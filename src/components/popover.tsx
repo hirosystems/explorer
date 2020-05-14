@@ -11,8 +11,8 @@ const Option = ({ children, onFocus, onBlur, ...rest }: any) => {
     <Box
       py="tight"
       px="base"
-      bg={focus ? 'var(--colors-bg-light)' : 'var(--colors-bg-alt)'}
-      _hover={{ cursor: 'pointer', bg: 'var(--colors-bg-light)' }}
+      bg={focus ? 'var(--colors-bg-alt)' : 'var(--colors-bg-light)'}
+      _hover={{ cursor: 'pointer', bg: 'var(--colors-bg-alt)' }}
       role="listitem"
       tabIndex={0}
       outline="none"

@@ -33,8 +33,8 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   light: {
     ['accent']: colorGet('blue')(props),
     ['bg']: 'white',
-    ['bg-alt']: colorGet('ink.150')(props),
-    ['bg-light']: colorGet('ink.150')(props),
+    ['bg-alt']: colorGet('ink.50')(props),
+    ['bg-light']: 'white',
     ['invert']: colorGet('ink')(props),
     ['text-hover']: colorGet('blue')(props),
     ['text-title']: colorGet('ink')(props),
@@ -49,8 +49,8 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   dark: {
     ['accent']: colorGet('blue.400')(props),
     ['bg']: colorGet('ink')(props),
-    ['bg-alt']: 'rgba(255,255,255,0.05)',
-    ['bg-light']: '#2c2e33',
+    ['bg-light']: 'rgba(255,255,255,0.05)',
+    ['bg-alt']: 'rgba(255,255,255,0.08)',
     ['invert']: 'white',
     ['text-hover']: colorGet('blue.300')(props),
     ['text-title']: 'white',
