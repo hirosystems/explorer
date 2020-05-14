@@ -99,7 +99,15 @@ export const FieldBase = ({
         </FormLabel>
       ) : null}
       {type === 'code' ? (
-        <CodeEditor name={name} value={value || ''} {...rest} />
+        <CodeEditor
+          name={name}
+          value={value || ''}
+          onChange={onChange}
+          id={name}
+          // @ts-ignore
+          onBlur={onBlur}
+          {...rest}
+        />
       ) : (
         <>
           <Input
