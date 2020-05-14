@@ -172,7 +172,7 @@ export const Wrapper = ({
 }: { title: string; loading?: boolean; error?: string } & BoxProps) => {
   return (
     <>
-      <Meta title={`${title} - Stacks Debugger`} />
+      <Meta title={`${title} - Stacks Sandbox`} />
       <Flex>
         <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
           <Stack spacing="base">

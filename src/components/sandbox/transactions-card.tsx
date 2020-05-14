@@ -172,8 +172,9 @@ export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: 
               <Caption fontWeight="bold">Recent transactions</Caption>
               <Box
                 onClick={hide}
-                opacity={0.5}
+                opacity={0.3}
                 _hover={{ opacity: 1, cursor: 'pointer' }}
+                color="var(--colors-invert)"
                 size="12px"
               >
                 <CloseIcon />

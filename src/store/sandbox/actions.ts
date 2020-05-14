@@ -1,5 +1,5 @@
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
-import { toBN } from '@blockstack/rpc-client';
+import BN from 'bn.js';
 import { Account, AccountPayload, FaucetResponse, IdentityPayload } from '@store/sandbox/types';
 import { fetchFromApi, postToSidecar } from '@common/api/fetch';
 import { identityStorage, truncateMiddle } from '@common/utils';
@@ -61,7 +61,7 @@ export const fetchAccount = createAsyncThunk<AccountPayload, string>(
       }
       const data = await resp.json();
       return {
-        balance: toBN(data.balance).toNumber(),
+        balance: new BN(data.balance.slice(2), 16).toString(),
         nonce: data.nonce,
         principal,
       };
