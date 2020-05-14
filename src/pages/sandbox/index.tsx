@@ -7,12 +7,10 @@ import { TokenTransfer } from '@components/sandbox/token-transfer';
 import { ContractDeploy } from '@components/sandbox/contract-deploy';
 import { ContractCall } from '@components/sandbox/contract-call';
 import { Faucet } from '@components/sandbox/faucet';
-import { WatchTx } from '@components/sandbox/watch-tx';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { ReduxNextPageContext } from '@common/types';
 import { useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
-import { SSEProvider } from 'react-hooks-sse';
 import { withApiServer } from '@common/constants';
 import { fetchAccount, generateIdentity, setIdentity } from '@store/sandbox';
 import { truncateMiddle } from '@common/utils';
@@ -22,7 +20,6 @@ const paths = [
   { path: 'token-transfer', label: 'Token Transfer', component: TokenTransfer },
   { path: 'contract-deploy', label: 'Contract Deploy', component: ContractDeploy },
   { path: 'contract-call', label: 'Contract Call', component: ContractCall },
-  { path: 'watch-tx', label: 'Tx Feed', component: WatchTx },
 ];
 
 const Tab = ({
@@ -189,17 +186,15 @@ const SandboxPage = () => {
   };
 
   return (
-    <SSEProvider endpoint={withApiServer('/sidecar/v1/tx/stream?protocol=eventsource')}>
-      <ToastProvider>
-        <PageContent
-          hideTransactionDialog={hideTransactionDialog}
-          showTransactionDialog={showTransactionDialog}
-          transactionsVisible={transactionsVisible}
-          handleGenerateKey={handleGenerateId}
-          lastViewedNumber={lastViewedNumber}
-        />
-      </ToastProvider>
-    </SSEProvider>
+    <ToastProvider>
+      <PageContent
+        hideTransactionDialog={hideTransactionDialog}
+        showTransactionDialog={showTransactionDialog}
+        transactionsVisible={transactionsVisible}
+        handleGenerateKey={handleGenerateId}
+        lastViewedNumber={lastViewedNumber}
+      />
+    </ToastProvider>
   );
 };
 
