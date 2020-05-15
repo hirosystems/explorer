@@ -175,7 +175,10 @@ export const navgiateToRandomTx = async () => {
   await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
 };
 
-export const clarityValuetoHumanReadable = (value: string) => {
+export const clarityValuetoHumanReadable = (value: any) => {
+  if (value && value.repr) {
+    return value.repr;
+  }
   const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
 
   if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {

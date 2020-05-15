@@ -14,8 +14,9 @@ import { Alert } from '@components/alert';
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
 import { Title } from '@components/typography';
+import { Ref } from 'react';
 
-export const Input = (props: InputProps) => (
+export const Input = React.forwardRef((props: InputProps, ref) => (
   <InputBase
     bg="transparent"
     color="var(--colors-text-body)"
@@ -24,9 +25,10 @@ export const Input = (props: InputProps) => (
     _focus={{
       boxShadow: '0 0 0 1px rgba(170, 179, 255, 0.6)',
     }}
+    ref={ref}
     {...props}
   />
-);
+));
 export const FormLabel = (props: FormLabelProps) => (
   <FormLabelBase color="var(--colors-text-caption)" {...props} />
 );
@@ -56,23 +58,7 @@ type InputType =
   | 'url'
   | 'week';
 
-export const FieldBase = ({
-  label,
-  inputComponent,
-  type,
-  placeholder,
-  touched,
-  error,
-  value,
-  name,
-  list,
-  datalist,
-  onChange,
-  multiple,
-  checked,
-  onBlur,
-  ...rest
-}: {
+interface FieldBaseProps {
   inputComponent?: React.ReactNode;
   label: string | any;
   placeholder?: string | any;
@@ -88,51 +74,76 @@ export const FieldBase = ({
   multiple?: any;
   checked?: any;
   onBlur?: any;
-}) => {
-  // @ts-ignore
+}
 
-  return (
-    <Box {...rest}>
-      {label ? (
-        <FormLabel mb="extra-tight" htmlFor={name}>
-          {label}
-        </FormLabel>
-      ) : null}
-      {type === 'code' ? (
-        <CodeEditor
-          name={name}
-          value={value || ''}
-          onChange={onChange}
-          id={name}
-          // @ts-ignore
-          onBlur={onBlur}
-          {...rest}
-        />
-      ) : (
-        <>
-          <Input
+export const FieldBase = React.forwardRef(
+  (
+    {
+      label,
+      inputComponent,
+      type,
+      placeholder,
+      touched,
+      error,
+      value,
+      name,
+      list,
+      datalist,
+      onChange,
+      multiple,
+      checked,
+      onBlur,
+      ...rest
+    }: FieldBaseProps,
+    ref: Ref<HTMLInputElement>
+  ) => {
+    // @ts-ignore
+
+    return (
+      <Box {...rest}>
+        {label ? (
+          <FormLabel mb="extra-tight" htmlFor={name}>
+            {label}
+          </FormLabel>
+        ) : null}
+        {type === 'code' ? (
+          <CodeEditor
             name={name}
-            type={type}
-            placeholder={placeholder}
-            value={value}
-            list={list}
-            id={name}
+            value={value || ''}
             onChange={onChange}
-            multiple={multiple}
+            id={name}
+            // @ts-ignore
             onBlur={onBlur}
+            ref={ref}
+            {...rest}
           />
-          {list && datalist?.length ? (
-            <datalist id={list}>
-              {datalist.map(option => (
-                <option value={option} key={option} />
-              ))}
-            </datalist>
-          ) : null}
-        </>
-      )}
-    </Box>
-  );
-};
+        ) : (
+          <>
+            <Input
+              name={name}
+              type={type}
+              placeholder={placeholder}
+              value={value}
+              list={list}
+              id={name}
+              onChange={onChange}
+              multiple={multiple}
+              onBlur={onBlur}
+              ref={ref}
+            />
+            {list && datalist?.length ? (
+              <datalist id={list}>
+                {datalist.map(option => (
+                  <option value={option} key={option} />
+                ))}
+              </datalist>
+            ) : null}
+          </>
+        )}
+      </Box>
+    );
+  }
+);
 
 const FieldForFormik = ({ label, type, ...rest }: any) => {
   const [field, { touched, error }, helpers] = useField({

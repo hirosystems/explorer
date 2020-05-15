@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { forwardRef, Ref } from 'react';
 import { Box, Input, Text } from '@blockstack/ui';
-import { MagnifyingGlass } from './icons/magnifying-glass';
+import { MagnifyingGlass } from '../icons/magnifying-glass';
 import { useFocus, useHover } from 'use-events';
-import dynamic from 'next/dynamic';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import debounce from 'just-debounce-it';
 import { SearchBarProps, ErrorType } from '@components/search-bar/types';
 import { handleValidation } from '@common/utils';
 import { Error } from '@components/search-bar/error';
-import Router from 'next/router';
-
-// @ts-ignore
-const RecentlyViewed = dynamic(() => import('../components/recently-viewed'), { ssr: false });
+import Router, { useRouter } from 'next/router';
+import { Popover } from '@components/popover/popover';
+import { RecentlyViewedListItem } from '@components/recently-viewed';
+import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
 export const SearchBar = forwardRef(
   (
@@ -153,49 +152,52 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
     updateQuery(e.currentTarget.value);
   };
 
+  const router = useRouter();
+
   const hideDropdown = small && error?.message;
   return (
-    <Box
-      position="relative"
-      width="100%"
-      as="form"
-      // @ts-ignore
-      autoComplete="off"
-      onSubmit={handleOnSubmit}
-      {...boxProps}
+    <Popover
+      cardProps={{
+        maxHeight: '320px',
+        width: '100%',
+        overflowY: 'auto',
+        ...boxProps,
+        ...recentlyViewedProps,
+      }}
+      wrapperProps={{
+        width: '100%',
+        maxWidth: ['100%', '100%', '544px'],
+      }}
+      items={transactions}
+      itemComponent={RecentlyViewedListItem}
+      onItemClick={(option: Transaction) => router.push('/txid/[txid]', `/txid/${option.tx_id}`)}
+      label="Recently Viewed"
+      maxWidth={['100%', '100%', '544px']}
+      triggerRef={inputRef}
+      hideItems={!!hideDropdown}
     >
-      <SearchBar
-        width="100%"
-        onChange={handleSearch}
-        clearError={clearError}
-        error={error}
-        value={query}
-        small={small}
-        // @ts-ignore
-        ref={inputRef}
-        {...props}
-        {...focusBind}
-      />
       <Box
-        left={0}
-        pt="tight"
-        top="100%"
-        zIndex={10000}
-        position="absolute"
+        position="relative"
         width="100%"
-        style={{ pointerEvents: 'none' }}
-        {...hoverBind}
+        as="form"
+        // @ts-ignore
+        autoComplete="off"
+        onSubmit={handleOnSubmit}
+        {...boxProps}
       >
-        <RecentlyViewed
-          transactions={transactions}
-          transition="0.12s all ease-in-out"
-          transform={visible ? 'none' : 'translateY(5px)'}
-          opacity={!hideDropdown && visible ? 1 : 0}
-          style={{
-            pointerEvents: visible ? 'all' : 'none',
-          }}
+        <SearchBar
+          width="100%"
+          onChange={handleSearch}
+          clearError={clearError}
+          error={error}
+          value={query}
+          small={small}
+          // @ts-ignore
+          ref={inputRef}
+          {...props}
+          {...focusBind}
         />
       </Box>
-    </Box>
+    </Popover>
   );
 };
