@@ -56,6 +56,9 @@ export const FooterLinks = (props: FlexProps) => {
           <LinkInNewWindow href="https://github.com/blockstack/explorer/">GitHub</LinkInNewWindow>
         </FooterLink>
         <FooterLink>
+          <LinkInNewWindow href="https://www2.blockstack.org/explorer/faq">FAQ</LinkInNewWindow>
+        </FooterLink>
+        <FooterLink>
           <LinkInNewWindow href="https://blockstack.org/legal/privacy-policy">
             Privacy policy
           </LinkInNewWindow>
