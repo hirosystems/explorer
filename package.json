@@ -26,7 +26,7 @@
     "blockstack": "^21.0.0",
     "c32check": "^1.0.1",
     "cacheable-response": "^2.0.8",
-    "dayjs": "^1.8.26",
+    "dayjs": "^1.8.27",
     "express": "^4.17.1",
     "fontfaceobserver": "^2.1.0",
     "formik": "^2.1.4",
@@ -46,7 +46,6 @@
     "redux-thunk": "^2.3.0",
     "store": "^2.0.12",
     "styled-components": "^5.0.1",
-    "timeago.js": "^4.0.2",
     "use-events": "^1.4.1",
     "web-api-hooks": "^3.0.1"
   },
