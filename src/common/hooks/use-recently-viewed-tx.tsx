@@ -17,7 +17,9 @@ export const useRecentlyViewedTx = (transaction?: Transaction) => {
     if (transaction) {
       const newTx: CachedTx = { ...transaction, viewedDate: new Date().toISOString() };
       const cachedTxs = viewedTransactions.filter(({ tx_id }) => tx_id !== transaction.tx_id);
-      const newTxList = dedupe([...cachedTxs, newTx], 'tx_id');
+      const newTxList = dedupe([...cachedTxs, newTx], 'tx_id').sort(
+        (a, b) => -(a as any).viewedDate.localeCompare((b as any).viewedDate)
+      );
       setViewedTransactions(newTxList);
       store.set(storageKey, newTxList);
     }
