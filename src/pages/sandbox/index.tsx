@@ -11,7 +11,6 @@ import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { ReduxNextPageContext } from '@common/types';
 import { useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
-import { withApiServer } from '@common/constants';
 import { fetchAccount, generateIdentity, setIdentity } from '@store/sandbox';
 import { truncateMiddle } from '@common/utils';
 

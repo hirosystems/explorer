@@ -71,6 +71,8 @@ const colorMap = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =>
   Object.keys(colors(props)[props.colorMode]);
 
 export const ColorModes = createGlobalStyle`
+
+:root{
 ${({ colorMode = 'light', ...rest }: any) =>
   colorMap({ colorMode, ...rest }).map(key => {
     return `--colors-${key}: ${
@@ -78,10 +80,9 @@ ${({ colorMode = 'light', ...rest }: any) =>
       colorModeStyles({ colorMode, ...rest })[key as string]
     };`;
   })}
-
+}
   @media (prefers-color-scheme: dark) {
-    html,
-    body {
+    :root {
     ${({ colorMode = 'dark', ...rest }: any) =>
       colorMap({ colorMode, ...rest }).map(key => {
         return `--colors-${key}: ${
@@ -93,8 +94,7 @@ ${({ colorMode = 'light', ...rest }: any) =>
   }
   
   @media (prefers-color-scheme: light) {
-    html,
-    body {
+    :root {
     ${({ colorMode = 'light', ...rest }: any) =>
       colorMap({ colorMode, ...rest }).map(key => {
         return `--colors-${key}: ${
