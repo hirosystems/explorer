@@ -1,6 +1,6 @@
 import * as React from 'react';
 import BigNum from 'bn.js';
-import { Formik, useField } from 'formik';
+import { Formik } from 'formik';
 import { Flex, Stack, Box, Button, ChevronIcon } from '@blockstack/ui';
 import { Field, FieldBase, Wrapper } from '@components/sandbox/common';
 import { SampleContracts } from '@common/sandbox/examples';
@@ -21,15 +21,15 @@ const Sample = (props: any) => {
   const [value, setValue] = React.useState(0);
   const handleValueClick = (value: number) => {
     setValue(value);
-    props.setFieldValue('codeBody', SampleContracts[value].contractSource);
+    props.setFieldValue('codeBody', SampleContracts[value].source);
   };
-  const inputValue = SampleContracts[value].contractName;
+  const inputValue = SampleContracts[value].name;
   return (
     <Box {...props}>
       <Popover
         onOptionClick={handleValueClick}
-        options={SampleContracts.map(({ contractName }, key: number) => ({
-          label: contractName,
+        options={SampleContracts.map(({ name }, key: number) => ({
+          label: name,
           value: key,
         }))}
       >
@@ -70,8 +70,8 @@ export const ContractDeploy = (props: any) => {
 
   const initialValues = {
     senderKey: identity?.privateKey,
-    contractName: SampleContracts[0].contractName,
-    codeBody: SampleContracts[3].contractSource,
+    contractName: SampleContracts[0].name,
+    codeBody: SampleContracts[0].source,
     fee: 2000,
   };
 
