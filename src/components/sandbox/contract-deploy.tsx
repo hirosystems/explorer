@@ -15,23 +15,26 @@ import {
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
-import { Popover } from '@components/popover';
+import { Popover } from '@components/popover/popover';
 
 const Sample = (props: any) => {
   const [value, setValue] = React.useState(0);
-  const handleValueClick = (value: number) => {
+  const handleValueClick = ({ value }: { value: number }) => {
     setValue(value);
     props.setFieldValue('codeBody', SampleContracts[value].source);
   };
+  const ref = React.useRef(null);
+  React.useEffect(() => console.log('ref', ref), [ref]);
   const inputValue = SampleContracts[value].name;
   return (
     <Box {...props}>
       <Popover
-        onOptionClick={handleValueClick}
-        options={SampleContracts.map(({ name }, key: number) => ({
+        onItemClick={handleValueClick}
+        items={SampleContracts.map(({ name }, key: number) => ({
           label: name,
           value: key,
         }))}
+        triggerRef={ref}
       >
         <Box position="relative">
           <FieldBase
@@ -39,10 +42,7 @@ const Sample = (props: any) => {
             type="text"
             value={inputValue}
             name="sampleContracts"
-            // @ts-ignore
-            style={{
-              pointerEvents: 'none',
-            }}
+            ref={ref}
           />
           <Flex
             color="var(--colors-invert)"
