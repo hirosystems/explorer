@@ -25,14 +25,16 @@ const FeesComponent = ({ fees, sponsored }: FeeComponentProps) => (
   </>
 );
 
-const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) => (
-  <>
-    <Box>{block}</Box>
-    <Box ml="base">
-      <Timestamp ts={ts} />
-    </Box>
-  </>
-);
+const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) => {
+  return (
+    <>
+      <Box>{block}</Box>
+      <Box ml="base">
+        <Timestamp ts={ts} />
+      </Box>
+    </>
+  );
+};
 
 const transformDataToRowData = (d: Transaction) => {
   const defaultData = [
