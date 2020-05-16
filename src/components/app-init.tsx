@@ -32,6 +32,20 @@ export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = ({ childre
     if (!fontsLoaded) handleFontLoading().then(() => setLoaded(true));
   }, []);
 
+  React.useEffect(() => {
+    // enable Fathom tracking in production
+    if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
+      const tracker = window.document.createElement('script');
+      const firstScript = window.document.getElementsByTagName('script')[0];
+      tracker.defer = true;
+      tracker.setAttribute('site', `MVHUUREV`);
+      tracker.setAttribute('spa', 'auto');
+      tracker.src = 'https://cdn.usefathom.com/script.js';
+
+      firstScript.parentNode!.insertBefore(tracker, firstScript);
+    }
+  }, []);
+
   const handleAppTime = React.useCallback(() => {
     dispatch(appTime());
   }, []);
