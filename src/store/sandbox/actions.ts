@@ -114,9 +114,11 @@ export const broadcastTransaction = createAsyncThunk<
 >(
   'account/broadcast-transaction',
   // @ts-ignore
-  async ({ principal, tx }, { rejectWithValue }) => {
+  async ({ principal, tx }, { rejectWithValue, getState }) => {
+    // @ts-ignore
+    const apiServer = selectCurrentNetworkUrl(getState());
     try {
-      const res = await broadcastTransactionBase(tx, network);
+      const res = await broadcastTransactionBase(tx, network(apiServer));
       if (res.includes('error')) {
         const error = JSON.parse(res);
         return rejectWithValue(error);
