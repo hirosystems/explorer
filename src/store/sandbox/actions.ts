@@ -10,6 +10,7 @@ import {
 } from '@blockstack/stacks-transactions';
 import { network } from '@common/sandbox';
 import { doAddToast } from '@store/ui/actions';
+import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 
 let errorCount = 0;
 
@@ -40,9 +41,11 @@ export const eraseIdentity = createAction('account/identity/erase');
 export const fetchAccount = createAsyncThunk<AccountPayload, string>(
   'account/fetch',
   // @ts-ignore
-  async (principal, { rejectWithValue, dispatch }) => {
+  async (principal, { rejectWithValue, dispatch, getState }) => {
+    // @ts-ignore
+    const apiServer = selectCurrentNetworkUrl(getState());
     try {
-      const resp = await fetchFromApi(`/v2/accounts/${principal}`, {
+      const resp = await fetchFromApi(apiServer)(`/v2/accounts/${principal}`, {
         credentials: 'omit',
       });
       if (!resp.ok) {
@@ -87,8 +90,10 @@ export const fetchAccount = createAsyncThunk<AccountPayload, string>(
 export const requestFaucetFunds = createAsyncThunk<Account, string>(
   'account/faucet',
   // @ts-ignore
-  async (principal, { rejectWithValue }) => {
-    const res = await postToSidecar(`/debug/faucet?address=${principal}`);
+  async (principal, { rejectWithValue, getState }) => {
+    // @ts-ignore
+    const apiServer = selectCurrentNetworkUrl(getState());
+    const res = await postToSidecar(apiServer)(`/debug/faucet?address=${principal}`);
     if (!res.ok) {
       return rejectWithValue({
         name: `Status ${res.status}`,

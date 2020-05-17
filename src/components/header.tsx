@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Box, BoxProps, Flex, FlexProps, BlockstackIcon } from '@blockstack/ui';
 
-import { Text } from '@components/typography';
+import { TestnetSelector } from '@components/testnet-selector';
 import { SearchBarWithDropdown } from '@components/search-bar';
 
 export const LogoNavItem = (props: BoxProps) => (
@@ -53,9 +53,7 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
           maxWidth={['100%', '100%', '544px']}
         />
       ) : (
-        <Box ml="auto">
-          <Text>Testnet</Text>
-        </Box>
+        <TestnetSelector />
       )}
     </Flex>
   </HeaderBar>

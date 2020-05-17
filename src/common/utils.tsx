@@ -12,6 +12,9 @@ import { BufferReader } from '@blockstack/stacks-transactions/lib/bufferReader';
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
 import BN from 'bn.js';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store';
+import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 export const store = engine.createStore([lclStorage]);
 export const identityStorage = engine.createStore([cookieStorage]);
 
@@ -157,8 +160,8 @@ export const getMemoString = (string: string) =>
 export const startPad = (n: number, z = 2, s = '0') =>
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
 
-export const navgiateToRandomTx = async () => {
-  const { results } = await fetchTxList();
+export const navgiateToRandomTx = (apiServer: string) => async () => {
+  const { results } = await fetchTxList(apiServer as string)();
   const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
 
   if (hasNonCoinbaseTxs) {
