@@ -12,10 +12,12 @@ import {
   makeStandardSTXPostCondition,
   FungibleConditionCode,
 } from '@blockstack/stacks-transactions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
 import { Popover } from '@components/popover/popover';
+import { RootState } from '@store';
+import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 
 const Sample = (props: any) => {
   const [value, setValue] = React.useState(0);
@@ -67,6 +69,9 @@ export const ContractDeploy = (props: any) => {
   const showToast = useTxToast();
   const dispatch = useDispatch();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
+  const { apiServer } = useSelector((state: RootState) => ({
+    apiServer: selectCurrentNetworkUrl(state),
+  }));
 
   const initialValues = {
     senderKey: identity?.privateKey,
@@ -97,7 +102,7 @@ export const ContractDeploy = (props: any) => {
         codeBody,
         fee: new BigNum(fee),
         postConditions,
-        network,
+        network: network(apiServer as string),
       });
 
       const { payload, error } = await dispatch(

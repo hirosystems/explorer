@@ -5,6 +5,9 @@ import { Provider } from 'react-redux';
 import { RootState, initStore } from '@store';
 import { AppWrapper } from '@components/app-init';
 import { parseCookies } from 'nookies';
+import getConfig from 'next/config';
+import { selectNetwork, setNetworks } from '@store/ui/actions';
+import { COLOR_MODE_COOKIE, NETWORK_COOKIE } from '@common/utils';
 
 interface MyAppProps {
   colorMode?: 'light' | 'dark';
@@ -13,15 +16,34 @@ interface MyAppProps {
 // @ts-ignore
 class MyApp extends App<MyAppProps & ReduxWrapperAppProps<RootState>> {
   static async getInitialProps({ Component, ctx }: AppContext) {
-    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-    const cookies = parseCookies(ctx);
-    if (cookies && cookies.color_mode) {
-      return {
-        ...pageProps,
-        colorMode: JSON.parse(cookies.color_mode),
-      };
+    const { serverRuntimeConfig } = getConfig();
+    const { MOCKNET_API_SERVER, TESTNET_API_SERVER } = serverRuntimeConfig;
+
+    let colorMode = undefined;
+    let apiServer = undefined;
+
+    if (ctx.res) {
+      await ctx.store.dispatch(
+        setNetworks({
+          MOCKNET: MOCKNET_API_SERVER,
+          TESTNET: TESTNET_API_SERVER,
+        })
+      );
+      const cookies = parseCookies(ctx);
+
+      if (cookies) {
+        colorMode = cookies[COLOR_MODE_COOKIE] ? JSON.parse(cookies[COLOR_MODE_COOKIE]) : undefined;
+        apiServer = cookies[NETWORK_COOKIE] ? JSON.parse(cookies[NETWORK_COOKIE]) : undefined;
+      }
+
+      if (apiServer) {
+        await ctx.store.dispatch(selectNetwork(JSON.parse(cookies[NETWORK_COOKIE])));
+      }
     }
-    return { pageProps };
+
+    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
+
+    return { pageProps, colorMode, apiServer };
   }
 
   render() {

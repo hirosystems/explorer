@@ -8,6 +8,10 @@ module.exports = withBundleAnalyzer({
     polyfillsOptimization: true,
     jsconfigPaths: true,
   },
+  serverRuntimeConfig: {
+    MOCKNET_API_SERVER: process.env.MOCKNET_API_SERVER,
+    TESTNET_API_SERVER: process.env.TESTNET_API_SERVER,
+  },
   webpack(config, { dev }) {
     if (!dev) {
       const splitChunks = config.optimization && config.optimization.splitChunks;
