@@ -3,20 +3,18 @@ import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
 import cookieStorage from 'store/storages/cookieStorage';
 import { c32addressDecode } from 'c32check';
-import {
-  deserializeMemoString,
-  deserializeCV,
-  addressToString,
-} from '@blockstack/stacks-transactions';
-import { BufferReader } from '@blockstack/stacks-transactions/lib/bufferReader';
+import { deserializeCV, addressToString } from '@blockstack/stacks-transactions';
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
 import BN from 'bn.js';
+
 export const store = engine.createStore([lclStorage]);
 export const identityStorage = engine.createStore([cookieStorage]);
 
 export const COLOR_MODE_COOKIE = 'color_mode';
 export const colorModeStorage = engine.createStore([cookieStorage]);
+export const NETWORK_COOKIE = 'selected_network';
+export const networkStorage = engine.createStore([cookieStorage]);
 
 /**
  * validateStacksAddress
@@ -146,19 +144,14 @@ export const getContractName = (fullyRealizedName: string) => fullyRealizedName.
 export const getFungibleAssetName = (assetName: string) =>
   getContractName(assetName).split('::')[1];
 
-const generateBufferReader = (string: string) => {
-  const buffer = Buffer.from(string.replace('0x', ''), 'hex');
-  return new BufferReader(buffer);
-};
-
 export const getMemoString = (string: string) =>
   string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;
 
 export const startPad = (n: number, z = 2, s = '0') =>
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
 
-export const navgiateToRandomTx = async () => {
-  const { results } = await fetchTxList();
+export const navgiateToRandomTx = (apiServer: string) => async () => {
+  const { results } = await fetchTxList(apiServer as string)();
   const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
 
   if (hasNonCoinbaseTxs) {

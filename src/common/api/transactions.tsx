@@ -1,19 +1,20 @@
 import { Transaction } from '@models/transaction.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
 
-export async function fetchTx(txid: Transaction['tx_id']): Promise<Transaction> {
-  const resp = await fetchFromSidecar(`/tx/${txid}`);
+export const fetchTx = (apiServer: string) => async (
+  txid: Transaction['tx_id']
+): Promise<Transaction> => {
+  const resp = await fetchFromSidecar(apiServer)(`/tx/${txid}`);
 
   const tx = await resp.json();
-  console.log(tx);
   if (!resp.ok) {
     throw Error(tx.error);
   }
 
   return tx;
-}
+};
 
-export async function fetchTxList(): Promise<{ results: Transaction[] }> {
-  const resp = await fetchFromSidecar('/tx?limit=200');
+export const fetchTxList = (apiServer: string) => async (): Promise<{ results: Transaction[] }> => {
+  const resp = await fetchFromSidecar(apiServer)('/tx?limit=200');
   return resp.json();
-}
+};

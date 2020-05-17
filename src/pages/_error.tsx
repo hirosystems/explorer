@@ -6,8 +6,8 @@ import { Flex, Box, Stack, BoxProps } from '@blockstack/ui';
 import { FormLabel } from '@components/sandbox/common';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import NextLink from 'next/link';
-import { navgiateToRandomTx } from '@common/utils';
 import { Meta } from '@components/meta-head';
+import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 
 const Link = ({ href, target, ...rest }: { href?: string; target?: string } & BoxProps) => {
   return (
@@ -28,6 +28,7 @@ const Link = ({ href, target, ...rest }: { href?: string; target?: string } & Bo
 };
 
 const Error = ({ statusCode }: { statusCode?: number }) => {
+  const navigateToRandomTx = useNavigateToRandomTx();
   return (
     <PageWrapper>
       <Meta title={`${statusCode} error - Stacks Explorer`} />
@@ -68,7 +69,7 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
             </NextLink>
           </Box>
           <Box>
-            <Link textDecoration="underline" fontSize="14px" onClick={navgiateToRandomTx}>
+            <Link textDecoration="underline" fontSize="14px" onClick={navigateToRandomTx}>
               Random transaction
             </Link>
           </Box>

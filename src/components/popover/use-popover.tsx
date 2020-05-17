@@ -4,9 +4,10 @@ import { useControlledHover } from '@common/hooks/use-controlled-hover';
 import { useFocus } from 'use-events';
 import { UsePopoverProps } from '@components/popover/types';
 
-export const usePopover = ({ length, triggerRef }: UsePopoverProps) => {
+export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps) => {
   const timeoutRef = React.useRef<number | null>(null);
   const removeFocusRef = React.useRef<number | null>(null);
+
   const [isVisible, setVisible] = useState(false);
   const [isHovered, setHovered] = useState(false);
   const [hoverDelay, setHoverDelay] = useState(false);
@@ -16,7 +17,7 @@ export const usePopover = ({ length, triggerRef }: UsePopoverProps) => {
 
   const [localTriggerFocusState, setTriggerFocus] = useState(false);
 
-  const isInFocus = localTriggerFocusState;
+  const isInFocus = localTriggerFocusState || wrapperFocus;
 
   const bindHover = useControlledHover(setHovered);
 
@@ -32,12 +33,12 @@ export const usePopover = ({ length, triggerRef }: UsePopoverProps) => {
   useEffect(() => {
     const triggerRefFocus =
       triggerRef?.current === (typeof document !== 'undefined' && document?.activeElement);
-    if (triggerRefFocus && !localTriggerFocusState) {
+    if ((triggerRefFocus && !localTriggerFocusState) || (wrapperFocus && !localTriggerFocusState)) {
       setTriggerFocus(true);
       setChildFocus(false);
       setCurrentFocus(undefined);
     }
-    if (!triggerRefFocus && localTriggerFocusState) {
+    if ((!triggerRefFocus && localTriggerFocusState) || (!wrapperFocus && localTriggerFocusState)) {
       setTriggerFocus(false);
     }
   }, [
@@ -138,7 +139,7 @@ export const usePopover = ({ length, triggerRef }: UsePopoverProps) => {
 
   useEffect(() => {
     if (!isVisible) {
-      if (isInFocus || (!hoverDelay && isHovered)) {
+      if (isInFocus || (!showOnFocus && isHovered)) {
         setVisible(true);
       }
     } else {
@@ -172,6 +173,9 @@ export const usePopover = ({ length, triggerRef }: UsePopoverProps) => {
     handleItemClick,
     triggerProps: {
       ...bindWrapperFocus,
+    },
+    wrapper: {
+      pointerEvents: hoverDelay ? 'none' : 'all',
     },
   };
 };
