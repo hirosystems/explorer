@@ -87,20 +87,19 @@ export const doGenerateIdentity = async () => {
   };
 };
 
-const broadcastApiUrl = withApiServer('/v2/transactions');
-const transferFeeEstimateApiUrl = withApiServer('/v2/fees/transfer');
-const balanceApiUrl = withApiServer('/v2/accounts');
-
-export const network: StacksNetwork = {
+export const network = (apiServer: string) => ({
   version: TransactionVersion.Testnet,
   chainId: ChainID.Testnet,
-  coreApiUrl: withApiServer(),
-  broadcastApiUrl,
-  transferFeeEstimateApiUrl,
-  balanceApiUrl,
-};
+  coreApiUrl: withApiServer(apiServer)(),
+  broadcastApiUrl: withApiServer(apiServer)('/v2/transactions'),
+  transferFeeEstimateApiUrl: withApiServer(apiServer)('/v2/fees/transfer'),
+  balanceApiUrl: withApiServer(apiServer)('/v2/accounts'),
+});
 
-export const fetchContractInterface = async (contractAddress: string, contractName: string) => {
-  const res = await fetchFromSidecar(`/contract/${contractAddress}.${contractName}`);
+export const fetchContractInterface = (apiServer: string) => async (
+  contractAddress: string,
+  contractName: string
+) => {
+  const res = await fetchFromSidecar(apiServer)(`/contract/${contractAddress}.${contractName}`);
   return res.json();
 };

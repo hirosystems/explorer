@@ -26,6 +26,8 @@ export const Popover = ({
   triggerRef,
   hideItems,
   activeItem,
+  placement,
+  showOnFocus,
   ...rest
 }: PopoverProps) => {
   const {
@@ -36,11 +38,20 @@ export const Popover = ({
     currentFocus,
     handleItemClick,
     triggerProps,
-  } = usePopover({ length: items?.length ?? 0, triggerRef });
+    wrapper,
+  } = usePopover({ length: items?.length ?? 0, triggerRef, showOnFocus });
 
   return (
     <Box width="100%" position="relative" {...bindHover} {...rest}>
-      <Box {...triggerProps}>{children}</Box>
+      <Box
+        tabIndex={0}
+        style={{
+          outline: 'none',
+        }}
+        {...triggerProps}
+      >
+        {children}
+      </Box>
       {items.length ? (
         <Transition
           styles={{
@@ -69,15 +80,19 @@ export const Popover = ({
               }}
               position="absolute"
               zIndex={999}
+              left={placement === 'left' || undefined ? 0 : 'unset'}
+              right={placement === 'right' ? 0 : 'unset'}
+              width="100%"
               pt="tight"
               {...wrapperProps}
+              {...wrapper}
             >
               <Card
                 role="listbox"
                 boxShadow="high"
-                minHeight="100px"
                 bg="var(--colors-bg)"
                 overflow="hidden"
+                width="100%"
                 {...cardProps}
               >
                 {label ? <PopoverListLabel>{label}</PopoverListLabel> : null}
@@ -91,6 +106,7 @@ export const Popover = ({
                     focused={currentFocus === key}
                     active={activeItem === key}
                     isLast={key === items.length - 1}
+                    placement={placement}
                   />
                 ))}
               </Card>
