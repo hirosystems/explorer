@@ -8,9 +8,18 @@ import { parseCookies } from 'nookies';
 import getConfig from 'next/config';
 import { selectNetwork, setNetworks, setEnv } from '@store/ui/actions';
 import { COLOR_MODE_COOKIE, NETWORK_COOKIE } from '@common/utils';
+import * as Sentry from '@sentry/node';
+import Error from 'next/error';
+
+Sentry.init({
+  enabled: process.env.NODE_ENV === 'production',
+  dsn: process.env.SENTRY_DSN,
+  release: `${process.env.SENTRY_PROJECT}@${process.env.npm_package_version}`,
+});
 
 interface MyAppProps {
   colorMode?: 'light' | 'dark';
+  err: Error;
 }
 
 // @ts-ignore
@@ -51,11 +60,14 @@ class MyApp extends App<MyAppProps & ReduxWrapperAppProps<RootState>> {
   }
 
   render() {
-    const { Component, pageProps, colorMode, store } = this.props;
+    // Workaround for https://github.com/zeit/next.js/issues/8592
+    const { Component, pageProps, colorMode, store, err } = this.props;
+    const modifiedPageProps = { ...pageProps, err };
+
     return (
       <Provider store={store}>
         <AppWrapper colorMode={colorMode}>
-          <Component {...pageProps} />
+          <Component {...modifiedPageProps} />
         </AppWrapper>
       </Provider>
     );

@@ -8,6 +8,8 @@ import { SearchBarWithDropdown } from '@components/search-bar';
 import NextLink from 'next/link';
 import { Meta } from '@components/meta-head';
 import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
+import * as Sentry from '@sentry/node';
+import Error from 'next/error';
 
 const Link = ({ href, target, ...rest }: { href?: string; target?: string } & BoxProps) => {
   return (
@@ -27,8 +29,24 @@ const Link = ({ href, target, ...rest }: { href?: string; target?: string } & Bo
   );
 };
 
-const Error = ({ statusCode }: { statusCode?: number }) => {
+const ExplorerError = ({
+  statusCode,
+  hasGetInitialPropsRun,
+  err,
+}: {
+  statusCode?: number;
+  hasGetInitialPropsRun?: boolean;
+  err?: Error;
+}) => {
+  if (!hasGetInitialPropsRun && err) {
+    // getInitialProps is not called in case of
+    // https://github.com/zeit/next.js/issues/8592. As a workaround, we pass
+    // err via _app.js so it can be captured
+    Sentry.captureException(err);
+  }
+
   const navigateToRandomTx = useNavigateToRandomTx();
+
   return (
     <PageWrapper>
       <Meta title={`Whoops! - Stacks Explorer`} />
@@ -78,9 +96,44 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
   );
 };
 
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  return { statusCode };
+ExplorerError.getInitialProps = async ({
+  res,
+  err,
+  pathname,
+  query,
+  AppTree,
+  isServer,
+  store,
+}: NextPageContext) => {
+  const errorInitialProps = await Error.getInitialProps({
+    res,
+    err,
+    pathname,
+    query,
+    AppTree,
+    isServer,
+    store,
+  });
+
+  // Workaround for https://github.com/zeit/next.js/issues/8592, mark when
+  // getInitialProps has run
+  // @ts-ignore
+  errorInitialProps.hasGetInitialPropsRun = true;
+
+  if (res && res.statusCode === 404) {
+    return { statusCode: 404 };
+  } else if (err) {
+    Sentry.captureException(err);
+  } else {
+    Sentry.captureException(
+      new Error({
+        statusCode: 400,
+        title: `_error.js getInitialProps missing data at path: ${pathname}`,
+      })
+    );
+  }
+
+  return errorInitialProps;
 };
 
-export default Error;
+export default ExplorerError;
