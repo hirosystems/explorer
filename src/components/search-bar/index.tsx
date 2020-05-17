@@ -2,7 +2,6 @@ import * as React from 'react';
 import { forwardRef, Ref } from 'react';
 import { Box, Input, Text } from '@blockstack/ui';
 import { MagnifyingGlass } from '../icons/magnifying-glass';
-import { useFocus, useHover } from 'use-events';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import debounce from 'just-debounce-it';
 import { SearchBarProps, ErrorType } from '@components/search-bar/types';
@@ -108,10 +107,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [error, setError] = React.useState<ErrorType | undefined>(undefined);
   const [query, setQuery] = React.useState<string>('');
-  const [isHovered, hoverBind] = useHover();
-  const [isFocused, focusBind] = useFocus();
   const transactions = useRecentlyViewedTx();
-  const visible = transactions?.length && (isHovered || isFocused);
 
   const hideDropDown = () => {
     inputRef?.current?.blur();
@@ -166,8 +162,10 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
       }}
       wrapperProps={{
         width: '100%',
+        pt: 'base',
         maxWidth: ['100%', '100%', '544px'],
       }}
+      showOnFocus
       items={transactions}
       itemComponent={RecentlyViewedListItem}
       onItemClick={(option: Transaction) => router.push('/txid/[txid]', `/txid/${option.tx_id}`)}
@@ -195,7 +193,6 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
           // @ts-ignore
           ref={inputRef}
           {...props}
-          {...focusBind}
         />
       </Box>
     </Popover>

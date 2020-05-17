@@ -7,14 +7,19 @@ import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';
 import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
 import BigNum from 'bn.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
+import { RootState } from '@store';
+import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 
 export const TokenTransfer = (props: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const { identity } = useDebugState();
   const dispatch = useDispatch();
+  const { apiServer } = useSelector((state: RootState) => ({
+    apiServer: selectCurrentNetworkUrl(state),
+  }));
   const initialValues = {
     senderKey: identity?.privateKey,
     recipient: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
@@ -34,7 +39,7 @@ export const TokenTransfer = (props: any) => {
         recipient,
         amount: new BigNum(amount),
         memo,
-        network,
+        network: network(apiServer as string),
       });
       console.log('tx', tx);
 

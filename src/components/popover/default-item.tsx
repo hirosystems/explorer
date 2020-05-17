@@ -11,6 +11,7 @@ export const PopoverItem = ({
   onClick,
   focused,
   active,
+  placement,
   ...rest
 }: any) => {
   const [localFocus, setLocalFocus] = React.useState<boolean>(false);
@@ -62,6 +63,7 @@ export const PopoverItem = ({
       onFocus={handleFocus}
       onBlur={handleBlur}
       ref={ref}
+      textAlign={placement === 'right' ? 'right' : 'left'}
     >
       <Text fontSize="14px" color={active ? 'var(--colors-accent)' : 'var(--colors-text-body)'}>
         {option.label}
