@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@blockstack/ui';
+import { Box, BoxProps } from '@blockstack/ui';
 import { Text } from '@components/typography';
 import { Popover } from '@components/popover/popover';
 import { NetworkOptions } from '@store/ui';
@@ -7,9 +7,12 @@ import { selectNetwork } from '@store/ui/actions';
 import { selectCurrentNetwork } from '@store/ui/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store';
+import { useToast } from '@common/hooks/use-toast';
+import { NETWORK_COOKIE, networkStorage } from '@common/utils';
 
-export const TestnetSelector = () => {
+export const TestnetSelector = (props: BoxProps) => {
   const ref = React.useRef(null);
+  const { addPositiveToast } = useToast();
   const { selected } = useSelector((state: RootState) => ({
     selected: selectCurrentNetwork(state),
   }));
@@ -18,6 +21,11 @@ export const TestnetSelector = () => {
 
   const handleSelectApiServer = ({ value }: { value: NetworkOptions }) => {
     dispatch(selectNetwork(value));
+    networkStorage.set(NETWORK_COOKIE, value);
+    addPositiveToast({
+      message: 'Network changed!',
+      description: `You are now using the ${value === 'MOCKNET' ? 'mocknet' : 'testnet'} server.`,
+    });
   };
 
   const items = [
@@ -28,23 +36,21 @@ export const TestnetSelector = () => {
   const activeItem = items.findIndex(item => item.value === selected);
 
   return (
-    <Box ml="auto">
+    <Box {...props}>
       <Popover
         items={items}
         activeItem={activeItem}
         triggerRef={ref}
-        cardProps={{
+        wrapperProps={{
           minWidth: '180px',
-          textAlign: 'right',
-          right: 0,
         }}
+        placement="right"
         onItemClick={handleSelectApiServer}
       >
         <Box
           _hover={{
             cursor: 'pointer',
           }}
-          py="tight"
           ref={ref}
         >
           <Text>{items[activeItem].label}</Text>

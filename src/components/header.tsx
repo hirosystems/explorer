@@ -41,7 +41,9 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
       width="100%"
       justifyContent={isHome ? 'space-between' : 'unset'}
       pl={['unset', 'unset', 'base-loose']}
+      pr={!isHome ? ['unset', 'unset', '52px'] : 'unset'}
       maxWidth={isHome ? 'unset' : '1280px'}
+      align="center"
     >
       {!isHome ? (
         <SearchBarWithDropdown
@@ -52,9 +54,8 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
           height="40px"
           maxWidth={['100%', '100%', '544px']}
         />
-      ) : (
-        <TestnetSelector />
-      )}
+      ) : null}
+      <TestnetSelector ml="auto" />
     </Flex>
   </HeaderBar>
 );

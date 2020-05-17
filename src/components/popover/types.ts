@@ -11,10 +11,13 @@ export interface PopoverProps extends BoxProps {
   label?: string;
   triggerRef: Ref<any>;
   hideItems?: boolean;
+  showOnFocus?: boolean;
   activeItem?: number;
+  placement?: 'left' | 'right';
 }
 
 export interface UsePopoverProps {
   length: number;
   triggerRef: any;
+  showOnFocus?: boolean;
 }
