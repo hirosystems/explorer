@@ -44,7 +44,6 @@ export const Popover = ({
   return (
     <Box width="100%" position="relative" {...bindHover} {...rest}>
       <Box
-        tabIndex={0}
         style={{
           outline: 'none',
         }}

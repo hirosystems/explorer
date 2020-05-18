@@ -6,12 +6,12 @@ const selectConfigSlice = (state: RootState) => state.ui.config;
 
 export const selectToasts = createSelector(selectUiSlice, state => state.toasts);
 export const selectNetworks = createSelector(selectConfigSlice, state => state.network);
-export const selectCurrentNetwork = createSelector(
+export const selectCurrentNetworkName = createSelector(
   selectConfigSlice,
   state => state.selectedNetwork
 );
 export const selectCurrentNetworkUrl = createSelector(
-  [selectNetworks, selectCurrentNetwork],
+  [selectNetworks, selectCurrentNetworkName],
   (networks, selectedNetwork) => {
     return networks[selectedNetwork];
   }
