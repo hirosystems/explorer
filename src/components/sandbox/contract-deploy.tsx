@@ -18,6 +18,7 @@ import { useTxToast } from '@common/sandbox';
 import { Popover } from '@components/popover/popover';
 import { RootState } from '@store';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+import { useConfigState } from '@common/hooks/use-config-state';
 
 const Sample = (props: any) => {
   const [value, setValue] = React.useState(0);
@@ -69,9 +70,7 @@ export const ContractDeploy = (props: any) => {
   const showToast = useTxToast();
   const dispatch = useDispatch();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
+  const { apiServer } = useConfigState();
 
   const initialValues = {
     senderKey: identity?.privateKey,
