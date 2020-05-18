@@ -7,6 +7,9 @@ import { deserializeCV, addressToString } from '@blockstack/stacks-transactions'
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
 import BN from 'bn.js';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 export const store = engine.createStore([lclStorage]);
 export const identityStorage = engine.createStore([cookieStorage]);
@@ -184,3 +187,5 @@ export const clarityValuetoHumanReadable = (value: any) => {
     return (deserializeAsset.buffer as Buffer).toString();
   }
 };
+
+export const toRelativeTime = (ts: number) => dayjs().to(ts);
