@@ -3,7 +3,7 @@ import { Box, BoxProps, Flex, FlexProps } from '@blockstack/ui';
 
 import { Header } from '@components/header';
 import { TransactionTitle, TitleProps } from '@components/transaction-title';
-import { FooterLinks } from '@components/footer-links';
+import { Footer } from '@components/footer';
 import { Notice } from '@components/notice';
 
 export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
@@ -32,7 +32,7 @@ export const Page = ({
     >
       {children}
     </Flex>
-    <FooterLinks
+    <Footer
       mx="auto"
       width="100%"
       maxWidth="1280px"
