@@ -87,7 +87,7 @@ export const doGenerateIdentity = async () => {
   };
 };
 
-export const network = (apiServer: string) => ({
+export const network = (apiServer: string): StacksNetwork => ({
   version: TransactionVersion.Testnet,
   chainId: ChainID.Testnet,
   coreApiUrl: withApiServer(apiServer)(),

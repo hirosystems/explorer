@@ -11,6 +11,7 @@ import {
   makeSmartContractDeploy,
   makeStandardSTXPostCondition,
   FungibleConditionCode,
+  StacksNetwork,
 } from '@blockstack/stacks-transactions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
@@ -79,12 +80,12 @@ export const ContractDeploy = (props: any) => {
     fee: 2000,
   };
 
-  const onSubmit = async ({ senderKey, contractName, codeBody, fee, memo }: any) => {
+  const onSubmit = async ({ senderKey, contractName, codeBody, fee }: any) => {
     const address = identity?.address;
     if (!address) return;
     try {
       doStartLoading();
-      await dispatch(fetchAccount(identity?.address));
+      await dispatch(fetchAccount(identity?.address as string));
 
       // hardcode some post conditions for now :)
       const postConditions = [
