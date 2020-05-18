@@ -4,19 +4,17 @@ import { Text } from '@components/typography';
 import { Popover } from '@components/popover/popover';
 import { NetworkOptions } from '@store/ui';
 import { selectNetwork } from '@store/ui/actions';
-import { selectCurrentNetwork } from '@store/ui/selectors';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@store';
+
+import { useDispatch } from 'react-redux';
+import { useConfigState } from '@common/hooks/use-config-state';
 import { useToast } from '@common/hooks/use-toast';
 import { IS_DEV } from '@common/constants';
 import { NETWORK_COOKIE, networkStorage } from '@common/utils';
 
 export const TestnetSelector = (props: BoxProps) => {
-  const ref = React.useRef(null);
+  const ref = React.useRef<any | null>(null);
   const { addPositiveToast } = useToast();
-  const { selected } = useSelector((state: RootState) => ({
-    selected: selectCurrentNetwork(state),
-  }));
+  const { selectedNetwork } = useConfigState();
 
   const dispatch = useDispatch();
 
@@ -29,19 +27,17 @@ export const TestnetSelector = (props: BoxProps) => {
     });
   };
 
-  const items = [
-    { label: 'Testnet', value: 'TESTNET' },
-    { label: 'Mocknet', value: 'MOCKNET' },
-  ];
+  const items = [{ label: 'Testnet', value: 'TESTNET' }];
 
   if (IS_DEV) {
+    items.push({ label: 'Mocknet', value: 'MOCKNET' });
     items.push({
       label: 'Localhost',
       value: 'LOCAL',
     });
   }
 
-  const activeItem = items.findIndex(item => item.value === selected);
+  const activeItem = items.findIndex(item => item.value === selectedNetwork);
 
   return (
     <Box {...props}>
@@ -54,10 +50,11 @@ export const TestnetSelector = (props: BoxProps) => {
         }}
         placement="right"
         onItemClick={handleSelectApiServer}
+        hideItems={items?.length < 2}
       >
         <Box
           _hover={{
-            cursor: 'pointer',
+            cursor: items?.length < 2 ? 'unset' : 'pointer',
           }}
           ref={ref}
         >
