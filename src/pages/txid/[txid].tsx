@@ -5,7 +5,7 @@ import { ReduxNextPageContext } from '@common/types/next-store';
 import { useTransactionState } from '@common/hooks/use-transaction-state';
 import { useMostRecentTxId } from '@common/hooks/use-most-recent-tx';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
-import { truncateMiddle } from '@common/utils';
+import { truncateMiddle, toRelativeTime } from '@common/utils';
 import { useDispatch } from 'react-redux';
 import { PageWrapper } from '@components/page';
 import { Meta } from '@components/meta-head';
@@ -16,7 +16,7 @@ import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
 import { getTxTypeName } from '@common/transaction-names';
-import * as timeago from 'timeago.js';
+
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'coinbase':
@@ -46,7 +46,7 @@ const TransactionMeta = ({ transaction }: any) => {
   const labels = [
     {
       label: 'Confirmation',
-      data: `${timeago.format(transaction?.burn_block_time * 1000)}, in block #${
+      data: `${toRelativeTime(transaction?.burn_block_time * 1000)}, in block #${
         transaction.block_height
       }`,
     },

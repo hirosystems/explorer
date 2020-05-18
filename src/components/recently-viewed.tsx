@@ -1,10 +1,8 @@
 import React from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { useHover, useFocus } from 'use-events';
 import { Flex, Box, BlockstackIcon, FlexProps, BoxProps, useEventListener } from '@blockstack/ui';
 import { Tag } from '@components/tags';
-import { microToStacks, truncateMiddle } from '@common/utils';
+import { microToStacks, truncateMiddle, toRelativeTime } from '@common/utils';
 import { Transaction, TransactionType } from '@models/transaction.interface';
 import { Caption, Title } from '@components/typography';
 import { getContractName } from '@common/utils';
@@ -26,8 +24,6 @@ export const ItemIcon = React.memo(({ type, ...rest }: { type: Transaction['tx_t
       );
   }
 });
-
-dayjs.extend(relativeTime);
 
 export interface RecentlyViewedProps extends FlexProps {
   transactions: Transaction[];
@@ -56,7 +52,7 @@ const getTitle = (transaction: Transaction) => {
 };
 
 const getCaption = (tx: Transaction) => {
-  const date = dayjs().to((tx as any).viewedDate);
+  const date = toRelativeTime((tx as any).viewedDate);
   const truncatedId = truncateMiddle(tx.tx_id, 4);
   switch (tx.tx_type) {
     case 'smart_contract':
