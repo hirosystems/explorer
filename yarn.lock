@@ -1374,12 +1374,12 @@
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
 
-"@blockstack/ui@^1.5.0-beta.8":
-  version "1.5.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.5.0-beta.8.tgz#04ee2dbff4d4558c922e24002af35201268ee5b2"
-  integrity sha512-ZDn66TL6BB/kNDJQ0HvsmkmkFjZ4ZDW4ZiwB3gva6FpFpeUtH0kGp3zp9iJ5XpaLvdJhQtYsgAE1t/5ElcozEQ==
+"@blockstack/ui@^1.6.1-beta.0":
+  version "1.6.1-beta.0"
+  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.6.1-beta.0.tgz#c231514eed78c02f7228d054800b536ea7513382"
+  integrity sha512-z2VLR/0yN4o6DoVGlDO2owWGkoi0kDr9eMRm7xDZE1/maRbc643RAa3ZAVquQ1/Xkd6r5sRh+7Fuj6D8E6WUEA==
   dependencies:
-    "@popperjs/core" "^2.3.3"
+    "@popperjs/core" "^2.4.0"
     "@reach/alert" "^0.10.2"
     "@reach/auto-id" "^0.10.0"
     "@reach/rect" "^0.10.2"
@@ -1392,6 +1392,7 @@
     "@types/styled-system__should-forward-prop" "^5.1.1"
     color "3.1.2"
     flushable "^1.0.0"
+    prettier "^2.0.5"
     prism-react-renderer "^1.0.2"
     prismjs "^1.20.0"
     prop-types "^15.7.2"
@@ -1599,6 +1600,11 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.3.3.tgz#8731722aeb7330e8fd9eb5d424be6b98dea7d6da"
   integrity sha512-yEvVC8RfhRPkD9TUn7cFcLcgoJePgZRAOR7T21rcRY5I8tpuhzeWfGa7We7tB14fe9R7wENdqUABcMdwD4SQLw==
+
+"@popperjs/core@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.0.tgz#0e1bdf8d021e7ea58affade33d9d607e11365915"
+  integrity sha512-NMrDy6EWh9TPdSRiHmHH2ye1v5U0gBD7pRYwSwJvomx7Bm4GG04vu63dYiVzebLOx2obPpJugew06xVP0Nk7hA==
 
 "@reach/alert@^0.10.2":
   version "0.10.2"
