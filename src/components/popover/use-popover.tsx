@@ -5,8 +5,8 @@ import { useFocus } from 'use-events';
 import { UsePopoverProps } from '@components/popover/types';
 
 export const usePopover = ({ length, triggerRef }: UsePopoverProps) => {
-  const timeoutRef = React.useRef<number | undefined>(undefined);
-  const removeFocusRef = React.useRef<number | undefined>(undefined);
+  const timeoutRef = React.useRef<number | null>(null);
+  const removeFocusRef = React.useRef<number | null>(null);
   const [isVisible, setVisible] = useState(false);
   const [isHovered, setHovered] = useState(false);
   const [hoverDelay, setHoverDelay] = useState(false);

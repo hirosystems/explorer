@@ -46,7 +46,7 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
   const { tx } = useSelector((state: RootState) => ({
     tx: selectTransaction(txid)(state) as Transaction,
   }));
-  const loadingRef = React.useRef<number | undefined>(undefined);
+  const loadingRef = React.useRef<number | null>(null);
   const handleFetch = React.useCallback(async () => {
     if (!localFetchLoading) {
       setLocalFetchLoading(true);
@@ -60,7 +60,7 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
 
   React.useEffect(() => {
     handleFetch().then(() => null);
-    return () => clearTimeout(loadingRef.current);
+    return () => (loadingRef.current ? clearTimeout(loadingRef.current) : undefined);
   }, []);
 
   const Icon = tx?.tx_type === 'smart_contract' ? DefaultContract : BlockstackIcon;
@@ -133,7 +133,7 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
 
 export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: any) => {
   const { transactions } = useDebugState();
-  const ref = React.useRef(null);
+  const ref = React.useRef<any | null>(null);
   useOnClickOutside(ref, hide);
   return (
     <Transition
