@@ -40,12 +40,12 @@ const GenericMessage = ({ value }: { value?: string }) => (
 );
 
 export const TxNotFound = ({ refresh }: { refresh: (query?: string) => Promise<any> }) => {
-  const buttonRef = React.useRef();
+  const buttonRef = React.useRef<any | null>(null);
   const { query } = useRouter();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
   const { addCriticalToast } = useToast();
-  const refreshTimer = React.useRef<any>(false);
-  const toastTimer = React.useRef<any>(false);
+  const refreshTimer = React.useRef<any | null>(null);
+  const toastTimer = React.useRef<any | null>(null);
   const [validity, setValidity] = React.useState<
     { valid: boolean; type?: 'contract' | 'txid' } | undefined
   >();

@@ -81,7 +81,7 @@ export const RecentlyViewedListItem = ({
 }: RecentlyViewedListItemProps) => {
   const [isHovered, bindHover] = useHover();
   const [isFocused, bindFocus] = useFocus();
-  const ref = React.useRef<HTMLDivElement | undefined>(null);
+  const ref = React.useRef<HTMLDivElement | null>(null);
   const [localFocus, setLocalFocus] = React.useState<boolean>(false);
 
   const handleFocus = (e?: React.FocusEvent) => {
