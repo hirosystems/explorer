@@ -1,4 +1,5 @@
 import * as React from 'react';
+import BigNum from 'bn.js';
 import { Formik } from 'formik';
 import { Flex, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
@@ -6,20 +7,17 @@ import { useDebugState, network } from '@common/sandbox';
 import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';
 import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
-import BigNum from 'bn.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
-import { RootState } from '@store';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+
+import { useConfigState } from '@common/hooks/use-config-state';
 
 export const TokenTransfer = (props: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const { identity } = useDebugState();
   const dispatch = useDispatch();
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
+  const { apiServer } = useConfigState();
   const initialValues = {
     senderKey: identity?.privateKey,
     recipient: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
