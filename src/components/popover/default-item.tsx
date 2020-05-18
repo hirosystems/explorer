@@ -16,7 +16,7 @@ export const PopoverItem = ({
   const [localFocus, setLocalFocus] = React.useState<boolean>(false);
 
   const [focus, focusBind] = useFocus();
-  const ref = React.useRef<HTMLDivElement | undefined>(null);
+  const ref = React.useRef<HTMLDivElement | null>(null);
 
   const handleFocus = (e?: React.FocusEvent) => {
     e?.preventDefault();
