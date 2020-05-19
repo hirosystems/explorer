@@ -13,14 +13,18 @@ import { RootState } from '@store';
 
 export const ContractCall = (props: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
-  const [contract, setContractName] = React.useState<string | undefined>(undefined);
+  const [contractName, setContractName] = React.useState<string | undefined>(undefined);
+  const [contractAddress, setAddress] = React.useState<string | undefined>(undefined);
   const [error, setError] = React.useState<string | undefined>(undefined);
 
   const dispatch = useDispatch();
 
+  const fullyRealizedName =
+    contractAddress && contractName ? contractAddress + '.' + contractName : '';
+
   const { abi } = useSelector((state: RootState) => ({
-    abi: selectContractAbi(contract || '')(state),
-    code: selectContractSource(contract || '')(state),
+    abi: selectContractAbi(fullyRealizedName)(state),
+    code: selectContractSource(fullyRealizedName)(state),
   }));
 
   const initialValues = {
@@ -33,7 +37,8 @@ export const ContractCall = (props: any) => {
       setError('Check your fields, please.');
       return;
     }
-    setContractName(contractAddress + '.' + contractName);
+    setContractName(contractName);
+    setAddress(contractAddress);
     try {
       setError(undefined);
       doStartLoading();
@@ -48,7 +53,14 @@ export const ContractCall = (props: any) => {
   const funcs = abi
     ? // @ts-ignore
       JSON.parse(abi as any).functions.map((func: any) => {
-        return <Function func={func} key={func.name} />;
+        return (
+          <Function
+            contractName={contractName as string}
+            contractAddress={contractAddress as string}
+            func={func}
+            key={func.name}
+          />
+        );
       })
     : null;
 

@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Flex, Button, Stack } from '@blockstack/ui';
+import { ClarityFunctionArg, network } from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
-
+import { abiFunctionToString, makeContractCall } from '@blockstack/stacks-transactions';
 import { Formik } from 'formik';
-
 import { Text } from '@components/typography';
-import { FieldBase } from '@components/sandbox/common';
+import { Field } from '@components/sandbox/common';
 import { Card } from '@components/card';
+import { valueToClarityValue } from '@common/sandbox';
+import { useConfigState } from '@common/hooks/use-config-state';
+import { useLoading } from '@common/hooks/use-loading';
+import { useDebugState } from '@common/sandbox';
+import { useDispatch } from 'react-redux';
+import { broadcastTransaction } from '@store/sandbox';
 
 interface FunctionProps {
   func: ContractInterfaceFunction;
-  contractName?: string;
-  contractAddress?: string;
+  contractName: string;
+  contractAddress: string;
 }
 
 interface Arg extends ContractInterfaceFunctionArg {
@@ -43,12 +49,7 @@ const Arguments = ({ args, state, ...rest }: any) =>
         const argType = typeof arg.type === 'string' ? arg.type : 'buffer';
         return (
           <Box key={argKey} mb={2} {...rest}>
-            <FieldBase
-              // @ts-ignore
-              field={{
-                value: arg.value,
-                name: arg.name,
-              }}
+            <Field
               name={arg.name}
               placeholder={argType}
               label={
@@ -85,10 +86,14 @@ const ArgumentsForm = ({ state, loading, onSubmit }: any) => (
   </Formik>
 );
 
-export const Function = ({ func }: FunctionProps) => {
+export const Function = ({ func, contractAddress, contractName }: FunctionProps) => {
   const [state, setState] = React.useState<FormState>({});
-  const [result, setResult] = React.useState<any>(null);
-  const [loading, setLoading] = React.useState(false);
+  const { isLoading, doStartLoading, doFinishLoading } = useLoading();
+  const [result, setResult] = useState<string | undefined>(undefined);
+
+  const dispatch = useDispatch();
+  const { apiServer } = useConfigState();
+  const { identity } = useDebugState();
 
   React.useEffect(() => {
     const newState: FormState = {};
@@ -101,6 +106,30 @@ export const Function = ({ func }: FunctionProps) => {
     setState(newState);
   }, [func.name]);
 
+  const valuesToClarityArray = (values: any) =>
+    Object.keys(values).map(name =>
+      valueToClarityValue(values[name], state[name] as ClarityFunctionArg)
+    );
+
+  const onSubmit = React.useCallback(
+    async (values: any) => {
+      doStartLoading();
+      const functionArgs = valuesToClarityArray(values);
+
+      const tx = await makeContractCall({
+        contractAddress,
+        contractName,
+        functionName: func.name,
+        functionArgs,
+        senderKey: identity?.privateKey as string,
+        network: network(apiServer as string),
+      });
+
+      doFinishLoading();
+    },
+    [state]
+  );
+
   return (
     <Card p="base" width="100%" mb={6}>
       <Stack spacing="base">
@@ -111,7 +140,7 @@ export const Function = ({ func }: FunctionProps) => {
           <TypeLabel ml="extra-tight">{func.access} function</TypeLabel>
         </Flex>
         {func.access === 'public' ? (
-          <ArgumentsForm state={state} loading={loading} onSubmit={() => console.log('submit')} />
+          <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
         ) : null}
         {result && <Text>Result: {result}</Text>}
       </Stack>
