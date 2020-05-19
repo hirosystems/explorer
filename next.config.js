@@ -11,6 +11,7 @@ module.exports = withBundleAnalyzer({
   serverRuntimeConfig: {
     MOCKNET_API_SERVER: process.env.MOCKNET_API_SERVER,
     TESTNET_API_SERVER: process.env.TESTNET_API_SERVER,
+    STAGING: process.env.STAGING,
   },
   webpack(config, { dev }) {
     if (!dev) {

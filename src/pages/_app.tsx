@@ -6,7 +6,7 @@ import { RootState, initStore } from '@store';
 import { AppWrapper } from '@components/app-init';
 import { parseCookies } from 'nookies';
 import getConfig from 'next/config';
-import { selectNetwork, setNetworks } from '@store/ui/actions';
+import { selectNetwork, setNetworks, setEnv } from '@store/ui/actions';
 import { COLOR_MODE_COOKIE, NETWORK_COOKIE } from '@common/utils';
 
 interface MyAppProps {
@@ -17,7 +17,7 @@ interface MyAppProps {
 class MyApp extends App<MyAppProps & ReduxWrapperAppProps<RootState>> {
   static async getInitialProps({ Component, ctx }: AppContext) {
     const { serverRuntimeConfig } = getConfig();
-    const { MOCKNET_API_SERVER, TESTNET_API_SERVER } = serverRuntimeConfig;
+    const { MOCKNET_API_SERVER, TESTNET_API_SERVER, STAGING } = serverRuntimeConfig;
 
     let colorMode = undefined;
     let apiServer = undefined;
@@ -29,6 +29,10 @@ class MyApp extends App<MyAppProps & ReduxWrapperAppProps<RootState>> {
           TESTNET: TESTNET_API_SERVER,
         })
       );
+      if (STAGING) {
+        await ctx.store.dispatch(setEnv('STAGING'));
+      }
+
       const cookies = parseCookies(ctx);
 
       if (cookies) {

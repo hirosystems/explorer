@@ -1,6 +1,15 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { doAddToast, doRemoveToast, appTime, setNetworks, selectNetwork } from '@store/ui/actions';
+import {
+  doAddToast,
+  doRemoveToast,
+  appTime,
+  setNetworks,
+  selectNetwork,
+  setEnv,
+} from '@store/ui/actions';
 import { ToastType } from '@blockstack/ui';
+
+export type Environment = 'STAGING' | 'DEV' | undefined;
 
 export interface Network {
   MOCKNET?: string;
@@ -14,6 +23,7 @@ export interface UiState {
   config: {
     network: Network;
     selectedNetwork: NetworkOptions;
+    env: Environment;
   };
 }
 
@@ -27,15 +37,16 @@ const initialState: UiState = {
       LOCAL: 'http://localhost:3999',
     },
     selectedNetwork: 'TESTNET',
+    env: undefined,
   },
 };
 
 export const uiReducer = createReducer(initialState, builder => {
+  builder.addCase(setEnv, (state, action) => {
+    state.config.env = action.payload;
+  });
   builder.addCase(setNetworks, (state, action) => {
-    state.config.network = {
-      ...state.config.network,
-      ...action.payload,
-    };
+    Object.assign(state.config.network, action.payload);
   });
   builder.addCase(selectNetwork, (state, action) => {
     state.config.selectedNetwork = action.payload;
@@ -48,7 +59,7 @@ export const uiReducer = createReducer(initialState, builder => {
     // @ts-ignore
     state.toasts = state.toasts.filter(({ id }) => id !== action.payload);
   });
-  builder.addCase(appTime, (state, action) => {
+  builder.addCase(appTime, state => {
     // @ts-ignore
     state.appTime = Math.round(new Date().getTime() / 1000);
   });
