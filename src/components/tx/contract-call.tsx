@@ -63,7 +63,7 @@ const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: 
                           placement="bottom"
                           label={Object.keys(abiData.args[key].type)[0].toString()}
                         >
-                          <Text>{clarityValuetoHumanReadable(arg.toString())}</Text>
+                          <Text>{clarityValuetoHumanReadable(arg)}</Text>
                         </Tooltip>
                       </Box>
                     </Box>

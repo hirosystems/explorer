@@ -9,7 +9,25 @@ import {
   privateKeyToString,
   pubKeyfromPrivKey,
   publicKeyToString,
+  ClarityValue,
+  ClarityAbiType,
+  isClarityAbiPrimitive,
+  isClarityAbiBuffer,
+  isClarityAbiResponse,
+  isClarityAbiOptional,
+  isClarityAbiTuple,
+  isClarityAbiList,
+  abiFunctionToString,
+  uintCV,
+  intCV,
+  trueCV,
+  falseCV,
+  standardPrincipalCV,
+  bufferCVFromString,
+  getTypeString,
+  StacksTestnet,
 } from '@blockstack/stacks-transactions';
+
 import { useSelector } from 'react-redux';
 import {
   selectAccountBalance,
@@ -27,6 +45,11 @@ import { fetchFromSidecar } from '@common/api/fetch';
 import { useToast } from '@common/hooks/use-toast';
 import { truncateMiddle } from '@common/utils';
 import { useRouter } from 'next/router';
+
+export interface ClarityFunctionArg {
+  name: string;
+  type: ClarityAbiType;
+}
 
 export const useTxToast = () => {
   const router = useRouter();
@@ -87,14 +110,11 @@ export const doGenerateIdentity = async () => {
   };
 };
 
-export const network = (apiServer: string): StacksNetwork => ({
-  version: TransactionVersion.Testnet,
-  chainId: ChainID.Testnet,
-  coreApiUrl: withApiServer(apiServer)(),
-  broadcastApiUrl: withApiServer(apiServer)('/v2/transactions'),
-  transferFeeEstimateApiUrl: withApiServer(apiServer)('/v2/fees/transfer'),
-  balanceApiUrl: withApiServer(apiServer)('/v2/accounts'),
-});
+export const network = (apiServer: string): StacksNetwork => {
+  const txNetwork = new StacksTestnet();
+  txNetwork.coreApiUrl = withApiServer(apiServer)();
+  return txNetwork;
+};
 
 export const fetchContractInterface = (apiServer: string) => async (
   contractAddress: string,
@@ -102,4 +122,28 @@ export const fetchContractInterface = (apiServer: string) => async (
 ) => {
   const res = await fetchFromSidecar(apiServer)(`/contract/${contractAddress}.${contractName}`);
   return res.json();
+};
+
+export const valueToClarityValue = (answer: any, arg: ClarityFunctionArg): ClarityValue => {
+  const { type } = arg;
+  const typeString = getTypeString(type);
+  const error = Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
+
+  if (isClarityAbiPrimitive(type)) {
+    switch (type) {
+      case 'bool':
+        return answer == 'True' ? trueCV() : falseCV();
+      case 'int128':
+        return intCV(answer);
+      case 'principal':
+        return standardPrincipalCV(answer);
+      case 'uint128':
+        return uintCV(answer);
+      default:
+        throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
+    }
+  } else if (isClarityAbiBuffer(type)) {
+    return bufferCVFromString(answer);
+  }
+  throw error;
 };

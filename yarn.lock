@@ -1329,10 +1329,10 @@
     sha.js "^2.4.11"
     smart-buffer "^4.1.0"
 
-"@blockstack/stacks-transactions@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.4.0.tgz#a85665b643b12c65bba057dd5a1750a4a0cef1e0"
-  integrity sha512-nrMpPqaeHjprbOoYg02sO8UN/T5UmdsyeT4YyDPvebKYTE1muSzNbO3GKUQi1kdZUS3iyIUTjNNFBbeoEXpzZg==
+"@blockstack/stacks-transactions@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.4.3.tgz#3d3cdad2fd91bb0a96129cad1f1df4a424f55ce4"
+  integrity sha512-ejv3A6Ifa0tZ8DV+LQMhKcZ4uu7H4rIoIHOOAqCY3avwuiFS2EyYbSADf7+weV0uvY6mgkP2fzZXQMuh4Q+IUw==
   dependencies:
     "@types/bn.js" "^4.11.6"
     "@types/elliptic" "^6.4.12"

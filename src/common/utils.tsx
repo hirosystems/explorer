@@ -175,17 +175,19 @@ export const clarityValuetoHumanReadable = (value: any) => {
   if (value && value.repr) {
     return value.repr;
   }
-  const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
-
-  if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {
-    return addressToString(deserializeAsset.address);
-  }
-  if (deserializeAsset.type === 1 && 'value' in deserializeAsset) {
-    return (deserializeAsset.value as BN).toString();
-  }
-  if (deserializeAsset.type === 2 && 'buffer' in deserializeAsset) {
-    return (deserializeAsset.buffer as Buffer).toString();
-  }
+  console.log('clarity: ', value);
+  return 'need to fix';
+  // const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
+  //
+  // if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {
+  //   return addressToString(deserializeAsset.address);
+  // }
+  // if (deserializeAsset.type === 1 && 'value' in deserializeAsset) {
+  //   return (deserializeAsset.value as BN).toString();
+  // }
+  // if (deserializeAsset.type === 2 && 'buffer' in deserializeAsset) {
+  //   return (deserializeAsset.buffer as Buffer).toString();
+  // }
 };
 
 export const toRelativeTime = (ts: number) => dayjs().to(ts);
