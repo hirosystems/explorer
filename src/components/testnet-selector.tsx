@@ -8,7 +8,7 @@ import { selectNetwork } from '@store/ui/actions';
 import { useDispatch } from 'react-redux';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useToast } from '@common/hooks/use-toast';
-import { IS_DEV } from '@common/constants';
+import { IS_DEV, IS_STAGING } from '@common/constants';
 import { NETWORK_COOKIE, networkStorage } from '@common/utils';
 
 export const TestnetSelector = (props: BoxProps) => {
@@ -29,7 +29,7 @@ export const TestnetSelector = (props: BoxProps) => {
 
   const items = [{ label: 'Testnet', value: 'TESTNET' }];
 
-  if (IS_DEV) {
+  if (IS_DEV || IS_STAGING) {
     items.push({ label: 'Mocknet', value: 'MOCKNET' });
     items.push({
       label: 'Localhost',
