@@ -17,7 +17,6 @@ let errorCount = 0;
 export const setIdentity = createAction<IdentityPayload>('account/identity/set');
 export const generateIdentity = createAsyncThunk<IdentityPayload>(
   'account',
-  // @ts-ignore
   async (thing, { dispatch }) => {
     const identity = await doGenerateIdentity();
     identityStorage.set('debug_identity', identity);
@@ -40,10 +39,8 @@ export const eraseIdentity = createAction('account/identity/erase');
 
 export const fetchAccount = createAsyncThunk<AccountPayload, string>(
   'account/fetch',
-  // @ts-ignore
   async (principal, { rejectWithValue, dispatch, getState }) => {
-    // @ts-ignore
-    const apiServer = selectCurrentNetworkUrl(getState());
+    const apiServer = selectCurrentNetworkUrl(getState() as any) as string;
     try {
       const resp = await fetchFromApi(apiServer)(`/v2/accounts/${principal}`, {
         credentials: 'omit',
@@ -87,56 +84,49 @@ export const fetchAccount = createAsyncThunk<AccountPayload, string>(
   }
 );
 
-export const requestFaucetFunds = createAsyncThunk<Account, string>(
-  'account/faucet',
-  // @ts-ignore
-  async (principal, { rejectWithValue, getState }) => {
-    // @ts-ignore
-    const apiServer = selectCurrentNetworkUrl(getState());
-    const res = await postToSidecar(apiServer)(`/debug/faucet?address=${principal}`);
-    if (!res.ok) {
-      return rejectWithValue({
-        name: `Status ${res.status}`,
-        message: res.statusText,
-      });
-    }
-    const data: FaucetResponse = await res.json();
-    return {
-      principal,
-      transactions: [data],
-    };
+export const requestFaucetFunds = createAsyncThunk<
+  Pick<Account, 'principal' | 'transactions'>,
+  string
+>('account/faucet', async (principal, { rejectWithValue, getState }) => {
+  const apiServer = selectCurrentNetworkUrl(getState() as any) as string;
+  const res = await postToSidecar(apiServer)(`/debug/faucet?address=${principal}`);
+  if (!res.ok) {
+    return rejectWithValue({
+      name: `Status ${res.status}`,
+      message: res.statusText,
+    });
   }
-);
+  const data: FaucetResponse = await res.json();
+  return {
+    principal,
+    transactions: [data],
+  };
+});
 
 export const broadcastTransaction = createAsyncThunk<
-  Account,
+  Pick<Account, 'principal' | 'transactions'>,
   { principal: string; tx: StacksTransaction }
->(
-  'account/broadcast-transaction',
-  // @ts-ignore
-  async ({ principal, tx }, { rejectWithValue, getState }) => {
-    // @ts-ignore
-    const apiServer = selectCurrentNetworkUrl(getState());
-    try {
-      const res = await broadcastTransactionBase(tx, network(apiServer));
-      if (res.includes('error')) {
-        const error = JSON.parse(res);
-        return rejectWithValue(error);
-      }
-      return {
-        principal,
-        transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
-      };
-    } catch (e) {
-      if (e.toString().includes('fetch')) {
-        return rejectWithValue({
-          name: 'Failed to fetch',
-          message: 'Could not post to API.',
-        });
-      }
-      return rejectWithValue(e);
+>('account/broadcast-transaction', async ({ principal, tx }, { rejectWithValue, getState }) => {
+  const apiServer = selectCurrentNetworkUrl(getState() as any) as string;
+  try {
+    const res = await broadcastTransactionBase(tx, network(apiServer));
+    if (res.includes('error')) {
+      const error = JSON.parse(res);
+      return rejectWithValue(error);
     }
+    return {
+      principal,
+      transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
+    };
+  } catch (e) {
+    if (e.toString().includes('fetch')) {
+      return rejectWithValue({
+        name: 'Failed to fetch',
+        message: 'Could not post to API.',
+      });
+    }
+    return rejectWithValue(e);
   }
-);
+});
 
 export const clearAccountError = createAction('account/clear-error');

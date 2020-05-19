@@ -9,8 +9,7 @@ import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 export const fetchTransaction = createAsyncThunk<Transaction[], string>(
   'transaction/fetch',
   async (query, { dispatch, rejectWithValue, getState }) => {
-    // @ts-ignore
-    const apiServer = selectCurrentNetworkUrl(getState());
+    const apiServer = selectCurrentNetworkUrl(getState() as any) as string;
     if (!query) return rejectWithValue({ name: 'Error!', message: 'No query provided' });
     const txs = [];
     if (query.includes('.')) {

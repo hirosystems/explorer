@@ -39,9 +39,9 @@ export const Faucet = (props: any) => {
       const account = await dispatch(fetchAccount(values.stacks_address));
       if (account.error) return stopLoading();
 
-      const { payload, error: faucetError } = await dispatch(
+      const { payload, error: faucetError } = (await dispatch(
         requestFaucetFunds(values.stacks_address)
-      );
+      )) as any;
       if (faucetError) return stopLoading();
 
       const txid = payload.transactions[0].txId;

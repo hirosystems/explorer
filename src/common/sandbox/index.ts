@@ -87,13 +87,13 @@ export const doGenerateIdentity = async () => {
   };
 };
 
-export const network = (apiServer: string): StacksNetwork => ({
+export const network = (apiServer: string): Partial<StacksNetwork> => ({
   version: TransactionVersion.Testnet,
   chainId: ChainID.Testnet,
   coreApiUrl: withApiServer(apiServer)(),
-  broadcastApiUrl: withApiServer(apiServer)('/v2/transactions'),
-  transferFeeEstimateApiUrl: withApiServer(apiServer)('/v2/fees/transfer'),
-  balanceApiUrl: withApiServer(apiServer)('/v2/accounts'),
+  broadcastEndpoint: withApiServer(apiServer)('/v2/transactions'),
+  transferFeeEstimateEndpoint: withApiServer(apiServer)('/v2/fees/transfer'),
+  accountEndpoint: withApiServer(apiServer)('/v2/accounts'),
 });
 
 export const fetchContractInterface = (apiServer: string) => async (

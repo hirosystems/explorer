@@ -41,15 +41,12 @@ export const uiReducer = createReducer(initialState, builder => {
     state.config.selectedNetwork = action.payload;
   });
   builder.addCase(doAddToast, (state, action) => {
-    // @ts-ignore
-    state.toasts.push(action.payload);
+    state.toasts.push(action.payload as any);
   });
   builder.addCase(doRemoveToast, (state, action) => {
-    // @ts-ignore
     state.toasts = state.toasts.filter(({ id }) => id !== action.payload);
   });
-  builder.addCase(appTime, (state, action) => {
-    // @ts-ignore
+  builder.addCase(appTime, state => {
     state.appTime = Math.round(new Date().getTime() / 1000);
   });
 });

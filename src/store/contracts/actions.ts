@@ -5,8 +5,8 @@ import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 
 export const fetchContract = createAsyncThunk<Contract, string>(
   'contracts/fetch',
-  // @ts-ignore
-  async (query, { getState }) => fetchContractFromApi(selectCurrentNetworkUrl(getState()))(query)
+  async (query, { getState }) =>
+    fetchContractFromApi(selectCurrentNetworkUrl(getState() as any) as string)(query)
 );
 
 export const clearContractsError = createAction('contracts/clear-error');
