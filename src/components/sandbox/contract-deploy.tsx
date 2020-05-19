@@ -11,14 +11,12 @@ import {
   makeSmartContractDeploy,
   makeStandardSTXPostCondition,
   FungibleConditionCode,
-  StacksNetwork,
 } from '@blockstack/stacks-transactions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
 import { Popover } from '@components/popover/popover';
-import { RootState } from '@store';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+
 import { useConfigState } from '@common/hooks/use-config-state';
 
 const Sample = (props: any) => {
