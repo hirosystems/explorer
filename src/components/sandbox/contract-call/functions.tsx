@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Flex, Button, Stack } from '@blockstack/ui';
 import { ClarityFunctionArg, network } from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
-import { abiFunctionToString, makeContractCall } from '@blockstack/stacks-transactions';
+import { makeContractCall } from '@blockstack/stacks-transactions';
 import { Formik } from 'formik';
 import { Text } from '@components/typography';
 import { Field } from '@components/sandbox/common';
@@ -124,6 +124,13 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
         senderKey: identity?.privateKey as string,
         network: network(apiServer as string),
       });
+
+      const { payload, error } = await dispatch(
+        broadcastTransaction({ principal: identity?.address, tx })
+      );
+      if (error) return doFinishLoading();
+
+      setResult(payload.transactions[0].txId);
 
       doFinishLoading();
     },
