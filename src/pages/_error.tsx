@@ -31,7 +31,7 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
   const navigateToRandomTx = useNavigateToRandomTx();
   return (
     <PageWrapper>
-      <Meta title={`${statusCode} error - Stacks Explorer`} />
+      <Meta title={`Whoops! - Stacks Explorer`} />
       <Flex
         maxWidth="700px"
         flexDirection="column"
@@ -40,12 +40,10 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
         flexGrow={1}
       >
         <Title mb="base" as="h1" fontSize="36px">
-          Whoops! something went wrong.
+          Whoops! something went wrong
         </Title>
         <Text maxWidth="490px">
-          {statusCode
-            ? `An error ${statusCode} occurred on server`
-            : 'An error occurred on client.'}
+          {statusCode ? `An error occurred on the server.` : 'An error occurred on the client.'}{' '}
           Please feel free to{' '}
           <Link
             // @ts-ignore
@@ -54,7 +52,8 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
           >
             file an issue
           </Link>
-          .
+          and describe: what you were attempting to do, the URL you are trying, and anything that is
+          in the console.
         </Text>
         <Box pb="loose" mt="loose" width="100%" maxWidth="544px">
           <FormLabel pb="tight">Search for a transaction</FormLabel>
@@ -64,7 +63,7 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
           <Box>
             <NextLink href="/" passHref>
               <Link textDecoration="underline" fontSize="14px">
-                Explorer homepage
+                Back home
               </Link>
             </NextLink>
           </Box>
