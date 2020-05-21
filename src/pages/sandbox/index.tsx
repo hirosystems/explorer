@@ -16,6 +16,7 @@ import { fetchAccount, generateIdentity, setIdentity } from '@store/sandbox';
 import { truncateMiddle } from '@common/utils';
 import { useRouter } from 'next/router';
 import { useHover } from 'use-events';
+import { Card } from '@components/card';
 
 const paths = [
   { path: 'faucet', label: 'STX faucet', component: Faucet },
@@ -81,7 +82,7 @@ const Tabs = ({
   const { transactions } = useDebugState();
   return (
     <>
-      <Box position="relative" zIndex={99}>
+      <Box width="100%" position="relative" zIndex={99}>
         <Flex width="100%" borderBottom="1px solid" borderBottomColor="var(--colors-border)">
           <Stack isInline spacing="0px">
             {paths.map(({ label, path }, index) => (
@@ -164,21 +165,39 @@ const PageContent = ({
                 <Text>{balance || 0} uSTX</Text>
               </Box>
             </Box>
-          ) : (
-            <Button onClick={handleGenerateKey}>Generate address</Button>
-          )}
+          ) : null}
         </Box>
       </Flex>
-      <Box width="100%" py="base">
-        <Tabs
-          hideTransactionDialog={hideTransactionDialog}
-          showTransactionDialog={showTransactionDialog}
-          transactionsVisible={transactionsVisible}
-          identity={identity}
-          lastViewedNumber={lastViewedNumber}
-          tab={tab}
-        />
-      </Box>
+      <Flex width="100%" py="base" flexGrow={1}>
+        {identity ? (
+          <Tabs
+            hideTransactionDialog={hideTransactionDialog}
+            showTransactionDialog={showTransactionDialog}
+            transactionsVisible={transactionsVisible}
+            identity={identity}
+            lastViewedNumber={lastViewedNumber}
+            tab={tab}
+          />
+        ) : (
+          <Flex pb="extra-loose" flexGrow={1} align="center" justify="center">
+            <Card mx="auto" p="extra-loose" direction="column" align="center" justify="center">
+              <Box maxWidth="600px" textAlign="center">
+                <Box mb="base">
+                  <Title as="h2">Welcome to the Stacks Explorer Sandbox!</Title>
+                </Box>
+                <Text>
+                  With the sandbox you'll be able to test out various aspects of the explorer: get
+                  STX from the faucet, send transactions, create contracts, and call contract
+                  functions. Please generate an address to use the sandbox.
+                </Text>
+              </Box>
+              <Box mt="base" mx="auto">
+                <Button onClick={handleGenerateKey}>Generate address</Button>
+              </Box>
+            </Card>
+          </Flex>
+        )}
+      </Flex>
     </PageWrapper>
   );
 };
