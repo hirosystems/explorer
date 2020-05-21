@@ -1,17 +1,38 @@
 import * as React from 'react';
 import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon } from '@blockstack/ui';
-import { Title, Text } from '@components/typography';
+import { Title, Text, Pre } from '@components/typography';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
 import { useDebugState } from '@common/sandbox';
 
 export const renderErrorMessage = ({
   reason,
   reason_data,
+  txid,
 }: {
-  reason: 'FeeTooLow' | 'NotEnoughFunds';
+  reason: 'FeeTooLow' | 'NotEnoughFunds' | 'NoSuchContract';
   reason_data: any;
+  txid?: string;
 }) => {
   switch (reason) {
+    case 'NoSuchContract':
+      return (
+        <>
+          Contract not found. Please{' '}
+          <Text
+            as="a"
+            color="var(--colors-accent)"
+            _hover={{
+              cursor: 'pointer',
+            }}
+            // @ts-ignore
+            href="https://github.com/blockstack/explorer/issues/new"
+            target="_blank"
+          >
+            file an issue
+          </Text>{' '}
+          for this. <Pre>{txid}</Pre>
+        </>
+      );
     case 'FeeTooLow':
       return `Fee was too low, expected ${reason_data?.expected} uSTX.`;
     case 'NotEnoughFunds':
