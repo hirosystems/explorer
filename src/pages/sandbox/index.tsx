@@ -7,18 +7,21 @@ import { TokenTransfer } from '@components/sandbox/token-transfer';
 import { ContractDeploy } from '@components/sandbox/contract-deploy';
 import { ContractCall } from '@components/sandbox/contract-call';
 import { Faucet } from '@components/sandbox/faucet';
+import { RawTx } from '@components/sandbox/raw-tx';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { ReduxNextPageContext } from '@common/types';
 import { useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
 import { fetchAccount, generateIdentity, setIdentity } from '@store/sandbox';
 import { truncateMiddle } from '@common/utils';
+import { useRouter } from 'next/router';
 
 const paths = [
-  { path: 'faucet', label: 'STX Faucet', component: Faucet },
-  { path: 'token-transfer', label: 'Token Transfer', component: TokenTransfer },
-  { path: 'contract-deploy', label: 'Contract Deploy', component: ContractDeploy },
-  { path: 'contract-call', label: 'Contract Call', component: ContractCall },
+  { path: 'faucet', label: 'STX faucet', component: Faucet },
+  { path: 'basic-transaction', label: 'Basic transaction', component: TokenTransfer },
+  { path: 'contract-deploy', label: 'Contract deploy', component: ContractDeploy },
+  { path: 'contract-call', label: 'Contract call', component: ContractCall },
+  // { path: 'raw-tx', label: 'Broadcast raw tx', component: RawTx },
 ];
 
 const Tab = ({
@@ -26,14 +29,15 @@ const Tab = ({
   index,
   label,
   onClick,
+  isActive,
   ...rest
 }: {
-  currentTab: number;
-  index: number;
+  currentTab?: string;
+  index?: number;
   label: string;
-  onClick: any;
+  onClick?: any;
+  isActive: boolean;
 } & BoxProps) => {
-  const isActive = index === currentTab;
   return (
     <Box
       borderBottom={isActive ? '2px solid' : `1px solid`}
@@ -64,10 +68,15 @@ const Tabs = ({
   transactionsVisible,
   hideTransactionDialog,
   showTransactionDialog,
+  tab,
 }: any) => {
-  const [currentTab, setTab] = React.useState(0);
-  const handleClick = (index: number) => setTab(index);
-  const Component = paths[currentTab].component;
+  const [currentTab, setTab] = React.useState<string>(tab || paths[0].path);
+  const router = useRouter();
+
+  const handleClick = React.useCallback((path: string) => {
+    router.push(`/sandbox?tab=${path}`, `/sandbox?tab=${path}`, { shallow: true });
+    setTab(path);
+  }, []);
   const { transactions } = useDebugState();
   return (
     <>
@@ -76,20 +85,21 @@ const Tabs = ({
           <Stack isInline spacing="0px">
             {paths.map(({ label, path }, index) => (
               <Tab
-                onClick={() => handleClick(index)}
+                onClick={() => handleClick(path)}
                 label={label}
                 currentTab={currentTab}
                 index={index}
                 key={index}
+                isActive={currentTab === path}
               />
             ))}
           </Stack>
           <Box transform="translateY(1px)" ml="auto" position="relative" zIndex={99}>
             <Tab
               label={`(${transactions?.length ?? 0}) Recent Txs`}
-              currentTab={0}
               index={1}
               onClick={() => showTransactionDialog()}
+              isActive={transactionsVisible}
             />
             <TransactionsCard
               visible={transactionsVisible}
@@ -103,11 +113,18 @@ const Tabs = ({
           </Box>
         </Flex>
         <Box py="base">
-          <Component
-            showTransactionDialog={showTransactionDialog}
-            identity={identity}
-            title={paths[currentTab].label}
-          />
+          {paths.map((path, key) => {
+            const PathComponent = path.component;
+            return (
+              <PathComponent
+                showTransactionDialog={showTransactionDialog}
+                identity={identity}
+                isVisible={path.path === currentTab}
+                title={path.label}
+                key={key}
+              />
+            );
+          })}
         </Box>
       </Box>
     </>
@@ -121,6 +138,7 @@ const PageContent = ({
   hideTransactionDialog,
   showTransactionDialog,
   lastViewedNumber,
+  tab,
   ...props
 }: any) => {
   const { identity, balance } = useDebugState();
@@ -156,12 +174,13 @@ const PageContent = ({
           transactionsVisible={transactionsVisible}
           identity={identity}
           lastViewedNumber={lastViewedNumber}
+          tab={tab}
         />
       </Box>
     </PageWrapper>
   );
 };
-const SandboxPage = () => {
+const SandboxPage = ({ tab }: any) => {
   const [transactionsVisible, setShowTransactions] = React.useState(false);
   const [lastViewedNumber, setLastViewed] = React.useState(0);
 
@@ -192,6 +211,7 @@ const SandboxPage = () => {
         transactionsVisible={transactionsVisible}
         handleGenerateKey={handleGenerateId}
         lastViewedNumber={lastViewedNumber}
+        tab={tab}
       />
     </ToastProvider>
   );
@@ -199,13 +219,15 @@ const SandboxPage = () => {
 
 SandboxPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
   const cookies = parseCookies(ctx);
+  let tab = ctx?.query?.tab ?? undefined;
   if (cookies && cookies.debug_identity) {
     ctx.store.dispatch(setIdentity(JSON.parse(cookies.debug_identity)));
     return {
       identity: cookies.debug_identity,
+      tab,
     };
   }
-  return {};
+  return { tab };
 };
 
 export default SandboxPage;

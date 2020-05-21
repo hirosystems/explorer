@@ -5,7 +5,7 @@ import { Timestamp } from '@components/timestamp';
 import { Rows } from '@components/rows';
 import { ContractCard } from '@components/contract-card';
 import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { getMemoString, getContractName, microToStacks } from '@common/utils';
+import { getMemoString, getContractName, microToStacks, truncateMiddle } from '@common/utils';
 
 interface FeeComponentProps {
   fees: string;
@@ -28,7 +28,10 @@ const FeesComponent = ({ fees, sponsored }: FeeComponentProps) => (
 const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) => {
   return (
     <>
-      <Box>{block}</Box>
+      {/**
+       * TODO: link to block
+       */}
+      <Box>#{block}</Box>
       <Box ml="base">
         <Timestamp ts={ts} />
       </Box>
@@ -37,61 +40,73 @@ const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) =
 };
 
 const transformDataToRowData = (d: Transaction) => {
-  const defaultData = [
-    {
-      label: {
-        children: 'Transaction ID',
-      },
-      children: d.tx_id,
-      copy: d.tx_id,
+  const txid = {
+    label: {
+      children: 'Transaction ID',
     },
-    {
-      condition: d.tx_type === 'smart_contract',
-      label: {
-        children: 'Contract address',
-      },
-      children: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
-      copy: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+    children: d.tx_id,
+    copy: d.tx_id,
+  };
+  const contractName = {
+    condition: d.tx_type === 'smart_contract',
+    label: {
+      children: 'Contract name',
     },
-    {
-      label: {
-        children: 'Sender address',
-      },
-      children: d.sender_address,
-      copy: d.sender_address,
+    children: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+    copy: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+  };
+  const sender = {
+    label: {
+      children: 'Sender address',
     },
-    {
-      label: {
-        children: 'Transaction fees',
-      },
-      children: <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} />,
+    children: d.sender_address,
+    copy: d.sender_address,
+  };
+  const fees = {
+    label: {
+      children: 'Fees',
     },
-    {
-      label: {
-        children: 'Block',
-      },
-      children: (
-        <BlockComponent
-          block={d.block_height}
-          ts={
-            //@ts-ignore
-            d.burn_block_time
-          }
-        />
-      ),
+    children: <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} />,
+  };
+  const blockTime = {
+    label: {
+      children: 'Block',
     },
-  ];
+    children: (
+      <BlockComponent
+        block={d.block_height}
+        ts={
+          //@ts-ignore
+          d.burn_block_time
+        }
+      />
+    ),
+  };
+  const blockHash = {
+    label: {
+      children: 'Block hash',
+    },
+    children: d.block_hash,
+  };
+
   switch (d.tx_type) {
-    case 'token_transfer':
-      return [
-        ...defaultData,
-        {
-          label: { children: 'Memo' },
-          children: getMemoString(d.token_transfer.memo),
+    case 'token_transfer': {
+      const recipient = {
+        label: {
+          children: 'Recipient address',
         },
-      ];
+        children: d.token_transfer.recipient_address,
+      };
+
+      const memo = {
+        label: { children: 'Memo' },
+        children: getMemoString(d.token_transfer.memo),
+      };
+
+      return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo];
+    }
     default:
-      return defaultData;
+      return [txid, contractName, sender, fees, blockTime, blockHash];
   }
 };
 

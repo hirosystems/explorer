@@ -4,7 +4,7 @@ import { ClarityFunctionArg, network } from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
 import { makeContractCall } from '@blockstack/stacks-transactions';
 import { Formik } from 'formik';
-import { Text } from '@components/typography';
+import { Caption, Text } from '@components/typography';
 import { Field } from '@components/sandbox/common';
 import { Card } from '@components/card';
 import { valueToClarityValue } from '@common/sandbox';
@@ -13,6 +13,8 @@ import { useLoading } from '@common/hooks/use-loading';
 import { useDebugState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
 import { broadcastTransaction } from '@store/sandbox';
+import BigNum from 'bn.js';
+import { TxLink } from '@components/links';
 
 interface FunctionProps {
   func: ContractInterfaceFunction;
@@ -113,26 +115,31 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
 
   const onSubmit = React.useCallback(
     async (values: any) => {
-      doStartLoading();
-      const functionArgs = valuesToClarityArray(values);
+      try {
+        doStartLoading();
+        const functionArgs = valuesToClarityArray(values);
 
-      const tx = await makeContractCall({
-        contractAddress,
-        contractName,
-        functionName: func.name,
-        functionArgs,
-        senderKey: identity?.privateKey as string,
-        network: network(apiServer as string),
-      });
+        const tx = await makeContractCall({
+          contractAddress,
+          contractName,
+          functionName: func.name,
+          functionArgs,
+          senderKey: identity?.privateKey as string,
+          network: network(apiServer as string),
+        });
 
-      const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx })
-      );
-      if (error) return doFinishLoading();
+        const { payload, error } = await dispatch(
+          broadcastTransaction({ principal: identity?.address, tx })
+        );
+        if (error) return doFinishLoading();
 
-      setResult(payload.transactions[0].txId);
+        setResult(payload.transactions[0].txId);
 
-      doFinishLoading();
+        doFinishLoading();
+      } catch (e) {
+        console.error('ERROR', e);
+        doFinishLoading();
+      }
     },
     [state]
   );
@@ -146,10 +153,35 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
           </Text>
           <TypeLabel ml="extra-tight">{func.access} function</TypeLabel>
         </Flex>
+
         {func.access === 'public' ? (
           <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
-        ) : null}
-        {result && <Text>Result: {result}</Text>}
+        ) : (
+          <Flex>
+            <Caption>
+              Read only calling is not currently available in the sandbox, check back soon. :)
+            </Caption>
+          </Flex>
+        )}
+        {result && (
+          <Box mt="base">
+            <Caption>
+              Result:{' '}
+              <TxLink txid={result}>
+                <Caption
+                  as="a"
+                  // @ts-ignore
+                  target="_blank"
+                  cursor="pointer"
+                  textDecoration="underline"
+                  color="var(--colors-accent)"
+                >
+                  {result}
+                </Caption>
+              </TxLink>
+            </Caption>
+          </Box>
+        )}
       </Stack>
     </Card>
   );

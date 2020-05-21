@@ -38,6 +38,8 @@ const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
           userSelect: 'none',
         }}
         as="a"
+        // @ts-ignore
+        target="_blank"
         {...props}
         {...bind}
       >

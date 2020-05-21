@@ -24,7 +24,14 @@ export const networkStorage = engine.createStore([cookieStorage]);
  *
  * @param {String} stacksAddress - the STX address to validate
  */
-const validateStacksAddress = (stacksAddress: string) => !!c32addressDecode(stacksAddress);
+export const validateStacksAddress = (stacksAddress: string) => {
+  try {
+    c32addressDecode(stacksAddress);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
 /**
  * dedupe
@@ -175,8 +182,7 @@ export const clarityValuetoHumanReadable = (value: any) => {
   if (value && value.repr) {
     return value.repr;
   }
-  console.log('clarity: ', value);
-  return 'need to fix';
+  return null;
   // const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
   //
   // if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {

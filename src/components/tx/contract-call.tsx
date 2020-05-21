@@ -23,7 +23,6 @@ import { Tooltip } from '@components/tooltip';
 const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: any }) => {
   // @ts-ignore
   const abiData = abi.functions.find(func => func.name === summary.function_name);
-  console.log(abiData);
   return (
     <Box {...rest}>
       <SectionTitle mb="base-loose">Function summary</SectionTitle>
@@ -35,7 +34,7 @@ const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: 
             },
             children: (
               <Flex width="100%" align="center">
-                <Pre fontSize="16px">
+                <Pre fontSize="14px">
                   define-{abiData.access} ({summary.function_name})
                 </Pre>
               </Flex>
@@ -91,8 +90,6 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
     contractSource: selectOriginContractSource(transaction.contract_call.contract_id)(state),
     abi: JSON.parse(selectContractAbi(transaction.contract_call.contract_id)(state) || ''),
   }));
-
-  console.log(abi);
 
   return (
     <>
