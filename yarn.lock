@@ -1329,10 +1329,10 @@
     sha.js "^2.4.11"
     smart-buffer "^4.1.0"
 
-"@blockstack/stacks-transactions@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.4.3.tgz#3d3cdad2fd91bb0a96129cad1f1df4a424f55ce4"
-  integrity sha512-ejv3A6Ifa0tZ8DV+LQMhKcZ4uu7H4rIoIHOOAqCY3avwuiFS2EyYbSADf7+weV0uvY6mgkP2fzZXQMuh4Q+IUw==
+"@blockstack/stacks-transactions@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.4.4.tgz#f18276902faf5ec15f407281c06898b4db468344"
+  integrity sha512-/ayC2EZBdIG4AKE/IsMViZPbjheIa7HqsFl8DgD7GG9X8I2SeqXf8eGMA5ngyNIBoE4VD2PsmmpXXUV0pdfE2g==
   dependencies:
     "@types/bn.js" "^4.11.6"
     "@types/elliptic" "^6.4.12"
@@ -4693,6 +4693,11 @@ extglob@^2.0.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+extract-json-string@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/extract-json-string/-/extract-json-string-1.0.1.tgz#ba7393f77164be2370842eaf73d009bbd598f584"
+  integrity sha512-qigLgel9C6bUtHXp+xiwA3sgFcqiNqITeuYbHYh3K5zGeIOIJ9/8eXC8kTjTOykGW8lx1wn5phh5CZ5Kt5Oh6w==
 
 extsprintf@1.3.0:
   version "1.3.0"

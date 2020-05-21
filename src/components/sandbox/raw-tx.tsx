@@ -27,7 +27,7 @@ export const RawTx = (props: any) => {
       await dispatch(fetchAccount(identity?.address));
 
       const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx: rawTx })
+        broadcastTransaction({ principal: identity?.address, tx: rawTx, isRaw: true })
       );
       if (error) return doFinishLoading();
 

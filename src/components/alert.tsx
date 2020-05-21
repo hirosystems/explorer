@@ -4,7 +4,7 @@ import { Title, Text } from '@components/typography';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
 import { useDebugState } from '@common/sandbox';
 
-const renderErrorMessage = ({
+export const renderErrorMessage = ({
   reason,
   reason_data,
 }: {
