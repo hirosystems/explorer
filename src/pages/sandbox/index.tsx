@@ -15,6 +15,7 @@ import { parseCookies } from 'nookies';
 import { fetchAccount, generateIdentity, setIdentity } from '@store/sandbox';
 import { truncateMiddle } from '@common/utils';
 import { useRouter } from 'next/router';
+import { useHover } from 'use-events';
 
 const paths = [
   { path: 'faucet', label: 'STX faucet', component: Faucet },
@@ -142,6 +143,7 @@ const PageContent = ({
   ...props
 }: any) => {
   const { identity, balance } = useDebugState();
+  const [isHovered, bindHover] = useHover();
   return (
     <PageWrapper
       notice={{
@@ -155,8 +157,8 @@ const PageContent = ({
         <Box>
           {identity ? (
             <Box textAlign="right">
-              <Box>
-                <Text>{truncateMiddle(identity.address, 10)}</Text>
+              <Box {...bindHover}>
+                <Text>{isHovered ? identity.address : truncateMiddle(identity.address, 10)}</Text>
               </Box>
               <Box>
                 <Text>{balance || 0} uSTX</Text>

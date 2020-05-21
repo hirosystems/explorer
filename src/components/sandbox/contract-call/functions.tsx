@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { Box, Flex, Button, Stack } from '@blockstack/ui';
-import { ClarityFunctionArg, network } from '@common/sandbox';
+import {
+  ClarityFunctionArg,
+  callReadOnlyFunction,
+  network,
+  parseReadOnlyResponse,
+} from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
-import { makeContractCall } from '@blockstack/stacks-transactions';
+import { deserializeCV, makeContractCall, ClarityType } from '@blockstack/stacks-transactions';
+import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
 import { Formik } from 'formik';
 import { Caption, Text } from '@components/typography';
 import { Field } from '@components/sandbox/common';
@@ -113,29 +119,42 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
       valueToClarityValue(values[name], state[name] as ClarityFunctionArg)
     );
 
+  const net = network(apiServer as string);
+
   const onSubmit = React.useCallback(
     async (values: any) => {
       try {
         doStartLoading();
         const functionArgs = valuesToClarityArray(values);
 
-        const tx = await makeContractCall({
-          contractAddress,
-          contractName,
-          functionName: func.name,
-          functionArgs,
-          senderKey: identity?.privateKey as string,
-          network: network(apiServer as string),
-        });
-
-        const { payload, error } = await dispatch(
-          broadcastTransaction({ principal: identity?.address, tx })
-        );
-        if (error) return doFinishLoading();
-
-        setResult(payload.transactions[0].txId);
-
-        doFinishLoading();
+        if (func.access === 'public') {
+          const tx = await makeContractCall({
+            contractAddress,
+            contractName,
+            functionName: func.name,
+            functionArgs,
+            senderKey: identity?.privateKey as string,
+            network: net,
+          });
+          const { payload, error } = await dispatch(
+            broadcastTransaction({ principal: identity?.address, tx })
+          );
+          if (error) return doFinishLoading();
+          setResult(payload.transactions[0].txId);
+          doFinishLoading();
+        } else {
+          const value = await callReadOnlyFunction({
+            senderAddress: identity?.address as string,
+            contractAddress,
+            contractName,
+            functionArgs,
+            functionName: func.name,
+            network: net,
+          });
+          const result = parseReadOnlyResponse(value);
+          setResult(result);
+          doFinishLoading();
+        }
       } catch (e) {
         console.error('ERROR', e);
         doFinishLoading();
@@ -154,31 +173,29 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
           <TypeLabel ml="extra-tight">{func.access} function</TypeLabel>
         </Flex>
 
-        {func.access === 'public' ? (
+        {func.args.length ? (
           <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
-        ) : (
-          <Flex>
-            <Caption>
-              Read only calling is not currently available in the sandbox, check back soon. :)
-            </Caption>
-          </Flex>
-        )}
+        ) : null}
         {result && (
           <Box mt="base">
             <Caption>
               Result:{' '}
-              <TxLink txid={result}>
-                <Caption
-                  as="a"
-                  // @ts-ignore
-                  target="_blank"
-                  cursor="pointer"
-                  textDecoration="underline"
-                  color="var(--colors-accent)"
-                >
-                  {result}
-                </Caption>
-              </TxLink>
+              {result.includes('0x') ? (
+                <TxLink txid={result}>
+                  <Caption
+                    as="a"
+                    // @ts-ignore
+                    target="_blank"
+                    cursor="pointer"
+                    textDecoration="underline"
+                    color="var(--colors-accent)"
+                  >
+                    {result}
+                  </Caption>
+                </TxLink>
+              ) : (
+                <Caption>{result}</Caption>
+              )}
             </Caption>
           </Box>
         )}
