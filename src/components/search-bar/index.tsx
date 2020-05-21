@@ -180,6 +180,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
       position={['unset', 'unset', 'relative']}
       showBackdrop={small}
       showClose="mobile"
+      lockBodyScroll
     >
       <Box
         position="relative"
