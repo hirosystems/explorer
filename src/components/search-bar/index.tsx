@@ -16,7 +16,7 @@ export const SearchBar = forwardRef(
   (
     {
       onChange,
-      inputOffset = '50px',
+      inputOffset: _inputOffset = '25px',
       error,
       height,
       clearError,
@@ -27,6 +27,7 @@ export const SearchBar = forwardRef(
     }: SearchBarProps,
     ref: Ref<HTMLDivElement>
   ) => {
+    const inputOffset = small ? '25px' : '50px';
     return (
       <Box position="relative" transform={transform} {...rest}>
         <Box
@@ -46,7 +47,7 @@ export const SearchBar = forwardRef(
             aria-hidden
             zIndex={-1}
           >
-            Search for transactions on the Stacks blockchain
+            Enter a txid or contract name.
           </Text>
           <Input
             p={0}
@@ -67,7 +68,7 @@ export const SearchBar = forwardRef(
             color="var(--colors-text-body)"
             borderColor="var(--colors-border)"
             _placeholder={{ color: 'var(--colors-text-caption)' }}
-            placeholder="Enter a transaction ID or contract name."
+            placeholder="Enter a txid or contract name."
             _hover={{
               borderColor: 'var(--colors-border)',
             }}
@@ -154,7 +155,9 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
   return (
     <Popover
       cardProps={{
-        maxHeight: '320px',
+        maxHeight: small
+          ? ['calc(70vh - calc(64px + 12px))', 'calc(70vh - calc(64px + 12px))', '320px']
+          : ['calc(50vh - calc(64px + 12px))', 'calc(50vh - calc(64px + 12px))', '320px', '320px'],
         width: '100%',
         overflowY: 'auto',
         ...boxProps,
@@ -162,7 +165,8 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
       }}
       wrapperProps={{
         width: '100%',
-        pt: 'base',
+        pt: small ? ['base-loose', 'base-loose', 'base'] : 'base',
+        px: small ? ['base', 'base', 'unset'] : ['base', 'base', 'unset'],
         maxWidth: ['100%', '100%', '544px'],
       }}
       showOnFocus
@@ -173,6 +177,9 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
       maxWidth={['100%', '100%', '544px']}
       triggerRef={inputRef}
       hideItems={!!hideDropdown}
+      position={['unset', 'unset', 'relative']}
+      showBackdrop={small}
+      showClose="mobile"
     >
       <Box
         position="relative"

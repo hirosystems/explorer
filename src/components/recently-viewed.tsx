@@ -7,6 +7,7 @@ import { Transaction, TransactionType } from '@models/transaction.interface';
 import { Caption, Title } from '@components/typography';
 import { getContractName } from '@common/utils';
 import { DefaultContract } from '@components/icons/default-contract';
+import { TxItem } from '@components/transaction-item';
 
 export const ItemIcon = React.memo(({ type, ...rest }: { type: Transaction['tx_type'] }) => {
   switch (type) {
@@ -112,15 +113,8 @@ export const RecentlyViewedListItem = ({
   }, [focused, ref]);
 
   return (
-    <Flex
-      px="base"
-      justifyContent="space-between"
-      alignItems="center"
-      height="64px"
+    <TxItem
       borderBottom={isLast ? null : '1px solid var(--colors-border)'}
-      cursor="pointer"
-      style={{ outline: 'none' }}
-      flexShrink={0}
       {...bindHover}
       onFocus={handleFocus}
       onBlur={handleBlur}
@@ -128,25 +122,12 @@ export const RecentlyViewedListItem = ({
       tabIndex={0}
       {...rest}
       ref={ref}
-    >
-      <Flex align="center">
-        <Box opacity={0.3} color="var(--colors-invert)" mr="base">
-          <ItemIcon type={option.tx_type} />
-        </Box>
-        <Flex flexDirection="column">
-          <Title
-            fontSize="14px"
-            display="block"
-            textDecoration={isHovered || isFocused ? 'underline' : null}
-          >
-            {getTitle(option)}
-          </Title>
-          <Caption>{getCaption(option)}</Caption>
-        </Flex>
-      </Flex>
-      <Box>
-        <Tag type={option.tx_type as TransactionType} />
-      </Box>
-    </Flex>
+      tx={option}
+      isFocused={isFocused}
+      isHovered={isHovered}
+      _hover={{
+        bg: 'var(--colors-bg-alt)',
+      }}
+    />
   );
 };
