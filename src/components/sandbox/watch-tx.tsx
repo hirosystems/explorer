@@ -8,9 +8,6 @@ import { Field, Wrapper } from '@components/sandbox/common';
 export const WatchTx = (props: any) => {
   const isBrowser = typeof window !== 'undefined';
   const state = useSSE('tx', {});
-  React.useEffect(() => {
-    console.log(state);
-  }, [state]);
 
   return (
     <Wrapper title="Contract deploy" {...props}>

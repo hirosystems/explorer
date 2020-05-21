@@ -69,7 +69,7 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
 
   return (
     <Box {...boxProps}>
-      <SectionTitle mb="base-loose">Token transfers</SectionTitle>
+      <SectionTitle mb="base-loose">Events</SectionTitle>
       <Card>
         <Box borderBottom="1px solid var(--colors-border)">
           <Stack width="100%" isInline>

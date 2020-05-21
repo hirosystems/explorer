@@ -10,7 +10,7 @@ import {
   BoxProps,
   ChevronIcon,
 } from '@blockstack/ui';
-import { startPad } from '@common/utils';
+import { startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
 import {
   TransactionEvent,
@@ -143,9 +143,11 @@ const EventAsset = React.memo(
 const AssetEventAmount = React.memo(
   ({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
     if (event.event_type === 'smart_contract_log') {
+      const value = clarityValuetoHumanReadable(event.contract_log.value);
+      const isAddress = validateStacksAddress(value);
       return (
-        <Text fontWeight="500" {...rest}>
-          {clarityValuetoHumanReadable(event.contract_log.value)}
+        <Text style={{ wordBreak: 'break-word' }} fontWeight="500" {...rest}>
+          {isAddress ? truncateMiddle(value, 8) : value}
         </Text>
       );
     }

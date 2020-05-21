@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import Editor from 'react-simple-code-editor';
 import { createGlobalStyle } from 'styled-components';
-import { Box, Highlighter } from '@blockstack/ui';
+import { Box, BoxProps, Highlighter } from '@blockstack/ui';
 
 const TextAreaOverrides = createGlobalStyle`
 .code-editor{
@@ -15,8 +15,8 @@ const TextAreaOverrides = createGlobalStyle`
       font-size: 14px !important;
   }
   textarea{
-    width: calc(100%) !important;
-    margin-left: 76px !important;
+    width: 100% !important;
+    padding-left: 76px !important;
     font-size: 14px !important;
     padding-top: 2px !important;
     font-family: 'Fira Code',monospace !important;
@@ -33,18 +33,17 @@ const TextAreaOverrides = createGlobalStyle`
 }
 `;
 
-interface CodeEditorProps {
+interface CodeEditorProps extends Partial<Omit<BoxProps, 'onChange'>> {
   value: string;
   disabled?: boolean;
   language?: string;
   onChange?: (code: string) => void;
-  style?: object;
   name?: string;
   id?: string;
 }
 
 export const CodeEditor = React.memo((props: CodeEditorProps) => {
-  const { style, value, onChange, language, id, disabled, ...rest } = props;
+  const { style, value, onChange, language, id, disabled, maxHeight, ...rest } = props;
   const [code, setState] = React.useState(value);
 
   const updateContent = (c: string) => {
@@ -76,6 +75,7 @@ export const CodeEditor = React.memo((props: CodeEditorProps) => {
         border="1px solid var(--colors-border)"
         overflowX="auto"
         minWidth="100%"
+        maxHeight={maxHeight}
       >
         <Editor
           textareaId={id}
