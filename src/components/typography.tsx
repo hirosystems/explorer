@@ -34,5 +34,8 @@ export const Pre = React.forwardRef((props: BoxProps, ref) => (
     fontSize="12px"
     ref={ref}
     {...props}
+    style={{
+      wordBreak: 'break-word',
+    }}
   />
 ));
