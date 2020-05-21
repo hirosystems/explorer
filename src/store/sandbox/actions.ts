@@ -7,10 +7,12 @@ import { doGenerateIdentity } from '@common/sandbox';
 import {
   StacksTransaction,
   broadcastTransaction as broadcastTransactionBase,
+  broadcastRawTransaction,
 } from '@blockstack/stacks-transactions';
 import { network } from '@common/sandbox';
 import { doAddToast } from '@store/ui/actions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+const extractJson = require('extract-json-string');
 
 let errorCount = 0;
 
@@ -110,29 +112,32 @@ export const requestFaucetFunds = createAsyncThunk<Account, string>(
 
 export const broadcastTransaction = createAsyncThunk<
   Account,
-  { principal: string; tx: StacksTransaction }
+  { principal: string; tx: StacksTransaction | string; isRaw?: boolean }
 >(
   'account/broadcast-transaction',
   // @ts-ignore
-  async ({ principal, tx }, { rejectWithValue, getState }) => {
+  async ({ principal, tx, isRaw }, { rejectWithValue, getState }) => {
     // @ts-ignore
     const apiServer = selectCurrentNetworkUrl(getState());
     try {
-      const res = await broadcastTransactionBase(tx, network(apiServer));
-      if (res.includes('error')) {
-        const error = JSON.parse(res);
-        return rejectWithValue(error);
+      if (isRaw) {
+        const buffer = Buffer.from(tx as string, 'hex');
+        const res = await broadcastRawTransaction(buffer, network(apiServer).getBroadcastApiUrl());
+        return {
+          principal,
+          transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
+        };
+      } else {
+        const res = await broadcastTransactionBase(tx as StacksTransaction, network(apiServer));
+        return {
+          principal,
+          transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
+        };
       }
-      return {
-        principal,
-        transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
-      };
     } catch (e) {
-      if (e.toString().includes('fetch')) {
-        return rejectWithValue({
-          name: 'Failed to fetch',
-          message: 'Could not post to API.',
-        });
+      const realError = extractJson.extract(e.message)[0];
+      if (realError) {
+        return rejectWithValue(realError);
       }
       return rejectWithValue(e);
     }

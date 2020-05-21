@@ -194,7 +194,7 @@ export const Wrapper = ({
   error,
   isVisible,
   clearError,
-  back,
+  subtitle,
   ...rest
 }: {
   title: string;
@@ -202,11 +202,15 @@ export const Wrapper = ({
   error?: string;
   isVisible: boolean;
   clearError?: () => void;
-  back?: {
+  subtitle?: {
     onClick: () => void;
     label: string;
+    icon?: any;
   };
 } & BoxProps) => {
+  const SubtitleIcon = () =>
+    <ChevronIcon color="var(--colors-text-caption)" direction="left" size="18px" /> ||
+    subtitle?.icon;
   return (
     <Transition
       styles={{
@@ -244,7 +248,7 @@ export const Wrapper = ({
               <Stack spacing="base-loose">
                 <Box>
                   <Title as="h2">{title}</Title>
-                  {back ? (
+                  {subtitle ? (
                     <Flex
                       _hover={{
                         cursor: 'pointer',
@@ -252,13 +256,8 @@ export const Wrapper = ({
                       }}
                       mt="tight"
                       align="center"
-                      onClick={back.onClick}
+                      onClick={subtitle.onClick}
                     >
-                      <ChevronIcon
-                        color="var(--colors-text-caption)"
-                        direction="left"
-                        size="18px"
-                      />
                       <Caption
                         _hover={{
                           cursor: 'pointer',
@@ -266,7 +265,7 @@ export const Wrapper = ({
                           color: 'var(--colors-invert)',
                         }}
                       >
-                        {back.label}
+                        {subtitle.label}
                       </Caption>
                     </Flex>
                   ) : null}

@@ -20,10 +20,10 @@ import { Card } from '@components/card';
 
 const paths = [
   { path: 'faucet', label: 'STX faucet', component: Faucet },
-  { path: 'basic-transaction', label: 'Basic transaction', component: TokenTransfer },
+  { path: 'stx-transfer', label: 'STX transfer', component: TokenTransfer },
+  { path: 'raw-tx', label: 'Raw transaction', component: RawTx },
   { path: 'contract-deploy', label: 'Contract deploy', component: ContractDeploy },
   { path: 'contract-call', label: 'Contract call', component: ContractCall },
-  // { path: 'raw-tx', label: 'Broadcast raw tx', component: RawTx },
 ];
 
 const Tab = ({
