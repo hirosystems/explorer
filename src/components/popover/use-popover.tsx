@@ -3,8 +3,14 @@ import { useEventListener } from '@blockstack/ui';
 import { useControlledHover } from '@common/hooks/use-controlled-hover';
 import { useFocus } from 'use-events';
 import { UsePopoverProps } from '@components/popover/types';
+import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
 
-export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps) => {
+export const usePopover = ({
+  length,
+  triggerRef,
+  showOnFocus,
+  lockBodyScroll,
+}: UsePopoverProps) => {
   const timeoutRef = React.useRef<number | null>(null);
   const removeFocusRef = React.useRef<number | null>(null);
 
@@ -20,6 +26,10 @@ export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps)
   const isInFocus = localTriggerFocusState || wrapperFocus;
 
   const bindHover = useControlledHover(setHovered);
+
+  if (lockBodyScroll) {
+    useLockBodyScroll(isVisible);
+  }
 
   const handleHoverDelay = () => {
     if (!hoverDelay) {
@@ -113,7 +123,7 @@ export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps)
   const handleKeyDown = useCallback(
     e => {
       if (isVisible && e.key === 'Escape') {
-        return hideImmediately();
+        hideImmediately();
       }
       if (isVisible || isInFocus) {
         if (e.keyCode === 40) {
@@ -144,7 +154,9 @@ export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps)
         setVisible(true);
       }
     } else {
-      if (!childIsInFocus) {
+      if (!isInFocus || (!showOnFocus && !isHovered)) {
+        removeFocusRef.current = setTimeout(hideImmediately, 100);
+      } else if (!childIsInFocus) {
         if (!isInFocus && !isHovered) {
           removeFocusRef.current = setTimeout(hideImmediately, 100);
         }
