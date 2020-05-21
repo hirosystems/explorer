@@ -59,15 +59,15 @@ const Condition = ({
           </Flex>
           <Flex align="center" width="calc(33.333%)" flexShrink={0}>
             <Text>
-              {'address' in condition.principal ? (
-                <ValueWrapped offset={6} truncate value={condition.principal.address} />
-              ) : null}
+              {condition.type === 'stx' ? condition.amount + ' ' : null}
+              {getConditionType(condition.type)}
             </Text>
           </Flex>
           <Flex align="center" width="calc(33.333% - 38px)" flexShrink={0}>
             <Text>
-              {condition.type === 'stx' ? condition.amount + ' ' : null}
-              {getConditionType(condition.type)}
+              {'address' in condition.principal ? (
+                <ValueWrapped offset={6} truncate value={condition.principal.address} />
+              ) : null}
             </Text>
           </Flex>
           <Flex
@@ -86,6 +86,7 @@ const Condition = ({
         <Box
           bg="ink"
           borderBottom={key === length - 1 ? 'unset' : '1px solid var(--colors-border)'}
+          borderTop="1px solid var(--colors-border)"
           borderBottomRightRadius={key === length - 1 ? '12px' : 'unset'}
           borderBottomLeftRadius={key === length - 1 ? '12px' : 'unset'}
         >
@@ -96,19 +97,17 @@ const Condition = ({
             language="json"
           />
           <Flex p="base" borderTop="1px solid" borderTopColor="ink.800" align="center">
-            <Box opacity={0.3} mr="tight" color="white" size="18px">
-              <InfoIcon />
+            <Box opacity={0.3} mr="tight" color="white">
+              <InfoIcon size="12px" />
             </Box>
-            <Text
+            <Caption
               as="a"
               // @ts-ignore
               href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-005-blocks-and-transactions.md#transaction-post-conditions"
               target="_blank"
-              fontSize="14px"
-              color="white"
             >
               Click here to learn more about post conditions.
-            </Text>
+            </Caption>
           </Flex>
         </Box>
       ) : null}
@@ -137,10 +136,10 @@ export const PostConditions = ({
                   <Caption fontSize="14px">Condition code</Caption>
                 </Flex>
                 <Box width="calc(33.333%)" py="base">
-                  <Caption fontSize="14px">Address</Caption>
+                  <Caption fontSize="14px">Amount</Caption>
                 </Box>
                 <Box width="calc(33.333% + 44px)" py="base">
-                  <Caption fontSize="14px">Amount</Caption>
+                  <Caption fontSize="14px">Address</Caption>
                 </Box>
               </Stack>
             </Box>

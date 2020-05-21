@@ -8,12 +8,14 @@ import {
   BoxProps,
   Flex,
   Stack,
+  Transition,
+  ChevronIcon,
 } from '@blockstack/ui';
 import { Field as FormikField, FieldProps, useField } from 'formik';
 import { Alert } from '@components/alert';
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
-import { Title } from '@components/typography';
+import { Caption, Title } from '@components/typography';
 import { Ref } from 'react';
 
 export const Input = React.forwardRef((props: InputProps, ref) => (
@@ -37,6 +39,7 @@ type InputType =
   | 'button'
   | 'checkbox'
   | 'code' // custom
+  | 'textarea' // custom
   | 'color'
   | 'date'
   | 'datetime-local'
@@ -58,7 +61,7 @@ type InputType =
   | 'url'
   | 'week';
 
-interface FieldBaseProps {
+interface FieldBaseProps extends Partial<BoxProps> {
   inputComponent?: React.ReactNode;
   label: string | any;
   placeholder?: string | any;
@@ -93,11 +96,18 @@ export const FieldBase = React.forwardRef(
       multiple,
       checked,
       onBlur,
+      maxHeight,
       ...rest
     }: FieldBaseProps,
     ref: Ref<HTMLInputElement>
   ) => {
-    // @ts-ignore
+    const textAreaProps =
+      type === 'textarea'
+        ? {
+            as: type,
+            minHeight: '200px',
+          }
+        : {};
 
     return (
       <Box {...rest}>
@@ -115,6 +125,7 @@ export const FieldBase = React.forwardRef(
             // @ts-ignore
             onBlur={onBlur}
             ref={ref}
+            maxHeight={maxHeight}
             {...rest}
           />
         ) : (
@@ -130,6 +141,8 @@ export const FieldBase = React.forwardRef(
               multiple={multiple}
               onBlur={onBlur}
               ref={ref}
+              {...textAreaProps}
+              maxHeight={maxHeight}
             />
             {list && datalist?.length ? (
               <datalist id={list}>
@@ -179,20 +192,92 @@ export const Wrapper = ({
   children,
   loading,
   error,
+  isVisible,
+  clearError,
+  back,
   ...rest
-}: { title: string; loading?: boolean; error?: string } & BoxProps) => {
+}: {
+  title: string;
+  loading?: boolean;
+  error?: string;
+  isVisible: boolean;
+  clearError?: () => void;
+  back?: {
+    onClick: () => void;
+    label: string;
+  };
+} & BoxProps) => {
   return (
-    <>
-      <Meta title={`${title} - Stacks Sandbox`} />
-      <Flex>
-        <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
-          <Stack spacing="base">
-            <Title as="h2">{title}</Title>
-            <Alert error={error} />
-            {children}
-          </Stack>
-        </Box>
-      </Flex>
-    </>
+    <Transition
+      styles={{
+        init: {
+          width: '100%',
+          opacity: 0,
+          position: 'absolute',
+          transform: 'translateY(5px)',
+        },
+        entered: {
+          width: '100%',
+          opacity: 1,
+          position: 'relative',
+          transform: 'none',
+        },
+        exiting: {
+          width: '100%',
+          opacity: 0,
+          position: 'absolute',
+          transform: 'translateY(10px)',
+        },
+      }}
+      in={isVisible}
+    >
+      {styles => (
+        <>
+          <Meta title={`${title} - Stacks Sandbox`} />
+          <Flex
+            style={{
+              willChange: 'transform, opacity',
+              ...styles,
+            }}
+          >
+            <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
+              <Stack spacing="base-loose">
+                <Box>
+                  <Title as="h2">{title}</Title>
+                  {back ? (
+                    <Flex
+                      _hover={{
+                        cursor: 'pointer',
+                        textDecoration: 'underline',
+                      }}
+                      mt="tight"
+                      align="center"
+                      onClick={back.onClick}
+                    >
+                      <ChevronIcon
+                        color="var(--colors-text-caption)"
+                        direction="left"
+                        size="18px"
+                      />
+                      <Caption
+                        _hover={{
+                          cursor: 'pointer',
+                          textDecoration: 'underline',
+                          color: 'var(--colors-invert)',
+                        }}
+                      >
+                        {back.label}
+                      </Caption>
+                    </Flex>
+                  ) : null}
+                </Box>
+                <Alert clearError={clearError} error={error} />
+                {children}
+              </Stack>
+            </Box>
+          </Flex>
+        </>
+      )}
+    </Transition>
   );
 };

@@ -21,7 +21,7 @@ const renderErrorMessage = ({
   }
 };
 
-export const Alert = ({ error: _error, ...rest }: any) => {
+export const Alert = ({ error: _error, clearError, ...rest }: any) => {
   const clearErrors = useClearErrors();
   const { error } = useDebugState();
   const hasError = error || _error;
@@ -38,14 +38,17 @@ export const Alert = ({ error: _error, ...rest }: any) => {
         bg="var(--colors-bg-alt)"
         p="base"
         align="center"
+        justify="center"
+        flexGrow={1}
         borderRight="1px solid var(--colors-border)"
+        alignSelf="stretch"
       >
         <Box mr="tight" color="red">
           <ExclamationMarkCircleIcon size="20px" />
         </Box>
-        {error ? (
+        {error || _error ? (
           <Title as="h4" style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}>
-            {error?.error || error?.name || 'Error!'}
+            {error?.error ? error?.error : error?.name ? error?.name : 'Error!'}
           </Title>
         ) : null}
       </Flex>
@@ -65,7 +68,10 @@ export const Alert = ({ error: _error, ...rest }: any) => {
           role="button"
           title="Clear error"
           aria-label="Clear error"
-          onClick={clearErrors}
+          onClick={() => {
+            clearErrors();
+            clearError && clearError();
+          }}
         >
           <CloseIcon size="12px" />
         </Box>

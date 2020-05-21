@@ -14,7 +14,12 @@ export const fetchTx = (apiServer: string) => async (
   return tx;
 };
 
-export const fetchTxList = (apiServer: string) => async (): Promise<{ results: Transaction[] }> => {
-  const resp = await fetchFromSidecar(apiServer)('/tx?limit=200');
+export const fetchTxList = (apiServer: string, offset?: number) => async (): Promise<{
+  results: Transaction[];
+  total: number;
+}> => {
+  const resp = await fetchFromSidecar(apiServer)(
+    `/tx?limit=200${offset ? '&offset=' + offset : ''}`
+  );
   return resp.json();
 };

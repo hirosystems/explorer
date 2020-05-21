@@ -15,7 +15,7 @@ interface TokenTransferPageProps {
 const TokenTransferPage = ({ transaction }: TokenTransferPageProps) => (
   <>
     <PageTop status={transaction.tx_status} type={[TransactionType.TOKEN_TRANSFER]} />
-    <Stack>
+    <Stack spacing="extra-loose">
       <TransactionDetails transaction={transaction} hideContract />
       <TokenTransfers events={transaction.events} />
     </Stack>

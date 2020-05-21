@@ -127,7 +127,7 @@ export const fetchContractInterface = (apiServer: string) => async (
 export function valueToClarityValue(answer: any, arg: ClarityFunctionArg): ClarityValue {
   const type = arg.type;
   const typeString = getTypeString(type);
-  console.log(type, typeString);
+
   if (isClarityAbiPrimitive(type)) {
     if (type === 'uint128') {
       return uintCV(answer);
@@ -142,7 +142,6 @@ export function valueToClarityValue(answer: any, arg: ClarityFunctionArg): Clari
       throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
     }
   } else if (isClarityAbiBuffer(type)) {
-    console.log('is buffer');
     return bufferCVFromString(answer);
   } else if (isClarityAbiResponse(type)) {
     throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
