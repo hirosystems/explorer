@@ -136,9 +136,11 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
             senderKey: identity?.privateKey as string,
             network: net,
           });
+          console.log(tx, 'TX');
           const { payload, error } = await dispatch(
             broadcastTransaction({ principal: identity?.address, tx })
           );
+          console.log('error', error);
           if (error) return doFinishLoading();
           setResult(payload.transactions[0].txId);
           doFinishLoading();
