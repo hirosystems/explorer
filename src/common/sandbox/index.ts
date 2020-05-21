@@ -17,7 +17,7 @@ import {
   isClarityAbiOptional,
   isClarityAbiTuple,
   isClarityAbiList,
-  abiFunctionToString,
+  serializeCV,
   uintCV,
   intCV,
   trueCV,
@@ -26,7 +26,10 @@ import {
   bufferCVFromString,
   getTypeString,
   StacksTestnet,
+  deserializeCV,
 } from '@blockstack/stacks-transactions';
+
+import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
 
 import { useSelector } from 'react-redux';
 import {
@@ -155,3 +158,57 @@ export function valueToClarityValue(answer: any, arg: ClarityFunctionArg): Clari
     throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
   }
 }
+
+interface ReadOnlyResponse {
+  okay: boolean;
+  result: string;
+}
+
+interface ReadOnlyOptions {
+  senderAddress: string;
+  contractName: string;
+  contractAddress: string;
+  functionName: string;
+  functionArgs: ClarityValue[];
+  network: StacksNetwork;
+}
+
+const cvToHex = (cv: ClarityValue) => {
+  const serialized = serializeCV(cv);
+  return `0x${serialized.toString('hex')}`;
+};
+
+export const callReadOnlyFunction = async ({
+  senderAddress,
+  contractName,
+  contractAddress,
+  functionName,
+  functionArgs,
+  network,
+}: ReadOnlyOptions): Promise<ReadOnlyResponse> => {
+  const url = `${network.coreApiUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/${functionName}`;
+
+  const args = functionArgs.map(arg => cvToHex(arg));
+
+  const body = JSON.stringify({
+    sender: senderAddress,
+    arguments: args,
+  });
+
+  const response = await fetch(url, {
+    method: 'POST',
+    body,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  return response.json();
+};
+
+export const parseReadOnlyResponse = ({ result }: ReadOnlyResponse) => {
+  const hex = result.slice(2);
+  const bufferCv = Buffer.from(hex, 'hex');
+  const clarityValue = deserializeCV(bufferCv);
+  return cvToString(clarityValue);
+};
