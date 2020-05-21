@@ -17,10 +17,12 @@ export interface PopoverProps extends BoxProps {
   showClose?: 'mobile' | 'always' | undefined;
   activeItem?: number;
   placement?: 'left' | 'right';
+  lockBodyScroll?: boolean;
 }
 
 export interface UsePopoverProps {
   length: number;
   triggerRef: any;
   showOnFocus?: boolean;
+  lockBodyScroll?: boolean;
 }
