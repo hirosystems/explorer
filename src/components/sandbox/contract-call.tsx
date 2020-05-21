@@ -74,7 +74,7 @@ export const ContractCall = (props: any) => {
       title="Contract call"
       error={error}
       position="relative"
-      back={
+      subtitle={
         !showSearch
           ? {
               onClick: () => setShowSearch(true),
