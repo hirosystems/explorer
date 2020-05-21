@@ -16,21 +16,21 @@ export const LogoNavItem = (props: BoxProps) => (
 );
 
 const HeaderBar = (props: FlexProps) => (
-  <Flex
-    top={0}
-    width="100%"
-    zIndex={9999}
-    height="64px"
-    position="fixed"
-    alignItems="center"
-    flexDirection="row"
-    bg="var(--colors-bg)"
-    borderBottom="1px solid"
-    borderColor="var(--colors-border)"
-    boxShadow="0px 1px 2px rgba(27, 39, 51, 0.04), 0px 4px 8px rgba(27, 39, 51, 0.04)"
-    px={['base', 'base', 'extra-loose']}
-    {...props}
-  />
+  <Box position="fixed" zIndex={99999} top={0} width="100%">
+    <Flex
+      zIndex={9999}
+      height="64px"
+      alignItems="center"
+      flexDirection="row"
+      bg="var(--colors-bg)"
+      borderBottom="1px solid"
+      borderColor="var(--colors-border)"
+      boxShadow="0px 1px 2px rgba(27, 39, 51, 0.04), 0px 4px 8px rgba(27, 39, 51, 0.04)"
+      px={['base', 'base', 'extra-loose']}
+      position="relative"
+      {...props}
+    />
+  </Box>
 );
 
 export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) => (
@@ -55,7 +55,7 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
           maxWidth={['100%', '100%', '544px']}
         />
       ) : null}
-      <TestnetSelector ml="auto" />
+      <TestnetSelector display={['none', 'none', 'block']} ml="auto" pl="base" />
     </Flex>
   </HeaderBar>
 );

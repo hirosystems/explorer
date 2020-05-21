@@ -50,11 +50,12 @@ export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps)
 
   // Hide and remove current focus of a child
   const hideImmediately = useCallback(() => {
+    triggerRef?.current?.blur();
+
     setVisible(false);
     setHovered(false);
     setCurrentFocus(undefined);
     setChildFocus(false);
-    triggerRef?.current?.blur();
     handleHoverDelay();
   }, []);
 
@@ -112,7 +113,7 @@ export const usePopover = ({ length, triggerRef, showOnFocus }: UsePopoverProps)
   const handleKeyDown = useCallback(
     e => {
       if (isVisible && e.key === 'Escape') {
-        hideImmediately();
+        return hideImmediately();
       }
       if (isVisible || isInFocus) {
         if (e.keyCode === 40) {

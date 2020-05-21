@@ -27,6 +27,8 @@ export const ItemIcon = React.memo(({ type, ...rest }: { type: Transaction['tx_t
 
 interface TxItemProps extends FlexProps {
   tx: Transaction;
+  isFocused?: boolean;
+  isHovered?: boolean;
 }
 
 const getTitle = (transaction: Transaction) => {
@@ -57,30 +59,38 @@ const getCaption = (tx: Transaction) => {
   }
 };
 
-export const TxItem = React.forwardRef(({ tx, ...rest }: TxItemProps, ref: any) => (
-  <Flex
-    px="base"
-    justifyContent="space-between"
-    alignItems="center"
-    height="64px"
-    style={{ outline: 'none' }}
-    flexShrink={0}
-    ref={ref}
-    {...rest}
-  >
-    <Flex align="center">
-      <Box opacity={0.3} color="var(--colors-invert)" mr="base">
-        <ItemIcon type={tx.tx_type} />
-      </Box>
-      <Flex flexDirection="column">
-        <Title fontSize="14px" display="block">
-          {getTitle(tx)}
-        </Title>
-        <Caption>{getCaption(tx)}</Caption>
+export const TxItem = React.forwardRef(
+  ({ tx, isHovered, isFocused, ...rest }: TxItemProps, ref: any) => (
+    <Flex
+      px="base"
+      justifyContent="space-between"
+      alignItems="center"
+      height="64px"
+      style={{ outline: 'none' }}
+      flexShrink={0}
+      ref={ref}
+      cursor={isHovered ? ['unset', 'unset', 'pointer'] : undefined}
+      {...rest}
+    >
+      <Flex align="center">
+        <Box
+          display={['none', 'none', 'block']}
+          opacity={0.3}
+          color="var(--colors-invert)"
+          mr="base"
+        >
+          <ItemIcon type={tx.tx_type} />
+        </Box>
+        <Flex flexDirection="column">
+          <Title textDecoration={isHovered ? 'underline' : 'unset'} fontSize="14px" display="block">
+            {getTitle(tx)}
+          </Title>
+          <Caption>{getCaption(tx)}</Caption>
+        </Flex>
       </Flex>
+      <Box>
+        <Tag type={tx.tx_type as TransactionType} />
+      </Box>
     </Flex>
-    <Box>
-      <Tag type={tx.tx_type as TransactionType} />
-    </Box>
-  </Flex>
-));
+  )
+);

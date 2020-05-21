@@ -12,6 +12,9 @@ export interface PopoverProps extends BoxProps {
   triggerRef: Ref<any>;
   hideItems?: boolean;
   showOnFocus?: boolean;
+  isVisible?: boolean;
+  showBackdrop?: boolean;
+  showClose?: 'mobile' | 'always' | undefined;
   activeItem?: number;
   placement?: 'left' | 'right';
 }

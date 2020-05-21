@@ -1,25 +1,12 @@
 import React from 'react';
 
 import { Button, Box, Flex } from '@blockstack/ui';
-import { Title, Text } from '@components/typography';
+import { Title, Text, Pre } from '@components/typography';
 import { Meta } from '@components/meta-head';
-import { useProgressBar } from '@components/progress-bar';
 import { useLoading } from '@common/hooks/use-loading';
 import { useRouter } from 'next/router';
 import { validateTxId, validateContractName } from '@common/utils';
 import { useToast } from '@common/hooks/use-toast';
-
-const Pre = (props: any) => (
-  <Text
-    fontFamily={`"Fira Code", monospace`}
-    bg="var(--colors-bg-light)"
-    borderRadius="3px"
-    px="extra-tight"
-    border="1px solid var(--colors-border)"
-    fontSize="14px"
-    {...props}
-  />
-);
 
 const TxIdMessage = ({ value }: { value?: string }) => (
   <>
