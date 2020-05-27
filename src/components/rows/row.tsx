@@ -49,7 +49,7 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
   return (
     <Flex pr="base" width="100%" align="center" justify="space-between" {...rest}>
       <Flex
-        color={isHovered ? 'var(--colors-text-hover)' : 'var(--colors-text-body)'}
+        color="var(--colors-text-body)"
         textStyle="body.small.medium"
         style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
         align="baseline"
