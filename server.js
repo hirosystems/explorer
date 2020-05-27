@@ -2,6 +2,8 @@ const cacheableResponse = require('cacheable-response');
 const express = require('express');
 const next = require('next');
 const morgan = require('morgan');
+const { createMiddleware: createPrometheusMiddleware } = require('@promster/express');
+const { createServer } = require('@promster/server');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -34,7 +36,13 @@ const ssrCache = cacheableResponse({
 app.prepare().then(() => {
   const server = express();
 
-  server.use(morgan('combined'));
+  server.use(createPrometheusMiddleware({ app: server }));
+
+  // Create `/metrics` endpoint on separate server
+  if (!dev) {
+    createServer({ port: 9153 }).then(() => console.log(`@promster/server started on port 9153.`));
+    server.use(morgan('combined'));
+  }
 
   server.get('/', (req, res) => ssrCache({ req, res, pagePath: '/' }));
 
