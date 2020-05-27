@@ -10,7 +10,7 @@ import {
   BoxProps,
   ChevronIcon,
 } from '@blockstack/ui';
-import { startPad, validateStacksAddress } from '@common/utils';
+import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
 import {
   TransactionEvent,
@@ -21,6 +21,7 @@ import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
 
 import { truncateMiddle, getFungibleAssetName } from '@common/utils';
+import { CodeAccordian } from '@components/code-accordian';
 
 import 'prismjs/components/prism-json';
 
@@ -159,17 +160,16 @@ const AssetEventAmount = React.memo(
     if (event.asset?.amount || value) {
       return (
         <Text fontWeight="500" {...rest}>
-          {event.asset?.amount || value}{' '}
-          <AssetWithTooltip
-            label={event.event_type}
-            value={
-              event.event_type === 'stx_asset'
-                ? 'uSTX'
-                : event.event_type === 'non_fungible_token_asset'
-                ? 'NFT'
-                : 'FT'
-            }
-          />
+          {event.event_type === 'stx_asset'
+            ? microToStacks(event.asset?.amount || value)
+            : event.asset?.amount || value}{' '}
+          <Text>
+            {event.event_type === 'stx_asset'
+              ? 'STX'
+              : event.event_type === 'non_fungible_token_asset'
+              ? 'NFT'
+              : 'FT'}
+          </Text>
         </Text>
       );
     }
@@ -222,7 +222,7 @@ export const TokenTransferItem = ({
     <Box fontSize="14px">
       <Stack
         isInline
-        borderBottom={!isOpen && noBottomBorder ? 'unset' : '1px solid'}
+        borderBottom={noBottomBorder ? 'unset' : '1px solid'}
         borderColor="var(--colors-border)"
         py="loose"
         pr="base"
@@ -234,14 +234,7 @@ export const TokenTransferItem = ({
         {...flexProps}
       >
         <EventAsset length={length} event={data} />
-        <Stack
-          align="center"
-          isInline
-          width="50%"
-          flexShrink={0}
-          flexGrow={1}
-          pt={['base', 'base', 'unset']}
-        >
+        <Stack align="center" isInline width="50%" flexShrink={0} flexGrow={1}>
           <AssetEventType width="50%" event={data} />
           <AssetEventAmount width="50%" event={data} />
 
@@ -257,21 +250,13 @@ export const TokenTransferItem = ({
           </Flex>
         </Stack>
       </Stack>
-      {isOpen ? (
-        <Box
-          bg="ink"
-          borderBottom={noBottomBorder ? 'unset' : '1px solid var(--colors-border)'}
-          borderBottomRightRadius={noBottomBorder ? '12px' : 'unset'}
-          borderBottomLeftRadius={noBottomBorder ? '12px' : 'unset'}
-        >
-          <CodeBlock
-            showLineNumbers
-            code={JSON.stringify(data, null, '  ')}
-            // @ts-ignore
-            language="json"
-          />
-        </Box>
-      ) : null}
+      <CodeAccordian
+        borderTop={noBottomBorder ? '1px solid var(--colors-border)' : 'unset'}
+        borderBottom={isOpen && !noBottomBorder ? '1px solid' : 'unset'}
+        isLast={noBottomBorder}
+        code={data}
+        isOpen={isOpen}
+      />
     </Box>
   );
 };

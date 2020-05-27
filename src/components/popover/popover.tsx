@@ -50,7 +50,7 @@ export const Popover = ({
   const maxHeight = cardProps?.maxHeight;
 
   return (
-    <Box width="100%" position="relative" zIndex={99} {...bindHover} {...rest}>
+    <Box width="100%" position="relative" zIndex={99} {...rest} {...bindHover}>
       <Box
         style={{
           outline: 'none',

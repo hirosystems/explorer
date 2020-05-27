@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Text, Box, Flex, BoxProps, FlexProps } from '@blockstack/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
-import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 
 const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   <Text
@@ -30,8 +29,6 @@ const LinkInNewWindow = React.forwardRef((props: any, ref: any) => (
 ));
 
 export const Footer = (props: FlexProps) => {
-  const handleRandomTxClick = useNavigateToRandomTx();
-
   return (
     <Box width="100%" {...props}>
       <Flex
@@ -42,8 +39,10 @@ export const Footer = (props: FlexProps) => {
         borderTop="1px solid var(--colors-border)"
       >
         <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
-          <FooterLink mr="base" onClick={handleRandomTxClick} role="link">
-            <Text>Random tx</Text>
+          <FooterLink mr="base">
+            <Link href="/transactions" passHref>
+              <Text as="a">Recent transactions</Text>
+            </Link>
           </FooterLink>
           <FooterLink mr="base">
             <Link href="/sandbox" passHref>

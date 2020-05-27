@@ -123,7 +123,7 @@ export const RecentlyViewedListItem = ({
       {...rest}
       ref={ref}
       tx={option}
-      isFocused={isFocused}
+      isFocused={focused || isFocused}
       isHovered={isHovered}
       _hover={{
         bg: 'var(--colors-bg-alt)',

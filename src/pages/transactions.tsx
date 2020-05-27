@@ -16,13 +16,14 @@ import { useConfigState } from '@common/hooks/use-config-state';
 import { useLoading } from '@common/hooks/use-loading';
 
 const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number }) => {
-  const { isLoading, doFinishLoading, doStartLoading } = useLoading();
-  const [transactions, setTransactions] = React.useState<Transaction[]>(txs);
-  const [selectedTypes, setSelectedTypes] = React.useState<TransactionType[]>([
+  const types = [
     TransactionType.CONTRACT_CALL,
     TransactionType.SMART_CONTRACT,
     TransactionType.TOKEN_TRANSFER,
-  ]);
+  ];
+  const { isLoading, doFinishLoading, doStartLoading } = useLoading();
+  const [transactions, setTransactions] = React.useState<Transaction[]>(txs);
+  const [selectedTypes, setSelectedTypes] = React.useState<TransactionType[]>(types);
   const [offset, setOffset] = React.useState(txs.length);
   const { apiServer } = useConfigState();
 
@@ -62,7 +63,7 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
         <Box>
           <Caption mb="tight">Filter by type</Caption>
           <Stack flexWrap="wrap" isInline>
-            {Object.values(TransactionType).map(type => {
+            {types.map(type => {
               const isSelected = selectedTypes?.length
                 ? selectedTypes.find(selected => selected === type)
                 : true;

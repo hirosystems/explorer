@@ -70,7 +70,7 @@ const transformDataToRowData = (d: Transaction) => {
   };
   const blockTime = {
     label: {
-      children: 'Block',
+      children: 'Block height',
     },
     children: (
       <BlockComponent
@@ -104,6 +104,18 @@ const transformDataToRowData = (d: Transaction) => {
       };
 
       return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo];
+    }
+    case 'coinbase': {
+      const scratch = {
+        condition:
+          d.coinbase_payload.data !==
+          '0x0000000000000000000000000000000000000000000000000000000000000000',
+        label: {
+          children: 'Scratch space',
+        },
+        children: d.coinbase_payload.data,
+      };
+      return [txid, sender, fees, blockTime, blockHash, scratch];
     }
     default:
       return [txid, contractName, sender, fees, blockTime, blockHash];
@@ -140,7 +152,6 @@ export const TransactionDetails = ({
       <Box
         width={['100%']}
         order={[2, 2, 0]}
-        mt={['extra-loose', 'extra-loose', 'unset']}
         mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
       >
         <Rows items={transformDataToRowData(transaction)} />
@@ -151,6 +162,7 @@ export const TransactionDetails = ({
           meta={contractMeta}
           contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
           order={[0, 0, 2]}
+          mb={['loose', 'loose', 'unset']}
         />
       )}
     </Flex>

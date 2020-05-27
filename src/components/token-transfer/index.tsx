@@ -58,7 +58,7 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
   /**
    * TODO: account for if there are many events. Limit to 5, show button if more, render more if button clicked
    */
-  const limit = 4;
+  const limit = 6;
 
   // sort them by event_index
   const events = _events
@@ -69,8 +69,8 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
 
   return (
     <Box {...boxProps}>
-      <SectionTitle mb="base-loose">Events</SectionTitle>
-      <Card>
+      <SectionTitle mb="base-loose">Event Log</SectionTitle>
+      <Card overflow="hidden">
         <Box borderBottom="1px solid var(--colors-border)">
           <Stack width="100%" isInline>
             <Flex
@@ -83,13 +83,13 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
               <Flex display={['none', 'none', 'flex']} align="center" justify="center" width="48px">
                 <Caption fontSize="14px">#</Caption>
               </Flex>
-              <Caption fontSize="14px">Token</Caption>
+              <Caption fontSize="14px">Asset</Caption>
             </Flex>
             <Box width="calc(33.333% - 32px)" py="base">
-              <Caption fontSize="14px">Type</Caption>
+              <Caption fontSize="14px">Event type</Caption>
             </Box>
             <Box width="calc(33.333% + 44px)" py="base">
-              <Caption fontSize="14px">Asset</Caption>
+              <Caption fontSize="14px">Value</Caption>
             </Box>
           </Stack>
         </Box>
