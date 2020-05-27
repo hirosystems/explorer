@@ -59,12 +59,13 @@ interface ContractCardProps extends FlexProps {
   icon?: string;
 }
 
-export const ContractCard: React.FC<ContractCardProps> = ({ title, meta, contractId }) => {
+export const ContractCard: React.FC<ContractCardProps> = ({ title, meta, contractId, ...rest }) => {
   return (
     <Card
       flexShrink={['unset', 'unset', 0]}
       width={['100%', '100%', '262px']}
       height={['unset', 'unset', '262px']}
+      {...rest}
     >
       <Flex
         px="base"

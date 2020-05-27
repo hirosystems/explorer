@@ -47,7 +47,7 @@ export const Meta = ({
       {url ? <meta property="og:description" content={description} /> : null}
       {labels?.length
         ? labels.map(({ label, data }, key) => (
-            <>
+            <React.Fragment key={key}>
               <meta
                 name={`twitter:label${key + 1}`}
                 // @ts-ignore
@@ -58,7 +58,7 @@ export const Meta = ({
                 // @ts-ignore
                 content={data}
               />
-            </>
+            </React.Fragment>
           ))
         : null}
       <link rel="icon" type="image/svg+xml" href={`/${filename}.svg`} />

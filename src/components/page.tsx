@@ -7,8 +7,8 @@ import { Footer } from '@components/footer';
 import { Notice } from '@components/notice';
 
 export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
-  <Box width="100%" {...props}>
-    <TransactionTitle mb="extra-loose" status={status} type={type} />
+  <Box width="100%" mb={['loose', 'loose', 'extra-loose']} {...props}>
+    <TransactionTitle status={status} type={type} />
   </Box>
 );
 

@@ -14,23 +14,8 @@ interface CoinbasePageProps {
 
 const CoinbasePage = ({ transaction }: CoinbasePageProps) => (
   <>
-    <PageTop status={transaction.tx_status} type={[TransactionType.COINBASE]} />
-    <Stack spacing="extra-loose">
-      <TransactionDetails transaction={transaction} hideContract />
-      {transaction.coinbase_payload.data ? (
-        <Rows
-          noTopBorder
-          items={[
-            {
-              label: {
-                children: 'Scratch space',
-              },
-              children: transaction.coinbase_payload.data,
-            },
-          ]}
-        />
-      ) : null}
-    </Stack>
+    <PageTop status={transaction.tx_status} type={TransactionType.COINBASE} />
+    <TransactionDetails transaction={transaction} />
   </>
 );
 
