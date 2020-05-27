@@ -1,6 +1,7 @@
 const cacheableResponse = require('cacheable-response');
 const express = require('express');
 const next = require('next');
+const morgan = require('morgan');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -32,6 +33,8 @@ const ssrCache = cacheableResponse({
 
 app.prepare().then(() => {
   const server = express();
+
+  server.use(morgan('combined'));
 
   server.get('/', (req, res) => ssrCache({ req, res, pagePath: '/' }));
 
