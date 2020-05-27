@@ -3,6 +3,7 @@ import { Account, IdentityPayload } from '@store/sandbox/types';
 import {
   fetchAccount,
   requestFaucetFunds,
+  setUserData,
   setIdentity,
   generateIdentity,
   broadcastTransaction,
@@ -11,25 +12,26 @@ import {
 import { RootState } from '@store';
 import { dedupe } from '@common/utils';
 
-export const accountAdapter = createEntityAdapter<Account>({
+export const sandboxAdapter = createEntityAdapter<Account>({
   selectId: (account: Account) => account.principal,
 });
 
-const initialState = accountAdapter.getInitialState<{
+const initialState = sandboxAdapter.getInitialState<{
   loading: 'idle' | 'pending' | 'rejected';
   error?: any;
   lastFetch?: number;
   identity?: IdentityPayload;
+  user?: any;
 }>({
   loading: 'idle',
   error: undefined,
   lastFetch: undefined,
 });
 
-const addAccountToState = (state: RootState['accounts'], action: any) => {
+const addAccountToState = (state: RootState['sandbox'], action: any) => {
   if (state.loading === 'pending') {
     const txs = state.entities[action.payload.principal]?.transactions;
-    accountAdapter.upsertOne(state, {
+    sandboxAdapter.upsertOne(state, {
       ...action.payload,
       transactions: dedupe([...txs, ...action.payload.transactions], 'txId'),
     });
@@ -37,18 +39,18 @@ const addAccountToState = (state: RootState['accounts'], action: any) => {
     state.error = undefined;
   }
 };
-const setError = (state: RootState['accounts'], action: any) => {
+const setError = (state: RootState['sandbox'], action: any) => {
   state.loading = 'idle';
   state.error = action.payload || action.error;
 };
 
-const setLoading = (state: RootState['accounts']) => {
+const setLoading = (state: RootState['sandbox']) => {
   if (state.loading === 'idle') {
     state.loading = 'pending';
     state.error = undefined;
   }
 };
-export const accounts = createReducer(initialState, builder => {
+export const sandbox = createReducer(initialState, builder => {
   builder.addCase(clearAccountError, state => {
     if (state.loading === 'idle') {
       state.error = undefined;
@@ -76,13 +78,17 @@ export const accounts = createReducer(initialState, builder => {
 
   builder.addCase(generateIdentity.rejected, setError);
 
+  builder.addCase(setUserData, (state, action) => {
+    state.user = action.payload;
+  });
+
   /**
    * Fetch Account
    */
   builder.addCase(fetchAccount.pending, setLoading);
   builder.addCase(fetchAccount.fulfilled, (state, action) => {
     if (state.loading === 'pending') {
-      accountAdapter.upsertOne(state, {
+      sandboxAdapter.upsertOne(state, {
         ...action.payload,
         transactions: state.entities[action.payload.principal]?.transactions || [],
       });
