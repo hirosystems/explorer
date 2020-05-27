@@ -10,26 +10,30 @@ import { Tabs } from '@components/sandbox/tabs';
 import { Text, Title } from '@components/typography';
 import { PageWrapper } from '@components/page';
 import { Card } from '@components/card';
+import { Meta } from '@components/meta-head';
 
 const SignedOutView = ({ onClick }: any) => {
   return (
-    <Flex pb="extra-loose" flexGrow={1} align="center" justify="center">
-      <Card mx="auto" p="extra-loose" direction="column" align="center" justify="center">
-        <Box maxWidth="600px" textAlign="center">
-          <Box mb="base">
-            <Title as="h2">Welcome to the Stacks Explorer Sandbox!</Title>
+    <>
+      <Meta title="Sandbox" />
+      <Flex pb="extra-loose" flexGrow={1} align="center" justify="center">
+        <Card mx="auto" p="extra-loose" direction="column" align="center" justify="center">
+          <Box maxWidth="600px" textAlign="center">
+            <Box mb="base">
+              <Title as="h2">Welcome to the Stacks Explorer Sandbox!</Title>
+            </Box>
+            <Text>
+              With the sandbox you'll be able to test out various aspects of the explorer: get STX
+              from the faucet, send transactions, create contracts, and call contract functions.
+              Please generate an address to use the sandbox.
+            </Text>
           </Box>
-          <Text>
-            With the sandbox you'll be able to test out various aspects of the explorer: get STX
-            from the faucet, send transactions, create contracts, and call contract functions.
-            Please generate an address to use the sandbox.
-          </Text>
-        </Box>
-        <Box mt="base" mx="auto">
-          <Button onClick={onClick}>Continue with Blockstack</Button>
-        </Box>
-      </Card>
-    </Flex>
+          <Box mt="base" mx="auto">
+            <Button onClick={onClick}>Continue with Blockstack</Button>
+          </Box>
+        </Card>
+      </Flex>
+    </>
   );
 };
 
