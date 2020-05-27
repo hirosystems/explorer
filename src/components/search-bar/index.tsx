@@ -108,6 +108,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
   const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [error, setError] = React.useState<ErrorType | undefined>(undefined);
   const [query, setQuery] = React.useState<string>('');
+
   const transactions = useRecentlyViewedTx();
 
   const hideDropDown = () => {
