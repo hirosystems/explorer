@@ -32,6 +32,8 @@ const Condition = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const isLast = key === length - 1;
+
   const handleOpen = React.useCallback(() => {
     if (!isOpen) {
       setIsOpen(true);
@@ -44,28 +46,33 @@ const Condition = ({
   const note = (
     <Flex
       bg="var(--colors-bg)"
+      color="var(--colors-text-caption)"
       p="base"
       borderTop="1px solid"
-      borderTopColor={['ink.800', 'ink.800', 'var(--colors-border)']}
+      borderBottom={!isLast ? '1px solid' : 'unset'}
+      borderColor={['ink.800', 'ink.800', 'var(--colors-border)']}
       align="center"
+      borderBottomRightRadius={isLast ? '12px' : 'unset'}
+      borderBottomLeftRadius={isLast ? '12px' : 'unset'}
+      as="a"
+      // @ts-ignore
+      href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-005-blocks-and-transactions.md#transaction-post-conditions"
+      target="_blank"
+      _hover={{
+        bg: 'var(--colors-bg-light)',
+        color: 'var(--colors-accent)',
+      }}
     >
-      <Box opacity={0.3} mr="tight" color="var(--colors-text-caption)">
+      <Box opacity={0.3} mr="tight">
         <InfoIcon size="12px" />
       </Box>
-      <Caption
-        as="a"
-        // @ts-ignore
-        href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-005-blocks-and-transactions.md#transaction-post-conditions"
-        target="_blank"
-      >
-        Click here to learn more about post conditions.
-      </Caption>
+      <Caption color="currentColor">Click here to learn more about post conditions.</Caption>
     </Flex>
   );
   return (
     <React.Fragment key={key}>
       <Row
-        borderBottom={key === length - 1 ? 'unset' : '1px solid var(--colors-border)'}
+        borderBottom={isLast && !isOpen ? 'unset' : '1px solid var(--colors-border)'}
         pl="base"
         onClick={handleOpen}
         _hover={{
@@ -102,7 +109,7 @@ const Condition = ({
           </Flex>
         </Stack>
       </Row>
-      <CodeAccordian code={condition} isOpen={isOpen} note={note} />
+      <CodeAccordian isLast={isLast} code={condition} isOpen={isOpen} note={note} />
     </React.Fragment>
   );
 };
