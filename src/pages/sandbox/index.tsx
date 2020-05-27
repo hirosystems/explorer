@@ -13,7 +13,7 @@ import { ReduxNextPageContext } from '@common/types';
 import { useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
 import { fetchAccount, generateIdentity, setIdentity, setUserData } from '@store/sandbox';
-import { truncateMiddle, usernameStorage, USERNAME_COOKIE } from '@common/utils';
+import { truncateMiddle, usernameStorage, USERNAME_COOKIE, microToStacks } from '@common/utils';
 import { useRouter } from 'next/router';
 import { useHover } from 'use-events';
 import { Card } from '@components/card';
@@ -173,7 +173,7 @@ const PageContent = ({
                   {isHovered ? identity.address : truncateMiddle(identity.address, 6)}
                 </Text>
                 <Text> </Text>
-                <Text fontSize="14px">{balance || 0} uSTX</Text>
+                <Text fontSize="14px">{microToStacks(balance as number) || 0} STX</Text>
               </Box>
             </Box>
           ) : null}
@@ -246,14 +246,16 @@ const SandboxPage = ({ tab, username }: any) => {
       ? document.location.href.toString().replace('/sandbox', '')
       : '';
 
-  const authOptions = {
-    finished: async (payload: FinishedData) => {
-      const userData = payload.userSession.loadUserData();
-      await dispatch(setUserData(userData));
-      usernameStorage.set(USERNAME_COOKIE, userData.username);
-      await handleGenerateId();
-    },
+  const onFinish = async (payload: FinishedData) => {
+    const userData = payload.userSession.loadUserData();
+    await dispatch(setUserData(userData));
+    usernameStorage.set(USERNAME_COOKIE, userData.username);
+    await handleGenerateId();
+  };
 
+  const authOptions = {
+    authOrigin: 'https://deploy-preview-301--stacks-authenticator.netlify.app',
+    finished: onFinish,
     appDetails: {
       name: 'Stacks Explorer',
       icon: iconPrefix + '/app-icon.png',
