@@ -13,7 +13,9 @@ dayjs.extend(relativeTime);
 
 export const store = engine.createStore([lclStorage]);
 export const identityStorage = engine.createStore([cookieStorage]);
+export const usernameStorage = engine.createStore([cookieStorage]);
 
+export const USERNAME_COOKIE = 'username';
 export const COLOR_MODE_COOKIE = 'color_mode';
 export const colorModeStorage = engine.createStore([cookieStorage]);
 export const NETWORK_COOKIE = 'selected_network';

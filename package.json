@@ -12,7 +12,7 @@
   },
   "version": "1.0.0",
   "dependencies": {
-    "@blockstack/connect": "^2.5.1-beta.0",
+    "@blockstack/connect": "^2.7.2",
     "@blockstack/rpc-client": "^0.2.0-alpha.0",
     "@blockstack/stacks-transactions": "^0.4.4",
     "@blockstack/ui": "^1.6.1-beta.0",

@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { UserSession, AppConfig } from 'blockstack';
+import { UserData } from 'blockstack/lib/auth/authApp';
 
 export const useUserSession = () => {
-  const [userData, setUserData] = React.useState({ loaded: false });
+  const [userData, setUserData] = React.useState<{ loaded: boolean } & Partial<UserData>>({
+    loaded: false,
+  });
   const [signedIn, setSignedIn] = React.useState(false);
   const appConfig = new AppConfig(['store_write']);
   const userSession = new UserSession({ appConfig });

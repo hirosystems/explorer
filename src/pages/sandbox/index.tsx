@@ -12,11 +12,13 @@ import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { ReduxNextPageContext } from '@common/types';
 import { useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
-import { fetchAccount, generateIdentity, setIdentity } from '@store/sandbox';
-import { truncateMiddle } from '@common/utils';
+import { fetchAccount, generateIdentity, setIdentity, setUserData } from '@store/sandbox';
+import { truncateMiddle, usernameStorage, USERNAME_COOKIE } from '@common/utils';
 import { useRouter } from 'next/router';
 import { useHover } from 'use-events';
 import { Card } from '@components/card';
+import { Connect, FinishedData, useConnect } from '@blockstack/connect';
+import { useUserSession } from '@common/hooks/use-user-session';
 
 const paths = [
   { path: 'faucet', label: 'STX faucet', component: Faucet },
@@ -141,10 +143,13 @@ const PageContent = ({
   showTransactionDialog,
   lastViewedNumber,
   tab,
+  username,
   ...props
 }: any) => {
   const { identity, balance } = useDebugState();
   const [isHovered, bindHover] = useHover();
+  const { doOpenAuth } = useConnect();
+  const { userData: user } = useUserSession();
   return (
     <PageWrapper
       notice={{
@@ -156,20 +161,26 @@ const PageContent = ({
       <Flex align="flex-start" justifyContent="space-between">
         <Title as="h1">Stacks Explorer Sandbox</Title>
         <Box>
-          {identity ? (
+          {(username && identity) || (identity && user?.profile) ? (
             <Box textAlign="right">
-              <Box {...bindHover}>
-                <Text>{isHovered ? identity.address : truncateMiddle(identity.address, 10)}</Text>
-              </Box>
               <Box>
-                <Text>{balance || 0} uSTX</Text>
+                <Text as="h3" fontSize="16px">
+                  {user.username}
+                </Text>
+              </Box>
+              <Box {...bindHover}>
+                <Text fontSize="14px">
+                  {isHovered ? identity.address : truncateMiddle(identity.address, 6)}
+                </Text>
+                <Text> </Text>
+                <Text fontSize="14px">{balance || 0} uSTX</Text>
               </Box>
             </Box>
           ) : null}
         </Box>
       </Flex>
       <Flex width="100%" py="base" flexGrow={1}>
-        {identity ? (
+        {(username && identity) || (identity && user?.profile) ? (
           <Tabs
             hideTransactionDialog={hideTransactionDialog}
             showTransactionDialog={showTransactionDialog}
@@ -192,7 +203,13 @@ const PageContent = ({
                 </Text>
               </Box>
               <Box mt="base" mx="auto">
-                <Button onClick={handleGenerateKey}>Generate address</Button>
+                <Button
+                  onClick={() => {
+                    doOpenAuth();
+                  }}
+                >
+                  Continue with Blockstack
+                </Button>
               </Box>
             </Card>
           </Flex>
@@ -201,7 +218,7 @@ const PageContent = ({
     </PageWrapper>
   );
 };
-const SandboxPage = ({ tab }: any) => {
+const SandboxPage = ({ tab, username }: any) => {
   const [transactionsVisible, setShowTransactions] = React.useState(false);
   const [lastViewedNumber, setLastViewed] = React.useState(0);
 
@@ -224,27 +241,44 @@ const SandboxPage = ({ tab }: any) => {
     await dispatch(generateIdentity());
   };
 
+  const authOptions = {
+    finished: async (payload: FinishedData) => {
+      const userData = payload.userSession.loadUserData();
+      dispatch(setUserData(userData));
+      usernameStorage.set(USERNAME_COOKIE, userData.username);
+      await handleGenerateId();
+    },
+    appDetails: {
+      name: 'Stacks Explorer',
+      icon: '/app-icon.png',
+    },
+  };
+
   return (
-    <ToastProvider>
-      <PageContent
-        hideTransactionDialog={hideTransactionDialog}
-        showTransactionDialog={showTransactionDialog}
-        transactionsVisible={transactionsVisible}
-        handleGenerateKey={handleGenerateId}
-        lastViewedNumber={lastViewedNumber}
-        tab={tab}
-      />
-    </ToastProvider>
+    <Connect authOptions={authOptions}>
+      <ToastProvider>
+        <PageContent
+          hideTransactionDialog={hideTransactionDialog}
+          showTransactionDialog={showTransactionDialog}
+          transactionsVisible={transactionsVisible}
+          handleGenerateKey={handleGenerateId}
+          lastViewedNumber={lastViewedNumber}
+          username={username}
+          tab={tab}
+        />
+      </ToastProvider>
+    </Connect>
   );
 };
 
 SandboxPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
   const cookies = parseCookies(ctx);
   let tab = ctx?.query?.tab ?? undefined;
-  if (cookies && cookies.debug_identity) {
-    ctx.store.dispatch(setIdentity(JSON.parse(cookies.debug_identity)));
+  if (cookies) {
+    cookies.debug_identity && ctx.store.dispatch(setIdentity(JSON.parse(cookies.debug_identity)));
     return {
       identity: cookies.debug_identity,
+      username: cookies[USERNAME_COOKIE] ? JSON.parse(cookies[USERNAME_COOKIE]) : undefined,
       tab,
     };
   }
