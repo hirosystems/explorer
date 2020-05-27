@@ -4,7 +4,7 @@
 
 ### Getting started
 
-The Stacks Explorer is built with react, [next.js](https://github.com/zeit/next.js) and [@blockstack/ui](https://github.com/blockstack/ux/tree/master/packages/ui). To run the explorer locally, you can copy this repo and install the dependencies needed. Make sure you have `yarn` installed.
+The Stacks Explorer is built with react, [next.js](https://github.com/zeit/next.js) and [@blockstack/ui](https://github.com/blockstack/ux/tree/master/packages/ui). To run the explorer locally, you can clone this repo and install the dependencies needed. Make sure you have `yarn` installed.
 
 ```sh
 yarn
