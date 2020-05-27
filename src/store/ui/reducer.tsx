@@ -17,6 +17,7 @@ export interface Network {
   LOCAL?: 'http://localhost:3999';
 }
 export type NetworkOptions = 'MOCKNET' | 'TESTNET' | 'LOCAL';
+
 export interface UiState {
   toasts: ToastType[];
   appTime: number;

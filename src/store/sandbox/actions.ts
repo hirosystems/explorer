@@ -12,11 +12,14 @@ import {
 import { network } from '@common/sandbox';
 import { doAddToast } from '@store/ui/actions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+import { UserData } from 'blockstack/lib/auth/authApp';
+
 const extractJson = require('extract-json-string');
 
 let errorCount = 0;
 
 export const setIdentity = createAction<IdentityPayload>('account/identity/set');
+export const setUserData = createAction<UserData>('account/user/set');
 export const generateIdentity = createAsyncThunk<IdentityPayload>(
   'account',
   // @ts-ignore

@@ -45,13 +45,13 @@ export const CodeAccordian = ({
           }}
         >
           <Box
-            bg="ink"
             borderBottomRightRadius={isLast ? '12px' : 'unset'}
             borderBottomLeftRadius={isLast ? '12px' : 'unset'}
             {...rest}
             ref={ref}
           >
             <CodeBlock
+              borderRadius="0"
               showLineNumbers
               code={JSON.stringify(code, null, '  ')}
               // @ts-ignore
