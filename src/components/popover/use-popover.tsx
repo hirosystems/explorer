@@ -154,7 +154,7 @@ export const usePopover = ({
         setVisible(true);
       }
     } else {
-      if (!isInFocus || (!showOnFocus && !isHovered)) {
+      if ((!isInFocus && !showOnFocus && !isHovered) || (!showOnFocus && !isHovered)) {
         removeFocusRef.current = setTimeout(hideImmediately, 100);
       } else if (!childIsInFocus) {
         if (!isInFocus && !isHovered) {

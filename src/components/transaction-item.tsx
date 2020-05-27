@@ -82,7 +82,11 @@ export const TxItem = React.forwardRef(
           <ItemIcon type={tx.tx_type} />
         </Box>
         <Flex flexDirection="column">
-          <Title textDecoration={isHovered ? 'underline' : 'unset'} fontSize="14px" display="block">
+          <Title
+            textDecoration={isFocused || isHovered ? 'underline' : 'unset'}
+            fontSize="14px"
+            display="block"
+          >
             {getTitle(tx)}
           </Title>
           <Caption>{getCaption(tx)}</Caption>
