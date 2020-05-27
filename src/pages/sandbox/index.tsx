@@ -241,16 +241,22 @@ const SandboxPage = ({ tab, username }: any) => {
     await dispatch(generateIdentity());
   };
 
+  const iconPrefix =
+    typeof document !== 'undefined'
+      ? document.location.href.toString().replace('/sandbox', '')
+      : '';
+
   const authOptions = {
     finished: async (payload: FinishedData) => {
       const userData = payload.userSession.loadUserData();
-      dispatch(setUserData(userData));
+      await dispatch(setUserData(userData));
       usernameStorage.set(USERNAME_COOKIE, userData.username);
       await handleGenerateId();
     },
+
     appDetails: {
       name: 'Stacks Explorer',
-      icon: '/app-icon.png',
+      icon: iconPrefix + '/app-icon.png',
     },
   };
 
