@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Formik } from 'formik';
-import { Flex, Stack, Box, Button, ChevronIcon } from '@blockstack/ui';
-import { Field, FieldBase, Wrapper } from '@components/sandbox/common';
+import { Flex, Stack, Box, Button } from '@blockstack/ui';
+import { Field, Wrapper, Select } from '@components/sandbox/common';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
 import { useDebugState, network } from '@common/sandbox';
@@ -10,53 +10,23 @@ import { makeSmartContractDeploy } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useTxToast } from '@common/sandbox';
-import { Popover } from '@components/popover/popover';
 import BN from 'bn.js';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useState } from 'react';
 
 const Sample = (props: any) => {
-  const [value, setValue] = React.useState(0);
-  const handleValueClick = ({ value }: { value: number }) => {
-    setValue(value);
-    props.setFieldValue('codeBody', SampleContracts[value].source);
-  };
-  const ref = React.useRef(null);
-  const inputValue = SampleContracts[value].name;
   return (
-    <Box {...props}>
-      <Popover
-        onItemClick={handleValueClick}
-        items={SampleContracts.map(({ name }, key: number) => ({
-          label: name,
-          value: key,
-        }))}
-        triggerRef={ref}
-      >
-        <Box _hover={{ cursor: 'pointer' }} position="relative">
-          <FieldBase
-            label="Choose from sample"
-            type="text"
-            value={inputValue}
-            name="sampleContracts"
-            ref={ref}
-            style={{ pointerEvents: 'none' }}
-          />
-          <Flex
-            color="var(--colors-invert)"
-            p="base"
-            pt="40px"
-            alignItems="center"
-            position="absolute"
-            bottom="0"
-            right={0}
-            height="100%"
-          >
-            <ChevronIcon size="22px" direction="down" />
-          </Flex>
-        </Box>
-      </Popover>
-    </Box>
+    <Select
+      name="codeBody"
+      label="Choose from sample"
+      setFieldValue={props.setFieldValue}
+      options={SampleContracts.map(({ name, source }, key: number) => ({
+        label: name,
+        value: source,
+        key,
+      }))}
+      flexGrow={1}
+    />
   );
 };
 

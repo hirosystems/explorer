@@ -7,7 +7,7 @@ import { Field, Wrapper } from '@components/sandbox/common';
 import { fetchContract, selectContractAbi, selectContractSource } from '@store/contracts';
 import { useDispatch, useSelector } from 'react-redux';
 import { Function } from '@components/sandbox/contract-call/functions';
-import { Caption, Title } from '@components/typography';
+import { Title } from '@components/typography';
 import { useLoading } from '@common/hooks/use-loading';
 import { RootState } from '@store';
 import { ContractCard } from '@components/contract-card';
@@ -69,6 +69,20 @@ export const ContractCall = (props: any) => {
     }
   };
 
+  const onPaste = (event: any, callback: (string: string) => any) => {
+    if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
+    if (event.originalEvent && event.originalEvent.clipboardData) {
+      // OriginalEvent is a property from jQuery, normalizing the event object
+      callback(event.originalEvent.clipboardData.getData('text'));
+    } else if (event.clipboardData) {
+      // used in some browsers for clipboardData
+      callback(event.clipboardData.getData('text/plain'));
+    } else if ((window as any).clipboardData) {
+      // Older clipboardData version for Internet Explorer only
+      callback((window as any).clipboardData.getData('Text'));
+    }
+  };
+
   return (
     <Wrapper
       title="Contract call"
@@ -111,35 +125,54 @@ export const ContractCall = (props: any) => {
           {styles => (
             <Box width="100%" position="absolute" style={styles}>
               <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
-                {({ handleSubmit }) => (
-                  <Box
-                    as="form"
-                    // @ts-ignore
-                    onSubmit={handleSubmit}
-                    method="post"
-                    style={{ width: '100%' }}
-                  >
-                    <Flex width="100%">
-                      <Stack spacing="base" width="100%">
-                        <Field
-                          label="Contract address"
-                          placeholder="STRYYQQ9M8KAF4NS7WNZQYY59X93XEKR31JP64CP"
-                          name="contractAddress"
-                        />
-                        <Field
-                          label="Contract Name"
-                          placeholder="hello-world-contract"
-                          name="contractName"
-                        />
-                        <Box>
-                          <Button ref={buttonRef as any} type="submit" isLoading={isLoading}>
-                            Fetch
-                          </Button>
-                        </Box>
-                      </Stack>
-                    </Flex>
-                  </Box>
-                )}
+                {({ handleSubmit, setValues }) => {
+                  const handlePaste = (e: any) =>
+                    onPaste(e, (value: string) => {
+                      const theValue = value.trim().toString();
+                      if (theValue.includes('.')) {
+                        const contractAddress = theValue.split('.')[0];
+                        const contractName = theValue.split('.')[1];
+
+                        setTimeout(() => {
+                          setValues({
+                            contractAddress,
+                            contractName,
+                          });
+                        }, 0);
+                      }
+                    });
+
+                  return (
+                    <Box
+                      as="form"
+                      // @ts-ignore
+                      onSubmit={handleSubmit}
+                      method="post"
+                      style={{ width: '100%' }}
+                    >
+                      <Flex width="100%">
+                        <Stack spacing="base" width="100%">
+                          <Field
+                            label="Contract address"
+                            placeholder="STRYYQQ9M8KAF4NS7WNZQYY59X93XEKR31JP64CP"
+                            name="contractAddress"
+                            onPaste={handlePaste}
+                          />
+                          <Field
+                            label="Contract Name"
+                            placeholder="hello-world-contract"
+                            name="contractName"
+                          />
+                          <Box>
+                            <Button ref={buttonRef as any} type="submit" isLoading={isLoading}>
+                              Fetch
+                            </Button>
+                          </Box>
+                        </Stack>
+                      </Flex>
+                    </Box>
+                  );
+                }}
               </Formik>
             </Box>
           )}
