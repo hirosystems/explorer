@@ -15,14 +15,14 @@ import { useRef } from 'react';
 
 const Functions = ({ abi, contractName, contractAddress }: any) => {
   return abi.functions.map((func: any) => {
-    return (
+    return func.access !== 'private' ? (
       <Function
         contractName={contractName as string}
         contractAddress={contractAddress as string}
         func={func}
         key={func.name}
       />
-    );
+    ) : null;
   });
 };
 

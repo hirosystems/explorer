@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Formik } from 'formik';
 import { Flex, Stack, Box, Button } from '@blockstack/ui';
-import { Field, Wrapper, Select } from '@components/sandbox/common';
+import { Field, Wrapper } from '@components/sandbox/common';
+import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
 import { useDebugState, network } from '@common/sandbox';

@@ -4,11 +4,12 @@ import { useControlledHover } from '@common/hooks/use-controlled-hover';
 import { useFocus } from 'use-events';
 import { UsePopoverProps } from '@components/popover/types';
 import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
+import { useClickOutside } from 'use-events';
 
 export const usePopover = ({
   length,
   triggerRef,
-  showOnFocus,
+  showOnClickOrFocus,
   lockBodyScroll,
 }: UsePopoverProps) => {
   const timeoutRef = React.useRef<number | null>(null);
@@ -19,13 +20,12 @@ export const usePopover = ({
   const [hoverDelay, setHoverDelay] = useState(false);
   const [currentFocus, setCurrentFocus] = useState<number | undefined>(undefined);
   const [childIsInFocus, setChildFocus] = useState(false);
-  const [wrapperFocus, bindWrapperFocus] = useFocus();
-
   const [localTriggerFocusState, setTriggerFocus] = useState(false);
 
-  const isInFocus = localTriggerFocusState || wrapperFocus;
-
+  const [wrapperFocus, bindWrapperFocus] = useFocus();
   const bindHover = useControlledHover(setHovered);
+
+  const isInFocus = localTriggerFocusState || wrapperFocus;
 
   if (lockBodyScroll) {
     useLockBodyScroll(isVisible);
@@ -59,15 +59,14 @@ export const usePopover = ({
   ]);
 
   // Hide and remove current focus of a child
-  const hideImmediately = useCallback(() => {
+  const hideImmediately = () => {
     triggerRef?.current?.blur();
-
+    setCurrentFocus(undefined);
     setVisible(false);
     setHovered(false);
-    setCurrentFocus(undefined);
     setChildFocus(false);
     handleHoverDelay();
-  }, []);
+  };
 
   // Set childFocus to true, and set the key of child that is focused
   const handleChildFocus = useCallback(
@@ -150,11 +149,14 @@ export const usePopover = ({
 
   useEffect(() => {
     if (!isVisible) {
-      if (isInFocus || (!showOnFocus && isHovered)) {
+      if (isInFocus || (!showOnClickOrFocus && isHovered)) {
         setVisible(true);
       }
     } else {
-      if ((!isInFocus && !showOnFocus && !isHovered) || (!showOnFocus && !isHovered)) {
+      if (
+        (!isInFocus && !showOnClickOrFocus && !isHovered) ||
+        (!showOnClickOrFocus && !isHovered)
+      ) {
         removeFocusRef.current = setTimeout(hideImmediately, 100);
       } else if (!childIsInFocus) {
         if (!isInFocus && !isHovered) {
@@ -166,13 +168,23 @@ export const usePopover = ({
         }
       }
     }
-  }, [isVisible, isInFocus, isHovered, childIsInFocus]);
+  }, [isVisible, isInFocus, isHovered, showOnClickOrFocus, childIsInFocus]);
 
   const handleItemClick = (callback: () => void) => (e: any) => {
     e?.preventDefault();
     hideImmediately();
     callback && callback();
   };
+
+  const triggerOnclick = showOnClickOrFocus
+    ? {
+        onClick: () => {
+          triggerRef.current.focus();
+        },
+      }
+    : {};
+
+  useClickOutside([triggerRef], () => hideImmediately());
 
   return {
     isVisible,
@@ -185,6 +197,7 @@ export const usePopover = ({
     hideImmediately,
     handleItemClick,
     triggerProps: {
+      ...triggerOnclick,
       ...bindWrapperFocus,
     },
     wrapper: {

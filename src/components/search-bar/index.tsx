@@ -170,7 +170,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
         px: small ? ['base', 'base', 'unset'] : ['base', 'base', 'unset'],
         maxWidth: ['100%', '100%', '544px'],
       }}
-      showOnFocus
+      showOnClickOrFocus
       items={transactions}
       itemComponent={RecentlyViewedListItem}
       onItemClick={(option: Transaction) => router.push('/txid/[txid]', `/txid/${option.tx_id}`)}

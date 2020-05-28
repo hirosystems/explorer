@@ -28,7 +28,7 @@ export const Popover = ({
   hideItems,
   activeItem,
   placement,
-  showOnFocus,
+  showOnClickOrFocus,
   showBackdrop,
   isVisible: _isVisible,
   showClose,
@@ -45,7 +45,7 @@ export const Popover = ({
     triggerProps,
     wrapper,
     hideImmediately,
-  } = usePopover({ length: items?.length ?? 0, triggerRef, showOnFocus, lockBodyScroll });
+  } = usePopover({ length: items?.length ?? 0, triggerRef, showOnClickOrFocus, lockBodyScroll });
 
   const maxHeight = cardProps?.maxHeight;
 
