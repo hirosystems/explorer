@@ -7,11 +7,10 @@ import {
   parseReadOnlyResponse,
 } from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
-import { deserializeCV, makeContractCall, ClarityType } from '@blockstack/stacks-transactions';
-import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
+import { makeContractCall, PostConditionMode } from '@blockstack/stacks-transactions';
 import { Formik } from 'formik';
 import { Caption, Text } from '@components/typography';
-import { Field } from '@components/sandbox/common';
+import { Field, Select } from '@components/sandbox/common';
 import { Card } from '@components/card';
 import { valueToClarityValue } from '@common/sandbox';
 import { useConfigState } from '@common/hooks/use-config-state';
@@ -19,7 +18,6 @@ import { useLoading } from '@common/hooks/use-loading';
 import { useDebugState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
 import { broadcastTransaction } from '@store/sandbox';
-import BigNum from 'bn.js';
 import { TxLink } from '@components/links';
 
 interface FunctionProps {
@@ -72,27 +70,45 @@ const Arguments = ({ args, state, ...rest }: any) =>
       })
     : null;
 
-const ArgumentsForm = ({ state, loading, onSubmit }: any) => (
-  <Formik
-    enableReinitialize
-    // @ts-ignore
-    initialValues={Object.keys(state).reduce((a, b) => ((a[b] = ''), a), {})}
-    onSubmit={onSubmit}
-  >
-    {({ handleSubmit }) => (
-      <form onSubmit={handleSubmit} method="post">
-        <Stack spacing="base">
-          <Arguments args={Object.keys(state)} state={state} />
-          <Box>
-            <Button isLoading={loading} loadingText="Loading" size="md">
-              Submit
-            </Button>
-          </Box>
-        </Stack>
-      </form>
-    )}
-  </Formik>
-);
+const ArgumentsForm = ({ state, loading, onSubmit }: any) => {
+  // @ts-ignore
+  const stateValues = Object.keys(state).reduce((a, b) => ((a[b] = ''), a), {});
+  return (
+    <Formik
+      enableReinitialize
+      initialValues={{
+        ...stateValues,
+        postConditionMode: PostConditionMode.Deny.toString(),
+      }}
+      onSubmit={onSubmit}
+    >
+      {({ handleSubmit, setFieldValue }) => (
+        <form onSubmit={handleSubmit} method="post">
+          <Stack spacing="base">
+            {Object.keys(state).length ? (
+              <Arguments args={Object.keys(state)} state={state} />
+            ) : null}
+            <Select
+              mb="base"
+              setFieldValue={setFieldValue}
+              options={[
+                { label: 'Deny', value: PostConditionMode.Deny.toString(), key: 0 },
+                { label: 'Allow', value: PostConditionMode.Allow.toString(), key: 1 },
+              ]}
+              label="Post condition mode"
+              name="postConditionMode"
+            />
+            <Box>
+              <Button isLoading={loading} loadingText="Loading" size="md">
+                Submit
+              </Button>
+            </Box>
+          </Stack>
+        </form>
+      )}
+    </Formik>
+  );
+};
 
 export const Function = ({ func, contractAddress, contractName }: FunctionProps) => {
   const [state, setState] = React.useState<FormState>({});
@@ -122,10 +138,17 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
   const net = network(apiServer as string);
 
   const onSubmit = React.useCallback(
-    async (values: any) => {
+    async (values?: any) => {
+      const { postConditionMode: stringPostConditionMode, ...clarityValues } = values;
+
+      const postConditionMode =
+        stringPostConditionMode === PostConditionMode.Deny.toString()
+          ? PostConditionMode.Deny
+          : PostConditionMode.Allow;
+
       try {
         doStartLoading();
-        const functionArgs = valuesToClarityArray(values);
+        const functionArgs = clarityValues ? valuesToClarityArray(clarityValues) : [];
 
         if (func.access === 'public') {
           const tx = await makeContractCall({
@@ -135,12 +158,13 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
             functionArgs,
             senderKey: identity?.privateKey as string,
             network: net,
+            postConditionMode,
           });
-          console.log(tx, 'TX');
+
           const { payload, error } = await dispatch(
             broadcastTransaction({ principal: identity?.address, tx })
           );
-          console.log('error', error);
+
           if (error) return doFinishLoading();
           setResult(payload.transactions[0].txId);
           doFinishLoading();
@@ -175,9 +199,8 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
           <TypeLabel ml="extra-tight">{func.access} function</TypeLabel>
         </Flex>
 
-        {func.args.length ? (
-          <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
-        ) : null}
+        <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
+
         {result && (
           <Box mt="base">
             <Caption>
