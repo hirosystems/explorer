@@ -11,12 +11,13 @@ import {
   Transition,
   ChevronIcon,
 } from '@blockstack/ui';
-import { Field as FormikField, FieldProps, useField } from 'formik';
+import { Field as FormikField, FieldProps, FormikHelpers, useField } from 'formik';
 import { Alert } from '@components/alert';
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
 import { Caption, Title } from '@components/typography';
 import { Ref } from 'react';
+import { Popover } from '@components/popover/popover';
 
 export const Input = React.forwardRef((props: InputProps, ref) => (
   <InputBase
@@ -280,3 +281,58 @@ export const Wrapper = ({
     </Transition>
   );
 };
+
+interface SelectProps extends BoxProps {
+  setFieldValue?: FormikHelpers<any>['setFieldValue'];
+  name: string;
+  options: {
+    label: string;
+    value: any;
+    key: number;
+  }[];
+  label: string;
+}
+export const Select = React.memo(({ name, options, label, ...rest }: SelectProps) => {
+  const [index, setIndex] = React.useState(0);
+  const selectedOption = options[index];
+  const [field, { touched, error }, helpers] = useField({
+    ...rest,
+    name,
+  } as any);
+
+  const handleValueClick = React.useCallback(({ key }: { value: string; key: number }) => {
+    setIndex(key);
+    helpers.setValue(options[key].value);
+  }, []);
+
+  const ref = React.useRef(null);
+
+  return (
+    <Box {...rest}>
+      <Popover onItemClick={handleValueClick} items={options} triggerRef={ref}>
+        <Box _hover={{ cursor: 'pointer' }} position="relative">
+          <FieldBase
+            label={label}
+            type="text"
+            value={selectedOption.label}
+            name={name}
+            ref={ref}
+            style={{ pointerEvents: 'none' }}
+          />
+          <Flex
+            color="var(--colors-invert)"
+            p="base"
+            pt="40px"
+            alignItems="center"
+            position="absolute"
+            bottom="0"
+            right={0}
+            height="100%"
+          >
+            <ChevronIcon size="22px" direction="down" />
+          </Flex>
+        </Box>
+      </Popover>
+    </Box>
+  );
+});
