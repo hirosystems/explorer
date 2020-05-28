@@ -11,7 +11,7 @@ export interface PopoverProps extends BoxProps {
   label?: string;
   triggerRef: Ref<any>;
   hideItems?: boolean;
-  showOnFocus?: boolean;
+  showOnClickOrFocus?: boolean;
   isVisible?: boolean;
   showBackdrop?: boolean;
   showClose?: 'mobile' | 'always' | undefined;
@@ -23,6 +23,6 @@ export interface PopoverProps extends BoxProps {
 export interface UsePopoverProps {
   length: number;
   triggerRef: any;
-  showOnFocus?: boolean;
+  showOnClickOrFocus?: boolean;
   lockBodyScroll?: boolean;
 }

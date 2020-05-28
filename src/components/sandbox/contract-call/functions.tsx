@@ -10,7 +10,8 @@ import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blocks
 import { makeContractCall, PostConditionMode } from '@blockstack/stacks-transactions';
 import { Formik } from 'formik';
 import { Caption, Text } from '@components/typography';
-import { Field, Select } from '@components/sandbox/common';
+import { Field } from '@components/sandbox/common';
+import { Select } from '@components/select';
 import { Card } from '@components/card';
 import { valueToClarityValue } from '@common/sandbox';
 import { useConfigState } from '@common/hooks/use-config-state';
