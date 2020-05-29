@@ -51,7 +51,7 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
             target="_blank"
           >
             file an issue
-          </Link>
+          </Link>{' '}
           and describe: what you were attempting to do, the URL you are trying, and anything that is
           in the console.
         </Text>
