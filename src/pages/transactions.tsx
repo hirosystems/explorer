@@ -109,7 +109,19 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
           })
         ) : (
           <Flex p="base" align="center" justify="center">
-            <Text>There are no transactions of this type.</Text>
+            <Box py="72px" maxWidth="420px" textAlign="center">
+              <Box mb="base">
+                <Title as="h2">No transactions found!</Title>
+              </Box>
+              <Box>
+                <Text>
+                  There aren't any transactions of the type(s) selected.{' '}
+                  {total === 0
+                    ? 'The Testnet might have been recently restarted, please check back soon.'
+                    : 'You can try to load more to find some.'}
+                </Text>
+              </Box>
+            </Box>
           </Flex>
         )}
         {transactions.length < total ? (

@@ -5,7 +5,7 @@ import { Badge } from '@components/badge';
 import { TransactionType } from '@models/transaction.interface';
 import { getTxTypeName } from '@common/transaction-names';
 
-const colorMap = {
+export const transactionTypeColor = {
   [TransactionType.SMART_CONTRACT]: '#0F5257',
   [TransactionType.CONTRACT_CALL]: '#F9A14D',
   [TransactionType.TOKEN_TRANSFER]: 'blue',
@@ -18,7 +18,7 @@ interface TagProps extends FlexProps {
 }
 
 export const Tag = ({ type, ...rest }: TagProps) => (
-  <Badge background={colorMap[type]} {...rest}>
+  <Badge background={transactionTypeColor[type]} {...rest}>
     {getTxTypeName(type)}
   </Badge>
 );
