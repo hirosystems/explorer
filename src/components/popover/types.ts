@@ -23,6 +23,7 @@ export interface PopoverProps extends BoxProps {
 export interface UsePopoverProps {
   length: number;
   triggerRef: any;
+  wrapperRef: any;
   showOnClickOrFocus?: boolean;
   lockBodyScroll?: boolean;
 }
