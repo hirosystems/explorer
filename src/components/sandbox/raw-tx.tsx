@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Formik } from 'formik';
-import { Flex, Stack, Button } from '@blockstack/ui';
+import { Flex, Box, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 import { useDebugState } from '@common/sandbox';
 import { broadcastTransaction, fetchAccount } from '@store/sandbox';
@@ -59,9 +59,11 @@ export const RawTx = (props: any) => {
             <Flex width="100%">
               <Stack spacing="base" maxWidth="560px" width="100%">
                 <Field type="textarea" name="rawTx" label="Raw transaction" />
-                <Button type="submit" isLoading={isLoading}>
-                  Submit
-                </Button>
+                <Box>
+                  <Button type="submit" isLoading={isLoading}>
+                    Broadcast transaction
+                  </Button>
+                </Box>
               </Stack>
             </Flex>
           </form>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BigNum from 'bn.js';
 import { Formik } from 'formik';
-import { Flex, Stack, Button } from '@blockstack/ui';
+import { Flex, Box, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 import { useDebugState, network } from '@common/sandbox';
 import { broadcastTransaction, fetchAccount } from '@store/sandbox';
@@ -74,9 +74,11 @@ export const TokenTransfer = (props: any) => {
                 <Field name="recipient" label="Recipient address" />
                 <Field type="number" name="amount" label="uSTX amount" />
                 <Field name="memo" label="Memo (message)" />
-                <Button type="submit" isLoading={isLoading}>
-                  Submit
-                </Button>
+                <Box>
+                  <Button type="submit" isLoading={isLoading}>
+                    Send STX
+                  </Button>
+                </Box>
               </Stack>
             </Flex>
           </form>

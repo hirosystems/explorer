@@ -165,7 +165,7 @@ export const ContractCall = (props: any) => {
                           />
                           <Box>
                             <Button ref={buttonRef as any} type="submit" isLoading={isLoading}>
-                              Fetch
+                              Search
                             </Button>
                           </Box>
                         </Stack>

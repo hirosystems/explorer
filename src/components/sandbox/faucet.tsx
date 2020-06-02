@@ -85,7 +85,7 @@ export const Faucet = (props: any) => {
                     isLoading={loading}
                     loadingText="Processing..."
                   >
-                    Submit
+                    Request STX
                   </Button>
                 </Box>
               </Stack>
