@@ -132,7 +132,6 @@ export const broadcastTransaction = createAsyncThunk<
         };
       } else {
         const res = await broadcastTransactionBase(tx as StacksTransaction, network(apiServer));
-        console.log(res);
         return {
           principal,
           transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
@@ -143,7 +142,6 @@ export const broadcastTransaction = createAsyncThunk<
       if (realError) {
         return rejectWithValue(realError);
       }
-      console.log('not real error, e', e);
       return rejectWithValue(e);
     }
   }

@@ -11,6 +11,7 @@ export const usePopover = ({
   triggerRef,
   showOnClickOrFocus,
   lockBodyScroll,
+  wrapperRef,
 }: UsePopoverProps) => {
   const timeoutRef = React.useRef<number | null>(null);
   const removeFocusRef = React.useRef<number | null>(null);
@@ -184,7 +185,7 @@ export const usePopover = ({
       }
     : {};
 
-  useClickOutside([triggerRef], () => hideImmediately());
+  useClickOutside([wrapperRef], () => hideImmediately());
 
   return {
     isVisible,

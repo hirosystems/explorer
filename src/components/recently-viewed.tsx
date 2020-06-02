@@ -118,7 +118,6 @@ export const RecentlyViewedListItem = ({
       {...bindHover}
       onFocus={handleFocus}
       onBlur={handleBlur}
-      onClick={onClick}
       tabIndex={0}
       {...rest}
       ref={ref}
@@ -128,6 +127,7 @@ export const RecentlyViewedListItem = ({
       _hover={{
         bg: 'var(--colors-bg-alt)',
       }}
+      onClick={onClick}
     />
   );
 };

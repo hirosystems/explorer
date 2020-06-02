@@ -35,6 +35,7 @@ export const Popover = ({
   lockBodyScroll,
   ...rest
 }: PopoverProps) => {
+  const wrapperRef = React.useRef(null);
   const {
     isVisible,
     bindHover,
@@ -45,12 +46,18 @@ export const Popover = ({
     triggerProps,
     wrapper,
     hideImmediately,
-  } = usePopover({ length: items?.length ?? 0, triggerRef, showOnClickOrFocus, lockBodyScroll });
+  } = usePopover({
+    length: items?.length ?? 0,
+    triggerRef,
+    wrapperRef,
+    showOnClickOrFocus,
+    lockBodyScroll,
+  });
 
   const maxHeight = cardProps?.maxHeight;
 
   return (
-    <Box width="100%" position="relative" zIndex={99} {...rest} {...bindHover}>
+    <Box width="100%" position="relative" ref={wrapperRef} zIndex={99} {...rest} {...bindHover}>
       <Box
         style={{
           outline: 'none',
@@ -128,13 +135,15 @@ export const Popover = ({
                       overflowY: 'auto',
                     }}
                   >
-                    {items.map((option, key: number) => (
+                    {items.map((item, key: number) => (
                       <ItemComponent
                         key={key}
                         onFocus={handleChildFocus(key)}
                         onBlur={handleChildBlur(key === items.length - 1, key)}
-                        onClick={handleItemClick(() => onItemClick && onItemClick(option))}
-                        option={option}
+                        onClick={handleItemClick(() => {
+                          onItemClick && onItemClick(item);
+                        })}
+                        option={item}
                         focused={currentFocus === key}
                         active={activeItem === key}
                         isLast={key === items.length - 1}
