@@ -7,10 +7,11 @@ import { ContractCall } from '@components/sandbox/contract-call';
 import { Faucet } from '@components/sandbox/faucet';
 import { RawTx } from '@components/sandbox/raw-tx';
 import { ReduxNextPageContext } from '@common/types';
-import { useDebugState } from '@common/sandbox';
+import { AppConfig, UserSession } from 'blockstack/lib';
+import { doGenerateIdentity, useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
-import { fetchAccount, generateIdentity, setIdentity, setUserData } from '@store/sandbox';
-import { usernameStorage, USERNAME_COOKIE } from '@common/utils';
+import { fetchAccount, setIdentity, setUserData } from '@store/sandbox';
+import { usernameStorage, USERNAME_COOKIE, identityStorage } from '@common/utils';
 import { PageContent } from '@components/sandbox/page';
 import { Connect, FinishedData } from '@blockstack/connect';
 
@@ -23,8 +24,10 @@ const paths = [
 ];
 
 const SandboxPage = ({ tab, username }: any) => {
+  const [iconPath, setIconPath] = React.useState<string | undefined>(undefined);
+  const appConfig = new AppConfig(['store_write', 'publish_data']);
+  const userSession = new UserSession({ appConfig });
   const [transactionsVisible, setShowTransactions] = React.useState(false);
-  const [lastViewedNumber, setLastViewed] = React.useState(0);
 
   const hideTransactionDialog = () => {
     setShowTransactions(false);
@@ -37,32 +40,43 @@ const SandboxPage = ({ tab, username }: any) => {
 
   const { lastFetch, loading, identity, error } = useDebugState();
 
-  if (!error && !lastFetch && loading !== 'pending' && identity) {
-    dispatch(fetchAccount(identity.address));
-  }
+  React.useEffect(() => {
+    if (!error && !lastFetch && loading !== 'pending' && identity) {
+      dispatch(fetchAccount(identity.address));
+    }
+  }, [error, lastFetch, loading, identity]);
 
-  const handleGenerateId = async () => {
-    await dispatch(generateIdentity());
-  };
+  React.useEffect(() => {
+    const iconPrefix = typeof document !== 'undefined' ? document.location.origin.toString() : '';
+    if (!iconPath) {
+      setIconPath(iconPrefix);
+    }
+  }, []);
 
-  const iconPrefix =
-    typeof document !== 'undefined'
-      ? document.location.href.toString().replace('/sandbox', '')
-      : '';
-
-  const onFinish = async (payload: FinishedData) => {
+  const onFinish = React.useCallback(async (payload: FinishedData) => {
     const userData = payload.userSession.loadUserData();
     await dispatch(setUserData(userData));
     usernameStorage.set(USERNAME_COOKIE, userData.username);
-    await handleGenerateId();
-  };
+    try {
+      const saved = await payload.userSession.getFile('identity.json');
+      const _identity = JSON.parse(saved as string);
+      identityStorage.set('debug_identity', _identity);
+      await dispatch(setIdentity(_identity));
+    } catch (e) {
+      const _identity = await doGenerateIdentity();
+      await payload.userSession.putFile('identity.json', JSON.stringify(_identity));
+      identityStorage.set('debug_identity', _identity);
+      await dispatch(setIdentity(_identity));
+    }
+  }, []);
 
   const authOptions = {
     authOrigin: 'https://deploy-preview-301--stacks-authenticator.netlify.app',
     finished: onFinish,
+    userSession,
     appDetails: {
       name: 'Stacks Explorer',
-      icon: iconPrefix + '/app-icon.png',
+      icon: iconPath + '/app-icon.png',
     },
   };
 
@@ -73,8 +87,6 @@ const SandboxPage = ({ tab, username }: any) => {
           hideTransactionDialog={hideTransactionDialog}
           showTransactionDialog={showTransactionDialog}
           transactionsVisible={transactionsVisible}
-          handleGenerateKey={handleGenerateId}
-          lastViewedNumber={lastViewedNumber}
           username={username}
           tab={tab}
           tabs={paths}

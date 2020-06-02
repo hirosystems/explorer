@@ -7,7 +7,7 @@ export const useUserSession = () => {
     loaded: false,
   });
   const [signedIn, setSignedIn] = React.useState(false);
-  const appConfig = new AppConfig(['store_write']);
+  const appConfig = new AppConfig(['store_write', 'publish_data']);
   const userSession = new UserSession({ appConfig });
   React.useEffect(() => {
     if (!signedIn && userSession.isUserSignedIn()) {
