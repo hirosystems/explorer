@@ -30,7 +30,11 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
   const handleFetchMore = async () => {
     if (transactions.length < total) {
       doStartLoading();
-      const { results } = await fetchTxList(apiServer as string, offset)();
+      const { results } = await fetchTxList({
+        apiServer: apiServer as string,
+        types: ['smart_contract', 'contract_call', 'token_transfer'],
+        offset,
+      })();
       setTransactions([...transactions, ...results]);
       setOffset(offset + 200);
       doFinishLoading();
@@ -135,12 +139,23 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
 
 TransactionsPage.getInitialProps = async ({ store }: ReduxNextPageContext) => {
   const apiServer = selectCurrentNetworkUrl(store.getState());
-  const { results, total } = await fetchTxList(apiServer as string)();
+  const { results, total } = await fetchTxList({
+    apiServer: apiServer as string,
+    types: ['smart_contract', 'contract_call', 'token_transfer'],
+  })();
   let txs = results;
   if (total > 600) {
     const [secondBatch, thirdBatch] = await Promise.all([
-      fetchTxList(apiServer as string, 200)(),
-      fetchTxList(apiServer as string, 400)(),
+      fetchTxList({
+        apiServer: apiServer as string,
+        types: ['smart_contract', 'contract_call', 'token_transfer'],
+        offset: 200,
+      })(),
+      fetchTxList({
+        apiServer: apiServer as string,
+        types: ['smart_contract', 'contract_call', 'token_transfer'],
+        offset: 400,
+      })(),
     ]);
     txs = [...results, ...secondBatch.results, ...thirdBatch.results];
   }
