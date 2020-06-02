@@ -270,7 +270,7 @@ export const Wrapper = ({
                     </Flex>
                   ) : null}
                 </Box>
-                <Alert clearError={clearError} error={error} />
+                <Alert clearError={clearError} showClearErrors error={error} />
                 {children}
               </Stack>
             </Box>

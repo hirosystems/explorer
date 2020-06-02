@@ -42,12 +42,21 @@ export const renderErrorMessage = ({
   }
 };
 
-export const Alert = ({ error: _error, clearError, size = 'default', ...rest }: any) => {
+export const Alert = ({
+  error: _error,
+  clearError,
+  showClearErrors,
+  size = 'default',
+  ...rest
+}: any) => {
   const clearErrors = useClearErrors();
   const { error } = useDebugState();
   const hasError = error || _error;
   const formattedError = error
-    ? error
+    ? {
+        name: error?.name || 'Error',
+        message: error?.message || error,
+      }
     : {
         name: _error?.name || 'Error',
         message: _error?.message || _error,
@@ -91,7 +100,7 @@ export const Alert = ({ error: _error, clearError, size = 'default', ...rest }: 
             {_error ? formattedError.message : error?.message || renderErrorMessage(error)}
           </Text>
         </Box>
-        {clearError ? (
+        {clearError || showClearErrors ? (
           <Box
             opacity={0.5}
             _hover={{
