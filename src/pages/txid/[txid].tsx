@@ -16,6 +16,7 @@ import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
 import { getTxTypeName } from '@common/transaction-names';
+import { Alert } from '@components/alert';
 
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {

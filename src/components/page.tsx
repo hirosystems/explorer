@@ -5,10 +5,24 @@ import { Header } from '@components/header';
 import { TransactionTitle, TitleProps } from '@components/transaction-title';
 import { Footer } from '@components/footer';
 import { Notice } from '@components/notice';
+import { Alert } from '@components/alert';
 
 export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
-  <Box width="100%" mb={['loose', 'loose', 'extra-loose']} {...props}>
-    <TransactionTitle status={status} type={type} />
+  <Box width="100%" {...props}>
+    <TransactionTitle mb="loose" status={status} type={type} />
+    {status !== 'success' ? (
+      <Alert
+        size={'small'}
+        mb="base"
+        error={{
+          name: 'Notice',
+          message:
+            status === 'abort_by_response'
+              ? 'This transaction did not succeed because the transaction was aborted during its execution.'
+              : 'This transaction would have succeeded, but was rolled back by a supplied post-condition.',
+        }}
+      />
+    ) : null}
   </Box>
 );
 
