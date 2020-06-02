@@ -36,6 +36,9 @@ export const CopyButton = React.forwardRef((props: CopyProps, ref: Ref<HTMLDivEl
       ml="auto"
       ref={ref}
       opacity={props.isHovered ? 1 : 0}
+      _hover={{
+        cursor: 'pointer',
+      }}
       {...props}
     >
       <CopyIcon />
@@ -58,13 +61,11 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
       >
         {children}
       </Flex>
-      <Tooltip
-        label={hasCopied ? 'Copied!' : 'Copy to clipboard'}
-        hasArrow={false}
-        placement="bottom"
-      >
-        <CopyButton onClick={onCopy} isHovered={isHovered} />
-      </Tooltip>
+      {copy ? (
+        <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'}>
+          <CopyButton onClick={onCopy} isHovered={isHovered} />
+        </Tooltip>
+      ) : null}
     </Flex>
   );
 };
@@ -87,7 +88,6 @@ export const Row: React.FC<RowProps> = ({
       borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
       borderBottom={isLast && card ? undefined : '1px solid'}
       px={card ? 'base' : 'unset'}
-      cursor={isHovered ? 'pointer' : undefined}
       {...bind}
       {...rest}
     >
