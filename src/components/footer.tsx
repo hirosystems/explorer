@@ -54,6 +54,11 @@ export const Footer = (props: FlexProps) => {
 
         <Flex ml={['unset', 'unset', 'auto']}>
           <FooterLink mr="base">
+            <LinkInNewWindow href="https://blocksurvey.io/survey/1Pb7eeibpfM98hRKBfMUULYCh9BivxE86q/1128356d-4048-48ca-a456-052ef8c5526e">
+              Give feedback
+            </LinkInNewWindow>
+          </FooterLink>
+          <FooterLink mr="base">
             <LinkInNewWindow href="https://www2.blockstack.org/explorer/faq">FAQ</LinkInNewWindow>
           </FooterLink>
           <FooterLink mr="base">
