@@ -58,12 +58,7 @@ const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: 
                         <Pre>{abiData.args[key].name}</Pre>
                       </Box>
                       <Box>
-                        <Tooltip
-                          placement="bottom"
-                          label={Object.keys(abiData.args[key].type)[0].toString()}
-                        >
-                          <Text>{clarityValuetoHumanReadable(arg)}</Text>
-                        </Tooltip>
+                        <Text>{clarityValuetoHumanReadable(arg)}</Text>
                       </Box>
                     </Box>
                   </Row>
