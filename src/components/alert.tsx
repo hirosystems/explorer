@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon } from '@blockstack/ui';
 import { Title, Text, Pre } from '@components/typography';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/sandbox';
 
 export const renderErrorMessage = ({
   reason,
@@ -44,7 +44,7 @@ export const renderErrorMessage = ({
 
 export const Alert = ({ error: _error, clearError, ...rest }: any) => {
   const clearErrors = useClearErrors();
-  const { error } = useDebugState();
+  const { error } = useSandboxState();
   const hasError = error || _error;
   return hasError ? (
     <Flex

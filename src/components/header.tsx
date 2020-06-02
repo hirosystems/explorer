@@ -33,7 +33,11 @@ const HeaderBar = (props: FlexProps) => (
   </Box>
 );
 
-export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) => (
+export const Header = ({
+  isHome,
+  fullWidth,
+  ...props
+}: { isHome?: boolean; fullWidth?: boolean } & FlexProps) => (
   <HeaderBar justifyContent={isHome ? 'space-between' : 'unset'} {...props}>
     <LogoNavItem mr="base" />
     <Flex
@@ -41,8 +45,8 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
       width="100%"
       justifyContent={isHome ? 'space-between' : 'unset'}
       pl={['unset', 'unset', 'base-loose']}
-      pr={!isHome ? ['unset', 'unset', '52px'] : 'unset'}
-      maxWidth={isHome ? 'unset' : '1280px'}
+      pr={isHome || fullWidth ? 'unset' : ['unset', 'unset', '52px']}
+      maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
       align="center"
     >
       {!isHome ? (

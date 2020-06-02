@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Stack, BoxProps } from '@blockstack/ui';
 import { Text } from '@components/typography';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/sandbox';
 import { IdentityPayload } from '@store/sandbox/types';
 
 export const Tab = ({
@@ -71,7 +71,7 @@ export const Tabs = ({
     router.push(`/sandbox?tab=${path}`, `/sandbox?tab=${path}`, { shallow: true });
     setTab(path);
   }, []);
-  const { transactions } = useDebugState();
+  const { transactions } = useSandboxState();
   return (
     <>
       <Box width="100%" position="relative" zIndex={99}>
@@ -88,23 +88,23 @@ export const Tabs = ({
               />
             ))}
           </Stack>
-          <Box transform="translateY(1px)" ml="auto" position="relative" zIndex={99}>
-            <Tab
-              label={`(${transactions?.length ?? 0}) Recent Txs`}
-              index={1}
-              onClick={() => showTransactionDialog()}
-              isActive={transactionsVisible}
-            />
-            <TransactionsCard
-              visible={transactionsVisible}
-              hide={hideTransactionDialog}
-              bg="var(--colors-bg)"
-              position="absolute"
-              top="calc(100% - 37px)"
-              right="0"
-              minWidth="544px"
-            />
-          </Box>
+          {/*<Box transform="translateY(1px)" ml="auto" position="relative" zIndex={99}>*/}
+          {/*  <Tab*/}
+          {/*    label={`(${transactions?.length ?? 0}) Recent Txs`}*/}
+          {/*    index={1}*/}
+          {/*    onClick={() => showTransactionDialog()}*/}
+          {/*    isActive={transactionsVisible}*/}
+          {/*  />*/}
+          {/*  <TransactionsCard*/}
+          {/*    visible={transactionsVisible}*/}
+          {/*    hide={hideTransactionDialog}*/}
+          {/*    bg="var(--colors-bg)"*/}
+          {/*    position="absolute"*/}
+          {/*    top="calc(100% - 37px)"*/}
+          {/*    right="0"*/}
+          {/*    minWidth="544px"*/}
+          {/*  />*/}
+          {/*</Box>*/}
         </Flex>
         <Box py="base">
           {tabs.map((tab, key: number) => {

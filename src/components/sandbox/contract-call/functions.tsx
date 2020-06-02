@@ -5,6 +5,7 @@ import {
   callReadOnlyFunction,
   network,
   parseReadOnlyResponse,
+  openContractCall,
 } from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
 import { makeContractCall, PostConditionMode } from '@blockstack/stacks-transactions';
@@ -16,7 +17,7 @@ import { Card } from '@components/card';
 import { valueToClarityValue } from '@common/sandbox';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useLoading } from '@common/hooks/use-loading';
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
 import { broadcastTransaction } from '@store/sandbox';
 import { TxLink } from '@components/links';
@@ -71,7 +72,7 @@ const Arguments = ({ args, state, ...rest }: any) =>
       })
     : null;
 
-const ArgumentsForm = ({ state, loading, onSubmit }: any) => {
+const ArgumentsForm = ({ state, loading, onSubmit, access }: any) => {
   // @ts-ignore
   const stateValues = Object.keys(state).reduce((a, b) => ((a[b] = ''), a), {});
   return (
@@ -89,16 +90,18 @@ const ArgumentsForm = ({ state, loading, onSubmit }: any) => {
             {Object.keys(state).length ? (
               <Arguments args={Object.keys(state)} state={state} />
             ) : null}
-            <Select
-              mb="base"
-              setFieldValue={setFieldValue}
-              options={[
-                { label: 'Deny', value: PostConditionMode.Deny.toString(), key: 0 },
-                { label: 'Allow', value: PostConditionMode.Allow.toString(), key: 1 },
-              ]}
-              label="Post condition mode"
-              name="postConditionMode"
-            />
+            {access !== 'read_only' ? (
+              <Select
+                mb="base"
+                setFieldValue={setFieldValue}
+                options={[
+                  { label: 'Deny', value: PostConditionMode.Deny.toString(), key: 0 },
+                  { label: 'Allow', value: PostConditionMode.Allow.toString(), key: 1 },
+                ]}
+                label="Post condition mode"
+                name="postConditionMode"
+              />
+            ) : null}
             <Box>
               <Button isLoading={loading} loadingText="Loading" size="md">
                 Submit
@@ -118,7 +121,7 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
 
   const dispatch = useDispatch();
   const { apiServer } = useConfigState();
-  const { identity } = useDebugState();
+  const { stxAddress } = useSandboxState();
 
   React.useEffect(() => {
     const newState: FormState = {};
@@ -152,32 +155,30 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
         const functionArgs = clarityValues ? valuesToClarityArray(clarityValues) : [];
 
         if (func.access === 'public') {
-          const tx = await makeContractCall({
-            contractAddress,
-            contractName,
-            functionName: func.name,
-            functionArgs,
-            senderKey: identity?.privateKey as string,
-            network: net,
-            postConditionMode,
-          });
+          // await openContractCall({
+          //   contractAddress,
+          //   contractName,
+          //   functionName: func.name,
+          //   functionArgs,
+          // });
 
-          const { payload, error } = await dispatch(
-            broadcastTransaction({ principal: identity?.address, tx })
-          );
-
-          if (error) return doFinishLoading();
-          setResult(payload.transactions[0].txId);
+          // const { payload, error } = await dispatch(
+          //   broadcastTransaction({ principal: stxAddress, tx })
+          // );
+          //
+          // if (error) return doFinishLoading();
+          // setResult(payload.transactions[0].txId);
           doFinishLoading();
         } else {
           const value = await callReadOnlyFunction({
-            senderAddress: identity?.address as string,
+            senderAddress: stxAddress as string,
             contractAddress,
             contractName,
             functionArgs,
             functionName: func.name,
             network: net,
           });
+          console.log(value);
           const result = parseReadOnlyResponse(value);
           setResult(result);
           doFinishLoading();
@@ -200,7 +201,7 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
           <TypeLabel ml="extra-tight">{func.access} function</TypeLabel>
         </Flex>
 
-        <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
+        <ArgumentsForm state={state} loading={isLoading} access={func.access} onSubmit={onSubmit} />
 
         {result && (
           <Box mt="base">

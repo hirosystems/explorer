@@ -20,6 +20,7 @@ let errorCount = 0;
 
 export const setIdentity = createAction<IdentityPayload>('account/identity/set');
 export const setUserData = createAction<UserData>('account/user/set');
+export const signUserOut = createAction('account/user/sign-out');
 export const generateIdentity = createAsyncThunk<IdentityPayload>(
   'account',
   // @ts-ignore

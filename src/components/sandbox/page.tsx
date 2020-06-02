@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Box, Flex, Button } from '@blockstack/ui';
+import { Box, Flex, Button, BoxProps } from '@blockstack/ui';
 import { useConnect } from '@blockstack/connect';
 import { useHover } from 'use-events';
-
-import { truncateMiddle, microToStacks } from '@common/utils';
-import { useUserSession } from '@common/hooks/use-user-session';
-import { useDebugState } from '@common/sandbox';
+import { Popover } from '@components/popover/popover';
+import { microToStacks } from '@common/utils';
+import { useSandboxState } from '@common/sandbox';
 import { Tabs } from '@components/sandbox/tabs';
 import { Text, Title } from '@components/typography';
 import { PageWrapper } from '@components/page';
 import { Card } from '@components/card';
 import { Meta } from '@components/meta-head';
+import AccountIcom from 'mdi-react/AccountCircleOutlineIcon';
 
 const SignedOutView = ({ onClick }: any) => {
   return (
@@ -37,24 +37,61 @@ const SignedOutView = ({ onClick }: any) => {
   );
 };
 
-const UserCard = ({ user, identity, balance }: any) => {
-  const [isHovered, bindHover] = useHover();
-  return (
-    <Box textAlign="right">
-      <Box>
-        <Text as="h3" fontSize="16px">
-          {user.username}
-        </Text>
-      </Box>
-      <Box {...bindHover}>
-        <Text fontSize="14px">
-          {isHovered ? identity.address : truncateMiddle(identity.address, 6)}
-        </Text>
-        <Text> </Text>
-        <Text fontSize="14px">{microToStacks(balance as number) || 0} STX</Text>
-      </Box>
+const UserCard = ({
+  stxAddress,
+  username,
+  handleSignOut,
+  ...props
+}: { stxAddress?: string; username?: string; handleSignOut: () => void } & BoxProps) => {
+  const { balance, user, stxAddress: _stxAddress } = useSandboxState();
+  const name = username || user?.username;
+  const address = stxAddress || _stxAddress;
+  const isSignedIn = name && address;
+
+  const ref = React.useRef(null);
+
+  const readableName = name?.includes('.') ? name?.split('.')[0] : name;
+
+  return isSignedIn ? (
+    <Box {...props}>
+      <Popover
+        placement="right"
+        items={[{ label: 'Sign Out', value: 'sign-out', key: 0, onClick: handleSignOut }]}
+        triggerRef={ref}
+        ml="auto"
+        width="unset"
+        position="relative"
+        zIndex={999}
+      >
+        <Card bg="var(--colors-bg)" boxShadow="mid" px="base-loose" py="base" ref={ref}>
+          <Flex align="center">
+            <Box textAlign="right">
+              <Box>
+                <Title fontWeight="600" as="h3" fontSize="16px">
+                  {readableName}
+                </Title>
+              </Box>
+              <Box textAlign="right">
+                <Text fontSize="16px">{microToStacks(balance as number) || 0} STX</Text>
+              </Box>
+            </Box>
+            <Flex
+              align="center"
+              justify="center"
+              flexShrink={0}
+              size="48px"
+              borderRadius="100%"
+              border="1px solid var(--colors-border)"
+              ml="base"
+              color="var(--colors-invert)"
+            >
+              <AccountIcom />
+            </Flex>
+          </Flex>
+        </Card>
+      </Popover>
     </Box>
-  );
+  ) : null;
 };
 
 export const PageContent = ({
@@ -66,16 +103,19 @@ export const PageContent = ({
   lastViewedNumber,
   tab,
   username,
+  stxAddress,
   tabs,
+  handleSignOut,
   ...props
 }: any) => {
-  const { identity, balance } = useDebugState();
   const { doOpenAuth } = useConnect();
-  const { userData: user } = useUserSession();
+  const { user } = useSandboxState();
 
-  const isSignedIn = (username && identity) || (identity && user?.profile);
+  const isSignedIn = !!stxAddress || !!user;
+
   return (
     <PageWrapper
+      fullWidth
       notice={{
         label: 'For testing only:',
         message: 'any address generated with the sandbox can and will be lost very easily.',
@@ -86,22 +126,25 @@ export const PageContent = ({
         <Box>
           <Title as="h1">Stacks Explorer Sandbox</Title>
         </Box>
-        {(username && identity) || (identity && user?.profile) ? (
-          <Box>
-            <UserCard user={user} identity={identity} balance={balance} />
-          </Box>
-        ) : null}
       </Flex>
-      <Flex width="100%" py="base" flexGrow={1}>
+      <Flex position="relative" width="100%" py="base" flexGrow={1}>
         {isSignedIn ? (
-          <Tabs
-            hideTransactionDialog={hideTransactionDialog}
-            showTransactionDialog={showTransactionDialog}
-            transactionsVisible={transactionsVisible}
-            identity={identity}
-            tab={tab}
-            tabs={tabs}
-          />
+          <Flex width="100%">
+            <Tabs
+              hideTransactionDialog={hideTransactionDialog}
+              showTransactionDialog={showTransactionDialog}
+              transactionsVisible={transactionsVisible}
+              tab={tab}
+              tabs={tabs}
+            />
+            <UserCard
+              handleSignOut={handleSignOut}
+              position="absolute"
+              right={0}
+              stxAddress={stxAddress}
+              username={username}
+            />
+          </Flex>
         ) : (
           <SignedOutView onClick={() => doOpenAuth()} />
         )}

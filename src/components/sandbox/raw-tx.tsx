@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Formik } from 'formik';
 import { Flex, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/sandbox';
 import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';
 import { useDispatch } from 'react-redux';
@@ -12,7 +12,7 @@ import { useTxToast } from '@common/sandbox';
 
 export const RawTx = (props: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
-  const { identity } = useDebugState();
+  const { identity } = useSandboxState();
   const dispatch = useDispatch();
   const initialValues = {
     rawTx: '',

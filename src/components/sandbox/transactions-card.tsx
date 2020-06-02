@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@blockstack/ui';
 import { Tooltip } from '@components/tooltip';
 import { Caption, Title, Text } from '@components/typography';
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/sandbox';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@store';
 import { selectTransaction } from '@store/transactions';
@@ -132,7 +132,7 @@ export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
 };
 
 export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: any) => {
-  const { transactions } = useDebugState();
+  const { transactions } = useSandboxState();
   const ref = React.useRef<any | null>(null);
   useOnClickOutside(ref, hide);
   return (

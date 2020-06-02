@@ -23,5 +23,9 @@ export const selectLastFetch = createSelector(selectSandboxSlice, state => state
 export const selectAccountLoading = createSelector(selectSandboxSlice, state => state.loading);
 
 export const selectIdentity = createSelector(selectSandboxSlice, state => state.identity);
-export const selectUserData = createSelector(selectSandboxSlice, state => state.identity);
+export const selectUserData = createSelector(selectSandboxSlice, state => state.user);
+export const selectStxAddress = createSelector(
+  selectSandboxSlice,
+  state => state?.user?.profile?.stxAddress
+);
 export const selectErrorState = createSelector(selectSandboxSlice, state => state.error);

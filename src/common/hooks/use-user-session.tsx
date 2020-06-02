@@ -3,9 +3,7 @@ import { UserSession, AppConfig } from 'blockstack';
 import { UserData } from 'blockstack/lib/auth/authApp';
 
 export const useUserSession = () => {
-  const [userData, setUserData] = React.useState<{ loaded: boolean } & Partial<UserData>>({
-    loaded: false,
-  });
+  const [userData, setUserData] = React.useState<UserData | undefined>(undefined);
   const [signedIn, setSignedIn] = React.useState(false);
   const appConfig = new AppConfig(['store_write']);
   const userSession = new UserSession({ appConfig });
@@ -16,10 +14,9 @@ export const useUserSession = () => {
   }, [userSession.isUserSignedIn()]);
 
   React.useEffect(() => {
-    if (!userData.loaded && signedIn) {
+    if (!userData && signedIn) {
       setUserData(s => ({
         ...userSession.loadUserData(),
-        loaded: true,
       }));
     }
   }, [signedIn]);

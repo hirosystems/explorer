@@ -5,12 +5,12 @@ import { Field, Wrapper } from '@components/sandbox/common';
 import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
-import { useDebugState, network } from '@common/sandbox';
+import { useSandboxState, network } from '@common/sandbox';
 import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { makeSmartContractDeploy } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
-import { useTxToast } from '@common/sandbox';
+import { useTxToast, openContractDeploy } from '@common/sandbox';
 import BN from 'bn.js';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useState } from 'react';
@@ -27,17 +27,17 @@ const Sample = (props: any) => {
         key,
       }))}
       flexGrow={1}
+      {...props}
     />
   );
 };
 
 export const ContractDeploy = (props: any) => {
   const [error, setError] = useState<{ name: string; message: string } | undefined>();
-  const { identity } = useDebugState();
+  const { identity, stxAddress } = useSandboxState();
   const showToast = useTxToast();
   const dispatch = useDispatch();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
-  const { apiServer } = useConfigState();
 
   const handleError = (message: string) => {
     setError({
@@ -47,48 +47,46 @@ export const ContractDeploy = (props: any) => {
   };
 
   const initialValues = {
-    senderKey: identity?.privateKey,
     contractName: SampleContracts[0].name,
     codeBody: SampleContracts[0].source,
-    fee: 2000,
   };
 
-  const onSubmit = async ({ senderKey, contractName, codeBody, fee }: any) => {
-    const address = identity?.address;
-    if (!address) {
+  const onSubmit = async ({ contractName, codeBody }: any) => {
+    if (!stxAddress) {
       handleError('Are you logged in?');
       return;
     }
     try {
       setError(undefined);
       doStartLoading();
-      await dispatch(fetchAccount(identity?.address as string));
+      await dispatch(fetchAccount(stxAddress));
 
-      const tx = await makeSmartContractDeploy({
-        senderKey,
+      const data = await openContractDeploy({
         contractName,
-        codeBody,
-        fee: new BN(fee),
-        network: network(apiServer as string),
+        contractSource: codeBody,
+        finished: () => {
+          doFinishLoading();
+        },
       });
-
-      const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx })
-      );
-      if (error) return doFinishLoading();
-
-      props.showTransactionDialog();
-      showToast(payload.transactions[0].txId);
-      setTimeout(async () => {
-        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
-
-        // todo: typing fix -- asyncThunk
-        if ((initialFetch as any).error) {
-          await dispatch(fetchTransaction(payload.transactions[0].txId));
-        }
-        await dispatch(fetchAccount(identity?.address));
-        doFinishLoading();
-      }, 3500);
+      //
+      //
+      // const { payload, error } = await dispatch(
+      //   broadcastTransaction({ principal: identity?.address, tx })
+      // );
+      // if (error) return doFinishLoading();
+      //
+      // props.showTransactionDialog();
+      // showToast(payload.transactions[0].txId);
+      // setTimeout(async () => {
+      //   const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
+      //
+      //   // todo: typing fix -- asyncThunk
+      //   if ((initialFetch as any).error) {
+      //     await dispatch(fetchTransaction(payload.transactions[0].txId));
+      //   }
+      //   await dispatch(fetchAccount(identity?.address));
+      //   doFinishLoading();
+      // }, 3500);
     } catch (e) {
       handleError(e.message);
       return doFinishLoading();
@@ -106,25 +104,17 @@ export const ContractDeploy = (props: any) => {
       <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
         {({ handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit} method="post">
-            <Flex width="100%">
+            <Flex alignItems="flex-start" width="100%">
               <Stack spacing="base" width="100%">
-                <Stack isInline spacing="base" width="100%">
-                  <Field width="33%" name="contractName" label="Contract name" />
-                  <Field width="33%" name="fee" label="Fee" />
-                  <Sample flexGrow={1} setFieldValue={setFieldValue} />
-                </Stack>
-                <Box>
-                  <Field
-                    maxHeight="500px"
-                    label="Contract source code (editable)"
-                    name="codeBody"
-                    type="code"
-                  />
-                </Box>
+                <Field name="contractName" label="Contract name" />
+                <Sample flexGrow={1} setFieldValue={setFieldValue} />
                 <Button type="submit" isLoading={isLoading}>
                   Submit
                 </Button>
               </Stack>
+              <Box ml="base">
+                <Field label="Contract source code (editable)" name="codeBody" type="code" />
+              </Box>
             </Flex>
           </form>
         )}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Flex, Stack, Button, Box } from '@blockstack/ui';
 
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
 import { fetchAccount, requestFaucetFunds } from '@store/sandbox';
 
@@ -14,7 +14,7 @@ import { useProgressBar } from '@components/progress-bar';
 import { useTxToast } from '@common/sandbox';
 
 export const Faucet = (props: any) => {
-  const { identity } = useDebugState();
+  const { stxAddress } = useSandboxState();
   const { start, done } = useProgressBar();
 
   const showToast = useTxToast();
@@ -67,7 +67,7 @@ export const Faucet = (props: any) => {
       <Formik
         enableReinitialize
         initialValues={{
-          stacks_address: identity?.address,
+          stacks_address: stxAddress,
         }}
         onSubmit={onSubmit}
       >

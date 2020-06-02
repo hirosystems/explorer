@@ -4,6 +4,7 @@ import {
   fetchAccount,
   requestFaucetFunds,
   setUserData,
+  signUserOut,
   setIdentity,
   generateIdentity,
   broadcastTransaction,
@@ -61,6 +62,13 @@ export const sandbox = createReducer(initialState, builder => {
    */
   builder.addCase(setIdentity, (state, action) => {
     state.identity = action.payload;
+  });
+
+  /**
+   * Sign user out
+   */
+  builder.addCase(signUserOut, state => {
+    state.user = undefined;
   });
 
   /**

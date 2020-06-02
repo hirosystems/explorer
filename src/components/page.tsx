@@ -12,40 +12,53 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => (
   </Box>
 );
 
-export const Page = ({
-  children,
-  notice,
-  ...rest
-}: { notice?: { label?: string; message?: string } } & BoxProps) => (
-  <Flex flexDirection="column" width="100%" minHeight="100%" pt="64px">
-    {notice ? <Notice label={notice.label} message={notice.message} /> : null}
-    <Flex
-      as="main"
-      mx="auto"
-      width="100%"
-      flexGrow={1}
-      height="100%"
-      maxWidth="1280px"
-      flexDirection="column"
-      px={['base', 'base', 'extra-loose']}
-      {...rest}
-    >
-      {children}
+interface PageProps extends BoxProps {
+  notice?: { label?: string; message?: string };
+  fullWidth?: boolean;
+}
+export const Page = ({ children, fullWidth, notice, ...rest }: PageProps) => {
+  const widthProps = fullWidth
+    ? {}
+    : {
+        maxWidth: '1280px',
+      };
+  return (
+    <Flex flexDirection="column" width="100%" minHeight="100%" pt="64px">
+      {notice ? (
+        <Notice fullWidth={fullWidth} label={notice.label} message={notice.message} />
+      ) : null}
+      <Flex
+        as="main"
+        mx="auto"
+        width="100%"
+        flexGrow={1}
+        height="100%"
+        flexDirection="column"
+        px={['base', 'base', 'extra-loose']}
+        {...widthProps}
+        {...rest}
+      >
+        {children}
+      </Flex>
+      <Footer
+        mx="auto"
+        width="100%"
+        mt="extra-loose"
+        mb={['base', 'base', 'extra-loose']}
+        px={['base', 'base', 'extra-loose']}
+        {...widthProps}
+      />
     </Flex>
-    <Footer
-      mx="auto"
-      width="100%"
-      maxWidth="1280px"
-      mt="extra-loose"
-      mb={['base', 'base', 'extra-loose']}
-      px={['base', 'base', 'extra-loose']}
-    />
-  </Flex>
-);
+  );
+};
 
-export const PageWrapper = (props: { isHome?: boolean; notice?: any } & FlexProps) => (
+interface PageWrapperProps extends PageProps {
+  isHome?: boolean;
+}
+
+export const PageWrapper = ({ isHome, fullWidth, ...rest }: PageWrapperProps & FlexProps) => (
   <>
-    <Header isHome={props.isHome} />
-    <Page pt="extra-loose" {...props} />
+    <Header fullWidth={fullWidth} isHome={isHome} />
+    <Page pt="extra-loose" fullWidth={fullWidth} {...rest} />
   </>
 );

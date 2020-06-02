@@ -1,63 +1,87 @@
 import * as React from 'react';
-import BigNum from 'bn.js';
+
 import { Formik } from 'formik';
 import { Flex, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
-import { useDebugState, network } from '@common/sandbox';
-import { broadcastTransaction, fetchAccount } from '@store/sandbox';
-import { fetchTransaction } from '@store/transactions';
-import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
+import { useSandboxState } from '@common/sandbox';
+import { fetchAccount } from '@store/sandbox';
+
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
-import { useTxToast } from '@common/sandbox';
-
-import { useConfigState } from '@common/hooks/use-config-state';
+import { useTxToast, openSTXTransfer } from '@common/sandbox';
+import { FinishedTxData } from '@blockstack/connect';
 
 export const TokenTransfer = (props: any) => {
+  const [isOpen, setIsOpen] = React.useState(false);
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
-  const { identity } = useDebugState();
+  const { stxAddress } = useSandboxState();
   const dispatch = useDispatch();
-  const { apiServer } = useConfigState();
+
+  const intervalRef = React.useRef<number | null>(null);
+
   const initialValues = {
-    senderKey: identity?.privateKey,
     recipient: 'STB44HYPYAT2BB2QE513NSP81HTMYWBJP02HPGK6',
     amount: 100,
     memo: 'hello world!',
   };
   const showToast = useTxToast();
 
-  const onSubmit = async ({ senderKey, recipient, amount, memo }: any) => {
+  React.useEffect(() => {
+    if (isLoading && !isOpen) {
+      doFinishLoading();
+    }
+  }, [isLoading, isOpen]);
+
+  const onSubmit = async ({ recipient, amount, memo }: any) => {
     try {
+      setIsOpen(true);
       doStartLoading();
 
-      await dispatch(fetchAccount(identity?.address));
+      await dispatch(fetchAccount(stxAddress));
 
-      const tx = await makeSTXTokenTransfer({
-        senderKey,
+      const popup = await openSTXTransfer({
         recipient,
-        amount: new BigNum(amount),
+        amount: amount.toString(),
         memo,
-        network: network(apiServer as string),
+        finished: (txData: FinishedTxData) => {
+          console.log(txData);
+          doFinishLoading();
+        },
       });
 
-      const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx })
-      );
-      if (error) return doFinishLoading();
-
-      props.showTransactionDialog();
-
-      showToast(payload.transactions[0].txId);
-
-      setTimeout(async () => {
-        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
-        // @ts-ignore
-        if (initialFetch.error) {
-          await dispatch(fetchTransaction(payload.transactions[0].txId));
+      intervalRef.current = setInterval(() => {
+        if (popup?.closed && isOpen) {
+          setIsOpen(false);
+          intervalRef.current && clearInterval(intervalRef.current);
         }
-        await dispatch(fetchAccount(identity?.address));
-        doFinishLoading();
-      }, 3500);
+      }, 250);
+
+      // const tx = await makeSTXTokenTransfer({
+      //   senderKey,
+      //   recipient,
+      //   amount: new BigNum(amount),
+      //   memo,
+      //   network: network(apiServer as string),
+      // });
+
+      // const { payload, error } = await dispatch(
+      //   broadcastTransaction({ principal: identity?.address, tx })
+      // );
+      // if (error) return doFinishLoading();
+
+      // props.showTransactionDialog();
+      //
+      // showToast(payload.transactions[0].txId);
+
+      // setTimeout(async () => {
+      //   const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
+      //   // @ts-ignore
+      //   if (initialFetch.error) {
+      //     await dispatch(fetchTransaction(payload.transactions[0].txId));
+      //   }
+      //   await dispatch(fetchAccount(identity?.address));
+      //   doFinishLoading();
+      // }, 3500);
     } catch (e) {
       console.log(e);
       doFinishLoading();

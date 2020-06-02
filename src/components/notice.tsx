@@ -5,8 +5,9 @@ import { Text } from '@components/typography';
 export const Notice = ({
   label,
   message,
+  fullWidth,
   ...rest
-}: { label?: string; message?: string } & FlexProps) => (
+}: { label?: string; message?: string; fullWidth?: boolean } & FlexProps) => (
   <Box
     bg="var(--colors-bg-alt)"
     borderBottom="1px solid"
@@ -19,7 +20,7 @@ export const Notice = ({
       justify="flex-start"
       mx="auto"
       width="100%"
-      maxWidth="1280px"
+      maxWidth={fullWidth ? 'unset' : '1280px'}
       px={['base', 'base', 'extra-loose']}
     >
       <Box mr="tight" color="orange">

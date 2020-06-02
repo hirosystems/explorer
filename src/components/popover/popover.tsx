@@ -128,13 +128,16 @@ export const Popover = ({
                       overflowY: 'auto',
                     }}
                   >
-                    {items.map((option, key: number) => (
+                    {items.map((item, key: number) => (
                       <ItemComponent
                         key={key}
                         onFocus={handleChildFocus(key)}
                         onBlur={handleChildBlur(key === items.length - 1, key)}
-                        onClick={handleItemClick(() => onItemClick && onItemClick(option))}
-                        option={option}
+                        onClick={handleItemClick(() => {
+                          onItemClick && onItemClick(item);
+                          item.onClick && item.onClick(item);
+                        })}
+                        option={item}
                         focused={currentFocus === key}
                         active={activeItem === key}
                         isLast={key === items.length - 1}

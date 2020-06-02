@@ -139,6 +139,8 @@ export const ContractCall = (props: any) => {
                             contractName,
                           });
                         }, 0);
+
+                        buttonRef?.current?.focus();
                       }
                     });
 
