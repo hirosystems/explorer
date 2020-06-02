@@ -8,7 +8,7 @@ import { ColorModeProvider } from '@components/color-modes';
 import { useDispatch } from 'react-redux';
 import { appTime } from '@store/ui/actions';
 import { useDocumentVisibility } from 'web-api-hooks';
-import { handleFontLoading } from '@common/fonts';
+
 import { useInterval } from 'react-use';
 
 const Toaster = dynamic(() => import('../components/toaster'), { ssr: false });
@@ -31,14 +31,9 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = ({ children, colorMode }) => {
-  const [fontsLoaded, setLoaded] = React.useState(false);
   const dispatch = useDispatch();
   const visibility = useDocumentVisibility();
   const isVisible = visibility === 'visible';
-
-  React.useEffect(() => {
-    if (!fontsLoaded) handleFontLoading().then(() => setLoaded(true));
-  }, []);
 
   React.useEffect(() => {
     // enable Fathom tracking in production

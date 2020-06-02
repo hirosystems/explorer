@@ -8,6 +8,8 @@ import { parseCookies } from 'nookies';
 import getConfig from 'next/config';
 import { selectNetwork, setNetworks, setEnv } from '@store/ui/actions';
 import { COLOR_MODE_COOKIE, NETWORK_COOKIE } from '@common/utils';
+import 'typeface-inter';
+import 'typeface-fira-code';
 
 interface MyAppProps {
   colorMode?: 'light' | 'dark';
