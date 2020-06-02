@@ -5,6 +5,7 @@ import { Text } from '@components/typography';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { useDebugState } from '@common/sandbox';
 import { IdentityPayload } from '@store/sandbox/types';
+import { useClearErrors } from '@common/hooks/use-clear-errors';
 
 export const Tab = ({
   currentTab,
@@ -66,10 +67,12 @@ export const Tabs = ({
 }) => {
   const [currentTab, setTab] = React.useState<string>(tab || tabs[0].path);
   const router = useRouter();
+  const clearErrors = useClearErrors();
 
   const handleClick = React.useCallback((path: string) => {
     router.push(`/sandbox?tab=${path}`, `/sandbox?tab=${path}`, { shallow: true });
     setTab(path);
+    clearErrors();
   }, []);
   const { transactions } = useDebugState();
   return (
