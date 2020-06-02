@@ -42,13 +42,7 @@ export const renderErrorMessage = ({
   }
 };
 
-export const Alert = ({
-  error: _error,
-  clearError,
-  showClearErrors,
-  size = 'default',
-  ...rest
-}: any) => {
+export const Alert = ({ error: _error, clearError, showClearErrors, ...rest }: any) => {
   const clearErrors = useClearErrors();
   const { error } = useDebugState();
   const hasError = error || _error;
@@ -72,7 +66,7 @@ export const Alert = ({
       <Flex
         borderRadius="6px 0 0 6px"
         bg="var(--colors-bg-alt)"
-        py={size === 'small' ? 'tight' : 'base'}
+        py="tight"
         px="base"
         align="center"
         justify="center"
@@ -81,11 +75,11 @@ export const Alert = ({
         alignSelf="stretch"
       >
         <Box mr="tight" color="red">
-          <ExclamationMarkCircleIcon size={size === 'small' ? '14px' : '20px'} />
+          <ExclamationMarkCircleIcon size="16px" />
         </Box>
         {error || _error ? (
           <Title
-            fontSize={size === 'small' ? '14px' : '16px'}
+            fontSize="14px"
             as="h4"
             fontWeight={500}
             style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}
@@ -94,9 +88,9 @@ export const Alert = ({
           </Title>
         ) : null}
       </Flex>
-      <Flex align="center" width="100%" p={size === 'small' ? 'tight' : 'base'} pr="none">
+      <Flex align="center" width="100%" py="tight" px="base-tight" pr="none">
         <Box>
-          <Text fontSize={size === 'small' ? '14px' : '16px'} pl="tight">
+          <Text fontSize="14px" pl="tight">
             {_error
               ? formattedError.message
               : error?.name === 'Status 429'
