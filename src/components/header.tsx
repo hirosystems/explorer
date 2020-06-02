@@ -16,7 +16,7 @@ export const LogoNavItem = (props: BoxProps) => (
 );
 
 const HeaderBar = (props: FlexProps) => (
-  <Box position="fixed" zIndex={99999} top={0} width="100%">
+  <Box position="fixed" zIndex={999} top={0} width="100%">
     <Flex
       zIndex={9999}
       height="64px"

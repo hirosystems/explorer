@@ -4,6 +4,7 @@ import { Account, AccountPayload, FaucetResponse, IdentityPayload } from '@store
 import { fetchFromApi, postToSidecar } from '@common/api/fetch';
 import { identityStorage, truncateMiddle } from '@common/utils';
 import { doGenerateIdentity } from '@common/sandbox';
+import * as blockstack from 'blockstack';
 import {
   StacksTransaction,
   broadcastTransaction as broadcastTransactionBase,
@@ -23,21 +24,18 @@ export const setUserData = createAction<UserData>('account/user/set');
 export const generateIdentity = createAsyncThunk<IdentityPayload>(
   'account',
   // @ts-ignore
-  async (thing, { dispatch }) => {
-    const identity = await doGenerateIdentity();
-    identityStorage.set('debug_identity', identity);
-    setTimeout(() => {
-      dispatch(
-        doAddToast({
-          id: 'address-toast',
-          tone: 'positive',
-          message: 'Identity generated',
-          description: `
-      An identity with testnet ${truncateMiddle(identity.address)} address has been generated!`,
-        })
-      );
-    }, 300);
-    return identity;
+  async () => {
+    try {
+      const saved = await blockstack.getFile('/identity.json');
+      console.log(saved);
+      identityStorage.set('debug_identity', JSON.parse(saved as string));
+      return JSON.parse(saved as string);
+    } catch (e) {
+      const id = await doGenerateIdentity();
+      identityStorage.set('debug_identity', id);
+      await blockstack.putFile('/identity.json', JSON.stringify(id));
+      return id;
+    }
   }
 );
 
