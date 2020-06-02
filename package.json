@@ -42,6 +42,7 @@
     "nprogress": "^0.2.0",
     "prism-react-renderer": "^1.1.0",
     "prismjs": "^1.20.0",
+    "prom-client": "^12.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hooks-sse": "^2.0.0",
