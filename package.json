@@ -2,6 +2,7 @@
   "name": "@blockstack/explorer",
   "scripts": {
     "build": "next telemetry disable && next build",
+    "build:analyze": "next telemetry disable && ANALYZE=true next build",
     "dev": "next",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
     "lint:eslint": "eslint --ext .ts,.tsx ./src",
@@ -52,6 +53,8 @@
     "redux-thunk": "^2.3.0",
     "store": "^2.0.12",
     "styled-components": "^5.0.1",
+    "typeface-fira-code": "^1.1.4",
+    "typeface-inter": "^3.12.0",
     "use-events": "^1.4.1",
     "use-onclickoutside": "^0.3.1",
     "web-api-hooks": "^3.0.1"
