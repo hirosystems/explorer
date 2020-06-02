@@ -1,7 +1,7 @@
 {
   "name": "@blockstack/explorer",
   "scripts": {
-    "build": "next build",
+    "build": "next telemetry disable && next build",
     "dev": "next",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
     "lint:eslint": "eslint --ext .ts,.tsx ./src",

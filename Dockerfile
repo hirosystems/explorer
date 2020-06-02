@@ -5,8 +5,6 @@ RUN yarn
 
 COPY . .
 
-RUN npx next telemetry disable
-
 ENV NODE_ENV production
 RUN yarn build
 RUN yarn cache clean
