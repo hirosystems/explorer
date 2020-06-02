@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Flex, Box, BlockstackIcon, FlexProps } from '@blockstack/ui';
+import { Flex, Box, BlockstackIcon, FlexProps, BoxProps } from '@blockstack/ui';
 import { Tag } from '@components/tags';
 import { microToStacks, truncateMiddle, toRelativeTime } from '@common/utils';
 import { Transaction, TransactionType } from '@models/transaction.interface';
@@ -8,22 +8,46 @@ import { Caption, Title } from '@components/typography';
 import { getContractName } from '@common/utils';
 import { DefaultContract } from '@components/icons/default-contract';
 
-export const ItemIcon = React.memo(({ type, ...rest }: { type: Transaction['tx_type'] }) => {
-  switch (type) {
-    case 'smart_contract' || 'contract_call':
-      return (
-        <Box display={['none', 'none', 'block']} {...rest}>
-          <DefaultContract size="36px" />
-        </Box>
-      );
-    default:
-      return (
-        <Box display={['none', 'none', 'block']} {...rest}>
-          <BlockstackIcon size="36px" />
-        </Box>
-      );
+export const ItemIcon = React.memo(
+  ({
+    type,
+    opacity,
+    status,
+    ...rest
+  }: { type: Transaction['tx_type']; status: Transaction['tx_status'] } & BoxProps) => {
+    let Icon = BlockstackIcon;
+    if (type === 'smart_contract' || type === 'contract_call') {
+      Icon = DefaultContract;
+    }
+    return (
+      <Flex
+        align="center"
+        justify="center"
+        size="40px"
+        borderRadius="8px"
+        position="relative"
+        display={['none', 'none', 'flex']}
+        border="1px solid var(--colors-border)"
+        bg="var(--colors-bg)"
+        {...rest}
+      >
+        <Box
+          bottom="0px"
+          right="0px"
+          position="absolute"
+          bg={
+            status === 'success' ? 'var(--colors-feedback-success)' : 'var(--colors-feedback-error)'
+          }
+          borderRadius="8px"
+          size="8px"
+          zIndex={9}
+        />
+
+        <Icon position="relative" zIndex={2} size="20px" />
+      </Flex>
+    );
   }
-});
+);
 
 interface TxItemProps extends FlexProps {
   tx: Transaction;
@@ -73,18 +97,14 @@ export const TxItem = React.forwardRef(
       {...rest}
     >
       <Flex align="center">
-        <Box
-          display={['none', 'none', 'block']}
-          opacity={0.3}
-          color="var(--colors-invert)"
-          mr="base"
-        >
-          <ItemIcon type={tx.tx_type} />
+        <Box display={['none', 'none', 'block']} color="var(--colors-invert)" mr="base">
+          <ItemIcon status={tx.tx_status} type={tx.tx_type} />
         </Box>
         <Flex flexDirection="column">
           <Title
             textDecoration={isFocused || isHovered ? 'underline' : 'unset'}
             fontSize="14px"
+            fontWeight={500}
             display="block"
           >
             {getTitle(tx)}

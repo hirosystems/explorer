@@ -27,7 +27,7 @@ export const SearchBar = forwardRef(
     }: SearchBarProps,
     ref: Ref<HTMLDivElement>
   ) => {
-    const inputOffset = small ? '25px' : '50px';
+    const inputOffset = small ? '38px' : '50px';
     return (
       <Box position="relative" transform={transform} {...rest}>
         <Box

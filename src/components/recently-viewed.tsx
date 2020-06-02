@@ -1,30 +1,9 @@
 import React from 'react';
 import { useHover, useFocus } from 'use-events';
-import { Flex, Box, BlockstackIcon, FlexProps, BoxProps, useEventListener } from '@blockstack/ui';
-import { Tag } from '@components/tags';
-import { microToStacks, truncateMiddle, toRelativeTime } from '@common/utils';
-import { Transaction, TransactionType } from '@models/transaction.interface';
-import { Caption, Title } from '@components/typography';
-import { getContractName } from '@common/utils';
-import { DefaultContract } from '@components/icons/default-contract';
+import { FlexProps, BoxProps, useEventListener } from '@blockstack/ui';
+import { Transaction } from '@models/transaction.interface';
 import { TxItem } from '@components/transaction-item';
-
-export const ItemIcon = React.memo(({ type, ...rest }: { type: Transaction['tx_type'] }) => {
-  switch (type) {
-    case 'smart_contract' || 'contract_call':
-      return (
-        <Box display={['none', 'none', 'block']} {...rest}>
-          <DefaultContract size="36px" />
-        </Box>
-      );
-    default:
-      return (
-        <Box display={['none', 'none', 'block']} {...rest}>
-          <BlockstackIcon size="36px" />
-        </Box>
-      );
-  }
-});
+import { TxLink } from '@components/links';
 
 export interface RecentlyViewedProps extends FlexProps {
   transactions: Transaction[];
@@ -38,34 +17,6 @@ interface RecentlyViewedListItemProps extends BoxProps {
   onClick: (e?: any) => void;
   focused?: boolean;
 }
-
-const getTitle = (transaction: Transaction) => {
-  switch (transaction.tx_type) {
-    case 'smart_contract':
-      return getContractName(transaction.smart_contract.contract_id);
-    case 'contract_call':
-      return getContractName(transaction.contract_call.contract_id);
-    case 'token_transfer':
-      return 'Token transfer';
-    default:
-      return truncateMiddle(transaction.tx_id, 10);
-  }
-};
-
-const getCaption = (tx: Transaction) => {
-  const date = toRelativeTime((tx as any).viewedDate);
-  const truncatedId = truncateMiddle(tx.tx_id, 4);
-  switch (tx.tx_type) {
-    case 'smart_contract':
-      return date + ' ∙ ' + truncatedId;
-    case 'contract_call':
-      return date + ' ∙ ' + truncatedId;
-    case 'token_transfer':
-      return date + ' ∙ ' + microToStacks(tx.token_transfer.amount) + ' STX';
-    default:
-      return date;
-  }
-};
 
 export const RecentlyViewedListItem = ({
   option,
@@ -113,21 +64,24 @@ export const RecentlyViewedListItem = ({
   }, [focused, ref]);
 
   return (
-    <TxItem
-      borderBottom={isLast ? null : '1px solid var(--colors-border)'}
-      {...bindHover}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      tabIndex={0}
-      {...rest}
-      ref={ref}
-      tx={option}
-      isFocused={focused || isFocused}
-      isHovered={isHovered}
-      _hover={{
-        bg: 'var(--colors-bg-alt)',
-      }}
-      onClick={onClick}
-    />
+    <TxLink txid={option.tx_id}>
+      <TxItem
+        borderBottom={isLast ? null : '1px solid var(--colors-border)'}
+        {...bindHover}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        tabIndex={0}
+        {...rest}
+        ref={ref}
+        tx={option}
+        isFocused={focused || isFocused}
+        isHovered={isHovered}
+        _hover={{
+          bg: 'var(--colors-bg-alt)',
+        }}
+        as="a"
+        onClick={onClick}
+      />
+    </TxLink>
   );
 };
