@@ -42,10 +42,16 @@ export const renderErrorMessage = ({
   }
 };
 
-export const Alert = ({ error: _error, clearError, ...rest }: any) => {
+export const Alert = ({ error: _error, clearError, size = 'default', ...rest }: any) => {
   const clearErrors = useClearErrors();
   const { error } = useDebugState();
   const hasError = error || _error;
+  const formattedError = error
+    ? error
+    : {
+        name: _error?.name || 'Error',
+        message: _error?.message || _error,
+      };
   return hasError ? (
     <Flex
       borderRadius="6px"
@@ -57,7 +63,8 @@ export const Alert = ({ error: _error, clearError, ...rest }: any) => {
       <Flex
         borderRadius="6px 0 0 6px"
         bg="var(--colors-bg-alt)"
-        p="base"
+        py={size === 'small' ? 'tight' : 'base'}
+        px="base"
         align="center"
         justify="center"
         flexGrow={1}
@@ -65,37 +72,46 @@ export const Alert = ({ error: _error, clearError, ...rest }: any) => {
         alignSelf="stretch"
       >
         <Box mr="tight" color="red">
-          <ExclamationMarkCircleIcon size="20px" />
+          <ExclamationMarkCircleIcon size={size === 'small' ? '14px' : '20px'} />
         </Box>
         {error || _error ? (
-          <Title as="h4" style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}>
-            {error?.error ? error?.error : error?.name ? error?.name : 'Error!'}
+          <Title
+            fontSize={size === 'small' ? '14px' : '16px'}
+            as="h4"
+            fontWeight={500}
+            style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}
+          >
+            {formattedError.name}
           </Title>
         ) : null}
       </Flex>
-      <Flex align="center" width="100%" p="base" pr="none">
+      <Flex align="center" width="100%" p={size === 'small' ? 'tight' : 'base'} pr="none">
         <Box>
-          <Text pl="tight">{_error ? _error : error?.message || renderErrorMessage(error)}</Text>
+          <Text fontSize={size === 'small' ? '14px' : '16px'} pl="tight">
+            {_error ? formattedError.message : error?.message || renderErrorMessage(error)}
+          </Text>
         </Box>
-        <Box
-          opacity={0.5}
-          _hover={{
-            cursor: 'pointer',
-            opacity: 1,
-          }}
-          px="base"
-          ml="auto"
-          color="var(--colors-text-caption)"
-          role="button"
-          title="Clear error"
-          aria-label="Clear error"
-          onClick={() => {
-            clearErrors();
-            clearError && clearError();
-          }}
-        >
-          <CloseIcon size="12px" />
-        </Box>
+        {clearError ? (
+          <Box
+            opacity={0.5}
+            _hover={{
+              cursor: 'pointer',
+              opacity: 1,
+            }}
+            px="base"
+            ml="auto"
+            color="var(--colors-text-caption)"
+            role="button"
+            title="Clear error"
+            aria-label="Clear error"
+            onClick={() => {
+              clearErrors();
+              clearError && clearError();
+            }}
+          >
+            <CloseIcon size="12px" />
+          </Box>
+        ) : null}
       </Flex>
     </Flex>
   ) : null;
