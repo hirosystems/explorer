@@ -1,5 +1,6 @@
 import { Transaction } from '@models/transaction.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
+import { TransactionType } from '@blockstack/stacks-blockchain-sidecar-types';
 
 export const fetchTx = (apiServer: string) => async (
   txid: Transaction['tx_id']
@@ -14,12 +15,30 @@ export const fetchTx = (apiServer: string) => async (
   return tx;
 };
 
-export const fetchTxList = (apiServer: string, offset?: number) => async (): Promise<{
+interface FetchTxListOptions {
+  apiServer: string;
+  types: TransactionType[];
+  offset?: number;
+}
+
+interface FetchTxReturnValue {
   results: Transaction[];
   total: number;
-}> => {
+}
+
+export const fetchTxList = (options: FetchTxListOptions) => async (): Promise<
+  FetchTxReturnValue
+> => {
+  const { apiServer, types, offset } = options;
+  const generateTypesQueryString = () => {
+    if (types?.length) {
+      return types
+        .map(type => `${encodeURIComponent('type[]')}=${encodeURIComponent(type)}`)
+        .join('&');
+    }
+  };
   const resp = await fetchFromSidecar(apiServer)(
-    `/tx?limit=200${offset ? '&offset=' + offset : ''}`
+    `/tx?${generateTypesQueryString()}&limit=200${offset ? '&offset=' + offset : ''}`
   );
   return resp.json();
 };

@@ -163,7 +163,10 @@ export const startPad = (n: number, z = 2, s = '0') =>
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
 
 export const navgiateToRandomTx = (apiServer: string) => async () => {
-  const { results } = await fetchTxList(apiServer as string)();
+  const { results } = await fetchTxList({
+    apiServer: apiServer as string,
+    types: ['smart_contract', 'contract_call', 'token_transfer'],
+  })();
   const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
 
   if (hasNonCoinbaseTxs) {
