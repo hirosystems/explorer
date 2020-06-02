@@ -97,7 +97,11 @@ export const Alert = ({
       <Flex align="center" width="100%" p={size === 'small' ? 'tight' : 'base'} pr="none">
         <Box>
           <Text fontSize={size === 'small' ? '14px' : '16px'} pl="tight">
-            {_error ? formattedError.message : error?.message || renderErrorMessage(error)}
+            {_error
+              ? formattedError.message
+              : error?.name === 'Status 429'
+              ? 'Too many requests to the faucet, try again later.'
+              : error?.message || renderErrorMessage(error)}
           </Text>
         </Box>
         {clearError || showClearErrors ? (

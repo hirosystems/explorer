@@ -121,9 +121,11 @@ export const ContractDeploy = (props: any) => {
                     type="code"
                   />
                 </Box>
-                <Button type="submit" isLoading={isLoading}>
-                  Submit
-                </Button>
+                <Box>
+                  <Button type="submit" isLoading={isLoading}>
+                    Deploy contract
+                  </Button>
+                </Box>
               </Stack>
             </Flex>
           </form>
