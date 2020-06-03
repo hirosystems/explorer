@@ -24,6 +24,7 @@ export const Tooltip = ({ children, label, 'aria-label': ariaLabel }: any) => {
         aria-label={ariaLabel}
         style={{
           position: 'absolute',
+          zIndex: 999,
           background: 'var(--colors-invert)',
           color: 'var(--colors-bg)',
           border: 'none',
