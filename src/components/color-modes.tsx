@@ -7,26 +7,55 @@ import { Theme } from '@blockstack/ui';
 
 export const colorGet = (path: string, fallback?: string) => themeGet('colors.' + path, fallback);
 
-interface colorModeTypes {
-  ['accent']: string;
-  ['bg']: string;
-  ['bg-alt']: string;
-  ['bg-light']: string;
-  ['invert']: string;
-  ['text-hover']: string;
-  ['text-title']: string;
-  ['text-caption']: string;
-  ['text-body']: string;
-  ['input-placeholder']: string;
-  ['border']: string;
-  ['feedback-alert']: string;
-  ['feedback-error']: string;
-  ['feedback-success']: string;
+//
+// The only reason we can't use an enum here is 'cause
+// the values we want aren't the same as the key, and enum
+// doesn't support kebab casing
+enum Color {
+  Accent = 'accent',
+  Bg = 'bg',
+  BgAlt = 'bg-alt',
+  BgLight = 'bg-light',
+  Invert = 'invert',
+  TextHover = 'text-hover',
+  TextTitle = 'text-title',
+  TextCaption = 'text-caption',
+  TextBody = 'text-body',
+  InputPlaceholder = 'input-placeholder',
+  Border = 'border',
+  FeedbackAlert = 'feedback-alert',
+  FeedbackError = 'feedback-error',
+  FeedbackSuccess = 'feedback-success',
 }
 
+type ColorsStringLiteral =
+  | 'accent'
+  | 'bg'
+  | 'bg-alt'
+  | 'bg-light'
+  | 'invert'
+  | 'text-hover'
+  | 'text-title'
+  | 'text-caption'
+  | 'text-body'
+  | 'input-placeholder'
+  | 'border'
+  | 'feedback-alert'
+  | 'feedback-error'
+  | 'feedback-success';
+
+type ColorModeTypes = {
+  [key in ColorsStringLiteral]: string;
+};
+
+// Doesn't work with interfaces
+// interface ColorModeTypesInterface {
+//   [key: ColorsStringLiteral]: string;
+// }
+
 interface ColorModesInterface {
-  light: colorModeTypes;
-  dark: colorModeTypes;
+  light: ColorModeTypes;
+  dark: ColorModeTypes;
 }
 
 const colors = (props: { theme: Theme }): ColorModesInterface => ({
@@ -64,6 +93,12 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   },
 });
 
+const getCssVariable = (name: ColorsStringLiteral, colorMode: 'light' | 'dark') => {
+  // create string however it's formatted
+  // import and use this fn to ensure we're typing colour vars
+  return `--var(${name})`;
+};
+
 const colorModeStyles = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =>
   colors(props)[props.colorMode];
 
@@ -77,7 +112,7 @@ ${({ colorMode = 'light', ...rest }: any) =>
   colorMap({ colorMode, ...rest }).map(key => {
     return `--colors-${key}: ${
       //@ts-ignore
-      colorModeStyles({ colorMode, ...rest })[key as string]
+      colorModeStyles({ colorMode, ...rest })[key]
     };`;
   })}
 }
@@ -87,7 +122,7 @@ ${({ colorMode = 'light', ...rest }: any) =>
       colorMap({ colorMode, ...rest }).map(key => {
         return `--colors-${key}: ${
           //@ts-ignore
-          colorModeStyles({ colorMode, ...rest })[key as string]
+          colorModeStyles({ colorMode, ...rest })[key]
         };`;
       })}
     }
@@ -99,7 +134,7 @@ ${({ colorMode = 'light', ...rest }: any) =>
       colorMap({ colorMode, ...rest }).map(key => {
         return `--colors-${key}: ${
           //@ts-ignore
-          colorModeStyles({ colorMode, ...rest })[key as string]
+          colorModeStyles({ colorMode, ...rest })[key]
         };`;
       })}
     }
