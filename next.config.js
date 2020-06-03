@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -16,6 +18,7 @@ module.exports = withBundleAnalyzer({
   webpack(config, { dev }) {
     if (!dev) {
       config.externals.push('elliptic');
+      config.plugins.push(new webpack.IgnorePlugin(/^\.\/wordlists\/(?!english)/, /bip39\/src$/));
     }
     return config;
   },
