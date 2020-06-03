@@ -22,7 +22,6 @@ export const usePopover = ({
   const [currentFocus, setCurrentFocus] = useState<number | undefined>(undefined);
   const [childIsInFocus, setChildFocus] = useState(false);
   const [localTriggerFocusState, setTriggerFocus] = useState(false);
-
   const [wrapperFocus, bindWrapperFocus] = useFocus();
   const bindHover = useControlledHover(setHovered);
 
@@ -99,24 +98,30 @@ export const usePopover = ({
       setCurrentFocus(0);
     }
     if (currentFocus === lastItem) {
-      setCurrentFocus(0);
+      if (length === 1) {
+        return setCurrentFocus(undefined);
+      }
+      return setCurrentFocus(0);
     } else if (currentFocus === 0) {
-      setCurrentFocus(1);
+      return setCurrentFocus(1);
     } else if (currentFocus && currentFocus > 0) {
-      setCurrentFocus(currentFocus + 1);
+      return setCurrentFocus(currentFocus + 1);
     }
   }, [currentFocus]);
 
   const setPrevNumber = useCallback(() => {
     if (currentFocus === undefined) {
-      return;
+      return setCurrentFocus(lastItem);
     }
     if (currentFocus === lastItem) {
-      setCurrentFocus(currentFocus - 1);
+      if (length === 1) {
+        return setCurrentFocus(undefined);
+      }
+      return setCurrentFocus(currentFocus - 1);
     } else if (currentFocus === 0) {
-      setCurrentFocus(length - 1);
+      return setCurrentFocus(length - 1);
     } else if (currentFocus && currentFocus <= length - 1) {
-      setCurrentFocus(currentFocus - 1);
+      return setCurrentFocus(currentFocus - 1);
     }
   }, [currentFocus]);
 
