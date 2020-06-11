@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Flex, Box, BlockstackIcon, FlexProps, BoxProps } from '@blockstack/ui';
 import { Tag } from '@components/tags';
-import { microToStacks, truncateMiddle, toRelativeTime } from '@common/utils';
+import { microToStacks, truncateMiddle, toRelativeTime, addSepBetweenStrings } from '@common/utils';
 import { Transaction, TransactionType } from '@models/transaction.interface';
 import { Caption, Title } from '@components/typography';
 import { getContractName } from '@common/utils';
@@ -69,15 +69,20 @@ const getTitle = (transaction: Transaction) => {
 };
 
 const getCaption = (tx: Transaction) => {
-  const date = toRelativeTime((tx as any).burn_block_time * 1000);
+  const date =
+    typeof (tx as any).burn_block_time !== 'undefined'
+      ? toRelativeTime((tx as any).burn_block_time * 1000)
+      : undefined;
+
   const truncatedId = truncateMiddle(tx.tx_id, 4);
+
   switch (tx.tx_type) {
     case 'smart_contract':
-      return date + ' ∙ ' + truncatedId;
+      return addSepBetweenStrings([date, truncatedId]);
     case 'contract_call':
-      return date + ' ∙ ' + truncatedId;
+      return addSepBetweenStrings([date, truncatedId]);
     case 'token_transfer':
-      return date + ' ∙ ' + microToStacks(tx.token_transfer.amount) + ' STX';
+      return addSepBetweenStrings([date, microToStacks(tx.token_transfer.amount) + ' STX']);
     default:
       return date;
   }

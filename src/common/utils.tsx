@@ -188,17 +188,21 @@ export const clarityValuetoHumanReadable = (value: any) => {
     return value.repr;
   }
   return null;
-  // const deserializeAsset = deserializeCV(Buffer.from(value.replace('0x', ''), 'hex'));
-  //
-  // if (deserializeAsset.type === 5 && 'address' in deserializeAsset) {
-  //   return addressToString(deserializeAsset.address);
-  // }
-  // if (deserializeAsset.type === 1 && 'value' in deserializeAsset) {
-  //   return (deserializeAsset.value as BN).toString();
-  // }
-  // if (deserializeAsset.type === 2 && 'buffer' in deserializeAsset) {
-  //   return (deserializeAsset.buffer as Buffer).toString();
-  // }
+};
+
+export const addSepBetweenStrings = (strings: (string | undefined)[], sep: string = '∙') => {
+  let str = '';
+  strings.forEach((string, index, array) => {
+    if (string) {
+      if (index < array.length - 1) {
+        str += string + ` ${sep} `;
+      } else {
+        str += string;
+      }
+    }
+  });
+
+  return str;
 };
 
 export const toRelativeTime = (ts: number) => dayjs().to(ts);
