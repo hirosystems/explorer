@@ -26,22 +26,21 @@ export const Rows: React.FC<RowsProps> = ({
           render={columnLabels[1] ? <RowLabel label={columnLabels[1]} /> : undefined}
         />
       ) : null}
-      {items.map(
-        ({ label, children, copy, condition = true }, key, arr) =>
-          condition && (
-            <ChildComponent
-              key={key}
-              card={card}
-              copy={copy}
-              label={label}
-              inline={inline}
-              render={children}
-              isFirst={key === 0}
-              noTopBorder={noTopBorder}
-              isLast={key === arr.length - 1}
-            />
-          )
-      )}
+      {items.map(({ label, children, copy, condition = true }, key, arr) => {
+        return condition ? (
+          <ChildComponent
+            key={key}
+            card={card}
+            copy={copy}
+            label={label}
+            inline={inline}
+            render={children}
+            isFirst={key === 0}
+            noTopBorder={noTopBorder}
+            isLast={key === arr.length - 1}
+          />
+        ) : null;
+      })}
     </Component>
   );
 };
