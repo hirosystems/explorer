@@ -62,11 +62,13 @@ const SandboxPage = ({ tab, username }: any) => {
       const _identity = JSON.parse(saved as string);
       identityStorage.set('debug_identity', _identity);
       await dispatch(setIdentity(_identity));
+      return;
     } catch (e) {
       const _identity = await doGenerateIdentity();
       await payload.userSession.putFile('identity.json', JSON.stringify(_identity));
       identityStorage.set('debug_identity', _identity);
       await dispatch(setIdentity(_identity));
+      return;
     }
   }, []);
 

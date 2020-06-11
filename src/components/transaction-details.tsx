@@ -56,6 +56,7 @@ const transformDataToRowData = (d: Transaction) => {
     copy: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
   };
   const sender = {
+    condition: typeof d.sender_address !== 'undefined',
     label: {
       children: 'Sender address',
     },
@@ -69,6 +70,7 @@ const transformDataToRowData = (d: Transaction) => {
     children: <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} />,
   };
   const blockTime = {
+    condition: typeof d.block_height !== 'undefined',
     label: {
       children: 'Block height',
     },
@@ -83,6 +85,7 @@ const transformDataToRowData = (d: Transaction) => {
     ),
   };
   const blockHash = {
+    condition: typeof d.block_hash !== 'undefined',
     label: {
       children: 'Block hash',
     },
