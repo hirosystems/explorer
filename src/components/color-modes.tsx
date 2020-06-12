@@ -7,60 +7,80 @@ import { Theme } from '@blockstack/ui';
 
 export const colorGet = (path: string, fallback?: string) => themeGet('colors.' + path, fallback);
 
-interface colorModeTypes {
-  ['accent']: string;
-  ['bg']: string;
-  ['bg-alt']: string;
-  ['bg-light']: string;
-  ['invert']: string;
-  ['text-hover']: string;
-  ['text-title']: string;
-  ['text-caption']: string;
-  ['text-body']: string;
-  ['input-placeholder']: string;
-  ['border']: string;
-  ['feedback-alert']: string;
-  ['feedback-error']: string;
-  ['feedback-success']: string;
+enum Color {
+  Accent = 'accent',
+  Bg = 'bg',
+  BgAlt = 'bg-alt',
+  BgLight = 'bg-light',
+  Invert = 'invert',
+  TextHover = 'text-hover',
+  TextTitle = 'text-title',
+  TextCaption = 'text-caption',
+  TextBody = 'text-body',
+  InputPlaceholder = 'input-placeholder',
+  Border = 'border',
+  FeedbackAlert = 'feedback-alert',
+  FeedbackError = 'feedback-error',
+  FeedbackSuccess = 'feedback-success',
 }
 
+type ColorsStringLiteral =
+  | 'accent'
+  | 'bg'
+  | 'bg-alt'
+  | 'bg-light'
+  | 'invert'
+  | 'text-hover'
+  | 'text-title'
+  | 'text-caption'
+  | 'text-body'
+  | 'input-placeholder'
+  | 'border'
+  | 'feedback-alert'
+  | 'feedback-error'
+  | 'feedback-success';
+
+type ColorModeTypes = {
+  [key in ColorsStringLiteral]: string;
+};
+
 interface ColorModesInterface {
-  light: colorModeTypes;
-  dark: colorModeTypes;
+  light: ColorModeTypes;
+  dark: ColorModeTypes;
 }
 
 const colors = (props: { theme: Theme }): ColorModesInterface => ({
   light: {
-    ['accent']: colorGet('blue')(props),
-    ['bg']: 'white',
-    ['bg-alt']: colorGet('ink.50')(props),
-    ['bg-light']: 'white',
-    ['invert']: colorGet('ink')(props),
-    ['text-hover']: colorGet('blue')(props),
-    ['text-title']: colorGet('ink')(props),
-    ['text-caption']: colorGet('ink.600')(props),
-    ['text-body']: colorGet('ink.900')(props),
-    ['input-placeholder']: colorGet('ink.400')(props),
-    ['border']: 'rgb(229, 229, 236)',
-    ['feedback-alert']: colorGet('orange')(props),
-    ['feedback-error']: colorGet('red')(props),
-    ['feedback-success']: colorGet('green')(props),
+    [Color.Accent]: colorGet('blue')(props),
+    [Color.Bg]: 'white',
+    [Color.BgAlt]: colorGet('ink.50')(props),
+    [Color.BgLight]: 'white',
+    [Color.Invert]: colorGet('ink')(props),
+    [Color.TextHover]: colorGet('blue')(props),
+    [Color.TextTitle]: colorGet('ink')(props),
+    [Color.TextCaption]: colorGet('ink.600')(props),
+    [Color.TextBody]: colorGet('ink.900')(props),
+    [Color.InputPlaceholder]: colorGet('ink.400')(props),
+    [Color.Border]: 'rgb(229, 229, 236)',
+    [Color.FeedbackAlert]: colorGet('orange')(props),
+    [Color.FeedbackError]: colorGet('red')(props),
+    [Color.FeedbackSuccess]: colorGet('green')(props),
   },
   dark: {
-    ['accent']: colorGet('blue.400')(props),
-    ['bg']: colorGet('ink')(props),
-    ['bg-light']: 'rgba(255,255,255,0.05)',
-    ['bg-alt']: 'rgba(255,255,255,0.08)',
-    ['invert']: 'white',
-    ['text-hover']: colorGet('blue.300')(props),
-    ['text-title']: 'white',
-    ['text-caption']: '#a7a7ad',
-    ['text-body']: colorGet('ink.300')(props),
-    ['input-placeholder']: 'rgba(255,255,255,0.3)',
-    ['border']: 'rgb(39, 41, 46)',
-    ['feedback-alert']: colorGet('orange')(props),
-    ['feedback-error']: colorGet('red')(props),
-    ['feedback-success']: colorGet('green')(props),
+    [Color.Accent]: colorGet('blue.400')(props),
+    [Color.Bg]: colorGet('ink')(props),
+    [Color.BgAlt]: 'rgba(255,255,255,0.05)',
+    [Color.BgLight]: 'rgba(255,255,255,0.08)',
+    [Color.Invert]: 'white',
+    [Color.TextHover]: colorGet('blue.300')(props),
+    [Color.TextTitle]: 'white',
+    [Color.TextCaption]: '#a7a7ad',
+    [Color.TextBody]: colorGet('ink.300')(props),
+    [Color.InputPlaceholder]: 'rgba(255,255,255,0.3)',
+    [Color.Border]: 'rgb(39, 41, 46)',
+    [Color.FeedbackAlert]: colorGet('orange')(props),
+    [Color.FeedbackError]: colorGet('red')(props),
+    [Color.FeedbackSuccess]: colorGet('green')(props),
   },
 });
 
@@ -69,6 +89,10 @@ const colorModeStyles = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =
 
 const colorMap = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =>
   Object.keys(colors(props)[props.colorMode]);
+
+export const color = (name: ColorsStringLiteral) => {
+  return `var(--colors-${name})`;
+};
 
 export const ColorModes = createGlobalStyle`
 
