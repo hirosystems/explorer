@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, BoxProps } from '@blockstack/ui';
-import { Text } from '@components/typography';
+import { Flex, Box, BoxProps, ChevronIcon } from '@blockstack/ui';
 import { Popover } from '@components/popover/popover';
 import { NetworkOptions } from '@store/ui';
 import { selectNetwork } from '@store/ui/actions';
@@ -10,6 +9,8 @@ import { useConfigState } from '@common/hooks/use-config-state';
 import { useToast } from '@common/hooks/use-toast';
 import { IS_DEV } from '@common/constants';
 import { NETWORK_COOKIE, networkStorage } from '@common/utils';
+import { color } from '@components/color-modes';
+import { HeaderTextItem } from '@components/header';
 
 export const TestnetSelector = (props: BoxProps) => {
   const ref = React.useRef<any | null>(null);
@@ -52,14 +53,18 @@ export const TestnetSelector = (props: BoxProps) => {
         onItemClick={handleSelectApiServer}
         hideItems={items?.length < 2}
       >
-        <Box
+        <Flex
           _hover={{
             cursor: items?.length < 2 ? 'unset' : 'pointer',
           }}
           ref={ref}
+          align="center"
         >
-          <Text>{items[activeItem].label}</Text>
-        </Box>
+          <HeaderTextItem>{items[activeItem].label}</HeaderTextItem>
+          <Box color={color('text-caption')}>
+            <ChevronIcon direction="down" />
+          </Box>
+        </Flex>
       </Popover>
     </Box>
   );

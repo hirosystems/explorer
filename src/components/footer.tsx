@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Text, Box, Flex, BoxProps, FlexProps } from '@blockstack/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
 
-const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
+const FooterLink: React.FC<BoxProps> = React.memo(({ children, ...rest }) => (
   <Text
     cursor="pointer"
     textStyle="body.small"
@@ -13,22 +13,24 @@ const FooterLink: React.FC<BoxProps> = ({ children, ...rest }) => (
   >
     {children}
   </Text>
-);
+));
 
-const ColorModeLink = ({ ...rest }) => {
+const ColorModeLink = React.memo(({ ...rest }) => {
   const { toggleColorMode, colorMode } = useColorMode();
   return (
     <FooterLink onClick={toggleColorMode} {...rest}>
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
     </FooterLink>
   );
-};
+});
 
-const LinkInNewWindow = React.forwardRef((props: any, ref: any) => (
-  <Text as="a" target="_blank" rel="noopener noreferrer" ref={ref} {...props} />
-));
+const LinkInNewWindow = React.memo(
+  React.forwardRef((props: any, ref: any) => (
+    <Text as="a" target="_blank" rel="noopener noreferrer" ref={ref} {...props} />
+  ))
+);
 
-export const Footer = (props: FlexProps) => {
+export const Footer = React.memo((props: FlexProps) => {
   return (
     <Box width="100%" {...props}>
       <Flex
@@ -78,4 +80,4 @@ export const Footer = (props: FlexProps) => {
       </Flex>
     </Box>
   );
-};
+});

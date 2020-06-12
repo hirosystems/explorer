@@ -1,50 +1,38 @@
 import * as React from 'react';
-
 import { Formik } from 'formik';
+import { useDispatch } from 'react-redux';
 import { Flex, Box, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
-import { useDebugState } from '@common/sandbox';
-import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';
-import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
-import { useTxToast } from '@common/sandbox';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 export const RawTx = (props: any) => {
+  const ref = React.useRef<HTMLDivElement | null>(null);
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
-  const { identity } = useDebugState();
+  const { identity, doFetchAccount, doBroadcastTransaction } = useSandboxState();
   const dispatch = useDispatch();
   const initialValues = {
     rawTx: '',
   };
-  const showToast = useTxToast();
 
   const onSubmit = async ({ rawTx }: any) => {
-    if (rawTx === '') return;
+    if (rawTx === '' || !identity) return;
+    ref?.current?.blur();
     try {
       doStartLoading();
-
-      await dispatch(fetchAccount(identity?.address));
-
-      const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx: rawTx, isRaw: true })
-      );
-      if (error) return doFinishLoading();
-
+      const [account, response] = await Promise.all([
+        doFetchAccount(),
+        doBroadcastTransaction({ principal: identity.address, tx: rawTx, isRaw: true }),
+      ]);
+      if (!response || !response.transactions?.length || !response.transactions[0].txId)
+        return doFinishLoading();
       props.showTransactionDialog();
-
-      showToast(payload.transactions[0].txId);
-
-      setTimeout(async () => {
-        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
-
-        // todo: typing fix -- asyncThunk
-        if ((initialFetch as any).error) {
-          await dispatch(fetchTransaction(payload.transactions[0].txId));
-        }
-        await dispatch(fetchAccount(identity?.address));
-        doFinishLoading();
-      }, 3500);
+      await Promise.all([
+        dispatch(fetchTransaction(response.transactions[0].txId)),
+        doFetchAccount(identity?.address),
+      ]);
+      doFinishLoading();
     } catch (e) {
       console.log(e);
       doFinishLoading();
@@ -60,7 +48,7 @@ export const RawTx = (props: any) => {
               <Stack spacing="base" maxWidth="560px" width="100%">
                 <Field type="textarea" name="rawTx" label="Raw transaction" />
                 <Box>
-                  <Button type="submit" isLoading={isLoading}>
+                  <Button ref={ref as any} type="submit" isLoading={isLoading}>
                     Broadcast transaction
                   </Button>
                 </Box>

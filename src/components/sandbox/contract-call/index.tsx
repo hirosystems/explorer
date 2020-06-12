@@ -13,7 +13,7 @@ import { RootState } from '@store';
 import { ContractCard } from '@components/contract-card';
 import { useRef } from 'react';
 
-const Functions = ({ abi, contractName, contractAddress }: any) => {
+const Functions = ({ abi, contractName, contractAddress, showTransactionDialog }: any) => {
   return abi.functions.map((func: any) => {
     return func.access !== 'private' ? (
       <Function
@@ -21,12 +21,13 @@ const Functions = ({ abi, contractName, contractAddress }: any) => {
         contractAddress={contractAddress as string}
         func={func}
         key={func.name}
+        showTransactionDialog={showTransactionDialog}
       />
     ) : null;
   });
 };
 
-export const ContractCall = (props: any) => {
+export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const [contractName, setContractName] = React.useState<string | undefined>(undefined);
   const [contractAddress, setAddress] = React.useState<string | undefined>(undefined);
@@ -96,7 +97,7 @@ export const ContractCall = (props: any) => {
             }
           : undefined
       }
-      {...props}
+      {...rest}
     >
       <Stack isInline spacing="base" width="100%">
         <Transition
@@ -217,6 +218,7 @@ export const ContractCall = (props: any) => {
                   <Functions
                     contractName={contractName}
                     contractAddress={contractAddress}
+                    showTransactionDialog={showTransactionDialog}
                     abi={JSON.parse(abi as any)}
                   />
                 </Box>

@@ -1,14 +1,14 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@store';
 import {
-  selectTransaction,
+  selectTransactionByIdOrContractName,
   selectTransactionLoading,
   selectTransactionError,
 } from '@store/transactions';
 
-export const useTransactionState = (tx_id: string) => {
+export const useTransactionState = (txidOrContractName: string) => {
   const { transaction, loading, error } = useSelector((state: RootState) => ({
-    transaction: selectTransaction(tx_id)(state),
+    transaction: selectTransactionByIdOrContractName(txidOrContractName)(state),
     loading: selectTransactionLoading(state),
     error: selectTransactionError(state),
   }));

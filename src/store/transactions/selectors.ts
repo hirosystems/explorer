@@ -8,12 +8,36 @@ const selectors = txAdapter.getSelectors();
 
 const selectTransactionsSlice = (state: RootState) => state.transactions;
 
+export const selectAllTransactions = createSelector(selectTransactionsSlice, state =>
+  selectors.selectAll(state)
+);
+
 export const selectTransaction = (id: Transaction['tx_id']) =>
   createSelector(selectTransactionsSlice, state => selectors.selectById(state, id));
 
+export const selectTransactionByIdOrContractName = (query: string) =>
+  createSelector(selectAllTransactions, transactions => {
+    if (transactions.length) {
+      if (query.includes('.')) {
+        // contract name most likely (hopefully)
+        return (transactions as any).find(
+          (transaction: Transaction) =>
+            (transaction.tx_type === 'contract_call' &&
+              transaction.contract_call.contract_id === query) ||
+            (transaction.tx_type === 'smart_contract' &&
+              transaction.smart_contract.contract_id === query)
+        );
+      } else {
+        return (transactions as any).find(
+          (transaction: Transaction) => transaction.tx_id === query
+        );
+      }
+    }
+  });
+
 export const selectTransactionLoading = createSelector(
   selectTransactionsSlice,
-  state => state.loading
+  state => state.loading !== 'idle'
 );
 export const selectTransactionError = createSelector(selectTransactionsSlice, state => state.error);
 export const selectTransactionLastTxId = createSelector(

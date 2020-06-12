@@ -15,21 +15,23 @@ export const fetchTransaction = createAsyncThunk<Transaction[], string>(
     const txs = [];
     if (query.includes('.')) {
       const action = await dispatch(fetchContract(query));
-      const tx = await fetchTx(apiServer)((action.payload as Contract).tx_id);
+      const tx = await fetchTx(apiServer as string)((action.payload as Contract).tx_id);
       txs.push(tx);
       if (tx.tx_type === 'contract_call') {
         const originAction = await dispatch(fetchContract(tx.contract_call.contract_id));
-        const originTx = await fetchTx(apiServer)((originAction.payload as Contract).tx_id);
+        const originTx = await fetchTx(apiServer as string)(
+          (originAction.payload as Contract).tx_id
+        );
         txs.push(originTx);
       }
       return txs;
     }
     // searching by a valid id hash
-    const tx = await fetchTx(apiServer)(queryWith0x(query));
+    const tx = await fetchTx(apiServer as string)(queryWith0x(query));
     txs.push(tx);
     if (tx.tx_type === 'contract_call') {
       const originAction = await dispatch(fetchContract(tx.contract_call.contract_id));
-      const originTx = await fetchTx(apiServer)((originAction.payload as Contract).tx_id);
+      const originTx = await fetchTx(apiServer as string)((originAction.payload as Contract).tx_id);
       txs.push(originTx);
     }
     return txs;

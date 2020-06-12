@@ -2,9 +2,7 @@ import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import BN from 'bn.js';
 import { Account, AccountPayload, FaucetResponse, IdentityPayload } from '@store/sandbox/types';
 import { fetchFromApi, postToSidecar } from '@common/api/fetch';
-import { identityStorage, truncateMiddle } from '@common/utils';
 import { doGenerateIdentity } from '@common/sandbox';
-import * as blockstack from 'blockstack';
 import {
   StacksTransaction,
   broadcastTransaction as broadcastTransactionBase,
@@ -14,41 +12,49 @@ import { network } from '@common/sandbox';
 import { doAddToast } from '@store/ui/actions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { UserData } from 'blockstack/lib/auth/authApp';
+import { UserSession } from 'blockstack/lib';
+import { AppDispatch, RootState } from '@store';
+
+interface ThunkApiConfig {
+  dispatch: AppDispatch;
+  state: RootState;
+  rejectValue?: {
+    name: string;
+    message: string;
+  };
+}
 
 const extractJson = require('extract-json-string');
 
 let errorCount = 0;
 
+export const setLocalNonce = createAction<number>('account/user/localNonce/increment');
+export const resetLocalNonce = createAction('account/user/localNonce/reset');
+
 export const setIdentity = createAction<IdentityPayload>('account/identity/set');
+export const eraseIdentity = createAction('account/identity/erase');
 export const setUserData = createAction<UserData>('account/user/set');
-export const generateIdentity = createAsyncThunk<IdentityPayload>(
+
+export const generateIdentity = createAsyncThunk<IdentityPayload, UserSession>(
   'account',
-  // @ts-ignore
-  async () => {
+  async (userSession: UserSession) => {
     try {
-      const saved = await blockstack.getFile('/identity.json');
-      console.log(saved);
-      identityStorage.set('debug_identity', JSON.parse(saved as string));
+      const saved = await userSession.getFile('identity.json');
       return JSON.parse(saved as string);
     } catch (e) {
-      const id = await doGenerateIdentity();
-      identityStorage.set('debug_identity', id);
-      await blockstack.putFile('/identity.json', JSON.stringify(id));
-      return id;
+      const identity = await doGenerateIdentity();
+      await userSession.putFile('identity.json', JSON.stringify(identity));
+      return identity;
     }
   }
 );
 
-export const eraseIdentity = createAction('account/identity/erase');
-
-export const fetchAccount = createAsyncThunk<AccountPayload, string>(
+export const fetchAccount = createAsyncThunk<Account, string, ThunkApiConfig>(
   'account/fetch',
-  // @ts-ignore
-  async (principal, { rejectWithValue, dispatch, getState }) => {
-    // @ts-ignore
+  async (principal, { dispatch, getState, rejectWithValue }) => {
     const apiServer = selectCurrentNetworkUrl(getState());
     try {
-      const resp = await fetchFromApi(apiServer)(`/v2/accounts/${principal}`, {
+      const resp = await fetchFromApi(apiServer as string)(`/v2/accounts/${principal}`, {
         credentials: 'omit',
       });
       if (!resp.ok) {
@@ -66,11 +72,13 @@ export const fetchAccount = createAsyncThunk<AccountPayload, string>(
         });
       }
       const data = await resp.json();
-      return {
+      const account: Account = {
         balance: new BN(data.balance.slice(2), 16).toString(),
         nonce: data.nonce,
         principal,
       };
+
+      return account;
     } catch (e) {
       setTimeout(() => {
         dispatch(
@@ -90,13 +98,12 @@ export const fetchAccount = createAsyncThunk<AccountPayload, string>(
   }
 );
 
-export const requestFaucetFunds = createAsyncThunk<Account, string>(
+export const requestFaucetFunds = createAsyncThunk<Partial<Account>, string, ThunkApiConfig>(
   'account/faucet',
-  // @ts-ignore
-  async (principal, { rejectWithValue, getState }) => {
-    // @ts-ignore
+  async (principal, thunkAPI) => {
+    const { rejectWithValue, getState } = thunkAPI;
     const apiServer = selectCurrentNetworkUrl(getState());
-    const res = await postToSidecar(apiServer)(`/debug/faucet?address=${principal}`);
+    const res = await postToSidecar(apiServer as string)(`/debug/faucet?address=${principal}`);
     if (!res.ok) {
       return rejectWithValue({
         name: `Status ${res.status}`,
@@ -104,45 +111,55 @@ export const requestFaucetFunds = createAsyncThunk<Account, string>(
       });
     }
     const data: FaucetResponse = await res.json();
-    return {
+    const final: Partial<Account> = {
       principal,
       transactions: [data],
     };
+    return final;
   }
 );
 
+export interface BroadcastTxOptions {
+  principal: string;
+  tx: StacksTransaction | string;
+  isRaw?: boolean;
+}
+
 export const broadcastTransaction = createAsyncThunk<
-  Account,
-  { principal: string; tx: StacksTransaction | string; isRaw?: boolean }
->(
-  'account/broadcast-transaction',
-  // @ts-ignore
-  async ({ principal, tx, isRaw }, { rejectWithValue, getState }) => {
-    // @ts-ignore
-    const apiServer = selectCurrentNetworkUrl(getState());
-    try {
-      if (isRaw) {
-        const buffer = Buffer.from(tx as string, 'hex');
-        const res = await broadcastRawTransaction(buffer, network(apiServer).getBroadcastApiUrl());
-        return {
-          principal,
-          transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
-        };
-      } else {
-        const res = await broadcastTransactionBase(tx as StacksTransaction, network(apiServer));
-        return {
-          principal,
-          transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
-        };
-      }
-    } catch (e) {
-      const realError = extractJson.extract(e.message)[0];
-      if (realError) {
-        return rejectWithValue(realError);
-      }
-      return rejectWithValue(e);
+  Partial<Account>,
+  BroadcastTxOptions,
+  ThunkApiConfig
+>('account/broadcast-transaction', async (options, { rejectWithValue, getState }) => {
+  const { principal, tx, isRaw } = options;
+  const apiServer = selectCurrentNetworkUrl(getState());
+  try {
+    if (isRaw) {
+      const buffer = Buffer.from(tx as string, 'hex');
+      const res = await broadcastRawTransaction(
+        buffer,
+        network(apiServer as string).getBroadcastApiUrl()
+      );
+      return {
+        principal,
+        transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
+      } as Partial<Account>;
+    } else {
+      const res = await broadcastTransactionBase(
+        tx as StacksTransaction,
+        network(apiServer as string)
+      );
+      return {
+        principal,
+        transactions: [{ txId: `0x${res.toString().split('"')[1]}` }],
+      } as Partial<Account>;
     }
+  } catch (e) {
+    const realError = extractJson.extract(e.message)[0];
+    if (realError) {
+      return rejectWithValue(realError);
+    }
+    return rejectWithValue(e);
   }
-);
+});
 
 export const clearAccountError = createAction('account/clear-error');

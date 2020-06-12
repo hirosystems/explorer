@@ -3,19 +3,18 @@ import BigNum from 'bn.js';
 import { Formik } from 'formik';
 import { Flex, Box, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
-import { useDebugState, network } from '@common/sandbox';
-import { broadcastTransaction, fetchAccount } from '@store/sandbox';
+import { network } from '@common/sandbox';
 import { fetchTransaction } from '@store/transactions';
 import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
-import { useTxToast } from '@common/sandbox';
-
 import { useConfigState } from '@common/hooks/use-config-state';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 export const TokenTransfer = (props: any) => {
+  const ref = React.useRef<HTMLDivElement | null>(null);
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
-  const { identity } = useDebugState();
+  const { identity, doFetchAccount, doBroadcastTransaction } = useSandboxState();
   const dispatch = useDispatch();
   const { apiServer } = useConfigState();
   const initialValues = {
@@ -24,40 +23,47 @@ export const TokenTransfer = (props: any) => {
     amount: 100,
     memo: 'hello world!',
   };
-  const showToast = useTxToast();
+
+  const makeAndBroadcastTx = async ({ senderKey, recipient, amount, memo, principal }: any) => {
+    const tx = await makeSTXTokenTransfer({
+      senderKey,
+      recipient,
+      amount: new BigNum(amount),
+      memo,
+      network: network(apiServer as string),
+    });
+    return doBroadcastTransaction({ principal, tx });
+  };
 
   const onSubmit = async ({ senderKey, recipient, amount, memo }: any) => {
+    if (!identity) return;
+    ref?.current?.blur();
+    doStartLoading();
     try {
-      doStartLoading();
-
-      await dispatch(fetchAccount(identity?.address));
-
-      const tx = await makeSTXTokenTransfer({
-        senderKey,
-        recipient,
-        amount: new BigNum(amount),
-        memo,
-        network: network(apiServer as string),
-      });
-
-      const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx })
+      const [account, response] = await Promise.all(
+        [
+          doFetchAccount(identity.address),
+          makeAndBroadcastTx({
+            senderKey,
+            recipient,
+            amount,
+            memo,
+            principal: identity.address,
+          }),
+        ].map((promise: Promise<any>) => promise.catch(e => console.log(e)))
       );
-      if (error) return doFinishLoading();
+
+      if (!response || !response.transactions?.length || !response.transactions[0].txId)
+        return doFinishLoading();
 
       props.showTransactionDialog();
 
-      showToast(payload.transactions[0].txId);
+      await Promise.all([
+        dispatch(fetchTransaction(response.transactions[0].txId)),
+        doFetchAccount(identity?.address),
+      ]);
 
-      setTimeout(async () => {
-        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
-        // @ts-ignore
-        if (initialFetch.error) {
-          await dispatch(fetchTransaction(payload.transactions[0].txId));
-        }
-        await dispatch(fetchAccount(identity?.address));
-        doFinishLoading();
-      }, 3500);
+      doFinishLoading();
     } catch (e) {
       console.log(e);
       doFinishLoading();
@@ -75,7 +81,14 @@ export const TokenTransfer = (props: any) => {
                 <Field type="number" name="amount" label="uSTX amount" />
                 <Field name="memo" label="Memo (message)" />
                 <Box>
-                  <Button type="submit" isLoading={isLoading}>
+                  <Button
+                    ref={ref as any}
+                    type="submit"
+                    style={{
+                      pointerEvents: isLoading ? 'none' : 'unset',
+                    }}
+                    isLoading={isLoading}
+                  >
                     Send STX
                   </Button>
                 </Box>

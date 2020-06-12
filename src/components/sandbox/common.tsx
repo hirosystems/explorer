@@ -187,96 +187,95 @@ export const Field = ({ name, value, ...props }: any) => (
   <FormikField name={name} {...props} component={FieldForFormik} />
 );
 
-export const Wrapper = ({
-  title,
-  children,
-  loading,
-  error,
-  isVisible,
-  clearError,
-  subtitle,
-  ...rest
-}: {
-  title: string;
-  loading?: boolean;
-  error?: string;
-  isVisible: boolean;
-  clearError?: () => void;
-  subtitle?: {
-    onClick: () => void;
-    label: string;
-    icon?: any;
-  };
-} & BoxProps) => {
-  const SubtitleIcon = () =>
-    <ChevronIcon color="var(--colors-text-caption)" direction="left" size="18px" /> ||
-    subtitle?.icon;
-  return (
-    <Transition
-      styles={{
-        init: {
-          width: '100%',
-          opacity: 0,
-          position: 'absolute',
-          transform: 'translateY(5px)',
-        },
-        entered: {
-          width: '100%',
-          opacity: 1,
-          position: 'relative',
-          transform: 'none',
-        },
-        exiting: {
-          width: '100%',
-          opacity: 0,
-          position: 'absolute',
-          transform: 'translateY(10px)',
-        },
-      }}
-      in={isVisible}
-    >
-      {styles => (
-        <>
-          <Meta title={`${title} - Stacks Sandbox`} />
-          <Flex
-            style={{
-              willChange: 'transform, opacity',
-              ...styles,
-            }}
-          >
-            <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
-              <Stack spacing="base-loose">
-                <Box>
-                  <Title as="h2">{title}</Title>
-                  {subtitle ? (
-                    <Flex
-                      _hover={{
-                        cursor: 'pointer',
-                        textDecoration: 'underline',
-                      }}
-                      mt="tight"
-                      align="center"
-                      onClick={subtitle.onClick}
-                    >
-                      <Caption
+export const Wrapper = React.memo(
+  ({
+    title,
+    children,
+    loading,
+    error,
+    isVisible,
+    clearError,
+    subtitle,
+    ...rest
+  }: {
+    title: string;
+    loading?: boolean;
+    error?: string;
+    isVisible: boolean;
+    clearError?: () => void;
+    subtitle?: {
+      onClick: () => void;
+      label: string;
+      icon?: any;
+    };
+  } & BoxProps) => {
+    return (
+      <Transition
+        styles={{
+          init: {
+            width: '100%',
+            opacity: 0,
+            position: 'absolute',
+            transform: 'translateY(5px)',
+          },
+          entered: {
+            width: '100%',
+            opacity: 1,
+            position: 'relative',
+            transform: 'none',
+          },
+          exiting: {
+            width: '100%',
+            opacity: 0,
+            position: 'absolute',
+            transform: 'translateY(10px)',
+          },
+        }}
+        in={isVisible}
+      >
+        {styles => (
+          <>
+            <Meta title={`${title} - Stacks Sandbox`} />
+            <Flex
+              style={{
+                willChange: 'transform, opacity',
+                ...styles,
+              }}
+            >
+              <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
+                <Stack spacing="base-loose">
+                  <Box>
+                    <Title as="h2">{title}</Title>
+                    {subtitle ? (
+                      <Flex
                         _hover={{
                           cursor: 'pointer',
                           textDecoration: 'underline',
-                          color: 'var(--colors-invert)',
                         }}
+                        mt="tight"
+                        align="center"
+                        onClick={subtitle.onClick}
                       >
-                        {subtitle.label}
-                      </Caption>
-                    </Flex>
-                  ) : null}
-                </Box>
-                <Alert clearError={clearError} showClearErrors error={error} />
-                {children}
-              </Stack>
-            </Box>
-          </Flex>
-        </>
-      )}
-    </Transition>
-  );
-};
+                        <Caption
+                          _hover={{
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                            color: 'var(--colors-invert)',
+                          }}
+                        >
+                          {subtitle.label}
+                        </Caption>
+                      </Flex>
+                    ) : null}
+                  </Box>
+                  <Alert clearError={clearError} showClearErrors error={error} />
+                  {children}
+                </Stack>
+              </Box>
+            </Flex>
+          </>
+        )}
+      </Transition>
+    );
+  }
+);

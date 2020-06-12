@@ -16,15 +16,16 @@ import { Card } from '@components/card';
 import { valueToClarityValue } from '@common/sandbox';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useLoading } from '@common/hooks/use-loading';
-import { useDebugState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
 import { broadcastTransaction } from '@store/sandbox';
 import { TxLink } from '@components/links';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 interface FunctionProps {
   func: ContractInterfaceFunction;
   contractName: string;
   contractAddress: string;
+  showTransactionDialog: () => void;
 }
 
 interface Arg extends ContractInterfaceFunctionArg {
@@ -111,14 +112,18 @@ const ArgumentsForm = ({ state, loading, onSubmit }: any) => {
   );
 };
 
-export const Function = ({ func, contractAddress, contractName }: FunctionProps) => {
+export const Function = ({
+  func,
+  contractAddress,
+  contractName,
+  showTransactionDialog,
+}: FunctionProps) => {
   const [state, setState] = React.useState<FormState>({});
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const [result, setResult] = useState<string | undefined>(undefined);
 
-  const dispatch = useDispatch();
   const { apiServer } = useConfigState();
-  const { identity } = useDebugState();
+  const { identity, doBroadcastTransaction, doFetchAccount } = useSandboxState();
 
   React.useEffect(() => {
     const newState: FormState = {};
@@ -140,6 +145,7 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
 
   const onSubmit = React.useCallback(
     async (values?: any) => {
+      if (!identity) return console.error('Not logged in!');
       const { postConditionMode: stringPostConditionMode, ...clarityValues } = values;
 
       const postConditionMode =
@@ -162,16 +168,20 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
             postConditionMode,
           });
 
-          const { payload, error } = await dispatch(
-            broadcastTransaction({ principal: identity?.address, tx })
-          );
+          const response: any = await doBroadcastTransaction({
+            principal: identity.address,
+            tx,
+          });
 
-          if (error) return doFinishLoading();
-          setResult(payload.transactions[0].txId);
+          if (response.error || !response.transactions[0].txId) return doFinishLoading();
+
+          setResult(response.transactions[0].txId);
+          showTransactionDialog();
+
           doFinishLoading();
         } else {
           const value = await callReadOnlyFunction({
-            senderAddress: identity?.address as string,
+            senderAddress: identity.address,
             contractAddress,
             contractName,
             functionArgs,
@@ -183,7 +193,6 @@ export const Function = ({ func, contractAddress, contractName }: FunctionProps)
           doFinishLoading();
         }
       } catch (e) {
-        console.error('ERROR', e);
         doFinishLoading();
       }
     },

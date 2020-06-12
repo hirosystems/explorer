@@ -5,12 +5,12 @@ import { useHover } from 'use-events';
 
 import { truncateMiddle, microToStacks } from '@common/utils';
 import { useUserSession } from '@common/hooks/use-user-session';
-import { useDebugState } from '@common/sandbox';
 import { Tabs } from '@components/sandbox/tabs';
 import { Text, Title } from '@components/typography';
 import { PageWrapper } from '@components/page';
 import { Card } from '@components/card';
 import { Meta } from '@components/meta-head';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 const SignedOutView = ({ onClick }: any) => {
   return (
@@ -37,22 +37,24 @@ const SignedOutView = ({ onClick }: any) => {
   );
 };
 
-const UserCard = ({ user, identity, balance }: any) => {
+const UserCard = ({ username, identity, balance }: any) => {
   const [isHovered, bindHover] = useHover();
   return (
     <Box textAlign="right">
       <Box>
         <Text as="h3" fontSize="16px">
-          {user.username}
+          {username}
         </Text>
       </Box>
-      <Box {...bindHover}>
-        <Text fontSize="14px">
-          {isHovered ? identity.address : truncateMiddle(identity.address, 6)}
-        </Text>
-        <Text> </Text>
-        <Text fontSize="14px">{microToStacks(balance as number) || 0} STX</Text>
-      </Box>
+      {identity && identity.address ? (
+        <Box {...bindHover}>
+          <Text fontSize="14px">
+            {isHovered ? identity.address : truncateMiddle(identity.address, 6)}
+          </Text>
+          <Text> </Text>
+          <Text fontSize="14px">{microToStacks(balance as number) || 0} STX</Text>
+        </Box>
+      ) : null}
     </Box>
   );
 };
@@ -69,11 +71,11 @@ export const PageContent = ({
   tabs,
   ...props
 }: any) => {
-  const { identity, balance } = useDebugState();
+  const { identity, balance } = useSandboxState();
   const { doOpenAuth } = useConnect();
   const { userData: user } = useUserSession();
 
-  const isSignedIn = (username && identity) || (identity && user?.profile);
+  const isSignedIn = (username || user.username) && identity;
   return (
     <PageWrapper
       notice={{
@@ -86,9 +88,9 @@ export const PageContent = ({
         <Box>
           <Title as="h1">Stacks Explorer Sandbox</Title>
         </Box>
-        {(username && identity) || (identity && user?.profile) ? (
+        {isSignedIn ? (
           <Box>
-            <UserCard user={user} identity={identity} balance={balance} />
+            <UserCard username={username || user.username} identity={identity} balance={balance} />
           </Box>
         ) : null}
       </Flex>

@@ -28,7 +28,7 @@ export const contracts = createReducer(initialState, builder => {
   });
   builder.addCase(fetchContract.fulfilled, (state, action) => {
     if (state.loading === 'pending') {
-      contractsAdapter.addOne(state, action.payload);
+      contractsAdapter.upsertOne(state, action.payload);
       state.loading = 'idle';
       state.error = undefined;
     }

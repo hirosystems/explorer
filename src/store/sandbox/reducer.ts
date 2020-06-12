@@ -8,6 +8,8 @@ import {
   generateIdentity,
   broadcastTransaction,
   clearAccountError,
+  setLocalNonce,
+  resetLocalNonce,
 } from './actions';
 import { RootState } from '@store';
 import { dedupe } from '@common/utils';
@@ -22,10 +24,12 @@ const initialState = sandboxAdapter.getInitialState<{
   lastFetch?: number;
   identity?: IdentityPayload;
   user?: any;
+  localNonce: number;
 }>({
   loading: 'idle',
   error: undefined,
   lastFetch: undefined,
+  localNonce: 0,
 });
 
 const addAccountToState = (state: RootState['sandbox'], action: any) => {
@@ -111,4 +115,14 @@ export const sandbox = createReducer(initialState, builder => {
   builder.addCase(broadcastTransaction.pending, setLoading);
   builder.addCase(broadcastTransaction.fulfilled, addAccountToState);
   builder.addCase(broadcastTransaction.rejected, setError);
+
+  /**
+   * Local nonce
+   */
+  builder.addCase(setLocalNonce, (state, action) => {
+    state.localNonce = action.payload;
+  });
+  builder.addCase(resetLocalNonce, (state, action) => {
+    state.localNonce = 0;
+  });
 });

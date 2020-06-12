@@ -5,7 +5,8 @@ export interface FaucetResponse {
   txRaw?: string;
   success: boolean;
 }
-export interface Account extends AccountPayload {
+export interface Account extends Omit<AccountPayload, 'balance'> {
+  balance: string;
   principal: string;
   transactions?: FaucetResponse[];
 }

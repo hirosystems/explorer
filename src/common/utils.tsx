@@ -3,23 +3,34 @@ import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
 import cookieStorage from 'store/storages/cookieStorage';
 import { c32addressDecode } from 'c32check';
-import { deserializeCV, addressToString } from '@blockstack/stacks-transactions';
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
-import BN from 'bn.js';
+
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
 dayjs.extend(relativeTime);
 
 export const store = engine.createStore([lclStorage]);
-export const identityStorage = engine.createStore([cookieStorage]);
-export const usernameStorage = engine.createStore([cookieStorage]);
 
+/**
+ * Cookie names
+ */
+export const IDENTITY_COOKIE = 'sandbox_identity';
 export const USERNAME_COOKIE = 'username';
 export const COLOR_MODE_COOKIE = 'color_mode';
-export const colorModeStorage = engine.createStore([cookieStorage]);
 export const NETWORK_COOKIE = 'selected_network';
-export const networkStorage = engine.createStore([cookieStorage]);
+
+/**
+ * Cookie setters
+ */
+
+const cookieSetter = engine.createStore([cookieStorage]);
+
+export const identityStorage = cookieSetter;
+export const usernameStorage = cookieSetter;
+export const colorModeStorage = cookieSetter;
+export const networkStorage = cookieSetter;
 
 /**
  * validateStacksAddress
@@ -192,17 +203,18 @@ export const clarityValuetoHumanReadable = (value: any) => {
 
 export const addSepBetweenStrings = (strings: (string | undefined)[], sep: string = '∙') => {
   let str = '';
-  strings.forEach((string, index, array) => {
-    if (string) {
+  strings
+    .filter(_s => _s)
+    .forEach((string, index, array) => {
       if (index < array.length - 1) {
         str += string + ` ${sep} `;
       } else {
         str += string;
       }
-    }
-  });
-
+    });
   return str;
 };
 
 export const toRelativeTime = (ts: number) => dayjs().to(ts);
+
+export const isPendingTx = (tx: Transaction) => tx && tx.tx_status === 'pending';

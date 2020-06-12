@@ -1,4 +1,8 @@
-import { TransactionEvent, TransactionType } from '@blockstack/stacks-blockchain-sidecar-types';
+import {
+  TransactionEvent,
+  TransactionEventAssetType,
+  TransactionType,
+} from '@blockstack/stacks-blockchain-sidecar-types';
 import { AssetType } from '@components/token-transfer/types';
 import { LogIcon, BurnIcon, MintIcon, TransferIcon } from '@components/svg';
 
@@ -29,7 +33,7 @@ export const getTransactionTypeLabel = (value: TransactionType) => {
       return 'Poison microblock';
   }
 };
-export const getAssetEventTypeLabel = (value?: AssetType['asset_event_type']) => {
+export const getAssetEventTypeLabel = (value?: TransactionEventAssetType) => {
   switch (value) {
     case 'transfer':
       return {

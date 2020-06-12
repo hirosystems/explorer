@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -20,6 +21,11 @@ module.exports = withBundleAnalyzer({
       config.externals.push('elliptic');
       config.plugins.push(new webpack.IgnorePlugin(/^\.\/wordlists\/(?!english)/, /bip39\/src$/));
     }
+    config.resolve.alias['styled-components'] = path.resolve(
+      __dirname,
+      './node_modules/styled-components'
+    );
+
     return config;
   },
 });
