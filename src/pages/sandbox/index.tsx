@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ToastProvider } from '@blockstack/ui';
-import { useDispatch } from 'react-redux';
 import { TokenTransfer } from '@components/sandbox/token-transfer';
 import { ContractDeploy } from '@components/sandbox/contract-deploy';
 import { ContractCall } from '@components/sandbox/contract-call';
@@ -8,12 +7,12 @@ import { Faucet } from '@components/sandbox/faucet';
 import { RawTx } from '@components/sandbox/raw-tx';
 import { ReduxNextPageContext } from '@common/types';
 import { AppConfig, UserSession } from 'blockstack/lib';
-import { doGenerateIdentity, useDebugState } from '@common/sandbox';
 import { parseCookies } from 'nookies';
-import { fetchAccount, setIdentity, setUserData } from '@store/sandbox';
-import { usernameStorage, USERNAME_COOKIE, identityStorage } from '@common/utils';
+import { fetchAccount, setIdentity } from '@store/sandbox';
+import { USERNAME_COOKIE, IDENTITY_COOKIE } from '@common/utils';
 import { PageContent } from '@components/sandbox/page';
 import { Connect, FinishedData } from '@blockstack/connect';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 const paths = [
   { path: 'faucet', label: 'STX faucet', component: Faucet },
@@ -23,52 +22,23 @@ const paths = [
   { path: 'contract-call', label: 'Contract call', component: ContractCall },
 ];
 
-const SandboxPage = ({ tab, username }: any) => {
-  const [iconPath, setIconPath] = React.useState<string | undefined>(undefined);
+const SandboxWrapper = React.memo(({ children }: any) => {
+  const { doGenerateIdentity, doSetUserData } = useSandboxState();
+  const [iconPath, setIconPath] = useState<string | undefined>(undefined);
+
   const appConfig = new AppConfig(['store_write', 'publish_data']);
   const userSession = new UserSession({ appConfig });
-  const [transactionsVisible, setShowTransactions] = React.useState(false);
 
-  const hideTransactionDialog = () => {
-    setShowTransactions(false);
-  };
-  const showTransactionDialog = () => {
-    setShowTransactions(true);
-  };
+  const onFinish = useCallback(async (payload: FinishedData) => {
+    const userData = payload.userSession.loadUserData();
+    doSetUserData(userData);
+    await doGenerateIdentity(payload.userSession);
+  }, []);
 
-  const dispatch = useDispatch();
-
-  const { lastFetch, loading, identity, error } = useDebugState();
-
-  React.useEffect(() => {
-    if (!error && !lastFetch && loading !== 'pending' && identity) {
-      dispatch(fetchAccount(identity.address));
-    }
-  }, [error, lastFetch, loading, identity]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const iconPrefix = typeof document !== 'undefined' ? document.location.origin.toString() : '';
     if (!iconPath) {
       setIconPath(iconPrefix);
-    }
-  }, []);
-
-  const onFinish = React.useCallback(async (payload: FinishedData) => {
-    const userData = payload.userSession.loadUserData();
-    await dispatch(setUserData(userData));
-    usernameStorage.set(USERNAME_COOKIE, userData.username);
-    try {
-      const saved = await payload.userSession.getFile('identity.json');
-      const _identity = JSON.parse(saved as string);
-      identityStorage.set('debug_identity', _identity);
-      await dispatch(setIdentity(_identity));
-      return;
-    } catch (e) {
-      const _identity = await doGenerateIdentity();
-      await payload.userSession.putFile('identity.json', JSON.stringify(_identity));
-      identityStorage.set('debug_identity', _identity);
-      await dispatch(setIdentity(_identity));
-      return;
     }
   }, []);
 
@@ -81,31 +51,60 @@ const SandboxPage = ({ tab, username }: any) => {
       icon: iconPath + '/app-icon.png',
     },
   };
-
   return (
     <Connect authOptions={authOptions}>
-      <ToastProvider>
-        <PageContent
-          hideTransactionDialog={hideTransactionDialog}
-          showTransactionDialog={showTransactionDialog}
-          transactionsVisible={transactionsVisible}
-          username={username}
-          tab={tab}
-          tabs={paths}
-        />
-      </ToastProvider>
+      <ToastProvider>{children}</ToastProvider>
     </Connect>
+  );
+});
+
+const SandboxPage = ({ tab, identity: _cookieIdentity, username }: any) => {
+  const [transactionsVisible, setShowTransactions] = useState(false);
+  const { lastFetch, loading, identity, error, doFetchAccount } = useSandboxState();
+
+  const hideTransactionDialog = () => {
+    setShowTransactions(false);
+  };
+  const showTransactionDialog = () => {
+    setShowTransactions(true);
+  };
+
+  useEffect(() => {
+    if (!error && !lastFetch && loading !== 'pending' && identity) {
+      doFetchAccount(identity.address);
+    }
+  }, [error, lastFetch, loading, identity]);
+
+  return (
+    <SandboxWrapper>
+      <PageContent
+        hideTransactionDialog={hideTransactionDialog}
+        showTransactionDialog={showTransactionDialog}
+        transactionsVisible={transactionsVisible}
+        username={username}
+        tab={tab}
+        tabs={paths}
+      />
+    </SandboxWrapper>
   );
 };
 
 SandboxPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
   const cookies = parseCookies(ctx);
+  const { dispatch } = ctx.store;
   let tab = ctx?.query?.tab ?? undefined;
   if (cookies) {
-    cookies.debug_identity && ctx.store.dispatch(setIdentity(JSON.parse(cookies.debug_identity)));
+    const identity = cookies[IDENTITY_COOKIE] ? JSON.parse(cookies[IDENTITY_COOKIE]) : undefined;
+    const username = cookies[USERNAME_COOKIE] ? JSON.parse(cookies[USERNAME_COOKIE]) : undefined;
+    if (identity) {
+      await Promise.all([
+        dispatch(setIdentity(identity)),
+        dispatch(fetchAccount(identity.address)),
+      ]);
+    }
     return {
-      identity: cookies.debug_identity,
-      username: cookies[USERNAME_COOKIE] ? JSON.parse(cookies[USERNAME_COOKIE]) : undefined,
+      identity,
+      username,
       tab,
     };
   }

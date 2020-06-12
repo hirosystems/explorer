@@ -1,48 +1,34 @@
-import { StacksNetwork, TransactionVersion, ChainID } from '@blockstack/stacks-transactions';
-import BN from 'bn.js';
 import {
   addressFromPublicKeys,
   AddressHashMode,
   addressToString,
   AddressVersion,
+  bufferCVFromString,
+  ClarityAbiType,
+  ClarityValue,
+  deserializeCV,
+  falseCV,
+  getTypeString,
+  intCV,
+  isClarityAbiBuffer,
+  isClarityAbiList,
+  isClarityAbiOptional,
+  isClarityAbiPrimitive,
+  isClarityAbiResponse,
+  isClarityAbiTuple,
   makeRandomPrivKey,
   privateKeyToString,
   pubKeyfromPrivKey,
   publicKeyToString,
-  ClarityValue,
-  ClarityAbiType,
-  isClarityAbiPrimitive,
-  isClarityAbiBuffer,
-  isClarityAbiResponse,
-  isClarityAbiOptional,
-  isClarityAbiTuple,
-  isClarityAbiList,
   serializeCV,
-  uintCV,
-  intCV,
-  trueCV,
-  falseCV,
-  standardPrincipalCV,
-  bufferCVFromString,
-  getTypeString,
+  StacksNetwork,
   StacksTestnet,
-  deserializeCV,
+  standardPrincipalCV,
+  trueCV,
+  uintCV,
 } from '@blockstack/stacks-transactions';
 
 import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
-
-import { useSelector } from 'react-redux';
-import {
-  selectAccountBalance,
-  selectAccountNonce,
-  selectAccountLoading,
-  selectIdentity,
-  selectLastFetch,
-  selectErrorState,
-  selectAccountTransactions,
-} from '@store/sandbox';
-import { RootState } from '@store';
-import { IdentityPayload } from '@store/sandbox/types';
 import { withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { useToast } from '@common/hooks/use-toast';
@@ -70,30 +56,6 @@ export const useTxToast = () => {
       },
     });
   return showToast;
-};
-
-export const useDebugState = (): {
-  lastFetch?: number;
-  loading: string;
-  balance?: BN | number;
-  transactions?: any;
-  nonce?: number;
-  identity?: IdentityPayload;
-  error?: any;
-} => {
-  const { lastFetch, loading, balance, identity, transactions, error } = useSelector(
-    (state: RootState) => ({
-      lastFetch: selectLastFetch(state),
-      loading: selectAccountLoading(state),
-      balance: selectAccountBalance(selectIdentity(state)?.address || '')(state),
-      transactions: selectAccountTransactions(selectIdentity(state)?.address || '')(state),
-      nonce: selectAccountNonce(selectIdentity(state)?.address || '')(state),
-      identity: selectIdentity(state),
-      error: selectErrorState(state),
-    })
-  );
-
-  return { lastFetch, loading, balance, transactions, identity, error };
 };
 
 export const doGenerateIdentity = async () => {

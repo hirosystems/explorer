@@ -6,6 +6,7 @@ import { FieldBase } from '@components/sandbox/common';
 
 interface SelectProps extends BoxProps {
   setFieldValue?: FormikHelpers<any>['setFieldValue'];
+  onItemClick?: (value: string) => void;
   name: string;
   options: {
     label: string;
@@ -14,7 +15,7 @@ interface SelectProps extends BoxProps {
   }[];
   label: string;
 }
-export const Select = ({ name, options, label, ...rest }: SelectProps) => {
+export const Select = ({ name, options, onItemClick, label, ...rest }: SelectProps) => {
   const [index, setIndex] = React.useState(0);
   const selectedOption = options[index];
   const [field, { touched, error }, helpers] = useField({
@@ -25,6 +26,7 @@ export const Select = ({ name, options, label, ...rest }: SelectProps) => {
   const handleValueClick = React.useCallback(({ key }: { value: string; key: number }) => {
     setIndex(key);
     helpers.setValue(options[key].value);
+    onItemClick && onItemClick(options[key].value);
   }, []);
 
   const ref = React.useRef(null);

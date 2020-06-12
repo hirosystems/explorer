@@ -5,22 +5,33 @@ import { Field, Wrapper } from '@components/sandbox/common';
 import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
-import { useDebugState, network } from '@common/sandbox';
+import { network } from '@common/sandbox';
 import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { makeSmartContractDeploy } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
-import { useTxToast } from '@common/sandbox';
 import BN from 'bn.js';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useState } from 'react';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
-const Sample = (props: any) => {
+import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
+
+const customConfig: Config = {
+  dictionaries: [adjectives, colors, animals],
+  separator: '-',
+  length: 3,
+};
+
+const generateContractName = () => uniqueNamesGenerator(customConfig);
+
+const Sample = ({ onItemClick, setFieldValue }: any) => {
   return (
     <Select
       name="codeBody"
       label="Choose from sample"
-      setFieldValue={props.setFieldValue}
+      setFieldValue={setFieldValue}
+      onItemClick={onItemClick}
       options={SampleContracts.map(({ name, source }, key: number) => ({
         label: name,
         value: source,
@@ -31,10 +42,11 @@ const Sample = (props: any) => {
   );
 };
 
-export const ContractDeploy = (props: any) => {
+export const ContractDeploy = React.memo((props: any) => {
   const [error, setError] = useState<{ name: string; message: string } | undefined>();
-  const { identity } = useDebugState();
-  const showToast = useTxToast();
+  const [defaultName, setDefaultName] = React.useState(generateContractName());
+  const [defaultContract, setDefaultContract] = React.useState(SampleContracts[0].source);
+  const { identity, doFetchAccount, doBroadcastTransaction } = useSandboxState();
   const dispatch = useDispatch();
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
   const { apiServer } = useConfigState();
@@ -46,23 +58,27 @@ export const ContractDeploy = (props: any) => {
     });
   };
 
+  const handleGenerateNewName = () => {
+    setDefaultName(generateContractName());
+  };
+
   const initialValues = {
     senderKey: identity?.privateKey,
-    contractName: SampleContracts[0].name,
-    codeBody: SampleContracts[0].source,
+    contractName: defaultName,
+    codeBody: defaultContract,
     fee: 2000,
   };
 
   const onSubmit = async ({ senderKey, contractName, codeBody, fee }: any) => {
-    const address = identity?.address;
-    if (!address) {
+    if (!identity) {
       handleError('Are you logged in?');
       return;
     }
+
+    doStartLoading();
     try {
       setError(undefined);
-      doStartLoading();
-      await dispatch(fetchAccount(identity?.address as string));
+      await doFetchAccount(identity.address);
 
       const tx = await makeSmartContractDeploy({
         senderKey,
@@ -72,23 +88,21 @@ export const ContractDeploy = (props: any) => {
         network: network(apiServer as string),
       });
 
-      const { payload, error } = await dispatch(
-        broadcastTransaction({ principal: identity?.address, tx })
-      );
-      if (error) return doFinishLoading();
+      const response: any = await doBroadcastTransaction({
+        principal: identity?.address as string,
+        tx,
+      });
+
+      if (response.error || !response.transactions[0].txId) return doFinishLoading();
 
       props.showTransactionDialog();
-      showToast(payload.transactions[0].txId);
-      setTimeout(async () => {
-        const initialFetch = await dispatch(fetchTransaction(payload.transactions[0].txId));
 
-        // todo: typing fix -- asyncThunk
-        if ((initialFetch as any).error) {
-          await dispatch(fetchTransaction(payload.transactions[0].txId));
-        }
-        await dispatch(fetchAccount(identity?.address));
-        doFinishLoading();
-      }, 3500);
+      await Promise.all([
+        dispatch(fetchTransaction(response.transactions[0].txId)),
+        doFetchAccount(identity.address),
+      ]);
+      handleGenerateNewName();
+      doFinishLoading();
     } catch (e) {
       handleError(e.message);
       return doFinishLoading();
@@ -103,7 +117,7 @@ export const ContractDeploy = (props: any) => {
       title="Contract deploy"
       {...props}
     >
-      <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
+      <Formik initialValues={initialValues} onSubmit={onSubmit}>
         {({ handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit} method="post">
             <Flex width="100%">
@@ -111,7 +125,11 @@ export const ContractDeploy = (props: any) => {
                 <Stack isInline spacing="base" width="100%">
                   <Field width="33%" name="contractName" label="Contract name" />
                   <Field width="33%" name="fee" label="Fee" />
-                  <Sample flexGrow={1} setFieldValue={setFieldValue} />
+                  <Sample
+                    onItemClick={(value: string) => setDefaultContract(value)}
+                    flexGrow={1}
+                    setFieldValue={setFieldValue}
+                  />
                 </Stack>
                 <Box>
                   <Field
@@ -133,4 +151,4 @@ export const ContractDeploy = (props: any) => {
       </Formik>
     </Wrapper>
   );
-};
+});

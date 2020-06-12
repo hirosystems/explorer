@@ -3,7 +3,6 @@ import { Transaction } from '@models/transaction.interface';
 import { fetchTransaction } from '@store/transactions';
 import { ReduxNextPageContext } from '@common/types/next-store';
 import { useTransactionState } from '@common/hooks/use-transaction-state';
-import { useMostRecentTxId } from '@common/hooks/use-most-recent-tx';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { truncateMiddle, toRelativeTime } from '@common/utils';
 import { useDispatch } from 'react-redux';
@@ -16,7 +15,7 @@ import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
 import { TxNotFound } from '@components/tx/not-found';
 import { getTxTypeName } from '@common/transaction-names';
-import { Alert } from '@components/alert';
+import { useRefreshPendingTx } from '@common/hooks/use-refresh-pending-tx';
 
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
@@ -66,14 +65,18 @@ const TransactionMeta = ({ transaction }: any) => {
   );
 };
 
-const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
-  const tx_id = useMostRecentTxId();
-  const { transaction, error } = useTransactionState(tx_id as string);
+const TransactionPage = ({ txid }: { txid: string }) => {
   const dispatch = useDispatch();
+  const { transaction, loading, error } = useTransactionState(txid as string);
 
-  const handleRefresh = async (query?: string) => dispatch(fetchTransaction(query || searchQuery));
-
+  useRefreshPendingTx(txid);
   useRecentlyViewedTx(transaction);
+
+  const handleRefresh = async (query?: string) => {
+    if (!loading) {
+      return dispatch(fetchTransaction(query || txid));
+    }
+  };
 
   if (error || !transaction)
     return (
@@ -92,9 +95,10 @@ const TransactionPage = ({ searchQuery }: { searchQuery: string }) => {
 
 TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
   const { txid } = query;
+  const { dispatch } = store;
   if (txid) {
-    await Promise.all([store.dispatch(fetchTransaction(txid.toString()))]);
-    return { searchQuery: txid.toString() };
+    await dispatch(fetchTransaction(txid.toString()));
+    return { txid: txid.toString() };
   }
   return {};
 };

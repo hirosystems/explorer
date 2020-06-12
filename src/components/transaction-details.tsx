@@ -74,15 +74,7 @@ const transformDataToRowData = (d: Transaction) => {
     label: {
       children: 'Block height',
     },
-    children: (
-      <BlockComponent
-        block={d.block_height}
-        ts={
-          //@ts-ignore
-          d.burn_block_time
-        }
-      />
-    ),
+    children: <BlockComponent block={d.block_height as number} ts={d.burn_block_time as number} />,
   };
   const blockHash = {
     condition: typeof d.block_hash !== 'undefined',

@@ -32,7 +32,7 @@ export const transactions = createReducer(initialState, builder => {
   builder.addCase(fetchTransaction.fulfilled, (state, action) => {
     if (state.loading === 'pending') {
       action.payload.forEach(tx => {
-        txAdapter.addOne(state, tx);
+        txAdapter.upsertOne(state, tx);
       });
       state.loading = 'idle';
       state.error = undefined;

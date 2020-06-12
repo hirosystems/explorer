@@ -1,20 +1,16 @@
 import * as React from 'react';
 import { Ref } from 'react';
-import {
-  Box,
-  Flex,
-  Stack,
-  CodeBlock,
-  FlexProps,
-  BlockstackIcon,
-  BoxProps,
-  ChevronIcon,
-} from '@blockstack/ui';
+import { Box, Flex, Stack, FlexProps, BlockstackIcon, BoxProps, ChevronIcon } from '@blockstack/ui';
+import { Truncate } from '@components/tuncated';
 import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
 import {
   TransactionEvent,
   TransactionEventAssetType,
+  TransactionEventSmartContractLog,
+  TransactionEventNonFungibleAsset,
+  TransactionEventFungibleAsset,
+  TransactionEventStxAsset,
 } from '@blockstack/stacks-blockchain-sidecar-types';
 import { clarityValuetoHumanReadable } from '@common/utils';
 import { Tooltip } from '@components/tooltip';
@@ -29,19 +25,8 @@ import { DefaultContract } from '@components/icons/default-contract';
 import { getAssetEventTypeLabel, getEventTypeName } from '@components/token-transfer/utils';
 import { TokenTransferItemProps } from '@components/token-transfer/types';
 import { LogIcon } from '@components/svg';
-import { useHover } from 'use-events';
-
-const Cell = React.memo((props: FlexProps) => (
-  <Flex px="tight" direction="column" justify="center" {...props} />
-));
-
-const AssetWithTooltip = React.memo(({ value, label }: any) => {
-  return (
-    <Tooltip placement="top" label={label}>
-      <Text>{value}</Text>
-    </Tooltip>
-  );
-});
+import { useActive, useHover } from 'use-events';
+import { color } from '@components/color-modes';
 
 const Value = React.memo(
   React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (
@@ -61,32 +46,6 @@ export const ValueWrapped = React.memo(({ truncate, offset = 4, value, ...rest }
   ) : (
     <Value {...rest}>{value}</Value>
   )
-);
-
-export const CellItem = React.memo(
-  ({
-    value,
-    label,
-    textProps = {},
-    truncate,
-    ...rest
-  }: {
-    value?: any;
-    label?: string | any;
-    truncate?: boolean;
-    textProps?: BoxProps;
-  } & FlexProps) => {
-    return value ? (
-      <Cell {...rest}>
-        <ValueWrapped truncate={truncate} value={value} {...textProps} />
-        {label ? (
-          <Box>
-            <Caption>{label}</Caption>
-          </Box>
-        ) : null}
-      </Cell>
-    ) : null;
-  }
 );
 
 const ItemIcon = React.memo(({ type }: { type: TransactionEvent['event_type'] }) => {
@@ -128,7 +87,7 @@ const EventAsset = React.memo(
           </Caption>
         </Flex>
         <ItemIcon type={event.event_type} />
-        {event.asset?.asset_id ? (
+        {event.event_type !== 'smart_contract_log' && event.asset.asset_id ? (
           <Text fontSize="14px" fontWeight="500" color="var(--colors-text-title)">
             {getFungibleAssetName(event.asset.asset_id)}
           </Text>
@@ -141,43 +100,62 @@ const EventAsset = React.memo(
     ) : null
 );
 
-const AssetEventAmount = React.memo(
-  ({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
-    if (event.event_type === 'smart_contract_log') {
-      const value = clarityValuetoHumanReadable(event.contract_log.value);
-      const isAddress = validateStacksAddress(value);
-      return (
-        <Text style={{ wordBreak: 'break-word' }} fontWeight="500" {...rest}>
-          {isAddress ? truncateMiddle(value, 8) : value}
-        </Text>
-      );
-    }
-
-    let value = event?.asset?.value;
-    if (value && clarityValuetoHumanReadable(value)) {
-      value = clarityValuetoHumanReadable(value);
-    }
-    if (event.asset?.amount || value) {
-      return (
-        <Text fontWeight="500" {...rest}>
-          {event.event_type === 'stx_asset'
-            ? microToStacks(event.asset?.amount || value)
-            : event.asset?.amount || value}{' '}
-          <Text>
-            {event.event_type === 'stx_asset'
-              ? 'STX'
-              : event.event_type === 'non_fungible_token_asset'
-              ? 'NFT'
-              : 'FT'}
-          </Text>
-        </Text>
-      );
-    }
-    return null;
+const ContractLogItem = React.memo(
+  ({ event, ...rest }: { event: TransactionEventSmartContractLog }) => {
+    const value = clarityValuetoHumanReadable(event.contract_log.value);
+    const isAddress = validateStacksAddress(value);
+    return (
+      <Text style={{ wordBreak: 'break-word' }} fontWeight="500" {...rest}>
+        {isAddress ? <Truncate>{value}</Truncate> : value}
+      </Text>
+    );
   }
 );
 
-const AssetEventType = React.memo(({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
+const NonFungibleItem = React.memo(
+  ({ event, ...rest }: { event: TransactionEventNonFungibleAsset }) => {
+    const value = clarityValuetoHumanReadable(event.asset.value);
+    return (
+      <Box {...rest}>
+        <Text fontWeight="500">
+          {value} <Text>NFT</Text>
+        </Text>
+      </Box>
+    );
+  }
+);
+const FungibleItem = React.memo(({ event, ...rest }: { event: TransactionEventFungibleAsset }) => (
+  <Box {...rest}>
+    <Text fontWeight="500">
+      {event.asset.amount} <Text>FT</Text>
+    </Text>
+  </Box>
+));
+
+const StxAsset = React.memo(({ event, ...rest }: { event: TransactionEventStxAsset }) => {
+  if (!event.asset.amount) return null;
+  return (
+    <Box {...rest}>
+      <Text>{microToStacks(event.asset.amount)} STX</Text>
+    </Box>
+  );
+});
+
+const EventAssetValue = React.memo(({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
+  if (!event) return null;
+  switch (event.event_type) {
+    case 'fungible_token_asset':
+      return <FungibleItem event={event} {...rest} />;
+    case 'non_fungible_token_asset':
+      return <NonFungibleItem event={event} {...rest} />;
+    case 'smart_contract_log':
+      return <ContractLogItem event={event} {...rest} />;
+    case 'stx_asset':
+      return <StxAsset event={event} {...rest} />;
+  }
+});
+
+const EventAssetType = React.memo(({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
   if (event.event_type === 'smart_contract_log') {
     return (
       <Flex align="center" {...rest}>
@@ -190,9 +168,8 @@ const AssetEventType = React.memo(({ event, ...rest }: { event: TransactionEvent
   }
   if (event.asset.asset_event_type) {
     const { label, icon: Icon } = getAssetEventTypeLabel(
-      event.asset?.asset_event_type as TransactionEventAssetType
+      event.asset.asset_event_type as TransactionEventAssetType
     );
-
     return (
       <Flex align="center" {...rest}>
         {Icon && (
@@ -207,56 +184,57 @@ const AssetEventType = React.memo(({ event, ...rest }: { event: TransactionEvent
   return null;
 });
 
-export const TokenTransferItem = ({
-  data,
-  noBottomBorder,
-  length = 0,
-  ...flexProps
-}: TokenTransferItemProps) => {
-  const [isOpen, openCode] = React.useState(false);
-  const [hover, bind] = useHover();
-  const handleOpen = React.useCallback(() => {
-    openCode(!isOpen);
-  }, [isOpen]);
-  return (
-    <Box fontSize="14px">
-      <Stack
-        isInline
-        borderBottom={noBottomBorder ? 'unset' : '1px solid'}
-        borderColor="var(--colors-border)"
-        py="loose"
-        pr="base"
-        onClick={handleOpen}
-        _hover={{
-          cursor: 'pointer',
-        }}
-        {...bind}
-        {...flexProps}
+export const TokenTransferItem = React.memo(
+  ({ data, noBottomBorder, length = 0, ...flexProps }: TokenTransferItemProps) => {
+    const [isOpen, openCode] = React.useState(false);
+    const [hover, bind] = useHover();
+    const [active, activeBind] = useActive();
+    const handleOpen = React.useCallback(() => {
+      openCode(!isOpen);
+    }, [isOpen]);
+    return (
+      <Box
+        bg={active ? color('bg-light') : hover ? color('bg-alt') : 'transparent'}
+        fontSize="14px"
+        {...activeBind}
       >
-        <EventAsset length={length} event={data} />
-        <Stack align="center" isInline width="50%" flexShrink={0} flexGrow={1}>
-          <AssetEventType width="50%" event={data} />
-          <AssetEventAmount width="50%" event={data} />
-
-          <Flex
-            align="center"
-            justify="center"
-            width="48px"
-            flexShrink={0}
-            color="var(--colors-invert)"
-            opacity={hover ? 1 : 0.5}
-          >
-            <ChevronIcon size="32px" direction={isOpen ? 'up' : 'down'} />
-          </Flex>
+        <Stack
+          isInline
+          borderBottom={noBottomBorder ? 'unset' : '1px solid'}
+          borderColor="var(--colors-border)"
+          py="loose"
+          pr="base"
+          onClick={handleOpen}
+          _hover={{
+            cursor: 'pointer',
+          }}
+          {...bind}
+          {...flexProps}
+        >
+          <EventAsset length={length} event={data} />
+          <Stack align="center" isInline width="50%" flexShrink={0} flexGrow={1}>
+            <EventAssetType width="50%" event={data} />
+            <EventAssetValue width="50%" event={data} />
+            <Flex
+              align="center"
+              justify="center"
+              width="48px"
+              flexShrink={0}
+              color="var(--colors-invert)"
+              opacity={hover ? 1 : 0.5}
+            >
+              <ChevronIcon size="32px" direction={isOpen ? 'up' : 'down'} />
+            </Flex>
+          </Stack>
         </Stack>
-      </Stack>
-      <CodeAccordian
-        borderTop={noBottomBorder ? '1px solid var(--colors-border)' : 'unset'}
-        borderBottom={isOpen && !noBottomBorder ? '1px solid' : 'unset'}
-        isLast={noBottomBorder}
-        code={data}
-        isOpen={isOpen}
-      />
-    </Box>
-  );
-};
+        <CodeAccordian
+          borderTop={noBottomBorder ? '1px solid var(--colors-border)' : 'unset'}
+          borderBottom={isOpen && !noBottomBorder ? '1px solid' : 'unset'}
+          isLast={noBottomBorder}
+          code={data}
+          isOpen={isOpen}
+        />
+      </Box>
+    );
+  }
+);

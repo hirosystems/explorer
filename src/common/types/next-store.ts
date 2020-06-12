@@ -1,9 +1,9 @@
 import { Store } from 'redux';
 import { NextPageContext } from 'next';
-import { ThunkDispatch } from 'redux-thunk';
+import { AppDispatch } from '@store';
 
 interface AppStore extends Store {
-  dispatch: ThunkDispatch<any, any, any>;
+  dispatch: AppDispatch;
 }
 
 export interface ReduxNextPageContext extends NextPageContext {

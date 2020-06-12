@@ -25,3 +25,10 @@ export const selectAccountLoading = createSelector(selectSandboxSlice, state => 
 export const selectIdentity = createSelector(selectSandboxSlice, state => state.identity);
 export const selectUserData = createSelector(selectSandboxSlice, state => state.identity);
 export const selectErrorState = createSelector(selectSandboxSlice, state => state.error);
+
+export const selectLocalNonce = createSelector(selectSandboxSlice, state => state.localNonce);
+
+export const selectTrueNonce = (id: Account['principal']) =>
+  createSelector([selectAccountNonce(id), selectLocalNonce], (accountNonce, localNonce) => {
+    return (accountNonce || 0) + localNonce;
+  });

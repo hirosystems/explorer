@@ -1,11 +1,47 @@
 import React from 'react';
 import Link from 'next/link';
 import { Box, BoxProps, Flex, FlexProps, BlockstackIcon } from '@blockstack/ui';
+import { Text } from '@components/typography';
 
 import { TestnetSelector } from '@components/testnet-selector';
 import { SearchBarWithDropdown } from '@components/search-bar';
+import { DarkModeIcon } from '@components/icons/dark-mode';
+import { color } from '@components/color-modes';
+import { useColorMode } from '@common/hooks/use-color-mode';
+import { LightModeIcon } from '@components/icons/light-mode';
 
-export const LogoNavItem = (props: BoxProps) => (
+const ColorModeButton = React.memo((props: BoxProps) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+  return (
+    <Box
+      p="tight"
+      borderRadius="4px"
+      _hover={{ bg: color('bg-alt'), cursor: 'pointer' }}
+      color={color('invert')}
+      onClick={toggleColorMode}
+      title="Toggle color mode"
+      {...props}
+    >
+      {colorMode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
+    </Box>
+  );
+});
+
+type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
+
+export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref) => (
+  <Text
+    _hover={{
+      textDecoration: 'underline',
+    }}
+    fontSize="14px"
+    fontWeight={500}
+    ref={ref}
+    {...props}
+  />
+));
+
+export const LogoNavItem = React.memo((props: BoxProps) => (
   <Box flexShrink={0} {...props}>
     <Link href="/" passHref>
       <a aria-label="Homepage" title="Stacks Explorer">
@@ -13,9 +49,9 @@ export const LogoNavItem = (props: BoxProps) => (
       </a>
     </Link>
   </Box>
-);
+));
 
-const HeaderBar = (props: FlexProps) => (
+const HeaderBar = React.memo((props: FlexProps) => (
   <Box position="fixed" zIndex={999} top={0} width="100%">
     <Flex
       zIndex={9999}
@@ -31,9 +67,9 @@ const HeaderBar = (props: FlexProps) => (
       {...props}
     />
   </Box>
-);
+));
 
-export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) => (
+export const Header = React.memo(({ isHome, ...props }: { isHome?: boolean } & FlexProps) => (
   <HeaderBar justifyContent={isHome ? 'space-between' : 'unset'} {...props}>
     <LogoNavItem mr="base" />
     <Flex
@@ -55,7 +91,17 @@ export const Header = ({ isHome, ...props }: { isHome?: boolean } & FlexProps) =
           maxWidth={['100%', '100%', '544px']}
         />
       ) : null}
-      <TestnetSelector display={['none', 'none', 'block']} ml="auto" pl="base" />
+      <Box ml="auto" pl="base" />
+      <ColorModeButton mr="tight" />
+      <Link href="/transactions" passHref>
+        <HeaderTextItem as="a" mr="base">
+          Transactions
+        </HeaderTextItem>
+      </Link>
+      <Link href="/sandbox" passHref>
+        <HeaderTextItem as="a">Sandbox</HeaderTextItem>
+      </Link>
+      <TestnetSelector display={['none', 'none', 'block']} pl="base" />
     </Flex>
   </HeaderBar>
-);
+));

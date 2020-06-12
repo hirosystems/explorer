@@ -70,31 +70,24 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
   );
 };
 
-export const Row: React.FC<RowProps> = ({
-  card,
-  isFirst,
-  isLast,
-  label,
-  render,
-  copy,
-  noTopBorder,
-  children,
-  ...rest
-}) => {
-  const [hovered, bind] = useHover();
-  const isHovered = !!copy && hovered;
-  return (
-    <RowWrapper
-      borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
-      borderBottom={isLast && card ? undefined : '1px solid'}
-      px={card ? 'base' : 'unset'}
-      {...bind}
-      {...rest}
-    >
-      {label ? <RowLabel label={label.children} /> : null}
-      <RowContent isHovered={isHovered} copy={copy}>
-        {render || children}
-      </RowContent>
-    </RowWrapper>
-  );
-};
+export const Row: React.FC<RowProps> = React.memo(
+  ({ card, isFirst, isLast, label, render, copy, noTopBorder, children, ...rest }) => {
+    const [hovered, _bind] = useHover();
+    const isHovered = !!copy && hovered;
+    const bind = !!copy ? { ..._bind } : {};
+    return (
+      <RowWrapper
+        borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
+        borderBottom={isLast && card ? undefined : '1px solid'}
+        px={card ? 'base' : 'unset'}
+        {...bind}
+        {...rest}
+      >
+        {label ? <RowLabel label={label.children} /> : null}
+        <RowContent isHovered={isHovered} copy={copy}>
+          {render || children}
+        </RowContent>
+      </RowWrapper>
+    );
+  }
+);

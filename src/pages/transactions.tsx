@@ -14,6 +14,7 @@ import { TxLink } from '@components/links';
 import { Meta } from '@components/meta-head';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useLoading } from '@common/hooks/use-loading';
+import { color } from '@components/color-modes';
 
 const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number }) => {
   const types = [
@@ -98,7 +99,7 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
                   tx={tx}
                   key={tx.tx_id}
                   _hover={{
-                    bg: 'var(--colors-bg-light)',
+                    bg: color('bg-alt'),
                   }}
                   borderBottom={
                     key === items.length - 1 ? 'unset' : '1px solid var(--colors-border)'

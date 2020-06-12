@@ -1,69 +1,45 @@
 import * as React from 'react';
 import { Flex, Stack, Button, Box } from '@blockstack/ui';
-
-import { useDebugState } from '@common/sandbox';
 import { useDispatch } from 'react-redux';
-import { fetchAccount, requestFaucetFunds } from '@store/sandbox';
-
+import { fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';
-
 import { Formik } from 'formik';
 import { Field, Wrapper } from '@components/sandbox/common';
-
-import { useProgressBar } from '@components/progress-bar';
-import { useTxToast } from '@common/sandbox';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
+import { useLoading } from '@common/hooks/use-loading';
 
 export const Faucet = (props: any) => {
-  const { identity } = useDebugState();
-  const { start, done } = useProgressBar();
-
-  const showToast = useTxToast();
-
-  const [loading, setLoading] = React.useState(false);
+  const { identity, doFetchAccount, doRequestFaucetFunds } = useSandboxState();
+  const { isLoading, doStartLoading, doFinishLoading } = useLoading();
 
   const dispatch = useDispatch();
 
-  const startLoading = () => {
-    setLoading(true);
-    start();
-  };
-
-  const stopLoading = () => {
-    done();
-    setLoading(false);
-  };
+  const ref = React.useRef<HTMLDivElement | null>(null);
 
   const onSubmit = async (values: any) => {
+    ref?.current?.blur();
     try {
-      startLoading();
-      const account = await dispatch(fetchAccount(values.stacks_address));
-      if (account.error) return stopLoading();
+      doStartLoading();
+      const account: any = await doFetchAccount(values.stacks_address);
+      if (account.error) return doFinishLoading();
 
-      const { payload, error: faucetError } = await dispatch(
-        requestFaucetFunds(values.stacks_address)
-      );
-      if (faucetError) return stopLoading();
-
-      const txid = payload.transactions[0].txId;
-
+      const payload = await doRequestFaucetFunds(values.stacks_address);
+      const txid = payload?.transactions?.length ? payload?.transactions[0].txId : undefined;
+      if (!txid) return doFinishLoading();
       props.showTransactionDialog();
-      showToast(txid);
+      doFinishLoading();
 
-      stopLoading();
+      const initialFetch: any = await dispatch(fetchTransaction(txid));
 
-      setTimeout(async () => {
-        const initialFetch = await dispatch(fetchTransaction(txid));
-        // @ts-ignore
-        if (initialFetch.error as any) return;
-        await dispatch(fetchAccount(values.stacks_address));
-      }, 20000);
+      if (initialFetch.error) return;
+      await dispatch(fetchAccount(values.stacks_address));
     } catch (e) {
-      stopLoading();
+      doFinishLoading();
     }
   };
 
   return (
-    <Wrapper loading={loading} {...props}>
+    <Wrapper loading={isLoading} {...props}>
       <Formik
         enableReinitialize
         initialValues={{
@@ -80,10 +56,10 @@ export const Faucet = (props: any) => {
                   <Button
                     type="submit"
                     style={{
-                      pointerEvents: loading ? 'none' : 'unset',
+                      pointerEvents: isLoading ? 'none' : 'unset',
                     }}
-                    isLoading={loading}
-                    loadingText="Processing..."
+                    isLoading={isLoading}
+                    ref={ref as any}
                   >
                     Request STX
                   </Button>

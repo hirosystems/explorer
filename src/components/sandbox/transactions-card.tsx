@@ -1,20 +1,14 @@
 import * as React from 'react';
 import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@blockstack/ui';
-import { Tooltip } from '@components/tooltip';
 import { Caption, Title, Text } from '@components/typography';
-import { useDebugState } from '@common/sandbox';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@store';
-import { selectTransaction } from '@store/transactions';
-import { fetchTransaction } from '@store/transactions';
+import { useRefreshPendingTx } from '@common/hooks/use-refresh-pending-tx';
 import { Card } from '@components/card';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { truncateMiddle, microToStacks } from '@common/utils';
-import { CellItem } from '@components/token-transfer/item';
-import { Timestamp } from '@components/timestamp';
-import { getTransactionTypeLabel } from '@components/token-transfer/utils';
-import { DefaultContract } from '@components/icons/default-contract';
-import useOnClickOutside from 'use-onclickoutside';
+import { TxLink } from '@components/links';
+import { TxItem as TransactionItem } from '@components/transaction-item';
+import { color } from '@components/color-modes';
+
+import { useTransactionState } from '@common/hooks/use-transaction-state';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 export const Loading = (props: any) => (
   <Box opacity={0.2} {...props}>
@@ -22,119 +16,45 @@ export const Loading = (props: any) => (
   </Box>
 );
 
-const TruncatedTitle = ({ value, ...rest }: { value: string }) => (
-  <Tooltip label={value} fontFamily={`"Fira Code", monospace`}>
-    <Box whiteSpace="nowrap" {...rest}>
-      <Title
-        as="a"
-        // @ts-ignore
-        href={`/txid/${value}`}
-        target="_blank"
-        _hover={{
-          color: 'var(--colors-text-hover)',
-        }}
-        fontFamily={`"Fira Code", monospace`}
-      >
-        {truncateMiddle(value, 5)}
-      </Title>
-    </Box>
-  </Tooltip>
-);
-export const TxItem = ({ txid, isLast, loading, ...rest }: any) => {
-  const dispatch = useDispatch();
-  const [localFetchLoading, setLocalFetchLoading] = React.useState(false);
-  const { tx } = useSelector((state: RootState) => ({
-    tx: selectTransaction(txid)(state) as Transaction,
-  }));
-  const loadingRef = React.useRef<number | null>(null);
-  const handleFetch = React.useCallback(async () => {
-    if (!localFetchLoading) {
-      setLocalFetchLoading(true);
-
-      loadingRef.current = setTimeout(async () => {
-        await dispatch(fetchTransaction(txid));
-        setLocalFetchLoading(false);
-      }, 8000);
-    }
-  }, [txid]);
-
-  React.useEffect(() => {
-    handleFetch().then(() => null);
-    return () => (loadingRef.current ? clearTimeout(loadingRef.current) : undefined);
-  }, []);
-
-  const Icon = tx?.tx_type === 'smart_contract' ? DefaultContract : BlockstackIcon;
+export const TxItem = ({ txid, isLast, ...rest }: any) => {
+  const { transaction, loading } = useTransactionState(txid);
+  useRefreshPendingTx(txid);
 
   return (
-    <Box
-      width="100%"
-      borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}
+    <Flex
+      borderBottom={!isLast ? `1px solid ${color('border')}` : undefined}
+      _hover={{ bg: color('bg-alt'), cursor: 'pointer' }}
+      align="center"
       {...rest}
     >
-      <Stack isInline spacing="base" align="center" p="base">
-        <Flex align="center" flexGrow={1} flexShrink={0} width="40%">
-          <Flex
-            mr="base"
-            align="center"
-            justify="center"
-            borderRadius="48px"
-            size="48px"
-            bg="var(--colors-text-caption)"
-            flexShrink={0}
-          >
-            <Icon color="var(--colors-bg)" size="24px" />
-          </Flex>
-          <Box>
-            <TruncatedTitle value={txid} />
-            {tx ? <Caption>{getTransactionTypeLabel(tx.tx_type)}</Caption> : null}
-          </Box>
-        </Flex>
-        {tx ? (
-          <Flex width="60%" flexGrow={1} align="center" justify="flex-end">
-            <CellItem
-              label="Confirmed"
-              width="60%"
-              value={
-                <Timestamp
-                  fontSize="14px"
-                  ts={
-                    //@ts-ignore
-                    tx?.burn_block_time
-                  }
-                />
-              }
-            />
-            {tx.tx_type === 'token_transfer' ? (
-              <CellItem
-                width="40%"
-                label="Amount"
-                textProps={{ fontSize: '14px' }}
-                value={`${microToStacks(tx.token_transfer.amount)} STX`}
-              />
+      <TxLink txid={txid}>
+        {transaction ? (
+          <Flex width="100%" align="center">
+            <TransactionItem flexGrow={1} as="a" tx={transaction} target="_blank" />
+            {transaction.tx_status === 'pending' ? (
+              <Box pt="2px" opacity={0.5} mr="base" color={color('invert')}>
+                <Spinner size="sm" />
+              </Box>
             ) : null}
           </Flex>
         ) : (
-          <Box ml="auto">
-            {!loading && localFetchLoading ? (
-              <Loading />
-            ) : !tx && !loading ? (
-              <Box _hover={{ cursor: 'pointer' }} onClick={handleFetch}>
-                <Text>Refresh</Text>
-              </Box>
-            ) : (
-              <Loading />
-            )}
-          </Box>
+          <Flex align="center" p="base">
+            <Box mr="tight">
+              <Spinner size="sm" />
+            </Box>
+            <Box transform="translateY(-2px)">
+              <Text fontSize="14px">Fetching transaction...</Text>
+            </Box>
+          </Flex>
         )}
-      </Stack>
-    </Box>
+      </TxLink>
+    </Flex>
   );
 };
 
 export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: any) => {
-  const { transactions } = useDebugState();
+  const { transactions } = useSandboxState();
   const ref = React.useRef<any | null>(null);
-  useOnClickOutside(ref, hide);
   return (
     <Transition
       styles={{
@@ -160,7 +80,7 @@ export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: 
     >
       {style => (
         <Box ref={ref} style={style} {...rest}>
-          <Card boxShadow="high" flexGrow={0}>
+          <Card boxShadow="high" flexGrow={0} overflow="hidden">
             <Flex
               justify="space-between"
               align="center"

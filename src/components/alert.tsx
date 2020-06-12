@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon } from '@blockstack/ui';
 import { Title, Text, Pre } from '@components/typography';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
-import { useDebugState } from '@common/sandbox';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 export const renderErrorMessage = ({
   reason,
   reason_data,
   txid,
 }: {
-  reason: 'FeeTooLow' | 'NotEnoughFunds' | 'NoSuchContract';
+  reason: 'FeeTooLow' | 'NotEnoughFunds' | 'NoSuchContract' | 'ContractAlreadyExists' | 'BadNonce';
   reason_data: any;
   txid?: string;
 }) => {
@@ -33,6 +33,10 @@ export const renderErrorMessage = ({
           for this. <Pre>{txid}</Pre>
         </>
       );
+    case 'BadNonce':
+      return 'There is a pending transaction, please wait until your previous transaction has completed.';
+    case 'ContractAlreadyExists':
+      return 'A contract with this name already exists at your address. Please change the contract name and try again.';
     case 'FeeTooLow':
       return `Fee was too low, expected ${reason_data?.expected} uSTX.`;
     case 'NotEnoughFunds':
@@ -44,7 +48,7 @@ export const renderErrorMessage = ({
 
 export const Alert = ({ error: _error, clearError, showClearErrors, ...rest }: any) => {
   const clearErrors = useClearErrors();
-  const { error } = useDebugState();
+  const { error } = useSandboxState();
   const hasError = error || _error;
   const formattedError = error
     ? {
