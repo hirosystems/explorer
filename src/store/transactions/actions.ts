@@ -5,11 +5,11 @@ import { fetchTx } from '@common/api/transactions';
 import { queryWith0x } from '@common/utils';
 import { fetchContract } from '@store/contracts';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+import { ThunkApiConfig } from '@common/redux';
 
-export const fetchTransaction = createAsyncThunk<Transaction[], string>(
+export const fetchTransaction = createAsyncThunk<Transaction[], string, ThunkApiConfig>(
   'transaction/fetch',
   async (query, { dispatch, rejectWithValue, getState }) => {
-    // @ts-ignore
     const apiServer = selectCurrentNetworkUrl(getState());
     if (!query) return rejectWithValue({ name: 'Error!', message: 'No query provided' });
     const txs = [];

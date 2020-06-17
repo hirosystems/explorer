@@ -15,4 +15,8 @@ module.exports = {
     context: true,
     jestPuppeteer: true,
   },
+  rules: {
+    '@typescript-eslint/no-unsafe-assignment': 0,
+    '@typescript-eslint/no-unsafe-member-access': 0,
+  },
 };

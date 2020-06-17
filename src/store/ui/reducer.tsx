@@ -9,7 +9,7 @@ import {
 } from '@store/ui/actions';
 import { ToastType } from '@blockstack/ui';
 
-export type Environment = 'STAGING' | 'DEV' | undefined;
+export type Environment = 'STAGING' | 'DEV';
 
 export interface Network {
   MOCKNET?: string;
@@ -19,12 +19,12 @@ export interface Network {
 export type NetworkOptions = 'MOCKNET' | 'TESTNET' | 'LOCAL';
 
 export interface UiState {
-  toasts: ToastType[];
+  toasts: ToastType[] | any[];
   appTime: number;
   config: {
     network: Network;
     selectedNetwork: NetworkOptions;
-    env: Environment;
+    env?: Environment;
   };
 }
 
@@ -53,15 +53,14 @@ export const uiReducer = createReducer(initialState, builder => {
     state.config.selectedNetwork = action.payload;
   });
   builder.addCase(doAddToast, (state, action) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     state.toasts.push(action.payload);
   });
   builder.addCase(doRemoveToast, (state, action) => {
-    // @ts-ignore
-    state.toasts = state.toasts.filter(({ id }) => id !== action.payload);
+    state.toasts = state.toasts.filter(({ id }: { id: string }) => id !== action.payload);
   });
   builder.addCase(appTime, state => {
-    // @ts-ignore
     state.appTime = Math.round(new Date().getTime() / 1000);
   });
 });

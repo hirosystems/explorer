@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Ref } from 'react';
 import { Box, Flex, Stack, FlexProps, BlockstackIcon, BoxProps, ChevronIcon } from '@blockstack/ui';
-import { Truncate } from '@components/tuncated';
+import { Truncate } from '@components/truncated';
 import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
 import {

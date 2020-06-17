@@ -41,3 +41,16 @@ export const Pre = React.memo(
     />
   ))
 );
+
+type LinkProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
+
+export const Link = React.forwardRef(({ _hover = {}, ...props }: LinkProps, ref) => (
+  <Text
+    _hover={{
+      textDecoration: 'underline',
+      ..._hover,
+    }}
+    ref={ref}
+    {...props}
+  />
+));

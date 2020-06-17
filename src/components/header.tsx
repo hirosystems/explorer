@@ -1,8 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { Box, BoxProps, Flex, FlexProps, BlockstackIcon } from '@blockstack/ui';
-import { Text } from '@components/typography';
-
+import { Link } from '@components/typography';
 import { TestnetSelector } from '@components/testnet-selector';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import { DarkModeIcon } from '@components/icons/dark-mode';
@@ -30,24 +29,16 @@ const ColorModeButton = React.memo((props: BoxProps) => {
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
 
 export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref) => (
-  <Text
-    _hover={{
-      textDecoration: 'underline',
-    }}
-    fontSize="14px"
-    fontWeight={500}
-    ref={ref}
-    {...props}
-  />
+  <Link as="a" fontSize="14px" fontWeight={500} ref={ref} {...props} />
 ));
 
 export const LogoNavItem = React.memo((props: BoxProps) => (
   <Box flexShrink={0} {...props}>
-    <Link href="/" passHref>
+    <NextLink href="/" passHref>
       <a aria-label="Homepage" title="Stacks Explorer">
         <BlockstackIcon color="var(--colors-invert)" size="24px" />
       </a>
-    </Link>
+    </NextLink>
   </Box>
 ));
 
@@ -93,14 +84,12 @@ export const Header = React.memo(({ isHome, ...props }: { isHome?: boolean } & F
       ) : null}
       <Box ml="auto" pl="base" />
       <ColorModeButton mr="tight" />
-      <Link href="/transactions" passHref>
-        <HeaderTextItem as="a" mr="base">
-          Transactions
-        </HeaderTextItem>
-      </Link>
-      <Link href="/sandbox" passHref>
-        <HeaderTextItem as="a">Sandbox</HeaderTextItem>
-      </Link>
+      <NextLink href="/transactions" passHref>
+        <HeaderTextItem mr="base">Transactions</HeaderTextItem>
+      </NextLink>
+      <NextLink href="/sandbox" passHref>
+        <HeaderTextItem>Sandbox</HeaderTextItem>
+      </NextLink>
       <TestnetSelector display={['none', 'none', 'block']} pl="base" />
     </Flex>
   </HeaderBar>

@@ -1,4 +1,3 @@
-import React from 'react';
 import engine from 'store/src/store-engine';
 import lclStorage from 'store/storages/localStorage';
 import cookieStorage from 'store/storages/cookieStorage';
