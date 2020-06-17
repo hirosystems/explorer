@@ -14,7 +14,6 @@ import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { UserData } from 'blockstack/lib/auth/authApp';
 import { UserSession } from 'blockstack/lib';
 import { ThunkApiConfig } from '@common/redux';
-import { selectIdentity } from '@store/sandbox/selectors';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
