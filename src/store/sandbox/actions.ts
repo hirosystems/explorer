@@ -13,18 +13,11 @@ import { doAddToast } from '@store/ui/actions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { UserData } from 'blockstack/lib/auth/authApp';
 import { UserSession } from 'blockstack/lib';
-import { AppDispatch, RootState } from '@store';
+import { ThunkApiConfig } from '@common/redux';
 
-interface ThunkApiConfig {
-  dispatch: AppDispatch;
-  state: RootState;
-  rejectValue?: {
-    name: string;
-    message: string;
-  };
-}
-
-const extractJson = require('extract-json-string');
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import extractJson from 'extract-json-string';
 
 let errorCount = 0;
 
@@ -35,12 +28,12 @@ export const setIdentity = createAction<IdentityPayload>('account/identity/set')
 export const eraseIdentity = createAction('account/identity/erase');
 export const setUserData = createAction<UserData>('account/user/set');
 
-export const generateIdentity = createAsyncThunk<IdentityPayload, UserSession>(
+export const generateIdentity = createAsyncThunk<IdentityPayload, UserSession, ThunkApiConfig>(
   'account',
   async (userSession: UserSession) => {
     try {
       const saved = await userSession.getFile('identity.json');
-      return JSON.parse(saved as string);
+      return JSON.parse(saved as string) as IdentityPayload;
     } catch (e) {
       const identity = await doGenerateIdentity();
       await userSession.putFile('identity.json', JSON.stringify(identity));
@@ -71,9 +64,9 @@ export const fetchAccount = createAsyncThunk<Account, string, ThunkApiConfig>(
           message: resp.statusText,
         });
       }
-      const data = await resp.json();
+      const data: AccountPayload = await resp.json();
       const account: Account = {
-        balance: new BN(data.balance.slice(2), 16).toString(),
+        balance: new BN(data.balance.toString().slice(2), 16).toString(),
         nonce: data.nonce,
         principal,
       };
@@ -85,6 +78,7 @@ export const fetchAccount = createAsyncThunk<Account, string, ThunkApiConfig>(
           doAddToast({
             tone: 'critical',
             message: 'Account error',
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/restrict-template-expressions
             description: `Could not get account balance, reason: ${e.message}.`,
             id: `account-error-${errorCount++}`,
           })
@@ -92,7 +86,8 @@ export const fetchAccount = createAsyncThunk<Account, string, ThunkApiConfig>(
       }, 200);
       return rejectWithValue({
         name: 'Error!',
-        message: e.message,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        message: e.message as string,
       });
     }
   }
@@ -154,7 +149,8 @@ export const broadcastTransaction = createAsyncThunk<
       } as Partial<Account>;
     }
   } catch (e) {
-    const realError = extractJson.extract(e.message)[0];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-call
+    const realError = extractJson.extract(e?.message)[0];
     if (realError) {
       return rejectWithValue(realError);
     }
