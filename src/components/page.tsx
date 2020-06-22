@@ -34,7 +34,12 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => {
 };
 
 export const Page = React.memo(
-  ({ children, notice, ...rest }: { notice?: { label?: string; message?: string } } & BoxProps) => (
+  ({
+    children,
+    notice,
+    fullWidth,
+    ...rest
+  }: { notice?: { label?: string; message?: string }; fullWidth?: boolean } & BoxProps) => (
     <Flex
       css={css({
         '*::selection': {
@@ -55,7 +60,7 @@ export const Page = React.memo(
         width="100%"
         flexGrow={1}
         height="100%"
-        maxWidth="1280px"
+        maxWidth={fullWidth ? '100%' : '1280px'}
         flexDirection="column"
         px={['base', 'base', 'extra-loose']}
         {...rest}
@@ -65,18 +70,21 @@ export const Page = React.memo(
       <Footer
         mx="auto"
         width="100%"
-        maxWidth="1280px"
-        mt="extra-loose"
+        maxWidth={fullWidth ? '100%' : '1280px'}
+        mt={fullWidth ? 'unset' : 'extra-loose'}
         mb={['base', 'base', 'extra-loose']}
-        px={['base', 'base', 'extra-loose']}
+        px={fullWidth ? 'unset' : ['base', 'base', 'extra-loose']}
+        fullWidth={fullWidth}
       />
     </Flex>
   )
 );
 
-export const PageWrapper = React.memo((props: { isHome?: boolean; notice?: any } & FlexProps) => (
-  <>
-    <Header isHome={props.isHome} />
-    <Page pt="extra-loose" {...props} />
-  </>
-));
+export const PageWrapper = React.memo(
+  (props: { isHome?: boolean; fullWidth?: boolean; notice?: any } & FlexProps) => (
+    <>
+      <Header fullWidth={props.fullWidth} isHome={props.isHome} />
+      <Page pt="extra-loose" {...props} />
+    </>
+  )
+);

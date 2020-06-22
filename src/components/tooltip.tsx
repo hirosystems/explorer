@@ -11,6 +11,7 @@ const centered = (triggerRect: any, tooltipRect: any) => {
     top: triggerRect.bottom + 8 + window.scrollY,
   };
 };
+
 export const Tooltip = ({ children, label, 'aria-label': ariaLabel }: any) => {
   const [trigger, tooltip] = useTooltip();
 

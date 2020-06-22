@@ -49,8 +49,6 @@ export const Tab = ({
 export const Tabs = React.memo(
   ({
     identity,
-    transactionsVisible,
-    hideTransactionDialog,
     showTransactionDialog,
     tab,
     tabs,
@@ -75,12 +73,19 @@ export const Tabs = React.memo(
       setTab(path);
       clearErrors();
     }, []);
-    const { transactions } = useSandboxState();
+
     return (
       <>
-        <Box width="100%" position="relative" zIndex={99}>
+        <Flex
+          overflow="hidden"
+          width="100%"
+          position="relative"
+          zIndex={99}
+          maxHeight="100%"
+          flexDirection="column"
+        >
           <Flex width="100%" borderBottom="1px solid" borderBottomColor="var(--colors-border)">
-            <Stack isInline spacing="0px">
+            <Stack pl="18px" isInline spacing="0px">
               {tabs.map(({ label, path }, index) => (
                 <Tab
                   onClick={() => handleClick(path)}
@@ -92,25 +97,8 @@ export const Tabs = React.memo(
                 />
               ))}
             </Stack>
-            <Box transform="translateY(1px)" ml="auto" position="relative" zIndex={99}>
-              <Tab
-                label={`(${transactions?.length ?? 0}) Recent Txs`}
-                index={1}
-                onClick={() => showTransactionDialog()}
-                isActive={transactionsVisible}
-              />
-              <TransactionsCard
-                visible={transactionsVisible}
-                hide={hideTransactionDialog}
-                bg="var(--colors-bg)"
-                position="absolute"
-                top="calc(100% - 37px)"
-                right="0"
-                minWidth="544px"
-              />
-            </Box>
           </Flex>
-          <Box py="base">
+          <Flex position="relative" maxHeight="calc(100% - 51px)" flexGrow={1}>
             {tabs.map((tab, key: number) => {
               const PathComponent = tab.component;
               return (
@@ -123,8 +111,8 @@ export const Tabs = React.memo(
                 />
               );
             })}
-          </Box>
-        </Box>
+          </Flex>
+        </Flex>
       </>
     );
   }

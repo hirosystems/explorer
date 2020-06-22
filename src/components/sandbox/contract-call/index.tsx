@@ -151,7 +151,7 @@ export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
                       method="post"
                       style={{ width: '100%' }}
                     >
-                      <Flex width="100%">
+                      <Flex width="100%" maxWidth="560px">
                         <Stack spacing="base" width="100%">
                           <Field
                             label="Contract address"

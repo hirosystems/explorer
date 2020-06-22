@@ -1,13 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
-import { Text, Box, Flex, BoxProps, FlexProps } from '@blockstack/ui';
+import { Text, Box, Flex, BoxProps, color, FlexProps } from '@blockstack/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
 
 const FooterLink: React.FC<BoxProps> = React.memo(({ children, ...rest }) => (
   <Text
     cursor="pointer"
     textStyle="body.small"
-    color="var(--colors-text-caption)"
+    color={color('text-caption')}
     _hover={{ textDecoration: 'underline' }}
     {...rest}
   >
@@ -30,7 +30,7 @@ const LinkInNewWindow = React.memo(
   ))
 );
 
-export const Footer = React.memo((props: FlexProps) => {
+export const Footer = React.memo((props: FlexProps & { fullWidth?: boolean }) => {
   return (
     <Box width="100%" {...props}>
       <Flex
@@ -39,6 +39,7 @@ export const Footer = React.memo((props: FlexProps) => {
         align={['center', 'center', 'unset']}
         textAlign={['center', 'center', 'unset']}
         borderTop="1px solid var(--colors-border)"
+        px={props.fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}
       >
         <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
           <FooterLink mr="base">
