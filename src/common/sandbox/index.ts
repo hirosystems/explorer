@@ -46,20 +46,21 @@ export const useTxToast = () => {
 
   const showToast = (txid: string) =>
     addPositiveToast({
-      message: `Transaction: ${truncateMiddle(txid)} submitted!`,
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      message: `Transaction${txid ? `:  ${truncateMiddle(txid)}` : ''} submitted!`,
       description: `Transactions can take 60 or more seconds to confirm.`,
       action: {
         label: 'View transaction',
         onClick: () => {
-          router.push('/txid/[txid]', `/txid/${txid}`);
+          void router.push('/txid/[txid]', `/txid/${txid}`);
         },
       },
     });
   return showToast;
 };
 
-export const doGenerateIdentity = async () => {
-  const key = await makeRandomPrivKey();
+export const doGenerateIdentity = () => {
+  const key = makeRandomPrivKey();
   const publicKey = pubKeyfromPrivKey(privateKeyToString(key));
   const address = addressFromPublicKeys(
     AddressVersion.TestnetSingleSig,

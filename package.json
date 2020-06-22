@@ -27,6 +27,7 @@
     "@types/prismjs": "^1.16.1",
     "@types/redux-logger": "^3.0.8",
     "@types/styled-components": "^5.1.0",
+    "awesome-debounce-promise": "^2.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "blockstack": "^21.0.0",
     "c32check": "^1.0.1",
@@ -59,6 +60,7 @@
     "typeface-fira-code": "^1.1.4",
     "typeface-inter": "^3.12.0",
     "unique-names-generator": "^4.2.0",
+    "use-constant": "^1.0.0",
     "use-events": "^1.4.1",
     "use-onclickoutside": "^0.3.1",
     "web-api-hooks": "^3.0.2"
