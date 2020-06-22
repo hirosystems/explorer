@@ -121,30 +121,32 @@ export const ContractDeploy = React.memo((props: any) => {
         {({ handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit} method="post">
             <Flex width="100%">
-              <Stack spacing="base" width="100%">
-                <Stack isInline spacing="base" width="100%">
-                  <Field width="33%" name="contractName" label="Contract name" />
-                  <Field width="33%" name="fee" label="Fee" />
-                  <Sample
-                    onItemClick={(value: string) => setDefaultContract(value)}
-                    flexGrow={1}
-                    setFieldValue={setFieldValue}
-                  />
-                </Stack>
-                <Box>
-                  <Field
-                    maxHeight="500px"
-                    label="Contract source code (editable)"
-                    name="codeBody"
-                    type="code"
-                  />
-                </Box>
+              <Stack width="40%" pr="base" spacing="base" flexGrow={1}>
+                <Field name="contractName" label="Contract name" />
+                <Field name="fee" label="Fee" />
                 <Box>
                   <Button type="submit" isLoading={isLoading}>
                     Deploy contract
                   </Button>
                 </Box>
               </Stack>
+
+              <Box maxWidth="60%">
+                <Box mb="base">
+                  <Sample
+                    onItemClick={(value: string) => setDefaultContract(value)}
+                    flexGrow={1}
+                    setFieldValue={setFieldValue}
+                  />
+                </Box>
+                <Field
+                  flexGrow={1}
+                  label="Contract source code (editable)"
+                  name="codeBody"
+                  type="code"
+                  maxWidth="100%"
+                />
+              </Box>
             </Flex>
           </form>
         )}

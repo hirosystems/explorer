@@ -1,16 +1,21 @@
 import * as React from 'react';
-import { Box, Flex, Button } from '@blockstack/ui';
+import { Box, Flex, Button, Spinner } from '@blockstack/ui';
 import { useConnect } from '@blockstack/connect';
 import { useHover } from 'use-events';
 
-import { truncateMiddle, microToStacks } from '@common/utils';
+import { microToStacks } from '@common/utils';
+import RefreshIcon from 'mdi-react/RefreshIcon';
+
 import { useUserSession } from '@common/hooks/use-user-session';
 import { Tabs } from '@components/sandbox/tabs';
 import { Text, Title } from '@components/typography';
 import { PageWrapper } from '@components/page';
 import { Card } from '@components/card';
 import { Meta } from '@components/meta-head';
-import { useSandboxState } from '@common/hooks/use-sandbox-state';
+import { useSandboxState, useSandboxStateValues } from '@common/hooks/use-sandbox-state';
+import { color } from '@components/color-modes';
+import { TransactionsCard } from '@components/sandbox/transactions-card';
+import { transition } from '@blockstack/ui/dist/ui/src/theme/theme';
 
 const SignedOutView = ({ onClick }: any) => {
   return (
@@ -37,23 +42,85 @@ const SignedOutView = ({ onClick }: any) => {
   );
 };
 
-const UserCard = ({ username, identity, balance }: any) => {
+const UserCard = ({ username, identity, balance, ...rest }: any) => {
+  const { doFetchAccount } = useSandboxState();
+  const [loading, setLoading] = React.useState('idle');
+  const isLoading = loading === 'pending';
   const [isHovered, bindHover] = useHover();
+  const handleRefresh = () => {
+    if (!isLoading) {
+      setLoading('pending');
+      void doFetchAccount().then(() => {
+        setTimeout(() => setLoading('idle'), 350);
+      });
+    }
+  };
   return (
-    <Box textAlign="right">
+    <Box borderBottom={`1px solid ${color('border')}`} textAlign="right" {...rest}>
       <Box>
+        <Flex
+          flexShrink={0}
+          flexGrow={1}
+          justifyContent="flex-end"
+          textAlign="right"
+          align="center"
+          position="relative"
+          {...bindHover}
+        >
+          <Text
+            fontWeight={600}
+            fontSize="22px"
+            transform={isLoading || isHovered ? 'translateX(-24px)' : 'none'}
+            transition="all 0.2s cubic-bezier(0.23, 1, 0.32, 1)"
+            display="block"
+            background={color('bg')}
+            position="relative"
+            zIndex={2}
+          >
+            {balance ? microToStacks(balance as number) : 0} <Text opacity={0.5}>STX</Text>
+          </Text>
+          <Flex
+            align="center"
+            justify="center"
+            position="absolute"
+            zIndex={1}
+            ml="extra-tight"
+            color={color('invert')}
+            opacity={isLoading ? 1 : 0.75}
+            cursor={!isLoading && isHovered ? 'pointer' : 'unset'}
+            transition="all 0.2s cubic-bezier(0.23, 1, 0.32, 1)"
+            onClick={handleRefresh}
+            _hover={{
+              opacity: 1,
+            }}
+          >
+            {isLoading ? (
+              <Box transform="translateX(-5px) translateY(2px)">
+                <Spinner size="sm" />
+              </Box>
+            ) : (
+              <Box>
+                <RefreshIcon />
+              </Box>
+            )}
+          </Flex>
+        </Flex>
+
         <Text as="h3" fontSize="16px">
-          {username}
+          {/* eslint-disable-next-line @typescript-eslint/no-unsafe-call */}
+          {username?.toString().split('.')[0]}
         </Text>
       </Box>
       {identity && identity.address ? (
-        <Box {...bindHover}>
-          <Text fontSize="14px">
-            {isHovered ? identity.address : truncateMiddle(identity.address, 6)}
-          </Text>
-          <Text> </Text>
-          <Text fontSize="14px">{microToStacks(balance as number) || 0} STX</Text>
-        </Box>
+        <>
+          <Box>
+            <Box>
+              <Text fontFamily="Fira Code" fontWeight="500" fontSize="12px">
+                {identity.address}
+              </Text>
+            </Box>
+          </Box>
+        </>
       ) : null}
     </Box>
   );
@@ -76,36 +143,58 @@ export const PageContent = ({
   const { userData: user } = useUserSession();
 
   const isSignedIn = (username || user.username) && identity;
+  const sidebarWidth = `${isSignedIn ? 420 : 0}px`;
   return (
-    <PageWrapper
-      notice={{
-        label: 'For testing only:',
-        message: 'any address generated with the sandbox can and will be lost very easily.',
-      }}
-      {...props}
-    >
-      <Flex align="flex-start" justifyContent="space-between">
-        <Box>
-          <Title as="h1">Stacks Explorer Sandbox</Title>
-        </Box>
-        {isSignedIn ? (
-          <Box>
-            <UserCard username={username || user.username} identity={identity} balance={balance} />
+    <PageWrapper maxWidth="100vw" overflow="hidden" px="0" py="0" {...props}>
+      <Flex width="100%" flexGrow={1}>
+        <Flex flexDirection="column" maxWidth={`calc(100% - ${sidebarWidth})`} flexGrow={1}>
+          <Flex pl="extra-loose" pt="extra-loose" align="flex-start" justifyContent="space-between">
+            <Box>
+              <Title as="h1">Stacks Explorer Sandbox</Title>
+            </Box>
+          </Flex>
+          <Flex maxHeight="calc(100vh - 195px)" width="100%" flexGrow={1}>
+            {isSignedIn ? (
+              <Tabs
+                hideTransactionDialog={hideTransactionDialog}
+                showTransactionDialog={showTransactionDialog}
+                transactionsVisible={transactionsVisible}
+                identity={identity}
+                tab={tab}
+                tabs={tabs}
+              />
+            ) : (
+              <SignedOutView onClick={() => doOpenAuth()} />
+            )}
+          </Flex>
+        </Flex>
+        {isSignedIn && (
+          <Box width={sidebarWidth} position="relative">
+            <Box
+              position="fixed"
+              right={0}
+              width={sidebarWidth}
+              height="calc(100vh - 132px)"
+              top="64px"
+              bg={color('bg')}
+              borderLeft={`1px solid ${color('border')}`}
+            >
+              <Box>
+                <UserCard
+                  username={username || user.username}
+                  identity={identity}
+                  balance={balance}
+                  px="extra-loose"
+                  pt="base"
+                  pb="base"
+                />
+              </Box>
+              <Box borderBottom={`1px solid ${color('border')}`} px="base" py="tight">
+                <Text fontSize="14px">Recent transactions</Text>
+              </Box>
+              <TransactionsCard visible />
+            </Box>
           </Box>
-        ) : null}
-      </Flex>
-      <Flex width="100%" py="base" flexGrow={1}>
-        {isSignedIn ? (
-          <Tabs
-            hideTransactionDialog={hideTransactionDialog}
-            showTransactionDialog={showTransactionDialog}
-            transactionsVisible={transactionsVisible}
-            identity={identity}
-            tab={tab}
-            tabs={tabs}
-          />
-        ) : (
-          <SignedOutView onClick={() => doOpenAuth()} />
         )}
       </Flex>
     </PageWrapper>

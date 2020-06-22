@@ -1363,14 +1363,14 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@blockstack/connect@^2.5.0-alpha.0":
-  version "2.5.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/connect/-/connect-2.5.0-alpha.0.tgz#29e7bec8391f5feb07ba4cb0c1fc54cb917ef93f"
-  integrity sha512-mhWyXX7QSsrtF1HEP7sF7EJ6LMG318MRPBL/xFcVVYh0GcaXSJVqYiK4RW/G4egomK4QGa8vhHrhD4maUwMY1A==
+"@blockstack/connect@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@blockstack/connect/-/connect-2.8.0.tgz#d261793b82f78954bb9cb23047986f24c8f75596"
+  integrity sha512-HV3YuVmV91Qr2wGQxbeo0EeV57AIYSmqD+tbmlFmDSrTIBf2fWx9ArOJXXqVBm7m2gR9OzitcXIteYQ0LYr9oQ==
   dependencies:
-    "@blockstack/ui" "^1.3.0-alpha.0"
-    jsontokens "^3.0.0"
+    "@blockstack/ui" "^2.8.0"
     preact "^10.4.0"
+    prettier "^2.0.5"
     styled-components "^5.1.0"
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
@@ -1450,10 +1450,10 @@
     sha.js "^2.4.11"
     smart-buffer "^4.1.0"
 
-"@blockstack/ui@^1.3.0-alpha.0":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.6.1.tgz#1d52545b50a919561bd758a130d0a2589496f876"
-  integrity sha512-2QlYH6ef31OH3x3Y71rVXrlUEyQ1XoXLXUoZocPUTLj/P+wC93CTpHQVFW3ISKuCGrfhrazGgdytvVqllCCyTA==
+"@blockstack/ui@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-2.8.0.tgz#f1a19adb32b82fe41deb13c815db78047ec3489e"
+  integrity sha512-QTriK24P8Sg6IHfEOkzKe9OvTRwOXXHeYtroDrSZizNozeqfSCUybGjyXVd7XDxHi1aVDthvyfZmK60hJpQb+g==
   dependencies:
     "@popperjs/core" "^2.4.0"
     "@reach/alert" "^0.10.2"
@@ -1461,11 +1461,13 @@
     "@reach/rect" "^0.10.2"
     "@styled-system/css" "5.1.5"
     "@styled-system/should-forward-prop" "^5.1.5"
+    "@styled-system/theme-get" "^5.1.2"
     "@types/react-transition-group" "^4.2.4"
     "@types/styled-components" "^5.1.0"
     "@types/styled-system" "^5.1.6"
     "@types/styled-system__css" "^5.0.8"
     "@types/styled-system__should-forward-prop" "^5.1.1"
+    "@types/styled-system__theme-get" "^5.0.0"
     color "3.1.2"
     flushable "^1.0.0"
     prettier "^2.0.5"
@@ -1475,34 +1477,7 @@
     react-spring "8.0.27"
     react-transition-group "^4.4.1"
     styled-system "5.1.5"
-    use-events "^1.4.1"
-    use-onclickoutside "^0.3.1"
-
-"@blockstack/ui@^1.6.1-beta.0":
-  version "1.6.1-beta.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-1.6.1-beta.0.tgz#c231514eed78c02f7228d054800b536ea7513382"
-  integrity sha512-z2VLR/0yN4o6DoVGlDO2owWGkoi0kDr9eMRm7xDZE1/maRbc643RAa3ZAVquQ1/Xkd6r5sRh+7Fuj6D8E6WUEA==
-  dependencies:
-    "@popperjs/core" "^2.4.0"
-    "@reach/alert" "^0.10.2"
-    "@reach/auto-id" "^0.10.0"
-    "@reach/rect" "^0.10.2"
-    "@styled-system/css" "5.1.5"
-    "@styled-system/should-forward-prop" "^5.1.5"
-    "@types/react-transition-group" "^4.2.4"
-    "@types/styled-components" "^5.1.0"
-    "@types/styled-system" "^5.1.6"
-    "@types/styled-system__css" "^5.0.8"
-    "@types/styled-system__should-forward-prop" "^5.1.1"
-    color "3.1.2"
-    flushable "^1.0.0"
-    prettier "^2.0.5"
-    prism-react-renderer "^1.0.2"
-    prismjs "^1.20.0"
-    prop-types "^15.7.2"
-    react-spring "8.0.27"
-    react-transition-group "^4.4.1"
-    styled-system "5.1.5"
+    type-fest "^0.15.1"
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
 
@@ -6377,7 +6352,7 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-jsontokens@3.0.0, jsontokens@^3.0.0:
+jsontokens@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/jsontokens/-/jsontokens-3.0.0.tgz#629984d260a4081b11541313acdba708377314d3"
   integrity sha512-P0QZC5AjOkn3t1ej6OuI7+XqoEctYj83UK4pw0WpHY4/z6a5PpZCJSpp5NZodq94GFkw2PfB9DPFoDM5qpyp/g==
@@ -6667,6 +6642,11 @@ md5.js@^1.3.4:
     hash-base "^3.0.0"
     inherits "^2.0.1"
     safe-buffer "^5.1.2"
+
+mdi-react@^7.3.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/mdi-react/-/mdi-react-7.3.0.tgz#70a3d1ebe892e0b4cc18f413472d1b83b9158ba2"
+  integrity sha512-pG7nAhzUMHzlI/6jRMvyujMSpuM93gGcTIirpQBYq5zheNf6MkqR4BAMWcwWnK5759MRBqgTusbQm1YHnkJe9Q==
 
 mdn-data@2.0.4:
   version "2.0.4"
@@ -10116,6 +10096,11 @@ type-fest@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.11.0.tgz#97abf0872310fed88a5c466b25681576145e33f1"
   integrity sha512-OdjXJxnCN1AvyLSzeKIgXTXxV+99ZuXl3Hpo9XpJAv9MBcHrrJOQ5kV7ypXOuQie+AmWG25hLbiKdwYTifzcfQ==
+
+type-fest@^0.15.1:
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.15.1.tgz#d2c4e73d3e4a53cf1a906396dd460a1c5178ca00"
+  integrity sha512-n+UXrN8i5ioo7kqT/nF8xsEzLaqFra7k32SEsSPwvXVGyAcRgV/FUQN/sgfptJTR1oRmmq7z4IXMFSM7im7C9A==
 
 type-fest@^0.6.0:
   version "0.6.0"

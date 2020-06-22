@@ -36,7 +36,9 @@ const SandboxWrapper = React.memo(({ children }: any) => {
 
   // we are using useConstant and debounce because it seems connect fires this fn many times
   // https://github.com/blockstack/ux/issues/444
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const onFinish = useConstant(() =>
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
     debounce(async (payload: FinishedData) => {
       const userData = payload.userSession.loadUserData();
       doSetUserData(userData);
@@ -87,6 +89,7 @@ const SandboxPage: NextPage<any> = ({ tab, identity: _cookieIdentity, username }
   return (
     <SandboxWrapper>
       <PageContent
+        fullWidth
         hideTransactionDialog={hideTransactionDialog}
         showTransactionDialog={showTransactionDialog}
         transactionsVisible={transactionsVisible}

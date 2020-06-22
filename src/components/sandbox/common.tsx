@@ -214,6 +214,7 @@ export const Wrapper = React.memo(
         styles={{
           init: {
             width: '100%',
+
             opacity: 0,
             position: 'absolute',
             transform: 'translateY(5px)',
@@ -226,6 +227,7 @@ export const Wrapper = React.memo(
           },
           exiting: {
             width: '100%',
+
             opacity: 0,
             position: 'absolute',
             transform: 'translateY(10px)',
@@ -242,9 +244,17 @@ export const Wrapper = React.memo(
                 ...styles,
               }}
             >
-              <Box flexShrink={0} width="100%" flexGrow={1} {...rest}>
+              <Box
+                flexShrink={0}
+                width="100%"
+                flexGrow={1}
+                overflow="auto"
+                pb="extra-loose"
+                px="extra-loose"
+                {...rest}
+              >
                 <Stack spacing="base-loose">
-                  <Box>
+                  <Box pt="extra-loose">
                     <Title as="h2">{title}</Title>
                     {subtitle ? (
                       <Flex
