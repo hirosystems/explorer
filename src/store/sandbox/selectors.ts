@@ -22,8 +22,9 @@ export const selectAccountTransactions = (id: Account['principal']) =>
 export const selectLastFetch = createSelector(selectSandboxSlice, state => state.lastFetch);
 export const selectAccountLoading = createSelector(selectSandboxSlice, state => state.loading);
 
-export const selectIdentity = createSelector(selectSandboxSlice, state => state.identity);
-export const selectUserData = createSelector(selectSandboxSlice, state => state.identity);
+export const selectIdentity = createSelector(selectSandboxSlice, state => state?.identity);
+export const selectUserData = createSelector(selectSandboxSlice, state => state.user);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 export const selectErrorState = createSelector(selectSandboxSlice, state => state.error);
 
 export const selectLocalNonce = createSelector(selectSandboxSlice, state => state.localNonce);

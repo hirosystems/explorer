@@ -4,6 +4,8 @@ import { unwrapResult } from '@reduxjs/toolkit';
 import { useDispatch } from '@common/hooks/use-dispatch';
 import { RootState } from '@store';
 
+import debounce from 'awesome-debounce-promise';
+
 import {
   selectAccountBalance,
   selectAccountLoading,
@@ -23,6 +25,7 @@ import {
   broadcastTransaction,
   BroadcastTxOptions,
   clearAccountError,
+  selectUserData,
 } from '@store/sandbox';
 
 import { IdentityPayload, Account } from '@store/sandbox/types';
@@ -38,27 +41,36 @@ interface SanboxStateValues {
   nonce?: number;
   localNonce?: number;
   identity?: IdentityPayload;
+  user?: UserData;
   error?: any;
 }
 
 export const useSandboxStateValues = (): SanboxStateValues => {
-  const { lastFetch, loading, balance, identity, localNonce, transactions, error } = useSelector(
-    (state: RootState) => {
-      const identity = selectIdentity(state);
-      return {
-        lastFetch: selectLastFetch(state),
-        loading: selectAccountLoading(state),
-        balance: selectAccountBalance(identity?.address || '')(state),
-        transactions: selectAccountTransactions(identity?.address || '')(state),
-        nonce: selectAccountNonce(identity?.address || '')(state),
-        localNonce: selectLocalNonce(state),
-        identity,
-        error: selectErrorState(state),
-      };
-    }
-  );
+  const {
+    lastFetch,
+    loading,
+    balance,
+    identity,
+    user,
+    localNonce,
+    transactions,
+    error,
+  } = useSelector((state: RootState) => {
+    const identity = selectIdentity(state);
+    return {
+      lastFetch: selectLastFetch(state),
+      loading: selectAccountLoading(state),
+      balance: selectAccountBalance(identity?.address || '')(state),
+      transactions: selectAccountTransactions(identity?.address || '')(state),
+      nonce: selectAccountNonce(identity?.address || '')(state),
+      user: selectUserData(state),
+      localNonce: selectLocalNonce(state),
+      identity,
+      error: selectErrorState(state),
+    };
+  });
 
-  return { lastFetch, loading, balance, transactions, identity, localNonce, error };
+  return { lastFetch, loading, balance, transactions, user, identity, localNonce, error };
 };
 
 interface UseSandboxState extends SanboxStateValues {
@@ -82,19 +94,25 @@ export const useSandboxState = (): UseSandboxState => {
   };
   const doResetLocalNonce = () => dispatch(resetLocalNonce);
   const doSetIdentity = (identity: IdentityPayload) => {
-    identityStorage.set(IDENTITY_COOKIE, identity);
-    dispatch(setIdentity(identity));
+    if (!stateValues.identity) {
+      identityStorage.set(IDENTITY_COOKIE, identity);
+      dispatch(setIdentity(identity));
+    }
   };
   const doSetUserData = (userData: UserData) => {
-    usernameStorage.set(USERNAME_COOKIE, userData.username);
-    dispatch(setUserData(userData));
+    if (!stateValues?.user) {
+      usernameStorage.set(USERNAME_COOKIE, userData.username);
+      dispatch(setUserData(userData));
+    }
   };
-  const doGenerateIdentity = async (userSession: UserSession) => {
+  const doGenerateIdentity = debounce(async (userSession: UserSession) => {
+    if (stateValues.identity) return stateValues.identity;
     const response = await dispatch(generateIdentity(userSession));
     const value = unwrapResult(response);
     doSetIdentity(value);
     return value;
-  };
+  }, 100);
+
   const doFetchAccount = async (principal?: string) => {
     const address = stateValues.identity && stateValues.identity.address;
     const response = await dispatch(fetchAccount(principal || (address as string)));

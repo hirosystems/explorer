@@ -13,6 +13,7 @@ import {
 } from './actions';
 import { RootState } from '@store';
 import { dedupe } from '@common/utils';
+import { UserData } from 'blockstack/lib/auth/authApp';
 
 export const sandboxAdapter = createEntityAdapter<Account>({
   selectId: (account: Account) => account.principal,
@@ -23,7 +24,7 @@ const initialState = sandboxAdapter.getInitialState<{
   error?: any;
   lastFetch?: number;
   identity?: IdentityPayload;
-  user?: any;
+  user?: UserData;
   localNonce: number;
 }>({
   loading: 'idle',

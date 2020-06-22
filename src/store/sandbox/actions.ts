@@ -14,6 +14,7 @@ import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { UserData } from 'blockstack/lib/auth/authApp';
 import { UserSession } from 'blockstack/lib';
 import { ThunkApiConfig } from '@common/redux';
+import { selectIdentity } from '@store/sandbox/selectors';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -27,17 +28,24 @@ export const resetLocalNonce = createAction('account/user/localNonce/reset');
 export const setIdentity = createAction<IdentityPayload>('account/identity/set');
 export const eraseIdentity = createAction('account/identity/erase');
 export const setUserData = createAction<UserData>('account/user/set');
+export const clearAccountError = createAction('account/clear-error');
 
 export const generateIdentity = createAsyncThunk<IdentityPayload, UserSession, ThunkApiConfig>(
-  'account',
+  'account/identity',
   async (userSession: UserSession) => {
     try {
       const saved = await userSession.getFile('identity.json');
       return JSON.parse(saved as string) as IdentityPayload;
     } catch (e) {
-      const identity = await doGenerateIdentity();
-      await userSession.putFile('identity.json', JSON.stringify(identity));
-      return identity;
+      // does not exist, so we will generate and upload
+      const identity = doGenerateIdentity();
+      try {
+        await userSession.putFile('identity.json', JSON.stringify(identity));
+        return identity;
+      } catch (e) {
+        console.log('putFile error', e);
+        return identity;
+      }
     }
   }
 );
@@ -157,5 +165,3 @@ export const broadcastTransaction = createAsyncThunk<
     return rejectWithValue(e);
   }
 });
-
-export const clearAccountError = createAction('account/clear-error');
