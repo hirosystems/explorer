@@ -11,7 +11,7 @@ import { LightModeIcon } from '@components/icons/light-mode';
 
 const ColorModeButton = React.memo((props: BoxProps) => {
   const { colorMode, toggleColorMode } = useColorMode();
-  return (
+  return colorMode ? (
     <Box
       p="tight"
       borderRadius="4px"
@@ -23,7 +23,7 @@ const ColorModeButton = React.memo((props: BoxProps) => {
     >
       {colorMode === 'dark' ? <DarkModeIcon /> : <LightModeIcon />}
     </Box>
-  );
+  ) : null;
 });
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;

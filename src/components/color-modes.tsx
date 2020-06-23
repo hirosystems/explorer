@@ -1,11 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { themeGet } from '@styled-system/theme-get';
 import { colorModeStorage, COLOR_MODE_COOKIE } from '@common/utils';
 import { useMediaQuery } from '@common/hooks/use-media-query';
 import { Theme } from '@blockstack/ui';
 
-export const colorGet = (path: string, fallback?: string) => themeGet('colors.' + path, fallback);
+export const colorGet = (path: string, fallback?: string): ((props: any) => any) =>
+  themeGet('colors.' + path, fallback);
 
 enum Color {
   Accent = 'accent',
@@ -84,51 +85,38 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   },
 });
 
-const colorModeStyles = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =>
+const colorModeStyles = (props: { theme: Theme; colorMode: 'light' | 'dark' }): ColorModeTypes =>
   colors(props)[props.colorMode];
 
-const colorMap = (props: { theme: Theme; colorMode: 'light' | 'dark' }) =>
-  Object.keys(colors(props)[props.colorMode]);
+const colorMap = (props: { theme: Theme; colorMode: 'light' | 'dark' }): ColorsStringLiteral[] =>
+  Object.keys(colors(props)[props.colorMode]) as ColorsStringLiteral[];
 
-export const color = (name: ColorsStringLiteral) => {
+export const color = (name: ColorsStringLiteral): string => {
   return `var(--colors-${name})`;
 };
 
-export const ColorModes = createGlobalStyle`
+const generateCssVariables = (mode: 'light' | 'dark') => ({ colorMode = mode, ...rest }: any) =>
+  colorMap({ colorMode, ...rest }).map((key: ColorsStringLiteral) => {
+    return `--colors-${key}: ${colorModeStyles({ colorMode, ...rest })[key]};`;
+  });
 
-:root{
-${({ colorMode = 'light', ...rest }: any) =>
-  colorMap({ colorMode, ...rest }).map(key => {
-    return `--colors-${key}: ${
-      //@ts-ignore
-      colorModeStyles({ colorMode, ...rest })[key as string]
-    };`;
-  })}
-}
+export const ColorModes = createGlobalStyle`
+  :root{
+    ${generateCssVariables('light')};
+  }
+
   @media (prefers-color-scheme: dark) {
     :root {
-    ${({ colorMode = 'dark', ...rest }: any) =>
-      colorMap({ colorMode, ...rest }).map(key => {
-        return `--colors-${key}: ${
-          //@ts-ignore
-          colorModeStyles({ colorMode, ...rest })[key as string]
-        };`;
-      })}
+      ${generateCssVariables('dark')};
     }
   }
   
   @media (prefers-color-scheme: light) {
     :root {
-    ${({ colorMode = 'light', ...rest }: any) =>
-      colorMap({ colorMode, ...rest }).map(key => {
-        return `--colors-${key}: ${
-          //@ts-ignore
-          colorModeStyles({ colorMode, ...rest })[key as string]
-        };`;
-      })}
+      ${generateCssVariables('light')};
     }
   }
-    
+  
   html, body, #__next {
     background: var(--colors-bg);
     border-color: var(--colors-border);
@@ -178,6 +166,12 @@ export const ColorModeProvider = ({
   const [mode, setMode] = React.useState(colorMode);
   const [darkmode] = useMediaQuery('(prefers-color-scheme: dark)');
   const [lightmode] = useMediaQuery('(prefers-color-scheme: light)');
+
+  useEffect(() => {
+    if (!mode) {
+      setMode(darkmode ? 'dark' : 'light');
+    }
+  }, [mode, darkmode, lightmode]);
 
   const setColorMode = useCallback(
     (mode: 'light' | 'dark') => {
