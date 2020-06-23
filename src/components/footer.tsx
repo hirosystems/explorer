@@ -17,11 +17,11 @@ const FooterLink: React.FC<BoxProps> = React.memo(({ children, ...rest }) => (
 
 const ColorModeLink = React.memo(({ ...rest }) => {
   const { toggleColorMode, colorMode } = useColorMode();
-  return (
+  return colorMode ? (
     <FooterLink onClick={toggleColorMode} {...rest}>
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
     </FooterLink>
-  );
+  ) : null;
 });
 
 const LinkInNewWindow = React.memo(
