@@ -4,10 +4,10 @@ import cookieStorage from 'store/storages/cookieStorage';
 import { c32addressDecode } from 'c32check';
 import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
-
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+
 dayjs.extend(relativeTime);
 
 export const store = engine.createStore([lclStorage]);
@@ -36,7 +36,7 @@ export const networkStorage = cookieSetter;
  *
  * @param {String} stacksAddress - the STX address to validate
  */
-export const validateStacksAddress = (stacksAddress: string) => {
+export const validateStacksAddress = (stacksAddress: string): boolean => {
   try {
     c32addressDecode(stacksAddress);
     return true;
@@ -51,8 +51,10 @@ export const validateStacksAddress = (stacksAddress: string) => {
  * @param {array} array - the array to remove duplicate items
  * @param {string} key - the key to check by for dupes, typically an id of some sort
  */
-export const dedupe = (array: any[], key: string) =>
+export const dedupe = (array: any[], key: string): any[] =>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   Array.from(new Set(array.map(a => a[key]))).map(id => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return array.find(a => a[key] === id);
   });
 
@@ -61,7 +63,7 @@ export const dedupe = (array: any[], key: string) =>
  *
  * @param {string} str - string to convert_this orThis to convert-this or-this
  */
-export const toKebabCase = (str: string) => {
+export const toKebabCase = (str: string): string => {
   if (!str) return '';
   const hasSpaces = str.includes(' ');
   const hasUnderscore = str.includes('_');
@@ -82,7 +84,7 @@ export const toKebabCase = (str: string) => {
  * @param {string} input - the string to truncate
  * @param {number} offset - the number of chars to keep on either end
  */
-export const truncateMiddle = (input: string, offset = 5) => {
+export const truncateMiddle = (input: string, offset = 5): string | undefined => {
   if (!input) return;
   const start = input.substr(0, offset);
   const end = input.substr(input.length - offset, input.length);
@@ -104,7 +106,7 @@ export const validateTxId = (tx_id: string) => {
  *
  * @param {string} contractString - the fully realized contract name to validate, ex: ST2ZRX0K27GW0SP3GJCEMHD95TQGJMKB7G9Y0X1MH.hello-world-contract
  */
-export const validateContractName = (contractString: string) => {
+export const validateContractName = (contractString: string): boolean => {
   if (!contractString.includes('.')) return false;
 
   const stxAddress = contractString.split('.')[0];
@@ -113,15 +115,16 @@ export const validateContractName = (contractString: string) => {
   try {
     const validStacksAddress = validateStacksAddress(stxAddress);
     const validName = nameRegex.exec(contractName);
-    return validName && validStacksAddress;
+    return !!(validName && validStacksAddress);
   } catch (e) {
     return false;
   }
 };
 
-export const queryWith0x = (query: string) => (!query.includes('0x') ? '0x' + query : query);
+export const queryWith0x = (query: string): string =>
+  !query.includes('0x') ? '0x' + query : query;
 
-export const handleValidation = (query?: string) => {
+export const handleValidation = (query?: string): { success: boolean; message?: string } => {
   if (!query || !query.trim().length) {
     return {
       success: false,
@@ -159,22 +162,23 @@ export const handleValidation = (query?: string) => {
  *
  * @param {Number} amountInMicroStacks - the amount of microStacks to convert
  */
-export const microToStacks = (amountInMicroStacks: string | number) =>
+export const microToStacks = (amountInMicroStacks: string | number): number =>
   amountInMicroStacks ? Number(amountInMicroStacks) / Math.pow(10, 6) : 0;
 
-export const getContractName = (fullyRealizedName: string) => fullyRealizedName.split('.')[1];
-export const getFungibleAssetName = (assetName: string) =>
+export const getContractName = (fullyRealizedName: string): string =>
+  fullyRealizedName.split('.')[1];
+export const getFungibleAssetName = (assetName: string): string =>
   getContractName(assetName).split('::')[1];
 
-export const getMemoString = (string: string) =>
+export const getMemoString = (string: string): string | null =>
   string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;
 
-export const startPad = (n: number, z = 2, s = '0') =>
+export const startPad = (n: number, z = 2, s = '0'): string =>
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
 
 export const navgiateToRandomTx = (apiServer: string) => async () => {
   const { results } = await fetchTxList({
-    apiServer: apiServer as string,
+    apiServer: apiServer,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   })();
   const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
@@ -193,20 +197,21 @@ export const navgiateToRandomTx = (apiServer: string) => async () => {
   await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
 };
 
-export const clarityValuetoHumanReadable = (value: any) => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const clarityValuetoHumanReadable = (value: any): string | null => {
   if (value && value.repr) {
     return value.repr;
   }
   return null;
 };
 
-export const addSepBetweenStrings = (strings: (string | undefined)[], sep: string = '∙') => {
+export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙'): string => {
   let str = '';
   strings
     .filter(_s => _s)
     .forEach((string, index, array) => {
       if (index < array.length - 1) {
-        str += string + ` ${sep} `;
+        str += (string as string) + ` ${sep} `;
       } else {
         str += string;
       }
@@ -214,6 +219,6 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep: strin
   return str;
 };
 
-export const toRelativeTime = (ts: number) => dayjs().to(ts);
+export const toRelativeTime = (ts: number): string => dayjs().to(ts);
 
-export const isPendingTx = (tx: Transaction) => tx && tx.tx_status === 'pending';
+export const isPendingTx = (tx: Transaction): boolean => tx && tx.tx_status === 'pending';

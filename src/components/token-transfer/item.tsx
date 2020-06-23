@@ -103,7 +103,7 @@ const EventAsset = React.memo(
 const ContractLogItem = React.memo(
   ({ event, ...rest }: { event: TransactionEventSmartContractLog }) => {
     const value = clarityValuetoHumanReadable(event.contract_log.value);
-    const isAddress = validateStacksAddress(value);
+    const isAddress = value && validateStacksAddress(value);
     return (
       <Text style={{ wordBreak: 'break-word' }} fontWeight="500" {...rest}>
         {isAddress ? <Truncate>{value}</Truncate> : value}
