@@ -5,7 +5,8 @@ import { Flex, Box, Stack, Button, Transition } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 
 import { fetchContract, selectContractAbi, selectContractSource } from '@store/contracts';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useDispatch } from '@common/hooks/use-dispatch';
 import { Function } from '@components/sandbox/contract-call/functions';
 import { Title } from '@components/typography';
 import { useLoading } from '@common/hooks/use-loading';
@@ -13,9 +14,9 @@ import { RootState } from '@store';
 import { ContractCard } from '@components/contract-card';
 import { useRef } from 'react';
 
-const Functions = ({ abi, contractName, contractAddress, showTransactionDialog }: any) => {
-  return abi.functions.map((func: any) => {
-    return func.access !== 'private' ? (
+const Functions: React.FC<any> = ({ abi, contractName, contractAddress, showTransactionDialog }) =>
+  abi.functions.map((func: any) =>
+    func.access !== 'private' ? (
       <Function
         contractName={contractName as string}
         contractAddress={contractAddress as string}
@@ -23,17 +24,16 @@ const Functions = ({ abi, contractName, contractAddress, showTransactionDialog }
         key={func.name}
         showTransactionDialog={showTransactionDialog}
       />
-    ) : null;
-  });
-};
+    ) : null
+  );
 
-export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
+export const ContractCall: React.FC<any> = ({ showTransactionDialog, ...rest }) => {
   const { isLoading, doStartLoading, doFinishLoading } = useLoading();
   const [contractName, setContractName] = React.useState<string | undefined>(undefined);
   const [contractAddress, setAddress] = React.useState<string | undefined>(undefined);
   const [error, setError] = React.useState<string | undefined>(undefined);
   const [showSearch, setShowSearch] = React.useState<boolean>(true);
-  const buttonRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const dispatch = useDispatch();
 
@@ -50,18 +50,24 @@ export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
     contractName: '',
   };
 
-  const onSubmit = async ({ contractAddress, contractName }: any) => {
+  const onSubmit = async ({
+    contractAddress,
+    contractName,
+  }: {
+    contractAddress: string;
+    contractName: string;
+  }) => {
     if (!contractAddress && !contractName) {
       setError('Check your fields, please.');
       return;
     }
-    (buttonRef as any).current.blur();
+    buttonRef?.current?.blur();
     setContractName(contractName);
     setAddress(contractAddress);
     try {
       setError(undefined);
       doStartLoading();
-      await dispatch(fetchContract(contractAddress + '.' + contractName));
+      await dispatch(fetchContract(`${contractAddress}.${contractName}`));
       doFinishLoading();
       setShowSearch(false);
     } catch (e) {
@@ -70,16 +76,14 @@ export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
     }
   };
 
-  const onPaste = (event: any, callback: (string: string) => any) => {
+  const onPaste = (event: ClipboardEvent, callback: (string: string) => any) => {
     if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
-    if (event.originalEvent && event.originalEvent.clipboardData) {
-      // OriginalEvent is a property from jQuery, normalizing the event object
-      callback(event.originalEvent.clipboardData.getData('text'));
-    } else if (event.clipboardData) {
+    if (event.clipboardData) {
       // used in some browsers for clipboardData
       callback(event.clipboardData.getData('text/plain'));
     } else if ((window as any).clipboardData) {
       // Older clipboardData version for Internet Explorer only
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       callback((window as any).clipboardData.getData('Text'));
     }
   };
@@ -97,6 +101,7 @@ export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
             }
           : undefined
       }
+      clearError={() => setError(undefined)}
       {...rest}
     >
       <Stack isInline spacing="base" width="100%">
@@ -146,6 +151,7 @@ export const ContractCall = ({ showTransactionDialog, ...rest }: any) => {
                   return (
                     <Box
                       as="form"
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                       // @ts-ignore
                       onSubmit={handleSubmit}
                       method="post"
