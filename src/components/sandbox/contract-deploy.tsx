@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { Formik } from 'formik';
-import { Flex, Stack, Box, Button } from '@blockstack/ui';
+import { Flex, Stack, Box, Button, space } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
 import { network } from '@common/sandbox';
-import { broadcastTransaction, fetchAccount } from '@store/sandbox';
 import { makeSmartContractDeploy } from '@blockstack/stacks-transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
@@ -14,7 +13,6 @@ import BN from 'bn.js';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useState } from 'react';
 import { useSandboxState } from '@common/hooks/use-sandbox-state';
-
 import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
 
 const customConfig: Config = {
@@ -120,8 +118,8 @@ export const ContractDeploy = React.memo((props: any) => {
       <Formik initialValues={initialValues} onSubmit={onSubmit}>
         {({ handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit} method="post">
-            <Flex width="100%">
-              <Stack width="40%" pr="base" spacing="base" flexGrow={1}>
+            <Flex flexDirection={['column', 'column', 'column', 'row']} width="100%">
+              <Stack width={['100%', '100%', '100%', '40%']} pr="base" spacing="base" flexGrow={1}>
                 <Field name="contractName" label="Contract name" />
                 <Field name="fee" label="Fee" />
                 <Box>
@@ -131,7 +129,10 @@ export const ContractDeploy = React.memo((props: any) => {
                 </Box>
               </Stack>
 
-              <Box maxWidth="60%">
+              <Box
+                mt={space(['base', 'base', 'base', 'none'])}
+                maxWidth={['100%', '100%', '100%', '60%']}
+              >
                 <Box mb="base">
                   <Sample
                     onItemClick={(value: string) => setDefaultContract(value)}
