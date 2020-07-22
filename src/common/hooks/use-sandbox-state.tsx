@@ -101,7 +101,7 @@ export const useSandboxState = (): UseSandboxState => {
   };
   const doSetUserData = (userData: UserData) => {
     if (!stateValues?.user) {
-      usernameStorage.set(USERNAME_COOKIE, userData.username);
+      usernameStorage.set(USERNAME_COOKIE, userData.username || userData.identityAddress);
       dispatch(setUserData(userData));
     }
   };
