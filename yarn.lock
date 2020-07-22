@@ -1363,14 +1363,14 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@blockstack/connect@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/connect/-/connect-2.8.0.tgz#d261793b82f78954bb9cb23047986f24c8f75596"
-  integrity sha512-HV3YuVmV91Qr2wGQxbeo0EeV57AIYSmqD+tbmlFmDSrTIBf2fWx9ArOJXXqVBm7m2gR9OzitcXIteYQ0LYr9oQ==
+"@blockstack/connect@^2.8.6":
+  version "2.8.6"
+  resolved "https://registry.yarnpkg.com/@blockstack/connect/-/connect-2.8.6.tgz#5c88d2fa25bd7eb1a6990e0ccb2383597d2c0080"
+  integrity sha512-4AxnIPpDjN4/+hLdrmc/cdLfliKV8bVmoFkE8JC1IKjUAIxV5Cx/3zelUkeY1Q5sNj7i3TeS7lhfMHe1Pz8//g==
   dependencies:
-    "@blockstack/ui" "^2.8.0"
+    "@blockstack/ui" "^2.10.10"
+    jsontokens "^3.0.0"
     preact "^10.4.0"
-    prettier "^2.0.5"
     styled-components "^5.1.0"
     use-events "^1.4.1"
     use-onclickoutside "^0.3.1"
@@ -1449,6 +1449,37 @@
     ripemd160 "^2.0.2"
     sha.js "^2.4.11"
     smart-buffer "^4.1.0"
+
+"@blockstack/ui@^2.10.10":
+  version "2.10.10"
+  resolved "https://registry.yarnpkg.com/@blockstack/ui/-/ui-2.10.10.tgz#16ea76e244ae8ac4b4c23292de1fdbe6b80888e2"
+  integrity sha512-HnqDYcXChByblBqy4ZwO99XvlQWiXzNtzyzCOX6yNuh/pBB2ZF+pXi78Ko9/BD6GIvloj3Iw2vTW7FTfuMLFgA==
+  dependencies:
+    "@popperjs/core" "^2.4.0"
+    "@reach/alert" "^0.10.2"
+    "@reach/auto-id" "^0.10.0"
+    "@reach/rect" "^0.10.2"
+    "@styled-system/css" "5.1.5"
+    "@styled-system/should-forward-prop" "^5.1.5"
+    "@styled-system/theme-get" "^5.1.2"
+    "@types/react-transition-group" "^4.2.4"
+    "@types/styled-components" "^5.1.0"
+    "@types/styled-system" "^5.1.6"
+    "@types/styled-system__css" "^5.0.8"
+    "@types/styled-system__should-forward-prop" "^5.1.1"
+    "@types/styled-system__theme-get" "^5.0.0"
+    color "3.1.2"
+    flushable "^1.0.0"
+    prettier "^2.0.5"
+    prism-react-renderer "^1.0.2"
+    prismjs "^1.20.0"
+    prop-types "^15.7.2"
+    react-spring "8.0.27"
+    react-transition-group "^4.4.1"
+    styled-system "5.1.5"
+    type-fest "^0.15.1"
+    use-events "^1.4.1"
+    use-onclickoutside "^0.3.1"
 
 "@blockstack/ui@^2.8.0":
   version "2.8.0"
@@ -6352,7 +6383,7 @@ jsonparse@^1.2.0:
   resolved "https://registry.yarnpkg.com/jsonparse/-/jsonparse-1.3.1.tgz#3f4dae4a91fac315f71062f8521cc239f1366280"
   integrity sha1-P02uSpH6wxX3EGL4UhzCOfE2YoA=
 
-jsontokens@3.0.0:
+jsontokens@3.0.0, jsontokens@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/jsontokens/-/jsontokens-3.0.0.tgz#629984d260a4081b11541313acdba708377314d3"
   integrity sha512-P0QZC5AjOkn3t1ej6OuI7+XqoEctYj83UK4pw0WpHY4/z6a5PpZCJSpp5NZodq94GFkw2PfB9DPFoDM5qpyp/g==
