@@ -98,5 +98,8 @@
     }
   },
   "license": "MIT",
-  "prettier": "@blockstack/prettier-config"
+  "prettier": "@blockstack/prettier-config",
+  "resolutions": {
+    "styled-components": "5.1.0"
+  }
 }
