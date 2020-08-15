@@ -1,17 +1,20 @@
 import React from 'react';
-import { FlexProps } from '@blockstack/ui';
+import { FlexProps } from '@stacks/ui';
 
 export interface RowProps extends FlexProps {
   card?: boolean;
   isFirst?: boolean;
   isLast?: boolean;
   copy?: string;
-  label?: {
-    children: any;
-  };
+  label?:
+    | {
+        children: any;
+      }
+    | string;
   render?: any;
   inline?: boolean;
   noTopBorder?: boolean;
+  onClick?: any;
 }
 
 export interface RowWrapperProps extends FlexProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { useSafeLayoutEffect } from '@blockstack/ui';
+import { useSafeLayoutEffect } from '@stacks/ui';
 
 import { useMediaQuery } from '@common/hooks/use-media-query';
 import { Statuses } from '@components/status';

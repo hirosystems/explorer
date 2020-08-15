@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { Box, Flex, ChevronIcon, Stack } from '@blockstack/ui';
+import { Box, Flex, ChevronIcon, Stack } from '@stacks/ui';
 import { Text } from '@components/typography';
-import { TransactionEvent } from '@blockstack/stacks-blockchain-sidecar-types';
+import { TransactionEvent } from '@blockstack/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 
 import { Card } from '@components/card';
 import { BottomButtonProps, TokenTransferProps } from '@components/token-transfer/types';
 import { Caption, SectionTitle } from '@components/typography';
 import { TokenTransferItem } from '@components/token-transfer/item';
+import { border } from '@common/utils';
+import { Section } from '@components/section';
 
 const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
   const [hover, bind] = useHover();
@@ -16,7 +18,7 @@ const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
       borderBottomLeftRadius="12px"
       borderBottomRightRadius="12px"
       py="base"
-      align="center"
+      alignItems="center"
       justify={['center', 'center', 'unset']}
       px="base-loose"
       cursor={hover ? 'pointer' : 'unset'}
@@ -45,7 +47,7 @@ const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
 const LoadMoreButton = (props: any) =>
   props.events.length - 1 > props.limit && !props.viewAll ? (
     <BottomButton
-      icon={() => <ChevronIcon direction="down" size={6} color="currentColor" />}
+      icon={() => <ChevronIcon direction={'down' as any} size={6} color="currentColor" />}
       label={`${props.events.length + 1 - props.limit} more transfers`}
       onClick={props.onClick}
     />
@@ -68,48 +70,50 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
     });
 
   return (
-    <Box {...boxProps}>
-      <SectionTitle mb="base-loose">Event Log</SectionTitle>
-      <Card overflow="hidden">
-        <Box borderBottom="1px solid var(--colors-border)">
-          <Stack width="100%" isInline>
+    <Section title={'Events'} {...(boxProps as any)}>
+      <Box borderBottom="1px solid var(--colors-border)">
+        <Stack width="100%" isInline alignItems="center">
+          <Flex
+            pl={['base', 'base', 'none']}
+            alignItems="center"
+            width="calc(33.333% - 4px)"
+            flexShrink={0}
+            py="tight"
+          >
             <Flex
-              pl={['base', 'base', 'none']}
-              align="center"
-              width="calc(33.333% - 4px)"
-              flexShrink={0}
-              py="base"
+              display={['none', 'none', 'flex']}
+              alignItems="center"
+              justify="center"
+              width="48px"
             >
-              <Flex display={['none', 'none', 'flex']} align="center" justify="center" width="48px">
-                <Caption fontSize="14px">#</Caption>
-              </Flex>
-              <Caption fontSize="14px">Asset</Caption>
+              <Caption fontSize="14px">#</Caption>
             </Flex>
-            <Box width="calc(33.333% - 32px)" py="base">
-              <Caption fontSize="14px">Event type</Caption>
-            </Box>
-            <Box width="calc(33.333% + 44px)" py="base">
-              <Caption fontSize="14px">Value</Caption>
-            </Box>
-          </Stack>
-        </Box>
-        {events.map((event: TransactionEvent, key) =>
-          event ? (
-            <TokenTransferItem
-              noBottomBorder={events?.length - 1 === key}
-              data={event}
-              key={key}
-              length={events?.length}
-            />
-          ) : null
-        )}
-        <LoadMoreButton
-          viewAll={viewAll}
-          limit={limit}
-          events={_events}
-          onClick={() => setViewAll(true)}
-        />
-      </Card>
-    </Box>
+            <Caption fontSize="14px">Asset</Caption>
+          </Flex>
+          <Box width="calc(33.333% - 32px)">
+            <Caption fontSize="14px">Event type</Caption>
+          </Box>
+          <Box width="calc(33.333% + 44px)">
+            <Caption fontSize="14px">Value</Caption>
+          </Box>
+        </Stack>
+      </Box>
+      {events.map((event: TransactionEvent, key) =>
+        event ? (
+          <TokenTransferItem
+            noBottomBorder={events?.length - 1 === key}
+            data={event}
+            key={key}
+            length={events?.length}
+          />
+        ) : null
+      )}
+      <LoadMoreButton
+        viewAll={viewAll}
+        limit={limit}
+        events={_events}
+        onClick={() => setViewAll(true)}
+      />
+    </Section>
   );
 };

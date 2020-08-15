@@ -1,44 +1,67 @@
 import React from 'react';
-import Document, { Head, Main, NextScript, DocumentContext } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
+import Document, {
+  DocumentContext,
+  DocumentProps,
+  DocumentInitialProps,
+  Html,
+  Head,
+  Main,
+  NextScript,
+} from 'next/document';
+import { extractCritical } from '@emotion/server';
+import {
+  GlobalStyles,
+  ProgressBarStyles,
+  TextAreaOverrides,
+  ColorModes,
+} from '@components/global-styles';
+export const THEME_STORAGE_KEY = 'theme';
 
-export default class MyDocument extends Document<any> {
-  static async getInitialProps(ctx: DocumentContext) {
-    const sheet = new ServerStyleSheet();
-    const originalRenderPage = ctx.renderPage;
-
-    try {
-      ctx.renderPage = () =>
-        originalRenderPage({
-          enhanceApp: App => props => sheet.collectStyles(<App {...props} />),
-        });
-
-      const initialProps = await Document.getInitialProps(ctx);
-
-      return {
-        ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
-      };
-    } finally {
-      sheet.seal();
-    }
+export default class MyDocument extends Document<DocumentProps> {
+  static async getInitialProps({ renderPage }: DocumentContext): Promise<DocumentInitialProps> {
+    const page = await renderPage();
+    const styles = extractCritical(page.html);
+    return {
+      ...page,
+      styles: (
+        <>
+          {GlobalStyles}
+          {ProgressBarStyles}
+          {TextAreaOverrides}
+          {ColorModes}
+          <style
+            data-emotion-css={styles.ids.join(' ')}
+            dangerouslySetInnerHTML={{ __html: styles.css }}
+          />
+        </>
+      ),
+    };
   }
-
   render() {
     return (
-      <html lang="en">
-        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-        <Head />
+      <Html lang="en">
+        <Head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function() {
+try {
+    var mode = localStorage.getItem('${THEME_STORAGE_KEY}')
+    if (!mode) return
+    document.documentElement.classList.add(mode)
+    var bgValue = getComputedStyle(document.documentElement)
+    .getPropertyValue('--colors-bg')
+    document.documentElement.style.background = bgValue
+} catch (e) {}
+})()`,
+            }}
+          />
+          <link rel="preconnect" href="https://cdn.usefathom.com" crossOrigin="true" />
+        </Head>
         <body>
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     );
   }
 }

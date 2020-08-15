@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, BoxProps, Transition, Flex } from '@blockstack/ui';
+import { Box, BoxProps, Transition, Flex } from '@stacks/ui';
 import { Card } from '@components/card';
 import { Caption } from '@components/typography';
 import { PopoverItem } from '@components/popover/default-item';
@@ -63,11 +63,13 @@ const PopoverItemList = React.memo(
         >
           {styles => (
             <Box
-              style={{
-                willChange: 'transform, opacity',
-                borderRadius: '12px',
-                ...styles,
-              }}
+              style={
+                {
+                  willChange: 'transform, opacity',
+                  borderRadius: '12px',
+                  ...styles,
+                } as any
+              }
               position="absolute"
               zIndex={99999999}
               left={placement === 'left' || placement === undefined ? 0 : 'unset'}
@@ -91,7 +93,7 @@ const PopoverItemList = React.memo(
                   <Flex
                     borderBottom="1px solid var(--colors-border)"
                     justifyContent="space-between"
-                    align="center"
+                    alignItems="center"
                   >
                     {label ? <PopoverListLabel>{label}</PopoverListLabel> : null}
                     {showClose ? (
@@ -134,7 +136,7 @@ const PopoverItemList = React.memo(
   }
 );
 
-export const Popover = React.memo(
+export const Popover: React.FC<PopoverProps> = React.memo(
   ({
     dismiss,
     itemComponent: ItemComponent = PopoverItem,
@@ -154,7 +156,7 @@ export const Popover = React.memo(
     showClose,
     lockBodyScroll,
     ...rest
-  }: PopoverProps) => {
+  }) => {
     const wrapperRef = React.useRef(null);
     const {
       isVisible,
@@ -245,9 +247,11 @@ export const Popover = React.memo(
                 zIndex={99}
                 top="64px"
                 left={0}
-                style={{
-                  ...styles,
-                }}
+                style={
+                  {
+                    ...styles,
+                  } as any
+                }
               />
             )}
           </Transition>

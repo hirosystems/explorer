@@ -1,12 +1,17 @@
-import engine from 'store/src/store-engine';
-import lclStorage from 'store/storages/localStorage';
-import cookieStorage from 'store/storages/cookieStorage';
-import { c32addressDecode } from 'c32check';
-import { fetchTxList } from '@common/api/transactions';
+import { ColorsStringLiteral, color } from '@stacks/ui';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { BorderStyleProperty } from 'csstype';
 import Router from 'next/router';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { c32addressDecode } from 'c32check';
+import cookieStorage from 'store/storages/cookieStorage';
 import dayjs from 'dayjs';
+import engine from 'store/src/store-engine';
+import { fetchTxList } from '@common/api/transactions';
+import lclStorage from 'store/storages/localStorage';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
 
 dayjs.extend(relativeTime);
 
@@ -84,8 +89,7 @@ export const toKebabCase = (str: string): string => {
  * @param {string} input - the string to truncate
  * @param {number} offset - the number of chars to keep on either end
  */
-export const truncateMiddle = (input: string, offset = 5): string | undefined => {
-  if (!input) return;
+export const truncateMiddle = (input: string, offset = 5): string => {
   const start = input.substr(0, offset);
   const end = input.substr(input.length - offset, input.length);
   return `${start}…${end}`;
@@ -96,7 +100,7 @@ export const truncateMiddle = (input: string, offset = 5): string | undefined =>
  *
  * @param {string} tx_id - the tx_id sha hash to validate
  */
-export const validateTxId = (tx_id: string) => {
+export const validateTxId = (tx_id: string): any => {
   const regex = /0x[A-Fa-f0-9]{64}/;
   return regex.exec(tx_id);
 };
@@ -162,18 +166,38 @@ export const handleValidation = (query?: string): { success: boolean; message?: 
  *
  * @param {Number} amountInMicroStacks - the amount of microStacks to convert
  */
-export const microToStacks = (amountInMicroStacks: string | number): number =>
-  amountInMicroStacks ? Number(amountInMicroStacks) / Math.pow(10, 6) : 0;
+export const microToStacks = (amountInMicroStacks: string | number): number | string =>
+  amountInMicroStacks ? Number(Number(amountInMicroStacks) / Math.pow(10, 6)).toLocaleString() : 0;
 
 export const getContractName = (fullyRealizedName: string): string =>
   fullyRealizedName.split('.')[1];
-export const getFungibleAssetName = (assetName: string): string =>
-  getContractName(assetName).split('::')[1];
+
+export const getFungibleAssetName = (fullyRealizedName: string): string =>
+  getContractName(fullyRealizedName).split('::')[1];
+
+export const getAssetNameParts = (fullyRealizedName: string) => {
+  const address = fullyRealizedName.split('.')[0];
+  const contract = getContractName(fullyRealizedName).split('::')[0];
+  const asset = getFungibleAssetName(fullyRealizedName);
+
+  return {
+    address,
+    contract,
+    asset,
+  };
+};
 
 export const getMemoString = (string: string): string | null =>
-  string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;
+  string
+    ? Buffer.from(string.replace('0x', '').replace(/^(0{2})+|(0{2})+$/g, ''), 'hex').toString(
+        'utf8'
+      )
+    : null;
 
 export const startPad = (n: number, z = 2, s = '0'): string =>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
 
 export const navgiateToRandomTx = (apiServer: string) => async () => {
@@ -181,14 +205,14 @@ export const navgiateToRandomTx = (apiServer: string) => async () => {
     apiServer: apiServer,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   })();
-  const hasNonCoinbaseTxs = results.some(tx => tx.tx_type !== 'coinbase');
+  const hasNonCoinbaseTxs = results.some((tx: any) => tx.tx_type !== 'coinbase');
 
   if (hasNonCoinbaseTxs) {
-    const nonCoinbaseResults = results.filter(tx => tx.tx_type !== 'coinbase');
+    const nonCoinbaseResults = (results as any).filter((tx: any) => tx.tx_type !== 'coinbase');
     const randomNonCoinbaseTx =
       nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
 
-    await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id}`);
+    await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id as string}`);
 
     return;
   }
@@ -222,3 +246,9 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
 export const toRelativeTime = (ts: number): string => dayjs().to(ts);
 
 export const isPendingTx = (tx: Transaction): boolean => tx && tx.tx_status === 'pending';
+
+export const border = (
+  _color: ColorsStringLiteral = 'border',
+  width = 1,
+  style: BorderStyleProperty = 'solid'
+): string => `${width}px ${style as string} ${color(_color)}`;

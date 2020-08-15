@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Box, Flex, Button, Spinner } from '@blockstack/ui';
-import { useConnect } from '@blockstack/connect';
+import { Box, Flex, Button, Spinner } from '@stacks/ui';
+import { useConnect } from '@pages/sandbox';
 import { useHover } from 'use-events';
 
 import { microToStacks } from '@common/utils';
@@ -15,14 +15,13 @@ import { Meta } from '@components/meta-head';
 import { useSandboxState, useSandboxStateValues } from '@common/hooks/use-sandbox-state';
 import { color } from '@components/color-modes';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
-import { transition } from '@blockstack/ui/dist/ui/src/theme/theme';
 
 const SignedOutView = ({ onClick }: any) => {
   return (
     <>
       <Meta title="Sandbox" />
-      <Flex pb="extra-loose" flexGrow={1} align="center" justify="center">
-        <Card mx="auto" p="extra-loose" direction="column" align="center" justify="center">
+      <Flex pb="extra-loose" flexGrow={1} alignItems="center" justify="center">
+        <Card mx="auto" p="extra-loose" flexDirection="column" alignItems="center" justify="center">
           <Box maxWidth="600px" textAlign="center">
             <Box mb="base">
               <Title as="h2">Welcome to the Stacks Explorer Sandbox!</Title>
@@ -63,7 +62,7 @@ const UserCard = ({ username, identity, balance, ...rest }: any) => {
           flexGrow={1}
           justifyContent="flex-end"
           textAlign="right"
-          align="center"
+          alignItems="center"
           position="relative"
           {...bindHover}
         >
@@ -80,7 +79,7 @@ const UserCard = ({ username, identity, balance, ...rest }: any) => {
             {balance ? microToStacks(balance as number) : 0} <Text opacity={0.5}>STX</Text>
           </Text>
           <Flex
-            align="center"
+            alignItems="center"
             justify="center"
             position="absolute"
             zIndex={1}
@@ -148,7 +147,12 @@ export const PageContent = ({
     <PageWrapper maxWidth="100vw" overflow="hidden" px="0" py="0" {...props}>
       <Flex width="100%" flexGrow={1}>
         <Flex flexDirection="column" maxWidth={`calc(100% - ${sidebarWidth})`} flexGrow={1}>
-          <Flex pl="extra-loose" pt="extra-loose" align="flex-start" justifyContent="space-between">
+          <Flex
+            pl="extra-loose"
+            pt="extra-loose"
+            alignItems="flex-start"
+            justifyContent="space-between"
+          >
             <Box>
               <Title as="h1">Stacks Explorer Sandbox</Title>
             </Box>

@@ -1,31 +1,49 @@
 import * as React from 'react';
-import { Text as BaseText, BoxProps } from '@blockstack/ui';
 
-export const Text = React.forwardRef((props: BoxProps, ref) => (
-  <BaseText ref={ref} color="var(--colors-text-body)" {...props} />
-));
+import { Text as BaseText, BoxProps } from '@stacks/ui';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 
-export const Caption: React.FC<BoxProps> = props => (
+export const Text: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
+  BoxProps,
+  'span'
+>(({ as = 'span', ...rest }, ref) => <BaseText as={as} ref={ref} color="currentColor" {...rest} />);
+
+export const Caption: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
+  BoxProps,
+  'span'
+>((props, ref) => (
   <Text
     style={{ userSelect: 'none' }}
     color="var(--colors-text-caption)"
     fontSize="12px"
     lineHeight="16px"
     display="inline-block"
+    ref={ref}
     {...props}
   />
-);
-
-export const Title: React.FC<BoxProps> = React.memo(props => (
-  <Text display="inline-block" {...props} color="var(--colors-text-title)" />
 ));
 
-export const SectionTitle: React.FC<BoxProps> = React.memo(props => (
-  <Title lineHeight="28px" fontSize="20px" fontWeight="500" {...props} />
+export const Title: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
+  BoxProps,
+  'span'
+>(({ as, ...props }, ref) => (
+  <Text
+    ref={ref}
+    as={as}
+    display="inline-block"
+    color="var(--colors-text-title)"
+    fontFamily={`"Open Sauce", Inter, sans-serif`}
+    fontWeight={500}
+    {...props}
+  />
 ));
 
-export const Pre = React.memo(
-  React.forwardRef((props: BoxProps, ref) => (
+export const SectionTitle: React.FC<BoxProps> = forwardRefWithAs<BoxProps, 'span'>((props, ref) => (
+  <Title ref={ref} lineHeight="28px" fontSize="20px" fontWeight="500" {...props} />
+));
+
+export const Pre = memoWithAs<BoxProps, 'pre'>(
+  forwardRefWithAs<BoxProps, 'pre'>(({ as = 'pre', ...props }, ref) => (
     <Text
       fontFamily={`"Fira Code", monospace`}
       bg="var(--colors-bg-light)"
@@ -42,15 +60,16 @@ export const Pre = React.memo(
   ))
 );
 
-type LinkProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
-
-export const Link = React.forwardRef(({ _hover = {}, ...props }: LinkProps, ref) => (
-  <Text
-    _hover={{
-      textDecoration: 'underline',
-      ..._hover,
-    }}
-    ref={ref}
-    {...props}
-  />
-));
+export const Link: ForwardRefExoticComponentWithAs<BoxProps, 'a'> = forwardRefWithAs<BoxProps, 'a'>(
+  ({ as = 'a', _hover = {}, ...props }, ref) => (
+    <Text
+      _hover={{
+        textDecoration: 'underline',
+        ..._hover,
+      }}
+      as={as}
+      ref={ref}
+      {...props}
+    />
+  )
+);

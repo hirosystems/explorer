@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Box, CodeBlock, Transition } from '@blockstack/ui';
+import { Box, Transition } from '@stacks/ui';
 import { useRect } from '@reach/rect';
+import { CodeBlock } from '@components/code-block';
 
 export const CodeAccordian = React.memo(
   ({ isOpen, code, language = 'json', isLast, show, note, ...rest }: any) => {
@@ -13,9 +14,9 @@ export const CodeAccordian = React.memo(
 
     return (
       <Transition
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         appear={false}
-        // @ts-ignore
         unmountOnExit={false}
         styles={{
           init: {
@@ -33,15 +34,18 @@ export const CodeAccordian = React.memo(
       >
         {styles => (
           <Box
-            style={{
-              willChange: 'height',
-              overflow: 'hidden',
-              ...styles,
-            }}
+            style={
+              {
+                willChange: 'height',
+                overflow: 'hidden',
+                ...styles,
+              } as any
+            }
           >
             <Box
               borderBottomRightRadius={isLast ? '12px' : 'unset'}
               borderBottomLeftRadius={isLast ? '12px' : 'unset'}
+              bg="ink"
               {...rest}
               ref={ref}
             >
@@ -49,7 +53,7 @@ export const CodeAccordian = React.memo(
                 borderRadius="0"
                 showLineNumbers
                 code={JSON.stringify(code, null, '  ')}
-                language={language as any}
+                language={language}
               />
               {note && note}
             </Box>

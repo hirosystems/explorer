@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, BoxProps, Flex, ChevronIcon } from '@blockstack/ui';
+import { Box, BoxProps, Flex, ChevronIcon } from '@stacks/ui';
 import { FormikHelpers, useField } from 'formik';
 import { Popover } from '@components/popover/popover';
 import { FieldBase } from '@components/sandbox/common';

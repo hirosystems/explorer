@@ -1,7 +1,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { ThemeProvider, CSSReset, theme } from '@blockstack/ui';
-import { createGlobalStyle } from 'styled-components';
+import { theme } from '@stacks/ui';
+import { ThemeProvider } from '@emotion/react';
 import { ProgressBar } from '@components/progress-bar';
 import { ColorModeProvider } from '@components/color-modes';
 
@@ -14,21 +14,6 @@ import { useInterval } from 'react-use';
 const Toaster = dynamic(() => import('../components/toaster'), { ssr: false });
 
 const delay = 20000;
-
-const GlobalStyles = createGlobalStyle`
-  html, body, #__next {
-    height: 100%;
-  }
-  .prism-code *::selection{
-    background-color: #AAB3FF;
-    color: white !important;
-  }
-  
-  .portal{
-  position: relative;
-  z-index: 99;
-  }
-`;
 
 export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = ({ children, colorMode }) => {
   const dispatch = useDispatch();
@@ -59,8 +44,6 @@ export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = ({ childre
     <>
       <ThemeProvider theme={theme}>
         <ColorModeProvider colorMode={colorMode}>
-          <CSSReset />
-          <GlobalStyles />
           <ProgressBar />
           <>{children}</>
           <Toaster />

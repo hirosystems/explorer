@@ -6,9 +6,9 @@ import {
   selectTransactionError,
 } from '@store/transactions';
 
-export const useTransactionState = (txidOrContractName: string) => {
+export const useTransactionState = (txidOrContractName?: string) => {
   const { transaction, loading, error } = useSelector((state: RootState) => ({
-    transaction: selectTransactionByIdOrContractName(txidOrContractName)(state),
+    transaction: selectTransactionByIdOrContractName(txidOrContractName as string)(state),
     loading: selectTransactionLoading(state),
     error: selectTransactionError(state),
   }));

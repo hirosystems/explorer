@@ -1,6 +1,10 @@
 import { Transaction } from '@models/transaction.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
-import { TransactionType } from '@blockstack/stacks-blockchain-sidecar-types';
+import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
+import {
+  MempoolTransactionListResponse,
+  TransactionResults,
+} from '@blockstack/stacks-blockchain-sidecar-types';
 
 export const fetchTx = (apiServer: string) => async (
   txid: Transaction['tx_id']
@@ -17,28 +21,28 @@ export const fetchTx = (apiServer: string) => async (
 
 interface FetchTxListOptions {
   apiServer: string;
-  types: TransactionType[];
+  types?: TransactionType[];
   offset?: number;
-}
-
-interface FetchTxReturnValue {
-  results: Transaction[];
-  total: number;
+  limit?: number;
+  mempool?: boolean;
 }
 
 export const fetchTxList = (options: FetchTxListOptions) => async (): Promise<
-  FetchTxReturnValue
+  TransactionResults | MempoolTransactionListResponse
 > => {
-  const { apiServer, types, offset } = options;
+  const { apiServer, types, offset, limit = 200, mempool } = options;
   const generateTypesQueryString = () => {
     if (types?.length) {
-      return types
+      return `&${types
         .map(type => `${encodeURIComponent('type[]')}=${encodeURIComponent(type)}`)
-        .join('&');
+        .join('&')}`;
     }
+    return '';
   };
   const resp = await fetchFromSidecar(apiServer)(
-    `/tx?${generateTypesQueryString()}&limit=200${offset ? '&offset=' + offset : ''}`
+    `/tx${mempool ? '/mempool' : ''}?limit=${limit}${
+      offset ? '&offset=' + offset : ''
+    }${generateTypesQueryString()}`
   );
   return resp.json();
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Button, Stack } from '@blockstack/ui';
+import { Box, Flex, Button, Stack } from '@stacks/ui';
 import {
   ClarityFunctionArg,
   callReadOnlyFunction,
@@ -202,7 +202,7 @@ export const Function = ({
   return (
     <Card p="base" width="100%" mb={6}>
       <Stack spacing="base">
-        <Flex align="center">
+        <Flex alignItems="center">
           <Text color="var(--colors-text-title)" fontFamily="'Fira Code', monospace">
             ({func.name})
           </Text>

@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { FlexProps } from '@blockstack/ui';
+import { color, FlexProps } from '@stacks/ui';
 
 import { Badge } from '@components/badge';
 import { TransactionType } from '@models/transaction.interface';
 import { getTxTypeName } from '@common/transaction-names';
+import { getTxTypeIcon } from './transaction-item';
 
 export const transactionTypeColor = {
   [TransactionType.SMART_CONTRACT]: '#0F5257',
@@ -13,12 +14,27 @@ export const transactionTypeColor = {
   [TransactionType.POISON_MICROBLOCK]: '#AAA9DD',
 };
 
-interface TagProps extends FlexProps {
+export interface TagProps extends FlexProps {
   type: TransactionType;
+  onClick?: any;
 }
 
-export const Tag = ({ type, ...rest }: TagProps) => (
-  <Badge background={transactionTypeColor[type]} {...rest}>
-    {getTxTypeName(type)}
-  </Badge>
-);
+export const Tag = ({ type, ...rest }: TagProps) => {
+  const Icon = getTxTypeIcon(type);
+  return (
+    <Badge
+      labelProps={{ display: 'flex', alignItems: 'center' }}
+      background={color('bg')}
+      color={color('text-body')}
+      {...rest}
+    >
+      <Icon
+        mr="extra-tight"
+        strokeWidth={1.5}
+        width={type === 'token_transfer' ? '12px' : '16px'}
+        height="auto"
+      />
+      {getTxTypeName(type)}
+    </Badge>
+  );
+};

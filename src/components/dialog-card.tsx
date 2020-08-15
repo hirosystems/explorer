@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, FlexProps } from '@blockstack/ui';
+import { Flex, FlexProps } from '@stacks/ui';
 
 export const DialogCard = (props: FlexProps) => {
   return (
