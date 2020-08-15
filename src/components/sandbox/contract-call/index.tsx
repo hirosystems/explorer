@@ -129,7 +129,7 @@ export const ContractCall: React.FC<any> = ({ showTransactionDialog, ...rest }) 
           in={showSearch}
         >
           {styles => (
-            <Box width="100%" position="absolute" style={styles}>
+            <Box width="100%" position="absolute" style={styles as any}>
               <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
                 {({ handleSubmit, setValues }) => {
                   const handlePaste = (e: any) =>
@@ -214,7 +214,7 @@ export const ContractCall: React.FC<any> = ({ showTransactionDialog, ...rest }) 
               bg="var(--colors-bg)"
               flexShrink={0}
               width="100%"
-              style={{ ...styles }}
+              style={{ ...styles } as any}
             >
               {abi ? (
                 <Box flexGrow={1} mr="base">

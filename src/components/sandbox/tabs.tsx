@@ -19,12 +19,12 @@ export const Tab = ({
   index?: number;
   label: string;
   onClick?: any;
-  isActive: boolean;
+  isActive?: boolean;
 } & BoxProps) => {
   return (
     <Box
       borderBottom={isActive ? '2px solid' : `1px solid`}
-      borderBottomColor={isActive ? 'var(--colors-accent)' : 'var(--colors-border)'}
+      borderBottomColor={isActive ? 'var(--colors-invert)' : 'var(--colors-border)'}
       px="base"
       py="base-tight"
       color={isActive ? 'var(--colors-invert)' : 'var(--colors-text-caption)'}

@@ -63,11 +63,13 @@ const PopoverItemList = React.memo(
         >
           {styles => (
             <Box
-              style={{
-                willChange: 'transform, opacity',
-                borderRadius: '12px',
-                ...styles,
-              }}
+              style={
+                {
+                  willChange: 'transform, opacity',
+                  borderRadius: '12px',
+                  ...styles,
+                } as any
+              }
               position="absolute"
               zIndex={99999999}
               left={placement === 'left' || placement === undefined ? 0 : 'unset'}
@@ -245,9 +247,11 @@ export const Popover = React.memo(
                 zIndex={99}
                 top="64px"
                 left={0}
-                style={{
-                  ...styles,
-                }}
+                style={
+                  {
+                    ...styles,
+                  } as any
+                }
               />
             )}
           </Transition>

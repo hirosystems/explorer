@@ -6,9 +6,11 @@ export interface RowProps extends FlexProps {
   isFirst?: boolean;
   isLast?: boolean;
   copy?: string;
-  label?: {
-    children: any;
-  };
+  label?:
+    | {
+        children: any;
+      }
+    | string;
   render?: any;
   inline?: boolean;
   noTopBorder?: boolean;

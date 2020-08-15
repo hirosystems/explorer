@@ -6,7 +6,8 @@ import { Rows } from '@components/rows';
 import { ContractCard } from '@components/contract-card';
 import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
 import { getMemoString, getContractName, microToStacks, truncateMiddle } from '@common/utils';
-
+import { Link } from '@components/typography';
+import NextLink from 'next/link';
 interface FeeComponentProps {
   fees: string;
   sponsored: boolean;
@@ -39,6 +40,14 @@ const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) =
   );
 };
 
+const AddressComponent = ({ principal }: any) => {
+  return (
+    <NextLink href={`/address/[principal]`} as={`/address/${principal}`} passHref>
+      <Link as="a">{principal}</Link>
+    </NextLink>
+  );
+};
+
 const transformDataToRowData = (d: Transaction) => {
   const txid = {
     label: {
@@ -60,7 +69,7 @@ const transformDataToRowData = (d: Transaction) => {
     label: {
       children: 'Sender address',
     },
-    children: d.sender_address,
+    children: <AddressComponent principal={d.sender_address} />,
     copy: d.sender_address,
   };
   const fees = {
@@ -90,7 +99,7 @@ const transformDataToRowData = (d: Transaction) => {
         label: {
           children: 'Recipient address',
         },
-        children: d.token_transfer.recipient_address,
+        children: <AddressComponent principal={d.token_transfer.recipient_address} />,
       };
 
       const memo = {

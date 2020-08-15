@@ -33,11 +33,13 @@ export const CodeAccordian = React.memo(
       >
         {styles => (
           <Box
-            style={{
-              willChange: 'height',
-              overflow: 'hidden',
-              ...styles,
-            }}
+            style={
+              {
+                willChange: 'height',
+                overflow: 'hidden',
+                ...styles,
+              } as any
+            }
           >
             <Box
               borderBottomRightRadius={isLast ? '12px' : 'unset'}
@@ -49,7 +51,7 @@ export const CodeAccordian = React.memo(
                 borderRadius="0"
                 showLineNumbers
                 code={JSON.stringify(code, null, '  ')}
-                language={language as any}
+                language={language}
               />
               {note && note}
             </Box>

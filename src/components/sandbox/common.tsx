@@ -239,10 +239,12 @@ export const Wrapper = React.memo(
           <>
             <Meta title={`${title} - Stacks Sandbox`} />
             <Flex
-              style={{
-                willChange: 'transform, opacity',
-                ...styles,
-              }}
+              style={
+                {
+                  willChange: 'transform, opacity',
+                  ...styles,
+                } as any
+              }
             >
               <Box
                 flexShrink={0}

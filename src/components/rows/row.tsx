@@ -83,7 +83,7 @@ export const Row: React.FC<RowProps> = React.memo(
         {...bind}
         {...rest}
       >
-        {label ? <RowLabel label={label.children} /> : null}
+        {label ? <RowLabel label={typeof label === 'string' ? label : label.children} /> : null}
         <RowContent isHovered={isHovered} copy={copy}>
           {render || children}
         </RowContent>

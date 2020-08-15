@@ -7,6 +7,8 @@ import Router from 'next/router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { color, ColorsStringLiteral } from '@blockstack/ui';
+import { BorderStyleProperty } from 'csstype';
 
 dayjs.extend(relativeTime);
 
@@ -167,8 +169,21 @@ export const microToStacks = (amountInMicroStacks: string | number): number =>
 
 export const getContractName = (fullyRealizedName: string): string =>
   fullyRealizedName.split('.')[1];
-export const getFungibleAssetName = (assetName: string): string =>
-  getContractName(assetName).split('::')[1];
+
+export const getFungibleAssetName = (fullyRealizedName: string): string =>
+  getContractName(fullyRealizedName).split('::')[1];
+
+export const getAssetNameParts = (fullyRealizedName: string) => {
+  const address = fullyRealizedName.split('.')[0];
+  const contract = getContractName(fullyRealizedName).split('::')[0];
+  const asset = getFungibleAssetName(fullyRealizedName);
+
+  return {
+    address,
+    contract,
+    asset,
+  };
+};
 
 export const getMemoString = (string: string): string | null =>
   string ? Buffer.from(string.replace('0x', ''), 'hex').toString('utf8') : null;
@@ -222,3 +237,9 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
 export const toRelativeTime = (ts: number): string => dayjs().to(ts);
 
 export const isPendingTx = (tx: Transaction): boolean => tx && tx.tx_status === 'pending';
+
+export const border = (
+  _color: ColorsStringLiteral = 'border',
+  width = 1,
+  style: BorderStyleProperty = 'solid'
+): string => `${width}px ${style} ${color(_color)}`;
