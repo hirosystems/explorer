@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Stack } from '@blockstack/ui';
+import { Stack } from '@stacks/ui';
 
 import { TokenTransfers } from '@components/token-transfer';
 import { PageTop } from '@components/page';
 
 import { TransactionType } from '@models/transaction.interface';
 import { TransactionDetails } from '@components/transaction-details';
-import { TokenTransferTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { TokenTransferTransaction } from '@blockstack/stacks-blockchain-api-types';
 
 interface TokenTransferPageProps {
   transaction: TokenTransferTransaction;

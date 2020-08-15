@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Stack, Button, Box } from '@blockstack/ui';
+import { Flex, Stack, Button, Box } from '@stacks/ui';
 import { useSSE } from 'react-hooks-sse';
 
 import { withApiServer } from '@common/constants';

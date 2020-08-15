@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Formik } from 'formik';
-import { Flex, Box, Stack, Button, Transition } from '@blockstack/ui';
+import { Flex, Box, Stack, Button, Transition } from '@stacks/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 
 import { fetchContract, selectContractAbi, selectContractSource } from '@store/contracts';
@@ -129,7 +129,7 @@ export const ContractCall: React.FC<any> = ({ showTransactionDialog, ...rest }) 
           in={showSearch}
         >
           {styles => (
-            <Box width="100%" position="absolute" style={styles}>
+            <Box width="100%" position="absolute" style={styles as any}>
               <Formik enableReinitialize initialValues={initialValues} onSubmit={onSubmit}>
                 {({ handleSubmit, setValues }) => {
                   const handlePaste = (e: any) =>
@@ -214,7 +214,7 @@ export const ContractCall: React.FC<any> = ({ showTransactionDialog, ...rest }) 
               bg="var(--colors-bg)"
               flexShrink={0}
               width="100%"
-              style={{ ...styles }}
+              style={{ ...styles } as any}
             >
               {abi ? (
                 <Box flexGrow={1} mr="base">

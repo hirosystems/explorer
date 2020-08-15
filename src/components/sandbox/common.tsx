@@ -10,15 +10,16 @@ import {
   Stack,
   Transition,
   ChevronIcon,
-} from '@blockstack/ui';
+} from '@stacks/ui';
 import { Field as FormikField, FieldProps, useField } from 'formik';
 import { Alert } from '@components/alert';
 import { CodeEditor } from '@components/code-editor';
 import { Meta } from '@components/meta-head';
 import { Caption, Title } from '@components/typography';
 import { Ref } from 'react';
+import { forwardRefWithAs } from '@stacks/ui-core';
 
-export const Input = React.forwardRef((props: InputProps, ref) => (
+export const Input = forwardRefWithAs<InputProps, 'input'>((props, ref) => (
   <InputBase
     bg="transparent"
     color="var(--colors-text-body)"
@@ -122,7 +123,6 @@ export const FieldBase = React.forwardRef(
             value={value || ''}
             onChange={onChange}
             id={name}
-            // @ts-ignore
             onBlur={onBlur}
             ref={ref}
             maxHeight={maxHeight}
@@ -187,34 +187,25 @@ export const Field = ({ name, value, ...props }: any) => (
   <FormikField name={name} {...props} component={FieldForFormik} />
 );
 
-export const Wrapper = React.memo(
-  ({
-    title,
-    children,
-    loading,
-    error,
-    isVisible,
-    clearError,
-    subtitle,
-    ...rest
-  }: {
-    title: string;
-    loading?: boolean;
-    error?: string;
-    isVisible: boolean;
-    clearError?: () => void;
-    subtitle?: {
-      onClick: () => void;
-      label: string;
-      icon?: any;
-    };
-  } & BoxProps) => {
+type WrapperProps = {
+  title: string;
+  loading?: boolean;
+  error?: string;
+  isVisible: boolean;
+  clearError?: () => void;
+  subtitle?: {
+    onClick: () => void;
+    label: string;
+    icon?: any;
+  };
+} & BoxProps;
+export const Wrapper: React.FC<WrapperProps> = React.memo(
+  ({ title, children, loading, error, isVisible, clearError, subtitle, ...rest }) => {
     return (
       <Transition
         styles={{
           init: {
             width: '100%',
-
             opacity: 0,
             position: 'absolute',
             transform: 'translateY(5px)',
@@ -227,7 +218,6 @@ export const Wrapper = React.memo(
           },
           exiting: {
             width: '100%',
-
             opacity: 0,
             position: 'absolute',
             transform: 'translateY(10px)',
@@ -239,10 +229,12 @@ export const Wrapper = React.memo(
           <>
             <Meta title={`${title} - Stacks Sandbox`} />
             <Flex
-              style={{
-                willChange: 'transform, opacity',
-                ...styles,
-              }}
+              style={
+                {
+                  willChange: 'transform, opacity',
+                  ...styles,
+                } as any
+              }
             >
               <Box
                 flexShrink={0}
@@ -263,7 +255,7 @@ export const Wrapper = React.memo(
                           textDecoration: 'underline',
                         }}
                         mt="tight"
-                        align="center"
+                        alignItems="center"
                         onClick={subtitle.onClick}
                       >
                         <Caption

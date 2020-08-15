@@ -1,7 +1,7 @@
 import * as React from 'react';
 import BigNum from 'bn.js';
 import { Formik } from 'formik';
-import { Flex, Box, Stack, Button } from '@blockstack/ui';
+import { Flex, Box, Stack, Button } from '@stacks/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 import { network } from '@common/sandbox';
 import { fetchTransaction } from '@store/transactions';

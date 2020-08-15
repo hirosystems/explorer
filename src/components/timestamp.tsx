@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Flex, Text, FlexProps } from '@blockstack/ui';
-import { ClockIcon } from '@components/svg';
+
+import { Flex, FlexProps, Text } from '@stacks/ui';
+
+import { ClockIcon } from '@components/icons/clock';
 import { Tooltip } from '@components/tooltip';
 import { toRelativeTime } from '@common/utils';
 
@@ -21,8 +23,8 @@ export const Timestamp: React.FC<TimestampProps> = ({ ts, noTooltip, ...props })
   const readableTimestamp = ts ? new Date(ts * 1000).toISOString() : '';
 
   const timestampElem = (
-    <Flex align="center" {...props}>
-      <ClockIcon mr="extra-tight" opacity={0.5} />
+    <Flex alignItems="center" {...props}>
+      <ClockIcon size="16px" mr="extra-tight" />
       <Text color="currentColor">{toRelativeTime(ts * 1000)}</Text>
     </Flex>
   );

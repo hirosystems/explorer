@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { txAdapter } from '@store/transactions/reducer';
 import { RootState } from '@store';
 import { Transaction } from '@models/transaction.interface';
-import type { SmartContractTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import type { SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
 
 const selectors = txAdapter.getSelectors();
 

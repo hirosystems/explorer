@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { FlexProps, BoxProps } from '@blockstack/ui';
+import { FlexProps, BoxProps } from '@stacks/ui';
 import {
   TokenTransferTransaction,
   TransactionEvent,
-} from '@blockstack/stacks-blockchain-sidecar-types';
+} from '@blockstack/stacks-blockchain-api-types';
 
 export interface AssetType {
   asset_event_type?: 'transfer' | 'mint' | 'burn';
@@ -20,10 +20,14 @@ export interface TokenTransferItemProps extends FlexProps {
   length?: number;
 }
 
-export interface BottomButtonProps extends FlexProps {
+interface BottomButtonPropsBase {
   label: string;
+  onClick?: any;
   icon: React.FC;
 }
+
+export type BottomButtonProps = FlexProps & BottomButtonPropsBase;
+
 export interface TokenTransferProps extends BoxProps {
   events?: TokenTransferTransaction['events'];
 }

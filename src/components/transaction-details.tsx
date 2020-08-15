@@ -1,11 +1,22 @@
 import * as React from 'react';
-import { Box, Flex, Text } from '@blockstack/ui';
+
+import { Box, Flex, Text, color } from '@stacks/ui';
+import {
+  border,
+  getContractName,
+  getMemoString,
+  microToStacks,
+  truncateMiddle,
+} from '@common/utils';
+
 import { Badge } from '@components/badge';
-import { Timestamp } from '@components/timestamp';
-import { Rows } from '@components/rows';
 import { ContractCard } from '@components/contract-card';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { getMemoString, getContractName, microToStacks, truncateMiddle } from '@common/utils';
+import { Link } from '@components/typography';
+import NextLink from 'next/link';
+import { Rows } from '@components/rows';
+import { Timestamp } from '@components/timestamp';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Section } from '@components/section';
 
 interface FeeComponentProps {
   fees: string;
@@ -39,6 +50,14 @@ const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) =
   );
 };
 
+const AddressComponent = ({ principal }: any) => {
+  return (
+    <NextLink href={`/address/[principal]`} as={`/address/${principal}`} passHref>
+      <Link as="a">{principal}</Link>
+    </NextLink>
+  );
+};
+
 const transformDataToRowData = (d: Transaction) => {
   const txid = {
     label: {
@@ -60,7 +79,7 @@ const transformDataToRowData = (d: Transaction) => {
     label: {
       children: 'Sender address',
     },
-    children: d.sender_address,
+    children: <AddressComponent principal={d.sender_address} />,
     copy: d.sender_address,
   };
   const fees = {
@@ -90,7 +109,7 @@ const transformDataToRowData = (d: Transaction) => {
         label: {
           children: 'Recipient address',
         },
-        children: d.token_transfer.recipient_address,
+        children: <AddressComponent principal={d.token_transfer.recipient_address} />,
       };
 
       const memo = {
@@ -124,7 +143,7 @@ interface TransactionDetailsProps {
   contractMeta?: string;
 }
 
-const getContractId = (transaction: Transaction) => {
+export const getContractId = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'contract_call':
       return transaction.contract_call.contract_id;
@@ -135,31 +154,32 @@ const getContractId = (transaction: Transaction) => {
   }
 };
 
-export const TransactionDetails = ({
+export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   transaction,
   hideContract,
   contractMeta,
+  contractName,
   ...rest
-}: TransactionDetailsProps) => {
+}) => {
   const contractId = getContractId(transaction);
   return (
-    <Flex align="flex-start" flexDirection={['column', 'column', 'row']} {...rest}>
-      <Box
-        width={['100%']}
-        order={[2, 2, 0]}
-        mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
-      >
-        <Rows items={transformDataToRowData(transaction)} />
-      </Box>
-      {hideContract || !contractId ? null : (
-        <ContractCard
-          title={getContractName(contractId)}
-          meta={contractMeta}
-          contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
-          order={[0, 0, 2]}
-          mb={['loose', 'loose', 'unset']}
-        />
-      )}
-    </Flex>
+    <Section title="Summary" {...rest}>
+      <Flex pb="base" px="base" width="100%" flexDirection={['column', 'column', 'row']}>
+        <Box width={['100%']} order={[2, 2, 0]}>
+          <Rows noTopBorder items={transformDataToRowData(transaction)} />
+        </Box>
+        {hideContract || !contractId ? null : (
+          <ContractCard
+            ml="base"
+            my="base"
+            title={getContractName(contractId)}
+            meta={contractMeta}
+            contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
+            order={[0, 0, 2]}
+            mb={['loose', 'loose', 'unset']}
+          />
+        )}
+      </Flex>
+    </Section>
   );
 };

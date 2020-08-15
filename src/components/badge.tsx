@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Flex, Text, BoxProps, FlexProps } from '@blockstack/ui';
+import { Flex, Text, BoxProps, FlexProps } from '@stacks/ui';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
 const Label: React.FC<BoxProps> = props => (
   <Text
@@ -12,16 +13,20 @@ const Label: React.FC<BoxProps> = props => (
   />
 );
 
-export const Badge: React.FC<FlexProps> = ({ children, ...rest }) => (
+export const Badge: ForwardRefExoticComponentWithAs<
+  FlexProps & { labelProps?: BoxProps },
+  'div'
+> = forwardRefWithAs(({ children, labelProps = {}, ...rest }, ref) => (
   <Flex
-    align="center"
+    alignItems="center"
     justify="center"
     borderRadius="24px"
     py="extra-tight"
-    px={['tight', 'tight', 'base']}
+    px={['tight', 'tight', 'base-tight']}
     color="white"
+    ref={ref}
     {...rest}
   >
-    <Label>{children}</Label>
+    <Label {...labelProps}>{children}</Label>
   </Flex>
-);
+));

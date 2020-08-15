@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHover, useFocus } from 'use-events';
-import { FlexProps, BoxProps, useEventListener } from '@blockstack/ui';
+import { FlexProps, BoxProps, useEventListener } from '@stacks/ui';
 import { Transaction } from '@models/transaction.interface';
 import { TxItem } from '@components/transaction-item';
 import { TxLink } from '@components/links';
@@ -66,16 +66,17 @@ export const RecentlyViewedListItem = ({
   return (
     <TxLink txid={option.tx_id}>
       <TxItem
-        borderBottom={isLast ? null : '1px solid var(--colors-border)'}
+        borderBottom={isLast ? undefined : '1px solid var(--colors-border)'}
         {...bindHover}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        tabIndex={0}
-        {...rest}
+        tabIndex="0"
+        {...(rest as any)}
         ref={ref}
         tx={option}
         isFocused={focused || isFocused}
         isHovered={isHovered}
+        minimal
         _hover={{
           bg: 'var(--colors-bg-alt)',
         }}

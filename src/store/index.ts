@@ -6,6 +6,7 @@ import { transactions } from '@store/transactions';
 import { sandbox } from '@store/sandbox';
 import { uiReducer } from '@store/ui';
 import { contracts } from '@store/contracts';
+import { blocks } from '@store/blocks';
 
 let middleware = getDefaultMiddleware({ thunk: true });
 
@@ -14,6 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const rootReducer = combineReducers({
+  blocks,
   transactions,
   contracts,
   sandbox,

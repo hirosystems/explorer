@@ -1,82 +1,95 @@
 import React from 'react';
 import Link from 'next/link';
-import { Text, Box, Flex, BoxProps, color, FlexProps } from '@blockstack/ui';
+import { Text, Box, Flex, BoxProps, color, FlexProps } from '@stacks/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
-const FooterLink: React.FC<BoxProps> = React.memo(({ children, ...rest }) => (
-  <Text
-    cursor="pointer"
-    textStyle="body.small"
-    color={color('text-caption')}
-    _hover={{ textDecoration: 'underline' }}
-    {...rest}
-  >
-    {children}
-  </Text>
-));
+const LinkWrapper: React.FC<any> = ({ children, href }) => {
+  return href ? (
+    <Link href={href} passHref>
+      {children}
+    </Link>
+  ) : (
+    children
+  );
+};
 
-const ColorModeLink = React.memo(({ ...rest }) => {
-  const { toggleColorMode, colorMode } = useColorMode();
+type FooterLinkProps = { onClick?: any } & BoxProps;
+
+const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = forwardRefWithAs<
+  FooterLinkProps,
+  'a'
+>(({ as = 'a', children, ...rest }, ref) => {
+  const externalProps =
+    rest.href && !rest.href.startsWith('/') ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+
+  return (
+    <LinkWrapper href={rest.href}>
+      <Text
+        cursor="pointer"
+        textStyle="body.small"
+        color={color('text-caption')}
+        textDecoration="none"
+        _hover={{ textDecoration: 'underline' }}
+        ref={ref}
+        as={as}
+        {...rest}
+        {...externalProps}
+      >
+        {children}
+      </Text>
+    </LinkWrapper>
+  );
+});
+
+const ColorModeLink = ({ ...rest }) => {
+  const [colorMode, toggleColorMode] = useColorMode();
   return colorMode ? (
     <FooterLink onClick={toggleColorMode} {...rest}>
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
     </FooterLink>
   ) : null;
-});
+};
 
 const LinkInNewWindow = React.memo(
-  React.forwardRef((props: any, ref: any) => (
-    <Text as="a" target="_blank" rel="noopener noreferrer" ref={ref} {...props} />
-  ))
+  React.forwardRef((props: any, ref: any) => <Text as="a" ref={ref} {...props} />)
 );
 
-export const Footer = React.memo((props: FlexProps & { fullWidth?: boolean }) => {
+export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWidth?: boolean }) => {
   return (
     <Box width="100%" {...props}>
       <Flex
         pt="base"
         flexDir={['column', 'column', 'row']}
-        align={['center', 'center', 'unset']}
+        alignItems={['center', 'center', 'unset']}
         textAlign={['center', 'center', 'unset']}
         borderTop="1px solid var(--colors-border)"
-        px={props.fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}
+        px={fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}
       >
         <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
-          <FooterLink mr="base">
-            <Link href="/transactions" passHref>
-              <Text as="a">Recent transactions</Text>
-            </Link>
+          <FooterLink mr="base" href="/transactions">
+            Recent transactions
           </FooterLink>
-          <FooterLink mr="base">
-            <Link href="/sandbox" passHref>
-              <Box as="a">Sandbox</Box>
-            </Link>
+          <FooterLink href="/sandbox" mr="base">
+            Sandbox
           </FooterLink>
           <ColorModeLink />
         </Flex>
 
         <Flex ml={['unset', 'unset', 'auto']}>
-          <FooterLink mr="base">
-            <LinkInNewWindow href="https://blocksurvey.io/survey/1Pb7eeibpfM98hRKBfMUULYCh9BivxE86q/1128356d-4048-48ca-a456-052ef8c5526e">
-              Give feedback
-            </LinkInNewWindow>
+          <FooterLink
+            mr="base"
+            href="https://blocksurvey.io/survey/1Pb7eeibpfM98hRKBfMUULYCh9BivxE86q/1128356d-4048-48ca-a456-052ef8c5526e"
+          >
+            Give feedback
           </FooterLink>
-          <FooterLink mr="base">
-            <LinkInNewWindow href="https://www2.blockstack.org/explorer/faq">FAQ</LinkInNewWindow>
+          <FooterLink mr="base" href="https://www2.blockstack.org/explorer/faq">
+            FAQ
           </FooterLink>
-          <FooterLink mr="base">
-            <LinkInNewWindow href="https://github.com/blockstack/explorer/">GitHub</LinkInNewWindow>
+          <FooterLink mr="base" href="https://github.com/blockstack/explorer/">
+            GitHub
           </FooterLink>
-          <FooterLink mr="base">
-            <LinkInNewWindow href="https://blockstack.org/legal/privacy-policy">
-              Privacy policy
-            </LinkInNewWindow>
-          </FooterLink>
-          <FooterLink>
-            <LinkInNewWindow href="https://blockstack.org/legal/terms-of-use">
-              Terms
-            </LinkInNewWindow>
-          </FooterLink>
+          <FooterLink href="https://www.blockstack.org/p/terms-privacy">Terms & Privacy</FooterLink>
         </Flex>
       </Flex>
     </Box>

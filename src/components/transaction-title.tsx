@@ -1,19 +1,19 @@
 import * as React from 'react';
-import { Box, Stack, BoxProps } from '@blockstack/ui';
 
+import { Box, BoxProps, Stack, StackProps } from '@stacks/ui';
 import { Status, Statuses } from '@components/status';
-import { Tag } from '@components/tags';
-import { Title } from '@components/typography';
+import { Tag, TagProps } from '@components/tags';
 
+import { Title } from '@components/typography';
 import { TransactionType } from '@models/transaction.interface';
 
-export interface TitleProps extends BoxProps {
+export interface TitleProps {
   status: Statuses;
   type: TransactionType | TransactionType[];
   contractName?: string;
 }
 
-const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] }) =>
+const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] } & BoxProps) =>
   Array.isArray(type) ? (
     <Box {...rest}>
       <Stack isInline spacing="tight">
@@ -23,10 +23,10 @@ const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] }) 
       </Stack>
     </Box>
   ) : (
-    <Tag type={type} {...rest} />
+    <Tag type={type} {...(rest as Omit<TagProps, 'type'>)} />
   );
 
-const TitleDetail = ({ status, type, ...rest }: TitleProps) => (
+const TitleDetail = ({ status, type, contractName, ...rest }: TitleProps & BoxProps) => (
   <Box {...rest}>
     <Stack isInline spacing="tight">
       <Tags type={type} />
@@ -35,13 +35,16 @@ const TitleDetail = ({ status, type, ...rest }: TitleProps) => (
   </Box>
 );
 
-export const TransactionTitle = ({ status, type, ...rest }: TitleProps) => (
+export const TransactionTitle = ({
+  status,
+  type,
+  contractName,
+  ...rest
+}: TitleProps & StackProps) => (
   <Stack spacing="base" {...rest}>
-    <Box>
-      <Title as="h1" textStyle="display.large" fontSize="36px">
-        Transaction details
-      </Title>
-    </Box>
+    <Title as="h1" fontSize="36px" color="white" mt="72px">
+      Transaction details
+    </Title>
     <TitleDetail status={status} type={type} />
   </Stack>
 );

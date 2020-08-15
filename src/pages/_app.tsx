@@ -8,8 +8,10 @@ import { parseCookies } from 'nookies';
 import getConfig from 'next/config';
 import { selectNetwork, setNetworks, setEnv } from '@store/ui/actions';
 import { COLOR_MODE_COOKIE, NETWORK_COOKIE } from '@common/utils';
-import 'typeface-inter';
-import 'typeface-fira-code';
+import 'modern-normalize/modern-normalize.css';
+
+import { CacheProvider } from '@emotion/react';
+import { cache } from '@emotion/css';
 
 interface MyAppProps {
   colorMode?: 'light' | 'dark';
@@ -55,11 +57,13 @@ class MyApp extends App<MyAppProps & ReduxWrapperAppProps<RootState>> {
   render() {
     const { Component, pageProps, colorMode, store } = this.props;
     return (
-      <Provider store={store}>
-        <AppWrapper colorMode={colorMode}>
-          <Component {...pageProps} />
-        </AppWrapper>
-      </Provider>
+      <CacheProvider value={cache}>
+        <Provider store={store}>
+          <AppWrapper colorMode={colorMode}>
+            <Component {...pageProps} />
+          </AppWrapper>
+        </Provider>
+      </CacheProvider>
     );
   }
 }

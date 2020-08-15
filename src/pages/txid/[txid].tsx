@@ -1,21 +1,24 @@
-import React from 'react';
-import { Transaction } from '@models/transaction.interface';
-import { fetchTransaction } from '@store/transactions';
-import { ReduxNextPageContext } from '@common/types/next-store';
-import { useTransactionState } from '@common/hooks/use-transaction-state';
-import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
-import { truncateMiddle, toRelativeTime } from '@common/utils';
-import { useDispatch } from 'react-redux';
-import { PageWrapper } from '@components/page';
-import { Meta } from '@components/meta-head';
+import { NextPage, NextPageContext } from 'next';
+import { toRelativeTime, truncateMiddle } from '@common/utils';
+
 import CoinbasePage from '@components/tx/coinbase';
-import TokenTransferPage from '@components/tx/token-transfer';
-import SmartContractPage from '@components/tx/smart-contract';
-import PoisonMicroblockPage from '@components/tx/poison-microblock';
 import ContractCallPage from '@components/tx/contract-call';
+import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { Meta } from '@components/meta-head';
+import { PageWrapper } from '@components/page';
+import PoisonMicroblockPage from '@components/tx/poison-microblock';
+import React from 'react';
+import { ReduxNextPageContext } from '@common/types/next-store';
+import SmartContractPage from '@components/tx/smart-contract';
+import TokenTransferPage from '@components/tx/token-transfer';
+import { Transaction } from '@models/transaction.interface';
 import { TxNotFound } from '@components/tx/not-found';
+import { fetchTransaction } from '@store/transactions';
 import { getTxTypeName } from '@common/transaction-names';
+import { useDispatch } from 'react-redux';
+import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import { useRefreshPendingTx } from '@common/hooks/use-refresh-pending-tx';
+import { useTransactionState } from '@common/hooks/use-transaction-state';
 
 const renderTxComponent = (transaction: Transaction) => {
   switch (transaction.tx_type) {
@@ -34,7 +37,10 @@ const renderTxComponent = (transaction: Transaction) => {
   }
 };
 
-const TransactionMeta = ({ transaction }: any) => {
+interface TransactionMetaProps {
+  transaction: MempoolTransaction | Transaction;
+}
+const TransactionMeta: React.FC<TransactionMetaProps> = ({ transaction }) => {
   const ogTitle = `${getTxTypeName(transaction.tx_type)}${
     transaction.tx_id && ` transaction: ${truncateMiddle(transaction.tx_id, 10)}`
   }`;
@@ -43,14 +49,17 @@ const TransactionMeta = ({ transaction }: any) => {
   const ogDescription = `
     ${subject} initiated by ${transaction.sender_address}`;
 
-  const labels = [
-    {
-      label: 'Confirmation',
-      data: `${toRelativeTime(transaction?.burn_block_time * 1000)}, in block #${
-        transaction.block_height
-      }`,
-    },
-  ];
+  const labels =
+    'burn_block_time' in transaction
+      ? [
+          {
+            label: 'Confirmation',
+            data: `${toRelativeTime(transaction?.burn_block_time * 1000)}, in block #${
+              transaction.block_height
+            }`,
+          },
+        ]
+      : undefined;
 
   return (
     <Meta
@@ -65,16 +74,21 @@ const TransactionMeta = ({ transaction }: any) => {
   );
 };
 
-const TransactionPage = ({ txid }: { txid: string }) => {
+const TransactionPage: NextPage<{ txid?: string }> = ({ txid }) => {
   const dispatch = useDispatch();
-  const { transaction, loading, error } = useTransactionState(txid as string);
+  const { transaction, loading, error } = useTransactionState(txid);
 
-  useRefreshPendingTx(txid);
+  txid && useRefreshPendingTx(txid);
   useRecentlyViewedTx(transaction);
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   const handleRefresh = async (query?: string) => {
     if (!loading) {
-      return dispatch(fetchTransaction(query || txid));
+      return query
+        ? dispatch(fetchTransaction(query))
+        : txid
+        ? dispatch(fetchTransaction(txid))
+        : undefined;
     }
   };
 
@@ -93,14 +107,19 @@ const TransactionPage = ({ txid }: { txid: string }) => {
   );
 };
 
-TransactionPage.getInitialProps = async ({ store, query }: ReduxNextPageContext) => {
+TransactionPage.getInitialProps = async ({
+  store,
+  query,
+}: NextPageContext & ReduxNextPageContext): Promise<{ txid?: string }> => {
   const { txid } = query;
   const { dispatch } = store;
   if (txid) {
     await dispatch(fetchTransaction(txid.toString()));
     return { txid: txid.toString() };
   }
-  return {};
+  return {
+    txid: undefined,
+  };
 };
 
 export default TransactionPage;

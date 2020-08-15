@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@blockstack/ui';
+import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@stacks/ui';
 import { Caption, Title, Text } from '@components/typography';
 import { useRefreshPendingTx } from '@common/hooks/use-refresh-pending-tx';
 import { Card } from '@components/card';
@@ -24,12 +24,12 @@ export const TxItem = ({ txid, isLast, ...rest }: any) => {
     <Flex
       borderBottom={!isLast ? `1px solid ${color('border')}` : undefined}
       _hover={{ bg: color('bg-alt'), cursor: 'pointer' }}
-      align="center"
+      alignItems="center"
       {...rest}
     >
       <TxLink txid={txid}>
         {transaction ? (
-          <Flex width="100%" align="center">
+          <Flex width="100%" alignItems="center">
             <TransactionItem flexGrow={1} as="a" tx={transaction} target="_blank" />
             {transaction.tx_status === 'pending' ? (
               <Box pt="2px" opacity={0.5} mr="base" color={color('invert')}>
@@ -38,7 +38,7 @@ export const TxItem = ({ txid, isLast, ...rest }: any) => {
             ) : null}
           </Flex>
         ) : (
-          <Flex align="center" p="base">
+          <Flex alignItems="center" p="base">
             <Box mr="tight">
               <Spinner size="sm" />
             </Box>
@@ -96,7 +96,7 @@ export const TransactionsCard = ({ loading, visible, identity, hide, ...rest }: 
                 />
               ))
           ) : (
-            <Flex p="loose" flexGrow={1} align="center" justify="center">
+            <Flex p="loose" flexGrow={1} alignItems="center" justify="center">
               <Box>
                 <Caption>No Transactions</Caption>
               </Box>

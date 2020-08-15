@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Stack, BoxProps } from '@blockstack/ui';
+import { Box, Flex, Stack, BoxProps } from '@stacks/ui';
 import { Text } from '@components/typography';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { IdentityPayload } from '@store/sandbox/types';
@@ -19,12 +19,12 @@ export const Tab = ({
   index?: number;
   label: string;
   onClick?: any;
-  isActive: boolean;
+  isActive?: boolean;
 } & BoxProps) => {
   return (
     <Box
       borderBottom={isActive ? '2px solid' : `1px solid`}
-      borderBottomColor={isActive ? 'var(--colors-accent)' : 'var(--colors-border)'}
+      borderBottomColor={isActive ? 'var(--colors-invert)' : 'var(--colors-border)'}
       px="base"
       py="base-tight"
       color={isActive ? 'var(--colors-invert)' : 'var(--colors-text-caption)'}
@@ -69,7 +69,7 @@ export const Tabs = React.memo(
     const clearErrors = useClearErrors();
 
     const handleClick = React.useCallback((path: string) => {
-      router.push(`/sandbox?tab=${path}`, `/sandbox?tab=${path}`, { shallow: true });
+      void router.push(`/sandbox?tab=${path}`, `/sandbox?tab=${path}`, { shallow: true });
       setTab(path);
       clearErrors();
     }, []);
@@ -101,7 +101,7 @@ export const Tabs = React.memo(
           <Flex position="relative" maxHeight="calc(100% - 51px)" flexGrow={1}>
             {tabs.map((tab, key: number) => {
               const PathComponent = tab.component;
-              return (
+              return PathComponent ? (
                 <PathComponent
                   showTransactionDialog={showTransactionDialog}
                   identity={identity}
@@ -109,7 +109,7 @@ export const Tabs = React.memo(
                   title={tab.label}
                   key={key}
                 />
-              );
+              ) : null;
             })}
           </Flex>
         </Flex>
