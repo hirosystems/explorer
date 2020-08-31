@@ -2,7 +2,7 @@ import {
   TransactionEvent,
   TransactionEventAssetType,
   TransactionType,
-} from '@blockstack/stacks-blockchain-sidecar-types';
+} from '@blockstack/stacks-blockchain-api-types';
 import { AssetType } from '@components/token-transfer/types';
 import { LogIcon, BurnIcon, MintIcon, TransferIcon } from '@components/svg';
 

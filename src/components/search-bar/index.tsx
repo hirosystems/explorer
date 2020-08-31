@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { forwardRef, Ref } from 'react';
-import { Box, Input, Text } from '@blockstack/ui';
+import { Box, Input, Text } from '@stacks/ui';
 import { MagnifyingGlass } from '../icons/magnifying-glass';
 import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 import debounce from 'just-debounce-it';
@@ -10,9 +10,13 @@ import { Error } from '@components/search-bar/error';
 import Router, { useRouter } from 'next/router';
 import { Popover } from '@components/popover/popover';
 import { RecentlyViewedListItem } from '@components/recently-viewed';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
-export const SearchBar = forwardRef(
+export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> = forwardRefWithAs<
+  SearchBarProps,
+  'div'
+>(
   (
     {
       onChange,
@@ -24,8 +28,8 @@ export const SearchBar = forwardRef(
       small,
       transform,
       ...rest
-    }: SearchBarProps,
-    ref: Ref<HTMLDivElement>
+    },
+    ref
   ) => {
     const inputOffset = small ? '38px' : '50px';
     return (
@@ -34,12 +38,11 @@ export const SearchBar = forwardRef(
           position="relative"
           width="100%"
           height={height || '64px'}
-          borderRadius="6px"
-          bg={small ? 'var(--colors-bg-alt)' : 'var(--colors-bg)'}
+          borderRadius="12px"
+          bg="rgba(255,255,255,0.08)"
         >
           <Text
             as="label"
-            // @ts-ignore
             htmlFor="txSearchBar"
             display="block"
             position="absolute"
@@ -53,6 +56,7 @@ export const SearchBar = forwardRef(
             p={0}
             top={0}
             left={0}
+            width="100%"
             pr="base"
             right={0}
             bottom={0}
@@ -63,16 +67,18 @@ export const SearchBar = forwardRef(
             lineHeight="20px"
             fontSize="inherit"
             position="absolute"
+            borderRadius="12px"
             onChange={onChange}
             backgroundColor="transparent"
             color="var(--colors-text-body)"
-            borderColor="var(--colors-border)"
+            borderColor="rgba(255,255,255,0.12)"
             _placeholder={{ color: 'var(--colors-text-caption)' }}
-            placeholder="Enter a txid or contract name."
+            placeholder="Search for transactions, contracts, and addresses"
             _hover={{
-              borderColor: 'var(--colors-border)',
+              borderColor: 'rgba(255,255,255,0.25)',
             }}
             _focus={{
+              borderColor: 'rgba(170, 179, 255, 0.75)',
               boxShadow: error
                 ? `0 0 0 3px rgba(212, 0, 26, 0.5)`
                 : `0 0 0 3px rgba(170, 179, 255, 0.5)`,
@@ -81,7 +87,6 @@ export const SearchBar = forwardRef(
               error ? `0 0 0 3px rgba(212, 0, 26, 0.5)` : `0 0 0 3px rgba(170, 179, 255, 0)`
             }
             ref={ref}
-            // @ts-ignore
             autoComplete="off"
           />
           <MagnifyingGlass
@@ -187,7 +192,6 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
         position="relative"
         width="100%"
         as="form"
-        // @ts-ignore
         autoComplete="off"
         onSubmit={handleOnSubmit}
         {...boxProps}
@@ -199,7 +203,6 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
           error={error}
           value={query}
           small={small}
-          // @ts-ignore
           ref={inputRef}
           {...props}
         />

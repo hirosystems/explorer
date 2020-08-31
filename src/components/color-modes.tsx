@@ -1,9 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { css, Global } from '@emotion/react';
 import { themeGet } from '@styled-system/theme-get';
 import { colorModeStorage, COLOR_MODE_COOKIE } from '@common/utils';
 import { useMediaQuery } from '@common/hooks/use-media-query';
-import { Theme } from '@blockstack/ui';
+import { theme } from '@stacks/ui';
+import { Theme } from '@stacks/ui-core';
 
 export const colorGet = (path: string, fallback?: string): ((props: any) => any) =>
   themeGet('colors.' + path, fallback);
@@ -97,60 +98,80 @@ export const color = (name: ColorsStringLiteral): string => {
 
 const generateCssVariables = (mode: 'light' | 'dark') => ({ colorMode = mode, ...rest }: any) =>
   colorMap({ colorMode, ...rest }).map((key: ColorsStringLiteral) => {
-    return `--colors-${key}: ${colorModeStyles({ colorMode, ...rest })[key]};`;
+    return `--colors-${key}: ${colorModeStyles({ colorMode, ...rest })[key]}`;
   });
 
-export const ColorModes = createGlobalStyle`
-  :root{
-    ${generateCssVariables('light')};
-  }
+export const LightMode = (
+  <Global
+    styles={css`
+      :root {
+        ${generateCssVariables('light')({ colorMode: 'light', theme })};
+        --colors-highlight-line-bg: rgba(255, 255, 255, 0.08);
+      }
+    `}
+  />
+);
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      ${generateCssVariables('dark')};
-    }
-  }
-  
-  @media (prefers-color-scheme: light) {
-    :root {
-      ${generateCssVariables('light')};
-    }
-  }
-  
-  html, body, #__next {
-    background: var(--colors-bg);
-    border-color: var(--colors-border);
-  }
+export const DarkMode = (
+  <Global
+    styles={css`
+      :root {
+        ${generateCssVariables('dark')({ colorMode: 'dark', theme })};
+        --colors-highlight-line-bg: rgba(255, 255, 255, 0.05);
+      }
+    `}
+  />
+);
 
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus,
-  select:-webkit-autofill,
-  select:-webkit-autofill:hover,
-  select:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--colors-text-body);
-    font-size: 16px !important;
-    transition: background-color 5000s ease-in-out 0s;
-  }
-  
-  input:-ms-input-placeholder,
-  textarea:-ms-input-placeholder {
-    color: var(--colors-input-placeholder) !important;
-  }
+export const Base = (
+  <Global
+    styles={css`
+      * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      html,
+      body,
+      #__next {
+        background: var(--colors-bg);
+        border-color: var(--colors-border);
 
-  input::-ms-input-placeholder,
-  textarea::-ms-input-placeholder {
-    color:  var(--colors-input-placeholder) !important;
-  }
+        &.light {
+          ${generateCssVariables('light')({ colorMode: 'light', theme })};
+          --colors-highlight-line-bg: rgba(255, 255, 255, 0.08);
+          * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+        }
+        &.dark {
+          ${generateCssVariables('dark')({ colorMode: 'dark', theme })};
+          --colors-highlight-line-bg: rgba(255, 255, 255, 0.04);
+          * {
+            -webkit-font-smoothing: subpixel-antialiased;
+            -moz-osx-font-smoothing: auto;
+          }
+        }
+      }
+    `}
+  />
+);
 
-  input::placeholder,
-  textarea::placeholder {
-    color:  var(--colors-input-placeholder) !important;
-  }
-  `;
+export const ColorModes = (
+  <>
+    <style
+      data-emotion-css={'css-global ' + DarkMode.props.styles.name}
+      dangerouslySetInnerHTML={{ __html: DarkMode.props.styles.styles }}
+      media="(prefers-color-scheme: dark)"
+    />
+    <style
+      data-emotion-css={'css-global ' + LightMode.props.styles.name}
+      dangerouslySetInnerHTML={{ __html: LightMode.props.styles.styles }}
+      media="(prefers-color-scheme: light)"
+    />
+    {Base}
+  </>
+);
 
 export const ColorModeContext = React.createContext<{ colorMode?: string; toggleColorMode?: any }>({
   colorMode: undefined,
@@ -202,7 +223,7 @@ export const ColorModeProvider = ({
 
   return (
     <ColorModeContext.Provider value={{ colorMode: mode, toggleColorMode }}>
-      <ColorModes colorMode={mode} />
+      {/*<ColorModes colorMode={mode} />*/}
       {children}
     </ColorModeContext.Provider>
   );

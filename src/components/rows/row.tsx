@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Ref } from 'react';
-import { Box, Flex, useClipboard } from '@blockstack/ui';
+import { Box, Flex, useClipboard } from '@stacks/ui';
 import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
 import { useHover } from 'use-events';
@@ -13,7 +13,7 @@ export const RowWrapper: React.FC<RowWrapperProps> = ({
   ...props
 }) => (
   <Flex
-    direction={inline ? 'column' : ['column', 'column', 'row']}
+    flexDirection={inline ? 'column' : ['column', 'column', 'row']}
     py={['base', 'base', 'loose']}
     width="100%"
     align={inline ? 'unset' : ['unset', 'unset', 'flex-start']}
@@ -28,23 +28,25 @@ export const RowLabel = ({ label }: { label: string }) => (
   </Flex>
 );
 
-export const CopyButton = React.forwardRef((props: CopyProps, ref: Ref<HTMLDivElement>) => {
-  return (
-    <Box
-      transition="75ms all ease-in-out"
-      color="ink.400"
-      ml="auto"
-      ref={ref}
-      opacity={props.isHovered ? 1 : 0}
-      _hover={{
-        cursor: 'pointer',
-      }}
-      {...props}
-    >
-      <CopyIcon />
-    </Box>
-  );
-});
+export const CopyButton = React.forwardRef(
+  ({ isHovered, ...rest }: CopyProps, ref: Ref<HTMLDivElement>) => {
+    return (
+      <Box
+        transition="75ms all ease-in-out"
+        color="ink.400"
+        ml="auto"
+        ref={ref}
+        opacity={isHovered ? 1 : 0}
+        _hover={{
+          cursor: 'pointer',
+        }}
+        {...rest}
+      >
+        <CopyIcon />
+      </Box>
+    );
+  }
+);
 
 export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovered, ...rest }) => {
   const { onCopy, hasCopied } = useClipboard(copy || '');
@@ -78,7 +80,7 @@ export const Row: React.FC<RowProps> = React.memo(
     return (
       <RowWrapper
         borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
-        borderBottom={isLast && card ? undefined : '1px solid'}
+        borderBottom={isLast || card ? undefined : '1px solid'}
         px={card ? 'base' : 'unset'}
         {...bind}
         {...rest}

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Box, CodeBlock, Transition } from '@blockstack/ui';
+import { Box, Transition } from '@stacks/ui';
 import { useRect } from '@reach/rect';
+import { CodeBlock } from '@components/code-block';
 
 export const CodeAccordian = React.memo(
   ({ isOpen, code, language = 'json', isLast, show, note, ...rest }: any) => {

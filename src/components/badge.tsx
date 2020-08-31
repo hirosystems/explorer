@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Text, BoxProps, FlexProps } from '@blockstack/ui';
+import { Flex, Text, BoxProps, FlexProps } from '@stacks/ui';
 
 const Label: React.FC<BoxProps> = props => (
   <Text

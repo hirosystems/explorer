@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Formik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { Flex, Box, Stack, Button } from '@blockstack/ui';
+import { Flex, Box, Stack, Button } from '@stacks/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 import { fetchTransaction } from '@store/transactions';
 import { useLoading } from '@common/hooks/use-loading';

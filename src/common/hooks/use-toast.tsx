@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ToastType } from '@blockstack/ui';
+import { ToastType } from '@stacks/ui';
 import { doAddToast, doRemoveToast } from '@store/ui/actions';
 import { RootState } from '@store';
 import { selectToasts } from '@store/ui/selectors';

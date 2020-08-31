@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Stack } from '@blockstack/ui';
+import { Stack } from '@stacks/ui';
 
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 
 import { TransactionType } from '@models/transaction.interface';
 import { TransactionDetails } from '@components/transaction-details';
-import { CoinbaseTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { CoinbaseTransaction } from '@blockstack/stacks-blockchain-api-types';
 
 interface CoinbasePageProps {
   transaction: CoinbaseTransaction;

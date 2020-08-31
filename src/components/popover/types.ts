@@ -1,7 +1,7 @@
-import { BoxProps } from '@blockstack/ui';
+import { BoxProps } from '@stacks/ui';
 import { Ref } from 'react';
 
-export interface PopoverProps extends BoxProps {
+interface PopoverPropsBase {
   onItemClick?: (item?: any) => void;
   dismiss?: () => void;
   itemComponent?: any;
@@ -19,6 +19,7 @@ export interface PopoverProps extends BoxProps {
   placement?: 'left' | 'right';
   lockBodyScroll?: boolean;
 }
+export type PopoverProps = PopoverPropsBase & BoxProps;
 
 export interface UsePopoverProps {
   length: number;

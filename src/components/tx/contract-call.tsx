@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Box, Flex, Stack } from '@blockstack/ui';
+import { Box, Flex, Stack } from '@stacks/ui';
 import { Text, Pre, Caption } from '@components/typography';
 import { useSelector } from 'react-redux';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { RootState } from '@store';
 
 import { selectOriginContractSource } from '@store/transactions';

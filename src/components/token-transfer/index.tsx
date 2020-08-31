@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Box, Flex, ChevronIcon, Stack } from '@blockstack/ui';
+import { Box, Flex, ChevronIcon, Stack } from '@stacks/ui';
 import { Text } from '@components/typography';
-import { TransactionEvent } from '@blockstack/stacks-blockchain-sidecar-types';
+import { TransactionEvent } from '@blockstack/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 
 import { Card } from '@components/card';
@@ -45,7 +45,7 @@ const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
 const LoadMoreButton = (props: any) =>
   props.events.length - 1 > props.limit && !props.viewAll ? (
     <BottomButton
-      icon={() => <ChevronIcon direction="down" size={6} color="currentColor" />}
+      icon={() => <ChevronIcon direction={'down' as any} size={6} color="currentColor" />}
       label={`${props.events.length + 1 - props.limit} more transfers`}
       onClick={props.onClick}
     />

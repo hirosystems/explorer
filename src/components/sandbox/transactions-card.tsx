@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@blockstack/ui';
+import { Flex, Box, Stack, Spinner, BlockstackIcon, CloseIcon, Transition } from '@stacks/ui';
 import { Caption, Title, Text } from '@components/typography';
 import { useRefreshPendingTx } from '@common/hooks/use-refresh-pending-tx';
 import { Card } from '@components/card';

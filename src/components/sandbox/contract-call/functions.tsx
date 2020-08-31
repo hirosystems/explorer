@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Button, Stack } from '@blockstack/ui';
+import { Box, Flex, Button, Stack } from '@stacks/ui';
 import {
   ClarityFunctionArg,
   callReadOnlyFunction,

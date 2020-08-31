@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Text, Box, Spinner, BoxProps } from '@blockstack/ui';
+import { Flex, Text, Box, Spinner, FlexProps } from '@stacks/ui';
 import { CheckmarkCircleIcon, ExclamationMarkCircleIcon } from '@components/svg';
 
 export type Statuses =
@@ -37,7 +37,7 @@ const iconMap = {
   abort_by_post_condition: ExclamationMarkCircleIcon,
 };
 
-interface StatusProps extends BoxProps {
+interface StatusProps extends FlexProps {
   status: Statuses;
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Router from 'next/router';
 import NProgress from 'nprogress';
-import { createGlobalStyle, css } from 'styled-components';
+import { css, Global } from '@emotion/react';
 
 const styles = css`
   /* Make clicks pass-through */
@@ -58,7 +58,8 @@ const styles = css`
     }
   }
 `;
-const ProgressBarStyles = createGlobalStyle`${styles}`;
+
+export const ProgressBarStyles = <Global styles={styles} />;
 
 export const useProgressBar = () => {
   const start = NProgress.start;
@@ -78,9 +79,5 @@ export const ProgressBar = () => {
     Router.events.on('routeChangeComplete', () => NProgress.done());
     Router.events.on('routeChangeError', () => NProgress.done());
   }, []);
-  return (
-    <>
-      <ProgressBarStyles />
-    </>
-  );
+  return <></>;
 };

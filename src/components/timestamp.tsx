@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Text, FlexProps } from '@blockstack/ui';
+import { Flex, Text, FlexProps } from '@stacks/ui';
 import { ClockIcon } from '@components/svg';
 import { Tooltip } from '@components/tooltip';
 import { toRelativeTime } from '@common/utils';

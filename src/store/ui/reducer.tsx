@@ -7,7 +7,7 @@ import {
   selectNetwork,
   setEnv,
 } from '@store/ui/actions';
-import { ToastType } from '@blockstack/ui';
+import { ToastType } from '@stacks/ui';
 
 export type Environment = 'STAGING' | 'DEV';
 

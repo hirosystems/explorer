@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { css } from '@styled-system/css';
-import { Box, Flex } from '@blockstack/ui';
-import { color } from '@components/color-modes';
+import { css } from '@stacks/ui-core';
+import { Box, Flex } from '@stacks/ui';
 import { truncateMiddle } from '@common/utils';
 import { useClickOutside } from 'use-events';
 
@@ -15,11 +14,11 @@ export const Truncate = React.memo(({ children, offset = 8 }: any) => {
   useClickOutside([ref], () => setSelected(false));
   return (
     <Flex
-      css={css({
+      css={{
         '*::selection': {
           color: 'transparent !important',
         },
-      })}
+      }}
     >
       <Box ref={ref} onDoubleClick={handleDoubleClick} position="relative" overflow="hidden">
         <Box

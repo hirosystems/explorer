@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Box, Flex } from '@blockstack/ui';
+import { Button, Box, Flex } from '@stacks/ui';
 import { Title, Text, Pre } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { useLoading } from '@common/hooks/use-loading';
@@ -86,6 +86,15 @@ export const TxNotFound = ({ refresh }: { refresh: (query?: string) => Promise<a
       clearTimeout(refreshTimer.current);
     };
   }, []);
+
+  const handleOnClick: any = async () => {
+    if (!isLoading) {
+      // @ts-ignore
+      buttonRef?.current.blur();
+      await handleRefresh();
+    }
+  };
+  // @ts-ignore
   return (
     <>
       <Meta title="Transaction not found" />
@@ -116,17 +125,12 @@ export const TxNotFound = ({ refresh }: { refresh: (query?: string) => Promise<a
             sent recently, feel free to refresh.
           </Text>
         </Box>
+
         <Button
           mt="loose"
+          ref={buttonRef as any}
           // @ts-ignore
-          ref={buttonRef}
-          onClick={async () => {
-            if (!isLoading) {
-              // @ts-ignore
-              buttonRef?.current.blur();
-              await handleRefresh();
-            }
-          }}
+          onClick={handleOnClick}
           isLoading={isLoading}
         >
           Refresh

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Stack } from '@blockstack/ui';
+import { Stack } from '@stacks/ui';
 
 import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
@@ -7,7 +7,7 @@ import { TokenTransfers } from '@components/token-transfer';
 import { TransactionDetails } from '@components/transaction-details';
 import { PostConditions } from '@components/post-conditions';
 
-import { SmartContractTransaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { TransactionType } from '@models/transaction.interface';
 
 interface SmartContractPageProps {

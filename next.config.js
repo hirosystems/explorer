@@ -18,13 +18,35 @@ module.exports = withBundleAnalyzer({
   },
   webpack(config, { dev }) {
     if (!dev) {
-      config.externals.push('elliptic');
+      config.externals.unshift('elliptic');
       config.plugins.push(new webpack.IgnorePlugin(/^\.\/wordlists\/(?!english)/, /bip39\/src$/));
+      const splitChunks = config.optimization && config.optimization.splitChunks;
+      if (splitChunks) {
+        const cacheGroups = splitChunks.cacheGroups;
+        const test = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
+        if (cacheGroups.framework) {
+          cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
+            test,
+          });
+          cacheGroups.commons.name = 'framework';
+        } else {
+          cacheGroups.preact = {
+            name: 'commons',
+            chunks: 'all',
+            test,
+          };
+        }
+      }
+
+      // Install webpack aliases:
+      const aliases = config.resolve.alias || (config.resolve.alias = {});
+      aliases.react = aliases['react-dom'] = 'preact/compat';
+      aliases.preact = 'preact';
+      aliases['preact/compat'] = 'preact/compat';
+      aliases['react-ssr-prepass'] = 'preact-ssr-prepass';
+      aliases['@blockstack/ui'] = '@stacks/ui';
+      aliases['styled-components'] = '@emotion/react';
     }
-    config.resolve.alias['styled-components'] = path.resolve(
-      __dirname,
-      './node_modules/styled-components'
-    );
 
     return config;
   },

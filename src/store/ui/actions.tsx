@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { ToastType } from '@blockstack/ui';
+import { ToastType } from '@stacks/ui';
 import { Network, NetworkOptions, Environment } from '@store/ui/reducer';
 
 function withPayloadType<T>() {

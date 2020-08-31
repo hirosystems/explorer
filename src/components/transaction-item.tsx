@@ -1,13 +1,20 @@
 import React from 'react';
-import { useHarmonicIntervalFn } from 'react-use';
-import { Flex, Box, BlockstackIcon, FlexProps, BoxProps } from '@blockstack/ui';
+import { Flex, Box, BlockstackIcon, FlexProps, BoxProps, Grid } from '@stacks/ui';
 import { Tag } from '@components/tags';
-import { microToStacks, truncateMiddle, toRelativeTime, addSepBetweenStrings } from '@common/utils';
+import {
+  microToStacks,
+  truncateMiddle,
+  toRelativeTime,
+  addSepBetweenStrings,
+  border,
+} from '@common/utils';
 import { Transaction, TransactionType } from '@models/transaction.interface';
-import { Caption, Title } from '@components/typography';
+import { Caption, Title, Text } from '@components/typography';
 import { getContractName } from '@common/utils';
 import { DefaultContract } from '@components/icons/default-contract';
 import { color } from '@components/color-modes';
+import { forwardRefWithAs } from '@stacks/ui-core';
+import { Badge } from '@components/badge';
 
 export const ItemIcon = React.memo(
   ({
@@ -15,7 +22,7 @@ export const ItemIcon = React.memo(
     opacity,
     status,
     ...rest
-  }: { type: Transaction['tx_type']; status: Transaction['tx_status'] } & BoxProps) => {
+  }: { type: Transaction['tx_type']; status: Transaction['tx_status'] } & FlexProps) => {
     let Icon = BlockstackIcon;
     if (type === 'smart_contract' || type === 'contract_call') {
       Icon = DefaultContract;
@@ -54,11 +61,15 @@ export const ItemIcon = React.memo(
   }
 );
 
-interface TxItemProps extends FlexProps {
+export interface TxItemProps extends FlexProps {
   tx: Transaction;
   isFocused?: boolean;
   isHovered?: boolean;
   target?: string;
+  onClick?: any;
+  onFocus?: any;
+  onBlur?: any;
+  tabIndex?: any;
 }
 
 const getTitle = (transaction: Transaction) => {
@@ -68,7 +79,7 @@ const getTitle = (transaction: Transaction) => {
     case 'contract_call':
       return getContractName(transaction.contract_call.contract_id);
     case 'token_transfer':
-      return 'Token transfer';
+      return undefined;
     default:
       return truncateMiddle(transaction.tx_id, 10);
   }
@@ -82,16 +93,7 @@ const getCaption = (tx: Transaction) => {
 
   const truncatedId = truncateMiddle(tx.tx_id, 4);
 
-  switch (tx.tx_type) {
-    case 'smart_contract':
-      return addSepBetweenStrings([date, truncatedId]);
-    case 'contract_call':
-      return addSepBetweenStrings([date, truncatedId]);
-    case 'token_transfer':
-      return addSepBetweenStrings([date, microToStacks(tx.token_transfer.amount) + ' STX']);
-    default:
-      return date;
-  }
+  return date;
 };
 
 const ItemCaption = React.memo(({ tx }: { tx: Transaction }) => {
@@ -99,10 +101,11 @@ const ItemCaption = React.memo(({ tx }: { tx: Transaction }) => {
   return <Caption>{caption}</Caption>;
 });
 
-export const TxItem = React.forwardRef(
-  ({ tx, isHovered, isFocused, ...rest }: TxItemProps, ref: any) => {
+export const TxItem = forwardRefWithAs<TxItemProps, 'div'>(
+  ({ tx, isHovered, isFocused, ...rest }, ref) => {
+    const title = getTitle(tx);
     return (
-      <Flex
+      <Grid
         px="base"
         justifyContent="space-between"
         alignItems="center"
@@ -110,29 +113,37 @@ export const TxItem = React.forwardRef(
         style={{ outline: 'none' }}
         flexShrink={0}
         ref={ref}
+        gridTemplateColumns="40% 1fr 1fr 1fr"
         cursor={isHovered ? ['unset', 'unset', 'pointer'] : undefined}
         {...rest}
       >
-        <Flex align="center">
-          <Box display={['none', 'none', 'block']} color="var(--colors-invert)" mr="base">
-            <ItemIcon status={tx.tx_status} type={tx.tx_type} />
-          </Box>
-          <Flex flexDirection="column">
-            <Title
-              textDecoration={isFocused || isHovered ? 'underline' : 'unset'}
-              fontSize="14px"
-              fontWeight={500}
-              display="block"
-            >
-              {getTitle(tx)}
-            </Title>
-            <ItemCaption tx={tx} />
+        <Flex>
+          <Flex alignItems="center">
+            <Box>
+              <Tag type={tx.tx_type as TransactionType} />
+            </Box>
+            {tx.tx_type === 'token_transfer' ? (
+              <Badge border={border()} ml="tight" bg="ink.50" color="ink.900">
+                {microToStacks(tx.token_transfer.amount)} STX
+              </Badge>
+            ) : null}
+            {title ? (
+              <Badge border={border()} ml="tight" bg="ink.50" color="ink.900">
+                {getTitle(tx)}
+              </Badge>
+            ) : null}
           </Flex>
         </Flex>
-        <Box>
-          <Tag type={tx.tx_type as TransactionType} />
+        <Box ml="base">
+          <Text fontSize="14px">{truncateMiddle(tx.tx_id)}</Text>
         </Box>
-      </Flex>
+        <Box>
+          <Text fontSize="14px">{truncateMiddle(tx.sender_address)}</Text>
+        </Box>
+        <Box ml="auto">
+          <ItemCaption tx={tx} />
+        </Box>
+      </Grid>
     );
   }
 );

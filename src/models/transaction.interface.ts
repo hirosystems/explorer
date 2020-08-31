@@ -1,4 +1,4 @@
-import type { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import type { Transaction } from '@blockstack/stacks-blockchain-api-types';
 
 export enum TransactionType {
   SMART_CONTRACT = 'smart_contract',

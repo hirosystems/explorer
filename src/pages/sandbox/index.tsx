@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AppConfig, UserSession } from 'blockstack/lib';
-import { ToastProvider } from '@blockstack/ui';
-import { Connect, FinishedData, AuthOptions } from '@blockstack/connect';
+import { ToastProvider } from '@stacks/ui';
+import { Connect, FinishedData } from '@blockstack/connect';
 import { parseCookies } from 'nookies';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';

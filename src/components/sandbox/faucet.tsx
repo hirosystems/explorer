@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Stack, Button, Box } from '@blockstack/ui';
+import { Flex, Stack, Button, Box } from '@stacks/ui';
 import { useDispatch } from 'react-redux';
 import { fetchAccount } from '@store/sandbox';
 import { fetchTransaction } from '@store/transactions';

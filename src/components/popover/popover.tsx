@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, BoxProps, Transition, Flex } from '@blockstack/ui';
+import { Box, BoxProps, Transition, Flex } from '@stacks/ui';
 import { Card } from '@components/card';
 import { Caption } from '@components/typography';
 import { PopoverItem } from '@components/popover/default-item';
@@ -136,7 +136,7 @@ const PopoverItemList = React.memo(
   }
 );
 
-export const Popover = React.memo(
+export const Popover: React.FC<PopoverProps> = React.memo(
   ({
     dismiss,
     itemComponent: ItemComponent = PopoverItem,
@@ -156,7 +156,7 @@ export const Popover = React.memo(
     showClose,
     lockBodyScroll,
     ...rest
-  }: PopoverProps) => {
+  }) => {
     const wrapperRef = React.useRef(null);
     const {
       isVisible,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReduxNextPageContext } from '@common/types/next-store';
-import { Box, Flex, Stack, Spinner } from '@blockstack/ui';
+import { Box, Flex, Stack, Spinner } from '@stacks/ui';
 import { Card } from '@components/card';
 import { fetchTxList } from '@common/api/transactions';
 import { TxItem } from '@components/transaction-item';
@@ -8,7 +8,7 @@ import { TransactionType } from '@models/transaction.interface';
 import { Tag } from '@components/tags';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { PageWrapper } from '@components/page';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
 import { Caption, Text, Title } from '@components/typography';
 import { TxLink } from '@components/links';
 import { Meta } from '@components/meta-head';
@@ -60,7 +60,7 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
     <PageWrapper>
       <Meta title="Recent transactions" />
       <Box mb="base-loose">
-        <Title as="h1" textStyle="display.large" fontSize="36px">
+        <Title mt="72px" color="white" as="h1" textStyle="display.large" fontSize="36px">
           Recent transactions
         </Title>
       </Box>
@@ -89,7 +89,7 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
           {offset} / {total}
         </Caption>
       </Flex>
-      <Card mt="tight" overflow="hidden">
+      <Card bg={color('bg')} mt="tight" overflow="hidden">
         {items.length ? (
           items?.map((tx: Transaction, key: number) => {
             return (
@@ -152,29 +152,15 @@ const TransactionsPage = ({ txs, total }: { txs: Transaction[]; total: number })
 
 TransactionsPage.getInitialProps = async ({ store }: ReduxNextPageContext) => {
   const apiServer = selectCurrentNetworkUrl(store.getState());
+
   const { results, total } = await fetchTxList({
     apiServer: apiServer as string,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   })();
-  let txs = results;
-  if (total > 600) {
-    const [secondBatch, thirdBatch] = await Promise.all([
-      fetchTxList({
-        apiServer: apiServer as string,
-        types: ['smart_contract', 'contract_call', 'token_transfer'],
-        offset: 200,
-      })(),
-      fetchTxList({
-        apiServer: apiServer as string,
-        types: ['smart_contract', 'contract_call', 'token_transfer'],
-        offset: 400,
-      })(),
-    ]);
-    txs = [...results, ...secondBatch.results, ...thirdBatch.results];
-  }
+
   return {
     total,
-    txs,
+    txs: results,
   };
 };
 

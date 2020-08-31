@@ -1,5 +1,5 @@
 import React from 'react';
-import { Toaster as ToasterBase, Portal } from '@blockstack/ui';
+import { Toaster as ToasterBase, Portal } from '@stacks/ui';
 
 import { useToast } from '@common/hooks/use-toast';
 

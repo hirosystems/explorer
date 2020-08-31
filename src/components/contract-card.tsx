@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { Box, Flex, FlexProps, Text } from '@blockstack/ui';
+import { Box, Flex, FlexProps, Text } from '@stacks/ui';
 import { useHover } from 'use-events';
 
 import { Card } from '@components/card';
@@ -72,7 +72,7 @@ export const ContractCard: React.FC<ContractCardProps> = ({ title, meta, contrac
         py="base"
         flexGrow={1}
         align="center"
-        direction={['row', 'row', 'column']}
+        flexDirection={['row', 'row', 'column']}
         justify={['flex-start', 'flex-start', 'center']}
       >
         <Box

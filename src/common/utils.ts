@@ -6,8 +6,8 @@ import { fetchTxList } from '@common/api/transactions';
 import Router from 'next/router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { color, ColorsStringLiteral } from '@blockstack/ui';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { color, ColorsStringLiteral } from '@stacks/ui';
 import { BorderStyleProperty } from 'csstype';
 
 dayjs.extend(relativeTime);

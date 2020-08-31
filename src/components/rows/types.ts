@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlexProps } from '@blockstack/ui';
+import { FlexProps } from '@stacks/ui';
 
 export interface RowProps extends FlexProps {
   card?: boolean;
@@ -14,6 +14,7 @@ export interface RowProps extends FlexProps {
   render?: any;
   inline?: boolean;
   noTopBorder?: boolean;
+  onClick?: any;
 }
 
 export interface RowWrapperProps extends FlexProps {

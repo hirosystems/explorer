@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Stack, BoxProps } from '@blockstack/ui';
+import { Box, Flex, Stack, BoxProps } from '@stacks/ui';
 import { Text } from '@components/typography';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { IdentityPayload } from '@store/sandbox/types';

@@ -1,12 +1,15 @@
 import React from 'react';
-import { Box, BoxProps } from '@blockstack/ui';
-import { SVGProps } from 'react';
+import { Box, BoxProps } from '@stacks/ui';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
-export type SvgProps = React.FC<BoxProps & SVGProps<any>>;
+export type SvgProps = React.FC<BoxProps>;
 
-export const BaseSvg: SvgProps = props => (
+export const BaseSvg: ForwardRefExoticComponentWithAs<BoxProps, 'svg'> = forwardRefWithAs<
+  BoxProps,
+  'svg'
+>(({ as = 'svg', ...props }, ref) => (
   <Box
-    as="svg"
+    as={as}
     width="44"
     height="44"
     viewBox="0 0 24 24"
@@ -15,6 +18,7 @@ export const BaseSvg: SvgProps = props => (
     fill="none"
     strokeLinecap="round"
     strokeLinejoin="round"
+    ref={ref}
     {...props}
   />
-);
+));

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FlexProps } from '@blockstack/ui';
+import { FlexProps } from '@stacks/ui';
 
 import { Badge } from '@components/badge';
 import { TransactionType } from '@models/transaction.interface';
@@ -13,8 +13,9 @@ export const transactionTypeColor = {
   [TransactionType.POISON_MICROBLOCK]: '#AAA9DD',
 };
 
-interface TagProps extends FlexProps {
+export interface TagProps extends FlexProps {
   type: TransactionType;
+  onClick?: any;
 }
 
 export const Tag = ({ type, ...rest }: TagProps) => (

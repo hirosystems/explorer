@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, BoxProps, ChevronIcon } from '@blockstack/ui';
+import { Flex, Box, BoxProps, ChevronIcon } from '@stacks/ui';
 import { Popover } from '@components/popover/popover';
 import { NetworkOptions } from '@store/ui';
 import { selectNetwork } from '@store/ui/actions';

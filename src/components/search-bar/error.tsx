@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Flex, Text, ExclamationMarkCircleIcon, CloseIcon } from '@blockstack/ui';
+import { Box, Flex, Text, ExclamationMarkCircleIcon, CloseIcon } from '@stacks/ui';
 import { DialogCard } from '@components/dialog-card';
 
 import { ErrorType } from '@components/search-bar/types';

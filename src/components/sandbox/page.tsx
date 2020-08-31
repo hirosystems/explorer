@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Flex, Button, Spinner } from '@blockstack/ui';
+import { Box, Flex, Button, Spinner } from '@stacks/ui';
 import { useConnect } from '@blockstack/connect';
 import { useHover } from 'use-events';
 
@@ -15,14 +15,13 @@ import { Meta } from '@components/meta-head';
 import { useSandboxState, useSandboxStateValues } from '@common/hooks/use-sandbox-state';
 import { color } from '@components/color-modes';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
-import { transition } from '@blockstack/ui/dist/ui/src/theme/theme';
 
 const SignedOutView = ({ onClick }: any) => {
   return (
     <>
       <Meta title="Sandbox" />
       <Flex pb="extra-loose" flexGrow={1} align="center" justify="center">
-        <Card mx="auto" p="extra-loose" direction="column" align="center" justify="center">
+        <Card mx="auto" p="extra-loose" flexDirection="column" align="center" justify="center">
           <Box maxWidth="600px" textAlign="center">
             <Box mb="base">
               <Title as="h2">Welcome to the Stacks Explorer Sandbox!</Title>

@@ -1,11 +1,17 @@
 import * as React from 'react';
-import { Box, Flex, Text } from '@blockstack/ui';
+import { Box, color, Flex, Text } from '@stacks/ui';
 import { Badge } from '@components/badge';
 import { Timestamp } from '@components/timestamp';
 import { Rows } from '@components/rows';
 import { ContractCard } from '@components/contract-card';
-import { Transaction } from '@blockstack/stacks-blockchain-sidecar-types';
-import { getMemoString, getContractName, microToStacks, truncateMiddle } from '@common/utils';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import {
+  getMemoString,
+  getContractName,
+  microToStacks,
+  truncateMiddle,
+  border,
+} from '@common/utils';
 import { Link } from '@components/typography';
 import NextLink from 'next/link';
 interface FeeComponentProps {
@@ -148,27 +154,41 @@ export const TransactionDetails = ({
   transaction,
   hideContract,
   contractMeta,
+  contractName,
   ...rest
 }: TransactionDetailsProps) => {
   const contractId = getContractId(transaction);
   return (
-    <Flex align="flex-start" flexDirection={['column', 'column', 'row']} {...rest}>
-      <Box
-        width={['100%']}
-        order={[2, 2, 0]}
-        mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
-      >
-        <Rows items={transformDataToRowData(transaction)} />
+    <Flex
+      border={border()}
+      borderRadius="12px"
+      bg={color('bg')}
+      align="flex-start"
+      flexDirection="column"
+      {...rest}
+    >
+      <Box width="100%" borderBottom={border()} p="base">
+        <Text fontWeight="500">Summary</Text>
       </Box>
-      {hideContract || !contractId ? null : (
-        <ContractCard
-          title={getContractName(contractId)}
-          meta={contractMeta}
-          contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
-          order={[0, 0, 2]}
-          mb={['loose', 'loose', 'unset']}
-        />
-      )}
+      <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
+        <Box
+          width={['100%']}
+          order={[2, 2, 0]}
+          mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
+        >
+          <Rows noTopBorder items={transformDataToRowData(transaction)} />
+        </Box>
+        {hideContract || !contractId ? null : (
+          <ContractCard
+            mt="base"
+            title={getContractName(contractId)}
+            meta={contractMeta}
+            contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
+            order={[0, 0, 2]}
+            mb={['loose', 'loose', 'unset']}
+          />
+        )}
+      </Flex>
     </Flex>
   );
 };

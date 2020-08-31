@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useEventListener } from '@blockstack/ui';
+import { useEventListener } from '@stacks/ui';
 import { useControlledHover } from '@common/hooks/use-controlled-hover';
 import { useFocus } from 'use-events';
 import { UsePopoverProps } from '@components/popover/types';

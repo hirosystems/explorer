@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon, BoxProps } from '@blockstack/ui';
+import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon, FlexProps } from '@stacks/ui';
 import { Title, Text, Pre, Link } from '@components/typography';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
 import { useSandboxState } from '@common/hooks/use-sandbox-state';
@@ -64,7 +64,7 @@ interface AlertError {
   message?: string;
 }
 
-interface AlertProps extends BoxProps {
+interface AlertProps {
   error?: AlertError | string;
   clearError?: () => void;
   showClearErrors?: boolean;
@@ -77,7 +77,7 @@ const getFormattedError = (error: AlertError | string): AlertError => {
   return error;
 };
 
-export const Alert: React.FC<AlertProps> = ({
+export const Alert: React.FC<AlertProps & FlexProps> = ({
   error: _error,
   clearError,
   showClearErrors,

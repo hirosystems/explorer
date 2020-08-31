@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Ref } from 'react';
-import { Box, Flex, Stack, FlexProps, BlockstackIcon, BoxProps, ChevronIcon } from '@blockstack/ui';
+import { Box, Flex, Stack, FlexProps, BlockstackIcon, BoxProps, ChevronIcon } from '@stacks/ui';
 import { Truncate } from '@components/truncated';
 import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
@@ -11,15 +11,13 @@ import {
   TransactionEventNonFungibleAsset,
   TransactionEventFungibleAsset,
   TransactionEventStxAsset,
-} from '@blockstack/stacks-blockchain-sidecar-types';
+} from '@blockstack/stacks-blockchain-api-types';
 import { clarityValuetoHumanReadable } from '@common/utils';
 import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
 
 import { truncateMiddle, getFungibleAssetName } from '@common/utils';
 import { CodeAccordian } from '@components/code-accordian';
-
-import 'prismjs/components/prism-json';
 
 import { DefaultContract } from '@components/icons/default-contract';
 import { getAssetEventTypeLabel, getEventTypeName } from '@components/token-transfer/utils';
@@ -155,7 +153,7 @@ const EventAssetValue = React.memo(({ event, ...rest }: { event: TransactionEven
   }
 });
 
-const EventAssetType = React.memo(({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
+const EventAssetType = React.memo(({ event, ...rest }: { event: TransactionEvent } & FlexProps) => {
   if (event.event_type === 'smart_contract_log') {
     return (
       <Flex align="center" {...rest}>
@@ -196,6 +194,7 @@ export const TokenTransferItem = React.memo(
       <Box
         bg={active ? color('bg-light') : hover ? color('bg-alt') : 'transparent'}
         fontSize="14px"
+        onClick={handleOpen as any}
         {...activeBind}
       >
         <Stack
@@ -204,7 +203,6 @@ export const TokenTransferItem = React.memo(
           borderColor="var(--colors-border)"
           py="loose"
           pr="base"
-          onClick={handleOpen}
           _hover={{
             cursor: 'pointer',
           }}

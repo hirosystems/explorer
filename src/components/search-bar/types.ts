@@ -1,4 +1,4 @@
-import { BoxProps } from '@blockstack/ui';
+import { BoxProps } from '@stacks/ui';
 import { RecentlyViewedProps } from '@components/recently-viewed';
 
 export interface ErrorType {
@@ -14,5 +14,6 @@ export interface SearchBarProps extends BoxProps {
   small?: boolean;
   recentlyViewedProps?: RecentlyViewedProps;
   clearError?: () => void;
+  onChange?: any;
   error?: ErrorType;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box } from '@blockstack/ui';
+import { Box } from '@stacks/ui';
 import { useFocus } from 'use-events';
 import { Text } from '@components/typography';
 
@@ -44,7 +44,7 @@ export const PopoverItem = React.memo(
         role="listitem"
         tabIndex={0}
         outline="none"
-        onKeyPress={e => {
+        onKeyPress={(e: any) => {
           if (e.key === 'Enter') {
             onClick(e);
           }

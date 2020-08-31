@@ -4,12 +4,12 @@ import { useDispatch } from 'react-redux';
 import { PageWrapper } from '@components/page';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import { Box, color, Flex, Grid, space, Stack, CodeBlock } from '@blockstack/ui';
+import { Box, color, Flex, Grid, space, Stack, CodeBlock } from '@stacks/ui';
 import { Row } from '@components/rows/row';
 import {
   AccountTransactionsListResponse,
   AddressBalanceResponse,
-} from '@blockstack/stacks-blockchain-sidecar-types';
+} from '@blockstack/stacks-blockchain-api-types';
 // @ts-ignore
 import vkQr from '@vkontakte/vk-qr';
 import { Caption, Text, Title } from '@components/typography';
