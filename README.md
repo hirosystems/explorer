@@ -16,7 +16,7 @@ The application needs a couple of env variables to work properly:
 
 ```
 MOCKNET_API_SERVER=https://crashy-stacky.zone117x.com
-TESTNET_API_SERVER=https://sidecar.staging.blockstack.xyz
+TESTNET_API_SERVER=https://stacks-node-api.blockstack.org
 ```
 
 ### Run in development mode
