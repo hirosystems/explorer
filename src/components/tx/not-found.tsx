@@ -112,7 +112,7 @@ export const TxNotFound = ({ refresh }: { refresh: (query?: string) => Promise<a
         </Box>
         <Box mt="base">
           <Text maxWidth="460px">
-            Transactions can take 60 or more seconds to confirm. If the you know the transaction was
+            Transactions can take 60 or more seconds to confirm. If you know the transaction was
             sent recently, feel free to refresh.
           </Text>
         </Box>
