@@ -149,7 +149,7 @@ export const callReadOnlyFunction = async ({
   functionArgs,
   network,
 }: ReadOnlyOptions): Promise<ReadOnlyResponse> => {
-  const url = `${network.coreApiUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/${functionName}`;
+  const url = `${network.coreApiUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/${encodeURIComponent(functionName)}`;
 
   const args = functionArgs.map(arg => cvToHex(arg));
 
