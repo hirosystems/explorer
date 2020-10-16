@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, BoxProps, ChevronIcon, Stack, Flex } from '@stacks/ui';
+import { Box, BoxProps, ChevronIcon, Stack, Flex, Grid, FlexProps } from '@stacks/ui';
 import { CodeAccordian } from '@components/code-accordian';
 
 import { Card } from '@components/card';
@@ -8,8 +8,11 @@ import { Row } from '@components/rows/row';
 import { PostCondition } from '@blockstack/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 import { ValueWrapped } from '@components/token-transfer/item';
+import NextLink from 'next/link';
+import { InfoIcon } from '@components/icons/info';
+import { border } from '@common/utils';
+import { Section } from '@components/section';
 
-import { InfoIcon } from '@components/svg';
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
     case 'fungible':
@@ -50,7 +53,7 @@ const Condition = ({
       p="base"
       borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}
       borderTop="1px solid var(--colors-border)"
-      align="center"
+      alignItems="center"
       borderBottomRightRadius={isLast ? '12px' : 'unset'}
       borderBottomLeftRadius={isLast ? '12px' : 'unset'}
       as="a"
@@ -61,9 +64,7 @@ const Condition = ({
         color: 'var(--colors-accent)',
       }}
     >
-      <Box opacity={0.3} mr="tight">
-        <InfoIcon size="12px" />
-      </Box>
+      <InfoIcon mr="tight" size="18px" />
       <Caption color="currentColor">Click here to learn more about post conditions.</Caption>
     </Flex>
   );
@@ -82,13 +83,19 @@ const Condition = ({
           <Flex pr="base" align="center" width="calc(33.333%)" flexShrink={0}>
             <Pre>{condition.condition_code}</Pre>
           </Flex>
-          <Flex align="center" width="calc(33.333%)" flexShrink={0}>
-            <Text>
-              {'address' in condition.principal ? (
-                <ValueWrapped offset={4} truncate value={condition.principal.address} />
-              ) : null}
-            </Text>
-          </Flex>
+          {'address' in condition.principal ? (
+            <Flex align="center" width="calc(33.333%)" flexShrink={0}>
+              <NextLink
+                href="/address/[principal]"
+                as={`/address/${condition.principal.address}`}
+                passHref
+              >
+                <Text _hover={{ textDecoration: 'underline' }} as="a">
+                  <ValueWrapped offset={8} truncate value={condition.principal.address} />
+                </Text>
+              </NextLink>
+            </Flex>
+          ) : null}
           <Flex align="center" width="calc(33.333% - 38px)" flexShrink={0}>
             <Text>
               {condition.type === 'stx' ? condition.amount + ' ' : null}
@@ -111,44 +118,36 @@ const Condition = ({
     </React.Fragment>
   );
 };
-export const PostConditions = ({
+export const PostConditions: React.FC<{ conditions?: PostCondition[] } & FlexProps> = ({
   conditions,
   ...rest
-}: { conditions?: PostCondition[] } & BoxProps) =>
+}) =>
   conditions ? (
-    <Box {...rest}>
-      <SectionTitle mb="base-loose">Post conditions</SectionTitle>
-      <Box>
+    <Section title="Post conditions" {...rest}>
+      <>
         {conditions?.length ? (
-          <Card>
-            <Box borderBottom="1px solid var(--colors-border)">
-              <Stack width="100%" isInline>
-                <Flex
-                  pl={'base'}
-                  align="center"
-                  width="calc(33.333% - 4px)"
-                  flexShrink={0}
-                  py="base"
-                >
-                  <Caption fontSize="14px">Condition code</Caption>
-                </Flex>
-                <Box width="calc(33.333%)" py="base">
-                  <Caption fontSize="14px">Address</Caption>
-                </Box>
-                <Box width="calc(33.333% + 44px)" py="base">
-                  <Caption fontSize="14px">Amount</Caption>
-                </Box>
-              </Stack>
-            </Box>
+          <>
+            <Grid
+              px="base"
+              py="tight"
+              gridTemplateColumns="repeat(3, 1fr)"
+              borderBottom="1px solid var(--colors-border)"
+            >
+              <Caption fontSize="14px">Condition code</Caption>
+              <Caption fontSize="14px">Address</Caption>
+              <Caption fontSize="14px">Amount</Caption>
+            </Grid>
             {conditions.map((condition: PostCondition, key) => (
               <Condition length={conditions?.length} condition={condition} index={key} key={key} />
             ))}
-          </Card>
+          </>
         ) : (
-          <Box>
-            <Caption fontSize="14px">This transaction has no post-conditions.</Caption>
-          </Box>
+          <Grid placeItems="center" px="base" py="extra-loose">
+            <Caption my="0" p="0" fontSize="14px">
+              This transaction has no post-conditions.
+            </Caption>
+          </Grid>
         )}
-      </Box>
-    </Box>
+      </>
+    </Section>
   ) : null;

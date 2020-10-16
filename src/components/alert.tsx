@@ -1,6 +1,11 @@
 import * as React from 'react';
-import { Box, Flex, ExclamationMarkCircleIcon, CloseIcon, FlexProps } from '@stacks/ui';
-import { Title, Text, Pre, Link } from '@components/typography';
+
+import { Box, CloseIcon, ExclamationMarkCircleIcon, Flex, FlexProps } from '@stacks/ui';
+import { Link, Pre, Text, Title } from '@components/typography';
+
+import { AlertTriangleIcon } from './icons/alert-triangle';
+import { border } from '@common/utils';
+import { color } from '@components/color-modes';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
 import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
@@ -98,30 +103,29 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
 
   return formattedError && hasError ? (
     <Flex
-      borderRadius="6px"
-      border="1px solid var(--colors-border)"
+      borderRadius="12px"
+      border={border()}
       align="center"
       color="#F9A14D"
+      bg={color('bg')}
       {...rest}
     >
       <Flex
-        borderRadius="6px 0 0 6px"
-        bg="var(--colors-bg-alt)"
+        borderRadius="12px 0 0 12px"
+        bg={color('bg')}
         py="tight"
-        px="base"
-        align="center"
-        justify="center"
+        pl="base"
+        alignItems="center"
+        justifyContent="center"
         flexGrow={1}
-        borderRight="1px solid var(--colors-border)"
         alignSelf="stretch"
       >
-        <Box mr="tight" color="red">
-          <ExclamationMarkCircleIcon size="16px" />
-        </Box>
+        <AlertTriangleIcon size="24px" mr="tight" color="red" />
         {error || _error ? (
           <Title
             fontSize="14px"
             as="h4"
+            my="0"
             fontWeight={500}
             style={{ textTransform: 'capitalize', whiteSpace: 'nowrap' }}
           >
@@ -129,9 +133,9 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
           </Title>
         ) : null}
       </Flex>
-      <Flex align="center" width="100%" py="tight" px="base-tight" pr="none">
+      <Flex alignItems="center" width="100%" py="tight" px="base-tight" pr="none">
         <Box>
-          <Text fontSize="14px" pl="tight">
+          <Text fontSize="14px" pl="tight" color={color('text-body')}>
             {_error
               ? formattedError?.message
               : error?.name === 'Status 429'
@@ -148,7 +152,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
             }}
             px="base"
             ml="auto"
-            color="var(--colors-text-caption)"
+            color={color('text-body')}
             role="button"
             title="Clear error"
             aria-label="Clear error"

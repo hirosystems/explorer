@@ -1,6 +1,10 @@
 import { Transaction } from '@models/transaction.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
+import {
+  MempoolTransactionListResponse,
+  TransactionResults,
+} from '@blockstack/stacks-blockchain-sidecar-types';
 
 export const fetchTx = (apiServer: string) => async (
   txid: Transaction['tx_id']
@@ -23,13 +27,8 @@ interface FetchTxListOptions {
   mempool?: boolean;
 }
 
-interface FetchTxReturnValue {
-  results: Transaction[];
-  total: number;
-}
-
 export const fetchTxList = (options: FetchTxListOptions) => async (): Promise<
-  FetchTxReturnValue
+  TransactionResults | MempoolTransactionListResponse
 > => {
   const { apiServer, types, offset, limit = 200, mempool } = options;
   const generateTypesQueryString = () => {

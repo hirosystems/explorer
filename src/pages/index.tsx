@@ -1,101 +1,97 @@
-import React from 'react';
-import { Flex, Box, transition, Stack } from '@stacks/ui';
-import { Text } from '@components/typography';
-import { PageWrapper } from '@components/page';
-import { SearchBarWithDropdown } from '@components/search-bar';
-import { Meta } from '@components/meta-head';
-import { ReduxNextPageContext } from '@common/types/next-store';
-import { fetchTxList } from '@common/api/transactions';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import { Card } from '@components/card';
-import { color } from '@components/color-modes';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
-import { TxLink } from '@components/links';
-import { TxItem } from '@components/transaction-item';
-import { border } from '@common/utils';
+import { Flex, Grid } from '@stacks/ui';
+import {
+  MempoolTransactionListResponse,
+  Transaction,
+  TransactionResults,
+} from '@blockstack/stacks-blockchain-api-types';
+import { NextPage, NextPageContext } from 'next';
+import { Text, Title } from '@components/typography';
 
-export const Home = ({ transactions, mempool }) => {
-  const [active, setActive] = React.useState<'tx' | 'mempool'>('mempool');
-  const items = active === 'tx' ? transactions : mempool;
+import { BlocksList } from '@components/blocks-list';
+import { Meta } from '@components/meta-head';
+import { PageWrapper } from '@components/page';
+import React from 'react';
+import { ReduxNextPageContext } from '@common/types/next-store';
+import { SearchBarWithDropdown } from '@components/search-bar';
+import { TransactionList } from '@components/transaction-list';
+import { doFetchBlocks } from '@store/blocks';
+import { fetchTxList } from '@common/api/transactions';
+
+import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+
+import { useFetchTransactions } from '@common/hooks/use-fetch-transactions';
+
+const PageTop: React.FC = () => (
+  <Flex flexDirection="column" align="center" maxWidth="544px" justify="center">
+    <Title
+      as="h1"
+      fontSize="36px"
+      display="block"
+      width="100%"
+      textAlign={['center', 'left']}
+      mt="72px"
+      mb="extra-loose"
+      color="white"
+    >
+      Stacks Explorer
+    </Title>
+    <SearchBarWithDropdown />
+  </Flex>
+);
+
+interface HomeData {
+  transactions: TransactionResults;
+  mempool: MempoolTransactionListResponse;
+}
+
+export const Home: NextPage<HomeData> = ({ transactions, mempool }) => {
+  const [tx, mem] = useFetchTransactions({
+    initialData: { transactions, mempool },
+  });
+
   return (
     <PageWrapper isHome>
       <Meta />
-      <Flex flexDirection="column" align="center" maxWidth="544px" justify="center">
-        <Text
-          as="h1"
-          fontSize="36px"
-          display="block"
-          width="100%"
-          textAlign={['center', 'left']}
-          mt="72px"
-          mb="extra-loose"
-          color="white"
-        >
-          Stacks Explorer
-        </Text>
-        <SearchBarWithDropdown />
-      </Flex>
-      <Card mt="extra-loose" bg={color('bg')} overflow="hidden">
-        <Flex justifyContent="space-between" borderBottom={border()} p="base">
-          <Box>
-            <Text fontWeight="500">Recent transactions</Text>
-          </Box>
-          <Stack spacing="base" isInline>
-            <Box>
-              <Text fontSize="14px">Confirmed</Text>
-            </Box>
-            <Box>
-              <Text fontSize="14px">Pending</Text>
-            </Box>
-          </Stack>
-        </Flex>
-        <Box>
-          {items?.results?.length
-            ? items?.results?.map((tx: Transaction, key: number, arr: any) => {
-                return (
-                  <TxLink txid={tx.tx_id}>
-                    <TxItem
-                      as="a"
-                      tx={tx}
-                      key={tx.tx_id}
-                      borderLeft="3px solid"
-                      borderLeftColor={color('bg')}
-                      borderBottom={key === arr.length - 1 ? 'unset' : '1px solid'}
-                      borderBottomColor="var(--colors-border)"
-                      transition={transition}
-                      _hover={{
-                        bg: color('bg-alt'),
-                        borderLeftColor: color('accent'),
-                      }}
-                    />
-                  </TxLink>
-                );
-              })
-            : null}
-        </Box>
-      </Card>
+      <PageTop />
+      <Grid
+        mt="extra-loose"
+        alignItems="flex-start"
+        gap="extra-loose"
+        gridTemplateColumns="repeat(1, 1fr)"
+      >
+        {tx && mem && <TransactionList recent transactions={tx} mempool={mem} />}
+        <BlocksList />
+      </Grid>
     </PageWrapper>
   );
 };
 
-Home.getInitialProps = async ({ store }: ReduxNextPageContext) => {
+Home.getInitialProps = async ({
+  store,
+}: NextPageContext & ReduxNextPageContext): Promise<HomeData> => {
   const apiServer = selectCurrentNetworkUrl(store.getState());
 
-  const transactions = await fetchTxList({
-    apiServer: apiServer as string,
-    limit: 10,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  })();
-
-  const mempool = await fetchTxList({
-    apiServer: apiServer as string,
-    limit: 10,
-    mempool: true,
-  })();
+  const [transactions, mempool] = await Promise.all([
+    fetchTxList({
+      apiServer: apiServer as string,
+      limit: 10,
+      types: ['smart_contract', 'contract_call', 'token_transfer'],
+    })(),
+    fetchTxList({
+      apiServer: apiServer as string,
+      limit: 10,
+      mempool: true,
+    })(),
+    await store.dispatch(
+      doFetchBlocks({
+        limit: 10,
+      })
+    ),
+  ]);
 
   return {
-    transactions,
-    mempool,
+    transactions: transactions as HomeData['transactions'],
+    mempool: (mempool as unknown) as HomeData['mempool'],
   };
 };
 

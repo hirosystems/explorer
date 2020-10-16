@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Box, Flex, Button, Spinner } from '@stacks/ui';
-import { useConnect } from '@blockstack/connect';
+import { useConnect } from '@pages/sandbox';
 import { useHover } from 'use-events';
 
 import { microToStacks } from '@common/utils';

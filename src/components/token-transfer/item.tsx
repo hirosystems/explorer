@@ -1,6 +1,15 @@
 import * as React from 'react';
 import { Ref } from 'react';
-import { Box, Flex, Stack, FlexProps, BlockstackIcon, BoxProps, ChevronIcon } from '@stacks/ui';
+import {
+  Box,
+  Flex,
+  Stack,
+  FlexProps,
+  BlockstackIcon,
+  BoxProps,
+  ChevronIcon,
+  Grid,
+} from '@stacks/ui';
 import { Truncate } from '@components/truncated';
 import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
@@ -25,6 +34,10 @@ import { TokenTransferItemProps } from '@components/token-transfer/types';
 import { LogIcon } from '@components/svg';
 import { useActive, useHover } from 'use-events';
 import { color } from '@components/color-modes';
+import { StxNexus } from '@components/icons/stx-nexus';
+import { FungibleTokenIcon } from '@components/icons/fungible-token';
+import { NonFungibleTokenIcon } from '@components/icons/non-fungible-token';
+import { CodeIcon } from '@components/icons/code';
 
 const Value = React.memo(
   React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (
@@ -46,19 +59,68 @@ export const ValueWrapped = React.memo(({ truncate, offset = 4, value, ...rest }
   )
 );
 
-const ItemIcon = React.memo(({ type }: { type: TransactionEvent['event_type'] }) => {
+export const ItemIcon = React.memo(({ type }: { type: TransactionEvent['event_type'] }) => {
   switch (type) {
     case 'smart_contract_log':
       return (
-        <Box display={['none', 'none', 'block']} color="var(--colors-invert)" mr="tight">
-          <DefaultContract size="20px" />
-        </Box>
+        <Grid
+          display={['none', 'none', 'grid']}
+          bg={color('invert')}
+          color={color('bg')}
+          mr="tight"
+          size="28px"
+          placeItems="center"
+          borderRadius="28px"
+        >
+          <CodeIcon strokeWidth="2" size="16px" />
+        </Grid>
       );
+    case 'fungible_token_asset':
+      return (
+        <Grid
+          display={['none', 'none', 'grid']}
+          bg={color('invert')}
+          mr="tight"
+          size="28px"
+          placeItems="center"
+          borderRadius="28px"
+        >
+          <Text fontSize="10px" color={color('bg')} fontWeight="800">
+            FT
+          </Text>
+        </Grid>
+      );
+
+    case 'non_fungible_token_asset':
+      return (
+        <Grid
+          display={['none', 'none', 'grid']}
+          bg={color('invert')}
+          color={color('bg')}
+          mr="tight"
+          size="28px"
+          placeItems="center"
+          borderRadius="28px"
+        >
+          <Text letterSpacing="-0.05em" fontSize="10px" color={color('bg')} fontWeight="800">
+            NFT
+          </Text>
+        </Grid>
+      );
+
     default:
       return (
-        <Box display={['none', 'none', 'block']} color="var(--colors-invert)" mr="tight">
-          <BlockstackIcon size="20px" />
-        </Box>
+        <Grid
+          display={['none', 'none', 'grid']}
+          bg={color('invert')}
+          color={color('bg')}
+          mr="tight"
+          size="28px"
+          placeItems="center"
+          borderRadius="28px"
+        >
+          <StxNexus color="currentColor" size="14px" />
+        </Grid>
       );
   }
 });
@@ -139,48 +201,52 @@ const StxAsset = React.memo(({ event, ...rest }: { event: TransactionEventStxAss
   );
 });
 
-const EventAssetValue = React.memo(({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
-  if (!event) return null;
-  switch (event.event_type) {
-    case 'fungible_token_asset':
-      return <FungibleItem event={event} {...rest} />;
-    case 'non_fungible_token_asset':
-      return <NonFungibleItem event={event} {...rest} />;
-    case 'smart_contract_log':
-      return <ContractLogItem event={event} {...rest} />;
-    case 'stx_asset':
-      return <StxAsset event={event} {...rest} />;
+export const EventAssetValue = React.memo(
+  ({ event, ...rest }: { event: TransactionEvent } & BoxProps) => {
+    if (!event) return null;
+    switch (event.event_type) {
+      case 'fungible_token_asset':
+        return <FungibleItem event={event} {...rest} />;
+      case 'non_fungible_token_asset':
+        return <NonFungibleItem event={event} {...rest} />;
+      case 'smart_contract_log':
+        return <ContractLogItem event={event} {...rest} />;
+      case 'stx_asset':
+        return <StxAsset event={event} {...rest} />;
+    }
   }
-});
+);
 
-const EventAssetType = React.memo(({ event, ...rest }: { event: TransactionEvent } & FlexProps) => {
-  if (event.event_type === 'smart_contract_log') {
-    return (
-      <Flex align="center" {...rest}>
-        <Box mr="tight" color="var(--colors-invert)" size="20px">
-          <LogIcon />
-        </Box>
-        <Text fontWeight="500">Log</Text>
-      </Flex>
-    );
-  }
-  if (event.asset.asset_event_type) {
-    const { label, icon: Icon } = getAssetEventTypeLabel(
-      event.asset.asset_event_type as TransactionEventAssetType
-    );
-    return (
-      <Flex align="center" {...rest}>
-        {Icon && (
-          <Box mr="tight">
-            <Icon size="20px" />
+export const EventAssetType = React.memo(
+  ({ event, ...rest }: { event: TransactionEvent } & FlexProps) => {
+    if (event.event_type === 'smart_contract_log') {
+      return (
+        <Flex align="center" {...rest}>
+          <Box mr="tight" color="var(--colors-invert)" size="20px">
+            <LogIcon />
           </Box>
-        )}
-        <Text fontWeight="500">{label}</Text>
-      </Flex>
-    );
+          <Text fontWeight="500">Log</Text>
+        </Flex>
+      );
+    }
+    if (event.asset.asset_event_type) {
+      const { label, icon: Icon } = getAssetEventTypeLabel(
+        event.asset.asset_event_type as TransactionEventAssetType
+      );
+      return (
+        <Flex align="center" {...rest}>
+          {Icon && (
+            <Box mr="tight">
+              <Icon size="20px" />
+            </Box>
+          )}
+          <Text fontWeight="500">{label}</Text>
+        </Flex>
+      );
+    }
+    return null;
   }
-  return null;
-});
+);
 
 export const TokenTransferItem = React.memo(
   ({ data, noBottomBorder, length = 0, ...flexProps }: TokenTransferItemProps) => {

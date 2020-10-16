@@ -14,9 +14,9 @@ export const CodeAccordian = React.memo(
 
     return (
       <Transition
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         appear={false}
-        // @ts-ignore
         unmountOnExit={false}
         styles={{
           init: {
@@ -45,6 +45,7 @@ export const CodeAccordian = React.memo(
             <Box
               borderBottomRightRadius={isLast ? '12px' : 'unset'}
               borderBottomLeftRadius={isLast ? '12px' : 'unset'}
+              bg="ink"
               {...rest}
               ref={ref}
             >

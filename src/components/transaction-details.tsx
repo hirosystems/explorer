@@ -1,19 +1,22 @@
 import * as React from 'react';
-import { Box, color, Flex, Text } from '@stacks/ui';
-import { Badge } from '@components/badge';
-import { Timestamp } from '@components/timestamp';
-import { Rows } from '@components/rows';
-import { ContractCard } from '@components/contract-card';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+
+import { Box, Flex, Text, color } from '@stacks/ui';
 import {
-  getMemoString,
+  border,
   getContractName,
+  getMemoString,
   microToStacks,
   truncateMiddle,
-  border,
 } from '@common/utils';
+
+import { Badge } from '@components/badge';
+import { ContractCard } from '@components/contract-card';
 import { Link } from '@components/typography';
 import NextLink from 'next/link';
+import { Rows } from '@components/rows';
+import { Timestamp } from '@components/timestamp';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+
 interface FeeComponentProps {
   fees: string;
   sponsored: boolean;
@@ -150,13 +153,13 @@ const getContractId = (transaction: Transaction) => {
   }
 };
 
-export const TransactionDetails = ({
+export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   transaction,
   hideContract,
   contractMeta,
   contractName,
   ...rest
-}: TransactionDetailsProps) => {
+}) => {
   const contractId = getContractId(transaction);
   return (
     <Flex
@@ -168,18 +171,17 @@ export const TransactionDetails = ({
       {...rest}
     >
       <Box width="100%" borderBottom={border()} p="base">
-        <Text fontWeight="500">Summary</Text>
+        <Text color={color('text-title')} fontWeight="500">
+          Summary
+        </Text>
       </Box>
       <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
-        <Box
-          width={['100%']}
-          order={[2, 2, 0]}
-          mr={hideContract ? 'unset' : ['unset', 'unset', '72px']}
-        >
+        <Box width={['100%']} order={[2, 2, 0]}>
           <Rows noTopBorder items={transformDataToRowData(transaction)} />
         </Box>
         {hideContract || !contractId ? null : (
           <ContractCard
+            ml="base"
             mt="base"
             title={getContractName(contractId)}
             meta={contractMeta}

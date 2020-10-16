@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { Box } from '@stacks/ui';
+import { Box, BoxProps } from '@stacks/ui';
 
 import { RowsProps } from '@components/rows/types';
 import { RowLabel, Row } from '@components/rows/row';
 import { Card } from '@components/card';
 
-export const Rows: React.FC<RowsProps> = ({
+export const Rows: React.FC<RowsProps & BoxProps> = ({
   card,
   childComponent,
   items,
@@ -17,7 +17,7 @@ export const Rows: React.FC<RowsProps> = ({
   const Component = card ? Card : Box;
   const ChildComponent = childComponent || Row;
   return (
-    <Component width="100%" {...props}>
+    <Component width="100%" {...(props as any)}>
       {columnLabels?.length ? (
         <Row
           py="tight"

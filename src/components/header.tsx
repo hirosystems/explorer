@@ -1,10 +1,22 @@
-import React from 'react';
-import NextLink from 'next/link';
-import { Box, BoxProps, Flex, FlexProps, BlockstackIcon } from '@stacks/ui';
-import { Link } from '@components/typography';
-import { TestnetSelector } from '@components/testnet-selector';
-import { SearchBarWithDropdown } from '@components/search-bar';
+import {
+  BlockstackIcon,
+  Box,
+  BoxProps,
+  color,
+  Flex,
+  FlexProps,
+  Grid,
+  transition,
+} from '@stacks/ui';
+
 import { ColorModeButton } from '@components/color-mode-button';
+import { Link } from '@components/typography';
+import NextLink from 'next/link';
+import React from 'react';
+import { SearchBarWithDropdown } from '@components/search-bar';
+import { StacksLogo } from '@components/icons/stx-logo';
+import { StxNexus } from '@components/icons/stx-nexus';
+import { TestnetSelector } from '@components/testnet-selector';
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
 
@@ -13,13 +25,23 @@ export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref)
 ));
 
 export const LogoNavItem = React.memo((props: BoxProps) => (
-  <Box flexShrink={0} {...props}>
-    <NextLink href="/" passHref>
-      <a aria-label="Homepage" title="Stacks Explorer">
-        <BlockstackIcon color="white" size="24px" />
-      </a>
-    </NextLink>
-  </Box>
+  <NextLink href="/" passHref>
+    <Grid
+      placeItems="center"
+      size="37px"
+      color="white"
+      borderRadius="37px"
+      flexShrink={0}
+      _hover={{ bg: '#5546FF', color: 'white' }}
+      aria-label="Homepage"
+      title="Stacks Explorer"
+      as="a"
+      transition={transition}
+      {...props}
+    >
+      <StxNexus color="currentColor" size="21px" />
+    </Grid>
+  </NextLink>
 ));
 
 const HeaderBar: React.FC<FlexProps> = React.memo(props => (
@@ -45,7 +67,7 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
       justifyContent={isHome ? 'space-between' : 'unset'}
       {...props}
     >
-      <LogoNavItem mr="base" />
+      <LogoNavItem />
       <Flex
         mx={['none', 'none', 'auto']}
         width="100%"

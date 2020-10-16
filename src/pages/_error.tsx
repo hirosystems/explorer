@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NextPageContext } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import { PageWrapper } from '@components/page';
 import { Text, Title } from '@components/typography';
 import { Flex, Box, Stack } from '@stacks/ui';
@@ -10,11 +10,11 @@ import { Meta } from '@components/meta-head';
 import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 import { Link } from '@components/link';
 
-const Error = ({ statusCode }: { statusCode?: number }) => {
+const Error: NextPage<{ statusCode?: number }> = ({ statusCode }) => {
   const navigateToRandomTx = useNavigateToRandomTx();
   return (
     <PageWrapper>
-      <Meta title={`Whoops! - Stacks Explorer`} />
+      <Meta title="Whoops! - Stacks Explorer" />
       <Flex
         maxWidth="700px"
         flexDirection="column"
@@ -28,11 +28,7 @@ const Error = ({ statusCode }: { statusCode?: number }) => {
         <Text maxWidth="490px">
           {statusCode ? `An error occurred on the server.` : 'An error occurred on the client.'}{' '}
           Please feel free to{' '}
-          <Link
-            // @ts-ignore
-            href="https://github.com/blockstack/explorer/issues/new"
-            target="_blank"
-          >
+          <Link href="https://github.com/blockstack/explorer/issues/new" target="_blank">
             file an issue
           </Link>{' '}
           and describe: what you were attempting to do, the URL you are trying, and anything that is

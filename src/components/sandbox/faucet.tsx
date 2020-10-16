@@ -59,7 +59,6 @@ export const Faucet = (props: any) => {
                       pointerEvents: isLoading ? 'none' : 'unset',
                     }}
                     isLoading={isLoading}
-                    ref={ref as any}
                   >
                     Request STX
                   </Button>

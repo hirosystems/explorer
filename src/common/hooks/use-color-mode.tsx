@@ -1,12 +1,18 @@
 import * as React from 'react';
 import { useMediaQuery } from '@stacks/ui';
 export const THEME_STORAGE_KEY = 'theme';
-export const useColorMode = (): [string, () => void, (mode: 'dark' | 'light') => void] => {
+
+type ColorModeString = 'dark' | 'light' | undefined;
+export const useColorMode = (): [
+  colorMode: ColorModeString,
+  toggleColorMode: () => void,
+  setColorMode: (mode: 'dark' | 'light') => void
+] => {
   const [darkmode] = useMediaQuery('(prefers-color-scheme: dark)');
   const [lightmode] = useMediaQuery('(prefers-color-scheme: light)');
   const setMode = typeof localStorage !== 'undefined' && localStorage.getItem(THEME_STORAGE_KEY);
 
-  const [colorMode, setColorMode] = React.useState<'dark' | 'light' | undefined>(undefined);
+  const [colorMode, setColorMode] = React.useState<ColorModeString>(undefined);
 
   const setHtmlBackgroundColor = React.useCallback(() => {
     document.documentElement.style.background = getComputedStyle(

@@ -1,14 +1,16 @@
 import * as React from 'react';
-import Link from 'next/link';
+
 import { Box, Flex, FlexProps, Text } from '@stacks/ui';
+import { Caption, Title } from '@components/typography';
+
+import { ArrowRightIcon } from './icons/arrow-right';
+import { Card } from '@components/card';
+import { CodeIcon } from '@components/icons/code';
+import { DefaultContract } from '@components/icons/default-contract';
+import Link from 'next/link';
 import { useHover } from 'use-events';
 
-import { Card } from '@components/card';
-import { CodeIcon } from '@components/svg';
-import { DefaultContract } from '@components/icons/default-contract';
-import { Title } from '@components/typography';
-
-const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
+const ContractCardButton: React.FC<{ contractId: string } & FlexProps> = ({
   contractId,
   ...props
 }) => {
@@ -38,15 +40,14 @@ const ContractCardButton: React.FC<{ contractId?: string } & FlexProps> = ({
           userSelect: 'none',
         }}
         as="a"
-        // @ts-ignore
         target="_blank"
         {...props}
         {...bind}
       >
-        <CodeIcon color="var(--colors-invert)" mr="tight" />
-        <Text color="var(--colors-text-body)" textStyle="body.small">
-          View contract
-        </Text>
+        <Caption fontWeight="500" color="var(--colors-text-body)" mr="extra-tight">
+          Go to contract
+        </Caption>
+        <ArrowRightIcon color="var(--colors-text-body)" size="16px" />
       </Flex>
     </Link>
   );

@@ -8,6 +8,7 @@ import { Card } from '@components/card';
 import { BottomButtonProps, TokenTransferProps } from '@components/token-transfer/types';
 import { Caption, SectionTitle } from '@components/typography';
 import { TokenTransferItem } from '@components/token-transfer/item';
+import { border } from '@common/utils';
 
 const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
   const [hover, bind] = useHover();
@@ -69,26 +70,28 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
 
   return (
     <Box {...boxProps}>
-      <SectionTitle mb="base-loose">Event Log</SectionTitle>
       <Card overflow="hidden">
+        <Box p="base" borderBottom={border()}>
+          Events
+        </Box>
         <Box borderBottom="1px solid var(--colors-border)">
-          <Stack width="100%" isInline>
+          <Stack width="100%" isInline alignItems="center">
             <Flex
               pl={['base', 'base', 'none']}
-              align="center"
+              alignItems="center"
               width="calc(33.333% - 4px)"
               flexShrink={0}
-              py="base"
+              py="tight"
             >
               <Flex display={['none', 'none', 'flex']} align="center" justify="center" width="48px">
                 <Caption fontSize="14px">#</Caption>
               </Flex>
               <Caption fontSize="14px">Asset</Caption>
             </Flex>
-            <Box width="calc(33.333% - 32px)" py="base">
+            <Box width="calc(33.333% - 32px)">
               <Caption fontSize="14px">Event type</Caption>
             </Box>
-            <Box width="calc(33.333% + 44px)" py="base">
+            <Box width="calc(33.333% + 44px)">
               <Caption fontSize="14px">Value</Caption>
             </Box>
           </Stack>

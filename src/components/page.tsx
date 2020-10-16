@@ -1,12 +1,14 @@
-import React from 'react';
-import { Box, Flex, FlexProps } from '@stacks/ui';
+import { Box, Flex, FlexProps, transition } from '@stacks/ui';
+import { TitleProps, TransactionTitle } from '@components/transaction-title';
 
-import { Header } from '@components/header';
-import { TransactionTitle, TitleProps } from '@components/transaction-title';
-import { Footer } from '@components/footer';
-import { Notice } from '@components/notice';
 import { Alert } from '@components/alert';
+import { Footer } from '@components/footer';
+import { Header } from '@components/header';
+import { Notice } from '@components/notice';
+import React from 'react';
 import { color } from '@components/color-modes';
+import { css, Theme } from '@stacks/ui-core';
+import Blurhash from '@components/blurhash/blurhash';
 
 export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => {
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
@@ -31,16 +33,20 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => {
     </Box>
   );
 };
+
 type PageProps = { notice?: { label?: string; message?: string }; fullWidth?: boolean } & FlexProps;
+
 export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWidth, ...rest }) => (
   <Flex
-    css={{
-      '*::selection': {
-        color: 'white',
-        background: color('accent'),
-        transition: 'all 0.12s ease-in-out',
-      },
-    }}
+    css={(theme: Theme) =>
+      css({
+        '*::selection': {
+          color: 'white',
+          background: color('accent'),
+          transition: 'all 0.12s ease-in-out',
+        },
+      })(theme)
+    }
     flexDirection="column"
     width="100%"
     minHeight="100%"
@@ -75,10 +81,40 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
 ));
 type PageWrapperProps = { isHome?: boolean; fullWidth?: boolean; notice?: any } & FlexProps;
 
-export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...props }) => (
-  <Flex flexDirection="column" minHeight="100vh" position="relative">
-    <Box position="absolute" left={0} top={0} width="100%" height="480px" bg="ink" zIndex={0} />
-    <Header fullWidth={fullWidth} isHome={isHome} />
-    <Page {...props} />
-  </Flex>
-);
+export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...props }) => {
+  return (
+    <Flex flexDirection="column" minHeight="100vh" position="relative">
+      <Box
+        position="absolute"
+        left={0}
+        top={0}
+        width="100%"
+        height="420px"
+        backgroundImage="url('https://blockstack-www.imgix.net/metaverse-bg.png?auto=format,compress')"
+        backgroundSize="cover"
+        backgroundAttachment="fixed"
+        backgroundPosition="0% 51%"
+        zIndex={-1}
+        transition={transition}
+        className="metaverse-header"
+      />
+      <Box
+        position="absolute"
+        left={0}
+        top={0}
+        width="100%"
+        zIndex={-2}
+        height="420px"
+        overflow="hidden"
+      >
+        <Blurhash
+          hash="e|IF4No?XkX8ba{vnOWGf6bH%XaQjbnif8T1X9oHjZjsO?bFjZjujs"
+          width="100%"
+          height="100vh"
+        />
+      </Box>
+      <Header fullWidth={fullWidth} isHome={isHome} />
+      <Page {...props} />
+    </Flex>
+  );
+};

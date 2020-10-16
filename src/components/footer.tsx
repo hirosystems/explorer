@@ -43,7 +43,7 @@ const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = forwar
 });
 
 const ColorModeLink = ({ ...rest }) => {
-  const { toggleColorMode, colorMode } = useColorMode();
+  const [colorMode, toggleColorMode] = useColorMode();
   return colorMode ? (
     <FooterLink onClick={toggleColorMode} {...rest}>
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}

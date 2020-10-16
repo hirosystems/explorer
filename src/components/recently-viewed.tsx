@@ -76,6 +76,7 @@ export const RecentlyViewedListItem = ({
         tx={option}
         isFocused={focused || isFocused}
         isHovered={isHovered}
+        minimal
         _hover={{
           bg: 'var(--colors-bg-alt)',
         }}

@@ -1,10 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
-import { css, Global } from '@emotion/react';
-import { themeGet } from '@styled-system/theme-get';
-import { colorModeStorage, COLOR_MODE_COOKIE } from '@common/utils';
-import { useMediaQuery } from '@common/hooks/use-media-query';
-import { theme } from '@stacks/ui';
+import { COLOR_MODE_COOKIE, colorModeStorage } from '@common/utils';
+import { Global, css } from '@emotion/react';
+import React, { useCallback, useEffect } from 'react';
+
 import { Theme } from '@stacks/ui-core';
+import { theme } from '@stacks/ui';
+import { themeGet } from '@styled-system/theme-get';
+import { useMediaQuery } from '@common/hooks/use-media-query';
 
 export const colorGet = (path: string, fallback?: string): ((props: any) => any) =>
   themeGet('colors.' + path, fallback);
@@ -130,9 +131,7 @@ export const Base = (
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-      html,
-      body,
-      #__next {
+      html {
         background: var(--colors-bg);
         border-color: var(--colors-border);
 
@@ -150,6 +149,9 @@ export const Base = (
           * {
             -webkit-font-smoothing: subpixel-antialiased;
             -moz-osx-font-smoothing: auto;
+          }
+          .metaverse-header {
+            opacity: 0.5;
           }
         }
       }

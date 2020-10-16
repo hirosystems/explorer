@@ -12,16 +12,20 @@ const Label: React.FC<BoxProps> = props => (
   />
 );
 
-export const Badge: React.FC<FlexProps> = ({ children, ...rest }) => (
+export const Badge: React.FC<FlexProps & { labelProps?: BoxProps }> = ({
+  children,
+  labelProps = {},
+  ...rest
+}) => (
   <Flex
     align="center"
     justify="center"
     borderRadius="24px"
     py="extra-tight"
-    px={['tight', 'tight', 'base']}
+    px={['tight', 'tight', 'base-tight']}
     color="white"
     {...rest}
   >
-    <Label>{children}</Label>
+    <Label {...labelProps}>{children}</Label>
   </Flex>
 );

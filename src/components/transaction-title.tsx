@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Box, Stack, BoxProps, StackProps } from '@stacks/ui';
 
+import { Box, BoxProps, Stack, StackProps } from '@stacks/ui';
 import { Status, Statuses } from '@components/status';
 import { Tag, TagProps } from '@components/tags';
-import { Title } from '@components/typography';
 
+import { Title } from '@components/typography';
 import { TransactionType } from '@models/transaction.interface';
 
 export interface TitleProps {
@@ -42,7 +42,7 @@ export const TransactionTitle = ({
   ...rest
 }: TitleProps & StackProps) => (
   <Stack spacing="base" {...rest}>
-    <Title as="h1" textStyle="display.large" fontSize="36px" color="white" mt="72px">
+    <Title as="h1" fontSize="36px" color="white" mt="72px">
       Transaction details
     </Title>
     <TitleDetail status={status} type={type} />

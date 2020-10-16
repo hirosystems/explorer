@@ -1,17 +1,19 @@
 import * as React from 'react';
-import { forwardRef, Ref } from 'react';
+
 import { Box, Input, Text } from '@stacks/ui';
-import { MagnifyingGlass } from '../icons/magnifying-glass';
-import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
-import debounce from 'just-debounce-it';
-import { SearchBarProps, ErrorType } from '@components/search-bar/types';
-import { handleValidation } from '@common/utils';
-import { Error } from '@components/search-bar/error';
+import { ErrorType, SearchBarProps } from '@components/search-bar/types';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
+import { Ref, forwardRef } from 'react';
 import Router, { useRouter } from 'next/router';
+
+import { Error } from '@components/search-bar/error';
+import { MagnifyingGlass } from '../icons/magnifying-glass';
 import { Popover } from '@components/popover/popover';
 import { RecentlyViewedListItem } from '@components/recently-viewed';
 import { Transaction } from '@blockstack/stacks-blockchain-api-types';
-import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
+import debounce from 'just-debounce-it';
+import { handleValidation } from '@common/utils';
+import { useRecentlyViewedTx } from '@common/hooks/use-recently-viewed-tx';
 
 export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> = forwardRefWithAs<
   SearchBarProps,
@@ -41,17 +43,6 @@ export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> =
           borderRadius="12px"
           bg="rgba(255,255,255,0.08)"
         >
-          <Text
-            as="label"
-            htmlFor="txSearchBar"
-            display="block"
-            position="absolute"
-            opacity={0}
-            aria-hidden
-            zIndex={-1}
-          >
-            Enter a txid or contract name.
-          </Text>
           <Input
             p={0}
             top={0}
@@ -70,15 +61,15 @@ export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> =
             borderRadius="12px"
             onChange={onChange}
             backgroundColor="transparent"
-            color="var(--colors-text-body)"
+            color="white"
             borderColor="rgba(255,255,255,0.12)"
-            _placeholder={{ color: 'var(--colors-text-caption)' }}
+            _placeholder={{ color: 'white' }}
             placeholder="Search for transactions, contracts, and addresses"
             _hover={{
               borderColor: 'rgba(255,255,255,0.25)',
             }}
             _focus={{
-              borderColor: 'rgba(170, 179, 255, 0.75)',
+              borderColor: 'rgba(255,255,255,1)',
               boxShadow: error
                 ? `0 0 0 3px rgba(212, 0, 26, 0.5)`
                 : `0 0 0 3px rgba(170, 179, 255, 0.5)`,
@@ -90,12 +81,14 @@ export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> =
             autoComplete="off"
           />
           <MagnifyingGlass
+            size="24px"
             position="absolute"
             zIndex={2}
             top="50%"
             transform="translateY(-50%)"
             left={`calc(${inputOffset} / 2 - 6px)`}
             style={{ pointerEvents: 'none' }}
+            color="white"
           />
         </Box>
         <Error small={small} clearError={clearError} error={error} />

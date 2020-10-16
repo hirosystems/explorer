@@ -1,13 +1,12 @@
 import * as React from 'react';
+
 import { Text as BaseText, BoxProps } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 
 export const Text: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
   BoxProps,
   'span'
->(({ as = 'span', ...rest }, ref) => (
-  <BaseText as={as} ref={ref} color="var(--colors-text-body)" {...rest} />
-));
+>(({ as = 'span', ...rest }, ref) => <BaseText as={as} ref={ref} color="currentColor" {...rest} />);
 
 export const Caption: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
   BoxProps,
@@ -28,7 +27,15 @@ export const Title: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardR
   BoxProps,
   'span'
 >(({ as, ...props }, ref) => (
-  <Text ref={ref} as={as} display="inline-block" color="var(--colors-text-title)" {...props} />
+  <Text
+    ref={ref}
+    as={as}
+    display="inline-block"
+    color="var(--colors-text-title)"
+    fontFamily={`"Open Sauce", Inter, sans-serif`}
+    fontWeight={500}
+    {...props}
+  />
 ));
 
 export const SectionTitle: React.FC<BoxProps> = forwardRefWithAs<BoxProps, 'span'>((props, ref) => (

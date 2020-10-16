@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { AppConfig, UserSession } from 'blockstack/lib';
 import { ToastProvider } from '@stacks/ui';
-import { Connect, FinishedData } from '@blockstack/connect';
+import { showBlockstackConnect, FinishedData, AuthOptions } from '@blockstack/connect';
 import { parseCookies } from 'nookies';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';
@@ -19,12 +19,23 @@ import { RawTx } from '@components/sandbox/raw-tx';
 import { USERNAME_COOKIE, IDENTITY_COOKIE } from '@common/utils';
 import { PageContent } from '@components/sandbox/page';
 
+const ConnectContext = React.createContext<{ authOptions?: AuthOptions }>({
+  authOptions: undefined,
+});
+
+const Connect: React.FC<{ authOptions?: AuthOptions }> = ({ authOptions, ...rest }) => (
+  <ConnectContext.Provider value={{ authOptions }} {...rest} />
+);
+export const useConnect = () => {
+  const { authOptions } = useContext(ConnectContext);
+  return { authOptions, doOpenAuth: () => showBlockstackConnect(authOptions as AuthOptions) };
+};
 const paths = [
   { path: 'faucet', label: 'STX faucet', component: Faucet },
-  { path: 'stx-transfer', label: 'STX transfer', component: TokenTransfer },
-  { path: 'raw-tx', label: 'Raw transaction', component: RawTx },
-  { path: 'contract-deploy', label: 'Contract deploy', component: ContractDeploy },
-  { path: 'contract-call', label: 'Contract call', component: ContractCall },
+  // { path: 'stx-transfer', label: 'STX transfer', component: TokenTransfer },
+  // { path: 'raw-tx', label: 'Raw transaction', component: RawTx },
+  // { path: 'contract-deploy', label: 'Contract deploy', component: ContractDeploy },
+  // { path: 'contract-call', label: 'Contract call', component: ContractCall },
 ];
 
 const SandboxWrapper = React.memo(({ children }: any) => {

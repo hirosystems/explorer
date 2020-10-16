@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { Ref } from 'react';
+
 import { Box, Flex, useClipboard } from '@stacks/ui';
-import { Tooltip } from '@components/tooltip';
+import { CopyProps, RowContentProps, RowProps, RowWrapperProps } from '@components/rows/types';
+
 import { Caption } from '@components/typography';
-import { useHover } from 'use-events';
 import { CopyIcon } from '@components/svg';
-import { RowWrapperProps, CopyProps, RowProps, RowContentProps } from '@components/rows/types';
+import { Ref } from 'react';
+import { Tooltip } from '@components/tooltip';
+import { useHover } from 'use-events';
 
 export const RowWrapper: React.FC<RowWrapperProps> = ({
   borderColor = 'var(--colors-border)',
@@ -52,12 +54,12 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
   const { onCopy, hasCopied } = useClipboard(copy || '');
 
   return (
-    <Flex pr="base" width="100%" align="center" justify="space-between" {...rest}>
+    <Flex pr="base" width="100%" alignItems="center" justifyContent="space-between" {...rest}>
       <Flex
         color="var(--colors-text-body)"
         textStyle="body.small.medium"
         style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
-        align="baseline"
+        align="center"
         width="100%"
         pr="base"
       >
