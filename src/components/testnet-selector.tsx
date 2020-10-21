@@ -1,5 +1,6 @@
 import React from 'react';
-import { Flex, Box, BoxProps, ChevronIcon } from '@stacks/ui';
+import { Flex, Box, BoxProps } from '@stacks/ui';
+import { ChevronDown } from '@components/icons/chevron-down';
 import { Popover } from '@components/popover/popover';
 import { NetworkOptions } from '@store/ui';
 import { selectNetwork } from '@store/ui/actions';
@@ -58,12 +59,10 @@ export const TestnetSelector = (props: BoxProps) => {
             cursor: items?.length < 2 ? 'unset' : 'pointer',
           }}
           ref={ref}
-          align="center"
+          alignItems="center"
         >
           <HeaderTextItem>{items[activeItem].label}</HeaderTextItem>
-          <Box color={color('text-caption')}>
-            <ChevronIcon direction="down" />
-          </Box>
+          <ChevronDown opacity={0.8} ml="extra-tight" color="white" strokeWidth={2} size={'14px'} />
         </Flex>
       </Popover>
     </Box>

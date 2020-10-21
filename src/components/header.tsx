@@ -14,8 +14,8 @@ import { Link } from '@components/typography';
 import NextLink from 'next/link';
 import React from 'react';
 import { SearchBarWithDropdown } from '@components/search-bar';
-import { StacksLogo } from '@components/icons/stx-logo';
-import { StxNexus } from '@components/icons/stx-nexus';
+
+import { StxInline } from '@components/icons/stx-inline';
 import { TestnetSelector } from '@components/testnet-selector';
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
@@ -39,7 +39,7 @@ export const LogoNavItem = React.memo((props: BoxProps) => (
       transition={transition}
       {...props}
     >
-      <StxNexus color="currentColor" size="21px" />
+      <StxInline color="currentColor" size="22px" />
     </Grid>
   </NextLink>
 ));
@@ -74,7 +74,7 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
         justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
         pl={['unset', 'unset', 'base-loose']}
         maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
-        align="center"
+        alignItems="center"
       >
         {!isHome ? (
           <SearchBarWithDropdown

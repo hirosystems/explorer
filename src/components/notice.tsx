@@ -15,7 +15,7 @@ export const Notice = ({
   >
     <Flex
       p="tight"
-      align="center"
+      alignItems="center"
       justify="flex-start"
       mx="auto"
       width="100%"

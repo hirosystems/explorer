@@ -18,7 +18,7 @@ const Error: NextPage<{ statusCode?: number }> = ({ statusCode }) => {
       <Flex
         maxWidth="700px"
         flexDirection="column"
-        align="flex-start"
+        alignItems="flex-start"
         justify="center"
         flexGrow={1}
       >

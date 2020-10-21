@@ -61,7 +61,7 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
       <Flex
         pt="base"
         flexDir={['column', 'column', 'row']}
-        align={['center', 'center', 'unset']}
+        alignItems={['center', 'center', 'unset']}
         textAlign={['center', 'center', 'unset']}
         borderTop="1px solid var(--colors-border)"
         px={fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}

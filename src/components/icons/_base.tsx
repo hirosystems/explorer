@@ -11,7 +11,7 @@ export const BaseSvg: ForwardRefExoticComponentWithAs<BoxProps, 'svg'> = forward
   <Box
     as={as}
     width="44px"
-    height="44px"
+    height="auto"
     viewBox="0 0 24 24"
     strokeWidth="1.5"
     stroke="currentColor"

@@ -93,7 +93,7 @@ const PopoverItemList = React.memo(
                   <Flex
                     borderBottom="1px solid var(--colors-border)"
                     justifyContent="space-between"
-                    align="center"
+                    alignItems="center"
                   >
                     {label ? <PopoverListLabel>{label}</PopoverListLabel> : null}
                     {showClose ? (

@@ -105,7 +105,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
     <Flex
       borderRadius="12px"
       border={border()}
-      align="center"
+      alignItems="center"
       color="#F9A14D"
       bg={color('bg')}
       {...rest}
@@ -135,7 +135,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
       </Flex>
       <Flex alignItems="center" width="100%" py="tight" px="base-tight" pr="none">
         <Box>
-          <Text fontSize="14px" pl="tight" color={color('text-body')}>
+          <Text fontSize="14px" pl="tight" color={color('text-body')} fontWeight={500}>
             {_error
               ? formattedError?.message
               : error?.name === 'Status 429'

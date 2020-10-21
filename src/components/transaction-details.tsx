@@ -16,6 +16,7 @@ import NextLink from 'next/link';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
 import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Section } from '@components/section';
 
 interface FeeComponentProps {
   fees: string;
@@ -142,7 +143,7 @@ interface TransactionDetailsProps {
   contractMeta?: string;
 }
 
-const getContractId = (transaction: Transaction) => {
+export const getContractId = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'contract_call':
       return transaction.contract_call.contract_id;
@@ -162,27 +163,15 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
 }) => {
   const contractId = getContractId(transaction);
   return (
-    <Flex
-      border={border()}
-      borderRadius="12px"
-      bg={color('bg')}
-      align="flex-start"
-      flexDirection="column"
-      {...rest}
-    >
-      <Box width="100%" borderBottom={border()} p="base">
-        <Text color={color('text-title')} fontWeight="500">
-          Summary
-        </Text>
-      </Box>
-      <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
+    <Section title="Summary" {...rest}>
+      <Flex pb="base" px="base" width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']} order={[2, 2, 0]}>
           <Rows noTopBorder items={transformDataToRowData(transaction)} />
         </Box>
         {hideContract || !contractId ? null : (
           <ContractCard
             ml="base"
-            mt="base"
+            my="base"
             title={getContractName(contractId)}
             meta={contractMeta}
             contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
@@ -191,6 +180,6 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
           />
         )}
       </Flex>
-    </Flex>
+    </Section>
   );
 };

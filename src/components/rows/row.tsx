@@ -18,14 +18,14 @@ export const RowWrapper: React.FC<RowWrapperProps> = ({
     flexDirection={inline ? 'column' : ['column', 'column', 'row']}
     py={['base', 'base', 'loose']}
     width="100%"
-    align={inline ? 'unset' : ['unset', 'unset', 'flex-start']}
+    alignItems={inline ? 'unset' : ['unset', 'unset', 'flex-start']}
     {...props}
     borderColor={borderColor}
   />
 );
 
 export const RowLabel = ({ label }: { label: string }) => (
-  <Flex align="baseline" pt="2px" flexShrink={0} width="140px">
+  <Flex alignItems="baseline" pt="2px" flexShrink={0} width="140px">
     <Caption pb={['extra-tight', 'extra-tight', 'unset']}>{label}</Caption>
   </Flex>
 );
@@ -59,7 +59,7 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
         color="var(--colors-text-body)"
         textStyle="body.small.medium"
         style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
-        align="center"
+        alignItems="center"
         width="100%"
         pr="base"
       >

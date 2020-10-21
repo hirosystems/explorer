@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Box, Flex, FlexProps, Spinner, Text } from '@stacks/ui';
-import { CheckmarkCircleIcon, ExclamationMarkCircleIcon } from '@components/svg';
 
 import { Badge } from './badge';
 import { CheckIcon } from './icons/check';
@@ -11,7 +10,6 @@ import { LoaderQuarter } from './icons/loader-quarter';
 
 import { keyframes } from '@emotion/react';
 import { css, Theme } from '@stacks/ui-core';
-import { AlertTriangleIcon } from './icons/alert-triangle';
 import { AlertCircleIcon } from './icons/alert-circle';
 
 const keyframesRotate = keyframes`
@@ -24,7 +22,7 @@ const keyframesRotate = keyframes`
   100% {
     transform: rotate(359deg);
   }
-}`;
+`;
 
 export type Statuses =
   | 'success'
@@ -48,10 +46,6 @@ const labelMap = {
   abort_by_response: 'Failed',
   abort_by_post_condition: 'Failed',
 };
-
-const SpinnerComponent = ({ color }: { color: string }) => (
-  <Spinner color={color} speed="1s" thickness="2px" size="sm" />
-);
 
 const iconMap = {
   pending: (p: any) => (
@@ -82,7 +76,7 @@ export const Status: React.FC<StatusProps> = ({ status, ...rest }) => {
     <Badge
       border={border()}
       bg={color('bg')}
-      color={_color}
+      color={color('invert')}
       labelProps={{ display: 'flex', alignItems: 'center' }}
       maxHeight="24px"
       {...rest}

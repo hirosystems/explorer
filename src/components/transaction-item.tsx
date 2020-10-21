@@ -20,16 +20,17 @@ import { Link } from '@components/link';
 import NextLink from 'next/link';
 import React from 'react';
 import { Transaction } from '@models/transaction.interface';
-import { TransferIcon } from '@components/icons/transfer';
+import { ContractCallIcon } from '@components/icons/contract-call';
 import { color } from '@components/color-modes';
 import { getContractName } from '@common/utils';
+import { StxInline } from '@components/icons/stx-inline';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
-  let Icon = TransferIcon;
+  let Icon = StxInline;
   if (txType === 'smart_contract') {
-    Icon = CodeIcon;
+    Icon = CodeIcon as any;
   } else if (txType === 'contract_call') {
-    Icon = FunctionIcon as any;
+    Icon = ContractCallIcon as any;
   }
   return Icon;
 };
@@ -50,7 +51,7 @@ export const ItemIcon = React.memo(
     };
     return (
       <Flex
-        align="center"
+        alignItems="center"
         justify="center"
         size="48px"
         borderRadius="8px"
@@ -73,7 +74,7 @@ export const ItemIcon = React.memo(
           zIndex={9}
           as="span"
         />
-        <Icon position="relative" zIndex={2} size="20px" />
+        <Icon position="relative" zIndex={2} size={type === 'token_transfer' ? '18px' : '21px'} />
       </Flex>
     );
   }
@@ -140,7 +141,14 @@ const Details = ({ tx, minimal, ...rest }: { tx: Transaction; minimal?: boolean 
       ].filter(str => str) as string[]);
 
   return (
-    <Caption as="span" display="block" textTransform="uppercase" fontWeight="600" {...rest}>
+    <Caption
+      alignItems={'center'}
+      as="span"
+      display="flex"
+      textTransform="uppercase"
+      fontWeight="600"
+      {...rest}
+    >
       {addSepBetweenStrings(strings)}
     </Caption>
   );

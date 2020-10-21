@@ -166,8 +166,8 @@ export const handleValidation = (query?: string): { success: boolean; message?: 
  *
  * @param {Number} amountInMicroStacks - the amount of microStacks to convert
  */
-export const microToStacks = (amountInMicroStacks: string | number): number =>
-  amountInMicroStacks ? Number(amountInMicroStacks) / Math.pow(10, 6) : 0;
+export const microToStacks = (amountInMicroStacks: string | number): number | string =>
+  amountInMicroStacks ? Number(Number(amountInMicroStacks) / Math.pow(10, 6)).toLocaleString() : 0;
 
 export const getContractName = (fullyRealizedName: string): string =>
   fullyRealizedName.split('.')[1];

@@ -1,10 +1,10 @@
+import React from 'react';
 import {
   TransactionEvent,
   TransactionEventAssetType,
   TransactionType,
 } from '@blockstack/stacks-blockchain-api-types';
-import { AssetType } from '@components/token-transfer/types';
-import { LogIcon, BurnIcon, MintIcon, TransferIcon } from '@components/svg';
+import { BurnIcon, MintIcon, TransferIcon } from '@components/svg';
 
 export const getEventTypeName = (value: TransactionEvent['event_type']) => {
   switch (value) {
@@ -33,22 +33,26 @@ export const getTransactionTypeLabel = (value: TransactionType) => {
       return 'Poison microblock';
   }
 };
+
 export const getAssetEventTypeLabel = (value?: TransactionEventAssetType) => {
   switch (value) {
     case 'transfer':
       return {
         label: 'Transfer',
         icon: TransferIcon,
+        bg: 'blue',
       };
     case 'mint':
       return {
         label: 'Mint',
         icon: MintIcon,
+        bg: 'green',
       };
     case 'burn':
       return {
         label: 'Burn',
         icon: BurnIcon,
+        bg: 'red',
       };
     default:
       return {

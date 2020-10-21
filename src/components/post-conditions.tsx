@@ -80,11 +80,11 @@ const Condition = ({
         {...bind}
       >
         <Stack width="100%" isInline>
-          <Flex pr="base" align="center" width="calc(33.333%)" flexShrink={0}>
+          <Flex pr="base" alignItems="center" width="calc(33.333%)" flexShrink={0}>
             <Pre>{condition.condition_code}</Pre>
           </Flex>
           {'address' in condition.principal ? (
-            <Flex align="center" width="calc(33.333%)" flexShrink={0}>
+            <Flex alignItems="center" width="calc(33.333%)" flexShrink={0}>
               <NextLink
                 href="/address/[principal]"
                 as={`/address/${condition.principal.address}`}
@@ -96,14 +96,14 @@ const Condition = ({
               </NextLink>
             </Flex>
           ) : null}
-          <Flex align="center" width="calc(33.333% - 38px)" flexShrink={0}>
+          <Flex alignItems="center" width="calc(33.333% - 38px)" flexShrink={0}>
             <Text>
               {condition.type === 'stx' ? condition.amount + ' ' : null}
               {getConditionType(condition.type)}
             </Text>
           </Flex>
           <Flex
-            align="center"
+            alignItems="center"
             justify="center"
             width="48px"
             flexShrink={0}

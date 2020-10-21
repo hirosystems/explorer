@@ -22,7 +22,7 @@ import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { useFetchTransactions } from '@common/hooks/use-fetch-transactions';
 
 const PageTop: React.FC = () => (
-  <Flex flexDirection="column" align="center" maxWidth="544px" justify="center">
+  <Flex flexDirection="column" alignItems="center" maxWidth="544px" justify="center">
     <Title
       as="h1"
       fontSize="36px"

@@ -18,7 +18,7 @@ const NotFound = () => {
       <Flex
         maxWidth="700px"
         flexDirection="column"
-        align="flex-start"
+        alignItems="flex-start"
         justify="center"
         flexGrow={1}
       >

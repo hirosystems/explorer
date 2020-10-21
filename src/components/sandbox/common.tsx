@@ -255,7 +255,7 @@ export const Wrapper: React.FC<WrapperProps> = React.memo(
                           textDecoration: 'underline',
                         }}
                         mt="tight"
-                        align="center"
+                        alignItems="center"
                         onClick={subtitle.onClick}
                       >
                         <Caption

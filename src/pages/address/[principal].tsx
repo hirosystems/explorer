@@ -3,7 +3,7 @@ import {
   TransactionResults,
   MempoolTransactionListResponse,
 } from '@blockstack/stacks-blockchain-api-types';
-import { Box, Flex, Grid, Stack, color, space } from '@stacks/ui';
+import { Box, Flex, Grid, useClipboard, color, space } from '@stacks/ui';
 import { Caption, Link, Text, Title } from '@components/typography';
 import { getAssetNameParts, microToStacks, truncateMiddle } from '@common/utils';
 
@@ -25,8 +25,12 @@ import { border } from '@common/utils';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 
-import { StxNexus } from '@components/icons/stx-nexus';
-// import vkQr from '@vkontakte/vk-qr';
+import { useSelector } from 'react-redux';
+import { RootState } from '@store';
+import useSWR from 'swr';
+import { StxInline } from '@components/icons/stx-inline';
+import { Tooltip } from '@components/tooltip';
+import { IconButton } from '@components/icon-button';
 
 const fetchBalances = (apiServer: string) => async (
   principal: string
@@ -158,7 +162,13 @@ const FtBalances = ({ balances }: { balances: AddressBalanceResponse }) => (
 
 const Balances = ({ balances }: { balances: AddressBalanceResponse }) => {
   return (
-    <Box mt="extra-loose" border={border()} borderRadius="12px" bg={color('bg')} align="flex-start">
+    <Box
+      mt="extra-loose"
+      border={border()}
+      borderRadius="12px"
+      bg={color('bg')}
+      alignItems="flex-start"
+    >
       <Box borderBottom={border()} p="base">
         <Text>Balances</Text>
       </Box>
@@ -193,46 +203,6 @@ const Tabs: React.FC<any> = ({ transactions, balances }) => {
   );
 };
 
-// const QrCode = ({ principal }) => {
-//   const qrSvg = vkQr.createQR(principal, {
-//     qrSize: 132,
-//     foregroundColor: color('invert'),
-//   });
-//   return (
-//     <Grid
-//       style={{ placeItems: 'center' }}
-//       border={`1px solid ${color('border')}`}
-//       p={space('base')}
-//       borderRadius="12px"
-//       size="256px"
-//       flexShrink={0}
-//     >
-//       <Box dangerouslySetInnerHTML={{ __html: qrSvg }} />
-//     </Grid>
-//   );
-// };
-
-// const AddressDetails = () => {
-//   return <Flex px="base" border={border()} borderRadius="12px" bg={color('bg')} align="flex-start">
-//   <Box mr="64px" flexGrow={1}>
-//     <Row label="Address">{principal}</Row>
-//     <Row label="Transactions">{transactions?.total}</Row>
-//     <Row label="Balances">
-//       <Stack spacing={space('base')} isInline>
-//         <Box>{microToStacks(balances?.stx.balance as any)} STX</Box>
-//         <Box>{getTokenAmounts(balances?.non_fungible_tokens as any).length} NFTs</Box>
-//         <Box>{getTokenAmounts(balances?.fungible_tokens as any).length} FTs</Box>
-//       </Stack>
-//     </Row>
-//     {transactions?.total && lastTimeStamp ? (
-//       <Row label="Last transaction">
-//         <Timestamp ts={lastTimeStamp} />
-//       </Row>
-//     ) : null}
-//   </Box>
-// </Flex>
-// }
-
 interface AddressPageData {
   principal: string;
   balances?: AddressBalanceResponse;
@@ -246,29 +216,20 @@ const hasTokenBalance = (balances: any) => {
   return totleNft + totalFt > 0;
 };
 
-// const BalanceAmounts = balances => {
-//   return (
-//     <>
-//       <Box>
-//         <Title fontWeight="400" my="0" as="h4" color="white" fontSize="20px">
-//           {getTokenAmounts(balances?.fungible_tokens as any).length} FTs
-//         </Title>
-//       </Box>
-//       <Box>
-//         <Title fontWeight="400" my="0" as="h4" color="white" fontSize="20px">
-//           {getTokenAmounts(balances?.non_fungible_tokens as any).length} NFTs
-//         </Title>
-//       </Box>
-//     </>
-//   );
-// };
-
 const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transactions }) => {
-  // const lastTimeStamp = transactions?.results[0]
-  //   ? 'receipt_time' in transactions?.results[0]
-  //     ? transactions?.results[0].receipt_time
-  //     : transactions?.results[0].burn_block_time
-  //   : undefined;
+  const { apiServer } = useSelector((state: RootState) => ({
+    apiServer: selectCurrentNetworkUrl(state),
+  }));
+
+  const { data, error } = useSWR(principal, fetchAllAccountData(apiServer as any), {
+    initialData: {
+      balances,
+      transactions,
+    },
+    refreshInterval: 5000,
+  });
+
+  const { onCopy, hasCopied } = useClipboard(principal || '');
 
   return (
     <PageWrapper>
@@ -285,24 +246,18 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
               {principal}
             </Title>
             <Flex ml="tight" alignItems="center">
-              <Grid
-                opacity="0.5"
-                _hover={{ opacity: 1 }}
-                color="white"
-                size="32px"
-                placeItems="center"
-              >
-                <CopyIcon size="24px" />
-              </Grid>
-              <Grid
-                opacity="0.5"
-                _hover={{ opacity: 1 }}
-                color="white"
-                size="32px"
-                placeItems="center"
-              >
-                <QrCode size="24px" />
-              </Grid>
+              <Tooltip label={hasCopied ? 'Copied!' : 'Copy'}>
+                <IconButton onClick={onCopy} icon={CopyIcon} />
+              </Tooltip>
+              {/*<Grid*/}
+              {/*  opacity="0.5"*/}
+              {/*  _hover={{ opacity: 1 }}*/}
+              {/*  color="white"*/}
+              {/*  size="32px"*/}
+              {/*  placeItems="center"*/}
+              {/*>*/}
+              {/*  <QrCode size="24px" />*/}
+              {/*</Grid>*/}
             </Flex>
           </Flex>
         </Box>
@@ -315,28 +270,30 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
           color="white"
           fontSize="28px"
         >
-          <StxNexus mr="tight" size="18px" />
+          <StxInline color="white" strokeBalance={1.5} mr="tight" size="18px" />
           <Flex alignItems="baseline">
-            {microToStacks(balances?.stx.balance as any)}{' '}
+            {microToStacks(data?.balances?.stx.balance as any)}{' '}
             <Text fontSize="20px" ml="tight">
               STX
             </Text>
           </Flex>
         </Title>
       </Flex>
-      <Box border={border()} borderRadius="12px" bg={color('bg')} align="flex-start">
+      <Box border={border()} borderRadius="12px" bg={color('bg')} alignItems="flex-start">
         <Box borderBottom={border()} p="base">
           <Text>Transactions</Text>
         </Box>
-        {transactions?.results.length ? (
-          <TxList txs={transactions} />
+        {data?.transactions?.results.length ? (
+          <TxList txs={data?.transactions} />
         ) : (
           <Grid placeItems="center" px="base" py="extra-loose">
             <Text>No transactions yet</Text>
           </Grid>
         )}
       </Box>
-      {balances && hasTokenBalance(balances) ? <Balances balances={balances} /> : null}{' '}
+      {data?.balances && hasTokenBalance(data.balances) ? (
+        <Balances balances={data.balances} />
+      ) : null}{' '}
     </PageWrapper>
   );
 };

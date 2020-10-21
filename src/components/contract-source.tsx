@@ -7,12 +7,22 @@ import { CodeBlock } from '@components/code-block';
 import { border } from '@common/utils';
 import { Badge } from './badge';
 import { CodeIcon } from './icons/code';
+import { TxLink } from '@components/links';
 
-export const ContractSource: React.FC<{ source?: string } & BoxProps> = ({ source, ...rest }) => {
+export const ContractSource: React.FC<{ sourceTx?: string; source?: string } & BoxProps> = ({
+  sourceTx,
+  source,
+  ...rest
+}) => {
   const [expanded, setExpanded] = React.useState(false);
   const handleToggleExpanded = React.useCallback(() => {
     setExpanded(s => !s);
   }, [setExpanded]);
+
+  const sourceLines =
+    source?.split(`
+`).length || 0;
+
   return source ? (
     <Box {...rest}>
       <Box border="1px solid var(--colors-border)" borderRadius="12px" overflow="hidden" bg="ink">
@@ -27,14 +37,20 @@ export const ContractSource: React.FC<{ source?: string } & BoxProps> = ({ sourc
           <Text color="white" fontWeight="500">
             Contract source
           </Text>
-          <Badge
-            _hover={{ bg: 'rgba(255,255,255,0.05)', cursor: 'pointer' }}
-            border="1px solid rgb(39, 41, 46)"
-            labelProps={{ display: 'flex', alignItems: 'center', fontWeight: 500 }}
-          >
-            <CodeIcon color="rgba(255,255,255,0.65)" strokeWidth="2" mr="tight" size="14px" />
-            Go to original transaction
-          </Badge>
+          {sourceTx ? (
+            <TxLink txid={sourceTx}>
+              <Badge
+                as="a"
+                _hover={{ bg: 'rgba(255,255,255,0.05)', cursor: 'pointer' }}
+                border="1px solid rgb(39, 41, 46)"
+                labelProps={{ display: 'flex', alignItems: 'center', fontWeight: 500 }}
+                target="_blank"
+              >
+                <CodeIcon color="rgba(255,255,255,0.65)" strokeWidth="2" mr="tight" size="14px" />
+                Go to original transaction
+              </Badge>
+            </TxLink>
+          ) : null}
         </Flex>
         <CodeBlock
           overflow={!expanded ? 'hidden' : undefined}
@@ -58,14 +74,9 @@ export const ContractSource: React.FC<{ source?: string } & BoxProps> = ({ sourc
               opacity: 1,
             }}
           >
-            <Text color="white">
-              {!expanded
-                ? `See all ${
-                    source.split(`
-`).length
-                  } lines`
-                : 'Collapse'}
-            </Text>
+            {sourceLines >= 10 ? (
+              <Text color="white">{!expanded ? `See all ${sourceLines} lines` : 'Collapse'}</Text>
+            ) : null}
           </Grid>
         </Box>
       </Box>

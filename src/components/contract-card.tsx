@@ -30,7 +30,7 @@ const ContractCardButton: React.FC<{ contractId: string } & FlexProps> = ({
         borderBottomLeftRadius="12px"
         borderBottomRightRadius="12px"
         py="base"
-        align="center"
+        alignItems="center"
         justify="center"
         borderTop="1px solid"
         cursor={hover ? 'pointer' : 'unset'}
@@ -72,7 +72,7 @@ export const ContractCard: React.FC<ContractCardProps> = ({ title, meta, contrac
         px="base"
         py="base"
         flexGrow={1}
-        align="center"
+        alignItems="center"
         flexDirection={['row', 'row', 'column']}
         justify={['flex-start', 'flex-start', 'center']}
       >

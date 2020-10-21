@@ -28,7 +28,12 @@ export const Tag = ({ type, ...rest }: TagProps) => {
       color={color('text-body')}
       {...rest}
     >
-      <Icon mr="extra-tight" size="16px" />
+      <Icon
+        mr="extra-tight"
+        strokeWidth={1.5}
+        width={type === 'token_transfer' ? '12px' : '16px'}
+        height="auto"
+      />
       {getTxTypeName(type)}
     </Badge>
   );

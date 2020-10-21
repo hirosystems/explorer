@@ -7,7 +7,7 @@ import { ErrorType } from '@components/search-bar/types';
 const InlineError = ({ children, visible }: any) => (
   <Flex
     color="red"
-    align="center"
+    alignItems="center"
     pt="tight"
     transform={visible ? 'none' : 'translateY(5px)'}
     opacity={visible ? 1 : 0}
@@ -28,7 +28,7 @@ const ErrorDropDown = ({ onClick, children, visible, ...rest }: any) => (
     position={'absolute'}
     width="100%"
     borderRadius="6px"
-    align="center"
+    alignItems="center"
     p="tight"
     mt="tight"
     flexDirection="row"
@@ -42,7 +42,7 @@ const ErrorDropDown = ({ onClick, children, visible, ...rest }: any) => (
     }}
     {...rest}
   >
-    <Flex align="center">
+    <Flex alignItems="center">
       <Box color="red" mr="tight" size="18px">
         <ExclamationMarkCircleIcon />
       </Box>

@@ -9,6 +9,8 @@ import {
   BoxProps,
   ChevronIcon,
   Grid,
+  GridProps,
+  transition,
 } from '@stacks/ui';
 import { Truncate } from '@components/truncated';
 import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
@@ -38,6 +40,7 @@ import { StxNexus } from '@components/icons/stx-nexus';
 import { FungibleTokenIcon } from '@components/icons/fungible-token';
 import { NonFungibleTokenIcon } from '@components/icons/non-fungible-token';
 import { CodeIcon } from '@components/icons/code';
+import { ChevronDown } from '@components/icons/chevron-down';
 
 const Value = React.memo(
   React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (
@@ -130,7 +133,7 @@ const EventAsset = React.memo(
     event ? (
       <Flex
         pl={['base', 'base', 'unset']}
-        align="center"
+        alignItems="center"
         pr="base"
         width={'33.333%'}
         flexShrink={0}
@@ -138,7 +141,7 @@ const EventAsset = React.memo(
       >
         <Flex
           display={['none', 'none', 'flex']}
-          align="center"
+          alignItems="center"
           justifyContent="center"
           width="48px"
         >
@@ -165,7 +168,12 @@ const ContractLogItem = React.memo(
     const value = clarityValuetoHumanReadable(event.contract_log.value);
     const isAddress = value && validateStacksAddress(value);
     return (
-      <Text style={{ wordBreak: 'break-word' }} fontWeight="500" {...rest}>
+      <Text
+        color={color('text-body')}
+        style={{ wordBreak: 'break-word' }}
+        fontWeight="500"
+        {...rest}
+      >
         {isAddress ? <Truncate>{value}</Truncate> : value}
       </Text>
     );
@@ -177,7 +185,7 @@ const NonFungibleItem = React.memo(
     const value = clarityValuetoHumanReadable(event.asset.value);
     return (
       <Box {...rest}>
-        <Text fontWeight="500">
+        <Text color={color('text-body')} fontWeight="500">
           {value} <Text>NFT</Text>
         </Text>
       </Box>
@@ -186,7 +194,7 @@ const NonFungibleItem = React.memo(
 );
 const FungibleItem = React.memo(({ event, ...rest }: { event: TransactionEventFungibleAsset }) => (
   <Box {...rest}>
-    <Text fontWeight="500">
+    <Text color={color('text-body')} fontWeight="500">
       {event.asset.amount} <Text>FT</Text>
     </Text>
   </Box>
@@ -196,7 +204,7 @@ const StxAsset = React.memo(({ event, ...rest }: { event: TransactionEventStxAss
   if (!event.asset.amount) return null;
   return (
     <Box {...rest}>
-      <Text>{microToStacks(event.asset.amount)} STX</Text>
+      <Text color={color('text-body')}>{microToStacks(event.asset.amount)} STX</Text>
     </Box>
   );
 });
@@ -217,30 +225,49 @@ export const EventAssetValue = React.memo(
   }
 );
 
+const IconWrapper: React.FC<GridProps> = props => {
+  return (
+    <Grid
+      placeItems={'center'}
+      borderRadius={'4px'}
+      overflow={'hidden'}
+      bg={color('text-caption')}
+      mr="tight"
+      color="white"
+      size="24px"
+      {...props}
+    />
+  );
+};
+
 export const EventAssetType = React.memo(
   ({ event, ...rest }: { event: TransactionEvent } & FlexProps) => {
     if (event.event_type === 'smart_contract_log') {
       return (
-        <Flex align="center" {...rest}>
-          <Box mr="tight" color="var(--colors-invert)" size="20px">
-            <LogIcon />
-          </Box>
-          <Text fontWeight="500">Log</Text>
+        <Flex alignItems="center" {...rest}>
+          <IconWrapper mr="tight" bg={color('text-caption')}>
+            <LogIcon size={'18px'} />
+          </IconWrapper>
+          <Text color={color('text-body')} fontWeight="500">
+            Log
+          </Text>
         </Flex>
       );
     }
     if (event.asset.asset_event_type) {
-      const { label, icon: Icon } = getAssetEventTypeLabel(
+      const { label, icon: Icon, ...props } = getAssetEventTypeLabel(
         event.asset.asset_event_type as TransactionEventAssetType
       );
       return (
-        <Flex align="center" {...rest}>
+        <Flex alignItems="center" {...rest}>
           {Icon && (
-            <Box mr="tight">
-              <Icon size="20px" />
-            </Box>
+            <IconWrapper mr="tight" {...props}>
+              <Icon size="18px" />
+            </IconWrapper>
           )}
-          <Text fontWeight="500">{label}</Text>
+          <Text color={color('text-body')} fontWeight="500">
+            {label}
+          </Text>
         </Flex>
       );
     }
@@ -276,18 +303,22 @@ export const TokenTransferItem = React.memo(
           {...flexProps}
         >
           <EventAsset length={length} event={data} />
-          <Stack align="center" isInline width="50%" flexShrink={0} flexGrow={1}>
+          <Stack alignItems="center" isInline width="50%" flexShrink={0} flexGrow={1}>
             <EventAssetType width="50%" event={data} />
             <EventAssetValue width="50%" event={data} />
             <Flex
-              align="center"
+              alignItems="center"
               justify="center"
               width="48px"
               flexShrink={0}
               color="var(--colors-invert)"
               opacity={hover ? 1 : 0.5}
             >
-              <ChevronIcon size="32px" direction={isOpen ? 'up' : 'down'} />
+              <ChevronDown
+                size="16px"
+                transition={transition}
+                transform={isOpen ? 'rotate(-180deg)' : 'none'}
+              />
             </Flex>
           </Stack>
         </Stack>

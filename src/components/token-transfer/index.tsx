@@ -9,6 +9,7 @@ import { BottomButtonProps, TokenTransferProps } from '@components/token-transfe
 import { Caption, SectionTitle } from '@components/typography';
 import { TokenTransferItem } from '@components/token-transfer/item';
 import { border } from '@common/utils';
+import { Section } from '@components/section';
 
 const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
   const [hover, bind] = useHover();
@@ -17,7 +18,7 @@ const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
       borderBottomLeftRadius="12px"
       borderBottomRightRadius="12px"
       py="base"
-      align="center"
+      alignItems="center"
       justify={['center', 'center', 'unset']}
       px="base-loose"
       cursor={hover ? 'pointer' : 'unset'}
@@ -69,50 +70,50 @@ export const TokenTransfers = ({ events: _events, ...boxProps }: TokenTransferPr
     });
 
   return (
-    <Box {...boxProps}>
-      <Card overflow="hidden">
-        <Box p="base" borderBottom={border()}>
-          Events
-        </Box>
-        <Box borderBottom="1px solid var(--colors-border)">
-          <Stack width="100%" isInline alignItems="center">
+    <Section title={'Events'} {...(boxProps as any)}>
+      <Box borderBottom="1px solid var(--colors-border)">
+        <Stack width="100%" isInline alignItems="center">
+          <Flex
+            pl={['base', 'base', 'none']}
+            alignItems="center"
+            width="calc(33.333% - 4px)"
+            flexShrink={0}
+            py="tight"
+          >
             <Flex
-              pl={['base', 'base', 'none']}
+              display={['none', 'none', 'flex']}
               alignItems="center"
-              width="calc(33.333% - 4px)"
-              flexShrink={0}
-              py="tight"
+              justify="center"
+              width="48px"
             >
-              <Flex display={['none', 'none', 'flex']} align="center" justify="center" width="48px">
-                <Caption fontSize="14px">#</Caption>
-              </Flex>
-              <Caption fontSize="14px">Asset</Caption>
+              <Caption fontSize="14px">#</Caption>
             </Flex>
-            <Box width="calc(33.333% - 32px)">
-              <Caption fontSize="14px">Event type</Caption>
-            </Box>
-            <Box width="calc(33.333% + 44px)">
-              <Caption fontSize="14px">Value</Caption>
-            </Box>
-          </Stack>
-        </Box>
-        {events.map((event: TransactionEvent, key) =>
-          event ? (
-            <TokenTransferItem
-              noBottomBorder={events?.length - 1 === key}
-              data={event}
-              key={key}
-              length={events?.length}
-            />
-          ) : null
-        )}
-        <LoadMoreButton
-          viewAll={viewAll}
-          limit={limit}
-          events={_events}
-          onClick={() => setViewAll(true)}
-        />
-      </Card>
-    </Box>
+            <Caption fontSize="14px">Asset</Caption>
+          </Flex>
+          <Box width="calc(33.333% - 32px)">
+            <Caption fontSize="14px">Event type</Caption>
+          </Box>
+          <Box width="calc(33.333% + 44px)">
+            <Caption fontSize="14px">Value</Caption>
+          </Box>
+        </Stack>
+      </Box>
+      {events.map((event: TransactionEvent, key) =>
+        event ? (
+          <TokenTransferItem
+            noBottomBorder={events?.length - 1 === key}
+            data={event}
+            key={key}
+            length={events?.length}
+          />
+        ) : null
+      )}
+      <LoadMoreButton
+        viewAll={viewAll}
+        limit={limit}
+        events={_events}
+        onClick={() => setViewAll(true)}
+      />
+    </Section>
   );
 };

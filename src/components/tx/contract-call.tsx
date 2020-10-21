@@ -13,7 +13,7 @@ import { SectionTitle } from '@components/typography';
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { Row } from '@components/rows/row';
-import { TransactionDetails } from '@components/transaction-details';
+import { getContractId, TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';
 import { border, clarityValuetoHumanReadable } from '@common/utils';
 import { PostConditions } from '@components/post-conditions';
@@ -50,7 +50,7 @@ const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: 
                 children: 'Name',
               },
               children: (
-                <Flex width="100%" align="center">
+                <Flex width="100%" alignItems="center">
                   <Pre fontSize="14px">
                     define-{abiData.access} ({summary.function_name})
                   </Pre>
@@ -103,7 +103,7 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
     contractSource: selectOriginContractSource(transaction.contract_call.contract_id)(state),
     abi: JSON.parse(selectContractAbi(transaction.contract_call.contract_id)(state) || ''),
   }));
-  console.log(transaction.contract_call);
+  const contractId = getContractId(transaction);
   return (
     <>
       <PageTop status={transaction.tx_status} type={[TransactionType.CONTRACT_CALL]} />
@@ -111,7 +111,10 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
         <TransactionDetails transaction={transaction} />
         <TokenTransfers events={transaction.events} />
         <FunctionSummarySection abi={abi} summary={transaction.contract_call} />
-        <ContractSource source={contractSource} />
+        <ContractSource
+          sourceTx={transaction.tx_type === 'contract_call' ? contractId : undefined}
+          source={contractSource}
+        />
         <PostConditions conditions={transaction.post_conditions} />
       </Stack>
     </>
