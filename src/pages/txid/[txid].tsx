@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { NextPage, NextPageContext } from 'next';
 import { toRelativeTime, truncateMiddle } from '@common/utils';
 
@@ -7,7 +9,7 @@ import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
 import PoisonMicroblockPage from '@components/tx/poison-microblock';
-import React from 'react';
+
 import { ReduxNextPageContext } from '@common/types/next-store';
 import SmartContractPage from '@components/tx/smart-contract';
 import TokenTransferPage from '@components/tx/token-transfer';

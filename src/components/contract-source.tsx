@@ -62,22 +62,22 @@ export const ContractSource: React.FC<{ sourceTx?: string; source?: string } & B
         <Box
           borderTop={border()}
           borderTopColor="rgb(39, 41, 46)"
-          mt={!expanded ? '16px' : 'unset'}
+          mt={sourceLines >= 10 && !expanded ? '16px' : 'unset'}
         >
-          <Grid
-            p="base"
-            placeItems="center"
-            opacity={0.65}
-            onClick={handleToggleExpanded}
-            _hover={{
-              cursor: 'pointer',
-              opacity: 1,
-            }}
-          >
-            {sourceLines >= 10 ? (
+          {sourceLines >= 10 ? (
+            <Grid
+              p="base"
+              placeItems="center"
+              opacity={0.65}
+              onClick={handleToggleExpanded}
+              _hover={{
+                cursor: 'pointer',
+                opacity: 1,
+              }}
+            >
               <Text color="white">{!expanded ? `See all ${sourceLines} lines` : 'Collapse'}</Text>
-            ) : null}
-          </Grid>
+            </Grid>
+          ) : null}
         </Box>
       </Box>
     </Box>

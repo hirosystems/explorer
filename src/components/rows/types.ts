@@ -47,4 +47,5 @@ export interface RowsProps {
   columnLabels?: string[];
   inline?: boolean;
   noTopBorder?: boolean;
+  noBottomBorder?: boolean;
 }

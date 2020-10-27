@@ -17,6 +17,7 @@ import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
 import { Transaction } from '@blockstack/stacks-blockchain-api-types';
 import { Section } from '@components/section';
+import { BlockLink } from '@components/links';
 
 interface FeeComponentProps {
   fees: string;
@@ -100,7 +101,12 @@ const transformDataToRowData = (d: Transaction) => {
     label: {
       children: 'Block hash',
     },
-    children: d.block_hash,
+    children: (
+      <BlockLink hash={d.block_hash}>
+        <Link>{d.block_hash}</Link>
+      </BlockLink>
+    ),
+    copy: d.block_hash,
   };
 
   switch (d.tx_type) {

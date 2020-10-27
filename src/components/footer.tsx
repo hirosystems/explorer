@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Text, Box, Flex, BoxProps, color, FlexProps } from '@stacks/ui';
 import { useColorMode } from '@common/hooks/use-color-mode';
-import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 
 const LinkWrapper: React.FC<any> = ({ children, href }) => {
   return href ? (
@@ -16,40 +16,44 @@ const LinkWrapper: React.FC<any> = ({ children, href }) => {
 
 type FooterLinkProps = { onClick?: any } & BoxProps;
 
-const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = forwardRefWithAs<
+const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = memoWithAs<
   FooterLinkProps,
   'a'
->(({ as = 'a', children, ...rest }, ref) => {
-  const externalProps =
-    rest.href && !rest.href.startsWith('/') ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+>(
+  forwardRefWithAs<FooterLinkProps, 'a'>(({ as = 'a', children, ...rest }, ref) => {
+    const externalProps =
+      rest.href && !rest.href.startsWith('/')
+        ? { target: '_blank', rel: 'noopener noreferrer' }
+        : {};
 
-  return (
-    <LinkWrapper href={rest.href}>
-      <Text
-        cursor="pointer"
-        textStyle="body.small"
-        color={color('text-caption')}
-        textDecoration="none"
-        _hover={{ textDecoration: 'underline' }}
-        ref={ref}
-        as={as}
-        {...rest}
-        {...externalProps}
-      >
-        {children}
-      </Text>
-    </LinkWrapper>
-  );
-});
+    return (
+      <LinkWrapper href={rest.href}>
+        <Text
+          cursor="pointer"
+          textStyle="body.small"
+          color={color('text-caption')}
+          textDecoration="none"
+          _hover={{ textDecoration: 'underline' }}
+          ref={ref}
+          as={as}
+          {...rest}
+          {...externalProps}
+        >
+          {children}
+        </Text>
+      </LinkWrapper>
+    );
+  })
+);
 
-const ColorModeLink = ({ ...rest }) => {
+const ColorModeLink = React.memo(({ ...rest }) => {
   const [colorMode, toggleColorMode] = useColorMode();
   return colorMode ? (
     <FooterLink onClick={toggleColorMode} {...rest}>
       {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
     </FooterLink>
   ) : null;
-};
+});
 
 const LinkInNewWindow = React.memo(
   React.forwardRef((props: any, ref: any) => <Text as="a" ref={ref} {...props} />)

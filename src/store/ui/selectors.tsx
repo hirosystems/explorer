@@ -14,7 +14,7 @@ export const selectCurrentNetworkName = createSelector(
   state => state.selectedNetwork
 );
 
-export const selectCurrentNetworkUrl = createSelector(
+export const selectCurrentNetworkUrl = createSelector<any, any, any, string>(
   [selectNetworks, selectCurrentNetworkName],
   (networks, selectedNetwork) => {
     return networks[selectedNetwork];

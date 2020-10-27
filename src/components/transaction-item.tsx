@@ -24,6 +24,7 @@ import { ContractCallIcon } from '@components/icons/contract-call';
 import { color } from '@components/color-modes';
 import { getContractName } from '@common/utils';
 import { StxInline } from '@components/icons/stx-inline';
+import { useHarmonicIntervalFn } from 'react-use';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = StxInline;
@@ -74,7 +75,12 @@ export const ItemIcon = React.memo(
           zIndex={9}
           as="span"
         />
-        <Icon position="relative" zIndex={2} size={type === 'token_transfer' ? '18px' : '21px'} />
+        <Icon
+          color={color('text-title')}
+          position="relative"
+          zIndex={2}
+          size={type === 'token_transfer' ? '18px' : '21px'}
+        />
       </Flex>
     );
   }
@@ -118,6 +124,8 @@ const getRelativeTimestamp = (tx: Transaction) => {
 
 const Details = ({ tx, minimal, ...rest }: { tx: Transaction; minimal?: boolean } & FlexProps) => {
   const date = getRelativeTimestamp(tx);
+
+  useHarmonicIntervalFn(() => null, date.toLocaleLowerCase().includes('seconds') ? 1000 : 60000);
 
   const additional =
     tx.tx_type === 'token_transfer'

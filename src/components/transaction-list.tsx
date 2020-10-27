@@ -47,21 +47,19 @@ const Item: React.FC<
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const VirtualList: React.FC<{ items: MempoolTransactionListResponse | TransactionResults }> = ({
-  items,
-}) => {
-  return items.results.length ? (
+const VirtualList: React.FC<{
+  items: (MempoolTransaction | Transaction)[];
+}> = React.memo(({ items }) => {
+  return items.length ? (
     <Flex flexDirection="column">
-      {(items.results as (MempoolTransaction | Transaction)[]).map(
-        (tx: MempoolTransaction | Transaction, index: number) => (
-          <Item key={index} tx={tx} isLast={index === items.results.length - 1} />
-        )
-      )}
+      {items.map((tx: MempoolTransaction | Transaction, index: number) => (
+        <Item key={index} tx={tx} isLast={index === items.length - 1} />
+      ))}
     </Flex>
   ) : (
     <></>
   );
-};
+});
 
 const EmptyMessage: React.FC = props => (
   <Grid px="base" py="64px" placeItems="center">
@@ -69,7 +67,7 @@ const EmptyMessage: React.FC = props => (
   </Grid>
 );
 
-const ViewAllButton: React.FC = props => (
+const ViewAllButton: React.FC = React.memo(props => (
   <NextLink href="/transactions" passHref>
     <Grid
       as="a"
@@ -83,7 +81,22 @@ const ViewAllButton: React.FC = props => (
       <Caption>View all transactions</Caption>
     </Grid>
   </NextLink>
-);
+));
+
+const LoadMoreButton: React.FC<any> = React.memo(({ loadMore }) => (
+  <Grid
+    as="a"
+    borderTop={border()}
+    px="base"
+    py="base"
+    placeItems="center"
+    bg={color('bg')}
+    _hover={{ bg: color('bg-alt') }}
+    onClick={loadMore}
+  >
+    <Caption>Load more</Caption>
+  </Grid>
+));
 
 const Filter = () => {
   const types = [
@@ -116,96 +129,118 @@ const Filter = () => {
   );
 };
 
+const PendingList: React.FC<any> = React.memo(
+  ({ pending, handleTogglePendingVisibility, pendingVisible }) =>
+    pendingVisible ? (
+      <Box borderBottom={border()} flexGrow={1}>
+        <Flex
+          justifyContent="space-between"
+          bg={color('bg')}
+          py="tight"
+          px="base"
+          borderBottom={border()}
+        >
+          <Caption>Pending ({pending.length})</Caption>
+          <Caption
+            onClick={handleTogglePendingVisibility}
+            _hover={{
+              color: pendingVisible ? color('accent') : undefined,
+              cursor: 'pointer',
+            }}
+          >
+            {pendingVisible ? 'Hide' : 'Show'} pending transactions
+          </Caption>
+        </Flex>
+
+        <VirtualList items={pending} />
+      </Box>
+    ) : null
+);
+
 export const TransactionList: React.FC<
   {
-    mempool: MempoolTransactionListResponse;
-    transactions: TransactionResults;
+    mempool?: MempoolTransactionListResponse['results'];
+    transactions: TransactionResults['results'];
     // Boolean for homepage view
     recent?: boolean;
+    isReachingEnd?: boolean;
+    isLoadingMore?: boolean;
+    loadMore?: () => void;
   } & FlexProps
-> = ({ mempool, transactions, recent, ...rest }) => {
-  const [pendingVisibility, setPendingVisibility] = React.useState<'visible' | 'hidden'>('visible');
+> = React.memo(
+  ({ mempool = [], transactions, recent, loadMore, isReachingEnd, isLoadingMore, ...rest }) => {
+    const [pendingVisibility, setPendingVisibility] = React.useState<'visible' | 'hidden'>(
+      'visible'
+    );
 
-  const handleTogglePendingVisibility = React.useCallback(() => {
-    setPendingVisibility(s => (s === 'visible' ? 'hidden' : 'visible'));
-  }, [setPendingVisibility]);
+    const handleTogglePendingVisibility = React.useCallback(() => {
+      setPendingVisibility(s => (s === 'visible' ? 'hidden' : 'visible'));
+    }, [setPendingVisibility]);
 
-  const pending: MempoolTransactionListResponse['results'] = mempool.results.filter(tx => {
-    const now = new Date().getTime();
-    const pendingTime = tx.receipt_time * 1000;
-    if (now - pendingTime <= 1000 * 60 * 60) {
-      return true;
-    }
-    return false;
-  });
+    const pending: MempoolTransactionListResponse['results'] = React.useMemo(
+      () =>
+        mempool.filter(tx => {
+          const now = new Date().getTime();
+          const pendingTime = tx.receipt_time * 1000;
+          if (now - pendingTime <= 1000 * 60 * 60) {
+            return true;
+          }
+          return false;
+        }),
+      [mempool]
+    );
 
-  const pendingVisible = pending?.length > 0 && pendingVisibility === 'visible';
+    const pendingVisible = pending?.length > 0 && pendingVisibility === 'visible';
 
-  const hasTransactions = !!transactions.results.length;
+    const hasTransactions = !!transactions.length;
 
-  return (
-    <Section title="Transactions" {...rest}>
-      <>
-        {pendingVisible ? (
-          <Box borderBottom={border()} flexGrow={1}>
-            <Flex
-              justifyContent="space-between"
-              bg={color('bg')}
-              py="tight"
-              px="base"
-              borderBottom={border()}
-            >
-              <Caption>Pending ({pending.length})</Caption>
-              <Caption
-                onClick={handleTogglePendingVisibility}
-                _hover={{
-                  color: pendingVisible ? color('accent') : undefined,
-                  cursor: 'pointer',
-                }}
+    return (
+      <Section title="Transactions" {...rest}>
+        <>
+          <PendingList
+            pending={pending}
+            handleTogglePendingVisibility={handleTogglePendingVisibility}
+            pendingVisible={pendingVisible}
+          />
+          {transactions.length ? (
+            <Box flexGrow={1}>
+              <Flex
+                bg={color('bg')}
+                justifyContent="space-between"
+                py="tight"
+                px="base"
+                borderBottom={border()}
               >
-                {pendingVisible ? 'Hide' : 'Show'} pending transactions
-              </Caption>
-            </Flex>
-
-            <VirtualList items={{ results: pending } as any} />
-          </Box>
-        ) : null}
-        {transactions.results.length ? (
-          <Box flexGrow={1}>
-            <Flex
-              bg={color('bg')}
-              justifyContent="space-between"
-              py="tight"
-              px="base"
-              borderBottom={border()}
-            >
-              <Caption>Confirmed</Caption>
-              <Flex alignItems="center">
-                {!recent && <Caption>Filter</Caption>}
-                {!pendingVisible && pending.length > 0 && (
-                  <Caption
-                    ml="base"
-                    onClick={handleTogglePendingVisibility}
-                    _hover={{
-                      color: pendingVisible ? color('accent') : undefined,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {pendingVisible ? 'Hide' : 'Show'} pending transactions ({pending.length})
-                  </Caption>
-                )}
+                <Caption>Confirmed</Caption>
+                <Flex alignItems="center">
+                  {!recent && <Caption>Filter</Caption>}
+                  {!pendingVisible && pending.length > 0 && (
+                    <Caption
+                      ml="base"
+                      onClick={handleTogglePendingVisibility}
+                      _hover={{
+                        color: pendingVisible ? color('accent') : undefined,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      {pendingVisible ? 'Hide' : 'Show'} pending transactions ({pending.length})
+                    </Caption>
+                  )}
+                </Flex>
               </Flex>
-            </Flex>
-            <VirtualList items={transactions} />
-          </Box>
-        ) : (
-          <Grid placeItems="center" px="base" py="extra-loose">
-            <Caption>No transactions yet</Caption>
-          </Grid>
-        )}
-
-        {hasTransactions && recent ? <ViewAllButton /> : null}
-      </>
-    </Section>
-  );
-};
+              <VirtualList items={transactions} />
+            </Box>
+          ) : (
+            <Grid placeItems="center" px="base" py="extra-loose">
+              <Caption>No transactions yet</Caption>
+            </Grid>
+          )}
+          {hasTransactions && recent ? <ViewAllButton /> : null}
+          {!isReachingEnd && loadMore ? (
+            <LoadMoreButton isLoadingMore={isLoadingMore} loadMore={loadMore} />
+          ) : null}{' '}
+        </>
+      </Section>
+    );
+  }
+);

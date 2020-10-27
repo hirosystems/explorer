@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import {
   AddressBalanceResponse,
   TransactionResults,
@@ -13,7 +15,7 @@ import Head from 'next/head';
 import { NextPage } from 'next';
 import { PageWrapper } from '@components/page';
 import { QrCode } from '@components/icons/qrcode';
-import React from 'react';
+
 import { ReduxNextPageContext } from '@common/types/next-store';
 
 import { Tab } from '@components/sandbox/tabs';
@@ -234,7 +236,7 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
   return (
     <PageWrapper>
       <Head>
-        <title>STX Address {truncateMiddle(principal)} | Blockstack Explorer</title>
+        <title>STX Address {truncateMiddle(principal)} | Stacks Explorer</title>
       </Head>
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>

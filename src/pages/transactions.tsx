@@ -1,8 +1,8 @@
+import * as React from 'react';
 import { Box } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
-import React from 'react';
 import { ReduxNextPageContext } from '@common/types/next-store';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
@@ -13,6 +13,7 @@ import {
   MempoolTransactionListResponse,
 } from '@blockstack/stacks-blockchain-sidecar-types';
 import { NextPage } from 'next';
+import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 
 interface InitialData {
   transactions: TransactionResults;
@@ -20,10 +21,21 @@ interface InitialData {
 }
 
 const TransactionsPage: NextPage<InitialData> = initialData => {
-  const [transactions, mempool] = useFetchTransactions({
-    initialData,
-    txLimit: 200,
-    mempoolLimit: 50,
+  const { data: transactions, loadMore, isReachingEnd, isLoadingMore } = useInfiniteFetch<
+    TransactionResults['results']
+  >({
+    initialData: initialData.transactions.results,
+    type: 'tx',
+    limit: 200,
+    types: ['smart_contract', 'contract_call', 'token_transfer'],
+  });
+
+  const { data: mempool } = useInfiniteFetch<MempoolTransactionListResponse['results']>({
+    initialData: initialData.mempool.results,
+    type: 'tx',
+    limit: 200,
+    pending: true,
+    types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
 
   return (
@@ -34,7 +46,13 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
           Transactions
         </Title>
       </Box>
-      {mempool && transactions && <TransactionList mempool={mempool} transactions={transactions} />}
+      <TransactionList
+        mempool={mempool || []}
+        transactions={transactions || []}
+        loadMore={loadMore}
+        isReachingEnd={isReachingEnd}
+        isLoadingMore={isLoadingMore}
+      />
     </PageWrapper>
   );
 };

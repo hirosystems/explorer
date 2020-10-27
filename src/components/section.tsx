@@ -11,7 +11,7 @@ interface SectionProps extends FlexProps {
   title: string;
 }
 
-const SectionHeader: React.FC<SectionProps> = ({ title, children, ...rest }) => (
+const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...rest }) => (
   <Flex bg={color('bg')} justifyContent="space-between" borderBottom={border()} p="base" {...rest}>
     <Box>
       <Text color={color('text-title')} fontWeight="500">
@@ -20,18 +20,15 @@ const SectionHeader: React.FC<SectionProps> = ({ title, children, ...rest }) => 
     </Box>
     {children}
   </Flex>
-);
+));
 
-export const Section: React.FC<{ topRight?: any } & SectionProps> = ({
-  title,
-  topRight = null,
-  children,
-  ...rest
-}) => {
-  return (
-    <Card overflow="hidden" bg={color('bg')} {...rest}>
-      <SectionHeader title={title}>{topRight}</SectionHeader>
-      <Flex flexDirection="column">{children}</Flex>
-    </Card>
-  );
-};
+export const Section: React.FC<{ topRight?: any } & SectionProps> = React.memo(
+  ({ title, topRight = null, children, ...rest }) => {
+    return (
+      <Card overflow="hidden" bg={color('bg')} {...rest}>
+        <SectionHeader title={title}>{topRight}</SectionHeader>
+        <Flex flexDirection="column">{children}</Flex>
+      </Card>
+    );
+  }
+);
