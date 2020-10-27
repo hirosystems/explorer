@@ -40,10 +40,9 @@ module.exports = withBundleAnalyzer({
 
       // Install webpack aliases:
       const aliases = config.resolve.alias || (config.resolve.alias = {});
-      aliases.react = aliases['react-dom'] = 'preact/compat';
-      aliases.preact = 'preact';
-      aliases['preact/compat'] = 'preact/compat';
-      aliases['react-ssr-prepass'] = 'preact-ssr-prepass';
+
+      // aliases.react = aliases['react-dom'] = 'preact/compat';
+      // aliases['react-ssr-prepass'] = 'preact-ssr-prepass';
       aliases['@blockstack/ui'] = '@stacks/ui';
       aliases['styled-components'] = '@emotion/react';
     }

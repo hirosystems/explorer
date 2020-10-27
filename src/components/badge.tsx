@@ -12,21 +12,20 @@ const Label: React.FC<BoxProps> = props => (
     {...props}
   />
 );
-
-export const Badge: ForwardRefExoticComponentWithAs<
-  FlexProps & { labelProps?: BoxProps },
-  'div'
-> = forwardRefWithAs(({ children, labelProps = {}, ...rest }, ref) => (
-  <Flex
-    alignItems="center"
-    justify="center"
-    borderRadius="24px"
-    py="extra-tight"
-    px={['tight', 'tight', 'base-tight']}
-    color="white"
-    ref={ref}
-    {...rest}
-  >
-    <Label {...labelProps}>{children}</Label>
-  </Flex>
-));
+export type BadgeProps = FlexProps & { labelProps?: BoxProps };
+export const Badge: ForwardRefExoticComponentWithAs<BadgeProps, 'div'> = forwardRefWithAs(
+  ({ children, labelProps = {}, ...rest }, ref) => (
+    <Flex
+      alignItems="center"
+      justify="center"
+      borderRadius="24px"
+      py="extra-tight"
+      px={['tight', 'tight', 'base-tight']}
+      color="white"
+      ref={ref}
+      {...rest}
+    >
+      <Label {...labelProps}>{children}</Label>
+    </Flex>
+  )
+);

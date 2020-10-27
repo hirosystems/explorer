@@ -53,6 +53,7 @@ const iconMap = {
       css={(theme: Theme) =>
         css({
           animation: `${keyframesRotate} 0.9s infinite linear`,
+          color: color('invert'),
         })(theme)
       }
       {...p}

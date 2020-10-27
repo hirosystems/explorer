@@ -1,19 +1,22 @@
 import * as React from 'react';
 
-import { Box, BoxProps, color, Flex, Grid } from '@stacks/ui';
-import { Caption, SectionTitle, Text } from '@components/typography';
+import { Box, BoxProps, Flex, Grid } from '@stacks/ui';
+import { Text } from '@components/typography';
 
 import { CodeBlock } from '@components/code-block';
 import { border } from '@common/utils';
 import { Badge } from './badge';
 import { CodeIcon } from './icons/code';
 import { TxLink } from '@components/links';
+import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
 
-export const ContractSource: React.FC<{ sourceTx?: string; source?: string } & BoxProps> = ({
-  sourceTx,
-  source,
-  ...rest
-}) => {
+export const ContractSource: React.FC<
+  {
+    sourceTx?: string;
+    source?: string;
+    contractCall?: ContractCallTransaction['contract_call'];
+  } & BoxProps
+> = ({ sourceTx, source, contractCall, ...rest }) => {
   const [expanded, setExpanded] = React.useState(false);
   const handleToggleExpanded = React.useCallback(() => {
     setExpanded(s => !s);
@@ -21,7 +24,14 @@ export const ContractSource: React.FC<{ sourceTx?: string; source?: string } & B
 
   const sourceLines =
     source?.split(`
-`).length || 0;
+`) || [];
+  const sourceLinesLength = sourceLines.length || 0;
+  const functionSigElements = contractCall?.function_signature.split(' ');
+  const start = functionSigElements?.length
+    ? [functionSigElements[0], functionSigElements[1]].join(' ')
+    : undefined;
+
+  const functionLine = start ? sourceLines.findIndex(line => line.includes(start)) + 1 : undefined;
 
   return source ? (
     <Box {...rest}>
@@ -58,26 +68,29 @@ export const ContractSource: React.FC<{ sourceTx?: string; source?: string } & B
           borderRadius="0"
           showLineNumbers
           code={source}
+          highlightedLine={functionLine}
         />
         <Box
           borderTop={border()}
           borderTopColor="rgb(39, 41, 46)"
-          mt={!expanded ? '16px' : 'unset'}
+          mt={sourceLinesLength >= 10 && !expanded ? '16px' : 'unset'}
         >
-          <Grid
-            p="base"
-            placeItems="center"
-            opacity={0.65}
-            onClick={handleToggleExpanded}
-            _hover={{
-              cursor: 'pointer',
-              opacity: 1,
-            }}
-          >
-            {sourceLines >= 10 ? (
-              <Text color="white">{!expanded ? `See all ${sourceLines} lines` : 'Collapse'}</Text>
-            ) : null}
-          </Grid>
+          {sourceLinesLength >= 10 ? (
+            <Grid
+              p="base"
+              placeItems="center"
+              opacity={0.65}
+              onClick={handleToggleExpanded}
+              _hover={{
+                cursor: 'pointer',
+                opacity: 1,
+              }}
+            >
+              <Text color="white">
+                {!expanded ? `See all ${sourceLinesLength} lines` : 'Collapse'}
+              </Text>
+            </Grid>
+          ) : null}
         </Box>
       </Box>
     </Box>

@@ -6,7 +6,7 @@ import {
   TransactionResults,
 } from '@blockstack/stacks-blockchain-sidecar-types';
 
-export const fetchTx = (apiServer: string) => async (
+export const fetchTx = (apiServer: string): ((txid: string) => Promise<Transaction>) => async (
   txid: Transaction['tx_id']
 ): Promise<Transaction> => {
   const resp = await fetchFromSidecar(apiServer)(`/tx/${txid}`);

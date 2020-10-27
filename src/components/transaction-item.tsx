@@ -24,6 +24,7 @@ import { ContractCallIcon } from '@components/icons/contract-call';
 import { color } from '@components/color-modes';
 import { getContractName } from '@common/utils';
 import { StxInline } from '@components/icons/stx-inline';
+import { useHarmonicIntervalFn } from 'react-use';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = StxInline;
@@ -74,7 +75,12 @@ export const ItemIcon = React.memo(
           zIndex={9}
           as="span"
         />
-        <Icon position="relative" zIndex={2} size={type === 'token_transfer' ? '18px' : '21px'} />
+        <Icon
+          color={color('text-title')}
+          position="relative"
+          zIndex={2}
+          size={type === 'token_transfer' ? '18px' : '21px'}
+        />
       </Flex>
     );
   }
@@ -86,6 +92,7 @@ export interface TxItemProps extends FlexProps {
   isFocused?: boolean;
   isHovered?: boolean;
   target?: string;
+  principal?: string;
   onClick?: any;
   onFocus?: any;
   onBlur?: any;
@@ -116,8 +123,15 @@ const getRelativeTimestamp = (tx: Transaction) => {
   return date;
 };
 
-const Details = ({ tx, minimal, ...rest }: { tx: Transaction; minimal?: boolean } & FlexProps) => {
+const Details = ({
+  tx,
+  minimal,
+  principal,
+  ...rest
+}: { tx: Transaction; principal?: string; minimal?: boolean } & FlexProps) => {
   const date = getRelativeTimestamp(tx);
+
+  useHarmonicIntervalFn(() => null, date.toLocaleLowerCase().includes('seconds') ? 1000 : 60000);
 
   const additional =
     tx.tx_type === 'token_transfer'
@@ -125,6 +139,13 @@ const Details = ({ tx, minimal, ...rest }: { tx: Transaction; minimal?: boolean 
       : (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
         (tx.tx_type === 'contract_call' && tx?.events?.length)
       ? `${tx?.events?.length} events`
+      : null;
+
+  const sentOrReceived =
+    tx.tx_type === 'token_transfer' && principal
+      ? tx.sender_address === principal
+        ? 'Sent'
+        : 'Received'
       : null;
 
   const strings = minimal
@@ -136,6 +157,7 @@ const Details = ({ tx, minimal, ...rest }: { tx: Transaction; minimal?: boolean 
       ].filter(str => str) as string[])
     : ([
         getTransactionTypeLabel(tx.tx_type),
+        sentOrReceived,
         date,
         tx.tx_status === 'pending' ? 'Pending' : null,
       ].filter(str => str) as string[]);
@@ -188,7 +210,7 @@ const AddressArea = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
   return null;
 };
 
-const LargeVersion = ({ tx }: { tx: Transaction }) => {
+const LargeVersion = ({ tx, principal }: { tx: Transaction; principal?: string }) => {
   const title = getTitle(tx);
 
   return (
@@ -201,7 +223,7 @@ const LargeVersion = ({ tx }: { tx: Transaction }) => {
           as="span"
           spacing="tight"
         >
-          <Details tx={tx} />
+          <Details principal={principal} tx={tx} />
           <Title fontWeight="500" display="block" fontSize="16px">
             {title || truncateMiddle(tx.tx_id, 12)}
           </Title>
@@ -314,7 +336,7 @@ const MinimalVersion = ({ tx }: any) => {
 };
 
 export const TxItem = forwardRefWithAs<TxItemProps, 'span'>(
-  ({ tx, isHovered, isFocused, minimal = false, as = 'span', ...rest }, ref) => {
+  ({ tx, isHovered, isFocused, minimal = false, as = 'span', principal, ...rest }, ref) => {
     return (
       <Flex
         px="base"
@@ -330,7 +352,11 @@ export const TxItem = forwardRefWithAs<TxItemProps, 'span'>(
         {...rest}
         display="flex"
       >
-        {minimal ? <MinimalVersion tx={tx} /> : <LargeVersion tx={tx as any} />}
+        {minimal ? (
+          <MinimalVersion tx={tx} />
+        ) : (
+          <LargeVersion principal={principal} tx={tx as any} />
+        )}
       </Flex>
     );
   }

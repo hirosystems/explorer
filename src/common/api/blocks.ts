@@ -21,6 +21,8 @@ export const fetchBlock = ({ apiServer }: { apiServer: string }) => async ({
 }): Promise<Block> => {
   const resp = await fetchFromSidecar(apiServer)(`/block/${hash}`);
 
+  console.log(resp);
+
   const block = await resp.json();
   if (!resp.ok) {
     throw Error(block.error);
@@ -29,7 +31,7 @@ export const fetchBlock = ({ apiServer }: { apiServer: string }) => async ({
   return block;
 };
 
-const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>
+export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>
   `limit=${limit}${offset ? `&offset=${offset}` : ''}`;
 
 export const fetchBlocksList = (options: FetchBlocksListOptions) => async (): Promise<
