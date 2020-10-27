@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AppConfig, UserSession } from 'blockstack/lib';
-import { ToastProvider } from '@stacks/ui';
+import { Flex, ToastProvider } from '@stacks/ui';
 import { showBlockstackConnect, FinishedData, AuthOptions } from '@blockstack/connect';
 import { parseCookies } from 'nookies';
 import useConstant from 'use-constant';
@@ -11,13 +11,11 @@ import { fetchAccount, setIdentity } from '@store/sandbox';
 import { ReduxNextPageContext } from '@common/types';
 import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
-import { TokenTransfer } from '@components/sandbox/token-transfer';
-import { ContractDeploy } from '@components/sandbox/contract-deploy';
-import { ContractCall } from '@components/sandbox/contract-call';
 import { Faucet } from '@components/sandbox/faucet';
-import { RawTx } from '@components/sandbox/raw-tx';
 import { USERNAME_COOKIE, IDENTITY_COOKIE } from '@common/utils';
 import { PageContent } from '@components/sandbox/page';
+import { PageWrapper } from '@components/page';
+import { Title } from '@components/typography';
 
 const ConnectContext = React.createContext<{ authOptions?: AuthOptions }>({
   authOptions: undefined,
@@ -79,6 +77,23 @@ const SandboxWrapper = React.memo(({ children }: any) => {
   );
 });
 
+const PageTop: React.FC = React.memo(() => (
+  <Flex flexDirection="column" alignItems="center" maxWidth="544px" justify="center">
+    <Title
+      as="h1"
+      fontSize="36px"
+      display="block"
+      width="100%"
+      textAlign={['center', 'left']}
+      mt="72px"
+      mb="extra-loose"
+      color="white"
+    >
+      Explorer sandbox
+    </Title>
+  </Flex>
+));
+
 const SandboxPage: NextPage<any> = ({ tab, identity: _cookieIdentity, username }) => {
   const [transactionsVisible, setShowTransactions] = useState(false);
   const { lastFetch, loading, identity, error, doFetchAccount } = useSandboxState();
@@ -98,15 +113,17 @@ const SandboxPage: NextPage<any> = ({ tab, identity: _cookieIdentity, username }
 
   return (
     <SandboxWrapper>
-      <PageContent
-        fullWidth
-        hideTransactionDialog={hideTransactionDialog}
-        showTransactionDialog={showTransactionDialog}
-        transactionsVisible={transactionsVisible}
-        username={username}
-        tab={tab}
-        tabs={paths}
-      />
+      <PageWrapper>
+        <PageTop />
+        <PageContent
+          hideTransactionDialog={hideTransactionDialog}
+          showTransactionDialog={showTransactionDialog}
+          transactionsVisible={transactionsVisible}
+          username={username}
+          tab={tab}
+          tabs={paths}
+        />
+      </PageWrapper>
     </SandboxWrapper>
   );
 };

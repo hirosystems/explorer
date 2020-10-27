@@ -34,7 +34,16 @@ const Value = ({ arg }: { arg: any }) => {
   return <Text>{clarityValuetoHumanReadable(arg)}</Text>;
 };
 
-const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: any }) => {
+const FunctionSummarySection = ({
+  summary,
+  result,
+  abi,
+  ...rest
+}: {
+  result: any;
+  summary: any;
+  abi: any;
+}) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const abiData = abi.functions.find(func => func.name === summary.function_name);
@@ -87,6 +96,17 @@ const FunctionSummarySection = ({ summary, abi, ...rest }: { summary: any; abi: 
                 </Row>
               ),
             },
+            {
+              label: {
+                children: 'Result',
+              },
+              condition: result?.repr,
+              children: (
+                <Flex width="100%" alignItems="center">
+                  <Pre fontSize="14px">{result?.repr}</Pre>
+                </Flex>
+              ),
+            },
           ]}
         />
       </>
@@ -104,16 +124,22 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
     abi: JSON.parse(selectContractAbi(transaction.contract_call.contract_id)(state) || ''),
   }));
   const contractId = getContractId(transaction);
+  console.log(transaction.contract_call);
   return (
     <>
       <PageTop status={transaction.tx_status} type={[TransactionType.CONTRACT_CALL]} />
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} />
         <TokenTransfers events={transaction.events} />
-        <FunctionSummarySection abi={abi} summary={transaction.contract_call} />
+        <FunctionSummarySection
+          abi={abi}
+          result={transaction.tx_result}
+          summary={transaction.contract_call}
+        />
         <ContractSource
           sourceTx={transaction.tx_type === 'contract_call' ? contractId : undefined}
           source={contractSource}
+          contractCall={transaction.contract_call}
         />
         <PostConditions conditions={transaction.post_conditions} />
       </Stack>

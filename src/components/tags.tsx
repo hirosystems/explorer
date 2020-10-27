@@ -33,6 +33,7 @@ export const Tag = ({ type, ...rest }: TagProps) => {
         strokeWidth={1.5}
         width={type === 'token_transfer' ? '12px' : '16px'}
         height="auto"
+        color={color('text-body')}
       />
       {getTxTypeName(type)}
     </Badge>

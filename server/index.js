@@ -53,11 +53,23 @@ app.prepare().then(() => {
 
   server.get('/', (req, res) => ssrCache({ req, res, pagePath: '/' }));
 
-  server.get('/txid/:txid', (req, res) => {
-    const queryParams = { txid: req.params.txid };
-    const pagePath = '/txid/[txid]';
-    return ssrCache({ req, res, pagePath, queryParams });
-  });
+  // server.get('/txid/:txid', (req, res) => {
+  //   const queryParams = { txid: req.params.txid };
+  //   const pagePath = '/txid/[txid]';
+  //   return ssrCache({ req, res, pagePath, queryParams });
+  // });
+  //
+  // server.get('/tx/:txid', (req, res) => {
+  //   const queryParams = { txid: req.params.txid };
+  //   const pagePath = '/txid/[txid]';
+  //   return ssrCache({ req, res, pagePath, queryParams });
+  // });
+  //
+  //   server.get('/tx/:txid', (req, res) => {
+  //   const queryParams = { txid: req.params.txid };
+  //   const pagePath = '/txid/[txid]';
+  //   return ssrCache({ req, res, pagePath, queryParams });
+  // });
 
   server.get('*', (req, res) => handle(req, res));
 

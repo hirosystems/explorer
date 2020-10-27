@@ -17,6 +17,12 @@ import { SearchBarWithDropdown } from '@components/search-bar';
 
 import { StxInline } from '@components/icons/stx-inline';
 import { TestnetSelector } from '@components/testnet-selector';
+import { useHomepageData } from '@pages/index';
+import { mutate, cache } from 'swr';
+import { makeKey } from '@common/hooks/use-fetch-blocks';
+import { useSelector } from 'react-redux';
+import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+import { RootState } from '@store';
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
 
@@ -24,25 +30,27 @@ export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref)
   <Link as="a" fontSize="14px" fontWeight={500} color="white" ref={ref as any} {...props} />
 ));
 
-export const LogoNavItem = React.memo((props: BoxProps) => (
-  <NextLink href="/" passHref>
-    <Grid
-      placeItems="center"
-      size="37px"
-      color="white"
-      borderRadius="37px"
-      flexShrink={0}
-      _hover={{ bg: '#5546FF', color: 'white' }}
-      aria-label="Homepage"
-      title="Stacks Explorer"
-      as="a"
-      transition={transition}
-      {...props}
-    >
-      <StxInline color="currentColor" size="22px" />
-    </Grid>
-  </NextLink>
-));
+export const LogoNavItem = React.memo((props: BoxProps) => {
+  return (
+    <NextLink href="/" passHref>
+      <Grid
+        placeItems="center"
+        size="37px"
+        color="white"
+        borderRadius="37px"
+        flexShrink={0}
+        _hover={{ bg: '#5546FF', color: 'white' }}
+        aria-label="Homepage"
+        title="Stacks Explorer"
+        as="a"
+        transition={transition}
+        {...props}
+      >
+        <StxInline color="currentColor" size="22px" />
+      </Grid>
+    </NextLink>
+  );
+});
 
 const HeaderBar: React.FC<FlexProps> = React.memo(props => (
   <Flex
@@ -90,6 +98,9 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
         <ColorModeButton mr="tight" />
         <NextLink href="/transactions" passHref>
           <HeaderTextItem mr="base">Transactions</HeaderTextItem>
+        </NextLink>
+        <NextLink href="/blocks" passHref>
+          <HeaderTextItem mr="base">Blocks</HeaderTextItem>
         </NextLink>
         <NextLink href="/sandbox" passHref>
           <HeaderTextItem>Sandbox</HeaderTextItem>
