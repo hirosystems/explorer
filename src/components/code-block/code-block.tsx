@@ -8,14 +8,56 @@ import { css, Theme } from '@stacks/ui-core';
 
 import * as React from 'react';
 
-import { Box, CodeBlock as CodeBlockBase, CodeBlockProps } from '@stacks/ui';
+import { Box, CodeBlock as CodeBlockBase, CodeBlockProps, color } from '@stacks/ui';
 
-const CodeBlock = (props: Omit<CodeBlockProps, 'Prism'>) => {
+const CodeBlock = ({
+  highlightedLine,
+  ...rest
+}: Omit<CodeBlockProps, 'Prism'> & { highlightedLine?: number }) => {
+  const highlightedLineStyle = highlightedLine
+    ? {
+        [`.token-line:nth-child(${highlightedLine})`]: {
+          backgroundColor: 'rgba(255,255,255,0.1)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          '::after': {
+            content: `'Called function'`,
+            pr: 'base',
+            fontSize: '12px',
+            opacity: 0.45,
+            ml: 'auto',
+          },
+          '& > div:first-child': {
+            '::before': {
+              content: `''`,
+              width: '10px',
+              height: '10px',
+              right: '-5px',
+              position: 'absolute',
+              bg: 'green',
+              borderRadius: '10px',
+            },
+            // borderRightColor: 'green',
+            color: 'white',
+            bg: 'rgba(255,255,255,0.08)',
+            position: 'relative',
+          },
+          '& > div:nth-child(2)': {
+            pl: 'base',
+          },
+        },
+      }
+    : {};
   return (
     <Box
       css={(theme: Theme) =>
         css({
+          width: '100%',
+
+          '.prism-code': {
+            width: '100%',
+          },
           '.token-line': {
+            width: '100%',
             fontFamily: `'Fira Code', monospace`,
             alignItems: 'center',
             ':hover': {
@@ -25,10 +67,11 @@ const CodeBlock = (props: Omit<CodeBlockProps, 'Prism'>) => {
               alignItems: 'center',
             },
           },
+          ...highlightedLineStyle,
         })(theme)
       }
     >
-      <CodeBlockBase border="0" borderRadius="0" Prism={Prism as any} {...props} />
+      <CodeBlockBase border="0" borderRadius="0" Prism={Prism as any} {...rest} />
     </Box>
   );
 };

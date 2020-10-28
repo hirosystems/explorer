@@ -20,8 +20,8 @@ import { color } from '@components/color-modes';
 import { Section } from '@components/section';
 
 const Item: React.FC<
-  { tx: MempoolTransaction | Transaction; isLast?: boolean } & BoxProps
-> = React.memo(({ tx, isLast, ...rest }) => {
+  { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
+> = React.memo(({ tx, isLast, principal, ...rest }) => {
   return (
     <Box
       borderLeft="3px solid"
@@ -39,8 +39,7 @@ const Item: React.FC<
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>
-
-      <TxItem as="span" tx={tx} key={tx.tx_id} />
+      <TxItem as="span" tx={tx} principal={principal} key={tx.tx_id} />
     </Box>
   );
 });
@@ -49,11 +48,12 @@ const Item: React.FC<
 // @ts-ignore
 const VirtualList: React.FC<{
   items: (MempoolTransaction | Transaction)[];
-}> = React.memo(({ items }) => {
+  principal?: string;
+}> = React.memo(({ items, principal }) => {
   return items.length ? (
     <Flex flexDirection="column">
       {items.map((tx: MempoolTransaction | Transaction, index: number) => (
-        <Item key={index} tx={tx} isLast={index === items.length - 1} />
+        <Item principal={principal} key={index} tx={tx} isLast={index === items.length - 1} />
       ))}
     </Flex>
   ) : (
@@ -165,10 +165,20 @@ export const TransactionList: React.FC<
     recent?: boolean;
     isReachingEnd?: boolean;
     isLoadingMore?: boolean;
+    principal?: string;
     loadMore?: () => void;
   } & FlexProps
 > = React.memo(
-  ({ mempool = [], transactions, recent, loadMore, isReachingEnd, isLoadingMore, ...rest }) => {
+  ({
+    mempool = [],
+    transactions,
+    recent,
+    loadMore,
+    isReachingEnd,
+    principal,
+    isLoadingMore,
+    ...rest
+  }) => {
     const [pendingVisibility, setPendingVisibility] = React.useState<'visible' | 'hidden'>(
       'visible'
     );
@@ -198,6 +208,7 @@ export const TransactionList: React.FC<
       <Section title="Transactions" {...rest}>
         <>
           <PendingList
+            principal={principal}
             pending={pending}
             handleTogglePendingVisibility={handleTogglePendingVisibility}
             pendingVisible={pendingVisible}
@@ -228,7 +239,7 @@ export const TransactionList: React.FC<
                   )}
                 </Flex>
               </Flex>
-              <VirtualList items={transactions} />
+              <VirtualList principal={principal} items={transactions} />
             </Box>
           ) : (
             <Grid placeItems="center" px="base" py="extra-loose">

@@ -26,14 +26,14 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
   >({
     initialData: initialData.transactions.results,
     type: 'tx',
-    limit: 200,
+    limit: 50,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
 
   const { data: mempool } = useInfiniteFetch<MempoolTransactionListResponse['results']>({
     initialData: initialData.mempool.results,
     type: 'tx',
-    limit: 200,
+    limit: 25,
     pending: true,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
@@ -64,12 +64,12 @@ TransactionsPage.getInitialProps = async ({
 
   const [transactions, mempool] = await Promise.all([
     fetchTxList({
-      apiServer: apiServer as string,
-      limit: 200,
+      apiServer,
+      limit: 50,
       types: ['smart_contract', 'contract_call', 'token_transfer'],
     })(),
     fetchTxList({
-      apiServer: apiServer as string,
+      apiServer,
       limit: 25,
       mempool: true,
     })(),

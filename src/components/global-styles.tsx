@@ -7,6 +7,15 @@ import { ProgressBarStyles } from '@components/progress-bar';
 import { TextAreaOverrides } from '@components/code-editor/code-editor';
 
 const globalStyles = css`
+  connect-modal {
+    .modal-container {
+      z-index: 999999999;
+      pointer-events: none;
+    }
+    .modal-body {
+      pointer-events: all;
+    }
+  }
   html,
   body,
   #__next {

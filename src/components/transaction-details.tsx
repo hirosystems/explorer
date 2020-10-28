@@ -59,6 +59,17 @@ const AddressComponent = ({ principal }: any) => {
   );
 };
 
+const getSenderName = (txType: Transaction['tx_type']) => {
+  switch (txType) {
+    case 'smart_contract':
+      return 'Creator';
+    case 'contract_call':
+      return 'Caller';
+    default:
+      return 'Sender address';
+  }
+};
+
 const transformDataToRowData = (d: Transaction) => {
   const txid = {
     label: {
@@ -78,7 +89,7 @@ const transformDataToRowData = (d: Transaction) => {
   const sender = {
     condition: typeof d.sender_address !== 'undefined',
     label: {
-      children: 'Sender address',
+      children: getSenderName(d.tx_type),
     },
     children: <AddressComponent principal={d.sender_address} />,
     copy: d.sender_address,
@@ -138,7 +149,7 @@ const transformDataToRowData = (d: Transaction) => {
       return [txid, sender, fees, blockTime, blockHash, scratch];
     }
     default:
-      return [txid, contractName, sender, fees, blockTime, blockHash];
+      return [contractName, txid, sender, fees, blockTime, blockHash];
   }
 };
 
@@ -170,7 +181,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   const contractId = getContractId(transaction);
   return (
     <Section title="Summary" {...rest}>
-      <Flex pb="base" px="base" width="100%" flexDirection={['column', 'column', 'row']}>
+      <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']} order={[2, 2, 0]}>
           <Rows noTopBorder items={transformDataToRowData(transaction)} />
         </Box>
@@ -182,7 +193,6 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
             meta={contractMeta}
             contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
             order={[0, 0, 2]}
-            mb={['loose', 'loose', 'unset']}
           />
         )}
       </Flex>

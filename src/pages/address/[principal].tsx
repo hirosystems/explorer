@@ -5,22 +5,18 @@ import {
   TransactionResults,
   MempoolTransactionListResponse,
 } from '@blockstack/stacks-blockchain-api-types';
-import { Box, Flex, Grid, useClipboard, color, space } from '@stacks/ui';
+import { Box, Flex, Grid, color, space, Stack } from '@stacks/ui';
 import { Caption, Link, Text, Title } from '@components/typography';
 import { getAssetNameParts, microToStacks, truncateMiddle } from '@common/utils';
 
-import { CopyIcon } from '@components/icons/copy';
 import Head from 'next/head';
 
 import { NextPage } from 'next';
 import { PageWrapper } from '@components/page';
-import { QrCode } from '@components/icons/qrcode';
 
 import { ReduxNextPageContext } from '@common/types/next-store';
 
-import { Tab } from '@components/sandbox/tabs';
-
-import { TxItem } from '@components/transaction-item';
+import { getTxTypeIcon, TxItem } from '@components/transaction-item';
 import { ItemIcon } from '@components/token-transfer/item';
 import { TxLink } from '@components/links';
 import { border } from '@common/utils';
@@ -31,8 +27,13 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@store';
 import useSWR from 'swr';
 import { StxInline } from '@components/icons/stx-inline';
-import { Tooltip } from '@components/tooltip';
-import { IconButton } from '@components/icon-button';
+import { Section } from '@components/section';
+import { Rows } from '@components/rows';
+import { Transaction } from '@models/transaction.interface';
+import { TransactionList } from '@components/transaction-list';
+import { Badge, BadgeProps } from '@components/badge';
+import pluralize from 'pluralize';
+import { TransferIcon } from '@components/icons/transfer';
 
 const fetchBalances = (apiServer: string) => async (
   principal: string
@@ -66,25 +67,6 @@ const fetchAllAccountData = (apiServer: string) => async (principal: string) => 
 
 const getTokenAmounts = (record: Record<string, any>): string[] => {
   return Object.keys(record);
-};
-
-const TxList = ({ txs }: any) => {
-  return txs && txs.results.length > 0
-    ? txs?.results.map((transaction: any, index: number) => {
-        return (
-          <TxLink txid={transaction.tx_id}>
-            <TxItem
-              _hover={{
-                bg: color('bg-alt'),
-              }}
-              borderBottom={index !== txs.results.length - 1 ? border() : 'unset'}
-              as="a"
-              tx={transaction}
-            />
-          </TxLink>
-        );
-      })
-    : null;
 };
 
 const TokenAssetListItem = ({
@@ -162,6 +144,15 @@ const FtBalances = ({ balances }: { balances: AddressBalanceResponse }) => (
   </Box>
 );
 
+const BalancesSmall = ({ balances }: { balances?: AddressBalanceResponse }) => {
+  return (
+    <Stack isInline spacing={'base'}>
+      <NumberedBadge array={Object.keys(balances?.fungible_tokens || [])} singular="FT" />
+      <NumberedBadge array={Object.keys(balances?.non_fungible_tokens || [])} singular="NFT" />
+    </Stack>
+  );
+};
+
 const Balances = ({ balances }: { balances: AddressBalanceResponse }) => {
   return (
     <Box
@@ -181,30 +172,6 @@ const Balances = ({ balances }: { balances: AddressBalanceResponse }) => {
   );
 };
 
-const Tabs: React.FC<any> = ({ transactions, balances }) => {
-  const [active, setActive] = React.useState<'transactions' | 'balances'>(
-    transactions.count > 0 ? 'transactions' : 'balances'
-  );
-
-  return (
-    <>
-      <Flex borderBottom={`1px solid ${color('border')}`} mt="40px">
-        <Tab
-          label="Transactions"
-          isActive={active === 'transactions'}
-          onClick={() => setActive('transactions')}
-        />
-        <Tab
-          label="Balances"
-          isActive={active === 'balances'}
-          onClick={() => setActive('balances')}
-        />
-      </Flex>
-      {active === 'transactions' ? <TxList txs={transactions} /> : <Balances balances={balances} />}
-    </>
-  );
-};
-
 interface AddressPageData {
   principal: string;
   balances?: AddressBalanceResponse;
@@ -212,10 +179,48 @@ interface AddressPageData {
 }
 
 const hasTokenBalance = (balances: any) => {
-  const totalFt: number = balances?.fungible_tokens?.length || 0;
-  const totleNft: number = balances?.non_fungible_tokens?.length || 0;
+  const totalFt: number = Object.keys(balances?.fungible_tokens).length || 0;
+  const totleNft: number = Object.keys(balances?.non_fungible_tokens).length || 0;
 
   return totleNft + totalFt > 0;
+};
+
+const NumberedBadge = ({
+  array,
+  singular,
+  icon: Icon,
+  ...rest
+}: { array: any[]; singular: string; icon?: any } & BadgeProps) => (
+  <Badge
+    border={border()}
+    color={color('text-body')}
+    labelProps={{ display: 'flex', alignItems: 'center' }}
+    alignItems="center"
+    my={0}
+    {...rest}
+  >
+    {Icon && <Icon strokeWidth={2} size="16px" />}
+    <Box ml={'extra-tight'}>
+      {array.length} {pluralize(singular, array.length)}
+    </Box>
+  </Badge>
+);
+
+const Activity = ({ txs }: { txs: Transaction[] }) => {
+  const contractCalls = txs?.filter(tx => tx.tx_type === 'contract_call');
+  const contractCreations = txs?.filter(tx => tx.tx_type === 'smart_contract');
+  const transactions = txs?.filter(
+    tx => tx.tx_type !== 'contract_call' && tx.tx_type !== 'smart_contract'
+  );
+  const ContractCallIcon = getTxTypeIcon('contract_call');
+  const ContractIcon = getTxTypeIcon('smart_contract');
+  return (
+    <Stack isInline spacing={'base'}>
+      <NumberedBadge array={transactions} icon={TransferIcon} singular="transfer" />
+      <NumberedBadge array={contractCreations} icon={ContractIcon} singular="contract" />
+      <NumberedBadge array={contractCalls} icon={ContractCallIcon} singular="contract call" />
+    </Stack>
+  );
 };
 
 const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transactions }) => {
@@ -231,38 +236,16 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
     refreshInterval: 5000,
   });
 
-  const { onCopy, hasCopied } = useClipboard(principal || '');
-
   return (
     <PageWrapper>
       <Head>
         <title>STX Address {truncateMiddle(principal)} | Stacks Explorer</title>
       </Head>
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
-        <Box>
-          <Title mb="base" mt="64px" as="h1" color="white" fontSize="36px">
-            Address details
-          </Title>
-          <Flex>
-            <Title pt="5px" mb="0" color="white" mt="0" as="h3">
-              {principal}
-            </Title>
-            <Flex ml="tight" alignItems="center">
-              <Tooltip label={hasCopied ? 'Copied!' : 'Copy'}>
-                <IconButton onClick={onCopy} icon={CopyIcon} />
-              </Tooltip>
-              {/*<Grid*/}
-              {/*  opacity="0.5"*/}
-              {/*  _hover={{ opacity: 1 }}*/}
-              {/*  color="white"*/}
-              {/*  size="32px"*/}
-              {/*  placeItems="center"*/}
-              {/*>*/}
-              {/*  <QrCode size="24px" />*/}
-              {/*</Grid>*/}
-            </Flex>
-          </Flex>
-        </Box>
+        <Title mb="0" mt="64px" as="h1" color="white" fontSize="36px">
+          Address details
+        </Title>
+
         <Title
           alignItems="center"
           display="flex"
@@ -272,7 +255,7 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
           color="white"
           fontSize="28px"
         >
-          <StxInline color="white" strokeBalance={1.5} mr="tight" size="18px" />
+          <StxInline color="white" strokeBalance={2} mr="tight" size="22px" />
           <Flex alignItems="baseline">
             {microToStacks(data?.balances?.stx.balance as any)}{' '}
             <Text fontSize="20px" ml="tight">
@@ -281,21 +264,38 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
           </Flex>
         </Title>
       </Flex>
-      <Box border={border()} borderRadius="12px" bg={color('bg')} alignItems="flex-start">
-        <Box borderBottom={border()} p="base">
-          <Text>Transactions</Text>
-        </Box>
-        {data?.transactions?.results.length ? (
-          <TxList txs={data?.transactions} />
-        ) : (
-          <Grid placeItems="center" px="base" py="extra-loose">
-            <Text>No transactions yet</Text>
-          </Grid>
-        )}
-      </Box>
+      <Section mb={'extra-loose'} title="Summary">
+        <Rows
+          px="base"
+          noTopBorder
+          items={[
+            {
+              label: {
+                children: 'Address',
+              },
+              children: principal,
+            },
+            {
+              label: {
+                children: 'Activity',
+              },
+              children: <Activity txs={transactions?.results as any} />,
+            },
+            {
+              label: {
+                children: 'Balances',
+              },
+              children: <BalancesSmall balances={data?.balances} />,
+            },
+          ]}
+        />
+      </Section>
       {data?.balances && hasTokenBalance(data.balances) ? (
         <Balances balances={data.balances} />
-      ) : null}{' '}
+      ) : null}
+      {data?.transactions?.results ? (
+        <TransactionList principal={principal} transactions={data.transactions.results as any} />
+      ) : null}
     </PageWrapper>
   );
 };

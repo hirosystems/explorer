@@ -22,7 +22,7 @@ export const getEventTypeName = (value: TransactionEvent['event_type']) => {
 export const getTransactionTypeLabel = (value: TransactionType) => {
   switch (value) {
     case 'token_transfer':
-      return 'Token transfer';
+      return 'STX transfer';
     case 'coinbase':
       return 'Coinbase';
     case 'contract_call':

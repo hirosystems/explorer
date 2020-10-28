@@ -1,42 +1,95 @@
 import * as React from 'react';
-import { Box, Flex, Button, Spinner } from '@stacks/ui';
+import { Box, Flex, Spinner, Grid, GridProps, BoxProps, Stack } from '@stacks/ui';
 import { useConnect } from '@pages/sandbox';
 import { useHover } from 'use-events';
+
+import { Button } from '@components/button';
 
 import { microToStacks } from '@common/utils';
 import RefreshIcon from 'mdi-react/RefreshIcon';
 
 import { useUserSession } from '@common/hooks/use-user-session';
 import { Tabs } from '@components/sandbox/tabs';
-import { Text, Title } from '@components/typography';
-import { PageWrapper } from '@components/page';
-import { Card } from '@components/card';
+import { Caption, Text, Title } from '@components/typography';
+
 import { Meta } from '@components/meta-head';
-import { useSandboxState, useSandboxStateValues } from '@common/hooks/use-sandbox-state';
+import { useSandboxState } from '@common/hooks/use-sandbox-state';
 import { color } from '@components/color-modes';
 import { TransactionsCard } from '@components/sandbox/transactions-card';
+import { CodeIcon } from '@components/icons/code';
+import { StxInline } from '@components/icons/stx-inline';
+import DropIcon from 'mdi-react/DropIcon';
+import FunctionIcon from 'mdi-react/FunctionIcon';
+import { Section } from '@components/section';
 
+const Item = ({ children, ...props }: GridProps) => (
+  <Grid textAlign="center" placeItems="center" {...props}>
+    <Stack spacing="base-tight" alignItems="center" justifyContent="center">
+      {children}
+    </Stack>
+  </Grid>
+);
+const IconWrapper = (props: GridProps) => (
+  <Grid color="white" bg="#9985FF" size="36px" borderRadius="100%" placeItems="center" {...props} />
+);
+const ItemLabel = (props: BoxProps) => <Text fontWeight="500" {...props} />;
 const SignedOutView = ({ onClick }: any) => {
   return (
     <>
       <Meta title="Sandbox" />
-      <Flex pb="extra-loose" flexGrow={1} alignItems="center" justify="center">
-        <Card mx="auto" p="extra-loose" flexDirection="column" alignItems="center" justify="center">
-          <Box maxWidth="600px" textAlign="center">
-            <Box mb="base">
-              <Title as="h2">Welcome to the Stacks Explorer Sandbox!</Title>
-            </Box>
-            <Text>
-              With the sandbox you'll be able to test out various aspects of the explorer: get STX
-              from the faucet, send transactions, create contracts, and call contract functions.
-              Please generate an address to use the sandbox.
-            </Text>
-          </Box>
-          <Box mt="base" mx="auto">
-            <Button onClick={onClick}>Continue with Blockstack</Button>
-          </Box>
-        </Card>
-      </Flex>
+      <Section px="base" py="extra-loose">
+        <Title width="100%" textAlign="center" as="h2" mt="0">
+          Welcome to the Stacks Explorer Sandbox!
+        </Title>
+        <Grid
+          maxWidth="70%"
+          mx="auto"
+          my="extra-loose"
+          columnGap="base"
+          width="100%"
+          gridTemplateColumns="repeat(4, 1fr)"
+        >
+          <Item>
+            <IconWrapper>
+              <DropIcon />
+            </IconWrapper>
+            <ItemLabel>Faucet</ItemLabel>
+            <Caption textAlign="center" maxWidth="18ch">
+              Get testnet STX to play around with.
+            </Caption>
+          </Item>
+          <Item>
+            <IconWrapper>
+              <StxInline strokeWidth={2} color="currentColor" size="18px" />
+            </IconWrapper>
+            <ItemLabel>Send STX</ItemLabel>
+            <Caption textAlign="center" maxWidth="18ch">
+              Send and receive STX with others.
+            </Caption>
+          </Item>
+          <Item>
+            <IconWrapper>
+              <CodeIcon strokeWidth={2} size="22px" />
+            </IconWrapper>
+            <ItemLabel>Deploy contracts</ItemLabel>
+            <Caption textAlign="center" maxWidth="18ch">
+              Test and deploy your Clarity smart contracts.
+            </Caption>
+          </Item>
+          <Item>
+            <IconWrapper>
+              <FunctionIcon size="24px" />
+            </IconWrapper>
+            <ItemLabel>Call contracts</ItemLabel>
+            <Caption textAlign="center" maxWidth="18ch">
+              Call contracts and test out Stacking (PoX).
+            </Caption>
+          </Item>
+        </Grid>
+        <Box mt="base" mx="auto">
+          <Button onClick={onClick}>Continue with Blockstack</Button>
+        </Box>
+      </Section>
     </>
   );
 };
@@ -144,63 +197,47 @@ export const PageContent = ({
   const isSignedIn = (username || user.username) && identity;
   const sidebarWidth = `${isSignedIn ? 420 : 0}px`;
   return (
-    <PageWrapper maxWidth="100vw" overflow="hidden" px="0" py="0" {...props}>
-      <Flex width="100%" flexGrow={1}>
-        <Flex flexDirection="column" maxWidth={`calc(100% - ${sidebarWidth})`} flexGrow={1}>
-          <Flex
-            pl="extra-loose"
-            pt="extra-loose"
-            alignItems="flex-start"
-            justifyContent="space-between"
+    <>
+      {isSignedIn ? (
+        <Tabs
+          hideTransactionDialog={hideTransactionDialog}
+          showTransactionDialog={showTransactionDialog}
+          transactionsVisible={transactionsVisible}
+          identity={identity}
+          tab={tab}
+          tabs={tabs}
+        />
+      ) : (
+        <SignedOutView onClick={() => doOpenAuth()} />
+      )}
+      {isSignedIn && (
+        <Box width={sidebarWidth} position="relative">
+          <Box
+            position="fixed"
+            right={0}
+            width={sidebarWidth}
+            height="calc(100vh - 132px)"
+            top="64px"
+            bg={color('bg')}
+            borderLeft={`1px solid ${color('border')}`}
           >
             <Box>
-              <Title as="h1">Stacks Explorer Sandbox</Title>
-            </Box>
-          </Flex>
-          <Flex maxHeight="calc(100vh - 195px)" width="100%" flexGrow={1}>
-            {isSignedIn ? (
-              <Tabs
-                hideTransactionDialog={hideTransactionDialog}
-                showTransactionDialog={showTransactionDialog}
-                transactionsVisible={transactionsVisible}
+              <UserCard
+                username={username || user.username}
                 identity={identity}
-                tab={tab}
-                tabs={tabs}
+                balance={balance}
+                px="extra-loose"
+                pt="base"
+                pb="base"
               />
-            ) : (
-              <SignedOutView onClick={() => doOpenAuth()} />
-            )}
-          </Flex>
-        </Flex>
-        {isSignedIn && (
-          <Box width={sidebarWidth} position="relative">
-            <Box
-              position="fixed"
-              right={0}
-              width={sidebarWidth}
-              height="calc(100vh - 132px)"
-              top="64px"
-              bg={color('bg')}
-              borderLeft={`1px solid ${color('border')}`}
-            >
-              <Box>
-                <UserCard
-                  username={username || user.username}
-                  identity={identity}
-                  balance={balance}
-                  px="extra-loose"
-                  pt="base"
-                  pb="base"
-                />
-              </Box>
-              <Box borderBottom={`1px solid ${color('border')}`} px="base" py="tight">
-                <Text fontSize="14px">Recent transactions</Text>
-              </Box>
-              <TransactionsCard visible />
             </Box>
+            <Box borderBottom={`1px solid ${color('border')}`} px="base" py="tight">
+              <Text fontSize="14px">Recent transactions</Text>
+            </Box>
+            <TransactionsCard visible />
           </Box>
-        )}
-      </Flex>
-    </PageWrapper>
+        </Box>
+      )}
+    </>
   );
 };

@@ -109,7 +109,7 @@ export const BlocksList: React.FC<
             <SectionHeadingRow />
             {blocks.length
               ? blocks?.map((block: Block, key: number, arr: any) => {
-                  return <BlockItem block={block} index={key} length={arr.length} />;
+                  return <BlockItem block={block} index={key} key={key} length={arr.length} />;
                 })
               : null}
           </>

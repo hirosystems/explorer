@@ -124,6 +124,7 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
     abi: JSON.parse(selectContractAbi(transaction.contract_call.contract_id)(state) || ''),
   }));
   const contractId = getContractId(transaction);
+  console.log(transaction.contract_call);
   return (
     <>
       <PageTop status={transaction.tx_status} type={[TransactionType.CONTRACT_CALL]} />
@@ -138,6 +139,7 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
         <ContractSource
           sourceTx={transaction.tx_type === 'contract_call' ? contractId : undefined}
           source={contractSource}
+          contractCall={transaction.contract_call}
         />
         <PostConditions conditions={transaction.post_conditions} />
       </Stack>
