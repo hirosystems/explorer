@@ -5,7 +5,7 @@ import { Flex, Box, Stack, Button } from '@blockstack/ui';
 import { Field, Wrapper } from '@components/sandbox/common';
 import { network } from '@common/sandbox';
 import { fetchTransaction } from '@store/transactions';
-import { makeSTXTokenTransfer } from '@blockstack/stacks-transactions';
+import { makeSTXTokenTransfer } from '@stacks/transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import { useConfigState } from '@common/hooks/use-config-state';

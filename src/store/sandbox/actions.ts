@@ -7,12 +7,11 @@ import {
   StacksTransaction,
   broadcastTransaction as broadcastTransactionBase,
   broadcastRawTransaction,
-} from '@blockstack/stacks-transactions';
+} from '@stacks/transactions';
 import { network } from '@common/sandbox';
 import { doAddToast } from '@store/ui/actions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import { UserData } from 'blockstack/lib/auth/authApp';
-import { UserSession } from 'blockstack/lib';
+import { UserData, UserSession } from '@stacks/storage';
 import { ThunkApiConfig } from '@common/redux';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment

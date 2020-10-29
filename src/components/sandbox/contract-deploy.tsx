@@ -6,7 +6,7 @@ import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
 import { fetchTransaction } from '@store/transactions';
 import { network } from '@common/sandbox';
-import { makeSmartContractDeploy } from '@blockstack/stacks-transactions';
+import { makeContractDeploy } from '@stacks/transactions';
 import { useDispatch } from 'react-redux';
 import { useLoading } from '@common/hooks/use-loading';
 import BN from 'bn.js';
@@ -78,7 +78,7 @@ export const ContractDeploy = React.memo((props: any) => {
       setError(undefined);
       await doFetchAccount(identity.address);
 
-      const tx = await makeSmartContractDeploy({
+      const tx = await makeContractDeploy({
         senderKey,
         contractName,
         codeBody,
@@ -87,7 +87,7 @@ export const ContractDeploy = React.memo((props: any) => {
       });
 
       const response: any = await doBroadcastTransaction({
-        principal: identity?.address as string,
+        principal: identity?.address,
         tx,
       });
 

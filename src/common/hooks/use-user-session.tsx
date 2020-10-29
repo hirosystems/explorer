@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { UserSession, AppConfig } from 'blockstack';
-import { UserData } from 'blockstack/lib/auth/authApp';
+import { UserSession, AppConfig, UserData } from '@stracks/auth';
 
 export const useUserSession = () => {
   const [userData, setUserData] = React.useState<{ loaded: boolean } & Partial<UserData>>({

@@ -21,14 +21,17 @@ import {
   pubKeyfromPrivKey,
   publicKeyToString,
   serializeCV,
-  StacksNetwork,
-  StacksTestnet,
   standardPrincipalCV,
   trueCV,
   uintCV,
-} from '@blockstack/stacks-transactions';
+  cvToString,
+  isClarityAbiStringAscii,
+  stringAsciiCV,
+  isClarityAbiStringUtf8,
+  stringUtf8CV,
+} from '@stacks/transactions';
 
-import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
+import { StacksNetwork, StacksTestnet } from '@stacks/network';
 import { withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { useToast } from '@common/hooks/use-toast';
@@ -109,6 +112,10 @@ export function valueToClarityValue(answer: any, arg: ClarityFunctionArg): Clari
     }
   } else if (isClarityAbiBuffer(type)) {
     return bufferCVFromString(answer);
+  } else if (isClarityAbiStringAscii(type)) {
+    return stringAsciiCV(answer);
+  } else if (isClarityAbiStringUtf8(type)) {
+    return stringUtf8CV(answer);
   } else if (isClarityAbiResponse(type)) {
     throw new Error(`Contract function contains unsupported Clarity ABI type: ${typeString}`);
   } else if (isClarityAbiOptional(type)) {
@@ -149,7 +156,9 @@ export const callReadOnlyFunction = async ({
   functionArgs,
   network,
 }: ReadOnlyOptions): Promise<ReadOnlyResponse> => {
-  const url = `${network.coreApiUrl}/v2/contracts/call-read/${contractAddress}/${contractName}/${encodeURIComponent(functionName)}`;
+  const url = `${
+    network.coreApiUrl
+  }/v2/contracts/call-read/${contractAddress}/${contractName}/${encodeURIComponent(functionName)}`;
 
   const args = functionArgs.map(arg => cvToHex(arg));
 

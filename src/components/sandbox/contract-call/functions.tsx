@@ -7,7 +7,7 @@ import {
   parseReadOnlyResponse,
 } from '@common/sandbox';
 import { ContractInterfaceFunction, ContractInterfaceFunctionArg } from '@blockstack/rpc-client';
-import { makeContractCall, PostConditionMode } from '@blockstack/stacks-transactions';
+import { makeContractCall, PostConditionMode } from '@stacks/transactions';
 import { Formik } from 'formik';
 import { Caption, Text } from '@components/typography';
 import { Field } from '@components/sandbox/common';
@@ -163,7 +163,7 @@ export const Function = ({
             contractName,
             functionName: func.name,
             functionArgs,
-            senderKey: identity?.privateKey as string,
+            senderKey: identity?.privateKey,
             network: net,
             postConditionMode,
           });

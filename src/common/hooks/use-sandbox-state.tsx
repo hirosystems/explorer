@@ -29,8 +29,7 @@ import {
 } from '@store/sandbox';
 
 import { IdentityPayload, Account } from '@store/sandbox/types';
-import { UserData } from 'blockstack/lib/auth/authApp';
-import { UserSession } from 'blockstack/lib';
+import { UserData, UserSession } from '@stacks/auth';
 import { identityStorage, USERNAME_COOKIE, IDENTITY_COOKIE, usernameStorage } from '@common/utils';
 
 interface SanboxStateValues {

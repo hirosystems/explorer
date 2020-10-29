@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppConfig, UserSession } from 'blockstack/lib';
+import { AppConfig, UserSession } from '@stacks/auth';
 import { ToastProvider } from '@blockstack/ui';
 import { Connect, FinishedData, AuthOptions } from '@blockstack/connect';
 import { parseCookies } from 'nookies';
