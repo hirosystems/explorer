@@ -30,6 +30,8 @@ import {
 
 import { IdentityPayload, Account } from '@store/sandbox/types';
 import { UserData, UserSession } from '@stacks/auth';
+const storage = require('@stacks/storage');
+const Storage = storage.Storage;
 import { identityStorage, USERNAME_COOKIE, IDENTITY_COOKIE, usernameStorage } from '@common/utils';
 
 interface SanboxStateValues {
@@ -106,7 +108,8 @@ export const useSandboxState = (): UseSandboxState => {
   };
   const doGenerateIdentity = debounce(async (userSession: UserSession) => {
     if (stateValues.identity) return stateValues.identity;
-    const response = await dispatch(generateIdentity(userSession));
+    const storage = new Storage({ userSession });
+    const response = await dispatch(generateIdentity(storage));
     const value = unwrapResult(response);
     doSetIdentity(value);
     return value;

@@ -13,7 +13,7 @@ import {
 } from './actions';
 import { RootState } from '@store';
 import { dedupe } from '@common/utils';
-import { UserData } from 'blockstack/lib/auth/authApp';
+import { UserData } from '@stacks/auth';
 
 export const sandboxAdapter = createEntityAdapter<Account>({
   selectId: (account: Account) => account.principal,

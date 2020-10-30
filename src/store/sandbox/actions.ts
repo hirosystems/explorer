@@ -11,7 +11,9 @@ import {
 import { network } from '@common/sandbox';
 import { doAddToast } from '@store/ui/actions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import { UserData, UserSession } from '@stacks/storage';
+import { UserData, UserSession } from '@stacks/auth';
+const storage = require('@stacks/storage');
+const Storage = storage.Storage;
 import { ThunkApiConfig } from '@common/redux';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -28,17 +30,17 @@ export const eraseIdentity = createAction('account/identity/erase');
 export const setUserData = createAction<UserData>('account/user/set');
 export const clearAccountError = createAction('account/clear-error');
 
-export const generateIdentity = createAsyncThunk<IdentityPayload, UserSession, ThunkApiConfig>(
+export const generateIdentity = createAsyncThunk<IdentityPayload, Storage, ThunkApiConfig>(
   'account/identity',
-  async (userSession: UserSession) => {
+  async (storage: Storage) => {
     try {
-      const saved = await userSession.getFile('identity.json');
+      const saved = await storage.getFile('identity.json');
       return JSON.parse(saved as string) as IdentityPayload;
     } catch (e) {
       // does not exist, so we will generate and upload
       const identity = doGenerateIdentity();
       try {
-        await userSession.putFile('identity.json', JSON.stringify(identity));
+        await storage.putFile('identity.json', JSON.stringify(identity));
         return identity;
       } catch (e) {
         console.log('putFile error', e);

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { UserSession, AppConfig, UserData } from '@stracks/auth';
+import { UserSession, AppConfig, UserData } from '@stacks/auth';
 
 export const useUserSession = () => {
   const [userData, setUserData] = React.useState<{ loaded: boolean } & Partial<UserData>>({
