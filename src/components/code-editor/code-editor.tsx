@@ -1,15 +1,34 @@
 import React from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import Prism from 'prismjs/components/prism-core';
+import Prism from 'prismjs';
+import { clarity } from '@components/code-block/clarity';
+clarity(Prism);
 import Editor from 'react-simple-code-editor';
 import { Box, BoxProps, Highlighter } from '@stacks/ui';
+import { prismTheme } from '@components/code-editor/theme';
 import { Global, css } from '@emotion/react';
-import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
+import {
+  ForwardRefExoticComponentWithAs,
+  forwardRefWithAs,
+  memoWithAs,
+  css as _css,
+  Theme,
+} from '@stacks/ui-core';
+import { atom, useRecoilState } from 'recoil';
+import { useClarityRepl } from '@common/hooks/use-clarity-repl';
+import { helloWorldContract } from '@common/sandbox/contracts';
 
 export const TextAreaOverrides = (
   <Global
     styles={css`
+      ${prismTheme};
       .code-editor {
+        pre {
+          width: fit-content;
+          min-width: 100%;
+          transform: translateY(2px);
+        }
         input,
         textarea,
         [contenteditable] {
@@ -49,31 +68,93 @@ interface CodeEditorProps extends Partial<Omit<BoxProps, 'onChange'>> {
   id?: string;
 }
 
+export const codeEditorState = atom({
+  key: 'codeEditor',
+  default: helloWorldContract.source,
+});
+
+export const useCodeEditor = (): [string, (value: string) => void] => {
+  const [codeBody, setCodeBody] = useRecoilState<string>(codeEditorState);
+
+  return [codeBody, setCodeBody as (value: string) => void];
+};
+
 const CodeEditor: ForwardRefExoticComponentWithAs<CodeEditorProps, 'div'> = memoWithAs<
   CodeEditorProps,
   'div'
 >(
   forwardRefWithAs<CodeEditorProps, 'div'>((props, ref) => {
     const { style, value, onChange, language, id, disabled, maxHeight, ...rest } = props;
-    const [code, setState] = React.useState(value);
-
-    const updateContent = (c: string) => {
-      if (c === code) {
-        return;
-      }
-      setState(s => {
-        if (props.onChange) {
-          props.onChange(c);
-        }
-        return c;
-      });
-    };
+    const [code, setCode] = useCodeEditor();
+    const { result } = useClarityRepl();
 
     React.useEffect(() => {
-      if (value !== code) {
-        updateContent(value);
+      if (typeof value !== 'undefined' && code !== value) {
+        setCode(value);
       }
-    }, [value]);
+    }, []);
+
+    const updateContent = React.useCallback((c: string) => setCode(c), []);
+
+    const errorLine = () => {
+      if (result && result?.error) {
+        return {
+          [`.token-line:nth-child(${result?.error?.line})`]: {
+            bg: 'transparent',
+            position: 'relative',
+            '&::before': {
+              content: `''`,
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              left: 0,
+              backgroundColor: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.1)',
+            },
+
+            '& > div:nth-child(2)': {
+              pl: '24px',
+            },
+            '& > div:first-child': {
+              '::before': {
+                content: `''`,
+                width: '10px',
+                height: '10px',
+                right: '-5px',
+                position: 'absolute',
+                bg: 'red',
+                borderRadius: '10px',
+              },
+              color: 'white',
+              bg: 'rgba(255,255,255,0.08)',
+              position: 'relative',
+            },
+          },
+        };
+        return {};
+      }
+    };
+
+    const highlighter = React.useMemo(
+      () => (c: string) => (
+        <Box
+          css={(theme: Theme) =>
+            _css({
+              '.token-line': {
+                alignItems: 'center',
+                '& > div:first-child': {
+                  alignItems: 'center',
+                },
+              },
+              ...errorLine(),
+            })(theme)
+          }
+        >
+          <Highlighter Prism={Prism as any} code={c} showLineNumbers language={language as any} />
+        </Box>
+      ),
+      [result]
+    );
 
     return (
       <>
@@ -82,9 +163,12 @@ const CodeEditor: ForwardRefExoticComponentWithAs<CodeEditorProps, 'div'> = memo
           bg="ink"
           borderRadius="6px"
           py="base-tight"
-          border="1px solid var(--colors-border)"
+          // border="1px solid var(--colors-border)"
           overflowX="auto"
           minWidth="100%"
+          maxWidth="100%"
+          flexGrow={1}
+          flexShrink={1}
           maxHeight={maxHeight}
         >
           <Editor
@@ -92,14 +176,7 @@ const CodeEditor: ForwardRefExoticComponentWithAs<CodeEditorProps, 'div'> = memo
             language={language}
             onValueChange={updateContent}
             ref={ref}
-            highlight={c => (
-              <Highlighter
-                Prism={Prism as any}
-                code={c}
-                showLineNumbers
-                language={language as any}
-              />
-            )}
+            highlight={highlighter}
             style={{
               ...style,
               overflowWrap: 'unset',

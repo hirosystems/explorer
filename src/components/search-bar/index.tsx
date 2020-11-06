@@ -101,6 +101,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
   boxProps = {},
   recentlyViewedProps = {},
   small,
+  hideBackdrop,
   ...props
 }) => {
   const inputRef = React.useRef<HTMLInputElement | null>(null);
@@ -177,7 +178,7 @@ export const SearchBarWithDropdown: React.FC<Omit<SearchBarProps, 'value'>> = ({
       triggerRef={inputRef}
       hideItems={!!hideDropdown}
       position={['unset', 'unset', 'relative']}
-      showBackdrop={small}
+      showBackdrop={!hideBackdrop && small}
       showClose="mobile"
       lockBodyScroll
     >

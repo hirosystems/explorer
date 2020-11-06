@@ -52,17 +52,6 @@ export const ClockIcon: React.FC<BoxProps> = props => (
   </Box>
 );
 
-export const CopyIcon: React.FC<BoxProps> = props => (
-  <Box {...props}>
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path
-        d="M2.61443 5.65856C2.61443 3.54194 3.75423 2.41593 5.88424 2.41593H12.3455V2.26627C12.3455 0.798184 11.5334 0 9.99466 0H2.34372C0.797863 0 0 0.791058 0 2.32329V9.86328C0 11.3884 0.797863 12.1866 2.32235 12.1866H2.61443V5.65856ZM6.00534 15.7H13.6563C15.195 15.7 16 14.9089 16 13.3838V5.77971C16 4.25461 15.195 3.45642 13.6563 3.45642H6.00534C4.45948 3.45642 3.6545 4.25461 3.6545 5.77971V13.3767C3.6545 14.9089 4.45948 15.7 6.00534 15.7Z"
-        fill="currentColor"
-      />
-    </svg>
-  </Box>
-);
-
 export const MintIcon: SvgProps = props => (
   <BaseSvg size="20px" {...props}>
     <path stroke="none" d="M0 0h24v24H0z" fill="none" />

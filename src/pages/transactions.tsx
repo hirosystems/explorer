@@ -14,6 +14,7 @@ import {
 } from '@blockstack/stacks-blockchain-sidecar-types';
 import { NextPage } from 'next';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
+import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
 
 interface InitialData {
   transactions: TransactionResults;
@@ -22,7 +23,7 @@ interface InitialData {
 
 const TransactionsPage: NextPage<InitialData> = initialData => {
   const { data: transactions, loadMore, isReachingEnd, isLoadingMore } = useInfiniteFetch<
-    TransactionResults['results']
+    Transaction
   >({
     initialData: initialData.transactions.results,
     type: 'tx',
@@ -30,7 +31,7 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
 
-  const { data: mempool } = useInfiniteFetch<MempoolTransactionListResponse['results']>({
+  const { data: mempool } = useInfiniteFetch<MempoolTransaction>({
     initialData: initialData.mempool.results,
     type: 'tx',
     limit: 25,

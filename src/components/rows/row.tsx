@@ -1,13 +1,14 @@
 import * as React from 'react';
 
-import { Box, Flex, useClipboard } from '@stacks/ui';
+import { Flex, useClipboard } from '@stacks/ui';
 import { CopyProps, RowContentProps, RowProps, RowWrapperProps } from '@components/rows/types';
 
 import { Caption } from '@components/typography';
-import { CopyIcon } from '@components/svg';
+import { CopyIcon } from '@components/icons/copy';
 import { Ref } from 'react';
 import { Tooltip } from '@components/tooltip';
 import { useHover } from 'use-events';
+import { IconButton } from '@components/icon-button';
 
 export const RowWrapper: React.FC<RowWrapperProps> = ({
   borderColor = 'var(--colors-border)',
@@ -18,7 +19,7 @@ export const RowWrapper: React.FC<RowWrapperProps> = ({
     flexDirection={inline ? 'column' : ['column', 'column', 'row']}
     py={['base', 'base', 'loose']}
     width="100%"
-    alignItems={inline ? 'unset' : ['unset', 'unset', 'flex-start']}
+    alignItems={inline ? 'unset' : ['unset', 'unset', 'center']}
     {...props}
     borderColor={borderColor}
   />
@@ -31,23 +32,9 @@ export const RowLabel = ({ label }: { label: string }) => (
 );
 
 export const CopyButton = React.forwardRef(
-  ({ isHovered, ...rest }: CopyProps, ref: Ref<HTMLDivElement>) => {
-    return (
-      <Box
-        transition="75ms all ease-in-out"
-        color="ink.400"
-        ml="auto"
-        ref={ref}
-        opacity={isHovered ? 1 : 0}
-        _hover={{
-          cursor: 'pointer',
-        }}
-        {...rest}
-      >
-        <CopyIcon />
-      </Box>
-    );
-  }
+  ({ isHovered, ...rest }: CopyProps, ref: Ref<HTMLDivElement>) => (
+    <IconButton opacity={[1, 1, isHovered ? 1 : 0]} ref={ref} dark icon={CopyIcon} {...rest} />
+  )
 );
 
 export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovered, ...rest }) => {

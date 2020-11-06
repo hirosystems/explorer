@@ -16,4 +16,5 @@ export interface SearchBarProps extends BoxProps {
   clearError?: () => void;
   onChange?: any;
   error?: ErrorType;
+  hideBackdrop?: boolean;
 }

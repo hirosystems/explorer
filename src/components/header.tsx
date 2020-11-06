@@ -90,6 +90,7 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
               transform: ['none', 'none', 'translateX(-11px)'],
             }}
             small
+            hideBackdrop
             height="40px"
             maxWidth={['100%', '100%', '544px']}
           />

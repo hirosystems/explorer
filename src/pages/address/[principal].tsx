@@ -215,11 +215,28 @@ const Activity = ({ txs }: { txs: Transaction[] }) => {
   const ContractCallIcon = getTxTypeIcon('contract_call');
   const ContractIcon = getTxTypeIcon('smart_contract');
   return (
-    <Stack isInline spacing={'base'}>
-      <NumberedBadge array={transactions} icon={TransferIcon} singular="transfer" />
-      <NumberedBadge array={contractCreations} icon={ContractIcon} singular="contract" />
-      <NumberedBadge array={contractCalls} icon={ContractCallIcon} singular="contract call" />
-    </Stack>
+    <Flex flexDirection={['column', 'column', 'row']}>
+      <NumberedBadge
+        mr={['unset', 'unset', 'base']}
+        my={['tight', 'tight', 'unset']}
+        array={transactions}
+        icon={TransferIcon}
+        singular="transfer"
+      />
+      <NumberedBadge
+        mr={['unset', 'unset', 'base']}
+        mb={['tight', 'tight', 'unset']}
+        array={contractCreations}
+        icon={ContractIcon}
+        singular="contract"
+      />
+      <NumberedBadge
+        mr={['unset', 'unset', 'base']}
+        array={contractCalls}
+        icon={ContractCallIcon}
+        singular="contract call"
+      />
+    </Flex>
   );
 };
 
@@ -241,8 +258,13 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
       <Head>
         <title>STX Address {truncateMiddle(principal)} | Stacks Explorer</title>
       </Head>
-      <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
-        <Title mb="0" mt="64px" as="h1" color="white" fontSize="36px">
+      <Flex
+        mb="base"
+        alignItems={['unset', 'unset', 'flex-end']}
+        justifyContent="space-between"
+        flexDirection={['column', 'column', 'row']}
+      >
+        <Title mb={['base', 'base', '0']} mt="64px" as="h1" color="white" fontSize="36px">
           Address details
         </Title>
 

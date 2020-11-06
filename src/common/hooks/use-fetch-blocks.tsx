@@ -1,19 +1,16 @@
 import React from 'react';
-import {
-  constructLimitAndOffsetQueryParams,
-  fetchBlocksList,
-  FetchBlocksListResponse,
-} from '@common/api/blocks';
+import { constructLimitAndOffsetQueryParams } from '@common/api/blocks';
 import { useSelector } from 'react-redux';
 import { RootState } from '@store';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import useSWR, { useSWRInfinite } from 'swr';
+import { useSWRInfinite } from 'swr';
 
 interface UseInfiniteFetch<Data> {
-  initialData: Data;
+  initialData: Data[];
   limit: number;
   type: 'tx' | 'block';
   pending?: boolean;
+  suspense?: boolean;
   types?: string[];
 }
 
@@ -44,7 +41,19 @@ export const makeKey = (options: GetKeyOptions) => {
   }`;
 };
 
-export function useInfiniteFetch<Data>(options: UseInfiniteFetch<Data>) {
+export function useInfiniteFetch<Data>(
+  options: UseInfiniteFetch<Data>
+): {
+  data: Data[];
+  error: any;
+  isLoadingInitialData: boolean;
+  isLoadingMore: boolean;
+  isEmpty: boolean;
+  isReachingEnd: boolean;
+  isRefreshing: boolean;
+  loadMore: () => void;
+  refresh: () => void;
+} {
   const { limit, initialData, pending, type, types } = options;
 
   const { apiServer } = useSelector((state: RootState) => ({
@@ -76,25 +85,17 @@ export function useInfiniteFetch<Data>(options: UseInfiniteFetch<Data>) {
         types,
       }),
     fetcher,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    { initialData, initialSize: 1, refreshInterval: 2500 }
+    { initialData, initialSize: 1, refreshInterval: 2500, suspense: options?.suspense }
   );
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const combined = data ? [].concat(...data) : [];
+  const combined = data ? [].concat(...(data as any)) : [];
 
   const isLoadingInitialData = !data && !error;
   const isLoadingMore =
-    isLoadingInitialData || (size > 0 && data && typeof data[size - 1] === 'undefined');
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const isEmpty = data?.[0]?.length === 0;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const isReachingEnd = isEmpty || (data && data[data.length - 1]?.length < limit);
-  const isRefreshing = isValidating && data && data.length === size;
+    isLoadingInitialData || !!(size > 0 && data && typeof data[size - 1] === 'undefined');
+  const isEmpty = (data?.[0] as any)?.length === 0;
+  const isReachingEnd = isEmpty || !!(data && (data[data.length - 1] as any)?.length < limit);
+  const isRefreshing = !!(isValidating && data && data.length === size);
 
   const loadMore = () => setSize(size + 1);
   const refresh = () => mutate();

@@ -72,8 +72,8 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
   dark: {
     [Color.Accent]: colorGet('blue.400')(props),
     [Color.Bg]: colorGet('ink')(props),
-    [Color.BgAlt]: 'rgba(255,255,255,0.05)',
-    [Color.BgLight]: 'rgba(255,255,255,0.08)',
+    [Color.BgAlt]: '#151616',
+    [Color.BgLight]: '#1B1C1D',
     [Color.Invert]: 'white',
     [Color.TextHover]: colorGet('blue.300')(props),
     [Color.TextTitle]: 'white',
