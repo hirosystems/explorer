@@ -6,7 +6,7 @@ import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-co
 export const StxInline: ForwardRefExoticComponentWithAs<BoxProps, 'svg'> = forwardRefWithAs<
   BoxProps,
   'svg'
->(({ color = 'black', as = 'svg', strokeWidth = '1.5', ...props }, ref) => (
+>(({ color = 'currentColor', as = 'svg', strokeWidth = '1.5', ...props }, ref) => (
   <Box
     display="block"
     as={as}

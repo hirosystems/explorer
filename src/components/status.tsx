@@ -24,6 +24,17 @@ const keyframesRotate = keyframes`
   }
 `;
 
+export const Pending = (p: any) => (
+  <LoaderQuarter
+    css={(theme: Theme) =>
+      css({
+        animation: `${keyframesRotate} 0.9s infinite linear`,
+        color: color('invert'),
+      })(theme)
+    }
+    {...p}
+  />
+);
 export type Statuses =
   | 'success'
   | 'pending'
@@ -48,17 +59,7 @@ const labelMap = {
 };
 
 const iconMap = {
-  pending: (p: any) => (
-    <LoaderQuarter
-      css={(theme: Theme) =>
-        css({
-          animation: `${keyframesRotate} 0.9s infinite linear`,
-          color: color('invert'),
-        })(theme)
-      }
-      {...p}
-    />
-  ),
+  pending: Pending,
   success: CheckIcon,
   failed: AlertCircleIcon,
   abort_by_response: AlertCircleIcon,

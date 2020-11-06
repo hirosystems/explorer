@@ -5,6 +5,7 @@ import {
   TransactionType,
 } from '@blockstack/stacks-blockchain-api-types';
 import { BurnIcon, MintIcon, TransferIcon } from '@components/svg';
+import { color } from '@stacks/ui';
 
 export const getEventTypeName = (value: TransactionEvent['event_type']) => {
   switch (value) {
@@ -40,19 +41,19 @@ export const getAssetEventTypeLabel = (value?: TransactionEventAssetType) => {
       return {
         label: 'Transfer',
         icon: TransferIcon,
-        bg: 'blue',
+        bg: color('accent'),
       };
     case 'mint':
       return {
         label: 'Mint',
         icon: MintIcon,
-        bg: 'green',
+        bg: color('feedback-success'),
       };
     case 'burn':
       return {
         label: 'Burn',
         icon: BurnIcon,
-        bg: 'red',
+        bg: color('feedback-error'),
       };
     default:
       return {

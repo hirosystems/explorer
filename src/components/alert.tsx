@@ -105,20 +105,20 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
     <Flex
       borderRadius="12px"
       border={border()}
-      alignItems="center"
+      alignItems={['flex-start', 'flex-start', 'center']}
       color="#F9A14D"
       bg={color('bg')}
+      py="tight"
+      px="base"
+      flexDirection={['column', 'column', 'row']}
       {...rest}
     >
       <Flex
         borderRadius="12px 0 0 12px"
         bg={color('bg')}
-        py="tight"
-        pl="base"
+        py={['none', 'none', 'tight']}
         alignItems="center"
         justifyContent="center"
-        flexGrow={1}
-        alignSelf="stretch"
       >
         <AlertTriangleIcon size="24px" mr="tight" color="red" />
         {error || _error ? (
@@ -133,16 +133,20 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
           </Title>
         ) : null}
       </Flex>
-      <Flex alignItems="center" width="100%" py="tight" px="base-tight" pr="none">
-        <Box>
-          <Text fontSize="14px" pl="tight" color={color('text-body')} fontWeight={500}>
-            {_error
-              ? formattedError?.message
-              : error?.name === 'Status 429'
-              ? 'Too many requests to the faucet, try again later.'
-              : error?.message || renderErrorMessage(error)}
-          </Text>
-        </Box>
+      <Flex
+        alignItems="center"
+        width="100%"
+        pt={['tight', 'tight', 'unset']}
+        pl={['unset', 'unset', 'base']}
+      >
+        <Text fontSize="14px" color={color('text-title')} lineHeight="18px" fontWeight={400}>
+          {_error
+            ? formattedError?.message
+            : error?.name === 'Status 429'
+            ? 'Too many requests to the faucet, try again later.'
+            : error?.message || renderErrorMessage(error)}
+        </Text>
+
         {clearError || showClearErrors ? (
           <Box
             opacity={0.5}

@@ -50,7 +50,7 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
       <Grid
         px="base"
         py="base"
-        gridTemplateColumns="repeat(4, 1fr)"
+        gridTemplateColumns={['repeat(3, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
         borderLeft="3px solid"
         borderLeftColor={color('bg')}
         borderBottom={index === length - 1 ? 'unset' : '1px solid'}
@@ -65,10 +65,10 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
         {...rest}
       >
         <Title display="block">#{block.height}</Title>
-        <Text display="block" width="100%" textAlign="right">
+        <Text display={['none', 'none', 'block']} width="100%" textAlign="right">
           {truncateMiddle(block.hash, 9)}
         </Text>
-        <Text width="100%" textAlign="right">
+        <Text textAlign={['center', 'center', 'right']} width="100%">
           {block.txs.length}
         </Text>
         <Text display="block" width="100%" textAlign="right">
@@ -80,12 +80,17 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
 );
 
 const SectionHeadingRow = React.memo(() => (
-  <Grid px="base" py="tight" gridTemplateColumns="repeat(4, 1fr)" borderBottom={border()}>
+  <Grid
+    px="base"
+    py="tight"
+    gridTemplateColumns={['repeat(3, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
+    borderBottom={border()}
+  >
     <Caption>Block height</Caption>
-    <Caption width="100%" textAlign="right">
+    <Caption display={['none', 'none', 'block']} width="100%" textAlign="right">
       Block hash
     </Caption>
-    <Caption width="100%" textAlign="right">
+    <Caption width="100%" textAlign={['center', 'center', 'right']}>
       Transactions
     </Caption>
     <Caption width="100%" textAlign="right">

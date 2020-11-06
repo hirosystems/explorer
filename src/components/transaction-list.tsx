@@ -6,8 +6,6 @@ import {
   Transaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
-
-import { Card } from '@components/card';
 import NextLink from 'next/link';
 import React from 'react';
 import { Tag } from '@components/tags';
@@ -202,7 +200,7 @@ export const TransactionList: React.FC<
 
     const pendingVisible = pending?.length > 0 && pendingVisibility === 'visible';
 
-    const hasTransactions = !!transactions.length;
+    const hasTransactions = !!transactions?.length;
 
     return (
       <Section title="Transactions" {...rest}>
@@ -213,7 +211,7 @@ export const TransactionList: React.FC<
             handleTogglePendingVisibility={handleTogglePendingVisibility}
             pendingVisible={pendingVisible}
           />
-          {transactions.length ? (
+          {hasTransactions ? (
             <Box flexGrow={1}>
               <Flex
                 bg={color('bg')}

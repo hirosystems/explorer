@@ -6,7 +6,9 @@ import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@
 export const Text: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
   BoxProps,
   'span'
->(({ as = 'span', ...rest }, ref) => <BaseText as={as} ref={ref} color="currentColor" {...rest} />);
+>(({ as = 'span', ...rest }, ref) => (
+  <BaseText display="block" as={as} ref={ref} color="currentColor" {...rest} />
+));
 
 export const Caption: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
   BoxProps,
@@ -45,6 +47,7 @@ export const SectionTitle: React.FC<BoxProps> = forwardRefWithAs<BoxProps, 'span
 export const Pre = memoWithAs<BoxProps, 'pre'>(
   forwardRefWithAs<BoxProps, 'pre'>(({ as = 'pre', ...props }, ref) => (
     <Text
+      display="inline"
       fontFamily={`"Fira Code", monospace`}
       bg="var(--colors-bg-light)"
       borderRadius="3px"

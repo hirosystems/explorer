@@ -12,11 +12,10 @@ import { NextPage } from 'next';
 import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
 import { BlocksList } from '@components/blocks-list';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
+import { Block } from '@blockstack/stacks-blockchain-api-types';
 
 const BlocksPage: NextPage<{ blocks: FetchBlocksListResponse }> = ({ blocks: initialBlocks }) => {
-  const { data: blocks, loadMore, isLoadingMore } = useInfiniteFetch<
-    FetchBlocksListResponse['results']
-  >({
+  const { data: blocks, loadMore, isLoadingMore } = useInfiniteFetch<Block>({
     initialData: initialBlocks.results,
     type: 'block',
     limit: 30,
@@ -41,7 +40,7 @@ BlocksPage.getInitialProps = async ({
   const apiServer = selectCurrentNetworkUrl(store.getState());
 
   const blocks = await fetchBlocksList({
-    apiServer: apiServer as string,
+    apiServer,
     limit: 30,
   })();
 

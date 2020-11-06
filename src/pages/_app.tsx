@@ -1,4 +1,5 @@
 import * as React from 'react';
+import 'tippy.js/dist/tippy.css'; // optional
 
 import App, { AppContext } from 'next/app';
 import withRedux, { ReduxWrapperAppProps } from 'next-redux-wrapper';

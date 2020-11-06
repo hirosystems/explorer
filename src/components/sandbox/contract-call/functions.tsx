@@ -16,10 +16,7 @@ import { Card } from '@components/card';
 import { valueToClarityValue } from '@common/sandbox';
 import { useConfigState } from '@common/hooks/use-config-state';
 import { useLoading } from '@common/hooks/use-loading';
-import { useDispatch } from 'react-redux';
-import { broadcastTransaction } from '@store/sandbox';
 import { TxLink } from '@components/links';
-import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 interface FunctionProps {
   func: ContractInterfaceFunction;
@@ -92,7 +89,6 @@ const ArgumentsForm = ({ state, loading, onSubmit }: any) => {
             ) : null}
             <Select
               mb="base"
-              setFieldValue={setFieldValue}
               options={[
                 { label: 'Deny', value: PostConditionMode.Deny.toString(), key: 0 },
                 { label: 'Allow', value: PostConditionMode.Allow.toString(), key: 1 },
@@ -118,123 +114,5 @@ export const Function = ({
   contractName,
   showTransactionDialog,
 }: FunctionProps) => {
-  const [state, setState] = React.useState<FormState>({});
-  const { isLoading, doStartLoading, doFinishLoading } = useLoading();
-  const [result, setResult] = useState<string | undefined>(undefined);
-
-  const { apiServer } = useConfigState();
-  const { identity, doBroadcastTransaction, doFetchAccount } = useSandboxState();
-
-  React.useEffect(() => {
-    const newState: FormState = {};
-    func.args.forEach(arg => {
-      newState[arg.name] = {
-        ...arg,
-        value: '',
-      };
-    });
-    setState(newState);
-  }, [func.name]);
-
-  const valuesToClarityArray = (values: any) =>
-    Object.keys(values).map(name =>
-      valueToClarityValue(values[name], state[name] as ClarityFunctionArg)
-    );
-
-  const net = network(apiServer as string);
-
-  const onSubmit = React.useCallback(
-    async (values?: any) => {
-      if (!identity) return console.error('Not logged in!');
-      const { postConditionMode: stringPostConditionMode, ...clarityValues } = values;
-
-      const postConditionMode =
-        stringPostConditionMode === PostConditionMode.Deny.toString()
-          ? PostConditionMode.Deny
-          : PostConditionMode.Allow;
-
-      try {
-        doStartLoading();
-        const functionArgs = clarityValues ? valuesToClarityArray(clarityValues) : [];
-
-        if (func.access === 'public') {
-          const tx = await makeContractCall({
-            contractAddress,
-            contractName,
-            functionName: func.name,
-            functionArgs,
-            senderKey: identity?.privateKey as string,
-            network: net,
-            postConditionMode,
-          });
-
-          const response: any = await doBroadcastTransaction({
-            principal: identity.address,
-            tx,
-          });
-
-          if (response.error || !response.transactions[0].txId) return doFinishLoading();
-
-          setResult(response.transactions[0].txId);
-          showTransactionDialog();
-
-          doFinishLoading();
-        } else {
-          const value = await callReadOnlyFunction({
-            senderAddress: identity.address,
-            contractAddress,
-            contractName,
-            functionArgs,
-            functionName: func.name,
-            network: net,
-          });
-          const result = parseReadOnlyResponse(value);
-          setResult(result);
-          doFinishLoading();
-        }
-      } catch (e) {
-        doFinishLoading();
-      }
-    },
-    [state]
-  );
-
-  return (
-    <Card p="base" width="100%" mb={6}>
-      <Stack spacing="base">
-        <Flex alignItems="center">
-          <Text color="var(--colors-text-title)" fontFamily="'Fira Code', monospace">
-            ({func.name})
-          </Text>
-          <TypeLabel ml="extra-tight">{func.access} function</TypeLabel>
-        </Flex>
-
-        <ArgumentsForm state={state} loading={isLoading} onSubmit={onSubmit} />
-
-        {result && (
-          <Box mt="base">
-            <Caption>
-              Result:{' '}
-              {result.includes('0x') ? (
-                <TxLink txid={result}>
-                  <Caption
-                    as="a"
-                    // @ts-ignore
-                    target="_blank"
-                    cursor="pointer"
-                    textDecoration="underline"
-                    color="var(--colors-accent)"
-                  >
-                    {result}
-                  </Caption>
-                </TxLink>
-              ) : (
-                <Caption>{result}</Caption>
-              )}
-            </Caption>
-          </Box>
-        )}
-      </Stack>
-    </Card>
-  );
+  return <></>;
 };
