@@ -2,7 +2,10 @@ import * as React from 'react';
 
 import { Flex, Grid } from '@stacks/ui';
 import {
+  Block,
+  MempoolTransaction,
   MempoolTransactionListResponse,
+  Transaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
 import { NextPage, NextPageContext } from 'next';
@@ -48,14 +51,18 @@ interface HomeData {
 }
 
 export const useHomepageData = (initialData?: HomeData) => {
-  const transactions = useInfiniteFetch<TransactionResults['results']>({
+  const { apiServer } = useSelector((state: RootState) => ({
+    apiServer: selectCurrentNetworkUrl(state),
+  }));
+
+  const transactions = useInfiniteFetch<Transaction>({
     initialData: initialData?.transactions?.results || [],
     type: 'tx',
     limit: 10,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
 
-  const mempool = useInfiniteFetch<MempoolTransactionListResponse['results']>({
+  const mempool = useInfiniteFetch<MempoolTransaction>({
     initialData: initialData?.mempool?.results || [],
     type: 'tx',
     limit: 10,
@@ -63,24 +70,12 @@ export const useHomepageData = (initialData?: HomeData) => {
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
 
-  const blocks = useInfiniteFetch<FetchBlocksListResponse['results']>({
+  const blocks = useInfiniteFetch<Block>({
     initialData: initialData?.blocks?.results || [],
     type: 'block',
     limit: 10,
   });
 
-  return {
-    transactions,
-    mempool,
-    blocks,
-  };
-};
-export const Home: NextPage<HomeData> = initialData => {
-  const { transactions, mempool, blocks } = useHomepageData(initialData);
-
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
   const txKey = makeKey({
     apiServer,
     index: 0,
@@ -103,24 +98,35 @@ export const Home: NextPage<HomeData> = initialData => {
     limit: 10,
   });
 
+  const keys = [txKey, mempoolKey, blockKey];
+
+  return {
+    keys,
+    transactions,
+    mempool,
+    blocks,
+  };
+};
+
+export const Home: NextPage<HomeData> = initialData => {
+  const { transactions, mempool, blocks, keys } = useHomepageData(initialData);
   return (
     <PageWrapper isHome>
       <Head>
-        <link rel="preload" href={txKey} as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href={mempoolKey} as="fetch" crossOrigin="anonymous" />
-        <link rel="preload" href={blockKey} as="fetch" crossOrigin="anonymous" />
+        {keys.map(key => (
+          <link rel="preload" href={key} as="fetch" crossOrigin="anonymous" key={key} />
+        ))}
       </Head>
       <Meta />
       <PageTop />
-      <Grid
-        mt="extra-loose"
-        alignItems="flex-start"
-        gap="extra-loose"
-        gridTemplateColumns="repeat(1, 1fr)"
-      >
-        <TransactionList recent transactions={transactions.data} mempool={mempool.data} />
-        <BlocksList blocks={blocks.data} />
-      </Grid>
+      <TransactionList
+        my="extra-loose"
+        recent
+        transactions={transactions.data}
+        mempool={mempool.data}
+      />
+
+      <BlocksList blocks={blocks.data} />
     </PageWrapper>
   );
 };
@@ -132,17 +138,17 @@ Home.getInitialProps = async ({
 
   const [transactions, mempool, blocks] = await Promise.all([
     fetchTxList({
-      apiServer: apiServer as string,
+      apiServer,
       limit: 10,
       types: ['smart_contract', 'contract_call', 'token_transfer'],
     })(),
     fetchTxList({
-      apiServer: apiServer as string,
+      apiServer,
       limit: 10,
       mempool: true,
     })(),
     fetchBlocksList({
-      apiServer: apiServer as string,
+      apiServer,
       limit: 10,
     })(),
   ]);

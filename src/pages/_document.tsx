@@ -56,7 +56,13 @@ try {
 })()`,
             }}
           />
+
           <link rel="preconnect" href="https://cdn.usefathom.com" crossOrigin="true" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />

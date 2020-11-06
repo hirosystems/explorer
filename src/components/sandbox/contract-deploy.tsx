@@ -23,12 +23,11 @@ const customConfig: Config = {
 
 const generateContractName = () => uniqueNamesGenerator(customConfig);
 
-const Sample = ({ onItemClick, setFieldValue }: any) => {
+export const Sample = ({ onItemClick }: any) => {
   return (
     <Select
       name="codeBody"
       label="Choose from sample"
-      setFieldValue={setFieldValue}
       onItemClick={onItemClick}
       options={SampleContracts.map(({ name, source }, key: number) => ({
         label: name,

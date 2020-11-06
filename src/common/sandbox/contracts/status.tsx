@@ -1,6 +1,8 @@
 export const statusContract = {
   name: 'status',
-  source: `(define-map statuses
+  source: `;; status contract
+
+(define-map statuses
   (
     (author principal)
   )

@@ -17,6 +17,7 @@ module.exports = withBundleAnalyzer({
     STAGING: process.env.STAGING,
   },
   webpack(config, { dev }) {
+    config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
     if (!dev) {
       config.externals.unshift('elliptic');
       config.plugins.push(new webpack.IgnorePlugin(/^\.\/wordlists\/(?!english)/, /bip39\/src$/));

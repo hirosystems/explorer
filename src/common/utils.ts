@@ -15,6 +15,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
+const MICROSTACKS_IN_STACKS = 1000000;
+
 export const store = engine.createStore([lclStorage]);
 
 /**
@@ -165,9 +167,26 @@ export const handleValidation = (query?: string): { success: boolean; message?: 
  * microToStacks
  *
  * @param {Number} amountInMicroStacks - the amount of microStacks to convert
+ * @param {Number} localString - big pretty print if true
  */
-export const microToStacks = (amountInMicroStacks: string | number): number | string =>
-  amountInMicroStacks ? Number(Number(amountInMicroStacks) / Math.pow(10, 6)).toLocaleString() : 0;
+export const microToStacks = (
+  amountInMicroStacks: string | number,
+  localString = true
+): number | string => {
+  const value = Number(Number(amountInMicroStacks) / Math.pow(10, 6));
+  if (localString) {
+    return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+  }
+  return value;
+};
+
+/**
+ * stacksToMicro
+ *
+ * @param {String || Number} amountInStacks - the amount of stacks to convert
+ */
+export const stacksToMicro = (amountInStacks: string | number) =>
+  amountInStacks ? Math.floor(Number(amountInStacks) * MICROSTACKS_IN_STACKS) : 0;
 
 export const getContractName = (fullyRealizedName: string): string =>
   fullyRealizedName.split('.')[1];
@@ -252,3 +271,25 @@ export const border = (
   width = 1,
   style: BorderStyleProperty = 'solid'
 ): string => `${width}px ${style as string} ${color(_color)}`;
+
+export function stringToHslColor(str: string, saturation: number, lightness: number): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const hue = hash % 360;
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+export const onPaste = (event: ClipboardEvent, callback: (string: string) => any) => {
+  if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
+  if (event.clipboardData) {
+    // used in some browsers for clipboardData
+    callback(event.clipboardData.getData('text/plain'));
+  } else if ((window as any).clipboardData) {
+    // Older clipboardData version for Internet Explorer only
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    callback((window as any).clipboardData.getData('Text'));
+  }
+};

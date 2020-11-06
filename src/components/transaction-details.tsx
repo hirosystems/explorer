@@ -182,17 +182,18 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   return (
     <Section title="Summary" {...rest}>
       <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
-        <Box width={['100%']} order={[2, 2, 0]}>
+        <Box width={['100%']}>
           <Rows noTopBorder items={transformDataToRowData(transaction)} />
         </Box>
         {hideContract || !contractId ? null : (
           <ContractCard
-            ml="base"
-            my="base"
+            ml={['unset', 'unset', 'base']}
+            mt={['unset', 'unset', 'base']}
+            mb="base"
             title={getContractName(contractId)}
             meta={contractMeta}
             contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
-            order={[0, 0, 2]}
+            // order={[0, 0, 2]}
           />
         )}
       </Flex>

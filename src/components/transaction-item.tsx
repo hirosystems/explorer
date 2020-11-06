@@ -9,7 +9,7 @@ import {
   toRelativeTime,
   truncateMiddle,
 } from '@common/utils';
-import { forwardRefWithAs } from '@stacks/ui-core';
+import { forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 
 import { ArrowRightIcon } from '@components/icons/arrow-right';
@@ -97,6 +97,8 @@ export interface TxItemProps extends FlexProps {
   onFocus?: any;
   onBlur?: any;
   tabIndex?: any;
+  hideIcon?: boolean;
+  hideRightElements?: boolean;
 }
 
 const getTitle = (transaction: Transaction) => {
@@ -210,13 +212,23 @@ const AddressArea = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
   return null;
 };
 
-const LargeVersion = ({ tx, principal }: { tx: Transaction; principal?: string }) => {
+const LargeVersion = ({
+  tx,
+  principal,
+  hideIcon,
+  hideRightElements,
+}: {
+  tx: Transaction;
+  principal?: string;
+  hideIcon?: boolean;
+  hideRightElements?: boolean;
+}) => {
   const title = getTitle(tx);
 
   return (
     <>
       <Flex display="flex" as="span" alignItems="center">
-        <ItemIcon mr="base" status={tx.tx_status} type={tx.tx_type} />
+        {!hideIcon ? <ItemIcon mr="base" status={tx.tx_status} type={tx.tx_type} /> : null}
         <Stack
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -248,95 +260,130 @@ const LargeVersion = ({ tx, principal }: { tx: Transaction; principal?: string }
           </Stack>
         </Stack>
       </Flex>
-      <Flex as="span" justifyContent="space-between" flexDirection="column" alignItems="flex-end">
-        {tx.tx_type === 'token_transfer' &&
-        getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
-          <Badge
-            border={border()}
-            bg={color('bg')}
-            labelProps={{
-              display: 'flex',
-              alignItems: 'center',
-              color: color('text-caption'),
-            }}
-          >
-            🚰<Box ml="tight">Faucet</Box>
-          </Badge>
-        ) : null}
-        {tx.tx_type === 'contract_call' && (
-          <Badge
-            border={border()}
-            bg={color('bg')}
-            labelProps={{
-              display: 'flex',
-              alignItems: 'center',
-              color: color('text-caption'),
-            }}
-          >
-            <FunctionIcon size="16px" /> <Box>{tx.contract_call.function_name}</Box>
-          </Badge>
-        )}
-        {tx.tx_type === 'contract_call' && (
-          <Flex position="relative" zIndex="99" as="span" alignSelf="flex-end" ml="tight">
-            <NextLink href={`/txid/${tx.contract_call.contract_id}`} passHref>
-              <Caption as={Link}>Source contract</Caption>
-            </NextLink>
-          </Flex>
-        )}
-      </Flex>
+      {!hideRightElements ? (
+        <Flex
+          display={['none', 'none', 'flex']}
+          as="span"
+          justifyContent="space-between"
+          flexDirection="column"
+          alignItems="flex-end"
+        >
+          {tx.tx_type === 'token_transfer' &&
+          getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
+            <Badge
+              border={border()}
+              bg={color('bg')}
+              labelProps={{
+                display: 'flex',
+                alignItems: 'center',
+                color: color('text-caption'),
+              }}
+            >
+              🚰<Box ml="tight">Faucet</Box>
+            </Badge>
+          ) : null}
+          {tx.tx_type === 'contract_call' && (
+            <Badge
+              border={border()}
+              bg={color('bg')}
+              labelProps={{
+                display: 'flex',
+                alignItems: 'center',
+                color: color('text-caption'),
+              }}
+            >
+              <FunctionIcon size="16px" /> <Box>{tx.contract_call.function_name}</Box>
+            </Badge>
+          )}
+          {tx.tx_type === 'contract_call' && (
+            <Flex position="relative" zIndex="99" as="span" alignSelf="flex-end" ml="tight">
+              <NextLink href={`/txid/${tx.contract_call.contract_id}`} passHref>
+                <Caption as={Link}>Source contract</Caption>
+              </NextLink>
+            </Flex>
+          )}
+        </Flex>
+      ) : null}
     </>
   );
 };
 
-const MinimalVersion = ({ tx }: any) => {
+const MinimalVersion = ({ tx, hideIcon, hideRightElements }: any) => {
+  const title = getTitle(tx);
+  const additional =
+    tx.tx_type === 'token_transfer'
+      ? `${microToStacks(tx.token_transfer.amount)} STX`
+      : (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
+        (tx.tx_type === 'contract_call' && tx?.events?.length)
+      ? `${tx?.events?.length} events`
+      : '';
   return (
     <>
       <Flex as="span" alignItems="center">
-        <ItemIcon status={tx.tx_status} type={tx.tx_type} />
+        {!hideIcon && <ItemIcon status={tx.tx_status} type={tx.tx_type} />}
         <Stack spacing="extra-tight" ml="base">
-          <Details minimal tx={tx} />
+          <Title fontWeight="500" display="block" fontSize="16px">
+            {title || truncateMiddle(tx.tx_id, 6)}
+          </Title>
           <Flex>
             <Caption display="block">
-              {addSepBetweenStrings([getRelativeTimestamp(tx), truncateMiddle(tx.tx_id)])}
+              {addSepBetweenStrings([
+                getTransactionTypeLabel(tx.tx_type),
+                additional,
+                getRelativeTimestamp(tx),
+              ])}
             </Caption>
           </Flex>
         </Stack>
       </Flex>
-      <Flex alignItems="flex-start">
-        {tx.tx_type === 'token_transfer' &&
-        getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
-          <Badge
-            border={border()}
-            bg={color('bg')}
-            labelProps={{
-              display: 'flex',
-              alignItems: 'center',
-              color: color('text-caption'),
-            }}
-          >
-            🚰<Box ml="tight">Faucet</Box>
-          </Badge>
-        ) : null}
-        {tx.tx_type === 'contract_call' && (
-          <Badge
-            border={border()}
-            bg={color('bg')}
-            labelProps={{
-              display: 'flex',
-              alignItems: 'center',
-              color: color('text-caption'),
-            }}
-          >
-            <FunctionIcon size="16px" /> <Box>{tx.contract_call.function_name}</Box>
-          </Badge>
-        )}
-      </Flex>
+      {!hideRightElements && (
+        <Flex alignItems="flex-start">
+          {tx.tx_type === 'token_transfer' &&
+          getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
+            <Badge
+              border={border()}
+              bg={color('bg')}
+              labelProps={{
+                display: 'flex',
+                alignItems: 'center',
+                color: color('text-caption'),
+              }}
+            >
+              🚰<Box ml="tight">Faucet</Box>
+            </Badge>
+          ) : null}
+          {tx.tx_type === 'contract_call' && (
+            <Badge
+              border={border()}
+              bg={color('bg')}
+              labelProps={{
+                display: 'flex',
+                alignItems: 'center',
+                color: color('text-caption'),
+              }}
+            >
+              <FunctionIcon size="16px" /> <Box>{tx.contract_call.function_name}</Box>
+            </Badge>
+          )}
+        </Flex>
+      )}
     </>
   );
 };
 
-export const TxItem = forwardRefWithAs<TxItemProps, 'span'>(
-  ({ tx, isHovered, isFocused, minimal = false, as = 'span', principal, ...rest }, ref) => {
+export const TxItem = memoWithAs<TxItemProps, 'span'>(
+  forwardRefWithAs<TxItemProps, 'span'>((props, ref) => {
+    const {
+      tx,
+      isHovered,
+      isFocused,
+      minimal = false,
+      as = 'span',
+      principal,
+      hideIcon,
+      hideRightElements,
+      ...rest
+    } = props;
     return (
       <Flex
         px="base"
@@ -353,11 +400,16 @@ export const TxItem = forwardRefWithAs<TxItemProps, 'span'>(
         display="flex"
       >
         {minimal ? (
-          <MinimalVersion tx={tx} />
+          <MinimalVersion hideRightElements={hideRightElements} hideIcon={hideIcon} tx={tx} />
         ) : (
-          <LargeVersion principal={principal} tx={tx as any} />
+          <LargeVersion
+            hideRightElements={hideRightElements}
+            hideIcon={hideIcon}
+            principal={principal}
+            tx={tx as any}
+          />
         )}
       </Flex>
     );
-  }
+  })
 );

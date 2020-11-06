@@ -6,6 +6,7 @@ import { TransactionsCard } from '@components/sandbox/transactions-card';
 import { IdentityPayload } from '@store/sandbox/types';
 import { useClearErrors } from '@common/hooks/use-clear-errors';
 import { useSandboxState } from '@common/hooks/use-sandbox-state';
+import { Section } from '@components/section';
 
 export const Tab = ({
   currentTab,
@@ -73,6 +74,25 @@ export const Tabs = React.memo(
       setTab(path);
       clearErrors();
     }, []);
+
+    return (
+      <Section>
+        <Flex width="100%" borderBottom="1px solid" borderBottomColor="var(--colors-border)">
+          <Stack pl="18px" isInline spacing="0px">
+            {tabs.map(({ label, path }, index) => (
+              <Tab
+                onClick={() => handleClick(path)}
+                label={label}
+                currentTab={currentTab}
+                index={index}
+                key={index}
+                isActive={currentTab === path}
+              />
+            ))}
+          </Stack>
+        </Flex>
+      </Section>
+    );
 
     return (
       <>

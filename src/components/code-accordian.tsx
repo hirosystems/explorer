@@ -4,7 +4,7 @@ import { useRect } from '@reach/rect';
 import { CodeBlock } from '@components/code-block';
 
 export const CodeAccordian = React.memo(
-  ({ isOpen, code, language = 'json', isLast, show, note, ...rest }: any) => {
+  ({ isOpen, code, language = 'json', isLast, show, note, maxHeight, ...rest }: any) => {
     const ref = React.useRef<HTMLDivElement>(null);
 
     const rect = useRect(ref);
@@ -54,6 +54,7 @@ export const CodeAccordian = React.memo(
                 showLineNumbers
                 code={JSON.stringify(code, null, '  ')}
                 language={language}
+                maxHeight={maxHeight}
               />
               {note && note}
             </Box>
