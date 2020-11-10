@@ -1,6 +1,8 @@
 export const helloWorldContract = {
   name: 'hello-world-contract',
-  source: `(define-constant sender 'SZ2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQ9H6DPR)
+  source: `;; hello-world contract
+
+(define-constant sender 'SZ2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQ9H6DPR)
 (define-constant recipient 'SM2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQVX8X0G)
 
 (define-fungible-token novel-token-19)

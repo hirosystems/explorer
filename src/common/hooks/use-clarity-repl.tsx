@@ -27,6 +27,7 @@ interface UseClarityRepl {
   handleValidate: (clarityCode: string) => Result;
   result?: Result;
   setResult: any;
+  wasmLoaded?: boolean;
 }
 export const useClarityRepl = (): UseClarityRepl => {
   const wasm = useRecoilValue(clarityWasmAtom);
@@ -123,6 +124,9 @@ export const useClarityRepl = (): UseClarityRepl => {
   }
 
   const handleValidate = (source: string): undefined | Result => {
+    if (!wasm) {
+      return { raw: undefined, valid: null };
+    }
     const raw = handle_command(source);
     let result: Result | undefined = undefined;
     if (raw.includes('successfully')) {
@@ -147,5 +151,5 @@ export const useClarityRepl = (): UseClarityRepl => {
     return result;
   };
 
-  return { handleCommand: handle_command, handleValidate, result, setResult };
+  return { handleCommand: handle_command, handleValidate, result, setResult, wasmLoaded: !!wasm };
 };

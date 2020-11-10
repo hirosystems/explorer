@@ -261,7 +261,13 @@ const LargeVersion = ({
         </Stack>
       </Flex>
       {!hideRightElements ? (
-        <Flex as="span" justifyContent="space-between" flexDirection="column" alignItems="flex-end">
+        <Flex
+          display={['none', 'none', 'flex']}
+          as="span"
+          justifyContent="space-between"
+          flexDirection="column"
+          alignItems="flex-end"
+        >
           {tx.tx_type === 'token_transfer' &&
           getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
             <Badge

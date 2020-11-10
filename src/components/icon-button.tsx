@@ -13,12 +13,25 @@ export const IconButton: MemoExoticComponentWithAs<
     dark?: boolean;
     invert?: boolean;
     iconSize?: BoxProps['size'];
+    iconProps?: BoxProps;
     isHovered?: boolean;
   },
   'button'
 > = memoWithAs(
   forwardRefWithAs(
-    ({ icon: Icon, iconSize = '20px', dark, invert, _hover = {}, isHovered, ...rest }, ref) => {
+    (
+      {
+        icon: Icon,
+        iconSize = '20px',
+        iconProps = {},
+        dark,
+        invert,
+        _hover = {},
+        isHovered,
+        ...rest
+      },
+      ref
+    ) => {
       const hoverStyles = isHovered
         ? {
             bg: invert ? color('bg-light') : !dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.05)',
@@ -42,7 +55,7 @@ export const IconButton: MemoExoticComponentWithAs<
           {...rest}
           {...hoverStyles}
         >
-          <Icon display="block" size={iconSize} />
+          <Icon display="block" size={iconSize} {...iconProps} />
         </Grid>
       );
     }

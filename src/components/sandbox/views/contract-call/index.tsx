@@ -1,13 +1,15 @@
 // @ts-nocheck
 import React from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { validateStacksAddress, onPaste } from '@common/utils';
 import { Box, BoxProps, color, Flex, Grid, Stack, transition } from '@stacks/ui';
 import { atom, useRecoilValue, useRecoilState, useSetRecoilState, selectorFamily } from 'recoil';
 import { Input } from '@components/sandbox/common';
 import { useFormik } from 'formik';
 import { Button } from '@components/button';
 import { border, truncateMiddle } from '@common/utils';
-import { Caption, Text, Title } from '@components/typography';
-
+import { Caption, Link, Text, Title } from '@components/typography';
+import { Error } from '@components/sandbox/error';
 import {
   txContractState,
   currentFunctionState,
@@ -20,7 +22,12 @@ import { Badge } from '@components/badge';
 import { IconButton } from '@components/icon-button';
 import pluralize from 'pluralize';
 import { ItemIcon } from '@components/transaction-item';
-import { ClarityAbiFunction, encodeClarityValue, getTypeString } from '@stacks/transactions';
+import {
+  ClarityAbiFunction,
+  encodeClarityValue,
+  getTypeString,
+  tupleCV,
+} from '@stacks/transactions';
 import { ArrowLeftIcon } from '@components/icons/arrow-left';
 import { ArrowRightIcon } from '@components/icons/arrow-right';
 import ApiIcon from 'mdi-react/ApiIcon';
@@ -37,6 +44,8 @@ import { FungibleTokenIcon } from '@components/icons/fungible-token';
 import { ExternalLinkIcon } from '@components/icons/external-link';
 import { TxLink } from '@components/links';
 import { CodeBlock } from '@components/code-block';
+import { AlertTriangleIcon } from '@components/icons/alert-triangle';
+import { Circle } from '@components/circle';
 
 const useContractInterface = (): [any, string, ClarityAbiFunction] => {
   const apiServer = useApiServer();
@@ -44,7 +53,7 @@ const useContractInterface = (): [any, string, ClarityAbiFunction] => {
   const functionName = useRecoilValue(currentFunctionState);
   const contractInterface = useRecoilValue(txContractState({ apiServer, contractId }));
   const func = functionName
-    ? contractInterface.abi.functions.find(fn => fn.name === functionName)
+    ? contractInterface?.abi?.functions.find(fn => fn.name === functionName)
     : undefined;
 
   return [contractInterface, contractId, func];
@@ -63,7 +72,7 @@ const PluralizedItem: React.FC<BoxProps & { array: any[]; label: string }> = ({
 const Details = () => {
   const [contractInterface, contractId] = useContractInterface();
   const [view, setView] = React.useState(undefined);
-  return (
+  return contractInterface ? (
     <Section
       topRight={
         <TxLink txid={contractId}>
@@ -94,7 +103,7 @@ const Details = () => {
               <Title mb="tight" display="block" mt="0" as="h3">
                 {truncateMiddle(contractId.split('.')[0])}.{contractId.split('.')[1]}
               </Title>
-              <Caption display="block">{truncateMiddle(contractInterface.tx_id, 8)}</Caption>
+              <Caption display="block">{truncateMiddle(contractInterface?.tx_id, 8)}</Caption>
             </Box>
           </Flex>
         </Flex>
@@ -103,19 +112,19 @@ const Details = () => {
             <Box opacity={0.6} size="20px">
               <FunctionIcon color={color('text-caption')} size="20px" />
             </Box>
-            <PluralizedItem ml="tight" array={contractInterface.abi.functions} label="function" />
+            <PluralizedItem ml="tight" array={contractInterface?.abi?.functions} label="function" />
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <Box opacity={0.6} size="20px">
               <AtomIcon color={color('text-caption')} size="20px" />
             </Box>
-            <PluralizedItem ml="tight" array={contractInterface.abi.variables} label="variable" />
+            <PluralizedItem ml="tight" array={contractInterface?.abi?.variables} label="variable" />
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <Box opacity={0.6} size="20px">
               <ListStatusIcon color={color('text-caption')} size="20px" />
             </Box>
-            <PluralizedItem ml="tight" array={contractInterface.abi.maps} label="map" />
+            <PluralizedItem ml="tight" array={contractInterface?.abi?.maps} label="map" />
           </Flex>
           <Flex alignItems="center" justifyContent="center">
             <Box opacity={0.6} size="20px">
@@ -124,8 +133,8 @@ const Details = () => {
             <PluralizedItem
               ml="tight"
               array={[
-                ...contractInterface.abi.fungible_tokens,
-                ...contractInterface.abi.non_fungible_tokens,
+                ...contractInterface?.abi?.fungible_tokens,
+                ...contractInterface?.abi?.non_fungible_tokens,
               ]}
               label="token"
             />
@@ -133,10 +142,10 @@ const Details = () => {
         </Grid>
       </Box>
     </Section>
-  );
+  ) : null;
 };
 
-const ArgLine = ({ name, type, handleChange, ...rest }: any) => (
+const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any) => (
   <Box width="100%" {...rest}>
     <Input
       width="100%"
@@ -144,27 +153,49 @@ const ArgLine = ({ name, type, handleChange, ...rest }: any) => (
       name={name}
       id={name}
       onChange={handleChange}
-      placeholder={`${name as string}   ${getTypeString(type)}`}
+      placeholder={`${getTypeString(type)}`}
     />
   </Box>
 );
 
+const Label: React.FC<BoxProps> = props => (
+  <Text
+    as="label"
+    fontSize="12px"
+    fontWeight="500"
+    display="block"
+    color={color('text-caption')}
+    {...props}
+  />
+);
+
 const FunctionLine = ({ name, type, handleChange, ...rest }) => {
-  // if (type?.tuple) {
-  //   return (
-  //     <Box {...rest}>
-  //       <Text display="block" mb="tight" color={color('text-caption')}>
-  //         {name}
-  //       </Text>
-  //       <Stack isInline spacing="base">
-  //         {type.tuple.map(arg => (
-  //           <ArgLine handleChange={handleChange} {...arg} />
-  //         ))}
-  //       </Stack>
-  //     </Box>
-  //   );
-  // }
-  return <ArgLine name={name} type={type} handleChange={handleChange} {...rest} />;
+  const tuple = type?.tuple || type?.optional?.tuple;
+  if (tuple) {
+    return (
+      <Box {...rest}>
+        <Stack id={name} isInline spacing="base" width="100%">
+          {tuple.map(arg => (
+            <Box flexGrow={1}>
+              <Label htmlFor={`${name}`} mb="tight">
+                ({name}): {arg.name}
+                {type?.optional ? ' (optional)' : ''}
+              </Label>
+              <ArgLine handleChange={handleChange} {...arg} name={`${name}.${arg.name}`} />
+            </Box>
+          ))}
+        </Stack>
+      </Box>
+    );
+  }
+  return (
+    <Box>
+      <Label mb="tight" htmlFor={name}>
+        {name}
+      </Label>
+      <ArgLine name={name} type={type} handleChange={handleChange} {...rest} />
+    </Box>
+  );
 };
 
 const Function = ({ func }) => {
@@ -290,30 +321,51 @@ const FunctionSingleView = () => {
   const handleClearFnName = () => setFunctionName(undefined);
   const [initialValues, setInitialValues] = React.useState({});
 
-  const { handleSubmit, handleChange, setValues } = useFormik({
+  const { handleSubmit, handleChange, setValues, values } = useFormik({
     initialValues,
     onSubmit: values => {
-      const final = {};
-      Object.keys(values).forEach(key => {
-        console.log(fn.args.find(({ name }) => name === key).type, values[key]);
-        try {
-          final[key] = encodeClarityValue(
-            fn.args.find(({ name }) => name === key).type,
-            values[key]
-          );
-        } catch (e) {
-          final[key] = values[key];
-        }
-      });
-      if (fn.access === 'public') {
-        void openContractCall({
-          contractAddress: contractId.split('.')[0],
-          contractName: contractId.split('.')[1],
-          functionName: fn.name,
-          functionArgs: Object.values(final),
+      try {
+        const final = {};
+        Object.keys(values).forEach(key => {
+          const type = fn.args.find(({ name }) => name === key).type;
+          const tuple = type?.tuple || type?.optional?.tuple;
+          const optional = type?.optional;
+          if (tuple) {
+            final[key] = {};
+            tuple.forEach(k => {
+              const _name = k.name;
+              const _type = k.type;
+              try {
+                final[key][_name] = encodeClarityValue(_type, values[key][_name]);
+              } catch (e) {
+                final[key][_name] = values[key][_name];
+              }
+            });
+            final[key] = tupleCV(final[key]);
+          } else {
+            try {
+              final[key] = encodeClarityValue(optional || type, values[key]);
+            } catch (e) {
+              final[key] = values[key];
+            }
+          }
         });
-      } else {
-        setReadonly(Object.values(final));
+        if (fn.access === 'public') {
+          try {
+            void openContractCall({
+              contractAddress: contractId.split('.')[0],
+              contractName: contractId.split('.')[1],
+              functionName: encodeURIComponent(fn.name),
+              functionArgs: Object.values(final),
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          setReadonly(Object.values(final));
+        }
+      } catch (e) {
+        console.log('error');
       }
     },
   });
@@ -341,12 +393,16 @@ const FunctionSingleView = () => {
               ))}
             </Stack>
           ) : null}
-          <Stack justifyContent="center" isInline spacing="base">
-            <Button variant="secondary" onClick={handleClearFnName}>
-              Back
-            </Button>
+          <Flex flexDirection="column" alignItems="center" justifyContent="center">
             <Button type="submit">Call function</Button>
-          </Stack>
+            <Caption
+              _hover={{ cursor: 'pointer', color: color('text-title') }}
+              mt="base"
+              onClick={handleClearFnName}
+            >
+              Cancel
+            </Caption>
+          </Flex>
         </Box>
       )}
     </Section>
@@ -359,7 +415,7 @@ const AvailableFunctions = () => {
     <FunctionSingleView />
   ) : (
     <Section overflowY="auto" flexGrow={1} title="Available functions">
-      {contractInterface.abi.functions.map(
+      {contractInterface?.abi?.functions.map(
         func => func.access !== 'private' && <Function func={func} />
       )}
     </Section>
@@ -404,26 +460,69 @@ const ContractCall = ({ setView }) => {
 
 export const ContractSearch = ({ setView }) => {
   const setQuery = useSetRecoilState(contractSearchQueryState);
-  const { handleSubmit, handleChange, handleBlur, values } = useFormik({
+  const { handleSubmit, handleChange, handleBlur, values, setValues, errors } = useFormik({
+    validateOnChange: false,
+    validateOnBlur: false,
     initialValues: {
       principal: 'ST000000000000000000002AMW42H',
       contract_name: 'pox',
+    },
+    validate: values => {
+      const errors = {};
+      const validPrincipal = validateStacksAddress(values.principal);
+      if (!validPrincipal) {
+        errors.principal = 'Invalid Stacks address.';
+      }
+      if (!values.contract_name) {
+        errors.contract_name = 'Contract name required.';
+      }
+      return errors;
     },
     onSubmit: ({ principal, contract_name }) => {
       setQuery(`${principal}.${contract_name}`);
       setView('fn');
     },
   });
+
+  const handlePaste = (e: any) =>
+    onPaste(e, (value: string) => {
+      const theValue = value.trim().toString();
+      if (theValue.includes('.')) {
+        const principal = theValue.split('.')[0];
+        const contract_name = theValue.split('.')[1];
+
+        setTimeout(() => {
+          setValues({
+            principal,
+            contract_name,
+          });
+        }, 0);
+      }
+    });
   return (
-    <Flex flexDirection="column" p="extra-loose">
-      <Box mb="base-loose">
-        <Text color={color('text-body')} maxWidth="42ch" lineHeight="1.6" display="block">
-          Manually enter contract details below, or load a contract from your transactions to see
-          available functions.
-        </Text>
-      </Box>
+    <Flex maxHeight="900px" flexDirection="column" p="extra-loose">
       <Box as="form" onSubmit={handleSubmit}>
         <Stack spacing="base">
+          <Title fontSize="24px">Call a contract</Title>
+          <Text color={color('text-body')} maxWidth="42ch" lineHeight="1.6" display="block" my={0}>
+            Manually enter contract details below, or load a contract from your transactions to see
+            available functions.
+          </Text>
+          <Caption>
+            Hint: you can paste the{' '}
+            <Link
+              display="inline"
+              textDecoration="underline"
+              href="https://docs.blockstack.org/smart-contracts/principals#smart-contracts-as-principals"
+              target="_blank"
+            >
+              smart contracts' identifier
+            </Link>{' '}
+            in this format: [principal].[contract-name]
+          </Caption>
+          {Object.keys(errors)?.length ? (
+            <Error>{errors?.principal || errors?.contract_name}</Error>
+          ) : null}
           <Input
             id="principal"
             name="principal"
@@ -432,6 +531,7 @@ export const ContractSearch = ({ setView }) => {
             onBlur={handleBlur}
             value={values.principal}
             placeholder="Enter the contract address"
+            onPaste={handlePaste}
           />
           <Input
             id="contract_name"
@@ -450,15 +550,45 @@ export const ContractSearch = ({ setView }) => {
     </Flex>
   );
 };
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <Stack spacing="loose" p="extra-loose" role="alert">
+      <Flex flexDirection="column" borderRadius="8px" alignItems="center">
+        <Circle mb="loose" transform="translateY(2px)" size="84px" mr="tight" border={border()}>
+          <AlertTriangleIcon size="52px" color={color('feedback-error')} />
+        </Circle>
+        <Title mb="base" fontSize="24px">
+          Something went wrong
+        </Title>
+        <Text color={color('text-body')} lineHeight="26px" maxWidth="50ch" textAlign="center">
+          {error}
+        </Text>
+      </Flex>
+      <Button mx="auto" onClick={resetErrorBoundary}>
+        Search again
+      </Button>
+    </Stack>
+  );
+}
+
 export const ContractCallView = () => {
   const [view, setView] = useRecoilState(contractCallViewState);
+  const [query, setQuery] = useRecoilState(contractSearchQueryState);
 
   switch (view) {
     case 'fn':
       return (
-        <React.Suspense fallback={<LoadingPanel text="Loading contract data..." />}>
-          <ContractCall setView={setView} />
-        </React.Suspense>
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => {
+            setView('search');
+            setQuery(undefined);
+          }}
+        >
+          <React.Suspense fallback={<LoadingPanel text="Loading contract data..." />}>
+            <ContractCall setView={setView} />
+          </React.Suspense>
+        </ErrorBoundary>
       );
     default:
       return <ContractSearch setView={setView} />;

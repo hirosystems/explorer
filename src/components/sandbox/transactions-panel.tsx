@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { Box, Flex, Stack, color, Grid, transition, FlexProps } from '@stacks/ui';
+import { Box, Flex, Stack, color, Grid, transition, Fade, Transition, FlexProps } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { useUser } from '@common/hooks/use-user';
@@ -38,6 +38,7 @@ import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutli
 import { FilterIcon } from '@components/icons/filter';
 
 import FilterVariantIcon from 'mdi-react/FilterVariantIcon';
+import { Tooltip } from '@components/tooltip';
 
 const types = [
   TransactionType.SMART_CONTRACT,
@@ -175,62 +176,114 @@ const FilterPanel = () => {
     setFilterState(state => ({ ...state, showing: false }));
   };
 
-  return filter.showing ? (
-    <>
+  return (
+    <Flex
+      height="100%"
+      width="100%"
+      left="0"
+      flexGrow={1}
+      position="absolute"
+      top="34px"
+      overflow="hidden"
+      flexDirection="column"
+    >
       <Box
         position="absolute"
-        top="33px"
-        boxShadow="high"
-        zIndex={100}
-        p="base"
-        pb="loose"
-        bg={color('bg-light')}
+        top={0}
+        left="0"
         width="100%"
-        borderRadius="0 0 16px 16px"
-      >
-        <Flex pb="base" alignItems="center" justifyContent="space-between">
-          <Title>Filter transactions</Title>
-          <IconButton onClick={handleClose} dark icon={CloseIcon} />
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Stack alignItems="flex-start" spacing="base">
-            {types.map(type => (
-              <CheckableElement
-                onClick={handleChangeType}
-                value={!!filter.types.find(_type => _type === type)}
-                type={type}
-                key={type}
-              />
-            ))}
-          </Stack>
-          <Stack alignItems="flex-end" spacing="base">
-            <Toggle
-              value={filter.showPending}
-              onClick={() =>
-                setFilterState(state => ({ ...state, showPending: !state.showPending }))
-              }
-              label="Show pending"
-            />
-            <Toggle
-              value={filter.showFailed}
-              onClick={() => setFilterState(state => ({ ...state, showFailed: !state.showFailed }))}
-              label="Show failed"
-            />
-          </Stack>
-        </Flex>
-      </Box>
-      <Box
-        onClick={handleClose}
-        position="absolute"
-        top="33px"
-        left={0}
-        width="100%"
-        height="calc(100% - 33px)"
-        bg="rgba(0,0,0,0.5)"
-        zIndex={99}
+        bg={color('border')}
+        height="1px"
+        zIndex={999999}
       />
-    </>
-  ) : null;
+      <Transition
+        transition={`all 280ms cubic-bezier(0.4, 0, 0.2, 1)`}
+        timeout={{ enter: 50, exit: 150 }}
+        styles={{
+          init: {
+            transform: 'translateY(-100%)',
+            // opacity: 0,
+          },
+          entered: { transform: 'translateY(0)', opacity: 1 },
+          exiting: {
+            transform: 'translateY(0)',
+            opacity: '0',
+          },
+        }}
+        in={filter.showing}
+      >
+        {styles => (
+          <Box
+            zIndex={100}
+            p="base"
+            pb="loose"
+            top="1px"
+            bg={color('bg-light')}
+            width="100%"
+            borderRadius="0 0 16px 16px"
+            willChange="transform, opacity"
+            style={styles}
+          >
+            <Box
+              position="absolute"
+              top={'-48px'}
+              left="0"
+              width="100%"
+              bg={color('bg-light')}
+              height="50px"
+            />
+            <Flex pb="base" alignItems="center" justifyContent="space-between">
+              <Title>Filter transactions</Title>
+              <IconButton onClick={handleClose} dark icon={CloseIcon} />
+            </Flex>
+            <Flex justifyContent="space-between">
+              <Stack alignItems="flex-start" spacing="base">
+                {types.map(type => (
+                  <CheckableElement
+                    onClick={handleChangeType}
+                    value={!!filter.types.find(_type => _type === type)}
+                    type={type}
+                    key={type}
+                  />
+                ))}
+              </Stack>
+              <Stack alignItems="flex-end" spacing="base">
+                <Toggle
+                  value={filter.showPending}
+                  onClick={() =>
+                    setFilterState(state => ({ ...state, showPending: !state.showPending }))
+                  }
+                  label="Show pending"
+                />
+                <Toggle
+                  value={filter.showFailed}
+                  onClick={() =>
+                    setFilterState(state => ({ ...state, showFailed: !state.showFailed }))
+                  }
+                  label="Show failed"
+                />
+              </Stack>
+            </Flex>
+          </Box>
+        )}
+      </Transition>
+      <Fade timeout={250} in={filter.showing}>
+        {styles => (
+          <Box
+            onClick={handleClose}
+            position="absolute"
+            top="0"
+            left={0}
+            width="100%"
+            height="calc(100% - 33px)"
+            bg="rgba(0,0,0,0.5)"
+            zIndex={99}
+            style={styles}
+          />
+        )}
+      </Fade>
+    </Flex>
+  );
 };
 
 const PanelHeader = React.memo(() => {
@@ -269,6 +322,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const [clicked, setClicked] = React.useState(false);
   const [_, setCodeBody] = useCodeEditor();
   const { setResult } = useClarityRepl();
+  const setTab = useSetRecoilState(tabState);
 
   return loaded ? (
     <Badge userSelect="none" border={border()} color={color('text-caption')}>
@@ -303,6 +357,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
             setCodeBody(codeBody);
             setLoaded(true);
             setResult(undefined);
+            setTab('deploy');
             setTimeout(() => {
               setLoaded(false);
             }, 3000);
@@ -325,6 +380,7 @@ const TxDetailsFunctions = ({
   const setQuery = useSetRecoilState(contractSearchQueryState);
   const setCurrentFunction = useSetRecoilState(currentFunctionState);
   const setTab = useSetRecoilState(tabState);
+  const [fnsVisible, setFnsVisibility] = React.useState(false);
 
   const handleSetFunction = (name: string) => {
     setView('fn');
@@ -333,60 +389,93 @@ const TxDetailsFunctions = ({
     setTab('call');
   };
 
+  const handleSetContractQuery = () => {
+    setQuery(contractId);
+    setCurrentFunction(undefined);
+    setView('fn');
+    setTab('call');
+  };
+
   return hasFunctionsAvailable ? (
     <>
       <Flex
         justifyContent="space-between"
         alignItems="center"
-        borderBottom={border()}
+        borderBottom={fnsVisible ? border() : 'unset'}
         px="base"
         pb="tight"
         pt="base-tight"
-        _hover={{
-          bg: color('bg-alt'),
-        }}
       >
         <Caption fontWeight="500" color={color('text-body')}>
-          Available functions
+          Call contract
         </Caption>
-        <ChevronDown color={color('text-caption')} size="18px" />
+        <Stack isInline spacing="tight" alignItems="center">
+          <Badge
+            userSelect="none"
+            _hover={{
+              cursor: 'pointer',
+              color: color('text-title'),
+            }}
+            border={border()}
+            color={color('text-caption')}
+            onClick={handleSetContractQuery}
+          >
+            Load contract
+          </Badge>
+          <IconButton
+            size="24px"
+            iconProps={{
+              size: '16px',
+              strokeWidth: 2,
+              transform: !fnsVisible ? 'none' : 'rotate(180deg)',
+              transition,
+            }}
+            dark
+            onClick={() => {
+              setFnsVisibility(s => !s);
+            }}
+            icon={ChevronDown}
+          />
+        </Stack>
       </Flex>
-      <Stack maxHeight="120px" overflowX="auto" spacing="0">
-        {contractInterface?.abi?.functions?.map(
-          (func: ContractInterfaceFunction, index: number, arr: ContractInterfaceFunction[]) => {
-            return func.access !== 'private' ? (
-              <Flex
-                borderBottom={index === arr.length - 1 ? 'unset' : border()}
-                px="base"
-                py="tight"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Flex alignItems="center" color={color('text-caption')}>
-                  {func.access === 'read_only' ? (
-                    <InfoCircleIcon size="18px" />
-                  ) : (
-                    <ContractCallIcon size="18px" />
-                  )}
-                  <Caption color={color('text-body')} ml="extra-tight">
-                    {func.name}
-                  </Caption>
+      {fnsVisible ? (
+        <Stack maxHeight="120px" overflowX="auto" spacing="0">
+          {contractInterface?.abi?.functions?.map(
+            (func: ContractInterfaceFunction, index: number, arr: ContractInterfaceFunction[]) => {
+              return func.access !== 'private' ? (
+                <Flex
+                  borderBottom={index === arr.length - 1 ? 'unset' : border()}
+                  px="base"
+                  py="tight"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Flex alignItems="center" color={color('text-caption')}>
+                    {func.access === 'read_only' ? (
+                      <InfoCircleIcon size="18px" />
+                    ) : (
+                      <ContractCallIcon size="18px" />
+                    )}
+                    <Caption color={color('text-body')} ml="extra-tight">
+                      {func.name}
+                    </Caption>
+                  </Flex>
+                  {status === 'success' ? (
+                    <Badge
+                      _hover={{ color: color('text-title'), cursor: 'pointer' }}
+                      color={color('text-caption')}
+                      border={border()}
+                      onClick={() => handleSetFunction(func.name)}
+                    >
+                      Load function
+                    </Badge>
+                  ) : null}
                 </Flex>
-                {status === 'success' ? (
-                  <Badge
-                    _hover={{ color: color('text-title'), cursor: 'pointer' }}
-                    color={color('text-caption')}
-                    border={border()}
-                    onClick={() => handleSetFunction(func.name)}
-                  >
-                    Load function
-                  </Badge>
-                ) : null}
-              </Flex>
-            ) : null;
-          }
-        )}
-      </Stack>
+              ) : null;
+            }
+          )}
+        </Stack>
+      ) : null}
     </>
   ) : null;
 };
@@ -459,75 +548,89 @@ const TxDetails: React.FC<{
   );
 });
 
-const SandboxTxItem = React.memo(({ tx }: { tx: Transaction }) => {
-  const { principal } = useUser();
-  const [detailsVisibility, setDetailsVisibility] = useRecoilState(txDetailsState(tx.tx_id));
-  const detailsVisible = detailsVisibility === 'visible';
+const SandboxTxItem = React.memo(
+  ({ tx, isLast, ...rest }: { tx: Transaction; isLast?: boolean }) => {
+    const { principal } = useUser();
+    const [detailsVisibility, setDetailsVisibility] = useRecoilState(txDetailsState(tx.tx_id));
+    const detailsVisible = detailsVisibility === 'visible';
 
-  return (
-    <Box key={tx.tx_id} borderBottom={border()}>
-      <Flex alignItems="center" justifyContent="space-between">
-        <TxItem
-          width="unset"
-          flexGrow={0}
-          hideRightElements
-          minimal
-          principal={principal}
-          tx={tx}
-        />
-        {tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call' ? (
-          <IconButton
-            color={color('text-caption')}
-            _hover={{ bg: color('bg-alt') }}
-            invert
-            mr="base"
-            onClick={() => {
-              if (detailsVisibility === 'hidden') {
-                setDetailsVisibility('visible');
-              } else {
-                setDetailsVisibility('hidden');
-              }
-            }}
-            icon={(p: any) => (
-              <ChevronDown
-                transform={detailsVisible ? 'rotate(180deg)' : 'none'}
-                strokeWidth={2.5}
-                {...p}
-              />
-            )}
+    return (
+      <Box key={tx.tx_id} borderBottom={!isLast ? border() : undefined} {...rest}>
+        <Flex alignItems="center" justifyContent="space-between">
+          <TxItem
+            width="unset"
+            flexGrow={0}
+            hideRightElements
+            minimal
+            principal={principal}
+            tx={tx}
           />
-        ) : null}
-      </Flex>
-      {detailsVisible && (tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call') ? (
-        <Box px="base" pb="base">
-          <Box boxShadow="mid" borderRadius={'12px'} border={border()} bg={color('bg')}>
-            <React.Suspense
-              fallback={
-                <Box p="base">
-                  <Flex>
-                    <Pending mr="base" size={'14px'} />
-                    <Caption>Fetching contract interface</Caption>
-                  </Flex>
-                </Box>
-              }
-            >
-              <TxDetails
-                txId={tx.tx_id}
-                type={tx.tx_type}
-                status={tx.tx_status}
-                contractId={
-                  tx.tx_type === 'smart_contract'
-                    ? tx.smart_contract.contract_id
-                    : tx.contract_call.contract_id
-                }
+          {tx.tx_type === 'token_transfer' && (
+            <TxLink txid={tx.tx_id}>
+              <IconButton
+                as="a"
+                target="_blank"
+                flexShrink={0}
+                dark
+                icon={ExternalLinkIcon}
+                mr="base"
               />
-            </React.Suspense>
+            </TxLink>
+          )}
+          {tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call' ? (
+            <IconButton
+              color={color('text-caption')}
+              _hover={{ bg: color('bg-alt') }}
+              invert
+              mr="base"
+              onClick={() => {
+                if (detailsVisibility === 'hidden') {
+                  setDetailsVisibility('visible');
+                } else {
+                  setDetailsVisibility('hidden');
+                }
+              }}
+              iconProps={{
+                size: '24px',
+                transform: detailsVisible ? 'rotate(180deg)' : 'none',
+                transition,
+                stokeWidth: 2,
+              }}
+              icon={ChevronDown}
+            />
+          ) : null}
+        </Flex>
+        {detailsVisible && (tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call') ? (
+          <Box px="base" pb="base">
+            <Box boxShadow="mid" borderRadius={'12px'} border={border()} bg={color('bg')}>
+              <React.Suspense
+                fallback={
+                  <Box p="base">
+                    <Flex>
+                      <Pending mr="base" size={'14px'} />
+                      <Caption>Fetching contract interface</Caption>
+                    </Flex>
+                  </Box>
+                }
+              >
+                <TxDetails
+                  txId={tx.tx_id}
+                  type={tx.tx_type}
+                  status={tx.tx_status}
+                  contractId={
+                    tx.tx_type === 'smart_contract'
+                      ? tx.smart_contract.contract_id
+                      : tx.contract_call.contract_id
+                  }
+                />
+              </React.Suspense>
+            </Box>
           </Box>
-        </Box>
-      ) : null}
-    </Box>
-  );
-});
+        ) : null}
+      </Box>
+    );
+  }
+);
 
 const FilteredMessage = () => {
   const [filter, setFilterState] = useRecoilState(filterState);
@@ -599,9 +702,9 @@ const TxList: React.FC = React.memo(() => {
 
   const txList = React.useMemo(
     () =>
-      filteredTxs.map(tx =>
+      filteredTxs.map((tx, key, arr) =>
         tx.tx_status !== 'success' && !filters.showFailed ? null : (
-          <SandboxTxItem tx={tx} key={tx.tx_id} />
+          <SandboxTxItem key={key} tx={tx} key={tx.tx_id} isLast={key === arr.length - 1} />
         )
       ),
     [filteredTxs, filters.types, filters.showFailed, transactions]
@@ -636,6 +739,7 @@ export const TransactionsPanel = React.memo(props => {
       flexGrow={1}
       bg={color('bg-alt')}
       borderLeft={border()}
+      overflow="hidden"
       {...props}
     >
       <PanelHeader />

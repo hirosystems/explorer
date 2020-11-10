@@ -32,7 +32,7 @@ export const Timestamp: React.FC<TimestampProps> = ({ ts, noTooltip, ...props })
   return noTooltip ? (
     timestampElem
   ) : (
-    <Tooltip label={readableTimestamp} hasArrow={false} placement={'right'}>
+    <Tooltip label={readableTimestamp} placement={'right'}>
       {timestampElem}
     </Tooltip>
   );

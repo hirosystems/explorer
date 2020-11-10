@@ -16,7 +16,7 @@ import { PageWrapper } from '@components/page';
 
 import { ReduxNextPageContext } from '@common/types/next-store';
 
-import { getTxTypeIcon, TxItem } from '@components/transaction-item';
+import { getTxTypeIcon } from '@components/transaction-item';
 import { ItemIcon } from '@components/token-transfer/item';
 import { TxLink } from '@components/links';
 import { border } from '@common/utils';
@@ -34,6 +34,7 @@ import { TransactionList } from '@components/transaction-list';
 import { Badge, BadgeProps } from '@components/badge';
 import pluralize from 'pluralize';
 import { TransferIcon } from '@components/icons/transfer';
+import { DynamicColorCircle } from '@components/dynamic-color-circle';
 
 const fetchBalances = (apiServer: string) => async (
   principal: string
@@ -73,75 +74,90 @@ const TokenAssetListItem = ({
   token,
   balances,
   type,
+  isLast,
 }: {
   token: string;
+  isLast: boolean;
   balances: AddressBalanceResponse;
   type: 'non_fungible_tokens' | 'fungible_tokens';
 }) => {
   const { address, asset, contract } = getAssetNameParts(token);
   const key = type === 'non_fungible_tokens' ? 'count' : 'balance';
   return (
-    <Grid px="base" gridTemplateColumns="60% 1fr 1fr" py={space('base')}>
+    <Grid
+      borderBottom={!isLast ? border() : 'unset'}
+      px="base"
+      gridTemplateColumns="60% 1fr"
+      py={space('base')}
+    >
       <Box>
-        <Flex mb={space('extra-tight')}>
-          <ItemIcon
-            type={
-              type === 'non_fungible_tokens' ? 'non_fungible_token_asset' : 'fungible_token_asset'
-            }
-          />
-          <Text fontWeight="600">{asset}</Text>
+        <Flex alignItems="center" mb={space('extra-tight')}>
+          <DynamicColorCircle string={`${address}.${contract}::${asset}`}>
+            {asset[0]}
+          </DynamicColorCircle>
+          <Box>
+            <Text mb="extra-tight" fontWeight="600">
+              {asset}
+            </Text>
+            <TxLink txid={`${address}.${contract}`}>
+              <Caption
+                target="_blank"
+                _hover={{
+                  textDecoration: 'underline',
+                }}
+                as="a"
+              >
+                {truncateMiddle(address, 6)}.{contract}
+              </Caption>
+            </TxLink>
+          </Box>
         </Flex>
       </Box>
-      <Box>
-        <TxLink txid={`${address}.${contract}`}>
-          <Link
-            color={color('accent')}
-            _hover={{
-              textDecoration: 'underline',
-            }}
-            as="a"
-          >
-            {truncateMiddle(address, 4)}.{contract}
-          </Link>
-        </TxLink>
-      </Box>
-      <Box>
-        <Text>
+      <Flex flexGrow={1} justifyContent="flex-end" alignItems="center" textAlign="right">
+        <Text textAlign="right">
           {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             balances[type][token][key]
           }
         </Text>
-      </Box>
+      </Flex>
     </Grid>
   );
 };
 
 const NftBalances = ({ balances }: { balances: AddressBalanceResponse }) => (
   <Box>
-    <Grid gridTemplateColumns="repeat(2, 1fr)" pb={space('base')} borderBottom={border()}>
-      <Caption>Token</Caption>
-      <Caption>Balance</Caption>
+    <Grid gridTemplateColumns="repeat(2, 1fr)" pl="base" py={space('base')} borderBottom={border()}>
+      <Caption>Collectibles</Caption>
     </Grid>
-    {Object.keys(balances.non_fungible_tokens).map(token => {
-      console.log(balances.non_fungible_tokens[token]);
-      return <TokenAssetListItem token={token} type="non_fungible_tokens" balances={balances} />;
-    })}
+    {Object.keys(balances.non_fungible_tokens).map((token, key, arr) => (
+      <TokenAssetListItem
+        token={token}
+        type="non_fungible_tokens"
+        balances={balances}
+        key={key}
+        isLast={key === arr.length - 1}
+      />
+    ))}
   </Box>
 );
 
 const FtBalances = ({ balances }: { balances: AddressBalanceResponse }) => (
-  <Box>
-    <Grid px="base" gridTemplateColumns="60% 1fr 1fr" pb={space('base')} borderBottom={border()}>
-      <Caption>Token</Caption>
-      <Caption>Address</Caption>
-      <Caption>Amount</Caption>
+  <>
+    <Grid px="base" py={space('base')} borderBottom={border()}>
+      <Caption>Tokens</Caption>
     </Grid>
-    {Object.keys(balances.fungible_tokens).map(token => {
-      return <TokenAssetListItem token={token} type="fungible_tokens" balances={balances} />;
-    })}
-  </Box>
+    {Object.keys(balances.fungible_tokens).map((token, key, arr) => (
+      <TokenAssetListItem
+        token={token}
+        type="fungible_tokens"
+        balances={balances}
+        key={key}
+        isLast={key === arr.length - 1}
+      />
+    ))}
+  </>
 );
 
 const BalancesSmall = ({ balances }: { balances?: AddressBalanceResponse }) => {
@@ -155,20 +171,16 @@ const BalancesSmall = ({ balances }: { balances?: AddressBalanceResponse }) => {
 
 const Balances = ({ balances }: { balances: AddressBalanceResponse }) => {
   return (
-    <Box
-      mt="extra-loose"
-      border={border()}
-      borderRadius="12px"
-      bg={color('bg')}
-      alignItems="flex-start"
-    >
-      <Box borderBottom={border()} p="base">
-        <Text>Balances</Text>
-      </Box>
-      <Box width="100%" pt={space('extra-loose')}>
-        <FtBalances balances={balances} />
-      </Box>
-    </Box>
+    <Section maxHeight="696px" overflowY="auto" mb="extra-loose" title="Balances">
+      <Flex>
+        <Box width="50%">
+          <FtBalances balances={balances} />
+        </Box>
+        <Box width="50%" borderLeft={border()}>
+          <NftBalances balances={balances} />
+        </Box>
+      </Flex>
+    </Section>
   );
 };
 

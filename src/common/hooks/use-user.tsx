@@ -50,7 +50,7 @@ export const useUser = (options?: {
   const { userData } = useAuthState();
 
   const principal = userData?.profile?.stxAddress;
-  const username = userData?.username || userData?.identityAddress;
+  const username = userData?.username;
   const profile = userData?.profile;
 
   const { data, mutate } = useFetchAccountData(principal, options);

@@ -41,6 +41,11 @@ import { FungibleTokenIcon } from '@components/icons/fungible-token';
 import { NonFungibleTokenIcon } from '@components/icons/non-fungible-token';
 import { CodeIcon } from '@components/icons/code';
 import { ChevronDown } from '@components/icons/chevron-down';
+import { DynamicColorCircle } from '@components/dynamic-color-circle';
+import NextLink from 'next/link';
+import { IconButton } from '@components/icon-button';
+import { AddressLink } from '@components/links';
+import { ExternalLinkIcon } from '@components/icons/external-link';
 
 const Value = React.memo(
   React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (
@@ -62,71 +67,64 @@ export const ValueWrapped = React.memo(({ truncate, offset = 4, value, ...rest }
   )
 );
 
-export const ItemIcon = React.memo(({ type }: { type: TransactionEvent['event_type'] }) => {
-  switch (type) {
-    case 'smart_contract_log':
-      return (
-        <Grid
-          display={['none', 'none', 'grid']}
-          bg={color('invert')}
-          color={color('bg')}
-          mr="tight"
-          size="28px"
-          placeItems="center"
-          borderRadius="28px"
-        >
-          <CodeIcon strokeWidth="2" size="16px" />
-        </Grid>
-      );
-    case 'fungible_token_asset':
-      return (
-        <Grid
-          display={['none', 'none', 'grid']}
-          bg={color('invert')}
-          mr="tight"
-          size="28px"
-          placeItems="center"
-          borderRadius="28px"
-        >
-          <Text fontSize="10px" color={color('bg')} fontWeight="800">
-            FT
-          </Text>
-        </Grid>
-      );
+export const ItemIcon = React.memo(
+  ({ name, type }: { name?: string; type: TransactionEvent['event_type'] }) => {
+    switch (type) {
+      case 'smart_contract_log':
+        return (
+          <Grid
+            display={['none', 'none', 'grid']}
+            bg={color('invert')}
+            color={color('bg')}
+            mr="tight"
+            size="28px"
+            placeItems="center"
+            borderRadius="28px"
+          >
+            <CodeIcon strokeWidth="2" size="16px" />
+          </Grid>
+        );
+      case 'fungible_token_asset':
+        return name ? (
+          <DynamicColorCircle
+            display={['none', 'none', 'grid']}
+            mr="tight"
+            size="28px"
+            string={name}
+          >
+            {name.split('::')[1][0]}
+          </DynamicColorCircle>
+        ) : null;
 
-    case 'non_fungible_token_asset':
-      return (
-        <Grid
-          display={['none', 'none', 'grid']}
-          bg={color('invert')}
-          color={color('bg')}
-          mr="tight"
-          size="28px"
-          placeItems="center"
-          borderRadius="28px"
-        >
-          <Text letterSpacing="-0.05em" fontSize="10px" color={color('bg')} fontWeight="800">
-            NFT
-          </Text>
-        </Grid>
-      );
+      case 'non_fungible_token_asset':
+        return name ? (
+          <DynamicColorCircle
+            display={['none', 'none', 'grid']}
+            mr="tight"
+            size="28px"
+            string={name}
+          >
+            {name.split('::')[1][0]}
+          </DynamicColorCircle>
+        ) : null;
 
-    default:
-      return (
-        <Grid
-          display={['none', 'none', 'grid']}
-          bg={color('invert')}
-          color={color('bg')}
-          mr="tight"
-          size="28px"
-          placeItems="center"
-          borderRadius="28px"
-        >
-          <StxNexus color="currentColor" size="14px" />
-        </Grid>
-      );
+      default:
+        return (
+          <Grid
+            display={['none', 'none', 'grid']}
+            bg={color('invert')}
+            color={color('bg')}
+            mr="tight"
+            size="28px"
+            placeItems="center"
+            borderRadius="28px"
+          >
+            <StxNexus color="currentColor" size="14px" />
+          </Grid>
+        );
+    }
   }
-});
+);
 
 const EventAsset = React.memo(
   ({ event, length = 0, ...rest }: { event: TransactionEvent; length?: number } & FlexProps) =>
@@ -135,7 +133,7 @@ const EventAsset = React.memo(
         pl={['base', 'base', 'unset']}
         alignItems="center"
         pr="base"
-        width={'33.333%'}
+        width={'25%'}
         flexShrink={0}
         {...rest}
       >
@@ -149,7 +147,12 @@ const EventAsset = React.memo(
             {startPad(event.event_index + 1, length?.toString().length + 1)}
           </Caption>
         </Flex>
-        <ItemIcon type={event.event_type} />
+        <ItemIcon
+          name={
+            event.event_type !== 'smart_contract_log' ? (event.asset.asset_id as string) : undefined
+          }
+          type={event.event_type}
+        />
         {event.event_type !== 'smart_contract_log' && event.asset.asset_id ? (
           <Text fontSize="14px" fontWeight="500" color="var(--colors-text-title)">
             {getFungibleAssetName(event.asset.asset_id)}
@@ -186,7 +189,7 @@ const NonFungibleItem = React.memo(
     return (
       <Box {...rest}>
         <Text color={color('text-body')} fontWeight="500">
-          {value} <Text>NFT</Text>
+          {value} <Text display="inline">NFT</Text>
         </Text>
       </Box>
     );
@@ -195,7 +198,7 @@ const NonFungibleItem = React.memo(
 const FungibleItem = React.memo(({ event, ...rest }: { event: TransactionEventFungibleAsset }) => (
   <Box {...rest}>
     <Text color={color('text-body')} fontWeight="500">
-      {event.asset.amount} <Text>FT</Text>
+      {event.asset.amount} <Text display="inline">FT</Text>
     </Text>
   </Box>
 ));
@@ -234,7 +237,7 @@ const IconWrapper: React.FC<GridProps> = props => {
       bg={color('text-caption')}
       mr="tight"
       color="white"
-      size="24px"
+      size="20px"
       {...props}
     />
   );
@@ -245,8 +248,8 @@ export const EventAssetType = React.memo(
     if (event.event_type === 'smart_contract_log') {
       return (
         <Flex alignItems="center" {...rest}>
-          <IconWrapper mr="tight" bg={color('text-caption')}>
-            <LogIcon size={'18px'} />
+          <IconWrapper mr="tight" size={'24px'} bg="transparent">
+            <LogIcon size={'24px'} color={color('text-caption')} />
           </IconWrapper>
           <Text color={color('text-body')} fontWeight="500">
             Log
@@ -261,8 +264,8 @@ export const EventAssetType = React.memo(
       return (
         <Flex alignItems="center" {...rest}>
           {Icon && (
-            <IconWrapper mr="tight" {...props}>
-              <Icon size="18px" />
+            <IconWrapper bg="transparent" size="24px" mr="tight">
+              <Icon color={props.bg} size="24px" strokeWidth={2} />
             </IconWrapper>
           )}
           <Text color={color('text-body')} fontWeight="500">
@@ -284,42 +287,40 @@ export const TokenTransferItem = React.memo(
       openCode(!isOpen);
     }, [isOpen]);
     return (
-      <Box
-        bg={active ? color('bg-light') : hover ? color('bg-alt') : 'transparent'}
-        fontSize="14px"
-        onClick={handleOpen as any}
-        {...activeBind}
-      >
+      <Box bg={color('bg')} fontSize="14px" {...activeBind}>
         <Stack
           isInline
           borderBottom={noBottomBorder ? 'unset' : '1px solid'}
           borderColor="var(--colors-border)"
           py="loose"
           pr="base"
-          _hover={{
-            cursor: 'pointer',
-          }}
           {...bind}
           {...flexProps}
         >
           <EventAsset length={length} event={data} />
-          <Stack alignItems="center" isInline width="50%" flexShrink={0} flexGrow={1}>
-            <EventAssetType width="50%" event={data} />
-            <EventAssetValue width="50%" event={data} />
-            <Flex
-              alignItems="center"
-              justify="center"
-              width="48px"
-              flexShrink={0}
-              color="var(--colors-invert)"
-              opacity={hover ? 1 : 0.5}
-            >
-              <ChevronDown
-                size="16px"
-                transition={transition}
-                transform={isOpen ? 'rotate(-180deg)' : 'none'}
-              />
+          <Stack alignItems="center" isInline width="75%" flexShrink={0} flexGrow={1}>
+            <EventAssetType width="calc(33.333% - 44px)" event={data} />
+            <EventAssetValue width="calc(33.333% + 16px)" event={data} />
+            <Flex justifyItems="flex-start" flexGrow={1}>
+              {'asset' in data && data?.asset?.recipient ? (
+                <AddressLink principal={data?.asset?.recipient}>
+                  <Text
+                    display="flex"
+                    alignItems="center"
+                    _hover={{
+                      textDecoration: 'underline',
+                    }}
+                    target="_blank"
+                    as="a"
+                    color={color('text-body')}
+                  >
+                    {truncateMiddle(data?.asset?.recipient)}
+                    <ExternalLinkIcon size="16px" color={color('text-caption')} ml="tight" />
+                  </Text>
+                </AddressLink>
+              ) : null}
             </Flex>
+            <IconButton dark icon={ChevronDown} onClick={handleOpen as any} />
           </Stack>
         </Stack>
         <CodeAccordian

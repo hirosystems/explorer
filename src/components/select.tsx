@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Box, BoxProps, Flex, ChevronIcon } from '@stacks/ui';
+import { Box, BoxProps, Flex, ChevronIcon, Input } from '@stacks/ui';
 import { FormikHelpers, useField } from 'formik';
 import { Popover } from '@components/popover/popover';
 import { FieldBase } from '@components/sandbox/common';
 
 interface SelectProps extends BoxProps {
-  setFieldValue?: FormikHelpers<any>['setFieldValue'];
   onItemClick?: (value: string) => void;
   name: string;
   options: {
@@ -18,37 +17,42 @@ interface SelectProps extends BoxProps {
 export const Select = ({ name, options, onItemClick, label, ...rest }: SelectProps) => {
   const [index, setIndex] = React.useState(0);
   const selectedOption = options[index];
-  const [field, { touched, error }, helpers] = useField({
-    ...rest,
-    name,
-  } as any);
 
-  const handleValueClick = React.useCallback(({ key }: { value: string; key: number }) => {
+  const handleValueClick = ({ key }: { value: string; key: number }) => {
     setIndex(key);
-    helpers.setValue(options[key].value);
-    onItemClick && onItemClick(options[key].value);
-  }, []);
+    onItemClick && onItemClick?.(options[key].value);
+  };
 
   const ref = React.useRef(null);
 
   const isInFocus = ref?.current === (typeof document !== 'undefined' && document?.activeElement);
 
   return (
-    <Box {...rest}>
+    <Box color="#a7a7ad" {...rest}>
       <Popover showOnClickOrFocus onItemClick={handleValueClick} items={options} triggerRef={ref}>
-        <Box _hover={{ cursor: 'pointer' }} position="relative">
-          <FieldBase
-            label={label}
+        <Flex
+          alignItems="center"
+          _hover={{ cursor: 'pointer' }}
+          pointerEvents="none"
+          position="relative"
+        >
+          <Input
+            width="100%"
+            backgroundColor="ink"
+            borderColor="rgb(39, 41, 46)"
+            color="#a7a7ad"
+            as="input"
             type="text"
             value={selectedOption.label}
             name={name}
             ref={ref}
             style={{ pointerEvents: 'none' }}
+            pointerEvents="none"
+            pr="40px"
           />
           <Flex
-            color="var(--colors-invert)"
+            color="currentColor"
             p="base"
-            pt="40px"
             alignItems="center"
             position="absolute"
             bottom="0"
@@ -57,7 +61,7 @@ export const Select = ({ name, options, onItemClick, label, ...rest }: SelectPro
           >
             <ChevronIcon size="22px" direction={isInFocus ? 'up' : 'down'} />
           </Flex>
-        </Box>
+        </Flex>
       </Popover>
     </Box>
   );

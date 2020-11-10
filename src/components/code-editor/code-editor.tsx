@@ -15,9 +15,11 @@ import {
   css as _css,
   Theme,
 } from '@stacks/ui-core';
-import { atom, useRecoilState } from 'recoil';
+import { atom, atomFamily, useRecoilState } from 'recoil';
 import { useClarityRepl } from '@common/hooks/use-clarity-repl';
-import { helloWorldContract } from '@common/sandbox/contracts';
+import { SampleContracts } from '@common/sandbox/examples';
+import { StandardPrincipal } from '@stacks/transactions';
+import { useUser } from '@common/hooks/use-user';
 
 export const TextAreaOverrides = (
   <Global
@@ -60,7 +62,7 @@ export const TextAreaOverrides = (
 );
 
 interface CodeEditorProps extends Partial<Omit<BoxProps, 'onChange'>> {
-  value: string;
+  value?: string;
   disabled?: boolean;
   language?: string;
   onChange?: (code: string) => void;
@@ -68,13 +70,15 @@ interface CodeEditorProps extends Partial<Omit<BoxProps, 'onChange'>> {
   id?: string;
 }
 
-export const codeEditorState = atom({
+export const codeEditorState = atomFamily({
   key: 'codeEditor',
-  default: helloWorldContract.source,
+  default: (principal: string) =>
+    SampleContracts[0].source.replace('SM2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQVX8X0G', principal),
 });
 
 export const useCodeEditor = (): [string, (value: string) => void] => {
-  const [codeBody, setCodeBody] = useRecoilState<string>(codeEditorState);
+  const { principal } = useUser();
+  const [codeBody, setCodeBody] = useRecoilState<string>(codeEditorState(principal as string));
 
   return [codeBody, setCodeBody as (value: string) => void];
 };

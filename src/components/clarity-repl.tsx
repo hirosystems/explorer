@@ -13,7 +13,7 @@ const capitalize = (s: string) => {
   return s?.charAt(0).toUpperCase() + s?.slice(1);
 };
 
-const ClarityRepl = React.memo(() => {
+const ClarityRepl = React.memo(({ show }: { show?: boolean }) => {
   const { result, setResult } = useClarityRepl();
 
   const [visible, setVisible] = React.useState(!!result);
@@ -25,12 +25,17 @@ const ClarityRepl = React.memo(() => {
     }
   }, [visible, result]);
 
+  const handleClose = () => {
+    setExiting(true);
+    setVisible(false);
+  };
+
   return (
     <Fade
-      in={visible}
+      in={show && visible && !!result}
       onExited={() => {
         setTimeout(() => {
-          setResult(undefined);
+          // setResult(undefined);
           setExiting(false);
         }, 250);
       }}
@@ -38,20 +43,30 @@ const ClarityRepl = React.memo(() => {
       {styles => (
         <Box
           // width="calc(100% - 16px)"
-          right="base"
-          top="71px"
+          right="tight"
+          top="122px"
           position="absolute"
-          zIndex={99}
+          zIndex={99999}
           p="base"
           style={styles}
           willChange="opacity"
         >
+          {/*<Box*/}
+          {/*  position="absolute"*/}
+          {/*  top="10px"*/}
+          {/*  right="153px"*/}
+          {/*  transform="rotate(45deg)"*/}
+          {/*  size="10px"*/}
+          {/*  bg={result?.valid ? color('feedback-success') : color('feedback-error')}*/}
+          {/*/>*/}
           <Flex
             transform="translateY(-1px)"
             bg={result?.valid ? color('feedback-success') : color('feedback-error')}
             borderRadius="8px"
             py="tight"
             px="base"
+            alignItems="center"
+            height="48px"
           >
             {result?.valid ? (
               <Flex alignItems="center" flexGrow={1} color="white">
@@ -85,15 +100,7 @@ const ClarityRepl = React.memo(() => {
                 </Box>
               </Flex>
             )}
-            <IconButton
-              ml="base"
-              onClick={() => {
-                setExiting(true);
-                setVisible(false);
-              }}
-              size="28px"
-              icon={CloseIcon}
-            />
+            <IconButton ml="base" onClick={handleClose} size="28px" icon={CloseIcon} />
           </Flex>
         </Box>
       )}
@@ -107,16 +114,20 @@ export const WasmComponent = dynamic(
       const response = await fetch('/clarity_repl.wasm');
       const buf = await response.arrayBuffer();
       const rustModule = await WebAssembly.instantiate(buf);
-      return () => {
+      return ({ show }: { show?: boolean }) => {
         const [wasm, setWasm] = useRecoilState(clarityWasmAtom);
         const { result } = useClarityRepl();
         const isBrowser = typeof window !== 'undefined';
         React.useEffect(() => {
-          if (isBrowser && !wasm && rustModule) {
-            setWasm(rustModule.instance.exports as any);
+          try {
+            if (isBrowser && !wasm && rustModule) {
+              setWasm(rustModule.instance.exports as any);
+            }
+          } catch (e) {
+            console.log(e);
           }
         }, [wasm, rustModule, isBrowser]);
-        return <ClarityRepl />;
+        return <ClarityRepl show={show} />;
       };
     },
   },

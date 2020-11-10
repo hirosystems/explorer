@@ -2,7 +2,7 @@
 import React from 'react';
 import { Box, color, Flex, Grid, Stack } from '@stacks/ui';
 import { blue, Button } from '@components/button';
-import { Link, Text } from '@components/typography';
+import { Link, Text, Title } from '@components/typography';
 import { postToSidecar } from '@common/api/fetch';
 import { useApiServer } from '@common/hooks/use-api';
 
@@ -25,6 +25,13 @@ export const FaucetView = () => {
   const [response, setResponse] = useRecoilState(faucetResponseState);
   const { refreshPendingTransactions } = useUser();
   const [stackingIndex, setIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    if (response) {
+      setResponse(undefined);
+    }
+    return () => setResponse(undefined);
+  }, []);
 
   const handleSubmit = async (stacking?: boolean) => {
     try {
@@ -64,7 +71,7 @@ export const FaucetView = () => {
     }
   };
   return (
-    <Flex flexDirection="column" p="extra-loose">
+    <Grid maxHeight="600px" placeItems="center" flexDirection="column" p="extra-loose">
       <Box mb="base-loose">
         <Grid
           placeItems="center"
@@ -74,6 +81,7 @@ export const FaucetView = () => {
           border={border()}
           borderRadius="100%"
           position="relative"
+          justifyContent="center"
         >
           <Grid
             placeItems="center"
@@ -91,14 +99,18 @@ export const FaucetView = () => {
           </Grid>
           <StxInline color={color('invert')} size="48px" />
         </Grid>
+        <Title mb="base" width="100%" mx="auto" fontSize="24px" textAlign="center">
+          STX Faucet
+        </Title>
         <Text
           mx="auto"
           width="100%"
           textAlign="center"
           color={color('text-body')}
-          maxWidth="42ch"
+          maxWidth="24ch"
           lineHeight="1.8"
           display="block"
+          mb={0}
         >
           Need STX to test the network? The faucet can top you up!
         </Text>
@@ -140,7 +152,7 @@ export const FaucetView = () => {
           </Box>
         ) : null}
 
-        <Stack spacing="base" justifyContent="center" mt="loose">
+        <Stack spacing="base" justifyContent="center" mt="base">
           <Button mx="auto" onClick={() => handleSubmit()}>
             Request STX
           </Button>
@@ -163,6 +175,6 @@ export const FaucetView = () => {
           </Badge>
         </Stack>
       </Box>
-    </Flex>
+    </Grid>
   );
 };

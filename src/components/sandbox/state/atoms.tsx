@@ -4,7 +4,6 @@ import { AuthOptions } from '@stacks/connect';
 import { generateRandomName } from '@common/hooks/use-random-name';
 import { helloWorldContract } from '@common/sandbox/contracts';
 import { fetchContractInterface } from '@common/sandbox';
-import { ClarityAbiFunction } from '@stacks/transactions';
 
 export const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
@@ -58,6 +57,11 @@ export const txDetailsState = atomFamily<'hidden' | 'visible', string>({
   default: 'hidden',
 });
 
+export const txContractStateError = atom({
+  key: 'sandbox.txDetails.error',
+  default: undefined,
+});
+
 export const txContractState = selectorFamily<any, { apiServer: string; contractId: string }>({
   key: 'sandbox.txDetails',
   get: ({ apiServer, contractId }) => async () => {
@@ -65,6 +69,9 @@ export const txContractState = selectorFamily<any, { apiServer: string; contract
       contractId.split('.')[0],
       contractId.split('.')[1]
     );
+    if (data.error) {
+      throw data.error;
+    }
     return {
       ...data,
       abi: JSON.parse(data.abi),

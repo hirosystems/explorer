@@ -1,6 +1,6 @@
 export const streamContract = {
   name: 'stream',
-  source: `;; hello world
+  source: `;; stream contract
 
 (define-public (say-hi)
   (ok "hello world")

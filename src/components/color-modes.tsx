@@ -151,7 +151,10 @@ export const Base = (
             -moz-osx-font-smoothing: auto;
           }
           .metaverse-header {
-            opacity: 0.5;
+            opacity: 0.4;
+            & + div {
+              opacity: 0.2;
+            }
           }
         }
       }

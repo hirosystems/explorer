@@ -89,7 +89,6 @@ const ArgumentsForm = ({ state, loading, onSubmit }: any) => {
             ) : null}
             <Select
               mb="base"
-              setFieldValue={setFieldValue}
               options={[
                 { label: 'Deny', value: PostConditionMode.Deny.toString(), key: 0 },
                 { label: 'Allow', value: PostConditionMode.Allow.toString(), key: 1 },

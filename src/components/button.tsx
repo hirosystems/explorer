@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { BoxProps, Box, transition } from '@stacks/ui';
+import { BoxProps, Box, transition, color } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 import { usePress } from 'react-aria';
 import { useFocusableRef } from '@react-spectrum/utils';
@@ -16,9 +16,10 @@ const variantStyles = (variant: ButtonProps['variant']) => {
   switch (variant) {
     case 'secondary':
       return (isPressed: boolean) => ({
-        bg: blue(0.5, isPressed),
+        bg: blue(0.2, isPressed),
+        color: color('invert'),
         borderColor: blue(0),
-        _hover: { bg: blue(0.75, true), cursor: 'pointer' },
+        _hover: { bg: blue(0.25, true), cursor: 'pointer' },
         _focus: {
           boxShadow: `0 0 0 3px ${focusBlue(0.5)}`,
         },
