@@ -1,9 +1,7 @@
 import React from 'react';
 import { constructLimitAndOffsetQueryParams } from '@common/api/blocks';
-import { useSelector } from 'react-redux';
-import { RootState } from '@store';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { useSWRInfinite } from 'swr';
+import { useApiServer } from '@common/hooks/use-api';
 
 interface UseInfiniteFetch<Data> {
   initialData: Data[];
@@ -56,9 +54,7 @@ export function useInfiniteFetch<Data>(
 } {
   const { limit, initialData, pending, type, types } = options;
 
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
+  const apiServer = useApiServer();
 
   const getKey = React.useCallback((options: GetKeyOptions) => {
     return makeKey({

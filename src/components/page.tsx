@@ -9,6 +9,7 @@ import { Header } from '@components/header';
 import { Notice } from '@components/notice';
 import { color } from '@components/color-modes';
 import { TitleProps, TransactionTitle } from '@components/transaction-title';
+import { MetaverseSVG } from '@components/metaverse';
 
 type PageProps = { notice?: { label?: string; message?: string }; fullWidth?: boolean } & FlexProps;
 type PageWrapperProps = { isHome?: boolean; fullWidth?: boolean; notice?: any } & FlexProps;
@@ -83,36 +84,20 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
 
 export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...props }) => (
   <Flex flexDirection="column" minHeight="100vh" position="relative">
+    <Header fullWidth={fullWidth} isHome={isHome} />
+    <Page {...props} />
     <Box
-      position="absolute"
-      left={0}
-      top={0}
-      width="100%"
-      height="420px"
-      backgroundImage="url('https://blockstack-www.imgix.net/metaverse-bg.png?auto=format,compress')"
-      backgroundSize="cover"
-      backgroundAttachment="fixed"
-      backgroundPosition="0% 51%"
-      zIndex={-1}
-      transition={transition}
       className="metaverse-header"
-    />
-    <Box
       position="absolute"
-      left={0}
-      top={0}
+      zIndex={-1}
       width="100%"
-      zIndex={-2}
+      top={0}
       height="420px"
       overflow="hidden"
     >
-      <Blurhash
-        hash="e|IF4No?XkX8ba{vnOWGf6bH%XaQjbnif8T1X9oHjZjsO?bFjZjujs"
-        width="100%"
-        height="100vh"
-      />
+      <Box transform="translateY(-12%) scale(1.28)" position="relative">
+        <MetaverseSVG minWidth="1400px" width="100vw" filter="contrast(1.1)" />
+      </Box>
     </Box>
-    <Header fullWidth={fullWidth} isHome={isHome} />
-    <Page {...props} />
   </Flex>
 );

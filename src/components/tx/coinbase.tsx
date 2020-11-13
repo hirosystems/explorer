@@ -1,18 +1,10 @@
 import * as React from 'react';
-import { Stack } from '@stacks/ui';
-
 import { PageTop } from '@components/page';
-import { Rows } from '@components/rows';
-
 import { TransactionType } from '@models/transaction.interface';
 import { TransactionDetails } from '@components/transaction-details';
-import { CoinbaseTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { TxData } from '@common/types/tx';
 
-interface CoinbasePageProps {
-  transaction: CoinbaseTransaction;
-}
-
-const CoinbasePage = ({ transaction }: CoinbasePageProps) => (
+const CoinbasePage = ({ transaction }: TxData) => (
   <>
     <PageTop status={transaction.tx_status} type={TransactionType.COINBASE} />
     <TransactionDetails transaction={transaction} />

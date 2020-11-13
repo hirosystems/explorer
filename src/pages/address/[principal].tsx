@@ -17,7 +17,7 @@ import { PageWrapper } from '@components/page';
 import { ReduxNextPageContext } from '@common/types/next-store';
 
 import { getTxTypeIcon } from '@components/transaction-item';
-import { ItemIcon } from '@components/token-transfer/item';
+
 import { TxLink } from '@components/links';
 import { border } from '@common/utils';
 import { fetchFromSidecar } from '@common/api/fetch';

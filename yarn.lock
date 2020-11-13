@@ -2529,6 +2529,11 @@
     "@styled-system/core" "^5.1.2"
     "@styled-system/css" "^5.1.5"
 
+"@tabler/icons@^1.35.0":
+  version "1.35.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.35.0.tgz#a9549c7f8e6ab9bedb1d0b75258da26d4c57c7a6"
+  integrity sha512-g3b6wu6IGcaoSc63RylAF4kc5TwMHNeV4sLZ/JcZZHWKMhJKSBwgXVZbaQxZ/x/BUv9SSn5bzudXUrZ1YG48rw==
+
 "@tippyjs/react@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@tippyjs/react/-/react-4.2.0.tgz#a1cb369d0051099e8a7e4ceb59f809abd9955283"
@@ -5041,7 +5046,7 @@ depd@~2.0.0:
   resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
   integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
-dequal@2.0.2:
+dequal@2.0.2, dequal@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/dequal/-/dequal-2.0.2.tgz#85ca22025e3a87e65ef75a7a437b35284a7e319d"
   integrity sha512-q9K8BlJVxK7hQYqa6XISGmBZbtQQWVXSrRrWreHC94rMt1QL/Impruc+7p2CYSYuVIUr+YCt6hjrs1kkdJRTug==

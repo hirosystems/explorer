@@ -3,18 +3,17 @@ import { Box } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
-import { ReduxNextPageContext } from '@common/types/next-store';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
 import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import { useFetchTransactions } from '@common/hooks/use-fetch-transactions';
 import {
   TransactionResults,
   MempoolTransactionListResponse,
 } from '@blockstack/stacks-blockchain-sidecar-types';
-import { NextPage } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { getServerSideApiServer } from '@common/api/utils';
 
 interface InitialData {
   transactions: TransactionResults;
@@ -58,10 +57,8 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
   );
 };
 
-TransactionsPage.getInitialProps = async ({
-  store,
-}: ReduxNextPageContext): Promise<InitialData> => {
-  const apiServer = selectCurrentNetworkUrl(store.getState());
+TransactionsPage.getInitialProps = async (ctx: NextPageContext): Promise<InitialData> => {
+  const apiServer = getServerSideApiServer(ctx);
 
   const [transactions, mempool] = await Promise.all([
     fetchTxList({

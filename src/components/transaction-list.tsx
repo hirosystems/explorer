@@ -26,10 +26,8 @@ const Item: React.FC<
       borderLeftColor={color('bg')}
       borderBottom={isLast ? 'unset' : '1px solid'}
       borderBottomColor="var(--colors-border)"
-      transition={transition}
       bg={color('bg')}
       _hover={{
-        bg: color('bg-alt'),
         borderLeftColor: color('accent'),
       }}
       position="relative"

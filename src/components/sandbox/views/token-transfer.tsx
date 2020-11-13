@@ -60,7 +60,6 @@ export const TokenTransferView = () => {
 
   const handleSetMax = () => {
     const total = balances?.stx?.balance - fee.toString();
-    console.log(total, fee.toString());
     setFieldValue('amount', microToStacks(total, false));
   };
   return (

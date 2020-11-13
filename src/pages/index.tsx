@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import getConfig from 'next/config';
 
-import { Flex, Grid } from '@stacks/ui';
+import { Flex, Box, Grid } from '@stacks/ui';
 import {
   Block,
   MempoolTransaction,
@@ -10,12 +12,9 @@ import {
 } from '@blockstack/stacks-blockchain-api-types';
 import { NextPage, NextPageContext } from 'next';
 import { Title } from '@components/typography';
-
 import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
-
-import { ReduxNextPageContext } from '@common/types/next-store';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
@@ -24,7 +23,9 @@ import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
 import { makeKey, useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 import { useSelector } from 'react-redux';
-import { RootState } from '@store';
+import { useRecoilValue } from 'recoil';
+import { apiServerState } from '@store/recoil';
+import { getServerSideApiServer } from '@common/api/utils';
 
 const PageTop: React.FC = React.memo(() => (
   <Flex flexDirection="column" alignItems="center" maxWidth="544px" justify="center">
@@ -51,9 +52,7 @@ interface HomeData {
 }
 
 export const useHomepageData = (initialData?: HomeData) => {
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
+  const apiServer = useRecoilValue(apiServerState);
 
   const transactions = useInfiniteFetch<Transaction>({
     initialData: initialData?.transactions?.results || [],
@@ -105,10 +104,15 @@ export const useHomepageData = (initialData?: HomeData) => {
     transactions,
     mempool,
     blocks,
+    refresh: () => {
+      transactions?.refresh?.();
+      mempool?.refresh?.();
+      blocks?.refresh?.();
+    },
   };
 };
 
-export const Home: NextPage<HomeData> = initialData => {
+const Home: NextPage<HomeData> = initialData => {
   const { transactions, mempool, blocks, keys } = useHomepageData(initialData);
   return (
     <PageWrapper isHome>
@@ -131,11 +135,8 @@ export const Home: NextPage<HomeData> = initialData => {
   );
 };
 
-Home.getInitialProps = async ({
-  store,
-}: NextPageContext & ReduxNextPageContext): Promise<HomeData> => {
-  const apiServer = selectCurrentNetworkUrl(store.getState());
-
+Home.getInitialProps = async (ctx: NextPageContext) => {
+  const apiServer = getServerSideApiServer(ctx);
   const [transactions, mempool, blocks] = await Promise.all([
     fetchTxList({
       apiServer,

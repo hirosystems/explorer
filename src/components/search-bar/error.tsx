@@ -1,10 +1,14 @@
 import * as React from 'react';
-import { Box, Flex, Text, ExclamationMarkCircleIcon, CloseIcon } from '@stacks/ui';
+import { Box, Flex, Text, color, ExclamationMarkCircleIcon } from '@stacks/ui';
 import { DialogCard } from '@components/dialog-card';
+import CloseIcon from 'mdi-react/CloseIcon';
 
 import { ErrorType } from '@components/search-bar/types';
+import { IconButton } from '@components/icon-button';
+import { Alert } from '@components/alert';
+import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 
-const InlineError = ({ children, visible }: any) => (
+export const InlineError = ({ children, visible }: any) => (
   <Flex
     color="red"
     alignItems="center"
@@ -29,7 +33,7 @@ const ErrorDropDown = ({ onClick, children, visible, ...rest }: any) => (
     width="100%"
     borderRadius="6px"
     alignItems="center"
-    p="tight"
+    p="base"
     mt="tight"
     flexDirection="row"
     justifyContent="space-between"
@@ -37,31 +41,21 @@ const ErrorDropDown = ({ onClick, children, visible, ...rest }: any) => (
     transition="0.12s all ease-in-out"
     transform={visible ? 'none' : 'translateY(5px)'}
     opacity={visible ? 1 : 0}
+    bg={color('bg')}
+    borderColor={color('border')}
     style={{
       pointerEvents: visible ? 'all' : 'none',
     }}
+    wordBreak="break-word"
     {...rest}
   >
     <Flex alignItems="center">
-      <Box color="red" mr="tight" size="18px">
-        <ExclamationMarkCircleIcon />
-      </Box>
-      <Text fontSize="14px" fontWeight="500">
+      <AlertTriangleIcon mr="tight" color={color('feedback-error')} />
+      <Text fontSize="14px" fontWeight="400" color={color('text-body')} lineHeight="22px">
         {children}
       </Text>
     </Flex>
-    <Box
-      px="tight"
-      color="ink.600"
-      _hover={{
-        cursor: 'pointer',
-        opacity: 1,
-      }}
-      onClick={onClick}
-      opacity={0.5}
-    >
-      <CloseIcon size="12px" />
-    </Box>
+    <IconButton flexShrink={0} dark icon={CloseIcon} onClick={onClick} />
   </DialogCard>
 );
 

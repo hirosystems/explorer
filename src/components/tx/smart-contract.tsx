@@ -9,12 +9,9 @@ import { PostConditions } from '@components/post-conditions';
 
 import { SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { TransactionType } from '@models/transaction.interface';
+import { TxData } from '@common/types/tx';
 
-interface SmartContractPageProps {
-  transaction: SmartContractTransaction;
-}
-
-const SmartContractPage = ({ transaction }: SmartContractPageProps) => (
+const SmartContractPage = ({ transaction }: TxData<SmartContractTransaction>) => (
   <>
     <PageTop status={transaction.tx_status} type={TransactionType.SMART_CONTRACT} />
     <Stack spacing="extra-loose">

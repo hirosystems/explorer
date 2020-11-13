@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box, BoxProps, Stack, StackProps } from '@stacks/ui';
+import { Box, BoxProps, Stack, StackProps, color } from '@stacks/ui';
 import { Status, Statuses } from '@components/status';
 import { Tag, TagProps } from '@components/tags';
 
@@ -18,12 +18,17 @@ const Tags = ({ type, ...rest }: { type: TransactionType | TransactionType[] } &
     <Box {...rest}>
       <Stack isInline spacing="tight">
         {type.map((t: TransactionType, key) => (
-          <Tag type={t} key={key} />
+          <Tag color="white" bg="rgba(255,255,255,0.24)" type={t} key={key} />
         ))}
       </Stack>
     </Box>
   ) : (
-    <Tag type={type} {...(rest as Omit<TagProps, 'type'>)} />
+    <Tag
+      color="white"
+      bg="rgba(255,255,255,0.24)"
+      type={type}
+      {...(rest as Omit<TagProps, 'type'>)}
+    />
   );
 
 const TitleDetail = ({ status, type, contractName, ...rest }: TitleProps & BoxProps) => (

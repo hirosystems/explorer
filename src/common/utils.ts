@@ -92,8 +92,8 @@ export const toKebabCase = (str: string): string => {
  * @param {number} offset - the number of chars to keep on either end
  */
 export const truncateMiddle = (input: string, offset = 5): string => {
-  const start = input.substr(0, offset);
-  const end = input.substr(input.length - offset, input.length);
+  const start = input?.substr(0, offset);
+  const end = input?.substr(input.length - offset, input.length);
   return `${start}…${end}`;
 };
 
@@ -104,7 +104,9 @@ export const truncateMiddle = (input: string, offset = 5): string => {
  */
 export const validateTxId = (tx_id: string): any => {
   const regex = /0x[A-Fa-f0-9]{64}/;
-  return regex.exec(tx_id);
+  const matches = regex.exec(tx_id);
+
+  return matches?.[0] === tx_id;
 };
 
 /**
@@ -128,9 +130,9 @@ export const validateContractName = (contractString: string): boolean => {
 };
 
 export const queryWith0x = (query: string): string =>
-  !query.includes('0x') ? '0x' + query : query;
+  query.includes('.') ? query : !query.includes('0x') ? '0x' + query : query;
 
-export const handleValidation = (query?: string): { success: boolean; message?: string } => {
+export const handleTxIdValidation = (query?: string): { success: boolean; message?: string } => {
   if (!query || !query.trim().length) {
     return {
       success: false,
@@ -151,7 +153,7 @@ export const handleValidation = (query?: string): { success: boolean; message?: 
     };
   }
 
-  if (validateTxId(queryWith0x(query))) {
+  if (validateTxId(query)) {
     return {
       success: true,
     };
@@ -189,10 +191,10 @@ export const stacksToMicro = (amountInStacks: string | number) =>
   amountInStacks ? Math.floor(Number(amountInStacks) * MICROSTACKS_IN_STACKS) : 0;
 
 export const getContractName = (fullyRealizedName: string): string =>
-  fullyRealizedName.split('.')[1];
+  fullyRealizedName?.split('.')[1];
 
 export const getFungibleAssetName = (fullyRealizedName: string): string =>
-  getContractName(fullyRealizedName).split('::')[1];
+  getContractName(fullyRealizedName)?.split('::')[1];
 
 export const getAssetNameParts = (fullyRealizedName: string) => {
   const address = fullyRealizedName.split('.')[0];

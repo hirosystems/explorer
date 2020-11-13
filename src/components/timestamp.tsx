@@ -20,7 +20,9 @@ export const Timestamp: React.FC<TimestampProps> = ({ ts, noTooltip, ...props })
 
     return clearTimeout(timeout);
   }, [count]);
-  const readableTimestamp = ts ? new Date(ts * 1000).toISOString() : '';
+  const readableTimestamp = ts
+    ? `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(ts * 1000).toLocaleDateString()}`
+    : '';
 
   const timestampElem = (
     <Flex alignItems="center" {...props}>

@@ -55,10 +55,8 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
         borderLeftColor={color('bg')}
         borderBottom={index === length - 1 ? 'unset' : '1px solid'}
         borderBottomColor="var(--colors-border)"
-        transition={transition}
         color={color('text-body')}
         _hover={{
-          bg: color('bg-alt'),
           borderLeftColor: color('accent'),
         }}
         as="a"

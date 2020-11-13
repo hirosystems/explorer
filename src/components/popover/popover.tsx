@@ -192,7 +192,10 @@ export const Popover: React.FC<PopoverProps> = React.memo(
       showClose,
       maxHeight,
       itemComponent: ItemComponent,
-      onItemClick,
+      onItemClick: (item: any) => {
+        onItemClick?.(item);
+        hideImmediately();
+      },
       activeItem,
       isVisible,
       handleChildFocus,

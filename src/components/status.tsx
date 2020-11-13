@@ -24,12 +24,12 @@ const keyframesRotate = keyframes`
   }
 `;
 
-export const Pending = (p: any) => (
+export const Pending = ({ speed = 0.9, ...p }: any) => (
   <LoaderQuarter
     css={(theme: Theme) =>
       css({
-        animation: `${keyframesRotate} 0.9s infinite linear`,
-        color: color('invert'),
+        animation: `${keyframesRotate} ${speed}s infinite linear`,
+        color: 'currentColor',
       })(theme)
     }
     {...p}
@@ -76,14 +76,13 @@ export const Status: React.FC<StatusProps> = ({ status, ...rest }) => {
   const label = labelMap[status];
   return (
     <Badge
-      border={border()}
-      bg={color('bg')}
-      color={color('invert')}
+      bg="rgba(255,255,255,0.24)"
+      color="white"
       labelProps={{ display: 'flex', alignItems: 'center' }}
       maxHeight="24px"
       {...rest}
     >
-      <IconComponent strokeWidth="2" mr="extra-tight" size="16px" color={_color} />
+      <IconComponent strokeWidth="2" mr="extra-tight" size="16px" color="currentColor" />
       {label}
     </Badge>
   );

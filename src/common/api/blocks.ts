@@ -21,8 +21,6 @@ export const fetchBlock = ({ apiServer }: { apiServer: string }) => async ({
 }): Promise<Block> => {
   const resp = await fetchFromSidecar(apiServer)(`/block/${hash}`);
 
-  console.log(resp);
-
   const block = await resp.json();
   if (!resp.ok) {
     throw Error(block.error);

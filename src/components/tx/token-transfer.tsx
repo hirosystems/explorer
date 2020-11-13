@@ -7,17 +7,14 @@ import { PageTop } from '@components/page';
 import { TransactionType } from '@models/transaction.interface';
 import { TransactionDetails } from '@components/transaction-details';
 import { TokenTransferTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { TokenTransferTxs, TxData } from '@common/types/tx';
 
-interface TokenTransferPageProps {
-  transaction: TokenTransferTransaction;
-}
-
-const TokenTransferPage = ({ transaction }: TokenTransferPageProps) => (
+const TokenTransferPage = ({ transaction }: TxData<TokenTransferTxs>) => (
   <>
     <PageTop status={transaction.tx_status} type={[TransactionType.TOKEN_TRANSFER]} />
     <Stack spacing="extra-loose">
       <TransactionDetails transaction={transaction} hideContract />
-      <TokenTransfers events={transaction.events} />
+      {'events' in transaction && <TokenTransfers events={transaction.events} />}
     </Stack>
   </>
 );

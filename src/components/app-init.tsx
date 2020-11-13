@@ -35,7 +35,6 @@ export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = React.memo
           <ColorModeProvider colorMode={colorMode}>
             <ProgressBar />
             <>{children}</>
-            <Toaster />
           </ColorModeProvider>
         </ThemeProvider>
       </>

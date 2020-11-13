@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { Box, Flex, Stack } from '@stacks/ui';
 import { Text, Pre, Caption, Link } from '@components/typography';
-import { useSelector } from 'react-redux';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
-import { RootState } from '@store';
 
-import { selectOriginContractSource } from '@store/transactions';
+import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
+
 import { TransactionType } from '@models/transaction.interface';
 
 import { TokenTransfers } from '@components/token-transfer';
-import { SectionTitle } from '@components/typography';
+
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { Row } from '@components/rows/row';
@@ -17,9 +15,10 @@ import { getContractId, TransactionDetails } from '@components/transaction-detai
 import { ContractSource } from '@components/contract-source';
 import { border, clarityValuetoHumanReadable } from '@common/utils';
 import { PostConditions } from '@components/post-conditions';
-import { selectContractAbi } from '@store/contracts';
+
 import NextLink from 'next/link';
 import { Section } from '@components/section';
+import { TxData } from '@common/types/tx';
 
 const Value = ({ arg }: { arg: any }) => {
   if (arg.type === 'principal') {
@@ -114,17 +113,7 @@ const FunctionSummarySection = ({
   );
 };
 
-interface ContractCallPageProps {
-  transaction: ContractCallTransaction;
-}
-
-const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
-  const { contractSource, abi } = useSelector((state: RootState) => ({
-    contractSource: selectOriginContractSource(transaction.contract_call.contract_id)(state),
-    abi: JSON.parse(selectContractAbi(transaction.contract_call.contract_id)(state) || ''),
-  }));
-  const contractId = getContractId(transaction);
-  console.log(transaction.contract_call);
+const ContractCallPage = ({ transaction, source }: TxData<ContractCallTransaction>) => {
   return (
     <>
       <PageTop status={transaction.tx_status} type={[TransactionType.CONTRACT_CALL]} />
@@ -132,13 +121,13 @@ const ContractCallPage = ({ transaction }: ContractCallPageProps) => {
         <TransactionDetails transaction={transaction} />
         <TokenTransfers events={transaction.events} />
         <FunctionSummarySection
-          abi={abi}
+          abi={source.contract.abi}
           result={transaction.tx_result}
           summary={transaction.contract_call}
         />
         <ContractSource
-          sourceTx={transaction.tx_type === 'contract_call' ? contractId : undefined}
-          source={contractSource}
+          sourceTx={source.contract.contract_id}
+          source={source.contract.source_code}
           contractCall={transaction.contract_call}
         />
         <PostConditions conditions={transaction.post_conditions} />

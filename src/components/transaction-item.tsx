@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, FlexProps, Stack } from '@stacks/ui';
+import { Box, Flex, FlexProps, Stack } from '@stacks/ui';
 import { Caption, Title } from '@components/typography';
 import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
 import {
@@ -14,77 +14,16 @@ import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 
 import { ArrowRightIcon } from '@components/icons/arrow-right';
 import { Badge } from '@components/badge';
-import { CodeIcon } from '@components/icons/code';
 import FunctionIcon from 'mdi-react/FunctionIcon';
 import { Link } from '@components/link';
 import NextLink from 'next/link';
 import React from 'react';
 import { Transaction } from '@models/transaction.interface';
-import { ContractCallIcon } from '@components/icons/contract-call';
 import { color } from '@components/color-modes';
 import { getContractName } from '@common/utils';
-import { StxInline } from '@components/icons/stx-inline';
 import { useHarmonicIntervalFn } from 'react-use';
-
-export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
-  let Icon = StxInline;
-  if (txType === 'smart_contract') {
-    Icon = CodeIcon as any;
-  } else if (txType === 'contract_call') {
-    Icon = ContractCallIcon as any;
-  }
-  return Icon;
-};
-
-export const ItemIcon = React.memo(
-  ({
-    type,
-    opacity,
-    status,
-    ...rest
-  }: { type: Transaction['tx_type']; status: Transaction['tx_status'] } & FlexProps) => {
-    const Icon = getTxTypeIcon(type);
-
-    const getStatusColor = () => {
-      if (status === 'success') return color('feedback-success');
-      if (status === 'pending') return color('feedback-alert');
-      return color('feedback-error');
-    };
-    return (
-      <Flex
-        alignItems="center"
-        justify="center"
-        size="48px"
-        borderRadius="8px"
-        position="relative"
-        display={['none', 'none', 'flex']}
-        border={border()}
-        bg={color('bg')}
-        color={color('invert')}
-        boxShadow="low"
-        as="span"
-        {...rest}
-      >
-        <Box
-          bottom="0px"
-          right="0px"
-          position="absolute"
-          bg={getStatusColor()}
-          borderRadius="8px"
-          size="8px"
-          zIndex={9}
-          as="span"
-        />
-        <Icon
-          color={color('text-title')}
-          position="relative"
-          zIndex={2}
-          size={type === 'token_transfer' ? '18px' : '21px'}
-        />
-      </Flex>
-    );
-  }
-);
+import { ItemIcon, getTxTypeIcon } from '@components/item-icon';
+export { getTxTypeIcon };
 
 export interface TxItemProps extends FlexProps {
   tx: Transaction | MempoolTransaction;
@@ -104,7 +43,7 @@ export interface TxItemProps extends FlexProps {
 const getTitle = (transaction: Transaction) => {
   switch (transaction.tx_type) {
     case 'smart_contract':
-      return getContractName(transaction.smart_contract.contract_id);
+      return getContractName(transaction?.smart_contract?.contract_id);
     case 'contract_call':
       return getContractName(transaction.contract_call.contract_id);
     case 'token_transfer':
@@ -179,7 +118,7 @@ const Details = ({
 };
 
 const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal, ...rest }) => (
-  <Flex position={'relative'} zIndex={2} as="span" {...rest}>
+  <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
     <NextLink href={`/address/${principal}`} passHref>
       <Caption
         as={Link}
@@ -206,8 +145,19 @@ const AddressArea = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
       </Flex>
     );
   }
-  if (tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call') {
-    return <PrincipalLink principal={tx.sender_address} />;
+  if (tx.tx_type === 'contract_call') {
+    return (
+      <Caption>
+        Called by <PrincipalLink principal={tx.sender_address} />
+      </Caption>
+    );
+  }
+  if (tx.tx_type === 'smart_contract') {
+    return (
+      <Caption>
+        Deployed by <PrincipalLink principal={tx.sender_address} />
+      </Caption>
+    );
   }
   return null;
 };
@@ -228,7 +178,9 @@ const LargeVersion = ({
   return (
     <>
       <Flex display="flex" as="span" alignItems="center">
-        {!hideIcon ? <ItemIcon mr="base" status={tx.tx_status} type={tx.tx_type} /> : null}
+        {!hideIcon ? (
+          <ItemIcon mr="base" status={tx.tx_status} type="tx" txType={tx.tx_type} />
+        ) : null}
         <Stack
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
@@ -320,7 +272,7 @@ const MinimalVersion = ({ tx, hideIcon, hideRightElements }: any) => {
   return (
     <>
       <Flex as="span" alignItems="center">
-        {!hideIcon && <ItemIcon status={tx.tx_status} type={tx.tx_type} />}
+        {!hideIcon && <ItemIcon status={tx.tx_status} type="tx" txType={tx.tx_type} />}
         <Stack spacing="extra-tight" ml="base">
           <Title fontWeight="500" display="block" fontSize="16px">
             {title || truncateMiddle(tx.tx_id, 6)}

@@ -33,7 +33,14 @@ export const RowLabel = ({ label }: { label: string }) => (
 
 export const CopyButton = React.forwardRef(
   ({ isHovered, ...rest }: CopyProps, ref: Ref<HTMLDivElement>) => (
-    <IconButton opacity={[1, 1, isHovered ? 1 : 0]} ref={ref} dark icon={CopyIcon} {...rest} />
+    <IconButton
+      opacity={[1, 1, isHovered ? 1 : 0]}
+      ref={ref}
+      dark
+      iconProps={{ strokeWidth: 1.75, size: '20px' }}
+      icon={CopyIcon}
+      {...rest}
+    />
   )
 );
 
@@ -41,13 +48,12 @@ export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovere
   const { onCopy, hasCopied } = useClipboard(copy || '');
 
   return (
-    <Flex pr="base" width="100%" alignItems="center" justifyContent="space-between" {...rest}>
+    <Flex pr="base" width="100%" alignItems="center" justifyContent="flex-start" {...rest}>
       <Flex
         color="var(--colors-text-body)"
         textStyle="body.small.medium"
         style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
         alignItems="center"
-        width="100%"
         pr="base"
       >
         {children}

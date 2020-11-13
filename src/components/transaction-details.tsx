@@ -15,9 +15,11 @@ import { Link } from '@components/typography';
 import NextLink from 'next/link';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
 import { Section } from '@components/section';
 import { BlockLink } from '@components/links';
+import { IconButton } from '@components/icon-button';
+import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
 
 interface FeeComponentProps {
   fees: string;
@@ -78,6 +80,25 @@ const transformDataToRowData = (d: Transaction) => {
     children: d.tx_id,
     copy: d.tx_id,
   };
+  const canonical = {
+    condition: d.tx_status !== 'pending' && !d.canonical,
+    label: {
+      children: 'Non-canonical',
+    },
+    children: (
+      <Flex alignItems="center">
+        <Box>This transaction is contained in a non-canonical fork of the Stacks chain.</Box>
+        <IconButton
+          ml="tight"
+          icon={QuestionMarkCircleOutlineIcon}
+          dark
+          as="a"
+          href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-001-burn-election.md#committing-to-a-chain-tip"
+          target="_blank"
+        />
+      </Flex>
+    ),
+  };
   const contractName = {
     condition: d.tx_type === 'smart_contract',
     label: {
@@ -130,11 +151,12 @@ const transformDataToRowData = (d: Transaction) => {
       };
 
       const memo = {
+        condition: !!getMemoString(d.token_transfer.memo),
         label: { children: 'Memo' },
         children: getMemoString(d.token_transfer.memo),
       };
 
-      return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo];
+      return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo, canonical];
     }
     case 'coinbase': {
       const scratch = {
@@ -146,15 +168,15 @@ const transformDataToRowData = (d: Transaction) => {
         },
         children: d.coinbase_payload.data,
       };
-      return [txid, sender, fees, blockTime, blockHash, scratch];
+      return [txid, sender, fees, blockTime, blockHash, scratch, canonical];
     }
     default:
-      return [contractName, txid, sender, fees, blockTime, blockHash];
+      return [contractName, txid, sender, fees, blockTime, blockHash, canonical];
   }
 };
 
 interface TransactionDetailsProps {
-  transaction: Transaction;
+  transaction: Transaction | MempoolTransaction;
   hideContract?: boolean;
   contractName?: string;
   contractMeta?: string;
