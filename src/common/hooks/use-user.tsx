@@ -3,19 +3,20 @@ import * as React from 'react';
 import { useAuthState } from '@common/hooks/use-auth';
 import useSWR from 'swr';
 import { useApiServer } from '@common/hooks/use-api';
-import { fetchAllAccountData } from '@common/fetchers';
+import { fetchAllAccountData } from '@common/api/accounts';
 import { UserData } from '@stacks/auth';
 import {
   AddressBalanceResponse,
   MempoolTransaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
-import { usePendingTxs } from '@common/hooks/use-pending-txs';
+
 interface AccountDataResponse {
   balances: AddressBalanceResponse;
   transactions: TransactionResults;
   pendingTransactions: MempoolTransaction[] | [];
 }
+
 const useFetchAccountData = (
   principal: string,
   options?: {

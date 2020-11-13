@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Box, BoxProps, Flex, ChevronIcon, Input } from '@stacks/ui';
-import { FormikHelpers, useField } from 'formik';
 import { Popover } from '@components/popover/popover';
-import { FieldBase } from '@components/sandbox/common';
 
 interface SelectProps extends BoxProps {
   onItemClick?: (value: string) => void;

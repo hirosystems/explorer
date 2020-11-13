@@ -1,4 +1,7 @@
 import * as React from 'react';
+import Head from 'next/head';
+import useSWR from 'swr';
+import pluralize from 'pluralize';
 
 import {
   AddressBalanceResponse,
@@ -6,35 +9,25 @@ import {
   MempoolTransactionListResponse,
 } from '@blockstack/stacks-blockchain-api-types';
 import { Box, Flex, Grid, color, space, Stack } from '@stacks/ui';
-import { Caption, Link, Text, Title } from '@components/typography';
-import { getAssetNameParts, microToStacks, truncateMiddle } from '@common/utils';
-
-import Head from 'next/head';
-
-import { NextPage } from 'next';
+import { Caption, Text, Title } from '@components/typography';
+import type { NextPage, NextPageContext } from 'next';
 import { PageWrapper } from '@components/page';
-
-import { ReduxNextPageContext } from '@common/types/next-store';
-
-import { getTxTypeIcon } from '@components/transaction-item';
-import { ItemIcon } from '@components/token-transfer/item';
 import { TxLink } from '@components/links';
-import { border } from '@common/utils';
-import { fetchFromSidecar } from '@common/api/fetch';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-
-import { useSelector } from 'react-redux';
-import { RootState } from '@store';
-import useSWR from 'swr';
+import { TransferIcon } from '@components/icons/transfer';
+import { DynamicColorCircle } from '@components/dynamic-color-circle';
 import { StxInline } from '@components/icons/stx-inline';
 import { Section } from '@components/section';
 import { Rows } from '@components/rows';
 import { Transaction } from '@models/transaction.interface';
 import { TransactionList } from '@components/transaction-list';
 import { Badge, BadgeProps } from '@components/badge';
-import pluralize from 'pluralize';
-import { TransferIcon } from '@components/icons/transfer';
-import { DynamicColorCircle } from '@components/dynamic-color-circle';
+
+import { getTxTypeIcon } from '@components/transaction-item';
+import { getAssetNameParts, microToStacks, truncateMiddle } from '@common/utils';
+import { border } from '@common/utils';
+import { fetchFromSidecar } from '@common/api/fetch';
+import { useApiServer } from '@common/hooks/use-api';
+import { getServerSideApiServer } from '@common/api/utils';
 
 const fetchBalances = (apiServer: string) => async (
   principal: string
@@ -64,10 +57,6 @@ const fetchAllAccountData = (apiServer: string) => async (principal: string) => 
     balances,
     transactions,
   };
-};
-
-const getTokenAmounts = (record: Record<string, any>): string[] => {
-  return Object.keys(record);
 };
 
 const TokenAssetListItem = ({
@@ -202,21 +191,22 @@ const NumberedBadge = ({
   singular,
   icon: Icon,
   ...rest
-}: { array: any[]; singular: string; icon?: any } & BadgeProps) => (
-  <Badge
-    border={border()}
-    color={color('text-body')}
-    labelProps={{ display: 'flex', alignItems: 'center' }}
-    alignItems="center"
-    my={0}
-    {...rest}
-  >
-    {Icon && <Icon strokeWidth={2} size="16px" />}
-    <Box ml={'extra-tight'}>
-      {array.length} {pluralize(singular, array.length)}
-    </Box>
-  </Badge>
-);
+}: { array: any[]; singular: string; icon?: any } & BadgeProps) =>
+  array?.length ? (
+    <Badge
+      border={border()}
+      color={color('text-body')}
+      labelProps={{ display: 'flex', alignItems: 'center' }}
+      alignItems="center"
+      my={0}
+      {...rest}
+    >
+      {Icon && <Icon strokeWidth={2} size="16px" />}
+      <Box ml={'extra-tight'}>
+        {array.length} {pluralize(singular, array.length)}
+      </Box>
+    </Badge>
+  ) : null;
 
 const Activity = ({ txs }: { txs: Transaction[] }) => {
   const contractCalls = txs?.filter(tx => tx.tx_type === 'contract_call');
@@ -252,17 +242,15 @@ const Activity = ({ txs }: { txs: Transaction[] }) => {
   );
 };
 
-const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transactions }) => {
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
-
-  const { data, error } = useSWR(principal, fetchAllAccountData(apiServer as any), {
+const AddressPage: NextPage<AddressPageData> = props => {
+  const { principal, balances, transactions } = props;
+  const apiServer = useApiServer();
+  const { data } = useSWR(principal, fetchAllAccountData(apiServer as any), {
     initialData: {
       balances,
       transactions,
     },
-    refreshInterval: 5000,
+    refreshInterval: 3500,
   });
 
   return (
@@ -310,6 +298,7 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
               children: principal,
             },
             {
+              condition: !!transactions?.results?.length,
               label: {
                 children: 'Activity',
               },
@@ -334,16 +323,16 @@ const AddressPage: NextPage<AddressPageData> = ({ principal, balances, transacti
   );
 };
 
-AddressPage.getInitialProps = async ({
-  store,
-  query,
-}: ReduxNextPageContext): Promise<AddressPageData> => {
-  const principal = query?.principal as string;
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getState } = store;
-  const apiServer = selectCurrentNetworkUrl(getState());
-  const data = await fetchAllAccountData(apiServer as any)(principal as any);
-  return { principal, ...data };
-};
+export async function getServerSideProps(
+  ctx: NextPageContext
+): Promise<{ props: AddressPageData }> {
+  const apiServer = getServerSideApiServer(ctx);
+  const { query } = ctx;
+  const principal: string = query?.principal as string;
+  const data = await fetchAllAccountData(apiServer)(principal);
+  return {
+    props: { principal, ...data },
+  };
+}
 
 export default AddressPage;

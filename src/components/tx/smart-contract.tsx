@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Stack } from '@stacks/ui';
+import { Grid, Stack } from '@stacks/ui';
 
 import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
@@ -7,22 +7,23 @@ import { TokenTransfers } from '@components/token-transfer';
 import { TransactionDetails } from '@components/transaction-details';
 import { PostConditions } from '@components/post-conditions';
 
-import { SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
-import { TransactionType } from '@models/transaction.interface';
+import { Block, SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { TxData } from '@common/types/tx';
+import { getContractName } from '@common/utils';
 
-interface SmartContractPageProps {
-  transaction: SmartContractTransaction;
-}
-
-const SmartContractPage = ({ transaction }: SmartContractPageProps) => (
+const SmartContractPage = ({
+  transaction,
+  contract,
+}: TxData<SmartContractTransaction> & { block?: Block }) => (
   <>
-    <PageTop status={transaction.tx_status} type={TransactionType.SMART_CONTRACT} />
+    <PageTop tx={transaction as any} />
+
     <Stack spacing="extra-loose">
       <TransactionDetails
-        contractName={transaction.smart_contract.contract_id.split('.')[1]}
+        contractName={getContractName(contract.contract_id)}
         transaction={transaction}
       />
-      <TokenTransfers events={transaction.events} />
+      {'events' in transaction && <TokenTransfers events={transaction.events} />}
       <ContractSource source={transaction.smart_contract.source_code} />
       <PostConditions conditions={transaction.post_conditions} />
     </Stack>

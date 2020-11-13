@@ -10,7 +10,7 @@ const isSupported = (api: string) => isBrowser && api in window;
  *
  * @param query the media query to match
  */
-export function useMediaQuery(query: string) {
+export function useMediaQuery(query: string): [boolean, () => void] {
   const [matches, setMatches] = React.useState(() => {
     if (!isSupported('matchMedia')) return false;
     return window.matchMedia(query).matches;
@@ -31,5 +31,5 @@ export function useMediaQuery(query: string) {
     };
   }, [query]);
 
-  return [matches, setMatches] as const;
+  return [matches, setMatches] as any;
 }

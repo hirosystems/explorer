@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';
 import { useRecoilState } from 'recoil';
-import { authOptionsAtom, userDataAtom, userSession } from '@components/sandbox/state/atoms';
+import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
 import { FinishedData, AuthOptions } from '@stacks/connect';
 
 export const useAuthState = () => {
@@ -20,7 +20,7 @@ export const useAuth = () => {
   // https://github.com/blockstack/ux/issues/444
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const onFinish = useConstant(() =>
-    debounce(async (payload: FinishedData) => {
+    debounce((payload: FinishedData) => {
       const userData = payload.userSession.loadUserData();
       setUserData(userData);
     }, 350)

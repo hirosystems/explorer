@@ -1,9 +1,7 @@
 import React from 'react';
-import type { NextPage } from 'next';
-import type { ReduxNextPageContext } from '@common/types';
+import type { NextPage, NextPageContext } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { RecoilRoot } from 'recoil';
 
 import { Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
@@ -30,18 +28,16 @@ const PageTop: React.FC = React.memo(() => (
 ));
 
 const SandboxPage: NextPage<any> = () => (
-  <RecoilRoot>
-    <PageWrapper>
-      <Head>
-        <title>Sandbox | Stacks Explorer</title>
-      </Head>
-      <PageTop />
-      <PageContent />
-    </PageWrapper>
-  </RecoilRoot>
+  <PageWrapper>
+    <Head>
+      <title>Sandbox | Stacks Explorer</title>
+    </Head>
+    <PageTop />
+    <PageContent />
+  </PageWrapper>
 );
 
-SandboxPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
+SandboxPage.getInitialProps = async (ctx: NextPageContext) => {
   const tab = ctx?.query?.tab ?? undefined;
   return { tab };
 };

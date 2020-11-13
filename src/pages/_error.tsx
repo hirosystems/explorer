@@ -3,15 +3,12 @@ import { NextPage, NextPageContext } from 'next';
 import { PageWrapper } from '@components/page';
 import { Text, Title } from '@components/typography';
 import { Flex, Box, Stack } from '@stacks/ui';
-import { FormLabel } from '@components/sandbox/common';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import NextLink from 'next/link';
 import { Meta } from '@components/meta-head';
-import { useNavigateToRandomTx } from '@common/hooks/use-random-tx';
 import { Link } from '@components/link';
 
 const Error: NextPage<{ statusCode?: number }> = ({ statusCode }) => {
-  const navigateToRandomTx = useNavigateToRandomTx();
   return (
     <PageWrapper>
       <Meta title="Whoops! - Stacks Explorer" />
@@ -34,10 +31,6 @@ const Error: NextPage<{ statusCode?: number }> = ({ statusCode }) => {
           and describe: what you were attempting to do, the URL you are trying, and anything that is
           in the console.
         </Text>
-        <Box pb="loose" mt="loose" width="100%" maxWidth="544px">
-          <FormLabel pb="tight">Search for a transaction</FormLabel>
-          <SearchBarWithDropdown />
-        </Box>
         <Stack isInline>
           <Box>
             <NextLink href="/" passHref>
@@ -45,11 +38,6 @@ const Error: NextPage<{ statusCode?: number }> = ({ statusCode }) => {
                 Back home
               </Link>
             </NextLink>
-          </Box>
-          <Box>
-            <Link textDecoration="underline" fontSize="14px" onClick={navigateToRandomTx}>
-              Random transaction
-            </Link>
           </Box>
         </Stack>
       </Flex>

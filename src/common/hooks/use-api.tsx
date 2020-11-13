@@ -1,10 +1,7 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '@store';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
+import { useRecoilValue } from 'recoil';
+import { apiServerState } from '@store';
 
 export const useApiServer = (): string => {
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
+  const apiServer = useRecoilValue(apiServerState);
   return apiServer || '';
 };

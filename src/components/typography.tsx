@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import { Text as BaseText, BoxProps } from '@stacks/ui';
+import { Text as BaseText, BoxProps, color } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
+import { border } from '@common/utils';
 
 export const Text: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
   BoxProps,
@@ -49,11 +50,14 @@ export const Pre = memoWithAs<BoxProps, 'pre'>(
     <Text
       display="inline"
       fontFamily={`"Fira Code", monospace`}
-      bg="var(--colors-bg-light)"
-      borderRadius="3px"
-      px="extra-tight"
-      border="1px solid var(--colors-border)"
+      bg={color('bg')}
+      borderRadius="8px"
+      border={border()}
       fontSize="12px"
+      boxShadow="low"
+      px="tight"
+      py="tight"
+      color={color('text-body')}
       ref={ref}
       {...props}
       style={{

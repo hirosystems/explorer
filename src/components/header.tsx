@@ -14,15 +14,8 @@ import { Link } from '@components/typography';
 import NextLink from 'next/link';
 import React from 'react';
 import { SearchBarWithDropdown } from '@components/search-bar';
-
-import { StxInline } from '@components/icons/stx-inline';
-import { TestnetSelector } from '@components/testnet-selector';
 import { useHomepageData } from '@pages/index';
-import { mutate, cache } from 'swr';
-import { makeKey } from '@common/hooks/use-fetch-blocks';
-import { useSelector } from 'react-redux';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
-import { RootState } from '@store';
+import { StxInline } from '@components/icons/stx-inline';
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
 
@@ -31,6 +24,7 @@ export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref)
 ));
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
+  const { refresh } = useHomepageData();
   return (
     <NextLink href="/" passHref>
       <Grid
@@ -44,6 +38,7 @@ export const LogoNavItem = React.memo((props: BoxProps) => {
         title="Stacks Explorer"
         as="a"
         transition={transition}
+        onClick={() => refresh()}
         {...props}
       >
         <StxInline color="currentColor" size="22px" />
@@ -55,7 +50,6 @@ export const LogoNavItem = React.memo((props: BoxProps) => {
 const HeaderBar: React.FC<FlexProps> = React.memo(props => (
   <Flex
     top={0}
-    zIndex={9999}
     height="64px"
     alignItems="center"
     flexDirection="row"
@@ -63,6 +57,7 @@ const HeaderBar: React.FC<FlexProps> = React.memo(props => (
     width="100%"
     {...props}
     position="relative"
+    zIndex={9999999}
   />
 ));
 
@@ -84,17 +79,7 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
         maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
         alignItems="center"
       >
-        {!isHome ? (
-          <SearchBarWithDropdown
-            boxProps={{
-              transform: ['none', 'none', 'translateX(-11px)'],
-            }}
-            small
-            hideBackdrop
-            height="40px"
-            maxWidth={['100%', '100%', '544px']}
-          />
-        ) : null}
+        {!isHome ? <SearchBarWithDropdown small maxWidth={['100%', '100%', '544px']} /> : null}
         <Box ml="auto" pl="base" />
         <ColorModeButton mr="tight" />
         <NextLink href="/transactions" passHref>
@@ -106,7 +91,6 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
         <NextLink href="/sandbox" passHref>
           <HeaderTextItem>Sandbox</HeaderTextItem>
         </NextLink>
-        <TestnetSelector display={['none', 'none', 'block']} pl="base" />
       </Flex>
     </HeaderBar>
   )

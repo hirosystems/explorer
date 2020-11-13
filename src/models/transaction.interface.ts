@@ -1,11 +1,11 @@
 import type { Transaction } from '@blockstack/stacks-blockchain-api-types';
 
-export enum TransactionType {
-  SMART_CONTRACT = 'smart_contract',
-  CONTRACT_CALL = 'contract_call',
-  TOKEN_TRANSFER = 'token_transfer',
-  COINBASE = 'coinbase',
-  POISON_MICROBLOCK = 'poison_microblock',
-}
+export const TransactionType = {
+  SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],
+  CONTRACT_CALL: 'contract_call' as Transaction['tx_type'],
+  TOKEN_TRANSFER: 'token_transfer' as Transaction['tx_type'],
+  COINBASE: 'coinbase' as Transaction['tx_type'],
+  POISON_MICROBLOCK: 'poison_microblock' as Transaction['tx_type'],
+} as const;
 
 export type { Transaction };

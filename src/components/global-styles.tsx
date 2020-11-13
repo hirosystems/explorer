@@ -21,6 +21,9 @@ const globalStyles = css`
   #__next {
     height: 100%;
   }
+  div[data-tippy-root] {
+    z-index: 999999999999 !important;
+  }
   .prism-code *::selection {
     background-color: #aab3ff;
     color: white !important;

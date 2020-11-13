@@ -185,7 +185,7 @@ export const usePopover = ({
   const triggerOnclick = showOnClickOrFocus
     ? {
         onClick: () => {
-          triggerRef.current.focus();
+          triggerRef?.current?.focus?.();
         },
       }
     : {};

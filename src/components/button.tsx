@@ -40,17 +40,15 @@ export const Button: ForwardRefExoticComponentWithAs<ButtonProps, 'button'> = fo
   ButtonProps,
   'button'
 >(({ variant = 'primary', ...props }, ref) => {
-  const domRef = useFocusableRef(ref);
   const { children, as = 'button', onClick, ...rest } = props;
-
   const variantStyle = variantStyles(variant);
-
   const { pressProps, isPressed } = usePress({
+    ref,
     onPress: e => {
-      onClick && onClick(e as any);
+      onClick?.(e as any);
     },
   });
-
+  const { onKeyUp, onKeyDown } = pressProps;
   return (
     <Box
       as={as}
@@ -64,9 +62,13 @@ export const Button: ForwardRefExoticComponentWithAs<ButtonProps, 'button'> = fo
       color="white"
       transition={transition}
       userSelect="none"
-      ref={domRef as any}
+      ref={ref}
+      onKeyUp={onKeyUp}
+      onKeyDown={onKeyDown}
+      onClick={e => {
+        onClick?.(e);
+      }}
       {...rest}
-      {...pressProps}
       {...variantStyle(isPressed)}
     >
       {children}

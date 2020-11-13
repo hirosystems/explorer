@@ -27,9 +27,9 @@ export const getTransactionTypeLabel = (value: TransactionType) => {
     case 'coinbase':
       return 'Coinbase';
     case 'contract_call':
-      return 'Contract call';
+      return 'Function call';
     case 'smart_contract':
-      return 'Contract creation';
+      return 'Contract deploy';
     case 'poison_microblock':
       return 'Poison microblock';
   }

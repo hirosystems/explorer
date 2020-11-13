@@ -5,6 +5,7 @@ import { Badge } from '@components/badge';
 import { TransactionType } from '@models/transaction.interface';
 import { getTxTypeName } from '@common/transaction-names';
 import { getTxTypeIcon } from './transaction-item';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
 
 export const transactionTypeColor = {
   [TransactionType.SMART_CONTRACT]: '#0F5257',
@@ -15,7 +16,7 @@ export const transactionTypeColor = {
 };
 
 export interface TagProps extends FlexProps {
-  type: TransactionType;
+  type: Transaction['tx_type'];
   onClick?: any;
 }
 
@@ -33,7 +34,8 @@ export const Tag = ({ type, ...rest }: TagProps) => {
         strokeWidth={1.5}
         width={type === 'token_transfer' ? '12px' : '16px'}
         height="auto"
-        color={color('text-body')}
+        size={type === 'contract_call' ? '16px' : undefined}
+        color="currentColor"
       />
       {getTxTypeName(type)}
     </Badge>

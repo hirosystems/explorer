@@ -8,13 +8,19 @@ import { border } from '@common/utils';
 import { Badge } from './badge';
 import { CodeIcon } from './icons/code';
 import { TxLink } from '@components/links';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
+import {
+  ContractCallTransaction,
+  MempoolContractCallTransaction,
+} from '@blockstack/stacks-blockchain-api-types';
+import { IconChevronRight } from '@tabler/icons';
 
 export const ContractSource: React.FC<
   {
     sourceTx?: string;
     source?: string;
-    contractCall?: ContractCallTransaction['contract_call'];
+    contractCall?:
+      | MempoolContractCallTransaction['contract_call']
+      | ContractCallTransaction['contract_call'];
   } & BoxProps
 > = ({ sourceTx, source, contractCall, ...rest }) => {
   const [expanded, setExpanded] = React.useState(false);
@@ -26,7 +32,12 @@ export const ContractSource: React.FC<
     source?.split(`
 `) || [];
   const sourceLinesLength = sourceLines.length || 0;
-  const functionSigElements = contractCall?.function_signature.split(' ');
+  const functionSigElements =
+    (contractCall &&
+      'function_signature' in contractCall &&
+      contractCall?.function_signature.split(' ')) ||
+    [];
+
   const start = functionSigElements?.length
     ? [functionSigElements[0], functionSigElements[1]].join(' ')
     : undefined;
@@ -45,19 +56,22 @@ export const ContractSource: React.FC<
           alignItems="center"
         >
           <Text color="white" fontWeight="500">
-            Contract source
+            Source code
           </Text>
           {sourceTx ? (
             <TxLink txid={sourceTx}>
               <Badge
                 as="a"
-                _hover={{ bg: 'rgba(255,255,255,0.05)', cursor: 'pointer' }}
+                bg="rgba(255,255,255,0.12)"
+                _hover={{ bg: 'rgba(255,255,255,0.2)', cursor: 'pointer' }}
                 border="1px solid rgb(39, 41, 46)"
                 labelProps={{ display: 'flex', alignItems: 'center', fontWeight: 500 }}
                 target="_blank"
               >
-                <CodeIcon color="rgba(255,255,255,0.65)" strokeWidth="2" mr="tight" size="14px" />
-                Go to original transaction
+                View deployment
+                <Box ml="extra-tight" size="14px">
+                  <IconChevronRight size="14px" />
+                </Box>
               </Badge>
             </TxLink>
           ) : null}

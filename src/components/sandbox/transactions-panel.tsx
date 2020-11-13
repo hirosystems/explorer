@@ -1,20 +1,21 @@
 // @ts-nocheck
 import React from 'react';
-import { Box, Flex, Stack, color, Grid, transition, Fade, Transition, FlexProps } from '@stacks/ui';
+import { Box, Flex, Stack, color, Grid, transition } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { useUser } from '@common/hooks/use-user';
 import { TxItem } from '@components/transaction-item';
-import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { ContractInterfaceFunction } from '@blockstack/rpc-client';
 import {
   contractCallViewState,
   contractSearchQueryState,
   currentFunctionState,
+  filterState,
   tabState,
   txContractState,
   txDetailsState,
-} from '@components/sandbox/state/atoms';
+} from '@store/sandbox';
 import { IconButton } from '@components/icon-button';
 import { ChevronDown } from '@components/icons/chevron-down';
 import { Transaction } from '@blockstack/stacks-blockchain-api-types';
@@ -27,264 +28,10 @@ import { ContractCallIcon } from '@components/icons/contract-call';
 import { InfoCircleIcon } from '@components/icons/info-circle';
 import { ExternalLinkIcon } from '@components/icons/external-link';
 import { TxLink } from '@components/links';
-import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
-import { Tag } from '@components/tags';
-import { TransactionType } from '@models/transaction.interface';
+import { FilterPanel } from '@components/sandbox/filter-panel';
+import { blue } from '@components/button';
 
-import { blue, focusBlue } from '@components/button';
-import CloseIcon from 'mdi-react/CloseIcon';
-import { useHover } from 'use-events';
-import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutlineIcon';
 import { FilterIcon } from '@components/icons/filter';
-
-import FilterVariantIcon from 'mdi-react/FilterVariantIcon';
-import { Tooltip } from '@components/tooltip';
-
-const types = [
-  TransactionType.SMART_CONTRACT,
-  TransactionType.CONTRACT_CALL,
-  TransactionType.TOKEN_TRANSFER,
-];
-
-const filterState = atom({
-  key: 'sandbox.tx-panel.filter',
-  default: {
-    showing: false,
-    types: types,
-    showPending: true,
-    showFailed: true,
-  },
-});
-
-const Toggle: React.FC<{ label: string; value: boolean } & FlexProps> = ({
-  label,
-  onClick,
-  value,
-  ...rest
-}) => {
-  const toggled = value;
-  const handleClick = () => {
-    onClick?.();
-  };
-  return (
-    <Flex
-      _hover={{
-        cursor: 'pointer',
-      }}
-      _focus={{
-        dropShadow: `0 0 0 3px ${focusBlue(0.5)}`,
-      }}
-      justifyContent="flex-end"
-      onClick={handleClick}
-      {...rest}
-    >
-      <Caption
-        _hover={{
-          cursor: 'pointer',
-        }}
-        fontWeight="500"
-        color={color('text-body')}
-        mr="tight"
-        as="label"
-      >
-        {label}
-      </Caption>
-      <Flex
-        px="4px"
-        alignItems="center"
-        width="36px"
-        borderRadius="24px"
-        height="20px"
-        transition={transition}
-        position="relative"
-      >
-        <Box
-          transform={toggled ? 'translateX(14px)' : 'none'}
-          transition={transition}
-          bg={color('bg')}
-          size="14px"
-          borderRadius="100%"
-          position="relative"
-          zIndex={2}
-        />
-        <Box
-          opacity={toggled ? 1 : 0.5}
-          left={0}
-          top={0}
-          borderRadius="24px"
-          position="absolute"
-          size="100%"
-          bg={toggled ? blue() : color('text-caption')}
-          zIndex={1}
-        />
-      </Flex>
-    </Flex>
-  );
-};
-
-const CheckableElement = ({ type, value: toggled, onClick, ...rest }) => {
-  const [isHovered, bind] = useHover();
-  const handleClick = () => {
-    onClick?.(type, !toggled);
-  };
-
-  const Icon = toggled ? CheckboxMarkedCircleOutlineIcon : CheckboxBlankCircleOutlineIcon;
-
-  return (
-    <Flex
-      onClick={handleClick}
-      _hover={{ cursor: 'pointer' }}
-      alignItems="center"
-      {...bind}
-      {...rest}
-    >
-      <IconButton
-        color={toggled ? color('accent') : color('text-caption')}
-        isHovered={isHovered}
-        mr="tight"
-        icon={Icon}
-        size="24px"
-        iconSize="16px"
-        dark
-      />
-      <Tag border={border()} type={type} />
-    </Flex>
-  );
-};
-
-const getTypes = (currentTypes, { type, enabled }) => {
-  if (enabled) {
-    return [...new Set([...currentTypes, type])];
-  }
-  return currentTypes.filter(_type => type !== _type);
-};
-
-const FilterPanel = () => {
-  const [filter, setFilterState] = useRecoilState(filterState);
-
-  const handleChangeType = (type, enabled) => {
-    setFilterState(state => {
-      const newTypes = getTypes(state.types, { type, enabled });
-      return {
-        ...state,
-        types: newTypes,
-      };
-    });
-  };
-
-  const handleClose = () => {
-    setFilterState(state => ({ ...state, showing: false }));
-  };
-
-  return (
-    <Flex
-      height="100%"
-      width="100%"
-      left="0"
-      flexGrow={1}
-      position="absolute"
-      top="34px"
-      overflow="hidden"
-      flexDirection="column"
-    >
-      <Box
-        position="absolute"
-        top={0}
-        left="0"
-        width="100%"
-        bg={color('border')}
-        height="1px"
-        zIndex={999999}
-      />
-      <Transition
-        transition={`all 280ms cubic-bezier(0.4, 0, 0.2, 1)`}
-        timeout={{ enter: 50, exit: 150 }}
-        styles={{
-          init: {
-            transform: 'translateY(-100%)',
-            // opacity: 0,
-          },
-          entered: { transform: 'translateY(0)', opacity: 1 },
-          exiting: {
-            transform: 'translateY(0)',
-            opacity: '0',
-          },
-        }}
-        in={filter.showing}
-      >
-        {styles => (
-          <Box
-            zIndex={100}
-            p="base"
-            pb="loose"
-            top="1px"
-            bg={color('bg-light')}
-            width="100%"
-            borderRadius="0 0 16px 16px"
-            willChange="transform, opacity"
-            style={styles}
-          >
-            <Box
-              position="absolute"
-              top={'-48px'}
-              left="0"
-              width="100%"
-              bg={color('bg-light')}
-              height="50px"
-            />
-            <Flex pb="base" alignItems="center" justifyContent="space-between">
-              <Title>Filter transactions</Title>
-              <IconButton onClick={handleClose} dark icon={CloseIcon} />
-            </Flex>
-            <Flex justifyContent="space-between">
-              <Stack alignItems="flex-start" spacing="base">
-                {types.map(type => (
-                  <CheckableElement
-                    onClick={handleChangeType}
-                    value={!!filter.types.find(_type => _type === type)}
-                    type={type}
-                    key={type}
-                  />
-                ))}
-              </Stack>
-              <Stack alignItems="flex-end" spacing="base">
-                <Toggle
-                  value={filter.showPending}
-                  onClick={() =>
-                    setFilterState(state => ({ ...state, showPending: !state.showPending }))
-                  }
-                  label="Show pending"
-                />
-                <Toggle
-                  value={filter.showFailed}
-                  onClick={() =>
-                    setFilterState(state => ({ ...state, showFailed: !state.showFailed }))
-                  }
-                  label="Show failed"
-                />
-              </Stack>
-            </Flex>
-          </Box>
-        )}
-      </Transition>
-      <Fade timeout={250} in={filter.showing}>
-        {styles => (
-          <Box
-            onClick={handleClose}
-            position="absolute"
-            top="0"
-            left={0}
-            width="100%"
-            height="calc(100% - 33px)"
-            bg="rgba(0,0,0,0.5)"
-            zIndex={99}
-            style={styles}
-          />
-        )}
-      </Fade>
-    </Flex>
-  );
-};
 
 const PanelHeader = React.memo(() => {
   const [filter, setFilterState] = useRecoilState(filterState);
@@ -555,7 +302,7 @@ const SandboxTxItem = React.memo(
     const detailsVisible = detailsVisibility === 'visible';
 
     return (
-      <Box key={tx.tx_id} borderBottom={!isLast ? border() : undefined} {...rest}>
+      <Box px="loose" key={tx.tx_id} borderBottom={!isLast ? border() : undefined} {...rest}>
         <Flex alignItems="center" justifyContent="space-between">
           <TxItem
             width="unset"
@@ -567,14 +314,7 @@ const SandboxTxItem = React.memo(
           />
           {tx.tx_type === 'token_transfer' && (
             <TxLink txid={tx.tx_id}>
-              <IconButton
-                as="a"
-                target="_blank"
-                flexShrink={0}
-                dark
-                icon={ExternalLinkIcon}
-                mr="base"
-              />
+              <IconButton as="a" target="_blank" flexShrink={0} dark icon={ExternalLinkIcon} />
             </TxLink>
           )}
           {tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call' ? (
@@ -582,7 +322,6 @@ const SandboxTxItem = React.memo(
               color={color('text-caption')}
               _hover={{ bg: color('bg-alt') }}
               invert
-              mr="base"
               onClick={() => {
                 if (detailsVisibility === 'hidden') {
                   setDetailsVisibility('visible');
@@ -601,7 +340,7 @@ const SandboxTxItem = React.memo(
           ) : null}
         </Flex>
         {detailsVisible && (tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call') ? (
-          <Box px="base" pb="base">
+          <Box pb="base">
             <Box boxShadow="mid" borderRadius={'12px'} border={border()} bg={color('bg')}>
               <React.Suspense
                 fallback={
@@ -683,7 +422,7 @@ const TxList: React.FC = React.memo(() => {
   const pendingList = React.useMemo(
     () =>
       pendingTransactions?.map(tx => (
-        <Flex borderBottom={border()} pr="base" alignItems="center" justifyContent="space-between">
+        <Flex borderBottom={border()} px="loose" alignItems="center" justifyContent="space-between">
           <TxItem
             hideRightElements
             minimal

@@ -4,7 +4,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { validateStacksAddress, onPaste } from '@common/utils';
 import { Box, BoxProps, color, Flex, Grid, Stack, transition } from '@stacks/ui';
 import { atom, useRecoilValue, useRecoilState, useSetRecoilState, selectorFamily } from 'recoil';
-import { Input } from '@components/sandbox/common';
+import { Input } from '@components/inputs';
+
 import { useFormik } from 'formik';
 import { Button } from '@components/button';
 import { border, truncateMiddle } from '@common/utils';
@@ -15,13 +16,13 @@ import {
   currentFunctionState,
   contractSearchQueryState,
   contractCallViewState,
-} from '@components/sandbox/state/atoms';
+} from '@store/sandbox';
 import { useApiServer } from '@common/hooks/use-api';
 import { Section } from '@components/section';
 import { Badge } from '@components/badge';
 import { IconButton } from '@components/icon-button';
 import pluralize from 'pluralize';
-import { ItemIcon } from '@components/transaction-item';
+import { ItemIcon } from '@components/item-icon';
 import {
   ClarityAbiFunction,
   encodeClarityValue,
@@ -98,7 +99,7 @@ const Details = () => {
       <Box>
         <Flex p="base" justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
-            <ItemIcon size="64px" type="smart_contract" status="success" />
+            <ItemIcon size="64px" type="tx" txType="smart_contract" status="success" />
             <Box ml="base">
               <Title mb="tight" display="block" mt="0" as="h3">
                 {truncateMiddle(contractId.split('.')[0])}.{contractId.split('.')[1]}
