@@ -1,6 +1,5 @@
 import * as React from 'react';
-
-import { Flex, Grid } from '@stacks/ui';
+import { Flex } from '@stacks/ui';
 import {
   Block,
   MempoolTransaction,
@@ -10,21 +9,47 @@ import {
 } from '@blockstack/stacks-blockchain-api-types';
 import { NextPage, NextPageContext } from 'next';
 import { Title } from '@components/typography';
-
 import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
-
-import { ReduxNextPageContext } from '@common/types/next-store';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
-import Head from 'next/head';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
-import { makeKey, useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
-import { useSelector } from 'react-redux';
-import { RootState } from '@store';
+
+import { getServerSideApiServer } from '@common/api/utils';
+import { useApiServer } from '@common/hooks/use-api';
+import useSWR from 'swr';
+
+interface FetchHomepageDataResponse {
+  transactions: TransactionResults;
+  mempool: MempoolTransactionListResponse;
+  blocks: FetchBlocksListResponse;
+}
+const fetchHomepageData = (apiServer: string) => async (): Promise<FetchHomepageDataResponse> => {
+  const [transactions, mempool, blocks] = await Promise.all([
+    fetchTxList({
+      apiServer,
+      limit: 10,
+      types: ['smart_contract', 'contract_call', 'token_transfer'],
+    })(),
+    fetchTxList({
+      apiServer,
+      limit: 10,
+      mempool: true,
+    })(),
+    fetchBlocksList({
+      apiServer,
+      limit: 10,
+    })(),
+  ]);
+
+  return {
+    transactions: transactions as TransactionResults,
+    mempool: mempool as MempoolTransactionListResponse,
+    blocks,
+  };
+};
 
 const PageTop: React.FC = React.memo(() => (
   <Flex flexDirection="column" alignItems="center" maxWidth="544px" justify="center">
@@ -51,113 +76,50 @@ interface HomeData {
 }
 
 export const useHomepageData = (initialData?: HomeData) => {
-  const { apiServer } = useSelector((state: RootState) => ({
-    apiServer: selectCurrentNetworkUrl(state),
-  }));
+  const apiServer = useApiServer();
 
-  const transactions = useInfiniteFetch<Transaction>({
-    initialData: initialData?.transactions?.results || [],
-    type: 'tx',
-    limit: 10,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  });
-
-  const mempool = useInfiniteFetch<MempoolTransaction>({
-    initialData: initialData?.mempool?.results || [],
-    type: 'tx',
-    limit: 10,
-    pending: true,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  });
-
-  const blocks = useInfiniteFetch<Block>({
-    initialData: initialData?.blocks?.results || [],
-    type: 'block',
-    limit: 10,
-  });
-
-  const txKey = makeKey({
-    apiServer,
-    index: 0,
-    type: 'tx',
-    limit: 10,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  });
-  const mempoolKey = makeKey({
-    apiServer,
-    index: 0,
-    type: 'tx',
-    limit: 10,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-    pending: true,
-  });
-  const blockKey = makeKey({
-    apiServer,
-    index: 0,
-    type: 'block',
-    limit: 10,
-  });
-
-  const keys = [txKey, mempoolKey, blockKey];
+  const { data, mutate } = useSWR<FetchHomepageDataResponse>(
+    'home',
+    () => fetchHomepageData(apiServer)(),
+    {
+      initialData,
+      refreshInterval: 3500,
+    }
+  );
 
   return {
-    keys,
-    transactions,
-    mempool,
-    blocks,
+    data,
+    refresh: mutate,
   };
 };
 
-export const Home: NextPage<HomeData> = initialData => {
-  const { transactions, mempool, blocks, keys } = useHomepageData(initialData);
+const Home: NextPage<HomeData> = React.memo(initialData => {
+  const { data } = useHomepageData(initialData);
+  if (!data) {
+    return null;
+  }
   return (
     <PageWrapper isHome>
-      <Head>
-        {keys.map(key => (
-          <link rel="preload" href={key} as="fetch" crossOrigin="anonymous" key={key} />
-        ))}
-      </Head>
       <Meta />
       <PageTop />
       <TransactionList
         my="extra-loose"
         recent
-        transactions={transactions.data}
-        mempool={mempool.data}
+        transactions={data.transactions.results}
+        mempool={data.mempool.results}
       />
 
-      <BlocksList blocks={blocks.data} />
+      <BlocksList blocks={data.blocks.results} />
     </PageWrapper>
   );
-};
+});
 
-Home.getInitialProps = async ({
-  store,
-}: NextPageContext & ReduxNextPageContext): Promise<HomeData> => {
-  const apiServer = selectCurrentNetworkUrl(store.getState());
-
-  const [transactions, mempool, blocks] = await Promise.all([
-    fetchTxList({
-      apiServer,
-      limit: 10,
-      types: ['smart_contract', 'contract_call', 'token_transfer'],
-    })(),
-    fetchTxList({
-      apiServer,
-      limit: 10,
-      mempool: true,
-    })(),
-    fetchBlocksList({
-      apiServer,
-      limit: 10,
-    })(),
-  ]);
-
+export async function getServerSideProps(ctx: NextPageContext) {
+  const apiServer = getServerSideApiServer(ctx);
+  const data = await fetchHomepageData(apiServer)();
   return {
-    transactions: transactions as HomeData['transactions'],
-    mempool: (mempool as unknown) as HomeData['mempool'],
-    blocks,
+    props: data,
   };
-};
+}
 
 export default Home;

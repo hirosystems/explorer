@@ -1,23 +1,18 @@
 import * as React from 'react';
 
-import { Box, Flex, Text, color } from '@stacks/ui';
-import {
-  border,
-  getContractName,
-  getMemoString,
-  microToStacks,
-  truncateMiddle,
-} from '@common/utils';
+import { Box, Flex, Text } from '@stacks/ui';
+import { getMemoString, microToStacks } from '@common/utils';
 
 import { Badge } from '@components/badge';
-import { ContractCard } from '@components/contract-card';
 import { Link } from '@components/typography';
 import NextLink from 'next/link';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
 import { Section } from '@components/section';
-import { BlockLink } from '@components/links';
+import { BlockLink, TxLink } from '@components/links';
+import { IconButton } from '@components/icon-button';
+import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
 
 interface FeeComponentProps {
   fees: string;
@@ -62,15 +57,15 @@ const AddressComponent = ({ principal }: any) => {
 const getSenderName = (txType: Transaction['tx_type']) => {
   switch (txType) {
     case 'smart_contract':
-      return 'Creator';
+      return 'Deployed by';
     case 'contract_call':
-      return 'Caller';
+      return 'Called by';
     default:
       return 'Sender address';
   }
 };
 
-const transformDataToRowData = (d: Transaction) => {
+const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
   const txid = {
     label: {
       children: 'Transaction ID',
@@ -78,14 +73,50 @@ const transformDataToRowData = (d: Transaction) => {
     children: d.tx_id,
     copy: d.tx_id,
   };
-  const contractName = {
-    condition: d.tx_type === 'smart_contract',
+  const canonical = {
+    condition: d.tx_status !== 'pending' && !d.canonical,
     label: {
-      children: 'Contract name',
+      children: 'Non-canonical',
     },
-    children: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
-    copy: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+    children: (
+      <Flex alignItems="center">
+        <Box>This transaction is contained in a non-canonical fork of the Stacks chain.</Box>
+        <IconButton
+          ml="tight"
+          icon={QuestionMarkCircleOutlineIcon}
+          dark
+          as="a"
+          href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-001-burn-election.md#committing-to-a-chain-tip"
+          target="_blank"
+        />
+      </Flex>
+    ),
   };
+  const contractName =
+    d.tx_type === 'contract_call'
+      ? {
+          condition: d.tx_type === 'contract_call',
+          label: {
+            children: 'Contract',
+          },
+          children:
+            d.tx_type === 'contract_call' ? (
+              <TxLink txid={d.contract_call.contract_id}>
+                <Link as="a">{d.contract_call.contract_id}</Link>
+              </TxLink>
+            ) : (
+              ''
+            ),
+          copy: d.tx_type === 'contract_call' ? d.contract_call.contract_id : '',
+        }
+      : {
+          condition: d.tx_type === 'smart_contract',
+          label: {
+            children: 'Contract name',
+          },
+          children: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+          copy: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+        };
   const sender = {
     condition: typeof d.sender_address !== 'undefined',
     label: {
@@ -101,23 +132,26 @@ const transformDataToRowData = (d: Transaction) => {
     children: <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} />,
   };
   const blockTime = {
-    condition: typeof d.block_height !== 'undefined',
+    condition: 'block_height' in d && typeof d.block_height !== 'undefined',
     label: {
       children: 'Block height',
     },
-    children: <BlockComponent block={d.block_height as number} ts={d.burn_block_time as number} />,
+    children:
+      'block_height' in d ? (
+        <BlockComponent block={d.block_height as number} ts={d.burn_block_time as number} />
+      ) : null,
   };
   const blockHash = {
-    condition: typeof d.block_hash !== 'undefined',
+    condition: 'block_hash' in d && typeof d.block_hash !== 'undefined',
     label: {
       children: 'Block hash',
     },
-    children: (
+    children: 'block_hash' in d && (
       <BlockLink hash={d.block_hash}>
         <Link>{d.block_hash}</Link>
       </BlockLink>
     ),
-    copy: d.block_hash,
+    copy: 'block_hash' in d && d.block_hash,
   };
 
   switch (d.tx_type) {
@@ -127,14 +161,16 @@ const transformDataToRowData = (d: Transaction) => {
           children: 'Recipient address',
         },
         children: <AddressComponent principal={d.token_transfer.recipient_address} />,
+        copy: d.token_transfer.recipient_address,
       };
 
       const memo = {
+        condition: !!getMemoString(d.token_transfer.memo),
         label: { children: 'Memo' },
         children: getMemoString(d.token_transfer.memo),
       };
 
-      return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo];
+      return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo, canonical];
     }
     case 'coinbase': {
       const scratch = {
@@ -146,21 +182,21 @@ const transformDataToRowData = (d: Transaction) => {
         },
         children: d.coinbase_payload.data,
       };
-      return [txid, sender, fees, blockTime, blockHash, scratch];
+      return [txid, sender, fees, blockTime, blockHash, scratch, canonical];
     }
     default:
-      return [contractName, txid, sender, fees, blockTime, blockHash];
+      return [contractName, txid, sender, fees, blockTime, blockHash, canonical];
   }
 };
 
 interface TransactionDetailsProps {
-  transaction: Transaction;
+  transaction: Transaction | MempoolTransaction;
   hideContract?: boolean;
   contractName?: string;
   contractMeta?: string;
 }
 
-export const getContractId = (transaction: Transaction) => {
+export const getContractId = (transaction: Transaction | MempoolTransaction) => {
   switch (transaction.tx_type) {
     case 'contract_call':
       return transaction.contract_call.contract_id;
@@ -178,24 +214,12 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   contractName,
   ...rest
 }) => {
-  const contractId = getContractId(transaction);
   return (
     <Section title="Summary" {...rest}>
       <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']}>
-          <Rows noTopBorder items={transformDataToRowData(transaction)} />
+          <Rows noTopBorder items={transformDataToRowData(transaction) as any} />
         </Box>
-        {hideContract || !contractId ? null : (
-          <ContractCard
-            ml={['unset', 'unset', 'base']}
-            mt={['unset', 'unset', 'base']}
-            mb="base"
-            title={getContractName(contractId)}
-            meta={contractMeta}
-            contractId={transaction.tx_type === 'contract_call' ? contractId : undefined}
-            // order={[0, 0, 2]}
-          />
-        )}
       </Flex>
     </Section>
   );

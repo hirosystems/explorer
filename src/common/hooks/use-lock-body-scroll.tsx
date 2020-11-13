@@ -13,12 +13,12 @@ export const useLockBodyScroll = (lock: boolean) => {
           document.body.style.overflow = 'hidden';
         }
       } else {
-        if (document.body.style.overflow! === originalStyle) {
+        if (document.body.style.overflow === originalStyle) {
           document.body.style.overflow = originalStyle;
         }
       }
     } else {
-      if (document.body.style.overflow! === originalStyle) {
+      if (document.body.style.overflow === originalStyle) {
         document.body.style.overflow = originalStyle;
       }
     }

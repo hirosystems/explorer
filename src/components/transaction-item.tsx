@@ -1,90 +1,29 @@
-import { Box, BoxProps, Flex, FlexProps, Stack } from '@stacks/ui';
-import { Caption, Title } from '@components/typography';
+import { Box, Flex, FlexProps, Stack } from '@stacks/ui';
+import { Caption, Text, Title } from '@components/typography';
 import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
 import {
   addSepBetweenStrings,
-  border,
   getMemoString,
-  microToStacks,
   toRelativeTime,
   truncateMiddle,
+  getTxTitle,
 } from '@common/utils';
 import { forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 
 import { ArrowRightIcon } from '@components/icons/arrow-right';
 import { Badge } from '@components/badge';
-import { CodeIcon } from '@components/icons/code';
-import FunctionIcon from 'mdi-react/FunctionIcon';
 import { Link } from '@components/link';
 import NextLink from 'next/link';
 import React from 'react';
 import { Transaction } from '@models/transaction.interface';
-import { ContractCallIcon } from '@components/icons/contract-call';
 import { color } from '@components/color-modes';
-import { getContractName } from '@common/utils';
-import { StxInline } from '@components/icons/stx-inline';
 import { useHarmonicIntervalFn } from 'react-use';
+import { ItemIcon, getTxTypeIcon } from '@components/item-icon';
+import { DropIcon } from '@components/icons/drop';
+import { IconClock } from '@tabler/icons';
 
-export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
-  let Icon = StxInline;
-  if (txType === 'smart_contract') {
-    Icon = CodeIcon as any;
-  } else if (txType === 'contract_call') {
-    Icon = ContractCallIcon as any;
-  }
-  return Icon;
-};
-
-export const ItemIcon = React.memo(
-  ({
-    type,
-    opacity,
-    status,
-    ...rest
-  }: { type: Transaction['tx_type']; status: Transaction['tx_status'] } & FlexProps) => {
-    const Icon = getTxTypeIcon(type);
-
-    const getStatusColor = () => {
-      if (status === 'success') return color('feedback-success');
-      if (status === 'pending') return color('feedback-alert');
-      return color('feedback-error');
-    };
-    return (
-      <Flex
-        alignItems="center"
-        justify="center"
-        size="48px"
-        borderRadius="8px"
-        position="relative"
-        display={['none', 'none', 'flex']}
-        border={border()}
-        bg={color('bg')}
-        color={color('invert')}
-        boxShadow="low"
-        as="span"
-        {...rest}
-      >
-        <Box
-          bottom="0px"
-          right="0px"
-          position="absolute"
-          bg={getStatusColor()}
-          borderRadius="8px"
-          size="8px"
-          zIndex={9}
-          as="span"
-        />
-        <Icon
-          color={color('text-title')}
-          position="relative"
-          zIndex={2}
-          size={type === 'token_transfer' ? '18px' : '21px'}
-        />
-      </Flex>
-    );
-  }
-);
+export { getTxTypeIcon };
 
 export interface TxItemProps extends FlexProps {
   tx: Transaction | MempoolTransaction;
@@ -100,19 +39,6 @@ export interface TxItemProps extends FlexProps {
   hideIcon?: boolean;
   hideRightElements?: boolean;
 }
-
-const getTitle = (transaction: Transaction) => {
-  switch (transaction.tx_type) {
-    case 'smart_contract':
-      return getContractName(transaction.smart_contract.contract_id);
-    case 'contract_call':
-      return getContractName(transaction.contract_call.contract_id);
-    case 'token_transfer':
-      return undefined;
-    default:
-      return truncateMiddle(transaction.tx_id, 10);
-  }
-};
 
 const getRelativeTimestamp = (tx: Transaction) => {
   const date =
@@ -136,10 +62,8 @@ const Details = ({
   useHarmonicIntervalFn(() => null, date.toLocaleLowerCase().includes('seconds') ? 1000 : 60000);
 
   const additional =
-    tx.tx_type === 'token_transfer'
-      ? `${microToStacks(tx.token_transfer.amount)} STX`
-      : (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
-        (tx.tx_type === 'contract_call' && tx?.events?.length)
+    (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
+    (tx.tx_type === 'contract_call' && tx?.events?.length)
       ? `${tx?.events?.length} events`
       : null;
 
@@ -151,18 +75,8 @@ const Details = ({
       : null;
 
   const strings = minimal
-    ? ([
-        getTransactionTypeLabel(tx.tx_type),
-        additional || date,
-        additional && date,
-        tx.tx_status === 'pending' ? 'Pending' : null,
-      ].filter(str => str) as string[])
-    : ([
-        getTransactionTypeLabel(tx.tx_type),
-        sentOrReceived,
-        date,
-        tx.tx_status === 'pending' ? 'Pending' : null,
-      ].filter(str => str) as string[]);
+    ? ([getTransactionTypeLabel(tx.tx_type), additional].filter(str => str) as string[])
+    : ([getTransactionTypeLabel(tx.tx_type), sentOrReceived].filter(str => str) as string[]);
 
   return (
     <Caption
@@ -179,7 +93,7 @@ const Details = ({
 };
 
 const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal, ...rest }) => (
-  <Flex position={'relative'} zIndex={2} as="span" {...rest}>
+  <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
     <NextLink href={`/address/${principal}`} passHref>
       <Caption
         as={Link}
@@ -197,17 +111,29 @@ const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal,
 const AddressArea = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
   if (tx.tx_type === 'token_transfer') {
     return (
-      <Flex as="span" {...rest}>
+      <Stack isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
+        <Caption>from</Caption>
         <PrincipalLink principal={tx.sender_address} />
-        <Flex as="span" mx="extra-tight" color={color('invert')}>
-          <ArrowRightIcon strokeWidth="1" size="14px" />
+        <Flex as="span" color={color('text-caption')}>
+          <ArrowRightIcon strokeWidth="1.5" size="15px" />
         </Flex>
         <PrincipalLink principal={tx.token_transfer.recipient_address} />
-      </Flex>
+      </Stack>
     );
   }
-  if (tx.tx_type === 'smart_contract' || tx.tx_type === 'contract_call') {
-    return <PrincipalLink principal={tx.sender_address} />;
+  if (tx.tx_type === 'contract_call') {
+    return (
+      <Caption>
+        by <PrincipalLink principal={tx.sender_address} />
+      </Caption>
+    );
+  }
+  if (tx.tx_type === 'smart_contract') {
+    return (
+      <Caption>
+        by <PrincipalLink principal={tx.sender_address} />
+      </Caption>
+    );
   }
   return null;
 };
@@ -217,45 +143,71 @@ const LargeVersion = ({
   principal,
   hideIcon,
   hideRightElements,
+  isHovered,
 }: {
   tx: Transaction;
   principal?: string;
   hideIcon?: boolean;
+  isHovered?: boolean;
   hideRightElements?: boolean;
 }) => {
-  const title = getTitle(tx);
+  const title = getTxTitle(tx);
 
   return (
     <>
       <Flex display="flex" as="span" alignItems="center">
-        {!hideIcon ? <ItemIcon mr="base" status={tx.tx_status} type={tx.tx_type} /> : null}
+        {!hideIcon ? (
+          <ItemIcon mr="base" status={tx.tx_status} type="tx" txType={tx.tx_type} />
+        ) : null}
         <Stack
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           as="span"
           spacing="tight"
         >
-          <Details principal={principal} tx={tx} />
-          <Title fontWeight="500" display="block" fontSize="16px">
-            {title || truncateMiddle(tx.tx_id, 12)}
-          </Title>
+          <Stack alignItems="center" isInline spacing="base">
+            <Title
+              color={isHovered ? color('accent') : color('text-title')}
+              fontWeight="500"
+              display="block"
+              fontSize="16px"
+            >
+              {title || truncateMiddle(tx.tx_id, 12)}
+            </Title>
+            {tx.tx_type === 'token_transfer' &&
+            getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
+              <Badge
+                bg={color('bg-light')}
+                labelProps={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: color('text-body'),
+                }}
+              >
+                <DropIcon color={color('accent')} size="14px" strokeWidth={2} />
+                <Box ml="extra-tight">Faucet</Box>
+              </Badge>
+            ) : null}
+          </Stack>
           <Stack
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             as="span"
             isInline
-            spacing="tight"
+            spacing="extra-tight"
           >
-            {tx.tx_type === 'token_transfer' ? (
-              <Flex as="span" alignItems="center">
-                <Caption>{microToStacks(tx.token_transfer.amount)} STX</Caption>
-              </Flex>
-            ) : (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
-              (tx.tx_type === 'contract_call' && tx?.events?.length) ? (
-              <Caption>{tx?.events?.length} events</Caption>
-            ) : title ? (
-              <Caption>{truncateMiddle(tx.tx_id)}</Caption>
+            {tx.tx_status === 'pending' ? (
+              <Caption fontWeight="bold" as="span" color={color('feedback-alert')}>
+                Pending
+              </Caption>
             ) : null}
+
+            {tx.tx_status !== 'pending' && tx.tx_status !== 'success' ? (
+              <Caption fontWeight="bold" mr="tight" as="span" color={color('feedback-error')}>
+                Failed
+              </Caption>
+            ) : null}
+            <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
             <AddressArea tx={tx} />
           </Stack>
         </Stack>
@@ -268,105 +220,12 @@ const LargeVersion = ({
           flexDirection="column"
           alignItems="flex-end"
         >
-          {tx.tx_type === 'token_transfer' &&
-          getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
-            <Badge
-              border={border()}
-              bg={color('bg')}
-              labelProps={{
-                display: 'flex',
-                alignItems: 'center',
-                color: color('text-caption'),
-              }}
-            >
-              🚰<Box ml="tight">Faucet</Box>
-            </Badge>
-          ) : null}
-          {tx.tx_type === 'contract_call' && (
-            <Badge
-              border={border()}
-              bg={color('bg')}
-              labelProps={{
-                display: 'flex',
-                alignItems: 'center',
-                color: color('text-caption'),
-              }}
-            >
-              <FunctionIcon size="16px" /> <Box>{tx.contract_call.function_name}</Box>
-            </Badge>
-          )}
-          {tx.tx_type === 'contract_call' && (
-            <Flex position="relative" zIndex="99" as="span" alignSelf="flex-end" ml="tight">
-              <NextLink href={`/txid/${tx.contract_call.contract_id}`} passHref>
-                <Caption as={Link}>Source contract</Caption>
-              </NextLink>
-            </Flex>
-          )}
+          <Text fontSize="14px" color={color('text-body')}>
+            {getRelativeTimestamp(tx)}
+          </Text>
+          <Caption>{truncateMiddle(tx.tx_id, 6)}</Caption>
         </Flex>
       ) : null}
-    </>
-  );
-};
-
-const MinimalVersion = ({ tx, hideIcon, hideRightElements }: any) => {
-  const title = getTitle(tx);
-  const additional =
-    tx.tx_type === 'token_transfer'
-      ? `${microToStacks(tx.token_transfer.amount)} STX`
-      : (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
-        (tx.tx_type === 'contract_call' && tx?.events?.length)
-      ? `${tx?.events?.length} events`
-      : '';
-  return (
-    <>
-      <Flex as="span" alignItems="center">
-        {!hideIcon && <ItemIcon status={tx.tx_status} type={tx.tx_type} />}
-        <Stack spacing="extra-tight" ml="base">
-          <Title fontWeight="500" display="block" fontSize="16px">
-            {title || truncateMiddle(tx.tx_id, 6)}
-          </Title>
-          <Flex>
-            <Caption display="block">
-              {addSepBetweenStrings([
-                getTransactionTypeLabel(tx.tx_type),
-                additional,
-                getRelativeTimestamp(tx),
-              ])}
-            </Caption>
-          </Flex>
-        </Stack>
-      </Flex>
-      {!hideRightElements && (
-        <Flex alignItems="flex-start">
-          {tx.tx_type === 'token_transfer' &&
-          getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
-            <Badge
-              border={border()}
-              bg={color('bg')}
-              labelProps={{
-                display: 'flex',
-                alignItems: 'center',
-                color: color('text-caption'),
-              }}
-            >
-              🚰<Box ml="tight">Faucet</Box>
-            </Badge>
-          ) : null}
-          {tx.tx_type === 'contract_call' && (
-            <Badge
-              border={border()}
-              bg={color('bg')}
-              labelProps={{
-                display: 'flex',
-                alignItems: 'center',
-                color: color('text-caption'),
-              }}
-            >
-              <FunctionIcon size="16px" /> <Box>{tx.contract_call.function_name}</Box>
-            </Badge>
-          )}
-        </Flex>
-      )}
     </>
   );
 };
@@ -386,11 +245,10 @@ export const TxItem = memoWithAs<TxItemProps, 'span'>(
     } = props;
     return (
       <Flex
-        px="base"
         justifyContent="space-between"
         alignItems="stretch"
         style={{ outline: 'none' }}
-        py="base"
+        py="loose"
         flexShrink={0}
         ref={ref}
         cursor={isHovered ? ['unset', 'unset', 'pointer'] : undefined}
@@ -399,16 +257,13 @@ export const TxItem = memoWithAs<TxItemProps, 'span'>(
         {...rest}
         display="flex"
       >
-        {minimal ? (
-          <MinimalVersion hideRightElements={hideRightElements} hideIcon={hideIcon} tx={tx} />
-        ) : (
-          <LargeVersion
-            hideRightElements={hideRightElements}
-            hideIcon={hideIcon}
-            principal={principal}
-            tx={tx as any}
-          />
-        )}
+        <LargeVersion
+          isHovered={isHovered}
+          hideRightElements={hideRightElements}
+          hideIcon={hideIcon}
+          principal={principal}
+          tx={tx as any}
+        />
       </Flex>
     );
   })

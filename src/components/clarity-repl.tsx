@@ -7,7 +7,7 @@ import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 import { CheckCircleIcon } from '@components/icons/check-circle';
 import { IconButton } from '@components/icon-button';
 import CloseIcon from 'mdi-react/CloseIcon';
-import { clarityWasmAtom } from '@components/sandbox/state/atoms';
+import { clarityWasmAtom } from '@store/sandbox';
 
 const capitalize = (s: string) => {
   return s?.charAt(0).toUpperCase() + s?.slice(1);

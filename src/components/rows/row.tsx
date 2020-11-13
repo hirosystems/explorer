@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Flex, useClipboard } from '@stacks/ui';
+import { Flex, FlexProps, useClipboard } from '@stacks/ui';
 import { CopyProps, RowContentProps, RowProps, RowWrapperProps } from '@components/rows/types';
 
 import { Caption } from '@components/typography';
@@ -25,44 +25,72 @@ export const RowWrapper: React.FC<RowWrapperProps> = ({
   />
 );
 
-export const RowLabel = ({ label }: { label: string }) => (
-  <Flex alignItems="baseline" pt="2px" flexShrink={0} width="140px">
+export const RowLabel: React.FC<{ label: string } & FlexProps> = ({ label, ...rest }) => (
+  <Flex alignItems="baseline" pt="2px" flexShrink={0} width="140px" {...rest}>
     <Caption pb={['extra-tight', 'extra-tight', 'unset']}>{label}</Caption>
   </Flex>
 );
 
 export const CopyButton = React.forwardRef(
   ({ isHovered, ...rest }: CopyProps, ref: Ref<HTMLDivElement>) => (
-    <IconButton opacity={[1, 1, isHovered ? 1 : 0]} ref={ref} dark icon={CopyIcon} {...rest} />
+    <IconButton
+      right={isHovered ? '0' : '10px'}
+      position="absolute"
+      opacity={[1, 1, isHovered ? 1 : 0]}
+      ref={ref}
+      dark
+      iconProps={{ strokeWidth: 1.75, size: '20px' }}
+      icon={CopyIcon}
+      {...rest}
+    />
   )
 );
 
-export const RowContent: React.FC<RowContentProps> = ({ children, copy, isHovered, ...rest }) => {
+export const RowContent: React.FC<RowContentProps> = ({
+  children,
+  flexGrow,
+  copy,
+  isHovered,
+  ...rest
+}) => {
   const { onCopy, hasCopied } = useClipboard(copy || '');
 
   return (
-    <Flex pr="base" width="100%" alignItems="center" justifyContent="space-between" {...rest}>
+    <Flex width="100%" alignItems="center" justifyContent="flex-start" {...rest}>
       <Flex
         color="var(--colors-text-body)"
         textStyle="body.small.medium"
         style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}
         alignItems="center"
-        width="100%"
-        pr="base"
+        position="relative"
+        pr={copy ? '48px' : undefined}
+        flexGrow={flexGrow}
       >
         {children}
+        {copy ? (
+          <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'}>
+            <CopyButton onClick={onCopy} isHovered={isHovered} />
+          </Tooltip>
+        ) : null}
       </Flex>
-      {copy ? (
-        <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'}>
-          <CopyButton onClick={onCopy} isHovered={isHovered} />
-        </Tooltip>
-      ) : null}
     </Flex>
   );
 };
 
 export const Row: React.FC<RowProps> = React.memo(
-  ({ card, isFirst, isLast, label, render, copy, noTopBorder, children, ...rest }) => {
+  ({
+    card,
+    isFirst,
+    isLast,
+    label,
+    render,
+    copy,
+    noTopBorder,
+    children,
+    flexGrow,
+    inline,
+    ...rest
+  }) => {
     const [hovered, _bind] = useHover();
     const isHovered = !!copy && hovered;
     const bind = !!copy ? { ..._bind } : {};
@@ -71,11 +99,17 @@ export const Row: React.FC<RowProps> = React.memo(
         borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
         borderBottom={isLast || card ? undefined : '1px solid'}
         px={card ? 'base' : 'unset'}
+        inline={inline}
         {...bind}
         {...rest}
       >
-        {label ? <RowLabel label={typeof label === 'string' ? label : label.children} /> : null}
-        <RowContent isHovered={isHovered} copy={copy}>
+        {label ? (
+          <RowLabel
+            mb={inline ? 'tight' : 'unset'}
+            label={typeof label === 'string' ? label : label.children}
+          />
+        ) : null}
+        <RowContent flexGrow={flexGrow} isHovered={isHovered} copy={copy}>
           {render || children}
         </RowContent>
       </RowWrapper>

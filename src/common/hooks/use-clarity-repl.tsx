@@ -1,7 +1,8 @@
 //@ts-nocheck
+// taken from ludo's demo
 
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { clarityWasmAtom, replResultState } from '@components/sandbox/state/atoms';
+import { clarityWasmAtom, replResultState } from '@store/sandbox';
 
 const getErrorMessage = (raw: string): { name: string; message: string; line: number } => {
   const arr = raw?.split('\n');

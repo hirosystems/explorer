@@ -1,13 +1,12 @@
+// @ts-nocheck
 import * as React from 'react';
 
-import { Box, CloseIcon, ExclamationMarkCircleIcon, Flex, FlexProps } from '@stacks/ui';
+import { Box, CloseIcon, Flex, FlexProps } from '@stacks/ui';
 import { Link, Pre, Text, Title } from '@components/typography';
 
 import { AlertTriangleIcon } from './icons/alert-triangle';
 import { border } from '@common/utils';
 import { color } from '@components/color-modes';
-import { useClearErrors } from '@common/hooks/use-clear-errors';
-import { useSandboxState } from '@common/hooks/use-sandbox-state';
 
 interface ReasonData {
   expected?: number | string;
@@ -83,23 +82,16 @@ const getFormattedError = (error: AlertError | string): AlertError => {
 };
 
 export const Alert: React.FC<AlertProps & FlexProps> = ({
-  error: _error,
+  error,
   clearError,
   showClearErrors,
   ...rest
 }) => {
-  const clearErrors = useClearErrors();
-  const { error } = useSandboxState();
-  const formattedError: AlertError | null = error
-    ? {
-        name: error?.name || 'Error',
-        message: error?.message || error,
-      }
-    : _error
-    ? getFormattedError(_error)
-    : null;
+  const clearErrors = () => console.log('clear');
 
-  const hasError = error || _error;
+  const formattedError: AlertError | null = getFormattedError(error);
+
+  const hasError = error;
 
   return formattedError && hasError ? (
     <Flex
@@ -121,7 +113,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
         justifyContent="center"
       >
         <AlertTriangleIcon size="24px" mr="tight" color="red" />
-        {error || _error ? (
+        {error ? (
           <Title
             fontSize="14px"
             as="h4"
@@ -140,7 +132,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
         pl={['unset', 'unset', 'base']}
       >
         <Text fontSize="14px" color={color('text-title')} lineHeight="18px" fontWeight={400}>
-          {_error
+          {error
             ? formattedError?.message
             : error?.name === 'Status 429'
             ? 'Too many requests to the faucet, try again later.'

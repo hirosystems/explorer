@@ -1,40 +1,37 @@
 import * as React from 'react';
-
 import { Block, Transaction } from '@blockstack/stacks-blockchain-api-types';
 import { Box, Flex, Grid } from '@stacks/ui';
 import { Title } from '@components/typography';
-import { truncateMiddle } from '@common/utils';
+import { queryWith0x, truncateMiddle } from '@common/utils';
 import { Rows } from '@components/rows';
 import Head from 'next/head';
 
-import { NextPage } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import { PageWrapper } from '@components/page';
-
-import { ReduxNextPageContext } from '@common/types/next-store';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import { fetchBlock } from '@common/api/blocks';
 import { Section } from '@components/section';
 import { Timestamp } from '@components/timestamp';
-import { fetchTx } from '@common/api/transactions';
+import { fetchTx, FetchTxResponse } from '@common/api/transactions';
 import { TransactionList } from '@components/transaction-list';
+import { getServerSideApiServer } from '@common/api/utils';
 
 interface BlockSinglePageData {
   hash: string;
   block: Block;
-  transactions?: Transaction[];
+  transactions?: FetchTxResponse[];
 }
 
 const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, hash, transactions }) => {
-  console.log('block', block);
+  const title = `Block #${block.height.toLocaleString()}`;
   return (
     <PageWrapper>
       <Head>
-        <title>Block {truncateMiddle(hash)} | Stacks Explorer</title>
+        <title>{title} | Stacks Explorer</title>
       </Head>
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>
           <Title mb="base" mt="64px" as="h1" color="white" fontSize="36px">
-            Block details
+            {title}
           </Title>
         </Box>
       </Flex>
@@ -105,26 +102,24 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, hash, transacti
         </Section>
       </Grid>
       {transactions?.length ? (
-        <TransactionList mt="extra-loose" transactions={transactions} />
+        <TransactionList mt="extra-loose" transactions={transactions as Transaction[]} />
       ) : null}
     </PageWrapper>
   );
 };
 
-BlockSinglePage.getInitialProps = async ({
-  store,
-  query,
-}: ReduxNextPageContext): Promise<BlockSinglePageData> => {
-  const hash = query?.hash?.toString() || '';
-  // eslint-disable-next-line @typescript-eslint/unbound-method
-  const { getState } = store;
-  const apiServer = selectCurrentNetworkUrl(getState());
-  const data = await fetchBlock({ apiServer })({ hash });
-  const txs: Promise<Transaction>[] = [];
-  data.txs.forEach(tx => txs.push(fetchTx(apiServer)(tx)));
-  const transactions: Transaction[] = await Promise.all(txs);
+export async function getServerSideProps(
+  ctx: NextPageContext
+): Promise<{ props: BlockSinglePageData }> {
+  const { query } = ctx;
+  const hash = query?.hash ? queryWith0x(query?.hash?.toString()) : '';
+  const apiServer = getServerSideApiServer(ctx);
+  const data = await fetchBlock(apiServer)(hash);
+  const txs: Promise<FetchTxResponse>[] = [];
+  data.txs.forEach((txid: string) => txs.push(fetchTx(apiServer)(txid)));
+  const transactions: FetchTxResponse[] = await Promise.all(txs);
 
-  return { hash, block: data, transactions };
-};
+  return { props: { hash, block: data, transactions } };
+}
 
 export default BlockSinglePage;

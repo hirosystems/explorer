@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlexProps } from '@stacks/ui';
+import { BoxProps, FlexProps } from '@stacks/ui';
 
 export interface RowProps extends FlexProps {
   card?: boolean;
@@ -23,6 +23,7 @@ export interface RowWrapperProps extends FlexProps {
 
 export interface RowContentProps {
   isHovered: boolean;
+  flexGrow?: BoxProps['flexGrow'];
   copy?: string;
 }
 
@@ -31,7 +32,7 @@ export interface CopyProps {
   onClick?: () => void;
 }
 
-export interface Item {
+export interface Item extends Partial<BoxProps> {
   condition?: boolean;
   label?: {
     children: any;
