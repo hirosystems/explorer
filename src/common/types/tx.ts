@@ -25,7 +25,7 @@ interface Tx<T> {
 }
 
 interface TxDataWithContract<T = Transaction> extends Tx<T> {
-  contract?: Contract;
+  contract: Contract;
 }
 
 interface TxDataContractCall {

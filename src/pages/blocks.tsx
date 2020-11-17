@@ -30,17 +30,19 @@ const BlocksPage: NextPage<{ blocks: FetchBlocksListResponse }> = ({ blocks: ini
   );
 };
 
-BlocksPage.getInitialProps = async (
+export async function getServerSideProps(
   ctx: NextPageContext
-): Promise<{ blocks: FetchBlocksListResponse }> => {
+): Promise<{ props: { blocks: FetchBlocksListResponse } }> {
   const apiServer = getServerSideApiServer(ctx);
   const blocks = await fetchBlocksList({
     apiServer,
     limit: 30,
   })();
   return {
-    blocks,
+    props: {
+      blocks,
+    },
   };
-};
+}
 
 export default BlocksPage;

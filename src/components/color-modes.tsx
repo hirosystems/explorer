@@ -57,14 +57,14 @@ const colors = (props: { theme: Theme }): ColorModesInterface => ({
     [Color.Accent]: colorGet('blue')(props),
     [Color.Bg]: 'white',
     [Color.BgAlt]: colorGet('ink.50')(props),
-    [Color.BgLight]: 'white',
+    [Color.BgLight]: colorGet('ink.50')(props),
     [Color.Invert]: colorGet('ink')(props),
     [Color.TextHover]: colorGet('blue')(props),
     [Color.TextTitle]: colorGet('ink')(props),
     [Color.TextCaption]: colorGet('ink.600')(props),
     [Color.TextBody]: colorGet('ink.900')(props),
     [Color.InputPlaceholder]: colorGet('ink.400')(props),
-    [Color.Border]: 'rgb(229, 229, 236)',
+    [Color.Border]: colorGet('ink.200')(props),
     [Color.FeedbackAlert]: colorGet('orange')(props),
     [Color.FeedbackError]: colorGet('red')(props),
     [Color.FeedbackSuccess]: colorGet('green')(props),
@@ -151,8 +151,8 @@ export const Base = (
             -moz-osx-font-smoothing: auto;
           }
           .metaverse-header {
-            opacity: 0.75;
-            filter: brightness(1.3) contrast(0.7);
+            opacity: 0.6;
+            //filter: brightness(1.3) contrast(0.7);
           }
         }
       }

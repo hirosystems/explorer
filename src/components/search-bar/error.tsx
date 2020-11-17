@@ -2,10 +2,8 @@ import * as React from 'react';
 import { Box, Flex, Text, color, ExclamationMarkCircleIcon } from '@stacks/ui';
 import { DialogCard } from '@components/dialog-card';
 import CloseIcon from 'mdi-react/CloseIcon';
-
 import { ErrorType } from '@components/search-bar/types';
 import { IconButton } from '@components/icon-button';
-import { Alert } from '@components/alert';
 import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 
 export const InlineError = ({ children, visible }: any) => (

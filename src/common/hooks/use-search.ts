@@ -9,7 +9,7 @@ import {
   searchBarFocus,
   searchBarHover,
   searchBarVisibility,
-} from '@store/recoil';
+} from '@store';
 import { useRouter } from 'next/router';
 
 import { useRecoilState, useRecoilStateLoadable, useResetRecoilState } from 'recoil';
@@ -27,14 +27,27 @@ export const useRecentItems = () => {
     [items, setItems]
   );
 
-  return { items, setItems, handleUpsertItem };
+  const clearRecentItems = React.useCallback(
+    item => {
+      setItems({});
+    },
+    [setItems]
+  );
+
+  return { items, setItems, clearRecentItems, handleUpsertItem };
 };
 
 export const useSearchResults = () => {
   const [result, setResult] = useRecoilStateLoadable(searchItemsState);
   const resetResults = useResetRecoilState(searchItemsState);
 
-  return { result, setResult, resetResults };
+  const hasError =
+    result.contents && 'error' in result.contents && 'message' in result.contents.error;
+  const hasResults = result.contents && 'data' in result.contents && result.contents.data.length;
+
+  const isLoading = result.state === 'loading';
+
+  return { result, setResult, resetResults, hasError, hasResults, isLoading };
 };
 
 export const useSearchQuery = () => {
@@ -47,6 +60,8 @@ export const useSearch = (ref?: any) => {
   const [isFocused, setFocus] = useRecoilState(searchBarFocus);
   const [isHovered, setHover] = useRecoilState(searchBarHover);
   const [visibility, setVisibility] = useRecoilState(searchBarVisibility);
+  const { hasResults, hasError } = useSearchResults();
+  const { items } = useRecentItems();
 
   const input =
     ref?.current || (typeof document !== 'undefined' && document.getElementById('search-bar'));
@@ -54,15 +69,20 @@ export const useSearch = (ref?: any) => {
   const router = useRouter();
   React.useEffect(() => {
     router.events.on('routeChangeStart', () => {
-      setQuery(undefined);
-      input?.blur?.();
+      if (input) {
+        setQuery(undefined);
+        input.value = '';
+        input?.blur?.();
+      }
     });
-  }, [setQuery, input, router]);
+  }, [setQuery, input, typeof document !== 'undefined', router]);
 
   const clearError = () => {
-    setQuery(undefined);
-    input.value = '';
-    input?.focus?.();
+    if (input) {
+      setQuery(undefined);
+      input.value = '';
+      input?.blur?.();
+    }
   };
 
   const updateQuery = debounce((v: string) => setQuery(v), 250);
@@ -94,7 +114,11 @@ export const useSearch = (ref?: any) => {
     input.blur?.();
   };
 
-  const resultsShowing = isVisible;
+  const hasRecentItems = Object.values(items)?.length;
+
+  const hasSomethingToShow = hasRecentItems || hasError || hasResults;
+
+  const resultsShowing = hasSomethingToShow && isVisible;
 
   return {
     query,

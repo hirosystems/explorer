@@ -31,50 +31,10 @@ import {
 import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
 import { withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
-import { useToast } from '@common/hooks/use-toast';
-import { truncateMiddle } from '@common/utils';
-import { useRouter } from 'next/router';
-
 export interface ClarityFunctionArg {
   name: string;
   type: ClarityAbiType;
 }
-
-export const useTxToast = () => {
-  const router = useRouter();
-  const { addPositiveToast } = useToast();
-
-  const showToast = (txid: string) =>
-    addPositiveToast({
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      message: `Transaction${txid ? `:  ${truncateMiddle(txid)}` : ''} submitted!`,
-      description: `Transactions can take 60 or more seconds to confirm.`,
-      action: {
-        label: 'View transaction',
-        onClick: () => {
-          void router.push('/txid/[txid]', `/txid/${txid}`);
-        },
-      },
-    });
-  return showToast;
-};
-
-export const doGenerateIdentity = () => {
-  const key = makeRandomPrivKey();
-  const publicKey = pubKeyfromPrivKey(privateKeyToString(key));
-  const address = addressFromPublicKeys(
-    AddressVersion.TestnetSingleSig,
-    AddressHashMode.SerializeP2PKH,
-    1,
-    [publicKey]
-  );
-
-  return {
-    privateKey: privateKeyToString(key),
-    publicKey: publicKeyToString(publicKey),
-    address: addressToString(address),
-  };
-};
 
 export const network = (apiServer: string): StacksNetwork => {
   const txNetwork = new StacksTestnet();

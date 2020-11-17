@@ -1,6 +1,5 @@
 import React from 'react';
-import type { NextPage } from 'next';
-import type { ReduxNextPageContext } from '@common/types';
+import type { NextPage, NextPageContext } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 
@@ -38,7 +37,7 @@ const SandboxPage: NextPage<any> = () => (
   </PageWrapper>
 );
 
-SandboxPage.getInitialProps = async (ctx: ReduxNextPageContext) => {
+SandboxPage.getInitialProps = async (ctx: NextPageContext) => {
   const tab = ctx?.query?.tab ?? undefined;
   return { tab };
 };

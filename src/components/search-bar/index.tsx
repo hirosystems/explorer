@@ -44,7 +44,7 @@ export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> =
           width="100%"
           height={height || '64px'}
           borderRadius="12px"
-          bg="rgba(255,255,255,0.08)"
+          bg="rgba(255,255,255,0.15)"
         >
           <Input
             p={0}
@@ -62,17 +62,18 @@ export const SearchBar: ForwardRefExoticComponentWithAs<SearchBarProps, 'div'> =
             fontSize="inherit"
             position="absolute"
             borderRadius="12px"
+            border="1px solid"
             onChange={onChange}
             backgroundColor="transparent"
             color="white"
-            borderColor="rgba(255,255,255,0.12)"
+            borderColor="transparent"
             _placeholder={{ color: 'white' }}
             placeholder="Search the Stacks blockchain"
             _hover={{
-              borderColor: 'rgba(255,255,255,0.25)',
+              borderColor: 'rgba(255,255,255,0.15)',
             }}
             _focus={{
-              borderColor: 'rgba(255,255,255,1)',
+              borderColor: 'rgba(255,255,255,0.5)',
               boxShadow: error
                 ? `0 0 0 3px rgba(212, 0, 26, 0.5)`
                 : `0 0 0 3px rgba(170, 179, 255, 0.5)`,

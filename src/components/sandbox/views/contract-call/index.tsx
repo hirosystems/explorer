@@ -4,7 +4,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { validateStacksAddress, onPaste } from '@common/utils';
 import { Box, BoxProps, color, Flex, Grid, Stack, transition } from '@stacks/ui';
 import { atom, useRecoilValue, useRecoilState, useSetRecoilState, selectorFamily } from 'recoil';
-import { Input } from '@components/sandbox/common';
+import { Input } from '@components/inputs';
+
 import { useFormik } from 'formik';
 import { Button } from '@components/button';
 import { border, truncateMiddle } from '@common/utils';
@@ -15,7 +16,7 @@ import {
   currentFunctionState,
   contractSearchQueryState,
   contractCallViewState,
-} from '@components/sandbox/state/atoms';
+} from '@store/sandbox';
 import { useApiServer } from '@common/hooks/use-api';
 import { Section } from '@components/section';
 import { Badge } from '@components/badge';

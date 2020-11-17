@@ -56,15 +56,12 @@ export const fetchTransaction = (apiServer: string) => async (
 ): Promise<FetchTransactionResponse> => {
   if (query.includes('.')) {
     const contract = await fetchContract(apiServer)(query);
-
     if ('error' in contract) {
       return {
         error: contract.error,
       };
     }
-
     const transaction = await fetchTx(apiServer)(contract.tx_id);
-
     if ('error' in transaction) {
       return {
         error: transaction.error,
@@ -102,13 +99,11 @@ export const fetchTransaction = (apiServer: string) => async (
         };
       }
       const contractTransaction = await fetchTx(apiServer)(contract.tx_id);
-
       if ('error' in contractTransaction) {
         return {
           error: contractTransaction.error,
         };
       }
-
       return {
         transaction,
         source: {

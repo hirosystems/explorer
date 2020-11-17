@@ -5,7 +5,7 @@ import {
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
 
-import { fetchFromApi, fetchFromSidecar } from '@common/api/fetch';
+import { fetchFromSidecar } from '@common/api/fetch';
 import { makeKey } from '@common/hooks/use-fetch-blocks';
 
 export const fetchPendingTxs = (apiServer: string) => async ({

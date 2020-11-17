@@ -1,14 +1,13 @@
 import * as React from 'react';
-import 'tippy.js/dist/tippy.css'; // optional
 import { RecoilRoot, useRecoilValue } from 'recoil';
-import type { AppProps } from 'next/app';
-
 import { AppWrapper } from '@components/app-init';
-import 'modern-normalize/modern-normalize.css';
-
 import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
-import { apiServerState } from '@store/recoil';
+import { apiServerState } from '@store';
+import type { AppProps } from 'next/app';
+
+import 'tippy.js/dist/tippy.css'; // optional
+import 'modern-normalize/modern-normalize.css';
 
 const AppContainer: React.FC<any> = ({ component: Component, ...props }) => {
   const apiServer = useRecoilValue(apiServerState);

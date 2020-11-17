@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { PageTop } from '@components/page';
-import { TransactionType } from '@models/transaction.interface';
 import { TransactionDetails } from '@components/transaction-details';
-import { TxData } from '@common/types/tx';
+import { CoinbaseTxs, TxData } from '@common/types/tx';
+import { Block } from '@blockstack/stacks-blockchain-api-types';
 
-const CoinbasePage = ({ transaction }: TxData) => (
+const CoinbasePage = ({ transaction }: TxData<CoinbaseTxs> & { block?: Block }) => (
   <>
-    <PageTop status={transaction.tx_status} type={TransactionType.COINBASE} />
+    <PageTop tx={transaction as any} />
     <TransactionDetails transaction={transaction} />
   </>
 );

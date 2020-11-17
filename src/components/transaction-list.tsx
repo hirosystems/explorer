@@ -8,34 +8,36 @@ import {
 } from '@blockstack/stacks-blockchain-api-types';
 import NextLink from 'next/link';
 import React from 'react';
-import { Tag } from '@components/tags';
-import { TransactionType } from '@models/transaction.interface';
+import { motion, AnimatePresence } from 'framer-motion';
+
 import { TxItem } from '@components/transaction-item';
 import { TxLink } from '@components/links';
 import { border } from '@common/utils';
 import { color } from '@components/color-modes';
 
 import { Section } from '@components/section';
+import { Toggle } from '@components/toggle';
+import { atom, useRecoilState } from 'recoil';
+import { useHover } from 'web-api-hooks';
+
+import { FloatingHoverIndicator } from '@components/hover-indicator';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
 > = React.memo(({ tx, isLast, principal, ...rest }) => {
+  const [isHovered, bind] = useHover();
   return (
     <Box
-      borderLeft="3px solid"
-      borderLeftColor={color('bg')}
       borderBottom={isLast ? 'unset' : '1px solid'}
       borderBottomColor="var(--colors-border)"
-      bg={color('bg')}
-      _hover={{
-        borderLeftColor: color('accent'),
-      }}
       position="relative"
+      {...bind}
     >
+      <FloatingHoverIndicator isHovered={isHovered} />
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>
-      <TxItem as="span" tx={tx} principal={principal} key={tx.tx_id} />
+      <TxItem isHovered={isHovered} as="span" tx={tx} principal={principal} key={tx.tx_id} />
     </Box>
   );
 });
@@ -72,9 +74,10 @@ const ViewAllButton: React.FC = React.memo(props => (
       py="base"
       placeItems="center"
       bg={color('bg')}
-      _hover={{ bg: color('bg-alt') }}
+      color={color('text-caption')}
+      _hover={{ color: color('text-title') }}
     >
-      <Caption>View all transactions</Caption>
+      <Caption color="currentColor">View all transactions</Caption>
     </Grid>
   </NextLink>
 ));
@@ -87,72 +90,29 @@ const LoadMoreButton: React.FC<any> = React.memo(({ loadMore }) => (
     py="base"
     placeItems="center"
     bg={color('bg')}
-    _hover={{ bg: color('bg-alt') }}
+    _hover={{ color: color('text-title') }}
     onClick={loadMore}
   >
     <Caption>Load more</Caption>
   </Grid>
 ));
 
-const Filter = () => {
-  const types = [
-    TransactionType.CONTRACT_CALL,
-    TransactionType.SMART_CONTRACT,
-    TransactionType.TOKEN_TRANSFER,
-  ];
-  const [selectedTypes, setSelectedTypes] = React.useState<TransactionType[]>(types);
-  return (
-    <Box>
-      <Caption mb="tight">Filter by type</Caption>
-      <Stack flexWrap="wrap" isInline>
-        {types.map(type => {
-          const isSelected = selectedTypes?.length
-            ? selectedTypes.find(selected => selected === type)
-            : true;
-
-          return (
-            <Tag
-              mb="tight"
-              _hover={{ cursor: 'pointer', opacity: isSelected ? 1 : 0.75 }}
-              opacity={isSelected ? 1 : 0.5}
-              // onClick={() => handleClick(type)}
-              type={type}
-            />
-          );
-        })}
-      </Stack>
-    </Box>
-  );
-};
-
 const PendingList: React.FC<any> = React.memo(
   ({ pending, handleTogglePendingVisibility, pendingVisible }) =>
     pendingVisible ? (
       <Box borderBottom={border()} flexGrow={1}>
-        <Flex
-          justifyContent="space-between"
-          bg={color('bg')}
-          py="tight"
-          px="base"
-          borderBottom={border()}
-        >
-          <Caption>Pending ({pending.length})</Caption>
-          <Caption
-            onClick={handleTogglePendingVisibility}
-            _hover={{
-              color: pendingVisible ? color('accent') : undefined,
-              cursor: 'pointer',
-            }}
-          >
-            {pendingVisible ? 'Hide' : 'Show'} pending transactions
-          </Caption>
-        </Flex>
-
         <VirtualList items={pending} />
       </Box>
     ) : null
 );
 
+const txListFilterState = atom({
+  key: 'tx-list.filters',
+  default: {
+    visible: false,
+    showPending: true,
+  },
+});
 export const TransactionList: React.FC<
   {
     mempool?: MempoolTransactionListResponse['results'];
@@ -175,6 +135,8 @@ export const TransactionList: React.FC<
     isLoadingMore,
     ...rest
   }) => {
+    const [filterState, setFilterState] = useRecoilState(txListFilterState);
+
     const [pendingVisibility, setPendingVisibility] = React.useState<'visible' | 'hidden'>(
       'visible'
     );
@@ -183,26 +145,41 @@ export const TransactionList: React.FC<
       setPendingVisibility(s => (s === 'visible' ? 'hidden' : 'visible'));
     }, [setPendingVisibility]);
 
-    const pending: MempoolTransactionListResponse['results'] = React.useMemo(
-      () =>
-        mempool.filter(tx => {
-          const now = new Date().getTime();
-          const pendingTime = tx.receipt_time * 1000;
-          if (now - pendingTime <= 1000 * 60 * 60) {
-            return true;
-          }
-          return false;
-        }),
-      [mempool]
-    );
+    const pending: MempoolTransactionListResponse['results'] = mempool.filter(tx => {
+      const now = new Date().getTime();
+      const pendingTime = tx.receipt_time * 1000;
+      if (now - pendingTime <= 1000 * 60 * 60) {
+        return true;
+      }
+      return false;
+    });
 
-    const pendingVisible = pending?.length > 0 && pendingVisibility === 'visible';
+    const pendingVisible = pending?.length > 0 && filterState.showPending;
 
     const hasTransactions = !!transactions?.length;
 
+    const handleFilterViewToggle = () => {
+      setFilterState(s => ({ ...s, showPending: !s.showPending }));
+    };
+
     return (
-      <Section title="Transactions" {...rest}>
-        <>
+      <Section
+        title={recent ? 'Recent transactions' : 'Transactions'}
+        topRight={
+          !!pending?.length && (
+            <>
+              <Toggle
+                size="small"
+                label={`Show pending (${pending?.length})`}
+                value={pendingVisible}
+                onClick={handleFilterViewToggle}
+              />
+            </>
+          )
+        }
+        {...rest}
+      >
+        <Box px="loose">
           <PendingList
             principal={principal}
             pending={pending}
@@ -211,30 +188,6 @@ export const TransactionList: React.FC<
           />
           {hasTransactions ? (
             <Box flexGrow={1}>
-              <Flex
-                bg={color('bg')}
-                justifyContent="space-between"
-                py="tight"
-                px="base"
-                borderBottom={border()}
-              >
-                <Caption>Confirmed</Caption>
-                <Flex alignItems="center">
-                  {!recent && <Caption>Filter</Caption>}
-                  {!pendingVisible && pending.length > 0 && (
-                    <Caption
-                      ml="base"
-                      onClick={handleTogglePendingVisibility}
-                      _hover={{
-                        color: pendingVisible ? color('accent') : undefined,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {pendingVisible ? 'Hide' : 'Show'} pending transactions ({pending.length})
-                    </Caption>
-                  )}
-                </Flex>
-              </Flex>
               <VirtualList principal={principal} items={transactions} />
             </Box>
           ) : (
@@ -245,8 +198,8 @@ export const TransactionList: React.FC<
           {hasTransactions && recent ? <ViewAllButton /> : null}
           {!isReachingEnd && loadMore ? (
             <LoadMoreButton isLoadingMore={isLoadingMore} loadMore={loadMore} />
-          ) : null}{' '}
-        </>
+          ) : null}
+        </Box>
       </Section>
     );
   }

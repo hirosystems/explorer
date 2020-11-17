@@ -16,7 +16,6 @@ import React from 'react';
 import { SearchBarWithDropdown } from '@components/search-bar';
 import { useHomepageData } from '@pages/index';
 import { StxInline } from '@components/icons/stx-inline';
-import { TestnetSelector } from '@components/testnet-selector';
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
 

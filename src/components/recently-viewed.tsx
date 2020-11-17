@@ -17,6 +17,7 @@ import {
 import { Caption, Title } from '@components/typography';
 import { forwardRefWithAs } from '@stacks/ui-core';
 import pluralize from 'pluralize';
+import { FloatingHoverIndicator } from '@components/hover-indicator';
 
 export interface RecentlyViewedProps extends FlexProps {
   transactions: Transaction[];
@@ -32,21 +33,27 @@ interface RecentlyViewedListItemProps extends BoxProps {
   _type?: 'tx' | 'principal' | 'block';
 }
 
-const Wrapper = forwardRefWithAs<FlexProps, 'a'>(({ children, as = 'a', ...rest }, ref) => (
-  <Flex
-    _hover={{
-      bg: color('bg-alt'),
-    }}
-    as={as}
-    p="base"
-    alignItems="center"
-    borderBottom={border()}
-    ref={ref}
-    {...rest}
-  >
-    {children}
-  </Flex>
-));
+const Wrapper = forwardRefWithAs<FlexProps & { isHovered?: boolean }, 'a'>(
+  ({ children, as = 'a', isHovered, ...rest }, ref) => {
+    return (
+      <Flex
+        as={as}
+        p="loose"
+        alignItems="center"
+        borderBottom={border()}
+        position="relative"
+        justifyContent="space-between"
+        ref={ref}
+        {...rest}
+      >
+        <FloatingHoverIndicator isHovered={isHovered} left="0" />
+        <Flex flexGrow={1} alignItems="center" justifyContent="space-between">
+          {children}
+        </Flex>
+      </Flex>
+    );
+  }
+);
 
 export const RecentlyViewedListItem = ({
   option,
@@ -98,11 +105,14 @@ export const RecentlyViewedListItem = ({
     handleFocus,
     handleBlur,
     onClick,
+    ...bindHover,
+    isHovered,
   };
 
   if ('tx_id' in option) {
     return (
-      <Box>
+      <Box position="relative">
+        <FloatingHoverIndicator isHovered={isHovered} left={0} />
         <TxLink txid={option.tx_id}>
           <TxItem
             borderBottom={isLast ? undefined : '1px solid var(--colors-border)'}
@@ -116,9 +126,7 @@ export const RecentlyViewedListItem = ({
             isFocused={focused || isFocused}
             isHovered={isHovered}
             minimal
-            _hover={{
-              bg: color('bg-alt'),
-            }}
+            px="loose"
             as="a"
             onClick={() => {
               onClick?.();
@@ -132,21 +140,27 @@ export const RecentlyViewedListItem = ({
     return (
       <AddressLink principal={option.principal}>
         <Wrapper {...itemProps}>
-          <ItemIcon type="principal" />
-          <Box ml="base">
-            <Title display="block" mb="extra-tight">
-              {truncateMiddle(option.principal, 6)}
-            </Title>
-            <Caption>
-              {addSepBetweenStrings([
-                `${microToStacks(option.balances?.stx?.balance)} STX`,
-                `${option?.transactions?.total} ${pluralize(
-                  'transaction',
-                  option?.transactions?.total
-                )}`,
-              ])}
-            </Caption>
-          </Box>
+          <Flex alignItems="center">
+            <ItemIcon type="principal" />
+            <Box ml="base">
+              <Title
+                color={isHovered ? color('accent') : color('text-title')}
+                display="block"
+                mb="extra-tight"
+              >
+                {truncateMiddle(option.principal, 6)}
+              </Title>
+              <Caption>
+                {addSepBetweenStrings([
+                  `${microToStacks(option.balances?.stx?.balance)} STX`,
+                  `${option?.transactions?.total} ${pluralize(
+                    'transaction',
+                    option?.transactions?.total
+                  )}`,
+                ])}
+              </Caption>
+            </Box>
+          </Flex>
         </Wrapper>
       </AddressLink>
     );
@@ -155,19 +169,25 @@ export const RecentlyViewedListItem = ({
     return (
       <BlockLink hash={option.hash}>
         <Wrapper {...itemProps}>
-          <ItemIcon type="block" />
-          <Box ml="base">
-            <Title display="block" mb="extra-tight">
-              Block #{option.height}
-            </Title>
-            <Caption>
-              {addSepBetweenStrings([
-                truncateMiddle(option.hash),
-                `${option.txs.length} ${pluralize('transaction', option.txs.length)}`,
-                toRelativeTime(option.burn_block_time * 1000),
-              ])}
-            </Caption>
-          </Box>
+          <Flex alignItems="center">
+            <ItemIcon type="block" />
+            <Box ml="base">
+              <Title
+                color={isHovered ? color('accent') : color('text-title')}
+                display="block"
+                mb="extra-tight"
+              >
+                Block #{option.height}
+              </Title>
+              <Caption>
+                {addSepBetweenStrings([
+                  truncateMiddle(option.hash),
+                  `${option.txs.length} ${pluralize('transaction', option.txs.length)}`,
+                ])}
+              </Caption>
+            </Box>
+          </Flex>
+          <Caption>{toRelativeTime(option.burn_block_time * 1000)}</Caption>
         </Wrapper>
       </BlockLink>
     );

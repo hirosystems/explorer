@@ -5,7 +5,6 @@ import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
-import { selectCurrentNetworkUrl } from '@store/ui/selectors';
 import {
   TransactionResults,
   MempoolTransactionListResponse,

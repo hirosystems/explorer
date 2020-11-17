@@ -10,7 +10,7 @@ import { WalletIcon } from '@components/icons/wallet';
 import { AppsIcon } from '@components/icons/apps';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
-  let Icon = (p: any) => <StxInline {...p} strokeWidth={2} />;
+  let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;
   if (txType === 'smart_contract') {
     Icon = CodeIcon as any;
   } else if (txType === 'contract_call') {
@@ -43,8 +43,8 @@ const StatusBubble: React.FC<any> = ({ status }) => {
   };
   return (
     <Box
-      bottom="0px"
-      right="0px"
+      top="4px"
+      right="4px"
       position="absolute"
       bg={getStatusColor()}
       borderRadius="8px"
@@ -79,7 +79,7 @@ export const ItemIcon = React.memo(
     }
     return (
       <ItemBox {...rest}>
-        {status ? <StatusBubble status={status} /> : null}
+        {status && status !== 'success' ? <StatusBubble status={status} /> : null}
         {Icon && (
           <Icon
             color={color('text-title')}

@@ -1,11 +1,14 @@
 import * as React from 'react';
 
-import { Box, color, Grid, Stack } from '@stacks/ui';
+import { Box, Grid, Stack } from '@stacks/ui';
 import { PageWrapper } from '@components/page';
-import { Text, Title } from '@components/typography';
+import { Title } from '@components/typography';
 import { Section } from '@components/section';
+import { Button } from '@components/button';
 import { TransactionMeta } from '@components/meta/transactions';
-import { IconAlertOctagon, IconInfoCircle, IconLoader, IconTrafficCone } from '@tabler/icons';
+import { IconAlertOctagon, IconInfoCircle } from '@tabler/icons';
+import { MessageWithIcon } from '@components/message-with-icon';
+import Link from 'next/link';
 
 import { queryWith0x } from '@common/utils';
 import { renderTxPageComponent } from '@common/render-tx-page';
@@ -14,14 +17,14 @@ import { getServerSideApiServer } from '@common/api/utils';
 import { fetchTransaction, FetchTransactionResponse } from '@common/api/transactions';
 
 import type { NextPage, NextPageContext } from 'next';
-import { MessageWithIcon } from '@components/message-with-icon';
-import { blue, Button } from '@components/button';
-import Link from 'next/link';
+import { fetchBlock } from '@common/api/blocks';
+import { Block } from '@blockstack/stacks-blockchain-api-types';
 
-const TransactionPage: NextPage<{ txid: string; initialData: FetchTransactionResponse }> = ({
-  txid,
-  initialData,
-}) => {
+const TransactionPage: NextPage<{
+  txid: string;
+  initialData: FetchTransactionResponse;
+  block?: Block;
+}> = ({ txid, initialData, block }) => {
   const { transaction, data, error, isPending } = useTransactionPageData({ txid, initialData });
 
   const hasInitialError = 'error' in initialData && initialData.error;
@@ -95,7 +98,7 @@ const TransactionPage: NextPage<{ txid: string; initialData: FetchTransactionRes
     return (
       <PageWrapper>
         <TransactionMeta transaction={transaction} />
-        {transaction && renderTxPageComponent(data)}
+        {transaction && renderTxPageComponent(data, block)}
       </PageWrapper>
     );
   }
@@ -107,16 +110,24 @@ export async function getServerSideProps(
   props: {
     txid: string;
     initialData: FetchTransactionResponse;
+    block?: Block;
   };
 }> {
   const apiServer = getServerSideApiServer(ctx);
   const { query } = ctx;
   const txid = query?.txid ? queryWith0x(query?.txid.toString()) : '';
   const initialData = await fetchTransaction(apiServer)(txid.toString());
+  let block = null;
+  if ('transaction' in initialData && 'block_hash' in initialData.transaction) {
+    const hash = initialData.transaction.block_hash;
+    block = await fetchBlock({ apiServer })({ hash });
+  }
+
   return {
     props: {
       txid,
       initialData,
+      block: block as Block,
     },
   };
 }

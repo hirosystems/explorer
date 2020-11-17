@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useConnect } from '@common/hooks/use-connect';
-import { SignedOutView } from '@components/sandbox/signed-out-view';
-import { SignedInView } from '@components/sandbox/signed-in-view';
+import { SignedOutView } from '@components/sandbox/views/signed-out-view';
+import { SignedInView } from '@components/sandbox/views/signed-in-view';
 import { useAuth } from '@common/hooks/use-auth';
 
 const PageContent = React.memo(() => {

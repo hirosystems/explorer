@@ -1,20 +1,26 @@
 import React from 'react';
 import { Box, Flex, FlexProps, transition } from '@stacks/ui';
 import { css, Theme } from '@stacks/ui-core';
-import Blurhash from '@components/blurhash/blurhash';
 
-import { Alert } from '@components/alert';
 import { Footer } from '@components/footer';
 import { Header } from '@components/header';
 import { Notice } from '@components/notice';
 import { color } from '@components/color-modes';
 import { TitleProps, TransactionTitle } from '@components/transaction-title';
 import { MetaverseSVG } from '@components/metaverse';
+import { Alert } from '@components/alert';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
 
-type PageProps = { notice?: { label?: string; message?: string }; fullWidth?: boolean } & FlexProps;
+type PageProps = {
+  notice?: { label?: string; message?: string };
+  fullWidth?: boolean;
+  tx?: Transaction;
+} & FlexProps;
 type PageWrapperProps = { isHome?: boolean; fullWidth?: boolean; notice?: any } & FlexProps;
 
-export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => {
+export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
+  const type = tx.tx_type;
+  const status = tx.tx_status;
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
 
   const failedMessage =
@@ -24,7 +30,7 @@ export const PageTop: React.FC<TitleProps> = ({ status, type, ...props }) => {
 
   return (
     <Box width="100%" {...props}>
-      <TransactionTitle mb="loose" status={status} type={type} />
+      <TransactionTitle mb="loose" tx={tx} />
       {failed ? (
         <Alert
           mb="base"
@@ -94,8 +100,9 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...
       top={0}
       height="420px"
       overflow="hidden"
+      transition={transition}
     >
-      <Box transform="translateY(-12%) scale(1.28)" position="relative">
+      <Box transform="translate3d(-3%, -16%, 0) scale(1.15) rotate(-8deg)" position="relative">
         <MetaverseSVG minWidth="1400px" width="100vw" filter="contrast(1.1)" />
       </Box>
     </Box>

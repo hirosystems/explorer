@@ -13,10 +13,11 @@ export const Rows: React.FC<RowsProps & BoxProps> = ({
   inline,
   noTopBorder,
   noBottomBorder,
+  alignItems = inline ? 'unset' : ['unset', 'unset', 'center'],
   ...props
 }) => {
   const Component = card ? Card : Box;
-  const ChildComponent = childComponent || Row;
+  const ChildComponent: any = childComponent || Row;
   return (
     <Component width="100%" {...(props as any)}>
       {columnLabels?.length ? (
@@ -25,11 +26,12 @@ export const Rows: React.FC<RowsProps & BoxProps> = ({
           borderBottom="0"
           label={{ children: columnLabels[0] }}
           render={columnLabels[1] ? <RowLabel label={columnLabels[1]} /> : undefined}
+          alignItems={alignItems}
         />
       ) : null}
       {items
         .filter(a => a.condition !== false)
-        .map(({ label, children, copy, condition = true }, key, arr) => {
+        .map(({ label, children, copy, condition = true, ...rowProps }, key, arr) => {
           return condition ? (
             <ChildComponent
               key={key}
@@ -41,6 +43,8 @@ export const Rows: React.FC<RowsProps & BoxProps> = ({
               isFirst={key === 0}
               noTopBorder={noTopBorder}
               isLast={key === arr.length - 1}
+              alignItems={alignItems as any}
+              {...rowProps}
             />
           ) : null;
         })}

@@ -4,6 +4,6 @@ import { NextPageContext } from 'next';
 
 export const getServerSideApiServer = (ctx: NextPageContext) => {
   const cookies = parseCookies(ctx);
-  const { TESTNET_API_SERVER } = getConfig();
-  return cookies?.apiServer || TESTNET_API_SERVER;
+  const { publicRuntimeConfig } = getConfig();
+  return cookies?.apiServer || publicRuntimeConfig.TESTNET_API_SERVER;
 };

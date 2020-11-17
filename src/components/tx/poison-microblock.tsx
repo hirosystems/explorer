@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Stack } from '@stacks/ui';
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
-import { TransactionType } from '@models/transaction.interface';
 import { TransactionDetails } from '@components/transaction-details';
 import { PoisonMicroblockTxs, TxData } from '@common/types/tx';
+import { Block } from '@blockstack/stacks-blockchain-api-types';
 
-const PoisonMicroblockPage = ({ transaction }: TxData<PoisonMicroblockTxs>) => (
+const PoisonMicroblockPage = ({ transaction }: TxData<PoisonMicroblockTxs> & { block?: Block }) => (
   <>
-    <PageTop status={transaction.tx_status} type={[TransactionType.POISON_MICROBLOCK]} />
+    <PageTop tx={transaction as any} />
     <Stack spacing="extra-loose">
       <TransactionDetails transaction={transaction} hideContract />
       <Rows

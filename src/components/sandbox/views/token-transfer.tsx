@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { Box, color, Flex, Grid, Stack } from '@stacks/ui';
-import { Input } from '@components/sandbox/common';
+import { Input } from '@components/inputs';
 import { useFormik } from 'formik';
 import { Button } from '@components/button';
 import { Caption, Text, Title } from '@components/typography';

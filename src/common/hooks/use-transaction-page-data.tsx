@@ -38,7 +38,5 @@ export const useTransactionPageData = ({
     }
   }, [data, transaction?.tx_status, isPending]);
 
-  console.log(data);
-
   return { data, transaction, error, isPending };
 };
