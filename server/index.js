@@ -52,24 +52,33 @@ app.prepare().then(() => {
   }
 
   server.get('/', (req, res) => ssrCache({ req, res, pagePath: '/' }));
+  server.get('/blocks', (req, res) => ssrCache({ req, res, pagePath: '/blocks' }));
+  server.get('/transactions', (req, res) => ssrCache({ req, res, pagePath: '/transactions' }));
+  server.get('/sandbox', (req, res) => ssrCache({ req, res, pagePath: '/sandbox' }));
 
-  // server.get('/txid/:txid', (req, res) => {
-  //   const queryParams = { txid: req.params.txid };
-  //   const pagePath = '/txid/[txid]';
-  //   return ssrCache({ req, res, pagePath, queryParams });
-  // });
-  //
-  // server.get('/tx/:txid', (req, res) => {
-  //   const queryParams = { txid: req.params.txid };
-  //   const pagePath = '/txid/[txid]';
-  //   return ssrCache({ req, res, pagePath, queryParams });
-  // });
-  //
-  //   server.get('/tx/:txid', (req, res) => {
-  //   const queryParams = { txid: req.params.txid };
-  //   const pagePath = '/txid/[txid]';
-  //   return ssrCache({ req, res, pagePath, queryParams });
-  // });
+  server.get('/txid/:txid', (req, res) => {
+    const queryParams = { txid: req.params.txid };
+    const pagePath = '/txid/[txid]';
+    return ssrCache({ req, res, pagePath, queryParams });
+  });
+
+  server.get('/tx/:txid', (req, res) => {
+    const queryParams = { txid: req.params.txid };
+    const pagePath = '/txid/[txid]';
+    return ssrCache({ req, res, pagePath, queryParams });
+  });
+
+  server.get('/block/:hash', (req, res) => {
+    const queryParams = { hash: req.params.hash };
+    const pagePath = '/block/[hash]';
+    return ssrCache({ req, res, pagePath, queryParams });
+  });
+
+  server.get('/address/:principal', (req, res) => {
+    const queryParams = { principal: req.params.principal };
+    const pagePath = '/address/[principal]';
+    return ssrCache({ req, res, pagePath, queryParams });
+  });
 
   server.get('*', (req, res) => handle(req, res));
 
