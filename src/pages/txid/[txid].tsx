@@ -120,7 +120,7 @@ export async function getServerSideProps(
   let block = null;
   if ('transaction' in initialData && 'block_hash' in initialData.transaction) {
     const hash = initialData.transaction.block_hash;
-    block = await fetchBlock({ apiServer })({ hash });
+    block = await fetchBlock(apiServer)(hash);
   }
 
   return {

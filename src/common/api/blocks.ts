@@ -1,5 +1,7 @@
 import { fetchFromSidecar } from '@common/api/fetch';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { constructLimitAndOffsetQueryParams } from '@common/api/utils';
+
+import type { Block } from '@blockstack/stacks-blockchain-api-types';
 
 export interface FetchBlocksListOptions {
   apiServer: string;
@@ -14,11 +16,12 @@ export interface FetchBlocksListResponse {
   offset: 0;
 }
 
-export const fetchBlock = ({ apiServer }: { apiServer: string }) => async ({
-  hash,
-}: {
-  hash: Block['hash'];
-}): Promise<Block> => {
+/**
+ * Fetch a block
+ *
+ * @param {string} apiServer - the current apiServer
+ */
+export const fetchBlock = (apiServer: string) => async (hash: Block['hash']): Promise<Block> => {
   const resp = await fetchFromSidecar(apiServer)(`/block/${hash}`);
 
   const block = await resp.json();
@@ -29,9 +32,11 @@ export const fetchBlock = ({ apiServer }: { apiServer: string }) => async ({
   return block;
 };
 
-export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>
-  `limit=${limit}${offset ? `&offset=${offset}` : ''}`;
-
+/**
+ * Fetch list of blocks
+ *
+ * @param {FetchBlocksListOptions} options
+ */
 export const fetchBlocksList = (options: FetchBlocksListOptions) => async (): Promise<
   FetchBlocksListResponse
 > => {

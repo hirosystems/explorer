@@ -114,7 +114,7 @@ export async function getServerSideProps(
   const { query } = ctx;
   const hash = query?.hash ? queryWith0x(query?.hash?.toString()) : '';
   const apiServer = getServerSideApiServer(ctx);
-  const data = await fetchBlock({ apiServer })({ hash });
+  const data = await fetchBlock(apiServer)(hash);
   const txs: Promise<FetchTxResponse>[] = [];
   data.txs.forEach((txid: string) => txs.push(fetchTx(apiServer)(txid)));
   const transactions: FetchTxResponse[] = await Promise.all(txs);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { constructLimitAndOffsetQueryParams } from '@common/api/blocks';
+import { constructLimitAndOffsetQueryParams } from '@common/api/utils';
 import { useSWRInfinite } from 'swr';
 import { useApiServer } from '@common/hooks/use-api';
 

@@ -1,11 +1,11 @@
 import { atomFamily, atom, selector, selectorFamily, AtomEffect } from 'recoil';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { SearchResult } from '@common/types/search';
-import { fetchAllAccountData, fetchPendingTxs } from '@common/fetchers';
-import { fetchTx } from '@common/api/transactions';
+import { fetchAllAccountData } from '@common/api/accounts';
+import { fetchTx, fetchPendingTxs } from '@common/api/transactions';
 import { fetchContract } from '@common/api/contracts';
 import { fetchBlock } from '@common/api/blocks';
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 
 const localStorageEffect = (key: string): AtomEffect<string> => ({ setSelf, onSet }) => {
   if (typeof window !== 'undefined') {
@@ -86,7 +86,7 @@ export const blockItemState = atomFamily<any, string | undefined>({
     get: hash => async ({ get }) => {
       const apiServer = get(apiServerState);
       if (hash) {
-        return fetchBlock({ apiServer })({ hash });
+        return fetchBlock(apiServer)(hash);
       }
       return undefined;
     },

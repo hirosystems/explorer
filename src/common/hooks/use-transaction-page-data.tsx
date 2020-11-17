@@ -1,11 +1,9 @@
 import * as React from 'react';
-
-import { handleTxIdValidation, validateTxId } from '@common/utils';
-
-import { fetchTransaction, FetchTransactionResponse } from '@common/api/transactions';
-
-import { useApiServer } from '@common/hooks/use-api';
 import useSWR from 'swr';
+
+import { handleTxIdValidation } from '@common/utils';
+import { fetchTransaction, FetchTransactionResponse } from '@common/api/transactions';
+import { useApiServer } from '@common/hooks/use-api';
 
 export const useTransactionPageData = ({
   txid,

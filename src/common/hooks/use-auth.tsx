@@ -20,7 +20,7 @@ export const useAuth = () => {
   // https://github.com/blockstack/ux/issues/444
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const onFinish = useConstant(() =>
-    debounce(async (payload: FinishedData) => {
+    debounce((payload: FinishedData) => {
       const userData = payload.userSession.loadUserData();
       setUserData(userData);
     }, 350)

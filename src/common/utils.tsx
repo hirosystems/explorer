@@ -1,5 +1,4 @@
 import { ColorsStringLiteral, color } from '@stacks/ui';
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { BorderStyleProperty } from 'csstype';
@@ -13,12 +12,9 @@ import { fetchTxList } from '@common/api/transactions';
 import lclStorage from 'store/storages/localStorage';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
-
 import { Box, Stack } from '@stacks/ui';
 import { Text } from '@components/typography';
-
 import { Badge } from '@components/badge';
-
 import { IconCode } from '@tabler/icons';
 
 dayjs.extend(relativeTime);
@@ -30,8 +26,6 @@ export const store = engine.createStore([lclStorage]);
 /**
  * Cookie names
  */
-export const IDENTITY_COOKIE = 'sandbox_identity';
-export const USERNAME_COOKIE = 'username';
 export const COLOR_MODE_COOKIE = 'color_mode';
 export const NETWORK_COOKIE = 'selected_network';
 
@@ -42,7 +36,6 @@ export const NETWORK_COOKIE = 'selected_network';
 const cookieSetter = engine.createStore([cookieStorage]);
 
 export const identityStorage = cookieSetter;
-export const usernameStorage = cookieSetter;
 export const colorModeStorage = cookieSetter;
 export const networkStorage = cookieSetter;
 

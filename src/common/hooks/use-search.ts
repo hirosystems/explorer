@@ -1,7 +1,5 @@
-// @ts-nocheck
 import React from 'react';
 
-import debounce from 'just-debounce-it';
 import {
   recentItemsState,
   searchItemsState,
@@ -10,8 +8,9 @@ import {
   searchBarHover,
   searchBarVisibility,
 } from '@store';
-import { useRouter } from 'next/router';
 
+import debounce from 'just-debounce-it';
+import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilStateLoadable, useResetRecoilState } from 'recoil';
 
 export const useRecentItems = () => {
@@ -42,8 +41,17 @@ export const useSearchResults = () => {
   const resetResults = useResetRecoilState(searchItemsState);
 
   const hasError =
-    result.contents && 'error' in result.contents && 'message' in result.contents.error;
-  const hasResults = result.contents && 'data' in result.contents && result.contents.data.length;
+    result.contents &&
+    'error' in result.contents &&
+    result.contents.error &&
+    'message' in result.contents.error &&
+    result.contents.error;
+
+  const hasResults =
+    result.contents &&
+    'data' in result.contents &&
+    result.contents.data &&
+    result.contents.data.length;
 
   const isLoading = result.state === 'loading';
 

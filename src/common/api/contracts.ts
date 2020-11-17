@@ -1,6 +1,7 @@
-import { Contract, ContractResponse } from '@models/contract.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
-import { ContractInterfaceResponse } from '@blockstack/stacks-blockchain-api-types';
+
+import type { ContractInterfaceResponse } from '@blockstack/stacks-blockchain-api-types';
+import type { Contract, ContractResponse } from '@models/contract.interface';
 
 export const fetchContract = (apiServer: string) => async (
   contract_id: string
@@ -8,11 +9,10 @@ export const fetchContract = (apiServer: string) => async (
   const resp = await fetchFromSidecar(apiServer)(`/contract/${contract_id}`);
   const data: ContractResponse = await resp.json();
   if ('abi' in data) {
-    const contract = {
+    return {
       ...data,
       abi: JSON.parse(data.abi) as ContractInterfaceResponse,
     };
-    return contract;
   }
   return data;
 };

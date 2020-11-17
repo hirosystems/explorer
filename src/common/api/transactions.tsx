@@ -6,19 +6,12 @@ import {
   SmartContractTransaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-sidecar-types';
-
+import { generateTypesQueryString } from '@common/api/utils';
 import { fetchContract } from '@common/api/contracts';
-import { ContractDeployTxs, NonContractTxs, TxData } from '@common/types/tx';
+import { ContractDeployTxs, TxData } from '@common/types/tx';
+import { makeKey } from '@common/hooks/use-fetch-blocks';
 
 export type FetchTxResponse = Transaction | MempoolTransaction | { error: string };
-
-export const fetchTx = (apiServer: string) => async (
-  txid: Transaction['tx_id']
-): Promise<FetchTxResponse> => {
-  const resp = await fetchFromSidecar(apiServer)(`/tx/${txid}`);
-  const tx = await resp.json();
-  return tx as Transaction | MempoolTransaction | { error: string };
-};
 
 interface FetchTxListOptions {
   apiServer: string;
@@ -28,28 +21,30 @@ interface FetchTxListOptions {
   mempool?: boolean;
 }
 
+export type FetchTransactionResponse =
+  | TxData<Transaction | MempoolTransaction>
+  | { error?: string };
+
+export const fetchTx = (apiServer: string) => async (
+  txid: Transaction['tx_id']
+): Promise<FetchTxResponse> => {
+  const resp = await fetchFromSidecar(apiServer)(`/tx/${txid}`);
+  const tx = await resp.json();
+  return tx as Transaction | MempoolTransaction | { error: string };
+};
+
 export const fetchTxList = (options: FetchTxListOptions) => async (): Promise<
   TransactionResults | MempoolTransactionListResponse
 > => {
   const { apiServer, types, offset, limit = 200, mempool } = options;
-  const generateTypesQueryString = () => {
-    if (types?.length) {
-      return `&${types
-        .map(type => `${encodeURIComponent('type[]')}=${encodeURIComponent(type)}`)
-        .join('&')}`;
-    }
-    return '';
-  };
+
   const resp = await fetchFromSidecar(apiServer)(
     `/tx${mempool ? '/mempool' : ''}?limit=${limit}${
-      offset ? '&offset=' + offset : ''
-    }${generateTypesQueryString()}`
+      offset ? `&offset=${offset}` : ''
+    }${generateTypesQueryString(types)}`
   );
   return resp.json();
 };
-export type FetchTransactionResponse =
-  | TxData<Transaction | MempoolTransaction>
-  | { error?: string };
 
 export const fetchTransaction = (apiServer: string) => async (
   query: string
@@ -115,5 +110,42 @@ export const fetchTransaction = (apiServer: string) => async (
     return {
       transaction,
     };
+  }
+};
+
+export const fetchPendingTxs = (apiServer: string) => async ({
+  query,
+  type,
+}: {
+  query: string;
+  type: 'principal' | 'tx_id';
+}) => {
+  const path = makeKey({
+    type: 'tx',
+    limit: 30,
+    pending: true,
+    index: 0,
+    apiServer,
+  });
+
+  const res = await fetch(path);
+  const mempool: MempoolTransactionListResponse = await res.json();
+
+  if (type === 'principal') {
+    const pendingTransactions =
+      mempool?.results?.filter(
+        (tx: MempoolTransaction) =>
+          ((tx.tx_type === 'smart_contract' ||
+            tx.tx_type === 'contract_call' ||
+            tx.tx_type === 'token_transfer') &&
+            tx.sender_address === query) ||
+          (tx.tx_type === 'token_transfer' && tx.token_transfer.recipient_address === query)
+      ) || [];
+
+    return pendingTransactions;
+  } else {
+    return mempool?.results?.find(
+      (tx: MempoolTransaction) => tx.tx_id === query
+    ) as MempoolTransaction;
   }
 };
