@@ -1,7 +1,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 
-import { Grid, transition, FlexProps } from '@stacks/ui';
+import { Grid, transition, FlexProps, Box } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 
 import { color } from '@components/color-modes';
@@ -48,8 +48,7 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
   ({ block, index, length, ...rest }) => (
     <BlockLink hash={block.hash} {...rest}>
       <Grid
-        px="base"
-        py="base"
+        py="loose"
         gridTemplateColumns={['repeat(3, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
         borderLeft="3px solid"
         borderLeftColor={color('bg')}
@@ -64,14 +63,24 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
       >
         <Title display="block">#{block.height}</Title>
         <Text display={['none', 'none', 'block']} width="100%" textAlign="right">
-          {truncateMiddle(block.hash, 9)}
+          {block.burn_block_height}
         </Text>
         <Text textAlign={['center', 'center', 'right']} width="100%">
           {block.txs.length}
         </Text>
-        <Text display="block" width="100%" textAlign="right">
-          {toRelativeTime(block.burn_block_time * 1000)}
-        </Text>
+        <Box textAlign="right">
+          <Text
+            fontSize="14px"
+            width="100%"
+            textAlign="right"
+            color={color('text-body')}
+            display="block"
+            mb="base"
+          >
+            {toRelativeTime(block.burn_block_time * 1000)}
+          </Text>
+          <Caption display="block">{truncateMiddle(block.hash, 9)}</Caption>
+        </Box>
       </Grid>
     </BlockLink>
   )
@@ -79,8 +88,8 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
 
 const SectionHeadingRow = React.memo(() => (
   <Grid
-    px="base"
-    py="tight"
+    px="loose"
+    py="base"
     gridTemplateColumns={['repeat(3, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
     borderBottom={border()}
   >
@@ -110,11 +119,13 @@ export const BlocksList: React.FC<
         {blocks?.length ? (
           <>
             <SectionHeadingRow />
-            {blocks.length
-              ? blocks?.map((block: Block, key: number, arr: any) => {
-                  return <BlockItem block={block} index={key} key={key} length={arr.length} />;
-                })
-              : null}
+            <Box px="loose">
+              {blocks.length
+                ? blocks?.map((block: Block, key: number, arr: any) => {
+                    return <BlockItem block={block} index={key} key={key} length={arr.length} />;
+                  })
+                : null}
+            </Box>
           </>
         ) : (
           <Grid px="base" py="64px" placeItems="center">

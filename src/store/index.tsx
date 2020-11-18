@@ -7,7 +7,7 @@ import { fetchContract } from '@common/api/contracts';
 import { fetchBlock } from '@common/api/blocks';
 import { parseCookies, setCookie } from 'nookies';
 
-const localStorageEffect = (key: string): AtomEffect<string> => ({ setSelf, onSet }) => {
+export const localStorageEffect = (key: string): AtomEffect<string> => ({ setSelf, onSet }) => {
   if (typeof window !== 'undefined') {
     const savedValue = localStorage.getItem(key);
     if (savedValue != null) {

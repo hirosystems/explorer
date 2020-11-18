@@ -25,7 +25,7 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
   >({
     initialData: initialData.transactions.results,
     type: 'tx',
-    limit: 50,
+    limit: 25,
     types: ['smart_contract', 'contract_call', 'token_transfer'],
   });
 

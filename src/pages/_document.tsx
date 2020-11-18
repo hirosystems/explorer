@@ -44,16 +44,20 @@ export default class MyDocument extends Document<DocumentProps> {
         <Head>
           <script
             dangerouslySetInnerHTML={{
-              __html: `(function() {
-try {
-    var mode = localStorage.getItem('${THEME_STORAGE_KEY}')
-    if (!mode) return
-    document.documentElement.classList.add(mode)
-    var bgValue = getComputedStyle(document.documentElement)
-    .getPropertyValue('--colors-bg')
-    document.documentElement.style.background = bgValue
-} catch (e) {}
-})()`,
+              __html: `(function () {
+  try {
+    var mode = localStorage.getItem('${THEME_STORAGE_KEY}');
+    if (!mode) {
+      document.documentElement.classList.add('light');
+      var bgValue = getComputedStyle(document.documentElement).getPropertyValue('--colors-bg');
+      document.documentElement.style.background = bgValue;
+    } else {
+      document.documentElement.classList.add(mode);
+      var bgValue = getComputedStyle(document.documentElement).getPropertyValue('--colors-bg');
+      document.documentElement.style.background = bgValue;
+    }
+  } catch (e) {}
+})();`,
             }}
           />
 

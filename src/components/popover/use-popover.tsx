@@ -1,3 +1,5 @@
+// @ts-nocheck
+// todo: remove
 import React, { useState, useEffect, useCallback } from 'react';
 import { useEventListener } from '@stacks/ui';
 import { useControlledHover } from '@common/hooks/use-controlled-hover';

@@ -17,7 +17,8 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...
     bg={color('bg')}
     justifyContent="space-between"
     borderBottom={border()}
-    p="base"
+    px="loose"
+    py="base"
     {...rest}
   >
     {title ? (

@@ -28,6 +28,7 @@ import { border } from '@common/utils';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { useApiServer } from '@common/hooks/use-api';
 import { getServerSideApiServer } from '@common/api/utils';
+import { ItemIcon } from '@components/item-icon';
 
 const fetchBalances = (apiServer: string) => async (
   principal: string
@@ -208,6 +209,54 @@ const NumberedBadge = ({
     </Badge>
   ) : null;
 
+const BalanceItem = ({ balance, ...rest }: any) => {
+  const parts = balance.split('.');
+
+  return (
+    <Flex as="span" {...rest}>
+      <Text color="currentColor">{parts[0]}</Text>
+      <Text color="currentColor" opacity={0.65}>
+        .{parts[1]}
+      </Text>
+      <Text ml="extra-tight" color="currentColor">
+        STX
+      </Text>
+    </Flex>
+  );
+};
+const StxBalances = ({ balances }: any) => {
+  const totalBalance = microToStacks(balances.stx.balance);
+  const availableBalance = microToStacks(balances.stx.balance - balances.stx.locked);
+  const stackedBalance = microToStacks(balances.stx.locked);
+
+  return (
+    <Section title="STX Balance">
+      <Box px="base">
+        <Flex borderBottom={border()} alignItems="center" py="loose">
+          <ItemIcon type="tx" txType="token_transfer" />
+          <Stack spacing="tight" px="base">
+            <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
+            <Caption>Total balance</Caption>
+          </Stack>
+        </Flex>
+      </Box>
+      <Box px="base">
+        <Stack borderBottom={border()} spacing="tight" py="loose">
+          <Caption>Available balance</Caption>
+          <BalanceItem color={color('text-body')} balance={availableBalance} />
+        </Stack>
+      </Box>
+
+      <Box px="base">
+        <Stack spacing="tight" py="loose">
+          <Caption>Stacked balance (locked)</Caption>
+          <BalanceItem color={color('text-body')} balance={stackedBalance} />
+        </Stack>
+      </Box>
+    </Section>
+  );
+};
+
 const Activity = ({ txs }: { txs: Transaction[] }) => {
   const contractCalls = txs?.filter(tx => tx.tx_type === 'contract_call');
   const contractCreations = txs?.filter(tx => tx.tx_type === 'smart_contract');
@@ -253,6 +302,8 @@ const AddressPage: NextPage<AddressPageData> = props => {
     refreshInterval: 3500,
   });
 
+  console.log(balances);
+
   return (
     <PageWrapper>
       <Head>
@@ -286,39 +337,55 @@ const AddressPage: NextPage<AddressPageData> = props => {
           </Flex>
         </Title>
       </Flex>
-      <Section mb={'extra-loose'} title="Summary">
-        <Rows
-          px="base"
-          noTopBorder
-          items={[
-            {
-              label: {
-                children: 'Address',
-              },
-              children: principal,
-            },
-            {
-              condition: !!transactions?.results?.length,
-              label: {
-                children: 'Activity',
-              },
-              children: <Activity txs={transactions?.results as any} />,
-            },
-            {
-              label: {
-                children: 'Balances',
-              },
-              children: <BalancesSmall balances={data?.balances} />,
-            },
-          ]}
-        />
-      </Section>
-      {data?.balances && hasTokenBalance(data.balances) ? (
-        <Balances balances={data.balances} />
-      ) : null}
-      {data?.transactions?.results ? (
-        <TransactionList principal={principal} transactions={data.transactions.results as any} />
-      ) : null}
+      <Grid
+        gridColumnGap="extra-loose"
+        gridTemplateColumns={['100%', '100%', 'repeat(1, calc(100% - 352px) 320px)']}
+        gridRowGap={['extra-loose', 'extra-loose', 'unset']}
+        maxWidth="100%"
+        alignItems="flex-start"
+      >
+        <Box>
+          <Section mb={'extra-loose'} title="Summary">
+            <Rows
+              px="base"
+              noTopBorder
+              items={[
+                {
+                  label: {
+                    children: 'Address',
+                  },
+                  children: principal,
+                },
+                {
+                  condition: !!transactions?.results?.length,
+                  label: {
+                    children: 'Activity',
+                  },
+                  children: <Activity txs={transactions?.results as any} />,
+                },
+                {
+                  label: {
+                    children: 'Balances',
+                  },
+                  children: <BalancesSmall balances={data?.balances} />,
+                },
+              ]}
+            />
+          </Section>
+          {data?.balances && hasTokenBalance(data.balances) ? (
+            <Balances balances={data.balances} />
+          ) : null}
+          {data?.transactions?.results ? (
+            <TransactionList
+              principal={principal}
+              transactions={data.transactions.results as any}
+            />
+          ) : null}
+        </Box>
+        <Box>
+          <StxBalances balances={balances} />
+        </Box>
+      </Grid>
     </PageWrapper>
   );
 };

@@ -102,7 +102,7 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...
       overflow="hidden"
       transition={transition}
     >
-      <Box transform="translate3d(-3%, -16%, 0) scale(1.15) rotate(-8deg)" position="relative">
+      <Box transform="translate3d(0%, -32%, 0) scale(1.05) rotate(-8deg)" position="relative">
         <MetaverseSVG minWidth="1400px" width="100vw" filter="contrast(1.1)" />
       </Box>
     </Box>
