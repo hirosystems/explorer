@@ -6,6 +6,7 @@ import { cache } from '@emotion/css';
 import { apiServerState } from '@store';
 import type { AppProps } from 'next/app';
 
+import './styles.css';
 import 'tippy.js/dist/tippy.css'; // optional
 import 'modern-normalize/modern-normalize.css';
 

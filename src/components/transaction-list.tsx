@@ -8,7 +8,6 @@ import {
 } from '@blockstack/stacks-blockchain-api-types';
 import NextLink from 'next/link';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 import { TxItem } from '@components/transaction-item';
 import { TxLink } from '@components/links';
@@ -21,6 +20,7 @@ import { atom, useRecoilState } from 'recoil';
 import { useHover } from 'web-api-hooks';
 
 import { FloatingHoverIndicator } from '@components/hover-indicator';
+import { Pending } from '@components/status';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
@@ -82,18 +82,28 @@ const ViewAllButton: React.FC = React.memo(props => (
   </NextLink>
 ));
 
-const LoadMoreButton: React.FC<any> = React.memo(({ loadMore }) => (
+const LoadMoreButton: React.FC<any> = React.memo(({ loadMore, isLoadingMore }) => (
   <Grid
     as="a"
     borderTop={border()}
     px="base"
     py="base"
     placeItems="center"
+    color={color('text-caption')}
     bg={color('bg')}
-    _hover={{ color: color('text-title') }}
+    _hover={{ color: color('text-title'), cursor: 'pointer' }}
     onClick={loadMore}
   >
-    <Caption>Load more</Caption>
+    {isLoadingMore ? (
+      <Flex>
+        <Pending size="16px" />
+        <Caption color="currentColor" ml="tight">
+          Loading...
+        </Caption>
+      </Flex>
+    ) : (
+      <Caption color="currentColor">Load more</Caption>
+    )}
   </Grid>
 ));
 
