@@ -1,16 +1,18 @@
 import React from 'react';
 import NextLink from 'next/link';
 
-import { Grid, transition, FlexProps, Box } from '@stacks/ui';
+import { Grid, Flex, FlexProps, Box, Stack } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 
 import { color } from '@components/color-modes';
 import { Block } from '@blockstack/stacks-blockchain-api-types';
 import { BlockLink } from '@components/links';
-import { border, toRelativeTime, truncateMiddle } from '@common/utils';
-
+import { addSepBetweenStrings, border, toRelativeTime, truncateMiddle } from '@common/utils';
+import pluralize from 'pluralize';
 import { Section } from '@components/section';
 import { FetchBlocksListResponse } from '@common/api/blocks';
+import { ItemIcon } from '@components/item-icon';
+import { HoverableItem, useHoverableState } from '@components/hoverable';
 
 const ViewAllButton: React.FC<{ isLoadingMore?: boolean; onClick?: () => void }> = React.memo(
   ({ onClick, isLoadingMore }) =>
@@ -21,11 +23,11 @@ const ViewAllButton: React.FC<{ isLoadingMore?: boolean; onClick?: () => void }>
         px="base"
         py="base"
         placeItems="center"
-        bg={color('bg')}
-        _hover={{ bg: color('bg-alt') }}
+        _hover={{ color: color('text-title') }}
         onClick={onClick}
+        color={color('text-caption')}
       >
-        <Caption>{isLoadingMore ? 'Loading...' : 'Load more'}</Caption>
+        <Caption color="currentColor">{isLoadingMore ? 'Loading...' : 'Load more'}</Caption>
       </Grid>
     ) : (
       <NextLink href="/blocks" passHref>
@@ -35,76 +37,62 @@ const ViewAllButton: React.FC<{ isLoadingMore?: boolean; onClick?: () => void }>
           px="base"
           py="base"
           placeItems="center"
-          bg={color('bg')}
-          _hover={{ bg: color('bg-alt') }}
+          _hover={{ color: color('text-title') }}
+          onClick={onClick}
+          color={color('text-caption')}
         >
-          <Caption>View all blocks</Caption>
+          <Caption color="currentColor">View all blocks</Caption>
         </Grid>
       </NextLink>
     )
 );
 
 const BlockItem: React.FC<{ block: Block; index: number; length: number }> = React.memo(
-  ({ block, index, length, ...rest }) => (
-    <BlockLink hash={block.hash} {...rest}>
-      <Grid
-        py="loose"
-        gridTemplateColumns={['repeat(3, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
-        borderLeft="3px solid"
-        borderLeftColor={color('bg')}
-        borderBottom={index === length - 1 ? 'unset' : '1px solid'}
-        borderBottomColor="var(--colors-border)"
-        color={color('text-body')}
-        _hover={{
-          borderLeftColor: color('accent'),
-        }}
-        as="a"
-        {...rest}
-      >
-        <Title display="block">#{block.height}</Title>
-        <Text display={['none', 'none', 'block']} width="100%" textAlign="right">
-          {block.burn_block_height}
-        </Text>
-        <Text textAlign={['center', 'center', 'right']} width="100%">
-          {block.txs.length}
-        </Text>
-        <Box textAlign="right">
-          <Text
-            fontSize="14px"
-            width="100%"
-            textAlign="right"
-            color={color('text-body')}
-            display="block"
-            mb="base"
-          >
-            {toRelativeTime(block.burn_block_time * 1000)}
-          </Text>
-          <Caption display="block">{truncateMiddle(block.hash, 9)}</Caption>
-        </Box>
-      </Grid>
-    </BlockLink>
-  )
+  ({ block, index, length, ...rest }) => {
+    const isHovered = useHoverableState();
+    return (
+      <BlockLink hash={block.hash} {...rest}>
+        <Flex
+          justifyContent="space-between"
+          py="loose"
+          color={color('text-body')}
+          _hover={{
+            borderLeftColor: color('accent'),
+          }}
+          as="a"
+          {...rest}
+        >
+          <Stack isInline alignItems="center" spacing="base">
+            <ItemIcon type="block" />
+            <Stack spacing="tight">
+              <Title display="block" color={isHovered ? color('accent') : color('text-title')}>
+                #{block.height}
+              </Title>
+              <Caption display="block">
+                {addSepBetweenStrings([
+                  `${block.txs.length} ${pluralize('transactions', block.txs.length)}`,
+                  `BTC block #${block.burn_block_height}`,
+                ])}
+              </Caption>
+            </Stack>
+          </Stack>
+          <Stack spacing="tight" textAlign="right">
+            <Text
+              fontSize="14px"
+              width="100%"
+              textAlign="right"
+              color={color('text-body')}
+              display="block"
+            >
+              {toRelativeTime(block.burn_block_time * 1000)}
+            </Text>
+            <Caption display="block">{truncateMiddle(block.hash, 9)}</Caption>
+          </Stack>
+        </Flex>
+      </BlockLink>
+    );
+  }
 );
-
-const SectionHeadingRow = React.memo(() => (
-  <Grid
-    px="loose"
-    py="base"
-    gridTemplateColumns={['repeat(3, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']}
-    borderBottom={border()}
-  >
-    <Caption>Block height</Caption>
-    <Caption display={['none', 'none', 'block']} width="100%" textAlign="right">
-      Block hash
-    </Caption>
-    <Caption width="100%" textAlign={['center', 'center', 'right']}>
-      Transactions
-    </Caption>
-    <Caption width="100%" textAlign="right">
-      Mined
-    </Caption>
-  </Grid>
-));
 
 export const BlocksList: React.FC<
   {
@@ -115,17 +103,18 @@ export const BlocksList: React.FC<
 > = React.memo(({ blocks, loadMore, isLoadingMore, ...props }) => {
   return (
     <Section title="Recent Blocks" {...props}>
-      <>
+      <Box px="loose">
         {blocks?.length ? (
           <>
-            <SectionHeadingRow />
-            <Box px="loose">
-              {blocks.length
-                ? blocks?.map((block: Block, key: number, arr: any) => {
-                    return <BlockItem block={block} index={key} key={key} length={arr.length} />;
-                  })
-                : null}
-            </Box>
+            {blocks.length
+              ? blocks?.map((block: Block, key: number, arr: any) => {
+                  return (
+                    <HoverableItem key={key} isLast={key === arr.length - 1}>
+                      <BlockItem block={block} index={key} length={arr.length} />
+                    </HoverableItem>
+                  );
+                })
+              : null}
           </>
         ) : (
           <Grid px="base" py="64px" placeItems="center">
@@ -135,7 +124,7 @@ export const BlocksList: React.FC<
           </Grid>
         )}
         <ViewAllButton isLoadingMore={isLoadingMore} onClick={loadMore} />
-      </>
+      </Box>
     </Section>
   );
 });

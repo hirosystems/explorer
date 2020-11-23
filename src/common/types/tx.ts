@@ -25,7 +25,7 @@ interface Tx<T> {
 }
 
 interface TxDataWithContract<T = Transaction> extends Tx<T> {
-  contract: Contract;
+  contract?: Contract;
 }
 
 interface TxDataContractCall {
@@ -37,6 +37,8 @@ type TxDataContractDeploy = TxDataWithContract<ContractDeployTxs>;
 
 export type TxData<T> = T extends NonContractTxs
   ? Tx<NonContractTxs>
+  : T extends MempoolSmartContractTransaction
+  ? Tx<MempoolSmartContractTransaction>
   : T extends ContractCallTxs
   ? TxDataContractCall
   : TxDataContractDeploy;

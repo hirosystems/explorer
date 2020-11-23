@@ -7,10 +7,9 @@ import { getTxTypeName } from '@common/transaction-names';
 import type { Transaction, MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
 import type { TxData } from '@common/types/tx';
 
-export const TransactionMeta: React.FC<Pick<
-  TxData<Transaction | MempoolTransaction>,
-  'transaction'
->> = ({ transaction }) => {
+export const TransactionMeta: React.FC<
+  Pick<TxData<Transaction | MempoolTransaction>, 'transaction'>
+> = ({ transaction }) => {
   const ogTitle = `${getTxTypeName(transaction.tx_type)}${
     transaction.tx_id && ` transaction: ${truncateMiddle(transaction.tx_id, 10)}`
   }`;

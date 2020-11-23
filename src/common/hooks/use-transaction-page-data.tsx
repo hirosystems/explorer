@@ -22,7 +22,7 @@ export const useTransactionPageData = ({
 
   const { data, error } = useSWR(txid, (txid: string) => fetchTransaction(apiServer)(txid), {
     initialData,
-    refreshInterval: isPending ? 2000 : undefined,
+    // refreshInterval: isPending ? 2000 : undefined,
     revalidateOnFocus: isPending,
     revalidateOnMount: isPending,
     revalidateOnReconnect: isPending,

@@ -81,7 +81,12 @@ export function useInfiniteFetch<Data>(
         types,
       }),
     fetcher,
-    { initialData, initialSize: 1, refreshInterval: 2500, suspense: options?.suspense }
+    {
+      initialData,
+      initialSize: 1,
+      // refreshInterval: 2500,
+      suspense: options?.suspense,
+    }
   );
 
   const combined = data ? [].concat(...(data as any)) : [];

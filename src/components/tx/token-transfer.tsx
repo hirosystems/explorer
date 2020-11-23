@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Stack } from '@stacks/ui';
 
-import { TokenTransfers } from '@components/token-transfer';
+import { Events } from '@components/tx-events';
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { TokenTransferTxs, TxData } from '@common/types/tx';
@@ -12,7 +12,7 @@ const TokenTransferPage = ({ transaction }: TxData<TokenTransferTxs> & { block?:
     <PageTop tx={transaction as any} />
     <Stack spacing="extra-loose">
       <TransactionDetails transaction={transaction} hideContract />
-      {'events' in transaction && <TokenTransfers events={transaction.events} />}
+      {'events' in transaction && <Events events={transaction.events} />}
     </Stack>
   </>
 );

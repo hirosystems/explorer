@@ -1123,10 +1123,10 @@
   resolved "https://registry.yarnpkg.com/@blockstack/prettier-config/-/prettier-config-0.0.6.tgz#8a41cd378ba061b79770987f2a6ad0c92b64bd72"
   integrity sha512-ke0MdyblmoUqSJBEutsG8/6G7KAjCB+uOcgZHPJvJr4R+i5yRhT4GSe5nV/wREINuK0jj2GvaA6qlx4PQTKQUA==
 
-"@blockstack/stacks-blockchain-api-types@^0.32.1":
-  version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-api-types/-/stacks-blockchain-api-types-0.32.1.tgz#31d98701c1a485ac227e5120fbbd4baa36d14c46"
-  integrity sha512-Sgs7f100KlERF5x+zjGL9DmmmthRDWhJdTYWWCKeIIfxPtahOH30mipxd8fizJ1Ii3DtRNc6fq/l32geWC8JJA==
+"@blockstack/stacks-blockchain-api-types@^0.33.0":
+  version "0.33.0"
+  resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-api-types/-/stacks-blockchain-api-types-0.33.0.tgz#53f8889ec34284ea14ae7ae683b4beaadefe1b5a"
+  integrity sha512-W4tRQERkzTQPObjdxePsUMcUUnsFrzkYuEJFUQHwQVxdZNU8DWJf/HS7Iu4CP/I6aAilxk8/t9621cY+9g4QMA==
 
 "@blockstack/stacks-blockchain-sidecar-types@^0.0.22":
   version "0.0.22"
@@ -2284,13 +2284,29 @@
   dependencies:
     "@stencil/core" "^1.17.3"
 
-"@stacks/connect@^4.0.0", "@stacks/connect@^4.2.3":
+"@stacks/connect-ui@^2.16.4":
+  version "2.16.4"
+  resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-2.16.4.tgz#a4d890b674334a9fbc8324f05636e1ca5f40e514"
+  integrity sha512-F7pJ9xUbZ442HOGYbfp50xQEk2uDyeQUEOHzb0HWsvUY/t6Ne9bT5FNimWhjIhaOb4Y55mDhZ3ZYkcinhFvF/g==
+  dependencies:
+    "@stencil/core" "^1.17.3"
+
+"@stacks/connect@^4.0.0":
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/@stacks/connect/-/connect-4.2.3.tgz#743159a4aee3eb469e0b7f0a1c204ffa808c830a"
   integrity sha512-ugabNLd9+WGYDM1XMh8gwhFQGFhPg8BXkpRFw02cFkfvW1u+DlBbfgb6nYIzsMZETTb+Jn8RcO1bQZQJdMK+AA==
   dependencies:
     "@blockstack/stacks-transactions" "0.7.0"
     "@stacks/connect-ui" "^2.16.3"
+    jsontokens "^3.0.0"
+
+"@stacks/connect@^4.2.4":
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/@stacks/connect/-/connect-4.2.4.tgz#bb13a006716df2d3a3c63d0b9b909ae6821ee204"
+  integrity sha512-uo3vPyudEMq5SIn4TeZPbwkQMDmvrjwD2yvPZ3jokzsnNOafzocLWBJWdhNHGIEZ3JRVPdrcM+xVwIL698xgww==
+  dependencies:
+    "@blockstack/stacks-transactions" "0.7.0"
+    "@stacks/connect-ui" "^2.16.4"
     jsontokens "^3.0.0"
 
 "@stacks/encryption@^1.0.0-beta.10":
@@ -2364,10 +2380,17 @@
   dependencies:
     type-fest "^0.16.0"
 
-"@stacks/ui@^3.0.0-alpha.16":
-  version "3.0.0-alpha.16"
-  resolved "https://registry.yarnpkg.com/@stacks/ui/-/ui-3.0.0-alpha.16.tgz#58c277f59a5ab60f4147cf3bb971e3fa5eda2c2c"
-  integrity sha512-qBHdXxLQ+QWuSQQ6Nd0d0x3HM8gryYTu/hiSN7/cyGmR/Rz19PCYoe8r7sRrcaxxSHgUCBh0PBfpl1SWWvGVWA==
+"@stacks/ui-theme@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@stacks/ui-theme/-/ui-theme-1.1.1.tgz#2273902b9655d8efa9ad55188997ec04c467a2aa"
+  integrity sha512-xQhO9mieB8SBwfHwczkWoXqAJQSpZ1yswrc44V2qahn80MQfya97XTpVD4t87NX0bBpepCUw/3KU62HoQNN3EQ==
+  dependencies:
+    type-fest "^0.16.0"
+
+"@stacks/ui@^3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@stacks/ui/-/ui-3.0.0-alpha.19.tgz#aa3a9b3624245f4fd2d282adeeccea2ff7a41b55"
+  integrity sha512-NWDKE4rast2rc4zeG9tm8geFnhxvQphfxJM507rKxI0D7R5VtqyNjY1AbIQlWbDmqHCa/gqMzml74TVQIcFgnA==
   dependencies:
     "@popperjs/core" "^2.4.0"
     "@reach/alert" "^0.11.2"
@@ -2650,10 +2673,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.19.5.tgz#9be3946136e818597c71c62d04240d0602c645d4"
   integrity sha512-Wgdl27uw/jUYUFyajUGKSjDNGxmJrZi9sjeG6UJImgUtKbJoO9aldx+1XODN1EpNDX9DirvbvHHmTsNlb8GwMA==
 
-"@types/node@^14.14.8":
-  version "14.14.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.8.tgz#2127bd81949a95c8b7d3240f3254352d72563aec"
-  integrity sha512-z/5Yd59dCKI5kbxauAJgw6dLPzW+TNOItNE00PkpzNwUIEwdj/Lsqwq94H5DdYBX7C13aRA0CY32BK76+neEUA==
+"@types/node@^14.14.9":
+  version "14.14.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.9.tgz#04afc9a25c6ff93da14deabd65dc44485b53c8d6"
+  integrity sha512-JsoLXFppG62tWTklIoO4knA+oDTYsmqWxHRvd4lpmfQRNhX6osheUOWETP2jMoV/2bEHuMra8Pp3Dmo/stBFcw==
 
 "@types/node@^8.0.0":
   version "8.10.66"
@@ -2707,10 +2730,10 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/react@^16.9.54":
-  version "16.9.56"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.56.tgz#ea25847b53c5bec064933095fc366b1462e2adf0"
-  integrity sha512-gIkl4J44G/qxbuC6r2Xh+D3CGZpJ+NdWTItAPmZbR5mUS+JQ8Zvzpl0ea5qT/ZT3ZNTUcDKUVqV3xBE8wv/DyQ==
+"@types/react@^16.14.0":
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.0.tgz#bc022cfe1609899b0f2196376b267724e7300f0e"
+  integrity sha512-jJjHo1uOe+NENRIBvF46tJimUvPnmbQ41Ax0pEm7pRvhPg+wuj8VMOHHiMvaGmZRzRrCtm7KnL5OOE/6kHPK8w==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -8570,10 +8593,15 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@>=2.0.5, prettier@^2.1.2:
+prettier@>=2.0.5:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.1.2.tgz#3050700dae2e4c8b67c4c3f666cdb8af405e1ce5"
   integrity sha512-16c7K+x4qVlJg9rEbXl7HEGmQyZlG4R9AgP+oHKRMsMsuk8s+ATStlf1NpDqyBI1HpVyfjLOeMhH2LvuNvV5Vg==
+
+prettier@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.2.0.tgz#8a03c7777883b29b37fb2c4348c66a78e980418b"
+  integrity sha512-yYerpkvseM4iKD/BXLYUkQV5aKt4tQPqaGW6EsZjzyu0r7sVZZNPJW4Y8MyKmicp6t42XUPcBVA+H6sB3gqndw==
 
 pretty-format@^3.8.0:
   version "3.8.0"
@@ -10546,10 +10574,10 @@ typescript@3.9.7:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
   integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
-typescript@^4.0.3:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
-  integrity sha512-ywmr/VrTVCmNTJ6iV2LwIrfG1P+lv6luD8sUJs+2eI9NLGigaN+nUQc13iHqisq7bra9lnmUSYqbJvegraBOPQ==
+typescript@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.1.2.tgz#6369ef22516fe5e10304aae5a5c4862db55380e9"
+  integrity sha512-thGloWsGH3SOxv1SoY7QojKi0tc+8FnOmiarEGMbd/lar7QOEd3hvlx3Fp5y6FlDUGl9L+pd4n2e+oToGMmhRQ==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

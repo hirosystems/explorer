@@ -17,53 +17,57 @@ import { color } from '@components/color-modes';
 import { Section } from '@components/section';
 import { Toggle } from '@components/toggle';
 import { atom, useRecoilState } from 'recoil';
-import { useHover } from 'web-api-hooks';
 
-import { FloatingHoverIndicator } from '@components/hover-indicator';
 import { Pending } from '@components/status';
+import { HoverableItem } from '@components/hoverable';
+import { CaptionAction } from '@components/caption-action';
+import { IconFilter } from '@tabler/icons';
+import { FilteredMessage, FilterPanel } from '@components/sandbox/filter-panel';
+import { useFilterState } from '@common/hooks/use-filter-state';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
 > = React.memo(({ tx, isLast, principal, ...rest }) => {
-  const [isHovered, bind] = useHover();
   return (
-    <Box
-      borderBottom={isLast ? 'unset' : '1px solid'}
-      borderBottomColor="var(--colors-border)"
-      position="relative"
-      {...bind}
-    >
-      <FloatingHoverIndicator isHovered={isHovered} />
+    <HoverableItem isLast={isLast}>
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>
-      <TxItem isHovered={isHovered} as="span" tx={tx} principal={principal} key={tx.tx_id} />
-    </Box>
+      <TxItem as="span" tx={tx} principal={principal} key={tx.tx_id} />
+    </HoverableItem>
   );
 });
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const VirtualList: React.FC<{
+const TxList: React.FC<{
   items: (MempoolTransaction | Transaction)[];
   principal?: string;
-}> = React.memo(({ items, principal }) => {
-  return items.length ? (
+  limit?: number;
+}> = React.memo(({ items, principal, limit }) => {
+  return (
     <Flex flexDirection="column">
-      {items.map((tx: MempoolTransaction | Transaction, index: number) => (
-        <Item principal={principal} key={index} tx={tx} isLast={index === items.length - 1} />
-      ))}
+      {items.map((tx: MempoolTransaction | Transaction, index: number) =>
+        limit ? (
+          index < limit ? (
+            <Item
+              principal={principal}
+              key={index}
+              tx={tx}
+              isLast={
+                limit
+                  ? items.length < limit
+                    ? index === items.length - 1
+                    : index === limit - 1
+                  : index === items.length - 1
+              }
+            />
+          ) : null
+        ) : (
+          <Item principal={principal} key={index} tx={tx} isLast={index === items.length - 1} />
+        )
+      )}
     </Flex>
-  ) : (
-    <></>
   );
 });
-
-const EmptyMessage: React.FC = props => (
-  <Grid px="base" py="64px" placeItems="center">
-    <Caption>There are no transactions yet.'</Caption>
-  </Grid>
-);
 
 const ViewAllButton: React.FC = React.memo(props => (
   <NextLink href="/transactions" passHref>
@@ -111,7 +115,7 @@ const PendingList: React.FC<any> = React.memo(
   ({ pending, handleTogglePendingVisibility, pendingVisible }) =>
     pendingVisible ? (
       <Box borderBottom={border()} flexGrow={1}>
-        <VirtualList items={pending} />
+        <TxList items={pending} />
       </Box>
     ) : null
 );
@@ -123,6 +127,31 @@ const txListFilterState = atom({
     showPending: true,
   },
 });
+
+const Filter = () => {
+  const { handleToggleFilterPanelVisibility } = useFilterState('txList');
+  return (
+    <Box position="relative" zIndex={99999999}>
+      <CaptionAction
+        position="relative"
+        zIndex={999}
+        onClick={handleToggleFilterPanelVisibility}
+        label="Filter"
+        icon={IconFilter}
+      />
+      <Box pointerEvents="none" top={0} right="-32px" position="absolute" size="500px">
+        <FilterPanel
+          bg={color('bg')}
+          hideBackdrop
+          filterKey="txList"
+          showBorder
+          pointerEvents="all"
+        />
+      </Box>
+    </Box>
+  );
+};
+
 export const TransactionList: React.FC<
   {
     mempool?: MempoolTransactionListResponse['results'];
@@ -131,8 +160,10 @@ export const TransactionList: React.FC<
     recent?: boolean;
     isReachingEnd?: boolean;
     isLoadingMore?: boolean;
+    hideFilter?: boolean;
     principal?: string;
     loadMore?: () => void;
+    limit?: number;
   } & FlexProps
 > = React.memo(
   ({
@@ -143,10 +174,10 @@ export const TransactionList: React.FC<
     isReachingEnd,
     principal,
     isLoadingMore,
+    hideFilter = true,
+    limit,
     ...rest
   }) => {
-    const [filterState, setFilterState] = useRecoilState(txListFilterState);
-
     const [pendingVisibility, setPendingVisibility] = React.useState<'visible' | 'hidden'>(
       'visible'
     );
@@ -164,49 +195,57 @@ export const TransactionList: React.FC<
       return false;
     });
 
-    const pendingVisible = pending?.length > 0 && filterState.showPending;
+    const { showPending, showFailed, handleToggleFilterPanelVisibility, types } = useFilterState(
+      'txList'
+    );
 
-    const hasTransactions = !!transactions?.length;
+    const items = [...pending, ...transactions];
 
-    const handleFilterViewToggle = () => {
-      setFilterState(s => ({ ...s, showPending: !s.showPending }));
-    };
+    const filteredTxs = hideFilter
+      ? items
+      : items
+          ?.filter(tx => types.find(type => type === tx.tx_type))
+          ?.filter(tx => (!showFailed ? tx.tx_status === 'success' : true))
+          ?.filter(tx => (!showPending ? tx.tx_status !== 'pending' : true));
+
+    const hasTransactions = !!filteredTxs?.length;
+
+    const hasNoVisibleTxs = !hasTransactions && items.length > 0;
 
     return (
       <Section
         title={recent ? 'Recent transactions' : 'Transactions'}
         topRight={
-          !!pending?.length && (
-            <>
-              <Toggle
-                size="small"
-                label={`Show pending (${pending?.length})`}
-                value={pendingVisible}
-                onClick={handleFilterViewToggle}
-              />
-            </>
-          )
+          <Flex>
+            {hideFilter && !!pending?.length && (
+              <>
+                <Toggle
+                  size="small"
+                  label={`Show pending (${pending?.length})`}
+                  value={showPending}
+                  onClick={handleToggleFilterPanelVisibility}
+                />
+              </>
+            )}
+            {!hideFilter ? <Filter /> : null}
+          </Flex>
         }
         {...rest}
       >
         <Box px="loose">
-          <PendingList
-            principal={principal}
-            pending={pending}
-            handleTogglePendingVisibility={handleTogglePendingVisibility}
-            pendingVisible={pendingVisible}
-          />
-          {hasTransactions ? (
+          {hasNoVisibleTxs ? (
+            <FilteredMessage minHeight="500px" filterKey={'txList'} />
+          ) : hasTransactions ? (
             <Box flexGrow={1}>
-              <VirtualList principal={principal} items={transactions} />
+              <TxList principal={principal} items={filteredTxs} />
             </Box>
           ) : (
             <Grid placeItems="center" px="base" py="extra-loose">
               <Caption>No transactions yet</Caption>
             </Grid>
           )}
-          {hasTransactions && recent ? <ViewAllButton /> : null}
-          {!isReachingEnd && loadMore ? (
+          {!hasNoVisibleTxs && hasTransactions && recent ? <ViewAllButton /> : null}
+          {!hasNoVisibleTxs && !isReachingEnd && loadMore ? (
             <LoadMoreButton isLoadingMore={isLoadingMore} loadMore={loadMore} />
           ) : null}
         </Box>

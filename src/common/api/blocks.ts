@@ -37,9 +37,9 @@ export const fetchBlock = (apiServer: string) => async (hash: Block['hash']): Pr
  *
  * @param {FetchBlocksListOptions} options
  */
-export const fetchBlocksList = (options: FetchBlocksListOptions) => async (): Promise<
-  FetchBlocksListResponse
-> => {
+export const fetchBlocksList = (
+  options: FetchBlocksListOptions
+) => async (): Promise<FetchBlocksListResponse> => {
   const { apiServer, offset, limit = 30 } = options;
 
   const resp = await fetchFromSidecar(apiServer)(

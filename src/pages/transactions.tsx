@@ -20,9 +20,12 @@ interface InitialData {
 }
 
 const TransactionsPage: NextPage<InitialData> = initialData => {
-  const { data: transactions, loadMore, isReachingEnd, isLoadingMore } = useInfiniteFetch<
-    Transaction
-  >({
+  const {
+    data: transactions,
+    loadMore,
+    isReachingEnd,
+    isLoadingMore,
+  } = useInfiniteFetch<Transaction>({
     initialData: initialData.transactions.results,
     type: 'tx',
     limit: 25,
@@ -51,6 +54,7 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
         loadMore={loadMore}
         isReachingEnd={isReachingEnd}
         isLoadingMore={isLoadingMore}
+        hideFilter={false}
       />
     </PageWrapper>
   );

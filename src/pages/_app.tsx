@@ -5,6 +5,7 @@ import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
 import { apiServerState } from '@store';
 import type { AppProps } from 'next/app';
+import { SWRConfig } from 'swr';
 
 import './styles.css';
 import 'tippy.js/dist/tippy.css'; // optional
@@ -23,9 +24,15 @@ const AppContainer: React.FC<any> = ({ component: Component, ...props }) => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <RecoilRoot>
-      <AppContainer component={Component} {...pageProps} />
-    </RecoilRoot>
+    <SWRConfig
+      value={{
+        refreshInterval: 3000,
+      }}
+    >
+      <RecoilRoot>
+        <AppContainer component={Component} {...pageProps} />
+      </RecoilRoot>
+    </SWRConfig>
   );
 }
 

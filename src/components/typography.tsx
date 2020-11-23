@@ -11,9 +11,9 @@ export const Text: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRe
   <BaseText display="block" as={as} ref={ref} color="currentColor" {...rest} />
 ));
 
-export const Caption: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<
+export const Caption: ForwardRefExoticComponentWithAs<BoxProps, 'small'> = forwardRefWithAs<
   BoxProps,
-  'span'
+  'small'
 >((props, ref) => (
   <Text
     style={{ userSelect: 'none' }}
