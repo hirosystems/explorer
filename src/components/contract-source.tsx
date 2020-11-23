@@ -6,7 +6,6 @@ import { Text } from '@components/typography';
 import { CodeBlock } from '@components/code-block';
 import { border } from '@common/utils';
 import { Badge } from './badge';
-import { CodeIcon } from './icons/code';
 import { TxLink } from '@components/links';
 import {
   ContractCallTransaction,

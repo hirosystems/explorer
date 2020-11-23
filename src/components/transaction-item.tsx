@@ -21,7 +21,7 @@ import { color } from '@components/color-modes';
 import { useHarmonicIntervalFn } from 'react-use';
 import { ItemIcon, getTxTypeIcon } from '@components/item-icon';
 import { DropIcon } from '@components/icons/drop';
-import { IconClock } from '@tabler/icons';
+import { useHoverableState } from '@components/hoverable';
 
 export { getTxTypeIcon };
 
@@ -182,6 +182,7 @@ const LargeVersion = ({
                   display: 'flex',
                   alignItems: 'center',
                   color: color('text-body'),
+                  fontWeight: 500,
                 }}
               >
                 <DropIcon color={color('accent')} size="14px" strokeWidth={2} />
@@ -234,7 +235,7 @@ export const TxItem = memoWithAs<TxItemProps, 'span'>(
   forwardRefWithAs<TxItemProps, 'span'>((props, ref) => {
     const {
       tx,
-      isHovered,
+      isHovered: isHoveredProp,
       isFocused,
       minimal = false,
       as = 'span',
@@ -243,6 +244,11 @@ export const TxItem = memoWithAs<TxItemProps, 'span'>(
       hideRightElements,
       ...rest
     } = props;
+
+    const isHoverableHovered = useHoverableState();
+
+    const isHovered = isHoverableHovered || isHoveredProp;
+
     return (
       <Flex
         justifyContent="space-between"

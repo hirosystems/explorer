@@ -14,7 +14,7 @@
   },
   "version": "1.0.0",
   "dependencies": {
-    "@blockstack/stacks-blockchain-api-types": "^0.32.1",
+    "@blockstack/stacks-blockchain-api-types": "^0.33.0",
     "@blockstack/stacks-transactions": "^0.7.0",
     "@emotion/babel-plugin": "^11.0.0-rc.0",
     "@emotion/babel-preset-css-prop": "^11.0.0-rc.0",
@@ -29,12 +29,13 @@
     "@react-spectrum/utils": "^3.3.0",
     "@react-stately/toggle": "^3.2.1",
     "@stacks/auth": "^1.0.0-beta.10",
-    "@stacks/connect": "^4.2.3",
+    "@stacks/connect": "^4.2.4",
+    "@stacks/connect-ui": "^2.16.4",
     "@stacks/network": "^1.0.0-beta.10",
     "@stacks/transactions": "^1.0.0-beta.10",
-    "@stacks/ui": "^3.0.0-alpha.16",
+    "@stacks/ui": "^3.0.0-alpha.19",
     "@stacks/ui-core": "^1.0.0-beta.6",
-    "@stacks/ui-theme": "^1.1.0",
+    "@stacks/ui-theme": "^1.1.1",
     "@styled-system/theme-get": "^5.1.2",
     "@tabler/icons": "^1.35.0",
     "@tippyjs/react": "^4.2.0",
@@ -100,8 +101,8 @@
     "@types/express": "^4.17.8",
     "@types/fontfaceobserver": "^0.0.6",
     "@types/next": "^9.0.0",
-    "@types/node": "^14.14.8",
-    "@types/react": "^16.9.54",
+    "@types/node": "^14.14.9",
+    "@types/react": "^16.14.0",
     "@types/store": "^2.0.2",
     "@types/styled-system__theme-get": "^5.0.1",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
@@ -111,8 +112,8 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.3.0",
-    "prettier": "^2.1.2",
-    "typescript": "^4.0.3"
+    "prettier": "^2.2.0",
+    "typescript": "^4.1.2"
   },
   "husky": {
     "hooks": {

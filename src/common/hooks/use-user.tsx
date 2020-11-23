@@ -29,7 +29,7 @@ const useFetchAccountData = (
     fetchAllAccountData(apiServer)(principal);
 
   const data = useSWR<AccountDataResponse>(principal, fetcher, {
-    refreshInterval: 2500,
+    // refreshInterval: 2500,
     suspense: options?.suspense,
   });
 

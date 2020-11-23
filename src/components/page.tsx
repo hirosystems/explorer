@@ -89,20 +89,20 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
 ));
 
 export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...props }) => (
-  <Flex flexDirection="column" minHeight="100vh" position="relative">
+  <Flex bg={color('bg')} flexDirection="column" minHeight="100vh" position="relative">
     <Header fullWidth={fullWidth} isHome={isHome} />
     <Page {...props} />
     <Box
       className="metaverse-header"
       position="absolute"
-      zIndex={-1}
+      zIndex={1}
       width="100%"
       top={0}
       height="420px"
       overflow="hidden"
       transition={transition}
     >
-      <Box transform="translate3d(0%, -32%, 0) scale(1.05) rotate(-8deg)" position="relative">
+      <Box transform="translate3d(-3%, -16%, 0px) scale(1.15) rotate(-8deg)" position="relative">
         <MetaverseSVG minWidth="1400px" width="100vw" filter="contrast(1.1)" />
       </Box>
     </Box>

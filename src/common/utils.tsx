@@ -97,6 +97,7 @@ export function shortenHex(hex: string, length = 4) {
  * @param {number} offset - the number of chars to keep on either end
  */
 export const truncateMiddle = (input: string, offset = 5): string => {
+  if (!input) return '';
   if (input.startsWith('0x')) {
     return shortenHex(input, offset);
   }
@@ -204,7 +205,6 @@ export const getContractName = (fullyRealizedName: string): string =>
 export const getFunctionName = (tx: ContractCallTxs) => {
   return tx.contract_call.function_name;
 };
-
 export const getFungibleAssetName = (fullyRealizedName: string): string =>
   getContractName(fullyRealizedName)?.split('::')[1];
 
@@ -292,7 +292,7 @@ export function stringToHslColor(str: string, saturation: number, lightness: num
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  const hue = hash % 360;
+  const hue = hash % 320;
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
@@ -318,6 +318,7 @@ const ContractName = ({ fn, contract }: any) => {
           display: 'flex',
           alignItems: 'center',
           color: color('text-body'),
+          fontWeight: 500,
         }}
       >
         <Box mr="extra-tight" size="16px" color={color('accent')}>
@@ -347,4 +348,8 @@ export const getTxTitle = (transaction: Transaction) => {
     default:
       return truncateMiddle(transaction.tx_id, 10);
   }
+};
+
+export const capitalize = (s: string) => {
+  return s?.charAt(0).toUpperCase() + s?.slice(1);
 };

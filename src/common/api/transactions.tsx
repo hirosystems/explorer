@@ -51,6 +51,7 @@ export const fetchTransaction = (apiServer: string) => async (
 ): Promise<FetchTransactionResponse> => {
   if (query.includes('.')) {
     const contract = await fetchContract(apiServer)(query);
+    console.log('contract', contract);
     if ('error' in contract) {
       return {
         error: contract.error,
@@ -74,6 +75,11 @@ export const fetchTransaction = (apiServer: string) => async (
       };
     }
     if (transaction.tx_type === 'smart_contract') {
+      if (transaction.tx_status === 'pending') {
+        return {
+          transaction,
+        };
+      }
       const contract = await fetchContract(apiServer)(transaction.smart_contract.contract_id);
       if ('error' in contract) {
         return {

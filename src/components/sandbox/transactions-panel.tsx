@@ -28,13 +28,12 @@ import { ContractCallIcon } from '@components/icons/contract-call';
 import { InfoCircleIcon } from '@components/icons/info-circle';
 import { ExternalLinkIcon } from '@components/icons/external-link';
 import { TxLink } from '@components/links';
-import { FilterPanel } from '@components/sandbox/filter-panel';
-import { blue } from '@components/button';
+import { FilteredMessage, FilterPanel } from '@components/sandbox/filter-panel';
 
 import { FilterIcon } from '@components/icons/filter';
 
 const PanelHeader = React.memo(() => {
-  const [filter, setFilterState] = useRecoilState(filterState);
+  const [filter, setFilterState] = useRecoilState(filterState('sandbox'));
 
   const handleFilterToggle = () => {
     setFilterState(state => ({ ...state, showing: !state.showing }));
@@ -371,49 +370,8 @@ const SandboxTxItem = React.memo(
   }
 );
 
-const FilteredMessage = () => {
-  const [filter, setFilterState] = useRecoilState(filterState);
-  const handleOpen = () => {
-    setFilterState(state => ({ ...state, showing: true }));
-  };
-  return (
-    <Grid p="extra-loose" textAlign="center">
-      <Grid
-        mx="auto"
-        placeItems="center"
-        size="72px"
-        borderRadius="100%"
-        color={color('text-title')}
-        mb="base-loose"
-        bg={blue(0.3)}
-      >
-        <Box color={color('accent')} transform="translateY(2px)" size="48px">
-          <FilterIcon size="48px" />
-        </Box>
-      </Grid>
-      <Title mb="tight" fontSize="20px">
-        Transactions filtered
-      </Title>
-      <Text maxWidth="30ch" mx="auto" lineHeight="1.8" color={color('text-body')}>
-        You have confirmed transactions, but they aren't currently visible due to your filter
-        settings.
-      </Text>
-      <Badge
-        _hover={{ cursor: 'pointer', bg: color('bg-alt') }}
-        mx="auto"
-        mt="base"
-        border={border()}
-        color={color('text-body')}
-        onClick={handleOpen}
-      >
-        Change filters
-      </Badge>
-    </Grid>
-  );
-};
-
 const TxList: React.FC = React.memo(() => {
-  const filters = useRecoilValue(filterState);
+  const filters = useRecoilValue(filterState('sandbox'));
   const { transactions, pendingTransactions, principal } = useUser({ suspense: true });
 
   const filteredTxs = transactions?.filter(tx => filters.types.find(type => type === tx.tx_type));
@@ -452,7 +410,11 @@ const TxList: React.FC = React.memo(() => {
   return (
     <>
       {pendingTransactions?.length && filters.showPending ? pendingList : null}
-      {filteredTxs?.length ? txList : hasTxButIsFiltered ? <FilteredMessage /> : null}
+      {filteredTxs?.length ? (
+        txList
+      ) : hasTxButIsFiltered ? (
+        <FilteredMessage filterKey="sandbox" />
+      ) : null}
     </>
   );
 });
@@ -482,7 +444,7 @@ export const TransactionsPanel = React.memo(props => {
       {...props}
     >
       <PanelHeader />
-      <FilterPanel />
+      <FilterPanel filterKey="sandbox" />
 
       <Flex
         flexDirection="column"

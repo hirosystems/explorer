@@ -1,6 +1,16 @@
-// @ts-nocheck
 import React from 'react';
-import { Box, Flex, Stack, color, Grid, transition, Fade, Transition, FlexProps } from '@stacks/ui';
+import {
+  Box,
+  Flex,
+  Stack,
+  color,
+  Grid,
+  transition,
+  Fade,
+  Transition,
+  FlexProps,
+  GridProps,
+} from '@stacks/ui';
 import { Title } from '@components/typography';
 import { border } from '@common/utils';
 import { Toggle } from '@components/toggle';
@@ -12,8 +22,63 @@ import { filterState } from '@store/sandbox';
 import CloseIcon from 'mdi-react/CloseIcon';
 import { useHover } from 'use-events';
 import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutlineIcon';
+import { TransactionType } from '@models/transaction.interface';
+import { blue } from '@components/button';
+import { FilterIcon } from '@components/icons/filter';
+import { Badge } from '@components/badge';
+import { Text } from '@components/typography';
+import { useFilterState } from '@common/hooks/use-filter-state';
 
-const CheckableElement = ({ type, value: toggled, onClick, ...rest }) => {
+const FILTERABLE_TYPES = [
+  TransactionType.SMART_CONTRACT,
+  TransactionType.CONTRACT_CALL,
+  TransactionType.TOKEN_TRANSFER,
+];
+
+export const FilteredMessage: React.FC<{ filterKey: 'sandbox' | 'txList' } & GridProps> = ({
+  filterKey,
+  ...rest
+}) => {
+  const { handleOpen } = useFilterState(filterKey);
+  return (
+    <Grid p="extra-loose" placeItems="center" textAlign="center" {...rest}>
+      <Box>
+        <Grid
+          mx="auto"
+          placeItems="center"
+          size="72px"
+          borderRadius="100%"
+          color={color('text-title')}
+          mb="base-loose"
+          bg={blue(0.3)}
+        >
+          <Box color={color('accent')} transform="translateY(2px)" size="48px">
+            <FilterIcon size="48px" />
+          </Box>
+        </Grid>
+        <Title mb="tight" fontSize="20px">
+          Transactions filtered
+        </Title>
+        <Text maxWidth="30ch" mx="auto" lineHeight="1.8" color={color('text-body')}>
+          You have confirmed transactions, but they aren't currently visible due to your filter
+          settings.
+        </Text>
+        <Flex alignItems="center" justifyContent="center" mx="auto" mt="base">
+          <Badge
+            _hover={{ cursor: 'pointer', bg: color('bg-alt') }}
+            border={border()}
+            color={color('text-body')}
+            onClick={handleOpen}
+          >
+            Change filters
+          </Badge>
+        </Flex>
+      </Box>
+    </Grid>
+  );
+};
+
+const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   const [isHovered, bind] = useHover();
   const handleClick = () => {
     onClick?.(type, !toggled);
@@ -43,29 +108,31 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }) => {
   );
 };
 
-const getTypes = (currentTypes, { type, enabled }) => {
-  if (enabled) {
-    return [...new Set([...currentTypes, type])];
-  }
-  return currentTypes.filter(_type => type !== _type);
-};
+export const FilterPanel = ({
+  filterKey,
+  hideBackdrop,
+  showBorder,
+  bg,
+  pointerEvents,
+  ...rest
+}: any) => {
+  const {
+    handleClose,
+    showFailed,
+    showPending,
+    types,
+    handleUpdateTypes,
+    handleToggleShowPending,
+    handleToggleShowShowFailed,
+    showing,
+  } = useFilterState(filterKey);
 
-export const FilterPanel = () => {
-  const [filter, setFilterState] = useRecoilState(filterState);
-
-  const handleChangeType = (type, enabled) => {
-    setFilterState(state => {
-      const newTypes = getTypes(state.types, { type, enabled });
-      return {
-        ...state,
-        types: newTypes,
-      };
-    });
-  };
-
-  const handleClose = () => {
-    setFilterState(state => ({ ...state, showing: false }));
-  };
+  const borderStyles = showBorder
+    ? {
+        border: border(),
+        borderTop: '0',
+      }
+    : {};
 
   return (
     <Flex
@@ -75,8 +142,11 @@ export const FilterPanel = () => {
       flexGrow={1}
       position="absolute"
       top="34px"
-      overflow="hidden"
+      overflowY="hidden"
       flexDirection="column"
+      px="extra-loose"
+      pointerEvents="none"
+      {...rest}
     >
       <Box
         position="absolute"
@@ -101,7 +171,7 @@ export const FilterPanel = () => {
             opacity: '0',
           },
         }}
-        in={filter.showing}
+        in={showing}
       >
         {styles => (
           <Box
@@ -109,11 +179,14 @@ export const FilterPanel = () => {
             p="base"
             pb="loose"
             top="1px"
-            bg={color('bg-light')}
+            bg={bg || color('bg-light')}
             width="100%"
             borderRadius="0 0 16px 16px"
             willChange="transform, opacity"
             style={styles}
+            boxShadow="high"
+            pointerEvents="all"
+            {...borderStyles}
           >
             <Box
               position="absolute"
@@ -129,10 +202,10 @@ export const FilterPanel = () => {
             </Flex>
             <Flex justifyContent="space-between">
               <Stack alignItems="flex-start" spacing="base">
-                {types.map(type => (
+                {FILTERABLE_TYPES.map(type => (
                   <CheckableElement
-                    onClick={handleChangeType}
-                    value={!!filter.types.find(_type => _type === type)}
+                    onClick={handleUpdateTypes}
+                    value={!!types.find(_type => _type === type)}
                     type={type}
                     key={type}
                   />
@@ -140,17 +213,13 @@ export const FilterPanel = () => {
               </Stack>
               <Stack alignItems="flex-end" spacing="base">
                 <Toggle
-                  value={filter.showPending}
-                  onClick={() =>
-                    setFilterState(state => ({ ...state, showPending: !state.showPending }))
-                  }
+                  value={showPending}
+                  onClick={() => handleToggleShowPending()}
                   label="Show pending"
                 />
                 <Toggle
-                  value={filter.showFailed}
-                  onClick={() =>
-                    setFilterState(state => ({ ...state, showFailed: !state.showFailed }))
-                  }
+                  value={showFailed}
+                  onClick={() => handleToggleShowShowFailed()}
                   label="Show failed"
                 />
               </Stack>
@@ -158,21 +227,23 @@ export const FilterPanel = () => {
           </Box>
         )}
       </Transition>
-      <Fade timeout={250} in={filter.showing}>
-        {styles => (
-          <Box
-            onClick={handleClose}
-            position="absolute"
-            top="0"
-            left={0}
-            width="100%"
-            height="calc(100% - 33px)"
-            bg="rgba(0,0,0,0.5)"
-            zIndex={99}
-            style={styles}
-          />
-        )}
-      </Fade>
+      {!hideBackdrop ? (
+        <Fade timeout={250} in={showing}>
+          {styles => (
+            <Box
+              onClick={handleClose}
+              position="absolute"
+              top="0"
+              left={0}
+              width="100%"
+              height="calc(100% - 33px)"
+              bg="rgba(0,0,0,0.5)"
+              zIndex={99}
+              style={styles}
+            />
+          )}
+        </Fade>
+      ) : null}
     </Flex>
   );
 };

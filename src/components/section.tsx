@@ -17,6 +17,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...
     bg={color('bg')}
     justifyContent="space-between"
     borderBottom={border()}
+    flexShrink={0}
     px="loose"
     py="base"
     {...rest}
@@ -35,7 +36,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...
 export const Section: React.FC<{ topRight?: any } & SectionProps> = React.memo(
   ({ title, topRight = null, children, overflowY, ...rest }) => {
     return (
-      <Card overflow="hidden" bg={color('bg')} {...rest}>
+      <Card overflow="hidden" bg={color('bg')} boxShadow="low" {...rest}>
         {title || topRight ? <SectionHeader title={title}>{topRight}</SectionHeader> : null}
         <Flex overflowY={overflowY} flexDirection="column">
           {children}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex } from '@stacks/ui';
+import { Flex, Grid } from '@stacks/ui';
 import {
   Block,
   MempoolTransaction,
@@ -83,7 +83,6 @@ export const useHomepageData = (initialData?: HomeData) => {
     () => fetchHomepageData(apiServer)(),
     {
       initialData,
-      refreshInterval: 3500,
     }
   );
 
@@ -102,14 +101,20 @@ const Home: NextPage<HomeData> = React.memo(initialData => {
     <PageWrapper isHome>
       <Meta />
       <PageTop />
-      <TransactionList
-        my="extra-loose"
-        recent
-        transactions={data.transactions.results}
-        mempool={data.mempool.results}
-      />
+      <Grid
+        mt="extra-loose"
+        gap="extra-loose"
+        gridTemplateColumns={['100%', '100%', 'calc(60% - 32px) 40%']}
+        width="100%"
+      >
+        <TransactionList
+          recent
+          transactions={data.transactions.results}
+          mempool={data.mempool.results}
+        />
 
-      <BlocksList blocks={data.blocks.results} />
+        <BlocksList blocks={data.blocks.results} />
+      </Grid>
     </PageWrapper>
   );
 });

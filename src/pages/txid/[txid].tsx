@@ -117,6 +117,7 @@ export async function getServerSideProps(
   const { query } = ctx;
   const txid = query?.txid ? queryWith0x(query?.txid.toString()) : '';
   const initialData = await fetchTransaction(apiServer)(txid.toString());
+
   let block = null;
   if ('transaction' in initialData && 'block_hash' in initialData.transaction) {
     const hash = initialData.transaction.block_hash;
