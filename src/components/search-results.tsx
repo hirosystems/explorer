@@ -1,9 +1,9 @@
 // @ts-nocheck
 import React from 'react';
 import { RecentlyViewedListItem } from '@components/recently-viewed';
-import { Box, Flex, color, Transition } from '@stacks/ui';
+import { Box, color, Flex, Transition } from '@stacks/ui';
 import { border } from '@common/utils';
-import { useSearchResults, useRecentItems, useSearch } from '@common/hooks/use-search';
+import { useRecentItems, useSearch, useSearchResults } from '@common/hooks/use-search';
 import { Caption, Text } from '@components/typography';
 import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 import { IconButton } from '@components/icon-button';
@@ -18,7 +18,7 @@ const Loading: React.FC = React.memo(() => (
 ));
 
 const Results = React.memo(() => {
-  const { result, isLoading } = useSearchResults();
+  const { result } = useSearchResults();
   const { clearError, hideImmediately } = useSearch();
   const { items, handleUpsertItem, clearRecentItems } = useRecentItems();
 
@@ -30,7 +30,6 @@ const Results = React.memo(() => {
   const isSearching = result.state === 'loading';
   const searchResults = result.state === 'hasValue' && result.contents?.type === 'search';
   const results = searchResults && 'data' in result.contents ? result?.contents?.data : recentItems;
-  const hasError = 'error' in result.contents;
 
   const handleItemClick = (option: any) => {
     hideImmediately();

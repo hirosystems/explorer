@@ -19,6 +19,8 @@ import { fetchTransaction, FetchTransactionResponse } from '@common/api/transact
 import type { NextPage, NextPageContext } from 'next';
 import { fetchBlock } from '@common/api/blocks';
 import { Block } from '@blockstack/stacks-blockchain-api-types';
+import useSWR from 'swr';
+import { useApiServer } from '@common/hooks/use-api';
 
 const TransactionPage: NextPage<{
   txid: string;
@@ -26,6 +28,14 @@ const TransactionPage: NextPage<{
   block?: Block;
 }> = ({ txid, initialData, block }) => {
   const { transaction, data, error, isPending } = useTransactionPageData({ txid, initialData });
+  const apiServer = useApiServer();
+
+  const hash = transaction && 'block_hash' in transaction && transaction.block_hash;
+
+  const { data: blockData } = useSWR(hash || '', fetchBlock(apiServer), {
+    initialData: block,
+    refreshInterval: transaction?.tx_status === 'pending' ? 3500 : undefined,
+  });
 
   const hasInitialError = 'error' in initialData && initialData.error;
 
@@ -98,7 +108,7 @@ const TransactionPage: NextPage<{
     return (
       <PageWrapper>
         <TransactionMeta transaction={transaction} />
-        {transaction && renderTxPageComponent(data, block)}
+        {transaction && renderTxPageComponent(data, blockData)}
       </PageWrapper>
     );
   }

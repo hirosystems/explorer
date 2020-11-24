@@ -84,7 +84,6 @@ export const ItemIcon = React.memo(
           <Icon
             color={color('text-title')}
             position="relative"
-            zIndex={2}
             size={txType === 'token_transfer' ? '18px' : '21px'}
           />
         )}

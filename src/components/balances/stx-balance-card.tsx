@@ -110,7 +110,9 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
               </Stack>
             </Box>
           ) : null}
-          <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
+          {stackedBalance && (
+            <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
+          )}
         </>
       ) : (
         <Grid placeItems="center" pt="extra-loose" pb="loose" width="100%">

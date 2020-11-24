@@ -111,6 +111,7 @@ const Home: NextPage<HomeData> = React.memo(initialData => {
           recent
           transactions={data.transactions.results}
           mempool={data.mempool.results}
+          limit={10}
         />
 
         <BlocksList blocks={data.blocks.results} />

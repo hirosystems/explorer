@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Box, BoxProps, Flex, Grid, Stack } from '@stacks/ui';
-import { Text, Pre, Caption, Link } from '@components/typography';
+import { Caption, Link, Pre, Text } from '@components/typography';
 import { Block, Transaction } from '@blockstack/stacks-blockchain-api-types';
 
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { Row } from '@components/rows/row';
-import { getContractId, TransactionDetails } from '@components/transaction-details';
+import { TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';
 import { border, clarityValuetoHumanReadable, microToStacks, truncateMiddle } from '@common/utils';
 import { PostConditions } from '@components/post-conditions';
@@ -19,6 +19,8 @@ import FunctionIcon from 'mdi-react/FunctionIcon';
 import { IconChevronRight } from '@tabler/icons';
 import { ContractDetails } from '@components/contract-details';
 import { ClarityType, cvToString, deserializeCV, getCVTypeString } from '@stacks/transactions';
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
+import { PagePanes } from '@components/page-panes';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -139,7 +141,6 @@ const Result = ({ result: _result }: { result: Transaction['tx_result'] }) => {
     return (
       <Box width="100%">
         <Pre>{result?.type}</Pre>
-
         <Stack mt="extra-loose" spacing="base" width="100%">
           {(result as any)?.value?.map((value: any) => (
             <Box borderBottom={border()} pb="base">
@@ -263,13 +264,7 @@ const ContractCallPage = ({
   return (
     <>
       <PageTop tx={transaction as any} />
-      <Grid
-        gridColumnGap="extra-loose"
-        gridTemplateColumns={['100%', '100%', 'repeat(1, calc(100% - 352px) 320px)']}
-        gridRowGap={['extra-loose', 'extra-loose', 'unset']}
-        maxWidth="100%"
-        alignItems="flex-start"
-      >
+      <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
           {'events' in transaction && transaction.events && <Events events={transaction.events} />}
@@ -296,40 +291,9 @@ const ContractCallPage = ({
               contractInterface={source.contract}
             />
           )}
-          {!isPending && (
-            <Section title="Bitcoin anchor">
-              <Box px="base">
-                <Rows
-                  noTopBorder
-                  inline
-                  items={[
-                    {
-                      label: {
-                        children: 'Bitcoin block',
-                      },
-                      children: `#${block?.burn_block_height}`,
-                    },
-                    {
-                      label: {
-                        children: 'Bitcoin hash',
-                      },
-                      children: truncateMiddle(block?.burn_block_hash as string, 12),
-                      copy: block?.burn_block_hash,
-                    },
-                    {
-                      label: {
-                        children: 'Anchor transaction',
-                      },
-                      children: truncateMiddle(block?.miner_txid as string, 12),
-                      copy: block?.miner_txid,
-                    },
-                  ]}
-                />
-              </Box>
-            </Section>
-          )}
+          {!isPending && block && <BtcAnchorBlockCard block={block} />}
         </Stack>
-      </Grid>
+      </PagePanes>
     </>
   );
 };
