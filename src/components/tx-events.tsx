@@ -4,7 +4,7 @@ import {
   TransactionEventAssetType,
 } from '@blockstack/stacks-blockchain-api-types';
 import { Section } from '@components/section';
-import { Box, Grid, Flex, color, Stack } from '@stacks/ui';
+import { Box, Grid, Flex, color, Stack, FlexProps } from '@stacks/ui';
 import { DynamicColorCircle } from '@components/dynamic-color-circle';
 import { IconAlignLeft, IconArrowRight, IconPlus, IconTrash } from '@tabler/icons';
 import { StxInline } from '@components/icons/stx-inline';
@@ -21,7 +21,7 @@ import { Circle } from '@components/circle';
 import { SenderRecipient } from '@components/addresses';
 import { AddressLink } from '@components/links';
 
-const getTicker = (name: string) => {
+export const getTicker = (name: string) => {
   if (name.includes('-')) {
     const parts = name.split('-');
     if (parts.length >= 3) {
@@ -88,7 +88,6 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
     case 'smart_contract_log':
       return (
         <Grid
-          display={['none', 'none', 'grid']}
           bg={color('bg')}
           border={border()}
           color={color('text-body')}
@@ -105,7 +104,6 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
       return name ? (
         <DynamicColorCircle
           textTransform="uppercase"
-          display={['none', 'none', 'grid']}
           mr="tight"
           size="48px"
           string={name}
@@ -118,13 +116,7 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
 
     case 'non_fungible_token_asset':
       return name ? (
-        <DynamicColorCircle
-          textTransform="uppercase"
-          display={['none', 'none', 'grid']}
-          mr="tight"
-          size="48px"
-          string={name}
-        >
+        <DynamicColorCircle textTransform="uppercase" mr="tight" size="48px" string={name}>
           {assetEventType ? <AssetEventTypeBubble type={assetEventType} /> : null}
           {getAssetNameParts(name).asset[0]}
         </DynamicColorCircle>
@@ -133,7 +125,6 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
     default:
       return (
         <Grid
-          display={['none', 'none', 'grid']}
           bg={color('accent')}
           color={color('bg')}
           mr="tight"
@@ -251,7 +242,7 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
         <ItemIcon event={event} />
         <Stack ml="base" spacing="tight">
           <Title>{name}</Title>
-          <Stack alignItems="center" isInline>
+          <Stack flexWrap="wrap" alignItems="center" isInline>
             {assetEventType ? <Caption fontWeight="bold">{assetEventType}</Caption> : null}
             {assetAmounts && (
               <Caption>
@@ -268,9 +259,9 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
     </Flex>
   );
 };
-export const Events = ({ events }: { events: TransactionEvent[] }) => {
+export const Events = ({ events, ...rest }: { events: TransactionEvent[] } & FlexProps) => {
   return events?.length ? (
-    <Section mb="extra-loose" title="Events">
+    <Section title="Events" {...rest}>
       <Box px="loose">
         {events.map((event, index) => (
           <Item event={event} isLast={index === events.length - 1} />

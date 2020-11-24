@@ -1,26 +1,17 @@
-import { Box, Flex, FlexProps, Stack } from '@stacks/ui';
+import { BoxProps, Flex, FlexProps, Stack } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
-import {
-  addSepBetweenStrings,
-  getMemoString,
-  toRelativeTime,
-  truncateMiddle,
-  getTxTitle,
-} from '@common/utils';
-import { forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
+import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
+import { forwardRefWithAs } from '@stacks/ui-core';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 
 import { ArrowRightIcon } from '@components/icons/arrow-right';
-import { Badge } from '@components/badge';
 import { Link } from '@components/link';
 import NextLink from 'next/link';
 import React from 'react';
 import { Transaction } from '@models/transaction.interface';
 import { color } from '@components/color-modes';
-import { useHarmonicIntervalFn } from 'react-use';
-import { ItemIcon, getTxTypeIcon } from '@components/item-icon';
-import { DropIcon } from '@components/icons/drop';
+import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
 import { useHoverableState } from '@components/hoverable';
 
 export { getTxTypeIcon };
@@ -51,47 +42,6 @@ const getRelativeTimestamp = (tx: Transaction) => {
   return date;
 };
 
-const Details = ({
-  tx,
-  minimal,
-  principal,
-  ...rest
-}: { tx: Transaction; principal?: string; minimal?: boolean } & FlexProps) => {
-  const date = getRelativeTimestamp(tx);
-
-  useHarmonicIntervalFn(() => null, date.toLocaleLowerCase().includes('seconds') ? 1000 : 60000);
-
-  const additional =
-    (tx.tx_type === 'smart_contract' && tx?.events?.length) ||
-    (tx.tx_type === 'contract_call' && tx?.events?.length)
-      ? `${tx?.events?.length} events`
-      : null;
-
-  const sentOrReceived =
-    tx.tx_type === 'token_transfer' && principal
-      ? tx.sender_address === principal
-        ? 'Sent'
-        : 'Received'
-      : null;
-
-  const strings = minimal
-    ? ([getTransactionTypeLabel(tx.tx_type), additional].filter(str => str) as string[])
-    : ([getTransactionTypeLabel(tx.tx_type), sentOrReceived].filter(str => str) as string[]);
-
-  return (
-    <Caption
-      alignItems={'center'}
-      as="span"
-      display="flex"
-      textTransform="uppercase"
-      fontWeight="600"
-      {...rest}
-    >
-      {addSepBetweenStrings(strings)}
-    </Caption>
-  );
-};
-
 const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal, ...rest }) => (
   <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
     <NextLink href={`/address/${principal}`} passHref>
@@ -108,11 +58,11 @@ const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal,
   </Flex>
 );
 
-const AddressArea = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
+const AddressArea = React.memo(({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
   if (tx.tx_type === 'token_transfer') {
     return (
-      <Stack isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
-        <Caption>from</Caption>
+      <Stack flexWrap="wrap" isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
+        <Caption display={['none', 'none', 'none', 'block']}>from</Caption>
         <PrincipalLink principal={tx.sender_address} />
         <Flex as="span" color={color('text-caption')}>
           <ArrowRightIcon strokeWidth="1.5" size="15px" />
@@ -136,102 +86,96 @@ const AddressArea = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
     );
   }
   return null;
-};
+});
 
-const LargeVersion = ({
-  tx,
-  principal,
-  hideIcon,
-  hideRightElements,
-  isHovered,
-}: {
-  tx: Transaction;
-  principal?: string;
-  hideIcon?: boolean;
-  isHovered?: boolean;
-  hideRightElements?: boolean;
-}) => {
-  const title = getTxTitle(tx);
+const TxItemTitleArea = React.memo(({ title, isHovered, tx }: any) => (
+  <Stack as="span" spacing="tight" flexWrap="wrap">
+    <Title
+      color={isHovered ? color('accent') : color('text-title')}
+      fontWeight="500"
+      display="block"
+      fontSize="16px"
+    >
+      {title}
+    </Title>
+    <Stack
+      as="span"
+      isInline
+      spacing="extra-tight"
+      alignItems="center"
+      flexWrap="wrap"
+      divider={<Caption>∙</Caption>}
+    >
+      <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
+      <AddressArea tx={tx} />
+    </Stack>
+  </Stack>
+));
+
+const Timestamp: React.FC<BoxProps & { tx: Transaction }> = React.memo(props => {
+  const { tx, ...rest } = props;
+  const date = getRelativeTimestamp(tx);
 
   return (
-    <>
-      <Flex display="flex" as="span" alignItems="center">
-        {!hideIcon ? (
-          <ItemIcon mr="base" status={tx.tx_status} type="tx" txType={tx.tx_type} />
-        ) : null}
-        <Stack
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          as="span"
-          spacing="tight"
-        >
-          <Stack alignItems="center" isInline spacing="base">
-            <Title
-              color={isHovered ? color('accent') : color('text-title')}
-              fontWeight="500"
-              display="block"
-              fontSize="16px"
-            >
-              {title || truncateMiddle(tx.tx_id, 12)}
-            </Title>
-            {tx.tx_type === 'token_transfer' &&
-            getMemoString(tx.token_transfer.memo)?.includes('Faucet') ? (
-              <Badge
-                bg={color('bg-light')}
-                labelProps={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: color('text-body'),
-                  fontWeight: 500,
-                }}
-              >
-                <DropIcon color={color('accent')} size="14px" strokeWidth={2} />
-                <Box ml="extra-tight">Faucet</Box>
-              </Badge>
-            ) : null}
-          </Stack>
-          <Stack
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            as="span"
-            isInline
-            spacing="extra-tight"
-          >
-            {tx.tx_status === 'pending' ? (
-              <Caption fontWeight="bold" as="span" color={color('feedback-alert')}>
-                Pending
-              </Caption>
-            ) : null}
-
-            {tx.tx_status !== 'pending' && tx.tx_status !== 'success' ? (
-              <Caption fontWeight="bold" mr="tight" as="span" color={color('feedback-error')}>
-                Failed
-              </Caption>
-            ) : null}
-            <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
-            <AddressArea tx={tx} />
-          </Stack>
-        </Stack>
-      </Flex>
-      {!hideRightElements ? (
-        <Flex
-          display={['none', 'none', 'flex']}
-          as="span"
-          justifyContent="space-between"
-          flexDirection="column"
-          alignItems="flex-end"
-        >
-          <Text fontSize="14px" color={color('text-body')}>
-            {getRelativeTimestamp(tx)}
-          </Text>
-          <Caption>{truncateMiddle(tx.tx_id, 6)}</Caption>
-        </Flex>
-      ) : null}
-    </>
+    <Text ml="tight" fontSize="14px" textAlign="right" color={color('text-body')} {...rest}>
+      {date}
+    </Text>
   );
-};
+});
 
-export const TxItem = memoWithAs<TxItemProps, 'span'>(
+const LargeVersion = React.memo(
+  ({
+    tx,
+    principal,
+    hideIcon,
+    hideRightElements,
+    isHovered,
+  }: {
+    tx: Transaction;
+    principal?: string;
+    hideIcon?: boolean;
+    isHovered?: boolean;
+    hideRightElements?: boolean;
+  }) => {
+    const title = getTxTitle(tx);
+
+    return (
+      <>
+        <Flex display="flex" as="span" alignItems="center">
+          {!hideIcon ? (
+            <ItemIcon mr="base" status={tx.tx_status} type="tx" txType={tx.tx_type} />
+          ) : null}
+          <TxItemTitleArea
+            isHovered={isHovered}
+            title={title || truncateMiddle(tx.tx_id, 12)}
+            tx={tx}
+          />
+        </Flex>
+        {!hideRightElements ? (
+          <Stack alignItems="flex-end" textAlign="right" as="span" spacing="tight">
+            <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
+              {tx.tx_status === 'pending' ? (
+                <Caption fontWeight="bold" as="span" color={color('feedback-alert')}>
+                  Pending
+                </Caption>
+              ) : null}
+
+              {tx.tx_status !== 'pending' && tx.tx_status !== 'success' ? (
+                <Caption fontWeight="bold" mr="tight" as="span" color={color('feedback-error')}>
+                  Failed
+                </Caption>
+              ) : null}
+              <Timestamp tx={tx} />
+            </Flex>
+            <Caption mt="1px">{truncateMiddle(tx.tx_id, 4)}</Caption>
+          </Stack>
+        ) : null}
+      </>
+    );
+  }
+);
+
+export const TxItem = React.memo(
   forwardRefWithAs<TxItemProps, 'span'>((props, ref) => {
     const {
       tx,
@@ -253,7 +197,7 @@ export const TxItem = memoWithAs<TxItemProps, 'span'>(
       <Flex
         justifyContent="space-between"
         alignItems="stretch"
-        style={{ outline: 'none' }}
+        outline="none"
         py="loose"
         flexShrink={0}
         ref={ref}

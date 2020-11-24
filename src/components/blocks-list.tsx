@@ -71,7 +71,6 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
               <Caption display="block">
                 {addSepBetweenStrings([
                   `${block.txs.length} ${pluralize('transactions', block.txs.length)}`,
-                  `BTC block #${block.burn_block_height}`,
                 ])}
               </Caption>
             </Stack>
@@ -86,7 +85,7 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
             >
               {toRelativeTime(block.burn_block_time * 1000)}
             </Text>
-            <Caption display="block">{truncateMiddle(block.hash, 9)}</Caption>
+            <Caption display="block">{truncateMiddle(block.hash)}</Caption>
           </Stack>
         </Flex>
       </BlockLink>

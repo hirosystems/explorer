@@ -1,5 +1,5 @@
-import { Box, BoxProps, Flex, FlexProps, Grid, Stack, transition } from '@stacks/ui';
-import { Caption, Text } from '@components/typography';
+import { Box, BoxProps, Flex, FlexProps, Grid } from '@stacks/ui';
+import { Caption } from '@components/typography';
 import {
   MempoolTransaction,
   MempoolTransactionListResponse,
@@ -16,7 +16,6 @@ import { color } from '@components/color-modes';
 
 import { Section } from '@components/section';
 import { Toggle } from '@components/toggle';
-import { atom, useRecoilState } from 'recoil';
 
 import { Pending } from '@components/status';
 import { HoverableItem } from '@components/hoverable';
@@ -111,23 +110,6 @@ const LoadMoreButton: React.FC<any> = React.memo(({ loadMore, isLoadingMore }) =
   </Grid>
 ));
 
-const PendingList: React.FC<any> = React.memo(
-  ({ pending, handleTogglePendingVisibility, pendingVisible }) =>
-    pendingVisible ? (
-      <Box borderBottom={border()} flexGrow={1}>
-        <TxList items={pending} />
-      </Box>
-    ) : null
-);
-
-const txListFilterState = atom({
-  key: 'tx-list.filters',
-  default: {
-    visible: false,
-    showPending: true,
-  },
-});
-
 const Filter = () => {
   const { handleToggleFilterPanelVisibility } = useFilterState('txList');
   return (
@@ -178,13 +160,13 @@ export const TransactionList: React.FC<
     limit,
     ...rest
   }) => {
-    const [pendingVisibility, setPendingVisibility] = React.useState<'visible' | 'hidden'>(
-      'visible'
-    );
-
-    const handleTogglePendingVisibility = React.useCallback(() => {
-      setPendingVisibility(s => (s === 'visible' ? 'hidden' : 'visible'));
-    }, [setPendingVisibility]);
+    const {
+      showPending,
+      showFailed,
+      handleToggleFilterPanelVisibility,
+      handleToggleShowPending,
+      types,
+    } = useFilterState('txList');
 
     const pending: MempoolTransactionListResponse['results'] = mempool.filter(tx => {
       const now = new Date().getTime();
@@ -195,18 +177,18 @@ export const TransactionList: React.FC<
       return false;
     });
 
-    const { showPending, showFailed, handleToggleFilterPanelVisibility, types } = useFilterState(
-      'txList'
+    const filteredTransactions = transactions.filter((tx, index) =>
+      limit && showPending && pending.length > 0 ? index < limit - pending.length : true
     );
 
-    const items = [...pending, ...transactions];
-
+    const items = [...pending, ...filteredTransactions]?.filter(tx =>
+      !showPending ? tx.tx_status !== 'pending' : true
+    );
     const filteredTxs = hideFilter
       ? items
       : items
           ?.filter(tx => types.find(type => type === tx.tx_type))
-          ?.filter(tx => (!showFailed ? tx.tx_status === 'success' : true))
-          ?.filter(tx => (!showPending ? tx.tx_status !== 'pending' : true));
+          ?.filter(tx => (!showFailed ? tx.tx_status === 'success' : true));
 
     const hasTransactions = !!filteredTxs?.length;
 
@@ -221,9 +203,9 @@ export const TransactionList: React.FC<
               <>
                 <Toggle
                   size="small"
-                  label={`Show pending (${pending?.length})`}
+                  label={`${showPending ? 'Hide' : 'Show'} pending (${pending?.length})`}
                   value={showPending}
-                  onClick={handleToggleFilterPanelVisibility}
+                  onClick={handleToggleShowPending}
                 />
               </>
             )}

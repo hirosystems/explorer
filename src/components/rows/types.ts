@@ -29,6 +29,7 @@ export interface RowContentProps {
 
 export interface CopyProps {
   isHovered?: boolean;
+  hasCopied?: boolean;
   onClick?: () => void;
 }
 

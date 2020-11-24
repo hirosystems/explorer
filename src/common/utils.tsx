@@ -1,4 +1,4 @@
-import { ColorsStringLiteral, color } from '@stacks/ui';
+import { Box, color, ColorsStringLiteral, Stack } from '@stacks/ui';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { BorderStyleProperty } from 'csstype';
@@ -12,10 +12,8 @@ import { fetchTxList } from '@common/api/transactions';
 import lclStorage from 'store/storages/localStorage';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
-import { Box, Stack } from '@stacks/ui';
 import { Text } from '@components/typography';
-import { Badge } from '@components/badge';
-import { IconCode } from '@tabler/icons';
+import { IconArrowLeft } from '@tabler/icons';
 
 dayjs.extend(relativeTime);
 
@@ -312,20 +310,12 @@ const ContractName = ({ fn, contract }: any) => {
   return (
     <Stack alignItems="center" spacing="tight" isInline>
       <Box as="span">{fn}</Box>
-      <Badge
-        bg={color('bg-light')}
-        labelProps={{
-          display: 'flex',
-          alignItems: 'center',
-          color: color('text-body'),
-          fontWeight: 500,
-        }}
-      >
-        <Box mr="extra-tight" size="16px" color={color('accent')}>
-          <IconCode size="16px" />
-        </Box>
+      <Box color={color('text-caption')} height="14px">
+        <IconArrowLeft size="14px" />
+      </Box>
+      <Box fontSize="12px" color={color('text-caption')} as="span">
         {contract}
-      </Badge>
+      </Box>
     </Stack>
   );
 };

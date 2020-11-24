@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box, Flex, Text } from '@stacks/ui';
+import { Box, color, Flex, Stack, Text } from '@stacks/ui';
 import { getMemoString, microToStacks } from '@common/utils';
 
 import { Badge } from '@components/badge';
@@ -13,13 +13,16 @@ import { Section } from '@components/section';
 import { BlockLink, TxLink } from '@components/links';
 import { IconButton } from '@components/icon-button';
 import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
+import { StxInline } from '@components/icons/stx-inline';
+import { Circle } from '@components/circle';
+import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
 
 interface FeeComponentProps {
   fees: string;
   sponsored: boolean;
 }
 
-const FeesComponent = ({ fees, sponsored }: FeeComponentProps) => (
+const FeesComponent = React.memo(({ fees, sponsored }: FeeComponentProps) => (
   <>
     <Box>
       <Text>{microToStacks(fees)} STX</Text>
@@ -30,9 +33,9 @@ const FeesComponent = ({ fees, sponsored }: FeeComponentProps) => (
       </Badge>
     ) : null}
   </>
-);
+));
 
-const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) => {
+const BlockComponent = React.memo(({ block, ts }: { block: number | string; ts: number }) => {
   return (
     <>
       {/**
@@ -44,15 +47,15 @@ const BlockComponent = ({ block, ts }: { block: number | string; ts: number }) =
       </Box>
     </>
   );
-};
+});
 
-const AddressComponent = ({ principal }: any) => {
+const AddressComponent = React.memo(({ principal }: { principal: string }) => {
   return (
     <NextLink href={`/address/[principal]`} as={`/address/${principal}`} passHref>
       <Link as="a">{principal}</Link>
     </NextLink>
   );
-};
+});
 
 const getSenderName = (txType: Transaction['tx_type']) => {
   switch (txType) {
@@ -156,11 +159,51 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
 
   switch (d.tx_type) {
     case 'token_transfer': {
+      const amount = {
+        label: 'Amount',
+        children: (
+          <Stack alignItems="center" isInline spacing="tight">
+            <Box width="24px" position="relative">
+              <Circle position="absolute" left={0} size="24px" bg={color('accent')} top="-12px">
+                <StxInline strokeWidth={2} size="14px" color="white" />
+              </Circle>
+            </Box>
+            <Text fontSize="16px" color={color('text-title')} fontWeight="500">
+              {microToStacks(d.token_transfer.amount)}{' '}
+              <Text as="span" display="inline" opacity="0.5">
+                STX
+              </Text>
+            </Text>
+          </Stack>
+        ),
+      };
+      const tokenTransferSender = {
+        condition: typeof d.sender_address !== 'undefined',
+        label: {
+          children: getSenderName(d.tx_type),
+        },
+        children: (
+          <Stack isInline>
+            <Box color={color('text-caption')}>
+              <IconArrowUpRight size="16px" />
+            </Box>
+            <AddressComponent principal={d.sender_address} />
+          </Stack>
+        ),
+        copy: d.sender_address,
+      };
       const recipient = {
         label: {
-          children: 'Recipient address',
+          children: 'Recipient',
         },
-        children: <AddressComponent principal={d.token_transfer.recipient_address} />,
+        children: (
+          <Stack isInline>
+            <Box color={color('text-caption')}>
+              <IconArrowDownRight size="16px" />
+            </Box>
+            <AddressComponent principal={d.token_transfer.recipient_address} />
+          </Stack>
+        ),
         copy: d.token_transfer.recipient_address,
       };
 
@@ -170,7 +213,17 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
         children: getMemoString(d.token_transfer.memo),
       };
 
-      return [txid, contractName, sender, recipient, fees, blockTime, blockHash, memo, canonical];
+      return [
+        amount,
+        tokenTransferSender,
+        recipient,
+        txid,
+        fees,
+        blockTime,
+        blockHash,
+        memo,
+        canonical,
+      ];
     }
     case 'coinbase': {
       const scratch = {

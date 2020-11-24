@@ -4,7 +4,7 @@ import { color } from '@components/color-modes';
 
 export const FloatingHoverIndicator: React.FC<
   BoxProps & { isHovered?: boolean; isActive?: boolean; placement?: 'left' | 'bottom' }
-> = ({ isHovered, placement, isActive, ...props }) => {
+> = ({ isHovered, placement = 'left', isActive, ...props }) => {
   const styles =
     placement === 'left'
       ? {

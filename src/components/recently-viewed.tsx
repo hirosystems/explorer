@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHover, useFocus } from 'use-events';
-import { FlexProps, Box, BoxProps, useEventListener, Flex, color } from '@stacks/ui';
+import { FlexProps, Box, BoxProps, useEventListener, Flex, color, Stack } from '@stacks/ui';
 import { Transaction } from '@models/transaction.interface';
 import { TxItem } from '@components/transaction-item';
 import { AddressLink, BlockLink, TxLink } from '@components/links';
@@ -14,7 +14,7 @@ import {
   toRelativeTime,
   truncateMiddle,
 } from '@common/utils';
-import { Caption, Title } from '@components/typography';
+import { Caption, Text, Title } from '@components/typography';
 import { forwardRefWithAs } from '@stacks/ui-core';
 import pluralize from 'pluralize';
 import { FloatingHoverIndicator } from '@components/hover-indicator';
@@ -171,23 +171,23 @@ export const RecentlyViewedListItem = ({
         <Wrapper {...itemProps}>
           <Flex alignItems="center">
             <ItemIcon type="block" />
-            <Box ml="base">
-              <Title
-                color={isHovered ? color('accent') : color('text-title')}
-                display="block"
-                mb="extra-tight"
-              >
+            <Stack spacing="tight" ml="base">
+              <Title color={isHovered ? color('accent') : color('text-title')} display="block">
                 Block #{option.height}
               </Title>
               <Caption>
                 {addSepBetweenStrings([
-                  truncateMiddle(option.hash),
                   `${option.txs.length} ${pluralize('transaction', option.txs.length)}`,
                 ])}
               </Caption>
-            </Box>
+            </Stack>
           </Flex>
-          <Caption>{toRelativeTime(option.burn_block_time * 1000)}</Caption>
+          <Stack textAlign="right" justifyContent="flex-end" spacing="tight">
+            <Text ml="tight" fontSize="14px" textAlign="right" color={color('text-body')}>
+              {toRelativeTime(option.burn_block_time * 1000)}
+            </Text>
+            <Caption>{truncateMiddle(option.hash)}</Caption>
+          </Stack>
         </Wrapper>
       </BlockLink>
     );

@@ -10,22 +10,27 @@ import { Block, SmartContractTransaction } from '@blockstack/stacks-blockchain-a
 import { TxData } from '@common/types/tx';
 import { getContractName } from '@common/utils';
 import { Events } from '@components/tx-events';
+import { PagePanes } from '@components/page-panes';
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 
 const SmartContractPage = ({
   transaction,
+  block,
 }: TxData<SmartContractTransaction> & { block?: Block }) => (
   <>
     <PageTop tx={transaction as any} />
-
-    <Stack spacing="extra-loose">
-      <TransactionDetails
-        contractName={getContractName(transaction.smart_contract.contract_id)}
-        transaction={transaction}
-      />
-      {'events' in transaction && <Events events={transaction.events} />}
-      <ContractSource source={transaction.smart_contract.source_code} />
-      <PostConditions conditions={transaction.post_conditions} />
-    </Stack>
+    <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
+      <Stack spacing="extra-loose">
+        <TransactionDetails
+          contractName={getContractName(transaction.smart_contract.contract_id)}
+          transaction={transaction}
+        />
+        {'events' in transaction && <Events events={transaction.events} />}
+        <ContractSource source={transaction.smart_contract.source_code} />
+        <PostConditions conditions={transaction.post_conditions} />
+      </Stack>
+      {block && <BtcAnchorBlockCard block={block} />}
+    </PagePanes>
   </>
 );
 

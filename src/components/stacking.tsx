@@ -30,7 +30,7 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
     const blocksUntilCycleCompletes = currentBlock - stackingBlock;
 
     const stackingPercent = (blocksUntilCycleCompletes / blockDelta) * 100;
-    return (
+    return stackingPercent < 100 ? (
       <Box px="base">
         <Stack spacing="tight" borderTop={border()} py="loose">
           <Caption>Stacking progress</Caption>
@@ -42,7 +42,7 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
           </Flex>
         </Stack>
       </Box>
-    );
+    ) : null;
   }
 
   return null;
