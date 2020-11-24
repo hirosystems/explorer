@@ -95,8 +95,8 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: |
-            ${{ GITHUB_REPOSITORY }}:${{ steps.semantic.outputs.new_release_version }}
-            ${{ GITHUB_REPOSITORY }}:latest
+            ${GITHUB_REPOSITORY}:${{ steps.semantic.outputs.new_release_version }}
+            ${GITHUB_REPOSITORY}:latest
           push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
 
 
