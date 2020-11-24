@@ -33,9 +33,8 @@ jobs:
 
   build-publish:
     runs-on: ubuntu-latest
-    needs:
-      # - notify-start
-      # - lint-fix
+    # needs:
+    #   - notify-start
     steps:
       - uses: actions/checkout@v2
         with:
