@@ -114,7 +114,7 @@ export const fetchTransaction = (apiServer: string) => async (
       };
     }
     return {
-      transaction,
+      transaction: transaction as any,
     };
   }
 };
