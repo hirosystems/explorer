@@ -119,7 +119,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint:prettier",
+      "pre-commit": "yarn lint:prettier && yarn typecheck",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
