@@ -60,6 +60,12 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SEMANTIC_RELEASE_PACKAGE: ${{ github.workflow }}
         with:
+          branches: |
+            [
+              '+([0-9])?(.{+([0-9]),x}).x',
+              'master',
+              'feat/actions'
+            ]
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
@@ -75,15 +81,15 @@ jobs:
           echo "new_release_patch_version: ${{ steps.semantic.outputs.new_release_patch_version }}"
           echo "Repo: ${GITHUB_REPOSITORY}"
 
-      # - name: Build/Tag/Push Image
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: .
-      #     file: ./Dockerfile
-      #     tags: |
-      #       ${{ env.GITHUB_REPOSITORY }}:${{ steps.semantic.outputs.new_release_version }}
-      #       ${{ env.GITHUB_REPOSITORY }}:latest
-      #     push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+      - name: Build/Tag/Push Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          tags: |
+            ${GITHUB_REPOSITORY}:${{ steps.semantic.outputs.new_release_version }}
+            ${GITHUB_REPOSITORY}:latest
+          push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
 
 
 
