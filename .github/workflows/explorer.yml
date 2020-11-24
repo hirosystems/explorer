@@ -66,15 +66,24 @@ jobs:
             semantic-release-slack-bot
             @semantic-release/exec
 
-      - name: Build/Tag/Push Image
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          tags: |
-            ${{ env.GITHUB_REPOSITORY }}:${{ steps.semantic.outputs.new_release_version }}
-            ${{ env.GITHUB_REPOSITORY }}:latest
-          push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+      - name: Echo Vars
+        # if: steps.semantic.outputs.new_release_published == 'true'
+        run: |
+          echo "new_release_version: ${{ steps.semantic.outputs.new_release_version }}"
+          echo "new_release_major_version: ${{ steps.semantic.outputs.new_release_major_version }}"
+          echo "new_release_minor_version: ${{ steps.semantic.outputs.new_release_minor_version }}"
+          echo "new_release_patch_version: ${{ steps.semantic.outputs.new_release_patch_version }}"
+          echo "Repo: ${GITHUB_REPOSITORY}"
+
+      # - name: Build/Tag/Push Image
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     tags: |
+      #       ${{ env.GITHUB_REPOSITORY }}:${{ steps.semantic.outputs.new_release_version }}
+      #       ${{ env.GITHUB_REPOSITORY }}:latest
+      #     push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
 
 
 
