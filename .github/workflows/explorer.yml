@@ -34,10 +34,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        if: ${{ env.ACT }}
 
       - uses: actions/cache@v1
-        if: ${{ env.ACT }}
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -45,15 +43,12 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Use Node.js
-        if: ${{ env.ACT }}
         uses: actions/setup-node@v1
 
       - name: Install Prettier
-        if: ${{ env.ACT }}
         run: yarn add prettier
 
       - name: Lint Prettier
-        if: ${{ env.ACT }}
         run: yarn lint:prettier:fix
         env:
           CI: true
@@ -99,7 +94,9 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          tags: ${{ github.event.inputs.tag }}
+          tags: |
+            ${{ GITHUB_REPOSITORY }}:${{ steps.semantic.outputs.new_release_version }}
+            ${{ GITHUB_REPOSITORY }}:latest
           push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
 
 
