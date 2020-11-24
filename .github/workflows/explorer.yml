@@ -30,34 +30,12 @@ jobs:
   #         channel: devops-notify
   #         status: STARTING
   #         color: warning
-  lint-fix:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-
-      - name: Install Prettier
-        run: yarn add prettier
-
-      - name: Lint Prettier
-        run: yarn lint:prettier:fix
-        env:
-          CI: true
 
   build-publish:
     runs-on: ubuntu-latest
     needs:
       # - notify-start
-      - lint-fix
+      # - lint-fix
     steps:
       - uses: actions/checkout@v2
         with:
@@ -95,8 +73,8 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: |
-            ${GITHUB_REPOSITORY}:${{ steps.semantic.outputs.new_release_version }}
-            ${GITHUB_REPOSITORY}:latest
+            ${{ env.GITHUB_REPOSITORY }}:${{ steps.semantic.outputs.new_release_version }}
+            ${{ env.GITHUB_REPOSITORY }}:latest
           push: ${{ (github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '') && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
 
 
