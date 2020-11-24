@@ -8,7 +8,7 @@ import { Rows } from '@components/rows';
 import { Row } from '@components/rows/row';
 import { TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';
-import { border, clarityValuetoHumanReadable, microToStacks, truncateMiddle } from '@common/utils';
+import { border, clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import { PostConditions } from '@components/post-conditions';
 import { Events } from '@components/tx-events';
 import NextLink from 'next/link';
@@ -264,7 +264,13 @@ const ContractCallPage = ({
   return (
     <>
       <PageTop tx={transaction as any} />
-      <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
+      <PagePanes
+        fullWidth={
+          source?.contract?.contract_id
+            ? false
+            : transaction.tx_status === 'pending' || block === null
+        }
+      >
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
           {'events' in transaction && transaction.events && <Events events={transaction.events} />}
