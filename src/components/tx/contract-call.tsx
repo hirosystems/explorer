@@ -260,6 +260,7 @@ const ContractCallPage = ({
   source,
   block,
 }: TxData<ContractCallTxs> & { block?: Block }) => {
+  // console.log(transaction);
   const isPending = transaction.tx_status === 'pending';
   return (
     <>
