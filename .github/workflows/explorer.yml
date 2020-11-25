@@ -1,0 +1,123 @@
+name: Docker-Build
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+    paths-ignore:
+      - '**/CHANGELOG.md'
+      - '**/package.json'
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'The tag to create (optional)'
+        required: false
+
+jobs:
+  notify-start:
+    runs-on: ubuntu-latest
+    # Only run on non-PR events or only PRs that aren't from forks
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    outputs:
+      slack_message_id: ${{ steps.slack.outputs.message_id }}
+    steps:
+      - name: Notify slack start
+        if: success()
+        id: slack
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1.1.2
+        with:
+          channel: devops-notify
+          status: STARTING
+          color: warning
+
+  build-publish:
+    runs-on: ubuntu-latest
+    needs:
+      - notify-start
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Define Docker Repo
+        id: set_repo
+        run: echo "REPO=$GITHUB_REPOSITORY" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ${{ env.REPO }}
+          tag-semver: |
+            {{version}}
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2.5.0
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SEMANTIC_RELEASE_PACKAGE: ${{ github.workflow }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        with:
+          branches: |
+            [
+              '+([0-9])?(.{+([0-9]),x}).x',
+              'master',
+            ]
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+            semantic-release-slack-bot
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build/Tag/Push Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: ${{ github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+
+  notify-end:
+    runs-on: ubuntu-latest
+    needs:
+      - notify-start
+      - build-publish
+    # Only run on non-PR events or only PRs that aren't from forks
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - name: Notify slack success
+        if: needs.notify-start.result != 'failure' && needs.lint.result != 'failure' && needs.lint-docs.result != 'failure' && needs.test.result != 'failure' && needs.build-publish.result != 'failure'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1.1.2
+        with:
+          message_id: ${{ needs.notify-start.outputs.slack_message_id }}
+          channel: devops-notify
+          status: SUCCESS
+          color: good
+
+      - name: Notify slack fail
+        if: needs.notify-start.result == 'failure' || needs.lint.result == 'failure' || needs.lint-docs.result == 'failure' || needs.test.result == 'failure' || needs.build-publish.result == 'failure'
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        uses: voxmedia/github-action-slack-notify-build@v1.1.2
+        with:
+          message_id: ${{ needs.notify-start.outputs.slack_message_id }}
+          channel: devops-notify
+          status: FAILED
+          color: danger
