@@ -1,4 +1,4 @@
-import { Box, Flex, FlexProps } from '@stacks/ui';
+import { Flex, FlexProps } from '@stacks/ui';
 import { Text } from '@components/typography';
 
 import { Card } from '@components/card';
@@ -20,14 +20,14 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...
     flexShrink={0}
     px="loose"
     py="base"
+    borderTopRightRadius="12px"
+    borderTopLeftRadius="12px"
     {...rest}
   >
     {title ? (
-      <Box>
-        <Text color={color('text-title')} fontWeight="500">
-          {title}
-        </Text>
-      </Box>
+      <Text color={color('text-title')} fontWeight="500">
+        {title}
+      </Text>
     ) : null}
     {children}
   </Flex>
@@ -36,7 +36,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...
 export const Section: React.FC<{ topRight?: any } & SectionProps> = React.memo(
   ({ title, topRight = null, children, overflowY, ...rest }) => {
     return (
-      <Card overflow="hidden" bg={color('bg')} boxShadow="low" {...rest}>
+      <Card bg={color('bg')} boxShadow="low" {...rest}>
         {title || topRight ? <SectionHeader title={title}>{topRight}</SectionHeader> : null}
         <Flex overflowY={overflowY} flexDirection="column">
           {children}

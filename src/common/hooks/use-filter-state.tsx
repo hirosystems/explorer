@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
-import { useRecoilState, useRecoilCallback } from 'recoil';
+import { useRecoilCallback, useRecoilState } from 'recoil';
 
-import { filterState } from '@store/sandbox';
 import type { TxTypeFilterOptions } from '@store/sandbox';
+import { filterState } from '@store/sandbox';
+import { TransactionType } from '@models/transaction.interface';
 
-export const useFilterState = (key: 'sandbox' | 'txList') => {
+export const useFilterState = (key: 'sandbox' | 'txList', showCoinbase = false) => {
   const [filter, setFilterState] = useRecoilState(filterState(key));
 
   const handleToggleFilterPanelVisibility = useCallback(() => {
@@ -59,5 +60,7 @@ export const useFilterState = (key: 'sandbox' | 'txList') => {
     handleClose,
     handleOpen,
     ...filter,
+    // @ts-ignore
+    types: [...filter.types].concat(showCoinbase ? TransactionType.COINBASE : undefined),
   };
 };

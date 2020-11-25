@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';
 import { useRecoilState } from 'recoil';
 import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
-import { FinishedData, AuthOptions } from '@stacks/connect';
+import type { AuthOptions, FinishedData } from '@stacks/connect';
 
 export const useAuthState = () => {
   const [authOptions, setAuthOptions] = useRecoilState<Partial<AuthOptions>>(authOptionsAtom);

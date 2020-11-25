@@ -1,3 +1,4 @@
+/** @jsxRuntime classic */
 import React from 'react';
 import { theme } from '@stacks/ui';
 import { ThemeProvider } from '@emotion/react';

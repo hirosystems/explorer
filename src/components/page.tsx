@@ -19,7 +19,6 @@ type PageProps = {
 type PageWrapperProps = { isHome?: boolean; fullWidth?: boolean; notice?: any } & FlexProps;
 
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
-  const type = tx.tx_type;
   const status = tx.tx_status;
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
 
@@ -89,7 +88,14 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
 ));
 
 export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...props }) => (
-  <Flex bg={color('bg')} flexDirection="column" minHeight="100vh" position="relative">
+  <Flex
+    maxWidth="100vw"
+    overflowX="hidden"
+    bg={color('bg')}
+    flexDirection="column"
+    minHeight="100vh"
+    position="relative"
+  >
     <Header fullWidth={fullWidth} isHome={isHome} />
     <Page {...props} />
     <Box

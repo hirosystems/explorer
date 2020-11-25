@@ -16,6 +16,8 @@ import {
   currentFunctionState,
   contractSearchQueryState,
   contractCallViewState,
+  readOnlyState,
+  readOnlyResponseState,
 } from '@store/sandbox';
 import { useApiServer } from '@common/hooks/use-api';
 import { Section } from '@components/section';
@@ -23,12 +25,11 @@ import { Badge } from '@components/badge';
 import { IconButton } from '@components/icon-button';
 import pluralize from 'pluralize';
 import { ItemIcon } from '@components/item-icon';
-import {
-  ClarityAbiFunction,
-  encodeClarityValue,
-  getTypeString,
-  tupleCV,
-} from '@stacks/transactions';
+
+import { encodeClarityValue, getTypeString, tupleCV } from '@stacks/transactions';
+
+import type { ClarityAbiFunction } from '@stacks/transactions';
+
 import { ArrowLeftIcon } from '@components/icons/arrow-left';
 import { ArrowRightIcon } from '@components/icons/arrow-right';
 import ApiIcon from 'mdi-react/ApiIcon';
@@ -37,8 +38,7 @@ import { LoadingPanel } from '@components/loading-panel';
 import { useHover } from 'use-events';
 import { openContractCall } from '@stacks/connect';
 import { useUser } from '@common/hooks/use-user';
-import { StacksTestnet } from '@stacks/network';
-import { callReadOnlyFunction, parseReadOnlyResponse } from '@common/sandbox';
+import { parseReadOnlyResponse } from '@common/sandbox';
 import { AtomIcon } from '@components/icons/atom';
 import ListStatusIcon from 'mdi-react/ListStatusIcon';
 import { FungibleTokenIcon } from '@components/icons/fungible-token';
@@ -246,34 +246,6 @@ const Function = ({ func }) => {
     </>
   );
 };
-
-const readOnlyState = atom({
-  key: 'sandbox.contract-call.read-only',
-  default: undefined,
-});
-
-const readOnlyResponseState = selectorFamily({
-  key: 'sandbox.contract-call.read-only.response',
-  get: ({
-    contractName,
-    contractAddress,
-    functionName,
-    functionArgs = [],
-    senderAddress,
-    apiServer,
-  }) => async () => {
-    const network = new StacksTestnet();
-    network.coreApiUrl = apiServer;
-    return callReadOnlyFunction({
-      contractName,
-      contractAddress,
-      functionName,
-      functionArgs,
-      network,
-      senderAddress,
-    });
-  },
-});
 
 const ReadOnly = () => {
   const { principal } = useUser();

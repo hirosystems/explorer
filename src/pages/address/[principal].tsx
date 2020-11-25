@@ -23,6 +23,7 @@ import { Activity } from '@components/activity-row';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { getStackStartBlockHeight, hasTokenBalance } from '@common/utils/accounts';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
+import { Meta } from '@components/meta-head';
 
 const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
   return (
@@ -86,9 +87,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
 
   return (
     <PageWrapper>
-      <Head>
-        <title>STX Address {truncateMiddle(principal)} | Stacks Explorer</title>
-      </Head>
+      <Meta title={`STX Address ${truncateMiddle(principal)}`} />
       <Flex
         mb="extra-loose"
         alignItems={['unset', 'unset', 'flex-end']}
@@ -110,6 +109,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
           <SummaryCard principal={principal} hasTokenBalances={hasTokenBalances} data={data} />
           {data?.transactions?.results ? (
             <TransactionList
+              showCoinbase
               hideFilter={false}
               principal={principal}
               transactions={data.transactions.results as any}

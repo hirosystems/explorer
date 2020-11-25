@@ -28,7 +28,7 @@ const useFaviconName = (s?: string) => {
 export const Meta = ({
   title = defaultTitle,
   status,
-  description,
+  description = 'The Stacks blockchain inherits the security of the Bitcoin blockchain through its consensus mechanism, Proof of Transfer.',
   ogTitle,
   url,
   labels,
@@ -36,12 +36,15 @@ export const Meta = ({
   const filename = useFaviconName(status);
   return (
     <Head>
-      <title>{title} - Stacks Explorer</title>
+      <title>{title === defaultTitle ? title : `${title} - ${defaultTitle}`}</title>
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Stacks 2.0 blockchain explorer" />
+      <meta property="og:site_name" content="Stacks 2.0 explorer" />
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:site" content="@blockstack" />
-      <meta name="twitter:creator" content="@blockstack" />
+      <meta name="twitter:site" content="@stacks" />
+      <meta name="twitter:creator" content="@stacks" />
+      <meta property="og:image" content="/explorer-og.png" />
+      <meta name="twitter:image" content="/explorer-og.png" />
+      <meta name="twitter:card" content="summary_large_image" />
       {ogTitle ? <meta property="og:title" content={ogTitle} /> : null}
       {url ? <meta property="og:url" content={url} /> : null}
       {url ? <meta property="og:description" content={description} /> : null}
@@ -62,7 +65,6 @@ export const Meta = ({
           ))
         : null}
       <link rel="icon" type="image/svg+xml" href={`/${filename}.svg`} />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
     </Head>
   );
 };

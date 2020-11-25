@@ -2,7 +2,7 @@ dist/
 out/
 node_modules/
 tests/screenshots/*
-.env
+.env.local
 .next
 .idea
 .DS_Store

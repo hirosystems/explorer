@@ -50,7 +50,7 @@ export const ContractSource: React.FC<
           justifyContent="space-between"
           borderBottom={border()}
           borderBottomColor="rgb(39, 41, 46)"
-          px="base"
+          px="loose"
           py="base"
           alignItems="center"
         >
@@ -68,9 +68,7 @@ export const ContractSource: React.FC<
                 target="_blank"
               >
                 View deployment
-                <Box ml="extra-tight" size="14px">
-                  <IconChevronRight size="14px" />
-                </Box>
+                <Box as={IconChevronRight} ml="extra-tight" size="14px" />
               </Badge>
             </TxLink>
           ) : null}
@@ -83,11 +81,7 @@ export const ContractSource: React.FC<
           code={source}
           highlightedLine={functionLine}
         />
-        <Box
-          borderTop={border()}
-          borderTopColor="rgb(39, 41, 46)"
-          mt={sourceLinesLength >= 10 && !expanded ? '16px' : 'unset'}
-        >
+        <Box borderTop={border()} borderTopColor="rgb(39, 41, 46)" mt="base">
           {sourceLinesLength >= 10 ? (
             <Grid
               p="base"

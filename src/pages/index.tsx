@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { Flex, Grid } from '@stacks/ui';
-import {
-  Block,
-  MempoolTransaction,
+import type {
   MempoolTransactionListResponse,
-  Transaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
 import { NextPage, NextPageContext } from 'next';

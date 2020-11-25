@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React from 'react';
-import { Box, color, Flex, Grid, Stack } from '@stacks/ui';
+import { Box, color, Grid, Stack } from '@stacks/ui';
 import { blue, Button } from '@components/button';
-import { Link, Text, Title } from '@components/typography';
+import { Text, Title } from '@components/typography';
 import { postToSidecar } from '@common/api/fetch';
 import { useApiServer } from '@common/hooks/use-api';
 
@@ -11,13 +11,8 @@ import { StxInline } from '@components/icons/stx-inline';
 import { useUser } from '@common/hooks/use-user';
 import { DropIcon } from '@components/icons/drop';
 import { Badge } from '@components/badge';
-import { atom, useRecoilState } from 'recoil';
-import { TxLink } from '@components/links';
-
-const faucetResponseState = atom({
-  key: 'sandbox.faucet.response',
-  default: undefined,
-});
+import { useRecoilState } from 'recoil';
+import { faucetResponseState } from '@store/sandbox';
 
 export const FaucetView = () => {
   const apiServer = useApiServer();

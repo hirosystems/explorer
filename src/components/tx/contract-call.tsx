@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, BoxProps, Flex, Grid, Stack } from '@stacks/ui';
+import { Box, BoxProps, color, Flex, Grid, Stack } from '@stacks/ui';
 import { Caption, Link, Pre, Text } from '@components/typography';
 import { Block, Transaction } from '@blockstack/stacks-blockchain-api-types';
 
@@ -8,7 +8,7 @@ import { Rows } from '@components/rows';
 import { Row } from '@components/rows/row';
 import { TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';
-import { border, clarityValuetoHumanReadable, microToStacks } from '@common/utils';
+import { border, capitalize, clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import { PostConditions } from '@components/post-conditions';
 import { Events } from '@components/tx-events';
 import NextLink from 'next/link';
@@ -16,7 +16,7 @@ import { Section } from '@components/section';
 import { ContractCallTxs, TxData } from '@common/types/tx';
 import { Badge } from '@components/badge';
 import FunctionIcon from 'mdi-react/FunctionIcon';
-import { IconChevronRight } from '@tabler/icons';
+import { IconAlertTriangle, IconCheck, IconChevronRight, IconCircleCheck } from '@tabler/icons';
 import { ContractDetails } from '@components/contract-details';
 import { ClarityType, cvToString, deserializeCV, getCVTypeString } from '@stacks/transactions';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
@@ -130,11 +130,19 @@ const resultValue = (value: any) => {
 };
 const Result = ({ result: _result }: { result: Transaction['tx_result'] }) => {
   const result = hexToNiceObject(_result?.hex);
+
   if (!_result?.repr.includes('tuple')) {
+    const type = resultValue(result).type;
+    const success = type.includes('responseOk');
+    const failed = type.includes('responseErr');
     return (
-      <Flex alignItems="center" justifyContent="space-between" width="100%">
-        <Box>{_result?.repr}</Box>
-        <Caption>{resultValue(result).type}</Caption>
+      <Flex width="100%" alignItems="center">
+        {success && <Box mr="tight" color={color('feedback-success')} as={IconCircleCheck} />}
+        {failed && <Box mr="tight" color={color('feedback-error')} as={IconAlertTriangle} />}
+        <Flex flexGrow={1} alignItems="baseline" justifyContent="space-between" width="100%">
+          <Box>{_result?.repr}</Box>
+          <Caption>{resultValue(result).type}</Caption>
+        </Flex>
       </Flex>
     );
   } else {
@@ -180,28 +188,26 @@ const FunctionSummarySection = ({
               label: {
                 children: 'Function',
               },
+              flexGrow: 1,
               children: (
-                <Flex width="100%" alignItems="center">
-                  <Badge
-                    _hover={{
-                      cursor: 'pointer',
-                    }}
-                    bg="#7F80FF"
-                    p="0"
-                    px="0"
-                  >
-                    <Flex px="tight" py="tight">
-                      <FunctionIcon size="15px" />
-                      define-{abiData.access} ({summary.function_name})
-                      <Grid placeItems="center" pl="tight">
-                        <IconChevronRight size="15px" />
-                      </Grid>
-                    </Flex>
-                  </Badge>
+                <Flex width="100%" alignItems="center" justifyContent="space-between">
+                  <Flex>
+                    <Box as={FunctionIcon} mr="tight" size="18px" />
+                    <Text fontWeight="600">{summary.function_name}</Text>
+                  </Flex>
+                  <Caption>{capitalize(abiData.access)} function</Caption>
                 </Flex>
               ),
             },
-
+            {
+              label: {
+                children: 'Result',
+              },
+              flexGrow: 1,
+              alignItems: 'flex-start',
+              condition: result?.repr,
+              children: <Result result={result} />,
+            },
             {
               label: {
                 children: 'Arguments',
@@ -239,15 +245,6 @@ const FunctionSummarySection = ({
                 </Row>
               ),
             },
-            {
-              label: {
-                children: 'Result',
-              },
-              flexGrow: 1,
-              alignItems: 'flex-start',
-              condition: result?.repr,
-              children: <Result result={result} />,
-            },
           ]}
         />
       </>
@@ -282,6 +279,10 @@ const ContractCallPage = ({
               summary={transaction.contract_call}
             />
           )}
+          <PostConditions
+            conditions={transaction.post_conditions}
+            mode={transaction.post_condition_mode}
+          />
           {source.contract && (
             <ContractSource
               sourceTx={source.contract.contract_id}
@@ -289,7 +290,6 @@ const ContractCallPage = ({
               contractCall={transaction.contract_call}
             />
           )}
-          <PostConditions conditions={transaction.post_conditions} />
         </Stack>
         <Stack spacing="extra-loose">
           {source?.contract?.contract_id && (

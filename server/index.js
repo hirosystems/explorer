@@ -1,7 +1,7 @@
 const express = require('express');
 const next = require('next');
 const Cache = require('lru-cache');
-const shrinkRay = require('shrink-ray-current');
+const compression = require('compression');
 
 const expressStaticGzip = require('express-static-gzip');
 const { createMiddleware: createPrometheusMiddleware } = require('@promster/express');
@@ -109,7 +109,7 @@ app.prepare().then(() => {
 
   server.get('/', (req, res) => {
     // since we don't use next's requestHandler, we lose compression, so we manually add it
-    server.use(shrinkRay());
+    server.use(compression());
     renderAndCache(app)(req, res, '/');
   });
 
@@ -121,33 +121,34 @@ app.prepare().then(() => {
   });
 
   server.get('/txid/:txid', (req, res) => {
-    server.use(shrinkRay());
+    server.use(compression());
     const queryParams = { txid: req.params.txid };
     const pagePath = '/txid/[txid]';
     renderAndCache(app)(req, res, pagePath, queryParams);
   });
   server.get('/tx/:txid', (req, res) => {
-    server.use(shrinkRay());
+    server.use(compression());
     const queryParams = { txid: req.params.txid };
     const pagePath = '/txid/[txid]';
     renderAndCache(app)(req, res, pagePath, queryParams);
   });
 
   server.get('/block/:hash', (req, res) => {
-    server.use(shrinkRay());
+    server.use(compression());
     const queryParams = { hash: req.params.hash };
     const pagePath = '/block/[hash]';
     renderAndCache(app)(req, res, pagePath, queryParams);
   });
 
   server.get('/address/:principal', (req, res) => {
-    server.use(shrinkRay());
+    server.use(compression());
     const queryParams = { principal: req.params.principal };
     const pagePath = '/address/[principal]';
     renderAndCache(app)(req, res, pagePath, queryParams);
   });
 
   server.get('*', (req, res, next) => {
+    server.use(compression());
     return handle(req, res);
   });
 

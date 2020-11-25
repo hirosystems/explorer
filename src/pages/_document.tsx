@@ -2,20 +2,21 @@ import * as React from 'react';
 
 import Document, {
   DocumentContext,
-  DocumentProps,
   DocumentInitialProps,
-  Html,
+  DocumentProps,
   Head,
+  Html,
   Main,
   NextScript,
 } from 'next/document';
 import { extractCritical } from '@emotion/server';
 import {
+  ColorModes,
   GlobalStyles,
   ProgressBarStyles,
   TextAreaOverrides,
-  ColorModes,
 } from '@components/global-styles';
+
 export const THEME_STORAGE_KEY = 'theme';
 
 export default class MyDocument extends Document<DocumentProps> {

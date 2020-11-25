@@ -84,8 +84,8 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
         <>
           <Box px="base">
             <Flex borderBottom={border()} alignItems="center" py="loose">
-              <ItemIcon type="tx" txType="token_transfer" />
-              <Stack spacing="tight" px="base">
+              <ItemIcon mr="base" type="tx" txType="token_transfer" />
+              <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
                 <Caption>Total balance</Caption>
               </Stack>

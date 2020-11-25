@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { Block, Transaction } from '@blockstack/stacks-blockchain-api-types';
-import { Box, Flex, Grid } from '@stacks/ui';
+import { Box, Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { queryWith0x, truncateMiddle } from '@common/utils';
 import { Rows } from '@components/rows';
-import Head from 'next/head';
 
 import { NextPage, NextPageContext } from 'next';
 import { PageWrapper } from '@components/page';
@@ -14,6 +13,8 @@ import { Timestamp } from '@components/timestamp';
 import { fetchTx, FetchTxResponse } from '@common/api/transactions';
 import { TransactionList } from '@components/transaction-list';
 import { getServerSideApiServer } from '@common/api/utils';
+import { Meta } from '@components/meta-head';
+import { PagePanes } from '@components/page-panes';
 
 interface BlockSinglePageData {
   hash: string;
@@ -25,9 +26,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, hash, transacti
   const title = `Block #${block.height.toLocaleString()}`;
   return (
     <PageWrapper>
-      <Head>
-        <title>{title} | Stacks Explorer</title>
-      </Head>
+      <Meta title={title} />
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>
           <Title mb="base" mt="64px" as="h1" color="white" fontSize="36px">
@@ -35,7 +34,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, hash, transacti
           </Title>
         </Box>
       </Flex>
-      <Grid gridTemplateColumns="1fr 320px" columnGap="base">
+      <PagePanes>
         <Section title="Summary">
           <Box px="base">
             <Rows
@@ -100,7 +99,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, hash, transacti
             />
           </Box>
         </Section>
-      </Grid>
+      </PagePanes>
       {transactions?.length ? (
         <TransactionList mt="extra-loose" transactions={transactions as Transaction[]} />
       ) : null}

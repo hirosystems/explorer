@@ -13,16 +13,16 @@ import {
   isClarityAbiResponse,
   isClarityAbiTuple,
   serializeCV,
-  StacksNetwork,
-  StacksTestnet,
   standardPrincipalCV,
   trueCV,
   uintCV,
-} from '@blockstack/stacks-transactions';
+  cvToString,
+} from '@stacks/transactions';
+import { StacksNetwork, StacksTestnet } from '@stacks/network';
 
-import { cvToString } from '@blockstack/stacks-transactions/lib/clarity';
 import { withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
+
 export interface ClarityFunctionArg {
   name: string;
   type: ClarityAbiType;

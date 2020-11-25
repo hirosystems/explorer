@@ -5,8 +5,8 @@ import { WasmComponent } from '@components/clarity-repl';
 import { CodeEditor } from '@components/code-editor';
 import { Button } from '@components/button';
 import { useUser } from '@common/hooks/use-user';
-import { atom, useRecoilState, useRecoilValue } from 'recoil';
-import { contractNameState } from '@store/sandbox';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { contractNameState, editorToolsState } from '@store/sandbox';
 import { ContractName } from '@components/sandbox/views/deploy/contract-name';
 import { useClarityRepl } from '@common/hooks/use-clarity-repl';
 import { useCodeEditor } from '@components/code-editor/code-editor';
@@ -14,7 +14,6 @@ import { useCodeEditor } from '@components/code-editor/code-editor';
 import { IconButton } from '@components/icon-button';
 import { CopyIcon } from '@components/icons/copy';
 import { ScanIcon } from '@components/icons/scan';
-import { ShareIcon } from '@components/icons/share';
 import { Tooltip } from '@components/tooltip';
 import CloseIcon from 'mdi-react/CloseIcon';
 import { Caption } from '@components/typography';
@@ -43,11 +42,6 @@ export const Sample = ({ onItemClick, setFieldValue }: any) => {
     />
   );
 };
-
-const editorToolsState = atom({
-  key: 'sandbox.deploy.tools',
-  default: 'hidden',
-});
 
 const Toolbar: React.FC<any> = props => {
   const { refreshPendingTransactions } = useUser();

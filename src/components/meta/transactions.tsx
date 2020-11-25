@@ -1,28 +1,115 @@
 import * as React from 'react';
-import { toRelativeTime, truncateMiddle } from '@common/utils';
+import {
+  getContractName,
+  getFunctionName,
+  getMemoString,
+  microToStacks,
+  toRelativeTime,
+  truncateMiddle,
+} from '@common/utils';
 import { Meta } from '@components/meta-head';
-
-import { getTxTypeName } from '@common/transaction-names';
-
-import type { Transaction, MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
+import type { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
 import type { TxData } from '@common/types/tx';
+import { getContractId } from '@components/transaction-details';
+import { getTxErrorMessage } from '@common/utils/errors';
+
+const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
+  switch (tx.tx_type) {
+    case 'contract_call':
+      return `Function call`;
+    case 'smart_contract':
+      return 'Contract deploy';
+    case 'coinbase':
+      return `Coinbase`;
+    case 'poison_microblock':
+      return 'Poison Microblock';
+    case 'token_transfer':
+      return 'STX transfer';
+  }
+};
+
+const getOgTitle = (tx: Transaction | MempoolTransaction) => {
+  switch (tx.tx_type) {
+    case 'contract_call': {
+      const functionName = getFunctionName(tx);
+      const contract = getContractId(tx);
+      const name = contract && getContractName(contract);
+      return `${functionName} ← ${name}`;
+    }
+    case 'smart_contract': {
+      const contract = getContractId(tx);
+      const name = contract && getContractName(contract);
+      return `${name}`;
+    }
+    case 'token_transfer': {
+      const amount = `${microToStacks(tx.token_transfer.amount)} STX transferred`;
+      return amount;
+    }
+    case 'coinbase':
+      return `Coinbase${tx.tx_status !== 'pending' && ` for block #${tx.block_height}`}`;
+    case 'poison_microblock':
+      return truncateMiddle(tx.tx_id);
+  }
+};
+
+const getDescription = (tx: Transaction | MempoolTransaction) => {
+  switch (tx.tx_type) {
+    case 'token_transfer': {
+      const amount = `${microToStacks(tx.token_transfer.amount)} STX`;
+      return `This transaction transferred ${amount} from ${truncateMiddle(
+        tx.sender_address
+      )} to ${truncateMiddle(tx.token_transfer.recipient_address)}${
+        tx.token_transfer.memo
+          ? ` with the message "${getMemoString(tx.token_transfer.memo)}".`
+          : '.'
+      }`;
+    }
+    case 'smart_contract': {
+      const contract = getContractId(tx);
+      const contractName = contract && getContractName(contract);
+      return `This transaction deployed a smart contract with the name '${contractName}' from the address ${truncateMiddle(
+        tx.sender_address,
+        8
+      )}.${
+        tx.tx_status !== 'success' && tx.tx_status !== 'pending' ? ` ${getTxErrorMessage(tx)}` : ''
+      }${
+        'events' in tx && tx.events.length
+          ? ` The transaction generated a total of ${tx.events.length} events during its execution.`
+          : ''
+      }`;
+    }
+    case 'contract_call':
+      const functionName = getFunctionName(tx);
+      const contract = getContractId(tx);
+      return `This transaction called the public function '${functionName}' from the contract ${
+        contract && truncateMiddle(contract)
+      }.${
+        tx.tx_status !== 'success' && tx.tx_status !== 'pending' ? ` ${getTxErrorMessage(tx)}` : ''
+      }${
+        'events' in tx && tx.events.length
+          ? ` This transaction generated a total of ${tx.events.length} events during its execution.`
+          : ''
+      }`;
+  }
+};
 
 export const TransactionMeta: React.FC<
   Pick<TxData<Transaction | MempoolTransaction>, 'transaction'>
 > = ({ transaction }) => {
-  const ogTitle = `${getTxTypeName(transaction.tx_type)}${
-    transaction.tx_id && ` transaction: ${truncateMiddle(transaction.tx_id, 10)}`
+  const pageTitle = `${getTxPageTitle(transaction)}${
+    transaction.tx_status === 'pending' ? ' (Pending)' : ''
+  }${
+    transaction.tx_status !== 'success' && transaction.tx_status !== 'pending' ? ' (Failed) ' : ''
   }`;
+  const ogTitle = getOgTitle(transaction);
   const ogUrl = `/txid/${transaction.tx_id}`;
-  const subject = transaction.sponsored ? 'Sponsored transaction' : 'Transaction';
-  const ogDescription = `
-    ${subject} initiated by ${transaction.sender_address}`;
+  const ogDescription = getDescription(transaction);
 
   const labels =
     'burn_block_time' in transaction
       ? [
           {
-            label: 'Confirmation',
+            label: 'Confirmed',
             data: `${toRelativeTime(transaction?.burn_block_time * 1000)}, in block #${
               transaction.block_height
             }`,
@@ -32,7 +119,7 @@ export const TransactionMeta: React.FC<
 
   return (
     <Meta
-      title={`${getTxTypeName(transaction.tx_type)} - Stacks 2.0 explorer`}
+      title={pageTitle}
       ogTitle={ogTitle}
       description={ogDescription}
       url={ogUrl}

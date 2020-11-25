@@ -444,7 +444,7 @@ export const TransactionsPanel = React.memo(props => {
       {...props}
     >
       <PanelHeader />
-      <FilterPanel filterKey="sandbox" />
+      <FilterPanel hideBackdrop showBorder bg={color('bg')} filterKey="sandbox" />
 
       <Flex
         flexDirection="column"
