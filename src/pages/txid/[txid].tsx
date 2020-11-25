@@ -4,7 +4,7 @@ import { TransactionMeta } from '@components/meta/transactions';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
 
-import { queryWith0x } from '@common/utils';
+import { queryWith0x, validateTxId } from '@common/utils';
 import { renderTxPageComponent } from '@common/render-tx-page';
 import { useTransactionPageData } from '@common/hooks/use-transaction-page-data';
 import { getServerSideApiServer } from '@common/api/utils';
@@ -14,6 +14,7 @@ import { fetchBlock } from '@common/api/blocks';
 import type { NextPage, NextPageContext } from 'next';
 import type { Block } from '@blockstack/stacks-blockchain-api-types';
 import { useApiServer } from '@common/hooks/use-api';
+import { Meta } from '@components/meta-head';
 
 // @ts-ignore
 const TxNotFound = dynamic(() =>
@@ -37,8 +38,15 @@ const TransactionPage: NextPage<{
 
   const hasInitialError = 'error' in initialData && initialData.error;
 
+  const isPossiblyValid = validateTxId(txid);
+
   if (hasInitialError || error || !data || !transaction) {
-    return <TxNotFound />;
+    return (
+      <>
+        <Meta title="Transaction not found" />
+        <TxNotFound isPending={isPossiblyValid} />
+      </>
+    );
   } else {
     return (
       <PageWrapper>

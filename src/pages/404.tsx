@@ -24,8 +24,7 @@ const PageTop: React.FC = React.memo(() => (
     </Title>
   </Flex>
 ));
-
-const Error: NextPage = () => {
+const NotFound: NextPage = () => {
   return (
     <PageWrapper>
       <Meta title="Not found" />
@@ -63,4 +62,4 @@ const Error: NextPage = () => {
   );
 };
 
-export default Error;
+export default NotFound;
