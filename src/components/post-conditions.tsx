@@ -1,17 +1,29 @@
 import * as React from 'react';
-import { Box, BoxProps, ChevronIcon, Stack, Flex, Grid, FlexProps } from '@stacks/ui';
+import { Box, BoxProps, ChevronIcon, Stack, Flex, Grid, FlexProps, color } from '@stacks/ui';
 import { CodeAccordian } from '@components/code-accordian';
 
-import { Card } from '@components/card';
-import { Caption, Text, Pre, SectionTitle } from '@components/typography';
+import pluralize from 'pluralize';
+import { Caption, Text, Pre, Title } from '@components/typography';
 import { Row } from '@components/rows/row';
-import { PostCondition } from '@blockstack/stacks-blockchain-api-types';
+import {
+  PostCondition,
+  PostConditionFungible,
+  PostConditionFungibleConditionCode,
+  PostConditionNonFungible,
+  PostConditionNonFungibleConditionCode,
+  Transaction,
+} from '@blockstack/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 import { ValueWrapped } from '@components/token-transfer/item';
 import NextLink from 'next/link';
 import { InfoIcon } from '@components/icons/info';
-import { border } from '@common/utils';
+import { border, capitalize, truncateMiddle, validateStacksAddress } from '@common/utils';
 import { Section } from '@components/section';
+import { DynamicColorCircle } from '@components/dynamic-color-circle';
+import { Circle } from '@components/circle';
+import { StxInline } from '@components/icons/stx-inline';
+import { getTicker } from '@components/tx-events';
+import { Badge } from '@components/badge';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -24,7 +36,7 @@ const getConditionType = (type: PostCondition['type']) => {
   }
 };
 
-const Condition = ({
+const _Condition = ({
   condition,
   index: key,
   length,
@@ -118,36 +130,148 @@ const Condition = ({
     </React.Fragment>
   );
 };
-export const PostConditions: React.FC<{ conditions?: PostCondition[] } & FlexProps> = ({
-  conditions,
-  ...rest
-}) =>
-  conditions ? (
-    <Section title="Post conditions" {...rest}>
-      <>
-        {conditions?.length ? (
-          <>
-            <Grid
-              px="base"
-              py="tight"
-              gridTemplateColumns="repeat(3, 1fr)"
-              borderBottom="1px solid var(--colors-border)"
-            >
-              <Caption fontSize="14px">Condition code</Caption>
-              <Caption fontSize="14px">Address</Caption>
-              <Caption fontSize="14px">Amount</Caption>
-            </Grid>
-            {conditions.map((condition: PostCondition, key) => (
-              <Condition length={conditions?.length} condition={condition} index={key} key={key} />
-            ))}
-          </>
-        ) : (
-          <Grid placeItems="center" px="base" py="extra-loose">
-            <Caption my="0" p="0" fontSize="14px">
-              This transaction has no post-conditions.
-            </Caption>
-          </Grid>
-        )}
-      </>
-    </Section>
-  ) : null;
+
+const constructPostConditionAssetId = (
+  asset: PostConditionFungible['asset'] | PostConditionNonFungible['asset']
+) => {
+  return `${asset.contract_address}.${asset.contract_name}::${asset.asset_name}`;
+};
+
+const getFirstLetterOfAsset = (value: string) => {
+  if (value.includes('::')) {
+    return value.split('::')[1][0];
+  } else {
+    if (value.includes('.')) {
+      const parts = value.split('.');
+      if (validateStacksAddress(parts[0])) {
+        return value[1][0];
+      } else {
+        return value[0][0];
+      }
+    }
+    return value[0];
+  }
+};
+
+const getPrettyCode = (
+  code: PostConditionFungibleConditionCode | PostConditionNonFungibleConditionCode,
+  plural: boolean
+) => {
+  const singular = 'transfer';
+  const modifier = pluralize(singular, plural ? 2 : 1);
+  switch (code) {
+    case 'not_sent':
+      return `prevent ${singular}`;
+    case 'sent':
+      return modifier;
+    case 'sent_equal_to':
+      return `${modifier} exactly`;
+    case 'sent_greater_than':
+      return `${modifier} more than`;
+    case 'sent_greater_than_or_equal_to':
+      return `${modifier} at least`;
+    case 'sent_less_than':
+      return `${modifier} less than`;
+    case 'sent_less_than_or_equal_to':
+      return `${modifier} no more than`;
+  }
+};
+
+const ConditionAsset = ({ condition }: { condition: PostCondition }) => {
+  switch (condition.type) {
+    case 'fungible':
+    case 'non_fungible':
+      const assetId = constructPostConditionAssetId(condition.asset);
+      const letter = getFirstLetterOfAsset(assetId);
+      return <DynamicColorCircle string={assetId}>{letter}</DynamicColorCircle>;
+    case 'stx':
+      return (
+        <Circle size="48px" bg={color('accent')}>
+          <StxInline size="20px" color="white" />
+        </Circle>
+      );
+  }
+};
+
+const getConditionTicker = (condition: PostCondition) => {
+  switch (condition.type) {
+    case 'stx':
+      return 'STX';
+    case 'fungible':
+      return getTicker(condition.asset.asset_name).toUpperCase();
+    default:
+      return '';
+  }
+};
+
+const getAmount = (condition: PostCondition) => {
+  if (condition.type === 'stx' || condition.type === 'fungible') {
+    return parseFloat(condition.amount).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 6,
+    });
+  }
+  return `1 ${condition.asset_value.repr}`;
+};
+
+const getAddressValue = (condition: PostCondition) => {
+  switch (condition.principal.type_id) {
+    case 'principal_standard':
+      return condition.principal.address;
+    case 'principal_origin':
+      return 'self';
+    case 'principal_contract':
+      return `${condition.principal.address}.${condition.principal.contract_name}`;
+  }
+};
+
+const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: boolean }) => {
+  return (
+    <Flex alignItems="center" borderBottom={!isLast ? border() : 'unset'} py="base">
+      <ConditionAsset condition={condition} />
+      <Stack spacing="tight" flexGrow={1} ml="base">
+        <Caption>{truncateMiddle(getAddressValue(condition), 8)}</Caption>
+
+        <Title>
+          {capitalize(getPrettyCode(condition.condition_code, true))} {getAmount(condition)}{' '}
+          {getConditionTicker(condition)}
+        </Title>
+      </Stack>
+    </Flex>
+  );
+};
+export const PostConditions: React.FC<
+  {
+    failed?: boolean;
+    conditions?: PostCondition[];
+    mode?: Transaction['post_condition_mode'];
+  } & FlexProps
+> = ({ conditions, mode, failed, ...rest }) => (
+  <Section
+    title="Post conditions"
+    topRight={
+      mode && (
+        <Badge color={color('text-body')} bg={color('bg-alt')}>
+          {capitalize(mode)} mode
+        </Badge>
+      )
+    }
+    {...rest}
+  >
+    <Box px="loose">
+      {conditions?.length ? (
+        <>
+          {conditions.map((condition: PostCondition, key) => (
+            <Condition isLast={key === conditions.length - 1} condition={condition} key={key} />
+          ))}
+        </>
+      ) : (
+        <Grid placeItems="center" px="base" py="extra-loose">
+          <Caption my="0" p="0" fontSize="14px">
+            This transaction has no post-conditions.
+          </Caption>
+        </Grid>
+      )}
+    </Box>
+  </Section>
+);

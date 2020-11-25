@@ -3,8 +3,10 @@ import { UserData, AppConfig, UserSession } from '@stacks/auth';
 import { AuthOptions } from '@stacks/connect';
 import { generateRandomName } from '@common/hooks/use-random-name';
 import { helloWorldContract } from '@common/sandbox/contracts';
-import { fetchContractInterface } from '@common/sandbox';
+import { callReadOnlyFunction, fetchContractInterface } from '@common/sandbox';
 import { TransactionType } from '@models/transaction.interface';
+import { SampleContracts } from '@common/sandbox/examples';
+import { StacksTestnet } from '@stacks/network';
 
 export const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
@@ -129,5 +131,49 @@ export const filterState = atomFamily({
     ],
     showPending: true,
     showFailed: true,
+  },
+});
+
+export const editorToolsState = atom({
+  key: 'sandbox.deploy.tools',
+  default: 'hidden',
+});
+
+export const faucetResponseState = atom({
+  key: 'sandbox.faucet.response',
+  default: undefined,
+});
+
+export const codeEditorState = atomFamily({
+  key: 'codeEditor',
+  default: (principal: string) =>
+    SampleContracts[0].source.replace('SM2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQVX8X0G', principal),
+});
+
+export const readOnlyState = atom({
+  key: 'sandbox.contract-call.read-only',
+  default: undefined,
+});
+
+export const readOnlyResponseState = selectorFamily<any, any>({
+  key: 'sandbox.contract-call.read-only.response',
+  get: ({
+    contractName,
+    contractAddress,
+    functionName,
+    functionArgs = [],
+    senderAddress,
+    apiServer,
+  }) => async () => {
+    const network = new StacksTestnet();
+    network.coreApiUrl = apiServer;
+    return callReadOnlyFunction({
+      contractName,
+      contractAddress,
+      functionName,
+      functionArgs,
+      network,
+      senderAddress,
+    });
   },
 });

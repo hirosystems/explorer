@@ -78,14 +78,15 @@ export const ContractDetails = ({ contractId, contractInterface }) => {
             <Flex
               as="a"
               target="_blank"
-              color={color('text-caption')}
-              _hover={{ color: color('text-body') }}
+              color={color('accent')}
+              textDecoration="none"
+              _hover={{ textDecoration: 'underline' }}
               alignItems="center"
             >
               <Caption transform="translateY(1px)" color="currentColor">
                 View deployment
               </Caption>
-              <ExternalLinkIcon ml="tight" color="currentColor" size="16px" />
+              <ExternalLinkIcon ml="tight" color={color('text-caption')} size="16px" />
             </Flex>
           </TxLink>
         </Grid>

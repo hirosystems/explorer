@@ -53,15 +53,7 @@ export const getTxTitle = (transaction: Transaction) => {
     case 'smart_contract':
       return getContractName(transaction?.smart_contract?.contract_id);
     case 'contract_call':
-      return (
-        <Stack isInline spacing="tight" alignItems="center">
-          <Box>{getContractName(transaction.contract_call.contract_id)}</Box>
-          <Box size="28px" opacity="0.5" transform="translateY(-4px)">
-            <IconChevronRight size="28px" />
-          </Box>
-          <Box>{getFunctionName(transaction)}</Box>
-        </Stack>
-      );
+      return getFunctionName(transaction);
     case 'token_transfer':
       return `${microToStacks(transaction.token_transfer.amount)} STX transfer`;
     case 'coinbase':

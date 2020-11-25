@@ -14,7 +14,7 @@ import { Link } from '@components/typography';
 import NextLink from 'next/link';
 import React from 'react';
 import { SearchBarWithDropdown } from '@components/search-bar';
-import { useHomepageData } from '@pages/index';
+// import { useHomepageData } from '@pages/index';
 import { StxInline } from '@components/icons/stx-inline';
 
 type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
@@ -24,7 +24,7 @@ export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref)
 ));
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
-  const { refresh } = useHomepageData();
+  // const { refresh } = useHomepageData();
   return (
     <NextLink href="/" passHref>
       <Grid
@@ -38,7 +38,6 @@ export const LogoNavItem = React.memo((props: BoxProps) => {
         title="Stacks Explorer"
         as="a"
         transition={transition}
-        onClick={() => refresh()}
         {...props}
       >
         <StxInline color="currentColor" size="22px" />

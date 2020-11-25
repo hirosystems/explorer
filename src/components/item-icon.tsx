@@ -25,7 +25,6 @@ const ItemBox: React.FC<GridProps> = props => (
     size="48px"
     borderRadius="8px"
     position="relative"
-    display={['none', 'none', 'grid']}
     border={border()}
     bg={color('bg')}
     color={color('invert')}

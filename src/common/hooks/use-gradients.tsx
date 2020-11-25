@@ -16,6 +16,12 @@ export const defaults = {
   lightnessFactor3: 1,
 };
 export const TweaksContext = React.createContext(defaults);
+function moduloRange(x: number, range: [number, number], includeMax = false) {
+  const max = range[1],
+    min = range[0],
+    d = max - min;
+  return x === max && includeMax ? x : ((((x - min) % d) + d) % d) + min;
+}
 
 export const useGradients = () => {
   const {
@@ -34,10 +40,37 @@ export const useGradients = () => {
   const generateGradientType = (string: string) => {
     const gradientType = `${hashValue(string, ['linear', 'radial'])}-gradient`;
     const radialModifier = `${hashValue(string, [
+      'farthest-side',
+      'farthest-side',
+      'farthest-side',
+      'farthest-side',
+      'farthest-side',
+      'farthest-side',
+      'farthest-side',
+      'farthest-corner',
+      'farthest-corner',
+      'farthest-corner',
+      'farthest-corner',
+      'farthest-corner',
+      'circle',
+      'circle',
+      'circle',
+      'circle',
+      'circle',
       'circle',
       'closest-side',
+      'closest-side',
+      'closest-corner',
+      'closest-corner',
+      'closest-corner',
+      'closest-corner',
       'ellipse',
-    ])} at ${Math.abs(generateHash(string) % 100)}%`;
+      'ellipse',
+      'ellipse',
+      'ellipse',
+      'ellipse',
+      'ellipse',
+    ])} at ${Math.abs(moduloRange(generateHash(string), [0, 100], true))}%`;
     const linearModifier = `${Math.abs(generateHash(string) % 360)}deg`;
 
     const modifier = gradientType === 'linear-gradient' ? linearModifier : radialModifier;

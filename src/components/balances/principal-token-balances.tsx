@@ -3,37 +3,46 @@ import { AddressBalanceResponse } from '@blockstack/stacks-blockchain-api-types'
 import { Box, color, FlexProps, Grid, GridProps } from '@stacks/ui';
 import { Caption } from '@components/typography';
 import { Section } from '@components/section';
-import { border } from '@common/utils';
 import { TokenAssetListItem } from '@components/balances/token-asset-list-item';
 import { HoverableItem } from '@components/hoverable';
 
-export const NftBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) => (
-  <>
-    {Object.keys(balances.non_fungible_tokens).map((token, key, arr) => (
-      <TokenAssetListItem
-        token={token}
-        type="non_fungible_tokens"
-        balances={balances}
-        key={key}
-        isLast={key === arr.length - 1}
-      />
-    ))}
-  </>
-);
+export const NftBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) =>
+  Object.keys(balances.non_fungible_tokens).length ? (
+    <>
+      {Object.keys(balances.non_fungible_tokens).map((token, key, arr) => (
+        <TokenAssetListItem
+          token={token}
+          type="non_fungible_tokens"
+          balances={balances}
+          key={key}
+          isLast={key === arr.length - 1}
+        />
+      ))}
+    </>
+  ) : (
+    <Grid minHeight="220px" textAlign="center" placeItems="center" padding="base">
+      <Caption>This account has no collectibles.</Caption>
+    </Grid>
+  );
 
-export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) => (
-  <>
-    {Object.keys(balances.fungible_tokens).map((token, key, arr) => (
-      <TokenAssetListItem
-        token={token}
-        type="fungible_tokens"
-        balances={balances}
-        key={key}
-        isLast={key === arr.length - 1}
-      />
-    ))}
-  </>
-);
+export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) =>
+  Object.keys(balances.fungible_tokens).length ? (
+    <>
+      {Object.keys(balances.fungible_tokens).map((token, key, arr) => (
+        <TokenAssetListItem
+          token={token}
+          type="fungible_tokens"
+          balances={balances}
+          key={key}
+          isLast={key === arr.length - 1}
+        />
+      ))}
+    </>
+  ) : (
+    <Grid minHeight="220px" textAlign="center" placeItems="center" padding="base">
+      <Caption>This account has no tokens.</Caption>
+    </Grid>
+  );
 
 const Tab: React.FC<GridProps & { label: string; isActive?: boolean }> = ({
   label,
@@ -73,7 +82,7 @@ export const TokenBalancesCard: React.FC<FlexProps & { balances: AddressBalanceR
           );
         })}
       </Grid>
-      <Box py="tight" maxHeight="500px" overflowY="auto">
+      <Box minHeight="220px" maxHeight="500px" overflowY="auto">
         <TabContent balances={balances} />
       </Box>
     </Section>

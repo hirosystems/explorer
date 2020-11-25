@@ -13,7 +13,6 @@ export const DynamicColorCircle: React.FC<{ string: string } & GridProps> = ({
   return (
     <Grid
       borderRadius="100%"
-      mr="base"
       size="48px"
       placeItems="center"
       textTransform="capitalize"

@@ -1,8 +1,9 @@
-import { atomFamily, atom, selector, selectorFamily, AtomEffect } from 'recoil';
+// @ts-nocheck
+import { atom, AtomEffect, atomFamily, selector, selectorFamily } from 'recoil';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { SearchResult } from '@common/types/search';
 import { fetchAllAccountData } from '@common/api/accounts';
-import { fetchTx, fetchPendingTxs } from '@common/api/transactions';
+import { fetchPendingTxs, fetchTx } from '@common/api/transactions';
 import { fetchContract } from '@common/api/contracts';
 import { fetchBlock } from '@common/api/blocks';
 import { parseCookies, setCookie } from 'nookies';
@@ -53,10 +54,9 @@ export const recentItemsState = atom({
   }),
   effects_UNSTABLE: [localStorageEffect('recent_search_items')],
 });
-
 export const apiServerState = atom({
   key: 'app/apiServer',
-  default: 'https://stacks-node-api.blockstack.org',
+  default: process.env.NEXT_PUBLIC_TESTNET_API_SERVER,
   effects_UNSTABLE: [cookieEffect('apiServer')],
 });
 

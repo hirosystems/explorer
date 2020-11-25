@@ -91,7 +91,6 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
           bg={color('bg')}
           border={border()}
           color={color('text-body')}
-          mr="tight"
           size="48px"
           placeItems="center"
           borderRadius="12px"
@@ -102,13 +101,7 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
       );
     case 'fungible_token_asset':
       return name ? (
-        <DynamicColorCircle
-          textTransform="uppercase"
-          mr="tight"
-          size="48px"
-          string={name}
-          position="relative"
-        >
+        <DynamicColorCircle textTransform="uppercase" size="48px" string={name} position="relative">
           {assetEventType ? <AssetEventTypeBubble type={assetEventType} /> : null}
           {getAssetNameParts(name).asset[0]}
         </DynamicColorCircle>
@@ -116,7 +109,7 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
 
     case 'non_fungible_token_asset':
       return name ? (
-        <DynamicColorCircle textTransform="uppercase" mr="tight" size="48px" string={name}>
+        <DynamicColorCircle textTransform="uppercase" size="48px" string={name}>
           {assetEventType ? <AssetEventTypeBubble type={assetEventType} /> : null}
           {getAssetNameParts(name).asset[0]}
         </DynamicColorCircle>
@@ -242,7 +235,13 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
         <ItemIcon event={event} />
         <Stack ml="base" spacing="tight">
           <Title>{name}</Title>
-          <Stack flexWrap="wrap" alignItems="center" isInline>
+          <Stack
+            flexWrap="wrap"
+            alignItems="center"
+            spacing="extra-tight"
+            isInline
+            divider={<Caption>∙</Caption>}
+          >
             {assetEventType ? <Caption fontWeight="bold">{assetEventType}</Caption> : null}
             {assetAmounts && (
               <Caption>

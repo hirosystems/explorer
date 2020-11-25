@@ -108,142 +108,137 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   );
 };
 
-export const FilterPanel = ({
-  filterKey,
-  hideBackdrop,
-  showBorder,
-  bg,
-  pointerEvents,
-  ...rest
-}: any) => {
-  const {
-    handleClose,
-    showFailed,
-    showPending,
-    types,
-    handleUpdateTypes,
-    handleToggleShowPending,
-    handleToggleShowShowFailed,
-    showing,
-  } = useFilterState(filterKey);
+export const FilterPanel = React.memo(
+  ({ filterKey, hideBackdrop, showBorder, bg, pointerEvents, ...rest }: any) => {
+    const {
+      handleClose,
+      showFailed,
+      showPending,
+      types,
+      handleUpdateTypes,
+      handleToggleShowPending,
+      handleToggleShowShowFailed,
+      showing,
+    } = useFilterState(filterKey);
 
-  const borderStyles = showBorder
-    ? {
-        border: border(),
-        borderTop: '0',
-      }
-    : {};
+    const borderStyles = showBorder
+      ? {
+          border: border(),
+          borderTop: '0',
+        }
+      : {};
 
-  return (
-    <Flex
-      height="100%"
-      width="100%"
-      left="0"
-      flexGrow={1}
-      position="absolute"
-      top="34px"
-      overflowY="hidden"
-      flexDirection="column"
-      px="extra-loose"
-      pointerEvents="none"
-      {...rest}
-    >
-      <Box
-        position="absolute"
-        top={0}
-        left="0"
+    return (
+      <Flex
+        height="100%"
         width="100%"
-        bg={color('border')}
-        height="1px"
-        zIndex={999999}
-      />
-      <Transition
-        transition={`all 280ms cubic-bezier(0.4, 0, 0.2, 1)`}
-        timeout={{ enter: 50, exit: 150 }}
-        styles={{
-          init: {
-            transform: 'translateY(-100%)',
-            // opacity: 0,
-          },
-          entered: { transform: 'translateY(0)', opacity: 1 },
-          exiting: {
-            transform: 'translateY(0)',
-            opacity: '0',
-          },
-        }}
-        in={showing}
+        left="0"
+        flexGrow={1}
+        position="absolute"
+        top="34px"
+        overflowY="hidden"
+        flexDirection="column"
+        px="extra-loose"
+        pointerEvents="none"
+        {...rest}
       >
-        {styles => (
-          <Box
-            zIndex={100}
-            p="base"
-            pb="loose"
-            top="1px"
-            bg={bg || color('bg-light')}
-            width="100%"
-            borderRadius="0 0 16px 16px"
-            willChange="transform, opacity"
-            style={styles}
-            boxShadow="high"
-            pointerEvents="all"
-            {...borderStyles}
-          >
-            <Box
-              position="absolute"
-              top={'-48px'}
-              left="0"
-              width="100%"
-              bg={color('bg-light')}
-              height="50px"
-            />
-            <Flex pb="base" alignItems="center" justifyContent="space-between">
-              <Title>Filter transactions</Title>
-              <IconButton onClick={handleClose} dark icon={CloseIcon} />
-            </Flex>
-            <Flex justifyContent="space-between">
-              <Stack alignItems="flex-start" spacing="base">
-                {FILTERABLE_TYPES.map(type => (
-                  <CheckableElement
-                    onClick={handleUpdateTypes}
-                    value={!!types.find(_type => _type === type)}
-                    type={type}
-                    key={type}
-                  />
-                ))}
-              </Stack>
-              <Stack alignItems="flex-end" spacing="base">
-                <Toggle
-                  value={showPending}
-                  onClick={() => handleToggleShowPending()}
-                  label="Show pending"
-                />
-                <Toggle
-                  value={showFailed}
-                  onClick={() => handleToggleShowShowFailed()}
-                  label="Show failed"
-                />
-              </Stack>
-            </Flex>
-          </Box>
-        )}
-      </Transition>
-      {!hideBackdrop ? (
-        <Fade timeout={250} in={showing}>
+        <Box
+          position="absolute"
+          top={0}
+          right="tight"
+          width="100%"
+          bg={color('border')}
+          height="1px"
+          zIndex={999999}
+        />
+        <Transition
+          transition={`all 280ms cubic-bezier(0.4, 0, 0.2, 1)`}
+          timeout={{ enter: 50, exit: 150 }}
+          styles={{
+            init: {
+              transform: 'translateY(-100%)',
+              // opacity: 0,
+            },
+            entered: { transform: 'translateY(0)', opacity: 1 },
+            exiting: {
+              transform: 'translateY(0)',
+              opacity: '0',
+            },
+          }}
+          in={showing}
+        >
           {styles => (
             <Box
-              onClick={handleClose}
-              position="absolute"
-              top="0"
-              left={0}
+              zIndex={100}
+              p="base"
+              pb="loose"
+              top="1px"
+              bg={bg || color('bg-light')}
               width="100%"
-              height="calc(100% - 33px)"
-              bg="rgba(0,0,0,0.5)"
-              zIndex={99}
+              borderRadius="0 0 16px 16px"
+              willChange="transform, opacity"
               style={styles}
-            />
+              boxShadow="high"
+              pointerEvents="all"
+              {...borderStyles}
+            >
+              <Box
+                position="absolute"
+                top={'-48px'}
+                left="0"
+                width="100%"
+                bg={color('bg-light')}
+                height="50px"
+              />
+              <Flex pb="base" alignItems="center" justifyContent="space-between">
+                <Title>Filter transactions</Title>
+                <IconButton onClick={handleClose} dark icon={CloseIcon} />
+              </Flex>
+              <Flex justifyContent="space-between">
+                <Stack alignItems="flex-start" spacing="base">
+                  {FILTERABLE_TYPES.map(type => (
+                    <CheckableElement
+                      onClick={handleUpdateTypes}
+                      value={!!types.find(_type => _type === type)}
+                      type={type}
+                      key={type}
+                    />
+                  ))}
+                </Stack>
+                <Stack alignItems="flex-end" spacing="base">
+                  <Toggle
+                    value={showPending}
+                    onClick={() => handleToggleShowPending()}
+                    label="Show pending"
+                  />
+                  <Toggle
+                    value={showFailed}
+                    onClick={() => handleToggleShowShowFailed()}
+                    label="Show failed"
+                  />
+                </Stack>
+              </Flex>
+            </Box>
           )}
-        </Fade>
-      ) : null}
-    </Flex>
-  );
-};
+        </Transition>
+        {!hideBackdrop ? (
+          <Fade timeout={250} in={showing}>
+            {styles => (
+              <Box
+                onClick={handleClose}
+                position="absolute"
+                top="0"
+                left={0}
+                width="100%"
+                height="calc(100% - 33px)"
+                bg="rgba(0,0,0,0.5)"
+                zIndex={99}
+                style={styles}
+              />
+            )}
+          </Fade>
+        ) : null}
+      </Flex>
+    );
+  }
+);

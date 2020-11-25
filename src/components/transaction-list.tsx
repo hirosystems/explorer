@@ -23,6 +23,7 @@ import { CaptionAction } from '@components/caption-action';
 import { IconFilter } from '@tabler/icons';
 import { FilteredMessage, FilterPanel } from '@components/sandbox/filter-panel';
 import { useFilterState } from '@common/hooks/use-filter-state';
+import { TransactionTypes } from '@stacks/connect';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
@@ -146,6 +147,7 @@ export const TransactionList: React.FC<
     principal?: string;
     loadMore?: () => void;
     limit?: number;
+    showCoinbase?: boolean;
   } & FlexProps
 > = React.memo(
   ({
@@ -158,6 +160,7 @@ export const TransactionList: React.FC<
     isLoadingMore,
     hideFilter = true,
     limit,
+    showCoinbase,
     ...rest
   }) => {
     const {
@@ -166,7 +169,7 @@ export const TransactionList: React.FC<
       handleToggleFilterPanelVisibility,
       handleToggleShowPending,
       types,
-    } = useFilterState('txList');
+    } = useFilterState('txList', showCoinbase);
 
     const pending: MempoolTransactionListResponse['results'] = mempool.filter(tx => {
       const now = new Date().getTime();
@@ -216,7 +219,7 @@ export const TransactionList: React.FC<
       >
         <Box px="loose">
           {hasNoVisibleTxs ? (
-            <FilteredMessage minHeight="500px" filterKey={'txList'} />
+            <FilteredMessage filterKey={'txList'} />
           ) : hasTransactions ? (
             <Box flexGrow={1}>
               <TxList principal={principal} items={filteredTxs} />

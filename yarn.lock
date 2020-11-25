@@ -1133,7 +1133,7 @@
   resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-sidecar-types/-/stacks-blockchain-sidecar-types-0.0.22.tgz#516017641c2ca9b89101c6f08eda94cb0200becd"
   integrity sha512-xU1CFB0xyLyGRUVH8a5o/A260KDn39lmE/5w5l3GK/5EKwEhbppcFilySMao/QRrNT42Q0YWqhWxNz6BFMllGQ==
 
-"@blockstack/stacks-transactions@0.7.0", "@blockstack/stacks-transactions@^0.7.0":
+"@blockstack/stacks-transactions@0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.7.0.tgz#c587f69879b1903bada87769f1d6d1217479336a"
   integrity sha512-9IUR641PJpigYDCWdtKFgBIk0Oxyoc2M2XVdyaEOEcRhI+4lcacDhsuseAmGbkB9FhJgJcNicWPujUPNFl1XCw==
@@ -1474,20 +1474,20 @@
   resolved "https://registry.yarnpkg.com/@next/env/-/env-10.0.1.tgz#5f49329fcc4fe8948737aeb8108c9d7d75155f93"
   integrity sha512-6dwx5YXKG88IR9Q1aai+pprF7WKcmtl0ShQy/iENj5yMWMzsQCem6hxe198u9j7z1IsWyGDXZPsaLEJEatOpeQ==
 
-"@next/env@10.0.3-canary.2":
-  version "10.0.3-canary.2"
-  resolved "https://registry.yarnpkg.com/@next/env/-/env-10.0.3-canary.2.tgz#c3b6d7d3862808cd7ab4d81b5a34b36f95681080"
-  integrity sha512-ifjd8wBcZGXAvA5vuzvWVJYNZOyyva3qsLUKR5dRrZIVPeDJIWVGt2gaiWVKtoO5IasElfU6MfX/EppHOWFsbQ==
+"@next/env@10.0.3":
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/@next/env/-/env-10.0.3.tgz#ef1077d78bf500855576f83090d6fb1ec96272f8"
+  integrity sha512-xjJt2VXoSxAydskmt77nJuEtRL782E4ltaj5JtMzJ8YkNUMMu3d5ktpCR+Q3INKHF/RY6zHJ9QzyE3/s1ikbNg==
 
 "@next/polyfill-module@10.0.1":
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/@next/polyfill-module/-/polyfill-module-10.0.1.tgz#483c8f8692d842800f6badb59f8de74b540580a9"
   integrity sha512-Vf8HYy74jx8aQgv/ftFXQtD/udJY4/OXYiiBepqrxC0T3PPl4cns1cbrr5f15xjPELMfcqulxwMYEurioBmv+w==
 
-"@next/polyfill-module@10.0.3-canary.2":
-  version "10.0.3-canary.2"
-  resolved "https://registry.yarnpkg.com/@next/polyfill-module/-/polyfill-module-10.0.3-canary.2.tgz#00625481fcce38f0cf9ac02ff1c13a2972f88982"
-  integrity sha512-x3OlUCUa0dboas5DPM8Bj/arTCpHMh6o5rfiZY0H5Jes5sjM5kQSt8Uhh3yjBXJD4EL1pJRyjR8+4hxu0zXqMg==
+"@next/polyfill-module@10.0.3":
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/@next/polyfill-module/-/polyfill-module-10.0.3.tgz#507e99f6dd351dc4a6e45b63dbd397087ece459a"
+  integrity sha512-JaiycQZZbqViaMZgRGYcPIdCPDz+qRnqEGxbhQlrxyPaBaOtsrAEkGf1SS2wJZKa/ncxqWHMfSvizDcGcz/ygQ==
 
 "@next/react-dev-overlay@10.0.1":
   version "10.0.1"
@@ -1505,10 +1505,10 @@
     stacktrace-parser "0.1.10"
     strip-ansi "6.0.0"
 
-"@next/react-dev-overlay@10.0.3-canary.2":
-  version "10.0.3-canary.2"
-  resolved "https://registry.yarnpkg.com/@next/react-dev-overlay/-/react-dev-overlay-10.0.3-canary.2.tgz#b99bfdd498dffd527b400d0337d2c3dc842f1b9e"
-  integrity sha512-Ta+mdEtmxvasNB5eo1mAxPSo3qVK95xKVNHj6zwVX8O0u6PizrP5FSTPSj/Fu0sgzxE6dzSrPe9mioCMB0UUzw==
+"@next/react-dev-overlay@10.0.3":
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/@next/react-dev-overlay/-/react-dev-overlay-10.0.3.tgz#99f3151677747d8be08a9314fa7ab3611e8161b8"
+  integrity sha512-ykiKeUhTsMRoyyYnx4jM8xeOPfKGqQ7xgx2dNXOu4tbPpdivzjJp2+K6+xnqhTmZ7uxfFBV+b1OE1ZzA8qyX5Q==
   dependencies:
     "@babel/code-frame" "7.10.4"
     ally.js "1.4.1"
@@ -1526,10 +1526,10 @@
   resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-10.0.1.tgz#ea6f808a9a6242d2da85138edee5562f17c0243a"
   integrity sha512-K3thGrgD0uic/x4PZh9oRK/+LWTsn6zmDSHoEXgdft1gtlOjQIVGz7yuPMvuEB9oXDl+giuvRbU+JRlhtSf/eQ==
 
-"@next/react-refresh-utils@10.0.3-canary.2":
-  version "10.0.3-canary.2"
-  resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-10.0.3-canary.2.tgz#70ce944e820e69d0f44e3b42bff9f897450c73c5"
-  integrity sha512-jPCAeKoD3RO9jhdpYuxZnH0hdt/ydb3b/iDHEOiUc3gNLbcJc7FZFeX75ewspiKSv3l1tQ4O3HJibsEc9kkt7g==
+"@next/react-refresh-utils@10.0.3":
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/@next/react-refresh-utils/-/react-refresh-utils-10.0.3.tgz#276bec60eae18768f96baf8a52f668f657f50ab4"
+  integrity sha512-XtzzPX2R4+MIyu1waEQUo2tiNwWVEkmObA6pboRCDTPOs4Ri8ckaIE08lN5A5opyF6GVN+IEq/J8KQrgsePsZQ==
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -7355,18 +7355,18 @@ next@*:
   optionalDependencies:
     sharp "0.26.2"
 
-next@^10.0.3-canary.2:
-  version "10.0.3-canary.2"
-  resolved "https://registry.yarnpkg.com/next/-/next-10.0.3-canary.2.tgz#cbfef241aa1163b58653e164e621a731cde1ebe9"
-  integrity sha512-4QVM6X0paK0nueoW+CecHgYh2WxN2kKuaHKVb5V6s1idxVhpsRqYqJ9BroahFauCEYLHHtTOOpmkJYITthZA8A==
+next@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/next/-/next-10.0.3.tgz#2bf9a1625dcd0afc8c31be19fc5516af68d99e80"
+  integrity sha512-QYCfjZgowjaLUFvyV8959SmkUZU/edFgHeiXNtWDv7kffo/oTm891p0KZAkk5cMIHcsDX3g3UuQdw/zmui783g==
   dependencies:
     "@ampproject/toolbox-optimizer" "2.7.0-alpha.1"
     "@babel/runtime" "7.12.5"
     "@hapi/accept" "5.0.1"
-    "@next/env" "10.0.3-canary.2"
-    "@next/polyfill-module" "10.0.3-canary.2"
-    "@next/react-dev-overlay" "10.0.3-canary.2"
-    "@next/react-refresh-utils" "10.0.3-canary.2"
+    "@next/env" "10.0.3"
+    "@next/polyfill-module" "10.0.3"
+    "@next/react-dev-overlay" "10.0.3"
+    "@next/react-refresh-utils" "10.0.3"
     ast-types "0.13.2"
     babel-plugin-transform-define "2.0.0"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
@@ -7414,6 +7414,11 @@ no-case@^3.0.3:
   dependencies:
     lower-case "^2.0.1"
     tslib "^1.10.0"
+
+noble-secp256k1@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/noble-secp256k1/-/noble-secp256k1-1.0.6.tgz#278c8516ff28d0869f1b67444902b4a7be5d2287"
+  integrity sha512-eQq70gZz7oOliA15dmOhkae2up92WTa9mQBeN65VV0OJ0GmBig6KJQXMw8jFMnhUcm1hcUYXH5+jvcZ8eIa3+A==
 
 node-abi@^2.7.0:
   version "2.19.1"
@@ -7776,6 +7781,13 @@ p-try@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
+
+package-json-cleanup-loader@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/package-json-cleanup-loader/-/package-json-cleanup-loader-1.0.3.tgz#67774b46003de332fc0bdf4721500d6aa412cc54"
+  integrity sha1-Z3dLRgA94zL8C99HIVANaqQSzFQ=
+  dependencies:
+    loader-utils "^1.1.0"
 
 param-case@^3.0.3:
   version "3.0.3"

@@ -1,4 +1,4 @@
-import { parseCookies } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 import getConfig from 'next/config';
 import { NextPageContext } from 'next';
 import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
@@ -6,7 +6,15 @@ import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
 export const getServerSideApiServer = (ctx: NextPageContext) => {
   const cookies = parseCookies(ctx);
   const { publicRuntimeConfig } = getConfig();
-  return cookies?.apiServer || publicRuntimeConfig.TESTNET_API_SERVER;
+  if (!cookies.apiServer) {
+    const defaultValue = publicRuntimeConfig.TESTNET_API_SERVER;
+    setCookie(ctx, 'apiServer', publicRuntimeConfig.TESTNET_API_SERVER as string, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: '/',
+    });
+    return defaultValue;
+  }
+  return cookies?.apiServer;
 };
 
 export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>

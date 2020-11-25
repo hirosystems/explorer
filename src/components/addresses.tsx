@@ -20,9 +20,13 @@ export const SenderRecipient: React.FC<SenderRecipientProps> = React.memo(
           </Link>
         </AddressLink>
       </Caption>
-      <Box display="inline-block" as="span" width="15px" color={color('text-caption')}>
-        <IconArrowRight strokeWidth="1.5" size="15px" />
-      </Box>
+      <Box
+        as={IconArrowRight}
+        display="inline-block"
+        size="15px"
+        strokeWidth="1.5"
+        color={color('text-caption')}
+      />
       <Caption display="inline-block">
         <AddressLink principal={recipient}>
           <Link display="inline-block" as="a">

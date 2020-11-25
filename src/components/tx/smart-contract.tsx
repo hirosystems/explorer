@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Grid, Stack } from '@stacks/ui';
+import { Stack } from '@stacks/ui';
 
 import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';

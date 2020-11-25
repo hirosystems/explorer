@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, BoxProps, Stack, Grid, color } from '@stacks/ui';
+import { Box, BoxProps, color, Flex, Grid, Stack } from '@stacks/ui';
 import { Text } from '@components/typography';
 import { Section } from '@components/section';
 import { border } from '@common/utils';
@@ -11,7 +11,7 @@ import { ContractCallView } from '@components/sandbox/views/contract-call';
 import { FaucetView } from '@components/sandbox/views/faucet';
 import { TokenTransferView } from '@components/sandbox/views/token-transfer';
 import { useUser } from '@common/hooks/use-user';
-import Head from 'next/head';
+import { Meta } from '@components/meta-head';
 
 const HeaderItem = React.memo((props: BoxProps) => (
   <Text
@@ -52,11 +52,7 @@ const Tabs = React.memo(() => {
   const [activeTab, setActiveTab] = useRecoilState(tabState);
   return (
     <>
-      <Head>
-        <title>
-          {tabs.find(tab => tab.slug === activeTab)?.label || 'Sandbox'} | Stacks Explorer
-        </title>
-      </Head>
+      <Meta title={`${tabs.find(tab => tab.slug === activeTab)?.label || 'Sandbox'}`} />
       <Stack isInline spacing="base">
         {tabs.map(tab => (
           <HeaderItem

@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { AddressBalanceResponse } from '@blockstack/stacks-blockchain-api-types';
-import { Box, color, Flex, FlexProps, space } from '@stacks/ui';
+import { Box, color, Flex, FlexProps, space, Stack } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 import { TxLink } from '@components/links';
 import { DynamicColorCircle } from '@components/dynamic-color-circle';
 import { getAssetNameParts } from '@common/utils';
+import { getTicker } from '@components/tx-events';
 
 interface TokenAssetListItemProps extends FlexProps {
   token: string;
@@ -26,29 +27,32 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
       justifyContent="space-between"
       // borderBottom={!isLast ? border() : 'unset'}
       px="base"
-      py="tight"
+      py="base"
     >
       <Box>
         <Flex alignItems="center" mb={space('extra-tight')}>
-          <DynamicColorCircle size="32px" string={`${address}.${contract}::${asset}`}>
+          <DynamicColorCircle size="32px" mr="base" string={`${address}.${contract}::${asset}`}>
             {asset[0]}
           </DynamicColorCircle>
-          <Box>
-            <Text color={color('text-title')} mb="extra-tight" fontWeight="600">
+          <Stack spacing="extra-tight">
+            <Text color={color('text-title')} fontWeight="600">
               {asset}
             </Text>
-            <TxLink txid={`${address}.${contract}`}>
-              <Caption
-                target="_blank"
-                _hover={{
-                  textDecoration: 'underline',
-                }}
-                as="a"
-              >
-                {contract}
-              </Caption>
-            </TxLink>
-          </Box>
+            <Stack isInline spacing="extra-tight" divider={<Caption>∙</Caption>}>
+              <Caption>{getTicker(asset).toUpperCase()}</Caption>
+              <TxLink txid={`${address}.${contract}`}>
+                <Caption
+                  target="_blank"
+                  _hover={{
+                    textDecoration: 'underline',
+                  }}
+                  as="a"
+                >
+                  View contract
+                </Caption>
+              </TxLink>
+            </Stack>
+          </Stack>
         </Flex>
       </Box>
       <Flex justifyContent="flex-end" alignItems="center" textAlign="right">

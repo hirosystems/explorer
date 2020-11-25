@@ -51,7 +51,6 @@ export const fetchTransaction = (apiServer: string) => async (
 ): Promise<FetchTransactionResponse> => {
   if (query.includes('.')) {
     const contract = await fetchContract(apiServer)(query);
-    console.log('contract', contract);
     if ('error' in contract) {
       return {
         error: contract.error,

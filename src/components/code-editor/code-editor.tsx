@@ -3,23 +3,23 @@ import React from 'react';
 // @ts-ignore
 import Prism from 'prismjs';
 import { clarity } from '@components/code-block/clarity';
-clarity(Prism);
 import Editor from 'react-simple-code-editor';
 import { Box, BoxProps, Highlighter } from '@stacks/ui';
 import { prismTheme } from '@components/code-editor/theme';
-import { Global, css } from '@emotion/react';
+import { css, Global } from '@emotion/react';
 import {
+  css as _css,
   ForwardRefExoticComponentWithAs,
   forwardRefWithAs,
   memoWithAs,
-  css as _css,
   Theme,
 } from '@stacks/ui-core';
-import { atom, atomFamily, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { useClarityRepl } from '@common/hooks/use-clarity-repl';
-import { SampleContracts } from '@common/sandbox/examples';
-import { StandardPrincipal } from '@stacks/transactions';
 import { useUser } from '@common/hooks/use-user';
+import { codeEditorState } from '@store/sandbox';
+
+clarity(Prism);
 
 export const TextAreaOverrides = (
   <Global
@@ -69,12 +69,6 @@ interface CodeEditorProps extends Partial<Omit<BoxProps, 'onChange'>> {
   name?: string;
   id?: string;
 }
-
-export const codeEditorState = atomFamily({
-  key: 'codeEditor',
-  default: (principal: string) =>
-    SampleContracts[0].source.replace('SM2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQVX8X0G', principal),
-});
 
 export const useCodeEditor = (): [string, (value: string) => void] => {
   const { principal } = useUser();
