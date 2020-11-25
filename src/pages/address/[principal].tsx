@@ -14,7 +14,7 @@ import { PageWrapper } from '@components/page';
 import { Section } from '@components/section';
 import { Rows } from '@components/rows';
 import { TransactionList } from '@components/transaction-list';
-import { microToStacks, truncateMiddle } from '@common/utils';
+import { microToStacks, truncateMiddle, validateStacksAddress } from '@common/utils';
 import { useApiServer } from '@common/hooks/use-api';
 import { getServerSideApiServer } from '@common/api/utils';
 import { fetchAllAccountData } from '@common/api/accounts';
@@ -24,6 +24,7 @@ import { StxBalances } from '@components/balances/stx-balance-card';
 import { getStackStartBlockHeight, hasTokenBalance } from '@common/utils/accounts';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { Meta } from '@components/meta-head';
+import { AddressNotFound } from '@components/address-not-found';
 
 const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
   return (
@@ -70,10 +71,19 @@ interface AddressPageData {
   balances?: AddressBalanceResponse;
   transactions?: TransactionResults | MempoolTransactionListResponse;
   pendingTransactions?: MempoolTransaction[];
+  error?: boolean;
 }
 
 const AddressPage: NextPage<AddressPageData> = props => {
-  const { principal, balances, pendingTransactions, transactions } = props;
+  const { principal, balances, pendingTransactions, transactions, error } = props;
+  if (error) {
+    return (
+      <>
+        <Meta title="Address not found" />
+        <AddressNotFound />
+      </>
+    );
+  }
   const apiServer = useApiServer();
   const { data } = useSWR(principal, fetchAllAccountData(apiServer as any), {
     initialData: {
@@ -136,9 +146,19 @@ const AddressPage: NextPage<AddressPageData> = props => {
 export async function getServerSideProps(
   ctx: NextPageContext
 ): Promise<{ props: AddressPageData }> {
-  const apiServer = getServerSideApiServer(ctx);
   const { query } = ctx;
   const principal: string = query?.principal as string;
+  const validAddress = validateStacksAddress(principal);
+  console.log('valid', validAddress);
+  if (!validAddress) {
+    return {
+      props: {
+        principal,
+        error: true,
+      },
+    } as any;
+  }
+  const apiServer = getServerSideApiServer(ctx);
   const data = await fetchAllAccountData(apiServer)(principal);
   return {
     props: { principal, ...data },
