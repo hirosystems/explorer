@@ -34,6 +34,7 @@ export const Meta = ({
   labels,
 }: MetaProps) => {
   const filename = useFaviconName(status);
+
   return (
     <Head>
       <title>{title === defaultTitle ? title : `${title} - ${defaultTitle}`}</title>
@@ -42,8 +43,14 @@ export const Meta = ({
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@stacks" />
       <meta name="twitter:creator" content="@stacks" />
-      <meta property="og:image" content="/explorer-og.png" />
-      <meta name="twitter:image" content="/explorer-og.png" />
+      <meta
+        property="og:image"
+        content={`http://blockstack-www.imgix.net/explorer-og.png?auto=format,compress`}
+      />
+      <meta
+        name="twitter:image"
+        content={`http://blockstack-www.imgix.net/explorer-og.png?auto=format,compress`}
+      />
       <meta name="twitter:card" content="summary_large_image" />
       {ogTitle ? <meta property="og:title" content={ogTitle} /> : null}
       {url ? <meta property="og:url" content={url} /> : null}
