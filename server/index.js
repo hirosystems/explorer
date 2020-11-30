@@ -15,8 +15,9 @@ const loggingMiddleware = require('./logging');
 const handle = app.getRequestHandler();
 
 const ssrCache = new Cache({
-  max: 20,
+  max: 3500,
   maxAge: 1000 * 60 * 60, // 1hour
+  updateAgeOnGet: true,
 });
 
 const getPageProps = payload => {
