@@ -134,6 +134,23 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      "@semantic-release/changelog",
+      "@semantic-release/git",
+      [
+        "semantic-release-slack-bot",
+        {
+          "notifyOnSuccess": true,
+          "notifyOnFail": true,
+          "markdownReleaseNotes": true
+        }
+      ]
+    ]
+  },
   "resolutions": {
     "eslint": "^7.1.0",
     "bn.js": "^5.1.3",
