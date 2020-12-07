@@ -56,7 +56,7 @@ export const recentItemsState = atom({
 });
 export const apiServerState = atom({
   key: 'app/apiServer',
-  default: process.env.NEXT_PUBLIC_TESTNET_API_SERVER,
+  default: process.env.TESTNET_API_SERVER,
   effects_UNSTABLE: [cookieEffect('apiServer')],
 });
 
