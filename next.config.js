@@ -60,6 +60,7 @@ module.exports = withBundleAnalyzer({
       );
     }
 
+    aliases['@emotion/react'] = '@emotion/react';
     aliases['@blockstack/stacks-transactions'] = '@stacks/transactions';
     aliases['@blockstack/stacks-transactions/lib/clarity'] = '@stacks/transactions/dist/clarity';
 

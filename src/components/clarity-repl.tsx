@@ -32,7 +32,7 @@ const ClarityRepl = React.memo(({ show }: { show?: boolean }) => {
 
   return (
     <Fade
-      in={show && visible && !!result}
+      in={!!(show && visible && !!result)}
       onExited={() => {
         setTimeout(() => {
           // setResult(undefined);

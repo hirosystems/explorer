@@ -158,7 +158,7 @@ export async function getServerSideProps(
       },
     } as any;
   }
-  const apiServer = getServerSideApiServer(ctx);
+  const apiServer = await getServerSideApiServer(ctx);
   const data = await fetchAllAccountData(apiServer)(principal);
   return {
     props: { principal, ...data },

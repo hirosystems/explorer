@@ -29,7 +29,7 @@ export const CodeAccordian = React.memo(
             height: 0,
           },
         }}
-        in={isOpen}
+        in={!!isOpen}
         timeout={200}
       >
         {styles => (

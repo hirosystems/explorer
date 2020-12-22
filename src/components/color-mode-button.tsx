@@ -4,7 +4,7 @@ import { useColorMode } from '@common/hooks/use-color-mode';
 import { IconButton } from '@components/icon-button';
 import { IconSun, IconSunOff } from '@tabler/icons';
 
-export const ColorModeButton = memo(
+const ColorModeButton = memo(
   forwardRef((props: BoxProps, ref: Ref<HTMLDivElement>) => {
     const [colorMode, toggleColorMode] = useColorMode();
     const Icon = colorMode === 'light' ? IconSun : IconSunOff;
@@ -19,3 +19,5 @@ export const ColorModeButton = memo(
     );
   })
 );
+
+export default ColorModeButton;

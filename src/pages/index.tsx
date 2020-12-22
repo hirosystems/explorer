@@ -118,7 +118,7 @@ const Home: NextPage<HomeData> = React.memo(initialData => {
 });
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const apiServer = getServerSideApiServer(ctx);
+  const apiServer = await getServerSideApiServer(ctx);
   const data = await fetchHomepageData(apiServer)();
   return {
     props: data,

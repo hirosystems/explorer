@@ -1,30 +1,15 @@
-import {
-  BlockstackIcon,
-  Box,
-  BoxProps,
-  color,
-  Flex,
-  FlexProps,
-  Grid,
-  transition,
-} from '@stacks/ui';
-
-import { ColorModeButton } from '@components/color-mode-button';
-import { Link } from '@components/typography';
+import { Box, BoxProps, Flex, FlexProps, Grid, transition } from '@stacks/ui';
+import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import React from 'react';
 import { SearchBarWithDropdown } from '@components/search-bar';
-// import { useHomepageData } from '@pages/index';
 import { StxInline } from '@components/icons/stx-inline';
+import { HeaderTextItem } from '@components/header-text-item';
+import { NetworkSwitcherItem } from '@components/network-switcher';
 
-type HeaderTextItemProps = BoxProps & Partial<React.AnchorHTMLAttributes<HTMLAnchorElement>>;
-
-export const HeaderTextItem = React.forwardRef((props: HeaderTextItemProps, ref) => (
-  <Link as="a" fontSize="14px" fontWeight={500} color="white" ref={ref as any} {...props} />
-));
+const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
-  // const { refresh } = useHomepageData();
   return (
     <NextLink href="/" passHref>
       <Grid
@@ -90,6 +75,7 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
         <NextLink href="/sandbox" passHref>
           <HeaderTextItem>Sandbox</HeaderTextItem>
         </NextLink>
+        <NetworkSwitcherItem ml="base" />
       </Flex>
     </HeaderBar>
   )
