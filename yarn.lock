@@ -1657,8 +1657,10 @@
     type-fest "^0.20.2"
     typescript "^4.1.2"
 
-"@stacks/ui-theme@file:.yalc/@stacks/ui-theme":
+"@stacks/ui-theme@^7.1.1-beta.1":
   version "7.1.1-beta.1"
+  resolved "https://registry.yarnpkg.com/@stacks/ui-theme/-/ui-theme-7.1.1-beta.1.tgz#72b8c26881c5659c0538e32aa243d7d5d296d1fd"
+  integrity sha512-q17PRzt6CBuq0DZRI++qON1t93JMcCu3jxqE+mXBjKjBaPT0D+fLbi88k9aEkGEba/xRQ/jkki3jMJAjGs3qPA==
   dependencies:
     type-fest "^0.20.2"
     typescript "^4.1.2"

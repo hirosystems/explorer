@@ -34,7 +34,7 @@
     "@stacks/transactions": "^1.0.0-beta.20",
     "@stacks/ui": "^7.3.1-beta.2",
     "@stacks/ui-core": "^7.0.0",
-    "@stacks/ui-theme": "file:.yalc/@stacks/ui-theme",
+    "@stacks/ui-theme": "^7.1.1-beta.1",
     "@stacks/ui-utils": "^7.1.1-beta.1",
     "@styled-system/theme-get": "^5.1.2",
     "@tabler/icons": "^1.38.1",
