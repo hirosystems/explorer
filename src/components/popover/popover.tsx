@@ -57,7 +57,7 @@ const PopoverItemList = React.memo(
               transform: 'translateY(10px) scale(0.99)',
             },
           }}
-          in={!hideItems && isVisible}
+          in={!!(!hideItems && isVisible)}
           onExit={dismiss}
           timeout={200}
         >
@@ -238,7 +238,7 @@ export const Popover: React.FC<PopoverProps> = React.memo(
                 opacity: 0,
               },
             }}
-            in={showBackdrop && !hideItems && isVisible}
+            in={!!(showBackdrop && !hideItems && isVisible)}
           >
             {styles => (
               <Box

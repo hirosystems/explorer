@@ -61,7 +61,7 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
 };
 
 TransactionsPage.getInitialProps = async (ctx: NextPageContext): Promise<InitialData> => {
-  const apiServer = getServerSideApiServer(ctx);
+  const apiServer = await getServerSideApiServer(ctx);
 
   const [transactions, mempool] = await Promise.all([
     fetchTxList({

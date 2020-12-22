@@ -46,19 +46,6 @@ const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = memoWi
   })
 );
 
-const ColorModeLink = React.memo(({ ...rest }) => {
-  const [colorMode, toggleColorMode] = useColorMode();
-  return colorMode ? (
-    <FooterLink onClick={toggleColorMode} {...rest}>
-      {colorMode === 'light' ? 'Dark mode' : 'Light mode'}
-    </FooterLink>
-  ) : null;
-});
-
-const LinkInNewWindow = React.memo(
-  React.forwardRef((props: any, ref: any) => <Text as="a" ref={ref} {...props} />)
-);
-
 export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWidth?: boolean }) => {
   return (
     <Box width="100%" {...props}>
@@ -77,7 +64,6 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
           <FooterLink href="/sandbox" mr="base">
             Sandbox
           </FooterLink>
-          <ColorModeLink />
         </Flex>
 
         <Flex ml={['unset', 'unset', 'auto']}>

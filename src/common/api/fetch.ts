@@ -1,10 +1,13 @@
 import { withApiServer } from '@common/constants';
 
-export const fetchFromApi = (apiServer: string) => async (path: string, opts = {}) =>
-  fetch(withApiServer(apiServer)(path), opts);
+export const fetchFromApi = (apiServer: string) => async (path: string, opts = {}) => {
+  console.log('API', apiServer);
+  return fetch(withApiServer(apiServer)(path), opts);
+};
 
-export const fetchFromSidecar = (apiServer: string) => async (path: string, opts = {}) =>
-  fetch(withApiServer(apiServer)('/extended/v1' + path), opts);
+export const fetchFromSidecar = (apiServer: string) => async (path: string, opts = {}) => {
+  return fetch(withApiServer(apiServer)('/extended/v1' + path), opts);
+};
 
 export const postToApi = (apiServer: string) => async (path: string, opts = {}) =>
   fetchFromApi(apiServer)(path, { method: 'POST', ...opts });

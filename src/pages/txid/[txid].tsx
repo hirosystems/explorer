@@ -66,7 +66,7 @@ export async function getServerSideProps(
     block?: Block;
   };
 }> {
-  const apiServer = getServerSideApiServer(ctx);
+  const apiServer = await getServerSideApiServer(ctx);
   const { query } = ctx;
   const txid = query?.txid ? queryWith0x(query?.txid.toString()) : '';
   const initialData = await fetchTransaction(apiServer)(txid.toString());

@@ -1,20 +1,50 @@
 import { parseCookies, setCookie } from 'nookies';
-import getConfig from 'next/config';
 import { NextPageContext } from 'next';
 import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
+import {
+  DEFAULT_NETWORK_INDEX,
+  DEFAULT_NETWORK_LIST,
+  NETWORK_CURRENT_INDEX_COOKIE,
+  NETWORK_LIST_COOKIE,
+} from '@common/constants';
 
-export const getServerSideApiServer = (ctx: NextPageContext) => {
+export const getServerSideApiServer = async (ctx: NextPageContext) => {
   const cookies = parseCookies(ctx);
-  const { publicRuntimeConfig } = getConfig();
-  if (!cookies.apiServer) {
-    const defaultValue = publicRuntimeConfig.TESTNET_API_SERVER;
-    setCookie(ctx, 'apiServer', publicRuntimeConfig.TESTNET_API_SERVER as string, {
+  const hasSet = cookies[NETWORK_LIST_COOKIE] || cookies[NETWORK_CURRENT_INDEX_COOKIE];
+
+  const setDefaultIndexCookie = () => {
+    setCookie(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_NETWORK_INDEX), {
       maxAge: 30 * 24 * 60 * 60,
       path: '/',
     });
-    return defaultValue;
+  };
+  if (!hasSet) {
+    if (!cookies[NETWORK_LIST_COOKIE]) {
+      setCookie(ctx, NETWORK_LIST_COOKIE, JSON.stringify(DEFAULT_NETWORK_LIST), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+    }
+    if (!cookies[NETWORK_CURRENT_INDEX_COOKIE]) {
+      setDefaultIndexCookie();
+    }
+
+    return DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
   }
-  return cookies?.apiServer;
+  const index = JSON.parse(cookies[NETWORK_CURRENT_INDEX_COOKIE]);
+  const list = JSON.parse(cookies[NETWORK_LIST_COOKIE]);
+  const apiServer = list[index].url;
+  if (apiServer.includes('localhost')) {
+    try {
+      await fetch(apiServer);
+      return apiServer;
+    } catch (e) {
+      setDefaultIndexCookie();
+      return list[DEFAULT_NETWORK_INDEX].url;
+    }
+  }
+
+  return apiServer;
 };
 
 export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>

@@ -33,7 +33,7 @@ const BlocksPage: NextPage<{ blocks: FetchBlocksListResponse }> = ({ blocks: ini
 export async function getServerSideProps(
   ctx: NextPageContext
 ): Promise<{ props: { blocks: FetchBlocksListResponse } }> {
-  const apiServer = getServerSideApiServer(ctx);
+  const apiServer = await getServerSideApiServer(ctx);
   const blocks = await fetchBlocksList({
     apiServer,
     limit: 30,

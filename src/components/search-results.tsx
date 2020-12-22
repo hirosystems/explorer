@@ -86,7 +86,7 @@ const SearchResultsCard = React.memo(() => {
   if (typeof document !== 'undefined') {
     return (
       <Transition
-        in={isLoading || resultsShowing}
+        in={!!(isLoading || resultsShowing)}
         styles={{
           init: {
             opacity: 0,

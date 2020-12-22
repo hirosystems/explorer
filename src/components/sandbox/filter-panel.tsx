@@ -165,7 +165,7 @@ export const FilterPanel = React.memo(
               opacity: '0',
             },
           }}
-          in={showing}
+          in={!!showing}
         >
           {styles => (
             <Box
@@ -222,7 +222,7 @@ export const FilterPanel = React.memo(
           )}
         </Transition>
         {!hideBackdrop ? (
-          <Fade timeout={250} in={showing}>
+          <Fade timeout={250} in={!!showing}>
             {styles => (
               <Box
                 onClick={handleClose}

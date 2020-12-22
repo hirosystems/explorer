@@ -1,7 +1,8 @@
 import { useRecoilValue } from 'recoil';
-import { apiServerState } from '@store';
+import { networkCurrentUrlSelector } from '@store/network';
+import { DEFAULT_TESETNET_SERVER } from '@common/constants';
 
 export const useApiServer = (): string => {
-  const apiServer = useRecoilValue(apiServerState);
-  return apiServer || '';
+  const network = useRecoilValue(networkCurrentUrlSelector);
+  return network || DEFAULT_TESETNET_SERVER;
 };
