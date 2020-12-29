@@ -1,7 +1,6 @@
 import { withApiServer } from '@common/constants';
 
 export const fetchFromApi = (apiServer: string) => async (path: string, opts = {}) => {
-  console.log('API', apiServer);
   return fetch(withApiServer(apiServer)(path), opts);
 };
 

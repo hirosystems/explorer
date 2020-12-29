@@ -20,15 +20,20 @@ export const useTransactionPageData = ({
 
   const [isPending, setPending] = React.useState(initialPendingTx);
 
-  const { data, error } = useSWR(txid, (txid: string) => fetchTransaction(apiServer)(txid), {
-    initialData,
-    // refreshInterval: isPending ? 2000 : undefined,
-    revalidateOnFocus: isPending,
-    revalidateOnMount: isPending,
-    revalidateOnReconnect: isPending,
-  });
+  const { data, error } = useSWR(
+    [txid, 'useTransactionPageData'],
+    () => fetchTransaction(apiServer)(txid),
+    {
+      initialData,
+      revalidateOnFocus: isPending,
+      revalidateOnMount: isPending,
+      revalidateOnReconnect: isPending,
+    }
+  );
 
-  const transaction = (data && 'transaction' in data && data.transaction) || undefined;
+  const transaction =
+    // @ts-ignore
+    (!data.error && data?.transaction) || (!initialData.error && initialData.transaction);
 
   React.useEffect(() => {
     if (!initialPendingTx && isPending && transaction?.tx_status !== 'pending') {

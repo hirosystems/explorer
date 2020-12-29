@@ -1,5 +1,4 @@
 import * as React from 'react';
-import dynamic from 'next/dynamic';
 
 import type { FetchTransactionResponse } from '@common/api/transactions';
 import type {
@@ -12,11 +11,11 @@ import type {
 } from '@common/types/tx';
 import type { Block } from '@blockstack/stacks-blockchain-api-types';
 
-const CoinbasePage = dynamic(() => import('../components/tx/coinbase'));
-const ContractCallPage = dynamic(() => import('../components/tx/contract-call'));
-const PoisonMicroblockPage = dynamic(() => import('../components/tx/poison-microblock'));
-const SmartContractPage = dynamic(() => import('../components/tx/smart-contract'));
-const TokenTransferPage = dynamic(() => import('../components/tx/token-transfer'));
+import CoinbasePage from '../components/tx/coinbase';
+import ContractCallPage from '../components/tx/contract-call';
+import PoisonMicroblockPage from '../components/tx/poison-microblock';
+import SmartContractPage from '../components/tx/smart-contract';
+import TokenTransferPage from '../components/tx/token-transfer';
 
 export const renderTxPageComponent = (data: FetchTransactionResponse, block?: Block) => {
   if ('transaction' in data) {

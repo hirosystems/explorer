@@ -1,6 +1,6 @@
-import { Transaction, Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block, Transaction } from '@blockstack/stacks-blockchain-api-types';
 
-export const enum SearchResultType {
+export enum SearchResultType {
   TxId = 'tx_id',
   MempoolTxId = 'mempool_tx_id',
   BlockHash = 'block_hash',

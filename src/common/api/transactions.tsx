@@ -121,13 +121,15 @@ export const fetchTransaction = (apiServer: string) => async (
 export const fetchPendingTxs = (apiServer: string) => async ({
   query,
   type,
+  limit,
 }: {
   query: string;
   type: 'principal' | 'tx_id';
+  limit?: number;
 }) => {
   const path = makeKey({
     type: 'tx',
-    limit: 30,
+    limit: limit || 30,
     pending: true,
     index: 0,
     apiServer,

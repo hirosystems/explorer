@@ -32,7 +32,6 @@ export const useNetworkAddForm = () => {
       url: '',
     },
     onSubmit: ({ label, url }) => {
-      console.log('submit, ', label, url);
       const _url = new URL(values.url);
 
       handleAddNetwork({

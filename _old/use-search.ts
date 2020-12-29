@@ -2,58 +2,34 @@ import React from 'react';
 
 import {
   recentItemsState,
-  searchItemsState,
-  searchQueryState,
   searchBarFocus,
   searchBarHover,
   searchBarVisibility,
+  searchItemsState,
+  searchQueryState,
 } from '@store';
 
 import debounce from 'just-debounce-it';
 import { useRouter } from 'next/router';
-import { useRecoilState, useRecoilStateLoadable, useResetRecoilState } from 'recoil';
-
-export const useRecentItems = () => {
-  const [items, setItems] = useRecoilState(recentItemsState);
-
-  const handleUpsertItem = React.useCallback(
-    item => {
-      setItems({
-        ...items,
-        [item.entity_id]: { ...item, viewedDate: new Date().toISOString() },
-      });
-    },
-    [items, setItems]
-  );
-
-  const clearRecentItems = React.useCallback(
-    item => {
-      setItems({});
-    },
-    [setItems]
-  );
-
-  return { items, setItems, clearRecentItems, handleUpsertItem };
-};
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
+import { useLoadableValue } from '@common/hooks/use-loadable';
 
 export const useSearchResults = () => {
-  const [result, setResult] = useRecoilStateLoadable(searchItemsState);
+  const { value: result, contents, state } = useLoadableValue(searchItemsState);
+  const setResult = useSetRecoilState(searchItemsState);
   const resetResults = useResetRecoilState(searchItemsState);
 
   const hasError =
-    result.contents &&
-    'error' in result.contents &&
-    result.contents.error &&
-    'message' in result.contents.error &&
-    result.contents.error;
+    contents &&
+    'error' in contents &&
+    contents.error &&
+    'message' in contents.error &&
+    contents.error;
 
-  const hasResults =
-    result.contents &&
-    'data' in result.contents &&
-    result.contents.data &&
-    result.contents.data.length;
+  const hasResults = !!result?.data?.length;
 
-  const isLoading = result.state === 'loading';
+  console.log(result);
+  const isLoading = state === 'loading';
 
   return { result, setResult, resetResults, hasError, hasResults, isLoading };
 };
@@ -75,6 +51,7 @@ export const useSearch = (ref?: any) => {
     ref?.current || (typeof document !== 'undefined' && document.getElementById('search-bar'));
 
   const router = useRouter();
+
   React.useEffect(() => {
     router.events.on('routeChangeStart', () => {
       if (input) {
@@ -89,7 +66,7 @@ export const useSearch = (ref?: any) => {
     if (input) {
       setQuery(undefined);
       input.value = '';
-      input?.blur?.();
+      input.focus();
     }
   };
 
@@ -113,7 +90,7 @@ export const useSearch = (ref?: any) => {
         setVisibility('hidden');
       }
     }
-  }, [isFocused, visibility, isHovered]);
+  }, [isFocused, visibility, isVisible, isHovered]);
 
   const hideImmediately = () => {
     setVisibility('hidden');
@@ -122,9 +99,11 @@ export const useSearch = (ref?: any) => {
     input.blur?.();
   };
 
-  const hasRecentItems = Object.values(items)?.length;
+  const hasRecentItems = Object.values(items)?.length > 0;
 
-  const hasSomethingToShow = hasRecentItems || hasError || hasResults;
+  console.log('has', hasRecentItems);
+
+  const hasSomethingToShow = !!hasError || hasResults || hasRecentItems;
 
   const resultsShowing = hasSomethingToShow && isVisible;
 

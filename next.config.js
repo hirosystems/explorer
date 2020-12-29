@@ -23,12 +23,12 @@ module.exports = withBundleAnalyzer({
     const aliases = config.resolve.alias || (config.resolve.alias = {});
 
     if (!dev) {
-      config.plugins.push(
-        new webpack.IgnorePlugin({
-          resourceRegExp: /^\.\/wordlists\/(?!english)/,
-          contextRegExp: /bip39\/src$/,
-        })
-      );
+      // config.plugins.push(
+      //   new webpack.IgnorePlugin({
+      //     resourceRegExp: /^\.\/wordlists\/(?!english)/,
+      //     contextRegExp: /bip39\/src$/,
+      //   })
+      // );
 
       const splitChunks = config.optimization && config.optimization.splitChunks;
 

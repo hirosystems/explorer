@@ -149,7 +149,6 @@ export async function getServerSideProps(
   const { query } = ctx;
   const principal: string = query?.principal as string;
   const validAddress = validateStacksAddress(principal);
-  console.log('valid', validAddress);
   if (!validAddress) {
     return {
       props: {

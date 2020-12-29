@@ -9,3 +9,4 @@ tests/screenshots/*
 .now
 build
 old/
+_old/

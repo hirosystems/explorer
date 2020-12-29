@@ -6,25 +6,7 @@ import { fetchAllAccountData } from '@common/api/accounts';
 import { fetchPendingTxs, fetchTx } from '@common/api/transactions';
 import { fetchContract } from '@common/api/contracts';
 import { fetchBlock } from '@common/api/blocks';
-import { localStorageEffect } from '@store/utils';
 import { networkCurrentUrlSelector } from '@store/network';
-
-export const recentItemsState = atom({
-  key: 'search.recent-items',
-  default: selector({
-    key: 'search.recent-items.default',
-    get: () => {
-      if (typeof window !== 'undefined') {
-        const saved = localStorage.getItem('recent_search_items');
-        if (saved) {
-          return JSON.parse(saved);
-        }
-      }
-      return [];
-    },
-  }),
-  effects_UNSTABLE: [localStorageEffect('recent_search_items')],
-});
 
 export const searchQueryState = atom<string | undefined>({
   key: 'search/query',
