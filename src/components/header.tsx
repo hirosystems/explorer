@@ -6,6 +6,7 @@ import { SearchBarWithDropdown } from '@components/search-bar';
 import { StxInline } from '@components/icons/stx-inline';
 import { HeaderTextItem } from '@components/header-text-item';
 import { NetworkSwitcherItem } from '@components/network-switcher';
+import { SearchComponent } from '@components/search/search';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -63,7 +64,9 @@ export const Header: React.FC<{ isHome?: boolean; fullWidth?: boolean } & FlexPr
         maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
         alignItems="center"
       >
-        {!isHome ? <SearchBarWithDropdown small maxWidth={['100%', '100%', '544px']} /> : null}
+        <Box flexGrow={1} pr="64px">
+          {!isHome ? <SearchComponent variant="small" /> : null}
+        </Box>
         <Box ml="auto" pl="base" />
         <ColorModeButton mr="tight" />
         <NextLink href="/transactions" passHref>

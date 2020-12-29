@@ -18,30 +18,31 @@ const Loading: React.FC = React.memo(() => (
 ));
 
 const Results = React.memo(() => {
-  const { result } = useSearchResults();
+  const { result, isLoading, hasError, hasResults } = useSearchResults();
   const { clearError, hideImmediately } = useSearch();
   const { items, handleUpsertItem, clearRecentItems } = useRecentItems();
 
-  const recentItems =
-    Object.values(items)?.sort(
-      (a, b) => -(a as any).viewedDate.localeCompare((b as any).viewedDate)
-    ) || [];
+  const recentItems = Object.values(items)?.length
+    ? Object.values(items)?.sort(
+        (a, b) => -(a as any)?.viewedDate?.localeCompare((b as any)?.viewedDate)
+      ) || []
+    : [];
 
-  const isSearching = result.state === 'loading';
-  const searchResults = result.state === 'hasValue' && result.contents?.type === 'search';
-  const results = searchResults && 'data' in result.contents ? result?.contents?.data : recentItems;
+  const searchResults = hasResults && result?.type === 'search';
+
+  const results = searchResults ? result.data : recentItems;
 
   const handleItemClick = (option: any) => {
     hideImmediately();
     handleUpsertItem(option);
   };
 
-  if (result.contents && 'error' in result.contents && 'message' in result.contents.error)
+  if (result && 'error' in result && 'message' in result.error)
     return (
       <Flex alignItems="center" px="base" py="base">
         <AlertTriangleIcon color={color('feedback-error')} />
         <Text fontSize="14px" color={color('text-body')} mx="base">
-          {result.contents.error.message}
+          {result.error.message}
         </Text>
         <IconButton flexShrink={0} icon={CloseIcon} dark onClick={() => clearError()} />
       </Flex>
@@ -56,8 +57,8 @@ const Results = React.memo(() => {
         justifyContent="space-between"
       >
         <Caption pr="base">{searchResults ? 'Search results' : 'Recently viewed'}</Caption>
-        {isSearching && <Loading />}
-        {!isSearching && !searchResults ? (
+        {isLoading && <Loading />}
+        {!isLoading && !searchResults ? (
           <Caption
             _hover={{ cursor: 'pointer', color: color('text-title') }}
             onClick={clearRecentItems}
@@ -65,7 +66,7 @@ const Results = React.memo(() => {
             Clear recent
           </Caption>
         ) : null}
-        {!isSearching && searchResults ? (
+        {!isLoading && searchResults ? (
           <Caption _hover={{ cursor: 'pointer', color: color('text-title') }} onClick={clearError}>
             Clear results
           </Caption>
@@ -83,10 +84,11 @@ const Results = React.memo(() => {
 const SearchResultsCard = React.memo(() => {
   const { resultsShowing } = useSearch();
   const { isLoading } = useSearchResults();
+
   if (typeof document !== 'undefined') {
     return (
       <Transition
-        in={!!(isLoading || resultsShowing)}
+        in={isLoading || resultsShowing}
         styles={{
           init: {
             opacity: 0,

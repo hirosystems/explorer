@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Flex, Grid } from '@stacks/ui';
+import { Flex, Box, Grid } from '@stacks/ui';
 import type {
   MempoolTransactionListResponse,
   TransactionResults,
@@ -9,7 +9,7 @@ import { Title } from '@components/typography';
 import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page';
-import { SearchBarWithDropdown } from '@components/search-bar';
+import { SearchComponent } from '@components/search/search';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
 import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
@@ -49,7 +49,13 @@ const fetchHomepageData = (apiServer: string) => async (): Promise<FetchHomepage
 };
 
 const PageTop: React.FC = React.memo(() => (
-  <Flex flexDirection="column" alignItems="center" maxWidth="544px" justify="center">
+  <Flex
+    width="100%"
+    flexDirection="column"
+    alignItems="center"
+    maxWidth="calc(60% - 32px)"
+    justify="center"
+  >
     <Title
       as="h1"
       fontSize="36px"
@@ -62,7 +68,9 @@ const PageTop: React.FC = React.memo(() => (
     >
       Stacks Explorer
     </Title>
-    <SearchBarWithDropdown />
+    <Box width="100%">
+      <SearchComponent />
+    </Box>
   </Flex>
 ));
 

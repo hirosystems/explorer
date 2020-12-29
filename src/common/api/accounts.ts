@@ -16,9 +16,10 @@ export const fetchBalances = (apiServer: string) => async (
 };
 
 export const fetchTransactions = (apiServer: string) => async (
-  principal: string
+  principal: string,
+  limit?: number
 ): Promise<TransactionResults> => {
-  const path = `/address/${principal}/transactions?limit=50`;
+  const path = `/address/${principal}/transactions?limit=${limit || 50}`;
   const res = await fetchFromSidecar(apiServer)(path);
   const final = await res.json();
 
@@ -32,11 +33,12 @@ export interface AllAccountData {
 }
 
 export const fetchAllAccountData = (apiServer: string) => async (
-  principal: string
+  principal: string,
+  txLimit?: number
 ): Promise<AllAccountData> => {
   const [balances, transactions, pendingTransactions] = await Promise.all([
     fetchBalances(apiServer)(principal),
-    fetchTransactions(apiServer)(principal),
+    fetchTransactions(apiServer)(principal, txLimit),
     fetchPendingTxs(apiServer)({ query: principal, type: 'principal' }),
   ]);
 
