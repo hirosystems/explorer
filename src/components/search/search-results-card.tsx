@@ -9,27 +9,26 @@ import { SearchCardItem } from '@components/search/search-result-item';
 import { useItem } from '@common/hooks/search/use-item';
 import { useSetRecoilState } from 'recoil';
 import { searchRecentlyViewedItemsState } from '@store/search';
-import { SearchResult } from '@common/types/search';
 
 interface SearchResultsCardProps extends BoxProps {
   isLoading?: boolean;
   clearResults?: () => void;
 }
 
-const RecentlyViewedList: React.FC = React.memo(() => {
-  const { recentItemsArray } = useRecentlyViewedItems();
-  return (
-    <>
-      {recentItemsArray?.map(recentItem =>
-        recentItem && recentItem.found ? (
-          <SearchCardItem key={recentItem.result.entity_id} recentItem={recentItem} />
-        ) : (
-          <></>
-        )
-      )}
-    </>
-  );
-});
+const RecentlyViewedList: React.FC<{ clearResults?: () => void }> = React.memo(
+  ({ clearResults }) => {
+    const { recentItemsArray } = useRecentlyViewedItems();
+    return (
+      <>
+        {recentItemsArray?.map((recentItem, index) => (
+          <React.Suspense key={index} fallback={<Box minHeight="96px">Loading!!!!</Box>}>
+            <SearchCardItem clearResults={clearResults} recentItem={recentItem} />
+          </React.Suspense>
+        ))}
+      </>
+    );
+  }
+);
 
 const SearchingIndicator: React.FC = React.memo(() => (
   <Flex alignItems="center">
@@ -141,9 +140,9 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
             }
           />
         ) : data && data.found && item ? (
-          <SearchCardItem />
+          <SearchCardItem clearResults={clearResults} />
         ) : (
-          <RecentlyViewedList />
+          <RecentlyViewedList clearResults={clearResults} />
         )}
       </>
     </Box>

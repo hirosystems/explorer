@@ -22,6 +22,7 @@ import { useItem } from '@common/hooks/search/use-item';
 import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 import { usePrevious } from '@common/hooks/search/use-previous';
 import { SearchResult } from '@common/types/search';
+import { useSearchDropdown } from '@common/hooks/search/use-search-dropdown';
 
 interface SearchResultItemProps extends BoxProps {
   option: FetchTransactionResponse | Block | ({ principal: string } & AllAccountData);
@@ -195,18 +196,24 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
   }
 };
 
-export const SearchCardItem: React.FC<{ recentItem?: SearchResult }> = React.memo(
-  ({ recentItem }) => {
-    const [item] = useItem(recentItem);
-    const { data } = usePrevious();
-    const { handleUpsertItem } = useRecentlyViewedItems();
+export const SearchCardItem: React.FC<{
+  recentItem?: SearchResult;
+  clearResults?: () => void;
+}> = React.memo(({ recentItem, clearResults }) => {
+  const [item] = useItem(recentItem);
+  const { data } = usePrevious();
+  const { handleUpsertItem } = useRecentlyViewedItems();
+  const { handleMakeHidden } = useSearchDropdown();
 
-    return (
-      <SearchResultItem
-        option={item}
-        onClick={() => (data?.found ? handleUpsertItem(data) : null)}
-        isLast
-      />
-    );
-  }
-);
+  return (
+    <SearchResultItem
+      option={item}
+      onClick={() => {
+        clearResults?.();
+        handleMakeHidden();
+        (data || recentItem)?.found ? handleUpsertItem(data || recentItem) : null;
+      }}
+      isLast
+    />
+  );
+});

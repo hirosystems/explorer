@@ -2,25 +2,37 @@ import * as React from 'react';
 
 import { useRecoilState } from 'recoil';
 import { searchRecentlyViewedItemsState } from '@store/search';
-import { SearchResult } from '@common/types/search';
+import { useApiServer } from '@common/hooks/use-api';
 
 export const useRecentlyViewedItems = () => {
+  const apiServer = useApiServer();
   const [recentItems, setRecentItems] = useRecoilState(searchRecentlyViewedItemsState);
+
+  const makeKey = (id: string) => `${apiServer}__${id}`;
 
   const handleUpsertItem = React.useCallback(
     data => {
       setRecentItems({
         ...recentItems,
-        [data.result.entity_id]: { ...data, viewedDate: new Date().toISOString() },
+        [makeKey(data.result.entity_id)]: { ...data, viewedAt: new Date().toISOString() },
       });
     },
     [recentItems, setRecentItems]
   );
 
+  const keys = Object.keys(recentItems).filter(key => key.includes(apiServer));
+
+  const recentItemsArray = keys
+    .map(key => recentItems[key])
+    .sort((a, b) => -a?.viewedAt?.localeCompare(b?.viewedAt));
+
+  const hasRecentItems = recentItemsArray.length > 0;
+
   return {
     handleUpsertItem,
     recentItems,
-    recentItemsArray: Object.values(recentItems) as SearchResult[],
+    recentItemsArray,
     setRecentItems,
+    hasRecentItems,
   };
 };
