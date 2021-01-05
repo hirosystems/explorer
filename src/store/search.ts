@@ -28,7 +28,7 @@ export const searchRecentlyViewedItemsState = atom({
           return JSON.parse(saved);
         }
       }
-      return [];
+      return {};
     },
   }),
   effects_UNSTABLE: [localStorageEffect('recent_search_items')],
@@ -37,4 +37,9 @@ export const searchRecentlyViewedItemsState = atom({
 export const searchDropdownState = atom<'hidden' | 'visible'>({
   key: 'search.dropdown',
   default: 'hidden',
+});
+
+export const searchDropdownExitingState = atom<boolean>({
+  key: 'search.dropdown',
+  default: false,
 });
