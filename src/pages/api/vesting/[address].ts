@@ -1,11 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import DATA from './data.json';
 import { addressConvert } from '@common/utils/addresses';
 
-function makeUrl(path: string) {
-  const root =
-    process.env.DEPLOYMENT_URL || `https://${process.env.VERCEL_URL}` || 'http://localhost:3000';
-  return `${root}${path}`;
-}
+const addresses = new Set(DATA);
 
 export default async function vestingAddressHandler(
   { query: { address } }: NextApiRequest,
@@ -14,10 +11,8 @@ export default async function vestingAddressHandler(
   try {
     if (address && typeof address === 'string') {
       const result = addressConvert(address);
-      const response = await fetch(makeUrl('/api/addresses'));
-      const addresses: string[] = await response.json();
-      const found = addresses.find(item => item === (result.mainnet.BTC || result.mainnet.STACKS));
-      if (!!found) {
+      const found = addresses.has(result.mainnet.BTC || result.mainnet.STACKS);
+      if (found) {
         res.status(200).json({ found: true });
       } else {
         res.status(404).json({ found: false });
