@@ -110,9 +110,9 @@ function getC32Address(address: string) {
   const stacksRegex = RegExp(STACKS_ADDRESS_PATTERN);
   const btcRegex = RegExp(BTC_ADDRESS_PATTERN);
   let c32addr: string;
-  if (stacksRegex.exec(address)) {
+  if (stacksRegex.exec(address)?.[0] === address) {
     c32addr = address;
-  } else if (btcRegex.exec(address)) {
+  } else if (btcRegex.exec(address)?.[0] === address) {
     c32addr = b58ToC32(address);
   } else {
     throw new Error(`Unrecognized address ${address}`);
