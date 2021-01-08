@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, BoxProps } from '@stacks/ui';
-import { color } from '@components/color-modes';
+import { Box, BoxProps, color } from '@stacks/ui';
 
 export const FloatingHoverIndicator: React.FC<
   BoxProps & { isHovered?: boolean; isActive?: boolean; placement?: 'left' | 'bottom' }

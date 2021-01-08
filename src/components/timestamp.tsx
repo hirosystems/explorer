@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { Flex, FlexProps, Text } from '@stacks/ui';
-
-import { ClockIcon } from '@components/icons/clock';
+import { Box, Flex, FlexProps, Text } from '@stacks/ui';
+import { IconClock } from '@tabler/icons';
 import { Tooltip } from '@components/tooltip';
 import { toRelativeTime } from '@common/utils';
 
@@ -26,7 +25,7 @@ export const Timestamp: React.FC<TimestampProps> = ({ ts, noTooltip, ...props })
 
   const timestampElem = (
     <Flex alignItems="center" {...props}>
-      <ClockIcon size="16px" mr="extra-tight" />
+      <Box as={IconClock} size="16px" mr="extra-tight" />
       <Text color="currentColor">{toRelativeTime(ts * 1000)}</Text>
     </Flex>
   );

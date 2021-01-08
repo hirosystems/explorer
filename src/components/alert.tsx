@@ -1,12 +1,11 @@
 // @ts-nocheck
 import * as React from 'react';
 
-import { Box, CloseIcon, Flex, FlexProps } from '@stacks/ui';
+import { Box, CloseIcon, Flex, FlexProps, color } from '@stacks/ui';
 import { Link, Pre, Text, Title } from '@components/typography';
 
 import { AlertTriangleIcon } from './icons/alert-triangle';
 import { border } from '@common/utils';
-import { color } from '@components/color-modes';
 
 interface ReasonData {
   expected?: number | string;

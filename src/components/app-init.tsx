@@ -1,20 +1,15 @@
-/** @jsxRuntime classic */
 import React from 'react';
-import { ThemeProvider } from '@stacks/ui';
+import { ColorModeProvider, ThemeProvider } from '@stacks/ui';
 import { ProgressBar } from '@components/progress-bar';
-import { ColorModeProvider } from '@components/color-modes';
+import { PageWrapper } from '@components/page';
+import { Modals } from '@components/modals';
 
-export const AppWrapper: React.FC<{ colorMode?: 'light' | 'dark' }> = React.memo(
-  ({ children, colorMode }) => {
-    return (
-      <>
-        <ThemeProvider>
-          <ColorModeProvider colorMode={colorMode}>
-            <ProgressBar />
-            <>{children}</>
-          </ColorModeProvider>
-        </ThemeProvider>
-      </>
-    );
-  }
-);
+export const AppWrapper: React.FC<{ isHome?: boolean }> = React.memo(({ children, isHome }) => (
+  <ThemeProvider>
+    <ColorModeProvider defaultMode="light">
+      <ProgressBar />
+      <PageWrapper isHome={isHome}>{children}</PageWrapper>
+      <Modals />
+    </ColorModeProvider>
+  </ThemeProvider>
+));

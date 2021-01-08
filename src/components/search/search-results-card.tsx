@@ -13,22 +13,28 @@ import { searchRecentlyViewedItemsState } from '@store/search';
 interface SearchResultsCardProps extends BoxProps {
   isLoading?: boolean;
   clearResults?: () => void;
+  handleSetExiting?: () => void;
+  handleItemOnClick?: () => void;
 }
 
-const RecentlyViewedList: React.FC<{ clearResults?: () => void }> = React.memo(
-  ({ clearResults }) => {
-    const { recentItemsArray } = useRecentlyViewedItems();
-    return (
-      <>
-        {recentItemsArray?.map((recentItem, index) => (
-          <React.Suspense key={index} fallback={<Box minHeight="96px">Loading!!!!</Box>}>
-            <SearchCardItem clearResults={clearResults} recentItem={recentItem} />
-          </React.Suspense>
-        ))}
-      </>
-    );
-  }
-);
+const RecentlyViewedList: React.FC<{
+  clearResults?: () => void;
+  itemOnClick?: () => void;
+}> = React.memo(({ clearResults, itemOnClick }) => {
+  const { recentItemsArray } = useRecentlyViewedItems();
+  return (
+    <>
+      {recentItemsArray?.map((recentItem, index) => (
+        <SearchCardItem
+          onClick={itemOnClick}
+          key={index}
+          clearResults={clearResults}
+          recentItem={recentItem}
+        />
+      ))}
+    </>
+  );
+});
 
 const SearchingIndicator: React.FC = React.memo(() => (
   <Flex alignItems="center">
@@ -44,6 +50,7 @@ interface CardActionsProps {
   hasRecent?: boolean;
   clearResults?: () => void;
 }
+
 const CardActions: React.FC<CardActionsProps> = ({
   isLoading,
   hasError,
@@ -75,6 +82,7 @@ const CardActions: React.FC<CardActionsProps> = ({
 export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
   isLoading,
   clearResults,
+  handleItemOnClick,
   ...rest
 }) => {
   const { data } = usePrevious();
@@ -99,10 +107,8 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
 
   return (
     <Box
-      overflow="hidden"
       borderRadius="12px"
       mt="base"
-      mr="52px"
       bg={color('bg')}
       color={color('text-caption')}
       position="absolute"
@@ -110,6 +116,7 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
       zIndex={99}
       boxShadow="high"
       border={border()}
+      overflow="auto"
       {...rest}
     >
       <Flex
@@ -140,9 +147,9 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
             }
           />
         ) : data && data.found && item ? (
-          <SearchCardItem clearResults={clearResults} />
+          <SearchCardItem onClick={handleItemOnClick} />
         ) : (
-          <RecentlyViewedList clearResults={clearResults} />
+          <RecentlyViewedList itemOnClick={handleItemOnClick} />
         )}
       </>
     </Box>

@@ -10,12 +10,7 @@ import Document, {
   NextScript,
 } from 'next/document';
 import { extractCritical } from '@emotion/server';
-import {
-  ColorModes,
-  GlobalStyles,
-  ProgressBarStyles,
-  TextAreaOverrides,
-} from '@components/global-styles';
+import { GlobalStyles, ProgressBarStyles, TextAreaOverrides } from '@components/global-styles';
 
 export const THEME_STORAGE_KEY = 'theme';
 
@@ -30,7 +25,6 @@ export default class MyDocument extends Document<DocumentProps> {
           {GlobalStyles}
           {ProgressBarStyles}
           {TextAreaOverrides}
-          {ColorModes}
           <style
             data-emotion-css={styles.ids.join(' ')}
             dangerouslySetInnerHTML={{ __html: styles.css }}

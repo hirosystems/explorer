@@ -5,7 +5,6 @@ import Head from 'next/head';
 
 import { Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
-import { PageWrapper } from '@components/page';
 import { UserCard } from '@components/sandbox/user-card';
 
 const PageContent = dynamic(() => import('../components/sandbox/page'), { ssr: false });
@@ -28,13 +27,13 @@ const PageTop: React.FC = React.memo(() => (
 ));
 
 const SandboxPage: NextPage<any> = () => (
-  <PageWrapper>
+  <>
     <Head>
       <title>Sandbox | Stacks Explorer</title>
     </Head>
     <PageTop />
     <PageContent />
-  </PageWrapper>
+  </>
 );
 
 SandboxPage.getInitialProps = async (ctx: NextPageContext) => {

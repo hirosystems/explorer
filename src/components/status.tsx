@@ -1,15 +1,13 @@
 import * as React from 'react';
 
-import { Box, Flex, FlexProps, Spinner, Text } from '@stacks/ui';
-
-import { Badge } from './badge';
-import { CheckIcon } from './icons/check';
-import { border } from '@common/utils';
-import { color } from '@components/color-modes';
-import { LoaderQuarter } from './icons/loader-quarter';
+import type { FlexProps } from '@stacks/ui';
 
 import { keyframes } from '@emotion/react';
 import { css, Theme } from '@stacks/ui-core';
+import { Badge } from './badge';
+
+import { CheckIcon } from './icons/check';
+import { LoaderQuarter } from './icons/loader-quarter';
 import { AlertCircleIcon } from './icons/alert-circle';
 
 const keyframesRotate = keyframes`
@@ -72,7 +70,6 @@ interface StatusProps extends FlexProps {
 
 export const Status: React.FC<StatusProps> = ({ status, ...rest }) => {
   const IconComponent = iconMap[status];
-  const _color = colorMap[status];
   const label = labelMap[status];
   return (
     <Badge

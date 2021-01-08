@@ -6,7 +6,6 @@ import { queryWith0x, truncateMiddle, validateTxId } from '@common/utils';
 import { Rows } from '@components/rows';
 
 import { NextPage, NextPageContext } from 'next';
-import { PageWrapper } from '@components/page';
 import { fetchBlock } from '@common/api/blocks';
 import { Section } from '@components/section';
 import { Timestamp } from '@components/timestamp';
@@ -35,7 +34,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, error, hash, tr
   }
   const title = `Block #${block.height.toLocaleString()}`;
   return (
-    <PageWrapper>
+    <>
       <Meta title={title} />
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>
@@ -113,7 +112,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, error, hash, tr
       {transactions?.length ? (
         <TransactionList mt="extra-loose" transactions={transactions as Transaction[]} />
       ) : null}
-    </PageWrapper>
+    </>
   );
 };
 

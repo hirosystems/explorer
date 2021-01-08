@@ -1,10 +1,9 @@
 import React from 'react';
 import NextLink from 'next/link';
 
-import { Grid, Flex, FlexProps, Box, Stack } from '@stacks/ui';
+import { Grid, Flex, FlexProps, Box, Stack, color } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 
-import { color } from '@components/color-modes';
 import { Block } from '@blockstack/stacks-blockchain-api-types';
 import { BlockLink } from '@components/links';
 import { addSepBetweenStrings, border, toRelativeTime, truncateMiddle } from '@common/utils';

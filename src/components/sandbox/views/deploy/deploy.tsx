@@ -20,6 +20,7 @@ import { Caption } from '@components/typography';
 import { ToolsIcon } from '@components/icons/tools';
 import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
+import { useNetworkConfig } from '@common/hooks/use-network-config';
 
 export const Sample = ({ onItemClick, setFieldValue }: any) => {
   const [codeBody, setCodeBody] = useCodeEditor();
@@ -108,6 +109,8 @@ export const DeployView = React.memo(() => {
   const [codeBody] = useCodeEditor();
   const { handleValidate, result, setResult, wasmLoaded } = useClarityRepl();
 
+  const network = useNetworkConfig();
+
   const contractName = useRecoilValue(contractNameState);
   const [toolsVisible, setToolsState] = useRecoilState(editorToolsState);
 
@@ -124,6 +127,7 @@ export const DeployView = React.memo(() => {
     if (!wasmLoaded || (_result && _result?.valid)) {
       setResult(undefined);
       void openContractDeploy({
+        network,
         postConditionMode: 0x01,
         codeBody,
         contractName,
