@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { atom, AtomEffect, selector } from 'recoil';
-import type { ColorModeString } from '@common/utils/color-modes';
-import { setDocumentStyles, THEME_STORAGE_KEY } from '@common/utils/color-modes';
+import type { ColorModeString } from '@stacks/ui';
+import { setDocumentStyles, THEME_STORAGE_KEY } from '@stacks/ui';
 
 export const colorModeAtomEffect = (key: string): AtomEffect<ColorModeString> => ({
   setSelf,

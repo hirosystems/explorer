@@ -8,7 +8,6 @@ import { NextPage, NextPageContext } from 'next';
 import { Title } from '@components/typography';
 import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
-import { PageWrapper } from '@components/page';
 import { SearchComponent } from '@components/search/search';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
@@ -53,7 +52,7 @@ const PageTop: React.FC = React.memo(() => (
     width="100%"
     flexDirection="column"
     alignItems="center"
-    maxWidth="calc(60% - 32px)"
+    maxWidth={['100%', '100%', 'calc(60% - 32px)']}
     justify="center"
   >
     <Title
@@ -88,6 +87,7 @@ export const useHomepageData = (initialData?: HomeData) => {
     () => fetchHomepageData(apiServer)(),
     {
       initialData,
+      suspense: false,
     }
   );
 
@@ -97,13 +97,13 @@ export const useHomepageData = (initialData?: HomeData) => {
   };
 };
 
-const Home: NextPage<HomeData> = React.memo(initialData => {
-  const { data } = useHomepageData(initialData);
+const Home: NextPage<HomeData> = React.memo(({ ...props }) => {
+  const { data } = useHomepageData(props);
   if (!data) {
     return null;
   }
   return (
-    <PageWrapper isHome>
+    <>
       <Meta />
       <PageTop />
       <Grid
@@ -121,7 +121,7 @@ const Home: NextPage<HomeData> = React.memo(initialData => {
 
         <BlocksList blocks={data.blocks.results} />
       </Grid>
-    </PageWrapper>
+    </>
   );
 });
 
@@ -129,7 +129,10 @@ export async function getServerSideProps(ctx: NextPageContext) {
   const apiServer = await getServerSideApiServer(ctx);
   const data = await fetchHomepageData(apiServer)();
   return {
-    props: data,
+    props: {
+      ...data,
+      isHome: true,
+    },
   };
 }
 

@@ -7,6 +7,19 @@ export const searchQueryState = atom<string | null>({
   default: null,
 });
 
+export const searchValueState = atom<string>({
+  key: 'search.value',
+  default: '',
+});
+
+export const searchExitingState = atom<boolean>({
+  key: 'search.exiting',
+  default: false,
+});
+export const searchLoadingState = atom<boolean>({
+  key: 'search.loading',
+  default: false,
+});
 export const searchResultsState = atom<SearchResult | null>({
   key: 'search.results',
   default: null,
@@ -40,6 +53,6 @@ export const searchDropdownState = atom<'hidden' | 'visible'>({
 });
 
 export const searchDropdownExitingState = atom<boolean>({
-  key: 'search.dropdown',
+  key: 'search.dropdown-exiting',
   default: false,
 });

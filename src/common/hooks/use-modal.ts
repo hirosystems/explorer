@@ -1,16 +1,25 @@
 import { useRecoilState } from 'recoil';
 import { modalState } from '@store/modals';
+import { AllModals, MODALS } from '@common/constants';
 
 export const useModal = () => {
-  const [modal, setModal] = useRecoilState<string | null>(modalState);
+  const [modal, setModal] = useRecoilState<AllModals | null>(modalState);
 
-  const setOpenModal = (slug: string) => setModal(slug);
+  const setOpenModal = (slug: AllModals) => setModal(slug);
   const handleCloseModal = () => setModal(null);
 
+  const handleOpenSearchModal = () => {
+    setOpenModal(MODALS.SEARCH);
+  };
+  const handleOpenNetworkModal = () => {
+    setOpenModal(MODALS.NETWORK);
+  };
   return {
     modal,
     setModal,
     setOpenModal,
     handleCloseModal,
+    handleOpenSearchModal,
+    handleOpenNetworkModal,
   };
 };

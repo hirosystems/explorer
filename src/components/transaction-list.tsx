@@ -1,5 +1,5 @@
-import { Box, BoxProps, Flex, FlexProps, Grid } from '@stacks/ui';
-import { Caption } from '@components/typography';
+import { Box, BoxProps, Flex, FlexProps, Grid, color } from '@stacks/ui';
+import { Caption, Text } from '@components/typography';
 import {
   MempoolTransaction,
   MempoolTransactionListResponse,
@@ -12,7 +12,6 @@ import React from 'react';
 import { TxItem } from '@components/transaction-item';
 import { TxLink } from '@components/links';
 import { border } from '@common/utils';
-import { color } from '@components/color-modes';
 
 import { Section } from '@components/section';
 import { Toggle } from '@components/toggle';
@@ -23,7 +22,6 @@ import { CaptionAction } from '@components/caption-action';
 import { IconFilter } from '@tabler/icons';
 import { FilteredMessage, FilterPanel } from '@components/sandbox/filter-panel';
 import { useFilterState } from '@common/hooks/use-filter-state';
-import { TransactionTypes } from '@stacks/connect';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
@@ -202,7 +200,7 @@ export const TransactionList: React.FC<
         title={recent ? 'Recent transactions' : 'Transactions'}
         topRight={
           <Flex>
-            {hideFilter && !!pending?.length && (
+            {hideFilter && !!pending?.length && hasTransactions && (
               <>
                 <Toggle
                   size="small"
@@ -212,7 +210,7 @@ export const TransactionList: React.FC<
                 />
               </>
             )}
-            {!hideFilter ? <Filter /> : null}
+            {!hideFilter && hasTransactions ? <Filter /> : null}
           </Flex>
         }
         {...rest}
@@ -226,7 +224,8 @@ export const TransactionList: React.FC<
             </Box>
           ) : (
             <Grid placeItems="center" px="base" py="extra-loose">
-              <Caption>No transactions yet</Caption>
+              <Box as="img" src="/no-txs.svg" alt="No transactions yet" />
+              <Text mt="extra-loose">No transactions yet</Text>
             </Grid>
           )}
           {!hasNoVisibleTxs && hasTransactions && recent ? <ViewAllButton /> : null}

@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { PageWrapper } from '@components/page';
 import { TransactionMeta } from '@components/meta/transactions';
-import dynamic from 'next/dynamic';
 import useSWR from 'swr';
 
 import { queryWith0x, validateTxId } from '@common/utils';
@@ -15,11 +13,7 @@ import type { NextPage, NextPageContext } from 'next';
 import type { Block } from '@blockstack/stacks-blockchain-api-types';
 import { useApiServer } from '@common/hooks/use-api';
 import { Meta } from '@components/meta-head';
-
-// @ts-ignore
-const TxNotFound = dynamic(() =>
-  import('../../components/tx-not-found').then(mod => mod.TxNotFound)
-);
+import { TxNotFound } from '@components/tx-not-found';
 
 const TransactionPage: NextPage<{
   txid: string;
@@ -49,10 +43,10 @@ const TransactionPage: NextPage<{
     );
   } else {
     return (
-      <PageWrapper>
+      <>
         <TransactionMeta transaction={transaction} />
         {transaction && renderTxPageComponent(data, blockData)}
-      </PageWrapper>
+      </>
     );
   }
 };

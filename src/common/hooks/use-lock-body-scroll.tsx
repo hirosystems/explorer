@@ -1,13 +1,13 @@
 import React from 'react';
 import { useSafeLayoutEffect, useMediaQuery } from '@stacks/ui';
 
-export const useLockBodyScroll = (lock: boolean) => {
+export const useLockBodyScroll = (lock: boolean, enableOnDesktop?: boolean) => {
   const [isMobile] = useMediaQuery('(max-width: 760px)');
 
   useSafeLayoutEffect(() => {
     // Get original body overflow
     const originalStyle = window.getComputedStyle(document.body).overflow;
-    if (isMobile) {
+    if (enableOnDesktop || isMobile) {
       if (lock) {
         if (document.body.style.overflow !== 'hidden') {
           document.body.style.overflow = 'hidden';

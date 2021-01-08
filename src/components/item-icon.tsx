@@ -1,10 +1,9 @@
 import React from 'react';
-import { Box, BoxProps, Flex, FlexProps, Grid, GridProps } from '@stacks/ui';
+import { Box, BoxProps, color, Grid, GridProps } from '@stacks/ui';
 import { border } from '@common/utils';
 import { CodeIcon } from '@components/icons/code';
 import { Transaction } from '@models/transaction.interface';
 import { ContractCallIcon } from '@components/icons/contract-call';
-import { color } from '@components/color-modes';
 import { StxInline } from '@components/icons/stx-inline';
 import { WalletIcon } from '@components/icons/wallet';
 import { AppsIcon } from '@components/icons/apps';

@@ -2,18 +2,7 @@
 // todo: remove
 import * as React from 'react';
 import { Ref } from 'react';
-import {
-  Box,
-  Flex,
-  Stack,
-  FlexProps,
-  BlockstackIcon,
-  BoxProps,
-  ChevronIcon,
-  Grid,
-  GridProps,
-  transition,
-} from '@stacks/ui';
+import { Box, Flex, Stack, FlexProps, BoxProps, Grid, GridProps, color } from '@stacks/ui';
 import { Truncate } from '@components/truncated';
 import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { Text } from '@components/typography';
@@ -32,19 +21,15 @@ import { Caption } from '@components/typography';
 import { truncateMiddle, getFungibleAssetName } from '@common/utils';
 import { CodeAccordian } from '@components/code-accordian';
 
-import { DefaultContract } from '@components/icons/default-contract';
 import { getAssetEventTypeLabel, getEventTypeName } from '@components/token-transfer/utils';
 import { TokenTransferItemProps } from '@components/token-transfer/types';
 import { LogIcon } from '@components/svg';
 import { useActive, useHover } from 'use-events';
-import { color } from '@components/color-modes';
 import { StxNexus } from '@components/icons/stx-nexus';
-import { FungibleTokenIcon } from '@components/icons/fungible-token';
-import { NonFungibleTokenIcon } from '@components/icons/non-fungible-token';
+
 import { CodeIcon } from '@components/icons/code';
 import { ChevronDown } from '@components/icons/chevron-down';
 import { DynamicColorCircle } from '@components/dynamic-color-circle';
-import NextLink from 'next/link';
 import { IconButton } from '@components/icon-button';
 import { AddressLink } from '@components/links';
 import { ExternalLinkIcon } from '@components/icons/external-link';

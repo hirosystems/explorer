@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Head from 'next/head';
+
 import useSWR from 'swr';
 import {
   AddressBalanceResponse,
@@ -10,7 +10,6 @@ import {
 import { Box, Flex, Grid } from '@stacks/ui';
 import { Title } from '@components/typography';
 import type { NextPage, NextPageContext } from 'next';
-import { PageWrapper } from '@components/page';
 import { Section } from '@components/section';
 import { Rows } from '@components/rows';
 import { TransactionList } from '@components/transaction-list';
@@ -96,7 +95,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
   const stackingStartedAtThisBlock = getStackStartBlockHeight(data?.transactions?.results);
 
   return (
-    <PageWrapper>
+    <>
       <Meta title={`STX Address ${truncateMiddle(principal)}`} />
       <Flex
         mb="extra-loose"
@@ -139,7 +138,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
           </Box>
         ) : null}
       </Grid>
-    </PageWrapper>
+    </>
   );
 };
 

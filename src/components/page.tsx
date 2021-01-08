@@ -1,13 +1,13 @@
 import React from 'react';
-import { Box, Flex, FlexProps, transition } from '@stacks/ui';
+import { Box, Flex, FlexProps, transition, color, useColorMode } from '@stacks/ui';
 import { css, Theme } from '@stacks/ui-core';
 
 import { Footer } from '@components/footer';
 import { Header } from '@components/header';
 import { Notice } from '@components/notice';
-import { color } from '@components/color-modes';
+import { MetaverseBg } from '@components/metaverse-bg';
+
 import { TitleProps, TransactionTitle } from '@components/transaction-title';
-import { MetaverseSVG } from '@components/metaverse';
 import { Alert } from '@components/alert';
 import { Transaction } from '@blockstack/stacks-blockchain-api-types';
 
@@ -16,7 +16,12 @@ type PageProps = {
   fullWidth?: boolean;
   tx?: Transaction;
 } & FlexProps;
-type PageWrapperProps = { isHome?: boolean; fullWidth?: boolean; notice?: any } & FlexProps;
+type PageWrapperProps = {
+  isHome?: boolean;
+  fullWidth?: boolean;
+  notice?: any;
+  networkMode?: string;
+} & FlexProps;
 
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
   const status = tx.tx_status;
@@ -87,7 +92,12 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
   </Flex>
 ));
 
-export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...props }) => (
+export const PageWrapper: React.FC<PageWrapperProps> = ({
+  networkMode,
+  fullWidth,
+  isHome,
+  ...props
+}) => (
   <Flex
     maxWidth="100vw"
     overflowX="hidden"
@@ -100,17 +110,15 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({ fullWidth, isHome, ...
     <Page {...props} />
     <Box
       className="metaverse-header"
-      position="absolute"
+      position="fixed"
       zIndex={1}
       width="100%"
       top={0}
-      height="420px"
+      height="clamp(420px, 40vh, 620px)"
       overflow="hidden"
       transition={transition}
     >
-      <Box transform="translate3d(-3%, -16%, 0px) scale(1.15) rotate(-8deg)" position="relative">
-        <MetaverseSVG minWidth="1400px" width="100vw" filter="contrast(1.1)" />
-      </Box>
+      <MetaverseBg height="clamp(420px, 40vh, 620px)" />
     </Box>
   </Flex>
 );

@@ -5,21 +5,18 @@ import { Link, Text, Title } from '@components/typography';
 import { useModal } from '@common/hooks/use-modal';
 import { NetworkSwitchModalForm } from '@components/add-network-form';
 import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
+import { MODALS } from '@common/constants';
 
 export const NetworkSwitchModal: React.FC = () => {
   const { modal, handleCloseModal } = useModal();
   const { setErrors } = useNetworkAddForm();
+  const isOpen = modal === MODALS.NETWORK;
   const handleClose = () => {
     setErrors({});
     handleCloseModal();
   };
   return (
-    <ControlledModal
-      minWidth="428px"
-      bg={color('bg')}
-      isOpen={modal === 'network'}
-      handleClose={handleClose}
-    >
+    <ControlledModal minWidth="428px" bg={color('bg')} isOpen={isOpen} handleClose={handleClose}>
       <Flex
         width="100%"
         justifyContent="space-between"

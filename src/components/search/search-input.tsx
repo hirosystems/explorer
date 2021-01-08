@@ -1,20 +1,6 @@
 import * as React from 'react';
-import { Box, BoxProps, Grid, Input, InputProps } from '@stacks/ui';
+import { Input, InputProps } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
-import { IconSearch } from '@tabler/icons';
-
-const SearchIcon: React.FC<
-  BoxProps & { inputOffset: string }
-> = React.memo(({ inputOffset, ...props }) => (
-  <Box
-    as={IconSearch}
-    size="18px"
-    strokeWidth={2}
-    style={{ pointerEvents: 'none' }}
-    color="white"
-    {...props}
-  />
-));
 
 const StyledInput = memoWithAs<InputProps & { hasError?: boolean }, 'input'>(
   forwardRefWithAs<InputProps & { hasError?: boolean }, 'input'>(
@@ -37,6 +23,7 @@ const StyledInput = memoWithAs<InputProps & { hasError?: boolean }, 'input'>(
           position="absolute"
           color="white"
           borderColor="transparent"
+          transitionProperty="border,box-shadow"
           _placeholder={{ color: 'rgba(255,255,255,0.65)' }}
           _hover={{
             borderColor: 'rgba(255,255,255,0.15)',

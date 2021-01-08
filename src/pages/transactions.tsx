@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Box } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
-import { PageWrapper } from '@components/page';
 import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
 import {
@@ -41,7 +40,7 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
   });
 
   return (
-    <PageWrapper>
+    <>
       <Meta title="Recent transactions" />
       <Box mb="base-loose">
         <Title mt="72px" color="white" as="h1" fontSize="36px">
@@ -56,7 +55,7 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
         isLoadingMore={isLoadingMore}
         hideFilter={false}
       />
-    </PageWrapper>
+    </>
   );
 };
 

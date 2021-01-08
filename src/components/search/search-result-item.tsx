@@ -199,7 +199,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
 export const SearchCardItem: React.FC<{
   recentItem?: SearchResult;
   clearResults?: () => void;
-}> = React.memo(({ recentItem, clearResults }) => {
+  onClick?: () => any;
+}> = React.memo(({ recentItem, onClick, clearResults }) => {
   const [item] = useItem(recentItem);
   const { data } = usePrevious();
   const { handleUpsertItem } = useRecentlyViewedItems();
@@ -209,6 +210,7 @@ export const SearchCardItem: React.FC<{
     <SearchResultItem
       option={item}
       onClick={() => {
+        onClick?.();
         clearResults?.();
         handleMakeHidden();
         (data || recentItem)?.found ? handleUpsertItem(data || recentItem) : null;

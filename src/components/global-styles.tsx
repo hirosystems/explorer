@@ -1,8 +1,5 @@
 import * as React from 'react';
-
 import { Global, css } from '@emotion/react';
-
-import { ColorModes } from '@components/color-modes';
 import { ProgressBarStyles } from '@components/progress-bar';
 import { TextAreaOverrides } from '@components/code-editor/code-editor';
 
@@ -58,4 +55,4 @@ const globalStyles = css`
 
 const GlobalStyles = <Global styles={globalStyles} />;
 
-export { TextAreaOverrides, GlobalStyles, ColorModes, ProgressBarStyles };
+export { TextAreaOverrides, GlobalStyles, ProgressBarStyles };

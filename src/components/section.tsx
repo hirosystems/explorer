@@ -1,11 +1,10 @@
-import { Flex, FlexProps } from '@stacks/ui';
+import { Flex, FlexProps, color } from '@stacks/ui';
 import { Text } from '@components/typography';
 
 import { Card } from '@components/card';
 import React from 'react';
 
 import { border } from '@common/utils';
-import { color } from '@components/color-modes';
 
 interface SectionProps extends FlexProps {
   title?: string;

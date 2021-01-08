@@ -1,71 +1,14 @@
 import React from 'react';
 import { HeaderTextItem } from '@components/header-text-item';
-import { Box, BoxProps, color, Fade, Flex, FlexProps, Stack } from '@stacks/ui';
-import { IconCheck, IconChevronDown } from '@tabler/icons';
+import { Box, BoxProps, Fade, color } from '@stacks/ui';
+import { IconChevronDown } from '@tabler/icons';
 import { useHover } from 'web-api-hooks';
 import { useNetwork } from '@common/hooks/use-network';
-import { Caption, Title } from '@components/typography';
-import { border } from '@common/utils';
-import { useModal } from '@common/hooks/use-modal';
-import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import { fetchFromSidecar } from '@common/api/fetch';
-import { NetworkSwitchModal } from '@components/modals/add-network';
 
-const DropdownItem: React.FC<FlexProps & { isDisabled?: boolean; isActive?: boolean }> = ({
-  isActive,
-  isDisabled,
-  ...props
-}) => {
-  return (
-    <Flex
-      opacity={isDisabled ? 0.5 : 1}
-      alignItems="center"
-      justifyContent="space-between"
-      px="extra-loose"
-      py="base"
-      position="relative"
-      zIndex="999"
-      bg={isDisabled ? 'bg-4' : 'bg'}
-      cursor={isDisabled ? 'not-allowed' : 'unset'}
-      _hover={{
-        bg: isDisabled ? 'unset' : isActive ? 'unset' : color('bg-alt'),
-        cursor: isDisabled ? 'not-allowed' : isActive ? 'default' : 'pointer',
-      }}
-      {...props}
-    />
-  );
-};
-
-const Item: React.FC<
-  FlexProps & {
-    item: { label: string; url: string };
-    isActive?: boolean;
-    isDisabled?: boolean;
-  }
-> = ({ item, isActive, isDisabled, ...rest }) => {
-  const { error } = useSWR(isDisabled ? null : item.url, async () =>
-    fetchFromSidecar(item.url)('/status')
-  );
-
-  return (
-    <DropdownItem isActive={isActive} isDisabled={isDisabled || !!error?.message} {...rest}>
-      <Stack flexGrow={1} spacing="tight">
-        <Title display="block">{item.label}</Title>
-        <Caption display="block">
-          {item.url.includes('//') ? item.url.split('//')[1] : item.url}
-        </Caption>
-      </Stack>
-      {isActive ? <Box as={IconCheck} color={color('feedback-success')} size="18px" /> : null}
-      {!!error?.message ? <Caption color={color('feedback-error')}>Offline</Caption> : null}
-    </DropdownItem>
-  );
-};
+import { NetworkItems } from '@components/network-items';
 
 const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ...props }) => {
-  const { list, index, handleUpdateCurrentIndex } = useNetwork();
-  const { setOpenModal } = useModal();
-  const router = useRouter();
+  const { list } = useNetwork();
   const showing = list && list?.length && show;
 
   return list && list?.length ? (
@@ -80,32 +23,7 @@ const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ..
             borderRadius="8px"
             pt="tight"
           >
-            <Item
-              isDisabled
-              item={{
-                label: 'Mainnet',
-                url: 'Coming soon',
-              }}
-            />
-            {list?.map((item, key) => {
-              const isActive = key === index;
-              return (
-                <Item
-                  isActive={isActive}
-                  item={item}
-                  key={key}
-                  onClick={() => {
-                    if (!isActive) {
-                      handleUpdateCurrentIndex(key);
-                      router.reload();
-                    }
-                  }}
-                />
-              );
-            })}
-            <DropdownItem onClick={() => setOpenModal('network')} py="loose" borderTop={border()}>
-              <Title fontWeight={400}>Add a network</Title>
-            </DropdownItem>
+            <NetworkItems />
           </Box>
         </Box>
       )}
@@ -133,7 +51,6 @@ export const NetworkSwitcherItem: React.FC<BoxProps> = props => {
         <Box as={IconChevronDown} size="14px" ml="tight" />
         <Dropdown show={isHovered} />
       </HeaderTextItem>
-      <NetworkSwitchModal />
     </>
   );
 };

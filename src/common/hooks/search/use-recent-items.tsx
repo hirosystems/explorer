@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import { useRecoilState } from 'recoil';
 import { searchRecentlyViewedItemsState } from '@store/search';
 import { useApiServer } from '@common/hooks/use-api';

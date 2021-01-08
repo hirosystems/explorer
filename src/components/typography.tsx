@@ -71,7 +71,7 @@ export const Link: ForwardRefExoticComponentWithAs<BoxProps, 'a'> = forwardRefWi
   ({ as = 'a', _hover = {}, ...props }, ref) => (
     <Text
       _hover={{
-        textDecoration: 'underline',
+        textDecoration: ['none', 'none', 'underline', 'underline'],
         ..._hover,
       }}
       as={as}

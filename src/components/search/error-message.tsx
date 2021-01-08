@@ -7,18 +7,13 @@ export const SearchErrorMessage: React.FC<{ message: string; hint?: string }> = 
   ({ message, hint }) => (
     <Box p="base">
       <Flex alignItems="flex-start">
-        <Box mr="base" as={IconAlertTriangle} color={color('feedback-error')} />
-        <Caption lineHeight="22px">{message}</Caption>
+        <Box flexShrink={0} mr="base" as={IconAlertTriangle} color={color('feedback-error')} />
+        <Caption lineHeight="22px" wordBreak="break-word">
+          {message}
+        </Caption>
       </Flex>
       {hint ? (
-        <Flex
-          bg={color('bg-4')}
-          mt="base"
-          borderRadius="6px"
-          p="tight"
-          // border={border()}
-          alignItems="center"
-        >
+        <Flex bg={color('bg-4')} mt="base" borderRadius="6px" p="tight" alignItems="center">
           <Caption mr="tight" fontWeight="600" color={color('brand')}>
             Hint
           </Caption>

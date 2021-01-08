@@ -3,40 +3,44 @@ import * as React from 'react';
 import debounce from 'just-debounce-it';
 
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { searchQueryState, searchResultItemState } from '@store/search';
+import {
+  searchQueryState,
+  searchResultItemState,
+  searchExitingState,
+  searchLoadingState,
+  searchValueState,
+} from '@store/search';
 import { useItem } from '@common/hooks/search/use-item';
 import { usePrevious } from '@common/hooks/search/use-previous';
 import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 
-export const useSearch = (ref: any) => {
+export const useSearch = (ref: any, isLoadingTimeoutRef: any) => {
+  const { recentItemsArray } = useRecentlyViewedItems();
   const [query, handleSetQuery] = useRecoilState(searchQueryState);
+  const [value, setValue] = useRecoilState(searchValueState);
+  const [exiting, handleSetExiting] = useRecoilState(searchExitingState);
+  const [isLoading, setIsLoading] = useRecoilState(searchLoadingState);
   const { data: previous, isValidating: searchResultsValidating, setPrevious } = usePrevious();
-  const [exiting, handleSetExiting] = React.useState(false);
   const [item, itemValidating] = useItem();
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  const isLoadingTimeoutRef = React.useRef<number | null>(null);
 
   const setItem = useSetRecoilState(
     searchResultItemState(previous?.found && previous.result.entity_id)
   );
 
-  const { recentItemsArray } = useRecentlyViewedItems();
+  const resetValue = () => {
+    setValue('');
+    handleSetQuery(null);
+  };
 
   const handleExiting = React.useCallback(() => {
-    if (ref?.current?.value) {
-      ref.current.value = null;
-    }
+    resetValue();
     handleSetExiting(true);
   }, [handleSetExiting]);
 
   const handleClearState = React.useCallback(() => {
-    handleSetQuery(null);
+    resetValue();
     setItem(null);
     setPrevious(null);
-    if (ref?.current?.value) {
-      ref.current.value = null;
-    }
   }, [handleSetQuery, setItem, setPrevious, ref]);
 
   const debouncedSetQuery = React.useCallback(
@@ -48,23 +52,12 @@ export const useSearch = (ref: any) => {
 
   const handleUpdateQuery = React.useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
-      const value = e.currentTarget.value;
-      debouncedSetQuery(value);
+      const v = e.currentTarget.value;
+      setValue(v);
+      debouncedSetQuery(v === '' ? null : v);
     },
     [debouncedSetQuery]
   );
-
-  React.useEffect(() => {
-    if (!query) {
-      if (recentItemsArray.length === 0) {
-        if (previous || item) {
-          handleSetExiting(false);
-        }
-      } else {
-        handleClearState();
-      }
-    }
-  }, [query, previous, item]);
 
   const handleSetLoading = React.useCallback(() => {
     const loading = itemValidating || searchResultsValidating;
@@ -98,7 +91,22 @@ export const useSearch = (ref: any) => {
     isLoadingTimeoutRef.current,
   ]);
 
+  // React.useEffect(() => {
+  //   if (!value) {
+  //     if (recentItemsArray.length === 0) {
+  //       if (previous || item) {
+  //         handleSetExiting(false);
+  //       }
+  //     } else {
+  //       handleClearState();
+  //     }
+  //   }
+  // }, [query, value, previous, item]);
+
   return {
+    value,
+    setValue,
+    resetValue,
     query,
     handleSetQuery,
     handleExiting,

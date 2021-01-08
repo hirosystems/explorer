@@ -1,4 +1,4 @@
-import { BoxProps, Flex, FlexProps, Stack } from '@stacks/ui';
+import { BoxProps, Flex, FlexProps, Stack, color } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
@@ -10,7 +10,6 @@ import { Link } from '@components/link';
 import NextLink from 'next/link';
 import React from 'react';
 import { Transaction } from '@models/transaction.interface';
-import { color } from '@components/color-modes';
 import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
 import { useHoverableState } from '@components/hoverable';
 
