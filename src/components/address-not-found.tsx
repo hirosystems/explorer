@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 export const AddressNotFound: React.FC<{ isPending?: boolean }> = React.memo(({ isPending }) => {
   return (
-    <PageWrapper>
+    <>
       <Title mb={['base', 'base', '0']} mt="64px" as="h1" color="white" fontSize="36px">
         Address not found
       </Title>
@@ -35,6 +35,6 @@ export const AddressNotFound: React.FC<{ isPending?: boolean }> = React.memo(({ 
           </Box>
         </Grid>
       </Section>
-    </PageWrapper>
+    </>
   );
 });

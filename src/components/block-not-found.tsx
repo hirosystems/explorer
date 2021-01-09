@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Box, Grid, Stack } from '@stacks/ui';
-import { PageWrapper } from '@components/page';
 import { Title } from '@components/typography';
 import { Section } from '@components/section';
 import { Button } from '@components/button';
@@ -11,7 +10,7 @@ import Link from 'next/link';
 
 export const BlockNotFound: React.FC<{ isPending?: boolean }> = React.memo(({ isPending }) => {
   return (
-    <PageWrapper>
+    <>
       <Title mb={['base', 'base', '0']} mt="64px" as="h1" color="white" fontSize="36px">
         Block not found
       </Title>
@@ -72,6 +71,6 @@ export const BlockNotFound: React.FC<{ isPending?: boolean }> = React.memo(({ is
           </Box>
         </Grid>
       </Section>
-    </PageWrapper>
+    </>
   );
 });
