@@ -27,31 +27,44 @@ const GlobalStyles = () => (
 export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = forwardRefWithAs<
   BoxProps,
   'div'
->(({ as = 'div', height = 'clamp(420px, 40vh, 620px)', ...rest }, ref) => {
-  return (
-    <Box
-      className="metaverse-header"
-      position="fixed"
-      zIndex={1}
-      width="100%"
-      top={0}
-      height={height}
-      overflow="hidden"
-      transition={transition}
-    >
-      <GlobalStyles />
+>(
+  (
+    {
+      as = 'div',
+      height = [
+        'clamp(380px, 45vh, 820px)',
+        'clamp(380px, 45vh, 820px)',
+        'clamp(580px, 45vh, 820px)',
+      ],
+      ...rest
+    },
+    ref
+  ) => {
+    return (
       <Box
-        className="metaverse-bg"
-        as={as}
-        backgroundSize="cover"
-        maxWidth="100%"
-        backgroundPosition="50% 29%"
+        className="metaverse-header"
+        position="fixed"
+        zIndex={1}
         width="100%"
-        minWidth="1600px"
+        top={0}
         height={height}
-        ref={ref}
-        {...rest}
-      />
-    </Box>
-  );
-});
+        overflow="hidden"
+        transition={transition}
+      >
+        <GlobalStyles />
+        <Box
+          className="metaverse-bg"
+          as={as}
+          backgroundSize="cover"
+          maxWidth="100%"
+          backgroundPosition="50% 29%"
+          width="100%"
+          minWidth="1600px"
+          height={height}
+          ref={ref}
+          {...rest}
+        />
+      </Box>
+    );
+  }
+);

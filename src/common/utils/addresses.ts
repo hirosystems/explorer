@@ -33,7 +33,7 @@ interface AddressesResult {
  *
  * Takes a C32 address and provides more verbose details about type and network
  */
-function getAddressDetails(address: string): AddressDetails {
+export function getAddressDetails(address: string): AddressDetails {
   const [version] = c32addressDecode(address);
 
   if (version === versions.testnet.p2pkh) {
@@ -70,7 +70,7 @@ function getAddressDetails(address: string): AddressDetails {
  *
  * Automatically invert address between testnet/mainnet
  */
-const invertAddress = (address: string): string => {
+export const invertAddress = (address: string): string => {
   const [version, hash160] = c32addressDecode(address);
   let _version = 0;
   if (version === versions.mainnet.p2pkh) {
@@ -106,7 +106,7 @@ export function convertAddress(address: string, network: 'testnet' | 'mainnet'):
  *
  * This will convert a BTC address to c32 if need be
  */
-function getC32Address(address: string) {
+export function getC32Address(address: string) {
   const stacksRegex = RegExp(STACKS_ADDRESS_PATTERN);
   const btcRegex = RegExp(BTC_ADDRESS_PATTERN);
   let c32addr: string;
@@ -148,4 +148,90 @@ export function addressConvert(address: string): AddressesResult {
     mainnet: getAddressResult(mainnetSTX),
     testnet: getAddressResult(testnetSTX),
   };
+}
+
+interface AddressVestingReturn {
+  found: boolean;
+}
+
+export async function fetchAddressVesting(address: string): Promise<boolean> {
+  try {
+    const res = await fetch(`http://localhost:3000/api/vesting/${address}`);
+    const data: AddressVestingReturn = await res.json();
+    return data?.found;
+  } catch (e) {
+    return false;
+  }
+}
+
+export interface VestingData {
+  tokensGranted: number;
+  totalLocked: number;
+  totalLockedStacks: string;
+  totalReceived: number;
+  totalUnlocked: number;
+  totalUnlockedStacks: string;
+  unlockTotal: number;
+  unlockTotalStacks: string;
+  vestingTotal: number;
+  vesting_total: number;
+}
+
+interface LegacyVestingDataResponse extends VestingData {
+  address: string;
+  balance: string;
+  btcAddress: string;
+  cumulativeVestedAtBlocks: Record<number, number>;
+  formattedUnlockTotal: string;
+  history: any[];
+  status: {
+    address: string;
+    block_id: number;
+    credit_value: string;
+    debit_value: string;
+    lock_transfer_block_id: number;
+    txid: string;
+    type: 'STACKS' | 'BTC';
+    vtxindex: number;
+  };
+  tokens: ('STACKS' | 'BTC')[];
+}
+
+export async function fetchLegacyExplorerVestingData(address: string): Promise<any> {
+  const convertedAddress = convertAddress(address, 'mainnet');
+  try {
+    const res = await fetch(
+      `https://explorer-api.blockstack.xyz/api/stacks/addresses/${convertedAddress}`
+    );
+    const data: LegacyVestingDataResponse = await res.json();
+    if (data && !('success' in data)) {
+      const {
+        tokensGranted,
+        totalLocked,
+        totalLockedStacks,
+        totalReceived,
+        totalUnlocked,
+        totalUnlockedStacks,
+        unlockTotal,
+        unlockTotalStacks,
+        vestingTotal,
+        vesting_total,
+      } = data;
+      return {
+        tokensGranted,
+        totalLocked,
+        totalLockedStacks,
+        totalReceived,
+        totalUnlocked,
+        totalUnlockedStacks,
+        unlockTotal,
+        unlockTotalStacks,
+        vestingTotal,
+        vesting_total,
+      };
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
 }
