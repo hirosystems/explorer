@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, color, ControlledModal, Flex, IconButton, Fade } from '@stacks/ui';
+import { Box, color, Flex, IconButton, Fade } from '@stacks/ui';
 import { IconSearch, IconX } from '@tabler/icons';
 import { Text, Title } from '@components/typography';
 import { useModal } from '@common/hooks/use-modal';
@@ -9,6 +9,7 @@ import { SearchBox } from '@components/search/search-box';
 import { SearchResultsCard } from '@components/search/search-results-card';
 import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
 import { MetaverseBg } from '@components/metaverse-bg';
+import { border } from '@common/utils';
 
 export const SearchModal: React.FC = () => {
   const { modal, handleCloseModal } = useModal();
@@ -58,7 +59,7 @@ export const SearchModal: React.FC = () => {
           <Box px="base">
             <SearchBox inputRef={inputRef} timeoutRef={timeoutRef} />
           </Box>
-          <Box px="base" width="100%" position="relative" flexGrow={1}>
+          <Flex flexDirection="column" px="base" width="100%" position="relative" flexGrow={1}>
             <Fade in={results}>
               {styles => (
                 <SearchResultsCard
@@ -81,22 +82,30 @@ export const SearchModal: React.FC = () => {
                   p="extra-loose"
                   alignItems="center"
                   style={styles}
+                  bg={color('bg')}
+                  position="relative"
+                  mt="base"
+                  borderRadius="12px"
+                  border={border()}
+                  zIndex={99}
+                  flexGrow={1}
+                  mb="base"
                 >
                   <Box
                     mb="extra-loose"
                     as={IconSearch}
-                    mx="auto"
+                    color={color('invert')}
                     opacity={0.15}
                     size="128px"
-                    color={color('invert')}
                   />
+
                   <Text color={color('text-caption')} textAlign="center" lineHeight="28px">
                     Available search terms: principal, tx_id, contract_id, and block_hash.
                   </Text>
                 </Flex>
               )}
             </Fade>
-          </Box>
+          </Flex>
           <MetaverseBg />
         </Flex>
       )}

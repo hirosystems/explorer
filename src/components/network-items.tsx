@@ -18,6 +18,7 @@ interface ItemWrapperProps extends FlexProps {
   isDisabled?: boolean;
   isActive?: boolean;
 }
+
 const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...props }) => {
   return (
     <Flex
@@ -42,6 +43,7 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
 interface ItemProps extends ItemWrapperProps {
   item: { label: string; url: string };
 }
+
 const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, ...rest }) => {
   const { data, error } = useSWR(isDisabled ? null : item.url, async () => {
     const response = await fetchFromApi(item.url)('/v2/info');
@@ -93,14 +95,16 @@ const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
     </ItemWrapper>
   );
 };
+
 interface NetworkItemsProps extends BoxProps {
   itemOnClick?: (item?: any) => void;
 }
+
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnClick }) => {
   const { list, index, handleUpdateCurrentIndex } = useNetwork();
   const router = useRouter();
 
-  return list && list?.length ? (
+  return (
     <>
       <Item
         isDisabled
@@ -132,5 +136,5 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnCli
         }}
       />
     </>
-  ) : null;
+  );
 });

@@ -33,10 +33,14 @@ export default class MyDocument extends Document<DocumentProps> {
       ),
     };
   }
+
   render() {
     return (
       <Html lang="en">
         <Head>
+          <meta name="theme-color" content="#6287DD" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="#6287DD" />
           <script
             dangerouslySetInnerHTML={{
               __html: `(function () {

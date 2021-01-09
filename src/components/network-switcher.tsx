@@ -3,17 +3,12 @@ import { HeaderTextItem } from '@components/header-text-item';
 import { Box, BoxProps, Fade, color } from '@stacks/ui';
 import { IconChevronDown } from '@tabler/icons';
 import { useHover } from 'web-api-hooks';
-import { useNetwork } from '@common/hooks/use-network';
-
 import { NetworkItems } from '@components/network-items';
 import { border } from '@common/utils';
 
 const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ...props }) => {
-  const { list } = useNetwork();
-  const showing = list && list?.length && show;
-
-  return list && list?.length ? (
-    <Fade in={!!showing}>
+  return (
+    <Fade in={show}>
       {styles => (
         <Box top="100%" pt="base" right={0} position="absolute" style={styles}>
           <Box
@@ -30,7 +25,7 @@ const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ..
         </Box>
       )}
     </Fade>
-  ) : null;
+  );
 });
 
 export const NetworkSwitcherItem: React.FC<BoxProps> = props => {
@@ -46,6 +41,7 @@ export const NetworkSwitcherItem: React.FC<BoxProps> = props => {
         _hover={{
           cursor: 'pointer',
         }}
+        as="span"
         {...bind}
         {...props}
       >
