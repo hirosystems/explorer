@@ -6,6 +6,7 @@ import { useHover } from 'web-api-hooks';
 import { useNetwork } from '@common/hooks/use-network';
 
 import { NetworkItems } from '@components/network-items';
+import { border } from '@common/utils';
 
 const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ...props }) => {
   const { list } = useNetwork();
@@ -16,6 +17,7 @@ const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ..
       {styles => (
         <Box top="100%" pt="base" right={0} position="absolute" style={styles}>
           <Box
+            border={border()}
             overflow="hidden"
             boxShadow="mid"
             minWidth="342px"

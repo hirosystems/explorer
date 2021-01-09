@@ -1,15 +1,7 @@
-import useSWR from 'swr';
-import { getNetworkMode } from '@common/api/network';
-import { useApiServer } from '@common/hooks/use-api';
+import { useRecoilValue } from 'recoil';
+import { networkModeState } from '@pages/_app';
 
-export const useNetworkMode = (initialData?: 'Testnet' | 'Mainnet') => {
-  const apiServer = useApiServer();
-  const { data } = useSWR<'Testnet' | 'Mainnet' | undefined>(
-    '/v2/info',
-    () => getNetworkMode(apiServer),
-    {
-      initialData,
-    }
-  );
-  return data;
+export const useNetworkMode = () => {
+  const state = useRecoilValue(networkModeState);
+  return state;
 };

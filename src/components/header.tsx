@@ -9,6 +9,7 @@ import { SearchComponent } from '@components/search/search';
 import { MobileMenu } from '@components/mobile-menu';
 import { useModal } from '@common/hooks/use-modal';
 import { IconSearch } from '@tabler/icons';
+import { NetworkModeBanner } from '@components/network-mode-banner';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -91,16 +92,17 @@ export const Header: React.FC<
           maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
           alignItems="center"
         >
-          <Box flexGrow={1}>
+          <Flex alignItems="center" flexGrow={1}>
             {!isHome ? (
               <>
                 <SearchComponent
                   display={['none', 'none', 'block', 'block']}
                   variant="small"
                   mr="base"
+                  width="100%"
                 />
                 <IconButton
-                  display={['flex', 'flex', 'none', 'none']}
+                  display={['grid', 'grid', 'none', 'none']}
                   ml="auto"
                   invert
                   color="white"
@@ -109,7 +111,8 @@ export const Header: React.FC<
                 />
               </>
             ) : null}
-          </Box>
+            <NetworkModeBanner order={[-1, -1, 2, 2]} mr="tight" />
+          </Flex>
           <Navigation />
         </Flex>
       </HeaderBar>

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 import { useSearch } from '@common/hooks/search/use-search';
-import { useSearchDropdown } from '@common/hooks/search/use-search-dropdown';
-import { useTimeoutFn } from 'react-use';
-import { useFocus, useHover } from 'web-api-hooks';
+import { useHover } from 'web-api-hooks';
+import { useRecoilFocus } from '@common/hooks/use-recoil-focus';
+import { searchDropdownVisibilitySelector, searchFocusedState } from '@store/search';
+import { useRecoilValue } from 'recoil';
+import { useSearchFocus } from '@common/hooks/search/use-search-focus';
 
 type Variant = 'default' | 'small';
 
@@ -15,11 +17,13 @@ export const useSearchComponent = ({
   variant?: Variant;
   inputRef: any;
   timeoutRef: any;
+  containerRef?: any;
 }) => {
-  const { isVisible, handleMakeHidden, handleMakeVisible } = useSearchDropdown();
   const { recentItemsArray } = useRecentlyViewedItems();
   const [isHovered, bindHover] = useHover();
-  const [_, bindFocus] = useFocus();
+  const [isFocused] = useRecoilFocus(searchFocusedState);
+  const [_, __, { removeFocus }] = useSearchFocus();
+  const isVisible = useRecoilValue(searchDropdownVisibilitySelector);
   const {
     query,
     handleUpdateQuery,
@@ -32,9 +36,6 @@ export const useSearchComponent = ({
     value,
   } = useSearch(inputRef, timeoutRef);
 
-  const isFocused =
-    inputRef?.current === (typeof document !== 'undefined' && document?.activeElement);
-
   const spinnerVisible = query && isLoading;
 
   const isSmall = variant === 'small';
@@ -46,43 +47,8 @@ export const useSearchComponent = ({
 
   const hasRecentItems = !!recentItemsArray?.length;
 
-  // const [isReady, cancel, reset] = useTimeoutFn(handleMakeHidden, 100);
-
-  React.useEffect(() => {
-    if (isFocused) {
-      if (!isVisible) {
-        console.log({ isFocusedIsVisible: isVisible });
-        handleMakeVisible();
-      }
-    } else {
-      if (isVisible) {
-        handleMakeHidden();
-      }
-    }
-    // if (!isFocused && isVisible) {
-    //   handleMakeHidden();
-    // }
-  }, [isFocused, isVisible]);
-
-  // React.useEffect(() => {
-  //   if (isFocused) {
-  //     if (!isVisible) {
-  //       if (hasRecentItems || hasSearchResult) {
-  //         cancel();
-  //         handleMakeVisible();
-  //       }
-  //     }
-  //   } else {
-  //     if (isVisible && !isFocused) {
-  //       // reset();
-  //       // handleMakeHidden();
-  //     }
-  //   }
-  // }, [isFocused, isVisible, hasRecentItems, hasSearchResult, handleMakeVisible, handleMakeHidden]);
-
   const handleClearResults = () => {
     inputRef?.current?.focus?.();
-    // cancel();
     handleClearState();
   };
 
@@ -92,7 +58,7 @@ export const useSearchComponent = ({
 
   const handleItemOnClick = React.useCallback(() => {
     handleClearState();
-    inputRef?.current?.blur?.();
+    removeFocus();
   }, [inputRef]);
 
   return {
@@ -117,6 +83,5 @@ export const useSearchComponent = ({
     handleSetExiting,
     isLoading,
     bindHover,
-    bindFocus,
   };
 };
