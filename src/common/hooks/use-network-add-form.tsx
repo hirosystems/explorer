@@ -4,12 +4,14 @@ import { useFormik } from 'formik';
 import { string } from 'yup';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { useModal } from '@common/hooks/use-modal';
+import { isLocal } from '@common/utils';
 
 interface Errors {
   label?: string;
   url?: string;
   general?: string;
 }
+
 export const useNetworkAddForm = () => {
   const { handleCloseModal } = useModal();
   const { list, handleAddNetwork } = useNetwork();
@@ -53,6 +55,9 @@ export const useNetworkAddForm = () => {
         if (!isValid) {
           _errors.url = 'Please check the formatting of the URL passed.';
         } else {
+          if (!isLocal() && !values.url.includes('https://')) {
+            _errors.url = 'The url needs to be https (non-local).';
+          }
           if (list.find(item => item.url.split('//')[1] === values.url.split('//')[1])) {
             _errors.general = 'This API has already been added.';
           }

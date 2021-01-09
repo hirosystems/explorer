@@ -58,6 +58,7 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
   const totalBalance = microToStacks(balances?.stx?.balance);
   const availableBalance = microToStacks(balances?.stx?.balance - balances?.stx?.locked);
   const stackedBalance = microToStacks(balances?.stx?.locked);
+  const isStacking = balances?.stx?.locked > 0;
 
   const [qrShowing, setQrShowing] = React.useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
@@ -92,27 +93,22 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
             </Flex>
           </Box>
           <Box px="base">
-            <Stack
-              borderBottom={stackedBalance > 0 ? border() : 'unset'}
-              spacing="tight"
-              py="loose"
-            >
+            <Stack borderBottom={stackedBalance ? border() : 'unset'} spacing="tight" py="loose">
               <Caption>Available balance</Caption>
               <BalanceItem color={color('text-title')} balance={availableBalance} />
             </Stack>
           </Box>
-
-          {stackedBalance > 0 ? (
-            <Box px="base">
-              <Stack spacing="tight" py="loose">
-                <Caption>Stacked balance (locked)</Caption>
-                <BalanceItem color={color('text-title')} balance={stackedBalance} />
-              </Stack>
-            </Box>
+          {isStacking ? (
+            <>
+              <Box px="base">
+                <Stack spacing="tight" py="loose">
+                  <Caption>Stacked balance (locked)</Caption>
+                  <BalanceItem color={color('text-title')} balance={stackedBalance} />
+                </Stack>
+              </Box>
+              <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
+            </>
           ) : null}
-          {stackedBalance && (
-            <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
-          )}
         </>
       ) : (
         <Grid placeItems="center" pt="extra-loose" pb="loose" width="100%">

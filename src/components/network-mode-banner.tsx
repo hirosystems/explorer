@@ -4,6 +4,7 @@ import { IconCircle } from '@tabler/icons';
 
 import { Badge, BadgeProps } from '@components/badge';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { capitalize } from '@common/utils';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
   const mode = useNetworkMode();
@@ -24,7 +25,7 @@ export const NetworkModeBanner: React.FC<BadgeProps> = props => {
           size="16px"
           mr="extra-tight"
         />
-        <Box>{mode} mode</Box>
+        <Box>{capitalize(mode)} mode</Box>
       </Flex>
     </Badge>
   ) : null;

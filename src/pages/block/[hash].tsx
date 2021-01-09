@@ -15,6 +15,7 @@ import { getServerSideApiServer } from '@common/api/utils';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
 import { BlockNotFound } from '@components/block-not-found';
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 
 interface BlockSinglePageData {
   hash: string;
@@ -78,36 +79,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, error, hash, tr
             />
           </Box>
         </Section>
-        <Section title="Bitcoin anchor">
-          <Box px="base">
-            <Rows
-              noTopBorder
-              inline
-              items={[
-                {
-                  label: {
-                    children: 'Bitcoin block',
-                  },
-                  children: block.burn_block_height,
-                  copy: block.burn_block_height.toString(),
-                },
-                {
-                  label: {
-                    children: 'Bitcoin hash',
-                  },
-                  children: truncateMiddle(block.burn_block_hash, 12),
-                  copy: block.burn_block_hash,
-                },
-                {
-                  label: {
-                    children: 'Anchor transaction',
-                  },
-                  children: truncateMiddle(block.miner_txid, 12),
-                },
-              ]}
-            />
-          </Box>
-        </Section>
+        <BtcAnchorBlockCard block={block} />
       </PagePanes>
       {transactions?.length ? (
         <TransactionList mt="extra-loose" transactions={transactions as Transaction[]} />

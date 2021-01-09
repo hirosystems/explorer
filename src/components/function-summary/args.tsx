@@ -18,6 +18,7 @@ export const FunctionSummaryArguments: React.FC<{ summary: any; abi: any }> = ({
           py={key === 0 ? undefined : 'base'}
           pb={key === summary.function_args.length - 1 ? 'none' : 'base'}
           borderBottom={key === summary.function_args.length - 1 ? 'none' : '1px solid'}
+          key={key}
         >
           <Grid
             justifyContent="flex-start"
