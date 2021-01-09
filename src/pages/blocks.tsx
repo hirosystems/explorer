@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Box } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
-import { PageWrapper } from '@components/page';
 import { NextPage, NextPageContext } from 'next';
 import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
 import { BlocksList } from '@components/blocks-list';
@@ -18,7 +17,7 @@ const BlocksPage: NextPage<{ blocks: FetchBlocksListResponse }> = ({ blocks: ini
   });
 
   return (
-    <PageWrapper>
+    <>
       <Meta title="Recent transactions" />
       <Box mb="base-loose">
         <Title mt="72px" color="white" as="h1" fontSize="36px">
@@ -26,7 +25,7 @@ const BlocksPage: NextPage<{ blocks: FetchBlocksListResponse }> = ({ blocks: ini
         </Title>
       </Box>
       <BlocksList blocks={blocks} loadMore={loadMore} isLoadingMore={isLoadingMore} />
-    </PageWrapper>
+    </>
   );
 };
 

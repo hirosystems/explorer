@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { NextPage } from 'next';
-import { PageWrapper } from '@components/page';
 import { Link, Text, Title } from '@components/typography';
-
 import { Meta } from '@components/meta-head';
-
 import { Box, color, Flex, Grid } from '@stacks/ui';
 import { Section } from '@components/section';
 
@@ -26,7 +23,7 @@ const PageTop: React.FC = React.memo(() => (
 ));
 const NotFound: NextPage = () => {
   return (
-    <PageWrapper>
+    <>
       <Meta title="Not found" />
       <PageTop />
       <Section>
@@ -58,7 +55,7 @@ const NotFound: NextPage = () => {
           </Box>
         </Grid>
       </Section>
-    </PageWrapper>
+    </>
   );
 };
 
