@@ -52,13 +52,11 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
                 </Text>
               </Flex>
               <Box>
-                <Text color={color('text-title')}>
-                  {blocksLeftUntilCycleEnds} blocks left in cycle
-                </Text>
+                <Text color={color('text-title')}>{blocksLeftUntilCycleEnds} blocks left</Text>
               </Box>
             </Box>
           ) : (
-            <Text color={color('text-title')}>Cycle completed at #{unlockBlock}</Text>
+            <Text color={color('text-title')}>Completed at #{unlockBlock}</Text>
           )}
         </Stack>
       </Box>
