@@ -45,11 +45,11 @@ export const Meta = ({
       <meta name="twitter:creator" content="@stacks" />
       <meta
         property="og:image"
-        content={`http://blockstack-www.imgix.net/explorer-og.png?auto=format,compress`}
+        content={`https://blockstack-www.imgix.net/explorer-og.png?auto=format,compress`}
       />
       <meta
         name="twitter:image"
-        content={`http://blockstack-www.imgix.net/explorer-og.png?auto=format,compress`}
+        content={`https://blockstack-www.imgix.net/explorer-og.png?auto=format,compress`}
       />
       <meta name="twitter:card" content="summary_large_image" />
       {ogTitle ? <meta property="og:title" content={ogTitle} /> : null}

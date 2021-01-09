@@ -11,13 +11,13 @@ const GlobalStyles = () => (
       html.dark {
         .metaverse-bg {
           opacity: 0.75;
-          background-image: url('http://blockstack-www.imgix.net/metaverse-v2-temp-dark.png?auto=format,compress');
+          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp-dark.png?auto=format,compress');
         }
       }
 
       html.light {
         .metaverse-bg {
-          background-image: url('http://blockstack-www.imgix.net/metaverse-v2-temp.png?auto=format,compress');
+          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp.png?auto=format,compress');
         }
       }
     `}
