@@ -197,7 +197,7 @@ export const TransactionList: React.FC<
         title={recent ? 'Recent transactions' : 'Transactions'}
         topRight={
           <Flex>
-            {hideFilter && !!pending?.length && hasTransactions && (
+            {hideFilter && !!pending?.length && items.length > 0 && (
               <>
                 <Toggle
                   size="small"
