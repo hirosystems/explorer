@@ -42,12 +42,21 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
         <Stack spacing="tight" borderTop={border()} py="loose">
           <Caption>Stacking progress</Caption>
           {stackingPercent <= 100 ? (
-            <Flex mt="extra-tight" alignItems="center">
-              <Box mr="tight" size="20px">
-                <PercentageCircle percentage={stackingPercent} />
+            <Box mt="extra-tight">
+              <Flex mb="base-tight" alignItems="center">
+                <Box mr="tight" size="20px">
+                  <PercentageCircle percentage={stackingPercent} />
+                </Box>
+                <Text color={color('text-title')}>
+                  {stackingPercent.toLocaleString()}% completed
+                </Text>
+              </Flex>
+              <Box>
+                <Text color={color('text-title')}>
+                  {blocksLeftUntilCycleEnds} blocks left in cycle
+                </Text>
               </Box>
-              <Text color={color('text-title')}>{stackingPercent.toLocaleString()}% completed</Text>
-            </Flex>
+            </Box>
           ) : (
             <Text color={color('text-title')}>Cycle completed at #{unlockBlock}</Text>
           )}
