@@ -6,10 +6,11 @@ import { Section } from '@components/section';
 import { Block } from '@blockstack/stacks-blockchain-api-types';
 import { Link } from '@components/typography';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { NetworkModes } from '@common/types/network';
 
 export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ block, ...rest }) => {
   const mode = useNetworkMode();
-  const path = mode === 'Testnet' ? '-testnet' : '';
+  const path = mode === NetworkModes.Testnet ? '-testnet' : '';
   return (
     <Section title="Bitcoin anchor" {...rest}>
       <Box px="base">

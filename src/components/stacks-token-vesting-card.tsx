@@ -7,8 +7,8 @@ import { border, microToStacks } from '@common/utils';
 import { VestingData } from '@common/utils/addresses';
 
 export const StacksTokenVestingCard: React.FC<{ vesting: VestingData }> = ({ vesting }) => {
-  const percent = (vesting.totalUnlocked / vesting.vesting_total) * 100;
-  return (
+  const percent = (vesting?.totalUnlocked / vesting?.vesting_total) * 100;
+  return percent ? (
     <Section mt="extra-loose" title="Stacks Token vesting">
       <Box p="base-loose">
         <Box pb="base-loose" mb="base" borderBottom={border()}>
@@ -36,5 +36,5 @@ export const StacksTokenVestingCard: React.FC<{ vesting: VestingData }> = ({ ves
         <Caption>* Data used from Stacks 1.0</Caption>
       </Box>
     </Section>
-  );
+  ) : null;
 };
