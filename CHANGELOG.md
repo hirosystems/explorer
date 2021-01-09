@@ -1,3 +1,21 @@
+# [1.3.0](https://github.com/blockstack/explorer/compare/v1.2.0...v1.3.0) (2021-01-09)
+
+
+### Bug Fixes
+
+* add count for cycle ([dab5df7](https://github.com/blockstack/explorer/commit/dab5df7037dc08df9a088dceb7e675b4802885d2))
+* fetch api url ([0643396](https://github.com/blockstack/explorer/commit/0643396adc7bbf984645706ca7b3d4c057c35499))
+* remove all extra PageWrappers ([f9c90d5](https://github.com/blockstack/explorer/commit/f9c90d529515799ce13ba8e488e614039a380c03))
+* safer math, fix stacking math, islocal checks ([269f4d5](https://github.com/blockstack/explorer/commit/269f4d5b7a488b8dd12d662c64dedcfe22bd7eae))
+* semantics ([13ba8b3](https://github.com/blockstack/explorer/commit/13ba8b3e2538b58004a75ae62d7c3c2bdf36133f))
+* tweak bg height ([62bdf58](https://github.com/blockstack/explorer/commit/62bdf58e344a7b5a1557d55e5991c783eaf0e93c))
+
+
+### Features
+
+* show pending txs on address page ([4596eab](https://github.com/blockstack/explorer/commit/4596eab8843f9806be41170b9131141cccf1daff))
+* show vesting data, convert address notice ([e05e293](https://github.com/blockstack/explorer/commit/e05e2932df4ce591bcfbf8e41f368468043e9868))
+
 # [1.2.0](https://github.com/blockstack/explorer/compare/v1.1.1...v1.2.0) (2021-01-09)
 
 
