@@ -156,7 +156,9 @@ interface AddressVestingReturn {
 
 export async function fetchAddressVesting(address: string): Promise<boolean> {
   try {
-    const res = await fetch(`http://localhost:3000/api/vesting/${address}`);
+    const res = await fetch(
+      `${process.env.DEPLOYMENT_URL || `https://${process.env.VERCEL_URL}`}/api/vesting/${address}`
+    );
     const data: AddressVestingReturn = await res.json();
     return data?.found;
   } catch (e) {
