@@ -222,7 +222,9 @@ export const TransactionList: React.FC<
           ) : (
             <Grid placeItems="center" px="base" py="extra-loose">
               <Box as="img" src="/no-txs.svg" alt="No transactions yet" />
-              <Text mt="extra-loose">No transactions yet</Text>
+              <Text color={color('text-caption')} mt="extra-loose">
+                No transactions yet
+              </Text>
             </Grid>
           )}
           {!hasNoVisibleTxs && hasTransactions && recent ? <ViewAllButton /> : null}
