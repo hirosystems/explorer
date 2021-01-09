@@ -22,8 +22,8 @@ export const DEFAULT_NETWORK_LIST = [
   },
 ];
 
-export const TESTNET_CHAIN_ID: ChainID.Testnet = 0x80000000;
-export const MAINNET_CHAIN_ID: ChainID.Mainnet = 0x00000001;
+export const TESTNET_CHAIN_ID = ChainID.Testnet;
+export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 
 export enum MODALS {
   SEARCH = 'modals/search',
@@ -41,4 +41,4 @@ const reverseMap: ReverseMap<typeof MODALS> = Object.entries(MODALS).reduce((rMa
   return rMap;
 }, {} as any);
 
-export type AllModals = keyof typeof reverseMap; // 'foo' | 'bar';
+export type AllModals = keyof typeof reverseMap;
