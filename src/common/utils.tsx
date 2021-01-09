@@ -354,3 +354,12 @@ export const getTxTitle = (transaction: Transaction) => {
 export const capitalize = (s: string) => {
   return s?.charAt(0).toUpperCase() + s?.slice(1);
 };
+
+export const isLocal = () => {
+  if (typeof document !== 'undefined') {
+    if (document.location.hostname === '127.0.0.1' || document.location.hostname === 'localhost') {
+      return true;
+    }
+  }
+  return false;
+};

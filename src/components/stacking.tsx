@@ -25,25 +25,35 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
     }
 
     const currentBlock = data?.burn_block_height || 0;
-    const unlockBlock = balances?.stx?.unlock_height || 0;
-    const blockDelta = balances?.stx?.unlock_height - stackingBlock;
-    const blocksUntilCycleCompletes = currentBlock - stackingBlock;
+    const lockBlock = balances?.stx?.burnchain_lock_height || 0;
+    const unlockBlock = balances?.stx?.burnchain_unlock_height || 0;
 
-    const stackingPercent = (blocksUntilCycleCompletes / blockDelta) * 100;
-    return stackingPercent < 100 ? (
+    const cycleLengthInBlocks = unlockBlock - lockBlock;
+    const blocksLeftUntilCycleEnds = unlockBlock - currentBlock;
+
+    const amount = Math.floor(
+      ((cycleLengthInBlocks - blocksLeftUntilCycleEnds) / cycleLengthInBlocks) * 100
+    );
+
+    const stackingPercent = amount < 0 ? 0 : amount;
+
+    return (
       <Box px="base">
         <Stack spacing="tight" borderTop={border()} py="loose">
           <Caption>Stacking progress</Caption>
-          <Flex alignItems="center">
-            <Box mr="tight" size="20px">
-              <PercentageCircle percentage={stackingPercent} />
-            </Box>
-            <Text color={color('text-title')}>{stackingPercent.toLocaleString()}% completed</Text>
-          </Flex>
+          {stackingPercent <= 100 ? (
+            <Flex mt="extra-tight" alignItems="center">
+              <Box mr="tight" size="20px">
+                <PercentageCircle percentage={stackingPercent} />
+              </Box>
+              <Text color={color('text-title')}>{stackingPercent.toLocaleString()}% completed</Text>
+            </Flex>
+          ) : (
+            <Text color={color('text-title')}>Cycle completed at #{unlockBlock}</Text>
+          )}
         </Stack>
       </Box>
-    ) : null;
+    );
   }
-
   return null;
 };

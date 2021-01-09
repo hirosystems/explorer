@@ -5,7 +5,7 @@ import { IconCheck } from '@tabler/icons';
 
 import { useNetwork } from '@common/hooks/use-network';
 import { Caption, Title } from '@components/typography';
-import { border } from '@common/utils';
+import { border, isLocal } from '@common/utils';
 import { useModal } from '@common/hooks/use-modal';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -13,6 +13,7 @@ import { fetchFromApi } from '@common/api/fetch';
 
 import { TESTNET_CHAIN_ID } from '@common/constants';
 import { Badge } from '@components/badge';
+import { NetworkModes } from '@common/types/network';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: boolean;
@@ -53,8 +54,8 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, ...rest }) => {
 
   const networkMode = networkId
     ? TESTNET_CHAIN_ID === networkId
-      ? 'Testnet'
-      : 'Mainnet'
+      ? NetworkModes.Testnet
+      : NetworkModes.Mainnet
     : undefined;
 
   return (
@@ -115,6 +116,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnCli
       />
       {list?.map((item, key) => {
         const isActive = key === index;
+        if (!isLocal() && item.url.includes('localhost')) return null;
         return (
           <Item
             isActive={isActive}
