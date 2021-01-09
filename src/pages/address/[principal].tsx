@@ -94,6 +94,9 @@ const AddressPage: NextPage<AddressPageData> = props => {
   const hasTokenBalances = hasTokenBalance(data?.balances);
   const stackingStartedAtThisBlock = getStackStartBlockHeight(data?.transactions?.results);
 
+  const confirmedTxs = data?.transactions?.results || [];
+  const pendingTxs = data?.pendingTransactions || [];
+
   return (
     <>
       <Meta title={`STX Address ${truncateMiddle(principal)}`} />
@@ -116,14 +119,13 @@ const AddressPage: NextPage<AddressPageData> = props => {
       >
         <Box>
           <SummaryCard principal={principal} hasTokenBalances={hasTokenBalances} data={data} />
-          {data?.transactions?.results ? (
-            <TransactionList
-              showCoinbase
-              hideFilter={false}
-              principal={principal}
-              transactions={data.transactions.results as any}
-            />
-          ) : null}
+          <TransactionList
+            showCoinbase
+            hideFilter={false}
+            principal={principal}
+            mempool={pendingTxs}
+            transactions={confirmedTxs as TransactionResults['results']}
+          />
         </Box>
         {balances ? (
           <Box>
