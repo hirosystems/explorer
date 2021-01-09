@@ -161,13 +161,10 @@ export const TransactionList: React.FC<
     showCoinbase,
     ...rest
   }) => {
-    const {
-      showPending,
-      showFailed,
-      handleToggleFilterPanelVisibility,
-      handleToggleShowPending,
-      types,
-    } = useFilterState('txList', showCoinbase);
+    const { showPending, showFailed, handleToggleShowPending, types } = useFilterState(
+      'txList',
+      showCoinbase
+    );
 
     const pending: MempoolTransactionListResponse['results'] = mempool.filter(tx => {
       const now = new Date().getTime();

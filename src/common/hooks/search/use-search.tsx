@@ -12,10 +12,8 @@ import {
 } from '@store/search';
 import { useItem } from '@common/hooks/search/use-item';
 import { usePrevious } from '@common/hooks/search/use-previous';
-import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 
 export const useSearch = (ref: any, isLoadingTimeoutRef: any) => {
-  const { recentItemsArray } = useRecentlyViewedItems();
   const [query, handleSetQuery] = useRecoilState(searchQueryState);
   const [value, setValue] = useRecoilState(searchValueState);
   const [exiting, handleSetExiting] = useRecoilState(searchExitingState);
@@ -90,18 +88,6 @@ export const useSearch = (ref: any, isLoadingTimeoutRef: any) => {
     handleSetLoading,
     isLoadingTimeoutRef.current,
   ]);
-
-  // React.useEffect(() => {
-  //   if (!value) {
-  //     if (recentItemsArray.length === 0) {
-  //       if (previous || item) {
-  //         handleSetExiting(false);
-  //       }
-  //     } else {
-  //       handleClearState();
-  //     }
-  //   }
-  // }, [query, value, previous, item]);
 
   return {
     value,

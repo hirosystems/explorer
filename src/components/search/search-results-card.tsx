@@ -7,8 +7,8 @@ import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 import { SearchErrorMessage } from '@components/search/error-message';
 import { SearchCardItem } from '@components/search/search-result-item';
 import { useItem } from '@common/hooks/search/use-item';
-import { useSetRecoilState } from 'recoil';
-import { searchRecentlyViewedItemsState } from '@store/search';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { searchErrorSelector, searchRecentlyViewedItemsState } from '@store/search';
 
 interface SearchResultsCardProps extends BoxProps {
   isLoading?: boolean;
@@ -30,6 +30,7 @@ const RecentlyViewedList: React.FC<{
           key={index}
           clearResults={clearResults}
           recentItem={recentItem}
+          isLast={index === recentItemsArray.length - 1}
         />
       ))}
     </>
@@ -64,11 +65,20 @@ const CardActions: React.FC<CardActionsProps> = ({
       {isLoading ? (
         <SearchingIndicator />
       ) : hasError || hasResults ? (
-        <Caption _hover={{ cursor: 'pointer', color: color('brand') }} onClick={clearResults}>
+        <Caption
+          as="button"
+          border="0"
+          bg="transparent"
+          _hover={{ cursor: 'pointer', color: color('brand') }}
+          onClick={clearResults}
+        >
           Clear {hasResults ? 'results' : 'error'}
         </Caption>
       ) : hasRecent ? (
         <Caption
+          as="button"
+          border="0"
+          bg="transparent"
           _hover={{ cursor: 'pointer', color: color('brand') }}
           onClick={() => setRecent({})}
         >
@@ -88,10 +98,11 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
   const { data } = usePrevious();
   const [item] = useItem();
   const { recentItemsArray } = useRecentlyViewedItems();
+  const error = useRecoilValue(searchErrorSelector);
 
-  const hasError = (data && !data.found) || (data && data.found && item && item.error);
-  const hasResults = data && data.found && item && !item.error;
-  const hasRecent = recentItemsArray.length > 0;
+  const hasError = !!error || !!(data?.found && item?.error);
+  const hasResults = !hasError && data?.found && !item?.error;
+  const hasRecent = recentItemsArray?.length > 0;
 
   const getTitle = React.useCallback(() => {
     if (hasError) {
@@ -137,17 +148,17 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
         />
       </Flex>
       <>
-        {(data && !data.found) || (data && data.found && item && item.error) ? (
+        {error || (data?.found && item?.error) ? (
           <SearchErrorMessage
-            message={('error' in data && data.error) || item.error}
+            message={error || item?.error}
             hint={
-              data.found && item.error && item.error.includes('cannot find contract')
+              data?.found && item?.error && item.error.includes('cannot find contract')
                 ? 'If you have the tx_id for this contract deploy, try using that instead.'
                 : undefined
             }
           />
         ) : data && data.found && item ? (
-          <SearchCardItem onClick={handleItemOnClick} />
+          <SearchCardItem isLast onClick={handleItemOnClick} />
         ) : (
           <RecentlyViewedList itemOnClick={handleItemOnClick} />
         )}

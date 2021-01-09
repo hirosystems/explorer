@@ -108,17 +108,6 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({
   >
     <Header fullWidth={fullWidth} isHome={isHome} />
     <Page {...props} />
-    <Box
-      className="metaverse-header"
-      position="fixed"
-      zIndex={1}
-      width="100%"
-      top={0}
-      height="clamp(420px, 40vh, 620px)"
-      overflow="hidden"
-      transition={transition}
-    >
-      <MetaverseBg height="clamp(420px, 40vh, 620px)" />
-    </Box>
+    <MetaverseBg height="clamp(420px, 40vh, 620px)" />
   </Flex>
 );

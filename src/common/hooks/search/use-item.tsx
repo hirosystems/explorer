@@ -14,11 +14,11 @@ export const useItem = (resultsData?: SearchResult): [any, boolean] => {
   const searchResultsData =
     (resultsData?.found && resultsData.result) || (data?.found && data?.result);
 
-  const [_, setItem] = useRecoilState(
+  const [item, setItem] = useRecoilState(
     searchResultItemState(searchResultsData && searchResultsData?.entity_id)
   );
 
-  const { data: item, isValidating } = useSWR(
+  const { isValidating } = useSWR(
     searchResultsData
       ? [searchResultsData.entity_id, searchResultsData.entity_type, apiServer]
       : null,
@@ -26,8 +26,9 @@ export const useItem = (resultsData?: SearchResult): [any, boolean] => {
     {
       refreshInterval: undefined,
       onSuccess: data => setItem(data as any),
+      onError: error => setItem(error as any),
     }
   );
 
-  return [item || _, isValidating];
+  return [item, isValidating];
 };

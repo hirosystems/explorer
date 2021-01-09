@@ -9,30 +9,31 @@ export const SearchDropdown = ({
   variant,
   inputRef,
   timeoutRef,
+  containerRef,
 }: {
   variant?: Variant;
   inputRef: any;
   timeoutRef: any;
+  containerRef: any;
 }) => {
   const {
     handleClearResults,
     handleItemOnClick,
-    hasRecentItems,
     query,
     exiting,
     isVisible,
     handleClearState,
     handleSetExiting,
     isLoading,
-    hasSearchResult,
   } = useSearchComponent({
     variant,
     inputRef,
     timeoutRef,
+    containerRef,
   });
   return (
     <Fade
-      in={!exiting && isVisible && (hasRecentItems || hasSearchResult)}
+      in={isVisible}
       onExited={() => {
         if (exiting) {
           handleClearState();

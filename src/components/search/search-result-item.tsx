@@ -1,6 +1,15 @@
 import React from 'react';
 import { useHover, useFocus } from 'use-events';
-import { FlexProps, Box, BoxProps, useEventListener, Flex, color, Stack } from '@stacks/ui';
+import {
+  FlexProps,
+  Box,
+  BoxProps,
+  useEventListener,
+  Flex,
+  color,
+  Stack,
+  Spinner,
+} from '@stacks/ui';
 import { TxItem } from '@components/transaction-item';
 import { AddressLink, BlockLink, TxLink } from '@components/links';
 import { Block } from '@blockstack/stacks-blockchain-api-types';
@@ -35,14 +44,14 @@ interface SearchResultItemProps extends BoxProps {
   _type?: 'tx' | 'principal' | 'block';
 }
 
-const Wrapper = forwardRefWithAs<FlexProps & { isHovered?: boolean }, 'a'>(
-  ({ children, as = 'a', isHovered, ...rest }, ref) => {
+const Wrapper = forwardRefWithAs<FlexProps & { isHovered?: boolean; isLast: boolean }, 'a'>(
+  ({ children, as = 'a', isHovered, isLast, ...rest }, ref) => {
     return (
       <Flex
         as={as}
         p="loose"
         alignItems="center"
-        borderBottom={border()}
+        borderBottom={!isLast ? border() : 'unset'}
         position="relative"
         justifyContent="space-between"
         ref={ref}
@@ -108,6 +117,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
     onFocus: handleFocus,
     onBlur: handleBlur,
     onClick,
+    isLast,
     ...bindHover,
     isHovered,
   };
@@ -120,7 +130,6 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({
       <TxLink txid={option.transaction.tx_id}>
         <Wrapper {...itemProps} p={0}>
           <TxItem
-            borderBottom={isLast ? undefined : '1px solid var(--colors-border)'}
             onFocus={handleFocus}
             onBlur={handleBlur}
             tabIndex="0"
@@ -200,13 +209,25 @@ export const SearchCardItem: React.FC<{
   recentItem?: SearchResult;
   clearResults?: () => void;
   onClick?: () => any;
-}> = React.memo(({ recentItem, onClick, clearResults }) => {
-  const [item] = useItem(recentItem);
+  isLast: boolean;
+}> = React.memo(({ recentItem, onClick, clearResults, isLast }) => {
+  const [item, loading] = useItem(recentItem);
   const { data } = usePrevious();
   const { handleUpsertItem } = useRecentlyViewedItems();
   const { handleMakeHidden } = useSearchDropdown();
 
-  return (
+  return loading ? (
+    <Flex
+      borderBottom={isLast ? border() : 'unset'}
+      alignItems="center"
+      p="extra-loose"
+      height="96px"
+      bg={color('bg')}
+      width="100%"
+    >
+      <Spinner size="sm" color={color('text-caption')} />
+    </Flex>
+  ) : (
     <SearchResultItem
       option={item}
       onClick={() => {
@@ -215,7 +236,7 @@ export const SearchCardItem: React.FC<{
         handleMakeHidden();
         (data || recentItem)?.found ? handleUpsertItem(data || recentItem) : null;
       }}
-      isLast
+      isLast={isLast}
     />
   );
 });

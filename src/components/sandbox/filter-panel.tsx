@@ -1,24 +1,11 @@
 import React from 'react';
-import {
-  Box,
-  Flex,
-  Stack,
-  color,
-  Grid,
-  transition,
-  Fade,
-  Transition,
-  FlexProps,
-  GridProps,
-} from '@stacks/ui';
+import { Box, Flex, Stack, color, Grid, Fade, Transition, GridProps } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { border } from '@common/utils';
 import { Toggle } from '@components/toggle';
-import { atom, useRecoilState } from 'recoil';
 import { IconButton } from '@components/icon-button';
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
 import { Tag } from '@components/tags';
-import { filterState } from '@store/sandbox';
 import CloseIcon from 'mdi-react/CloseIcon';
 import { useHover } from 'use-events';
 import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutlineIcon';
@@ -132,7 +119,9 @@ export const FilterPanel = React.memo(
       <Flex
         height="100%"
         width="100%"
-        left="0"
+        maxWidth="100vw"
+        left={['unset', 'unset', 0, 0]}
+        right={['-10px', '-10px', 'unset', 'unset']}
         flexGrow={1}
         position="absolute"
         top="34px"
@@ -145,8 +134,10 @@ export const FilterPanel = React.memo(
         <Box
           position="absolute"
           top={0}
-          right="tight"
           width="100%"
+          maxWidth="calc(100vw - 50px)"
+          left={['unset', 'unset', 'unset', 'unset']}
+          right={['20px', '20px', 'tight', 'tight']}
           bg={color('border')}
           height="1px"
           zIndex={999999}
