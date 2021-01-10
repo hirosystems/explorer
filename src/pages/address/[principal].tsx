@@ -46,7 +46,7 @@ const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) 
       <Flex alignItems="center" justifyContent="space-between" p="base-loose">
         <Flex alignItems="center">
           <Box mr="tight" as={IconAlertCircle} color={color('feedback-alert')} />
-          <Text>
+          <Text color={color('text-body')}>
             This is a <strong>{capitalize(invert)}</strong> address, but you are viewing data from
             the <strong>{network}</strong> Stacks Network.
           </Text>
