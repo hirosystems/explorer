@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/blockstack/explorer/compare/v1.3.0...v1.3.1) (2021-01-10)
+
+
+### Bug Fixes
+
+* https for imgix urls ([c6f40aa](https://github.com/blockstack/explorer/commit/c6f40aa1a1b6be92809b0efa2f77c2cb5bde1373))
+
 # [1.3.0](https://github.com/blockstack/explorer/compare/v1.2.0...v1.3.0) (2021-01-09)
 
 
