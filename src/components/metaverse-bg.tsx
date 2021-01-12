@@ -27,7 +27,7 @@ const GlobalStyles = () => (
         .metaverse-bg {
           display: none;
           opacity: 0.65;
-          background-image: url('http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
+          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
             linear-gradient(
               30deg,
               rgba(98, 135, 221, 1) 0%,
@@ -39,7 +39,7 @@ const GlobalStyles = () => (
 
       html.light {
         .metaverse-bg {
-          background-image: url('http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
+          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
             linear-gradient(
               30deg,
               rgba(98, 135, 221, 1) 0%,
@@ -55,7 +55,7 @@ const GlobalStyles = () => (
 const Grain: React.FC<BoxProps> = props => (
   <Box
     as="img"
-    src="http://blockstack-www.imgix.net/metaverse/grain.jpg"
+    src="https://blockstack-www.imgix.net/metaverse/grain.jpg"
     width="100%"
     position="absolute"
     left={0}
@@ -75,9 +75,9 @@ const Video: React.FC = props => (
     autoPlay
     muted
     loop
-    poster="http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
+    poster="https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
   >
-    <source src="http://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
+    <source src="https://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
   </video>
 );
 
