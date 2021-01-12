@@ -8,10 +8,26 @@ import { forwardRefWithAs } from '@stacks/ui-core';
 const GlobalStyles = () => (
   <Global
     styles={css`
+      video.metaverse-video {
+        filter: brightness(0.95);
+        object-fit: cover;
+        width: 100vw;
+        height: 380px;
+        position: absolute;
+        top: -29%;
+        left: 0;
+        z-index: 9999;
+      }
+
       html.dark {
+        .metaverse-header {
+          opacity: 0.5;
+        }
+
         .metaverse-bg {
-          opacity: 0.75;
-          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp-dark.png?auto=format&w=1800'),
+          display: none;
+          opacity: 0.65;
+          background-image: url('http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
             linear-gradient(
               30deg,
               rgba(98, 135, 221, 1) 0%,
@@ -23,7 +39,7 @@ const GlobalStyles = () => (
 
       html.light {
         .metaverse-bg {
-          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp.png?auto=format&w=1800'),
+          background-image: url('http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
             linear-gradient(
               30deg,
               rgba(98, 135, 221, 1) 0%,
@@ -53,14 +69,36 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = for
     >
       <GlobalStyles />
       <Box
+        as="img"
+        src="http://blockstack-www.imgix.net/metaverse/grain.jpg"
+        width="100%"
+        position="absolute"
+        left={0}
+        top={0}
+        mixBlendMode="multiply"
+        minWidth="1600px"
+        zIndex={999999}
+      />
+      <video
+        className="metaverse-video"
+        playsInline
+        autoPlay
+        muted
+        loop
+        poster="http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
+      >
+        <source src="http://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
+      </video>
+
+      <Box
         className="metaverse-bg"
         as={as}
         backgroundSize="cover"
         maxWidth="100%"
-        backgroundPosition="50% 29%"
+        backgroundPosition="0% 29%"
         width="100%"
-        minWidth="1600px"
-        height={height}
+        // minWidth="1600px"
+        height="60vh"
         ref={ref}
         {...rest}
       />
