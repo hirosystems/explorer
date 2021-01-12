@@ -143,13 +143,13 @@ interface NetworkItemsProps extends BoxProps {
 }
 
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnClick }) => {
-  const { list, index, handleUpdateCurrentIndex } = useNetwork();
+  const { networkList, currentNetworkIndex, handleUpdateCurrentIndex } = useNetwork();
   const router = useRouter();
 
   return (
     <>
-      {list?.map((item, key) => {
-        const isActive = key === index;
+      {networkList?.map((item, key) => {
+        const isActive = key === currentNetworkIndex;
         if (!isLocal() && item?.url?.includes('localhost')) return null;
         return (
           <Item

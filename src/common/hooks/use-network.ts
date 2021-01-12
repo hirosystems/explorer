@@ -6,26 +6,26 @@ import { DEFAULT_TESTNET_INDEX, DEFAULT_MAINNET_INDEX } from '@common/constants'
 
 export const useNetwork = () => {
   const router = useRouter();
-  const setList = useSetRecoilState(customNetworksListState);
-  const list = useRecoilValue(networkListState);
-  const [index, setIndex] = useRecoilState(networkIndexState);
+  const setNetworkList = useSetRecoilState(customNetworksListState);
+  const networkList = useRecoilValue(networkListState);
+  const [currentNetworkIndex, setIndex] = useRecoilState(networkIndexState);
 
   const handleAddListItem = useCallback(
     (item: { label: string; url: string }) =>
-      setList(list => {
-        const listSet = new Set(list);
-        listSet.add(item);
-        return [...listSet];
+      setNetworkList(list => {
+        const networkListSet = new Set(list);
+        networkListSet.add(item);
+        return [...networkListSet];
       }),
     []
   );
 
   const handleRemoveListItem = useCallback(
     (item: { label: string; url: string }) =>
-      setList(list => {
-        const listSet = new Set(list);
-        listSet.delete(item);
-        return [...listSet];
+      setNetworkList(list => {
+        const networkListSet = new Set(list);
+        networkListSet.delete(item);
+        return [...networkListSet];
       }),
     []
   );
@@ -37,10 +37,10 @@ export const useNetwork = () => {
   const handleAddNetwork = useCallback(
     (item: { label: string; url: string }) => {
       handleAddListItem(item);
-      handleUpdateCurrentIndex(list.length);
+      handleUpdateCurrentIndex(networkList.length);
       router.reload();
     },
-    [list, handleAddListItem, handleUpdateCurrentIndex]
+    [networkList, handleAddListItem, handleUpdateCurrentIndex]
   );
 
   const handleRemoveNetwork = useCallback(
@@ -61,9 +61,9 @@ export const useNetwork = () => {
   }, []);
 
   return {
-    list,
-    setList,
-    index,
+    networkList,
+    setNetworkList,
+    currentNetworkIndex,
     setIndex,
     handleAddListItem,
     handleUpdateCurrentIndex,
