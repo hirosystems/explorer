@@ -84,6 +84,13 @@ const AddressArea = React.memo(({ tx, ...rest }: { tx: Transaction } & FlexProps
       </Caption>
     );
   }
+  if (tx.tx_type === 'coinbase') {
+    return (
+      <Caption>
+        Mined by <PrincipalLink principal={tx.sender_address} />
+      </Caption>
+    );
+  }
   return null;
 });
 

@@ -36,7 +36,7 @@ const Item: React.FC<
   );
 });
 
-const TxList: React.FC<{
+export const TxList: React.FC<{
   items: (MempoolTransaction | Transaction)[];
   principal?: string;
   limit?: number;
