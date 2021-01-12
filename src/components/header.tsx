@@ -44,7 +44,7 @@ const HeaderBar: React.FC<FlexProps> = React.memo(props => (
     px={['base', 'base', 'extra-loose']}
     width="100%"
     position="relative"
-    zIndex={9999999}
+    zIndex={99999}
     {...props}
   />
 ));
