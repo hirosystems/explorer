@@ -12,9 +12,9 @@ const GlobalStyles = () => (
         filter: brightness(0.95);
         object-fit: cover;
         width: 100vw;
-        height: 380px;
+        height: calc(380px + 29%);
         position: absolute;
-        top: -29%;
+        top: 0;
         left: 0;
         z-index: 9999;
       }
@@ -52,6 +52,35 @@ const GlobalStyles = () => (
   />
 );
 
+const Grain: React.FC<BoxProps> = props => (
+  <Box
+    as="img"
+    src="http://blockstack-www.imgix.net/metaverse/grain.jpg"
+    width="100%"
+    position="absolute"
+    left={0}
+    top={0}
+    mixBlendMode="multiply"
+    minWidth="1600px"
+    zIndex={999999}
+    imageRendering="crisp-edges"
+    {...props}
+  />
+);
+
+const Video: React.FC = props => (
+  <video
+    className="metaverse-video"
+    playsInline
+    autoPlay
+    muted
+    loop
+    poster="http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
+  >
+    <source src="http://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
+  </video>
+);
+
 export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = forwardRefWithAs<
   BoxProps,
   'div'
@@ -68,28 +97,9 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = for
       transition={transition}
     >
       <GlobalStyles />
-      <Box
-        as="img"
-        src="http://blockstack-www.imgix.net/metaverse/grain.jpg"
-        width="100%"
-        position="absolute"
-        left={0}
-        top={0}
-        mixBlendMode="multiply"
-        minWidth="1600px"
-        zIndex={999999}
-      />
-      <video
-        className="metaverse-video"
-        playsInline
-        autoPlay
-        muted
-        loop
-        poster="http://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
-      >
-        <source src="http://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
-      </video>
-
+      <Grain opacity={0.45} />
+      <Grain />
+      <Video />
       <Box
         className="metaverse-bg"
         as={as}
@@ -97,7 +107,6 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = for
         maxWidth="100%"
         backgroundPosition="0% 29%"
         width="100%"
-        // minWidth="1600px"
         height="60vh"
         ref={ref}
         {...rest}
