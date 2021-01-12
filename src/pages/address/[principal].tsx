@@ -141,13 +141,17 @@ const AddressPage: NextPage<AddressPageData> = props => {
     );
   }
   const apiServer = useApiServer();
-  const { data } = useSWR(principal, fetchAllAccountData(apiServer as any), {
-    initialData: {
-      balances,
-      transactions,
-      pendingTransactions,
-    },
-  });
+  const { data } = useSWR(
+    principal,
+    async () => fetchAllAccountData(apiServer as any)({ principal }),
+    {
+      initialData: {
+        balances,
+        transactions,
+        pendingTransactions,
+      },
+    }
+  );
 
   const {
     data: _transactions,
