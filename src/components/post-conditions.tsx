@@ -232,7 +232,7 @@ const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: b
       <Stack spacing="tight" flexGrow={1} ml="base">
         <Caption>{truncateMiddle(getAddressValue(condition), 8)}</Caption>
 
-        <Title>
+        <Title fontSize={1}>
           {capitalize(getPrettyCode(condition.condition_code, true))} {getAmount(condition)}{' '}
           {getConditionTicker(condition)}
         </Title>
