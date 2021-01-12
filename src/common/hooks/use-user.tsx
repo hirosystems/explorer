@@ -49,7 +49,7 @@ export const useUser = (options?: {
 } => {
   const { userData } = useAuthState();
 
-  const principal = userData?.profile?.stxAddress;
+  const principal = userData?.profile?.stxAddress?.testnet as string;
   const username = userData?.username;
   const profile = userData?.profile;
 
