@@ -12,7 +12,7 @@ export const LEGACY_EXPLORER_API =
 export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || 'https://pr-725.app.stacks.engineering';
 
-export const DEFAULT_TESETNET_SERVER =
+export const DEFAULT_TESTNET_SERVER =
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER || 'https://stacks-node-api.xenon.blockstack.org';
 
 export const DEFAULT_MAINNET_SERVER = process.env.NEXT_PUBLIC_MAINNET_API_SERVER;
@@ -34,7 +34,7 @@ export const DEFAULT_NETWORK_LIST = [
   },
   {
     label: 'stacks.co',
-    url: DEFAULT_TESETNET_SERVER,
+    url: DEFAULT_TESTNET_SERVER,
   },
   {
     label: 'localhost',
