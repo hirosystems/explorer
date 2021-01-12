@@ -1,35 +1,40 @@
-import React from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { HeaderTextItem } from '@components/header-text-item';
 import { Box, BoxProps, Fade, color } from '@stacks/ui';
 import { IconChevronDown } from '@tabler/icons';
-import { useHover } from 'web-api-hooks';
 import { NetworkItems } from '@components/network-items';
 import { border } from '@common/utils';
+import { useControlledHover } from '@common/hooks/use-controlled-hover';
 
-const Dropdown: React.FC<BoxProps & { show?: boolean }> = React.memo(({ show, ...props }) => {
-  return (
-    <Fade in={show}>
-      {styles => (
-        <Box top="100%" pt="base" right={0} position="absolute" style={styles}>
-          <Box
-            border={border()}
-            overflow="hidden"
-            boxShadow="mid"
-            minWidth="342px"
-            bg={color('bg')}
-            borderRadius="8px"
-            pt="tight"
-          >
-            <NetworkItems />
+const Dropdown: React.FC<BoxProps & { show?: boolean; onItemClick?: () => void }> = memo(
+  ({ show, onItemClick }) => {
+    return (
+      <Fade in={show}>
+        {styles => (
+          <Box top="100%" pt="base" right={0} position="absolute" style={styles}>
+            <Box
+              border={border()}
+              overflow="hidden"
+              boxShadow="mid"
+              minWidth="342px"
+              bg={color('bg')}
+              borderRadius="8px"
+              pt="tight"
+            >
+              <NetworkItems onItemClick={onItemClick} />
+            </Box>
           </Box>
-        </Box>
-      )}
-    </Fade>
-  );
-});
+        )}
+      </Fade>
+    );
+  }
+);
 
-export const NetworkSwitcherItem: React.FC<BoxProps> = props => {
-  const [isHovered, bind] = useHover();
+export const NetworkSwitcherItem: React.FC<BoxProps> = memo(props => {
+  const [isHovered, setIsHovered] = useState(false);
+  const bind = useControlledHover(setIsHovered);
+
+  const handleRemoveHover = useCallback(() => setIsHovered(false), [setIsHovered]);
 
   return (
     <>
@@ -47,8 +52,8 @@ export const NetworkSwitcherItem: React.FC<BoxProps> = props => {
       >
         Network
         <Box as={IconChevronDown} size="14px" ml="tight" />
-        <Dropdown show={isHovered} />
+        <Dropdown onItemClick={handleRemoveHover} show={isHovered} />
       </HeaderTextItem>
     </>
   );
-};
+});

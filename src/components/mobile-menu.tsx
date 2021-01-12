@@ -34,7 +34,7 @@ const NetworkView: React.FC<{
       Switch network
     </HeaderTextItem>
     <NetworkItems
-      itemOnClick={() => {
+      onItemClick={() => {
         handleClose();
       }}
     />

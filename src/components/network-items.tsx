@@ -139,10 +139,10 @@ const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
 };
 
 interface NetworkItemsProps extends BoxProps {
-  itemOnClick?: (item?: any) => void;
+  onItemClick?: (item?: any) => void;
 }
 
-export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnClick }) => {
+export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
   const { networkList, currentNetworkIndex, handleUpdateCurrentIndex } = useNetwork();
   const router = useRouter();
 
@@ -159,7 +159,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnCli
             key={key}
             isCustom={key >= 3}
             onClick={() => {
-              itemOnClick?.(item);
+              onItemClick?.(item);
               if (!isActive) {
                 handleUpdateCurrentIndex(key);
                 router.reload();
@@ -170,7 +170,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ itemOnCli
       })}
       <AddNetwork
         onClick={() => {
-          itemOnClick?.();
+          onItemClick?.();
         }}
       />
     </>
