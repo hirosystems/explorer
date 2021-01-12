@@ -1,3 +1,23 @@
+# [1.4.0](https://github.com/blockstack/explorer/compare/v1.3.1...v1.4.0) (2021-01-12)
+
+
+### Bug Fixes
+
+* color for incorrect address mode notice component ([e7600d6](https://github.com/blockstack/explorer/commit/e7600d69e215a0966cc3520ac7235c4975a699cd))
+* comments, better naming of vars, clean up ([7664cdc](https://github.com/blockstack/explorer/commit/7664cdc2eba8be42519ac27bfd98fe99b24735e7))
+* hide dropdown on click ([d48578e](https://github.com/blockstack/explorer/commit/d48578e0ce4ea87a96e0b361b3227460425f29e7))
+* principal to fetchAllAccountData ([57d8950](https://github.com/blockstack/explorer/commit/57d8950df0d0a7e617f5626ca905a236dfe6d8e2))
+* reduce zIndex of header ([b80d32d](https://github.com/blockstack/explorer/commit/b80d32decd7d23508d6aa2514c9d169a0fd9183f))
+* tweaks to grain, video ([2c1ae44](https://github.com/blockstack/explorer/commit/2c1ae4462dc11584dd22c7b96118ca6c4e662749))
+* tx filter boolean ([eada13a](https://github.com/blockstack/explorer/commit/eada13aed85724193ef98e3ccc5a37175220d3bb))
+* typo ([3a5fd5a](https://github.com/blockstack/explorer/commit/3a5fd5a298ce9f54811e8476027b434ceb787073))
+
+
+### Features
+
+* network switcher modal, addresses tx fetching, connect-2 ([4783d37](https://github.com/blockstack/explorer/commit/4783d3703ac54f705e87ab40fd3946b67a0cc64a))
+* new gradient ([2a1e3ce](https://github.com/blockstack/explorer/commit/2a1e3ce181d4d9e302b269d59a3bbb6e65a51cc9))
+
 ## [1.3.1](https://github.com/blockstack/explorer/compare/v1.3.0...v1.3.1) (2021-01-10)
 
 
