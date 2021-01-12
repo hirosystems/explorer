@@ -24,6 +24,7 @@ const StyledInput = memoWithAs<InputProps & { hasError?: boolean }, 'input'>(
           color="white"
           borderColor="rgba(255,255,255,0.25)"
           transitionProperty="border,box-shadow"
+          backdropFilter="blur(10px)"
           _placeholder={{ color: 'white', opacity: 1 }}
           _hover={{
             borderColor: 'rgba(255,255,255,0.35)',

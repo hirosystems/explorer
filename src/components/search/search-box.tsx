@@ -71,7 +71,7 @@ export const SearchBox = React.memo(
         />
 
         {spinnerVisible ? (
-          <Box position="absolute" right={isSmall ? '48px' : '64px'}>
+          <Box position="absolute" zIndex={99} right={isSmall ? '48px' : '64px'}>
             <Spinner size="sm" color="white" />
           </Box>
         ) : null}
