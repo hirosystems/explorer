@@ -36,7 +36,6 @@ import ApiIcon from 'mdi-react/ApiIcon';
 import FunctionIcon from 'mdi-react/FunctionIcon';
 import { LoadingPanel } from '@components/loading-panel';
 import { useHover } from 'use-events';
-import { openContractCall } from '@stacks/connect';
 import { useUser } from '@common/hooks/use-user';
 import { parseReadOnlyResponse } from '@common/sandbox';
 import { AtomIcon } from '@components/icons/atom';
