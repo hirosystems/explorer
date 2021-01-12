@@ -47,6 +47,7 @@ import { TxLink } from '@components/links';
 import { CodeBlock } from '@components/code-block';
 import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 import { Circle } from '@components/circle';
+import { handleContractCall } from '@common/sandbox/connect-functions';
 
 const useContractInterface = (): [any, string, ClarityAbiFunction] => {
   const apiServer = useApiServer();
@@ -325,7 +326,7 @@ const FunctionSingleView = () => {
         });
         if (fn.access === 'public') {
           try {
-            void openContractCall({
+            void handleContractCall({
               contractAddress: contractId.split('.')[0],
               contractName: contractId.split('.')[1],
               functionName: encodeURIComponent(fn.name),
@@ -523,6 +524,7 @@ export const ContractSearch = ({ setView }) => {
     </Flex>
   );
 };
+
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
     <Stack spacing="loose" p="extra-loose" role="alert">

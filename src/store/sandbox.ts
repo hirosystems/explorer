@@ -7,6 +7,7 @@ import { callReadOnlyFunction, fetchContractInterface } from '@common/sandbox';
 import { TransactionType } from '@models/transaction.interface';
 import { SampleContracts } from '@common/sandbox/examples';
 import { StacksTestnet } from '@stacks/network';
+import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 
 export const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
@@ -14,6 +15,9 @@ export const userSession = new UserSession({ appConfig });
 export const authOptionsAtom = atom<Partial<AuthOptions>>({
   key: 'authOptions',
   default: {
+    authOrigin: CONNECT_AUTH_ORIGIN,
+    manifestPath: '/manifest.json',
+    redirectTo: '/sandbox',
     userSession: userSession as any,
     appDetails: {
       name: 'Stacks Explorer',

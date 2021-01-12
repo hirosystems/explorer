@@ -1,4 +1,4 @@
-import { parseCookies, setCookie } from 'nookies';
+import nookies from 'nookies';
 import { NextPageContext } from 'next';
 import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
 import {
@@ -7,44 +7,63 @@ import {
   NETWORK_CURRENT_INDEX_COOKIE,
   NETWORK_LIST_COOKIE,
 } from '@common/constants';
+import { fetchFromApi } from '@common/api/fetch';
 
 export const getServerSideApiServer = async (ctx: NextPageContext) => {
-  const cookies = parseCookies(ctx);
-  const hasSet = cookies[NETWORK_LIST_COOKIE] || cookies[NETWORK_CURRENT_INDEX_COOKIE];
+  const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
+  const backupApiServer = DEFAULT_NETWORK_LIST[1].url;
+  let apiServer = defaultApiServer;
+  let changed = false;
+  try {
+    const cookies = nookies.get(ctx);
+    const index = cookies[NETWORK_CURRENT_INDEX_COOKIE];
+    const list = cookies[NETWORK_LIST_COOKIE];
 
-  const setDefaultIndexCookie = () => {
-    setCookie(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_NETWORK_INDEX), {
-      maxAge: 30 * 24 * 60 * 60,
-      path: '/',
-    });
-  };
-  if (!hasSet) {
-    if (!cookies[NETWORK_LIST_COOKIE]) {
-      setCookie(ctx, NETWORK_LIST_COOKIE, JSON.stringify(DEFAULT_NETWORK_LIST), {
-        maxAge: 30 * 24 * 60 * 60,
-        path: '/',
-      });
+    const hasCustomItems = !!list;
+    const hasSelectedIndex = !!index;
+
+    if (hasSelectedIndex && parseInt(index) < 3) {
+      const INDEX = JSON.parse(index);
+      if (INDEX !== DEFAULT_NETWORK_INDEX) {
+        apiServer = DEFAULT_NETWORK_LIST[INDEX].url;
+        changed = true;
+      }
+    } else if (hasSelectedIndex && hasCustomItems && parseInt(index) >= 3) {
+      const NETWORK_LIST = JSON.parse(list);
+      const INDEX = JSON.parse(index);
+      const customServer = NETWORK_LIST[INDEX - 3]?.url;
+      if (customServer) {
+        apiServer = customServer;
+        changed = true;
+      }
     }
-    if (!cookies[NETWORK_CURRENT_INDEX_COOKIE]) {
-      setDefaultIndexCookie();
+    if (changed && apiServer) {
+      try {
+        const res = await fetchFromApi(apiServer)('/v2/info');
+        const data = await res.json();
+      } catch (e) {
+        apiServer = defaultApiServer;
+      }
+    } else {
+      // backup
+      try {
+        if (apiServer) {
+          const res = await fetchFromApi(apiServer)('/v2/info');
+          const data = await res.json();
+        }
+      } catch (e) {
+        apiServer = backupApiServer;
+        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(1), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
+      }
     }
 
-    return DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
+    return apiServer as string;
+  } catch (e) {
+    return apiServer as string;
   }
-  const index = JSON.parse(cookies[NETWORK_CURRENT_INDEX_COOKIE]);
-  const list = JSON.parse(cookies[NETWORK_LIST_COOKIE]);
-  const apiServer = list[index].url;
-  if (apiServer.includes('localhost')) {
-    try {
-      await fetch(apiServer);
-      return apiServer;
-    } catch (e) {
-      setDefaultIndexCookie();
-      return list[DEFAULT_NETWORK_INDEX].url;
-    }
-  }
-
-  return apiServer;
 };
 
 export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>

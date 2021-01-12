@@ -28,18 +28,27 @@ export const fetchTransactions = (apiServer: string) => async (
 
 export interface AllAccountData {
   balances: AddressBalanceResponse;
-  transactions: TransactionResults;
+  transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
 }
 
+interface AllAccountOptionsBase {
+  principal: string;
+  txLimit?: number;
+  doNotFetchTransactions?: boolean;
+}
+
 export const fetchAllAccountData = (apiServer: string) => async (
-  principal: string,
-  txLimit?: number
+  options: AllAccountOptionsBase
 ): Promise<AllAccountData> => {
   const [balances, transactions, pendingTransactions] = await Promise.all([
-    fetchBalances(apiServer)(principal),
-    fetchTransactions(apiServer)(principal, txLimit),
-    fetchPendingTxs(apiServer)({ query: principal, type: 'principal' }),
+    fetchBalances(apiServer)(options.principal),
+    options.doNotFetchTransactions
+      ? new Promise<null>(resolve => {
+          return resolve(null);
+        })
+      : fetchTransactions(apiServer)(options.principal, options.txLimit || 50),
+    fetchPendingTxs(apiServer)({ query: options.principal, type: 'principal' }),
   ]);
 
   return {

@@ -5,7 +5,7 @@ import { Input } from '@components/inputs';
 import { useFormik } from 'formik';
 import { Button } from '@components/button';
 import { Caption, Text, Title } from '@components/typography';
-import { openSTXTransfer } from '@stacks/connect';
+import { handleStxTransfer } from '@common/sandbox/connect-functions';
 import { border, microToStacks, stacksToMicro, validateStacksAddress } from '@common/utils';
 import { useUser } from '@common/hooks/use-user';
 import { Error } from '@components/sandbox/error';
@@ -37,7 +37,7 @@ export const TokenTransferView = () => {
       amount: null,
     },
     onSubmit: ({ recipient, amount, memo }) => {
-      void openSTXTransfer({ recipient, amount: stacksToMicro(amount), memo });
+      void handleStxTransfer({ recipient, amount: stacksToMicro(amount), memo });
     },
     validate: values => {
       const _errors = {};

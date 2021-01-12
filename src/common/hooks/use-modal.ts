@@ -14,6 +14,9 @@ export const useModal = () => {
   const handleOpenNetworkModal = () => {
     setOpenModal(MODALS.NETWORK);
   };
+  const handleOpenDifferentNetworkModal = () => {
+    setOpenModal(MODALS.DIFFERENT_NETWORK);
+  };
   return {
     modal,
     setModal,
@@ -21,5 +24,6 @@ export const useModal = () => {
     handleCloseModal,
     handleOpenSearchModal,
     handleOpenNetworkModal,
+    handleOpenDifferentNetworkModal,
   };
 };

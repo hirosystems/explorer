@@ -21,6 +21,7 @@ import { ToolsIcon } from '@components/icons/tools';
 import { Select } from '@components/select';
 import { SampleContracts } from '@common/sandbox/examples';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
+import { handleContractDeploy } from '@common/sandbox/connect-functions';
 
 export const Sample = ({ onItemClick, setFieldValue }: any) => {
   const [codeBody, setCodeBody] = useCodeEditor();
@@ -126,7 +127,7 @@ export const DeployView = React.memo(() => {
     const _result = handleValidate(codeBody);
     if (!wasmLoaded || (_result && _result?.valid)) {
       setResult(undefined);
-      void openContractDeploy({
+      void handleContractDeploy({
         network,
         postConditionMode: 0x01,
         codeBody,

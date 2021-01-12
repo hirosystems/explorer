@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Flex } from '@stacks/ui';
-import { IconCircle } from '@tabler/icons';
+import { Box, Flex, color } from '@stacks/ui';
+import { IconFlask } from '@tabler/icons';
 
 import { Badge, BadgeProps } from '@components/badge';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
@@ -8,24 +8,17 @@ import { capitalize } from '@common/utils';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
   const mode = useNetworkMode();
-  return mode ? (
-    <Badge
-      flexShrink={0}
-      backdropFilter="blur(10px)"
-      bg="rgba(255,255,255,0.1)"
-      border="1px solid"
-      borderColor="rgba(255,255,255,0.45)"
-      {...props}
-    >
+  return mode === 'testnet' ? (
+    <Badge flexShrink={0} bg="white" {...props}>
       <Flex alignItems="center">
         <Box
-          as={IconCircle}
-          fill="rgba(255,255,255,0.5)"
-          color="white"
+          as={IconFlask}
+          fill="rgba(0,0,0,0.1)"
+          color={color('brand')}
           size="16px"
           mr="extra-tight"
         />
-        <Box>{capitalize(mode)} mode</Box>
+        <Box color="ink">{capitalize(mode)} mode</Box>
       </Flex>
     </Badge>
   ) : null;

@@ -4,5 +4,5 @@ import { DEFAULT_TESETNET_SERVER } from '@common/constants';
 
 export const useApiServer = (): string => {
   const network = useRecoilValue(networkCurrentUrlSelector);
-  return network || DEFAULT_TESETNET_SERVER;
+  return network as string;
 };

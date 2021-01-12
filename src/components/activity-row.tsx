@@ -5,7 +5,11 @@ import { TransferIcon } from '@components/icons/transfer';
 import { Transaction } from '@models/transaction.interface';
 import { getTxTypeIcon } from '@components/transaction-item';
 
-export const Activity: React.FC<FlexProps & { txs: Transaction[] }> = ({ txs, ...rest }) => {
+export const Activity: React.FC<FlexProps & { txs: Transaction[]; amount: number }> = ({
+  txs,
+  amount,
+  ...rest
+}) => {
   const contractCalls = txs?.filter(tx => tx.tx_type === 'contract_call');
   const contractCreations = txs?.filter(tx => tx.tx_type === 'smart_contract');
   const transactions = txs?.filter(
@@ -19,6 +23,7 @@ export const Activity: React.FC<FlexProps & { txs: Transaction[] }> = ({ txs, ..
         mr={['unset', 'unset', 'base']}
         my={['tight', 'tight', 'unset']}
         array={transactions}
+        amount={amount}
         icon={TransferIcon}
         singular="transfer"
       />

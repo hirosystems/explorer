@@ -11,9 +11,14 @@ module.exports = withBundleAnalyzer({
     jsconfigPaths: true,
   },
   publicRuntimeConfig: {
-    MOCKNET_API_SERVER: process.env.MOCKNET_API_SERVER,
-    TESTNET_API_SERVER: process.env.TESTNET_API_SERVER,
-    STAGING: process.env.STAGING,
+    MAINNET_API_SERVER:
+      process.env.NEXT_PUBLIC_MAINNET_API_SERVER || process.env.MAINNET_API_SERVER,
+    TESTNET_API_SERVER:
+      process.env.NEXT_PUBLIC_TESTNET_API_SERVER || process.env.TESTNET_API_SERVER,
+    CONNECT_AUTH_ORIGIN:
+      process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || process.env.CONNECT_AUTH_ORIGIN,
+    DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL || process.env.DEPLOYMENT_URL,
+    MAINNET_ENABLED: process.env.NEXT_PUBLIC_MAINNET_ENABLED || process.env.MAINNET_ENABLED,
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';

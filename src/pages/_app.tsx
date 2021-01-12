@@ -4,15 +4,15 @@ import { AppWrapper } from '@components/app-init';
 import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
 import { SWRConfig } from 'swr';
-import type { AppProps } from 'next/app';
+import type { AppProps, AppContext } from 'next/app';
 import './styles.css';
 import 'tippy.js/dist/tippy.css'; // optional
 import 'modern-normalize/modern-normalize.css';
 import { getServerSideApiServer } from '@common/api/utils';
 import { getNetworkMode } from '@common/api/network';
 import { atom } from 'recoil';
-import { useRouter } from 'next/router';
 import App from 'next/app';
+import { useChainModeEffect } from '@common/hooks/use-chain-mode';
 
 /**
  * This is an awful hack that will hopefully be removed in the future
@@ -34,6 +34,7 @@ export const networkModeState = atom({
 });
 
 const AppContainer: React.FC<any> = ({ component: Component, networkMode, isHome, ...props }) => {
+  useChainModeEffect();
   return (
     <CacheProvider value={cache}>
       <AppWrapper isHome={isHome}>
@@ -44,26 +45,10 @@ const AppContainer: React.FC<any> = ({ component: Component, networkMode, isHome
 };
 
 function MyApp({ Component, pageProps, networkMode }: { networkMode: string } & AppProps) {
-  const router = useRouter();
   React.useMemo(() => {
     CURRENT_NETWORK_MODE = networkMode;
   }, []);
 
-  const isBrowser = typeof document !== 'undefined';
-
-  React.useEffect(() => {
-    if (typeof document !== 'undefined') {
-      if (!router?.query?.chain || router?.query?.chain !== networkMode.toLowerCase()) {
-        void router.replace(
-          `${document.location.pathname}?chain=${networkMode.toLowerCase()}`,
-          `${document.location.pathname}?chain=${networkMode.toLowerCase()}`,
-          {
-            shallow: true,
-          }
-        );
-      }
-    }
-  }, [router.query, isBrowser]);
   return (
     <SWRConfig
       value={{
@@ -78,13 +63,12 @@ function MyApp({ Component, pageProps, networkMode }: { networkMode: string } & 
   );
 }
 
-MyApp.getInitialProps = async (appContext: any) => {
+MyApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
-
   try {
-    const apiServer = await getServerSideApiServer(appContext);
-    const mode = await getNetworkMode(apiServer);
-    return { networkMode: mode, ...appProps };
+    const apiServer = await getServerSideApiServer(appContext.ctx);
+    const networkMode = await getNetworkMode(apiServer);
+    return { networkMode, ...appProps };
   } catch (e) {
     return { ...appProps };
   }

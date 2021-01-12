@@ -26,10 +26,9 @@ const useFetchAccountData = (
   const apiServer = useApiServer();
 
   const fetcher = async (principal: string): Promise<AccountDataResponse> =>
-    fetchAllAccountData(apiServer)(principal);
+    fetchAllAccountData(apiServer)({ principal }) as Promise<AccountDataResponse>;
 
   const data = useSWR<AccountDataResponse>(principal, fetcher, {
-    // refreshInterval: 2500,
     suspense: options?.suspense,
   });
 

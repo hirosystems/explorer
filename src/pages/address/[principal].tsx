@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import {
   AddressBalanceResponse,
   MempoolTransaction,
-  MempoolTransactionListResponse,
+  Transaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
 import { Box, Flex, Grid, color } from '@stacks/ui';
@@ -37,6 +37,7 @@ import { getNetworkMode } from '@common/api/network';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IconAlertCircle } from '@tabler/icons';
 import { AddressLink } from '@components/links';
+import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 
 const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
   const network = useNetworkMode();
@@ -88,7 +89,9 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
             label: {
               children: 'Activity',
             },
-            children: <Activity txs={data?.transactions?.results} />,
+            children: (
+              <Activity txs={data?.transactions?.results} amount={data?.transactions?.total} />
+            ),
           },
           {
             condition: !!hasTokenBalances,
@@ -111,9 +114,9 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
 
 interface AddressPageData {
   principal: string;
-  balances?: AddressBalanceResponse;
-  transactions?: TransactionResults | MempoolTransactionListResponse;
-  pendingTransactions?: MempoolTransaction[];
+  balances: AddressBalanceResponse;
+  transactions: TransactionResults | null;
+  pendingTransactions: MempoolTransaction[];
   error?: boolean;
   vesting?: VestingData;
   networkModeAddress: string | null;
@@ -145,10 +148,23 @@ const AddressPage: NextPage<AddressPageData> = props => {
       pendingTransactions,
     },
   });
+
+  const {
+    data: _transactions,
+    loadMore,
+    isReachingEnd,
+    isLoadingMore,
+  } = useInfiniteFetch<Transaction>({
+    initialData: data?.transactions?.results as Transaction[],
+    type: 'tx',
+    limit: 50,
+    principal,
+    types: ['smart_contract', 'contract_call', 'token_transfer', 'coinbase'],
+  });
   const hasTokenBalances = hasTokenBalance(data?.balances);
   const stackingStartedAtThisBlock = getStackStartBlockHeight(data?.transactions?.results);
 
-  const confirmedTxs = data?.transactions?.results || [];
+  const confirmedTxs = _transactions || [];
   const pendingTxs = data?.pendingTransactions || [];
 
   return (
@@ -179,7 +195,10 @@ const AddressPage: NextPage<AddressPageData> = props => {
             hideFilter={false}
             principal={principal}
             mempool={pendingTxs}
-            transactions={confirmedTxs as TransactionResults['results']}
+            loadMore={loadMore}
+            transactions={confirmedTxs}
+            isReachingEnd={isReachingEnd}
+            isLoadingMore={isLoadingMore}
           />
         </Box>
         {balances ? (
@@ -219,7 +238,7 @@ export async function getServerSideProps(
   const details = getAddressDetails(principal);
   const isDifferentMode = details.network !== networkMode?.toLowerCase();
 
-  const data = await fetchAllAccountData(apiServer)(principal);
+  const data = await fetchAllAccountData(apiServer)({ principal });
   const hasHadVesting = await fetchAddressVesting(principal);
 
   const networkModeAddress = isDifferentMode ? invertAddress(principal) : null;

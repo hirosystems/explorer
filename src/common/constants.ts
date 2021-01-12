@@ -1,20 +1,40 @@
 import { ChainID } from '@stacks/transactions';
 
-export const withApiServer = (apiServer: string) => (path?: string) =>
-  path ? apiServer + path : apiServer;
+export const TESTNET_CHAIN_ID = ChainID.Testnet;
+export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 
 export const IS_DEV = process.env.NODE_ENV !== 'production';
-export const IS_STAGING = process.env.STAGING === 'enabled';
+export const IS_BROWSER = typeof document !== 'undefined';
 
-export const DEFAULT_TESETNET_SERVER = 'https://stacks-node-api.xenon.blockstack.org';
+export const LEGACY_EXPLORER_API =
+  process.env.NEXT_PUBLIC_DEPLOYMENT_URL || `https://${process.env.VERCEL_URL}`;
+
+export const CONNECT_AUTH_ORIGIN =
+  process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || 'https://pr-725.app.stacks.engineering';
+
+export const DEFAULT_TESETNET_SERVER =
+  process.env.NEXT_PUBLIC_TESTNET_API_SERVER || 'https://stacks-node-api.xenon.blockstack.org';
+
+export const DEFAULT_MAINNET_SERVER = process.env.NEXT_PUBLIC_MAINNET_API_SERVER;
+
+export const MAINNET_ENABLED = process.env.NEXT_PUBLIC_MAINNET_ENABLED === 'true';
 
 export const NETWORK_LIST_COOKIE = 'network-list';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'network-current';
-export const DEFAULT_NETWORK_INDEX = 0;
+export const DEFAULT_TESTNET_INDEX = 1;
+export const DEFAULT_MAINNET_INDEX = 0;
+export const DEFAULT_NETWORK_INDEX = MAINNET_ENABLED
+  ? DEFAULT_MAINNET_INDEX
+  : DEFAULT_TESTNET_INDEX;
+
 export const DEFAULT_NETWORK_LIST = [
   {
     label: 'stacks.co',
-    url: process.env.TESTNET_API_SERVER || DEFAULT_TESETNET_SERVER,
+    url: DEFAULT_MAINNET_SERVER,
+  },
+  {
+    label: 'stacks.co',
+    url: DEFAULT_TESETNET_SERVER,
   },
   {
     label: 'localhost',
@@ -22,12 +42,10 @@ export const DEFAULT_NETWORK_LIST = [
   },
 ];
 
-export const TESTNET_CHAIN_ID = ChainID.Testnet;
-export const MAINNET_CHAIN_ID = ChainID.Mainnet;
-
 export enum MODALS {
   SEARCH = 'modals/search',
   NETWORK = 'modals/add-network',
+  DIFFERENT_NETWORK = 'modals/different-network',
 }
 
 type ReverseMap<T extends Record<keyof T, any>> = {
@@ -42,3 +60,6 @@ const reverseMap: ReverseMap<typeof MODALS> = Object.entries(MODALS).reduce((rMa
 }, {} as any);
 
 export type AllModals = keyof typeof reverseMap;
+
+export const withApiServer = (apiServer: string) => (path?: string) =>
+  path ? apiServer + path : apiServer;
