@@ -22,11 +22,11 @@ const StyledInput = memoWithAs<InputProps & { hasError?: boolean }, 'input'>(
           fontSize="inherit"
           position="absolute"
           color="white"
-          borderColor="transparent"
+          borderColor="rgba(255,255,255,0.25)"
           transitionProperty="border,box-shadow"
-          _placeholder={{ color: 'rgba(255,255,255,0.65)' }}
+          _placeholder={{ color: 'white', opacity: 1 }}
           _hover={{
-            borderColor: 'rgba(255,255,255,0.15)',
+            borderColor: 'rgba(255,255,255,0.35)',
           }}
           _focus={{
             borderColor: 'rgba(255,255,255,0.5)',
