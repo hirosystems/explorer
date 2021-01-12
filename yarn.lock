@@ -1596,6 +1596,13 @@
   dependencies:
     cross-fetch "^3.0.5"
 
+"@stacks/connect-ui@^2.17.17-alpha.5b0a745.0":
+  version "2.17.17-alpha.f4fab37.0"
+  resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-2.17.17-alpha.f4fab37.0.tgz#8fc1baf4942d1148a387b52006f1a9ccf4661bc7"
+  integrity sha512-Lj7Soezo+jZxQlRS8/h3my9ye8QAg0FlicEx5lHZjUgCM1i3myPtTGBT1J2DDUEnHBs3DJal2rSw99W+7KpcEA==
+  dependencies:
+    "@stencil/core" "^1.17.3"
+
 "@stacks/connect-ui@^2.17.8":
   version "2.17.8"
   resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-2.17.8.tgz#17a2e04cb6815b861e432525372e6e6a5d5cb24e"
@@ -1603,14 +1610,14 @@
   dependencies:
     "@stencil/core" "^1.17.3"
 
-"@stacks/connect@^4.3.7":
-  version "4.3.7"
-  resolved "https://registry.yarnpkg.com/@stacks/connect/-/connect-4.3.7.tgz#d959d86647ebb644fb0df95ac79f3c13af930de6"
-  integrity sha512-oLOfyWjxo3yO9Q3NHk+ZBBV2m7HewbmFV0WUndiwgzLNH4Cnjxz3BNcfMT8gCu3PIhgVGg2d8Z8xTl8fQhFDbw==
+"@stacks/connect@^4.3.16-alpha.5b0a745.0":
+  version "4.3.16-alpha.5b0a745.0"
+  resolved "https://registry.yarnpkg.com/@stacks/connect/-/connect-4.3.16-alpha.5b0a745.0.tgz#ca0501d39e4d844fcf4fce5e2f36a2b8a840a0cb"
+  integrity sha512-OTf26K9zDN8RcKBjytCKeKvmRlKbZU+9ff8ayON4CBpihqNEkQiGp0sIG6KunSeMBVHqD7W8HOjLlulyQpSVeA==
   dependencies:
     "@blockstack/stacks-transactions" "0.7.0"
     "@stacks/auth" "^1.0.0-beta.19"
-    "@stacks/connect-ui" "^2.17.8"
+    "@stacks/connect-ui" "^2.17.17-alpha.5b0a745.0"
     jsontokens "^3.0.0"
 
 "@stacks/encryption@^1.0.0-beta.20":

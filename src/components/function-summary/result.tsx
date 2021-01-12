@@ -31,7 +31,6 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
       </Box>
     );
   } else {
-    console.log(success, type, value);
     return null;
   }
 

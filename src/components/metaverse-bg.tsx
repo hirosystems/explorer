@@ -11,13 +11,25 @@ const GlobalStyles = () => (
       html.dark {
         .metaverse-bg {
           opacity: 0.75;
-          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp-dark.png?auto=format,compress');
+          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp-dark.png?auto=format&w=1800'),
+            linear-gradient(
+              30deg,
+              rgba(98, 135, 221, 1) 0%,
+              rgba(231, 72, 92, 1) 58%,
+              rgba(102, 137, 221, 1) 100%
+            );
         }
       }
 
       html.light {
         .metaverse-bg {
-          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp.png?auto=format,compress');
+          background-image: url('https://blockstack-www.imgix.net/metaverse-v2-temp.png?auto=format&w=1800'),
+            linear-gradient(
+              30deg,
+              rgba(98, 135, 221, 1) 0%,
+              rgba(231, 72, 92, 1) 58%,
+              rgba(102, 137, 221, 1) 100%
+            );
         }
       }
     `}

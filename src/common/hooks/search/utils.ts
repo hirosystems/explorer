@@ -8,6 +8,7 @@ import { fetchTransaction } from '@common/api/transactions';
 export function makeKey(query: string | null, prefix: string): string | null {
   return query !== null ? `${prefix}__${query}` : null;
 }
+
 export function extractQueryFromKey(query: string | null, prefix: string): string | null {
   return query ? query.replace(`${prefix}__`, '') : null;
 }
@@ -23,7 +24,10 @@ export const getFetcher = async (
   const [query, type, apiServer] = args;
   switch (type) {
     case SearchResultType.StandardAddress: {
-      const data = await fetchAllAccountData(apiServer)(query, 1);
+      const data = await fetchAllAccountData(apiServer)({
+        principal: query,
+        txLimit: 1,
+      });
       return {
         principal: query,
         entity_id: query,

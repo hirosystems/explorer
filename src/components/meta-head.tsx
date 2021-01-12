@@ -4,6 +4,7 @@ import { useSafeLayoutEffect } from '@stacks/ui';
 
 import { useMediaQuery } from '@common/hooks/use-media-query';
 import { Statuses } from '@components/status';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 const defaultTitle = 'Stacks 2.0 explorer';
 
@@ -34,10 +35,18 @@ export const Meta = ({
   labels,
 }: MetaProps) => {
   const filename = useFaviconName(status);
+  const mode = useNetworkMode();
+
+  const withMode = (title: string) => {
+    if (mode === 'testnet') {
+      return `${title} [Testnet mode]`;
+    }
+    return title;
+  };
 
   return (
     <Head>
-      <title>{title === defaultTitle ? title : `${title} - ${defaultTitle}`}</title>
+      <title>{withMode(title === defaultTitle ? title : `${title} - ${defaultTitle}`)}</title>
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="Stacks 2.0 explorer" />
       <meta name="twitter:card" content="summary" />

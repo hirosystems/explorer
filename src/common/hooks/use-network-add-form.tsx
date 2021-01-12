@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNetwork } from '@common/hooks/use-network';
 import { useFormik } from 'formik';
 import { string } from 'yup';
-import { fetchFromSidecar } from '@common/api/fetch';
+import { fetchFromApi } from '@common/api/fetch';
 import { useModal } from '@common/hooks/use-modal';
-import { isLocal } from '@common/utils';
+import { getChainIdFromInfo, isLocal } from '@common/utils';
+import { NetworkMode } from '@common/types/network';
+import { useSetChainMode } from '@common/hooks/use-chain-mode';
 
 interface Errors {
   label?: string;
@@ -13,8 +15,10 @@ interface Errors {
 }
 
 export const useNetworkAddForm = () => {
+  const [networkMode, setNetworkMode] = useState<NetworkMode | undefined>(undefined);
   const { handleCloseModal } = useModal();
   const { list, handleAddNetwork } = useNetwork();
+  const setChainMode = useSetChainMode();
   const schema = string().matches(
     /^(?:([a-z0-9+.-]+):\/\/)(?:\S+(?::\S*)?@)?(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/
   );
@@ -33,8 +37,10 @@ export const useNetworkAddForm = () => {
       label: '',
       url: '',
     },
-    onSubmit: ({ label, url }) => {
-      const _url = new URL(values.url);
+    onSubmit: async ({ label, url }) => {
+      const _url = new URL(url);
+
+      await setChainMode(networkMode);
 
       handleAddNetwork({
         label: label.trim(),
@@ -58,15 +64,16 @@ export const useNetworkAddForm = () => {
           if (!isLocal() && !values.url.includes('https://')) {
             _errors.url = 'The url needs to be https (non-local).';
           }
-          if (list.find(item => item.url.split('//')[1] === values.url.split('//')[1])) {
+          if (list.find(item => item?.url?.split('//')?.[1] === values.url.split('//')[1])) {
             _errors.general = 'This API has already been added.';
           }
           try {
             const _url = new URL(values.url);
-            const res = await fetchFromSidecar(`https://${_url.host}`)('/status');
-            const response = await res.json();
-            if (response.status !== 'ready') {
-              _errors.general = 'The API did not return a status of "ready"';
+            const res = await fetchFromApi(`https://${_url.host}`)('/v2/info');
+            const data = await res.json();
+            data?.network_id && setNetworkMode(getChainIdFromInfo(data));
+            if (!data?.network_id) {
+              _errors.general = 'The API did not return a network_id.';
             }
           } catch (e) {
             if (e.message.includes('Failed to fetch')) {

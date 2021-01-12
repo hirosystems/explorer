@@ -1,4 +1,5 @@
 import { b58ToC32, c32address, c32addressDecode, c32ToB58, versions } from 'c32check';
+import { LEGACY_EXPLORER_API } from '@common/constants';
 
 export const C32_ADDRESS_CHARS = '[0123456789ABCDEFGHJKMNPQRSTVWXYZ]+';
 export const STACKS_ADDRESS_PATTERN = `^(${C32_ADDRESS_CHARS})$`;
@@ -156,9 +157,7 @@ interface AddressVestingReturn {
 
 export async function fetchAddressVesting(address: string): Promise<boolean> {
   try {
-    const res = await fetch(
-      `${process.env.DEPLOYMENT_URL || `https://${process.env.VERCEL_URL}`}/api/vesting/${address}`
-    );
+    const res = await fetch(`${LEGACY_EXPLORER_API}/api/vesting/${address}`);
     const data: AddressVestingReturn = await res.json();
     return data?.found;
   } catch (e) {

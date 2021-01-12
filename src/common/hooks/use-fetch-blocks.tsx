@@ -10,6 +10,7 @@ interface UseInfiniteFetch<Data> {
   pending?: boolean;
   suspense?: boolean;
   types?: string[];
+  principal?: string;
 }
 
 interface GetKeyOptions {
@@ -19,6 +20,7 @@ interface GetKeyOptions {
   pending?: boolean;
   types?: string[];
   apiServer?: string;
+  principal?: string;
 }
 
 const generateTypesQueryString = (types?: string[]) => {
@@ -31,12 +33,13 @@ const generateTypesQueryString = (types?: string[]) => {
 };
 
 export const makeKey = (options: GetKeyOptions) => {
-  const { index, type, limit, pending, types, apiServer } = options;
-  return `${apiServer as string}/extended/v1/${type}${
-    pending ? '/mempool' : ''
-  }?${constructLimitAndOffsetQueryParams(limit, index + 1 === 1 ? 0 : limit * index + 1)}${
-    types ? generateTypesQueryString(types) : ''
-  }`;
+  const { index, type, limit, pending, types, apiServer, principal } = options;
+  return `${apiServer as string}/extended/v1/${principal ? `address/${principal}` : ''}${
+    principal ? '/transactions' : type
+  }${pending ? '/mempool' : ''}?${constructLimitAndOffsetQueryParams(
+    limit,
+    index + 1 === 1 ? 0 : limit * index + 1
+  )}${types ? generateTypesQueryString(types) : ''}`;
 };
 
 export function useInfiniteFetch<Data>(
@@ -52,7 +55,7 @@ export function useInfiniteFetch<Data>(
   loadMore: () => void;
   refresh: () => void;
 } {
-  const { limit, initialData, pending, type, types } = options;
+  const { limit, initialData, pending, type, principal, types } = options;
 
   const apiServer = useApiServer();
 
@@ -60,6 +63,7 @@ export function useInfiniteFetch<Data>(
     return makeKey({
       ...options,
       apiServer,
+      principal,
     });
   }, []);
 

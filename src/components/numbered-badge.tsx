@@ -7,11 +7,12 @@ import { Badge, BadgeProps } from '@components/badge';
 
 export const NumberedBadge = ({
   array,
+  amount,
   singular,
   icon: Icon,
   ...rest
-}: { array: any[]; singular: string; icon?: any } & BadgeProps) =>
-  array?.length ? (
+}: { array?: any[]; amount?: number; singular: string; icon?: any } & BadgeProps) =>
+  amount || array?.length ? (
     <Badge
       color={color('text-body')}
       labelProps={{ display: 'flex', alignItems: 'center' }}
@@ -22,7 +23,7 @@ export const NumberedBadge = ({
     >
       {Icon && <Icon strokeWidth={2} size="16px" />}
       <Box ml={'extra-tight'}>
-        {array.length} {pluralize(singular, array.length)}
+        {amount || array?.length} {pluralize(singular, amount || array?.length)}
       </Box>
     </Badge>
   ) : null;

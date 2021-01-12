@@ -15,6 +15,8 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
+import { TESTNET_CHAIN_ID } from '@common/constants';
+import { NetworkMode, NetworkModes } from '@common/types/network';
 
 dayjs.extend(relativeTime);
 
@@ -362,4 +364,17 @@ export const isLocal = () => {
     }
   }
   return false;
+};
+
+export const getInvertedChainMode = (mode: 'testnet' | 'mainnet') =>
+  mode === 'testnet' ? 'mainnet' : 'testnet';
+
+export const getChainIdFromInfo = (data: any): NetworkMode | undefined => {
+  const networkId = data?.network_id && parseInt(data?.network_id);
+
+  return networkId
+    ? TESTNET_CHAIN_ID === networkId
+      ? NetworkModes.Testnet
+      : NetworkModes.Mainnet
+    : undefined;
 };

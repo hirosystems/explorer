@@ -7,10 +7,18 @@ import {
   NETWORK_LIST_COOKIE,
 } from '@common/constants';
 
-export const networkListState = atom<{ label: string; url: string }[]>({
-  key: 'app/network.list',
-  default: DEFAULT_NETWORK_LIST,
+export const customNetworksListState = atom<{ label: string; url: string }[]>({
+  key: 'app/network.list.custom',
+  default: [],
   effects_UNSTABLE: [cookieEffect<{ label: string; url: string }[]>(NETWORK_LIST_COOKIE)],
+});
+
+export const networkListState = selector({
+  key: 'app/network.list',
+  get: ({ get }) => {
+    const customItems = get(customNetworksListState);
+    return [...DEFAULT_NETWORK_LIST, ...customItems];
+  },
 });
 
 export const networkIndexState = atom({

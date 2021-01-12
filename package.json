@@ -29,7 +29,7 @@
     "@react-spectrum/utils": "^3.5.0",
     "@react-stately/toggle": "^3.2.1",
     "@stacks/auth": "^1.0.0-beta.20",
-    "@stacks/connect": "^4.3.7",
+    "@stacks/connect": "^4.3.16-alpha.5b0a745.0",
     "@stacks/connect-ui": "^2.17.8",
     "@stacks/network": "^1.0.0-beta.20",
     "@stacks/transactions": "^1.0.0-beta.20",

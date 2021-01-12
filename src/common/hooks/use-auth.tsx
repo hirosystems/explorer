@@ -4,6 +4,7 @@ import debounce from 'awesome-debounce-promise';
 import { useRecoilState } from 'recoil';
 import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
 import type { AuthOptions, FinishedData } from '@stacks/connect';
+import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 
 export const useAuthState = () => {
   const [authOptions, setAuthOptions] = useRecoilState<Partial<AuthOptions>>(authOptionsAtom);
@@ -32,6 +33,9 @@ export const useAuth = () => {
       setIconPath(iconPrefix);
       setAuthOptions({
         onFinish,
+        manifestPath: '/manifest.json',
+        authOrigin: CONNECT_AUTH_ORIGIN,
+        redirectTo: '/sandbox',
         userSession: userSession as any,
         appDetails: {
           name: 'Stacks Explorer',
