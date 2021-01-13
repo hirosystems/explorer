@@ -10,6 +10,7 @@ import {
   MempoolTransaction,
   TransactionResults,
 } from '@blockstack/stacks-blockchain-api-types';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 interface AccountDataResponse {
   balances: AddressBalanceResponse;
@@ -48,8 +49,9 @@ export const useUser = (options?: {
   hasTransactions?: boolean;
 } => {
   const { userData } = useAuthState();
+  const networkMode = useNetworkMode();
 
-  const principal = userData?.profile?.stxAddress;
+  const principal = networkMode && userData?.profile?.stxAddress?.[networkMode];
   const username = userData?.username;
   const profile = userData?.profile;
 

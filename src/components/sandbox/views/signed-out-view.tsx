@@ -10,6 +10,8 @@ import { StxInline } from '@components/icons/stx-inline';
 
 import FunctionIcon from 'mdi-react/FunctionIcon';
 import { Section } from '@components/section';
+import { IS_BROWSER } from '@common/constants';
+import { useEffect, useState } from 'react';
 
 const Item = ({ children, ...props }: GridProps) => (
   <Grid p="base" border={border()} borderRadius="8px" {...props}>
@@ -33,7 +35,15 @@ const ItemCaption = (props: BoxProps) => (
 
 export const SignedOutView: React.FC<any> = () => {
   const { doOpenAuth } = useConnect();
+  const [installed, setInstallStatus] = useState(false);
 
+  const extInstalled = IS_BROWSER && typeof window.BlockstackProvider !== 'undefined';
+
+  useEffect(() => {
+    if (extInstalled !== installed) {
+      setInstallStatus(extInstalled);
+    }
+  }, [IS_BROWSER, extInstalled, installed]);
   return (
     <>
       <Meta title="Sandbox" />
@@ -97,7 +107,7 @@ export const SignedOutView: React.FC<any> = () => {
               Welcome to the Stacks Explorer Sandbox!
             </Title>
 
-            <Button onClick={doOpenAuth}>Login to continue</Button>
+            <Button onClick={doOpenAuth}>Continue with Stacks Wallet</Button>
           </Box>
         </Grid>
       </Section>

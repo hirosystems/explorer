@@ -3,6 +3,7 @@ import { Box, BoxProps, Flex } from '@stacks/ui';
 import { Caption, Link, Text } from '@components/typography';
 import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import NextLink from 'next/link';
+import { TxLink } from '@components/links';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -71,6 +72,17 @@ const Principal: React.FC<{ principal: string } & BoxProps> = ({ principal, ...r
 export const FunctionSummaryClarityValue = ({ arg, ...rest }: { arg: any }) => {
   if (arg.type === 'principal') {
     const principal = clarityValuetoHumanReadable(arg) as string;
+    const isContract = principal.includes('.');
+    if (isContract) {
+      return (
+        <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
+          <TxLink txid={principal}>
+            <Link as="a">{principal}</Link>
+          </TxLink>
+          <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
+        </Flex>
+      );
+    }
     return (
       <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
         <Principal principal={principal} />
@@ -78,7 +90,6 @@ export const FunctionSummaryClarityValue = ({ arg, ...rest }: { arg: any }) => {
       </Flex>
     );
   }
-
   return (
     <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
       <Text>{getValue(arg)}</Text>

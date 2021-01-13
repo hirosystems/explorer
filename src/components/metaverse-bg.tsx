@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, memo } from 'react';
 import type { BoxProps } from '@stacks/ui';
 import { Box, transition } from '@stacks/ui';
 import { css, Global } from '@emotion/react';
@@ -52,7 +52,7 @@ const GlobalStyles = () => (
   />
 );
 
-const Grain: React.FC<BoxProps> = props => (
+const Grain: React.FC<BoxProps> = memo(props => (
   <Box
     as="img"
     src="https://blockstack-www.imgix.net/metaverse/grain.jpg"
@@ -66,51 +66,59 @@ const Grain: React.FC<BoxProps> = props => (
     imageRendering="crisp-edges"
     {...props}
   />
-);
+));
 
-const Video: React.FC = props => (
-  <video
-    className="metaverse-video"
-    playsInline
-    autoPlay
-    muted
-    loop
-    poster="https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
-  >
-    <source src="https://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
-  </video>
-);
-
-export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = forwardRefWithAs<
-  BoxProps,
-  'div'
->(({ as = 'div', height = '380px', ...rest }, ref) => {
+const Video: React.FC = memo(() => {
+  const ref = useRef<null | HTMLVideoElement>(null);
+  useEffect(() => {
+    if (ref.current && ref.current.playbackRate && ref.current.playbackRate === 1) {
+      ref.current.playbackRate = 0.85;
+    }
+  }, [ref.current]);
   return (
-    <Box
-      className="metaverse-header"
-      position="fixed"
-      zIndex={1}
-      width="100%"
-      top={0}
-      height={height}
-      overflow="hidden"
-      transition={transition}
+    <video
+      className="metaverse-video"
+      playsInline
+      autoPlay
+      muted
+      loop
+      ref={ref}
+      poster="https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
     >
-      <GlobalStyles />
-      <Grain opacity={0.45} />
-      <Grain />
-      <Video />
-      <Box
-        className="metaverse-bg"
-        as={as}
-        backgroundSize="cover"
-        maxWidth="100%"
-        backgroundPosition="0% 29%"
-        width="100%"
-        height="60vh"
-        ref={ref}
-        {...rest}
-      />
-    </Box>
+      <source src="https://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
+    </video>
   );
 });
+
+export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = memo(
+  forwardRefWithAs<BoxProps, 'div'>(({ as = 'div', height = '380px', ...rest }, ref) => {
+    return (
+      <Box
+        className="metaverse-header"
+        position="fixed"
+        zIndex={1}
+        width="100%"
+        top={0}
+        height={height}
+        overflow="hidden"
+        transition={transition}
+      >
+        <GlobalStyles />
+        <Grain opacity={0.45} />
+        <Grain />
+        <Video />
+        <Box
+          className="metaverse-bg"
+          as={as}
+          backgroundSize="cover"
+          maxWidth="100%"
+          backgroundPosition="0% 29%"
+          width="100%"
+          height="60vh"
+          ref={ref}
+          {...rest}
+        />
+      </Box>
+    );
+  })
+);

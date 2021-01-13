@@ -111,7 +111,7 @@ export const SignedInView: React.FC<BoxProps> = React.memo(props => {
   return (
     <Section>
       <Header />
-      <Grid gridTemplateColumns={`calc(100% - ${width}) ${width}`}>
+      <Grid minHeight="600px" gridTemplateColumns={`calc(100% - ${width}) ${width}`}>
         <TabContent />
         {hasTransactions ? <TransactionsPanel /> : null}
       </Grid>
