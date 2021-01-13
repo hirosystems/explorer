@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
 import type { AuthOptions, FinishedData } from '@stacks/connect';
-import { CONNECT_AUTH_ORIGIN } from '@common/constants';
+import { CONNECT_AUTH_ORIGIN, IS_BROWSER } from '@common/constants';
 import { useRouter } from 'next/router';
 
 export const useAuthState = () => {
@@ -38,17 +38,59 @@ export const useAuth = () => {
     }, 350)
   );
 
+  const handleRemoveAuthResponseQuery = useCallback(async () => {
+    if (IS_BROWSER) {
+      const query = router.query;
+      delete query['authResponse'];
+      await router.replace(
+        {
+          pathname: router.pathname,
+          query,
+        },
+        {
+          pathname: router.pathname,
+          query,
+        },
+        { shallow: true }
+      );
+    }
+  }, [IS_BROWSER, router]);
+
+  const handlePendingSignIn = useCallback(async () => {
+    try {
+      const userData = await userSession.handlePendingSignIn(authResponse);
+      await handleRemoveAuthResponseQuery();
+      setUserData(userData);
+      setAuthResponse(undefined);
+    } catch (e) {
+      console.error(e.message);
+      await handleRemoveAuthResponseQuery();
+    }
+  }, [
+    IS_BROWSER,
+    IS_BROWSER && document.location.search,
+    userSession,
+    router,
+    setUserData,
+    setAuthResponse,
+  ]);
+
+  const isSignedIn = userSession.isUserSignedIn();
+
   useEffect(() => {
-    if (router.query.authResponse && !authResponse) {
-      setAuthResponse(router.query.authResponse as string);
+    if (!isSignedIn) {
+      if (router.query.authResponse && !authResponse) {
+        setAuthResponse(router.query.authResponse as string);
+      }
+      if (authResponse) {
+        void handlePendingSignIn();
+      }
+    } else {
+      if (router.query.authResponse) {
+        void handleRemoveAuthResponseQuery();
+      }
     }
-    if (authResponse && !userSession.isUserSignedIn()) {
-      void userSession.handlePendingSignIn(authResponse).then(userData => {
-        setUserData(userData);
-        setAuthResponse(undefined);
-      });
-    }
-  }, [router.query.authResponse, setAuthResponse, authResponse]);
+  }, [router.query, setAuthResponse, authResponse, isSignedIn]);
 
   useEffect(() => {
     const iconPrefix = typeof document !== 'undefined' ? document.location.origin.toString() : '';
