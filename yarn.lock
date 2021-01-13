@@ -340,25 +340,6 @@
   resolved "https://registry.yarnpkg.com/@blockstack/stacks-blockchain-sidecar-types/-/stacks-blockchain-sidecar-types-0.0.22.tgz#516017641c2ca9b89101c6f08eda94cb0200becd"
   integrity sha512-xU1CFB0xyLyGRUVH8a5o/A260KDn39lmE/5w5l3GK/5EKwEhbppcFilySMao/QRrNT42Q0YWqhWxNz6BFMllGQ==
 
-"@blockstack/stacks-transactions@0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@blockstack/stacks-transactions/-/stacks-transactions-0.7.0.tgz#c587f69879b1903bada87769f1d6d1217479336a"
-  integrity sha512-9IUR641PJpigYDCWdtKFgBIk0Oxyoc2M2XVdyaEOEcRhI+4lcacDhsuseAmGbkB9FhJgJcNicWPujUPNFl1XCw==
-  dependencies:
-    "@types/bn.js" "^4.11.6"
-    "@types/elliptic" "^6.4.12"
-    "@types/randombytes" "^2.0.0"
-    "@types/sha.js" "^2.4.0"
-    bn.js "^4.11.9"
-    c32check "^1.1.1"
-    cross-fetch "^3.0.5"
-    elliptic "^6.5.2"
-    lodash "^4.17.20"
-    randombytes "^2.1.0"
-    ripemd160-min "^0.0.6"
-    sha.js "^2.4.11"
-    smart-buffer "^4.1.0"
-
 "@commitlint/cli@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-11.0.0.tgz#698199bc52afed50aa28169237758fa14a67b5d3"
@@ -1575,7 +1556,7 @@
     "@react-types/overlays" "^3.4.0"
     "@react-types/shared" "^3.2.1"
 
-"@stacks/auth@^1.0.0-beta.19", "@stacks/auth@^1.0.0-beta.20":
+"@stacks/auth@^1.0.0-beta.20":
   version "1.0.0-beta.20"
   resolved "https://registry.yarnpkg.com/@stacks/auth/-/auth-1.0.0-beta.20.tgz#87ad5d5b7c2ef72da833e02003c38a890d256e43"
   integrity sha512-TkK4mkYpvcRSVVmsMqKff7bBIQVvM2LZEjei2EseLJVGbvGM2SamGaj160V+RCxzQOKquL41A1ceJYC4DWCkyQ==
@@ -1596,28 +1577,22 @@
   dependencies:
     cross-fetch "^3.0.5"
 
-"@stacks/connect-ui@^2.17.17-alpha.5b0a745.0":
-  version "2.17.17-alpha.f4fab37.0"
-  resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-2.17.17-alpha.f4fab37.0.tgz#8fc1baf4942d1148a387b52006f1a9ccf4661bc7"
-  integrity sha512-Lj7Soezo+jZxQlRS8/h3my9ye8QAg0FlicEx5lHZjUgCM1i3myPtTGBT1J2DDUEnHBs3DJal2rSw99W+7KpcEA==
+"@stacks/connect-ui@^2.17.17-alpha.d514fd4.0":
+  version "2.17.17-alpha.d514fd4.0"
+  resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-2.17.17-alpha.d514fd4.0.tgz#dda290fdbe70b6e8e737739cce8fb720cccb5856"
+  integrity sha512-y8Ycq74DB+wG6F3GjRqBWIRcOHQhJzD3w57q01ZKfJfRjk7gOwQwkPrmmAhPw0MdrdH62MpkT734zyChv9G+GQ==
   dependencies:
     "@stencil/core" "^1.17.3"
 
-"@stacks/connect-ui@^2.17.8":
-  version "2.17.8"
-  resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-2.17.8.tgz#17a2e04cb6815b861e432525372e6e6a5d5cb24e"
-  integrity sha512-kLXH42aFn08YbY9e16oINIaZMX86ES1uKf/PIrDtxfsW46TUSvkX1cTb+hzIcWV1Jk9YjB15AKErvgpWXIEekA==
+"@stacks/connect@^4.3.16-alpha.d514fd4.0":
+  version "4.3.16-alpha.d514fd4.0"
+  resolved "https://registry.yarnpkg.com/@stacks/connect/-/connect-4.3.16-alpha.d514fd4.0.tgz#c79853dc868433da62dc305951976da7ddae1a65"
+  integrity sha512-HstRLLecqgQGoRZIa8wD8wG+JpK8JT15MzwWSF3QxkPoqICB3edtaJ8iM3GKQZ3my+R5GWZHPOT4ISvKcjrOeQ==
   dependencies:
-    "@stencil/core" "^1.17.3"
-
-"@stacks/connect@^4.3.16-alpha.5b0a745.0":
-  version "4.3.16-alpha.5b0a745.0"
-  resolved "https://registry.yarnpkg.com/@stacks/connect/-/connect-4.3.16-alpha.5b0a745.0.tgz#ca0501d39e4d844fcf4fce5e2f36a2b8a840a0cb"
-  integrity sha512-OTf26K9zDN8RcKBjytCKeKvmRlKbZU+9ff8ayON4CBpihqNEkQiGp0sIG6KunSeMBVHqD7W8HOjLlulyQpSVeA==
-  dependencies:
-    "@blockstack/stacks-transactions" "0.7.0"
-    "@stacks/auth" "^1.0.0-beta.19"
-    "@stacks/connect-ui" "^2.17.17-alpha.5b0a745.0"
+    "@stacks/auth" "^1.0.0-beta.20"
+    "@stacks/connect-ui" "^2.17.17-alpha.d514fd4.0"
+    "@stacks/network" "^1.0.0-beta.20"
+    "@stacks/transactions" "^1.0.0-beta.20"
     jsontokens "^3.0.0"
 
 "@stacks/encryption@^1.0.0-beta.20":
@@ -2044,9 +2019,9 @@
     next "*"
 
 "@types/node@*":
-  version "14.14.14"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.14.tgz#f7fd5f3cc8521301119f63910f0fb965c7d761ae"
-  integrity sha512-UHnOPWVWV1z+VV8k6L1HhG7UbGBgIdghqF3l9Ny9ApPghbjICXkUJSd/b9gOgQfjM1r+37cipdw/HJ3F6ICEnQ==
+  version "14.14.20"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.20.tgz#f7974863edd21d1f8a494a73e8e2b3658615c340"
+  integrity sha512-Y93R97Ouif9JEOWPIUyU+eyIdyRqQR0I8Ez1dzku4hDx34NWh4HbtIc3WNzwB1Y9ULvNGeu5B8h8bVL5cAk4/A==
 
 "@types/node@10.12.18":
   version "10.12.18"
