@@ -35,15 +35,7 @@ const ItemCaption = (props: BoxProps) => (
 
 export const SignedOutView: React.FC<any> = () => {
   const { doOpenAuth } = useConnect();
-  const [installed, setInstallStatus] = useState(false);
 
-  const extInstalled = IS_BROWSER && typeof window.BlockstackProvider !== 'undefined';
-
-  useEffect(() => {
-    if (extInstalled !== installed) {
-      setInstallStatus(extInstalled);
-    }
-  }, [IS_BROWSER, extInstalled, installed]);
   return (
     <>
       <Meta title="Sandbox" />
