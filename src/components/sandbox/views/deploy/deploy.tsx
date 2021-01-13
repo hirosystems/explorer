@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Flex, Stack, useClipboard } from '@stacks/ui';
-import { openContractDeploy } from '@stacks/connect';
 import { WasmComponent } from '@components/clarity-repl';
 import { CodeEditor } from '@components/code-editor';
 import { Button } from '@components/button';
@@ -48,7 +47,7 @@ export const Sample = ({ onItemClick, setFieldValue }: any) => {
 const Toolbar: React.FC<any> = props => {
   const { refreshPendingTransactions } = useUser();
   const [codeBody] = useCodeEditor();
-  const { handleValidate, wasmLoaded } = useClarityRepl();
+
   const { onCopy, hasCopied } = useClipboard(codeBody);
   const [toolsVisible, setToolsState] = useRecoilState(editorToolsState);
 
@@ -76,13 +75,6 @@ const Toolbar: React.FC<any> = props => {
         </Box>
       </Flex>
       <Stack ml="auto" isInline>
-        {wasmLoaded && (
-          <Box>
-            <Tooltip label="Validate contract">
-              <IconButton onClick={() => handleValidate(codeBody)} icon={ScanIcon} />
-            </Tooltip>
-          </Box>
-        )}
         <Box onClick={onCopy}>
           <Tooltip label={hasCopied ? 'Copied!' : 'Copy contract code'}>
             <IconButton icon={CopyIcon} />
@@ -124,21 +116,14 @@ export const DeployView = React.memo(() => {
   };
 
   const onDeploy = React.useCallback(() => {
-    const _result = handleValidate(codeBody);
-    if (!wasmLoaded || (_result && _result?.valid)) {
-      setResult(undefined);
-      void handleContractDeploy({
-        network,
-        postConditionMode: 0x01,
-        codeBody,
-        contractName,
-        finished: onFinished,
-      });
-    } else {
-      if (toolsVisible === 'hidden') {
-        handleToggleToolsState();
-      }
-    }
+    setResult(undefined);
+    void handleContractDeploy({
+      network,
+      postConditionMode: 0x01,
+      codeBody,
+      contractName,
+      finished: onFinished,
+    });
   }, [codeBody, contractName, result, codeBody, handleValidate]);
 
   return (

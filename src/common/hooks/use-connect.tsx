@@ -3,8 +3,13 @@ import { showConnect, AuthOptions } from '@stacks/connect';
 import { useAuthState } from '@common/hooks/use-auth';
 
 export const useConnect = () => {
-  const { userData, authOptions } = useAuthState();
+  const { userData, authOptions, userSession, resetUserData } = useAuthState();
 
   const doOpenAuth = useCallback(() => showConnect(authOptions as AuthOptions), [authOptions]);
-  return { authOptions, userData, doOpenAuth };
+  const doSignOut = useCallback(() => {
+    userSession?.signUserOut();
+    resetUserData();
+  }, [resetUserData, userSession]);
+
+  return { authOptions, userData, doOpenAuth, doSignOut };
 };

@@ -1,21 +1,32 @@
 import { useEffect, useState } from 'react';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
 import type { AuthOptions, FinishedData } from '@stacks/connect';
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
+import { useRouter } from 'next/router';
 
 export const useAuthState = () => {
   const [authOptions, setAuthOptions] = useRecoilState<Partial<AuthOptions>>(authOptionsAtom);
   const [userData, setUserData] = useRecoilState(userDataAtom);
+  const resetUserData = useResetRecoilState(userDataAtom);
 
-  return { userData, setUserData, authOptions, setAuthOptions };
+  return {
+    userData,
+    setUserData,
+    authOptions,
+    setAuthOptions,
+    userSession: authOptions.userSession,
+    resetUserData,
+  };
 };
 
 export const useAuth = () => {
+  const [authResponse, setAuthResponse] = useState<string | undefined>(undefined);
   const { setUserData, setAuthOptions } = useAuthState();
   const [iconPath, setIconPath] = useState<string | undefined>('');
+  const router = useRouter();
 
   // we are using useConstant and debounce because it seems connect fires this fn many times
   // https://github.com/blockstack/ux/issues/444
@@ -26,6 +37,18 @@ export const useAuth = () => {
       setUserData(userData);
     }, 350)
   );
+
+  useEffect(() => {
+    if (router.query.authResponse && !authResponse) {
+      setAuthResponse(router.query.authResponse as string);
+    }
+    if (authResponse && !userSession.isUserSignedIn()) {
+      void userSession.handlePendingSignIn(authResponse).then(userData => {
+        setUserData(userData);
+        setAuthResponse(undefined);
+      });
+    }
+  }, [router.query.authResponse, setAuthResponse, authResponse]);
 
   useEffect(() => {
     const iconPrefix = typeof document !== 'undefined' ? document.location.origin.toString() : '';
