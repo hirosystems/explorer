@@ -60,7 +60,7 @@ export const UserCard = ({ ...rest }: any) => {
       >
         <StxInline strokeWidth={2} color="currentColor" mr="tight" size="18px" />
         <Text fontWeight={600} fontSize="22px" display="block" position="relative" zIndex={2}>
-          {balances ? microToStacks(balances.stx.balance) : 0} STX
+          {balances?.stx?.balance ? microToStacks(balances.stx.balance) : 0} STX
         </Text>
       </Flex>
       <Stack
