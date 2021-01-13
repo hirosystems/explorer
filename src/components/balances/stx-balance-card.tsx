@@ -65,7 +65,7 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
 
   return (
     <Section
-      title="STX Balance"
+      title={qrShowing ? 'Address QR code' : 'STX Balance'}
       topRight={
         <Box position="relative">
           <Tooltip label={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
@@ -101,12 +101,12 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
           {isStacking ? (
             <>
               <Box px="base">
-                <Stack spacing="tight" py="loose">
-                  <Caption>Stacked balance (locked)</Caption>
+                <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
+                <Stack borderTop={border()} spacing="tight" py="loose">
+                  <Caption>Stacked amount (locked)</Caption>
                   <BalanceItem color={color('text-title')} balance={stackedBalance} />
                 </Stack>
               </Box>
-              <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
             </>
           ) : null}
         </>

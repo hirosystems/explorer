@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Box, Flex, color, Stack } from '@stacks/ui';
-import { Caption, Text } from '@components/typography';
-import { border } from '@common/utils';
+import { Box, Flex, color, Stack, StxInline, Circle } from '@stacks/ui';
+import { Caption, Text, Link, Title } from '@components/typography';
 import { useStacksInfo } from '@common/hooks/use-stacks-info';
 import { Pending } from '@components/status';
 import { PercentageCircle } from '@components/percentage-circle';
+import { TxLink } from '@components/links';
 
 export const StackingPercentage = ({ balances, stackingBlock }: any) => {
   const { data } = useStacksInfo();
@@ -12,8 +12,8 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
   if (stackingBlock) {
     if (!data) {
       return (
-        <Box px="base">
-          <Stack spacing="tight" borderTop={border()} py="loose">
+        <Box px="base-loose">
+          <Stack spacing="tight" py="loose">
             <Caption>Stacking progress</Caption>
             <Flex alignItems="center">
               <Pending size="14px" mr="tight" />
@@ -24,39 +24,58 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
       );
     }
 
-    const currentBlock = data?.burn_block_height || 0;
-    const lockBlock = balances?.stx?.burnchain_lock_height || 0;
-    const unlockBlock = balances?.stx?.burnchain_unlock_height || 0;
+    const currentBlock = data?.burn_block_height;
+    const lockBlock = balances?.stx?.burnchain_lock_height;
+    const unlockBlock = balances?.stx?.burnchain_unlock_height;
 
-    const cycleLengthInBlocks = unlockBlock - lockBlock;
-    const blocksLeftUntilCycleEnds = unlockBlock - currentBlock;
+    const totalBlocksInStackingPeriod = unlockBlock - lockBlock;
+    const blocksUntilUnlocked = unlockBlock - currentBlock;
+    const blocksCompleted = totalBlocksInStackingPeriod - blocksUntilUnlocked;
+    const stackingPercentage = (blocksCompleted / totalBlocksInStackingPeriod) * 100;
 
-    const amount = Math.floor(
-      ((cycleLengthInBlocks - blocksLeftUntilCycleEnds) / cycleLengthInBlocks) * 100
-    );
-
-    const stackingPercent = amount < 0 ? 0 : amount;
+    const isStacking = unlockBlock > currentBlock;
 
     return (
-      <Box px="base">
-        <Stack spacing="tight" borderTop={border()} py="loose">
-          <Caption>Stacking progress</Caption>
-          {stackingPercent <= 100 ? (
+      <Box px="base-loose">
+        <Stack spacing="tight" py="loose">
+          {isStacking ? (
+            <Box mx="auto" size="64px">
+              <PercentageCircle strokeWidth={3} percentage={stackingPercentage} />
+            </Box>
+          ) : (
+            <Circle mx="auto" size="48px" mb="base" bg={color('invert')}>
+              <StxInline color={color('bg')} size="24px" />
+            </Circle>
+          )}
+          <Caption mx="auto">Stacking progress</Caption>
+          {isStacking ? (
             <Box mt="extra-tight">
-              <Flex mb="base-tight" alignItems="center">
-                <Box mr="tight" size="20px">
-                  <PercentageCircle percentage={stackingPercent} />
-                </Box>
-                <Text color={color('text-title')}>
-                  {stackingPercent.toLocaleString()}% completed
-                </Text>
+              <Flex position="relative" mb="base-tight" justifyContent="center" alignItems="center">
+                <Title fontSize={2} fontWeight={500} color={color('text-title')}>
+                  {stackingPercentage.toLocaleString(undefined, { maximumFractionDigits: 2 })}%
+                  completed
+                </Title>
               </Flex>
-              <Box>
-                <Text color={color('text-title')}>{blocksLeftUntilCycleEnds} blocks left</Text>
+              <Box textAlign="center">
+                <Caption mb="base-tight">Stacking for ~{blocksUntilUnlocked} more blocks</Caption>
+                <TxLink txid={balances?.stx?.lock_tx_id}>
+                  <Link target="_blank" color={color('brand')} fontSize={0}>
+                    View Stacking transaction
+                  </Link>
+                </TxLink>
               </Box>
             </Box>
           ) : (
-            <Text color={color('text-title')}>Completed at #{unlockBlock}</Text>
+            <Box textAlign="center">
+              <Title mb="base-tight" fontSize={2} fontWeight={500} color={color('text-title')}>
+                Completed at #{unlockBlock}
+              </Title>
+              <TxLink txid={balances?.stx?.lock_tx_id}>
+                <Link target="_blank" color={color('brand')} fontSize={0}>
+                  View Stacking transaction
+                </Link>
+              </TxLink>
+            </Box>
           )}
         </Stack>
       </Box>

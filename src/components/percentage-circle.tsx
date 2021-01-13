@@ -1,20 +1,24 @@
 import * as React from 'react';
-import { Box, BoxProps } from '@stacks/ui';
-import { blue } from '@components/button';
+import { Box, BoxProps, color } from '@stacks/ui';
 
-export const PercentageCircle: React.FC<BoxProps & { percentage: number }> = ({ percentage }) => {
+export const PercentageCircle: React.FC<BoxProps & { percentage: number }> = ({
+  percentage,
+  strokeWidth = 5,
+}) => {
   return (
-    <Box strokeWidth={5} strokeLinecap="round" as="svg" viewBox="0 0 36 36">
-      <path
+    <Box strokeWidth={strokeWidth} strokeLinecap="round" as="svg" viewBox="0 0 36 36">
+      <Box
+        as="path"
         fill="none"
-        stroke={blue(0.1)}
+        stroke={color('border')}
         d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831"
       />
-      <path
+      <Box
+        as="path"
         fill="none"
-        stroke="blue"
+        stroke={color('brand')}
         strokeDasharray={`${percentage}, 100`}
         d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
