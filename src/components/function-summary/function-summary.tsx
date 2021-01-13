@@ -15,9 +15,7 @@ export const FunctionSummarySection = ({
   summary: any;
   abi: any;
 }) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const abiData = abi.functions.find(func => func.name === summary.function_name);
+  const abiData = abi.functions.find((func: any) => func.name === summary.function_name);
   return (
     <Section title="Function called" {...rest}>
       <>

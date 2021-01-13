@@ -9,38 +9,34 @@ import { Tooltip } from '@components/tooltip';
 import { IconButton } from '@components/icon-button';
 import { CopyIcon } from '@components/icons/copy';
 import { useHover } from 'use-events';
+import { IconLogout } from '@tabler/icons';
+import { useConnect } from '@common/hooks/use-connect';
 
 const Address: React.FC<FlexProps & { isHovered?: boolean }> = ({ isHovered, ...props }) => {
-  const { balances, username, principal } = useUser();
+  const { principal } = useUser();
   const { onCopy, hasCopied } = useClipboard(principal as string);
+  const { doSignOut } = useConnect();
   return (
     <Flex height="36px" position="relative" alignItems="center" {...props}>
-      <Text
-        willChange="transform"
-        transform={isHovered ? 'translateX(-36px)' : 'none'}
-        transition={transition}
-        mr="tight"
-        color="white"
-        display={['none', 'none', 'block']}
-      >
-        {username ? truncateMiddle(principal as string) : principal}
+      <Text mr="tight" color="white" display={['none', 'none', 'block']}>
+        {truncateMiddle(principal as string, 10)}
       </Text>
       <Text mr="tight" color="white" display={['block', 'block', 'none']}>
         {truncateMiddle(principal as string)}
       </Text>
 
-      <Box
-        display={['none', 'none', 'block']}
-        position="absolute"
-        opacity={isHovered ? 1 : 0}
-        right={0}
-      >
+      <Flex>
         <Box _hover={{ cursor: 'pointer' }} onClick={onCopy} position="relative">
-          <Tooltip label={hasCopied ? 'Copied!' : 'Copy address'}>
+          <Tooltip placement="bottom" label={hasCopied ? 'Copied!' : 'Copy address'}>
             <IconButton icon={CopyIcon} />
           </Tooltip>
         </Box>
-      </Box>
+        <Box _hover={{ cursor: 'pointer' }} onClick={doSignOut} position="relative">
+          <Tooltip placement="bottom" label="Sign out">
+            <IconButton icon={IconLogout} />
+          </Tooltip>
+        </Box>
+      </Flex>
     </Flex>
   );
 };

@@ -20,17 +20,12 @@ export const FunctionSummaryArguments: React.FC<{ summary: any; abi: any }> = ({
           borderBottom={key === summary.function_args.length - 1 ? 'none' : '1px solid'}
           key={key}
         >
-          <Grid
-            justifyContent="flex-start"
-            width="100%"
-            gridTemplateColumns="150px 1fr"
-            alignItems="center"
-          >
-            <Flex alignItems="center">
+          <Box width="100%" alignItems="center">
+            <Flex mb="base" alignItems="center">
               <Pre>{abi.args[key].name}</Pre>
             </Flex>
             <FunctionSummaryClarityValue arg={arg} />
-          </Grid>
+          </Box>
         </Row>
       ))}
     </Box>
