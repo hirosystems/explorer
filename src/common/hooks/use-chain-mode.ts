@@ -12,8 +12,17 @@ type SetChainMode = (mode: ChainMode) => Promise<void>;
 export const useChainMode = (): [ChainMode, SetChainMode] => {
   const router = useRouter();
 
+  const queries = Object.keys(router.query);
+
+  const queryParams = queries
+    .map(key => (key !== 'chain' ? `${key}=${router.query[key]}` : null))
+    .filter(q => q)
+    .join('&');
+
   const setChainMode = useCallback(async (mode: ChainMode) => {
-    const path = mode ? `${document.location.pathname}?chain=${mode}` : document.location.pathname;
+    const path = mode
+      ? `${document.location.pathname}?chain=${mode}${queryParams ? `&${queryParams}` : ''}`
+      : document.location.pathname;
     await router.replace(path, path, { shallow: true });
   }, []);
 
