@@ -55,10 +55,12 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
 });
 
 export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
-  const totalBalance = microToStacks(balances?.stx?.balance);
-  const availableBalance = microToStacks(balances?.stx?.balance - balances?.stx?.locked);
-  const stackedBalance = microToStacks(balances?.stx?.locked);
-  const isStacking = balances?.stx?.locked > 0;
+  const balance = typeof balances?.stx?.balance === 'number' ? balances?.stx?.balance : 0;
+  const locked = typeof balances?.stx?.locked === 'number' ? balances?.stx?.locked : 0;
+  const totalBalance = microToStacks(balance);
+  const availableBalance = microToStacks(balance - locked);
+  const stackedBalance = microToStacks(locked);
+  const isStacking = locked > 0;
 
   const [qrShowing, setQrShowing] = React.useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
