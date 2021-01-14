@@ -38,6 +38,7 @@ import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IconAlertCircle } from '@tabler/icons';
 import { AddressLink } from '@components/links';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
+import { microStxToStx } from '@stacks/ui-utils';
 
 const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
   const network = useNetworkMode();
@@ -173,7 +174,15 @@ const AddressPage: NextPage<AddressPageData> = props => {
 
   return (
     <>
-      <Meta title={`STX Address ${truncateMiddle(principal)}`} />
+      <Meta
+        title={`STX Address ${truncateMiddle(principal)}`}
+        labels={[
+          {
+            label: 'STX Balance',
+            data: `${balances?.stx?.balance ? microStxToStx(balances.stx.balance) : 0} STX`,
+          },
+        ]}
+      />
       <Flex
         mb="extra-loose"
         alignItems={['unset', 'unset', 'flex-end']}

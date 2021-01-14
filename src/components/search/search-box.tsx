@@ -20,6 +20,7 @@ const ClearButton: React.FC<Omit<IconButtonProps, 'icon'>> = props => (
     _focus={{
       borderColor: color('brand'),
     }}
+    display="flex"
     icon={IconX}
     {...props}
   />
