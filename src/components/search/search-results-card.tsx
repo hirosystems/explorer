@@ -8,7 +8,13 @@ import { SearchErrorMessage } from '@components/search/error-message';
 import { SearchCardItem } from '@components/search/search-result-item';
 import { useItem } from '@common/hooks/search/use-item';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { searchErrorSelector, searchRecentlyViewedItemsState } from '@store/search';
+import {
+  searchErrorSelector,
+  searchRecentlyViewedItemsState,
+  searchForAddressOfDifferentType,
+} from '@store/search';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { InvertedAddressNote } from '@components/search/inverted-address';
 
 interface SearchResultsCardProps extends BoxProps {
   isLoading?: boolean;
@@ -158,7 +164,10 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
             }
           />
         ) : data && data.found && item ? (
-          <SearchCardItem isLast onClick={handleItemOnClick} />
+          <>
+            <InvertedAddressNote />
+            <SearchCardItem isLast onClick={handleItemOnClick} />
+          </>
         ) : (
           <RecentlyViewedList itemOnClick={handleItemOnClick} />
         )}
