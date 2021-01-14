@@ -92,11 +92,8 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ block, error, hash, tr
       <Section overflow="hidden" px="base-loose" mt="extra-loose">
         <TxList items={[coinbaseTx]} />
       </Section>
-      {transactions?.length ? (
-        <TransactionList
-          mt="extra-loose"
-          transactions={transactionsWithoutCoinbase as Transaction[]}
-        />
+      {transactionsWithoutCoinbase?.length ? (
+        <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
       ) : null}
     </>
   );

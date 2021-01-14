@@ -71,7 +71,7 @@ const CodeBlock = ({
         })(theme)
       }
     >
-      <CodeBlockBase border="0" borderRadius="0" Prism={Prism as any} {...rest} />
+      <CodeBlockBase border="0" borderRadius="0" bg="#040404" Prism={Prism as any} {...rest} />
     </Box>
   );
 };

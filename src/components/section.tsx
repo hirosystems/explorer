@@ -37,7 +37,7 @@ export const Section: React.FC<{ topRight?: any } & SectionProps> = React.memo(
     return (
       <Card bg={color('bg')} boxShadow="low" {...rest}>
         {title || topRight ? <SectionHeader title={title}>{topRight}</SectionHeader> : null}
-        <Flex overflowY={overflowY} flexDirection="column">
+        <Flex overflowY={overflowY} flexDirection="column" flexGrow={1}>
           {children}
         </Flex>
       </Card>

@@ -1,7 +1,7 @@
 import React from 'react';
 import NextLink from 'next/link';
 
-import { Grid, Flex, FlexProps, Box, Stack, color } from '@stacks/ui';
+import { Grid, Flex, FlexProps, Box, Stack, color, Spinner } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 
 import { Block } from '@blockstack/stacks-blockchain-api-types';
@@ -101,7 +101,7 @@ export const BlocksList: React.FC<
 > = React.memo(({ blocks, loadMore, isLoadingMore, ...props }) => {
   return (
     <Section title="Recent Blocks" {...props}>
-      <Box px="loose">
+      <Flex flexDirection="column" flexGrow={1} px="loose">
         {blocks?.length ? (
           <>
             {blocks.length
@@ -113,16 +113,17 @@ export const BlocksList: React.FC<
                   );
                 })
               : null}
+            <ViewAllButton isLoadingMore={isLoadingMore} onClick={loadMore} />
           </>
         ) : (
-          <Grid px="base" py="64px" placeItems="center">
-            <Caption>
-              The network was recently reset. Blocks should start streaming in soon.
+          <Grid alignContent="center" flexGrow={1} px="base" py="64px" placeItems="center">
+            <Spinner size="lg" color={color('text-caption')} />
+            <Caption mt="extra-loose" maxWidth="38ch">
+              Blocks should start streaming in soon.
             </Caption>
           </Grid>
         )}
-        <ViewAllButton isLoadingMore={isLoadingMore} onClick={loadMore} />
-      </Box>
+      </Flex>
     </Section>
   );
 });
