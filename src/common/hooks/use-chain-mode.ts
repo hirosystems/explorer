@@ -12,6 +12,10 @@ type SetChainMode = (mode: ChainMode) => Promise<void>;
 export const useChainMode = (): [ChainMode, SetChainMode] => {
   const router = useRouter();
 
+  const authResponse = router.query?.authResponse
+    ? { authResponse: router.query?.authResponse }
+    : {};
+
   const setChainMode = useCallback(
     async (chain: ChainMode) => {
       await router.replace(
@@ -19,14 +23,15 @@ export const useChainMode = (): [ChainMode, SetChainMode] => {
           pathname: router.pathname,
           query: {
             ...router.query,
+            ...authResponse,
             chain,
           },
         },
         {
-          pathname: router.pathname,
+          pathname: router.asPath,
           query: {
-            ...router.query,
             chain,
+            ...authResponse,
           },
         },
         { shallow: true }
