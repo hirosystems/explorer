@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { fetchFromApi } from '@common/api/fetch';
 
-import { MAINNET_ENABLED, TESTNET_CHAIN_ID } from '@common/constants';
+import { TESTNET_CHAIN_ID } from '@common/constants';
 import { Badge } from '@components/badge';
 import { NetworkModes } from '@common/types/network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
@@ -153,7 +153,6 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
         if (!isLocal() && item?.url?.includes('localhost')) return null;
         return (
           <Item
-            isDisabled={key === 0 && !MAINNET_ENABLED ? 'Coming soon' : false}
             isActive={isActive}
             item={item}
             key={key}
