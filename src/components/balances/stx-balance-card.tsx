@@ -55,11 +55,18 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
 });
 
 export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
-  const balance = typeof balances?.stx?.balance === 'number' ? balances?.stx?.balance : 0;
-  const locked = typeof balances?.stx?.locked === 'number' ? balances?.stx?.locked : 0;
+  const balance =
+    typeof parseInt(balances?.stx?.balance) === 'number' ? parseInt(balances?.stx?.balance) : 0;
+  const minerRewards =
+    typeof parseInt(balances?.stx?.total_miner_rewards_received) === 'number'
+      ? parseInt(balances?.stx?.total_miner_rewards_received)
+      : 0;
+  const locked =
+    typeof parseInt(balances?.stx?.locked) === 'number' ? parseInt(balances?.stx?.locked) : 0;
   const totalBalance = microToStacks(balance);
   const availableBalance = microToStacks(balance - locked);
   const stackedBalance = microToStacks(locked);
+  const minerRewardsBalance = microToStacks(minerRewards);
   const isStacking = locked > 0;
 
   const [qrShowing, setQrShowing] = React.useState(false);
@@ -95,11 +102,25 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
             </Flex>
           </Box>
           <Box px="base">
-            <Stack borderBottom={stackedBalance ? border() : 'unset'} spacing="tight" py="loose">
+            <Stack
+              borderBottom={isStacking || minerRewards > 0 ? border() : 'unset'}
+              spacing="tight"
+              py="loose"
+            >
               <Caption>Available balance</Caption>
               <BalanceItem color={color('text-title')} balance={availableBalance} />
             </Stack>
           </Box>
+          {minerRewards > 0 ? (
+            <>
+              <Box px="base">
+                <Stack spacing="tight" py="loose">
+                  <Caption>Miner rewards</Caption>
+                  <BalanceItem color={color('text-title')} balance={minerRewardsBalance} />
+                </Stack>
+              </Box>
+            </>
+          ) : null}
           {isStacking ? (
             <>
               <Box px="base">
