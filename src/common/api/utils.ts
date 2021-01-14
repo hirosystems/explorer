@@ -24,7 +24,6 @@ import { fetchFromApi } from '@common/api/fetch';
  */
 export const getServerSideApiServer = async (ctx: NextPageContext) => {
   const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
-  const backupApiServer = DEFAULT_NETWORK_LIST[1].url;
   // set it to our default network
   let apiServer = defaultApiServer;
   let changed = false;
@@ -72,26 +71,10 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
         // if it fails, reset to default
         apiServer = defaultApiServer;
       }
-    } else {
-      // if not changed, try it
-      try {
-        if (apiServer) {
-          const res = await fetchFromApi(apiServer)('/v2/info');
-          const data = await res.json();
-        }
-      } catch (e) {
-        // if it fails, change it to backup
-        // todo: eventually set a second cookie to show a toast for this behavior
-        apiServer = backupApiServer;
-        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
-        });
-      }
     }
-    return apiServer as string;
+    return apiServer;
   } catch (e) {
-    return apiServer as string;
+    return apiServer;
   }
 };
 

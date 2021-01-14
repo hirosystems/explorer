@@ -59,10 +59,6 @@ export const useChainModeEffect = () => {
       if (!chainMode || (!isTestnet && !isMainnet)) {
         void setChainMode(networkMode);
       }
-      // if mainnet is disabled, but some how someone is at chain=mainnet, reset it to testnet
-      if (isMainnet && !MAINNET_ENABLED) {
-        void setChainMode(NetworkModes.Testnet);
-      }
     }
   }, [chainMode, networkMode, IS_BROWSER]);
 
