@@ -22,11 +22,6 @@ export const ContractSource: React.FC<
       | ContractCallTransaction['contract_call'];
   } & BoxProps
 > = ({ sourceTx, source, contractCall, ...rest }) => {
-  const [expanded, setExpanded] = React.useState(false);
-  const handleToggleExpanded = React.useCallback(() => {
-    setExpanded(s => !s);
-  }, [setExpanded]);
-
   const sourceLines =
     source?.split(`
 `) || [];
@@ -43,9 +38,19 @@ export const ContractSource: React.FC<
 
   const functionLine = start ? sourceLines.findIndex(line => line.includes(start)) + 1 : undefined;
 
+  const [expanded, setExpanded] = React.useState(sourceLinesLength <= 10);
+  const handleToggleExpanded = React.useCallback(() => {
+    setExpanded(s => !s);
+  }, [setExpanded]);
+
   return source ? (
     <Box {...rest}>
-      <Box border="1px solid var(--colors-border)" borderRadius="12px" overflow="hidden" bg="ink">
+      <Box
+        border="1px solid var(--colors-border)"
+        borderRadius="12px"
+        overflow="hidden"
+        bg="#040404"
+      >
         <Flex
           justifyContent="space-between"
           borderBottom={border()}
