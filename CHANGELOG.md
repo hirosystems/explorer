@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/blockstack/explorer/compare/v1.4.4...v1.4.5) (2021-01-14)
+
+
+### Bug Fixes
+
+* mainnet vars ([ba989ac](https://github.com/blockstack/explorer/commit/ba989acbe592c8ada3146b689445e03b414b07fb))
+
 ## [1.4.4](https://github.com/blockstack/explorer/compare/v1.4.3...v1.4.4) (2021-01-14)
 
 
