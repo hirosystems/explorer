@@ -6,8 +6,11 @@ export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 export const IS_DEV = process.env.NODE_ENV !== 'production';
 export const IS_BROWSER = typeof document !== 'undefined';
 
-export const LEGACY_EXPLORER_API =
+export const DEPLOYMENT_URL =
   process.env.NEXT_PUBLIC_DEPLOYMENT_URL || `https://${process.env.VERCEL_URL}`;
+
+export const LEGACY_EXPLORER_API_SERVER =
+  process.env.NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER || 'https://explorer-api.blockstack.xyz';
 
 export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || 'https://pr-725.app.stacks.engineering';
