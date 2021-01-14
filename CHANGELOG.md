@@ -1,3 +1,12 @@
+## [1.4.2](https://github.com/blockstack/explorer/compare/v1.4.1...v1.4.2) (2021-01-14)
+
+
+### Bug Fixes
+
+* balances ([7dbda63](https://github.com/blockstack/explorer/commit/7dbda63269782a8605c1fd1cf5c180b77e0b58b6))
+* contract view, colors, empty states ([bb07684](https://github.com/blockstack/explorer/commit/bb076844eb76e3a923140285ca4f5f7fb1d484ce))
+* legacy explorer api env var ([134b877](https://github.com/blockstack/explorer/commit/134b8776060842b1d4c2561b2d4d83a13b9e1cdf))
+
 ## [1.4.1](https://github.com/blockstack/explorer/compare/v1.4.0...v1.4.1) (2021-01-14)
 
 
