@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/blockstack/explorer/compare/v1.4.3...v1.4.4) (2021-01-14)
+
+
+### Bug Fixes
+
+* remove isDisabled completely ([d322016](https://github.com/blockstack/explorer/commit/d322016769f4002096b0725522df1e7774ed165a))
+
 ## [1.4.3](https://github.com/blockstack/explorer/compare/v1.4.2...v1.4.3) (2021-01-14)
 
 
