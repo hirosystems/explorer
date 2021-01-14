@@ -1,6 +1,8 @@
 import { atom, atomFamily, selector } from 'recoil';
 import { SearchResult } from '@common/types/search';
 import { localStorageEffect } from '@store/utils';
+import { convertAddress, getAddressDetails } from '@common/utils/addresses';
+import { networkModeState } from '@pages/_app';
 
 export const searchQueryAtom = atom<string | null>({
   key: 'search.query.base',
@@ -127,5 +129,25 @@ export const searchDropdownVisibilitySelector = selector({
       return hasRecentItems;
     }
     return false;
+  },
+});
+
+export const searchForAddressOfDifferentType = selector({
+  key: 'search.address.network',
+  get: ({ get }) => {
+    const results = get(searchResultsState);
+    const networkMode = get(networkModeState);
+    if (
+      results &&
+      results.found &&
+      results?.result.entity_type === 'standard_address' &&
+      results?.result?.entity_id
+    ) {
+      const details = getAddressDetails(results?.result?.entity_id);
+      if (networkMode && networkMode !== details.network) {
+        return convertAddress(results?.result?.entity_id, networkMode);
+      }
+      return false;
+    }
   },
 });

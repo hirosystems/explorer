@@ -4,6 +4,7 @@ import { fetchFromSidecar } from '@common/api/fetch';
 import { fetchAllAccountData } from '@common/api/accounts';
 import { fetchBlock } from '@common/api/blocks';
 import { fetchTransaction } from '@common/api/transactions';
+import { getAddressDetails } from '@common/utils/addresses';
 
 export function makeKey(query: string | null, prefix: string): string | null {
   return query !== null ? `${prefix}__${query}` : null;
@@ -15,7 +16,18 @@ export function extractQueryFromKey(query: string | null, prefix: string): strin
 
 export const fetchSearchResults = (apiServer: string) => async (query: string) => {
   const res = await fetchFromSidecar(apiServer)(`/search/${query}`);
-  return res.json() as Promise<SearchResult>;
+  const data = await res.json();
+  // this is a workaround for the API not returning data for valid stx addresses
+  if (data && data?.found === false && data?.result?.entity_type === 'standard_address') {
+    return {
+      found: true,
+      result: {
+        entity_id: query,
+        entity_type: 'standard_address',
+      },
+    };
+  }
+  return data;
 };
 
 export const getFetcher = async (
