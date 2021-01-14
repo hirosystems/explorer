@@ -1,5 +1,3 @@
-// @ts-nocheck
-// todo: remove
 import React, { useState, useEffect, useCallback } from 'react';
 import { useEventListener } from '@stacks/ui';
 import { useControlledHover } from '@common/hooks/use-controlled-hover';
@@ -83,7 +81,7 @@ export const usePopover = ({
   // if we are on the last child, and other child hasn't canceled the timout, we will remove childFocus
   const handleChildBlur = useCallback(
     (isLast: boolean, key: number) => () => {
-      timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = window.setTimeout(() => {
         if (isLast && currentFocus === key) {
           setChildFocus(false);
           setCurrentFocus(undefined);
@@ -165,10 +163,10 @@ export const usePopover = ({
         (!isInFocus && !showOnClickOrFocus && !isHovered) ||
         (!showOnClickOrFocus && !isHovered)
       ) {
-        removeFocusRef.current = setTimeout(hideImmediately, 100);
+        removeFocusRef.current = window.setTimeout(hideImmediately, 100);
       } else if (!childIsInFocus) {
         if (!isInFocus && !isHovered) {
-          removeFocusRef.current = setTimeout(hideImmediately, 100);
+          removeFocusRef.current = window.setTimeout(hideImmediately, 100);
         }
       } else {
         if (removeFocusRef.current) {
