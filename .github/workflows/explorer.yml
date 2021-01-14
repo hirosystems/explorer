@@ -67,7 +67,7 @@ jobs:
           branches: |
             [
               '+([0-9])?(.{+([0-9]),x}).x',
-              'master',
+              'main',
             ]
           extra_plugins: |
             @semantic-release/changelog
@@ -88,7 +88,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: ${{ github.ref != 'refs/heads/master' || steps.semantic.outputs.new_release_version != '' }}
+          push: ${{ github.ref != 'refs/heads/main' || steps.semantic.outputs.new_release_version != '' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
 
