@@ -6,6 +6,13 @@ export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 export const IS_DEV = process.env.NODE_ENV !== 'production';
 export const IS_BROWSER = typeof document !== 'undefined';
 
+export const STACKS_EXPLORER_APP_ICON =
+  'https://blockstack-www.imgix.net/stacks-explorer-icon.png?auto=format&w=72';
+
+export const APP_DETAILS = {
+  name: 'Stacks Explorer',
+  icon: STACKS_EXPLORER_APP_ICON,
+};
 export const DEPLOYMENT_URL =
   process.env.NEXT_PUBLIC_DEPLOYMENT_URL || `https://${process.env.VERCEL_URL}`;
 
