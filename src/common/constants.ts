@@ -25,7 +25,8 @@ export const CONNECT_AUTH_ORIGIN =
 export const DEFAULT_TESTNET_SERVER =
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER || 'https://stacks-node-api.xenon.blockstack.org';
 
-export const DEFAULT_MAINNET_SERVER = process.env.NEXT_PUBLIC_MAINNET_API_SERVER;
+export const DEFAULT_MAINNET_SERVER =
+  process.env.NEXT_PUBLIC_MAINNET_API_SERVER || 'https://stacks-node-api.stacks.co';
 
 export const MAINNET_ENABLED =
   process.env.NEXT_PUBLIC_MAINNET_ENABLED &&
@@ -35,9 +36,7 @@ export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
 export const DEFAULT_TESTNET_INDEX = 1;
 export const DEFAULT_MAINNET_INDEX = 0;
-export const DEFAULT_NETWORK_INDEX = MAINNET_ENABLED
-  ? DEFAULT_MAINNET_INDEX
-  : DEFAULT_TESTNET_INDEX;
+export const DEFAULT_NETWORK_INDEX = DEFAULT_MAINNET_INDEX;
 
 export const DEFAULT_NETWORK_LIST = [
   {
