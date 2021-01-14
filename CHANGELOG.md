@@ -1,3 +1,11 @@
+## [1.4.3](https://github.com/blockstack/explorer/compare/v1.4.2...v1.4.3) (2021-01-14)
+
+
+### Bug Fixes
+
+* mainnet ([b1024de](https://github.com/blockstack/explorer/commit/b1024defcf9e450018c94ed15f6303fb9d302f17))
+* update icon, authOptions ([fd965c6](https://github.com/blockstack/explorer/commit/fd965c6594211d1d109d8a018dc3fd298d1f2402))
+
 ## [1.4.2](https://github.com/blockstack/explorer/compare/v1.4.1...v1.4.2) (2021-01-14)
 
 
