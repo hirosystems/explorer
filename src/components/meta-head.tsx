@@ -53,7 +53,7 @@ export const Meta = ({
     <Head>
       <title>{withMode(title === defaultTitle ? title : `${title} - ${defaultTitle}`)}</title>
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Stacks 2.0 explorer" />
+      <meta property="og:site_name" content="explorer.stacks.co" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@stacks" />
       <meta name="twitter:creator" content="@stacks" />
@@ -66,6 +66,7 @@ export const Meta = ({
         content={`https://blockstack-www.imgix.net/stacks-explorer-og.png?auto=format,compress`}
       />
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@stacks" />
       <meta property="og:title" content={ogTitle || title} />
       {url ? <meta property="og:url" content={url} /> : null}
       <meta property="og:description" content={description} />
