@@ -1,3 +1,23 @@
+## [1.4.1](https://github.com/blockstack/explorer/compare/v1.4.0...v1.4.1) (2021-01-14)
+
+
+### Bug Fixes
+
+* asPath -> pathname ([be6c897](https://github.com/blockstack/explorer/commit/be6c897c9202a9eb2ac0816a6066d95d5ae5c07f))
+* better coinbase tx caption, display on block, other misc fixes ([f920848](https://github.com/blockstack/explorer/commit/f920848b1761655fa0e70cb95b6d8b1827688736))
+* better conditional for balance ([e519ee2](https://github.com/blockstack/explorer/commit/e519ee2964c991b4f18b19f7a22e7154c084fa75))
+* cookie names ([7d90b36](https://github.com/blockstack/explorer/commit/7d90b36000277c3191a87406480070397360d705))
+* https for imgix (again) ([d8738c7](https://github.com/blockstack/explorer/commit/d8738c7fce09357bd62bf820c66a535b3dc188e7))
+* meta data, favicon, queries ([730b07c](https://github.com/blockstack/explorer/commit/730b07cf894b37c73c311936c6713f2ed1f8ab8e))
+* meta head fix, address link fix ([f8bd451](https://github.com/blockstack/explorer/commit/f8bd4515c516810b2f594d69afd3efa0660f5445))
+* number balance ([4f071b6](https://github.com/blockstack/explorer/commit/4f071b668c666cbf32a7549fe1c60de3729b9d7f))
+* query params ([f478c77](https://github.com/blockstack/explorer/commit/f478c7739b995770eb53ddd023791380b73b9317))
+* remove query param after auth ([71ec620](https://github.com/blockstack/explorer/commit/71ec6206bbbc473064a889dcc608c73a9b5d6238))
+* sandbox and other misc design improvements ([3fd9e31](https://github.com/blockstack/explorer/commit/3fd9e31bca0d19f1dbaffd1718fd2505995ba3e0))
+* search result improvements ([1dfb2e3](https://github.com/blockstack/explorer/commit/1dfb2e3ed8a22866e72460efb47b885577845765))
+* stacking fixes ([859a0c5](https://github.com/blockstack/explorer/commit/859a0c56d481d119683ef52b37072e8c7f146576))
+* update connect ([6df2669](https://github.com/blockstack/explorer/commit/6df26693bb947a5506fce895b7a1d7bc0a9547c3))
+
 # [1.4.0](https://github.com/blockstack/explorer/compare/v1.3.1...v1.4.0) (2021-01-12)
 
 
