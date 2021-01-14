@@ -4,7 +4,7 @@ import debounce from 'awesome-debounce-promise';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
 import type { AuthOptions, FinishedData } from '@stacks/connect';
-import { CONNECT_AUTH_ORIGIN, IS_BROWSER } from '@common/constants';
+import { APP_DETAILS, IS_BROWSER } from '@common/constants';
 import { useRouter } from 'next/router';
 
 export const useAuthState = () => {
@@ -99,13 +99,9 @@ export const useAuth = () => {
       setAuthOptions({
         onFinish,
         manifestPath: '/manifest.json',
-        authOrigin: CONNECT_AUTH_ORIGIN,
         redirectTo: '/sandbox',
         userSession: userSession as any,
-        appDetails: {
-          name: 'Stacks Explorer',
-          icon: `${iconPath}/app-icon.png`,
-        },
+        appDetails: APP_DETAILS,
       });
     }
   }, []);
