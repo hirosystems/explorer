@@ -28,7 +28,7 @@ export const useChainMode = (): [ChainMode, SetChainMode] => {
           },
         },
         {
-          pathname: router.asPath,
+          pathname: router.pathname,
           query: {
             chain,
             ...authResponse,
