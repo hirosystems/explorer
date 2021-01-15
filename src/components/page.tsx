@@ -66,6 +66,12 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
     zIndex={2}
     flexGrow={1}
   >
+    <Box px="base-loose">
+      <Notice
+        label="Notice"
+        message="We are investigating an issue where our API does not return blockchain information after block #119."
+      />
+    </Box>
     {notice ? <Notice label={notice.label} message={notice.message} /> : null}
     <Flex
       as="main"
