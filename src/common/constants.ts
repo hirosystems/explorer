@@ -1,6 +1,10 @@
 import { ChainID } from '@stacks/transactions';
 
-export const DEFAULT_POLLING_INTERVAL = 10000; // 10 seconds :c
+const getNumber = (query?: string): number | undefined =>
+  query && typeof parseInt(query) === 'number' ? parseInt(query) : undefined;
+
+export const DEFAULT_POLLING_INTERVAL =
+  getNumber(process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL) || 10000; // 10 seconds :c
 
 export const TESTNET_CHAIN_ID = ChainID.Testnet;
 export const MAINNET_CHAIN_ID = ChainID.Mainnet;
