@@ -1,13 +1,11 @@
 import useSWR from 'swr';
-import { useApiServer } from '@common/hooks/use-api';
 import { fetchFromApi } from '@common/api/fetch';
-import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
+import { DEFAULT_V2_INFO_ENDPOINT, DEPLOYMENT_URL } from '@common/constants';
 
 export const useStacksInfo = (options?: { initialData?: any; suspense?: boolean }) => {
-  const apiServer = useApiServer();
   return useSWR(
     'useStacksInfo',
-    () => fetchFromApi(apiServer)(DEFAULT_V2_INFO_ENDPOINT).then(res => res.json()),
+    () => fetchFromApi(`${DEPLOYMENT_URL}/api`)(DEFAULT_V2_INFO_ENDPOINT).then(res => res.json()),
     {
       initialData: options?.initialData || null,
     }
