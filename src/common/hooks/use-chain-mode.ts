@@ -2,7 +2,7 @@ import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useModal } from '@common/hooks/use-modal';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
-import { IS_BROWSER, MAINNET_ENABLED } from '@common/constants';
+import { IS_BROWSER } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 
 type ChainMode = NetworkMode | undefined;
@@ -63,14 +63,14 @@ export const useChainModeEffect = () => {
   }, [chainMode, networkMode, IS_BROWSER]);
 
   useEffect(() => {
-    if (IS_BROWSER && MAINNET_ENABLED) {
+    if (IS_BROWSER) {
       if (chainMode && chainMode !== networkMode) {
         // alert if url is different than what is returned by api server
         // in the future we can have the modal display all servers added that match a given chain id
         handleOpenDifferentNetworkModal();
       }
     }
-  }, [networkMode, IS_BROWSER, MAINNET_ENABLED]);
+  }, [networkMode, IS_BROWSER]);
 };
 
 // sometimes you just need the setter

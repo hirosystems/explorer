@@ -1,9 +1,18 @@
 import { fetchFromApi } from '@common/api/fetch';
-import { TESTNET_CHAIN_ID } from '@common/constants';
+import {
+  DEFAULT_MAINNET_SERVER,
+  DEFAULT_TESTNET_SERVER,
+  TESTNET_CHAIN_ID,
+} from '@common/constants';
 import { ChainID } from '@stacks/transactions';
 import { NetworkModes } from '@common/types/network';
 
 export async function getNetworkMode(apiServer: string) {
+  if (apiServer === DEFAULT_MAINNET_SERVER) {
+    return NetworkModes.Mainnet;
+  } else if (apiServer === DEFAULT_TESTNET_SERVER) {
+    return NetworkModes.Testnet;
+  }
   try {
     const response = await fetchFromApi(apiServer)('/v2/info');
     const data = await response.json();

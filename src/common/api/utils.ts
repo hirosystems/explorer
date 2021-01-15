@@ -2,13 +2,18 @@ import nookies from 'nookies';
 import { NextPageContext } from 'next';
 import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
 import {
+  DEFAULT_MAINNET_SERVER,
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,
-  DEFAULT_TESTNET_INDEX,
+  DEFAULT_TESTNET_SERVER,
+  MAINNET_CHAIN_ID,
   NETWORK_CURRENT_INDEX_COOKIE,
   NETWORK_LIST_COOKIE,
+  TESTNET_CHAIN_ID,
 } from '@common/constants';
 import { fetchFromApi } from '@common/api/fetch';
+import { ChainID } from '@stacks/transactions';
+import { NetworkModes } from '@common/types/network';
 
 /**
  * Get the api server in SSR contexts
@@ -88,4 +93,29 @@ export const generateTypesQueryString = (types?: TransactionType[]) => {
       .join('&')}`;
   }
   return '';
+};
+
+export const getDefaultChainId = (
+  apiServer: string
+): typeof TESTNET_CHAIN_ID | typeof MAINNET_CHAIN_ID | undefined => {
+  if (apiServer === DEFAULT_TESTNET_SERVER) {
+    return TESTNET_CHAIN_ID;
+  }
+  if (apiServer === DEFAULT_MAINNET_SERVER) {
+    return MAINNET_CHAIN_ID;
+  }
+  return undefined;
+};
+
+export const getChainTypeFromId = (
+  networkId: typeof TESTNET_CHAIN_ID | typeof MAINNET_CHAIN_ID
+) => {
+  switch (networkId) {
+    case ChainID.Mainnet:
+      return NetworkModes.Mainnet;
+    case ChainID.Testnet:
+      return NetworkModes.Testnet;
+    default:
+      return undefined;
+  }
 };
