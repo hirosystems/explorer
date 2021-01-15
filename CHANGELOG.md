@@ -1,3 +1,10 @@
+## [1.4.7](https://github.com/blockstack/explorer/compare/v1.4.6...v1.4.7) (2021-01-15)
+
+
+### Bug Fixes
+
+* as env var ([ee33123](https://github.com/blockstack/explorer/commit/ee33123cd0adb8a4af58fd2ab416eafd288c8eb0))
+
 ## [1.4.6](https://github.com/blockstack/explorer/compare/v1.4.5...v1.4.6) (2021-01-15)
 
 
