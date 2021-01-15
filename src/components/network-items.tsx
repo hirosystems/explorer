@@ -11,7 +11,11 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { fetchFromApi } from '@common/api/fetch';
 
-import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@common/constants';
+import {
+  DEFAULT_MAINNET_SERVER,
+  DEFAULT_TESTNET_SERVER,
+  DEFAULT_V2_INFO_ENDPOINT,
+} from '@common/constants';
 import { Badge } from '@components/badge';
 
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
@@ -54,7 +58,8 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const doNotFetch = isDisabled || !item.url || isDefault;
 
   const { data, error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
-    const response = await fetchFromApi(item.url as string)('/v2/info');
+    // this will only run if the item url is not one of the defaults (mainnet/testnet)
+    const response = await fetchFromApi(item.url as string)(DEFAULT_V2_INFO_ENDPOINT);
     return response.json();
   });
 

@@ -7,6 +7,7 @@ import { useModal } from '@common/hooks/use-modal';
 import { getChainIdFromInfo, isLocal } from '@common/utils';
 import { NetworkMode } from '@common/types/network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
+import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
 
 interface Errors {
   label?: string;
@@ -69,7 +70,7 @@ export const useNetworkAddForm = () => {
           }
           try {
             const _url = new URL(values.url);
-            const res = await fetchFromApi(`https://${_url.host}`)('/v2/info');
+            const res = await fetchFromApi(`https://${_url.host}`)(DEFAULT_V2_INFO_ENDPOINT);
             const data = await res.json();
             data?.network_id && setNetworkMode(getChainIdFromInfo(data));
             if (!data?.network_id) {
