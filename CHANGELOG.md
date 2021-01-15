@@ -1,3 +1,10 @@
+## [1.4.6](https://github.com/blockstack/explorer/compare/v1.4.5...v1.4.6) (2021-01-15)
+
+
+### Bug Fixes
+
+* polling timing ([49e7044](https://github.com/blockstack/explorer/commit/49e70440a0a876286ef5e637de26567e21552500))
+
 ## [1.4.5](https://github.com/blockstack/explorer/compare/v1.4.4...v1.4.5) (2021-01-14)
 
 
