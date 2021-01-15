@@ -1,5 +1,7 @@
 import { ChainID } from '@stacks/transactions';
 
+export const DEFAULT_POLLING_INTERVAL = 10000; // 10 seconds :c
+
 export const TESTNET_CHAIN_ID = ChainID.Testnet;
 export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 

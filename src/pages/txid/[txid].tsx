@@ -14,6 +14,7 @@ import type { Block } from '@blockstack/stacks-blockchain-api-types';
 import { useApiServer } from '@common/hooks/use-api';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';
+import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 
 const TransactionPage: NextPage<{
   txid: string;
@@ -27,7 +28,7 @@ const TransactionPage: NextPage<{
 
   const { data: blockData } = useSWR(hash || '', fetchBlock(apiServer), {
     initialData: block,
-    refreshInterval: transaction?.tx_status === 'pending' ? 3500 : undefined,
+    refreshInterval: transaction?.tx_status === 'pending' ? DEFAULT_POLLING_INTERVAL : undefined,
   });
 
   const hasInitialError = 'error' in initialData && initialData.error;

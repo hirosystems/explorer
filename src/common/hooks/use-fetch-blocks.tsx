@@ -88,7 +88,6 @@ export function useInfiniteFetch<Data>(
     {
       initialData,
       initialSize: 1,
-      // refreshInterval: 2500,
       suspense: options?.suspense,
     }
   );

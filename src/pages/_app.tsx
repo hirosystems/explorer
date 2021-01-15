@@ -13,6 +13,7 @@ import { getNetworkMode } from '@common/api/network';
 import { atom } from 'recoil';
 import App from 'next/app';
 import { useChainModeEffect } from '@common/hooks/use-chain-mode';
+import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 
 /**
  * This is an awful hack that will hopefully be removed in the future
@@ -52,7 +53,7 @@ function MyApp({ Component, pageProps, networkMode }: { networkMode: string } & 
   return (
     <SWRConfig
       value={{
-        refreshInterval: 3000,
+        refreshInterval: DEFAULT_POLLING_INTERVAL,
         suspense: false,
       }}
     >
