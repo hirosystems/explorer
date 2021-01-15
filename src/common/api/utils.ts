@@ -5,6 +5,7 @@ import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,
+  DEFAULT_STATUS_ENDPOINT,
   DEFAULT_TESTNET_SERVER,
   MAINNET_CHAIN_ID,
   NETWORK_CURRENT_INDEX_COOKIE,
@@ -70,7 +71,7 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
     // check the server works
     if (changed && apiServer) {
       try {
-        const res = await fetchFromApi(apiServer)('/v2/info');
+        const res = await fetchFromApi(apiServer)(DEFAULT_STATUS_ENDPOINT);
         const data = await res.json();
       } catch (e) {
         // if it fails, reset to default

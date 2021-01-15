@@ -15,6 +15,9 @@ export const IS_BROWSER = typeof document !== 'undefined';
 export const STACKS_EXPLORER_APP_ICON =
   'https://blockstack-www.imgix.net/stacks-explorer-icon.png?auto=format&w=72';
 
+export const DEFAULT_STATUS_ENDPOINT = '/extended/v1/status';
+export const DEFAULT_V2_INFO_ENDPOINT = '/v2/info';
+
 export const APP_DETAILS = {
   name: 'Stacks Explorer',
   icon: STACKS_EXPLORER_APP_ICON,
