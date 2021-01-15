@@ -161,25 +161,13 @@ export const TransactionList: React.FC<
     showCoinbase,
     ...rest
   }) => {
-    const { showPending, showFailed, handleToggleShowPending, types } = useFilterState(
-      'txList',
-      showCoinbase
-    );
-
-    const pending: MempoolTransactionListResponse['results'] = mempool.filter(tx => {
-      const now = new Date().getTime();
-      const pendingTime = tx.receipt_time * 1000;
-      if (now - pendingTime <= 1000 * 60 * 60) {
-        return true;
-      }
-      return false;
-    });
+    const { showPending, showFailed, types } = useFilterState('txList', showCoinbase);
 
     const filteredTransactions = transactions.filter((tx, index) =>
-      limit && showPending && pending.length > 0 ? index < limit - pending.length : true
+      limit && showPending && mempool.length > 0 ? index < limit - mempool.length : true
     );
 
-    const items = [...pending, ...filteredTransactions]?.filter(tx =>
+    const items = [...mempool, ...filteredTransactions]?.filter(tx =>
       !showPending ? tx.tx_status !== 'pending' : true
     );
     const filteredTxs = hideFilter
@@ -195,21 +183,7 @@ export const TransactionList: React.FC<
     return (
       <Section
         title={recent ? 'Recent transactions' : 'Transactions'}
-        topRight={
-          <Flex>
-            {hideFilter && !!pending?.length && transactions.length > 0 && (
-              <>
-                <Toggle
-                  size="small"
-                  label={`${showPending ? 'Hide' : 'Show'} pending (${pending?.length})`}
-                  value={showPending}
-                  onClick={handleToggleShowPending}
-                />
-              </>
-            )}
-            {!hideFilter && hasTransactions ? <Filter /> : null}
-          </Flex>
-        }
+        topRight={<Filter />}
         {...rest}
       >
         <Box px="loose">

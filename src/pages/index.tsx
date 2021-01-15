@@ -9,30 +9,24 @@ import { Title } from '@components/typography';
 import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
 import { SearchComponent } from '@components/search/search';
-import { TransactionList } from '@components/transaction-list';
 import { fetchTxList } from '@common/api/transactions';
 import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
-
+import { HomeTxs } from '@components/new-tx-component';
 import { getServerSideApiServer } from '@common/api/utils';
 import { useApiServer } from '@common/hooks/use-api';
 import useSWR from 'swr';
 
 interface FetchHomepageDataResponse {
   transactions: TransactionResults;
-  mempool: MempoolTransactionListResponse;
   blocks: FetchBlocksListResponse;
 }
+
 const fetchHomepageData = (apiServer: string) => async (): Promise<FetchHomepageDataResponse> => {
-  const [transactions, mempool, blocks] = await Promise.all([
+  const [transactions, blocks] = await Promise.all([
     fetchTxList({
       apiServer,
       limit: 10,
       types: ['smart_contract', 'contract_call', 'token_transfer'],
-    })(),
-    fetchTxList({
-      apiServer,
-      limit: 10,
-      mempool: true,
     })(),
     fetchBlocksList({
       apiServer,
@@ -42,7 +36,6 @@ const fetchHomepageData = (apiServer: string) => async (): Promise<FetchHomepage
 
   return {
     transactions: transactions as TransactionResults,
-    mempool: mempool as MempoolTransactionListResponse,
     blocks,
   };
 };
@@ -75,7 +68,6 @@ const PageTop: React.FC = React.memo(() => (
 
 interface HomeData {
   transactions: TransactionResults;
-  mempool: MempoolTransactionListResponse;
   blocks: FetchBlocksListResponse;
 }
 
@@ -97,7 +89,7 @@ export const useHomepageData = (initialData?: HomeData) => {
   };
 };
 
-const Home: NextPage<HomeData> = React.memo(({ ...props }) => {
+const Home: NextPage<any> = React.memo(({ mempool, ...props }) => {
   const { data } = useHomepageData(props);
   if (!data) {
     return null;
@@ -112,12 +104,7 @@ const Home: NextPage<HomeData> = React.memo(({ ...props }) => {
         gridTemplateColumns={['100%', '100%', 'calc(60% - 32px) 40%']}
         width="100%"
       >
-        <TransactionList
-          recent
-          transactions={data.transactions.results}
-          mempool={data.mempool.results}
-          limit={10}
-        />
+        <HomeTxs confirmed={data.transactions.results} mempool={mempool.results} />
 
         <BlocksList blocks={data.blocks.results} />
       </Grid>
@@ -128,9 +115,16 @@ const Home: NextPage<HomeData> = React.memo(({ ...props }) => {
 export async function getServerSideProps(ctx: NextPageContext) {
   const apiServer = await getServerSideApiServer(ctx);
   const data = await fetchHomepageData(apiServer)();
+  const mempool = await fetchTxList({
+    apiServer,
+    limit: 10,
+    mempool: true,
+  })();
+
   return {
     props: {
       ...data,
+      mempool,
       isHome: true,
     },
   };
