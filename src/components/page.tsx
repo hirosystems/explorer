@@ -10,6 +10,11 @@ import { MetaverseBg } from '@components/metaverse-bg';
 import { TitleProps, TransactionTitle } from '@components/transaction-title';
 import { Alert } from '@components/alert';
 import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import {
+  SITE_NOTICE_BANNER_LABEL,
+  SITE_NOTICE_BANNER_MESSAGE,
+  SITE_NOTICE_ENABLED,
+} from '@common/constants';
 
 type PageProps = {
   notice?: { label?: string; message?: string };
@@ -48,7 +53,7 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
   );
 };
 
-export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWidth, ...rest }) => (
+export const Page: React.FC<PageProps> = React.memo(({ children, fullWidth, ...rest }) => (
   <Flex
     css={(theme: Theme) =>
       css({
@@ -66,13 +71,11 @@ export const Page: React.FC<PageProps> = React.memo(({ children, notice, fullWid
     zIndex={2}
     flexGrow={1}
   >
-    <Box px="base-loose">
-      <Notice
-        label="Notice"
-        message="We are investigating an issue where our API does not return blockchain information after block #119."
-      />
-    </Box>
-    {notice ? <Notice label={notice.label} message={notice.message} /> : null}
+    {SITE_NOTICE_ENABLED && (
+      <Box px="base-loose">
+        <Notice label={SITE_NOTICE_BANNER_LABEL} message={SITE_NOTICE_BANNER_MESSAGE} />
+      </Box>
+    )}
     <Flex
       as="main"
       mx="auto"

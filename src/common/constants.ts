@@ -18,6 +18,10 @@ export const STACKS_EXPLORER_APP_ICON =
 export const DEFAULT_STATUS_ENDPOINT = '/extended/v1/status';
 export const DEFAULT_V2_INFO_ENDPOINT = '/v2/info';
 
+export const SITE_NOTICE_BANNER_LABEL = process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL;
+export const SITE_NOTICE_BANNER_MESSAGE = process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE;
+export const SITE_NOTICE_ENABLED = SITE_NOTICE_BANNER_LABEL && SITE_NOTICE_BANNER_MESSAGE;
+
 export const APP_DETAILS = {
   name: 'Stacks Explorer',
   icon: STACKS_EXPLORER_APP_ICON,
