@@ -1,3 +1,12 @@
+## [1.4.8](https://github.com/blockstack/explorer/compare/v1.4.7...v1.4.8) (2021-01-15)
+
+
+### Bug Fixes
+
+* better abstraction ([419d0c9](https://github.com/blockstack/explorer/commit/419d0c95e5e22ed0a681838589c2dc5727b310fb))
+* don't shrink ([68a7b54](https://github.com/blockstack/explorer/commit/68a7b54febe7e31b5632a3831787d18e3efca7b2))
+* network modes, less use of v2/info ([1448ede](https://github.com/blockstack/explorer/commit/1448ede684682dddb5947025458ca8ebd10d104c))
+
 ## [1.4.7](https://github.com/blockstack/explorer/compare/v1.4.6...v1.4.7) (2021-01-15)
 
 
