@@ -1,3 +1,11 @@
+# [1.5.0](https://github.com/blockstack/explorer/compare/v1.4.8...v1.5.0) (2021-01-16)
+
+
+### Features
+
+* show notice ([0e037d4](https://github.com/blockstack/explorer/commit/0e037d4c45a002f148d70492eba477bcdcf12142))
+* use env vars for message ([2127371](https://github.com/blockstack/explorer/commit/212737110d139982c2e667f796c2148fedb7b45a))
+
 ## [1.4.8](https://github.com/blockstack/explorer/compare/v1.4.7...v1.4.8) (2021-01-15)
 
 
