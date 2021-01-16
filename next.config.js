@@ -10,15 +10,14 @@ module.exports = withBundleAnalyzer({
     polyfillsOptimization: true,
     jsconfigPaths: true,
   },
-  publicRuntimeConfig: {
-    MAINNET_API_SERVER:
-      process.env.NEXT_PUBLIC_MAINNET_API_SERVER || process.env.MAINNET_API_SERVER,
-    TESTNET_API_SERVER:
-      process.env.NEXT_PUBLIC_TESTNET_API_SERVER || process.env.TESTNET_API_SERVER,
-    CONNECT_AUTH_ORIGIN:
-      process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || process.env.CONNECT_AUTH_ORIGIN,
-    DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL || process.env.DEPLOYMENT_URL,
-    MAINNET_ENABLED: process.env.NEXT_PUBLIC_MAINNET_ENABLED || process.env.MAINNET_ENABLED,
+  env: {
+    NEXT_PUBLIC_DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL,
+    NEXT_PUBLIC_TESTNET_API_SERVER: process.env.NEXT_PUBLIC_TESTNET_API_SERVER,
+    NEXT_PUBLIC_MAINNET_API_SERVER: process.env.NEXT_PUBLIC_MAINNET_API_SERVER,
+    NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER: process.env.NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER,
+    NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL: process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL,
+    NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL,
+    NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE,
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
