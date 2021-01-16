@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/blockstack/explorer/compare/v1.5.0...v1.5.1) (2021-01-16)
+
+
+### Bug Fixes
+
+* env vars in next.config.js ([18975f7](https://github.com/blockstack/explorer/commit/18975f7b9fab021e463c0b4f49da80e1b62d7b5e))
+
 # [1.5.0](https://github.com/blockstack/explorer/compare/v1.4.8...v1.5.0) (2021-01-16)
 
 
