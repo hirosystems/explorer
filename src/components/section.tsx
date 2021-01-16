@@ -5,6 +5,7 @@ import { Card } from '@components/card';
 import React from 'react';
 
 import { border } from '@common/utils';
+import { SECTION_HEADER_HEIGHT } from '@common/constants/sizes';
 
 interface SectionProps extends FlexProps {
   title?: string;
@@ -21,6 +22,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...
     py="base"
     borderTopRightRadius="12px"
     borderTopLeftRadius="12px"
+    height={SECTION_HEADER_HEIGHT}
     {...rest}
   >
     {title ? (
