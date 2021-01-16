@@ -10,3 +10,4 @@ tests/screenshots/*
 build
 old/
 _old/
+.env
