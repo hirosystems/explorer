@@ -1,47 +1,30 @@
-import * as React from 'react';
-import { RecoilRoot } from 'recoil';
-import { AppWrapper } from '@components/app-init';
-import { CacheProvider } from '@emotion/react';
-import { cache } from '@emotion/css';
-import { SWRConfig } from 'swr';
+import React, { memo } from 'react';
+import { AppConfig } from '@components/app-config';
+
+import { appGetInitialProps } from '@common/app-helpers';
+import { useSetNetworkMode } from '@common/hooks/use-set-network-mode';
+
 import type { AppProps } from 'next/app';
+import type { NetworkModes } from '@common/types/network';
+
 import './styles.css';
 import 'tippy.js/dist/tippy.css'; // optional
 import 'modern-normalize/modern-normalize.css';
-import { useChainModeEffect } from '@common/hooks/use-chain-mode';
-import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
-import { appGetInitialProps, setCurrentNetworkMode } from '@common/app-helpers';
 
-const AppContainer: React.FC<any> = ({ component: Component, networkMode, isHome, ...props }) => {
-  useChainModeEffect();
+interface MyAppProps extends AppProps {
+  networkMode: NetworkModes;
+}
+
+function MyApp({ Component, pageProps, networkMode }: MyAppProps) {
+  useSetNetworkMode(networkMode);
+  const { isHome, ...props } = pageProps;
   return (
-    <CacheProvider value={cache}>
-      <AppWrapper isHome={isHome}>
-        <Component {...props} />
-      </AppWrapper>
-    </CacheProvider>
-  );
-};
-
-function MyApp({ Component, pageProps, networkMode }: { networkMode: string } & AppProps) {
-  React.useMemo(() => {
-    setCurrentNetworkMode(networkMode);
-  }, []);
-
-  return (
-    <SWRConfig
-      value={{
-        refreshInterval: DEFAULT_POLLING_INTERVAL,
-        suspense: false,
-      }}
-    >
-      <RecoilRoot>
-        <AppContainer networkMode={networkMode} component={Component} {...pageProps} />
-      </RecoilRoot>
-    </SWRConfig>
+    <AppConfig isHome={isHome}>
+      <Component {...props} />
+    </AppConfig>
   );
 }
 
 MyApp.getInitialProps = appGetInitialProps;
 
-export default MyApp;
+export default memo(MyApp);
