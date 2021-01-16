@@ -62,6 +62,7 @@
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
     "extract-json-string": "^1.0.1",
+    "fathom-client": "^3.0.0",
     "fontfaceobserver": "^2.1.0",
     "formik": "^2.2.6",
     "just-debounce-it": "^1.1.0",

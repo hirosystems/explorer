@@ -12,6 +12,7 @@ const {
   NEXT_PUBLIC_CONNECT_AUTH_ORIGIN,
   NEXT_PUBLIC_TESTNET_API_SERVER,
   NEXT_PUBLIC_MAINNET_API_SERVER,
+  NEXT_PUBLIC_FATHOM_ID,
 } = publicRuntimeConfig;
 
 const getNumber = (query?: string): number | undefined =>
@@ -69,10 +70,6 @@ export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   'https://stacks-node-api.stacks.co';
 
-export const MAINNET_ENABLED =
-  process.env.NEXT_PUBLIC_MAINNET_ENABLED &&
-  JSON.parse(process.env.NEXT_PUBLIC_MAINNET_ENABLED) === true;
-
 export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
 export const DEFAULT_TESTNET_INDEX = 1;
@@ -93,6 +90,8 @@ export const DEFAULT_NETWORK_LIST = [
     url: 'http://localhost:3999',
   },
 ];
+
+export const FATHOM_ID = NEXT_PUBLIC_FATHOM_ID || process.env.NEXT_PUBLIC_FATHOM_ID;
 
 export enum MODALS {
   SEARCH = 'modals/search',
