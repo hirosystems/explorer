@@ -1,4 +1,3 @@
-/** @jsxRuntime classic */
 import { Box, color, ColorsStringLiteral, Stack } from '@stacks/ui';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -266,7 +265,7 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
   return str;
 };
 
-export const toRelativeTime = (ts: number): string => dayjs().to(ts);
+export const toRelativeTime = (date: number | string): string => dayjs().to(date);
 
 export const isPendingTx = (tx: Transaction): boolean => tx && tx.tx_status === 'pending';
 

@@ -1,0 +1,36 @@
+---
+date: 01/21/2021
+---
+
+![A screenshot of the explorer homepage](/changelog/changelog-001.png)
+
+### Updates to the transactions list component
+
+This update brings some improvements to the component that displays lists of transactions on the homepage and on the
+transactions page. Previously you were only able to see a limited number of transactions from the mempool in either
+view. Now you are able to see all items currently pending, paginate through them, and filter between types of
+transactions. This update also changes the way we are filtering transactions: previously there was a naive
+implementation that simply filtered through the data returned. This meant that if the limit was set to 50, and all 50 of
+the returned items were of one type, filtering to view others would remove all transactions from view. Now the data is
+re-fetched with the selected types. This gives a much better experience, allowing users to see all available
+transactions of a given set of types.
+
+### Function summaries on pending Contract Call transactions
+
+We had previously been reliant on some data that was only available after a transaction was confirmed. The component
+that displays the function summary of a contract-call transaction has been refactored to use only the data that is
+available before and after confirmation. This is useful when doing many calls to the same function with different
+arguments passed -- previously it would have been hard to keep track of which contract-call transaction had which
+arguments.
+
+### Other fixes
+
+- When viewing a `stack-stx` function call transaction, the `pox-addr` parameter is now parsed and rendered as the BTC
+  address it represents.
+- Fixed a bug where the transaction list component would display "Load more transactions" when in-fact there were no
+  more transaction to load.
+- Added Fathom tracking.
+- Fixed bug around logging into the sandbox with the Stacks Wallet extension.
+- Fixed bug where stale data would persist in the transactions list of an address page when navigating to another
+  address page.
+- Added this changelog page
