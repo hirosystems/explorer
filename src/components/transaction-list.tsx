@@ -181,7 +181,11 @@ export const TransactionList: React.FC<
     const hasNoVisibleTxs = !hasTransactions && items.length > 0;
 
     return (
-      <Section title={recent ? 'Recent transactions' : 'Transactions'} topRight={Filter} {...rest}>
+      <Section
+        title={recent ? 'Recent transactions' : 'Transactions'}
+        topRight={hideFilter ? undefined : Filter}
+        {...rest}
+      >
         <Box px="loose">
           {hasNoVisibleTxs ? (
             <FilteredMessage filterKey={'txList'} />
