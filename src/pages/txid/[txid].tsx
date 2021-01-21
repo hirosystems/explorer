@@ -15,12 +15,14 @@ import { useApiServer } from '@common/hooks/use-api';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
+import { AllAccountData, fetchAllAccountData } from '@common/api/accounts';
 
 const TransactionPage: NextPage<{
   txid: string;
   initialData: FetchTransactionResponse;
   block?: Block;
-}> = ({ txid, initialData, block }) => {
+  account?: AllAccountData;
+}> = ({ txid, initialData, block, account }) => {
   const { transaction, data, error } = useTransactionPageData({ txid, initialData });
   const apiServer = useApiServer();
 
@@ -46,7 +48,12 @@ const TransactionPage: NextPage<{
     return (
       <>
         <TransactionMeta transaction={transaction} />
-        {transaction && renderTxPageComponent(data, blockData)}
+        {transaction &&
+          renderTxPageComponent({
+            data,
+            block: blockData,
+            account,
+          })}
       </>
     );
   }
@@ -59,6 +66,7 @@ export async function getServerSideProps(
     txid: string;
     initialData: FetchTransactionResponse;
     block?: Block;
+    account?: null | AllAccountData;
   };
 }> {
   const apiServer = await getServerSideApiServer(ctx);
@@ -67,9 +75,16 @@ export async function getServerSideProps(
   const initialData = await fetchTransaction(apiServer)(txid.toString());
 
   let block = null;
+  let account: AllAccountData | null = null;
   if ('transaction' in initialData && 'block_hash' in initialData.transaction) {
     const hash = initialData.transaction.block_hash;
     block = await fetchBlock(apiServer)(hash);
+  }
+
+  if ('transaction' in initialData && initialData?.transaction.tx_type === 'smart_contract') {
+    account = await fetchAllAccountData(apiServer)({
+      principal: initialData.transaction.smart_contract.contract_id,
+    });
   }
 
   return {
@@ -77,6 +92,7 @@ export async function getServerSideProps(
       txid,
       initialData,
       block: block as Block,
+      account,
     },
   };
 }

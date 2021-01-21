@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Stack } from '@stacks/ui';
+import { TransactionList } from '@components/transaction-list';
 
 import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
@@ -12,11 +13,13 @@ import { getContractName } from '@common/utils';
 import { Events } from '@components/tx-events';
 import { PagePanes } from '@components/page-panes';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
+import { AllAccountData } from '@common/api/accounts';
 
 const SmartContractPage = ({
   transaction,
   block,
-}: TxData<SmartContractTransaction> & { block?: Block }) => (
+  account,
+}: TxData<SmartContractTransaction> & { block?: Block; account?: AllAccountData }) => (
   <>
     <PageTop tx={transaction as any} />
     <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
@@ -27,7 +30,18 @@ const SmartContractPage = ({
         />
         {'events' in transaction && <Events events={transaction.events} />}
         <ContractSource source={transaction.smart_contract.source_code} />
-        <PostConditions conditions={transaction.post_conditions} />
+        <PostConditions
+          mode={transaction.post_condition_mode}
+          conditions={transaction.post_conditions}
+        />
+        {account?.transactions?.results ? (
+          <TransactionList
+            showCoinbase
+            hideFilter
+            principal={transaction.smart_contract.contract_id}
+            transactions={account?.transactions?.results}
+          />
+        ) : null}
       </Stack>
       {block && <BtcAnchorBlockCard block={block} />}
     </PagePanes>
