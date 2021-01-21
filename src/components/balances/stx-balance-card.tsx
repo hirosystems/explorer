@@ -72,24 +72,23 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
   const [qrShowing, setQrShowing] = React.useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
 
+  const TopRight = () => (
+    <Box position="relative">
+      <Tooltip label={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
+        <IconButton
+          position="absolute"
+          top="-18px"
+          right="-12px"
+          dark
+          icon={qrShowing ? IconX : IconQrcode}
+          onClick={toggleViewQrCode}
+        />
+      </Tooltip>
+    </Box>
+  );
+
   return (
-    <Section
-      title={qrShowing ? 'Address QR code' : 'STX Balance'}
-      topRight={
-        <Box position="relative">
-          <Tooltip label={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
-            <IconButton
-              position="absolute"
-              top="-18px"
-              right="-12px"
-              dark
-              icon={qrShowing ? IconX : IconQrcode}
-              onClick={toggleViewQrCode}
-            />
-          </Tooltip>
-        </Box>
-      }
-    >
+    <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
         <>
           <Box px="base">

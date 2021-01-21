@@ -1,16 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
 import useConstant from 'use-constant';
 import debounce from 'awesome-debounce-promise';
-import { useRecoilState, useResetRecoilState } from 'recoil';
-import { authOptionsAtom, userDataAtom, userSession } from '@store/sandbox';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import {
+  authOptionsAtom,
+  authResponseState,
+  isSignedInSelector,
+  pendingSignInState,
+  userDataAtom,
+  userSession,
+} from '@store/sandbox';
 import type { AuthOptions, FinishedData } from '@stacks/connect';
-import { APP_DETAILS, IS_BROWSER } from '@common/constants';
+import { IS_BROWSER } from '@common/constants';
 import { useRouter } from 'next/router';
 
 export const useAuthState = () => {
   const [authOptions, setAuthOptions] = useRecoilState<Partial<AuthOptions>>(authOptionsAtom);
+  const [authResponse, setAuthResponse] = useRecoilState(authResponseState);
   const [userData, setUserData] = useRecoilState(userDataAtom);
   const resetUserData = useResetRecoilState(userDataAtom);
+
+  const handleSetAuthResponse = (_authResponse: string) => {
+    setAuthResponse(_authResponse);
+  };
 
   return {
     userData,
@@ -19,13 +31,14 @@ export const useAuthState = () => {
     setAuthOptions,
     userSession: authOptions.userSession,
     resetUserData,
+    authResponse,
+    setAuthResponse: handleSetAuthResponse,
   };
 };
 
 export const useAuth = () => {
-  const [authResponse, setAuthResponse] = useState<string | undefined>(undefined);
-  const { setUserData, setAuthOptions } = useAuthState();
-  const [iconPath, setIconPath] = useState<string | undefined>('');
+  const pendingSignIn = useRecoilValue(pendingSignInState);
+  const { setUserData, authResponse } = useAuthState();
   const router = useRouter();
 
   // we are using useConstant and debounce because it seems connect fires this fn many times
@@ -38,71 +51,46 @@ export const useAuth = () => {
     }, 350)
   );
 
-  const handleRemoveAuthResponseQuery = useCallback(async () => {
-    if (IS_BROWSER) {
-      const query = router.query;
-      delete query['authResponse'];
+  const handlePendingSignIn = useCallback(async () => {
+    if (authResponse) {
+      try {
+        const userData = await userSession.handlePendingSignIn(authResponse);
+        setUserData(userData);
+      } catch (e) {
+        console.error(e.message);
+      }
+    }
+    if (router.query.authResponse) {
+      const params = router.query;
+      delete params.authResponse;
       await router.replace(
         {
           pathname: router.pathname,
-          query,
+          query: {
+            ...params,
+          },
         },
         {
           pathname: router.pathname,
-          query,
+          query: {
+            ...params,
+          },
         },
         { shallow: true }
       );
-    }
-  }, [IS_BROWSER, router]);
-
-  const handlePendingSignIn = useCallback(async () => {
-    try {
-      const userData = await userSession.handlePendingSignIn(authResponse);
-      await handleRemoveAuthResponseQuery();
-      setUserData(userData);
-      setAuthResponse(undefined);
-    } catch (e) {
-      console.error(e.message);
-      await handleRemoveAuthResponseQuery();
     }
   }, [
     IS_BROWSER,
     IS_BROWSER && document.location.search,
     userSession,
+    authResponse,
     router,
     setUserData,
-    setAuthResponse,
   ]);
 
-  const isSignedIn = userSession.isUserSignedIn();
-
   useEffect(() => {
-    if (!isSignedIn) {
-      if (router.query.authResponse && !authResponse) {
-        setAuthResponse(router.query.authResponse as string);
-      }
-      if (authResponse) {
-        void handlePendingSignIn();
-      }
-    } else {
-      if (router.query.authResponse) {
-        void handleRemoveAuthResponseQuery();
-      }
+    if (pendingSignIn) {
+      void handlePendingSignIn();
     }
-  }, [router.query, setAuthResponse, authResponse, isSignedIn]);
-
-  useEffect(() => {
-    const iconPrefix = typeof document !== 'undefined' ? document.location.origin.toString() : '';
-    if (iconPath === '' && typeof document !== 'undefined') {
-      setIconPath(iconPrefix);
-      setAuthOptions({
-        onFinish,
-        manifestPath: '/manifest.json',
-        redirectTo: '/sandbox',
-        userSession: userSession as any,
-        appDetails: APP_DETAILS,
-      });
-    }
-  }, []);
+  }, [pendingSignIn, handlePendingSignIn]);
 };

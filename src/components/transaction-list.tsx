@@ -8,14 +8,10 @@ import {
 } from '@blockstack/stacks-blockchain-api-types';
 import NextLink from 'next/link';
 import React from 'react';
-
 import { TxItem } from '@components/transaction-item';
 import { TxLink } from '@components/links';
 import { border } from '@common/utils';
-
 import { Section } from '@components/section';
-import { Toggle } from '@components/toggle';
-
 import { Pending } from '@components/status';
 import { HoverableItem } from '@components/hoverable';
 import { CaptionAction } from '@components/caption-action';
@@ -41,7 +37,7 @@ export const TxList: React.FC<{
   principal?: string;
   limit?: number;
 }> = React.memo(({ items, principal, limit }) => {
-  return (
+  return items.length ? (
     <Flex flexDirection="column">
       {items.map((tx: MempoolTransaction | Transaction, index: number) =>
         limit ? (
@@ -63,6 +59,10 @@ export const TxList: React.FC<{
           <Item principal={principal} key={index} tx={tx} isLast={index === items.length - 1} />
         )
       )}
+    </Flex>
+  ) : (
+    <Flex flexGrow={1} alignItems="center" justifyContent="center">
+      No transactions!
     </Flex>
   );
 });
@@ -181,11 +181,7 @@ export const TransactionList: React.FC<
     const hasNoVisibleTxs = !hasTransactions && items.length > 0;
 
     return (
-      <Section
-        title={recent ? 'Recent transactions' : 'Transactions'}
-        topRight={<Filter />}
-        {...rest}
-      >
+      <Section title={recent ? 'Recent transactions' : 'Transactions'} topRight={Filter} {...rest}>
         <Box px="loose">
           {hasNoVisibleTxs ? (
             <FilteredMessage filterKey={'txList'} />

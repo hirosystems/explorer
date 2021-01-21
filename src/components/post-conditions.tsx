@@ -250,11 +250,13 @@ export const PostConditions: React.FC<
   <Section
     title="Post conditions"
     topRight={
-      mode && (
-        <Badge color={color('text-body')} bg={color('bg-alt')}>
-          {capitalize(mode)} mode
-        </Badge>
-      )
+      mode
+        ? () => (
+            <Badge color={color('text-body')} bg={color('bg-alt')}>
+              {capitalize(mode)} mode
+            </Badge>
+          )
+        : undefined
     }
     {...rest}
   >

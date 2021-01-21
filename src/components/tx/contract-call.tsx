@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Stack } from '@stacks/ui';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block, ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';
@@ -31,13 +31,11 @@ const ContractCallPage = ({
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
           {'events' in transaction && transaction.events && <Events events={transaction.events} />}
-          {!isPending && source.contract && (
-            <FunctionSummarySection
-              abi={source.contract.abi}
-              result={transaction.tx_result}
-              summary={transaction.contract_call}
-            />
-          )}
+          <FunctionSummarySection
+            isPending={isPending}
+            result={transaction.tx_result}
+            summary={transaction.contract_call as ContractCallTransaction['contract_call']}
+          />
           <PostConditions
             conditions={transaction.post_conditions}
             mode={transaction.post_condition_mode}

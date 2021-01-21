@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { Text, Box, Flex, BoxProps, color, FlexProps } from '@stacks/ui';
-import { useColorMode } from '@common/hooks/use-color-mode';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 
 const LinkWrapper: React.FC<any> = ({ children, href }) => {
@@ -73,13 +72,13 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
           >
             Give feedback
           </FooterLink>
-          <FooterLink mr="base" href="https://www2.blockstack.org/explorer/faq">
+          <FooterLink mr="base" href="https://hiro.so/explorer/faq">
             FAQ
           </FooterLink>
           <FooterLink mr="base" href="https://github.com/blockstack/explorer/">
             GitHub
           </FooterLink>
-          <FooterLink href="https://www.blockstack.org/p/terms-privacy">Terms & Privacy</FooterLink>
+          <FooterLink href="https://www.hiro.so/p/terms-privacy">Terms & Privacy</FooterLink>
         </Flex>
       </Flex>
     </Box>

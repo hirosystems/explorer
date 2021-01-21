@@ -72,10 +72,9 @@ const PluralizedItem: React.FC<BoxProps & { array: any[]; label: string }> = ({
 
 const Details = () => {
   const [contractInterface, contractId] = useContractInterface();
-  const [view, setView] = React.useState(undefined);
   return contractInterface ? (
     <Section
-      topRight={
+      topRight={() => (
         <TxLink txid={contractId}>
           <Flex
             as="a"
@@ -90,7 +89,7 @@ const Details = () => {
             <ExternalLinkIcon ml="tight" color="currentColor" size="16px" />
           </Flex>
         </TxLink>
-      }
+      )}
       flexShrink={0}
       mb="extra-loose"
       minWidth="200px"

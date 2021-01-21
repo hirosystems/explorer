@@ -57,44 +57,71 @@ const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal,
   </Flex>
 );
 
-const AddressArea = React.memo(({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
-  if (tx.tx_type === 'token_transfer') {
-    return (
-      <Stack flexWrap="wrap" isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
-        <Caption display={['none', 'none', 'none', 'block']}>from</Caption>
-        <PrincipalLink principal={tx.sender_address} />
-        <Flex as="span" color={color('text-caption')}>
-          <ArrowRightIcon strokeWidth="1.5" size="15px" />
-        </Flex>
-        <PrincipalLink principal={tx.token_transfer.recipient_address} />
-      </Stack>
-    );
+const AddressArea = React.memo(
+  ({ tx, principal, ...rest }: { tx: Transaction; principal?: string } & FlexProps) => {
+    if (tx.tx_type === 'token_transfer') {
+      if (tx.sender_address === principal) {
+        return (
+          <Stack
+            flexWrap="wrap"
+            isInline
+            spacing="extra-tight"
+            {...({ as: 'span', ...rest } as any)}
+          >
+            <Caption display={['none', 'none', 'none', 'block']}>Sent to</Caption>
+            <PrincipalLink principal={tx.token_transfer.recipient_address} />
+          </Stack>
+        );
+      } else if (tx.token_transfer.recipient_address === principal) {
+        return (
+          <Stack
+            flexWrap="wrap"
+            isInline
+            spacing="extra-tight"
+            {...({ as: 'span', ...rest } as any)}
+          >
+            <Caption display={['none', 'none', 'none', 'block']}>Received from</Caption>
+            <PrincipalLink principal={tx.sender_address} />
+          </Stack>
+        );
+      }
+      return (
+        <Stack flexWrap="wrap" isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
+          <Caption display={['none', 'none', 'none', 'block']}>from</Caption>
+          <PrincipalLink principal={tx.sender_address} />
+          <Flex as="span" color={color('text-caption')}>
+            <ArrowRightIcon strokeWidth="1.5" size="15px" />
+          </Flex>
+          <PrincipalLink principal={tx.token_transfer.recipient_address} />
+        </Stack>
+      );
+    }
+    if (tx.tx_type === 'contract_call') {
+      return (
+        <Caption>
+          by <PrincipalLink principal={tx.sender_address} />
+        </Caption>
+      );
+    }
+    if (tx.tx_type === 'smart_contract') {
+      return (
+        <Caption>
+          by <PrincipalLink principal={tx.sender_address} />
+        </Caption>
+      );
+    }
+    if (tx.tx_type === 'coinbase') {
+      return (
+        <Caption>
+          Mined by <PrincipalLink principal={tx.sender_address} />
+        </Caption>
+      );
+    }
+    return null;
   }
-  if (tx.tx_type === 'contract_call') {
-    return (
-      <Caption>
-        by <PrincipalLink principal={tx.sender_address} />
-      </Caption>
-    );
-  }
-  if (tx.tx_type === 'smart_contract') {
-    return (
-      <Caption>
-        by <PrincipalLink principal={tx.sender_address} />
-      </Caption>
-    );
-  }
-  if (tx.tx_type === 'coinbase') {
-    return (
-      <Caption>
-        Mined by <PrincipalLink principal={tx.sender_address} />
-      </Caption>
-    );
-  }
-  return null;
-});
+);
 
-const TxItemTitleArea = React.memo(({ title, isHovered, tx }: any) => (
+const TxItemTitleArea = React.memo(({ title, isHovered, tx, principal }: any) => (
   <Stack as="span" spacing="tight" flexWrap="wrap">
     <Title
       color={isHovered ? color('accent') : color('text-title')}
@@ -113,7 +140,7 @@ const TxItemTitleArea = React.memo(({ title, isHovered, tx }: any) => (
       divider={<Caption>∙</Caption>}
     >
       <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
-      <AddressArea tx={tx} />
+      <AddressArea principal={principal} tx={tx} />
     </Stack>
   </Stack>
 ));
@@ -155,6 +182,7 @@ const LargeVersion = React.memo(
             isHovered={isHovered}
             title={title || truncateMiddle(tx.tx_id, 12)}
             tx={tx}
+            principal={principal}
           />
         </Flex>
         {!hideRightElements ? (

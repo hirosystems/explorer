@@ -4,6 +4,8 @@ import { Caption, Link, Text } from '@components/typography';
 import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import NextLink from 'next/link';
 import { TxLink } from '@components/links';
+import { convertPoxAddressToBtc } from '@common/utils/btc';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -32,13 +34,46 @@ const tupleToArr = (tuple: string) =>
     .split(') (')
     .map(item => item.split(' '));
 
-const TupleResult = ({ tuple }: any) => {
-  return tuple.map((entry: any, index: number, arr: any[]) => (
-    <Box display="block" mb={index !== arr.length - 1 ? 'tight' : 'unset'} as="span" key={index}>
-      <Caption mb="extra-tight">{entry[0]}</Caption>
-      <Text>{entry[1]}</Text>
-    </Box>
-  ));
+const TupleResult = ({ tuple, isPoxAddr }: any) => {
+  const networkMode = useNetworkMode();
+  let additional: any = null;
+  if (isPoxAddr) {
+    const btc = convertPoxAddressToBtc(networkMode)({
+      version: Buffer.from(tuple[1][1].replace('0x', ''), 'hex'),
+      hashbytes: Buffer.from(tuple[0][1].replace('0x', ''), 'hex'),
+    });
+
+    additional = (
+      <Box display="block" as="span">
+        <Caption mb="extra-tight">BTC address (converted)</Caption>
+        <Text
+          target="_blank"
+          as={Link}
+          href={`https://www.blockchain.com/btc${
+            networkMode === 'testnet' ? '-testnet' : ''
+          }/address/${btc}`}
+        >
+          {btc}
+        </Text>
+      </Box>
+    );
+  }
+  return (
+    <>
+      {tuple.map((entry: any, index: number, arr: any[]) => (
+        <Box
+          display="block"
+          mb={index !== arr.length - 1 || !!additional ? 'tight' : 'unset'}
+          as="span"
+          key={index}
+        >
+          <Caption mb="extra-tight">{entry[0]}</Caption>
+          <Text>{entry[1]}</Text>
+        </Box>
+      ))}
+      {additional}
+    </>
+  );
 };
 
 const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
@@ -54,7 +89,7 @@ const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
 
     return (
       <>
-        <TupleResult tuple={value} />
+        <TupleResult isPoxAddr={arg.name === 'pox-addr'} tuple={value} />
       </>
     );
   }

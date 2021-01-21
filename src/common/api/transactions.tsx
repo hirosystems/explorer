@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+// This will be refactored
 import { Transaction } from '@models/transaction.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { MempoolTransaction, TransactionType } from '@blockstack/stacks-blockchain-api-types';
@@ -64,7 +67,7 @@ export const fetchTransaction = (apiServer: string) => async (
     }
     return {
       contract,
-      transaction: transaction as SmartContractTransaction,
+      transaction: transaction as any,
     };
   } else {
     const transaction = await fetchTx(apiServer)(query);

@@ -1,23 +1,13 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { AppWrapper } from '@components/app-init';
-import { CacheProvider } from '@emotion/react';
-import { cache } from '@emotion/css';
 import { useChainModeEffect } from '@common/hooks/use-chain-mode';
-import { useFathom } from '@common/hooks/use-fathom';
 
 interface AppContainerProps {
   isHome?: boolean;
 }
 
-export const AppContainer: React.FC<AppContainerProps> = memo(props => {
+export const AppContainer: React.FC<AppContainerProps> = props => {
   const { children, isHome } = props;
-
   useChainModeEffect();
-  useFathom();
-
-  return (
-    <CacheProvider value={cache}>
-      <AppWrapper isHome={isHome}>{children}</AppWrapper>
-    </CacheProvider>
-  );
-});
+  return <AppWrapper isHome={isHome}>{children}</AppWrapper>;
+};

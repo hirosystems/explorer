@@ -1,6 +1,6 @@
 import nookies from 'nookies';
 import { NextPageContext } from 'next';
-import { TransactionType } from '@blockstack/stacks-blockchain-api-types';
+import { Transaction } from '@blockstack/stacks-blockchain-api-types';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_NETWORK_INDEX,
@@ -87,7 +87,7 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
 export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>
   `limit=${limit}${offset ? `&offset=${offset}` : ''}`;
 
-export const generateTypesQueryString = (types?: TransactionType[]) => {
+export const generateTypesQueryString = (types?: Transaction['tx_type'][]) => {
   if (types?.length) {
     return `&${types
       .map(type => `${encodeURIComponent('type[]')}=${encodeURIComponent(type)}`)

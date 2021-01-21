@@ -59,13 +59,16 @@ export function useInfiniteFetch<Data>(
 
   const apiServer = useApiServer();
 
-  const getKey = React.useCallback((options: GetKeyOptions) => {
-    return makeKey({
-      ...options,
-      apiServer,
-      principal,
-    });
-  }, []);
+  const getKey = React.useCallback(
+    (options: GetKeyOptions) => {
+      return makeKey({
+        ...options,
+        apiServer,
+        principal,
+      });
+    },
+    [principal]
+  );
 
   const fetcher = React.useCallback(
     (url: string) =>
