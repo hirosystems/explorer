@@ -4,7 +4,7 @@ import { Box, color, ColorsStringLiteral, Stack } from '@stacks/ui';
 // @ts-ignore
 import { BorderStyleProperty } from 'csstype';
 import Router from 'next/router';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Transaction, CoreNodeInfoResponse } from '@blockstack/stacks-blockchain-api-types';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
 import { fetchTxList } from '@common/api/transactions';
@@ -348,8 +348,8 @@ export const isLocal = () => {
 export const getInvertedChainMode = (mode: 'testnet' | 'mainnet') =>
   mode === 'testnet' ? 'mainnet' : 'testnet';
 
-export const getChainIdFromInfo = (data: any): NetworkMode | undefined => {
-  const networkId = data?.network_id && parseInt(data?.network_id);
+export const getChainIdFromInfo = (data: CoreNodeInfoResponse): NetworkMode | undefined => {
+  const networkId = data?.network_id;
 
   return networkId
     ? TESTNET_CHAIN_ID === networkId
@@ -357,3 +357,9 @@ export const getChainIdFromInfo = (data: any): NetworkMode | undefined => {
       : NetworkModes.Mainnet
     : undefined;
 };
+
+export function isReactComponent(Comp: any) {
+  return (
+    (Comp && typeof Comp === 'object' && `$$typeof` in Comp) || (Comp && typeof Comp === 'function')
+  );
+}

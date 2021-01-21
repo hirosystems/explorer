@@ -16,20 +16,27 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
       <Box width="100%">
         <Pre>{value.type}</Pre>
         <Stack mt="extra-loose" spacing="base" width="100%">
-          {Object.keys(value.value).map((name: string) => (
-            <Box borderBottom={border()} pb="base">
-              <Caption display="inline-block" mb="tight">
-                {name}
-              </Caption>
-              <FunctionSummaryClarityValue
-                arg={{
-                  type: value.value[name].type,
-                  repr: value.value[name].value.toString(),
-                  name,
-                }}
-              />
-            </Box>
-          ))}
+          {Object.keys(value.value).map((name: string, index: number) => {
+            const isLast = Object.keys(value.value).length <= index + 1;
+            return (
+              <Box
+                borderBottom={!isLast ? border() : undefined}
+                pb={!isLast ? 'base' : undefined}
+                key={name}
+              >
+                <Caption display="inline-block" mb="tight">
+                  {name}
+                </Caption>
+                <FunctionSummaryClarityValue
+                  arg={{
+                    type: value.value[name].type,
+                    repr: value.value[name].value.toString(),
+                    name,
+                  }}
+                />
+              </Box>
+            );
+          })}
         </Stack>
       </Box>
     );

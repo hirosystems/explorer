@@ -20,6 +20,7 @@ const FILTERABLE_TYPES = [
   TransactionType.SMART_CONTRACT,
   TransactionType.CONTRACT_CALL,
   TransactionType.TOKEN_TRANSFER,
+  TransactionType.COINBASE,
 ];
 
 export const FilteredMessage: React.FC<{ filterKey: 'sandbox' | 'txList' } & GridProps> = ({
@@ -97,21 +98,11 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
 
 export const FilterPanel = React.memo(
   ({ filterKey, hideBackdrop, showBorder, bg, pointerEvents, ...rest }: any) => {
-    const {
-      handleClose,
-      showFailed,
-      showPending,
-      types,
-      handleUpdateTypes,
-      handleToggleShowPending,
-      handleToggleShowShowFailed,
-      showing,
-    } = useFilterState(filterKey);
+    const { handleClose, types, handleUpdateTypes, showing } = useFilterState(filterKey);
 
     const borderStyles = showBorder
       ? {
           border: border(),
-          borderTop: '0',
         }
       : {};
 
@@ -124,31 +115,18 @@ export const FilterPanel = React.memo(
         right={['-10px', '-10px', 'unset', 'unset']}
         flexGrow={1}
         position="absolute"
-        top="34px"
+        top="35px"
         overflowY="hidden"
         flexDirection="column"
         px="extra-loose"
         pointerEvents="none"
         {...rest}
       >
-        <Box
-          position="absolute"
-          top={0}
-          width="100%"
-          maxWidth="calc(100vw - 50px)"
-          left={['unset', 'unset', 'unset', 'unset']}
-          right={['20px', '20px', 'tight', 'tight']}
-          bg={color('border')}
-          height="1px"
-          zIndex={999999}
-        />
         <Transition
-          transition={`all 280ms cubic-bezier(0.4, 0, 0.2, 1)`}
           timeout={{ enter: 50, exit: 150 }}
           styles={{
             init: {
               transform: 'translateY(-100%)',
-              // opacity: 0,
             },
             entered: { transform: 'translateY(0)', opacity: 1 },
             exiting: {
@@ -164,13 +142,15 @@ export const FilterPanel = React.memo(
               p="base"
               pb="loose"
               top="1px"
-              bg={bg || color('bg-light')}
+              bg={bg}
               width="100%"
               borderRadius="0 0 16px 16px"
               willChange="transform, opacity"
               style={styles}
               boxShadow="high"
               pointerEvents="all"
+              transition={`280ms cubic-bezier(0.4, 0, 0.2, 1)`}
+              transitionProperty="opacity, transform"
               {...borderStyles}
             >
               <Box
@@ -178,16 +158,16 @@ export const FilterPanel = React.memo(
                 top={'-48px'}
                 left="0"
                 width="100%"
-                bg={color('bg-light')}
+                bg={color('bg')}
                 height="50px"
               />
               <Flex pb="base" alignItems="center" justifyContent="space-between">
                 <Title>Filter transactions</Title>
                 <IconButton onClick={handleClose} dark icon={CloseIcon} />
               </Flex>
-              <Flex justifyContent="space-between">
-                <Stack alignItems="flex-start" spacing="base">
-                  {FILTERABLE_TYPES.map(type => (
+              <Flex justifyContent="flex-start">
+                <Stack alignItems="flex-start" spacing="base" mr="base">
+                  {[FILTERABLE_TYPES[0], FILTERABLE_TYPES[1]].map(type => (
                     <CheckableElement
                       onClick={handleUpdateTypes}
                       value={!!types.find(_type => _type === type)}
@@ -196,17 +176,15 @@ export const FilterPanel = React.memo(
                     />
                   ))}
                 </Stack>
-                <Stack alignItems="flex-end" spacing="base">
-                  <Toggle
-                    value={showPending}
-                    onClick={() => handleToggleShowPending()}
-                    label="Show pending"
-                  />
-                  <Toggle
-                    value={showFailed}
-                    onClick={() => handleToggleShowShowFailed()}
-                    label="Show failed"
-                  />
+                <Stack alignItems="flex-start" spacing="base">
+                  {[FILTERABLE_TYPES[2], FILTERABLE_TYPES[3]].map(type => (
+                    <CheckableElement
+                      onClick={handleUpdateTypes}
+                      value={!!types.find(_type => _type === type)}
+                      type={type}
+                      key={type}
+                    />
+                  ))}
                 </Stack>
               </Flex>
             </Box>

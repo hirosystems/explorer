@@ -4,6 +4,7 @@ import { useModal } from '@common/hooks/use-modal';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IS_BROWSER } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
+import { useAuthState } from '@common/hooks/use-auth';
 
 type ChainMode = NetworkMode | undefined;
 type SetChainMode = (mode: ChainMode) => Promise<void>;
@@ -11,34 +12,35 @@ type SetChainMode = (mode: ChainMode) => Promise<void>;
 // kind of like useState, but for the query param state
 export const useChainMode = (): [ChainMode, SetChainMode] => {
   const router = useRouter();
+  const { setAuthResponse } = useAuthState();
 
-  const authResponse = router.query?.authResponse
-    ? { authResponse: router.query?.authResponse }
-    : {};
+  const setChainMode = async (chain: ChainMode) => {
+    const params = router.query || {};
+    if (router.query.authResponse) {
+      setAuthResponse(params.authResponse as string);
+      delete params.authResponse;
+    }
 
-  const setChainMode = useCallback(
-    async (chain: ChainMode) => {
-      await router.replace(
-        {
-          pathname: router.pathname,
-          query: {
-            ...router.query,
-            ...authResponse,
-            chain,
-          },
+    if (router.query.chain) {
+      delete params.chain;
+    }
+    await router.replace(
+      {
+        pathname: router.pathname,
+        query: {
+          ...params,
+          chain,
         },
-        {
-          pathname: router.pathname,
-          query: {
-            chain,
-            ...authResponse,
-          },
+      },
+      {
+        pathname: router.pathname,
+        query: {
+          ...params,
+          chain,
         },
-        { shallow: true }
-      );
-    },
-    [router]
-  );
+      }
+    );
+  };
 
   return [router.query.chain as ChainMode, setChainMode];
 };

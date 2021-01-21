@@ -1,4 +1,4 @@
-import { atomFamily, atom, selectorFamily } from 'recoil';
+import { atomFamily, atom, selectorFamily, selector } from 'recoil';
 import { UserData, AppConfig, UserSession } from '@stacks/auth';
 import { AuthOptions } from '@stacks/connect';
 import { generateRandomName } from '@common/hooks/use-random-name';
@@ -12,6 +12,10 @@ import { APP_DETAILS } from '@common/constants';
 export const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
 
+export const authResponseState = atom<null | string>({
+  key: 'authResponse',
+  default: null,
+});
 export const authOptionsAtom = atom<Partial<AuthOptions>>({
   key: 'authOptions',
   default: {
@@ -33,6 +37,24 @@ export const userDataAtom = atom<UserData | undefined>({
   key: 'sandbox.userData',
   default: undefined,
   effects_UNSTABLE: [userDataEffect],
+});
+
+export const pendingSignInState = selector({
+  key: 'auth.pending',
+  get: ({ get }) => {
+    const authResponse = get(authResponseState);
+    const userData = get(userDataAtom);
+    if (authResponse && !userData) {
+      return true;
+    }
+  },
+});
+
+export const isSignedInSelector = selector({
+  key: 'auth.isSignedIn',
+  get: ({ get }) => {
+    return userSession.isUserSignedIn();
+  },
 });
 
 export const codeBodyState = atom({
@@ -118,17 +140,20 @@ export const replResultState = atom({
 export type TxTypeFilterOptions = [
   typeof TransactionType.SMART_CONTRACT,
   typeof TransactionType.CONTRACT_CALL,
-  typeof TransactionType.TOKEN_TRANSFER
+  typeof TransactionType.TOKEN_TRANSFER,
+  typeof TransactionType.COINBASE
+];
+export const DEFAULT_TX_FILTER_TYPES = [
+  TransactionType.SMART_CONTRACT,
+  TransactionType.CONTRACT_CALL,
+  TransactionType.TOKEN_TRANSFER,
+  TransactionType.COINBASE,
 ];
 export const filterState = atomFamily({
   key: 'sandbox.tx-panel.filter',
   default: {
     showing: false,
-    types: [
-      TransactionType.SMART_CONTRACT,
-      TransactionType.CONTRACT_CALL,
-      TransactionType.TOKEN_TRANSFER,
-    ],
+    types: DEFAULT_TX_FILTER_TYPES,
     showPending: true,
     showFailed: true,
   },

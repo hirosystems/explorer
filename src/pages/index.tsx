@@ -1,44 +1,19 @@
-import * as React from 'react';
+import React, { memo } from 'react';
 import { Flex, Box, Grid } from '@stacks/ui';
-import type {
-  MempoolTransactionListResponse,
-  TransactionResults,
-} from '@blockstack/stacks-blockchain-api-types';
 import { NextPage, NextPageContext } from 'next';
 import { Title } from '@components/typography';
 import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
 import { SearchComponent } from '@components/search/search';
-import { fetchTxList } from '@common/api/transactions';
-import { fetchBlocksList, FetchBlocksListResponse } from '@common/api/blocks';
-import { HomeTxs } from '@components/new-tx-component';
-import { getServerSideApiServer } from '@common/api/utils';
-import { useApiServer } from '@common/hooks/use-api';
-import useSWR from 'swr';
+import { TabbedTransactionList } from '@components/tabbed-transaction-list';
+import { getSsrHomeProps } from '@common/lib/pages/home';
+import {
+  HOMEPAGE,
+  HOMEPAGE_TX_LIST_CONFIRMED,
+  HOMEPAGE_TX_LIST_MEMPOOL,
+} from '@common/constants/data';
 
-interface FetchHomepageDataResponse {
-  transactions: TransactionResults;
-  blocks: FetchBlocksListResponse;
-}
-
-const fetchHomepageData = (apiServer: string) => async (): Promise<FetchHomepageDataResponse> => {
-  const [transactions, blocks] = await Promise.all([
-    fetchTxList({
-      apiServer,
-      limit: 10,
-      types: ['smart_contract', 'contract_call', 'token_transfer'],
-    })(),
-    fetchBlocksList({
-      apiServer,
-      limit: 10,
-    })(),
-  ]);
-
-  return {
-    transactions: transactions as TransactionResults,
-    blocks,
-  };
-};
+const ITEM_LIMIT = 10;
 
 const PageTop: React.FC = React.memo(() => (
   <Flex
@@ -66,34 +41,23 @@ const PageTop: React.FC = React.memo(() => (
   </Flex>
 ));
 
-interface HomeData {
-  transactions: TransactionResults;
-  blocks: FetchBlocksListResponse;
-}
-
-export const useHomepageData = (initialData?: HomeData) => {
-  const apiServer = useApiServer();
-
-  const { data, mutate } = useSWR<FetchHomepageDataResponse>(
-    'home',
-    () => fetchHomepageData(apiServer)(),
-    {
-      initialData,
-      suspense: false,
-    }
+const HomeTransactions: React.FC = memo(() => {
+  return (
+    <TabbedTransactionList
+      key={HOMEPAGE}
+      confirmed={{
+        key: HOMEPAGE_TX_LIST_CONFIRMED,
+        limit: ITEM_LIMIT,
+      }}
+      mempool={{
+        key: HOMEPAGE_TX_LIST_MEMPOOL,
+        limit: ITEM_LIMIT,
+      }}
+    />
   );
+});
 
-  return {
-    data,
-    refresh: mutate,
-  };
-};
-
-const Home: NextPage<any> = React.memo(({ mempool, ...props }) => {
-  const { data } = useHomepageData(props);
-  if (!data) {
-    return null;
-  }
+const Home: NextPage<any> = memo(({ blocks }) => {
   return (
     <>
       <Meta />
@@ -104,28 +68,20 @@ const Home: NextPage<any> = React.memo(({ mempool, ...props }) => {
         gridTemplateColumns={['100%', '100%', 'calc(60% - 32px) 40%']}
         width="100%"
       >
-        <HomeTxs confirmed={data.transactions.results} mempool={mempool.results} />
-
-        <BlocksList blocks={data.blocks.results} />
+        <HomeTransactions />
+        <BlocksList blocks={blocks.results} />
       </Grid>
     </>
   );
 });
 
-export async function getServerSideProps(ctx: NextPageContext) {
-  const apiServer = await getServerSideApiServer(ctx);
-  const data = await fetchHomepageData(apiServer)();
-  const mempool = await fetchTxList({
-    apiServer,
-    limit: 10,
-    mempool: true,
-  })();
-
+export async function getServerSideProps(context: NextPageContext) {
+  const { blocks, dehydratedState } = await getSsrHomeProps(context);
   return {
     props: {
-      ...data,
-      mempool,
+      blocks,
       isHome: true,
+      dehydratedState,
     },
   };
 }

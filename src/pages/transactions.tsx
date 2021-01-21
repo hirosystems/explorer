@@ -1,43 +1,21 @@
-import * as React from 'react';
+import React, { memo } from 'react';
 import { Box } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
-import { TransactionList } from '@components/transaction-list';
-import { fetchTxList } from '@common/api/transactions';
-import {
-  TransactionResults,
-  MempoolTransactionListResponse,
-} from '@blockstack/stacks-blockchain-sidecar-types';
 import { NextPage, NextPageContext } from 'next';
-import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
-import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
-import { getServerSideApiServer } from '@common/api/utils';
+import { prefetchTransactionsPageData } from '@common/lib/pages/transactions';
+import { TabbedTransactionList } from '@components/tabbed-transaction-list';
+import { useFetchTransactions } from '@common/hooks/data/use-fetch-transactions';
+import {
+  TRANSACTIONS_PAGE_TX_LIST_CONFIRMED,
+  TRANSACTIONS_PAGE_TX_LIST_MEMPOOL,
+} from '@common/constants/data';
+import { useFilterState } from '@common/hooks/use-filter-state';
 
-interface InitialData {
-  transactions: TransactionResults;
-  mempool: MempoolTransactionListResponse;
-}
+const ITEM_LIMIT = 50;
 
-const TransactionsPage: NextPage<InitialData> = initialData => {
-  const {
-    data: transactions,
-    loadMore,
-    isReachingEnd,
-    isLoadingMore,
-  } = useInfiniteFetch<Transaction>({
-    initialData: initialData.transactions.results,
-    type: 'tx',
-    limit: 25,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  });
-
-  const { data: mempool } = useInfiniteFetch<MempoolTransaction>({
-    initialData: initialData.mempool.results,
-    type: 'tx',
-    limit: 25,
-    pending: true,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  });
+const TransactionsPage: NextPage<any> = () => {
+  const { types } = useFilterState('txList');
 
   return (
     <>
@@ -46,39 +24,29 @@ const TransactionsPage: NextPage<InitialData> = initialData => {
         <Title mt="72px" color="white" as="h1" fontSize="36px">
           Transactions
         </Title>
+        <TabbedTransactionList
+          infinite
+          confirmed={{
+            key: TRANSACTIONS_PAGE_TX_LIST_CONFIRMED,
+            limit: ITEM_LIMIT,
+            txTypes: types,
+          }}
+          mempool={{
+            key: TRANSACTIONS_PAGE_TX_LIST_MEMPOOL,
+            limit: ITEM_LIMIT,
+            txTypes: types,
+          }}
+        />
       </Box>
-      <TransactionList
-        mempool={mempool || []}
-        transactions={transactions || []}
-        loadMore={loadMore}
-        isReachingEnd={isReachingEnd}
-        isLoadingMore={isLoadingMore}
-        hideFilter={false}
-      />
     </>
   );
 };
 
-TransactionsPage.getInitialProps = async (ctx: NextPageContext): Promise<InitialData> => {
-  const apiServer = await getServerSideApiServer(ctx);
-
-  const [transactions, mempool] = await Promise.all([
-    fetchTxList({
-      apiServer,
-      limit: 50,
-      types: ['smart_contract', 'contract_call', 'token_transfer'],
-    })(),
-    fetchTxList({
-      apiServer,
-      limit: 25,
-      mempool: true,
-    })(),
-  ]);
-
+export async function getServerSideProps(context: NextPageContext) {
+  const { dehydratedState } = await prefetchTransactionsPageData(context);
   return {
-    transactions: transactions as InitialData['transactions'],
-    mempool: mempool as InitialData['mempool'],
+    props: { dehydratedState },
   };
-};
+}
 
 export default TransactionsPage;

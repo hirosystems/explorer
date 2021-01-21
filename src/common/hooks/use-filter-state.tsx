@@ -3,7 +3,6 @@ import { useRecoilCallback, useRecoilState } from 'recoil';
 
 import type { TxTypeFilterOptions } from '@store/sandbox';
 import { filterState } from '@store/sandbox';
-import { TransactionType } from '@models/transaction.interface';
 
 export const useFilterState = (key: 'sandbox' | 'txList', showCoinbase = false) => {
   const [filter, setFilterState] = useRecoilState(filterState(key));
@@ -60,7 +59,6 @@ export const useFilterState = (key: 'sandbox' | 'txList', showCoinbase = false) 
     handleClose,
     handleOpen,
     ...filter,
-    // @ts-ignore
-    types: [...filter.types].concat(showCoinbase ? TransactionType.COINBASE : undefined),
+    types: [...filter.types].filter(t => t),
   };
 };

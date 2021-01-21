@@ -154,6 +154,8 @@ const AddressPage: NextPage<AddressPageData> = props => {
     }
   );
 
+  const limit = 50;
+
   const {
     data: _transactions,
     loadMore,
@@ -162,7 +164,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
   } = useInfiniteFetch<Transaction>({
     initialData: data?.transactions?.results as Transaction[],
     type: 'tx',
-    limit: 50,
+    limit,
     principal,
     types: ['smart_contract', 'contract_call', 'token_transfer', 'coinbase'],
   });
@@ -210,7 +212,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
             mempool={pendingTxs}
             loadMore={loadMore}
             transactions={confirmedTxs}
-            isReachingEnd={isReachingEnd}
+            isReachingEnd={isReachingEnd || confirmedTxs.length < limit}
             isLoadingMore={isLoadingMore}
           />
         </Box>
