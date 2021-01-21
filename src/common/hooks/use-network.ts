@@ -3,12 +3,23 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { customNetworksListState, networkIndexState, networkListState } from '@store/network';
 import { useRouter } from 'next/router';
 import { DEFAULT_TESTNET_INDEX, DEFAULT_MAINNET_INDEX } from '@common/constants';
+import { networkSwitchingState } from '@store/network';
 
 export const useNetwork = () => {
   const router = useRouter();
   const setNetworkList = useSetRecoilState(customNetworksListState);
   const networkList = useRecoilValue(networkListState);
   const [currentNetworkIndex, setIndex] = useRecoilState(networkIndexState);
+  const [networkSwitching, setNetworkSwitching] = useRecoilState(networkSwitchingState);
+  const isSwitching = networkSwitching === 'pending';
+
+  const handleSetPendingChange = () => {
+    setNetworkSwitching('pending');
+  };
+
+  const handleSetIdleChange = () => {
+    setNetworkSwitching('idle');
+  };
 
   const handleAddListItem = useCallback(
     (item: { label: string; url: string }) =>
@@ -32,13 +43,16 @@ export const useNetwork = () => {
 
   const handleUpdateCurrentIndex = useCallback((newIndex: number) => {
     setIndex(newIndex);
+    handleSetPendingChange();
+    setTimeout(() => {
+      window.location.reload(true);
+    }, 1000);
   }, []);
 
   const handleAddNetwork = useCallback(
     (item: { label: string; url: string }) => {
       handleAddListItem(item);
       handleUpdateCurrentIndex(networkList.length);
-      router.reload();
     },
     [networkList, handleAddListItem, handleUpdateCurrentIndex]
   );
@@ -52,13 +66,11 @@ export const useNetwork = () => {
 
   const handleSetTestnet = useCallback(() => {
     handleUpdateCurrentIndex(DEFAULT_TESTNET_INDEX);
-    router.reload();
-  }, []);
+  }, [handleUpdateCurrentIndex]);
 
   const handleSetMainnet = useCallback(() => {
     handleUpdateCurrentIndex(DEFAULT_MAINNET_INDEX);
-    router.reload();
-  }, []);
+  }, [handleUpdateCurrentIndex]);
 
   return {
     networkList,

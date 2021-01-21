@@ -5,6 +5,8 @@ import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IS_BROWSER } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { useAuthState } from '@common/hooks/use-auth';
+import { useRecoilValue } from 'recoil';
+import { networkSwitchingState } from '@store/network';
 
 type ChainMode = NetworkMode | undefined;
 type SetChainMode = (mode: ChainMode) => Promise<void>;
@@ -32,13 +34,8 @@ export const useChainMode = (): [ChainMode, SetChainMode] => {
           chain,
         },
       },
-      {
-        pathname: router.pathname,
-        query: {
-          ...params,
-          chain,
-        },
-      }
+      `${router.pathname}?chain=${chain}`,
+      { shallow: true }
     );
   };
 
@@ -52,21 +49,22 @@ export const useChainModeEffect = () => {
   const { handleOpenDifferentNetworkModal } = useModal();
   const networkMode = useNetworkMode();
   const [chainMode, setChainMode] = useChainMode();
+  const networkModeChangeState = useRecoilValue(networkSwitchingState);
 
   const isTestnet = chainMode === NetworkModes.Testnet;
   const isMainnet = chainMode === NetworkModes.Mainnet;
 
   useEffect(() => {
-    if (IS_BROWSER && networkMode) {
+    if (IS_BROWSER && networkMode && networkModeChangeState !== 'pending') {
       if (!chainMode || (!isTestnet && !isMainnet)) {
         void setChainMode(networkMode);
       }
     }
-  }, [chainMode, networkMode, IS_BROWSER]);
+  }, [chainMode, networkMode, IS_BROWSER, networkModeChangeState]);
 
   useEffect(() => {
     if (IS_BROWSER) {
-      if (chainMode && chainMode !== networkMode) {
+      if (chainMode && chainMode !== networkMode && networkModeChangeState !== 'pending') {
         // alert if url is different than what is returned by api server
         // in the future we can have the modal display all servers added that match a given chain id
         handleOpenDifferentNetworkModal();

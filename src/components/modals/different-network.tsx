@@ -9,6 +9,7 @@ import { useToggle } from 'react-use';
 import { useNetwork } from '@common/hooks/use-network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { getInvertedChainMode } from '@common/utils';
+import { useLoading } from '@common/hooks/use-loading';
 
 const HelperInfo: React.FC = memo(() => {
   const [isOpen, toggleIsOpen] = useToggle(false);
@@ -56,6 +57,7 @@ export const DifferentNetworkModal: React.FC = memo(() => {
   const { handleSetTestnet, handleSetMainnet } = useNetwork();
   const networkMode = useNetworkMode();
   const setChainMode = useSetChainMode();
+  const { isLoading, doStartLoading } = useLoading();
 
   const isOpen = modal === MODALS.DIFFERENT_NETWORK;
   const inverted = networkMode && getInvertedChainMode(networkMode);
@@ -66,6 +68,7 @@ export const DifferentNetworkModal: React.FC = memo(() => {
   }, [networkMode, setChainMode, handleCloseModal]);
 
   const handleClick = useCallback(() => {
+    doStartLoading();
     if (inverted === 'testnet') {
       handleSetTestnet();
     } else {
@@ -94,7 +97,7 @@ export const DifferentNetworkModal: React.FC = memo(() => {
         </Text>
         <HelperInfo />
         <Stack mt="base-loose" spacing="base">
-          <Button width="100%" onClick={handleClick}>
+          <Button isLoading={isLoading} width="100%" onClick={handleClick}>
             Switch to {inverted}
           </Button>
           <Button onClick={handleClose} mode="secondary" width="100%">

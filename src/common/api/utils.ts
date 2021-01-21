@@ -6,6 +6,7 @@ import {
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,
   DEFAULT_STATUS_ENDPOINT,
+  DEFAULT_TESTNET_INDEX,
   DEFAULT_TESTNET_SERVER,
   MAINNET_CHAIN_ID,
   NETWORK_CURRENT_INDEX_COOKIE,
@@ -29,6 +30,7 @@ import { NetworkModes } from '@common/types/network';
  * is online (mainnet/testnet)
  */
 export const getServerSideApiServer = async (ctx: NextPageContext) => {
+  const chain = ctx.query?.chain;
   const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
   // set it to our default network
   let apiServer = defaultApiServer;
@@ -76,6 +78,15 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
       } catch (e) {
         // if it fails, reset to default
         apiServer = defaultApiServer;
+      }
+    } else {
+      // if nothing is set, and chain param is testnet, set it to testnet (for open graph rendering, etc)
+      if (!savedNetworkIndex && chain === 'testnet') {
+        apiServer = DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url;
+        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
       }
     }
     return apiServer;
