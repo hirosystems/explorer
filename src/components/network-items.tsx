@@ -153,7 +153,6 @@ interface NetworkItemsProps extends BoxProps {
 
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
   const { networkList, currentNetworkIndex, handleUpdateCurrentIndex } = useNetwork();
-  const router = useRouter();
 
   return (
     <>
@@ -170,7 +169,6 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
               onItemClick?.(item);
               if (!isActive) {
                 handleUpdateCurrentIndex(key);
-                router.reload();
               }
             }}
           />

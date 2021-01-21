@@ -43,3 +43,8 @@ export const networkCurrentUrlSelector = selector({
     return current.url;
   },
 });
+
+export const networkSwitchingState = atom<'idle' | 'pending'>({
+  key: 'app/network.switching-status',
+  default: 'idle',
+});
