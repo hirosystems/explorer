@@ -1,3 +1,19 @@
+# [1.7.0](https://github.com/blockstack/explorer/compare/v1.6.0...v1.7.0) (2021-01-22)
+
+
+### Bug Fixes
+
+* default index for tabs ([e75b721](https://github.com/blockstack/explorer/commit/e75b721a3189125f32bbe9b8759f9af8b3252681))
+* improved network-switching, ssr enabled ([74ed647](https://github.com/blockstack/explorer/commit/74ed6474190c9e3105026e660de7944a7e694406))
+* only show txs if more than one, fix border issue on last item ([1a69135](https://github.com/blockstack/explorer/commit/1a691354342b06c2d234a6382120825eb7010ec4))
+* show pending for contract-call, balances ([ab186d0](https://github.com/blockstack/explorer/commit/ab186d026799687c1814e3df689a605b13e4f715))
+* use react-query for blocks data on home ([3fca28a](https://github.com/blockstack/explorer/commit/3fca28a8eac8b5b44b38e8cf617532dfca79ac6a))
+
+
+### Features
+
+* show transactions on smart-contract tx page ([8b8e053](https://github.com/blockstack/explorer/commit/8b8e05375fbb79af9a2f18559e0ef722e07cfa85))
+
 # [1.6.0](https://github.com/blockstack/explorer/compare/v1.5.2...v1.6.0) (2021-01-22)
 
 
