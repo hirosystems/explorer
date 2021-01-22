@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, BoxProps, Flex, color, Stack, Spinner, transition } from '@stacks/ui';
+import { Box, BoxProps, Flex, color, Stack, transition } from '@stacks/ui';
 import { Section } from '@components/section';
 import { capitalize } from '@common/utils';
 import { Caption } from '@components/typography';
@@ -18,13 +18,25 @@ import { useFetchTransactions } from '@common/hooks/data/use-fetch-transactions'
 
 const TX_TABS = 'tabs/tx-list';
 
-const tabIndexState = atomFamily({
+interface TabIndexState {
+  key: string;
+  defaultIndex?: number;
+}
+
+const tabIndexState = atomFamily<number, Readonly<TabIndexState>>({
   key: 'tabs.index',
   default: 0,
+  effects_UNSTABLE: param => [
+    ({ trigger, setSelf }) => {
+      if (trigger === 'get') {
+        setSelf(param.defaultIndex || 0);
+      }
+    },
+  ],
 });
 
-const useTabs = (key: string) => {
-  const [currentIndex, setCurrentIndex] = useRecoilState(tabIndexState(key));
+const useTabs = (key: string, defaultIndex?: number) => {
+  const [currentIndex, setCurrentIndex] = useRecoilState(tabIndexState({ key, defaultIndex }));
 
   return {
     currentIndex,
@@ -35,6 +47,7 @@ const useTabs = (key: string) => {
 interface TabProps extends BoxProps {
   tab: string;
   index: number;
+  defaultIndex?: number;
 }
 
 interface TabIndicatorProps extends BoxProps {
@@ -56,9 +69,9 @@ const TabActiveIndicator: React.FC<TabIndicatorProps> = memo(({ isHovered, isAct
   />
 ));
 
-const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, ...rest }) => {
+const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, defaultIndex, ...rest }) => {
   const [isHovered, bind] = useHover();
-  const { currentIndex, setCurrentIndex } = useTabs(TX_TABS);
+  const { currentIndex, setCurrentIndex } = useTabs(TX_TABS, defaultIndex);
   const isActive = index === currentIndex;
   const hoverProps = isActive
     ? {
@@ -98,12 +111,12 @@ const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, ...rest }) => {
   );
 });
 
-const Tabs = memo(() => {
+const Tabs = memo(({ defaultIndex }: { defaultIndex?: number }) => {
   const tabs = ['pending', 'confirmed'];
   return (
     <Stack isInline spacing="0">
       {tabs.map((tab, index) => (
-        <Tab tab={tab} index={index} key={index} />
+        <Tab defaultIndex={defaultIndex} tab={tab} index={index} key={index} />
       ))}
     </Stack>
   );
@@ -161,10 +174,6 @@ export const TabbedTransactionList: React.FC<{
   confirmed: any;
   infinite?: boolean;
 }> = ({ mempool: mempoolOptions, confirmed: confirmedOptions, infinite }) => {
-  const [loading, setLoading] = useState(false);
-  const { currentIndex } = useTabs(TX_TABS);
-  const mempoolSelected = currentIndex === 0;
-
   const confirmed = useFetchTransactions({
     ...confirmedOptions,
   });
@@ -172,6 +181,12 @@ export const TabbedTransactionList: React.FC<{
     ...mempoolOptions,
     mempool: true,
   });
+
+  const [loading, setLoading] = useState(false);
+  // if there are no mempool transactions, default to confirmed
+  const defaultIndex = mempool?.data.pages[0].results.length === 0 ? 1 : 0;
+  const { currentIndex } = useTabs(TX_TABS, defaultIndex);
+  const mempoolSelected = currentIndex === 0;
 
   const currentList: InfiniteQueryObserverBaseResult = mempoolSelected ? mempool : confirmed;
 
@@ -185,7 +200,7 @@ export const TabbedTransactionList: React.FC<{
 
   return (
     <Section
-      title={Tabs}
+      title={() => <Tabs defaultIndex={defaultIndex} />}
       headerProps={{
         pl: '0',
       }}
