@@ -1,3 +1,18 @@
+# [1.6.0](https://github.com/blockstack/explorer/compare/v1.5.2...v1.6.0) (2021-01-22)
+
+
+### Bug Fixes
+
+* clean up app files ([9c6b074](https://github.com/blockstack/explorer/commit/9c6b0743fe4e901c3e127c9f5e22f837ef7846c6))
+* remove unused api path ([a07bf34](https://github.com/blockstack/explorer/commit/a07bf3490d5dfd51cced03b7a2ceeb652e513e3b))
+
+
+### Features
+
+* home tx component ([cab27b8](https://github.com/blockstack/explorer/commit/cab27b85587bb44408750549eb49b1fd83202980))
+* start new tx component ([f62b529](https://github.com/blockstack/explorer/commit/f62b529bbabf6e67184487c9b77e9e95932ce475))
+* transactions list, function summary, coinbase, etc ([12471aa](https://github.com/blockstack/explorer/commit/12471aa38d38f6c0fbd50b4613213c2b4cdb519b))
+
 ## [1.5.2](https://github.com/blockstack/explorer/compare/v1.5.1...v1.5.2) (2021-01-16)
 
 
