@@ -7,7 +7,7 @@ import {
 import { Transaction } from '@models/transaction.interface';
 
 export const hasTokenBalance = (balances?: AddressBalanceResponse) => {
-  if (!balances) return 0;
+  if (!balances) return false;
   let totalFt = 0;
   let totalNft = 0;
   if (balances?.fungible_tokens) {
@@ -19,6 +19,33 @@ export const hasTokenBalance = (balances?: AddressBalanceResponse) => {
   }
 
   return totalFt + totalNft > 0;
+};
+
+export const hasStxBalance = (balances?: AddressBalanceResponse) => {
+  if (!balances) return false;
+
+  let hasBalance = false;
+  if (balances?.stx) {
+    const {
+      balance,
+      total_sent,
+      total_received,
+      total_fees_sent,
+      total_miner_rewards_received,
+    } = balances?.stx;
+
+    const total =
+      parseInt(balance) +
+      parseInt(total_sent) +
+      parseInt(total_received) +
+      parseInt(total_fees_sent) +
+      parseInt(total_miner_rewards_received);
+    if (total > 0) {
+      hasBalance = true;
+    }
+  }
+
+  return hasBalance;
 };
 
 export const getStackStartBlockHeight = (transactions?: MempoolTransaction[] | Transaction[]) => {

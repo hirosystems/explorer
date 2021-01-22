@@ -149,7 +149,8 @@ export const fetchPendingTxs = (apiServer: string) => async ({
             tx.tx_type === 'contract_call' ||
             tx.tx_type === 'token_transfer') &&
             tx.sender_address === query) ||
-          (tx.tx_type === 'token_transfer' && tx.token_transfer.recipient_address === query)
+          (tx.tx_type === 'token_transfer' && tx.token_transfer.recipient_address === query) ||
+          (tx.tx_type === 'contract_call' && tx.contract_call.contract_id === query)
       ) || [];
 
     return pendingTransactions;
