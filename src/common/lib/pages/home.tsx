@@ -1,20 +1,30 @@
 import type { NextPageContext } from 'next';
-import { fetchBlocksList } from '@common/api/blocks';
 import { getServerSideApiServer } from '@common/api/utils';
 import { QueryClient } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
-import { HOMEPAGE_TX_LIST_CONFIRMED, HOMEPAGE_TX_LIST_MEMPOOL } from '@common/constants/data';
+import {
+  HOMEPAGE_BLOCKS_LIST,
+  HOMEPAGE_TX_LIST_CONFIRMED,
+  HOMEPAGE_TX_LIST_MEMPOOL,
+} from '@common/constants/data';
 import { preloadTransactionsListData } from '@common/lib/transactions';
+import { preloadBlocksList } from '@common/lib/blocks';
 import devalue from 'devalue';
 
-export async function getSsrHomeProps(context: NextPageContext) {
+export async function getSsrHomeProps(
+  context: NextPageContext
+): Promise<{ dehydratedState: string }> {
   const apiServer = await getServerSideApiServer(context);
   const queryClient = new QueryClient();
-  const [blocks] = await Promise.all([
-    fetchBlocksList({
+  await Promise.all([
+    preloadBlocksList({
       apiServer,
-      limit: 10,
-    })(),
+      queryClient,
+      options: {
+        limit: 10,
+        key: HOMEPAGE_BLOCKS_LIST,
+      },
+    }),
     preloadTransactionsListData({
       apiServer,
       queryClient,
@@ -36,5 +46,5 @@ export async function getSsrHomeProps(context: NextPageContext) {
 
   const dehydratedState = devalue(dehydrate(queryClient));
 
-  return { blocks, dehydratedState };
+  return { dehydratedState };
 }
