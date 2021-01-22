@@ -9,9 +9,11 @@ import { TabbedTransactionList } from '@components/tabbed-transaction-list';
 import { getSsrHomeProps } from '@common/lib/pages/home';
 import {
   HOMEPAGE,
+  HOMEPAGE_BLOCKS_LIST,
   HOMEPAGE_TX_LIST_CONFIRMED,
   HOMEPAGE_TX_LIST_MEMPOOL,
 } from '@common/constants/data';
+import { useFetchBlocks } from '@common/hooks/data/use-fetch-blocks';
 
 const ITEM_LIMIT = 10;
 
@@ -57,7 +59,14 @@ const HomeTransactions: React.FC = memo(() => {
   );
 });
 
-const Home: NextPage<any> = memo(({ blocks }) => {
+const Home: NextPage<any> = memo(() => {
+  const blocks = useFetchBlocks({
+    key: HOMEPAGE_BLOCKS_LIST,
+    limit: 10,
+  });
+
+  const blocksData = blocks?.data?.pages?.[0]?.results;
+
   return (
     <>
       <Meta />
@@ -69,17 +78,16 @@ const Home: NextPage<any> = memo(({ blocks }) => {
         width="100%"
       >
         <HomeTransactions />
-        <BlocksList blocks={blocks.results} />
+        <BlocksList blocks={blocksData} />
       </Grid>
     </>
   );
 });
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { blocks, dehydratedState } = await getSsrHomeProps(context);
+  const { dehydratedState } = await getSsrHomeProps(context);
   return {
     props: {
-      blocks,
       isHome: true,
       dehydratedState,
     },
