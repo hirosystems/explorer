@@ -144,7 +144,11 @@ const TransactionList = memo<TransactionListProps>(props => {
           <TransactionListItem
             tx={item}
             key={item.tx_id}
-            isLast={limit ? itemIndex + 1 === limit : itemIndex + 1 === list.length}
+            isLast={
+              limit && list.length >= limit
+                ? itemIndex + 1 === limit
+                : itemIndex + 1 === list.length
+            }
           />
         )
       )}
@@ -185,6 +189,7 @@ export const TabbedTransactionList: React.FC<{
       headerProps={{
         pl: '0',
       }}
+      alignSelf="flex-start"
       isLoading={isFetching}
       topRight={!mempoolSelected && infinite && FilterButton}
     >
@@ -203,7 +208,7 @@ export const TabbedTransactionList: React.FC<{
             limit={!infinite && confirmedOptions.limit}
           />
         </Box>
-        <Box flexGrow={1} />
+        {/*<Box flexGrow={1} />*/}
         <SectionFooterAction
           path="transactions"
           isLoading={isFetchingNextPage || loading}
