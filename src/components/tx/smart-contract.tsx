@@ -34,7 +34,7 @@ const SmartContractPage = ({
           mode={transaction.post_condition_mode}
           conditions={transaction.post_conditions}
         />
-        {account?.transactions?.results ? (
+        {account?.transactions?.results && account?.transactions?.results.length > 1 ? (
           <TransactionList
             showCoinbase
             hideFilter
