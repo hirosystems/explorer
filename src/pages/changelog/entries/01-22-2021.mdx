@@ -1,0 +1,26 @@
+---
+date: 01/22/2021
+---
+
+![A screenshot of a list of calls to the BNS contract](/changelog/changelog-002.png)
+
+## Transactions on contract-deploy pages
+
+In the Stacks Blockchain, contracts are able to be participants in transactions. This is typically in the form of being
+the contract that is called for a function call transaction. This PR adds the list of transactions for any contract
+deploy transaction, giving the user the ability to see all calls to said contract. You will also be able to see any
+pending transaction related to a given contract. You can see
+an [example here](https://explorer.stacks.co/txid/0x41356e380d164c5233dd9388799a5508aae929ee1a7e6ea0c18f5359ce7b8c33?chain=mainnet), 
+with the PoX contract.
+
+## Contract balances
+
+In the same way that contracts are able to participate in transactions, they can also hold balances of STX, NFTs, and
+FTs. This PR implements the same balance card component that a user would see if they were on any other address page.
+
+### Other fixes
+
+- Fixed bugs / removed race conditions related to network switching.
+- Fixed a bug where links to testnet data would not render the correct open graph data.
+- The blocks list on the homepage now uses `react-query` just as the transaction lists do.
+- If there are no pending transactions, the transactions list view will default to confirmed transactions.

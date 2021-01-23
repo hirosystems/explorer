@@ -23,7 +23,9 @@ export const ChangelogEntry: React.FC<
 > = ({ entry, ...rest }) => (
   <Flex width="100%" {...rest}>
     <Flex flexShrink={0} justifyContent="flex-end" width="125px">
-      <Title color={color('text-caption')}>{toRelativeTime(entry.data.date)}</Title>
+      <Title color={color('text-caption')} fontSize={1} textAlign="right">
+        {toRelativeTime(entry.data.date)}
+      </Title>
     </Flex>
     <Box px="extra-loose" flexGrow={1} width="100%">
       {hydrate(entry.content, { components })}

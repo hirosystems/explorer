@@ -7,9 +7,7 @@ import { Section } from '@components/section';
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
-import hydrate from 'next-mdx-remote/hydrate';
 import renderToString from 'next-mdx-remote/render-to-string';
-
 
 // @ts-ignore
 import remarkImages from 'remark-images';
@@ -17,11 +15,10 @@ import remarkImages from 'remark-images';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import rehypeImages from '@common/lib/rehype-images';
 import { css, Theme } from '@stacks/ui-core';
-import { border, toRelativeTime } from '@common/utils';
+import { ChangelogEntry } from '@components/changelog/entry';
+import { components } from '@components/changelog/mdx';
 
-
-
-const ChangelogPage: NextPage = ({ posts }: any) => {
+const ChangelogPage: NextPage = ({ entries }: any) => {
   return (
     <>
       <Meta title="Changelog" />
@@ -30,7 +27,8 @@ const ChangelogPage: NextPage = ({ posts }: any) => {
           Changelog
         </Title>
         <Section minHeight="600px">
-          <Box
+          <Stack
+            spacing="64px"
             css={(theme: Theme) =>
               css({
                 '* + h1, * + h2, * + h3, * + h4, * + h5, * + h6': {
@@ -40,12 +38,10 @@ const ChangelogPage: NextPage = ({ posts }: any) => {
             }
             p="extra-loose"
           >
-            {posts.map((post: any, index: number) => {
-              return (
-
-              );
+            {[...entries].reverse().map((entry: any, index: number) => {
+              return <ChangelogEntry entry={entry} key={index} />;
             })}
-          </Box>
+          </Stack>
         </Section>
       </Box>
     </>
@@ -56,7 +52,7 @@ export async function getStaticProps() {
   const POSTS = path.join(process.cwd(), 'src', 'pages', 'changelog', 'entries');
   const postFilePaths = fs.readdirSync(POSTS).filter(path => /\.mdx?$/.test(path));
 
-  const posts = await Promise.all(
+  const entries = await Promise.all(
     postFilePaths.map(async filePath => {
       const source = fs.readFileSync(path.join(POSTS, filePath));
       const { content, data } = matter(source);
@@ -77,7 +73,7 @@ export async function getStaticProps() {
     })
   );
 
-  return { props: { posts } };
+  return { props: { entries } };
 }
 
 export default ChangelogPage;
