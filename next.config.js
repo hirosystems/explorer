@@ -26,7 +26,7 @@ module.exports = withPreact(
     },
     webpack(config, { dev }) {
       // Install webpack aliases:
-      const aliases = config?.resolve?.alias || (config.resolve.alias = {});
+      const aliases = config.resolve.alias || (config.resolve.alias = {});
 
       if (!dev) {
         config.plugins.push(
