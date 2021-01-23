@@ -4,7 +4,6 @@ import { Caption, Link, Text } from '@components/typography';
 import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import NextLink from 'next/link';
 import { TxLink } from '@components/links';
-import { convertPoxAddressToBtc } from '@common/utils/btc';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 const getPrettyClarityValueType = (type: any) => {
@@ -38,11 +37,7 @@ const TupleResult = ({ tuple, isPoxAddr }: any) => {
   const networkMode = useNetworkMode();
   let additional: any = null;
   if (isPoxAddr) {
-    const btc = convertPoxAddressToBtc(networkMode)({
-      version: Buffer.from(tuple[1][1].replace('0x', ''), 'hex'),
-      hashbytes: Buffer.from(tuple[0][1].replace('0x', ''), 'hex'),
-    });
-
+    const btc = 'BTC_ADDRESS';
     additional = (
       <Box display="block" as="span">
         <Caption mb="extra-tight">BTC address (converted)</Caption>

@@ -5,7 +5,6 @@ import { Meta } from '@components/meta-head';
 import { NextPage, NextPageContext } from 'next';
 import { prefetchTransactionsPageData } from '@common/lib/pages/transactions';
 import { TabbedTransactionList } from '@components/tabbed-transaction-list';
-import { useFetchTransactions } from '@common/hooks/data/use-fetch-transactions';
 import {
   TRANSACTIONS_PAGE_TX_LIST_CONFIRMED,
   TRANSACTIONS_PAGE_TX_LIST_MEMPOOL,
