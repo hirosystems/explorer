@@ -8,7 +8,7 @@ import {
 } from '@common/constants/data';
 import { preloadTransactionsListData } from '@common/lib/transactions';
 import devalue from 'devalue';
-import { DEFAULT_TX_FILTER_TYPES } from '@store/sandbox';
+import { DEFAULT_TX_FILTER_TYPES } from '@store/filter';
 
 export async function prefetchTransactionsPageData(context: NextPageContext) {
   const apiServer = await getServerSideApiServer(context);

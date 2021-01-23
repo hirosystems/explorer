@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Box, BoxProps, Flex } from '@stacks/ui';
-import { Caption, Link, Text } from '@components/typography';
-import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
+import {Box, BoxProps, Flex} from '@stacks/ui';
+import {Caption, Link, Text} from '@components/typography';
+import {clarityValuetoHumanReadable, microToStacks} from '@common/utils';
 import NextLink from 'next/link';
-import { TxLink } from '@components/links';
-import { convertPoxAddressToBtc } from '@common/utils/btc';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
+import {TxLink} from '@components/links';
+import {useNetworkMode} from '@common/hooks/use-network-mode';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -34,32 +33,27 @@ const tupleToArr = (tuple: string) =>
     .split(') (')
     .map(item => item.split(' '));
 
-const TupleResult = ({ tuple, isPoxAddr }: any) => {
+const TupleResult = ({tuple, isPoxAddr}: any) => {
   const networkMode = useNetworkMode();
   let additional: any = null;
-  try {
-    if (isPoxAddr) {
-      const btc = convertPoxAddressToBtc(networkMode)({
-        version: Buffer.from(tuple[1][1].replace('0x', ''), 'hex'),
-        hashbytes: Buffer.from(tuple[0][1].replace('0x', ''), 'hex'),
-      });
+  if (isPoxAddr) {
+    const btc = 'BTC_ADDRESS';
+    additional = (
+      <Box display="block" as="span">
+        <Caption mb="extra-tight">BTC address (converted)</Caption>
+        <Text
+          target="_blank"
+          as={Link}
+          href={`https://www.blockchain.com/btc${
+            networkMode === 'testnet' ? '-testnet' : ''
+          }/address/${btc}`}
+        >
+          {btc}
+        </Text>
+      </Box>
+    );
+  }
 
-      additional = (
-        <Box display="block" as="span">
-          <Caption mb="extra-tight">BTC address (converted)</Caption>
-          <Text
-            target="_blank"
-            as={Link}
-            href={`https://www.blockchain.com/btc${
-              networkMode === 'testnet' ? '-testnet' : ''
-            }/address/${btc}`}
-          >
-            {btc}
-          </Text>
-        </Box>
-      );
-    }
-  } catch (e) {}
   return (
     <>
       {tuple.map((entry: any, index: number, arr: any[]) =>
@@ -93,14 +87,14 @@ const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
 
     return (
       <>
-        <TupleResult isPoxAddr={arg.name === 'pox-addr'} tuple={value} />
+        <TupleResult isPoxAddr={arg.name === 'pox-addr'} tuple={value}/>
       </>
     );
   }
   return arg.repr;
 };
 
-const Principal: React.FC<{ principal: string } & BoxProps> = ({ principal, ...rest }) => (
+const Principal: React.FC<{ principal: string } & BoxProps> = ({principal, ...rest}) => (
   <NextLink href="/address/[principal]" as={`/address/${principal}`} passHref>
     <Link as="a" {...rest}>
       {principal}
@@ -108,7 +102,7 @@ const Principal: React.FC<{ principal: string } & BoxProps> = ({ principal, ...r
   </NextLink>
 );
 
-export const FunctionSummaryClarityValue = ({ arg, ...rest }: { arg: any }) => {
+export const FunctionSummaryClarityValue = ({arg, ...rest}: { arg: any }) => {
   if (arg.type === 'principal') {
     const principal = clarityValuetoHumanReadable(arg) as string;
     const isContract = principal.includes('.');
@@ -124,7 +118,7 @@ export const FunctionSummaryClarityValue = ({ arg, ...rest }: { arg: any }) => {
     }
     return (
       <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-        <Principal principal={principal} />
+        <Principal principal={principal}/>
         <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
       </Flex>
     );
