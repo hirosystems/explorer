@@ -55,7 +55,7 @@ const GlobalStyles = () => (
 const Grain: React.FC<BoxProps> = memo(props => (
   <Box
     as="img"
-    src="https://blockstack-www.imgix.net/metaverse/grain.jpg"
+    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format,compress&w=1800"
     width="100%"
     position="absolute"
     left={0}
