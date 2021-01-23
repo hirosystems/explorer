@@ -55,7 +55,7 @@ const GlobalStyles = () => (
 const Grain: React.FC<BoxProps> = memo(props => (
   <Box
     as="img"
-    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format,compress&w=1800"
+    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format"
     width="100%"
     position="absolute"
     left={0}
@@ -106,7 +106,9 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = mem
         <GlobalStyles />
         <Grain opacity={0.45} />
         <Grain />
-        <Video />
+        <Box display={['none', 'none', 'unset']}>
+          <Video />
+        </Box>
         <Box
           className="metaverse-bg"
           as={as}
