@@ -1,12 +1,12 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useModal } from '@common/hooks/use-modal';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IS_BROWSER } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
-import { useAuthState } from '@common/hooks/use-auth';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { networkSwitchingState } from '@store/network';
+import { authResponseState } from '@store/auth';
 
 type ChainMode = NetworkMode | undefined;
 type SetChainMode = (mode: ChainMode) => Promise<void>;
@@ -14,7 +14,7 @@ type SetChainMode = (mode: ChainMode) => Promise<void>;
 // kind of like useState, but for the query param state
 export const useChainMode = (): [ChainMode, SetChainMode] => {
   const router = useRouter();
-  const { setAuthResponse } = useAuthState();
+  const setAuthResponse = useSetRecoilState(authResponseState);
 
   const setChainMode = async (chain: ChainMode) => {
     const params = router.query || {};
