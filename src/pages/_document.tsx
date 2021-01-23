@@ -60,11 +60,7 @@ export default class MyDocument extends Document<DocumentProps> {
             }}
           />
           <link rel="preconnect" href="https://cdn.usefathom.com" crossOrigin="true" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap"
-            rel="stylesheet"
-          />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
         </Head>
         <body>
           <Main />
