@@ -12,7 +12,8 @@ type FunctionArg = Singleton<
 
 export const FunctionSummaryArguments: React.FC<{
   summary: ContractCallTransaction['contract_call'];
-}> = ({ summary }) => {
+  btc: null | string;
+}> = ({ summary, btc }) => {
   return summary.function_args ? (
     <Box width="100%">
       {summary.function_args.map((arg: FunctionArg, key: number) => {
@@ -31,7 +32,7 @@ export const FunctionSummaryArguments: React.FC<{
               <Flex mb="base" alignItems="center">
                 <Pre>{arg.name}</Pre>
               </Flex>
-              <FunctionSummaryClarityValue arg={arg} />
+              <FunctionSummaryClarityValue btc={btc} arg={arg} />
             </Box>
           </Row>
         );

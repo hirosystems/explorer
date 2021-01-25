@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Box, BoxProps, Flex} from '@stacks/ui';
-import {Caption, Link, Text} from '@components/typography';
-import {clarityValuetoHumanReadable, microToStacks} from '@common/utils';
+import { Box, BoxProps, Flex } from '@stacks/ui';
+import { Caption, Link, Text } from '@components/typography';
+import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import NextLink from 'next/link';
-import {TxLink} from '@components/links';
-import {useNetworkMode} from '@common/hooks/use-network-mode';
+import { TxLink } from '@components/links';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -33,11 +33,10 @@ const tupleToArr = (tuple: string) =>
     .split(') (')
     .map(item => item.split(' '));
 
-const TupleResult = ({tuple, isPoxAddr}: any) => {
+const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
   const networkMode = useNetworkMode();
   let additional: any = null;
-  if (isPoxAddr) {
-    const btc = 'BTC_ADDRESS';
+  if (isPoxAddr && btc) {
     additional = (
       <Box display="block" as="span">
         <Caption mb="extra-tight">BTC address (converted)</Caption>
@@ -74,7 +73,7 @@ const TupleResult = ({tuple, isPoxAddr}: any) => {
   );
 };
 
-const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
+const getValue = (arg: { name: string; type: any; repr: any; value: any }, btc: null | string) => {
   if (arg.type === 'uint') {
     const value = arg.repr.replace('u', '');
     if (arg.name.includes('ustx')) {
@@ -87,14 +86,14 @@ const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
 
     return (
       <>
-        <TupleResult isPoxAddr={arg.name === 'pox-addr'} tuple={value}/>
+        <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />
       </>
     );
   }
   return arg.repr;
 };
 
-const Principal: React.FC<{ principal: string } & BoxProps> = ({principal, ...rest}) => (
+const Principal: React.FC<{ principal: string } & BoxProps> = ({ principal, ...rest }) => (
   <NextLink href="/address/[principal]" as={`/address/${principal}`} passHref>
     <Link as="a" {...rest}>
       {principal}
@@ -102,7 +101,14 @@ const Principal: React.FC<{ principal: string } & BoxProps> = ({principal, ...re
   </NextLink>
 );
 
-export const FunctionSummaryClarityValue = ({arg, ...rest}: { arg: any }) => {
+export const FunctionSummaryClarityValue = ({
+  arg,
+  btc,
+  ...rest
+}: {
+  arg: any;
+  btc: null | string;
+}) => {
   if (arg.type === 'principal') {
     const principal = clarityValuetoHumanReadable(arg) as string;
     const isContract = principal.includes('.');
@@ -118,14 +124,14 @@ export const FunctionSummaryClarityValue = ({arg, ...rest}: { arg: any }) => {
     }
     return (
       <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-        <Principal principal={principal}/>
+        <Principal principal={principal} />
         <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
       </Flex>
     );
   }
   return (
     <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-      <Text>{getValue(arg)}</Text>
+      <Text>{getValue(arg, btc)}</Text>
       <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
     </Flex>
   );
