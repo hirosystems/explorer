@@ -22,10 +22,12 @@ export const renderTxPageComponent = ({
   data,
   block,
   account,
+  btc,
 }: {
   data: FetchTransactionResponse;
   block?: Block;
   account?: AllAccountData;
+  btc: null | string;
 }) => {
   if ('transaction' in data) {
     switch (data.transaction.tx_type) {
@@ -34,7 +36,7 @@ export const renderTxPageComponent = ({
       case 'token_transfer':
         return <TokenTransferPage {...(data as TxData<TokenTransferTxs>)} block={block} />;
       case 'contract_call':
-        return <ContractCallPage {...(data as TxData<ContractCallTxs>)} block={block} />;
+        return <ContractCallPage {...(data as TxData<ContractCallTxs>)} btc={btc} block={block} />;
       case 'smart_contract':
         return (
           <SmartContractPage

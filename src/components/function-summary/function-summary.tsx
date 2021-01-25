@@ -11,7 +11,8 @@ export const FunctionSummarySection = memo<{
   result: any;
   summary: ContractCallTransaction['contract_call'];
   isPending?: boolean;
-}>(({ summary, result, isPending, ...rest }) => {
+  btc: null | string;
+}>(({ summary, result, isPending, btc, ...rest }) => {
   const items = useMemo(
     () => [
       {
@@ -36,7 +37,9 @@ export const FunctionSummarySection = memo<{
         },
         alignItems: 'flex-start',
         flexGrow: 1,
-        children: summary.function_args ? <FunctionSummaryArguments summary={summary} /> : null,
+        children: summary.function_args ? (
+          <FunctionSummaryArguments btc={btc} summary={summary} />
+        ) : null,
       },
     ],
     [summary, isPending, result]
