@@ -8,7 +8,7 @@ export const useFathom = () => {
 
   useEffect(() => {
     Fathom.load(FATHOM_ID, {
-      includedDomains: ['explorer.stacks.co'],
+      includedDomains: ['https://explorer.stacks.co'],
     });
 
     function onRouteChangeComplete() {

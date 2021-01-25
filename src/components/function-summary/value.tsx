@@ -33,11 +33,10 @@ const tupleToArr = (tuple: string) =>
     .split(') (')
     .map(item => item.split(' '));
 
-const TupleResult = ({ tuple, isPoxAddr }: any) => {
+const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
   const networkMode = useNetworkMode();
   let additional: any = null;
-  if (isPoxAddr) {
-    const btc = 'BTC_ADDRESS';
+  if (isPoxAddr && btc) {
     additional = (
       <Box display="block" as="span">
         <Caption mb="extra-tight">BTC address (converted)</Caption>
@@ -71,7 +70,7 @@ const TupleResult = ({ tuple, isPoxAddr }: any) => {
   );
 };
 
-const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
+const getValue = (arg: { name: string; type: any; repr: any; value: any }, btc: null | string) => {
   if (arg.type === 'uint') {
     const value = arg.repr.replace('u', '');
     if (arg.name.includes('ustx')) {
@@ -84,7 +83,7 @@ const getValue = (arg: { name: string; type: any; repr: any; value: any }) => {
 
     return (
       <>
-        <TupleResult isPoxAddr={arg.name === 'pox-addr'} tuple={value} />
+        <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />
       </>
     );
   }
@@ -99,7 +98,14 @@ const Principal: React.FC<{ principal: string } & BoxProps> = ({ principal, ...r
   </NextLink>
 );
 
-export const FunctionSummaryClarityValue = ({ arg, ...rest }: { arg: any }) => {
+export const FunctionSummaryClarityValue = ({
+  arg,
+  btc,
+  ...rest
+}: {
+  arg: any;
+  btc: null | string;
+}) => {
   if (arg.type === 'principal') {
     const principal = clarityValuetoHumanReadable(arg) as string;
     const isContract = principal.includes('.');
@@ -122,7 +128,7 @@ export const FunctionSummaryClarityValue = ({ arg, ...rest }: { arg: any }) => {
   }
   return (
     <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-      <Text>{getValue(arg)}</Text>
+      <Text>{getValue(arg, btc)}</Text>
       <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
     </Flex>
   );

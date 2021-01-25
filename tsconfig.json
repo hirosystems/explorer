@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,15 +19,38 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "paths": {
-      "@store/*": ["store/*"],
-      "@store": ["store/index"],
-      "@components/*": ["components/*"],
-      "@pages/*": ["pages/*"],
-      "@common/*": ["common/*"],
-      "@models/*": ["models/*"]
+      "@store/*": [
+        "store/*"
+      ],
+      "@store": [
+        "store/index"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@common/*": [
+        "common/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ],
+      "@sandbox/*": [
+        "sandbox/*"
+      ]
     },
     "baseUrl": "src"
   },
-  "exclude": ["node_modules", ".next"],
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "common.d.ts"]
+  "exclude": [
+    "node_modules",
+    ".next"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "common.d.ts"
+  ]
 }
