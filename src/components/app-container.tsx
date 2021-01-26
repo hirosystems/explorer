@@ -4,10 +4,11 @@ import { useChainModeEffect } from '@common/hooks/use-chain-mode';
 
 interface AppContainerProps {
   isHome?: boolean;
+  fullWidth?: boolean;
 }
 
 export const AppContainer: React.FC<AppContainerProps> = props => {
-  const { children, isHome } = props;
+  const { children, ...rest } = props;
   useChainModeEffect();
-  return <AppWrapper isHome={isHome}>{children}</AppWrapper>;
+  return <AppWrapper {...rest}>{children}</AppWrapper>;
 };

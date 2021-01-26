@@ -79,8 +79,8 @@ export const Header: React.FC<
       <HeaderBar
         mx="auto"
         width="100%"
-        maxWidth={isHome ? '100%' : '1280px'}
-        justifyContent={isHome ? 'space-between' : 'unset'}
+        maxWidth={isHome || fullWidth ? '100%' : '1280px'}
+        justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
         {...props}
       >
         <LogoNavItem />
@@ -100,6 +100,7 @@ export const Header: React.FC<
                   variant="small"
                   mr="base"
                   width="100%"
+                  maxWidth="760px"
                 />
                 <IconButton
                   display={['grid', 'grid', 'none', 'none']}
