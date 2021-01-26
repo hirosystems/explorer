@@ -114,3 +114,5 @@ export type AllModals = keyof typeof reverseMap;
 
 export const withApiServer = (apiServer: string) => (path?: string) =>
   path ? apiServer + path : apiServer;
+
+export const POX_ADDRESS = 'SP000000000000000000002Q6VF78';
