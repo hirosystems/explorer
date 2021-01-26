@@ -37,27 +37,29 @@ const tupleToArr = (tuple: string) =>
 const TupleResult = ({ tuple, isPoxAddr }: any) => {
   const networkMode = useNetworkMode();
   let additional: any = null;
-  if (isPoxAddr) {
-    const btc = convertPoxAddressToBtc(networkMode)({
-      version: Buffer.from(tuple[1][1].replace('0x', ''), 'hex'),
-      hashbytes: Buffer.from(tuple[0][1].replace('0x', ''), 'hex'),
-    });
+  try {
+    if (isPoxAddr) {
+      const btc = convertPoxAddressToBtc(networkMode)({
+        version: Buffer.from(tuple[1][1].replace('0x', ''), 'hex'),
+        hashbytes: Buffer.from(tuple[0][1].replace('0x', ''), 'hex'),
+      });
 
-    additional = (
-      <Box display="block" as="span">
-        <Caption mb="extra-tight">BTC address (converted)</Caption>
-        <Text
-          target="_blank"
-          as={Link}
-          href={`https://www.blockchain.com/btc${
-            networkMode === 'testnet' ? '-testnet' : ''
-          }/address/${btc}`}
-        >
-          {btc}
-        </Text>
-      </Box>
-    );
-  }
+      additional = (
+        <Box display="block" as="span">
+          <Caption mb="extra-tight">BTC address (converted)</Caption>
+          <Text
+            target="_blank"
+            as={Link}
+            href={`https://www.blockchain.com/btc${
+              networkMode === 'testnet' ? '-testnet' : ''
+            }/address/${btc}`}
+          >
+            {btc}
+          </Text>
+        </Box>
+      );
+    }
+  } catch (e) {}
   return (
     <>
       {tuple.map((entry: any, index: number, arr: any[]) => (
