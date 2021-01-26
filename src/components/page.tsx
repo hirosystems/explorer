@@ -117,7 +117,7 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({
     overflow="hidden"
   >
     <Header fullWidth={fullWidth} isHome={isHome} />
-    <Page {...props} />
+    <Page fullWidth={fullWidth} {...props} />
     <MetaverseBg />
   </Flex>
 );

@@ -24,6 +24,7 @@ module.exports = withBundleAnalyzer({
     NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE,
   },
   webpack(config, { dev }) {
+    config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
     const aliases = config.resolve.alias || (config.resolve.alias = {});
     const externals = config.externals || [];
 
@@ -35,19 +36,19 @@ module.exports = withBundleAnalyzer({
         })
       );
 
-      // preact specific
-      const splitChunks = config.optimization && config.optimization.splitChunks;
-      if (splitChunks) {
-        const cacheGroups = splitChunks.cacheGroups;
-        const test = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
-        if (cacheGroups.framework) {
-          cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
-            test,
-          });
-          // if you want to merge the 2 small commons+framework chunks:
-          cacheGroups.commons.name = 'framework';
-        }
-      }
+      // preact specific (disabled for now, breaking some things :C)
+      // const splitChunks = config.optimization && config.optimization.splitChunks;
+      // if (splitChunks) {
+      //   const cacheGroups = splitChunks.cacheGroups;
+      //   const test = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
+      //   if (cacheGroups.framework) {
+      //     cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
+      //       test,
+      //     });
+      //     // if you want to merge the 2 small commons+framework chunks:
+      //     cacheGroups.commons.name = 'framework';
+      //   }
+      // }
 
       aliases.react = aliases['react-dom'] = 'preact/compat';
       aliases['react-ssr-prepass'] = 'preact-ssr-prepass';
@@ -56,8 +57,6 @@ module.exports = withBundleAnalyzer({
     aliases['@blockstack/stacks-transactions'] = '@stacks/transactions';
     aliases['@blockstack/stacks-transactions/lib/clarity'] = '@stacks/transactions/dist/clarity';
     aliases['@tabler/icons'] = '@tabler/icons/icons-react/dist/index.esm.min';
-
-    externals.push('bitcoinjs-lib');
 
     config.externals = externals;
     return config;
