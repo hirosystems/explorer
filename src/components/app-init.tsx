@@ -4,11 +4,11 @@ import { ProgressBar } from '@components/progress-bar';
 import { PageWrapper } from '@components/page';
 import { Modals } from '@components/modals';
 
-export const AppWrapper: React.FC<{ isHome?: boolean }> = React.memo(({ children, isHome }) => (
+export const AppWrapper: React.FC<{ isHome?: boolean; fullWidth?: boolean }> = React.memo(props => (
   <ThemeProvider>
     <ColorModeProvider defaultMode="light">
       <ProgressBar />
-      <PageWrapper isHome={isHome}>{children}</PageWrapper>
+      <PageWrapper {...props} />
       <Modals />
     </ColorModeProvider>
   </ThemeProvider>
