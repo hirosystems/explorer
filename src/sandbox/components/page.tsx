@@ -5,6 +5,7 @@ import { SignedOutView } from '@sandbox/components/views/signed-out-view';
 import { SignedInView } from '@sandbox/components/views/signed-in-view';
 
 const PageContent = React.memo(() => {
+  return <SignedInView />;
   useAuth();
   const { userData } = useConnect();
   const isSignedIn = userData?.appPrivateKey;

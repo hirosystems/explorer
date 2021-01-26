@@ -414,6 +414,7 @@ const BackElement = props => {
 const ContractCall = ({ setView }) => {
   return (
     <Flex
+      flexGrow={1}
       maxHeight="900px"
       overflow="auto"
       px="extra-loose"

@@ -66,7 +66,7 @@ export const FaucetView = () => {
     }
   };
   return (
-    <Grid maxHeight="600px" placeItems="center" flexDirection="column" p="extra-loose">
+    <Grid flexGrow={1} maxHeight="600px" placeItems="center" flexDirection="column" p="extra-loose">
       <Box mb="base-loose">
         <Grid
           placeItems="center"

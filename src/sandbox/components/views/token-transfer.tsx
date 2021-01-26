@@ -63,7 +63,7 @@ export const TokenTransferView = () => {
     setFieldValue('amount', microToStacks(total, false));
   };
   return (
-    <Flex flexDirection="column" p="extra-loose">
+    <Flex flexGrow={1} flexDirection="column" p="extra-loose">
       <Box as="form" onSubmit={handleSubmit}>
         <Stack spacing="base">
           <Title fontSize="24px">Send STX</Title>
