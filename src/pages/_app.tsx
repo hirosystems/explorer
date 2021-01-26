@@ -16,13 +16,13 @@ interface MyAppProps extends AppProps {
 }
 
 function MyApp({ Component, pageProps, networkMode }: MyAppProps) {
-  const { isHome, dehydratedState, ...props } = pageProps;
+  const { isHome, fullWidth, dehydratedState, ...props } = pageProps;
 
   useSetNetworkMode(networkMode);
   useFathom();
 
   return (
-    <AppConfig isHome={isHome} dehydratedState={dehydratedState}>
+    <AppConfig isHome={isHome} fullWidth={fullWidth} dehydratedState={dehydratedState}>
       <Component networkMode={networkMode} {...props} />
     </AppConfig>
   );

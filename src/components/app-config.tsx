@@ -22,24 +22,29 @@ const queryClient = new QueryClient({
 
 interface AppConfigProps {
   isHome?: boolean;
+  fullWidth?: boolean;
   dehydratedState?: any;
 }
 
-export const AppConfig: React.FC<AppConfigProps> = memo(({ children, isHome, dehydratedState }) => (
-  <SWRConfig
-    value={{
-      refreshInterval: DEFAULT_POLLING_INTERVAL,
-      suspense: false,
-    }}
-  >
-    <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={dehydratedState && eval(dehydratedState)}>
-          <CacheProvider value={cache}>
-            <AppContainer isHome={isHome}>{children}</AppContainer>
-          </CacheProvider>
-        </Hydrate>
-      </QueryClientProvider>
-    </RecoilRoot>
-  </SWRConfig>
-));
+export const AppConfig: React.FC<AppConfigProps> = memo(
+  ({ children, isHome, fullWidth, dehydratedState }) => (
+    <SWRConfig
+      value={{
+        refreshInterval: DEFAULT_POLLING_INTERVAL,
+        suspense: false,
+      }}
+    >
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={dehydratedState && eval(dehydratedState)}>
+            <CacheProvider value={cache}>
+              <AppContainer isHome={isHome} fullWidth={fullWidth}>
+                {children}
+              </AppContainer>
+            </CacheProvider>
+          </Hydrate>
+        </QueryClientProvider>
+      </RecoilRoot>
+    </SWRConfig>
+  )
+);
