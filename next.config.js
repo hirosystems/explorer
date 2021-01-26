@@ -57,8 +57,6 @@ module.exports = withBundleAnalyzer({
     aliases['@blockstack/stacks-transactions/lib/clarity'] = '@stacks/transactions/dist/clarity';
     aliases['@tabler/icons'] = '@tabler/icons/icons-react/dist/index.esm.min';
 
-    externals.push('bitcoinjs-lib');
-
     config.externals = externals;
     return config;
   },
