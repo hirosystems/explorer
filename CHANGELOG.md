@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/blockstack/explorer/compare/v1.7.0...v1.7.1) (2021-01-27)
+
+
+### Bug Fixes
+
+* try/catch btc conversion ([a9e99c7](https://github.com/blockstack/explorer/commit/a9e99c71669703ea0025ae51a40b0a774e94f5c6))
+
 # [1.7.0](https://github.com/blockstack/explorer/compare/v1.6.0...v1.7.0) (2021-01-22)
 
 
