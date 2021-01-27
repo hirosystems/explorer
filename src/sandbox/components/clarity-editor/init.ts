@@ -2,8 +2,9 @@
 import { loadWASM } from 'onigasm'; // peer dependency of 'monaco-textmate'
 import { IGrammarDefinition, Registry } from 'monaco-textmate'; // peer dependency
 import { wireTmGrammars } from 'monaco-editor-textmate';
+import { Monaco } from '@monaco-editor/react';
 
-export async function liftOff(monaco: any) {
+export async function liftOff(monaco: Monaco) {
   try {
     await loadWASM(`onigasm.wasm`);
     const registry = new Registry({

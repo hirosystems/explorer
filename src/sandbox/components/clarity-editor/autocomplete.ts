@@ -1,7 +1,8 @@
 // @ts-nocheck
 import { clarity } from '@sandbox/common/clarity-reference';
+import { Monaco } from '@monaco-editor/react';
 
-export function autocomplete(monaco: any) {
+export function autocomplete(monaco: Monaco) {
   // @ts-ignore
   const provider = {
     triggerCharacters: ['(', "'", '"', ' '],
@@ -106,9 +107,9 @@ export function autocomplete(monaco: any) {
   monaco.languages.registerCompletionItemProvider('clarity', provider);
 }
 
-export function hover(monaco: any) {
+export function hover(monaco: Monaco) {
   monaco.languages.registerHoverProvider('clarity', {
-    provideHover: function (model, position) {
+    provideHover: function (model: any, position: any) {
       const word = model.getWordAtPosition(position);
       const wordsWithHyphens = model.getLineContent(position.lineNumber).match(/((?:\w+-)+\w+)/);
 
@@ -118,8 +119,16 @@ export function hover(monaco: any) {
       const functions = clarity.functions.find(
         func => func.name === token || func.name === `${token}?`
       );
+
       if (functions) {
+        const thing =
+          model
+            .findMatches(`${token}?`)
+            .find(i => i.range.startLineNumber === position.lineNumber) ||
+          model.findMatches(`${token}`).find(i => i.range.startLineNumber === position.lineNumber);
+        console.log(thing);
         return {
+          range: thing?.range || undefined,
           contents: [
             { value: `**${functions.name}**` },
             functions.input_type !== 'Not Applicable'
