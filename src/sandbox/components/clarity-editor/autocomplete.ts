@@ -111,7 +111,12 @@ export function hover(monaco: Monaco) {
   monaco.languages.registerHoverProvider('clarity', {
     provideHover: function (model: any, position: any) {
       const word = model.getWordAtPosition(position);
-      const wordsWithHyphens = model.getLineContent(position.lineNumber).match(/((?:\w+-)+\w+)/);
+      const hyphenWordPattern = new RegExp(/((?:\w+-)+\w+)/, 'g');
+      const wordsWithHyphens: string[] = [
+        ...new Set([
+          ...[...model.getLineContent(position.lineNumber).matchAll(hyphenWordPattern)].flat(),
+        ]),
+      ];
 
       const token =
         (word?.word && wordsWithHyphens?.find(t => t.includes(word.word))) || word?.word;
@@ -121,14 +126,13 @@ export function hover(monaco: Monaco) {
       );
 
       if (functions) {
-        const thing =
+        const foundWord =
           model
             .findMatches(`${token}?`)
             .find(i => i.range.startLineNumber === position.lineNumber) ||
           model.findMatches(`${token}`).find(i => i.range.startLineNumber === position.lineNumber);
-        console.log(thing);
         return {
-          range: thing?.range || undefined,
+          range: foundWord?.range || undefined,
           contents: [
             { value: `**${functions.name}**` },
             functions.input_type !== 'Not Applicable'
@@ -145,7 +149,11 @@ export function hover(monaco: Monaco) {
 
       const keywords = clarity.keywords.find(keyword => keyword.name === token);
       if (keywords) {
+        const foundWord = model
+          .findMatches(`${token}`)
+          .find(i => i.range.startLineNumber === position.lineNumber);
         return {
+          range: foundWord?.range || undefined,
           contents: [
             { value: `**${keywords.name}**` },
             keywords.output_type !== 'Not Applicable'
