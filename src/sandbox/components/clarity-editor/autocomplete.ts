@@ -105,3 +105,39 @@ export function autocomplete(monaco: any) {
   };
   monaco.languages.registerCompletionItemProvider('clarity', provider);
 }
+
+export function hover(monaco: any) {
+  monaco.languages.registerHoverProvider('clarity', {
+    provideHover: function (model, position) {
+      const word = model.getWordAtPosition(position);
+      const wordsWithHypens = model.getLineContent(position.lineNumber).match(/((?:\w+-)+\w+)/);
+
+      const token = wordsWithHypens?.find(t => t.includes(word.word)) || word.word;
+
+      const reference = clarity.functions.find(func => func.name.startsWith(token));
+      if (reference) {
+        return {
+          range: {
+            startLineNumber: position.lineNumber,
+            startColumn: position.column,
+            endLineNumber: position.lineNumber,
+            endColumn: position.column,
+          },
+          contents: [
+            { value: `**${reference.name}**` },
+            reference.input_type !== 'Not Applicable'
+              ? { value: `**Input type** \`${reference.input_type}\`` }
+              : null,
+            reference.output_type !== 'Not Applicable'
+              ? { value: `**Output type** \`${reference.output_type}\`` }
+              : null,
+            { value: `**Signature** \`${reference.signature}\`` },
+            { value: reference.description },
+          ].filter(t => t),
+        };
+      }
+
+      return;
+    },
+  } as any);
+}
