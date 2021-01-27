@@ -35,19 +35,19 @@ module.exports = withBundleAnalyzer({
         })
       );
 
-      // preact specific
-      const splitChunks = config.optimization && config.optimization.splitChunks;
-      if (splitChunks) {
-        const cacheGroups = splitChunks.cacheGroups;
-        const test = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
-        if (cacheGroups.framework) {
-          cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
-            test,
-          });
-          // if you want to merge the 2 small commons+framework chunks:
-          cacheGroups.commons.name = 'framework';
-        }
-      }
+      // preact specific (disabled for now, breaking some things :C)
+      // const splitChunks = config.optimization && config.optimization.splitChunks;
+      // if (splitChunks) {
+      //   const cacheGroups = splitChunks.cacheGroups;
+      //   const test = /[\\/]node_modules[\\/](preact|preact-render-to-string|preact-context-provider)[\\/]/;
+      //   if (cacheGroups.framework) {
+      //     cacheGroups.preact = Object.assign({}, cacheGroups.framework, {
+      //       test,
+      //     });
+      //     // if you want to merge the 2 small commons+framework chunks:
+      //     cacheGroups.commons.name = 'framework';
+      //   }
+      // }
 
       aliases.react = aliases['react-dom'] = 'preact/compat';
       aliases['react-ssr-prepass'] = 'preact-ssr-prepass';
