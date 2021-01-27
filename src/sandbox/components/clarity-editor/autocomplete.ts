@@ -112,7 +112,7 @@ export function hover(monaco: any) {
       const word = model.getWordAtPosition(position);
       const wordsWithHypens = model.getLineContent(position.lineNumber).match(/((?:\w+-)+\w+)/);
 
-      const token = wordsWithHypens?.find(t => t.includes(word.word)) || word.word;
+      const token = (word?.word && wordsWithHypens?.find(t => t.includes(word.word))) || word?.word;
 
       const reference = clarity.functions.find(func => func.name.startsWith(token));
       if (reference) {
