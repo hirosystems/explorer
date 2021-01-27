@@ -94,7 +94,7 @@
     "language-functions": {
       "patterns": [
         {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\\n\n  ( or|and|xor|not|begin|let|if|ok|err|\n    unwrap!|unwrap-err!|unwrap-panic|unwrap-err-panic|match|try!|asserts!\n    map-get\\?|var-get|contract-map-get\\?|get|tuple|\n    define-public|define-private|define-constant|define-map|define-data-var|\n    define-fungible-token|define-non-fungible-token|\n    define-read-only|let\\* )\n  (?=(\\s|\\())\n",
+          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\\n\n  ( impl-trait|print|or|and|xor|not|begin|let|if|ok|err|\n    unwrap!|unwrap-err!|unwrap-panic|unwrap-err-panic|match|try!|asserts!\n    map-get\\?|var-get|contract-map-get\\?|get|tuple|\n    define-public|define-private|define-constant|define-map|define-data-var|\n    define-fungible-token|define-non-fungible-token|\n    define-read-only|let\\* )\n  (?=(\\s|\\())\n",
           "name": "keyword.control.clarity"
         },
         {
@@ -102,7 +102,7 @@
           "name": "support.function.boolean-test.clarity"
         },
         {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( var-set|map-set|map-delete|map-insert|\n    ft-transfer\\?|nft-transfer\\?|nft-mint\\?|ft-mint\\?|nft-get-owner\\?|ft-get-balance\\?|\n    contract-call\\?|stx-burn\\?|stx-transfer\\?|stx-get-balance|use-trait)\n  (?=(\\s|\\()) # followed by space or (\n",
+          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( var-set|map-set|map-delete|map-insert|\n    ft-transfer\\?|nft-transfer\\?|nft-mint\\?|ft-mint\\?|nft-get-owner\\?|ft-get-balance\\?|\n    contract-call\\?|stx-burn\\?|stx-transfer\\?|stx-get-balance|use-trait|map-get\\?)\n  (?=(\\s|\\()) # followed by space or (\n",
           "name": "support.function.with-side-effects.clarity"
         },
         {
@@ -144,7 +144,7 @@
           "include": "#define-map"
         },
         {
-          "begin": "(?x) (?<=\\() # preceded by (\n  (define-public|define-private|define-constant|define-read-only)\\s+\n  \\(    # open parens\n    ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n    ((\\s+\n      \\( # open parens for parameter/type pair\n      \\s*\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s+\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s*\n      \\) # close parens for parameter/type pair\n      \\s*\n      )*)\n    \\s*\n  \\)    # close parens\n",
+          "begin": "(?x) (?<=\\() # preceded by (\n  (define-public|define-private|define-constant|define-read-only)\\s+\n  \\(    # open parens\n    ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n    ((\\s+\n      \\( # open parens for parameter/type pair\n      \\s*\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s+\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s*\n      \\) # close parens for parameter/type pair\n      \\s*\n      )*)\n    \\s*\n  (?=(\\s|\\())    # close parens\n",
           "captures": {
             "1": {
               "name": "keyword.control.clarity"

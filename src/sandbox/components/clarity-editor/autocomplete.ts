@@ -127,10 +127,21 @@ export function hover(monaco: Monaco) {
 
       if (functions) {
         const foundWord =
-          model
-            .findMatches(`${token}?`)
-            .find(i => i.range.startLineNumber === position.lineNumber) ||
-          model.findMatches(`${token}`).find(i => i.range.startLineNumber === position.lineNumber);
+          model.findMatches(`${token}?`).find(i => {
+            if (i.range.startLineNumber === position.lineNumber) {
+              if (position.column >= i.range.startColumn && position.column <= i.range.endColumn) {
+                return true;
+              }
+            }
+          }) ||
+          model.findMatches(`${token}`).find(i => {
+            if (i.range.startLineNumber === position.lineNumber) {
+              if (position.column >= i.range.startColumn && position.column <= i.range.endColumn) {
+                return true;
+              }
+            }
+          });
+        if (!foundWord) return;
         return {
           range: foundWord?.range || undefined,
           contents: [
@@ -149,9 +160,14 @@ export function hover(monaco: Monaco) {
 
       const keywords = clarity.keywords.find(keyword => keyword.name === token);
       if (keywords) {
-        const foundWord = model
-          .findMatches(`${token}`)
-          .find(i => i.range.startLineNumber === position.lineNumber);
+        const foundWord = model.findMatches(`${token}`).find(i => {
+          if (i.range.startLineNumber === position.lineNumber) {
+            if (position.column >= i.range.startColumn && position.column <= i.range.endColumn) {
+              return true;
+            }
+          }
+        });
+        if (!foundWord) return;
         return {
           range: foundWord?.range || undefined,
           contents: [
