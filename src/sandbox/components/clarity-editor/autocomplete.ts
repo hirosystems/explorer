@@ -110,29 +110,40 @@ export function hover(monaco: any) {
   monaco.languages.registerHoverProvider('clarity', {
     provideHover: function (model, position) {
       const word = model.getWordAtPosition(position);
-      const wordsWithHypens = model.getLineContent(position.lineNumber).match(/((?:\w+-)+\w+)/);
+      const wordsWithHyphens = model.getLineContent(position.lineNumber).match(/((?:\w+-)+\w+)/);
 
-      const token = (word?.word && wordsWithHypens?.find(t => t.includes(word.word))) || word?.word;
+      const token =
+        (word?.word && wordsWithHyphens?.find(t => t.includes(word.word))) || word?.word;
 
-      const reference = clarity.functions.find(func => func.name.startsWith(token));
-      if (reference) {
+      const functions = clarity.functions.find(
+        func => func.name === token || func.name === `${token}?`
+      );
+      if (functions) {
         return {
-          range: {
-            startLineNumber: position.lineNumber,
-            startColumn: position.column,
-            endLineNumber: position.lineNumber,
-            endColumn: position.column,
-          },
           contents: [
-            { value: `**${reference.name}**` },
-            reference.input_type !== 'Not Applicable'
-              ? { value: `**Input type** \`${reference.input_type}\`` }
+            { value: `**${functions.name}**` },
+            functions.input_type !== 'Not Applicable'
+              ? { value: `**Input type** \`${functions.input_type}\`` }
               : null,
-            reference.output_type !== 'Not Applicable'
-              ? { value: `**Output type** \`${reference.output_type}\`` }
+            functions.output_type !== 'Not Applicable'
+              ? { value: `**Output type** \`${functions.output_type}\`` }
               : null,
-            { value: `**Signature** \`${reference.signature}\`` },
-            { value: reference.description },
+            { value: `**Signature** \`${functions.signature}\`` },
+            { value: functions.description },
+          ].filter(t => t),
+        };
+      }
+
+      const keywords = clarity.keywords.find(keyword => keyword.name === token);
+      if (keywords) {
+        return {
+          contents: [
+            { value: `**${keywords.name}**` },
+            keywords.output_type !== 'Not Applicable'
+              ? { value: `**Output type** \`${keywords.output_type}\`` }
+              : null,
+            { value: `\`${keywords.example}\`` },
+            { value: keywords.description },
           ].filter(t => t),
         };
       }
