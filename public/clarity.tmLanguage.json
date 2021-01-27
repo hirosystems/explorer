@@ -102,7 +102,7 @@
           "name": "support.function.boolean-test.clarity"
         },
         {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( var-set|map-set|map-delete|map-insert|\n    ft-transfer\\?|nft-transfer\\?|nft-mint\\?|ft-mint\\?|nft-get-owner\\?|ft-get-balance\\?|\n    contract-call\\?|stx-burn\\?|stx-transfer\\?|stx-get-balance|use-trait|map-get\\?)\n  (?=(\\s|\\()) # followed by space or (\n",
+          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( var-set|map-set|map-delete|map-insert|\n    ft-transfer\\?|nft-transfer\\?|nft-mint\\?|ft-mint\\?|nft-get-owner\\?|ft-get-balance\\?|\n    contract-call\\?|stx-burn\\?|stx-transfer\\?|stx-get-balance|use-trait|map-get\\?|ft-get-balance|ft-get-supply)\n  (?=(\\s|\\()) # followed by space or (\n",
           "name": "support.function.with-side-effects.clarity"
         },
         {
@@ -145,6 +145,33 @@
         },
         {
           "begin": "(?x) (?<=\\() # preceded by (\n  (define-public|define-private|define-constant|define-read-only)\\s+\n  \\(    # open parens\n    ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n    ((\\s+\n      \\( # open parens for parameter/type pair\n      \\s*\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s+\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s*\n      \\) # close parens for parameter/type pair\n      \\s*\n      )*)\n    \\s*\n  (?=(\\s|\\())    # close parens\n",
+          "captures": {
+            "1": {
+              "name": "keyword.control.clarity"
+            },
+            "2": {
+              "name": "entity.name.function.clarity"
+            },
+            "3": {
+              "name": "variable.parameter.function.clarity"
+            }
+          },
+          "end": "(?=\\))",
+          "name": "meta.declaration.procedure.clarity",
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#sexp"
+            },
+            {
+              "include": "#illegal"
+            }
+          ]
+        },
+        {
+          "begin": "(?x) (?<=\\() # preceded by (\n  (define-public|define-private|define-constant|define-read-only)\\s+\n  \\(    # open parens\n    ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\)  (?=(\\s|\\())    # close parens\n",
           "captures": {
             "1": {
               "name": "keyword.control.clarity"

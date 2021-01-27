@@ -65,7 +65,9 @@ export function autocomplete(monaco: Monaco) {
       });
 
       if (
-        textUntilPosition.match(/(nft-mint|nft-burn|nft-get-owner|nft-transfer)\?\s$/) &&
+        textUntilPosition.match(
+          /(nft-get-balance|nft-get-supply|nft-mint|nft-burn|nft-get-owner|nft-transfer)\?\s$/
+        ) &&
         [...nfts].length > 0
       ) {
         return {
@@ -77,7 +79,9 @@ export function autocomplete(monaco: Monaco) {
         };
       }
       if (
-        textUntilPosition.match(/(ft-mint|ft-burn|ft-get-owner|ft-transfer)\?\s$/) &&
+        textUntilPosition.match(
+          /(ft-get-balance|ft-get-supply|ft-mint|ft-burn|ft-get-owner|ft-transfer)\?\s$/
+        ) &&
         [...fts].length > 0
       ) {
         return {
