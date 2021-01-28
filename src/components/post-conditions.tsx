@@ -24,6 +24,7 @@ import { Circle } from '@components/circle';
 import { StxInline } from '@components/icons/stx-inline';
 import { getTicker } from '@components/tx-events';
 import { Badge } from '@components/badge';
+import { microStxToStx } from '@stacks/ui-utils';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -205,7 +206,11 @@ const getConditionTicker = (condition: PostCondition) => {
 };
 
 const getAmount = (condition: PostCondition) => {
-  if (condition.type === 'stx' || condition.type === 'fungible') {
+  if (condition.type === 'stx') {
+    return microStxToStx(condition.amount);
+  }
+
+  if (condition.type === 'fungible') {
     return parseFloat(condition.amount).toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 6,
