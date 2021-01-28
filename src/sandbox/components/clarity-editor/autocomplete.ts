@@ -96,9 +96,9 @@ export function autocomplete(monaco: Monaco) {
       if (textUntilPosition.endsWith('(')) {
         return {
           suggestions: clarity.functions.map(func => ({
-            // Show the full file path for label
             label: func.name,
-            // Don't keep extension for JS files
+            detail: func.input_type,
+            documentation: func.description,
             insertText: func.name.split(' ')[0],
             kind: monaco.languages.CompletionItemKind.Function,
           })),
