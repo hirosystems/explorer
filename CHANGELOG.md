@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/blockstack/explorer/compare/v1.7.1...v1.7.2) (2021-01-28)
+
+
+### Bug Fixes
+
+* microstx to stx for stx post conditions ([1d2a343](https://github.com/blockstack/explorer/commit/1d2a3436ff81cb6bc855c17d66de8051f67f3782))
+
 ## [1.7.1](https://github.com/blockstack/explorer/compare/v1.7.0...v1.7.1) (2021-01-27)
 
 
