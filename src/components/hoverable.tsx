@@ -22,6 +22,8 @@ export const HoverableItem: React.FC<
         _hover={{
           cursor: isActive ? 'unset' : 'pointer',
         }}
+        as="span"
+        display="block"
         {...bind}
         {...props}
       >
