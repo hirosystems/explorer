@@ -60,13 +60,6 @@ const HomeTransactions: React.FC = memo(() => {
 });
 
 const Home: NextPage<any> = memo(() => {
-  const blocks = useFetchBlocks({
-    key: HOMEPAGE_BLOCKS_LIST,
-    limit: 10,
-  });
-
-  const blocksData = blocks?.data?.pages?.[0]?.results;
-
   return (
     <>
       <Meta />
@@ -78,7 +71,7 @@ const Home: NextPage<any> = memo(() => {
         width="100%"
       >
         <HomeTransactions />
-        <BlocksList blocks={blocksData} />
+        <BlocksList key={HOMEPAGE_BLOCKS_LIST} fetchKey={HOMEPAGE_BLOCKS_LIST} limit={10} />
       </Grid>
     </>
   );
