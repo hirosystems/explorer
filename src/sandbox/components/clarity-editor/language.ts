@@ -1,36 +1,38 @@
 // @ts-nocheck
-export function configLanguage(monaco: any) {
+import { Monaco } from '@monaco-editor/react';
+
+export function configLanguage(monaco: Monaco) {
   monaco.languages.register({
     id: 'clarity',
     extensions: ['.clar'],
-    configuration: {
-      wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\#\%\^\&\*\(\)\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
-      comments: {
-        lineComment: ';;',
-      },
-      brackets: [['(', ')']],
-      autoClosingPairs: [
-        {
-          open: '(',
-          close: ')',
-        },
-        {
-          open: '"',
-          close: '"',
-        },
-        {
-          open: '{',
-          close: '}',
-        },
-      ],
-      surroundingPairs: [
-        { open: '(', close: ')' },
-        {
-          open: '{',
-          close: '}',
-        },
-        { open: '"', close: '"' },
-      ],
+  });
+  monaco.languages.setLanguageConfiguration('clarity', {
+    wordPattern: /(-?\d*\.\d\w*)|([^`~!#%^&*()=+\[{\]}\\|;:'",>?\s]+)/g,
+    comments: {
+      lineComment: ';;',
     },
+    brackets: [['(', ')']],
+    autoClosingPairs: [
+      {
+        open: '(',
+        close: ')',
+      },
+      {
+        open: '"',
+        close: '"',
+      },
+      {
+        open: '{',
+        close: '}',
+      },
+    ],
+    surroundingPairs: [
+      { open: '(', close: ')' },
+      {
+        open: '{',
+        close: '}',
+      },
+      { open: '"', close: '"' },
+    ],
   });
 }
