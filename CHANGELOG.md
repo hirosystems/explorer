@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/blockstack/explorer/compare/v1.7.2...v1.7.3) (2021-01-29)
+
+
+### Bug Fixes
+
+* rendering for tx result list type in tuple ([b90d91b](https://github.com/blockstack/explorer/commit/b90d91b50de1b8abb16cc405df016fedab239c13))
+
 ## [1.7.2](https://github.com/blockstack/explorer/compare/v1.7.1...v1.7.2) (2021-01-28)
 
 
