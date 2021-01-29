@@ -7,7 +7,8 @@ import { FunctionSummaryClarityValue } from '@components/function-summary/value'
 import { IconAlertTriangle, IconCircleCheck } from '@tabler/icons';
 
 export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_result'] }) => {
-  const { success, type, value } = cvToJSON(hexToCV((result as any).hex as string));
+  if (!result) return null;
+  const { success, type, value } = cvToJSON(hexToCV(result.hex));
 
   const hasType = !type?.includes('UnknownType');
 
@@ -18,6 +19,11 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
         <Stack mt="extra-loose" spacing="base" width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
+            const entry = value.value[name];
+            let repr = entry.value.toString();
+            if (entry.type.includes('list')) {
+              repr = entry.value.map((listEntry: any) => listEntry.value).join(', ');
+            }
             return (
               <Box
                 borderBottom={!isLast ? border() : undefined}
@@ -29,8 +35,8 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
                 </Caption>
                 <FunctionSummaryClarityValue
                   arg={{
-                    type: value.value[name].type,
-                    repr: value.value[name].value.toString(),
+                    type: entry.type,
+                    repr,
                     name,
                   }}
                 />
