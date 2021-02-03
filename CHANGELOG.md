@@ -1,3 +1,10 @@
+## [1.7.4](https://github.com/blockstack/explorer/compare/v1.7.3...v1.7.4) (2021-02-03)
+
+
+### Bug Fixes
+
+* add notice to addresses with unlocking ([a170796](https://github.com/blockstack/explorer/commit/a170796aa4eafd94c96ff8ec85eb0fd91d52d694))
+
 ## [1.7.3](https://github.com/blockstack/explorer/compare/v1.7.2...v1.7.3) (2021-01-29)
 
 
