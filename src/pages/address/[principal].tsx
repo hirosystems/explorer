@@ -120,6 +120,7 @@ interface AddressPageData {
   pendingTransactions: MempoolTransaction[];
   error?: boolean;
   vesting?: VestingData;
+  hasHadVesting: boolean;
   networkModeAddress: string | null;
 }
 
@@ -130,6 +131,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
     pendingTransactions,
     transactions,
     vesting,
+    hasHadVesting,
     networkModeAddress,
     error,
   } = props;
@@ -222,11 +224,12 @@ const AddressPage: NextPage<AddressPageData> = props => {
               principal={principal}
               stackingBlock={stackingStartedAtThisBlock}
               balances={balances}
+              hasHadVesting={hasHadVesting}
             />
             {data?.balances && hasTokenBalance(data.balances) ? (
               <TokenBalancesCard mt="extra-loose" balances={data.balances} />
             ) : null}
-            {vesting ? <StacksTokenVestingCard vesting={vesting} /> : null}
+            {hasHadVesting ? <StacksTokenVestingCard /> : null}
           </Box>
         ) : null}
       </Grid>
@@ -264,7 +267,7 @@ export async function getServerSideProps(
     vesting = await fetchLegacyExplorerVestingData(principal);
   }
   return {
-    props: { principal, vesting, networkModeAddress, ...data },
+    props: { principal, vesting, networkModeAddress, hasHadVesting, ...data },
   };
 }
 
