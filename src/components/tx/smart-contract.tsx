@@ -64,7 +64,7 @@ const SmartContractPage = ({
             <>
               {hasStxBalance(accountData.balances) && (
                 <Box mb={block ? 'extra-loose' : 'unset'}>
-                  <StxBalances balances={accountData.balances} />
+                  <StxBalances balances={accountData.balances} hasHadVesting={false} />
                 </Box>
               )}
               {hasTokenBalance(accountData.balances) && (

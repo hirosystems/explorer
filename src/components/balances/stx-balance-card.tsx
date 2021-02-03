@@ -54,7 +54,16 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
   );
 });
 
-export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
+interface StxBalancesProps {
+  [key: string]: any;
+  hasHadVesting: boolean;
+}
+export const StxBalances: React.FC<StxBalancesProps> = ({
+  balances,
+  principal,
+  stackingBlock,
+  hasHadVesting,
+}) => {
   const balance =
     typeof parseInt(balances?.stx?.balance) === 'number' ? parseInt(balances?.stx?.balance) : 0;
   const minerRewards =
@@ -92,24 +101,26 @@ export const StxBalances = ({ balances, principal, stackingBlock }: any) => {
       {!qrShowing ? (
         <>
           <Box px="base">
-            <Flex borderBottom={border()} alignItems="center" py="loose">
+            <Flex borderBottom={isStacking ? border() : 'unset'} alignItems="center" py="loose">
               <ItemIcon mr="base" type="tx" txType="token_transfer" />
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
-                <Caption>Total balance</Caption>
+                <Caption>{hasHadVesting ? 'Unlocked balance' : 'Total balance'}</Caption>
               </Stack>
             </Flex>
           </Box>
-          <Box px="base">
-            <Stack
-              borderBottom={isStacking || minerRewards > 0 ? border() : 'unset'}
-              spacing="tight"
-              py="loose"
-            >
-              <Caption>Available balance</Caption>
-              <BalanceItem color={color('text-title')} balance={availableBalance} />
-            </Stack>
-          </Box>
+          {isStacking ? (
+            <Box px="base">
+              <Stack
+                borderBottom={isStacking || minerRewards > 0 ? border() : 'unset'}
+                spacing="tight"
+                py="loose"
+              >
+                <Caption>Available balance</Caption>
+                <BalanceItem color={color('text-title')} balance={availableBalance} />
+              </Stack>
+            </Box>
+          ) : null}
           {minerRewards > 0 ? (
             <>
               <Box px="base">
