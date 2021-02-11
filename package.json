@@ -10,7 +10,7 @@
     "lint:prettier": "prettier --check \"src/**/*.{ts,tsx}\" *.js *.json",
     "lint:prettier:fix": "prettier --write \"src/**/*.{ts,tsx}\" *.js *.json",
     "start": "NODE_ENV=production node server/index.js",
-    "test": "jest --verbose=true"
+    "test": "jest --verbose=true",
     "typecheck": "tsc --noEmit"
   },
   "version": "1.0.0",
