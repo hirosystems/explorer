@@ -1,3 +1,23 @@
+# [1.8.0](https://github.com/blockstack/explorer/compare/v1.7.4...v1.8.0) (2021-02-12)
+
+
+### Bug Fixes
+
+* add tooltip ([d7cd6de](https://github.com/blockstack/explorer/commit/d7cd6dec11de3d9a22d4063e95d27c50d2d2716f))
+* border ([8e35adf](https://github.com/blockstack/explorer/commit/8e35adf5364d2a490375b4c73751aa9b66776feb))
+* borders, math ([d7e3a47](https://github.com/blockstack/explorer/commit/d7e3a47538e7de2fd4a882334a918eb714fbe9b2))
+* center status ([a9c0629](https://github.com/blockstack/explorer/commit/a9c0629c7b022abef26a97e2da933044d82a73c0))
+* column widths ([62753c2](https://github.com/blockstack/explorer/commit/62753c2aafb630a3d86aaaf1cf8c0ec1571251e9))
+* misc fixes ([a2309b6](https://github.com/blockstack/explorer/commit/a2309b60f1c835dfb943ba55a7ebb6a3db605f3b))
+* mobile ([016a357](https://github.com/blockstack/explorer/commit/016a357636fb5246677afdb42d47df7fa1ab74cc))
+* page overflow, spacing ([7db0a5d](https://github.com/blockstack/explorer/commit/7db0a5d69ca545f60fc1e1827e9f9981cf1e1d55))
+* spacing, numerals ([3157ff0](https://github.com/blockstack/explorer/commit/3157ff0cf55feca7d64295ab74de81a819febc39))
+
+
+### Features
+
+* improved unlocking display ([7872910](https://github.com/blockstack/explorer/commit/787291023604a67ca8e9df87120ff113f388e69a))
+
 ## [1.7.4](https://github.com/blockstack/explorer/compare/v1.7.3...v1.7.4) (2021-02-03)
 
 
