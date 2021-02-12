@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { useEffect } from 'react';
 import useSWR from 'swr';
 import {
   AddressBalanceResponse,
@@ -37,7 +37,6 @@ import { AddressLink } from '@components/links';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 import { microStxToStx } from '@stacks/ui-utils';
 import { useUnlockingState } from '@common/hooks/use-unlocking-state';
-import { useEffect } from 'react';
 import { VestingAddressData } from '@pages/api/vesting/[address]';
 
 const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
