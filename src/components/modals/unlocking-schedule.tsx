@@ -38,8 +38,13 @@ const OverviewCard: React.FC = () => {
 
   return (
     <Section p="extra-loose">
-      <Stack isInline>
-        <Stack width="50%" borderRight={border()}>
+      <Stack spacing={0} flexWrap="wrap" isInline>
+        <Stack
+          width={['100%', '100%', '50%']}
+          borderRight={['unset', 'unset', border()]}
+          borderBottom={[border(), border(), 'unset']}
+          pb={['extra-loose', 'extra-loose', 'unset']}
+        >
           <Flex alignItems="center">
             <Box mr="base" size="44px">
               <PercentageCircle strokeWidth={3} size="44px" percentage={percentage} />
@@ -55,14 +60,18 @@ const OverviewCard: React.FC = () => {
             </Stack>
           </Flex>
         </Stack>
-        <Stack width="50%" isInline>
+        <Stack
+          pt={['extra-loose', 'extra-loose', 'unset']}
+          width={['100%', '100%', '50%']}
+          isInline
+        >
           <Flex borderRight={border()} justifyContent="center" flexGrow={1}>
             <Stack>
               <Caption>Unlocked</Caption>
               <StxAmount amount={totalThatHasUnlocked} />
             </Stack>
-          </Flex>{' '}
-          <Flex justifyContent="center" flexGrow={1}>
+          </Flex>
+          <Flex pl={['base', 'base', 'unset']} justifyContent="center" flexGrow={1}>
             <Stack>
               <Caption>Locked</Caption>
 
@@ -90,6 +99,7 @@ const Table: React.FC = () => {
         pt="loose"
         width="100%"
         gridTemplateColumns="repeat(5, 1fr)"
+        display={['none', 'none', 'grid']}
       >
         <Caption>Block</Caption>
         <Caption>Est. Date</Caption>
@@ -111,14 +121,22 @@ const Table: React.FC = () => {
           <Grid
             alignItems="center"
             borderBottom={index === arr.length - 1 ? undefined : border()}
-            py="base-tight"
+            py={['loose', 'loose', 'base-tight']}
             width="100%"
-            gridTemplateColumns="repeat(5, 1fr)"
+            gridTemplateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(5, 1fr)']}
             justifyContent="flex-start"
+            position="relative"
           >
-            <Box>#{height}</Box>
-            <Box>{relativeTime}</Box>
-            <Flex justifyContent="flex-start">
+            <Box fontWeight={[500, 500, 'unset']} mb={['tight', 'tight', 'unset']}>
+              <Box display={['inline', 'inline', 'none']}>Block </Box>#{height}
+            </Box>
+            <Box mb={['base', 'base', 'unset']}>{relativeTime}</Box>
+            <Flex
+              justifyContent="flex-start"
+              position={['absolute', 'absolute', 'static']}
+              top="loose"
+              right={0}
+            >
               {isReceived ? (
                 <Badge bg={color('feedback-success')}>Received</Badge>
               ) : (
@@ -127,8 +145,14 @@ const Table: React.FC = () => {
                 </Badge>
               )}
             </Flex>
+            <Caption my="tight" display={['block', 'block', 'none']}>
+              Amount
+            </Caption>
             <StxAmount amount={amount} />
-            <StxAmount textAlign="right" amount={cumulativeAmount} />
+            <Caption my="tight" mt="base" display={['block', 'block', 'none']}>
+              Cumulative
+            </Caption>
+            <StxAmount textAlign={['left', 'left', 'right']} amount={cumulativeAmount} />
           </Grid>
         );
       })}
