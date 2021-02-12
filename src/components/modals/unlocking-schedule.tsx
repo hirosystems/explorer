@@ -8,15 +8,19 @@ import { MODALS } from '@common/constants';
 import { Section } from '@components/section';
 import { stxToMicroStx } from '@stacks/ui-utils';
 import { PercentageCircle } from '@components/percentage-circle';
-import { border, microToStacks } from '@common/utils';
+import { border } from '@common/utils';
 import { Badge } from '@components/badge';
 
 import dayjs from 'dayjs';
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
-  const [stx, ustx] = microToStacks(amount).toString().split('.');
+  const value = Number(Number(amount) / Math.pow(10, 6));
+
+  const [stx, ustx] = value
+    .toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })
+    .split('.');
   return (
-    <Box {...rest}>
+    <Box fontVariantNumeric="tabular-nums" {...rest}>
       <Box as="span">{stx}</Box>
       <Box opacity={0.5} as="span">
         .{ustx}
@@ -40,7 +44,7 @@ const OverviewCard: React.FC = () => {
     <Section p="extra-loose">
       <Stack spacing={0} flexWrap="wrap" isInline>
         <Stack
-          width={['100%', '100%', '50%']}
+          width={['100%', '100%', '40%']}
           borderRight={['unset', 'unset', border()]}
           borderBottom={[border(), border(), 'unset']}
           pb={['extra-loose', 'extra-loose', 'unset']}
@@ -62,14 +66,15 @@ const OverviewCard: React.FC = () => {
         </Stack>
         <Stack
           pt={['extra-loose', 'extra-loose', 'unset']}
-          width={['100%', '100%', '50%']}
-          flexWrap="wrap"
+          width={['100%', '100%', '60%']}
+          flexWrap={['wrap', 'wrap', 'unset']}
           isInline
         >
           <Flex
             borderRight={['unset', 'unset', border()]}
             justifyContent={['flex-start', 'flex-start', 'center']}
             pb={['extra-loose', 'extra-loose', 'unset']}
+            px={['unset', 'unset', 'extra-loose']}
             width={['100%', '100%', '50%']}
             flexGrow={1}
           >
@@ -80,7 +85,6 @@ const OverviewCard: React.FC = () => {
           </Flex>
           <Flex
             pt={['extra-loose', 'extra-loose', 'unset']}
-            borderRight={['unset', 'unset', border()]}
             borderTop={[border(), 'unset', 'unset']}
             justifyContent={['flex-start', 'flex-start', 'center']}
             width={['100%', '100%', '50%']}
