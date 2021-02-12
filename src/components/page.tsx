@@ -114,6 +114,7 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({
     flexDirection="column"
     minHeight="100vh"
     position="relative"
+    overflow="hidden"
   >
     <Header fullWidth={fullWidth} isHome={isHome} />
     <Page {...props} />
