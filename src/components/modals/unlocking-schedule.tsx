@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, BoxProps, color, ControlledModal, Flex, Grid, IconButton, Stack } from '@stacks/ui';
-import { IconAlertTriangle, IconX } from '@tabler/icons';
+import { Tooltip } from '@components/tooltip';
+import { IconAlertTriangle, IconInfoCircle, IconX } from '@tabler/icons';
 import { Caption, Text, Title } from '@components/typography';
 import { useModal } from '@common/hooks/use-modal';
 import { useUnlockingState } from '@common/hooks/use-unlocking-state';
@@ -119,7 +120,19 @@ const Table: React.FC = () => {
         display={['none', 'none', 'grid']}
       >
         <Caption>Block</Caption>
-        <Caption>Est. Date</Caption>
+        <Flex>
+          <Caption>Est. Date</Caption>
+          <Tooltip
+            labelProps={{
+              textAlign: 'center',
+            }}
+            label="Based on average Bitcoin block time."
+          >
+            <Box size="16px" color={color('text-caption')} ml="tight">
+              <IconInfoCircle size="16px" />
+            </Box>
+          </Tooltip>
+        </Flex>
         <Caption>Status</Caption>
         <Caption>Amount</Caption>
         <Caption textAlign="right">Cumulative</Caption>
