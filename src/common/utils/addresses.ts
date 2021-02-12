@@ -1,5 +1,12 @@
 import { b58ToC32, c32address, c32addressDecode, c32ToB58, versions } from 'c32check';
-import { DEPLOYMENT_URL, LEGACY_EXPLORER_API_SERVER } from '@common/constants';
+import {
+  DEFAULT_MAINNET_SERVER,
+  DEFAULT_V2_INFO_ENDPOINT,
+  DEPLOYMENT_URL,
+  LEGACY_EXPLORER_API_SERVER,
+} from '@common/constants';
+import { fetchFromApi } from '@common/api/fetch';
+import { VestingAddressData } from '@pages/api/vesting/[address]';
 
 export const C32_ADDRESS_CHARS = '[0123456789ABCDEFGHJKMNPQRSTVWXYZ]+';
 export const STACKS_ADDRESS_PATTERN = `^(${C32_ADDRESS_CHARS})$`;
@@ -165,6 +172,24 @@ export async function fetchAddressVesting(address: string): Promise<boolean> {
   }
 }
 
+export async function fetchCurrentStacksBlock(address = DEFAULT_MAINNET_SERVER): Promise<number> {
+  const response = await fetchFromApi(address)(DEFAULT_V2_INFO_ENDPOINT);
+  const data = await response.json();
+  return data?.stacks_tip_height;
+}
+
+export async function fetchAddressUnlockingData(
+  address: string
+): Promise<VestingAddressData | { found: false }> {
+  try {
+    const res = await fetch(`${DEPLOYMENT_URL}/api/vesting/${address}`);
+    const data: VestingAddressData = await res.json();
+    return data;
+  } catch (e) {
+    return { found: false };
+  }
+}
+
 export interface VestingData {
   tokensGranted: number;
   totalLocked: number;
@@ -217,8 +242,10 @@ export async function fetchLegacyExplorerVestingData(address: string): Promise<a
         unlockTotalStacks,
         vestingTotal,
         vesting_total,
+        formattedUnlockTotal,
       } = data;
       return {
+        formattedUnlockTotal,
         tokensGranted,
         totalLocked,
         totalLockedStacks,
