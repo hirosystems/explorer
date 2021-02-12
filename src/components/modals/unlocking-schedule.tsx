@@ -116,7 +116,7 @@ const Table: React.FC = () => {
         pb="base"
         pt="loose"
         width="100%"
-        gridTemplateColumns="repeat(5, 1fr)"
+        gridTemplateColumns="16.666% 16.666% 16.666% 25% 25%"
         display={['none', 'none', 'grid']}
       >
         <Caption>Block</Caption>
@@ -153,7 +153,11 @@ const Table: React.FC = () => {
             borderBottom={index === arr.length - 1 ? undefined : border()}
             py={['loose', 'loose', 'base-tight']}
             width="100%"
-            gridTemplateColumns={['repeat(1, 1fr)', 'repeat(1, 1fr)', 'repeat(5, 1fr)']}
+            gridTemplateColumns={[
+              'repeat(1, 1fr)',
+              'repeat(1, 1fr)',
+              '16.666% 16.666% 16.666% 25% 25%',
+            ]}
             justifyContent="flex-start"
             position="relative"
           >
