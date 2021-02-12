@@ -63,18 +63,31 @@ const OverviewCard: React.FC = () => {
         <Stack
           pt={['extra-loose', 'extra-loose', 'unset']}
           width={['100%', '100%', '50%']}
+          flexWrap="wrap"
           isInline
         >
-          <Flex borderRight={border()} justifyContent="center" flexGrow={1}>
+          <Flex
+            borderRight={['unset', 'unset', border()]}
+            justifyContent={['flex-start', 'flex-start', 'center']}
+            pb={['extra-loose', 'extra-loose', 'unset']}
+            width={['100%', '100%', '50%']}
+            flexGrow={1}
+          >
             <Stack>
               <Caption>Unlocked</Caption>
               <StxAmount amount={totalThatHasUnlocked} />
             </Stack>
           </Flex>
-          <Flex pl={['base', 'base', 'unset']} justifyContent="center" flexGrow={1}>
+          <Flex
+            pt={['extra-loose', 'extra-loose', 'unset']}
+            borderRight={['unset', 'unset', border()]}
+            borderTop={[border(), 'unset', 'unset']}
+            justifyContent={['flex-start', 'flex-start', 'center']}
+            width={['100%', '100%', '50%']}
+            flexGrow={1}
+          >
             <Stack>
               <Caption>Locked</Caption>
-
               <StxAmount amount={state.lockedBalance} />
             </Stack>
           </Flex>
@@ -92,7 +105,7 @@ const Table: React.FC = () => {
   const data: [height: string, amount: number][] = Object.entries(state.data);
   let cumulativeAmount = totalThatHasUnlocked;
   return (
-    <Section mt="extra-loose" px="extra-loose" pb="tight">
+    <Section mt="extra-loose" px="extra-loose" pb="tight" pt={['tight', 'tight', 'unset']}>
       <Grid
         borderBottom={border()}
         pb="base"
