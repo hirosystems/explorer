@@ -80,7 +80,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
 
   const totalBalance =
     unlocking && 'found' in unlocking && 'balance' in unlocking
-      ? microToStacks(Number(unlocking.lockedBalance) + Number(unlocking.balance))
+      ? microToStacks(locked + Number(unlocking.lockedBalance) + Number(unlocking.balance))
       : microToStacks(balance);
 
   const availableBalance =
@@ -114,7 +114,15 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
       {!qrShowing ? (
         <>
           <Box px="base-loose">
-            <Flex borderBottom={isStacking ? border() : 'unset'} alignItems="center" py="loose">
+            <Flex
+              borderBottom={
+                isStacking || (unlocking && 'found' in unlocking && unlocking.found)
+                  ? border()
+                  : 'unset'
+              }
+              alignItems="center"
+              py="loose"
+            >
               <Circle bg={color('brand')} mr="base">
                 <StxInline color="white" size="22px" />
               </Circle>
@@ -127,8 +135,13 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
           {isStacking || (unlocking && 'found' in unlocking && unlocking.found) ? (
             <Box px="base-loose">
               <Stack
-                borderBottom={isStacking || minerRewards > 0 ? border() : 'unset'}
-                borderTop={border()}
+                borderBottom={
+                  isStacking ||
+                  minerRewards > 0 ||
+                  (unlocking && 'found' in unlocking && 'balance' in unlocking)
+                    ? border()
+                    : 'unset'
+                }
                 spacing="tight"
                 py="loose"
               >
@@ -140,7 +153,13 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
           {minerRewards > 0 ? (
             <>
               <Box px="base-loose">
-                <Stack spacing="tight" py="loose">
+                <Stack
+                  borderBottom={
+                    unlocking && 'found' in unlocking && 'balance' in unlocking ? border() : 'unset'
+                  }
+                  spacing="tight"
+                  py="loose"
+                >
                   <Caption>Miner rewards</Caption>
                   <BalanceItem color={color('text-title')} balance={minerRewardsBalance} />
                 </Stack>
@@ -149,7 +168,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
           ) : null}
           {unlocking && 'found' in unlocking && 'balance' in unlocking ? (
             <Box px="base-loose">
-              <Stack borderTop={border()} spacing="tight" py="loose">
+              <Stack borderBottom={border()} spacing="tight" py="loose">
                 <Caption>Locked</Caption>
                 <Flex alignItems="baseline" justifyContent="space-between">
                   <BalanceItem
@@ -173,11 +192,11 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
           {isStacking ? (
             <>
               <Box px="base-loose">
-                <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
-                <Stack borderTop={border()} spacing="tight" py="loose">
+                <Stack borderBottom={border()} spacing="tight" py="loose">
                   <Caption>Stacked amount (locked)</Caption>
                   <BalanceItem color={color('text-title')} balance={stackedBalance} />
                 </Stack>
+                <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
               </Box>
             </>
           ) : null}

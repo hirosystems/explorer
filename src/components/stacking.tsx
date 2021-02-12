@@ -57,7 +57,10 @@ export const StackingPercentage = ({ balances, stackingBlock }: any) => {
                 </Title>
               </Flex>
               <Box textAlign="center">
-                <Caption mb="base-tight">Stacking for ~{blocksUntilUnlocked} more blocks</Caption>
+                <Caption mb="base-tight">
+                  ~{blocksUntilUnlocked.toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
+                  blocks remaining
+                </Caption>
                 <TxLink txid={balances?.stx?.lock_tx_id}>
                   <Link target="_blank" color={color('brand')} fontSize={0}>
                     View Stacking transaction
