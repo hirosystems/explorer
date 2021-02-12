@@ -168,7 +168,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
           ) : null}
           {unlocking && 'found' in unlocking && 'balance' in unlocking ? (
             <Box px="base-loose">
-              <Stack borderBottom={border()} spacing="tight" py="loose">
+              <Stack borderBottom={isStacking ? border() : undefined} spacing="tight" py="loose">
                 <Caption>Locked</Caption>
                 <Flex alignItems="baseline" justifyContent="space-between">
                   <BalanceItem
