@@ -19,8 +19,7 @@ interface LockupData {
 async function fetchActualBalance(address: string) {
   try {
     const res = await fetch(`https://stacks-node-api.stacks.co/v2/accounts/${address}?proof=0`);
-    const data = await res.json();
-    return data;
+    return res.json();
   } catch (e) {
     throw Error(`Can't fetch actual balance: ${e.message}`);
   }
@@ -28,8 +27,7 @@ async function fetchActualBalance(address: string) {
 
 async function fetchAverageBlockTime() {
   const res = await fetch('https://blockchain.info/q/interval');
-  const data = await res.text();
-  return data;
+  return res.text();
 }
 
 export type VestingAddressData =
@@ -64,12 +62,12 @@ export default async function vestingAddressHandler(
           fetchAverageBlockTime(),
         ]);
 
-        let lockedBalance = 0;
-        Object.keys(data).forEach((height, index) => {
-          if (parseInt(height) > currentHeight) {
-            lockedBalance += Object.values(data)[index];
-          }
-        });
+        const lockedBalance = Object.entries(data).reduce((acc, [height, amount]) => {
+          if (parseInt(height) > currentHeight) return acc + amount;
+          return 0;
+        }, 0);
+
+        console.log({ lockedBalance });
         const balance = new BN(coreNodeData.balance.replace('0x', ''), 'hex').toString();
         res.status(200).json({
           found: true,
