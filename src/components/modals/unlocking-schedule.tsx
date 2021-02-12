@@ -133,8 +133,8 @@ const Table: React.FC = () => {
             </Box>
           </Tooltip>
         </Flex>
-        <Caption>Status</Caption>
-        <Caption>Amount</Caption>
+        <Caption textAlign="center">Status</Caption>
+        <Caption textAlign="right">Amount</Caption>
         <Caption textAlign="right">Cumulative</Caption>
       </Grid>
       {data.map(([height, amount], index, arr) => {
@@ -166,7 +166,7 @@ const Table: React.FC = () => {
             </Box>
             <Box mb={['base', 'base', 'unset']}>{relativeTime}</Box>
             <Flex
-              justifyContent="flex-start"
+              justifyContent="center"
               position={['absolute', 'absolute', 'static']}
               top="loose"
               right={0}
@@ -182,7 +182,7 @@ const Table: React.FC = () => {
             <Caption my="tight" display={['block', 'block', 'none']}>
               Amount
             </Caption>
-            <StxAmount amount={amount} />
+            <StxAmount textAlign={['left', 'left', 'right']} amount={amount} />
             <Caption my="tight" mt="base" display={['block', 'block', 'none']}>
               Cumulative
             </Caption>
