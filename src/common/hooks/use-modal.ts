@@ -17,6 +17,9 @@ export const useModal = () => {
   const handleOpenDifferentNetworkModal = () => {
     setOpenModal(MODALS.DIFFERENT_NETWORK);
   };
+  const handleOpenUnlockingScheduleModal = () => {
+    setOpenModal(MODALS.UNLOCKING_SCHEDULE);
+  };
   return {
     modal,
     setModal,
@@ -25,5 +28,6 @@ export const useModal = () => {
     handleOpenSearchModal,
     handleOpenNetworkModal,
     handleOpenDifferentNetworkModal,
+    handleOpenUnlockingScheduleModal,
   };
 };

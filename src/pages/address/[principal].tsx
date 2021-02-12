@@ -26,19 +26,19 @@ import { TokenBalancesCard } from '@components/balances/principal-token-balances
 import { Meta } from '@components/meta-head';
 import { AddressNotFound } from '@components/address-not-found';
 import {
-  fetchAddressVesting,
-  fetchLegacyExplorerVestingData,
-  VestingData,
   getAddressDetails,
   invertAddress,
+  fetchAddressUnlockingData,
 } from '@common/utils/addresses';
-import { StacksTokenVestingCard } from '@components/stacks-token-vesting-card';
 import { getNetworkMode } from '@common/api/network';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IconAlertCircle } from '@tabler/icons';
 import { AddressLink } from '@components/links';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 import { microStxToStx } from '@stacks/ui-utils';
+import { useUnlockingState } from '@common/hooks/use-unlocking-state';
+import { useEffect } from 'react';
+import { VestingAddressData } from '@pages/api/vesting/[address]';
 
 const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
   const network = useNetworkMode();
@@ -119,8 +119,7 @@ interface AddressPageData {
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
   error?: boolean;
-  vesting?: VestingData;
-  hasHadVesting: boolean;
+  unlocking: VestingAddressData;
   networkModeAddress: string | null;
 }
 
@@ -130,8 +129,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
     balances,
     pendingTransactions,
     transactions,
-    vesting,
-    hasHadVesting,
+    unlocking,
     networkModeAddress,
     error,
   } = props;
@@ -143,7 +141,13 @@ const AddressPage: NextPage<AddressPageData> = props => {
       </>
     );
   }
+
+  const limit = 50;
+
+  const [unlockingState, setUnlockingState] = useUnlockingState();
+
   const apiServer = useApiServer();
+
   const { data } = useSWR(
     principal,
     async () => fetchAllAccountData(apiServer as any)({ principal }),
@@ -155,8 +159,6 @@ const AddressPage: NextPage<AddressPageData> = props => {
       },
     }
   );
-
-  const limit = 50;
 
   const {
     data: _transactions,
@@ -170,11 +172,21 @@ const AddressPage: NextPage<AddressPageData> = props => {
     principal,
     types: ['smart_contract', 'contract_call', 'token_transfer', 'coinbase'],
   });
+
   const hasTokenBalances = hasTokenBalance(data?.balances);
   const stackingStartedAtThisBlock = getStackStartBlockHeight(data?.transactions?.results);
 
   const confirmedTxs = _transactions || [];
   const pendingTxs = data?.pendingTransactions || [];
+
+  useEffect(() => {
+    // add to recoil state for the modal to use
+    if (unlocking && 'found' in unlocking && unlocking.found) {
+      if (!unlockingState) {
+        setUnlockingState(unlocking);
+      }
+    }
+  }, [unlocking, unlockingState, setUnlockingState]);
 
   return (
     <>
@@ -224,12 +236,11 @@ const AddressPage: NextPage<AddressPageData> = props => {
               principal={principal}
               stackingBlock={stackingStartedAtThisBlock}
               balances={balances}
-              hasHadVesting={hasHadVesting}
+              unlocking={unlocking}
             />
             {data?.balances && hasTokenBalance(data.balances) ? (
               <TokenBalancesCard mt="extra-loose" balances={data.balances} />
             ) : null}
-            {hasHadVesting ? <StacksTokenVestingCard /> : null}
           </Box>
         ) : null}
       </Grid>
@@ -252,22 +263,24 @@ export async function getServerSideProps(
     } as any;
   }
   const apiServer = await getServerSideApiServer(ctx);
-  const networkMode = await getNetworkMode(apiServer);
+
+  const [networkMode, data, unlocking] = await Promise.all([
+    getNetworkMode(apiServer),
+    fetchAllAccountData(apiServer)({ principal }),
+    fetchAddressUnlockingData(principal),
+  ]);
+
   const details = getAddressDetails(principal);
   const isDifferentMode = details.network !== networkMode?.toLowerCase();
-
-  const data = await fetchAllAccountData(apiServer)({ principal });
-  const hasHadVesting = await fetchAddressVesting(principal);
-
   const networkModeAddress = isDifferentMode ? invertAddress(principal) : null;
 
-  let vesting = null;
-
-  if (hasHadVesting) {
-    vesting = await fetchLegacyExplorerVestingData(principal);
-  }
   return {
-    props: { principal, vesting, networkModeAddress, hasHadVesting, ...data },
+    props: {
+      principal,
+      unlocking,
+      networkModeAddress,
+      ...data,
+    },
   };
 }
 

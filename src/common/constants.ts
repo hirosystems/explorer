@@ -53,7 +53,7 @@ export const DEPLOYMENT_URL =
 export const LEGACY_EXPLORER_API_SERVER =
   NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER ||
   process.env.NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER ||
-  'https://explorer-api.blockstack.xyz';
+  'https://explorer-api.legacy.blockstack.org';
 
 export const CONNECT_AUTH_ORIGIN =
   NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
@@ -97,6 +97,7 @@ export enum MODALS {
   SEARCH = 'modals/search',
   NETWORK = 'modals/add-network',
   DIFFERENT_NETWORK = 'modals/different-network',
+  UNLOCKING_SCHEDULE = 'modals/unlocking-schedule',
 }
 
 type ReverseMap<T extends Record<keyof T, any>> = {

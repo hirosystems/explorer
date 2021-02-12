@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box, BoxProps, color, Flex, Grid, Stack } from '@stacks/ui';
+import { Box, BoxProps, Circle, color, Flex, Grid, Stack, StxInline } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 
 import { Section } from '@components/section';
@@ -13,6 +13,8 @@ import { StackingPercentage } from '@components/stacking';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import vkQr from '@vkontakte/vk-qr';
+import { useModal } from '@common/hooks/use-modal';
+import { VestingAddressData } from '@pages/api/vesting/[address]';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const parts = balance.split('.');
@@ -56,14 +58,17 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
 
 interface StxBalancesProps {
   [key: string]: any;
-  hasHadVesting: boolean;
+
+  unlocking: VestingAddressData;
 }
+
 export const StxBalances: React.FC<StxBalancesProps> = ({
   balances,
   principal,
   stackingBlock,
-  hasHadVesting,
+  unlocking,
 }) => {
+  const { handleOpenUnlockingScheduleModal } = useModal();
   const balance =
     typeof parseInt(balances?.stx?.balance) === 'number' ? parseInt(balances?.stx?.balance) : 0;
   const minerRewards =
@@ -72,8 +77,16 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
       : 0;
   const locked =
     typeof parseInt(balances?.stx?.locked) === 'number' ? parseInt(balances?.stx?.locked) : 0;
-  const totalBalance = microToStacks(balance);
-  const availableBalance = microToStacks(balance - locked);
+
+  const totalBalance =
+    unlocking && 'found' in unlocking && 'balance' in unlocking
+      ? microToStacks(Number(unlocking.lockedBalance) + Number(unlocking.balance))
+      : microToStacks(balance);
+
+  const availableBalance =
+    unlocking && 'found' in unlocking && 'balance' in unlocking
+      ? microToStacks(unlocking.balance)
+      : microToStacks(balance - locked);
   const stackedBalance = microToStacks(locked);
   const minerRewardsBalance = microToStacks(minerRewards);
   const isStacking = locked > 0;
@@ -100,30 +113,33 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
         <>
-          <Box px="base">
+          <Box px="base-loose">
             <Flex borderBottom={isStacking ? border() : 'unset'} alignItems="center" py="loose">
-              <ItemIcon mr="base" type="tx" txType="token_transfer" />
+              <Circle bg={color('brand')} mr="base">
+                <StxInline color="white" size="22px" />
+              </Circle>
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
-                <Caption>{hasHadVesting ? 'Unlocked balance' : 'Total balance'}</Caption>
+                <Caption>Total balance</Caption>
               </Stack>
             </Flex>
           </Box>
-          {isStacking ? (
-            <Box px="base">
+          {isStacking || (unlocking && 'found' in unlocking && unlocking.found) ? (
+            <Box px="base-loose">
               <Stack
                 borderBottom={isStacking || minerRewards > 0 ? border() : 'unset'}
+                borderTop={border()}
                 spacing="tight"
                 py="loose"
               >
-                <Caption>Available balance</Caption>
+                <Caption>Available</Caption>
                 <BalanceItem color={color('text-title')} balance={availableBalance} />
               </Stack>
             </Box>
           ) : null}
           {minerRewards > 0 ? (
             <>
-              <Box px="base">
+              <Box px="base-loose">
                 <Stack spacing="tight" py="loose">
                   <Caption>Miner rewards</Caption>
                   <BalanceItem color={color('text-title')} balance={minerRewardsBalance} />
@@ -131,9 +147,32 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
               </Box>
             </>
           ) : null}
+          {unlocking && 'found' in unlocking && 'balance' in unlocking ? (
+            <Box px="base-loose">
+              <Stack borderTop={border()} spacing="tight" py="loose">
+                <Caption>Locked</Caption>
+                <Flex alignItems="baseline" justifyContent="space-between">
+                  <BalanceItem
+                    color={color('text-title')}
+                    balance={microToStacks(unlocking.lockedBalance)}
+                  />
+                  <Box
+                    onClick={handleOpenUnlockingScheduleModal}
+                    fontSize={1}
+                    _hover={{
+                      cursor: 'pointer',
+                    }}
+                    color={color('brand')}
+                  >
+                    View schedule
+                  </Box>
+                </Flex>
+              </Stack>
+            </Box>
+          ) : null}
           {isStacking ? (
             <>
-              <Box px="base">
+              <Box px="base-loose">
                 <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
                 <Stack borderTop={border()} spacing="tight" py="loose">
                   <Caption>Stacked amount (locked)</Caption>
