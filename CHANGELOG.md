@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/blockstack/explorer/compare/v1.8.0...v1.9.0) (2021-02-15)
+
+
+### Features
+
+* add /api/status ([2411ea1](https://github.com/blockstack/explorer/commit/2411ea15a8952ded3f06e1d70406fbd5a4169be2))
+
 # [1.8.0](https://github.com/blockstack/explorer/compare/v1.7.4...v1.8.0) (2021-02-12)
 
 
