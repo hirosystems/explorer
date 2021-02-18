@@ -9,15 +9,18 @@ import { Error } from '@sandbox/components/error';
 import { Input } from '@components/inputs';
 import { Button } from '@components/button';
 import { functionCallViewState } from '@sandbox/store/views';
+import { useRootContractAddress } from '@sandbox/common/use-root-contract';
 
 export const ContractSearch: React.FC = () => {
   const setView = useSetRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
+  const address = useRootContractAddress();
+
   const { handleSubmit, handleChange, handleBlur, values, setValues, errors } = useFormik({
     validateOnChange: false,
     validateOnBlur: false,
     initialValues: {
-      principal: 'SP000000000000000000002Q6VF78',
+      principal: address,
       contract_name: 'pox',
     },
     validate: values => {
