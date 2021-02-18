@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React from 'react';
 import { Box, Flex, Stack, color, Grid, transition } from '@stacks/ui';
-import { Caption, Text } from '@components/typography';
+import { Caption, Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { useUser } from '@sandbox/hooks/use-user';
 import { TxItem } from '@components/transaction-item';
@@ -413,7 +413,14 @@ const TxList: React.FC = React.memo(() => {
         txList
       ) : hasTxButIsFiltered ? (
         <FilteredMessage filterKey="sandbox" />
-      ) : null}
+      ) : (
+        <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
+          <Stack textAlign="center">
+            <Title>No Transactions</Title>
+            <Caption>Your list of transactions will display here.</Caption>
+          </Stack>
+        </Flex>
+      )}
     </>
   );
 });
