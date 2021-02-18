@@ -12,7 +12,6 @@ import { Caption, Text, Title } from '@components/typography';
 import { Section } from '@components/section';
 import { contractSearchQueryState } from '@sandbox/store/sandbox';
 import {
-  IconArrowsSplit,
   IconChartBar,
   IconCurrencyBitcoin,
   IconCurrencyDollar,
@@ -21,29 +20,30 @@ import {
 import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 import { Button } from '@components/button';
 import { ErrorWrapper } from '@sandbox/components/error-wrapper';
+import { useRootContractAddress } from '@sandbox/common/use-root-contract';
 
-const defaultContracts = [
+const defaultContracts = (address: string) => [
   {
     name: 'pox',
-    address: 'SP000000000000000000002Q6VF78',
+    address,
     description: '',
     icon: IconCurrencyBitcoin,
   },
   {
     name: 'bns',
-    address: 'SP000000000000000000002Q6VF78',
+    address,
     description: '',
     icon: IconSignature,
   },
   {
     name: 'cost-voting',
-    address: 'SP000000000000000000002Q6VF78',
+    address,
     description: '',
     icon: IconChartBar,
   },
   {
     name: 'costs',
-    address: 'SP000000000000000000002Q6VF78',
+    address,
     description: '',
     icon: IconCurrencyDollar,
   },
@@ -70,6 +70,36 @@ function ErrorFallback({ error, resetErrorBoundary }: any) {
   );
 }
 
+const DefaultContracts: React.FC = () => {
+  const address = useRootContractAddress();
+  const [view, setView] = useRecoilState(functionCallViewState);
+  const setQuery = useSetRecoilState(contractSearchQueryState);
+  return (
+    <Stack mt="loose" spacing="loose">
+      {defaultContracts(address).map(({ name, address, icon: Icon }) => (
+        <Section
+          p="loose"
+          _hover={{ cursor: 'pointer', color: color('brand') }}
+          onClick={() => {
+            setQuery(`${address}.${name}`);
+            setView('function-overview');
+          }}
+        >
+          <Stack isInline spacing="base">
+            <Circle border={border()}>
+              <Icon />
+            </Circle>
+            <Stack>
+              <Title color="currentColor">{name}</Title>
+              <Caption>{address}</Caption>
+            </Stack>
+          </Stack>
+        </Section>
+      ))}
+    </Stack>
+  );
+};
+
 export const FunctionCallView: React.FC = () => {
   const [view, setView] = useRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
@@ -88,27 +118,9 @@ export const FunctionCallView: React.FC = () => {
           </Box>
           <Box p="extra-loose">
             <Title fontWeight={400}>Or select from one of these</Title>
-            <Stack mt="loose" spacing="loose">
-              {defaultContracts.map(({ name, address, icon: Icon }) => (
-                <Section
-                  p="loose"
-                  onClick={() => {
-                    setQuery(`${address}.${name}`);
-                    setView('function-overview');
-                  }}
-                >
-                  <Stack isInline spacing="base">
-                    <Circle border={border()}>
-                      <Icon />
-                    </Circle>
-                    <Stack>
-                      <Title>{name}</Title>
-                      <Caption>{address}</Caption>
-                    </Stack>
-                  </Stack>
-                </Section>
-              ))}
-            </Stack>
+            <React.Suspense fallback={<LoadingPanel text="Loading.." />}>
+              <DefaultContracts />
+            </React.Suspense>
           </Box>
         </Grid>
       );
