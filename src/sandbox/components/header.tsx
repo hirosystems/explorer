@@ -12,7 +12,7 @@ const UserCard: React.FC<StackProps> = props => {
   const { userData } = useConnect();
   return (
     <Stack isInline alignItems="center" {...props}>
-      <Circle boxShadow="low" size="20px" border={border()}>
+      <Circle color={color('text-body')} boxShadow="low" size="20px" border={border()}>
         <IconUser size="14px" />
       </Circle>
       <Caption>{userData?.username?.split('.')[0] || userData?.identityAddress}</Caption>
@@ -26,7 +26,7 @@ const Actions: React.FC<StackProps> = props => {
   const handleToggle = () => setRightPanelVisibility(v => (v === 'hidden' ? 'showing' : 'hidden'));
   return (
     <Stack isInline alignItems="center" {...props}>
-      <IconButton onClick={handleToggle} icon={IconMenu2} />
+      <IconButton color={color('text-title')} onClick={handleToggle} icon={IconMenu2} />
     </Stack>
   );
 };
