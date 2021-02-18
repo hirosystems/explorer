@@ -140,7 +140,6 @@ export const WasmComponent = dynamic(
         const [wasm, setWasm] = useRecoilState(clarityWasmAtom);
         const isBrowser = typeof window !== 'undefined';
         useEffect(() => {
-          console.log(rustModule);
           try {
             if (isBrowser && !wasm && rustModule) {
               setWasm(rustModule.instance.exports as any);
