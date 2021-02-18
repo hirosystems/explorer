@@ -28,7 +28,7 @@ const View: React.FC = memo(() => {
       );
     case 'function-call':
       return (
-        <React.Suspense fallback={<></>}>
+        <React.Suspense fallback={<Box flexGrow={1} />}>
           <FunctionCallView />
         </React.Suspense>
       );

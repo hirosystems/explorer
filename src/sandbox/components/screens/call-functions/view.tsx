@@ -78,6 +78,7 @@ const DefaultContracts: React.FC = () => {
     <Stack mt="loose" spacing="loose">
       {defaultContracts(address).map(({ name, address, icon: Icon }) => (
         <Section
+          color={color('text-title')}
           p="loose"
           _hover={{ cursor: 'pointer', color: color('brand') }}
           onClick={() => {
