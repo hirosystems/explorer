@@ -18,7 +18,6 @@ export const useConnect = () => {
   const onFinish = async (finishedData: FinishedData) => {
     if (userSession) {
       const data = await userSession.loadUserData();
-      console.log(data);
       setUserData(data);
     }
   };
