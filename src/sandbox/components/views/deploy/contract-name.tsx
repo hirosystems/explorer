@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Flex, Input, IconButton } from '@stacks/ui';
+import { Box, Flex, Input, IconButton, color } from '@stacks/ui';
 
 import { useRecoilState } from 'recoil';
 import { useRandomName } from '@common/hooks/use-random-name';
@@ -32,6 +32,7 @@ export const ContractName = React.memo(() => {
       />
       <Flex position="absolute" right="tight">
         <IconButton
+          color={color('text-body')}
           onClick={() => {
             setName('');
             (inputRef?.current as any)?.focus();
@@ -39,6 +40,7 @@ export const ContractName = React.memo(() => {
           icon={CloseIcon}
         />
         <IconButton
+          color={color('text-body')}
           onClick={() => {
             setName(randomName());
           }}
