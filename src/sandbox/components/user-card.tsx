@@ -63,6 +63,7 @@ const Balance: React.FC<StackProps> = props => {
         alignItems="center"
         position="relative"
         justifyContent="flex-end"
+        color={color('text-title')}
       >
         <StxInline strokeWidth={2} color="currentColor" mr="tight" size="18px" />
         <Text fontWeight={600} fontSize={4} display="block" position="relative" zIndex={2}>
