@@ -197,6 +197,18 @@ const getParticipants = (event: TransactionEvent) => {
   }
 };
 
+// handle if the print is a hex, convert it to string if so
+function handleContractLogHex(repr: string) {
+  if (repr?.startsWith('0x')) {
+    try {
+      return Buffer.from(repr.replace('0x', ''), 'hex').toString('utf8');
+    } catch (e) {
+      return repr;
+    }
+  }
+  return repr;
+}
+
 const getName = (event: TransactionEvent) => {
   const assetId =
     event.event_type === 'fungible_token_asset' || event.event_type === 'non_fungible_token_asset'
@@ -206,7 +218,7 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return event.contract_log.value.repr;
+      return handleContractLogHex(event.contract_log.value.repr);
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:

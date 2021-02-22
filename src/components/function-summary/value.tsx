@@ -69,8 +69,8 @@ const TupleResult = ({ tuple, isPoxAddr }: any) => {
           as="span"
           key={index}
         >
-          <Caption mb="extra-tight">{entry[0]}</Caption>
-          <Text>{entry[1]}</Text>
+          <Caption mb="extra-tight">{entry[0].replace(/\(/g, '')}</Caption>
+          <Text>{entry[1].replace(/\)/g, '')}</Text>
         </Box>
       ))}
       {additional}
