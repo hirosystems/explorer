@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/blockstack/explorer/compare/v1.9.0...v1.9.1) (2021-02-22)
+
+
+### Bug Fixes
+
+* convert hex log, display events on coinbase, bump deps ([4e267d7](https://github.com/blockstack/explorer/commit/4e267d79fdf185933c5c4ad662bfc15c4ed11eac))
+
 # [1.9.0](https://github.com/blockstack/explorer/compare/v1.8.0...v1.9.0) (2021-02-15)
 
 
