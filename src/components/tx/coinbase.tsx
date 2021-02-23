@@ -14,7 +14,9 @@ const CoinbasePage = ({ transaction, block }: TxData<CoinbaseTxs> & { block?: Bl
     <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
       <Box>
         <TransactionDetails transaction={transaction} />
-        {'events' in transaction && <Events mt="extra-loose" events={transaction.events} />}
+        {'events' in transaction && (
+          <Events txId={transaction.tx_id} mt="extra-loose" events={transaction.events} />
+        )}
       </Box>
       {block && <BtcAnchorBlockCard block={block} />}
     </PagePanes>
