@@ -16,9 +16,6 @@
   "version": "1.0.0",
   "author": "Hiro Systems PBC (formerly Blockstack PBC)",
   "dependencies": {
-    "@blockstack/stacks-blockchain-api-types": "^0.48.3",
-    "@emotion/babel-plugin": "^11.2.0",
-    "@emotion/babel-preset-css-prop": "^11.2.0",
     "@emotion/cache": "^11.0.0",
     "@babel/core": "^7.12.10",
     "@emotion/core": "^11.0.0",
@@ -79,7 +76,7 @@
     "react-simple-code-editor": "^0.11.0",
     "react-ssr-prepass": "npm:preact-ssr-prepass",
     "react-use": "^15.3.8",
-    "recoil": "facebookexperimental/Recoil.git#nightly",
+    "recoil": "facebookexperimental/Recoil.git#4dbffa51882fb7968940165e3b4a7117b7dad591",
     "swr": "^0.4.0",
     "unique-names-generator": "^4.3.1",
     "use-constant": "^1.0.0",
@@ -90,7 +87,7 @@
     "yup": "^0.32.8"
   },
   "devDependencies": {
-    "@blockstack/stacks-blockchain-api-types": "^0.44.0",
+    "@blockstack/stacks-blockchain-api-types": "^0.48.3",
     "@commitlint/config-conventional": "^11.0.0",
     "@next/bundle-analyzer": "^10.0.7",
     "@stacks/eslint-config": "^1.0.7",
