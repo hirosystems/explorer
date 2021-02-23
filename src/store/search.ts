@@ -3,6 +3,7 @@ import { SearchResult } from '@common/types/search';
 import { localStorageEffect } from '@store/utils';
 import { convertAddress, getAddressDetails } from '@common/utils/addresses';
 import { networkModeState } from '@common/app-helpers';
+import { networkCurrentUrlSelector } from '@store/network';
 
 export const searchQueryAtom = atom<string | null>({
   key: 'search.query.base',
@@ -113,11 +114,13 @@ export const searchResultsSelector = selector({
 export const searchDropdownVisibilitySelector = selector({
   key: 'search.dropdown.visible',
   get: ({ get }) => {
+    const apiServer = get(networkCurrentUrlSelector);
     const hasValue = get(searchValueState);
     const query = get(searchQueryState);
     const isFocused = get(searchFocusedState);
     const recentItems = get(searchRecentlyViewedItemsState);
-    const hasRecentItems = Object.keys(recentItems).length > 0;
+    const keys = Object.keys(recentItems)?.filter(key => key?.startsWith(apiServer)) || [];
+    const hasRecentItems = keys.length > 0;
     const hasResults = get(searchResultsState);
     const hasError = get(searchErrorSelector);
     const hasItem = get(searchResultItemState(hasResults?.found && hasResults.result.entity_id));
