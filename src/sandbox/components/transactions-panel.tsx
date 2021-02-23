@@ -8,11 +8,9 @@ import { TxItem } from '@components/transaction-item';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import {
-  contractCallViewState,
   contractSearchQueryState,
   currentFunctionState,
   sandboxRouteState,
-  tabState,
   txContractState,
   txDetailsState,
 } from '@sandbox/store/sandbox';
@@ -32,6 +30,7 @@ import { TxLink } from '@components/links';
 import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 
 import { FilterIcon } from '@components/icons/filter';
+import { functionCallViewState } from '@sandbox/store/views';
 
 const PanelHeader = React.memo(() => {
   const [filter, setFilterState] = useRecoilState(filterState('sandbox'));
@@ -123,24 +122,24 @@ const TxDetailsFunctions = ({
   contractId,
   status,
 }: any) => {
-  const setView = useSetRecoilState(contractCallViewState);
+  const setView = useSetRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
   const setCurrentFunction = useSetRecoilState(currentFunctionState);
-  const setTab = useSetRecoilState(tabState);
   const [fnsVisible, setFnsVisibility] = React.useState(false);
+  const setRoute = useSetRecoilState(sandboxRouteState);
 
   const handleSetFunction = (name: string) => {
-    setView('fn');
+    setView('function-overview');
     setQuery(contractId);
     setCurrentFunction(name);
-    setTab('call');
+    setRoute('function-call');
   };
 
   const handleSetContractQuery = () => {
+    setRoute('function-call');
     setQuery(contractId);
     setCurrentFunction(undefined);
-    setView('fn');
-    setTab('call');
+    setView('function-overview');
   };
 
   return hasFunctionsAvailable ? (
