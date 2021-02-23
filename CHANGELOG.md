@@ -1,3 +1,24 @@
+## [1.9.3](https://github.com/blockstack/explorer/compare/v1.9.2...v1.9.3) (2021-02-23)
+
+
+### Bug Fixes
+
+* 500kb+ -> 194kb ([18a5dc2](https://github.com/blockstack/explorer/commit/18a5dc22f3d793a155f8f432b22f38fbfcaa635f))
+* add @stacks/blockchain-api-client ([7619c60](https://github.com/blockstack/explorer/commit/7619c60fcddb3188febbc858a25eed3754644b2f))
+* btc address on server ([65dbfbf](https://github.com/blockstack/explorer/commit/65dbfbf6981ff460bff08cd7e1f3488ade27d3b1))
+* build, remove unused page ([d94249f](https://github.com/blockstack/explorer/commit/d94249f54c36e37ecf93e4285cbaf932b9a24277))
+* bump deps, grain image, fonts ([349126d](https://github.com/blockstack/explorer/commit/349126db46bd90fa6c3aada0f832808a02c0df36))
+* clarity syntax ([10d9119](https://github.com/blockstack/explorer/commit/10d9119788ae2bd57673ce81b95cf5252dd66db4))
+* cleanup ([b6b9112](https://github.com/blockstack/explorer/commit/b6b9112d8ea7ef78cc6b214a131875e3a1a4cac1))
+* colors, empty message ([76e79d0](https://github.com/blockstack/explorer/commit/76e79d05ef40e20c4b652f54db063580a0896a99))
+* comment client bug, blocks list data ([eced062](https://github.com/blockstack/explorer/commit/eced0623a27e05f3059a075b051052b8786405b1))
+* correct address for defaults ([f603b3b](https://github.com/blockstack/explorer/commit/f603b3b2cc3f9e479871e32eb1cd996c6eb9112c))
+* gg preact ([19b68a0](https://github.com/blockstack/explorer/commit/19b68a02179558ee8e21f9d43c5432def8faf71c))
+* load contract functions ([fb0668e](https://github.com/blockstack/explorer/commit/fb0668e0dd0d79dc193d66b6341e067ddf50407d))
+* move sandbox, monaco editor is amazing ([cab8cae](https://github.com/blockstack/explorer/commit/cab8cae2476b522f5bc98de69d6f183fd3715b3f))
+* remove optional ([95626cc](https://github.com/blockstack/explorer/commit/95626cc716cde30c6389ed00af938ed79dc7de0b))
+* remove video on mobile ([427ee26](https://github.com/blockstack/explorer/commit/427ee26703cf572d63c148acb4e7381fccbe8873))
+
 ## [1.9.2](https://github.com/blockstack/explorer/compare/v1.9.1...v1.9.2) (2021-02-23)
 
 
