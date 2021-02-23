@@ -31,7 +31,9 @@ const ContractCallPage = ({
       >
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
-          {'events' in transaction && transaction.events && <Events events={transaction.events} />}
+          {'events' in transaction && transaction.events && (
+            <Events txId={transaction.tx_id} events={transaction.events} />
+          )}
           <FunctionSummarySection
             isPending={isPending}
             result={transaction.tx_result}
