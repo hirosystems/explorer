@@ -34,8 +34,11 @@ export function useFetchEvents(
   return useInfiniteQuery<TransactionEvent[]>(key, fetcher, {
     ...hookOptions,
     initialData,
-    refetchInterval: DEFAULT_POLLING_INTERVAL,
-    staleTime: DEFAULT_POLLING_INTERVAL,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
     keepPreviousData: true,
     notifyOnChangeProps: ['data'],
     getNextPageParam: (lastPage, allPages) => {
