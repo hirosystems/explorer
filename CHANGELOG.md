@@ -1,3 +1,10 @@
+## [1.9.2](https://github.com/blockstack/explorer/compare/v1.9.1...v1.9.2) (2021-02-23)
+
+
+### Bug Fixes
+
+* better checking for tuples ([6ee5982](https://github.com/blockstack/explorer/commit/6ee5982722056c1ddd1c5622a8f34f16e2eadff6))
+
 ## [1.9.1](https://github.com/blockstack/explorer/compare/v1.9.0...v1.9.1) (2021-02-22)
 
 
