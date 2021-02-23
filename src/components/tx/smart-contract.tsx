@@ -42,7 +42,9 @@ const SmartContractPage = ({
             contractName={getContractName(transaction.smart_contract.contract_id)}
             transaction={transaction}
           />
-          {'events' in transaction && <Events events={transaction.events} />}
+          {'events' in transaction && (
+            <Events txId={transaction.tx_id} events={transaction.events} />
+          )}
           <ContractSource source={transaction.smart_contract.source_code} />
           <PostConditions
             mode={transaction.post_condition_mode}
