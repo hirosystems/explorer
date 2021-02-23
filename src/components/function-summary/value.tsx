@@ -62,17 +62,19 @@ const TupleResult = ({ tuple, isPoxAddr }: any) => {
   } catch (e) {}
   return (
     <>
-      {tuple.map((entry: any, index: number, arr: any[]) => (
-        <Box
-          display="block"
-          mb={index !== arr.length - 1 || !!additional ? 'tight' : 'unset'}
-          as="span"
-          key={index}
-        >
-          <Caption mb="extra-tight">{entry[0].replace(/\(/g, '')}</Caption>
-          <Text>{entry[1].replace(/\)/g, '')}</Text>
-        </Box>
-      ))}
+      {tuple.map((entry: any, index: number, arr: any[]) =>
+        entry && entry.length ? (
+          <Box
+            display="block"
+            mb={index !== arr.length - 1 || !!additional ? 'tight' : 'unset'}
+            as="span"
+            key={index}
+          >
+            <Caption mb="extra-tight">{entry?.[0]?.replace(/\(/g, '')}</Caption>
+            <Text>{entry?.[1]?.replace(/\)/g, '')}</Text>
+          </Box>
+        ) : null
+      )}
       {additional}
     </>
   );
