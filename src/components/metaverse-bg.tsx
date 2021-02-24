@@ -27,7 +27,7 @@ const GlobalStyles = () => (
         .metaverse-bg {
           display: none;
           opacity: 0.65;
-          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
+          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format,compress&w=1800'),
             linear-gradient(
               30deg,
               rgba(98, 135, 221, 1) 0%,
@@ -39,7 +39,7 @@ const GlobalStyles = () => (
 
       html.light {
         .metaverse-bg {
-          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800'),
+          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format,compress&w=1800'),
             linear-gradient(
               30deg,
               rgba(98, 135, 221, 1) 0%,
@@ -55,7 +55,7 @@ const GlobalStyles = () => (
 const Grain: React.FC<BoxProps> = memo(props => (
   <Box
     as="img"
-    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format"
+    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format,compress&w=1800"
     width="100%"
     position="absolute"
     left={0}
@@ -101,14 +101,10 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = mem
         top={0}
         height={height}
         overflow="hidden"
-        transition={transition}
       >
         <GlobalStyles />
         <Grain opacity={0.45} />
         <Grain />
-        <Box display={['none', 'none', 'unset']}>
-          <Video />
-        </Box>
         <Box
           className="metaverse-bg"
           as={as}
