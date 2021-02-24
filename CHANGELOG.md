@@ -1,3 +1,14 @@
+## [1.9.4](https://github.com/blockstack/explorer/compare/v1.9.3...v1.9.4) (2021-02-24)
+
+
+### Bug Fixes
+
+* add txId to events components ([7c79d45](https://github.com/blockstack/explorer/commit/7c79d45939cb114f2196e3b4ff24b043af279625))
+* fix recent conditional, fixes [#356](https://github.com/blockstack/explorer/issues/356) ([581fafd](https://github.com/blockstack/explorer/commit/581fafd37176160213e1d36a824377575bedee67))
+* images ([5793e72](https://github.com/blockstack/explorer/commit/5793e726372550349566117c4f2d0d2f8058f169))
+* no need to refetch ([4874635](https://github.com/blockstack/explorer/commit/48746351e7e3d1fe791ad79f33db61bd668ad5bb))
+* paginate events, fixes [#364](https://github.com/blockstack/explorer/issues/364) ([c28d41c](https://github.com/blockstack/explorer/commit/c28d41c0e963a2e02806da89fa3bfb0701a52985))
+
 ## [1.9.3](https://github.com/blockstack/explorer/compare/v1.9.2...v1.9.3) (2021-02-23)
 
 
