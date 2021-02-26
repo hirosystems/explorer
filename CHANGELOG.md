@@ -1,3 +1,10 @@
+## [1.9.5](https://github.com/blockstack/explorer/compare/v1.9.4...v1.9.5) (2021-02-26)
+
+
+### Bug Fixes
+
+* use correct title in meta ([4d41351](https://github.com/blockstack/explorer/commit/4d41351e924d961615da7198d42586b1b76740ea))
+
 ## [1.9.4](https://github.com/blockstack/explorer/compare/v1.9.3...v1.9.4) (2021-02-24)
 
 
