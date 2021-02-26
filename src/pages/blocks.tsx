@@ -9,7 +9,7 @@ import { BLOCKS_PAGE_BLOCKS_LIST, BLOCKS_PAGE_BLOCKS_LIST_LIMIT } from '@common/
 
 const BlocksPage: NextPage = () => (
   <>
-    <Meta title="Recent transactions" />
+    <Meta title="Recent Blocks" />
     <Box mb="base-loose">
       <Title mt="72px" color="white" as="h1" fontSize="36px">
         Blocks
