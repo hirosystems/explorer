@@ -34,6 +34,7 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
                   {name}
                 </Caption>
                 <FunctionSummaryClarityValue
+                  btc={null}
                   arg={{
                     type: entry.type,
                     repr,
@@ -59,6 +60,7 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
         </Flex>
         <Stack mt="extra-loose" spacing="base" width="100%">
           <FunctionSummaryClarityValue
+            btc={null}
             arg={{
               type: type.replace(' UnknownType', ''),
               repr: result?.repr,

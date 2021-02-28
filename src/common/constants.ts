@@ -37,6 +37,7 @@ export const DEFAULT_V2_INFO_ENDPOINT = '/v2/info';
 
 export const SITE_NOTICE_BANNER_LABEL =
   NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL || process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL;
+
 export const SITE_NOTICE_BANNER_MESSAGE =
   NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE || process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE;
 export const SITE_NOTICE_ENABLED = SITE_NOTICE_BANNER_LABEL && SITE_NOTICE_BANNER_MESSAGE;
@@ -53,7 +54,7 @@ export const DEPLOYMENT_URL =
 export const LEGACY_EXPLORER_API_SERVER =
   NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER ||
   process.env.NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER ||
-  'https://explorer-api.blockstack.xyz';
+  'https://explorer-api.legacy.blockstack.org';
 
 export const CONNECT_AUTH_ORIGIN =
   NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
@@ -97,6 +98,7 @@ export enum MODALS {
   SEARCH = 'modals/search',
   NETWORK = 'modals/add-network',
   DIFFERENT_NETWORK = 'modals/different-network',
+  UNLOCKING_SCHEDULE = 'modals/unlocking-schedule',
 }
 
 type ReverseMap<T extends Record<keyof T, any>> = {
@@ -114,3 +116,5 @@ export type AllModals = keyof typeof reverseMap;
 
 export const withApiServer = (apiServer: string) => (path?: string) =>
   path ? apiServer + path : apiServer;
+
+export const POX_ADDRESS = 'SP000000000000000000002Q6VF78';

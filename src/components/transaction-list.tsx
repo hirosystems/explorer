@@ -16,7 +16,7 @@ import { Pending } from '@components/status';
 import { HoverableItem } from '@components/hoverable';
 import { CaptionAction } from '@components/caption-action';
 import { IconFilter } from '@tabler/icons';
-import { FilteredMessage, FilterPanel } from '@components/sandbox/filter-panel';
+import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 import { useFilterState } from '@common/hooks/use-filter-state';
 
 const Item: React.FC<

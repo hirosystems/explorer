@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   TransactionEvent,
   TransactionEventAssetType,
@@ -20,6 +20,9 @@ import { Caption, Link, Title } from '@components/typography';
 import { Circle } from '@components/circle';
 import { SenderRecipient } from '@components/addresses';
 import { AddressLink } from '@components/links';
+import { useFetchEvents } from '@common/hooks/data/use-fetch-events';
+import { useApiServer } from '@common/hooks/use-api';
+import { useLoading } from '@common/hooks/use-loading';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {
@@ -197,6 +200,18 @@ const getParticipants = (event: TransactionEvent) => {
   }
 };
 
+// handle if the print is a hex, convert it to string if so
+function handleContractLogHex(repr: string) {
+  if (repr?.startsWith('0x')) {
+    try {
+      return Buffer.from(repr.replace('0x', ''), 'hex').toString('utf8');
+    } catch (e) {
+      return repr;
+    }
+  }
+  return repr;
+}
+
 const getName = (event: TransactionEvent) => {
   const assetId =
     event.event_type === 'fungible_token_asset' || event.event_type === 'non_fungible_token_asset'
@@ -206,7 +221,7 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return event.contract_log.value.repr;
+      return handleContractLogHex(event.contract_log.value.repr);
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:
@@ -266,14 +281,72 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
     </Flex>
   );
 };
-export const Events = ({ events, ...rest }: { events: TransactionEvent[] } & FlexProps) => {
+
+const EventsList = ({
+  events: initialData,
+  txId,
+}: {
+  txId: string;
+  events: TransactionEvent[];
+}) => {
+  const apiServer = useApiServer();
+  const { data, hasNextPage, fetchNextPage } = useFetchEvents({
+    initialData: {
+      pageParams: [undefined],
+      pages: [initialData],
+    },
+    txId,
+    apiServer,
+    key: `EVENTS__${txId}`,
+  });
+
+  const { isLoading, doFinishLoading, doStartLoading } = useLoading();
+
+  const handleLoadMore = useCallback(async () => {
+    doStartLoading();
+    await fetchNextPage();
+    doFinishLoading();
+  }, [doStartLoading, fetchNextPage, doFinishLoading]);
+
+  return (
+    <Box px="loose">
+      {data.pages.map((events: TransactionEvent[], pageIndex: number) =>
+        events.map((event, index, arr) => (
+          <Item
+            key={index}
+            event={event}
+            isLast={pageIndex === data?.pages?.length - 1 && index === arr.length - 1}
+          />
+        ))
+      )}
+      {hasNextPage ? (
+        <Grid
+          as="a"
+          borderTop={border()}
+          px="base"
+          py="base"
+          placeItems="center"
+          _hover={{ color: color('text-title'), cursor: 'pointer' }}
+          onClick={handleLoadMore}
+          color={color('text-caption')}
+        >
+          <Caption color="currentColor">{isLoading ? 'Loading...' : 'Load more'}</Caption>
+        </Grid>
+      ) : null}
+    </Box>
+  );
+};
+export const Events = ({
+  events,
+  txId,
+  ...rest
+}: {
+  txId: string;
+  events: TransactionEvent[];
+} & FlexProps) => {
   return events?.length ? (
     <Section title="Events" {...rest}>
-      <Box px="loose">
-        {events.map((event, index) => (
-          <Item event={event} isLast={index === events.length - 1} />
-        ))}
-      </Box>
+      <EventsList events={events} txId={txId} />
     </Section>
   ) : null;
 };

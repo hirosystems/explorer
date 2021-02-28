@@ -2,7 +2,7 @@ import { Box, color } from '@stacks/ui';
 import React, { memo } from 'react';
 import { CaptionAction } from '@components/caption-action';
 import { IconFilter } from '@tabler/icons';
-import { FilterPanel } from '@components/sandbox/filter-panel';
+import { FilterPanel } from '@components/filter-panel';
 import { useFilterState } from '@common/hooks/use-filter-state';
 
 export const FilterButton = memo(() => {

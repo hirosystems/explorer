@@ -5,11 +5,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-  experimental: {
-    modern: true,
-    polyfillsOptimization: true,
-    jsconfigPaths: true,
-  },
   publicRuntimeConfig: {
     NEXT_PUBLIC_DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL,
     NEXT_PUBLIC_TESTNET_API_SERVER: process.env.NEXT_PUBLIC_TESTNET_API_SERVER,
@@ -30,9 +25,8 @@ module.exports = withBundleAnalyzer({
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
-
-    // Install webpack aliases:
     const aliases = config.resolve.alias || (config.resolve.alias = {});
+    const externals = config.externals || [];
 
     if (!dev) {
       config.plugins.push(
@@ -43,10 +37,11 @@ module.exports = withBundleAnalyzer({
       );
     }
 
-    aliases['@emotion/react'] = '@emotion/react';
     aliases['@blockstack/stacks-transactions'] = '@stacks/transactions';
     aliases['@blockstack/stacks-transactions/lib/clarity'] = '@stacks/transactions/dist/clarity';
+    aliases['@tabler/icons'] = '@tabler/icons/icons-react/dist/index.esm.min';
 
+    config.externals = externals;
     return config;
   },
 });

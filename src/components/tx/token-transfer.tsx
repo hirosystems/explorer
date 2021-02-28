@@ -18,7 +18,7 @@ const TokenTransferPage = ({
     <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
       <Stack spacing="extra-loose">
         <TransactionDetails transaction={transaction} hideContract />
-        {'events' in transaction && <Events events={transaction.events} />}
+        {'events' in transaction && <Events txId={transaction.tx_id} events={transaction.events} />}
       </Stack>
       {block && <BtcAnchorBlockCard block={block} />}
     </PagePanes>

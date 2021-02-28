@@ -11,3 +11,5 @@ build
 old/
 _old/
 .env
+
+.vercel

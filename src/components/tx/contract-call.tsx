@@ -16,7 +16,8 @@ const ContractCallPage = ({
   transaction,
   source,
   block,
-}: TxData<ContractCallTxs> & { block?: Block }) => {
+  btc,
+}: TxData<ContractCallTxs> & { block?: Block; btc: null | string }) => {
   const isPending = transaction.tx_status === 'pending';
   return (
     <>
@@ -30,11 +31,14 @@ const ContractCallPage = ({
       >
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
-          {'events' in transaction && transaction.events && <Events events={transaction.events} />}
+          {'events' in transaction && transaction.events && (
+            <Events txId={transaction.tx_id} events={transaction.events} />
+          )}
           <FunctionSummarySection
             isPending={isPending}
             result={transaction.tx_result}
             summary={transaction.contract_call as ContractCallTransaction['contract_call']}
+            btc={btc}
           />
           <PostConditions
             conditions={transaction.post_conditions}

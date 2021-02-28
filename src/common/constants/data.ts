@@ -13,6 +13,7 @@ export const HOMEPAGE_BLOCKS_LIST = `${HOMEPAGE}/BLOCKS_LIST`;
 // Blocks index page
 export const BLOCKS_PAGE = 'data/BLOCKS_PAGE';
 export const BLOCKS_PAGE_BLOCKS_LIST = `${BLOCKS_PAGE}/BLOCKS_LIST`;
+export const BLOCKS_PAGE_BLOCKS_LIST_LIMIT = 30;
 
 // Transactions index page
 export const TRANSACTIONS_PAGE = 'data/TRANSACTIONS_PAGE';
