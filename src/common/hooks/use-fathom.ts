@@ -1,24 +1,28 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import * as Fathom from 'fathom-client';
-import { FATHOM_ID } from '@common/constants';
+import { IS_BROWSER, IS_DEV } from '@common/constants';
+
+function onRouteChangeComplete() {
+  Fathom.trackPageview();
+}
 
 export const useFathom = () => {
   const router = useRouter();
 
   useEffect(() => {
-    Fathom.load(FATHOM_ID, {
-      includedDomains: ['https://explorer.stacks.co'],
-    });
+    if (!IS_DEV && IS_BROWSER) {
+      Fathom.load('YAKFSIOZ', {
+        includedDomains: ['explorer.stacks.co'],
+      });
 
-    function onRouteChangeComplete() {
-      Fathom.trackPageview();
+      const handleRouteChange = () => onRouteChangeComplete();
+
+      router.events.on('routeChangeComplete', handleRouteChange);
+
+      return () => {
+        router.events.off('routeChangeComplete', handleRouteChange);
+      };
     }
-
-    router.events.on('routeChangeComplete', onRouteChangeComplete);
-
-    return () => {
-      router.events.off('routeChangeComplete', onRouteChangeComplete);
-    };
   }, []);
 };
