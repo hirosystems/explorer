@@ -12,7 +12,6 @@ const {
   NEXT_PUBLIC_CONNECT_AUTH_ORIGIN,
   NEXT_PUBLIC_TESTNET_API_SERVER,
   NEXT_PUBLIC_MAINNET_API_SERVER,
-  NEXT_PUBLIC_FATHOM_ID,
 } = publicRuntimeConfig;
 
 const getNumber = (query?: string): number | undefined =>
@@ -91,8 +90,6 @@ export const DEFAULT_NETWORK_LIST = [
     url: 'http://localhost:3999',
   },
 ];
-
-export const FATHOM_ID = NEXT_PUBLIC_FATHOM_ID || process.env.NEXT_PUBLIC_FATHOM_ID;
 
 export enum MODALS {
   SEARCH = 'modals/search',
