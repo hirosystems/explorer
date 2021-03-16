@@ -1,3 +1,10 @@
+## [1.9.6](https://github.com/blockstack/explorer/compare/v1.9.5...v1.9.6) (2021-03-16)
+
+
+### Bug Fixes
+
+* fathom ([9507a41](https://github.com/blockstack/explorer/commit/9507a412cbfa80bdf5175a034889de58a0f0350c))
+
 ## [1.9.5](https://github.com/blockstack/explorer/compare/v1.9.4...v1.9.5) (2021-02-26)
 
 
