@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import { useApiServer } from '@common/hooks/use-api';
 import { BigNumber } from 'bignumber.js';
 import { useConnect } from '@sandbox/hooks/use-connect';
+import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 
 const fetcher = async (apiServer: string) => {
   const res = await fetch(apiServer + '/v2/fees/transfer');
@@ -27,6 +28,7 @@ export const TokenTransferView = () => {
   const { data } = useSWR(apiServer, fetcher);
   const fee = data ? new BigNumber(data).multipliedBy(180) : 0;
   const { principal, balances } = useUser();
+  const { handleTrackGoal } = useFathomGoal();
   const { handleSubmit, handleChange, handleBlur, values, errors, setFieldValue } = useFormik({
     validateOnBlur: false,
     validateOnChange: false,
@@ -36,6 +38,7 @@ export const TokenTransferView = () => {
       amount: null,
     },
     onSubmit: ({ recipient, amount, memo }) => {
+      handleTrackGoal(Goals.SANDBOX_TOKEN_TRANSFER);
       void handleStxTransfer({ recipient, amount: stacksToMicro(amount), memo });
     },
     validate: values => {

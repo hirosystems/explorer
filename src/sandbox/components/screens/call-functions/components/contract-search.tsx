@@ -10,11 +10,13 @@ import { Input } from '@components/inputs';
 import { Button } from '@components/button';
 import { functionCallViewState } from '@sandbox/store/views';
 import { useRootContractAddress } from '@sandbox/common/use-root-contract';
+import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 
 export const ContractSearch: React.FC = () => {
   const setView = useSetRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
   const address = useRootContractAddress();
+  const { handleTrackGoal } = useFathomGoal();
 
   const { handleSubmit, handleChange, handleBlur, values, setValues, errors } = useFormik({
     validateOnChange: false,
@@ -35,6 +37,7 @@ export const ContractSearch: React.FC = () => {
       return errors;
     },
     onSubmit: ({ principal, contract_name }) => {
+      handleTrackGoal(Goals.SANDBOX_CONTRACT_SEARCH);
       setQuery(`${principal}.${contract_name}`);
       setView('function-overview');
     },
