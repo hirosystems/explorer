@@ -3,6 +3,7 @@ import { showConnect, AuthOptions, FinishedData } from '@stacks/connect';
 import { useAuthState } from '@sandbox/hooks/use-auth';
 import { useSetRecoilState } from 'recoil';
 import { rightPanelState } from '@sandbox/store/views';
+import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 
 export const useConnect = () => {
   const {
@@ -13,23 +14,23 @@ export const useConnect = () => {
     resetUserData,
     setUserData,
   } = useAuthState();
+  const { handleTrackGoal } = useFathomGoal();
   const setPanelVisibility = useSetRecoilState(rightPanelState);
 
-  const onFinish = async (finishedData: FinishedData) => {
+  const onFinish = (finishedData: FinishedData) => {
     if (userSession) {
-      const data = await userSession.loadUserData();
+      const data = userSession.loadUserData();
       setUserData(data);
     }
   };
 
-  const doOpenAuth = useCallback(
-    () =>
-      showConnect({
-        ...(authOptions as AuthOptions),
-        onFinish,
-      }),
-    [authOptions, onFinish]
-  );
+  const doOpenAuth = useCallback(() => {
+    handleTrackGoal(Goals.SANDBOX_SIGNIN);
+    void showConnect({
+      ...(authOptions as AuthOptions),
+      onFinish,
+    });
+  }, [authOptions, onFinish]);
   const doSignOut = useCallback(() => {
     userSession?.signUserOut();
     resetUserData();
