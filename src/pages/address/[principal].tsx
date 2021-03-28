@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import useSWR from 'swr';
 import {
   AddressBalanceResponse,
-  AddressInfoResponse,
+  AccountDataResponse,
   MempoolTransaction,
   Transaction,
   TransactionResults,
@@ -121,7 +121,7 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
 
 interface AddressPageData {
   principal: string;
-  info: AddressInfoResponse;
+  info: AccountDataResponse;
   balances: AddressBalanceResponse;
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
