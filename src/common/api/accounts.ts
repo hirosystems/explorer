@@ -2,16 +2,25 @@ import type {
   AddressBalanceResponse,
   MempoolTransaction,
   TransactionResults,
+  AddressInfoResponse,
 } from '@blockstack/stacks-blockchain-api-types';
 
 import { fetchPendingTxs } from '@common/api/transactions';
-import { fetchFromSidecar } from '@common/api/fetch';
+import { fetchFromSidecar, fetchFromApi } from '@common/api/fetch';
 
 export const fetchBalances = (apiServer: string) => async (
   principal: string
 ): Promise<AddressBalanceResponse> => {
   const path = `/address/${principal}/balances`;
   const res = await fetchFromSidecar(apiServer)(path);
+  return res.json();
+};
+
+export const fetchAccountInfo = (apiServer: string) => async (
+  principal: string
+): Promise<AddressInfoResponse> => {
+  const path = `/v2/accounts/${principal}?proof=0`;
+  const res = await fetchFromApi(apiServer)(path);
   return res.json();
 };
 
@@ -27,6 +36,7 @@ export const fetchTransactions = (apiServer: string) => async (
 };
 
 export interface AllAccountData {
+  info: AddressInfoResponse;
   balances: AddressBalanceResponse;
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
@@ -41,7 +51,8 @@ interface AllAccountOptionsBase {
 export const fetchAllAccountData = (apiServer: string) => async (
   options: AllAccountOptionsBase
 ): Promise<AllAccountData> => {
-  const [balances, transactions, pendingTransactions] = await Promise.all([
+  const [info, balances, transactions, pendingTransactions] = await Promise.all([
+    fetchAccountInfo(apiServer)(options.principal),
     fetchBalances(apiServer)(options.principal),
     options.doNotFetchTransactions
       ? new Promise<null>(resolve => {
@@ -52,6 +63,7 @@ export const fetchAllAccountData = (apiServer: string) => async (
   ]);
 
   return {
+    info,
     balances,
     transactions,
     pendingTransactions: pendingTransactions as MempoolTransaction[],

@@ -57,6 +57,14 @@ const AddressComponent = React.memo(({ principal }: { principal: string }) => {
   );
 });
 
+const NoncesComponent = React.memo(({ nonce }: { nonce: number }) => {
+  return (
+    <Box>
+      <Text>{nonce}</Text>
+    </Box>
+  );
+});
+
 const getSenderName = (txType: Transaction['tx_type']) => {
   switch (txType) {
     case 'smart_contract':
@@ -127,6 +135,13 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
     },
     children: <AddressComponent principal={d.sender_address} />,
     copy: d.sender_address,
+  };
+  const nonce = {
+    label: {
+      children: `Nonce`,
+    },
+    children: <NoncesComponent nonce={d.nonce} />,
+    copy: d.nonce,
   };
   const fees = {
     label: {
@@ -219,6 +234,7 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
         recipient,
         txid,
         fees,
+        nonce,
         blockTime,
         blockHash,
         memo,
@@ -235,10 +251,10 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
         },
         children: d.coinbase_payload.data,
       };
-      return [txid, sender, fees, blockTime, blockHash, scratch, canonical];
+      return [txid, sender, fees, nonce, blockTime, blockHash, scratch, canonical];
     }
     default:
-      return [contractName, txid, sender, fees, blockTime, blockHash, canonical];
+      return [contractName, txid, sender, fees, nonce, blockTime, blockHash, canonical];
   }
 };
 
