@@ -2,7 +2,7 @@ import type {
   AddressBalanceResponse,
   MempoolTransaction,
   TransactionResults,
-  AddressInfoResponse,
+  AccountDataResponse,
 } from '@blockstack/stacks-blockchain-api-types';
 
 import { fetchPendingTxs } from '@common/api/transactions';
@@ -18,7 +18,7 @@ export const fetchBalances = (apiServer: string) => async (
 
 export const fetchAccountInfo = (apiServer: string) => async (
   principal: string
-): Promise<AddressInfoResponse> => {
+): Promise<AccountDataResponse> => {
   const path = `/v2/accounts/${principal}?proof=0`;
   const res = await fetchFromApi(apiServer)(path);
   return res.json();
@@ -36,7 +36,7 @@ export const fetchTransactions = (apiServer: string) => async (
 };
 
 export interface AllAccountData {
-  info: AddressInfoResponse;
+  info: AccountDataResponse;
   balances: AddressBalanceResponse;
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
