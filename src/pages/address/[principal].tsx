@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import useSWR from 'swr';
 import {
   AddressBalanceResponse,
+  AddressInfoResponse,
   MempoolTransaction,
   Transaction,
   TransactionResults,
@@ -106,6 +107,12 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
             },
             children: `${microToStacks(data?.balances?.stx?.total_fees_sent || 0)} STX`,
           },
+          {
+            label: {
+              children: 'Nonce',
+            },
+            children: data?.info?.nonce,
+          },
         ]}
       />
     </Section>
@@ -114,6 +121,7 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
 
 interface AddressPageData {
   principal: string;
+  info: AddressInfoResponse;
   balances: AddressBalanceResponse;
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
@@ -125,6 +133,7 @@ interface AddressPageData {
 const AddressPage: NextPage<AddressPageData> = props => {
   const {
     principal,
+    info,
     balances,
     pendingTransactions,
     transactions,
@@ -152,6 +161,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
     async () => fetchAllAccountData(apiServer as any)({ principal }),
     {
       initialData: {
+        info,
         balances,
         transactions,
         pendingTransactions,
