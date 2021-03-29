@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Flex, FlexProps, transition, color, useColorMode } from '@stacks/ui';
 import { css, Theme } from '@stacks/ui-core';
+import dayjs from 'dayjs';
 
 import { Footer } from '@components/footer';
 import { Header } from '@components/header';
@@ -31,11 +32,15 @@ type PageWrapperProps = {
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
   const status = tx.tx_status;
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
+  const longPending = dayjs().diff(dayjs.unix(tx.receipt_time), 'h') > 24;
 
   const failedMessage =
     status === 'abort_by_response'
       ? 'This transaction did not succeed because the transaction was aborted during its execution.'
       : 'This transaction would have succeeded, but was rolled back by a supplied post-condition.';
+
+  const longPendingMessage =
+    'Transactions that cannot be confirmed within 256 blocks will eventually be garbage-collected.';
 
   return (
     <Box width="100%" {...props}>
@@ -46,6 +51,15 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
           error={{
             name: 'Notice',
             message: failedMessage,
+          }}
+        />
+      ) : null}
+      {longPending ? (
+        <Alert
+          mb="base"
+          error={{
+            name: 'Notice',
+            message: longPendingMessage,
           }}
         />
       ) : null}
