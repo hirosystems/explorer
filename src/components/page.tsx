@@ -16,6 +16,7 @@ import {
   SITE_NOTICE_BANNER_MESSAGE,
   SITE_NOTICE_ENABLED,
 } from '@common/constants';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 type PageProps = {
   notice?: { label?: string; message?: string };
@@ -32,7 +33,10 @@ type PageWrapperProps = {
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
   const status = tx.tx_status;
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
-  const longPending = dayjs().diff(dayjs.unix(tx.receipt_time), 'h') > 24;
+  const networkMode = useNetworkMode();
+  // for testnet, show after 4 hours. for mainnet, show after 24 hours
+  const longPending =
+    dayjs().diff(dayjs.unix(tx.receipt_time), 'h') > (networkMode === 'testnet' ? 4 : 24);
 
   const failedMessage =
     status === 'abort_by_response'
