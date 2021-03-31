@@ -44,7 +44,7 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
       : 'This transaction would have succeeded, but was rolled back by a supplied post-condition.';
 
   const longPendingMessage =
-    'Transactions that cannot be confirmed within 256 blocks will eventually be garbage-collected.';
+    'Transactions that cannot be confirmed within 256 blocks are eventually canceled automatically.';
 
   return (
     <Box width="100%" {...props}>
