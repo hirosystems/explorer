@@ -31,12 +31,15 @@ type PageWrapperProps = {
 } & FlexProps;
 
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
+  const HOURS_NOTICE_TESTNET = 4;
+  const HOURS_NOTICE_MAINNET = 24;
   const status = tx.tx_status;
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
   const networkMode = useNetworkMode();
   // for testnet, show after 4 hours. for mainnet, show after 24 hours
   const longPending =
-    dayjs().diff(dayjs.unix(tx.receipt_time), 'h') > (networkMode === 'testnet' ? 4 : 24);
+    dayjs().diff(dayjs.unix(tx.receipt_time), 'h') >
+    (networkMode === 'testnet' ? HOURS_NOTICE_TESTNET : HOURS_NOTICE_MAINNET);
 
   const failedMessage =
     status === 'abort_by_response'
