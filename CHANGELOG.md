@@ -1,3 +1,18 @@
+# [1.10.0](https://github.com/blockstack/explorer/compare/v1.9.6...v1.10.0) (2021-04-01)
+
+
+### Bug Fixes
+
+* lint issue ([1d15a5c](https://github.com/blockstack/explorer/commit/1d15a5cec8b1df3fc28809b262ca72687be1e6c9))
+
+
+### Features
+
+* account for different networks ([0fff7a0](https://github.com/blockstack/explorer/commit/0fff7a0f48745399fdda0f9c44b53a6a72d6714e))
+* add garbage collection info ([162336d](https://github.com/blockstack/explorer/commit/162336d8aa0529ae3b5069c59f26ff1615270916))
+* add vars for notice hours ([8896c0e](https://github.com/blockstack/explorer/commit/8896c0e7321f6db73b1a075b7bfed4771205d19d))
+* update message ([80988ee](https://github.com/blockstack/explorer/commit/80988ee99d4ab5d83503a380fa416e93151b515e))
+
 ## [1.9.6](https://github.com/blockstack/explorer/compare/v1.9.5...v1.9.6) (2021-03-16)
 
 
