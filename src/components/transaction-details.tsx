@@ -77,7 +77,7 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
     copy: d.tx_id,
   };
   const canonical = {
-    condition: d.tx_status !== 'pending' && !d.canonical,
+    condition: d.tx_status !== 'pending' && 'canonical' in d && !d.canonical,
     label: {
       children: 'Non-canonical',
     },

@@ -42,11 +42,12 @@ const getOgTitle = (tx: Transaction | MempoolTransaction) => {
       return `${name}`;
     }
     case 'token_transfer': {
-      const amount = `${microToStacks(tx.token_transfer.amount)} STX transferred`;
-      return amount;
+      return `${microToStacks(tx.token_transfer.amount)} STX transferred`;
     }
     case 'coinbase':
-      return `Coinbase${tx.tx_status !== 'pending' && ` for block #${tx.block_height}`}`;
+      return `Coinbase${
+        tx.tx_status !== 'pending' && ` for block #${(tx as Transaction).block_height}`
+      }`;
     case 'poison_microblock':
       return truncateMiddle(tx.tx_id);
   }

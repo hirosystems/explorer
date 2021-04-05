@@ -30,7 +30,7 @@ export interface TxItemProps extends FlexProps {
   hideRightElements?: boolean;
 }
 
-const getRelativeTimestamp = (tx: Transaction) => {
+const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
   const date =
     typeof (tx as any).burn_block_time !== 'undefined'
       ? toRelativeTime((tx as any).burn_block_time * 1000)
@@ -145,16 +145,18 @@ const TxItemTitleArea = React.memo(({ title, isHovered, tx, principal }: any) =>
   </Stack>
 ));
 
-const Timestamp: React.FC<BoxProps & { tx: Transaction }> = React.memo(props => {
-  const { tx, ...rest } = props;
-  const date = getRelativeTimestamp(tx);
+const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> = React.memo(
+  props => {
+    const { tx, ...rest } = props;
+    const date = getRelativeTimestamp(tx);
 
-  return (
-    <Text ml="tight" fontSize="14px" textAlign="right" color={color('text-body')} {...rest}>
-      {date}
-    </Text>
-  );
-});
+    return (
+      <Text ml="tight" fontSize="14px" textAlign="right" color={color('text-body')} {...rest}>
+        {date}
+      </Text>
+    );
+  }
+);
 
 const LargeVersion = React.memo(
   ({
@@ -164,7 +166,7 @@ const LargeVersion = React.memo(
     hideRightElements,
     isHovered,
   }: {
-    tx: Transaction;
+    tx: Transaction | MempoolTransaction;
     principal?: string;
     hideIcon?: boolean;
     isHovered?: boolean;

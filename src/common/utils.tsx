@@ -4,7 +4,11 @@ import { Box, color, ColorsStringLiteral, Stack } from '@stacks/ui';
 // @ts-ignore
 import { BorderStyleProperty } from 'csstype';
 import Router from 'next/router';
-import { Transaction, CoreNodeInfoResponse } from '@blockstack/stacks-blockchain-api-types';
+import {
+  Transaction,
+  CoreNodeInfoResponse,
+  MempoolTransaction,
+} from '@blockstack/stacks-blockchain-api-types';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
 import { fetchTxList } from '@common/api/transactions';
@@ -268,7 +272,8 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
 
 export const toRelativeTime = (ts: number): string => dayjs().to(ts);
 
-export const isPendingTx = (tx: Transaction): boolean => tx && tx.tx_status === 'pending';
+export const isPendingTx = (tx: Transaction | MempoolTransaction): boolean =>
+  tx && tx.tx_status === 'pending';
 
 export const border = (
   _color: ColorsStringLiteral = 'border',
@@ -312,7 +317,7 @@ const ContractName = ({ fn, contract }: any) => {
   );
 };
 
-export const getTxTitle = (transaction: Transaction) => {
+export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
   switch (transaction.tx_type) {
     case 'smart_contract':
       return getContractName(transaction?.smart_contract?.contract_id);
@@ -326,7 +331,7 @@ export const getTxTitle = (transaction: Transaction) => {
     case 'token_transfer':
       return `${microToStacks(transaction.token_transfer.amount)} STX`;
     case 'coinbase':
-      return `Block #${transaction.block_height} coinbase`;
+      return `Block #${(transaction as Transaction).block_height} coinbase`;
     default:
       return truncateMiddle(transaction.tx_id, 10);
   }
