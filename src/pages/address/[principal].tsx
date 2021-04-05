@@ -181,12 +181,17 @@ const AddressPage: NextPage<AddressPageData> = props => {
   useEffect(() => {
     // add to recoil state for the modal to use
     if (unlocking && 'found' in unlocking && unlocking.found) {
-      if (!unlockingState) {
+      if (!unlockingState || unlockingState !== unlocking) {
         setUnlockingState(unlocking);
       }
     }
   }, [unlocking, unlockingState, setUnlockingState]);
 
+  useEffect(() => {
+    return () => {
+      setUnlockingState(null);
+    };
+  }, []);
   return (
     <>
       <Meta

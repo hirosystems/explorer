@@ -106,9 +106,13 @@ const Table: React.FC = () => {
   const [state] = useUnlockingState();
   if (!state) return null;
   const totalNumber = state && parseFloat(state.originalTotal.replace(/,/g, ''));
-  const totalThatHasUnlocked = state && stxToMicroStx(totalNumber) - state.lockedBalance;
+  const total = state && stxToMicroStx(totalNumber) - state.lockedBalance;
   const data: [height: string, amount: number][] = Object.entries(state.data);
-  let cumulativeAmount = totalThatHasUnlocked;
+  const slotAmount = data[0][1];
+  const totalCompleteRows = data.filter(([height, amount]) => height < state.currentHeight);
+  const unlocked = slotAmount * totalCompleteRows.length;
+  let cumulativeAmount = total - unlocked;
+
   return (
     <Section mt="extra-loose" px="extra-loose" pb="tight" pt={['tight', 'tight', 'unset']}>
       <Grid
@@ -139,9 +143,7 @@ const Table: React.FC = () => {
       </Grid>
       {data.map(([height, amount], index, arr) => {
         const isReceived = height < state.currentHeight;
-        if (!isReceived) {
-          cumulativeAmount += amount;
-        }
+        cumulativeAmount += amount;
         const difference = parseInt(height) - state.currentHeight;
         const timeInSeconds = difference * parseInt(state.averageBlockTime) * 1000;
         const now = dayjs().valueOf();

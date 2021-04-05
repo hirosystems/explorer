@@ -7,7 +7,6 @@ export default async function poxHandler(
 ) {
   try {
     const data = await getPoxAddrForRewardCycle(1);
-    console.log('DATA', data);
     res.status(200).json(data);
   } catch (e) {
     res.status(404).json({ error: e.message });
