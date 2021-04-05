@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { AddressBalanceResponse } from '@blockstack/stacks-blockchain-api-types';
-import { Box, color, Flex, FlexProps, space, Stack } from '@stacks/ui';
+import { Box, color, Flex, FlexProps, Stack } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 import { TxLink } from '@components/links';
 import { DynamicColorCircle } from '@components/dynamic-color-circle';
@@ -23,14 +23,9 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   const { address, asset, contract } = getAssetNameParts(token);
   const key = type === 'non_fungible_tokens' ? 'count' : 'balance';
   return (
-    <Flex
-      justifyContent="space-between"
-      // borderBottom={!isLast ? border() : 'unset'}
-      px="base"
-      py="base"
-    >
+    <Flex justifyContent="space-between" px="base" py="base">
       <Box>
-        <Flex alignItems="center" mb={space('extra-tight')}>
+        <Flex alignItems="center" mb={'extra-tight'}>
           <DynamicColorCircle size="32px" mr="base" string={`${address}.${contract}::${asset}`}>
             {asset[0]}
           </DynamicColorCircle>

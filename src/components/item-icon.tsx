@@ -7,6 +7,7 @@ import { ContractCallIcon } from '@components/icons/contract-call';
 import { StxInline } from '@components/icons/stx-inline';
 import { WalletIcon } from '@components/icons/wallet';
 import { AppsIcon } from '@components/icons/apps';
+import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;
@@ -62,8 +63,8 @@ export const ItemIcon = React.memo(
     ...rest
   }: {
     type: 'tx' | 'block' | 'principal';
-    txType?: Transaction['tx_type'];
-    status?: Transaction['tx_status'];
+    txType?: Transaction['tx_type'] | MempoolTransaction['tx_type'];
+    status?: Transaction['tx_status'] | MempoolTransaction['tx_status'];
   } & GridProps) => {
     let Icon;
     if (txType) {

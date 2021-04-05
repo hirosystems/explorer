@@ -5,7 +5,7 @@ import { useSafeLayoutEffect } from '@stacks/ui';
 import { useMediaQuery } from '@common/hooks/use-media-query';
 import { Statuses } from '@components/status';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
 
 const defaultTitle = 'Stacks 2.0 explorer';
 
@@ -15,10 +15,10 @@ interface MetaProps {
   url?: string;
   description?: string;
   labels?: { label: string; data: string }[];
-  status?: Transaction['tx_status'];
+  status?: Transaction['tx_status'] | MempoolTransaction['tx_status'];
 }
 
-const useFaviconName = (s?: Transaction['tx_status']) => {
+const useFaviconName = (s?: Transaction['tx_status'] | MempoolTransaction['tx_status']) => {
   const status = () => {
     switch (s) {
       case 'abort_by_post_condition':
