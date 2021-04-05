@@ -67,7 +67,6 @@ export default async function vestingAddressHandler(
           return 0;
         }, 0);
 
-        console.log({ lockedBalance });
         const balance = new BN(coreNodeData.balance.replace('0x', ''), 'hex').toString();
         res.status(200).json({
           found: true,
