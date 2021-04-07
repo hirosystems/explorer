@@ -1,3 +1,11 @@
+## [1.10.1](https://github.com/blockstack/explorer/compare/v1.10.0...v1.10.1) (2021-04-07)
+
+
+### Bug Fixes
+
+* account for rows ([1fe20b5](https://github.com/blockstack/explorer/commit/1fe20b52c22756210e840bc0de526f3a5741da14))
+* runtime config ([8d62ceb](https://github.com/blockstack/explorer/commit/8d62ceb637989795b146f19dbc9874fd56ebc9c0))
+
 # [1.10.0](https://github.com/blockstack/explorer/compare/v1.9.6...v1.10.0) (2021-04-01)
 
 
