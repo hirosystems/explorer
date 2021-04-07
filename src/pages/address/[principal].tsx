@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import useSWR from 'swr';
 import {
   AddressBalanceResponse,
-  AccountDataResponse,
   MempoolTransaction,
   Transaction,
   TransactionResults,
@@ -111,7 +110,7 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
             label: {
               children: 'Nonce',
             },
-            children: data?.info?.nonce,
+            children: data?.nonce,
           },
         ]}
       />
@@ -121,7 +120,7 @@ const SummaryCard = ({ principal, hasTokenBalances, data }: any) => {
 
 interface AddressPageData {
   principal: string;
-  info: AccountDataResponse;
+  nonce: number;
   balances: AddressBalanceResponse;
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
@@ -133,7 +132,7 @@ interface AddressPageData {
 const AddressPage: NextPage<AddressPageData> = props => {
   const {
     principal,
-    info,
+    nonce,
     balances,
     pendingTransactions,
     transactions,
@@ -161,7 +160,7 @@ const AddressPage: NextPage<AddressPageData> = props => {
     async () => fetchAllAccountData(apiServer as any)({ principal }),
     {
       initialData: {
-        info,
+        nonce,
         balances,
         transactions,
         pendingTransactions,
