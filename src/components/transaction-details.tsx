@@ -58,9 +58,7 @@ const AddressComponent = React.memo(({ principal }: { principal: string }) => {
 });
 
 const NoncesComponent = React.memo(({ nonce }: { nonce: number }) => {
-  return (
-    <Text display="block">{nonce}</Text>
-  );
+  return <Text display="block">{nonce}</Text>;
 });
 
 const getSenderName = (txType: Transaction['tx_type']) => {
