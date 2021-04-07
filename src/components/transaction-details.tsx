@@ -59,9 +59,7 @@ const AddressComponent = React.memo(({ principal }: { principal: string }) => {
 
 const NoncesComponent = React.memo(({ nonce }: { nonce: number }) => {
   return (
-    <Box>
-      <Text>{nonce}</Text>
-    </Box>
+    <Text display="block">{nonce}</Text>
   );
 });
 
