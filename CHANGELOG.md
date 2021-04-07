@@ -1,3 +1,16 @@
+# [1.11.0](https://github.com/blockstack/explorer/compare/v1.10.1...v1.11.0) (2021-04-07)
+
+
+### Bug Fixes
+
+* correct response type ([190554d](https://github.com/blockstack/explorer/commit/190554dbfef293a94b2a27b93feb5034e9f8d4fa))
+* lint ([b7066c5](https://github.com/blockstack/explorer/commit/b7066c5783e7979146a645c8957cfe2092e40f0c))
+
+
+### Features
+
+* add nonce to tx and account page ([4bf8352](https://github.com/blockstack/explorer/commit/4bf83528e328e203627e944392b94b3bd3a3ba8e)), closes [#322](https://github.com/blockstack/explorer/issues/322)
+
 ## [1.10.1](https://github.com/blockstack/explorer/compare/v1.10.0...v1.10.1) (2021-04-07)
 
 
