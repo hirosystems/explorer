@@ -36,7 +36,7 @@ export const fetchTransactions = (apiServer: string) => async (
 };
 
 export interface AllAccountData {
-  info: AccountDataResponse;
+  nonce: number;
   balances: AddressBalanceResponse;
   transactions: TransactionResults | null;
   pendingTransactions: MempoolTransaction[];
@@ -63,7 +63,7 @@ export const fetchAllAccountData = (apiServer: string) => async (
   ]);
 
   return {
-    info,
+    nonce: info.nonce,
     balances,
     transactions,
     pendingTransactions: pendingTransactions as MempoolTransaction[],
