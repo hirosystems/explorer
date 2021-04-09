@@ -15,6 +15,7 @@ import { useApiServer } from '@common/hooks/use-api';
 import { BigNumber } from 'bignumber.js';
 import { useConnect } from '@sandbox/hooks/use-connect';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
+import { useNetworkConfig } from '@common/hooks/use-network-config';
 
 const fetcher = async (apiServer: string) => {
   const res = await fetch(apiServer + '/v2/fees/transfer');
@@ -24,6 +25,7 @@ const fetcher = async (apiServer: string) => {
 
 export const TokenTransferView = () => {
   const apiServer = useApiServer();
+  const network = useNetworkConfig();
   const { isSignedIn, doOpenAuth } = useConnect();
   const { data } = useSWR(apiServer, fetcher);
   const fee = data ? new BigNumber(data).multipliedBy(180) : 0;
@@ -39,7 +41,7 @@ export const TokenTransferView = () => {
     },
     onSubmit: ({ recipient, amount, memo }) => {
       handleTrackGoal(Goals.SANDBOX_TOKEN_TRANSFER);
-      void handleStxTransfer({ recipient, amount: stacksToMicro(amount), memo });
+      void handleStxTransfer({ network, recipient, amount: stacksToMicro(amount), memo });
     },
     validate: values => {
       const _errors = {};
