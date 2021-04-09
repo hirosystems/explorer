@@ -24,6 +24,7 @@ import { CodeBlock } from '@components/code-block';
 import { handleContractCall } from '@sandbox/common/connect-functions';
 import { useContractInterface } from '@sandbox/components/screens/call-functions/components/use-contract-interface';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
+import { useNetworkConfig } from '@common/hooks/use-network-config';
 
 const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any) => (
   <Box width="100%" {...rest}>
@@ -173,6 +174,7 @@ const FunctionSingleView = () => {
   const handleClearFnName = () => setFunctionName(undefined);
   const [initialValues, setInitialValues] = React.useState({});
   const { handleTrackGoal } = useFathomGoal();
+  const network = useNetworkConfig();
 
   const { handleSubmit, handleChange, setValues, values } = useFormik({
     initialValues,
@@ -211,6 +213,7 @@ const FunctionSingleView = () => {
               contractName: contractId.split('.')[1],
               functionName: encodeURIComponent(fn.name),
               functionArgs: Object.values(final),
+              network,
             });
           } catch (e) {
             console.log(e);

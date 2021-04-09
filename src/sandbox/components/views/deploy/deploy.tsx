@@ -1,7 +1,5 @@
 import React from 'react';
 import { Box, Flex, Stack, useClipboard } from '@stacks/ui';
-import { WasmComponent } from '@sandbox/components/clarity-repl';
-import { CodeEditor } from '@sandbox/components/code-editor';
 import { Button } from '@components/button';
 import { useUser } from '@sandbox/hooks/use-user';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -121,7 +119,7 @@ export const DeployView = React.memo(() => {
       contractName,
       finished: onFinished,
     });
-  }, [codeBody, contractName, result, codeBody, handleValidate]);
+  }, [codeBody, contractName, network, result, codeBody, handleValidate]);
 
   return (
     <Flex position="relative" flexDirection="column" flexGrow={1} bg="ink">
