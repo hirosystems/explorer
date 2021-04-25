@@ -6,12 +6,12 @@ import { Monaco } from '@monaco-editor/react';
 
 export async function liftOff(monaco: Monaco) {
   try {
-    await loadWASM(`onigasm.wasm`);
+    await loadWASM(`/onigasm.wasm`);
     const registry = new Registry({
       getGrammarDefinition: async scopeName => {
         return {
           format: 'json',
-          content: await (await fetch(`clarity.tmLanguage.json`)).text(),
+          content: await (await fetch(`/clarity.tmLanguage.json`)).text(),
         } as IGrammarDefinition;
       },
     });

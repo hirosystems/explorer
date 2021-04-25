@@ -5,12 +5,11 @@ import { Caption, Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { useUser } from '@sandbox/hooks/use-user';
 import { TxItem } from '@components/transaction-item';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRouter } from 'next/router';
 
 import {
   contractSearchQueryState,
   currentFunctionState,
-  sandboxRouteState,
   txContractState,
   txDetailsState,
 } from '@sandbox/store/sandbox';
@@ -31,6 +30,7 @@ import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 
 import { FilterIcon } from '@components/icons/filter';
 import { functionCallViewState } from '@sandbox/store/views';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const PanelHeader = React.memo(() => {
   const [filter, setFilterState] = useRecoilState(filterState('sandbox'));
@@ -64,11 +64,11 @@ const PanelHeader = React.memo(() => {
 });
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
+  const router = useRouter();
   const [loaded, setLoaded] = React.useState(false);
   const [clicked, setClicked] = React.useState(false);
   const [_, setCodeBody] = useCodeEditor();
   const { setResult } = useClarityRepl();
-  const setRoute = useSetRecoilState(sandboxRouteState);
 
   return loaded ? (
     <Badge userSelect="none" border={border()} color={color('text-caption')}>
@@ -103,7 +103,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
             setCodeBody(codeBody);
             setLoaded(true);
             setResult(undefined);
-            setRoute('deploy');
+            router.push('/sandbox/deploy');
             setTimeout(() => {
               setLoaded(false);
             }, 3000);
@@ -122,21 +122,21 @@ const TxDetailsFunctions = ({
   contractId,
   status,
 }: any) => {
+  const router = useRouter();
   const setView = useSetRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
   const setCurrentFunction = useSetRecoilState(currentFunctionState);
   const [fnsVisible, setFnsVisibility] = React.useState(false);
-  const setRoute = useSetRecoilState(sandboxRouteState);
 
   const handleSetFunction = (name: string) => {
     setView('function-overview');
     setQuery(contractId);
     setCurrentFunction(name);
-    setRoute('function-call');
+    router.push('/sandbox/contract-call');
   };
 
   const handleSetContractQuery = () => {
-    setRoute('function-call');
+    router.push('/sandbox/contract-call');
     setQuery(contractId);
     setCurrentFunction(undefined);
     setView('function-overview');
