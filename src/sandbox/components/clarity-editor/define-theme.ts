@@ -207,7 +207,7 @@ export function defineTheme(monaco: any) {
       { fontStyle: 'italic', foreground: '#d19a66', token: 'parameter.variable' },
       {
         foreground: '#abb2bf',
-        token: 'entity.name.function-call',
+        token: 'entity.name.contract-call',
       },
       { foreground: '#98c379', token: 'function.support.builtin' },
       {

@@ -178,8 +178,3 @@ export const readOnlyResponseState = selectorFamily<any, any>({
     });
   },
 });
-
-export const sandboxRouteState = atom<Routes>({
-  key: 'sandbox.route',
-  default: 'deploy',
-});
