@@ -62,7 +62,7 @@ const IndexView: React.FC<{
         Blocks
       </HeaderTextItem>
     </NextLink>
-    <NextLink href="/sandbox/deploy" passHref>
+    <NextLink href="/sandbox" passHref>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Sandbox
       </HeaderTextItem>

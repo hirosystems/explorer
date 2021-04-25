@@ -60,7 +60,7 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
           <FooterLink mr="base" href="/transactions">
             Recent transactions
           </FooterLink>
-          <FooterLink href="/sandbox/deploy" mr="base">
+          <FooterLink href="/sandbox" mr="base">
             Sandbox
           </FooterLink>
         </Flex>

@@ -5,11 +5,12 @@ import { Caption, Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { useUser } from '@sandbox/hooks/use-user';
 import { TxItem } from '@components/transaction-item';
-import { useRouter } from 'next/router';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import {
   contractSearchQueryState,
   currentFunctionState,
+  sandboxRouteState,
   txContractState,
   txDetailsState,
 } from '@sandbox/store/sandbox';
@@ -63,11 +64,11 @@ const PanelHeader = React.memo(() => {
 });
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
-  const router = useRouter();
   const [loaded, setLoaded] = React.useState(false);
   const [clicked, setClicked] = React.useState(false);
   const [_, setCodeBody] = useCodeEditor();
   const { setResult } = useClarityRepl();
+  const setRoute = useSetRecoilState(sandboxRouteState);
 
   return loaded ? (
     <Badge userSelect="none" border={border()} color={color('text-caption')}>
@@ -102,7 +103,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
             setCodeBody(codeBody);
             setLoaded(true);
             setResult(undefined);
-            router.push('/sandbox/deploy');
+            setRoute('deploy');
             setTimeout(() => {
               setLoaded(false);
             }, 3000);
@@ -121,21 +122,21 @@ const TxDetailsFunctions = ({
   contractId,
   status,
 }: any) => {
-  const router = useRouter();
   const setView = useSetRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
   const setCurrentFunction = useSetRecoilState(currentFunctionState);
   const [fnsVisible, setFnsVisibility] = React.useState(false);
+  const setRoute = useSetRecoilState(sandboxRouteState);
 
   const handleSetFunction = (name: string) => {
     setView('function-overview');
     setQuery(contractId);
     setCurrentFunction(name);
-    router.push('/sandbox/contract-call');
+    setRoute('function-call');
   };
 
   const handleSetContractQuery = () => {
-    router.push('/sandbox/contract-call');
+    setRoute('function-call');
     setQuery(contractId);
     setCurrentFunction(undefined);
     setView('function-overview');

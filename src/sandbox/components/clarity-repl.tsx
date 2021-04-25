@@ -134,7 +134,7 @@ async function load(module, imports) {
 export const WasmComponent = dynamic(
   {
     loader: async () => {
-      const response = await fetch('/clarity-repl.wasm');
+      const response = await fetch('clarity-repl.wasm');
       const rustModule = await load(response, {});
       return () => {
         const [wasm, setWasm] = useRecoilState(clarityWasmAtom);

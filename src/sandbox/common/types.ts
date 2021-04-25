@@ -1,1 +1,1 @@
-export type Routes = 'deploy' | 'contract-call' | 'transfer' | 'faucet';
+export type Routes = 'deploy' | 'function-call' | 'transfer' | 'faucet';

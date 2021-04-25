@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 export const functionCallViewState = atom<'initial' | 'function-overview'>({
-  key: 'sandbox.contract-call.view',
+  key: 'sandbox.function-call.view',
   default: 'initial',
 });
 
