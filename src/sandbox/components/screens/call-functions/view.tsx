@@ -101,9 +101,16 @@ const DefaultContracts: React.FC = () => {
   );
 };
 
-export const FunctionCallView: React.FC = () => {
+export const FunctionCallView: React.FC<{ sender: string; contract: string }> = props => {
+  const { sender, contract } = props;
   const [view, setView] = useRecoilState(functionCallViewState);
   const setQuery = useSetRecoilState(contractSearchQueryState);
+
+  // if sender + contract provided, set query
+  if (sender.length > 0 && contract.length > 0) {
+    setView('function-overview');
+    setQuery(`${sender}.${contract}`);
+  }
 
   switch (view) {
     case 'initial':

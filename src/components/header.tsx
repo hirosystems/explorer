@@ -60,7 +60,7 @@ const Navigation: React.FC = () => {
         <NextLink href="/blocks" passHref>
           <HeaderTextItem mr="base">Blocks</HeaderTextItem>
         </NextLink>
-        <NextLink href="/sandbox" passHref>
+        <NextLink href="/sandbox/deploy" passHref>
           <HeaderTextItem>Sandbox</HeaderTextItem>
         </NextLink>
         <NetworkSwitcherItem ml="base" />
