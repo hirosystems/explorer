@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/blockstack/explorer/compare/v1.11.0...v1.11.1) (2021-04-26)
+
+
+### Bug Fixes
+
+* correctly pass the network ([69f46ef](https://github.com/blockstack/explorer/commit/69f46ef2dddf5814df81259baec3365b6973477b))
+
 # [1.11.0](https://github.com/blockstack/explorer/compare/v1.10.1...v1.11.0) (2021-04-07)
 
 
