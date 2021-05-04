@@ -126,7 +126,6 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
               <Circle bg={color('brand')} mr="base">
                 <StxInline color="white" size="22px" />
               </Circle>
-              {console.log(totalBalance)}
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
                 <Caption>Total balance</Caption>
