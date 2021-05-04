@@ -20,7 +20,7 @@ export const BalanceItem = ({ balance, ...rest }: any) => {
   const parts = balance.split('.');
 
   return (
-    <Flex as="span" {...rest}>
+    <Flex as="span" {...rest} style={{ userSelect: 'all' }}>
       <Text color="currentColor">{parts[0]}</Text>
       <Text color="currentColor" opacity={0.65}>
         .{parts[1]}
@@ -126,6 +126,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({
               <Circle bg={color('brand')} mr="base">
                 <StxInline color="white" size="22px" />
               </Circle>
+              {console.log(totalBalance)}
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
                 <Caption>Total balance</Caption>
