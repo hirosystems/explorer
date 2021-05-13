@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/blockstack/explorer/compare/v1.11.1...v1.11.2) (2021-05-13)
+
+
+### Bug Fixes
+
+* select the balance with one click ([a3cfd2a](https://github.com/blockstack/explorer/commit/a3cfd2aca6682ab628a0cc64894377e0f7b5a391))
+
 ## [1.11.1](https://github.com/blockstack/explorer/compare/v1.11.0...v1.11.1) (2021-04-26)
 
 
