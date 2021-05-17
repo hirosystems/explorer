@@ -62,6 +62,8 @@ export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   'https://stacks-node-api.stacks.co';
 
+export const VERSION = config?.VERSION || process.env.VERSION;
+
 export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
 export const DEFAULT_TESTNET_INDEX = 1;
@@ -107,3 +109,8 @@ export const withApiServer = (apiServer: string) => (path?: string) =>
   path ? apiServer + path : apiServer;
 
 export const POX_ADDRESS = 'SP000000000000000000002Q6VF78';
+
+export const HIRO_HEADERS: HeadersInit = {
+  'x-hiro-product': 'explorer',
+  'x-hiro-version': VERSION,
+};

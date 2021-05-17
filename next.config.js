@@ -22,6 +22,7 @@ module.exports = withBundleAnalyzer({
     NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL: process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL,
     NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL,
     NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE,
+    VERSION: process.env.VERSION,
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
