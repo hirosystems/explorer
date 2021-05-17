@@ -20,7 +20,7 @@ import {
 } from '@stacks/transactions';
 import { StacksNetwork, StacksTestnet } from '@stacks/network';
 
-import { withApiServer } from '@common/constants';
+import { HIRO_HEADERS, withApiServer } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
 
 export interface ClarityFunctionArg {
@@ -117,6 +117,7 @@ export const callReadOnlyFunction = async ({
     body,
     headers: {
       'Content-Type': 'application/json',
+      ...HIRO_HEADERS,
     },
   });
 

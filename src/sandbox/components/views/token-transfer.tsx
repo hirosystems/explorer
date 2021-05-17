@@ -16,9 +16,12 @@ import { BigNumber } from 'bignumber.js';
 import { useConnect } from '@sandbox/hooks/use-connect';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
+import { HIRO_HEADERS } from '@common/constants';
 
 const fetcher = async (apiServer: string) => {
-  const res = await fetch(apiServer + '/v2/fees/transfer');
+  const res = await fetch(apiServer + '/v2/fees/transfer', {
+    headers: HIRO_HEADERS,
+  });
   const data = await res.json();
   return data;
 };

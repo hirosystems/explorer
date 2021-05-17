@@ -7,6 +7,7 @@ import {
   fetchLegacyExplorerVestingData,
 } from '@common/utils/addresses';
 import BN from 'bn.js';
+import { HIRO_HEADERS } from '@common/constants';
 
 const addresses = new Set(DATA);
 
@@ -18,7 +19,9 @@ interface LockupData {
 
 async function fetchActualBalance(address: string) {
   try {
-    const res = await fetch(`https://stacks-node-api.stacks.co/v2/accounts/${address}?proof=0`);
+    const res = await fetch(`https://stacks-node-api.stacks.co/v2/accounts/${address}?proof=0`, {
+      headers: HIRO_HEADERS,
+    });
     return res.json();
   } catch (e) {
     throw Error(`Can't fetch actual balance: ${e.message}`);
