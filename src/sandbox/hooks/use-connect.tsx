@@ -6,14 +6,8 @@ import { rightPanelState } from '@sandbox/store/views';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 
 export const useConnect = () => {
-  const {
-    isSignedIn,
-    userData,
-    authOptions,
-    userSession,
-    resetUserData,
-    setUserData,
-  } = useAuthState();
+  const { isSignedIn, userData, authOptions, userSession, resetUserData, setUserData } =
+    useAuthState();
   const { handleTrackGoal } = useFathomGoal();
   const setPanelVisibility = useSetRecoilState(rightPanelState);
 

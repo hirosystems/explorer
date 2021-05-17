@@ -251,9 +251,11 @@ export const EventAssetType = React.memo(
       );
     }
     if ('asset' in event && event.asset && event.asset.asset_event_type) {
-      const { label, icon: Icon, ...props } = getAssetEventTypeLabel(
-        event.asset.asset_event_type as TransactionEventAssetType
-      );
+      const {
+        label,
+        icon: Icon,
+        ...props
+      } = getAssetEventTypeLabel(event.asset.asset_event_type as TransactionEventAssetType);
       return (
         <Flex alignItems="center" {...rest}>
           {Icon && (

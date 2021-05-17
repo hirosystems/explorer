@@ -15,17 +15,16 @@ export const constructLimitAndOffsetQueryParams = (limit: number, offset?: numbe
  *
  * @param {FetchEventsPaginatedOptions} options
  */
-export const fetchEventsPaginated = (
-  options: FetchEventsPaginatedOptions
-) => async (): Promise<any> => {
-  const { txId, apiServer, offset, limit = 96 } = options;
+export const fetchEventsPaginated =
+  (options: FetchEventsPaginatedOptions) => async (): Promise<any> => {
+    const { txId, apiServer, offset, limit = 96 } = options;
 
-  const resp = await fetchFromSidecar(apiServer)(
-    `/tx/${txId}?${constructLimitAndOffsetQueryParams(limit, offset)}`
-  );
-  const data = await resp.json();
-  if ('events' in data && data?.events) {
-    return data?.events;
-  }
-  return [];
-};
+    const resp = await fetchFromSidecar(apiServer)(
+      `/tx/${txId}?${constructLimitAndOffsetQueryParams(limit, offset)}`
+    );
+    const data = await resp.json();
+    if ('events' in data && data?.events) {
+      return data?.events;
+    }
+    return [];
+  };

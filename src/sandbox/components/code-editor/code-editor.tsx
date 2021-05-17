@@ -93,23 +93,24 @@ const CodeEditor: ForwardRefExoticComponentWithAs<CodeEditorProps, 'div'> = memo
     };
 
     const highlighter = React.useMemo(
-      () => (c: string) => (
-        <Box
-          css={(theme: Theme) =>
-            _css({
-              '.token-line': {
-                alignItems: 'center',
-                '& > div:first-child': {
+      () => (c: string) =>
+        (
+          <Box
+            css={(theme: Theme) =>
+              _css({
+                '.token-line': {
                   alignItems: 'center',
+                  '& > div:first-child': {
+                    alignItems: 'center',
+                  },
                 },
-              },
-              ...errorLine(),
-            })(theme)
-          }
-        >
-          <Highlighter Prism={Prism as any} code={c} showLineNumbers language={language as any} />
-        </Box>
-      ),
+                ...errorLine(),
+              })(theme)
+            }
+          >
+            <Highlighter Prism={Prism as any} code={c} showLineNumbers language={language as any} />
+          </Box>
+        ),
       [result]
     );
 

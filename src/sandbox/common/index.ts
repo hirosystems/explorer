@@ -34,13 +34,11 @@ export const network = (apiServer: string): StacksNetwork => {
   return txNetwork;
 };
 
-export const fetchContractInterface = (apiServer: string) => async (
-  contractAddress: string,
-  contractName: string
-) => {
-  const res = await fetchFromSidecar(apiServer)(`/contract/${contractAddress}.${contractName}`);
-  return res.json();
-};
+export const fetchContractInterface =
+  (apiServer: string) => async (contractAddress: string, contractName: string) => {
+    const res = await fetchFromSidecar(apiServer)(`/contract/${contractAddress}.${contractName}`);
+    return res.json();
+  };
 
 export function valueToClarityValue(answer: any, arg: ClarityFunctionArg): ClarityValue {
   const type = arg.type;

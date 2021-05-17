@@ -26,13 +26,8 @@ export const hasStxBalance = (balances?: AddressBalanceResponse) => {
 
   let hasBalance = false;
   if (balances?.stx) {
-    const {
-      balance,
-      total_sent,
-      total_received,
-      total_fees_sent,
-      total_miner_rewards_received,
-    } = balances?.stx;
+    const { balance, total_sent, total_received, total_fees_sent, total_miner_rewards_received } =
+      balances?.stx;
 
     const total =
       parseInt(balance) +
