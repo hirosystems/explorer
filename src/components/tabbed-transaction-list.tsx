@@ -139,7 +139,7 @@ interface TransactionListProps {
 }
 
 function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
-  return ([...new Map(arr.map(item => [item[key], item])).values()] as unknown) as T[];
+  return [...new Map(arr.map(item => [item[key], item])).values()] as unknown as T[];
 }
 
 const TransactionList = memo<TransactionListProps>(props => {

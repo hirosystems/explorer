@@ -64,9 +64,7 @@ const TransactionPage: NextPage<{
   }
 };
 
-export async function getServerSideProps(
-  ctx: NextPageContext
-): Promise<{
+export async function getServerSideProps(ctx: NextPageContext): Promise<{
   props: {
     txid: string;
     initialData: FetchTransactionResponse;

@@ -22,25 +22,26 @@ export const useFilterState = (key: 'sandbox' | 'txList', showCoinbase = false) 
   );
 
   const handleUpdateTypes = useRecoilCallback(
-    ({ snapshot, set }) => (type, enabled) => {
-      const filters = snapshot.getLoadable(filterState(key)).contents;
-      if ('types' in filters && filters.types) {
-        if (enabled) {
-          const newTypes: TxTypeFilterOptions = [
-            ...new Set([...filters.types, type]),
-          ] as TxTypeFilterOptions;
+    ({ snapshot, set }) =>
+      (type, enabled) => {
+        const filters = snapshot.getLoadable(filterState(key)).contents;
+        if ('types' in filters && filters.types) {
+          if (enabled) {
+            const newTypes: TxTypeFilterOptions = [
+              ...new Set([...filters.types, type]),
+            ] as TxTypeFilterOptions;
 
+            return set(filterState(key), s => ({
+              ...s,
+              types: newTypes,
+            }));
+          }
           return set(filterState(key), s => ({
             ...s,
-            types: newTypes,
+            types: filters.types.filter(_type => type !== _type),
           }));
         }
-        return set(filterState(key), s => ({
-          ...s,
-          types: filters.types.filter(_type => type !== _type),
-        }));
-      }
-    },
+      },
     [key]
   );
 

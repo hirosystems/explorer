@@ -86,19 +86,21 @@ export const txContractStateError = atom({
 // @ts-ignore
 export const txContractState = selectorFamily<any, { apiServer: string; contractId: string }>({
   key: 'sandbox.txDetails',
-  get: ({ apiServer, contractId }) => async () => {
-    const data = await fetchContractInterface(apiServer)(
-      contractId.split('.')[0],
-      contractId.split('.')[1]
-    );
-    if (data.error) {
-      throw data.error;
-    }
-    return {
-      ...data,
-      abi: JSON.parse(data.abi),
-    };
-  },
+  get:
+    ({ apiServer, contractId }) =>
+    async () => {
+      const data = await fetchContractInterface(apiServer)(
+        contractId.split('.')[0],
+        contractId.split('.')[1]
+      );
+      if (data.error) {
+        throw data.error;
+      }
+      return {
+        ...data,
+        abi: JSON.parse(data.abi),
+      };
+    },
 });
 
 export const functionNameState = atom({
@@ -158,25 +160,27 @@ export const readOnlyState = atom({
 
 export const readOnlyResponseState = selectorFamily<any, any>({
   key: 'sandbox.contract-call.read-only.response',
-  get: ({
-    contractName,
-    contractAddress,
-    functionName,
-    functionArgs = [],
-    senderAddress,
-    apiServer,
-  }) => () => {
-    const network = new StacksTestnet();
-    network.coreApiUrl = apiServer;
-    return callReadOnlyFunction({
+  get:
+    ({
       contractName,
       contractAddress,
       functionName,
-      functionArgs,
-      network,
+      functionArgs = [],
       senderAddress,
-    });
-  },
+      apiServer,
+    }) =>
+    () => {
+      const network = new StacksTestnet();
+      network.coreApiUrl = apiServer;
+      return callReadOnlyFunction({
+        contractName,
+        contractAddress,
+        functionName,
+        functionArgs,
+        network,
+        senderAddress,
+      });
+    },
 });
 
 export const sandboxRouteState = atom<Routes>({

@@ -15,9 +15,11 @@ import App from 'next/app';
 
 let CURRENT_NETWORK_MODE: any = null;
 
-const initialEffect = (key: string) => ({ setSelf }: any) => {
-  if (CURRENT_NETWORK_MODE !== null) setSelf(CURRENT_NETWORK_MODE);
-};
+const initialEffect =
+  (key: string) =>
+  ({ setSelf }: any) => {
+    if (CURRENT_NETWORK_MODE !== null) setSelf(CURRENT_NETWORK_MODE);
+  };
 
 export const setCurrentNetworkMode = (networkMode: any) => {
   CURRENT_NETWORK_MODE = networkMode;

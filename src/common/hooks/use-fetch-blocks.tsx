@@ -42,9 +42,7 @@ export const makeKey = (options: GetKeyOptions) => {
   )}${types ? generateTypesQueryString(types) : ''}`;
 };
 
-export function useInfiniteFetch<Data>(
-  options: UseInfiniteFetch<Data>
-): {
+export function useInfiniteFetch<Data>(options: UseInfiniteFetch<Data>): {
   data: Data[];
   error: any;
   isLoadingInitialData: boolean;

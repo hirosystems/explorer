@@ -21,29 +21,30 @@ export interface FetchBlocksListResponse {
  *
  * @param {string} apiServer - the current apiServer
  */
-export const fetchBlock = (apiServer: string) => async (hash: Block['hash']): Promise<Block> => {
-  const resp = await fetchFromSidecar(apiServer)(`/block/${hash}`);
+export const fetchBlock =
+  (apiServer: string) =>
+  async (hash: Block['hash']): Promise<Block> => {
+    const resp = await fetchFromSidecar(apiServer)(`/block/${hash}`);
 
-  const block = await resp.json();
-  if (!resp.ok) {
-    throw Error(block.error);
-  }
+    const block = await resp.json();
+    if (!resp.ok) {
+      throw Error(block.error);
+    }
 
-  return block;
-};
+    return block;
+  };
 
 /**
  * Fetch list of blocks
  *
  * @param {FetchBlocksListOptions} options
  */
-export const fetchBlocksList = (
-  options: FetchBlocksListOptions
-) => async (): Promise<FetchBlocksListResponse> => {
-  const { apiServer, offset, limit = 30 } = options;
+export const fetchBlocksList =
+  (options: FetchBlocksListOptions) => async (): Promise<FetchBlocksListResponse> => {
+    const { apiServer, offset, limit = 30 } = options;
 
-  const resp = await fetchFromSidecar(apiServer)(
-    `/block?${constructLimitAndOffsetQueryParams(limit, offset)}`
-  );
-  return resp.json();
-};
+    const resp = await fetchFromSidecar(apiServer)(
+      `/block?${constructLimitAndOffsetQueryParams(limit, offset)}`
+    );
+    return resp.json();
+  };
