@@ -1,3 +1,10 @@
+## [1.11.3](https://github.com/blockstack/explorer/compare/v1.11.2...v1.11.3) (2021-05-24)
+
+
+### Bug Fixes
+
+* update readme.md ([f1b89ee](https://github.com/blockstack/explorer/commit/f1b89ee4772b845dc57f5177c626bb0cbeb0b4f3))
+
 ## [1.11.2](https://github.com/blockstack/explorer/compare/v1.11.1...v1.11.2) (2021-05-13)
 
 
