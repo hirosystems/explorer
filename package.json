@@ -135,6 +135,9 @@
   "license": "MIT",
   "prettier": "@stacks/prettier-config",
   "release": {
+    "branches": [
+      "main"
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
@@ -144,14 +147,6 @@
         "@semantic-release/git",
         {
           "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
-        }
-      ],
-      [
-        "semantic-release-slack-bot",
-        {
-          "notifyOnSuccess": true,
-          "notifyOnFail": true,
-          "markdownReleaseNotes": true
         }
       ]
     ]

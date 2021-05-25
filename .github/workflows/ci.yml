@@ -1,0 +1,154 @@
+# PRs:
+#   - Builds Explorer
+# Pushes:
+#   - Builds Explorer
+#   - Pushes Docker image to Docker Hub
+#   - Deploys to staging environment
+# Tags:
+#   - Builds Explorer
+#   - Pushes Docker image to Docker Hub
+#   - Deploys to staging environment
+#   - Deploys to prod environment
+
+name: CI/CD
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+    paths-ignore:
+      - '**/CHANGELOG.md'
+      - '**/package.json'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  pre_run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@ad6cb1b847ffb509a69b745b6ee2f1d14dfe14b8
+        with:
+          access_token: ${{ github.token }}
+
+  build-publish:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.docker_meta.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: docker_meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ github.repository }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Login to Dockerhub
+        uses: docker/login-action@v1
+        if: github.event_name != 'pull_request'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build/Tag/Push Image
+        uses: docker/build-push-action@v2
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
+
+      - name: Deployment Info
+        if: github.event_name != 'pull_request'
+        run: 'echo "::warning::Will deploy docker tag: ${{ steps.docker_meta.outputs.version }}"'
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    needs:
+      - build-publish
+    env:
+      DEPLOY_ENV: staging
+    environment:
+      name: k8s-staging
+      url: https://explorer.staging.blockstack.xyz/
+    concurrency: k8s-staging
+    steps:
+      - name: Checkout actions repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
+
+      - name: Deploy Explorer
+        uses: ./actions/deploy
+        with:
+          argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
+          argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
+          argocd_username: ${{ secrets.ARGOCD_USERNAME }}
+          file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
+          gh_token: ${{ secrets.GH_TOKEN }}
+
+  auto-approve-staging:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    # if: startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - build-publish
+    steps:
+      - name: Approve pending deployment
+        run: |
+          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/blockstack/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
+          if [[ -n "${ENV_ID}" ]]; then
+            echo "ENV_ID is ${ENV_ID}"
+            set -x
+            curl -s -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/blockstack/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
+            set +x
+          fi
+
+  deploy-prod:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs:
+      - deploy-staging
+    env:
+      DEPLOY_ENV: prod
+    environment:
+      name: k8s-prod
+      url: https://explorer.stacks.co/
+    concurrency: k8s-prod
+    steps:
+      - name: Checkout actions repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
+
+      - name: Deploy Explorer
+        uses: ./actions/deploy
+        with:
+          argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
+          argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
+          argocd_username: ${{ secrets.ARGOCD_USERNAME }}
+          file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
+          gh_token: ${{ secrets.GH_TOKEN }}
