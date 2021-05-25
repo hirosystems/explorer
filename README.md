@@ -1,6 +1,12 @@
 # Stacks 2.0 Explorer
 
 ![An image of the Stacks Explorer](/explorer-image.png 'Stacks Explorer')
+![CI/CD](https://github.com/blockstack/explorer/actions/workflows/ci.yml/badge.svg)
+
+| Environment | Status                                                                                                                                                            |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Prod        | [![Prod App Status](https://argocd.blockstack.xyz/api/badge?name=prod.explorer&revision=true)](https://argocd.blockstack.xyz/applications/prod.explorer)          |
+| Staging     | [![Staging App Status](https://argocd.blockstack.xyz/api/badge?name=staging.explorer&revision=true)](https://argocd.blockstack.xyz/applications/staging.explorer) |
 
 ### Getting started
 
