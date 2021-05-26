@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/blockstack/explorer/compare/v1.11.3...v1.12.0) (2021-05-26)
+
+
+### Features
+
+* improve sandbox routing ([4dd3ad3](https://github.com/blockstack/explorer/commit/4dd3ad32173245e2043f089b3f6a96f5f801f3ed)), closes [#433](https://github.com/blockstack/explorer/issues/433)
+
 ## [1.11.3](https://github.com/blockstack/explorer/compare/v1.11.2...v1.11.3) (2021-05-24)
 
 
