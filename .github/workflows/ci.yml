@@ -111,8 +111,7 @@ jobs:
 
   auto-approve-staging:
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request'
-    # if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v')
     needs:
       - build-publish
     steps:
@@ -120,10 +119,7 @@ jobs:
         run: |
           ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/blockstack/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
           if [[ -n "${ENV_ID}" ]]; then
-            echo "ENV_ID is ${ENV_ID}"
-            set -x
             curl -s -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/blockstack/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
-            set +x
           fi
 
   deploy-prod:
