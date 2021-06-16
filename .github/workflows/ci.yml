@@ -92,7 +92,9 @@ jobs:
     environment:
       name: k8s-staging
       url: https://explorer.staging.blockstack.xyz/
-    concurrency: k8s-staging
+    concurrency:
+      group: k8s-staging-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout actions repo
         uses: actions/checkout@v2
@@ -132,7 +134,9 @@ jobs:
     environment:
       name: k8s-prod
       url: https://explorer.stacks.co/
-    concurrency: k8s-prod
+    concurrency:
+      group: k8s-prod-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Checkout actions repo
         uses: actions/checkout@v2
