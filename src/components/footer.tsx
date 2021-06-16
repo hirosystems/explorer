@@ -22,7 +22,7 @@ const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = memoWi
   forwardRefWithAs<FooterLinkProps, 'a'>(({ as = 'a', children, ...rest }, ref) => {
     const externalProps =
       rest.href && !rest.href.startsWith('/')
-        ? { target: '_blank', rel: 'noopener noreferrer' }
+        ? { target: '_blank', rel: 'noopener noreferrer nofollow' }
         : {};
 
     return (
