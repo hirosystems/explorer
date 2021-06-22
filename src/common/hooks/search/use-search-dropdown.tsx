@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { useRecoilState } from 'recoil';
-import { searchDropdownState } from '@store/search';
+import { searchDropdownState } from '@store/recoil/search';
 
 export const useSearchDropdown = () => {
   const [searchDropdown, setSearchDropdown] = useRecoilState(searchDropdownState);

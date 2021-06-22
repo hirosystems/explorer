@@ -3,7 +3,7 @@ import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 import { useSearch } from '@common/hooks/search/use-search';
 import { useHover } from 'web-api-hooks';
 import { useRecoilFocus } from '@common/hooks/use-recoil-focus';
-import { searchDropdownVisibilitySelector, searchFocusedState } from '@store/search';
+import { searchDropdownVisibilitySelector, searchFocusedState } from '@store/recoil/search';
 import { useRecoilValue } from 'recoil';
 import { useSearchFocus } from '@common/hooks/search/use-search-focus';
 

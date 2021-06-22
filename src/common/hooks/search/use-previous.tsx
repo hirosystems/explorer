@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useApiServer } from '@common/hooks/use-api';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { searchQueryState, searchResultsState } from '@store/search';
+import { searchQueryState, searchResultsState } from '@store/recoil/search';
 import { extractQueryFromKey, fetchSearchResults, makeKey } from '@common/hooks/search/utils';
 import useSWR from 'swr';
 

@@ -9,7 +9,7 @@ import {
   searchExitingState,
   searchLoadingState,
   searchValueState,
-} from '@store/search';
+} from '@store/recoil/search';
 import { useItem } from '@common/hooks/search/use-item';
 import { usePrevious } from '@common/hooks/search/use-previous';
 

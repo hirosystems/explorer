@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
 
-import type { TxTypeFilterOptions } from '@store/filter';
-import { filterState } from '@store/filter';
+import type { TxTypeFilterOptions } from '@store/recoil/filter';
+import { filterState } from '@store/recoil/filter';
 
 export const useFilterState = (key: 'sandbox' | 'txList', showCoinbase = false) => {
   const [filter, setFilterState] = useRecoilState(filterState(key));

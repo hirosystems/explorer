@@ -8,7 +8,7 @@ import {
   searchValueState,
   searchQueryState,
   searchFocusedState,
-} from '@store/search';
+} from '@store/recoil/search';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 export const InvertedAddressNote: React.FC = () => {

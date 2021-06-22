@@ -57,6 +57,7 @@
     "express-static-gzip": "2.1.1",
     "fathom-client": "3.0.0",
     "formik": "2.2.9",
+    "jotai": "^1.0.0",
     "just-debounce-it": "1.5.0",
     "lru-cache": "6.0.0",
     "mdi-react": "7.5.0",
@@ -119,18 +120,13 @@
     "eslint": "7.30.0",
     "eslint-plugin-import": "2.23.4",
     "eslint-plugin-prettier": "3.4.0",
-    "husky": "4.3.8",
-    "lint-staged": "10.5.4",
+    "husky": "6.0.0",
+    "lint-staged": "11.0.0",
     "package-json-cleanup-loader": "1.0.3",
     "prettier": "2.3.2",
     "typescript": "4.3.5"
   },
   "homepage": "https://explorer.stacks.co",
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "license": "MIT",
   "prettier": "@stacks/prettier-config",
   "release": {

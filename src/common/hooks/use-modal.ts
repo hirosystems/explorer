@@ -1,5 +1,5 @@
 import { useRecoilState } from 'recoil';
-import { modalState } from '@store/modals';
+import { modalState } from '@store/recoil/modals';
 import { AllModals, MODALS } from '@common/constants';
 
 export const useModal = () => {

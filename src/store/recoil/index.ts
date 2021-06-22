@@ -6,7 +6,7 @@ import { fetchAllAccountData } from '@common/api/accounts';
 import { fetchPendingTxs, fetchTx } from '@common/api/transactions';
 import { fetchContract } from '@common/api/contracts';
 import { fetchBlock } from '@common/api/blocks';
-import { networkCurrentUrlSelector } from '@store/network';
+import { networkCurrentUrlSelector } from '@store/recoil/network';
 
 export const searchQueryState = atom<string | undefined>({
   key: 'search/query',

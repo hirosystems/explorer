@@ -1,9 +1,9 @@
 import { atom, atomFamily, selector } from 'recoil';
 import { SearchResult } from '@common/types/search';
-import { localStorageEffect } from '@store/utils';
+import { localStorageEffect } from '@store/recoil/utils';
 import { convertAddress, getAddressDetails } from '@common/utils/addresses';
 import { networkModeState } from '@common/app-helpers';
-import { networkCurrentUrlSelector } from '@store/network';
+import { networkCurrentUrlSelector } from '@store/recoil/network';
 
 export const searchQueryAtom = atom<string | null>({
   key: 'search.query.base',

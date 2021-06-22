@@ -5,8 +5,8 @@ import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IS_BROWSER } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { networkSwitchingState } from '@store/network';
-import { authResponseState } from '@store/auth';
+import { networkSwitchingState } from '@store/recoil/network';
+import { authResponseState } from '@store/recoil/auth';
 
 type ChainMode = NetworkMode | undefined;
 type SetChainMode = (mode: ChainMode) => Promise<void>;

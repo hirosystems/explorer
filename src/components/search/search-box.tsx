@@ -5,7 +5,7 @@ import { IconSearch, IconX } from '@tabler/icons';
 
 import { useSearchComponent } from '@common/hooks/search/use-search-component';
 import { useSetRecoilState } from 'recoil';
-import { searchFocusedState } from '@store/search';
+import { searchFocusedState } from '@store/recoil/search';
 
 type Variant = 'default' | 'small';
 

@@ -1,9 +1,13 @@
 import { useCallback } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { customNetworksListState, networkIndexState, networkListState } from '@store/network';
+import {
+  customNetworksListState,
+  networkIndexState,
+  networkListState,
+} from '@store/recoil/network';
 import { useRouter } from 'next/router';
 import { DEFAULT_TESTNET_INDEX, DEFAULT_MAINNET_INDEX } from '@common/constants';
-import { networkSwitchingState } from '@store/network';
+import { networkSwitchingState } from '@store/recoil/network';
 
 export const useNetwork = () => {
   const router = useRouter();

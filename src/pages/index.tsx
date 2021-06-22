@@ -13,7 +13,6 @@ import {
   HOMEPAGE_TX_LIST_CONFIRMED,
   HOMEPAGE_TX_LIST_MEMPOOL,
 } from '@common/constants/data';
-import { useFetchBlocks } from '@common/hooks/data/use-fetch-blocks';
 
 const ITEM_LIMIT = 10;
 

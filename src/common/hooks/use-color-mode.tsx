@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useRecoilState } from 'recoil';
 import type { ColorModeString } from '@stacks/ui';
 import { getInvertedValue } from '@stacks/ui';
-import { colorModeState } from '@store/app';
+import { colorModeState } from '@store/recoil/app';
 
 export const useColorMode = (): [colorMode: ColorModeString, toggleColorMode: () => void] => {
   const [colorMode, setColorMode] = useRecoilState(colorModeState);

@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { cookieEffect } from '@store/utils';
+import { cookieEffect } from '@store/recoil/utils';
 import {
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,

@@ -12,7 +12,7 @@ import {
   searchErrorSelector,
   searchRecentlyViewedItemsState,
   searchForAddressOfDifferentType,
-} from '@store/search';
+} from '@store/recoil/search';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { InvertedAddressNote } from '@components/search/inverted-address';
 
