@@ -1,50 +1,27 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { RecoilRoot } from 'recoil';
 import { AppContainer } from '@components/app-container';
-import { SWRConfig } from 'swr';
-import { DefaultOptions, QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
 import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
-import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
-
-const config: DefaultOptions['queries'] = {
-  refetchInterval: DEFAULT_POLLING_INTERVAL,
-  keepPreviousData: true,
-  notifyOnChangeProps: ['data'],
-};
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: config,
-  },
-});
+import { NetworkMode } from '@common/types/network';
 
 interface AppConfigProps {
   isHome?: boolean;
   fullWidth?: boolean;
-  dehydratedState?: any;
+  networkMode?: NetworkMode;
 }
 
-export const AppConfig: React.FC<AppConfigProps> = memo(
-  ({ children, isHome, fullWidth, dehydratedState }) => (
-    <SWRConfig
-      value={{
-        refreshInterval: DEFAULT_POLLING_INTERVAL,
-        suspense: false,
-      }}
-    >
-      <RecoilRoot>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={dehydratedState && eval(dehydratedState)}>
-            <CacheProvider value={cache}>
-              <AppContainer isHome={isHome} fullWidth={fullWidth}>
-                {children}
-              </AppContainer>
-            </CacheProvider>
-          </Hydrate>
-        </QueryClientProvider>
-      </RecoilRoot>
-    </SWRConfig>
-  )
+export const AppConfig: React.FC<AppConfigProps> = ({
+  children,
+  networkMode,
+  isHome,
+  fullWidth,
+}) => (
+  <RecoilRoot>
+    <CacheProvider value={cache}>
+      <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
+        {children}
+      </AppContainer>
+    </CacheProvider>
+  </RecoilRoot>
 );

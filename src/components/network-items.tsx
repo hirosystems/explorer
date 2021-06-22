@@ -165,10 +165,12 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
             key={key}
             isCustom={key >= 3}
             onClick={() => {
-              onItemClick?.(item);
-              if (!isActive) {
-                handleUpdateCurrentIndex(key);
-              }
+              setTimeout(() => {
+                onItemClick?.(item);
+                if (!isActive) {
+                  handleUpdateCurrentIndex(key);
+                }
+              }, 250);
             }}
           />
         );
