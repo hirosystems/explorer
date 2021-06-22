@@ -56,12 +56,12 @@ const HelperInfo: React.FC = memo(() => {
 
 export const DifferentNetworkModal: React.FC = memo(() => {
   const { modal, handleCloseModal } = useModal();
-  const { handleSetTestnet, handleSetMainnet } = useNetwork();
+  const { handleSetTestnet, handleSetMainnet, isSwitching } = useNetwork();
   const networkMode = useNetworkMode();
   const setChainMode = useSetChainMode();
   const { isLoading, doStartLoading } = useLoading();
 
-  const isOpen = modal === MODALS.DIFFERENT_NETWORK;
+  const isOpen = modal === MODALS.DIFFERENT_NETWORK && !isSwitching;
   const inverted = networkMode && getInvertedChainMode(networkMode);
 
   const handleClose = useCallback(() => {

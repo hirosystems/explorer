@@ -1,24 +1,23 @@
 import { useCallback } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { customNetworksListState, networkIndexState, networkListState } from '@store/network';
-import { useRouter } from 'next/router';
+import {
+  customNetworksListState,
+  networkIndexState,
+  networkListState,
+} from '@store/recoil/network';
 import { DEFAULT_TESTNET_INDEX, DEFAULT_MAINNET_INDEX } from '@common/constants';
-import { networkSwitchingState } from '@store/network';
+import { networkSwitchingState } from '@store/recoil/network';
+import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
+import { useAtom } from 'jotai';
 
 export const useNetwork = () => {
-  const router = useRouter();
-  const setNetworkList = useSetRecoilState(customNetworksListState);
-  const networkList = useRecoilValue(networkListState);
-  const [currentNetworkIndex, setIndex] = useRecoilState(networkIndexState);
-  const [networkSwitching, setNetworkSwitching] = useRecoilState(networkSwitchingState);
-  const isSwitching = networkSwitching === 'pending';
+  const setNetworkList = useUpdateAtom(customNetworksListState);
+  const networkList = useAtomValue(networkListState);
+  const [currentNetworkIndex, setIndex] = useAtom(networkIndexState);
+  const [networkSwitching, setNetworkSwitching] = useAtom(networkSwitchingState);
 
   const handleSetPendingChange = () => {
+    console.log('set pending');
     setNetworkSwitching('pending');
-  };
-
-  const handleSetIdleChange = () => {
-    setNetworkSwitching('idle');
   };
 
   const handleAddListItem = useCallback(
@@ -41,18 +40,20 @@ export const useNetwork = () => {
     []
   );
 
-  const handleUpdateCurrentIndex = useCallback((newIndex: number) => {
-    setIndex(newIndex);
-    handleSetPendingChange();
-    setTimeout(() => {
-      window.location.reload(true);
-    }, 1000);
-  }, []);
+  const handleUpdateCurrentIndex = useAtomCallback<void, number>(
+    useCallback((get, set, arg) => {
+      set(networkSwitchingState, 'pending');
+      set(networkIndexState, arg);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 1000);
+    }, [])
+  );
 
   const handleAddNetwork = useCallback(
     (item: { label: string; url: string }) => {
       handleAddListItem(item);
-      handleUpdateCurrentIndex(networkList.length);
+      void handleUpdateCurrentIndex(networkList.length);
     },
     [networkList, handleAddListItem, handleUpdateCurrentIndex]
   );
@@ -65,23 +66,27 @@ export const useNetwork = () => {
   );
 
   const handleSetTestnet = useCallback(() => {
-    handleUpdateCurrentIndex(DEFAULT_TESTNET_INDEX);
+    void handleUpdateCurrentIndex(DEFAULT_TESTNET_INDEX);
   }, [handleUpdateCurrentIndex]);
 
   const handleSetMainnet = useCallback(() => {
-    handleUpdateCurrentIndex(DEFAULT_MAINNET_INDEX);
+    void handleUpdateCurrentIndex(DEFAULT_MAINNET_INDEX);
   }, [handleUpdateCurrentIndex]);
+
+  const isSwitching = networkSwitching === 'pending';
 
   return {
     networkList,
     setNetworkList,
     currentNetworkIndex,
     setIndex,
+    isSwitching,
     handleAddListItem,
     handleUpdateCurrentIndex,
     handleSetTestnet,
     handleSetMainnet,
     handleAddNetwork,
     handleRemoveNetwork,
+    handleSetPendingChange,
   };
 };

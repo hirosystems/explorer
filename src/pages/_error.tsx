@@ -4,6 +4,7 @@ import { Link, Text, Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { Box, color, Flex, Grid } from '@stacks/ui';
 import { Section } from '@components/section';
+import { PageWrapper } from '@components/page-wrapper';
 
 const PageTop: React.FC = React.memo(() => (
   <Flex flexDirection="column" alignItems="center" maxWidth="544px" justify="center">
@@ -24,7 +25,7 @@ const PageTop: React.FC = React.memo(() => (
 
 const Error: NextPage = () => {
   return (
-    <>
+    <PageWrapper>
       <Meta title="Not found" />
       <PageTop />
       <Section>
@@ -56,7 +57,7 @@ const Error: NextPage = () => {
           </Box>
         </Grid>
       </Section>
-    </>
+    </PageWrapper>
   );
 };
 

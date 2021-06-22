@@ -102,9 +102,7 @@ export const DeployView = React.memo(() => {
   const contractName = useRecoilValue(contractNameState);
   const [toolsVisible, setToolsState] = useRecoilState(editorToolsState);
 
-  const onFinished = React.useCallback(() => {
-    refreshPendingTransactions && refreshPendingTransactions();
-  }, [refreshPendingTransactions]);
+  const onFinished = React.useCallback(() => {}, [refreshPendingTransactions]);
 
   const handleToggleToolsState = () => {
     setToolsState(s => (s === 'visible' ? 'hidden' : 'visible'));

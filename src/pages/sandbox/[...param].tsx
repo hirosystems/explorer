@@ -3,6 +3,10 @@ import type { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import { SandboxPageContent } from '@sandbox/components/page-content';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
+import { SafeSuspense } from '@components/ssr-safe-suspense';
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
+import { getHomePageQueries } from '@common/page-queries/home';
 
 const Sandbox: NextPage<SandboxData> = props => {
   const { handleTrackGoal } = useFathomGoal();
@@ -12,16 +16,16 @@ const Sandbox: NextPage<SandboxData> = props => {
   }, []);
 
   return (
-    <>
+    <SafeSuspense fallback={<></>}>
       <Head>
         <title>Sandbox - Stacks 2.0 explorer</title>
       </Head>
       <SandboxPageContent {...props} />
-    </>
+    </SafeSuspense>
   );
 };
 
-export function getServerSideProps(ctx: NextPageContext): { props: SandboxData } {
+Sandbox.getInitialProps = (ctx: NextPageContext): SandboxData => {
   const { query } = ctx;
   const param = query?.param ? query.param : [];
   let view = 'deploy';
@@ -34,10 +38,8 @@ export function getServerSideProps(ctx: NextPageContext): { props: SandboxData }
   const sender = param[1] || '';
   const contract = param[2] || '';
 
-  return {
-    props: { view, sender, contract },
-  };
-}
+  return { view, sender, contract };
+};
 
 export interface SandboxData {
   view: string;
@@ -45,4 +47,4 @@ export interface SandboxData {
   contract: string;
 }
 
-export default Sandbox;
+export default withInitialQueries(Sandbox, pageAtomBuilders)(getHomePageQueries);

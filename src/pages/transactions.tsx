@@ -1,51 +1,30 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Box } from '@stacks/ui';
+
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
-import { NextPage, NextPageContext } from 'next';
-import { prefetchTransactionsPageData } from '@common/lib/pages/transactions';
 import { TabbedTransactionList } from '@components/tabbed-transaction-list';
-import {
-  TRANSACTIONS_PAGE_TX_LIST_CONFIRMED,
-  TRANSACTIONS_PAGE_TX_LIST_MEMPOOL,
-} from '@common/constants/data';
-import { useFilterState } from '@common/hooks/use-filter-state';
 
-const ITEM_LIMIT = 50;
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { PageWrapper } from '@components/page-wrapper';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
+import { getTransactionsPageQueries } from '@common/page-queries/transactions';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 
-const TransactionsPage: NextPage<any> = () => {
-  const { types } = useFilterState('txList');
+import type { NextPage } from 'next';
 
+const TransactionsPage: NextPage = () => {
   return (
-    <>
+    <PageWrapper>
       <Meta title="Recent transactions" />
       <Box mb="base-loose">
         <Title mt="72px" color="white" as="h1" fontSize="36px">
           Transactions
         </Title>
-        <TabbedTransactionList
-          infinite
-          confirmed={{
-            key: TRANSACTIONS_PAGE_TX_LIST_CONFIRMED,
-            limit: ITEM_LIMIT,
-            txTypes: types,
-          }}
-          mempool={{
-            key: TRANSACTIONS_PAGE_TX_LIST_MEMPOOL,
-            limit: ITEM_LIMIT,
-            txTypes: types,
-          }}
-        />
+        <TabbedTransactionList infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
-    </>
+    </PageWrapper>
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
-  const { dehydratedState } = await prefetchTransactionsPageData(context);
-  return {
-    props: { dehydratedState },
-  };
-}
-
-export default TransactionsPage;
+export default withInitialQueries(TransactionsPage, pageAtomBuilders)(getTransactionsPageQueries);
