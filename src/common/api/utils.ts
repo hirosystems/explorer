@@ -8,13 +8,12 @@ import {
   DEFAULT_STATUS_ENDPOINT,
   DEFAULT_TESTNET_INDEX,
   DEFAULT_TESTNET_SERVER,
-  MAINNET_CHAIN_ID,
+  DEFAULT_REGTEST_SERVER,
+  DEFAULT_REGTEST_INDEX,
   NETWORK_CURRENT_INDEX_COOKIE,
   NETWORK_LIST_COOKIE,
-  TESTNET_CHAIN_ID,
 } from '@common/constants';
 import { fetchFromApi } from '@common/api/fetch';
-import { ChainID } from '@stacks/transactions';
 import { NetworkModes } from '@common/types/network';
 
 /**
@@ -88,6 +87,14 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
           path: '/',
         });
       }
+      // if nothing is set, and chain param is regtest, set it to regtest (for open graph rendering, etc)
+      if (!savedNetworkIndex && chain === 'regtest') {
+        apiServer = DEFAULT_NETWORK_LIST[DEFAULT_REGTEST_INDEX]?.url;
+        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_REGTEST_INDEX), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
+      }
     }
     return apiServer;
   } catch (e) {
@@ -107,26 +114,14 @@ export const generateTypesQueryString = (types?: Transaction['tx_type'][]) => {
   return '';
 };
 
-export const getDefaultChainId = (
-  apiServer: string
-): typeof TESTNET_CHAIN_ID | typeof MAINNET_CHAIN_ID | undefined => {
-  if (apiServer === DEFAULT_TESTNET_SERVER) {
-    return TESTNET_CHAIN_ID;
-  }
-  if (apiServer === DEFAULT_MAINNET_SERVER) {
-    return MAINNET_CHAIN_ID;
-  }
-  return undefined;
-};
-
-export const getChainTypeFromId = (
-  networkId: typeof TESTNET_CHAIN_ID | typeof MAINNET_CHAIN_ID
-) => {
-  switch (networkId) {
-    case ChainID.Mainnet:
+export const getChainTypeFromUrl = (networkUrl: string | undefined) => {
+  switch (networkUrl) {
+    case DEFAULT_MAINNET_SERVER:
       return NetworkModes.Mainnet;
-    case ChainID.Testnet:
+    case DEFAULT_TESTNET_SERVER:
       return NetworkModes.Testnet;
+    case DEFAULT_REGTEST_SERVER:
+      return NetworkModes.Regtest;
     default:
       return undefined;
   }

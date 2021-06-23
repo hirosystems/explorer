@@ -26,7 +26,7 @@ export const useItem = (resultsData?: SearchResult): [any, boolean] => {
     {
       refreshInterval: undefined,
       onSuccess: data => setItem(data as any),
-      onError: error => setItem(error as any),
+      onError: error => setItem(error),
     }
   );
 

@@ -2,7 +2,9 @@ import { fetchFromApi } from '@common/api/fetch';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
+  DEFAULT_REGTEST_SERVER,
   DEFAULT_V2_INFO_ENDPOINT,
+  REGTEST_CHAIN_ID,
   TESTNET_CHAIN_ID,
 } from '@common/constants';
 import { ChainID } from '@stacks/transactions';
@@ -14,6 +16,8 @@ export async function getNetworkMode(apiServer: string) {
     return NetworkModes.Mainnet;
   } else if (apiServer === DEFAULT_TESTNET_SERVER) {
     return NetworkModes.Testnet;
+  } else if (apiServer === DEFAULT_REGTEST_SERVER) {
+    return NetworkModes.Regtest;
   }
   try {
     const response = await fetchFromApi(apiServer)(DEFAULT_V2_INFO_ENDPOINT);

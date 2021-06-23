@@ -36,8 +36,8 @@ export const useClarityRepl = (): UseClarityRepl => {
 
   let cachegetUint8Memory0 = null;
   let WASM_VECTOR_LEN = 0;
-  let cachedTextEncoder = new TextEncoder('utf-8');
-  let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+  const cachedTextEncoder = new TextEncoder('utf-8');
+  const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
   let cachegetInt32Memory0 = null;
 
   function getUint8Memory0() {
@@ -113,8 +113,8 @@ export const useClarityRepl = (): UseClarityRepl => {
 
   function handle_command(snippet: string) {
     try {
-      var ptr0 = passStringToWasm0(snippet, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-      var len0 = WASM_VECTOR_LEN;
+      const ptr0 = passStringToWasm0(snippet, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+      const len0 = WASM_VECTOR_LEN;
       wasm.handle_command(8, ptr0, len0);
       var r0 = getInt32Memory0()[8 / 4 + 0];
       var r1 = getInt32Memory0()[8 / 4 + 1];

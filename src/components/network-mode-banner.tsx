@@ -8,7 +8,7 @@ import { capitalize } from '@common/utils';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
   const mode = useNetworkMode();
-  return mode === 'testnet' ? (
+  return mode === 'testnet' || mode === 'regtest' ? (
     <Badge flexShrink={0} bg="white" {...props}>
       <Flex alignItems="center">
         <Box
