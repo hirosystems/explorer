@@ -41,7 +41,10 @@ import { VestingAddressData } from '@pages/api/vesting/[address]';
 
 const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
   const network = useNetworkMode();
-  const invert = network && network.toLowerCase() === 'testnet' ? 'mainnet' : 'testnet';
+  const invert =
+    network && (network.toLowerCase() === 'testnet' || network.toLowerCase() === 'regtest')
+      ? 'mainnet'
+      : 'testnet';
   return (
     <Section mb="extra-loose">
       <Flex alignItems="center" justifyContent="space-between" p="base-loose">
@@ -284,7 +287,7 @@ export async function getServerSideProps(
   ]);
 
   const details = getAddressDetails(principal);
-  const isDifferentMode = details.network !== networkMode?.toLowerCase();
+  const isDifferentMode = details.network.includes('test') !== networkMode?.includes('test');
   const networkModeAddress = isDifferentMode ? invertAddress(principal) : null;
 
   return {

@@ -46,6 +46,8 @@ const HelperInfo: React.FC = memo(() => {
           "Mainnet" version. However, on "testnet", STX and transactions are used for testing where
           users can request STX, send transactions, and test and deploy smart contracts to ensure
           everything works as expected before deploying them on the "mainnet" Stacks Blockchain.
+          "Regtest" is an alternative version of the Testnet, but is confgured to process
+          transactions faster. Regtest and Testnet can be subject to resets.
         </Text>
       ) : null}
     </>
@@ -91,9 +93,8 @@ export const DifferentNetworkModal: React.FC = memo(() => {
 
       <Box mb="extra-loose" px="extra-loose">
         <Text fontSize={1} color={color('text-body')} lineHeight="22px">
-          The URL you're on is for the {networkMode === 'testnet' ? 'mainnet' : 'testnet'} version
-          of the Stacks Blockchain. Do you want to update your network version to{' '}
-          {networkMode === 'testnet' ? 'mainnet' : 'testnet'}?
+          The URL you're on is for the {networkMode} version of the Stacks Blockchain. Do you want
+          to update your network version to {networkMode === 'testnet' ? 'mainnet' : 'testnet'}?
         </Text>
         <HelperInfo />
         <Stack mt="base-loose" spacing="base">

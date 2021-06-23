@@ -14,12 +14,13 @@ import { fetchFromApi } from '@common/api/fetch';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
+  DEFAULT_REGTEST_SERVER,
   DEFAULT_V2_INFO_ENDPOINT,
 } from '@common/constants';
 import { Badge } from '@components/badge';
 
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
-import { getChainTypeFromId, getDefaultChainId } from '@common/api/utils';
+import { getChainTypeFromUrl } from '@common/api/utils';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -54,7 +55,10 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const { handleRemoveNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
 
-  const isDefault = item.url === DEFAULT_TESTNET_SERVER || item.url === DEFAULT_MAINNET_SERVER;
+  const isDefault =
+    item.url === DEFAULT_REGTEST_SERVER ||
+    item.url === DEFAULT_TESTNET_SERVER ||
+    item.url === DEFAULT_MAINNET_SERVER;
   const doNotFetch = isDisabled || !item.url || isDefault;
 
   const { data, error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
@@ -63,12 +67,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
     return response.json();
   });
 
-  const networkId =
-    isDefault && item.url
-      ? getDefaultChainId(item.url)
-      : data?.network_id && parseInt(data?.network_id);
-
-  const networkMode = getChainTypeFromId(networkId);
+  const networkMode = getChainTypeFromUrl(item.url);
 
   const handleClick = React.useCallback(
     async e => {

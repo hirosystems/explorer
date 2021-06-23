@@ -16,7 +16,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
-import { TESTNET_CHAIN_ID } from '@common/constants';
+import { REGTEST_CHAIN_ID, TESTNET_CHAIN_ID } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 
 dayjs.extend(relativeTime);
@@ -235,7 +235,7 @@ export const navgiateToRandomTx = (apiServer: string) => async () => {
   const hasNonCoinbaseTxs = results.some((tx: any) => tx.tx_type !== 'coinbase');
 
   if (hasNonCoinbaseTxs) {
-    const nonCoinbaseResults = (results as any).filter((tx: any) => tx.tx_type !== 'coinbase');
+    const nonCoinbaseResults = results.filter((tx: any) => tx.tx_type !== 'coinbase');
     const randomNonCoinbaseTx =
       nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
 
@@ -350,7 +350,7 @@ export const isLocal = () => {
   return false;
 };
 
-export const getInvertedChainMode = (mode: 'testnet' | 'mainnet') =>
+export const getInvertedChainMode = (mode: 'regtest' | 'testnet' | 'mainnet') =>
   mode === 'testnet' ? 'mainnet' : 'testnet';
 
 export const getChainIdFromInfo = (data: CoreNodeInfoResponse): NetworkMode | undefined => {
@@ -359,6 +359,8 @@ export const getChainIdFromInfo = (data: CoreNodeInfoResponse): NetworkMode | un
   return networkId
     ? TESTNET_CHAIN_ID === networkId
       ? NetworkModes.Testnet
+      : REGTEST_CHAIN_ID === networkId
+      ? NetworkModes.Regtest
       : NetworkModes.Mainnet
     : undefined;
 };

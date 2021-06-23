@@ -51,12 +51,13 @@ export const useChainModeEffect = () => {
   const [chainMode, setChainMode] = useChainMode();
   const networkModeChangeState = useRecoilValue(networkSwitchingState);
 
+  const isRegtest = chainMode === NetworkModes.Regtest;
   const isTestnet = chainMode === NetworkModes.Testnet;
   const isMainnet = chainMode === NetworkModes.Mainnet;
 
   useEffect(() => {
     if (IS_BROWSER && networkMode && networkModeChangeState !== 'pending') {
-      if (!chainMode || (!isTestnet && !isMainnet)) {
+      if (!chainMode || (!isTestnet && !isMainnet && !isRegtest)) {
         void setChainMode(networkMode);
       }
     }
@@ -64,8 +65,12 @@ export const useChainModeEffect = () => {
 
   useEffect(() => {
     if (IS_BROWSER) {
-      if (chainMode && chainMode !== networkMode && networkModeChangeState !== 'pending') {
-        // alert if url is different than what is returned by api server
+      if (
+        chainMode &&
+        chainMode.includes('test') !== networkMode?.includes('test') &&
+        networkModeChangeState !== 'pending'
+      ) {
+        // alert if url is different than what is returned by api server, unless it is on regtest
         // in the future we can have the modal display all servers added that match a given chain id
         handleOpenDifferentNetworkModal();
       }
