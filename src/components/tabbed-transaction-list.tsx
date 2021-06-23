@@ -13,8 +13,10 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { TransactionListItem } from '@components/transaction-list-item';
 import { FilterButton } from '@components/filter-button';
-import { InfiniteQueryObserverBaseResult } from 'react-query';
-import { useFetchTransactions } from '@common/hooks/data/use-fetch-transactions';
+import {
+  useMempoolTransactionsListState,
+  useTransactionsListState,
+} from '../hooks/use-transactions-list-state';
 
 const TX_TABS = 'tabs/tx-list';
 
@@ -132,10 +134,7 @@ export interface Pages {
 
 interface TransactionListProps {
   limit?: number;
-  data: {
-    pages: Pages[];
-    pageParams: (number | undefined)[];
-  };
+  data: Pages;
 }
 
 function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
@@ -144,11 +143,7 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
 
 const TransactionList = memo<TransactionListProps>(props => {
   const { data, limit } = props;
-  const results = data.pages.reduce<Item[]>(
-    (accumulator, value) => accumulator.concat(value.results),
-    []
-  );
-
+  const { results } = data;
   const list = useMemo(() => getUniqueListBy<Item>(results, 'tx_id'), [results]);
   return (
     <>
@@ -170,33 +165,23 @@ const TransactionList = memo<TransactionListProps>(props => {
 });
 
 export const TabbedTransactionList: React.FC<{
-  mempool: any;
-  confirmed: any;
+  limit?: number;
   infinite?: boolean;
-}> = ({ mempool: mempoolOptions, confirmed: confirmedOptions, infinite }) => {
-  const confirmed = useFetchTransactions({
-    ...confirmedOptions,
-  });
-  const mempool = useFetchTransactions({
-    ...mempoolOptions,
-    mempool: true,
-  });
+}> = ({ limit, infinite }) => {
+  const confirmed = useTransactionsListState();
+  const mempool = useMempoolTransactionsListState();
 
   const [loading, setLoading] = useState(false);
   // if there are no mempool transactions, default to confirmed
-  const defaultIndex = mempool?.data.pages[0].results.length === 0 ? 1 : 0;
-  const { currentIndex } = useTabs(TX_TABS, defaultIndex);
+  const defaultIndex = mempool?.results.length === 0 ? 1 : 0;
+  const { currentIndex } = useTabs(TX_TABS, 0);
   const mempoolSelected = currentIndex === 0;
 
-  const currentList: InfiniteQueryObserverBaseResult = mempoolSelected ? mempool : confirmed;
-
-  const { isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = currentList;
-
-  const handleFooterClick = useCallback(async () => {
+  const handleFooterClick = useCallback(() => {
     setLoading(true);
-    await fetchNextPage();
+
     setLoading(false);
-  }, [mempoolSelected, fetchNextPage, setLoading]);
+  }, [mempoolSelected, setLoading]);
 
   return (
     <Section
@@ -205,30 +190,19 @@ export const TabbedTransactionList: React.FC<{
         pl: '0',
       }}
       alignSelf="flex-start"
-      isLoading={isFetching}
       topRight={!mempoolSelected && infinite && FilterButton}
     >
       <Flex flexGrow={1} flexDirection="column" px="base-loose">
         <Box display={mempoolSelected ? 'unset' : 'none'} position="relative">
-          <TransactionList
-            data={mempool?.data}
-            key={'mempool'}
-            limit={!infinite && mempoolOptions.limit}
-          />
+          <TransactionList limit={limit} data={mempool} key={'mempool'} />
         </Box>
         <Box display={!mempoolSelected ? 'unset' : 'none'} position="relative">
-          <TransactionList
-            data={confirmed?.data}
-            key={'confirmed'}
-            limit={!infinite && confirmedOptions.limit}
-          />
+          <TransactionList limit={limit} data={confirmed} key={'confirmed'} />
         </Box>
-        {/*<Box flexGrow={1} />*/}
         <SectionFooterAction
           path="transactions"
-          isLoading={isFetchingNextPage || loading}
+          isLoading={loading}
           onClick={handleFooterClick}
-          hasNextPage={hasNextPage}
           showLoadMoreButton={infinite}
         />
       </Flex>

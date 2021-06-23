@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps, networkMode }: MyAppProps) {
   const { isHome, fullWidth, dehydratedState, ...props } = pageProps;
 
   useSetNetworkMode(networkMode);
-
   return (
     <AppConfig isHome={isHome} fullWidth={fullWidth} dehydratedState={dehydratedState}>
       <Component networkMode={networkMode} {...props} />

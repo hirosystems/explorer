@@ -1,20 +1,21 @@
-import React, { memo } from 'react';
+import React, { useMemo } from 'react';
 import { Flex, Box, Grid } from '@stacks/ui';
 import { NextPage, NextPageContext } from 'next';
 import { Title } from '@components/typography';
-import { BlocksList } from '@components/blocks-list';
 import { Meta } from '@components/meta-head';
 import { SearchComponent } from '@components/search/search';
-import { TabbedTransactionList } from '@components/tabbed-transaction-list';
-import { getSsrHomeProps } from '@common/lib/pages/home';
-import {
-  HOMEPAGE,
-  HOMEPAGE_BLOCKS_LIST,
-  HOMEPAGE_TX_LIST_CONFIRMED,
-  HOMEPAGE_TX_LIST_MEMPOOL,
-} from '@common/constants/data';
 
-const ITEM_LIMIT = 10;
+import { Provider } from 'jotai';
+import { initialDataAtom } from '@store/query';
+import {
+  MempoolTransactionsListResponse,
+  TransactionQueryKeys,
+  TransactionsListResponse,
+} from '@store/transactions';
+import { getApiClients } from '@common/api/client';
+import { BlocksListResponse, BlocksQueryKeys } from '@store/blocks';
+import { BlocksList } from '../features/blocks-list';
+import { TabbedTransactionList } from '@components/tabbed-transaction-list';
 
 const PageTop: React.FC = React.memo(() => (
   <Flex
@@ -42,25 +43,23 @@ const PageTop: React.FC = React.memo(() => (
   </Flex>
 ));
 
-const HomeTransactions: React.FC = memo(() => {
-  return (
-    <TabbedTransactionList
-      key={HOMEPAGE}
-      confirmed={{
-        key: HOMEPAGE_TX_LIST_CONFIRMED,
-        limit: ITEM_LIMIT,
-      }}
-      mempool={{
-        key: HOMEPAGE_TX_LIST_MEMPOOL,
-        limit: ITEM_LIMIT,
-      }}
-    />
-  );
-});
+interface HomePageData {
+  transactions: TransactionsListResponse;
+  mempool: MempoolTransactionsListResponse;
+  blocks: BlocksListResponse;
+}
 
-const Home: NextPage<any> = memo(() => {
+const Home: NextPage<HomePageData> = ({ transactions, mempool, blocks }) => {
+  const initialValues = useMemo(
+    () => [
+      [initialDataAtom(TransactionQueryKeys.CONFIRMED), transactions] as const,
+      [initialDataAtom(TransactionQueryKeys.MEMPOOL), mempool] as const,
+      [initialDataAtom(BlocksQueryKeys.CONFIRMED), blocks] as const,
+    ],
+    [transactions, mempool, blocks]
+  );
   return (
-    <>
+    <Provider initialValues={initialValues}>
       <Meta />
       <PageTop />
       <Grid
@@ -69,19 +68,25 @@ const Home: NextPage<any> = memo(() => {
         gridTemplateColumns={['100%', '100%', 'calc(60% - 32px) 40%']}
         width="100%"
       >
-        <HomeTransactions />
-        <BlocksList key={HOMEPAGE_BLOCKS_LIST} fetchKey={HOMEPAGE_BLOCKS_LIST} limit={10} />
+        <TabbedTransactionList limit={10} />
+        <BlocksList limit={10} />
       </Grid>
-    </>
+    </Provider>
   );
-});
+};
 
 export async function getServerSideProps(context: NextPageContext) {
-  const { dehydratedState } = await getSsrHomeProps(context);
+  const { transactionsApi, blocksApi } = await getApiClients(context);
+  const transactions = await transactionsApi.getTransactionList({});
+  const mempool = await transactionsApi.getMempoolTransactionList({});
+  const blocks = await blocksApi.getBlockList({});
+
   return {
     props: {
       isHome: true,
-      dehydratedState,
+      transactions,
+      mempool,
+      blocks,
     },
   };
 }
