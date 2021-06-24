@@ -4,8 +4,16 @@ import type { Getter } from 'jotai';
 import deepEqual from 'fast-deep-equal';
 
 import { apiClientsState } from '@store/api-clients';
-import { atomFamilyWithQuery, atomWithQuery } from '@store/query';
+
 import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { QueryRefreshRates } from '@common/constants';
+import {
+  atomFamilyWithInfiniteQuery,
+  atomFamilyWithQuery,
+  makeQueryKey,
+} from 'jotai-query-toolkit';
+import { QueryFunctionContext, QueryKey } from 'react-query';
+import { getNextPageParam } from '@store/common';
 
 const paginatedResponseOffset = atomFamily(_key => atomWithDefault(() => 0), deepEqual);
 
@@ -18,9 +26,10 @@ export enum BlocksQueryKeys {
   SINGLE = 'blocks/SINGLE',
 }
 
-export function makeBlocksSingleKey(hash: string) {
-  return [BlocksQueryKeys.SINGLE, hash];
-}
+export const getBlocksQueryKey = {
+  confirmed: (limit: number): QueryKey => makeQueryKey(BlocksQueryKeys.CONFIRMED, limit),
+  single: (blockHash: string): QueryKey => makeQueryKey(BlocksQueryKeys.SINGLE, blockHash),
+};
 
 // ----------------
 // types
@@ -30,11 +39,12 @@ export type BlocksListResponse = ApiResponseWithResultsOffset<Block>;
 // ----------------
 // queryFn's
 // ----------------
-const blocksListQueryFn = async (get: Getter) => {
+const blocksListQueryFn = async (get: Getter, limit: number, context: QueryFunctionContext) => {
   const { blocksApi } = get(apiClientsState);
-  const offset = get(paginatedResponseOffset([BlocksQueryKeys.CONFIRMED, 'offset']));
+  const { pageParam } = context;
   return (await blocksApi.getBlockList({
-    offset,
+    offset: pageParam,
+    limit,
   })) as BlocksListResponse; // cast due to limitation in api client
 };
 
@@ -47,12 +57,15 @@ const blocksSingleQueryFn = async (get: Getter, hash: string) => {
 // ----------------
 // atoms
 // ----------------
-export const blocksListState = atomWithQuery<BlocksListResponse>(
+export const blocksListState = atomFamilyWithInfiniteQuery<number, BlocksListResponse>(
   BlocksQueryKeys.CONFIRMED,
-  blocksListQueryFn
+  blocksListQueryFn,
+  { getNextPageParam: getNextPageParam }
 );
 
 export const blocksSingleState = atomFamilyWithQuery<string, Block>(
   BlocksQueryKeys.SINGLE,
-  blocksSingleQueryFn
+  blocksSingleQueryFn,
+  // blocks have no reason to refresh, they are pretty static
+  { refetchInterval: QueryRefreshRates.None, getShouldRefetch: () => false }
 );

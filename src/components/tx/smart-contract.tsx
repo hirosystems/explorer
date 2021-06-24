@@ -6,7 +6,7 @@ import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { PostConditions } from '@components/post-conditions';
-import { getContractName } from '@common/utils';
+import { getContractName, isPendingTx } from '@common/utils';
 import { Events } from '@components/tx-events';
 import { PagePanes } from '@components/page-panes';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
@@ -16,18 +16,20 @@ import {
   useBlockInView,
   useContractSourceInView,
   useTransactionInView,
-} from '@common/hooks/use-transaction-in-view';
+} from '../../hooks/use-transaction-in-view';
 
 const SmartContractPage = () => {
   const transaction = useTransactionInView();
   const block = useBlockInView();
   const source = useContractSourceInView();
   const accountData: any = undefined;
+
   if (!transaction || transaction.tx_type !== 'smart_contract') return null;
+
   return (
     <>
-      <PageTop tx={transaction as any} />
-      <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
+      <PageTop tx={transaction} />
+      <PagePanes fullWidth={isPendingTx(transaction) || block === null}>
         <Stack spacing="extra-loose">
           <TransactionDetails
             contractName={getContractName(transaction.smart_contract.contract_id)}
@@ -36,7 +38,7 @@ const SmartContractPage = () => {
           {'events' in transaction && (
             <Events txId={transaction.tx_id} events={transaction.events} />
           )}
-          {source && <ContractSource source={source.source} />}
+          {source && <ContractSource source={source} />}
           <PostConditions
             mode={transaction.post_condition_mode}
             conditions={transaction.post_conditions}

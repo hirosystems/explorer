@@ -13,11 +13,12 @@ import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
 import { FunctionSummarySection } from '@components/function-summary/function-summary';
 import {
+  useAccountInViewTransactions,
   useBlockInView,
   useContractInfoInView,
   useContractSourceInView,
   useTransactionInView,
-} from '@common/hooks/use-transaction-in-view';
+} from '../../hooks/use-transaction-in-view';
 
 const ContractCallPage = () => {
   const transaction = useTransactionInView();
@@ -25,15 +26,15 @@ const ContractCallPage = () => {
   const source = useContractSourceInView();
   const info = useContractInfoInView();
   const btc = null;
+
+  const test = useAccountInViewTransactions();
   if (!transaction || transaction.tx_type !== 'contract_call') return null;
   const isPending = transaction.tx_status === 'pending';
   return (
     <>
       <PageTop tx={transaction as any} />
       <PagePanes
-        fullWidth={
-          info || source?.source ? false : transaction.tx_status === 'pending' || block === null
-        }
+        fullWidth={info || !!source ? false : transaction.tx_status === 'pending' || block === null}
       >
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
@@ -50,10 +51,10 @@ const ContractCallPage = () => {
             conditions={transaction.post_conditions}
             mode={transaction.post_condition_mode}
           />
-          {source?.source && (
+          {source && (
             <ContractSource
               sourceTx={transaction.contract_call.contract_id}
-              source={source.source}
+              source={source}
               contractCall={transaction.contract_call}
             />
           )}

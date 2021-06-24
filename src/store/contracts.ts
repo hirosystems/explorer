@@ -1,8 +1,10 @@
-import { atomFamilyWithQuery } from '@store/query';
-import { Getter } from 'jotai';
+import { atom, Getter } from 'jotai';
 import { apiClientsState } from '@store/api-clients';
 import { ContractInterfaceResponse, ContractSourceResponse } from '@stacks/blockchain-api-client';
 import { QueryRefreshRates } from '@common/constants';
+import { QueryKey } from 'react-query';
+import { makeQueryKey, atomFamilyWithQuery } from 'jotai-query-toolkit';
+import { atomFamily } from 'jotai/utils';
 
 // ----------------
 // keys
@@ -13,43 +15,21 @@ export enum ContractsQueryKeys {
   INTERFACE = 'contracts/INTERFACE',
 }
 
-export function makeContractsInfoQueryKey(txId: string) {
-  return [ContractsQueryKeys.INFO, txId];
-}
-
-export function makeContractsSourceQueryKey(txId: string) {
-  return [ContractsQueryKeys.SOURCE, txId];
-}
-
-export function makeContractsInterfaceQueryKey(txId: string) {
-  return [ContractsQueryKeys.INTERFACE, txId];
-}
+export const getContractQueryKeys = {
+  info: (contractId: string): QueryKey => makeQueryKey(ContractsQueryKeys.INFO, contractId),
+  source: (contractId: string): QueryKey => makeQueryKey(ContractsQueryKeys.SOURCE, contractId),
+  interface: (contractId: string): QueryKey =>
+    makeQueryKey(ContractsQueryKeys.INTERFACE, contractId),
+};
 
 // ----------------
 // queryFn's
 // ----------------
-const contractSourceQueryFn = async (get: Getter, contractPrincipal: string) => {
-  const { smartContractsApi } = get(apiClientsState);
-  const [contractAddress, contractName] = contractPrincipal.split('.');
-  return await smartContractsApi.getContractSource({
-    contractAddress,
-    contractName,
-  });
-};
 
-const contractInfoQueryFn = async (get: Getter, contractPrincipal: string) => {
+const contractInfoQueryFn = async (get: Getter, contractId: string) => {
   const { smartContractsApi } = get(apiClientsState);
   return smartContractsApi.getContractById({
-    contractId: contractPrincipal,
-  });
-};
-
-const contractInterfaceQueryFn = async (get: Getter, contractPrincipal: string) => {
-  const { smartContractsApi } = get(apiClientsState);
-  const [contractAddress, contractName] = contractPrincipal.split('.');
-  return await smartContractsApi.getContractInterface({
-    contractAddress,
-    contractName,
+    contractId: contractId,
   });
 };
 
@@ -59,17 +39,19 @@ const contractInterfaceQueryFn = async (get: Getter, contractPrincipal: string) 
 export const contractInfoState = atomFamilyWithQuery<string, any>(
   ContractsQueryKeys.INFO,
   contractInfoQueryFn,
-  { refetchInterval: QueryRefreshRates.None }
+  { refetchInterval: QueryRefreshRates.None, getShouldRefetch: () => false }
 );
 
-export const contractSourceState = atomFamilyWithQuery<string, ContractSourceResponse>(
-  ContractsQueryKeys.SOURCE,
-  contractSourceQueryFn,
-  { refetchInterval: QueryRefreshRates.None }
+export const contractSourceState = atomFamily<string, string>(contractId =>
+  atom(get => {
+    const info = get(contractInfoState(contractId));
+    return info.source_code;
+  })
 );
 
-export const contractInterfaceState = atomFamilyWithQuery<string, ContractInterfaceResponse>(
-  ContractsQueryKeys.INTERFACE,
-  contractInterfaceQueryFn,
-  { refetchInterval: QueryRefreshRates.None }
+export const contractInterfaceState = atomFamily<string, ContractInterfaceResponse>(contractId =>
+  atom(get => {
+    const info = get(contractInfoState(contractId));
+    return info.abi;
+  })
 );

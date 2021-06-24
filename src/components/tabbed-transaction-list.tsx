@@ -141,7 +141,7 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
   return [...new Map(arr.map(item => [item[key], item])).values()] as unknown as T[];
 }
 
-const TransactionList = memo<TransactionListProps>(props => {
+const TransactionList = (props: TransactionListProps) => {
   const { data, limit } = props;
   const { results } = data;
   const list = useMemo(() => getUniqueListBy<Item>(results, 'tx_id'), [results]);
@@ -162,18 +162,18 @@ const TransactionList = memo<TransactionListProps>(props => {
       )}
     </>
   );
-});
+};
 
 export const TabbedTransactionList: React.FC<{
   limit?: number;
   infinite?: boolean;
 }> = ({ limit, infinite }) => {
-  const confirmed = useTransactionsListState();
-  const mempool = useMempoolTransactionsListState();
+  const confirmedPages = useTransactionsListState(limit);
+  const mempoolPages = useMempoolTransactionsListState(limit);
 
   const [loading, setLoading] = useState(false);
   // if there are no mempool transactions, default to confirmed
-  const defaultIndex = mempool?.results.length === 0 ? 1 : 0;
+  const defaultIndex = mempoolPages.pages[0]?.results.length === 0 ? 1 : 0;
   const { currentIndex } = useTabs(TX_TABS, 0);
   const mempoolSelected = currentIndex === 0;
 
@@ -194,10 +194,10 @@ export const TabbedTransactionList: React.FC<{
     >
       <Flex flexGrow={1} flexDirection="column" px="base-loose">
         <Box display={mempoolSelected ? 'unset' : 'none'} position="relative">
-          <TransactionList limit={limit} data={mempool} key={'mempool'} />
+          <TransactionList limit={limit} data={mempoolPages.pages[0]} key={'mempool'} />
         </Box>
         <Box display={!mempoolSelected ? 'unset' : 'none'} position="relative">
-          <TransactionList limit={limit} data={confirmed} key={'confirmed'} />
+          <TransactionList limit={limit} data={confirmedPages.pages[0]} key={'confirmed'} />
         </Box>
         <SectionFooterAction
           path="transactions"

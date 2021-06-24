@@ -68,6 +68,9 @@ export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   'https://stacks-node-api.stacks.co';
 
+// TODO: Remove before deployment
+export const MAINNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.stacks.co';
+
 export const VERSION = config?.VERSION || process.env.VERSION;
 
 export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
@@ -126,7 +129,11 @@ export const HIRO_HEADERS: HeadersInit = {
   'x-hiro-version': VERSION,
 };
 
-export enum QueryRefreshRates {
-  Default = DEFAULT_POLLING_INTERVAL,
-  None = 0,
-}
+export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
+  Default: DEFAULT_POLLING_INTERVAL,
+  None: false,
+};
+
+export const DEFAULT_LIST_LIMIT_SMALL = 10;
+export const DEFAULT_LIST_LIMIT = 30;
+export const MICROBLOCKS_ENABLED = true;

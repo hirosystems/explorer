@@ -1,13 +1,19 @@
 import { atom } from 'jotai';
-
 import { Configuration } from '@stacks/blockchain-api-client';
-import { fetcher } from '@common/api/fetch';
-import { DEFAULT_MAINNET_SERVER } from '@common/constants';
-import { apiClients } from '@common/api/client';
+import {
+  DEFAULT_MAINNET_SERVER,
+  MAINNET_MICROBLOCKS_SERVER,
+  MICROBLOCKS_ENABLED,
+} from '@common/constants';
+import { apiClients, createConfig } from '@common/api/client';
+import { networkUrlState } from '@store/network';
 
 export const apiClientConfiguration = atom<Configuration>(get => {
-  // const network = get(currentNetworkState);
-  return new Configuration({ basePath: DEFAULT_MAINNET_SERVER, fetchApi: fetcher });
+  const networkUrl = get(networkUrlState); // this should always be defined
+  const apiServer = MICROBLOCKS_ENABLED
+    ? MAINNET_MICROBLOCKS_SERVER
+    : networkUrl || DEFAULT_MAINNET_SERVER;
+  return createConfig(apiServer);
 });
 
 export const apiClientsState = atom(get => {

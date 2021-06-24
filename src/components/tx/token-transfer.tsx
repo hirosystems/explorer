@@ -5,7 +5,7 @@ import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
-import { useBlockInView, useTransactionInView } from '@common/hooks/use-transaction-in-view';
+import { useBlockInView, useTransactionInView } from '../../hooks/use-transaction-in-view';
 
 const TokenTransferPage = () => {
   const transaction = useTransactionInView();

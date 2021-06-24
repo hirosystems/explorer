@@ -36,7 +36,7 @@ export const appGetInitialProps = async (appContext: AppContext) => {
   try {
     const apiServer = await getServerSideApiServer(appContext.ctx);
     const networkMode = await getNetworkMode(apiServer);
-    return { networkMode, ...appProps };
+    return { networkMode, apiServer, ...appProps };
   } catch (e) {
     return { ...appProps };
   }

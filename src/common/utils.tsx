@@ -18,6 +18,7 @@ import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
 import { REGTEST_CHAIN_ID, TESTNET_CHAIN_ID } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
+import { NextPageContext } from 'next';
 
 dayjs.extend(relativeTime);
 
@@ -282,6 +283,12 @@ export function isPendingTx(tx: MempoolTransaction | Transaction) {
 
   return tx.tx_status === statuses;
 }
+
+export const assertConfirmedTransaction = (
+  tx?: MempoolTransaction | Transaction
+): Transaction | undefined =>
+  tx ? (isPendingTx(tx) ? undefined : (tx as Transaction)) : undefined;
+
 export const border = (
   _color: ColorsStringLiteral = 'border',
   width = 1,
@@ -377,3 +384,14 @@ export function isReactComponent(Comp: any) {
     (Comp && typeof Comp === 'object' && `$$typeof` in Comp) || (Comp && typeof Comp === 'function')
   );
 }
+
+export const getTxIdFromCtx = (ctx: NextPageContext) =>
+  ctx?.query?.txid ? queryWith0x(ctx.query?.txid.toString()) : '';
+
+export const getContractIdFromTx = (tx?: Transaction | MempoolTransaction) => {
+  if (!tx) return;
+  let contractId;
+  if (tx.tx_type === 'contract_call') contractId = tx.contract_call.contract_id;
+  if (tx.tx_type === 'smart_contract') contractId = tx.smart_contract.contract_id;
+  return contractId;
+};
