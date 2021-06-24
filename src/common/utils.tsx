@@ -272,9 +272,16 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
 
 export const toRelativeTime = (ts: number): string => dayjs().to(ts);
 
-export const isPendingTx = (tx: Transaction | MempoolTransaction): boolean =>
-  tx && tx.tx_status === 'pending';
+export function isPendingTx(tx: MempoolTransaction | Transaction) {
+  const statuses =
+    'pending' ||
+    'dropped_replace_by_fee' ||
+    'dropped_replace_across_fork' ||
+    'dropped_too_expensive' ||
+    'dropped_stale_garbage_collect';
 
+  return tx.tx_status === statuses;
+}
 export const border = (
   _color: ColorsStringLiteral = 'border',
   width = 1,

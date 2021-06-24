@@ -4,7 +4,7 @@ import { atomFamily } from 'jotai/utils';
 import { QueryObserverOptions } from 'react-query';
 import deepEqual from 'fast-deep-equal';
 import memoize from 'micro-memoize';
-import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
+import { DEFAULT_POLLING_INTERVAL, QueryRefreshRates } from '@common/constants';
 
 const IS_SSR = typeof document === 'undefined';
 
@@ -25,7 +25,7 @@ export const atomFamilyWithQuery = <Param, Data>(
   return atomFamily<Param, Data>(param => {
     const queryKey = makeQueryKey(key, param);
     const queryAtom = _atomWithQuery(get => {
-      const initialData = get(initialDataAtom(param));
+      const initialData = get(initialDataAtom(queryKey));
       return {
         queryKey,
         queryFn: () => queryFn(get, param),
@@ -34,13 +34,13 @@ export const atomFamilyWithQuery = <Param, Data>(
         refetchOnMount: true,
         refetchOnWindowFocus: true,
         refetchOnReconnect: true,
-        refetchInterval: DEFAULT_POLLING_INTERVAL,
+        refetchInterval: QueryRefreshRates.Default,
         ...rest,
       } as any;
     }, equalityFn);
     const anAtom = atom(
       get => {
-        const initialData = get(initialDataAtom(param));
+        const initialData = get(initialDataAtom(queryKey));
         if (IS_SSR) {
           return initialData as unknown as Data;
         } else {
@@ -79,7 +79,7 @@ export const atomWithQuery = <Data>(
       refetchOnMount: true,
       refetchOnWindowFocus: true,
       refetchOnReconnect: true,
-      refetchInterval: DEFAULT_POLLING_INTERVAL,
+      refetchInterval: QueryRefreshRates.Default,
       ...rest,
     };
   });

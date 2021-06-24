@@ -6612,9 +6612,9 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-"jotai@https://pkg.csb.dev/pmndrs/jotai/commit/dbebd887/jotai":
+"jotai@https://pkg.csb.dev/pmndrs/jotai/commit/a7eb6bcb/jotai":
   version "1.0.1"
-  resolved "https://pkg.csb.dev/pmndrs/jotai/commit/dbebd887/jotai#3a40c6598afb8339ee162299b5dd36e30996dc7f"
+  resolved "https://pkg.csb.dev/pmndrs/jotai/commit/a7eb6bcb/jotai#abd061875d10846863747f8e9910a0d799f5ef42"
 
 js-cookie@^2.2.1:
   version "2.2.1"

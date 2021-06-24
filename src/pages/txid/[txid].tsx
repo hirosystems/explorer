@@ -1,131 +1,134 @@
 import * as React from 'react';
+import { Provider } from 'jotai';
 import { TransactionMeta } from '@components/meta/transactions';
-import useSWR from 'swr';
-import { convertPoxAddressToBtc } from '@common/btc';
-import { queryWith0x, validateTxId } from '@common/utils';
-import { renderTxPageComponent } from '@common/render-tx-page';
-import { useTransactionPageData } from '@common/hooks/use-transaction-page-data';
-import { getServerSideApiServer } from '@common/api/utils';
-import { fetchTransaction, FetchTransactionResponse } from '@common/api/transactions';
-import { fetchBlock } from '@common/api/blocks';
+import { TransactionPageComponent } from '@components/transaction-page-component';
 
+import { isPendingTx, queryWith0x } from '@common/utils';
+import { getApiClients } from '@common/api/client';
+
+import { initialDataAtom } from '@store/query';
+import { makeTransactionSingleKey } from '@store/transactions';
+import { makeBlocksSingleKey } from '@store/blocks';
+import { currentlyInViewState } from '@store/app';
+import {
+  makeContractsInfoQueryKey,
+  makeContractsInterfaceQueryKey,
+  makeContractsSourceQueryKey,
+} from '@store/contracts';
+
+import type {
+  MempoolTransaction,
+  Transaction,
+  Block,
+  ContractInterfaceResponse,
+  ContractSourceResponse,
+} from '@stacks/stacks-blockchain-api-types';
 import type { NextPage, NextPageContext } from 'next';
-import type { Block } from '@stacks/stacks-blockchain-api-types';
-import { useApiServer } from '@common/hooks/use-api';
-import { Meta } from '@components/meta-head';
-import { TxNotFound } from '@components/tx-not-found';
-import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
-import { AllAccountData, fetchAllAccountData } from '@common/api/accounts';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
-import { getNetworkMode } from '@common/api/network';
-import { NetworkMode } from '@common/types/network';
 
-const TransactionPage: NextPage<{
-  txid: string;
-  initialData: FetchTransactionResponse;
+interface TransactionPageData {
+  transaction: MempoolTransaction | Transaction;
+  txId: string;
   block?: Block;
-  account?: AllAccountData;
-  btc: null | string;
-}> = ({ txid, initialData, block, account, btc }) => {
-  const { transaction, data, error } = useTransactionPageData({ txid, initialData });
-  const apiServer = useApiServer();
+  contractId?: string;
+  contractSource?: ContractSourceResponse;
+  contractInterface?: ContractInterfaceResponse;
+  contractInfo?: any; // TODO: find type
+}
 
-  const hash = transaction && 'block_hash' in transaction && transaction.block_hash;
+const TransactionPage: NextPage<TransactionPageData> = props => {
+  const { transaction, txId, block, contractId, contractSource, contractInterface, contractInfo } =
+    props;
 
-  const { data: blockData } = useSWR(hash || '', fetchBlock(apiServer), {
-    initialData: block,
-    refreshInterval: transaction?.tx_status === 'pending' ? DEFAULT_POLLING_INTERVAL : undefined,
-  });
+  const initialValues: any =
+    // TODO: find right type
+    [
+      [initialDataAtom(makeTransactionSingleKey(txId)), transaction] as const,
+      [currentlyInViewState, { type: 'tx', payload: transaction.tx_id }] as const,
+    ];
 
-  const hasInitialError = 'error' in initialData && initialData.error;
-
-  const isPossiblyValid = validateTxId(txid);
-
-  if (hasInitialError || error || !data || !transaction) {
-    return (
-      <>
-        <Meta title="Transaction not found" />
-        <TxNotFound isPending={isPossiblyValid} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <TransactionMeta transaction={transaction} />
-        {transaction &&
-          renderTxPageComponent({
-            data,
-            block: blockData,
-            account,
-            btc,
-          })}
-      </>
-    );
+  // it's a confirmed transaction, populate block
+  if (block) {
+    const blockSingleQueryKey = makeBlocksSingleKey(block.hash);
+    initialValues.push([initialDataAtom(blockSingleQueryKey), block] as const);
   }
+
+  // there is an associated contract with this txid
+  if (contractId) {
+    initialValues.push([
+      initialDataAtom(makeContractsInterfaceQueryKey(contractId)),
+      contractInterface,
+    ] as const);
+    initialValues.push([
+      initialDataAtom(makeContractsSourceQueryKey(contractId)),
+      contractSource,
+    ] as const);
+    initialValues.push([
+      initialDataAtom(makeContractsInfoQueryKey(contractId)),
+      contractInfo,
+    ] as const);
+  }
+
+  return (
+    <Provider initialValues={initialValues}>
+      <TransactionMeta />
+      <TransactionPageComponent />
+    </Provider>
+  );
 };
 
-export async function getServerSideProps(ctx: NextPageContext): Promise<{
-  props: {
-    txid: string;
-    initialData: FetchTransactionResponse;
-    block?: Block;
-    account?: null | AllAccountData;
-    btc: null | string;
-  };
-}> {
-  const apiServer = await getServerSideApiServer(ctx);
-  const networkMode = await getNetworkMode(apiServer);
-  const { query } = ctx;
-  const txid = query?.txid ? queryWith0x(query?.txid.toString()) : '';
-  const initialData = await fetchTransaction(apiServer)(txid.toString());
+TransactionPage.getInitialProps = async (
+  context: NextPageContext
+): Promise<TransactionPageData> => {
+  // get our network aware api clients
+  const { transactionsApi, blocksApi, smartContractsApi } = await getApiClients(context);
 
-  let block = null;
-  let account: AllAccountData | null = null;
-  if ('transaction' in initialData && 'block_hash' in initialData.transaction) {
-    const hash = initialData.transaction.block_hash;
-    block = await fetchBlock(apiServer)(hash);
+  const txId = context?.query?.txid ? queryWith0x(context.query?.txid.toString()) : '';
+
+  if (txId === '') throw Error('No txid');
+
+  const transaction = (await transactionsApi.getTransactionById({ txId })) as
+    | MempoolTransaction
+    | Transaction;
+
+  // our other data
+  let block = undefined;
+  let contractId = undefined;
+  let contractInterface = undefined;
+  let contractSource = undefined;
+  let contractInfo = undefined;
+
+  // if it has a contract associated with it
+  if (transaction.tx_type === 'contract_call') contractId = transaction.contract_call.contract_id;
+  if (transaction.tx_type === 'smart_contract') contractId = transaction.smart_contract.contract_id;
+
+  // if it's not pending, we should fetch some associated information for this transaction
+  if (!isPendingTx(transaction)) {
+    // fetch the anchor block
+    const hash = (transaction as Transaction).block_hash;
+    block = (await blocksApi.getBlockByHash({ hash })) as Block;
   }
 
-  if ('transaction' in initialData && initialData?.transaction.tx_type === 'smart_contract') {
-    account = await fetchAllAccountData(apiServer)({
-      principal: initialData.transaction.smart_contract.contract_id,
-    });
-  }
-
-  // process and convert pox address on server to avoid sending large code to client bundle
-  let btc = null;
-
-  if (
-    'transaction' in initialData &&
-    initialData?.transaction.tx_type === 'contract_call' &&
-    initialData.transaction.contract_call.function_name === 'stack-stx' &&
-    'function_args' in initialData.transaction.contract_call
-  ) {
-    const pox = initialData.transaction.contract_call.function_args?.find(
-      arg => arg.name === 'pox-addr'
-    );
-    try {
-      const { value } = cvToJSON(hexToCV((pox as any).hex as string));
-      if (value) {
-        const hashbytes = Buffer.from(value.hashbytes.value.replace('0x', ''), 'hex');
-        const version = Buffer.from(value.version.value.replace('0x', ''), 'hex');
-        btc = convertPoxAddressToBtc(networkMode as NetworkMode)({
-          hashbytes,
-          version,
-        });
-      }
-    } catch (e) {}
+  if (contractId) {
+    const [contractAddress, contractName] = contractId.split('.');
+    const data = await Promise.all([
+      smartContractsApi.getContractInterface({ contractAddress, contractName }),
+      smartContractsApi.getContractSource({ contractAddress, contractName }),
+      smartContractsApi.getContractById({ contractId }),
+    ]);
+    contractInterface = data[0];
+    contractSource = data[1];
+    contractInfo = data[2];
   }
 
   return {
-    props: {
-      txid,
-      initialData,
-      block: block as Block,
-      account,
-      btc,
-    },
+    transaction,
+    block,
+    txId,
+    contractId,
+    contractInterface,
+    contractSource,
+    contractInfo,
   };
-}
+};
 
 export default TransactionPage;

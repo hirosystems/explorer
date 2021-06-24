@@ -6,33 +6,24 @@ import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { PostConditions } from '@components/post-conditions';
-
-import { Block, SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
-import { TxData } from '@common/types/tx';
 import { getContractName } from '@common/utils';
 import { Events } from '@components/tx-events';
 import { PagePanes } from '@components/page-panes';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import { AllAccountData, fetchAllAccountData } from '@common/api/accounts';
-import { useApiServer } from '@common/hooks/use-api';
-import useSWR from 'swr';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { hasStxBalance, hasTokenBalance } from '@common/utils/accounts';
+import {
+  useBlockInView,
+  useContractSourceInView,
+  useTransactionInView,
+} from '@common/hooks/use-transaction-in-view';
 
-const SmartContractPage = ({
-  transaction,
-  block,
-  account,
-}: TxData<SmartContractTransaction> & { block?: Block; account?: AllAccountData }) => {
-  const apiServer = useApiServer();
-  const { data: accountData } = useSWR(
-    [transaction.smart_contract.contract_id, 'SMART_CONTRACT_PAGE'],
-    async () =>
-      fetchAllAccountData(apiServer as any)({ principal: transaction.smart_contract.contract_id }),
-    {
-      initialData: account,
-    }
-  );
+const SmartContractPage = () => {
+  const transaction = useTransactionInView();
+  const block = useBlockInView();
+  const source = useContractSourceInView();
+  const accountData: any = undefined;
+  if (!transaction || transaction.tx_type !== 'smart_contract') return null;
   return (
     <>
       <PageTop tx={transaction as any} />
@@ -45,7 +36,7 @@ const SmartContractPage = ({
           {'events' in transaction && (
             <Events txId={transaction.tx_id} events={transaction.events} />
           )}
-          <ContractSource source={transaction.smart_contract.source_code} />
+          {source && <ContractSource source={source.source} />}
           <PostConditions
             mode={transaction.post_condition_mode}
             conditions={transaction.post_conditions}

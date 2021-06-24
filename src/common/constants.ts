@@ -125,3 +125,8 @@ export const HIRO_HEADERS: HeadersInit = {
   'x-hiro-product': 'explorer',
   'x-hiro-version': VERSION,
 };
+
+export enum QueryRefreshRates {
+  Default = DEFAULT_POLLING_INTERVAL,
+  None = 0,
+}
