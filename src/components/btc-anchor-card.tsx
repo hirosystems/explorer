@@ -28,7 +28,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
               label: {
                 children: 'Bitcoin block hash',
               },
-              children: (
+              children: block.burn_block_hash ? (
                 <Link
                   as="a"
                   target="_blank"
@@ -39,14 +39,14 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                 >
                   {truncateMiddle(block.burn_block_hash, 8)}
                 </Link>
-              ),
+              ) : null,
               copy: block?.burn_block_hash,
             },
             {
               label: {
                 children: 'Anchor transaction ID',
               },
-              children: (
+              children: block.miner_txid ? (
                 <Link
                   as="a"
                   target="_blank"
@@ -57,7 +57,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                 >
                   {truncateMiddle(block.miner_txid, 8)}
                 </Link>
-              ),
+              ) : null,
               copy: block?.miner_txid,
             },
           ]}

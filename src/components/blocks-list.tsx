@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import NextLink from 'next/link';
 
 import { Grid, Flex, FlexProps, Box, Stack, color, Spinner } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 
 import { Block } from '@stacks/stacks-blockchain-api-types';
-import { BlockLink } from '@components/links';
+import { BlockLink, MicroblockLink } from '@components/links';
 import { addSepBetweenStrings, border, toRelativeTime, truncateMiddle } from '@common/utils';
 import pluralize from 'pluralize';
 import { Section } from '@components/section';
@@ -15,6 +15,9 @@ import { useFetchBlocks } from '@common/hooks/data/use-fetch-blocks';
 import HashtagIcon from 'mdi-react/HashtagIcon';
 import { useLoading } from '@common/hooks/use-loading';
 import { FetchBlocksListResponse } from '@common/api/blocks';
+import { useApiServer } from '@common/hooks/use-api';
+import { fetchMicroblock } from '@common/api/microblocks';
+import { Microblock } from '@stacks/stacks-blockchain-api-types';
 
 const ViewAllButton: React.FC<{ isLoadingMore?: boolean; onClick?: () => void }> = React.memo(
   ({ onClick, isLoadingMore }) =>
@@ -52,6 +55,7 @@ const ViewAllButton: React.FC<{ isLoadingMore?: boolean; onClick?: () => void }>
 const BlockItem: React.FC<{ block: Block; index: number; length: number }> = React.memo(
   ({ block, index, length, ...rest }) => {
     const isHovered = useHoverableState();
+
     return (
       <BlockLink hash={block.hash} {...rest}>
         <Flex
@@ -74,9 +78,11 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
                 </Title>
               </Flex>
               <Caption display="block">
-                {addSepBetweenStrings([
-                  `${block.txs.length} ${pluralize('transactions', block.txs.length)}`,
-                ])}
+                {'Anchor block' +
+                  ' · ' +
+                  addSepBetweenStrings([
+                    `${block.txs.length} ${pluralize('transactions', block.txs.length)}`,
+                  ])}
               </Caption>
             </Stack>
           </Stack>
@@ -98,6 +104,65 @@ const BlockItem: React.FC<{ block: Block; index: number; length: number }> = Rea
   }
 );
 
+const MicroblockItem: React.FC<{ blockTime: number; hash: string; index: number; length: number }> =
+  React.memo(({ blockTime, hash, index, length, ...rest }) => {
+    const [microblock, setMicroblock] = useState<Microblock | undefined>();
+    const isHovered = useHoverableState();
+    const apiServer = useApiServer();
+
+    useEffect(() => {
+      void loadMicroblock();
+      async function loadMicroblock() {
+        const mBlock = await fetchMicroblock(apiServer)(hash);
+        if (mBlock) setMicroblock(mBlock);
+      }
+    }, []);
+
+    return microblock ? (
+      <MicroblockLink hash={microblock.microblock_hash} {...rest}>
+        <Flex
+          justifyContent="space-between"
+          py="loose"
+          color={color('text-body')}
+          _hover={{
+            borderLeftColor: color('accent'),
+          }}
+          as="a"
+          {...rest}
+        >
+          <Stack as="span" isInline alignItems="center" spacing="base">
+            <ItemIcon type="microblock" />
+            <Stack spacing="tight" as="span">
+              <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
+                <Title display="block" color="currentColor">
+                  {truncateMiddle(microblock.microblock_hash)}
+                </Title>
+              </Flex>
+              <Caption display="block">
+                {'Microblock' +
+                  ' · ' +
+                  addSepBetweenStrings([
+                    `${microblock.txs.length} ${pluralize('transactions', microblock.txs.length)}`,
+                  ])}
+              </Caption>
+            </Stack>
+          </Stack>
+          <Stack spacing="tight" textAlign="right" as="span">
+            <Text
+              fontSize="14px"
+              width="100%"
+              textAlign="right"
+              color={color('text-body')}
+              display="block"
+            >
+              {toRelativeTime(blockTime * 1000)}
+            </Text>
+          </Stack>
+        </Flex>
+      </MicroblockLink>
+    ) : null;
+  });
+
 export const BlocksList: React.FC<
   {
     fetchKey: string;
@@ -109,6 +174,7 @@ export const BlocksList: React.FC<
     key: fetchKey,
     limit: limit,
   });
+  console.log(blocks);
   const { isLoading, doFinishLoading, doStartLoading } = useLoading();
   const { hasNextPage, fetchNextPage } = blocks;
 
@@ -127,12 +193,31 @@ export const BlocksList: React.FC<
               <React.Fragment key={index}>
                 {page.results?.map((block: Block, key: number, arr: any) => {
                   return (
-                    <HoverableItem
-                      key={`blocks-list-${block.height}`}
-                      isLast={index === blocks?.data?.pages?.length - 1 && key === arr.length - 1}
-                    >
-                      <BlockItem block={block} index={key} length={arr.length} />
-                    </HoverableItem>
+                    <>
+                      <HoverableItem
+                        key={`blocks-list-${block.height}`}
+                        isLast={index === blocks?.data?.pages?.length - 1 && key === arr.length - 1}
+                      >
+                        <BlockItem block={block} index={key} length={arr.length} />
+                      </HoverableItem>
+                      {block.microblocks_accepted.map(
+                        (microblockHash: string, key: number, arr: any) => {
+                          return (
+                            <HoverableItem
+                              key={`microblocks-list-${microblockHash}`}
+                              isLast={key === arr.length - 1}
+                            >
+                              <MicroblockItem
+                                blockTime={block.burn_block_time}
+                                hash={microblockHash}
+                                index={key}
+                                length={arr.length}
+                              />
+                            </HoverableItem>
+                          );
+                        }
+                      )}
+                    </>
                   );
                 })}
               </React.Fragment>

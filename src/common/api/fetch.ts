@@ -12,6 +12,7 @@ export const fetchFromApi =
 export const fetchFromSidecar =
   (apiServer: string) =>
   async (path: string, opts = {}) => {
+    const newPath = path + `${path.includes('?')}` ? '&' : '?' + `unanchored=true`;
     return fetch(withApiServer(apiServer)('/extended/v1' + path), {
       ...opts,
       headers: HIRO_HEADERS,
