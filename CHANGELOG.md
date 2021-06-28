@@ -1,3 +1,10 @@
+## [1.12.1](https://github.com/blockstack/explorer/compare/v1.12.0...v1.12.1) (2021-06-28)
+
+
+### Bug Fixes
+
+* 462 Added nofollow in footer.tsx ([8a97b96](https://github.com/blockstack/explorer/commit/8a97b963a5965f785f57d07527716cdcf9833213))
+
 # [1.12.0](https://github.com/blockstack/explorer/compare/v1.11.3...v1.12.0) (2021-05-26)
 
 
