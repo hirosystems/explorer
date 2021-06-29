@@ -1,6 +1,6 @@
 import { fetchBlocksList } from '@common/api/blocks';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
-import type { BlockListResponse } from '@blockstack/stacks-blockchain-api-types';
+import type { BlockListResponse } from '@stacks/stacks-blockchain-api-types';
 import type { FetchBlocksBase } from '@common/lib/types';
 
 /**

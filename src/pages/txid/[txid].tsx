@@ -10,7 +10,7 @@ import { fetchTransaction, FetchTransactionResponse } from '@common/api/transact
 import { fetchBlock } from '@common/api/blocks';
 
 import type { NextPage, NextPageContext } from 'next';
-import type { Block } from '@blockstack/stacks-blockchain-api-types';
+import type { Block } from '@stacks/stacks-blockchain-api-types';
 import { useApiServer } from '@common/hooks/use-api';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';

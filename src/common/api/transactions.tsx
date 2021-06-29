@@ -3,7 +3,7 @@
 // This will be refactored
 import { Transaction } from '@models/transaction.interface';
 import { fetchFromSidecar } from '@common/api/fetch';
-import { MempoolTransaction, TransactionType } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, TransactionType } from '@stacks/stacks-blockchain-api-types';
 import {
   MempoolTransactionListResponse,
   SmartContractTransaction,

@@ -1,7 +1,7 @@
 import type {
   MempoolTransactionListResponse,
   TransactionResults as TransactionListResponse,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { fetchFromSidecar } from '@common/api/fetch';
 import { generateTransactionsQueryPath } from '@common/lib/utils';
 import type { FetchTransactionsBase } from '@common/lib/types';

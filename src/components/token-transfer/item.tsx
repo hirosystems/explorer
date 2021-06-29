@@ -13,7 +13,7 @@ import {
   TransactionEventNonFungibleAsset,
   TransactionEventFungibleAsset,
   TransactionEventStxAsset,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { clarityValuetoHumanReadable } from '@common/utils';
 import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';

@@ -1,4 +1,4 @@
-import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getTxErrorMessage = (tx: Transaction | MempoolTransaction): string | undefined => {
   switch (tx.tx_status) {

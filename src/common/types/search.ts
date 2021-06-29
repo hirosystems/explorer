@@ -1,4 +1,4 @@
-import { Block, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export enum SearchResultType {
   TxId = 'tx_id',

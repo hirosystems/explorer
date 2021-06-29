@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AddressBalanceResponse } from '@blockstack/stacks-blockchain-api-types';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 import { Box, color, FlexProps, Grid, GridProps } from '@stacks/ui';
 import { Caption } from '@components/typography';
 import { Section } from '@components/section';

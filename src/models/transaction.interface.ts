@@ -1,4 +1,4 @@
-import type { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const TransactionType = {
   SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],

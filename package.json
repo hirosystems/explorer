@@ -95,13 +95,13 @@
     "yup": "0.32.9"
   },
   "devDependencies": {
-    "@blockstack/stacks-blockchain-api-types": "0.55.3",
     "@commitlint/config-conventional": "12.1.4",
     "@emotion/babel-plugin": "11.3.0",
     "@emotion/babel-preset-css-prop": "11.2.0",
     "@next/bundle-analyzer": "10.2.0",
     "@stacks/eslint-config": "1.0.7",
     "@stacks/prettier-config": "0.0.7",
+    "@stacks/stacks-blockchain-api-types": "0.62.1",
     "@types/express": "4.17.11",
     "@types/fontfaceobserver": "0.0.6",
     "@types/just-debounce-it": "1.5.0",

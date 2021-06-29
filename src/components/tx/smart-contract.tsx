@@ -7,7 +7,7 @@ import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { PostConditions } from '@components/post-conditions';
 
-import { Block, SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { Block, SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
 import { TxData } from '@common/types/tx';
 import { getContractName } from '@common/utils';
 import { Events } from '@components/tx-events';

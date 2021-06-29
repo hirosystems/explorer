@@ -12,7 +12,7 @@ import {
 } from '@stacks/ui';
 import { TxItem } from '@components/transaction-item';
 import { AddressLink, BlockLink, TxLink } from '@components/links';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { AllAccountData } from '@common/api/accounts';
 import { ItemIcon } from '@components/item-icon';
 import {

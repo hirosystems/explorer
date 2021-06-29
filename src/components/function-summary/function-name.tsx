@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, Flex, FlexProps } from '@stacks/ui';
 import { Text } from '@components/typography';
 import FunctionIcon from 'mdi-react/FunctionIcon';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
 export const FunctionSummaryName: React.FC<
   { summary: ContractCallTransaction['contract_call'] } & FlexProps

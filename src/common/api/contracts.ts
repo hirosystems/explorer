@@ -1,6 +1,6 @@
 import { fetchFromSidecar } from '@common/api/fetch';
 
-import type { ContractInterfaceResponse } from '@blockstack/stacks-blockchain-api-types';
+import type { ContractInterfaceResponse } from '@stacks/stacks-blockchain-api-types';
 import type { Contract, ContractResponse } from '@models/contract.interface';
 
 export const fetchContract =

@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import { Grid, Flex, FlexProps, Box, Stack, color, Spinner } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { BlockLink } from '@components/links';
 import { addSepBetweenStrings, border, toRelativeTime, truncateMiddle } from '@common/utils';
 import pluralize from 'pluralize';

@@ -10,7 +10,7 @@ import { MetaverseBg } from '@components/metaverse-bg';
 
 import { TitleProps, TransactionTitle } from '@components/transaction-title';
 import { Alert } from '@components/alert';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import {
   SITE_NOTICE_BANNER_LABEL,
   SITE_NOTICE_BANNER_MESSAGE,

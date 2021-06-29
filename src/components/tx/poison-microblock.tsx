@@ -4,7 +4,7 @@ import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { TransactionDetails } from '@components/transaction-details';
 import { PoisonMicroblockTxs, TxData } from '@common/types/tx';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
 const PoisonMicroblockPage = ({ transaction }: TxData<PoisonMicroblockTxs> & { block?: Block }) => (
   <>

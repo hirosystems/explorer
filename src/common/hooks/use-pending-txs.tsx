@@ -1,5 +1,5 @@
 import React from 'react';
-import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 import { useInfiniteFetch } from '@common/hooks/use-fetch-blocks';
 
 export const usePendingTxs = (

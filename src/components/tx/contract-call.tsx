@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Stack } from '@stacks/ui';
-import { Block, ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { Block, ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';

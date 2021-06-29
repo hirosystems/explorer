@@ -7,7 +7,7 @@ import { ContractCallIcon } from '@components/icons/contract-call';
 import { StxInline } from '@components/icons/stx-inline';
 import { WalletIcon } from '@components/icons/wallet';
 import { AppsIcon } from '@components/icons/apps';
-import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;

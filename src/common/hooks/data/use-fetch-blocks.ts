@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 
-import type { BlockListResponse } from '@blockstack/stacks-blockchain-api-types';
+import type { BlockListResponse } from '@stacks/stacks-blockchain-api-types';
 import type { FetchBlocksBase } from '@common/lib/types';
 
 export function useFetchBlocks(options: FetchBlocksBase): any {

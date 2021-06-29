@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Block, CoinbaseTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Block, CoinbaseTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { queryWith0x, validateTxId } from '@common/utils';

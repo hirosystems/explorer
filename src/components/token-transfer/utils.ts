@@ -3,7 +3,7 @@ import {
   TransactionEvent,
   TransactionEventAssetType,
   TransactionType,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { BurnIcon, MintIcon, TransferIcon } from '@components/svg';
 import { color } from '@stacks/ui';
 

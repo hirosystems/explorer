@@ -9,7 +9,7 @@ import {
   AddressBalanceResponse,
   MempoolTransaction,
   TransactionResults,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 interface AccountDataResponse {

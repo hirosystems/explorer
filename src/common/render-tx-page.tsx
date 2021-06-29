@@ -9,7 +9,7 @@ import type {
   TokenTransferTxs,
   TxData,
 } from '@common/types/tx';
-import type { Block } from '@blockstack/stacks-blockchain-api-types';
+import type { Block } from '@stacks/stacks-blockchain-api-types';
 
 import CoinbasePage from '../components/tx/coinbase';
 import ContractCallPage from '../components/tx/contract-call';

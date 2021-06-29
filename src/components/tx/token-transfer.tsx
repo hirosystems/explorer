@@ -5,7 +5,7 @@ import { Events } from '@components/tx-events';
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { TokenTransferTxs, TxData } from '@common/types/tx';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
 

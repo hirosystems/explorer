@@ -10,7 +10,7 @@ import {
   SmartContractTransaction,
   TokenTransferTransaction,
   Transaction,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { Contract } from '@models/contract.interface';
 
 export type TokenTransferTxs = TokenTransferTransaction | MempoolTokenTransferTransaction;

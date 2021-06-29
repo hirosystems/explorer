@@ -3,7 +3,7 @@ import { Box, Flex } from '@stacks/ui';
 import { Pre, Text } from '@components/typography';
 import { Row } from '@components/rows/row';
 import { FunctionSummaryClarityValue } from '@components/function-summary/value';
-import { ContractCallTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { Singleton } from '@common/types/utils';
 
 type FunctionArg = Singleton<
