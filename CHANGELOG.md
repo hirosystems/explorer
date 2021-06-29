@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/blockstack/explorer/compare/v1.12.1...v1.13.0) (2021-06-29)
+
+
+### Features
+
+* add regtest to network list ([a1598bc](https://github.com/blockstack/explorer/commit/a1598bc6eca597c32b3b428c8fdd77c09981a8da)), closes [#436](https://github.com/blockstack/explorer/issues/436)
+
 ## [1.12.1](https://github.com/blockstack/explorer/compare/v1.12.0...v1.12.1) (2021-06-28)
 
 
