@@ -5,7 +5,7 @@ import {
   MempoolTransactionListResponse,
   Transaction,
   TransactionResults,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import NextLink from 'next/link';
 import React from 'react';
 import { TxItem } from '@components/transaction-item';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Flex, ChevronIcon, Stack } from '@stacks/ui';
 import { Text } from '@components/typography';
-import { TransactionEvent } from '@blockstack/stacks-blockchain-api-types';
+import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 
 import { Card } from '@components/card';

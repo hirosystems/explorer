@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 import type { FetchEventsPaginatedOptions } from '@common/api/tx-events';
-import { TransactionEvent } from '@blockstack/stacks-blockchain-api-types';
+import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 
 export function useFetchEvents(
   options: FetchEventsPaginatedOptions & {

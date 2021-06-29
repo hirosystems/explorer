@@ -9,7 +9,7 @@ import { memo, useCallback, useState, useMemo } from 'react';
 import { useHover } from 'web-api-hooks';
 import { SECTION_HEADER_HEIGHT } from '@common/constants/sizes';
 import { SectionFooterAction } from '@components/section-footer-button';
-import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionListItem } from '@components/transaction-list-item';
 import { FilterButton } from '@components/filter-button';

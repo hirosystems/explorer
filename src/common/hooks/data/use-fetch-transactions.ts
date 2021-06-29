@@ -8,7 +8,7 @@ import type { FetchTransactionsBase } from '@common/lib/types';
 import type {
   MempoolTransactionListResponse,
   TransactionResults,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 
 export function useFetchTransactions(

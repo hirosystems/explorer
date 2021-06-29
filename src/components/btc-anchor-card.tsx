@@ -3,7 +3,7 @@ import { Box, FlexProps } from '@stacks/ui';
 import { Rows } from '@components/rows';
 import { truncateMiddle } from '@common/utils';
 import { Section } from '@components/section';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { Link } from '@components/typography';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { NetworkModes } from '@common/types/network';

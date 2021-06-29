@@ -1,5 +1,5 @@
 import { cvToJSON, hexToCV } from '@stacks/transactions';
-import type { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex, Stack, color } from '@stacks/ui';
 import { Caption, Pre } from '@components/typography';
 import { border } from '@common/utils';

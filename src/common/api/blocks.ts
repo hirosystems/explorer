@@ -1,7 +1,7 @@
 import { fetchFromSidecar } from '@common/api/fetch';
 import { constructLimitAndOffsetQueryParams } from '@common/api/utils';
 
-import type { Block } from '@blockstack/stacks-blockchain-api-types';
+import type { Block } from '@stacks/stacks-blockchain-api-types';
 
 export interface FetchBlocksListOptions {
   apiServer: string;

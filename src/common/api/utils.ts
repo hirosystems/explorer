@@ -1,6 +1,6 @@
 import nookies from 'nookies';
 import { NextPageContext } from 'next';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_NETWORK_INDEX,

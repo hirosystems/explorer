@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { FlexProps, BoxProps } from '@stacks/ui';
-import {
-  TokenTransferTransaction,
-  TransactionEvent,
-} from '@blockstack/stacks-blockchain-api-types';
+import { TokenTransferTransaction, TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 
 export interface AssetType {
   asset_event_type?: 'transfer' | 'mint' | 'burn';

@@ -8,7 +8,7 @@ import { Link } from '@components/typography';
 import NextLink from 'next/link';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
-import { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Section } from '@components/section';
 import { BlockLink, TxLink } from '@components/links';
 import { IconButton } from '@components/icon-button';

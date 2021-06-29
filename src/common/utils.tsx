@@ -8,7 +8,7 @@ import {
   Transaction,
   CoreNodeInfoResponse,
   MempoolTransaction,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
 import { fetchTxList } from '@common/api/transactions';

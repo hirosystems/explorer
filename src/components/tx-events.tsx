@@ -1,8 +1,5 @@
 import React, { useCallback } from 'react';
-import {
-  TransactionEvent,
-  TransactionEventAssetType,
-} from '@blockstack/stacks-blockchain-api-types';
+import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 import { Section } from '@components/section';
 import { Box, Grid, Flex, color, Stack, FlexProps } from '@stacks/ui';
 import { DynamicColorCircle } from '@components/dynamic-color-circle';

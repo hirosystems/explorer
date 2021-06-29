@@ -5,7 +5,7 @@ import { Badge } from '@components/badge';
 import { TransactionType } from '@models/transaction.interface';
 import { getTxTypeName } from '@common/transaction-names';
 import { getTxTypeIcon } from './transaction-item';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const transactionTypeColor = {
   [TransactionType.SMART_CONTRACT]: '#0F5257',

@@ -12,7 +12,7 @@ import {
   PostConditionNonFungible,
   PostConditionNonFungibleConditionCode,
   Transaction,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 import { ValueWrapped } from '@components/token-transfer/item';
 import NextLink from 'next/link';

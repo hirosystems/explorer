@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { NumberedBadge } from '@components/numbered-badge';
-import { AddressBalanceResponse } from '@blockstack/stacks-blockchain-api-types';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 import { Stack, StackProps } from '@stacks/ui';
 
 interface TokenBalancesRowProps extends StackProps {

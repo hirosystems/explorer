@@ -6,7 +6,7 @@ import {
   currentFunctionState,
   txContractState,
 } from '@sandbox/store/sandbox';
-import { SmartContractTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
 
 export const useContractInterface = (): [
   Partial<SmartContractTransaction & { abi: ClarityAbi }> | undefined,

@@ -1,4 +1,4 @@
-import { ContractInterfaceResponse } from '@blockstack/stacks-blockchain-api-types';
+import { ContractInterfaceResponse } from '@stacks/stacks-blockchain-api-types';
 
 export interface ContractResponse {
   tx_id: string;

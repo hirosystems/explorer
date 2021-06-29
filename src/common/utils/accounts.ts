@@ -2,7 +2,7 @@ import {
   AddressBalanceResponse,
   ContractCallTransaction,
   MempoolTransaction,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 
 import { Transaction } from '@models/transaction.interface';
 

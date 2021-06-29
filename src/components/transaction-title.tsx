@@ -5,7 +5,7 @@ import { Status } from '@components/status';
 import { Tag, TagProps } from '@components/tags';
 
 import { Title } from '@components/typography';
-import { Transaction } from '@blockstack/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { getContractName, getFunctionName, microToStacks, truncateMiddle } from '@common/utils';
 import { IconChevronRight } from '@tabler/icons';
 export interface TitleProps {

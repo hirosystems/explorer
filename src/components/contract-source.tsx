@@ -10,7 +10,7 @@ import { TxLink } from '@components/links';
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { IconChevronRight } from '@tabler/icons';
 
 export const ContractSource: React.FC<

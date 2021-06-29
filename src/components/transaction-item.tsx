@@ -1,6 +1,6 @@
 import { BoxProps, Flex, FlexProps, Stack, color } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
-import { MempoolTransaction } from '@blockstack/stacks-blockchain-api-types';
+import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
 import { forwardRefWithAs } from '@stacks/ui-core';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';

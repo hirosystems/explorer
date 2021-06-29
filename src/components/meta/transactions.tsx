@@ -8,7 +8,7 @@ import {
   truncateMiddle,
 } from '@common/utils';
 import { Meta } from '@components/meta-head';
-import type { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import type { TxData } from '@common/types/tx';
 import { getContractId } from '@components/transaction-details';
 import { getTxErrorMessage } from '@common/utils/errors';

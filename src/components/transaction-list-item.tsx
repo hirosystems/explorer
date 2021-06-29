@@ -4,7 +4,7 @@ import { TxItem } from '@components/transaction-item';
 import { TxLink } from '@components/links';
 import { HoverableItem } from '@components/hoverable';
 
-import type { MempoolTransaction, Transaction } from '@blockstack/stacks-blockchain-api-types';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 interface TransactionListItemProps extends BoxProps {
   tx: MempoolTransaction | Transaction;

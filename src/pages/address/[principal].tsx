@@ -6,7 +6,7 @@ import {
   MempoolTransaction,
   Transaction,
   TransactionResults,
-} from '@blockstack/stacks-blockchain-api-types';
+} from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex, Grid, color } from '@stacks/ui';
 import { Title, Text } from '@components/typography';
 import { Link } from '@components/link';
