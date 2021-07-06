@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { showConnect, AuthOptions, FinishedData } from '@stacks/connect';
+import { showConnect, AuthOptions, FinishedAuthData } from '@stacks/connect';
 import { useAuthState } from '@sandbox/hooks/use-auth';
 import { useSetRecoilState } from 'recoil';
 import { rightPanelState } from '@sandbox/store/views';
@@ -11,7 +11,7 @@ export const useConnect = () => {
   const { handleTrackGoal } = useFathomGoal();
   const setPanelVisibility = useSetRecoilState(rightPanelState);
 
-  const onFinish = (finishedData: FinishedData) => {
+  const onFinish = (finishedData: FinishedAuthData) => {
     if (userSession) {
       const data = userSession.loadUserData();
       setUserData(data);
