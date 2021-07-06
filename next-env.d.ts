@@ -1,4 +1,3 @@
 /// <reference types="next" />
 /// <reference types="next/types/global" />
-
-declare module 'node-addon-api';
+/// <reference types="next/image-types/global" />
