@@ -47,7 +47,6 @@ module.exports = withBundleAnalyzer({
 
     aliases['@blockstack/stacks-transactions'] = '@stacks/transactions';
     aliases['@blockstack/stacks-transactions/lib/clarity'] = '@stacks/transactions/dist/clarity';
-    aliases['@tabler/icons'] = '@tabler/icons/icons-react/dist/index.esm.min';
 
     config.externals = externals;
     return config;
