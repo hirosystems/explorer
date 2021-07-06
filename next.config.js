@@ -5,6 +5,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
+  eslint: {
+    // Warning: Dangerously allow production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   publicRuntimeConfig: {
     NEXT_PUBLIC_DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL,
     NEXT_PUBLIC_TESTNET_API_SERVER: process.env.NEXT_PUBLIC_TESTNET_API_SERVER,
