@@ -1,4 +1,3 @@
-import { useAtomValue } from 'jotai/utils';
 import {
   mempoolTransactionsListState,
   OptionalTransactionAddress,
@@ -7,6 +6,7 @@ import {
 import { DEFAULT_LIST_LIMIT_SMALL, IS_DEV } from '@common/constants';
 import { useMemo } from 'react';
 import { useAtomDevtools } from '@common/hooks/use-atom-devtools';
+import { useInfiniteQueryAtom } from 'jotai-query-toolkit';
 
 export function useTransactionsListState(
   limit = DEFAULT_LIST_LIMIT_SMALL,
@@ -14,7 +14,7 @@ export function useTransactionsListState(
 ) {
   const anAtom = useMemo(() => transactionsListState([limit, options]), [limit, options]);
   if (IS_DEV) useAtomDevtools(anAtom as any);
-  return useAtomValue(anAtom);
+  return useInfiniteQueryAtom(anAtom);
 }
 
 export function useMempoolTransactionsListState(
@@ -23,5 +23,5 @@ export function useMempoolTransactionsListState(
 ) {
   const anAtom = mempoolTransactionsListState([limit, options]);
   if (IS_DEV) useAtomDevtools(anAtom as any);
-  return useAtomValue(anAtom);
+  return useInfiniteQueryAtom(anAtom);
 }

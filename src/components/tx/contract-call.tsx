@@ -18,7 +18,7 @@ import {
   useContractInfoInView,
   useContractSourceInView,
   useTransactionInView,
-} from '../../hooks/use-transaction-in-view';
+} from '../../hooks/currently-in-view-hooks';
 
 const ContractCallPage = () => {
   const transaction = useTransactionInView();

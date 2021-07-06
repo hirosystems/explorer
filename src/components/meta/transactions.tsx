@@ -11,7 +11,7 @@ import { Meta } from '@components/meta-head';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { getContractId } from '@components/transaction-details';
 import { getTxErrorMessage } from '@common/utils/errors';
-import { useTransactionInView } from '../../hooks/use-transaction-in-view';
+import { useTransactionInView } from '../../hooks/currently-in-view-hooks';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {

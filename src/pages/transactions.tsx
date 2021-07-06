@@ -19,7 +19,7 @@ const TransactionsPage: NextPage = () => {
         <Title mt="72px" color="white" as="h1" fontSize="36px">
           Transactions
         </Title>
-        <TabbedTransactionList limit={DEFAULT_LIST_LIMIT} />
+        <TabbedTransactionList infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
     </>
   );

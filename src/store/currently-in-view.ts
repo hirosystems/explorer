@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom, PrimitiveAtom, WritableAtom } from 'jotai';
 import { transactionSingleState, TransactionsListResponse } from '@store/transactions';
 import { blocksSingleState } from '@store/blocks';
 import { contractInfoState, contractInterfaceState, contractSourceState } from '@store/contracts';
@@ -11,6 +11,9 @@ import {
   accountTransactionsState,
 } from '@store/accounts';
 import { InfiniteData } from 'react-query';
+import { AtomWithInfiniteQueryAction } from 'jotai/query';
+import deepEqual from 'fast-deep-equal';
+import { Atom } from 'jotai/core/atom';
 
 function makeDebugLabel(name: string) {
   return `[currently in view] ${name}`;
@@ -112,7 +115,6 @@ export const blockInViewTransactions = atom<Transaction[] | undefined>(get => {
 
 export const addressInViewState = atom<string | undefined>(get => {
   const inView = get(currentlyInViewState);
-  console.log({ inView });
   if (inView?.type === 'address') return inView.payload;
   const transaction = get(transactionInViewState);
   if (transaction?.tx_type === 'smart_contract') return transaction.smart_contract.contract_id;
@@ -121,18 +123,18 @@ export const addressInViewState = atom<string | undefined>(get => {
   if (transaction?.tx_type === 'contract_call') return transaction.contract_call.contract_id;
 });
 
-export const accountInViewTransactionsState = atomFamily<
+export const getAccountInViewTransactionsState = atomFamily<
   number,
-  InfiniteData<TransactionsListResponse> | undefined
->(limit => {
-  const anAtom = atom<InfiniteData<TransactionsListResponse> | undefined>(get => {
+  WritableAtom<InfiniteData<TransactionsListResponse>, AtomWithInfiniteQueryAction> | undefined
+>(limit =>
+  atom(get => {
     const address = get(addressInViewState);
     if (!address) return;
-    return get(accountTransactionsState([address, limit]));
-  });
-  anAtom.debugLabel = makeDebugLabel('account transactions');
-  return anAtom;
-});
+    const anAtom = accountTransactionsState([address, limit]);
+    anAtom.debugLabel = makeDebugLabel('account transactions');
+    return anAtom;
+  })
+);
 
 export const accountInViewBalances = atom(get => {
   const address = get(addressInViewState);

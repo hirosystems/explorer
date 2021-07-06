@@ -13,16 +13,18 @@ import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { hasStxBalance, hasTokenBalance } from '@common/utils/accounts';
 import {
+  useAccountInViewBalances,
   useBlockInView,
   useContractSourceInView,
   useTransactionInView,
-} from '../../hooks/use-transaction-in-view';
+} from '../../hooks/currently-in-view-hooks';
+import { AccountTransactionList } from '@features/account-transaction-list';
 
 const SmartContractPage = () => {
   const transaction = useTransactionInView();
   const block = useBlockInView();
   const source = useContractSourceInView();
-  const accountData: any = undefined;
+  const balances = useAccountInViewBalances();
 
   if (!transaction || transaction.tx_type !== 'smart_contract') return null;
 
@@ -38,37 +40,27 @@ const SmartContractPage = () => {
           {'events' in transaction && (
             <Events txId={transaction.tx_id} events={transaction.events} />
           )}
-          {source && <ContractSource source={source} />}
           <PostConditions
             mode={transaction.post_condition_mode}
             conditions={transaction.post_conditions}
           />
-          {accountData?.transactions?.results && accountData?.transactions?.results.length > 1 ? (
-            <TransactionList
-              mempool={accountData?.pendingTransactions}
-              showCoinbase
-              hideFilter
-              principal={transaction.smart_contract.contract_id}
-              transactions={accountData?.transactions?.results}
-            />
-          ) : null}
+          {source && <ContractSource source={source} />}
+          <AccountTransactionList />
         </Stack>
         <Box>
           {block && <BtcAnchorBlockCard mb="extra-loose" block={block} />}
-          {accountData?.balances && (
+          {balances && (
             <>
-              {hasStxBalance(accountData.balances) && (
+              {hasStxBalance(balances) && (
                 <Box mb={block ? 'extra-loose' : 'unset'}>
                   <StxBalances
-                    balances={accountData.balances}
+                    balances={balances}
                     unlocking={{ found: false }}
                     hasHadVesting={false}
                   />
                 </Box>
               )}
-              {hasTokenBalance(accountData.balances) && (
-                <TokenBalancesCard balances={accountData.balances} />
-              )}
+              {hasTokenBalance(balances) && <TokenBalancesCard balances={balances} />}
             </>
           )}
         </Box>

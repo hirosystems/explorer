@@ -5,7 +5,7 @@ import { PagePanes } from '@components/page-panes';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { Events } from '@components/tx-events';
 import { Box } from '@stacks/ui';
-import { useBlockInView, useTransactionInView } from '../../hooks/use-transaction-in-view';
+import { useBlockInView, useTransactionInView } from '../../hooks/currently-in-view-hooks';
 
 const CoinbasePage = () => {
   const transaction = useTransactionInView();

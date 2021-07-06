@@ -5504,8 +5504,10 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-"jotai-query-toolkit@file:.yalc/jotai-query-toolkit":
-  version "0.0.16"
+jotai-query-toolkit@^0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/jotai-query-toolkit/-/jotai-query-toolkit-0.0.17.tgz#926466ab9db3624f387663c866ca0d703701e06b"
+  integrity sha512-fpmashI4QoRbZtKuMPzFvZtOIX6elsFFnn/ZFAVukxl6pOmXL5kUXUaPKzDCRTL/LQTMhrLc6Zcg3Hr1viwrEw==
   dependencies:
     fast-deep-equal "3.1.3"
     micro-memoize "4.0.9"

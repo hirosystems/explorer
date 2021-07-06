@@ -10,7 +10,11 @@ import { getApiClients } from '@common/api/client';
 import { assertConfirmedTransaction, getContractIdFromTx, getTxIdFromCtx } from '@common/utils';
 
 import type { GetQueries, Queries } from 'jotai-query-toolkit/nextjs';
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import type {
+  AddressBalanceResponse,
+  MempoolTransaction,
+  Transaction,
+} from '@stacks/stacks-blockchain-api-types';
 import { getAccountQueryKey } from '@store/accounts';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
@@ -139,6 +143,14 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
           offset: 0,
           limit: DEFAULT_LIST_LIMIT,
         })) as TransactionsListResponse),
+    ],
+    [
+      contractId && getAccountQueryKey.balances(contractId),
+      async () =>
+        contractId &&
+        ((await accountsApi.getAccountBalance({
+          principal: contractId,
+        })) as AddressBalanceResponse),
     ],
   ];
 };

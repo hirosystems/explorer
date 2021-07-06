@@ -1,5 +1,5 @@
 import React from 'react';
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { useHoverableState } from '@components/hoverable';
 import { BlockLink } from '@components/links';
 import { Box, color, Flex, Stack } from '@stacks/ui';

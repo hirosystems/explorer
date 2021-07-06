@@ -8,13 +8,13 @@ import type {
   AddressNftListResponse,
   AddressTransactionsWithTransfersListResponse,
   AddressStxBalanceResponse,
+  AddressBalanceResponse,
 } from '@stacks/stacks-blockchain-api-types';
 import type { Getter } from 'jotai';
 import type { TransactionsListResponse } from '@store/transactions';
 import { atomFamilyWithInfiniteQuery, makeQueryKey } from 'jotai-query-toolkit';
 import { QueryFunctionContext, QueryKey } from 'react-query';
 import { getNextPageParam } from '@store/common';
-import { AddressBalanceResponse } from '@stacks/blockchain-api-client';
 
 // ----------------
 // keys
@@ -65,9 +65,9 @@ const accountInfoQueryFn = async (get: Getter, principal: Principal) => {
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_balance
 const accountBalancesQueryFn = async (get: Getter, principal: Principal) => {
   const { accountsApi } = get(apiClientsState);
-  return accountsApi.getAccountBalance({
+  return (await accountsApi.getAccountBalance({
     principal,
-  });
+  })) as AddressBalanceResponse;
 };
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_stx_balance

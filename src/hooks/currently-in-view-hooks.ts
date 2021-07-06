@@ -1,25 +1,27 @@
 import { useAtomValue } from 'jotai/utils';
 import {
-  accountInViewTransactionsState,
+  accountInViewBalances,
+  accountInViewInfo,
+  addressInViewState,
+  blockHashInView,
+  blockInView,
   blockInViewState,
+  blockInViewTransactions,
   contractInfoInViewState,
   contractInterfaceInViewState,
   contractSourceInViewState,
+  currentlyInViewBlockHash,
+  currentlyInViewState,
+  currentlyInViewTxId,
+  getAccountInViewTransactionsState,
   transactionInViewState,
   transactionTypeInViewState,
-  addressInViewState,
-  currentlyInViewState,
-  blockInViewTransactions,
-  blockInView,
-  currentlyInViewTxId,
-  blockHashInView,
-  currentlyInViewBlockHash,
-  accountInViewBalances,
-  accountInViewInfo,
 } from '@store/currently-in-view';
 import { transactionSingleState } from '@store/transactions';
 import { DEFAULT_LIST_LIMIT, IS_DEV } from '@common/constants';
 import { useAtomDevtools } from '@common/hooks/use-atom-devtools';
+import { useInfiniteQueryAtom } from 'jotai-query-toolkit';
+import { useMemo } from 'react';
 
 export function useTransactionInView() {
   return useAtomValue(transactionInViewState);
@@ -50,8 +52,10 @@ export function useContractInfoInView() {
 }
 
 export function useAccountInViewTransactions(limit = DEFAULT_LIST_LIMIT) {
-  IS_DEV && useAtomDevtools(accountInViewTransactionsState(limit) as any);
-  return useAtomValue(accountInViewTransactionsState(limit));
+  const anAtom = useMemo(() => getAccountInViewTransactionsState(limit), [limit]);
+  const ourAtom = useAtomValue(anAtom);
+  if (!ourAtom) throw Error('No account in view');
+  return useInfiniteQueryAtom(ourAtom);
 }
 
 export function useAccountInViewInfo() {
@@ -64,6 +68,14 @@ export function useAccountInViewBalances() {
 
 export function useAccountInViewStxBalance() {
   return useAtomValue(accountInViewBalances);
+}
+
+export function useBlockCurrentlyInView() {
+  return useAtomValue(blockInView);
+}
+
+export function useBlockTxsCurrentlyInView() {
+  return useAtomValue(blockInViewTransactions);
 }
 
 export const useDebugInView = () => {

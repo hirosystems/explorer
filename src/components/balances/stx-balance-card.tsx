@@ -59,7 +59,7 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
 interface StxBalancesProps {
   [key: string]: any;
 
-  unlocking: VestingAddressData;
+  unlocking?: VestingAddressData;
 }
 
 export const StxBalances: React.FC<StxBalancesProps> = ({

@@ -20,7 +20,10 @@ import {
   getBlockPageQueries,
   getBlockPageQueryProps,
 } from '@common/page-queries/block-hash';
-import { useBlockCurrentlyInView, useBlockTxsCurrentlyInView } from '../../hooks/use-block';
+import {
+  useBlockCurrentlyInView,
+  useBlockTxsCurrentlyInView,
+} from '../../hooks/currently-in-view-hooks';
 
 interface BlockSinglePageData {
   hash: string;

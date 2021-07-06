@@ -1,111 +1,22 @@
 import * as React from 'react';
-import { Link } from '@components/link';
 import type { NextPage } from 'next';
-import { Section } from '@components/section';
-import { Rows } from '@components/rows';
-import { capitalize, microToStacks, truncateMiddle } from '@common/utils';
-
-import { TokenBalancesRow } from '@components/balances/token-balances-row';
-import { Activity } from '@components/activity-row';
-
+import { truncateMiddle } from '@common/utils';
 import { Meta } from '@components/meta-head';
-
-import { useNetworkMode } from '@common/hooks/use-network-mode';
-import { IconAlertCircle } from '@tabler/icons';
-import { AddressLink } from '@components/links';
 import { microStxToStx } from '@stacks/ui-utils';
-import { Flex, Grid, color, Box, Stack, GridProps } from '@stacks/ui';
+import { Flex, Grid, Stack, GridProps } from '@stacks/ui';
 import { getAccountPageQueries, getPrincipalFromCtx } from '@common/page-queries/account';
 import { withInitialQueries } from '@common/with-initial-queries';
 import {
   useAccountInViewBalances,
   useAccountInViewInfo,
-  useAccountInViewTransactions,
-} from '../../hooks/use-transaction-in-view';
+} from '../../hooks/currently-in-view-hooks';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { hasTokenBalance } from '@common/utils/accounts';
 import { Title } from '@components/typography';
-
-const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
-  const network = useNetworkMode();
-  const invert =
-    network && (network.toLowerCase() === 'testnet' || network.toLowerCase() === 'regtest')
-      ? 'mainnet'
-      : 'testnet';
-  return (
-    <Section mb="extra-loose">
-      <Flex alignItems="center" justifyContent="space-between" p="base-loose">
-        <Flex alignItems="center">
-          <Box mr="tight" as={IconAlertCircle} color={color('feedback-alert')} />
-          <Text color={color('text-body')}>
-            This is a <strong>{capitalize(invert)}</strong> address, but you are viewing data from
-            the <strong>{network}</strong> Stacks Network.
-          </Text>
-        </Flex>
-
-        <AddressLink principal={address}>
-          <Link
-            fontSize={1}
-            color={color('brand')}
-            textDecoration="none"
-            _hover={{
-              textDecoration: 'underline',
-            }}
-          >
-            Update address
-          </Link>
-        </AddressLink>
-      </Flex>
-    </Section>
-  );
-};
-
-const SummaryCard = ({ principal, hasTokenBalances, balances, transactions, nonce }: any) => {
-  return (
-    <Section mb={'extra-loose'} title="Summary">
-      <Rows
-        px="base"
-        noTopBorder
-        items={[
-          {
-            label: {
-              children: 'Address',
-            },
-            children: principal,
-            copy: principal,
-          },
-          {
-            condition: !!transactions?.results?.length,
-            label: {
-              children: 'Activity',
-            },
-            children: <Activity txs={transactions?.results} amount={transactions?.total} />,
-          },
-          {
-            condition: !!hasTokenBalances,
-            label: {
-              children: 'Holdings',
-            },
-            children: <TokenBalancesRow balances={balances} />,
-          },
-          {
-            label: {
-              children: 'Fees',
-            },
-            children: `${microToStacks(balances?.stx?.total_fees_sent || 0)} STX`,
-          },
-          {
-            label: {
-              children: 'Nonce',
-            },
-            children: nonce,
-          },
-        ]}
-      />
-    </Section>
-  );
-};
+import { AddressSummary } from '@features/address-page/address-summary';
+import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
+import { AccountTransactionList } from '@features/account-transaction-list';
 
 const PageTop = () => {
   return (
@@ -133,11 +44,14 @@ const ContentWrapper = (props: GridProps) => {
     />
   );
 };
+
 const AddressPage: NextPage<any> = ({ principal }) => {
   const balances = useAccountInViewBalances();
-  const transactions = useAccountInViewTransactions();
   const info = useAccountInViewInfo();
   const hasTokenBalances = hasTokenBalance(balances);
+
+  useRefreshOnBack('principal');
+
   return (
     <>
       <Meta
@@ -151,13 +65,15 @@ const AddressPage: NextPage<any> = ({ principal }) => {
       />
       <PageTop />
       <ContentWrapper>
-        <SummaryCard
-          principal={principal}
-          hasTokenBalances={hasTokenBalances}
-          transactions={transactions?.pages?.[0]}
-          balances={balances}
-          nonce={info?.nonce}
-        />
+        <Stack spacing="extra-loose">
+          <AddressSummary
+            principal={principal}
+            hasTokenBalances={hasTokenBalances}
+            balances={balances}
+            nonce={info?.nonce}
+          />
+          <AccountTransactionList />
+        </Stack>
         {balances && (
           <Stack spacing="extra-loose">
             <StxBalances principal={principal} balances={balances} />

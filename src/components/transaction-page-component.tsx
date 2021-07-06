@@ -3,7 +3,7 @@ import CoinbasePage from './tx/coinbase';
 import ContractCallPage from './tx/contract-call';
 import SmartContractPage from './tx/smart-contract';
 import TokenTransferPage from './tx/token-transfer';
-import { useTransactionTypeInView } from '../hooks/use-transaction-in-view';
+import { useTransactionTypeInView } from '../hooks/currently-in-view-hooks';
 
 export const TransactionPageComponent = () => {
   const type = useTransactionTypeInView();
