@@ -14,5 +14,5 @@ export const fetchContract =
         abi: JSON.parse(data.abi) as ContractInterfaceResponse,
       };
     }
-    return data;
+    return data as any;
   };

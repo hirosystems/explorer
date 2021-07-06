@@ -117,7 +117,7 @@ export const DeployView = React.memo(() => {
       postConditionMode: 0x01,
       codeBody,
       contractName,
-      finished: onFinished,
+      onFinish: onFinished,
     });
   }, [codeBody, contractName, network, result, codeBody, handleValidate]);
 

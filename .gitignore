@@ -11,5 +11,6 @@ build
 old/
 _old/
 .env
-
+.yalc
+yalc.lock
 .vercel

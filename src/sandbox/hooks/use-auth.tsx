@@ -10,7 +10,7 @@ import {
   userSession,
 } from '@sandbox/store/sandbox';
 import { authResponseState } from '@store/auth';
-import type { AuthOptions, FinishedData } from '@stacks/connect';
+import type { AuthOptions, FinishedAuthData } from '@stacks/connect';
 import { IS_BROWSER } from '@common/constants';
 import { useRouter } from 'next/router';
 
@@ -47,7 +47,7 @@ export const useAuth = () => {
   // https://github.com/blockstack/ux/issues/444
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const onFinish = useConstant(() =>
-    debounce((payload: FinishedData) => {
+    debounce((payload: FinishedAuthData) => {
       const userData = payload.userSession.loadUserData();
       setUserData(userData);
     }, 350)
