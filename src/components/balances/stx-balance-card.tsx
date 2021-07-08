@@ -76,8 +76,8 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal, s
   const locked =
     typeof parseInt(balances?.stx?.locked) === 'number' ? parseInt(balances?.stx?.locked) : 0;
 
-  const totalBalance = microToStacks(balance);
-
+  const tokenOfferingLocked = parseInt(tokenOfferingData?.total_locked || '0');
+  const totalBalance = microToStacks(balance + tokenOfferingLocked);
   const availableBalance = microToStacks(balance - locked);
   const stackedBalance = microToStacks(locked);
   const minerRewardsBalance = microToStacks(minerRewards);
