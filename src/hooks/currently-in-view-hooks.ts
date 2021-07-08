@@ -18,10 +18,9 @@ import {
   transactionTypeInViewState,
 } from '@store/currently-in-view';
 import { transactionSingleState } from '@store/transactions';
-import { DEFAULT_LIST_LIMIT, IS_DEV } from '@common/constants';
+import { IS_DEV } from '@common/constants';
 import { useAtomDevtools } from '@common/hooks/use-atom-devtools';
 import { useInfiniteQueryAtom } from 'jotai-query-toolkit';
-import { useMemo } from 'react';
 
 export function useTransactionInView() {
   return useAtomValue(transactionInViewState);
@@ -51,11 +50,10 @@ export function useContractInfoInView() {
   return useAtomValue(contractInfoInViewState);
 }
 
-export function useAccountInViewTransactions(limit = DEFAULT_LIST_LIMIT) {
-  const anAtom = useMemo(() => getAccountInViewTransactionsState(limit), [limit]);
-  const ourAtom = useAtomValue(anAtom);
-  if (!ourAtom) throw Error('No account in view');
-  return useInfiniteQueryAtom(ourAtom);
+export function useAccountInViewTransactions() {
+  const anAtom = useAtomValue(getAccountInViewTransactionsState);
+  if (!anAtom) throw Error('No account in view');
+  return useInfiniteQueryAtom(anAtom);
 }
 
 export function useAccountInViewInfo() {

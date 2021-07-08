@@ -1,7 +1,4 @@
-import { atom } from 'recoil';
 import type { AllModals } from '@common/constants';
+import { atom } from 'jotai';
 
-export const modalState = atom<AllModals | null>({
-  key: 'modal',
-  default: null,
-});
+export const modalState = atom<AllModals | null>(null);

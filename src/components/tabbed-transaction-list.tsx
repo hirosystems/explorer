@@ -20,7 +20,7 @@ export const TabbedTransactionList: React.FC<{
   const [mempoolPages, mempoolActions] = useMempoolTransactionsListState(limit);
 
   // if there are no mempool transactions, default to confirmed
-  const defaultIndex = mempoolPages.pages[0]?.results.length === 0 ? 1 : 0;
+  const defaultIndex = mempoolPages?.pages[0]?.results.length === 0 ? 1 : 0;
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
 
@@ -29,6 +29,7 @@ export const TabbedTransactionList: React.FC<{
     ? mempoolActions
     : confirmedActions;
 
+  if (!data) return null;
   return (
     <Section
       title={() => (
@@ -43,6 +44,7 @@ export const TabbedTransactionList: React.FC<{
       <Flex flexGrow={1} flexDirection="column" px="base-loose">
         <InfiniteTransactionsList
           data={data}
+          showLoadMoreButton={infinite}
           isFetchingNextPage={isFetchingNextPage}
           fetchNextPage={fetchNextPage}
           hasNextPage={hasNextPage}

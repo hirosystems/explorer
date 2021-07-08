@@ -1,8 +1,7 @@
 import React from 'react';
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 import { Section } from '@components/section';
-import { Box, Grid, Flex, color, Stack, FlexProps } from '@stacks/ui';
-import { DynamicColorCircle } from '@components/dynamic-color-circle';
+import { Box, Grid, Flex, color, Stack, FlexProps, DynamicColorCircle } from '@stacks/ui';
 import { IconAlignLeft, IconArrowRight, IconPlus, IconTrash } from '@tabler/icons';
 import { StxInline } from '@components/icons/stx-inline';
 import {

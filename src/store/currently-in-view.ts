@@ -1,8 +1,7 @@
-import { atom, PrimitiveAtom, WritableAtom } from 'jotai';
+import { atom, WritableAtom } from 'jotai';
 import { transactionSingleState, TransactionsListResponse } from '@store/transactions';
 import { blocksSingleState } from '@store/blocks';
 import { contractInfoState, contractInterfaceState, contractSourceState } from '@store/contracts';
-import { atomFamily, atomWithDefault, selectAtom } from 'jotai/utils';
 import type { MempoolTransaction, Transaction, Block } from '@stacks/stacks-blockchain-api-types';
 import {
   accountBalancesResponseState,
@@ -12,8 +11,7 @@ import {
 } from '@store/accounts';
 import { InfiniteData } from 'react-query';
 import { AtomWithInfiniteQueryAction } from 'jotai/query';
-import deepEqual from 'fast-deep-equal';
-import { Atom } from 'jotai/core/atom';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
 function makeDebugLabel(name: string) {
   return `[currently in view] ${name}`;
@@ -115,26 +113,30 @@ export const blockInViewTransactions = atom<Transaction[] | undefined>(get => {
 
 export const addressInViewState = atom<string | undefined>(get => {
   const inView = get(currentlyInViewState);
-  if (inView?.type === 'address') return inView.payload;
+  if (inView?.type === 'address' || (inView?.type === 'tx' && inView.payload.includes('.')))
+    return inView.payload;
   const transaction = get(transactionInViewState);
   if (transaction?.tx_type === 'smart_contract') return transaction.smart_contract.contract_id;
-  // if we want to display a list of transactions on a contract-call page related to the contract
-  // uncomment the line below
   if (transaction?.tx_type === 'contract_call') return transaction.contract_call.contract_id;
 });
 
-export const getAccountInViewTransactionsState = atomFamily<
-  number,
-  WritableAtom<InfiniteData<TransactionsListResponse>, AtomWithInfiniteQueryAction> | undefined
->(limit =>
-  atom(get => {
-    const address = get(addressInViewState);
-    if (!address) return;
-    const anAtom = accountTransactionsState([address, limit]);
-    anAtom.debugLabel = makeDebugLabel('account transactions');
-    return anAtom;
-  })
-);
+export const getAccountInViewTransactionsState = atom<
+  | WritableAtom<InfiniteData<TransactionsListResponse> | undefined, AtomWithInfiniteQueryAction>
+  | undefined
+>(get => {
+  const address = get(addressInViewState);
+  if (!address) return;
+  const anAtom = accountTransactionsState([address, DEFAULT_LIST_LIMIT]);
+  anAtom.debugLabel = makeDebugLabel('account transactions');
+  return anAtom;
+});
+
+export const accountInViewTransactionsState = atom<
+  InfiniteData<TransactionsListResponse> | undefined
+>(get => {
+  const anAtom = get(getAccountInViewTransactionsState);
+  if (anAtom) return get(anAtom);
+});
 
 export const accountInViewBalances = atom(get => {
   const address = get(addressInViewState);

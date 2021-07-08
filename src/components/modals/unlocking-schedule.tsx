@@ -4,7 +4,7 @@ import { Tooltip } from '@components/tooltip';
 import { IconAlertTriangle, IconInfoCircle, IconX } from '@tabler/icons';
 import { Caption, Text, Title } from '@components/typography';
 import { useModal } from '@common/hooks/use-modal';
-import { useUnlockingState } from '@common/hooks/use-unlocking-state';
+
 import { MODALS } from '@common/constants';
 import { Section } from '@components/section';
 import { stxToMicroStx } from '@stacks/ui-utils';
@@ -13,6 +13,10 @@ import { border } from '@common/utils';
 import { Badge } from '@components/badge';
 
 import dayjs from 'dayjs';
+
+const useUnlockingState = (): [any] => {
+  return [null];
+};
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
   const value = Number(Number(amount) / Math.pow(10, 6));

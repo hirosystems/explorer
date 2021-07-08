@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { Fade } from '@stacks/ui';
-import { SearchResultsCard } from '@components/search/search-results-card';
+import {
+  SearchResultsCard,
+  SearchResultsCardPlaceholder,
+} from '@features/search/dropdown/search-results-card';
 import { useSearchComponent } from '@common/hooks/search/use-search-component';
+import { SafeSuspense } from '@components/ssr-safe-suspense';
 
 type Variant = 'default' | 'small';
 
@@ -45,12 +49,14 @@ export const SearchDropdown = ({
       }}
     >
       {styles => (
-        <SearchResultsCard
-          handleItemOnClick={handleItemOnClick}
-          clearResults={handleClearResults}
-          isLoading={isLoading}
-          style={styles}
-        />
+        <SafeSuspense fallback={<SearchResultsCardPlaceholder style={styles} />}>
+          <SearchResultsCard
+            handleItemOnClick={handleItemOnClick}
+            clearResults={handleClearResults}
+            isLoading={isLoading}
+            style={styles}
+          />
+        </SafeSuspense>
       )}
     </Fade>
   );

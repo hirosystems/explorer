@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Box, color, Flex, Button } from '@stacks/ui';
 import { Text } from '@components/typography';
 import { border } from '@common/utils';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import {
   searchForAddressOfDifferentType,
   searchValueState,
@@ -10,13 +10,14 @@ import {
   searchFocusedState,
 } from '@store/recoil/search';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 
 export const InvertedAddressNote: React.FC = () => {
   const networkMode = useNetworkMode();
-  const setValue = useSetRecoilState(searchValueState);
-  const setQuery = useSetRecoilState(searchQueryState);
-  const setFocus = useSetRecoilState(searchFocusedState);
-  const invertedAddress = useRecoilValue(searchForAddressOfDifferentType);
+  const setValue = useUpdateAtom(searchValueState);
+  const setQuery = useUpdateAtom(searchQueryState);
+  const setFocus = useUpdateAtom(searchFocusedState);
+  const invertedAddress = useAtomValue(searchForAddressOfDifferentType);
   return invertedAddress ? (
     <Box p="base">
       <Flex alignItems="center" justifyContent="space-between" border={border()} p="base">

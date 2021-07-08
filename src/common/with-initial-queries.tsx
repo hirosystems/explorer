@@ -6,7 +6,7 @@ import {
   GetQueries,
   QueryPropsGetter,
 } from 'jotai-query-toolkit/nextjs';
-import { initialDataAtom, queryClient } from 'jotai-query-toolkit';
+import { initialDataAtom, queryClient, INITIAL_DATA_SCOPE } from 'jotai-query-toolkit';
 import { queryClientAtom } from 'jotai/query';
 import { Atom } from 'jotai/core/atom';
 import { Provider } from 'jotai';
@@ -16,6 +16,9 @@ import { hashQueryKey } from 'react-query';
 import { AtomDebug } from '@features/devtools';
 import { networkUrlState } from '@store/network';
 import { getServerSideApiServer } from '@common/api/utils';
+import { getNetworkMode } from '@common/api/network';
+import { networkModeState } from '@store/recoil/network';
+import { NetworkModes } from '@common/types/network';
 
 export function useQueryInitialValues(props: Record<string, unknown>) {
   const queryKeys = Object.keys(props);
@@ -43,7 +46,8 @@ export function withInitialQueries<QueryProps = unknown, PageProps = Record<stri
       initialQueryData: Record<string, unknown>;
       inView?: InView;
       networkUrl: string;
-    }> = ({ initialQueryData, inView, networkUrl, ...props }) => {
+      networkMode?: NetworkModes;
+    }> = ({ initialQueryData, inView, networkUrl, networkMode, ...props }) => {
       const initialQueries = useQueryInitialValues(initialQueryData);
       const keys = Object.keys(initialQueryData);
       // this key is very important, without passing key={key} to the Provider,
@@ -51,7 +55,7 @@ export function withInitialQueries<QueryProps = unknown, PageProps = Record<stri
       const key = useMemo(() => hashQueryKey(keys), [keys]);
       const initialValues = [...initialQueries]
         .concat(inView ? [setCurrentlyInView(inView.type, inView.payload)] : [])
-        .concat([[networkUrlState, networkUrl] as const]);
+        .concat([[networkModeState, networkMode] as const]);
 
       return (
         <Provider initialValues={initialValues} key={key}>
@@ -63,6 +67,7 @@ export function withInitialQueries<QueryProps = unknown, PageProps = Record<stri
 
     Wrapper.getInitialProps = async (ctx: NextPageContext) => {
       const networkUrl = await getServerSideApiServer(ctx);
+      const networkMode = await getNetworkMode(networkUrl);
       const promises = [
         await getInitialPropsFromQueries<QueryProps>({
           getQueries,
@@ -83,6 +88,7 @@ export function withInitialQueries<QueryProps = unknown, PageProps = Record<stri
         key: hashQueryKey(Object.keys(initialQueryData)),
         initialQueryData,
         networkUrl,
+        networkMode,
         ...componentProps,
       };
     };

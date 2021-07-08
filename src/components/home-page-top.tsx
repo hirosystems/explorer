@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
-import { SearchComponent } from '@components/search/search';
+import { SearchComponent } from '@features/search/search';
 
 export const HomePageTop: React.FC = React.memo(() => (
   <Flex

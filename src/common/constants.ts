@@ -1,5 +1,6 @@
 import { ChainID } from '@stacks/transactions';
 import getConfig from 'next/config';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -137,3 +138,11 @@ export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
 export const MICROBLOCKS_ENABLED = true;
+
+export const TransactionType = {
+  SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],
+  CONTRACT_CALL: 'contract_call' as Transaction['tx_type'],
+  TOKEN_TRANSFER: 'token_transfer' as Transaction['tx_type'],
+  COINBASE: 'coinbase' as Transaction['tx_type'],
+  POISON_MICROBLOCK: 'poison_microblock' as Transaction['tx_type'],
+} as const;

@@ -1,11 +1,11 @@
 import React from 'react';
-import { RecoilState, useRecoilState } from 'recoil';
 import { useFocusWithin } from '@common/hooks/use-focus-within';
+import { PrimitiveAtom, useAtom } from 'jotai';
 
-export function useRecoilFocus(
-  atom: RecoilState<boolean>
+export function useAtomFocus(
+  atom: PrimitiveAtom<boolean>
 ): [boolean, any, { removeFocus: () => void }] {
-  const [isFocused, setIsFocused] = useRecoilState(atom);
+  const [isFocused, setIsFocused] = useAtom(atom);
 
   const ref = React.useRef({
     isFocusWithin: false,

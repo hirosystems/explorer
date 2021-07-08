@@ -13,6 +13,7 @@ import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
 import { FunctionSummarySection } from '@components/function-summary/function-summary';
 import {
+  useAccountInViewBalances,
   useAccountInViewTransactions,
   useBlockInView,
   useContractInfoInView,
@@ -27,7 +28,6 @@ const ContractCallPage = () => {
   const info = useContractInfoInView();
   const btc = null;
 
-  const test = useAccountInViewTransactions();
   if (!transaction || transaction.tx_type !== 'contract_call') return null;
   const isPending = transaction.tx_status === 'pending';
   return (

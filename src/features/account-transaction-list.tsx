@@ -4,9 +4,10 @@ import { Section } from '@components/section';
 import * as React from 'react';
 import { useAccountInViewTransactions } from '../hooks/currently-in-view-hooks';
 
-export function AccountTransactionList({ limit }: { limit?: number }) {
+export function AccountTransactionList() {
   const [transactions, { hasNextPage, fetchNextPage, isFetchingNextPage }] =
-    useAccountInViewTransactions(limit);
+    useAccountInViewTransactions();
+  if (!transactions) return null;
   return (
     <Section title="Transactions">
       <Box px="loose">

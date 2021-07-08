@@ -29,4 +29,8 @@ const Home: NextPage = () => {
   );
 };
 
+Home.getInitialProps = () => {
+  return { isHome: true };
+};
+
 export default withInitialQueries(Home)(getHomePageQueries);

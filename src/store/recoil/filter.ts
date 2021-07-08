@@ -1,6 +1,6 @@
-import { atomFamily } from 'recoil';
-
-import { TransactionType } from '@models/transaction.interface';
+import { atomFamily } from 'jotai/utils';
+import { atom } from 'jotai';
+import { TransactionType } from '@common/constants';
 
 export type TxTypeFilterOptions = [
   typeof TransactionType.SMART_CONTRACT,
@@ -14,12 +14,11 @@ export const DEFAULT_TX_FILTER_TYPES = [
   TransactionType.TOKEN_TRANSFER,
   TransactionType.COINBASE,
 ];
-export const filterState = atomFamily({
-  key: 'sandbox.tx-panel.filter',
-  default: {
-    showing: false,
-    types: DEFAULT_TX_FILTER_TYPES,
-    showPending: true,
-    showFailed: true,
-  },
-});
+const defaultValue = {
+  showing: false,
+  types: DEFAULT_TX_FILTER_TYPES,
+  showPending: true,
+  showFailed: true,
+};
+
+export const filterState = atomFamily(_param => atom(defaultValue));

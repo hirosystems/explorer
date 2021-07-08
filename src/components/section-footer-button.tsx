@@ -55,7 +55,6 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
         py="base"
         placeItems="center"
         _hover={{ color: color('text-title') }}
-        onClick={onClick}
         color={color('text-caption')}
       >
         <Caption color="currentColor">View all {path}</Caption>

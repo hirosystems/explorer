@@ -172,7 +172,9 @@ export const accountStxBalanceResponseState = atomFamilyWithQuery<
 export const accountTransactionsState = atomFamilyWithInfiniteQuery<
   PrincipalWithLimit,
   TransactionsListResponse
->(AccountsQueryKeys.TRANSACTIONS, accountTransactionsQueryFn, { getNextPageParam });
+>(AccountsQueryKeys.TRANSACTIONS, accountTransactionsQueryFn, {
+  getNextPageParam,
+});
 
 export const accountTransactionsWithTransfersState = atomFamilyWithInfiniteQuery<
   PrincipalWithLimit,

@@ -1,42 +1,17 @@
-import { atom, AtomEffect, selector } from 'recoil';
-import type { ColorModeString } from '@stacks/ui';
+import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
 import { setDocumentStyles, THEME_STORAGE_KEY } from '@stacks/ui';
+import type { ColorModeString } from '@stacks/ui';
 
-export const colorModeAtomEffect =
-  (key: string): AtomEffect<ColorModeString> =>
-  ({ setSelf, onSet }) => {
-    if (typeof window !== 'undefined') {
-      const savedValue: ColorModeString | null = localStorage.getItem(
-        key
-      ) as ColorModeString | null;
-
-      if (savedValue != null) {
-        const value: ColorModeString = savedValue;
-        setSelf(value);
-        setDocumentStyles(value);
-      }
-      onSet(newValue => {
-        localStorage.setItem(key, newValue as ColorModeString);
-        setDocumentStyles(newValue as ColorModeString);
-      });
-    }
-  };
-
-export const colorModeState = atom<ColorModeString>({
-  key: 'app.color-mode',
-  default: selector<ColorModeString>({
-    key: 'search.color-mode.default',
-    get: () => {
-      if (typeof window !== 'undefined') {
-        const saved = localStorage.getItem(THEME_STORAGE_KEY);
-        if (saved) {
-          setDocumentStyles(saved as ColorModeString);
-          return saved as ColorModeString;
-        }
-      }
-      setDocumentStyles('light');
-      return 'light';
-    },
-  }),
-  effects_UNSTABLE: [colorModeAtomEffect(THEME_STORAGE_KEY)],
-});
+export const _colorModeState = atomWithStorage<ColorModeString>(THEME_STORAGE_KEY, 'light');
+export const colorModeState = atom<ColorModeString, ColorModeString>(
+  get => {
+    const saved = get(_colorModeState);
+    setDocumentStyles(saved as ColorModeString);
+    return saved;
+  },
+  (get, set, update) => {
+    setDocumentStyles(update);
+    set(_colorModeState, update);
+  }
+);

@@ -5,6 +5,8 @@ import { QueryRefreshRates } from '@common/constants';
 import { QueryKey } from 'react-query';
 import { makeQueryKey, atomFamilyWithQuery } from 'jotai-query-toolkit';
 import { atomFamily } from 'jotai/utils';
+import { transactionSingleState } from '@store/transactions';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 // ----------------
 // keys
@@ -53,5 +55,15 @@ export const contractInterfaceState = atomFamily<string, ContractInterfaceRespon
   atom(get => {
     const info = get(contractInfoState(contractId));
     return info.abi;
+  })
+);
+
+export const transactionFromContractId = atomFamily<
+  string,
+  Transaction | MempoolTransaction | undefined
+>(contract_id =>
+  atom(get => {
+    const contractInfo = get(contractInfoState(contract_id));
+    return get(transactionSingleState(contractInfo.tx_id));
   })
 );

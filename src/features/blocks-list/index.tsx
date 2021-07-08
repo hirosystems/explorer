@@ -8,9 +8,10 @@ import { Caption } from '@components/typography';
 
 export const BlocksList: React.FC<FlexProps & { limit?: number }> = ({ limit, ...props }) => {
   const result = useBlocksList(limit);
-  const blocks = result.pages[0];
+  if (!result) return null;
+  const blocks = result?.pages[0];
   const hasBlocks = blocks?.results?.length;
-  const items = limit ? blocks.results.slice(0, limit) : blocks.results;
+  const items = limit ? blocks?.results.slice(0, limit) : blocks?.results;
   return (
     <Section title="Recent Blocks" {...props}>
       <Flex flexDirection="column" flexGrow={1} px="loose">

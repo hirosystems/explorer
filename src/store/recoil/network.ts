@@ -1,50 +1,23 @@
-import { atom, selector } from 'recoil';
-import { cookieEffect } from '@store/recoil/utils';
-import {
-  DEFAULT_NETWORK_INDEX,
-  DEFAULT_NETWORK_LIST,
-  NETWORK_CURRENT_INDEX_COOKIE,
-  NETWORK_LIST_COOKIE,
-} from '@common/constants';
+import { atom } from 'jotai';
+import { DEFAULT_NETWORK_INDEX, DEFAULT_NETWORK_LIST } from '@common/constants';
 
-export const customNetworksListState = atom<{ label: string; url: string }[]>({
-  key: 'app/network.list.custom',
-  default: [],
-  effects_UNSTABLE: [cookieEffect<{ label: string; url: string }[]>(NETWORK_LIST_COOKIE)],
+export const networkModeState = atom(null);
+
+export const customNetworksListState = atom<{ label: string; url: string }[]>([]);
+
+export const networkListState = atom(get => {
+  const customItems = get(customNetworksListState);
+  return [...DEFAULT_NETWORK_LIST, ...customItems];
 });
 
-export const networkListState = selector({
-  key: 'app/network.list',
-  get: ({ get }) => {
-    const customItems = get(customNetworksListState);
-    return [...DEFAULT_NETWORK_LIST, ...customItems];
-  },
+export const networkIndexState = atom(DEFAULT_NETWORK_INDEX);
+
+export const networkCurrentSelector = atom(get => {
+  const index = get(networkIndexState);
+  const list = get(networkListState);
+  return list[index];
 });
 
-export const networkIndexState = atom({
-  key: 'app/network.index',
-  default: DEFAULT_NETWORK_INDEX,
-  effects_UNSTABLE: [cookieEffect(NETWORK_CURRENT_INDEX_COOKIE)],
-});
+export const networkCurrentUrlSelector = atom(get => get(networkCurrentSelector).url);
 
-export const networkCurrentSelector = selector({
-  key: 'app/network.current',
-  get: ({ get }) => {
-    const index = get(networkIndexState);
-    const list = get(networkListState);
-    return list[index];
-  },
-});
-
-export const networkCurrentUrlSelector = selector({
-  key: 'app/network.current.url',
-  get: ({ get }) => {
-    const current = get(networkCurrentSelector);
-    return current.url;
-  },
-});
-
-export const networkSwitchingState = atom<'idle' | 'pending'>({
-  key: 'app/network.switching-status',
-  default: 'idle',
-});
+export const networkSwitchingState = atom<'idle' | 'pending'>('idle');

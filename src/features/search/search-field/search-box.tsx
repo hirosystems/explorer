@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { Box, color, Flex, IconButton, IconButtonProps, Spinner, transition } from '@stacks/ui';
-import { SearchInput } from '@components/search/search-input';
+import { SearchInput } from '@features/search/search-field/search-input';
 import { IconSearch, IconX } from '@tabler/icons';
 
 import { useSearchComponent } from '@common/hooks/search/use-search-component';
-import { useSetRecoilState } from 'recoil';
+
 import { searchFocusedState } from '@store/recoil/search';
+import { useUpdateAtom } from 'jotai/utils';
 
 type Variant = 'default' | 'small';
 
@@ -46,7 +47,7 @@ export const SearchBox = React.memo(
       timeoutRef,
     });
 
-    const setFocus = useSetRecoilState(searchFocusedState);
+    const setFocus = useUpdateAtom(searchFocusedState);
 
     return (
       <Flex height={defaultHeight} alignItems="center" position="relative" {...bindHover}>

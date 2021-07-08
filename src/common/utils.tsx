@@ -11,7 +11,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
-import { fetchTxList } from '@common/api/transactions';
+
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
@@ -228,33 +228,9 @@ export const startPad = (n: number, z = 2, s = '0'): string =>
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
   (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
 
-export const navgiateToRandomTx = (apiServer: string) => async () => {
-  const { results } = await fetchTxList({
-    apiServer: apiServer,
-    types: ['smart_contract', 'contract_call', 'token_transfer'],
-  })();
-  const hasNonCoinbaseTxs = results.some((tx: any) => tx.tx_type !== 'coinbase');
-
-  if (hasNonCoinbaseTxs) {
-    const nonCoinbaseResults = results.filter((tx: any) => tx.tx_type !== 'coinbase');
-    const randomNonCoinbaseTx =
-      nonCoinbaseResults[Math.floor(Math.random() * nonCoinbaseResults.length)];
-
-    await Router.push('/txid/[txid]', `/txid/${randomNonCoinbaseTx.tx_id as string}`);
-
-    return;
-  }
-
-  const randomTx = results[Math.floor(Math.random() * results.length)];
-  await Router.push('/txid/[txid]', `/txid/${randomTx.tx_id}`);
-};
-
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const clarityValuetoHumanReadable = (value: any): string | null => {
-  if (value && value.repr) {
-    return value.repr;
-  }
-  return null;
+  return (value && value.repr) || null;
 };
 
 export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙'): string => {
