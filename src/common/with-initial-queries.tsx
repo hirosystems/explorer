@@ -6,7 +6,7 @@ import {
   GetQueries,
   QueryPropsGetter,
 } from 'jotai-query-toolkit/nextjs';
-import { initialDataAtom, queryClient, INITIAL_DATA_SCOPE } from 'jotai-query-toolkit';
+import { initialDataAtom, queryClient } from 'jotai-query-toolkit';
 import { queryClientAtom } from 'jotai/query';
 import { Atom } from 'jotai/core/atom';
 import { Provider } from 'jotai';
@@ -14,7 +14,6 @@ import { InView } from '@store/currently-in-view';
 import { setCurrentlyInView } from '@common/set-currently-in-view';
 import { hashQueryKey } from 'react-query';
 import { AtomDebug } from '@features/devtools';
-import { networkUrlState } from '@store/network';
 import { getServerSideApiServer } from '@common/api/utils';
 import { getNetworkMode } from '@common/api/network';
 import { networkModeState } from '@store/recoil/network';
