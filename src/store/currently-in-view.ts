@@ -155,6 +155,10 @@ export const accountInViewStxBalance = atom(get => {
   if (!address) return;
   return get(accountStxBalanceResponseState(address));
 });
+export const accountInViewTokenOfferingData = atom(get => {
+  const balances = get(accountInViewBalances);
+  return balances?.token_offering_locked;
+});
 
 currentlyInViewState.debugLabel = makeDebugLabel('currently in view');
 currentlyInViewTxId.debugLabel = makeDebugLabel('txid');

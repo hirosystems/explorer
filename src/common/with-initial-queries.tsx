@@ -18,6 +18,7 @@ import { getServerSideApiServer } from '@common/api/utils';
 import { getNetworkMode } from '@common/api/network';
 import { networkModeState } from '@store/recoil/network';
 import { NetworkModes } from '@common/types/network';
+import { Modals } from '@components/modals';
 
 export function useQueryInitialValues(props: Record<string, unknown>) {
   const queryKeys = Object.keys(props);
@@ -60,6 +61,7 @@ export function withInitialQueries<QueryProps = unknown, PageProps = Record<stri
         <Provider initialValues={initialValues} key={key}>
           <AtomDebug />
           <WrappedComponent {...(props as PageProps)} />
+          <Modals />
         </Provider>
       );
     };
