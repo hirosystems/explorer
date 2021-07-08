@@ -14,7 +14,7 @@ export const useSearch = (ref: any, isLoadingTimeoutRef: any) => {
   const [query, handleSetQuery] = useAtom(searchQueryState);
   const [value, setValue] = useAtom(searchValueState);
   const [exiting, handleSetExiting] = useAtom(searchExitingState);
-  const [isLoading, setIsLoading] = useAtom(searchLoadingState);
+  const [isLoading] = useAtom(searchLoadingState);
 
   const resetValue = () => {
     setValue('');
@@ -45,30 +45,6 @@ export const useSearch = (ref: any, isLoadingTimeoutRef: any) => {
     },
     [debouncedSetQuery]
   );
-
-  const handleSetLoading = React.useCallback(() => {
-    if (!isLoading) {
-      setIsLoading((v: any) => {
-        return true;
-      });
-    }
-  }, [isLoading, setIsLoading]);
-
-  const handleSetLoadingFalse = React.useCallback(() => {
-    if (isLoading) {
-      setIsLoading((v: any) => {
-        return false;
-      });
-    }
-  }, [isLoading, setIsLoading]);
-
-  // React.useEffect(() => {
-  //   if (!isLoading) {
-  //     handleSetLoading();
-  //   } else {
-  //     handleSetLoadingFalse();
-  //   }
-  // }, [isLoading, handleSetLoading, isLoadingTimeoutRef.current]);
 
   return {
     value,
