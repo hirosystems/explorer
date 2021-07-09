@@ -37,6 +37,7 @@ const InnerTransactionListContent = ({
     ? mempoolActions
     : confirmedActions;
   if (!data) return null;
+
   return (
     <Flex flexGrow={1} flexDirection="column" px="base-loose">
       <InfiniteTransactionsList

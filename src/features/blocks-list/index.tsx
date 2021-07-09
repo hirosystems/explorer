@@ -3,8 +3,10 @@ import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
 import { Section } from '@components/section';
 import { HoverableItem } from '@components/hoverable';
 import { useBlocksList } from './hooks';
-import { BlockItem } from './block-list-item';
 import { Caption } from '@components/typography';
+import { BlockItem } from './block-list-item';
+import { MicroblockItem } from './microblock-list-item';
+import { SafeSuspense } from '@components/ssr-safe-suspense';
 
 export const BlocksList: React.FC<FlexProps & { limit?: number }> = ({ limit, ...props }) => {
   const result = useBlocksList(limit);
@@ -12,18 +14,46 @@ export const BlocksList: React.FC<FlexProps & { limit?: number }> = ({ limit, ..
   const blocks = result?.pages[0];
   const hasBlocks = blocks?.results?.length;
   const items = limit ? blocks?.results.slice(0, limit) : blocks?.results;
+  const listLength = items.length;
+  let count = 0; // keeps track of the list length with microblocks
+
   return (
     <Section title="Recent Blocks" {...props}>
       <Flex flexDirection="column" flexGrow={1} px="loose">
         {hasBlocks ? (
           items?.map((block, index: number, arr: any) => {
+            count += 1;
+            if (count >= listLength + 1) return;
             return (
-              <HoverableItem
-                key={`blocks-list-${block.height}`}
-                isLast={index === blocks.results?.length - 1}
-              >
-                <BlockItem block={block} index={index} length={arr.length} />
-              </HoverableItem>
+              <>
+                <HoverableItem
+                  key={`blocks-list-${block.height}`}
+                  isLast={index === blocks.results?.length - 1}
+                >
+                  <BlockItem block={block} index={index} length={arr.length} />
+                </HoverableItem>
+                {block.microblocks_accepted.map(
+                  (microblockHash: string, index: number, arr: any) => {
+                    count += 1;
+                    if (count >= listLength + 1) return;
+                    return (
+                      <SafeSuspense key={`microblocks-list-${microblockHash}`} fallback={<></>}>
+                        <HoverableItem
+                          key={`microblocks-list-${microblockHash}`}
+                          isLast={index === blocks.results?.length - 1}
+                        >
+                          <MicroblockItem
+                            blockTime={block.burn_block_time}
+                            hash={microblockHash}
+                            index={index}
+                            length={arr.length}
+                          />
+                        </HoverableItem>
+                      </SafeSuspense>
+                    );
+                  }
+                )}
+              </>
             );
           })
         ) : (

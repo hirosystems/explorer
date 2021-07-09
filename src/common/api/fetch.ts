@@ -1,4 +1,4 @@
-import { HIRO_HEADERS, withApiServer } from '@common/constants';
+import { HIRO_HEADERS, MICROBLOCKS_ENABLED, withApiServer } from '@common/constants';
 
 export const fetcher = (input: RequestInfo, init: RequestInit = {}) => {
   const initHeaders = init.headers || {};
