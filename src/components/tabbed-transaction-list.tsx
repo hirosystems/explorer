@@ -30,6 +30,7 @@ export const TabbedTransactionList: React.FC<{
     : confirmedActions;
 
   if (!data) return null;
+
   return (
     <Section
       title={() => (

@@ -137,7 +137,7 @@ export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
 
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
-export const MICROBLOCKS_ENABLED = false;
+export const MICROBLOCKS_ENABLED = true;
 
 export const TransactionType = {
   SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],
