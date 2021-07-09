@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import { AppContainer } from '@components/app-container';
 import { CacheProvider } from '@emotion/react';
@@ -11,17 +12,21 @@ interface AppConfigProps {
   networkMode?: NetworkMode;
 }
 
+const queryClient = new QueryClient();
+
 export const AppConfig: React.FC<AppConfigProps> = ({
   children,
   networkMode,
   isHome,
   fullWidth,
 }) => (
-  <RecoilRoot>
-    <CacheProvider value={cache}>
-      <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
-        {children}
-      </AppContainer>
-    </CacheProvider>
-  </RecoilRoot>
+  <QueryClientProvider client={queryClient}>
+    <RecoilRoot>
+      <CacheProvider value={cache}>
+        <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
+          {children}
+        </AppContainer>
+      </CacheProvider>
+    </RecoilRoot>
+  </QueryClientProvider>
 );
