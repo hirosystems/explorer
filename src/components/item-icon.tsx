@@ -1,11 +1,14 @@
 import React from 'react';
-import { Box, BoxProps, color, Grid, GridProps } from '@stacks/ui';
+import { BoxProps, color, Grid, GridProps } from '@stacks/ui';
 import { border } from '@common/utils';
 import { CodeIcon } from '@components/icons/code';
 import { ContractCallIcon } from '@components/icons/contract-call';
 import { StxInline } from '@components/icons/stx-inline';
 import { WalletIcon } from '@components/icons/wallet';
-import { AppsIcon } from '@components/icons/apps';
+import { AnchorBlockIcon } from '@components/icons/anchor-block';
+import { MicroblockIcon } from '@components/icons/microblock';
+import { ClockIcon } from '@components/icons/clock';
+import { FailedIcon } from '@components/icons/failed';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
@@ -18,14 +21,14 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps
   return Icon;
 };
 
-const ItemBox: React.FC<GridProps> = props => (
+const ItemCircle: React.FC<GridProps> = props => (
   <Grid
     placeItems="center"
     size="48px"
-    borderRadius="8px"
+    borderRadius="50%"
     position="relative"
-    border={border()}
-    bg={color('bg')}
+    border={props.border}
+    bg={props.bg}
     color={color('invert')}
     boxShadow="low"
     as="span"
@@ -33,59 +36,92 @@ const ItemBox: React.FC<GridProps> = props => (
   />
 );
 
-const StatusBubble: React.FC<any> = ({ status }) => {
-  const getStatusColor = () => {
-    if (status === 'success') return color('feedback-success');
-    if (status === 'pending') return color('feedback-alert');
-    return color('feedback-error');
-  };
-  return (
-    <Box
-      top="4px"
-      right="4px"
-      position="absolute"
-      bg={getStatusColor()}
-      borderRadius="8px"
-      size="8px"
-      zIndex={9}
-      as="span"
-    />
-  );
+const StatusBubble: React.FC<any> = ({ tx }) => {
+  if (tx?.tx_status === 'pending') {
+    return (
+      <ClockIcon
+        color="white"
+        fill="#757B83"
+        size="20px"
+        position="absolute"
+        bottom="-2px"
+        right="-4px"
+        zIndex={10}
+      />
+    );
+  } else if (tx?.tx_status !== 'success' && tx?.tx_status !== 'pending') {
+    return (
+      <FailedIcon
+        color={color('feedback-error')}
+        fill="white"
+        size="16px"
+        position="absolute"
+        bottom="-2px"
+        right="-2px"
+        zIndex={10}
+      />
+    );
+  } else if (tx?.tx_status === 'success' && !!tx?.microblock_hash) {
+    return (
+      <ItemCircle
+        bg={color('invert')}
+        size="16px"
+        position="absolute"
+        bottom="-2px"
+        right="-2px"
+        zIndex={10}
+      >
+        <MicroblockIcon color="white" fill="white" size="12px" />
+      </ItemCircle>
+    );
+  } else {
+    return null;
+  }
 };
 
 export const ItemIcon = React.memo(
   ({
     type,
-    txType,
+    tx,
     opacity,
-    status,
     ...rest
   }: {
-    type: 'tx' | 'block' | 'principal';
-    txType?: Transaction['tx_type'] | MempoolTransaction['tx_type'];
-    status?: Transaction['tx_status'] | MempoolTransaction['tx_status'];
+    type: 'tx' | 'microblock' | 'block' | 'principal';
+    tx?: Transaction | MempoolTransaction;
   } & GridProps) => {
     let Icon;
-    if (txType) {
-      Icon = getTxTypeIcon(txType);
+    if (tx?.tx_type) {
+      Icon = getTxTypeIcon(tx?.tx_type);
+    }
+    const showTxStatusBubble =
+      tx?.tx_status !== 'success' || (tx?.tx_status === 'success' && !!tx?.is_unanchored);
+
+    if (type === 'microblock') {
+      Icon = React.memo((p: any) => (
+        <MicroblockIcon {...p} size="22px" color="#74777D" fill="#74777D" />
+      ));
     }
     if (type === 'block') {
-      Icon = React.memo((p: any) => <AppsIcon {...p} size="22px" />);
+      Icon = React.memo((p: any) => <AnchorBlockIcon {...p} size="22px" color="#FFFFFF" />);
     }
     if (type === 'principal') {
       Icon = React.memo((p: any) => <WalletIcon {...p} size="22px" />);
     }
     return (
-      <ItemBox {...rest}>
-        {status && status !== 'success' ? <StatusBubble status={status} /> : null}
+      <ItemCircle
+        bg={type === 'block' ? '#242629' : color('bg')}
+        border={type === 'block' ? 'none' : border()}
+        {...rest}
+      >
+        {type === 'tx' && showTxStatusBubble && <StatusBubble tx={tx} />}
         {Icon && (
           <Icon
             color={color('text-title')}
             position="relative"
-            size={txType === 'token_transfer' ? '18px' : '21px'}
+            size={tx?.tx_type === 'token_transfer' ? '18px' : '21px'}
           />
         )}
-      </ItemBox>
+      </ItemCircle>
     );
   }
 );

@@ -26,6 +26,7 @@ export const TransactionList = (props: TransactionListProps) => {
   const { data, isLastPage, borderOnLast } = props;
   const { results } = data;
   const list = useMemo(() => getUniqueListBy<Item>(results, 'tx_id'), [results]);
+
   return (
     <>
       {list?.map((item: Item, itemIndex: number) => (
