@@ -7,11 +7,13 @@ import { SafeSuspense } from '@components/ssr-safe-suspense';
 
 export const Modals: React.FC = () => {
   return (
-    <SafeSuspense fallback={<></>}>
-      <SearchModal />
+    <>
+      <SafeSuspense fallback={<></>}>
+        <SearchModal />
+        <UnlockingScheduleModal />
+      </SafeSuspense>
       <NetworkSwitchModal />
       <DifferentNetworkModal />
-      <UnlockingScheduleModal />
-    </SafeSuspense>
+    </>
   );
 };

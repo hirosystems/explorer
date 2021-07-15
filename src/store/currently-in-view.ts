@@ -2,10 +2,16 @@ import { atom, WritableAtom } from 'jotai';
 import { transactionSingleState, TransactionsListResponse } from '@store/transactions';
 import { blocksSingleState } from '@store/blocks';
 import { contractInfoState, contractInterfaceState, contractSourceState } from '@store/contracts';
-import type { MempoolTransaction, Transaction, Block } from '@stacks/stacks-blockchain-api-types';
+import type {
+  MempoolTransaction,
+  Transaction,
+  Block,
+  MempoolTransactionListResponse,
+} from '@stacks/stacks-blockchain-api-types';
 import {
   accountBalancesResponseState,
   accountInfoState,
+  accountPendingTransactionsState,
   accountStxBalanceResponseState,
   accountTransactionsState,
 } from '@store/accounts';
@@ -128,6 +134,20 @@ export const getAccountInViewTransactionsState = atom<
   if (!address) return;
   const anAtom = accountTransactionsState([address, DEFAULT_LIST_LIMIT]);
   anAtom.debugLabel = makeDebugLabel('account transactions');
+  return anAtom;
+});
+
+export const getAccountInViewPendingTransactionsState = atom<
+  | WritableAtom<
+      InfiniteData<MempoolTransactionListResponse> | undefined,
+      AtomWithInfiniteQueryAction
+    >
+  | undefined
+>(get => {
+  const address = get(addressInViewState);
+  if (!address) return;
+  const anAtom = accountPendingTransactionsState([address, DEFAULT_LIST_LIMIT]);
+  anAtom.debugLabel = makeDebugLabel('account pending transactions');
   return anAtom;
 });
 

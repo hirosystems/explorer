@@ -15,6 +15,7 @@ import type { TransactionsListResponse } from '@store/transactions';
 import { atomFamilyWithInfiniteQuery, makeQueryKey } from 'jotai-query-toolkit';
 import { QueryFunctionContext, QueryKey } from 'react-query';
 import { getNextPageParam } from '@store/common';
+import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-types';
 
 // ----------------
 // keys
@@ -24,6 +25,7 @@ export enum AccountsQueryKeys {
   BALANCES = 'accounts/BALANCES',
   STX_BALANCE = 'accounts/STX_BALANCE',
   TRANSACTIONS = 'accounts/TRANSACTIONS',
+  PENDING_TRANSACTIONS = 'accounts/PENDING_TRANSACTIONS',
   TRANSACTIONS_WITH_TRANSFERS = 'accounts/TRANSACTIONS_WITH_TRANSFERS',
   ASSETS = 'accounts/ASSETS',
   NFT_EVENTS = 'accounts/NFT_EVENTS',
@@ -40,6 +42,8 @@ export const getAccountQueryKey = {
     makeQueryKey(AccountsQueryKeys.STX_BALANCE, principal),
   transactions: (param: PrincipalWithLimit): QueryKey =>
     makeQueryKey(AccountsQueryKeys.TRANSACTIONS, param),
+  pendingTransactions: (param: PrincipalWithLimit): QueryKey =>
+    makeQueryKey(AccountsQueryKeys.PENDING_TRANSACTIONS, param),
   transactionsWithTransfers: (param: PrincipalWithLimit): QueryKey =>
     makeQueryKey(AccountsQueryKeys.TRANSACTIONS_WITH_TRANSFERS, param),
   assets: (param: PrincipalWithLimit): QueryKey => makeQueryKey(AccountsQueryKeys.ASSETS, param),
@@ -91,6 +95,25 @@ const accountTransactionsQueryFn = async (
     offset: pageParam || 0,
     limit,
   })) as TransactionsListResponse;
+};
+
+const accountMempoolTransactionsQueryFn = async (
+  get: Getter,
+  [principal, limit]: PrincipalWithLimit,
+  context: QueryFunctionContext
+) => {
+  const isContract = principal?.includes('.');
+  const { transactionsApi } = get(apiClientsState);
+  const { pageParam } = context;
+  const data = (await transactionsApi.getMempoolTransactionList({
+    // the mempool tx endpoint does NOT currently support contract principals
+    // @see https://github.com/blockstack/stacks-blockchain-api/issues/605
+    address: !isContract ? principal : undefined,
+    offset: pageParam || 0,
+    limit,
+  })) as MempoolTransactionListResponse;
+  if (!isContract) return data;
+  return { ...data, results: data.results.filter(tx => JSON.stringify(tx).includes(principal)) };
 };
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_transactions_with_transfers
@@ -173,6 +196,13 @@ export const accountTransactionsState = atomFamilyWithInfiniteQuery<
   PrincipalWithLimit,
   TransactionsListResponse
 >(AccountsQueryKeys.TRANSACTIONS, accountTransactionsQueryFn, {
+  getNextPageParam,
+});
+
+export const accountPendingTransactionsState = atomFamilyWithInfiniteQuery<
+  PrincipalWithLimit,
+  MempoolTransactionListResponse
+>(AccountsQueryKeys.PENDING_TRANSACTIONS, accountMempoolTransactionsQueryFn, {
   getNextPageParam,
 });
 

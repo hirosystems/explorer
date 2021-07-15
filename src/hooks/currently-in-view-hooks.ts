@@ -13,6 +13,7 @@ import {
   currentlyInViewBlockHash,
   currentlyInViewState,
   currentlyInViewTxId,
+  getAccountInViewPendingTransactionsState,
   getAccountInViewTransactionsState,
   transactionInViewState,
   transactionTypeInViewState,
@@ -52,6 +53,12 @@ export function useContractInfoInView() {
 
 export function useAccountInViewTransactions() {
   const anAtom = useAtomValue(getAccountInViewTransactionsState);
+  if (!anAtom) throw Error('No account in view');
+  return useInfiniteQueryAtom(anAtom);
+}
+
+export function useAccountInViewPendingTransactions() {
+  const anAtom = useAtomValue(getAccountInViewPendingTransactionsState);
   if (!anAtom) throw Error('No account in view');
   return useInfiniteQueryAtom(anAtom);
 }

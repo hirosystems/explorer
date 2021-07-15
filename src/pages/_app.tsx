@@ -1,32 +1,50 @@
 import React from 'react';
 
-import { Devtools } from '@features/devtools';
+import { AtomDebug, Devtools } from '@features/devtools';
 import { AppConfig } from '@components/app-config';
 
-import type { AppProps } from 'next/app';
-import type { NetworkModes } from '@common/types/network';
+import App from 'next/app';
+import type { AppProps, AppContext } from 'next/app';
+import type { NetworkMode } from '@common/types/network';
 
 import 'tippy.js/dist/tippy.css';
 import 'modern-normalize/modern-normalize.css';
+import { getNetworkMode } from '@common/api/network';
+import { getServerSideApiServer } from '@common/api/utils';
 
-interface ExporerAppProps extends AppProps {
-  networkMode: NetworkModes;
+interface ExplorerAppProps extends AppProps {
+  networkMode: NetworkMode;
   apiServer: string;
 }
 
-function App({
+function ExplorerApp({
   Component,
-  pageProps: { isHome, fullWidth, dehydratedState, ...props },
   networkMode,
-}: ExporerAppProps) {
+  apiServer,
+  pageProps: { isHome, fullWidth, ...props },
+}: ExplorerAppProps) {
   return (
     <>
       <Devtools />
       <AppConfig isHome={isHome} fullWidth={fullWidth}>
-        <Component networkMode={networkMode} {...props} />
+        <AtomDebug />
+        <Component apiServer={apiServer} networkMode={networkMode} {...props} />
       </AppConfig>
     </>
   );
 }
 
-export default App;
+ExplorerApp.getInitialProps = async (appContext: AppContext) => {
+  const [appProps, apiServer] = await Promise.all([
+    App.getInitialProps(appContext),
+    getServerSideApiServer(appContext.ctx),
+  ]);
+  const networkMode = await getNetworkMode(apiServer);
+  return {
+    apiServer,
+    networkMode,
+    ...appProps,
+  };
+};
+
+export default ExplorerApp;

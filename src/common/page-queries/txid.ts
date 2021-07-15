@@ -14,6 +14,7 @@ import type {
   AddressBalanceResponse,
   MempoolTransaction,
   Transaction,
+  MempoolTransactionListResponse,
 } from '@stacks/stacks-blockchain-api-types';
 import { getAccountQueryKey } from '@store/accounts';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
@@ -107,7 +108,7 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
   // if it's a tx that references a contract, this will be a principal
   const contractId = getContractIdFromTx(transaction);
   // we can get our api clients here
-  const { smartContractsApi, blocksApi, accountsApi } = await getApiClients(ctx);
+  const { smartContractsApi, blocksApi, accountsApi, transactionsApi } = await getApiClients(ctx);
 
   // our query keys
   const txQueryKey = getTxQueryKey.single(txId);
@@ -143,6 +144,22 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
           offset: 0,
           limit: DEFAULT_LIST_LIMIT,
         })) as TransactionsListResponse),
+    ],
+    [
+      contractId && getAccountQueryKey.pendingTransactions([contractId, DEFAULT_LIST_LIMIT]),
+      async () => {
+        if (!contractId) return;
+        const data = (await transactionsApi.getMempoolTransactionList({
+          // the mempool tx endpoint does NOT currently support contract principals
+          // @see https://github.com/blockstack/stacks-blockchain-api/issues/605
+          offset: 0,
+          limit: DEFAULT_LIST_LIMIT,
+        })) as MempoolTransactionListResponse;
+        return {
+          ...data,
+          results: data.results.filter(tx => JSON.stringify(tx).includes(contractId)),
+        };
+      },
     ],
     [
       contractId && getAccountQueryKey.balances(contractId),

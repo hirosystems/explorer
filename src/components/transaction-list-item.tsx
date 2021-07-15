@@ -10,12 +10,13 @@ interface TransactionListItemProps extends BoxProps {
   tx: MempoolTransaction | Transaction;
   isLast?: boolean;
   principal?: string;
+  borderOnLast?: boolean;
 }
 
 export const TransactionListItem: React.FC<TransactionListItemProps> = memo(props => {
-  const { tx, isLast, principal, ...rest } = props;
+  const { tx, isLast, principal, borderOnLast, ...rest } = props;
   return (
-    <HoverableItem isLast={isLast}>
+    <HoverableItem isLast={borderOnLast ? false : isLast}>
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>

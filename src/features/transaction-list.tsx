@@ -15,6 +15,7 @@ export interface Pages {
 interface TransactionListProps {
   isLastPage?: boolean;
   data: Pages;
+  borderOnLast?: boolean;
 }
 
 function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
@@ -22,7 +23,7 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
 }
 
 export const TransactionList = (props: TransactionListProps) => {
-  const { data, isLastPage } = props;
+  const { data, isLastPage, borderOnLast } = props;
   const { results } = data;
   const list = useMemo(() => getUniqueListBy<Item>(results, 'tx_id'), [results]);
   return (
@@ -32,6 +33,7 @@ export const TransactionList = (props: TransactionListProps) => {
           tx={item}
           key={item.tx_id}
           isLast={isLastPage && itemIndex + 1 === list.length}
+          borderOnLast={borderOnLast}
         />
       ))}
     </>

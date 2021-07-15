@@ -14,7 +14,8 @@ import { PagePanes } from '@components/page-panes';
 import { BlockNotFound } from '@components/block-not-found';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { TransactionList, TxList } from '@components/transaction-list';
-import { withInitialQueries } from '@common/with-initial-queries';
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import {
   getBlockHashFromCtx,
   getBlockPageQueries,
@@ -24,6 +25,7 @@ import {
   useBlockCurrentlyInView,
   useBlockTxsCurrentlyInView,
 } from '../../hooks/currently-in-view-hooks';
+import { PageWrapper } from '@components/page-wrapper';
 
 interface BlockSinglePageData {
   hash: string;
@@ -43,15 +45,11 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error, hash }) => {
   }
   const title = `Block #${block.height.toLocaleString()}`;
 
-  const coinbaseTx = (transactions as Transaction[])?.find(
-    tx => tx.tx_type === 'coinbase'
-  ) as CoinbaseTransaction;
+  const coinbaseTx = transactions?.find(tx => tx.tx_type === 'coinbase') as CoinbaseTransaction;
 
-  const transactionsWithoutCoinbase = (transactions as Transaction[])?.filter(
-    tx => tx.tx_type !== 'coinbase'
-  );
+  const transactionsWithoutCoinbase = transactions?.filter(tx => tx.tx_type !== 'coinbase');
   return (
-    <>
+    <PageWrapper>
       <Meta title={title} />
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>
@@ -103,7 +101,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error, hash }) => {
       {transactionsWithoutCoinbase?.length ? (
         <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
       ) : null}
-    </>
+    </PageWrapper>
   );
 };
 
@@ -115,7 +113,7 @@ BlockSinglePage.getInitialProps = ctx => {
     error: false,
   };
 };
-export default withInitialQueries<Block, BlockSinglePageData>(BlockSinglePage)(
+export default withInitialQueries<Block, BlockSinglePageData>(BlockSinglePage, pageAtomBuilders)(
   getBlockPageQueries,
   getBlockPageQueryProps
 );

@@ -5,7 +5,8 @@ import { Meta } from '@components/meta-head';
 import { microStxToStx } from '@stacks/ui-utils';
 import { Flex, Grid, Stack, GridProps } from '@stacks/ui';
 import { getAccountPageQueries, getPrincipalFromCtx } from '@common/page-queries/account';
-import { withInitialQueries } from '@common/with-initial-queries';
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import {
   useAccountInViewBalances,
   useAccountInViewInfo,
@@ -17,6 +18,7 @@ import { Title } from '@components/typography';
 import { AddressSummary } from '@features/address-page/address-summary';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { AccountTransactionList } from '@features/account-transaction-list';
+import { PageWrapper } from '@components/page-wrapper';
 
 const PageTop = () => {
   return (
@@ -53,7 +55,7 @@ const AddressPage: NextPage<any> = ({ principal }) => {
   useRefreshOnBack('principal');
 
   return (
-    <>
+    <PageWrapper>
       <Meta
         title={`STX Address ${truncateMiddle(principal)}`}
         labels={[
@@ -81,7 +83,7 @@ const AddressPage: NextPage<any> = ({ principal }) => {
           </Stack>
         )}
       </ContentWrapper>
-    </>
+    </PageWrapper>
   );
 };
 
@@ -95,4 +97,4 @@ AddressPage.getInitialProps = ctx => {
     },
   };
 };
-export default withInitialQueries(AddressPage)(getAccountPageQueries);
+export default withInitialQueries(AddressPage, pageAtomBuilders)(getAccountPageQueries);

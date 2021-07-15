@@ -6,7 +6,7 @@ import {
 } from '@store/recoil/network';
 import { DEFAULT_TESTNET_INDEX, DEFAULT_MAINNET_INDEX } from '@common/constants';
 import { networkSwitchingState } from '@store/recoil/network';
-import { useAtomValue, useUpdateAtom } from 'jotai/utils';
+import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useAtom } from 'jotai';
 
 export const useNetwork = () => {
@@ -16,6 +16,7 @@ export const useNetwork = () => {
   const [networkSwitching, setNetworkSwitching] = useAtom(networkSwitchingState);
 
   const handleSetPendingChange = () => {
+    console.log('set pending');
     setNetworkSwitching('pending');
   };
 
@@ -39,18 +40,20 @@ export const useNetwork = () => {
     []
   );
 
-  const handleUpdateCurrentIndex = useCallback((newIndex: number) => {
-    setIndex(newIndex);
-    handleSetPendingChange();
-    setTimeout(() => {
-      window.location.reload(true);
-    }, 1000);
-  }, []);
+  const handleUpdateCurrentIndex = useAtomCallback<void, number>(
+    useCallback((get, set, arg) => {
+      set(networkSwitchingState, 'pending');
+      set(networkIndexState, arg);
+      setTimeout(() => {
+        window.location.reload(true);
+      }, 1000);
+    }, [])
+  );
 
   const handleAddNetwork = useCallback(
     (item: { label: string; url: string }) => {
       handleAddListItem(item);
-      handleUpdateCurrentIndex(networkList.length);
+      void handleUpdateCurrentIndex(networkList.length);
     },
     [networkList, handleAddListItem, handleUpdateCurrentIndex]
   );
@@ -63,23 +66,27 @@ export const useNetwork = () => {
   );
 
   const handleSetTestnet = useCallback(() => {
-    handleUpdateCurrentIndex(DEFAULT_TESTNET_INDEX);
+    void handleUpdateCurrentIndex(DEFAULT_TESTNET_INDEX);
   }, [handleUpdateCurrentIndex]);
 
   const handleSetMainnet = useCallback(() => {
-    handleUpdateCurrentIndex(DEFAULT_MAINNET_INDEX);
+    void handleUpdateCurrentIndex(DEFAULT_MAINNET_INDEX);
   }, [handleUpdateCurrentIndex]);
+
+  const isSwitching = networkSwitching === 'pending';
 
   return {
     networkList,
     setNetworkList,
     currentNetworkIndex,
     setIndex,
+    isSwitching,
     handleAddListItem,
     handleUpdateCurrentIndex,
     handleSetTestnet,
     handleSetMainnet,
     handleAddNetwork,
     handleRemoveNetwork,
+    handleSetPendingChange,
   };
 };

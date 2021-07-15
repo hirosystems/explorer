@@ -1,23 +1,23 @@
 import * as React from 'react';
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { TransactionMeta } from '@components/meta/transactions';
 import { TransactionPageComponent } from '@components/transaction-page-component';
 import { getTxPageQueries, getTxPageQueryProps } from '@common/page-queries/txid';
 
 import { getTxIdFromCtx } from '@common/utils';
-import { withInitialQueries } from '@common/with-initial-queries';
+import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 import type { NextPage, NextPageContext } from 'next';
-
 import type { TxPageQueryProps } from '@common/page-queries/txid';
-import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 const TransactionPage: NextPage = () => {
   useRefreshOnBack('txid');
   return (
-    <React.Fragment>
+    <>
       <TransactionMeta />
       <TransactionPageComponent />
-    </React.Fragment>
+    </>
   );
 };
 
@@ -30,7 +30,7 @@ TransactionPage.getInitialProps = (ctx: NextPageContext) => {
   };
 };
 
-export default withInitialQueries<TxPageQueryProps>(TransactionPage)(
+export default withInitialQueries<TxPageQueryProps>(TransactionPage, pageAtomBuilders)(
   getTxPageQueries,
   getTxPageQueryProps
 );
