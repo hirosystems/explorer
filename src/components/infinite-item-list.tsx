@@ -4,9 +4,9 @@ import { TransactionList } from '@features/transaction-list';
 import { SectionFooterAction } from '@components/section-footer-button';
 import type { InfiniteData } from 'react-query';
 import type {
-  TransactionResults,
-  MempoolTransactionListResponse,
-} from '@stacks/stacks-blockchain-api-types';
+  TransactionsListResponse,
+  MempoolTransactionsListResponse,
+} from '@store/transactions';
 
 export function InfiniteTransactionsList({
   data,
@@ -16,7 +16,7 @@ export function InfiniteTransactionsList({
   showLoadMoreButton,
   borderOnLast,
 }: {
-  data: InfiniteData<TransactionResults | MempoolTransactionListResponse>;
+  data: InfiniteData<TransactionsListResponse | MempoolTransactionsListResponse>;
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
   hasNextPage: boolean;
