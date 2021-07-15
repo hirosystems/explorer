@@ -1,4 +1,4 @@
-import { Box } from '@stacks/ui';
+import { Box, Flex, Stack } from '@stacks/ui';
 import { InfiniteTransactionsList } from '@components/infinite-item-list';
 import { Section } from '@components/section';
 import * as React from 'react';
@@ -6,6 +6,8 @@ import {
   useAccountInViewPendingTransactions,
   useAccountInViewTransactions,
 } from '../hooks/currently-in-view-hooks';
+import { NoActivityIllustration } from '@components/no-activity-illustration';
+import { Caption } from '@components/typography';
 
 const ConfirmedTransactionsList = () => {
   const [transactions, { hasNextPage, fetchNextPage, isFetchingNextPage }] =
@@ -38,13 +40,35 @@ const MempoolTransactionsList = () => {
   );
 };
 
+const useHasTransactions = () => {
+  const [pendingTransactions] = useAccountInViewPendingTransactions();
+  const [transactions] = useAccountInViewTransactions();
+  const hasPending = pendingTransactions && pendingTransactions?.pages?.[0].results.length > 0;
+  const hasConfirmed = transactions && transactions?.pages?.[0].total > 0;
+  return hasPending || hasConfirmed;
+};
+
 export function AccountTransactionList() {
+  const hasTransactions = useHasTransactions();
   return (
     <Section title="Transactions">
-      <Box px="loose">
-        <MempoolTransactionsList />
-        <ConfirmedTransactionsList />
-      </Box>
+      {hasTransactions ? (
+        <Box px="loose">
+          <MempoolTransactionsList />
+          <ConfirmedTransactionsList />
+        </Box>
+      ) : (
+        <Stack
+          px="loose"
+          spacing="base"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="300px"
+        >
+          <NoActivityIllustration width="172px" />
+          <Caption>No activity yet</Caption>
+        </Stack>
+      )}
     </Section>
   );
 }
