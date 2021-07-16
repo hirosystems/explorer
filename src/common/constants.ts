@@ -1,5 +1,6 @@
 import { ChainID } from '@stacks/transactions';
 import getConfig from 'next/config';
+import packageJson from '../../package.json';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -68,7 +69,7 @@ export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   'https://stacks-node-api.stacks.co';
 
-export const VERSION = config?.VERSION || process.env.VERSION;
+export const VERSION = packageJson.version;
 
 export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
