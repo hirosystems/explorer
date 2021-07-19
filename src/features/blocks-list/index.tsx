@@ -6,6 +6,7 @@ import { useBlocksList } from './hooks';
 import { Caption } from '@components/typography';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
+import { SafeSuspense } from '@components/ssr-safe-suspense';
 
 export const BlocksList: React.FC<FlexProps & { limit?: number }> = ({ limit, ...props }) => {
   const result = useBlocksList(limit);
@@ -29,17 +30,16 @@ export const BlocksList: React.FC<FlexProps & { limit?: number }> = ({ limit, ..
                 {block.microblocks_accepted.map(
                   (microblockHash: string, index: number, arr: any) => {
                     return (
-                      <HoverableItem
-                        key={`microblocks-list-${microblockHash}`}
-                        isLast={index === blocks.results?.length - 1}
-                      >
-                        <MicroblockItem
-                          blockTime={block.burn_block_time}
-                          hash={microblockHash}
-                          index={index}
-                          length={arr.length}
-                        />
-                      </HoverableItem>
+                      <SafeSuspense key={`microblocks-list-${microblockHash}`} fallback={<></>}>
+                        <HoverableItem isLast={index === blocks.results?.length - 1}>
+                          <MicroblockItem
+                            blockTime={block.burn_block_time}
+                            hash={microblockHash}
+                            index={index}
+                            length={arr.length}
+                          />
+                        </HoverableItem>
+                      </SafeSuspense>
                     );
                   }
                 )}

@@ -1,28 +1,21 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import pluralize from 'pluralize';
 import { useHoverableState } from '@components/hoverable';
 import { color, Flex, Stack } from '@stacks/ui';
 import { ItemIcon } from '@components/item-icon';
 import { Caption, Text, Title } from '@components/typography';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
-import { fetchMicroblock } from '@common/api/microblocks';
-import { useApiServer } from '@common/hooks/use-api';
 import { MicroblockLink } from '@components/links';
+import { useMicroblock } from '../../hooks/use-microblock';
 
 export const MicroblockItem: React.FC<{
   blockTime: number;
   hash: string;
   index: number;
   length: number;
-}> = React.memo(({ blockTime, hash, index, length, ...rest }) => {
-  const apiServer = useApiServer();
-  const getMicroblock = async () => {
-    return await fetchMicroblock(apiServer)(hash);
-  };
-  const { data: microblock } = useQuery('microblock', getMicroblock);
+}> = ({ blockTime, hash, index, length, ...rest }) => {
   const isHovered = useHoverableState();
-
+  const [microblock] = useMicroblock(hash);
   return microblock ? (
     <MicroblockLink hash={microblock.microblock_hash} {...rest}>
       <Flex
@@ -66,4 +59,4 @@ export const MicroblockItem: React.FC<{
       </Flex>
     </MicroblockLink>
   ) : null;
-});
+};

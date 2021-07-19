@@ -12,21 +12,17 @@ interface AppConfigProps {
   networkMode?: NetworkMode;
 }
 
-const queryClient = new QueryClient();
-
 export const AppConfig: React.FC<AppConfigProps> = ({
   children,
   networkMode,
   isHome,
   fullWidth,
 }) => (
-  <QueryClientProvider client={queryClient}>
-    <RecoilRoot>
-      <CacheProvider value={cache}>
-        <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
-          {children}
-        </AppContainer>
-      </CacheProvider>
-    </RecoilRoot>
-  </QueryClientProvider>
+  <RecoilRoot>
+    <CacheProvider value={cache}>
+      <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
+        {children}
+      </AppContainer>
+    </CacheProvider>
+  </RecoilRoot>
 );

@@ -6,7 +6,8 @@ import { NextPageContext } from 'next';
 import { QueryClient } from 'react-query';
 import { getSingleCachedQueryData } from 'jotai-query-toolkit/nextjs';
 import { getTxQueryKey } from '@store/transactions';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import type { Block } from '@stacks/stacks-blockchain-api-types';
+import { getMicroblocksQueryKey } from '@store/microblocks';
 
 export function getBlockHashFromCtx(ctx: NextPageContext) {
   const { query } = ctx;
@@ -36,14 +37,14 @@ export const getBlockPageQueryProps = async (
     getBlockPageCachedQueryProps(ctx, queryClient);
   if (cachedBlock) return cachedBlock;
   const { blocksApi } = await getApiClients(ctx);
-  return blocksApi.getBlockByHash({
+  return (await blocksApi.getBlockByHash({
     hash: blockHash,
-  });
+  })) as Block;
 };
 
 export const getBlockPageQueries: GetQueries<Block> = async (ctx, queryProps, queryClient) => {
   const blockHash = getBlockHashFromCtx(ctx);
-  const { transactionsApi } = await getApiClients(ctx);
+  const { transactionsApi, microblocksApi } = await getApiClients(ctx);
   const txQueries: Queries<Block> =
     queryProps?.txs.map(txid => {
       const queryKey = getTxQueryKey.single(txid);
@@ -57,5 +58,22 @@ export const getBlockPageQueries: GetQueries<Block> = async (ctx, queryProps, qu
       ];
     }) || [];
 
-  return [[getBlocksQueryKey.single(blockHash), () => queryProps], ...txQueries];
+  const microblockQueries: Queries<Block> =
+    queryProps?.microblocks_accepted?.map(microblockHash => {
+      const queryKey = getMicroblocksQueryKey.single(microblockHash);
+      return [
+        queryKey,
+        () => {
+          const cached = queryClient && getSingleCachedQueryData(queryKey, queryClient);
+          if (cached) return cached;
+          return microblocksApi.getMicroblockByHash({ hash: microblockHash });
+        },
+      ];
+    }) || [];
+
+  return [
+    [getBlocksQueryKey.single(blockHash), () => queryProps],
+    ...txQueries,
+    ...microblockQueries,
+  ];
 };

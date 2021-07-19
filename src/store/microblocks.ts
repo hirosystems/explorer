@@ -19,7 +19,7 @@ export const getMicroblocksQueryKey = {
 // ----------------
 // queryFn's
 // ----------------
-const microblocksSingleQueryFn = async (get: Getter, hash: string) => {
+const microblocksSingleQueryFn = async (get: Getter, hash: string): Promise<Microblock> => {
   const { microblocksApi } = get(apiClientsState);
   return (await microblocksApi.getMicroblockByHash({
     hash,
