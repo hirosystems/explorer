@@ -73,8 +73,9 @@ export const DEFAULT_MAINNET_SERVER =
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
-// TODO: Remove before deployment
+// MICROBLOCKS TODO: Remove before deployment
 export const MAINNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.stacks.co';
+export const TESTNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.testnet.stacks.co';
 
 export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
