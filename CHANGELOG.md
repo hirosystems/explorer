@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/blockstack/explorer/compare/v1.13.0...v1.13.1) (2021-07-21)
+
+
+### Bug Fixes
+
+* version missing in api calls ([0ba74a5](https://github.com/blockstack/explorer/commit/0ba74a5345e6ddb42ddc8cab4c73d49d76bb0667))
+
 # [1.13.0](https://github.com/blockstack/explorer/compare/v1.12.1...v1.13.0) (2021-06-29)
 
 
