@@ -1,4 +1,4 @@
-import type { GetQueries, Queries } from 'jotai-query-toolkit/nextjs';
+import type { GetQueries, Queries, QueryPropsGetter } from 'jotai-query-toolkit/nextjs';
 import { queryWith0x } from '@common/utils';
 import { getApiClients } from '@common/api/client';
 import { getBlocksQueryKey } from '@store/blocks';
@@ -6,7 +6,7 @@ import { NextPageContext } from 'next';
 import { QueryClient } from 'react-query';
 import { getSingleCachedQueryData } from 'jotai-query-toolkit/nextjs';
 import { getTxQueryKey } from '@store/transactions';
-import { Block } from '@blockstack/stacks-blockchain-api-types';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
 export function getBlockHashFromCtx(ctx: NextPageContext) {
   const { query } = ctx;
@@ -25,7 +25,7 @@ function getBlockPageCachedQueryProps(ctx: NextPageContext, queryClient: QueryCl
 // this is our function for fetching the transaction being requested
 // the transaction (if found) will be fed as context/props to the getQuerys function
 // so our other queries can depend on it
-export const getBlockPageQueryProps = async (
+export const getBlockPageQueryProps: QueryPropsGetter<Block> = async (
   ctx: NextPageContext,
   queryClient: QueryClient
 ): Promise<Block> => {
@@ -36,9 +36,9 @@ export const getBlockPageQueryProps = async (
     getBlockPageCachedQueryProps(ctx, queryClient);
   if (cachedBlock) return cachedBlock;
   const { blocksApi } = await getApiClients(ctx);
-  return blocksApi.getBlockByHash({
+  return (await blocksApi.getBlockByHash({
     hash: blockHash,
-  });
+  })) as Block;
 };
 
 export const getBlockPageQueries: GetQueries<Block> = async (ctx, queryProps, queryClient) => {

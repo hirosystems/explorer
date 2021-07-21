@@ -23,7 +23,7 @@ const microblocksSingleQueryFn = async (get: Getter, hash: string): Promise<Micr
   const { microblocksApi } = get(apiClientsState);
   return (await microblocksApi.getMicroblockByHash({
     hash,
-  })) as Microblock;
+  })) as unknown as Microblock;
 };
 
 // ----------------

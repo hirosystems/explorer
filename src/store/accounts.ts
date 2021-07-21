@@ -154,11 +154,11 @@ const accountNftEventsQueryFn = async (
 ) => {
   const { accountsApi } = get(apiClientsState);
   const { pageParam } = context;
-  return await accountsApi.getAccountNft({
+  return (await accountsApi.getAccountNft({
     principal,
     offset: pageParam || 0,
     limit,
-  });
+  })) as AddressNftListResponse;
 };
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_inbound
@@ -169,11 +169,11 @@ const accountInboundQueryFn = async (
 ) => {
   const { accountsApi } = get(apiClientsState);
   const { pageParam } = context;
-  return await accountsApi.getAccountInbound({
+  return (await accountsApi.getAccountInbound({
     principal,
     offset: pageParam || 0,
     limit,
-  });
+  })) as AddressStxInboundListResponse;
 };
 
 // ----------------
