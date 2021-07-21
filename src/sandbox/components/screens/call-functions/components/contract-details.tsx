@@ -1,3 +1,4 @@
+// @ts-nocheck TODO: Fix
 import { Section } from '@components/section';
 import { TxLink } from '@components/links';
 import { Box, color, Flex, Grid, Stack } from '@stacks/ui';
