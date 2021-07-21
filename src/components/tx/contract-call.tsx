@@ -32,7 +32,7 @@ const ContractCallPage = () => {
   const isPending = transaction.tx_status === 'pending';
   return (
     <>
-      <PageTop tx={transaction as any} />
+      <PageTop tx={transaction} />
       <PagePanes
         fullWidth={info || !!source ? false : transaction.tx_status === 'pending' || block === null}
       >
@@ -41,12 +41,14 @@ const ContractCallPage = () => {
           {'events' in transaction && transaction.events && (
             <Events txId={transaction.tx_id} events={transaction.events} />
           )}
-          <FunctionSummarySection
-            isPending={isPending}
-            result={transaction.tx_result}
-            summary={transaction.contract_call as ContractCallTransaction['contract_call']}
-            btc={btc}
-          />
+          {'tx_result' in transaction && (
+            <FunctionSummarySection
+              isPending={isPending}
+              result={transaction.tx_result}
+              summary={transaction.contract_call}
+              btc={btc}
+            />
+          )}
           <PostConditions
             conditions={transaction.post_conditions}
             mode={transaction.post_condition_mode}
