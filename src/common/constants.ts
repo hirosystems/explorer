@@ -69,8 +69,8 @@ export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   'https://stacks-node-api.stacks.co';
 
-// TODO: Remove before deployment
-export const MAINNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.stacks.co';
+// MICROBLOCKS TODO: Remove before deployment
+export const TESTNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.testnet.stacks.co';
 
 export const VERSION = config?.VERSION || process.env.VERSION;
 
