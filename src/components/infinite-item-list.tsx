@@ -16,7 +16,7 @@ export function InfiniteTransactionsList({
   showLoadMoreButton,
   borderOnLast,
 }: {
-  data: InfiniteData<TransactionsListResponse | MempoolTransactionsListResponse>;
+  data: InfiniteData<TransactionsListResponse> | InfiniteData<MempoolTransactionsListResponse>;
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
   hasNextPage: boolean;
