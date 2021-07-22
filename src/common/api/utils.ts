@@ -90,14 +90,6 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
           path: '/',
         });
       }
-      // if nothing is set, and chain param is regtest, set it to regtest (for open graph rendering, etc)
-      if (!savedNetworkIndex && chain === 'regtest') {
-        apiServer = DEFAULT_NETWORK_LIST[DEFAULT_REGTEST_INDEX]?.url;
-        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_REGTEST_INDEX), {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
-        });
-      }
     }
     return apiServer;
   } catch (e) {
@@ -123,8 +115,6 @@ export const getChainTypeFromUrl = (networkUrl: string | undefined) => {
       return NetworkModes.Mainnet;
     case DEFAULT_TESTNET_SERVER:
       return NetworkModes.Testnet;
-    case DEFAULT_REGTEST_SERVER:
-      return NetworkModes.Regtest;
     default:
       return undefined;
   }

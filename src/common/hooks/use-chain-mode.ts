@@ -64,7 +64,7 @@ export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
 
   useEffect(() => {
     if (showModalState) {
-      // alert if url is different than what is returned by api server, unless it is on regtest
+      // alert if url is different than what is returned by api server
       // in the future we can have the modal display all servers added that match a given chain id
       handleOpenDifferentNetworkModal();
     }

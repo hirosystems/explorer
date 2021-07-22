@@ -10,10 +10,7 @@ import { Link } from '@components/link';
 
 export const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
   const network = useNetworkMode();
-  const invert =
-    network && (network.toLowerCase() === 'testnet' || network.toLowerCase() === 'regtest')
-      ? 'mainnet'
-      : 'testnet';
+  const invert = network && network.toLowerCase() === 'testnet' ? 'mainnet' : 'testnet';
   return (
     <Section mb="extra-loose">
       <Flex alignItems="center" justifyContent="space-between" p="base-loose">

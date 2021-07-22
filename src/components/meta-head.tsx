@@ -46,9 +46,6 @@ export const Meta = ({
     if (mode === 'testnet') {
       return `${title} [Testnet mode]`;
     }
-    if (mode === 'regtest') {
-      return `${title} [Regtest mode]`;
-    }
     return title;
   };
 
