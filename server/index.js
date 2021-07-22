@@ -1,11 +1,12 @@
 const express = require('express');
 const next = require('next');
-const Cache = require('lru-cache');
 const compression = require('compression');
 
 const expressStaticGzip = require('express-static-gzip');
 const { createMiddleware: createPrometheusMiddleware } = require('@promster/express');
 const { createServer } = require('@promster/server');
+const { pathToRegexp } = require('path-to-regexp');
+const expressListEndpoints = require('express-list-endpoints');
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -14,87 +15,8 @@ const loggingMiddleware = require('./logging');
 
 const handle = app.getRequestHandler();
 
-const ssrCache = new Cache({
-  max: 3500,
-  maxAge: 1000 * 60 * 60, // 1hour
-  updateAgeOnGet: true,
-});
-
-const getPageProps = payload => {
-  const string = payload
-    .split('id="__NEXT_DATA__" type="application/json">')[1]
-    .split('</script>')[0];
-  const json = JSON.parse(string);
-  if (json && json.props && json.props.pageProps) {
-    return json.props.pageProps;
-  }
-};
-
-const getCanCache = (pagePath, payload) => {
-  // cache block pages
-  if (pagePath.includes('block') && !pagePath.includes('blocks')) {
-    return true;
-  }
-  const props = getPageProps(payload);
-  if (
-    props &&
-    props.initialData &&
-    props.initialData.transaction &&
-    props.initialData.transaction.tx_status
-  ) {
-    if (props.initialData.transaction.tx_status !== 'pending') {
-      return true;
-    }
-  } else {
-    return false;
-  }
-};
-
-const renderAndCache = app =>
-  async function (req, res, pagePath, queryParams) {
-    const { host } = req.headers;
-    // Define the cache key as you wish here:
-    const key = host + req.url;
-
-    // if page is in cache, server from cache
-    if (ssrCache.has(key)) {
-      console.info('SSR Response from cache for ', key);
-      res.setHeader('x-cache', 'HIT');
-      res.end(ssrCache.get(key));
-      return;
-    }
-
-    try {
-      /**
-       * Override res.end method before sending it to app.renderToHTML
-       * to be able to get the payload (renderedHTML) and save it to cache.
-       */
-      const _resEnd = res.end.bind(res);
-      res.end = function (payload) {
-        // Add here custom logic for when you do not want to cache the page, for example when
-        // the status is not 200
-        const canCache = getCanCache(pagePath, payload);
-
-        if (res.statusCode !== 200) {
-          console.warn('Oops, something is wrong, will skip the cache');
-        } else if (canCache) {
-          ssrCache.set(key, payload);
-        }
-        return _resEnd(payload);
-      };
-      // if not in cache, render the page into HTML
-      res.setHeader('x-cache', 'MISS');
-      console.info('SSR rendering without cache and try caching for ', key);
-      await app.renderToHTML(req, res, pagePath, queryParams);
-    } catch (err) {
-      app.renderError(err, req, res, pagePath, queryParams);
-    }
-  };
-
 app.prepare().then(() => {
   const server = express();
-
-  server.use(createPrometheusMiddleware({ app: server }));
 
   server.get(
     '/_next/',
@@ -103,15 +25,60 @@ app.prepare().then(() => {
     })
   );
 
+  let routes = [];
+
   if (!dev) {
+    const promMiddleware = createPrometheusMiddleware({
+      options: {
+        normalizePath: path => {
+          // Get the url pathname without a query string or fragment
+          // (note base url doesn't matter, but required by URL constructor)
+          let pathTemplate = new URL(path, 'http://x').pathname;
+          // Match request url to the Express route, e.g.:
+          // `/extended/v1/address/ST26DR4VGV507V1RZ1JNM7NN4K3DTGX810S62SBBR/stx` to
+          // `/extended/v1/address/:stx_address/stx`
+          for (const pathRegex of routes) {
+            if (pathRegex.regexp.test(pathTemplate)) {
+              pathTemplate = pathRegex.path;
+              break;
+            }
+          }
+          return pathTemplate;
+        },
+      },
+    });
+    server.use(promMiddleware);
     createServer({ port: 9153 }).then(() => console.log(`@promster/server started on port 9153.`));
     server.use(loggingMiddleware());
   }
 
+  // Store all the registered express routes for usage with metrics reporting
+  routes = expressListEndpoints(app).map(endpoint => ({
+    path: endpoint.path,
+    regexp: pathToRegexp(endpoint.path),
+  }));
+
+  // Manual route definitions for the /v2/ proxied endpoints
+  routes.push({
+    path: '/txid/*',
+    regexp: /^\/txid(.*)/,
+  });
+  routes.push({
+    path: '/tx/*',
+    regexp: /^\/tx(.*)/,
+  });
+  routes.push({
+    path: '/block/*',
+    regexp: /^\/block(.*)/,
+  });
+  routes.push({
+    path: '/address/*',
+    regexp: /^\/address(.*)/,
+  });
+
   server.get('/', (req, res) => {
     // since we don't use next's requestHandler, we lose compression, so we manually add it
     server.use(compression());
-    renderAndCache(app)(req, res, '/');
   });
 
   server.get('/*.js', (req, res, next) => {
@@ -121,34 +88,7 @@ app.prepare().then(() => {
     next();
   });
 
-  server.get('/txid/:txid', (req, res) => {
-    server.use(compression());
-    const queryParams = { txid: req.params.txid };
-    const pagePath = '/txid/[txid]';
-    renderAndCache(app)(req, res, pagePath, queryParams);
-  });
-  server.get('/tx/:txid', (req, res) => {
-    server.use(compression());
-    const queryParams = { txid: req.params.txid };
-    const pagePath = '/txid/[txid]';
-    renderAndCache(app)(req, res, pagePath, queryParams);
-  });
-
-  server.get('/block/:hash', (req, res) => {
-    server.use(compression());
-    const queryParams = { hash: req.params.hash };
-    const pagePath = '/block/[hash]';
-    renderAndCache(app)(req, res, pagePath, queryParams);
-  });
-
-  server.get('/address/:principal', (req, res) => {
-    server.use(compression());
-    const queryParams = { principal: req.params.principal };
-    const pagePath = '/address/[principal]';
-    renderAndCache(app)(req, res, pagePath, queryParams);
-  });
-
-  server.get('*', (req, res, next) => {
+  server.get('*', (req, res) => {
     server.use(compression());
     return handle(req, res);
   });
