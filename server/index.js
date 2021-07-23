@@ -12,6 +12,7 @@ const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const loggingMiddleware = require('./logging');
+const router = express.Router();
 
 const handle = app.getRequestHandler();
 
@@ -25,10 +26,21 @@ app.prepare().then(() => {
     })
   );
 
+  server.use(
+    (() => {
+      const router = express.Router();
+      router.use('/txid', next());
+      router.use('/microblock', next());
+      router.use('/block', next());
+      router.use('/address', next());
+      return router;
+    })()
+  );
+
   let routes = [];
 
   // Store all the registered express routes for usage with metrics reporting
-  routes = expressListEndpoints(app).map(endpoint => ({
+  routes = expressListEndpoints(server).map(endpoint => ({
     path: endpoint.path,
     regexp: pathToRegexp(endpoint.path),
   }));
@@ -57,15 +69,20 @@ app.prepare().then(() => {
         normalizePath: path => {
           // Get the url pathname without a query string or fragment
           // (note base url doesn't matter, but required by URL constructor)
-          let pathTemplate = new URL(path, 'http://x').pathname;
-          // Match request url to the Express route
-          for (const pathRegex of routes) {
-            if (pathRegex.regexp.test(pathTemplate)) {
-              pathTemplate = pathRegex.path;
-              break;
+          try {
+            let pathTemplate = new URL(path, 'http://x').pathname;
+            // Match request url to the Express route
+            for (const pathRegex of routes) {
+              if (pathRegex.regexp.test(pathTemplate)) {
+                pathTemplate = pathRegex.path;
+                break;
+              }
             }
+            return pathTemplate;
+          } catch (error) {
+            logger.warn(`Warning: ${error}`);
+            return path;
           }
-          return pathTemplate;
         },
       },
     });
@@ -73,18 +90,6 @@ app.prepare().then(() => {
     createServer({ port: 9153 }).then(() => console.log(`@promster/server started on port 9153.`));
     server.use(loggingMiddleware());
   }
-
-  server.get('/', (req, res) => {
-    // since we don't use next's requestHandler, we lose compression, so we manually add it
-    server.use(compression());
-  });
-
-  server.get('/*.js', (req, res, next) => {
-    req.url = req.url + '.br';
-    res.set('Content-Encoding', 'br');
-    res.set('Content-Type', 'application/javascript; charset=UTF-8');
-    next();
-  });
 
   server.get('*', (req, res) => {
     server.use(compression());
