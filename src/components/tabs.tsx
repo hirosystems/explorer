@@ -73,25 +73,11 @@ const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, stateKey, ...re
 });
 
 export const Tabs = memo(
-  ({
-    defaultIndex,
-    tabs,
-    stateKey,
-  }: {
-    defaultIndex?: number;
-    tabs: string[];
-    stateKey: string;
-  }) => {
+  ({ tabs, stateKey }: { defaultIndex?: number; tabs: string[]; stateKey: string }) => {
     return (
       <Stack isInline spacing="0">
         {tabs.map((tab, index) => (
-          <Tab
-            stateKey={stateKey}
-            defaultIndex={defaultIndex}
-            tab={tab}
-            index={index}
-            key={index}
-          />
+          <Tab stateKey={stateKey} tab={tab} index={index} key={index} />
         ))}
       </Stack>
     );

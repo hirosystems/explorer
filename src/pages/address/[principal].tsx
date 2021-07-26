@@ -19,6 +19,7 @@ import { AddressSummary } from '@features/address-page/address-summary';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { AccountTransactionList } from '@features/account-transaction-list';
 import { PageWrapper } from '@components/page-wrapper';
+import { AddressNotFound } from '@components/address-not-found';
 
 const PageTop = () => {
   return (
@@ -47,7 +48,14 @@ const ContentWrapper = (props: GridProps) => {
   );
 };
 
-const AddressPage: NextPage<any> = ({ principal }) => {
+const AddressPage: NextPage<any> = ({ error, principal }) => {
+  if (error)
+    return (
+      <>
+        <Meta title="Address not found" />
+        <AddressNotFound />
+      </>
+    );
   const balances = useAccountInViewBalances();
   const info = useAccountInViewInfo();
   const hasTokenBalances = hasTokenBalance(balances);
