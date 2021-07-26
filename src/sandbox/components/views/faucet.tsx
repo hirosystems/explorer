@@ -38,10 +38,8 @@ export const FaucetView = () => {
       );
       const resp = await res.json();
       setResponse(resp);
-      void refreshPendingTransactions();
     } catch (e) {
       setResponse({ error: e.message });
-      void refreshPendingTransactions();
     }
   };
 

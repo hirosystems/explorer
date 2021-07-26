@@ -31,9 +31,10 @@ import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 import { FilterIcon } from '@components/icons/filter';
 import { functionCallViewState } from '@sandbox/store/views';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { useAtom } from 'jotai';
 
 const PanelHeader = React.memo(() => {
-  const [filter, setFilterState] = useRecoilState(filterState('sandbox'));
+  const [filter, setFilterState] = useAtom(filterState('sandbox'));
 
   const handleFilterToggle = () => {
     setFilterState(state => ({ ...state, showing: !state.showing }));
@@ -369,7 +370,7 @@ const SandboxTxItem = React.memo(
 );
 
 const TxList: React.FC = React.memo(() => {
-  const filters = useRecoilValue(filterState('sandbox'));
+  const [filters] = useAtom(filterState('sandbox'));
   const { transactions, pendingTransactions, principal } = useUser({ suspense: true });
 
   const filteredTxs = transactions?.filter(tx => filters.types.find(type => type === tx.tx_type));

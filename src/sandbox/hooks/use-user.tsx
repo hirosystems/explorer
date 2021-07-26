@@ -8,7 +8,12 @@ import type {
 } from '@stacks/stacks-blockchain-api-types';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { useAtomValue } from 'jotai/utils';
-import { accountBalancesResponseState, accountTransactionsState } from '@store/accounts';
+import {
+  accountBalancesResponseState,
+  accountPendingTransactionsState,
+  accountTransactionsState,
+} from '@store/accounts';
+import { DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 
 export const useUser = (options?: {
   suspense?: boolean;
@@ -28,12 +33,16 @@ export const useUser = (options?: {
   const profile = userData?.profile;
 
   const balances = useAtomValue(accountBalancesResponseState(principal));
-  const transactions = useAtomValue(accountTransactionsState(principal));
-  const pendingTransactions: any = { results: [] };
+  const transactions = useAtomValue(
+    accountTransactionsState([principal, DEFAULT_LIST_LIMIT_SMALL])
+  );
+  const pendingTransactions = useAtomValue(
+    accountPendingTransactionsState([principal, DEFAULT_LIST_LIMIT_SMALL])
+  );
 
   const hasTransactions = !!(
     (transactions && transactions?.pages?.[0].total > 0) ||
-    pendingTransactions?.results.length
+    (pendingTransactions && pendingTransactions?.pages?.[0]?.results?.length > 0)
   );
   return {
     principal,
@@ -41,8 +50,7 @@ export const useUser = (options?: {
     profile,
     transactions: transactions?.pages?.[0].results,
     balances,
-    pendingTransactions,
-    refreshPendingTransactions: () => console.log('todo'),
+    pendingTransactions: pendingTransactions && pendingTransactions?.pages?.[0].results,
     hasTransactions,
     ...userData,
   };

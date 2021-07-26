@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Box, color, Grid, Flex } from '@stacks/ui';
+import { Box, color, Grid, Flex, Button, Stack } from '@stacks/ui';
 import { border } from '@common/utils';
 import { SideNav } from '@sandbox/components/side-nav';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -13,9 +13,34 @@ import { TransactionsPanel } from '@sandbox/components/transactions-panel';
 import { rightPanelState } from '@sandbox/store/views';
 import { useConnect } from '@sandbox/hooks/use-connect';
 import { TokenTransferView } from '@sandbox/components/views/token-transfer';
+import { useAuthState } from '@sandbox/hooks/use-auth';
+import { Title } from '@components/typography';
 
 const View: React.FC<{ view: string; sender: string; contract: string }> = memo(props => {
   const { view } = props;
+
+  const { isSignedIn, doOpenAuth } = useConnect();
+
+  if (!isSignedIn)
+    return (
+      <Flex
+        flexGrow={1}
+        alignItems="center"
+        justifyContent="flex-start"
+        pt="120px"
+        flexDirection="column"
+        maxWidth="300px"
+        mx="auto"
+      >
+        <Stack spacing="extra-loose" textAlign="center">
+          <Title fontSize={3}>Welcome to the sandbox</Title>
+          <Title>Please sign in to continue</Title>
+          <Button onClick={doOpenAuth} width="100%">
+            Connect Stacks Wallet
+          </Button>
+        </Stack>
+      </Flex>
+    );
 
   switch (view) {
     case 'contract-call':
