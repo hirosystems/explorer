@@ -3,12 +3,13 @@ import { getApiClients } from '@common/api/client';
 import { getTxQueryKey, TransactionsListResponse } from '@store/transactions';
 import { DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { BlocksListResponse, getBlocksQueryKey } from '@store/blocks';
+import { DEFAULT_TX_FILTER_TYPES } from '@store/recoil/filter';
 
 export const getHomePageQueries: GetQueries = async ctx => {
   const { transactionsApi, blocksApi } = await getApiClients(ctx);
   return [
     [
-      getTxQueryKey.confirmed(DEFAULT_LIST_LIMIT_SMALL),
+      getTxQueryKey.confirmed(DEFAULT_LIST_LIMIT_SMALL, DEFAULT_TX_FILTER_TYPES),
       async () => {
         return (await transactionsApi.getTransactionList({
           limit: DEFAULT_LIST_LIMIT_SMALL,

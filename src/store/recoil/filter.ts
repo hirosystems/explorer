@@ -1,18 +1,25 @@
 import { atomFamily } from 'jotai/utils';
 import { atom } from 'jotai';
-import { TransactionType } from '@common/constants';
+
+export enum GetTransactionListTypeEnum {
+  coinbase = 'coinbase',
+  token_transfer = 'token_transfer',
+  smart_contract = 'smart_contract',
+  contract_call = 'contract_call',
+  poison_microblock = 'poison_microblock',
+}
 
 export type TxTypeFilterOptions = [
-  typeof TransactionType.SMART_CONTRACT,
-  typeof TransactionType.CONTRACT_CALL,
-  typeof TransactionType.TOKEN_TRANSFER,
-  typeof TransactionType.COINBASE
+  typeof GetTransactionListTypeEnum.coinbase,
+  typeof GetTransactionListTypeEnum.token_transfer,
+  typeof GetTransactionListTypeEnum.smart_contract,
+  typeof GetTransactionListTypeEnum.contract_call
 ];
-export const DEFAULT_TX_FILTER_TYPES = [
-  TransactionType.SMART_CONTRACT,
-  TransactionType.CONTRACT_CALL,
-  TransactionType.TOKEN_TRANSFER,
-  TransactionType.COINBASE,
+export const DEFAULT_TX_FILTER_TYPES: GetTransactionListTypeEnum[] = [
+  GetTransactionListTypeEnum.coinbase,
+  GetTransactionListTypeEnum.token_transfer,
+  GetTransactionListTypeEnum.smart_contract,
+  GetTransactionListTypeEnum.contract_call,
 ];
 const defaultValue = {
   showing: false,
@@ -21,4 +28,11 @@ const defaultValue = {
   showFailed: true,
 };
 
-export const filterState = atomFamily(_param => atom(defaultValue));
+export const filterState = atomFamily(_param =>
+  atom<{
+    showing: boolean;
+    showPending: boolean;
+    showFailed: boolean;
+    types: GetTransactionListTypeEnum[];
+  }>(defaultValue)
+);

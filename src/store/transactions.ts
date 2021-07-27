@@ -13,6 +13,7 @@ import { QueryFunctionContext, QueryKey } from 'react-query';
 import { getNextPageParam } from '@store/common';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 import { isPendingTx } from '@common/utils';
+import { GetTransactionListTypeEnum } from '@store/recoil/filter';
 
 // ----------------
 // types
@@ -25,6 +26,11 @@ export type OptionalTransactionAddress =
   | { senderAddress?: string; recipientAddress?: never; address?: never };
 
 export type LimitWithOptionalAddress = [limit: number, options?: OptionalTransactionAddress];
+export type LimitWithTypesOptionalAddress = [
+  limit: number,
+  types?: GetTransactionListTypeEnum[],
+  options?: OptionalTransactionAddress
+];
 
 // ----------------
 // keys
@@ -36,8 +42,11 @@ export enum TransactionQueryKeys {
 }
 
 export const getTxQueryKey = {
-  confirmed: (limit: number, options?: OptionalTransactionAddress): QueryKey =>
-    makeQueryKey(TransactionQueryKeys.CONFIRMED, [limit, options]),
+  confirmed: (
+    limit: number,
+    types: GetTransactionListTypeEnum[],
+    options?: OptionalTransactionAddress
+  ): QueryKey => makeQueryKey(TransactionQueryKeys.CONFIRMED, [limit, types, options]),
   mempool: (limit: number, options?: OptionalTransactionAddress): QueryKey =>
     makeQueryKey(TransactionQueryKeys.MEMPOOL, [limit, options]),
   single: (txId: string): QueryKey => makeQueryKey(TransactionQueryKeys.SINGLE, txId),
@@ -48,7 +57,7 @@ export const getTxQueryKey = {
 // ----------------
 const transactionsListQueryFn = async (
   get: Getter,
-  [limit, options = {}]: LimitWithOptionalAddress,
+  [limit, types, options = {}]: LimitWithTypesOptionalAddress,
   context: QueryFunctionContext
 ) => {
   const { transactionsApi } = get(apiClientsState);
@@ -56,6 +65,7 @@ const transactionsListQueryFn = async (
   return (await transactionsApi.getTransactionList({
     offset: pageParam,
     limit,
+    type: types,
   })) as TransactionsListResponse; // cast due to limitation in api client
 };
 
@@ -84,7 +94,7 @@ const transactionSingeQueryFn = async (get: Getter, txId: string) => {
 // ----------------
 
 export const transactionsListState = atomFamilyWithInfiniteQuery<
-  LimitWithOptionalAddress,
+  LimitWithTypesOptionalAddress,
   TransactionsListResponse
 >(TransactionQueryKeys.CONFIRMED, transactionsListQueryFn, {
   getNextPageParam,
