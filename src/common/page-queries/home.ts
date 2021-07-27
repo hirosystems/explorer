@@ -1,7 +1,7 @@
 import { GetQueries } from 'jotai-query-toolkit/nextjs';
 import { getApiClients } from '@common/api/client';
 import { getTxQueryKey, TransactionsListResponse } from '@store/transactions';
-import { DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
+import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { BlocksListResponse, getBlocksQueryKey } from '@store/blocks';
 import { DEFAULT_TX_FILTER_TYPES } from '@store/recoil/filter';
 
@@ -27,10 +27,10 @@ export const getHomePageQueries: GetQueries = async ctx => {
       },
     ],
     [
-      getBlocksQueryKey.confirmed(DEFAULT_LIST_LIMIT_SMALL),
+      getBlocksQueryKey.confirmed(DEFAULT_BLOCKS_LIST_LIMIT),
       async () => {
         return (await blocksApi.getBlockList({
-          limit: DEFAULT_LIST_LIMIT_SMALL,
+          limit: DEFAULT_BLOCKS_LIST_LIMIT,
           offset: 0,
         })) as BlocksListResponse;
       },

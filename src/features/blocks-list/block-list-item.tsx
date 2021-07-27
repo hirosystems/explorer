@@ -25,7 +25,7 @@ export const BlockItem: React.FC<{ block: Block; index: number; length: number }
           {...rest}
         >
           <Stack as="span" isInline alignItems="center" spacing="base">
-            <ItemIcon type="block" />
+            <ItemIcon size="36px" type="block" />
             <Stack spacing="tight" as="span">
               <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
                 <Box size="16px" as={HashtagIcon} mr="1px" opacity={0.5} color="currentColor" />

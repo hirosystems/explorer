@@ -7,7 +7,7 @@ import { HomePageTop } from '@components/home-page-top';
 import { TabbedTransactionList } from '@components/tabbed-transaction-list';
 import { BlocksList } from '@features/blocks-list';
 
-import { DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
+import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { getHomePageQueries } from '@common/page-queries/home';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
         width="100%"
       >
         <TabbedTransactionList limit={DEFAULT_LIST_LIMIT_SMALL} />
-        <BlocksList limit={DEFAULT_LIST_LIMIT_SMALL} />
+        <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
       </Grid>
     </PageWrapper>
   );

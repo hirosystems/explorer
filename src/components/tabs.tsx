@@ -1,9 +1,7 @@
-import { Box, BoxProps, color, Stack, transition } from '@stacks/ui';
+import { Box, BoxProps, color, Stack } from '@stacks/ui';
 import * as React from 'react';
 import { memo } from 'react';
-import { useHover } from 'web-api-hooks';
 import { useTabs } from '../hooks/use-tabs';
-import { SECTION_HEADER_HEIGHT } from '@common/constants/sizes';
 import { Caption } from '@components/typography';
 import { capitalize } from '@common/utils';
 
@@ -14,13 +12,7 @@ interface TabProps extends BoxProps {
   defaultIndex?: number;
 }
 
-interface TabIndicatorProps extends BoxProps {
-  isHovered?: boolean;
-  isActive?: boolean;
-}
-
 const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, stateKey, ...rest }) => {
-  const [isHovered, bind] = useHover();
   const { currentIndex, setCurrentIndex } = useTabs(stateKey);
   const isActive = index === currentIndex;
   const hoverProps = isActive
@@ -48,7 +40,6 @@ const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, stateKey, ...re
       bg={isActive ? color('bg-4') : 'transparent'}
       py="base-tight"
       borderRadius="10px"
-      {...bind}
       {...rest}
     >
       <Caption opacity={isActive ? 1 : 0.85} fontSize={1} fontWeight={500} color="currentColor">

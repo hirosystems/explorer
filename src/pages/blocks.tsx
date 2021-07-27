@@ -9,6 +9,7 @@ import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 
 import type { NextPage } from 'next';
 import { PageWrapper } from '@components/page-wrapper';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
 const BlocksPage: NextPage = () => (
   <PageWrapper>
@@ -17,7 +18,7 @@ const BlocksPage: NextPage = () => (
       <Title mt="72px" color="white" as="h1" fontSize="36px">
         Blocks
       </Title>
-      <BlocksList limit={30} />
+      <BlocksList infinite limit={DEFAULT_LIST_LIMIT} />
     </Box>
   </PageWrapper>
 );

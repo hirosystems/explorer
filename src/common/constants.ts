@@ -137,7 +137,7 @@ export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
   Default: DEFAULT_POLLING_INTERVAL,
   None: false,
 };
-
+export const DEFAULT_BLOCKS_LIST_LIMIT = 11;
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
 export const MICROBLOCKS_ENABLED = true;
