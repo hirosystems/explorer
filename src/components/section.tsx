@@ -23,7 +23,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title: Title, childr
       py="base"
       borderTopRightRadius="12px"
       borderTopLeftRadius="12px"
-      height={SECTION_HEADER_HEIGHT}
+      minHeight={SECTION_HEADER_HEIGHT}
       {...rest}
     >
       {Title ? (
