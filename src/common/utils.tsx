@@ -340,7 +340,7 @@ export const isLocal = () => {
   return false;
 };
 
-export const getInvertedChainMode = (mode: 'testnet' | 'mainnet') =>
+export const getInvertedChainMode = (mode: NetworkModes) =>
   mode === 'testnet' ? 'mainnet' : 'testnet';
 
 export const getChainIdFromInfo = (data: CoreNodeInfoResponse): NetworkMode | undefined => {
