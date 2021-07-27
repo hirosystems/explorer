@@ -29,7 +29,7 @@ export type LimitWithOptionalAddress = [limit: number, options?: OptionalTransac
 export type LimitWithTypesOptionalAddress = [
   limit: number,
   types?: GetTransactionListTypeEnum[],
-  options?: OptionalTransactionAddress
+  options?: OptionalTransactionAddress | null
 ];
 
 // ----------------

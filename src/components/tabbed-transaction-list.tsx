@@ -12,6 +12,9 @@ import { Tabs } from '@components/tabs';
 import { DEFAULT_TX_FILTER_TYPES, GetTransactionListTypeEnum } from '@store/recoil/filter';
 import { useFilterState } from '@common/hooks/use-filter-state';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
+import { useUpdateAtom } from 'jotai/utils';
+import { transactionsListState } from '@store/transactions';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
 const TX_TABS = 'tabs/tx-list';
 
@@ -27,6 +30,7 @@ const InnerTransactionListContent = ({
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
   const [confirmedPages, confirmedActions] = useTransactionsListState(limit, types);
+  const dispatch = useUpdateAtom(transactionsListState([DEFAULT_LIST_LIMIT, types, null]));
   const [mempoolPages, mempoolActions] = useMempoolTransactionsListState(limit);
   const data = mempoolSelected ? mempoolPages : confirmedPages;
   const { isFetchingNextPage, hasNextPage, fetchNextPage } = mempoolSelected
@@ -39,7 +43,9 @@ const InnerTransactionListContent = ({
         data={data}
         showLoadMoreButton={infinite}
         isFetchingNextPage={isFetchingNextPage}
-        fetchNextPage={fetchNextPage}
+        fetchNextPage={() =>
+          mempoolSelected ? fetchNextPage() : dispatch({ type: 'fetchNextPage' })
+        }
         hasNextPage={hasNextPage}
       />
     </Flex>

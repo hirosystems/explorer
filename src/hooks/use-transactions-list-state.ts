@@ -12,7 +12,7 @@ import { DEFAULT_TX_FILTER_TYPES } from '@store/recoil/filter';
 export function useTransactionsListState(
   limit = DEFAULT_LIST_LIMIT_SMALL,
   types = DEFAULT_TX_FILTER_TYPES,
-  options?: OptionalTransactionAddress
+  options: OptionalTransactionAddress | null = null
 ) {
   const anAtom = useMemo(
     () => transactionsListState([limit, types, options]),
