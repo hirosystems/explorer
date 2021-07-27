@@ -4,6 +4,7 @@ import {
   DEFAULT_MAINNET_SERVER,
   TESTNET_MICROBLOCKS_SERVER,
   MICROBLOCKS_ENABLED,
+  MAINNET_MICROBLOCKS_SERVER,
 } from '@common/constants';
 import { apiClients, createConfig } from '@common/api/client';
 import { networkUrlState } from '@store/network';
@@ -11,7 +12,7 @@ import { networkUrlState } from '@store/network';
 export const apiClientConfiguration = atom<Configuration>(get => {
   const networkUrl = get(networkUrlState); // this should always be defined
   const apiServer = MICROBLOCKS_ENABLED
-    ? TESTNET_MICROBLOCKS_SERVER
+    ? MAINNET_MICROBLOCKS_SERVER
     : networkUrl || DEFAULT_MAINNET_SERVER;
   return createConfig(apiServer);
 });

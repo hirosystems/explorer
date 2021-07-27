@@ -11,9 +11,9 @@ import {
   DEFAULT_REGTEST_SERVER,
   DEFAULT_REGTEST_INDEX,
   MICROBLOCKS_ENABLED,
-  TESTNET_MICROBLOCKS_SERVER,
   NETWORK_CURRENT_INDEX_COOKIE,
   NETWORK_LIST_COOKIE,
+  MAINNET_MICROBLOCKS_SERVER,
 } from '@common/constants';
 import { fetchFromApi } from '@common/api/fetch';
 import { NetworkModes } from '@common/types/network';
@@ -31,7 +31,7 @@ import { NetworkModes } from '@common/types/network';
  * is online (mainnet/testnet)
  */
 export const getServerSideApiServer = async (ctx: NextPageContext) => {
-  if (MICROBLOCKS_ENABLED) return TESTNET_MICROBLOCKS_SERVER;
+  if (MICROBLOCKS_ENABLED) return MAINNET_MICROBLOCKS_SERVER;
   const chain = ctx.query?.chain;
   const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
   // set it to our default network
