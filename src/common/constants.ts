@@ -11,6 +11,13 @@ const config = publicRuntimeConfig;
 const getNumber = (query?: string): number | undefined =>
   query && typeof parseInt(query) === 'number' ? parseInt(query) : undefined;
 
+export const MICROBLOCKS_ENABLED = true;
+
+// MICROBLOCKS TODO: Remove before deployment
+export const MAINNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.stacks.co';
+export const TESTNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.testnet.stacks.co';
+export const REGTEST_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.regtest.stacks.co';
+
 export const DEFAULT_POLLING_INTERVAL =
   getNumber(
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
@@ -56,30 +63,28 @@ export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
   'https://pr-725.app.stacks.engineering';
 
-export const DEFAULT_TESTNET_SERVER =
-  config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  'https://stacks-node-api.testnet.stacks.co';
+export const DEFAULT_TESTNET_SERVER = MICROBLOCKS_ENABLED
+  ? TESTNET_MICROBLOCKS_SERVER
+  : config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
+    process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
+    'https://stacks-node-api.testnet.stacks.co';
 
-export const DEFAULT_REGTEST_SERVER =
-  config?.NEXT_PUBLIC_REGTEST_API_SERVER ||
-  process.env.NEXT_PUBLIC_REGTEST_API_SERVER ||
-  'https://stacks-node-api.regtest.stacks.co';
+export const DEFAULT_REGTEST_SERVER = MICROBLOCKS_ENABLED
+  ? REGTEST_MICROBLOCKS_SERVER
+  : config?.NEXT_PUBLIC_REGTEST_API_SERVER ||
+    process.env.NEXT_PUBLIC_REGTEST_API_SERVER ||
+    'https://stacks-node-api.regtest.stacks.co';
 
-export const DEFAULT_MAINNET_SERVER =
-  config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  'https://stacks-node-api.stacks.co';
+export const DEFAULT_MAINNET_SERVER = MICROBLOCKS_ENABLED
+  ? MAINNET_MICROBLOCKS_SERVER
+  : config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
+    process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
+    'https://stacks-node-api.stacks.co';
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
-// MICROBLOCKS TODO: Remove before deployment
-export const MAINNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.stacks.co';
-export const TESTNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.testnet.stacks.co';
-
 export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
-export const DEFAULT_REGTEST_INDEX = 2;
 export const DEFAULT_TESTNET_INDEX = 1;
 export const DEFAULT_MAINNET_INDEX = 0;
 export const DEFAULT_NETWORK_INDEX = DEFAULT_MAINNET_INDEX;
@@ -140,7 +145,6 @@ export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
 export const DEFAULT_BLOCKS_LIST_LIMIT = 11;
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
-export const MICROBLOCKS_ENABLED = true;
 
 export const TransactionType = {
   SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],
