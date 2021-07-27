@@ -1823,6 +1823,16 @@
   dependencies:
     cross-fetch "^3.0.6"
 
+"@stacks/common@^2.0.0-beta.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@stacks/common/-/common-2.0.0.tgz#df5c8ef083864c9b5be90628cee9bc2463c93054"
+  integrity sha512-drfXbdJbiwbSNJNaY5KCobR/oQryhAAwAUcLDcco+Aa3QKttjx1KefWDwstvSpZ7Hqmnyl3a/yf269X/d09gpA==
+  dependencies:
+    "@types/node" "^14.14.43"
+    bn.js "^5.2.0"
+    buffer "^6.0.3"
+    cross-fetch "^3.1.4"
+
 "@stacks/common@^2.0.1-beta.1":
   version "2.0.1-beta.1"
   resolved "https://registry.yarnpkg.com/@stacks/common/-/common-2.0.1-beta.1.tgz#1e2f12bf3d91bc85c2110e212a432df2ca10109d"
@@ -1902,12 +1912,12 @@
     eslint-plugin-import ">=2.23.3"
     eslint-plugin-prettier "^3.4.0"
 
-"@stacks/network@2.0.1-beta.1", "@stacks/network@^2.0.1-beta.1":
-  version "2.0.1-beta.1"
-  resolved "https://registry.yarnpkg.com/@stacks/network/-/network-2.0.1-beta.1.tgz#cdc598bfa14a53800b842cdcb0a6b483873957db"
-  integrity sha512-ByoFPdl88uGA9wy6iA2qm3yFa5bj08tfPWGIVfamzfPfSeZw0MRRntvaO/cBGXgBd0EX2fxYgSu0CL/722vUrA==
+"@stacks/network@2.0.0-beta.0":
+  version "2.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@stacks/network/-/network-2.0.0-beta.0.tgz#1facdc42ef76ba57448cebf28e022385758e675a"
+  integrity sha512-ZhpHjnmgdHvy28oaUGK66IKMepopFiyhlJ6L3jbe6RJLHJFpupB5Kho6pa+Z4zXg2MsgZuHqBX6CyPaHfw9E4A==
   dependencies:
-    "@stacks/common" "^2.0.1-beta.1"
+    "@stacks/common" "^2.0.0-beta.0"
 
 "@stacks/network@^1.2.2":
   version "1.2.2"
@@ -1915,6 +1925,13 @@
   integrity sha512-xcWwuRrLJn9qqi3PEBcP2UPZHQztTZd31C0aVlzYHttNMir/sY9SrUqSnw45z2Jo4O9pIYYPIiPRtdV91Ho3fw==
   dependencies:
     "@stacks/common" "^1.2.2"
+
+"@stacks/network@^2.0.1-beta.1":
+  version "2.0.1-beta.1"
+  resolved "https://registry.yarnpkg.com/@stacks/network/-/network-2.0.1-beta.1.tgz#cdc598bfa14a53800b842cdcb0a6b483873957db"
+  integrity sha512-ByoFPdl88uGA9wy6iA2qm3yFa5bj08tfPWGIVfamzfPfSeZw0MRRntvaO/cBGXgBd0EX2fxYgSu0CL/722vUrA==
+  dependencies:
+    "@stacks/common" "^2.0.1-beta.1"
 
 "@stacks/prettier-config@0.0.8", "@stacks/prettier-config@^0.0.8":
   version "0.0.8"
@@ -1975,12 +1992,12 @@
     sha.js "^2.4.11"
     smart-buffer "^4.1.0"
 
-"@stacks/transactions@2.0.1-beta.1":
-  version "2.0.1-beta.1"
-  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-2.0.1-beta.1.tgz#56a4a4e7d0bc4b70322ccdaf8aa869e92eccd521"
-  integrity sha512-i4jas9zgU0vPemzAmnKCS//2wV5hQxOCi5mE4Ysjmc+9mqheNXK0ZFNB/SdSqoAfB+9AGITcZcRZUG9WdlG9CA==
+"@stacks/transactions@2.0.0-beta.0":
+  version "2.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-2.0.0-beta.0.tgz#7d3d4da699564683e1f2e18626143c615a465686"
+  integrity sha512-k/4EZDOIVlJ3VsIKGdXSEmcCRiRiajxm8v3vPI79vKEYKWpc9roBoh/7j+ntReUBnu2UCcAQQmTwkjRjtfKR3w==
   dependencies:
-    "@stacks/common" "^2.0.1-beta.1"
+    "@stacks/common" "^2.0.0-beta.0"
     "@stacks/network" "^1.2.2"
     "@types/bn.js" "^4.11.6"
     "@types/elliptic" "^6.4.12"
