@@ -1,5 +1,4 @@
 import React from 'react';
-import { useQuery } from 'react-query';
 import pluralize from 'pluralize';
 import { useHoverableState } from '@components/hoverable';
 import { color, Flex, Stack } from '@stacks/ui';
@@ -31,7 +30,7 @@ export const MicroblockItem: React.FC<{
         {...rest}
       >
         <Stack as="span" isInline alignItems="center" spacing="base">
-          <ItemIcon type="microblock" />
+          <ItemIcon size="36px" type="microblock" />
           <Stack spacing="tight" as="span">
             <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
               <Title display="block" color="currentColor">
