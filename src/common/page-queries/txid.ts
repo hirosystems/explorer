@@ -101,6 +101,7 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
 ): Promise<Queries<TxPageQueryProps>> => {
   if (!queryProps) throw Error('No Query props');
   const { transaction, contractInfo } = queryProps;
+  const isPending = transaction.tx_status === 'pending';
   // we'll extract our txid from the server context (query param)
   const txId = transaction.tx_id;
   // this is an assertion of a confirmed tx or undefined
@@ -116,7 +117,8 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
   const blocksQueryKey =
     confirmedTransaction && getBlocksQueryKey.single(confirmedTransaction.block_hash);
   // if this is undefined, they query won't be fetched
-  const contractInfoQueryKey = contractId && getContractQueryKeys.info(contractId);
+  const contractInfoQueryKey =
+    !isPending && contractId ? getContractQueryKeys.info(contractId) : undefined;
 
   // and our final array of query keys and fetchers
   return [
@@ -128,12 +130,16 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
     ],
     [
       contractInfoQueryKey,
-      () =>
-        contractInfo ||
-        (contractId &&
-          smartContractsApi.getContractById({
-            contractId,
-          })),
+      () => {
+        if (isPending || !queryProps?.transaction) return;
+        return (
+          contractInfo ||
+          (contractId &&
+            smartContractsApi.getContractById({
+              contractId,
+            }))
+        );
+      },
     ],
     [
       contractId && getAccountQueryKey.transactions([contractId, DEFAULT_LIST_LIMIT]),
