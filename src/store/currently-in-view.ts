@@ -85,6 +85,8 @@ const contractPrincipalInViewState = atom(get => {
 
 export const contractSourceInViewState = atom(get => {
   const contractPrincipal = get(contractPrincipalInViewState);
+  const tx = get(transactionInViewState);
+  if (tx?.tx_type === 'smart_contract' && tx.tx_status === 'pending') return;
   if (contractPrincipal) return get(contractSourceState(contractPrincipal));
 });
 
