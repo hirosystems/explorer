@@ -25,7 +25,7 @@ const Home: NextPage = () => {
         width="100%"
       >
         <TabbedTransactionList limit={DEFAULT_LIST_LIMIT_SMALL} />
-        <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+        <BlocksList enforceLimit limit={DEFAULT_BLOCKS_LIST_LIMIT} />
       </Grid>
     </PageWrapper>
   );
