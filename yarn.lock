@@ -7146,7 +7146,7 @@ proxy-compare@2.0.1:
   resolved "https://registry.yarnpkg.com/proxy-compare/-/proxy-compare-2.0.1.tgz#3ae19cf47f64e89bd60fe4f57afd124f733ef64f"
   integrity sha512-uXj3TtWdR1S2SNwJKbgJB+1FJm9HM3sFzlVc8W6PZvU6ogt9mlkb1WwZQpuKFLkDS6LKY4+FBE18K6ZArphnHA==
 
-proxy-memoize@0.3.5, proxy-memoize@^0.3.5:
+proxy-memoize@^0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/proxy-memoize/-/proxy-memoize-0.3.5.tgz#d139c196ea88d20f0cb0d2073a66f87af4f1cbe6"
   integrity sha512-eJFgHxMkFir/J25rCNZE48kDLsjGOQ1O6bRqDUStw/Wcwi+l5nm+siATZkhnFbV4foSWOXa0Dcb4Fq1ZhrqWwQ==

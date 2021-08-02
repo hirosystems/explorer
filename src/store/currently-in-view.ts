@@ -99,6 +99,7 @@ export const contractInfoInViewState = atom(get => {
   const contractPrincipal = get(contractPrincipalInViewState);
   if (contractPrincipal) {
     const data = get(contractInfoState(contractPrincipal));
+    if (!data) return;
     return { ...data, abi: JSON.parse(data.abi) };
   }
 });

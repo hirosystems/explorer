@@ -47,7 +47,7 @@ export const contractInfoState = atomFamilyWithQuery<string, any>(
 export const contractSourceState = atomFamily<string, string>(contractId =>
   atom(get => {
     const info = get(contractInfoState(contractId));
-    return info.source_code;
+    return info?.source_code;
   })
 );
 
