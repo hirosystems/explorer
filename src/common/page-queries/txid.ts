@@ -101,13 +101,16 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
 ): Promise<Queries<TxPageQueryProps>> => {
   if (!queryProps) throw Error('No Query props');
   const { transaction, contractInfo } = queryProps;
-  const isPending = transaction.tx_status === 'pending';
   // we'll extract our txid from the server context (query param)
   const txId = transaction.tx_id;
   // this is an assertion of a confirmed tx or undefined
   const confirmedTransaction = assertConfirmedTransaction(transaction);
   // if it's a tx that references a contract, this will be a principal
   const contractId = getContractIdFromTx(transaction);
+  const isPending = transaction.tx_status === 'pending';
+  const isContractDeploy = transaction.tx_type === 'smart_contract';
+  const canFetchContractInfo = (!isContractDeploy || !isPending) && !!contractId;
+
   // we can get our api clients here
   const { smartContractsApi, blocksApi, accountsApi, transactionsApi } = await getApiClients(ctx);
 
@@ -117,8 +120,11 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
   const blocksQueryKey =
     confirmedTransaction && getBlocksQueryKey.single(confirmedTransaction.block_hash);
   // if this is undefined, they query won't be fetched
-  const contractInfoQueryKey =
-    !isPending && contractId ? getContractQueryKeys.info(contractId) : undefined;
+  const contractInfoQueryKey = canFetchContractInfo
+    ? getContractQueryKeys.info(
+        contractId as string // TS 4.4 should fix this cast
+      )
+    : undefined;
 
   // and our final array of query keys and fetchers
   return [
@@ -131,7 +137,7 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
     [
       contractInfoQueryKey,
       () => {
-        if (isPending || !queryProps?.transaction) return;
+        if (!canFetchContractInfo) return;
         return (
           contractInfo ||
           (contractId &&

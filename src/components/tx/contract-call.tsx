@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Stack } from '@stacks/ui';
 
-import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
-
 import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { ContractSource } from '@components/contract-source';
@@ -13,8 +11,6 @@ import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
 import { FunctionSummarySection } from '@components/function-summary/function-summary';
 import {
-  useAccountInViewBalances,
-  useAccountInViewTransactions,
   useBlockInView,
   useContractInfoInView,
   useContractSourceInView,
