@@ -10,7 +10,7 @@
     "lint:fix": "eslint --ext .ts,.tsx ./src/ -f unix --fix && prettier --write src/**/*.{ts,tsx} *.js",
     "lint:prettier": "prettier --check \"src/**/*.{ts,tsx}\" *.js *.json",
     "lint:prettier:fix": "prettier --write \"src/**/*.{ts,tsx}\" *.js *.json",
-    "start": "next start",
+    "start": "cross-env NODE_ENV=production node server.js",
     "typecheck": "tsc --noEmit"
   },
   "version": "1.0.0",
@@ -118,6 +118,7 @@
     "@typescript-eslint/parser": "4.28.2",
     "@welldone-software/why-did-you-render": "6.2.0",
     "commitlint": "12.1.4",
+    "cross-env": "^7.0.3",
     "eslint": "7.30.0",
     "eslint-plugin-import": "2.23.4",
     "eslint-plugin-prettier": "3.4.0",
