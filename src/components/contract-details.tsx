@@ -31,7 +31,7 @@ export const ContractDetails = ({ contractId, contractInterface }) => {
       <Box px="base">
         <Flex borderBottom={border()} py="base" justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
-            <ItemIcon size="48px" type="tx" txType="smart_contract" status="success" />
+            <ItemIcon size="48px" tx={{ tx_status: 'success', tx_type: 'smart_contract' }} />
             <Box ml="base">
               <Title mb="tight" display="block" mt="0" as="h4">
                 {getContractName(contractId)}
