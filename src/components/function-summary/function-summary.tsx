@@ -8,7 +8,7 @@ import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { memo, useMemo } from 'react';
 
 export const FunctionSummarySection = memo<{
-  result: any;
+  result?: any;
   summary: ContractCallTransaction['contract_call'];
   isPending?: boolean;
   btc: null | string;
