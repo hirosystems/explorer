@@ -13,11 +13,6 @@ const getNumber = (query?: string): number | undefined =>
 
 export const MICROBLOCKS_ENABLED = true;
 
-// MICROBLOCKS TODO: Remove before deployment
-export const MAINNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.stacks.co';
-export const TESTNET_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.testnet.stacks.co';
-export const REGTEST_MICROBLOCKS_SERVER = 'https://stacks-node-api-microblocks.regtest.stacks.co';
-
 export const DEFAULT_POLLING_INTERVAL =
   getNumber(
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
@@ -63,23 +58,20 @@ export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
   'https://pr-725.app.stacks.engineering';
 
-export const DEFAULT_TESTNET_SERVER = MICROBLOCKS_ENABLED
-  ? TESTNET_MICROBLOCKS_SERVER
-  : config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
-    process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-    'https://stacks-node-api.testnet.stacks.co';
+export const DEFAULT_TESTNET_SERVER =
+  config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
+  process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
+  'https://stacks-node-api.testnet.stacks.co';
 
-export const DEFAULT_REGTEST_SERVER = MICROBLOCKS_ENABLED
-  ? REGTEST_MICROBLOCKS_SERVER
-  : config?.NEXT_PUBLIC_REGTEST_API_SERVER ||
-    process.env.NEXT_PUBLIC_REGTEST_API_SERVER ||
-    'https://stacks-node-api.regtest.stacks.co';
+export const DEFAULT_REGTEST_SERVER =
+  config?.NEXT_PUBLIC_REGTEST_API_SERVER ||
+  process.env.NEXT_PUBLIC_REGTEST_API_SERVER ||
+  'https://stacks-node-api.regtest.stacks.co';
 
-export const DEFAULT_MAINNET_SERVER = MICROBLOCKS_ENABLED
-  ? MAINNET_MICROBLOCKS_SERVER
-  : config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
-    process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-    'https://stacks-node-api.stacks.co';
+export const DEFAULT_MAINNET_SERVER =
+  config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
+  process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
+  'https://stacks-node-api.stacks.co';
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
