@@ -1,3 +1,24 @@
+# [1.14.0](https://github.com/blockstack/explorer/compare/v1.13.1...v1.14.0) (2021-08-18)
+
+
+### Bug Fixes
+
+* [#495](https://github.com/blockstack/explorer/issues/495) ([586e43d](https://github.com/blockstack/explorer/commit/586e43d9bc99a0f15c8f5a7bf1b9906cba23e71b))
+* better contract check ([eb91e56](https://github.com/blockstack/explorer/commit/eb91e5680fef108eb5a50c72a3e947ef0d56ae29))
+* better network url when microblocks enabled ([115f189](https://github.com/blockstack/explorer/commit/115f18941c1b0084fc4920a45df23949c65c9af4))
+* block lists loading ([e2b33fd](https://github.com/blockstack/explorer/commit/e2b33fda062d2f406372beddeb70ad5e94eda45d))
+* contract details and filtering ([0d850db](https://github.com/blockstack/explorer/commit/0d850db9d387afb4e285e83397f0194164b885a5))
+* limit blocks + microblocks ([27380be](https://github.com/blockstack/explorer/commit/27380be7a3f6efd3860ca9246b29a3ce718cafe9))
+* more failing types ([01d5f1b](https://github.com/blockstack/explorer/commit/01d5f1b33596e08cfe9b957b389ed7775c6921a6))
+* pending function arguments ([c1541d3](https://github.com/blockstack/explorer/commit/c1541d338c2ec7b8e093f33ebd89fde18c495d77))
+* types ([09318b2](https://github.com/blockstack/explorer/commit/09318b23a693a39501d44bd431c1a71f7b145bc4))
+
+
+### Features
+
+* add microblocks ([f568dd8](https://github.com/blockstack/explorer/commit/f568dd8c3dc9fd930e6713334baa867c64556854))
+* tab design ([7e8efa2](https://github.com/blockstack/explorer/commit/7e8efa247267798e745aba4847b13d2aa55c0a03))
+
 ## [1.13.1](https://github.com/blockstack/explorer/compare/v1.13.0...v1.13.1) (2021-07-21)
 
 
