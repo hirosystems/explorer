@@ -23,15 +23,14 @@ function getMicroblockPageCachedQueryProps(ctx: NextPageContext, queryClient: Qu
 export const getMicroblockPageQueryProps = async (
   ctx: NextPageContext,
   queryClient: QueryClient
-  // TODO: Remove 'any' before deploy when types are updated in client package
-): Promise<Microblock | any> => {
+): Promise<Microblock> => {
   const microblockHash = getMicroblockHashFromCtx(ctx);
   const cachedMicroblock = getMicroblockPageCachedQueryProps(ctx, queryClient);
   if (cachedMicroblock) return cachedMicroblock;
   const { microblocksApi } = await getApiClients(ctx);
-  return microblocksApi.getMicroblockByHash({
+  return (await microblocksApi.getMicroblockByHash({
     hash: microblockHash,
-  });
+  })) as Microblock;
 };
 
 export const getMicroblockPageQueries: GetQueries<Microblock> = async (
