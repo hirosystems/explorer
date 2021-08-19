@@ -153,7 +153,9 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
       children: 'Block height',
     },
     children:
-      'block_height' in d ? <BlockComponent block={d.block_height} ts={d.burn_block_time} /> : null,
+      'block_height' in d ? (
+        <BlockComponent block={d.block_height} ts={d.parent_burn_block_time || d.burn_block_time} />
+      ) : null,
   };
   const blockHash = {
     condition: 'block_hash' in d && typeof d.block_hash !== 'undefined',
