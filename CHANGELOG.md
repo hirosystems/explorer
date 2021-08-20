@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/blockstack/explorer/compare/v1.14.0...v1.14.1) (2021-08-20)
+
+
+### Bug Fixes
+
+* microblock tx parent burn block time ([8d0e59b](https://github.com/blockstack/explorer/commit/8d0e59bc93e9545368878275aa1ed995544f37b8))
+
 # [1.14.0](https://github.com/blockstack/explorer/compare/v1.13.1...v1.14.0) (2021-08-18)
 
 
