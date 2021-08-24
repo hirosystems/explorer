@@ -2,13 +2,11 @@ import { atom } from 'jotai';
 import {
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,
-  IS_BROWSER,
   NETWORK_CURRENT_INDEX_COOKIE,
 } from '@common/constants';
 
 import { parseCookies, setCookie } from 'nookies';
 import { IS_SSR } from 'jotai-query-toolkit';
-import Router from 'next/router';
 
 const atomWithCookie = <T>({ key, initialValue }: { key: string; initialValue: T }) => {
   const baseAtom = atom<T>(initialValue);
@@ -61,12 +59,3 @@ export const networkCurrentSelector = atom(get => {
 export const networkCurrentUrlSelector = atom(get => get(networkCurrentSelector).url);
 
 export const networkSwitchingState = atom<'idle' | 'pending'>('idle');
-
-export const showDifferentNetworkModalState = atom(get => {
-  const networkMode = get(networkModeState);
-  const switchingState = get(networkSwitchingState);
-  const isSwitching = switchingState === 'pending';
-  const query = Router.router?.query;
-  const chainMode = query?.['chain'];
-  return IS_BROWSER && chainMode && !isSwitching && chainMode !== networkMode;
-});

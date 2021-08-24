@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, Flex, Stack, color, Grid, Fade, Transition, GridProps } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { border } from '@common/utils';
-import { Toggle } from '@components/toggle';
 import { IconButton } from '@components/icon-button';
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
 import { Tag } from '@components/tags';

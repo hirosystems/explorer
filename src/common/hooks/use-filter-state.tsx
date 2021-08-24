@@ -9,7 +9,6 @@ import { usePrevious } from 'react-use';
 export const useFilterState = (key: 'sandbox' | 'txList') => {
   const [filter, setFilterState] = useAtom(filterState(key));
   const filterTypes = filter.types.filter(Boolean);
-  const previousFilterTypes = usePrevious(filterTypes);
 
   const handleToggleFilterPanelVisibility = useCallback(() => {
     setFilterState(state => ({ ...state, showing: !state.showing }));
@@ -66,6 +65,5 @@ export const useFilterState = (key: 'sandbox' | 'txList') => {
     handleOpen,
     ...filter,
     types: filterTypes,
-    previousTypes: previousFilterTypes,
   };
 };
