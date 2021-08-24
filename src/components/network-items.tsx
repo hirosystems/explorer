@@ -128,12 +128,12 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
 };
 
 const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
-  const { handleOpenNetworkModal } = useModal();
+  const { handleOpenAddNetworkModal } = useModal();
 
   return (
     <ItemWrapper
       onClick={e => {
-        handleOpenNetworkModal();
+        handleOpenAddNetworkModal();
         onClick?.(e);
       }}
       py="loose"

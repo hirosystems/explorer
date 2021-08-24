@@ -1,13 +1,11 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useModal } from '@common/hooks/use-modal';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IS_BROWSER } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 
-import { showDifferentNetworkModalState, networkSwitchingState } from '@store/recoil/network';
+import { networkSwitchingState } from '@store/recoil/network';
 import { useAtomValue } from 'jotai/utils';
-import { useNetwork } from '@common/hooks/use-network';
 
 type ChainMode = NetworkMode | undefined;
 type SetChainMode = (mode: ChainMode) => Promise<void>;
@@ -43,11 +41,9 @@ export const useChainMode = (): [ChainMode, SetChainMode] => {
 // if there is, but not one of two options, set current mode
 export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
   const router = useRouter();
-  const { handleOpenDifferentNetworkModal } = useModal();
   const _networkMode = useNetworkMode();
   const [chainMode, setChainMode] = useChainMode();
   const networkModeChangeState = useAtomValue(networkSwitchingState);
-  const showModalState = useAtomValue(showDifferentNetworkModalState);
 
   const isRegtest = chainMode === NetworkModes.Regtest;
   const isTestnet = chainMode === NetworkModes.Testnet;
@@ -61,14 +57,6 @@ export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
       }
     }
   }, [chainMode, networkMode, IS_BROWSER, networkModeChangeState]);
-
-  useEffect(() => {
-    if (showModalState) {
-      // alert if url is different than what is returned by api server
-      // in the future we can have the modal display all servers added that match a given chain id
-      handleOpenDifferentNetworkModal();
-    }
-  }, [showModalState]);
 
   useEffect(() => {
     if (!router.query['chain'] && networkMode) {

@@ -57,7 +57,7 @@ export const TabbedTransactionList: React.FC<{
   limit?: number;
   infinite?: boolean;
 }> = ({ limit, infinite }) => {
-  const { types, previousTypes } = useFilterState('txList');
+  const { types } = useFilterState('txList');
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
 
@@ -75,7 +75,7 @@ export const TabbedTransactionList: React.FC<{
           <InnerTransactionListContent
             infinite={infinite}
             limit={limit}
-            types={previousTypes || DEFAULT_TX_FILTER_TYPES}
+            types={DEFAULT_TX_FILTER_TYPES}
           />
         }
       >

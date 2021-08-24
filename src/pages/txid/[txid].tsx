@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import toast from 'react-hot-toast';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { TransactionMeta } from '@components/meta/transactions';
 import { TransactionPageComponent } from '@components/transaction-page-component';
@@ -13,6 +14,11 @@ import type { TxPageQueryProps } from '@common/page-queries/txid';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';
 import { InView } from '@store/currently-in-view';
+import { color } from '@stacks/ui-utils';
+import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { useRouter } from 'next/router';
+import { useNetwork } from '@common/hooks/use-network';
+import { NetworkModeToast } from '@components/network-mode-toast';
 
 interface TransactionPageProps {
   inView: InView;
@@ -21,18 +27,41 @@ interface TransactionPageProps {
 }
 
 const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyValid }) => {
+  const router = useRouter();
+  const networkMode = useNetworkMode();
+  const { handleSetTestnet, handleSetMainnet } = useNetwork();
+
+  useEffect(() => {
+    const chainMode = router.query.chain;
+    if (error || !chainMode || chainMode === networkMode) return;
+    if (chainMode === 'testnet') {
+      handleSetTestnet();
+    } else {
+      handleSetMainnet();
+    }
+  }, []);
+
+  useEffect(() => {
+    const chainMode = router.query.chain;
+    toast(`You're viewing the ${networkMode || chainMode} Explorer`);
+  }, []);
+
   if (error)
     return (
       <>
         <Meta title="Transaction not found" />
         <TxNotFound isPending={isPossiblyValid} />
+        <NetworkModeToast />
       </>
     );
+
   useRefreshOnBack('txid');
+
   return (
     <>
       <TransactionMeta />
       <TransactionPageComponent />
+      <NetworkModeToast />
     </>
   );
 };
