@@ -7,8 +7,11 @@ import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { getHomePageQueries } from '@common/page-queries/home';
+import { useNetworkToast } from '@common/hooks/use-network-toast';
+import { NetworkModeToast } from '@components/network-mode-toast';
 
 const Sandbox: NextPage<SandboxData> = props => {
+  useNetworkToast();
   const { handleTrackGoal } = useFathomGoal();
 
   useEffect(() => {
@@ -21,6 +24,7 @@ const Sandbox: NextPage<SandboxData> = props => {
         <title>Sandbox - Stacks 2.0 explorer</title>
       </Head>
       <SandboxPageContent {...props} />
+      <NetworkModeToast />
     </SafeSuspense>
   );
 };

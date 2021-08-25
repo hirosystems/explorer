@@ -4,13 +4,14 @@ import { Box, Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { truncateMiddle, validateTxId } from '@common/utils';
 import { Rows } from '@components/rows';
-import { NextPage, NextPageContext } from 'next';
+import { NextPage } from 'next';
 import { Section } from '@components/section';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
 import { MicroblockNotFound } from '@components/microblock-not-found';
 import { TransactionList } from '@components/transaction-list';
-import { withInitialQueries } from '@common/with-initial-queries';
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import {
   useMicroblockBlockCurrentlyInView,
   useMicroblockCurrentlyInView,
@@ -22,6 +23,8 @@ import {
   getMicroblockPageQueryProps,
 } from '@common/page-queries/microblock-hash';
 import { Timestamp } from '@components/timestamp';
+import { useNetworkToast } from '@common/hooks/use-network-toast';
+import { NetworkModeToast } from '@components/network-mode-toast';
 
 interface MicroblockSinglePageData {
   hash: string;
@@ -32,11 +35,13 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = ({ error, hash 
   const microblock = useMicroblockCurrentlyInView();
   const block = useMicroblockBlockCurrentlyInView();
   const transactions = useMicroblockTxsCurrentlyInView();
+  useNetworkToast(error || !microblock || !block || !transactions);
   if (error || !microblock || !block || !transactions) {
     return (
       <>
         <Meta title="Microblock hash not found" />
-        <MicroblockNotFound isPending={validateTxId(hash)} />;
+        <MicroblockNotFound isPending={validateTxId(hash)} />
+        <NetworkModeToast />
       </>
     );
   }
@@ -99,6 +104,7 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = ({ error, hash 
       {transactionsWithoutCoinbase?.length ? (
         <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
       ) : null}
+      <NetworkModeToast />
     </>
   );
 };
@@ -112,7 +118,7 @@ MicroblockSinglePage.getInitialProps = ctx => {
   };
 };
 
-export default withInitialQueries<Microblock, MicroblockSinglePageData>(MicroblockSinglePage)(
-  getMicroblockPageQueries,
-  getMicroblockPageQueryProps
-);
+export default withInitialQueries<Microblock, MicroblockSinglePageData>(
+  MicroblockSinglePage,
+  pageAtomBuilders
+)(getMicroblockPageQueries, getMicroblockPageQueryProps);

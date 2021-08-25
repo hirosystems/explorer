@@ -5674,13 +5674,13 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jotai-query-toolkit@0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/jotai-query-toolkit/-/jotai-query-toolkit-0.1.6.tgz#69da053b6bbd3efe5715e5088f23a00862051ca1"
-  integrity sha512-koQ7XLNc7J/RGc10FmKKdTDya6wF3Wc9+nYg02JEVX1CuaO72K2WY2C5GEwdP4dvCqDOeA679SzoBJ2P5kGp/w==
+jotai-query-toolkit@0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/jotai-query-toolkit/-/jotai-query-toolkit-0.1.8.tgz#b375dbf5b57d0a4b896b889433ad6597556f55c6"
+  integrity sha512-jY5civ+peNc+bTQ/ir8DEzEY6Yb8h21SMqkvvLhr0u6xW1pDrwRlS1BEeBewhvV04CFN8rm90UYW7SZV4c0Htw==
   dependencies:
     fast-deep-equal "3.1.3"
-    proxy-memoize "^0.3.5"
+    proxy-memoize "^0.3.6"
 
 jotai@1.2.2:
   version "1.2.2"
@@ -7120,7 +7120,7 @@ proxy-compare@2.0.2:
   resolved "https://registry.yarnpkg.com/proxy-compare/-/proxy-compare-2.0.2.tgz#343e624d0ec399dfbe575f1d365d4fa042c9fc69"
   integrity sha512-3qUXJBariEj3eO90M3Rgqq3+/P5Efl0t/dl9g/1uVzIQmO3M+ql4hvNH3mYdu8H+1zcKv07YvL55tsY74jmH1A==
 
-proxy-memoize@^0.3.5:
+proxy-memoize@^0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/proxy-memoize/-/proxy-memoize-0.3.6.tgz#90204033201403a0e00d1261173b74280706f4d7"
   integrity sha512-EVEcKR5A7Am2Opcz8Dww1rwMiYM+xG6RrGFnfdPl9H27gYXCa3aXGN9M3L393dpULr8QnVEc1wWcfWuRgETDgA==
