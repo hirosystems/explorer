@@ -29,6 +29,7 @@ export const ContractName = React.memo(() => {
         placeholder="Name your contract"
         ref={inputRef as any}
         pr="84px"
+        color={color('text-body')}
       />
       <Flex position="absolute" right="tight">
         <IconButton
