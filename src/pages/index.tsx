@@ -10,11 +10,8 @@ import { BlocksList } from '@features/blocks-list';
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { getHomePageQueries } from '@common/page-queries/home';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { NetworkModeToast } from '@components/network-mode-toast';
 
 const Home: NextPage = () => {
-  useNetworkToast();
   return (
     <PageWrapper>
       <Meta />
@@ -28,7 +25,6 @@ const Home: NextPage = () => {
         <TabbedTransactionList limit={DEFAULT_LIST_LIMIT_SMALL} />
         <BlocksList enforceLimit limit={DEFAULT_BLOCKS_LIST_LIMIT} />
       </Grid>
-      <NetworkModeToast />
     </PageWrapper>
   );
 };

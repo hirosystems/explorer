@@ -9,11 +9,8 @@ import { getBlocksPageQueries } from '@common/page-queries/blocks';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { PageWrapper } from '@components/page-wrapper';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { NetworkModeToast } from '@components/network-mode-toast';
 
 const BlocksPage: NextPage = () => {
-  useNetworkToast();
   return (
     <PageWrapper>
       <Meta title="Recent Blocks" />
@@ -23,7 +20,6 @@ const BlocksPage: NextPage = () => {
         </Title>
         <BlocksList infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
-      <NetworkModeToast />
     </PageWrapper>
   );
 };

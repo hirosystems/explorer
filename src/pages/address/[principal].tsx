@@ -20,8 +20,6 @@ import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { AccountTransactionList } from '@features/account-transaction-list';
 import { PageWrapper } from '@components/page-wrapper';
 import { AddressNotFound } from '@components/address-not-found';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { NetworkModeToast } from '@components/network-mode-toast';
 
 const PageTop = () => {
   return (
@@ -51,13 +49,11 @@ const ContentWrapper = (props: GridProps) => {
 };
 
 const AddressPage: NextPage<any> = ({ error, principal }) => {
-  useNetworkToast(error);
   if (error)
     return (
       <>
         <Meta title="Address not found" />
         <AddressNotFound />
-        <NetworkModeToast />
       </>
     );
   const balances = useAccountInViewBalances();
@@ -95,7 +91,6 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
           </Stack>
         )}
       </ContentWrapper>
-      <NetworkModeToast />
     </PageWrapper>
   );
 };

@@ -61,7 +61,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
     item.url === DEFAULT_MAINNET_SERVER;
   const doNotFetch = isDisabled || !item.url || isDefault;
 
-  const { data, error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
+  const { error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
     // this will only run if the item url is not one of the defaults (mainnet/testnet)
     const response = await fetchFromApi(item.url as string)(DEFAULT_V2_INFO_ENDPOINT);
     return response.json();

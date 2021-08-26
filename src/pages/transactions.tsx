@@ -9,11 +9,8 @@ import { PageWrapper } from '@components/page-wrapper';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { getTransactionsPageQueries } from '@common/page-queries/transactions';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { NetworkModeToast } from '@components/network-mode-toast';
 
 const TransactionsPage: NextPage = () => {
-  useNetworkToast();
   return (
     <PageWrapper>
       <Meta title="Recent transactions" />
@@ -23,7 +20,6 @@ const TransactionsPage: NextPage = () => {
         </Title>
         <TabbedTransactionList infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
-      <NetworkModeToast />
     </PageWrapper>
   );
 };

@@ -23,8 +23,6 @@ import {
   getMicroblockPageQueryProps,
 } from '@common/page-queries/microblock-hash';
 import { Timestamp } from '@components/timestamp';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { NetworkModeToast } from '@components/network-mode-toast';
 
 interface MicroblockSinglePageData {
   hash: string;
@@ -35,13 +33,11 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = ({ error, hash 
   const microblock = useMicroblockCurrentlyInView();
   const block = useMicroblockBlockCurrentlyInView();
   const transactions = useMicroblockTxsCurrentlyInView();
-  useNetworkToast(error || !microblock || !block || !transactions);
   if (error || !microblock || !block || !transactions) {
     return (
       <>
         <Meta title="Microblock hash not found" />
         <MicroblockNotFound isPending={validateTxId(hash)} />
-        <NetworkModeToast />
       </>
     );
   }
@@ -104,7 +100,6 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = ({ error, hash 
       {transactionsWithoutCoinbase?.length ? (
         <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
       ) : null}
-      <NetworkModeToast />
     </>
   );
 };
