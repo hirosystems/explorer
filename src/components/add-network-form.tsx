@@ -19,6 +19,7 @@ export const NetworkSwitchModalForm: React.FC<StackProps> = props => {
             id="label"
             placeholder="My Stacks API"
             onChange={handleChange}
+            color={color('text-body')}
           />
           {errors?.label && <Caption color={color('feedback-error')}>{errors?.label}</Caption>}
         </Stack>
@@ -26,7 +27,14 @@ export const NetworkSwitchModalForm: React.FC<StackProps> = props => {
           <Caption htmlFor="url" as="label">
             URL
           </Caption>
-          <Input id="url" name="url" type="url" placeholder="https://" onChange={handleChange} />
+          <Input
+            id="url"
+            name="url"
+            type="url"
+            placeholder="https://"
+            onChange={handleChange}
+            color={color('text-body')}
+          />
           {errors?.url && <Caption color={color('feedback-error')}>{errors?.url}</Caption>}
         </Stack>
       </Stack>
