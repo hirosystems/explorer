@@ -160,10 +160,16 @@ const Table: React.FC = () => {
             justifyContent="flex-start"
             position="relative"
           >
-            <Box fontWeight={[500, 500, 'unset']} mb={['tight', 'tight', 'unset']} color={color('text-body')}>
+            <Box
+              fontWeight={[500, 500, 'unset']}
+              mb={['tight', 'tight', 'unset']}
+              color={color('text-body')}
+            >
               <Box display={['inline', 'inline', 'none']}>Block </Box>#{block_height}
             </Box>
-            <Box mb={['base', 'base', 'unset']} color={color('text-body')}>{relativeTime}</Box>
+            <Box mb={['base', 'base', 'unset']} color={color('text-body')}>
+              {relativeTime}
+            </Box>
             <Flex
               justifyContent="center"
               position={['absolute', 'absolute', 'static']}
@@ -178,14 +184,22 @@ const Table: React.FC = () => {
                 </Badge>
               )}
             </Flex>
-            <Caption my="tight" display={['block', 'block', 'none']} >
+            <Caption my="tight" display={['block', 'block', 'none']}>
               Amount
             </Caption>
-            <StxAmount textAlign={['left', 'left', 'right']} amount={parseFloat(amount)} color={color('text-body')} />
+            <StxAmount
+              textAlign={['left', 'left', 'right']}
+              amount={parseFloat(amount)}
+              color={color('text-body')}
+            />
             <Caption my="tight" mt="base" display={['block', 'block', 'none']}>
               Cumulative
             </Caption>
-            <StxAmount textAlign={['left', 'left', 'right']} amount={cumulativeAmount} color={color('text-body')} />
+            <StxAmount
+              textAlign={['left', 'left', 'right']}
+              amount={cumulativeAmount}
+              color={color('text-body')}
+            />
           </Grid>
         );
       })}
