@@ -13,9 +13,6 @@ import type { TxPageQueryProps } from '@common/page-queries/txid';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';
 import { InView } from '@store/currently-in-view';
-import { NetworkModeToast } from '@components/network-mode-toast';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { useChainModeEffect } from '@common/hooks/use-chain-mode';
 
 interface TransactionPageProps {
   inView: InView;
@@ -24,15 +21,11 @@ interface TransactionPageProps {
 }
 
 const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyValid }) => {
-  useChainModeEffect();
-  useNetworkToast(error);
-
   if (error)
     return (
       <>
         <Meta title="Transaction not found" />
         <TxNotFound isPending={isPossiblyValid} />
-        <NetworkModeToast />
       </>
     );
 
@@ -42,7 +35,6 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
     <>
       <TransactionMeta />
       <TransactionPageComponent />
-      <NetworkModeToast />
     </>
   );
 };

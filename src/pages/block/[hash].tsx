@@ -26,8 +26,6 @@ import {
   useBlockTxsCurrentlyInView,
 } from '../../hooks/currently-in-view-hooks';
 import { PageWrapper } from '@components/page-wrapper';
-import { useNetworkToast } from '@common/hooks/use-network-toast';
-import { NetworkModeToast } from '@components/network-mode-toast';
 
 interface BlockSinglePageData {
   hash: string;
@@ -37,13 +35,11 @@ interface BlockSinglePageData {
 const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error, hash }) => {
   const block = useBlockCurrentlyInView();
   const transactions = useBlockTxsCurrentlyInView();
-  useNetworkToast(error || !block || !transactions);
   if (error || !block || !transactions) {
     return (
       <>
         <Meta title="Block hash not found" />
         <BlockNotFound isPending={validateTxId(hash)} />
-        <NetworkModeToast />
       </>
     );
   }
@@ -105,7 +101,6 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error, hash }) => {
       {transactionsWithoutCoinbase?.length ? (
         <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
       ) : null}
-      <NetworkModeToast />
     </PageWrapper>
   );
 };
