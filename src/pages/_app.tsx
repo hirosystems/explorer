@@ -7,7 +7,7 @@ import { AppConfig } from '@components/app-config';
 
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
-import type { NetworkMode } from '@common/types/network';
+import { NetworkMode } from '@common/types/network';
 
 import 'tippy.js/dist/tippy.css';
 import 'modern-normalize/modern-normalize.css';
@@ -29,15 +29,15 @@ function ExplorerApp({
   pageProps: { isHome, fullWidth, ...props },
 }: ExplorerAppProps) {
   const router = useRouter();
-  const setUpdateNetworkIndex = useUpdateAtom(networkIndexState);
+  const setNetworkIndex = useUpdateAtom(networkIndexState);
 
   useEffect(() => {
     const chainMode = router.query.chain;
     // Make sure the network list is in sync with the query param
     if (chainMode && chainMode === 'testnet') {
-      setUpdateNetworkIndex(DEFAULT_TESTNET_INDEX);
+      setNetworkIndex(DEFAULT_TESTNET_INDEX);
     } else {
-      setUpdateNetworkIndex(DEFAULT_NETWORK_INDEX);
+      setNetworkIndex(DEFAULT_NETWORK_INDEX);
     }
     toast(`You're viewing the ${chainMode || networkMode} Explorer`);
   }, []);
