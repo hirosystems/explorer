@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { TransactionMeta } from '@components/meta/transactions';
@@ -13,6 +13,7 @@ import type { TxPageQueryProps } from '@common/page-queries/txid';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';
 import { InView } from '@store/currently-in-view';
+import { useChainModeEffect } from '@common/hooks/use-chain-mode';
 
 interface TransactionPageProps {
   inView: InView;
@@ -21,6 +22,7 @@ interface TransactionPageProps {
 }
 
 const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyValid }) => {
+  useChainModeEffect();
   if (error)
     return (
       <>
@@ -28,9 +30,7 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
         <TxNotFound isPending={isPossiblyValid} />
       </>
     );
-
   useRefreshOnBack('txid');
-
   return (
     <>
       <TransactionMeta />
