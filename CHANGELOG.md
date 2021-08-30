@@ -1,3 +1,12 @@
+## [1.14.2](https://github.com/blockstack/explorer/compare/v1.14.1...v1.14.2) (2021-08-30)
+
+
+### Bug Fixes
+
+* dark mode contract deploy field ([096bcd0](https://github.com/blockstack/explorer/commit/096bcd07527cc9b8696c7ac5ee59e60100cd0763))
+* dark mode network modal, closes [#460](https://github.com/blockstack/explorer/issues/460) ([1fb135e](https://github.com/blockstack/explorer/commit/1fb135e2f3c160909fc791afb73d1e3789b5fa7a))
+* unlock scheduled dark mode, closes [#412](https://github.com/blockstack/explorer/issues/412) ([cb849b3](https://github.com/blockstack/explorer/commit/cb849b3cdb07bc44aa47e0b6706cd111f837dfea))
+
 ## [1.14.1](https://github.com/blockstack/explorer/compare/v1.14.0...v1.14.1) (2021-08-20)
 
 
