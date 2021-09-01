@@ -69,7 +69,7 @@
     "monaco-vscode-textmate-theme-converter": "0.1.1",
     "monacode": "0.3.1",
     "morgan": "1.10.0",
-    "next": "^11.0.2-canary.22",
+    "next": "^11.1.1",
     "next-plugin-preact": "3.0.6",
     "nookies": "2.5.2",
     "nprogress": "0.2.0",
