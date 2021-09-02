@@ -1,3 +1,10 @@
+## [1.14.3](https://github.com/blockstack/explorer/compare/v1.14.2...v1.14.3) (2021-09-02)
+
+
+### Bug Fixes
+
+* update hiro branding ([ace987b](https://github.com/blockstack/explorer/commit/ace987b55ed58e7569cb305ccc7d803977aef202)), closes [#513](https://github.com/blockstack/explorer/issues/513)
+
 ## [1.14.2](https://github.com/blockstack/explorer/compare/v1.14.1...v1.14.2) (2021-08-30)
 
 
