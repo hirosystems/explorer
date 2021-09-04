@@ -4,8 +4,9 @@ import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-co
 import { usePress } from 'react-aria';
 import { useFocusableRef } from '@react-spectrum/utils';
 
-export const blue = '#9146FF';
-export const focusBlue = `#9146FF`;
+export const blue = (alpha = 1, darker = false) =>
+  `rgba(${darker ? '70,55,255' : '85,70,255'},${alpha})`;
+export const focusBlue = (alpha = 1) => `rgba(170, 179, 255,${alpha})`;
 
 interface ButtonProps extends BoxProps {
   variant?: 'primary' | 'secondary' | 'tertiary';
@@ -15,17 +16,17 @@ const variantStyles = (variant: ButtonProps['variant']) => {
   switch (variant) {
     case 'secondary':
       return (isPressed: boolean) => ({
-        bg: '#9146FF',
+        bg: blue(0.2, isPressed),
         color: color('invert'),
         borderColor: blue(0),
-        _hover: { bg: '#9146FF', cursor: 'pointer' },
+        _hover: { bg: blue(0.25, true), cursor: 'pointer' },
         _focus: {
           boxShadow: `0 0 0 3px ${focusBlue(0.5)}`,
         },
       });
     default:
       return (isPressed: boolean) => ({
-        bg: '#9146FF',
+        bg: blue(1, isPressed),
         borderColor: blue(0),
         _hover: { bg: blue(1, true), cursor: 'pointer' },
         _focus: {
@@ -50,7 +51,6 @@ export const Button: ForwardRefExoticComponentWithAs<ButtonProps, 'button'> = fo
   const { onKeyUp, onKeyDown } = pressProps;
   return (
     <Box
-      background="#9146FF"
       as={as}
       border="1px solid"
       outline="none"
