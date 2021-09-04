@@ -9,6 +9,7 @@ import { usePrevious } from 'react-use';
 export const useFilterState = (key: 'sandbox' | 'txList') => {
   const [filter, setFilterState] = useAtom(filterState(key));
   const filterTypes = filter.types.filter(Boolean);
+  const previousFilterTypes = usePrevious(filterTypes);
 
   const handleToggleFilterPanelVisibility = useCallback(() => {
     setFilterState(state => ({ ...state, showing: !state.showing }));
@@ -19,7 +20,8 @@ export const useFilterState = (key: 'sandbox' | 'txList') => {
     [setFilterState]
   );
 
-  const handleToggleShowShowFailed = useCallback(
+  // TODO: This seems to be unused, remove?
+  const handleToggleShowFailed = useCallback(
     () => setFilterState(state => ({ ...state, showFailed: !state.showFailed })),
     [setFilterState]
   );
@@ -59,11 +61,12 @@ export const useFilterState = (key: 'sandbox' | 'txList') => {
   return {
     handleToggleFilterPanelVisibility,
     handleToggleShowPending,
-    handleToggleShowShowFailed,
+    handleToggleShowFailed,
     handleUpdateTypes,
     handleClose,
     handleOpen,
     ...filter,
     types: filterTypes,
+    previousTypes: previousFilterTypes,
   };
 };

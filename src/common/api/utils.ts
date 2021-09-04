@@ -68,7 +68,7 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
 
     const savedIndexInt = savedNetworkIndex && parseInt(savedNetworkIndex);
     const hasSelectedIndex = typeof savedIndexInt === 'number';
-    // TODO: I believer this will always be false?
+    // TODO: I believe this will always be false?
     const hasCustomItems = !!savedNetworkList;
 
     // has saved list and has saved an index, and that index is greater than or equal to the

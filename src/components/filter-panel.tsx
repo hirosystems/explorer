@@ -67,6 +67,7 @@ export const FilteredMessage: React.FC<{ filterKey: 'sandbox' | 'txList' } & Gri
 
 const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   const [isHovered, bind] = useHover();
+
   const handleClick = () => {
     onClick?.([type, !toggled]);
   };
