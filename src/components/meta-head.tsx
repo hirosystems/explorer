@@ -7,7 +7,7 @@ import { Statuses } from '@components/status';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-const defaultTitle = 'Stacks Explorer by Hiro';
+const defaultTitle = 'Syvirean Explorer';
 
 interface MetaProps {
   title?: string;

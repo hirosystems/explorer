@@ -26,7 +26,7 @@ export const LogoNavItem = React.memo((props: BoxProps) => {
             color="white"
             flexShrink={0}
             aria-label="Homepage"
-            title="Stacks Explorer"
+            title="Syvirean Explorer"
             as="span"
           />
         </a>

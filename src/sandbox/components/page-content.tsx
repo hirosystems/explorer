@@ -36,7 +36,7 @@ const View: React.FC<{ view: string; sender: string; contract: string }> = memo(
           <Title fontSize={3}>Welcome to the sandbox</Title>
           <Title>Please sign in to continue</Title>
           <Button onClick={doOpenAuth} width="100%">
-            Connect Stacks Wallet
+            Connect Hiro Wallet
           </Button>
         </Stack>
       </Flex>

@@ -20,32 +20,15 @@ const GlobalStyles = () => (
       }
 
       html.dark {
-        .metaverse-header {
-          opacity: 0.5;
-        }
-
         .metaverse-bg {
-          display: none;
-          opacity: 0.65;
-          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format,compress&w=1800'),
-            linear-gradient(
-              30deg,
-              rgba(98, 135, 221, 1) 0%,
-              rgba(231, 72, 92, 1) 58%,
-              rgba(102, 137, 221, 1) 100%
-            );
+          opacity: 0.5;
+          background: linear-gradient(0deg, #00fafa 0%, #9146ff 100%);
         }
       }
 
       html.light {
         .metaverse-bg {
-          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format,compress&w=1800'),
-            linear-gradient(
-              30deg,
-              rgba(98, 135, 221, 1) 0%,
-              rgba(231, 72, 92, 1) 58%,
-              rgba(102, 137, 221, 1) 100%
-            );
+          background: linear-gradient(0deg, #00fafa 0%, #9146ff 100%);
         }
       }
     `}
@@ -55,7 +38,7 @@ const GlobalStyles = () => (
 const Grain: React.FC<BoxProps> = memo(props => (
   <Box
     as="img"
-    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format,compress&w=1800"
+    src=""
     width="100%"
     position="absolute"
     left={0}

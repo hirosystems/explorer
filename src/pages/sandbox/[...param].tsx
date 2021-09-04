@@ -18,7 +18,7 @@ const Sandbox: NextPage<SandboxData> = props => {
   return (
     <SafeSuspense fallback={<></>}>
       <Head>
-        <title>Sandbox - Stacks Explorer by Hiro</title>
+        <title>Sandbox | Syvirean Explorer</title>
       </Head>
       <SandboxPageContent {...props} />
     </SafeSuspense>

@@ -34,7 +34,7 @@ export const WriteAndDeployTools: React.FC = props => {
       <Caption mb="tight">Contract name</Caption>
       <ContractName />
       <Button onClick={isSignedIn ? onDeploy : doOpenAuth} mt="base-loose" width="100%">
-        {isSignedIn ? 'Deploy' : 'Connect Stacks Wallet'}
+        {isSignedIn ? 'Deploy' : 'Connect Hiro Wallet'}
       </Button>
     </Flex>
   );

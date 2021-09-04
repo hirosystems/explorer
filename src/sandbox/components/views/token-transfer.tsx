@@ -153,7 +153,7 @@ export const TokenTransferView = () => {
             placeholder="Optional message (memo)"
           />
           <Box>
-            <Button type="submit">{isSignedIn ? 'Send STX' : 'Connect Stacks Wallet'}</Button>
+            <Button type="submit">{isSignedIn ? 'Send STX' : 'Connect Hiro Wallet'}</Button>
           </Box>
         </Stack>
       </Box>

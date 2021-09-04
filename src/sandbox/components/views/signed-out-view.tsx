@@ -96,10 +96,10 @@ export const SignedOutView: React.FC<any> = () => {
               fontWeight="500"
               maxWidth="14ch"
             >
-              Welcome to the Stacks Explorer Sandbox!
+              Welcome to the Syvirean Explorer Sandbox!
             </Title>
 
-            <Button onClick={doOpenAuth}>Continue with Stacks Wallet</Button>
+            <Button onClick={doOpenAuth}>Continue with Hiro Wallet</Button>
           </Box>
         </Grid>
       </Section>

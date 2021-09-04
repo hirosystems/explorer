@@ -35,7 +35,7 @@ export const Title: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardR
     as={as}
     display="inline-block"
     color="var(--colors-text-title)"
-    fontFamily={`"Open Sauce", Inter, sans-serif`}
+    fontFamily={`"Roobert", Inter, sans-serif`}
     fontWeight={500}
     {...props}
   />
@@ -49,7 +49,7 @@ export const Pre = memoWithAs<BoxProps, 'pre'>(
   forwardRefWithAs<BoxProps, 'pre'>(({ as = 'pre', ...props }, ref) => (
     <Text
       display="inline"
-      fontFamily={`"Fira Code", monospace`}
+      fontFamily={`Menlo, monospace`}
       bg={color('bg')}
       borderRadius="8px"
       border={border()}

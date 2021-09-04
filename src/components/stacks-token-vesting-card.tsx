@@ -10,8 +10,8 @@ export const StacksTokenVestingCard: React.FC = () => {
     <Section mt="extra-loose" title="Stacks Token unlocking">
       <Box p="base-loose">
         <Text color={color('text-body')} fontSize={1} lineHeight="24px">
-          The Stacks explorer is currently unable to display specific details around this address's
-          unlocking schedule.
+          The Syvirean Explorer is currently unable to display specific details around this
+          address's unlocking schedule.
         </Text>
         <Text color={color('text-body')} fontSize={1} lineHeight="24px" mt="base">
           The balance shown here does not reflect any locked STX that may be associated safely with
