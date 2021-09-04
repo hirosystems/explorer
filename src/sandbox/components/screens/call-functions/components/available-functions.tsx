@@ -23,7 +23,6 @@ import { parseReadOnlyResponse } from '@sandbox/common';
 import { CodeBlock } from '@components/code-block';
 import { handleContractCall } from '@sandbox/common/connect-functions';
 import { useContractInterface } from '@sandbox/components/screens/call-functions/components/use-contract-interface';
-import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
 
 const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any) => (
@@ -173,7 +172,6 @@ const FunctionSingleView = () => {
   const [readOnlyValue, setReadonly] = useRecoilState(readOnlyState);
   const handleClearFnName = () => setFunctionName(undefined);
   const [initialValues, setInitialValues] = React.useState({});
-  const { handleTrackGoal } = useFathomGoal();
   const network = useNetworkConfig();
 
   const { handleSubmit, handleChange, setValues, values } = useFormik({
@@ -207,7 +205,6 @@ const FunctionSingleView = () => {
         });
         if (fn.access === 'public') {
           try {
-            handleTrackGoal(Goals.SANDBOX_CONTRACT_CALL);
             void handleContractCall({
               contractAddress: contractId.split('.')[0],
               contractName: contractId.split('.')[1],

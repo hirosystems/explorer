@@ -2,19 +2,12 @@ import React, { useEffect } from 'react';
 import type { NextPage, NextPageContext } from 'next';
 import Head from 'next/head';
 import { SandboxPageContent } from '@sandbox/components/page-content';
-import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { getHomePageQueries } from '@common/page-queries/home';
 
 const Sandbox: NextPage<SandboxData> = props => {
-  const { handleTrackGoal } = useFathomGoal();
-
-  useEffect(() => {
-    handleTrackGoal(Goals.SANDBOX_LOAD);
-  }, []);
-
   return (
     <SafeSuspense fallback={<></>}>
       <Head>

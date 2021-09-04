@@ -13,7 +13,6 @@ import { DropIcon } from '@components/icons/drop';
 import { Badge } from '@components/badge';
 import { useRecoilState } from 'recoil';
 import { faucetResponseState } from '@sandbox/store/sandbox';
-import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 
 export const FaucetView = () => {
   const apiServer = useApiServer();
@@ -21,7 +20,6 @@ export const FaucetView = () => {
   const [response, setResponse] = useRecoilState(faucetResponseState);
   const { refreshPendingTransactions } = useUser();
   const [stackingIndex, setIndex] = React.useState(0);
-  const { handleTrackGoal } = useFathomGoal();
 
   React.useEffect(() => {
     if (response) {
@@ -31,7 +29,6 @@ export const FaucetView = () => {
   }, []);
 
   const handleSubmit = async (stacking?: boolean) => {
-    handleTrackGoal(Goals.SANDBOX_FAUCET);
     try {
       const res = await postToSidecar(apiServer)(
         `/faucets/stx?address=${principal as string}${stacking ? '&stacking=true' : ''}`

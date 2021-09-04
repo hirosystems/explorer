@@ -8,17 +8,14 @@ import { useCodeEditor } from '@sandbox/components/code-editor/code-editor';
 import { useRecoilState } from 'recoil';
 import { contractNameState } from '@sandbox/store/sandbox';
 import { useConnect } from '@sandbox/hooks/use-connect';
-import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 
 export const WriteAndDeployTools: React.FC = props => {
-  const { handleTrackGoal } = useFathomGoal();
   const [codeBody] = useCodeEditor();
   const [contractName] = useRecoilState(contractNameState);
   const { isSignedIn, doOpenAuth } = useConnect();
 
   const network = useNetworkConfig();
   const onDeploy = React.useCallback(() => {
-    handleTrackGoal(isSignedIn ? Goals.SANDBOX_DEPLOY : Goals.SANDBOX_SIGNIN);
     void handleContractDeploy({
       network,
       postConditionMode: 0x01,

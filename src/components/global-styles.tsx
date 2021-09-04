@@ -51,6 +51,7 @@ const TextAreaOverrides = (
 
 const globalStyles = css`
   @import url('https://x.syvita.org/fonts/roobert/importme.css');
+  @import url('https://x.syvita.org/fonts/inter/importme.css');
   connect-modal {
     .modal-container {
       z-index: 999999999;

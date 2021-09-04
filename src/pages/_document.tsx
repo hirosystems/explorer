@@ -38,9 +38,9 @@ export default class MyDocument extends Document<DocumentProps> {
     return (
       <Html lang="en">
         <Head>
-          <meta name="theme-color" content="#6287DD" />
+          <meta name="theme-color" content="#9146FF" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="#6287DD" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="#9146FF" />
           <script
             dangerouslySetInnerHTML={{
               __html: `(function () {
@@ -59,8 +59,6 @@ export default class MyDocument extends Document<DocumentProps> {
 })();`,
             }}
           />
-          <link rel="preconnect" href="https://cdn.usefathom.com" crossOrigin="true" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
         </Head>
         <body>
           <Main />
