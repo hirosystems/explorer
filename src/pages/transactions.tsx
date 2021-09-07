@@ -10,8 +10,6 @@ import { PageWrapper } from '@components/page-wrapper';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { getTransactionsPageQueries } from '@common/page-queries/transactions';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
-import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { LoadingPanel } from '@components/loading-panel';
 
 import type { NextPage } from 'next';
 
@@ -23,9 +21,7 @@ const TransactionsPage: NextPage = () => {
         <Title mt="72px" color="white" as="h1" fontSize="36px">
           Transactions
         </Title>
-        <SafeSuspense fallback={<LoadingPanel text="Loading..." />}>
-          <TabbedTransactionList infinite limit={DEFAULT_LIST_LIMIT} />
-        </SafeSuspense>
+        <TabbedTransactionList infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
     </PageWrapper>
   );
