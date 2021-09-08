@@ -21,10 +21,14 @@ import {
   transactionInViewState,
   transactionTypeInViewState,
 } from '@store/currently-in-view';
-import { transactionSingleState } from '@store/transactions';
+import { transactionSingleState, TransactionsListResponse } from '@store/transactions';
 import { IS_DEV } from '@common/constants';
 import { useAtomDevtools } from '@common/hooks/use-atom-devtools';
 import { useInfiniteQueryAtom } from 'jotai-query-toolkit';
+import { WritableAtom } from 'jotai';
+import { InfiniteData } from 'react-query';
+import { AtomWithInfiniteQueryAction } from 'jotai/query';
+import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-types';
 
 export function useTransactionInView() {
   return useAtomValue(transactionInViewState);
@@ -57,13 +61,13 @@ export function useContractInfoInView() {
 export function useAccountInViewTransactions() {
   const anAtom = useAtomValue(getAccountInViewTransactionsState);
   if (!anAtom) throw Error('No account in view');
-  return useInfiniteQueryAtom(anAtom);
+  return useInfiniteQueryAtom<InfiniteData<TransactionsListResponse> | undefined>(anAtom);
 }
 
 export function useAccountInViewPendingTransactions() {
   const anAtom = useAtomValue(getAccountInViewPendingTransactionsState);
   if (!anAtom) throw Error('No account in view');
-  return useInfiniteQueryAtom(anAtom);
+  return useInfiniteQueryAtom<InfiniteData<MempoolTransactionListResponse> | undefined>(anAtom);
 }
 
 export function useAccountInViewInfo() {
