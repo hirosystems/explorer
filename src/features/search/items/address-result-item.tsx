@@ -11,6 +11,8 @@ import { AddressLink } from '@components/links';
 import { ItemIcon } from '@components/item-icon';
 import { Caption, Title } from '@components/typography';
 import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
+import { TransactionsListResponse } from '@store/transactions';
+import { InfiniteData } from 'react-query';
 
 export const AddressResultItem: React.FC<
   FlexProps & { isHovered?: boolean; isLast: boolean; result: FoundResult }
@@ -18,7 +20,7 @@ export const AddressResultItem: React.FC<
   if (!result || !result.found || result.result.entity_type !== 'standard_address') return null;
   const principal = result.result.entity_id;
   const stx = useAtomValue(accountStxBalanceResponseState(principal));
-  const [transactions, { isFetchingNextPage }] = useInfiniteQueryAtom(
+  const [transactions] = useInfiniteQueryAtom<InfiniteData<TransactionsListResponse> | undefined>(
     accountTransactionsState([principal, DEFAULT_LIST_LIMIT])
   );
   const transactionTotal = transactions?.pages?.[0]?.total;

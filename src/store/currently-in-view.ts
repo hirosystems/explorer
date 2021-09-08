@@ -156,7 +156,10 @@ export const addressInViewState = atom<string | undefined>(get => {
 });
 
 export const getAccountInViewTransactionsState = atom<
-  | WritableAtom<InfiniteData<TransactionsListResponse> | undefined, AtomWithInfiniteQueryAction>
+  | WritableAtom<
+      InfiniteData<TransactionsListResponse> | undefined,
+      AtomWithInfiniteQueryAction<TransactionsListResponse>
+    >
   | undefined
 >(get => {
   const address = get(addressInViewState);
@@ -169,7 +172,7 @@ export const getAccountInViewTransactionsState = atom<
 export const getAccountInViewPendingTransactionsState = atom<
   | WritableAtom<
       InfiniteData<MempoolTransactionListResponse> | undefined,
-      AtomWithInfiniteQueryAction
+      AtomWithInfiniteQueryAction<MempoolTransactionListResponse>
     >
   | undefined
 >(get => {

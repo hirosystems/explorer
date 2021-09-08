@@ -1,20 +1,15 @@
 import { useMemo } from 'react';
 import { TransactionListItem } from '@components/transaction-list-item';
 import * as React from 'react';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-
-type Item = MempoolTransaction | Transaction;
-
-export interface Pages {
-  limit: number;
-  offset: number;
-  total: number;
-  results: Item[];
-}
+import type {
+  MempoolTransactionsListResponse,
+  TransactionsListResponse,
+} from '@store/transactions';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 interface TransactionListProps {
   isLastPage?: boolean;
-  data: Pages;
+  data?: TransactionsListResponse | MempoolTransactionsListResponse;
   borderOnLast?: boolean;
 }
 
@@ -24,12 +19,17 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
 
 export const TransactionList = (props: TransactionListProps) => {
   const { data, isLastPage, borderOnLast } = props;
-  const { results } = data;
-  const list = useMemo(() => getUniqueListBy<Item>(results, 'tx_id'), [results]);
-
+  const list = useMemo(
+    () =>
+      data?.results
+        ? getUniqueListBy<Transaction | MempoolTransaction>(data?.results, 'tx_id')
+        : undefined,
+    [data]
+  );
+  if (!list) return null;
   return (
     <>
-      {list?.map((item: Item, itemIndex: number) => (
+      {list?.map((item: Transaction | MempoolTransaction, itemIndex: number) => (
         <TransactionListItem
           tx={item}
           key={item.tx_id}
