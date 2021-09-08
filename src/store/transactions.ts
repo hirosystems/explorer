@@ -92,7 +92,6 @@ const transactionSingeQueryFn = async (get: Getter, txId: string) => {
 // ----------------
 // atoms
 // ----------------
-
 export const transactionsListState = atomFamilyWithInfiniteQuery<
   LimitWithTypesOptionalAddress,
   TransactionsListResponse
