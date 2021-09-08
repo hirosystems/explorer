@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAtomValue } from 'jotai/utils';
 import { Box, Flex, Stack, color, Grid, Fade, Transition, GridProps } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { border } from '@common/utils';
@@ -14,6 +15,7 @@ import { Badge } from '@components/badge';
 import { Text } from '@components/typography';
 import { useFilterState } from '@common/hooks/use-filter-state';
 import { TransactionType } from '@common/constants';
+import { isLoadingState } from '@store/filter';
 
 const FILTERABLE_TYPES = [
   TransactionType.SMART_CONTRACT,
@@ -99,6 +101,7 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
 export const FilterPanel = React.memo(
   ({ filterKey, hideBackdrop, showBorder, bg, pointerEvents, ...rest }: any) => {
     const { handleClose, types, handleUpdateTypes, showing } = useFilterState(filterKey);
+    const isLoading = useAtomValue(isLoadingState);
 
     const borderStyles = showBorder
       ? {
@@ -163,7 +166,17 @@ export const FilterPanel = React.memo(
               />
               <Flex pb="base" alignItems="center" justifyContent="space-between">
                 <Title>Filter transactions</Title>
-                <IconButton onClick={handleClose} dark icon={CloseIcon} />
+                <Stack isInline alignItems="center">
+                  <Text
+                    mb="0px !important"
+                    fontWeight="500"
+                    fontSize="12px"
+                    color={color('text-caption')}
+                  >
+                    {isLoading ? 'Loading...' : ''}
+                  </Text>
+                  <IconButton onClick={handleClose} dark icon={CloseIcon} />
+                </Stack>
               </Flex>
               <Flex justifyContent="flex-start">
                 <Stack alignItems="flex-start" spacing="base" mr="base">

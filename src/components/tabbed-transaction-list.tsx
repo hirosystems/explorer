@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex } from '@stacks/ui';
 import { Section } from '@components/section';
 import { FilterButton } from '@components/filter-button';
@@ -15,7 +15,7 @@ import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { useUpdateAtom } from 'jotai/utils';
 import { transactionsListState } from '@store/transactions';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
-import { useEffect, useState } from 'react';
+import { isLoadingState } from '@store/filter';
 
 const TX_TABS = 'tabs/tx-list';
 
@@ -68,6 +68,7 @@ export const TabbedTransactionList: React.FC<{
   limit?: number;
   infinite?: boolean;
 }> = ({ limit, infinite }) => {
+  const setIsLoading = useUpdateAtom(isLoadingState);
   const { types } = useFilterState('txList');
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
@@ -75,8 +76,7 @@ export const TabbedTransactionList: React.FC<{
   const [previousTypes, setPreviousTypes] = useState(types);
 
   const onSuspenseUnmount = (types?: GetTransactionListTypeEnum[]) => {
-    // set a loading atom here to be used in the filter panel
-    // setLoading(true)
+    setIsLoading(false);
     if (types) setPreviousTypes(types);
   };
 
@@ -95,8 +95,7 @@ export const TabbedTransactionList: React.FC<{
             infinite={infinite}
             limit={limit}
             types={previousTypes}
-            // to disable loading
-            // onUnMount={() => setLoading(false)}
+            onUnMount={() => setIsLoading(true)}
           />
         }
       >
