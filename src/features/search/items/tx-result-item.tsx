@@ -20,10 +20,12 @@ export const TxResultItem: React.FC<
   }
 > = ({ handleFocus, handleBlur, isFocused, isHovered, result, ...props }) => {
   const isTxid = result?.result.entity_type === 'tx_id';
+  const isMempoolTxId = result?.result.entity_type === 'mempool_tx_id';
   const isContractId = result?.result.entity_type === 'contract_address';
-  if (!result || (!isTxid && !isContractId)) return null;
+  if (!result || (!isTxid && !isMempoolTxId && !isContractId)) return null;
   const param = (result.result as any).entity_id;
-  const anAtom = isTxid ? transactionSingleState(param) : transactionFromContractId(param);
+  const anAtom =
+    isTxid || isMempoolTxId ? transactionSingleState(param) : transactionFromContractId(param);
 
   const transaction = useAtomValue<Transaction | MempoolTransaction | undefined>(anAtom);
 
