@@ -1,3 +1,10 @@
+## [1.14.4](https://github.com/blockstack/explorer/compare/v1.14.3...v1.14.4) (2021-09-10)
+
+
+### Bug Fixes
+
+* add mempool tx to search ([3ff1b27](https://github.com/blockstack/explorer/commit/3ff1b274444f6656036c02f7aa7a8858f8a77fd2))
+
 ## [1.14.3](https://github.com/blockstack/explorer/compare/v1.14.2...v1.14.3) (2021-09-02)
 
 
