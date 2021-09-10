@@ -4,6 +4,7 @@ import { getAccountQueryKey } from '@store/accounts';
 import { getApiClients } from '@common/api/client';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-types';
+import { InfoQueryKeys } from '@store/info';
 
 export function getPrincipalFromCtx(ctx: NextPageContext) {
   const { query } = ctx;
@@ -13,8 +14,10 @@ export function getPrincipalFromCtx(ctx: NextPageContext) {
 
 export const getAccountPageQueries: GetQueries = async ctx => {
   const principal = getPrincipalFromCtx(ctx);
-  const { accountsApi, transactionsApi } = await getApiClients(ctx);
+  const { accountsApi, transactionsApi, infoApi } = await getApiClients(ctx);
+
   return [
+    [InfoQueryKeys.INFO, async () => infoApi.getCoreApiInfo()],
     [
       getAccountQueryKey.balances(principal),
       async () => accountsApi.getAccountBalance({ principal }),

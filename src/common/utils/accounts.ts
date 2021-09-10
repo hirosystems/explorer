@@ -42,7 +42,9 @@ export const hasStxBalance = (balances?: AddressBalanceResponse) => {
   return hasBalance;
 };
 
-export const getStackStartBlockHeight = (transactions?: MempoolTransaction[] | Transaction[]) => {
+export const getStackingStartBlockHeight = (
+  transactions?: MempoolTransaction[] | Transaction[]
+) => {
   if (transactions && transactions.length) {
     const latestStackStxTx = (transactions as any).find(
       (tx: MempoolTransaction | Transaction) =>
