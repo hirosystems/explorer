@@ -1,9 +1,13 @@
+import { atom } from 'jotai';
 import { atomWithQuery } from 'jotai-query-toolkit';
 import { apiClientsState } from '@store/api-clients';
-import { atom } from 'jotai';
 
-const infoStateAtom = atomWithQuery(
-  'StacksInfoState',
+export enum InfoQueryKeys {
+  INFO = 'stacks/INFO',
+}
+
+export const stacksInfoState = atomWithQuery(
+  InfoQueryKeys.INFO,
   get => {
     const { infoApi } = get(apiClientsState);
     return infoApi.getCoreApiInfo();
@@ -11,4 +15,4 @@ const infoStateAtom = atomWithQuery(
   { refetchInterval: false, getShouldRefetch: () => false }
 );
 
-export const currentStacksHeight = atom(get => get(infoStateAtom).stacks_tip_height);
+export const currentStacksHeight = atom(get => get(stacksInfoState).stacks_tip_height);

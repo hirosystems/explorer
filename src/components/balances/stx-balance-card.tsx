@@ -63,7 +63,7 @@ interface StxBalancesProps {
   unlocking?: VestingAddressData;
 }
 
-export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal, stackingBlock }) => {
+export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
   const { handleOpenUnlockingScheduleModal } = useModal();
   const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
 
@@ -75,7 +75,6 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal, s
       : 0;
   const locked =
     typeof parseInt(balances?.stx?.locked) === 'number' ? parseInt(balances?.stx?.locked) : 0;
-
   const tokenOfferingLocked = parseInt(tokenOfferingData?.total_locked || '0');
   const totalBalance = microToStacks(balance + tokenOfferingLocked);
   const availableBalance = microToStacks(balance - locked);
@@ -178,7 +177,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal, s
                   <Caption>Stacked amount (locked)</Caption>
                   <BalanceItem color={color('text-title')} balance={stackedBalance} />
                 </Stack>
-                <StackingPercentage balances={balances} stackingBlock={stackingBlock} />
+                <StackingPercentage balances={balances} />
               </Box>
             </>
           ) : null}

@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai/utils';
 import {
   accountInViewBalances,
   accountInViewInfo,
+  accountInViewStackingStartBlockHeight,
   addressInViewState,
   blockHashInView,
   blockInView,
@@ -76,6 +77,10 @@ export function useAccountInViewBalances() {
 
 export function useAccountInViewStxBalance() {
   return useAtomValue(accountInViewBalances);
+}
+
+export function useAccountInViewStackingStartBlockHeight() {
+  return useAtomValue(accountInViewStackingStartBlockHeight);
 }
 
 export function useMicroblockCurrentlyInView() {
