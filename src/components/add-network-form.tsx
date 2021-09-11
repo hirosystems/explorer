@@ -4,7 +4,7 @@ import { Caption } from '@components/typography';
 import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
 import { IconAlertTriangle } from '@tabler/icons';
 
-export const NetworkSwitchModalForm: React.FC<StackProps> = props => {
+export const AddNetworkForm: React.FC<StackProps> = props => {
   const { handleSubmit, handleChange, errors, isValidating } = useNetworkAddForm();
   return (
     <Stack spacing="loose" as="form" onSubmit={handleSubmit} {...props}>

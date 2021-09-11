@@ -4,7 +4,6 @@ import {
   networkIndexState,
   networkListState,
 } from '@store/recoil/network';
-import { DEFAULT_TESTNET_INDEX, DEFAULT_MAINNET_INDEX } from '@common/constants';
 import { networkSwitchingState } from '@store/recoil/network';
 import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useAtom } from 'jotai';
@@ -65,14 +64,6 @@ export const useNetwork = () => {
     [handleRemoveListItem]
   );
 
-  const handleSetTestnet = useCallback(() => {
-    void handleUpdateCurrentIndex(DEFAULT_TESTNET_INDEX);
-  }, [handleUpdateCurrentIndex]);
-
-  const handleSetMainnet = useCallback(() => {
-    void handleUpdateCurrentIndex(DEFAULT_MAINNET_INDEX);
-  }, [handleUpdateCurrentIndex]);
-
   const isSwitching = networkSwitching === 'pending';
 
   return {
@@ -83,8 +74,6 @@ export const useNetwork = () => {
     isSwitching,
     handleAddListItem,
     handleUpdateCurrentIndex,
-    handleSetTestnet,
-    handleSetMainnet,
     handleAddNetwork,
     handleRemoveNetwork,
     handleSetPendingChange,

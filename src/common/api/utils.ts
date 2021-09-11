@@ -28,32 +28,52 @@ import { NetworkModes } from '@common/types/network';
  */
 export const getServerSideApiServer = async (ctx: NextPageContext) => {
   const chain = ctx.query?.chain;
+
   const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
-  // set it to our default network
+  // Set it to our default network
   let apiServer = defaultApiServer;
+  // Get cookies
+  const cookies = nookies.get(ctx);
+  const savedNetworkIndex = cookies[NETWORK_CURRENT_INDEX_COOKIE];
+  const INDEX = savedNetworkIndex && parseInt(savedNetworkIndex);
+
   let changed = false;
 
+  // Check the query param 'chain' to set the api server and cookie
+  if (chain) {
+    if (chain === 'mainnet') {
+      nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_NETWORK_INDEX), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+    } else if (chain === 'testnet') {
+      apiServer = DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url;
+      nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+    }
+  } else {
+    // If there is no chain, check if there is a saved network index to get the url
+    // This will then set the networkMode and the chain downstream
+    const savedServerUrl =
+      typeof INDEX === 'number' ? DEFAULT_NETWORK_LIST[INDEX]?.url : defaultApiServer;
+    apiServer = savedServerUrl;
+  }
+
   try {
-    // check for cookies
-    const cookies = nookies.get(ctx);
-    const savedNetworkIndex = cookies[NETWORK_CURRENT_INDEX_COOKIE];
+    // TODO: Confused bc this cookie doesn't seem to currently exist?
+    // Should it be added in networkListState?
     const savedNetworkList = cookies[NETWORK_LIST_COOKIE];
 
     const savedIndexInt = savedNetworkIndex && parseInt(savedNetworkIndex);
     const hasSelectedIndex = typeof savedIndexInt === 'number';
-
+    // TODO: I believe this will always be false?
     const hasCustomItems = !!savedNetworkList;
 
-    // if there is a saved index, and it's less than the length of the built in list
-    // meaning the user has saved one of the built in items, so pull from default list
-    if (hasSelectedIndex && savedIndexInt && savedIndexInt < DEFAULT_NETWORK_LIST.length) {
-      const INDEX = savedIndexInt;
-      apiServer = DEFAULT_NETWORK_LIST[INDEX].url;
-      changed = true;
-    }
     // has saved list and has saved an index, and that index is greater than or equal to the
     // length of default list (meaning they are using a saved item as api server)
-    else if (
+    if (
       hasSelectedIndex &&
       hasCustomItems &&
       savedIndexInt &&
@@ -71,19 +91,10 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
     if (changed && apiServer) {
       try {
         const res = await fetchFromApi(apiServer)(DEFAULT_STATUS_ENDPOINT);
-        const data = await res.json();
+        await res.json();
       } catch (e) {
         // if it fails, reset to default
         apiServer = defaultApiServer;
-      }
-    } else {
-      // if nothing is set, and chain param is testnet, set it to testnet (for open graph rendering, etc)
-      if (!savedNetworkIndex && chain === 'testnet') {
-        apiServer = DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url;
-        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
-          maxAge: 30 * 24 * 60 * 60,
-          path: '/',
-        });
       }
     }
     return apiServer;

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex } from '@stacks/ui';
 import { Section } from '@components/section';
 import { FilterButton } from '@components/filter-button';
@@ -9,12 +9,13 @@ import {
 import { useTabs } from '../hooks/use-tabs';
 import { InfiniteTransactionsList } from '@components/infinite-item-list';
 import { Tabs } from '@components/tabs';
-import { DEFAULT_TX_FILTER_TYPES, GetTransactionListTypeEnum } from '@store/recoil/filter';
+import { GetTransactionListTypeEnum } from '@store/recoil/filter';
 import { useFilterState } from '@common/hooks/use-filter-state';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { useUpdateAtom } from 'jotai/utils';
 import { transactionsListState } from '@store/transactions';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
+import { isLoadingState } from '@store/filter';
 
 const TX_TABS = 'tabs/tx-list';
 
@@ -22,10 +23,12 @@ const InnerTransactionListContent = ({
   limit,
   types,
   infinite,
+  onUnMount,
 }: {
   limit?: number;
   infinite?: boolean;
   types: GetTransactionListTypeEnum[];
+  onUnMount?: (types?: GetTransactionListTypeEnum[]) => void;
 }) => {
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
@@ -37,6 +40,14 @@ const InnerTransactionListContent = ({
     ? mempoolActions
     : confirmedActions;
   if (!data) return null;
+
+  useEffect(() => {
+    if (onUnMount) {
+      return () => {
+        onUnMount(types);
+      };
+    }
+  }, [types, onUnMount]);
 
   return (
     <Flex flexGrow={1} flexDirection="column" px="base-loose">
@@ -57,9 +68,17 @@ export const TabbedTransactionList: React.FC<{
   limit?: number;
   infinite?: boolean;
 }> = ({ limit, infinite }) => {
-  const { types, previousTypes } = useFilterState('txList');
+  const setIsLoading = useUpdateAtom(isLoadingState);
+  const { types } = useFilterState('txList');
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
+
+  const [previousTypes, setPreviousTypes] = useState(types);
+
+  const onSuspenseUnmount = (types?: GetTransactionListTypeEnum[]) => {
+    setIsLoading(false);
+    if (types) setPreviousTypes(types);
+  };
 
   return (
     <Section
@@ -75,11 +94,17 @@ export const TabbedTransactionList: React.FC<{
           <InnerTransactionListContent
             infinite={infinite}
             limit={limit}
-            types={previousTypes || DEFAULT_TX_FILTER_TYPES}
+            types={previousTypes}
+            onUnMount={() => setIsLoading(true)}
           />
         }
       >
-        <InnerTransactionListContent infinite={infinite} limit={limit} types={types} />
+        <InnerTransactionListContent
+          infinite={infinite}
+          limit={limit}
+          types={types}
+          onUnMount={onSuspenseUnmount}
+        />
       </SafeSuspense>
     </Section>
   );

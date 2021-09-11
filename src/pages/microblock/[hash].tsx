@@ -4,13 +4,14 @@ import { Box, Flex } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { truncateMiddle, validateTxId } from '@common/utils';
 import { Rows } from '@components/rows';
-import { NextPage, NextPageContext } from 'next';
+import { NextPage } from 'next';
 import { Section } from '@components/section';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
 import { MicroblockNotFound } from '@components/microblock-not-found';
 import { TransactionList } from '@components/transaction-list';
-import { withInitialQueries } from '@common/with-initial-queries';
+import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
+import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import {
   useMicroblockBlockCurrentlyInView,
   useMicroblockCurrentlyInView,
@@ -36,7 +37,7 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = ({ error, hash 
     return (
       <>
         <Meta title="Microblock hash not found" />
-        <MicroblockNotFound isPending={validateTxId(hash)} />;
+        <MicroblockNotFound isPending={validateTxId(hash)} />
       </>
     );
   }
@@ -112,7 +113,7 @@ MicroblockSinglePage.getInitialProps = ctx => {
   };
 };
 
-export default withInitialQueries<Microblock, MicroblockSinglePageData>(MicroblockSinglePage)(
-  getMicroblockPageQueries,
-  getMicroblockPageQueryProps
-);
+export default withInitialQueries<Microblock, MicroblockSinglePageData>(
+  MicroblockSinglePage,
+  pageAtomBuilders
+)(getMicroblockPageQueries, getMicroblockPageQueryProps);

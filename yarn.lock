@@ -5115,6 +5115,11 @@ globby@^11.0.3:
     merge2 "^1.3.0"
     slash "^3.0.0"
 
+goober@^2.0.35:
+  version "2.0.41"
+  resolved "https://registry.yarnpkg.com/goober/-/goober-2.0.41.tgz#0a3d786ff9917bcf2a096eef703bf717838cbec9"
+  integrity sha512-kwjegMT5018zWydhOQlQneCgCtrKJaPsru7TaBWmTYV0nsMeUrM6L6O8JmNYb9UbPMgWcmtf+9p4Y3oJabIH1A==
+
 graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4:
   version "4.2.8"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
@@ -5669,18 +5674,18 @@ jest-worker@^27.0.2:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jotai-query-toolkit@0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/jotai-query-toolkit/-/jotai-query-toolkit-0.1.6.tgz#69da053b6bbd3efe5715e5088f23a00862051ca1"
-  integrity sha512-koQ7XLNc7J/RGc10FmKKdTDya6wF3Wc9+nYg02JEVX1CuaO72K2WY2C5GEwdP4dvCqDOeA679SzoBJ2P5kGp/w==
+jotai-query-toolkit@0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/jotai-query-toolkit/-/jotai-query-toolkit-0.1.8.tgz#b375dbf5b57d0a4b896b889433ad6597556f55c6"
+  integrity sha512-jY5civ+peNc+bTQ/ir8DEzEY6Yb8h21SMqkvvLhr0u6xW1pDrwRlS1BEeBewhvV04CFN8rm90UYW7SZV4c0Htw==
   dependencies:
     fast-deep-equal "3.1.3"
-    proxy-memoize "^0.3.5"
+    proxy-memoize "^0.3.6"
 
-jotai@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.2.2.tgz#631fd7ad44e9ac26cdf9874d52282c1cfe032807"
-  integrity sha512-iqkkUdWsH2Mk4HY1biba/8kA77+8liVBy8E0d8Nce29qow4h9mzdDhpTasAruuFYPycw6JvfZgL5RB0JJuIZjw==
+jotai@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.3.2.tgz#955cdeaa35b0b792ac452c90646b52362d998f98"
+  integrity sha512-if3G/ic6PhGFPc0ypVi4F6gcfkfLN76iN4K0hayK+O+7Z0IUEQOow2w8NCDeZ2ES9DHmGpNh2pkbSxxU3kv2NQ==
 
 js-cookie@^2.2.1:
   version "2.2.1"
@@ -7115,7 +7120,7 @@ proxy-compare@2.0.2:
   resolved "https://registry.yarnpkg.com/proxy-compare/-/proxy-compare-2.0.2.tgz#343e624d0ec399dfbe575f1d365d4fa042c9fc69"
   integrity sha512-3qUXJBariEj3eO90M3Rgqq3+/P5Efl0t/dl9g/1uVzIQmO3M+ql4hvNH3mYdu8H+1zcKv07YvL55tsY74jmH1A==
 
-proxy-memoize@^0.3.5:
+proxy-memoize@^0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/proxy-memoize/-/proxy-memoize-0.3.6.tgz#90204033201403a0e00d1261173b74280706f4d7"
   integrity sha512-EVEcKR5A7Am2Opcz8Dww1rwMiYM+xG6RrGFnfdPl9H27gYXCa3aXGN9M3L393dpULr8QnVEc1wWcfWuRgETDgA==
@@ -7354,6 +7359,13 @@ react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-hot-toast@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-hot-toast/-/react-hot-toast-2.1.1.tgz#56409ab406b534e9e58274cf98d80355ba0fdda0"
+  integrity sha512-Odrp4wue0fHh0pOfZt5H+9nWCMtqs3wdlFSzZPp7qsxfzmbE26QmGWIh6hG43CukiPeOjA8WQhBJU8JwtWvWbQ==
+  dependencies:
+    goober "^2.0.35"
 
 react-hotkeys-hook@^2.4.0:
   version "2.4.1"

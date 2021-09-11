@@ -1,3 +1,19 @@
+## [1.14.5](https://github.com/blockstack/explorer/compare/v1.14.4...v1.14.5) (2021-09-10)
+
+
+### Bug Fixes
+
+* add isLoading to filter ([21b6ee3](https://github.com/blockstack/explorer/commit/21b6ee36b745b07f53ed0e32444cbbc6331e995f))
+* persist types between suspense ([c2bc836](https://github.com/blockstack/explorer/commit/c2bc8362542d576b27324af4109794f0923955a5))
+* transaction-list-filter ([ab3274e](https://github.com/blockstack/explorer/commit/ab3274e759e532eb9d99be7f7eaeb7a504cda4d0))
+
+## [1.14.4](https://github.com/blockstack/explorer/compare/v1.14.3...v1.14.4) (2021-09-10)
+
+
+### Bug Fixes
+
+* add mempool tx to search ([3ff1b27](https://github.com/blockstack/explorer/commit/3ff1b274444f6656036c02f7aa7a8858f8a77fd2))
+
 ## [1.14.3](https://github.com/blockstack/explorer/compare/v1.14.2...v1.14.3) (2021-09-02)
 
 

@@ -3,14 +3,14 @@ import { Box, color, ControlledModal, Flex, IconButton, Stack } from '@stacks/ui
 import { IconX } from '@tabler/icons';
 import { Link, Text, Title } from '@components/typography';
 import { useModal } from '@common/hooks/use-modal';
-import { NetworkSwitchModalForm } from '@components/add-network-form';
+import { AddNetworkForm } from '@components/add-network-form';
 import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
 import { MODALS } from '@common/constants';
 
-export const NetworkSwitchModal: React.FC = () => {
+export const AddNetworkModal: React.FC = () => {
   const { modal, handleCloseModal } = useModal();
   const { setErrors } = useNetworkAddForm();
-  const isOpen = modal === MODALS.NETWORK;
+  const isOpen = modal === MODALS.ADD_NETWORK;
   const handleClose = () => {
     setErrors({});
     handleCloseModal();
@@ -43,7 +43,7 @@ export const NetworkSwitchModal: React.FC = () => {
             . Make sure you review and trust the host before you add it.
           </Text>
         </Box>
-        {modal && <NetworkSwitchModalForm />}
+        {modal && <AddNetworkForm />}
       </Stack>
     </ControlledModal>
   );

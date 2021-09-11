@@ -1,7 +1,6 @@
 import React from 'react';
 import { SearchModal } from '@components/modals/search';
-import { NetworkSwitchModal } from '@components/modals/add-network';
-import { DifferentNetworkModal } from '@components/modals/different-network';
+import { AddNetworkModal } from '@components/modals/add-network';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 
@@ -12,8 +11,7 @@ export const Modals: React.FC = () => {
         <SearchModal />
         <UnlockingScheduleModal />
       </SafeSuspense>
-      <NetworkSwitchModal />
-      <DifferentNetworkModal />
+      <AddNetworkModal />
     </>
   );
 };

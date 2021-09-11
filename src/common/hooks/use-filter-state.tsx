@@ -20,7 +20,8 @@ export const useFilterState = (key: 'sandbox' | 'txList') => {
     [setFilterState]
   );
 
-  const handleToggleShowShowFailed = useCallback(
+  // TODO: This seems to be unused, remove?
+  const handleToggleShowFailed = useCallback(
     () => setFilterState(state => ({ ...state, showFailed: !state.showFailed })),
     [setFilterState]
   );
@@ -60,7 +61,7 @@ export const useFilterState = (key: 'sandbox' | 'txList') => {
   return {
     handleToggleFilterPanelVisibility,
     handleToggleShowPending,
-    handleToggleShowShowFailed,
+    handleToggleShowFailed,
     handleUpdateTypes,
     handleClose,
     handleOpen,

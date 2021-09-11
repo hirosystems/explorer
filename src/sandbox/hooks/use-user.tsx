@@ -48,7 +48,7 @@ export const useUser = (options?: {
     principal,
     username,
     profile,
-    transactions: transactions?.pages?.[0].results,
+    transactions: transactions?.pages?.[0].results as TransactionResults['results'],
     balances,
     pendingTransactions: pendingTransactions && pendingTransactions?.pages?.[0].results,
     hasTransactions,

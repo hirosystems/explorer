@@ -39,7 +39,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error, hash }) => {
     return (
       <>
         <Meta title="Block hash not found" />
-        <BlockNotFound isPending={validateTxId(hash)} />;
+        <BlockNotFound isPending={validateTxId(hash)} />
       </>
     );
   }
@@ -113,6 +113,7 @@ BlockSinglePage.getInitialProps = ctx => {
     error: false,
   };
 };
+
 export default withInitialQueries<Block, BlockSinglePageData>(BlockSinglePage, pageAtomBuilders)(
   getBlockPageQueries,
   getBlockPageQueryProps

@@ -101,8 +101,7 @@ export const DEFAULT_NETWORK_LIST = [
 
 export enum MODALS {
   SEARCH = 'modals/search',
-  NETWORK = 'modals/add-network',
-  DIFFERENT_NETWORK = 'modals/different-network',
+  ADD_NETWORK = 'modals/add-network',
   UNLOCKING_SCHEDULE = 'modals/unlocking-schedule',
 }
 
