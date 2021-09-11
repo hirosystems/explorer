@@ -445,6 +445,7 @@ export const TransactionsPanel = React.memo(props => {
       flexDirection="column"
       flexGrow={1}
       bg={color('bg-alt')}
+      borderBottomRightRadius="12px"
       overflow="hidden"
       {...props}
     >
