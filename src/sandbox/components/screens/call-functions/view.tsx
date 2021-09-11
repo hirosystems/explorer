@@ -115,22 +115,17 @@ export const FunctionCallView: React.FC<{ sender: string; contract: string }> = 
   switch (view) {
     case 'initial':
       return (
-        <Grid
-          minHeight="600px"
-          gridTemplateColumns={`600px 0.5fr 0.5fr`}
-          flexGrow={1}
-          flexShrink={1}
-        >
+        <>
           <Box borderRight={border()}>
             <ContractSearch />
           </Box>
-          <Box p="extra-loose">
+          <Box p="base">
             <Title fontWeight={400}>Or select from one of these</Title>
             <React.Suspense fallback={<LoadingPanel text="Loading.." />}>
               <DefaultContracts />
             </React.Suspense>
           </Box>
-        </Grid>
+        </>
       );
     case 'function-overview':
       return (
@@ -142,25 +137,13 @@ export const FunctionCallView: React.FC<{ sender: string; contract: string }> = 
           fallback={ErrorFallback}
         >
           <React.Suspense fallback={<LoadingPanel text="Loading..." />}>
-            <Grid
-              minHeight="600px"
-              gridTemplateColumns={`365px 0.5fr 0.5fr`}
-              flexGrow={1}
-              flexShrink={1}
-            >
-              <Box borderRight={border()} p="base">
-                <BackElement onClick={() => setView('initial')} />
-                <CalledContractDetails />
-              </Box>
-              <Box
-                overflow="auto"
-                maxHeight={'calc(100vh - 217px)'}
-                borderRight={border()}
-                p="base"
-              >
-                <AvailableFunctions />
-              </Box>
-            </Grid>
+            <Box borderRight={border()} p="base">
+              <BackElement onClick={() => setView('initial')} />
+              <CalledContractDetails />
+            </Box>
+            <Box overflow="auto" maxHeight="calc(100vh - 217px)" p="base">
+              <AvailableFunctions />
+            </Box>
           </React.Suspense>
         </ErrorWrapper>
       );

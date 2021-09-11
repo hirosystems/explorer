@@ -44,7 +44,7 @@ export const SideNav: React.FC<StackProps> = props => {
   ];
 
   return (
-    <Stack bg={color('bg-2')} borderRight={border()} {...props}>
+    <Stack borderRight={border()} {...props}>
       {navigation.map(nav =>
         nav.isDisabled ? null : (
           <Tooltip label={nav.label} placement="right" key={nav.label}>
