@@ -5,6 +5,8 @@ import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,
+  DEFAULT_REGTEST_INDEX,
+  DEFAULT_REGTEST_SERVER,
   DEFAULT_STATUS_ENDPOINT,
   DEFAULT_TESTNET_INDEX,
   DEFAULT_TESTNET_SERVER,
@@ -49,6 +51,12 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
     } else if (chain === 'testnet') {
       apiServer = DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url;
       nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
+        maxAge: 30 * 24 * 60 * 60,
+        path: '/',
+      });
+    } else if (chain === 'regtest') {
+      apiServer = DEFAULT_NETWORK_LIST[DEFAULT_REGTEST_INDEX]?.url;
+      nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_REGTEST_INDEX), {
         maxAge: 30 * 24 * 60 * 60,
         path: '/',
       });
@@ -121,6 +129,8 @@ export const getChainTypeFromUrl = (networkUrl: string | undefined) => {
       return NetworkModes.Mainnet;
     case DEFAULT_TESTNET_SERVER:
       return NetworkModes.Testnet;
+    case DEFAULT_REGTEST_SERVER:
+      return NetworkModes.Regtest;
     default:
       return undefined;
   }
