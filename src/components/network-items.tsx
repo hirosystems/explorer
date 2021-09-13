@@ -7,7 +7,6 @@ import { useNetwork } from '@common/hooks/use-network';
 import { Caption, Title } from '@components/typography';
 import { border, isLocal } from '@common/utils';
 import { useModal } from '@common/hooks/use-modal';
-import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { fetchFromApi } from '@common/api/fetch';
 
@@ -168,7 +167,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
               setTimeout(() => {
                 onItemClick?.(item);
                 if (!isActive) {
-                  handleUpdateCurrentIndex(key);
+                  void handleUpdateCurrentIndex(key);
                 }
               }, 250);
             }}

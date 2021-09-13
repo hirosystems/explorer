@@ -44,7 +44,7 @@ export const useNetwork = () => {
       set(networkSwitchingState, 'pending');
       set(networkIndexState, arg);
       setTimeout(() => {
-        window.location.reload(true);
+        window.location.reload();
       }, 1000);
     }, [])
   );
