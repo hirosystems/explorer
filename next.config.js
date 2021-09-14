@@ -1,10 +1,11 @@
+const { withSentryConfig } = require('@sentry/nextjs');
 const BrotliPlugin = require('brotli-webpack-plugin');
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-module.exports = withBundleAnalyzer({
+const moduleExports = withBundleAnalyzer({
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
@@ -50,3 +51,9 @@ module.exports = withBundleAnalyzer({
     return config;
   },
 });
+
+const SentryWebpackPluginOptions = {
+  silent: true, // Suppresses all logs
+};
+
+module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions);
