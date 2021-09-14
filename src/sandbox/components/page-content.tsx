@@ -13,7 +13,6 @@ import { TransactionsPanel } from '@sandbox/components/transactions-panel';
 import { rightPanelState } from '@sandbox/store/views';
 import { useConnect } from '@sandbox/hooks/use-connect';
 import { TokenTransferView } from '@sandbox/components/views/token-transfer';
-import { useAuthState } from '@sandbox/hooks/use-auth';
 import { Title } from '@components/typography';
 
 const View: React.FC<{ view: string; sender: string; contract: string }> = memo(props => {
@@ -43,30 +42,40 @@ const View: React.FC<{ view: string; sender: string; contract: string }> = memo(
     );
 
   switch (view) {
+    case 'deploy':
+      return (
+        <Grid minHeight="600px" gridTemplateColumns="365px 1fr" flexGrow={1} flexShrink={1}>
+          <WriteAndDeployTools />
+          <WriteAndDeployView />
+        </Grid>
+      );
     case 'contract-call':
       return (
         <React.Suspense fallback={<Box flexGrow={1} />}>
-          <FunctionCallView {...props} />
+          <Grid
+            minHeight="600px"
+            width="calc((1142px / 3) * 2)"
+            gridTemplateColumns="repeat(2, 1fr)"
+            flexGrow={1}
+            flexShrink={1}
+          >
+            <FunctionCallView {...props} />
+          </Grid>
         </React.Suspense>
       );
     case 'transfer':
       return (
-        <Grid minHeight="600px" gridTemplateColumns={`600px`} flexGrow={1} flexShrink={1}>
+        <Grid minHeight="600px" gridTemplateColumns="760px" flexGrow={1} flexShrink={1}>
           <TokenTransferView />
         </Grid>
       );
     case 'faucet':
       return (
         <React.Suspense fallback={<></>}>
-          <FaucetView />
+          <Grid minHeight="600px" placeItems="center" flexDirection="column">
+            <FaucetView />
+          </Grid>
         </React.Suspense>
-      );
-    case 'deploy':
-      return (
-        <Grid minHeight="600px" gridTemplateColumns={`365px 1fr`} flexGrow={1} flexShrink={1}>
-          <WriteAndDeployTools />
-          <WriteAndDeployView />
-        </Grid>
       );
   }
   return null;
@@ -74,7 +83,13 @@ const View: React.FC<{ view: string; sender: string; contract: string }> = memo(
 
 const Menu = () => {
   return (
-    <Flex flexGrow={1} flexDirection="column" borderLeft={border()}>
+    <Flex
+      flexGrow={1}
+      flexDirection="column"
+      maxHeight={'calc(100vh - 217px)'}
+      zIndex="100"
+      borderLeft={border()}
+    >
       <UserCard />
       <TransactionsPanel />
     </Flex>
@@ -105,7 +120,7 @@ export const SandboxPageContent: React.FC<{
     >
       <SandboxHeader />
       <Grid
-        gridTemplateColumns={panelVisible ? `72px 1fr 460px` : '72px 1fr'}
+        gridTemplateColumns={panelVisible ? `72px 1fr calc(1142px / 3)` : '72px 1fr'}
         minHeight="calc(100vh - 217px)"
         flexGrow={1}
         flexShrink={1}

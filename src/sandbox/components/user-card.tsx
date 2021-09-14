@@ -80,7 +80,7 @@ export const UserCard = ({ ...rest }: any) => {
   const [isHovered, bind] = useHover();
 
   return balances ? (
-    <Box borderBottom={border()} p="loose" {...rest}>
+    <Box bg={color('bg')} borderBottom={border()} p="loose" {...rest}>
       <Stack spacing="base">
         <Balance />
         {principal && (

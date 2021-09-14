@@ -20,6 +20,7 @@ import {
 import { InfiniteData } from 'react-query';
 import { AtomWithInfiniteQueryAction } from 'jotai/query';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
+import { getStackingStartBlockHeight } from '@common/utils/accounts';
 
 function makeDebugLabel(name: string) {
   return `[currently in view] ${name}`;
@@ -207,9 +208,16 @@ export const accountInViewStxBalance = atom(get => {
   if (!address) return;
   return get(accountStxBalanceResponseState(address));
 });
+
 export const accountInViewTokenOfferingData = atom(get => {
   const balances = get(accountInViewBalances);
   return balances?.token_offering_locked;
+});
+
+export const accountInViewStackingStartBlockHeight = atom(get => {
+  const transactions = get(accountInViewTransactionsState);
+  const stackingStartBlockHeight = getStackingStartBlockHeight(transactions?.pages[0].results);
+  return stackingStartBlockHeight;
 });
 
 currentlyInViewState.debugLabel = makeDebugLabel('currently in view');
