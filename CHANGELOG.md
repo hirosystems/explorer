@@ -1,3 +1,12 @@
+## [1.14.6](https://github.com/blockstack/explorer/compare/v1.14.5...v1.14.6) (2021-09-14)
+
+
+### Bug Fixes
+
+* menu ui ([8a1b438](https://github.com/blockstack/explorer/commit/8a1b4388a341188e7a4907995d7b60b15f0d5e50))
+* stacking cycle info ([936bc3f](https://github.com/blockstack/explorer/commit/936bc3f1ed7c5779525fb4d25d2e8c736e39758d))
+* transaction tabs ([3a95546](https://github.com/blockstack/explorer/commit/3a95546ec820d22f129ea6506267baba0c3b6159))
+
 ## [1.14.5](https://github.com/blockstack/explorer/compare/v1.14.4...v1.14.5) (2021-09-10)
 
 
