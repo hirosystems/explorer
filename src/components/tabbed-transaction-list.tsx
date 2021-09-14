@@ -76,7 +76,7 @@ export const TabbedTransactionList: React.FC<{
   const [previousTypes, setPreviousTypes] = useState(types);
 
   const onSuspenseUnmount = (types?: GetTransactionListTypeEnum[]) => {
-    setIsLoading(false);
+    setIsLoading(true);
     if (types) setPreviousTypes(types);
   };
 
@@ -95,7 +95,7 @@ export const TabbedTransactionList: React.FC<{
             infinite={infinite}
             limit={limit}
             types={previousTypes}
-            onUnMount={() => setIsLoading(true)}
+            onUnMount={onSuspenseUnmount}
           />
         }
       >
@@ -103,7 +103,7 @@ export const TabbedTransactionList: React.FC<{
           infinite={infinite}
           limit={limit}
           types={types}
-          onUnMount={onSuspenseUnmount}
+          onUnMount={() => setIsLoading(false)}
         />
       </SafeSuspense>
     </Section>
