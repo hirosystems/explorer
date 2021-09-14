@@ -5,6 +5,7 @@ import type {
   ContractDeployOptions,
 } from '@stacks/connect';
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
+import { PostConditionMode } from '@stacks/transactions';
 
 export const handleStxTransfer = async (options: STXTransferOptions): Promise<void | null> => {
   const payload = await openSTXTransfer({
@@ -16,6 +17,7 @@ export const handleStxTransfer = async (options: STXTransferOptions): Promise<vo
 
 export const handleContractCall = async (options: ContractCallOptions): Promise<void | null> => {
   const payload = await openContractCall({
+    postConditionMode: PostConditionMode.Allow,
     ...options,
     authOrigin: CONNECT_AUTH_ORIGIN,
   });
