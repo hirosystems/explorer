@@ -16,6 +16,7 @@ import { getServerSideApiServer } from '@common/api/utils';
 import { networkIndexState } from '@store/recoil/network';
 import { DEFAULT_NETWORK_INDEX, DEFAULT_TESTNET_INDEX } from '@common/constants';
 import { NetworkModeToast } from '@components/network-mode-toast';
+import { Modals } from '@components/modals';
 
 interface ExplorerAppProps extends AppProps {
   networkMode: NetworkMode;
@@ -48,6 +49,7 @@ function ExplorerApp({
       <AppConfig isHome={isHome} fullWidth={fullWidth}>
         <AtomDebug />
         <Component apiServer={apiServer} networkMode={networkMode} {...props} />
+        <Modals />
         <NetworkModeToast />
       </AppConfig>
     </>
