@@ -13,7 +13,6 @@ import { fetchFromApi } from '@common/api/fetch';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
-  DEFAULT_REGTEST_SERVER,
   DEFAULT_V2_INFO_ENDPOINT,
 } from '@common/constants';
 import { Badge } from '@components/badge';
@@ -54,10 +53,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const { handleRemoveNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
 
-  const isDefault =
-    item.url === DEFAULT_REGTEST_SERVER ||
-    item.url === DEFAULT_TESTNET_SERVER ||
-    item.url === DEFAULT_MAINNET_SERVER;
+  const isDefault = item.url === DEFAULT_TESTNET_SERVER || item.url === DEFAULT_MAINNET_SERVER;
   const doNotFetch = isDisabled || !item.url || isDefault;
 
   const { error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
