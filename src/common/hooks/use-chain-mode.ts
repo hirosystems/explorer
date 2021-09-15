@@ -45,14 +45,13 @@ export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
   const [chainMode, setChainMode] = useChainMode();
   const networkModeChangeState = useAtomValue(networkSwitchingState);
 
-  const isRegtest = chainMode === NetworkModes.Regtest;
   const isTestnet = chainMode === NetworkModes.Testnet;
   const isMainnet = chainMode === NetworkModes.Mainnet;
   const networkMode = providedNetworkMode || _networkMode;
 
   useEffect(() => {
     if (IS_BROWSER && networkMode && networkModeChangeState !== 'pending') {
-      if (!chainMode || (!isTestnet && !isMainnet && !isRegtest)) {
+      if (!chainMode || (!isTestnet && !isMainnet)) {
         void setChainMode(networkMode);
       }
     }
