@@ -10,8 +10,8 @@ export const Modals: React.FC = () => {
       <SafeSuspense fallback={<></>}>
         <SearchModal />
         <UnlockingScheduleModal />
+        <AddNetworkModal />
       </SafeSuspense>
-      <AddNetworkModal />
     </>
   );
 };
