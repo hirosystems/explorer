@@ -3,6 +3,7 @@ import {
   DEFAULT_NETWORK_INDEX,
   DEFAULT_NETWORK_LIST,
   NETWORK_CURRENT_INDEX_COOKIE,
+  NETWORK_CUSTOM_LIST_COOKIE,
 } from '@common/constants';
 
 import { parseCookies, setCookie } from 'nookies';
@@ -28,7 +29,7 @@ const atomWithCookie = <T>({ key, initialValue }: { key: string; initialValue: T
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
           });
-          set(baseAtom, update);
+          void set(baseAtom, update);
         }
       }
     }
@@ -38,7 +39,10 @@ const atomWithCookie = <T>({ key, initialValue }: { key: string; initialValue: T
 
 export const networkModeState = atom(null);
 
-export const customNetworksListState = atom<{ label: string; url: string }[]>([]);
+export const customNetworksListState = atomWithCookie<{ label: string; url: string }[]>({
+  key: NETWORK_CUSTOM_LIST_COOKIE,
+  initialValue: [],
+});
 
 export const networkListState = atom(get => {
   const customItems = get(customNetworksListState);
