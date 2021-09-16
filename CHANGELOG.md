@@ -1,3 +1,10 @@
+## [1.14.7](https://github.com/blockstack/explorer/compare/v1.14.6...v1.14.7) (2021-09-16)
+
+
+### Bug Fixes
+
+* regtest network mode ([5d43f21](https://github.com/blockstack/explorer/commit/5d43f21e2cb5c2589dde0d28d7c47a7853574ea4))
+
 ## [1.14.6](https://github.com/blockstack/explorer/compare/v1.14.5...v1.14.6) (2021-09-14)
 
 
