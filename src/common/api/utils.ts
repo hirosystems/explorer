@@ -9,10 +9,17 @@ import {
   DEFAULT_TESTNET_INDEX,
   DEFAULT_TESTNET_SERVER,
   NETWORK_CURRENT_INDEX_COOKIE,
-  NETWORK_LIST_COOKIE,
+  NETWORK_CUSTOM_LIST_COOKIE,
 } from '@common/constants';
 import { fetchFromApi } from '@common/api/fetch';
 import { NetworkModes } from '@common/types/network';
+
+export const getSavedNetworkIndex = (ctx: NextPageContext) => {
+  const cookies = nookies.get(ctx);
+  const savedNetworkIndex = cookies[NETWORK_CURRENT_INDEX_COOKIE];
+  const parsedIndex = savedNetworkIndex ? parseInt(savedNetworkIndex) : 0;
+  return parsedIndex;
+};
 
 /**
  * Get the api server in SSR contexts
@@ -32,55 +39,45 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
   const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
   // Set it to our default network
   let apiServer = defaultApiServer;
-  // Get cookies
-  const cookies = nookies.get(ctx);
-  const savedNetworkIndex = cookies[NETWORK_CURRENT_INDEX_COOKIE];
-  const INDEX = savedNetworkIndex && parseInt(savedNetworkIndex);
+  const INDEX = getSavedNetworkIndex(ctx);
 
   let changed = false;
-
   // Check the query param 'chain' to set the api server and cookie
-  if (chain) {
-    if (chain === 'mainnet') {
-      nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_NETWORK_INDEX), {
-        maxAge: 30 * 24 * 60 * 60,
-        path: '/',
-      });
-    } else if (chain === 'testnet') {
-      apiServer = DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url;
-      nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
-        maxAge: 30 * 24 * 60 * 60,
-        path: '/',
-      });
+  if (INDEX === DEFAULT_NETWORK_INDEX || INDEX === DEFAULT_TESTNET_INDEX) {
+    if (chain) {
+      if (chain === NetworkModes.Mainnet) {
+        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_NETWORK_INDEX), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
+      } else if (chain === NetworkModes.Testnet) {
+        apiServer = DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url;
+        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_TESTNET_INDEX), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: '/',
+        });
+      }
+    } else {
+      // If there is no chain, check if there is a saved network index to get the url
+      // This will then set the networkMode and the chain downstream
+      const savedServerUrl =
+        typeof INDEX === 'number' ? DEFAULT_NETWORK_LIST[INDEX]?.url : defaultApiServer;
+      apiServer = savedServerUrl;
     }
-  } else {
-    // If there is no chain, check if there is a saved network index to get the url
-    // This will then set the networkMode and the chain downstream
-    const savedServerUrl =
-      typeof INDEX === 'number' ? DEFAULT_NETWORK_LIST[INDEX]?.url : defaultApiServer;
-    apiServer = savedServerUrl;
   }
 
+  // This code block addresses custom networks and attempts to test the server
+  // before returning the apiServer
   try {
-    // TODO: Confused bc this cookie doesn't seem to currently exist?
-    // Should it be added in networkListState?
-    const savedNetworkList = cookies[NETWORK_LIST_COOKIE];
+    const cookies = nookies.get(ctx);
+    const savedCustomNetworkList = cookies[NETWORK_CUSTOM_LIST_COOKIE];
+    const hasValidIndex = INDEX && typeof INDEX === 'number';
+    const hasCustomItems = !!savedCustomNetworkList;
 
-    const savedIndexInt = savedNetworkIndex && parseInt(savedNetworkIndex);
-    const hasSelectedIndex = typeof savedIndexInt === 'number';
-    // TODO: I believe this will always be false?
-    const hasCustomItems = !!savedNetworkList;
-
-    // has saved list and has saved an index, and that index is greater than or equal to the
+    // has saved custom list and has saved an index, and that index is greater than or equal to the
     // length of default list (meaning they are using a saved item as api server)
-    if (
-      hasSelectedIndex &&
-      hasCustomItems &&
-      savedIndexInt &&
-      savedIndexInt >= DEFAULT_NETWORK_LIST.length
-    ) {
-      const NETWORK_LIST = JSON.parse(savedNetworkList);
-      const INDEX = savedIndexInt;
+    if (hasValidIndex && hasCustomItems && INDEX >= DEFAULT_NETWORK_LIST.length) {
+      const NETWORK_LIST = JSON.parse(savedCustomNetworkList);
       const customServer = NETWORK_LIST[INDEX - DEFAULT_NETWORK_LIST.length]?.url;
       if (customServer) {
         apiServer = customServer;
