@@ -12,7 +12,7 @@ import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 export const SideNav: React.FC<StackProps> = props => {
   const { isSignedIn } = useConnect();
-  const mode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
 
   const navigation: {
     label: string;
@@ -39,7 +39,7 @@ export const SideNav: React.FC<StackProps> = props => {
       label: 'Testnet Faucet',
       slug: 'faucet',
       icon: <Box as={DropIcon} size="24px" />,
-      isDisabled: !isSignedIn || mode === 'mainnet',
+      isDisabled: !isSignedIn || networkMode === 'mainnet',
     },
   ];
 

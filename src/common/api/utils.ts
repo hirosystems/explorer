@@ -2,17 +2,16 @@ import nookies from 'nookies';
 import { NextPageContext } from 'next';
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import {
-  DEFAULT_MAINNET_SERVER,
-  DEFAULT_NETWORK_INDEX,
+  DEFAULT_MAINNET_INDEX,
   DEFAULT_NETWORK_LIST,
-  DEFAULT_STATUS_ENDPOINT,
   DEFAULT_TESTNET_INDEX,
-  DEFAULT_TESTNET_SERVER,
   NETWORK_CURRENT_INDEX_COOKIE,
   NETWORK_CUSTOM_LIST_COOKIE,
+  DEFAULT_V2_INFO_ENDPOINT,
 } from '@common/constants';
 import { fetchFromApi } from '@common/api/fetch';
 import { NetworkModes } from '@common/types/network';
+import { ChainID } from '@stacks/transactions';
 
 export const getSavedNetworkIndex = (ctx: NextPageContext) => {
   const cookies = nookies.get(ctx);
@@ -35,18 +34,17 @@ export const getSavedNetworkIndex = (ctx: NextPageContext) => {
  */
 export const getServerSideApiServer = async (ctx: NextPageContext) => {
   const chain = ctx.query?.chain;
-
-  const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_NETWORK_INDEX].url;
+  const defaultApiServer = DEFAULT_NETWORK_LIST[DEFAULT_MAINNET_INDEX].url;
   // Set it to our default network
   let apiServer = defaultApiServer;
   const INDEX = getSavedNetworkIndex(ctx);
 
-  let changed = false;
+  // This code block handles default networks
   // Check the query param 'chain' to set the api server and cookie
-  if (INDEX === DEFAULT_NETWORK_INDEX || INDEX === DEFAULT_TESTNET_INDEX) {
+  if (INDEX === DEFAULT_MAINNET_INDEX || INDEX === DEFAULT_TESTNET_INDEX) {
     if (chain) {
       if (chain === NetworkModes.Mainnet) {
-        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_NETWORK_INDEX), {
+        nookies.set(ctx, NETWORK_CURRENT_INDEX_COOKIE, JSON.stringify(DEFAULT_MAINNET_INDEX), {
           maxAge: 30 * 24 * 60 * 60,
           path: '/',
         });
@@ -58,45 +56,67 @@ export const getServerSideApiServer = async (ctx: NextPageContext) => {
         });
       }
     } else {
-      // If there is no chain, check if there is a saved network index to get the url
-      // This will then set the networkMode and the chain downstream
+      // If there is no chain, check if there is a saved network index to get the server
       const savedServerUrl =
         typeof INDEX === 'number' ? DEFAULT_NETWORK_LIST[INDEX]?.url : defaultApiServer;
       apiServer = savedServerUrl;
     }
-  }
-
-  // This code block addresses custom networks and attempts to test the server
-  // before returning the apiServer
-  try {
-    const cookies = nookies.get(ctx);
-    const savedCustomNetworkList = cookies[NETWORK_CUSTOM_LIST_COOKIE];
-    const hasValidIndex = INDEX && typeof INDEX === 'number';
-    const hasCustomItems = !!savedCustomNetworkList;
-
-    // has saved custom list and has saved an index, and that index is greater than or equal to the
-    // length of default list (meaning they are using a saved item as api server)
-    if (hasValidIndex && hasCustomItems && INDEX >= DEFAULT_NETWORK_LIST.length) {
-      const NETWORK_LIST = JSON.parse(savedCustomNetworkList);
-      const customServer = NETWORK_LIST[INDEX - DEFAULT_NETWORK_LIST.length]?.url;
-      if (customServer) {
-        apiServer = customServer;
-        changed = true;
-      }
-    }
-    // check the server works
-    if (changed && apiServer) {
-      try {
-        const res = await fetchFromApi(apiServer)(DEFAULT_STATUS_ENDPOINT);
-        await res.json();
-      } catch (e) {
-        // if it fails, reset to default
-        apiServer = defaultApiServer;
-      }
-    }
     return apiServer;
-  } catch (e) {
-    return apiServer;
+  } else {
+    // This code block handles custom networks and attempts to test the server
+    try {
+      const cookies = nookies.get(ctx);
+      const savedCustomNetworkList = cookies[NETWORK_CUSTOM_LIST_COOKIE];
+      const hasValidIndex = INDEX && typeof INDEX === 'number';
+      const hasCustomItems = !!savedCustomNetworkList;
+
+      // Has a saved custom network list and the saved index is one of those networks
+      if (hasValidIndex && hasCustomItems && INDEX >= DEFAULT_NETWORK_LIST.length) {
+        const NETWORK_LIST = JSON.parse(savedCustomNetworkList);
+        const customServer = NETWORK_LIST[INDEX - DEFAULT_NETWORK_LIST.length]?.url;
+
+        if (customServer) {
+          // Check to make sure the server works and use the network id
+          try {
+            const response = await fetchFromApi(customServer)(DEFAULT_V2_INFO_ENDPOINT);
+            const data = await response.json();
+            // Network id of the custom network
+            const customServerNetworkId: ChainID.Mainnet | ChainID.Testnet =
+              data?.network_id && parseInt(data?.network_id);
+            const chainIsTestnet = chain === NetworkModes.Testnet;
+            // Network id of the chain query param
+            const chainNetworkId: ChainID.Mainnet | ChainID.Testnet = chainIsTestnet
+              ? ChainID.Testnet
+              : ChainID.Mainnet;
+            // If they are the same, don't change servers
+            if (customServerNetworkId === chainNetworkId) {
+              apiServer = customServer;
+            } else {
+              // If they are different, switch servers
+              apiServer = chainIsTestnet
+                ? DEFAULT_NETWORK_LIST[DEFAULT_TESTNET_INDEX]?.url
+                : defaultApiServer;
+              // And, set new cookie
+              nookies.set(
+                ctx,
+                NETWORK_CURRENT_INDEX_COOKIE,
+                JSON.stringify(chainIsTestnet ? DEFAULT_TESTNET_INDEX : DEFAULT_MAINNET_INDEX),
+                {
+                  maxAge: 30 * 24 * 60 * 60,
+                  path: '/',
+                }
+              );
+            }
+          } catch (e) {
+            // If it fails, reset to default
+            apiServer = defaultApiServer;
+          }
+        }
+      }
+      return apiServer;
+    } catch (e) {
+      return apiServer;
+    }
   }
 };
 
@@ -112,11 +132,11 @@ export const generateTypesQueryString = (types?: Transaction['tx_type'][]) => {
   return '';
 };
 
-export const getChainTypeFromUrl = (networkUrl: string | undefined) => {
-  switch (networkUrl) {
-    case DEFAULT_MAINNET_SERVER:
+export const getNetworkModeFromNetworkId = (networkId: ChainID) => {
+  switch (networkId) {
+    case ChainID.Mainnet:
       return NetworkModes.Mainnet;
-    case DEFAULT_TESTNET_SERVER:
+    case ChainID.Testnet:
       return NetworkModes.Testnet;
     default:
       return undefined;

@@ -13,7 +13,7 @@ import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { useAtomValue, useUpdateAtom } from 'jotai/utils';
 
 export const InvertedAddressNote: React.FC = () => {
-  const networkMode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
   const setValue = useUpdateAtom(searchValueState);
   const setQuery = useUpdateAtom(searchQueryState);
   const setFocus = useUpdateAtom(searchFocusedState);

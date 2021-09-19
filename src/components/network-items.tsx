@@ -18,7 +18,8 @@ import {
 import { Badge } from '@components/badge';
 
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
-import { getChainTypeFromUrl } from '@common/api/utils';
+import { getNetworkModeFromNetworkId } from '@common/api/utils';
+import { ChainID } from '@stacks/transactions';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -53,23 +54,34 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const { handleRemoveNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
 
-  const isDefault = item.url === DEFAULT_TESTNET_SERVER || item.url === DEFAULT_MAINNET_SERVER;
+  const isMainnet = item.url === DEFAULT_MAINNET_SERVER;
+  const isTestnet = item.url === DEFAULT_TESTNET_SERVER;
+  const isDefault = isMainnet || isTestnet;
+  let itemNetworkId: ChainID.Mainnet | ChainID.Testnet = isMainnet
+    ? ChainID.Mainnet
+    : ChainID.Testnet;
+
   const doNotFetch = isDisabled || !item.url || isDefault;
 
-  const { error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
+  const { data, error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
     // this will only run if the item url is not one of the defaults (mainnet/testnet)
     const response = await fetchFromApi(item.url as string)(DEFAULT_V2_INFO_ENDPOINT);
     return response.json();
   });
 
-  const networkMode = getChainTypeFromUrl(item.url);
+  // Custom network id
+  if (!isDefault && data) {
+    itemNetworkId = data?.network_id && parseInt(data?.network_id);
+  }
+
+  const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
 
   const handleClick = React.useCallback(
     async e => {
-      await setChainMode(networkMode);
+      await setChainMode(itemNetworkMode);
       onClick?.(e);
     },
-    [networkMode]
+    [itemNetworkMode]
   );
 
   return (
@@ -85,9 +97,9 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
       >
         <Flex alignItems="center">
           <Title display="block">{item.label}</Title>
-          {networkMode ? (
+          {itemNetworkMode ? (
             <Badge bg={color('bg-4')} ml="tight" border={border()} color={color('text-caption')}>
-              {networkMode}
+              {itemNetworkMode}
             </Badge>
           ) : null}
         </Flex>
@@ -146,12 +158,13 @@ interface NetworkItemsProps extends BoxProps {
 }
 
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
-  const { networkList, currentNetworkIndex, handleUpdateCurrentIndex } = useNetwork();
+  const { networkList, networkIndex, handleUpdateNetworkIndex } = useNetwork();
 
   return (
     <>
       {networkList?.map((item, key) => {
-        const isActive = key === currentNetworkIndex;
+        const isActive = key === networkIndex;
+
         if (!isLocal() && item?.url?.includes('localhost')) return null;
         return (
           <Item
@@ -163,7 +176,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
               setTimeout(() => {
                 onItemClick?.(item);
                 if (!isActive) {
-                  void handleUpdateCurrentIndex(key);
+                  void handleUpdateNetworkIndex(key);
                 }
               }, 250);
             }}
