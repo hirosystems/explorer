@@ -11,7 +11,7 @@ import { useAtom } from 'jotai';
 export const useNetwork = () => {
   const [customNetworkList, setCustomNetworksList] = useAtom(customNetworksListState);
   const networkList = useAtomValue(networkListState);
-  const [currentNetworkIndex, setCurrentNetworkIndex] = useAtom(networkIndexState);
+  const [networkIndex, setNetworkIndex] = useAtom(networkIndexState);
   const [networkSwitching, setNetworkSwitching] = useAtom(networkSwitchingState);
 
   const handleSetPendingChange = () => {
@@ -19,7 +19,7 @@ export const useNetwork = () => {
     void setNetworkSwitching('pending');
   };
 
-  const handleUpdateCurrentIndex = useAtomCallback<void, number>(
+  const handleUpdateNetworkIndex = useAtomCallback<void, number>(
     useCallback((get, set, arg) => {
       void set(networkSwitchingState, 'pending');
       void set(networkIndexState, arg);
@@ -32,7 +32,7 @@ export const useNetwork = () => {
   const handleAddNetwork = useAtomCallback<void, { label: string; url: string }>(
     useCallback((get, set, arg) => {
       void set(customNetworksListState, [...customNetworkList, arg]);
-      void handleUpdateCurrentIndex(networkList.length);
+      void handleUpdateNetworkIndex(networkList.length);
     }, [])
   );
 
@@ -42,7 +42,7 @@ export const useNetwork = () => {
       networkListSet.delete(arg);
       Array.from(networkListSet);
       void set(customNetworksListState, Array.from(networkListSet));
-      void handleUpdateCurrentIndex(0);
+      void handleUpdateNetworkIndex(0);
     }, [])
   );
 
@@ -51,10 +51,10 @@ export const useNetwork = () => {
   return {
     networkList,
     setCustomNetworksList,
-    currentNetworkIndex,
-    setCurrentNetworkIndex,
+    networkIndex,
+    setNetworkIndex,
     isSwitching,
-    handleUpdateCurrentIndex,
+    handleUpdateNetworkIndex,
     handleAddNetwork,
     handleRemoveNetwork,
     handleSetPendingChange,

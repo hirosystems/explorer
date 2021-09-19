@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useAtomValue } from 'jotai/utils';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { IS_BROWSER } from '@common/constants';
-import { NetworkMode, NetworkModes } from '@common/types/network';
-
+import { NetworkMode } from '@common/types/network';
 import { networkSwitchingState } from '@store/recoil/network';
-import { useAtomValue } from 'jotai/utils';
 
 type ChainMode = NetworkMode | undefined;
 type SetChainMode = (mode: ChainMode) => Promise<void>;
@@ -41,28 +40,25 @@ export const useChainMode = (): [ChainMode, SetChainMode] => {
 // if there is, but not one of two options, set current mode
 export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
   const router = useRouter();
-  const _networkMode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
   const [chainMode, setChainMode] = useChainMode();
   const networkModeChangeState = useAtomValue(networkSwitchingState);
-
-  const isTestnet = chainMode === NetworkModes.Testnet;
-  const isMainnet = chainMode === NetworkModes.Mainnet;
-  const networkMode = providedNetworkMode || _networkMode;
+  const localNetworkMode = providedNetworkMode || networkMode;
 
   useEffect(() => {
-    if (IS_BROWSER && networkMode && networkModeChangeState !== 'pending') {
-      if (!chainMode || (!isTestnet && !isMainnet)) {
-        void setChainMode(networkMode);
+    if (IS_BROWSER && localNetworkMode && networkModeChangeState !== 'pending') {
+      if (!chainMode) {
+        void setChainMode(localNetworkMode);
       }
     }
-  }, [chainMode, networkMode, IS_BROWSER, networkModeChangeState]);
+  }, [IS_BROWSER, localNetworkMode, networkModeChangeState]);
 
   useEffect(() => {
-    if (!router.query['chain'] && networkMode) {
-      router.query['chain'] = networkMode as string;
+    if (!router.query['chain'] && localNetworkMode) {
+      router.query['chain'] = localNetworkMode as string;
       void router.push(router);
     }
-  }, [router.query, networkMode]);
+  }, [router.query, localNetworkMode]);
 };
 
 // sometimes you just need the setter

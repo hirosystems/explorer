@@ -18,8 +18,8 @@ export const DEFAULT_POLLING_INTERVAL =
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
   ) || 10000; // 10 seconds :c
 
-export const TESTNET_CHAIN_ID = ChainID.Testnet;
 export const MAINNET_CHAIN_ID = ChainID.Mainnet;
+export const TESTNET_CHAIN_ID = ChainID.Testnet;
 
 export const IS_DEV = process.env.NODE_ENV !== 'production';
 export const IS_BROWSER = typeof document !== 'undefined';

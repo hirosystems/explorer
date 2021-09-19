@@ -34,7 +34,7 @@ const tupleToArr = (tuple: string) =>
     .map(item => item.split(' '));
 
 const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
-  const networkMode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
   let additional: any = null;
   if (isPoxAddr && btc) {
     additional = (

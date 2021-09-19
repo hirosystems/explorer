@@ -38,7 +38,7 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
   const HOURS_NOTICE_MAINNET = 24;
   const status = tx.tx_status;
   const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
-  const networkMode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
   const longPending =
     dayjs().diff(dayjs.unix((tx as any).receipt_time), 'h') >
     (networkMode === 'testnet' ? HOURS_NOTICE_TESTNET : HOURS_NOTICE_MAINNET);

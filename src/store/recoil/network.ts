@@ -8,6 +8,7 @@ import {
 
 import { parseCookies, setCookie } from 'nookies';
 import { IS_SSR } from 'jotai-query-toolkit';
+import { NetworkMode, NetworkModes } from '@common/types/network';
 
 const atomWithCookie = <T>({ key, initialValue }: { key: string; initialValue: T }) => {
   const baseAtom = atom<T>(initialValue);
@@ -37,7 +38,7 @@ const atomWithCookie = <T>({ key, initialValue }: { key: string; initialValue: T
   return anAtom;
 };
 
-export const networkModeState = atom(null);
+export const networkModeState = atom<NetworkMode>(NetworkModes.Mainnet);
 
 export const customNetworksListState = atomWithCookie<{ label: string; url: string }[]>({
   key: NETWORK_CUSTOM_LIST_COOKIE,
