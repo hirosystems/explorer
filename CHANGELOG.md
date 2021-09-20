@@ -1,3 +1,11 @@
+## [1.14.8](https://github.com/blockstack/explorer/compare/v1.14.7...v1.14.8) (2021-09-20)
+
+
+### Bug Fixes
+
+* add network modal ([cf5821f](https://github.com/blockstack/explorer/commit/cf5821f1f91fc19a8919f4113e8eab9086fdc95d))
+* custom network list ([0bebb9a](https://github.com/blockstack/explorer/commit/0bebb9a9fb80e480bc134a57a7104568af5b5b8e))
+
 ## [1.14.7](https://github.com/blockstack/explorer/compare/v1.14.6...v1.14.7) (2021-09-16)
 
 
