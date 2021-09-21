@@ -1,6 +1,9 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 const BrotliPlugin = require('brotli-webpack-plugin');
 
+const SENTRY_AUTH_TOKEN =
+  process.env.SENTRY_AUTH_TOKEN || process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN;
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -53,6 +56,7 @@ const moduleExports = withBundleAnalyzer({
 });
 
 const sentryWebpackPluginOptions = {
+  authToken: SENTRY_AUTH_TOKEN,
   silent: true, // Suppresses all logs
 };
 
