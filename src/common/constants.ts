@@ -117,7 +117,6 @@ export const POX_ADDRESS = 'SP000000000000000000002Q6VF78';
 export const HIRO_HEADERS: HeadersInit = {
   'x-hiro-product': 'explorer',
   'x-hiro-version': VERSION,
-  Authorization: 'Bearer {process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN}',
 };
 
 export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
