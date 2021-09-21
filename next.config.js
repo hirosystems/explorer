@@ -54,6 +54,7 @@ const moduleExports = withBundleAnalyzer({
 
 const SentryWebpackPluginOptions = {
   silent: true, // Suppresses all logs
+  authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,
 };
 
 module.exports = withSentryConfig(moduleExports, SentryWebpackPluginOptions);
