@@ -66,6 +66,10 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+          build-args: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+            SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            SENTRY_LOG_LEVEL=debug
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2

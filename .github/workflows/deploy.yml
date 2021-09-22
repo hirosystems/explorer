@@ -47,10 +47,6 @@ jobs:
       - name: Build/Tag/Push Image
         if: github.event.inputs.tag == ''
         uses: docker/build-push-action@v2
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_LOG_LEVEL: debug
-
         with:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
