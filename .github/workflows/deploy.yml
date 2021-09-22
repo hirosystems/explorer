@@ -48,13 +48,17 @@ jobs:
         if: github.event.inputs.tag == ''
         uses: docker/build-push-action@v2
         env:
-          NEXT_PUBLIC_SENTRY_AUTH_TOKEN: ${{ secrets.NEXT_PUBLIC_SENTRY_AUTH_TOKEN }}
-          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_LOG_LEVEL: debug
+
         with:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
-        run: 'curl -H "Authorization: Bearer ${{ secrets.NEXT_PUBLIC_SENTRY_AUTH_TOKEN }}" https://sentry.io/api/0/projects/'
+          build-args: |
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+            SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+            SENTRY_LOG_LEVEL=debug
 
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag: ${{ steps.docker_meta.outputs.version || github.event.inputs.tag }}"'
