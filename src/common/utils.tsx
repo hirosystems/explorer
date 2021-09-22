@@ -16,7 +16,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
-import { REGTEST_CHAIN_ID, TESTNET_CHAIN_ID } from '@common/constants';
+import { TESTNET_CHAIN_ID } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
 
@@ -349,8 +349,6 @@ export const getChainIdFromInfo = (data: CoreNodeInfoResponse): NetworkMode | un
   return networkId
     ? TESTNET_CHAIN_ID === networkId
       ? NetworkModes.Testnet
-      : REGTEST_CHAIN_ID === networkId
-      ? NetworkModes.Regtest
       : NetworkModes.Mainnet
     : undefined;
 };

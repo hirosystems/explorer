@@ -9,71 +9,52 @@ import { useAtomCallback, useAtomValue, useUpdateAtom } from 'jotai/utils';
 import { useAtom } from 'jotai';
 
 export const useNetwork = () => {
-  const setNetworkList = useUpdateAtom(customNetworksListState);
+  const [customNetworkList, setCustomNetworksList] = useAtom(customNetworksListState);
   const networkList = useAtomValue(networkListState);
-  const [currentNetworkIndex, setIndex] = useAtom(networkIndexState);
+  const [networkIndex, setNetworkIndex] = useAtom(networkIndexState);
   const [networkSwitching, setNetworkSwitching] = useAtom(networkSwitchingState);
 
   const handleSetPendingChange = () => {
     console.log('set pending');
-    setNetworkSwitching('pending');
+    void setNetworkSwitching('pending');
   };
 
-  const handleAddListItem = useCallback(
-    (item: { label: string; url: string }) =>
-      setNetworkList(list => {
-        const networkListSet = new Set(list);
-        networkListSet.add(item);
-        return [...networkListSet];
-      }),
-    []
-  );
-
-  const handleRemoveListItem = useCallback(
-    (item: { label: string; url: string }) =>
-      setNetworkList(list => {
-        const networkListSet = new Set(list);
-        networkListSet.delete(item);
-        return [...networkListSet];
-      }),
-    []
-  );
-
-  const handleUpdateCurrentIndex = useAtomCallback<void, number>(
+  const handleUpdateNetworkIndex = useAtomCallback<void, number>(
     useCallback((get, set, arg) => {
-      set(networkSwitchingState, 'pending');
-      set(networkIndexState, arg);
+      void set(networkSwitchingState, 'pending');
+      void set(networkIndexState, arg);
       setTimeout(() => {
-        window.location.reload(true);
+        window.location.reload();
       }, 1000);
     }, [])
   );
 
-  const handleAddNetwork = useCallback(
-    (item: { label: string; url: string }) => {
-      handleAddListItem(item);
-      void handleUpdateCurrentIndex(networkList.length);
-    },
-    [networkList, handleAddListItem, handleUpdateCurrentIndex]
+  const handleAddNetwork = useAtomCallback<void, { label: string; url: string }>(
+    useCallback((get, set, arg) => {
+      void set(customNetworksListState, [...customNetworkList, arg]);
+      void handleUpdateNetworkIndex(networkList.length);
+    }, [])
   );
 
-  const handleRemoveNetwork = useCallback(
-    (item: { label: string; url: string }) => {
-      handleRemoveListItem(item);
-    },
-    [handleRemoveListItem]
+  const handleRemoveNetwork = useAtomCallback<void, { label: string; url: string }>(
+    useCallback((get, set, arg) => {
+      const networkListSet = new Set(customNetworkList);
+      networkListSet.delete(arg);
+      Array.from(networkListSet);
+      void set(customNetworksListState, Array.from(networkListSet));
+      void handleUpdateNetworkIndex(0);
+    }, [])
   );
 
   const isSwitching = networkSwitching === 'pending';
 
   return {
     networkList,
-    setNetworkList,
-    currentNetworkIndex,
-    setIndex,
+    setCustomNetworksList,
+    networkIndex,
+    setNetworkIndex,
     isSwitching,
-    handleAddListItem,
-    handleUpdateCurrentIndex,
+    handleUpdateNetworkIndex,
     handleAddNetwork,
     handleRemoveNetwork,
     handleSetPendingChange,

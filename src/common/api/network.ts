@@ -2,38 +2,37 @@ import { fetchFromApi } from '@common/api/fetch';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
-  DEFAULT_REGTEST_SERVER,
   DEFAULT_V2_INFO_ENDPOINT,
-  REGTEST_CHAIN_ID,
-  TESTNET_CHAIN_ID,
+  MAINNET_CHAIN_ID,
 } from '@common/constants';
 import { ChainID } from '@stacks/transactions';
-import { NetworkModes } from '@common/types/network';
+import { NetworkMode, NetworkModes } from '@common/types/network';
 
-export async function getNetworkMode(apiServer: string) {
-  // if either of defaults, no need to fetch
+export async function getNetworkMode(apiServer: string): Promise<NetworkMode> {
+  // Defaults
+  let networkMode: NetworkModes = NetworkModes.Mainnet;
+  // If it is a default network, there is no need to fetch the chain id
   if (apiServer === DEFAULT_MAINNET_SERVER) {
-    return NetworkModes.Mainnet;
+    return networkMode;
   } else if (apiServer === DEFAULT_TESTNET_SERVER) {
-    return NetworkModes.Testnet;
-  } else if (apiServer === DEFAULT_REGTEST_SERVER) {
-    return NetworkModes.Regtest;
+    networkMode = NetworkModes.Testnet;
+    return networkMode;
   }
+  // If it is a custom network, fetch the chain id and use it
+  // to return the correct network mode (mainnet or testnet)
   try {
     const response = await fetchFromApi(apiServer)(DEFAULT_V2_INFO_ENDPOINT);
     const data = await response.json();
 
-    const networkId: ChainID.Mainnet | ChainID.Testnet | undefined =
+    const networkId: ChainID.Mainnet | ChainID.Testnet =
       data?.network_id && parseInt(data?.network_id);
 
-    const networkMode = networkId
-      ? TESTNET_CHAIN_ID === networkId
-        ? NetworkModes.Testnet
-        : NetworkModes.Mainnet
-      : undefined;
+    networkMode = networkId === MAINNET_CHAIN_ID ? NetworkModes.Mainnet : NetworkModes.Testnet;
 
     return networkMode;
   } catch (e) {
-    return undefined;
+    // Fallback to the defaults
+    networkMode = NetworkModes.Mainnet;
+    return networkMode;
   }
 }

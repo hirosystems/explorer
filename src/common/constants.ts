@@ -18,9 +18,8 @@ export const DEFAULT_POLLING_INTERVAL =
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
   ) || 10000; // 10 seconds :c
 
-export const REGTEST_CHAIN_ID = ChainID.Testnet;
-export const TESTNET_CHAIN_ID = ChainID.Testnet;
 export const MAINNET_CHAIN_ID = ChainID.Mainnet;
+export const TESTNET_CHAIN_ID = ChainID.Testnet;
 
 export const IS_DEV = process.env.NODE_ENV !== 'production';
 export const IS_BROWSER = typeof document !== 'undefined';
@@ -62,11 +61,6 @@ export const DEFAULT_TESTNET_SERVER =
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
   'https://stacks-node-api.testnet.stacks.co';
 
-export const DEFAULT_REGTEST_SERVER =
-  config?.NEXT_PUBLIC_REGTEST_API_SERVER ||
-  process.env.NEXT_PUBLIC_REGTEST_API_SERVER ||
-  'https://stacks-node-api.regtest.stacks.co';
-
 export const DEFAULT_MAINNET_SERVER =
   config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
@@ -74,10 +68,10 @@ export const DEFAULT_MAINNET_SERVER =
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
-export const NETWORK_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_LIST';
+export const NETWORK_CUSTOM_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_CUSTOM_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
-export const DEFAULT_TESTNET_INDEX = 1;
 export const DEFAULT_MAINNET_INDEX = 0;
+export const DEFAULT_TESTNET_INDEX = 1;
 export const DEFAULT_NETWORK_INDEX = DEFAULT_MAINNET_INDEX;
 
 export const DEFAULT_NETWORK_LIST = [
@@ -88,10 +82,6 @@ export const DEFAULT_NETWORK_LIST = [
   {
     label: 'stacks.co',
     url: DEFAULT_TESTNET_SERVER,
-  },
-  {
-    label: 'stacks.co',
-    url: DEFAULT_REGTEST_SERVER,
   },
   {
     label: 'localhost',

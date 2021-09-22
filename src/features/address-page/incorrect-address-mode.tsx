@@ -9,8 +9,8 @@ import { AddressLink } from '@components/links';
 import { Link } from '@components/link';
 
 export const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
-  const network = useNetworkMode();
-  const invert = network && network.toLowerCase() === 'testnet' ? 'mainnet' : 'testnet';
+  const { networkMode } = useNetworkMode();
+  const invert = networkMode && networkMode.toLowerCase() === 'testnet' ? 'mainnet' : 'testnet';
   return (
     <Section mb="extra-loose">
       <Flex alignItems="center" justifyContent="space-between" p="base-loose">
@@ -18,7 +18,7 @@ export const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ addr
           <Box mr="tight" as={IconAlertCircle} color={color('feedback-alert')} />
           <Text color={color('text-body')}>
             This is a <strong>{capitalize(invert)}</strong> address, but you are viewing data from
-            the <strong>{network}</strong> Stacks Network.
+            the <strong>{networkMode}</strong> Stacks Network.
           </Text>
         </Flex>
 

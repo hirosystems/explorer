@@ -26,7 +26,7 @@ export const useUser = (options?: {
   hasTransactions?: boolean;
 } & Partial<UserData> => {
   const { userData } = useAuthState();
-  const networkMode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
 
   const principal = networkMode && userData?.profile?.stxAddress?.[networkMode];
   const username = userData?.username;

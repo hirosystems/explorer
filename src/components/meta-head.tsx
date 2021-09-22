@@ -40,10 +40,10 @@ export const Meta = ({
   labels,
 }: MetaProps) => {
   const filename = useFaviconName(status);
-  const mode = useNetworkMode();
+  const { networkMode } = useNetworkMode();
 
   const withMode = (title: string) => {
-    if (mode === 'testnet') {
+    if (networkMode === 'testnet') {
       return `${title} [Testnet mode]`;
     }
     return title;

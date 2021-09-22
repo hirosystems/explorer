@@ -7,8 +7,8 @@ import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { capitalize } from '@common/utils';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
-  const mode = useNetworkMode();
-  return mode === 'testnet' || mode === 'regtest' ? (
+  const { networkMode } = useNetworkMode();
+  return networkMode === 'testnet' ? (
     <Badge flexShrink={0} bg="white" {...props}>
       <Flex alignItems="center">
         <Box
@@ -18,7 +18,7 @@ export const NetworkModeBanner: React.FC<BadgeProps> = props => {
           size="16px"
           mr="extra-tight"
         />
-        <Box color="ink">{capitalize(mode)} mode</Box>
+        <Box color="ink">{capitalize(networkMode)} mode</Box>
       </Flex>
     </Badge>
   ) : null;
