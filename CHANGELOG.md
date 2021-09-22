@@ -1,3 +1,15 @@
+# [1.15.0](https://github.com/blockstack/explorer/compare/v1.14.8...v1.15.0) (2021-09-22)
+
+
+### Bug Fixes
+
+* try disabling source maps ([63bc1fa](https://github.com/blockstack/explorer/commit/63bc1faf84e72836261d9ab8396f8bb211a756f6))
+
+
+### Features
+
+* add sentry ([6aed06f](https://github.com/blockstack/explorer/commit/6aed06f22331db2e4b1f590e79dfc33a4d7a6583))
+
 ## [1.14.8](https://github.com/blockstack/explorer/compare/v1.14.7...v1.14.8) (2021-09-20)
 
 
