@@ -54,6 +54,7 @@ jobs:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+        run: 'curl -H "Authorization: Bearer ${{ secrets.NEXT_PUBLIC_SENTRY_AUTH_TOKEN }}" https://sentry.io/api/0/projects/'
 
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag: ${{ steps.docker_meta.outputs.version || github.event.inputs.tag }}"'
