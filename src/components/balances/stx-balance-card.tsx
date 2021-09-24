@@ -110,8 +110,8 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
               alignItems="center"
               py="loose"
             >
-              <Circle bg={color('brand')} mr="base">
-                <StxInline color="white" size="22px" />
+              <Circle bg={color('brand')} mr="base" size="36px">
+                <StxInline color="white" size="16px" />
               </Circle>
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BoxProps, color, Grid, GridProps } from '@stacks/ui';
+import { BoxProps, color, Grid, GridProps, useColorMode } from '@stacks/ui';
 import { border } from '@common/utils';
 import { CodeIcon } from '@components/icons/code';
 import { ContractCallIcon } from '@components/icons/contract-call';
@@ -24,7 +24,7 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps
 const ItemCircle: React.FC<GridProps> = props => (
   <Grid
     placeItems="center"
-    size="48px"
+    size="40px"
     borderRadius="50%"
     position="relative"
     border={props.border}
@@ -40,9 +40,10 @@ const StatusBubble: React.FC<any> = ({ tx }) => {
   if (tx?.tx_status === 'pending') {
     return (
       <ClockIcon
-        color="white"
-        fill="#757B83"
-        size="20px"
+        color={color('invert')}
+        fill={color('bg')}
+        border="none"
+        size="16px"
         position="absolute"
         bottom="-2px"
         right="-4px"
@@ -57,7 +58,7 @@ const StatusBubble: React.FC<any> = ({ tx }) => {
         size="16px"
         position="absolute"
         bottom="-2px"
-        right="-2px"
+        right="-4px"
         zIndex={10}
       />
     );
@@ -68,10 +69,10 @@ const StatusBubble: React.FC<any> = ({ tx }) => {
         size="16px"
         position="absolute"
         bottom="-2px"
-        right="-2px"
+        right="-4px"
         zIndex={10}
       >
-        <MicroblockIcon color="white" fill="white" size="12px" />
+        <MicroblockIcon color={color('bg')} fill={color('bg')} size="10px" />
       </ItemCircle>
     );
   } else {
@@ -95,32 +96,39 @@ export const ItemIcon = React.memo(
     }
     const showTxStatusBubble =
       tx?.tx_status !== 'success' || (tx?.tx_status === 'success' && !!tx?.is_unanchored);
+    const { colorMode } = useColorMode();
 
     if (type === 'microblock') {
       Icon = React.memo((p: any) => (
-        <MicroblockIcon {...p} size="22px" color="#74777D" fill="#74777D" />
+        <MicroblockIcon
+          {...p}
+          size="16px"
+          color={color('text-caption')}
+          fill={color('text-caption')}
+        />
       ));
     }
     if (type === 'block') {
-      Icon = React.memo((p: any) => <AnchorBlockIcon {...p} size="22px" color="#FFFFFF" />);
+      Icon = React.memo((p: any) => <AnchorBlockIcon {...p} size="16px" color={color('bg')} />);
     }
     if (type === 'principal') {
-      Icon = React.memo((p: any) => <WalletIcon {...p} size="22px" />);
+      Icon = React.memo((p: any) => <WalletIcon {...p} size="16px" />);
     }
+
     return (
       <ItemCircle
-        bg={type === 'block' ? '#242629' : color('bg')}
-        border={type === 'block' ? 'none' : border()}
+        bg={type === 'block' ? color('invert') : color('bg')}
+        border={
+          type === 'microblock' || type === 'tx'
+            ? colorMode === 'light'
+              ? border()
+              : border('text-caption')
+            : 'none'
+        }
         {...rest}
       >
         {type === 'tx' && showTxStatusBubble && <StatusBubble tx={tx} />}
-        {Icon && (
-          <Icon
-            color={color('text-title')}
-            position="relative"
-            size={tx?.tx_type === 'token_transfer' ? '18px' : '21px'}
-          />
-        )}
+        {Icon && <Icon color={color('text-title')} position="relative" size="16px" />}
       </ItemCircle>
     );
   }

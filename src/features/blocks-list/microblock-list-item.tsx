@@ -30,7 +30,7 @@ export const MicroblockItem: React.FC<{
         {...rest}
       >
         <Stack as="span" isInline alignItems="center" spacing="base">
-          <ItemIcon size="36px" type="microblock" />
+          <ItemIcon size="40px" type="microblock" />
           <Stack spacing="tight" as="span">
             <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
               <Title display="block" color="currentColor">
