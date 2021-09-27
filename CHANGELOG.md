@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/blockstack/explorer/compare/v1.15.0...v1.15.1) (2021-09-27)
+
+
+### Bug Fixes
+
+* dark mode ([a2f9294](https://github.com/blockstack/explorer/commit/a2f9294d3fbd4c82e9bd934f22127cdb330f359e))
+
 # [1.15.0](https://github.com/blockstack/explorer/compare/v1.14.8...v1.15.0) (2021-09-22)
 
 
