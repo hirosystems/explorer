@@ -194,7 +194,11 @@ const LargeVersion = React.memo(
           <Stack alignItems="flex-end" textAlign="right" as="span" spacing="tight">
             <Timestamp tx={tx} />
             <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
-              <Caption mr="6px" as="span" color={didFail ? color('feedback-error') : ''}>
+              <Caption
+                mr="6px"
+                as="span"
+                color={didFail ? color('feedback-error') : color('invert')}
+              >
                 {isPending && 'Pending'}
                 {isConfirmed && !isAnchored && 'In microblock'}
                 {isConfirmed && isAnchored && 'In anchor block'}
