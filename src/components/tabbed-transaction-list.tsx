@@ -76,7 +76,7 @@ export const TabbedTransactionList: React.FC<{
   const [previousTypes, setPreviousTypes] = useState(types);
 
   const onSuspenseUnmount = (types?: GetTransactionListTypeEnum[]) => {
-    setIsLoading(true);
+    void setIsLoading(true);
     if (types) setPreviousTypes(types);
   };
 

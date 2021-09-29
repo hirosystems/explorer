@@ -5,11 +5,20 @@ import { Caption, Pre } from '@components/typography';
 import { border } from '@common/utils';
 import { FunctionSummaryClarityValue } from '@components/function-summary/value';
 import { IconAlertTriangle, IconCircleCheck } from '@tabler/icons';
+import { TransactionStatus } from '@common/constants';
 
-export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_result'] }) => {
+export const FunctionSummaryResult = ({
+  result,
+  txStatus,
+}: {
+  result: Transaction['tx_result'];
+  txStatus: string | undefined;
+}) => {
   if (!result) return null;
-  const { success, type, value } = cvToJSON(hexToCV(result.hex));
-
+  const { type, value } = cvToJSON(hexToCV(result.hex));
+  const isSuccess =
+    txStatus === TransactionStatus.SUCCESS_ANCHOR_BLOCK ||
+    txStatus === TransactionStatus.SUCCESS_MICROBLOCK;
   const hasType = !type?.includes('UnknownType');
 
   if (type?.includes('tuple')) {
@@ -51,12 +60,12 @@ export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_resu
     return (
       <Box width="100%">
         <Flex alignItems="center">
-          {success ? (
+          {isSuccess ? (
             <Box mr="tight" color={color('feedback-success')} as={IconCircleCheck} />
           ) : (
             <Box mr="tight" color={color('feedback-error')} as={IconAlertTriangle} />
           )}
-          <Pre>{hasType ? type : success ? 'Success' : 'Failed'}</Pre>
+          <Pre>{hasType ? type : isSuccess ? 'Success' : 'Failed'}</Pre>
         </Flex>
         <Stack mt="extra-loose" spacing="base" width="100%">
           <FunctionSummaryClarityValue

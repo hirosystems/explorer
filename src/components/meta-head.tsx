@@ -1,11 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
-import { useSafeLayoutEffect } from '@stacks/ui';
-
-import { useMediaQuery } from '@common/hooks/use-media-query';
-import { Statuses } from '@components/status';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { TxStatus } from '@common/types/tx';
 
 const defaultTitle = 'Stacks Explorer by Hiro';
 
@@ -15,31 +11,22 @@ interface MetaProps {
   url?: string;
   description?: string;
   labels?: { label: string; data: string }[];
-  status?: Transaction['tx_status'] | MempoolTransaction['tx_status'];
+  txStatus?: TxStatus;
 }
 
-const useFaviconName = (s?: Transaction['tx_status'] | MempoolTransaction['tx_status']) => {
-  const status = () => {
-    switch (s) {
-      case 'abort_by_post_condition':
-      case 'abort_by_response':
-        return 'failed';
-      default:
-        return s;
-    }
-  };
-  return `favicon${status() ? `-${status()}` : ''}`;
+const useFaviconName = (txStatus?: TxStatus) => {
+  return `favicon${txStatus ? `-${txStatus}` : ''}`;
 };
 
 export const Meta = ({
   title = defaultTitle,
-  status,
+  txStatus,
   description = 'Explore transactions and accounts on the Stacks blockchain. Clone any contract and experiment in your browser with the Explorer sandbox.',
   ogTitle,
   url,
   labels,
 }: MetaProps) => {
-  const filename = useFaviconName(status);
+  const filename = useFaviconName(txStatus);
   const { networkMode } = useNetworkMode();
 
   const withMode = (title: string) => {
@@ -73,16 +60,8 @@ export const Meta = ({
       {labels?.length
         ? labels.map(({ label, data }, key) => (
             <React.Fragment key={key}>
-              <meta
-                name={`twitter:label${key + 1}`}
-                // @ts-ignore
-                content={label}
-              />
-              <meta
-                name={`twitter:data${key + 1}`}
-                // @ts-ignore
-                content={data}
-              />
+              <meta name={`twitter:label${key + 1}`} content={label} />
+              <meta name={`twitter:data${key + 1}`} content={data} />
             </React.Fragment>
           ))
         : null}
