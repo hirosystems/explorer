@@ -12,7 +12,8 @@ export const FunctionSummarySection = memo<{
   summary: ContractCallTransaction['contract_call'];
   isPending?: boolean;
   btc: null | string;
-}>(({ summary, result, isPending, btc, ...rest }) => {
+  txStatus: string | undefined;
+}>(({ summary, result, isPending, btc, txStatus, ...rest }) => {
   const items = useMemo(
     () => [
       {
@@ -29,7 +30,7 @@ export const FunctionSummarySection = memo<{
         flexGrow: 1,
         alignItems: 'flex-start',
         condition: !isPending && result?.repr,
-        children: <FunctionSummaryResult result={result} />,
+        children: <FunctionSummaryResult result={result} txStatus={txStatus} />,
       },
       {
         label: {

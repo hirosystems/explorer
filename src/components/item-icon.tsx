@@ -10,6 +10,8 @@ import { MicroblockIcon } from '@components/icons/microblock';
 import { ClockIcon } from '@components/icons/clock';
 import { FailedIcon } from '@components/icons/failed';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { useTransactionStatus } from '@common/hooks/use-transaction-status';
+import { TransactionStatus } from '@common/constants';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;
@@ -36,8 +38,8 @@ const ItemCircle: React.FC<GridProps> = props => (
   />
 );
 
-const StatusBubble: React.FC<any> = ({ tx }) => {
-  if (tx?.tx_status === 'pending') {
+const StatusBubble: React.FC<any> = ({ txStatus }) => {
+  if (txStatus === TransactionStatus.PENDING) {
     return (
       <ClockIcon
         color={color('invert')}
@@ -50,7 +52,7 @@ const StatusBubble: React.FC<any> = ({ tx }) => {
         zIndex={10}
       />
     );
-  } else if (tx?.tx_status !== 'success' && tx?.tx_status !== 'pending') {
+  } else if (txStatus === TransactionStatus.FAILED) {
     return (
       <FailedIcon
         color={color('feedback-error')}
@@ -62,7 +64,7 @@ const StatusBubble: React.FC<any> = ({ tx }) => {
         zIndex={10}
       />
     );
-  } else if (tx?.tx_status === 'success' && !!tx?.microblock_hash) {
+  } else if (txStatus === TransactionStatus.SUCCESS_MICROBLOCK) {
     return (
       <ItemCircle
         bg={color('invert')}
@@ -90,13 +92,15 @@ export const ItemIcon = React.memo(
     type: 'tx' | 'microblock' | 'block' | 'principal';
     tx?: Transaction | MempoolTransaction;
   } & GridProps) => {
+    const txStatus = useTransactionStatus(tx);
+    const { colorMode } = useColorMode();
+
+    const showTxStatusBubble = txStatus && txStatus !== TransactionStatus.SUCCESS_ANCHOR_BLOCK;
+
     let Icon;
     if (tx?.tx_type) {
       Icon = getTxTypeIcon(tx?.tx_type);
     }
-    const showTxStatusBubble =
-      tx?.tx_status !== 'success' || (tx?.tx_status === 'success' && !!tx?.is_unanchored);
-    const { colorMode } = useColorMode();
 
     if (type === 'microblock') {
       Icon = React.memo((p: any) => (
@@ -127,7 +131,7 @@ export const ItemIcon = React.memo(
         }
         {...rest}
       >
-        {type === 'tx' && showTxStatusBubble && <StatusBubble tx={tx} />}
+        {type === 'tx' && showTxStatusBubble && <StatusBubble txStatus={txStatus} />}
         {Icon && <Icon color={color('text-title')} position="relative" size="16px" />}
       </ItemCircle>
     );

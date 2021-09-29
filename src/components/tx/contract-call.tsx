@@ -16,16 +16,19 @@ import {
   useContractSourceInView,
   useTransactionInView,
 } from '../../hooks/currently-in-view-hooks';
+import { useTransactionStatus } from '@common/hooks/use-transaction-status';
+import { TransactionStatus } from '@common/constants';
 
 const ContractCallPage = () => {
   const transaction = useTransactionInView();
   const block = useBlockInView();
   const source = useContractSourceInView();
   const info = useContractInfoInView();
+  const txStatus = useTransactionStatus(transaction);
   const btc = null;
 
   if (!transaction || transaction.tx_type !== 'contract_call') return null;
-  const isPending = transaction.tx_status === 'pending';
+  const isPending = txStatus === TransactionStatus.PENDING;
   const result = 'tx_result' in transaction && transaction.tx_result;
 
   return (
@@ -44,6 +47,7 @@ const ContractCallPage = () => {
             result={result}
             summary={transaction.contract_call}
             btc={btc}
+            txStatus={txStatus}
           />
           <PostConditions
             conditions={transaction.post_conditions}
