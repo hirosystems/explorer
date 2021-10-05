@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BoxProps, color, Grid, GridProps, useColorMode } from '@stacks/ui';
 import { border } from '@common/utils';
 import { CodeIcon } from '@components/icons/code';
@@ -10,8 +10,9 @@ import { MicroblockIcon } from '@components/icons/microblock';
 import { ClockIcon } from '@components/icons/clock';
 import { FailedIcon } from '@components/icons/failed';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { useTransactionStatus } from '@common/hooks/use-transaction-status';
 import { TransactionStatus } from '@common/constants';
+import { getTransactionStatus } from '@common/utils/transactions';
+import { TxStatus } from '@common/types/tx';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;
@@ -38,31 +39,22 @@ const ItemCircle: React.FC<GridProps> = props => (
   />
 );
 
-const StatusBubble: React.FC<any> = ({ txStatus }) => {
+interface StatusBubbleProps extends BoxProps {
+  txStatus: TxStatus | undefined;
+}
+
+const StatusBubble: React.FC<StatusBubbleProps> = ({ txStatus }) => {
   if (txStatus === TransactionStatus.PENDING) {
     return (
-      <ClockIcon
-        color={color('invert')}
-        fill={color('bg')}
-        border="none"
-        size="16px"
-        position="absolute"
-        bottom="-2px"
-        right="-4px"
-        zIndex={10}
-      />
+      <ItemCircle size="16px" position="absolute" bottom="-2px" right="-4px" zIndex={10}>
+        <ClockIcon color={color('invert')} fill={color('bg')} border="none" />
+      </ItemCircle>
     );
   } else if (txStatus === TransactionStatus.FAILED) {
     return (
-      <FailedIcon
-        color={color('feedback-error')}
-        fill="white"
-        size="16px"
-        position="absolute"
-        bottom="-2px"
-        right="-4px"
-        zIndex={10}
-      />
+      <ItemCircle size="16px" position="absolute" bottom="-2px" right="-4px" zIndex={10}>
+        <FailedIcon color={color('feedback-error')} fill={color('bg')} />
+      </ItemCircle>
     );
   } else if (txStatus === TransactionStatus.SUCCESS_MICROBLOCK) {
     return (
@@ -92,10 +84,10 @@ export const ItemIcon = React.memo(
     type: 'tx' | 'microblock' | 'block' | 'principal';
     tx?: Transaction | MempoolTransaction;
   } & GridProps) => {
-    const txStatus = useTransactionStatus(tx);
+    const txStatus = tx && useMemo(() => getTransactionStatus(tx), [tx]);
     const { colorMode } = useColorMode();
 
-    const showTxStatusBubble = txStatus && txStatus !== TransactionStatus.SUCCESS_ANCHOR_BLOCK;
+    const showTxStatusBubble = txStatus !== TransactionStatus.SUCCESS_ANCHOR_BLOCK;
 
     let Icon;
     if (tx?.tx_type) {

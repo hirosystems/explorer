@@ -136,9 +136,9 @@ export const TransactionType = {
   POISON_MICROBLOCK: 'poison_microblock' as Transaction['tx_type'],
 } as const;
 
-export const TransactionStatus = {
-  PENDING: 'pending' as TxStatus,
-  SUCCESS_ANCHOR_BLOCK: 'success_anchor_block' as TxStatus,
-  SUCCESS_MICROBLOCK: 'success_microblock' as TxStatus,
-  FAILED: 'failed' as TxStatus,
+export const TransactionStatus: Record<string, TxStatus> = {
+  PENDING: 'pending',
+  SUCCESS_ANCHOR_BLOCK: 'success_anchor_block',
+  SUCCESS_MICROBLOCK: 'success_microblock',
+  FAILED: 'failed',
 };
