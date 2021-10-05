@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import {
   getContractName,
   getFunctionName,
@@ -12,8 +12,8 @@ import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-
 import { getContractId } from '@components/transaction-details';
 import { getTxErrorMessage } from '@common/utils/errors';
 import { useTransactionInView } from '../../hooks/currently-in-view-hooks';
-import { useTransactionStatus } from '@common/hooks/use-transaction-status';
 import { TransactionStatus } from '@common/constants';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
@@ -98,9 +98,9 @@ const getDescription = (tx: Transaction | MempoolTransaction) => {
 
 export const TransactionMeta = () => {
   const transaction = useTransactionInView();
-  const txStatus = useTransactionStatus(transaction);
   if (!transaction) return null;
 
+  const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const pageTitle = `${getTxPageTitle(transaction)}${
     txStatus === TransactionStatus.PENDING ? ' (Pending)' : ''
   }${txStatus === TransactionStatus.FAILED ? ' (Failed) ' : ''}`;

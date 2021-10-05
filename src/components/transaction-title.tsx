@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, BoxProps, Stack, StackProps } from '@stacks/ui';
 import { Status } from '@components/status';
@@ -8,7 +8,7 @@ import { Title } from '@components/typography';
 import { getContractName, getFunctionName, microToStacks, truncateMiddle } from '@common/utils';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TxStatus } from '@common/types/tx';
-import { useTransactionStatus } from '@common/hooks/use-transaction-status';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 export interface TitleProps {
   contractName?: string;
@@ -71,7 +71,7 @@ export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
 };
 
 export const TransactionTitle = ({ contractName, tx, ...rest }: TitleProps & StackProps) => {
-  const txStatus = useTransactionStatus(tx);
+  const txStatus = useMemo(() => getTransactionStatus(tx), [tx]);
 
   return (
     <Stack spacing="base" {...rest}>

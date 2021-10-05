@@ -7,13 +7,12 @@ import { FunctionSummaryClarityValue } from '@components/function-summary/value'
 import { IconAlertTriangle, IconCircleCheck } from '@tabler/icons';
 import { TransactionStatus } from '@common/constants';
 
-export const FunctionSummaryResult = ({
-  result,
-  txStatus,
-}: {
+interface FunctionSummaryResultProps {
   result: Transaction['tx_result'];
   txStatus: string | undefined;
-}) => {
+}
+
+export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResultProps) => {
   if (!result) return null;
   const { type, value } = cvToJSON(hexToCV(result.hex));
   const isSuccess =
