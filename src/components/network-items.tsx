@@ -21,6 +21,8 @@ import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
 import { ChainID } from '@stacks/transactions';
 
+declare const global: any;
+
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
   isActive?: boolean;
@@ -79,6 +81,10 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const handleClick = React.useCallback(
     async e => {
       await setChainMode(itemNetworkMode);
+      global.analytics.track('Network selected', {
+        network: item.url,
+        time: Date.now(),
+      });
       onClick?.(e);
     },
     [itemNetworkMode]

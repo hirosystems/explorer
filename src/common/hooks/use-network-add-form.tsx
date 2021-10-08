@@ -9,6 +9,8 @@ import { NetworkMode } from '@common/types/network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
 
+declare const global: any;
+
 interface Errors {
   label?: string;
   url?: string;
@@ -34,14 +36,19 @@ export const useNetworkAddForm = () => {
       onSubmit: async ({ label, url }) => {
         const _url = new URL(url);
 
+        global.analytics.track('Network added', {
+          network: url,
+          time: Date.now(),
+        });
+
         await setChainMode(networkMode);
 
-        handleAddNetwork({
+        void handleAddNetwork({
           label: label.trim(),
           url: `https://${_url.host}`,
         });
 
-        handleCloseModal();
+        void handleCloseModal();
       },
       validate: async values => {
         const _errors: Errors = {};
