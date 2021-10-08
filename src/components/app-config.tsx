@@ -1,9 +1,17 @@
 import React from 'react';
 import { RecoilRoot } from 'recoil';
+import Router from 'next/router';
 import { AppContainer } from '@components/app-container';
 import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
 import { NetworkMode } from '@common/types/network';
+
+declare const window: any;
+
+// Track client-side page views with Segment
+Router.events.on('routeChangeComplete', url => {
+  window.analytics.page(url);
+});
 
 interface AppConfigProps {
   isHome?: boolean;
