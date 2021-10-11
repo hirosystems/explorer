@@ -8,8 +8,7 @@ import { getChainIdFromInfo, isLocal } from '@common/utils';
 import { NetworkMode } from '@common/types/network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
-
-declare const global: any;
+import { useAnalytics } from '@common/hooks/use-analytics';
 
 interface Errors {
   label?: string;
@@ -22,6 +21,7 @@ export const useNetworkAddForm = () => {
   const { handleCloseModal } = useModal();
   const { networkList, handleAddNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
+  const analytics = useAnalytics();
   const schema = string().matches(
     /^(?:([a-z0-9+.-]+):\/\/)(?:\S+(?::\S*)?@)?(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/
   );
@@ -36,9 +36,12 @@ export const useNetworkAddForm = () => {
       onSubmit: async ({ label, url }) => {
         const _url = new URL(url);
 
-        global.analytics.track('Network added', {
-          network: url,
-          time: Date.now(),
+        analytics.track({
+          event: 'network-added',
+          properties: {
+            addedNetworkUrl: url,
+            time: Date.now(),
+          },
         });
 
         await setChainMode(networkMode);
@@ -78,7 +81,7 @@ export const useNetworkAddForm = () => {
               if (!data?.network_id) {
                 _errors.general = 'The API did not return a network_id.';
               }
-            } catch (e) {
+            } catch (e: any) {
               if (e.message.includes('Failed to fetch')) {
                 _errors.general = 'Could not connect to supplied network URL.';
               } else {
