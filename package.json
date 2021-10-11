@@ -105,6 +105,7 @@
     "@emotion/babel-plugin": "11.3.0",
     "@emotion/babel-preset-css-prop": "11.2.0",
     "@next/bundle-analyzer": "11.0.1",
+    "@segment/analytics.js-core": "^4.1.11",
     "@stacks/eslint-config": "1.0.9",
     "@stacks/prettier-config": "0.0.8",
     "@stacks/stacks-blockchain-api-types": "0.63.0",

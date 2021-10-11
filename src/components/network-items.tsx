@@ -20,8 +20,7 @@ import { Badge } from '@components/badge';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
 import { ChainID } from '@stacks/transactions';
-
-declare const global: any;
+import { useAnalytics } from '@common/hooks/use-analytics';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -55,6 +54,7 @@ interface ItemProps extends ItemWrapperProps {
 const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
   const { handleRemoveNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
+  const analytics = useAnalytics();
 
   const isMainnet = item.url === DEFAULT_MAINNET_SERVER;
   const isTestnet = item.url === DEFAULT_TESTNET_SERVER;
@@ -81,10 +81,15 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const handleClick = React.useCallback(
     async e => {
       await setChainMode(itemNetworkMode);
-      global.analytics.track('Network selected', {
-        network: item.url,
-        time: Date.now(),
+
+      analytics.track({
+        event: 'network-selected',
+        properties: {
+          selectedNetworkUrl: item.url,
+          time: Date.now(),
+        },
       });
+
       onClick?.(e);
     },
     [itemNetworkMode]

@@ -12,6 +12,9 @@ const config = publicRuntimeConfig;
 const getNumber = (query?: string): number | undefined =>
   query && typeof parseInt(query) === 'number' ? parseInt(query) : undefined;
 
+export const ANALYTICS_WRITE_KEY =
+  process.env.SEGMENT_WRITE_KEY || process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY;
+
 export const MICROBLOCKS_ENABLED = true;
 
 export const DEFAULT_POLLING_INTERVAL =

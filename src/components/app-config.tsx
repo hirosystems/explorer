@@ -1,17 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RecoilRoot } from 'recoil';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { AppContainer } from '@components/app-container';
 import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
 import { NetworkMode } from '@common/types/network';
-
-declare const window: any;
-
-// Track client-side page views with Segment
-Router.events.on('routeChangeComplete', url => {
-  window.analytics.page(url);
-});
+import { useAnalytics } from '@common/hooks/use-analytics';
 
 interface AppConfigProps {
   isHome?: boolean;
@@ -24,12 +18,21 @@ export const AppConfig: React.FC<AppConfigProps> = ({
   networkMode,
   isHome,
   fullWidth,
-}) => (
-  <RecoilRoot>
-    <CacheProvider value={cache}>
-      <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
-        {children}
-      </AppContainer>
-    </CacheProvider>
-  </RecoilRoot>
-);
+}) => {
+  const { events } = useRouter();
+  const analytics = useAnalytics();
+
+  useEffect(() => {
+    events.on('routeChangeComplete', (url: string) => analytics.page(url));
+  }, []);
+
+  return (
+    <RecoilRoot>
+      <CacheProvider value={cache}>
+        <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
+          {children}
+        </AppContainer>
+      </CacheProvider>
+    </RecoilRoot>
+  );
+};
