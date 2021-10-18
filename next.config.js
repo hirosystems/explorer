@@ -5,6 +5,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
+const hasSentryDsn = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
+
 const moduleExports = withBundleAnalyzer({
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
@@ -56,4 +58,8 @@ const sentryWebpackPluginOptions = {
   silent: false,
 };
 
-module.exports = withSentryConfig(moduleExports, sentryWebpackPluginOptions);
+const nextConfig = hasSentryDsn
+  ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+  : moduleExports;
+
+module.exports = nextConfig;
