@@ -1,3 +1,11 @@
+# [1.16.0](https://github.com/blockstack/explorer/compare/v1.15.1...v1.16.0) (2021-10-18)
+
+
+### Features
+
+* add segment page analytics ([7c44459](https://github.com/blockstack/explorer/commit/7c44459d38566c0d808af04704c79fd9c4e1f569))
+* add track event ([8d67026](https://github.com/blockstack/explorer/commit/8d670261eb7f945572e98a61dc55732e70263fae))
+
 ## [1.15.1](https://github.com/blockstack/explorer/compare/v1.15.0...v1.15.1) (2021-09-27)
 
 
