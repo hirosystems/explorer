@@ -1,3 +1,10 @@
+## [1.16.1](https://github.com/blockstack/explorer/compare/v1.16.0...v1.16.1) (2021-10-19)
+
+
+### Bug Fixes
+
+* build without sentry creds ([8f0212c](https://github.com/blockstack/explorer/commit/8f0212cda3e9196c9393657654bdc0199058aee3))
+
 # [1.16.0](https://github.com/blockstack/explorer/compare/v1.15.1...v1.16.0) (2021-10-18)
 
 
