@@ -41,6 +41,7 @@ const labelMap = {
   success: 'Confirmed',
   success_anchor_block: 'Confirmed in anchor block',
   success_microblock: 'Included in microblock',
+  non_canonical: 'Non-canonical (orphaned)',
   failed: 'Failed',
 };
 
@@ -49,6 +50,7 @@ const iconMap = {
   success: CheckIcon,
   success_anchor_block: CheckIcon,
   success_microblock: () => <MicroblockIcon fill="white" />,
+  non_canonical: AlertCircleIcon,
   failed: AlertCircleIcon,
 };
 

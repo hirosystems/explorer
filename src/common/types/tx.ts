@@ -14,7 +14,12 @@ import {
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-export type TxStatus = 'pending' | 'success_anchor_block' | 'success_microblock' | 'failed';
+export type TxStatus =
+  | 'pending'
+  | 'success_anchor_block'
+  | 'success_microblock'
+  | 'non_canonical'
+  | 'failed';
 
 export type TokenTransferTxs = TokenTransferTransaction | MempoolTokenTransferTransaction;
 export type CoinbaseTxs = CoinbaseTransaction | MempoolCoinbaseTransaction;

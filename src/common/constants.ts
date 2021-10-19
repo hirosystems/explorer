@@ -143,5 +143,6 @@ export const TransactionStatus: Record<string, TxStatus> = {
   PENDING: 'pending',
   SUCCESS_ANCHOR_BLOCK: 'success_anchor_block',
   SUCCESS_MICROBLOCK: 'success_microblock',
+  NON_CANONICAL: 'non_canonical',
   FAILED: 'failed',
 };
