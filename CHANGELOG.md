@@ -1,3 +1,10 @@
+## [1.16.2](https://github.com/blockstack/explorer/compare/v1.16.1...v1.16.2) (2021-10-20)
+
+
+### Bug Fixes
+
+* display of non-canonical transactions ([4dbeb67](https://github.com/blockstack/explorer/commit/4dbeb6758e026c99d9181555af900a7751e06e6f))
+
 ## [1.16.1](https://github.com/blockstack/explorer/compare/v1.16.0...v1.16.1) (2021-10-19)
 
 
