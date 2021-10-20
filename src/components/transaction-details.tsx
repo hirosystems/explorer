@@ -93,7 +93,7 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
     children: (
       <Flex alignItems="center">
         <Box>
-          Transaction has been orphaned by the canonical chain. It is in a non-canonical fork.
+          Transaction is in a non-canonical fork. It has been orphaned by the canonical chain.
         </Box>
         <IconButton
           ml="tight"
