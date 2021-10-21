@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/blockstack/explorer/compare/v1.16.2...v1.17.0) (2021-10-21)
+
+
+### Features
+
+* add notice banner for non-canonical txs ([361817f](https://github.com/blockstack/explorer/commit/361817fc20a92381a9cf2207a3ea0360a040ca76))
+
 ## [1.16.2](https://github.com/blockstack/explorer/compare/v1.16.1...v1.16.2) (2021-10-20)
 
 
