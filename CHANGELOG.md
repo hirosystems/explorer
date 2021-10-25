@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/blockstack/explorer/compare/v1.17.0...v1.17.1) (2021-10-25)
+
+
+### Bug Fixes
+
+* add segment write key to build ([df1d603](https://github.com/blockstack/explorer/commit/df1d603a4a0b929667292e88de1cdfe62afda01a))
+
 # [1.17.0](https://github.com/blockstack/explorer/compare/v1.16.2...v1.17.0) (2021-10-21)
 
 
