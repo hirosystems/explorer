@@ -1,5 +1,8 @@
 FROM node:alpine
 
+# Pass these build args in to configure Segment
+ARG SEGMENT_WRITE_KEY
+
 # Pass these build args in to configure Sentry
 ARG SENTRY_AUTH_TOKEN
 ARG SENTRY_DSN
@@ -20,6 +23,7 @@ RUN apk --no-cache add --virtual \
   && yarn \
   && apk del native-deps
 
+ENV SEGMENT_WRITE_KEY=${SEGMENT_WRITE_KEY}
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV SENTRY_DSN=${SENTRY_DSN}
 ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
