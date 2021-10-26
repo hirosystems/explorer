@@ -9,7 +9,8 @@ function initSentry() {
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
     // that it will also get attached to your source maps
     // Adjust this value in production, or use tracesSampler for greater control
-    tracesSampleRate: 1.0,
+    tracesSampleRate: 0.05,
+    sampleRate: 0.05,
   });
 }
 
