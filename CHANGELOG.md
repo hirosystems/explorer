@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/blockstack/explorer/compare/v1.17.1...v1.17.2) (2021-10-27)
+
+
+### Bug Fixes
+
+* **sentry:** lower logging sampling to 10% ([2991bd0](https://github.com/blockstack/explorer/commit/2991bd00e94d2abac4c0a6df86fb0f651a391924))
+
 ## [1.17.1](https://github.com/blockstack/explorer/compare/v1.17.0...v1.17.1) (2021-10-25)
 
 
