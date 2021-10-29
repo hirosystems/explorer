@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:16-alpine AS deps
 
 # Pass these build args in to configure Segment
 ARG SEGMENT_WRITE_KEY
