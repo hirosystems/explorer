@@ -5,7 +5,10 @@ import { AppContainer } from '@components/app-container';
 import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
 import { NetworkMode } from '@common/types/network';
-import { useAnalytics } from '@common/hooks/use-analytics';
+
+// TODO: Replace any type w/ SegmentAnalytics
+// import { SegmentAnalytics } from '@segment/analytics.js-core';
+declare const window: any;
 
 interface AppConfigProps {
   isHome?: boolean;
@@ -20,10 +23,10 @@ export const AppConfig: React.FC<AppConfigProps> = ({
   fullWidth,
 }) => {
   const { events } = useRouter();
-  const analytics = useAnalytics();
 
   useEffect(() => {
-    events.on('routeChangeComplete', (url: string) => analytics.page(url));
+    if (!window.analytics) return;
+    events.on('routeChangeComplete', (url: string) => window.analytics?.page(url));
   }, []);
 
   return (
