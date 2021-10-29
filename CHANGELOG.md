@@ -1,3 +1,12 @@
+## [1.17.3](https://github.com/hirosystems/explorer/compare/v1.17.2...v1.17.3) (2021-10-29)
+
+
+### Bug Fixes
+
+* build error update next ([553a086](https://github.com/hirosystems/explorer/commit/553a0864be1590007ad15d74ca3fd26fbad6d14a))
+* downgrade node in dockerfile ([ed26260](https://github.com/hirosystems/explorer/commit/ed26260e0df5e786e2b0b1e6596f0e631fa9a03d))
+* segment not logging in prod ([aa028a0](https://github.com/hirosystems/explorer/commit/aa028a068bd27831f74e32491fdec421eb76ff06))
+
 ## [1.17.2](https://github.com/blockstack/explorer/compare/v1.17.1...v1.17.2) (2021-10-27)
 
 
