@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as snippet from '@segment/snippet';
 
 import Document, {
   DocumentContext,
@@ -11,6 +12,7 @@ import Document, {
 } from 'next/document';
 import { extractCritical } from '@emotion/server';
 import { GlobalStyles, ProgressBarStyles, TextAreaOverrides } from '@components/global-styles';
+const { SEGMENT_WRITE_KEY, NODE_ENV } = process.env;
 
 export const THEME_STORAGE_KEY = 'theme';
 
@@ -34,6 +36,19 @@ export default class MyDocument extends Document<DocumentProps> {
     };
   }
 
+  renderSnippet() {
+    const opts = {
+      apiKey: SEGMENT_WRITE_KEY,
+      // Note: the page option only covers SSR tracking.
+      // Track other events using `window.analytics.page()`
+      // in app-config.js if needed later.
+      page: true,
+    };
+    // Use if needed for dev mode
+    // if (NODE_ENV !== 'production') return snippet.max(opts);
+    return snippet.min(opts);
+  }
+
   render() {
     return (
       <Html lang="en">
@@ -41,6 +56,10 @@ export default class MyDocument extends Document<DocumentProps> {
           <meta name="theme-color" content="#6287DD" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="#6287DD" />
+          {/* Inject the Segment snippet into the <head> of the document  */}
+          {SEGMENT_WRITE_KEY && (
+            <script dangerouslySetInnerHTML={{ __html: this.renderSnippet() }} />
+          )}
           <script
             dangerouslySetInnerHTML={{
               __html: `(function () {

@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
-import { VERSION } from '@common/constants';
-// import { SegmentAnalytics } from '@segment/analytics.js-core';
 
-// TODO: Move this to a global location and
-// replace any type w/ SegmentAnalytics
+import { VERSION } from '@common/constants';
+
+// TODO: Replace any type w/ SegmentAnalytics
+// import { SegmentAnalytics } from '@segment/analytics.js-core';
 declare const global: any;
 
 export interface AnalyticsProps {
@@ -24,14 +24,10 @@ export function useAnalytics() {
 
   if (!global.analytics)
     return {
-      page: () => undefined,
       track: () => undefined,
     };
 
   return {
-    page: (url: string) => {
-      return global.analytics.page(url);
-    },
     track: (args: AnalyticsProps) => {
       const { event, properties, options, callback } = args;
       return global.analytics.track(event, { ...defaultOptions, ...properties }, options, callback);

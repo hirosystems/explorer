@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import Script from 'next/script';
-import { AtomDebug, Devtools } from '@features/devtools';
-import { AppConfig } from '@components/app-config';
-
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
-import { NetworkMode } from '@common/types/network';
-
 import 'tippy.js/dist/tippy.css';
 import 'modern-normalize/modern-normalize.css';
+
+import { AtomDebug, Devtools } from '@features/devtools';
+import { AppConfig } from '@components/app-config';
+import { NetworkMode } from '@common/types/network';
 import { getNetworkMode } from '@common/api/network';
 import { getServerSideApiServer } from '@common/api/utils';
 import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
-import { renderSnippet } from '@common/utils/analytics';
-import { ANALYTICS_WRITE_KEY, IS_DEV } from '@common/constants';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
@@ -30,7 +26,6 @@ function ExplorerApp({
   pageProps: { isHome, fullWidth, ...props },
 }: ExplorerAppProps): React.ReactElement {
   const router = useRouter();
-  const hasAnalyticsKey = !IS_DEV && ANALYTICS_WRITE_KEY;
 
   useEffect(() => {
     const chain = router.query.chain;
@@ -41,8 +36,6 @@ function ExplorerApp({
     <>
       <Devtools />
       <AppConfig isHome={isHome} fullWidth={fullWidth}>
-        {/* Inject the Segment snippet into the <head> of the document  */}
-        {hasAnalyticsKey && <Script dangerouslySetInnerHTML={{ __html: renderSnippet() }} />}
         <AtomDebug />
         <Component apiServer={apiServer} networkMode={networkMode} {...props} />
         <Modals />

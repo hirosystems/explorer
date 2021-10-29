@@ -34,6 +34,7 @@ const moduleExports = withBundleAnalyzer({
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
+    config.output.hashFunction = 'xxhash64';
     const aliases = config.resolve.alias || (config.resolve.alias = {});
     const externals = config.externals || [];
 
