@@ -2,7 +2,11 @@ import React from 'react';
 import { Box, color, Flex, FlexProps } from '@stacks/ui';
 import { FoundResult } from '@common/types/search-results';
 import { useAtomValue } from 'jotai/utils';
-import { accountStxBalanceResponseState, accountTransactionsState } from '@store/accounts';
+import {
+  accountNameState,
+  accountStxBalanceResponseState,
+  accountTransactionsState,
+} from '@store/accounts';
 import { useInfiniteQueryAtom } from 'jotai-query-toolkit';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { addSepBetweenStrings, microToStacks, truncateMiddle } from '@common/utils';
@@ -19,12 +23,14 @@ export const AddressResultItem: React.FC<
 > = ({ isHovered, result, ...props }) => {
   if (!result || !result.found || result.result.entity_type !== 'standard_address') return null;
   const principal = result.result.entity_id;
+  const name = useAtomValue(accountNameState(principal));
   const stx = useAtomValue(accountStxBalanceResponseState(principal));
   const [transactions] = useInfiniteQueryAtom<InfiniteData<TransactionsListResponse> | undefined>(
     accountTransactionsState([principal, DEFAULT_LIST_LIMIT])
   );
   const transactionTotal = transactions?.pages?.[0]?.total;
   const caption = addSepBetweenStrings([
+    name ? truncateMiddle(principal, 4) : undefined,
     `${microToStacks(stx.balance)} STX`,
     `${transactionTotal} ${pluralize('transaction', transactionTotal)}`,
   ]);
@@ -39,7 +45,7 @@ export const AddressResultItem: React.FC<
               display="block"
               mb="extra-tight"
             >
-              {truncateMiddle(principal, 4)}
+              {name ?? truncateMiddle(principal, 4)}
             </Title>
             <Caption>{caption}</Caption>
           </Box>

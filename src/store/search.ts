@@ -14,8 +14,24 @@ import { DEFAULT_LIST_LIMIT } from '@common/constants';
 export const searchAtomWithQuery = atomFamilyWithQuery<string, SearchResult | undefined>(
   'SEARCH',
   async (get, query) => {
-    const { searchApi } = get(apiClientsState);
+    const { bnsApi, searchApi } = get(apiClientsState);
     if (!query) return;
+    if (query.endsWith('.stx')) {
+      try {
+        const res = await bnsApi.getNameInfo({
+          name: query,
+        });
+
+        return {
+          found: true,
+          result: {
+            entity_type: SearchResultType.StandardAddress,
+            entity_id: res.address,
+          },
+        };
+      } catch {}
+    }
+
     try {
       const result = await searchApi.searchById({ id: query });
       return result as FoundResult;
