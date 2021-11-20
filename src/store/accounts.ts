@@ -68,7 +68,7 @@ const accountInfoQueryFn = async (get: Getter, principal: Principal) => {
   });
 };
 
-// @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_info
+// @see https://hirosystems.github.io/stacks-blockchain-api/#operation/get_names_owned_by_address
 const accountNameQueryFn = async (get: Getter, principal: Principal) => {
   const { bnsApi } = get(apiClientsState);
   const res = await bnsApi.getNamesOwnedByAddress({
