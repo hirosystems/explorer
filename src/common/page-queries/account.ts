@@ -6,14 +6,30 @@ import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-types';
 import { InfoQueryKeys } from '@store/info';
 
-export function getPrincipalFromCtx(ctx: NextPageContext) {
+export async function getPrincipalFromCtx(ctx: NextPageContext) {
   const { query } = ctx;
-  const principal: string = query?.principal as string;
+  let principal: string = query?.principal as string;
+
+  // TODO: Is this the correct place for this?
+  if (principal.endsWith('.stx')) {
+    const { bnsApi } = await getApiClients(ctx);
+
+    try {
+      const res = await bnsApi.getNameInfo({
+        name: principal,
+      });
+
+      principal = res.address;
+    } catch {
+      principal = '';
+    }
+  }
+
   return principal;
 }
 
 export const getAccountPageQueries: GetQueries = async ctx => {
-  const principal = getPrincipalFromCtx(ctx);
+  const principal = await getPrincipalFromCtx(ctx);
   const { accountsApi, bnsApi, transactionsApi, infoApi } = await getApiClients(ctx);
 
   return [

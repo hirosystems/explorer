@@ -98,8 +98,8 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
   );
 };
 
-AddressPage.getInitialProps = ctx => {
-  const principal = getPrincipalFromCtx(ctx);
+AddressPage.getInitialProps = async ctx => {
+  const principal = await getPrincipalFromCtx(ctx);
   return {
     principal,
     inView: {
