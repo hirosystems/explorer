@@ -221,9 +221,9 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
             <Box color={color('text-caption')}>
               <IconArrowDownRight size="16px" />
             </Box>
-            {/* @ts-ignore */}
             <AddressComponent
               principal={d.token_transfer.recipient_address}
+              // @ts-ignore
               name={d.token_transfer.recipient_name}
             />
           </Stack>
