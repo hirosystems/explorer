@@ -60,13 +60,41 @@ const transactionsListQueryFn = async (
   [limit, types, options = {}]: LimitWithTypesOptionalAddress,
   context: QueryFunctionContext
 ) => {
-  const { transactionsApi } = get(apiClientsState);
+  const { bnsApi, transactionsApi } = get(apiClientsState);
   const { pageParam } = context;
-  return (await transactionsApi.getTransactionList({
+
+  let transactions = (await transactionsApi.getTransactionList({
     offset: pageParam,
     limit,
     type: types,
   })) as TransactionsListResponse; // cast due to limitation in api client
+
+  for (let i = 0; i < transactions.results.length; i++) {
+    let res;
+
+    res = await bnsApi.getNamesOwnedByAddress({
+      address: transactions.results[i].sender_address,
+      blockchain: 'stacks',
+    });
+    // @ts-ignore
+    if (res.names && res.names.length) transactions.results[i].sender_name = res.names[0];
+
+    if (transactions.results[i].tx_type === 'token_transfer') {
+      res = await bnsApi.getNamesOwnedByAddress({
+        // @ts-ignore
+        address: transactions.results[i].token_transfer.recipient_address,
+        blockchain: 'stacks',
+      });
+
+      if (res.names && res.names.length)
+        // @ts-ignore
+        transactions.results[i].token_transfer.recipient_name = res.names[0];
+    }
+  }
+
+  console.log('Store', transactions);
+
+  return transactions;
 };
 
 const mempoolTransactionsListQueryFn = async (

@@ -42,7 +42,11 @@ const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
   return date;
 };
 
-const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal, ...rest }) => (
+const PrincipalLink: React.FC<FlexProps & { principal: string; name?: string }> = ({
+  principal,
+  name,
+  ...rest
+}) => (
   <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
     <NextLink href={`/address/${principal}`} passHref>
       <Caption
@@ -52,7 +56,7 @@ const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal,
         }}
         textDecoration="none"
       >
-        {truncateMiddle(principal)}
+        {name ?? truncateMiddle(principal)}
       </Caption>
     </NextLink>
   </Flex>
@@ -88,11 +92,16 @@ const AddressArea = React.memo(
       }
       return (
         <Stack flexWrap="wrap" isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
-          <PrincipalLink principal={tx.sender_address} />
+          {/* @ts-ignore */}
+          <PrincipalLink principal={tx.sender_address} name={tx.sender_name} />
           <Flex as="span" color={color('text-caption')}>
             <ArrowRightIcon strokeWidth="1.5" size="15px" />
           </Flex>
-          <PrincipalLink principal={tx.token_transfer.recipient_address} />
+          <PrincipalLink
+            principal={tx.token_transfer.recipient_address}
+            // @ts-ignore
+            name={tx.token_transfer.recipient_name}
+          />
         </Stack>
       );
     }
