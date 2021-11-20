@@ -30,7 +30,7 @@ export const AddressResultItem: React.FC<
   );
   const transactionTotal = transactions?.pages?.[0]?.total;
   const caption = addSepBetweenStrings([
-    name ? truncateMiddle(principal, 4) : undefined,
+    name === 'undefined' ? undefined : truncateMiddle(principal, 4),
     `${microToStacks(stx.balance)} STX`,
     `${transactionTotal} ${pluralize('transaction', transactionTotal)}`,
   ]);
@@ -45,7 +45,7 @@ export const AddressResultItem: React.FC<
               display="block"
               mb="extra-tight"
             >
-              {name ?? truncateMiddle(principal, 4)}
+              {name === 'undefined' ? truncateMiddle(principal, 4) : name}
             </Title>
             <Caption>{caption}</Caption>
           </Box>
