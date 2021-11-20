@@ -16,7 +16,9 @@ export const searchAtomWithQuery = atomFamilyWithQuery<string, SearchResult | un
   async (get, query) => {
     const { bnsApi, searchApi } = get(apiClientsState);
     if (!query) return;
-    if (query.endsWith('.stx')) {
+
+    const { namespaces } = await bnsApi.getAllNamespaces();
+    if (namespaces.filter(namespace => query.endsWith(namespace)).length) {
       try {
         const res = await bnsApi.getNameInfo({
           name: query,

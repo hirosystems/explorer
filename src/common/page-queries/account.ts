@@ -8,11 +8,13 @@ import { InfoQueryKeys } from '@store/info';
 
 export async function getPrincipalFromCtx(ctx: NextPageContext) {
   const { query } = ctx;
+  const { bnsApi } = await getApiClients(ctx);
   let principal: string = query?.principal as string;
 
   // TODO: Is this the correct place for this?
-  if (principal.endsWith('.stx')) {
-    const { bnsApi } = await getApiClients(ctx);
+  const { namespaces } = await bnsApi.getAllNamespaces();
+  if (namespaces.filter(namespace => principal.endsWith(namespace)).length) {
+    bnsApi.getAllNamespaces();
 
     try {
       const res = await bnsApi.getNameInfo({
