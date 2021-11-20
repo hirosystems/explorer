@@ -42,7 +42,7 @@ export const getAccountPageQueries: GetQueries = async ctx => {
           blockchain: 'stacks',
         });
 
-        return res.names ? res.names[0] : undefined;
+        return res.names && res.names.length ? res.names[0] : 'undefined';
       },
     ],
     [

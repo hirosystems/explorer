@@ -76,7 +76,7 @@ const accountNameQueryFn = async (get: Getter, principal: Principal) => {
     blockchain: 'stacks',
   });
 
-  return res.names ? res.names[0] : undefined;
+  return res.names && res.names.length ? res.names[0] : 'undefined';
 };
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_balance
@@ -196,7 +196,7 @@ export const accountInfoState = atomFamilyWithQuery<string, AccountDataResponse>
   AccountsQueryKeys.INFO,
   accountInfoQueryFn
 );
-export const accountNameState = atomFamilyWithQuery<string, string | undefined>(
+export const accountNameState = atomFamilyWithQuery<string, string>(
   AccountsQueryKeys.NAME,
   accountNameQueryFn
 );

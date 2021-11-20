@@ -16,6 +16,9 @@ export const AddressSummary = ({
   transactions,
   nonce,
 }: any) => {
+  // @note If we return undefined, the code can't check if an initial value was provided.
+  if (name === 'undefined') name = undefined;
+
   return (
     <Section mb={'extra-loose'} title="Summary">
       <Rows
