@@ -14,10 +14,21 @@ export function getPrincipalFromCtx(ctx: NextPageContext) {
 
 export const getAccountPageQueries: GetQueries = async ctx => {
   const principal = getPrincipalFromCtx(ctx);
-  const { accountsApi, transactionsApi, infoApi } = await getApiClients(ctx);
+  const { accountsApi, bnsApi, transactionsApi, infoApi } = await getApiClients(ctx);
 
   return [
     [InfoQueryKeys.INFO, async () => infoApi.getCoreApiInfo()],
+    [
+      getAccountQueryKey.name(principal),
+      async () => {
+        const res = await bnsApi.getNamesOwnedByAddress({
+          address: principal,
+          blockchain: 'stacks',
+        });
+
+        return res.names ? res.names[0] : undefined;
+      },
+    ],
     [
       getAccountQueryKey.balances(principal),
       async () => accountsApi.getAccountBalance({ principal }),

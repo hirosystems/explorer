@@ -13,6 +13,7 @@ import type {
 import {
   accountBalancesResponseState,
   accountInfoState,
+  accountNameState,
   accountPendingTransactionsState,
   accountStxBalanceResponseState,
   accountTransactionsState,
@@ -201,6 +202,12 @@ export const accountInViewInfo = atom(get => {
   const address = get(addressInViewState);
   if (!address) return;
   return get(accountInfoState(address));
+});
+
+export const accountInViewName = atom(get => {
+  const address = get(addressInViewState);
+  if (!address) return;
+  return get(accountNameState(address));
 });
 
 export const accountInViewStxBalance = atom(get => {

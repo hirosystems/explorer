@@ -8,7 +8,7 @@ import { SearchResultType } from '@common/types/search-results';
 import { blocksSingleState } from '@store/blocks';
 import { contractInfoState } from '@store/contracts';
 import { transactionSingleState } from '@store/transactions';
-import { accountInfoState, accountTransactionsState } from '@store/accounts';
+import { accountInfoState, accountNameState, accountTransactionsState } from '@store/accounts';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
 export const searchAtomWithQuery = atomFamilyWithQuery<string, SearchResult | undefined>(
@@ -51,6 +51,7 @@ export const searchResultItemState = atom(get => {
     case SearchResultType.StandardAddress:
       return {
         info: get(accountInfoState(entity_id)),
+        name: get(accountNameState(entity_id)),
         transactions: get(accountTransactionsState([entity_id, DEFAULT_LIST_LIMIT])),
       };
   }

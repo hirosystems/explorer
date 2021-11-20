@@ -10,6 +10,7 @@ import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import {
   useAccountInViewBalances,
   useAccountInViewInfo,
+  useAccountInViewName,
 } from '../../hooks/currently-in-view-hooks';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
@@ -58,6 +59,7 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
     );
   const balances = useAccountInViewBalances();
   const info = useAccountInViewInfo();
+  const name = useAccountInViewName();
   const hasTokenBalances = hasTokenBalance(balances);
 
   useRefreshOnBack('principal');
@@ -78,6 +80,7 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
         <Stack spacing="extra-loose">
           <AddressSummary
             principal={principal}
+            name={name}
             hasTokenBalances={hasTokenBalances}
             balances={balances}
             nonce={info?.nonce}

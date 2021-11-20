@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai/utils';
 import {
   accountInViewBalances,
   accountInViewInfo,
+  accountInViewName,
   accountInViewStackingStartBlockHeight,
   addressInViewState,
   blockHashInView,
@@ -73,6 +74,10 @@ export function useAccountInViewPendingTransactions() {
 
 export function useAccountInViewInfo() {
   return useAtomValue(accountInViewInfo);
+}
+
+export function useAccountInViewName() {
+  return useAtomValue(accountInViewName);
 }
 
 export function useAccountInViewBalances() {

@@ -4,9 +4,13 @@ import { Rows } from '@components/rows';
 import { Activity } from '@components/activity-row';
 import { TokenBalancesRow } from '@components/balances/token-balances-row';
 import { microToStacks } from '@common/utils';
+import { Box, color, Stack, StxInline } from '@stacks/ui';
+import { Badge } from '@components/badge';
+import { truncateMiddle } from '@stacks/ui-utils';
 
 export const AddressSummary = ({
   principal,
+  name,
   hasTokenBalances,
   balances,
   transactions,
@@ -22,7 +26,26 @@ export const AddressSummary = ({
             label: {
               children: 'Address',
             },
-            children: principal,
+            children: (
+              <>
+                {name ? (
+                  <Stack isInline spacing={'base'}>
+                    <span>{name}</span>
+                    <Badge
+                      color={color('text-body')}
+                      labelProps={{ display: 'flex', alignItems: 'center' }}
+                      alignItems="center"
+                      bg={color('bg-alt')}
+                      my={0}
+                    >
+                      <Box ml={'extra-tight'}>{truncateMiddle(principal, 5)}</Box>
+                    </Badge>
+                  </Stack>
+                ) : (
+                  principal
+                )}
+              </>
+            ),
             copy: principal,
           },
           {

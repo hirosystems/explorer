@@ -22,6 +22,7 @@ import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-ty
 // ----------------
 export enum AccountsQueryKeys {
   INFO = 'accounts/INFO',
+  NAME = 'accounts/NAME',
   BALANCES = 'accounts/BALANCES',
   STX_BALANCE = 'accounts/STX_BALANCE',
   TRANSACTIONS = 'accounts/TRANSACTIONS',
@@ -36,6 +37,7 @@ type Principal = string;
 type PrincipalWithLimit = [principal: Principal, limit: number];
 export const getAccountQueryKey = {
   info: (principal: Principal): QueryKey => makeQueryKey(AccountsQueryKeys.INFO, [principal]),
+  name: (principal: Principal): QueryKey => makeQueryKey(AccountsQueryKeys.NAME, [principal]),
   balances: (principal: Principal): QueryKey =>
     makeQueryKey(AccountsQueryKeys.BALANCES, [principal]),
   stxBalance: (principal: Principal): QueryKey =>
@@ -64,6 +66,17 @@ const accountInfoQueryFn = async (get: Getter, principal: Principal) => {
     principal,
     proof: 0, // no need to fetch the proof
   });
+};
+
+// @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_info
+const accountNameQueryFn = async (get: Getter, principal: Principal) => {
+  const { bnsApi } = get(apiClientsState);
+  const res = await bnsApi.getNamesOwnedByAddress({
+    address: principal,
+    blockchain: 'stacks',
+  });
+
+  return res.names ? res.names[0] : undefined;
 };
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_balance
@@ -182,6 +195,10 @@ const accountInboundQueryFn = async (
 export const accountInfoState = atomFamilyWithQuery<string, AccountDataResponse>(
   AccountsQueryKeys.INFO,
   accountInfoQueryFn
+);
+export const accountNameState = atomFamilyWithQuery<string, string | undefined>(
+  AccountsQueryKeys.NAME,
+  accountNameQueryFn
 );
 export const accountBalancesResponseState = atomFamilyWithQuery<string, AddressBalanceResponse>(
   AccountsQueryKeys.BALANCES,
