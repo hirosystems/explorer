@@ -83,10 +83,30 @@ const mempoolTransactionsListQueryFn = async (
   })) as MempoolTransactionsListResponse; // cast due to limitation in api client
 };
 const transactionSingeQueryFn = async (get: Getter, txId: string) => {
-  const { transactionsApi } = get(apiClientsState);
-  return (await transactionsApi.getTransactionById({
-    txId,
-  })) as MempoolTransaction | Transaction;
+  const { bnsApi, transactionsApi } = get(apiClientsState);
+  let transaction = (await transactionsApi.getTransactionById({ txId })) as (
+    | MempoolTransaction
+    | Transaction
+  ) & { sender_name: string };
+  let res;
+
+  res = await bnsApi.getNamesOwnedByAddress({
+    address: transaction.sender_address,
+    blockchain: 'stacks',
+  });
+  if (res.names && res.names.length) transaction.sender_name = res.names[0];
+
+  if (transaction.tx_type === 'token_transfer') {
+    res = await bnsApi.getNamesOwnedByAddress({
+      address: transaction.token_transfer.recipient_address,
+      blockchain: 'stacks',
+    });
+
+    // @ts-ignore
+    if (res.names && res.names.length) transaction.token_transfer.recipient_name = res.names[0];
+  }
+
+  return transaction;
 };
 
 // ----------------

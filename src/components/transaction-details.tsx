@@ -52,10 +52,10 @@ const BlockComponent = React.memo(({ block, ts }: { block: number | string; ts: 
   );
 });
 
-const AddressComponent = React.memo(({ principal }: { principal: string }) => {
+const AddressComponent = React.memo(({ principal, name }: { principal: string; name?: string }) => {
   return (
     <NextLink href={`/address/[principal]`} as={`/address/${principal}`} passHref>
-      <Link as="a">{principal}</Link>
+      <Link as="a">{name || principal}</Link>
     </NextLink>
   );
 });
@@ -136,7 +136,8 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
     label: {
       children: getSenderName(d.tx_type),
     },
-    children: <AddressComponent principal={d.sender_address} />,
+    // @ts-ignore
+    children: <AddressComponent principal={d.sender_address} name={d.sender_name} />,
     copy: d.sender_address,
   };
   const nonce = {
@@ -205,7 +206,8 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
             <Box color={color('text-caption')}>
               <IconArrowUpRight size="16px" />
             </Box>
-            <AddressComponent principal={d.sender_address} />
+            {/* @ts-ignore */}
+            <AddressComponent principal={d.sender_address} name={d.sender_name} />
           </Stack>
         ),
         copy: d.sender_address,
@@ -219,7 +221,11 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
             <Box color={color('text-caption')}>
               <IconArrowDownRight size="16px" />
             </Box>
-            <AddressComponent principal={d.token_transfer.recipient_address} />
+            {/* @ts-ignore */}
+            <AddressComponent
+              principal={d.token_transfer.recipient_address}
+              name={d.token_transfer.recipient_name}
+            />
           </Stack>
         ),
         copy: d.token_transfer.recipient_address,

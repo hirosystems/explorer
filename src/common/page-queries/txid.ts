@@ -66,17 +66,37 @@ export const getTxPageQueryProps = async (
     // we can use react-query to get the data if it's been viewed before,
     // and on mount it will automatically revalidate and update if it's different
     getTxPageCachedQueryProps(ctx, queryClient);
-  const { transactionsApi, smartContractsApi } = await getApiClients(ctx);
+  const { bnsApi, transactionsApi, smartContractsApi } = await getApiClients(ctx);
 
-  if (!isContractId)
+  if (!isContractId) {
     // it's a txid, so we can just return the tx
-    return {
-      transaction:
-        cachedTransaction || // if we have a cached tx, use that
-        ((await transactionsApi.getTransactionById({ txId: txQuery })) as
-          | Transaction
-          | MempoolTransaction),
-    };
+
+    if (cachedTransaction) return { transaction: cachedTransaction };
+
+    let transaction = (await transactionsApi.getTransactionById({ txId: txQuery })) as (
+      | MempoolTransaction
+      | Transaction
+    ) & { sender_name: string };
+    let res;
+
+    res = await bnsApi.getNamesOwnedByAddress({
+      address: transaction.sender_address,
+      blockchain: 'stacks',
+    });
+    if (res.names && res.names.length) transaction.sender_name = res.names[0];
+
+    if (transaction.tx_type === 'token_transfer') {
+      res = await bnsApi.getNamesOwnedByAddress({
+        address: transaction.token_transfer.recipient_address,
+        blockchain: 'stacks',
+      });
+
+      // @ts-ignore
+      if (res.names && res.names.length) transaction.token_transfer.recipient_name = res.names[0];
+    }
+
+    return { transaction };
+  }
   // it's a contract principal, so we need to get the info to get the txid
   const contractInfo =
     cachedContractInfo || // if we have a cached contract, use that
