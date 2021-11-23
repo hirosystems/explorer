@@ -17,29 +17,24 @@ export const getTransactionsPageQueries: GetQueries = async ctx => {
         })) as TransactionsListResponse;
 
         for (let i = 0; i < transactions.results.length; i++) {
-          let res;
+          const transaction = transactions.results[i];
 
-          res = await bnsApi.getNamesOwnedByAddress({
-            address: transactions.results[i].sender_address,
+          const { names } = await bnsApi.getNamesOwnedByAddress({
+            address: transaction.sender_address,
             blockchain: 'stacks',
           });
-          // @ts-ignore
-          if (res.names && res.names.length) transactions.results[i].sender_name = res.names[0];
+          if (names && names.length) transactions.results[i].sender_name = names[0];
 
-          if (transactions.results[i].tx_type === 'token_transfer') {
-            res = await bnsApi.getNamesOwnedByAddress({
-              // @ts-ignore
-              address: transactions.results[i].token_transfer.recipient_address,
+          if (transaction.tx_type === 'token_transfer') {
+            const { names } = await bnsApi.getNamesOwnedByAddress({
+              address: transaction.token_transfer.recipient_address,
               blockchain: 'stacks',
             });
 
-            if (res.names && res.names.length)
-              // @ts-ignore
-              transactions.results[i].token_transfer.recipient_name = res.names[0];
+            if (names && names.length)
+              transactions.results[i].token_transfer!.recipient_name = names[0];
           }
         }
-
-        console.log('Queries', transactions);
 
         return transactions;
       },

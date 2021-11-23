@@ -18,7 +18,9 @@ import { GetTransactionListTypeEnum } from '@store/recoil/filter';
 // ----------------
 // types
 // ----------------
-export type TransactionsListResponse = ApiResponseWithResultsOffset<Transaction>;
+export type TransactionsListResponse = ApiResponseWithResultsOffset<
+  Transaction & { sender_name?: string; token_transfer?: { recipient_name?: string } }
+>;
 export type MempoolTransactionsListResponse = ApiResponseWithResultsOffset<MempoolTransaction>;
 export type OptionalTransactionAddress =
   | { address?: string; recipientAddress?: never; senderAddress?: never }
