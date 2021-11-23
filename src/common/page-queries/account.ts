@@ -5,13 +5,16 @@ import { getApiClients } from '@common/api/client';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-types';
 import { InfoQueryKeys } from '@store/info';
+import { validateStacksAddress } from '@common/utils';
 
 export async function getPrincipalFromCtx(ctx: NextPageContext) {
   const { query } = ctx;
   const { bnsApi } = await getApiClients(ctx);
   let principal: string = query?.principal as string;
 
-  // TODO: Is this the correct place for this?
+  // Return early if it's a valid address.
+  if (validateStacksAddress(principal)) return principal;
+
   const { namespaces } = await bnsApi.getAllNamespaces();
   if (namespaces.filter(namespace => principal.endsWith(namespace)).length) {
     bnsApi.getAllNamespaces();
