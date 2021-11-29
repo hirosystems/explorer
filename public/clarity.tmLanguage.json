@@ -1,280 +1,184 @@
 {
-  "fileTypes": [
-    "clar"
-  ],
-  "keyEquivalent": "^~S",
-  "name": "Clarity",
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "clarity",
+  "scopeName": "source.clar",
+  "uuid": "f9e9871d-2ea6-4be0-afd2-fc382d704716",
   "patterns": [
     {
       "include": "#comment"
     },
     {
-      "include": "#sexp"
+      "include": "#datatype"
+    },
+    {
+      "include": "#keyword"
+    },
+    {
+      "include": "#number"
     },
     {
       "include": "#string"
     },
     {
-      "include": "#language-functions"
+      "include": "#define"
     },
     {
-      "include": "#illegal"
+      "include": "#lang-func"
+    },
+    {
+      "include": "#tuple-key"
     }
   ],
   "repository": {
     "comment": {
-      "begin": "(^[ \\t]+)?(?=;)",
-      "beginCaptures": {
-        "1": {
-          "name": "punctuation.whitespace.comment.leading.clarity"
-        }
-      },
-      "end": "(?!\\G)",
-      "patterns": [
-        {
-          "begin": ";",
-          "beginCaptures": {
-            "0": {
-              "name": "punctuation.definition.comment.clarity"
-            }
-          },
-          "end": "\\n",
-          "name": "comment.line.semicolon.clarity"
-        }
-      ]
+      "name": "comment.line.semicolon.clarity",
+      "match": "(?x) (?<=^|[()\\[\\]{}\",'`;\\s]) (;) .* $"
     },
-    "define-map": {
-      "begin": "(?<=\\()(define-map)\\s([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\\s+",
-      "end": "(?=\\))",
-      "captures": {
-        "1": {
-          "name": "keyword.control.clarity"
-        },
-        "2": {
-          "name": "entity.name.function.clarity"
-        }
-      },
-      "name": "meta.declaration.map.clarity",
-      "patterns": [
-        {
-          "include": "#comment"
-        },
-        {
-          "include": "#sexp"
-        },
-        {
-          "include": "#illegal"
-        }
-      ]
+    "datatype": {
+      "name": "storage.type.clarity",
+      "match": "(?x)\n(?<=^|[\\s:(){},])\n(tuple|list|response|optional|buff|string-ascii|string-utf8|principal|bool|int|uint)\n(?=[\\s(){},])"
     },
-    "constants": {
-      "patterns": [
-        {
-          "match": "(true|false)",
-          "name": "constant.language.boolean.clarity"
-        },
-        {
-          "match": "(?<=[\\(\\s])((#e|#i)?[0-9]+(\\.[0-9]+)?|(#x)[0-9a-fA-F]+|(#o)[0-7]+|(#b)[01]+)(?=[\\s;()'\",\\[\\]])",
-          "name": "constant.numeric.clarity"
-        },
-        {
-          "match": "\\'[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{28,41}",
-          "name": "constant.numeric.clarity"
-        },
-        {
-          "match": "u[0123456789]{1,}",
-          "name": "constant.numeric.clarity"
-        }
-      ]
+    "keyword": {
+      "name": "constant.language.clarity",
+      "match": "(?x)\n  (?<=^|[\\s:(){},]) \n  (?:block-height|burn-block-height|contract-caller|false|is-in-regtest|none|stx-liquid-supply|true|tx-sender)\n  (?=[\\s(){},])\n"
     },
-    "illegal": {
-      "match": "[()\\[\\]]",
-      "name": "invalid.illegal.parenthesis.clarity"
-    },
-    "language-functions": {
-      "patterns": [
-        {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\\n\n  ( impl-trait|print|or|and|xor|not|begin|let|if|ok|err|\n    unwrap!|unwrap-err!|unwrap-panic|unwrap-err-panic|match|try!|asserts!\n    map-get\\?|var-get|contract-map-get\\?|get|tuple|\n    define-public|define-private|define-constant|define-map|define-data-var|\n    define-fungible-token|define-non-fungible-token|\n    define-read-only|let\\* )\n  (?=(\\s|\\())\n",
-          "name": "keyword.control.clarity"
-        },
-        {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( is-eq|is-some|is-none|is-ok|is-err )\n  (?=(\\s|\\()) # followed by space or (\n",
-          "name": "support.function.boolean-test.clarity"
-        },
-        {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( var-set|map-set|map-delete|map-insert|\n    ft-transfer\\?|nft-transfer\\?|nft-mint\\?|ft-mint\\?|nft-get-owner\\?|ft-get-balance\\?|\n    contract-call\\?|stx-burn\\?|stx-transfer\\?|stx-get-balance|use-trait|map-get\\?|ft-get-balance|ft-get-supply)\n  (?=(\\s|\\()) # followed by space or (\n",
-          "name": "support.function.with-side-effects.clarity"
-        },
-        {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( as-contract|contract-caller|tx-sender|block-height|at-block|get-block-info\\? )\n  (?=(\\s|\\()) # followed by space or (\n",
-          "name": "support.function.sender-context.clarity"
-        },
-        {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( >=?|<=?|[*/+-]|mod|pow|log2 )\n  (?=(\\s|\\()) # followed by space or (\n",
-          "name": "support.function.arithmetic.clarity"
-        },
-        {
-          "match": "(?x)\n  (?<=(\\s|\\()) # preceded by space or (\n  ( list|map|filter|fold|len|concat|append|as-max-len\\?|to-int|to-uint|\n    buff|hash160|sha256|sha512|sha512/256|keccak256 )\n  (?=(\\s|\\()) # followed by space or (\n",
-          "name": "support.function.general.clarity"
-        }
-      ]
-    },
-    "sexp": {
-      "begin": "\\(",
-      "beginCaptures": {
-        "1": {
-          "name": "punctuation.section.expression.begin.clarity"
-        }
-      },
-      "end": "\\)(\\n)?",
-      "endCaptures": {
-        "1": {
-          "name": "punctuation.section.expression.end.clarity"
-        },
-        "2": {
-          "name": "meta.after-expression.clarity"
-        }
-      },
-      "name": "meta.expression.clarity",
-      "patterns": [
-        {
-          "include": "#comment"
-        },
-        {
-          "include": "#define-map"
-        },
-        {
-          "begin": "(?x) (?<=\\() # preceded by (\n  (define-public|define-private|define-constant|define-read-only)\\s+\n  \\(    # open parens\n    ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n    ((\\s+\n      \\( # open parens for parameter/type pair\n      \\s*\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s+\n      ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\s*\n      \\) # close parens for parameter/type pair\n      \\s*\n      )*)\n    \\s*\n  (?=(\\s|\\())    # close parens\n",
-          "captures": {
-            "1": {
-              "name": "keyword.control.clarity"
-            },
-            "2": {
-              "name": "entity.name.function.clarity"
-            },
-            "3": {
-              "name": "variable.parameter.function.clarity"
-            }
-          },
-          "end": "(?=\\))",
-          "name": "meta.declaration.procedure.clarity",
-          "patterns": [
-            {
-              "include": "#comment"
-            },
-            {
-              "include": "#sexp"
-            },
-            {
-              "include": "#illegal"
-            }
-          ]
-        },
-        {
-          "begin": "(?x) (?<=\\() # preceded by (\n  (define-public|define-private|define-constant|define-read-only)\\s+\n  \\(    # open parens\n    ([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\n      \\)  (?=(\\s|\\())    # close parens\n",
-          "captures": {
-            "1": {
-              "name": "keyword.control.clarity"
-            },
-            "2": {
-              "name": "entity.name.function.clarity"
-            },
-            "3": {
-              "name": "variable.parameter.function.clarity"
-            }
-          },
-          "end": "(?=\\))",
-          "name": "meta.declaration.procedure.clarity",
-          "patterns": [
-            {
-              "include": "#comment"
-            },
-            {
-              "include": "#sexp"
-            },
-            {
-              "include": "#illegal"
-            }
-          ]
-        },
-        {
-          "begin": "(?<=\\()(define)\\s([[:alnum:]][[:alnum:]!$%&*+-./:<=>?@^_~]*)\\s*.*?",
-          "captures": {
-            "1": {
-              "name": "keyword.control.clarity"
-            },
-            "2": {
-              "name": "variable.other.clarity"
-            }
-          },
-          "end": "(?=\\))",
-          "name": "meta.declaration.variable.clarity",
-          "patterns": [
-            {
-              "include": "#constants"
-            },
-            {
-              "include": "#comment"
-            },
-            {
-              "include": "#sexp"
-            },
-            {
-              "include": "#illegal"
-            }
-          ]
-        },
-        {
-          "include": "#language-functions"
-        },
-        {
-          "include": "#string"
-        },
-        {
-          "include": "#constants"
-        },
-        {
-          "match": "(?<=[\\(\\s])(#\\\\)(space|newline|tab)(?=[\\s\\)])",
-          "name": "constant.character.named.clarity"
-        },
-        {
-          "match": "(?<=[\\(\\s])(#\\\\)x[0-9A-F]{2,4}(?=[\\s\\)])",
-          "name": "constant.character.hex-literal.clarity"
-        },
-        {
-          "match": "(?<=[\\(\\s])(#\\\\).(?=[\\s\\)])",
-          "name": "constant.character.escape.clarity"
-        },
-        {
-          "include": "#sexp"
-        },
-        {
-          "include": "#illegal"
-        }
-      ]
+    "number": {
+      "name": "constant.numeric.clarity",
+      "match": "(?x)\n  (?<=^|[\\s:(){},])\n  \\'[0-9A-Z]{28,41}(:?\\.[a-zA-Z][a-zA-Z0-9\\-]+){0,2}|\n  0x[0-9a-f]{2,}|\n  u[0-9]+|\n  [0-9]+\n  (?=[\\s(){},]|$)\n"
     },
     "string": {
-      "begin": "(\")",
+      "name": "string.quoted.double.clarity",
+      "begin": "\"",
       "beginCaptures": {
-        "1": {
+        "0": {
           "name": "punctuation.definition.string.begin.clarity"
         }
       },
-      "end": "(\")",
+      "end": "\"",
       "endCaptures": {
-        "1": {
+        "0": {
           "name": "punctuation.definition.string.end.clarity"
         }
       },
-      "name": "string.quoted.double.clarity",
       "patterns": [
         {
-          "match": "\\\\.",
-          "name": "constant.character.escape.clarity"
+          "include": "#escape-char"
+        }
+      ]
+    },
+    "escape-char": {
+      "name": "constant.character.escape.clarity",
+      "match": "\\\\."
+    },
+    "lang-func": {
+      "match": "(?x)\n  (?<=^|[(]) \\s*\n  (\n    and|append|as-contract|as-max-len\\?|asserts!|at-block|begin|concat|contract-call\\?|contract-of|\n    default-to|element-at|err|filter|fold|ft-burn\\?|ft-get-balance|ft-get-supply|ft-mint\\?|ft-transfer\\?|\n    get|get-block-info\\?|hash160|if|impl-trait|index-of|is-eq|is-err|is-none|is-ok|is-some|keccak256|\n    len|let|list|log2|map|map-delete|map-get\\?|map-insert|map-set|match|merge|mod|nft-burn\\?|nft-get-owner\\?|\n    nft-mint\\?|nft-transfer\\?|not|ok|or|pow|principal-of\\?|print|secp256k1-recover\\?|secp256k1-verify|sha256|\n    sha512|sha512/256|some|sqrti|stx-burn\\?|stx-get-balance|stx-transfer\\?|to-int|to-uint|try!|unwrap-err-panic|\n    unwrap-err!|unwrap-panic|unwrap!|var-get|var-set|xor\n  ) \\s+\n",
+      "name": "keyword.control.clarity"
+    },
+    "define": {
+      "patterns": [
+        {
+          "include": "#define-func"
+        },
+        {
+          "include": "#define-var"
+        },
+        {
+          "include": "#set-func"
+        }
+      ]
+    },
+    "set-func": {
+      "begin": "(?x)\n  (?<=^|[(]) \\s*\n  (var-get|var-set|map-get\\?|map-set|map-insert|get) \\s+\n  ([a-z][a-zA-Z0-9_-]+) \\s*\n",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.clarity"
+        },
+        "2": {
+          "name": "variable.other.clarity"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.end.clarity"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#lang-func"
+        },
+        {
+          "include": "#tuple-key"
+        },
+        {
+          "include": "#number"
+        }
+      ]
+    },
+    "define-func": {
+      "begin": "(?x)\n  (?<=^|[(]) \\s*\n  (define-(?:public|private|read-only)) \\s+\n  (\\() \\s*\n  ([a-z][a-zA-Z0-9_-]+) \\s*\n",
+      "beginCaptures": {
+        "1": {
+          "name": "storage.type.clarity"
+        },
+        "2": {
+          "name": "punctuation.section.begin.clarity"
+        },
+        "3": {
+          "name": "entity.name.function.clarity"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.end.clarity"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#args"
+        }
+      ]
+    },
+    "define-var": {
+      "match": "(?x)\n  (?<=^[(]) \\s*\n  (define-(?:constant|data-var|map|fungible-token|non-fungible-token|trait)) \\s+\n  ([a-zA-Z][a-zA-Z0-9_-]+)\n",
+      "captures": {
+        "1": {
+          "name": "storage.type.clarity"
+        },
+        "2": {
+          "name": "variable.other.clarity"
+        }
+      }
+    },
+    "tuple-key": {
+      "name": "entity.name.type.clarity",
+      "match": "(?x)\n  ([a-z][a-zA-Z0-9_-]+)(?=:)\n"
+    },
+    "args": {
+      "begin": "(?x)\n  (?<=^|[(]) \\s*\n  ([a-z][a-zA-Z0-9_-]+) \\s*\n",
+      "beginCaptures": {
+        "0": {
+          "name": "variable.parameter.clarity"
+        }
+      },
+      "end": "\\)",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.end.clarity"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#datatype"
+        },
+        {
+          "include": "#tuple-key"
+        },
+        {
+          "include": "#number"
         }
       ]
     }
-  },
-  "scopeName": "source.clarity",
-  "uuid": "a26370fe-ce63-4d00-a5f7-a00abb11be89"
+  }
 }
