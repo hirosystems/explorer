@@ -26,8 +26,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{github.actor}}
-          password: ${{secrets.GITHUB_TOKEN}}
+          username: 0xAsteria
+          password: ${{secrets.GHCR_TOKEN}}
 
       - name: Build container
         run: docker build . -t ghcr.io/syvita/explorer:latest
