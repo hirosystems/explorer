@@ -71,7 +71,7 @@ export const ContractSearch: React.FC = () => {
             <Link
               display="inline"
               textDecoration="underline"
-              href="https://docs.blockstack.org/smart-contracts/principals#smart-contracts-as-principals"
+              href="https://docs.syvita.org/smart-contracts/principals#smart-contracts-as-principals"
               target="_blank"
             >
               smart contracts' identifier

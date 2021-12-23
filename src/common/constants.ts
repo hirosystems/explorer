@@ -16,7 +16,7 @@ export const MICROBLOCKS_ENABLED = true;
 export const DEFAULT_POLLING_INTERVAL =
   getNumber(
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
-  ) || 10000; // 10 seconds :c
+  ) || 400; // 0.4 seconds :c
 
 export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 export const TESTNET_CHAIN_ID = ChainID.Testnet;
@@ -38,7 +38,7 @@ export const SITE_NOTICE_BANNER_MESSAGE =
 export const SITE_NOTICE_ENABLED = SITE_NOTICE_BANNER_LABEL && SITE_NOTICE_BANNER_MESSAGE;
 
 export const APP_DETAILS = {
-  name: 'Syvirean Explorer',
+  name: 'Explorer',
   icon: STACKS_EXPLORER_APP_ICON,
 };
 export const DEPLOYMENT_URL =
@@ -54,17 +54,17 @@ export const LEGACY_EXPLORER_API_SERVER =
 export const CONNECT_AUTH_ORIGIN =
   config?.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
-  'https://pr-725.app.stacks.engineering';
+  'https://explorer.syvita.org';
 
 export const DEFAULT_TESTNET_SERVER =
   config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  'https://stacks-node-api.testnet.stacks.co';
+  'https://testnet.syv.gd';
 
 export const DEFAULT_MAINNET_SERVER =
   config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  'https://stacks-node-api.stacks.co';
+  'https://mainnet.syv.gd';
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
@@ -76,11 +76,11 @@ export const DEFAULT_NETWORK_INDEX = DEFAULT_MAINNET_INDEX;
 
 export const DEFAULT_NETWORK_LIST = [
   {
-    label: 'stacks.co',
+    label: 'Syvita Guild',
     url: DEFAULT_MAINNET_SERVER,
   },
   {
-    label: 'stacks.co',
+    label: 'Syvita Guild',
     url: DEFAULT_TESTNET_SERVER,
   },
   {

@@ -22,11 +22,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Authenticate to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
       - name: Build container
         run: docker build . -t ghcr.io/syvita/explorer:latest
-
-      - name: Authenticate to GHCR
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u syvita --password-stdin
       
       - name: Push container
         run: docker push ghcr.io/syvita/explorer:latest

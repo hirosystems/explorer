@@ -22,13 +22,15 @@ const GlobalStyles = () => (
       html.dark {
         .metaverse-bg {
           opacity: 0.5;
-          background: linear-gradient(0deg, #00fafa 0%, #9146ff 100%);
+          background-image: url('/mesh.png');
+          background-size: cover;
         }
       }
 
       html.light {
         .metaverse-bg {
-          background: linear-gradient(0deg, #00fafa 0%, #9146ff 100%);
+          background-image: url('/mesh.png');
+          background-size: cover;
         }
       }
     `}

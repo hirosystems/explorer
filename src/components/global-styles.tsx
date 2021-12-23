@@ -9,6 +9,7 @@ const TextAreaOverrides = (
     styles={css`
       @import url('https://x.syvita.org/fonts/roobert/importme.css');
       @import url('https://x.syvita.org/fonts/inter/importme.css');
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:display=swap');
       ${prismTheme};
 
       .code-editor {
@@ -97,15 +98,15 @@ const globalStyles = css`
     @media (prefers-color-scheme: light) {
       ${generateCssVariables('light')({ colorMode: 'light', theme })};
       --colors-highlight-line-bg: rgba(255, 255, 255, 0.1);
-      --colors-accent: #9146ff !important;
-      --colors-brand: #9146ff !important;
-      --colors-text-hover: #9146ff !important;
+      --colors-accent: #6B50FF !important;
+      --colors-brand: #6B50FF !important;
+      --colors-text-hover: #6B50FF !important;
     }
     @media (prefers-color-scheme: dark) {
       ${generateCssVariables('dark')({ colorMode: 'dark', theme })};
       --colors-highlight-line-bg: rgba(255, 255, 255, 0.05);
-      --colors-accent: #bfabff !important;
-      --colors-brand: #bfabff !important;
+      --colors-accent: #4DC2CA !important;
+      --colors-brand: #4DC2CA !important;
     }
   }
 

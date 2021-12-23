@@ -21,7 +21,7 @@ export const HomePageTop: React.FC = React.memo(() => (
       mb="extra-loose"
       color="white"
     >
-      Syvirean Explorer
+      Explorer
     </Title>
     <Box width="100%">
       <SearchComponent />

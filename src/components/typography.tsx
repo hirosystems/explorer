@@ -35,7 +35,7 @@ export const Title: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardR
     as={as}
     display="inline-block"
     color="var(--colors-text-title)"
-    fontFamily={`"Roobert", Inter, sans-serif`}
+    fontFamily={`"Roobert", "Inter", sans-serif`}
     fontWeight={500}
     {...props}
   />

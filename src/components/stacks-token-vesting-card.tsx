@@ -10,7 +10,7 @@ export const StacksTokenVestingCard: React.FC = () => {
     <Section mt="extra-loose" title="Stacks Token unlocking">
       <Box p="base-loose">
         <Text color={color('text-body')} fontSize={1} lineHeight="24px">
-          The Syvirean Explorer is currently unable to display specific details around this
+          The Explorer is currently unable to display specific details around this
           address's unlocking schedule.
         </Text>
         <Text color={color('text-body')} fontSize={1} lineHeight="24px" mt="base">

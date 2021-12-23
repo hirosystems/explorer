@@ -35,7 +35,7 @@ export const SandboxHeader: React.FC<FlexProps> = props => {
   return (
     <Flex alignItems="center" justifyContent="space-between" borderBottom={border()} {...props}>
       <Box p="base" color={color('text-title')}>
-        Syvirean Explorer Sandbox
+        Explorer Sandbox
       </Box>
       <Flex alignItems="center" px="base">
         {!isSignedIn ? (
