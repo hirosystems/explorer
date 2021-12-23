@@ -41,7 +41,7 @@ export const renderErrorMessage = ({
             _hover={{
               cursor: 'pointer',
             }}
-            href="https://github.com/blockstack/explorer/issues/new"
+            href="https://github.com/syvita/explorer/issues/new"
             target="_blank"
           >
             file an issue
