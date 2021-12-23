@@ -22,14 +22,14 @@ const GlobalStyles = () => (
       html.dark {
         .metaverse-bg {
           opacity: 0.5;
-          background-image: url('/mesh.png');
+          background-image: url('/mesh.webp');
           background-size: cover;
         }
       }
 
       html.light {
         .metaverse-bg {
-          background-image: url('/mesh.png');
+          background-image: url('/mesh.webp');
           background-size: cover;
         }
       }
