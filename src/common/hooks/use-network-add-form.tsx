@@ -36,12 +36,12 @@ export const useNetworkAddForm = () => {
 
         await setChainMode(networkMode);
 
-        handleAddNetwork({
+        void handleAddNetwork({
           label: label.trim(),
           url: `https://${_url.host}`,
         });
 
-        handleCloseModal();
+        void handleCloseModal();
       },
       validate: async values => {
         const _errors: Errors = {};
@@ -71,7 +71,7 @@ export const useNetworkAddForm = () => {
               if (!data?.network_id) {
                 _errors.general = 'The API did not return a network_id.';
               }
-            } catch (e) {
+            } catch (e: any) {
               if (e.message.includes('Failed to fetch')) {
                 _errors.general = 'Could not connect to supplied network URL.';
               } else {

@@ -1,3 +1,74 @@
+## [1.17.3](https://github.com/hirosystems/explorer/compare/v1.17.2...v1.17.3) (2021-10-29)
+
+
+### Bug Fixes
+
+* build error update next ([553a086](https://github.com/hirosystems/explorer/commit/553a0864be1590007ad15d74ca3fd26fbad6d14a))
+* downgrade node in dockerfile ([ed26260](https://github.com/hirosystems/explorer/commit/ed26260e0df5e786e2b0b1e6596f0e631fa9a03d))
+* segment not logging in prod ([aa028a0](https://github.com/hirosystems/explorer/commit/aa028a068bd27831f74e32491fdec421eb76ff06))
+
+## [1.17.2](https://github.com/blockstack/explorer/compare/v1.17.1...v1.17.2) (2021-10-27)
+
+
+### Bug Fixes
+
+* **sentry:** lower logging sampling to 10% ([2991bd0](https://github.com/blockstack/explorer/commit/2991bd00e94d2abac4c0a6df86fb0f651a391924))
+
+## [1.17.1](https://github.com/blockstack/explorer/compare/v1.17.0...v1.17.1) (2021-10-25)
+
+
+### Bug Fixes
+
+* add segment write key to build ([df1d603](https://github.com/blockstack/explorer/commit/df1d603a4a0b929667292e88de1cdfe62afda01a))
+
+# [1.17.0](https://github.com/blockstack/explorer/compare/v1.16.2...v1.17.0) (2021-10-21)
+
+
+### Features
+
+* add notice banner for non-canonical txs ([361817f](https://github.com/blockstack/explorer/commit/361817fc20a92381a9cf2207a3ea0360a040ca76))
+
+## [1.16.2](https://github.com/blockstack/explorer/compare/v1.16.1...v1.16.2) (2021-10-20)
+
+
+### Bug Fixes
+
+* display of non-canonical transactions ([4dbeb67](https://github.com/blockstack/explorer/commit/4dbeb6758e026c99d9181555af900a7751e06e6f))
+
+## [1.16.1](https://github.com/blockstack/explorer/compare/v1.16.0...v1.16.1) (2021-10-19)
+
+
+### Bug Fixes
+
+* build without sentry creds ([8f0212c](https://github.com/blockstack/explorer/commit/8f0212cda3e9196c9393657654bdc0199058aee3))
+
+# [1.16.0](https://github.com/blockstack/explorer/compare/v1.15.1...v1.16.0) (2021-10-18)
+
+
+### Features
+
+* add segment page analytics ([7c44459](https://github.com/blockstack/explorer/commit/7c44459d38566c0d808af04704c79fd9c4e1f569))
+* add track event ([8d67026](https://github.com/blockstack/explorer/commit/8d670261eb7f945572e98a61dc55732e70263fae))
+
+## [1.15.1](https://github.com/blockstack/explorer/compare/v1.15.0...v1.15.1) (2021-09-27)
+
+
+### Bug Fixes
+
+* dark mode ([a2f9294](https://github.com/blockstack/explorer/commit/a2f9294d3fbd4c82e9bd934f22127cdb330f359e))
+
+# [1.15.0](https://github.com/blockstack/explorer/compare/v1.14.8...v1.15.0) (2021-09-22)
+
+
+### Bug Fixes
+
+* try disabling source maps ([63bc1fa](https://github.com/blockstack/explorer/commit/63bc1faf84e72836261d9ab8396f8bb211a756f6))
+
+
+### Features
+
+* add sentry ([6aed06f](https://github.com/blockstack/explorer/commit/6aed06f22331db2e4b1f590e79dfc33a4d7a6583))
+
 ## [1.14.8](https://github.com/blockstack/explorer/compare/v1.14.7...v1.14.8) (2021-09-20)
 
 

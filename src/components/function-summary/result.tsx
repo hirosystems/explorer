@@ -6,10 +6,14 @@ import { border } from '@common/utils';
 import { FunctionSummaryClarityValue } from '@components/function-summary/value';
 import { IconAlertTriangle, IconCircleCheck } from '@tabler/icons';
 
-export const FunctionSummaryResult = ({ result }: { result: Transaction['tx_result'] }) => {
+interface FunctionSummaryResultProps {
+  result: Transaction['tx_result'];
+  txStatus: string | undefined;
+}
+
+export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResultProps) => {
   if (!result) return null;
   const { success, type, value } = cvToJSON(hexToCV(result.hex));
-
   const hasType = !type?.includes('UnknownType');
 
   if (type?.includes('tuple')) {

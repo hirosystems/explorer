@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import { Stack } from '@stacks/ui';
 
 import { PageTop } from '@components/page';
@@ -16,6 +16,8 @@ import {
   useContractSourceInView,
   useTransactionInView,
 } from '../../hooks/currently-in-view-hooks';
+import { TransactionStatus } from '@common/constants';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 const ContractCallPage = () => {
   const transaction = useTransactionInView();
@@ -25,7 +27,8 @@ const ContractCallPage = () => {
   const btc = null;
 
   if (!transaction || transaction.tx_type !== 'contract_call') return null;
-  const isPending = transaction.tx_status === 'pending';
+  const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
+  const isPending = txStatus === TransactionStatus.PENDING;
   const result = 'tx_result' in transaction && transaction.tx_result;
 
   return (
@@ -44,6 +47,7 @@ const ContractCallPage = () => {
             result={result}
             summary={transaction.contract_call}
             btc={btc}
+            txStatus={txStatus}
           />
           <PostConditions
             conditions={transaction.post_conditions}

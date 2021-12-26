@@ -1,11 +1,12 @@
 import * as React from 'react';
+import NextLink from 'next/link';
 
 import { Box, color, Flex, Stack, Text } from '@stacks/ui';
 import { getMemoString, microToStacks } from '@common/utils';
 
 import { Badge } from '@components/badge';
 import { Link } from '@components/typography';
-import NextLink from 'next/link';
+import { TransactionStatus } from '@common/constants';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -83,19 +84,23 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
     copy: d.tx_id,
   };
   const canonical = {
-    condition: d.tx_status !== 'pending' && 'canonical' in d && !d.canonical,
+    condition:
+      (d.tx_status !== TransactionStatus.PENDING && 'canonical' in d && !d.canonical) ||
+      ('microblock_canonical' in d && !d.microblock_canonical),
     label: {
       children: 'Non-canonical',
     },
     children: (
       <Flex alignItems="center">
-        <Box>This transaction is contained in a non-canonical fork of the Stacks chain.</Box>
+        <Box>
+          Transaction is in a non-canonical fork. It has been orphaned by the canonical chain.
+        </Box>
         <IconButton
           ml="tight"
           icon={QuestionMarkCircleOutlineIcon}
           dark
           as="a"
-          href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-001-burn-election.md#committing-to-a-chain-tip"
+          href="https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#committing-to-a-chain-tip"
           target="_blank"
         />
       </Flex>

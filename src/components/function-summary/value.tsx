@@ -7,12 +7,20 @@ import { TxLink } from '@components/links';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 
 const getPrettyClarityValueType = (type: any) => {
-  if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
+  if (
+    type === 'bool' ||
+    type === 'int' ||
+    type === 'principal' ||
+    type === 'uint' ||
+    type === 'trait_reference'
+  ) {
     switch (type) {
       case 'bool':
         return 'Boolean';
       case 'int':
         return 'Integer';
+      case 'trait_reference':
+        return 'Trait Reference';
       case 'principal':
         return 'Principal';
       case 'uint':

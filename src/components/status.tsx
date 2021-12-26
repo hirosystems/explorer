@@ -10,6 +10,7 @@ import { CheckIcon } from './icons/check';
 import { LoaderQuarter } from './icons/loader-quarter';
 import { AlertCircleIcon } from './icons/alert-circle';
 import { MicroblockIcon } from './icons/microblock';
+import { TxStatus } from '@common/types/tx';
 
 const keyframesRotate = keyframes`
   0% {
@@ -35,40 +36,31 @@ export const Pending = ({ speed = 0.9, ...p }: any) => (
   />
 );
 
-export type Statuses =
-  | 'success_microblock'
-  | 'success_anchor_block'
-  | 'success'
-  | 'pending'
-  | 'abort_by_response'
-  | 'abort_by_post_condition';
-
 const labelMap = {
-  success_microblock: 'Included in microblock',
-  success_anchor_block: 'Confirmed in anchor block',
-  success: 'Confirmed',
   pending: 'Pending',
-  abort_by_response: 'Failed',
-  abort_by_post_condition: 'Failed',
+  success: 'Confirmed',
+  success_anchor_block: 'Confirmed in anchor block',
+  success_microblock: 'Included in microblock',
+  non_canonical: 'Non-canonical (orphaned)',
+  failed: 'Failed',
 };
 
 const iconMap = {
-  success_microblock: () => <MicroblockIcon fill="white" />,
-  success_anchor_block: CheckIcon,
-  success: CheckIcon,
   pending: Pending,
+  success: CheckIcon,
+  success_anchor_block: CheckIcon,
+  success_microblock: () => <MicroblockIcon fill="white" />,
+  non_canonical: AlertCircleIcon,
   failed: AlertCircleIcon,
-  abort_by_response: AlertCircleIcon,
-  abort_by_post_condition: AlertCircleIcon,
 };
 
 interface StatusProps extends FlexProps {
-  status: Statuses;
+  txStatus: TxStatus;
 }
 
-export const Status: React.FC<StatusProps> = ({ status, ...rest }) => {
-  const IconComponent = iconMap[status];
-  const label = labelMap[status];
+export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
+  const IconComponent = iconMap[txStatus];
+  const label = labelMap[txStatus];
   return (
     <Badge
       bg="rgba(255,255,255,0.24)"

@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import { AtomDebug, Devtools } from '@features/devtools';
-import { AppConfig } from '@components/app-config';
-
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
-import { NetworkMode } from '@common/types/network';
-
 import 'tippy.js/dist/tippy.css';
 import 'modern-normalize/modern-normalize.css';
+
+import { AtomDebug, Devtools } from '@features/devtools';
+import { AppConfig } from '@components/app-config';
+import { NetworkMode } from '@common/types/network';
 import { getNetworkMode } from '@common/api/network';
 import { getServerSideApiServer } from '@common/api/utils';
 import { NetworkModeToast } from '@components/network-mode-toast';

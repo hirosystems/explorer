@@ -65,10 +65,7 @@ export const BlocksList: React.FC<
                             if (enforceLimit && hashesToShow[microblockHash] > limit) return null;
 
                             return (
-                              <SafeSuspense
-                                key={`microblocks-list-${microblockHash}`}
-                                fallback={<></>}
-                              >
+                              <SafeSuspense fallback={<></>}>
                                 <HoverableItem
                                   key={`microblocks-list-${microblockHash}`}
                                   isLast={isLastPage && isLastItem && isLastMicroblock}

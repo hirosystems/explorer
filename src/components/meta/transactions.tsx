@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useMemo } from 'react';
 import {
   getContractName,
   getFunctionName,
@@ -12,6 +12,8 @@ import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-
 import { getContractId } from '@components/transaction-details';
 import { getTxErrorMessage } from '@common/utils/errors';
 import { useTransactionInView } from '../../hooks/currently-in-view-hooks';
+import { TransactionStatus } from '@common/constants';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
@@ -98,11 +100,10 @@ export const TransactionMeta = () => {
   const transaction = useTransactionInView();
   if (!transaction) return null;
 
+  const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const pageTitle = `${getTxPageTitle(transaction)}${
-    transaction.tx_status === 'pending' ? ' (Pending)' : ''
-  }${
-    transaction.tx_status !== 'success' && transaction.tx_status !== 'pending' ? ' (Failed) ' : ''
-  }`;
+    txStatus === TransactionStatus.PENDING ? ' (Pending)' : ''
+  }${txStatus === TransactionStatus.FAILED ? ' (Failed) ' : ''}`;
   const ogTitle = getOgTitle(transaction);
   const ogUrl = `/txid/${transaction.tx_id}`;
   const ogDescription = getDescription(transaction);
@@ -125,7 +126,7 @@ export const TransactionMeta = () => {
       ogTitle={ogTitle}
       description={ogDescription}
       url={ogUrl}
-      status={transaction.tx_status}
+      txStatus={txStatus}
       key={transaction.tx_status}
       labels={labels}
     />

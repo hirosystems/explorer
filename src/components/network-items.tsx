@@ -79,6 +79,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const handleClick = React.useCallback(
     async e => {
       await setChainMode(itemNetworkMode);
+
       onClick?.(e);
     },
     [itemNetworkMode]

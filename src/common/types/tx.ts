@@ -15,10 +15,11 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 export type TxStatus =
-  | Transaction['tx_status']
-  | MempoolTransaction['tx_status']
+  | 'pending'
+  | 'success_anchor_block'
   | 'success_microblock'
-  | 'success_anchor_block';
+  | 'non_canonical'
+  | 'failed';
 
 export type TokenTransferTxs = TokenTransferTransaction | MempoolTokenTransferTransaction;
 export type CoinbaseTxs = CoinbaseTransaction | MempoolCoinbaseTransaction;

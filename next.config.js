@@ -4,7 +4,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
 
-module.exports = withBundleAnalyzer({
+const moduleExports = withBundleAnalyzer({
   eslint: {
     // Warning: Dangerously allow production builds to successfully complete even if
     // your project has ESLint errors.
@@ -30,6 +30,7 @@ module.exports = withBundleAnalyzer({
     NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL: process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL,
     NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL,
     NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE,
+    SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY,
     VERSION: process.env.VERSION,
   },
   webpack(config, { dev }) {
@@ -53,3 +54,7 @@ module.exports = withBundleAnalyzer({
     return config;
   },
 });
+
+const nextConfig = moduleExports;
+
+module.exports = nextConfig;

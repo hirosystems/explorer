@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as snippet from '@segment/snippet';
 
 import Document, {
   DocumentContext,
@@ -11,6 +12,7 @@ import Document, {
 } from 'next/document';
 import { extractCritical } from '@emotion/server';
 import { GlobalStyles, ProgressBarStyles, TextAreaOverrides } from '@components/global-styles';
+const { SEGMENT_WRITE_KEY, NODE_ENV } = process.env;
 
 export const THEME_STORAGE_KEY = 'theme';
 

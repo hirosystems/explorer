@@ -15,9 +15,11 @@ import {
   SITE_NOTICE_BANNER_LABEL,
   SITE_NOTICE_BANNER_MESSAGE,
   SITE_NOTICE_ENABLED,
+  TransactionStatus,
 } from '@common/constants';
 import { useNetworkMode } from '@common/hooks/use-network-mode';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 type PageProps = {
   notice?: { label?: string; message?: string };
@@ -33,28 +35,33 @@ type PageWrapperProps = {
 } & FlexProps;
 
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
+  const { networkMode } = useNetworkMode();
   // for testnet, show after 4 hours. for mainnet, show after 24 hours
   const HOURS_NOTICE_TESTNET = 4;
   const HOURS_NOTICE_MAINNET = 24;
-  const status = tx.tx_status;
-  const failed = status === 'abort_by_response' || status === 'abort_by_post_condition';
-  const { networkMode } = useNetworkMode();
-  const longPending =
+  const txStatus = getTransactionStatus(tx);
+  const isFailed =
+    tx.tx_status === 'abort_by_response' || tx.tx_status === 'abort_by_post_condition';
+  const isLongPending =
     dayjs().diff(dayjs.unix((tx as any).receipt_time), 'h') >
     (networkMode === 'testnet' ? HOURS_NOTICE_TESTNET : HOURS_NOTICE_MAINNET);
+  const isNonCanonical = txStatus === TransactionStatus.NON_CANONICAL;
 
   const failedMessage =
-    status === 'abort_by_response'
+    tx.tx_status === 'abort_by_response'
       ? 'This transaction did not succeed because the transaction was aborted during its execution.'
       : 'This transaction would have succeeded, but was rolled back by a supplied post-condition.';
 
   const longPendingMessage =
     'Transactions that cannot be confirmed within 256 blocks are eventually canceled automatically.';
 
+  const nonCanonicalMessage =
+    'This transaction is in a non-canonical fork. It is not in the canonical Stacks chain.';
+
   return (
     <Box width="100%" {...props}>
       <TransactionTitle mb="loose" tx={tx} />
-      {failed ? (
+      {isFailed ? (
         <Alert
           mb="base"
           error={{
@@ -63,12 +70,21 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
           }}
         />
       ) : null}
-      {longPending ? (
+      {isLongPending ? (
         <Alert
           mb="base"
           error={{
             name: 'Notice',
             message: longPendingMessage,
+          }}
+        />
+      ) : null}
+      {isNonCanonical ? (
+        <Alert
+          mb="base"
+          error={{
+            name: 'Notice',
+            message: nonCanonicalMessage,
           }}
         />
       ) : null}
