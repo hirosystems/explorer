@@ -16,7 +16,7 @@ export const MICROBLOCKS_ENABLED = true;
 export const DEFAULT_POLLING_INTERVAL =
   getNumber(
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
-  ) || 400; // 0.4 seconds :c
+  ) || 1000; // 0.4 seconds :c
 
 export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 export const TESTNET_CHAIN_ID = ChainID.Testnet;
