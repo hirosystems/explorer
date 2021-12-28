@@ -1,26 +1,43 @@
-import * as React from 'react';
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import React, { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai/utils';
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import { Box, color, DynamicColorCircle, Flex, FlexProps, Stack } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 import { TxLink } from '@components/links';
-import { getAssetNameParts } from '@common/utils';
+import { ftDecimals, getAssetNameParts, initBigNumber } from '@common/utils';
 import { getTicker } from '@components/tx-events';
+import { apiClientsState } from '@store/api-clients';
 
 interface TokenAssetListItemProps extends FlexProps {
+  amount: string;
   token: string;
-  isLast: boolean;
-  balances: AddressBalanceResponse;
-  type: 'non_fungible_tokens' | 'fungible_tokens';
+  tokenType: 'non_fungible_tokens' | 'fungible_tokens';
 }
-
 export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
+  amount,
   token,
-  balances,
-  type,
-  isLast,
+  tokenType,
 }) => {
+  const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
+  const { tokensApi } = useAtomValue(apiClientsState);
   const { address, asset, contract } = getAssetNameParts(token);
-  const key = type === 'non_fungible_tokens' ? 'count' : 'balance';
+
+  useEffect(() => {
+    // TODO: Revisit this bc duplicated code in several places
+    const getFtMetadata = async () => {
+      const contractId = `${address}.${contract}`;
+      const data = await tokensApi.getContractFtMetadata({
+        contractId,
+      });
+      setFtMetadata(data);
+    };
+    if (tokenType === 'fungible_tokens') void getFtMetadata();
+  }, []);
+
+  const totalType = tokenType === 'non_fungible_tokens' ? 'count' : 'balance';
+
+  if (initBigNumber(amount).isLessThanOrEqualTo(0)) return null;
+
   return (
     <Flex justifyContent="space-between" px="base" py="base">
       <Box>
@@ -32,8 +49,8 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
             <Text color={color('text-title')} fontWeight="600">
               {asset}
             </Text>
-            <Stack isInline spacing="extra-tight" divider={<Caption>∙</Caption>}>
-              <Caption>{getTicker(asset).toUpperCase()}</Caption>
+            <Stack isInline spacing="extra-tight" divider={<Caption>∙</Caption>} wrap="wrap">
+              <Caption>{ftMetadata?.symbol || getTicker(asset).toUpperCase()}</Caption>
               <TxLink txid={`${address}.${contract}`}>
                 <Caption
                   target="_blank"
@@ -51,12 +68,9 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
       </Box>
       <Flex justifyContent="flex-end" alignItems="center" textAlign="right">
         <Text color={color('text-body')} textAlign="right">
-          {key === 'balance'
-            ? parseFloat((balances as any)[type][token][key]).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 6,
-              })
-            : parseInt((balances as any)[type][token][key]).toLocaleString()}
+          {totalType === 'balance'
+            ? ftDecimals(amount, ftMetadata?.decimals || 0)
+            : parseInt(amount).toLocaleString()}
         </Text>
       </Flex>
     </Flex>

@@ -9,13 +9,12 @@ import { HoverableItem } from '@components/hoverable';
 export const NftBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) =>
   Object.keys(balances.non_fungible_tokens).length ? (
     <>
-      {Object.keys(balances.non_fungible_tokens).map((token, key, arr) => (
+      {Object.keys(balances.non_fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
-          token={token}
-          type="non_fungible_tokens"
-          balances={balances}
-          key={key}
-          isLast={key === arr.length - 1}
+          amount={balances.non_fungible_tokens[key].count}
+          key={index}
+          token={key}
+          tokenType="non_fungible_tokens"
         />
       ))}
     </>
@@ -28,13 +27,12 @@ export const NftBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ ba
 export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) =>
   Object.keys(balances.fungible_tokens).length ? (
     <>
-      {Object.keys(balances.fungible_tokens).map((token, key, arr) => (
+      {Object.keys(balances.fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
-          token={token}
-          type="fungible_tokens"
-          balances={balances}
-          key={key}
-          isLast={key === arr.length - 1}
+          amount={balances.fungible_tokens[key].balance}
+          key={index}
+          token={key}
+          tokenType="fungible_tokens"
         />
       ))}
     </>
