@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai/utils';
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import { Section } from '@components/section';
 import { Box, Grid, Flex, color, Stack, FlexProps, DynamicColorCircle } from '@stacks/ui';
 import { IconAlignLeft, IconArrowRight, IconPlus, IconTrash } from '@tabler/icons';
@@ -8,6 +10,7 @@ import {
   addSepBetweenStrings,
   border,
   capitalize,
+  ftDecimals,
   getAssetNameParts,
   microToStacks,
   truncateMiddle,
@@ -16,6 +19,7 @@ import { Caption, Link, Title } from '@components/typography';
 import { Circle } from '@components/circle';
 import { SenderRecipient } from '@components/addresses';
 import { AddressLink } from '@components/links';
+import { apiClientsState } from '@store/api-clients';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {
@@ -235,6 +239,8 @@ const getName = (event: TransactionEvent) => {
 };
 
 const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, isLast }) => {
+  const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
+  const { tokensApi } = useAtomValue(apiClientsState);
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
   const assetAmounts = getAssetAmounts(event);
@@ -244,6 +250,7 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
     event.event_type === 'fungible_token_asset' || event.event_type === 'non_fungible_token_asset'
       ? event.asset.asset_id
       : undefined;
+  const contractId = assetId?.split('::')[0] || '';
 
   const tokenType =
     event.event_type === 'fungible_token_asset'
@@ -251,6 +258,16 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
       : event.event_type === 'non_fungible_token_asset'
       ? 'Non-fungible token'
       : undefined;
+
+  useEffect(() => {
+    const getFtMetadata = async () => {
+      const data = await tokensApi.getContractFtMetadata({
+        contractId,
+      });
+      setFtMetadata(data);
+    };
+    if (event.event_type === 'fungible_token_asset' && contractId) void getFtMetadata();
+  }, []);
 
   return (
     <Flex
@@ -273,8 +290,11 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
             {assetEventType ? <Caption fontWeight="bold">{assetEventType}</Caption> : null}
             {assetAmounts && (
               <Caption>
-                {assetAmounts}{' '}
-                {assetId && getTicker(getAssetNameParts(assetId).asset).toUpperCase()}
+                {ftMetadata
+                  ? ftDecimals((event as any).asset.amount, ftMetadata?.decimals || 0)
+                  : assetAmounts}{' '}
+                {assetId &&
+                  (ftMetadata?.symbol || getTicker(getAssetNameParts(assetId).asset).toUpperCase())}
               </Caption>
             )}
             {participants && participants}

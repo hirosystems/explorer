@@ -12,6 +12,7 @@ import {
   SearchApi,
   RosettaApi,
   MicroblocksApi,
+  TokensApi,
 } from '@stacks/blockchain-api-client';
 import { NextPageContext } from 'next';
 import { getServerSideApiServer } from '@common/api/utils';
@@ -36,6 +37,7 @@ export function apiClients(config: Configuration) {
   const feesApi = new FeesApi(config);
   const searchApi = new SearchApi(config);
   const rosettaApi = new RosettaApi(config);
+  const tokensApi = new TokensApi(config);
 
   return {
     smartContractsApi,
@@ -50,6 +52,7 @@ export function apiClients(config: Configuration) {
     feesApi,
     searchApi,
     rosettaApi,
+    tokensApi,
   };
 }
 
@@ -57,7 +60,7 @@ export function apiClients(config: Configuration) {
 const unanchoredMiddleware: Middleware = {
   pre: (context: RequestContext) => {
     const url = new URL(context.url);
-    url.searchParams.set('unanchored', 'true');
+    if (!url.toString().includes('/v2')) url.searchParams.set('unanchored', 'true');
     return Promise.resolve({
       init: context.init,
       url: url.toString(),

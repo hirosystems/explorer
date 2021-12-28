@@ -12,6 +12,8 @@ const config = publicRuntimeConfig;
 const getNumber = (query?: string): number | undefined =>
   query && typeof parseInt(query) === 'number' ? parseInt(query) : undefined;
 
+export const STX_DECIMALS = 6;
+
 export const MICROBLOCKS_ENABLED = true;
 
 export const DEFAULT_POLLING_INTERVAL =

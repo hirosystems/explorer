@@ -16,9 +16,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
-import { TESTNET_CHAIN_ID } from '@common/constants';
+import { STX_DECIMALS, TESTNET_CHAIN_ID } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
+import BigNumber from 'bignumber.js';
 
 dayjs.extend(relativeTime);
 
@@ -368,4 +369,19 @@ export const getContractIdFromTx = (tx?: Transaction | MempoolTransaction) => {
   if (tx.tx_type === 'contract_call') contractId = tx.contract_call.contract_id;
   if (tx.tx_type === 'smart_contract') contractId = tx.smart_contract.contract_id;
   return contractId;
+};
+
+export function initBigNumber(num: string | number | BigNumber) {
+  return BigNumber.isBigNumber(num) ? num : new BigNumber(num);
+}
+
+export const ftDecimals = (value: number | string | BigNumber, decimals: number) => {
+  return initBigNumber(value)
+    .shiftedBy(-decimals)
+    .toNumber()
+    .toLocaleString('en-US', { maximumFractionDigits: decimals });
+};
+
+export const ftUnshiftDecimals = (value: number | string | BigNumber, decimals: number) => {
+  return initBigNumber(value).shiftedBy(decimals).toString(10);
 };

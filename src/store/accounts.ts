@@ -68,7 +68,7 @@ const accountInfoQueryFn = async (get: Getter, principal: Principal) => {
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_balance
 const accountBalancesQueryFn = async (get: Getter, principal: Principal) => {
-  const { accountsApi } = get(apiClientsState);
+  const { accountsApi, tokensApi } = get(apiClientsState);
   return (await accountsApi.getAccountBalance({
     principal,
   })) as AddressBalanceResponse;

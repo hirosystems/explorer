@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAtomValue } from 'jotai/utils';
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import {
   Box,
   DynamicColorCircle,
@@ -26,13 +28,20 @@ import { useHover } from 'use-events';
 import { ValueWrapped } from '@components/token-transfer/item';
 import NextLink from 'next/link';
 import { InfoIcon } from '@components/icons/info';
-import { border, capitalize, truncateMiddle, validateStacksAddress } from '@common/utils';
+import {
+  border,
+  capitalize,
+  ftDecimals,
+  truncateMiddle,
+  validateStacksAddress,
+} from '@common/utils';
 import { Section } from '@components/section';
 import { Circle } from '@components/circle';
 import { StxInline } from '@components/icons/stx-inline';
 import { getTicker } from '@components/tx-events';
 import { Badge } from '@components/badge';
 import { microStxToStx } from '@stacks/ui-utils';
+import { apiClientsState } from '@store/api-clients';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -239,6 +248,22 @@ const getAddressValue = (condition: PostCondition) => {
 };
 
 const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: boolean }) => {
+  const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
+  const { tokensApi } = useAtomValue(apiClientsState);
+
+  useEffect(() => {
+    const getFtMetadata = async () => {
+      const contractId = `${(condition as any).asset.contract_address}.${
+        (condition as any).asset.contract_name
+      }`;
+      const data = await tokensApi.getContractFtMetadata({
+        contractId,
+      });
+      setFtMetadata(data);
+    };
+    if (condition.type === 'fungible') void getFtMetadata();
+  }, []);
+
   return (
     <Flex alignItems="center" borderBottom={!isLast ? border() : 'unset'} py="base">
       <ConditionAsset condition={condition} />
@@ -246,13 +271,17 @@ const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: b
         <Caption>{truncateMiddle(getAddressValue(condition), 8)}</Caption>
 
         <Title fontSize={1}>
-          {capitalize(getPrettyCode(condition.condition_code, true))} {getAmount(condition)}{' '}
-          {getConditionTicker(condition)}
+          {capitalize(getPrettyCode(condition.condition_code, true))}{' '}
+          {ftMetadata
+            ? ftDecimals((condition as any).amount, ftMetadata?.decimals || 0)
+            : getAmount(condition)}{' '}
+          {ftMetadata?.symbol || getConditionTicker(condition)}
         </Title>
       </Stack>
     </Flex>
   );
 };
+
 export const PostConditions: React.FC<
   {
     failed?: boolean;
