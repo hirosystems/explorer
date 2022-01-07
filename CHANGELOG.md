@@ -1,3 +1,11 @@
+## [1.17.4](https://github.com/hirosystems/explorer/compare/v1.17.3...v1.17.4) (2022-01-07)
+
+
+### Bug Fixes
+
+* run pretter ([9390556](https://github.com/hirosystems/explorer/commit/93905568cdc09f354b083d51a93fe0d784bd9c3e))
+* view schedule for addresses with unlocking tokens ([6dadaaf](https://github.com/hirosystems/explorer/commit/6dadaaff7ebc9dbdc740b2ee5106f50a96be616c))
+
 ## [1.17.3](https://github.com/hirosystems/explorer/compare/v1.17.2...v1.17.3) (2021-10-29)
 
 
