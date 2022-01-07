@@ -20,6 +20,8 @@ import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { AccountTransactionList } from '@features/account-transaction-list';
 import { PageWrapper } from '@components/page-wrapper';
 import { AddressNotFound } from '@components/address-not-found';
+import {UnlockingScheduleModal} from "@components/modals/unlocking-schedule";
+import {SafeSuspense} from "@components/ssr-safe-suspense";
 
 const PageTop = () => {
   return (
@@ -64,6 +66,9 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
 
   return (
     <PageWrapper>
+      <SafeSuspense fallback={<></>}>
+        <UnlockingScheduleModal />
+      </SafeSuspense>
       <Meta
         title={`STX Address ${truncateMiddle(principal)}`}
         labels={[
