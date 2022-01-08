@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/hirosystems/explorer/compare/v1.17.4...v1.18.0) (2022-01-08)
+
+
+### Features
+
+* add sip 10 decimal support ([a8054a6](https://github.com/hirosystems/explorer/commit/a8054a689fea92e06fd4793fb04ef40e725c2431))
+
 ## [1.17.4](https://github.com/hirosystems/explorer/compare/v1.17.3...v1.17.4) (2022-01-07)
 
 
