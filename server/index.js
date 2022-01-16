@@ -87,6 +87,7 @@ const renderAndCache = app =>
       console.info('SSR rendering without cache and try caching for ', key);
       await app.renderToHTML(req, res, pagePath, queryParams);
     } catch (err) {
+      console.log(`error rendering ${pagePath} ${err}`);
       app.renderError(err, req, res, pagePath, queryParams);
     }
   };
@@ -142,6 +143,7 @@ app.prepare().then(() => {
   });
 
   server.get('/address/:principal', (req, res) => {
+    console.log(`got address ${req.params.principal}`);
     server.use(compression());
     const queryParams = { principal: req.params.principal };
     const pagePath = '/address/[principal]';

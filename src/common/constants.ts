@@ -68,7 +68,7 @@ export const DEFAULT_TESTNET_SERVER =
 export const DEFAULT_MAINNET_SERVER =
   config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  'https://stacks-node-api.stacks.co';
+  'https://stacks-node-api.alexlab.co';
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
@@ -86,7 +86,7 @@ export const DEFAULT_NETWORK_LIST = [
   {
     label: 'alex-test',
     url: DEFAULT_TESTNET_SERVER,
-  },  
+  },
 ];
 
 export enum MODALS {
