@@ -20,7 +20,7 @@ interface LockupData {
 
 async function fetchActualBalance(address: string) {
   try {
-    const res = await fetch(`https://stacks-node-api.stacks.co/v2/accounts/${address}?proof=0`, {
+    const res = await fetch(`https://stacks-node-api.alexlab.co/v2/accounts/${address}?proof=0`, {
       headers: HIRO_HEADERS,
     });
     return res.json();
