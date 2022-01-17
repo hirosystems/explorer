@@ -1,0 +1,26 @@
+name: Build Docker Image
+on:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment to build for (dev/prod)'
+        required: true
+        default: 'dev'
+env:
+  GCR_KEY_FILE: ${{ secrets.GCR_KEY_FILE }}
+  TARGET_ENV: ${{ github.event.inputs.env }}
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Image
+        run: |
+          echo "$GCR_KEY_FILE" | docker login -u _json_key --password-stdin https://us-central1-docker.pkg.dev
+          export TAG_NAME=${CI_COMMIT_TAG:-"v`git --no-pager log -1 --format="%ad" --date=format:"%Y%m%d"`-`git describe --always --dirty --abbrev=8`"}
+          export IMAGE=us-central1-docker.pkg.dev/fifth-compiler-334213/alexgo/explorer:$TAG_NAME
+          docker build -t $IMAGE .
+          docker push $IMAGE
+
