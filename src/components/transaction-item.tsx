@@ -158,6 +158,17 @@ const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
   }
 );
 
+const Nonce: React.FC<BoxProps & { nonce: Number, isHovered?: boolean }> = React.memo(
+  props => (
+      <>
+        {'·'}
+        <Caption as="span" text-align="right" ml="6px">
+         {props.nonce}
+        </Caption>
+      </>
+    )
+);
+
 const LargeVersion = React.memo(
   ({
     tx,
@@ -205,9 +216,14 @@ const LargeVersion = React.memo(
                 {didFail && 'Failed'}
               </Caption>
               {'·'}
-              <Caption mt="1px" ml="6px">
+              <Caption mt="1px" ml="6px" mr={isPending && "6px"}>
                 {truncateMiddle(tx.tx_id, 4)}
               </Caption>
+
+              { isPending &&
+                <Nonce ml="6px" nonce={tx.nonce} isHovered={isHovered}>
+                </Nonce>
+              }
             </Flex>
           </Stack>
         ) : null}
