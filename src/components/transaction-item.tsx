@@ -11,6 +11,7 @@ import { Link } from '@components/link';
 import NextLink from 'next/link';
 import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
 import { useHoverableState } from '@components/hoverable';
+import { Tooltip } from '@components/tooltip';
 
 export { getTxTypeIcon };
 
@@ -162,9 +163,11 @@ const Nonce: React.FC<BoxProps & { nonce: Number, isHovered?: boolean }> = React
   props => (
       <>
         {'·'}
-        <Caption as="span" text-align="right" ml="6px">
-         {props.nonce}
-        </Caption>
+        <Tooltip label="nonce">
+          <Caption as="span" text-align="right" ml="6px" style={{zIndex:1}}>
+            {props.nonce}
+          </Caption>
+        </Tooltip>
       </>
     )
 );
@@ -221,7 +224,7 @@ const LargeVersion = React.memo(
               </Caption>
 
               { isPending &&
-                <Nonce ml="6px" nonce={tx.nonce} isHovered={isHovered}>
+                <Nonce ml="6px" nonce={tx.nonce}>
                 </Nonce>
               }
             </Flex>
