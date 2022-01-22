@@ -163,7 +163,7 @@ const Nonce: React.FC<BoxProps & { nonce: Number, isHovered?: boolean }> = React
   props => (
       <>
         {'·'}
-        <Tooltip label="nonce">
+        <Tooltip label="Nonce">
           <Caption as="span" text-align="right" ml="6px" style={{zIndex:1}}>
             {props.nonce}
           </Caption>
