@@ -1,3 +1,11 @@
+## [1.18.1](https://github.com/hirosystems/explorer/compare/v1.18.0...v1.18.1) (2022-01-27)
+
+
+### Bug Fixes
+
+* linting ([a331c13](https://github.com/hirosystems/explorer/commit/a331c1348e31053abd58591850b816ab7aa65db1))
+* update sentry ([402af2a](https://github.com/hirosystems/explorer/commit/402af2a77622d09061baf38bc715345503e3d23d))
+
 # [1.18.0](https://github.com/hirosystems/explorer/compare/v1.17.4...v1.18.0) (2022-01-08)
 
 
