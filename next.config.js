@@ -32,6 +32,7 @@ const moduleExports = withBundleAnalyzer({
     NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE: process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE,
     SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY,
     VERSION: process.env.VERSION,
+    SENTRY_DSN: process.env.SENTRY_DSN,
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
