@@ -9,10 +9,14 @@ function initSentry() {
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
     // that it will also get attached to your source maps
     tracesSampler: () => {
-      if (window.location.search.includes('send-sample')) {
-        return 1;
+      try {
+        if (window.location.search.includes('send-sample')) {
+          return 1;
+        }
+        return 0.05;
+      } catch (_) {
+        return 0.05;
       }
-      return 0.05;
     },
   });
 }
