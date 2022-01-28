@@ -8,8 +8,8 @@ function initSentry() {
     // Note: if you want to override the automatic release value, do not set a
     // `release` value here - use the environment variable `SENTRY_RELEASE`, so
     // that it will also get attached to your source maps
-    tracesSampler: samplingContext => {
-      if (samplingContext.location.search.includes('send-sample')) {
+    tracesSampler: () => {
+      if (window.location.search.includes('send-sample')) {
         return 1;
       }
       return 0.05;
