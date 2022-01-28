@@ -1,3 +1,11 @@
+## [1.18.3](https://github.com/hirosystems/explorer/compare/v1.18.2...v1.18.3) (2022-01-28)
+
+
+### Bug Fixes
+
+* sentry test query param ([e1ded8c](https://github.com/hirosystems/explorer/commit/e1ded8ce7320f6d5dc2c68e4f4e7ad9d43b097c5))
+* sentry test query param ([da9db2b](https://github.com/hirosystems/explorer/commit/da9db2bf3ca0112b77095135a2c581557b4ba7f1))
+
 ## [1.18.2](https://github.com/hirosystems/explorer/compare/v1.18.1...v1.18.2) (2022-01-28)
 
 
