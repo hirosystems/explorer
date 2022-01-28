@@ -1,3 +1,10 @@
+## [1.18.2](https://github.com/hirosystems/explorer/compare/v1.18.1...v1.18.2) (2022-01-28)
+
+
+### Bug Fixes
+
+* add sentry dsn to next env config ([7a98553](https://github.com/hirosystems/explorer/commit/7a98553ff1b2732c79389af0de94e9975c5f3560))
+
 ## [1.18.1](https://github.com/hirosystems/explorer/compare/v1.18.0...v1.18.1) (2022-01-27)
 
 
