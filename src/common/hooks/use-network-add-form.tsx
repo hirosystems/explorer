@@ -3,12 +3,13 @@ import { useNetwork } from '@common/hooks/use-network';
 import { useFormik } from 'formik';
 import { string } from 'yup';
 import { fetchFromApi } from '@common/api/fetch';
-import { useModal } from '@common/hooks/use-modal';
+import { closeModal } from '@components/modals/modalSlice';
 import { getChainIdFromInfo, isLocal } from '@common/utils';
 import { NetworkMode } from '@common/types/network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
 import { useAnalytics } from '@common/hooks/use-analytics';
+import { useAppDispatch } from '@common/state/hooks';
 
 interface Errors {
   label?: string;
@@ -18,7 +19,7 @@ interface Errors {
 
 export const useNetworkAddForm = () => {
   const [networkMode, setNetworkMode] = useState<NetworkMode | undefined>(undefined);
-  const { handleCloseModal } = useModal();
+  const dispatch = useAppDispatch();
   const { networkList, handleAddNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
   const analytics = useAnalytics();
@@ -51,7 +52,7 @@ export const useNetworkAddForm = () => {
           url: `https://${_url.host}`,
         });
 
-        void handleCloseModal();
+        dispatch(closeModal());
       },
       validate: async values => {
         const _errors: Errors = {};

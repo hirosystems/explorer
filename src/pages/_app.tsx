@@ -13,6 +13,8 @@ import { getNetworkMode } from '@common/api/network';
 import { getServerSideApiServer } from '@common/api/utils';
 import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
+import { store } from '@common/state/store';
+import { Provider } from 'react-redux';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
@@ -33,7 +35,7 @@ function ExplorerApp({
   }, []);
 
   return (
-    <>
+    <Provider store={store}>
       <Devtools />
       <AppConfig isHome={isHome} fullWidth={fullWidth}>
         <AtomDebug />
@@ -41,7 +43,7 @@ function ExplorerApp({
         <Modals />
         <NetworkModeToast />
       </AppConfig>
-    </>
+    </Provider>
   );
 }
 

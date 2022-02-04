@@ -6,7 +6,6 @@ import { IconCheck, IconTrash } from '@tabler/icons';
 import { useNetwork } from '@common/hooks/use-network';
 import { Caption, Title } from '@components/typography';
 import { border, isLocal } from '@common/utils';
-import { useModal } from '@common/hooks/use-modal';
 import useSWR from 'swr';
 import { fetchFromApi } from '@common/api/fetch';
 
@@ -14,6 +13,7 @@ import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
   DEFAULT_V2_INFO_ENDPOINT,
+  MODALS,
 } from '@common/constants';
 import { Badge } from '@components/badge';
 
@@ -21,6 +21,8 @@ import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
 import { ChainID } from '@stacks/transactions';
 import { useAnalytics } from '@common/hooks/use-analytics';
+import { useAppDispatch } from '@common/state/hooks';
+import { openModal } from '@components/modals/modalSlice';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -146,12 +148,12 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
 };
 
 const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
-  const { handleOpenAddNetworkModal } = useModal();
+  const dispatch = useAppDispatch();
 
   return (
     <ItemWrapper
       onClick={e => {
-        handleOpenAddNetworkModal();
+        dispatch(openModal(MODALS.ADD_NETWORK));
         onClick?.(e);
       }}
       py="loose"
