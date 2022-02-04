@@ -3,7 +3,6 @@ import { Box, BoxProps, color, ControlledModal, Flex, Grid, IconButton, Stack } 
 import { Tooltip } from '@components/tooltip';
 import { IconAlertTriangle, IconInfoCircle, IconX } from '@tabler/icons';
 import { Caption, Text, Title } from '@components/typography';
-import { useModal } from '@common/hooks/use-modal';
 import { Section } from '@components/section';
 import { PercentageCircle } from '@components/percentage-circle';
 import { border } from '@common/utils';
@@ -14,6 +13,8 @@ import { useAtomValue } from 'jotai/utils';
 import { accountInViewTokenOfferingData } from '@store/currently-in-view';
 import { MODALS } from '@common/constants';
 import { currentStacksHeight } from '@store/info';
+import { useAppDispatch } from '@common/state/hooks';
+import { closeModal, selectOpenedModal } from '@components/modals/modalSlice';
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
   const value = Number(Number(amount) / Math.pow(10, 6));
@@ -208,11 +209,11 @@ const Table: React.FC = () => {
 };
 
 export const UnlockingScheduleModal: React.FC = () => {
-  const { modal, handleCloseModal } = useModal();
-  const isOpen = modal === MODALS.UNLOCKING_SCHEDULE;
+  const dispatch = useAppDispatch();
+  const isOpen = selectOpenedModal() === MODALS.UNLOCKING_SCHEDULE;
 
   const handleClose = () => {
-    handleCloseModal();
+    dispatch(closeModal());
   };
 
   return (

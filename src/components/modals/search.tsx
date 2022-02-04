@@ -2,7 +2,6 @@ import React from 'react';
 import { Box, color, Flex, IconButton, Fade } from '@stacks/ui';
 import { IconSearch, IconX } from '@tabler/icons';
 import { Text, Title } from '@components/typography';
-import { useModal } from '@common/hooks/use-modal';
 import { MODALS } from '@common/constants';
 import { useSearchComponent } from '@common/hooks/search/use-search-component';
 import { SearchBox } from '@features/search/search-field/search-box';
@@ -10,11 +9,13 @@ import { SearchResultsCard } from '@features/search/dropdown/search-results-card
 import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
 import { MetaverseBg } from '@components/metaverse-bg';
 import { border } from '@common/utils';
+import { closeModal, selectOpenedModal } from '@components/modals/modalSlice';
+import { useAppDispatch } from '@common/state/hooks';
 
 export const SearchModal: React.FC = () => {
-  const { modal, handleCloseModal } = useModal();
+  const dispatch = useAppDispatch();
   const handleClose = () => {
-    handleCloseModal();
+    dispatch(closeModal());
   };
   const inputRef = React.useRef(null);
   const timeoutRef = React.useRef<number | null>(null);
@@ -25,7 +26,7 @@ export const SearchModal: React.FC = () => {
     timeoutRef,
   });
 
-  const isOpen = modal === MODALS.SEARCH;
+  const isOpen = selectOpenedModal() === MODALS.SEARCH;
 
   const results = hasRecentItems;
   useLockBodyScroll(isOpen, true);

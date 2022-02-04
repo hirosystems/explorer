@@ -7,9 +7,11 @@ import { HeaderTextItem } from '@components/header-text-item';
 import { NetworkSwitcherItem } from '@components/network-switcher';
 import { SearchComponent } from '@features/search/search';
 import { MobileMenu } from '@components/mobile-menu';
-import { useModal } from '@common/hooks/use-modal';
 import { IconSearch } from '@tabler/icons';
 import { NetworkModeBanner } from '@components/network-mode-banner';
+import { useAppDispatch } from '@common/state/hooks';
+import { MODALS } from '@common/constants';
+import { openModal } from '@components/modals/modalSlice';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -73,7 +75,7 @@ const Navigation: React.FC = () => {
 export const Header: React.FC<
   { isHome?: boolean; fullWidth?: boolean; networkMode?: string } & FlexProps
 > = React.memo(({ isHome, fullWidth, networkMode, ...props }) => {
-  const { handleOpenSearchModal } = useModal();
+  const dispatch = useAppDispatch();
   return (
     <>
       <HeaderBar
@@ -108,7 +110,7 @@ export const Header: React.FC<
                   invert
                   color="white"
                   icon={IconSearch}
-                  onClick={handleOpenSearchModal}
+                  onClick={() => dispatch(openModal(MODALS.SEARCH))}
                 />
               </>
             ) : null}

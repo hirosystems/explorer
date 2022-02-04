@@ -2,18 +2,20 @@ import React from 'react';
 import { Box, color, ControlledModal, Flex, IconButton, Stack } from '@stacks/ui';
 import { IconX } from '@tabler/icons';
 import { Link, Text, Title } from '@components/typography';
-import { useModal } from '@common/hooks/use-modal';
+import { closeModal, selectOpenedModal } from '@components/modals/modalSlice';
 import { AddNetworkForm } from '@components/add-network-form';
 import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
 import { MODALS } from '@common/constants';
+import { useAppDispatch } from '@common/state/hooks';
 
 export const AddNetworkModal: React.FC = () => {
-  const { modal, handleCloseModal } = useModal();
+  const modal = selectOpenedModal();
+  const dispatch = useAppDispatch();
   const { setErrors } = useNetworkAddForm();
   const isOpen = modal === MODALS.ADD_NETWORK;
   const handleClose = () => {
     setErrors({});
-    handleCloseModal();
+    dispatch(closeModal());
   };
   return (
     <ControlledModal minWidth="428px" bg={color('bg')} isOpen={isOpen} handleClose={handleClose}>

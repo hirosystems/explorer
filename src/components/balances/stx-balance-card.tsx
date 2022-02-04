@@ -12,10 +12,12 @@ import { StackingPercentage } from '@components/stacking';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import vkQr from '@vkontakte/vk-qr';
-import { useModal } from '@common/hooks/use-modal';
+import { openModal } from '@components/modals/modalSlice';
 import { VestingAddressData } from '@pages/api/vesting/[address]';
 import { useAtomValue } from 'jotai/utils';
 import { accountInViewTokenOfferingData } from '@store/currently-in-view';
+import { MODALS } from '@common/constants';
+import { useAppDispatch } from '@common/state/hooks';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const parts = balance.split('.');
@@ -64,7 +66,7 @@ interface StxBalancesProps {
 }
 
 export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
-  const { handleOpenUnlockingScheduleModal } = useModal();
+  const dispatch = useAppDispatch();
   const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
 
   const balance =
@@ -157,7 +159,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
                     balance={microToStacks(tokenOfferingData.total_locked)}
                   />
                   <Box
-                    onClick={handleOpenUnlockingScheduleModal}
+                    onClick={() => dispatch(openModal(MODALS.UNLOCKING_SCHEDULE))}
                     fontSize={1}
                     _hover={{
                       cursor: 'pointer',
