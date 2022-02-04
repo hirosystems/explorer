@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, FlexProps, IconButton, Fade, color } from '@stacks/ui';
+import { Box, BoxProps, Flex, FlexProps, IconButton } from '@stacks/ui';
 import dynamic from 'next/dynamic';
 import NextLink from 'next/link';
 import React from 'react';
