@@ -1,12 +1,10 @@
 import React from 'react';
-import pluralize from 'pluralize';
 import { useHoverableState } from '@components/hoverable';
 import { color, Flex, Stack } from '@stacks/ui';
 import { ItemIcon } from '@components/item-icon';
 import { Caption, Text, Title } from '@components/typography';
-import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
+import { toRelativeTime, truncateMiddle } from '@common/utils';
 import { MicroblockLink } from '@components/links';
-import { useMicroblock } from './hooks';
 
 export const MicroblockItem: React.FC<{
   blockTime: number;
@@ -15,10 +13,9 @@ export const MicroblockItem: React.FC<{
   length: number;
 }> = ({ blockTime, hash, index, length, ...rest }) => {
   const isHovered = useHoverableState();
-  const [microblock] = useMicroblock(hash);
 
-  return microblock ? (
-    <MicroblockLink hash={microblock.microblock_hash} {...rest}>
+  return (
+    <MicroblockLink hash={hash} {...rest}>
       <Flex
         justifyContent="space-between"
         py="loose"
@@ -34,16 +31,10 @@ export const MicroblockItem: React.FC<{
           <Stack spacing="tight" as="span">
             <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
               <Title display="block" color="currentColor">
-                {truncateMiddle(microblock.microblock_hash)}
+                {truncateMiddle(hash)}
               </Title>
             </Flex>
-            <Caption display="block">
-              {'Microblock' +
-                ' · ' +
-                addSepBetweenStrings([
-                  `${microblock.txs.length} ${pluralize('transactions', microblock.txs.length)}`,
-                ])}
-            </Caption>
+            <Caption display="block">Microblock</Caption>
           </Stack>
         </Stack>
         <Stack spacing="tight" textAlign="right" as="span">
@@ -59,5 +50,5 @@ export const MicroblockItem: React.FC<{
         </Stack>
       </Flex>
     </MicroblockLink>
-  ) : null;
+  );
 };
