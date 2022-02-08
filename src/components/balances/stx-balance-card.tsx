@@ -4,7 +4,7 @@ import { Box, BoxProps, Circle, color, Flex, Grid, Stack, StxInline } from '@sta
 import { Caption, Text } from '@components/typography';
 
 import { Section } from '@components/section';
-import { border, microToStacks } from '@common/utils';
+import { border, microToStacks, getLocaleDecimalSeparator } from '@common/utils';
 import { IconButton } from '@components/icon-button';
 import { IconQrcode, IconX } from '@tabler/icons';
 import { Tooltip } from '@components/tooltip';
@@ -20,13 +20,14 @@ import { MODALS } from '@common/constants';
 import { useAppDispatch } from '@common/state/hooks';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
-  const parts = balance.split('.');
+  const localeDecimalSeparator = getLocaleDecimalSeparator();
+  const parts = balance.split(localeDecimalSeparator);
 
   return (
     <Flex as="span" {...rest} style={{ userSelect: 'all' }}>
       <Text color="currentColor">{parts[0]}</Text>
       <Text color="currentColor" opacity={0.65}>
-        .{parts[1]}
+        {localeDecimalSeparator}{parts[1]}
       </Text>
       <Text ml="extra-tight" color="currentColor">
         STX
