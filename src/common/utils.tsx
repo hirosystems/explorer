@@ -385,3 +385,7 @@ export const ftDecimals = (value: number | string | BigNumber, decimals: number)
 export const ftUnshiftDecimals = (value: number | string | BigNumber, decimals: number) => {
   return initBigNumber(value).shiftedBy(decimals).toString(10);
 };
+
+export function getLocaleDecimalSeparator() {
+  return (1.1).toLocaleString().substring(1, 2);
+}
