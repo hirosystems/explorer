@@ -1,3 +1,10 @@
+## [1.18.4](https://github.com/hirosystems/explorer/compare/v1.18.3...v1.18.4) (2022-02-09)
+
+
+### Bug Fixes
+
+* remove microblock txs count ([7b23a20](https://github.com/hirosystems/explorer/commit/7b23a20da70ac416079d6bbe60e9b6cfc8f66b98))
+
 ## [1.18.3](https://github.com/hirosystems/explorer/compare/v1.18.2...v1.18.3) (2022-01-28)
 
 
