@@ -1,3 +1,10 @@
+## [1.18.5](https://github.com/hirosystems/explorer/compare/v1.18.4...v1.18.5) (2022-02-09)
+
+
+### Bug Fixes
+
+* update package.json ([2866b30](https://github.com/hirosystems/explorer/commit/2866b30421399006a6fca832aa6f0eec9248f0ce))
+
 ## [1.18.4](https://github.com/hirosystems/explorer/compare/v1.18.3...v1.18.4) (2022-02-09)
 
 
