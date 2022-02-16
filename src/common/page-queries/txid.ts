@@ -66,7 +66,7 @@ export const getTxPageQueryProps = async (
     // we can use react-query to get the data if it's been viewed before,
     // and on mount it will automatically revalidate and update if it's different
     getTxPageCachedQueryProps(ctx, queryClient);
-  const { transactionsApi, smartContractsApi } = await getApiClients(ctx);
+  const { transactionsApi, smartContractsApi } = await getApiClients();
 
   if (!isContractId)
     // it's a txid, so we can just return the tx
@@ -112,7 +112,7 @@ export const getTxPageQueries: GetQueries<TxPageQueryProps> = async (
   const canFetchContractInfo = (!isContractDeploy || !isPending) && !!contractId;
 
   // we can get our api clients here
-  const { smartContractsApi, blocksApi, accountsApi, transactionsApi } = await getApiClients(ctx);
+  const { smartContractsApi, blocksApi, accountsApi, transactionsApi } = await getApiClients();
 
   // our query keys
   const txQueryKey = getTxQueryKey.single(txId);

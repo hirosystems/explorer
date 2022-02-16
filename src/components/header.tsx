@@ -9,13 +9,14 @@ import { SearchComponent } from '@features/search/search';
 import { MobileMenu } from '@components/mobile-menu';
 import { NetworkModeBanner } from '@components/network-mode-banner';
 import { useAppDispatch } from '@common/state/hooks';
+import { buildUrl } from '@components/links';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
   return (
     <Box {...props}>
-      <NextLink href="/" passHref>
+      <NextLink href={buildUrl('/')} passHref>
         <a>
           <IconButton
             invert
@@ -53,13 +54,13 @@ const Navigation: React.FC = () => {
     <>
       <Flex alignItems="center" display={['none', 'none', 'none', 'flex']}>
         <ColorModeButton mr="tight" />
-        <NextLink href="/transactions" passHref>
+        <NextLink href={buildUrl('/transactions')} passHref>
           <HeaderTextItem mr="base">Transactions</HeaderTextItem>
         </NextLink>
-        <NextLink href="/blocks" passHref>
+        <NextLink href={buildUrl('/blocks')} passHref>
           <HeaderTextItem mr="base">Blocks</HeaderTextItem>
         </NextLink>
-        <NextLink href="/sandbox/deploy" passHref>
+        <NextLink href={buildUrl('/sandbox/deploy')} passHref>
           <HeaderTextItem>Sandbox</HeaderTextItem>
         </NextLink>
         <NetworkSwitcherItem ml="base" />

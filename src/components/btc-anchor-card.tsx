@@ -5,11 +5,12 @@ import { truncateMiddle } from '@common/utils';
 import { Section } from '@components/section';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 import { Link } from '@components/typography';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { NetworkModes } from '@common/types/network';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ block, ...rest }) => {
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
   const path = networkMode === NetworkModes.Testnet ? '-testnet' : '';
   return (
     <Section title="Bitcoin anchor" {...rest}>

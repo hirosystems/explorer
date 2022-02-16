@@ -3,11 +3,11 @@ import { MODALS } from '@common/constants';
 import { useAppSelector } from '@common/state/hooks';
 
 interface State {
-  openedModal?: MODALS;
+  openedModal: MODALS | null;
 }
 
 const initialState: State = {
-  openedModal: undefined,
+  openedModal: null,
 };
 
 export const modalSlice = createSlice({
@@ -18,7 +18,7 @@ export const modalSlice = createSlice({
       state.openedModal = action.payload;
     },
     closeModal: state => {
-      state.openedModal = undefined;
+      state.openedModal = null;
     },
   },
 });

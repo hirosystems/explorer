@@ -19,7 +19,7 @@ import { Caption, Link, Title } from '@components/typography';
 import { Circle } from '@components/circle';
 import { SenderRecipient } from '@components/addresses';
 import { AddressLink } from '@components/links';
-import { apiClientsState } from '@store/api-clients';
+import { useApi } from '@common/api/client';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {
@@ -240,7 +240,7 @@ const getName = (event: TransactionEvent) => {
 
 const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, isLast }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { tokensApi } = useAtomValue(apiClientsState);
+  const { tokensApi } = useApi();
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
   const assetAmounts = getAssetAmounts(event);

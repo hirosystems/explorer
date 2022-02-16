@@ -17,7 +17,6 @@ import { filterState } from '@store/recoil/filter';
 import { IconButton } from '@components/icon-button';
 import { ChevronDown } from '@components/icons/chevron-down';
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
-import { useApiServer } from '@common/hooks/use-api';
 import { Pending } from '@components/status';
 import { Badge } from '@components/badge';
 import { useCodeEditor } from '@sandbox/components/code-editor/code-editor';
@@ -25,13 +24,15 @@ import { useClarityRepl } from '@sandbox/hooks/use-clarity-repl';
 import { ContractCallIcon } from '@components/icons/contract-call';
 import { InfoCircleIcon } from '@components/icons/info-circle';
 import { ExternalLinkIcon } from '@components/icons/external-link';
-import { TxLink } from '@components/links';
+import { buildUrl, TxLink } from '@components/links';
 import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 
 import { FilterIcon } from '@components/icons/filter';
 import { functionCallViewState } from '@sandbox/store/views';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useAtom } from 'jotai';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 const PanelHeader = React.memo(() => {
   const [filter, setFilterState] = useAtom(filterState('sandbox'));
@@ -104,7 +105,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
             setCodeBody(codeBody);
             setLoaded(true);
             setResult(undefined);
-            router.push('/sandbox/deploy');
+            router.push(buildUrl('/sandbox/deploy'));
             setTimeout(() => {
               setLoaded(false);
             }, 3000);
@@ -133,11 +134,11 @@ const TxDetailsFunctions = ({
     setView('function-overview');
     setQuery(contractId);
     setCurrentFunction(name);
-    router.push('/sandbox/contract-call');
+    router.push(buildUrl('/sandbox/contract-call'));
   };
 
   const handleSetContractQuery = () => {
-    router.push('/sandbox/contract-call');
+    router.push(buildUrl('/sandbox/contract-call'));
     setQuery(contractId);
     setCurrentFunction(undefined);
     setView('function-overview');
@@ -231,7 +232,7 @@ const TxDetails: React.FC<{
   txId: Transaction['tx_id'];
   contractId: string;
 }> = React.memo(({ contractId, txId, type, status }) => {
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const contractInterface = useRecoilValue(
     txContractState({
       apiServer,

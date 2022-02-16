@@ -19,7 +19,6 @@ import {
   readOnlyState,
   readOnlyResponseState,
 } from '@sandbox/store/sandbox';
-import { useApiServer } from '@common/hooks/use-api';
 import { Section } from '@components/section';
 import { Badge } from '@components/badge';
 import { IconButton } from '@components/icon-button';
@@ -48,9 +47,11 @@ import { AlertTriangleIcon } from '@components/icons/alert-triangle';
 import { Circle } from '@components/circle';
 import { handleContractCall } from '@sandbox/common/connect-functions';
 import { functionCallViewState } from '@sandbox/store/views';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 const useContractInterface = (): [any, string, ClarityAbiFunction] => {
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const contractId = useRecoilValue(contractSearchQueryState);
   const functionName = useRecoilValue(currentFunctionState);
   const contractInterface = useRecoilValue(txContractState({ apiServer, contractId }));
@@ -249,7 +250,7 @@ const Function = ({ func }) => {
 
 const ReadOnly = () => {
   const { principal } = useUser();
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const [contractInterface, contractId, fn] = useContractInterface();
   const setFunctionName = useSetRecoilState(currentFunctionState);
   const [readOnlyValue, setReadonly] = useRecoilState(readOnlyState);

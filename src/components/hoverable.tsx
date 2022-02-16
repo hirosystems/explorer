@@ -10,14 +10,12 @@ export const useHoverableState = () => {
 };
 
 export const HoverableItem: React.FC<
-  { isLast?: boolean; isActive?: boolean; placement?: 'left' | 'bottom' } & BoxProps
-> = React.memo(({ isLast, children, isActive, placement = 'left', ...props }) => {
+  { isActive?: boolean; placement?: 'left' | 'bottom' } & BoxProps
+> = React.memo(({ children, isActive, placement = 'left', ...props }) => {
   const [isHovered, bind] = useHover();
   return (
     <HoverContext.Provider value={isHovered}>
       <Box
-        borderBottom={isLast ? 'unset' : '1px solid'}
-        borderBottomColor="var(--colors-border)"
         position="relative"
         _hover={{
           cursor: isActive ? 'unset' : 'pointer',

@@ -1,6 +1,13 @@
 import { css } from '@emotion/react';
 import { color } from '@stacks/ui';
 
+const container = css`
+  border-bottom: 1px solid var(--colors-border);
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
 const common = css`
   display: block;
   content: '';
@@ -9,6 +16,7 @@ const common = css`
 `;
 
 export const bottomLineCss = css`
+  ${container};
   &:after {
     ${common};
     bottom: 0;
@@ -28,6 +36,7 @@ export const bottomLineCss = css`
 `;
 
 export const leftLineCss = css`
+  ${container};
   &:after {
     ${common};
     left: -24px;

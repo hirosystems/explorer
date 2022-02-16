@@ -1,25 +1,14 @@
 import { atomFamily, atom, selectorFamily, selector } from 'recoil';
-import { AuthOptions, UserData, AppConfig, UserSession } from '@stacks/connect';
+import { UserData, AppConfig, UserSession } from '@stacks/connect';
 import { generateRandomName } from '@common/hooks/use-random-name';
 import { helloWorldContract } from '@sandbox/common/contracts';
 import { callReadOnlyFunction, fetchContractInterface } from '@sandbox/common';
 import { SampleContracts } from '@sandbox/common/examples';
 import { StacksTestnet } from '@stacks/network';
-import { APP_DETAILS } from '@common/constants';
 import { authResponseState } from '@store/recoil/auth';
 
 export const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
-
-export const authOptionsAtom = atom<Partial<AuthOptions>>({
-  key: 'authOptions',
-  default: {
-    manifestPath: '/manifest.json',
-    redirectTo: '/sandbox',
-    userSession: userSession as any,
-    appDetails: APP_DETAILS,
-  },
-});
 
 const userDataEffect = ({ setSelf }: any) => {
   const isSignedIn = userSession.isUserSignedIn();

@@ -85,6 +85,7 @@ const DefaultContracts: React.FC = () => {
             setQuery(`${address}.${name}`);
             setView('function-overview');
           }}
+          key={name}
         >
           <Stack isInline spacing="base">
             <Circle border={border()}>

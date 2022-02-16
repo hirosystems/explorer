@@ -187,7 +187,7 @@ const LargeVersion = React.memo(
         </Flex>
         {!hideRightElements ? (
           <Stack alignItems="flex-end" textAlign="right" as="span" spacing="tight">
-            <Timestamp tx={tx} />
+            <Timestamp tx={tx} suppressHydrationWarning={true} />
             <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
               <Caption
                 mr="6px"

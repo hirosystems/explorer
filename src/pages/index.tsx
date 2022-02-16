@@ -1,17 +1,16 @@
 import React from 'react';
 import { Grid } from '@stacks/ui';
-import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
 import { PageWrapper } from '@components/page-wrapper';
 import { Meta } from '@components/meta-head';
 import { HomePageTop } from '@components/home-page-top';
 import { TabbedTransactionList } from '@components/tabbed-transaction-list';
 import { BlocksList } from '@features/blocks-list';
-
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
-import { getHomePageQueries } from '@common/page-queries/home';
-import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
-
 import type { NextPage } from 'next';
+import { wrapper } from '@common/state/store';
+import { dehydrate } from 'react-query/hydration';
+import { QueryClient } from 'react-query';
+import { getHomeQueries } from '@features/home/useHomeQueries';
 
 const Home: NextPage = () => {
   return (
@@ -31,8 +30,42 @@ const Home: NextPage = () => {
   );
 };
 
-Home.getInitialProps = () => {
-  return { isHome: true };
+const prefetchData = async (networkUrl: string): Promise<QueryClient> => {
+  const queryClient = new QueryClient();
+  const prefetchOptions = { staleTime: 5000 };
+  const queries = getHomeQueries(networkUrl);
+  await Promise.all([
+    queryClient.prefetchInfiniteQuery(
+      ['blocks'],
+      queries.fetchBlocks(DEFAULT_BLOCKS_LIST_LIMIT, 0),
+      prefetchOptions
+    ),
+    queryClient.prefetchInfiniteQuery(
+      ['confirmedTransactions'],
+      queries.fetchConfirmedTransactions(DEFAULT_LIST_LIMIT_SMALL, 0),
+      prefetchOptions
+    ),
+    queryClient.prefetchInfiniteQuery(
+      ['mempoolTransactions'],
+      queries.fetchMempoolTransactions(DEFAULT_LIST_LIMIT_SMALL, 0),
+      prefetchOptions
+    ),
+  ]);
+  return queryClient;
 };
 
-export default withInitialQueries(Home, pageAtomBuilders)(getHomePageQueries);
+const removeKeysWithUndefinedValues = (obj: Record<string, any>) => JSON.parse(JSON.stringify(obj));
+
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query }) => {
+  const client = await prefetchData(
+    store.getState().global.networks[store.getState().global.activeNetworkKey].url
+  );
+  return {
+    props: {
+      isHome: true,
+      dehydratedState: removeKeysWithUndefinedValues(dehydrate(client)),
+    },
+  };
+});
+
+export default Home;

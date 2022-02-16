@@ -1,22 +1,33 @@
-import React, { useMemo } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
 import { Section } from '@components/section';
 import { HoverableItem } from '@components/hoverable';
-import { useBlocksList } from './hooks';
 import { Caption } from '@components/typography';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { SectionFooterAction } from '@components/section-footer-button';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
+import { useInfiniteQuery } from 'react-query';
+import { getNextPageParam } from '@store/common';
+import { useHomeQueries } from '@features/home/useHomeQueries';
+
+function useBlockList(limit: number) {
+  const queries = useHomeQueries();
+  const { data: blocks, ...actions } = useInfiniteQuery(
+    ['blocks'],
+    ({ pageParam }) => queries.fetchBlocks(limit, pageParam || 0)(),
+    { getNextPageParam }
+  );
+  return { blocks, actions };
+}
 
 export const BlocksList: React.FC<
-  FlexProps & { enforceLimit?: boolean; limit?: number; infinite?: boolean }
+  FlexProps & { enforceLimit?: boolean; limit: number; infinite?: boolean }
 > = ({ infinite, limit = DEFAULT_LIST_LIMIT, enforceLimit, ...props }) => {
-  const [blocks, actions] = useBlocksList(limit);
-  if (!blocks) return null;
+  const { blocks, actions } = useBlockList(limit);
   const hasBlocks = blocks?.pages?.[0]?.results?.length;
-  const firstPage = blocks.pages?.[0].results;
+  const firstPage = blocks?.pages?.[0].results;
 
   // due to the way that we fetch from two endpoints (blocks and microblocks)
   // we need to generate a combined flat list of hashes to know which hashes
@@ -24,7 +35,7 @@ export const BlocksList: React.FC<
   const hashesToShow = useMemo(() => {
     if (!enforceLimit) return {};
     const _index: Record<string, number> = {};
-    const flatmap = firstPage
+    const flatmap = (firstPage || [])
       .map(block => [block.hash, ...block.microblocks_accepted.map(mb => mb)])
       .flat(5);
 
@@ -34,57 +45,43 @@ export const BlocksList: React.FC<
     return _index;
   }, [firstPage, enforceLimit]);
 
+  if (!blocks) return null;
+
   return (
     <Section title="Recent Blocks" {...props}>
       <Flex flexDirection="column" flexGrow={1} px="loose">
         {hasBlocks ? (
           <>
-            {blocks.pages.map((page, pageIndex, pages) => {
-              const isLastPage = pageIndex === pages.length - 1;
-
+            {blocks.pages.map(page => {
               return (
-                <>
+                <Fragment key={page.offset}>
                   {page?.results.map((block, index, arr) => {
-                    const isLastItem =
-                      index === arr.length - 1 ||
-                      (enforceLimit && hashesToShow[block.hash] === limit);
                     if (enforceLimit && hashesToShow[block.hash] > limit) return null;
                     return (
-                      <>
-                        <HoverableItem
-                          key={`blocks-list-${block.height}`}
-                          isLast={isLastPage && isLastItem}
-                        >
+                      <Fragment key={block.hash}>
+                        <HoverableItem>
                           <BlockItem block={block} index={index} length={arr.length} />
                         </HoverableItem>
-                        {block.microblocks_accepted.map(
-                          (microblockHash, microblockIndex, microblocks) => {
-                            const isLastMicroblock =
-                              microblockIndex === microblocks.length - 1 ||
-                              (enforceLimit && hashesToShow[microblockHash] === limit);
-                            if (enforceLimit && hashesToShow[microblockHash] > limit) return null;
+                        {block.microblocks_accepted.map((microblockHash, microblockIndex) => {
+                          if (enforceLimit && hashesToShow[microblockHash] > limit) return null;
 
-                            return (
-                              <SafeSuspense fallback={<></>}>
-                                <HoverableItem
-                                  key={`microblocks-list-${microblockHash}`}
-                                  isLast={isLastPage && isLastItem && isLastMicroblock}
-                                >
-                                  <MicroblockItem
-                                    blockTime={block.burn_block_time}
-                                    hash={microblockHash}
-                                    index={microblockIndex}
-                                    length={arr.length}
-                                  />
-                                </HoverableItem>
-                              </SafeSuspense>
-                            );
-                          }
-                        )}
-                      </>
+                          return (
+                            <SafeSuspense fallback={<></>} key={microblockHash}>
+                              <HoverableItem>
+                                <MicroblockItem
+                                  blockTime={block.burn_block_time}
+                                  hash={microblockHash}
+                                  index={microblockIndex}
+                                  length={arr.length}
+                                />
+                              </HoverableItem>
+                            </SafeSuspense>
+                          );
+                        })}
+                      </Fragment>
                     );
                   })}
-                </>
+                </Fragment>
               );
             })}
 

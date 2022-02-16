@@ -70,28 +70,14 @@ export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   'https://stacks-node-api.stacks.co';
 
+export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
+
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
 
 export const NETWORK_CUSTOM_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_CUSTOM_LIST';
 export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
 export const DEFAULT_MAINNET_INDEX = 0;
 export const DEFAULT_TESTNET_INDEX = 1;
-export const DEFAULT_NETWORK_INDEX = DEFAULT_MAINNET_INDEX;
-
-export const DEFAULT_NETWORK_LIST = [
-  {
-    label: 'stacks.co',
-    url: DEFAULT_MAINNET_SERVER,
-  },
-  {
-    label: 'stacks.co',
-    url: DEFAULT_TESTNET_SERVER,
-  },
-  {
-    label: 'localhost',
-    url: 'http://localhost:3999',
-  },
-];
 
 export enum MODALS {
   SEARCH = 'modals/search',

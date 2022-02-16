@@ -21,9 +21,9 @@ import { useFilterState } from '@common/hooks/use-filter-state';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
-> = React.memo(({ tx, isLast, principal, ...rest }) => {
+> = React.memo(({ tx, principal, ...rest }) => {
   return (
-    <HoverableItem isLast={isLast}>
+    <HoverableItem>
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>

@@ -11,12 +11,13 @@ import { useUser } from '@sandbox/hooks/use-user';
 import { Error } from '@sandbox/components/error';
 import { Badge } from '@components/badge';
 import useSWR from 'swr';
-import { useApiServer } from '@common/hooks/use-api';
 import { BigNumber } from 'bignumber.js';
 import { useConnect } from '@sandbox/hooks/use-connect';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
 import { HIRO_HEADERS } from '@common/constants';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 const fetcher = async (apiServer: string) => {
   const res = await fetch(apiServer + '/v2/fees/transfer', {
@@ -27,7 +28,7 @@ const fetcher = async (apiServer: string) => {
 };
 
 export const TokenTransferView = () => {
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const network = useNetworkConfig();
   const { isSignedIn, doOpenAuth } = useConnect();
   const { data } = useSWR(apiServer, fetcher);

@@ -8,36 +8,38 @@ import { DropIcon } from '@components/icons/drop';
 import { Routes } from '@sandbox/common/types';
 import Link from 'next/link';
 import { useConnect } from '@sandbox/hooks/use-connect';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { buildUrl } from '@components/links';
 
 export const SideNav: React.FC<StackProps> = props => {
   const { isSignedIn } = useConnect();
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
 
   const navigation: {
     label: string;
-    slug: Routes;
+    url: string;
     icon: any;
     isDisabled?: boolean;
   }[] = [
     {
       label: 'Write & Deploy Contracts',
-      slug: 'deploy',
+      url: buildUrl(`/sandbox/deploy`, networkMode),
       icon: <ClarityIcon size="24px" />,
     },
     {
       label: 'Call Functions',
-      slug: 'contract-call',
+      url: buildUrl(`/sandbox/contract-call`, networkMode),
       icon: <Box as={FunctionIcon} size="24px" />,
     },
     {
       label: 'STX Transfer',
-      slug: 'transfer',
+      url: buildUrl(`/sandbox/transfer`, networkMode),
       icon: <Box as={StxInline} size="20px" />,
     },
     {
       label: 'Testnet Faucet',
-      slug: 'faucet',
+      url: buildUrl(`/sandbox/faucet`, networkMode),
       icon: <Box as={DropIcon} size="24px" />,
       isDisabled: !isSignedIn || networkMode === 'mainnet',
     },
@@ -47,25 +49,23 @@ export const SideNav: React.FC<StackProps> = props => {
     <Stack borderRight={border()} {...props}>
       {navigation.map(nav =>
         nav.isDisabled ? null : (
-          <Tooltip label={nav.label} placement="right" key={nav.label}>
-            <Link href={`/sandbox/${nav.slug}`}>
-              <Grid
-                borderRight={border()}
-                bg={color('bg')}
-                borderBottom={border()}
-                size="72px"
-                placeItems="center"
-                justifyContent="center"
-                color={color('text-title')}
-                _hover={{
-                  cursor: 'pointer',
-                  bg: color('bg-2'),
-                }}
-              >
-                {nav.icon}
-              </Grid>
-            </Link>
-          </Tooltip>
+          <Link href={nav.url}>
+            <Grid
+              borderRight={border()}
+              bg={color('bg')}
+              borderBottom={border()}
+              size="72px"
+              placeItems="center"
+              justifyContent="center"
+              color={color('text-title')}
+              _hover={{
+                cursor: 'pointer',
+                bg: color('bg-2'),
+              }}
+            >
+              {nav.icon}
+            </Grid>
+          </Link>
         )
       )}
     </Stack>

@@ -10,7 +10,6 @@ import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-
 interface TransactionListProps {
   isLastPage?: boolean;
   data?: TransactionsListResponse | MempoolTransactionsListResponse;
-  borderOnLast?: boolean;
 }
 
 function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
@@ -18,7 +17,7 @@ function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
 }
 
 export const TransactionList = (props: TransactionListProps) => {
-  const { data, isLastPage, borderOnLast } = props;
+  const { data, isLastPage } = props;
   const list = useMemo(
     () =>
       data?.results
@@ -34,7 +33,6 @@ export const TransactionList = (props: TransactionListProps) => {
           tx={item}
           key={item.tx_id}
           isLast={isLastPage && itemIndex + 1 === list.length}
-          borderOnLast={borderOnLast}
         />
       ))}
     </>

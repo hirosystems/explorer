@@ -6,7 +6,6 @@ import type {
   MempoolTransaction,
   TransactionResults,
 } from '@stacks/stacks-blockchain-api-types';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { useAtomValue } from 'jotai/utils';
 import {
   accountBalancesResponseState,
@@ -14,6 +13,8 @@ import {
   accountTransactionsState,
 } from '@store/accounts';
 import { DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const useUser = (options?: {
   suspense?: boolean;
@@ -26,7 +27,7 @@ export const useUser = (options?: {
   hasTransactions?: boolean;
 } & Partial<UserData> => {
   const { userData } = useAuthState();
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
 
   const principal = networkMode && userData?.profile?.stxAddress?.[networkMode];
   const username = userData?.username;

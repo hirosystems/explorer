@@ -1,6 +1,6 @@
 import { atom, Getter } from 'jotai';
 import { apiClientsState } from '@store/api-clients';
-import { ContractInterfaceResponse, ContractSourceResponse } from '@stacks/blockchain-api-client';
+import { ContractInterfaceResponse } from '@stacks/blockchain-api-client';
 import { QueryRefreshRates } from '@common/constants';
 import { QueryKey } from 'react-query';
 import { makeQueryKey, atomFamilyWithQuery } from 'jotai-query-toolkit';

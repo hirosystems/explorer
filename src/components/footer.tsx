@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Text, Box, Flex, BoxProps, color, FlexProps } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
+import { buildUrl } from '@components/links';
 
 const LinkWrapper: React.FC<any> = ({ children, href }) => {
   return href ? (
@@ -57,10 +58,10 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
         px={fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}
       >
         <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
-          <FooterLink mr="base" href="/transactions">
+          <FooterLink mr="base" href={buildUrl('/transactions')}>
             Recent transactions
           </FooterLink>
-          <FooterLink href="/sandbox/deploy" mr="base">
+          <FooterLink href={buildUrl('/sandbox/deploy')} mr="base">
             Sandbox
           </FooterLink>
         </Flex>

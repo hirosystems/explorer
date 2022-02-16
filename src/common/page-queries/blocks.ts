@@ -6,7 +6,7 @@ export const getBlocksPageQueries: Queries = [
   [
     getBlocksQueryKey.confirmed(30),
     async context => {
-      const { blocksApi } = await getApiClients(context);
+      const { blocksApi } = await getApiClients();
       return (await blocksApi.getBlockList({
         limit: 30,
         offset: 0,

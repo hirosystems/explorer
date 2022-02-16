@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAtomValue } from 'jotai/utils';
 import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import {
   Box,
@@ -41,7 +40,7 @@ import { StxInline } from '@components/icons/stx-inline';
 import { getTicker } from '@components/tx-events';
 import { Badge } from '@components/badge';
 import { microStxToStx } from '@stacks/ui-utils';
-import { apiClientsState } from '@store/api-clients';
+import { useApi } from '@common/api/client';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -249,7 +248,7 @@ const getAddressValue = (condition: PostCondition) => {
 
 const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: boolean }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { tokensApi } = useAtomValue(apiClientsState);
+  const { tokensApi } = useApi();
 
   useEffect(() => {
     const getFtMetadata = async () => {
