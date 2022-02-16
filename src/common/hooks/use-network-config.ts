@@ -1,12 +1,13 @@
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
-import { useApiServer } from '@common/hooks/use-api';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { NetworkModes } from '@common/types/network';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 // for use with connect
 export const useNetworkConfig = (): StacksTestnet | StacksMainnet => {
-  const apiServer = useApiServer();
-  const { networkMode } = useNetworkMode();
+  const selectedNetwork = useAppSelector(selectActiveNetwork);
+  const apiServer = selectedNetwork.url;
+  const networkMode = selectedNetwork.mode;
   const Network = networkMode === NetworkModes.Testnet ? StacksTestnet : StacksMainnet;
   const network = new Network();
   network.coreApiUrl = apiServer;

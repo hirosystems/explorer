@@ -3,9 +3,8 @@ import React from 'react';
 import { Box, BoxProps, color, Flex, FlexProps, IconButton, Stack, Tooltip } from '@stacks/ui';
 import { IconCheck, IconTrash } from '@tabler/icons';
 
-import { useNetwork } from '@common/hooks/use-network';
 import { Caption, Title } from '@components/typography';
-import { border, isLocal } from '@common/utils';
+import { border } from '@common/utils';
 import useSWR from 'swr';
 import { fetchFromApi } from '@common/api/fetch';
 
@@ -17,12 +16,18 @@ import {
 } from '@common/constants';
 import { Badge } from '@components/badge';
 
-import { useSetChainMode } from '@common/hooks/use-chain-mode';
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
 import { ChainID } from '@stacks/transactions';
 import { useAnalytics } from '@common/hooks/use-analytics';
-import { useAppDispatch } from '@common/state/hooks';
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import { openModal } from '@components/modals/modal-slice';
+import {
+  removeCustomNetwork,
+  selectActiveNetwork,
+  selectNetworks,
+  setActiveNetwork,
+} from '@common/state/network-slice';
+import { Network } from '@common/types/network';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -49,13 +54,12 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
 };
 
 interface ItemProps extends ItemWrapperProps {
-  item: { label: string; url?: string };
+  item: Network;
   isCustom?: boolean;
 }
 
 const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
-  const { handleRemoveNetwork } = useNetwork();
-  const setChainMode = useSetChainMode();
+  const dispatch = useAppDispatch();
   const analytics = useAnalytics();
 
   const isMainnet = item.url === DEFAULT_MAINNET_SERVER;
@@ -67,9 +71,9 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
 
   const doNotFetch = isDisabled || !item.url || isDefault;
 
-  const { data, error } = useSWR(!!doNotFetch ? null : (item?.url as string), async () => {
+  const { data, error } = useSWR(!!doNotFetch ? null : item.url, async () => {
     // this will only run if the item url is not one of the defaults (mainnet/testnet)
-    const response = await fetchFromApi(item.url as string)(DEFAULT_V2_INFO_ENDPOINT);
+    const response = await fetchFromApi(item.url)(DEFAULT_V2_INFO_ENDPOINT);
     return response.json();
   });
 
@@ -81,9 +85,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
 
   const handleClick = React.useCallback(
-    async e => {
-      await setChainMode(itemNetworkMode);
-
+    e => {
       analytics.track({
         event: 'network-selected',
         properties: {
@@ -133,9 +135,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
                 zIndex={999}
                 color={color('text-caption')}
                 icon={IconTrash}
-                onClick={() =>
-                  item.url && handleRemoveNetwork(item as { label: string; url: string })
-                }
+                onClick={() => dispatch(removeCustomNetwork(item))}
               />
             </Tooltip>
           </>
@@ -171,25 +171,25 @@ interface NetworkItemsProps extends BoxProps {
 }
 
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
-  const { networkList, networkIndex, handleUpdateNetworkIndex } = useNetwork();
+  const dispatch = useAppDispatch();
+  const networks = Object.values<Network>(useAppSelector(selectNetworks));
+  const activeNetwork = useAppSelector(selectActiveNetwork);
 
   return (
     <>
-      {networkList?.map((item, key) => {
-        const isActive = key === networkIndex;
-
-        if (!isLocal() && item?.url?.includes('localhost')) return null;
+      {networks.map((network, key) => {
+        const isActive = activeNetwork.url === network.url;
         return (
           <Item
             isActive={isActive}
-            item={item}
+            item={network}
             key={key}
             isCustom={key >= 3}
             onClick={() => {
               setTimeout(() => {
-                onItemClick?.(item);
+                onItemClick?.(network);
                 if (!isActive) {
-                  void handleUpdateNetworkIndex(key);
+                  dispatch(setActiveNetwork(network));
                 }
               }, 250);
             }}

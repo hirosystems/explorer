@@ -27,7 +27,7 @@ export const getMicroblockPageQueryProps = async (
   const microblockHash = getMicroblockHashFromCtx(ctx);
   const cachedMicroblock = getMicroblockPageCachedQueryProps(ctx, queryClient);
   if (cachedMicroblock) return cachedMicroblock;
-  const { microblocksApi } = await getApiClients(ctx);
+  const { microblocksApi } = await getApiClients();
   return (await microblocksApi.getMicroblockByHash({
     hash: microblockHash,
   })) as Microblock;
@@ -39,8 +39,7 @@ export const getMicroblockPageQueries: GetQueries<Microblock> = async (
   queryClient
 ) => {
   const microblockHash = getMicroblockHashFromCtx(ctx);
-  const { blocksApi } = await getApiClients(ctx);
-  const { transactionsApi } = await getApiClients(ctx);
+  const { blocksApi, transactionsApi } = await getApiClients();
   const blocksQueryKey = queryProps?.block_hash && getBlocksQueryKey.single(queryProps?.block_hash);
   const txQueries: Queries<Microblock> =
     queryProps?.txs.map(txid => {

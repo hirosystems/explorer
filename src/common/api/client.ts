@@ -15,10 +15,12 @@ import {
   TokensApi,
 } from '@stacks/blockchain-api-client';
 import { NextPageContext } from 'next';
-import { getServerSideApiServer } from '@common/api/utils';
 import { fetcher as fetchApi } from '@common/api/fetch';
 import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
 import { MICROBLOCKS_ENABLED } from '@common/constants';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { useAppSelector } from '@common/state/hooks';
+import { store } from '@common/state/store';
 
 /**
  * Our mega api clients function. This is a combo of all clients that the blockchain-api-client package offers.
@@ -53,6 +55,7 @@ export function apiClients(config: Configuration) {
     searchApi,
     rosettaApi,
     tokensApi,
+    config,
   };
 }
 
@@ -81,15 +84,18 @@ export function createConfig(basePath: string) {
 
 // this is used in next.js specific data fetchers, typically only by getApiClients
 // this will pass the correct network url as defined by cookie (or default value)
-export const getApiClientConfig = async (context: NextPageContext): Promise<Configuration> => {
-  const apiServer = await getServerSideApiServer(context);
+export const getApiClientConfig = (): Configuration => {
+  const apiServer = store.getState().global.networks[store.getState().global.activeNetworkKey].url;
   return createConfig(apiServer);
 };
 // this is used in next.js specific data fetchers to get all our api clients fetching from the correct network url
 // only to be used in `getInitialProps` or other next.js data fetching methods
-export const getApiClients = async (
-  context: NextPageContext
-): Promise<ReturnType<typeof apiClients>> => {
-  const config = await getApiClientConfig(context);
+export const getApiClients = async (): Promise<ReturnType<typeof apiClients>> => {
+  const config = getApiClientConfig();
+  return Promise.resolve(apiClients(config));
+};
+
+export const useApi = () => {
+  const config = createConfig(useAppSelector(selectActiveNetwork).url);
   return apiClients(config);
 };

@@ -4,7 +4,8 @@ import { Caption, Link, Text } from '@components/typography';
 import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
 import NextLink from 'next/link';
 import { TxLink } from '@components/links';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -34,7 +35,7 @@ const tupleToArr = (tuple: string) =>
     .map(item => item.split(' '));
 
 const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
   let additional: any = null;
   if (isPoxAddr && btc) {
     additional = (

@@ -1,7 +1,5 @@
-import { atomFamily, atomWithDefault } from 'jotai/utils';
 import type { Block } from '@stacks/stacks-blockchain-api-types';
 import type { Getter } from 'jotai';
-import deepEqual from 'fast-deep-equal';
 
 import { apiClientsState } from '@store/api-clients';
 
@@ -14,8 +12,6 @@ import {
 } from 'jotai-query-toolkit';
 import { QueryFunctionContext, QueryKey } from 'react-query';
 import { getNextPageParam } from '@store/common';
-
-const paginatedResponseOffset = atomFamily(_key => atomWithDefault(() => 0), deepEqual);
 
 // ----------------
 // keys

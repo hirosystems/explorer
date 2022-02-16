@@ -8,7 +8,6 @@ import { Button } from '@components/button';
 import { border } from '@common/utils';
 import { Caption, Text } from '@components/typography';
 import { currentFunctionState, readOnlyState, readOnlyResponseState } from '@sandbox/store/sandbox';
-import { useApiServer } from '@common/hooks/use-api';
 import { Section } from '@components/section';
 import { Badge } from '@components/badge';
 import { IconButton } from '@components/icon-button';
@@ -25,6 +24,8 @@ import { handleContractCall } from '@sandbox/common/connect-functions';
 import { useContractInterface } from '@sandbox/components/screens/call-functions/components/use-contract-interface';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any) => (
   <Box width="100%" {...rest}>
@@ -129,7 +130,7 @@ const Function = ({ func }) => {
 
 const ReadOnly = () => {
   const { principal } = useUser();
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const [contractInterface, contractId, fn] = useContractInterface();
   const setFunctionName = useSetRecoilState(currentFunctionState);
   const [readOnlyValue, setReadonly] = useRecoilState(readOnlyState);

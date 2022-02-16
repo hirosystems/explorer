@@ -14,7 +14,7 @@ export function getPrincipalFromCtx(ctx: NextPageContext) {
 
 export const getAccountPageQueries: GetQueries = async ctx => {
   const principal = getPrincipalFromCtx(ctx);
-  const { accountsApi, transactionsApi, infoApi } = await getApiClients(ctx);
+  const { accountsApi, transactionsApi, infoApi } = await getApiClients();
 
   return [
     [InfoQueryKeys.INFO, async () => infoApi.getCoreApiInfo()],

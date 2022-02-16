@@ -1,16 +1,11 @@
 import { apiClientsState } from '@store/api-clients';
-import {
-  atomFamilyWithInfiniteQuery,
-  atomFamilyWithQuery,
-  makeQueryKey,
-} from 'jotai-query-toolkit';
+import { atomFamilyWithQuery, makeQueryKey } from 'jotai-query-toolkit';
 
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import type { Getter } from 'jotai';
 import type { ApiResponseWithResultsOffset } from '@common/types/api';
 import { atom } from 'jotai';
-import { QueryFunctionContext, QueryKey } from 'react-query';
-import { getNextPageParam } from '@store/common';
+import { QueryKey } from 'react-query';
 import { DEFAULT_POLLING_INTERVAL } from '@common/constants';
 import { isPendingTx } from '@common/utils';
 import { GetTransactionListTypeEnum } from '@store/recoil/filter';
@@ -24,13 +19,6 @@ export type OptionalTransactionAddress =
   | { address?: string; recipientAddress?: never; senderAddress?: never }
   | { recipientAddress?: string; address?: never; senderAddress?: never }
   | { senderAddress?: string; recipientAddress?: never; address?: never };
-
-export type LimitWithOptionalAddress = [limit: number, options?: OptionalTransactionAddress];
-export type LimitWithTypesOptionalAddress = [
-  limit: number,
-  types?: GetTransactionListTypeEnum[],
-  options?: OptionalTransactionAddress | null
-];
 
 // ----------------
 // keys
@@ -55,33 +43,6 @@ export const getTxQueryKey = {
 // ----------------
 // queryFn's
 // ----------------
-const transactionsListQueryFn = async (
-  get: Getter,
-  [limit, types, options = {}]: LimitWithTypesOptionalAddress,
-  context: QueryFunctionContext
-) => {
-  const { transactionsApi } = get(apiClientsState);
-  const { pageParam } = context;
-  return (await transactionsApi.getTransactionList({
-    offset: pageParam,
-    limit,
-    type: types,
-  })) as TransactionsListResponse; // cast due to limitation in api client
-};
-
-const mempoolTransactionsListQueryFn = async (
-  get: Getter,
-  [limit, options = {}]: LimitWithOptionalAddress,
-  context: QueryFunctionContext
-) => {
-  const { transactionsApi } = get(apiClientsState);
-  const { pageParam } = context;
-  return (await transactionsApi.getMempoolTransactionList({
-    offset: pageParam,
-    limit,
-    ...options,
-  })) as MempoolTransactionsListResponse; // cast due to limitation in api client
-};
 const transactionSingeQueryFn = async (get: Getter, txId: string) => {
   const { transactionsApi } = get(apiClientsState);
   return (await transactionsApi.getTransactionById({
@@ -92,22 +53,6 @@ const transactionSingeQueryFn = async (get: Getter, txId: string) => {
 // ----------------
 // atoms
 // ----------------
-export const transactionsListState = atomFamilyWithInfiniteQuery<
-  LimitWithTypesOptionalAddress,
-  TransactionsListResponse
->(TransactionQueryKeys.CONFIRMED, transactionsListQueryFn, {
-  getNextPageParam,
-  staleTime: DEFAULT_POLLING_INTERVAL * 0.75,
-});
-
-export const mempoolTransactionsListState = atomFamilyWithInfiniteQuery<
-  LimitWithOptionalAddress,
-  MempoolTransactionsListResponse
->(TransactionQueryKeys.MEMPOOL, mempoolTransactionsListQueryFn, {
-  getNextPageParam,
-  staleTime: DEFAULT_POLLING_INTERVAL * 0.75,
-});
-
 export const transactionSingleState = atomFamilyWithQuery<string, MempoolTransaction | Transaction>(
   TransactionQueryKeys.SINGLE,
   transactionSingeQueryFn,

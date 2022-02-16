@@ -7,6 +7,7 @@ import { HeaderTextItem } from '@components/header-text-item';
 import { IconArrowLeft, IconMenu2, IconX } from '@tabler/icons';
 import { NetworkItems } from '@components/network-items';
 import { border } from '@common/utils';
+import { buildUrl } from '@components/links';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -47,22 +48,22 @@ const IndexView: React.FC<{
   handleSetIndexView: () => void;
 }> = ({ handleSetNetworkView, handleClose }) => (
   <Flex flexDirection="column" alignItems="flex-end" px="extra-loose">
-    <NextLink href="/" passHref>
+    <NextLink href={buildUrl('/')} passHref>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Home
       </HeaderTextItem>
     </NextLink>
-    <NextLink href="/transactions" passHref>
+    <NextLink href={buildUrl('/transactions')} passHref>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Transactions
       </HeaderTextItem>
     </NextLink>
-    <NextLink href="/blocks" passHref>
+    <NextLink href={buildUrl('/blocks')} passHref>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Blocks
       </HeaderTextItem>
     </NextLink>
-    <NextLink href="/sandbox/deploy" passHref>
+    <NextLink href={buildUrl('/sandbox/deploy')} passHref>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Sandbox
       </HeaderTextItem>

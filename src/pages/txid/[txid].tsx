@@ -13,7 +13,6 @@ import type { TxPageQueryProps } from '@common/page-queries/txid';
 import { Meta } from '@components/meta-head';
 import { TxNotFound } from '@components/tx-not-found';
 import { InView } from '@store/currently-in-view';
-import { useChainModeEffect } from '@common/hooks/use-chain-mode';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 
 interface TransactionPageProps {
@@ -23,7 +22,6 @@ interface TransactionPageProps {
 }
 
 const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyValid }) => {
-  useChainModeEffect();
   if (error)
     return (
       <>

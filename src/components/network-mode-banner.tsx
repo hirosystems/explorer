@@ -3,11 +3,12 @@ import { Box, Flex, color } from '@stacks/ui';
 import { IconFlask } from '@tabler/icons';
 
 import { Badge, BadgeProps } from '@components/badge';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { capitalize } from '@common/utils';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
   return networkMode === 'testnet' ? (
     <Badge flexShrink={0} bg="white" {...props}>
       <Flex alignItems="center">

@@ -35,7 +35,6 @@ const MempoolTransactionsList = () => {
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       showLoadMoreButton
-      borderOnLast
     />
   );
 };

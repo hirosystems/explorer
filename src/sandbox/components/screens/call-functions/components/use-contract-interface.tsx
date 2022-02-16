@@ -1,5 +1,4 @@
 import { ClarityAbi, ClarityAbiFunction } from '@stacks/transactions';
-import { useApiServer } from '@common/hooks/use-api';
 import { useRecoilValue } from 'recoil';
 import {
   contractSearchQueryState,
@@ -7,13 +6,15 @@ import {
   txContractState,
 } from '@sandbox/store/sandbox';
 import { SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const useContractInterface = (): [
   Partial<SmartContractTransaction & { abi: ClarityAbi }> | undefined,
   string,
   ClarityAbiFunction
 ] => {
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const contractId = useRecoilValue(contractSearchQueryState);
   const functionName = useRecoilValue(currentFunctionState);
   const contractInterface = useRecoilValue(txContractState({ apiServer, contractId }));

@@ -26,9 +26,7 @@ import { transactionSingleState, TransactionsListResponse } from '@store/transac
 import { IS_DEV } from '@common/constants';
 import { useAtomDevtools } from '@common/hooks/use-atom-devtools';
 import { useInfiniteQueryAtom } from 'jotai-query-toolkit';
-import { WritableAtom } from 'jotai';
 import { InfiniteData } from 'react-query';
-import { AtomWithInfiniteQueryAction } from 'jotai/query';
 import { MempoolTransactionListResponse } from '@stacks/stacks-blockchain-api-types';
 
 export function useTransactionInView() {
@@ -49,10 +47,6 @@ export function useBlockInView() {
 
 export function useContractSourceInView() {
   return useAtomValue(contractSourceInViewState);
-}
-
-export function useContractInterfaceInView() {
-  return useAtomValue(contractInterfaceInViewState);
 }
 
 export function useContractInfoInView() {

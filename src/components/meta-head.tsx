@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { TxStatus } from '@common/types/tx';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { useAppSelector } from '@common/state/hooks';
 
 const defaultTitle = 'Stacks Explorer by Hiro';
 
@@ -27,10 +28,10 @@ export const Meta = ({
   labels,
 }: MetaProps) => {
   const filename = useFaviconName(txStatus);
-  const { networkMode } = useNetworkMode();
+  const network = useAppSelector(selectActiveNetwork);
 
   const withMode = (title: string) => {
-    if (networkMode === 'testnet') {
+    if (network.mode === 'testnet') {
       return `${title} [Testnet mode]`;
     }
     return title;

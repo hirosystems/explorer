@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useAtomValue } from 'jotai/utils';
 import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import { Box, color, DynamicColorCircle, Flex, FlexProps, Stack } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 import { TxLink } from '@components/links';
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@common/utils';
 import { getTicker } from '@components/tx-events';
-import { apiClientsState } from '@store/api-clients';
+import { useApi } from '@common/api/client';
 
 interface TokenAssetListItemProps extends FlexProps {
   amount: string;
@@ -19,7 +18,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   tokenType,
 }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { tokensApi } = useAtomValue(apiClientsState);
+  const { tokensApi } = useApi();
   const { address, asset, contract } = getAssetNameParts(token);
 
   useEffect(() => {

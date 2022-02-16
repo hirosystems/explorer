@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import { Section } from '@components/section';
 import { Box, color, Flex } from '@stacks/ui';
 import { IconAlertCircle } from '@tabler/icons';
@@ -7,9 +6,11 @@ import { Text } from '@components/typography';
 import { capitalize } from '@common/utils';
 import { AddressLink } from '@components/links';
 import { Link } from '@components/link';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
   const invert = networkMode && networkMode.toLowerCase() === 'testnet' ? 'mainnet' : 'testnet';
   return (
     <Section mb="extra-loose">

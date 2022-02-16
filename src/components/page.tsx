@@ -17,9 +17,10 @@ import {
   SITE_NOTICE_ENABLED,
   TransactionStatus,
 } from '@common/constants';
-import { useNetworkMode } from '@common/hooks/use-network-mode';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { getTransactionStatus } from '@common/utils/transactions';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 type PageProps = {
   notice?: { label?: string; message?: string };
@@ -35,7 +36,7 @@ type PageWrapperProps = {
 } & FlexProps;
 
 export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
-  const { networkMode } = useNetworkMode();
+  const networkMode = useAppSelector(selectActiveNetwork).mode;
   // for testnet, show after 4 hours. for mainnet, show after 24 hours
   const HOURS_NOTICE_TESTNET = 4;
   const HOURS_NOTICE_MAINNET = 24;

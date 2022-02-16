@@ -35,7 +35,7 @@ export const getBlockPageQueryProps: QueryPropsGetter<Block> = async (
     // and on mount it will automatically revalidate and update if it's different
     getBlockPageCachedQueryProps(ctx, queryClient);
   if (cachedBlock) return cachedBlock;
-  const { blocksApi } = await getApiClients(ctx);
+  const { blocksApi } = await getApiClients();
   return (await blocksApi.getBlockByHash({
     hash: blockHash,
   })) as Block;
@@ -43,7 +43,7 @@ export const getBlockPageQueryProps: QueryPropsGetter<Block> = async (
 
 export const getBlockPageQueries: GetQueries<Block> = async (ctx, queryProps, queryClient) => {
   const blockHash = getBlockHashFromCtx(ctx);
-  const { transactionsApi } = await getApiClients(ctx);
+  const { transactionsApi } = await getApiClients();
   const txQueries: Queries<Block> =
     queryProps?.txs.map(txid => {
       const queryKey = getTxQueryKey.single(txid);

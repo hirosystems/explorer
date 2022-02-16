@@ -5,7 +5,7 @@ import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { DEFAULT_TX_FILTER_TYPES } from '@store/recoil/filter';
 
 export const getTransactionsPageQueries: GetQueries = async ctx => {
-  const { transactionsApi } = await getApiClients(ctx);
+  const { transactionsApi } = await getApiClients();
   return [
     [
       getTxQueryKey.confirmed(DEFAULT_LIST_LIMIT, DEFAULT_TX_FILTER_TYPES),

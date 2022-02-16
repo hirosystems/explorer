@@ -4,7 +4,6 @@ import { Box, color, Grid, Stack } from '@stacks/ui';
 import { blue, Button } from '@components/button';
 import { Text, Title } from '@components/typography';
 import { postToSidecar } from '@common/api/fetch';
-import { useApiServer } from '@common/hooks/use-api';
 
 import { border } from '@common/utils';
 import { StxInline } from '@components/icons/stx-inline';
@@ -14,9 +13,11 @@ import { Badge } from '@components/badge';
 import { useRecoilState } from 'recoil';
 import { faucetResponseState } from '@sandbox/store/sandbox';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const FaucetView = () => {
-  const apiServer = useApiServer();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
   const { principal } = useUser();
   const [response, setResponse] = useRecoilState(faucetResponseState);
   const { refreshPendingTransactions } = useUser();
