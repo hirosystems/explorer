@@ -5,7 +5,7 @@ import { PageWrapper } from '@components/page-wrapper';
 import { Meta } from '@components/meta-head';
 import { HomePageTop } from '@components/home-page-top';
 import { TabbedTransactionList } from '@components/tabbed-transaction-list';
-import { BlocksList } from '@features/blocks-list';
+import { HomeBlockList } from '@features/blocks-list/HomeBlockList';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { getHomePageQueries } from '@common/page-queries/home';
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
         width="100%"
       >
         <TabbedTransactionList limit={DEFAULT_LIST_LIMIT_SMALL} />
-        <BlocksList enforceLimit limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+        <HomeBlockList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
       </Grid>
     </PageWrapper>
   );
@@ -35,4 +35,19 @@ Home.getInitialProps = () => {
   return { isHome: true };
 };
 
-export default withInitialQueries(Home, pageAtomBuilders)(getHomePageQueries);
+// export function getServerSideProps(ctx: NextPageContext) {
+//   // Parse
+//   const cookies = nookies.get(ctx);
+//   // Set
+//   nookies.set(ctx, 'fromGetInitialProps', 'value', {
+//     maxAge: 30 * 24 * 60 * 60,
+//     path: '/',
+//   });
+//
+//   // Destroy
+//   // nookies.destroy(ctx, 'cookieName')
+//
+//   return { cookies, isHome: true };
+// }
+
+export default withInitialQueries(Home)(getHomePageQueries);

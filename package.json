@@ -93,6 +93,7 @@
     "react-ssr-prepass": "npm:preact-ssr-prepass",
     "react-use": "17.2.4",
     "recoil": "0.3.1",
+    "redux-persist": "^6.0.0",
     "schema-inspector": "2.0.1",
     "ssri": "8.0.1",
     "swr": "0.5.6",

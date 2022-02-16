@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
 import { Section } from '@components/section';
 import { HoverableItem } from '@components/hoverable';
-import { useBlocksList } from './hooks';
+import { useBlocksListOld } from './hooks';
 import { Caption } from '@components/typography';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
@@ -13,7 +13,7 @@ import { DEFAULT_LIST_LIMIT } from '@common/constants';
 export const BlocksList: React.FC<
   FlexProps & { enforceLimit?: boolean; limit?: number; infinite?: boolean }
 > = ({ infinite, limit = DEFAULT_LIST_LIMIT, enforceLimit, ...props }) => {
-  const [blocks, actions] = useBlocksList(limit);
+  const [blocks, actions] = useBlocksListOld(limit);
   if (!blocks) return null;
   const hasBlocks = blocks?.pages?.[0]?.results?.length;
   const firstPage = blocks.pages?.[0].results;

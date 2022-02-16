@@ -19,17 +19,17 @@ export const useChainMode = (): [ChainMode, SetChainMode] => {
     if (router.query.chain) {
       delete params.chain;
     }
-    await router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...params,
-          chain,
-        },
-      },
-      `${router.pathname}?chain=${chain}`,
-      { shallow: true }
-    );
+    // await router.replace(
+    //   {
+    //     pathname: router.pathname,
+    //     query: {
+    //       ...params,
+    //       chain,
+    //     },
+    //   },
+    //   `${router.pathname}?chain=${chain}`,
+    //   { shallow: true }
+    // );
   };
 
   return [router.query.chain as ChainMode, setChainMode];
@@ -48,6 +48,7 @@ export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
   useEffect(() => {
     if (IS_BROWSER && localNetworkMode && networkModeChangeState !== 'pending') {
       if (!chainMode) {
+        console.log('lll no chain mode');
         void setChainMode(localNetworkMode);
       }
     }
@@ -56,7 +57,7 @@ export const useChainModeEffect = (providedNetworkMode?: NetworkMode) => {
   useEffect(() => {
     if (!router.query['chain'] && localNetworkMode) {
       router.query['chain'] = localNetworkMode as string;
-      void router.push(router);
+      // void router.push(router);
     }
   }, [router.query, localNetworkMode]);
 };

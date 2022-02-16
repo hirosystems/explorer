@@ -4,12 +4,13 @@ import { useFormik } from 'formik';
 import { string } from 'yup';
 import { fetchFromApi } from '@common/api/fetch';
 import { closeModal } from '@components/modals/modalSlice';
-import { getChainIdFromInfo, isLocal } from '@common/utils';
-import { NetworkMode } from '@common/types/network';
-import { useSetChainMode } from '@common/hooks/use-chain-mode';
+import { isLocal } from '@common/utils';
+import { NetworkIdModeMap, NetworkMode } from '@common/types/network';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
 import { useAnalytics } from '@common/hooks/use-analytics';
 import { useAppDispatch } from '@common/state/hooks';
+import { addCustomNetwork, setActiveNetworkUrl } from '@common/state/globalSlice';
+import { ChainID } from '@stacks/transactions';
 
 interface Errors {
   label?: string;
@@ -17,11 +18,18 @@ interface Errors {
   general?: string;
 }
 
+const fetchNetworkId: (url: string) => Promise<ChainID | undefined> = (url: string) =>
+  fetchFromApi(`https://${new URL(url).host}`)(DEFAULT_V2_INFO_ENDPOINT)
+    .then(res => res.json())
+    .then(res =>
+      Object.values(ChainID).includes(res.network_id) ? (res.network_id as ChainID) : undefined
+    )
+    .catch();
+
 export const useNetworkAddForm = () => {
   const [networkMode, setNetworkMode] = useState<NetworkMode | undefined>(undefined);
   const dispatch = useAppDispatch();
   const { networkList, handleAddNetwork } = useNetwork();
-  const setChainMode = useSetChainMode();
   const analytics = useAnalytics();
   const schema = string().matches(
     /^(?:([a-z0-9+.-]+):\/\/)(?:\S+(?::\S*)?@)?(?:(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*\.?)(?::\d{2,5})?(?:[/?#]\S*)?$/
@@ -45,12 +53,13 @@ export const useNetworkAddForm = () => {
           },
         });
 
-        await setChainMode(networkMode);
+        const networkId = await fetchNetworkId(values.url);
+        const networkUrl = `https://${_url.host}`;
 
-        void handleAddNetwork({
-          label: label.trim(),
-          url: `https://${_url.host}`,
-        });
+        if (networkId) {
+          dispatch(addCustomNetwork({ label: label.trim(), url: networkUrl, networkId }));
+          dispatch(setActiveNetworkUrl(networkUrl));
+        }
 
         dispatch(closeModal());
       },
@@ -75,12 +84,11 @@ export const useNetworkAddForm = () => {
               _errors.general = 'This API has already been added.';
             }
             try {
-              const _url = new URL(values.url);
-              const res = await fetchFromApi(`https://${_url.host}`)(DEFAULT_V2_INFO_ENDPOINT);
-              const data = await res.json();
-              data?.network_id && setNetworkMode(getChainIdFromInfo(data));
-              if (!data?.network_id) {
-                _errors.general = 'The API did not return a network_id.';
+              const networkId = await fetchNetworkId(values.url);
+              if (networkId) {
+                setNetworkMode(NetworkIdModeMap[networkId]);
+              } else {
+                _errors.general = 'The API did not return a valid network_id.';
               }
             } catch (e: any) {
               if (e.message.includes('Failed to fetch')) {

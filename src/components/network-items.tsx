@@ -23,6 +23,12 @@ import { ChainID } from '@stacks/transactions';
 import { useAnalytics } from '@common/hooks/use-analytics';
 import { useAppDispatch } from '@common/state/hooks';
 import { openModal } from '@components/modals/modalSlice';
+import {
+  removeCustomNetwork,
+  selectActiveNetworkUrl,
+  selectNetworks,
+  setActiveNetworkUrl,
+} from '@common/state/globalSlice';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -49,11 +55,12 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
 };
 
 interface ItemProps extends ItemWrapperProps {
-  item: { label: string; url?: string };
+  item: { label: string; url: string };
   isCustom?: boolean;
 }
 
 const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
+  const dispatch = useAppDispatch();
   const { handleRemoveNetwork } = useNetwork();
   const setChainMode = useSetChainMode();
   const analytics = useAnalytics();
@@ -82,8 +89,6 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
 
   const handleClick = React.useCallback(
     async e => {
-      await setChainMode(itemNetworkMode);
-
       analytics.track({
         event: 'network-selected',
         properties: {
@@ -133,9 +138,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
                 zIndex={999}
                 color={color('text-caption')}
                 icon={IconTrash}
-                onClick={() =>
-                  item.url && handleRemoveNetwork(item as { label: string; url: string })
-                }
+                onClick={() => dispatch(removeCustomNetwork(item.url))}
               />
             </Tooltip>
           </>
@@ -171,12 +174,15 @@ interface NetworkItemsProps extends BoxProps {
 }
 
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
-  const { networkList, networkIndex, handleUpdateNetworkIndex } = useNetwork();
+  // const { handleUpdateNetworkIndex } = useNetwork();
+  const dispatch = useAppDispatch();
+  const networks = selectNetworks();
+  const activeNetworkUrl = selectActiveNetworkUrl();
 
   return (
     <>
-      {networkList?.map((item, key) => {
-        const isActive = key === networkIndex;
+      {networks.map((item, key) => {
+        const isActive = activeNetworkUrl === item.url;
 
         if (!isLocal() && item?.url?.includes('localhost')) return null;
         return (
@@ -189,7 +195,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
               setTimeout(() => {
                 onItemClick?.(item);
                 if (!isActive) {
-                  void handleUpdateNetworkIndex(key);
+                  dispatch(setActiveNetworkUrl(item.url));
                 }
               }, 250);
             }}

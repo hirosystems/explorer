@@ -7,6 +7,7 @@ import { DEFAULT_TX_FILTER_TYPES } from '@store/recoil/filter';
 
 export const getHomePageQueries: GetQueries = async ctx => {
   const { transactionsApi, blocksApi } = await getApiClients(ctx);
+  console.log(555, getBlocksQueryKey.confirmed(DEFAULT_BLOCKS_LIST_LIMIT));
   return [
     [
       getTxQueryKey.confirmed(DEFAULT_LIST_LIMIT_SMALL, DEFAULT_TX_FILTER_TYPES),

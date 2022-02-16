@@ -82,14 +82,17 @@ export const DEFAULT_NETWORK_LIST = [
   {
     label: 'stacks.co',
     url: DEFAULT_MAINNET_SERVER,
+    networkId: ChainID.Mainnet,
   },
   {
     label: 'stacks.co',
     url: DEFAULT_TESTNET_SERVER,
+    networkId: ChainID.Testnet,
   },
   {
     label: 'localhost',
     url: 'http://localhost:3999',
+    networkId: ChainID.Testnet,
   },
 ];
 

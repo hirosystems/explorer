@@ -10,16 +10,20 @@ import { AtomDebug, Devtools } from '@features/devtools';
 import { AppConfig } from '@components/app-config';
 import { NetworkMode } from '@common/types/network';
 import { getNetworkMode } from '@common/api/network';
-import { getServerSideApiServer } from '@common/api/utils';
 import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
-import { store } from '@common/state/store';
+import { persistedStore, rehydration, store } from '@common/state/store';
 import { Provider } from 'react-redux';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { PersistGate } from 'redux-persist/integration/react';
+import { selectActiveNetworkUrl } from '@common/state/globalSlice';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
   networkMode: NetworkMode;
 }
+
+const queryClient = new QueryClient();
 
 function ExplorerApp({
   Component,
@@ -35,29 +39,33 @@ function ExplorerApp({
   }, []);
 
   return (
-    <Provider store={store}>
-      <Devtools />
-      <AppConfig isHome={isHome} fullWidth={fullWidth}>
-        <AtomDebug />
-        <Component apiServer={apiServer} networkMode={networkMode} {...props} />
-        <Modals />
-        <NetworkModeToast />
-      </AppConfig>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistedStore}>
+          <Devtools />
+          <AppConfig isHome={isHome} fullWidth={fullWidth}>
+            <AtomDebug />
+            <Component apiServer={apiServer} networkMode={networkMode} {...props} />
+            <Modals />
+            <NetworkModeToast />
+          </AppConfig>
+        </PersistGate>
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
-ExplorerApp.getInitialProps = async (appContext: AppContext) => {
-  const [appProps, apiServer] = await Promise.all([
-    App.getInitialProps(appContext),
-    getServerSideApiServer(appContext.ctx),
-  ]);
-  const networkMode = await getNetworkMode(apiServer);
-  return {
-    apiServer,
-    networkMode,
-    ...appProps,
-  };
-};
+// ExplorerApp.getInitialProps = async (appContext: AppContext) => {
+//   await rehydration();
+//   const appProps = await App.getInitialProps(appContext);
+//   const apiServer = store.getState().global.activeNetworkUrl
+//   console.log(333, apiServer)
+//   const networkMode = await getNetworkMode(apiServer);
+//   return {
+//     apiServer,
+//     networkMode,
+//     ...appProps,
+//   };
+// };
 
 export default ExplorerApp;
