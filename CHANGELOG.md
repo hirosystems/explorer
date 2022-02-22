@@ -1,3 +1,10 @@
+## [1.18.6](https://github.com/hirosystems/explorer/compare/v1.18.5...v1.18.6) (2022-02-22)
+
+
+### Bug Fixes
+
+* reduce sample size on server ([4e9a4e6](https://github.com/hirosystems/explorer/commit/4e9a4e6fc678aaa4df10af1af3fb9b6d4e7086ac))
+
 ## [1.18.5](https://github.com/hirosystems/explorer/compare/v1.18.4...v1.18.5) (2022-02-09)
 
 
