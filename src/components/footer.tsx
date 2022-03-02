@@ -66,15 +66,6 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
         </Flex>
 
         <Flex ml={['unset', 'unset', 'auto']}>
-          <FooterLink
-            mr="base"
-            href="https://blocksurvey.io/survey/1Pb7eeibpfM98hRKBfMUULYCh9BivxE86q/1128356d-4048-48ca-a456-052ef8c5526e"
-          >
-            Give feedback
-          </FooterLink>
-          <FooterLink mr="base" href="https://hiro.so/explorer/faq">
-            FAQ
-          </FooterLink>
           <FooterLink mr="base" href="https://github.com/blockstack/explorer/">
             GitHub
           </FooterLink>
