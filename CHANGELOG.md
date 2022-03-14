@@ -1,3 +1,10 @@
+## [1.18.7](https://github.com/hirosystems/explorer/compare/v1.18.6...v1.18.7) (2022-03-14)
+
+
+### Bug Fixes
+
+* remove old footer links ([47c6fe8](https://github.com/hirosystems/explorer/commit/47c6fe8a14f49349d9287da7980dc5e0b4441c59))
+
 ## [1.18.6](https://github.com/hirosystems/explorer/compare/v1.18.5...v1.18.6) (2022-02-22)
 
 
