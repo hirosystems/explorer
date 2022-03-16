@@ -15,7 +15,6 @@ import { TxNotFound } from '@components/tx-not-found';
 import { InView } from '@store/currently-in-view';
 import { useChainModeEffect } from '@common/hooks/use-chain-mode';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
-import { SafeSuspense } from '@components/ssr-safe-suspense';
 
 interface TransactionPageProps {
   inView: InView;
@@ -35,9 +34,7 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
   useRefreshOnBack('txid');
   return (
     <>
-      <SafeSuspense fallback={<></>}>
-        <UnlockingScheduleModal />
-      </SafeSuspense>
+      <UnlockingScheduleModal />
       <TransactionMeta />
       <TransactionPageComponent />
     </>
