@@ -15,11 +15,14 @@ import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
 import { store } from '@common/state/store';
 import { Provider } from 'react-redux';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
   networkMode: NetworkMode;
 }
+
+const queryClient = new QueryClient();
 
 function ExplorerApp({
   Component,
@@ -35,15 +38,17 @@ function ExplorerApp({
   }, []);
 
   return (
-    <Provider store={store}>
-      <Devtools />
-      <AppConfig isHome={isHome} fullWidth={fullWidth}>
-        <AtomDebug />
-        <Component apiServer={apiServer} networkMode={networkMode} {...props} />
-        <Modals />
-        <NetworkModeToast />
-      </AppConfig>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <Devtools />
+        <AppConfig isHome={isHome} fullWidth={fullWidth}>
+          <AtomDebug />
+          <Component apiServer={apiServer} networkMode={networkMode} {...props} />
+          <Modals />
+          <NetworkModeToast />
+        </AppConfig>
+      </Provider>
+    </QueryClientProvider>
   );
 }
 
