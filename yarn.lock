@@ -6314,10 +6314,10 @@ jotai-query-toolkit@0.1.8:
     fast-deep-equal "3.1.3"
     proxy-memoize "^0.3.6"
 
-jotai@^1.3.2:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.3.5.tgz#69f0fe5c3afa13fc41672e4bd2a4118e90c3667e"
-  integrity sha512-MsRZ6uZRwYxF7kbh/H6+VerMlt2AR0gZYTlzNisH7gKB23HPUidXN91mn5V/pBcYUT18eHoo+Bap2kTTfQj10w==
+jotai@^1.6.0:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.6.1.tgz#a6379d7dce159474f24963921d55ae8f6e9e8dd6"
+  integrity sha512-iNKHmpKGN31KXDqxGLsplb4HLTroYtiM7oBEQ9leyoXSEGQGUZKK5IOV4kN6fUmkBSJbwb5WnmInYOYzpjIDOw==
 
 js-cookie@^2.2.1:
   version "2.2.1"
