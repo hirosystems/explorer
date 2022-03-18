@@ -100,7 +100,7 @@
     "use-constant": "1.1.0",
     "use-events": "1.4.2",
     "web-api-hooks": "3.0.2",
-    "webpack": "5.47.0",
+    "webpack": "5.69.1",
     "yup": "0.32.9"
   },
   "devDependencies": {
