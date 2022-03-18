@@ -3,7 +3,7 @@ import { useNetwork } from '@common/hooks/use-network';
 import { useFormik } from 'formik';
 import { string } from 'yup';
 import { fetchFromApi } from '@common/api/fetch';
-import { closeModal } from '@components/modals/modalSlice';
+import { closeModal } from '@components/modals/modal-slice';
 import { getChainIdFromInfo, isLocal } from '@common/utils';
 import { NetworkMode } from '@common/types/network';
 import { useSetChainMode } from '@common/hooks/use-chain-mode';
