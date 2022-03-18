@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, color, ControlledModal, Flex, IconButton, Stack } from '@stacks/ui';
 import { IconX } from '@tabler/icons';
 import { Link, Text, Title } from '@components/typography';
-import { closeModal, selectOpenedModal } from '@components/modals/modalSlice';
+import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
 import { AddNetworkForm } from '@components/add-network-form';
 import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
 import { MODALS } from '@common/constants';

@@ -12,7 +12,7 @@ import { StackingPercentage } from '@components/stacking';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import vkQr from '@vkontakte/vk-qr';
-import { openModal } from '@components/modals/modalSlice';
+import { openModal } from '@components/modals/modal-slice';
 import { VestingAddressData } from '@pages/api/vesting/[address]';
 import { useAtomValue } from 'jotai/utils';
 import { accountInViewTokenOfferingData } from '@store/currently-in-view';
