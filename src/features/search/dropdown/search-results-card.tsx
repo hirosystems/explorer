@@ -2,27 +2,15 @@ import * as React from 'react';
 import { Box, BoxProps, color, Flex, Spinner, transition } from '@stacks/ui';
 import { Caption } from '@components/typography';
 import { border } from '@common/utils';
-import { useRecentlyViewedItems } from '@common/hooks/search/use-recent-items';
 import { SearchErrorMessage } from '@features/search/dropdown/error-message';
-
-import { searchErrorSelector, searchRecentlyViewedItemsState } from '@store/recoil/search';
-import { InvertedAddressNote } from '@features/search/dropdown/inverted-address';
-import { useAtomValue, useUpdateAtom } from 'jotai/utils';
-import { searchQueryResultsAtom } from '@store/search';
 import { Pending } from '@components/status';
 import { ReactNode } from 'react';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { RecentlyViewedList } from '@features/search/dropdown/recently-viewed-list';
 import { SearchResultItem } from '@features/search/items/search-result-item';
 import { SearchResultsItemPlaceholder } from '@features/search/items/item-placeholder';
-import { useSearchDropdown } from '@common/hooks/search/use-search-dropdown';
-
-interface SearchResultsCardProps extends BoxProps {
-  isLoading?: boolean;
-  clearResults?: () => void;
-  handleSetExiting?: () => void;
-  handleItemOnClick?: () => void;
-}
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { clearSearchTerm, selectIsSearchFieldFocused } from '@features/search/search-slice';
+import { useSearch } from '@features/search/use-search';
 
 const SearchingIndicator: React.FC = React.memo(() => (
   <Flex alignItems="center">
@@ -35,20 +23,12 @@ interface CardActionsProps {
   isLoading?: boolean;
   hasError?: boolean;
   hasResults?: boolean;
-  hasRecent?: boolean;
-  clearResults?: () => void;
 }
 
-const CardActions: React.FC<CardActionsProps> = ({
-  isLoading,
-  hasError,
-  hasResults,
-  clearResults,
-  hasRecent,
-}) => {
-  const setRecent = useUpdateAtom(searchRecentlyViewedItemsState);
+const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResults }) => {
+  const dispatch = useAppDispatch();
   return (
-    <Box opacity={isLoading || hasResults || hasError || hasRecent ? 1 : 0} transition={transition}>
+    <Box opacity={isLoading || hasResults || hasError ? 1 : 0} transition={transition}>
       {isLoading ? (
         <SearchingIndicator />
       ) : hasError || hasResults ? (
@@ -57,19 +37,9 @@ const CardActions: React.FC<CardActionsProps> = ({
           border="0"
           bg="transparent"
           _hover={{ cursor: 'pointer', color: color('brand') }}
-          onClick={clearResults}
+          onClick={() => dispatch(clearSearchTerm())}
         >
           Clear {hasResults ? 'results' : 'error'}
-        </Caption>
-      ) : hasRecent ? (
-        <Caption
-          as="button"
-          border="0"
-          bg="transparent"
-          _hover={{ cursor: 'pointer', color: color('brand') }}
-          onClick={() => setRecent({} as any)}
-        >
-          Clear recent
         </Caption>
       ) : null}
     </Box>
@@ -123,21 +93,15 @@ export const SearchResultsCardPlaceholder = (props: BoxProps) => {
   );
 };
 
-export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
-  isLoading,
-  clearResults,
-  handleItemOnClick,
-  ...rest
-}) => {
-  const { handleMakeHidden } = useSearchDropdown();
-  const data = useAtomValue(searchQueryResultsAtom);
-  const { recentItemsArray, handleUpsertItem } = useRecentlyViewedItems();
-  const error = useAtomValue(searchErrorSelector);
-
+export const SearchResultsCard: React.FC = () => {
+  const {
+    query: { data, isLoading, error },
+    searchTerm,
+  } = useSearch();
+  const isFocused = useAppSelector(selectIsSearchFieldFocused);
   const hasError = !!error || (data && !data?.found);
   const hasResults = !hasError && data?.found;
-  const hasRecent = recentItemsArray?.length > 0;
-
+  const errorMessage = searchTerm && !data?.found && data?.error ? data.error : '';
   const getTitle = React.useMemo(() => {
     if (hasError) {
       return 'Not found';
@@ -145,45 +109,24 @@ export const SearchResultsCard: React.FC<SearchResultsCardProps> = ({
     if (hasResults) {
       return 'Search results';
     }
-    if (hasRecent) {
-      return 'Recently viewed';
-    }
-  }, [hasError, hasResults, hasRecent]);
+  }, [hasError, hasResults]);
+
+  if (!isFocused || (!hasError && !hasResults)) return null;
 
   return (
     <SearchResultsCardWrapper
       title={getTitle}
-      actions={
-        <CardActions
-          hasError={hasError}
-          hasResults={hasResults}
-          hasRecent={hasRecent}
-          isLoading={isLoading}
-          clearResults={clearResults}
-        />
-      }
-      {...rest}
+      actions={<CardActions hasError={hasError} hasResults={hasResults} isLoading={isLoading} />}
     >
       <>
-        {error ? (
-          <SearchErrorMessage message={error} />
+        {errorMessage ? (
+          <SearchErrorMessage message={errorMessage} />
         ) : data && data.found ? (
           <>
-            <InvertedAddressNote />
             <SafeSuspense fallback={<SearchResultsItemPlaceholder result={data} isLast />}>
-              <SearchResultItem
-                result={data}
-                onClick={() => {
-                  handleUpsertItem(data);
-                  handleItemOnClick?.();
-                  handleMakeHidden();
-                }}
-                isLast
-              />
+              <SearchResultItem result={data} />
             </SafeSuspense>
           </>
-        ) : hasRecent ? (
-          <RecentlyViewedList itemOnClick={handleItemOnClick} />
         ) : null}
       </>
     </SearchResultsCardWrapper>
