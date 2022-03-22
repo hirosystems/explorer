@@ -1,3 +1,10 @@
+## [1.18.8](https://github.com/hirosystems/explorer/compare/v1.18.7...v1.18.8) (2022-03-22)
+
+
+### Bug Fixes
+
+* move suspense higher ([9c56755](https://github.com/hirosystems/explorer/commit/9c56755ec1799d0edf5402de07fae873653d5cf3))
+
 ## [1.18.7](https://github.com/hirosystems/explorer/compare/v1.18.6...v1.18.7) (2022-03-14)
 
 
