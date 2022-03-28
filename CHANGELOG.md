@@ -1,3 +1,11 @@
+## [1.18.9](https://github.com/hirosystems/explorer/compare/v1.18.8...v1.18.9) (2022-03-28)
+
+
+### Bug Fixes
+
+* locale decimal separator issue ([e14e7ab](https://github.com/hirosystems/explorer/commit/e14e7ab7b9254ac097c4bcbf3cf81fe64564fc19))
+* review comment ([94d13d8](https://github.com/hirosystems/explorer/commit/94d13d89d504c96f2e33cdc4d01459c1661d02ed))
+
 ## [1.18.8](https://github.com/hirosystems/explorer/compare/v1.18.7...v1.18.8) (2022-03-22)
 
 
