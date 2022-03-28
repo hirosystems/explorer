@@ -387,5 +387,7 @@ export const ftUnshiftDecimals = (value: number | string | BigNumber, decimals: 
 };
 
 export function getLocaleDecimalSeparator() {
-  return Intl.NumberFormat().formatToParts(1.1).find(part => part.type === 'decimal')?.value
+  return Intl.NumberFormat()
+    .formatToParts(1.1)
+    .find(part => part.type === 'decimal')?.value;
 }

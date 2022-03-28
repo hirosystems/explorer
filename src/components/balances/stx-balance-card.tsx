@@ -27,7 +27,8 @@ export const BalanceItem = ({ balance, ...rest }: any) => {
     <Flex as="span" {...rest} style={{ userSelect: 'all' }}>
       <Text color="currentColor">{parts[0]}</Text>
       <Text color="currentColor" opacity={0.65}>
-        {localeDecimalSeparator}{parts[1]}
+        {localeDecimalSeparator}
+        {parts[1]}
       </Text>
       <Text ml="extra-tight" color="currentColor">
         STX
