@@ -1,3 +1,10 @@
+## [1.18.10](https://github.com/hirosystems/explorer/compare/v1.18.9...v1.18.10) (2022-04-04)
+
+
+### Bug Fixes
+
+* prettier ([261cdc5](https://github.com/hirosystems/explorer/commit/261cdc55f9a1a5e676602e13f80b915e3edcc70f))
+
 ## [1.18.9](https://github.com/hirosystems/explorer/compare/v1.18.8...v1.18.9) (2022-03-28)
 
 
