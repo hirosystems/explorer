@@ -1,4 +1,5 @@
 import React from 'react';
+import { FlexProps } from '@stacks/ui';
 import { FoundResult } from '@common/types/search-results';
 import { transactionSingleState } from '@store/transactions';
 import { transactionFromContractId } from '@store/contracts';
@@ -8,11 +9,16 @@ import { TxLink } from '@components/links';
 import { TxItem } from '@components/transaction-item';
 import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 
-interface TxResultItemProps {
-  result: FoundResult;
-}
-
-export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
+export const TxResultItem: React.FC<
+  FlexProps & {
+    handleFocus: any;
+    handleBlur: any;
+    isFocused?: boolean;
+    isHovered?: boolean;
+    isLast: boolean;
+    result: FoundResult;
+  }
+> = ({ handleFocus, handleBlur, isFocused, isHovered, result, ...props }) => {
   const isTxid = result?.result.entity_type === 'tx_id';
   const isMempoolTxId = result?.result.entity_type === 'mempool_tx_id';
   const isContractId = result?.result.entity_type === 'contract_address';
@@ -27,8 +33,17 @@ export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
 
   return (
     <TxLink txid={transaction.tx_id}>
-      <ResultItemWrapper p={0}>
-        <TxItem tabIndex="0" tx={transaction} minimal px="loose" />
+      <ResultItemWrapper {...props} p={0}>
+        <TxItem
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          tabIndex="0"
+          tx={transaction}
+          isFocused={isFocused}
+          isHovered={isHovered}
+          minimal
+          px="loose"
+        />
       </ResultItemWrapper>
     </TxLink>
   );

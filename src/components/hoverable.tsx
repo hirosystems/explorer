@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Box, BoxProps } from '@stacks/ui';
 import { useHover } from 'web-api-hooks';
-import { bottomLineCss, leftLineCss } from '@common/styles/hover';
+import { FloatingHoverIndicator } from '@components/hover-indicator';
 
 const HoverContext = React.createContext(false);
 
@@ -26,8 +26,8 @@ export const HoverableItem: React.FC<
         display="block"
         {...bind}
         {...props}
-        css={placement === 'left' ? leftLineCss : bottomLineCss}
       >
+        <FloatingHoverIndicator isActive={isActive} placement={placement} isHovered={isHovered} />
         {children}
       </Box>
     </HoverContext.Provider>

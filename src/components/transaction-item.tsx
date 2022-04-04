@@ -121,9 +121,14 @@ const AddressArea = React.memo(
   }
 );
 
-const TxItemTitleArea = React.memo(({ title, tx, principal }: any) => (
+const TxItemTitleArea = React.memo(({ title, isHovered, tx, principal }: any) => (
   <Stack as="span" spacing="tight" flexWrap="wrap">
-    <Title className={'search-result-title'} fontWeight="500" display="block" fontSize="16px">
+    <Title
+      color={isHovered ? color('accent') : color('text-title')}
+      fontWeight="500"
+      display="block"
+      fontSize="16px"
+    >
       {title}
     </Title>
     <Stack
@@ -215,6 +220,7 @@ export const TxItem = React.memo(
   forwardRefWithAs<TxItemProps, 'span'>((props, ref) => {
     const {
       tx,
+      isHovered: isHoveredProp,
       isFocused,
       minimal = false,
       as = 'span',
@@ -223,6 +229,11 @@ export const TxItem = React.memo(
       hideRightElements,
       ...rest
     } = props;
+
+    const isHoverableHovered = useHoverableState();
+
+    const isHovered = isHoverableHovered || isHoveredProp;
+
     return (
       <Flex
         justifyContent="space-between"
@@ -231,12 +242,14 @@ export const TxItem = React.memo(
         py="loose"
         flexShrink={0}
         ref={ref}
+        cursor={isHovered ? ['unset', 'unset', 'pointer'] : undefined}
         width="100%"
         as={as}
         {...rest}
         display="flex"
       >
         <LargeVersion
+          isHovered={isHovered}
           hideRightElements={hideRightElements}
           hideIcon={hideIcon}
           principal={principal}

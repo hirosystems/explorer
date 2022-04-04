@@ -22,7 +22,7 @@ import { getNetworkModeFromNetworkId } from '@common/api/utils';
 import { ChainID } from '@stacks/transactions';
 import { useAnalytics } from '@common/hooks/use-analytics';
 import { useAppDispatch } from '@common/state/hooks';
-import { openModal } from '@components/modals/modal-slice';
+import { openModal } from '@components/modals/modalSlice';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;

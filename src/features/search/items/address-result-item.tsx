@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex } from '@stacks/ui';
+import { Box, color, Flex, FlexProps } from '@stacks/ui';
 import { FoundResult } from '@common/types/search-results';
 import { useAtomValue } from 'jotai/utils';
 import { accountStxBalanceResponseState, accountTransactionsState } from '@store/accounts';
@@ -14,10 +14,9 @@ import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 import { TransactionsListResponse } from '@store/transactions';
 import { InfiniteData } from 'react-query';
 
-interface AddressResultItemProps {
-  result: FoundResult;
-}
-export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) => {
+export const AddressResultItem: React.FC<
+  FlexProps & { isHovered?: boolean; isLast: boolean; result: FoundResult }
+> = ({ isHovered, result, ...props }) => {
   if (!result || !result.found || result.result.entity_type !== 'standard_address') return null;
   const principal = result.result.entity_id;
   const stx = useAtomValue(accountStxBalanceResponseState(principal));
@@ -31,11 +30,15 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
   ]);
   return (
     <AddressLink principal={principal}>
-      <ResultItemWrapper>
+      <ResultItemWrapper {...props}>
         <Flex alignItems="center">
           <ItemIcon type="principal" />
           <Box ml="base">
-            <Title display="block" mb="extra-tight" className={'search-result-title'}>
+            <Title
+              color={isHovered ? color('accent') : color('text-title')}
+              display="block"
+              mb="extra-tight"
+            >
               {truncateMiddle(principal, 4)}
             </Title>
             <Caption>{caption}</Caption>
