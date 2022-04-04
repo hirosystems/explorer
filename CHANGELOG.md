@@ -1,3 +1,10 @@
+## [1.18.11](https://github.com/hirosystems/explorer/compare/v1.18.10...v1.18.11) (2022-04-04)
+
+
+### Reverts
+
+* Revert "refactor: search bar" ([711ffcf](https://github.com/hirosystems/explorer/commit/711ffcfb0f0dd6944b5002e62f3bdb2d32c21ff6))
+
 ## [1.18.10](https://github.com/hirosystems/explorer/compare/v1.18.9...v1.18.10) (2022-04-04)
 
 
