@@ -16,14 +16,11 @@ import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
 import { store } from '@common/state/store';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { QueryClient, QueryClientProvider } from 'react-query';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
   networkMode: NetworkMode;
 }
-
-const queryClient = new QueryClient();
 
 function ExplorerApp({
   Component,
@@ -39,19 +36,17 @@ function ExplorerApp({
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <Devtools />
-        <AppConfig isHome={isHome} fullWidth={fullWidth}>
-          <AtomDebug />
-          <SafeSuspense fallback={<></>}>
-            <Component apiServer={apiServer} networkMode={networkMode} {...props} />
-            <Modals />
-            <NetworkModeToast />
-          </SafeSuspense>
-        </AppConfig>
-      </Provider>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <Devtools />
+      <AppConfig isHome={isHome} fullWidth={fullWidth}>
+        <AtomDebug />
+        <SafeSuspense fallback={<></>}>
+          <Component apiServer={apiServer} networkMode={networkMode} {...props} />
+          <Modals />
+          <NetworkModeToast />
+        </SafeSuspense>
+      </AppConfig>
+    </Provider>
   );
 }
 

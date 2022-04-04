@@ -4,7 +4,7 @@ import { Caption, Text, Title } from '@components/typography';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
 import pluralize from 'pluralize';
 import React from 'react';
-import { color, Flex, Stack } from '@stacks/ui';
+import { color, Flex, FlexProps, Stack } from '@stacks/ui';
 import { FoundResult } from '@common/types/search-results';
 import { BlockLink } from '@components/links';
 import { ItemIcon } from '@components/item-icon';
@@ -19,20 +19,17 @@ const BlocksCaption = ({ hash }: { hash: string }) => {
     </Caption>
   );
 };
-
-interface BlockResultItemProps {
-  result: FoundResult;
-}
-
-export const BlockResultItem: React.FC<BlockResultItemProps> = ({ result }) => {
+export const BlockResultItem: React.FC<
+  FlexProps & { isFocused?: boolean; isHovered?: boolean; isLast: boolean; result: FoundResult }
+> = ({ isHovered, isFocused, result, ...props }) => {
   if (!result || result.result.entity_type !== 'block_hash') return null;
   return (
     <BlockLink hash={result.result.block_data.hash as string}>
-      <ResultItemWrapper>
+      <ResultItemWrapper {...props}>
         <Flex alignItems="center">
           <ItemIcon type="block" />
           <Stack spacing="tight" ml="base">
-            <Title display="block" className={'search-result-title'}>
+            <Title color={isHovered ? color('accent') : color('text-title')} display="block">
               Block #{result.result.block_data.height}
             </Title>
             <SafeSuspense fallback={<Caption>Loading...</Caption>}>

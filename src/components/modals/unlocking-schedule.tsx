@@ -14,7 +14,7 @@ import { accountInViewTokenOfferingData } from '@store/currently-in-view';
 import { MODALS } from '@common/constants';
 import { currentStacksHeight } from '@store/info';
 import { useAppDispatch } from '@common/state/hooks';
-import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
+import { closeModal, selectOpenedModal } from '@components/modals/modalSlice';
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
   const value = Number(Number(amount) / Math.pow(10, 6));

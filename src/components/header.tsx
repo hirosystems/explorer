@@ -7,8 +7,11 @@ import { HeaderTextItem } from '@components/header-text-item';
 import { NetworkSwitcherItem } from '@components/network-switcher';
 import { SearchComponent } from '@features/search/search';
 import { MobileMenu } from '@components/mobile-menu';
+import { IconSearch } from '@tabler/icons';
 import { NetworkModeBanner } from '@components/network-mode-banner';
 import { useAppDispatch } from '@common/state/hooks';
+import { MODALS } from '@common/constants';
+import { openModal } from '@components/modals/modalSlice';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -100,6 +103,14 @@ export const Header: React.FC<
                   mr="base"
                   width="100%"
                   maxWidth="760px"
+                />
+                <IconButton
+                  display={['grid', 'grid', 'none', 'none']}
+                  ml="auto"
+                  invert
+                  color="white"
+                  icon={IconSearch}
+                  onClick={() => dispatch(openModal(MODALS.SEARCH))}
                 />
               </>
             ) : null}
