@@ -41,6 +41,7 @@ function ExplorerApp({
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <Devtools />
+        Test deploy 1
         <AppConfig isHome={isHome} fullWidth={fullWidth}>
           <AtomDebug />
           <Component apiServer={apiServer} networkMode={networkMode} {...props} />
