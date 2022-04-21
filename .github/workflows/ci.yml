@@ -34,7 +34,7 @@ jobs:
   build-publish:
     runs-on: ubuntu-latest
     outputs:
-      docker_image_id: ${{ steps.docker_push.outputs.imageid }}
+      docker_image_digest: ${{ steps.docker_push.outputs.digest }}
       version: ${{ steps.docker_meta.outputs.version }}
     steps:
       - name: Checkout
@@ -83,7 +83,7 @@ jobs:
             @semantic-release/git
 
       - name: Deployment Info
-        run: 'echo "::warning::Will deploy docker tag: ${{ steps.docker_meta.outputs.version }}"'
+        run: 'echo "::warning::Will deploy docker tag/digest: ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }}"'
 
   deploy-staging:
     runs-on: ubuntu-latest
@@ -111,7 +111,7 @@ jobs:
           argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
           argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
           argocd_username: ${{ secrets.ARGOCD_USERNAME }}
-          docker_tag: ${{ needs.build-publish.outputs.docker_image_id }}
+          docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
           file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
 
@@ -155,6 +155,6 @@ jobs:
           argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
           argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
           argocd_username: ${{ secrets.ARGOCD_USERNAME }}
-          docker_tag: ${{ needs.build-publish.outputs.docker_image_id }}
+          docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
           file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
