@@ -34,10 +34,11 @@ jobs:
   build-publish:
     runs-on: ubuntu-latest
     outputs:
+      docker_image_id: ${{ steps.docker_push.outputs.imageid }}
       version: ${{ steps.docker_meta.outputs.version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
@@ -59,6 +60,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build/Tag/Push Image
+        id: docker_push
         uses: docker/build-push-action@v2
         with:
           push: true
@@ -97,10 +99,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout actions repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
+          ref: feat/image-ids
 
       - name: Deploy Explorer
         uses: ./actions/deploy
@@ -108,6 +111,7 @@ jobs:
           argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
           argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
           argocd_username: ${{ secrets.ARGOCD_USERNAME }}
+          docker_tag: ${{ needs.build-publish.outputs.docker_image_id }}
           file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
 
@@ -139,10 +143,11 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout actions repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
+          ref: feat/image-ids
 
       - name: Deploy Explorer
         uses: ./actions/deploy
@@ -150,5 +155,6 @@ jobs:
           argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
           argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
           argocd_username: ${{ secrets.ARGOCD_USERNAME }}
+          docker_tag: ${{ needs.build-publish.outputs.docker_image_id }}
           file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
