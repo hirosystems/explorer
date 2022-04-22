@@ -131,6 +131,7 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     needs:
+      - build-publish
       - deploy-staging
     env:
       DEPLOY_ENV: prod
