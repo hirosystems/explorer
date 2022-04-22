@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Checkout
         if: github.event.inputs.tag == ''
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
@@ -74,7 +74,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout actions repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
@@ -87,7 +87,7 @@ jobs:
           argocd_username: ${{ secrets.ARGOCD_USERNAME }}
           file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
-          docker_tag: ${{ github.event.inputs.tag }}
+          docker_tag: ${{ github.event.inputs.tag || github.ref }}
 
   auto-approve-staging:
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Checkout actions repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
@@ -128,4 +128,4 @@ jobs:
           argocd_username: ${{ secrets.ARGOCD_USERNAME }}
           file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
-          docker_tag: ${{ github.event.inputs.tag }}
+          docker_tag: ${{ github.event.inputs.tag || github.ref }}
