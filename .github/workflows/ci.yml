@@ -103,7 +103,6 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
-          ref: feat/image-ids
 
       - name: Deploy Explorer
         uses: ./actions/deploy
@@ -147,7 +146,6 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
-          ref: feat/image-ids
 
       - name: Deploy Explorer
         uses: ./actions/deploy
