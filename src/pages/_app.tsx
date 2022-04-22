@@ -35,7 +35,7 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5002,
+            staleTime: 5000,
           },
         },
       })
