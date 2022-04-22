@@ -1,3 +1,10 @@
+## [1.18.12](https://github.com/hirosystems/explorer/compare/v1.18.11...v1.18.12) (2022-04-22)
+
+
+### Bug Fixes
+
+* deploy network refactor ([34ecdbf](https://github.com/hirosystems/explorer/commit/34ecdbf3302f2ee870a905e0ad2ead1d78c2c1fd))
+
 ## [1.18.11](https://github.com/hirosystems/explorer/compare/v1.18.10...v1.18.11) (2022-04-04)
 
 
