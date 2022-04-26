@@ -56,6 +56,20 @@ export default class MyDocument extends Document<DocumentProps> {
           <meta name="theme-color" content="#6287DD" />
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="#6287DD" />
+          {NODE_ENV === 'production' && (
+            <>
+              <script async src="https://www.googletagmanager.com/gtag/js?id=G-NB2VBT0KY2"></script>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+              
+                gtag('config', 'G-NB2VBT0KY2');`,
+                }}
+              />
+            </>
+          )}
           {/* Inject the Segment snippet into the <head> of the document  */}
           {SEGMENT_WRITE_KEY && (
             <script dangerouslySetInnerHTML={{ __html: this.renderSnippet() }} />

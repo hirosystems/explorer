@@ -64,6 +64,9 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
           <FooterLink href={buildUrl('/sandbox/deploy')} mr="base">
             Sandbox
           </FooterLink>
+          <FooterLink href="https://immunefi.com/bounty/stacks/" mr="base" target="_blank">
+            Found a bug in the Stacks Blockchain?
+          </FooterLink>
         </Flex>
 
         <Flex ml={['unset', 'unset', 'auto']}>
