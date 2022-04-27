@@ -64,7 +64,9 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
   );
 }
 
-const handleNetworkModeQueryParam = (store: EnhancedStore, query: ParsedUrlQuery) => {
+const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContext) => {
+  if (appContext.ctx.pathname === '/_error') return;
+  const query = appContext.ctx.query;
   const activeNetwork = store.getState().global.networks[store.getState().global.activeNetworkKey];
   const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
   if (queryNetworkMode !== activeNetwork.mode) {
@@ -76,7 +78,7 @@ const handleNetworkModeQueryParam = (store: EnhancedStore, query: ParsedUrlQuery
 ExplorerApp.getInitialProps = wrapper.getInitialAppProps(
   store => async (appContext: AppContext) => {
     const appProps = await App.getInitialProps(appContext);
-    handleNetworkModeQueryParam(store, appContext.ctx.query);
+    handleNetworkModeQueryParam(store, appContext);
     return {
       ...appProps,
       ...appProps.pageProps,

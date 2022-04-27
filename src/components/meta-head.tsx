@@ -16,7 +16,8 @@ interface MetaProps {
 }
 
 const useFaviconName = (txStatus?: TxStatus) => {
-  return `favicon${txStatus ? `-${txStatus}` : ''}`;
+  const suffix = txStatus === 'pending' ? 'pending' : txStatus === 'failed' ? 'failed' : 'success';
+  return `favicon${txStatus ? `-${suffix}` : ''}`;
 };
 
 export const Meta = ({

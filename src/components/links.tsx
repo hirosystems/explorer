@@ -11,7 +11,7 @@ export const TxLink: React.FC<{ txid: string }> = React.memo(({ txid, ...rest })
 ));
 
 export const MicroblockLink: React.FC<{ hash: string }> = React.memo(({ hash, ...rest }) => (
-  <Link href={buildUrl('/microblock/')} passHref {...rest} />
+  <Link href={buildUrl(`/microblock/${encodeURIComponent(hash)}`)} passHref {...rest} />
 ));
 
 export const BlockLink: React.FC<{ hash: string }> = React.memo(({ hash, ...rest }) => (
