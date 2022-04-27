@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/hirosystems/explorer/compare/v1.18.12...v1.19.0) (2022-04-27)
+
+
+### Features
+
+* add GA and update footer links ([138302d](https://github.com/hirosystems/explorer/commit/138302dce24b1166f29fc710a71dd70636efabb9))
+
 ## [1.18.12](https://github.com/hirosystems/explorer/compare/v1.18.11...v1.18.12) (2022-04-22)
 
 
