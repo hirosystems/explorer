@@ -1,3 +1,10 @@
+## [1.19.1](https://github.com/hirosystems/explorer/compare/v1.19.0...v1.19.1) (2022-04-27)
+
+
+### Bug Fixes
+
+* favicon error missing chain query bug ([a50f210](https://github.com/hirosystems/explorer/commit/a50f2107b93f5ce1f0e63c101f19175b02ed4390))
+
 # [1.19.0](https://github.com/hirosystems/explorer/compare/v1.18.12...v1.19.0) (2022-04-27)
 
 
