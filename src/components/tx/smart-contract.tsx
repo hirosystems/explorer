@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Box, Stack } from '@stacks/ui';
-import { TransactionList } from '@components/transaction-list';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
@@ -12,21 +11,33 @@ import { PagePanes } from '@components/page-panes';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { hasStxBalance, hasTokenBalance } from '@common/utils/accounts';
-import {
-  useAccountInViewBalances,
-  useBlockInView,
-  useContractSourceInView,
-  useTransactionInView,
-} from '../../hooks/currently-in-view-hooks';
 import { AccountTransactionList } from '@features/account-transaction-list';
+import { Block, SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { useQuery } from 'react-query';
+import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 
-const SmartContractPage = () => {
-  const transaction = useTransactionInView();
-  const block = useBlockInView();
-  const source = useContractSourceInView();
-  const balances = useAccountInViewBalances();
+const SmartContractPage: React.FC<{
+  transaction: SmartContractTransaction;
+  block?: Block;
+  contractId?: string;
+}> = ({ transaction, block, contractId }) => {
+  const queries = useTransactionQueries();
+  if (!contractId) return null;
 
-  if (!transaction || transaction.tx_type !== 'smart_contract') return null;
+  const { data: contract } = useQuery(
+    transactionQK(TransactionQueryKeys.contract, contractId),
+    queries.fetchContract(contractId)
+  );
+
+  const { data: balance } = useQuery(
+    transactionQK(TransactionQueryKeys.accountBalance, contractId),
+    queries.fetchAccountBalance(contractId)
+  );
+
+  if (!contract) return null;
+
+  const source = contract.source_code;
 
   return (
     <>
@@ -45,22 +56,22 @@ const SmartContractPage = () => {
             conditions={transaction.post_conditions}
           />
           {source && <ContractSource source={source} />}
-          <AccountTransactionList />
+          <AccountTransactionList contractId={contractId} />
         </Stack>
         <Box>
           {block && <BtcAnchorBlockCard mb="extra-loose" block={block} />}
-          {balances && (
+          {balance && (
             <>
-              {hasStxBalance(balances) && (
+              {hasStxBalance(balance) && (
                 <Box mb={block ? 'extra-loose' : 'unset'}>
                   <StxBalances
-                    balances={balances}
+                    balances={balance}
                     unlocking={{ found: false }}
                     hasHadVesting={false}
                   />
                 </Box>
               )}
-              {hasTokenBalance(balances) && <TokenBalancesCard balances={balances} />}
+              {hasTokenBalance(balance) && <TokenBalancesCard balances={balance} />}
             </>
           )}
         </Box>

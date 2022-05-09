@@ -11,9 +11,11 @@ import { Meta } from '@components/meta-head';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { getContractId } from '@components/transaction-details';
 import { getTxErrorMessage } from '@common/utils/errors';
-import { useTransactionInView } from '../../hooks/currently-in-view-hooks';
 import { TransactionStatus } from '@common/constants';
 import { getTransactionStatus } from '@common/utils/transactions';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
@@ -97,7 +99,12 @@ const getDescription = (tx: Transaction | MempoolTransaction) => {
 };
 
 export const TransactionMeta = () => {
-  const transaction = useTransactionInView();
+  const queries = useTransactionQueries();
+  const { query } = useRouter();
+  const txId = query.txid as string;
+  const { data } = useQuery(['transaction', txId], queries.fetchTransaction(txId));
+  const transaction = data?.transaction;
+
   if (!transaction) return null;
 
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
@@ -113,7 +120,7 @@ export const TransactionMeta = () => {
       ? [
           {
             label: 'Confirmed',
-            data: `${toRelativeTime(transaction?.burn_block_time * 1000)}, in block #${
+            data: `${toRelativeTime(transaction.burn_block_time * 1000)}, in block #${
               transaction.block_height
             }`,
           },

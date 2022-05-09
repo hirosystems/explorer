@@ -11,6 +11,7 @@ import { Link } from '@components/link';
 import NextLink from 'next/link';
 import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
 import { useHoverableState } from '@components/hoverable';
+import { buildUrl } from '@components/links';
 
 export { getTxTypeIcon };
 
@@ -44,7 +45,7 @@ const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
 
 const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal, ...rest }) => (
   <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
-    <NextLink href={`/address/${principal}`} passHref>
+    <NextLink href={buildUrl(`/address/${encodeURIComponent(principal)}`)} passHref>
       <Caption
         as={Link}
         _hover={{

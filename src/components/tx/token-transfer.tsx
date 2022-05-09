@@ -5,11 +5,16 @@ import { PageTop } from '@components/page';
 import { TransactionDetails } from '@components/transaction-details';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
-import { useBlockInView, useTransactionInView } from '../../hooks/currently-in-view-hooks';
+import {
+  Block,
+  MempoolTokenTransferTransaction,
+  TokenTransferTransaction,
+} from '@stacks/stacks-blockchain-api-types';
 
-const TokenTransferPage = () => {
-  const transaction = useTransactionInView();
-  const block = useBlockInView();
+const TokenTransferPage: React.FC<{
+  transaction: TokenTransferTransaction | MempoolTokenTransferTransaction;
+  block?: Block;
+}> = ({ transaction, block }) => {
   if (!transaction) return null;
   return (
     <>

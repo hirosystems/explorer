@@ -10,23 +10,30 @@ import { ContractDetails } from '@components/contract-details';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { PagePanes } from '@components/page-panes';
 import { FunctionSummarySection } from '@components/function-summary/function-summary';
-import {
-  useBlockInView,
-  useContractInfoInView,
-  useContractSourceInView,
-  useTransactionInView,
-} from '../../hooks/currently-in-view-hooks';
 import { TransactionStatus } from '@common/constants';
 import { getTransactionStatus } from '@common/utils/transactions';
+import { Block, MempoolContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
+import { useQuery } from 'react-query';
+import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
 
-const ContractCallPage = () => {
-  const transaction = useTransactionInView();
-  const block = useBlockInView();
-  const source = useContractSourceInView();
-  const info = useContractInfoInView();
+const ContractCallPage: React.FC<{
+  transaction: ContractCallTransaction | MempoolContractCallTransaction;
+  block?: Block;
+  contractId?: string;
+}> = ({ transaction, block, contractId }) => {
+  const queries = useTransactionQueries();
+  if (!contractId) return null;
+
+  const { data: contract } = useQuery(
+    transactionQK(TransactionQueryKeys.contract, contractId),
+    queries.fetchContract(contractId)
+  );
+  if (!contract) return null;
+
+  const source = contract.source_code;
   const btc = null;
-
-  if (!transaction || transaction.tx_type !== 'contract_call') return null;
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const isPending = txStatus === TransactionStatus.PENDING;
   const result = 'tx_result' in transaction && transaction.tx_result;
@@ -35,7 +42,9 @@ const ContractCallPage = () => {
     <>
       <PageTop tx={transaction} />
       <PagePanes
-        fullWidth={info || !!source ? false : transaction.tx_status === 'pending' || block === null}
+        fullWidth={
+          contract || !!source ? false : transaction.tx_status === 'pending' || block === null
+        }
       >
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} />
@@ -62,10 +71,10 @@ const ContractCallPage = () => {
           )}
         </Stack>
         <Stack spacing="extra-loose">
-          {info && (
+          {contract && (
             <ContractDetails
               contractId={transaction.contract_call.contract_id}
-              contractInterface={info}
+              contractInterface={contract}
             />
           )}
           {!isPending && block && <BtcAnchorBlockCard block={block} />}

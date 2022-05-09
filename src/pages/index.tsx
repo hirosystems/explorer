@@ -11,6 +11,7 @@ import { wrapper } from '@common/state/store';
 import { dehydrate } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
 import { getHomeQueries } from '@features/home/useHomeQueries';
+import { removeKeysWithUndefinedValues } from '@common/utils';
 
 const Home: NextPage = () => {
   return (
@@ -53,8 +54,6 @@ const prefetchData = async (networkUrl: string): Promise<QueryClient> => {
   ]);
   return queryClient;
 };
-
-const removeKeysWithUndefinedValues = (obj: Record<string, any>) => JSON.parse(JSON.stringify(obj));
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query }) => {
   const client = await prefetchData(
