@@ -1,16 +1,12 @@
 import * as React from 'react';
 import type { NextPage } from 'next';
-import { truncateMiddle } from '@common/utils';
+import { getContractId, removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
 import { Meta } from '@components/meta-head';
 import { microStxToStx } from '@stacks/ui-utils';
 import { Flex, Grid, Stack, GridProps } from '@stacks/ui';
 import { getAccountPageQueries, getPrincipalFromCtx } from '@common/page-queries/account';
 import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
-import {
-  useAccountInViewBalances,
-  useAccountInViewInfo,
-} from '../../hooks/currently-in-view-hooks';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { hasTokenBalance } from '@common/utils/accounts';
@@ -21,6 +17,19 @@ import { AccountTransactionList } from '@features/account-transaction-list';
 import { PageWrapper } from '@components/page-wrapper';
 import { AddressNotFound } from '@components/address-not-found';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
+import { ServerResponse } from 'http';
+import { QueryClient, useQuery } from 'react-query';
+import {
+  getTransactionQueries,
+  useTransactionQueries,
+} from '@features/transaction/use-transaction-queries';
+import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { wrapper } from '@common/state/store';
+import { dehydrate } from 'react-query/hydration';
+import TransactionPage from '@pages/txid/[txid]';
+import { getAddressQueries, useAddressQueries } from '@features/address/use-address-queries';
+import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
+import { useRouter } from 'next/router';
 
 const PageTop = () => {
   return (
@@ -49,7 +58,7 @@ const ContentWrapper = (props: GridProps) => {
   );
 };
 
-const AddressPage: NextPage<any> = ({ error, principal }) => {
+const AddressPage: NextPage<any> = ({ error }) => {
   if (error)
     return (
       <>
@@ -57,9 +66,22 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
         <AddressNotFound />
       </>
     );
-  const balances = useAccountInViewBalances();
-  const info = useAccountInViewInfo();
-  const hasTokenBalances = hasTokenBalance(balances);
+
+  const queries = useAddressQueries();
+  const { query } = useRouter();
+  const address = query.principal as string;
+
+  const { data: balance } = useQuery(
+    addressQK(AddressQueryKeys.accountBalance, address),
+    queries.fetchAccountBalance(address)
+  );
+
+  const { data: info } = useQuery(
+    addressQK(AddressQueryKeys.accountInfo, address),
+    queries.fetchAccountInfo(address)
+  );
+
+  const hasTokenBalances = hasTokenBalance(balance);
 
   useRefreshOnBack('principal');
 
@@ -67,11 +89,11 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
     <PageWrapper>
       <UnlockingScheduleModal />
       <Meta
-        title={`STX Address ${truncateMiddle(principal)}`}
+        title={`STX Address ${truncateMiddle(address)}`}
         labels={[
           {
             label: 'STX Balance',
-            data: `${balances?.stx?.balance ? microStxToStx(balances.stx.balance) : 0} STX`,
+            data: `${balance?.stx?.balance ? microStxToStx(balance.stx.balance) : 0} STX`,
           },
         ]}
       />
@@ -79,17 +101,17 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
       <ContentWrapper>
         <Stack spacing="extra-loose">
           <AddressSummary
-            principal={principal}
+            principal={address}
             hasTokenBalances={hasTokenBalances}
-            balances={balances}
+            balances={balance}
             nonce={info?.nonce}
           />
-          <AccountTransactionList />
+          <AccountTransactionList contractId={address} />
         </Stack>
-        {balances && (
+        {balance && (
           <Stack spacing="extra-loose">
-            <StxBalances principal={principal} balances={balances} />
-            <TokenBalancesCard balances={balances} />
+            <StxBalances principal={address} balances={balance} />
+            <TokenBalancesCard balances={balance} />
           </Stack>
         )}
       </ContentWrapper>
@@ -97,14 +119,68 @@ const AddressPage: NextPage<any> = ({ error, principal }) => {
   );
 };
 
-AddressPage.getInitialProps = ctx => {
-  const principal = getPrincipalFromCtx(ctx);
+const prefetchData = async (
+  networkUrl: string,
+  addressPageQuery: string,
+  res: ServerResponse
+): Promise<QueryClient> => {
+  const queryClient = new QueryClient();
+  const prefetchOptions = { staleTime: 5000 };
+  const queries = getAddressQueries(networkUrl);
+  try {
+    await Promise.all([
+      queryClient.prefetchQuery(
+        addressQK(AddressQueryKeys.coreApiInfo),
+        queries.fetchCoreApiInfo(),
+        prefetchOptions
+      ),
+      queryClient.prefetchQuery(
+        addressQK(AddressQueryKeys.accountInfo, addressPageQuery),
+        queries.fetchAccountInfo(addressPageQuery),
+        prefetchOptions
+      ),
+      queryClient.prefetchInfiniteQuery(
+        addressQK(AddressQueryKeys.mempoolTransactionsForAddress, addressPageQuery),
+        queries.fetchMempoolTransactionsForAddress(addressPageQuery),
+        prefetchOptions
+      ),
+      queryClient.prefetchInfiniteQuery(
+        addressQK(AddressQueryKeys.transactionsForAddress, addressPageQuery),
+        queries.fetchTransactionsForAddress(addressPageQuery),
+        prefetchOptions
+      ),
+      queryClient.prefetchQuery(
+        addressQK(AddressQueryKeys.accountBalance, addressPageQuery),
+        queries.fetchAccountBalance(addressPageQuery),
+        prefetchOptions
+      ),
+    ]);
+  } catch (err) {
+    res.statusCode = err.status;
+  }
+  return queryClient;
+};
+
+export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
+  const client = await prefetchData(
+    store.getState().global.networks[store.getState().global.activeNetworkKey].url,
+    query.principal as string,
+    res
+  );
+  if (res.statusCode >= 400 && res.statusCode < 500) {
+    return {
+      notFound: true,
+    };
+  }
+  if (res.statusCode >= 500) {
+    throw res;
+  }
   return {
-    principal,
-    inView: {
-      type: 'address',
-      payload: principal,
+    props: {
+      isHome: false,
+      dehydratedState: removeKeysWithUndefinedValues(dehydrate(client)),
     },
   };
-};
-export default withInitialQueries(AddressPage, pageAtomBuilders)(getAccountPageQueries);
+});
+
+export default AddressPage;

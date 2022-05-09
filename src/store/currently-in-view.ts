@@ -170,20 +170,6 @@ export const getAccountInViewTransactionsState = atom<
   return anAtom;
 });
 
-export const getAccountInViewPendingTransactionsState = atom<
-  | WritableAtom<
-      InfiniteData<MempoolTransactionListResponse> | undefined,
-      AtomWithInfiniteQueryAction<MempoolTransactionListResponse>
-    >
-  | undefined
->(get => {
-  const address = get(addressInViewState);
-  if (!address) return;
-  const anAtom = accountPendingTransactionsState([address, DEFAULT_LIST_LIMIT]);
-  anAtom.debugLabel = makeDebugLabel('account pending transactions');
-  return anAtom;
-});
-
 export const accountInViewTransactionsState = atom<
   InfiniteData<TransactionsListResponse> | undefined
 >(get => {
@@ -195,12 +181,6 @@ export const accountInViewBalances = atom(get => {
   const address = get(addressInViewState);
   if (!address) return;
   return get(accountBalancesResponseState(address));
-});
-
-export const accountInViewInfo = atom(get => {
-  const address = get(addressInViewState);
-  if (!address) return;
-  return get(accountInfoState(address));
 });
 
 export const accountInViewStxBalance = atom(get => {

@@ -8,6 +8,7 @@ import {
   Transaction,
   CoreNodeInfoResponse,
   MempoolTransaction,
+  Block,
 } from '@stacks/stacks-blockchain-api-types';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
@@ -20,6 +21,8 @@ import { STX_DECIMALS, TESTNET_CHAIN_ID } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
 import BigNumber from 'bignumber.js';
+import { useQuery } from 'react-query';
+import blocks from '@pages/blocks';
 
 dayjs.extend(relativeTime);
 
@@ -390,4 +393,22 @@ export function getLocaleDecimalSeparator() {
   return Intl.NumberFormat()
     .formatToParts(1.1)
     .find(part => part.type === 'decimal')?.value;
+}
+
+export const removeKeysWithUndefinedValues = (obj: Record<string, any>) =>
+  JSON.parse(JSON.stringify(obj));
+
+export function getContractId(
+  txPageQuery?: string,
+  transaction?: Transaction | MempoolTransaction
+) {
+  if (!txPageQuery || !transaction) return;
+  const isContract = txPageQuery.includes('.');
+  return isContract
+    ? txPageQuery
+    : transaction?.tx_type === 'smart_contract'
+    ? transaction.smart_contract.contract_id
+    : transaction?.tx_type === 'contract_call'
+    ? transaction.contract_call.contract_id
+    : undefined;
 }

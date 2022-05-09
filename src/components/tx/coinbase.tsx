@@ -5,11 +5,16 @@ import { PagePanes } from '@components/page-panes';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { Events } from '@components/tx-events';
 import { Box } from '@stacks/ui';
-import { useBlockInView, useTransactionInView } from '../../hooks/currently-in-view-hooks';
+import {
+  Block,
+  CoinbaseTransaction,
+  MempoolCoinbaseTransaction,
+} from '@stacks/stacks-blockchain-api-types';
 
-const CoinbasePage = () => {
-  const transaction = useTransactionInView();
-  const block = useBlockInView();
+const CoinbasePage: React.FC<{
+  transaction: CoinbaseTransaction | MempoolCoinbaseTransaction;
+  block?: Block;
+}> = ({ transaction, block }) => {
   if (!transaction) return null;
   return (
     <>
