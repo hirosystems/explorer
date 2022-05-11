@@ -1,3 +1,10 @@
+## [1.19.2](https://github.com/hirosystems/explorer/compare/v1.19.1...v1.19.2) (2022-05-11)
+
+
+### Bug Fixes
+
+* refactor transaction page ([8e2289d](https://github.com/hirosystems/explorer/commit/8e2289dcad6551851a52728140a842071c14d385))
+
 ## [1.19.1](https://github.com/hirosystems/explorer/compare/v1.19.0...v1.19.1) (2022-04-27)
 
 
