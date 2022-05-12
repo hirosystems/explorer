@@ -68,6 +68,7 @@ const SmartContractPage: React.FC<{
                     balances={balance}
                     unlocking={{ found: false }}
                     hasHadVesting={false}
+                    principal={contractId}
                   />
                 </Box>
               )}

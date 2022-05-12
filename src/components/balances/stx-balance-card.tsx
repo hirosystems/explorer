@@ -181,7 +181,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
                   <Caption>Stacked amount (locked)</Caption>
                   <BalanceItem color={color('text-title')} balance={stackedBalance} />
                 </Stack>
-                <StackingPercentage balances={balances} />
+                <StackingPercentage balances={balances} address={principal} />
               </Box>
             </>
           ) : null}
