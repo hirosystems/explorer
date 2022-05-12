@@ -1,12 +1,9 @@
 import * as React from 'react';
 import type { NextPage } from 'next';
-import { getContractId, removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
+import { removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
 import { Meta } from '@components/meta-head';
 import { microStxToStx } from '@stacks/ui-utils';
 import { Flex, Grid, Stack, GridProps } from '@stacks/ui';
-import { getAccountPageQueries, getPrincipalFromCtx } from '@common/page-queries/account';
-import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
-import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { hasTokenBalance } from '@common/utils/accounts';
@@ -19,14 +16,8 @@ import { AddressNotFound } from '@components/address-not-found';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 import { ServerResponse } from 'http';
 import { QueryClient, useQuery } from 'react-query';
-import {
-  getTransactionQueries,
-  useTransactionQueries,
-} from '@features/transaction/use-transaction-queries';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { wrapper } from '@common/state/store';
 import { dehydrate } from 'react-query/hydration';
-import TransactionPage from '@pages/txid/[txid]';
 import { getAddressQueries, useAddressQueries } from '@features/address/use-address-queries';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
 import { useRouter } from 'next/router';
