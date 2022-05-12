@@ -1,3 +1,10 @@
+## [1.19.3](https://github.com/hirosystems/explorer/compare/v1.19.2...v1.19.3) (2022-05-12)
+
+
+### Bug Fixes
+
+* stacking-percentage-bug ([93d5572](https://github.com/hirosystems/explorer/commit/93d557273acd9539b3d00684caaa0c51724d3921))
+
 ## [1.19.2](https://github.com/hirosystems/explorer/compare/v1.19.1...v1.19.2) (2022-05-11)
 
 
