@@ -35,6 +35,7 @@ const prefetchData = async (networkUrl: string): Promise<QueryClient> => {
   const queryClient = new QueryClient();
   const prefetchOptions = { staleTime: 5000 };
   const queries = getHomeQueries(networkUrl);
+  // test comment
   await Promise.all([
     queryClient.prefetchInfiniteQuery(
       ['blocks'],
