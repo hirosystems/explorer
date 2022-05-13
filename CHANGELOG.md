@@ -1,3 +1,10 @@
+## [1.19.4](https://github.com/hirosystems/explorer/compare/v1.19.3...v1.19.4) (2022-05-13)
+
+
+### Bug Fixes
+
+* test-build-time ([012b8de](https://github.com/hirosystems/explorer/commit/012b8de58bf4b7673ce70e6653e5b4775b577553))
+
 ## [1.19.3](https://github.com/hirosystems/explorer/compare/v1.19.2...v1.19.3) (2022-05-12)
 
 
