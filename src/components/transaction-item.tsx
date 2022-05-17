@@ -224,8 +224,7 @@ const LargeVersion = React.memo(
               </Caption>
 
               { isPending &&
-                <Nonce ml="6px" nonce={tx.nonce}>
-                </Nonce>
+                <Nonce ml="6px" nonce={tx.nonce}/>
               }
             </Flex>
           </Stack>
