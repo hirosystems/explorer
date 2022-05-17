@@ -10,7 +10,7 @@ import { ArrowRightIcon } from '@components/icons/arrow-right';
 import { Link } from '@components/link';
 import NextLink from 'next/link';
 import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
-import { useHoverableState } from '@components/hoverable';
+import { Tooltip } from '@components/tooltip';
 import { buildUrl } from '@components/links';
 
 export { getTxTypeIcon };
@@ -154,6 +154,17 @@ const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
   }
 );
 
+const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
+  <>
+    {'·'}
+    <Tooltip label="Nonce">
+      <Caption as="span" text-align="right" ml="6px" style={{ zIndex: 1 }}>
+        {nonce.toString() + 'n'}
+      </Caption>
+    </Tooltip>
+  </>
+));
+
 const LargeVersion = React.memo(
   ({
     tx,
@@ -201,9 +212,10 @@ const LargeVersion = React.memo(
                 {didFail && 'Failed'}
               </Caption>
               {'·'}
-              <Caption mt="1px" ml="6px">
+              <Caption mt="1px" ml="6px" mr={isPending ? '6px' : undefined}>
                 {truncateMiddle(tx.tx_id, 4)}
               </Caption>
+              {isPending && <Nonce nonce={tx.nonce} />}
             </Flex>
           </Stack>
         ) : null}
