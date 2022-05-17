@@ -31,6 +31,7 @@ export const networkSlice = createSlice({
   initialState,
   reducers: {
     setActiveNetwork: (state, action: PayloadAction<Network>) => {
+      console.log('[debug] setActiveNetwork', action);
       state.activeNetworkKey = action.payload.url;
       reloadWithNewMode(action.payload.mode);
     },
