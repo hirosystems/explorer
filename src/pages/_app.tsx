@@ -73,7 +73,13 @@ const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContex
   const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
   if (queryNetworkMode !== activeNetwork?.mode) {
     // query param overrides state
-    console.log('[debug] network conflict', queryNetworkMode, activeNetwork);
+    console.log(
+      '[debug] network conflict',
+      queryNetworkMode,
+      activeNetwork,
+      DEFAULT_NETWORK_MAP,
+      NetworkModeUrlMap
+    );
     store.dispatch(setActiveNetwork(DEFAULT_NETWORK_MAP[NetworkModeUrlMap[queryNetworkMode]]));
   }
 };
