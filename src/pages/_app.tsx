@@ -47,6 +47,7 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
     toast(`You're viewing the ${chain || networkMode} Explorer`);
   }, []);
 
+  console.log('[debug] pageProps.dehydratedState', pageProps.dehydratedState);
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
@@ -68,9 +69,11 @@ const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContex
   if (appContext.ctx.pathname === '/_error') return;
   const query = appContext.ctx.query;
   const activeNetwork = store.getState().global.networks[store.getState().global.activeNetworkKey];
+  console.log('[debug] activeNetwork', store.getState().global.activeNetworkKey);
   const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
   if (queryNetworkMode !== activeNetwork?.mode) {
     // query param overrides state
+    console.log('[debug] network conflict', queryNetworkMode, activeNetwork);
     store.dispatch(setActiveNetwork(DEFAULT_NETWORK_MAP[NetworkModeUrlMap[queryNetworkMode]]));
   }
 };
