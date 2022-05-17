@@ -159,7 +159,7 @@ const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
   }
 );
 
-const Nonce: React.FC<BoxProps & { nonce: Number, isHovered?: boolean }> = React.memo(
+const Nonce: React.FC<{ nonce: Number }> = React.memo(
   props => (
       <>
         {'·'}
