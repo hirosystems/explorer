@@ -1,3 +1,10 @@
+## [1.19.5](https://github.com/hirosystems/explorer/compare/v1.19.4...v1.19.5) (2022-05-17)
+
+
+### Bug Fixes
+
+* undefined network ([5b5c793](https://github.com/hirosystems/explorer/commit/5b5c7933adbb8b5e3badfe0df9a2f8ea23e73428))
+
 ## [1.19.4](https://github.com/hirosystems/explorer/compare/v1.19.3...v1.19.4) (2022-05-13)
 
 
