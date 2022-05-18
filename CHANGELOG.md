@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/hirosystems/explorer/compare/v1.19.7...v1.20.0) (2022-05-18)
+
+
+### Features
+
+* add nonce to transaction item ([97d93fa](https://github.com/hirosystems/explorer/commit/97d93fac43b0d27f198a3cb2b4d2dbfcb944b047))
+
 ## [1.19.7](https://github.com/hirosystems/explorer/compare/v1.19.6...v1.19.7) (2022-05-17)
 
 
