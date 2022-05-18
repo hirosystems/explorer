@@ -1,3 +1,10 @@
+## [1.20.1](https://github.com/hirosystems/explorer/compare/v1.20.0...v1.20.1) (2022-05-18)
+
+
+### Bug Fixes
+
+* add debug logs ([fbfdf6b](https://github.com/hirosystems/explorer/commit/fbfdf6b094e7a7539d2e3933312c33a9b3d9b87e))
+
 # [1.20.0](https://github.com/hirosystems/explorer/compare/v1.19.7...v1.20.0) (2022-05-18)
 
 
