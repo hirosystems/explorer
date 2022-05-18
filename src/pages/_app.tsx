@@ -69,7 +69,9 @@ const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContex
   if (appContext.ctx.pathname === '/_error') return;
   const query = appContext.ctx.query;
   const activeNetwork = store.getState().global.networks[store.getState().global.activeNetworkKey];
-  console.log('[debug] activeNetwork', store.getState().global.activeNetworkKey);
+  console.log('[debug] activeNetworkKey', store.getState().global.activeNetworkKey);
+  console.log('[debug] availableNetworks', store.getState().global.networks);
+  console.log('[debug] activeNetwork', activeNetwork);
   const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
   if (queryNetworkMode !== activeNetwork?.mode) {
     // query param overrides state
