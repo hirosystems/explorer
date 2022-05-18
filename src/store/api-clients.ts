@@ -5,7 +5,7 @@ import { apiClients, createConfig } from '@common/api/client';
 import { store } from '@common/state/store';
 
 export const apiClientConfiguration = atom<Configuration>(() => {
-  const networkUrl = store.getState().global.networks[store.getState().global.activeNetworkKey].url;
+  const networkUrl = store.getState().network.activeNetworkKey;
   const apiServer = networkUrl || DEFAULT_MAINNET_SERVER;
   return createConfig(apiServer);
 });

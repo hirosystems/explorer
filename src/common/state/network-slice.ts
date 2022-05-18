@@ -5,14 +5,14 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { DEFAULT_NETWORK_MAP } from '@common/constants/network';
 import { Network } from '@common/types/network';
 
-interface State {
+export interface NetworkState {
   activeNetworkKey: string;
-  networks: { [key: string]: Network };
+  customNetworks: Record<string, Network>;
 }
 
-const initialState: State = {
+const initialState: NetworkState = {
   activeNetworkKey: DEFAULT_MAINNET_SERVER,
-  networks: DEFAULT_NETWORK_MAP,
+  customNetworks: {},
 };
 
 const RELOAD_DELAY = 500;
@@ -36,17 +36,17 @@ export const networkSlice = createSlice({
       reloadWithNewMode(action.payload.mode);
     },
     addCustomNetwork: (state, action: PayloadAction<Network>) => {
-      state.networks[action.payload.url] = action.payload;
+      state.customNetworks[action.payload.url] = action.payload;
     },
     removeCustomNetwork: (state, action: PayloadAction<Network>) => {
-      delete state.networks[action.payload.url];
+      delete state.customNetworks[action.payload.url];
     },
   },
   extraReducers: {
     [HYDRATE]: (state, action) => {
       return {
         ...state,
-        ...action.payload.global,
+        ...action.payload.network,
       };
     },
   },
@@ -54,10 +54,14 @@ export const networkSlice = createSlice({
 
 export const { setActiveNetwork, addCustomNetwork, removeCustomNetwork } = networkSlice.actions;
 
-const selectGlobal = (state: RootState) => state.global;
+export const selectNetworkSlice = (state: RootState) => state.network;
+
+export const selectNetworks = createSelector([selectNetworkSlice], networkSlice => ({
+  ...DEFAULT_NETWORK_MAP,
+  ...networkSlice.customNetworks,
+}));
 
 export const selectActiveNetwork = createSelector(
-  [selectGlobal],
-  global => global.networks[global.activeNetworkKey]
+  [selectNetworkSlice, selectNetworks],
+  (networkSlice, networks) => networks[networkSlice.activeNetworkKey]
 );
-export const selectNetworks = createSelector([selectGlobal], global => global.networks);

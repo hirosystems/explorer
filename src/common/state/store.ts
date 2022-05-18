@@ -1,12 +1,12 @@
 import { combineReducers, configureStore, EnhancedStore } from '@reduxjs/toolkit';
-import { networkSlice } from './network-slice';
-import { modalSlice } from '@components/modals/modal-slice';
-import { searchSlice } from '@features/search/search-slice';
+import { networkSlice, NetworkState } from './network-slice';
+import { modalSlice, ModalState } from '@components/modals/modal-slice';
+import { searchSlice, SearchState } from '@features/search/search-slice';
 import { nextReduxCookieMiddleware, wrapMakeStore } from 'next-redux-cookie-wrapper';
 import { createWrapper } from 'next-redux-wrapper';
 
 const rootReducer = combineReducers({
-  global: networkSlice.reducer,
+  network: networkSlice.reducer,
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
 });
@@ -30,5 +30,10 @@ export const wrapper = createWrapper<AppStore>(makeStore);
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type AppState = ReturnType<AppStore['getState']>;
-export type RootState = ReturnType<ReturnType<typeof makeStore>['getState']>;
+export type aa = ReturnType<typeof makeStore>;
+export interface RootState {
+  network: NetworkState;
+  modal: ModalState;
+  search: SearchState;
+}
 export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];

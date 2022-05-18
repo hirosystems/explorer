@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { MODALS } from '@common/constants';
 import { useAppSelector } from '@common/state/hooks';
 
-interface State {
+export interface ModalState {
   openedModal: MODALS | null;
 }
 
-const initialState: State = {
+const initialState: ModalState = {
   openedModal: null,
 };
 
