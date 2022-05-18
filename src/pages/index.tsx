@@ -57,9 +57,7 @@ const prefetchData = async (networkUrl: string): Promise<QueryClient> => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query }) => {
-  const client = await prefetchData(
-    store.getState().global.networks[store.getState().global.activeNetworkKey].url
-  );
+  const client = await prefetchData(store.getState().network.activeNetworkKey);
   return {
     props: {
       isHome: true,

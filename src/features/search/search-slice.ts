@@ -1,12 +1,12 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@common/state/store';
 
-interface State {
+export interface SearchState {
   searchTerm: string;
   isFocused: boolean;
 }
 
-const initialState: State = {
+const initialState: SearchState = {
   searchTerm: '',
   isFocused: false,
 };

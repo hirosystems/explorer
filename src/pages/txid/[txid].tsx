@@ -88,7 +88,7 @@ const prefetchData = async (
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
   const client = await prefetchData(
-    store.getState().global.networks[store.getState().global.activeNetworkKey].url,
+    store.getState().network.activeNetworkKey,
     query.txid as string,
     res
   );

@@ -17,7 +17,12 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import { ParsedUrlQuery } from 'querystring';
-import { setActiveNetwork } from '@common/state/network-slice';
+import {
+  selectActiveNetwork,
+  selectNetworks,
+  selectNetworkSlice,
+  setActiveNetwork,
+} from '@common/state/network-slice';
 import { DEFAULT_NETWORK_MAP, NetworkModeUrlMap } from '@common/constants/network';
 
 interface ExplorerAppProps extends AppProps {
@@ -68,10 +73,11 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
 const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContext) => {
   if (appContext.ctx.pathname === '/_error') return;
   const query = appContext.ctx.query;
-  const activeNetwork = store.getState().global.networks[store.getState().global.activeNetworkKey];
-  console.log('[debug] activeNetworkKey', store.getState().global.activeNetworkKey);
-  console.log('[debug] availableNetworks', store.getState().global.networks);
+  const activeNetwork = selectActiveNetwork(store.getState() as never);
+  const networks = selectNetworks(store.getState() as never);
+  console.log('[debug] activeNetworkKey', store.getState().network.activeNetworkKey);
   console.log('[debug] activeNetwork', activeNetwork);
+  console.log('[debug] networks', networks);
   const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
   if (queryNetworkMode !== activeNetwork?.mode) {
     // query param overrides state

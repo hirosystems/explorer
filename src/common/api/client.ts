@@ -85,7 +85,7 @@ export function createConfig(basePath: string) {
 // this is used in next.js specific data fetchers, typically only by getApiClients
 // this will pass the correct network url as defined by cookie (or default value)
 export const getApiClientConfig = (): Configuration => {
-  const apiServer = store.getState().global.networks[store.getState().global.activeNetworkKey].url;
+  const apiServer = store.getState().network.activeNetworkKey;
   return createConfig(apiServer);
 };
 // this is used in next.js specific data fetchers to get all our api clients fetching from the correct network url
