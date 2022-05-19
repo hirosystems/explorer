@@ -17,7 +17,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
-import { STX_DECIMALS, TESTNET_CHAIN_ID } from '@common/constants';
+import {
+  DEFAULT_DEVNET_SERVER,
+  isBrowser,
+  STX_DECIMALS,
+  TESTNET_CHAIN_ID,
+} from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
 import BigNumber from 'bignumber.js';
@@ -412,3 +417,8 @@ export function getContractId(
     ? transaction.contract_call.contract_id
     : undefined;
 }
+
+export const isClarinetInstance = (url: string) => url.includes('.devnet:3999');
+
+export const useLocalhostForClarinetClient = (url: string) =>
+  isClarinetInstance(url) && isBrowser ? DEFAULT_DEVNET_SERVER : url;

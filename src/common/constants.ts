@@ -4,6 +4,7 @@ import packageJson from '../../package.json';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TxStatus } from './types/tx';
+import { useLocalhostForClarinetClient } from '@common/utils';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -60,15 +61,17 @@ export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
   'https://pr-725.app.stacks.engineering';
 
-export const DEFAULT_TESTNET_SERVER =
+export const DEFAULT_TESTNET_SERVER = useLocalhostForClarinetClient(
   config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  'https://stacks-node-api.testnet.stacks.co';
+    process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
+    'https://stacks-node-api.testnet.stacks.co'
+);
 
-export const DEFAULT_MAINNET_SERVER =
+export const DEFAULT_MAINNET_SERVER = useLocalhostForClarinetClient(
   config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  'https://stacks-node-api.stacks.co';
+    process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
+    'https://stacks-node-api.stacks.co'
+);
 
 export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
 
@@ -131,3 +134,5 @@ export const TransactionStatus: Record<string, TxStatus> = {
   NON_CANONICAL: 'non_canonical',
   FAILED: 'failed',
 };
+
+export const isBrowser = typeof window !== 'undefined';
