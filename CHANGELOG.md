@@ -1,3 +1,10 @@
+## [1.20.3](https://github.com/hirosystems/explorer/compare/v1.20.2...v1.20.3) (2022-05-19)
+
+
+### Bug Fixes
+
+* network persistence subtree ([d876ed9](https://github.com/hirosystems/explorer/commit/d876ed9ee3c621bbd1d84823afdc27d8bab5fcf8))
+
 ## [1.20.2](https://github.com/hirosystems/explorer/compare/v1.20.1...v1.20.2) (2022-05-19)
 
 
