@@ -19,7 +19,7 @@ const makeStore = wrapMakeStore(() => {
     middleware: getDefaultMiddleware =>
       getDefaultMiddleware().prepend(
         nextReduxCookieMiddleware({
-          subtrees: ['global'],
+          subtrees: ['network'],
         })
       ),
   });
