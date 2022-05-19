@@ -1,3 +1,10 @@
+## [1.20.2](https://github.com/hirosystems/explorer/compare/v1.20.1...v1.20.2) (2022-05-19)
+
+
+### Bug Fixes
+
+* network state naming and default networks persistence ([96a668e](https://github.com/hirosystems/explorer/commit/96a668e854fcdb6b9c870d4b4817394d42c710c2))
+
 ## [1.20.1](https://github.com/hirosystems/explorer/compare/v1.20.0...v1.20.1) (2022-05-18)
 
 
