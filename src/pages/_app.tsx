@@ -2,27 +2,21 @@ import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import { useRouter } from 'next/router';
+import type { AppContext, AppProps } from 'next/app';
 import App from 'next/app';
-import type { AppProps, AppContext } from 'next/app';
 import 'tippy.js/dist/tippy.css';
 import 'modern-normalize/modern-normalize.css';
 
 import { AtomDebug, Devtools } from '@features/devtools';
 import { AppConfig } from '@components/app-config';
-import { NetworkMode } from '@common/types/network';
+import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
 import { wrapper } from '@common/state/store';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import { EnhancedStore } from '@reduxjs/toolkit';
-import { ParsedUrlQuery } from 'querystring';
-import {
-  selectActiveNetwork,
-  selectNetworks,
-  selectNetworkSlice,
-  setActiveNetwork,
-} from '@common/state/network-slice';
+import { selectActiveNetwork, selectNetworks, setActiveNetwork } from '@common/state/network-slice';
 import { DEFAULT_NETWORK_MAP, NetworkModeUrlMap } from '@common/constants/network';
 
 interface ExplorerAppProps extends AppProps {
@@ -78,7 +72,8 @@ const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContex
   console.log('[debug] activeNetworkKey', store.getState().network.activeNetworkKey);
   console.log('[debug] activeNetwork', activeNetwork);
   console.log('[debug] networks', networks);
-  const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
+  const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
+    NetworkModes.Mainnet) as NetworkModes;
   if (queryNetworkMode !== activeNetwork?.mode || !networks[activeNetwork.url]) {
     // query param overrides state
     console.log(

@@ -420,5 +420,4 @@ export function getContractId(
 
 export const isClarinetInstance = (url: string) => url.includes('.devnet:3999');
 
-export const useLocalhostForClarinetClient = (url: string) =>
-  isClarinetInstance(url) && isBrowser ? DEFAULT_DEVNET_SERVER : url;
+export const useLocalhostForClarinetClient = (url: string) => url;

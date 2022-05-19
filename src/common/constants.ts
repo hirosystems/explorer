@@ -61,16 +61,25 @@ export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
   'https://pr-725.app.stacks.engineering';
 
-export const DEFAULT_TESTNET_SERVER = useLocalhostForClarinetClient(
+export const DEFAULT_TESTNET_SERVER =
   config?.NEXT_PUBLIC_TESTNET_API_SERVER ||
-    process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-    'https://stacks-node-api.testnet.stacks.co'
-);
+  process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
+  'https://stacks-node-api.testnet.stacks.co';
 
-export const DEFAULT_MAINNET_SERVER = useLocalhostForClarinetClient(
+export const DEFAULT_MAINNET_SERVER =
   config?.NEXT_PUBLIC_MAINNET_API_SERVER ||
-    process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-    'https://stacks-node-api.stacks.co'
+  process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
+  'https://stacks-node-api.stacks.co';
+
+console.log(
+  'DEFAULT_TESTNET_SERVER',
+  config?.NEXT_PUBLIC_TESTNET_API_SERVER,
+  process.env.NEXT_PUBLIC_TESTNET_API_SERVER
+);
+console.log(
+  'DEFAULT_MAINNET_SERVER',
+  config?.NEXT_PUBLIC_MAINNET_API_SERVER,
+  process.env.NEXT_PUBLIC_MAINNET_API_SERVER
 );
 
 export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';

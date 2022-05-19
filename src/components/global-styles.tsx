@@ -8,6 +8,10 @@ const TextAreaOverrides = (
     styles={css`
       ${prismTheme};
 
+      body * {
+        color: red !important;
+      }
+
       .code-editor {
         pre {
           width: fit-content;

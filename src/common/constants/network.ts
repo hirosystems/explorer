@@ -11,13 +11,14 @@ export const NetworkIdModeMap: { [key in ChainID]: NetworkModes } = {
   [ChainID.Testnet]: NetworkModes.Testnet,
 };
 
-export const NetworkModeUrlMap: Record<string, NetworkModes> = {
+export const NetworkModeUrlMap: Record<NetworkModes, string> = {
   [NetworkModes.Mainnet]: DEFAULT_MAINNET_SERVER,
   [NetworkModes.Testnet]: DEFAULT_TESTNET_SERVER,
 };
 
 export const DEFAULT_NETWORK_MAP: Record<string, Network> = {
   [DEFAULT_MAINNET_SERVER]: {
+    //TODO: use different key
     label: 'stacks.co',
     url: DEFAULT_MAINNET_SERVER,
     networkId: ChainID.Mainnet,
