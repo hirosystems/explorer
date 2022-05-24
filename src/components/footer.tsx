@@ -70,8 +70,15 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
         </Flex>
 
         <Flex ml={['unset', 'unset', 'auto']}>
-          <FooterLink mr="base" href="https://github.com/blockstack/explorer/">
-            GitHub
+          <FooterLink
+            mr="base"
+            target="_blank"
+            href="https://github.com/hirosystems/explorer/issues/new/choose"
+          >
+            Submit report or request
+          </FooterLink>
+          <FooterLink mr="base" href="mailto:support@hiro.so">
+            Support
           </FooterLink>
           <FooterLink href="https://www.hiro.so/p/terms-privacy">Terms & Privacy</FooterLink>
         </Flex>
