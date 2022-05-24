@@ -12,7 +12,6 @@ import type {
 } from '@stacks/stacks-blockchain-api-types';
 import {
   accountBalancesResponseState,
-  accountInfoState,
   accountPendingTransactionsState,
   accountStxBalanceResponseState,
   accountTransactionsState,

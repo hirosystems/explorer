@@ -14,11 +14,10 @@ import {
   MicroblocksApi,
   TokensApi,
 } from '@stacks/blockchain-api-client';
-import { NextPageContext } from 'next';
 import { fetcher as fetchApi } from '@common/api/fetch';
 import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
 import { MICROBLOCKS_ENABLED } from '@common/constants';
-import { selectActiveNetwork } from '@common/state/network-slice';
+import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
 import { useAppSelector } from '@common/state/hooks';
 import { store } from '@common/state/store';
 
@@ -72,7 +71,7 @@ const unanchoredMiddleware: Middleware = {
 };
 
 // we use to to create our api client config on both the server and client
-export function createConfig(basePath: string) {
+export function createConfig(basePath?: string) {
   const middleware: Middleware[] = [];
   if (MICROBLOCKS_ENABLED) middleware.push(unanchoredMiddleware);
   return new Configuration({
@@ -85,7 +84,7 @@ export function createConfig(basePath: string) {
 // this is used in next.js specific data fetchers, typically only by getApiClients
 // this will pass the correct network url as defined by cookie (or default value)
 export const getApiClientConfig = (): Configuration => {
-  const apiServer = store.getState().network.activeNetworkKey;
+  const apiServer = selectActiveNetworkUrl(store.getState());
   return createConfig(apiServer);
 };
 // this is used in next.js specific data fetchers to get all our api clients fetching from the correct network url

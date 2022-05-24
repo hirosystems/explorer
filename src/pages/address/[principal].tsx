@@ -16,11 +16,12 @@ import { AddressNotFound } from '@components/address-not-found';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 import { ServerResponse } from 'http';
 import { QueryClient, useQuery } from 'react-query';
-import { wrapper } from '@common/state/store';
+import { store, wrapper } from '@common/state/store';
 import { dehydrate } from 'react-query/hydration';
 import { getAddressQueries, useAddressQueries } from '@features/address/use-address-queries';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
 import { useRouter } from 'next/router';
+import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
 
 const PageTop = () => {
   return (
@@ -111,11 +112,14 @@ const AddressPage: NextPage<any> = ({ error }) => {
 };
 
 const prefetchData = async (
-  networkUrl: string,
   addressPageQuery: string,
-  res: ServerResponse
+  res: ServerResponse,
+  networkUrl?: string
 ): Promise<QueryClient> => {
   const queryClient = new QueryClient();
+  if (!networkUrl) {
+    return queryClient;
+  }
   const prefetchOptions = { staleTime: 5000 };
   const queries = getAddressQueries(networkUrl);
   try {
@@ -154,9 +158,9 @@ const prefetchData = async (
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
   const client = await prefetchData(
-    store.getState().network.activeNetworkKey,
     query.principal as string,
-    res
+    res,
+    selectActiveNetworkUrl(store.getState())
   );
   if (res.statusCode >= 400 && res.statusCode < 500) {
     return {

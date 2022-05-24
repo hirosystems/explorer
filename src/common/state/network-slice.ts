@@ -1,5 +1,5 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DEFAULT_MAINNET_SERVER } from '@common/constants';
+import { DEFAULT_MAINNET_SERVER, IS_BROWSER } from '@common/constants';
 import { RootState } from '@common/state/store';
 import { HYDRATE } from 'next-redux-wrapper';
 import { DEFAULT_NETWORK_MAP } from '@common/constants/network';
@@ -65,3 +65,14 @@ export const selectActiveNetwork = createSelector(
   [selectNetworkSlice, selectNetworks],
   (networkSlice, networks) => networks[networkSlice.activeNetworkKey]
 );
+
+export const selectActiveNetworkUrl = createSelector([selectActiveNetwork], activeNetwork => {
+  if (
+    activeNetwork &&
+    !IS_BROWSER &&
+    ['localhost', '127.0.0.1'].includes(new URL(activeNetwork.url).hostname)
+  ) {
+    return undefined;
+  }
+  return activeNetwork?.url;
+});

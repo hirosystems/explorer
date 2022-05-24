@@ -12,13 +12,14 @@ import { AppConfig } from '@components/app-config';
 import { NetworkMode } from '@common/types/network';
 import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
-import { wrapper } from '@common/state/store';
+import { store, wrapper } from '@common/state/store';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Hydrate } from 'react-query/hydration';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import { ParsedUrlQuery } from 'querystring';
 import {
   selectActiveNetwork,
+  selectActiveNetworkUrl,
   selectNetworks,
   selectNetworkSlice,
   setActiveNetwork,
@@ -73,9 +74,9 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
 const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContext) => {
   if (appContext.ctx.pathname === '/_error') return;
   const query = appContext.ctx.query;
-  const activeNetwork = selectActiveNetwork(store.getState() as never);
-  const networks = selectNetworks(store.getState() as never);
-  console.log('[debug] activeNetworkKey', store.getState().network.activeNetworkKey);
+  const activeNetwork = selectActiveNetwork(store.getState());
+  const networks = selectNetworks(store.getState());
+  console.log('[debug] selectActiveNetworkUrl', selectActiveNetworkUrl(store.getState()));
   console.log('[debug] activeNetwork', activeNetwork);
   console.log('[debug] networks', networks);
   const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';

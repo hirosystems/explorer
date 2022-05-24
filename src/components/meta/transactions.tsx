@@ -103,9 +103,7 @@ export const TransactionMeta = () => {
   const { query } = useRouter();
   const txId = query.txid as string;
   const { data } = useQuery(['transaction', txId], queries.fetchTransaction(txId));
-  const transaction = data?.transaction;
-
-  if (!transaction) return null;
+  const transaction = data?.transaction || ({} as Transaction);
 
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const pageTitle = `${getTxPageTitle(transaction)}${
@@ -126,6 +124,8 @@ export const TransactionMeta = () => {
           },
         ]
       : undefined;
+
+  if (!transaction) return null;
 
   return (
     <Meta

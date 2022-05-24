@@ -57,15 +57,6 @@ export const getAccountQueryKey = {
 // queryFn's
 // ----------------
 
-// @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_info
-const accountInfoQueryFn = async (get: Getter, principal: Principal) => {
-  const { accountsApi } = get(apiClientsState);
-  return accountsApi.getAccountInfo({
-    principal,
-    proof: 0, // no need to fetch the proof
-  });
-};
-
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_balance
 const accountBalancesQueryFn = async (get: Getter, principal: Principal) => {
   const { accountsApi, tokensApi } = get(apiClientsState);
@@ -179,10 +170,6 @@ const accountInboundQueryFn = async (
 // ----------------
 // atoms
 // ----------------
-export const accountInfoState = atomFamilyWithQuery<string, AccountDataResponse>(
-  AccountsQueryKeys.INFO,
-  accountInfoQueryFn
-);
 export const accountBalancesResponseState = atomFamilyWithQuery<string, AddressBalanceResponse>(
   AccountsQueryKeys.BALANCES,
   accountBalancesQueryFn

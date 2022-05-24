@@ -12,10 +12,11 @@ import { InView } from '@store/currently-in-view';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 import { QueryClient } from 'react-query';
 import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { wrapper } from '@common/state/store';
+import { store, wrapper } from '@common/state/store';
 import { dehydrate } from 'react-query/hydration';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { ServerResponse } from 'http';
+import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
 
 interface TransactionPageProps {
   inView: InView;
@@ -42,11 +43,14 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
 };
 
 const prefetchData = async (
-  networkUrl: string,
   txPageQuery: string,
-  res: ServerResponse
+  res: ServerResponse,
+  networkUrl?: string
 ): Promise<QueryClient> => {
   const queryClient = new QueryClient();
+  if (!networkUrl) {
+    return queryClient;
+  }
   const prefetchOptions = { staleTime: 5000 };
   const queries = getTransactionQueries(networkUrl);
   try {
@@ -88,9 +92,9 @@ const prefetchData = async (
 
 export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
   const client = await prefetchData(
-    store.getState().network.activeNetworkKey,
     query.txid as string,
-    res
+    res,
+    selectActiveNetworkUrl(store.getState())
   );
   console.log(res.statusCode);
   if (res.statusCode >= 400 && res.statusCode < 500) {
