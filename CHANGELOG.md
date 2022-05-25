@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/hirosystems/explorer/compare/v1.21.0...v1.22.0) (2022-05-25)
+
+
+### Features
+
+* skip prefetch for devnet ([45ebd66](https://github.com/hirosystems/explorer/commit/45ebd66c5e6cf29906ecffcfd258b3ddf5b8ec03))
+
 # [1.21.0](https://github.com/hirosystems/explorer/compare/v1.20.3...v1.21.0) (2022-05-25)
 
 
