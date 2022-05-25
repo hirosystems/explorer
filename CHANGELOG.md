@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/hirosystems/explorer/compare/v1.20.3...v1.21.0) (2022-05-25)
+
+
+### Features
+
+* add new footer links ([658c10b](https://github.com/hirosystems/explorer/commit/658c10bdbb7d881f2e400f940a8b4962965b8a7e))
+
 ## [1.20.3](https://github.com/hirosystems/explorer/compare/v1.20.2...v1.20.3) (2022-05-19)
 
 
