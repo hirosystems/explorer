@@ -30,9 +30,8 @@ const ContractCallPage: React.FC<{
     transactionQK(TransactionQueryKeys.contract, contractId),
     queries.fetchContract(contractId)
   );
-  if (!contract) return null;
 
-  const source = contract.source_code;
+  const source = contract?.source_code;
   const btc = null;
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const isPending = txStatus === TransactionStatus.PENDING;
