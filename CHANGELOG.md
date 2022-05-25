@@ -1,3 +1,10 @@
+## [1.22.1](https://github.com/hirosystems/explorer/compare/v1.22.0...v1.22.1) (2022-05-25)
+
+
+### Bug Fixes
+
+* contract-call.tsx return statement ([6f19592](https://github.com/hirosystems/explorer/commit/6f19592c8a997ac803b2f9ca6bae2666c40708d5))
+
 # [1.22.0](https://github.com/hirosystems/explorer/compare/v1.21.0...v1.22.0) (2022-05-25)
 
 
