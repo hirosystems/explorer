@@ -13,6 +13,13 @@ const moduleExports = withBundleAnalyzer({
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  typescript: { // TOREMOVE
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
   publicRuntimeConfig: {
     NEXT_PUBLIC_DEPLOYMENT_URL: process.env.NEXT_PUBLIC_DEPLOYMENT_URL,
     NEXT_PUBLIC_TESTNET_API_SERVER: process.env.NEXT_PUBLIC_TESTNET_API_SERVER,

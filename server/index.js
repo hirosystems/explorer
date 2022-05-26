@@ -25,21 +25,9 @@ app.prepare().then(() => {
     })
   );
 
-  server.use(
-    (() => {
-      const router = express.Router();
-      router.use('/txid', next());
-      router.use('/microblock', next());
-      router.use('/block', next());
-      router.use('/address', next());
-      return router;
-    })()
-  );
-
-  let routes = [];
 
   // Store all the registered express routes for usage with metrics reporting
-  routes = expressListEndpoints(server).map(endpoint => ({
+  const routes = expressListEndpoints(server).map(endpoint => ({
     path: endpoint.path,
     regexp: pathToRegexp(endpoint.path),
   }));
@@ -68,6 +56,7 @@ app.prepare().then(() => {
         normalizePath: path => {
           // Get the url pathname without a query string or fragment
           // (note base url doesn't matter, but required by URL constructor)
+          console.log('normalizePath', path)
           try {
             let pathTemplate = new URL(path, 'http://x').pathname;
             // Match request url to the Express route
@@ -77,8 +66,10 @@ app.prepare().then(() => {
                 break;
               }
             }
+            console.log('normalizePath return', pathTemplate)
             return pathTemplate;
           } catch (error) {
+            console.erro('normalizePath error', error)
             logger.warn(`Warning: ${error}`);
             return path;
           }
