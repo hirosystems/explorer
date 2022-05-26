@@ -1,7 +1,6 @@
 import React from 'react';
-import { useAtomValue } from 'jotai/utils';
-import { Box, Flex, Stack, color, Grid, Fade, Transition, GridProps } from '@stacks/ui';
-import { Title } from '@components/typography';
+import { Box, color, Flex, Grid, GridProps, Stack, Transition } from '@stacks/ui';
+import { Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { IconButton } from '@components/icon-button';
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
@@ -12,23 +11,22 @@ import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutli
 import { blue } from '@components/button';
 import { FilterIcon } from '@components/icons/filter';
 import { Badge } from '@components/badge';
-import { Text } from '@components/typography';
 import { useFilterState } from '@common/hooks/use-filter-state';
-import { TransactionType } from '@common/constants';
-import { isLoadingState } from '@store/filter';
+import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
 
-const FILTERABLE_TYPES = [
-  TransactionType.SMART_CONTRACT,
-  TransactionType.CONTRACT_CALL,
-  TransactionType.TOKEN_TRANSFER,
-  TransactionType.COINBASE,
+const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
+  GetTransactionListTypeEnum.smart_contract,
+  GetTransactionListTypeEnum.contract_call,
+  GetTransactionListTypeEnum.token_transfer,
+  GetTransactionListTypeEnum.coinbase,
 ];
 
-export const FilteredMessage: React.FC<{ filterKey: 'sandbox' | 'txList' } & GridProps> = ({
-  filterKey,
+export const FilteredMessage: React.FC<{ filterType: TxFilterTypes } & GridProps> = ({
+  filterType,
   ...rest
 }) => {
-  const { handleOpen } = useFilterState(filterKey);
+  const { toggleFilterVisibility } = useFilterState(filterType);
   return (
     <Grid p="extra-loose" placeItems="center" textAlign="center" {...rest}>
       <Box>
@@ -57,7 +55,7 @@ export const FilteredMessage: React.FC<{ filterKey: 'sandbox' | 'txList' } & Gri
             _hover={{ cursor: 'pointer', bg: color('bg-alt') }}
             border={border()}
             color={color('text-body')}
-            onClick={handleOpen}
+            onClick={toggleFilterVisibility}
           >
             Change filters
           </Badge>
@@ -98,129 +96,89 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   );
 };
 
-export const FilterPanel = React.memo(
-  ({ filterKey, hideBackdrop, showBorder, bg, pointerEvents, ...rest }: any) => {
-    const { handleClose, types, handleUpdateTypes, showing } = useFilterState(filterKey);
-    const isLoading = useAtomValue(isLoadingState);
+export const FilterPanel = React.memo(({ filterKey, showBorder, bg, ...rest }: any) => {
+  const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } =
+    useFilterState(filterKey);
 
-    const borderStyles = showBorder
-      ? {
-          border: border(),
-        }
-      : {};
+  const borderStyles = showBorder
+    ? {
+        border: border(),
+      }
+    : {};
 
-    return (
-      <Flex
-        height="100%"
+  if (!isVisible) return null;
+
+  return (
+    <Flex
+      data-test="filter-panel"
+      height="100%"
+      width="100%"
+      maxWidth="100vw"
+      left={['unset', 'unset', 0, 0]}
+      right={['-10px', '-10px', 'unset', 'unset']}
+      flexGrow={1}
+      position="absolute"
+      top="45px"
+      overflowY="hidden"
+      flexDirection="column"
+      px="extra-loose"
+      pointerEvents="none"
+      {...rest}
+    >
+      <Box
+        zIndex={100}
+        p="base"
+        pb="loose"
+        top="1px"
+        bg={bg}
         width="100%"
-        maxWidth="100vw"
-        left={['unset', 'unset', 0, 0]}
-        right={['-10px', '-10px', 'unset', 'unset']}
-        flexGrow={1}
-        position="absolute"
-        top="45px"
-        overflowY="hidden"
-        flexDirection="column"
-        px="extra-loose"
-        pointerEvents="none"
-        {...rest}
+        borderRadius="0 0 16px 16px"
+        willChange="transform, opacity"
+        boxShadow="high"
+        pointerEvents="all"
+        transition={`280ms cubic-bezier(0.4, 0, 0.2, 1)`}
+        transitionProperty="opacity, transform"
+        {...borderStyles}
       >
-        <Transition
-          timeout={{ enter: 50, exit: 150 }}
-          styles={{
-            init: {
-              transform: 'translateY(-100%)',
-            },
-            entered: { transform: 'translateY(0)', opacity: 1 },
-            exiting: {
-              transform: 'translateY(0)',
-              opacity: '0',
-            },
-          }}
-          in={!!showing}
-        >
-          {styles => (
-            <Box
-              zIndex={100}
-              p="base"
-              pb="loose"
-              top="1px"
-              bg={bg}
-              width="100%"
-              borderRadius="0 0 16px 16px"
-              willChange="transform, opacity"
-              style={styles}
-              boxShadow="high"
-              pointerEvents="all"
-              transition={`280ms cubic-bezier(0.4, 0, 0.2, 1)`}
-              transitionProperty="opacity, transform"
-              {...borderStyles}
-            >
-              <Box
-                position="absolute"
-                top={'-48px'}
-                left="0"
-                width="100%"
-                bg={color('bg')}
-                height="50px"
+        <Box
+          position="absolute"
+          top={'-48px'}
+          left="0"
+          width="100%"
+          bg={color('bg')}
+          height="50px"
+        />
+        <Flex pb="base" alignItems="center" justifyContent="space-between">
+          <Title>Filter transactions</Title>
+          <Stack isInline alignItems="center">
+            <IconButton onClick={toggleFilterVisibility} dark icon={CloseIcon} />
+          </Stack>
+        </Flex>
+        <Flex justifyContent="flex-start">
+          <Stack alignItems="flex-start" spacing="base" mr="base">
+            {[FILTERABLE_TYPES[0], FILTERABLE_TYPES[1]].map(type => (
+              <CheckableElement
+                onClick={() => toggleFilter(type)}
+                value={activeFilters[type]}
+                type={type}
+                key={type}
+                data-test={type}
               />
-              <Flex pb="base" alignItems="center" justifyContent="space-between">
-                <Title>Filter transactions</Title>
-                <Stack isInline alignItems="center">
-                  <Text
-                    mb="0px !important"
-                    fontWeight="500"
-                    fontSize="12px"
-                    color={color('text-caption')}
-                  >
-                    {isLoading ? 'Loading...' : ''}
-                  </Text>
-                  <IconButton onClick={handleClose} dark icon={CloseIcon} />
-                </Stack>
-              </Flex>
-              <Flex justifyContent="flex-start">
-                <Stack alignItems="flex-start" spacing="base" mr="base">
-                  {[FILTERABLE_TYPES[0], FILTERABLE_TYPES[1]].map(type => (
-                    <CheckableElement
-                      onClick={handleUpdateTypes}
-                      value={!!types.find(_type => _type === type)}
-                      type={type}
-                      key={type}
-                    />
-                  ))}
-                </Stack>
-                <Stack alignItems="flex-start" spacing="base">
-                  {[FILTERABLE_TYPES[2], FILTERABLE_TYPES[3]].map(type => (
-                    <CheckableElement
-                      onClick={handleUpdateTypes}
-                      value={!!types.find(_type => _type === type)}
-                      type={type}
-                      key={type}
-                    />
-                  ))}
-                </Stack>
-              </Flex>
-            </Box>
-          )}
-        </Transition>
-        {!hideBackdrop ? (
-          <Fade timeout={250} in={!!showing}>
-            {styles => (
-              <Box
-                onClick={handleClose}
-                position="absolute"
-                top="0"
-                left={0}
-                width="100%"
-                height="calc(100% - 33px)"
-                bg="rgba(0,0,0,0.5)"
-                zIndex={99}
-                style={styles}
+            ))}
+          </Stack>
+          <Stack alignItems="flex-start" spacing="base">
+            {[FILTERABLE_TYPES[2], FILTERABLE_TYPES[3]].map(type => (
+              <CheckableElement
+                onClick={() => toggleFilter(type)}
+                value={activeFilters[type]}
+                type={type}
+                key={type}
+                data-test={type}
               />
-            )}
-          </Fade>
-        ) : null}
-      </Flex>
-    );
-  }
-);
+            ))}
+          </Stack>
+        </Flex>
+      </Box>
+    </Flex>
+  );
+});

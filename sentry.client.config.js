@@ -13,9 +13,9 @@ function initSentry() {
         if (window.location.search.includes('send-sample')) {
           return 1;
         }
-        return 0.05;
+        return 0.1;
       } catch (_) {
-        return 0.05;
+        return 0.1;
       }
     },
   });

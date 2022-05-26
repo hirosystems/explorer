@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Flex } from '@stacks/ui';
 import { Section } from '@components/section';
 import { FilterButton } from '@components/filter-button';
 import { useTabs } from '../hooks/use-tabs';
 import { InfiniteTransactionsList } from '@components/infinite-item-list';
 import { Tabs } from '@components/tabs';
-import { GetTransactionListTypeEnum } from '@store/recoil/filter';
-import { useFilterState } from '@common/hooks/use-filter-state';
-import { useUpdateAtom } from 'jotai/utils';
-import { isLoadingState } from '@store/filter';
 import { useHomeQueries } from '@features/home/useHomeQueries';
 import { useInfiniteQuery } from 'react-query';
 import { getNextPageParam } from '@store/common';
@@ -32,14 +28,10 @@ function useTransactionList(limit: number) {
 
 const InnerTransactionListContent = ({
   limit,
-  types,
   infinite,
-  onUnMount,
 }: {
   limit: number;
   infinite?: boolean;
-  types: GetTransactionListTypeEnum[];
-  onUnMount?: (types?: GetTransactionListTypeEnum[]) => void;
 }) => {
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
@@ -49,14 +41,6 @@ const InnerTransactionListContent = ({
   const { isFetchingNextPage, hasNextPage, fetchNextPage } = mempoolSelected
     ? mempoolActions
     : confirmedActions;
-
-  useEffect(() => {
-    if (onUnMount) {
-      return () => {
-        onUnMount(types);
-      };
-    }
-  }, [types, onUnMount]);
 
   if (!data) return null;
 
@@ -77,17 +61,8 @@ export const TabbedTransactionList: React.FC<{
   limit: number;
   infinite?: boolean;
 }> = ({ limit, infinite }) => {
-  const setIsLoading = useUpdateAtom(isLoadingState);
-  const { types } = useFilterState('txList');
   const { currentIndex } = useTabs(TX_TABS);
   const mempoolSelected = currentIndex !== 0;
-
-  const [previousTypes, setPreviousTypes] = useState(types);
-
-  const onSuspenseUnmount = (types?: GetTransactionListTypeEnum[]) => {
-    void setIsLoading(true);
-    if (types) setPreviousTypes(types);
-  };
 
   return (
     <Section
@@ -98,12 +73,7 @@ export const TabbedTransactionList: React.FC<{
       alignSelf="flex-start"
       topRight={!mempoolSelected && infinite && FilterButton}
     >
-      <InnerTransactionListContent
-        infinite={infinite}
-        limit={limit}
-        types={types}
-        onUnMount={() => setIsLoading(false)}
-      />
+      <InnerTransactionListContent infinite={infinite} limit={limit} />
     </Section>
   );
 };

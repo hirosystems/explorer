@@ -1,11 +1,13 @@
+import * as React from 'react';
 import { useMemo } from 'react';
 import { TransactionListItem } from '@components/transaction-list-item';
-import * as React from 'react';
 import type {
   MempoolTransactionsListResponse,
   TransactionsListResponse,
 } from '@store/transactions';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { useFilterState } from '@common/hooks/use-filter-state';
+import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
 
 interface TransactionListProps {
   isLastPage?: boolean;
@@ -26,12 +28,14 @@ export const TransactionList = (props: TransactionListProps) => {
     [data]
   );
   if (!list) return null;
+  const { activeFilters } = useFilterState(TxFilterTypes.TransactionsPageTxFilter);
+  const filteredTxs = list.filter(tx => activeFilters[tx.tx_type]);
   return (
     <>
-      {list?.map((item: Transaction | MempoolTransaction, itemIndex: number) => (
+      {filteredTxs?.map((tx: Transaction | MempoolTransaction, itemIndex: number) => (
         <TransactionListItem
-          tx={item}
-          key={item.tx_id}
+          tx={tx}
+          key={tx.tx_id}
           isLast={isLastPage && itemIndex + 1 === list.length}
         />
       ))}

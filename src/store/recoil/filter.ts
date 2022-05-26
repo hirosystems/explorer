@@ -1,6 +1,3 @@
-import { atomFamily } from 'jotai/utils';
-import { atom } from 'jotai';
-
 export enum GetTransactionListTypeEnum {
   coinbase = 'coinbase',
   token_transfer = 'token_transfer',
@@ -21,18 +18,3 @@ export const DEFAULT_TX_FILTER_TYPES: GetTransactionListTypeEnum[] = [
   GetTransactionListTypeEnum.smart_contract,
   GetTransactionListTypeEnum.contract_call,
 ];
-const defaultValue = {
-  showing: false,
-  types: DEFAULT_TX_FILTER_TYPES,
-  showPending: true,
-  showFailed: true,
-};
-
-export const filterState = atomFamily(_param =>
-  atom<{
-    showing: boolean;
-    showPending: boolean;
-    showFailed: boolean;
-    types: GetTransactionListTypeEnum[];
-  }>(defaultValue)
-);
