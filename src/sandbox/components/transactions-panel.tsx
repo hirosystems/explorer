@@ -1,6 +1,5 @@
-// @ts-nocheck
 import React from 'react';
-import { Box, Flex, Stack, color, Grid, transition } from '@stacks/ui';
+import { Box, color, Flex, Grid, Stack, transition } from '@stacks/ui';
 import { Caption, Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { useUser } from '@sandbox/hooks/use-user';
@@ -13,7 +12,6 @@ import {
   txContractState,
   txDetailsState,
 } from '@sandbox/store/sandbox';
-import { filterState } from '@store/recoil/filter';
 import { IconButton } from '@components/icon-button';
 import { ChevronDown } from '@components/icons/chevron-down';
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -30,16 +28,13 @@ import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 import { FilterIcon } from '@components/icons/filter';
 import { functionCallViewState } from '@sandbox/store/views';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useAtom } from 'jotai';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { useFilterState } from '@common/hooks/use-filter-state';
 
-const PanelHeader = React.memo(() => {
-  const [filter, setFilterState] = useAtom(filterState('sandbox'));
-
-  const handleFilterToggle = () => {
-    setFilterState(state => ({ ...state, showing: !state.showing }));
-  };
+const PanelHeader: React.FC<{ filterType: TxFilterTypes }> = ({ filterType }) => {
+  const { toggleFilterVisibility } = useFilterState(filterType);
   return (
     <>
       <Flex
@@ -55,7 +50,7 @@ const PanelHeader = React.memo(() => {
           display="flex"
           alignItems="center"
           _hover={{ cursor: 'pointer', color: color('text-title') }}
-          onClick={handleFilterToggle}
+          onClick={toggleFilterVisibility}
         >
           <FilterIcon mr="extra-tight" color="currentColor" size="18px" strokeWidth={1.5} />
           Filter transactions
@@ -63,7 +58,7 @@ const PanelHeader = React.memo(() => {
       </Flex>
     </>
   );
-});
+};
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const router = useRouter();
@@ -105,7 +100,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
             setCodeBody(codeBody);
             setLoaded(true);
             setResult(undefined);
-            router.push(buildUrl('/sandbox/deploy'));
+            void router.push(buildUrl('/sandbox/deploy'));
             setTimeout(() => {
               setLoaded(false);
             }, 3000);
@@ -134,11 +129,11 @@ const TxDetailsFunctions = ({
     setView('function-overview');
     setQuery(contractId);
     setCurrentFunction(name);
-    router.push(buildUrl('/sandbox/contract-call'));
+    void router.push(buildUrl('/sandbox/contract-call'));
   };
 
   const handleSetContractQuery = () => {
-    router.push(buildUrl('/sandbox/contract-call'));
+    void router.push(buildUrl('/sandbox/contract-call'));
     setQuery(contractId);
     setCurrentFunction(undefined);
     setView('function-overview');
@@ -332,7 +327,6 @@ const SandboxTxItem = React.memo(
                 size: '24px',
                 transform: detailsVisible ? 'rotate(180deg)' : 'none',
                 transition,
-                stokeWidth: 2,
               }}
               icon={ChevronDown}
             />
@@ -371,10 +365,12 @@ const SandboxTxItem = React.memo(
 );
 
 const TxList: React.FC = React.memo(() => {
-  const [filters] = useAtom(filterState('sandbox'));
+  const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } = useFilterState(
+    TxFilterTypes.SandboxTxFilter
+  );
   const { transactions, pendingTransactions, principal } = useUser({ suspense: true });
 
-  const filteredTxs = transactions?.filter(tx => filters.types.find(type => type === tx.tx_type));
+  const filteredTxs = (transactions || []).filter(tx => activeFilters[tx.tx_type]);
   const hasTxButIsFiltered = transactions?.length && filteredTxs?.length === 0;
 
   const pendingList = React.useMemo(
@@ -399,21 +395,19 @@ const TxList: React.FC = React.memo(() => {
 
   const txList = React.useMemo(
     () =>
-      filteredTxs.map((tx, key, arr) =>
-        tx.tx_status !== 'success' && !filters.showFailed ? null : (
-          <SandboxTxItem key={key} tx={tx} key={tx.tx_id} isLast={key === arr.length - 1} />
-        )
-      ),
-    [filteredTxs, filters.types, filters.showFailed, transactions]
+      filteredTxs.map((tx, key, arr) => (
+        <SandboxTxItem tx={tx} key={tx.tx_id} isLast={key === arr.length - 1} />
+      )),
+    [filteredTxs, activeFilters, transactions]
   );
 
   return (
     <>
-      {pendingTransactions?.length && filters.showPending ? pendingList : null}
+      {pendingList}
       {filteredTxs?.length ? (
         txList
       ) : hasTxButIsFiltered ? (
-        <FilteredMessage filterKey="sandbox" />
+        <FilteredMessage filterType={TxFilterTypes.SandboxTxFilter} />
       ) : (
         <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
           <Stack textAlign="center">
@@ -450,8 +444,8 @@ export const TransactionsPanel = React.memo(props => {
       overflow="hidden"
       {...props}
     >
-      <PanelHeader />
-      <FilterPanel hideBackdrop showBorder bg={color('bg')} filterKey="sandbox" />
+      <PanelHeader filterType={TxFilterTypes.SandboxTxFilter} />
+      <FilterPanel showBorder bg={color('bg')} filterKey={TxFilterTypes.SandboxTxFilter} />
 
       <Flex
         flexDirection="column"

@@ -12,7 +12,7 @@ import { dehydrate } from 'react-query/hydration';
 import { QueryClient } from 'react-query';
 import { getHomeQueries } from '@features/home/useHomeQueries';
 import { removeKeysWithUndefinedValues } from '@common/utils';
-import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
+import { selectActiveNetworkUrl } from '@common/state/network-slice';
 
 const Home: NextPage = () => {
   return (

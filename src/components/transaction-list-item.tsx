@@ -15,7 +15,7 @@ interface TransactionListItemProps extends BoxProps {
 export const TransactionListItem: React.FC<TransactionListItemProps> = memo(props => {
   const { tx, isLast, principal, ...rest } = props;
   return (
-    <HoverableItem>
+    <HoverableItem data-test={`${tx.tx_type}-transaction`}>
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>

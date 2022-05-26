@@ -11,7 +11,8 @@
     "lint:prettier": "prettier --check \"src/**/*.{ts,tsx}\" *.js *.json",
     "lint:prettier:fix": "prettier --write \"src/**/*.{ts,tsx}\" *.js *.json",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test"
   },
   "version": "1.0.0",
   "author": "Hiro Systems PBC (formerly Blockstack PBC)",
@@ -110,6 +111,7 @@
     "@emotion/babel-plugin": "11.3.0",
     "@emotion/babel-preset-css-prop": "11.2.0",
     "@next/bundle-analyzer": "11.0.1",
+    "@playwright/test": "^1.22.2",
     "@segment/analytics.js-core": "^4.1.11",
     "@stacks/eslint-config": "1.0.9",
     "@stacks/prettier-config": "0.0.8",
