@@ -1,3 +1,10 @@
+## [1.22.2](https://github.com/hirosystems/explorer/compare/v1.22.1...v1.22.2) (2022-05-27)
+
+
+### Bug Fixes
+
+* use principal hex value ([538670b](https://github.com/hirosystems/explorer/commit/538670bf585c6140ac90475e2a034afe3ea0b28a))
+
 ## [1.22.1](https://github.com/hirosystems/explorer/compare/v1.22.0...v1.22.1) (2022-05-25)
 
 
