@@ -6,6 +6,7 @@ import NextLink from 'next/link';
 import { TxLink } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -111,7 +112,7 @@ export const FunctionSummaryClarityValue = ({
   btc: null | string;
 }) => {
   if (arg.type === 'principal') {
-    const principal = clarityValuetoHumanReadable(arg) as string;
+    const principal = arg.hex ? (cvToJSON(hexToCV(arg.hex)) || {}).value : '';
     const isContract = principal.includes('.');
     if (isContract) {
       return (
