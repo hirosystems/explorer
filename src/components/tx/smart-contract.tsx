@@ -35,9 +35,7 @@ const SmartContractPage: React.FC<{
     queries.fetchAccountBalance(contractId)
   );
 
-  if (!contract) return null;
-
-  const source = contract.source_code;
+  const source = contract?.source_code;
 
   return (
     <>
