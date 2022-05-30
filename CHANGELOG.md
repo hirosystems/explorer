@@ -1,3 +1,10 @@
+## [1.22.3](https://github.com/hirosystems/explorer/compare/v1.22.2...v1.22.3) (2022-05-30)
+
+
+### Bug Fixes
+
+* pending contract deployment ([3480f0d](https://github.com/hirosystems/explorer/commit/3480f0df4119fded8ec0f163938f7da818918af7))
+
 ## [1.22.2](https://github.com/hirosystems/explorer/compare/v1.22.1...v1.22.2) (2022-05-27)
 
 
