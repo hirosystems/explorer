@@ -1,3 +1,10 @@
+## [1.22.4](https://github.com/hirosystems/explorer/compare/v1.22.3...v1.22.4) (2022-05-31)
+
+
+### Bug Fixes
+
+* filter null args ([c9984a0](https://github.com/hirosystems/explorer/commit/c9984a09c966fa5f6334946d326f88f82fee03cf))
+
 ## [1.22.3](https://github.com/hirosystems/explorer/compare/v1.22.2...v1.22.3) (2022-05-30)
 
 
