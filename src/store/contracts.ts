@@ -1,4 +1,4 @@
-import { atom, Getter } from 'jotai';
+import { Atom, atom, Getter } from 'jotai';
 import { apiClientsState } from '@store/api-clients';
 import { ContractInterfaceResponse } from '@stacks/blockchain-api-client';
 import { QueryRefreshRates } from '@common/constants';
@@ -44,23 +44,24 @@ export const contractInfoState = atomFamilyWithQuery<string, any>(
   { refetchInterval: QueryRefreshRates.None, getShouldRefetch: () => false }
 );
 
-export const contractSourceState = atomFamily<string, string>(contractId =>
+export const contractSourceState = atomFamily<string, Atom<string>>(contractId =>
   atom(get => {
     const info = get(contractInfoState(contractId));
     return info?.source_code;
   })
 );
 
-export const contractInterfaceState = atomFamily<string, ContractInterfaceResponse>(contractId =>
-  atom(get => {
-    const info = get(contractInfoState(contractId));
-    return info.abi;
-  })
+export const contractInterfaceState = atomFamily<string, Atom<ContractInterfaceResponse>>(
+  contractId =>
+    atom(get => {
+      const info = get(contractInfoState(contractId));
+      return info.abi;
+    })
 );
 
 export const transactionFromContractId = atomFamily<
   string,
-  Transaction | MempoolTransaction | undefined
+  Atom<Transaction | MempoolTransaction | undefined>
 >(contract_id =>
   atom(get => {
     const contractInfo = get(contractInfoState(contract_id));

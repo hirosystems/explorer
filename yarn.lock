@@ -3322,6 +3322,13 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
+"@types/react-dom@17.0.2":
+  version "17.0.2"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.2.tgz#35654cf6c49ae162d5bc90843d5437dc38008d43"
+  integrity sha512-Icd9KEgdnFfJs39KyRyr0jQ7EKhq8U6CcHRMGAS45fp5qgUvxL3ujUCfWFttUK2UErqZNj97t9gsVPNAqcwoCg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-redux@7.1.22":
   version "7.1.22"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.22.tgz#0eab76a37ef477cc4b53665aeaf29cb60631b72a"
@@ -3342,16 +3349,7 @@
     hoist-non-react-statics "^3.3.0"
     redux "^4.0.0"
 
-"@types/react@*":
-  version "18.0.9"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.9.tgz#d6712a38bd6cd83469603e7359511126f122e878"
-  integrity sha512-9bjbg1hJHUm4De19L1cHiW0Jvx3geel6Qczhjd0qY5VKVE2X5+x77YxAepuCwVh4vrgZJdgEJw48zrhRIeF4Nw==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@17.0.15":
+"@types/react@*", "@types/react@17.0.15":
   version "17.0.15"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.15.tgz#c7533dc38025677e312606502df7656a6ea626d0"
   integrity sha512-uTKHDK9STXFHLaKv6IMnwp52fm0hwU+N89w/p9grdUqcFA6WuqDyPhaWopbNyE1k/VhgzmHl8pu1L4wITtmlLw==

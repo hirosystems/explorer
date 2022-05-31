@@ -25,7 +25,6 @@ app.prepare().then(() => {
     })
   );
 
-
   // Store all the registered express routes for usage with metrics reporting
   const routes = expressListEndpoints(server).map(endpoint => ({
     path: endpoint.path,
@@ -56,7 +55,7 @@ app.prepare().then(() => {
         normalizePath: path => {
           // Get the url pathname without a query string or fragment
           // (note base url doesn't matter, but required by URL constructor)
-          console.log('normalizePath', path)
+          console.log('normalizePath', path);
           try {
             let pathTemplate = new URL(path, 'http://x').pathname;
             // Match request url to the Express route
@@ -66,10 +65,10 @@ app.prepare().then(() => {
                 break;
               }
             }
-            console.log('normalizePath return', pathTemplate)
+            console.log('normalizePath return', pathTemplate);
             return pathTemplate;
           } catch (error) {
-            console.erro('normalizePath error', error)
+            console.erro('normalizePath error', error);
             logger.warn(`Warning: ${error}`);
             return path;
           }

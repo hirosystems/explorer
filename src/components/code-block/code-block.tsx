@@ -8,12 +8,12 @@ import { css, Theme } from '@stacks/ui-core';
 
 import * as React from 'react';
 
-import { Box, CodeBlock as CodeBlockBase, CodeBlockProps, color } from '@stacks/ui';
+import { Box, CodeBlock as CodeBlockBase, CodeBlockProps } from '@stacks/ui';
 
 const CodeBlock = ({
   highlightedLine,
   ...rest
-}: Omit<CodeBlockProps, 'Prism'> & { highlightedLine?: number }) => {
+}: Omit<CodeBlockProps, 'Prism'> & { highlightedLine?: number }): JSX.Element => {
   const highlightedLineStyle = highlightedLine
     ? {
         [`.token-line:nth-child(${highlightedLine})`]: {
