@@ -14,10 +14,11 @@ export const FunctionSummaryArguments: React.FC<{
   summary: ContractCallTransaction['contract_call'];
   btc: null | string;
 }> = ({ summary, btc }) => {
+  const args = (summary?.function_args || []).filter(arg => !!arg);
   return summary.function_args ? (
     <Box width="100%">
-      {summary.function_args.map((arg: FunctionArg, key: number) => {
-        const isLast = summary?.function_args && key === summary?.function_args?.length - 1;
+      {args.map((arg: FunctionArg, key: number) => {
+        const isLast = key === args.length - 1;
         return (
           <Row
             flexGrow={1}
