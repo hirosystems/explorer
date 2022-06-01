@@ -15,8 +15,6 @@ on:
   push:
     branches:
       - '**'
-    tags:
-      - 'v*'
     paths-ignore:
       - '**/CHANGELOG.md'
       - '**/package.json'
@@ -41,6 +39,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Semantic Release
+          uses: cycjimmy/semantic-release-action@v2
+          env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+            SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
+          with:
+            extra_plugins: |
+              @semantic-release/changelog
+              @semantic-release/git
 
       - name: Docker meta
         id: docker_meta
@@ -71,16 +79,6 @@ jobs:
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             SENTRY_LOG_LEVEL=debug
-
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
-        with:
-          extra_plugins: |
-            @semantic-release/changelog
-            @semantic-release/git
 
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag/digest: ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }}"'
