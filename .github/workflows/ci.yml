@@ -42,6 +42,7 @@ jobs:
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
@@ -51,11 +52,11 @@ jobs:
             @semantic-release/git
 
       - name: Checkout tag
-        if: ${{ steps.semantic.outputs.new_release_version }} > ${{ steps.semantic.outputs.last_release_version }}
+        if: steps.semantic.outputs.new_release_version != ''
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
-          ref: ${{ steps.semantic.outputs.new_release_version }}
+          ref: v${{ steps.semantic.outputs.new_release_version }}
 
       - name: Docker meta
         id: docker_meta
