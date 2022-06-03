@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/hirosystems/explorer/compare/v1.22.4...v1.23.0) (2022-06-03)
+
+
+### Features
+
+* refactor filters ([4f645e1](https://github.com/hirosystems/explorer/commit/4f645e1cfd016180596cefad2df1b7a0f42280fa))
+
 ## [1.22.4](https://github.com/hirosystems/explorer/compare/v1.22.3...v1.22.4) (2022-05-31)
 
 
