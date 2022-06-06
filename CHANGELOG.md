@@ -1,3 +1,11 @@
+## [1.23.1](https://github.com/hirosystems/explorer/compare/v1.23.0...v1.23.1) (2022-06-06)
+
+
+### Bug Fixes
+
+* fix yml spacing ([b389e40](https://github.com/hirosystems/explorer/commit/b389e40b7f5e90cc32f6328ded2b9d7d1c31918a))
+* generate tags for docker ([7e30aa6](https://github.com/hirosystems/explorer/commit/7e30aa6eb467739200dbdd3aef66f56dd6fabad2))
+
 # [1.23.0](https://github.com/hirosystems/explorer/compare/v1.22.4...v1.23.0) (2022-06-03)
 
 
