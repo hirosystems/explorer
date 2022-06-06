@@ -34,7 +34,7 @@ jobs:
     outputs:
       docker_image_digest: ${{ steps.docker_push.outputs.digest }}
       version: ${{ steps.docker_meta.outputs.version }}
-      sem_version_bool: ${{ steps.semantic.outputs.new_release_version }}
+      sem_version_bool: ${{ steps.semantic.outputs.new_release_published }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -123,7 +123,7 @@ jobs:
 
   auto-approve-staging:
     runs-on: ubuntu-latest
-    if: ${{ needs.semantic.outputs.sem_version_bool == 'true' }}
+    if: needs.build-publish.outputs.sem_version_bool == 'true'
     needs:
       - build-publish
     steps:
