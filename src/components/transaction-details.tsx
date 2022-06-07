@@ -11,7 +11,7 @@ import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Section } from '@components/section';
-import { BlockLink, TxLink } from '@components/links';
+import { BlockLink, buildUrl, TxLink } from '@components/links';
 import { IconButton } from '@components/icon-button';
 import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
 import { StxInline } from '@components/icons/stx-inline';
@@ -54,7 +54,7 @@ const BlockComponent = React.memo(({ block, ts }: { block: number | string; ts: 
 
 const AddressComponent = React.memo(({ principal }: { principal: string }) => {
   return (
-    <NextLink href={`/address/[principal]`} as={`/address/${principal}`} passHref>
+    <NextLink href={buildUrl(`/address/${encodeURIComponent(principal)}`)} passHref>
       <Link as="a">{principal}</Link>
     </NextLink>
   );
