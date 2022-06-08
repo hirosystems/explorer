@@ -1,3 +1,10 @@
+## [1.23.2](https://github.com/hirosystems/explorer/compare/v1.23.1...v1.23.2) (2022-06-08)
+
+
+### Bug Fixes
+
+* tx page address urls ([365362a](https://github.com/hirosystems/explorer/commit/365362a15d25467e2f2c75de0a4d4553aafb912c))
+
 ## [1.23.1](https://github.com/hirosystems/explorer/compare/v1.23.0...v1.23.1) (2022-06-06)
 
 
