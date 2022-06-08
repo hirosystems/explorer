@@ -136,7 +136,7 @@ jobs:
 
   deploy-prod:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: needs.build-publish.outputs.sem_version_bool == 'true'
     needs:
       - build-publish
       - deploy-staging
