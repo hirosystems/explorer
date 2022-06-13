@@ -22,6 +22,10 @@ const config: PlaywrightTestConfig = {
     // All available context options: https://playwright.dev/docs/api/class-browser#browser-new-context
     // contextOptions: {
     //   ignoreHTTPSErrors: true,
+    //   recordVideo: {
+    //     dir: 'videos/',
+    //     size: { width: 640, height: 480 },
+    //   },
     // },
   },
 

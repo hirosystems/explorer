@@ -17,6 +17,8 @@ import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIc
 import { StxInline } from '@components/icons/stx-inline';
 import { Circle } from '@components/circle';
 import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
+import { BlocksVisualizer } from '@features/blocks-visualizer';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 interface FeeComponentProps {
   fees: string;
@@ -286,13 +288,26 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   contractName,
   ...rest
 }) => {
+  const txStatus = getTransactionStatus(transaction);
+  const showBlocksVisualizer = txStatus === 'success_microblock' || txStatus === 'pending';
   return (
-    <Section title="Summary" {...rest}>
-      <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
-        <Box width={['100%']}>
-          <Rows noTopBorder items={transformDataToRowData(transaction) as any} />
-        </Box>
-      </Flex>
-    </Section>
+    <>
+      <Section title="Summary" {...rest}>
+        <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
+          <Box width={['100%']}>
+            <Rows noTopBorder items={transformDataToRowData(transaction) as any} />
+          </Box>
+        </Flex>
+      </Section>
+      {showBlocksVisualizer && (
+        <Section title="Blocks" {...rest}>
+          <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
+            <Box width={['100%']} margin={'24px 0'}>
+              <BlocksVisualizer />
+            </Box>
+          </Flex>
+        </Section>
+      )}
+    </>
   );
 };
