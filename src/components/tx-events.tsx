@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAtomValue } from 'jotai/utils';
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import { Section } from '@components/section';
