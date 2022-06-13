@@ -37,7 +37,7 @@ export const Pending = ({ speed = 0.9, ...p }: any) => (
 );
 
 const labelMap = {
-  pending: 'Pending',
+  pending: 'In mempool',
   success: 'Confirmed',
   success_anchor_block: 'Confirmed in anchor block',
   success_microblock: 'Included in microblock',

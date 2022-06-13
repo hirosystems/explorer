@@ -17,6 +17,8 @@ import { dehydrate } from 'react-query/hydration';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { ServerResponse } from 'http';
 import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
+import { DEFAULT_BLOCKS_LIST_LIMIT } from '@common/constants';
+import { getHomeQueries } from '@features/home/useHomeQueries';
 
 interface TransactionPageProps {
   inView: InView;
@@ -53,12 +55,20 @@ const prefetchData = async (
   }
   const prefetchOptions = { staleTime: 5000 };
   const queries = getTransactionQueries(networkUrl);
+  const homeQueries = getHomeQueries(networkUrl);
   try {
-    const { transaction } = await queryClient.fetchQuery(
-      transactionQK(TransactionQueryKeys.transaction, txPageQuery),
-      queries.fetchTransaction(txPageQuery),
-      prefetchOptions
-    );
+    const [{ transaction }] = await Promise.all([
+      queryClient.fetchQuery(
+        transactionQK(TransactionQueryKeys.transaction, txPageQuery),
+        queries.fetchTransaction(txPageQuery),
+        prefetchOptions
+      ),
+      queryClient.prefetchInfiniteQuery(
+        [TransactionQueryKeys.lastThreeBlocks],
+        homeQueries.fetchBlocks(3, 0),
+        prefetchOptions
+      ),
+    ]);
     const contractId = getContractId(txPageQuery, transaction);
     if (contractId) {
       await Promise.all([
