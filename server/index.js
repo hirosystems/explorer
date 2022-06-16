@@ -4,9 +4,10 @@ const compression = require('compression');
 
 const expressStaticGzip = require('express-static-gzip');
 const { createMiddleware: createPrometheusMiddleware } = require('@promster/express');
-const { createServer } = require('@promster/server');
 const { pathToRegexp } = require('path-to-regexp');
 const expressListEndpoints = require('express-list-endpoints');
+const prometheuseApp = require('./prometheus');
+const prometheusPort = 9153;
 
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -76,7 +77,9 @@ app.prepare().then(() => {
       },
     });
     server.use(promMiddleware);
-    createServer({ port: 9153 }).then(() => console.log(`@promster/server started on port 9153.`));
+    prometheuseApp.listen(prometheusPort, () => {
+      console.log(`Example app listening on port ${prometheusPort}`);
+    });
     server.use(loggingMiddleware());
   }
 
