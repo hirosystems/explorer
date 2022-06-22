@@ -4,5 +4,6 @@ export enum AddressQueryKeys {
   accountInfo = 'accountInfo',
   mempoolTransactionsForAddress = 'mempoolTransactionsForAddress',
   transactionsForAddress = 'transactionsForAddress',
+  nonce = 'nonceForAddress',
 }
 export const addressQK = (type: AddressQueryKeys, id?: string) => [type, id];

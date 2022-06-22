@@ -49,7 +49,7 @@ export const AddressSummary = ({
             label: {
               children: 'Nonce',
             },
-            children: `${nonce}`,
+            children: `${nonce ?? ''}`,
           },
         ]}
       />

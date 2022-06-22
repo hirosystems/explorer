@@ -21,6 +21,7 @@ export interface FetchBlocksListResponse {
  *
  * @param {string} apiServer - the current apiServer
  */
+// TOREMOVE unused
 export const fetchBlock =
   (apiServer: string) =>
   async (hash: Block['hash']): Promise<Block> => {
