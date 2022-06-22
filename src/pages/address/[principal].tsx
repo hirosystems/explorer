@@ -1,27 +1,28 @@
-import * as React from 'react';
-import type { NextPage } from 'next';
-import { removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
-import { Meta } from '@components/meta-head';
-import { microStxToStx } from '@stacks/ui-utils';
-import { Flex, Grid, Stack, GridProps } from '@stacks/ui';
-import { StxBalances } from '@components/balances/stx-balance-card';
-import { TokenBalancesCard } from '@components/balances/principal-token-balances';
-import { hasTokenBalance } from '@common/utils/accounts';
-import { Title } from '@components/typography';
-import { AddressSummary } from '@features/address-page/address-summary';
-import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
-import { AccountTransactionList } from '@features/account-transaction-list';
-import { PageWrapper } from '@components/page-wrapper';
-import { AddressNotFound } from '@components/address-not-found';
-import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
-import { ServerResponse } from 'http';
-import { QueryClient, useQuery } from 'react-query';
-import { store, wrapper } from '@common/state/store';
-import { dehydrate } from 'react-query/hydration';
-import { getAddressQueries, useAddressQueries } from '@features/address/use-address-queries';
-import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
-import { useRouter } from 'next/router';
+import { fetchNonce } from '@common/api/account';
+import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
+import { wrapper } from '@common/state/store';
+import { removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
+import { hasTokenBalance } from '@common/utils/accounts';
+import { AddressNotFound } from '@components/address-not-found';
+import { TokenBalancesCard } from '@components/balances/principal-token-balances';
+import { StxBalances } from '@components/balances/stx-balance-card';
+import { Meta } from '@components/meta-head';
+import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
+import { PageWrapper } from '@components/page-wrapper';
+import { Title } from '@components/typography';
+import { AccountTransactionList } from '@features/account-transaction-list';
+import { AddressSummary } from '@features/address-page/address-summary';
+import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
+import { getAddressQueries, useAddressQueries } from '@features/address/use-address-queries';
+import { Flex, Grid, GridProps, Stack } from '@stacks/ui';
+import { microStxToStx } from '@stacks/ui-utils';
+import { ServerResponse } from 'http';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { QueryClient, useQuery } from 'react-query';
+import { dehydrate } from 'react-query/hydration';
+import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 const PageTop = () => {
   return (
@@ -50,7 +51,13 @@ const ContentWrapper = (props: GridProps) => {
   );
 };
 
-const AddressPage: NextPage<any> = ({ error }) => {
+const queryOptions = {
+  refetchOnWindowFocus: false,
+};
+
+const AddressPage: NextPage<any> = arg => {
+  const { error } = arg;
+
   if (error)
     return (
       <>
@@ -60,17 +67,21 @@ const AddressPage: NextPage<any> = ({ error }) => {
     );
 
   const queries = useAddressQueries();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
+
   const { query } = useRouter();
   const address = query.principal as string;
 
   const { data: balance } = useQuery(
     addressQK(AddressQueryKeys.accountBalance, address),
-    queries.fetchAccountBalance(address)
+    queries.fetchAccountBalance(address),
+    queryOptions
   );
 
-  const { data: info } = useQuery(
-    addressQK(AddressQueryKeys.accountInfo, address),
-    queries.fetchAccountInfo(address)
+  const { data: nonces } = useQuery(
+    addressQK(AddressQueryKeys.nonce, address),
+    () => fetchNonce(apiServer)(address),
+    queryOptions
   );
 
   const hasTokenBalances = hasTokenBalance(balance);
@@ -96,7 +107,7 @@ const AddressPage: NextPage<any> = ({ error }) => {
             principal={address}
             hasTokenBalances={hasTokenBalances}
             balances={balance}
-            nonce={info?.nonce}
+            nonce={nonces && nonces.last_executed_tx_nonce}
           />
           <AccountTransactionList contractId={address} />
         </Stack>
@@ -122,6 +133,7 @@ const prefetchData = async (
   }
   const prefetchOptions = { staleTime: 5000 };
   const queries = getAddressQueries(networkUrl);
+
   try {
     await Promise.all([
       queryClient.prefetchQuery(
@@ -130,8 +142,8 @@ const prefetchData = async (
         prefetchOptions
       ),
       queryClient.prefetchQuery(
-        addressQK(AddressQueryKeys.accountInfo, addressPageQuery),
-        queries.fetchAccountInfo(addressPageQuery),
+        addressQK(AddressQueryKeys.nonce, addressPageQuery),
+        () => fetchNonce(networkUrl)(addressPageQuery),
         prefetchOptions
       ),
       queryClient.prefetchInfiniteQuery(

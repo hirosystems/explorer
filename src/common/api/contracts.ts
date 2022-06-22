@@ -3,6 +3,7 @@ import { fetchFromSidecar } from '@common/api/fetch';
 import type { ContractInterfaceResponse } from '@stacks/stacks-blockchain-api-types';
 import type { Contract, ContractResponse } from '@common/types/tx';
 
+// TOREMOVE unused
 export const fetchContract =
   (apiServer: string) =>
   async (contract_id: string): Promise<Contract | { error: string }> => {
