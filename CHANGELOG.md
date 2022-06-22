@@ -1,3 +1,10 @@
+## [1.23.3](https://github.com/hirosystems/explorer/compare/v1.23.2...v1.23.3) (2022-06-22)
+
+
+### Bug Fixes
+
+* display 0 instead of blank in address summary ([b7a14ac](https://github.com/hirosystems/explorer/commit/b7a14ac135913a7392ceb09270905f7cdc73b931)), closes [#606](https://github.com/hirosystems/explorer/issues/606)
+
 ## [1.23.2](https://github.com/hirosystems/explorer/compare/v1.23.1...v1.23.2) (2022-06-08)
 
 
