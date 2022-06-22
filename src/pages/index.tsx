@@ -1,18 +1,17 @@
-import React from 'react';
-import { Grid } from '@stacks/ui';
-import { PageWrapper } from '@components/page-wrapper';
-import { Meta } from '@components/meta-head';
+import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL, IS_BROWSER } from '@common/constants';
+import { selectActiveNetworkUrl } from '@common/state/network-slice';
+import { wrapper } from '@common/state/store';
+import { removeKeysWithUndefinedValues } from '@common/utils';
 import { HomePageTop } from '@components/home-page-top';
+import { Meta } from '@components/meta-head';
+import { PageWrapper } from '@components/page-wrapper';
 import { TabbedTransactionList } from '@components/tabbed-transaction-list';
 import { BlocksList } from '@features/blocks-list';
-import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL, IS_BROWSER } from '@common/constants';
-import type { NextPage } from 'next';
-import { store, wrapper } from '@common/state/store';
-import { dehydrate } from 'react-query/hydration';
-import { QueryClient } from 'react-query';
 import { getHomeQueries } from '@features/home/useHomeQueries';
-import { removeKeysWithUndefinedValues } from '@common/utils';
-import { selectActiveNetworkUrl } from '@common/state/network-slice';
+import { Grid } from '@stacks/ui';
+import type { NextPage } from 'next';
+import { QueryClient } from 'react-query';
+import { dehydrate } from 'react-query/hydration';
 
 const Home: NextPage = () => {
   return (
@@ -37,24 +36,14 @@ const prefetchData = async (networkUrl?: string): Promise<QueryClient> => {
   if (!networkUrl) {
     return queryClient;
   }
-  const prefetchOptions = { staleTime: 5000 };
+  const prefetchOptions = { retry: 0, staleTime: 5000 };
   console.log('[DEBUG] prefetch home', networkUrl, IS_BROWSER);
   const queries = getHomeQueries(networkUrl);
-  // test comment
+
   await Promise.all([
-    queryClient.prefetchInfiniteQuery(
-      ['blocks'],
-      queries.fetchBlocks(DEFAULT_BLOCKS_LIST_LIMIT, 0),
-      prefetchOptions
-    ),
     queryClient.prefetchInfiniteQuery(
       ['confirmedTransactions'],
       queries.fetchConfirmedTransactions(DEFAULT_LIST_LIMIT_SMALL, 0),
-      prefetchOptions
-    ),
-    queryClient.prefetchInfiniteQuery(
-      ['mempoolTransactions'],
-      queries.fetchMempoolTransactions(DEFAULT_LIST_LIMIT_SMALL, 0),
       prefetchOptions
     ),
   ]);

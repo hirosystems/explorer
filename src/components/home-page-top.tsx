@@ -19,6 +19,7 @@ export const HomePageTop: React.FC = React.memo(() => (
       textAlign={['center', 'left']}
       mt="72px"
       mb="extra-loose"
+      data-test="homepage-title"
       color="white"
     >
       Stacks Explorer

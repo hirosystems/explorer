@@ -36,6 +36,7 @@ export const TransactionList = (props: TransactionListProps) => {
         <TransactionListItem
           tx={tx}
           key={tx.tx_id}
+          data-test="transaction-list-item"
           isLast={isLastPage && itemIndex + 1 === list.length}
         />
       ))}

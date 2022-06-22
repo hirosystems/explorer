@@ -1,15 +1,19 @@
-import { Box, Stack } from '@stacks/ui';
 import { InfiniteTransactionsList } from '@components/infinite-item-list';
-import { Section } from '@components/section';
-import * as React from 'react';
+import { SkeletonAccountTransactionList } from '@components/loaders/skeleton-transaction';
 import { NoActivityIllustration } from '@components/no-activity-illustration';
+import { Section } from '@components/section';
 import { Caption } from '@components/typography';
-import { useInfiniteQuery } from 'react-query';
-import { getNextPageParam } from '@store/common';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { Box, Stack } from '@stacks/ui';
+import { getNextPageParam } from '@store/common';
+import * as React from 'react';
+import { useInfiniteQuery } from 'react-query';
 
-const Wrapper: React.FC = ({ children }) => <Section title="Transactions">{children}</Section>;
+// TODO to move to a separate file
+export const Wrapper: React.FC = ({ children }) => (
+  <Section title="Transactions">{children}</Section>
+);
 
 const EmptyState: React.FC = () => (
   <Stack px="loose" spacing="base" justifyContent="center" alignItems="center" minHeight="300px">
@@ -20,11 +24,7 @@ const EmptyState: React.FC = () => (
 
 export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ contractId }) => {
   if (!contractId) {
-    return (
-      <Wrapper>
-        <EmptyState />
-      </Wrapper>
-    );
+    return <SkeletonAccountTransactionList />;
   }
 
   const queries = useTransactionQueries();
@@ -39,15 +39,21 @@ export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ cont
       queries.fetchMempoolTransactionsForAddress(contractId, undefined, pageParam || 0)(),
     { getNextPageParam }
   );
+  const isLoading =
+    transactionsQueryResponse.isLoading || mempoolTransactionsQueryResponse.isLoading;
 
   const hasPending = !!mempoolTransactionsQueryResponse?.data?.pages?.[0]?.results?.length;
   const hasConfirmed = !!transactionsQueryResponse?.data?.pages?.[0]?.total;
   const hasTransactions = hasPending || hasConfirmed;
 
+  if (isLoading) {
+    return <SkeletonAccountTransactionList />;
+  }
+
   return (
     <Wrapper>
       {hasTransactions ? (
-        <Box px="loose">
+        <Box px="loose" data-test="account-transaction-list">
           {!!mempoolTransactionsQueryResponse.data && (
             <InfiniteTransactionsList
               data={mempoolTransactionsQueryResponse.data}

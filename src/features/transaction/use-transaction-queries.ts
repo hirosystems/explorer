@@ -8,9 +8,11 @@ import {
   MempoolTransaction,
   MempoolTransactionListResponse,
   Transaction,
+  TransactionResults,
 } from '@stacks/stacks-blockchain-api-types';
-import { DEFAULT_LIST_LIMIT } from '@common/constants';
+import { DEFAULT_LIST_LIMIT, MAX_BLOCK_TRANSACTIONS_PER_CALL } from '@common/constants';
 import { TransactionsListResponse } from '@store/transactions';
+import { getNextPageParam } from '@store/common';
 
 export const getTransactionQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -20,6 +22,7 @@ export const getTransactionQueries = (networkUrl: string) => {
           hash: blockHash,
         })) as Block)
       : undefined;
+
   const fetchContract = (contractId: string) => async () => {
     const contract = (await clients.smartContractsApi.getContractById({
       contractId,
@@ -29,7 +32,27 @@ export const getTransactionQueries = (networkUrl: string) => {
       abi: contract.abi ? (JSON.parse(contract.abi) as ContractInterfaceResponse) : undefined,
     };
   };
+
+  const fetchBlockTransactions = async (blockHash?: string) => {
+    if (!blockHash) return undefined;
+    let results: Transaction[] = [];
+    let tempResults: TransactionResults;
+    let offset = 0;
+    do {
+      tempResults = (await clients.transactionsApi.getTransactionsByBlockHash({
+        blockHash,
+        offset,
+        limit: MAX_BLOCK_TRANSACTIONS_PER_CALL,
+      })) as TransactionResults;
+      results = results.concat(tempResults.results);
+      offset += tempResults.results.length;
+    } while (results.length < tempResults.total);
+    return results;
+  };
+
   return {
+    fetchBlock: (blockHash?: string) => () => fetchBlock(blockHash),
+    fetchBlockTransactions: (blockHash?: string) => () => fetchBlockTransactions(blockHash),
     fetchTransaction: (txId: string) => async () => {
       const isContractId = txId.includes('.');
       if (!isContractId) {
@@ -38,6 +61,7 @@ export const getTransactionQueries = (networkUrl: string) => {
         })) as unknown as Transaction | MempoolTransaction;
         return {
           transaction,
+          // TODO
           block: await fetchBlock('block_hash' in transaction ? transaction.block_hash : undefined),
         };
       }

@@ -1,22 +1,22 @@
-import React, { useMemo } from 'react';
 import { Stack } from '@stacks/ui';
+import React, { useMemo } from 'react';
 
-import { PageTop } from '@components/page';
-import { TransactionDetails } from '@components/transaction-details';
-import { ContractSource } from '@components/contract-source';
-import { PostConditions } from '@components/post-conditions';
-import { Events } from '@components/tx-events';
-import { ContractDetails } from '@components/contract-details';
-import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import { PagePanes } from '@components/page-panes';
-import { FunctionSummarySection } from '@components/function-summary/function-summary';
 import { TransactionStatus } from '@common/constants';
 import { getTransactionStatus } from '@common/utils/transactions';
-import { Block, MempoolContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
-import { useQuery } from 'react-query';
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
+import { ContractDetails } from '@components/contract-details';
+import { PageTop } from '@components/page';
+import { PagePanes } from '@components/page-panes';
+import { TransactionDetails } from '@components/transaction-details';
+import { Events } from '@components/tx-events';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { Block, MempoolContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
+import { useQuery } from 'react-query';
+import { FunctionSummarySection } from '@components/function-summary/function-summary';
+import { PostConditions } from '@components/post-conditions';
+import { ContractSource } from '@components/contract-source';
 
 const ContractCallPage: React.FC<{
   transaction: ContractCallTransaction | MempoolContractCallTransaction;
@@ -35,8 +35,6 @@ const ContractCallPage: React.FC<{
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const isPending = txStatus === TransactionStatus.PENDING;
   const result = 'tx_result' in transaction && transaction.tx_result;
-
-  if (!contract) return null;
 
   const source = contract?.source_code;
 
@@ -64,13 +62,11 @@ const ContractCallPage: React.FC<{
             conditions={transaction.post_conditions}
             mode={transaction.post_condition_mode}
           />
-          {source && (
-            <ContractSource
-              sourceTx={transaction.contract_call.contract_id}
-              source={source}
-              contractCall={transaction.contract_call}
-            />
-          )}
+          <ContractSource
+            sourceTx={transaction.contract_call.contract_id}
+            source={source}
+            contractCall={transaction.contract_call}
+          />
         </Stack>
         <Stack spacing="extra-loose">
           {contract && (

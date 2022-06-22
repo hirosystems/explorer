@@ -1,17 +1,17 @@
-import React from 'react';
-import { BoxProps, Flex, FlexProps, Stack, color } from '@stacks/ui';
-import { Caption, Text, Title } from '@components/typography';
-import { Transaction, MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
+import { Caption, Text, Title } from '@components/typography';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { BoxProps, color, Flex, FlexProps, Stack } from '@stacks/ui';
 import { forwardRefWithAs } from '@stacks/ui-core';
+import * as React from 'react';
 
-import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 import { ArrowRightIcon } from '@components/icons/arrow-right';
-import { Link } from '@components/link';
-import NextLink from 'next/link';
 import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
-import { Tooltip } from '@components/tooltip';
+import { Link } from '@components/link';
 import { buildUrl } from '@components/links';
+import { getTransactionTypeLabel } from '@components/token-transfer/utils';
+import { Tooltip } from '@components/tooltip';
+import NextLink from 'next/link';
 
 export { getTxTypeIcon };
 
@@ -188,7 +188,7 @@ const LargeVersion = React.memo(
 
     return (
       <>
-        <Flex display="flex" as="span" alignItems="center">
+        <Flex display="flex" as="span" alignItems="center" data-test="tx-item">
           {!hideIcon ? <ItemIcon mr="base" type="tx" tx={tx} /> : null}
           <TxItemTitleArea
             isHovered={isHovered}
@@ -204,6 +204,7 @@ const LargeVersion = React.memo(
               <Caption
                 mr="6px"
                 as="span"
+                data-test="tx-caption"
                 color={didFail ? color('feedback-error') : color('invert')}
               >
                 {isPending && 'Pending'}

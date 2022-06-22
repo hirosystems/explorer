@@ -1,21 +1,21 @@
-import * as React from 'react';
-import { Box, Stack } from '@stacks/ui';
+import { getContractName, isPendingTx } from '@common/utils';
+import { hasStxBalance, hasTokenBalance } from '@common/utils/accounts';
+import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { StxBalances } from '@components/balances/stx-balance-card';
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { ContractSource } from '@components/contract-source';
 import { PageTop } from '@components/page';
-import { TransactionDetails } from '@components/transaction-details';
-import { PostConditions } from '@components/post-conditions';
-import { getContractName, isPendingTx } from '@common/utils';
-import { Events } from '@components/tx-events';
 import { PagePanes } from '@components/page-panes';
-import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import { TokenBalancesCard } from '@components/balances/principal-token-balances';
-import { hasStxBalance, hasTokenBalance } from '@common/utils/accounts';
+import { PostConditions } from '@components/post-conditions';
+import { TransactionDetails } from '@components/transaction-details';
+import { Events } from '@components/tx-events';
 import { AccountTransactionList } from '@features/account-transaction-list';
-import { Block, SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { useQuery } from 'react-query';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { Block, SmartContractTransaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Stack } from '@stacks/ui';
+import * as React from 'react';
+import { useQuery } from 'react-query';
 
 const SmartContractPage: React.FC<{
   transaction: SmartContractTransaction;
@@ -28,6 +28,7 @@ const SmartContractPage: React.FC<{
   const { data: contract } = useQuery(
     transactionQK(TransactionQueryKeys.contract, contractId),
     queries.fetchContract(contractId)
+    // TODO no refetch
   );
 
   const { data: balance } = useQuery(

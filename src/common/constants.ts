@@ -119,6 +119,8 @@ export const DEFAULT_BLOCKS_LIST_LIMIT = 11;
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
 
+export const MAX_BLOCK_TRANSACTIONS_PER_CALL = 200;
+
 export const TransactionType = {
   SMART_CONTRACT: 'smart_contract' as Transaction['tx_type'],
   CONTRACT_CALL: 'contract_call' as Transaction['tx_type'],

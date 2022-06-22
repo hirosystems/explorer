@@ -1,18 +1,18 @@
-import React, { useMemo } from 'react';
-import { BoxProps, color, Grid, GridProps, useColorMode } from '@stacks/ui';
+import { TransactionStatus } from '@common/constants';
+import { TxStatus } from '@common/types/tx';
 import { border } from '@common/utils';
+import { getTransactionStatus } from '@common/utils/transactions';
+import { AnchorBlockIcon } from '@components/icons/anchor-block';
+import { ClockIcon } from '@components/icons/clock';
 import { CodeIcon } from '@components/icons/code';
 import { ContractCallIcon } from '@components/icons/contract-call';
+import { FailedIcon } from '@components/icons/failed';
+import { MicroblockIcon } from '@components/icons/microblock';
 import { StxInline } from '@components/icons/stx-inline';
 import { WalletIcon } from '@components/icons/wallet';
-import { AnchorBlockIcon } from '@components/icons/anchor-block';
-import { MicroblockIcon } from '@components/icons/microblock';
-import { ClockIcon } from '@components/icons/clock';
-import { FailedIcon } from '@components/icons/failed';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { TransactionStatus } from '@common/constants';
-import { getTransactionStatus } from '@common/utils/transactions';
-import { TxStatus } from '@common/types/tx';
+import { BoxProps, color, Grid, GridProps, useColorMode } from '@stacks/ui';
+import React, { useMemo } from 'react';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;

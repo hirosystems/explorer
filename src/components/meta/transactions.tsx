@@ -16,6 +16,7 @@ import { getTransactionStatus } from '@common/utils/transactions';
 import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
+import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
@@ -102,7 +103,10 @@ export const TransactionMeta = () => {
   const queries = useTransactionQueries();
   const { query } = useRouter();
   const txId = query.txid as string;
-  const { data } = useQuery(['transaction', txId], queries.fetchTransaction(txId));
+  const { data } = useQuery(
+    transactionQK(TransactionQueryKeys.transaction, txId),
+    queries.fetchTransaction(txId)
+  );
   const transaction = data?.transaction || ({} as Transaction);
 
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);

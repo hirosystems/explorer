@@ -21,6 +21,7 @@ export interface FetchBlocksListResponse {
  *
  * @param {string} apiServer - the current apiServer
  */
+// TOREMOVE unused
 export const fetchBlock =
   (apiServer: string) =>
   async (hash: Block['hash']): Promise<Block> => {
@@ -39,6 +40,7 @@ export const fetchBlock =
  *
  * @param {FetchBlocksListOptions} options
  */
+// TOREMOVE unused
 export const fetchBlocksList =
   (options: FetchBlocksListOptions) => async (): Promise<FetchBlocksListResponse> => {
     const { apiServer, offset, limit = 30 } = options;

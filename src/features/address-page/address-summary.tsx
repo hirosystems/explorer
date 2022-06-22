@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { Section } from '@components/section';
-import { Rows } from '@components/rows';
+import { microToStacks } from '@common/utils';
 import { Activity } from '@components/activity-row';
 import { TokenBalancesRow } from '@components/balances/token-balances-row';
-import { microToStacks } from '@common/utils';
+import { Rows } from '@components/rows';
+import { Section } from '@components/section';
 
 export const AddressSummary = ({
   principal,
@@ -43,13 +42,16 @@ export const AddressSummary = ({
             label: {
               children: 'Fees',
             },
-            children: `${microToStacks(balances?.stx?.total_fees_sent || 0)} STX`,
+            children:
+              (balances?.stx?.total_fees_sent &&
+                `${microToStacks(balances?.stx?.total_fees_sent)} STX`) ||
+              undefined,
           },
           {
             label: {
               children: 'Nonce',
             },
-            children: `${nonce}`,
+            children: (!isNaN(nonce) && `${nonce}`) || nonce,
           },
         ]}
       />

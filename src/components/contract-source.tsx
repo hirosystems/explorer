@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-import { Box, BoxProps, Flex, Grid } from '@stacks/ui';
 import { Text } from '@components/typography';
+import { Box, BoxProps, Flex, Grid } from '@stacks/ui';
 
-import { CodeBlock } from '@components/code-block';
 import { border } from '@common/utils';
-import { Badge } from './badge';
+import { CodeBlock } from '@components/code-block';
 import { TxLink } from '@components/links';
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 import { IconChevronRight } from '@tabler/icons';
+import { Badge } from './badge';
 
 export const ContractSource: React.FC<
   {
@@ -22,10 +22,11 @@ export const ContractSource: React.FC<
       | ContractCallTransaction['contract_call'];
   } & BoxProps
 > = ({ sourceTx, source, contractCall, ...rest }) => {
+  console.log('contract source');
   const sourceLines =
     source?.split(`
 `) || [];
-  const sourceLinesLength = sourceLines.length || 0;
+  const sourceLinesLength = sourceLines.length;
   const functionSigElements =
     (contractCall &&
       'function_signature' in contractCall &&
@@ -38,7 +39,8 @@ export const ContractSource: React.FC<
 
   const functionLine = start ? sourceLines.findIndex(line => line.includes(start)) + 1 : undefined;
 
-  const [expanded, setExpanded] = React.useState(sourceLinesLength <= 10);
+  const isSourceCodeTooLong = sourceLinesLength <= 10;
+  const [expanded, setExpanded] = React.useState(source && isSourceCodeTooLong);
   const handleToggleExpanded = React.useCallback(() => {
     setExpanded(s => !s);
   }, [setExpanded]);

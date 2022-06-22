@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { Box, BoxProps } from '@stacks/ui';
+import * as React from 'react';
 
-import { RowsProps } from '@components/rows/types';
-import { RowLabel, Row } from '@components/rows/row';
 import { Card } from '@components/card';
+import { Row, RowLabel } from '@components/rows/row';
+import { RowsProps } from '@components/rows/types';
 
 export const Rows: React.FC<RowsProps & BoxProps> = React.memo(
   ({

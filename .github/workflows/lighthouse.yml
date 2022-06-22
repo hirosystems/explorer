@@ -39,8 +39,14 @@ jobs:
           # add as many urls here as you wish to audit
           # prefixed by the preview-url
           urls: |
+            https://explorer-git-prod-reference-blockstack.vercel.app/
+            https://explorer-git-prod-reference-blockstack.vercel.app/txid/0xa176909e4681cf41cf8662ce51ffcf109fb2fdb2aeae6bb8425d236241debe3f
+            https://explorer-git-prod-reference-blockstack.vercel.app/address/SM2MARAVW6BEJCD13YV2RHGYHQWT7TDDNMNRB1MVT
+            https://explorer-git-prod-reference-blockstack.vercel.app/block/0xe1c163a23ce0fa8a552b5237c25bc36f3ec0612eb8a01322d9f154f09163b1a0
             ${{ steps.vercel_action.outputs.preview-url }}
-            ${{ steps.vercel_action.outputs.preview-url }}/transactions
+            ${{ steps.vercel_action.outputs.preview-url }}/txid/0xa176909e4681cf41cf8662ce51ffcf109fb2fdb2aeae6bb8425d236241debe3f
+            ${{ steps.vercel_action.outputs.preview-url }}/address/SM2MARAVW6BEJCD13YV2RHGYHQWT7TDDNMNRB1MVT
+            ${{ steps.vercel_action.outputs.preview-url }}/block/0xe1c163a23ce0fa8a552b5237c25bc36f3ec0612eb8a01322d9f154f09163b1a0
           budgetPath: '.github/lighthouse/budget.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
@@ -112,3 +118,23 @@ jobs:
           header: budget
           message: |
             ${{ steps.budget_result.outputs.comment }}
+
+  test_e2e:
+    needs: test_setup
+    name: Playwright tests
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare testing env
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: yarn install
+      - run: npx playwright install --with-deps
+      - name: Run tests
+        run: |
+          xvfb-run --auto-servernum -- \
+            yarn run test:e2e
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ steps.vercel_action.outputs.preview-url }}
