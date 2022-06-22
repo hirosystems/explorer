@@ -1,11 +1,11 @@
 import { apiClients, createConfig } from '@common/api/client';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import {
   AddressBalanceResponse,
   MempoolTransactionListResponse,
 } from '@stacks/stacks-blockchain-api-types';
-import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { TransactionsListResponse } from '@store/transactions';
 
 export const getAddressQueries = (networkUrl: string) => {

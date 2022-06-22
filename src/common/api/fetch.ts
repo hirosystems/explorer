@@ -25,6 +25,7 @@ export const fetchFromSidecar =
     });
   };
 
+// TOREMOVE unused
 export const postToApi =
   (apiServer: string) =>
   async (path: string, opts = {}) =>

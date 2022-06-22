@@ -1,13 +1,13 @@
-import React from 'react';
-import { Flex } from '@stacks/ui';
-import { Section } from '@components/section';
 import { FilterButton } from '@components/filter-button';
-import { useTabs } from '../hooks/use-tabs';
 import { InfiniteTransactionsList } from '@components/infinite-item-list';
+import { Section } from '@components/section';
 import { Tabs } from '@components/tabs';
 import { useHomeQueries } from '@features/home/useHomeQueries';
-import { useInfiniteQuery } from 'react-query';
+import { Flex } from '@stacks/ui';
 import { getNextPageParam } from '@store/common';
+import * as React from 'react';
+import { useInfiniteQuery } from 'react-query';
+import { useTabs } from '../hooks/use-tabs';
 
 const TX_TABS = 'tabs/tx-list';
 

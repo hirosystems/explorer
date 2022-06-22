@@ -1,27 +1,25 @@
-import * as React from 'react';
-import type { NextPage } from 'next';
-import { removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
-import { Meta } from '@components/meta-head';
-import { microStxToStx } from '@stacks/ui-utils';
-import { Flex, Grid, Stack, GridProps } from '@stacks/ui';
-import { StxBalances } from '@components/balances/stx-balance-card';
-import { TokenBalancesCard } from '@components/balances/principal-token-balances';
+import { fetchNonce } from '@common/api/account';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { truncateMiddle } from '@common/utils';
 import { hasTokenBalance } from '@common/utils/accounts';
-import { Title } from '@components/typography';
-import { AddressSummary } from '@features/address-page/address-summary';
-import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
-import { AccountTransactionList } from '@features/account-transaction-list';
-import { PageWrapper } from '@components/page-wrapper';
 import { AddressNotFound } from '@components/address-not-found';
+import { TokenBalancesCard } from '@components/balances/principal-token-balances';
+import { StxBalances } from '@components/balances/stx-balance-card';
+import { Meta } from '@components/meta-head';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
-import { ServerResponse } from 'http';
-import { QueryClient, useQuery } from 'react-query';
-import { store, wrapper } from '@common/state/store';
-import { dehydrate } from 'react-query/hydration';
-import { getAddressQueries, useAddressQueries } from '@features/address/use-address-queries';
+import { PageWrapper } from '@components/page-wrapper';
+import { Title } from '@components/typography';
+import { AccountTransactionList } from '@features/account-transaction-list';
+import { AddressSummary } from '@features/address-page/address-summary';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
+import { useAddressQueries } from '@features/address/use-address-queries';
+import { Flex, Grid, GridProps, Stack } from '@stacks/ui';
+import { microStxToStx } from '@stacks/ui-utils';
+import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
+import { useQuery } from 'react-query';
+import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 const PageTop = () => {
   return (
@@ -31,7 +29,14 @@ const PageTop = () => {
       justifyContent="space-between"
       flexDirection={['column', 'column', 'row']}
     >
-      <Title mb={['base', 'base', '0']} mt="64px" as="h1" color="white" fontSize="36px">
+      <Title
+        mb={['base', 'base', '0']}
+        mt="64px"
+        as="h1"
+        color="white"
+        fontSize="36px"
+        data-test="address-title"
+      >
         Address details
       </Title>
     </Flex>
@@ -50,7 +55,13 @@ const ContentWrapper = (props: GridProps) => {
   );
 };
 
-const AddressPage: NextPage<any> = ({ error }) => {
+const queryOptions = {
+  // refetchOnWindowFocus: false,
+};
+
+const AddressPage: NextPage<any> = arg => {
+  const { error } = arg;
+
   if (error)
     return (
       <>
@@ -60,17 +71,34 @@ const AddressPage: NextPage<any> = ({ error }) => {
     );
 
   const queries = useAddressQueries();
+  const apiServer = useAppSelector(selectActiveNetwork).url;
+
   const { query } = useRouter();
   const address = query.principal as string;
 
   const { data: balance } = useQuery(
     addressQK(AddressQueryKeys.accountBalance, address),
-    queries.fetchAccountBalance(address)
+    queries.fetchAccountBalance(address),
+    queryOptions
   );
 
-  const { data: info } = useQuery(
-    addressQK(AddressQueryKeys.accountInfo, address),
-    queries.fetchAccountInfo(address)
+  const { data: nonces } = useQuery(
+    addressQK(AddressQueryKeys.nonce, address),
+    () => fetchNonce(apiServer)(address),
+    queryOptions
+  );
+
+  useQuery(addressQK(AddressQueryKeys.coreApiInfo), queries.fetchCoreApiInfo());
+
+  useQuery(
+    addressQK(AddressQueryKeys.mempoolTransactionsForAddress, address),
+    queries.fetchMempoolTransactionsForAddress(address)
+  );
+
+  useQuery(
+    addressQK(AddressQueryKeys.transactionsForAddress, address),
+    queries.fetchTransactionsForAddress(address),
+    { staleTime: 2000 }
   );
 
   const hasTokenBalances = hasTokenBalance(balance);
@@ -96,7 +124,7 @@ const AddressPage: NextPage<any> = ({ error }) => {
             principal={address}
             hasTokenBalances={hasTokenBalances}
             balances={balance}
-            nonce={info?.nonce}
+            nonce={nonces && (nonces.last_executed_tx_nonce ?? nonces.possible_next_nonce)}
           />
           <AccountTransactionList contractId={address} />
         </Stack>
@@ -110,72 +138,5 @@ const AddressPage: NextPage<any> = ({ error }) => {
     </PageWrapper>
   );
 };
-
-const prefetchData = async (
-  addressPageQuery: string,
-  res: ServerResponse,
-  networkUrl?: string
-): Promise<QueryClient> => {
-  const queryClient = new QueryClient();
-  if (!networkUrl) {
-    return queryClient;
-  }
-  const prefetchOptions = { staleTime: 5000 };
-  const queries = getAddressQueries(networkUrl);
-  try {
-    await Promise.all([
-      queryClient.prefetchQuery(
-        addressQK(AddressQueryKeys.coreApiInfo),
-        queries.fetchCoreApiInfo(),
-        prefetchOptions
-      ),
-      queryClient.prefetchQuery(
-        addressQK(AddressQueryKeys.accountInfo, addressPageQuery),
-        queries.fetchAccountInfo(addressPageQuery),
-        prefetchOptions
-      ),
-      queryClient.prefetchInfiniteQuery(
-        addressQK(AddressQueryKeys.mempoolTransactionsForAddress, addressPageQuery),
-        queries.fetchMempoolTransactionsForAddress(addressPageQuery),
-        prefetchOptions
-      ),
-      queryClient.prefetchInfiniteQuery(
-        addressQK(AddressQueryKeys.transactionsForAddress, addressPageQuery),
-        queries.fetchTransactionsForAddress(addressPageQuery),
-        prefetchOptions
-      ),
-      queryClient.prefetchQuery(
-        addressQK(AddressQueryKeys.accountBalance, addressPageQuery),
-        queries.fetchAccountBalance(addressPageQuery),
-        prefetchOptions
-      ),
-    ]);
-  } catch (err) {
-    res.statusCode = err.status;
-  }
-  return queryClient;
-};
-
-export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
-  const client = await prefetchData(
-    query.principal as string,
-    res,
-    selectActiveNetworkUrl(store.getState())
-  );
-  if (res.statusCode >= 400 && res.statusCode < 500) {
-    return {
-      notFound: true,
-    };
-  }
-  if (res.statusCode >= 500) {
-    throw res;
-  }
-  return {
-    props: {
-      isHome: false,
-      dehydratedState: removeKeysWithUndefinedValues(dehydrate(client)),
-    },
-  };
-});
 
 export default AddressPage;

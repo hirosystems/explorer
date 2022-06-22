@@ -1,30 +1,29 @@
+import 'modern-normalize/modern-normalize.css';
+import type { AppContext, AppProps } from 'next/app';
+import App from 'next/app';
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { Provider } from 'react-redux';
-import { useRouter } from 'next/router';
-import App from 'next/app';
-import type { AppProps, AppContext } from 'next/app';
 import 'tippy.js/dist/tippy.css';
-import 'modern-normalize/modern-normalize.css';
 
-import { AtomDebug, Devtools } from '@features/devtools';
-import { AppConfig } from '@components/app-config';
-import { NetworkMode, NetworkModes } from '@common/types/network';
-import { NetworkModeToast } from '@components/network-mode-toast';
-import { Modals } from '@components/modals';
-import { store, wrapper } from '@common/state/store';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Hydrate } from 'react-query/hydration';
-import { EnhancedStore } from '@reduxjs/toolkit';
-import { ParsedUrlQuery } from 'querystring';
+import { DEFAULT_NETWORK_MAP, NetworkModeUrlMap } from '@common/constants/network';
 import {
   selectActiveNetwork,
   selectActiveNetworkUrl,
   selectNetworks,
-  selectNetworkSlice,
   setActiveNetwork,
 } from '@common/state/network-slice';
-import { DEFAULT_NETWORK_MAP, NetworkModeUrlMap } from '@common/constants/network';
+import { wrapper } from '@common/state/store';
+import { NetworkMode, NetworkModes } from '@common/types/network';
+import { AppConfig } from '@components/app-config';
+import { Modals } from '@components/modals';
+import { NetworkModeToast } from '@components/network-mode-toast';
+import { AtomDebug } from '@features/devtools';
+import { EnhancedStore } from '@reduxjs/toolkit';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { Hydrate } from 'react-query/hydration';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
@@ -58,7 +57,6 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Devtools />
           <AppConfig isHome={isHome} fullWidth={fullWidth}>
             <AtomDebug />
             <Component apiServer={apiServer} networkMode={networkMode} {...props} />
@@ -66,6 +64,7 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
             <NetworkModeToast />
           </AppConfig>
         </Hydrate>
+        <ReactQueryDevtools initialIsOpen={false} />
       </Provider>
     </QueryClientProvider>
   );

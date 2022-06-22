@@ -1,12 +1,12 @@
-import * as React from 'react';
-import { Box } from '@stacks/ui';
-import { TransactionList } from '@features/transaction-list';
 import { SectionFooterAction } from '@components/section-footer-button';
+import { TransactionList } from '@features/transaction-list';
+import { Box } from '@stacks/ui';
 import type { InfiniteData } from 'react-query';
+import * as React from 'react';
 
 import type {
-  TransactionsListResponse,
   MempoolTransactionsListResponse,
+  TransactionsListResponse,
 } from '@store/transactions';
 
 export function InfiniteTransactionsList({
@@ -22,6 +22,7 @@ export function InfiniteTransactionsList({
   hasNextPage: boolean;
   showLoadMoreButton?: boolean;
 }) {
+  if (!data.pages) return null;
   return (
     <>
       <Box position="relative">
@@ -29,6 +30,7 @@ export function InfiniteTransactionsList({
           <TransactionList
             data={page}
             isLastPage={index === arr.length - 1}
+            data-test={`tx-list-page-${index}`}
             key={`tx-list-page-${index}`}
           />
         ))}

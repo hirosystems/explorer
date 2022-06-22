@@ -1,4 +1,4 @@
-import { PlaywrightTestConfig, devices } from '@playwright/test';
+import { devices, PlaywrightTestConfig } from '@playwright/test';
 import path from 'path';
 
 // Reference: https://playwright.dev/docs/test-configuration
@@ -12,20 +12,12 @@ const config: PlaywrightTestConfig = {
   // Artifacts folder where screenshots, videos, and traces are stored.
   outputDir: 'test-results/',
 
-  // Run your local dev server before starting the tests:
-  // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
-  webServer: {
-    command: 'yarn dev',
-    port: 3000,
-    timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
-
   use: {
     // Retry a test if its failing with enabled tracing. This allows you to analyse the DOM, console logs, network traffic etc.
     // More information: https://playwright.dev/docs/trace-viewer
     trace: 'retry-with-trace',
     headless: false,
+    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000',
 
     // All available context options: https://playwright.dev/docs/api/class-browser#browser-new-context
     // contextOptions: {
@@ -66,4 +58,16 @@ const config: PlaywrightTestConfig = {
     // },
   ],
 };
+
+if (!process.env.PLAYWRIGHT_TEST_BASE_URL) {
+  // Run your local dev server before starting the tests:
+  // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
+  config.webServer = {
+    command: 'yarn dev',
+    port: 3000,
+    timeout: 120 * 1000,
+    reuseExistingServer: !process.env.CI,
+  };
+}
+
 export default config;

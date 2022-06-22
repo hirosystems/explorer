@@ -1,16 +1,17 @@
-import React, { Fragment, useMemo } from 'react';
-import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
-import { Section } from '@components/section';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { HoverableItem } from '@components/hoverable';
+import { SkeletonBlockList } from '@components/loaders/skeleton-text';
+import { Section } from '@components/section';
+import { SectionFooterAction } from '@components/section-footer-button';
+import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { Caption } from '@components/typography';
+import { useHomeQueries } from '@features/home/useHomeQueries';
+import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
+import { getNextPageParam } from '@store/common';
+import React, { Fragment, useMemo } from 'react';
+import { useInfiniteQuery } from 'react-query';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
-import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { SectionFooterAction } from '@components/section-footer-button';
-import { DEFAULT_LIST_LIMIT } from '@common/constants';
-import { useInfiniteQuery } from 'react-query';
-import { getNextPageParam } from '@store/common';
-import { useHomeQueries } from '@features/home/useHomeQueries';
 
 function useBlockList(limit: number) {
   const queries = useHomeQueries();
@@ -45,7 +46,7 @@ export const BlocksList: React.FC<
     return _index;
   }, [firstPage, enforceLimit]);
 
-  if (!blocks) return null;
+  if (!blocks) return <SkeletonBlockList />;
 
   return (
     <Section title="Recent Blocks" {...props}>
@@ -60,7 +61,12 @@ export const BlocksList: React.FC<
                     return (
                       <Fragment key={block.hash}>
                         <HoverableItem>
-                          <BlockItem block={block} index={index} length={arr.length} />
+                          <BlockItem
+                            block={block}
+                            index={index}
+                            length={arr.length}
+                            data-test={`block-${index}`}
+                          />
                         </HoverableItem>
                         {block.microblocks_accepted.map((microblockHash, microblockIndex) => {
                           if (enforceLimit && hashesToShow[microblockHash] > limit) return null;

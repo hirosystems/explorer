@@ -1,20 +1,20 @@
-import { Box, BoxProps, color, Flex, FlexProps, Grid } from '@stacks/ui';
+import { useFilterState } from '@common/hooks/use-filter-state';
+import { CaptionAction } from '@components/caption-action';
+import { FilteredMessage, FilterPanel } from '@components/filter-panel';
+import { HoverableItem } from '@components/hoverable';
+import { TxLink } from '@components/links';
+import { Section } from '@components/section';
+import { TxItem } from '@components/transaction-item';
 import { Text } from '@components/typography';
+import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
 import {
   MempoolTransaction,
   Transaction,
   TransactionResults,
 } from '@stacks/stacks-blockchain-api-types';
-import React from 'react';
-import { TxItem } from '@components/transaction-item';
-import { TxLink } from '@components/links';
-import { Section } from '@components/section';
-import { HoverableItem } from '@components/hoverable';
-import { CaptionAction } from '@components/caption-action';
+import { Box, BoxProps, color, Flex, FlexProps, Grid } from '@stacks/ui';
 import { IconFilter } from '@tabler/icons';
-import { FilteredMessage, FilterPanel } from '@components/filter-panel';
-import { useFilterState } from '@common/hooks/use-filter-state';
-import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import React from 'react';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
@@ -96,6 +96,7 @@ export const TransactionList: React.FC<
   const filteredTxs = transactions.filter(tx => activeFilters[tx.tx_type]);
   const hasTxs = !!transactions.length;
   const hasVisibleTxs = !!filteredTxs.length;
+  console.log('rest', rest);
 
   return (
     <Section title={'Transactions'} topRight={Filter} {...rest}>

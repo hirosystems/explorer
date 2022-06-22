@@ -23,6 +23,7 @@ export interface RowWrapperProps extends FlexProps {
 
 export interface RowContentProps {
   isHovered: boolean;
+  label?: string;
   flexGrow?: BoxProps['flexGrow'];
   copy?: string;
 }

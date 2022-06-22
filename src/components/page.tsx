@@ -61,7 +61,7 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
 
   return (
     <Box width="100%" {...props}>
-      <TransactionTitle mb="loose" tx={tx} />
+      <TransactionTitle data-test="txid-title" mb="loose" tx={tx} />
       {isFailed ? (
         <Alert
           mb="base"

@@ -3,10 +3,10 @@ import React from 'react';
 import { Box, BoxProps, color, Flex, FlexProps, IconButton, Stack, Tooltip } from '@stacks/ui';
 import { IconCheck, IconTrash } from '@tabler/icons';
 
-import { Caption, Title } from '@components/typography';
-import { border } from '@common/utils';
-import useSWR from 'swr';
 import { fetchFromApi } from '@common/api/fetch';
+import { border } from '@common/utils';
+import { Caption, Title } from '@components/typography';
+import useSWR from 'swr';
 
 import {
   DEFAULT_MAINNET_SERVER,
@@ -17,10 +17,8 @@ import {
 import { Badge } from '@components/badge';
 
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
-import { ChainID } from '@stacks/transactions';
 import { useAnalytics } from '@common/hooks/use-analytics';
 import { useAppDispatch, useAppSelector } from '@common/state/hooks';
-import { openModal } from '@components/modals/modal-slice';
 import {
   removeCustomNetwork,
   selectActiveNetwork,
@@ -28,6 +26,8 @@ import {
   setActiveNetwork,
 } from '@common/state/network-slice';
 import { Network } from '@common/types/network';
+import { openModal } from '@components/modals/modal-slice';
+import { ChainID } from '@stacks/transactions';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -184,6 +184,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
             isActive={isActive}
             item={network}
             key={key}
+            data-test={`network-${network}`}
             isCustom={key >= 3}
             onClick={() => {
               setTimeout(() => {

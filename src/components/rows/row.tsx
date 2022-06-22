@@ -1,14 +1,15 @@
 import * as React from 'react';
 import { Ref } from 'react';
 
-import { Flex, FlexProps, useClipboard } from '@stacks/ui';
 import { CopyProps, RowContentProps, RowProps, RowWrapperProps } from '@components/rows/types';
+import { Flex, FlexProps, useClipboard } from '@stacks/ui';
 
-import { Caption } from '@components/typography';
-import { CopyIcon } from '@components/icons/copy';
-import { Tooltip } from '@components/tooltip';
-import { useHover } from 'use-events';
 import { IconButton } from '@components/icon-button';
+import { CopyIcon } from '@components/icons/copy';
+import { SkeletonForType } from '@components/loaders/skeleton-text';
+import { Tooltip } from '@components/tooltip';
+import { Caption } from '@components/typography';
+import { useHover } from 'use-events';
 
 export const RowWrapper: React.FC<RowWrapperProps> = React.memo(
   ({ borderColor = 'var(--colors-border)', inline, ...props }) => (
@@ -49,8 +50,10 @@ export const CopyButton = React.memo(
 );
 
 export const RowContent: React.FC<RowContentProps> = React.memo(
-  ({ children, flexGrow, copy, isHovered, ...rest }) => {
+  ({ children, flexGrow, copy, isHovered, label, ...rest }) => {
     const { onCopy, hasCopied } = useClipboard(copy || '');
+
+    if (typeof children === 'undefined') return <SkeletonForType type={label?.toLowerCase()} />;
 
     return (
       <Flex width="100%" alignItems="center" justifyContent="flex-start" {...rest}>
@@ -90,6 +93,7 @@ export const Row: React.FC<RowProps> = React.memo(
     const [hovered, _bind] = useHover();
     const isHovered = !!copy && hovered;
     const bind = !!copy ? { ..._bind } : {};
+    const labelString = typeof label === 'string' ? label : label ? label.children : undefined;
     return (
       <RowWrapper
         borderTop={!noTopBorder && isFirst && !card ? '1px solid' : undefined}
@@ -105,7 +109,7 @@ export const Row: React.FC<RowProps> = React.memo(
             label={typeof label === 'string' ? label : label.children}
           />
         ) : null}
-        <RowContent flexGrow={flexGrow} isHovered={isHovered} copy={copy}>
+        <RowContent flexGrow={flexGrow} isHovered={isHovered} copy={copy} label={labelString}>
           {render || children}
         </RowContent>
       </RowWrapper>
