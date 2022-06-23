@@ -1,56 +1,13 @@
 import * as React from 'react';
-import {
-  Box,
-  color,
-  Flex,
-  FlexProps,
-  Stack,
-  StackProps,
-  transition,
-  useClipboard,
-} from '@stacks/ui';
+import { Box, color, Flex, Stack, StackProps, useClipboard } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 import { border, microToStacks, truncateMiddle } from '@common/utils';
 import { useUser } from '@sandbox/hooks/use-user';
 import { StxInline } from '@components/icons/stx-inline';
-import AccountCircleOutlineIcon from 'mdi-react/AccountCircleOutlineIcon';
 import { Tooltip } from '@components/tooltip';
 import { IconButton } from '@components/icon-button';
-import { CopyIcon } from '@components/icons/copy';
-import { useHover } from 'use-events';
 import { IconLogout } from '@tabler/icons';
 import { useConnect } from '@sandbox/hooks/use-connect';
-
-const Address: React.FC<FlexProps & { isHovered?: boolean }> = ({ isHovered, ...props }) => {
-  const { principal } = useUser();
-  const { onCopy, hasCopied } = useClipboard(principal as string);
-  const { doSignOut } = useConnect();
-  return (
-    <Flex height="36px" position="relative" alignItems="center" {...props}>
-      <Text mr="tight" color="currentColor" display={['none', 'none', 'block']}>
-        {truncateMiddle(principal as string, 10)}
-      </Text>
-      <Text mr="tight" color="currentColor" display={['block', 'block', 'none']}>
-        {truncateMiddle(principal as string)}
-      </Text>
-
-      <Flex></Flex>
-    </Flex>
-  );
-};
-
-const Username: React.FC<StackProps> = props => {
-  const { username, identityAddress } = useUser();
-  return (
-    <Stack textAlign="right" justifyContent="flex-end" isInline {...props}>
-      <Text display="block" color="currentColor">
-        {username?.includes('.')
-          ? username.split('.')[0]
-          : username || (identityAddress && truncateMiddle(identityAddress, 8))}
-      </Text>
-    </Stack>
-  );
-};
 
 const Balance: React.FC<StackProps> = props => {
   const { balances } = useUser();
@@ -74,10 +31,9 @@ const Balance: React.FC<StackProps> = props => {
   );
 };
 export const UserCard = ({ ...rest }: any) => {
-  const { balances, username, principal } = useUser();
+  const { balances, principal } = useUser();
   const { doSignOut } = useConnect();
   const { onCopy, hasCopied } = useClipboard(principal as string);
-  const [isHovered, bind] = useHover();
 
   return balances ? (
     <Box bg={color('bg')} borderBottom={border()} p="loose" {...rest}>

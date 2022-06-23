@@ -59,7 +59,7 @@ export const getAccountQueryKey = {
 
 // @see https://blockstack.github.io/stacks-blockchain-api/#operation/get_account_balance
 const accountBalancesQueryFn = async (get: Getter, principal: Principal) => {
-  const { accountsApi, tokensApi } = get(apiClientsState);
+  const { accountsApi } = get(apiClientsState);
   return (await accountsApi.getAccountBalance({
     principal,
   })) as AddressBalanceResponse;

@@ -6,6 +6,7 @@ import { callReadOnlyFunction, fetchContractInterface } from '@sandbox/common';
 import { SampleContracts } from '@sandbox/common/examples';
 import { StacksTestnet } from '@stacks/network';
 import { authResponseState } from '@store/recoil/auth';
+import { fetchWithApiKey } from '@common/utils/fetchWithApiKey';
 
 export const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig });
@@ -158,8 +159,7 @@ export const readOnlyResponseState = selectorFamily<any, any>({
       apiServer,
     }) =>
     () => {
-      const network = new StacksTestnet();
-      network.coreApiUrl = apiServer;
+      const network = new StacksTestnet({ url: apiServer, fetchFn: fetchWithApiKey });
       return callReadOnlyFunction({
         contractName,
         contractAddress,

@@ -15,7 +15,7 @@ const UserCard: React.FC<StackProps> = props => {
       <Circle color={color('text-body')} boxShadow="low" size="20px" border={border()}>
         <IconUser size="14px" />
       </Circle>
-      <Caption>{userData?.username?.split('.')[0] || userData?.identityAddress}</Caption>
+      <Caption>{userData?.identityAddress}</Caption>
     </Stack>
   );
 };

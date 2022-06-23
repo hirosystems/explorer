@@ -20,8 +20,9 @@ import {
 } from '@stacks/transactions';
 import { StacksNetwork, StacksTestnet } from '@stacks/network';
 
-import { HIRO_HEADERS, withApiServer } from '@common/constants';
+import { HIRO_HEADERS } from '@common/constants';
 import { fetchFromSidecar } from '@common/api/fetch';
+import { fetchWithApiKey } from '@common/utils/fetchWithApiKey';
 
 export interface ClarityFunctionArg {
   name: string;
@@ -29,8 +30,7 @@ export interface ClarityFunctionArg {
 }
 
 export const network = (apiServer: string): StacksNetwork => {
-  const txNetwork = new StacksTestnet();
-  txNetwork.coreApiUrl = withApiServer(apiServer)();
+  const txNetwork = new StacksTestnet({ url: apiServer, fetchFn: fetchWithApiKey });
   return txNetwork;
 };
 

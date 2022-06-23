@@ -33,6 +33,7 @@ const moduleExports = withBundleAnalyzer({
     SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY,
     VERSION: process.env.VERSION,
     SENTRY_DSN: process.env.SENTRY_DSN,
+    X_API_KEY: process.env.X_API_KEY,
   },
   webpack(config, { dev }) {
     config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';

@@ -240,7 +240,7 @@ const getName = (event: TransactionEvent) => {
 
 const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, isLast }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { tokensApi } = useApi();
+  const { fungibleTokensApi } = useApi();
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
   const assetAmounts = getAssetAmounts(event);
@@ -261,7 +261,7 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
 
   useEffect(() => {
     const getFtMetadata = async () => {
-      const data = await tokensApi.getContractFtMetadata({
+      const data = await fungibleTokensApi.getContractFtMetadata({
         contractId,
       });
       setFtMetadata(data);

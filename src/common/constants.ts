@@ -103,7 +103,10 @@ export const withApiServer = (apiServer: string) => (path?: string) =>
 
 export const POX_ADDRESS = 'SP000000000000000000002Q6VF78';
 
+export const X_API_KEY = config?.X_API_KEY ?? process.env.X_API_KEY ?? '';
+
 export const HIRO_HEADERS: HeadersInit = {
+  'x-api-key': X_API_KEY,
   'x-hiro-product': 'explorer',
   'x-hiro-version': VERSION,
 };
