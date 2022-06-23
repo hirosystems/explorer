@@ -30,7 +30,6 @@ export const useUser = (options?: {
   const networkMode = useAppSelector(selectActiveNetwork).mode;
 
   const principal = networkMode && userData?.profile?.stxAddress?.[networkMode];
-  const username = userData?.username;
   const profile = userData?.profile;
 
   const balances = useAtomValue(accountBalancesResponseState(principal));
@@ -47,7 +46,6 @@ export const useUser = (options?: {
   );
   return {
     principal,
-    username,
     profile,
     transactions: transactions?.pages?.[0].results as TransactionResults['results'],
     balances,

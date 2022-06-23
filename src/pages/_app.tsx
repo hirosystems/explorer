@@ -9,7 +9,7 @@ import 'modern-normalize/modern-normalize.css';
 
 import { AtomDebug, Devtools } from '@features/devtools';
 import { AppConfig } from '@components/app-config';
-import { NetworkMode } from '@common/types/network';
+import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NetworkModeToast } from '@components/network-mode-toast';
 import { Modals } from '@components/modals';
 import { store, wrapper } from '@common/state/store';
@@ -79,7 +79,8 @@ const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContex
   console.log('[debug] selectActiveNetworkUrl', selectActiveNetworkUrl(store.getState()));
   console.log('[debug] activeNetwork', activeNetwork);
   console.log('[debug] networks', networks);
-  const queryNetworkMode = (Array.isArray(query.chain) ? query.chain[0] : query.chain) || '';
+  const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
+    '') as NetworkModes;
   if (queryNetworkMode !== activeNetwork?.mode || !networks[activeNetwork.url]) {
     // query param overrides state
     console.log(

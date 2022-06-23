@@ -18,14 +18,14 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   tokenType,
 }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { tokensApi } = useApi();
+  const { fungibleTokensApi } = useApi();
   const { address, asset, contract } = getAssetNameParts(token);
 
   useEffect(() => {
     // TODO: Revisit this bc duplicated code in several places
     const getFtMetadata = async () => {
       const contractId = `${address}.${contract}`;
-      const data = await tokensApi.getContractFtMetadata({
+      const data = await fungibleTokensApi.getContractFtMetadata({
         contractId,
       });
       setFtMetadata(data);

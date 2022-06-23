@@ -11,7 +11,7 @@ export const NftBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ ba
     <>
       {Object.keys(balances.non_fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
-          amount={balances.non_fungible_tokens[key].count}
+          amount={balances.non_fungible_tokens[key]?.count || ''}
           key={index}
           token={key}
           tokenType="non_fungible_tokens"
@@ -29,7 +29,7 @@ export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ bal
     <>
       {Object.keys(balances.fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
-          amount={balances.fungible_tokens[key].balance}
+          amount={balances.fungible_tokens[key]?.balance || ''}
           key={index}
           token={key}
           tokenType="fungible_tokens"

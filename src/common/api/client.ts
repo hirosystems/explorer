@@ -6,13 +6,11 @@ import {
   TransactionsApi,
   BlocksApi,
   FaucetsApi,
-  BNSApi,
-  BurnchainApi,
   FeesApi,
   SearchApi,
   RosettaApi,
   MicroblocksApi,
-  TokensApi,
+  FungibleTokensApi,
 } from '@stacks/blockchain-api-client';
 import { fetcher as fetchApi } from '@common/api/fetch';
 import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
@@ -33,12 +31,10 @@ export function apiClients(config: Configuration) {
   const microblocksApi = new MicroblocksApi(config);
   const blocksApi = new BlocksApi(config);
   const faucetsApi = new FaucetsApi(config);
-  const bnsApi = new BNSApi(config);
-  const burnchainApi = new BurnchainApi(config);
   const feesApi = new FeesApi(config);
   const searchApi = new SearchApi(config);
   const rosettaApi = new RosettaApi(config);
-  const tokensApi = new TokensApi(config);
+  const fungibleTokensApi = new FungibleTokensApi(config);
 
   return {
     smartContractsApi,
@@ -48,12 +44,10 @@ export function apiClients(config: Configuration) {
     microblocksApi,
     blocksApi,
     faucetsApi,
-    bnsApi,
-    burnchainApi,
     feesApi,
     searchApi,
     rosettaApi,
-    tokensApi,
+    fungibleTokensApi,
     config,
   };
 }

@@ -248,14 +248,14 @@ const getAddressValue = (condition: PostCondition) => {
 
 const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: boolean }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { tokensApi } = useApi();
+  const { fungibleTokensApi } = useApi();
 
   useEffect(() => {
     const getFtMetadata = async () => {
       const contractId = `${(condition as any).asset.contract_address}.${
         (condition as any).asset.contract_name
       }`;
-      const data = await tokensApi.getContractFtMetadata({
+      const data = await fungibleTokensApi.getContractFtMetadata({
         contractId,
       });
       setFtMetadata(data);

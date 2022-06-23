@@ -11,7 +11,7 @@ export const NetworkIdModeMap: { [key in ChainID]: NetworkModes } = {
   [ChainID.Testnet]: NetworkModes.Testnet,
 };
 
-export const NetworkModeUrlMap: Record<string, NetworkModes> = {
+export const NetworkModeUrlMap: Record<NetworkModes, string> = {
   [NetworkModes.Mainnet]: DEFAULT_MAINNET_SERVER,
   [NetworkModes.Testnet]: DEFAULT_TESTNET_SERVER,
 };
