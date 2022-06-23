@@ -1,8 +1,7 @@
 import { fetchNonce } from '@common/api/account';
 import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
-import { wrapper } from '@common/state/store';
-import { removeKeysWithUndefinedValues, truncateMiddle } from '@common/utils';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { truncateMiddle } from '@common/utils';
 import { hasTokenBalance } from '@common/utils/accounts';
 import { AddressNotFound } from '@components/address-not-found';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
@@ -21,7 +20,6 @@ import { ServerResponse } from 'http';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { QueryClient, useQuery } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 const PageTop = () => {
@@ -71,6 +69,21 @@ const AddressPage: NextPage<any> = arg => {
 
   const { query } = useRouter();
   const address = query.principal as string;
+
+  const { data: dataCoreApi } = useQuery(
+    addressQK(AddressQueryKeys.coreApiInfo),
+    queries.fetchCoreApiInfo()
+  );
+
+  const { data: dataMempool } = useQuery(
+    addressQK(AddressQueryKeys.mempoolTransactionsForAddress, address),
+    queries.fetchMempoolTransactionsForAddress(address)
+  );
+
+  const { data: dataTransactions } = useQuery(
+    addressQK(AddressQueryKeys.transactionsForAddress, address),
+    queries.fetchTransactionsForAddress(address)
+  );
 
   const { data: balance } = useQuery(
     addressQK(AddressQueryKeys.accountBalance, address),
@@ -168,26 +181,26 @@ const prefetchData = async (
   return queryClient;
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
-  const client = await prefetchData(
-    query.principal as string,
-    res,
-    selectActiveNetworkUrl(store.getState())
-  );
-  if (res.statusCode >= 400 && res.statusCode < 500) {
-    return {
-      notFound: true,
-    };
-  }
-  if (res.statusCode >= 500) {
-    throw res;
-  }
-  return {
-    props: {
-      isHome: false,
-      dehydratedState: removeKeysWithUndefinedValues(dehydrate(client)),
-    },
-  };
-});
+// export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
+//   const client = await prefetchData(
+//     query.principal as string,
+//     res,
+//     selectActiveNetworkUrl(store.getState())
+//   );
+//   if (res.statusCode >= 400 && res.statusCode < 500) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+//   if (res.statusCode >= 500) {
+//     throw res;
+//   }
+//   return {
+//     props: {
+//       isHome: false,
+//       dehydratedState: removeKeysWithUndefinedValues(dehydrate(client)),
+//     },
+//   };
+// });
 
 export default AddressPage;
