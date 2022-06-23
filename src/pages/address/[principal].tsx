@@ -70,6 +70,18 @@ const AddressPage: NextPage<any> = arg => {
   const { query } = useRouter();
   const address = query.principal as string;
 
+  const { data: balance } = useQuery(
+    addressQK(AddressQueryKeys.accountBalance, address),
+    queries.fetchAccountBalance(address),
+    queryOptions
+  );
+
+  const { data: nonces } = useQuery(
+    addressQK(AddressQueryKeys.nonce, address),
+    () => fetchNonce(apiServer)(address),
+    queryOptions
+  );
+
   const { data: dataCoreApi } = useQuery(
     addressQK(AddressQueryKeys.coreApiInfo),
     queries.fetchCoreApiInfo()
@@ -83,18 +95,6 @@ const AddressPage: NextPage<any> = arg => {
   const { data: dataTransactions } = useQuery(
     addressQK(AddressQueryKeys.transactionsForAddress, address),
     queries.fetchTransactionsForAddress(address)
-  );
-
-  const { data: balance } = useQuery(
-    addressQK(AddressQueryKeys.accountBalance, address),
-    queries.fetchAccountBalance(address),
-    queryOptions
-  );
-
-  const { data: nonces } = useQuery(
-    addressQK(AddressQueryKeys.nonce, address),
-    () => fetchNonce(apiServer)(address),
-    queryOptions
   );
 
   const hasTokenBalances = hasTokenBalance(balance);
