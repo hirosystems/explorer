@@ -1,3 +1,10 @@
+# [1.25.0](https://github.com/hirosystems/explorer/compare/v1.24.0...v1.25.0) (2022-06-27)
+
+
+### Features
+
+* add lighthouse to ci ([8ec3d23](https://github.com/hirosystems/explorer/commit/8ec3d23c45609358284b40356dfe28e5d2b007a5))
+
 # [1.24.0](https://github.com/hirosystems/explorer/compare/v1.23.3...v1.24.0) (2022-06-27)
 
 
