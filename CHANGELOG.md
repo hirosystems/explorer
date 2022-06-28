@@ -1,3 +1,10 @@
+# [1.28.0](https://github.com/hirosystems/explorer/compare/v1.27.0...v1.28.0) (2022-06-28)
+
+
+### Features
+
+* add new api key to headers ([80b4207](https://github.com/hirosystems/explorer/commit/80b420751039844188b70e056efa15d75c7ff689))
+
 # [1.27.0](https://github.com/hirosystems/explorer/compare/v1.26.0...v1.27.0) (2022-06-27)
 
 
