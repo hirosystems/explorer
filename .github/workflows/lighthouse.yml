@@ -39,6 +39,7 @@ jobs:
           # add as many urls here as you wish to audit
           # prefixed by the preview-url
           urls: |
+            https://explorer.stacks.co
             ${{ steps.vercel_action.outputs.preview-url }}
             ${{ steps.vercel_action.outputs.preview-url }}/transactions
           budgetPath: '.github/lighthouse/budget.json'
