@@ -41,6 +41,9 @@ jobs:
           urls: |
             ${{ steps.vercel_action.outputs.preview-url }}
             ${{ steps.vercel_action.outputs.preview-url }}/transactions
+            ${{ steps.vercel_action.outputs.preview-url }}/txid/0xa176909e4681cf41cf8662ce51ffcf109fb2fdb2aeae6bb8425d236241debe3f
+            ${{ steps.vercel_action.outputs.preview-url }}/address/SM2MARAVW6BEJCD13YV2RHGYHQWT7TDDNMNRB1MVT
+            ${{ steps.vercel_action.outputs.preview-url }}/block/0xe1c163a23ce0fa8a552b5237c25bc36f3ec0612eb8a01322d9f154f09163b1a0?chain=mainnet
           budgetPath: '.github/lighthouse/budget.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
