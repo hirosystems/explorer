@@ -1,3 +1,10 @@
+## [1.28.1](https://github.com/hirosystems/explorer/compare/v1.28.0...v1.28.1) (2022-07-25)
+
+
+### Bug Fixes
+
+* improve performance across many pages ([3c7abb3](https://github.com/hirosystems/explorer/commit/3c7abb3483c7d6a6ba0fddee0e2afd95ba52726a)), closes [#586](https://github.com/hirosystems/explorer/issues/586) [#776](https://github.com/hirosystems/explorer/issues/776) [#785](https://github.com/hirosystems/explorer/issues/785) [#786](https://github.com/hirosystems/explorer/issues/786) [#601](https://github.com/hirosystems/explorer/issues/601) [#449](https://github.com/hirosystems/explorer/issues/449)
+
 # [1.28.0](https://github.com/hirosystems/explorer/compare/v1.27.0...v1.28.0) (2022-06-28)
 
 
