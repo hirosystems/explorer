@@ -103,18 +103,6 @@ const AddressPage: NextPage<any> = arg => {
     { staleTime: 2000 }
   );
 
-  const { data: accountAssets } = useQuery(
-    addressQK(AddressQueryKeys.accountAssets, address),
-    queries.getAccountAssets(address)
-  );
-
-  console.log('accountAssets', accountAssets);
-  useEffect(() => {
-    const accountNfts = accountAssets?.results?.filter(
-      item => item.event_type === 'non_fungible_token_asset' && item.asset.recipient === address
-    );
-    console.log('accountNfts', accountNfts);
-  }, [accountAssets]);
   const hasTokenBalances = hasTokenBalance(balance);
 
   useRefreshOnBack('principal');
