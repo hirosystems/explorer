@@ -5,6 +5,7 @@ import { truncateMiddle } from '@common/utils';
 import { hasTokenBalance } from '@common/utils/accounts';
 import { AddressNotFound } from '@components/address-not-found';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
+import { NewAccountCard } from '@components/balances/account-toggle';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { Meta } from '@components/meta-head';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
@@ -15,13 +16,16 @@ import { AccountTransactionList } from '@features/account-transaction-list';
 import { AddressSummary } from '@features/address-page/address-summary';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
 import { useAddressQueries } from '@features/address/use-address-queries';
-import { Flex, Grid, GridProps, Stack } from '@stacks/ui';
+import { Box, DynamicColorCircle, Flex, Grid, GridProps, Stack, Text } from '@stacks/ui';
 import { microStxToStx } from '@stacks/ui-utils';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
+import { css } from '@emotion/react';
+import { IdentIcon } from '@features/address/avatar';
+import { WalletOverview } from '@components/balances/wallet-overview';
 
 const PageTop = () => {
   return (
@@ -48,7 +52,7 @@ const ContentWrapper = (props: GridProps) => {
   return (
     <Grid
       gridColumnGap="extra-loose"
-      gridTemplateColumns={['100%', '100%', 'repeat(1, calc(100% - 352px) 320px)']}
+      gridTemplateColumns={['100%', '100%', 'repeat(1, 320px calc(100% - 352px) )']}
       gridRowGap={['extra-loose', 'extra-loose', 'unset']}
       maxWidth="100%"
       alignItems="flex-start"
@@ -60,6 +64,15 @@ const ContentWrapper = (props: GridProps) => {
 const queryOptions = {
   // refetchOnWindowFocus: false,
 };
+
+const profilePictureCss = css`
+  border-radius: 50%;
+  width: 224px;
+  height: 224px;
+  overflow: hidden;
+  border: 6px solid #f3d6cf;
+  margin-bottom: 20px !important;
+`;
 
 const AddressPage: NextPage<any> = arg => {
   const { error } = arg;
@@ -109,6 +122,7 @@ const AddressPage: NextPage<any> = arg => {
 
   return (
     <PageWrapper>
+      <div style={{ height: '50px' }}></div>
       <UnlockingScheduleModal />
       <Meta
         title={`STX Address ${truncateMiddle(address)}`}
@@ -119,24 +133,45 @@ const AddressPage: NextPage<any> = arg => {
           },
         ]}
       />
-      <PageTop />
+      {/*<PageTop />*/}
       <ContentWrapper>
         <Stack spacing="extra-loose">
+          <Box css={profilePictureCss}>
+            <IdentIcon seed={address} />
+          </Box>
+          <Text fontSize={'32px'} fontWeight={500} style={{ marginBottom: '4px' }}>
+            andres.btc
+          </Text>
+          <Text fontSize={'16px'} fontWeight={500} color={'#9A9A9A'}>
+            {truncateMiddle(address)}
+          </Text>
+          {balance && (
+            <Fragment>
+              <StxBalances principal={address} balances={balance} />
+              <WalletOverview
+                principal={address}
+                balances={balance}
+                nonce={nonces && (nonces.last_executed_tx_nonce ?? nonces.possible_next_nonce)}
+              />
+            </Fragment>
+          )}
+        </Stack>
+
+        <Stack spacing="extra-loose">
+          {/* 
           <AddressSummary
             principal={address}
             hasTokenBalances={hasTokenBalances}
             balances={balance}
             nonce={nonces && (nonces.last_executed_tx_nonce ?? nonces.possible_next_nonce)}
           />
+<<<<<<< HEAD
           <PrincipalCollectible principal={address} />
           <AccountTransactionList contractId={address} />
+=======
+          <AccountTransactionList contractId={address} /> */}
+          <NewAccountCard address={address} balance={balance} />
         </Stack>
-        {balance && (
-          <Stack spacing="extra-loose">
-            <StxBalances principal={address} balances={balance} />
-            <TokenBalancesCard balances={balance} />
-          </Stack>
-        )}
       </ContentWrapper>
     </PageWrapper>
   );

@@ -108,53 +108,60 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
         <>
-          <Box px="base-loose">
-            <Flex
-              borderBottom={isStacking || !!tokenOfferingData ? border() : 'unset'}
-              alignItems="center"
-              py="loose"
-            >
+          <Box
+            px="base-loose"
+            borderBottom={isStacking || !!tokenOfferingData ? border() : 'unset'}
+          >
+            <Box padding={'16px 4px 12px'}>
+              <Text fontSize="14px" color={'#747478'}>
+                Total balance
+              </Text>
+            </Box>
+            <Flex alignItems="center" paddingBottom={'24px'}>
               <Circle bg={color('brand')} mr="base" size="36px">
                 <StxInline color="white" size="16px" />
               </Circle>
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
-                <Caption>Total balance</Caption>
+                <Text fontSize="14px" color={'#747478'}>
+                  $ 59,836
+                </Text>
               </Stack>
             </Flex>
           </Box>
           {isStacking || !!tokenOfferingData ? (
-            <Box px="base-loose">
-              <Stack
-                borderBottom={
-                  isStacking || minerRewards > 0 || !!tokenOfferingData ? border() : 'unset'
-                }
-                spacing="tight"
-                py="loose"
-              >
-                <Caption>Available</Caption>
+            <Box
+              px="base-loose"
+              borderBottom={
+                isStacking || minerRewards > 0 || !!tokenOfferingData ? border() : 'unset'
+              }
+            >
+              <Stack spacing="tight" py="loose">
+                <Text fontSize="14px" color={'#747478'}>
+                  Available
+                </Text>
                 <BalanceItem color={color('text-title')} balance={availableBalance} />
               </Stack>
             </Box>
           ) : null}
           {minerRewards > 0 ? (
             <>
-              <Box px="base-loose">
-                <Stack
-                  borderBottom={!!tokenOfferingData ? border() : 'unset'}
-                  spacing="tight"
-                  py="loose"
-                >
-                  <Caption>Miner rewards</Caption>
+              <Box px="base-loose" borderBottom={!!tokenOfferingData ? border() : 'unset'}>
+                <Stack spacing="tight" py="loose">
+                  <Text fontSize="14px" color={'#747478'}>
+                    Miner rewards
+                  </Text>
                   <BalanceItem color={color('text-title')} balance={minerRewardsBalance} />
                 </Stack>
               </Box>
             </>
           ) : null}
           {!!tokenOfferingData ? (
-            <Box px="base-loose">
-              <Stack borderBottom={isStacking ? border() : undefined} spacing="tight" py="loose">
-                <Caption>Locked</Caption>
+            <Box px="base-loose" borderBottom={isStacking ? border() : undefined}>
+              <Stack spacing="tight" py="loose">
+                <Text fontSize="14px" color={'#747478'}>
+                  Locked
+                </Text>
                 <Flex alignItems="baseline" justifyContent="space-between">
                   <BalanceItem
                     color={color('text-title')}
@@ -176,9 +183,11 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
           ) : null}
           {isStacking ? (
             <>
-              <Box px="base-loose">
-                <Stack borderBottom={border()} spacing="tight" py="loose">
-                  <Caption>Stacked amount (locked)</Caption>
+              <Box px="base-loose" borderBottom={border()}>
+                <Stack spacing="tight" py="loose">
+                  <Text fontSize="14px" color={'#747478'}>
+                    Stacked amount (locked)
+                  </Text>
                   <BalanceItem color={color('text-title')} balance={stackedBalance} />
                 </Stack>
                 <StackingPercentage balances={balances} address={principal} />

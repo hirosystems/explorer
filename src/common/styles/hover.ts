@@ -54,3 +54,27 @@ export const leftLineCss = css`
     top: 0;
   }
 `;
+
+// TODO: special styling for selected item
+export const accountPageCss = css`
+  border-bottom: 1px solid var(--colors-border);
+  &:after {
+    display: block;
+    content: '';
+    position: absolute;
+    background: ${color('border')};
+    bottom: 0;
+    height: 3px;
+    left: 50%;
+    width: 0;
+    transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1), left 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    &:hover {
+      width: 100%;
+      left: 0;
+    }
+  }
+  &:hover:after {
+    width: 100%;
+    left: 0;
+  }
+`;

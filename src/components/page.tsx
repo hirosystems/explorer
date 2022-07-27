@@ -21,6 +21,7 @@ import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-
 import { getTransactionStatus } from '@common/utils/transactions';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { useRouter } from 'next/router';
 
 type PageProps = {
   notice?: { label?: string; message?: string };
@@ -146,18 +147,23 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({
   fullWidth,
   isHome,
   ...props
-}) => (
-  <Flex
-    maxWidth="100vw"
-    overflowX="hidden"
-    bg={color('bg')}
-    flexDirection="column"
-    minHeight="100vh"
-    position="relative"
-    overflow="hidden"
-  >
-    <Header fullWidth={fullWidth} isHome={isHome} />
-    <Page fullWidth={fullWidth} {...props} />
-    <MetaverseBg />
-  </Flex>
-);
+}) => {
+  const router = useRouter();
+  const height = router.pathname === '/address/[principal]' ? '224px' : '380px';
+  console.log(2222, router, height);
+  return (
+    <Flex
+      maxWidth="100vw"
+      overflowX="hidden"
+      bg={color('bg')}
+      flexDirection="column"
+      minHeight="100vh"
+      position="relative"
+      overflow="hidden"
+    >
+      <Header fullWidth={fullWidth} isHome={isHome} />
+      <Page fullWidth={fullWidth} {...props} />
+      <MetaverseBg height={height} />
+    </Flex>
+  );
+};

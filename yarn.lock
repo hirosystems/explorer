@@ -3761,6 +3761,11 @@ bl@^4.0.3:
     inherits "^2.0.4"
     readable-stream "^3.4.0"
 
+blockies-identicon@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/blockies-identicon/-/blockies-identicon-0.1.0.tgz#d0b2fd221a18f09c9adc606de8c1adb73ac50638"
+  integrity sha512-gjm7IfqMbJuFKxtoFeeVC5inZgSRsyzVzlbwAqZxb5B/TU88BcEyyj3vOlcfClYCSLzTBfcogM45xU9otIoeaQ==
+
 bn.js@5.1.3, bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.11.9, bn.js@^5.0.0, bn.js@^5.1.1, bn.js@^5.2.0:
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/bn.js/-/bn.js-5.1.3.tgz#beca005408f642ebebea80b042b4d18d2ac0ee6b"

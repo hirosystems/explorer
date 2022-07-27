@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Box, BoxProps } from '@stacks/ui';
 import { useHover } from 'web-api-hooks';
-import { bottomLineCss, leftLineCss } from '@common/styles/hover';
+import { bottomLineCss, leftLineCss, accountPageCss } from '@common/styles/hover';
 
 const HoverContext = React.createContext(false);
 
@@ -10,9 +10,19 @@ export const useHoverableState = () => {
 };
 
 export const HoverableItem: React.FC<
-  { isActive?: boolean; placement?: 'left' | 'bottom' } & BoxProps
+  { isActive?: boolean; placement?: 'left' | 'bottom' | 'account' } & BoxProps
 > = React.memo(({ children, isActive, placement = 'left', ...props }) => {
   const [isHovered, bind] = useHover();
+  let cssType = leftLineCss; 
+  switch (placement) {
+    case 'bottom':
+      cssType = bottomLineCss; 
+      break; 
+    case 'account': 
+      cssType = accountPageCss; 
+      break;
+  };
+
   return (
     <HoverContext.Provider value={isHovered}>
       <Box
@@ -24,7 +34,7 @@ export const HoverableItem: React.FC<
         display="block"
         {...bind}
         {...props}
-        css={placement === 'left' ? leftLineCss : bottomLineCss}
+        css={cssType}
       >
         {children}
       </Box>

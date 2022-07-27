@@ -11,6 +11,7 @@ import { Box, Flex, Stack } from '@stacks/ui';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { css } from '@emotion/react';
 
 export const CollectibleList = ({ principal }: { principal: string }) => {
   // const imageUrl = 'https://placehold.co/225';
@@ -20,6 +21,7 @@ export const CollectibleList = ({ principal }: { principal: string }) => {
     fetch('/api/nfts?chain=mainnet').then(res => res.json())
   );
   console.log('meta', nftMetadata);
+  ``;
 
   const queries = useAddressQueries();
   const { data: accountAssets } = useQuery(
@@ -44,8 +46,18 @@ export const CollectibleList = ({ principal }: { principal: string }) => {
   const imageUrl =
     'https://ipfs.io/ipfs/QmZjrCc9836Njqw1Yx8ztM6FbJzvuZijwtZJSkKPxLTMWU/34b424ea4b724';
   // const arr = new Array(5).fill(0);
+
+  if (!principalAssets?.length) return null;
+
   return (
-    <Flex spacing="base" style={{ overflow: 'hidden', justifyContent: 'space-between' }}>
+    <Flex
+      spacing="base"
+      css={css`
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 0.25rem;
+      `}
+    >
       {principalAssets.map(asset => (
         <CollectibleCard asset={asset} />
       ))}
@@ -69,7 +81,7 @@ export const CollectibleCard = ({ asset }: any) => {
   if (!imageUrl) return null;
   return (
     <Stack spacing="base" p="base">
-      <img src={imageUrl} style={{ maxWidth: '225px' }} />
+      <img src={imageUrl} style={{ maxWidth: '225px', borderRadius: '3px' }} />
     </Stack>
   );
 };
