@@ -12,7 +12,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
-export const CollectibleList = ({ principal }) => {
+export const CollectibleList = ({ principal }: { principal: string }) => {
   // const imageUrl = 'https://placehold.co/225';
   const [principalAssets, setPrincipalAssets] = React.useState([]);
 
@@ -32,10 +32,12 @@ export const CollectibleList = ({ principal }) => {
     if (!accountAssets) return;
     if (!nftMetadata) return;
     const accountNfts = accountAssets?.results?.filter(
+      // @ts-ignore
       item => item.event_type === 'non_fungible_token_asset' && item.asset.recipient === principal
     );
     console.log('accountNfts', accountNfts);
     console.log('principalCollectibles', principalCollectibles(accountNfts, nftMetadata));
+    // @ts-ignore
     setPrincipalAssets(principalCollectibles(accountNfts, nftMetadata));
   }, [accountAssets, nftMetadata]);
 
@@ -45,13 +47,13 @@ export const CollectibleList = ({ principal }) => {
   return (
     <Flex spacing="base" style={{ overflow: 'hidden', justifyContent: 'space-between' }}>
       {principalAssets.map(asset => (
-        <CollectibleCard imageUrl={imageUrl} asset={asset} />
+        <CollectibleCard asset={asset} />
       ))}
     </Flex>
   );
 };
 
-export const CollectibleCard = ({ asset }) => {
+export const CollectibleCard = ({ asset }: any) => {
   console.log('asset', asset);
   const [imageUrl, setImageUrl] = useState<string | undefined>();
   const { data: metadata } = useQuery([asset.metadataUrl], () =>
@@ -72,19 +74,19 @@ export const CollectibleCard = ({ asset }) => {
   );
 };
 
-export const TopRight = ({ principal }) => {
+export const TopRight = ({ principal }: { principal: string }) => {
   return <a href={`/collectibles/${principal}`} />;
 };
 
-function urlFromTokenId(url, tokenId) {
+function urlFromTokenId(url: string, tokenId: string) {
   return url.replace('{id}', tokenId);
 }
 
-function assetIdToContractId(assetId) {
+function assetIdToContractId(assetId: string) {
   return assetId.split('::')[0];
 }
 
-function principalCollectibles(accountNfts, nftMetadata) {
+function principalCollectibles(accountNfts: any[], nftMetadata: any[]) {
   if (!accountNfts || !nftMetadata) return [];
   const result = accountNfts
     .filter(nft => {
@@ -94,7 +96,7 @@ function principalCollectibles(accountNfts, nftMetadata) {
       return {
         ...nft,
         metadataUrl: urlFromTokenId(
-          nftMetadata[assetIdToContractId(nft.asset.asset_id)].ipfsUrl,
+          nftMetadata[assetIdToContractId(nft.asset.asset_id) as any].ipfsUrl,
           nft.asset.value.repr.replace('u', '')
         ),
       };
@@ -102,7 +104,7 @@ function principalCollectibles(accountNfts, nftMetadata) {
   return result;
 }
 
-export const PrincipalCollectible = ({ principal }) => {
+export const PrincipalCollectible = ({ principal }: { principal: string }) => {
   return (
     <Section
       mb={'extra-loose'}

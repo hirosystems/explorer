@@ -22,8 +22,8 @@ const metadata = {
   'SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.megapont-robot-component-nft': {
     contract: 'SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.megapont-robot-component-nft',
     ipfsUrl: 'https://api.megapont.com/components/{id}',
-  }
-}
+  },
+};
 
 export function ipfsToIpfsIo(ipfsUrl: string): string {
   return ipfsUrl.replace('ipfs://', 'https://ipfs.io/');
@@ -37,6 +37,7 @@ function standardiseIpfsUrl(ipfsUrl: string): string {
 function standardise(metadata: any) {
   return Object.keys(metadata).reduce((acc, key) => {
     const item = metadata[key];
+    // @ts-ignore
     acc[item.contract] = {
       contract: item.contract,
       ipfsUrl: standardiseIpfsUrl(item.ipfsUrl),
@@ -47,6 +48,7 @@ function standardise(metadata: any) {
 
 const metadataStandard = standardise(metadata);
 
+// @ts-ignore
 export default function handler(req, res) {
   res.status(200).json(metadataStandard);
 }

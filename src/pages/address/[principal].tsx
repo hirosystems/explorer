@@ -8,6 +8,7 @@ import { TokenBalancesCard } from '@components/balances/principal-token-balances
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { Meta } from '@components/meta-head';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
+import { PrincipalCollectible } from '@components/nfts/principal-collectibles';
 import { PageWrapper } from '@components/page-wrapper';
 import { Title } from '@components/typography';
 import { AccountTransactionList } from '@features/account-transaction-list';
@@ -21,7 +22,6 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
-import { PrincipalCollectible } from './principal-collectibles';
 
 const PageTop = () => {
   return (
