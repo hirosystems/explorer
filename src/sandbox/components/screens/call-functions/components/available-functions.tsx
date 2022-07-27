@@ -1,31 +1,31 @@
 // @ts-nocheck
-import React from 'react';
-import { Box, BoxProps, color, Flex, Grid, Stack, transition } from '@stacks/ui';
-import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
-import { Input } from '@components/inputs';
-import { useFormik } from 'formik';
-import { Button } from '@components/button';
 import { border } from '@common/utils';
-import { Caption, Text } from '@components/typography';
-import { currentFunctionState, readOnlyState, readOnlyResponseState } from '@sandbox/store/sandbox';
-import { Section } from '@components/section';
 import { Badge } from '@components/badge';
+import { Button } from '@components/button';
 import { IconButton } from '@components/icon-button';
-import { encodeClarityValue, getTypeString, tupleCV } from '@stacks/transactions';
 import { ArrowRightIcon } from '@components/icons/arrow-right';
+import { Input } from '@components/inputs';
+import { LoadingPanel } from '@components/loading-panel';
+import { Section } from '@components/section';
+import { Caption, Text } from '@components/typography';
+import { currentFunctionState, readOnlyResponseState, readOnlyState } from '@sandbox/store/sandbox';
+import { encodeClarityValue, getTypeString, tupleCV } from '@stacks/transactions';
+import { Box, BoxProps, color, Flex, Grid, Stack } from '@stacks/ui';
+import { useFormik } from 'formik';
 import ApiIcon from 'mdi-react/ApiIcon';
 import FunctionIcon from 'mdi-react/FunctionIcon';
-import { LoadingPanel } from '@components/loading-panel';
+import React from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { useUser } from '@sandbox/hooks/use-user';
-import { parseReadOnlyResponse } from '@sandbox/common';
-import { CodeBlock } from '@components/code-block';
-import { handleContractCall } from '@sandbox/common/connect-functions';
-import { useContractInterface } from '@sandbox/components/screens/call-functions/components/use-contract-interface';
 import { Goals, useFathomGoal } from '@common/hooks/use-fathom';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { CodeBlock } from '@components/code-block';
+import { parseReadOnlyResponse } from '@sandbox/common';
+import { handleContractCall } from '@sandbox/common/connect-functions';
+import { useContractInterface } from '@sandbox/components/screens/call-functions/components/use-contract-interface';
+import { useUser } from '@sandbox/hooks/use-user';
 
 const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any) => (
   <Box width="100%" {...rest}>
@@ -135,6 +135,7 @@ const ReadOnly = () => {
   const setFunctionName = useSetRecoilState(currentFunctionState);
   const [readOnlyValue, setReadonly] = useRecoilState(readOnlyState);
 
+  console.log(contractId);
   const response = useRecoilValue(
     readOnlyResponseState({
       contractName: contractId.split('.')[1],

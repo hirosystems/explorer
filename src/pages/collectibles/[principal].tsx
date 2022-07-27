@@ -18,10 +18,8 @@ import { Flex, Grid, GridProps, Stack } from '@stacks/ui';
 import { microStxToStx } from '@stacks/ui-utils';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
-import { PrincipalCollectible } from './principal-collectibles';
 
 const PageTop = () => {
   return (
@@ -103,18 +101,6 @@ const AddressPage: NextPage<any> = arg => {
     { staleTime: 2000 }
   );
 
-  const { data: accountAssets } = useQuery(
-    addressQK(AddressQueryKeys.accountAssets, address),
-    queries.getAccountAssets(address)
-  );
-
-  console.log('accountAssets', accountAssets);
-  useEffect(() => {
-    const accountNfts = accountAssets?.results?.filter(
-      item => item.event_type === 'non_fungible_token_asset' && item.asset.recipient === address
-    );
-    console.log('accountNfts', accountNfts);
-  }, [accountAssets]);
   const hasTokenBalances = hasTokenBalance(balance);
 
   useRefreshOnBack('principal');
@@ -140,7 +126,6 @@ const AddressPage: NextPage<any> = arg => {
             balances={balance}
             nonce={nonces && (nonces.last_executed_tx_nonce ?? nonces.possible_next_nonce)}
           />
-          <PrincipalCollectible principal={address} />
           <AccountTransactionList contractId={address} />
         </Stack>
         {balance && (

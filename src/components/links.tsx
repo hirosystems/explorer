@@ -25,3 +25,9 @@ export const AddressLink: React.FC<{ principal: string }> = React.memo(({ princi
     <Link href={buildUrl(`/address/${encodeURIComponent(principal)}`)} passHref {...rest} />
   )
 );
+
+export const CollectibleLink: React.FC<{ principal: string }> = React.memo(
+  ({ principal, ...rest }) => (
+    <Link href={buildUrl(`/collectibles/${encodeURIComponent(principal)}`)} passHref {...rest} />
+  )
+);
