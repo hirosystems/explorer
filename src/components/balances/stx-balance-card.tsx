@@ -18,6 +18,8 @@ import { useAtomValue } from 'jotai/utils';
 import { accountInViewTokenOfferingData } from '@store/currently-in-view';
 import { MODALS } from '@common/constants';
 import { useAppDispatch } from '@common/state/hooks';
+import { useQuery } from 'react-query';
+import { useEffect, useState } from 'react';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const localeDecimalSeparator = getLocaleDecimalSeparator();
@@ -70,6 +72,7 @@ interface StxBalancesProps {
 export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
   const dispatch = useAppDispatch();
   const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
+  const [totalBalanceUsd, setTotalBalanceUsd] = useState();
 
   const balance =
     typeof parseInt(balances?.stx?.balance) === 'number' ? parseInt(balances?.stx?.balance) : 0;
@@ -88,6 +91,25 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
 
   const [qrShowing, setQrShowing] = React.useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
+
+  const { data: stxTicker } = useQuery(
+    ['stx-ticker'],
+    () =>
+      fetch('https://api.coingecko.com/api/v3/coins/blockstack/tickers').then(res => res.json()),
+    {
+      refetchInterval: 5000,
+      staleTime: 5000,
+    }
+  );
+
+  useEffect(() => {
+    if (!stxTicker) return;
+    const stxPriceUsd = stxTicker.tickers.find(t => t.target === 'USDT' && t.base === 'STX');
+    if (!stxPriceUsd) return;
+    // warning some precision error below
+    setTotalBalanceUsd(stxPriceUsd.last * totalBalance);
+  }, [stxTicker]);
+
 
   const TopRight = () => (
     <Box position="relative">
@@ -124,7 +146,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
               <Stack spacing="tight" pr="base">
                 <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
                 <Text fontSize="14px" color={'#747478'}>
-                  $ 59,836
+                  {totalBalanceUsd ? `$ ${totalBalanceUsd.toFixed(2)}` : ''}
                 </Text>
               </Stack>
             </Flex>
