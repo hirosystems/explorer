@@ -9,10 +9,13 @@ import { Box, Stack } from '@stacks/ui';
 import { getNextPageParam } from '@store/common';
 import * as React from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { FilterButton } from '@components/filter-button';
 
 // TODO to move to a separate file
 export const Wrapper: React.FC = ({ children }) => (
-  <Section title="Transactions">{children}</Section>
+  <Section title="Transactions" topRight={FilterButton}>
+    {children}
+  </Section>
 );
 
 const EmptyState: React.FC = () => (

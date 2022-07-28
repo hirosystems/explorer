@@ -54,8 +54,9 @@ export const CollectibleList = ({ principal }: { principal: string }) => {
       spacing="base"
       css={css`
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(161px, 1fr));
         grid-gap: 0.25rem;
+        padding: 32px;
       `}
     >
       {principalAssets.map(asset => (
@@ -80,8 +81,8 @@ export const CollectibleCard = ({ asset }: any) => {
   console.log('assmeta', metadata);
   if (!imageUrl) return null;
   return (
-    <Stack spacing="base" p="base">
-      <img src={imageUrl} style={{ maxWidth: '225px', borderRadius: '3px' }} />
+    <Stack spacing="base">
+      <img src={imageUrl} style={{ maxWidth: '161px', borderRadius: '3px' }} />
     </Stack>
   );
 };

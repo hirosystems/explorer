@@ -16,7 +16,18 @@ import { AccountTransactionList } from '@features/account-transaction-list';
 import { AddressSummary } from '@features/address-page/address-summary';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
 import { useAddressQueries } from '@features/address/use-address-queries';
-import { Box, DynamicColorCircle, Flex, Grid, GridProps, Stack, Text, Circle, color, Button} from '@stacks/ui';
+import {
+  Box,
+  DynamicColorCircle,
+  Flex,
+  Grid,
+  GridProps,
+  Stack,
+  Text,
+  Circle,
+  color,
+  Button,
+} from '@stacks/ui';
 import { microStxToStx } from '@stacks/ui-utils';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -26,7 +37,7 @@ import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { css } from '@emotion/react';
 import { IdentIcon } from '@features/address/avatar';
 import { WalletOverview } from '@components/balances/wallet-overview';
-import { IconLayoutGridAdd,  IconCopy } from '@tabler/icons';
+import { IconLayoutGridAdd, IconCopy } from '@tabler/icons';
 
 const PageTop = () => {
   return (
@@ -147,17 +158,25 @@ const AddressPage: NextPage<any> = arg => {
             {truncateMiddle(address)}
           </Text>
           <Box>
-            <Text fontSize={'14px'} fontWeight={300} color={'#747478'} paddingBottom="15px">Exploring Stacks & Web3 built on the Bitcoin network. 
-              The price of awakening is the sacrifice of the mirages. 
+            <Text fontSize={'14px'} fontWeight={300} color={'#747478'} paddingBottom="32px">
+              Exploring Stacks & Web3 built on the Bitcoin network. The price of awakening is the
+              sacrifice of the mirages.
             </Text>
             <Flex justifyContent="space-between">
-              <Button fontSize={'14px'} paddingLeft="58px" paddingRight="58px" size="sm" marginRight="10px" borderRadius="100px">
+              <Button
+                fontSize={'14px'}
+                paddingLeft="58px"
+                paddingRight="58px"
+                size="md"
+                marginRight="10px"
+                borderRadius="100px"
+              >
                 + Follow
               </Button>
               <Circle border={border()} mr="base" size="46px">
                 <IconLayoutGridAdd size="20px" color="currentColor" />
               </Circle>
-              <Circle border={border()} mr="base" size="46px">
+              <Circle border={border()} size="46px">
                 <IconCopy size="20px" color="currentColor" />
               </Circle>
             </Flex>
