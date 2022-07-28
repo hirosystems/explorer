@@ -7,17 +7,16 @@ import { TokenBalancesCard } from '@components/balances/principal-token-balances
 import { HoverableItem } from '@components/hoverable';
 import { AccountTransactionList } from '@features/account-transaction-list';
 import { PrincipalCollectible } from '@components/nfts/principal-collectibles';
-import { FollowerList, FollowerListItemProps } from '@features/follower-list'
-
+import { FollowerList, FollowerListItemProps } from '@features/follower-list';
 
 const fakeFollowers: FollowerListItemProps[] = [
-    {address: 'SPVJSM1EEQK81JN8CD63M9Y84WTP6PDY0ZJJEA40', title: 'Founder & CEO @memorizely'},
-    {address: 'SP2DZHWD7V2TYPF3VDJ329SFYD4TDQBD1XADY504G', title: 'Stacks maxi'},
-    {address: 'SPGA0V94XE2CVPHWF4YEEERGEXJ8XFHFVT7Q1TF9', title: 'Megapont Hodler'},
-    {address: 'SP1BSVBGXX5KZMZ2XJDFJDCW690MHGQ4KVPG08NRP', title: 'Dreamer by day'},
-    {address: 'SP31HQPJJV470954AT85GPSTTRTP98JDCDEXDDRXX', title: 'Builder @StxLabs'},
-    {address: 'SP1S7NXBWDEK7MD2FK7BGB42YK6WGEA8S78G3R4ZW', title: '3-time founder'},
-] 
+  { address: 'SPVJSM1EEQK81JN8CD63M9Y84WTP6PDY0ZJJEA40', title: 'Founder & CEO @memorizely' },
+  { address: 'SP2DZHWD7V2TYPF3VDJ329SFYD4TDQBD1XADY504G', title: 'Stacks maxi' },
+  { address: 'SPGA0V94XE2CVPHWF4YEEERGEXJ8XFHFVT7Q1TF9', title: 'Megapont Hodler' },
+  { address: 'SP1BSVBGXX5KZMZ2XJDFJDCW690MHGQ4KVPG08NRP', title: 'Dreamer by day' },
+  { address: 'SP31HQPJJV470954AT85GPSTTRTP98JDCDEXDDRXX', title: 'Builder @StxLabs' },
+  { address: 'SP1S7NXBWDEK7MD2FK7BGB42YK6WGEA8S78G3R4ZW', title: '3-time founder' },
+];
 
 export const Summary: React.FC<{
   address: string;
@@ -42,12 +41,12 @@ export const Tokens: React.FC<{
 export const Collectibles: React.FC<{
   address: string;
   balance: AddressBalanceResponse | undefined;
-}> = ({ address }) => <AccountTransactionList contractId={address} />;
+}> = ({ address }) => <PrincipalCollectible principal={address} />;
 
 export const Following: React.FC<{
-    address: string;
-    balance: AddressBalanceResponse | undefined;
-  }> = ({ address }) => <FollowerList followers={fakeFollowers} />;
+  address: string;
+  balance: AddressBalanceResponse | undefined;
+}> = ({ address }) => <FollowerList followers={fakeFollowers} />;
 
 const Tab: React.FC<GridProps & { label: string; isActive?: boolean }> = ({
   label,
