@@ -5,15 +5,19 @@ const identIcon = require('blockies-identicon');
 
 interface IdentIconProps {
   seed: string;
+  size?: number; 
+  scale?: number;
 }
 
-export const IdentIcon: React.FC<IdentIconProps> = ({ seed }) => {
+export const IdentIcon: React.FC<IdentIconProps> = ({ seed, size, scale }) => {
+  let realSize = size===undefined ? 8 : size; 
+  let realScale = scale===undefined ? 27 : scale;
   const options = {
     seed: seed,
     color: '#5546FF',
     bgcolor: '#fff',
-    size: 8,
-    scale: 27,
+    size: realSize,
+    scale: realScale,
     spotcolor: '#000',
   };
 
