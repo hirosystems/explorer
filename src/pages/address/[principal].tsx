@@ -1,7 +1,7 @@
 import { fetchNonce } from '@common/api/account';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { truncateMiddle } from '@common/utils';
+import { truncateMiddle, border } from '@common/utils';
 import { hasTokenBalance } from '@common/utils/accounts';
 import { AddressNotFound } from '@components/address-not-found';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
@@ -16,7 +16,7 @@ import { AccountTransactionList } from '@features/account-transaction-list';
 import { AddressSummary } from '@features/address-page/address-summary';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
 import { useAddressQueries } from '@features/address/use-address-queries';
-import { Box, DynamicColorCircle, Flex, Grid, GridProps, Stack, Text } from '@stacks/ui';
+import { Box, DynamicColorCircle, Flex, Grid, GridProps, Stack, Text, Circle, color, Button} from '@stacks/ui';
 import { microStxToStx } from '@stacks/ui-utils';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -26,6 +26,7 @@ import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { css } from '@emotion/react';
 import { IdentIcon } from '@features/address/avatar';
 import { WalletOverview } from '@components/balances/wallet-overview';
+import { IconLayoutGridAdd,  IconCopy } from '@tabler/icons';
 
 const PageTop = () => {
   return (
@@ -52,7 +53,7 @@ const ContentWrapper = (props: GridProps) => {
   return (
     <Grid
       gridColumnGap="extra-loose"
-      gridTemplateColumns={['100%', '100%', 'repeat(1, 320px calc(100% - 352px) )']}
+      gridTemplateColumns={['100%', '100%', 'repeat(1, 380px calc(100% - 412px) )']}
       gridRowGap={['extra-loose', 'extra-loose', 'unset']}
       maxWidth="100%"
       alignItems="flex-start"
@@ -135,7 +136,7 @@ const AddressPage: NextPage<any> = arg => {
       />
       {/*<PageTop />*/}
       <ContentWrapper>
-        <Stack spacing="extra-loose">
+        <Stack spacing="extra-loose" paddingLeft="65px">
           <Box css={profilePictureCss}>
             <IdentIcon seed={address} />
           </Box>
@@ -145,6 +146,23 @@ const AddressPage: NextPage<any> = arg => {
           <Text fontSize={'16px'} fontWeight={500} color={'#9A9A9A'}>
             {truncateMiddle(address)}
           </Text>
+          <Box>
+            <Text fontSize={'14px'} fontWeight={300} color={'#747478'} paddingBottom="15px">Exploring Stacks & Web3 built on the Bitcoin network. 
+              The price of awakening is the sacrifice of the mirages. 
+            </Text>
+            <Flex justifyContent="space-between">
+              <Button fontSize={'14px'} paddingLeft="58px" paddingRight="58px" size="sm" marginRight="10px" borderRadius="100px">
+                + Follow
+              </Button>
+              <Circle border={border()} mr="base" size="46px">
+                <IconLayoutGridAdd size="20px" color="currentColor" />
+              </Circle>
+              <Circle border={border()} mr="base" size="46px">
+                <IconCopy size="20px" color="currentColor" />
+              </Circle>
+            </Flex>
+          </Box>
+
           {balance && (
             <Fragment>
               <StxBalances principal={address} balances={balance} />
@@ -157,19 +175,7 @@ const AddressPage: NextPage<any> = arg => {
           )}
         </Stack>
 
-        <Stack spacing="extra-loose">
-          {/* 
-          <AddressSummary
-            principal={address}
-            hasTokenBalances={hasTokenBalances}
-            balances={balance}
-            nonce={nonces && (nonces.last_executed_tx_nonce ?? nonces.possible_next_nonce)}
-          />
-<<<<<<< HEAD
-          <PrincipalCollectible principal={address} />
-          <AccountTransactionList contractId={address} />
-=======
-          <AccountTransactionList contractId={address} /> */}
+        <Stack spacing="extra-loose" paddingRight="65px">
           <NewAccountCard address={address} balance={balance} />
         </Stack>
       </ContentWrapper>
