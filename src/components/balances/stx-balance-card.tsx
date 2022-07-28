@@ -72,7 +72,7 @@ interface StxBalancesProps {
 export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
   const dispatch = useAppDispatch();
   const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
-  const [totalBalanceUsd, setTotalBalanceUsd] = useState();
+  const [totalBalanceUsd, setTotalBalanceUsd] = useState<number>();
 
   const balance =
     typeof parseInt(balances?.stx?.balance) === 'number' ? parseInt(balances?.stx?.balance) : 0;
@@ -83,7 +83,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
   const locked =
     typeof parseInt(balances?.stx?.locked) === 'number' ? parseInt(balances?.stx?.locked) : 0;
   const tokenOfferingLocked = parseInt(tokenOfferingData?.total_locked || '0');
-  const totalBalance = microToStacks(balance + tokenOfferingLocked);
+  const totalBalance = microToStacks(balance + tokenOfferingLocked) as number;
   const availableBalance = microToStacks(balance - locked);
   const stackedBalance = microToStacks(locked);
   const minerRewardsBalance = microToStacks(minerRewards);
