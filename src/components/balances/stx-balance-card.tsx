@@ -104,12 +104,13 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
 
   useEffect(() => {
     if (!stxTicker) return;
-    const stxPriceUsd = stxTicker.tickers.find(t => t.target === 'USDT' && t.base === 'STX');
+    const stxPriceUsd = stxTicker.tickers.find(
+      (t: { target: string; base: string }) => t.target === 'USDT' && t.base === 'STX'
+    );
     if (!stxPriceUsd) return;
     // warning some precision error below
-    setTotalBalanceUsd(stxPriceUsd.last * totalBalance);
+    setTotalBalanceUsd((stxPriceUsd?.last || 0) * totalBalance);
   }, [stxTicker]);
-
 
   const TopRight = () => (
     <Box position="relative">
