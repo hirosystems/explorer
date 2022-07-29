@@ -95,7 +95,7 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = mem
     return (
       <Box
         className="metaverse-header"
-        position="fixed"
+        position="absolute"
         zIndex={1}
         width="100%"
         top={0}
