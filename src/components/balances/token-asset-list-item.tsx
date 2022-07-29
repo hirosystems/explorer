@@ -58,7 +58,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
 
   useEffect(() => {
     if (!tokenTicker) return;
-    const tokenPriceUsd = tokenTicker.tickers.find(t => t.target === 'USD');
+    const tokenPriceUsd = tokenTicker.tickers.find((t: any) => t.target === 'USD');
     if (!tokenPriceUsd) return;
     const quantity =
       totalType === 'balance'
