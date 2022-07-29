@@ -99,10 +99,10 @@ const AddressPage: NextPage<any> = arg => {
 
   const queries = useAddressQueries();
   const apiServer = useAppSelector(selectActiveNetwork).url;
-  const [bnsName, setBnsName] = useState('andres.btc');
 
   const { query } = useRouter();
   const address = query.principal as string;
+  const [bnsName, setBnsName] = useState(truncateMiddle(address));
 
   const { data: balance } = useQuery(
     addressQK(AddressQueryKeys.accountBalance, address),
@@ -137,7 +137,7 @@ const AddressPage: NextPage<any> = arg => {
 
   useEffect(() => {
     if (!bnsData) return;
-    setBnsName(bnsData.names?.[0] || 'andres.btc');
+    setBnsName(bnsData.names?.[0] || truncateMiddle(address));
   }, [bnsData]);
 
   return (
