@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import { Box, color, DynamicColorCircle, Flex, FlexProps, Stack } from '@stacks/ui';
+import { TokenAvatar } from '../token-avatar';
+import React from 'react';
+import { Box, color, Flex, FlexProps, Stack } from '@stacks/ui';
 import { Caption, Text } from '@components/typography';
 import { TxLink } from '@components/links';
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@common/utils';
 import { getTicker } from '@components/tx-events';
-import { useApi } from '@common/api/client';
+import { useTokenMetadata } from '../../common/hooks/use-token-metadata';
 
 interface TokenAssetListItemProps extends FlexProps {
   amount: string;
@@ -17,21 +17,9 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   token,
   tokenType,
 }) => {
-  const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { fungibleTokensApi } = useApi();
   const { address, asset, contract } = getAssetNameParts(token);
 
-  useEffect(() => {
-    // TODO: Revisit this bc duplicated code in several places
-    const getFtMetadata = async () => {
-      const contractId = `${address}.${contract}`;
-      const data = await fungibleTokensApi.getContractFtMetadata({
-        contractId,
-      });
-      setFtMetadata(data);
-    };
-    if (tokenType === 'fungible_tokens') void getFtMetadata();
-  }, []);
+  const { data: ftMetadata } = useTokenMetadata(token, tokenType);
 
   const totalType = tokenType === 'non_fungible_tokens' ? 'count' : 'balance';
 
@@ -41,9 +29,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
     <Flex justifyContent="space-between" px="base" py="base">
       <Box>
         <Flex alignItems="center" mb={'extra-tight'}>
-          <DynamicColorCircle size="32px" mr="base" string={`${address}.${contract}::${asset}`}>
-            {asset[0]}
-          </DynamicColorCircle>
+          <TokenAvatar token={token} ftMetadata={ftMetadata} />
           <Stack spacing="extra-tight">
             <Text color={color('text-title')} fontWeight="600">
               {asset}

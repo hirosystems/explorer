@@ -1,0 +1,16 @@
+name: Code checks
+
+on: [pull_request]
+
+jobs:
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare testing env
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: yarn install
+      - name: Run unit tests
+        run: yarn test:unit
