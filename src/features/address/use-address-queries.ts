@@ -14,6 +14,9 @@ export const getAddressQueries = (networkUrl: string) => {
     fetchCoreApiInfo: () => () => {
       return clients.infoApi.getCoreApiInfo();
     },
+    fetchBns: (address: string) => () => {
+      return clients.bnsApi.getNamesOwnedByAddress({ address, blockchain: 'stacks' });
+    },
     fetchAccountBalance: (address: string) => () => {
       return clients.accountsApi.getAccountBalance({
         principal: address,

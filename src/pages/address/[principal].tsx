@@ -31,7 +31,7 @@ import {
 import { microStxToStx } from '@stacks/ui-utils';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 import { css } from '@emotion/react';
@@ -99,6 +99,7 @@ const AddressPage: NextPage<any> = arg => {
 
   const queries = useAddressQueries();
   const apiServer = useAppSelector(selectActiveNetwork).url;
+  const [bnsName, setBnsName] = useState('andres.btc');
 
   const { query } = useRouter();
   const address = query.principal as string;
@@ -132,6 +133,13 @@ const AddressPage: NextPage<any> = arg => {
 
   useRefreshOnBack('principal');
 
+  const { data: bnsData } = useQuery(['bns' + address], queries.fetchBns(address));
+
+  useEffect(() => {
+    if (!bnsData) return;
+    setBnsName(bnsData.names?.[0] || 'andres.btc');
+  }, [bnsData]);
+
   return (
     <PageWrapper>
       <div style={{ height: '50px' }}></div>
@@ -152,7 +160,7 @@ const AddressPage: NextPage<any> = arg => {
             <IdentIcon seed={address} />
           </Box>
           <Text fontSize={'32px'} fontWeight={500} style={{ marginBottom: '4px' }}>
-            andres.btc
+            {bnsName}
           </Text>
           <Text fontSize={'16px'} fontWeight={500} color={'#9A9A9A'}>
             {truncateMiddle(address)}
