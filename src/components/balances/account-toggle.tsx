@@ -23,7 +23,7 @@ export const Summary: React.FC<{
   balance: AddressBalanceResponse | undefined;
 }> = ({ address }) => (
   <>
-    <PrincipalCollectible principal={address} />
+    <PrincipalCollectible principal={address} limit={4} />
     <AccountTransactionList contractId={address} />
   </>
 );

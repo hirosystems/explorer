@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { css } from '@emotion/react';
 
-export const CollectibleList = ({ principal }: { principal: string }) => {
+export const CollectibleList = ({ principal, limit }: { principal: string; limit?: number }) => {
   const [principalAssets, setPrincipalAssets] = React.useState([]);
 
   const { data: nftMetadata } = useQuery(['nftMetadata'], () =>
@@ -36,9 +36,9 @@ export const CollectibleList = ({ principal }: { principal: string }) => {
       item => item.event_type === 'non_fungible_token_asset' && item.asset.recipient === principal
     );
     console.log('accountNfts', accountNfts);
-    console.log('principalCollectibles', principalCollectibles(accountNfts, nftMetadata));
+    console.log('principalCollectibles', principalCollectibles(accountNfts, nftMetadata, limit));
     // @ts-ignore
-    setPrincipalAssets(principalCollectibles(accountNfts, nftMetadata));
+    setPrincipalAssets(principalCollectibles(accountNfts, nftMetadata, limit));
   }, [accountAssets, nftMetadata]);
 
   if (!principalAssets?.length) return null;
@@ -93,9 +93,8 @@ function assetIdToContractId(assetId: string) {
   return assetId.split('::')[0];
 }
 
-function principalCollectibles(accountNfts: any[], nftMetadata: any[]) {
+function principalCollectibles(accountNfts: any[], nftMetadata: any[], limit?: number) {
   if (!accountNfts || !nftMetadata) return [];
-  console.log('foo');
   const result = accountNfts
     .filter(nft => {
       return assetIdToContractId(nft.asset.asset_id) in nftMetadata;
@@ -109,10 +108,19 @@ function principalCollectibles(accountNfts: any[], nftMetadata: any[]) {
         ),
       };
     });
+  if (limit) {
+    return result.slice(0, limit);
+  }
   return result;
 }
 
-export const PrincipalCollectible = ({ principal }: { principal: string }) => {
+export const PrincipalCollectible = ({
+  principal,
+  limit,
+}: {
+  principal: string;
+  limit?: number;
+}) => {
   return (
     <Section
       mb={'extra-loose'}
@@ -129,7 +137,7 @@ export const PrincipalCollectible = ({ principal }: { principal: string }) => {
       // topRight={() => <TopRight principal={principal} />}
     >
       <Stack spacing="loose">
-        <CollectibleList principal={principal} />
+        <CollectibleList principal={principal} limit={limit} />
       </Stack>
     </Section>
   );
