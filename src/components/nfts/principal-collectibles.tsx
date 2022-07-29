@@ -14,14 +14,12 @@ import { useQuery } from 'react-query';
 import { css } from '@emotion/react';
 
 export const CollectibleList = ({ principal }: { principal: string }) => {
-  // const imageUrl = 'https://placehold.co/225';
   const [principalAssets, setPrincipalAssets] = React.useState([]);
 
   const { data: nftMetadata } = useQuery(['nftMetadata'], () =>
     fetch('/api/nfts?chain=mainnet').then(res => res.json())
   );
   console.log('meta', nftMetadata);
-  ``;
 
   const queries = useAddressQueries();
   const { data: accountAssets } = useQuery(
@@ -42,10 +40,6 @@ export const CollectibleList = ({ principal }: { principal: string }) => {
     // @ts-ignore
     setPrincipalAssets(principalCollectibles(accountNfts, nftMetadata));
   }, [accountAssets, nftMetadata]);
-
-  const imageUrl =
-    'https://ipfs.io/ipfs/QmZjrCc9836Njqw1Yx8ztM6FbJzvuZijwtZJSkKPxLTMWU/34b424ea4b724';
-  // const arr = new Array(5).fill(0);
 
   if (!principalAssets?.length) return null;
 
@@ -76,7 +70,7 @@ export const CollectibleCard = ({ asset }: any) => {
   useEffect(() => {
     if (!metadata) return;
     console.log('setting', metadata.image);
-    setImageUrl(ipfsToIpfsIo(metadata.image));
+    setImageUrl(ipfsToIpfsIo(metadata.image || metadata.imageUrl));
   }, metadata);
   console.log('assmeta', metadata);
   if (!imageUrl) return null;
@@ -101,6 +95,7 @@ function assetIdToContractId(assetId: string) {
 
 function principalCollectibles(accountNfts: any[], nftMetadata: any[]) {
   if (!accountNfts || !nftMetadata) return [];
+  console.log('foo');
   const result = accountNfts
     .filter(nft => {
       return assetIdToContractId(nft.asset.asset_id) in nftMetadata;

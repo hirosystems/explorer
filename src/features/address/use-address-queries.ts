@@ -23,7 +23,7 @@ export const getAddressQueries = (networkUrl: string) => {
       return clients.accountsApi.getAccountInfo({ principal: address });
     },
     getAccountAssets: (address: string) => () => {
-      return clients.accountsApi.getAccountAssets({ principal: address });
+      return clients.accountsApi.getAccountAssets({ principal: address, limit: 40 });
     },
     fetchTransactionsForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>
