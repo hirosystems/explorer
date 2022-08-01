@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/hirosystems/explorer/compare/v1.28.1...v1.29.0) (2022-08-01)
+
+
+### Features
+
+* block visualizer ([35ecc72](https://github.com/hirosystems/explorer/commit/35ecc729cb6e34ba33d12365b814adf9ab40f9e3))
+
 ## [1.28.1](https://github.com/hirosystems/explorer/compare/v1.28.0...v1.28.1) (2022-07-25)
 
 
