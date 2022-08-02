@@ -1,3 +1,10 @@
+## [1.29.1](https://github.com/hirosystems/explorer/compare/v1.29.0...v1.29.1) (2022-08-02)
+
+
+### Bug Fixes
+
+* disable refetch on focus ([0762c1b](https://github.com/hirosystems/explorer/commit/0762c1bccc015b845c362c9738d611df72fb5daa))
+
 # [1.29.0](https://github.com/hirosystems/explorer/compare/v1.28.1...v1.29.0) (2022-08-01)
 
 
