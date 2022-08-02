@@ -40,6 +40,7 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
       new QueryClient({
         defaultOptions: {
           queries: {
+            refetchOnWindowFocus: false,
             staleTime: 5000,
           },
         },
