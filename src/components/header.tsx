@@ -10,6 +10,7 @@ import { MobileMenu } from '@components/mobile-menu';
 import { NetworkModeBanner } from '@components/network-mode-banner';
 import { useAppDispatch } from '@common/state/hooks';
 import { buildUrl } from '@components/links';
+import { StatusBar } from '@features/status-bar/status-bar';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -76,6 +77,7 @@ export const Header: React.FC<
   const dispatch = useAppDispatch();
   return (
     <>
+      <StatusBar />
       <HeaderBar
         mx="auto"
         width="100%"
