@@ -124,7 +124,7 @@ const AddressPage: NextPage<any> = arg => {
             principal={address}
             hasTokenBalances={hasTokenBalances}
             balances={balance}
-            nonce={nonces && (nonces.last_executed_tx_nonce ?? nonces.possible_next_nonce)}
+            lastExecutedTxNonce={nonces?.last_executed_tx_nonce}
           />
           <AccountTransactionList contractId={address} />
         </Stack>

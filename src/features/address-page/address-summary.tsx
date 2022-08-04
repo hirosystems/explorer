@@ -9,7 +9,7 @@ export const AddressSummary = ({
   hasTokenBalances,
   balances,
   transactions,
-  nonce,
+  lastExecutedTxNonce,
 }: any) => {
   return (
     <Section mb={'extra-loose'} title="Summary">
@@ -49,9 +49,9 @@ export const AddressSummary = ({
           },
           {
             label: {
-              children: 'Nonce',
+              children: 'Last executed tx nonce',
             },
-            children: (!isNaN(nonce) && `${nonce}`) || nonce,
+            children: lastExecutedTxNonce || "This account hasn't executed a tx yet",
           },
         ]}
       />
