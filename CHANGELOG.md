@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/hirosystems/explorer/compare/v1.29.1...v1.30.0) (2022-08-04)
+
+
+### Features
+
+* display status from status page ([abe9cfa](https://github.com/hirosystems/explorer/commit/abe9cfab50c91aec3af615261a0b6d33c25adf32))
+
 ## [1.29.1](https://github.com/hirosystems/explorer/compare/v1.29.0...v1.29.1) (2022-08-02)
 
 
