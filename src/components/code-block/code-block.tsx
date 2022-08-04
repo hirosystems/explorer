@@ -58,8 +58,10 @@ const CodeBlock = ({
           },
           '.token-line': {
             width: '100%',
+            height: 'auto',
             fontFamily: `'Fira Code', monospace`,
             alignItems: 'center',
+            whiteSpace: 'pre-wrap',
             ':hover': {
               backgroundColor: 'rgba(255,255,255,0.1)',
             },
