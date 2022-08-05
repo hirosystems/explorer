@@ -1,3 +1,10 @@
+# [1.31.0](https://github.com/hirosystems/explorer/compare/v1.30.0...v1.31.0) (2022-08-05)
+
+
+### Features
+
+* tx page updates ([02e3ad8](https://github.com/hirosystems/explorer/commit/02e3ad8e82cc3e03be9f21b9d211dc18790a1159))
+
 # [1.30.0](https://github.com/hirosystems/explorer/compare/v1.29.1...v1.30.0) (2022-08-04)
 
 
