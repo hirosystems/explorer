@@ -8,6 +8,7 @@ import HashtagIcon from 'mdi-react/HashtagIcon';
 import { Caption, Text, Title } from '@components/typography';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
 import pluralize from 'pluralize';
+import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
 
 export const BlockItem: React.FC<{ block: Block; index: number; length: number }> = React.memo(
   ({ block, index, length, ...rest }) => {
@@ -28,10 +29,12 @@ export const BlockItem: React.FC<{ block: Block; index: number; length: number }
             <ItemIcon size="40px" type="block" />
             <Stack spacing="tight" as="span">
               <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
-                <Box size="16px" as={HashtagIcon} mr="1px" opacity={0.5} color="currentColor" />
-                <Title display="block" color="currentColor">
-                  {String(block.height)}
-                </Title>
+                <BtcStxBlockLinks
+                  btcBlockHeight={block.burn_block_height}
+                  stxBlockHeight={block.height}
+                  stxBlockHash={block.hash}
+                  fontSize={'16px'}
+                />
               </Flex>
               <Caption display="block">
                 {'Anchor block' +

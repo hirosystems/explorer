@@ -7,11 +7,14 @@ import { PoisonMicroblockTxs, TxData } from '@common/types/tx';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 // TODO: make this real
-const PoisonMicroblockPage = ({ transaction }: TxData<PoisonMicroblockTxs> & { block?: Block }) => (
+const PoisonMicroblockPage = ({
+  transaction,
+  block,
+}: TxData<PoisonMicroblockTxs> & { block?: Block }) => (
   <>
     <PageTop tx={transaction as any} />
     <Stack spacing="extra-loose">
-      <TransactionDetails transaction={transaction} hideContract />
+      <TransactionDetails transaction={transaction} block={block} hideContract />
       <Rows
         items={[
           {
