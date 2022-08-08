@@ -21,7 +21,7 @@ const CoinbasePage: React.FC<{
       <PageTop tx={transaction} />
       <PagePanes fullWidth={transaction.tx_status === 'pending' || !block}>
         <Box>
-          <TransactionDetails transaction={transaction} />
+          <TransactionDetails transaction={transaction} block={block} />
           {'events' in transaction && (
             <Events txId={transaction.tx_id} mt="extra-loose" events={transaction.events} />
           )}

@@ -9,7 +9,7 @@ import { Link } from '@components/typography';
 import { TransactionStatus } from '@common/constants';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction, Block } from '@stacks/stacks-blockchain-api-types';
 import { Section } from '@components/section';
 import { BlockLink, buildUrl, TxLink } from '@components/links';
 import { IconButton } from '@components/icon-button';
@@ -19,6 +19,7 @@ import { Circle } from '@components/circle';
 import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
 import { BlocksVisualizer } from '@features/blocks-visualizer';
 import { getTransactionStatus } from '@common/utils/transactions';
+import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
 
 interface FeeComponentProps {
   fees: string;
@@ -38,21 +39,34 @@ const FeesComponent = React.memo(({ fees, sponsored }: FeeComponentProps) => (
   </>
 ));
 
-const BlockComponent = React.memo(({ block, ts }: { block: number | string; ts: number }) => {
-  return (
-    <>
-      {/**
-       * TODO: link to block
-       */}
-      <Box>#{block}</Box>
-      {/* MICROBLOCK TODO: Make this real data if possible? */}
-      {/* <Box ml="extra-tight">(6 confirmations)</Box> */}
-      <Box ml="base">
-        <Timestamp ts={ts} />
-      </Box>
-    </>
-  );
-});
+const BlockComponent = React.memo(
+  ({
+    btcBlockHeight,
+    stxBlockHeight,
+    stxBlockHash,
+    ts,
+  }: {
+    btcBlockHeight?: number;
+    stxBlockHeight: number;
+    stxBlockHash: string;
+    ts: number;
+  }) => {
+    return (
+      <>
+        <BtcStxBlockLinks
+          btcBlockHeight={btcBlockHeight}
+          stxBlockHeight={stxBlockHeight}
+          stxBlockHash={stxBlockHash}
+        />
+        {/* MICROBLOCK TODO: Make this real data if possible? */}
+        {/* <Box ml="extra-tight">(6 confirmations)</Box> */}
+        <Box ml="base">
+          <Timestamp ts={ts} />
+        </Box>
+      </>
+    );
+  }
+);
 
 const AddressComponent = React.memo(({ principal }: { principal: string }) => {
   return (
@@ -77,7 +91,7 @@ const getSenderName = (txType: Transaction['tx_type']) => {
   }
 };
 
-const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
+const transformDataToRowData = (d: Transaction | MempoolTransaction, block?: Block) => {
   const txid = {
     label: {
       children: 'Transaction ID',
@@ -161,7 +175,12 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction) => {
     },
     children:
       'block_height' in d ? (
-        <BlockComponent block={d.block_height} ts={d.parent_burn_block_time || d.burn_block_time} />
+        <BlockComponent
+          stxBlockHeight={d.block_height}
+          stxBlockHash={d.block_hash}
+          btcBlockHeight={block?.burn_block_height}
+          ts={d.parent_burn_block_time || d.burn_block_time}
+        />
       ) : null,
   };
   const blockHash = {
@@ -268,6 +287,7 @@ interface TransactionDetailsProps {
   hideContract?: boolean;
   contractName?: string;
   contractMeta?: string;
+  block?: Block;
 }
 
 export const getContractId = (transaction: Transaction | MempoolTransaction) => {
@@ -286,6 +306,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   hideContract,
   contractMeta,
   contractName,
+  block,
   ...rest
 }) => {
   const txStatus = getTransactionStatus(transaction);
@@ -295,7 +316,7 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
       <Section title="Summary" {...rest}>
         <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
           <Box width={['100%']}>
-            <Rows noTopBorder items={transformDataToRowData(transaction) as any} />
+            <Rows noTopBorder items={transformDataToRowData(transaction, block) as any} />
           </Box>
         </Flex>
       </Section>

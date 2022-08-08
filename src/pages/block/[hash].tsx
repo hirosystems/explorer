@@ -26,6 +26,7 @@ import { ServerResponse } from 'http';
 import { useRouter } from 'next/router';
 import { QueryClient, useQuery } from 'react-query';
 import { dehydrate } from 'react-query/hydration';
+import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
 
 interface BlockSinglePageData {
   hash: string;
@@ -95,7 +96,13 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error }) => {
                   label: {
                     children: 'Block height',
                   },
-                  children: `#${block.height}`,
+                  children: (
+                    <BtcStxBlockLinks
+                      btcBlockHeight={block.burn_block_height}
+                      stxBlockHeight={block.height}
+                      stxBlockHash={block.hash}
+                    />
+                  ),
                 },
                 {
                   label: {

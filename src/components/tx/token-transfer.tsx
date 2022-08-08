@@ -21,7 +21,7 @@ const TokenTransferPage: React.FC<{
       <PageTop tx={transaction as any} />
       <PagePanes fullWidth={transaction.tx_status === 'pending' || block === null}>
         <Stack spacing="extra-loose">
-          <TransactionDetails transaction={transaction} hideContract />
+          <TransactionDetails transaction={transaction} block={block} hideContract />
           {'events' in transaction && (
             <Events txId={transaction.tx_id} events={transaction.events} />
           )}

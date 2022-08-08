@@ -46,6 +46,7 @@ const SmartContractPage: React.FC<{
           <TransactionDetails
             contractName={getContractName(transaction.smart_contract.contract_id)}
             transaction={transaction}
+            block={block}
           />
           {'events' in transaction && (
             <Events txId={transaction.tx_id} events={transaction.events} />
