@@ -1,3 +1,10 @@
+# [1.32.0](https://github.com/hirosystems/explorer/compare/v1.31.0...v1.32.0) (2022-08-09)
+
+
+### Features
+
+* btc and stx block height links ([20bc64a](https://github.com/hirosystems/explorer/commit/20bc64a3f9cda58f0c975a48ffbd335cc3ef8d7a))
+
 # [1.31.0](https://github.com/hirosystems/explorer/compare/v1.30.0...v1.31.0) (2022-08-05)
 
 
