@@ -3,9 +3,11 @@ import { RootState } from '@common/state/store';
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
 
 export enum TxFilterTypes {
+  HomepageTxFilter = 'HomepageTxFilter',
   TransactionsPageTxFilter = 'TransactionsPageTxFilter',
   BlocksPageTxFilter = 'BlocksPageTxFilter',
   SandboxTxFilter = 'SandboxTxFilter',
+  AddressTxFilter = 'AddressTxFilter',
 }
 
 export type TxFilters = { [key in TxFilterTypes]: TxFilterState };

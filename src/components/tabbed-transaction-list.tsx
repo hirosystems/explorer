@@ -52,6 +52,7 @@ const InnerTransactionListContent = ({
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
         hasNextPage={!!hasNextPage}
+        mempoolSelected={mempoolSelected}
       />
     </Flex>
   );
@@ -71,7 +72,7 @@ export const TabbedTransactionList: React.FC<{
         pl: '0',
       }}
       alignSelf="flex-start"
-      topRight={!mempoolSelected && infinite && FilterButton}
+      topRight={!mempoolSelected && FilterButton}
     >
       <InnerTransactionListContent infinite={infinite} limit={limit} />
     </Section>

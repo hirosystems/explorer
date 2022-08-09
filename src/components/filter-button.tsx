@@ -4,10 +4,11 @@ import { CaptionAction } from '@components/caption-action';
 import { IconFilter } from '@tabler/icons';
 import { FilterPanel } from '@components/filter-panel';
 import { useFilterState } from '@common/hooks/use-filter-state';
-import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { useFilterScope } from '@features/transactions-filter/hooks/use-filter-scope';
 
 export const FilterButton = memo(() => {
-  const { toggleFilterVisibility } = useFilterState(TxFilterTypes.TransactionsPageTxFilter);
+  const filterScope = useFilterScope();
+  const { toggleFilterVisibility } = useFilterState(filterScope);
   return (
     <Box position="relative" zIndex={99999999}>
       <CaptionAction
@@ -19,12 +20,7 @@ export const FilterButton = memo(() => {
         data-test="filter-button"
       />
       <Box pointerEvents="none" top={0} right="-32px" position="absolute" size="500px">
-        <FilterPanel
-          bg={color('bg')}
-          filterKey={TxFilterTypes.TransactionsPageTxFilter}
-          showBorder
-          pointerEvents="all"
-        />
+        <FilterPanel bg={color('bg')} filterKey={filterScope} showBorder pointerEvents="all" />
       </Box>
     </Box>
   );

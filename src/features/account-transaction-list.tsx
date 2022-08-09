@@ -61,6 +61,7 @@ export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ cont
               fetchNextPage={mempoolTransactionsQueryResponse.fetchNextPage}
               hasNextPage={!!mempoolTransactionsQueryResponse.hasNextPage}
               showLoadMoreButton
+              mempoolSelected
             />
           )}
           {!!transactionsQueryResponse.data && (
