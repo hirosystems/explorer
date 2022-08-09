@@ -15,12 +15,14 @@ export function InfiniteTransactionsList({
   fetchNextPage,
   hasNextPage,
   showLoadMoreButton,
+  mempoolSelected,
 }: {
   data: InfiniteData<TransactionsListResponse> | InfiniteData<MempoolTransactionsListResponse>;
   isFetchingNextPage: boolean;
   fetchNextPage: () => void;
   hasNextPage: boolean;
   showLoadMoreButton?: boolean;
+  mempoolSelected?: boolean;
 }) {
   if (!data.pages) return null;
   return (
@@ -32,6 +34,7 @@ export function InfiniteTransactionsList({
             isLastPage={index === arr.length - 1}
             data-test={`tx-list-page-${index}`}
             key={`tx-list-page-${index}`}
+            mempoolSelected={mempoolSelected}
           />
         ))}
       </Box>

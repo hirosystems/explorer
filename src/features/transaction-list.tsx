@@ -7,11 +7,12 @@ import type {
 } from '@store/transactions';
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { useFilterState } from '@common/hooks/use-filter-state';
-import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { useFilterScope } from '@features/transactions-filter/hooks/use-filter-scope';
 
 interface TransactionListProps {
   isLastPage?: boolean;
   data?: TransactionsListResponse | MempoolTransactionsListResponse;
+  mempoolSelected?: boolean;
 }
 
 function getUniqueListBy<T>(arr: T[], key: keyof T): T[] {
@@ -27,9 +28,10 @@ export const TransactionList = (props: TransactionListProps) => {
         : undefined,
     [data]
   );
+  const filterScope = useFilterScope();
   if (!list) return null;
-  const { activeFilters } = useFilterState(TxFilterTypes.TransactionsPageTxFilter);
-  const filteredTxs = list.filter(tx => activeFilters[tx.tx_type]);
+  const { activeFilters } = useFilterState(filterScope);
+  const filteredTxs = props.mempoolSelected ? list : list.filter(tx => activeFilters[tx.tx_type]);
   return (
     <>
       {filteredTxs?.map((tx: Transaction | MempoolTransaction, itemIndex: number) => (
