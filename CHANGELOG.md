@@ -1,3 +1,10 @@
+# [1.33.0](https://github.com/hirosystems/explorer/compare/v1.32.0...v1.33.0) (2022-08-11)
+
+
+### Features
+
+* add filters to homepage tx list ([800d862](https://github.com/hirosystems/explorer/commit/800d86297daefdc63d0c750dcfa052cfcf256e2b))
+
 # [1.32.0](https://github.com/hirosystems/explorer/compare/v1.31.0...v1.32.0) (2022-08-09)
 
 
