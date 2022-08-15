@@ -1,3 +1,10 @@
+# [1.34.0](https://github.com/hirosystems/explorer/compare/v1.33.0...v1.34.0) (2022-08-15)
+
+
+### Features
+
+* add fungible token images ([75b2c3b](https://github.com/hirosystems/explorer/commit/75b2c3bf43a30c2788723055331827e2ca66db93)), closes [#800](https://github.com/hirosystems/explorer/issues/800)
+
 # [1.33.0](https://github.com/hirosystems/explorer/compare/v1.32.0...v1.33.0) (2022-08-11)
 
 
