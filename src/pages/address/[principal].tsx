@@ -97,13 +97,10 @@ const AddressPage: NextPage<any> = arg => {
 
   useQuery(
     addressQK(AddressQueryKeys.transactionsForAddress, address),
-    queries.fetchTransactionsForAddress(address),
-    { staleTime: 2000 }
+    queries.fetchTransactionsForAddress(address)
   );
 
   const hasTokenBalances = hasTokenBalance(balance);
-
-  useRefreshOnBack('principal');
 
   return (
     <PageWrapper>

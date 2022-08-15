@@ -165,6 +165,38 @@ const globalStyles = css`
     font-weight: normal;
     font-style: normal;
   }
+
+  .skeleton-outer {
+    display: flex;
+    align-items: center;
+  }
+
+  .skeleton-outer-full-width {
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  .skeleton-title {
+    --base-color: rgba(255, 255, 255, 0.24);
+    --highlight-color: rgba(255, 255, 255, 0.74)
+  }
+
+  .dark {
+    .react-loading-skeleton {
+      --base-color: #1a1a1a;
+    }
+    .react-loading-skeleton::after {
+      --base-color: #1a1a1a;
+      --highlight-color: #151515;
+    }
+    .skeleton-title {
+      --base-color: rgba(255, 255, 255, 0.24);
+    }
+    .skeleton-title::after {
+      --base-color: rgba(255, 255, 255, 0.24);
+      --highlight-color: rgba(255, 255, 255, 0.74)
+    }
 `;
 
 const GlobalStyles = <Global styles={globalStyles} />;

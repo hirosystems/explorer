@@ -1,86 +1,49 @@
+import { ExplorerSkeletonLoader } from './skeleton-common';
 import { Section } from '@components/section';
-import { Box, Flex, useColorMode } from '@stacks/ui';
+import { Box, Flex } from '@stacks/ui';
 import * as React from 'react';
-import ContentLoader from 'react-content-loader';
 import { SkeletonBlock, SkeletonTransaction } from './skeleton-transaction';
 
-export const useContentLoaderColors = () => {
-  const { colorMode } = useColorMode();
-  const [backgroundColor, setBackgroundColor] = React.useState('#f3f3f3');
-  const [foregroundColor, setForegroundColor] = React.useState('#ecebeb');
-  React.useEffect(() => {
-    setBackgroundColor(colorMode === 'light' ? '#f3f3f3' : '#1a1a1a');
-    setForegroundColor(colorMode === 'light' ? '#ecebeb' : '#151515');
-  }, [colorMode]);
-  return [backgroundColor, foregroundColor];
-};
+const SkeletonTextSpan = () => <ExplorerSkeletonLoader width={'399px'} height={'16px'} />;
 
-export const ExplorerContentLoader = ({ children, ...rest }: any) => {
-  const [backgroundColor, foregroundColor] = useContentLoaderColors();
-  return (
-    <ContentLoader backgroundColor={backgroundColor} foregroundColor={foregroundColor} {...rest}>
-      {children}
-    </ContentLoader>
-  );
-};
-
-export const SkeletonTextSpan = () => (
-  <ExplorerContentLoader width={400} height={20} viewBox="0px 0px 400 20">
-    <rect x="0" y="0" width="399px" height="16px" rx="4px" />
-  </ExplorerContentLoader>
+export const SkeletonRectangleFiller = () => (
+  <ExplorerSkeletonLoader height={'20px'} containerClassName="skeleton-outer-full-width" />
 );
 
-export const SkeletonAddress = () => (
-  <ExplorerContentLoader width={400} height={20} viewBox="0px 0px 400 20">
-    <rect x="0" y="0" width="399px" height="16px" rx="4px" />
-  </ExplorerContentLoader>
-);
+const SkeletonFees = () => <ExplorerSkeletonLoader width={'61px'} height={'16px'} />;
 
-export const SkeletonFees = () => (
-  <ExplorerContentLoader width={380} height={20} viewBox="0px 0px 380 20">
-    <rect x="0" y="0" width="61px" height="16px" rx="4px" />
-  </ExplorerContentLoader>
-);
+const SkeletonMediumText = () => <ExplorerSkeletonLoader width={'150px'} height={'16px'} />;
 
-export const SkeletonNonce = SkeletonFees;
+const SkeletonShortDigit = () => <ExplorerSkeletonLoader width={'22px'} height={'20px'} />;
 
-export const SkeletonHoldings = () => (
-  <ExplorerContentLoader width={380} height={20} viewBox="0px 0px 380 20">
-    <rect x="0" y="0" width="91px" height="16px" rx="4px" />
-    <rect x="118px" y="0" width="91px" height="16px" rx="4px" />
-  </ExplorerContentLoader>
-);
+const SkeletonNonce = SkeletonFees;
 
-export const SkeletonTransactionList = () => (
-  <>
-    {new Array(10).fill(true).map((_, i) => (
-      <div>
-        <SkeletonTransaction key={i} />
-      </div>
-    ))}
-  </>
-);
-
-export const SectionBoxSkeleton = () => (
-  <Section mt="extra-loose">
-    <Box p="base">
-      <SkeletonTransactionList />
-    </Box>
-  </Section>
+const SkeletonHoldings = () => (
+  <Flex flexDirection={'column'} justifyContent="space-between">
+    <ExplorerSkeletonLoader width={'91px'} height={'16px'} />
+    <ExplorerSkeletonLoader width={'91px'} height={'16px'} />
+  </Flex>
 );
 
 export const SkeletonForType = (props: { type: string | undefined }) => {
   const { type } = props;
+
   if (!type) return <SkeletonTextSpan />;
   switch (type) {
     case 'address':
-      return <SkeletonAddress />;
+      return <SkeletonTextSpan />;
     case 'holdings':
       return <SkeletonHoldings />;
     case 'fees':
       return <SkeletonFees />;
-    case 'nonce':
+    case 'last executed tx nonce':
       return <SkeletonNonce />;
+    case 'block height':
+      return <SkeletonMediumText />;
+    case 'mined':
+      return <SkeletonMediumText />;
+    case 'transactions':
+      return <SkeletonShortDigit />;
     default:
       return <SkeletonTextSpan />;
   }

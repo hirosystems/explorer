@@ -8,6 +8,10 @@ import { getNextPageParam } from '@store/common';
 import * as React from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { useTabs } from '../hooks/use-tabs';
+import {
+  SkeletonAccountTransactionList,
+  SkeletonGenericTransactionList,
+} from './loaders/skeleton-transaction';
 
 const TX_TABS = 'tabs/tx-list';
 
@@ -42,7 +46,7 @@ const InnerTransactionListContent = ({
     ? mempoolActions
     : confirmedActions;
 
-  if (!data) return null;
+  if (!data) return <SkeletonGenericTransactionList />;
 
   return (
     <Flex flexGrow={1} flexDirection="column" px="base-loose">
