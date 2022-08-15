@@ -4,7 +4,8 @@ import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
 
 export enum TxFilterTypes {
   HomepageTxFilter = 'HomepageTxFilter',
-  TransactionsPageTxFilter = 'TransactionsPageTxFilter',
+  TxsPageTxFilter = 'TxsPageTxFilter',
+  TxPageTxFilter = 'TxPageTxFilter',
   BlocksPageTxFilter = 'BlocksPageTxFilter',
   SandboxTxFilter = 'SandboxTxFilter',
   AddressTxFilter = 'AddressTxFilter',

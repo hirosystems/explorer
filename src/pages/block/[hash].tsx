@@ -2,13 +2,10 @@ import { validateTxId } from '@common/utils';
 import * as React from 'react';
 import { Rows } from '@components/rows';
 import { Title } from '@components/typography';
-import { CoinbaseTransaction } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex } from '@stacks/ui';
 import { NextPage } from 'next';
-
 import { Section } from '@components/section';
 import { Timestamp } from '@components/timestamp';
-
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { BlockNotFound } from '@components/block-not-found';
@@ -21,13 +18,14 @@ import {
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
 import { PageWrapper } from '@components/page-wrapper';
-import { TransactionList, TxList } from '@components/transaction-list';
 import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
 import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { useRouter } from 'next/router';
-import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
-import { useQuery } from 'react-query';
 import { SkeletonPageTitle } from '@components/loaders/skeleton-common';
+import { useQuery, useInfiniteQuery } from 'react-query';
+import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { TxsList } from '@modules/TransactionList/components/TxsList';
+import { FilterButton } from '@components/filter-button';
 
 interface BlockSinglePageData {
   hash: string;
@@ -52,7 +50,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
     queryOptions
   );
 
-  const { data: transactions } = useQuery(
+  const blockTransactionsResponse = useInfiniteQuery(
     blockQK(BlockQueryKeys.blockTransactions, hash),
     queries.fetchBlockTransactions(hash),
     queryOptions
@@ -68,9 +66,6 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
   }
 
   const title = (block && `Block #${block.height.toLocaleString()}`) || '';
-
-  const coinbaseTx = transactions?.find(tx => tx.tx_type === 'coinbase') as CoinbaseTransaction;
-  const transactionsWithoutCoinbase = transactions?.filter(tx => tx.tx_type !== 'coinbase');
 
   return (
     <PageWrapper>
@@ -125,13 +120,20 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
         </Section>
         {block ? <BtcAnchorBlockCard block={block} /> : null}
       </PagePanes>
-      <Section overflow="hidden" px="base-loose" mt="extra-loose">
-        {coinbaseTx ? <TxList items={[coinbaseTx]} /> : <SkeletonCoinbaseTransaction />}
-      </Section>
-      {typeof transactionsWithoutCoinbase === 'undefined' ? (
+      {blockTransactionsResponse.isLoading ? (
         <SectionBoxSkeleton />
-      ) : transactionsWithoutCoinbase.length ? (
-        <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
+      ) : !!blockTransactionsResponse.data ? (
+        <Section
+          title={'Transactions'}
+          topRight={FilterButton}
+          headerProps={{ pl: '0', pr: '0' }}
+          px="base-loose"
+          mt="extra-loose"
+        >
+          <Box flexGrow={1}>
+            <TxsList response={blockTransactionsResponse} />
+          </Box>
+        </Section>
       ) : null}
     </PageWrapper>
   );

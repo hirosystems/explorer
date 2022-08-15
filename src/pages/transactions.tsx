@@ -1,10 +1,8 @@
 import React from 'react';
 import { Box } from '@stacks/ui';
-
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
-import { TabbedTransactionList } from '@components/tabbed-transaction-list';
-
+import { TxsListWithTabs } from '@modules/TransactionList/components/TxsListWithTabs';
 import { PageWrapper } from '@components/page-wrapper';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
@@ -18,7 +16,7 @@ const TransactionsPage: NextPage = () => {
         <Title mt="72px" color="white" as="h1" fontSize="36px">
           Transactions
         </Title>
-        <TabbedTransactionList infinite limit={DEFAULT_LIST_LIMIT} />
+        <TxsListWithTabs infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
     </PageWrapper>
   );

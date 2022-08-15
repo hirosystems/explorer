@@ -3,6 +3,7 @@ import { color } from '@stacks/ui';
 
 const container = css`
   border-bottom: 1px solid var(--colors-border);
+  position: relative;
   &:last-child {
     border-bottom: none;
   }

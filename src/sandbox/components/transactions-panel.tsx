@@ -33,8 +33,8 @@ import { selectActiveNetwork } from '@common/state/network-slice';
 import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
 import { useFilterState } from '@common/hooks/use-filter-state';
 
-const PanelHeader: React.FC<{ filterType: TxFilterTypes }> = ({ filterType }) => {
-  const { toggleFilterVisibility } = useFilterState(filterType);
+const PanelHeader: React.FC = () => {
+  const { toggleFilterVisibility } = useFilterState();
   return (
     <>
       <Flex
@@ -365,9 +365,7 @@ const SandboxTxItem = React.memo(
 );
 
 const TxList: React.FC = React.memo(() => {
-  const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } = useFilterState(
-    TxFilterTypes.SandboxTxFilter
-  );
+  const { activeFilters } = useFilterState();
   const { transactions, pendingTransactions, principal } = useUser({ suspense: true });
 
   const filteredTxs = (transactions || []).filter(tx => activeFilters[tx.tx_type]);
@@ -407,7 +405,7 @@ const TxList: React.FC = React.memo(() => {
       {filteredTxs?.length ? (
         txList
       ) : hasTxButIsFiltered ? (
-        <FilteredMessage filterType={TxFilterTypes.SandboxTxFilter} />
+        <FilteredMessage />
       ) : (
         <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
           <Stack textAlign="center">
@@ -444,7 +442,7 @@ export const TransactionsPanel = React.memo(props => {
       overflow="hidden"
       {...props}
     >
-      <PanelHeader filterType={TxFilterTypes.SandboxTxFilter} />
+      <PanelHeader />
       <FilterPanel showBorder bg={color('bg')} filterKey={TxFilterTypes.SandboxTxFilter} />
 
       <Flex

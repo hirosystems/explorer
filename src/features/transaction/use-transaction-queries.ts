@@ -47,12 +47,13 @@ export const getTransactionQueries = (networkUrl: string) => {
       results = results.concat(tempResults.results);
       offset += tempResults.results.length;
     } while (results.length < tempResults.total);
-    return results;
+    return { results };
   };
 
   return {
     fetchBlock: (blockHash?: string) => () => fetchBlock(blockHash),
-    fetchBlockTransactions: (blockHash?: string) => () => fetchBlockTransactions(blockHash),
+    fetchBlockTransactions: (blockHash?: string) => () =>
+      fetchBlockTransactions(blockHash) as unknown as TransactionsListResponse,
     fetchTransaction: (txId: string) => async () => {
       const isContractId = txId.includes('.');
       if (!isContractId) {

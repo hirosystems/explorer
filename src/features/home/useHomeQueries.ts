@@ -1,7 +1,7 @@
 import { apiClients, createConfig } from '@common/api/client';
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { BlocksListResponse } from '@store/blocks';
-import { TransactionsListResponse } from '@store/transactions';
+import { MempoolTransactionsListResponse, TransactionsListResponse } from '@store/transactions';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 
@@ -28,7 +28,7 @@ export const getHomeQueries = (networkUrl: string) => {
         clients.transactionsApi.getMempoolTransactionList({
           limit,
           offset,
-        }) as unknown as TransactionsListResponse,
+        }) as unknown as MempoolTransactionsListResponse,
   };
 };
 

@@ -1,7 +1,7 @@
 import { Box, BoxProps, color, Stack } from '@stacks/ui';
 import * as React from 'react';
 import { memo } from 'react';
-import { useTabs } from '../hooks/use-tabs';
+import { useTabs } from '../hooks/useTabs';
 import { Caption } from '@components/typography';
 import { capitalize } from '@common/utils';
 

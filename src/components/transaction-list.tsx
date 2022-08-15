@@ -65,7 +65,7 @@ export const TxList: React.FC<{
 });
 
 const Filter = () => {
-  const { toggleFilterVisibility } = useFilterState(TxFilterTypes.BlocksPageTxFilter);
+  const { toggleFilterVisibility } = useFilterState();
   return (
     <Box position="relative" zIndex={99999999}>
       <CaptionAction
@@ -92,7 +92,7 @@ export const TransactionList: React.FC<
     transactions: TransactionResults['results'];
   } & FlexProps
 > = React.memo(({ transactions, ...rest }) => {
-  const { activeFilters } = useFilterState(TxFilterTypes.BlocksPageTxFilter);
+  const { activeFilters } = useFilterState();
   const filteredTxs = transactions.filter(tx => activeFilters[tx.tx_type]);
   const hasTxs = !!transactions.length;
   const hasVisibleTxs = !!filteredTxs.length;
@@ -102,7 +102,7 @@ export const TransactionList: React.FC<
     <Section title={'Transactions'} topRight={Filter} {...rest}>
       <Box px="loose">
         {hasTxs && !hasVisibleTxs ? (
-          <FilteredMessage filterType={TxFilterTypes.TransactionsPageTxFilter} />
+          <FilteredMessage />
         ) : hasVisibleTxs ? (
           <Box flexGrow={1}>
             <TxList items={filteredTxs} />
