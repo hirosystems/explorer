@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, color, Flex, Grid, GridProps, Stack, Transition } from '@stacks/ui';
+import { Box, color, Flex, Grid, GridProps, Stack } from '@stacks/ui';
 import { Text, Title } from '@components/typography';
 import { border } from '@common/utils';
 import { IconButton } from '@components/icon-button';
@@ -12,7 +12,6 @@ import { blue } from '@components/button';
 import { FilterIcon } from '@components/icons/filter';
 import { Badge } from '@components/badge';
 import { useFilterState } from '@common/hooks/use-filter-state';
-import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
 
 const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
@@ -22,11 +21,8 @@ const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
   GetTransactionListTypeEnum.coinbase,
 ];
 
-export const FilteredMessage: React.FC<{ filterType: TxFilterTypes } & GridProps> = ({
-  filterType,
-  ...rest
-}) => {
-  const { toggleFilterVisibility } = useFilterState(filterType);
+export const FilteredMessage: React.FC<GridProps> = ({ ...rest }) => {
+  const { toggleFilterVisibility } = useFilterState();
   return (
     <Grid p="extra-loose" placeItems="center" textAlign="center" {...rest}>
       <Box>
@@ -97,8 +93,7 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
 };
 
 export const FilterPanel = React.memo(({ filterKey, showBorder, bg, ...rest }: any) => {
-  const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } =
-    useFilterState(filterKey);
+  const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } = useFilterState();
 
   const borderStyles = showBorder
     ? {

@@ -1,4 +1,3 @@
-import { InfiniteTransactionsList } from '@components/infinite-item-list';
 import { SkeletonAccountTransactionList } from '@components/loaders/skeleton-transaction';
 import { NoActivityIllustration } from '@components/no-activity-illustration';
 import { Section } from '@components/section';
@@ -9,6 +8,7 @@ import { Box, Stack } from '@stacks/ui';
 import { getNextPageParam } from '@store/common';
 import * as React from 'react';
 import { useInfiniteQuery } from 'react-query';
+import { MempoolTxsList, TxsList } from '@modules/TransactionList/components/TxsList';
 
 // TODO to move to a separate file
 export const Wrapper: React.FC = ({ children }) => (
@@ -55,23 +55,10 @@ export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ cont
       {hasTransactions ? (
         <Box px="loose" data-test="account-transaction-list">
           {!!mempoolTransactionsQueryResponse.data && (
-            <InfiniteTransactionsList
-              data={mempoolTransactionsQueryResponse.data}
-              isFetchingNextPage={mempoolTransactionsQueryResponse.isFetchingNextPage}
-              fetchNextPage={mempoolTransactionsQueryResponse.fetchNextPage}
-              hasNextPage={!!mempoolTransactionsQueryResponse.hasNextPage}
-              showLoadMoreButton
-              mempoolSelected
-            />
+            <MempoolTxsList response={mempoolTransactionsQueryResponse} />
           )}
           {!!transactionsQueryResponse.data && (
-            <InfiniteTransactionsList
-              data={transactionsQueryResponse.data}
-              isFetchingNextPage={transactionsQueryResponse.isFetchingNextPage}
-              fetchNextPage={transactionsQueryResponse.fetchNextPage}
-              hasNextPage={!!transactionsQueryResponse.hasNextPage}
-              showLoadMoreButton
-            />
+            <TxsList response={transactionsQueryResponse} showFooter infinite />
           )}
         </Box>
       ) : (

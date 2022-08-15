@@ -59,8 +59,12 @@ const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal,
   </Flex>
 );
 
-const AddressArea = React.memo(
-  ({ tx, principal, ...rest }: { tx: Transaction; principal?: string } & FlexProps) => {
+export const AddressArea = React.memo(
+  ({
+    tx,
+    principal,
+    ...rest
+  }: { tx: Transaction | MempoolTransaction; principal?: string } & FlexProps) => {
     if (tx.tx_type === 'token_transfer') {
       if (tx.sender_address === principal) {
         return (
@@ -141,7 +145,7 @@ const TxItemTitleArea = React.memo(({ title, tx, principal }: any) => (
   </Stack>
 ));
 
-const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> = React.memo(
+export const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> = React.memo(
   props => {
     const { tx, ...rest } = props;
     const date = getRelativeTimestamp(tx);
@@ -154,7 +158,7 @@ const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
   }
 );
 
-const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
+export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
   <>
     {'·'}
     <Tooltip label="Nonce">

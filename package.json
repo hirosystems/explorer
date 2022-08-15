@@ -95,7 +95,7 @@
     "react-hot-toast": "2.1.1",
     "react-icons": "4.4.0",
     "react-loading-skeleton": "^3.1.0",
-    "react-query": "3.19.1",
+    "react-query": "3.39.2",
     "react-redux": "7.2.6",
     "react-simple-code-editor": "0.11.0",
     "react-ssr-prepass": "npm:preact-ssr-prepass",
@@ -149,7 +149,7 @@
     "package-json-cleanup-loader": "1.0.3",
     "prettier": "2.3.2",
     "ts-unused-exports": "^8.0.0",
-    "typescript": "4.3.5"
+    "typescript": "4.7.4"
   },
   "homepage": "https://explorer.stacks.co",
   "license": "MIT",

@@ -1,22 +1,24 @@
-import { txFilters, TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { txFilters } from '@features/transactions-filter/transactions-filter-slice';
 import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
+import { useFilterScope } from '@features/transactions-filter/hooks/use-filter-scope';
 
-export const useFilterState = (filterType: TxFilterTypes) => {
+export const useFilterState = () => {
   const dispatch = useAppDispatch();
+  const filterScope = useFilterScope();
 
   const toggleFilterVisibility = () => {
-    dispatch(txFilters[filterType].actions.toggleVisibility());
+    dispatch(txFilters[filterScope].actions.toggleVisibility());
   };
 
   const toggleFilter = (filter: GetTransactionListTypeEnum) => {
-    dispatch(txFilters[filterType].actions.toggleFilter(filter));
+    dispatch(txFilters[filterScope].actions.toggleFilter(filter));
   };
 
   return {
     toggleFilterVisibility,
     toggleFilter,
-    isVisible: useAppSelector(txFilters[filterType].selectors.selectIsVisible),
-    activeFilters: useAppSelector(txFilters[filterType].selectors.selectActiveFilters),
+    isVisible: useAppSelector(txFilters[filterScope].selectors.selectIsVisible),
+    activeFilters: useAppSelector(txFilters[filterScope].selectors.selectActiveFilters),
   };
 };
