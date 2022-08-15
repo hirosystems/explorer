@@ -19,6 +19,9 @@ import { useQuery } from 'react-query';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
+  const defaultPageTitle = 'Transaction';
+
+  if (!tx?.tx_type) return defaultPageTitle;
   switch (tx.tx_type) {
     case 'contract_call':
       return `Function call`;

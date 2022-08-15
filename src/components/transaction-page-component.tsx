@@ -1,27 +1,34 @@
-import * as React from 'react';
-import CoinbasePage from './tx/coinbase';
-import ContractCallPage from './tx/contract-call';
-import SmartContractPage from './tx/smart-contract';
-import TokenTransferPage from './tx/token-transfer';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { getContractId } from '@common/utils';
-import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
+import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import {
   CoinbaseTransaction,
   SmartContractTransaction,
   TokenTransferTransaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
+import { SkeletonTransactionSummary } from './loaders/skeleton-transaction';
+import CoinbasePage from './tx/coinbase';
+import ContractCallPage from './tx/contract-call';
+import SmartContractPage from './tx/smart-contract';
+import TokenTransferPage from './tx/token-transfer';
 
 export const TransactionPageComponent = () => {
   const queries = useTransactionQueries();
   const { query } = useRouter();
-  const txPageQuery = query.txid as string;
-  const { data } = useQuery(['transaction', txPageQuery], queries.fetchTransaction(txPageQuery));
+  const txId = query.txid as string;
+  const { data } = useQuery(
+    transactionQK(TransactionQueryKeys.transaction, txId),
+    queries.fetchTransaction(txId)
+  );
   const transaction = data?.transaction;
+  if (!transaction) {
+    return <SkeletonTransactionSummary />;
+  }
   const block = data?.block;
-  const contractId = getContractId(txPageQuery, transaction);
+  const contractId = getContractId(txId, transaction);
 
   switch (transaction?.tx_type) {
     case 'coinbase':

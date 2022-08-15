@@ -51,7 +51,10 @@ export const AddressSummary = ({
             label: {
               children: 'Last executed tx nonce',
             },
-            children: lastExecutedTxNonce || "This account hasn't executed a tx yet",
+            children:
+              typeof lastExecutedTxNonce === 'undefined'
+                ? undefined
+                : lastExecutedTxNonce || "This account hasn't executed a tx yet",
           },
         ]}
       />

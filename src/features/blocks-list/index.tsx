@@ -12,11 +12,12 @@ import React, { Fragment, useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
+import { BlockQueryKeys } from '@features/block/query-keys';
 
 function useBlockList(limit: number) {
   const queries = useHomeQueries();
   const { data: blocks, ...actions } = useInfiniteQuery(
-    ['blocks'],
+    [BlockQueryKeys.blocks],
     ({ pageParam }) => queries.fetchBlocks(limit, pageParam || 0)(),
     { getNextPageParam }
   );

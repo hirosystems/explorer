@@ -1,4 +1,4 @@
-import { removeKeysWithUndefinedValues, validateTxId } from '@common/utils';
+import { validateTxId } from '@common/utils';
 import * as React from 'react';
 import { Rows } from '@components/rows';
 import { Title } from '@components/typography';
@@ -10,30 +10,31 @@ import { Section } from '@components/section';
 import { Timestamp } from '@components/timestamp';
 
 import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
-import { wrapper } from '@common/state/store';
+import { selectActiveNetwork } from '@common/state/network-slice';
 import { BlockNotFound } from '@components/block-not-found';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import { SectionBoxSkeleton } from '@components/loaders/skeleton-text';
-import { SkeletonCoinbaseTransaction } from '@components/loaders/skeleton-transaction';
+import {} from '@components/loaders/skeleton-text';
+import {
+  SectionBoxSkeleton,
+  SkeletonCoinbaseTransaction,
+} from '@components/loaders/skeleton-transaction';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
 import { PageWrapper } from '@components/page-wrapper';
 import { TransactionList, TxList } from '@components/transaction-list';
 import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
 import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { ServerResponse } from 'http';
 import { useRouter } from 'next/router';
-import { QueryClient, useQuery } from 'react-query';
-import { dehydrate } from 'react-query/hydration';
 import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { useQuery } from 'react-query';
+import { SkeletonPageTitle } from '@components/loaders/skeleton-common';
 
 interface BlockSinglePageData {
   hash: string;
   error?: boolean;
 }
 
-const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error }) => {
+const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
   const { query } = useRouter();
   const hash = query.hash as string;
   const networkUrl = useAppSelector(selectActiveNetwork).url;
@@ -44,19 +45,20 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error }) => {
     retry: 0,
     staleTime: Infinity,
   };
-  const { data: block } = useQuery(
+
+  const { data: block, isError: blockIsError } = useQuery(
     blockQK(BlockQueryKeys.block, hash),
     queries.fetchBlock(hash),
     queryOptions
   );
 
-  const { data: transactions, isError } = useQuery(
+  const { data: transactions } = useQuery(
     blockQK(BlockQueryKeys.blockTransactions, hash),
     queries.fetchBlockTransactions(hash),
     queryOptions
   );
 
-  if (isError || !block) {
+  if (blockIsError) {
     return (
       <>
         <Meta title="Block hash not found" />
@@ -64,7 +66,8 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error }) => {
       </>
     );
   }
-  const title = `Block #${block.height.toLocaleString()}`;
+
+  const title = (block && `Block #${block.height.toLocaleString()}`) || '';
 
   const coinbaseTx = transactions?.find(tx => tx.tx_type === 'coinbase') as CoinbaseTransaction;
   const transactionsWithoutCoinbase = transactions?.filter(tx => tx.tx_type !== 'coinbase');
@@ -75,7 +78,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error }) => {
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>
           <Title mb="base" mt="64px" as="h1" color="white" fontSize="36px">
-            {title}
+            {title || <SkeletonPageTitle />}
           </Title>
         </Box>
       </Flex>
@@ -96,85 +99,42 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = ({ error }) => {
                   label: {
                     children: 'Block height',
                   },
-                  children: (
+                  children: block ? (
                     <BtcStxBlockLinks
                       btcBlockHeight={block.burn_block_height}
                       stxBlockHeight={block.height}
                       stxBlockHash={block.hash}
                     />
-                  ),
+                  ) : undefined,
                 },
                 {
                   label: {
                     children: 'Mined',
                   },
-                  children: <Timestamp ts={block.burn_block_time} />,
+                  children: (block && <Timestamp ts={block.burn_block_time} />) || undefined,
                 },
                 {
                   label: {
                     children: 'Transactions',
                   },
-                  children: block.txs.length,
+                  children: (block && block.txs.length) || undefined,
                 },
               ]}
             />
           </Box>
         </Section>
-        <BtcAnchorBlockCard block={block} />
+        {block ? <BtcAnchorBlockCard block={block} /> : null}
       </PagePanes>
       <Section overflow="hidden" px="base-loose" mt="extra-loose">
         {coinbaseTx ? <TxList items={[coinbaseTx]} /> : <SkeletonCoinbaseTransaction />}
       </Section>
-      {transactionsWithoutCoinbase?.length ? (
-        <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
-      ) : (
+      {typeof transactionsWithoutCoinbase === 'undefined' ? (
         <SectionBoxSkeleton />
-      )}
+      ) : transactionsWithoutCoinbase.length ? (
+        <TransactionList mt="extra-loose" transactions={transactionsWithoutCoinbase} />
+      ) : null}
     </PageWrapper>
   );
 };
-
-const prefetchData = async (
-  blockHash: string,
-  res: ServerResponse,
-  networkUrl?: string
-): Promise<QueryClient> => {
-  const queryClient = new QueryClient();
-  if (!networkUrl) {
-    return queryClient;
-  }
-  const prefetchOptions = { retry: 0, staleTime: Infinity }; // mined block for a unique hash doesn't change
-  const queries = getTransactionQueries(networkUrl);
-  try {
-    await queryClient.fetchQuery(
-      blockQK(BlockQueryKeys.block, blockHash),
-      queries.fetchBlock(blockHash),
-      prefetchOptions
-    );
-  } catch (err) {
-    res.statusCode = err.status;
-  }
-  return queryClient;
-};
-
-export const getServerSideProps = wrapper.getServerSideProps(store => async ({ query, res }) => {
-  const client = await prefetchData(
-    query.hash as string,
-    res,
-    selectActiveNetworkUrl(store.getState())
-  );
-
-  if (res.statusCode >= 500) {
-    throw res;
-  }
-
-  const dehydratedState = removeKeysWithUndefinedValues(dehydrate(client));
-  return {
-    props: {
-      isHome: false,
-      dehydratedState,
-    },
-  };
-});
 
 export default BlockSinglePage;

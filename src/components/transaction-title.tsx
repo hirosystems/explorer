@@ -1,14 +1,14 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { Box, BoxProps, Stack, StackProps } from '@stacks/ui';
 import { Status } from '@components/status';
 import { Tag, TagProps } from '@components/tags';
 import { Title } from '@components/typography';
+import { Box, BoxProps, Stack, StackProps } from '@stacks/ui';
 
-import { getContractName, getFunctionName, microToStacks, truncateMiddle } from '@common/utils';
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TxStatus } from '@common/types/tx';
+import { getContractName, getFunctionName, microToStacks, truncateMiddle } from '@common/utils';
 import { getTransactionStatus } from '@common/utils/transactions';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export interface TitleProps {
   contractName?: string;
