@@ -10,7 +10,18 @@
 
 ### Getting started
 
-The Stacks Explorer is built with react, [next.js](https://github.com/zeit/next.js) and [@stacks/ui](https://github.com/blockstack/ui). To run the explorer locally, you can clone this repo and install the dependencies needed. Make sure you have `yarn` installed.
+The Stacks Explorer is built with [React](https://reactjs.org/), [next.js](https://github.com/zeit/next.js) and [@stacks/ui](https://github.com/blockstack/ui).
+
+To run the explorer locally, first [clone this repo](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository).
+
+Next let's make sure you have the tools to install the projects dependencies:
+
+1. Install [NodeJS](https://nodejs.dev/) that includes `npm`
+1. Install [Yarn](https://yarnpkg.com/)
+
+We highly recommend using [Homebrew](https://brew.sh/).
+
+Now open your the Terminal, and make sure you are in the `/explorer` folder to run `yarn` to install the dependencies:
 
 ```sh
 yarn
@@ -28,10 +39,11 @@ NEXT_PUBLIC_DEPLOYMENT_URL=https://explorer.stacks.co
 NEXT_PUBLIC_MAINNET_ENABLED="true"
 NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL="10000"
 ```
+If you are in a mac, you'll need to add this to `/etc/paths`
 
 ### Run in development mode
 
-To build and run the application, you can run this yarn task which will launch the application at http://localhost:3000.
+To build and run the application locally, you can run this yarn task which will launch the application at http://localhost:3000.
 
 ```sh
 yarn dev
