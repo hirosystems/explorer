@@ -57,16 +57,23 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
         borderTop="1px solid var(--colors-border)"
         px={fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}
       >
-        <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
-          <FooterLink mr="base" href={buildUrl('/transactions')}>
-            Recent transactions
-          </FooterLink>
-          <FooterLink href={buildUrl('/sandbox/deploy')} mr="base">
-            Sandbox
-          </FooterLink>
-          <FooterLink href="https://immunefi.com/bounty/stacks/" mr="base" target="_blank">
-            Found a bug in the Stacks Blockchain?
-          </FooterLink>
+        <Flex display="flex" flexDirection={'column'} gap="5px">
+          <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
+            <FooterLink mr="base" href={buildUrl('/transactions')}>
+              Recent transactions
+            </FooterLink>
+            <FooterLink href={buildUrl('/sandbox/deploy')} mr="base">
+              Sandbox
+            </FooterLink>
+            <FooterLink href="https://immunefi.com/bounty/stacks/" mr="base" target="_blank">
+              Found a bug in the Stacks Blockchain?
+            </FooterLink>
+          </Flex>
+          <Box>
+            <FooterLink mr="base" target="_blank" href="https://www.coingecko.com/">
+              Market data provided by CoinGecko
+            </FooterLink>
+          </Box>
         </Flex>
 
         <Flex ml={['unset', 'unset', 'auto']}>

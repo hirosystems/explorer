@@ -11,6 +11,7 @@ import { NetworkModeBanner } from '@components/network-mode-banner';
 import { useAppDispatch } from '@common/state/hooks';
 import { buildUrl } from '@components/links';
 import { StatusBar } from '@features/status-bar/status-bar';
+import { BtcStxPrice } from '@components/btc-stx-price';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -53,18 +54,19 @@ const HeaderBar: React.FC<FlexProps> = React.memo(props => (
 const Navigation: React.FC = () => {
   return (
     <>
-      <Flex alignItems="center" display={['none', 'none', 'none', 'flex']}>
-        <ColorModeButton mr="tight" />
+      <Flex alignItems="center" display={['none', 'none', 'none', 'flex']} gap={'16px'}>
+        <ColorModeButton mr="-8px" />
         <NextLink href={buildUrl('/transactions')} passHref>
-          <HeaderTextItem mr="base">Transactions</HeaderTextItem>
+          <HeaderTextItem>Transactions</HeaderTextItem>
         </NextLink>
         <NextLink href={buildUrl('/blocks')} passHref>
-          <HeaderTextItem mr="base">Blocks</HeaderTextItem>
+          <HeaderTextItem>Blocks</HeaderTextItem>
         </NextLink>
         <NextLink href={buildUrl('/sandbox/deploy')} passHref>
           <HeaderTextItem>Sandbox</HeaderTextItem>
         </NextLink>
-        <NetworkSwitcherItem ml="base" />
+        <NetworkSwitcherItem />
+        <BtcStxPrice />
       </Flex>
       <MobileMenu />
     </>
