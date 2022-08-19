@@ -1,3 +1,10 @@
+# [1.35.0](https://github.com/hirosystems/explorer/compare/v1.34.0...v1.35.0) (2022-08-19)
+
+
+### Features
+
+* add stx and btc prices to header ([629a7ae](https://github.com/hirosystems/explorer/commit/629a7ae19469b836a4632313d86dcc80e14bfa6c))
+
 # [1.34.0](https://github.com/hirosystems/explorer/compare/v1.33.0...v1.34.0) (2022-08-15)
 
 
