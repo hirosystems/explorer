@@ -1,3 +1,10 @@
+## [1.35.1](https://github.com/hirosystems/explorer/compare/v1.35.0...v1.35.1) (2022-08-22)
+
+
+### Bug Fixes
+
+* move most pages to client side rendering ([bbca0b3](https://github.com/hirosystems/explorer/commit/bbca0b37c6ad022dc568098d219b8086aec1283a)), closes [#809](https://github.com/hirosystems/explorer/issues/809) [#626](https://github.com/hirosystems/explorer/issues/626)
+
 # [1.35.0](https://github.com/hirosystems/explorer/compare/v1.34.0...v1.35.0) (2022-08-19)
 
 
