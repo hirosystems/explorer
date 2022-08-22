@@ -1,4 +1,4 @@
-FROM node:16-alpine AS deps
+FROM node:16-alpine AS build
 
 # Pass these build args in to configure Segment
 ARG SEGMENT_WRITE_KEY
@@ -7,6 +7,8 @@ ARG SEGMENT_WRITE_KEY
 ARG SENTRY_AUTH_TOKEN
 ARG SENTRY_DSN
 ARG SENTRY_LOG_LEVEL=warn
+
+WORKDIR /app
 
 COPY . .
 
@@ -31,6 +33,19 @@ ENV NODE_ENV=production
 
 RUN yarn build
 RUN yarn cache clean
+
+FROM node:16-alpine
+RUN apk --no-cache add --virtual \
+  yarn
+
+WORKDIR /app
+
+COPY --from=build /app/node_modules /app/node_modules
+COPY --from=build /app/.next /app/.next
+COPY --from=build /app/next.config.js /app/next.config.js
+COPY --from=build /app/public /app/public
+COPY --from=build /app/package.json /app/package.json
+COPY --from=build /app/yarn.lock /app/yarn.lock
 
 EXPOSE 3000
 CMD [ "yarn", "start" ]
