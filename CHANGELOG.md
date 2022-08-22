@@ -1,3 +1,10 @@
+# [1.36.0](https://github.com/hirosystems/explorer/compare/v1.35.1...v1.36.0) (2022-08-22)
+
+
+### Features
+
+* refactor transactions list ([48e38f8](https://github.com/hirosystems/explorer/commit/48e38f88c4ff7a4e0a58c03672f66bd7fc4836af))
+
 ## [1.35.1](https://github.com/hirosystems/explorer/compare/v1.35.0...v1.35.1) (2022-08-22)
 
 
