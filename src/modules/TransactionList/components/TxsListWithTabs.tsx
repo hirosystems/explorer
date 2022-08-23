@@ -61,5 +61,9 @@ export const TxsListWithTabs: React.FC<{
       </Wrapper>
     );
 
-  return <SkeletonGenericTransactionList />;
+  return (
+    <Wrapper>
+      <SkeletonGenericTransactionList />
+    </Wrapper>
+  );
 });
