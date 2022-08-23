@@ -9,10 +9,10 @@ import {
   MempoolTransactionListResponse,
   Transaction,
   TransactionResults,
+  AddressTransactionsWithTransfersListResponse,
 } from '@stacks/stacks-blockchain-api-types';
 import { DEFAULT_LIST_LIMIT, MAX_BLOCK_TRANSACTIONS_PER_CALL } from '@common/constants';
 import { TransactionsListResponse } from '@store/transactions';
-import { getNextPageParam } from '@store/common';
 
 export const getTransactionQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -83,6 +83,15 @@ export const getTransactionQueries = (networkUrl: string) => {
           offset,
           limit,
         }) as unknown as TransactionsListResponse;
+      },
+    fetchTransactionsWithTransfersForAddress:
+      (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>
+      () => {
+        return clients.accountsApi.getAccountTransactionsWithTransfers({
+          principal: address,
+          offset,
+          limit,
+        }) as unknown as AddressTransactionsWithTransfersListResponse;
       },
     fetchMempoolTransactionsForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>

@@ -19,7 +19,10 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
 }) => {
   const { address, asset, contract } = getAssetNameParts(token);
 
-  const { data: ftMetadata } = useTokenMetadata(token, tokenType);
+  const {
+    ftMetadata: { data: ftMetadata },
+    nftMetadata: { data: nftMetadata },
+  } = useTokenMetadata(token, tokenType);
 
   const totalType = tokenType === 'non_fungible_tokens' ? 'count' : 'balance';
 
@@ -29,7 +32,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
     <Flex justifyContent="space-between" px="base" py="base">
       <Box>
         <Flex alignItems="center" mb={'extra-tight'}>
-          <TokenAvatar token={token} ftMetadata={ftMetadata} />
+          <TokenAvatar token={token} tokenMetadata={ftMetadata || nftMetadata} />
           <Stack spacing="extra-tight">
             <Text color={color('text-title')} fontWeight="600">
               {asset}

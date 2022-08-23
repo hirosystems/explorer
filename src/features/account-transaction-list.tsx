@@ -8,7 +8,11 @@ import { Box, Stack } from '@stacks/ui';
 import { getNextPageParam } from '@store/common';
 import * as React from 'react';
 import { useInfiniteQuery } from 'react-query';
-import { MempoolTxsList, TxsList } from '@modules/TransactionList/components/TxsList';
+import {
+  MempoolTxsList,
+  TxsList,
+  TxsListWithTransfers,
+} from '@modules/TransactionList/components/TxsList';
 
 // TODO to move to a separate file
 export const Wrapper: React.FC = ({ children }) => (
@@ -28,22 +32,23 @@ export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ cont
   }
 
   const queries = useTransactionQueries();
-  const transactionsQueryResponse = useInfiniteQuery(
-    transactionQK(TransactionQueryKeys.transactionsForAddress, contractId),
-    ({ pageParam }) => queries.fetchTransactionsForAddress(contractId, undefined, pageParam || 0)(),
+  const transactionsWithTransfersQueryResponse = useInfiniteQuery(
+    transactionQK(TransactionQueryKeys.transactionsWithTransfersForAddressInfinite, contractId),
+    ({ pageParam }) =>
+      queries.fetchTransactionsWithTransfersForAddress(contractId, undefined, pageParam || 0)(),
     { getNextPageParam }
   );
   const mempoolTransactionsQueryResponse = useInfiniteQuery(
-    transactionQK(TransactionQueryKeys.mempoolTransactionsForAddress, contractId),
+    transactionQK(TransactionQueryKeys.mempoolTransactionsForAddressInfinite, contractId),
     ({ pageParam }) =>
       queries.fetchMempoolTransactionsForAddress(contractId, undefined, pageParam || 0)(),
     { getNextPageParam }
   );
   const isLoading =
-    transactionsQueryResponse.isLoading || mempoolTransactionsQueryResponse.isLoading;
+    transactionsWithTransfersQueryResponse.isLoading || mempoolTransactionsQueryResponse.isLoading;
 
   const hasPending = !!mempoolTransactionsQueryResponse?.data?.pages?.[0]?.results?.length;
-  const hasConfirmed = !!transactionsQueryResponse?.data?.pages?.[0]?.total;
+  const hasConfirmed = !!transactionsWithTransfersQueryResponse?.data?.pages?.[0]?.total;
   const hasTransactions = hasPending || hasConfirmed;
 
   if (isLoading) {
@@ -57,8 +62,13 @@ export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ cont
           {!!mempoolTransactionsQueryResponse.data && (
             <MempoolTxsList response={mempoolTransactionsQueryResponse} />
           )}
-          {!!transactionsQueryResponse.data && (
-            <TxsList response={transactionsQueryResponse} showFooter infinite />
+          {!!transactionsWithTransfersQueryResponse.data && (
+            <TxsListWithTransfers
+              address={contractId}
+              response={transactionsWithTransfersQueryResponse}
+              showFooter
+              infinite
+            />
           )}
         </Box>
       ) : (

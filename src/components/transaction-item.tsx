@@ -43,7 +43,10 @@ const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
   return date;
 };
 
-const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({ principal, ...rest }) => (
+export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
+  principal,
+  ...rest
+}) => (
   <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
     <NextLink href={buildUrl(`/address/${encodeURIComponent(principal)}`)} passHref>
       <Caption
