@@ -1,5 +1,5 @@
 import { DynamicColorCircle } from '@stacks/ui';
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
+import { FungibleTokenMetadata, NonFungibleTokenMetadata } from '@stacks/blockchain-api-client';
 
 import React from 'react';
 import { getAssetNameParts } from '@common/utils';
@@ -7,12 +7,12 @@ import { imageCanonicalUriFromFtMetadata } from '@common/utils/token-utils';
 
 interface TokenAvatarProps {
   token: string;
-  ftMetadata?: FungibleTokenMetadata;
+  tokenMetadata?: FungibleTokenMetadata | NonFungibleTokenMetadata;
 }
 
-export function TokenAvatar({ token, ftMetadata }: TokenAvatarProps) {
+export function TokenAvatar({ token, tokenMetadata }: TokenAvatarProps) {
   const { address, asset, contract } = getAssetNameParts(token);
-  const imageCanonicalUri = imageCanonicalUriFromFtMetadata(ftMetadata);
+  const imageCanonicalUri = imageCanonicalUriFromFtMetadata(tokenMetadata);
   return imageCanonicalUri ? (
     <TokenImage imageUri={imageCanonicalUri} />
   ) : (

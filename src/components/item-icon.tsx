@@ -13,6 +13,7 @@ import { WalletIcon } from '@components/icons/wallet';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { BoxProps, color, Grid, GridProps, useColorMode } from '@stacks/ui';
 import React, { useMemo } from 'react';
+import { IconArrowUp, IconArrowDown } from '@tabler/icons';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;
@@ -129,3 +130,21 @@ export const ItemIcon = React.memo(
     );
   }
 );
+
+export const ArrowUpIcon: React.FC = () => {
+  const { colorMode } = useColorMode();
+  return (
+    <ItemCircle bg={color('bg')} border={colorMode === 'light' ? border() : border('text-caption')}>
+      <IconArrowUp color={color('invert')} fill={color('bg')} size={'16px'} />
+    </ItemCircle>
+  );
+};
+
+export const ArrowDownIcon: React.FC = () => {
+  const { colorMode } = useColorMode();
+  return (
+    <ItemCircle bg={color('bg')} border={colorMode === 'light' ? border() : border('text-caption')}>
+      <IconArrowDown color={color('invert')} fill={color('bg')} size={'16px'} />
+    </ItemCircle>
+  );
+};
