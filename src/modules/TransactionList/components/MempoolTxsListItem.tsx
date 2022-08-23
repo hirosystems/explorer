@@ -19,7 +19,7 @@ interface MempoolTxsListItemProps {
 export const MempoolTxsListItem: FC<MempoolTxsListItemProps> = memo(({ tx }) => {
   const isPending = tx.tx_status === 'pending';
   const didFail = !isPending;
-  const activeNetworkUrl = useAppSelector(selectActiveNetwork).url;
+  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
 
   const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
 
@@ -78,7 +78,7 @@ export const MempoolTxsListItem: FC<MempoolTxsListItemProps> = memo(({ tx }) => 
       icon={icon}
       leftContent={{ title: leftTitle, subtitle: leftSubtitle }}
       rightContent={{ title: rightTitle, subtitle: rightSubtitle }}
-      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkUrl)}
+      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkMode)}
     />
   );
 });

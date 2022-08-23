@@ -20,7 +20,7 @@ export const TxsListItem: FC<TxsListItemProps> = memo(({ tx }) => {
   const isConfirmed = tx.tx_status === 'success';
   const isAnchored = !tx.is_unanchored;
   const didFail = !isConfirmed;
-  const activeNetworkUrl = useAppSelector(selectActiveNetwork).url;
+  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
 
   const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
 
@@ -79,7 +79,7 @@ export const TxsListItem: FC<TxsListItemProps> = memo(({ tx }) => {
       icon={icon}
       leftContent={{ title: leftTitle, subtitle: leftSubtitle }}
       rightContent={{ title: rightTitle, subtitle: rightSubtitle }}
-      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkUrl)}
+      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkMode)}
     />
   );
 });
