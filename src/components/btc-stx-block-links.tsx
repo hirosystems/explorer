@@ -60,7 +60,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
   fontSize,
 }) => {
   const router = useRouter();
-  const activeNetworkUrl = useAppSelector(selectActiveNetwork).url;
+  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
 
   return (
     <Box css={wrapperStyle}>
@@ -73,7 +73,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
           if (stxBlockHash !== '') {
             e.preventDefault();
             void router.push(
-              buildUrl(`/block/${encodeURIComponent(stxBlockHash)}`, activeNetworkUrl)
+              buildUrl(`/block/${encodeURIComponent(stxBlockHash)}`, activeNetworkMode)
             );
           }
         }}

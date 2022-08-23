@@ -194,7 +194,7 @@ const Block: React.FC<BlockProps> = ({
   const Icon = delayedBlock ? BsFillExclamationCircleFill : AiFillCheckCircle;
   const timeBetweenBlocksFormatted = secondsToString(timeBetweenBlocks);
   const router = useRouter();
-  const activeNetworkUrl = useAppSelector(selectActiveNetwork).url;
+  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
   return (
     <Box css={blockWrapperStyle}>
       <Box css={blockAndArrowStyle}>
@@ -235,7 +235,7 @@ const Block: React.FC<BlockProps> = ({
           css={blockStyle}
           className={'block-box'}
           onClick={() =>
-            router.push(buildUrl(`/block/${encodeURIComponent(block.hash)}`, activeNetworkUrl))
+            router.push(buildUrl(`/block/${encodeURIComponent(block.hash)}`, activeNetworkMode))
           }
         >
           {stxBlockHeight}
