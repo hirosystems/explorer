@@ -1,3 +1,10 @@
+## [1.36.1](https://github.com/hirosystems/explorer/compare/v1.36.0...v1.36.1) (2022-08-23)
+
+
+### Bug Fixes
+
+* tx link network mode ([6239f74](https://github.com/hirosystems/explorer/commit/6239f74e8cc70ff1164cb8ae319236efcc15cdad))
+
 # [1.36.0](https://github.com/hirosystems/explorer/compare/v1.35.1...v1.36.0) (2022-08-22)
 
 
