@@ -1,4 +1,5 @@
 /** @jsxRuntime classic */
+import React from 'react';
 import { Box, color, ColorsStringLiteral, Stack } from '@stacks/ui';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

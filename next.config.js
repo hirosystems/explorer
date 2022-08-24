@@ -55,6 +55,11 @@ const moduleExports = withBundleAnalyzer({
     config.externals = externals;
     return config;
   },
+  swcMinify: true,
+  output: 'standalone',
+  experimental: {
+    emotion: true,
+  },
 });
 
 const sentryWebpackPluginOptions = {
@@ -64,5 +69,7 @@ const sentryWebpackPluginOptions = {
 const nextConfig = hasSentryDsn
   ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
   : moduleExports;
+
+console.log(nextConfig);
 
 module.exports = nextConfig;
