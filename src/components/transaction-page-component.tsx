@@ -1,4 +1,8 @@
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 import { getContractId } from '@common/utils';
+import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
+import { getBlockQueries } from '@features/block/use-block-queries';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import {
@@ -19,15 +23,28 @@ export const TransactionPageComponent = () => {
   const queries = useTransactionQueries();
   const { query } = useRouter();
   const txId = query.txid as string;
-  const { data } = useQuery(
+  const { data: transaction } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txId),
-    queries.fetchTransaction(txId)
+    queries.fetchSingleTransaction(txId)
   );
-  const transaction = data?.transaction;
+
+  const networkUrl = useAppSelector(selectActiveNetwork).url;
+  const blockQueries = getBlockQueries(networkUrl);
+
+  const { data: block } = useQuery(
+    blockQK(
+      BlockQueryKeys.block,
+      (transaction && 'block_hash' in transaction && transaction.block_hash) || ''
+    ),
+    blockQueries.fetchBlock(
+      (transaction && 'block_hash' in transaction && transaction.block_hash) || undefined
+    ),
+    { enabled: transaction && 'block_hash' in transaction }
+  );
+
   if (!transaction) {
     return <SkeletonTransactionSummary />;
   }
-  const block = data?.block;
   const contractId = getContractId(txId, transaction);
 
   switch (transaction?.tx_type) {

@@ -3,7 +3,6 @@ import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import {
   AddressBalanceResponse,
-  Block,
   ContractInterfaceResponse,
   MempoolTransaction,
   MempoolTransactionListResponse,
@@ -16,12 +15,6 @@ import { TransactionsListResponse } from '@store/transactions';
 
 export const getTransactionQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
-  const fetchBlock = async (blockHash?: string) =>
-    blockHash
-      ? ((await clients.blocksApi.getBlockByHash({
-          hash: blockHash,
-        })) as Block)
-      : undefined;
 
   const fetchContract = (contractId: string) => async () => {
     const contract = (await clients.smartContractsApi.getContractById({
@@ -50,31 +43,26 @@ export const getTransactionQueries = (networkUrl: string) => {
     return { results };
   };
 
+  const fetchTransactionWithContract = async (txId: string) => {
+    const isContractId = txId.includes('.');
+    if (!isContractId) {
+      const transaction = (await clients.transactionsApi.getTransactionById({
+        txId,
+      })) as unknown as Transaction | MempoolTransaction;
+      return transaction;
+    }
+
+    const contractInfo = await fetchContract(txId)();
+    const transaction = (await clients.transactionsApi.getTransactionById({
+      txId: contractInfo.tx_id,
+    })) as Transaction | MempoolTransaction;
+    return transaction;
+  };
+
   return {
-    fetchBlock: (blockHash?: string) => () => fetchBlock(blockHash),
     fetchBlockTransactions: (blockHash?: string) => () =>
       fetchBlockTransactions(blockHash) as unknown as TransactionsListResponse,
-    fetchTransaction: (txId: string) => async () => {
-      const isContractId = txId.includes('.');
-      if (!isContractId) {
-        const transaction = (await clients.transactionsApi.getTransactionById({
-          txId,
-        })) as unknown as Transaction | MempoolTransaction;
-        return {
-          transaction,
-          // TODO
-          block: await fetchBlock('block_hash' in transaction ? transaction.block_hash : undefined),
-        };
-      }
-      const contractInfo = await fetchContract(txId)();
-      const transaction = (await clients.transactionsApi.getTransactionById({
-        txId: contractInfo.tx_id,
-      })) as Transaction | MempoolTransaction;
-      return {
-        transaction,
-        block: await fetchBlock('block_hash' in transaction ? transaction.block_hash : undefined),
-      };
-    },
+    fetchSingleTransaction: (txId: string) => () => fetchTransactionWithContract(txId),
     fetchTransactionsForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>
       () => {

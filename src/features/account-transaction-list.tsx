@@ -8,11 +8,7 @@ import { Box, Stack } from '@stacks/ui';
 import { getNextPageParam } from '@store/common';
 import * as React from 'react';
 import { useInfiniteQuery } from 'react-query';
-import {
-  MempoolTxsList,
-  TxsList,
-  TxsListWithTransfers,
-} from '@modules/TransactionList/components/TxsList';
+import { MempoolTxsList, TxsListWithTransfers } from '@modules/TransactionList/components/TxsList';
 
 // TODO to move to a separate file
 export const Wrapper: React.FC = ({ children }) => (
@@ -26,23 +22,19 @@ const EmptyState: React.FC = () => (
   </Stack>
 );
 
-export const AccountTransactionList: React.FC<{ contractId?: string }> = ({ contractId }) => {
-  if (!contractId) {
-    return <SkeletonAccountTransactionList />;
-  }
-
+export const AccountTransactionList: React.FC<{ contractId: string }> = ({ contractId }) => {
   const queries = useTransactionQueries();
   const transactionsWithTransfersQueryResponse = useInfiniteQuery(
     transactionQK(TransactionQueryKeys.transactionsWithTransfersForAddressInfinite, contractId),
     ({ pageParam }) =>
       queries.fetchTransactionsWithTransfersForAddress(contractId, undefined, pageParam || 0)(),
-    { getNextPageParam }
+    { getNextPageParam, enabled: !!contractId }
   );
   const mempoolTransactionsQueryResponse = useInfiniteQuery(
     transactionQK(TransactionQueryKeys.mempoolTransactionsForAddressInfinite, contractId),
     ({ pageParam }) =>
       queries.fetchMempoolTransactionsForAddress(contractId, undefined, pageParam || 0)(),
-    { getNextPageParam }
+    { getNextPageParam, enabled: !!contractId }
   );
   const isLoading =
     transactionsWithTransfersQueryResponse.isLoading || mempoolTransactionsQueryResponse.isLoading;

@@ -8,4 +8,4 @@ export enum TransactionQueryKeys {
   accountBalance = 'accountBalance',
   lastFourBlocks = 'lastFourBlocks',
 }
-export const transactionQK = (type: TransactionQueryKeys, id: string) => [type, id];
+export const transactionQK = (type: TransactionQueryKeys, id: string | undefined) => [type, id];

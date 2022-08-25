@@ -3,7 +3,6 @@ import { TransactionMeta } from '@components/meta/transactions';
 import { TransactionPageComponent } from '@components/transaction-page-component';
 
 import { getContractId } from '@common/utils';
-import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
@@ -24,14 +23,6 @@ interface TransactionPageProps {
 }
 
 const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyValid }) => {
-  if (error)
-    return (
-      <>
-        <Meta title="Transaction not found" />
-        <TxNotFound isPending={isPossiblyValid} />
-      </>
-    );
-
   const { query } = useRouter();
   const txid = query.txid as string;
   const networkUrl = useAppSelector(selectActiveNetwork).url;
@@ -41,13 +32,13 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
     staleTime: 2000,
   };
 
-  const { data: txData } = useQuery(
+  const { data: tx } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txid),
-    queries.fetchTransaction(txid),
+    queries.fetchSingleTransaction(txid),
     queryOptions
   );
 
-  const contractId = txData && getContractId(txid, txData.transaction);
+  const contractId = tx && getContractId(txid, tx);
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const noop = () => {};
@@ -73,6 +64,14 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
     contractId ? queries.fetchAccountBalance(contractId) : noop,
     { ...queryOptions, ...{ enabled: !!contractId } }
   );
+
+  if (error)
+    return (
+      <>
+        <Meta title="Transaction not found" />
+        <TxNotFound isPending={isPossiblyValid} />
+      </>
+    );
 
   return (
     <>

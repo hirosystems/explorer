@@ -216,15 +216,18 @@ export const SkeletonTransactionSummary = () => {
   );
 };
 
-const SkeletonTransactionList = () => (
-  <>
-    {new Array(10).fill(true).map((_, i) => (
-      <div>
-        <SkeletonTransaction key={i} />
-      </div>
-    ))}
-  </>
-);
+export const SkeletonTransactionList = ({ length }: { length?: number }) => {
+  const num = length ?? 10;
+  return (
+    <>
+      {[...Array(num)].map((_, i) => (
+        <div>
+          <SkeletonTransaction key={i} />
+        </div>
+      ))}
+    </>
+  );
+};
 
 export const SectionBoxSkeleton = () => (
   <Section mt="extra-loose">

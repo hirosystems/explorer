@@ -1,18 +1,10 @@
 import { atom, WritableAtom } from 'jotai';
 import { transactionSingleState, TransactionsListResponse } from '@store/transactions';
-import { microblocksSingleState } from '@store/microblocks';
 import { blocksSingleState } from '@store/blocks';
 import { contractInfoState, contractInterfaceState, contractSourceState } from '@store/contracts';
-import type {
-  MempoolTransaction,
-  Transaction,
-  Block,
-  MempoolTransactionListResponse,
-  Microblock,
-} from '@stacks/stacks-blockchain-api-types';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import {
   accountBalancesResponseState,
-  accountPendingTransactionsState,
   accountStxBalanceResponseState,
   accountTransactionsState,
 } from '@store/accounts';
@@ -104,46 +96,12 @@ export const contractInfoInViewState = atom(get => {
   }
 });
 
-export const currentlyInViewMicroblockHash = atom<string | undefined>(get => {
-  const inView = get(currentlyInViewState);
-  if (inView && inView.type === 'microblock') return inView.payload;
-  return undefined;
-});
-
 export const currentlyInViewBlockHash = atom<string | undefined>(get => {
   const inView = get(currentlyInViewState);
   if (inView) {
     if (inView.type === 'block') return inView.payload;
   }
   return undefined;
-});
-
-export const microblockInView = atom<Microblock | undefined>(get => {
-  const microblockHash = get(currentlyInViewMicroblockHash);
-  return microblockHash ? get(microblocksSingleState(microblockHash)) : undefined;
-});
-
-export const microblockInViewBlock = atom<Block | undefined>(get => {
-  const microblock = get(microblockInView);
-  if (!microblock) return;
-  return get(blocksSingleState(microblock.block_hash));
-});
-
-export const microblockInViewTransactions = atom<Transaction[] | undefined>(get => {
-  const microblock = get(microblockInView);
-  if (!microblock) return;
-  return microblock.txs.map(txid => get(transactionSingleState(txid))) as Transaction[];
-});
-
-export const blockInView = atom<Block | undefined>(get => {
-  const blockHash = get(currentlyInViewBlockHash);
-  return blockHash ? get(blocksSingleState(blockHash)) : undefined;
-});
-
-export const blockInViewTransactions = atom<Transaction[] | undefined>(get => {
-  const block = get(blockInView);
-  if (!block) return;
-  return block.txs.map(txid => get(transactionSingleState(txid))) as Transaction[];
 });
 
 export const addressInViewState = atom<string | undefined>(get => {
@@ -211,5 +169,3 @@ contractInterfaceInViewState.debugLabel = makeDebugLabel('contract interface');
 contractInfoInViewState.debugLabel = makeDebugLabel('contract info');
 addressInViewState.debugLabel = makeDebugLabel('address');
 currentlyInViewBlockHash.debugLabel = makeDebugLabel('block hash');
-blockInView.debugLabel = makeDebugLabel('block');
-blockInViewTransactions.debugLabel = makeDebugLabel('block transactions');

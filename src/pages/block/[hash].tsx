@@ -11,10 +11,7 @@ import { selectActiveNetwork } from '@common/state/network-slice';
 import { BlockNotFound } from '@components/block-not-found';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import {} from '@components/loaders/skeleton-text';
-import {
-  SectionBoxSkeleton,
-  SkeletonCoinbaseTransaction,
-} from '@components/loaders/skeleton-transaction';
+import { SectionBoxSkeleton } from '@components/loaders/skeleton-transaction';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
 import { PageWrapper } from '@components/page-wrapper';
@@ -26,6 +23,7 @@ import { useQuery, useInfiniteQuery } from 'react-query';
 import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
 import { TxsList } from '@modules/TransactionList/components/TxsList';
 import { FilterButton } from '@components/filter-button';
+import { getBlockQueries } from '@features/block/use-block-queries';
 
 interface BlockSinglePageData {
   hash: string;
@@ -36,7 +34,8 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
   const { query } = useRouter();
   const hash = query.hash as string;
   const networkUrl = useAppSelector(selectActiveNetwork).url;
-  const queries = getTransactionQueries(networkUrl);
+  const blockQueries = getBlockQueries(networkUrl);
+  const transactionQueries = getTransactionQueries(networkUrl);
 
   const queryOptions = {
     refetchOnWindowFocus: false,
@@ -46,13 +45,13 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
 
   const { data: block, isError: blockIsError } = useQuery(
     blockQK(BlockQueryKeys.block, hash),
-    queries.fetchBlock(hash),
+    blockQueries.fetchBlock(hash),
     queryOptions
   );
 
   const blockTransactionsResponse = useInfiniteQuery(
     blockQK(BlockQueryKeys.blockTransactions, hash),
-    queries.fetchBlockTransactions(hash),
+    transactionQueries.fetchBlockTransactions(hash),
     queryOptions
   );
 

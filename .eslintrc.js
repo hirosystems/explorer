@@ -1,5 +1,6 @@
 module.exports = {
   extends: ['@stacks/eslint-config'],
+  plugins: ['react', 'react-hooks'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
@@ -21,5 +22,6 @@ module.exports = {
     '@typescript-eslint/no-unsafe-call': 0,
     '@typescript-eslint/no-unsafe-return': 0,
     '@typescript-eslint/restrict-template-expressions': 0,
+    'react-hooks/rules-of-hooks': 'error',
   },
 };

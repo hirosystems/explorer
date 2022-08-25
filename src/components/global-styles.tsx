@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Global, css } from '@emotion/react';
-import { ProgressBarStyles } from '@components/progress-bar';
 import { prismTheme } from '@components/prism-theme';
 
 const TextAreaOverrides = (
@@ -201,4 +200,4 @@ const globalStyles = css`
 
 const GlobalStyles = <Global styles={globalStyles} />;
 
-export { TextAreaOverrides, GlobalStyles, ProgressBarStyles };
+export { TextAreaOverrides, GlobalStyles };
