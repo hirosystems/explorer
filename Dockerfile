@@ -1,5 +1,4 @@
-FROM node:16-alpine AS build
-
+# Set Global ARGs
 # Pass these build args in to configure Segment
 ARG SEGMENT_WRITE_KEY
 
@@ -7,6 +6,9 @@ ARG SEGMENT_WRITE_KEY
 ARG SENTRY_AUTH_TOKEN
 ARG SENTRY_DSN
 ARG SENTRY_LOG_LEVEL=warn
+ARG NODE_ENV=production
+
+FROM node:16-alpine AS build
 
 WORKDIR /app
 
@@ -25,16 +27,18 @@ RUN apk --no-cache add --virtual \
   && yarn \
   && apk del native-deps
 
+RUN yarn build
+
+RUN yarn cache clean
+
+FROM node:16-alpine
+
 ENV SEGMENT_WRITE_KEY=${SEGMENT_WRITE_KEY}
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV SENTRY_DSN=${SENTRY_DSN}
 ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
 ENV NODE_ENV=production
 
-RUN yarn build
-RUN yarn cache clean
-
-FROM node:16-alpine
 RUN apk --no-cache add --virtual \
   yarn
 
