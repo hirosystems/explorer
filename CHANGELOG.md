@@ -1,3 +1,10 @@
+# [1.37.0](https://github.com/hirosystems/explorer/compare/v1.36.3...v1.37.0) (2022-08-25)
+
+
+### Features
+
+* display tx transfers for addresses ([acccffa](https://github.com/hirosystems/explorer/commit/acccffaae5c4f156ac40c3f9f5eb19ee20e5f78c))
+
 ## [1.36.3](https://github.com/hirosystems/explorer/compare/v1.36.2...v1.36.3) (2022-08-25)
 
 
