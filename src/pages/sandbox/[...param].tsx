@@ -7,6 +7,7 @@ import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { withInitialQueries } from 'jotai-query-toolkit/nextjs';
 import { pageAtomBuilders } from '@common/page-queries/extra-initial-values';
 import { getHomePageQueries } from '@common/page-queries/home';
+import { RecoilRoot } from 'recoil';
 
 const Sandbox: NextPage<SandboxData> = props => {
   const { handleTrackGoal } = useFathomGoal();
@@ -16,12 +17,14 @@ const Sandbox: NextPage<SandboxData> = props => {
   }, []);
 
   return (
-    <SafeSuspense fallback={<></>}>
-      <Head>
-        <title>Sandbox - Stacks Explorer by Hiro</title>
-      </Head>
-      <SandboxPageContent {...props} />
-    </SafeSuspense>
+    <RecoilRoot>
+      <SafeSuspense fallback={<></>}>
+        <Head>
+          <title>Sandbox - Stacks Explorer by Hiro</title>
+        </Head>
+        <SandboxPageContent {...props} />
+      </SafeSuspense>
+    </RecoilRoot>
   );
 };
 

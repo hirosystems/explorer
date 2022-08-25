@@ -1,5 +1,5 @@
+import { IS_SSR } from '@common/constants';
 import React, { ReactNode } from 'react';
-import { IS_SSR } from 'jotai-query-toolkit';
 
 export function SafeSuspense({
   children,

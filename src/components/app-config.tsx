@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { RecoilRoot } from 'recoil';
 import { useRouter } from 'next/router';
 import { AppContainer } from '@components/app-container';
 import { CacheProvider } from '@emotion/react';
@@ -30,12 +29,10 @@ export const AppConfig: React.FC<AppConfigProps> = ({
   }, []);
 
   return (
-    <RecoilRoot>
-      <CacheProvider value={cache}>
-        <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
-          {children}
-        </AppContainer>
-      </CacheProvider>
-    </RecoilRoot>
+    <CacheProvider value={cache}>
+      <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
+        {children}
+      </AppContainer>
+    </CacheProvider>
   );
 };

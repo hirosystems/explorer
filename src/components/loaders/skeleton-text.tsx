@@ -10,7 +10,7 @@ export const SkeletonRectangleFiller = () => (
   <ExplorerSkeletonLoader height={'20px'} containerClassName="skeleton-outer-full-width" />
 );
 
-const SkeletonFees = () => <ExplorerSkeletonLoader width={'61px'} height={'16px'} />;
+export const SkeletonFees = () => <ExplorerSkeletonLoader width={'61px'} height={'16px'} />;
 
 const SkeletonMediumText = () => <ExplorerSkeletonLoader width={'150px'} height={'16px'} />;
 
@@ -53,7 +53,7 @@ export const SkeletonBlockList = () => {
   return (
     <Section title="Recent Blocks">
       <Flex flexDirection="column" flexGrow={1} px="loose">
-        {new Array(10).fill(true).map((_, i) => (
+        {[...Array(10)].map((_, i) => (
           <SkeletonBlock key={i} />
         ))}
       </Flex>

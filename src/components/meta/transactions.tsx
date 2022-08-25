@@ -108,9 +108,9 @@ export const TransactionMeta = () => {
   const txId = query.txid as string;
   const { data } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txId),
-    queries.fetchTransaction(txId)
+    queries.fetchSingleTransaction(txId)
   );
-  const transaction = data?.transaction || ({} as Transaction);
+  const transaction = data || ({} as Transaction);
 
   const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
   const pageTitle = `${getTxPageTitle(transaction)}${

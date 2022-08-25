@@ -7,6 +7,8 @@ import { TxStatus } from './types/tx';
 
 const { publicRuntimeConfig } = getConfig();
 
+export const IS_SSR = typeof window === 'undefined';
+
 const config = publicRuntimeConfig;
 
 const getNumber = (query?: string): number | undefined =>

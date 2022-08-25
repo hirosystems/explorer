@@ -23,7 +23,6 @@ import { AtomDebug } from '@features/devtools';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { Hydrate } from 'react-query/hydration';
 
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
@@ -54,18 +53,14 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
     toast(`You're viewing the ${chain || networkMode} Explorer`);
   }, []);
 
-  console.log('[debug] pageProps.dehydratedState', pageProps.dehydratedState);
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <AppConfig isHome={isHome} fullWidth={fullWidth}>
-            <AtomDebug />
-            <Component apiServer={apiServer} networkMode={networkMode} {...props} />
-            <Modals />
-            <NetworkModeToast />
-          </AppConfig>
-        </Hydrate>
+        <AppConfig isHome={isHome} fullWidth={fullWidth}>
+          <Component apiServer={apiServer} networkMode={networkMode} {...props} />
+          <Modals />
+          <NetworkModeToast />
+        </AppConfig>
         <ReactQueryDevtools initialIsOpen={false} />
       </Provider>
     </QueryClientProvider>

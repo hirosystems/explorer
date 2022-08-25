@@ -19,7 +19,6 @@ import { microStxToStx } from '@stacks/ui-utils';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
-import { useRefreshOnBack } from '../../hooks/use-refresh-on-back';
 
 const PageTop = () => {
   return (
@@ -62,14 +61,6 @@ const queryOptions = {
 const AddressPage: NextPage<any> = arg => {
   const { error } = arg;
 
-  if (error)
-    return (
-      <>
-        <Meta title="Address not found" />
-        <AddressNotFound />
-      </>
-    );
-
   const queries = useAddressQueries();
   const apiServer = useAppSelector(selectActiveNetwork).url;
 
@@ -101,6 +92,14 @@ const AddressPage: NextPage<any> = arg => {
   );
 
   const hasTokenBalances = hasTokenBalance(balance);
+
+  if (error)
+    return (
+      <>
+        <Meta title="Address not found" />
+        <AddressNotFound />
+      </>
+    );
 
   return (
     <PageWrapper>

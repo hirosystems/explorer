@@ -96,7 +96,6 @@ export const TransactionList: React.FC<
   const filteredTxs = transactions.filter(tx => activeFilters[tx.tx_type]);
   const hasTxs = !!transactions.length;
   const hasVisibleTxs = !!filteredTxs.length;
-  console.log('rest', rest);
 
   return (
     <Section title={'Transactions'} topRight={Filter} {...rest}>
