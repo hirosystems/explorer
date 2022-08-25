@@ -1,3 +1,10 @@
+## [1.36.3](https://github.com/hirosystems/explorer/compare/v1.36.2...v1.36.3) (2022-08-25)
+
+
+### Bug Fixes
+
+* read-only function call serialization error ([d09c667](https://github.com/hirosystems/explorer/commit/d09c667367ca2e83abdc961b49fafff456a9c3d0))
+
 ## [1.36.2](https://github.com/hirosystems/explorer/compare/v1.36.1...v1.36.2) (2022-08-25)
 
 
