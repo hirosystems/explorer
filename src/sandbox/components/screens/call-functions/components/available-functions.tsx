@@ -220,6 +220,12 @@ const FunctionSingleView = () => {
             console.log(e);
           }
         } else {
+          Object.values(final).forEach(value => {
+            if (typeof value?.value === 'bigint') {
+              value.value = value.value.toString();
+            }
+            return value;
+          });
           setReadonly(Object.values(final));
         }
       } catch (e) {
