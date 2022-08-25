@@ -1,3 +1,10 @@
+## [1.36.2](https://github.com/hirosystems/explorer/compare/v1.36.1...v1.36.2) (2022-08-25)
+
+
+### Bug Fixes
+
+* add tabs in home page skeleton ([68587f6](https://github.com/hirosystems/explorer/commit/68587f629c686db35215c1d0b0fc41dd8e3bffe1))
+
 ## [1.36.1](https://github.com/hirosystems/explorer/compare/v1.36.0...v1.36.1) (2022-08-23)
 
 
