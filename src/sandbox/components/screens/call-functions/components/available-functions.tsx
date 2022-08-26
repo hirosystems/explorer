@@ -5,7 +5,7 @@ import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
 import { Input } from '@components/inputs';
 import { useFormik } from 'formik';
 import { Button } from '@components/button';
-import { border } from '@common/utils';
+import { border, validateStacksAddress } from '@common/utils';
 import { Caption, Text } from '@components/typography';
 import { currentFunctionState, readOnlyState, readOnlyResponseState } from '@sandbox/store/sandbox';
 import { Section } from '@components/section';
@@ -27,7 +27,7 @@ import { useNetworkConfig } from '@common/hooks/use-network-config';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 
-const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any) => (
+const ArgLine = ({ name, type, handleChange, placeholder = name, error, ...rest }: any) => (
   <Box width="100%" {...rest}>
     <Input
       width="100%"
@@ -37,6 +37,7 @@ const ArgLine = ({ name, type, handleChange, placeholder = name, ...rest }: any)
       onChange={handleChange}
       placeholder={`${getTypeString(type)}`}
     />
+    {error && <Caption color={color('feedback-error')}>{error}</Caption>}
   </Box>
 );
 
@@ -51,7 +52,7 @@ const Label: React.FC<BoxProps> = props => (
   />
 );
 
-const FunctionLine = ({ name, type, handleChange, ...rest }) => {
+const FunctionLine = ({ name, type, handleChange, error, ...rest }) => {
   const tuple = type?.tuple || type?.optional?.tuple;
   if (tuple) {
     return (
@@ -63,7 +64,12 @@ const FunctionLine = ({ name, type, handleChange, ...rest }) => {
                 ({name}): {arg.name}
                 {type?.optional ? ' (optional)' : ''}
               </Label>
-              <ArgLine handleChange={handleChange} {...arg} name={`${name}.${arg.name}`} />
+              <ArgLine
+                handleChange={handleChange}
+                error={error}
+                {...arg}
+                name={`${name}.${arg.name}`}
+              />
             </Box>
           ))}
         </Stack>
@@ -75,7 +81,7 @@ const FunctionLine = ({ name, type, handleChange, ...rest }) => {
       <Label mb="tight" htmlFor={name}>
         {name}
       </Label>
-      <ArgLine name={name} type={type} handleChange={handleChange} {...rest} />
+      <ArgLine name={name} type={type} handleChange={handleChange} error={error} {...rest} />
     </Box>
   );
 };
@@ -177,8 +183,26 @@ const FunctionSingleView = () => {
   const { handleTrackGoal } = useFathomGoal();
   const network = useNetworkConfig();
 
-  const { handleSubmit, handleChange, setValues, values } = useFormik({
+  console.log(11111111, 'FunctionSingleView');
+
+  const { handleSubmit, handleChange, setValues, values, errors } = useFormik({
     initialValues,
+    validateOnChange: false,
+    validateOnBlur: false,
+    validate: values => {
+      const errors = {};
+      Object.keys(values).forEach(key => {
+        const type = fn.args.find(({ name }) => name === key).type;
+        const optionalType = type?.optional;
+        if (type === 'principal' || (optionalType === 'principal' && !!values[key])) {
+          const validPrincipal = validateStacksAddress(values[key]);
+          if (!validPrincipal) {
+            errors[key] = 'Invalid Stacks address.';
+          }
+        }
+      });
+      return errors;
+    },
     onSubmit: values => {
       try {
         const final = {};
@@ -253,7 +277,12 @@ const FunctionSingleView = () => {
           {fn.args.length ? (
             <Stack mb="extra-loose" spacing="base">
               {fn.args.map(({ name, type }) => (
-                <FunctionLine handleChange={handleChange} name={name} type={type} />
+                <FunctionLine
+                  handleChange={handleChange}
+                  name={name}
+                  type={type}
+                  error={errors[name]}
+                />
               ))}
             </Stack>
           ) : null}
