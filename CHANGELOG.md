@@ -1,3 +1,10 @@
+# [1.38.0](https://github.com/hirosystems/explorer/compare/v1.37.0...v1.38.0) (2022-08-26)
+
+
+### Features
+
+* add principal validation to sandbox ([a85ea69](https://github.com/hirosystems/explorer/commit/a85ea69d4dd686da7dfd3b089fd2a0907d71646d))
+
 # [1.37.0](https://github.com/hirosystems/explorer/compare/v1.36.3...v1.37.0) (2022-08-25)
 
 
