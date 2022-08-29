@@ -219,8 +219,8 @@ export const SkeletonTransactionSummary = () => {
 const SkeletonTransactionList = () => (
   <>
     {new Array(10).fill(true).map((_, i) => (
-      <div>
-        <SkeletonTransaction key={i} />
+      <div key={i}>
+        <SkeletonTransaction />
       </div>
     ))}
   </>
