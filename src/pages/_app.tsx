@@ -28,6 +28,7 @@ import { Hydrate } from 'react-query/hydration';
 interface ExplorerAppProps extends AppProps {
   apiServer: string;
   networkMode: NetworkMode;
+  pageProps: any;
 }
 
 function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactElement {

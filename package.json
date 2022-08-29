@@ -78,7 +78,7 @@
     "monaco-vscode-textmate-theme-converter": "0.1.1",
     "monacode": "0.3.1",
     "morgan": "1.10.0",
-    "next": "12.0.1",
+    "next": "12.2.6-canary.6",
     "next-plugin-preact": "3.0.6",
     "next-redux-cookie-wrapper": "2.1.2",
     "next-redux-wrapper": "8.0.0-rc.1",
@@ -110,12 +110,12 @@
     "valid-url": "1.0.9",
     "web-api-hooks": "3.0.2",
     "webpack": "5.47.0",
-    "yup": "0.32.9"
+    "yup": "0.32.9",
+    "@emotion/babel-preset-css-prop": "11.2.0"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "12.1.4",
     "@emotion/babel-plugin": "11.3.0",
-    "@emotion/babel-preset-css-prop": "11.2.0",
     "@next/bundle-analyzer": "11.0.1",
     "@playwright/test": "^1.22.2",
     "@segment/analytics.js-core": "^4.1.11",

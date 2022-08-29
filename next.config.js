@@ -1,9 +1,8 @@
 const { withSentryConfig } = require('@sentry/nextjs');
 const BrotliPlugin = require('brotli-webpack-plugin');
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-});
+const withBundleAnalyzer =
+  process.env.ANALYZE === 'true' ? require('@next/bundle-analyzer')() : x => x;
 
 const hasSentryDsn = !!process.env.SENTRY_DSN;
 
@@ -55,6 +54,7 @@ const moduleExports = withBundleAnalyzer({
     config.externals = externals;
     return config;
   },
+  output: 'standalone',
 });
 
 const sentryWebpackPluginOptions = {
