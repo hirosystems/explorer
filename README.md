@@ -39,6 +39,7 @@ NEXT_PUBLIC_DEPLOYMENT_URL=https://explorer.stacks.co
 NEXT_PUBLIC_MAINNET_ENABLED="true"
 NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL="10000"
 ```
+
 If you are in a mac, you'll need to add this to `/etc/paths`
 
 ### Run in development mode
@@ -52,3 +53,5 @@ yarn dev
 ### Building for production
 
 To build for production, run `yarn build` which will run the default next.js build task.
+
+Test build
