@@ -1,3 +1,10 @@
+# [1.39.0](https://github.com/hirosystems/explorer/compare/v1.38.0...v1.39.0) (2022-08-30)
+
+
+### Features
+
+* test build ([903d5db](https://github.com/hirosystems/explorer/commit/903d5dbafc51bb1661cd97aa9ec6d26b95c2b7a5))
+
 # [1.38.0](https://github.com/hirosystems/explorer/compare/v1.37.0...v1.38.0) (2022-08-26)
 
 
