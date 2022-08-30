@@ -50,12 +50,11 @@ RUN apk --no-cache add --virtual \
 
 WORKDIR /app
 
-COPY --from=build /app/node_modules /app/node_modules
-COPY --from=build /app/.next /app/.next
 COPY --from=build /app/next.config.js /app/next.config.js
 COPY --from=build /app/public /app/public
 COPY --from=build /app/package.json /app/package.json
-COPY --from=build /app/yarn.lock /app/yarn.lock
+COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 EXPOSE 3000
-CMD [ "yarn", "start" ]
+CMD [ "node", "server.js" ]
