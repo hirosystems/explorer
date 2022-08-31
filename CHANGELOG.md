@@ -1,3 +1,10 @@
+## [1.39.1](https://github.com/hirosystems/explorer/compare/v1.39.0...v1.39.1) (2022-08-31)
+
+
+### Bug Fixes
+
+* refactor microblock to fetch client side ([f72f848](https://github.com/hirosystems/explorer/commit/f72f848cfe50569e6f4fb727407e5633537b2b40)), closes [#626](https://github.com/hirosystems/explorer/issues/626) [#834](https://github.com/hirosystems/explorer/issues/834)
+
 # [1.39.0](https://github.com/hirosystems/explorer/compare/v1.38.0...v1.39.0) (2022-08-30)
 
 
