@@ -14,7 +14,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "test:unit": "jest --forceExit ./src"
+    "test:unit": "jest --forceExit ./src",
+    "prepare": "husky install"
   },
   "version": "1.0.0",
   "author": "Hiro Systems PBC (formerly Blockstack PBC)",
