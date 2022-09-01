@@ -23,7 +23,15 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
               label: {
                 children: 'Bitcoin block height',
               },
-              children: `#${block.burn_block_height}`,
+              children: (
+                <Link
+                  as="a"
+                  target="_blank"
+                  href={`https://www.blockchain.com/btc/block/${block.burn_block_height}`}
+                >
+                  #{block.burn_block_height}
+                </Link>
+              ),
             },
             {
               label: {
@@ -36,7 +44,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                   href={`https://www.blockchain.com/btc${path}/block/${block.burn_block_hash.replace(
                     '0x',
                     ''
-                  )}?utm_source=stacks_explorer`}
+                  )}`}
                 >
                   {truncateMiddle(block.burn_block_hash, 8)}
                 </Link>
@@ -54,7 +62,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                   href={`https://www.blockchain.com/btc${path}/tx/${block.miner_txid.replace(
                     '0x',
                     ''
-                  )}?utm_source=stacks_explorer`}
+                  )}`}
                 >
                   {truncateMiddle(block.miner_txid, 8)}
                 </Link>
