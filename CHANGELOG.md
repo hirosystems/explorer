@@ -1,3 +1,10 @@
+# [1.40.0](https://github.com/hirosystems/explorer/compare/v1.39.1...v1.40.0) (2022-09-02)
+
+
+### Features
+
+* btc block height link from the btc anchor section ([023ff51](https://github.com/hirosystems/explorer/commit/023ff5172e6ddd11ea1f26a1c53392f83395c80b))
+
 ## [1.39.1](https://github.com/hirosystems/explorer/compare/v1.39.0...v1.39.1) (2022-08-31)
 
 
