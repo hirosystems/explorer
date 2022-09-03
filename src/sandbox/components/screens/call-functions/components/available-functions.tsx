@@ -195,7 +195,7 @@ const FunctionSingleView = () => {
         const type = fn.args.find(({ name }) => name === key).type;
         const optionalType = type?.optional;
         if (type === 'principal' || (optionalType === 'principal' && !!values[key])) {
-          const validPrincipal = validateStacksAddress(values[key]);
+          const validPrincipal = validateStacksAddress(values[key].split('.')[0]);
           if (!validPrincipal) {
             errors[key] = 'Invalid Stacks address.';
           }
