@@ -1,3 +1,10 @@
+## [1.40.1](https://github.com/hirosystems/explorer/compare/v1.40.0...v1.40.1) (2022-09-03)
+
+
+### Bug Fixes
+
+* principal validation ([44eb054](https://github.com/hirosystems/explorer/commit/44eb054152e81e81beeb516272811643afd85507))
+
 # [1.40.0](https://github.com/hirosystems/explorer/compare/v1.39.1...v1.40.0) (2022-09-02)
 
 
