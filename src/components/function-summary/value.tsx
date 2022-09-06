@@ -7,6 +7,7 @@ import { TxLink } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { NetworkModes } from '@common/types/network';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -37,6 +38,7 @@ const tupleToArr = (tuple: string) =>
 
 const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
   const networkMode = useAppSelector(selectActiveNetwork).mode;
+  const btcLinkPathPrefix = networkMode === NetworkModes.Testnet ? '/testnet' : '';
   let additional: any = null;
   if (isPoxAddr && btc) {
     additional = (
@@ -45,9 +47,7 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
         <Text
           target="_blank"
           as={Link}
-          href={`https://www.blockchain.com/btc${
-            networkMode === 'testnet' ? '-testnet' : ''
-          }/address/${btc}`}
+          href={`https://mempool.space${btcLinkPathPrefix}/address/${btc}`}
         >
           {btc}
         </Text>

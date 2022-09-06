@@ -10,6 +10,7 @@ import { StxInline } from '@components/icons/stx-inline';
 import { Circle } from '@components/circle';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { NetworkModes } from '@common/types/network';
 
 interface BtcStxBlockLinksProps {
   btcBlockHeight?: number;
@@ -61,6 +62,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
 }) => {
   const router = useRouter();
   const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const btcLinkPathPrefix = activeNetworkMode === NetworkModes.Testnet ? '/testnet' : '';
 
   return (
     <Box css={wrapperStyle}>
@@ -90,7 +92,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
               e.preventDefault();
               window
                 ?.open(
-                  `https://www.blockchain.com/btc/block/${btcBlockHeight}`,
+                  `https://mempool.space${btcLinkPathPrefix}/block/${btcBlockHeight}`,
                   '_blank',
                   'noopener'
                 )
