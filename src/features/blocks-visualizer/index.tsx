@@ -13,6 +13,7 @@ import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { TransactionQueryKeys } from '@features/transaction/query-keys';
+import { NetworkModes } from '@common/types/network';
 
 const wrapperStyle = css`
   display: flex;
@@ -195,6 +196,8 @@ const Block: React.FC<BlockProps> = ({
   const timeBetweenBlocksFormatted = secondsToString(timeBetweenBlocks);
   const router = useRouter();
   const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const btcLinkPathPrefix = activeNetworkMode === NetworkModes.Testnet ? '/testnet' : '';
+
   return (
     <Box css={blockWrapperStyle}>
       <Box css={blockAndArrowStyle}>
@@ -208,7 +211,7 @@ const Block: React.FC<BlockProps> = ({
           css={blockStyle}
           onClick={() => {
             window
-              ?.open(`https://www.blockchain.com/btc/block/${btcBlockHeight}`, '_blank')
+              ?.open(`https://mempool.space${btcLinkPathPrefix}/block/${btcBlockHeight}`, '_blank')
               ?.focus();
           }}
         >

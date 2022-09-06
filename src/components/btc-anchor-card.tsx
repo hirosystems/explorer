@@ -11,7 +11,8 @@ import { selectActiveNetwork } from '@common/state/network-slice';
 
 export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ block, ...rest }) => {
   const networkMode = useAppSelector(selectActiveNetwork).mode;
-  const path = networkMode === NetworkModes.Testnet ? '-testnet' : '';
+  const btcLinkPathPrefix = networkMode === NetworkModes.Testnet ? '/testnet' : '';
+
   return (
     <Section title="Bitcoin anchor" {...rest}>
       <Box px="base">
@@ -27,7 +28,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                 <Link
                   as="a"
                   target="_blank"
-                  href={`https://www.blockchain.com/btc/block/${block.burn_block_height}`}
+                  href={`https://mempool.space${btcLinkPathPrefix}/block/${block.burn_block_height}`}
                 >
                   #{block.burn_block_height}
                 </Link>
@@ -41,7 +42,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                 <Link
                   as="a"
                   target="_blank"
-                  href={`https://www.blockchain.com/btc${path}/block/${block.burn_block_hash.replace(
+                  href={`https://mempool.space${btcLinkPathPrefix}/block/${block.burn_block_hash.replace(
                     '0x',
                     ''
                   )}`}
@@ -59,7 +60,7 @@ export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ blo
                 <Link
                   as="a"
                   target="_blank"
-                  href={`https://www.blockchain.com/btc${path}/tx/${block.miner_txid.replace(
+                  href={`https://mempool.space${btcLinkPathPrefix}/tx/${block.miner_txid.replace(
                     '0x',
                     ''
                   )}`}
