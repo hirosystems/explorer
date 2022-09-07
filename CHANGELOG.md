@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/hirosystems/explorer/compare/v1.40.1...v1.41.0) (2022-09-07)
+
+
+### Features
+
+* change all external btc links to mempool.space ([c69fcdd](https://github.com/hirosystems/explorer/commit/c69fcdd5d3fd721c5d83aa0036e997220b8f88bf))
+
 ## [1.40.1](https://github.com/hirosystems/explorer/compare/v1.40.0...v1.40.1) (2022-09-03)
 
 
