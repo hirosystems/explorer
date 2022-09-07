@@ -4,6 +4,7 @@ import { Box, color } from '@stacks/ui';
 import { css } from '@emotion/react';
 import { StxInline } from '@components/icons/stx-inline';
 import { Circle } from '@components/circle';
+import { useCurrentBtcPrice, useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 const wrapperStyle = css`
   display: flex;
@@ -32,36 +33,25 @@ const formatter = new Intl.NumberFormat('en-US', {
 });
 
 export const BtcStxPrice: FC = () => {
-  const [stxPrice, setStxPrice] = useState<string | undefined>();
-  const [btcPrice, setBtcPrice] = useState<string | undefined>();
-  useEffect(() => {
-    void fetch('https://api.coingecko.com/api/v3/exchange_rates')
-      .then(res => res.json())
-      .then(data => {
-        setBtcPrice(formatter.format(data.rates.usd.value));
-      });
-    void fetch(
-      'https://api.coingecko.com/api/v3/simple/price?ids=blockstack,bitcoin&vs_currencies=usd'
-    )
-      .then(res => res.json())
-      .then(data => {
-        setStxPrice(formatter.format(data.blockstack.usd));
-      });
-  }, []);
-  if (!stxPrice || !btcPrice) return null;
+  const { data: btcPrice } = useCurrentBtcPrice();
+  const { data: stxPrice } = useCurrentStxPrice();
+  const formattedBtcPrice = formatter.format(btcPrice);
+  const formattedStxPrice = formatter.format(stxPrice);
+
+  if (!formattedStxPrice || !formattedBtcPrice) return null;
   return (
     <Fragment>
       <Box css={wrapperStyle}>
         <Circle size="18px" bg={'#fff'} css={iconStyle}>
           <FaBitcoin color={'#f7931a'} size={19} />
         </Circle>
-        <Box css={priceStyle}>{btcPrice}</Box>
+        <Box css={priceStyle}>{formattedBtcPrice}</Box>
       </Box>
       <Box css={wrapperStyle}>
         <Circle size="19px" bg={color('accent')} css={iconStyle}>
           <StxInline strokeWidth={2} size="11px" color="white" />
         </Circle>
-        <Box css={priceStyle}>{stxPrice}</Box>
+        <Box css={priceStyle}>{formattedStxPrice}</Box>
       </Box>
     </Fragment>
   );
