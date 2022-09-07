@@ -18,21 +18,41 @@ import { useAtomValue } from 'jotai/utils';
 import { accountInViewTokenOfferingData } from '@store/currently-in-view';
 import { MODALS } from '@common/constants';
 import { useAppDispatch } from '@common/state/hooks';
+import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
+
+const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
+  const { data: stxPrice } = useCurrentStxPrice();
+
+  const formattedBalance = balance.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 6,
+  });
+  const usdBalance = usdFormatter.format(balance * stxPrice);
   const localeDecimalSeparator = getLocaleDecimalSeparator();
-  const parts = balance.split(localeDecimalSeparator);
+  const parts = formattedBalance.split(localeDecimalSeparator);
 
   return (
-    <Flex as="span" {...rest} style={{ userSelect: 'all' }}>
-      <Text color="currentColor">{parts[0]}</Text>
-      <Text color="currentColor" opacity={0.65}>
-        {localeDecimalSeparator}
-        {parts[1]}
-      </Text>
-      <Text ml="extra-tight" color="currentColor">
-        STX
-      </Text>
+    <Flex flexDirection="column" as="span" {...rest} style={{ userSelect: 'all' }}>
+      <Flex>
+        <Text color="currentColor">{parts[0]}</Text>
+        <Text color="currentColor" opacity={0.65}>
+          {localeDecimalSeparator}
+          {parts[1]}
+        </Text>
+        <Text ml="extra-tight" color="currentColor">
+          STX
+        </Text>
+      </Flex>
+      {usdBalance && (
+        <Text mt="extra-tight" color="ink.400" fontSize="14px">
+          {usdBalance}
+        </Text>
+      )}
     </Flex>
   );
 };
@@ -80,10 +100,10 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
   const locked =
     typeof parseInt(balances?.stx?.locked) === 'number' ? parseInt(balances?.stx?.locked) : 0;
   const tokenOfferingLocked = parseInt(tokenOfferingData?.total_locked || '0');
-  const totalBalance = microToStacks(balance + tokenOfferingLocked);
-  const availableBalance = microToStacks(balance - locked);
-  const stackedBalance = microToStacks(locked);
-  const minerRewardsBalance = microToStacks(minerRewards);
+  const totalBalance = microToStacks(balance + tokenOfferingLocked, false);
+  const availableBalance = microToStacks(balance - locked, false);
+  const stackedBalance = microToStacks(locked, false);
+  const minerRewardsBalance = microToStacks(minerRewards, false);
   const isStacking = locked > 0;
 
   const [qrShowing, setQrShowing] = React.useState(false);
@@ -111,7 +131,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
           <Box px="base-loose">
             <Flex
               borderBottom={isStacking || !!tokenOfferingData ? border() : 'unset'}
-              alignItems="center"
+              alignItems="flex-start"
               py="loose"
             >
               <Circle bg={color('brand')} mr="base" size="36px">
