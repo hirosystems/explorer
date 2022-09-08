@@ -4,7 +4,14 @@ import { Box, BoxProps, Circle, color, Flex, Grid, Stack, StxInline } from '@sta
 import { Caption, Text } from '@components/typography';
 
 import { Section } from '@components/section';
-import { border, microToStacks, getLocaleDecimalSeparator } from '@common/utils';
+import {
+  border,
+  microToStacks,
+  getLocaleDecimalSeparator,
+  formatStacksAmount,
+  usdFormatter,
+  getUsdValue,
+} from '@common/utils';
 import { IconButton } from '@components/icon-button';
 import { IconQrcode, IconX } from '@tabler/icons';
 import { Tooltip } from '@components/tooltip';
@@ -20,20 +27,12 @@ import { MODALS } from '@common/constants';
 import { useAppDispatch } from '@common/state/hooks';
 import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
-const usdFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const { data: stxPrice } = useCurrentStxPrice();
 
-  const formattedBalance = balance.toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 6,
-  });
-  const usdBalance = usdFormatter.format(balance * stxPrice);
-  const localeDecimalSeparator = getLocaleDecimalSeparator();
+  const formattedBalance = formatStacksAmount(balance);
+  const usdBalance = getUsdValue(balance, stxPrice);
+  const localeDecimalSeparator = getLocaleDecimalSeparator() || '.';
   const parts = formattedBalance.split(localeDecimalSeparator);
 
   return (

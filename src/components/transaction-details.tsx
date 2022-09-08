@@ -2,7 +2,7 @@ import * as React from 'react';
 import NextLink from 'next/link';
 
 import { Box, color, Flex, Stack, Text } from '@stacks/ui';
-import { getMemoString, microToStacks } from '@common/utils';
+import { getMemoString, getUsdValue, microToStacks } from '@common/utils';
 
 import { Badge } from '@components/badge';
 import { Link } from '@components/typography';
@@ -20,17 +20,20 @@ import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
 import { BlocksVisualizer } from '@features/blocks-visualizer';
 import { getTransactionStatus } from '@common/utils/transactions';
 import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 interface FeeComponentProps {
   fees: string;
   sponsored: boolean;
+  currentStxPrice: number;
 }
 
-const FeesComponent = React.memo(({ fees, sponsored }: FeeComponentProps) => (
+const FeesComponent = React.memo(({ fees, sponsored, currentStxPrice }: FeeComponentProps) => (
   <>
-    <Box>
+    <Stack spacing="extra-tight">
       <Text>{microToStacks(fees)} STX</Text>
-    </Box>
+      <Text color="ink.400">{getUsdValue(Number(fees), currentStxPrice, true)}</Text>
+    </Stack>
     {sponsored ? (
       <Badge ml="base" bg="ink.300">
         Sponsored
@@ -91,7 +94,11 @@ const getSenderName = (txType: Transaction['tx_type']) => {
   }
 };
 
-const transformDataToRowData = (d: Transaction | MempoolTransaction, block?: Block) => {
+const transformDataToRowData = (
+  d: Transaction | MempoolTransaction,
+  currentStxPrice: number,
+  block?: Block
+) => {
   const txid = {
     label: {
       children: 'Transaction ID',
@@ -166,7 +173,9 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction, block?: Blo
     label: {
       children: 'Fees',
     },
-    children: <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} />,
+    children: (
+      <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} currentStxPrice={currentStxPrice} />
+    ),
   };
   const blockTime = {
     condition: 'block_height' in d && typeof d.block_height !== 'undefined',
@@ -201,18 +210,23 @@ const transformDataToRowData = (d: Transaction | MempoolTransaction, block?: Blo
       const amount = {
         label: 'Amount',
         children: (
-          <Stack alignItems="center" isInline spacing="tight">
-            <Box width="24px" position="relative">
-              <Circle position="absolute" left={0} size="24px" bg={color('accent')} top="-12px">
+          <Stack alignItems="flex-start" isInline spacing="tight">
+            <Box width="24px" position="relative" mt="base-tight">
+              <Circle position="absolute" left={0} size="24px" bg={color('accent')}>
                 <StxInline strokeWidth={2} size="14px" color="white" />
               </Circle>
             </Box>
-            <Text fontSize="16px" color={color('text-title')} fontWeight="500">
-              {microToStacks(d.token_transfer.amount)}{' '}
-              <Text as="span" display="inline" opacity="0.5">
-                STX
+            <Stack ml="tight" spacing="extra-tight">
+              <Text fontSize="16px" color={color('text-title')} fontWeight="500">
+                {microToStacks(d.token_transfer.amount)}{' '}
+                <Text as="span" display="inline" opacity="0.5">
+                  STX
+                </Text>
               </Text>
-            </Text>
+              <Text fontSize="14px" color="ink.400">
+                {getUsdValue(Number(d.token_transfer.amount), currentStxPrice, true)}
+              </Text>
+            </Stack>
           </Stack>
         ),
       };
@@ -310,13 +324,17 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   ...rest
 }) => {
   const txStatus = getTransactionStatus(transaction);
+  const { data: currentStxPrice } = useCurrentStxPrice();
   const showBlocksVisualizer = txStatus === 'success_microblock' || txStatus === 'pending';
   return (
     <>
       <Section title="Summary" {...rest}>
         <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
           <Box width={['100%']}>
-            <Rows noTopBorder items={transformDataToRowData(transaction, block) as any} />
+            <Rows
+              noTopBorder
+              items={transformDataToRowData(transaction, currentStxPrice, block) as any}
+            />
           </Box>
         </Flex>
       </Section>
