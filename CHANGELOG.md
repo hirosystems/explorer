@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/hirosystems/explorer/compare/v1.41.0...v1.42.0) (2022-09-08)
+
+
+### Features
+
+* show usd values alongside balances on address page ([1258b9f](https://github.com/hirosystems/explorer/commit/1258b9f62322851d0f2e6f86c1c9258eab0eecc2))
+
 # [1.41.0](https://github.com/hirosystems/explorer/compare/v1.40.1...v1.41.0) (2022-09-07)
 
 
