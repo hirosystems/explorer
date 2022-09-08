@@ -5,6 +5,7 @@ import { css } from '@emotion/react';
 import { StxInline } from '@components/icons/stx-inline';
 import { Circle } from '@components/circle';
 import { useCurrentBtcPrice, useCurrentStxPrice } from '@common/hooks/use-current-prices';
+import { usdFormatter } from '@common/utils';
 
 const wrapperStyle = css`
   display: flex;
@@ -27,16 +28,11 @@ const priceStyle = css`
   font-size: 14px;
 `;
 
-const formatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
-
 export const BtcStxPrice: FC = () => {
   const { data: btcPrice } = useCurrentBtcPrice();
   const { data: stxPrice } = useCurrentStxPrice();
-  const formattedBtcPrice = formatter.format(btcPrice);
-  const formattedStxPrice = formatter.format(stxPrice);
+  const formattedBtcPrice = usdFormatter.format(btcPrice);
+  const formattedStxPrice = usdFormatter.format(stxPrice);
 
   if (!formattedStxPrice || !formattedBtcPrice) return null;
   return (

@@ -173,6 +173,13 @@ export const handleTxIdValidation = (query?: string): { success: boolean; messag
   }
 };
 
+export const formatStacksAmount = (amountInStacks: number): string => {
+  return amountInStacks.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 6,
+  });
+};
+
 /**
  * microToStacks
  *
@@ -185,9 +192,26 @@ export const microToStacks = (
 ): number | string => {
   const value = Number(Number(amountInMicroStacks) / Math.pow(10, 6));
   if (localString) {
-    return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+    return formatStacksAmount(value);
   }
   return value;
+};
+
+/**
+ * @param stxAmount - the amount of stacks (or microstacks) to convert to a USD price
+ * @param currentStxPrice - the current USD price of STX
+ * @param isInMicroStacks - if true, the stxAmount is in microstacks
+ *
+ * @returns string - the formatted current USD price of the given STX
+ */
+export const getUsdValue = (
+  stxAmount: number,
+  currentStxPrice: number,
+  isInMicroStacks: boolean = false
+): string => {
+  const amountInStx = isInMicroStacks ? (microToStacks(stxAmount, false) as number) : stxAmount;
+  const price = amountInStx * currentStxPrice;
+  return price < 0.01 ? '<$0.01' : usdFormatter.format(price);
 };
 
 /**
@@ -412,3 +436,8 @@ export function getContractId(
     ? transaction.contract_call.contract_id
     : undefined;
 }
+
+export const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
