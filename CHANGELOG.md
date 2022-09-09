@@ -1,3 +1,10 @@
+# [1.43.0](https://github.com/hirosystems/explorer/compare/v1.42.0...v1.43.0) (2022-09-09)
+
+
+### Features
+
+* show usd values alongside amount and fees on transaction page ([506b251](https://github.com/hirosystems/explorer/commit/506b25145c52220e44fea5a3600bfd409e7ad15c))
+
 # [1.42.0](https://github.com/hirosystems/explorer/compare/v1.41.0...v1.42.0) (2022-09-08)
 
 
