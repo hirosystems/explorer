@@ -1,3 +1,10 @@
+# [1.44.0](https://github.com/hirosystems/explorer/compare/v1.43.0...v1.44.0) (2022-09-09)
+
+
+### Features
+
+* show usd values within transaction lists ([23ab902](https://github.com/hirosystems/explorer/commit/23ab902ff8b9d4199819fb8b086a1d16a8069f20))
+
 # [1.43.0](https://github.com/hirosystems/explorer/compare/v1.42.0...v1.43.0) (2022-09-09)
 
 
