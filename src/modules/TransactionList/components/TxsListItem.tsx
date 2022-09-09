@@ -12,6 +12,7 @@ import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { AddressTransactionWithTransfersStxTransfers } from '@stacks/blockchain-api-client/src/generated/models';
+import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 interface TxsListItemProps {
   tx: Transaction;
@@ -22,13 +23,14 @@ export const TxsListItem: FC<TxsListItemProps> = memo(({ tx }) => {
   const isAnchored = !tx.is_unanchored;
   const didFail = !isConfirmed;
   const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const { data: currentStxPrice } = useCurrentStxPrice();
 
   const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
 
   const leftTitle = useMemo(
     () => (
       <Title fontWeight="500" display="block" fontSize="16px">
-        {getTxTitle(tx)}
+        {getTxTitle(tx, currentStxPrice)}
       </Title>
     ),
     [tx]

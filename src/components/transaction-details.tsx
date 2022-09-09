@@ -30,10 +30,15 @@ interface FeeComponentProps {
 
 const FeesComponent = React.memo(({ fees, sponsored, currentStxPrice }: FeeComponentProps) => (
   <>
-    <Stack spacing="extra-tight">
+    <Flex
+      flexDirection={['column', 'column', 'row']}
+      alignItems={['flex-start', 'flex-start', 'center']}
+    >
       <Text>{microToStacks(fees)} STX</Text>
-      <Text color="ink.400">{getUsdValue(Number(fees), currentStxPrice, true)}</Text>
-    </Stack>
+      <Text color="ink.400" ml={['none', 'none', 'base']}>
+        {getUsdValue(Number(fees), currentStxPrice, true)}
+      </Text>
+    </Flex>
     {sponsored ? (
       <Badge ml="base" bg="ink.300">
         Sponsored
@@ -210,24 +215,28 @@ const transformDataToRowData = (
       const amount = {
         label: 'Amount',
         children: (
-          <Stack alignItems="flex-start" isInline spacing="tight">
-            <Box width="24px" position="relative" mt="base-tight">
-              <Circle position="absolute" left={0} size="24px" bg={color('accent')}>
-                <StxInline strokeWidth={2} size="14px" color="white" />
-              </Circle>
-            </Box>
-            <Stack ml="tight" spacing="extra-tight">
+          <Flex
+            flexDirection={['column', 'column', 'row']}
+            alignItems={['flex-start', 'flex-start', 'center']}
+          >
+            <Stack alignItems="flex-start" isInline spacing="tight">
+              <Box width="24px" position="relative">
+                <Circle position="absolute" left={0} size="24px" bg={color('accent')}>
+                  <StxInline strokeWidth={2} size="14px" color="white" />
+                </Circle>
+              </Box>
+
               <Text fontSize="16px" color={color('text-title')} fontWeight="500">
                 {microToStacks(d.token_transfer.amount)}{' '}
                 <Text as="span" display="inline" opacity="0.5">
                   STX
                 </Text>
               </Text>
-              <Text fontSize="14px" color="ink.400">
-                {getUsdValue(Number(d.token_transfer.amount), currentStxPrice, true)}
-              </Text>
             </Stack>
-          </Stack>
+            <Text fontSize="14px" color="ink.400" ml={['extra-loose', 'extra-loose', 'base']}>
+              {getUsdValue(Number(d.token_transfer.amount), currentStxPrice, true)}
+            </Text>
+          </Flex>
         ),
       };
       const tokenTransferSender = {

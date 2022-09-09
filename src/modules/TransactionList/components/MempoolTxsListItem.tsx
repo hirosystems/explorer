@@ -11,6 +11,7 @@ import { AddressArea, Nonce, Timestamp } from '@components/transaction-item';
 import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 interface MempoolTxsListItemProps {
   tx: MempoolTransaction;
@@ -20,13 +21,14 @@ export const MempoolTxsListItem: FC<MempoolTxsListItemProps> = memo(({ tx }) => 
   const isPending = tx.tx_status === 'pending';
   const didFail = !isPending;
   const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const { data: currentStxPrice } = useCurrentStxPrice();
 
   const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
 
   const leftTitle = useMemo(
     () => (
       <Title fontWeight="500" display="block" fontSize="16px">
-        {getTxTitle(tx)}
+        {getTxTitle(tx, currentStxPrice)}
       </Title>
     ),
     []
