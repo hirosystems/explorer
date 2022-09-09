@@ -1,5 +1,5 @@
 /** @jsxRuntime classic */
-import { Box, color, ColorsStringLiteral, Stack } from '@stacks/ui';
+import { Box, color, ColorsStringLiteral, Flex, Stack } from '@stacks/ui';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { BorderStyleProperty } from 'csstype';
@@ -23,6 +23,7 @@ import { NextPageContext } from 'next';
 import BigNumber from 'bignumber.js';
 import { useQuery } from 'react-query';
 import blocks from '@pages/blocks';
+import React from 'react';
 
 dayjs.extend(relativeTime);
 
@@ -335,7 +336,10 @@ const ContractName = ({ fn, contract }: any) => {
   );
 };
 
-export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
+export const getTxTitle = (
+  transaction: Transaction | MempoolTransaction,
+  currentStxPrice?: number
+) => {
   switch (transaction.tx_type) {
     case 'smart_contract':
       return getContractName(transaction?.smart_contract?.contract_id);
@@ -347,7 +351,19 @@ export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
         />
       );
     case 'token_transfer':
-      return `${microToStacks(transaction.token_transfer.amount)} STX`;
+      return (
+        <Flex
+          flexDirection={['column', 'column', 'row']}
+          alignItems={['flex-start', 'flex-start', 'center']}
+        >
+          <Text>{microToStacks(transaction.token_transfer.amount)} STX</Text>
+          {currentStxPrice && (
+            <Text ml={['none', 'none', 'base']} fontSize="14px" color="ink.400">
+              {getUsdValue(Number(transaction.token_transfer.amount), currentStxPrice, true)}
+            </Text>
+          )}
+        </Flex>
+      );
     case 'coinbase':
       return `Block #${(transaction as Transaction).block_height} coinbase`;
     default:

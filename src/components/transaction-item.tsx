@@ -12,6 +12,7 @@ import { buildUrl } from '@components/links';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 import { Tooltip } from '@components/tooltip';
 import NextLink from 'next/link';
+import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 export { getTxTypeIcon };
 
@@ -186,7 +187,8 @@ const LargeVersion = React.memo(
     isHovered?: boolean;
     hideRightElements?: boolean;
   }) => {
-    const title = getTxTitle(tx);
+    const { data: currentStxPrice } = useCurrentStxPrice();
+    const title = getTxTitle(tx, currentStxPrice);
 
     const isPending = tx.tx_status === 'pending';
     const isConfirmed = tx.tx_status === 'success';
