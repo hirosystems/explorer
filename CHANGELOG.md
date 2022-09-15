@@ -1,3 +1,10 @@
+# [1.45.0](https://github.com/hirosystems/explorer/compare/v1.44.0...v1.45.0) (2022-09-15)
+
+
+### Features
+
+* fetch txs and blocks on focus ([fc8e9f3](https://github.com/hirosystems/explorer/commit/fc8e9f37f2a8f36712e7bff6437cefac10265500))
+
 # [1.44.0](https://github.com/hirosystems/explorer/compare/v1.43.0...v1.44.0) (2022-09-09)
 
 
