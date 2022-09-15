@@ -39,7 +39,7 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = () => {
   const blockQueries = getBlockQueries(networkUrl);
 
   const queryOptions = {
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     retry: 0,
   };
 

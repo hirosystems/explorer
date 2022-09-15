@@ -12,4 +12,5 @@ export interface Network {
   url: string;
   networkId: ChainID;
   mode: NetworkModes;
+  wsUrl?: string;
 }

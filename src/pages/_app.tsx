@@ -19,7 +19,6 @@ import { NetworkMode, NetworkModes } from '@common/types/network';
 import { AppConfig } from '@components/app-config';
 import { Modals } from '@components/modals';
 import { NetworkModeToast } from '@components/network-mode-toast';
-import { AtomDebug } from '@features/devtools';
 import { EnhancedStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';

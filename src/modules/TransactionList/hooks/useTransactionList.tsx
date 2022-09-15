@@ -8,12 +8,12 @@ export function useTransactionList(limit: number) {
   const confirmedTransactionsResponse = useInfiniteQuery(
     ['confirmedTransactions'],
     ({ pageParam }) => queries.fetchConfirmedTransactions(limit, pageParam || 0)(),
-    { getNextPageParam }
+    { getNextPageParam, refetchOnWindowFocus: true }
   );
   const mempoolTransactionsResponse = useInfiniteQuery(
     ['mempoolTransactions'],
     ({ pageParam }) => queries.fetchMempoolTransactions(limit, pageParam || 0)(),
-    { getNextPageParam }
+    { getNextPageParam, refetchOnWindowFocus: true }
   );
   return { confirmedTransactionsResponse, mempoolTransactionsResponse };
 }

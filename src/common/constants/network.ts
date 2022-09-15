@@ -22,12 +22,14 @@ export const DEFAULT_NETWORK_MAP: Record<string, Network> = {
     url: DEFAULT_MAINNET_SERVER,
     networkId: ChainID.Mainnet,
     mode: NetworkModes.Mainnet,
+    wsUrl: 'wss://stacks-node-api.mainnet.stacks.co/',
   },
   [DEFAULT_TESTNET_SERVER]: {
     label: 'stacks.co',
     url: DEFAULT_TESTNET_SERVER,
     networkId: ChainID.Testnet,
     mode: NetworkModes.Testnet,
+    wsUrl: 'wss://stacks-node-api.testnet.stacks.co/',
   },
   [DEFAULT_DEVNET_SERVER]: {
     label: 'devnet',

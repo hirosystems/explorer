@@ -54,10 +54,6 @@ const ContentWrapper = (props: GridProps) => {
   );
 };
 
-const queryOptions = {
-  // refetchOnWindowFocus: false,
-};
-
 const AddressPage: NextPage<any> = arg => {
   const { error } = arg;
 
@@ -70,25 +66,25 @@ const AddressPage: NextPage<any> = arg => {
   const { data: balance } = useQuery(
     addressQK(AddressQueryKeys.accountBalance, address),
     queries.fetchAccountBalance(address),
-    queryOptions
+    { refetchOnWindowFocus: true }
   );
 
-  const { data: nonces } = useQuery(
-    addressQK(AddressQueryKeys.nonce, address),
-    () => fetchNonce(apiServer)(address),
-    queryOptions
+  const { data: nonces } = useQuery(addressQK(AddressQueryKeys.nonce, address), () =>
+    fetchNonce(apiServer)(address)
   );
 
   useQuery(addressQK(AddressQueryKeys.coreApiInfo), queries.fetchCoreApiInfo());
 
   useQuery(
     addressQK(AddressQueryKeys.mempoolTransactionsForAddress, address),
-    queries.fetchMempoolTransactionsForAddress(address)
+    queries.fetchMempoolTransactionsForAddress(address),
+    { refetchOnWindowFocus: true }
   );
 
   useQuery(
     addressQK(AddressQueryKeys.transactionsForAddress, address),
-    queries.fetchTransactionsForAddress(address)
+    queries.fetchTransactionsForAddress(address),
+    { refetchOnWindowFocus: true }
   );
 
   const hasTokenBalances = hasTokenBalance(balance);
