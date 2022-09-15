@@ -19,7 +19,7 @@ function useBlockList(limit: number) {
   const { data: blocks, ...actions } = useInfiniteQuery(
     [BlockQueryKeys.blocks],
     ({ pageParam }) => queries.fetchBlocks(limit, pageParam || 0)(),
-    { getNextPageParam }
+    { getNextPageParam, refetchOnWindowFocus: true }
   );
   return { blocks, actions };
 }

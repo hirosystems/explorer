@@ -28,13 +28,13 @@ export const AccountTransactionList: React.FC<{ contractId: string }> = ({ contr
     transactionQK(TransactionQueryKeys.transactionsWithTransfersForAddressInfinite, contractId),
     ({ pageParam }) =>
       queries.fetchTransactionsWithTransfersForAddress(contractId, undefined, pageParam || 0)(),
-    { getNextPageParam, enabled: !!contractId }
+    { getNextPageParam, enabled: !!contractId, refetchOnWindowFocus: true }
   );
   const mempoolTransactionsQueryResponse = useInfiniteQuery(
     transactionQK(TransactionQueryKeys.mempoolTransactionsForAddressInfinite, contractId),
     ({ pageParam }) =>
       queries.fetchMempoolTransactionsForAddress(contractId, undefined, pageParam || 0)(),
-    { getNextPageParam, enabled: !!contractId }
+    { getNextPageParam, enabled: !!contractId, refetchOnWindowFocus: true }
   );
   const isLoading =
     transactionsWithTransfersQueryResponse.isLoading || mempoolTransactionsQueryResponse.isLoading;

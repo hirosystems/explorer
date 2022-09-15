@@ -38,7 +38,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
   const transactionQueries = getTransactionQueries(networkUrl);
 
   const queryOptions = {
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     retry: 0,
     staleTime: Infinity,
   };

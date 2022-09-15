@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { TransactionMeta } from '@components/meta/transactions';
 import { TransactionPageComponent } from '@components/transaction-page-component';
-
-import { getContractId } from '@common/utils';
-
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { Meta } from '@components/meta-head';
@@ -36,33 +33,6 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
     transactionQK(TransactionQueryKeys.transaction, txid),
     queries.fetchSingleTransaction(txid),
     queryOptions
-  );
-
-  const contractId = tx && getContractId(txid, tx);
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const noop = () => {};
-
-  useQuery(
-    contractId ? transactionQK(TransactionQueryKeys.mempoolTransactionsForAddress, contractId) : '',
-    contractId ? queries.fetchMempoolTransactionsForAddress(contractId) : noop,
-    { ...queryOptions, ...{ enabled: !!contractId } }
-  );
-  useQuery(
-    contractId ? transactionQK(TransactionQueryKeys.transactionsForAddress, contractId) : '',
-    contractId ? queries.fetchTransactionsForAddress(contractId) : noop,
-    { ...queryOptions, ...{ enabled: !!contractId } }
-  );
-  useQuery(
-    contractId ? transactionQK(TransactionQueryKeys.contract, contractId) : '',
-    contractId ? queries.fetchContract(contractId) : noop,
-    { ...queryOptions, ...{ enabled: !!contractId } }
-  );
-
-  useQuery(
-    contractId ? transactionQK(TransactionQueryKeys.accountBalance, contractId) : '',
-    contractId ? queries.fetchAccountBalance(contractId) : noop,
-    { ...queryOptions, ...{ enabled: !!contractId } }
   );
 
   if (error)

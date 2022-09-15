@@ -221,8 +221,8 @@ export const SkeletonTransactionList = ({ length }: { length?: number }) => {
   return (
     <>
       {[...Array(num)].map((_, i) => (
-        <div>
-          <SkeletonTransaction key={i} />
+        <div key={i}>
+          <SkeletonTransaction />
         </div>
       ))}
     </>
