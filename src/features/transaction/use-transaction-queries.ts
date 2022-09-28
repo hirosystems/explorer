@@ -10,7 +10,11 @@ import {
   TransactionResults,
   AddressTransactionsWithTransfersListResponse,
 } from '@stacks/stacks-blockchain-api-types';
-import { DEFAULT_LIST_LIMIT, MAX_BLOCK_TRANSACTIONS_PER_CALL } from '@common/constants';
+import {
+  DEFAULT_LIST_LIMIT,
+  DEFAULT_TX_EVENTS_LIMIT,
+  MAX_BLOCK_TRANSACTIONS_PER_CALL,
+} from '@common/constants';
 import { TransactionsListResponse } from '@store/transactions';
 
 export const getTransactionQueries = (networkUrl: string) => {
@@ -48,6 +52,7 @@ export const getTransactionQueries = (networkUrl: string) => {
     if (!isContractId) {
       const transaction = (await clients.transactionsApi.getTransactionById({
         txId,
+        eventLimit: DEFAULT_TX_EVENTS_LIMIT,
       })) as unknown as Transaction | MempoolTransaction;
       return transaction;
     }
@@ -55,6 +60,7 @@ export const getTransactionQueries = (networkUrl: string) => {
     const contractInfo = await fetchContract(txId)();
     const transaction = (await clients.transactionsApi.getTransactionById({
       txId: contractInfo.tx_id,
+      eventLimit: DEFAULT_TX_EVENTS_LIMIT,
     })) as Transaction | MempoolTransaction;
     return transaction;
   };
