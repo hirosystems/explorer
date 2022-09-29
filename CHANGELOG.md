@@ -1,3 +1,10 @@
+## [1.45.1](https://github.com/hirosystems/explorer/compare/v1.45.0...v1.45.1) (2022-09-29)
+
+
+### Bug Fixes
+
+* show maximums events for /txid ([6d4eedf](https://github.com/hirosystems/explorer/commit/6d4eedf34430f2aaadf8f63d9c53e5b501ad5ff7)), closes [#865](https://github.com/hirosystems/explorer/issues/865)
+
 # [1.45.0](https://github.com/hirosystems/explorer/compare/v1.44.0...v1.45.0) (2022-09-15)
 
 
