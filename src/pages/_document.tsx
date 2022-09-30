@@ -49,9 +49,8 @@ export default class MyDocument extends Document<DocumentProps> {
     return snippet.min(opts);
   }
 
-  console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY)
-
   render() {
+    console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY)
     return (
       <Html lang="en">
         <Head>
