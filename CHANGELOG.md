@@ -1,3 +1,10 @@
+# [1.46.0](https://github.com/hirosystems/explorer/compare/v1.45.1...v1.46.0) (2022-09-30)
+
+
+### Features
+
+* debug segment ([cab65cc](https://github.com/hirosystems/explorer/commit/cab65cc48bf244f9c9ad392025084410a5f8de28))
+
 ## [1.45.1](https://github.com/hirosystems/explorer/compare/v1.45.0...v1.45.1) (2022-09-29)
 
 
