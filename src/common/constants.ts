@@ -120,6 +120,7 @@ export const QueryRefreshRates: Record<'Default' | 'None', number | false> = {
 export const DEFAULT_BLOCKS_LIST_LIMIT = 11;
 export const DEFAULT_LIST_LIMIT_SMALL = 10;
 export const DEFAULT_LIST_LIMIT = 30;
+export const DEFAULT_TX_EVENTS_LIMIT = 200;
 
 export const MAX_BLOCK_TRANSACTIONS_PER_CALL = 200;
 
