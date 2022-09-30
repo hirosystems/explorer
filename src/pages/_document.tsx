@@ -14,8 +14,6 @@ import { extractCritical } from '@emotion/server';
 import { GlobalStyles, TextAreaOverrides } from '@components/global-styles';
 const { SEGMENT_WRITE_KEY, NODE_ENV } = process.env;
 
-console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY)
-
 export const THEME_STORAGE_KEY = 'theme';
 
 export default class MyDocument extends Document<DocumentProps> {
@@ -50,6 +48,8 @@ export default class MyDocument extends Document<DocumentProps> {
     // if (NODE_ENV !== 'production') return snippet.max(opts);
     return snippet.min(opts);
   }
+
+  console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY)
 
   render() {
     return (
