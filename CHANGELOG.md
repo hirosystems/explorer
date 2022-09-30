@@ -1,3 +1,10 @@
+## [1.48.1](https://github.com/hirosystems/explorer/compare/v1.48.0...v1.48.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* lint ([57592cf](https://github.com/hirosystems/explorer/commit/57592cf463ec2f67ee1d57dea81da30898524323))
+
 # [1.48.0](https://github.com/hirosystems/explorer/compare/v1.47.0...v1.48.0) (2022-09-30)
 
 
