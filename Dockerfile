@@ -1,20 +1,10 @@
-# Set Global ARGs
-# Pass these build args in to configure Segment
-ARG SEGMENT_WRITE_KEY
+FROM node:16-alpine AS build
 
-# Pass these build args in to configure Sentry
+ARG SEGMENT_WRITE_KEY
 ARG SENTRY_AUTH_TOKEN
 ARG SENTRY_DSN
 ARG SENTRY_LOG_LEVEL=warn
 ARG NODE_ENV=production
-
-FROM node:16-alpine AS build
-
-ENV SEGMENT_WRITE_KEY=${SEGMENT_WRITE_KEY}
-ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-ENV SENTRY_DSN=${SENTRY_DSN}
-ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
-ENV NODE_ENV=production
 
 WORKDIR /app
 
@@ -39,11 +29,18 @@ RUN yarn cache clean
 
 FROM node:16-alpine
 
+ARG SEGMENT_WRITE_KEY
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_DSN
+ARG SENTRY_LOG_LEVEL=warn
+ARG NODE_ENV=production
+
+# Set ENVs so they persist after image is built
 ENV SEGMENT_WRITE_KEY=${SEGMENT_WRITE_KEY}
 ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV SENTRY_DSN=${SENTRY_DSN}
 ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
-ENV NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
 RUN apk --no-cache add --virtual \
   yarn
