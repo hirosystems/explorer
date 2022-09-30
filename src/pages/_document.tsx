@@ -43,14 +43,14 @@ export default class MyDocument extends Document<DocumentProps> {
       // in app-config.js if needed later.
       page: true,
     };
-    console.log('opts', opts)
+    console.log('opts', opts);
     // Use if needed for dev mode
     // if (NODE_ENV !== 'production') return snippet.max(opts);
     return snippet.min(opts);
   }
 
   render() {
-    console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY)
+    console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY);
     return (
       <Html lang="en">
         <Head>

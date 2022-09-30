@@ -24,11 +24,11 @@ export const AppConfig: React.FC<AppConfigProps> = ({
   const { events } = useRouter();
 
   useEffect(() => {
-    console.log('mount')
+    console.log('mount');
     if (!window.analytics) return;
-    console.log('analytics')
+    console.log('analytics');
     events.on('routeChangeComplete', (url: string) => {
-      console.log('routeChangeComplete')
+      console.log('routeChangeComplete');
       return window.analytics?.page(url);
     });
   }, []);
