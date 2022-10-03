@@ -91,7 +91,7 @@ const Video: React.FC = memo(() => {
 });
 
 export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = memo(
-  forwardRefWithAs<BoxProps, 'div'>(({ as = 'div', height = '380px', ...rest }, ref) => {
+  forwardRefWithAs<BoxProps, 'div'>(({ as = 'div', height = '530px', ...rest }, ref) => {
     return (
       <Box
         className="metaverse-header"
