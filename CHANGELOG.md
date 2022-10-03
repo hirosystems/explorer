@@ -1,3 +1,10 @@
+# [1.50.0](https://github.com/hirosystems/explorer/compare/v1.49.0...v1.50.0) (2022-10-03)
+
+
+### Features
+
+* display hardcoded upgrade status ([3610f8e](https://github.com/hirosystems/explorer/commit/3610f8e7734c8ab575dd232a242578444a2cef39))
+
 # [1.49.0](https://github.com/hirosystems/explorer/compare/v1.48.1...v1.49.0) (2022-10-03)
 
 
