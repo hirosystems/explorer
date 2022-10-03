@@ -39,16 +39,16 @@ const iconStyle = css`
 
 export const StatusBar: React.FC = () => {
   const [status, setStatus] = useState<StatusProps>({
-    description: '',
-    indicator: Indicator.none,
+    description: 'Stacks Miners - Upgrade to  2.05.0.4.0 NOW!',
+    indicator: Indicator.critical,
   });
-  useEffect(() => {
-    void fetch('https://status.hiro.so/api/v2/status.json')
-      .then(res => res.json())
-      .then(data => setStatus(data.status));
-  }, []);
+  // useEffect(() => {
+  //   void fetch('https://status.hiro.so/api/v2/status.json')
+  //     .then(res => res.json())
+  //     .then(data => setStatus(data.status));
+  // }, []);
   const { indicator, description } = status;
-  if (indicator === Indicator.none) return null;
+  // if (indicator === Indicator.none) return null;
   const color = indicator === Indicator.critical ? '#C83532' : '#A96500';
   const icon =
     indicator === Indicator.critical ? (
@@ -62,21 +62,47 @@ export const StatusBar: React.FC = () => {
         {icon}
         <Text color={color} fontWeight={500} fontSize={'14px'} lineHeight={'21px'}>
           {description}
-          {description.endsWith('.') ? '' : '.'}
+          {/*{description.endsWith('.') ? '' : '.'}*/}
         </Text>{' '}
         <Text fontWeight={400} fontSize={'14px'}>
-          More information on the{' '}
+          Identified - ATTENTION: Stacks miners! If you haven't upgraded to 2.05.0.4.0 yet, you
+          really, really NEED to NOW! This is critical to clearing the mempool.<br/>Follow Stacks Status
+          for more details :{' '}
           <Link
-            href="https://status.hiro.so/"
+            href="https://twitter.com/stacksstatus"
             target="_blank"
             css={css`
               display: inline;
             `}
           >
-            Hiro status page
+            https://twitter.com/stacksstatus
+          </Link><br/>
+          Announcement:{' '}
+          <Link
+            href="https://groups.google.com/u/1/a/stacks.org/g/announce/c/i9tYoYK2cAI"
+            target="_blank"
+            css={css`
+              display: inline;
+            `}
+          >
+            https://groups.google.com/u/1/a/stacks.org/g/announce/c/i9tYoYK2cAI
           </Link>
-          .
+          <br />
+          Oct 03, 2022 - 14:00 UTC
         </Text>
+        {/*<Text fontWeight={400} fontSize={'14px'}>*/}
+        {/*  More information on the{' '}*/}
+        {/*  <Link*/}
+        {/*    href="https://status.hiro.so/"*/}
+        {/*    target="_blank"*/}
+        {/*    css={css`*/}
+        {/*      display: inline;*/}
+        {/*    `}*/}
+        {/*  >*/}
+        {/*    Hiro status page*/}
+        {/*  </Link>*/}
+        {/*  .*/}
+        {/*</Text>*/}
       </Box>
     </Box>
   );
