@@ -39,7 +39,7 @@ const iconStyle = css`
 
 export const StatusBar: React.FC = () => {
   const [status, setStatus] = useState<StatusProps>({
-    description: 'Stacks Miners - Upgrade to  2.05.0.4.0 NOW!',
+    description: 'Stacks Miners — Upgrade to  2.05.0.4.0 NOW!',
     indicator: Indicator.critical,
   });
   // useEffect(() => {
@@ -60,14 +60,14 @@ export const StatusBar: React.FC = () => {
     <Box css={backgroundStyle}>
       <Box css={wrapperStyle}>
         {icon}
-        <Text color={color} fontWeight={500} fontSize={'14px'} lineHeight={'21px'}>
+        <Text color={color} fontWeight={500} fontSize={'14px'} lineHeight={'1.5'}>
           {description}
           {/*{description.endsWith('.') ? '' : '.'}*/}
         </Text>{' '}
-        <Text fontWeight={400} fontSize={'14px'}>
-          Identified - ATTENTION: Stacks miners! If you haven't upgraded to 2.05.0.4.0 yet, you
+        <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'} mt={'10px'}>
+          Identified — ATTENTION: Stacks miners! If you haven't upgraded to 2.05.0.4.0 yet, you
           really, really NEED to NOW! This is critical to clearing the mempool.<br/>Follow Stacks Status
-          for more details :{' '}
+          for more details:{' '}
           <Link
             href="https://twitter.com/stacksstatus"
             target="_blank"
@@ -76,7 +76,8 @@ export const StatusBar: React.FC = () => {
             `}
           >
             https://twitter.com/stacksstatus
-          </Link><br/>
+          </Link>
+          <br/>
           Announcement:{' '}
           <Link
             href="https://groups.google.com/u/1/a/stacks.org/g/announce/c/i9tYoYK2cAI"
@@ -88,7 +89,7 @@ export const StatusBar: React.FC = () => {
             https://groups.google.com/u/1/a/stacks.org/g/announce/c/i9tYoYK2cAI
           </Link>
           <br />
-          Oct 03, 2022 - 14:00 UTC
+          <Text fontSize={'12px'}>Oct 03, 2022 — 14:00 UTC</Text>
         </Text>
         {/*<Text fontWeight={400} fontSize={'14px'}>*/}
         {/*  More information on the{' '}*/}
