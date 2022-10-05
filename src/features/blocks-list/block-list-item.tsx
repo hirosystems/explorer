@@ -28,7 +28,13 @@ export const BlockItem: React.FC<{ block: Block; index: number; length: number }
           <Stack as="span" isInline alignItems="center" spacing="base">
             <ItemIcon size="40px" type="block" />
             <Stack spacing="tight" as="span">
-              <Flex color={color(isHovered ? 'brand' : 'text-title')} alignItems="center">
+              <Flex
+                onClick={e => {
+                  e.stopPropagation(); // Prioritize child links instead of parent link
+                }}
+                color={color(isHovered ? 'brand' : 'text-title')}
+                alignItems="center"
+              >
                 <BtcStxBlockLinks
                   btcBlockHeight={block.burn_block_height}
                   stxBlockHeight={block.height}

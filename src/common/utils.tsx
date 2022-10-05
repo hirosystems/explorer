@@ -208,11 +208,11 @@ export const microToStacks = (
 export const getUsdValue = (
   stxAmount: number,
   currentStxPrice: number,
-  isInMicroStacks: boolean = false
+  isInMicroStacks = false
 ): string => {
   const amountInStx = isInMicroStacks ? (microToStacks(stxAmount, false) as number) : stxAmount;
   const price = amountInStx * currentStxPrice;
-  return price < 0.01 ? '<$0.01' : usdFormatter.format(price);
+  return price > 0 && price < 0.01 ? '<$0.01' : usdFormatter.format(price);
 };
 
 /**
