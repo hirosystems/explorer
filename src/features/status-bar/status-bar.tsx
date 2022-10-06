@@ -39,16 +39,16 @@ const iconStyle = css`
 
 export const StatusBar: React.FC = () => {
   const [status, setStatus] = useState<StatusProps>({
-    description: 'Stacks Miners — Upgrade to  2.05.0.4.0 NOW!',
-    indicator: Indicator.critical,
+    description: '',
+    indicator: Indicator.none,
   });
-  // useEffect(() => {
-  //   void fetch('https://status.hiro.so/api/v2/status.json')
-  //     .then(res => res.json())
-  //     .then(data => setStatus(data.status));
-  // }, []);
+  useEffect(() => {
+    void fetch('https://status.hiro.so/api/v2/status.json')
+      .then(res => res.json())
+      .then(data => setStatus(data.status));
+  }, []);
   const { indicator, description } = status;
-  // if (indicator === Indicator.none) return null;
+  if (indicator === Indicator.none) return null;
   const color = indicator === Indicator.critical ? '#C83532' : '#A96500';
   const icon =
     indicator === Indicator.critical ? (
@@ -62,48 +62,21 @@ export const StatusBar: React.FC = () => {
         {icon}
         <Text color={color} fontWeight={500} fontSize={'14px'} lineHeight={'1.5'}>
           {description}
-          {/*{description.endsWith('.') ? '' : '.'}*/}
+          {description.endsWith('.') ? '' : '.'}
         </Text>{' '}
-        <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'} mt={'10px'}>
-          Identified — ATTENTION: Stacks miners! If you haven't upgraded to 2.05.0.4.0 yet, you
-          really, really NEED to NOW! This is critical to clearing the mempool.<br/>Follow Stacks Status
-          for more details:{' '}
+        <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'}>
+          More information on the{' '}
           <Link
-            href="https://twitter.com/stacksstatus"
+            href="https://status.hiro.so/"
             target="_blank"
             css={css`
               display: inline;
             `}
           >
-            https://twitter.com/stacksstatus
+            Hiro status page
           </Link>
-          <br/>
-          Announcement:{' '}
-          <Link
-            href="https://groups.google.com/u/1/a/stacks.org/g/announce/c/i9tYoYK2cAI"
-            target="_blank"
-            css={css`
-              display: inline;
-            `}
-          >
-            https://groups.google.com/u/1/a/stacks.org/g/announce/c/i9tYoYK2cAI
-          </Link>
-          <br />
-          <Text fontSize={'12px'}>Oct 03, 2022 — 14:00 UTC</Text>
+          .
         </Text>
-        {/*<Text fontWeight={400} fontSize={'14px'}>*/}
-        {/*  More information on the{' '}*/}
-        {/*  <Link*/}
-        {/*    href="https://status.hiro.so/"*/}
-        {/*    target="_blank"*/}
-        {/*    css={css`*/}
-        {/*      display: inline;*/}
-        {/*    `}*/}
-        {/*  >*/}
-        {/*    Hiro status page*/}
-        {/*  </Link>*/}
-        {/*  .*/}
-        {/*</Text>*/}
       </Box>
     </Box>
   );
