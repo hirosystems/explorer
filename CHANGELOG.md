@@ -1,3 +1,10 @@
+## [1.51.1](https://github.com/hirosystems/explorer/compare/v1.51.0...v1.51.1) (2022-10-06)
+
+
+### Bug Fixes
+
+* use semantic links for stx and btc block links ([0e74539](https://github.com/hirosystems/explorer/commit/0e74539a92fbef416e1850528ce52b3b2ad03f80))
+
 # [1.51.0](https://github.com/hirosystems/explorer/compare/v1.50.0...v1.51.0) (2022-10-06)
 
 
