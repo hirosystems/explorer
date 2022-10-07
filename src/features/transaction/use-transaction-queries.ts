@@ -16,6 +16,7 @@ import {
   MAX_BLOCK_TRANSACTIONS_PER_CALL,
 } from '@common/constants';
 import { TransactionsListResponse } from '@store/transactions';
+import { GetTransactionByIdRequest } from '@stacks/blockchain-api-client';
 
 export const getTransactionQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -47,12 +48,17 @@ export const getTransactionQueries = (networkUrl: string) => {
     return { results };
   };
 
-  const fetchTransactionWithContract = async (txId: string) => {
+  const fetchTransactionWithContract = async ({
+    txId,
+    eventLimit = DEFAULT_TX_EVENTS_LIMIT,
+    eventOffset = 0,
+  }: GetTransactionByIdRequest) => {
     const isContractId = txId.includes('.');
     if (!isContractId) {
       const transaction = (await clients.transactionsApi.getTransactionById({
         txId,
-        eventLimit: DEFAULT_TX_EVENTS_LIMIT,
+        eventLimit,
+        eventOffset,
       })) as unknown as Transaction | MempoolTransaction;
       return transaction;
     }
@@ -60,7 +66,8 @@ export const getTransactionQueries = (networkUrl: string) => {
     const contractInfo = await fetchContract(txId)();
     const transaction = (await clients.transactionsApi.getTransactionById({
       txId: contractInfo.tx_id,
-      eventLimit: DEFAULT_TX_EVENTS_LIMIT,
+      eventLimit,
+      eventOffset,
     })) as Transaction | MempoolTransaction;
     return transaction;
   };
@@ -68,7 +75,31 @@ export const getTransactionQueries = (networkUrl: string) => {
   return {
     fetchBlockTransactions: (blockHash?: string) => () =>
       fetchBlockTransactions(blockHash) as unknown as TransactionsListResponse,
-    fetchSingleTransaction: (txId: string) => () => fetchTransactionWithContract(txId),
+    fetchSingleTransaction:
+      ({
+        txId,
+        eventLimit = DEFAULT_TX_EVENTS_LIMIT,
+        eventOffset = 0,
+      }: GetTransactionByIdRequest) =>
+      () =>
+        fetchTransactionWithContract({ txId, eventLimit, eventOffset }),
+    fetchEventsForTx:
+      ({
+        txId,
+        eventLimit = DEFAULT_TX_EVENTS_LIMIT,
+        eventOffset = 0,
+      }: GetTransactionByIdRequest) =>
+      async () => {
+        const transaction = await fetchTransactionWithContract({ txId, eventLimit, eventOffset });
+        const tx = transaction as Transaction;
+        const response = {
+          results: tx.events,
+          total: tx.event_count,
+          limit: eventLimit,
+          offset: eventOffset,
+        };
+        return response;
+      },
     fetchTransactionsForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>
       () => {

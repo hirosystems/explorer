@@ -49,7 +49,11 @@ const ContractCallPage: React.FC<{
         <Stack spacing="extra-loose">
           <TransactionDetails transaction={transaction} block={block} />
           {'events' in transaction && transaction.events && (
-            <Events txId={transaction.tx_id} events={transaction.events} />
+            <Events
+              txId={transaction.tx_id}
+              events={transaction.events}
+              event_count={transaction.event_count}
+            />
           )}
           <FunctionSummarySection
             isPending={isPending}

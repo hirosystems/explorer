@@ -58,7 +58,7 @@ const MicroblockSinglePage: NextPage<MicroblockSinglePageData> = () => {
   const useQueriesOptionsForTransactions = microblock?.txs.map(txId => {
     return {
       queryKey: microblockQK(MicroblockQueryKeys.tx, txId),
-      queryFn: transactionQueries.fetchSingleTransaction(txId),
+      queryFn: transactionQueries.fetchSingleTransaction({ txId }),
       enabled: !!microblock,
     };
   });

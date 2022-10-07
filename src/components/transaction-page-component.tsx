@@ -25,7 +25,7 @@ export const TransactionPageComponent = () => {
   const txId = query.txid as string;
   const { data: transaction } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txId),
-    queries.fetchSingleTransaction(txId)
+    queries.fetchSingleTransaction({ txId })
   );
 
   const networkUrl = useAppSelector(selectActiveNetwork).url;

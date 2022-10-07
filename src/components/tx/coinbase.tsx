@@ -23,7 +23,12 @@ const CoinbasePage: React.FC<{
         <Box>
           <TransactionDetails transaction={transaction} block={block} />
           {'events' in transaction && (
-            <Events txId={transaction.tx_id} mt="extra-loose" events={transaction.events} />
+            <Events
+              txId={transaction.tx_id}
+              mt="extra-loose"
+              events={transaction.events}
+              event_count={transaction.event_count}
+            />
           )}
         </Box>
         {block && <BtcAnchorBlockCard block={block} />}
