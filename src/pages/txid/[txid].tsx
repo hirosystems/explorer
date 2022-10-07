@@ -31,7 +31,7 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
 
   const { data: tx } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txid),
-    queries.fetchSingleTransaction(txid),
+    queries.fetchSingleTransaction({ txId: txid }),
     queryOptions
   );
 

@@ -108,7 +108,7 @@ export const TransactionMeta = () => {
   const txId = query.txid as string;
   const { data } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txId),
-    queries.fetchSingleTransaction(txId)
+    queries.fetchSingleTransaction({ txId })
   );
   const transaction = data || ({} as Transaction);
 

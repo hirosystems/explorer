@@ -7,5 +7,6 @@ export enum TransactionQueryKeys {
   contract = 'contract',
   accountBalance = 'accountBalance',
   lastFourBlocks = 'lastFourBlocks',
+  events = 'events',
 }
 export const transactionQK = (type: TransactionQueryKeys, id: string | undefined) => [type, id];

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import { Section } from '@components/section';
@@ -19,6 +19,10 @@ import { Circle } from '@components/circle';
 import { SenderRecipient } from '@components/addresses';
 import { AddressLink } from '@components/links';
 import { useApi } from '@common/api/client';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { Pending } from './status';
+import { useInfiniteTransactionEvents } from '@features/transaction/use-infinite-transaction-events';
+import { InfiniteData } from 'react-query';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {
@@ -306,27 +310,75 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
   );
 };
 
+export const EventsPaginatedList = ({
+  events,
+}: {
+  events: InfiniteData<ApiResponseWithResultsOffset<TransactionEvent>> | undefined;
+}) => {
+  return events ? (
+    <>
+      {events.pages.map(page => (
+        <Fragment key={page.offset}>
+          {page?.results.map((event, index, arr) => (
+            <Item key={index} event={event} isLast={index === arr.length - 1} />
+          ))}
+        </Fragment>
+      ))}
+    </>
+  ) : null;
+};
+
 const EventsList = ({ events }: { txId: string; events: TransactionEvent[] }) => {
-  // TODO: paginated data
   return (
-    <Box px="loose">
+    <>
       {events.map((event, index, arr) => (
         <Item key={index} event={event} isLast={index === arr.length - 1} />
       ))}
-    </Box>
+    </>
   );
 };
+
 export const Events = ({
   events,
   txId,
+  event_count,
   ...rest
 }: {
-  txId: string;
   events: TransactionEvent[];
+  txId: string;
+  event_count: number;
 } & FlexProps) => {
-  return events?.length ? (
+  // fetch extra events if there are more than the default returned by the fetch tx api
+  // and display them below
+
+  const { data, ...actions } = useInfiniteTransactionEvents(txId, event_count, events);
+
+  if (event_count === 0) return null;
+
+  return (
     <Section title="Events" {...rest}>
-      <EventsList events={events} txId={txId} />
+      <Box px="loose">
+        <EventsList events={events} txId={txId} />
+        <EventsPaginatedList events={data} />
+      </Box>
+      <Box
+        as="a"
+        borderTop={border()}
+        px="base"
+        py="base"
+        _hover={{ color: color('text-title'), cursor: 'pointer' }}
+        onClick={() => actions.hasNextPage && actions.fetchNextPage()}
+        color={color('text-caption')}
+      >
+        {actions.isFetchingNextPage ? (
+          <Flex alignItems="center" justifyContent="center">
+            <Box size="16px" as={Pending} mr="extra-tight" />
+            Loading...
+          </Flex>
+        ) : actions.hasNextPage ? (
+          <Caption color="currentColor">Load more events</Caption>
+        ) : null}
+      </Box>
     </Section>
-  ) : null;
+  );
 };

@@ -28,6 +28,7 @@ export const BlocksList: React.FC<
   FlexProps & { enforceLimit?: boolean; limit: number; infinite?: boolean }
 > = ({ infinite, limit = DEFAULT_LIST_LIMIT, enforceLimit, ...props }) => {
   const { blocks, actions } = useBlockList(limit);
+  console.log('🚀 ~ file: index.tsx ~ line 31 ~ blocks', blocks, actions);
   const hasBlocks = blocks?.pages?.[0]?.results?.length;
   const firstPage = blocks?.pages?.[0].results;
 
