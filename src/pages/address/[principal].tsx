@@ -73,20 +73,6 @@ const AddressPage: NextPage<any> = arg => {
     fetchNonce(apiServer)(address)
   );
 
-  useQuery(addressQK(AddressQueryKeys.coreApiInfo), queries.fetchCoreApiInfo());
-
-  useQuery(
-    addressQK(AddressQueryKeys.mempoolTransactionsForAddress, address),
-    queries.fetchMempoolTransactionsForAddress(address),
-    { refetchOnWindowFocus: true }
-  );
-
-  useQuery(
-    addressQK(AddressQueryKeys.transactionsForAddress, address),
-    queries.fetchTransactionsForAddress(address),
-    { refetchOnWindowFocus: true }
-  );
-
   const hasTokenBalances = hasTokenBalance(balance);
 
   if (error)
