@@ -1,3 +1,10 @@
+# [1.52.0](https://github.com/hirosystems/explorer/compare/v1.51.1...v1.52.0) (2022-10-12)
+
+
+### Features
+
+* show events with pagination (load more) ([7938cfd](https://github.com/hirosystems/explorer/commit/7938cfdf215a7729b06a0b94080e7baed2a16a98)), closes [#866](https://github.com/hirosystems/explorer/issues/866)
+
 ## [1.51.1](https://github.com/hirosystems/explorer/compare/v1.51.0...v1.51.1) (2022-10-06)
 
 
