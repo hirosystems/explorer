@@ -1,3 +1,10 @@
+## [1.52.1](https://github.com/hirosystems/explorer/compare/v1.52.0...v1.52.1) (2022-10-12)
+
+
+### Bug Fixes
+
+* align load more events ([b5fa1bf](https://github.com/hirosystems/explorer/commit/b5fa1bfc6668a80eafb75b1f169614d74efcf5cd))
+
 # [1.52.0](https://github.com/hirosystems/explorer/compare/v1.51.1...v1.52.0) (2022-10-12)
 
 
