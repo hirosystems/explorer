@@ -376,7 +376,9 @@ export const Events = ({
             Loading...
           </Flex>
         ) : actions.hasNextPage ? (
-          <Caption color="currentColor">Load more events</Caption>
+          <Flex alignItems="center" justifyContent="center">
+            <Caption color="currentColor">Load more events</Caption>
+          </Flex>
         ) : null}
       </Box>
     </Section>
