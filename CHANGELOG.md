@@ -1,3 +1,10 @@
+## [1.52.2](https://github.com/hirosystems/explorer/compare/v1.52.1...v1.52.2) (2022-10-13)
+
+
+### Bug Fixes
+
+* remove mempool tx duplicates ([623f951](https://github.com/hirosystems/explorer/commit/623f9515118f593c121479ea6a999c69f71306b0))
+
 ## [1.52.1](https://github.com/hirosystems/explorer/compare/v1.52.0...v1.52.1) (2022-10-12)
 
 
