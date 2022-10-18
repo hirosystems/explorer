@@ -6,6 +6,7 @@ import { Caption } from '@components/typography';
 
 import { border } from '@common/utils';
 import { Pending } from '@components/status';
+import { buildUrl } from './links';
 
 interface SectionFooterButtonPropsBase {
   isLoading?: boolean;
@@ -47,7 +48,7 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
       </Grid>
     ) : null
   ) : (
-    <NextLink href={`/${path}`} passHref>
+    <NextLink href={buildUrl(`/${path}`)} passHref>
       <Grid
         as="a"
         borderTop={border()}
