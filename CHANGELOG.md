@@ -1,3 +1,10 @@
+## [1.52.3](https://github.com/hirosystems/explorer/compare/v1.52.2...v1.52.3) (2022-10-19)
+
+
+### Bug Fixes
+
+* view all blocks and view all transactions incorrect redirect ([04f9ae3](https://github.com/hirosystems/explorer/commit/04f9ae30d0e933c15b02a5727c9637abe9047199))
+
 ## [1.52.2](https://github.com/hirosystems/explorer/compare/v1.52.1...v1.52.2) (2022-10-13)
 
 
