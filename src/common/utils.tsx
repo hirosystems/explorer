@@ -461,3 +461,12 @@ export const usdFormatter = new Intl.NumberFormat('en-US', {
 export function isNumeric(value: string): boolean {
   return /^-?\d+$/.test(value);
 }
+
+export const hexToString = (input?: string) => {
+  if (!input) return '';
+  const hex = input.toString();
+  let str = '';
+  for (let i = 0; i < hex.length; i += 2)
+    str += String.fromCharCode(parseInt(hex.slice(i, i + 2), 16));
+  return str;
+};
