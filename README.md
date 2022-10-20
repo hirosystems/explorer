@@ -21,7 +21,7 @@ Next let's make sure you have the tools to install the projects dependencies:
 
 We highly recommend using [Homebrew](https://brew.sh/).
 
-Now open your the Terminal, and make sure you are in the `/explorer` folder to run `yarn` to install the dependencies:
+Now open your Terminal, and make sure you are in the `/explorer` folder to run `yarn` to install the dependencies:
 
 ```sh
 yarn
@@ -39,6 +39,7 @@ NEXT_PUBLIC_DEPLOYMENT_URL=https://explorer.stacks.co
 NEXT_PUBLIC_MAINNET_ENABLED="true"
 NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL="10000"
 ```
+
 If you are in a mac, you'll need to add this to `/etc/paths`
 
 ### Run in development mode
