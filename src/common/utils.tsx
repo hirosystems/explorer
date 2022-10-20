@@ -457,3 +457,7 @@ export const usdFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 });
+
+export function isNumeric(value: string): boolean {
+  return /^-?\d+$/.test(value);
+}
