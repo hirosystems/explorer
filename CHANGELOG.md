@@ -1,3 +1,10 @@
+# [1.53.0](https://github.com/hirosystems/explorer/compare/v1.52.3...v1.53.0) (2022-10-20)
+
+
+### Features
+
+* enable search by block height ([ef1b597](https://github.com/hirosystems/explorer/commit/ef1b59706fac9fdd3eca1e0173a4f895c3276f9f))
+
 ## [1.52.3](https://github.com/hirosystems/explorer/compare/v1.52.2...v1.52.3) (2022-10-19)
 
 
