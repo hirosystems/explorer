@@ -1,3 +1,10 @@
+# [1.54.0](https://github.com/hirosystems/explorer/compare/v1.53.0...v1.54.0) (2022-10-20)
+
+
+### Features
+
+* display bns names ([f00797b](https://github.com/hirosystems/explorer/commit/f00797b55a271715c8bea45cb92dbc32163234d9))
+
 # [1.53.0](https://github.com/hirosystems/explorer/compare/v1.52.3...v1.53.0) (2022-10-20)
 
 
