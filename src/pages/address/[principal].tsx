@@ -69,6 +69,12 @@ const AddressPage: NextPage<any> = arg => {
     { refetchOnWindowFocus: true }
   );
 
+  const { data: nftHoldings } = useQuery(
+    addressQK(AddressQueryKeys.nftHoldings, address),
+    queries.fetchNftHoldings(address),
+    { refetchOnWindowFocus: true }
+  );
+
   const { data: nonces } = useQuery(addressQK(AddressQueryKeys.nonce, address), () =>
     fetchNonce(apiServer)(address)
   );
@@ -109,7 +115,7 @@ const AddressPage: NextPage<any> = arg => {
         {balance && (
           <Stack spacing="extra-loose">
             <StxBalances principal={address} balances={balance} />
-            <TokenBalancesCard balances={balance} />
+            <TokenBalancesCard balances={balance} nftHoldings={nftHoldings} />
           </Stack>
         )}
       </ContentWrapper>

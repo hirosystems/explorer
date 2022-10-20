@@ -15,6 +15,8 @@ interface AddressResultItemProps {
 export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) => {
   if (!result || !result.found || result.result.entity_type !== 'standard_address') return null;
   const principal = result.result.entity_id;
+  const displayName = result.result.display_name;
+  const truncatedPrincipal = truncateMiddle(principal, 4);
   const stx = useAtomValue(accountStxBalanceResponseState(principal));
   return (
     <AddressLink principal={principal}>
@@ -23,7 +25,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
           <ItemIcon type="principal" />
           <Box ml="base">
             <Title display="block" mb="extra-tight" className={'search-result-title'}>
-              {truncateMiddle(principal, 4)}
+              {displayName ? `${displayName} (${truncatedPrincipal})` : truncatedPrincipal}
             </Title>
             <Caption>{`${microToStacks(stx.balance)} STX`}</Caption>
           </Box>

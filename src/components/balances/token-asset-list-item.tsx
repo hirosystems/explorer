@@ -11,11 +11,13 @@ interface TokenAssetListItemProps extends FlexProps {
   amount: string;
   token: string;
   tokenType: 'non_fungible_tokens' | 'fungible_tokens';
+  bnsName?: string;
 }
 export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   amount,
   token,
   tokenType,
+  bnsName,
 }) => {
   const { address, asset, contract } = getAssetNameParts(token);
 
@@ -35,7 +37,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
           <TokenAvatar token={token} tokenMetadata={ftMetadata || nftMetadata} />
           <Stack spacing="extra-tight">
             <Text color={color('text-title')} fontWeight="600">
-              {asset}
+              {bnsName || asset}
             </Text>
             <Stack isInline spacing="extra-tight" divider={<Caption>∙</Caption>} wrap="wrap">
               <Caption>{ftMetadata?.symbol || getTicker(asset).toUpperCase()}</Caption>

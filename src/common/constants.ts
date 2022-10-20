@@ -139,3 +139,5 @@ export const TransactionStatus: Record<string, TxStatus> = {
   NON_CANONICAL: 'non_canonical',
   FAILED: 'failed',
 };
+
+export const BTC_BNS_CONTRACT = 'SP000000000000000000002Q6VF78.bns::names';

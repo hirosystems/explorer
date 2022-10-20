@@ -1,6 +1,7 @@
 import { useAtomValue } from 'jotai/utils';
 import { apiClientsState } from '@store/api-clients';
 import {
+  AddressSearchResult,
   BlockSearchResult,
   FoundResult,
   NotFoundResult,
@@ -12,16 +13,37 @@ import { selectSearchTerm } from '@features/search/search-slice';
 import { useDebounce } from '@common/hooks/use-debounce';
 import { isNumeric } from '@common/utils';
 import { Block } from '@stacks/blockchain-api-client';
+import { BTC_BNS_CONTRACT } from '@common/constants';
+import { cvToHex, tupleCV, bufferCVFromString } from '@stacks/transactions';
 
 export const useSearchQuery = (id: string) => {
-  const { searchApi, blocksApi } = useAtomValue(apiClientsState);
+  const { searchApi, blocksApi, nonFungibleTokensApi } = useAtomValue(apiClientsState);
+  const isBtcName = id.endsWith('.btc');
   return useQuery(
     ['search', id],
     async () => {
       let foundResult;
       let notFoundResult;
 
-      if (isNumeric(id)) {
+      if (isBtcName) {
+        try {
+          const nftHistory = await nonFungibleTokensApi.getNftHistory({
+            assetIdentifier: BTC_BNS_CONTRACT,
+            value: cvToHex(
+              tupleCV({
+                ['name']: bufferCVFromString(id.replace(new RegExp('.btc$'), '')),
+                ['namespace']: bufferCVFromString('btc'),
+              })
+            ),
+          });
+          if (nftHistory.results.length) {
+            foundResult = nftHistoryToSearchResult(
+              nftHistory.results[nftHistory.results.length - 1],
+              id
+            );
+          }
+        } catch (e) {}
+      } else if (isNumeric(id)) {
         // Fetch block height if numeric
         try {
           const block = await blocksApi.getBlockByHeight({ height: parseInt(id) });
@@ -80,6 +102,18 @@ function blockToSearchResult(block: Block): FoundResult {
       burn_block_time: block.burn_block_time,
       height: block.height,
     },
+  };
+  return {
+    found: true,
+    result: blockResult,
+  };
+}
+
+function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundResult {
+  const blockResult: AddressSearchResult = {
+    entity_id: nftHistoryEntry.recipient,
+    entity_type: SearchResultType.StandardAddress,
+    display_name: bnsName,
   };
   return {
     found: true,

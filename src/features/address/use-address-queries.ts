@@ -5,6 +5,7 @@ import { selectActiveNetwork } from '@common/state/network-slice';
 import {
   AddressBalanceResponse,
   MempoolTransactionListResponse,
+  NonFungibleTokenHoldingsList,
 } from '@stacks/stacks-blockchain-api-types';
 import { TransactionsListResponse } from '@store/transactions';
 
@@ -18,6 +19,12 @@ export const getAddressQueries = (networkUrl: string) => {
       return clients.accountsApi.getAccountBalance({
         principal: address,
       }) as unknown as AddressBalanceResponse;
+    },
+    fetchNftHoldings: (address: string) => () => {
+      return clients.nonFungibleTokensApi.getNftHoldings({
+        principal: address,
+        limit: 200,
+      }) as unknown as NonFungibleTokenHoldingsList;
     },
     fetchAccountInfo: (address: string) => () => {
       return clients.accountsApi.getAccountInfo({ principal: address });

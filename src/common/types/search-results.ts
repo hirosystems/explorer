@@ -37,6 +37,7 @@ export type SearchResult = FoundResult | NotFoundResult;
 export interface AddressSearchResult {
   entity_type: SearchResultType.StandardAddress;
   entity_id: string;
+  display_name?: string;
 }
 
 export interface ContractSearchResult {
