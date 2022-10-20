@@ -37,10 +37,7 @@ export const useSearchQuery = (id: string) => {
             ),
           });
           if (nftHistory.results.length) {
-            foundResult = nftHistoryToSearchResult(
-              nftHistory.results[nftHistory.results.length - 1],
-              id
-            );
+            foundResult = nftHistoryToSearchResult(nftHistory.results[0], id);
           }
         } catch (e) {}
       } else if (isNumeric(id)) {
