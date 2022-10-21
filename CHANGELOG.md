@@ -1,3 +1,10 @@
+## [1.54.1](https://github.com/hirosystems/explorer/compare/v1.54.0...v1.54.1) (2022-10-21)
+
+
+### Bug Fixes
+
+* redeploy ([2baff63](https://github.com/hirosystems/explorer/commit/2baff631ca49bf12349ab827e3bfd3e09a6689c0))
+
 # [1.54.0](https://github.com/hirosystems/explorer/compare/v1.53.0...v1.54.0) (2022-10-20)
 
 
