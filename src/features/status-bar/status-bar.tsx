@@ -65,7 +65,9 @@ export const StatusBar: React.FC = () => {
           {description.endsWith('.') ? '' : '.'}
         </Text>{' '}
         <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'}>
-          More information on the{' '}
+          The Stacks blockchain is not halted. Stacks Nodes running with event observer enabled will
+          likely crash on block #80742. We are working to get the Explorer back to chain tip. More
+          information & updates on the{' '}
           <Link
             href="https://status.hiro.so/"
             target="_blank"
