@@ -42,13 +42,8 @@ export const StatusBar: React.FC = () => {
     description: 'Stacks Miners — Upgrade to  2.05.0.5.1 NOW!',
     indicator: Indicator.critical,
   });
-  // useEffect(() => {
-  //   void fetch('https://status.hiro.so/api/v2/status.json')
-  //     .then(res => res.json())
-  //     .then(data => setStatus(data.status));
-  // }, []);
+
   const { indicator, description } = status;
-  // if (indicator === Indicator.none) return null;
   const color = indicator === Indicator.critical ? '#C83532' : '#A96500';
   const icon =
     indicator === Indicator.critical ? (
@@ -65,8 +60,8 @@ export const StatusBar: React.FC = () => {
           {description.endsWith('.') ? '' : '.'}
         </Text>
         <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'} mt={'10px'}>
-          ATTENTION: Stacks miners! Please upgrade to 2.05.0.5.1 NOW!
-          Follow Stacks Status for more details:{' '}
+          ATTENTION: Stacks miners! Please upgrade to 2.05.0.5.1 NOW! Follow Stacks Status for more
+          details:{' '}
           <Link
             href="https://twitter.com/stacksstatus"
             target="_blank"
