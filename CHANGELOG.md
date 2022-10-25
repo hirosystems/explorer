@@ -1,3 +1,11 @@
+# [1.55.0](https://github.com/hirosystems/explorer/compare/v1.54.1...v1.55.0) (2022-10-25)
+
+
+### Features
+
+* display hardcoded miner upgrade notification ([17546b5](https://github.com/hirosystems/explorer/commit/17546b58ca6d133729c8e5a3e07aa5d4469796ef))
+* display hardcoded miner upgrade notification -prettify ([ed518cc](https://github.com/hirosystems/explorer/commit/ed518ccbe437c3f8c15da35c47deab6ada1534b7))
+
 ## [1.54.1](https://github.com/hirosystems/explorer/compare/v1.54.0...v1.54.1) (2022-10-21)
 
 
