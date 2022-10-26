@@ -1,3 +1,10 @@
+# [1.56.0](https://github.com/hirosystems/explorer/compare/v1.55.0...v1.56.0) (2022-10-26)
+
+
+### Features
+
+* remove miners notification ([9eadb10](https://github.com/hirosystems/explorer/commit/9eadb10b597f845b8caccaaec6ae2bbb199d7be0))
+
 # [1.55.0](https://github.com/hirosystems/explorer/compare/v1.54.1...v1.55.0) (2022-10-25)
 
 
