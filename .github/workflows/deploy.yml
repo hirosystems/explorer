@@ -75,6 +75,7 @@ jobs:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
@@ -116,6 +117,7 @@ jobs:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
