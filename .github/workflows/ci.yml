@@ -38,14 +38,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
         with:
           extra_plugins: |
@@ -56,7 +54,6 @@ jobs:
         if: steps.semantic.outputs.new_release_version != ''
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_TOKEN || secrets.GITHUB_TOKEN }}
           ref: v${{ steps.semantic.outputs.new_release_version }}
 
       - name: Docker meta
@@ -109,7 +106,6 @@ jobs:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
@@ -130,9 +126,9 @@ jobs:
     steps:
       - name: Approve pending deployment
         run: |
-          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
+          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
           if [[ -n "${ENV_ID}" ]]; then
-            curl -s -X POST -H "Authorization: token ${{ secrets.GH_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
+            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
           fi
 
   deploy-prod:
@@ -153,7 +149,6 @@ jobs:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
