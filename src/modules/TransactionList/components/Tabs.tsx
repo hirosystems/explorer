@@ -1,29 +1,18 @@
 import { Box, BoxProps, color, Stack } from '@stacks/ui';
 import * as React from 'react';
 import { memo } from 'react';
-import { useTabs } from '../hooks/useTabs';
 import { Caption } from '@components/typography';
 import { capitalize } from '@common/utils';
 
 interface TabProps extends BoxProps {
   tab: string;
   index: number;
-  stateKey: string;
-  defaultIndex?: number;
+  currentIndex: number;
+  setCurrentIndex: (index: number) => void;
 }
 
-const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, stateKey, ...rest }) => {
-  const { currentIndex, setCurrentIndex } = useTabs(stateKey);
+const Tab: React.FC<TabProps> = memo(({ tab, index, currentIndex, setCurrentIndex }) => {
   const isActive = index === currentIndex;
-  const hoverProps = isActive
-    ? {
-        ..._hover,
-      }
-    : {
-        cursor: 'pointer',
-        color: color('brand'),
-        ..._hover,
-      };
   return (
     <Box
       as="button"
@@ -35,12 +24,14 @@ const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, stateKey, ...re
       px="base-loose"
       onClick={() => setCurrentIndex(index)}
       color={isActive ? color('text-title') : color('text-caption')}
-      _hover={hoverProps}
+      _hover={{
+        cursor: 'pointer',
+        color: color('brand'),
+      }}
       position="relative"
       bg={isActive ? color('bg-4') : 'transparent'}
       py="base-tight"
       borderRadius="10px"
-      {...rest}
     >
       <Caption opacity={isActive ? 1 : 0.85} fontSize={1} fontWeight={500} color="currentColor">
         {capitalize(tab)}
@@ -50,11 +41,25 @@ const Tab: React.FC<TabProps> = memo(({ tab, index, _hover = {}, stateKey, ...re
 });
 
 export const Tabs = memo(
-  ({ tabs, stateKey }: { defaultIndex?: number; tabs: string[]; stateKey: string }) => {
+  ({
+    tabs,
+    currentIndex,
+    setCurrentIndex,
+  }: {
+    tabs: string[];
+    currentIndex: number;
+    setCurrentIndex: (index: number) => void;
+  }) => {
     return (
       <Stack isInline spacing="0" pl="base">
         {tabs.map((tab, index) => (
-          <Tab stateKey={stateKey} tab={tab} index={index} key={index} />
+          <Tab
+            tab={tab}
+            index={index}
+            key={index}
+            currentIndex={currentIndex}
+            setCurrentIndex={setCurrentIndex}
+          />
         ))}
       </Stack>
     );

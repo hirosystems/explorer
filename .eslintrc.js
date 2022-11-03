@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['@stacks/eslint-config'],
+  extends: ['@stacks/eslint-config', 'plugin:react-hooks/recommended'],
   plugins: ['react', 'react-hooks'],
   parser: '@typescript-eslint/parser',
   parserOptions: {

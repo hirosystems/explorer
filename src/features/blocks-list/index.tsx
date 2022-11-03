@@ -7,12 +7,12 @@ import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { Caption } from '@components/typography';
 import { useHomeQueries } from '@features/home/useHomeQueries';
 import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
-import { getNextPageParam } from '@store/common';
 import React, { Fragment, useMemo } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
 import { BlockQueryKeys } from '@features/block/query-keys';
+import { getNextPageParam } from '@common/utils';
 
 function useBlockList(limit: number) {
   const queries = useHomeQueries();

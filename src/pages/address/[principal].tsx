@@ -91,7 +91,7 @@ const AddressPage: NextPage<any> = arg => {
 
   return (
     <PageWrapper>
-      <UnlockingScheduleModal />
+      <UnlockingScheduleModal balance={balance} />
       <Meta
         title={`STX Address ${truncateMiddle(address)}`}
         labels={[

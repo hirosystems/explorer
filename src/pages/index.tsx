@@ -1,4 +1,4 @@
-import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL, IS_BROWSER } from '@common/constants';
+import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
 import { HomePageTop } from '@components/home-page-top';
 import { Meta } from '@components/meta-head';
 import { PageWrapper } from '@components/page-wrapper';

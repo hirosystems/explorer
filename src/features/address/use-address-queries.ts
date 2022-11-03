@@ -6,8 +6,9 @@ import {
   AddressBalanceResponse,
   MempoolTransactionListResponse,
   NonFungibleTokenHoldingsList,
+  Transaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { TransactionsListResponse } from '@store/transactions';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
 
 export const getAddressQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -36,7 +37,7 @@ export const getAddressQueries = (networkUrl: string) => {
           principal: address,
           offset,
           limit,
-        }) as unknown as TransactionsListResponse;
+        }) as unknown as ApiResponseWithResultsOffset<Transaction>;
       },
     fetchMempoolTransactionsForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>

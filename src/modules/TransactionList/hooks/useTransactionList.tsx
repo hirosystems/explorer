@@ -1,6 +1,6 @@
 import { useHomeQueries } from '@features/home/useHomeQueries';
-import { getNextPageParam } from '@store/common';
 import { useInfiniteQuery } from 'react-query';
+import { getNextPageParam } from '@common/utils';
 
 export function useTransactionList(limit: number) {
   console.log('[debug] useTransactionList');

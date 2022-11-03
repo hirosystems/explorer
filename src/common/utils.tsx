@@ -1,14 +1,9 @@
 /** @jsxRuntime classic */
 import { Box, color, ColorsStringLiteral, Flex, Stack } from '@stacks/ui';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { BorderStyleProperty } from 'csstype';
-import Router from 'next/router';
 import {
-  Transaction,
   CoreNodeInfoResponse,
   MempoolTransaction,
-  Block,
+  Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
@@ -17,12 +12,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
-import { STX_DECIMALS, TESTNET_CHAIN_ID } from '@common/constants';
+import { TESTNET_CHAIN_ID } from '@common/constants';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
 import BigNumber from 'bignumber.js';
-import { useQuery } from 'react-query';
-import blocks from '@pages/blocks';
 import React from 'react';
 
 dayjs.extend(relativeTime);
@@ -34,8 +27,9 @@ const MICROSTACKS_IN_STACKS = 1000000;
  *
  * @param {String} stacksAddress - the STX address to validate
  */
-export const validateStacksAddress = (stacksAddress: string): boolean => {
+export const validateStacksAddress = (stacksAddress?: string): boolean => {
   try {
+    if (!stacksAddress) return false;
     c32addressDecode(stacksAddress);
     return true;
   } catch (e) {
@@ -297,8 +291,8 @@ export const assertConfirmedTransaction = (
 export const border = (
   _color: ColorsStringLiteral = 'border',
   width = 1,
-  style: BorderStyleProperty = 'solid'
-): string => `${width}px ${style as string} ${color(_color)}`;
+  style = 'solid'
+): string => `${width}px ${style} ${color(_color)}`;
 
 export function stringToHslColor(str: string, saturation: number, lightness: number): string {
   let hash = 0;
@@ -310,7 +304,10 @@ export function stringToHslColor(str: string, saturation: number, lightness: num
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
-export const onPaste = (event: ClipboardEvent, callback: (string: string) => any) => {
+export const onPaste = (
+  event: React.ClipboardEvent<HTMLInputElement>,
+  callback: (string: string) => any
+) => {
   if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
   if (event.clipboardData) {
     // used in some browsers for clipboardData
@@ -470,3 +467,13 @@ export const hexToString = (input?: string) => {
     str += String.fromCharCode(parseInt(hex.slice(i, i + 2), 16));
   return str;
 };
+
+export function getNextPageParam(options?: { limit: number; offset: number; total: number }) {
+  if (!options) return 0;
+  const { limit, offset, total } = options;
+  const sum = offset + limit;
+  const delta = total - sum;
+  const isAtEnd = delta === 0 || Math.sign(delta) === -1;
+  if (Math.abs(delta) === sum || isAtEnd) return undefined;
+  return sum;
+}

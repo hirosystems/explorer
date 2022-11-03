@@ -8,13 +8,11 @@ import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 import { TxNotFound } from '@components/tx-not-found';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { InView } from '@store/currently-in-view';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
 interface TransactionPageProps {
-  inView: InView;
   isPossiblyValid?: boolean;
   error?: boolean;
 }

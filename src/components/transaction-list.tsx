@@ -76,12 +76,7 @@ const Filter = () => {
         icon={IconFilter}
       />
       <Box pointerEvents="none" top={0} right="-32px" position="absolute" size="500px">
-        <FilterPanel
-          bg={color('bg')}
-          filterKey={TxFilterTypes.BlocksPageTxFilter}
-          showBorder
-          pointerEvents="all"
-        />
+        <FilterPanel bg={color('bg')} showBorder pointerEvents="all" />
       </Box>
     </Box>
   );

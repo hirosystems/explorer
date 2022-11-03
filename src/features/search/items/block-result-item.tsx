@@ -1,5 +1,3 @@
-import { useAtomValue } from 'jotai/utils';
-import { blocksSingleState } from '@store/blocks';
 import { Caption, Text, Title } from '@components/typography';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
 import pluralize from 'pluralize';
@@ -11,12 +9,9 @@ import { ItemIcon } from '@components/item-icon';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 
-const BlocksCaption = ({ hash }: { hash: string }) => {
-  const block = useAtomValue(blocksSingleState(hash));
+const BlocksCaption = ({ txsCount }: { txsCount: number }) => {
   return (
-    <Caption>
-      {addSepBetweenStrings([`${block.txs.length} ${pluralize('transaction', block.txs.length)}`])}
-    </Caption>
+    <Caption>{addSepBetweenStrings([`${txsCount} ${pluralize('transaction', txsCount)}`])}</Caption>
   );
 };
 
@@ -36,7 +31,7 @@ export const BlockResultItem: React.FC<BlockResultItemProps> = ({ result }) => {
               Block #{result.result.block_data.height}
             </Title>
             <SafeSuspense fallback={<Caption>Loading...</Caption>}>
-              <BlocksCaption hash={result.result.block_data.hash as string} />
+              <BlocksCaption txsCount={result.result.tx_count} />
             </SafeSuspense>
           </Stack>
         </Flex>
