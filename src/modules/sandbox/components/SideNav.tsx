@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, Stack, StxInline, StackProps, color } from '@stacks/ui';
+import { Box, Grid, Stack, StxInline, StackProps, color, Tooltip } from '@stacks/ui';
 import { border } from '@common/utils';
 import { ClarityIcon } from '@modules/sandbox/components/ClarityIcon';
 import FunctionIcon from 'mdi-react/FunctionIcon';
@@ -54,24 +54,28 @@ export const SideNav: React.FC<StackProps> = props => {
     <Stack borderRight={border()}>
       {navigation.map(nav =>
         nav.isDisabled ? null : (
-          <Link href={nav.url} key={nav.url}>
-            <Grid
-              borderRight={border()}
-              bg={nav.isSelected ? '#efefef' : color('bg')}
-              borderBottom={border()}
-              size="72px"
-              placeItems="center"
-              justifyContent="center"
-              color={color('text-title')}
-              marginBottom={'0px !important'}
-              _hover={{
-                cursor: 'pointer',
-                bg: '#efefef',
-              }}
-            >
-              {nav.icon}
-            </Grid>
-          </Link>
+          <Tooltip placement="left" label={nav.label} key={nav.url}>
+            <div>
+              <Link href={nav.url}>
+                <Grid
+                  borderRight={border()}
+                  bg={nav.isSelected ? '#efefef' : color('bg')}
+                  borderBottom={border()}
+                  size="72px"
+                  placeItems="center"
+                  justifyContent="center"
+                  color={color('text-title')}
+                  marginBottom={'0px !important'}
+                  _hover={{
+                    cursor: 'pointer',
+                    bg: '#efefef',
+                  }}
+                >
+                  {nav.icon}
+                </Grid>
+              </Link>
+            </div>
+          </Tooltip>
         )
       )}
     </Stack>
