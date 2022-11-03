@@ -92,7 +92,7 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   );
 };
 
-export const FilterPanel = React.memo(({ filterKey, showBorder, bg, ...rest }: any) => {
+export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
   const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } = useFilterState();
 
   const borderStyles = showBorder

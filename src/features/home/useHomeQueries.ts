@@ -1,9 +1,9 @@
 import { apiClients, createConfig } from '@common/api/client';
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
-import { BlocksListResponse } from '@store/blocks';
-import { MempoolTransactionsListResponse, TransactionsListResponse } from '@store/transactions';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getHomeQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -14,21 +14,21 @@ export const getHomeQueries = (networkUrl: string) => {
         clients.blocksApi.getBlockList({
           limit,
           offset,
-        }) as unknown as BlocksListResponse,
+        }) as unknown as ApiResponseWithResultsOffset<Block>,
     fetchConfirmedTransactions:
       (limit = DEFAULT_LIST_LIMIT_SMALL, offset = 0) =>
       () =>
         clients.transactionsApi.getTransactionList({
           limit,
           offset,
-        }) as unknown as TransactionsListResponse,
+        }) as unknown as ApiResponseWithResultsOffset<Transaction>,
     fetchMempoolTransactions:
       (limit = DEFAULT_LIST_LIMIT_SMALL, offset = 0) =>
       () =>
         clients.transactionsApi.getMempoolTransactionList({
           limit,
           offset,
-        }) as unknown as MempoolTransactionsListResponse,
+        }) as unknown as ApiResponseWithResultsOffset<MempoolTransaction>,
   };
 };
 

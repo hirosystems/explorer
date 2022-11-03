@@ -5,11 +5,13 @@ import { searchSlice, SearchState } from '@features/search/search-slice';
 import { nextReduxCookieMiddleware, wrapMakeStore } from 'next-redux-cookie-wrapper';
 import { createWrapper } from 'next-redux-wrapper';
 import { TxFilters, filterReducers } from '@features/transactions-filter/transactions-filter-slice';
+import { sandboxSlice, ConnectState } from '@modules/sandbox/sandbox-slice';
 
 const rootReducer = combineReducers({
   network: networkSlice.reducer,
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
+  connect: sandboxSlice.reducer,
   ...filterReducers,
 });
 
@@ -19,7 +21,9 @@ const makeStore = wrapMakeStore(() => {
     reducer: rootReducer,
     devTools: true,
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().prepend(
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }).prepend(
         nextReduxCookieMiddleware({
           subtrees: ['network'],
         })
@@ -37,6 +41,7 @@ export interface RootState extends TxFilters {
   network: NetworkState;
   modal: ModalState;
   search: SearchState;
+  connect: ConnectState;
 }
 
 export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];

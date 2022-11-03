@@ -16,16 +16,12 @@ import { IconButton } from '@components/icon-button';
 import { IconQrcode, IconX } from '@tabler/icons';
 import { Tooltip } from '@components/tooltip';
 import { StackingPercentage } from '@components/stacking';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import vkQr from '@vkontakte/vk-qr';
 import { openModal } from '@components/modals/modal-slice';
-import { VestingAddressData } from '@pages/api/vesting/[address]';
-import { useAtomValue } from 'jotai/utils';
-import { accountInViewTokenOfferingData } from '@store/currently-in-view';
 import { MODALS } from '@common/constants';
 import { useAppDispatch } from '@common/state/hooks';
 import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const { data: stxPrice } = useCurrentStxPrice();
@@ -81,14 +77,13 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
 });
 
 interface StxBalancesProps {
-  [key: string]: any;
-
-  unlocking?: VestingAddressData;
+  balances: AddressBalanceResponse;
+  principal: string;
 }
 
 export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
   const dispatch = useAppDispatch();
-  const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
+  const tokenOfferingData = balances?.token_offering_locked;
 
   const balance =
     typeof parseInt(balances?.stx?.balance) === 'number' ? parseInt(balances?.stx?.balance) : 0;

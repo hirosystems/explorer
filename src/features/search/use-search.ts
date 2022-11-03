@@ -1,5 +1,3 @@
-import { useAtomValue } from 'jotai/utils';
-import { apiClientsState } from '@store/api-clients';
 import {
   AddressSearchResult,
   BlockSearchResult,
@@ -15,9 +13,10 @@ import { isNumeric } from '@common/utils';
 import { Block } from '@stacks/blockchain-api-client';
 import { BTC_BNS_CONTRACT } from '@common/constants';
 import { cvToHex, tupleCV, bufferCVFromString } from '@stacks/transactions';
+import { useApi } from '@common/api/client';
 
 export const useSearchQuery = (id: string) => {
-  const { searchApi, blocksApi, nonFungibleTokensApi } = useAtomValue(apiClientsState);
+  const { searchApi, blocksApi, nonFungibleTokensApi } = useApi();
   const isBtcName = id.endsWith('.btc');
   return useQuery(
     ['search', id],
@@ -50,7 +49,7 @@ export const useSearchQuery = (id: string) => {
         } catch (e) {}
       } else {
         try {
-          foundResult = await searchApi.searchById({ id });
+          foundResult = await searchApi.searchById({ id, includeMetadata: true });
         } catch (e) {
           try {
             const data = await e.json();
@@ -99,6 +98,7 @@ function blockToSearchResult(block: Block): FoundResult {
       burn_block_time: block.burn_block_time,
       height: block.height,
     },
+    tx_count: block.txs?.length || 0,
   };
   return {
     found: true,

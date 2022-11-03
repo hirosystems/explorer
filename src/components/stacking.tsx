@@ -4,15 +4,12 @@ import { Caption, Text, Link, Title } from '@components/typography';
 import { Pending } from '@components/status';
 import { PercentageCircle } from '@components/percentage-circle';
 import { TxLink } from '@components/links';
-import { useStacksInfo } from 'hooks/use-stacks-info';
-import { useAccountInViewStackingStartBlockHeight } from 'hooks/currently-in-view-hooks';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
 import { useAddressQueries } from '@features/address/use-address-queries';
-import { useRouter } from 'next/router';
 import { getStackingStartBlockHeight } from '@common/utils/accounts';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
-import { getNextPageParam } from '@store/common';
+import { getNextPageParam } from '@common/utils';
 
 export const StackingPercentage = ({ balances, address }: any) => {
   const queries = useAddressQueries();

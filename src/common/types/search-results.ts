@@ -38,28 +38,34 @@ export interface AddressSearchResult {
   entity_type: SearchResultType.StandardAddress;
   entity_id: string;
   display_name?: string;
+  metadata?: any;
 }
 
 export interface ContractSearchResult {
   entity_type: SearchResultType.ContractAddress;
   entity_id: string;
   tx_data?: Partial<Transaction>;
+  metadata?: any;
 }
 
 export interface TxSearchResult {
   entity_type: SearchResultType.TxId;
   entity_id: string;
   tx_data: Partial<Transaction>;
+  metadata?: any;
 }
 
 export interface MempoolTxSearchResult {
   entity_type: SearchResultType.MempoolTxId;
   entity_id: string;
   tx_data: Partial<Transaction>;
+  metadata?: any;
 }
 
 export interface BlockSearchResult {
   entity_type: SearchResultType.BlockHash;
   entity_id: string;
   block_data: Partial<Block>;
+  tx_count: number;
+  metadata?: any;
 }

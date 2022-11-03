@@ -5,12 +5,13 @@ import { Caption } from '@components/typography';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { Box, Stack } from '@stacks/ui';
-import { getNextPageParam } from '@store/common';
 import * as React from 'react';
 import { useInfiniteQuery, UseInfiniteQueryResult } from 'react-query';
 import { MempoolTxsList, TxsListWithTransfers } from '@modules/TransactionList/components/TxsList';
-import { MempoolTransactionsListResponse } from '@store/transactions';
 import { useMemo } from 'react';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
+import { getNextPageParam } from '@common/utils';
 
 // TODO to move to a separate file
 export const Wrapper: React.FC = ({ children }) => (
@@ -51,22 +52,23 @@ export const AccountTransactionList: React.FC<{ contractId: string }> = ({ contr
         }, {} as Record<string, boolean>),
     [transactionsWithTransfersQueryResponse]
   );
-  const mempoolTransactionsQueryResponseDeduped: UseInfiniteQueryResult<MempoolTransactionsListResponse> =
-    useMemo(
-      () => ({
-        ...mempoolTransactionsQueryResponse,
-        ...(mempoolTransactionsQueryResponse.data
-          ? {
-              ...mempoolTransactionsQueryResponse.data,
-              pages: mempoolTransactionsQueryResponse.data?.pages?.map(page => ({
-                ...page,
-                results: page.results.filter(tx => !confirmedTxIds?.[tx.tx_id]),
-              })),
-            }
-          : {}),
-      }),
-      [mempoolTransactionsQueryResponse, confirmedTxIds]
-    );
+  const mempoolTransactionsQueryResponseDeduped: UseInfiniteQueryResult<
+    ApiResponseWithResultsOffset<MempoolTransaction>
+  > = useMemo(
+    () => ({
+      ...mempoolTransactionsQueryResponse,
+      ...(mempoolTransactionsQueryResponse.data
+        ? {
+            ...mempoolTransactionsQueryResponse.data,
+            pages: mempoolTransactionsQueryResponse.data?.pages?.map(page => ({
+              ...page,
+              results: page.results.filter(tx => !confirmedTxIds?.[tx.tx_id]),
+            })),
+          }
+        : {}),
+    }),
+    [mempoolTransactionsQueryResponse, confirmedTxIds]
+  );
 
   const isLoading =
     transactionsWithTransfersQueryResponse.isLoading || mempoolTransactionsQueryResponse.isLoading;

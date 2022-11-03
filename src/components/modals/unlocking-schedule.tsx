@@ -9,12 +9,13 @@ import { border } from '@common/utils';
 import { Badge } from '@components/badge';
 
 import dayjs from 'dayjs';
-import { useAtomValue } from 'jotai/utils';
-import { accountInViewTokenOfferingData } from '@store/currently-in-view';
 import { MODALS } from '@common/constants';
-import { currentStacksHeight } from '@store/info';
 import { useAppDispatch } from '@common/state/hooks';
 import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import { useQuery } from 'react-query';
+import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
+import { useAddressQueries } from '@features/address/use-address-queries';
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
   const value = Number(Number(amount) / Math.pow(10, 6));
@@ -33,16 +34,18 @@ const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest })
   );
 };
 
-const OverviewCard: React.FC = () => {
-  const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
+const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: number }> = ({
+  balance,
+  stacksTipHeight,
+}) => {
+  const tokenOfferingData = balance?.token_offering_locked;
   if (!tokenOfferingData) return null;
   const { total_locked, total_unlocked, unlock_schedule } = tokenOfferingData;
   const totalNumber = parseFloat(total_locked) + parseFloat(total_unlocked);
   const totalThatHasUnlocked = parseFloat(total_unlocked);
   const percentage = (totalThatHasUnlocked / totalNumber) * 100;
   const data = unlock_schedule;
-  const currentHeight = useAtomValue(currentStacksHeight);
-  const blocksLeft = data[data.length - 1].block_height - currentHeight;
+  const blocksLeft = stacksTipHeight ? data[data.length - 1].block_height - stacksTipHeight : 0;
 
   return (
     <Section p="extra-loose">
@@ -105,11 +108,13 @@ const OverviewCard: React.FC = () => {
   );
 };
 
-const Table: React.FC = () => {
-  const tokenOfferingData = useAtomValue(accountInViewTokenOfferingData);
+const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: number }> = ({
+  balance,
+  stacksTipHeight,
+}) => {
+  const tokenOfferingData = balance?.token_offering_locked;
   if (!tokenOfferingData) return null;
   const { unlock_schedule } = tokenOfferingData;
-  const currentHeight = useAtomValue(currentStacksHeight);
   let cumulativeAmount = 0;
   return (
     <Section mt="extra-loose" px="extra-loose" pb="tight" pt={['tight', 'tight', 'unset']}>
@@ -140,9 +145,9 @@ const Table: React.FC = () => {
         <Caption textAlign="right">Cumulative</Caption>
       </Grid>
       {unlock_schedule.map(({ block_height, amount }, index, arr) => {
-        const isReceived = block_height < currentHeight;
+        const isReceived = stacksTipHeight ? block_height < stacksTipHeight : false;
         cumulativeAmount += parseFloat(amount);
-        const difference = block_height - currentHeight;
+        const difference = stacksTipHeight ? block_height - stacksTipHeight : 0;
         const timeInSeconds = difference * 600 * 1000;
         const now = dayjs().valueOf();
         const relativeTime = dayjs(now + timeInSeconds).format(`MMM DD 'YY`);
@@ -208,9 +213,16 @@ const Table: React.FC = () => {
   );
 };
 
-export const UnlockingScheduleModal: React.FC = () => {
+export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse }> = ({
+  balance,
+}) => {
   const dispatch = useAppDispatch();
   const isOpen = selectOpenedModal() === MODALS.UNLOCKING_SCHEDULE;
+  const queries = useAddressQueries();
+  const { data: stacksInfo } = useQuery(
+    addressQK(AddressQueryKeys.coreApiInfo),
+    queries.fetchCoreApiInfo()
+  );
 
   const handleClose = () => {
     dispatch(closeModal());
@@ -245,7 +257,7 @@ export const UnlockingScheduleModal: React.FC = () => {
           </Text>
         </Box>
         <Box mt="base-tight" pb="extra-loose" px="extra-loose">
-          <OverviewCard />
+          <OverviewCard balance={balance} stacksTipHeight={stacksInfo?.stacks_tip_height} />
           <Section p="base" mt="extra-loose">
             <Stack isInline alignItems="center">
               <Box size="18px">
@@ -254,7 +266,7 @@ export const UnlockingScheduleModal: React.FC = () => {
               <Caption>This table only shows data from after the launch of Stacks 2.0</Caption>
             </Stack>
           </Section>
-          <Table />
+          <Table balance={balance} stacksTipHeight={stacksInfo?.stacks_tip_height} />
         </Box>
       </Stack>
     </ControlledModal>

@@ -1,6 +1,5 @@
 import { useHomeQueries } from '@features/home/useHomeQueries';
 import { useInfiniteQuery } from 'react-query';
-import { getNextPageParam } from '@store/common';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
@@ -14,6 +13,7 @@ import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { TransactionQueryKeys } from '@features/transaction/query-keys';
 import { NetworkModes } from '@common/types/network';
+import { getNextPageParam } from '@common/utils';
 
 const wrapperStyle = css`
   display: flex;

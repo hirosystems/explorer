@@ -3,7 +3,6 @@ import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import {
   AddressBalanceResponse,
-  ContractInterfaceResponse,
   MempoolTransaction,
   MempoolTransactionListResponse,
   Transaction,
@@ -15,20 +14,22 @@ import {
   DEFAULT_TX_EVENTS_LIMIT,
   MAX_BLOCK_TRANSACTIONS_PER_CALL,
 } from '@common/constants';
-import { TransactionsListResponse } from '@store/transactions';
 import { GetTransactionByIdRequest } from '@stacks/blockchain-api-client';
+import { ContractWithParsedAbi } from '@common/types/contract';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
 
 export const getTransactionQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
 
-  const fetchContract = (contractId: string) => async () => {
+  const fetchContract = (contractId?: string) => async () => {
+    if (!contractId) return Promise.reject();
     const contract = (await clients.smartContractsApi.getContractById({
       contractId,
     })) as any;
     return {
       ...contract,
-      abi: contract.abi ? (JSON.parse(contract.abi) as ContractInterfaceResponse) : undefined,
-    };
+      abi: contract.abi ? JSON.parse(contract.abi) : undefined,
+    } as ContractWithParsedAbi;
   };
 
   const fetchBlockTransactions = async (blockHash?: string) => {
@@ -74,7 +75,7 @@ export const getTransactionQueries = (networkUrl: string) => {
 
   return {
     fetchBlockTransactions: (blockHash?: string) => () =>
-      fetchBlockTransactions(blockHash) as unknown as TransactionsListResponse,
+      fetchBlockTransactions(blockHash) as unknown as ApiResponseWithResultsOffset<Transaction>,
     fetchSingleTransaction:
       ({
         txId,
@@ -107,7 +108,7 @@ export const getTransactionQueries = (networkUrl: string) => {
           principal: address,
           offset,
           limit,
-        }) as unknown as TransactionsListResponse;
+        }) as unknown as ApiResponseWithResultsOffset<Transaction>;
       },
     fetchTransactionsWithTransfersForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>
@@ -128,7 +129,8 @@ export const getTransactionQueries = (networkUrl: string) => {
         }) as unknown as MempoolTransactionListResponse;
       },
     fetchContract,
-    fetchAccountBalance: (address: string) => () => {
+    fetchAccountBalance: (address?: string) => () => {
+      if (!address) return Promise.reject();
       return clients.accountsApi.getAccountBalance({
         principal: address,
       }) as unknown as AddressBalanceResponse;

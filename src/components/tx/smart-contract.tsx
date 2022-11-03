@@ -23,20 +23,22 @@ const SmartContractPage: React.FC<{
   contractId?: string;
 }> = ({ transaction, block, contractId }) => {
   const queries = useTransactionQueries();
-  if (!contractId) return null;
 
   const { data: contract } = useQuery(
     transactionQK(TransactionQueryKeys.contract, contractId),
-    queries.fetchContract(contractId)
-    // TODO no refetch
+    queries.fetchContract(contractId),
+    { enabled: !!contractId }
   );
 
   const { data: balance } = useQuery(
     transactionQK(TransactionQueryKeys.accountBalance, contractId),
-    queries.fetchAccountBalance(contractId)
+    queries.fetchAccountBalance(contractId),
+    { enabled: !!contractId }
   );
 
   const source = contract?.source_code;
+
+  if (!contractId) return null;
 
   return (
     <>
@@ -68,12 +70,7 @@ const SmartContractPage: React.FC<{
             <>
               {hasStxBalance(balance) && (
                 <Box mb={block ? 'extra-loose' : 'unset'}>
-                  <StxBalances
-                    balances={balance}
-                    unlocking={{ found: false }}
-                    hasHadVesting={false}
-                    principal={contractId}
-                  />
+                  <StxBalances balances={balance} principal={contractId} />
                 </Box>
               )}
               {hasTokenBalance(balance) && <TokenBalancesCard balances={balance} />}

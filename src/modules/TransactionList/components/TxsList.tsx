@@ -1,11 +1,7 @@
-import type {
-  MempoolTransactionsListResponse,
-  TransactionsListResponse,
-} from '@store/transactions';
 import { useFilterState } from '@common/hooks/use-filter-state';
 import { TransferListItem, TxsListItem } from './TxsListItem';
 import { MempoolTxsListItem } from './MempoolTxsListItem';
-import { FC, Fragment, memo, useCallback, useMemo } from 'react';
+import { FC, Fragment, memo, useMemo } from 'react';
 import { UseInfiniteQueryResult } from 'react-query';
 import { SectionFooterAction } from '@components/section-footer-button';
 import { FilteredMessage } from '@components/filter-panel';
@@ -16,11 +12,12 @@ import {
   AddressTransactionWithTransfersFtTransfers,
   AddressTransactionWithTransfersNftTransfers,
 } from '@stacks/blockchain-api-client';
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { ftDecimals, getAssetNameParts, microToStacks } from '@common/utils';
 import { useTokenMetadata } from '@common/hooks/use-token-metadata';
 import { getTicker } from '@components/tx-events';
 import { AddressTransactionWithTransfersStxTransfers } from '@stacks/blockchain-api-client/src/generated/models';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
 
 interface TxsListCommonProps {
   showFooter?: boolean;
@@ -29,7 +26,7 @@ interface TxsListCommonProps {
 }
 
 interface TxsListProps extends TxsListCommonProps {
-  response: UseInfiniteQueryResult<TransactionsListResponse>;
+  response: UseInfiniteQueryResult<ApiResponseWithResultsOffset<Transaction>>;
 }
 
 export const TxsList: FC<TxsListProps> = memo(({ response, showFooter, infinite, limit }) => {
@@ -220,7 +217,7 @@ export const TxsListWithTransfers: FC<TxsListWithTransfersProps> = memo(
 );
 
 interface MempoolTxsListProps extends TxsListCommonProps {
-  response: UseInfiniteQueryResult<MempoolTransactionsListResponse>;
+  response: UseInfiniteQueryResult<ApiResponseWithResultsOffset<MempoolTransaction>>;
 }
 
 export const MempoolTxsList: FC<MempoolTxsListProps> = memo(

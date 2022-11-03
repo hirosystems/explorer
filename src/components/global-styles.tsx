@@ -7,6 +7,9 @@ const TextAreaOverrides = (
     styles={css`
       ${prismTheme};
 
+      .clarity-editor-wrapper {
+        position: absolute !important;
+      }
       .code-editor {
         pre {
           width: fit-content;

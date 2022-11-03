@@ -8,7 +8,7 @@ import { useFilterState } from '@common/hooks/use-filter-state';
 export const FilterButton = memo(() => {
   const { toggleFilterVisibility } = useFilterState();
   return (
-    <Box position="relative" zIndex={99999999}>
+    <Box position="relative" zIndex={98}>
       <CaptionAction
         position="relative"
         zIndex={999}
