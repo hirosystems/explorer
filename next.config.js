@@ -1,5 +1,4 @@
 const { withSentryConfig } = require('@sentry/nextjs');
-const BrotliPlugin = require('brotli-webpack-plugin');
 
 const withBundleAnalyzer =
   process.env.ANALYZE === 'true' ? require('@next/bundle-analyzer')() : x => x;
@@ -33,26 +32,6 @@ const moduleExports = withBundleAnalyzer({
     VERSION: process.env.VERSION,
     SENTRY_DSN: process.env.SENTRY_DSN,
     X_API_KEY: process.env.X_API_KEY,
-  },
-  webpack(config, { dev }) {
-    config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
-    const aliases = config.resolve.alias || (config.resolve.alias = {});
-    const externals = config.externals || [];
-
-    if (!dev) {
-      config.plugins.push(
-        new BrotliPlugin({
-          filename: '[path].br[query]',
-          test: /\.js$|\.css$|\.html$/,
-        })
-      );
-    }
-
-    aliases['@blockstack/stacks-transactions'] = '@stacks/transactions';
-    aliases['@blockstack/stacks-transactions/lib/clarity'] = '@stacks/transactions/dist/clarity';
-
-    config.externals = externals;
-    return config;
   },
   output: 'standalone',
 });
