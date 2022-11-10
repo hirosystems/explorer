@@ -1,3 +1,10 @@
+## [1.56.2](https://github.com/hirosystems/explorer/compare/v1.56.1...v1.56.2) (2022-11-10)
+
+
+### Bug Fixes
+
+* refactor sandbox ([45afca5](https://github.com/hirosystems/explorer/commit/45afca5798e70bf80e5dedc55c39d05092209f98))
+
 ## [1.56.1](https://github.com/hirosystems/explorer/compare/v1.56.0...v1.56.1) (2022-10-26)
 
 
