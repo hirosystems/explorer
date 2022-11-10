@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import { FaBitcoin } from 'react-icons/fa';
 import { Box, color } from '@stacks/ui';
 import { css } from '@emotion/react';
@@ -13,8 +13,12 @@ const wrapperStyle = css`
   gap: 5px;
 `;
 
-const iconStyle = css`
+const iconStyle = (bg: string) => css`
   position: relative;
+  height: 18px;
+  width: 18px;
+  border-radius: 18px;
+  background-color: ${bg};
   svg {
     position: absolute;
     left: 50%;
@@ -38,13 +42,13 @@ export const BtcStxPrice: FC = () => {
   return (
     <Fragment>
       <Box css={wrapperStyle}>
-        <Circle size="18px" bg={'#fff'} css={iconStyle}>
+        <Circle css={iconStyle('white')}>
           <FaBitcoin color={'#f7931a'} size={19} />
         </Circle>
         <Box css={priceStyle}>{formattedBtcPrice}</Box>
       </Box>
       <Box css={wrapperStyle}>
-        <Circle size="19px" bg={color('accent')} css={iconStyle}>
+        <Circle css={iconStyle(color('accent'))}>
           <StxInline strokeWidth={2} size="11px" color="white" />
         </Circle>
         <Box css={priceStyle}>{formattedStxPrice}</Box>

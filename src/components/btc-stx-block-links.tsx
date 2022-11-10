@@ -26,7 +26,18 @@ const wrapperStyle = css`
 `;
 
 const iconStyle = css`
+  position: relative;
   margin-right: 3px;
+  height: 18px;
+  width: 18px;
+  border-radius: 18px;
+  background-color: ${color('accent')};
+  svg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 `;
 
 const linkStyle = (secondary?: boolean, clickable?: boolean, fontSize?: string) => css`
@@ -66,7 +77,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
 
   return (
     <Box css={wrapperStyle}>
-      <Circle size="19px" bg={color('accent')} css={iconStyle}>
+      <Circle css={iconStyle}>
         <StxInline strokeWidth={2} size="11px" color="white" />
       </Circle>
       <BlockLink hash={stxBlockHash} networkMode={activeNetworkMode}>
