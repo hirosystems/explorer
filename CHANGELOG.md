@@ -1,3 +1,10 @@
+# [1.57.0](https://github.com/hirosystems/explorer/compare/v1.56.2...v1.57.0) (2022-11-11)
+
+
+### Features
+
+* remove babel and use swc ([ee0dc00](https://github.com/hirosystems/explorer/commit/ee0dc008bf1e36b7a3eea6833b231c88cc694e72))
+
 ## [1.56.2](https://github.com/hirosystems/explorer/compare/v1.56.1...v1.56.2) (2022-11-10)
 
 
