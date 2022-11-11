@@ -17,18 +17,19 @@ const hoverStyle = css`
 export const ResultItemWrapper = forwardRefWithAs<FlexProps, 'a'>(
   ({ children, as = 'a', ...rest }, ref) => {
     return (
-      <Flex
-        as={as}
-        p="loose"
-        alignItems="center"
-        position="relative"
-        justifyContent="space-between"
-        ref={ref}
-        css={hoverStyle}
-        {...rest}
-      >
-        <Flex flexGrow={1} alignItems="center" justifyContent="space-between">
-          {children}
+      <Flex css={hoverStyle}>
+        <Flex
+          as={as}
+          p="loose"
+          alignItems="center"
+          position="relative"
+          justifyContent="space-between"
+          ref={ref}
+          {...rest}
+        >
+          <Flex flexGrow={1} alignItems="center" justifyContent="space-between">
+            {children}
+          </Flex>
         </Flex>
       </Flex>
     );

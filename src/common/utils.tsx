@@ -17,6 +17,7 @@ import { NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
 import BigNumber from 'bignumber.js';
 import React from 'react';
+import { StxPriceButton } from '@modules/stxPrice/StxPriceButton';
 
 dayjs.extend(relativeTime);
 
@@ -194,18 +195,18 @@ export const microToStacks = (
 
 /**
  * @param stxAmount - the amount of stacks (or microstacks) to convert to a USD price
- * @param currentStxPrice - the current USD price of STX
+ * @param stxPrice - the current USD price of STX
  * @param isInMicroStacks - if true, the stxAmount is in microstacks
  *
  * @returns string - the formatted current USD price of the given STX
  */
 export const getUsdValue = (
   stxAmount: number,
-  currentStxPrice: number,
+  stxPrice: number,
   isInMicroStacks = false
 ): string => {
   const amountInStx = isInMicroStacks ? (microToStacks(stxAmount, false) as number) : stxAmount;
-  const price = amountInStx * currentStxPrice;
+  const price = amountInStx * stxPrice;
   return price > 0 && price < 0.01 ? '<$0.01' : usdFormatter.format(price);
 };
 
@@ -333,10 +334,7 @@ const ContractName = ({ fn, contract }: any) => {
   );
 };
 
-export const getTxTitle = (
-  transaction: Transaction | MempoolTransaction,
-  currentStxPrice?: number
-) => {
+export const getTxTitle = (transaction: Transaction | MempoolTransaction, showPrice?: boolean) => {
   switch (transaction.tx_type) {
     case 'smart_contract':
       return getContractName(transaction?.smart_contract?.contract_id);
@@ -354,10 +352,8 @@ export const getTxTitle = (
           alignItems={['flex-start', 'flex-start', 'center']}
         >
           <Text>{microToStacks(transaction.token_transfer.amount)} STX</Text>
-          {currentStxPrice && (
-            <Text ml={['none', 'none', 'base']} fontSize="14px" color="ink.400">
-              {getUsdValue(Number(transaction.token_transfer.amount), currentStxPrice, true)}
-            </Text>
+          {showPrice && (
+            <StxPriceButton tx={transaction} value={Number(transaction.token_transfer.amount)} />
           )}
         </Flex>
       );

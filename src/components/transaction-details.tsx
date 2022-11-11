@@ -20,32 +20,30 @@ import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
 import { BlocksVisualizer } from '@features/blocks-visualizer';
 import { getTransactionStatus } from '@common/utils/transactions';
 import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
-import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
+import { StxPriceButton } from '@modules/stxPrice/StxPriceButton';
 
 interface FeeComponentProps {
-  fees: string;
-  sponsored: boolean;
-  currentStxPrice: number;
+  tx: Transaction | MempoolTransaction;
 }
 
-const FeesComponent = React.memo(({ fees, sponsored, currentStxPrice }: FeeComponentProps) => (
-  <>
-    <Flex
-      flexDirection={['column', 'column', 'row']}
-      alignItems={['flex-start', 'flex-start', 'center']}
-    >
-      <Text>{microToStacks(fees)} STX</Text>
-      <Text color="ink.400" ml={['none', 'none', 'base']}>
-        {getUsdValue(Number(fees), currentStxPrice, true)}
-      </Text>
-    </Flex>
-    {sponsored ? (
-      <Badge ml="base" bg="ink.300">
-        Sponsored
-      </Badge>
-    ) : null}
-  </>
-));
+const FeesComponent = React.memo(({ tx }: FeeComponentProps) => {
+  return (
+    <>
+      <Flex
+        flexDirection={['column', 'column', 'row']}
+        alignItems={['flex-start', 'flex-start', 'center']}
+      >
+        <Text>{microToStacks(tx.fee_rate)} STX</Text>
+        <StxPriceButton tx={tx} value={Number(tx.fee_rate)} />
+      </Flex>
+      {tx.sponsored ? (
+        <Badge ml="base" bg="ink.300">
+          Sponsored
+        </Badge>
+      ) : null}
+    </>
+  );
+});
 
 const BlockComponent = React.memo(
   ({
@@ -99,22 +97,18 @@ const getSenderName = (txType: Transaction['tx_type']) => {
   }
 };
 
-const transformDataToRowData = (
-  d: Transaction | MempoolTransaction,
-  currentStxPrice: number,
-  block?: Block
-) => {
+const transformDataToRowData = (tx: Transaction | MempoolTransaction, block?: Block) => {
   const txid = {
     label: {
       children: 'Transaction ID',
     },
-    children: d.tx_id,
-    copy: d.tx_id,
+    children: tx.tx_id,
+    copy: tx.tx_id,
   };
   const canonical = {
     condition:
-      (d.tx_status !== TransactionStatus.PENDING && 'canonical' in d && !d.canonical) ||
-      ('microblock_canonical' in d && !d.microblock_canonical),
+      (tx.tx_status !== TransactionStatus.PENDING && 'canonical' in tx && !tx.canonical) ||
+      ('microblock_canonical' in tx && !tx.microblock_canonical),
     label: {
       children: 'Non-canonical',
     },
@@ -135,82 +129,80 @@ const transformDataToRowData = (
     ),
   };
   const contractName =
-    d.tx_type === 'contract_call'
+    tx.tx_type === 'contract_call'
       ? {
-          condition: d.tx_type === 'contract_call',
+          condition: tx.tx_type === 'contract_call',
           label: {
             children: 'Contract',
           },
           children:
-            d.tx_type === 'contract_call' ? (
-              <TxLink txid={d.contract_call.contract_id}>
-                <Link as="a">{d.contract_call.contract_id}</Link>
+            tx.tx_type === 'contract_call' ? (
+              <TxLink txid={tx.contract_call.contract_id}>
+                <Link as="a">{tx.contract_call.contract_id}</Link>
               </TxLink>
             ) : (
               ''
             ),
-          copy: d.tx_type === 'contract_call' ? d.contract_call.contract_id : '',
+          copy: tx.tx_type === 'contract_call' ? tx.contract_call.contract_id : '',
         }
       : {
-          condition: d.tx_type === 'smart_contract',
+          condition: tx.tx_type === 'smart_contract',
           label: {
             children: 'Contract name',
           },
-          children: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
-          copy: d.tx_type === 'smart_contract' ? d.smart_contract.contract_id : '',
+          children: tx.tx_type === 'smart_contract' ? tx.smart_contract.contract_id : '',
+          copy: tx.tx_type === 'smart_contract' ? tx.smart_contract.contract_id : '',
         };
   const sender = {
-    condition: typeof d.sender_address !== 'undefined',
+    condition: typeof tx.sender_address !== 'undefined',
     label: {
-      children: getSenderName(d.tx_type),
+      children: getSenderName(tx.tx_type),
     },
-    children: <AddressComponent principal={d.sender_address} />,
-    copy: d.sender_address,
+    children: <AddressComponent principal={tx.sender_address} />,
+    copy: tx.sender_address,
   };
   const nonce = {
     label: {
       children: `Nonce`,
     },
-    children: <NoncesComponent nonce={d.nonce} />,
-    copy: d.nonce,
+    children: <NoncesComponent nonce={tx.nonce} />,
+    copy: tx.nonce,
   };
   const fees = {
     label: {
       children: 'Fees',
     },
-    children: (
-      <FeesComponent fees={d.fee_rate} sponsored={d.sponsored} currentStxPrice={currentStxPrice} />
-    ),
+    children: <FeesComponent tx={tx} />,
   };
   const blockTime = {
-    condition: 'block_height' in d && typeof d.block_height !== 'undefined',
+    condition: 'block_height' in tx && typeof tx.block_height !== 'undefined',
     label: {
       children: 'Block height',
     },
     children:
-      'block_height' in d ? (
+      'block_height' in tx ? (
         <BlockComponent
-          stxBlockHeight={d.block_height}
-          stxBlockHash={d.block_hash}
+          stxBlockHeight={tx.block_height}
+          stxBlockHash={tx.block_hash}
           btcBlockHeight={block?.burn_block_height}
-          ts={d.parent_burn_block_time || d.burn_block_time}
+          ts={tx.parent_burn_block_time || tx.burn_block_time}
         />
       ) : null,
   };
   const blockHash = {
-    condition: 'block_hash' in d && typeof d.block_hash !== 'undefined',
+    condition: 'block_hash' in tx && typeof tx.block_hash !== 'undefined',
     label: {
       children: 'Block hash',
     },
-    children: 'block_hash' in d && (
-      <BlockLink hash={d.block_hash}>
-        <Link>{d.block_hash}</Link>
+    children: 'block_hash' in tx && (
+      <BlockLink hash={tx.block_hash}>
+        <Link>{tx.block_hash}</Link>
       </BlockLink>
     ),
-    copy: 'block_hash' in d && d.block_hash,
+    copy: 'block_hash' in tx && tx.block_hash,
   };
 
-  switch (d.tx_type) {
+  switch (tx.tx_type) {
     case 'token_transfer': {
       const amount = {
         label: 'Amount',
@@ -227,32 +219,30 @@ const transformDataToRowData = (
               </Box>
 
               <Text fontSize="16px" color={color('text-title')} fontWeight="500">
-                {microToStacks(d.token_transfer.amount)}{' '}
+                {microToStacks(tx.token_transfer.amount)}{' '}
                 <Text as="span" display="inline" opacity="0.5">
                   STX
                 </Text>
               </Text>
             </Stack>
-            <Text fontSize="14px" color="ink.400" ml={['extra-loose', 'extra-loose', 'base']}>
-              {getUsdValue(Number(d.token_transfer.amount), currentStxPrice, true)}
-            </Text>
+            <StxPriceButton tx={tx} value={Number(tx.token_transfer.amount)} />
           </Flex>
         ),
       };
       const tokenTransferSender = {
-        condition: typeof d.sender_address !== 'undefined',
+        condition: typeof tx.sender_address !== 'undefined',
         label: {
-          children: getSenderName(d.tx_type),
+          children: getSenderName(tx.tx_type),
         },
         children: (
           <Stack isInline>
             <Box color={color('text-caption')}>
               <IconArrowUpRight size="16px" />
             </Box>
-            <AddressComponent principal={d.sender_address} />
+            <AddressComponent principal={tx.sender_address} />
           </Stack>
         ),
-        copy: d.sender_address,
+        copy: tx.sender_address,
       };
       const recipient = {
         label: {
@@ -263,16 +253,16 @@ const transformDataToRowData = (
             <Box color={color('text-caption')}>
               <IconArrowDownRight size="16px" />
             </Box>
-            <AddressComponent principal={d.token_transfer.recipient_address} />
+            <AddressComponent principal={tx.token_transfer.recipient_address} />
           </Stack>
         ),
-        copy: d.token_transfer.recipient_address,
+        copy: tx.token_transfer.recipient_address,
       };
 
       const memo = {
-        condition: !!getMemoString(d.token_transfer.memo),
+        condition: !!getMemoString(tx.token_transfer.memo),
         label: { children: 'Memo' },
-        children: getMemoString(d.token_transfer.memo),
+        children: getMemoString(tx.token_transfer.memo),
       };
 
       return [
@@ -291,12 +281,12 @@ const transformDataToRowData = (
     case 'coinbase': {
       const scratch = {
         condition:
-          d.coinbase_payload.data !==
+          tx.coinbase_payload.data !==
           '0x0000000000000000000000000000000000000000000000000000000000000000',
         label: {
           children: 'Scratch space',
         },
-        children: d.coinbase_payload.data,
+        children: tx.coinbase_payload.data,
       };
       return [txid, sender, fees, nonce, blockTime, blockHash, scratch, canonical];
     }
@@ -333,17 +323,13 @@ export const TransactionDetails: React.FC<TransactionDetailsProps> = ({
   ...rest
 }) => {
   const txStatus = getTransactionStatus(transaction);
-  const { data: currentStxPrice } = useCurrentStxPrice();
   const showBlocksVisualizer = txStatus === 'success_microblock' || txStatus === 'pending';
   return (
     <>
       <Section title="Summary" {...rest}>
         <Flex px="base" width="100%" flexDirection={['column', 'column', 'row']}>
           <Box width={['100%']}>
-            <Rows
-              noTopBorder
-              items={transformDataToRowData(transaction, currentStxPrice, block) as any}
-            />
+            <Rows noTopBorder items={transformDataToRowData(transaction, block) as any} />
           </Box>
         </Flex>
       </Section>

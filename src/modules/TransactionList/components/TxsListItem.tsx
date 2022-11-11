@@ -11,77 +11,68 @@ import { AddressArea, PrincipalLink, Timestamp } from '@components/transaction-i
 import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { AddressTransactionWithTransfersStxTransfers } from '@stacks/blockchain-api-client/src/generated/models';
-import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 interface TxsListItemProps {
   tx: Transaction;
 }
 
-export const TxsListItem: FC<TxsListItemProps> = memo(({ tx }) => {
+const Icon: FC<{ tx: Transaction }> = memo(({ tx }) => <ItemIcon type={'tx'} tx={tx} />);
+
+const LeftTitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
+  <Title fontWeight="500" display="block" fontSize="16px">
+    {getTxTitle(tx, true)}
+  </Title>
+));
+
+const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
+  <Stack
+    as="span"
+    isInline
+    spacing="extra-tight"
+    alignItems="center"
+    flexWrap="wrap"
+    divider={<Caption>∙</Caption>}
+  >
+    <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
+    <AddressArea tx={tx} />
+  </Stack>
+));
+
+const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
+  <Timestamp tx={tx} suppressHydrationWarning={true} />
+));
+
+const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   const isConfirmed = tx.tx_status === 'success';
   const isAnchored = !tx.is_unanchored;
   const didFail = !isConfirmed;
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
-  const { data: currentStxPrice } = useCurrentStxPrice();
-
-  const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
-
-  const leftTitle = useMemo(
-    () => (
-      <Title fontWeight="500" display="block" fontSize="16px">
-        {getTxTitle(tx, currentStxPrice)}
-      </Title>
-    ),
-    [tx]
-  );
-
-  const leftSubtitle = useMemo(
-    () => (
-      <Stack
+  return (
+    <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
+      <Caption
+        mr="6px"
         as="span"
-        isInline
-        spacing="extra-tight"
-        alignItems="center"
-        flexWrap="wrap"
-        divider={<Caption>∙</Caption>}
+        data-test="tx-caption"
+        color={didFail ? color('feedback-error') : color('invert')}
       >
-        <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
-        <AddressArea tx={tx} />
-      </Stack>
-    ),
-    [tx]
+        {isConfirmed && !isAnchored && 'In microblock'}
+        {isConfirmed && isAnchored && 'In anchor block'}
+        {didFail && 'Failed'}
+      </Caption>
+      {'·'}
+      <Caption mt="1px" ml="6px">
+        {truncateMiddle(tx.tx_id, 4)}
+      </Caption>
+    </Flex>
   );
+});
 
-  const rightTitle = useMemo(() => <Timestamp tx={tx} suppressHydrationWarning={true} />, [tx]);
-
-  const rightSubtitle = useMemo(
-    () => (
-      <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
-        <Caption
-          mr="6px"
-          as="span"
-          data-test="tx-caption"
-          color={didFail ? color('feedback-error') : color('invert')}
-        >
-          {isConfirmed && !isAnchored && 'In microblock'}
-          {isConfirmed && isAnchored && 'In anchor block'}
-          {didFail && 'Failed'}
-        </Caption>
-        {'·'}
-        <Caption mt="1px" ml="6px">
-          {truncateMiddle(tx.tx_id, 4)}
-        </Caption>
-      </Flex>
-    ),
-    [tx]
-  );
-
+export const TxsListItem: FC<TxsListItemProps> = memo(({ tx }) => {
+  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
   return (
     <TwoColsListItem
-      icon={icon}
-      leftContent={{ title: leftTitle, subtitle: leftSubtitle }}
-      rightContent={{ title: rightTitle, subtitle: rightSubtitle }}
+      icon={<Icon tx={tx} />}
+      leftContent={{ title: <LeftTitle tx={tx} />, subtitle: <LeftSubtitle tx={tx} /> }}
+      rightContent={{ title: <RightTitle tx={tx} />, subtitle: <RightSubtitle tx={tx} /> }}
       href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkMode)}
     />
   );

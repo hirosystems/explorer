@@ -93,7 +93,6 @@ export default class MyDocument extends Document<DocumentProps> {
 })();`,
             }}
           />
-          <link rel="preconnect" href="https://cdn.usefathom.com" crossOrigin="true" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
         </Head>
         <body>

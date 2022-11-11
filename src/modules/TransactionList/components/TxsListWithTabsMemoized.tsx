@@ -8,44 +8,52 @@ import { SkeletonGenericTransactionList } from '@components/loaders/skeleton-tra
 import { MempoolTxsList, TxsList } from './TxsList';
 import { useTransactionList } from '../hooks/useTransactionList';
 
-export const TxsListWithTabs: React.FC<{
+const Title: FC<{ currentIndex: number; setCurrentIndex: (val: number) => void }> = ({
+  currentIndex,
+  setCurrentIndex,
+}) => (
+  <Tabs
+    tabs={['confirmed', 'pending']}
+    currentIndex={currentIndex}
+    setCurrentIndex={setCurrentIndex}
+  />
+);
+
+const Wrapper: FC<{
+  currentIndex: number;
+  setCurrentIndex: (val: number) => void;
+  mempoolSelected: boolean;
+}> = ({ setCurrentIndex, currentIndex, mempoolSelected, children }) => (
+  <Section
+    title={memo(() => (
+      <Title currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
+    ))}
+    headerProps={{ pl: '0' }}
+    alignSelf="flex-start"
+    topRight={!mempoolSelected && FilterButton}
+  >
+    <Flex flexGrow={1} flexDirection="column" px="base-loose">
+      <Box position="relative">{children}</Box>
+    </Flex>
+  </Section>
+);
+
+const TxsListWithTabs: React.FC<{
   limit: number;
   infinite?: boolean;
-}> = memo(({ limit, infinite }) => {
+}> = ({ limit, infinite }) => {
   console.log('[debug] rendering TxsListWithTabs');
   const [currentIndex, setCurrentIndex] = useState(0);
   const mempoolSelected = currentIndex !== 0;
   const { confirmedTransactionsResponse, mempoolTransactionsResponse } = useTransactionList(limit);
-  const title = useCallback(
-    () => (
-      <Tabs
-        tabs={['confirmed', 'pending']}
-        currentIndex={currentIndex}
-        setCurrentIndex={setCurrentIndex}
-      />
-    ),
-    [currentIndex]
-  );
-
-  const Wrapper: FC = memo(({ children }) => {
-    console.log('[debug] rendering Wrapper');
-    return (
-      <Section
-        title={title}
-        headerProps={{ pl: '0' }}
-        alignSelf="flex-start"
-        topRight={!mempoolSelected && FilterButton}
-      >
-        <Flex flexGrow={1} flexDirection="column" px="base-loose">
-          <Box position="relative">{children}</Box>
-        </Flex>
-      </Section>
-    );
-  });
 
   if (mempoolSelected && mempoolTransactionsResponse.data)
     return (
-      <Wrapper>
+      <Wrapper
+        setCurrentIndex={setCurrentIndex}
+        currentIndex={currentIndex}
+        mempoolSelected={mempoolSelected}
+      >
         <MempoolTxsList
           response={mempoolTransactionsResponse}
           showFooter
@@ -57,7 +65,11 @@ export const TxsListWithTabs: React.FC<{
 
   if (!mempoolSelected && confirmedTransactionsResponse.data)
     return (
-      <Wrapper>
+      <Wrapper
+        setCurrentIndex={setCurrentIndex}
+        currentIndex={currentIndex}
+        mempoolSelected={mempoolSelected}
+      >
         <TxsList
           response={confirmedTransactionsResponse}
           showFooter
@@ -68,8 +80,14 @@ export const TxsListWithTabs: React.FC<{
     );
 
   return (
-    <Wrapper>
+    <Wrapper
+      setCurrentIndex={setCurrentIndex}
+      currentIndex={currentIndex}
+      mempoolSelected={mempoolSelected}
+    >
       <SkeletonGenericTransactionList />
     </Wrapper>
   );
-});
+};
+
+export const TxsListWithTabsMemoized = memo(TxsListWithTabs);
