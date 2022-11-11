@@ -82,17 +82,6 @@ const SearchResultsCardWrapper: React.FC<BoxProps & { title?: string; actions?: 
   );
 };
 
-export const SearchResultsCardPlaceholder = (props: BoxProps) => {
-  return (
-    <SearchResultsCardWrapper title="Searching" actions={<SearchingIndicator />} {...props}>
-      <Flex p="base" flexGrow={1}>
-        <Pending size="16px" />
-        <Caption ml="loose">Searching the network...</Caption>
-      </Flex>
-    </SearchResultsCardWrapper>
-  );
-};
-
 export const SearchResultsCard: React.FC = () => {
   const {
     query: { data, isLoading, error },

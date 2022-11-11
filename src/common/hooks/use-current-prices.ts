@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { QueryFunctionContext, QueryObserverOptions, useQuery, UseQueryOptions } from 'react-query';
 
 const getCurrentBtcPrice = async () =>
   fetch('https://api.coingecko.com/api/v3/exchange_rates')
@@ -13,5 +13,28 @@ const getCurrentStxPrice = async () =>
     .then(res => res.json())
     .then(data => data?.blockstack?.usd);
 
-export const useCurrentStxPrice = () =>
-  useQuery('current-stx-price', getCurrentStxPrice, { staleTime: 30 * 60 * 1000 });
+export const useCurrentStxPrice = (
+  options?: UseQueryOptions<any, unknown, any, 'current-stx-price'>
+) => useQuery('current-stx-price', getCurrentStxPrice, { staleTime: 30 * 60 * 1000, ...options });
+
+const getHistoricalStxPrice = async ({ queryKey }: QueryFunctionContext) => {
+  const [_, date] = queryKey;
+  return fetch(
+    `https://api.coingecko.com/api/v3/coins/blockstack/history?date=${date}&localization=false`
+  )
+    .then(res => res.json())
+    .then(data => data?.market_data?.current_price?.usd);
+};
+
+export const useHistoricalStxPrice = (
+  date: string,
+  options?: UseQueryOptions<any, unknown, any, string[]>
+) =>
+  useQuery(['historical-stx-price', date], getHistoricalStxPrice, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    ...options,
+  });

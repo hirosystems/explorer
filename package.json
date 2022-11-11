@@ -59,7 +59,6 @@
     "c32check": "1.1.2",
     "dayjs": "1.10.6",
     "express": "4.17.1",
-    "fathom-client": "3.1.0",
     "formik": "2.2.9",
     "mdi-react": "7.5.0",
     "modern-normalize": "1.1.0",

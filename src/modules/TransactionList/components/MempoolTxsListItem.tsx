@@ -21,17 +21,16 @@ export const MempoolTxsListItem: FC<MempoolTxsListItemProps> = memo(({ tx }) => 
   const isPending = tx.tx_status === 'pending';
   const didFail = !isPending;
   const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
-  const { data: currentStxPrice } = useCurrentStxPrice();
 
   const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
 
   const leftTitle = useMemo(
     () => (
       <Title fontWeight="500" display="block" fontSize="16px">
-        {getTxTitle(tx, currentStxPrice)}
+        {getTxTitle(tx, true)}
       </Title>
     ),
-    []
+    [tx]
   );
 
   const leftSubtitle = useMemo(
