@@ -1,3 +1,10 @@
+## [1.58.1](https://github.com/hirosystems/explorer/compare/v1.58.0...v1.58.1) (2022-11-15)
+
+
+### Reverts
+
+* Revert "Revert "feat: remove miners notification"" ([8dbba1f](https://github.com/hirosystems/explorer/commit/8dbba1fd03575eeac3b0efeabad4faa7b82542b7))
+
 # [1.58.0](https://github.com/hirosystems/explorer/compare/v1.57.0...v1.58.0) (2022-11-15)
 
 
