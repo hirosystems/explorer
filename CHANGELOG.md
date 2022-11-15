@@ -1,3 +1,10 @@
+# [1.59.0](https://github.com/hirosystems/explorer/compare/v1.58.1...v1.59.0) (2022-11-15)
+
+
+### Features
+
+* add tooltip to navigation icons in sandbox ([6a93157](https://github.com/hirosystems/explorer/commit/6a93157989c81bf611ba720dc3df3b72a83d2531))
+
 ## [1.58.1](https://github.com/hirosystems/explorer/compare/v1.58.0...v1.58.1) (2022-11-15)
 
 

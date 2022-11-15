@@ -33,7 +33,6 @@ const moduleExports = withBundleAnalyzer({
     SENTRY_DSN: process.env.SENTRY_DSN,
     X_API_KEY: process.env.X_API_KEY,
   },
-  output: 'standalone',
 });
 
 const sentryWebpackPluginOptions = {
