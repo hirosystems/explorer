@@ -39,11 +39,16 @@ const iconStyle = css`
 
 export const StatusBar: React.FC = () => {
   const [status, setStatus] = useState<StatusProps>({
-    description: 'Stacks Miners — Upgrade to  2.05.0.5.1 NOW!',
-    indicator: Indicator.critical,
+    description: '',
+    indicator: Indicator.none,
   });
-
+  useEffect(() => {
+    void fetch('https://status.hiro.so/api/v2/status.json')
+      .then(res => res.json())
+      .then(data => setStatus(data.status));
+  }, []);
   const { indicator, description } = status;
+  if (indicator === Indicator.none) return null;
   const color = indicator === Indicator.critical ? '#C83532' : '#A96500';
   const icon =
     indicator === Indicator.critical ? (
@@ -58,19 +63,19 @@ export const StatusBar: React.FC = () => {
         <Text color={color} fontWeight={500} fontSize={'14px'} lineHeight={'1.5'}>
           {description}
           {description.endsWith('.') ? '' : '.'}
-        </Text>
-        <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'} mt={'10px'}>
-          ATTENTION: Stacks miners! Please upgrade to 2.05.0.5.1 NOW! Follow Stacks Status for more
-          details:{' '}
+        </Text>{' '}
+        <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'}>
+          More information on the{' '}
           <Link
-            href="https://twitter.com/stacksstatus"
+            href="https://status.hiro.so/"
             target="_blank"
             css={css`
               display: inline;
             `}
           >
-            https://twitter.com/stacksstatus
+            Hiro status page
           </Link>
+          .
         </Text>
       </Box>
     </Box>
