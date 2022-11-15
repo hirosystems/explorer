@@ -1,3 +1,10 @@
+# [1.58.0](https://github.com/hirosystems/explorer/compare/v1.57.0...v1.58.0) (2022-11-15)
+
+
+### Features
+
+* use historical stx price ([f927277](https://github.com/hirosystems/explorer/commit/f927277a0c5502ab818e6aac719ce26835977dc6))
+
 # [1.57.0](https://github.com/hirosystems/explorer/compare/v1.56.2...v1.57.0) (2022-11-11)
 
 
