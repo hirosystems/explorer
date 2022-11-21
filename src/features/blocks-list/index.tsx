@@ -5,24 +5,11 @@ import { Section } from '@components/section';
 import { SectionFooterAction } from '@components/section-footer-button';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { Caption } from '@components/typography';
-import { useHomeQueries } from '@features/home/useHomeQueries';
 import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
 import React, { Fragment, useMemo } from 'react';
-import { useInfiniteQuery } from 'react-query';
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
-import { BlockQueryKeys } from '@features/block/query-keys';
-import { getNextPageParam } from '@common/utils';
-
-function useBlockList(limit: number) {
-  const queries = useHomeQueries();
-  const { data: blocks, ...actions } = useInfiniteQuery(
-    [BlockQueryKeys.blocks],
-    ({ pageParam }) => queries.fetchBlocks(limit, pageParam || 0)(),
-    { getNextPageParam, refetchOnWindowFocus: true }
-  );
-  return { blocks, actions };
-}
+import { useBlockList } from '@features/blocks-list/useBlockList';
 
 export const BlocksList: React.FC<
   FlexProps & { enforceLimit?: boolean; limit: number; infinite?: boolean }
@@ -51,7 +38,7 @@ export const BlocksList: React.FC<
   if (!blocks) return <SkeletonBlockList />;
 
   return (
-    <Section title="Recent Blocks" {...props}>
+    <Section title="Recent Blocks" gridColumnStart="2" gridColumnEnd="3" {...props}>
       <Flex flexDirection="column" flexGrow={1} px="loose">
         {hasBlocks ? (
           <>

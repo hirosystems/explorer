@@ -1,38 +1,43 @@
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
-import { HomePageTop } from '@components/home-page-top';
 import { Meta } from '@components/meta-head';
-import { PageWrapper } from '@components/page-wrapper';
 import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
 import { BlocksList } from '@features/blocks-list';
 import { Grid } from '@stacks/ui';
 import * as React from 'react';
 import type { NextPage } from 'next';
+import { Stats } from '@modules/stats/Stats';
+import { Title } from '@components/typography';
 
 const Home: NextPage = () => {
   console.log('[DEBUG] rendering home');
   return (
-    <PageWrapper>
+    <>
       <Meta />
-      <HomePageTop />
       <Grid
         mt="extra-loose"
         gap="extra-loose"
-        gridTemplateColumns={['100%', '100%', 'calc(60% - 32px) 40%']}
+        gridTemplateColumns={['100%', '100%', '0.6fr 0.4fr']}
         width="100%"
       >
+        <Title
+          as="h1"
+          fontSize="36px"
+          display="block"
+          width="100%"
+          textAlign={['center', 'left']}
+          mt="40px"
+          mb="0"
+          data-test="homepage-title"
+          color="white"
+        >
+          Stacks Explorer
+        </Title>
+        <Stats />
         <TxsListWithTabsMemoized limit={DEFAULT_LIST_LIMIT_SMALL} />
         <BlocksList enforceLimit limit={DEFAULT_BLOCKS_LIST_LIMIT} />
       </Grid>
-    </PageWrapper>
+    </>
   );
 };
-
-export function getServerSideProps() {
-  return {
-    props: {
-      isHome: true,
-    },
-  };
-}
 
 export default Home;

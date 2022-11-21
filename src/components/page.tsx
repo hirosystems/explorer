@@ -29,7 +29,6 @@ type PageProps = {
 } & FlexProps;
 
 type PageWrapperProps = {
-  isHome?: boolean;
   fullWidth?: boolean;
   notice?: any;
   networkMode?: string;
@@ -141,12 +140,7 @@ export const Page: React.FC<PageProps> = React.memo(({ children, fullWidth, ...r
   </Flex>
 ));
 
-export const PageWrapper: React.FC<PageWrapperProps> = ({
-  networkMode,
-  fullWidth,
-  isHome,
-  ...props
-}) => (
+export const PageWrapper: React.FC<PageWrapperProps> = ({ networkMode, ...props }) => (
   <Flex
     maxWidth="100vw"
     overflowX="hidden"
@@ -156,8 +150,8 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({
     position="relative"
     overflow="hidden"
   >
-    <Header fullWidth={fullWidth} isHome={isHome} />
-    <Page fullWidth={fullWidth} {...props} />
+    <Header fullWidth={true} />
+    <Page {...props} />
     <MetaverseBg />
   </Flex>
 );

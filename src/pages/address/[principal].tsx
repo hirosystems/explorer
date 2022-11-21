@@ -8,7 +8,6 @@ import { TokenBalancesCard } from '@components/balances/principal-token-balances
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { Meta } from '@components/meta-head';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
-import { PageWrapper } from '@components/page-wrapper';
 import { Title } from '@components/typography';
 import { AccountTransactionList } from '@features/account-transaction-list';
 import { AddressSummary } from '@features/address-page/address-summary';
@@ -90,7 +89,7 @@ const AddressPage: NextPage<any> = arg => {
     );
 
   return (
-    <PageWrapper>
+    <>
       <UnlockingScheduleModal balance={balance} />
       <Meta
         title={`STX Address ${truncateMiddle(address)}`}
@@ -119,7 +118,7 @@ const AddressPage: NextPage<any> = arg => {
           </Stack>
         )}
       </ContentWrapper>
-    </PageWrapper>
+    </>
   );
 };
 

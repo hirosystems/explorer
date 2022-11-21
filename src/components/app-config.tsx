@@ -13,9 +13,6 @@ import { IS_SSR } from '@common/constants';
 declare const window: any;
 
 interface AppConfigProps {
-  isHome?: boolean;
-  fullWidth?: boolean;
-  networkMode?: NetworkMode;
   apiUrls: ApiUrls;
   queryNetworkMode: NetworkMode;
   queryApiUrl?: string;
@@ -23,9 +20,6 @@ interface AppConfigProps {
 
 export const AppConfig: React.FC<AppConfigProps> = ({
   children,
-  networkMode,
-  isHome,
-  fullWidth,
   apiUrls,
   queryNetworkMode,
   queryApiUrl,
@@ -50,6 +44,10 @@ export const AppConfig: React.FC<AppConfigProps> = ({
     return null;
   }
 
+  if (IS_SSR) {
+    return null;
+  }
+
   return (
     <Connect
       authOptions={{
@@ -61,9 +59,7 @@ export const AppConfig: React.FC<AppConfigProps> = ({
       }}
     >
       <CacheProvider value={cache}>
-        <AppContainer networkMode={networkMode} isHome={isHome} fullWidth={fullWidth}>
-          {children}
-        </AppContainer>
+        <AppContainer>{children}</AppContainer>
       </CacheProvider>
     </Connect>
   );

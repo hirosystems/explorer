@@ -3,14 +3,13 @@ import { Box } from '@stacks/ui';
 import { Title } from '@components/typography';
 import { Meta } from '@components/meta-head';
 import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
-import { PageWrapper } from '@components/page-wrapper';
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
 import type { NextPage } from 'next';
 
 const TransactionsPage: NextPage = () => {
   return (
-    <PageWrapper>
+    <>
       <Meta title="Recent transactions" />
       <Box mb="base-loose">
         <Title mt="72px" color="white" as="h1" fontSize="36px">
@@ -18,7 +17,7 @@ const TransactionsPage: NextPage = () => {
         </Title>
         <TxsListWithTabsMemoized infinite limit={DEFAULT_LIST_LIMIT} />
       </Box>
-    </PageWrapper>
+    </>
   );
 };
 

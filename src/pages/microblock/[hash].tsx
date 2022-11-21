@@ -147,7 +147,6 @@ export function getServerSideProps(ctx: GetServerSidePropsContext) {
   return {
     props: {
       hash,
-      isHome: true,
     },
   };
 }

@@ -22,7 +22,7 @@ import { CustomNetworksLSKey } from '@common/constants/network';
 
 dayjs.extend(relativeTime);
 
-const MICROSTACKS_IN_STACKS = 1000000;
+export const MICROSTACKS_IN_STACKS = 1000000;
 
 /**
  * validateStacksAddress
@@ -452,6 +452,13 @@ export const usdFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
+export const usdFormatterNoDecimals = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+});
+
 export function isNumeric(value: string): boolean {
   return /^-?\d+$/.test(value);
 }
@@ -481,4 +488,16 @@ export const getCustomNetworksFromLS = () => {
   } catch (_) {
     return {};
   }
+};
+
+export const numberToString = (value: number) => {
+  const mil = 1e6;
+  const bil = 1e9;
+  if (value >= bil) {
+    return `${(value / bil).toFixed(2)}B`;
+  }
+  if (value >= mil) {
+    return `${(value / mil).toFixed(2)}M`;
+  }
+  return value.toLocaleString();
 };
