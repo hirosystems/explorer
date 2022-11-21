@@ -14,7 +14,6 @@ import {} from '@components/loaders/skeleton-text';
 import { SectionBoxSkeleton } from '@components/loaders/skeleton-transaction';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
-import { PageWrapper } from '@components/page-wrapper';
 import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
 import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { useRouter } from 'next/router';
@@ -67,7 +66,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
   const title = (block && `Block #${block.height.toLocaleString()}`) || '';
 
   return (
-    <PageWrapper>
+    <>
       <Meta title={title} />
       <Flex mb="base" alignItems="flex-end" justifyContent="space-between">
         <Box>
@@ -134,7 +133,7 @@ const BlockSinglePage: NextPage<BlockSinglePageData> = () => {
           </Box>
         </Section>
       ) : null}
-    </PageWrapper>
+    </>
   );
 };
 

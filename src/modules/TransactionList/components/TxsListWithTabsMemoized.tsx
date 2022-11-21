@@ -31,6 +31,8 @@ const Wrapper: FC<{
     headerProps={{ pl: '0' }}
     alignSelf="flex-start"
     topRight={!mempoolSelected && FilterButton}
+    gridColumnStart="1"
+    gridColumnEnd="2"
   >
     <Flex flexGrow={1} flexDirection="column" px="base-loose">
       <Box position="relative">{children}</Box>

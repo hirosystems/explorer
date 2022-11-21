@@ -26,7 +26,7 @@ interface ExplorerAppProps extends AppProps {
 
 function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
   const { apiUrls, queryNetworkMode, queryApiUrl, pageProps } = rest;
-  const { isHome, fullWidth } = pageProps;
+  const { fullWidth } = pageProps;
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -48,13 +48,7 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <AppConfig
-          isHome={isHome}
-          fullWidth={fullWidth}
-          queryNetworkMode={queryNetworkMode}
-          queryApiUrl={queryApiUrl}
-          apiUrls={apiUrls}
-        >
+        <AppConfig queryNetworkMode={queryNetworkMode} queryApiUrl={queryApiUrl} apiUrls={apiUrls}>
           <Component {...pageProps} />
           <Modals />
           <NetworkModeToast />
