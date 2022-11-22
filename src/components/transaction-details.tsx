@@ -288,7 +288,34 @@ const transformDataToRowData = (tx: Transaction | MempoolTransaction, block?: Bl
         },
         children: tx.coinbase_payload.data,
       };
-      return [txid, sender, fees, nonce, blockTime, blockHash, scratch, canonical];
+      const altRecipient = {
+        condition: !!tx.coinbase_payload.alt_recipient,
+        label: {
+          children: 'Alt recipient',
+        },
+        children: tx.coinbase_payload.alt_recipient,
+      };
+      return [txid, sender, fees, nonce, blockTime, blockHash, scratch, canonical, altRecipient];
+    }
+    case 'smart_contract': {
+      const clarityVersion = {
+        condition: true,
+        label: {
+          children: 'Clarity version',
+        },
+        children: tx.smart_contract?.clarity_version || '1',
+      };
+      return [
+        contractName,
+        txid,
+        sender,
+        fees,
+        nonce,
+        blockTime,
+        blockHash,
+        canonical,
+        clarityVersion,
+      ];
     }
     default:
       return [contractName, txid, sender, fees, nonce, blockTime, blockHash, canonical];

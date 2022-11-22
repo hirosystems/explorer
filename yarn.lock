@@ -2696,10 +2696,10 @@
   resolved "https://registry.yarnpkg.com/@stacks/stacks-blockchain-api-types/-/stacks-blockchain-api-types-0.68.0.tgz#2dcac241ab377886b3d12b424c0738f0039941d2"
   integrity sha512-gLNJtCo4lvg82UHke5VrhvGPOnUY3oh+DJqBu45ta1nP7/NgWmRTEsEZLMAEhMd7/zb3ye4VvMPS5UwthgKytA==
 
-"@stacks/stacks-blockchain-api-types@4.0.3":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@stacks/stacks-blockchain-api-types/-/stacks-blockchain-api-types-4.0.3.tgz#226e6d9226349587cf7bbc60c053023e957e2bcb"
-  integrity sha512-ehBKOxNrNCQE5p1z4m9acdar1mdq4Rtr54kMcYK5IjVhYl1rz5mD1fqyxEXbojUejEwY2+j/Eh+lk98CdR2HNA==
+"@stacks/stacks-blockchain-api-types@4.2.0-stacks-2.1.1":
+  version "4.2.0-stacks-2.1.1"
+  resolved "https://registry.yarnpkg.com/@stacks/stacks-blockchain-api-types/-/stacks-blockchain-api-types-4.2.0-stacks-2.1.1.tgz#321bfd103f923b44c9541823cdc15479b9558417"
+  integrity sha512-0ljUJbWyDTXbDg6kK/xb+X6LyxpJdn3V1Z3h35NQScgKrJvyaND21eooo9NjLdizY2/25WyDxhMutoeySWgigA==
 
 "@stacks/transactions@4.1.0":
   version "4.1.0"
