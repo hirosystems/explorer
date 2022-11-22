@@ -262,6 +262,8 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
       ? 'Non-fungible token'
       : undefined;
 
+  const memo = event.event_type === 'stx_asset' ? event.asset.memo || '' : '';
+
   useEffect(() => {
     const getFtMetadata = async () => {
       const data = await fungibleTokensApi.getContractFtMetadata({
@@ -303,6 +305,12 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
             {participants && participants}
             {tokenType && <Caption>{tokenType}</Caption>}
           </Stack>
+          {memo && (
+            <Stack flexWrap="nowrap" spacing="extra-tight" isInline divider={<Caption>∙</Caption>}>
+              <Caption fontWeight="bold">Memo</Caption>
+              <Caption wordBreak={'break-all'}>{memo}</Caption>
+            </Stack>
+          )}
         </Stack>
       </Flex>
       <Caption>{event.event_index}</Caption>

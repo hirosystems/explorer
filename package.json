@@ -102,7 +102,7 @@
     "@playwright/test": "1.22.2",
     "@stacks/eslint-config": "1.2.0",
     "@stacks/prettier-config": "0.0.10",
-    "@stacks/stacks-blockchain-api-types": "4.0.3",
+    "@stacks/stacks-blockchain-api-types": "4.2.0-stacks-2.1.1",
     "@types/express": "4.17.13",
     "@types/fontfaceobserver": "0.0.6",
     "@types/jest": "28.1.6",
