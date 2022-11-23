@@ -1,3 +1,10 @@
+# [1.60.0](https://github.com/hirosystems/explorer/compare/v1.59.0...v1.60.0) (2022-11-23)
+
+
+### Features
+
+* stacks 2.1 ([a409bef](https://github.com/hirosystems/explorer/commit/a409befcfb353cc32e108f9e5a59ee5bfc8e76eb))
+
 # [1.59.0](https://github.com/hirosystems/explorer/compare/v1.58.1...v1.59.0) (2022-11-15)
 
 
