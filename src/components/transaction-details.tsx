@@ -1,17 +1,16 @@
 import * as React from 'react';
-import NextLink from 'next/link';
 
 import { Box, color, Flex, Stack, Text } from '@stacks/ui';
-import { getMemoString, getUsdValue, microToStacks } from '@common/utils';
+import { getMemoString, microToStacks } from '@common/utils';
 
 import { Badge } from '@components/badge';
 import { Link } from '@components/typography';
 import { TransactionStatus } from '@common/constants';
 import { Rows } from '@components/rows';
 import { Timestamp } from '@components/timestamp';
-import { MempoolTransaction, Transaction, Block } from '@stacks/stacks-blockchain-api-types';
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Section } from '@components/section';
-import { BlockLink, buildUrl, TxLink } from '@components/links';
+import { BlockLink, ExplorerLink, TxLink } from '@components/links';
 import { IconButton } from '@components/icon-button';
 import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
 import { StxInline } from '@components/icons/stx-inline';
@@ -76,9 +75,9 @@ const BlockComponent = React.memo(
 
 const AddressComponent = React.memo(({ principal }: { principal: string }) => {
   return (
-    <NextLink href={buildUrl(`/address/${encodeURIComponent(principal)}`)} passHref>
+    <ExplorerLink path={`/address/${encodeURIComponent(principal)}`}>
       <Link as="a">{principal}</Link>
-    </NextLink>
+    </ExplorerLink>
   );
 });
 

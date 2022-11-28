@@ -13,11 +13,12 @@ import { ContractCallTxs } from '@common/types/tx';
 import { Text } from '@components/typography';
 import { IconArrowLeft } from '@tabler/icons';
 import { TESTNET_CHAIN_ID } from '@common/constants';
-import { NetworkMode, NetworkModes } from '@common/types/network';
+import { Network, NetworkMode, NetworkModes } from '@common/types/network';
 import { NextPageContext } from 'next';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import { StxPriceButton } from '@modules/stxPrice/StxPriceButton';
+import { CustomNetworksLSKey } from '@common/constants/network';
 
 dayjs.extend(relativeTime);
 
@@ -473,3 +474,11 @@ export function getNextPageParam(options?: { limit: number; offset: number; tota
   if (Math.abs(delta) === sum || isAtEnd) return undefined;
   return sum;
 }
+
+export const getCustomNetworksFromLS = () => {
+  try {
+    return JSON.parse(localStorage.getItem(CustomNetworksLSKey) || '{}') as Record<string, Network>;
+  } catch (_) {
+    return {};
+  }
+};

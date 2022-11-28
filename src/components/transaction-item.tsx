@@ -8,10 +8,9 @@ import * as React from 'react';
 import { ArrowRightIcon } from '@components/icons/arrow-right';
 import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
 import { Link } from '@components/link';
-import { buildUrl } from '@components/links';
+import { ExplorerLink } from '@components/links';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 import { Tooltip } from '@components/tooltip';
-import NextLink from 'next/link';
 
 export { getTxTypeIcon };
 
@@ -48,7 +47,7 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
   ...rest
 }) => (
   <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
-    <NextLink href={buildUrl(`/address/${encodeURIComponent(principal)}`)} passHref>
+    <ExplorerLink path={`/address/${encodeURIComponent(principal)}`}>
       <Caption
         as={Link}
         _hover={{
@@ -58,7 +57,7 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
       >
         {truncateMiddle(principal)}
       </Caption>
-    </NextLink>
+    </ExplorerLink>
   </Flex>
 );
 

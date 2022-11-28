@@ -6,7 +6,7 @@ import { ArrowDownIcon, ArrowUpIcon, ItemIcon } from '@components/item-icon';
 import { Caption, Text, Title } from '@components/typography';
 import { getTxTitle, truncateMiddle } from '@common/utils';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
-import { Stack, Flex, color } from '@stacks/ui';
+import { color, Flex, Stack } from '@stacks/ui';
 import { AddressArea, PrincipalLink, Timestamp } from '@components/transaction-item';
 import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
@@ -67,13 +67,13 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
 });
 
 export const TxsListItem: FC<TxsListItemProps> = memo(({ tx }) => {
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const network = useAppSelector(selectActiveNetwork);
   return (
     <TwoColsListItem
       icon={<Icon tx={tx} />}
       leftContent={{ title: <LeftTitle tx={tx} />, subtitle: <LeftSubtitle tx={tx} /> }}
       rightContent={{ title: <RightTitle tx={tx} />, subtitle: <RightSubtitle tx={tx} /> }}
-      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkMode)}
+      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network)}
     />
   );
 });
@@ -89,7 +89,7 @@ interface TransferListItemProps {
 
 export const TransferListItem: FC<TransferListItemProps> = memo(
   ({ tx, title, sender, recipient, amount, isOriginator }) => {
-    const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+    const network = useAppSelector(selectActiveNetwork);
 
     const icon = useMemo(
       () => (isOriginator ? <ArrowUpIcon /> : <ArrowDownIcon />),
@@ -145,7 +145,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
         icon={icon}
         leftContent={{ title: leftTitle, subtitle: leftSubtitle }}
         rightContent={{ title: rightTitle, subtitle: null }}
-        href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkMode)}
+        href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network)}
       />
     );
   }

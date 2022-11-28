@@ -1,12 +1,11 @@
 import React from 'react';
-import NextLink from 'next/link';
 
-import { Grid, Flex, Box, color } from '@stacks/ui';
+import { Box, color, Flex, Grid } from '@stacks/ui';
 import { Caption } from '@components/typography';
 
 import { border } from '@common/utils';
 import { Pending } from '@components/status';
-import { buildUrl } from './links';
+import { ExplorerLink } from './links';
 
 interface SectionFooterButtonPropsBase {
   isLoading?: boolean;
@@ -48,7 +47,7 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
       </Grid>
     ) : null
   ) : (
-    <NextLink href={buildUrl(`/${path}`)} passHref>
+    <ExplorerLink path={`/${path}`}>
       <Grid
         as="a"
         borderTop={border()}
@@ -60,5 +59,5 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
       >
         <Caption color="currentColor">View all {path}</Caption>
       </Grid>
-    </NextLink>
+    </ExplorerLink>
   );

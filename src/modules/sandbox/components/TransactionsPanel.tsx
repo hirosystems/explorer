@@ -11,7 +11,7 @@ import { Pending } from '@components/status';
 import { Badge } from '@components/badge';
 import { InfoCircleIcon } from '@components/icons/info-circle';
 import { ExternalLinkIcon } from '@components/icons/external-link';
-import { buildUrl, TxLink } from '@components/links';
+import { buildUrl, ExplorerLink, TxLink } from '@components/links';
 import { FilteredMessage, FilterPanel } from '@components/filter-panel';
 import FunctionIcon from 'mdi-react/FunctionIcon';
 import { FilterIcon } from '@components/icons/filter';
@@ -22,7 +22,6 @@ import { useTransactionQueries } from '@features/transaction/use-transaction-que
 import { useQuery } from 'react-query';
 import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
 import { setCodeBody, toggleRightPanel } from '@modules/sandbox/sandbox-slice';
-import NextLink from 'next/link';
 
 const PanelHeader: React.FC = () => {
   const { toggleFilterVisibility } = useFilterState();
@@ -53,7 +52,7 @@ const PanelHeader: React.FC = () => {
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const router = useRouter();
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const network = useAppSelector(selectActiveNetwork);
   const [loaded, setLoaded] = React.useState(false);
   const [clicked, setClicked] = React.useState(false);
   const dispatch = useAppDispatch();
@@ -90,7 +89,7 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
             setClicked(false);
             dispatch(setCodeBody({ codeBody }));
             setLoaded(true);
-            void router.push(buildUrl('/sandbox/deploy', activeNetworkMode));
+            void router.push(buildUrl('/sandbox/deploy', network));
             setTimeout(() => {
               setLoaded(false);
             }, 3000);
@@ -110,7 +109,6 @@ const TxDetailsFunctions = ({
   status,
 }: any) => {
   const [fnsVisible, setFnsVisibility] = React.useState(false);
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
   const dispatch = useAppDispatch();
   return hasFunctionsAvailable ? (
     <>
@@ -126,10 +124,7 @@ const TxDetailsFunctions = ({
           Call contract
         </Caption>
         <Stack isInline spacing="tight" alignItems="center">
-          <NextLink
-            href={buildUrl(`/sandbox/contract-call/${contractId}`, activeNetworkMode)}
-            passHref
-          >
+          <ExplorerLink path={`/sandbox/contract-call/${contractId}`}>
             <Badge
               userSelect="none"
               _hover={{
@@ -141,7 +136,7 @@ const TxDetailsFunctions = ({
             >
               Load contract
             </Badge>
-          </NextLink>
+          </ExplorerLink>
           <IconButton
             size="24px"
             iconProps={{
@@ -180,13 +175,7 @@ const TxDetailsFunctions = ({
                   </Caption>
                 </Flex>
                 {status === 'success' ? (
-                  <NextLink
-                    href={buildUrl(
-                      `/sandbox/contract-call/${contractId}/${func.name}`,
-                      activeNetworkMode
-                    )}
-                    passHref
-                  >
+                  <ExplorerLink path={`/sandbox/contract-call/${contractId}/${func.name}`}>
                     <Badge
                       _hover={{ color: color('text-title'), cursor: 'pointer' }}
                       color={color('text-caption')}
@@ -197,7 +186,7 @@ const TxDetailsFunctions = ({
                     >
                       Load function
                     </Badge>
-                  </NextLink>
+                  </ExplorerLink>
                 ) : null}
               </Flex>
             ) : null;

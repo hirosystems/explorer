@@ -2,8 +2,6 @@ import { useRouter } from 'next/router';
 
 import { VERSION } from '@common/constants';
 
-// TODO: Replace any type w/ SegmentAnalytics
-// import { SegmentAnalytics } from '@segment/analytics.js-core';
 declare const global: any;
 
 export interface AnalyticsProps {

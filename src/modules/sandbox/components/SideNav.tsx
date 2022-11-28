@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, Stack, StxInline, StackProps, color, Tooltip } from '@stacks/ui';
+import { Box, color, Grid, Stack, StackProps, StxInline, Tooltip } from '@stacks/ui';
 import { border } from '@common/utils';
 import { ClarityIcon } from '@modules/sandbox/components/ClarityIcon';
 import FunctionIcon from 'mdi-react/FunctionIcon';
@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { useUser } from '@modules/sandbox/hooks/useUser';
 
 export const SideNav: React.FC<StackProps> = props => {
-  const networkMode = useAppSelector(selectActiveNetwork).mode;
+  const network = useAppSelector(selectActiveNetwork);
   const router = useRouter();
   const { isConnected } = useUser();
 
@@ -25,27 +25,27 @@ export const SideNav: React.FC<StackProps> = props => {
   }[] = [
     {
       label: 'Write & Deploy Contracts',
-      url: buildUrl(`/sandbox/deploy`, networkMode),
+      url: buildUrl(`/sandbox/deploy`, network),
       icon: <ClarityIcon size="24px" />,
       isSelected: router.pathname === '/sandbox/deploy',
     },
     {
       label: 'Call Functions',
-      url: buildUrl(`/sandbox/contract-call`, networkMode),
+      url: buildUrl(`/sandbox/contract-call`, network),
       icon: <Box as={FunctionIcon} size="24px" />,
       isSelected: router.pathname === '/sandbox/contract-call/[[...params]]',
     },
     {
       label: 'STX Transfer',
-      url: buildUrl(`/sandbox/transfer`, networkMode),
+      url: buildUrl(`/sandbox/transfer`, network),
       icon: <Box as={StxInline} size="20px" />,
       isSelected: router.pathname === '/sandbox/transfer',
     },
     {
       label: 'Testnet Faucet',
-      url: buildUrl(`/sandbox/faucet`, networkMode),
+      url: buildUrl(`/sandbox/faucet`, network),
       icon: <Box as={DropIcon} size="24px" />,
-      isDisabled: !isConnected || networkMode === 'mainnet',
+      isDisabled: !isConnected || network.mode === 'mainnet',
       isSelected: router.pathname === '/sandbox/faucet',
     },
   ];

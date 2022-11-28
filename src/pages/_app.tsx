@@ -7,33 +7,26 @@ import toast from 'react-hot-toast';
 import { Provider } from 'react-redux';
 import 'tippy.js/dist/tippy.css';
 
-import { DEFAULT_NETWORK_MAP, NetworkModeUrlMap } from '@common/constants/network';
-import {
-  selectActiveNetwork,
-  selectActiveNetworkUrl,
-  selectNetworks,
-  setActiveNetwork,
-} from '@common/state/network-slice';
-import { wrapper } from '@common/state/store';
+import { NetworkModeUrlMap } from '@common/constants/network';
+import { ApiUrls, initialize, selectActiveNetworkUrl } from '@common/state/network-slice';
+import { store } from '@common/state/store';
 import { NetworkMode, NetworkModes } from '@common/types/network';
 import { AppConfig } from '@components/app-config';
 import { Modals } from '@components/modals';
 import { NetworkModeToast } from '@components/network-mode-toast';
-import { EnhancedStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 interface ExplorerAppProps extends AppProps {
-  apiServer: string;
-  networkMode: NetworkMode;
+  apiUrls: ApiUrls;
+  queryNetworkMode: NetworkMode;
+  queryApiUrl?: string;
   pageProps: any;
 }
 
-function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactElement {
-  const { apiServer, networkMode, pageProps } = rest;
+function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
+  const { apiUrls, queryNetworkMode, queryApiUrl, pageProps } = rest;
   const { isHome, fullWidth } = pageProps;
-  const { store, props } = wrapper.useWrappedStore(rest);
-
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
@@ -49,14 +42,20 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
 
   useEffect(() => {
     const chain = router.query.chain;
-    toast(`You're viewing the ${chain || networkMode} Explorer`);
-  }, []);
+    toast(`You're viewing the ${chain || queryNetworkMode} Explorer`);
+  }, [queryNetworkMode, router.query.chain]);
 
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <AppConfig isHome={isHome} fullWidth={fullWidth}>
-          <Component apiServer={apiServer} networkMode={networkMode} {...props} />
+        <AppConfig
+          isHome={isHome}
+          fullWidth={fullWidth}
+          queryNetworkMode={queryNetworkMode}
+          queryApiUrl={queryApiUrl}
+          apiUrls={apiUrls}
+        >
+          <Component {...pageProps} />
           <Modals />
           <NetworkModeToast />
         </AppConfig>
@@ -66,38 +65,29 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps): React.ReactEleme
   );
 }
 
-const handleNetworkModeQueryParam = (store: EnhancedStore, appContext: AppContext) => {
-  if (appContext.ctx.pathname === '/_error') return;
+ExplorerApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await App.getInitialProps(appContext);
   const query = appContext.ctx.query;
-  const activeNetwork = selectActiveNetwork(store.getState());
-  const networks = selectNetworks(store.getState());
-  console.log('[debug] selectActiveNetworkUrl', selectActiveNetworkUrl(store.getState()));
-  console.log('[debug] activeNetwork', activeNetwork);
-  console.log('[debug] networks', networks);
   const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
     '') as NetworkModes;
-  if (queryNetworkMode !== activeNetwork?.mode || !networks[activeNetwork.url]) {
-    // query param overrides state
-    console.log(
-      '[debug] network conflict',
-      queryNetworkMode,
-      activeNetwork,
-      DEFAULT_NETWORK_MAP,
-      NetworkModeUrlMap
-    );
-    store.dispatch(setActiveNetwork(DEFAULT_NETWORK_MAP[NetworkModeUrlMap[queryNetworkMode]]));
-  }
+  const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
+  store.dispatch(initialize({ queryNetworkMode, apiUrls: NetworkModeUrlMap, queryApiUrl }));
+  console.log(
+    '[debug] store.getState().network',
+    JSON.stringify(store.getState().network, null, 4)
+  );
+  console.log('[debug] NetworkModeUrlMap', JSON.stringify(NetworkModeUrlMap, null, 4));
+  console.log('[debug] selectActiveNetworkUrl', selectActiveNetworkUrl(store.getState()));
+  console.log('[debug] queryNetworkMode', queryNetworkMode);
+  console.log('[debug] queryApiUrl', queryApiUrl);
+  console.log('[debug] query', query);
+  return {
+    ...appProps,
+    ...appProps.pageProps,
+    apiUrls: NetworkModeUrlMap,
+    queryNetworkMode,
+    queryApiUrl,
+  };
 };
-
-ExplorerApp.getInitialProps = wrapper.getInitialAppProps(
-  store => async (appContext: AppContext) => {
-    const appProps = await App.getInitialProps(appContext);
-    handleNetworkModeQueryParam(store, appContext);
-    return {
-      ...appProps,
-      ...appProps.pageProps,
-    };
-  }
-);
 
 export default ExplorerApp;
