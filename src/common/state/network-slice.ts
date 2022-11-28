@@ -1,27 +1,45 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DEFAULT_MAINNET_SERVER, IS_BROWSER } from '@common/constants';
+import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@common/constants';
 import { RootState } from '@common/state/store';
-import { HYDRATE } from 'next-redux-wrapper';
-import { DEFAULT_NETWORK_MAP } from '@common/constants/network';
-import { Network } from '@common/types/network';
+import { Network, NetworkModes } from '@common/types/network';
+import { ChainID } from '@stacks/transactions';
+import { CustomNetworksLSKey } from '@common/constants/network';
+import { getCustomNetworksFromLS } from '@common/utils';
+
+export interface ApiUrls {
+  [NetworkModes.Mainnet]: string;
+  [NetworkModes.Testnet]: string;
+}
 
 export interface NetworkState {
+  isInitialized: boolean;
+  apiUrls: ApiUrls;
   activeNetworkKey: string;
   customNetworks: Record<string, Network>;
 }
 
 const initialState: NetworkState = {
-  activeNetworkKey: DEFAULT_MAINNET_SERVER,
-  customNetworks: {},
+  isInitialized: false,
+  apiUrls: {
+    [NetworkModes.Mainnet]: '',
+    [NetworkModes.Testnet]: '',
+  },
+  activeNetworkKey: '',
+  customNetworks: getCustomNetworksFromLS(),
 };
 
 const RELOAD_DELAY = 500;
 
-const reloadWithNewMode = (networkMode: string) =>
+const reloadWithNewNetwork = (network: Network) =>
   setTimeout(() => {
     if (typeof window !== 'undefined') {
       const href = new URL(window.location.href);
-      href.searchParams.set('chain', networkMode);
+      href.searchParams.set('chain', network.mode);
+      if (network.isCustomNetwork) {
+        href.searchParams.set('api', network.url);
+      } else {
+        href.searchParams.delete('api');
+      }
       window?.location?.replace(href.toString());
     }
   }, RELOAD_DELAY);
@@ -33,31 +51,67 @@ export const networkSlice = createSlice({
     setActiveNetwork: (state, action: PayloadAction<Network>) => {
       console.log('[debug] setActiveNetwork', action);
       state.activeNetworkKey = action.payload.url;
-      reloadWithNewMode(action.payload.mode);
+      reloadWithNewNetwork(action.payload);
     },
     addCustomNetwork: (state, action: PayloadAction<Network>) => {
-      state.customNetworks[action.payload.url] = action.payload;
+      state.customNetworks[action.payload.url] = { ...action.payload, isCustomNetwork: true };
+      localStorage.setItem(
+        CustomNetworksLSKey,
+        JSON.stringify({
+          ...getCustomNetworksFromLS(),
+          [action.payload.url]: state.customNetworks[action.payload.url],
+        })
+      );
     },
     removeCustomNetwork: (state, action: PayloadAction<Network>) => {
       delete state.customNetworks[action.payload.url];
+      const { [action.payload.url]: omitted, ...remainingCustomNetworks } =
+        getCustomNetworksFromLS();
+      localStorage.setItem(CustomNetworksLSKey, JSON.stringify(remainingCustomNetworks));
     },
-  },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.network,
-      };
+    initialize: (
+      state,
+      action: PayloadAction<{
+        apiUrls: ApiUrls;
+        queryNetworkMode: NetworkModes;
+        queryApiUrl?: string;
+      }>
+    ) => {
+      state.apiUrls = action.payload.apiUrls;
+      if (action.payload.queryApiUrl) {
+        state.activeNetworkKey = action.payload.queryApiUrl;
+      } else {
+        state.activeNetworkKey = action.payload.apiUrls[action.payload.queryNetworkMode];
+      }
+      state.isInitialized = true;
     },
   },
 });
 
-export const { setActiveNetwork, addCustomNetwork, removeCustomNetwork } = networkSlice.actions;
+export const { setActiveNetwork, addCustomNetwork, removeCustomNetwork, initialize } =
+  networkSlice.actions;
 
 export const selectNetworkSlice = (state: RootState) => state.network;
 
 export const selectNetworks = createSelector([selectNetworkSlice], networkSlice => ({
-  ...DEFAULT_NETWORK_MAP,
+  [networkSlice.apiUrls[NetworkModes.Mainnet]]: {
+    label: 'stacks.co',
+    url: networkSlice.apiUrls[NetworkModes.Mainnet],
+    networkId: ChainID.Mainnet,
+    mode: NetworkModes.Mainnet,
+  },
+  [networkSlice.apiUrls[NetworkModes.Testnet]]: {
+    label: 'stacks.co',
+    url: networkSlice.apiUrls[NetworkModes.Testnet],
+    networkId: ChainID.Testnet,
+    mode: NetworkModes.Testnet,
+  },
+  [DEFAULT_DEVNET_SERVER]: {
+    label: 'devnet',
+    url: DEFAULT_DEVNET_SERVER,
+    networkId: ChainID.Testnet,
+    mode: NetworkModes.Testnet,
+  },
   ...networkSlice.customNetworks,
 }));
 
@@ -76,3 +130,13 @@ export const selectActiveNetworkUrl = createSelector([selectActiveNetwork], acti
   }
   return activeNetwork?.url;
 });
+
+export const selectIsInitialized = createSelector(
+  [selectNetworkSlice],
+  networkSlice => networkSlice.isInitialized
+);
+
+export const selectApiUrls = createSelector(
+  [selectNetworkSlice, selectNetworks],
+  networkSlice => networkSlice.apiUrls
+);

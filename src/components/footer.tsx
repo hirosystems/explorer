@@ -1,8 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { Text, Box, Flex, BoxProps, color, FlexProps } from '@stacks/ui';
+import { Box, BoxProps, color, Flex, FlexProps, Text } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
 import { buildUrl } from '@components/links';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 
 const LinkWrapper: React.FC<any> = ({ children, href }) => {
   return href ? (
@@ -47,6 +49,7 @@ const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = memoWi
 );
 
 export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWidth?: boolean }) => {
+  const network = useAppSelector(selectActiveNetwork);
   return (
     <Box width="100%" {...props}>
       <Flex
@@ -59,10 +62,10 @@ export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWid
       >
         <Flex display="flex" flexDirection={'column'} gap="5px">
           <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
-            <FooterLink mr="base" href={buildUrl('/transactions')}>
+            <FooterLink mr="base" href={buildUrl('/transactions', network)}>
               Recent transactions
             </FooterLink>
-            <FooterLink href={buildUrl('/sandbox/deploy')} mr="base">
+            <FooterLink href={buildUrl('/sandbox/deploy', network)} mr="base">
               Sandbox
             </FooterLink>
             <FooterLink href="https://immunefi.com/bounty/stacks/" mr="base" target="_blank">

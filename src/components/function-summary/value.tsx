@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, BoxProps, Flex } from '@stacks/ui';
 import { Caption, Link, Text } from '@components/typography';
-import { clarityValuetoHumanReadable, microToStacks } from '@common/utils';
+import { microToStacks } from '@common/utils';
 import NextLink from 'next/link';
 import { TxLink } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';

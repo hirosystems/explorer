@@ -1,6 +1,5 @@
 import { Box, BoxProps, Flex, FlexProps, IconButton } from '@stacks/ui';
 import dynamic from 'next/dynamic';
-import NextLink from 'next/link';
 import React from 'react';
 import { StxInline } from '@components/icons/stx-inline';
 import { HeaderTextItem } from '@components/header-text-item';
@@ -8,8 +7,7 @@ import { NetworkSwitcherItem } from '@components/network-switcher';
 import { SearchComponent } from '@features/search/search';
 import { MobileMenu } from '@components/mobile-menu';
 import { NetworkModeBanner } from '@components/network-mode-banner';
-import { useAppDispatch } from '@common/state/hooks';
-import { buildUrl } from '@components/links';
+import { ExplorerLink } from '@components/links';
 import { StatusBar } from '@features/status-bar/status-bar';
 import { BtcStxPrice } from '@components/btc-stx-price';
 
@@ -18,7 +16,7 @@ const ColorModeButton = dynamic(() => import('@components/color-mode-button'), {
 export const LogoNavItem = React.memo((props: BoxProps) => {
   return (
     <Box {...props}>
-      <NextLink href={buildUrl('/')} passHref>
+      <ExplorerLink path={'/'}>
         <a>
           <IconButton
             invert
@@ -32,7 +30,7 @@ export const LogoNavItem = React.memo((props: BoxProps) => {
             as="span"
           />
         </a>
-      </NextLink>
+      </ExplorerLink>
     </Box>
   );
 });
@@ -56,15 +54,15 @@ const Navigation: React.FC = () => {
     <>
       <Flex alignItems="center" display={['none', 'none', 'none', 'flex']} gap={'16px'}>
         <ColorModeButton mr="-8px" />
-        <NextLink href={buildUrl('/transactions')} passHref>
+        <ExplorerLink path={'/transactions'}>
           <HeaderTextItem>Transactions</HeaderTextItem>
-        </NextLink>
-        <NextLink href={buildUrl('/blocks')} passHref>
+        </ExplorerLink>
+        <ExplorerLink path={'/blocks'}>
           <HeaderTextItem>Blocks</HeaderTextItem>
-        </NextLink>
-        <NextLink href={buildUrl('/sandbox/deploy')} passHref>
+        </ExplorerLink>
+        <ExplorerLink path={'/sandbox/deploy'}>
           <HeaderTextItem>Sandbox</HeaderTextItem>
-        </NextLink>
+        </ExplorerLink>
         <NetworkSwitcherItem />
         <BtcStxPrice />
       </Flex>
@@ -76,7 +74,6 @@ const Navigation: React.FC = () => {
 export const Header: React.FC<
   { isHome?: boolean; fullWidth?: boolean; networkMode?: string } & FlexProps
 > = React.memo(({ isHome, fullWidth, networkMode, ...props }) => {
-  const dispatch = useAppDispatch();
   return (
     <>
       <StatusBar />

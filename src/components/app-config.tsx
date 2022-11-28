@@ -5,17 +5,20 @@ import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
 import { NetworkMode } from '@common/types/network';
 import { Connect } from '@stacks/connect-react';
-import { useAppSelector } from '@common/state/hooks';
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import { selectUserSession } from '@modules/sandbox/sandbox-slice';
+import { ApiUrls, initialize, selectIsInitialized } from '@common/state/network-slice';
+import { IS_SSR } from '@common/constants';
 
-// TODO: Replace any type w/ SegmentAnalytics
-// import { SegmentAnalytics } from '@segment/analytics.js-core';
 declare const window: any;
 
 interface AppConfigProps {
   isHome?: boolean;
   fullWidth?: boolean;
   networkMode?: NetworkMode;
+  apiUrls: ApiUrls;
+  queryNetworkMode: NetworkMode;
+  queryApiUrl?: string;
 }
 
 export const AppConfig: React.FC<AppConfigProps> = ({
@@ -23,9 +26,14 @@ export const AppConfig: React.FC<AppConfigProps> = ({
   networkMode,
   isHome,
   fullWidth,
+  apiUrls,
+  queryNetworkMode,
+  queryApiUrl,
 }) => {
   const { events } = useRouter();
+  const dispatch = useAppDispatch();
   const userSession = useAppSelector(selectUserSession);
+  const isInitialized = useAppSelector(selectIsInitialized);
 
   useEffect(() => {
     console.log('mount');
@@ -36,6 +44,11 @@ export const AppConfig: React.FC<AppConfigProps> = ({
       return window.analytics?.page(url);
     });
   }, []);
+
+  if (!isInitialized) {
+    dispatch(initialize({ apiUrls, queryNetworkMode, queryApiUrl }));
+    return null;
+  }
 
   return (
     <Connect

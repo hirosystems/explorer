@@ -1,10 +1,9 @@
 import { FC, Fragment } from 'react';
 import { FaBitcoin } from 'react-icons/fa';
-import { BsArrowRightShort } from 'react-icons/bs';
-import { Box, Text, color } from '@stacks/ui';
+import { Box, color } from '@stacks/ui';
 import { css } from '@emotion/react';
 import { IconArrowRight } from '@tabler/icons';
-import { BlockLink, buildUrl } from '@components/links';
+import { BlockLink } from '@components/links';
 import { StxInline } from '@components/icons/stx-inline';
 import { Circle } from '@components/circle';
 import { useAppSelector } from '@common/state/hooks';
@@ -80,7 +79,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
       <Circle css={iconStyle}>
         <StxInline strokeWidth={2} size="11px" color="white" />
       </Circle>
-      <BlockLink hash={stxBlockHash} networkMode={activeNetworkMode}>
+      <BlockLink hash={stxBlockHash}>
         <span>#{stxBlockHeight}</span>
       </BlockLink>
       {btcBlockHeight && (

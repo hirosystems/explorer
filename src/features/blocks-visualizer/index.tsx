@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
 import { Box, StxInline, Tooltip } from '@stacks/ui';
 import { IconCurrencyBitcoin } from '@tabler/icons';
-import { BsFillExclamationCircleFill, BsArrowRight } from 'react-icons/bs';
+import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { Block as BlockType } from '@stacks/stacks-blockchain-api-types';
 import { buildUrl } from '@components/links';
@@ -195,8 +195,8 @@ const Block: React.FC<BlockProps> = ({
   const Icon = delayedBlock ? BsFillExclamationCircleFill : AiFillCheckCircle;
   const timeBetweenBlocksFormatted = secondsToString(timeBetweenBlocks);
   const router = useRouter();
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
-  const btcLinkPathPrefix = activeNetworkMode === NetworkModes.Testnet ? '/testnet' : '';
+  const network = useAppSelector(selectActiveNetwork);
+  const btcLinkPathPrefix = network.mode === NetworkModes.Testnet ? '/testnet' : '';
 
   return (
     <Box css={blockWrapperStyle}>
@@ -237,9 +237,7 @@ const Block: React.FC<BlockProps> = ({
         <Box
           css={blockStyle}
           className={'block-box'}
-          onClick={() =>
-            router.push(buildUrl(`/block/${encodeURIComponent(block.hash)}`, activeNetworkMode))
-          }
+          onClick={() => router.push(buildUrl(`/block/${encodeURIComponent(block.hash)}`, network))}
         >
           {stxBlockHeight}
         </Box>

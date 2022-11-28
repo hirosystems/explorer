@@ -8,12 +8,7 @@ import { border } from '@common/utils';
 import { Caption, Title } from '@components/typography';
 import useSWR from 'swr';
 
-import {
-  DEFAULT_MAINNET_SERVER,
-  DEFAULT_TESTNET_SERVER,
-  DEFAULT_V2_INFO_ENDPOINT,
-  MODALS,
-} from '@common/constants';
+import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@common/constants';
 import { Badge } from '@components/badge';
 
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
@@ -22,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import {
   removeCustomNetwork,
   selectActiveNetwork,
+  selectApiUrls,
   selectNetworks,
   setActiveNetwork,
 } from '@common/state/network-slice';
@@ -61,9 +57,10 @@ interface ItemProps extends ItemWrapperProps {
 const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
   const dispatch = useAppDispatch();
   const analytics = useAnalytics();
+  const { mainnet, testnet } = useAppSelector(selectApiUrls);
 
-  const isMainnet = item.url === DEFAULT_MAINNET_SERVER;
-  const isTestnet = item.url === DEFAULT_TESTNET_SERVER;
+  const isMainnet = item.url === mainnet;
+  const isTestnet = item.url === testnet;
   const isDefault = isMainnet || isTestnet;
   let itemNetworkId: ChainID.Mainnet | ChainID.Testnet = isMainnet
     ? ChainID.Mainnet

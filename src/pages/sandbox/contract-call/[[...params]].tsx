@@ -26,7 +26,7 @@ import {
 import { useFormik } from 'formik';
 import { useQuery } from 'react-query';
 import { useApi } from '@common/api/client';
-import { buildUrl, TxLink } from '@components/links';
+import { buildUrl, ExplorerLink, TxLink } from '@components/links';
 import NextLink from 'next/link';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
@@ -40,7 +40,7 @@ import { getTransactionQueries } from '@features/transaction/use-transaction-que
 import { Badge } from '@components/badge';
 import { ArrowRightIcon } from '@components/icons/arrow-right';
 import Icon from '@mdi/react';
-import { mdiListStatus, mdiFunction, mdiApi } from '@mdi/js';
+import { mdiApi, mdiFunction, mdiListStatus } from '@mdi/js';
 import {
   ClarityAbiFunction,
   ClarityAbiType,
@@ -200,8 +200,7 @@ interface ReadOnlyProps {
 
 const ReadOnly: FC<ReadOnlyProps> = ({ readOnlyValue, contractId, fn }) => {
   const { stxAddress } = useUser();
-  const network = useNetworkConfig();
-  const { mode: activeNetworkMode } = useAppSelector(selectActiveNetwork);
+  const stacksNetwork = useNetworkConfig();
 
   const { data } = useQuery(['readonly', contractId, fn.name], () =>
     callReadOnlyFunction({
@@ -209,7 +208,7 @@ const ReadOnly: FC<ReadOnlyProps> = ({ readOnlyValue, contractId, fn }) => {
       contractAddress: contractId.split('.')[0],
       functionName: fn.name,
       functionArgs: readOnlyValue,
-      network,
+      network: stacksNetwork,
       senderAddress: stxAddress,
     })
   );
@@ -226,12 +225,9 @@ const ReadOnly: FC<ReadOnlyProps> = ({ readOnlyValue, contractId, fn }) => {
         <Box>{data.result}</Box>
       )}
       <Flex alignItems="center" justifyContent="center" pt="base">
-        <NextLink
-          href={buildUrl(`/sandbox/contract-call/${contractId}`, activeNetworkMode)}
-          passHref
-        >
+        <ExplorerLink path={`/sandbox/contract-call/${contractId}`}>
           <Button>Back</Button>
-        </NextLink>
+        </ExplorerLink>
       </Flex>
     </Box>
   );
@@ -252,8 +248,7 @@ interface FunctionViewProps {
 
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
-  const network = useNetworkConfig();
-  const { mode: activeNetworkMode } = useAppSelector(selectActiveNetwork);
+  const stacksNetwork = useNetworkConfig();
 
   const initialValues = useMemo(
     () =>
@@ -322,7 +317,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId }) => {
           contractName: contractId.split('.')[1],
           functionName: encodeURIComponent(fn.name),
           functionArgs: Object.values(final),
-          network,
+          network: stacksNetwork,
           authOrigin: CONNECT_AUTH_ORIGIN,
         });
       } else {
@@ -353,14 +348,11 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId }) => {
           ) : null}
           <Flex flexDirection="column" alignItems="center" justifyContent="center">
             <Button type="submit">Call function</Button>
-            <NextLink
-              href={buildUrl(`/sandbox/contract-call/${contractId}`, activeNetworkMode)}
-              passHref
-            >
+            <ExplorerLink path={`/sandbox/contract-call/${contractId}`}>
               <Caption _hover={{ cursor: 'pointer', color: color('text-title') }} mt="base">
                 Cancel
               </Caption>
-            </NextLink>
+            </ExplorerLink>
           </Flex>
         </Box>
       )}
@@ -442,19 +434,12 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
   );
 };
 
-const PopularContracts: FC<{ rootContractAddress: string; activeNetworkMode: string }> = ({
-  rootContractAddress,
-  activeNetworkMode,
-}) => (
+const PopularContracts: FC<{ rootContractAddress: string }> = ({ rootContractAddress }) => (
   <>
     <Title fontWeight={400}>Or select from one of these</Title>
     <Stack mt="loose" spacing="loose">
       {defaultContracts(rootContractAddress).map(({ name, address, icon: Icon }) => (
-        <NextLink
-          href={buildUrl(`/sandbox/contract-call/${address}.${name}`, activeNetworkMode)}
-          key={name}
-          passHref
-        >
+        <ExplorerLink path={`/sandbox/contract-call/${address}.${name}`} key={name}>
           <Section
             color={color('text-title')}
             p="loose"
@@ -470,17 +455,15 @@ const PopularContracts: FC<{ rootContractAddress: string; activeNetworkMode: str
               </Stack>
             </Stack>
           </Section>
-        </NextLink>
+        </ExplorerLink>
       ))}
     </Stack>
   </>
 );
 
-const SearchContractsForm: FC<{ rootContractAddress: string; activeNetworkMode: string }> = ({
-  rootContractAddress,
-  activeNetworkMode,
-}) => {
+const SearchContractsForm: FC<{ rootContractAddress: string }> = ({ rootContractAddress }) => {
   const router = useRouter();
+  const network = useAppSelector(selectActiveNetwork);
   const { handleSubmit, handleChange, handleBlur, values, setValues, errors } = useFormik({
     validateOnChange: false,
     validateOnBlur: false,
@@ -501,9 +484,7 @@ const SearchContractsForm: FC<{ rootContractAddress: string; activeNetworkMode: 
       return errors;
     },
     onSubmit: ({ principal, contract_name }) =>
-      router.push(
-        buildUrl(`/sandbox/contract-call/${principal}.${contract_name}`, activeNetworkMode)
-      ),
+      router.push(buildUrl(`/sandbox/contract-call/${principal}.${contract_name}`, network)),
   });
 
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) =>
@@ -586,18 +567,16 @@ const SearchContractsForm: FC<{ rootContractAddress: string; activeNetworkMode: 
 };
 
 const AvailableFunctionsView: FC<{
-  activeNetworkMode: string;
   contract: ContractInfoProps['contract'];
   contractId: string;
-}> = ({ contractId, activeNetworkMode, contract }) => (
+}> = ({ contractId, contract }) => (
   <Section overflowY="auto" flexGrow={1} title="Available functions">
     {contract?.abi?.functions.map(
       (abiFn: any) =>
         abiFn.access !== 'private' && (
-          <NextLink
-            href={buildUrl(`/sandbox/contract-call/${contractId}/${abiFn.name}`, activeNetworkMode)}
+          <ExplorerLink
+            path={`/sandbox/contract-call/${contractId}/${abiFn.name}`}
             key={abiFn.name}
-            passHref
           >
             <Flex
               justifyContent="space-between"
@@ -641,7 +620,7 @@ const AvailableFunctionsView: FC<{
               </Flex>
               <IconButton icon={ArrowRightIcon} />
             </Flex>
-          </NextLink>
+          </ExplorerLink>
         )
     )}
   </Section>
@@ -667,11 +646,11 @@ export const BackLink: React.FC<{ href: string }> = ({ href }) => {
 };
 
 const SelectedContractView: FC<{
-  activeNetworkMode: string;
   contract: ContractWithParsedAbi;
   functionName: string;
   contractId: string;
-}> = ({ contract, activeNetworkMode, functionName, contractId }) => {
+}> = ({ contract, functionName, contractId }) => {
+  const network = useAppSelector(selectActiveNetwork);
   return (
     <Layout>
       <Grid
@@ -682,7 +661,7 @@ const SelectedContractView: FC<{
         flexShrink={1}
       >
         <Box borderRight={border()} p="base">
-          <BackLink href={buildUrl(`/sandbox/contract-call`, activeNetworkMode)} />
+          <BackLink href={buildUrl(`/sandbox/contract-call`, network)} />
           <ContractInfo contract={contract} />
         </Box>
         <Box overflow="auto" maxHeight="calc(100vh - 217px)" p="base">
@@ -696,11 +675,7 @@ const SelectedContractView: FC<{
               }
             />
           ) : (
-            <AvailableFunctionsView
-              contract={contract}
-              contractId={contractId}
-              activeNetworkMode={activeNetworkMode}
-            />
+            <AvailableFunctionsView contract={contract} contractId={contractId} />
           )}
         </Box>
       </Grid>
@@ -710,8 +685,7 @@ const SelectedContractView: FC<{
 
 const DefaultView: FC<{
   rootContractAddress: string;
-  activeNetworkMode: string;
-}> = ({ rootContractAddress, activeNetworkMode }) => (
+}> = ({ rootContractAddress }) => (
   <Layout>
     <Grid
       minHeight="600px"
@@ -721,16 +695,10 @@ const DefaultView: FC<{
       flexShrink={1}
     >
       <Box borderRight={border()}>
-        <SearchContractsForm
-          rootContractAddress={rootContractAddress}
-          activeNetworkMode={activeNetworkMode}
-        />
+        <SearchContractsForm rootContractAddress={rootContractAddress} />
       </Box>
       <Box p="base">
-        <PopularContracts
-          rootContractAddress={rootContractAddress}
-          activeNetworkMode={activeNetworkMode}
-        />
+        <PopularContracts rootContractAddress={rootContractAddress} />
       </Box>
     </Grid>
   </Layout>
@@ -743,7 +711,7 @@ const ContractCall: NextPage = () => {
   const { infoApi } = useApi();
   const { data: poxInfo } = useQuery('pox-info', () => infoApi.getPoxInfo(), { staleTime: 5000 });
   const rootContractAddress = poxInfo?.contract_id?.split('.')?.[0];
-  const { mode: activeNetworkMode, url: activeNetworkUrl } = useAppSelector(selectActiveNetwork);
+  const { url: activeNetworkUrl } = useAppSelector(selectActiveNetwork);
 
   const queries = getTransactionQueries(activeNetworkUrl);
 
@@ -761,16 +729,13 @@ const ContractCall: NextPage = () => {
     return (
       <SelectedContractView
         contract={contract}
-        activeNetworkMode={activeNetworkMode}
         functionName={functionName}
         contractId={contractId}
       />
     );
   }
 
-  return (
-    <DefaultView activeNetworkMode={activeNetworkMode} rootContractAddress={rootContractAddress} />
-  );
+  return <DefaultView rootContractAddress={rootContractAddress} />;
 };
 
 export default ContractCall;

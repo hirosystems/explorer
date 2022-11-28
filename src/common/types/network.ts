@@ -5,7 +5,7 @@ export enum NetworkModes {
   Mainnet = 'mainnet',
 }
 
-export type NetworkMode = NetworkModes.Mainnet | NetworkModes.Testnet | null;
+export type NetworkMode = NetworkModes.Mainnet | NetworkModes.Testnet;
 
 export interface Network {
   label: string;
@@ -13,4 +13,5 @@ export interface Network {
   networkId: ChainID;
   mode: NetworkModes;
   wsUrl?: string;
+  isCustomNetwork?: boolean;
 }

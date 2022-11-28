@@ -1,13 +1,12 @@
-import { Box, Flex, IconButton, Fade, color } from '@stacks/ui';
+import { Box, color, Fade, Flex, IconButton } from '@stacks/ui';
 import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
 import dynamic from 'next/dynamic';
-import NextLink from 'next/link';
 import React from 'react';
 import { HeaderTextItem } from '@components/header-text-item';
 import { IconArrowLeft, IconMenu2, IconX } from '@tabler/icons';
 import { NetworkItems } from '@components/network-items';
 import { border } from '@common/utils';
-import { buildUrl } from '@components/links';
+import { ExplorerLink } from '@components/links';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 
@@ -48,26 +47,26 @@ const IndexView: React.FC<{
   handleSetIndexView: () => void;
 }> = ({ handleSetNetworkView, handleClose }) => (
   <Flex flexDirection="column" alignItems="flex-end" px="extra-loose">
-    <NextLink href={buildUrl('/')} passHref>
+    <ExplorerLink path={'/'}>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Home
       </HeaderTextItem>
-    </NextLink>
-    <NextLink href={buildUrl('/transactions')} passHref>
+    </ExplorerLink>
+    <ExplorerLink path={'/transactions'}>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Transactions
       </HeaderTextItem>
-    </NextLink>
-    <NextLink href={buildUrl('/blocks')} passHref>
+    </ExplorerLink>
+    <ExplorerLink path={'/blocks'}>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Blocks
       </HeaderTextItem>
-    </NextLink>
-    <NextLink href={buildUrl('/sandbox/deploy')} passHref>
+    </ExplorerLink>
+    <ExplorerLink path={'/sandbox/deploy'}>
       <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
         Sandbox
       </HeaderTextItem>
-    </NextLink>
+    </ExplorerLink>
     <HeaderTextItem onClick={handleSetNetworkView} color={color('invert')} fontSize={6}>
       Switch network
     </HeaderTextItem>

@@ -23,16 +23,12 @@ export const DEFAULT_POLLING_INTERVAL =
     config?.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL || process.env.NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
   ) || 10000; // 10 seconds :c
 
-export const MAINNET_CHAIN_ID = ChainID.Mainnet;
 export const TESTNET_CHAIN_ID = ChainID.Testnet;
-
-export const IS_DEV = process.env.NODE_ENV !== 'production';
 export const IS_BROWSER = typeof document !== 'undefined';
 
 export const STACKS_EXPLORER_APP_ICON =
   'https://blockstack-www.imgix.net/stacks-explorer-icon.png?auto=format&w=72';
 
-export const DEFAULT_STATUS_ENDPOINT = '/extended/v1/status';
 export const DEFAULT_V2_INFO_ENDPOINT = '/v2/info';
 
 export const SITE_NOTICE_BANNER_LABEL =
@@ -47,15 +43,6 @@ export const APP_DETAILS = {
   name: 'Stacks Explorer',
   icon: STACKS_EXPLORER_APP_ICON,
 };
-export const DEPLOYMENT_URL =
-  config?.NEXT_PUBLIC_DEPLOYMENT_URL ||
-  process.env.NEXT_PUBLIC_DEPLOYMENT_URL ||
-  `https://${process.env.VERCEL_URL}`;
-
-export const LEGACY_EXPLORER_API_SERVER =
-  config?.NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER ||
-  process.env.NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER ||
-  'https://explorer-api.legacy.blockstack.org';
 
 export const CONNECT_AUTH_ORIGIN =
   config?.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
@@ -75,11 +62,6 @@ export const DEFAULT_MAINNET_SERVER =
 export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
 
 export const VERSION = config?.VERSION || process.env.VERSION || packageJson.version;
-
-export const NETWORK_CUSTOM_LIST_COOKIE = 'STACKS_EXPLORER_NETWORK_CUSTOM_LIST';
-export const NETWORK_CURRENT_INDEX_COOKIE = 'STACKS_EXPLORER_NETWORK_CURRENT_INDEX';
-export const DEFAULT_MAINNET_INDEX = 0;
-export const DEFAULT_TESTNET_INDEX = 1;
 
 export enum MODALS {
   SEARCH = 'modals/search',

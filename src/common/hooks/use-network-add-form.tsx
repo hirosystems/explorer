@@ -66,6 +66,7 @@ export const useNetworkAddForm = () => {
             url: networkUrl,
             networkId,
             mode: NetworkIdModeMap[networkId],
+            isCustomNetwork: true,
           };
           dispatch(addCustomNetwork(network));
           dispatch(setActiveNetwork(network));

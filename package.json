@@ -69,8 +69,6 @@
     "morgan": "1.10.0",
     "next": "12.2.6-canary.6",
     "next-plugin-preact": "3.0.6",
-    "next-redux-cookie-wrapper": "2.1.2",
-    "next-redux-wrapper": "8.0.0-rc.1",
     "nookies": "2.5.2",
     "onigasm": "2.2.5",
     "pluralize": "8.0.0",

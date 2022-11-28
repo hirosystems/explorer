@@ -6,12 +6,11 @@ import { ItemIcon } from '@components/item-icon';
 import { Caption, Title } from '@components/typography';
 import { getTxTitle, truncateMiddle } from '@common/utils';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
-import { Stack, Flex, color } from '@stacks/ui';
+import { color, Flex, Stack } from '@stacks/ui';
 import { AddressArea, Nonce, Timestamp } from '@components/transaction-item';
 import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
 
 interface MempoolTxsListItemProps {
   tx: MempoolTransaction;
@@ -20,7 +19,7 @@ interface MempoolTxsListItemProps {
 export const MempoolTxsListItem: FC<MempoolTxsListItemProps> = memo(({ tx }) => {
   const isPending = tx.tx_status === 'pending';
   const didFail = !isPending;
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const network = useAppSelector(selectActiveNetwork);
 
   const icon = useMemo(() => <ItemIcon type={'tx'} tx={tx} />, [tx]);
 
@@ -79,7 +78,7 @@ export const MempoolTxsListItem: FC<MempoolTxsListItemProps> = memo(({ tx }) => 
       icon={icon}
       leftContent={{ title: leftTitle, subtitle: leftSubtitle }}
       rightContent={{ title: rightTitle, subtitle: rightSubtitle }}
-      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, activeNetworkMode)}
+      href={buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network)}
     />
   );
 });
