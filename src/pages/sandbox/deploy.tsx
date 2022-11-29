@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
 import { Box, Button, color, Flex, Grid, IconButton, Input, Stack } from '@stacks/ui';
 import { border } from '@common/utils';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -99,7 +99,11 @@ const RightSection: FC = () => {
   );
 };
 
-const LeftSection: FC = () => {
+interface LeftSectionProps {
+  claritySyntax: string;
+}
+
+const LeftSection: FC<LeftSectionProps> = ({ claritySyntax }) => {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useAppDispatch();
   const codeBody = useAppSelector(selectCodeBody);
@@ -110,7 +114,7 @@ const LeftSection: FC = () => {
         hover(monaco);
         autocomplete(monaco);
         defineTheme(monaco);
-        await liftOff(monaco);
+        await liftOff(monaco, claritySyntax);
 
         setLoaded(true);
       }
@@ -162,17 +166,29 @@ const LeftSection: FC = () => {
   );
 };
 
-const Deploy: NextPage = () => (
+const Deploy: NextPage = ({ claritySyntax }: InferGetStaticPropsType<typeof getStaticProps>) => (
   <Layout>
     <Grid minHeight="600px" gridTemplateColumns="365px 1fr" flexGrow={1} flexShrink={1}>
       <Flex flexDirection="column" flexGrow={1} p="loose">
         <RightSection />
       </Flex>
       <Flex flexDirection="column" bg="#282c34" pt="base" flexGrow={1} flexShrink={1}>
-        <LeftSection />
+        <LeftSection claritySyntax={claritySyntax} />
       </Flex>
     </Grid>
   </Layout>
 );
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Fetch Clarity grammar file only at build time
+  const response = await fetch(
+    'https://raw.githubusercontent.com/hirosystems/clarinet/main/components/clarity-vscode/syntaxes/clarity.tmLanguage.json'
+  );
+  const data = await response.text();
+
+  return {
+    props: { claritySyntax: data },
+  };
+};
 
 export default Deploy;
