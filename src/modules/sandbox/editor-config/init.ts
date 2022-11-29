@@ -3,16 +3,15 @@ import { IGrammarDefinition, Registry } from 'monaco-textmate';
 import { wireTmGrammars } from 'monaco-editor-textmate';
 import { Monaco } from '@monaco-editor/react';
 
-export async function liftOff(monaco: Monaco) {
+export async function liftOff(monaco: Monaco, claritySyntax: string) {
   try {
     await loadWASM(`/onigasm.wasm`);
     const registry = new Registry({
-      getGrammarDefinition: async scopeName => {
-        return {
+      getGrammarDefinition: scopeName =>
+        Promise.resolve({
           format: 'json',
-          content: await (await fetch(`/clarity.tmLanguage.json`)).text(),
-        } as IGrammarDefinition;
-      },
+          content: claritySyntax,
+        } as IGrammarDefinition),
     });
 
     const grammars = new Map();

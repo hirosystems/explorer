@@ -69,7 +69,7 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
   const query = appContext.ctx.query;
   const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
-    '') as NetworkModes;
+    NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
   store.dispatch(initialize({ queryNetworkMode, apiUrls: NetworkModeUrlMap, queryApiUrl }));
   console.log(
