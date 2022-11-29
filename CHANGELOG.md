@@ -1,3 +1,10 @@
+# [1.61.0](https://github.com/hirosystems/explorer/compare/v1.60.0...v1.61.0) (2022-11-29)
+
+
+### Features
+
+* copy ts ([ce55e94](https://github.com/hirosystems/explorer/commit/ce55e94ab7dea0536d5d7120c2616568bd642e3e))
+
 # [1.60.0](https://github.com/hirosystems/explorer/compare/v1.59.0...v1.60.0) (2022-11-23)
 
 
