@@ -1,3 +1,10 @@
+# [1.62.0](https://github.com/hirosystems/explorer/compare/v1.61.0...v1.62.0) (2022-12-02)
+
+
+### Features
+
+* debug reload issue ([2b084b6](https://github.com/hirosystems/explorer/commit/2b084b67f2afabc478b07d205c684f170ef731e7))
+
 # [1.61.0](https://github.com/hirosystems/explorer/compare/v1.60.0...v1.61.0) (2022-11-29)
 
 
