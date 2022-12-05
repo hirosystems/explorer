@@ -1,3 +1,10 @@
+# [1.63.0](https://github.com/hirosystems/explorer/compare/v1.62.0...v1.63.0) (2022-12-05)
+
+
+### Features
+
+* dynamically fetch clarity grammar file for editor ([b0f4ab0](https://github.com/hirosystems/explorer/commit/b0f4ab0fac66bbd0d2b5c00fdda55b2295a03bda))
+
 # [1.62.0](https://github.com/hirosystems/explorer/compare/v1.61.0...v1.62.0) (2022-12-02)
 
 
