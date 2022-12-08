@@ -4,8 +4,7 @@ import { Box, color, Text, Flex } from '@stacks/ui';
 import { Tooltip } from '@components/tooltip';
 import { Card } from '@components/card';
 import { css } from '@emotion/react';
-import { MICROSTACKS_IN_STACKS, numberToString, usdFormatterNoDecimals } from '@common/utils';
-import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti';
+import { MICROSTACKS_IN_STACKS, numberToString } from '@common/utils';
 import { useQuery } from 'react-query';
 import { useApi } from '@common/api/client';
 import { useAppSelector } from '@common/state/hooks';
@@ -55,24 +54,6 @@ const StatSection: FC<{
   </Box>
 );
 
-const MovePercentage: FC<{ currentValue: number; previousValue: number }> = ({
-  currentValue,
-  previousValue,
-}) => {
-  const moveAmount = currentValue - previousValue;
-  const isUp = moveAmount >= 0;
-  const Icons = isUp ? TiArrowSortedUp : TiArrowSortedDown;
-  const color = isUp ? '#16C784' : '#EA3943';
-  const movePercentage = Math.abs((moveAmount * 100) / previousValue).toFixed(2);
-  return (
-    <Flex alignItems={'center'} color={color}>
-      (
-      <Icons size={18} />
-      {movePercentage}%)
-    </Flex>
-  );
-};
-
 const SkeletonStatSection: FC = () => (
   // TODO: Add error state once we have a design for it
   <StatSection
@@ -109,43 +90,12 @@ const StxSupply: FC<{ unlockedStx?: string; totalStx?: string; unlockedPercent?:
   );
 };
 
-const MarketCap: FC<{
-  marketCapToday?: number;
-  marketCapYesterday?: number;
-  totalVolumeToday?: number;
-  totalVolumeYesterday?: number;
-}> = ({ marketCapToday, marketCapYesterday, totalVolumeToday, totalVolumeYesterday }) => {
-  if (!marketCapToday || !marketCapYesterday || !totalVolumeToday || !totalVolumeYesterday) {
-    return <SkeletonStatSection />;
-  }
-  return (
-    <StatSection
-      title="Market Cap"
-      bodyMainText={usdFormatterNoDecimals.format(marketCapToday)}
-      bodySecondaryText={
-        <MovePercentage currentValue={marketCapToday} previousValue={marketCapYesterday} />
-      }
-      caption={
-        <Flex fontSize={'12px'} color={color('text-title')} fontWeight="500" alignItems={'center'}>
-          <Text fontSize={'12px'} color={color('text-caption')}>
-            24h volume:
-          </Text>
-          &nbsp;
-          {usdFormatterNoDecimals.format(totalVolumeToday)}&nbsp;
-          <MovePercentage currentValue={totalVolumeToday} previousValue={totalVolumeYesterday} />
-        </Flex>
-      }
-    />
-  );
-};
-
 const StackingCycle: FC<{
   title: string;
   stackedSTX?: number;
-  blocksTilNextCycle?: number;
   caption: ReactNode;
-}> = ({ title, stackedSTX, blocksTilNextCycle, caption }) => {
-  if (!stackedSTX || !blocksTilNextCycle) {
+}> = ({ title, stackedSTX, caption }) => {
+  if (!stackedSTX) {
     return <SkeletonStatSection />;
   }
   return (
@@ -221,8 +171,9 @@ export const Stats: FC = () => {
     blocksTilNextCycleRewardPhase / numberOfTenMinutesInDay
   );
   const displayPreparePhaseInfo = approximateDaysTilNextCyclePreparePhase > 0;
-  const currentCycleCaption = useMemo(
-    () => (
+  const currentCycleCaption = useMemo(() => {
+    if (!blocksTilNextCycle) return null;
+    return (
       <Flex fontSize={'12px'} color={color('text-title')} fontWeight="500" alignItems={'center'}>
         <Text fontSize={'12px'} color={color('text-caption')}>
           Next cycle starts in
@@ -240,18 +191,22 @@ export const Stats: FC = () => {
           </Flex>
         </Tooltip>
       </Flex>
-    ),
-    [approximateDaysTilNextCycle, blocksTilNextCycle]
-  );
-  const nextCycleCaption = useMemo(
-    () => (
+    );
+  }, [approximateDaysTilNextCycle, blocksTilNextCycle]);
+  const nextCycleCaption = useMemo(() => {
+    if (
+      (displayPreparePhaseInfo && !blocksTilNextCyclePreparePhase) ||
+      (!displayPreparePhaseInfo && !blocksTilNextCycleRewardPhase)
+    )
+      return null;
+    return (
       <Flex fontSize={'12px'} color={color('text-title')} fontWeight="500" alignItems={'center'}>
         <Text fontSize={'12px'} color={color('text-caption')}>
           {displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in
         </Text>
         &nbsp;
         <Tooltip
-          label={`Next cycle starts in ${
+          label={`${displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in ${
             displayPreparePhaseInfo ? blocksTilNextCyclePreparePhase : blocksTilNextCycleRewardPhase
           } block${
             (displayPreparePhaseInfo
@@ -276,9 +231,14 @@ export const Stats: FC = () => {
           </Flex>
         </Tooltip>
       </Flex>
-    ),
-    [approximateDaysTilNextCycle, blocksTilNextCycle]
-  );
+    );
+  }, [
+    approximateDaysTilNextCyclePreparePhase,
+    approximateDaysTilNextCycleRewardPhase,
+    blocksTilNextCyclePreparePhase,
+    blocksTilNextCycleRewardPhase,
+    displayPreparePhaseInfo,
+  ]);
   return (
     <Card
       bg={color('bg')}
@@ -301,13 +261,11 @@ export const Stats: FC = () => {
       <StackingCycle
         title="Current Stacking Cycle"
         stackedSTX={currentCycleStackedSTX}
-        blocksTilNextCycle={blocksTilNextCycle}
         caption={currentCycleCaption}
       />
       <StackingCycle
         title="Next Stacking Cycle"
         stackedSTX={nextCycleStackedSTX}
-        blocksTilNextCycle={blocksTilNextCycle}
         caption={nextCycleCaption}
       />
     </Card>
