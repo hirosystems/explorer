@@ -1,3 +1,10 @@
+# [1.65.0](https://github.com/hirosystems/explorer/compare/v1.64.0...v1.65.0) (2022-12-08)
+
+
+### Features
+
+* handle empty stats caption ([bec6b0b](https://github.com/hirosystems/explorer/commit/bec6b0b430597a3c0ccf7c638e397bba822639f8))
+
 # [1.64.0](https://github.com/hirosystems/explorer/compare/v1.63.0...v1.64.0) (2022-12-08)
 
 
