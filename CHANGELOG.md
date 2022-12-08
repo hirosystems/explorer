@@ -1,3 +1,10 @@
+# [1.64.0](https://github.com/hirosystems/explorer/compare/v1.63.0...v1.64.0) (2022-12-08)
+
+
+### Features
+
+* stats widget ([7e96eff](https://github.com/hirosystems/explorer/commit/7e96eff69454ed9c66ff73d6b913dd36c40e1cb1))
+
 # [1.63.0](https://github.com/hirosystems/explorer/compare/v1.62.0...v1.63.0) (2022-12-05)
 
 
