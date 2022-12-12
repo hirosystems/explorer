@@ -1,3 +1,10 @@
+# [1.66.0](https://github.com/hirosystems/explorer/compare/v1.65.0...v1.66.0) (2022-12-12)
+
+
+### Features
+
+* display search bar on mobile ([64780ee](https://github.com/hirosystems/explorer/commit/64780ee3c6dd74e5ff17f5050a0dc858a50a53a8))
+
 # [1.65.0](https://github.com/hirosystems/explorer/compare/v1.64.0...v1.65.0) (2022-12-08)
 
 
