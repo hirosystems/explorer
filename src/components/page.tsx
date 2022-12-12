@@ -21,6 +21,7 @@ import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-
 import { getTransactionStatus } from '@common/utils/transactions';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { SearchComponent } from '@features/search/search';
 
 type PageProps = {
   notice?: { label?: string; message?: string };
@@ -151,6 +152,16 @@ export const PageWrapper: React.FC<PageWrapperProps> = ({ networkMode, ...props 
     overflow="hidden"
   >
     <Header fullWidth={true} />
+    <Flex
+      display={['block', 'block', 'none', 'none']}
+      p="tight"
+      mx="auto"
+      width="100%"
+      flexDirection={'column'}
+      px={'base'}
+    >
+      <SearchComponent variant="small" mr="base" width="100%" maxWidth="760px" />
+    </Flex>
     <Page {...props} />
     <MetaverseBg />
   </Flex>
