@@ -1,4 +1,4 @@
-import { cvToJSON, hexToCV, ClarityAbiType, ClarityAbiTypeTuple } from '@stacks/transactions';
+import { cvToJSON, hexToCV } from '@stacks/transactions';
 import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex, Stack, color } from '@stacks/ui';
 import { Caption, Pre } from '@components/typography';
