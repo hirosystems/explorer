@@ -1,5 +1,5 @@
 import { FC, useCallback, useMemo, useState } from 'react';
-import { Button, color, Text, Tooltip } from '@stacks/ui';
+import { Button, color, Text, Tooltip, useColorMode } from '@stacks/ui';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { useStxPriceForTx } from '@modules/stxPrice/useStxPriceForTx';
 import { getUsdValue } from '@common/utils';
@@ -32,15 +32,19 @@ export const StxPriceButton: FC<StxPriceButtonProps> = ({ tx, value }) => {
     () => getUsdValue(value, historicalStxPrice, true),
     [historicalStxPrice, value]
   );
+  const { colorMode } = useColorMode();
   if (hasBlockHeight) {
     return (
       <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
         <Button
           size={'sm'}
-          bg={'#e9e8ff'}
+          bg={colorMode === 'light' ? '#e9e8ff' : color('bg-4')}
           fontFamily="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'"
           color={color('text-body')}
-          _hover={{ bg: '#d9d7ff' }}
+          _hover={{
+            bg: colorMode === 'light' ? '#d9d7ff' : color('bg-4'),
+            color: colorMode === 'light' ? undefined : color('brand'),
+          }}
           ml={'5px'}
           onClick={toggleStxPrice}
           fontSize={'14px !important'}
