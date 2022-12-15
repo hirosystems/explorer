@@ -174,7 +174,10 @@ const transformDataToRowData = (tx: Transaction | MempoolTransaction, block?: Bl
     children: <FeesComponent tx={tx} />,
   };
   const blockTime = {
-    condition: 'block_height' in tx && typeof tx.block_height !== 'undefined',
+    condition:
+      'block_height' in tx &&
+      typeof tx.block_height !== 'undefined' &&
+      !(tx?.tx_status === 'success' && tx.is_unanchored), // exclude block height row from txs in microblocks
     label: {
       children: 'Block height',
     },
@@ -189,7 +192,10 @@ const transformDataToRowData = (tx: Transaction | MempoolTransaction, block?: Bl
       ) : null,
   };
   const blockHash = {
-    condition: 'block_hash' in tx && typeof tx.block_hash !== 'undefined',
+    condition:
+      'block_hash' in tx &&
+      typeof tx.block_hash !== 'undefined' &&
+      !(tx?.tx_status === 'success' && tx.is_unanchored), // exclude block hash row from txs in microblocks,
     label: {
       children: 'Block hash',
     },
