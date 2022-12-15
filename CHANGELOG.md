@@ -1,3 +1,10 @@
+# [1.67.0](https://github.com/hirosystems/explorer/compare/v1.66.0...v1.67.0) (2022-12-15)
+
+
+### Features
+
+* fix dark mode price color ([411f79c](https://github.com/hirosystems/explorer/commit/411f79c3561e48c09602bf85391d3971b7f4cb29))
+
 # [1.66.0](https://github.com/hirosystems/explorer/compare/v1.65.0...v1.66.0) (2022-12-12)
 
 
