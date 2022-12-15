@@ -11,6 +11,7 @@ import {
   Input,
   Stack,
   transition,
+  useColorMode,
 } from '@stacks/ui';
 import { border, onPaste, truncateMiddle, validateStacksAddress } from '@common/utils';
 import { Caption, Link, Text, Title } from '@components/typography';
@@ -113,20 +114,24 @@ const ArgLine: FC<ArgLineProps> = ({
   placeholder = name,
   error,
   value,
-}) => (
-  <Box width="100%">
-    <Input
-      width="100%"
-      type={getTypeString(type).includes('int') ? 'number' : 'text'}
-      name={name}
-      id={name}
-      onChange={handleChange}
-      value={value}
-      placeholder={`${getTypeString(type)}`}
-    />
-    {error && <Caption color={color('feedback-error')}>{error}</Caption>}
-  </Box>
-);
+}) => {
+  const { colorMode } = useColorMode();
+  return (
+    <Box width="100%">
+      <Input
+        width="100%"
+        type={getTypeString(type).includes('int') ? 'number' : 'text'}
+        name={name}
+        id={name}
+        onChange={handleChange}
+        value={value}
+        placeholder={`${getTypeString(type)}`}
+        color={colorMode === 'light' ? '#000' : '#fff'}
+      />
+      {error && <Caption color={color('feedback-error')}>{error}</Caption>}
+    </Box>
+  );
+};
 
 interface FunctionLineProps {
   name: string;
@@ -501,6 +506,7 @@ const SearchContractsForm: FC<{ rootContractAddress: string }> = ({ rootContract
         }, 0);
       }
     });
+  const { colorMode } = useColorMode();
 
   return (
     <Flex maxHeight="900px" flexDirection="column" p="loose">
@@ -547,6 +553,7 @@ const SearchContractsForm: FC<{ rootContractAddress: string }> = ({ rootContract
             value={values.principal}
             placeholder="Enter the contract address"
             onPaste={handlePaste}
+            color={colorMode === 'light' ? '#000' : '#fff'}
           />
           <Input
             id="contract_name"
@@ -556,6 +563,7 @@ const SearchContractsForm: FC<{ rootContractAddress: string }> = ({ rootContract
             onBlur={handleBlur}
             value={values.contract_name}
             placeholder="Enter the contract name"
+            color={colorMode === 'light' ? '#000' : '#fff'}
           />
           <Box>
             <Button type="submit">Get contract</Button>
