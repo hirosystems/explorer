@@ -1,4 +1,4 @@
-import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { cvToJSON, hexToCV, ClarityAbiType, ClarityAbiTypeTuple } from '@stacks/transactions';
 import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex, Stack, color } from '@stacks/ui';
 import { Caption, Pre } from '@components/typography';
@@ -24,7 +24,7 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const entry = value.value[name];
-            let repr = entry.value.toString();
+            let repr = entry.value === null ? 'none' : entry.value.toString();
             if (entry.type.includes('list')) {
               repr = entry.value.map((listEntry: any) => listEntry.value).join(', ');
             }
