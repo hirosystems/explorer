@@ -1,10 +1,13 @@
-import React, { memo, useCallback, useState } from 'react';
-import { HeaderTextItem } from '@components/header-text-item';
-import { Box, BoxProps, Fade, color } from '@stacks/ui';
 import { IconChevronDown } from '@tabler/icons';
-import { NetworkItems } from '@components/network-items';
-import { border } from '@common/utils';
+import React, { memo, useCallback, useState } from 'react';
+
+import { Box, BoxProps, Fade, color } from '@stacks/ui';
+
 import { useControlledHover } from '@common/hooks/use-controlled-hover';
+import { border } from '@common/utils';
+
+import { HeaderTextItem } from '@components/header-text-item';
+import { NetworkItems } from '@components/network-items';
 
 const Dropdown: React.FC<BoxProps & { show?: boolean; onItemClick?: () => void }> = memo(
   ({ show, onItemClick }) => {

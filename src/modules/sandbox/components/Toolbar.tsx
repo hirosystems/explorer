@@ -1,24 +1,28 @@
+import { useMonaco } from '@monaco-editor/react';
+import CloseIcon from 'mdi-react/CloseIcon';
 import React from 'react';
+
 import { Box, Flex, Stack, useClipboard } from '@stacks/ui';
-import { useUser } from '@modules/sandbox/hooks/useUser';
+
+import { helloWorldContract } from '@common/contracts/hello-world-contract';
+import { kvStoreContract } from '@common/contracts/kv-store';
+import { statusContract } from '@common/contracts/status';
+import { streamContract } from '@common/contracts/stream';
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+
 import { IconButton } from '@components/icon-button';
 import { CopyIcon } from '@components/icons/copy';
-import { Tooltip } from '@components/tooltip';
-import CloseIcon from 'mdi-react/CloseIcon';
-import { Caption } from '@components/typography';
 import { Select } from '@components/select';
-import { useMonaco } from '@monaco-editor/react';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { Tooltip } from '@components/tooltip';
+import { Caption } from '@components/typography';
+
+import { useUser } from '@modules/sandbox/hooks/useUser';
 import {
   selectCodeBody,
   selectShowCodeToolbar,
   setCodeBody,
   toggleCodeToolbar,
 } from '@modules/sandbox/sandbox-slice';
-import { helloWorldContract } from '@common/contracts/hello-world-contract';
-import { kvStoreContract } from '@common/contracts/kv-store';
-import { statusContract } from '@common/contracts/status';
-import { streamContract } from '@common/contracts/stream';
 
 export const Sample = () => {
   const { stxAddress } = useUser();

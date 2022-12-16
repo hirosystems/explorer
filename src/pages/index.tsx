@@ -1,12 +1,16 @@
-import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
-import { Meta } from '@components/meta-head';
-import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
 import { BlocksList } from '@features/blocks-list';
-import { Grid } from '@stacks/ui';
-import * as React from 'react';
 import type { NextPage } from 'next';
-import { Stats } from '@modules/stats/Stats';
+import * as React from 'react';
+
+import { Grid } from '@stacks/ui';
+
+import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
+
+import { Meta } from '@components/meta-head';
 import { Title } from '@components/typography';
+
+import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
+import { Stats } from '@modules/stats/Stats';
 
 const Home: NextPage = () => {
   console.log('[DEBUG] rendering home');

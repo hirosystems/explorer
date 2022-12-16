@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { Box, BoxProps, color } from '@stacks/ui';
 
 export const PercentageCircle: React.FC<BoxProps & { percentage: number }> = ({

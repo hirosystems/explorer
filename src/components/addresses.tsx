@@ -1,9 +1,12 @@
-import React from 'react';
-import { Stack, color, Flex, Box, StackProps } from '@stacks/ui';
 import { IconArrowRight } from '@tabler/icons';
-import { Caption, Link } from '@components/typography';
-import { AddressLink } from '@components/links';
+import React from 'react';
+
+import { Box, Flex, Stack, StackProps, color } from '@stacks/ui';
+
 import { truncateMiddle } from '@common/utils';
+
+import { AddressLink } from '@components/links';
+import { Caption, Link } from '@components/typography';
 
 interface SenderRecipientProps extends StackProps {
   sender: string;

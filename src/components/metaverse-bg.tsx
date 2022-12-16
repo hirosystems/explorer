@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, memo } from 'react';
+import { Global, css } from '@emotion/react';
+import React, { memo, useEffect, useRef } from 'react';
+
 import type { BoxProps } from '@stacks/ui';
 import { Box, transition } from '@stacks/ui';
-import { css, Global } from '@emotion/react';
 import type { ForwardRefExoticComponentWithAs } from '@stacks/ui-core';
 import { forwardRefWithAs } from '@stacks/ui-core';
 

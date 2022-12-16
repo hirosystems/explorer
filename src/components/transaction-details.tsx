@@ -1,24 +1,26 @@
+import { BlocksVisualizer } from '@features/blocks-visualizer';
+import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
+import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
 import * as React from 'react';
 
-import { Box, color, Flex, Stack, Text } from '@stacks/ui';
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Flex, Stack, Text, color } from '@stacks/ui';
+
+import { TransactionStatus } from '@common/constants';
 import { getMemoString, microToStacks } from '@common/utils';
+import { getTransactionStatus } from '@common/utils/transactions';
 
 import { Badge } from '@components/badge';
-import { Link } from '@components/typography';
-import { TransactionStatus } from '@common/constants';
-import { Rows } from '@components/rows';
-import { Timestamp } from '@components/timestamp';
-import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { Section } from '@components/section';
-import { BlockLink, ExplorerLink, TxLink } from '@components/links';
-import { IconButton } from '@components/icon-button';
-import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
-import { StxInline } from '@components/icons/stx-inline';
-import { Circle } from '@components/circle';
-import { IconArrowDownRight, IconArrowUpRight } from '@tabler/icons';
-import { BlocksVisualizer } from '@features/blocks-visualizer';
-import { getTransactionStatus } from '@common/utils/transactions';
 import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { Circle } from '@components/circle';
+import { IconButton } from '@components/icon-button';
+import { StxInline } from '@components/icons/stx-inline';
+import { BlockLink, ExplorerLink, TxLink } from '@components/links';
+import { Rows } from '@components/rows';
+import { Section } from '@components/section';
+import { Timestamp } from '@components/timestamp';
+import { Link } from '@components/typography';
+
 import { StxPriceButton } from '@modules/stxPrice/StxPriceButton';
 
 interface FeeComponentProps {

@@ -1,8 +1,11 @@
-import React from 'react';
-import { Box, Flex, Button, color, Input, Stack, StackProps } from '@stacks/ui';
-import { Caption } from '@components/typography';
-import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
 import { IconAlertTriangle } from '@tabler/icons';
+import React from 'react';
+
+import { Box, Button, Flex, Input, Stack, StackProps, color } from '@stacks/ui';
+
+import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
+
+import { Caption } from '@components/typography';
 
 export const AddNetworkForm: React.FC<StackProps> = props => {
   const { handleSubmit, handleChange, errors, isValidating } = useNetworkAddForm();

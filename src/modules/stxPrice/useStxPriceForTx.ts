@@ -1,6 +1,8 @@
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { useCurrentStxPrice, useHistoricalStxPrice } from '@common/hooks/use-current-prices';
 import dayjs from 'dayjs';
+
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+
+import { useCurrentStxPrice, useHistoricalStxPrice } from '@common/hooks/use-current-prices';
 
 export const useStxPriceForTx = (tx: Transaction | MempoolTransaction) => {
   const hasBlockHeight = 'block_height' in tx;

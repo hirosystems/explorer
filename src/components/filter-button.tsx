@@ -1,9 +1,12 @@
-import { Box, color } from '@stacks/ui';
-import React, { memo } from 'react';
-import { CaptionAction } from '@components/caption-action';
 import { IconFilter } from '@tabler/icons';
-import { FilterPanel } from '@components/filter-panel';
+import React, { memo } from 'react';
+
+import { Box, color } from '@stacks/ui';
+
 import { useFilterState } from '@common/hooks/use-filter-state';
+
+import { CaptionAction } from '@components/caption-action';
+import { FilterPanel } from '@components/filter-panel';
 
 export const FilterButton = memo(() => {
   const { toggleFilterVisibility } = useFilterState();

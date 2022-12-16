@@ -1,5 +1,6 @@
-import { IS_SSR } from '@common/constants';
 import React, { ReactNode } from 'react';
+
+import { IS_SSR } from '@common/constants';
 
 export function SafeSuspense({
   children,

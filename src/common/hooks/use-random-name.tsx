@@ -1,5 +1,5 @@
 import React from 'react';
-import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
+import { Config, adjectives, animals, colors, uniqueNamesGenerator } from 'unique-names-generator';
 
 const customConfig: Config = {
   dictionaries: [adjectives, colors, animals],

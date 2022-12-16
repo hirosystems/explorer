@@ -1,19 +1,20 @@
 // @ts-nocheck TODO: Fix
+import FunctionIcon from 'mdi-react/FunctionIcon';
+import ListStatusIcon from 'mdi-react/ListStatusIcon';
+import pluralize from 'pluralize';
 import React from 'react';
 
-import { Box, BoxProps, color, Flex, Grid, Stack } from '@stacks/ui';
+import { Box, BoxProps, Flex, Grid, Stack, color } from '@stacks/ui';
 
 import { border, getContractName, truncateMiddle } from '@common/utils';
-import { Caption, Title, Text } from '@components/typography';
-import { Section } from '@components/section';
-import pluralize from 'pluralize';
-import { ItemIcon } from '@components/item-icon';
-import FunctionIcon from 'mdi-react/FunctionIcon';
+
 import { AtomIcon } from '@components/icons/atom';
-import ListStatusIcon from 'mdi-react/ListStatusIcon';
-import { FungibleTokenIcon } from '@components/icons/fungible-token';
 import { ExternalLinkIcon } from '@components/icons/external-link';
+import { FungibleTokenIcon } from '@components/icons/fungible-token';
+import { ItemIcon } from '@components/item-icon';
 import { TxLink } from '@components/links';
+import { Section } from '@components/section';
+import { Caption, Text, Title } from '@components/typography';
 
 const PluralizedItem: React.FC<BoxProps & { array: any[]; label: string }> = ({
   array,

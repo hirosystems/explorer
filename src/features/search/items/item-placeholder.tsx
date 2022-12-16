@@ -1,7 +1,10 @@
 import React from 'react';
-import { color, Spinner, Stack } from '@stacks/ui';
-import { border } from '@common/utils';
+
+import { Spinner, Stack, color } from '@stacks/ui';
+
 import { FoundResult, SearchResultType } from '@common/types/search-results';
+import { border } from '@common/utils';
+
 import { ItemIcon } from '@components/item-icon';
 
 export const SearchResultsItemPlaceholder = ({

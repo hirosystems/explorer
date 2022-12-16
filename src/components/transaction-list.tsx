@@ -1,20 +1,23 @@
-import { useFilterState } from '@common/hooks/use-filter-state';
-import { CaptionAction } from '@components/caption-action';
-import { FilteredMessage, FilterPanel } from '@components/filter-panel';
-import { HoverableItem } from '@components/hoverable';
-import { TxLink } from '@components/links';
-import { Section } from '@components/section';
-import { TxItem } from '@components/transaction-item';
-import { Text } from '@components/typography';
 import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { IconFilter } from '@tabler/icons';
+import React from 'react';
+
 import {
   MempoolTransaction,
   Transaction,
   TransactionResults,
 } from '@stacks/stacks-blockchain-api-types';
-import { Box, BoxProps, color, Flex, FlexProps, Grid } from '@stacks/ui';
-import { IconFilter } from '@tabler/icons';
-import React from 'react';
+import { Box, BoxProps, Flex, FlexProps, Grid, color } from '@stacks/ui';
+
+import { useFilterState } from '@common/hooks/use-filter-state';
+
+import { CaptionAction } from '@components/caption-action';
+import { FilterPanel, FilteredMessage } from '@components/filter-panel';
+import { HoverableItem } from '@components/hoverable';
+import { TxLink } from '@components/links';
+import { Section } from '@components/section';
+import { TxItem } from '@components/transaction-item';
+import { Text } from '@components/typography';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps

@@ -1,6 +1,8 @@
-import * as React from 'react';
-import { Box, Transition } from '@stacks/ui';
 import { useRect } from '@reach/rect';
+import * as React from 'react';
+
+import { Box, Transition } from '@stacks/ui';
+
 import { CodeBlock } from '@components/code-block';
 
 export const CodeAccordian = React.memo(

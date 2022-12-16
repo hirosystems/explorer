@@ -1,13 +1,14 @@
+import { IconAlertOctagon, IconInfoCircle } from '@tabler/icons';
+import Link from 'next/link';
 import * as React from 'react';
 
 import { Box, Grid, Stack } from '@stacks/ui';
-import { PageWrapper } from '@components/page';
-import { Title } from '@components/typography';
-import { Section } from '@components/section';
+
 import { Button } from '@components/button';
-import { IconAlertOctagon, IconInfoCircle } from '@tabler/icons';
 import { MessageWithIcon } from '@components/message-with-icon';
-import Link from 'next/link';
+import { PageWrapper } from '@components/page';
+import { Section } from '@components/section';
+import { Title } from '@components/typography';
 
 export const AddressNotFound: React.FC<{ isPending?: boolean }> = React.memo(({ isPending }) => {
   return (

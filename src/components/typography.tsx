@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import { Text as BaseText, BoxProps, color } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
+
 import { border } from '@common/utils';
 
 export const Text: ForwardRefExoticComponentWithAs<BoxProps, 'span'> = forwardRefWithAs<

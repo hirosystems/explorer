@@ -1,17 +1,13 @@
-import React from 'react';
-
-import { Box, BoxProps, color, Flex, FlexProps, IconButton, Stack, Tooltip } from '@stacks/ui';
 import { IconCheck, IconTrash } from '@tabler/icons';
-
-import { fetchFromApi } from '@common/api/fetch';
-import { border } from '@common/utils';
-import { Caption, Title } from '@components/typography';
+import React from 'react';
 import useSWR from 'swr';
 
-import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@common/constants';
-import { Badge } from '@components/badge';
+import { ChainID } from '@stacks/transactions';
+import { Box, BoxProps, Flex, FlexProps, IconButton, Stack, Tooltip, color } from '@stacks/ui';
 
+import { fetchFromApi } from '@common/api/fetch';
 import { getNetworkModeFromNetworkId } from '@common/api/utils';
+import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@common/constants';
 import { useAnalytics } from '@common/hooks/use-analytics';
 import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import {
@@ -22,8 +18,11 @@ import {
   setActiveNetwork,
 } from '@common/state/network-slice';
 import { Network } from '@common/types/network';
+import { border } from '@common/utils';
+
+import { Badge } from '@components/badge';
 import { openModal } from '@components/modals/modal-slice';
-import { ChainID } from '@stacks/transactions';
+import { Caption, Title } from '@components/typography';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;

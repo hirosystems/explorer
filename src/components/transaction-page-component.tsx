@@ -1,18 +1,21 @@
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { getContractId } from '@common/utils';
-import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
+import { BlockQueryKeys, blockQK } from '@features/block/query-keys';
 import { getBlockQueries } from '@features/block/use-block-queries';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
 import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
+
 import {
   CoinbaseTransaction,
   SmartContractTransaction,
   TokenTransferTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
+
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { getContractId } from '@common/utils';
+
 import { SkeletonTransactionSummary } from './loaders/skeleton-transaction';
 import CoinbasePage from './tx/coinbase';
 import ContractCallPage from './tx/contract-call';

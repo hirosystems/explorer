@@ -1,17 +1,21 @@
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import * as React from 'react';
+import { useMemo } from 'react';
+import { UseInfiniteQueryResult, useInfiniteQuery } from 'react-query';
+
+import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Stack } from '@stacks/ui';
+
+import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { getNextPageParam } from '@common/utils';
+
 import { SkeletonAccountTransactionList } from '@components/loaders/skeleton-transaction';
 import { NoActivityIllustration } from '@components/no-activity-illustration';
 import { Section } from '@components/section';
 import { Caption } from '@components/typography';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { Box, Stack } from '@stacks/ui';
-import * as React from 'react';
-import { useInfiniteQuery, UseInfiniteQueryResult } from 'react-query';
+
 import { MempoolTxsList, TxsListWithTransfers } from '@modules/TransactionList/components/TxsList';
-import { useMemo } from 'react';
-import { ApiResponseWithResultsOffset } from '@common/types/api';
-import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
-import { getNextPageParam } from '@common/utils';
 
 // TODO to move to a separate file
 export const Wrapper: React.FC = ({ children }) => (

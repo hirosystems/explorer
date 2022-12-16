@@ -1,7 +1,9 @@
 import React from 'react';
-import { Box, Flex, color, transition, FlexProps } from '@stacks/ui';
-import { Caption } from '@components/typography';
+
+import { Box, Flex, FlexProps, color, transition } from '@stacks/ui';
+
 import { blue, focusBlue } from '@components/button';
+import { Caption } from '@components/typography';
 
 const DEFAULT_HEIGHT = 20;
 const SMALL_HEIGHT = 12;

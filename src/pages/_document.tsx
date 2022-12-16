@@ -1,6 +1,5 @@
-import * as React from 'react';
+import { extractCritical } from '@emotion/server';
 import * as snippet from '@segment/snippet';
-
 import Document, {
   DocumentContext,
   DocumentInitialProps,
@@ -10,8 +9,10 @@ import Document, {
   Main,
   NextScript,
 } from 'next/document';
-import { extractCritical } from '@emotion/server';
+import * as React from 'react';
+
 import { GlobalStyles, TextAreaOverrides } from '@components/global-styles';
+
 const { SEGMENT_WRITE_KEY, NODE_ENV } = process.env;
 
 export const THEME_STORAGE_KEY = 'theme';

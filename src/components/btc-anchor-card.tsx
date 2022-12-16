@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Box, FlexProps } from '@stacks/ui';
-import { Rows } from '@components/rows';
-import { truncateMiddle } from '@common/utils';
-import { Section } from '@components/section';
+
 import { Block } from '@stacks/stacks-blockchain-api-types';
-import { Link } from '@components/typography';
-import { NetworkModes } from '@common/types/network';
+import { Box, FlexProps } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { NetworkModes } from '@common/types/network';
+import { truncateMiddle } from '@common/utils';
+
+import { Rows } from '@components/rows';
+import { Section } from '@components/section';
+import { Link } from '@components/typography';
 
 export const BtcAnchorBlockCard: React.FC<FlexProps & { block: Block }> = ({ block, ...rest }) => {
   const networkMode = useAppSelector(selectActiveNetwork).mode;

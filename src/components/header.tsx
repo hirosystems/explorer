@@ -1,15 +1,17 @@
-import { Box, BoxProps, Flex, FlexProps, IconButton } from '@stacks/ui';
+import { SearchComponent } from '@features/search/search';
+import { StatusBar } from '@features/status-bar/status-bar';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { StxInline } from '@components/icons/stx-inline';
-import { HeaderTextItem } from '@components/header-text-item';
-import { NetworkSwitcherItem } from '@components/network-switcher';
-import { MobileMenu } from '@components/mobile-menu';
-import { ExplorerLink } from '@components/links';
-import { StatusBar } from '@features/status-bar/status-bar';
+
+import { Box, BoxProps, Flex, FlexProps, IconButton } from '@stacks/ui';
+
 import { BtcStxPrice } from '@components/btc-stx-price';
-import { SearchComponent } from '@features/search/search';
+import { HeaderTextItem } from '@components/header-text-item';
+import { StxInline } from '@components/icons/stx-inline';
+import { ExplorerLink } from '@components/links';
+import { MobileMenu } from '@components/mobile-menu';
 import { NetworkModeBanner } from '@components/network-mode-banner';
+import { NetworkSwitcherItem } from '@components/network-switcher';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 

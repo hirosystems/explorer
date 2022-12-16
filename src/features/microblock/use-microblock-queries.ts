@@ -1,7 +1,8 @@
+import { Block, Microblock } from '@stacks/stacks-blockchain-api-types';
+
 import { apiClients, createConfig } from '@common/api/client';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { Block, Microblock } from '@stacks/stacks-blockchain-api-types';
 
 export const getMicroblockQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));

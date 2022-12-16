@@ -1,20 +1,24 @@
-import React from 'react';
-import type { NextPage } from 'next';
-import { Box, color, Flex, Grid, Stack } from '@stacks/ui';
-import { border, microToStacks, stacksToMicro, validateStacksAddress } from '@common/utils';
-import { Button } from '@components/button';
-import { Caption, Text, Title } from '@components/typography';
-import { Badge } from '@components/badge';
-import { useUser } from '@modules/sandbox/hooks/useUser';
-import { Layout } from '@modules/sandbox/components/Layout';
-import { Input } from '@components/inputs';
-import { useNetworkConfig } from '@common/hooks/use-network-config';
 import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
-import { useApi } from '@common/api/client';
+import type { NextPage } from 'next';
+import React from 'react';
 import { useQuery } from 'react-query';
+
 import { openSTXTransfer } from '@stacks/connect';
+import { Box, Flex, Grid, Stack, color } from '@stacks/ui';
+
+import { useApi } from '@common/api/client';
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
+import { useNetworkConfig } from '@common/hooks/use-network-config';
+import { border, microToStacks, stacksToMicro, validateStacksAddress } from '@common/utils';
+
+import { Badge } from '@components/badge';
+import { Button } from '@components/button';
+import { Input } from '@components/inputs';
+import { Caption, Text, Title } from '@components/typography';
+
+import { Layout } from '@modules/sandbox/components/Layout';
+import { useUser } from '@modules/sandbox/hooks/useUser';
 
 const Transfer: NextPage = () => {
   const { feesApi } = useApi();

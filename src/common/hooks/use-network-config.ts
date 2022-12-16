@@ -1,7 +1,8 @@
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
-import { NetworkModes } from '@common/types/network';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { NetworkModes } from '@common/types/network';
 import { fetchWithApiKey } from '@common/utils/fetchWithApiKey';
 
 // for use with connect

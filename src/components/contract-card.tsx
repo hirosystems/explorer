@@ -1,14 +1,15 @@
+import Link from 'next/link';
 import * as React from 'react';
+import { useHover } from 'use-events';
 
 import { Box, Flex, FlexProps, Text } from '@stacks/ui';
-import { Caption, Title } from '@components/typography';
 
-import { ArrowRightIcon } from './icons/arrow-right';
 import { Card } from '@components/card';
 import { CodeIcon } from '@components/icons/code';
 import { DefaultContract } from '@components/icons/default-contract';
-import Link from 'next/link';
-import { useHover } from 'use-events';
+import { Caption, Title } from '@components/typography';
+
+import { ArrowRightIcon } from './icons/arrow-right';
 
 const ContractCardButton: React.FC<{ contractId: string } & FlexProps> = ({
   contractId,

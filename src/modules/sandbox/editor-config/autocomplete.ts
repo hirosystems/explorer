@@ -1,6 +1,7 @@
-import { clarity } from '@modules/sandbox/editor-config/clarity-reference';
 import { Monaco } from '@monaco-editor/react';
-import { editor, Position, languages, IRange } from 'monaco-editor/esm/vs/editor/editor.api';
+import { IRange, Position, editor, languages } from 'monaco-editor/esm/vs/editor/editor.api';
+
+import { clarity } from '@modules/sandbox/editor-config/clarity-reference';
 
 const getToken = (line: string, replacer: string) =>
   line

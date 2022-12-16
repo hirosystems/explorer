@@ -1,7 +1,7 @@
+import React from 'react';
+
 import { Box, BoxProps } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
-
-import React from 'react';
 
 export const StacksLogo: ForwardRefExoticComponentWithAs<BoxProps, 'svg'> = forwardRefWithAs<
   BoxProps,

@@ -1,4 +1,5 @@
 import { microToStacks } from '@common/utils';
+
 import { Activity } from '@components/activity-row';
 import { TokenBalancesRow } from '@components/balances/token-balances-row';
 import { Rows } from '@components/rows';

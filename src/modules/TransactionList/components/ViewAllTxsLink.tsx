@@ -1,8 +1,11 @@
-import { border } from '@common/utils';
-import { Caption } from '@components/typography';
-import { FC, memo } from 'react';
 import NextLink from 'next/link';
+import { FC, memo } from 'react';
+
 import { Grid, color } from '@stacks/ui';
+
+import { border } from '@common/utils';
+
+import { Caption } from '@components/typography';
 
 export const ViewAllTxsLink: FC = memo(() => (
   <NextLink href={`/transactions`} passHref>

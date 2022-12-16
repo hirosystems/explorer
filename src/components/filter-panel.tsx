@@ -1,18 +1,21 @@
-import React from 'react';
-import { Box, color, Flex, Grid, GridProps, Stack } from '@stacks/ui';
-import { Text, Title } from '@components/typography';
-import { border } from '@common/utils';
-import { IconButton } from '@components/icon-button';
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
-import { Tag } from '@components/tags';
-import CloseIcon from 'mdi-react/CloseIcon';
-import { useHover } from 'use-events';
 import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutlineIcon';
-import { blue } from '@components/button';
-import { FilterIcon } from '@components/icons/filter';
-import { Badge } from '@components/badge';
-import { useFilterState } from '@common/hooks/use-filter-state';
+import CloseIcon from 'mdi-react/CloseIcon';
+import React from 'react';
+import { useHover } from 'use-events';
+
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
+import { Box, Flex, Grid, GridProps, Stack, color } from '@stacks/ui';
+
+import { useFilterState } from '@common/hooks/use-filter-state';
+import { border } from '@common/utils';
+
+import { Badge } from '@components/badge';
+import { blue } from '@components/button';
+import { IconButton } from '@components/icon-button';
+import { FilterIcon } from '@components/icons/filter';
+import { Tag } from '@components/tags';
+import { Text, Title } from '@components/typography';
 
 const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
   GetTransactionListTypeEnum.smart_contract,

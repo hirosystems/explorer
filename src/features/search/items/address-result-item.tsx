@@ -1,14 +1,17 @@
+import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 import React from 'react';
+import { useQuery } from 'react-query';
+
+import { AddressStxBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex } from '@stacks/ui';
+
+import { useApi } from '@common/api/client';
 import { FoundResult } from '@common/types/search-results';
 import { microToStacks, truncateMiddle } from '@common/utils';
-import { AddressLink } from '@components/links';
+
 import { ItemIcon } from '@components/item-icon';
+import { AddressLink } from '@components/links';
 import { Caption, Title } from '@components/typography';
-import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
-import { useApi } from '@common/api/client';
-import { useQuery } from 'react-query';
-import { AddressStxBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 interface AddressResultItemProps {
   result: FoundResult;

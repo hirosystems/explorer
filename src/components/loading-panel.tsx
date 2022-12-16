@@ -1,8 +1,11 @@
 import React from 'react';
-import { Box, Flex, Grid, color, BoxProps } from '@stacks/ui';
-import { Text } from '@components/typography';
-import { Pending } from '@components/status';
+
+import { Box, BoxProps, Flex, Grid, color } from '@stacks/ui';
+
 import { border } from '@common/utils';
+
+import { Pending } from '@components/status';
+import { Text } from '@components/typography';
 
 export const LoadingPanel: React.FC<{ text: string } & BoxProps> = React.memo(
   ({ text, ...rest }) => (

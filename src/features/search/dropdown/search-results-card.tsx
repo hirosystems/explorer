@@ -1,16 +1,19 @@
-import * as React from 'react';
-import { Box, BoxProps, color, Flex, Spinner, transition } from '@stacks/ui';
-import { Caption } from '@components/typography';
-import { border } from '@common/utils';
 import { SearchErrorMessage } from '@features/search/dropdown/error-message';
-import { Pending } from '@components/status';
-import { ReactNode } from 'react';
-import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { SearchResultItem } from '@features/search/items/search-result-item';
 import { SearchResultsItemPlaceholder } from '@features/search/items/item-placeholder';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { SearchResultItem } from '@features/search/items/search-result-item';
 import { clearSearchTerm, selectIsSearchFieldFocused } from '@features/search/search-slice';
 import { useSearch } from '@features/search/use-search';
+import * as React from 'react';
+import { ReactNode } from 'react';
+
+import { Box, BoxProps, Flex, Spinner, color, transition } from '@stacks/ui';
+
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { border } from '@common/utils';
+
+import { SafeSuspense } from '@components/ssr-safe-suspense';
+import { Pending } from '@components/status';
+import { Caption } from '@components/typography';
 
 const SearchingIndicator: React.FC = React.memo(() => (
   <Flex alignItems="center">

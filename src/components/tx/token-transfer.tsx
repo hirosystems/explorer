@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { Stack } from '@stacks/ui';
-import { Events } from '@components/tx-events';
-import { PageTop } from '@components/page';
-import { TransactionDetails } from '@components/transaction-details';
-import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import { PagePanes } from '@components/page-panes';
+
 import {
   Block,
   MempoolTokenTransferTransaction,
   TokenTransferTransaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { Stack } from '@stacks/ui';
+
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
+import { PageTop } from '@components/page';
+import { PagePanes } from '@components/page-panes';
+import { TransactionDetails } from '@components/transaction-details';
+import { Events } from '@components/tx-events';
 
 const TokenTransferPage: React.FC<{
   transaction: TokenTransferTransaction | MempoolTokenTransferTransaction;

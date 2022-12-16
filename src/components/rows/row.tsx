@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { Ref } from 'react';
+import { useHover } from 'use-events';
 
-import { CopyProps, RowContentProps, RowProps, RowWrapperProps } from '@components/rows/types';
 import { Flex, FlexProps, useClipboard } from '@stacks/ui';
 
 import { IconButton } from '@components/icon-button';
 import { CopyIcon } from '@components/icons/copy';
 import { SkeletonForType } from '@components/loaders/skeleton-text';
+import { CopyProps, RowContentProps, RowProps, RowWrapperProps } from '@components/rows/types';
 import { Tooltip } from '@components/tooltip';
 import { Caption } from '@components/typography';
-import { useHover } from 'use-events';
 
 export const RowWrapper: React.FC<RowWrapperProps> = React.memo(
   ({ borderColor = 'var(--colors-border)', inline, ...props }) => (

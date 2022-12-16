@@ -1,7 +1,8 @@
-import { DynamicColorCircle } from '@stacks/ui';
-import { FungibleTokenMetadata, NonFungibleTokenMetadata } from '@stacks/blockchain-api-client';
-
 import React from 'react';
+
+import { FungibleTokenMetadata, NonFungibleTokenMetadata } from '@stacks/blockchain-api-client';
+import { DynamicColorCircle } from '@stacks/ui';
+
 import { getAssetNameParts } from '@common/utils';
 import { imageCanonicalUriFromFtMetadata } from '@common/utils/token-utils';
 

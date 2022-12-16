@@ -1,6 +1,7 @@
 import { FungibleTokenMetadata, NonFungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import { isIconUrl } from './url-utils';
+
 import { convertUnicodeToAscii } from './string-utils';
+import { isIconUrl } from './url-utils';
 
 export function isFtNameLikeStx(name: string): boolean {
   return ['stx', 'stack', 'stacks'].includes(convertUnicodeToAscii(name).toLocaleLowerCase());

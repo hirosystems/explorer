@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
-import { Box, BoxProps } from '@stacks/ui';
 import { useHover } from 'web-api-hooks';
+
+import { Box, BoxProps } from '@stacks/ui';
+
 import { bottomLineCss, leftLineCss } from '@common/styles/hover';
 
 const HoverContext = React.createContext(false);

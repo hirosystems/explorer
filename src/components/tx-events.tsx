@@ -1,10 +1,14 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import { Section } from '@components/section';
-import { Box, Grid, Flex, color, Stack, FlexProps, DynamicColorCircle } from '@stacks/ui';
+import { useInfiniteTransactionEvents } from '@features/transaction/use-infinite-transaction-events';
 import { IconAlignLeft, IconArrowRight, IconPlus, IconTrash } from '@tabler/icons';
-import { StxInline } from '@components/icons/stx-inline';
+import React, { Fragment, useEffect, useState } from 'react';
+import { InfiniteData } from 'react-query';
+
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
+import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
+import { Box, DynamicColorCircle, Flex, FlexProps, Grid, Stack, color } from '@stacks/ui';
+
+import { useApi } from '@common/api/client';
+import { ApiResponseWithResultsOffset } from '@common/types/api';
 import {
   addSepBetweenStrings,
   border,
@@ -14,15 +18,15 @@ import {
   microToStacks,
   truncateMiddle,
 } from '@common/utils';
-import { Caption, Link, Title } from '@components/typography';
-import { Circle } from '@components/circle';
+
 import { SenderRecipient } from '@components/addresses';
+import { Circle } from '@components/circle';
+import { StxInline } from '@components/icons/stx-inline';
 import { AddressLink } from '@components/links';
-import { useApi } from '@common/api/client';
-import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { Section } from '@components/section';
+import { Caption, Link, Title } from '@components/typography';
+
 import { Pending } from './status';
-import { useInfiniteTransactionEvents } from '@features/transaction/use-infinite-transaction-events';
-import { InfiniteData } from 'react-query';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {

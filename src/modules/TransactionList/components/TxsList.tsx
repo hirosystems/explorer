@@ -1,23 +1,27 @@
-import { useFilterState } from '@common/hooks/use-filter-state';
-import { TransferListItem, TxsListItem } from './TxsListItem';
-import { MempoolTxsListItem } from './MempoolTxsListItem';
 import { FC, Fragment, memo, useMemo } from 'react';
 import { UseInfiniteQueryResult } from 'react-query';
-import { SectionFooterAction } from '@components/section-footer-button';
-import { FilteredMessage } from '@components/filter-panel';
-import { Text } from '@components/typography';
-import { Grid, Box, color } from '@stacks/ui';
+
 import {
-  AddressTransactionsWithTransfersListResponse,
   AddressTransactionWithTransfersFtTransfers,
   AddressTransactionWithTransfersNftTransfers,
+  AddressTransactionsWithTransfersListResponse,
 } from '@stacks/blockchain-api-client';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { ftDecimals, getAssetNameParts, microToStacks } from '@common/utils';
-import { useTokenMetadata } from '@common/hooks/use-token-metadata';
-import { getTicker } from '@components/tx-events';
 import { AddressTransactionWithTransfersStxTransfers } from '@stacks/blockchain-api-client/src/generated/models';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Grid, color } from '@stacks/ui';
+
+import { useFilterState } from '@common/hooks/use-filter-state';
+import { useTokenMetadata } from '@common/hooks/use-token-metadata';
 import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { ftDecimals, getAssetNameParts, microToStacks } from '@common/utils';
+
+import { FilteredMessage } from '@components/filter-panel';
+import { SectionFooterAction } from '@components/section-footer-button';
+import { getTicker } from '@components/tx-events';
+import { Text } from '@components/typography';
+
+import { MempoolTxsListItem } from './MempoolTxsListItem';
+import { TransferListItem, TxsListItem } from './TxsListItem';
 
 interface TxsListCommonProps {
   showFooter?: boolean;

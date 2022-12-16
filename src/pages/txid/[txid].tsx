@@ -1,16 +1,18 @@
-import * as React from 'react';
-import { TransactionMeta } from '@components/meta/transactions';
-import { TransactionPageComponent } from '@components/transaction-page-component';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { Meta } from '@components/meta-head';
-import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
-import { TxNotFound } from '@components/tx-not-found';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
 import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import * as React from 'react';
 import { useQuery } from 'react-query';
+
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
+
+import { Meta } from '@components/meta-head';
+import { TransactionMeta } from '@components/meta/transactions';
+import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
+import { TransactionPageComponent } from '@components/transaction-page-component';
+import { TxNotFound } from '@components/tx-not-found';
 
 interface TransactionPageProps {
   isPossiblyValid?: boolean;

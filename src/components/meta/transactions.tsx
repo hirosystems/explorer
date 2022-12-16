@@ -1,4 +1,12 @@
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
+import { useQuery } from 'react-query';
+
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+
+import { TransactionStatus } from '@common/constants';
 import {
   getContractName,
   getFunctionName,
@@ -7,16 +15,11 @@ import {
   toRelativeTime,
   truncateMiddle,
 } from '@common/utils';
-import { Meta } from '@components/meta-head';
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { getContractId } from '@components/transaction-details';
 import { getTxErrorMessage } from '@common/utils/errors';
-import { TransactionStatus } from '@common/constants';
 import { getTransactionStatus } from '@common/utils/transactions';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+
+import { Meta } from '@components/meta-head';
+import { getContractId } from '@components/transaction-details';
 
 const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
   const defaultPageTitle = 'Transaction';

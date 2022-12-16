@@ -1,7 +1,9 @@
-import * as React from 'react';
-import { Flex, FlexProps, IconButton } from '@stacks/ui';
-import { Tooltip } from '@components/tooltip';
 import { IconQuestionMark } from '@tabler/icons';
+import * as React from 'react';
+
+import { Flex, FlexProps, IconButton } from '@stacks/ui';
+
+import { Tooltip } from '@components/tooltip';
 
 interface SearchHintsProps extends FlexProps {
   isHovered?: boolean;

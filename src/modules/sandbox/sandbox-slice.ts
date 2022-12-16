@@ -1,9 +1,11 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '@common/state/store';
-import { AppConfig, showConnect, UserData, UserSession } from '@stacks/connect';
-import { APP_DETAILS } from '@common/constants';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
+
+import { AppConfig, UserData, UserSession, showConnect } from '@stacks/connect';
 import { AuthOptions } from '@stacks/connect/dist/types/types/auth';
+
+import { APP_DETAILS } from '@common/constants';
 import { helloWorldContract } from '@common/contracts/hello-world-contract';
+import { RootState } from '@common/state/store';
 
 export interface ConnectState {
   userSession: UserSession;

@@ -1,11 +1,12 @@
-import { Flex, Box, FlexProps, color, Spinner } from '@stacks/ui';
-import { Text } from '@components/typography';
-
-import { Card } from '@components/card';
 import React from 'react';
 
-import { border, isReactComponent } from '@common/utils';
+import { Box, Flex, FlexProps, Spinner, color } from '@stacks/ui';
+
 import { SECTION_HEADER_HEIGHT } from '@common/constants/sizes';
+import { border, isReactComponent } from '@common/utils';
+
+import { Card } from '@components/card';
+import { Text } from '@components/typography';
 
 interface SectionProps extends Omit<FlexProps, 'title'> {
   title?: string | React.FC;

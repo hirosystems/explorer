@@ -1,7 +1,9 @@
-import * as React from 'react';
-import { Box, color, Flex } from '@stacks/ui';
-import { Caption } from '@components/typography';
 import { IconAlertTriangle } from '@tabler/icons';
+import * as React from 'react';
+
+import { Box, Flex, color } from '@stacks/ui';
+
+import { Caption } from '@components/typography';
 
 export const SearchErrorMessage: React.FC<{ message: string; hint?: string }> = React.memo(
   ({ message, hint }) => (

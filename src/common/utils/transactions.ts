@@ -1,4 +1,5 @@
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+
 import { TransactionStatus } from '@common/constants';
 
 export function getTransactionStatus(tx: Transaction | MempoolTransaction) {

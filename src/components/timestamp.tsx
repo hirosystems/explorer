@@ -1,9 +1,11 @@
+import { IconClock } from '@tabler/icons';
 import * as React from 'react';
 
 import { Box, Flex, FlexProps, Text, useClipboard } from '@stacks/ui';
-import { IconClock } from '@tabler/icons';
-import { Tooltip } from '@components/tooltip';
+
 import { toRelativeTime } from '@common/utils';
+
+import { Tooltip } from '@components/tooltip';
 
 interface TimestampProps extends FlexProps {
   ts: number;

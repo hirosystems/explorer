@@ -1,8 +1,9 @@
-import { Box, Text } from '@stacks/ui';
 import { css } from '@emotion/react';
+import { Link } from 'components/link';
 import { useEffect, useState } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
-import { Link } from 'components/link';
+
+import { Box, Text } from '@stacks/ui';
 
 enum Indicator {
   none = 'none',

@@ -1,25 +1,29 @@
-import React, { FC, useState } from 'react';
+import { IconLogout, IconMenu2, IconUser } from '@tabler/icons';
 import Head from 'next/head';
+import React, { FC, useState } from 'react';
+
 import {
   Box,
   Button,
-  color,
+  Circle,
   Flex,
   Grid,
   IconButton,
   Stack,
+  color,
   useClipboard,
-  Circle,
 } from '@stacks/ui';
+
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import { border, microToStacks, truncateMiddle } from '@common/utils';
+
+import { StxInline } from '@components/icons/stx-inline';
+import { Tooltip } from '@components/tooltip';
+import { Caption, Text, Title } from '@components/typography';
+
 import { SideNav } from '@modules/sandbox/components/SideNav';
 import { TransactionsPanel } from '@modules/sandbox/components/TransactionsPanel';
-import { Caption, Text, Title } from '@components/typography';
-import { IconLogout, IconMenu2, IconUser } from '@tabler/icons';
-import { Tooltip } from '@components/tooltip';
-import { StxInline } from '@components/icons/stx-inline';
 import { useUser } from '@modules/sandbox/hooks/useUser';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import {
   selectShowRightPanel,
   setUserData,

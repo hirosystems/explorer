@@ -1,6 +1,7 @@
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
-import { NetworkModes } from '@common/types/network';
 import { ChainID } from '@stacks/transactions';
+
+import { NetworkModes } from '@common/types/network';
 
 export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>
   `limit=${limit}${offset ? `&offset=${offset}` : ''}`;

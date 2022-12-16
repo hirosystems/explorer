@@ -1,8 +1,10 @@
 import * as React from 'react';
+
 import { Box, BoxProps, color } from '@stacks/ui';
 
 import { BaseSvg, SvgProps } from '@components/icons/_base';
 import { TransferIcon } from '@components/icons/transfer';
+
 export { TransferIcon };
 export const CheckmarkCircleIcon: React.FC<BoxProps> = props => (
   <Box {...props}>

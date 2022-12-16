@@ -1,22 +1,23 @@
-import { apiClients, createConfig } from '@common/api/client';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
+import { GetTransactionByIdRequest } from '@stacks/blockchain-api-client';
 import {
   AddressBalanceResponse,
+  AddressTransactionsWithTransfersListResponse,
   MempoolTransaction,
   MempoolTransactionListResponse,
   Transaction,
   TransactionResults,
-  AddressTransactionsWithTransfersListResponse,
 } from '@stacks/stacks-blockchain-api-types';
+
+import { apiClients, createConfig } from '@common/api/client';
 import {
   DEFAULT_LIST_LIMIT,
   DEFAULT_TX_EVENTS_LIMIT,
   MAX_BLOCK_TRANSACTIONS_PER_CALL,
 } from '@common/constants';
-import { GetTransactionByIdRequest } from '@stacks/blockchain-api-client';
-import { ContractWithParsedAbi } from '@common/types/contract';
+import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
 import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { ContractWithParsedAbi } from '@common/types/contract';
 
 export const getTransactionQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));

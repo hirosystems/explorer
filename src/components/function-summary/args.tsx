@@ -1,10 +1,13 @@
 import * as React from 'react';
-import { Box, Flex } from '@stacks/ui';
-import { Pre, Text } from '@components/typography';
-import { Row } from '@components/rows/row';
-import { FunctionSummaryClarityValue } from '@components/function-summary/value';
+
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Flex } from '@stacks/ui';
+
 import { Singleton } from '@common/types/utils';
+
+import { FunctionSummaryClarityValue } from '@components/function-summary/value';
+import { Row } from '@components/rows/row';
+import { Pre, Text } from '@components/typography';
 
 type FunctionArg = Singleton<
   Required<Required<ContractCallTransaction['contract_call']>['function_args']>

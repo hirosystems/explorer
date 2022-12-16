@@ -1,7 +1,7 @@
-import { loadWASM } from 'onigasm';
-import { IGrammarDefinition, Registry } from 'monaco-textmate';
-import { wireTmGrammars } from 'monaco-editor-textmate';
 import { Monaco } from '@monaco-editor/react';
+import { wireTmGrammars } from 'monaco-editor-textmate';
+import { IGrammarDefinition, Registry } from 'monaco-textmate';
+import { loadWASM } from 'onigasm';
 
 export async function liftOff(monaco: Monaco, claritySyntax: string) {
   try {

@@ -1,20 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import {
-  Box,
-  DynamicColorCircle,
-  ChevronIcon,
-  Stack,
-  Flex,
-  Grid,
-  FlexProps,
-  color,
-} from '@stacks/ui';
-import { CodeAccordian } from '@components/code-accordian';
-
+import NextLink from 'next/link';
 import pluralize from 'pluralize';
-import { Caption, Text, Pre, Title } from '@components/typography';
-import { Row } from '@components/rows/row';
+import React, { useEffect, useState } from 'react';
+import { useHover } from 'use-events';
+
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import {
   PostCondition,
   PostConditionFungible,
@@ -23,10 +12,19 @@ import {
   PostConditionNonFungibleConditionCode,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { useHover } from 'use-events';
-import { ValueWrapped } from '@components/token-transfer/item';
-import NextLink from 'next/link';
-import { InfoIcon } from '@components/icons/info';
+import {
+  Box,
+  ChevronIcon,
+  DynamicColorCircle,
+  Flex,
+  FlexProps,
+  Grid,
+  Stack,
+  color,
+} from '@stacks/ui';
+import { microStxToStx } from '@stacks/ui-utils';
+
+import { useApi } from '@common/api/client';
 import {
   border,
   capitalize,
@@ -34,13 +32,17 @@ import {
   truncateMiddle,
   validateStacksAddress,
 } from '@common/utils';
-import { Section } from '@components/section';
-import { Circle } from '@components/circle';
-import { StxInline } from '@components/icons/stx-inline';
-import { getTicker } from '@components/tx-events';
+
 import { Badge } from '@components/badge';
-import { microStxToStx } from '@stacks/ui-utils';
-import { useApi } from '@common/api/client';
+import { Circle } from '@components/circle';
+import { CodeAccordian } from '@components/code-accordian';
+import { InfoIcon } from '@components/icons/info';
+import { StxInline } from '@components/icons/stx-inline';
+import { Row } from '@components/rows/row';
+import { Section } from '@components/section';
+import { ValueWrapped } from '@components/token-transfer/item';
+import { getTicker } from '@components/tx-events';
+import { Caption, Pre, Text, Title } from '@components/typography';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {

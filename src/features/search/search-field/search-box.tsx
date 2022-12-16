@@ -1,11 +1,13 @@
-import * as React from 'react';
-import { Box, color, Flex, IconButton, IconButtonProps, Spinner, transition } from '@stacks/ui';
 import { SearchInput } from '@features/search/search-field/search-input';
-import { IconSearch, IconX } from '@tabler/icons';
-import { useAppDispatch } from '@common/state/hooks';
-import { setSearchTerm, focus, blur, clearSearchTerm } from '@features/search/search-slice';
+import { blur, clearSearchTerm, focus, setSearchTerm } from '@features/search/search-slice';
 import { useSearch } from '@features/search/use-search';
+import { IconSearch, IconX } from '@tabler/icons';
+import * as React from 'react';
 import { useEffect } from 'react';
+
+import { Box, Flex, IconButton, IconButtonProps, Spinner, color, transition } from '@stacks/ui';
+
+import { useAppDispatch } from '@common/state/hooks';
 
 type Variant = 'default' | 'small';
 

@@ -1,10 +1,13 @@
-import React from 'react';
 import Link from 'next/link';
-import { Box, BoxProps, color, Flex, FlexProps, Text } from '@stacks/ui';
+import React from 'react';
+
+import { Box, BoxProps, Flex, FlexProps, Text, color } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
-import { buildUrl } from '@components/links';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+
+import { buildUrl } from '@components/links';
 
 const LinkWrapper: React.FC<any> = ({ children, href }) => {
   return href ? (

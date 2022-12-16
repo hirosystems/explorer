@@ -1,10 +1,12 @@
 import React from 'react';
 
-import { Box, color, Flex, Grid } from '@stacks/ui';
-import { Caption } from '@components/typography';
+import { Box, Flex, Grid, color } from '@stacks/ui';
 
 import { border } from '@common/utils';
+
 import { Pending } from '@components/status';
+import { Caption } from '@components/typography';
+
 import { ExplorerLink } from './links';
 
 interface SectionFooterButtonPropsBase {

@@ -1,8 +1,10 @@
 import * as React from 'react';
 
 import { Box, color } from '@stacks/ui';
-import { Text } from '@components/typography';
+
 import { Section } from '@components/section';
+import { Text } from '@components/typography';
+
 import { Link } from './link';
 
 export const StacksTokenVestingCard: React.FC = () => {

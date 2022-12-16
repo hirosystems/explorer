@@ -1,5 +1,6 @@
 import React from 'react';
-import { BoxProps, Box } from '@stacks/ui';
+
+import { Box, BoxProps } from '@stacks/ui';
 
 export const MetaverseSVG = (props: BoxProps) => (
   <Box as="svg" height="auto" viewBox="0 0 601 601" fill="none" {...props}>

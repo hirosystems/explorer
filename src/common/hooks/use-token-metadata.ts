@@ -1,6 +1,7 @@
-import { getAssetNameParts } from '@common/utils';
-import { useApi } from '@common/api/client';
 import { useQuery } from 'react-query';
+
+import { useApi } from '@common/api/client';
+import { getAssetNameParts } from '@common/utils';
 
 export function useTokenMetadata(
   token: string,

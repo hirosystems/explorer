@@ -1,9 +1,10 @@
 import React from 'react';
-import { Box, BoxProps, color, Grid, transition } from '@stacks/ui';
+
+import { Box, BoxProps, Grid, color, transition } from '@stacks/ui';
 import {
   ForwardRefExoticComponentWithAs,
-  forwardRefWithAs,
   MemoExoticComponentWithAs,
+  forwardRefWithAs,
   memoWithAs,
 } from '@stacks/ui-core';
 

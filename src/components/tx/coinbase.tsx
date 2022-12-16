@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { PageTop } from '@components/page';
-import { TransactionDetails } from '@components/transaction-details';
-import { PagePanes } from '@components/page-panes';
-import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import { Events } from '@components/tx-events';
-import { Box } from '@stacks/ui';
+
 import {
   Block,
   CoinbaseTransaction,
   MempoolCoinbaseTransaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { Box } from '@stacks/ui';
+
+import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
+import { PageTop } from '@components/page';
+import { PagePanes } from '@components/page-panes';
+import { TransactionDetails } from '@components/transaction-details';
+import { Events } from '@components/tx-events';
 
 const CoinbasePage: React.FC<{
   transaction: CoinbaseTransaction | MempoolCoinbaseTransaction;

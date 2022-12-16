@@ -1,23 +1,24 @@
 import {
-  Configuration,
   AccountsApi,
-  SmartContractsApi,
-  InfoApi,
-  TransactionsApi,
   BlocksApi,
+  Configuration,
   FaucetsApi,
   FeesApi,
-  SearchApi,
-  RosettaApi,
-  MicroblocksApi,
   FungibleTokensApi,
+  InfoApi,
+  MicroblocksApi,
   NonFungibleTokensApi,
+  RosettaApi,
+  SearchApi,
+  SmartContractsApi,
+  TransactionsApi,
 } from '@stacks/blockchain-api-client';
-import { fetcher as fetchApi } from '@common/api/fetch';
 import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
+
+import { fetcher as fetchApi } from '@common/api/fetch';
 import { MICROBLOCKS_ENABLED } from '@common/constants';
-import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
 import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
 import { store } from '@common/state/store';
 
 /**

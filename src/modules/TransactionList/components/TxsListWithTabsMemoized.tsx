@@ -1,43 +1,24 @@
-import { FilterButton } from '@components/filter-button';
-import { Section } from '@components/section';
-import { Tabs } from '@modules/TransactionList/components/Tabs';
-import { Box, Flex } from '@stacks/ui';
 import * as React from 'react';
-import { FC, memo, useCallback, useState } from 'react';
-import { SkeletonGenericTransactionList } from '@components/loaders/skeleton-transaction';
-import { MempoolTxsList, TxsList } from './TxsList';
-import { useTransactionList } from '../hooks/useTransactionList';
+import { FC, ReactNode, memo, useCallback, useState } from 'react';
 
-const Title: FC<{ currentIndex: number; setCurrentIndex: (val: number) => void }> = ({
-  currentIndex,
-  setCurrentIndex,
-}) => (
+import { Box, Flex } from '@stacks/ui';
+
+import { FilterButton } from '@components/filter-button';
+import { SkeletonGenericTransactionList } from '@components/loaders/skeleton-transaction';
+import { Section } from '@components/section';
+
+import { TabsTitleProps, TabsWrapper } from '@modules/Tabs/TabsWrapper';
+import { Tabs } from '@modules/TransactionList/components/Tabs';
+
+import { useTransactionList } from '../hooks/useTransactionList';
+import { MempoolTxsList, TxsList } from './TxsList';
+
+const Title: FC<TabsTitleProps> = ({ currentIndex, setCurrentIndex }) => (
   <Tabs
     tabs={['confirmed', 'pending']}
     currentIndex={currentIndex}
     setCurrentIndex={setCurrentIndex}
   />
-);
-
-const Wrapper: FC<{
-  currentIndex: number;
-  setCurrentIndex: (val: number) => void;
-  mempoolSelected: boolean;
-}> = ({ setCurrentIndex, currentIndex, mempoolSelected, children }) => (
-  <Section
-    title={memo(() => (
-      <Title currentIndex={currentIndex} setCurrentIndex={setCurrentIndex} />
-    ))}
-    headerProps={{ pl: '0' }}
-    alignSelf="flex-start"
-    topRight={!mempoolSelected && FilterButton}
-    gridColumnStart="1"
-    gridColumnEnd="2"
-  >
-    <Flex flexGrow={1} flexDirection="column" px="base-loose">
-      <Box position="relative">{children}</Box>
-    </Flex>
-  </Section>
 );
 
 const TxsListWithTabs: React.FC<{
@@ -51,10 +32,11 @@ const TxsListWithTabs: React.FC<{
 
   if (mempoolSelected && mempoolTransactionsResponse.data)
     return (
-      <Wrapper
+      <TabsWrapper
         setCurrentIndex={setCurrentIndex}
         currentIndex={currentIndex}
-        mempoolSelected={mempoolSelected}
+        TopRight={!mempoolSelected ? FilterButton : undefined}
+        Title={Title}
       >
         <MempoolTxsList
           response={mempoolTransactionsResponse}
@@ -62,15 +44,16 @@ const TxsListWithTabs: React.FC<{
           infinite={infinite}
           limit={limit}
         />
-      </Wrapper>
+      </TabsWrapper>
     );
 
   if (!mempoolSelected && confirmedTransactionsResponse.data)
     return (
-      <Wrapper
+      <TabsWrapper
         setCurrentIndex={setCurrentIndex}
         currentIndex={currentIndex}
-        mempoolSelected={mempoolSelected}
+        TopRight={!mempoolSelected ? FilterButton : undefined}
+        Title={Title}
       >
         <TxsList
           response={confirmedTransactionsResponse}
@@ -78,17 +61,18 @@ const TxsListWithTabs: React.FC<{
           infinite={infinite}
           limit={limit}
         />
-      </Wrapper>
+      </TabsWrapper>
     );
 
   return (
-    <Wrapper
+    <TabsWrapper
       setCurrentIndex={setCurrentIndex}
       currentIndex={currentIndex}
-      mempoolSelected={mempoolSelected}
+      TopRight={!mempoolSelected ? FilterButton : undefined}
+      Title={Title}
     >
       <SkeletonGenericTransactionList />
-    </Wrapper>
+    </TabsWrapper>
   );
 };
 

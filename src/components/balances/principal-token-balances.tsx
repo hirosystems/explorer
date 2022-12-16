@@ -1,16 +1,19 @@
 import * as React from 'react';
+import { useMemo } from 'react';
+
 import {
   AddressBalanceResponse,
   NonFungibleTokenHoldingsList,
 } from '@stacks/stacks-blockchain-api-types';
-import { Box, color, FlexProps, Grid, GridProps } from '@stacks/ui';
-import { Caption } from '@components/typography';
-import { Section } from '@components/section';
+import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { Box, FlexProps, Grid, GridProps, color } from '@stacks/ui';
+
+import { hexToString } from '@common/utils';
+
 import { TokenAssetListItem } from '@components/balances/token-asset-list-item';
 import { HoverableItem } from '@components/hoverable';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
-import { useMemo } from 'react';
-import { hexToString } from '@common/utils';
+import { Section } from '@components/section';
+import { Caption } from '@components/typography';
 
 export const NftBalances: React.FC<{ balances: AddressBalanceResponse; bnsHexValues: any }> = ({
   balances,

@@ -2,10 +2,12 @@
 import * as React from 'react';
 
 import { Box, CloseIcon, Flex, FlexProps, color } from '@stacks/ui';
+
+import { border } from '@common/utils';
+
 import { Link, Pre, Text, Title } from '@components/typography';
 
 import { AlertTriangleIcon } from './icons/alert-triangle';
-import { border } from '@common/utils';
 
 interface ReasonData {
   expected?: number | string;

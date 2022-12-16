@@ -1,16 +1,20 @@
-import React from 'react';
 import type { NextPage } from 'next';
-import { Box, color, Grid, Stack } from '@stacks/ui';
+import React from 'react';
+import { useMutation } from 'react-query';
+
+import { Box, Grid, Stack, color } from '@stacks/ui';
+
+import { useApi } from '@common/api/client';
 import { border } from '@common/utils';
-import { blue, Button } from '@components/button';
+
+import { Badge } from '@components/badge';
+import { Button, blue } from '@components/button';
 import { DropIcon } from '@components/icons/drop';
 import { StxInline } from '@components/icons/stx-inline';
 import { Text, Title } from '@components/typography';
-import { Badge } from '@components/badge';
-import { useUser } from '@modules/sandbox/hooks/useUser';
-import { useMutation } from 'react-query';
-import { useApi } from '@common/api/client';
+
 import { Layout } from '@modules/sandbox/components/Layout';
+import { useUser } from '@modules/sandbox/hooks/useUser';
 
 const Faucet: NextPage = () => {
   const { faucetsApi } = useApi();

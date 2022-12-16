@@ -1,7 +1,10 @@
-import { ExplorerSkeletonLoader } from './skeleton-common';
-import { Section } from '@components/section';
-import { Box, Flex } from '@stacks/ui';
 import * as React from 'react';
+
+import { Box, Flex } from '@stacks/ui';
+
+import { Section } from '@components/section';
+
+import { ExplorerSkeletonLoader } from './skeleton-common';
 import { SkeletonBlock, SkeletonTransaction } from './skeleton-transaction';
 
 const SkeletonTextSpan = () => <ExplorerSkeletonLoader width={'399px'} height={'16px'} />;

@@ -1,6 +1,8 @@
 import React from 'react';
-import { AppWrapper } from '@components/app-init';
+
 import { NetworkMode } from '@common/types/network';
+
+import { AppWrapper } from '@components/app-init';
 
 interface AppContainerProps {
   networkMode?: NetworkMode;

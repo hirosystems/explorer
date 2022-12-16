@@ -1,23 +1,26 @@
+import { AccountTransactionList } from '@features/account-transaction-list';
+import { AddressSummary } from '@features/address-page/address-summary';
+import { AddressQueryKeys, addressQK } from '@features/address/query-keys';
+import { useAddressQueries } from '@features/address/use-address-queries';
+import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
+
+import { Flex, Grid, GridProps, Stack } from '@stacks/ui';
+import { microStxToStx } from '@stacks/ui-utils';
+
 import { fetchNonce } from '@common/api/account';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { truncateMiddle } from '@common/utils';
 import { hasTokenBalance } from '@common/utils/accounts';
+
 import { AddressNotFound } from '@components/address-not-found';
 import { TokenBalancesCard } from '@components/balances/principal-token-balances';
 import { StxBalances } from '@components/balances/stx-balance-card';
 import { Meta } from '@components/meta-head';
 import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
 import { Title } from '@components/typography';
-import { AccountTransactionList } from '@features/account-transaction-list';
-import { AddressSummary } from '@features/address-page/address-summary';
-import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
-import { useAddressQueries } from '@features/address/use-address-queries';
-import { Flex, Grid, GridProps, Stack } from '@stacks/ui';
-import { microStxToStx } from '@stacks/ui-utils';
-import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
 
 const PageTop = () => {
   return (

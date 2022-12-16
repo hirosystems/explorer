@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Text } from '@components/typography';
+
 import { BoxProps } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
+
+import { Text } from '@components/typography';
 
 type LinkProps = { onClick?: any } & BoxProps;
 

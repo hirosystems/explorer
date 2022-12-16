@@ -1,5 +1,6 @@
-import { Box, BoxProps } from '@stacks/ui';
 import * as React from 'react';
+
+import { Box, BoxProps } from '@stacks/ui';
 
 import { Card } from '@components/card';
 import { Row, RowLabel } from '@components/rows/row';

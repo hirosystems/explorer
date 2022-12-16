@@ -1,16 +1,18 @@
-import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
-import { Caption, Text, Title } from '@components/typography';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { BoxProps, color, Flex, FlexProps, Stack } from '@stacks/ui';
-import { forwardRefWithAs } from '@stacks/ui-core';
 import * as React from 'react';
 
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { BoxProps, Flex, FlexProps, Stack, color } from '@stacks/ui';
+import { forwardRefWithAs } from '@stacks/ui-core';
+
+import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
+
 import { ArrowRightIcon } from '@components/icons/arrow-right';
-import { getTxTypeIcon, ItemIcon } from '@components/item-icon';
+import { ItemIcon, getTxTypeIcon } from '@components/item-icon';
 import { Link } from '@components/link';
 import { ExplorerLink } from '@components/links';
 import { getTransactionTypeLabel } from '@components/token-transfer/utils';
 import { Tooltip } from '@components/tooltip';
+import { Caption, Text, Title } from '@components/typography';
 
 export { getTxTypeIcon };
 

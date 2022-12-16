@@ -1,15 +1,18 @@
-import React from 'react';
 import { useFormik } from 'formik';
+import React from 'react';
 import { string } from 'yup';
+
+import { ChainID } from '@stacks/transactions';
+
 import { fetchFromApi } from '@common/api/fetch';
-import { closeModal } from '@components/modals/modal-slice';
-import { Network } from '@common/types/network';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@common/constants';
+import { NetworkIdModeMap } from '@common/constants/network';
 import { useAnalytics } from '@common/hooks/use-analytics';
 import { useAppDispatch } from '@common/state/hooks';
 import { addCustomNetwork, setActiveNetwork } from '@common/state/network-slice';
-import { ChainID } from '@stacks/transactions';
-import { NetworkIdModeMap } from '@common/constants/network';
+import { Network } from '@common/types/network';
+
+import { closeModal } from '@components/modals/modal-slice';
 
 interface Errors {
   label?: string;

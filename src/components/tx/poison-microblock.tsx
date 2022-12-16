@@ -1,10 +1,13 @@
 import * as React from 'react';
+
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { Stack } from '@stacks/ui';
+
+import { PoisonMicroblockTxs, TxData } from '@common/types/tx';
+
 import { PageTop } from '@components/page';
 import { Rows } from '@components/rows';
 import { TransactionDetails } from '@components/transaction-details';
-import { PoisonMicroblockTxs, TxData } from '@common/types/tx';
-import { Block } from '@stacks/stacks-blockchain-api-types';
 
 // TODO: make this real
 const PoisonMicroblockPage = ({

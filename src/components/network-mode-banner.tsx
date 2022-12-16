@@ -1,11 +1,13 @@
-import React from 'react';
-import { Box, Flex, color } from '@stacks/ui';
 import { IconFlask } from '@tabler/icons';
+import React from 'react';
 
-import { Badge, BadgeProps } from '@components/badge';
-import { capitalize } from '@common/utils';
+import { Box, Flex, color } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { capitalize } from '@common/utils';
+
+import { Badge, BadgeProps } from '@components/badge';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
   const networkMode = useAppSelector(selectActiveNetwork).mode;

@@ -1,31 +1,35 @@
-import React, { FC, useCallback, useState } from 'react';
-import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
-import { Box, Button, color, Flex, Grid, IconButton, Input, Stack } from '@stacks/ui';
-import { border } from '@common/utils';
-import { useNetworkConfig } from '@common/hooks/use-network-config';
-import { Caption, Title } from '@components/typography';
-import { ClarityIcon } from '@modules/sandbox/components/ClarityIcon';
 import Editor, { Monaco } from '@monaco-editor/react';
-import { configLanguage } from '@modules/sandbox/editor-config/language';
+import CloseIcon from 'mdi-react/CloseIcon';
+import type { GetStaticProps, InferGetStaticPropsType, NextPage } from 'next';
+import React, { FC, useCallback, useState } from 'react';
+
+import { openContractDeploy } from '@stacks/connect';
+import { Box, Button, Flex, Grid, IconButton, Input, Stack, color } from '@stacks/ui';
+
+import { CONNECT_AUTH_ORIGIN } from '@common/constants';
+import { useNetworkConfig } from '@common/hooks/use-network-config';
+import { useRandomName } from '@common/hooks/use-random-name';
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { border } from '@common/utils';
+
+import { ToolsIcon } from '@components/icons/tools';
+import { Tooltip } from '@components/tooltip';
+import { Caption, Title } from '@components/typography';
+
+import { ClarityIcon } from '@modules/sandbox/components/ClarityIcon';
+import { Layout } from '@modules/sandbox/components/Layout';
+import { Toolbar } from '@modules/sandbox/components/Toolbar';
 import { autocomplete, hover } from '@modules/sandbox/editor-config/autocomplete';
 import { defineTheme } from '@modules/sandbox/editor-config/define-theme';
 import { liftOff } from '@modules/sandbox/editor-config/init';
-import CloseIcon from 'mdi-react/CloseIcon';
-import { useRandomName } from '@common/hooks/use-random-name';
+import { configLanguage } from '@modules/sandbox/editor-config/language';
 import { useUser } from '@modules/sandbox/hooks/useUser';
-import { Layout } from '@modules/sandbox/components/Layout';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import {
   selectCodeBody,
   setCodeBody,
   setUserData,
   toggleCodeToolbar,
 } from '@modules/sandbox/sandbox-slice';
-import { Toolbar } from '@modules/sandbox/components/Toolbar';
-import { Tooltip } from '@components/tooltip';
-import { ToolsIcon } from '@components/icons/tools';
-import { openContractDeploy } from '@stacks/connect';
-import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 
 const RightSection: FC = () => {
   const dispatch = useAppDispatch();

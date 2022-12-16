@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSafeLayoutEffect, useMediaQuery } from '@stacks/ui';
+
+import { useMediaQuery, useSafeLayoutEffect } from '@stacks/ui';
 
 export const useLockBodyScroll = (lock: boolean, enableOnDesktop?: boolean) => {
   const [isMobile] = useMediaQuery('(max-width: 760px)');

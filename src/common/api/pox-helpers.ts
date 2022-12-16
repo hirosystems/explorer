@@ -1,3 +1,4 @@
+import { Configuration, SmartContractsApi } from '@stacks/blockchain-api-client';
 import {
   callReadOnlyFunction,
   cvToHex,
@@ -9,9 +10,9 @@ import {
   uintCV,
 } from '@stacks/transactions';
 import { microStxToStx } from '@stacks/ui-utils';
-import { Configuration, SmartContractsApi } from '@stacks/blockchain-api-client';
-import { POX_ADDRESS } from '@common/constants';
+
 import { convertPoxAddressToBtc } from '@common/btc';
+import { POX_ADDRESS } from '@common/constants';
 import { NetworkModes } from '@common/types/network';
 
 const config = new Configuration({

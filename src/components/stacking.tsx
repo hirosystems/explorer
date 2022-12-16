@@ -1,15 +1,18 @@
-import * as React from 'react';
-import { Box, Flex, color, Stack, StxInline, Circle } from '@stacks/ui';
-import { Caption, Text, Link, Title } from '@components/typography';
-import { Pending } from '@components/status';
-import { PercentageCircle } from '@components/percentage-circle';
-import { TxLink } from '@components/links';
-import { useInfiniteQuery, useQuery } from 'react-query';
-import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
+import { AddressQueryKeys, addressQK } from '@features/address/query-keys';
 import { useAddressQueries } from '@features/address/use-address-queries';
-import { getStackingStartBlockHeight } from '@common/utils/accounts';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
+import * as React from 'react';
+import { useInfiniteQuery, useQuery } from 'react-query';
+
+import { Box, Circle, Flex, Stack, StxInline, color } from '@stacks/ui';
+
 import { getNextPageParam } from '@common/utils';
+import { getStackingStartBlockHeight } from '@common/utils/accounts';
+
+import { TxLink } from '@components/links';
+import { PercentageCircle } from '@components/percentage-circle';
+import { Pending } from '@components/status';
+import { Caption, Link, Text, Title } from '@components/typography';
 
 export const StackingPercentage = ({ balances, address }: any) => {
   const queries = useAddressQueries();

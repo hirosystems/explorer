@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { Box, Flex, ChevronIcon, Stack } from '@stacks/ui';
-import { Text } from '@components/typography';
-import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 import { useHover } from 'use-events';
 
-import { Card } from '@components/card';
-import { BottomButtonProps, TokenTransferProps } from '@components/token-transfer/types';
-import { Caption, SectionTitle } from '@components/typography';
-import { TokenTransferItem } from '@components/token-transfer/item';
+import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
+import { Box, ChevronIcon, Flex, Stack } from '@stacks/ui';
+
 import { border } from '@common/utils';
+
+import { Card } from '@components/card';
 import { Section } from '@components/section';
+import { TokenTransferItem } from '@components/token-transfer/item';
+import { BottomButtonProps, TokenTransferProps } from '@components/token-transfer/types';
+import { Text } from '@components/typography';
+import { Caption, SectionTitle } from '@components/typography';
 
 const BottomButton = ({ label, icon: Icon, ...props }: BottomButtonProps) => {
   const [hover, bind] = useHover();

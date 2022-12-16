@@ -1,6 +1,7 @@
 import { ChainID } from '@stacks/transactions';
-import { NetworkModes } from '@common/types/network';
+
 import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@common/constants';
+import { NetworkModes } from '@common/types/network';
 
 export const NetworkIdModeMap: { [key in ChainID]: NetworkModes } = {
   [ChainID.Mainnet]: NetworkModes.Mainnet,

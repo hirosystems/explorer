@@ -2,46 +2,46 @@
 // todo: remove
 import * as React from 'react';
 import { Ref } from 'react';
-import {
-  Box,
-  Flex,
-  Stack,
-  FlexProps,
-  BoxProps,
-  Grid,
-  GridProps,
-  color,
-  DynamicColorCircle,
-} from '@stacks/ui';
-import { Truncate } from '@components/truncated';
-import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
-import { Text } from '@components/typography';
+import { useActive, useHover } from 'use-events';
+
 import {
   TransactionEvent,
   TransactionEventAssetType,
-  TransactionEventSmartContractLog,
-  TransactionEventNonFungibleAsset,
   TransactionEventFungibleAsset,
+  TransactionEventNonFungibleAsset,
+  TransactionEventSmartContractLog,
   TransactionEventStxAsset,
 } from '@stacks/stacks-blockchain-api-types';
+import {
+  Box,
+  BoxProps,
+  DynamicColorCircle,
+  Flex,
+  FlexProps,
+  Grid,
+  GridProps,
+  Stack,
+  color,
+} from '@stacks/ui';
+
+import { microToStacks, startPad, validateStacksAddress } from '@common/utils';
 import { clarityValuetoHumanReadable } from '@common/utils';
-import { Tooltip } from '@components/tooltip';
-import { Caption } from '@components/typography';
+import { getFungibleAssetName, truncateMiddle } from '@common/utils';
 
-import { truncateMiddle, getFungibleAssetName } from '@common/utils';
 import { CodeAccordian } from '@components/code-accordian';
-
-import { getAssetEventTypeLabel, getEventTypeName } from '@components/token-transfer/utils';
-import { TokenTransferItemProps } from '@components/token-transfer/types';
-import { LogIcon } from '@components/svg';
-import { useActive, useHover } from 'use-events';
-import { StxNexus } from '@components/icons/stx-nexus';
-
-import { CodeIcon } from '@components/icons/code';
-import { ChevronDown } from '@components/icons/chevron-down';
 import { IconButton } from '@components/icon-button';
-import { AddressLink } from '@components/links';
+import { ChevronDown } from '@components/icons/chevron-down';
+import { CodeIcon } from '@components/icons/code';
 import { ExternalLinkIcon } from '@components/icons/external-link';
+import { StxNexus } from '@components/icons/stx-nexus';
+import { AddressLink } from '@components/links';
+import { LogIcon } from '@components/svg';
+import { TokenTransferItemProps } from '@components/token-transfer/types';
+import { getAssetEventTypeLabel, getEventTypeName } from '@components/token-transfer/utils';
+import { Tooltip } from '@components/tooltip';
+import { Truncate } from '@components/truncated';
+import { Text } from '@components/typography';
+import { Caption } from '@components/typography';
 
 const Value = React.memo(
   React.forwardRef(({ children, ...rest }: any, ref: Ref<HTMLDivElement>) => (

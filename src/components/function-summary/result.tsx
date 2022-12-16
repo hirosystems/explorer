@@ -1,10 +1,13 @@
-import { cvToJSON, hexToCV } from '@stacks/transactions';
-import type { Transaction } from '@stacks/stacks-blockchain-api-types';
-import { Box, Flex, Stack, color } from '@stacks/ui';
-import { Caption, Pre } from '@components/typography';
-import { border } from '@common/utils';
-import { FunctionSummaryClarityValue } from '@components/function-summary/value';
 import { IconAlertTriangle, IconCircleCheck } from '@tabler/icons';
+
+import type { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { Box, Flex, Stack, color } from '@stacks/ui';
+
+import { border } from '@common/utils';
+
+import { FunctionSummaryClarityValue } from '@components/function-summary/value';
+import { Caption, Pre } from '@components/typography';
 
 interface FunctionSummaryResultProps {
   result: Transaction['tx_result'];

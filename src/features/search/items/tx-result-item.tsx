@@ -1,9 +1,12 @@
+import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 import React from 'react';
-import { FoundResult } from '@common/types/search-results';
+
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+
+import { FoundResult } from '@common/types/search-results';
+
 import { TxLink } from '@components/links';
 import { TxItem } from '@components/transaction-item';
-import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 
 interface TxResultItemProps {
   result: FoundResult;

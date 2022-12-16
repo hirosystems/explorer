@@ -1,8 +1,9 @@
-import React from 'react';
 import Head from 'next/head';
-import { TxStatus } from '@common/types/tx';
-import { selectActiveNetwork } from '@common/state/network-slice';
+import React from 'react';
+
 import { useAppSelector } from '@common/state/hooks';
+import { selectActiveNetwork } from '@common/state/network-slice';
+import { TxStatus } from '@common/types/tx';
 
 const defaultTitle = 'Stacks Explorer by Hiro';
 
