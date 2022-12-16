@@ -1,14 +1,17 @@
-import { FC, Fragment } from 'react';
-import { FaBitcoin } from 'react-icons/fa';
-import { Box, color } from '@stacks/ui';
 import { css } from '@emotion/react';
 import { IconArrowRight } from '@tabler/icons';
-import { BlockLink } from '@components/links';
-import { StxInline } from '@components/icons/stx-inline';
-import { Circle } from '@components/circle';
+import { FC, Fragment } from 'react';
+import { FaBitcoin } from 'react-icons/fa';
+
+import { Box, color } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { NetworkModes } from '@common/types/network';
+
+import { Circle } from '@components/circle';
+import { StxInline } from '@components/icons/stx-inline';
+import { BlockLink } from '@components/links';
 import { Link } from '@components/typography';
 
 interface BtcStxBlockLinksProps {

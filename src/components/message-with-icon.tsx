@@ -1,10 +1,11 @@
+import Link from 'next/link';
 import * as React from 'react';
 
 import { Box, BoxProps, Flex, color } from '@stacks/ui';
-import { Text, Title } from '@components/typography';
+
+import { Button, blue } from '@components/button';
 import { Circle } from '@components/circle';
-import { blue, Button } from '@components/button';
-import Link from 'next/link';
+import { Text, Title } from '@components/typography';
 
 export const MessageWithIcon: React.FC<
   { title: string; icon: any; message: string; action: any } & BoxProps

@@ -1,9 +1,13 @@
+import { useAddressQueries } from '@features/address/use-address-queries';
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+
+import { AuthOptions } from '@stacks/connect/dist/types/types/auth';
+
 import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { useAddressQueries } from '@features/address/use-address-queries';
-import { useQuery } from 'react-query';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+
 import {
   connect,
   disconnect,
@@ -11,7 +15,6 @@ import {
   selectUserSession,
   setUserData,
 } from '@modules/sandbox/sandbox-slice';
-import { AuthOptions } from '@stacks/connect/dist/types/types/auth';
 
 export const useUser = () => {
   const dispatch = useAppDispatch();

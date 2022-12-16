@@ -1,13 +1,16 @@
-import * as React from 'react';
-import { Section } from '@components/section';
-import { Box, color, Flex } from '@stacks/ui';
 import { IconAlertCircle } from '@tabler/icons';
-import { Text } from '@components/typography';
-import { capitalize } from '@common/utils';
-import { AddressLink } from '@components/links';
-import { Link } from '@components/link';
+import * as React from 'react';
+
+import { Box, Flex, color } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { capitalize } from '@common/utils';
+
+import { Link } from '@components/link';
+import { AddressLink } from '@components/links';
+import { Section } from '@components/section';
+import { Text } from '@components/typography';
 
 export const IncorrectAddressModeNotice: React.FC<{ address: string }> = ({ address }) => {
   const networkMode = useAppSelector(selectActiveNetwork).mode;

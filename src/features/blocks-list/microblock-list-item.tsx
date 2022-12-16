@@ -1,10 +1,13 @@
 import React from 'react';
-import { useHoverableState } from '@components/hoverable';
-import { color, Flex, Stack } from '@stacks/ui';
-import { ItemIcon } from '@components/item-icon';
-import { Caption, Text, Title } from '@components/typography';
+
+import { Flex, Stack, color } from '@stacks/ui';
+
 import { toRelativeTime, truncateMiddle } from '@common/utils';
+
+import { useHoverableState } from '@components/hoverable';
+import { ItemIcon } from '@components/item-icon';
 import { MicroblockLink } from '@components/links';
+import { Caption, Text, Title } from '@components/typography';
 
 export const MicroblockItem: React.FC<{
   blockTime: number;

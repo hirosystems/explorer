@@ -1,11 +1,14 @@
+import { css } from '@emotion/react';
 import { FC, Fragment } from 'react';
 import { FaBitcoin } from 'react-icons/fa';
+
 import { Box, color } from '@stacks/ui';
-import { css } from '@emotion/react';
-import { StxInline } from '@components/icons/stx-inline';
-import { Circle } from '@components/circle';
+
 import { useCurrentBtcPrice, useCurrentStxPrice } from '@common/hooks/use-current-prices';
 import { usdFormatter } from '@common/utils';
+
+import { Circle } from '@components/circle';
+import { StxInline } from '@components/icons/stx-inline';
 
 const wrapperStyle = css`
   display: flex;

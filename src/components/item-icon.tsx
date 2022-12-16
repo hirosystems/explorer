@@ -1,7 +1,15 @@
+import { IconArrowDown, IconArrowUp } from '@tabler/icons';
+import FunctionIcon from 'mdi-react/FunctionIcon';
+import React, { useMemo } from 'react';
+
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { BoxProps, Grid, GridProps, color, useColorMode } from '@stacks/ui';
+
 import { TransactionStatus } from '@common/constants';
 import { TxStatus } from '@common/types/tx';
 import { border } from '@common/utils';
 import { getTransactionStatus } from '@common/utils/transactions';
+
 import { AnchorBlockIcon } from '@components/icons/anchor-block';
 import { ClockIcon } from '@components/icons/clock';
 import { CodeIcon } from '@components/icons/code';
@@ -9,11 +17,6 @@ import { FailedIcon } from '@components/icons/failed';
 import { MicroblockIcon } from '@components/icons/microblock';
 import { StxInline } from '@components/icons/stx-inline';
 import { WalletIcon } from '@components/icons/wallet';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { BoxProps, color, Grid, GridProps, useColorMode } from '@stacks/ui';
-import React, { useMemo } from 'react';
-import { IconArrowUp, IconArrowDown } from '@tabler/icons';
-import FunctionIcon from 'mdi-react/FunctionIcon';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): React.FC<BoxProps> => {
   let Icon = (p: any) => <StxInline {...p} strokeWidth={1.5} />;

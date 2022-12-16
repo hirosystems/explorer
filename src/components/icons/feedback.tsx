@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, BoxProps, transition } from '@stacks/ui';
 import { SVGProps } from 'react';
+
+import { Box, BoxProps, transition } from '@stacks/ui';
 
 export type SvgProps = React.FC<BoxProps>;
 

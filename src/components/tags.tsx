@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { color, FlexProps } from '@stacks/ui';
+
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { FlexProps, color } from '@stacks/ui';
+
+import { TransactionType } from '@common/constants';
+import { getTxTypeName } from '@common/transaction-names';
 
 import { Badge } from '@components/badge';
-import { getTxTypeName } from '@common/transaction-names';
+
 import { getTxTypeIcon } from './transaction-item';
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
-import { TransactionType } from '@common/constants';
 
 export const transactionTypeColor = {
   [TransactionType.SMART_CONTRACT]: '#0F5257',

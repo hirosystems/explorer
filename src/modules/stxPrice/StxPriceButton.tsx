@@ -1,9 +1,12 @@
 import { FC, useCallback, useMemo, useState } from 'react';
-import { Button, color, Text, Tooltip, useColorMode } from '@stacks/ui';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { useStxPriceForTx } from '@modules/stxPrice/useStxPriceForTx';
-import { getUsdValue } from '@common/utils';
 import * as React from 'react';
+
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Button, Text, Tooltip, color, useColorMode } from '@stacks/ui';
+
+import { getUsdValue } from '@common/utils';
+
+import { useStxPriceForTx } from '@modules/stxPrice/useStxPriceForTx';
 
 const initialTooltipContent = 'Displaying current value; Click to show value on day of txn';
 

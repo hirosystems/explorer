@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { css, Theme } from '@stacks/ui-core';
-import { Box, Flex } from '@stacks/ui';
-import { truncateMiddle } from '@common/utils';
 import { useClickOutside } from 'use-events';
+
+import { Box, Flex } from '@stacks/ui';
+import { Theme, css } from '@stacks/ui-core';
+
+import { truncateMiddle } from '@common/utils';
 
 export const Truncate = React.memo(({ children, offset = 8 }: any) => {
   const [selected, setSelected] = React.useState(false);

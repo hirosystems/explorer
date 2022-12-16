@@ -1,14 +1,18 @@
-import React from 'react';
-import { Box, color, Grid, Stack, StackProps, StxInline, Tooltip, useColorMode } from '@stacks/ui';
-import { border } from '@common/utils';
-import { ClarityIcon } from '@modules/sandbox/components/ClarityIcon';
 import FunctionIcon from 'mdi-react/FunctionIcon';
-import { DropIcon } from '@components/icons/drop';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+
+import { Box, Grid, Stack, StackProps, StxInline, Tooltip, color, useColorMode } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { border } from '@common/utils';
+
+import { DropIcon } from '@components/icons/drop';
 import { buildUrl } from '@components/links';
-import { useRouter } from 'next/router';
+
+import { ClarityIcon } from '@modules/sandbox/components/ClarityIcon';
 import { useUser } from '@modules/sandbox/hooks/useUser';
 
 export const SideNav: React.FC<StackProps> = props => {

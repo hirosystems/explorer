@@ -1,15 +1,10 @@
-import React from 'react';
-import { Box, Flex, FlexProps, color } from '@stacks/ui';
-import { css, Theme } from '@stacks/ui-core';
+import { SearchComponent } from '@features/search/search';
 import dayjs from 'dayjs';
+import React from 'react';
 
-import { Footer } from '@components/footer';
-import { Header } from '@components/header';
-import { Notice } from '@components/notice';
-import { MetaverseBg } from '@components/metaverse-bg';
-
-import { TitleProps, TransactionTitle } from '@components/transaction-title';
-import { Alert } from '@components/alert';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Flex, FlexProps, color } from '@stacks/ui';
+import { Theme, css } from '@stacks/ui-core';
 
 import {
   SITE_NOTICE_BANNER_LABEL,
@@ -17,11 +12,16 @@ import {
   SITE_NOTICE_ENABLED,
   TransactionStatus,
 } from '@common/constants';
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { getTransactionStatus } from '@common/utils/transactions';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { SearchComponent } from '@features/search/search';
+import { getTransactionStatus } from '@common/utils/transactions';
+
+import { Alert } from '@components/alert';
+import { Footer } from '@components/footer';
+import { Header } from '@components/header';
+import { MetaverseBg } from '@components/metaverse-bg';
+import { Notice } from '@components/notice';
+import { TitleProps, TransactionTitle } from '@components/transaction-title';
 
 type PageProps = {
   notice?: { label?: string; message?: string };

@@ -1,8 +1,10 @@
 import * as React from 'react';
-import { NumberedBadge } from '@components/numbered-badge';
-import { Flex, FlexProps } from '@stacks/ui';
-import { TransferIcon } from '@components/icons/transfer';
+
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Flex, FlexProps } from '@stacks/ui';
+
+import { TransferIcon } from '@components/icons/transfer';
+import { NumberedBadge } from '@components/numbered-badge';
 import { getTxTypeIcon } from '@components/transaction-item';
 
 export const Activity: React.FC<FlexProps & { txs: Transaction[]; amount: number }> = ({

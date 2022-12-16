@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { BaseSvg, SvgProps } from '@components/icons/_base';
 
 export const CircleCheck: SvgProps = props => (

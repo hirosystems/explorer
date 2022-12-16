@@ -1,8 +1,8 @@
+import pluralize from 'pluralize';
 import * as React from 'react';
 
-import pluralize from 'pluralize';
-
 import { Box, color } from '@stacks/ui';
+
 import { Badge, BadgeProps } from '@components/badge';
 
 export const NumberedBadge = ({

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import { Box } from '@stacks/ui';
 import { useFocus } from 'use-events';
+
+import { Box } from '@stacks/ui';
+
 import { Text } from '@components/typography';
 
 export const PopoverItem = React.memo(

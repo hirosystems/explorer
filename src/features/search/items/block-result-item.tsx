@@ -1,13 +1,16 @@
-import { Caption, Text, Title } from '@components/typography';
-import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
+import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
 import pluralize from 'pluralize';
 import React from 'react';
-import { color, Flex, Stack } from '@stacks/ui';
+
+import { Flex, Stack, color } from '@stacks/ui';
+
 import { FoundResult } from '@common/types/search-results';
-import { BlockLink } from '@components/links';
+import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
+
 import { ItemIcon } from '@components/item-icon';
+import { BlockLink } from '@components/links';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
+import { Caption, Text, Title } from '@components/typography';
 
 const BlocksCaption = ({ txsCount }: { txsCount: number }) => {
   return (

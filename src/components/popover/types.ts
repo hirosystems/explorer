@@ -1,5 +1,6 @@
-import { BoxProps } from '@stacks/ui';
 import { Ref } from 'react';
+
+import { BoxProps } from '@stacks/ui';
 
 interface PopoverPropsBase {
   onItemClick?: (item?: any) => void;

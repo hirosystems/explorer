@@ -1,21 +1,23 @@
-import React from 'react';
-import { Box, BoxProps, color, ControlledModal, Flex, Grid, IconButton, Stack } from '@stacks/ui';
-import { Tooltip } from '@components/tooltip';
+import { AddressQueryKeys, addressQK } from '@features/address/query-keys';
+import { useAddressQueries } from '@features/address/use-address-queries';
 import { IconAlertTriangle, IconInfoCircle, IconX } from '@tabler/icons';
-import { Caption, Text, Title } from '@components/typography';
-import { Section } from '@components/section';
-import { PercentageCircle } from '@components/percentage-circle';
-import { border } from '@common/utils';
-import { Badge } from '@components/badge';
-
 import dayjs from 'dayjs';
+import React from 'react';
+import { useQuery } from 'react-query';
+
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import { Box, BoxProps, ControlledModal, Flex, Grid, IconButton, Stack, color } from '@stacks/ui';
+
 import { MODALS } from '@common/constants';
 import { useAppDispatch } from '@common/state/hooks';
+import { border } from '@common/utils';
+
+import { Badge } from '@components/badge';
 import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-import { useQuery } from 'react-query';
-import { addressQK, AddressQueryKeys } from '@features/address/query-keys';
-import { useAddressQueries } from '@features/address/use-address-queries';
+import { PercentageCircle } from '@components/percentage-circle';
+import { Section } from '@components/section';
+import { Tooltip } from '@components/tooltip';
+import { Caption, Text, Title } from '@components/typography';
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
   const value = Number(Number(amount) / Math.pow(10, 6));

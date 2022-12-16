@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { MODALS } from '@common/constants';
 import { useAppSelector } from '@common/state/hooks';
 

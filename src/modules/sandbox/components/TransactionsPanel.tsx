@@ -1,26 +1,30 @@
-import React, { FC, useState } from 'react';
-import { Box, color, Flex, Stack, transition } from '@stacks/ui';
-import { Caption, Title } from '@components/typography';
-import { border } from '@common/utils';
-import { TxItem } from '@components/transaction-item';
-import { useRouter } from 'next/router';
-import { IconButton } from '@components/icon-button';
-import { ChevronDown } from '@components/icons/chevron-down';
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { Pending } from '@components/status';
-import { Badge } from '@components/badge';
-import { InfoCircleIcon } from '@components/icons/info-circle';
-import { ExternalLinkIcon } from '@components/icons/external-link';
-import { buildUrl, ExplorerLink, TxLink } from '@components/links';
-import { FilteredMessage, FilterPanel } from '@components/filter-panel';
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import FunctionIcon from 'mdi-react/FunctionIcon';
-import { FilterIcon } from '@components/icons/filter';
+import { useRouter } from 'next/router';
+import React, { FC, useState } from 'react';
+import { useQuery } from 'react-query';
+
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Box, Flex, Stack, color, transition } from '@stacks/ui';
+
+import { useFilterState } from '@common/hooks/use-filter-state';
 import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { useFilterState } from '@common/hooks/use-filter-state';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { useQuery } from 'react-query';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
+import { border } from '@common/utils';
+
+import { Badge } from '@components/badge';
+import { FilterPanel, FilteredMessage } from '@components/filter-panel';
+import { IconButton } from '@components/icon-button';
+import { ChevronDown } from '@components/icons/chevron-down';
+import { ExternalLinkIcon } from '@components/icons/external-link';
+import { FilterIcon } from '@components/icons/filter';
+import { InfoCircleIcon } from '@components/icons/info-circle';
+import { ExplorerLink, TxLink, buildUrl } from '@components/links';
+import { Pending } from '@components/status';
+import { TxItem } from '@components/transaction-item';
+import { Caption, Title } from '@components/typography';
+
 import { setCodeBody, toggleRightPanel } from '@modules/sandbox/sandbox-slice';
 
 const PanelHeader: React.FC = () => {

@@ -1,7 +1,9 @@
-import { AddressHashMode } from '@stacks/transactions';
-import { NetworkMode, NetworkModes } from '@common/types/network';
-import BN from 'bn.js';
 import { address } from 'bitcoinjs-lib';
+import BN from 'bn.js';
+
+import { AddressHashMode } from '@stacks/transactions';
+
+import { NetworkMode, NetworkModes } from '@common/types/network';
 
 const poxKeyToVersionBytesMap: Record<NetworkModes.Mainnet | NetworkModes.Testnet, any> = {
   [NetworkModes.Mainnet]: {

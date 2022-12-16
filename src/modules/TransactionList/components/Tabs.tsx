@@ -1,8 +1,11 @@
-import { Box, BoxProps, color, Stack } from '@stacks/ui';
 import * as React from 'react';
 import { memo } from 'react';
-import { Caption } from '@components/typography';
+
+import { Box, BoxProps, Stack, color } from '@stacks/ui';
+
 import { capitalize } from '@common/utils';
+
+import { Caption } from '@components/typography';
 
 interface TabProps extends BoxProps {
   tab: string;

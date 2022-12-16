@@ -1,19 +1,22 @@
-import { useHomeQueries } from '@features/home/useHomeQueries';
-import { useInfiniteQuery } from 'react-query';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { css } from '@emotion/react';
-import { Box, StxInline, Tooltip } from '@stacks/ui';
+import { useHomeQueries } from '@features/home/useHomeQueries';
+import { TransactionQueryKeys } from '@features/transaction/query-keys';
 import { IconCurrencyBitcoin } from '@tabler/icons';
-import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import { AiFillCheckCircle } from 'react-icons/ai';
+import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
+import { useInfiniteQuery } from 'react-query';
+
 import { Block as BlockType } from '@stacks/stacks-blockchain-api-types';
-import { buildUrl } from '@components/links';
+import { Box, StxInline, Tooltip } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { TransactionQueryKeys } from '@features/transaction/query-keys';
 import { NetworkModes } from '@common/types/network';
 import { getNextPageParam } from '@common/utils';
+
+import { buildUrl } from '@components/links';
 
 const wrapperStyle = css`
   display: flex;

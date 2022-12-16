@@ -1,13 +1,16 @@
-import * as React from 'react';
-import { Box, BoxProps, Flex } from '@stacks/ui';
-import { Caption, Link, Text } from '@components/typography';
-import { microToStacks } from '@common/utils';
 import NextLink from 'next/link';
-import { TxLink } from '@components/links';
+import * as React from 'react';
+
+import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { Box, BoxProps, Flex } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
 import { NetworkModes } from '@common/types/network';
+import { microToStacks } from '@common/utils';
+
+import { TxLink } from '@components/links';
+import { Caption, Link, Text } from '@components/typography';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {

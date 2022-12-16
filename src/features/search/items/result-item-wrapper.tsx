@@ -1,7 +1,8 @@
-import React from 'react';
-import { color, Flex, FlexProps } from '@stacks/ui';
-import { forwardRefWithAs } from '@stacks/ui-core';
 import { css } from '@emotion/react';
+import React from 'react';
+
+import { Flex, FlexProps, color } from '@stacks/ui';
+import { forwardRefWithAs } from '@stacks/ui-core';
 
 const hoverStyle = css`
   .search-result-title {

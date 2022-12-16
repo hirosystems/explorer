@@ -1,4 +1,5 @@
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
+
 import { TransactionType } from '@common/constants';
 
 export const txTypeNamesMap = {

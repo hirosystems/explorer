@@ -1,12 +1,15 @@
-import React from 'react';
-import { Box, color, ControlledModal, Flex, IconButton, Stack } from '@stacks/ui';
 import { IconX } from '@tabler/icons';
-import { Link, Text, Title } from '@components/typography';
-import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
-import { AddNetworkForm } from '@components/add-network-form';
-import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
+import React from 'react';
+
+import { Box, ControlledModal, Flex, IconButton, Stack, color } from '@stacks/ui';
+
 import { MODALS } from '@common/constants';
+import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
 import { useAppDispatch } from '@common/state/hooks';
+
+import { AddNetworkForm } from '@components/add-network-form';
+import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
+import { Link, Text, Title } from '@components/typography';
 
 export const AddNetworkModal: React.FC = () => {
   const modal = selectOpenedModal();

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, BoxProps } from '@stacks/ui';
 import { SVGProps } from 'react';
+
+import { Box, BoxProps } from '@stacks/ui';
 
 export const AccessibleIcon: React.FC<BoxProps> = props => (
   <Box

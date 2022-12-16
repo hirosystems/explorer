@@ -1,11 +1,13 @@
-import * as React from 'react';
-import { Box } from '@stacks/ui';
-import { Title } from '@components/typography';
-import { Meta } from '@components/meta-head';
 import { BlocksList } from '@features/blocks-list';
-
 import type { NextPage } from 'next';
+import * as React from 'react';
+
+import { Box } from '@stacks/ui';
+
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
+
+import { Meta } from '@components/meta-head';
+import { Title } from '@components/typography';
 
 const BlocksPage: NextPage = () => (
   <>

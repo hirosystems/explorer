@@ -1,11 +1,13 @@
 import * as React from 'react';
+import { memo, useMemo } from 'react';
+
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
+
+import { FunctionSummaryArguments } from '@components/function-summary/args';
+import { FunctionSummaryName } from '@components/function-summary/function-name';
+import { FunctionSummaryResult } from '@components/function-summary/result';
 import { Rows } from '@components/rows';
 import { Section } from '@components/section';
-import { FunctionSummaryName } from '@components/function-summary/function-name';
-import { FunctionSummaryArguments } from '@components/function-summary/args';
-import { FunctionSummaryResult } from '@components/function-summary/result';
-import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
-import { memo, useMemo } from 'react';
 
 export const FunctionSummarySection = memo<{
   result?: any;

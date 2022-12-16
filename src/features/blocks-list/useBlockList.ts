@@ -1,6 +1,7 @@
+import { BlockQueryKeys } from '@features/block/query-keys';
 import { useHomeQueries } from '@features/home/useHomeQueries';
 import { useInfiniteQuery } from 'react-query';
-import { BlockQueryKeys } from '@features/block/query-keys';
+
 import { getNextPageParam } from '@common/utils';
 
 export function useBlockList(limit: number) {

@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { AppContainer } from '@components/app-container';
-import { CacheProvider } from '@emotion/react';
 import { cache } from '@emotion/css';
-import { NetworkMode } from '@common/types/network';
+import { CacheProvider } from '@emotion/react';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+
 import { Connect } from '@stacks/connect-react';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
-import { selectUserSession } from '@modules/sandbox/sandbox-slice';
-import { ApiUrls, initialize, selectIsInitialized } from '@common/state/network-slice';
+
 import { IS_SSR } from '@common/constants';
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { ApiUrls, initialize, selectIsInitialized } from '@common/state/network-slice';
+import { NetworkMode } from '@common/types/network';
+
+import { AppContainer } from '@components/app-container';
+
+import { selectUserSession } from '@modules/sandbox/sandbox-slice';
 
 declare const window: any;
 

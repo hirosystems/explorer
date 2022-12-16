@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Flex, Text, BoxProps, FlexProps } from '@stacks/ui';
+
+import { BoxProps, Flex, FlexProps, Text } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
 const Label: React.FC<BoxProps> = props => (

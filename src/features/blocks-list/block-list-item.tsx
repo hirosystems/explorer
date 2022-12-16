@@ -1,14 +1,17 @@
-import React from 'react';
-import { Block } from '@stacks/stacks-blockchain-api-types';
-import { useHoverableState } from '@components/hoverable';
-import { BlockLink } from '@components/links';
-import { Box, color, Flex, Stack } from '@stacks/ui';
-import { ItemIcon } from '@components/item-icon';
 import HashtagIcon from 'mdi-react/HashtagIcon';
-import { Caption, Text, Title } from '@components/typography';
-import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
 import pluralize from 'pluralize';
+import React from 'react';
+
+import { Block } from '@stacks/stacks-blockchain-api-types';
+import { Box, Flex, Stack, color } from '@stacks/ui';
+
+import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@common/utils';
+
 import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { useHoverableState } from '@components/hoverable';
+import { ItemIcon } from '@components/item-icon';
+import { BlockLink } from '@components/links';
+import { Caption, Text, Title } from '@components/typography';
 
 export const BlockItem: React.FC<{ block: Block; index: number; length: number }> = React.memo(
   ({ block, index, length, ...rest }) => {

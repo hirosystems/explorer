@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
+
+import { Box, BoxProps, color } from '@stacks/ui';
+
 import { Caption } from '@components/typography';
-import { Box, color, BoxProps } from '@stacks/ui';
 
 interface CaptionActionProps extends BoxProps {
   label: string;

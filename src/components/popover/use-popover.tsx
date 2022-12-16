@@ -1,12 +1,15 @@
 // @ts-nocheck
 // todo: remove
-import React, { useState, useEffect, useCallback } from 'react';
-import { useEventListener } from '@stacks/ui';
-import { useControlledHover } from '@common/hooks/use-controlled-hover';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useFocus } from 'use-events';
-import { UsePopoverProps } from '@components/popover/types';
-import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
 import { useClickOutside } from 'use-events';
+
+import { useEventListener } from '@stacks/ui';
+
+import { useControlledHover } from '@common/hooks/use-controlled-hover';
+import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
+
+import { UsePopoverProps } from '@components/popover/types';
 
 export const usePopover = ({
   length,

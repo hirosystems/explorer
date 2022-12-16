@@ -1,5 +1,6 @@
-import * as React from 'react';
 import Tippy, { TippyProps } from '@tippyjs/react';
+import * as React from 'react';
+
 import { Box, BoxProps } from '@stacks/ui';
 
 export const Tooltip: React.FC<

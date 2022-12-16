@@ -1,11 +1,13 @@
 import React from 'react';
-import { Box, BoxProps, Transition, Flex } from '@stacks/ui';
+
+import { Box, BoxProps, Flex, Transition } from '@stacks/ui';
+
 import { Card } from '@components/card';
-import { Caption } from '@components/typography';
+import { CloseButton } from '@components/close-button';
 import { PopoverItem } from '@components/popover/default-item';
 import { PopoverProps } from '@components/popover/types';
 import { usePopover } from '@components/popover/use-popover';
-import { CloseButton } from '@components/close-button';
+import { Caption } from '@components/typography';
 
 const PopoverListLabel: React.FC<BoxProps> = ({ children, ...rest }) => (
   <Box py="tight" px="base" {...rest}>

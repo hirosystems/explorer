@@ -1,16 +1,19 @@
 import * as React from 'react';
 import { FC, memo, useMemo } from 'react';
+
 import type { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
+import { Flex, Stack, color } from '@stacks/ui';
+
 import { TwoColsListItem } from '@common/components/TwoColumnsListItem';
-import { ItemIcon } from '@components/item-icon';
-import { Caption, Title } from '@components/typography';
-import { getTxTitle, truncateMiddle } from '@common/utils';
-import { getTransactionTypeLabel } from '@components/token-transfer/utils';
-import { color, Flex, Stack } from '@stacks/ui';
-import { AddressArea, Nonce, Timestamp } from '@components/transaction-item';
-import { buildUrl } from '@components/links';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { getTxTitle, truncateMiddle } from '@common/utils';
+
+import { ItemIcon } from '@components/item-icon';
+import { buildUrl } from '@components/links';
+import { getTransactionTypeLabel } from '@components/token-transfer/utils';
+import { AddressArea, Nonce, Timestamp } from '@components/transaction-item';
+import { Caption, Title } from '@components/typography';
 
 interface MempoolTxsListItemProps {
   tx: MempoolTransaction;

@@ -1,29 +1,32 @@
+import { BlockQueryKeys, blockQK } from '@features/block/query-keys';
+import { getBlockQueries } from '@features/block/use-block-queries';
+import { MicroblockQueryKeys, microblockQK } from '@features/microblock/query-keys';
+import { getMicroblockQueries } from '@features/microblock/use-microblock-queries';
+import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
+import { GetServerSidePropsContext, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as React from 'react';
+import { useQueries, useQuery } from 'react-query';
+
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Box, Flex } from '@stacks/ui';
-import { Title } from '@components/typography';
-import { truncateMiddle, validateTxId } from '@common/utils';
-import { Rows } from '@components/rows';
-import { GetServerSidePropsContext, NextPage } from 'next';
-import { Section } from '@components/section';
-import { Meta } from '@components/meta-head';
-import { PagePanes } from '@components/page-panes';
-import { MicroblockNotFound } from '@components/microblock-not-found';
-import { TransactionList } from '@components/transaction-list';
+
 import { getMicroblockHashFromServerSideCtx } from '@common/page-queries/microblock-hash';
-import { useQueries, useQuery } from 'react-query';
-import { microblockQK, MicroblockQueryKeys } from '@features/microblock/query-keys';
-import { getMicroblockQueries } from '@features/microblock/use-microblock-queries';
-import { useRouter } from 'next/router';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
-import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
-import { SkeletonFees } from '@components/loaders/skeleton-text';
+import { truncateMiddle, validateTxId } from '@common/utils';
+
 import { SkeletonPageTitle } from '@components/loaders/skeleton-common';
+import { SkeletonFees } from '@components/loaders/skeleton-text';
 import { SkeletonTransactionList } from '@components/loaders/skeleton-transaction';
+import { Meta } from '@components/meta-head';
+import { MicroblockNotFound } from '@components/microblock-not-found';
+import { PagePanes } from '@components/page-panes';
+import { Rows } from '@components/rows';
+import { Section } from '@components/section';
 import { Timestamp } from '@components/timestamp';
-import { getBlockQueries } from '@features/block/use-block-queries';
+import { TransactionList } from '@components/transaction-list';
+import { Title } from '@components/typography';
 
 interface MicroblockSinglePageData {
   hash: string;

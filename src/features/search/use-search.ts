@@ -1,3 +1,13 @@
+import { selectSearchTerm } from '@features/search/search-slice';
+import { useQuery } from 'react-query';
+
+import { Block } from '@stacks/blockchain-api-client';
+import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
+
+import { useApi } from '@common/api/client';
+import { BTC_BNS_CONTRACT } from '@common/constants';
+import { useDebounce } from '@common/hooks/use-debounce';
+import { useAppSelector } from '@common/state/hooks';
 import {
   AddressSearchResult,
   BlockSearchResult,
@@ -5,15 +15,7 @@ import {
   NotFoundResult,
   SearchResultType,
 } from '@common/types/search-results';
-import { useQuery } from 'react-query';
-import { useAppSelector } from '@common/state/hooks';
-import { selectSearchTerm } from '@features/search/search-slice';
-import { useDebounce } from '@common/hooks/use-debounce';
 import { isNumeric } from '@common/utils';
-import { Block } from '@stacks/blockchain-api-client';
-import { BTC_BNS_CONTRACT } from '@common/constants';
-import { cvToHex, tupleCV, bufferCVFromString } from '@stacks/transactions';
-import { useApi } from '@common/api/client';
 
 export const useSearchQuery = (id: string) => {
   const { searchApi, blocksApi, nonFungibleTokensApi } = useApi();

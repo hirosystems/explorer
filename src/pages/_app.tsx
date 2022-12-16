@@ -4,6 +4,8 @@ import App from 'next/app';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 import 'tippy.js/dist/tippy.css';
 
@@ -11,11 +13,10 @@ import { NetworkModeUrlMap } from '@common/constants/network';
 import { ApiUrls, initialize, selectActiveNetworkUrl } from '@common/state/network-slice';
 import { store } from '@common/state/store';
 import { NetworkMode, NetworkModes } from '@common/types/network';
+
 import { AppConfig } from '@components/app-config';
 import { Modals } from '@components/modals';
 import { NetworkModeToast } from '@components/network-mode-toast';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
 
 interface ExplorerAppProps extends AppProps {
   apiUrls: ApiUrls;

@@ -1,16 +1,16 @@
+import { keyframes } from '@emotion/react';
 import * as React from 'react';
 
 import { Box, FlexProps } from '@stacks/ui';
+import { Theme, css } from '@stacks/ui-core';
 
-import { keyframes } from '@emotion/react';
-import { css, Theme } from '@stacks/ui-core';
+import { TxStatus } from '@common/types/tx';
+
 import { Badge } from './badge';
-
+import { AlertCircleIcon } from './icons/alert-circle';
 import { CheckIcon } from './icons/check';
 import { LoaderQuarter } from './icons/loader-quarter';
-import { AlertCircleIcon } from './icons/alert-circle';
 import { MicroblockIcon } from './icons/microblock';
-import { TxStatus } from '@common/types/tx';
 
 const keyframesRotate = keyframes`
   0% {

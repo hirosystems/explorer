@@ -1,7 +1,9 @@
-import { txFilters } from '@features/transactions-filter/transactions-filter-slice';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
-import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
 import { useFilterScope } from '@features/transactions-filter/hooks/use-filter-scope';
+import { txFilters } from '@features/transactions-filter/transactions-filter-slice';
+
+import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
+
+import { useAppDispatch, useAppSelector } from '@common/state/hooks';
 
 export const useFilterState = () => {
   const dispatch = useAppDispatch();

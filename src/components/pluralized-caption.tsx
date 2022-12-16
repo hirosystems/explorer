@@ -1,7 +1,9 @@
-import React from 'react';
-import { BoxProps, color } from '@stacks/ui';
-import { Caption } from '@components/typography';
 import pluralize from 'pluralize';
+import React from 'react';
+
+import { BoxProps, color } from '@stacks/ui';
+
+import { Caption } from '@components/typography';
 
 export const PluralizedCaption: React.FC<BoxProps & { array?: any[]; label: string }> = ({
   array,

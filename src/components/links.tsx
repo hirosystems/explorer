@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
 import Link from 'next/link';
+import React, { FC } from 'react';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
 import { Network } from '@common/types/network';

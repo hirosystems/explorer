@@ -1,13 +1,16 @@
+import { css } from '@emotion/react';
 import { Wrapper } from '@features/account-transaction-list';
+import * as React from 'react';
+
 import { Box, Flex, Stack } from '@stacks/ui';
-import { SkeletonRectangleFiller } from './skeleton-text';
+
 import { PagePanes } from '@components/page-panes';
 import { RowContent, RowWrapper } from '@components/rows/row';
 import { Section } from '@components/section';
 import { Title } from '@components/typography';
-import * as React from 'react';
+
 import { ExplorerSkeletonLoader, SkeletonPageTitle, SkeletonTag } from './skeleton-common';
-import { css } from '@emotion/react';
+import { SkeletonRectangleFiller } from './skeleton-text';
 
 const skeletonTransactionCss = css`
   .skeleton-align-self-right {

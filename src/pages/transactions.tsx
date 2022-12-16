@@ -1,11 +1,14 @@
+import { NextPage } from 'next';
 import React from 'react';
+
 import { Box } from '@stacks/ui';
-import { Title } from '@components/typography';
-import { Meta } from '@components/meta-head';
-import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
+
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
 
-import type { NextPage } from 'next';
+import { Meta } from '@components/meta-head';
+import { Title } from '@components/typography';
+
+import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
 
 const TransactionsPage: NextPage = () => {
   return (

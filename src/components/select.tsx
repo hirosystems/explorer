@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Box, BoxProps, Flex, ChevronIcon, Input } from '@stacks/ui';
+
+import { Box, BoxProps, ChevronIcon, Flex, Input } from '@stacks/ui';
+
 import { Popover } from '@components/popover/popover';
 
 interface SelectProps extends BoxProps {

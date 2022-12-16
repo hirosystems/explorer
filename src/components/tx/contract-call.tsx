@@ -1,22 +1,24 @@
-import { Stack } from '@stacks/ui';
+import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
+import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
 import React, { useMemo } from 'react';
+import { useQuery } from 'react-query';
+
+import { Block, MempoolContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
+import { Stack } from '@stacks/ui';
 
 import { TransactionStatus } from '@common/constants';
 import { getTransactionStatus } from '@common/utils/transactions';
+
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
 import { ContractDetails } from '@components/contract-details';
+import { ContractSource } from '@components/contract-source';
+import { FunctionSummarySection } from '@components/function-summary/function-summary';
 import { PageTop } from '@components/page';
 import { PagePanes } from '@components/page-panes';
+import { PostConditions } from '@components/post-conditions';
 import { TransactionDetails } from '@components/transaction-details';
 import { Events } from '@components/tx-events';
-import { transactionQK, TransactionQueryKeys } from '@features/transaction/query-keys';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { Block, MempoolContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
-import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types/generated';
-import { useQuery } from 'react-query';
-import { FunctionSummarySection } from '@components/function-summary/function-summary';
-import { PostConditions } from '@components/post-conditions';
-import { ContractSource } from '@components/contract-source';
 
 const ContractCallPage: React.FC<{
   transaction: ContractCallTransaction | MempoolContractCallTransaction;

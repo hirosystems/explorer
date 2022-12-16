@@ -1,9 +1,11 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
+
+import { ChainID } from '@stacks/transactions';
+
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@common/constants';
+import { CustomNetworksLSKey } from '@common/constants/network';
 import { RootState } from '@common/state/store';
 import { Network, NetworkModes } from '@common/types/network';
-import { ChainID } from '@stacks/transactions';
-import { CustomNetworksLSKey } from '@common/constants/network';
 import { getCustomNetworksFromLS } from '@common/utils';
 
 export interface ApiUrls {

@@ -1,7 +1,9 @@
-import { FC, memo, ReactNode } from 'react';
-import { Box } from '@stacks/ui';
 import { css } from '@emotion/react';
 import Link from 'next/link';
+import { FC, ReactNode, memo } from 'react';
+
+import { Box } from '@stacks/ui';
+
 import { leftLineCss } from '@common/styles/hover';
 
 interface TwoColumnsListProps {

@@ -1,11 +1,15 @@
-import { TokenAvatar } from '../token-avatar';
 import React from 'react';
-import { Box, color, Flex, FlexProps, Stack } from '@stacks/ui';
-import { Caption, Text } from '@components/typography';
-import { TxLink } from '@components/links';
+
+import { Box, Flex, FlexProps, Stack, color } from '@stacks/ui';
+
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@common/utils';
+
+import { TxLink } from '@components/links';
 import { getTicker } from '@components/tx-events';
+import { Caption, Text } from '@components/typography';
+
 import { useTokenMetadata } from '../../common/hooks/use-token-metadata';
+import { TokenAvatar } from '../token-avatar';
 
 interface TokenAssetListItemProps extends FlexProps {
   amount: string;

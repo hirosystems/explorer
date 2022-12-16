@@ -1,8 +1,9 @@
-import { ChainID } from '@stacks/transactions';
 import getConfig from 'next/config';
-import packageJson from '../../package.json';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { ChainID } from '@stacks/transactions';
+
+import packageJson from '../../package.json';
 import { TxStatus } from './types/tx';
 
 const { publicRuntimeConfig } = getConfig();

@@ -1,15 +1,19 @@
+import { useBlockList } from '@features/blocks-list/useBlockList';
+import React, { Fragment, useMemo } from 'react';
+
+import { Flex, FlexProps, Grid, Spinner, color } from '@stacks/ui';
+
 import { DEFAULT_LIST_LIMIT } from '@common/constants';
+
 import { HoverableItem } from '@components/hoverable';
 import { SkeletonBlockList } from '@components/loaders/skeleton-text';
 import { Section } from '@components/section';
 import { SectionFooterAction } from '@components/section-footer-button';
 import { SafeSuspense } from '@components/ssr-safe-suspense';
 import { Caption } from '@components/typography';
-import { color, Flex, FlexProps, Grid, Spinner } from '@stacks/ui';
-import React, { Fragment, useMemo } from 'react';
+
 import { BlockItem } from './block-list-item';
 import { MicroblockItem } from './microblock-list-item';
-import { useBlockList } from '@features/blocks-list/useBlockList';
 
 export const BlocksList: React.FC<
   FlexProps & { enforceLimit?: boolean; limit: number; infinite?: boolean }

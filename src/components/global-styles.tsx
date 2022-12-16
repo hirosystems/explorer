@@ -1,5 +1,6 @@
-import * as React from 'react';
 import { Global, css } from '@emotion/react';
+import * as React from 'react';
+
 import { prismTheme } from '@components/prism-theme';
 
 const TextAreaOverrides = (

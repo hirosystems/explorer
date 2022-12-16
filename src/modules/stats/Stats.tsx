@@ -1,20 +1,23 @@
+import { css } from '@emotion/react';
+import { useBlockList } from '@features/blocks-list/useBlockList';
 import { FC, ReactNode, useMemo } from 'react';
 import * as React from 'react';
-import { Box, color, Text, Flex } from '@stacks/ui';
-import { Tooltip } from '@components/tooltip';
-import { Card } from '@components/card';
-import { css } from '@emotion/react';
-import { MICROSTACKS_IN_STACKS, numberToString } from '@common/utils';
+import { FaBitcoin } from 'react-icons/fa';
 import { useQuery } from 'react-query';
+
+import { Box, Flex, Text, color } from '@stacks/ui';
+
 import { useApi } from '@common/api/client';
+import { DEFAULT_LIST_LIMIT } from '@common/constants';
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetworkUrl } from '@common/state/network-slice';
-import { DEFAULT_LIST_LIMIT } from '@common/constants';
-import { useBlockList } from '@features/blocks-list/useBlockList';
-import { FaBitcoin } from 'react-icons/fa';
+import { MICROSTACKS_IN_STACKS, numberToString } from '@common/utils';
+
+import { Card } from '@components/card';
 import { Circle } from '@components/circle';
-import { ExplorerSkeletonLoader } from '@components/loaders/skeleton-common';
 import { InfoCircleIcon } from '@components/icons/info-circle';
+import { ExplorerSkeletonLoader } from '@components/loaders/skeleton-common';
+import { Tooltip } from '@components/tooltip';
 
 const statSectionStyle = css`
   display: grid;

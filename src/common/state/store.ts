@@ -1,9 +1,12 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { networkSlice, NetworkState } from './network-slice';
-import { modalSlice, ModalState } from '@components/modals/modal-slice';
-import { searchSlice, SearchState } from '@features/search/search-slice';
+import { SearchState, searchSlice } from '@features/search/search-slice';
 import { TxFilters, filterReducers } from '@features/transactions-filter/transactions-filter-slice';
-import { sandboxSlice, ConnectState } from '@modules/sandbox/sandbox-slice';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+
+import { ModalState, modalSlice } from '@components/modals/modal-slice';
+
+import { ConnectState, sandboxSlice } from '@modules/sandbox/sandbox-slice';
+
+import { NetworkState, networkSlice } from './network-slice';
 
 const rootReducer = combineReducers({
   network: networkSlice.reducer,

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Box, BoxProps } from '@stacks/ui';
 
 export const BlockstackLogo = ({ size = '24px', ...props }: BoxProps) => (

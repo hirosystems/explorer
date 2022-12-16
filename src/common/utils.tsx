@@ -1,24 +1,27 @@
 /** @jsxRuntime classic */
-import { Box, color, ColorsStringLiteral, Flex, Stack } from '@stacks/ui';
+import { IconArrowLeft } from '@tabler/icons';
+import BigNumber from 'bignumber.js';
+import { c32addressDecode } from 'c32check';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { NextPageContext } from 'next';
+import React from 'react';
+
 import {
   CoreNodeInfoResponse,
   MempoolTransaction,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { c32addressDecode } from 'c32check';
-import dayjs from 'dayjs';
+import { Box, ColorsStringLiteral, Flex, Stack, color } from '@stacks/ui';
 
-import relativeTime from 'dayjs/plugin/relativeTime';
-import { ContractCallTxs } from '@common/types/tx';
-import { Text } from '@components/typography';
-import { IconArrowLeft } from '@tabler/icons';
 import { TESTNET_CHAIN_ID } from '@common/constants';
-import { Network, NetworkMode, NetworkModes } from '@common/types/network';
-import { NextPageContext } from 'next';
-import BigNumber from 'bignumber.js';
-import React from 'react';
-import { StxPriceButton } from '@modules/stxPrice/StxPriceButton';
 import { CustomNetworksLSKey } from '@common/constants/network';
+import { Network, NetworkMode, NetworkModes } from '@common/types/network';
+import { ContractCallTxs } from '@common/types/tx';
+
+import { Text } from '@components/typography';
+
+import { StxPriceButton } from '@modules/stxPrice/StxPriceButton';
 
 dayjs.extend(relativeTime);
 

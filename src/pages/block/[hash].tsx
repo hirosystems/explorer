@@ -1,28 +1,32 @@
-import { validateTxId } from '@common/utils';
-import * as React from 'react';
-import { Rows } from '@components/rows';
-import { Title } from '@components/typography';
-import { Box, Flex } from '@stacks/ui';
+import { BlockQueryKeys, blockQK } from '@features/block/query-keys';
+import { getBlockQueries } from '@features/block/use-block-queries';
+import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
 import { NextPage } from 'next';
-import { Section } from '@components/section';
-import { Timestamp } from '@components/timestamp';
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { useInfiniteQuery, useQuery } from 'react-query';
+
+import { Box, Flex } from '@stacks/ui';
+
 import { useAppSelector } from '@common/state/hooks';
 import { selectActiveNetwork } from '@common/state/network-slice';
+import { validateTxId } from '@common/utils';
+
 import { BlockNotFound } from '@components/block-not-found';
 import { BtcAnchorBlockCard } from '@components/btc-anchor-card';
-import {} from '@components/loaders/skeleton-text';
+import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { FilterButton } from '@components/filter-button';
+import { SkeletonPageTitle } from '@components/loaders/skeleton-common';
+import '@components/loaders/skeleton-text';
 import { SectionBoxSkeleton } from '@components/loaders/skeleton-transaction';
 import { Meta } from '@components/meta-head';
 import { PagePanes } from '@components/page-panes';
-import { blockQK, BlockQueryKeys } from '@features/block/query-keys';
-import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { useRouter } from 'next/router';
-import { SkeletonPageTitle } from '@components/loaders/skeleton-common';
-import { useQuery, useInfiniteQuery } from 'react-query';
-import { BtcStxBlockLinks } from '@components/btc-stx-block-links';
+import { Rows } from '@components/rows';
+import { Section } from '@components/section';
+import { Timestamp } from '@components/timestamp';
+import { Title } from '@components/typography';
+
 import { TxsList } from '@modules/TransactionList/components/TxsList';
-import { FilterButton } from '@components/filter-button';
-import { getBlockQueries } from '@features/block/use-block-queries';
 
 interface BlockSinglePageData {
   hash: string;

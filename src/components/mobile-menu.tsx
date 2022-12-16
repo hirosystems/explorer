@@ -1,12 +1,15 @@
-import { Box, color, Fade, Flex, IconButton } from '@stacks/ui';
-import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
+import { IconArrowLeft, IconMenu2, IconX } from '@tabler/icons';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { HeaderTextItem } from '@components/header-text-item';
-import { IconArrowLeft, IconMenu2, IconX } from '@tabler/icons';
-import { NetworkItems } from '@components/network-items';
+
+import { Box, Fade, Flex, IconButton, color } from '@stacks/ui';
+
+import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
 import { border } from '@common/utils';
+
+import { HeaderTextItem } from '@components/header-text-item';
 import { ExplorerLink } from '@components/links';
+import { NetworkItems } from '@components/network-items';
 
 const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
 

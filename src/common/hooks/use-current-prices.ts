@@ -1,4 +1,4 @@
-import { QueryFunctionContext, useQuery, UseQueryOptions } from 'react-query';
+import { QueryFunctionContext, UseQueryOptions, useQuery } from 'react-query';
 
 const getCurrentBtcPrice = async () =>
   fetch('https://api.coingecko.com/api/v3/exchange_rates')

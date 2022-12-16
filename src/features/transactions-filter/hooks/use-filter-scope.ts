@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
+import { useRouter } from 'next/router';
 
 const pathnameFilterScopeMap: Record<string, TxFilterTypes> = {
   '/transactions': TxFilterTypes.TxsPageTxFilter,

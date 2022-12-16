@@ -1,16 +1,18 @@
+import { IconChevronRight } from '@tabler/icons';
 import * as React from 'react';
 
-import { Text } from '@components/typography';
-import { Box, BoxProps, Flex, Grid } from '@stacks/ui';
-
-import { border } from '@common/utils';
-import { CodeBlock } from '@components/code-block';
-import { TxLink } from '@components/links';
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { IconChevronRight } from '@tabler/icons';
+import { Box, BoxProps, Flex, Grid } from '@stacks/ui';
+
+import { border } from '@common/utils';
+
+import { CodeBlock } from '@components/code-block';
+import { TxLink } from '@components/links';
+import { Text } from '@components/typography';
+
 import { Badge } from './badge';
 
 export const ContractSource: React.FC<
@@ -47,12 +49,7 @@ export const ContractSource: React.FC<
 
   return source ? (
     <Box {...rest}>
-      <Box
-        border="1px solid var(--colors-border)"
-        borderRadius="12px"
-        overflow="hidden"
-        bg="#040404"
-      >
+      <Box overflow="hidden" bg="#040404">
         <Flex
           justifyContent="space-between"
           borderBottom={border()}

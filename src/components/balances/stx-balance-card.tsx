@@ -1,27 +1,28 @@
+import { IconQrcode, IconX } from '@tabler/icons';
+import vkQr from '@vkontakte/vk-qr';
 import * as React from 'react';
 
-import { Box, BoxProps, Circle, color, Flex, Grid, Stack, StxInline } from '@stacks/ui';
-import { Caption, Text } from '@components/typography';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import { Box, BoxProps, Circle, Flex, Grid, Stack, StxInline, color } from '@stacks/ui';
 
-import { Section } from '@components/section';
+import { MODALS } from '@common/constants';
+import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
+import { useAppDispatch } from '@common/state/hooks';
 import {
   border,
-  microToStacks,
-  getLocaleDecimalSeparator,
   formatStacksAmount,
-  usdFormatter,
+  getLocaleDecimalSeparator,
   getUsdValue,
+  microToStacks,
+  usdFormatter,
 } from '@common/utils';
+
 import { IconButton } from '@components/icon-button';
-import { IconQrcode, IconX } from '@tabler/icons';
-import { Tooltip } from '@components/tooltip';
-import { StackingPercentage } from '@components/stacking';
-import vkQr from '@vkontakte/vk-qr';
 import { openModal } from '@components/modals/modal-slice';
-import { MODALS } from '@common/constants';
-import { useAppDispatch } from '@common/state/hooks';
-import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import { Section } from '@components/section';
+import { StackingPercentage } from '@components/stacking';
+import { Tooltip } from '@components/tooltip';
+import { Caption, Text } from '@components/typography';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const { data: stxPrice } = useCurrentStxPrice();

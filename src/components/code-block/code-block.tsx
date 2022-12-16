@@ -1,14 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import Prism from 'prismjs';
-import { clarity } from '@components/code-block/clarity';
 import 'prismjs/components/prism-json';
-clarity(Prism);
-import { css, Theme } from '@stacks/ui-core';
-
 import * as React from 'react';
 
 import { Box, CodeBlock as CodeBlockBase, CodeBlockProps, color } from '@stacks/ui';
+import { Theme, css } from '@stacks/ui-core';
+
+import { clarity } from '@components/code-block/clarity';
+
+clarity(Prism);
 
 const CodeBlock = ({
   highlightedLine,

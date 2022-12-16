@@ -1,13 +1,20 @@
+import { StacksNetwork } from '@stacks/network';
 import {
   ClarityAbiType,
+  ClarityAbiTypeTuple,
   ClarityValue,
-  deserializeCV,
-  serializeCV,
   cvToString,
+  deserializeCV,
+  encodeClarityValue,
+  isClarityAbiOptional,
+  isClarityAbiTuple,
+  serializeCV,
+  tupleCV,
 } from '@stacks/transactions';
-import { StacksNetwork } from '@stacks/network';
 
 import { HIRO_HEADERS } from '@common/constants';
+
+import { TupleValueType } from '@modules/sandbox/types';
 
 export interface ClarityFunctionArg {
   name: string;
@@ -69,4 +76,21 @@ export const parseReadOnlyResponse = ({ result }: ReadOnlyResponse) => {
   const bufferCv = Buffer.from(hex, 'hex');
   const clarityValue = deserializeCV(bufferCv);
   return cvToString(clarityValue);
+};
+
+export const getTuple = (type?: ClarityAbiType): ClarityAbiTypeTuple['tuple'] | undefined => {
+  if (!type) return;
+  const isTuple = isClarityAbiTuple(type);
+  if (isTuple) return type?.tuple;
+  const isOptional = isClarityAbiOptional(type);
+  if (isOptional && isClarityAbiTuple(type?.optional)) return type?.optional?.tuple;
+};
+
+export const encodeTuple = (tuple: ClarityAbiTypeTuple['tuple'], value: TupleValueType) => {
+  const tupleData = tuple.reduce((acc, tupleEntry) => {
+    const _type = tupleEntry.type;
+    acc[tupleEntry.name] = encodeClarityValue(_type, value[tupleEntry.name].toString());
+    return acc;
+  }, {} as Record<string, ClarityValue>);
+  return tupleCV(tupleData);
 };

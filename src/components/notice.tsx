@@ -1,5 +1,7 @@
 import React from 'react';
-import { Box, Flex, ExclamationMarkCircleIcon, FlexProps } from '@stacks/ui';
+
+import { Box, ExclamationMarkCircleIcon, Flex, FlexProps } from '@stacks/ui';
+
 import { Text } from '@components/typography';
 
 export const Notice = ({
