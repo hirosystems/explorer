@@ -1,3 +1,10 @@
+# [1.69.0](https://github.com/hirosystems/explorer/compare/v1.68.1...v1.69.0) (2022-12-20)
+
+
+### Features
+
+* sandbox list arg ([e6871b7](https://github.com/hirosystems/explorer/commit/e6871b750795dea0bafafd41e1615dbde0874367))
+
 ## [1.68.1](https://github.com/hirosystems/explorer/compare/v1.68.0...v1.68.1) (2022-12-20)
 
 
