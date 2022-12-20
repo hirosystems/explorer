@@ -1,3 +1,10 @@
+## [1.68.1](https://github.com/hirosystems/explorer/compare/v1.68.0...v1.68.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* handle tuple result when value is 'none' ([9fc03d6](https://github.com/hirosystems/explorer/commit/9fc03d617e40035412f99eb0f5ede3a230b43de1))
+
 # [1.68.0](https://github.com/hirosystems/explorer/compare/v1.67.0...v1.68.0) (2022-12-20)
 
 
