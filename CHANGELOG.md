@@ -1,3 +1,10 @@
+# [1.68.0](https://github.com/hirosystems/explorer/compare/v1.67.0...v1.68.0) (2022-12-20)
+
+
+### Features
+
+* exclude block info from txs in microblocks ([76e39b3](https://github.com/hirosystems/explorer/commit/76e39b34dad7f168b462bd5239a88590918ecf04))
+
 # [1.67.0](https://github.com/hirosystems/explorer/compare/v1.66.0...v1.67.0) (2022-12-15)
 
 
