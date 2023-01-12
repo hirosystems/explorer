@@ -63,7 +63,7 @@ const Switch = ({
 };
 
 export const Toggle: React.FC<
-  { label: string; value: boolean; size?: 'small' | 'default' } & FlexProps
+  { label?: string; value: boolean; size?: 'small' | 'default'; onClick: () => void } & FlexProps
 > = ({ label, onClick, value, size = 'default', ...rest }) => {
   const toggled = value;
   const handleClick = (e: any) => {
@@ -77,7 +77,6 @@ export const Toggle: React.FC<
       _focus={{
         filter: `drop-shadow(0 0 0 3px ${focusBlue(0.5)})`,
       }}
-      justifyContent="flex-end"
       alignItems="center"
       onClick={handleClick}
       {...rest}
