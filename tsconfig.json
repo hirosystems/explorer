@@ -27,7 +27,7 @@
       "@modules/*": ["modules/*"]
     },
     "baseUrl": "src",
-    "incremental": true
+    "incremental": true,
   },
   "exclude": ["node_modules", ".next"],
   "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "common.d.ts"]
