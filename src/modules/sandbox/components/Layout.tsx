@@ -1,6 +1,6 @@
 import { IconLogout, IconMenu2, IconUser } from '@tabler/icons';
 import Head from 'next/head';
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 
 import {
   Box,
