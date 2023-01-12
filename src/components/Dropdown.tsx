@@ -56,7 +56,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 {optionRenderer ? (
                   optionRenderer(option)
                 ) : (
-                  <Flex alignItems="center" borderBottom={border()} py="base">
+                  <Flex alignItems="center" py="base">
                     <Text
                       fontSize="14px"
                       display="block"
@@ -92,10 +92,9 @@ const DropdownMenu = styled.div`
     left: 0;
     right: 0;
     /* background-color: white; */
-    border: 1px solid border();
+    /* border: 1px solid border(); */
     /* border: 1px solid; */
 
-    
     li {
       list-style: none;
       :first-child {
@@ -107,9 +106,7 @@ const DropdownMenu = styled.div`
         border-bottom-right-radius: 6px;
       }
       width: 100%;
-      border-bottom: 1px solid var(--colors-border);
-      border-left: 1px solid var(--colors-border);
-      border-right: 1px solid var(--colors-border);
+      border-top: 1px solid border();
       padding-left: 8px;
       :hover {
         background-color: #efefef;

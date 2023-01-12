@@ -15,8 +15,10 @@ import {
   isClarityAbiPrimitive,
   listCV,
   makeContractCall,
+  makeStandardFungiblePostCondition,
+  makeStandardNonFungiblePostCondition,
+  makeStandardSTXPostCondition,
 } from '@stacks/transactions';
-import { ClarityAbiType, ClarityAbiTypeUnion, getTypeUnion } from '@stacks/transactions';
 import { Box, Button, Flex, IconButton, Input, Stack, color } from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
@@ -34,7 +36,6 @@ import { Text } from '@components/typography';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types';
 import { encodeTuple, getTuple } from '../../utils';
 import { Argument } from '../Argument';
-import { PostCondition } from './PostCondition';
 import { ReadOnlyField } from './ReadOnlyField';
 
 interface FunctionViewProps {
@@ -60,6 +61,39 @@ const PostConditionOptions = [
   { label: 'Fungible Post Condition', value: PostConditionType.Fungible },
   { label: 'Non-Fungible Post Condition', value: PostConditionType.NonFungible },
 ];
+
+function getPostCondition(postConditionType: PostConditionType) {
+  const address = '';
+  const amount = 5;
+  const assetInfo = 'undefined';
+  //   const assetName = ClarityType.BoolFalse;
+  const assetName = encodeClarityValue('principal', 'false');
+
+  // const conditionCode:
+  if (postConditionType === PostConditionType.Stx) {
+    return makeStandardSTXPostCondition(address, FungibleConditionCode.Equal, amount);
+  }
+  if (postConditionType === PostConditionType.Fungible) {
+    return makeStandardFungiblePostCondition(
+      address,
+      FungibleConditionCode.Equal,
+      amount,
+      assetInfo
+    );
+  }
+  if (postConditionType === PostConditionType.NonFungible) {
+    return makeStandardNonFungiblePostCondition(
+      address,
+      NonFungibleConditionCode.DoesNotOwn,
+      assetInfo,
+      assetName
+    );
+  }
+  //   if (postConditionType === PostConditionType.Stx) {
+  //     return makestand();
+  //   }
+  throw new Error(`There is no post condition type that matches ${postConditionType}`);
+}
 
 type FormType = Record<string, ValueType | ListValueType>;
 
