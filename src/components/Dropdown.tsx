@@ -46,32 +46,34 @@ export const Dropdown: React.FC<DropdownProps> = ({
       {isOpen && (
         <Flex>
           <ul className="dropdown-menu">
-            {options.map(option => (
-              <li
-                key={option.label}
-                onClick={() => {
-                  onChange?.(option);
-                  setSelected(option);
-                  toggle();
-                }}
-              >
-                {optionRenderer ? (
-                  optionRenderer(option)
-                ) : (
-                  <Flex alignItems="center" py="base">
-                    <Text
-                      fontSize="14px"
-                      display="block"
-                      color={color('text-title')}
-                      mb="tight"
-                      margin={0}
-                    >
-                      {option.label}
-                    </Text>
-                  </Flex>
-                )}
-              </li>
-            ))}
+            {options
+              .filter(option => option.value !== selected.value)
+              .map(option => (
+                <li
+                  key={option.label}
+                  onClick={() => {
+                    onChange?.(option);
+                    setSelected(option);
+                    toggle();
+                  }}
+                >
+                  {optionRenderer ? (
+                    optionRenderer(option)
+                  ) : (
+                    <Flex alignItems="center" py="base">
+                      <Text
+                        fontSize="14px"
+                        display="block"
+                        color={color('text-title')}
+                        mb="tight"
+                        margin={0}
+                      >
+                        {option.label}
+                      </Text>
+                    </Flex>
+                  )}
+                </li>
+              ))}
           </ul>
         </Flex>
       )}
