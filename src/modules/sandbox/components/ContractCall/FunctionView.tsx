@@ -51,7 +51,6 @@ import { Caption, Text } from '@components/typography';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types';
 import { encodeTuple, getTuple } from '../../utils';
 import { Argument } from '../Argument';
-import { PostCondition } from './PostCondition';
 import { ReadOnlyField } from './ReadOnlyField';
 
 interface FunctionViewProps {
