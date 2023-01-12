@@ -4,6 +4,7 @@ import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { openContractCall } from '@stacks/connect';
 import {
+  AssetInfo,
   ClarityAbiFunction,
   ClarityAbiType,
   ClarityAbiTypeId,
