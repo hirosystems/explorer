@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import * as React from 'react';
+import { FaRegBell } from 'react-icons/fa';
 
-import { Box, Button, ChevronIcon, Flex } from '@stacks/ui';
+import { Box, Button, ChevronIcon, ColorModeString, Flex, color, useColorMode } from '@stacks/ui';
 
 import { border } from '@common/utils';
 
@@ -27,6 +28,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Option>(defaultOption ?? options[0]);
+  const { colorMode } = useColorMode();
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -34,7 +36,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     console.log('open', { options });
   }
   return (
-    <DropdownMenu onClick={toggle}>
+    <DropdownMenu onClick={toggle} colorMode={colorMode}>
       <Button width="100%" height="100%">
         <Flex alignItems="center" whiteSpace="nowrap">
           <Box>{selected.label}</Box>
@@ -60,7 +62,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     <Text
                       fontSize="14px"
                       display="block"
-                      // color={color('text-caption')}
+                      color={color('text-title')}
                       mb="tight"
                       margin={0}
                     >
@@ -77,10 +79,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
   );
 };
 
-const DropdownMenu = styled.div`
+const DropdownMenu = styled.div<{ colorMode: ColorModeString | undefined }>`
   height: 100%;
   overflow: visible;
   position: relative;
+
   ul {
     width: 100%;
     padding: 0;
@@ -91,11 +94,11 @@ const DropdownMenu = styled.div`
     top: 100%;
     left: 0;
     right: 0;
-    /* background-color: white; */
-    /* border: 1px solid border(); */
-    /* border: 1px solid; */
 
     li {
+      background-color: ${props => (props.colorMode === 'light' ? color('bg') : 'rgb(41, 41, 41)')};
+      border: ${border()};
+
       list-style: none;
       :first-child {
         border-top-left-radius: 6px;
@@ -106,17 +109,11 @@ const DropdownMenu = styled.div`
         border-bottom-right-radius: 6px;
       }
       width: 100%;
-      border-top: 1px solid border();
+      border-top: 1px solid ${border()};
       padding-left: 8px;
       :hover {
-        background-color: #efefef;
-        /* background-color: rgb(255, 40, 255); */
-        /* background-color: orange; */
+        background-color: ${props => (props.colorMode === 'light' ? '#efefef' : '#9c9ca2')};
       }
-
-      /* :last-child {
-      border-top: '1px solid var(--colors-border)';;
-    } */
     }
   }
 `;
