@@ -244,6 +244,14 @@ const checkPostConditionParameters = (
   return errors;
 };
 
+// type FormikValues = FormType & PostConditionParameters>;
+// type FormikValues = Record<string, number | string>;
+
+interface FormikInitialValues extends PostConditionParameters {
+  isPostConditionModeEnabled: PostConditionMode;
+  functionParameterValues: FormType;
+}
+
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
   const [isPostConditionModeEnabled, setPostConditionMode] = useState<PostConditionMode>(
@@ -297,6 +305,14 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     postConditionAssetContractName: undefined,
   };
 
+  console.log({
+    initialValues: {
+      functionParameterValues: initialFunctionParameterValues,
+      ...initialPostConditionParameterValues,
+      isPostConditionModeEnabled: PostConditionMode.Deny,
+    },
+  });
+
   return (
     <Formik
       initialValues={
@@ -329,9 +345,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           const isList = isClarityAbiList(type);
           const optionalType = isClarityAbiOptional(type) ? type?.optional : undefined;
           if (tuple) {
-            final[arg] = encodeTuple(tuple, values[arg] as TupleValueType);
+            final[arg] = encodeTuple(tuple, values.functionParameterValues[arg] as TupleValueType);
           } else if (isList) {
-            const listValues = values[arg] as ListValueType;
+            const listValues = values.functionParameterValues[arg] as ListValueType;
             const listType = type.list.type;
             const optionalListType = isClarityAbiOptional(listType)
               ? listType?.optional
@@ -349,7 +365,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           } else {
             final[arg] = encodeClarityValue(
               optionalType || type,
-              (values[arg] as NonTupleValueType).toString()
+              (values.functionParameterValues[arg] as NonTupleValueType).toString()
             );
           }
         });
