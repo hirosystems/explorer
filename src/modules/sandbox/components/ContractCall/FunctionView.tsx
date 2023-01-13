@@ -25,6 +25,7 @@ import {
   makeStandardFungiblePostCondition,
   makeStandardNonFungiblePostCondition,
   makeStandardSTXPostCondition,
+  stringAsciiCV,
 } from '@stacks/transactions';
 import { Box, Button, Flex, IconButton, Input, Stack, color } from '@stacks/ui';
 
@@ -59,15 +60,29 @@ enum PostConditionType {
 
 const postConditionParameterMap = {
   [PostConditionType.Stx]: ['address', 'conditionCode', 'amount'],
-  [PostConditionType.Fungible]: ['address', 'conditionCode', 'amount', 'assetInfo'],
-  [PostConditionType.NonFungible]: ['address', 'conditionCode', 'assetInfo', 'assetName'],
+  [PostConditionType.Fungible]: [
+    'address',
+    'conditionCode',
+    'amount',
+    'assetAddress',
+    'assetContractName',
+    'assetName',
+  ],
+  [PostConditionType.NonFungible]: [
+    'address',
+    'conditionCode',
+    'assetAddress',
+    'assetContractName',
+    'assetName',
+  ],
 };
 
 const postConditionParameterLabels: Record<string, string> = {
   address: 'Address',
   conditionCode: 'Condition Code',
   amount: 'Amount',
-  assetInfo: 'Asset Info',
+  assetAddress: 'Asset Address',
+  assetContractName: 'Asset Contract Name',
   assetName: 'Asset Name',
 };
 
@@ -113,15 +128,13 @@ function getPostCondition(
       );
     }
   } else if (postConditionType === PostConditionType.NonFungible) {
-    // TODO: const conditionCodeHackConversion = (conditionCode as NonFungibleConditionCode) === NonFungibleCode.;
-
-    if (address && assetAddress && assetContractName && assetName && conditionCode && assetName) {
+    if (address && assetAddress && assetContractName && assetName && conditionCode) {
       const assetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
       postCondition = makeStandardNonFungiblePostCondition(
         address,
         conditionCode as NonFungibleConditionCode,
         assetInfo,
-        assetName as ClarityValue
+        stringAsciiCV(assetName)
       );
     }
   } else {
@@ -133,6 +146,42 @@ function getPostCondition(
 }
 
 type FormType = Record<string, ValueType | ListValueType>;
+
+const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
+  const errors: Record<string, string> = {};
+  Object.keys(values).forEach(arg => {
+    const type = fn.args.find(({ name }) => name === arg)?.type;
+    const isOptional = type && isClarityAbiOptional(type);
+    const optionalTypeIsPrincipal =
+      isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
+    if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
+      const validPrincipal = validateStacksAddress(
+        (values[arg] as NonTupleValueType).toString().split('.')[0]
+      );
+      if (!validPrincipal) {
+        errors[arg] = 'Invalid Stacks address.';
+      }
+    }
+  });
+  return errors;
+};
+
+const checkPostConditionParameters = (values: any) => {
+  const errors: Record<string, string> = {};
+  Object.keys(values).forEach(arg => {
+    if (arg === 'address' || arg === 'assetAddress') {
+      if (!validateStacksAddress(values[arg])) {
+        errors[arg] = 'Invalid Stacks address.';
+      }
+    }
+    if (arg === 'amount') {
+      if (values[arg] < 0 || !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))) {
+        errors[arg] = 'Invalid amount';
+      }
+    }
+  });
+  return errors;
+};
 
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
@@ -162,10 +211,10 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   );
 
   useEffect(() => {
-    if (!showPostCondition) {
+    if (!showPostCondition || isPostConditionModeEnabled) {
       setPostCondition(undefined);
     }
-  }, [showPostCondition]);
+  }, [showPostCondition, isPostConditionModeEnabled]);
 
   const initialPostConditionParameterValues: PostConditionParameters = {
     address: undefined,
@@ -188,21 +237,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
       validateOnChange={false}
       validateOnBlur={false}
       validate={values => {
-        const errors: Record<string, string> = {};
-        Object.keys(values).forEach(arg => {
-          const type = fn.args.find(({ name }) => name === arg)?.type;
-          const isOptional = type && isClarityAbiOptional(type);
-          const optionalTypeIsPrincipal =
-            isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
-          if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
-            const validPrincipal = validateStacksAddress(
-              (values[arg] as NonTupleValueType).toString().split('.')[0]
-            );
-            if (!validPrincipal) {
-              errors[arg] = 'Invalid Stacks address.';
-            }
-          }
-        });
+        const functionParametersErrors = checkFunctionParameters(fn, values);
+        const postConditionParametersErrors = checkPostConditionParameters(values);
+        const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
         return errors;
       }}
       onSubmit={values => {
@@ -239,7 +276,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           }
         });
         if (fn.access === 'public') {
-          const { address, conditionCode, amount, assetInfo, assetName } = values;
+          const { address, conditionCode, amount, assetAddress, assetContractName, assetName } =
+            values;
 
           void openContractCall({
             contractAddress: contractId.split('.')[0],
@@ -248,14 +286,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             functionArgs: Object.values(final),
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
-            // TODO: jannik is fixing this
-            // @ts-ignore
             postConditions: postCondition
               ? getPostCondition(postCondition, {
                   address,
                   conditionCode,
                   amount,
-                  assetInfo,
+                  assetAddress,
+                  assetContractName,
                   assetName,
                 })
               : undefined,
@@ -394,10 +431,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                       postCondition === PostConditionType.NonFungible
                                         ? [
                                             {
-                                              label: 'Does not own',
-                                              value: NonFungibleConditionCode.DoesNotOwn,
+                                              label: 'Does not send',
+                                              value: NonFungibleConditionCode.DoesNotSend,
                                             },
-                                            { label: 'Owns', value: NonFungibleConditionCode.Owns },
+                                            {
+                                              label: 'Sends',
+                                              value: NonFungibleConditionCode.Sends,
+                                            },
                                           ]
                                         : [
                                             { label: 'Equal', value: FungibleConditionCode.Equal },

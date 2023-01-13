@@ -1389,7 +1389,7 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-12.2.6-canary.6.tgz#5d8705881b6167822ff12584a18d5e73d99dfc01"
   integrity sha512-h04RtTXZA5EcZorqp0DzKF4/kRMcDqBYUPBuglnRvRK2exyh0Y38KY9ICTKVNcp+kzbamH6EGWhd8MRm2FFIRA==
 
-"@noble/hashes@^1.0.0", "@noble/hashes@^1.1.2", "@noble/hashes@~1.1.1":
+"@noble/hashes@^1.0.0", "@noble/hashes@^1.1.2", "@noble/hashes@^1.1.3", "@noble/hashes@~1.1.1":
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.1.5.tgz#1a0377f3b9020efe2fae03290bd2a12140c95c11"
   integrity sha512-LTMZiiLc+V4v1Yi16TD6aX2gmtKszNye0pQgbaLqkvhIqP7nVsSaJsWloGQjJfJ8offaoP5GtX3yY5swbcJxxQ==
@@ -2710,7 +2710,7 @@
     "@types/node" "^14.14.43"
     buffer "^6.0.3"
 
-"@stacks/common@^4.0.1", "@stacks/common@^4.1.0", "@stacks/common@^4.3.0":
+"@stacks/common@^4.0.1":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@stacks/common/-/common-4.3.0.tgz#add68aa8ab09da20c7ed7e3aad0c88cc4374de81"
   integrity sha512-3/n3E9VGoE/cTPfdBUmFHNer33UZtCiugV0uodXfdUfNbHfILLgk0acTVMI04FufFkglhS3seiOD+R5Z2pBUYA==
@@ -2719,10 +2719,27 @@
     "@types/node" "^14.14.43"
     buffer "^6.0.3"
 
+"@stacks/common@^4.1.0", "@stacks/common@^4.3.0":
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/@stacks/common/-/common-4.3.5.tgz#8115100f6d0bd29b66ddb2ce0e7e034ddee92115"
+  integrity sha512-UuViiQ7fn3vdtTe3739aRzbl+wbukekeQuXgqt8d7nB2HC2HodD7GcHhpUga165cO35CD6lQUtj3vXxJb5Ga+A==
+  dependencies:
+    "@types/bn.js" "^5.1.0"
+    "@types/node" "^18.0.4"
+    buffer "^6.0.3"
+
 "@stacks/common@^5.0.3":
   version "5.0.3"
   resolved "https://registry.yarnpkg.com/@stacks/common/-/common-5.0.3.tgz#2a24d1198ce2db4d75ec92f37491de922960f69b"
   integrity sha512-0c1L1xQAFI4p0oB8BrwU1ic3q91plceztzT6ZQizxWfAJFnELdYyO/nJlq9a3yIVV90iaLYgvYBTPW3b7LWrdg==
+  dependencies:
+    "@types/bn.js" "^5.1.0"
+    "@types/node" "^18.0.4"
+
+"@stacks/common@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@stacks/common/-/common-6.0.0.tgz#ce80a11ca5d16db8276891db3ecc8e4f2eb1b43a"
+  integrity sha512-tETwccvbYvaZ7u3ZucWNMOIPN97r6IPeZXKIFhLc1KSVaWSGEPTtZcwVp+Rz3mu2XgI2pg37SUrOWXSL7OOkDw==
   dependencies:
     "@types/bn.js" "^5.1.0"
     "@types/node" "^18.0.4"
@@ -2807,7 +2824,7 @@
     "@stacks/common" "^4.1.0"
     cross-fetch "^3.1.5"
 
-"@stacks/network@^4.0.1", "@stacks/network@^4.1.0", "@stacks/network@^4.3.0":
+"@stacks/network@^4.0.1", "@stacks/network@^4.3.0":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@stacks/network/-/network-4.3.0.tgz#5d2815078d2baea7cccc45117b26a675de5d5908"
   integrity sha512-X97IFfhJe5aZu8F1tOvYCzoIxPD5PH/NB24/WDZ+JH5Loho1D7zk1zZ6bOtQknaSfezDyi6wsZwKC/7Mxg959A==
@@ -2821,6 +2838,14 @@
   integrity sha512-9ZSKktElpgDst1SVI5K4ocmsrIKrIHVQMRTfLkVarNqMnk9zliLMXrmXef6Z3rszU7JbUWGbb8+F3ubhpfqZxg==
   dependencies:
     "@stacks/common" "^5.0.3"
+    cross-fetch "^3.1.5"
+
+"@stacks/network@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@stacks/network/-/network-6.1.0.tgz#19f00f54edd7c52ca948c83bdec22d694de29b9d"
+  integrity sha512-kJ7Btpw7M9qxnimwmszZomJZdzqQmlKDX7NoIGqlbjpy1TJ0FRHjnqELLNgK0qKLlzkw06SwWNOaxiFytdmCHg==
+  dependencies:
+    "@stacks/common" "^6.0.0"
     cross-fetch "^3.1.5"
 
 "@stacks/prettier-config@0.0.10":
@@ -2871,22 +2896,17 @@
   resolved "https://registry.yarnpkg.com/@stacks/stacks-blockchain-api-types/-/stacks-blockchain-api-types-4.2.0-stacks-2.1.1.tgz#321bfd103f923b44c9541823cdc15479b9558417"
   integrity sha512-0ljUJbWyDTXbDg6kK/xb+X6LyxpJdn3V1Z3h35NQScgKrJvyaND21eooo9NjLdizY2/25WyDxhMutoeySWgigA==
 
-"@stacks/transactions@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-4.1.0.tgz#f8cbf715bd0279c4236435926b640da435ed30e6"
-  integrity sha512-NS3DkZh8WziUQaze6RY5ft1v5bmq1wHjYEoCMzzhdreJ+Sp74ZADaO38fQQGcEcVdOhcM31k2oh6DgJEmBXVUQ==
+"@stacks/transactions@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-6.1.0.tgz#e175b76daf6e7fa3113082805ba35c8624f32335"
+  integrity sha512-5+6M6wvUiO3HQAWP77y80crJXtoDHaiirY3dnwrkUCwJD/021JRYDNCzeW8QDrtAaAlpCcmtjUh/Nv8Vwtb4mg==
   dependencies:
-    "@noble/hashes" "^1.0.0"
-    "@noble/secp256k1" "^1.5.5"
-    "@stacks/common" "^4.1.0"
-    "@stacks/network" "^4.1.0"
-    "@types/node" "^14.14.43"
-    "@types/sha.js" "^2.4.0"
-    c32check "^1.1.3"
+    "@noble/hashes" "^1.1.3"
+    "@noble/secp256k1" "^1.6.3"
+    "@stacks/common" "^6.0.0"
+    "@stacks/network" "^6.1.0"
+    c32check "^2.0.0"
     lodash.clonedeep "^4.5.0"
-    ripemd160-min "^0.0.6"
-    sha.js "^2.4.11"
-    smart-buffer "^4.1.0"
 
 "@stacks/transactions@^4.3.0":
   version "4.3.0"
@@ -3332,9 +3352,9 @@
   integrity sha512-GKM4FLMkWDc0sfx7tXqPWkM6NBow1kge0fgQh0bOnlqo4iT1kvTvMEKE0c1RtUGnbLlGRXiAA8SumE//90uKAg==
 
 "@types/node@^14.14.43":
-  version "14.17.17"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.17.17.tgz#4ec7b71bbcb01a4e55455b60b18b1b6a783fe31d"
-  integrity sha512-niAjcewgEYvSPCZm3OaM9y6YQrL2SEPH9PymtE6fuZAvFiP6ereCcvApGl2jKTq7copTIguX3PBvfP08LN4LvQ==
+  version "14.18.36"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.36.tgz#c414052cb9d43fab67d679d5f3c641be911f5835"
+  integrity sha512-FXKWbsJ6a1hIrRxv+FoukuHnGTgEzKYGi7kilfMae96AL9UNkPFNWJEEYWzdRI9ooIkbr4AKldyuSTLql06vLQ==
 
 "@types/node@^8.0.0":
   version "8.10.66"
@@ -4187,17 +4207,10 @@ balanced-match@^1.0.0:
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
-base-x@^3.0.2:
+base-x@^3.0.2, base-x@^3.0.8:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.9.tgz#6349aaabb58526332de9f60995e548a53fe21320"
   integrity sha512-H7JU6iBHTal1gp56aKoaa//YUxEaAOUiydvrV/pILqIHXTtqxSkATOnDA2u+jZ/61sD+L/412+7kzXRtWukhpQ==
-  dependencies:
-    safe-buffer "^5.0.1"
-
-base-x@^3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.8.tgz#1e1106c2537f0162e8b52474a557ebb09000018d"
-  integrity sha512-Rl/1AWP4J/zRrk54hhlxH4drNxPJXYUaKffODVI53/dAsV4t9fBxyxYKAVPU1XBHxYwOWP9h9H0hM2MVw4YfJA==
   dependencies:
     safe-buffer "^5.0.1"
 
