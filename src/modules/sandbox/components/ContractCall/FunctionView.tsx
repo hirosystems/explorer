@@ -244,6 +244,42 @@ const checkPostConditionParameters = (
   return errors;
 };
 
+const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
+  const errors: Record<string, string> = {};
+  Object.keys(values).forEach(arg => {
+    const type = fn.args.find(({ name }) => name === arg)?.type;
+    const isOptional = type && isClarityAbiOptional(type);
+    const optionalTypeIsPrincipal =
+      isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
+    if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
+      const validPrincipal = validateStacksAddress(
+        (values[arg] as NonTupleValueType).toString().split('.')[0]
+      );
+      if (!validPrincipal) {
+        errors[arg] = 'Invalid Stacks address.';
+      }
+    }
+  });
+  return errors;
+};
+
+const checkPostConditionParameters = (values: any) => {
+  const errors: Record<string, string> = {};
+  Object.keys(values).forEach(arg => {
+    if (arg === 'address' || arg === 'assetAddress') {
+      if (!validateStacksAddress(values[arg])) {
+        errors[arg] = 'Invalid Stacks address.';
+      }
+    }
+    if (arg === 'amount') {
+      if (values[arg] < 0 || !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))) {
+        errors[arg] = 'Invalid amount';
+      }
+    }
+  });
+  return errors;
+};
+
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
   const [isPostConditionModeEnabled, setPostConditionMode] = useState<PostConditionMode>(
