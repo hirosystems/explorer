@@ -57,9 +57,17 @@ enum PostConditionType {
 }
 
 const postConditionParameterMap = {
-  [PostConditionType.Stx]: ['Address', 'Post Condition Code', 'Amount'],
-  [PostConditionType.Fungible]: ['Address', 'Post Condition Code', 'Amount'],
-  [PostConditionType.NonFungible]: ['Address', 'Post Condition Code', 'Amount'],
+  [PostConditionType.Stx]: ['address', 'conditionCode', 'amount'],
+  [PostConditionType.Fungible]: ['address', 'conditionCode', 'amount', 'assetInfo'],
+  [PostConditionType.NonFungible]: ['address', 'conditionCode', 'assetInfo', 'assetName'],
+};
+
+const postConditionParameterLabels: Record<string, string> = {
+  address: 'Address',
+  conditionCode: 'Condition Code',
+  amount: 'Amount',
+  assetInfo: 'Asset Info',
+  assetName: 'Asset Name',
 };
 
 const PostConditionOptions = [
@@ -121,11 +129,6 @@ function getPostCondition(
 
 type FormType = Record<string, ValueType | ListValueType>;
 
-interface FormikInitialValues extends PostConditionParameters {
-  isPostConditionModeEnabled: PostConditionMode;
-  functionParameterValues: FormType;
-}
-
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
   const [isPostConditionModeEnabled, setPostConditionMode] = useState<PostConditionMode>(
@@ -167,38 +170,27 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     assetInfo: '',
   };
 
-  console.log({
-    initialValues: {
-      functionParameterValues: initialFunctionParameterValues,
-      ...initialPostConditionParameterValues,
-      isPostConditionModeEnabled,
-    },
-  });
-
   return (
     <Formik
       initialValues={
         {
-          functionParameterValues: initialFunctionParameterValues,
+          ...initialFunctionParameterValues,
           ...initialPostConditionParameterValues,
           isPostConditionModeEnabled,
-        } as FormikInitialValues
+        } as any
       }
       validateOnChange={false}
       validateOnBlur={false}
       validate={values => {
         const errors: Record<string, string> = {};
-        Object.keys(values.functionParameterValues).forEach(arg => {
+        Object.keys(values).forEach(arg => {
           const type = fn.args.find(({ name }) => name === arg)?.type;
           const isOptional = type && isClarityAbiOptional(type);
           const optionalTypeIsPrincipal =
             isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
-          if (
-            type === 'principal' ||
-            (optionalTypeIsPrincipal && !!values.functionParameterValues[arg])
-          ) {
+          if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
             const validPrincipal = validateStacksAddress(
-              (values.functionParameterValues[arg] as NonTupleValueType).toString().split('.')[0]
+              (values[arg] as NonTupleValueType).toString().split('.')[0]
             );
             if (!validPrincipal) {
               errors[arg] = 'Invalid Stacks address.';
@@ -208,19 +200,17 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         return errors;
       }}
       onSubmit={values => {
-        // TODO: refactor
-        // console.log({ values });
         const final: Record<string, ClarityValue> = {};
-        Object.keys(values.functionParameterValues).forEach(arg => {
+        Object.keys(values).forEach(arg => {
           const type = fn.args.find(({ name }) => name === arg)?.type;
           if (!type) return;
           const tuple = getTuple(type);
           const isList = isClarityAbiList(type);
           const optionalType = isClarityAbiOptional(type) ? type?.optional : undefined;
           if (tuple) {
-            final[arg] = encodeTuple(tuple, values.functionParameterValues[arg] as TupleValueType);
+            final[arg] = encodeTuple(tuple, values[arg] as TupleValueType);
           } else if (isList) {
-            const listValues = values.functionParameterValues[arg] as ListValueType;
+            const listValues = values[arg] as ListValueType;
             const listType = type.list.type;
             const optionalListType = isClarityAbiOptional(listType)
               ? listType?.optional
@@ -238,7 +228,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           } else {
             final[arg] = encodeClarityValue(
               optionalType || type,
-              (values.functionParameterValues[arg] as NonTupleValueType).toString()
+              (values[arg] as NonTupleValueType).toString()
             );
           }
         });
@@ -269,184 +259,181 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           setReadonlyValue(Object.values(final));
         }
       }}
-      render={({ handleSubmit, handleChange, values, errors, setFieldValue }) => (
-        <Section
-          overflowY="visible"
-          flexGrow={1}
-          title={`${fn.name} (${fn.access} function)`}
-          borderRadius={'0'}
-        >
-          {/* <Tooltip label="info">
-            <Flex alignItems={'center'}>
-              <InfoCircleIcon size="18px" />
-            </Flex>
-          </Tooltip> */}
-          {/* <Tooltip label={`Next cycle starts in `}>
-            <Flex alignItems={'center'}>
-              <InfoCircleIcon size="18px" />
-            </Flex>
-          </Tooltip> */}
-          {readOnlyValue ? (
-            <ReadOnlyField
-              fn={fn}
-              readOnlyValue={readOnlyValue}
-              contractId={contractId}
-              cancelButton={cancelButton}
-            />
-          ) : (
-            <Box p="extra-loose" as="form" onSubmit={handleSubmit}>
-              {fn.args.length ? (
-                <Stack mb="extra-loose" spacing="base">
-                  {fn.args.map(({ name, type }) => (
-                    <Argument
-                      handleChange={handleChange}
-                      name={name}
-                      type={type}
-                      error={errors?.functionParameterValues?.[name]}
-                      key={name}
-                      value={values.functionParameterValues[name]}
-                    />
-                  ))}
-                  {fn.access === 'public' && (
-                    <Button
-                      onClick={() => {
-                        setShowPostCondition(!showPostCondition);
-                      }}
-                    >
-                      {!showPostCondition ? 'Add post condition' : 'Remove post condition'}
-                    </Button>
-                  )}
-                  {showPostCondition && (
-                    <Box>
-                      <Flex marginBottom="16px">
-                        <Toggle
-                          onClick={() =>
-                            setPostConditionMode(
-                              isPostConditionModeEnabled === PostConditionMode.Deny
-                                ? PostConditionMode.Allow
-                                : PostConditionMode.Deny
-                            )
-                          } // TODO: If post condition is added, switch to deny
-                          label="Allow Mode"
-                          value={
-                            isPostConditionModeEnabled === PostConditionMode.Allow ? true : false
-                          }
-                        />
-                        <Tooltip
-                          label={
-                            <Box>
-                              Enabling Allow mode is less secure than deny mode because it permits
-                              asset transfers that aren't not covered by post conditions. In Deny
-                              mode no other asset transfers are permitted besides those named in the
-                              post conditions
-                            </Box>
-                          }
-                        >
-                          <Flex alignItems="center" marginLeft="8px">
-                            <InfoCircleIcon size="18px" />
-                          </Flex>
-                        </Tooltip>
-                      </Flex>
-                      <Box maxWidth="260px" maxHeight="42px" height="42px" marginBottom="16px">
-                        <Dropdown
-                          defaultOption={{ label: 'Select a post condition', value: undefined }}
-                          options={PostConditionOptions}
-                          onChange={option => {
-                            if (option.value === PostConditionType.Stx) {
-                              setPostCondition(PostConditionType.Stx);
-                            } else if (option.value === PostConditionType.Fungible) {
-                              setPostCondition(PostConditionType.Fungible);
-                            } else if (option.value === PostConditionType.NonFungible) {
-                              setPostCondition(PostConditionType.NonFungible);
-                            }
-                          }}
-                        />
-                      </Box>
+      render={({ handleSubmit, handleChange, values, errors, setFieldValue }) => {
+        console.log({ values });
 
-                      {postCondition && (
-                        <Stack>
-                          {postConditionParameterMap[postCondition].map(parameter =>
-                            parameter !== 'Post Condition Code' ? (
+        return (
+          <Section
+            overflowY="visible"
+            flexGrow={1}
+            title={`${fn.name} (${fn.access} function)`}
+            borderRadius={'0'}
+          >
+            {readOnlyValue ? (
+              <ReadOnlyField
+                fn={fn}
+                readOnlyValue={readOnlyValue}
+                contractId={contractId}
+                cancelButton={cancelButton}
+              />
+            ) : (
+              <Box p="extra-loose" as="form" onSubmit={handleSubmit}>
+                {fn.args.length ? (
+                  <Stack mb="extra-loose" spacing="base">
+                    {fn.args.map(({ name, type }) => (
+                      <Argument
+                        handleChange={handleChange}
+                        name={name}
+                        type={type}
+                        error={errors[name]}
+                        key={name}
+                        value={values[name]}
+                      />
+                    ))}
+                    {fn.access === 'public' && (
+                      <Button
+                        onClick={() => {
+                          setShowPostCondition(!showPostCondition);
+                        }}
+                      >
+                        {!showPostCondition ? 'Add post condition' : 'Remove post condition'}
+                      </Button>
+                    )}
+                    {showPostCondition && (
+                      <Box>
+                        <Flex marginBottom="16px">
+                          <Toggle
+                            onClick={() =>
+                              setPostConditionMode(
+                                isPostConditionModeEnabled === PostConditionMode.Deny
+                                  ? PostConditionMode.Allow
+                                  : PostConditionMode.Deny
+                              )
+                            } // TODO: If post condition is added, switch to deny
+                            label="Allow Mode"
+                            value={
+                              isPostConditionModeEnabled === PostConditionMode.Allow ? true : false
+                            }
+                          />
+                          <Tooltip
+                            label={
                               <Box>
-                                <Text
-                                  fontSize="12px"
-                                  fontWeight="500"
-                                  display="block"
-                                  color={color('text-caption')}
-                                  htmlFor={parameter}
-                                  mb="tight"
+                                Enabling Allow mode is less secure than deny mode because it permits
+                                asset transfers that aren't not covered by post conditions. In Deny
+                                mode no other asset transfers are permitted besides those named in
+                                the post conditions
+                              </Box>
+                            }
+                          >
+                            <Flex alignItems="center" marginLeft="8px">
+                              <InfoCircleIcon size="18px" />
+                            </Flex>
+                          </Tooltip>
+                        </Flex>
+                        <Box maxWidth="260px" maxHeight="42px" height="42px" marginBottom="16px">
+                          <Dropdown
+                            defaultOption={{ label: 'Select a post condition', value: undefined }}
+                            options={PostConditionOptions}
+                            onChange={option => {
+                              if (option.value === PostConditionType.Stx) {
+                                setPostCondition(PostConditionType.Stx);
+                              } else if (option.value === PostConditionType.Fungible) {
+                                setPostCondition(PostConditionType.Fungible);
+                              } else if (option.value === PostConditionType.NonFungible) {
+                                setPostCondition(PostConditionType.NonFungible);
+                              }
+                            }}
+                          />
+                        </Box>
+
+                        {postCondition && (
+                          <Stack>
+                            {postConditionParameterMap[postCondition].map(parameter =>
+                              parameter !== 'Post Condition Code' ? (
+                                <Box key={parameter}>
+                                  <Text
+                                    fontSize="12px"
+                                    fontWeight="500"
+                                    display="block"
+                                    color={color('text-caption')}
+                                    htmlFor={parameter}
+                                    mb="tight"
+                                  >
+                                    {postConditionParameterLabels[parameter]}
+                                  </Text>
+                                  <Box width="100%">
+                                    <Input
+                                      width="100%"
+                                      // type={getTypeString(type).includes('int') ? 'number' : 'text'}
+                                      name={parameter}
+                                      id={parameter}
+                                      onChange={handleChange}
+                                      value={values[parameter]}
+                                      // placeholder={`${getTypeString(type)}`}
+                                    />
+                                  </Box>
+                                </Box>
+                              ) : (
+                                <Box
+                                  maxWidth="260px"
+                                  maxHeight="42px"
+                                  height="42px"
+                                  marginBottom="16px"
+                                  key={parameter}
                                 >
-                                  {parameter}
-                                </Text>
-                                <Box width="100%">
-                                  <Input
-                                    width="100%"
-                                    // type={getTypeString(type).includes('int') ? 'number' : 'text'}
-                                    name={parameter}
-                                    id={parameter}
-                                    onChange={handleChange}
-                                    value={values[parameter]}
-                                    // placeholder={`${getTypeString(type)}`}
+                                  <Dropdown
+                                    defaultOption={{
+                                      label: `Select a condition code`,
+                                      value: undefined,
+                                    }}
+                                    options={
+                                      postCondition === PostConditionType.NonFungible
+                                        ? [
+                                            {
+                                              label: 'Does not own',
+                                              value: NonFungibleConditionCode.DoesNotOwn,
+                                            },
+                                            { label: 'Owns', value: NonFungibleConditionCode.Owns },
+                                          ]
+                                        : [
+                                            { label: 'Equal', value: FungibleConditionCode.Equal },
+                                            {
+                                              label: 'Greater',
+                                              value: FungibleConditionCode.Greater,
+                                            },
+                                            {
+                                              label: 'GreaterEqual',
+                                              value: FungibleConditionCode.GreaterEqual,
+                                            },
+                                            { label: 'Less', value: FungibleConditionCode.Less },
+                                            {
+                                              label: 'LessEqual',
+                                              value: FungibleConditionCode.LessEqual,
+                                            },
+                                          ]
+                                    }
+                                    onChange={option =>
+                                      setFieldValue('conditionCode', option.value)
+                                    }
                                   />
                                 </Box>
-                              </Box>
-                            ) : (
-                              <Box
-                                maxWidth="260px"
-                                maxHeight="42px"
-                                height="42px"
-                                marginBottom="16px"
-                              >
-                                <Dropdown
-                                  defaultOption={{
-                                    label: `Select a condition code`,
-                                    value: undefined,
-                                  }}
-                                  options={
-                                    postCondition === PostConditionType.NonFungible
-                                      ? [
-                                          {
-                                            label: 'Does not own',
-                                            value: NonFungibleConditionCode.DoesNotOwn,
-                                          },
-                                          { label: 'Owns', value: NonFungibleConditionCode.Owns },
-                                        ]
-                                      : [
-                                          { label: 'Equal', value: FungibleConditionCode.Equal },
-                                          {
-                                            label: 'Greater',
-                                            value: FungibleConditionCode.Greater,
-                                          },
-                                          {
-                                            label: 'GreaterEqual',
-                                            value: FungibleConditionCode.GreaterEqual,
-                                          },
-                                          { label: 'Less', value: FungibleConditionCode.Less },
-                                          {
-                                            label: 'LessEqual',
-                                            value: FungibleConditionCode.LessEqual,
-                                          },
-                                        ]
-                                  }
-                                  onChange={option => setFieldValue('conditionCode', option.value)}
-                                />
-                              </Box>
-                            )
-                          )}
-                        </Stack>
-                      )}
-                    </Box>
-                  )}
-                </Stack>
-              ) : null}
-              <Flex flexDirection="column" alignItems="center" justifyContent="center">
-                <Button type="submit">Call function</Button>
-                {cancelButton}
-              </Flex>
-            </Box>
-          )}
-        </Section>
-      )}
+                              )
+                            )}
+                          </Stack>
+                        )}
+                      </Box>
+                    )}
+                  </Stack>
+                ) : null}
+                <Flex flexDirection="column" alignItems="center" justifyContent="center">
+                  <Button type="submit">Call function</Button>
+                  {cancelButton}
+                </Flex>
+              </Box>
+            )}
+          </Section>
+        );
+      }}
     />
   );
 };
