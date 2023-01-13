@@ -10,6 +10,8 @@ import {
   FungiblePostCondition,
   NonFungibleConditionCode,
   NonFungiblePostCondition,
+  PostCondition,
+  PostConditionMode,
   STXPostCondition,
   encodeClarityValue,
   getTypeString,
@@ -22,7 +24,7 @@ import {
   makeStandardNonFungiblePostCondition,
   makeStandardSTXPostCondition,
 } from '@stacks/transactions';
-import { Box, Button, Flex, IconButton, Input, Stack, color } from '@stacks/ui';
+import { Box, Button, Flex, Input, Stack, color } from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -66,49 +68,72 @@ const PostConditionOptions = [
 ];
 
 interface PostConditionParameters {
-  address: string;
-  conditionCode: NonFungibleConditionCode | FungibleConditionCode;
-  contractName: string;
-  amount: number;
-  assetInfo: string | AssetInfo;
-  assetName: ClarityValue;
+  address?: string;
+  conditionCode?: NonFungibleConditionCode | FungibleConditionCode;
+  amount?: number;
+  assetInfo?: string | AssetInfo;
+  assetName?: ClarityValue;
 }
 
 function getPostCondition(
   postConditionType: PostConditionType,
   postConditionParameters: PostConditionParameters
-) {
-  const { address, conditionCode, contractName, amount, assetInfo, assetName } =
-    postConditionParameters;
-
-  // makeStandardSTXPostCondition(address: string, conditionCode: FungibleConditionCode, amount: IntegerType): STXPostCondition;
-  // makeContractSTXPostCondition(address: string, contractName: string, conditionCode: FungibleConditionCode, amount: IntegerType): STXPostCondition;
-
-  // makeStandardFungiblePostCondition(address: string, conditionCode: FungibleConditionCode, amount: IntegerType, assetInfo: string | AssetInfo): FungiblePostCondition;
-  // makeContractFungiblePostCondition(address: string, contractName: string, conditionCode: FungibleConditionCode, amount: IntegerType, assetInfo: string | AssetInfo): FungiblePostCondition;
-
-  // makeStandardNonFungiblePostCondition(address: string, conditionCode: NonFungibleConditionCode, assetInfo: string | AssetInfo, assetName: ClarityValue): NonFungiblePostCondition;
-  // makeContractNonFungiblePostCondition(address: string, contractName: string, conditionCode: NonFungibleConditionCode, assetInfo: string | AssetInfo, assetName: ClarityValue): NonFungiblePostCondition;
+): PostCondition[] {
+  const { address, conditionCode, amount, assetInfo, assetName } = postConditionParameters;
+  let postCondition;
 
   if (postConditionType === PostConditionType.Stx) {
-    return makeStandardSTXPostCondition(address, conditionCode, amount);
+    if (address && conditionCode && amount) {
+      postCondition = makeStandardSTXPostCondition(
+        address,
+        conditionCode as FungibleConditionCode,
+        amount
+      );
+    }
   } else if (postConditionType === PostConditionType.Fungible) {
-    return makeStandardFungiblePostCondition(address, conditionCode, amount, assetInfo);
+    if (address && assetInfo && conditionCode && amount) {
+      postCondition = makeStandardFungiblePostCondition(
+        address,
+        conditionCode as FungibleConditionCode,
+        amount,
+        assetInfo
+      );
+    }
   } else if (postConditionType === PostConditionType.NonFungible) {
-    return makeStandardNonFungiblePostCondition(address, conditionCode, assetInfo, assetName);
+    // TODO: const conditionCodeHackConversion = (conditionCode as NonFungibleConditionCode) === NonFungibleCode.;
+
+    if (address && assetInfo && conditionCode && assetName) {
+      postCondition = makeStandardNonFungiblePostCondition(
+        address,
+        conditionCode as NonFungibleConditionCode,
+        assetInfo,
+        assetName
+      );
+    }
+  } else {
+    throw new Error(`There is no post condition type that matches ${postConditionType}`);
   }
-  throw new Error(`There is no post condition type that matches ${postConditionType}`);
+
+  if (!postCondition) throw new Error('Post condition is undefined');
+  return [postCondition];
 }
 
 type FormType = Record<string, ValueType | ListValueType>;
 
+// type FormikValues = FormType & PostConditionParameters>;
+// type FormikValues = Record<string, number | string>;
+
+interface FormikInitialValues extends PostConditionParameters {
+  isPostConditionModeEnabled: PostConditionMode;
+  functionParameterValues: FormType;
+}
+
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
-  const [isAllowMode, setAllowMode] = useState(false);
+  const [isPostConditionModeEnabled, setPostConditionMode] = useState<PostConditionMode>(
+    PostConditionMode.Deny
+  );
   const [showPostCondition, setShowPostCondition] = useState(false);
-  // const [postCondition, setPostCondition] = useState<
-  //   FungiblePostCondition | NonFungiblePostCondition | STXPostCondition | undefined
-  // >(undefined);
   const [postCondition, setPostCondition] = useState<PostConditionType | undefined>(undefined);
   const network = useNetworkConfig();
 
@@ -134,34 +159,48 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     if (!showPostCondition) {
       setPostCondition(undefined);
     }
-  });
+  }, [showPostCondition]);
 
-  const initialPostConditionParameterValues = {
-    contractAddress: '',
-    amount: '',
+  const initialPostConditionParameterValues: PostConditionParameters = {
+    address: '',
+    amount: undefined,
     conditionCode: undefined,
-    assetName: '',
+    assetName: undefined,
+    assetInfo: '',
   };
+
+  console.log({
+    initialValues: {
+      functionParameterValues: initialFunctionParameterValues,
+      ...initialPostConditionParameterValues,
+      isPostConditionModeEnabled: PostConditionMode.Deny,
+    },
+  });
 
   return (
     <Formik
-      initialValues={{
-        ...initialFunctionParameterValues,
-        ...initialPostConditionParameterValues,
-        allowMode: false,
-      }} // TODO: causing typing issues
+      initialValues={
+        {
+          functionParameterValues: initialFunctionParameterValues,
+          ...initialPostConditionParameterValues,
+          isPostConditionModeEnabled: PostConditionMode.Deny,
+        } as FormikInitialValues
+      }
       validateOnChange={false}
       validateOnBlur={false}
       validate={values => {
         const errors: Record<string, string> = {};
-        Object.keys(values).forEach(arg => {
+        Object.keys(values.functionParameterValues).forEach(arg => {
           const type = fn.args.find(({ name }) => name === arg)?.type;
           const isOptional = type && isClarityAbiOptional(type);
           const optionalTypeIsPrincipal =
             isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
-          if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
+          if (
+            type === 'principal' ||
+            (optionalTypeIsPrincipal && !!values.functionParameterValues[arg])
+          ) {
             const validPrincipal = validateStacksAddress(
-              (values[arg] as NonTupleValueType).toString().split('.')[0]
+              (values.functionParameterValues[arg] as NonTupleValueType).toString().split('.')[0]
             );
             if (!validPrincipal) {
               errors[arg] = 'Invalid Stacks address.';
@@ -174,16 +213,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         // TODO: refactor
         // console.log({ values });
         const final: Record<string, ClarityValue> = {};
-        Object.keys(values).forEach(arg => {
+        Object.keys(values.functionParameterValues).forEach(arg => {
           const type = fn.args.find(({ name }) => name === arg)?.type;
           if (!type) return;
           const tuple = getTuple(type);
           const isList = isClarityAbiList(type);
           const optionalType = isClarityAbiOptional(type) ? type?.optional : undefined;
           if (tuple) {
-            final[arg] = encodeTuple(tuple, values[arg] as TupleValueType);
+            final[arg] = encodeTuple(tuple, values.functionParameterValues[arg] as TupleValueType);
           } else if (isList) {
-            const listValues = values[arg] as ListValueType;
+            const listValues = values.functionParameterValues[arg] as ListValueType;
             const listType = type.list.type;
             const optionalListType = isClarityAbiOptional(listType)
               ? listType?.optional
@@ -201,11 +240,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           } else {
             final[arg] = encodeClarityValue(
               optionalType || type,
-              (values[arg] as NonTupleValueType).toString()
+              (values.functionParameterValues[arg] as NonTupleValueType).toString()
             );
           }
         });
         if (fn.access === 'public') {
+          const { address, conditionCode, amount, assetInfo, assetName } = values;
+
           void openContractCall({
             contractAddress: contractId.split('.')[0],
             contractName: contractId.split('.')[1],
@@ -213,8 +254,18 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             functionArgs: Object.values(final),
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
-            postConditions: postCondition,
-            allowMode: isAllowMode,
+            // @ts-
+            // TODO: jannik is fixing this
+            postConditions: postCondition
+              ? getPostCondition(postCondition, {
+                  address,
+                  conditionCode,
+                  amount,
+                  assetInfo,
+                  assetName,
+                })
+              : undefined,
+            postConditionMode: isPostConditionModeEnabled,
           });
         } else {
           setReadonlyValue(Object.values(final));
@@ -243,9 +294,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                       handleChange={handleChange}
                       name={name}
                       type={type}
-                      error={errors[name]}
+                      error={errors?.functionParameterValues?.[name]}
                       key={name}
-                      value={values[name]}
+                      value={values.functionParameterValues[name]}
                     />
                   ))}
                   <Button
@@ -259,9 +310,15 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                     <Box>
                       <Flex marginBottom="16px">
                         <Toggle
-                          onClick={() => setAllowMode(!isAllowMode)} // TODO: If post condition is added, switch to deny
+                          onClick={() =>
+                            setPostConditionMode(
+                              isPostConditionModeEnabled === PostConditionMode.Deny
+                                ? PostConditionMode.Allow
+                                : PostConditionMode.Deny
+                            )
+                          } // TODO: If post condition is added, switch to deny
                           label="Allow Mode"
-                          value={isAllowMode}
+                          value={isPostConditionModeEnabled ? true : false}
                         />
                         <Tooltip label="info">
                           <InfoCircleIcon size="18px" />
@@ -315,36 +372,46 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                 </Box>
                               </Box>
                             ) : (
-                              <Dropdown
-                                defaultOption={{
-                                  label: `Select a condition code`,
-                                  value: undefined,
-                                }}
-                                options={
-                                  postCondition === PostConditionType.NonFungible
-                                    ? [
-                                        {
-                                          label: 'Does not own',
-                                          value: NonFungibleConditionCode.DoesNotOwn,
-                                        },
-                                        { label: 'Owns', value: NonFungibleConditionCode.Owns },
-                                      ]
-                                    : [
-                                        { label: 'Equal', value: FungibleConditionCode.Equal },
-                                        { label: 'Greater', value: FungibleConditionCode.Greater },
-                                        {
-                                          label: 'GreaterEqual',
-                                          value: FungibleConditionCode.GreaterEqual,
-                                        },
-                                        { label: 'Less', value: FungibleConditionCode.Less },
-                                        {
-                                          label: 'LessEqual',
-                                          value: FungibleConditionCode.LessEqual,
-                                        },
-                                      ]
-                                }
-                                onChange={option => setFieldValue('conditionCode', option.value)}
-                              />
+                              <Box
+                                maxWidth="260px"
+                                maxHeight="42px"
+                                height="42px"
+                                marginBottom="16px"
+                              >
+                                <Dropdown
+                                  defaultOption={{
+                                    label: `Select a condition code`,
+                                    value: undefined,
+                                  }}
+                                  options={
+                                    postCondition === PostConditionType.NonFungible
+                                      ? [
+                                          {
+                                            label: 'Does not own',
+                                            value: NonFungibleConditionCode.DoesNotOwn,
+                                          },
+                                          { label: 'Owns', value: NonFungibleConditionCode.Owns },
+                                        ]
+                                      : [
+                                          { label: 'Equal', value: FungibleConditionCode.Equal },
+                                          {
+                                            label: 'Greater',
+                                            value: FungibleConditionCode.Greater,
+                                          },
+                                          {
+                                            label: 'GreaterEqual',
+                                            value: FungibleConditionCode.GreaterEqual,
+                                          },
+                                          { label: 'Less', value: FungibleConditionCode.Less },
+                                          {
+                                            label: 'LessEqual',
+                                            value: FungibleConditionCode.LessEqual,
+                                          },
+                                        ]
+                                  }
+                                  onChange={option => setFieldValue('conditionCode', option.value)}
+                                />
+                              </Box>
                             )
                           )}
                         </Stack>

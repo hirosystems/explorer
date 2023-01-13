@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import * as React from 'react';
-import { FaRegBell } from 'react-icons/fa';
 
 import { Box, Button, ChevronIcon, ColorModeString, Flex, color, useColorMode } from '@stacks/ui';
 
@@ -32,9 +31,6 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
   const toggle = () => setIsOpen(!isOpen);
 
-  if (isOpen) {
-    console.log('open', { options });
-  }
   return (
     <DropdownMenu onClick={toggle} colorMode={colorMode}>
       <Button width="100%" height="100%">
