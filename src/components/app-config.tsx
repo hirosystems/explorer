@@ -1,37 +1,27 @@
+'use client';
+
+import { SSRData } from '@/app/common/SSRData';
+import { useAppSelector } from '@/common/state/hooks';
+import { NetworkMode } from '@/common/types/network';
 import { cache } from '@emotion/css';
 import { CacheProvider } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
 import { Connect } from '@stacks/connect-react';
 
-import { IS_SSR } from '@common/constants';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
-import { ApiUrls, initialize, selectIsInitialized } from '@common/state/network-slice';
-import { NetworkMode } from '@common/types/network';
-
-import { AppContainer } from '@components/app-container';
-
-import { selectUserSession } from '@modules/sandbox/sandbox-slice';
+import { selectUserSession } from '../app/sandbox/sandbox-slice';
 
 declare const window: any;
 
-interface AppConfigProps {
-  apiUrls: ApiUrls;
+export const AppConfig: React.FC<{
+  apiUrls: any;
   queryNetworkMode: NetworkMode;
   queryApiUrl?: string;
-}
-
-export const AppConfig: React.FC<AppConfigProps> = ({
-  children,
-  apiUrls,
-  queryNetworkMode,
-  queryApiUrl,
-}) => {
+}> = ({ children, queryApiUrl, queryNetworkMode, apiUrls }) => {
   const { events } = useRouter();
-  const dispatch = useAppDispatch();
   const userSession = useAppSelector(selectUserSession);
-  const isInitialized = useAppSelector(selectIsInitialized);
 
   useEffect(() => {
     console.log('mount');
@@ -43,14 +33,13 @@ export const AppConfig: React.FC<AppConfigProps> = ({
     });
   }, []);
 
-  if (!isInitialized) {
-    dispatch(initialize({ apiUrls, queryNetworkMode, queryApiUrl }));
-    return null;
-  }
+  // if (typeof window === 'undefined') {
+  //   return null;
+  // }
 
-  if (IS_SSR) {
-    return null;
-  }
+  useEffect(() => {
+    toast(`You're viewing the ${SSRData.getInstance().networkMode} Explorer`);
+  }, []);
 
   return (
     <Connect
@@ -62,9 +51,7 @@ export const AppConfig: React.FC<AppConfigProps> = ({
         userSession,
       }}
     >
-      <CacheProvider value={cache}>
-        <AppContainer>{children}</AppContainer>
-      </CacheProvider>
+      <CacheProvider value={cache}>{children}</CacheProvider>
     </Connect>
   );
 };

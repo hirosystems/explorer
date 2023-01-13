@@ -1,23 +1,17 @@
-import { SearchErrorMessage } from '@features/search/dropdown/error-message';
-import { SearchResultsItemPlaceholder } from '@features/search/items/item-placeholder';
-import { SearchResultItem } from '@features/search/items/search-result-item';
-import { clearSearchTerm, selectIsSearchFieldFocused } from '@features/search/search-slice';
-import { useSearch } from '@features/search/use-search';
+import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
+import { SearchErrorMessage } from '@/features/search/dropdown/error-message';
+import { SearchResultItem } from '@/features/search/items/search-result-item';
+import { clearSearchTerm, selectIsSearchFieldFocused } from '@/features/search/search-slice';
+import { useSearch } from '@/features/search/use-search';
+import { Box, BoxProps, Flex, Spinner } from '@/ui/components';
+import { Caption } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
 
-import { Box, BoxProps, Flex, Spinner, color, transition } from '@stacks/ui';
-
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
-import { border } from '@common/utils';
-
-import { SafeSuspense } from '@components/ssr-safe-suspense';
-import { Pending } from '@components/status';
-import { Caption } from '@components/typography';
-
 const SearchingIndicator: React.FC = React.memo(() => (
   <Flex alignItems="center">
-    <Spinner size="sm" opacity={0.5} mr="tight" />
+    <Spinner size="18px" opacity={0.5} mr="8px" />
     <Caption>Searching</Caption>
   </Flex>
 ));
@@ -31,7 +25,7 @@ interface CardActionsProps {
 const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResults }) => {
   const dispatch = useAppDispatch();
   return (
-    <Box opacity={isLoading || hasResults || hasError ? 1 : 0} transition={transition}>
+    <Box opacity={isLoading || hasResults || hasError ? 1 : 0}>
       {isLoading ? (
         <SearchingIndicator />
       ) : hasError || hasResults ? (
@@ -39,7 +33,7 @@ const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResul
           as="button"
           border="0"
           bg="transparent"
-          _hover={{ cursor: 'pointer', color: color('brand') }}
+          _hover={{ cursor: 'pointer', color: 'brand' }}
           onClick={() => dispatch(clearSearchTerm())}
         >
           Clear {hasResults ? 'results' : 'error'}
@@ -58,22 +52,23 @@ const SearchResultsCardWrapper: React.FC<BoxProps & { title?: string; actions?: 
   return (
     <Box
       borderRadius="12px"
-      mt="base"
-      bg={color('bg')}
-      color={color('text-caption')}
+      mt="16px"
+      bg={`bg.${useColorMode().colorMode}`}
+      color={`textCaption.${useColorMode().colorMode}`}
       position="absolute"
       width="100%"
       zIndex={99}
       boxShadow="high"
-      border={border()}
+      borderWidth="1px"
       overflow="auto"
+      minWidth={0}
       {...rest}
     >
       <Flex
-        borderBottom={border()}
+        borderBottomWidth="1px"
         justifyContent="space-between"
         alignItems="center"
-        px="base"
+        px="16px"
         height="48px"
       >
         {title && <Caption>{title}</Caption>}
@@ -114,11 +109,7 @@ export const SearchResultsCard: React.FC = () => {
         {errorMessage ? (
           <SearchErrorMessage message={errorMessage} />
         ) : data && data.found ? (
-          <>
-            <SafeSuspense fallback={<SearchResultsItemPlaceholder result={data} isLast />}>
-              <SearchResultItem result={data} />
-            </SafeSuspense>
-          </>
+          <SearchResultItem result={data} />
         ) : null}
       </>
     </SearchResultsCardWrapper>

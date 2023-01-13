@@ -1,17 +1,15 @@
-import { ResultItemWrapper } from '@features/search/items/result-item-wrapper';
+import { useApi } from '@/common/api/client';
+import { FoundResult } from '@/common/types/search-results';
+import { microToStacks, truncateMiddle } from '@/common/utils';
+import { AddressLink } from '@/components/links';
+import { ResultItemWrapper } from '@/features/search/items/result-item-wrapper';
+import { Box, Circle, Flex } from '@/ui/components';
+import { WalletIcon } from '@/ui/icons';
+import { Caption, Title } from '@/ui/typography';
 import React from 'react';
 import { useQuery } from 'react-query';
 
 import { AddressStxBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-import { Box, Flex } from '@stacks/ui';
-
-import { useApi } from '@common/api/client';
-import { FoundResult } from '@common/types/search-results';
-import { microToStacks, truncateMiddle } from '@common/utils';
-
-import { ItemIcon } from '@components/item-icon';
-import { AddressLink } from '@components/links';
-import { Caption, Title } from '@components/typography';
 
 interface AddressResultItemProps {
   result: FoundResult;
@@ -32,9 +30,11 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
     <AddressLink principal={principal}>
       <ResultItemWrapper>
         <Flex alignItems="center">
-          <ItemIcon type="principal" />
-          <Box ml="base">
-            <Title display="block" mb="extra-tight" className={'search-result-title'}>
+          <Circle>
+            <WalletIcon size="16px" />
+          </Circle>
+          <Box ml="16px">
+            <Title display="block" mb="4px" className={'search-result-title'} color={'midnight'}>
               {displayName ? `${displayName} (${truncatedPrincipal})` : truncatedPrincipal}
             </Title>
             <Caption>{`${microToStacks(stxBalance?.balance || 0)} STX`}</Caption>

@@ -1,3 +1,8 @@
+import { fetcher as fetchApi } from '@/common/api/fetch';
+import { MICROBLOCKS_ENABLED } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
+
+import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
 import {
   AccountsApi,
   BlocksApi,
@@ -13,13 +18,6 @@ import {
   SmartContractsApi,
   TransactionsApi,
 } from '@stacks/blockchain-api-client';
-import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
-
-import { fetcher as fetchApi } from '@common/api/fetch';
-import { MICROBLOCKS_ENABLED } from '@common/constants';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork, selectActiveNetworkUrl } from '@common/state/network-slice';
-import { store } from '@common/state/store';
 
 /**
  * Our mega api clients function. This is a combo of all clients that the blockchain-api-client package offers.
@@ -79,20 +77,7 @@ export function createConfig(basePath?: string) {
   });
 }
 
-// this is used in next.js specific data fetchers, typically only by getApiClients
-// this will pass the correct network url as defined by cookie (or default value)
-export const getApiClientConfig = (): Configuration => {
-  const apiServer = selectActiveNetworkUrl(store.getState());
-  return createConfig(apiServer);
-};
-// this is used in next.js specific data fetchers to get all our api clients fetching from the correct network url
-// only to be used in `getInitialProps` or other next.js data fetching methods
-export const getApiClients = async (): Promise<ReturnType<typeof apiClients>> => {
-  const config = getApiClientConfig();
-  return Promise.resolve(apiClients(config));
-};
-
 export const useApi = () => {
-  const config = createConfig(useAppSelector(selectActiveNetwork).url);
+  const config = createConfig(useGlobalContext().activeNetwork.url);
   return apiClients(config);
 };

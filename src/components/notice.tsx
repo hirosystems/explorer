@@ -1,8 +1,7 @@
+import { ExclamationMarkCircleIcon } from '@/ui/ExclamationMarkCircleIcon';
+import { Box, Flex, FlexProps } from '@/ui/components';
+import { Text } from '@/ui/typography';
 import React from 'react';
-
-import { Box, ExclamationMarkCircleIcon, Flex, FlexProps } from '@stacks/ui';
-
-import { Text } from '@components/typography';
 
 export const Notice = ({
   label,
@@ -14,27 +13,27 @@ export const Notice = ({
     borderRadius="8px"
     maxWidth="1216px"
     bg="var(--colors-bg-alt)"
-    borderBottom="1px solid"
-    borderColor="var(--colors-border)"
+    borderBottomWidth="1px"
+    borderColor="var(--stacks-colors-border)"
     {...rest}
   >
     <Flex
-      p="tight"
+      p="8px"
       alignItems={['flex-start', 'flex-start', 'center']}
       justifyContent={['center', 'center', 'flex-start']}
       mx="auto"
       width="100%"
       maxWidth="1280px"
       flexDirection={['column', 'column', 'row']}
-      px={['base']}
+      px={['16px']}
     >
-      <Flex alignItems="center" mb={['tight', 'tight', 'unset']}>
-        <Box mr="tight" color="orange">
+      <Flex alignItems="center" mb={['8px', '8px', 'unset']}>
+        <Box mr="8px" color="orange">
           <ExclamationMarkCircleIcon size="14px" />
         </Box>
         {label ? (
           <Text
-            mr="tight"
+            mr="8px"
             fontWeight="600"
             fontSize="14px"
             lineHeight="22px"

@@ -11,11 +11,9 @@ import Document, {
 } from 'next/document';
 import * as React from 'react';
 
-import { GlobalStyles, TextAreaOverrides } from '@components/global-styles';
+import { GlobalStyles, PrismTheme, TextAreaOverrides } from '../global-styles';
 
 const { SEGMENT_WRITE_KEY, NODE_ENV } = process.env;
-
-export const THEME_STORAGE_KEY = 'theme';
 
 export default class MyDocument extends Document<DocumentProps> {
   static async getInitialProps({ renderPage }: DocumentContext): Promise<DocumentInitialProps> {
@@ -27,6 +25,7 @@ export default class MyDocument extends Document<DocumentProps> {
         <>
           {GlobalStyles}
           {TextAreaOverrides}
+          {PrismTheme}
           <style
             data-emotion-css={styles.ids.join(' ')}
             dangerouslySetInnerHTML={{ __html: styles.css }}
@@ -39,19 +38,13 @@ export default class MyDocument extends Document<DocumentProps> {
   renderSnippet() {
     const opts = {
       apiKey: SEGMENT_WRITE_KEY,
-      // Note: the page option only covers SSR tracking.
-      // Track other events using `window.analytics.page()`
-      // in app-config.js if needed later.
       page: true,
     };
     console.log('opts', opts);
-    // Use if needed for dev mode
-    // if (NODE_ENV !== 'production') return snippet.max(opts);
     return snippet.min(opts);
   }
 
   render() {
-    console.log('SEGMENT_WRITE_KEY', SEGMENT_WRITE_KEY);
     return (
       <Html lang="en">
         <Head>
@@ -72,28 +65,9 @@ export default class MyDocument extends Document<DocumentProps> {
               />
             </>
           )}
-          {/* Inject the Segment snippet into the <head> of the document  */}
           {SEGMENT_WRITE_KEY && (
             <script dangerouslySetInnerHTML={{ __html: this.renderSnippet() }} />
           )}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(function () {
-  try {
-    var mode = localStorage.getItem('${THEME_STORAGE_KEY}');
-    if (!mode) {
-      document.documentElement.classList.add('light');
-      var bgValue = getComputedStyle(document.documentElement).getPropertyValue('--colors-bg');
-      document.documentElement.style.background = bgValue;
-    } else {
-      document.documentElement.classList.add(mode);
-      var bgValue = getComputedStyle(document.documentElement).getPropertyValue('--colors-bg');
-      document.documentElement.style.background = bgValue;
-    }
-  } catch (e) {}
-})();`,
-            }}
-          />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
         </Head>
         <body>

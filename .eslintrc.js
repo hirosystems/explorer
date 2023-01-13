@@ -1,5 +1,9 @@
 module.exports = {
-  extends: ['@stacks/eslint-config', 'plugin:react-hooks/recommended'],
+  extends: [
+    '@stacks/eslint-config',
+    'plugin:react-hooks/recommended',
+    'plugin:storybook/recommended',
+  ],
   plugins: ['react', 'react-hooks'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -23,5 +27,7 @@ module.exports = {
     '@typescript-eslint/no-unsafe-return': 0,
     '@typescript-eslint/restrict-template-expressions': 0,
     'react-hooks/rules-of-hooks': 'error',
+    'import/newline-after-import': ['error', { count: 1 }],
+    '@typescript-eslint/no-non-null-assertion': 'off',
   },
 };

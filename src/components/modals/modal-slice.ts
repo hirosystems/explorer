@@ -1,7 +1,8 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+'use client';
 
-import { MODALS } from '@common/constants';
-import { useAppSelector } from '@common/state/hooks';
+import { MODALS } from '@/common/constants';
+import { useAppSelector } from '@/common/state/hooks';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface ModalState {
   openedModal: MODALS | null;

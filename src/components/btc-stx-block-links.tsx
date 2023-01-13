@@ -1,18 +1,15 @@
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { NetworkModes } from '@/common/types/network';
+import { Circle } from '@/components/circle';
+import { BlockLink } from '@/components/links';
+import { Box, Icon, TextLink } from '@/ui/components';
+import { BitcoinIcon } from '@/ui/icons';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { Text } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { IconArrowRight } from '@tabler/icons';
 import { FC, Fragment } from 'react';
-import { FaBitcoin } from 'react-icons/fa';
-
-import { Box, color } from '@stacks/ui';
-
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { NetworkModes } from '@common/types/network';
-
-import { Circle } from '@components/circle';
-import { StxInline } from '@components/icons/stx-inline';
-import { BlockLink } from '@components/links';
-import { Link } from '@components/typography';
+import { HiOutlineArrowSmRight } from 'react-icons/hi';
 
 interface BtcStxBlockLinksProps {
   btcBlockHeight?: number;
@@ -30,10 +27,7 @@ const wrapperStyle = css`
 const iconStyle = css`
   position: relative;
   margin-right: 3px;
-  height: 18px;
-  width: 18px;
   border-radius: 18px;
-  background-color: ${color('accent')};
   svg {
     position: absolute;
     left: 50%;
@@ -48,7 +42,6 @@ const linkStyle = (secondary?: boolean, clickable?: boolean, fontSize?: string) 
   text-overflow: ellipsis;
   font-weight: 500;
   text-decoration: none;
-  font-family: 'Open Sauce', Inter, sans-serif;
   ${fontSize ? `font-size: ${fontSize};` : 'font-size: 14px;'}
   ${clickable &&
   `
@@ -64,38 +57,45 @@ const linkStyle = (secondary?: boolean, clickable?: boolean, fontSize?: string) 
   `}
 `;
 
-const arrowStyle = css`
-  margin: 0 8px;
-`;
-
 export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
   btcBlockHeight,
   stxBlockHeight,
   stxBlockHash,
   fontSize,
 }) => {
-  const activeNetworkMode = useAppSelector(selectActiveNetwork).mode;
+  const activeNetworkMode = useGlobalContext().activeNetwork.mode;
   const btcLinkPathPrefix = activeNetworkMode === NetworkModes.Testnet ? '/testnet' : '';
 
   return (
     <Box css={wrapperStyle}>
-      <Circle css={iconStyle}>
-        <StxInline strokeWidth={2} size="11px" color="white" />
+      <Circle size={18} backgroundColor={`accent.light`} css={iconStyle}>
+        <StxIcon strokeWidth={2} size="11px" color="white" />
       </Circle>
       <BlockLink hash={stxBlockHash}>
-        <span>#{stxBlockHeight}</span>
+        <Text
+          fontWeight={500}
+          fontSize={'15px'}
+          as={'a'}
+          color={`brand.${useColorMode().colorMode}`}
+          _hover={{
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
+        >
+          #{stxBlockHeight}
+        </Text>
       </BlockLink>
       {btcBlockHeight && (
         <Fragment>
-          <IconArrowRight size="14px" color={'#747478'} css={arrowStyle} />
-          <FaBitcoin color={'#f7931a'} size={19} css={iconStyle} />
-          <Link
+          <Icon as={HiOutlineArrowSmRight} size="14px" color={'#747478'} m={'0 2px'} />
+          <Icon as={BitcoinIcon} color={'#f7931a'} size={19} css={iconStyle} />
+          <TextLink
             css={linkStyle(true, true, fontSize)}
             href={`https://mempool.space${btcLinkPathPrefix}/block/${btcBlockHeight}`}
             target="_blank"
           >
-            <span>#{btcBlockHeight}</span>
-          </Link>
+            #{btcBlockHeight}
+          </TextLink>
         </Fragment>
       )}
     </Box>

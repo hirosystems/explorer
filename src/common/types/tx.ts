@@ -7,7 +7,6 @@ import {
   MempoolPoisonMicroblockTransaction,
   MempoolSmartContractTransaction,
   MempoolTokenTransferTransaction,
-  MempoolTransaction,
   PoisonMicroblockTransaction,
   SmartContractTransaction,
   TokenTransferTransaction,

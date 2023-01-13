@@ -1,22 +1,20 @@
+import { useApi } from '@/common/api/client';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { NetworkModes } from '@/common/types/network';
+import { buildUrl } from '@/components/links';
+import { Box, Icon, Spinner, Tooltip } from '@/ui/components';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { useColorMode } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { useHomeQueries } from '@features/home/useHomeQueries';
-import { TransactionQueryKeys } from '@features/transaction/query-keys';
-import { IconCurrencyBitcoin } from '@tabler/icons';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
-import { useInfiniteQuery } from 'react-query';
+import { TbCurrencyBitcoin } from 'react-icons/tb';
 
-import { Block as BlockType } from '@stacks/stacks-blockchain-api-types';
-import { Box, StxInline, Tooltip } from '@stacks/ui';
+import { Block as BlockType } from '@stacks/blockchain-api-client';
 
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { NetworkModes } from '@common/types/network';
-import { getNextPageParam } from '@common/utils';
-
-import { buildUrl } from '@components/links';
+import { useBlockListInfinite } from '../../app/common/queries/useBlockListInfinite';
 
 const wrapperStyle = css`
   display: flex;
@@ -51,7 +49,6 @@ const blockWrapperStyle = css`
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  background-color: #f0f0f0;
   border-radius: 10px;
   margin-right: 28px;
   flex-basis: 25%;
@@ -84,8 +81,8 @@ const blockAndArrowStyle = css`
 
 const currentBlockStyle = css`
   ${blockWrapperStyle};
-  background-color: #fff;
-  border: 2px dashed #62676e;
+  border-width: 2px;
+  border-style: dashed;
   .block-box {
     box-shadow: none;
     background-color: #d9d9d9;
@@ -195,18 +192,19 @@ const Block: React.FC<BlockProps> = ({
   const btcBlockHeight = block.burn_block_height;
   const timeBetweenBlocks = btcBlockBurnTime - previousBtcBlockBurnTime;
   const delayedBlock = timeBetweenBlocks && timeBetweenBlocks >= 11 * 60;
-  const Icon = delayedBlock ? BsFillExclamationCircleFill : AiFillCheckCircle;
+  const BlockInfoIcon = delayedBlock ? BsFillExclamationCircleFill : AiFillCheckCircle;
   const timeBetweenBlocksFormatted = secondsToString(timeBetweenBlocks);
   const router = useRouter();
-  const network = useAppSelector(selectActiveNetwork);
+  const network = useGlobalContext().activeNetwork;
   const btcLinkPathPrefix = network.mode === NetworkModes.Testnet ? '/testnet' : '';
+  const colorMode = useColorMode().colorMode;
 
   return (
-    <Box css={blockWrapperStyle}>
+    <Box css={blockWrapperStyle} bg={`block.${colorMode}`}>
       <Box css={blockAndArrowStyle}>
         {displayBlockchainIcons && (
           <Box css={blockchainIconWrapperStyle} backgroundColor={'#f7931a'}>
-            <IconCurrencyBitcoin color={'#fff'} />
+            <TbCurrencyBitcoin color={'#fff'} />
           </Box>
         )}
         <Box
@@ -220,7 +218,7 @@ const Block: React.FC<BlockProps> = ({
         >
           {btcBlockHeight}
         </Box>
-        <BsArrowRight color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
+        <Icon as={BsArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
       </Box>
       <BlockInfo
         tooltip={
@@ -228,13 +226,13 @@ const Block: React.FC<BlockProps> = ({
             ? `This block took longer than expected`
             : 'This block was mined in under 10 minutes.'
         }
-        icon={<Icon size={20} color={'#757b83'} css={iconStyle} />}
+        icon={<Icon as={BlockInfoIcon} size={'20px'} color={'#757b83'} css={iconStyle} />}
         time={timeBetweenBlocksFormatted}
       />
       <Box css={blockAndArrowStyle}>
         {displayBlockchainIcons && (
-          <Box css={blockchainIconWrapperStyle} backgroundColor={'#5546ff'}>
-            <StxInline color="#fff" size="16px" />
+          <Box css={blockchainIconWrapperStyle} backgroundColor={`accent.${colorMode}`}>
+            <StxIcon color="#fff" size="16px" />
           </Box>
         )}
         <Box
@@ -244,7 +242,7 @@ const Block: React.FC<BlockProps> = ({
         >
           {stxBlockHeight}
         </Box>
-        <BsArrowRight color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
+        <Icon as={BsArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
       </Box>
     </Box>
   );
@@ -258,6 +256,7 @@ const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
   const btcBlockHeight = lastBlock.burn_block_height + 1;
   const stxBlockHeight = lastBlock.height + 1;
   const lastBtcBlockBurnTime = lastBlock.burn_block_time;
+  const colorMode = useColorMode().colorMode;
 
   const [currentBlockWaitTime, setCurrentBlockWaitTime] = useState(
     Math.ceil(Date.now() / 1000) - lastBtcBlockBurnTime
@@ -273,7 +272,7 @@ const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
   });
 
   return (
-    <Box css={currentBlockStyle}>
+    <Box css={currentBlockStyle} bg={`lightBlock.${colorMode}`}>
       <Box css={blockAndArrowStyle}>
         <Box className={'block-box'} css={blockStyle}>
           {btcBlockHeight}
@@ -294,19 +293,18 @@ const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
 };
 
 export const BlocksVisualizer: React.FC = () => {
-  const queries = useHomeQueries();
-  const { data: blocks } = useInfiniteQuery(
-    [TransactionQueryKeys.lastFourBlocks],
-    () => queries.fetchBlocks(4)(),
-    { getNextPageParam, refetchInterval: 1 * 60 * 1000 }
-  );
+  const api = useApi();
+  const { data: blocks, isLoading } = useBlockListInfinite(api);
+
+  if (isLoading) return <Spinner />;
+
   const lastFourBlocks = (blocks?.pages?.[0]?.results || []).slice(0, 4).reverse();
   if (lastFourBlocks.length === 0) return null;
   console.log(lastFourBlocks);
   const lastBlock = lastFourBlocks[3];
   return (
     <Box css={wrapperStyle}>
-      {lastFourBlocks.map((block, i) => {
+      {lastFourBlocks.map((block: BlockType, i: number) => {
         if (i === 0) return null;
         return (
           <Block

@@ -1,7 +1,5 @@
+import { Box, BoxProps } from '@/ui/components';
 import React from 'react';
-import { SVGProps } from 'react';
-
-import { Box, BoxProps } from '@stacks/ui';
 
 export const AtomIcon: React.FC<BoxProps> = props => (
   <Box

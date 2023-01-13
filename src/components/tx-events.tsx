@@ -1,31 +1,35 @@
-import { useInfiniteTransactionEvents } from '@features/transaction/use-infinite-transaction-events';
-import { IconAlignLeft, IconArrowRight, IconPlus, IconTrash } from '@tabler/icons';
-import React, { Fragment, useEffect, useState } from 'react';
-import { InfiniteData } from 'react-query';
+'use client';
 
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
-import { Box, DynamicColorCircle, Flex, FlexProps, Grid, Stack, color } from '@stacks/ui';
-
-import { useApi } from '@common/api/client';
-import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { useContractFtMetadata } from '@/app/common/queries/useContractFtMetadata';
+import { useApi } from '@/common/api/client';
 import {
   addSepBetweenStrings,
-  border,
   capitalize,
   ftDecimals,
   getAssetNameParts,
   microToStacks,
   truncateMiddle,
-} from '@common/utils';
+} from '@/common/utils';
+import { SenderRecipient } from '@/components/addresses';
+import { AddressLink } from '@/components/links';
+import { Section } from '@/components/section';
+import { useInfiniteTransactionEvents } from '@/features/transaction/use-infinite-transaction-events';
+import { Box, Circle, Flex, Grid, Stack } from '@/ui/components';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { Caption } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
+import React, { FC, Fragment, useEffect, useState } from 'react';
+import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
 
-import { SenderRecipient } from '@components/addresses';
-import { Circle } from '@components/circle';
-import { StxInline } from '@components/icons/stx-inline';
-import { AddressLink } from '@components/links';
-import { Section } from '@components/section';
-import { Caption, Link, Title } from '@components/typography';
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
+import {
+  Transaction,
+  TransactionEvent,
+  TransactionEventAssetType,
+} from '@stacks/stacks-blockchain-api-types';
 
+import { ListItem } from '../app/common/components/ListItem';
+import { useVerticallyStackedElementsBorderStyle } from '../app/common/styles/border';
 import { Pending } from './status';
 
 export const getTicker = (name: string) => {
@@ -47,11 +51,11 @@ export const getTicker = (name: string) => {
 const getIcon = (type: TransactionEventAssetType) => {
   switch (type) {
     case 'burn':
-      return IconTrash;
+      return TbTrash;
     case 'mint':
-      return IconPlus;
+      return TbPlus;
     case 'transfer':
-      return IconArrowRight;
+      return TbArrowRight;
   }
 };
 
@@ -62,12 +66,12 @@ const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) =>
     <Circle
       zIndex={99}
       size="20px"
-      bg={color('bg')}
-      border={border()}
+      bg={'bg'}
+      borderWidth="1px"
       position="absolute"
       top={'-4px'}
       right="-2px"
-      color={color('accent')}
+      color={'accent'}
     >
       <Icon size="14px" color="currentColor" />
     </Circle>
@@ -76,7 +80,7 @@ const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) =>
 
 export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
   const type = event.event_type;
-
+  const colorMode = useColorMode().colorMode;
   const name =
     event.event_type === 'fungible_token_asset' ||
     event.event_type === 'non_fungible_token_asset' ||
@@ -95,56 +99,49 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
     case 'smart_contract_log':
       return (
         <Grid
-          bg={color('bg')}
-          border={border()}
-          color={color('text-body')}
+          bg={'bg'}
+          borderWidth="1px"
+          color={'textBody'}
           size="48px"
           placeItems="center"
           borderRadius="12px"
           boxShadow="mid"
           flexShrink={0}
         >
-          <IconAlignLeft strokeWidth="2" size="16px" />
+          <TbAlignLeft strokeWidth="2" size="16px" />
         </Grid>
       );
     case 'fungible_token_asset':
       return name ? (
-        <DynamicColorCircle
-          flexShrink={0}
-          textTransform="uppercase"
-          size="48px"
-          string={name}
-          position="relative"
-        >
+        <Circle flexShrink={0} textTransform="uppercase" size="48px" position="relative">
           {assetEventType ? (
             <AssetEventTypeBubble type={assetEventType as TransactionEventAssetType} />
           ) : null}
           {getAssetNameParts(name).asset[0]}
-        </DynamicColorCircle>
+        </Circle>
       ) : null;
 
     case 'non_fungible_token_asset':
       return name ? (
-        <DynamicColorCircle flexShrink={0} textTransform="uppercase" size="48px" string={name}>
+        <Circle flexShrink={0} textTransform="uppercase" size="48px" position="relative">
           {assetEventType ? (
             <AssetEventTypeBubble type={assetEventType as TransactionEventAssetType} />
           ) : null}
           {getAssetNameParts(name).asset[0]}
-        </DynamicColorCircle>
+        </Circle>
       ) : null;
 
     default:
       return (
         <Grid
           flexShrink={0}
-          bg={color('accent')}
-          color={color('bg')}
-          mr="tight"
+          bg={`accent.${colorMode}`}
+          mr="8px"
           size="48px"
           placeItems="center"
           borderRadius="48px"
         >
-          <StxInline color="currentColor" size="22px" />
+          <StxIcon size="22px" />
         </Grid>
       );
   }
@@ -158,7 +155,8 @@ const getAssetAmounts = (event: TransactionEvent) => {
         maximumFractionDigits: 6,
       });
     case 'non_fungible_token_asset':
-      return parseInt(event.asset.value.repr.replace('u', '')).toLocaleString();
+      const value = parseInt(event.asset.value.repr.replace('u', ''));
+      return isNaN(value) ? 0 : parseInt(event.asset.value.repr.replace('u', '')).toLocaleString();
     case 'stx_asset':
       return event.asset.amount ? `${microToStacks(event.asset.amount)} STX` : undefined;
   }
@@ -197,7 +195,7 @@ const getParticipants = (event: TransactionEvent) => {
           return event.asset.recipient ? (
             <Caption>
               <AddressLink principal={event.asset.recipient}>
-                <Link as="a">{truncateMiddle(event.asset.recipient)}</Link>
+                {truncateMiddle(event.asset.recipient)}
               </AddressLink>
             </Caption>
           ) : null;
@@ -207,7 +205,7 @@ const getParticipants = (event: TransactionEvent) => {
     return (
       <Caption>
         <AddressLink principal={event.stx_lock_event.locked_address}>
-          <Link as="a">{truncateMiddle(event.stx_lock_event.locked_address)}</Link>
+          {truncateMiddle(event.stx_lock_event.locked_address)}
         </AddressLink>
       </Caption>
     );
@@ -245,9 +243,8 @@ const getName = (event: TransactionEvent) => {
   }
 };
 
-const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, isLast }) => {
-  const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
-  const { fungibleTokensApi } = useApi();
+const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
+  const api = useApi();
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
   const assetAmounts = getAssetAmounts(event);
@@ -268,31 +265,22 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
 
   const memo = event.event_type === 'stx_asset' ? event.asset.memo || '' : '';
 
-  useEffect(() => {
-    const getFtMetadata = async () => {
-      const data = await fungibleTokensApi.getContractFtMetadata({
-        contractId,
-      });
-      setFtMetadata(data);
-    };
-    if (event.event_type === 'fungible_token_asset' && contractId) void getFtMetadata();
-  }, []);
+  const { data: ftMetadata } = useContractFtMetadata(
+    api,
+    { contractId },
+    { enabled: !!contractId && event.event_type === 'fungible_token_asset' }
+  );
 
   return (
-    <Flex
-      borderBottom={!isLast ? border() : undefined}
-      justifyContent="space-between"
-      alignItems="center"
-      py="loose"
-    >
-      <Flex alignItems="center">
-        <ItemIcon event={event} />
-        <Stack ml="base" spacing="tight">
-          <Title lineHeight="28px">{name}</Title>
+    <ListItem
+      icon={<ItemIcon event={event} />}
+      title={name}
+      subTitle={
+        <>
           <Stack
             flexWrap="wrap"
             alignItems="center"
-            spacing="extra-tight"
+            gap="4px"
             isInline
             divider={<Caption>∙</Caption>}
           >
@@ -310,89 +298,62 @@ const Item: React.FC<{ event: TransactionEvent; isLast?: boolean }> = ({ event, 
             {tokenType && <Caption>{tokenType}</Caption>}
           </Stack>
           {memo && (
-            <Stack flexWrap="nowrap" spacing="extra-tight" isInline divider={<Caption>∙</Caption>}>
+            <Stack flexWrap="nowrap" spacing="4px" isInline divider={<Caption>∙</Caption>}>
               <Caption fontWeight="bold">Memo</Caption>
               <Caption wordBreak={'break-all'}>{memo}</Caption>
             </Stack>
           )}
-        </Stack>
-      </Flex>
-      <Caption>{event.event_index}</Caption>
-    </Flex>
+        </>
+      }
+      rightItem={event.event_index}
+    />
   );
 };
 
-export const EventsPaginatedList = ({
-  events,
-}: {
-  events: InfiniteData<ApiResponseWithResultsOffset<TransactionEvent>> | undefined;
-}) => {
-  return events ? (
-    <>
-      {events.pages.map(page => (
-        <Fragment key={page.offset}>
-          {page?.results.map((event, index, arr) => (
-            <Item key={index} event={event} isLast={index === arr.length - 1} />
-          ))}
-        </Fragment>
-      ))}
-    </>
-  ) : null;
-};
+interface EventsProps {
+  tx: Transaction;
+}
 
-const EventsList = ({ events }: { txId: string; events: TransactionEvent[] }) => {
-  return (
-    <>
-      {events.map((event, index, arr) => (
-        <Item key={index} event={event} isLast={index === arr.length - 1} />
-      ))}
-    </>
-  );
-};
-
-export const Events = ({
-  events,
-  txId,
-  event_count,
-  ...rest
-}: {
-  events: TransactionEvent[];
-  txId: string;
-  event_count: number;
-} & FlexProps) => {
-  // fetch extra events if there are more than the default returned by the fetch tx api
-  // and display them below
-
-  const { data, ...actions } = useInfiniteTransactionEvents(txId, event_count, events);
-
-  if (event_count === 0) return null;
+export const Events: FC<EventsProps> = ({ tx }) => {
+  const { data, ...actions } = useInfiniteTransactionEvents(tx.tx_id, tx.event_count, tx.events);
+  if (tx.event_count === 0) return null;
 
   return (
-    <Section title="Events" {...rest}>
-      <Box px="loose">
-        <EventsList events={events} txId={txId} />
-        <EventsPaginatedList events={data} />
+    <Section title="Events">
+      <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
+        {tx.events.map((event, index) => (
+          <Item key={index} event={event} />
+        ))}
+        {data?.pages.map(page => (
+          <Fragment key={page.offset}>
+            {page?.results.map((event, index) => (
+              <Item key={index} event={event} />
+            ))}
+          </Fragment>
+        ))}
       </Box>
-      <Box
-        as="a"
-        borderTop={border()}
-        px="base"
-        py="base"
-        _hover={{ color: color('text-title'), cursor: 'pointer' }}
-        onClick={() => actions.hasNextPage && actions.fetchNextPage()}
-        color={color('text-caption')}
-      >
-        {actions.isFetchingNextPage ? (
-          <Flex alignItems="center" justifyContent="center">
-            <Box size="16px" as={Pending} mr="extra-tight" />
-            Loading...
-          </Flex>
-        ) : actions.hasNextPage ? (
-          <Flex alignItems="center" justifyContent="center">
-            <Caption color="currentColor">Load more events</Caption>
-          </Flex>
-        ) : null}
-      </Box>
+      {(actions.isFetchingNextPage || actions.hasNextPage) && (
+        <Box
+          as="a"
+          borderTopWidth="1px"
+          px="16px"
+          py="16px"
+          _hover={{ color: 'textTitle', cursor: 'pointer' }}
+          onClick={() => actions.hasNextPage && actions.fetchNextPage()}
+          color={'textCaption'}
+        >
+          {actions.isFetchingNextPage ? (
+            <Flex alignItems="center" justifyContent="center">
+              <Box size="16px" as={Pending} mr="4px" />
+              Loading...
+            </Flex>
+          ) : actions.hasNextPage ? (
+            <Flex alignItems="center" justifyContent="center">
+              <Caption color="currentColor">Load more events</Caption>
+            </Flex>
+          ) : null}
+        </Box>
+      )}
     </Section>
   );
 };

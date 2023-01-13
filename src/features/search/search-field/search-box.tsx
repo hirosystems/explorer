@@ -1,32 +1,13 @@
-import { SearchInput } from '@features/search/search-field/search-input';
-import { blur, clearSearchTerm, focus, setSearchTerm } from '@features/search/search-slice';
-import { useSearch } from '@features/search/use-search';
-import { IconSearch, IconX } from '@tabler/icons';
+import { useAppDispatch } from '@/common/state/hooks';
+import { SearchInput } from '@/features/search/search-field/search-input';
+import { blur, clearSearchTerm, focus, setSearchTerm } from '@/features/search/search-slice';
+import { useSearch } from '@/features/search/use-search';
+import { Box, Flex, IconButton, Spinner } from '@/ui/components';
 import * as React from 'react';
 import { useEffect } from 'react';
-
-import { Box, Flex, IconButton, IconButtonProps, Spinner, color, transition } from '@stacks/ui';
-
-import { useAppDispatch } from '@common/state/hooks';
+import { TbSearch, TbX } from 'react-icons/tb';
 
 type Variant = 'default' | 'small';
-
-const ClearButton: React.FC<Omit<IconButtonProps, 'icon'>> = props => (
-  <IconButton
-    border="1px solid transparent"
-    bg="transparent"
-    as="button"
-    invert
-    color="white"
-    outline={0}
-    _focus={{
-      borderColor: color('brand'),
-    }}
-    display="flex"
-    icon={IconX}
-    {...props}
-  />
-);
 
 interface SearchBoxProps {
   variant?: Variant;
@@ -55,7 +36,6 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
       <SearchInput
         height={defaultHeight}
         pl={inputLeftOffset}
-        zIndex={5}
         pr={inputRightOffset}
         onChange={(e: React.FormEvent<HTMLInputElement>) => {
           dispatch(setSearchTerm(e.currentTarget.value));
@@ -67,19 +47,22 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
 
       {isLoading ? (
         <Box position="absolute" zIndex={99} right={isSmall ? '48px' : '64px'}>
-          <Spinner size="sm" color="white" />
+          <Spinner size="18px" color="white" />
         </Box>
       ) : null}
-      <ClearButton
-        transition={transition}
+      <IconButton
+        bg="transparent"
+        color="white"
+        icon={<TbX width={isSmall ? '16px' : '24px'} height={isSmall ? '16px' : '24px'} />}
         opacity={showClearButton ? 1 : 0}
-        pointerEvents={showClearButton ? 'all' : 'none'}
         onClick={() => dispatch(clearSearchTerm())}
         position="absolute"
-        right="base"
+        right="16px"
         zIndex={5}
         size={isSmall ? '28px' : '36px'}
-        iconSize={isSmall ? '16px' : '24px'}
+        aria-label={'Clear search bar'}
+        borderRadius={'50%'}
+        _hover={{ bg: 'rgba(255, 255, 255, 0.15)' }}
       />
 
       <Flex
@@ -92,7 +75,7 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         zIndex={99}
       >
         <Box
-          as={IconSearch}
+          as={TbSearch}
           transform="translateX(4px) scaleX(-1)"
           color="white"
           size={isSmall ? '16px' : '18px'}

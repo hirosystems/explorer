@@ -1,42 +1,22 @@
-import { SearchComponent } from '@features/search/search';
+'use client';
+
+import { TransactionStatus } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { getTransactionStatus } from '@/common/utils/transactions';
+import { Alert } from '@/components/alert';
+import { Notice } from '@/components/notice';
+import { Box } from '@/ui/components';
 import dayjs from 'dayjs';
 import React from 'react';
 
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { Box, Flex, FlexProps, color } from '@stacks/ui';
-import { Theme, css } from '@stacks/ui-core';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import {
-  SITE_NOTICE_BANNER_LABEL,
-  SITE_NOTICE_BANNER_MESSAGE,
-  SITE_NOTICE_ENABLED,
-  TransactionStatus,
-} from '@common/constants';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { getTransactionStatus } from '@common/utils/transactions';
+interface TxAlertsProps {
+  tx: MempoolTransaction | Transaction;
+}
 
-import { Alert } from '@components/alert';
-import { Footer } from '@components/footer';
-import { Header } from '@components/header';
-import { MetaverseBg } from '@components/metaverse-bg';
-import { Notice } from '@components/notice';
-import { TitleProps, TransactionTitle } from '@components/transaction-title';
-
-type PageProps = {
-  notice?: { label?: string; message?: string };
-  fullWidth?: boolean;
-  tx?: MempoolTransaction | Transaction;
-} & FlexProps;
-
-type PageWrapperProps = {
-  fullWidth?: boolean;
-  notice?: any;
-  networkMode?: string;
-} & FlexProps;
-
-export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
-  const networkMode = useAppSelector(selectActiveNetwork).mode;
+export const TxAlerts: React.FC<TxAlertsProps> = ({ tx }) => {
+  const networkMode = useGlobalContext().activeNetwork.mode;
   // for testnet, show after 4 hours. for mainnet, show after 24 hours
   const HOURS_NOTICE_TESTNET = 4;
   const HOURS_NOTICE_MAINNET = 24;
@@ -60,11 +40,10 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
     'This transaction is in a non-canonical fork. It is not in the canonical Stacks chain.';
 
   return (
-    <Box width="100%" {...props}>
-      <TransactionTitle data-test="txid-title" mb="loose" tx={tx} />
+    <Box width="100%">
       {isFailed ? (
         <Alert
-          mb="base"
+          mb="16px"
           error={{
             name: 'Notice',
             message: failedMessage,
@@ -73,7 +52,7 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
       ) : null}
       {isLongPending ? (
         <Alert
-          mb="base"
+          mb="16px"
           error={{
             name: 'Notice',
             message: longPendingMessage,
@@ -82,7 +61,7 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
       ) : null}
       {isNonCanonical ? (
         <Alert
-          mb="base"
+          mb="16px"
           error={{
             name: 'Notice',
             message: nonCanonicalMessage,
@@ -92,77 +71,3 @@ export const PageTop: React.FC<TitleProps> = ({ tx, ...props }) => {
     </Box>
   );
 };
-
-export const Page: React.FC<PageProps> = React.memo(({ children, fullWidth, ...rest }) => (
-  <Flex
-    css={(theme: Theme) =>
-      css({
-        '*::selection': {
-          color: 'white',
-          background: color('accent'),
-          transition: 'all 0.12s ease-in-out',
-        },
-      })(theme)
-    }
-    flexDirection="column"
-    width="100%"
-    minHeight="100%"
-    position="relative"
-    zIndex={2}
-    flexGrow={1}
-  >
-    {SITE_NOTICE_ENABLED && (
-      <Box px="base-loose">
-        <Notice label={SITE_NOTICE_BANNER_LABEL} message={SITE_NOTICE_BANNER_MESSAGE} />
-      </Box>
-    )}
-    <Flex
-      as="main"
-      mx="auto"
-      width="100%"
-      flexGrow={1}
-      height="100%"
-      maxWidth={fullWidth ? '100%' : '1280px'}
-      flexDirection="column"
-      px={['base', 'base', 'extra-loose']}
-      {...rest}
-    >
-      {children}
-    </Flex>
-    <Footer
-      mx="auto"
-      width="100%"
-      maxWidth={fullWidth ? '100%' : '1280px'}
-      mt={fullWidth ? 'unset' : 'extra-loose'}
-      mb={['base', 'base', 'extra-loose']}
-      px={fullWidth ? 'unset' : ['base', 'base', 'extra-loose']}
-      fullWidth={fullWidth}
-    />
-  </Flex>
-));
-
-export const PageWrapper: React.FC<PageWrapperProps> = ({ networkMode, ...props }) => (
-  <Flex
-    maxWidth="100vw"
-    overflowX="hidden"
-    bg={color('bg')}
-    flexDirection="column"
-    minHeight="100vh"
-    position="relative"
-    overflow="hidden"
-  >
-    <Header fullWidth={true} />
-    <Flex
-      display={['block', 'block', 'none', 'none']}
-      p="tight"
-      mx="auto"
-      width="100%"
-      flexDirection={'column'}
-      px={'base'}
-    >
-      <SearchComponent variant="small" mr="base" width="100%" maxWidth="760px" />
-    </Flex>
-    <Page {...props} />
-    <MetaverseBg />
-  </Flex>
-);

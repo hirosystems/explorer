@@ -1,15 +1,14 @@
-import { SearchState, searchSlice } from '@features/search/search-slice';
-import { TxFilters, filterReducers } from '@features/transactions-filter/transactions-filter-slice';
+import { ModalState, modalSlice } from '@/components/modals/modal-slice';
+import { SearchState, searchSlice } from '@/features/search/search-slice';
+import {
+  TxFilters,
+  filterReducers,
+} from '@/features/transactions-filter/transactions-filter-slice';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { ModalState, modalSlice } from '@components/modals/modal-slice';
-
-import { ConnectState, sandboxSlice } from '@modules/sandbox/sandbox-slice';
-
-import { NetworkState, networkSlice } from './network-slice';
+import { ConnectState, sandboxSlice } from '../../app/sandbox/sandbox-slice';
 
 const rootReducer = combineReducers({
-  network: networkSlice.reducer,
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
   connect: sandboxSlice.reducer,
@@ -32,7 +31,6 @@ export type AppStore = ReturnType<typeof makeStore>;
 export type AppState = ReturnType<AppStore['getState']>;
 export type aa = ReturnType<typeof makeStore>;
 export interface RootState extends TxFilters {
-  network: NetworkState;
   modal: ModalState;
   search: SearchState;
   connect: ConnectState;

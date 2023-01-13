@@ -1,55 +1,35 @@
-import { IconX } from '@tabler/icons';
-import React from 'react';
+import { MODALS } from '@/common/constants';
+import { useAppDispatch } from '@/common/state/hooks';
+import { AddNetworkForm } from '@/components/add-network-form';
+import { selectOpenedModal } from '@/components/modals/modal-slice';
+import { Box, Modal, Stack, TextLink } from '@/ui/components';
+import { Text } from '@/ui/typography';
+import { FC } from 'react';
 
-import { Box, ControlledModal, Flex, IconButton, Stack, color } from '@stacks/ui';
-
-import { MODALS } from '@common/constants';
-import { useNetworkAddForm } from '@common/hooks/use-network-add-form';
-import { useAppDispatch } from '@common/state/hooks';
-
-import { AddNetworkForm } from '@components/add-network-form';
-import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
-import { Link, Text, Title } from '@components/typography';
-
-export const AddNetworkModal: React.FC = () => {
+export const AddNetworkModal: FC = () => {
   const modal = selectOpenedModal();
   const dispatch = useAppDispatch();
-  const { setErrors } = useNetworkAddForm();
   const isOpen = modal === MODALS.ADD_NETWORK;
-  const handleClose = () => {
-    setErrors({});
-    dispatch(closeModal());
-  };
   return (
-    <ControlledModal minWidth="428px" bg={color('bg')} isOpen={isOpen} handleClose={handleClose}>
-      <Flex
-        width="100%"
-        justifyContent="space-between"
-        alignItems="center"
-        p="extra-loose"
-        pb="base"
-      >
-        <Title fontSize={4}>Add a network</Title>
-        <IconButton color={color('text-caption')} onClick={handleClose} icon={IconX} />
-      </Flex>
-      <Stack spacing="base">
-        <Box px="extra-loose">
-          <Text fontSize={1} color={color('text-body')} lineHeight="22px">
+    <Modal title={'Add a network'} isOpen={isOpen}>
+      <Stack spacing="16px">
+        <Box>
+          <Text fontSize={'14px'} color={'textBody'}>
             Use this form to add a new instance of the{' '}
-            <Link
+            <TextLink
               display="inline"
               as="a"
               href="https://github.com/blockstack/stacks-blockchain-api"
               target="_blank"
-              color={color('accent')}
+              color={'accent'}
             >
               Stacks Blockchain API
-            </Link>
+            </TextLink>
             . Make sure you review and trust the host before you add it.
           </Text>
         </Box>
-        {modal && <AddNetworkForm />}
+        <AddNetworkForm />
       </Stack>
-    </ControlledModal>
+    </Modal>
   );
 };

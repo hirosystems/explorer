@@ -1,49 +1,29 @@
-import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
-import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import type { NextPage } from 'next';
+import { SkeletonSandbox } from '@/components/loaders/skeleton-transaction';
+import { Spinner } from '@/ui/Spinner';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { useQuery } from 'react-query';
+import * as React from 'react';
 
-import { useApi } from '@common/api/client';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
+const AppSandboxContractPage = dynamic(
+  () => import('../../../app/sandbox/contract-call/[[...params]]/page'),
+  {
+    loading: () => <Spinner alignSelf={'center'} justifySelf={'center'} size={'32px'} />,
+    ssr: false,
+  }
+);
 
-import { DefaultView } from '@modules/sandbox/components/ContractCall/DefaultView';
-import { SelectedContractView } from '@modules/sandbox/components/ContractCall/SelectedContractView';
+const Layout = dynamic(() => import('@/app/sandbox/layout'), {
+  loading: () => <SkeletonSandbox />,
+  ssr: false,
+});
 
-const ContractCall: NextPage = () => {
+export default function SandboxContractPage() {
   const { query } = useRouter();
   const contractId = query?.params?.[0] || '';
   const functionName = query?.params?.[1] || '';
-  const { infoApi } = useApi();
-  const { data: poxInfo } = useQuery('pox-info', () => infoApi.getPoxInfo(), { staleTime: 5000 });
-  const rootContractAddress = poxInfo?.contract_id?.split('.')?.[0];
-  const { url: activeNetworkUrl } = useAppSelector(selectActiveNetwork);
-
-  const queries = getTransactionQueries(activeNetworkUrl);
-
-  const { data: contract } = useQuery(
-    transactionQK(TransactionQueryKeys.contract, contractId),
-    queries.fetchContract(contractId),
-    {
-      enabled: !!contractId,
-    }
+  return (
+    <Layout>
+      <AppSandboxContractPage params={{ params: [contractId, functionName] }} />
+    </Layout>
   );
-
-  if (!rootContractAddress) return null;
-
-  if (!!contract) {
-    return (
-      <SelectedContractView
-        contract={contract}
-        functionName={functionName}
-        contractId={contractId}
-      />
-    );
-  }
-
-  return <DefaultView rootContractAddress={rootContractAddress} />;
-};
-
-export default ContractCall;
+}

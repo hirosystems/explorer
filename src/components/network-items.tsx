@@ -1,28 +1,32 @@
-import { IconCheck, IconTrash } from '@tabler/icons';
-import React from 'react';
-import useSWR from 'swr';
+'use client';
 
-import { ChainID } from '@stacks/transactions';
-import { Box, BoxProps, Flex, FlexProps, IconButton, Stack, Tooltip, color } from '@stacks/ui';
-
-import { fetchFromApi } from '@common/api/fetch';
-import { getNetworkModeFromNetworkId } from '@common/api/utils';
-import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@common/constants';
-import { useAnalytics } from '@common/hooks/use-analytics';
-import { useAppDispatch, useAppSelector } from '@common/state/hooks';
+import { ONE_MINUTE } from '@/app/common/queries/query-stale-time';
+import { getNetworkModeFromNetworkId } from '@/common/api/utils';
+import { Badge } from '@/common/components/Badge';
+import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { useAppDispatch } from '@/common/state/hooks';
+import { Network } from '@/common/types/network';
+import { openModal } from '@/components/modals/modal-slice';
 import {
-  removeCustomNetwork,
-  selectActiveNetwork,
-  selectApiUrls,
-  selectNetworks,
-  setActiveNetwork,
-} from '@common/state/network-slice';
-import { Network } from '@common/types/network';
-import { border } from '@common/utils';
+  Box,
+  BoxProps,
+  Flex,
+  FlexProps,
+  IconButton,
+  Spinner,
+  Stack,
+  Tooltip,
+} from '@/ui/components';
+import { Caption, Title } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { TbCheck, TbTrash } from 'react-icons/tb';
+import { useQuery } from 'react-query';
 
-import { Badge } from '@components/badge';
-import { openModal } from '@components/modals/modal-slice';
-import { Caption, Title } from '@components/typography';
+import { CoreNodeInfoResponse } from '@stacks/blockchain-api-client/src/generated/models';
+import { ChainID } from '@stacks/transactions';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -40,7 +44,7 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
       bg={isDisabled ? 'bg-4' : 'bg'}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
       _hover={{
-        bg: isDisabled ? 'unset' : isActive ? 'unset' : color('bg-alt'),
+        bg: isDisabled ? 'unset' : isActive ? 'unset' : 'bgAlt',
         cursor: isDisabled ? 'not-allowed' : isActive ? 'default' : 'pointer',
       }}
       {...props}
@@ -53,11 +57,15 @@ interface ItemProps extends ItemWrapperProps {
   isCustom?: boolean;
 }
 
-const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
-  const dispatch = useAppDispatch();
-  const analytics = useAnalytics();
-  const { mainnet, testnet } = useAppSelector(selectApiUrls);
+const getCustomNetworkApiInfo = (baseUrl: string) => () =>
+  fetch(`${baseUrl}${DEFAULT_V2_INFO_ENDPOINT}`).then(res => res.json());
 
+const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
+  const {
+    removeCustomNetwork,
+    apiUrls: { mainnet, testnet },
+  } = useGlobalContext();
+  const colorMode = useColorMode().colorMode;
   const isMainnet = item.url === mainnet;
   const isTestnet = item.url === testnet;
   const isDefault = isMainnet || isTestnet;
@@ -67,49 +75,38 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
 
   const doNotFetch = isDisabled || !item.url || isDefault;
 
-  const { data, error } = useSWR(!!doNotFetch ? null : item.url, async () => {
-    // this will only run if the item url is not one of the defaults (mainnet/testnet)
-    const response = await fetchFromApi(item.url)(DEFAULT_V2_INFO_ENDPOINT);
-    return response.json();
-  });
+  const { data, error, isLoading } = useQuery<CoreNodeInfoResponse, Error>(
+    ['customNetworkApiInfo', item.url],
+    getCustomNetworkApiInfo(item.url),
+    {
+      staleTime: ONE_MINUTE,
+      enabled: !doNotFetch,
+      suspense: false,
+      useErrorBoundary: false,
+    }
+  );
 
-  // Custom network id
   if (!isDefault && data) {
-    itemNetworkId = data?.network_id && parseInt(data?.network_id);
+    itemNetworkId = data?.network_id && parseInt(data.network_id.toString());
   }
 
   const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
 
-  const handleClick = React.useCallback(
-    e => {
-      analytics.track({
-        event: 'network-selected',
-        properties: {
-          selectedNetworkUrl: item.url,
-          time: Date.now(),
-        },
-      });
-
-      onClick?.(e);
-    },
-    [itemNetworkMode]
-  );
-
   return (
-    <ItemWrapper isActive={isActive} isDisabled={!!isDisabled || !!error?.message} {...rest}>
+    <ItemWrapper isActive={isActive} isDisabled={!!isDisabled || !!error || isLoading} {...rest}>
       <Stack
-        pl="extra-loose"
-        pr={isCustom && !isActive ? 'unset' : 'extra-loose'}
-        py="base"
+        pl="32px"
+        pr={'32px'}
+        py="16px"
         width="100%"
         flexGrow={1}
-        spacing="tight"
-        onClick={handleClick}
+        spacing="8px"
+        onClick={onClick}
       >
         <Flex alignItems="center">
           <Title display="block">{item.label}</Title>
           {itemNetworkMode ? (
-            <Badge bg={color('bg-4')} ml="tight" border={border()} color={color('text-caption')}>
+            <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               {itemNetworkMode}
             </Badge>
           ) : null}
@@ -118,26 +115,31 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
           {item?.url?.includes('//') ? item?.url?.split('//')[1] : item?.url || isDisabled}
         </Caption>
       </Stack>
-      <Flex
-        alignItems="center"
-        pr={isCustom || isActive || !!error?.message ? 'extra-loose' : 'unset'}
-        py="base"
-      >
+      <Flex alignItems="center" pr={'32px'} py="16px" position={'relative'}>
         {isCustom && !isActive ? (
-          <>
-            <Tooltip label="Remove network">
-              <IconButton
-                position="relative"
-                zIndex={999}
-                color={color('text-caption')}
-                icon={IconTrash}
-                onClick={() => dispatch(removeCustomNetwork(item))}
-              />
-            </Tooltip>
-          </>
+          <Tooltip label="Remove network">
+            <IconButton
+              position="relative"
+              zIndex={999}
+              color={`textCaption.${colorMode}`}
+              size={'21px'}
+              icon={
+                <span>
+                  <TbTrash size={'21px'} />
+                </span>
+              }
+              onClick={() => removeCustomNetwork(item)}
+              aria-label={'Remove network'}
+              _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
+            />
+          </Tooltip>
+        ) : isLoading ? (
+          <Spinner size="18px" opacity={0.5} color={'#666'} />
+        ) : !!error ? (
+          <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
+        ) : isActive ? (
+          <Box as={TbCheck} color={`feedbackSuccess.${colorMode}`} size="18px" />
         ) : null}
-        {isActive ? <Box as={IconCheck} color={color('feedback-success')} size="18px" /> : null}
-        {!!error?.message ? <Caption color={color('feedback-error')}>Offline</Caption> : null}
       </Flex>
     </ItemWrapper>
   );
@@ -152,9 +154,9 @@ const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
         dispatch(openModal(MODALS.ADD_NETWORK));
         onClick?.(e);
       }}
-      py="loose"
-      px="extra-loose"
-      borderTop={border()}
+      py="24px"
+      px="32px"
+      borderTopWidth="1px"
       {...rest}
     >
       <Title fontWeight={400}>Add a network</Title>
@@ -167,13 +169,12 @@ interface NetworkItemsProps extends BoxProps {
 }
 
 export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
-  const dispatch = useAppDispatch();
-  const networks = Object.values<Network>(useAppSelector(selectNetworks));
-  const activeNetwork = useAppSelector(selectActiveNetwork);
+  const { networks, activeNetwork } = useGlobalContext();
+  const router = useRouter();
 
   return (
     <>
-      {networks.map((network, key) => {
+      {Object.values<Network>(networks).map((network, key) => {
         const isActive = activeNetwork.url === network.url;
         return (
           <Item
@@ -186,7 +187,13 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
               setTimeout(() => {
                 onItemClick?.(network);
                 if (!isActive) {
-                  dispatch(setActiveNetwork(network));
+                  void router
+                    .push(
+                      `/?chain=${network.mode}${
+                        network.isCustomNetwork ? `&api=${network.url}` : ''
+                      }`
+                    )
+                    .then(() => router.reload());
                 }
               }, 250);
             }}

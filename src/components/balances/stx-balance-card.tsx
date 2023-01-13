@@ -1,28 +1,25 @@
-import { IconQrcode, IconX } from '@tabler/icons';
-import vkQr from '@vkontakte/vk-qr';
-import * as React from 'react';
-
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-import { Box, BoxProps, Circle, Flex, Grid, Stack, StxInline, color } from '@stacks/ui';
-
-import { MODALS } from '@common/constants';
-import { useCurrentStxPrice } from '@common/hooks/use-current-prices';
-import { useAppDispatch } from '@common/state/hooks';
+import { MODALS } from '@/common/constants';
+import { useAppDispatch } from '@/common/state/hooks';
 import {
-  border,
   formatStacksAmount,
   getLocaleDecimalSeparator,
   getUsdValue,
   microToStacks,
-  usdFormatter,
-} from '@common/utils';
+} from '@/common/utils';
+import { openModal } from '@/components/modals/modal-slice';
+import { Section } from '@/components/section';
+import { StackingPercentage } from '@/components/stacking';
+import { Box, BoxProps, Circle, Flex, Grid, IconButton, Stack, Tooltip } from '@/ui/components';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { Caption, Text } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
+import vkQr from '@vkontakte/vk-qr';
+import * as React from 'react';
+import { TbQrcode, TbX } from 'react-icons/tb';
 
-import { IconButton } from '@components/icon-button';
-import { openModal } from '@components/modals/modal-slice';
-import { Section } from '@components/section';
-import { StackingPercentage } from '@components/stacking';
-import { Tooltip } from '@components/tooltip';
-import { Caption, Text } from '@components/typography';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+
+import { useCurrentStxPrice } from '../../app/common/hooks/use-current-prices';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const { data: stxPrice } = useCurrentStxPrice();
@@ -40,12 +37,12 @@ export const BalanceItem = ({ balance, ...rest }: any) => {
           {localeDecimalSeparator}
           {parts[1]}
         </Text>
-        <Text ml="extra-tight" color="currentColor">
+        <Text ml="4px" color="currentColor">
           STX
         </Text>
       </Flex>
       {usdBalance && (
-        <Text mt="extra-tight" color="ink.400" fontSize="14px">
+        <Text mt="4px" color="ink.400" fontSize="14px">
           {usdBalance}
         </Text>
       )}
@@ -60,7 +57,7 @@ const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ princip
         qrSize: 256,
         isShowLogo: true,
         logoData: '/stx-square.svg',
-        foregroundColor: color('invert'),
+        foregroundColor: 'invert',
       }),
     [principal]
   );
@@ -111,9 +108,9 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
           position="absolute"
           top="-18px"
           right="-12px"
-          dark
-          icon={qrShowing ? IconX : IconQrcode}
+          icon={qrShowing ? <TbX /> : <TbQrcode />}
           onClick={toggleViewQrCode}
+          aria-label={'toggle view QR code'}
         />
       </Tooltip>
     </Box>
@@ -123,56 +120,56 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
         <>
-          <Box px="base-loose">
+          <Box px="20px">
             <Flex
-              borderBottom={isStacking || !!tokenOfferingData ? border() : 'unset'}
+              borderBottom={isStacking || !!tokenOfferingData ? '1px solid' : 'unset'}
               alignItems="flex-start"
-              py="loose"
+              py="24px"
             >
-              <Circle bg={color('brand')} mr="base" size="36px">
-                <StxInline color="white" size="16px" />
+              <Circle bg={`brand.${useColorMode().colorMode}`} mr="16px" size="36px">
+                <StxIcon color="white" size="16px" />
               </Circle>
-              <Stack spacing="tight" pr="base">
-                <BalanceItem fontWeight="500" color={color('text-title')} balance={totalBalance} />
+              <Stack spacing="8px" pr="16px">
+                <BalanceItem fontWeight="500" color={'textTitle'} balance={totalBalance} />
                 <Caption>Total balance</Caption>
               </Stack>
             </Flex>
           </Box>
           {isStacking || !!tokenOfferingData ? (
-            <Box px="base-loose">
+            <Box px="20px">
               <Stack
                 borderBottom={
-                  isStacking || minerRewards > 0 || !!tokenOfferingData ? border() : 'unset'
+                  isStacking || minerRewards > 0 || !!tokenOfferingData ? '1px solid' : 'unset'
                 }
-                spacing="tight"
-                py="loose"
+                spacing="8px"
+                py="24px"
               >
                 <Caption>Available</Caption>
-                <BalanceItem color={color('text-title')} balance={availableBalance} />
+                <BalanceItem color={'textTitle'} balance={availableBalance} />
               </Stack>
             </Box>
           ) : null}
           {minerRewards > 0 ? (
             <>
-              <Box px="base-loose">
+              <Box px="20px">
                 <Stack
-                  borderBottom={!!tokenOfferingData ? border() : 'unset'}
-                  spacing="tight"
-                  py="loose"
+                  borderBottom={!!tokenOfferingData ? '1px solid' : 'unset'}
+                  spacing="8px"
+                  py="24px"
                 >
                   <Caption>Miner rewards</Caption>
-                  <BalanceItem color={color('text-title')} balance={minerRewardsBalance} />
+                  <BalanceItem color={'textTitle'} balance={minerRewardsBalance} />
                 </Stack>
               </Box>
             </>
           ) : null}
           {!!tokenOfferingData ? (
-            <Box px="base-loose">
-              <Stack borderBottom={isStacking ? border() : undefined} spacing="tight" py="loose">
+            <Box px="20px">
+              <Stack borderBottom={isStacking ? '1px solid' : undefined} spacing="8px" py="24px">
                 <Caption>Locked</Caption>
                 <Flex alignItems="baseline" justifyContent="space-between">
                   <BalanceItem
-                    color={color('text-title')}
+                    color={'textTitle'}
                     balance={microToStacks(tokenOfferingData.total_locked)}
                   />
                   <Box
@@ -181,7 +178,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
                     _hover={{
                       cursor: 'pointer',
                     }}
-                    color={color('brand')}
+                    color={'brand'}
                   >
                     View schedule
                   </Box>
@@ -191,10 +188,10 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
           ) : null}
           {isStacking ? (
             <>
-              <Box px="base-loose">
-                <Stack borderBottom={border()} spacing="tight" py="loose">
+              <Box px="20px">
+                <Stack borderBottomWidth="1px" spacing="8px" py="24px">
                   <Caption>Stacked amount (locked)</Caption>
-                  <BalanceItem color={color('text-title')} balance={stackedBalance} />
+                  <BalanceItem color={'textTitle'} balance={stackedBalance} />
                 </Stack>
                 <StackingPercentage balances={balances} address={principal} />
               </Box>
@@ -202,14 +199,14 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
           ) : null}
         </>
       ) : (
-        <Grid placeItems="center" pt="extra-loose" pb="loose" width="100%">
+        <Grid placeItems="center" pt="32px" pb="24px" width="100%">
           <QRcode principal={principal} />
           <Caption
-            mt="base"
+            mt="16px"
             onClick={toggleViewQrCode}
             _hover={{
               cursor: 'pointer',
-              color: color('text-title'),
+              color: 'textTitle',
             }}
           >
             Hide

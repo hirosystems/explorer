@@ -1,34 +1,30 @@
-import { TxFilterTypes } from '@features/transactions-filter/transactions-filter-slice';
-import { IconFilter } from '@tabler/icons';
+import { FilterPanel, FilteredMessage } from '@/components/filter-panel';
+import { TxLink } from '@/components/links';
+import { Section } from '@/components/section';
+import { TxItem } from '@/components/transaction-item';
+import { Box, BoxProps, Flex, FlexProps, Grid, Icon } from '@/ui/components';
+import { Caption, Text } from '@/ui/typography';
 import React from 'react';
+import { TbFilter } from 'react-icons/tb';
 
 import {
   MempoolTransaction,
   Transaction,
   TransactionResults,
 } from '@stacks/stacks-blockchain-api-types';
-import { Box, BoxProps, Flex, FlexProps, Grid, color } from '@stacks/ui';
 
-import { useFilterState } from '@common/hooks/use-filter-state';
-
-import { CaptionAction } from '@components/caption-action';
-import { FilterPanel, FilteredMessage } from '@components/filter-panel';
-import { HoverableItem } from '@components/hoverable';
-import { TxLink } from '@components/links';
-import { Section } from '@components/section';
-import { TxItem } from '@components/transaction-item';
-import { Text } from '@components/typography';
+import { useFilterState } from '../app/common/hooks/use-filter-state';
 
 const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
 > = React.memo(({ tx, principal, ...rest }) => {
   return (
-    <HoverableItem>
+    <Flex>
       <TxLink txid={tx.tx_id} {...rest}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>
       <TxItem as="span" tx={tx} principal={principal} key={tx.tx_id} />
-    </HoverableItem>
+    </Flex>
   );
 });
 
@@ -70,16 +66,20 @@ export const TxList: React.FC<{
 const Filter = () => {
   const { toggleFilterVisibility } = useFilterState();
   return (
-    <Box position="relative" zIndex={99999999}>
-      <CaptionAction
+    <Box position="relative">
+      <Caption
+        display="flex"
+        alignItems="center"
+        _hover={{ cursor: 'pointer', color: 'textTitle' }}
         position="relative"
         zIndex={999}
         onClick={toggleFilterVisibility}
-        label="Filter"
-        icon={IconFilter}
-      />
+      >
+        <Icon as={TbFilter} mr="4px" color="currentColor" size="16px" strokeWidth={1.5} />
+        Filter
+      </Caption>
       <Box pointerEvents="none" top={0} right="-32px" position="absolute" size="500px">
-        <FilterPanel bg={color('bg')} showBorder pointerEvents="all" />
+        <FilterPanel />
       </Box>
     </Box>
   );
@@ -97,7 +97,7 @@ export const TransactionList: React.FC<
 
   return (
     <Section title={'Transactions'} topRight={Filter} {...rest}>
-      <Box px="loose">
+      <Box px="24px">
         {hasTxs && !hasVisibleTxs ? (
           <FilteredMessage />
         ) : hasVisibleTxs ? (
@@ -105,9 +105,9 @@ export const TransactionList: React.FC<
             <TxList items={filteredTxs} />
           </Box>
         ) : (
-          <Grid placeItems="center" px="base" py="extra-loose">
+          <Grid placeItems="center" px="16px" py="32px">
             <Box as="img" src="/no-txs.svg" alt="No transactions yet" />
-            <Text color={color('text-caption')} mt="extra-loose">
+            <Text color={'textCaption'} mt="32px">
               No transactions yet
             </Text>
           </Grid>

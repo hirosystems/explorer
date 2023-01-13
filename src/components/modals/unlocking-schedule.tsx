@@ -1,23 +1,20 @@
-import { AddressQueryKeys, addressQK } from '@features/address/query-keys';
-import { useAddressQueries } from '@features/address/use-address-queries';
-import { IconAlertTriangle, IconInfoCircle, IconX } from '@tabler/icons';
+'use client';
+
+import { Badge } from '@/common/components/Badge';
+import { MODALS } from '@/common/constants';
+import { selectOpenedModal } from '@/components/modals/modal-slice';
+import { PercentageCircle } from '@/components/percentage-circle';
+import { Section } from '@/components/section';
+import { AddressQueryKeys, addressQK } from '@/features/address/query-keys';
+import { useAddressQueries } from '@/features/address/use-address-queries';
+import { Box, BoxProps, Flex, Grid, Modal, Stack, Tooltip } from '@/ui/components';
+import { Caption, Text, Title } from '@/ui/typography';
 import dayjs from 'dayjs';
 import React from 'react';
+import { TbAlertTriangle, TbInfoCircle } from 'react-icons/tb';
 import { useQuery } from 'react-query';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-import { Box, BoxProps, ControlledModal, Flex, Grid, IconButton, Stack, color } from '@stacks/ui';
-
-import { MODALS } from '@common/constants';
-import { useAppDispatch } from '@common/state/hooks';
-import { border } from '@common/utils';
-
-import { Badge } from '@components/badge';
-import { closeModal, selectOpenedModal } from '@components/modals/modal-slice';
-import { PercentageCircle } from '@components/percentage-circle';
-import { Section } from '@components/section';
-import { Tooltip } from '@components/tooltip';
-import { Caption, Text, Title } from '@components/typography';
 
 const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
   const value = Number(Number(amount) / Math.pow(10, 6));
@@ -50,17 +47,17 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
   const blocksLeft = stacksTipHeight ? data[data.length - 1].block_height - stacksTipHeight : 0;
 
   return (
-    <Section p="extra-loose">
+    <Section p="32px">
       <Stack spacing={0} flexWrap="wrap" isInline>
         <Stack
           width={['100%', '100%', '40%']}
-          borderRight={['unset', 'unset', border()]}
-          borderBottom={[border(), border(), 'unset']}
-          pb={['extra-loose', 'extra-loose', 'unset']}
+          borderRight={['unset', 'unset', '1px solid']}
+          borderBottom={['1px solid', '1px solid', 'unset']}
+          pb={['32px', '32px', 'unset']}
         >
           <Flex alignItems="center">
-            <Box mr="base" size="44px">
-              <PercentageCircle strokeWidth={3} size="44px" percentage={percentage} />
+            <Box mr="16px" size="44px">
+              <PercentageCircle size="44px" percentage={percentage} />
             </Box>
             <Stack>
               <Title fontSize={3} fontWeight={400}>
@@ -74,34 +71,34 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
           </Flex>
         </Stack>
         <Stack
-          pt={['extra-loose', 'extra-loose', 'unset']}
+          pt={['32px', '32px', 'unset']}
           width={['100%', '100%', '60%']}
           flexWrap={['wrap', 'wrap', 'unset']}
           isInline
         >
           <Flex
-            borderRight={['unset', 'unset', border()]}
+            borderRight={['unset', 'unset', '1px solid']}
             justifyContent={['flex-start', 'flex-start', 'center']}
-            pb={['extra-loose', 'extra-loose', 'unset']}
-            px={['unset', 'unset', 'extra-loose']}
+            pb={['32px', '32px', 'unset']}
+            px={['unset', 'unset', '32px']}
             width={['100%', '100%', '50%']}
             flexGrow={1}
           >
             <Stack>
               <Caption>Unlocked</Caption>
-              <StxAmount color={color('text-body')} amount={totalThatHasUnlocked} />
+              <StxAmount color={'textBody'} amount={totalThatHasUnlocked} />
             </Stack>
           </Flex>
           <Flex
-            pt={['extra-loose', 'extra-loose', 'unset']}
-            borderTop={[border(), 'unset', 'unset']}
+            pt={['32px', '32px', 'unset']}
+            borderTop={['1px solid', 'unset', 'unset']}
             justifyContent={['flex-start', 'flex-start', 'center']}
             width={['100%', '100%', '50%']}
             flexGrow={1}
           >
             <Stack>
               <Caption>Locked</Caption>
-              <StxAmount color={color('text-body')} amount={parseFloat(total_locked)} />
+              <StxAmount color={'textBody'} amount={parseFloat(total_locked)} />
             </Stack>
           </Flex>
         </Stack>
@@ -119,11 +116,11 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
   const { unlock_schedule } = tokenOfferingData;
   let cumulativeAmount = 0;
   return (
-    <Section mt="extra-loose" px="extra-loose" pb="tight" pt={['tight', 'tight', 'unset']}>
+    <Section mt="32px" px="32px" pb="8px" pt={['8px', '8px', 'unset']}>
       <Grid
-        borderBottom={border()}
-        pb="base"
-        pt="loose"
+        borderBottom={'1px solid'}
+        pb="16px"
+        pt="24px"
         width="100%"
         gridTemplateColumns="16.666% 16.666% 16.666% 25% 25%"
         display={['none', 'none', 'grid']}
@@ -131,14 +128,9 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
         <Caption>Block</Caption>
         <Flex>
           <Caption>Est. Date</Caption>
-          <Tooltip
-            labelProps={{
-              textAlign: 'center',
-            }}
-            label="Based on average Bitcoin block time."
-          >
-            <Box size="16px" color={color('text-caption')} ml="tight">
-              <IconInfoCircle size="16px" />
+          <Tooltip label="Based on average Bitcoin block time.">
+            <Box size="16px" color={'textCaption'} ml="8px">
+              <TbInfoCircle size="16px" />
             </Box>
           </Tooltip>
         </Flex>
@@ -157,8 +149,8 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
         return (
           <Grid
             alignItems="center"
-            borderBottom={index === arr.length - 1 ? undefined : border()}
-            py={['loose', 'loose', 'base-tight']}
+            borderBottom={index === arr.length - 1 ? undefined : '1px solid'}
+            py={['24px', '24px', '12px']}
             width="100%"
             gridTemplateColumns={[
               'repeat(1, 1fr)',
@@ -168,45 +160,43 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
             justifyContent="flex-start"
             position="relative"
           >
-            <Box
-              fontWeight={[500, 500, 'unset']}
-              mb={['tight', 'tight', 'unset']}
-              color={color('text-body')}
-            >
+            <Box fontWeight={[500, 500, 'unset']} mb={['8px', '8px', 'unset']} color={'textBody'}>
               <Box display={['inline', 'inline', 'none']}>Block </Box>#{block_height}
             </Box>
-            <Box mb={['base', 'base', 'unset']} color={color('text-body')}>
+            <Box mb={['16px', '16px', 'unset']} color={'textBody'}>
               {relativeTime}
             </Box>
             <Flex
               justifyContent="center"
               position={['absolute', 'absolute', 'static']}
-              top="loose"
+              top="24px"
               right={0}
             >
               {isReceived ? (
-                <Badge bg={color('feedback-success')}>Received</Badge>
+                <Badge bg={'feedbackSuccess'} border={'none'}>
+                  Received
+                </Badge>
               ) : (
-                <Badge color={color('text-body')} bg={color('border')}>
+                <Badge color={'textBody'} bg={'border'} border={'none'}>
                   Locked
                 </Badge>
               )}
             </Flex>
-            <Caption my="tight" display={['block', 'block', 'none']}>
+            <Caption my="8px" display={['block', 'block', 'none']}>
               Amount
             </Caption>
             <StxAmount
               textAlign={['left', 'left', 'right']}
               amount={parseFloat(amount)}
-              color={color('text-body')}
+              color={'textBody'}
             />
-            <Caption my="tight" mt="base" display={['block', 'block', 'none']}>
+            <Caption my="8px" mt="16px" display={['block', 'block', 'none']}>
               Cumulative
             </Caption>
             <StxAmount
               textAlign={['left', 'left', 'right']}
               amount={cumulativeAmount}
-              color={color('text-body')}
+              color={'textBody'}
             />
           </Grid>
         );
@@ -218,7 +208,6 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
 export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse }> = ({
   balance,
 }) => {
-  const dispatch = useAppDispatch();
   const isOpen = selectOpenedModal() === MODALS.UNLOCKING_SCHEDULE;
   const queries = useAddressQueries();
   const { data: stacksInfo } = useQuery(
@@ -226,51 +215,31 @@ export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse
     queries.fetchCoreApiInfo()
   );
 
-  const handleClose = () => {
-    dispatch(closeModal());
-  };
-
   return (
-    <ControlledModal
-      width="100%"
-      maxWidth="960px"
-      bg={color('bg')}
-      isOpen={isOpen}
-      handleClose={handleClose}
-      maxHeight="calc(100vh - 64px)"
-      overflow="auto"
-    >
-      <Flex
-        width="100%"
-        justifyContent="space-between"
-        alignItems="center"
-        p="extra-loose"
-        pb="base"
-      >
-        <Title fontSize={4}>Unlocking schedule</Title>
-        <IconButton color={color('text-caption')} onClick={handleClose} icon={IconX} />
-      </Flex>
-      <Stack spacing="base">
-        <Box px="extra-loose">
-          <Text fontSize={1} color={color('text-body')} lineHeight="22px" maxWidth="72ch">
-            This address participated in the Stacks token offering. Its STX is subject to the
-            unlocking schedule detailed below. The dates are estimates and can vary depending on the
-            Bitcoin block time.
-          </Text>
-        </Box>
-        <Box mt="base-tight" pb="extra-loose" px="extra-loose">
-          <OverviewCard balance={balance} stacksTipHeight={stacksInfo?.stacks_tip_height} />
-          <Section p="base" mt="extra-loose">
-            <Stack isInline alignItems="center">
-              <Box size="18px">
-                <IconAlertTriangle color={color('feedback-alert')} size="18px" />
-              </Box>
-              <Caption>This table only shows data from after the launch of Stacks 2.0</Caption>
-            </Stack>
-          </Section>
-          <Table balance={balance} stacksTipHeight={stacksInfo?.stacks_tip_height} />
-        </Box>
-      </Stack>
-    </ControlledModal>
+    <Modal isOpen={isOpen} title={'Unlocking schedule'}>
+      <Box width="100%" maxWidth="960px" bg={'bg'} maxHeight="calc(100vh - 64px)" overflow="auto">
+        <Stack spacing="16px">
+          <Box>
+            <Text fontSize={'14px'} color={'textBody'} lineHeight="22px" maxWidth="72ch">
+              This address participated in the Stacks token offering. Its STX is subject to the
+              unlocking schedule detailed below. The dates are estimates and can vary depending on
+              the Bitcoin block time.
+            </Text>
+          </Box>
+          <Box mt="12px" pb="32px">
+            <OverviewCard balance={balance} stacksTipHeight={stacksInfo?.stacks_tip_height} />
+            <Section p="16px" mt="32px">
+              <Stack isInline alignItems="center">
+                <Box size="18px">
+                  <TbAlertTriangle color={'feedbackAlert'} size="18px" />
+                </Box>
+                <Caption>This table only shows data from after the launch of Stacks 2.0</Caption>
+              </Stack>
+            </Section>
+            <Table balance={balance} stacksTipHeight={stacksInfo?.stacks_tip_height} />
+          </Box>
+        </Stack>
+      </Box>
+    </Modal>
   );
 };

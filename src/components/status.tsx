@@ -1,40 +1,15 @@
-import { keyframes } from '@emotion/react';
+import { Badge } from '@/common/components/Badge';
+import { TxStatus } from '@/common/types/tx';
+import { FlexProps, Icon, Spinner } from '@/ui/components';
+import { CheckIcon } from '@/ui/icons';
+import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
-import { Box, FlexProps } from '@stacks/ui';
-import { Theme, css } from '@stacks/ui-core';
-
-import { TxStatus } from '@common/types/tx';
-
-import { Badge } from './badge';
-import { AlertCircleIcon } from './icons/alert-circle';
-import { CheckIcon } from './icons/check';
 import { LoaderQuarter } from './icons/loader-quarter';
 import { MicroblockIcon } from './icons/microblock';
 
-const keyframesRotate = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(180deg);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
-`;
-
-export const Pending = ({ speed = 0.9, ...p }: any) => (
-  <LoaderQuarter
-    css={(theme: Theme) =>
-      css({
-        animation: `${keyframesRotate} ${speed}s infinite linear`,
-        color: 'currentColor',
-      })(theme)
-    }
-    {...p}
-  />
-);
+export const Pending = ({ speed = 0.9, ...p }: any) => <LoaderQuarter {...p} />;
 
 const labelMap = {
   pending: 'In mempool',
@@ -46,12 +21,12 @@ const labelMap = {
 };
 
 const iconMap = {
-  pending: Pending,
+  pending: Spinner,
   success: CheckIcon,
   success_anchor_block: CheckIcon,
   success_microblock: () => <MicroblockIcon fill="white" />,
-  non_canonical: AlertCircleIcon,
-  failed: AlertCircleIcon,
+  non_canonical: HiOutlineExclamationCircle,
+  failed: HiOutlineExclamationCircle,
 };
 
 interface StatusProps extends FlexProps {
@@ -63,14 +38,16 @@ export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
   const label = labelMap[txStatus];
   return (
     <Badge
-      bg="rgba(255,255,255,0.24)"
+      labelProps={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+      background={`bg.${useColorMode().colorMode}`}
+      gap={'4px'}
       color="white"
-      labelProps={{ display: 'flex', alignItems: 'center' }}
-      maxHeight="24px"
+      bg="rgba(255,255,255,0.24)"
+      border={'none'}
       {...rest}
     >
-      <IconComponent strokeWidth="2" size="16px" color="currentColor" />
-      <Box ml="extra-tight">{label}</Box>
+      <Icon as={IconComponent} size="16px" color="currentColor" />
+      {label}
     </Badge>
   );
 };

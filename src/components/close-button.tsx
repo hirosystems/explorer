@@ -1,6 +1,6 @@
+import { Box, BoxProps } from '@/ui/components';
 import React from 'react';
-
-import { Box, BoxProps, CloseIcon } from '@stacks/ui';
+import { RiCloseLine } from 'react-icons/ri';
 
 export const CloseButton = (props: BoxProps & { onClick?: any }) => (
   <Box
@@ -10,6 +10,6 @@ export const CloseButton = (props: BoxProps & { onClick?: any }) => (
     size="12px"
     {...props}
   >
-    <CloseIcon />
+    <RiCloseLine />
   </Box>
 );

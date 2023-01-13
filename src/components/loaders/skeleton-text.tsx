@@ -1,17 +1,13 @@
+import { Section } from '@/components/section';
+import { Flex } from '@/ui/components';
 import * as React from 'react';
 
-import { Box, Flex } from '@stacks/ui';
-
-import { Section } from '@components/section';
-
 import { ExplorerSkeletonLoader } from './skeleton-common';
-import { SkeletonBlock, SkeletonTransaction } from './skeleton-transaction';
+import { SkeletonBlock } from './skeleton-transaction';
 
 const SkeletonTextSpan = () => <ExplorerSkeletonLoader width={'399px'} height={'16px'} />;
 
-export const SkeletonRectangleFiller = () => (
-  <ExplorerSkeletonLoader height={'20px'} containerClassName="skeleton-outer-full-width" />
-);
+export const SkeletonRectangleFiller = () => <ExplorerSkeletonLoader height={'20px'} />;
 
 export const SkeletonFees = () => <ExplorerSkeletonLoader width={'61px'} height={'16px'} />;
 
@@ -55,7 +51,7 @@ export const SkeletonForType = (props: { type: string | undefined }) => {
 export const SkeletonBlockList = () => {
   return (
     <Section title="Recent Blocks">
-      <Flex flexDirection="column" flexGrow={1} px="loose">
+      <Flex flexDirection="column" flexGrow={1} px="20px">
         {[...Array(10)].map((_, i) => (
           <SkeletonBlock key={i} />
         ))}

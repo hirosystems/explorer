@@ -1,44 +1,33 @@
-import { IconChevronDown } from '@tabler/icons';
+import { HeaderTextItem } from '@/components/header-text-item';
+import { NetworkItems } from '@/components/network-items';
+import { Box, BoxProps, Icon } from '@/ui/components';
+import { useColorMode } from '@chakra-ui/react';
 import React, { memo, useCallback, useState } from 'react';
-
-import { Box, BoxProps, Fade, color } from '@stacks/ui';
-
-import { useControlledHover } from '@common/hooks/use-controlled-hover';
-import { border } from '@common/utils';
-
-import { HeaderTextItem } from '@components/header-text-item';
-import { NetworkItems } from '@components/network-items';
+import { TbChevronDown } from 'react-icons/tb';
 
 const Dropdown: React.FC<BoxProps & { show?: boolean; onItemClick?: () => void }> = memo(
-  ({ show, onItemClick }) => {
+  ({ onItemClick }) => {
     return (
-      <Fade in={show}>
-        {styles => (
-          <Box top="100%" pt="base" right={0} position="absolute" style={styles}>
-            <Box
-              border={border()}
-              overflow="hidden"
-              boxShadow="mid"
-              minWidth="342px"
-              bg={color('bg')}
-              borderRadius="8px"
-              pt="tight"
-            >
-              <NetworkItems onItemClick={onItemClick} />
-            </Box>
-          </Box>
-        )}
-      </Fade>
+      <Box top="100%" pt="16px" right={0} position="absolute">
+        <Box
+          borderWidth="1px"
+          overflow="hidden"
+          boxShadow="mid"
+          minWidth="342px"
+          bg={`bg.${useColorMode().colorMode}`}
+          borderRadius="8px"
+          pt="8px"
+        >
+          <NetworkItems onItemClick={onItemClick} />
+        </Box>
+      </Box>
     );
   }
 );
 
 export const NetworkSwitcherItem: React.FC<BoxProps> = memo(props => {
   const [isHovered, setIsHovered] = useState(false);
-  const bind = useControlledHover(setIsHovered);
-
   const handleRemoveHover = useCallback(() => setIsHovered(false), [setIsHovered]);
-
   return (
     <>
       <HeaderTextItem
@@ -50,12 +39,12 @@ export const NetworkSwitcherItem: React.FC<BoxProps> = memo(props => {
           cursor: 'pointer',
         }}
         as="span"
-        {...bind}
-        {...props}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         Network
-        <Box as={IconChevronDown} size="14px" ml="tight" />
-        <Dropdown onItemClick={handleRemoveHover} show={isHovered} />
+        <Icon as={TbChevronDown} size="14px" ml="8px" />
+        {isHovered && <Dropdown onItemClick={handleRemoveHover} />}
       </HeaderTextItem>
     </>
   );

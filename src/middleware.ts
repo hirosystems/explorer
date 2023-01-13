@@ -1,6 +1,5 @@
+import { NetworkModes } from '@/common/types/network';
 import { NextRequest, NextResponse } from 'next/server';
-
-import { NetworkModes } from '@common/types/network';
 
 const replaceInvalidNetworkModeWithMainnet = (req: NextRequest) => {
   const url = req.nextUrl;

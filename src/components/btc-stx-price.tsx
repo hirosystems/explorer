@@ -1,27 +1,27 @@
+import { usdFormatter } from '@/common/utils';
+import { Circle } from '@/components/circle';
+import { Box, Icon } from '@/ui/components';
+import { BitcoinIcon } from '@/ui/icons';
+import { StxIcon } from '@/ui/icons/StxIcon';
 import { css } from '@emotion/react';
+import dynamic from 'next/dynamic';
+import * as React from 'react';
 import { FC, Fragment } from 'react';
-import { FaBitcoin } from 'react-icons/fa';
 
-import { Box, color } from '@stacks/ui';
-
-import { useCurrentBtcPrice, useCurrentStxPrice } from '@common/hooks/use-current-prices';
-import { usdFormatter } from '@common/utils';
-
-import { Circle } from '@components/circle';
-import { StxInline } from '@components/icons/stx-inline';
+import { useCurrentBtcPrice, useCurrentStxPrice } from '../app/common/hooks/use-current-prices';
 
 const wrapperStyle = css`
   display: flex;
   color: #fff;
   gap: 5px;
+  align-items: center;
 `;
 
-const iconStyle = (bg: string) => css`
+const iconStyle = css`
   position: relative;
   height: 18px;
   width: 18px;
   border-radius: 18px;
-  background-color: ${bg};
   svg {
     position: absolute;
     left: 50%;
@@ -35,7 +35,7 @@ const priceStyle = css`
   font-size: 14px;
 `;
 
-export const BtcStxPrice: FC = () => {
+const BtcStxPriceBase: FC = () => {
   const { data: btcPrice } = useCurrentBtcPrice();
   const { data: stxPrice } = useCurrentStxPrice();
   const formattedBtcPrice = usdFormatter.format(btcPrice);
@@ -45,17 +45,28 @@ export const BtcStxPrice: FC = () => {
   return (
     <Fragment>
       <Box css={wrapperStyle}>
-        <Circle css={iconStyle('white')}>
-          <FaBitcoin color={'#f7931a'} size={19} />
+        <Circle size={18} bg="white" css={iconStyle}>
+          <Icon as={BitcoinIcon} color={'#f7931a'} size={19} />
         </Circle>
-        <Box css={priceStyle}>{formattedBtcPrice}</Box>
+        <Box css={priceStyle} suppressHydrationWarning={true}>
+          {formattedBtcPrice}
+        </Box>
       </Box>
       <Box css={wrapperStyle}>
-        <Circle css={iconStyle(color('accent'))}>
-          <StxInline strokeWidth={2} size="11px" color="white" />
+        <Circle size={18} bg="accent.light" css={iconStyle}>
+          <Icon as={StxIcon} strokeWidth={2} size="11px" color="white" />
         </Circle>
-        <Box css={priceStyle}>{formattedStxPrice}</Box>
+        <Box css={priceStyle} suppressHydrationWarning={true}>
+          {formattedStxPrice}
+        </Box>
       </Box>
     </Fragment>
   );
 };
+
+export default BtcStxPriceBase;
+
+export const BtcStxPrice = dynamic(() => import('./btc-stx-price'), {
+  loading: () => null,
+  ssr: false,
+});

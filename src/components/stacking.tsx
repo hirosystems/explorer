@@ -1,18 +1,16 @@
-import { AddressQueryKeys, addressQK } from '@features/address/query-keys';
-import { useAddressQueries } from '@features/address/use-address-queries';
-import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
+import { getNextPageParam } from '@/common/utils';
+import { getStackingStartBlockHeight } from '@/common/utils/accounts';
+import { TxLink } from '@/components/links';
+import { PercentageCircle } from '@/components/percentage-circle';
+import { Pending } from '@/components/status';
+import { AddressQueryKeys, addressQK } from '@/features/address/query-keys';
+import { useAddressQueries } from '@/features/address/use-address-queries';
+import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
+import { Box, Circle, Flex, Stack, TextLink } from '@/ui/components';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { Caption, Text, Title } from '@/ui/typography';
 import * as React from 'react';
 import { useInfiniteQuery, useQuery } from 'react-query';
-
-import { Box, Circle, Flex, Stack, StxInline, color } from '@stacks/ui';
-
-import { getNextPageParam } from '@common/utils';
-import { getStackingStartBlockHeight } from '@common/utils/accounts';
-
-import { TxLink } from '@components/links';
-import { PercentageCircle } from '@components/percentage-circle';
-import { Pending } from '@components/status';
-import { Caption, Link, Text, Title } from '@components/typography';
 
 export const StackingPercentage = ({ balances, address }: any) => {
   const queries = useAddressQueries();
@@ -30,12 +28,12 @@ export const StackingPercentage = ({ balances, address }: any) => {
   if (stackingStartBlock) {
     if (!stacksInfo) {
       return (
-        <Box px="base-loose">
-          <Stack spacing="tight" py="loose">
+        <Box px="20px">
+          <Stack spacing="8px" py="24px">
             <Caption>Stacking progress</Caption>
             <Flex alignItems="center">
-              <Pending size="14px" mr="tight" />
-              <Text color={color('text-title')}>Calculating...</Text>
+              <Pending size="14px" mr="8px" />
+              <Text color={'textTitle'}>Calculating...</Text>
             </Flex>
           </Stack>
         </Box>
@@ -54,47 +52,47 @@ export const StackingPercentage = ({ balances, address }: any) => {
     const isStacking = unlockBlock > currentBlock;
 
     return (
-      <Box px="base-loose">
-        <Stack spacing="tight" py="loose">
+      <Box px="20px">
+        <Stack spacing="8px" py="24px">
           {isStacking ? (
             <Box mx="auto" size="64px">
-              <PercentageCircle strokeWidth={3} percentage={stackingPercentage} />
+              <PercentageCircle percentage={stackingPercentage} />
             </Box>
           ) : (
-            <Circle mx="auto" size="48px" mb="base" bg={color('invert')}>
-              <StxInline color={color('bg')} size="24px" />
+            <Circle mx="auto" size="48px" mb="16px" bg={'invert'}>
+              <StxIcon color={'bg'} size="24px" />
             </Circle>
           )}
           <Caption mx="auto">Stacking progress</Caption>
           {isStacking ? (
-            <Box mt="extra-tight">
-              <Flex position="relative" mb="base-tight" justifyContent="center" alignItems="center">
-                <Title fontSize={2} fontWeight={500} color={color('text-title')}>
+            <Box mt="4px">
+              <Flex position="relative" mb="12px" justifyContent="center" alignItems="center">
+                <Title fontSize={2} fontWeight={500} color={'textTitle'}>
                   {stackingPercentage.toLocaleString(undefined, { maximumFractionDigits: 2 })}%
                   completed
                 </Title>
               </Flex>
               <Box textAlign="center">
-                <Caption mb="base-tight">
+                <Caption mb="12px">
                   ~{blocksUntilUnlocked.toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
                   blocks remaining
                 </Caption>
                 <TxLink txid={balances?.stx?.lock_tx_id}>
-                  <Link target="_blank" color={color('brand')} fontSize={0}>
+                  <TextLink target="_blank" color={'brand'} fontSize={0}>
                     View Stacking transaction
-                  </Link>
+                  </TextLink>
                 </TxLink>
               </Box>
             </Box>
           ) : (
             <Box textAlign="center">
-              <Title mb="base-tight" fontSize={2} fontWeight={500} color={color('text-title')}>
+              <Title mb="12px" fontSize={2} fontWeight={500} color={'textTitle'}>
                 Completed at #{unlockBlock}
               </Title>
               <TxLink txid={balances?.stx?.lock_tx_id}>
-                <Link target="_blank" color={color('brand')} fontSize={0}>
+                <TextLink target="_blank" color={'brand'} fontSize={0}>
                   View Stacking transaction
-                </Link>
+                </TextLink>
               </TxLink>
             </Box>
           )}

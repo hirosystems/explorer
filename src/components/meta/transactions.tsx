@@ -1,45 +1,37 @@
-import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
-import { useTransactionQueries } from '@features/transaction/use-transaction-queries';
-import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
-import { useQuery } from 'react-query';
-
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-
-import { TransactionStatus } from '@common/constants';
 import {
   getContractName,
   getFunctionName,
   getMemoString,
   microToStacks,
-  toRelativeTime,
   truncateMiddle,
-} from '@common/utils';
-import { getTxErrorMessage } from '@common/utils/errors';
-import { getTransactionStatus } from '@common/utils/transactions';
+} from '@/common/utils';
+import React from 'react';
 
-import { Meta } from '@components/meta-head';
-import { getContractId } from '@components/transaction-details';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-const getTxPageTitle = (tx: Transaction | MempoolTransaction) => {
-  const defaultPageTitle = 'Transaction';
-
-  if (!tx?.tx_type) return defaultPageTitle;
-  switch (tx.tx_type) {
-    case 'contract_call':
-      return `Function call`;
-    case 'smart_contract':
-      return 'Contract deploy';
-    case 'coinbase':
-      return `Coinbase`;
-    case 'poison_microblock':
-      return 'Poison Microblock';
-    case 'token_transfer':
-      return 'STX transfer';
+export const getTxErrorMessage = (tx: Transaction | MempoolTransaction): string | undefined => {
+  switch (tx.tx_status) {
+    case 'abort_by_post_condition':
+      return 'This transaction would have succeeded, but was rolled back by a supplied post-condition.';
+    case 'abort_by_response':
+      return 'This transaction did not succeed because the transaction was aborted during its execution.';
+    default:
+      return undefined;
   }
 };
 
-const getOgTitle = (tx: Transaction | MempoolTransaction) => {
+export const getContractId = (transaction: Transaction | MempoolTransaction) => {
+  switch (transaction.tx_type) {
+    case 'contract_call':
+      return transaction.contract_call.contract_id;
+    case 'smart_contract':
+      return transaction.smart_contract.contract_id;
+    default:
+      return undefined;
+  }
+};
+
+export const getOgTitle = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
     case 'contract_call': {
       const functionName = getFunctionName(tx);
@@ -64,7 +56,7 @@ const getOgTitle = (tx: Transaction | MempoolTransaction) => {
   }
 };
 
-const getDescription = (tx: Transaction | MempoolTransaction) => {
+export const getDescription = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
     case 'token_transfer': {
       const amount = `${microToStacks(tx.token_transfer.amount)} STX`;
@@ -103,49 +95,4 @@ const getDescription = (tx: Transaction | MempoolTransaction) => {
           : ''
       }`;
   }
-};
-
-export const TransactionMeta = () => {
-  const queries = useTransactionQueries();
-  const { query } = useRouter();
-  const txId = query.txid as string;
-  const { data } = useQuery(
-    transactionQK(TransactionQueryKeys.transaction, txId),
-    queries.fetchSingleTransaction({ txId })
-  );
-  const transaction = data || ({} as Transaction);
-
-  const txStatus = useMemo(() => getTransactionStatus(transaction), [transaction]);
-  const pageTitle = `${getTxPageTitle(transaction)}${
-    txStatus === TransactionStatus.PENDING ? ' (Pending)' : ''
-  }${txStatus === TransactionStatus.FAILED ? ' (Failed) ' : ''}`;
-  const ogTitle = getOgTitle(transaction);
-  const ogUrl = `/txid/${transaction.tx_id}`;
-  const ogDescription = getDescription(transaction);
-
-  const labels =
-    'burn_block_time' in transaction
-      ? [
-          {
-            label: 'Confirmed',
-            data: `${toRelativeTime(transaction.burn_block_time * 1000)}, in block #${
-              transaction.block_height
-            }`,
-          },
-        ]
-      : undefined;
-
-  if (!transaction) return null;
-
-  return (
-    <Meta
-      title={pageTitle}
-      ogTitle={ogTitle}
-      description={ogDescription}
-      url={ogUrl}
-      txStatus={txStatus}
-      key={transaction.tx_status}
-      labels={labels}
-    />
-  );
 };

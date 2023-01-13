@@ -7,4 +7,7 @@ export enum AddressQueryKeys {
   nonce = 'nonceForAddress',
   nftHoldings = 'nftHoldings',
 }
-export const addressQK = (type: AddressQueryKeys, id?: string) => [type, id];
+export const addressQK = (type: AddressQueryKeys, id?: string): (string | undefined)[] => [
+  type,
+  id,
+];

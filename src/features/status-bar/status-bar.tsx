@@ -1,9 +1,8 @@
+import { Box, Icon, TextLink } from '@/ui/components';
+import { Text } from '@/ui/typography';
 import { css } from '@emotion/react';
-import { Link } from 'components/link';
 import { useEffect, useState } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
-
-import { Box, Text } from '@stacks/ui';
 
 enum Indicator {
   none = 'none',
@@ -53,9 +52,9 @@ export const StatusBar: React.FC = () => {
   const color = indicator === Indicator.critical ? '#C83532' : '#A96500';
   const icon =
     indicator === Indicator.critical ? (
-      <BsExclamationCircle color={color} css={iconStyle} />
+      <Icon as={BsExclamationCircle} color={color} css={iconStyle} />
     ) : (
-      <BsExclamationTriangle color={color} css={iconStyle} />
+      <Icon as={BsExclamationTriangle} color={color} css={iconStyle} />
     );
   return (
     <Box css={backgroundStyle}>
@@ -67,7 +66,7 @@ export const StatusBar: React.FC = () => {
         </Text>{' '}
         <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'}>
           More information on the{' '}
-          <Link
+          <TextLink
             href="https://status.hiro.so/"
             target="_blank"
             css={css`
@@ -75,7 +74,7 @@ export const StatusBar: React.FC = () => {
             `}
           >
             Hiro status page
-          </Link>
+          </TextLink>
           .
         </Text>
       </Box>
