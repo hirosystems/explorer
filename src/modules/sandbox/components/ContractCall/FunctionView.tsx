@@ -1,33 +1,26 @@
-import Tippy from '@tippyjs/react';
 import { Formik } from 'formik';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { openContractCall } from '@stacks/connect';
 import {
-  AssetInfo,
   ClarityAbiFunction,
   ClarityValue,
   FungibleConditionCode,
-  FungiblePostCondition,
   NonFungibleConditionCode,
-  NonFungiblePostCondition,
   PostCondition,
   PostConditionMode,
-  STXPostCondition,
   createAssetInfo,
   encodeClarityValue,
-  getTypeString,
   isClarityAbiList,
   isClarityAbiOptional,
   isClarityAbiPrimitive,
   listCV,
-  makeContractCall,
   makeStandardFungiblePostCondition,
   makeStandardNonFungiblePostCondition,
   makeStandardSTXPostCondition,
   stringAsciiCV,
 } from '@stacks/transactions';
-import { Box, Button, Flex, IconButton, Input, Stack, color } from '@stacks/ui';
+import { Box, Button, Flex, Input, Stack, color } from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -35,7 +28,6 @@ import { validateStacksAddress } from '@common/utils';
 
 import { Dropdown } from '@components/Dropdown';
 import { InfoCircleIcon } from '@components/icons/info-circle';
-import { ToolsIcon } from '@components/icons/tools';
 import { Section } from '@components/section';
 import { Toggle } from '@components/toggle';
 import { Tooltip } from '@components/tooltip';
@@ -211,9 +203,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   );
 
   useEffect(() => {
-    if (!showPostCondition || isPostConditionModeEnabled) {
+    if (!showPostCondition) {
       setPostCondition(undefined);
     }
+    if (showPostCondition) {
+      setPostConditionMode(PostConditionMode.Deny);
+    }
+    // if (isPostConditionModeEnabled) {
+    //   setPostCondition(undefined);
+    //   setShowPostCondition(false);
+    // }
   }, [showPostCondition, isPostConditionModeEnabled]);
 
   const initialPostConditionParameterValues: PostConditionParameters = {
@@ -303,8 +302,14 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         }
       }}
       render={({ handleSubmit, handleChange, values, errors, setFieldValue }) => {
-        console.log({ values });
-
+        if (!isPostConditionModeEnabled) {
+          setFieldValue('address', undefined);
+          setFieldValue('amount', undefined);
+          setFieldValue('conditionCode', undefined);
+          setFieldValue('assetName', undefined);
+          setFieldValue('assetAddress', undefined);
+          setFieldValue('assetContractName', undefined);
+        }
         return (
           <Section
             overflowY="visible"
@@ -329,16 +334,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                           ? PostConditionMode.Allow
                           : PostConditionMode.Deny
                       )
-                    } // TODO: If post condition is added, switch to deny
+                    }
                     label="Allow Mode"
                     value={isPostConditionModeEnabled === PostConditionMode.Allow ? true : false}
                   />
                   <Tooltip
                     label={
                       <Box>
-                        Enabling Allow mode is less secure than deny mode because it permits asset
-                        transfers that aren't not covered by post conditions. In Deny mode no other
-                        asset transfers are permitted besides those named in the post conditions
+                        Allow mode is less secure than Deny mode. Allow mode permits asset transfers
+                        that are not covered by post conditions. In Deny mode no other asset
+                        transfers are permitted besides those named in the post conditions
                       </Box>
                     }
                   >

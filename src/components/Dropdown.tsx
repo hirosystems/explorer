@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Box, Button, ChevronIcon, ColorModeString, Flex, color, useColorMode } from '@stacks/ui';
 
@@ -25,23 +25,21 @@ export const Dropdown: React.FC<DropdownProps> = ({
   onChange,
   optionRenderer,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Option>(defaultOption ?? options[0]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState<Option>(defaultOption ?? options[0]);
   const { colorMode } = useColorMode();
 
   const toggle = () => setIsOpen(!isOpen);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     function handleClickOutside(event: any) {
       if (dropdownRef.current && !dropdownRef?.current?.contains(event?.target)) {
         setIsOpen(false);
       }
     }
-    // Bind the event listener
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [dropdownRef]);
