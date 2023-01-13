@@ -1,9 +1,5 @@
 import styled from '@emotion/styled';
-<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from 'react';
-=======
-import * as React from 'react';
->>>>>>> e469188 (feat(post-conditions): fixing typing issues)
 
 import { Box, Button, ChevronIcon, ColorModeString, Flex, color, useColorMode } from '@stacks/ui';
 

@@ -244,9 +244,6 @@ const checkPostConditionParameters = (
   return errors;
 };
 
-// type FormikValues = FormType & PostConditionParameters>;
-// type FormikValues = Record<string, number | string>;
-
 interface FormikInitialValues extends PostConditionParameters {
   isPostConditionModeEnabled: PostConditionMode;
   functionParameterValues: FormType;
@@ -309,7 +306,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     initialValues: {
       functionParameterValues: initialFunctionParameterValues,
       ...initialPostConditionParameterValues,
-      isPostConditionModeEnabled: PostConditionMode.Deny,
+      isPostConditionModeEnabled,
     },
   });
 
