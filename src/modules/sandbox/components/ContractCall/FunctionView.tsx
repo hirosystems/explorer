@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react';
 import { Formik } from 'formik';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -24,7 +25,7 @@ import {
   makeStandardNonFungiblePostCondition,
   makeStandardSTXPostCondition,
 } from '@stacks/transactions';
-import { Box, Button, Flex, Input, Stack, color } from '@stacks/ui';
+import { Box, Button, Flex, IconButton, Input, Stack, color } from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -120,9 +121,6 @@ function getPostCondition(
 
 type FormType = Record<string, ValueType | ListValueType>;
 
-// type FormikValues = FormType & PostConditionParameters>;
-// type FormikValues = Record<string, number | string>;
-
 interface FormikInitialValues extends PostConditionParameters {
   isPostConditionModeEnabled: PostConditionMode;
   functionParameterValues: FormType;
@@ -173,7 +171,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     initialValues: {
       functionParameterValues: initialFunctionParameterValues,
       ...initialPostConditionParameterValues,
-      isPostConditionModeEnabled: PostConditionMode.Deny,
+      isPostConditionModeEnabled,
     },
   });
 
@@ -183,7 +181,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         {
           functionParameterValues: initialFunctionParameterValues,
           ...initialPostConditionParameterValues,
-          isPostConditionModeEnabled: PostConditionMode.Deny,
+          isPostConditionModeEnabled,
         } as FormikInitialValues
       }
       validateOnChange={false}
@@ -254,8 +252,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             functionArgs: Object.values(final),
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
-            // @ts-
             // TODO: jannik is fixing this
+            // @ts-ignore
             postConditions: postCondition
               ? getPostCondition(postCondition, {
                   address,
@@ -278,6 +276,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           title={`${fn.name} (${fn.access} function)`}
           borderRadius={'0'}
         >
+          {/* <Tooltip label="info">
+            <Flex alignItems={'center'}>
+              <InfoCircleIcon size="18px" />
+            </Flex>
+          </Tooltip> */}
+          {/* <Tooltip label={`Next cycle starts in `}>
+            <Flex alignItems={'center'}>
+              <InfoCircleIcon size="18px" />
+            </Flex>
+          </Tooltip> */}
           {readOnlyValue ? (
             <ReadOnlyField
               fn={fn}
@@ -299,13 +307,15 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                       value={values.functionParameterValues[name]}
                     />
                   ))}
-                  <Button
-                    onClick={() => {
-                      setShowPostCondition(!showPostCondition);
-                    }}
-                  >
-                    {!showPostCondition ? 'Add post condition' : 'Remove post condition'}
-                  </Button>
+                  {fn.access === 'public' && (
+                    <Button
+                      onClick={() => {
+                        setShowPostCondition(!showPostCondition);
+                      }}
+                    >
+                      {!showPostCondition ? 'Add post condition' : 'Remove post condition'}
+                    </Button>
+                  )}
                   {showPostCondition && (
                     <Box>
                       <Flex marginBottom="16px">
@@ -318,14 +328,23 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                             )
                           } // TODO: If post condition is added, switch to deny
                           label="Allow Mode"
-                          value={isPostConditionModeEnabled ? true : false}
+                          value={
+                            isPostConditionModeEnabled === PostConditionMode.Allow ? true : false
+                          }
                         />
-                        <Tooltip label="info">
-                          <InfoCircleIcon size="18px" />
-                        </Tooltip>
-                        <Tooltip label="Contract tools">
-                          <InfoCircleIcon size="18px" />
-                          {/* <IconButton icon={ToolsIcon} /> */}
+                        <Tooltip
+                          label={
+                            <Box>
+                              Enabling Allow mode is less secure than deny mode because it permits
+                              asset transfers that aren't not covered by post conditions. In Deny
+                              mode no other asset transfers are permitted besides those named in the
+                              post conditions
+                            </Box>
+                          }
+                        >
+                          <Flex alignItems="center" marginLeft="8px">
+                            <InfoCircleIcon size="18px" />
+                          </Flex>
                         </Tooltip>
                       </Flex>
                       <Box maxWidth="260px" maxHeight="42px" height="42px" marginBottom="16px">
