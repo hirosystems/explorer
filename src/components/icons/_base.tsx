@@ -1,14 +1,10 @@
+import { Box, BoxProps } from '@/ui/components';
+import { forwardRef } from '@chakra-ui/react';
 import React from 'react';
-
-import { Box, BoxProps } from '@stacks/ui';
-import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
 export type SvgProps = React.FC<BoxProps>;
 
-export const BaseSvg: ForwardRefExoticComponentWithAs<BoxProps, 'svg'> = forwardRefWithAs<
-  BoxProps,
-  'svg'
->(({ as = 'svg', ...props }, ref) => (
+export const BaseSvg = forwardRef<BoxProps, 'svg'>(({ as = 'svg', ...rest }, ref) => (
   <Box
     as={as}
     width="44px"
@@ -20,6 +16,6 @@ export const BaseSvg: ForwardRefExoticComponentWithAs<BoxProps, 'svg'> = forward
     strokeLinecap="round"
     strokeLinejoin="round"
     ref={ref}
-    {...props}
+    {...rest}
   />
 ));

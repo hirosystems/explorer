@@ -1,6 +1,6 @@
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { TransactionStatus } from '@/common/constants';
 
-import { TransactionStatus } from '@common/constants';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
   if (tx?.tx_status === 'pending') {

@@ -1,14 +1,14 @@
+'use client';
+
+import { useContractFtMetadata } from '@/app/common/queries/useContractFtMetadata';
+import { useApi } from '@/common/api/client';
+import { ftDecimals, getAssetNameParts, initBigNumber } from '@/common/utils';
+import { TxLink } from '@/components/links';
+import { getTicker } from '@/components/tx-events';
+import { Box, Flex, FlexProps, Stack } from '@/ui/components';
+import { Caption, Text } from '@/ui/typography';
 import React from 'react';
 
-import { Box, Flex, FlexProps, Stack, color } from '@stacks/ui';
-
-import { ftDecimals, getAssetNameParts, initBigNumber } from '@common/utils';
-
-import { TxLink } from '@components/links';
-import { getTicker } from '@components/tx-events';
-import { Caption, Text } from '@components/typography';
-
-import { useTokenMetadata } from '../../common/hooks/use-token-metadata';
 import { TokenAvatar } from '../token-avatar';
 
 interface TokenAssetListItemProps extends FlexProps {
@@ -23,27 +23,26 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   tokenType,
   bnsName,
 }) => {
+  const api = useApi();
   const { address, asset, contract } = getAssetNameParts(token);
+  const contractId = `${address}.${contract}`;
 
-  const {
-    ftMetadata: { data: ftMetadata },
-    nftMetadata: { data: nftMetadata },
-  } = useTokenMetadata(token, tokenType);
+  const { data: ftMetadata } = useContractFtMetadata(api, { contractId });
 
   const totalType = tokenType === 'non_fungible_tokens' ? 'count' : 'balance';
 
   if (initBigNumber(amount).isLessThanOrEqualTo(0)) return null;
 
   return (
-    <Flex justifyContent="space-between" px="base" py="base">
+    <Flex justifyContent="space-between" px="16px" py="16px">
       <Box>
-        <Flex alignItems="center" mb={'extra-tight'}>
-          <TokenAvatar token={token} tokenMetadata={ftMetadata || nftMetadata} />
-          <Stack spacing="extra-tight">
-            <Text color={color('text-title')} fontWeight="600">
+        <Flex alignItems="center" mb={'4px'}>
+          <TokenAvatar token={token} tokenMetadata={ftMetadata} />
+          <Stack spacing="4px">
+            <Text color={'textTitle'} fontWeight="600">
               {bnsName || asset}
             </Text>
-            <Stack isInline spacing="extra-tight" divider={<Caption>∙</Caption>} wrap="wrap">
+            <Stack isInline spacing="4px" divider={<Caption>∙</Caption>} wrap="wrap">
               <Caption>{ftMetadata?.symbol || getTicker(asset).toUpperCase()}</Caption>
               <TxLink txid={`${address}.${contract}`}>
                 <Caption
@@ -61,7 +60,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
         </Flex>
       </Box>
       <Flex justifyContent="flex-end" alignItems="center" textAlign="right">
-        <Text color={color('text-body')} textAlign="right">
+        <Text color={'textBody'} textAlign="right">
           {totalType === 'balance'
             ? ftDecimals(amount, ftMetadata?.decimals || 0)
             : parseInt(amount).toLocaleString()}

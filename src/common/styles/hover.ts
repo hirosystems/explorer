@@ -1,9 +1,7 @@
 import { css } from '@emotion/react';
 
-import { color } from '@stacks/ui';
-
-const container = css`
-  border-bottom: 1px solid var(--colors-border);
+const container = (colorMode: string) => css`
+  border-bottom: 1px solid var(--stacks-colors-border-${colorMode});
   position: relative;
   &:last-child {
     border-bottom: none;
@@ -14,11 +12,11 @@ const common = css`
   display: block;
   content: '';
   position: absolute;
-  background: ${color('accent')};
+  background: var(--stacks-colors-accent-light);
 `;
 
-export const bottomLineCss = css`
-  ${container};
+export const bottomLineCss = (colorMode: string) => css`
+  ${container(colorMode)};
   &:after {
     ${common};
     bottom: 0;
@@ -37,11 +35,11 @@ export const bottomLineCss = css`
   }
 `;
 
-export const leftLineCss = css`
-  ${container};
+export const leftLineCss = (colorMode: string) => css`
+  ${container(colorMode)};
   &:after {
     ${common};
-    left: -24px;
+    left: -21px;
     width: 3px;
     top: 50%;
     height: 0;

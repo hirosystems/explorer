@@ -1,3 +1,9 @@
+import { useVerticallyStackedElementsBorderStyle } from '@/app/common/styles/border';
+import { hexToString } from '@/common/utils';
+import { TokenAssetListItem } from '@/components/balances/token-asset-list-item';
+import { Section } from '@/components/section';
+import { Box, FlexProps, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@/ui/components';
+import { Caption } from '@/ui/typography';
 import * as React from 'react';
 import { useMemo } from 'react';
 
@@ -6,21 +12,14 @@ import {
   NonFungibleTokenHoldingsList,
 } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
-import { Box, FlexProps, Grid, GridProps, color } from '@stacks/ui';
-
-import { hexToString } from '@common/utils';
-
-import { TokenAssetListItem } from '@components/balances/token-asset-list-item';
-import { HoverableItem } from '@components/hoverable';
-import { Section } from '@components/section';
-import { Caption } from '@components/typography';
 
 export const NftBalances: React.FC<{ balances: AddressBalanceResponse; bnsHexValues: any }> = ({
   balances,
   bnsHexValues,
-}) =>
-  Object.keys(balances.non_fungible_tokens).length ? (
-    <>
+}) => {
+  const verticallyStackedElementsBorderStyle = useVerticallyStackedElementsBorderStyle();
+  return Object.keys(balances.non_fungible_tokens).length ? (
+    <Box css={verticallyStackedElementsBorderStyle}>
       {Object.keys(balances.non_fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
           amount={balances.non_fungible_tokens[key]?.count || ''}
@@ -34,12 +33,13 @@ export const NftBalances: React.FC<{ balances: AddressBalanceResponse; bnsHexVal
           }
         />
       ))}
-    </>
+    </Box>
   ) : (
-    <Grid minHeight="220px" textAlign="center" placeItems="center" padding="base">
+    <Grid minHeight="220px" textAlign="center" placeItems="center" padding="16px">
       <Caption>This account has no collectibles.</Caption>
     </Grid>
   );
+};
 
 export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) =>
   Object.keys(balances.fungible_tokens).length ? (
@@ -54,33 +54,14 @@ export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ bal
       ))}
     </>
   ) : (
-    <Grid minHeight="220px" textAlign="center" placeItems="center" padding="base">
+    <Grid minHeight="220px" textAlign="center" placeItems="center" padding="16px">
       <Caption>This account has no tokens.</Caption>
     </Grid>
   );
 
-const Tab: React.FC<GridProps & { label: string; isActive?: boolean }> = ({
-  label,
-  isActive,
-  ...rest
-}) => (
-  <Grid px="base" py="base-tight" placeItems="center" {...rest}>
-    <Caption color={color(isActive ? 'text-title' : 'text-caption')}>{label}</Caption>
-  </Grid>
-);
-
-const tabs: { label: string; slug: 'ft' | 'nft' }[] = [
-  { label: 'Tokens', slug: 'ft' },
-  { label: 'Collectibles', slug: 'nft' },
-];
-
 export const TokenBalancesCard: React.FC<
   FlexProps & { balances: AddressBalanceResponse; nftHoldings?: NonFungibleTokenHoldingsList }
 > = ({ balances, nftHoldings, ...rest }) => {
-  const [activeTab, setActiveTab] = React.useState<'ft' | 'nft'>('ft');
-
-  const TabContent = activeTab === 'ft' ? FtBalances : NftBalances;
-
   const bnsHexValues = useMemo(
     () =>
       nftHoldings?.results
@@ -97,30 +78,26 @@ export const TokenBalancesCard: React.FC<
               }
             : {};
           return acc;
-        }, {} as Record<string, { name?: string; namespace?: string }>),
+        }, {} as Record<string, { name?: string; namespace?: string }>) || {},
     [nftHoldings]
   );
 
-  console.log(222, bnsHexValues);
-
   return (
-    <Section mb="extra-loose" title="Holdings" {...rest}>
-      <Grid gridTemplateColumns={`repeat(${tabs.length}, 1fr)`} flexShrink={0}>
-        {tabs.map(tab => {
-          return (
-            <HoverableItem isActive={tab.slug === activeTab} placement="bottom" key={tab.slug}>
-              <Tab
-                isActive={tab.slug === activeTab}
-                onClick={() => setActiveTab(tab.slug)}
-                label={tab.label}
-              />
-            </HoverableItem>
-          );
-        })}
-      </Grid>
-      <Box minHeight="220px" maxHeight="500px" overflowY="auto">
-        <TabContent balances={balances} bnsHexValues={bnsHexValues} />
-      </Box>
+    <Section mb="32px" title="Holdings" {...rest}>
+      <Tabs variant={'soft-rounded'} borderRadius={'0px'} border={'none'} isLazy bg={'transparent'}>
+        <TabList>
+          <Tab fontSize="12px">Tokens</Tab>
+          <Tab fontSize="12px">Collectibles</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel>
+            <FtBalances balances={balances} />
+          </TabPanel>
+          <TabPanel>
+            <NftBalances balances={balances} bnsHexValues={bnsHexValues} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </Section>
   );
 };

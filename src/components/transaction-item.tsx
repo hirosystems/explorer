@@ -1,18 +1,19 @@
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { toRelativeTime, truncateMiddle } from '@/common/utils';
+import { getTransactionStatus } from '@/common/utils/transactions';
+import { ExplorerLink, buildUrl } from '@/components/links';
+import { BoxProps, Circle, Flex, FlexProps, Icon, Stack, Tooltip } from '@/ui/components';
+import { Caption, Text, Title } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
+import { FC } from 'react';
+import { HiOutlineArrowSmRight } from 'react-icons/hi';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { BoxProps, Flex, FlexProps, Stack, color } from '@stacks/ui';
-import { forwardRefWithAs } from '@stacks/ui-core';
 
-import { getTxTitle, toRelativeTime, truncateMiddle } from '@common/utils';
-
-import { ArrowRightIcon } from '@components/icons/arrow-right';
-import { ItemIcon, getTxTypeIcon } from '@components/item-icon';
-import { Link } from '@components/link';
-import { ExplorerLink } from '@components/links';
-import { getTransactionTypeLabel } from '@components/token-transfer/utils';
-import { Tooltip } from '@components/tooltip';
-import { Caption, Text, Title } from '@components/typography';
+import { TxIcon, getTxTypeIcon } from '../app/common/components/TxIcon';
+import { useTxTitle } from '../app/common/components/tx-lists/common/utils/tx';
+import { getTransactionTypeLabel } from '../app/common/components/tx-lists/utils/tx';
 
 export { getTxTypeIcon };
 
@@ -20,7 +21,6 @@ export interface TxItemProps extends FlexProps {
   tx: Transaction | MempoolTransaction;
   minimal?: boolean;
   isFocused?: boolean;
-  isHovered?: boolean;
   target?: string;
   principal?: string;
   onClick?: any;
@@ -49,10 +49,12 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
   ...rest
 }) => (
   <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
-    <ExplorerLink path={`/address/${encodeURIComponent(principal)}`}>
+    <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
       <Caption
-        as={Link}
+        as={'a'}
+        color={`brand.${useColorMode().colorMode}`}
         _hover={{
+          cursor: 'pointer',
           textDecoration: 'underline',
         }}
         textDecoration="none"
@@ -72,34 +74,24 @@ export const AddressArea = React.memo(
     if (tx.tx_type === 'token_transfer') {
       if (tx.sender_address === principal) {
         return (
-          <Stack
-            flexWrap="wrap"
-            isInline
-            spacing="extra-tight"
-            {...({ as: 'span', ...rest } as any)}
-          >
+          <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
             <Caption display={['none', 'none', 'none', 'block']}>Sent to</Caption>
             <PrincipalLink principal={tx.token_transfer.recipient_address} />
           </Stack>
         );
       } else if (tx.token_transfer.recipient_address === principal) {
         return (
-          <Stack
-            flexWrap="wrap"
-            isInline
-            spacing="extra-tight"
-            {...({ as: 'span', ...rest } as any)}
-          >
+          <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
             <Caption display={['none', 'none', 'none', 'block']}>Received from</Caption>
             <PrincipalLink principal={tx.sender_address} />
           </Stack>
         );
       }
       return (
-        <Stack flexWrap="wrap" isInline spacing="extra-tight" {...({ as: 'span', ...rest } as any)}>
+        <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
           <PrincipalLink principal={tx.sender_address} />
-          <Flex as="span" color={color('text-caption')}>
-            <ArrowRightIcon strokeWidth="1.5" size="15px" />
+          <Flex as="span" color={'textCaption'}>
+            <Icon as={HiOutlineArrowSmRight} strokeWidth="1.5" size="15px" />
           </Flex>
           <PrincipalLink principal={tx.token_transfer.recipient_address} />
         </Stack>
@@ -131,14 +123,20 @@ export const AddressArea = React.memo(
 );
 
 const TxItemTitleArea = React.memo(({ title, tx, principal }: any) => (
-  <Stack as="span" spacing="tight" flexWrap="wrap">
-    <Title className={'search-result-title'} fontWeight="500" display="block" fontSize="16px">
+  <Stack as="span" spacing="8px" flexWrap="wrap" minWidth={0}>
+    <Title
+      className={'search-result-title'}
+      fontWeight="500"
+      display="block"
+      fontSize="16px"
+      color={'midnight'}
+    >
       {title}
     </Title>
     <Stack
       as="span"
       isInline
-      spacing="extra-tight"
+      spacing="4px"
       alignItems="center"
       flexWrap="wrap"
       divider={<Caption>∙</Caption>}
@@ -151,11 +149,11 @@ const TxItemTitleArea = React.memo(({ title, tx, principal }: any) => (
 
 export const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> = React.memo(
   props => {
-    const { tx, ...rest } = props;
+    const { tx } = props;
     const date = getRelativeTimestamp(tx);
 
     return (
-      <Text ml="tight" fontSize="14px" textAlign="right" color={color('text-body')} {...rest}>
+      <Text ml="8px" fontSize="14px" textAlign="right" color={'textBody'} suppressHydrationWarning>
         {date}
       </Text>
     );
@@ -173,98 +171,71 @@ export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
   </>
 ));
 
-const LargeVersion = React.memo(
-  ({
+export const TxItem: FC<TxItemProps> = props => {
+  const {
     tx,
+    isFocused,
+    minimal = false,
+    as = 'span',
     principal,
     hideIcon,
     hideRightElements,
-    isHovered,
-  }: {
-    tx: Transaction | MempoolTransaction;
-    principal?: string;
-    hideIcon?: boolean;
-    isHovered?: boolean;
-    hideRightElements?: boolean;
-  }) => {
-    const title = getTxTitle(tx, true);
-
-    const isPending = tx.tx_status === 'pending';
-    const isConfirmed = tx.tx_status === 'success';
-    const isAnchored = !(tx as any).is_unanchored;
-    const didFail = !isPending && !isConfirmed;
-
-    return (
-      <>
-        <Flex display="flex" as="span" alignItems="center" data-test="tx-item">
-          {!hideIcon ? <ItemIcon mr="base" type="tx" tx={tx} /> : null}
-          <TxItemTitleArea
-            isHovered={isHovered}
-            title={title || truncateMiddle(tx.tx_id, 12)}
-            tx={tx}
-            principal={principal}
-          />
-        </Flex>
-        {!hideRightElements ? (
-          <Stack alignItems="flex-end" textAlign="right" as="span" spacing="tight">
-            <Timestamp tx={tx} suppressHydrationWarning={true} />
-            <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
-              <Caption
-                mr="6px"
-                as="span"
-                data-test="tx-caption"
-                color={didFail ? color('feedback-error') : color('invert')}
-              >
-                {isPending && 'Pending'}
-                {isConfirmed && !isAnchored && 'In microblock'}
-                {isConfirmed && isAnchored && 'In anchor block'}
-                {didFail && 'Failed'}
-              </Caption>
-              {'·'}
-              <Caption mt="1px" ml="6px" mr={isPending ? '6px' : undefined}>
-                {truncateMiddle(tx.tx_id, 4)}
-              </Caption>
-              {isPending && <Nonce nonce={tx.nonce} />}
-            </Flex>
-          </Stack>
+    ...rest
+  } = props;
+  const network = useGlobalContext().activeNetwork;
+  const href = buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network);
+  const title = useTxTitle(tx, href, true);
+  const isPending = tx.tx_status === 'pending';
+  const isConfirmed = tx.tx_status === 'success';
+  const isAnchored = !(tx as any).is_unanchored;
+  const didFail = !isPending && !isConfirmed;
+  return (
+    <Flex
+      justifyContent="space-between"
+      alignItems="stretch"
+      outline="none"
+      py="24px"
+      flexShrink={0}
+      width="100%"
+      as={as}
+      {...rest}
+      display="flex"
+    >
+      <Flex display="flex" as="span" alignItems="center" data-test="tx-item" minWidth={0}>
+        {!hideIcon ? (
+          <Circle flexShrink={0}>
+            <TxIcon mr="16px" txType={tx.tx_type} txStatus={getTransactionStatus(tx)} />
+          </Circle>
         ) : null}
-      </>
-    );
-  }
-);
-
-export const TxItem = React.memo(
-  forwardRefWithAs<TxItemProps, 'span'>((props, ref) => {
-    const {
-      tx,
-      isFocused,
-      minimal = false,
-      as = 'span',
-      principal,
-      hideIcon,
-      hideRightElements,
-      ...rest
-    } = props;
-    return (
-      <Flex
-        justifyContent="space-between"
-        alignItems="stretch"
-        outline="none"
-        py="loose"
-        flexShrink={0}
-        ref={ref}
-        width="100%"
-        as={as}
-        {...rest}
-        display="flex"
-      >
-        <LargeVersion
-          hideRightElements={hideRightElements}
-          hideIcon={hideIcon}
+        <TxItemTitleArea
+          title={title || truncateMiddle(tx.tx_id, 12)}
+          tx={tx}
           principal={principal}
-          tx={tx as any}
         />
       </Flex>
-    );
-  })
-);
+      {!hideRightElements ? (
+        <Stack alignItems="flex-end" textAlign="right" as="span" spacing="8px">
+          <Timestamp tx={tx} />
+          <Flex justifyContent="flex-end" alignItems="flex-end" flexWrap="wrap">
+            <Caption
+              mr="6px"
+              as="span"
+              data-test="tx-caption"
+              color={didFail ? 'feedbackError' : 'invert'}
+            >
+              {isPending && 'Pending'}
+              {isConfirmed && !isAnchored && 'In microblock'}
+              {isConfirmed && isAnchored && 'In anchor block'}
+              {didFail && 'Failed'}
+            </Caption>
+            {'·'}
+            <Caption mt="1px" ml="6px" mr={isPending ? '6px' : undefined}>
+              {truncateMiddle(tx.tx_id, 4)}
+            </Caption>
+            {isPending && <Nonce nonce={tx.nonce} />}
+          </Flex>
+        </Stack>
+      ) : null}
+    </Flex>
+  );
+};

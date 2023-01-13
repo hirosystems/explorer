@@ -1,27 +1,12 @@
-import { NextPage } from 'next';
-import React from 'react';
+import { Meta } from '@/components/meta-head';
 
-import { Box } from '@stacks/ui';
+import AppTransactionsPage from '../app/transactions/page';
 
-import { DEFAULT_LIST_LIMIT } from '@common/constants';
-
-import { Meta } from '@components/meta-head';
-import { Title } from '@components/typography';
-
-import { TxsListWithTabsMemoized } from '@modules/TransactionList/components/TxsListWithTabsMemoized';
-
-const TransactionsPage: NextPage = () => {
+export default function TransactionsPage() {
   return (
     <>
       <Meta title="Recent transactions" />
-      <Box mb="base-loose">
-        <Title mt="72px" color="white" as="h1" fontSize="36px">
-          Transactions
-        </Title>
-        <TxsListWithTabsMemoized infinite limit={DEFAULT_LIST_LIMIT} />
-      </Box>
+      <AppTransactionsPage />
     </>
   );
-};
-
-export default TransactionsPage;
+}

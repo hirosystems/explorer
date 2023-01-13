@@ -1,55 +1,27 @@
-import { TransactionQueryKeys, transactionQK } from '@features/transaction/query-keys';
-import { getTransactionQueries } from '@features/transaction/use-transaction-queries';
-import type { NextPage } from 'next';
+import { claritySyntax } from '@/app/common/claritySyntax';
+import { SkeletonPageWithTagsAndTwoColumns } from '@/components/loaders/skeleton-transaction';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useQuery } from 'react-query';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
+import AppTxidPageError from '../../app/txid/[txid]/error';
 
-import { Meta } from '@components/meta-head';
-import { TransactionMeta } from '@components/meta/transactions';
-import { UnlockingScheduleModal } from '@components/modals/unlocking-schedule';
-import { TransactionPageComponent } from '@components/transaction-page-component';
-import { TxNotFound } from '@components/tx-not-found';
+export const AppTxidPage = dynamic(() => import('../../app/txid/[txid]/page'), {
+  loading: () => <SkeletonPageWithTagsAndTwoColumns />,
+  ssr: false,
+});
 
-interface TransactionPageProps {
-  isPossiblyValid?: boolean;
-  error?: boolean;
-}
-
-const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyValid }) => {
+export default function TxidPage() {
   const { query } = useRouter();
   const txid = query.txid as string;
-  const networkUrl = useAppSelector(selectActiveNetwork).url;
-  const queries = getTransactionQueries(networkUrl);
-
-  const queryOptions = {
-    staleTime: 2000,
-  };
-
-  const { data: tx } = useQuery(
-    transactionQK(TransactionQueryKeys.transaction, txid),
-    queries.fetchSingleTransaction({ txId: txid }),
-    queryOptions
-  );
-
-  if (error)
-    return (
-      <>
-        <Meta title="Transaction not found" />
-        <TxNotFound isPending={isPossiblyValid} />
-      </>
-    );
-
   return (
-    <>
-      <UnlockingScheduleModal />
-      <TransactionMeta />
-      <TransactionPageComponent />
-    </>
+    <ErrorBoundary
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <AppTxidPageError error={error} reset={resetErrorBoundary} />
+      )}
+    >
+      <AppTxidPage params={{ txid }} claritySyntax={claritySyntax} />
+    </ErrorBoundary>
   );
-};
-
-export default TransactionPage;
+}

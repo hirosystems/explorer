@@ -1,28 +1,23 @@
-import { IconFlask } from '@tabler/icons';
+import { Badge } from '@/common/components/Badge';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { capitalize } from '@/common/utils';
+import { Flex, Icon } from '@/ui/components';
+import { FlaskIcon } from '@/ui/icons';
+import { Text } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
 
-import { Box, Flex, color } from '@stacks/ui';
-
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { capitalize } from '@common/utils';
-
-import { Badge, BadgeProps } from '@components/badge';
-
-export const NetworkModeBanner: React.FC<BadgeProps> = props => {
-  const networkMode = useAppSelector(selectActiveNetwork).mode;
-  return networkMode === 'testnet' ? (
-    <Badge flexShrink={0} bg="white" {...props}>
-      <Flex alignItems="center">
-        <Box
-          as={IconFlask}
-          fill="rgba(0,0,0,0.1)"
-          color={color('brand')}
-          size="16px"
-          mr="extra-tight"
-        />
-        <Box color="ink">{capitalize(networkMode)} mode</Box>
+export const NetworkModeBanner: React.FC = () => {
+  const networkMode = useGlobalContext().activeNetwork.mode;
+  if (networkMode !== 'testnet') return null;
+  return (
+    <Badge bg="white" border={'none'}>
+      <Flex alignItems="center" as={'span'}>
+        <Icon as={FlaskIcon} color={`brand.${useColorMode().colorMode}`} size="16px" mr="4px" />
+        <Text color={`textTitle.light`} whiteSpace={'nowrap'} as={'span'}>
+          {capitalize(networkMode)} mode
+        </Text>
       </Flex>
     </Badge>
-  ) : null;
+  );
 };

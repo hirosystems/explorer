@@ -1,42 +1,25 @@
-import { IconArrowRight } from '@tabler/icons';
+import { truncateMiddle } from '@/common/utils';
+import { AddressLink } from '@/components/links';
+import { Flex, Icon } from '@/ui/components';
+import { Caption } from '@/ui/typography';
 import React from 'react';
+import { TbArrowRight } from 'react-icons/tb';
 
-import { Box, Flex, Stack, StackProps, color } from '@stacks/ui';
-
-import { truncateMiddle } from '@common/utils';
-
-import { AddressLink } from '@components/links';
-import { Caption, Link } from '@components/typography';
-
-interface SenderRecipientProps extends StackProps {
+interface SenderRecipientProps {
   sender: string;
   recipient: string;
 }
 
 export const SenderRecipient: React.FC<SenderRecipientProps> = React.memo(
-  ({ sender, recipient, ...rest }) => (
-    <Stack isInline spacing="extra-tight" {...{ as: 'span', ...rest }}>
+  ({ sender, recipient }) => (
+    <Flex gap={'4px'}>
       <Caption display="inline-block">
-        <AddressLink principal={sender}>
-          <Link display="inline-block" as="a">
-            {truncateMiddle(sender)}
-          </Link>
-        </AddressLink>
+        <AddressLink principal={sender}>{truncateMiddle(sender)}</AddressLink>
       </Caption>
-      <Box
-        as={IconArrowRight}
-        display="inline-block"
-        size="15px"
-        strokeWidth="1.5"
-        color={color('text-caption')}
-      />
+      <Icon as={TbArrowRight} size="15px" strokeWidth="1.5" color={'textCaption'} />
       <Caption display="inline-block">
-        <AddressLink principal={recipient}>
-          <Link display="inline-block" as="a">
-            {truncateMiddle(recipient)}
-          </Link>
-        </AddressLink>
+        <AddressLink principal={recipient}>{truncateMiddle(recipient)}</AddressLink>
       </Caption>
-    </Stack>
+    </Flex>
   )
 );

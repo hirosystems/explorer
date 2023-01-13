@@ -1,9 +1,11 @@
-import { microToStacks } from '@common/utils';
+import { microToStacks } from '@/common/utils';
+import { TokenBalancesRow } from '@/components/balances/token-balances-row';
+import { Section } from '@/components/section';
+import { Box, Flex } from '@/ui/components';
 
-import { Activity } from '@components/activity-row';
-import { TokenBalancesRow } from '@components/balances/token-balances-row';
-import { Rows } from '@components/rows';
-import { Section } from '@components/section';
+import { KeyValueHorizontal } from '../../app/common/components/KeyValueHorizontal';
+import { Value } from '../../app/common/components/Value';
+import { useVerticallyStackedElementsBorderStyle } from '../../app/common/styles/border';
 
 export const AddressSummary = ({
   principal,
@@ -13,52 +15,36 @@ export const AddressSummary = ({
   lastExecutedTxNonce,
 }: any) => {
   return (
-    <Section mb={'extra-loose'} title="Summary">
-      <Rows
-        px="base"
-        noTopBorder
-        items={[
-          {
-            label: {
-              children: 'Address',
-            },
-            children: principal,
-            copy: principal,
-          },
-          {
-            condition: !!transactions?.results?.length,
-            label: {
-              children: 'Activity',
-            },
-            children: <Activity txs={transactions?.results} amount={transactions?.total} />,
-          },
-          {
-            condition: !!hasTokenBalances,
-            label: {
-              children: 'Holdings',
-            },
-            children: <TokenBalancesRow balances={balances} />,
-          },
-          {
-            label: {
-              children: 'Fees',
-            },
-            children:
-              (balances?.stx?.total_fees_sent &&
-                `${microToStacks(balances?.stx?.total_fees_sent)} STX`) ||
-              undefined,
-          },
-          {
-            label: {
-              children: 'Last executed tx nonce',
-            },
-            children:
-              typeof lastExecutedTxNonce === 'undefined'
-                ? undefined
-                : lastExecutedTxNonce || "This account hasn't executed a tx yet",
-          },
-        ]}
-      />
+    <Section title="Summary">
+      <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
+        <Box width={['100%']} css={useVerticallyStackedElementsBorderStyle}>
+          <KeyValueHorizontal
+            label={'Address'}
+            value={<Value>{principal}</Value>}
+            copyValue={principal}
+          />
+          {hasTokenBalances && (
+            <KeyValueHorizontal
+              label={'Holdings'}
+              value={<TokenBalancesRow balances={balances} />}
+            />
+          )}
+          {!!balances?.stx?.total_fees_sent && (
+            <KeyValueHorizontal
+              label={'Fees'}
+              value={<Value>{`${microToStacks(balances?.stx?.total_fees_sent)} STX`}</Value>}
+            />
+          )}
+          {lastExecutedTxNonce !== 'undefined' && (
+            <KeyValueHorizontal
+              label={'Last executed tx nonce'}
+              value={
+                <Value>{lastExecutedTxNonce || "This account hasn't executed a tx yet"}</Value>
+              }
+            />
+          )}
+        </Box>
+      </Flex>
     </Section>
   );
 };

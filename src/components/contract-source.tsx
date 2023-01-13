@@ -1,19 +1,14 @@
-import { IconChevronRight } from '@tabler/icons';
+import { Badge } from '@/common/components/Badge';
+import { TxLink } from '@/components/links';
+import { Section } from '@/components/section';
+import { Box, BoxProps, CodeEditor } from '@/ui/components';
 import * as React from 'react';
+import { TbChevronRight } from 'react-icons/tb';
 
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { Box, BoxProps, Flex, Grid } from '@stacks/ui';
-
-import { border } from '@common/utils';
-
-import { CodeBlock } from '@components/code-block';
-import { TxLink } from '@components/links';
-import { Text } from '@components/typography';
-
-import { Badge } from './badge';
 
 export const ContractSource: React.FC<
   {
@@ -22,88 +17,34 @@ export const ContractSource: React.FC<
     contractCall?:
       | MempoolContractCallTransaction['contract_call']
       | ContractCallTransaction['contract_call'];
+    claritySyntax: Record<string, any>;
   } & BoxProps
-> = ({ sourceTx, source, contractCall, ...rest }) => {
-  console.log('contract source');
-  const sourceLines =
-    source?.split(`
-`) || [];
-  const sourceLinesLength = sourceLines.length;
-  const functionSigElements =
-    (contractCall &&
-      'function_signature' in contractCall &&
-      contractCall?.function_signature.split(' ')) ||
-    [];
-
-  const start = functionSigElements?.length
-    ? [functionSigElements[0], functionSigElements[1]].join(' ')
-    : undefined;
-
-  const functionLine = start ? sourceLines.findIndex(line => line.includes(start)) + 1 : undefined;
-
-  const isSourceCodeTooLong = sourceLinesLength <= 10;
-  const [expanded, setExpanded] = React.useState(source && isSourceCodeTooLong);
-  const handleToggleExpanded = React.useCallback(() => {
-    setExpanded(s => !s);
-  }, [setExpanded]);
-
+> = ({ sourceTx, source, contractCall, claritySyntax }) => {
   return source ? (
-    <Box {...rest}>
-      <Box overflow="hidden" bg="#040404">
-        <Flex
-          justifyContent="space-between"
-          borderBottom={border()}
-          borderBottomColor="rgb(39, 41, 46)"
-          px="loose"
-          py="base"
-          alignItems="center"
-        >
-          <Text color="white" fontWeight="500">
-            Source code
-          </Text>
-          {sourceTx ? (
-            <TxLink txid={sourceTx}>
-              <Badge
-                as="a"
-                bg="rgba(255,255,255,0.12)"
-                _hover={{ bg: 'rgba(255,255,255,0.2)', cursor: 'pointer' }}
-                border="1px solid rgb(39, 41, 46)"
-                labelProps={{ display: 'flex', alignItems: 'center', fontWeight: 500 }}
-                target="_blank"
-              >
-                View deployment
-                <Box as={IconChevronRight} ml="extra-tight" size="14px" />
-              </Badge>
-            </TxLink>
-          ) : null}
-        </Flex>
-        <CodeBlock
-          overflow={!expanded ? 'hidden' : undefined}
-          maxHeight={!expanded ? '256px' : undefined}
-          borderRadius="0"
-          showLineNumbers
-          code={source}
-          highlightedLine={functionLine}
-        />
-        <Box borderTop={border()} borderTopColor="rgb(39, 41, 46)" mt="base">
-          {sourceLinesLength >= 10 ? (
-            <Grid
-              p="base"
-              placeItems="center"
-              opacity={0.65}
-              onClick={handleToggleExpanded}
-              _hover={{
-                cursor: 'pointer',
-                opacity: 1,
-              }}
-            >
-              <Text color="white">
-                {!expanded ? `See all ${sourceLinesLength} lines` : 'Collapse'}
-              </Text>
-            </Grid>
-          ) : null}
-        </Box>
-      </Box>
-    </Box>
+    <Section
+      title={'Source code'}
+      topRight={
+        sourceTx
+          ? () => (
+              <TxLink txid={sourceTx}>
+                <Badge
+                  as="a"
+                  _hover={{ bg: '#eee', cursor: 'pointer' }}
+                  color={'textBody'}
+                  bg={'bgAlt'}
+                  target="_blank"
+                  labelProps={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}
+                  border={'none'}
+                >
+                  View deployment
+                  <Box as={TbChevronRight} ml="4px" size="14px" display={'inline'} />
+                </Badge>
+              </TxLink>
+            )
+          : undefined
+      }
+    >
+      <CodeEditor code={source} claritySyntax={claritySyntax} />
+    </Section>
   ) : null;
 };

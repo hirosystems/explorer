@@ -1,8 +1,7 @@
-import { Block } from '@stacks/stacks-blockchain-api-types';
+import { apiClients, createConfig } from '@/common/api/client';
+import { useGlobalContext } from '@/common/context/useAppContext';
 
-import { apiClients, createConfig } from '@common/api/client';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
 export const getBlockQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -19,6 +18,6 @@ export const getBlockQueries = (networkUrl: string) => {
 };
 
 export const useBlockQueries = () => {
-  const network = useAppSelector(selectActiveNetwork);
+  const network = useGlobalContext().activeNetwork;
   return getBlockQueries(network.url);
 };

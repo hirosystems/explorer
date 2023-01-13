@@ -1,101 +1,93 @@
-import Link from 'next/link';
-import React from 'react';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { buildUrl } from '@/components/links';
+import { Box, Flex, TextLink } from '@/ui/components';
+import Link, { LinkProps } from 'next/link';
+import React, { FC, HTMLProps } from 'react';
 
-import { Box, BoxProps, Flex, FlexProps, Text, color } from '@stacks/ui';
-import { ForwardRefExoticComponentWithAs, forwardRefWithAs, memoWithAs } from '@stacks/ui-core';
-
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-
-import { buildUrl } from '@components/links';
-
-const LinkWrapper: React.FC<any> = ({ children, href }) => {
-  return href ? (
-    <Link href={href} passHref>
-      {children}
+const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
+  children,
+  href,
+  target,
+  rel,
+}) => {
+  return (
+    <Link href={href} passHref legacyBehavior>
+      <TextLink
+        cursor="pointer"
+        textStyle="body.small"
+        color={'textCaption'}
+        textDecoration="none"
+        fontSize={'14px'}
+        _hover={{ textDecoration: 'underline' }}
+        target={target}
+        rel={rel}
+      >
+        {children}
+      </TextLink>
     </Link>
-  ) : (
-    children
   );
 };
 
-type FooterLinkProps = { onClick?: any } & BoxProps;
-
-const FooterLink: ForwardRefExoticComponentWithAs<FooterLinkProps, 'a'> = memoWithAs<
-  FooterLinkProps,
-  'a'
->(
-  forwardRefWithAs<FooterLinkProps, 'a'>(({ as = 'a', children, ...rest }, ref) => {
-    const externalProps =
-      rest.href && !rest.href.startsWith('/')
-        ? { target: '_blank', rel: 'noopener noreferrer nofollow' }
-        : {};
-
-    return (
-      <LinkWrapper href={rest.href}>
-        <Text
-          cursor="pointer"
-          textStyle="body.small"
-          color={color('text-caption')}
-          textDecoration="none"
-          _hover={{ textDecoration: 'underline' }}
-          ref={ref}
-          as={as}
-          {...rest}
-          {...externalProps}
-        >
-          {children}
-        </Text>
-      </LinkWrapper>
-    );
-  })
-);
-
-export const Footer = React.memo(({ fullWidth, ...props }: FlexProps & { fullWidth?: boolean }) => {
-  const network = useAppSelector(selectActiveNetwork);
+export const Footer: FC = () => {
+  const network = useGlobalContext().activeNetwork;
   return (
-    <Box width="100%" {...props}>
+    <Box
+      mx="auto"
+      width="100%"
+      maxWidth={'1280px'}
+      mt={'32px'}
+      mb={['16px', '16px', '32px']}
+      px={['16px', '16px', '32px']}
+    >
       <Flex
-        pt="base"
+        pt="16px"
         flexDirection={['column', 'column', 'row']}
         alignItems={['center', 'center', 'unset']}
         textAlign={['center', 'center', 'unset']}
-        borderTop="1px solid var(--colors-border)"
-        px={fullWidth ? ['base', 'base', 'extra-loose'] : 'unset'}
+        borderTop="1px solid var(--stacks-colors-border)"
+        px={'unset'}
       >
         <Flex display="flex" flexDirection={'column'} gap="5px">
-          <Flex pb={['tight', 'tight', 'unset']} pr={['unset', 'unset', 'base']}>
-            <FooterLink mr="base" href={buildUrl('/transactions', network)}>
-              Recent transactions
-            </FooterLink>
-            <FooterLink href={buildUrl('/sandbox/deploy', network)} mr="base">
-              Sandbox
-            </FooterLink>
-            <FooterLink href="https://immunefi.com/bounty/stacks/" mr="base" target="_blank">
+          <Flex pb={['8px', '8px', 'unset']} pr={['unset', 'unset', '16px']} gap={'16px'}>
+            <FooterLink href={buildUrl('/transactions', network)}>Recent transactions</FooterLink>
+            <FooterLink href={buildUrl('/sandbox/deploy', network)}>Sandbox</FooterLink>
+            <FooterLink
+              href="https://immunefi.com/bounty/stacks/"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
               Found a bug in the Stacks Blockchain?
             </FooterLink>
           </Flex>
           <Box>
-            <FooterLink mr="base" target="_blank" href="https://www.coingecko.com/">
+            <FooterLink
+              href="https://www.coingecko.com/"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
               Market data provided by CoinGecko
             </FooterLink>
           </Box>
         </Flex>
 
-        <Flex ml={['unset', 'unset', 'auto']}>
+        <Flex ml={['unset', 'unset', 'auto']} gap={'16px'}>
           <FooterLink
-            mr="base"
-            target="_blank"
             href="https://github.com/hirosystems/explorer/issues/new/choose"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
           >
             Submit report or request
           </FooterLink>
-          <FooterLink mr="base" href="mailto:support@hiro.so">
-            Support
+          <FooterLink href="mailto:support@hiro.so">Support</FooterLink>
+          <FooterLink
+            href="https://www.hiro.so/p/terms-privacy"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+          >
+            Terms & Privacy
           </FooterLink>
-          <FooterLink href="https://www.hiro.so/p/terms-privacy">Terms & Privacy</FooterLink>
         </Flex>
       </Flex>
     </Box>
   );
-});
+};

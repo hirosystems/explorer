@@ -1,9 +1,7 @@
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { TxStatus } from '@/common/types/tx';
 import Head from 'next/head';
 import React from 'react';
-
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { TxStatus } from '@common/types/tx';
 
 const defaultTitle = 'Stacks Explorer by Hiro';
 
@@ -30,7 +28,7 @@ export const Meta = ({
   labels,
 }: MetaProps) => {
   const filename = useFaviconName(txStatus);
-  const network = useAppSelector(selectActiveNetwork);
+  const network = useGlobalContext().activeNetwork;
 
   const withMode = (title: string) => {
     if (network.mode === 'testnet') {

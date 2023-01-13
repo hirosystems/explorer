@@ -1,13 +1,10 @@
-import { IconAlertTriangle, IconCircleCheck } from '@tabler/icons';
+import { FunctionSummaryClarityValue } from '@/components/function-summary/value';
+import { Box, Flex, Stack } from '@/ui/components';
+import { Caption, Pre } from '@/ui/typography';
+import { TbAlertTriangle, TbCircleCheck } from 'react-icons/tb';
 
 import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
-import { Box, Flex, Stack, color } from '@stacks/ui';
-
-import { border } from '@common/utils';
-
-import { FunctionSummaryClarityValue } from '@components/function-summary/value';
-import { Caption, Pre } from '@components/typography';
 
 interface FunctionSummaryResultProps {
   result: Transaction['tx_result'];
@@ -23,7 +20,7 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
     return (
       <Box width="100%">
         <Pre>{value.type}</Pre>
-        <Stack mt="extra-loose" spacing="base" width="100%">
+        <Stack mt="32px" spacing="16px" width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const entry = value.value[name];
@@ -33,11 +30,12 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
             }
             return (
               <Box
-                borderBottom={!isLast ? border() : undefined}
-                pb={!isLast ? 'base' : undefined}
+                borderBottom={!isLast ? '1px solid' : undefined}
+                pb={!isLast ? '16px' : undefined}
                 key={name}
+                width="100%"
               >
-                <Caption display="inline-block" mb="tight">
+                <Caption display="inline-block" mb="8px" fontSize={'14px'}>
                   {name}
                 </Caption>
                 <FunctionSummaryClarityValue
@@ -59,13 +57,13 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
       <Box width="100%">
         <Flex alignItems="center">
           {success ? (
-            <Box mr="tight" color={color('feedback-success')} as={IconCircleCheck} />
+            <Box mr="8px" color={'feedbackSuccess'} as={TbCircleCheck} />
           ) : (
-            <Box mr="tight" color={color('feedback-error')} as={IconAlertTriangle} />
+            <Box mr="8px" color={'feedbackError'} as={TbAlertTriangle} />
           )}
           <Pre>{hasType ? type : success ? 'Success' : 'Failed'}</Pre>
         </Flex>
-        <Stack mt="extra-loose" spacing="base" width="100%">
+        <Stack mt="32px" spacing="16px" width="100%">
           <FunctionSummaryClarityValue
             btc={null}
             arg={{

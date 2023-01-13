@@ -1,73 +1,46 @@
-import { css } from '@emotion/react';
-import Link from 'next/link';
+import { leftLineCss } from '@/common/styles/hover';
+import { Box, Flex, FlexProps } from '@/ui/components';
+import { useColorMode } from '@chakra-ui/react';
 import { FC, ReactNode, memo } from 'react';
 
-import { Box } from '@stacks/ui';
-
-import { leftLineCss } from '@common/styles/hover';
-
-interface TwoColumnsListProps {
+interface TwoColumnsListProps extends FlexProps {
   icon: ReactNode;
   leftContent: {
     title: ReactNode;
     subtitle: ReactNode;
   };
-  rightContent: {
+  rightContent?: {
     title: ReactNode;
     subtitle: ReactNode;
   };
-  href: string;
 }
 
-const containerStyle = css`
-  display: flex;
-  padding: 24px 0;
-  align-items: center;
-  ${leftLineCss}
-`;
-
-const linkStyle = css`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-`;
-
-const iconWrapperStyle = css`
-  width: 40px;
-  margin-right: 16px;
-`;
-
-const leftWrapperStyle = css`
-  margin-right: 16px;
-  > :first-child {
-    margin-bottom: 8px;
-  }
-`;
-
-const rightWrapperStyle = css`
-  margin-left: auto;
-  flex-shrink: 0;
-`;
-
 export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
-  ({ icon, leftContent, rightContent, href }) => {
+  ({ icon, leftContent, rightContent, ...rest }) => {
     return (
-      <Box css={containerStyle}>
-        <Link href={href} passHref>
-          <Box as="a" css={linkStyle} />
-        </Link>
-        <Box css={iconWrapperStyle}>{icon}</Box>
-        <Box css={leftWrapperStyle}>
-          <Box>{leftContent.title}</Box>
+      <Flex
+        flexGrow={1}
+        gap={'16px'}
+        alignItems={'center'}
+        py={'24px'}
+        css={leftLineCss(useColorMode().colorMode)}
+        minWidth={0}
+        {...rest}
+      >
+        <Box width={'40px'}>{icon}</Box>
+        <Flex direction={'column'} gap={'6px'} minWidth={0}>
+          <Flex direction={'column'} minHeight={'24px'} justifyContent={'center'}>
+            {leftContent.title}
+          </Flex>
           <Box>{leftContent.subtitle}</Box>
-        </Box>
-        <Box css={rightWrapperStyle}>
-          <Box>{rightContent.title}</Box>
-          <Box>{rightContent.subtitle}</Box>
-        </Box>
-      </Box>
+        </Flex>
+        {rightContent && (
+          <Flex direction={'column'} gap={'8px'} ml={'auto'} flexShrink={0}>
+            <Box alignSelf={'flex-end'}>{rightContent.title}</Box>
+            <Box alignSelf={'flex-end'}>{rightContent.subtitle}</Box>
+          </Flex>
+        )}
+      </Flex>
     );
   }
 );

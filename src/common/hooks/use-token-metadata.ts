@@ -1,7 +1,6 @@
+import { useApi } from '@/common/api/client';
+import { getAssetNameParts } from '@/common/utils';
 import { useQuery } from 'react-query';
-
-import { useApi } from '@common/api/client';
-import { getAssetNameParts } from '@common/utils';
 
 export function useTokenMetadata(
   token: string,
@@ -22,6 +21,7 @@ export function useTokenMetadata(
       {
         staleTime: T_24H_IN_MS,
         enabled: tokenType === 'fungible_tokens',
+        suspense: false,
       }
     ),
     nftMetadata: useQuery(
@@ -33,6 +33,7 @@ export function useTokenMetadata(
       {
         staleTime: T_24H_IN_MS,
         enabled: false, // disable till API support. tokenType === 'non_fungible_tokens',
+        suspense: false,
       }
     ),
   };

@@ -1,17 +1,11 @@
-import { IconArrowLeft, IconMenu2, IconX } from '@tabler/icons';
-import dynamic from 'next/dynamic';
+import { ColorModeButton } from '@/components/color-mode-button';
+import { HeaderTextItem } from '@/components/header-text-item';
+import { ExplorerLink } from '@/components/links';
+import { NetworkItems } from '@/components/network-items';
+import { Box, Flex, IconButton } from '@/ui/components';
+import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
-
-import { Box, Fade, Flex, IconButton, color } from '@stacks/ui';
-
-import { useLockBodyScroll } from '@common/hooks/use-lock-body-scroll';
-import { border } from '@common/utils';
-
-import { HeaderTextItem } from '@components/header-text-item';
-import { ExplorerLink } from '@components/links';
-import { NetworkItems } from '@components/network-items';
-
-const ColorModeButton = dynamic(() => import('@components/color-mode-button'), { ssr: false });
+import { TbArrowLeft, TbMenu2, TbX } from 'react-icons/tb';
 
 enum Visibility {
   CLOSED = 'closed',
@@ -31,9 +25,14 @@ const NetworkView: React.FC<{
   handleSetNetworkView: () => void;
   handleSetIndexView: () => void;
   handleClose: () => void;
-}> = ({ handleSetIndexView, handleClose }) => (
+}> = ({ handleClose }) => (
   <Box width="100%">
-    <HeaderTextItem px="extra-loose" color={color('invert')} mb="extra-loose" fontSize={6}>
+    <HeaderTextItem
+      px="32px"
+      color={`invert.${useColorMode().colorMode}`}
+      mb="32px"
+      fontSize={'32px'}
+    >
       Switch network
     </HeaderTextItem>
     <NetworkItems
@@ -49,28 +48,52 @@ const IndexView: React.FC<{
   handleSetNetworkView: () => void;
   handleSetIndexView: () => void;
 }> = ({ handleSetNetworkView, handleClose }) => (
-  <Flex flexDirection="column" alignItems="flex-end" px="extra-loose">
-    <ExplorerLink path={'/'}>
-      <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
+  <Flex flexDirection="column" alignItems="flex-end" px="32px">
+    <ExplorerLink href={'/'}>
+      <HeaderTextItem
+        color={`invert.${useColorMode().colorMode}`}
+        mb="32px"
+        fontSize={'32px'}
+        onClick={handleClose}
+      >
         Home
       </HeaderTextItem>
     </ExplorerLink>
-    <ExplorerLink path={'/transactions'}>
-      <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
+    <ExplorerLink href={'/transactions'}>
+      <HeaderTextItem
+        color={`invert.${useColorMode().colorMode}`}
+        mb="32px"
+        fontSize={'32px'}
+        onClick={handleClose}
+      >
         Transactions
       </HeaderTextItem>
     </ExplorerLink>
-    <ExplorerLink path={'/blocks'}>
-      <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
+    <ExplorerLink href={'/blocks'}>
+      <HeaderTextItem
+        color={`invert.${useColorMode().colorMode}`}
+        mb="32px"
+        fontSize={'32px'}
+        onClick={handleClose}
+      >
         Blocks
       </HeaderTextItem>
     </ExplorerLink>
-    <ExplorerLink path={'/sandbox/deploy'}>
-      <HeaderTextItem color={color('invert')} mb="extra-loose" fontSize={6} onClick={handleClose}>
+    <ExplorerLink href={'/sandbox/deploy'}>
+      <HeaderTextItem
+        color={`invert.${useColorMode().colorMode}`}
+        mb="32px"
+        fontSize={'32px'}
+        onClick={handleClose}
+      >
         Sandbox
       </HeaderTextItem>
     </ExplorerLink>
-    <HeaderTextItem onClick={handleSetNetworkView} color={color('invert')} fontSize={6}>
+    <HeaderTextItem
+      onClick={handleSetNetworkView}
+      color={`invert.${useColorMode().colorMode}`}
+      fontSize={'32px'}
+    >
       Switch network
     </HeaderTextItem>
   </Flex>
@@ -81,6 +104,7 @@ export const MobileMenu: React.FC = () => {
   const [view, setView] = React.useState<ViewsState>(Views.INDEX);
   const isClosed = state === Visibility.CLOSED;
   const isOpen = state === Visibility.OPEN;
+  const colorMode = useColorMode().colorMode;
 
   const handleSetNetworkView = () => setView(Views.NETWORK);
   const handleSetIndexView = () => setView(Views.INDEX);
@@ -96,85 +120,76 @@ export const MobileMenu: React.FC = () => {
     }, 250);
   }, [setState]);
 
-  useLockBodyScroll(isOpen, true);
-
   return (
     <Box display={['block', 'block', 'block', 'none']}>
       <IconButton
         size="42px"
-        iconSize="24px"
         onClick={handleOpen}
-        invert
         color="white"
-        icon={IconMenu2}
+        icon={<TbMenu2 size="24px" />}
+        aria-label={'Open menu'}
       />
-      <Fade in={isOpen}>
-        {styles => (
-          <>
-            <Box
-              position="fixed"
-              top={0}
-              left={0}
-              height="100vh"
-              width="100vw"
-              bg="rgba(0,0,0,0.5)"
-              style={styles}
-              pointerEvents={isClosed ? 'none' : 'all'}
-              zIndex={9999}
-            >
-              <Flex
-                flexDirection="column"
-                alignItems="flex-end"
-                py="extra-loose"
-                bg={color('bg')}
-                borderLeft={border()}
-                width="90vw"
-                ml="10vw"
-                height="100vh"
-              >
-                <Flex px="extra-loose" width="100%" justifyContent="space-between" mb="extra-loose">
-                  {view === Views.NETWORK ? (
-                    <IconButton
-                      onClick={handleSetIndexView}
-                      size="48px"
-                      iconSize="32px"
-                      color={color('invert')}
-                      icon={IconArrowLeft}
-                    />
-                  ) : (
-                    <ColorModeButton
-                      invert={false}
-                      color={color('invert')}
-                      size="48px"
-                      iconSize="32px"
-                    />
-                  )}
-                  <IconButton
-                    onClick={handleClose}
-                    size="48px"
-                    iconSize="32px"
-                    color={color('invert')}
-                    icon={IconX}
-                  />
-                </Flex>
-                {view === Views.NETWORK ? (
-                  <NetworkView
-                    handleSetNetworkView={handleSetNetworkView}
-                    handleSetIndexView={handleSetIndexView}
-                    handleClose={handleClose}
-                  />
-                ) : (
-                  <IndexView
-                    handleSetNetworkView={handleSetNetworkView}
-                    handleSetIndexView={handleSetIndexView}
-                    handleClose={handleClose}
-                  />
-                )}
-              </Flex>
-            </Box>
-          </>
-        )}
-      </Fade>
+      {isOpen && (
+        <Box
+          position="fixed"
+          top={0}
+          left={0}
+          height="100vh"
+          width="100vw"
+          bg="rgba(0,0,0,0.5)"
+          pointerEvents={isClosed ? 'none' : 'all'}
+          zIndex={9999}
+        >
+          <Flex
+            flexDirection="column"
+            alignItems="flex-end"
+            py="32px"
+            bg={`bg.${colorMode}`}
+            borderLeftWidth={'1px'}
+            width="90vw"
+            ml="10vw"
+            height="100vh"
+          >
+            <Flex px="32px" width="100%" justifyContent="space-between" mb="32px">
+              {view === Views.NETWORK ? (
+                <IconButton
+                  onClick={handleSetIndexView}
+                  size="48px"
+                  color={`invert.${colorMode}`}
+                  icon={<TbArrowLeft size={'32px'} />}
+                  aria-label={'Network'}
+                />
+              ) : (
+                <ColorModeButton
+                  color={`invert.${colorMode}`}
+                  size="48px"
+                  aria-label={'Change color mode'}
+                />
+              )}
+              <IconButton
+                onClick={handleClose}
+                size="48px"
+                color={`invert.${colorMode}`}
+                icon={<TbX size={'32px'} />}
+                aria-label={'Close menu'}
+              />
+            </Flex>
+            {view === Views.NETWORK ? (
+              <NetworkView
+                handleSetNetworkView={handleSetNetworkView}
+                handleSetIndexView={handleSetIndexView}
+                handleClose={handleClose}
+              />
+            ) : (
+              <IndexView
+                handleSetNetworkView={handleSetNetworkView}
+                handleSetIndexView={handleSetIndexView}
+                handleClose={handleClose}
+              />
+            )}
+          </Flex>
+        </Box>
+      )}
     </Box>
   );
 };

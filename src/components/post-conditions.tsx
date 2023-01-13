@@ -1,7 +1,20 @@
-import NextLink from 'next/link';
+import { useApi } from '@/common/api/client';
+import { Badge } from '@/common/components/Badge';
+import {
+  capitalize,
+  ftDecimals,
+  microStxToStx,
+  truncateMiddle,
+  validateStacksAddress,
+} from '@/common/utils';
+import { Section } from '@/components/section';
+import { getTicker } from '@/components/tx-events';
+import { Box, Circle, FlexProps, Grid } from '@/ui/components';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { Caption } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import React, { useEffect, useState } from 'react';
-import { useHover } from 'use-events';
 
 import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import {
@@ -12,37 +25,9 @@ import {
   PostConditionNonFungibleConditionCode,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
-import {
-  Box,
-  ChevronIcon,
-  DynamicColorCircle,
-  Flex,
-  FlexProps,
-  Grid,
-  Stack,
-  color,
-} from '@stacks/ui';
-import { microStxToStx } from '@stacks/ui-utils';
 
-import { useApi } from '@common/api/client';
-import {
-  border,
-  capitalize,
-  ftDecimals,
-  truncateMiddle,
-  validateStacksAddress,
-} from '@common/utils';
-
-import { Badge } from '@components/badge';
-import { Circle } from '@components/circle';
-import { CodeAccordian } from '@components/code-accordian';
-import { InfoIcon } from '@components/icons/info';
-import { StxInline } from '@components/icons/stx-inline';
-import { Row } from '@components/rows/row';
-import { Section } from '@components/section';
-import { ValueWrapped } from '@components/token-transfer/item';
-import { getTicker } from '@components/tx-events';
-import { Caption, Pre, Text, Title } from '@components/typography';
+import { ListItem } from '../app/common/components/ListItem';
+import { useVerticallyStackedElementsBorderStyle } from '../app/common/styles/border';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -53,101 +38,6 @@ const getConditionType = (type: PostCondition['type']) => {
     case 'stx':
       return 'STX';
   }
-};
-
-const _Condition = ({
-  condition,
-  index: key,
-  length,
-}: {
-  condition: PostCondition;
-  index: number;
-  length: number;
-}) => {
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const isLast = key === length - 1;
-
-  const handleOpen = React.useCallback(() => {
-    if (!isOpen) {
-      setIsOpen(true);
-    } else {
-      setIsOpen(false);
-    }
-  }, [isOpen]);
-  const [hover, bind] = useHover();
-
-  const note = (
-    <Flex
-      bg="var(--colors-bg)"
-      color="var(--colors-text-caption)"
-      p="base"
-      borderBottom={!isLast ? '1px solid var(--colors-border)' : undefined}
-      borderTop="1px solid var(--colors-border)"
-      alignItems="center"
-      borderBottomRightRadius={isLast ? '12px' : 'unset'}
-      borderBottomLeftRadius={isLast ? '12px' : 'unset'}
-      as="a"
-      href="https://github.com/blockstack/stacks-blockchain/blob/master/sip/sip-005-blocks-and-transactions.md#transaction-post-conditions"
-      target="_blank"
-      _hover={{
-        bg: 'var(--colors-bg-light)',
-        color: 'var(--colors-accent)',
-      }}
-    >
-      <InfoIcon mr="tight" size="18px" />
-      <Caption color="currentColor">Click here to learn more about post conditions.</Caption>
-    </Flex>
-  );
-  return (
-    <React.Fragment key={key}>
-      <Row
-        borderBottom={isLast && !isOpen ? 'unset' : '1px solid var(--colors-border)'}
-        pl="base"
-        onClick={handleOpen}
-        _hover={{
-          cursor: 'pointer',
-        }}
-        {...bind}
-      >
-        <Stack width="100%" isInline>
-          <Flex pr="base" alignItems="center" width="calc(33.333%)" flexShrink={0}>
-            <Pre>{condition.condition_code}</Pre>
-          </Flex>
-          {'address' in condition.principal ? (
-            <Flex alignItems="center" width="calc(33.333%)" flexShrink={0}>
-              <NextLink
-                href="/address/[principal]"
-                as={`/address/${condition.principal.address}`}
-                passHref
-              >
-                <Text _hover={{ textDecoration: 'underline' }} as="a">
-                  <ValueWrapped offset={8} truncate value={condition.principal.address} />
-                </Text>
-              </NextLink>
-            </Flex>
-          ) : null}
-          <Flex alignItems="center" width="calc(33.333% - 38px)" flexShrink={0}>
-            <Text>
-              {condition.type === 'stx' ? condition.amount + ' ' : null}
-              {getConditionType(condition.type)}
-            </Text>
-          </Flex>
-          <Flex
-            alignItems="center"
-            justify="center"
-            width="48px"
-            flexShrink={0}
-            color="var(--colors-invert)"
-            opacity={hover ? 1 : 0.5}
-          >
-            <ChevronIcon size="32px" direction={isOpen ? 'up' : 'down'} />
-          </Flex>
-        </Stack>
-      </Row>
-      <CodeAccordian isLast={isLast} code={condition} isOpen={isOpen} note={note} />
-    </React.Fragment>
-  );
 };
 
 const constructPostConditionAssetId = (
@@ -197,16 +87,17 @@ const getPrettyCode = (
 };
 
 const ConditionAsset = ({ condition }: { condition: PostCondition }) => {
+  const colorMode = useColorMode().colorMode;
   switch (condition.type) {
     case 'fungible':
     case 'non_fungible':
       const assetId = constructPostConditionAssetId(condition.asset);
       const letter = getFirstLetterOfAsset(assetId);
-      return <DynamicColorCircle string={assetId}>{letter}</DynamicColorCircle>;
+      return <Circle size={'48px'}>{letter.toUpperCase()}</Circle>;
     case 'stx':
       return (
-        <Circle size="48px" bg={color('accent')}>
-          <StxInline size="20px" color="white" />
+        <Circle size="48px" bg={`accent.${colorMode}`}>
+          <StxIcon size="20px" color="white" />
         </Circle>
       );
   }
@@ -263,23 +154,22 @@ const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: b
       setFtMetadata(data);
     };
     if (condition.type === 'fungible') void getFtMetadata();
-  }, []);
+  }, [condition, fungibleTokensApi]);
 
   return (
-    <Flex alignItems="center" borderBottom={!isLast ? border() : 'unset'} py="base">
-      <ConditionAsset condition={condition} />
-      <Stack spacing="tight" flexGrow={1} ml="base">
-        <Caption>{truncateMiddle(getAddressValue(condition), 8)}</Caption>
-
-        <Title fontSize={1}>
+    <ListItem
+      icon={<ConditionAsset condition={condition} />}
+      title={
+        <>
           {capitalize(getPrettyCode(condition.condition_code, true))}{' '}
           {ftMetadata
             ? ftDecimals((condition as any).amount, ftMetadata?.decimals || 0)
             : getAmount(condition)}{' '}
           {ftMetadata?.symbol || getConditionTicker(condition)}
-        </Title>
-      </Stack>
-    </Flex>
+        </>
+      }
+      subTitle={truncateMiddle(getAddressValue(condition), 8)}
+    />
   );
 };
 
@@ -295,7 +185,7 @@ export const PostConditions: React.FC<
     topRight={
       mode
         ? () => (
-            <Badge color={color('text-body')} bg={color('bg-alt')}>
+            <Badge color={'textBody'} bg={'bgAlt'} border={'none'}>
               {capitalize(mode)} mode
             </Badge>
           )
@@ -303,7 +193,7 @@ export const PostConditions: React.FC<
     }
     {...rest}
   >
-    <Box px="loose">
+    <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
       {conditions?.length ? (
         <>
           {conditions.map((condition: PostCondition, key) => (
@@ -311,7 +201,7 @@ export const PostConditions: React.FC<
           ))}
         </>
       ) : (
-        <Grid placeItems="center" px="base" py="extra-loose">
+        <Grid placeItems="center" px="16px" py="32px">
           <Caption my="0" p="0" fontSize="14px">
             This transaction has no post-conditions.
           </Caption>

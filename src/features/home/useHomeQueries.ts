@@ -1,10 +1,9 @@
-import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { apiClients, createConfig } from '@/common/api/client';
+import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { ApiResponseWithResultsOffset } from '@/common/types/api';
 
-import { apiClients, createConfig } from '@common/api/client';
-import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@common/constants';
-import { useAppSelector } from '@common/state/hooks';
-import { selectActiveNetwork } from '@common/state/network-slice';
-import { ApiResponseWithResultsOffset } from '@common/types/api';
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getHomeQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -34,6 +33,6 @@ export const getHomeQueries = (networkUrl: string) => {
 };
 
 export const useHomeQueries = () => {
-  const network = useAppSelector(selectActiveNetwork);
+  const network = useGlobalContext().activeNetwork;
   return getHomeQueries(network.url);
 };

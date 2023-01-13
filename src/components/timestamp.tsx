@@ -1,43 +1,25 @@
-import { IconClock } from '@tabler/icons';
+import { toRelativeTime } from '@/common/utils';
+import { Box, Flex, Tooltip } from '@/ui/components';
 import * as React from 'react';
+import { TbClock } from 'react-icons/tb';
 
-import { Box, Flex, FlexProps, Text, useClipboard } from '@stacks/ui';
+import { Value } from '../app/common/components/Value';
 
-import { toRelativeTime } from '@common/utils';
-
-import { Tooltip } from '@components/tooltip';
-
-interface TimestampProps extends FlexProps {
+interface TimestampProps {
   ts: number;
-  noTooltip?: boolean;
 }
 
-export const Timestamp: React.FC<TimestampProps> = ({ ts, noTooltip, ...props }) => {
-  const [count, setCount] = React.useState(0);
+export const Timestamp: React.FC<TimestampProps> = ({ ts }) => {
   const readableTimestamp = ts
     ? `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(ts * 1000).toLocaleDateString()}`
     : '';
-  const { onCopy, hasCopied } = useClipboard(readableTimestamp);
-  React.useEffect(() => {
-    const timeout = setTimeout(() => {
-      setCount(count + 1);
-    }, 1000);
 
-    return clearTimeout(timeout);
-  }, [count]);
-
-  const timestampElem = (
-    <Flex alignItems="center" onClick={onCopy} {...props}>
-      <Box as={IconClock} size="16px" mr="extra-tight" />
-      <Text color="currentColor">{toRelativeTime(ts * 1000)}</Text>
-    </Flex>
-  );
-
-  return noTooltip ? (
-    timestampElem
-  ) : (
-    <Tooltip label={hasCopied ? 'Copied!' : readableTimestamp} placement={'right'}>
-      {timestampElem}
+  return (
+    <Tooltip label={readableTimestamp}>
+      <Flex alignItems="center">
+        <Box as={TbClock} size="16px" mr="4px" />
+        <Value>{toRelativeTime(ts * 1000)}</Value>
+      </Flex>
     </Tooltip>
   );
 };
