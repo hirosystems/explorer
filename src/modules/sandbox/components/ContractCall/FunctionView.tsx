@@ -14,6 +14,7 @@ import {
   PostCondition,
   PostConditionMode,
   STXPostCondition,
+  createAssetInfo,
   encodeClarityValue,
   getTypeString,
   isClarityAbiList,
@@ -80,15 +81,17 @@ interface PostConditionParameters {
   address?: string;
   conditionCode?: NonFungibleConditionCode | FungibleConditionCode;
   amount?: number;
-  assetInfo?: string | AssetInfo;
-  assetName?: ClarityValue;
+  assetAddress?: string;
+  assetContractName?: string;
+  assetName?: string;
 }
 
 function getPostCondition(
   postConditionType: PostConditionType,
   postConditionParameters: PostConditionParameters
 ): PostCondition[] {
-  const { address, conditionCode, amount, assetInfo, assetName } = postConditionParameters;
+  const { address, conditionCode, amount, assetAddress, assetContractName, assetName } =
+    postConditionParameters;
   let postCondition;
 
   if (postConditionType === PostConditionType.Stx) {
@@ -100,7 +103,8 @@ function getPostCondition(
       );
     }
   } else if (postConditionType === PostConditionType.Fungible) {
-    if (address && assetInfo && conditionCode && amount) {
+    if (address && assetAddress && assetContractName && assetName && conditionCode && amount) {
+      const assetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
       postCondition = makeStandardFungiblePostCondition(
         address,
         conditionCode as FungibleConditionCode,
@@ -111,12 +115,13 @@ function getPostCondition(
   } else if (postConditionType === PostConditionType.NonFungible) {
     // TODO: const conditionCodeHackConversion = (conditionCode as NonFungibleConditionCode) === NonFungibleCode.;
 
-    if (address && assetInfo && conditionCode && assetName) {
+    if (address && assetAddress && assetContractName && assetName && conditionCode && assetName) {
+      const assetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
       postCondition = makeStandardNonFungiblePostCondition(
         address,
         conditionCode as NonFungibleConditionCode,
         assetInfo,
-        assetName
+        assetName as ClarityValue
       );
     }
   } else {
@@ -163,11 +168,12 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   }, [showPostCondition]);
 
   const initialPostConditionParameterValues: PostConditionParameters = {
-    address: '',
+    address: undefined,
     amount: undefined,
     conditionCode: undefined,
     assetName: undefined,
-    assetInfo: '',
+    assetAddress: undefined,
+    assetContractName: undefined,
   };
 
   return (
@@ -278,6 +284,32 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
               />
             ) : (
               <Box p="extra-loose" as="form" onSubmit={handleSubmit}>
+                <Flex marginBottom="16px" justifyContent="flex-end">
+                  <Toggle
+                    onClick={() =>
+                      setPostConditionMode(
+                        isPostConditionModeEnabled === PostConditionMode.Deny
+                          ? PostConditionMode.Allow
+                          : PostConditionMode.Deny
+                      )
+                    } // TODO: If post condition is added, switch to deny
+                    label="Allow Mode"
+                    value={isPostConditionModeEnabled === PostConditionMode.Allow ? true : false}
+                  />
+                  <Tooltip
+                    label={
+                      <Box>
+                        Enabling Allow mode is less secure than deny mode because it permits asset
+                        transfers that aren't not covered by post conditions. In Deny mode no other
+                        asset transfers are permitted besides those named in the post conditions
+                      </Box>
+                    }
+                  >
+                    <Flex alignItems="center" marginLeft="8px">
+                      <InfoCircleIcon size="18px" />
+                    </Flex>
+                  </Tooltip>
+                </Flex>
                 {fn.args.length ? (
                   <Stack mb="extra-loose" spacing="base">
                     {fn.args.map(({ name, type }) => (
@@ -292,6 +324,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                     ))}
                     {fn.access === 'public' && (
                       <Button
+                        disabled={isPostConditionModeEnabled === PostConditionMode.Allow}
                         onClick={() => {
                           setShowPostCondition(!showPostCondition);
                         }}
@@ -301,35 +334,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                     )}
                     {showPostCondition && (
                       <Box>
-                        <Flex marginBottom="16px">
-                          <Toggle
-                            onClick={() =>
-                              setPostConditionMode(
-                                isPostConditionModeEnabled === PostConditionMode.Deny
-                                  ? PostConditionMode.Allow
-                                  : PostConditionMode.Deny
-                              )
-                            } // TODO: If post condition is added, switch to deny
-                            label="Allow Mode"
-                            value={
-                              isPostConditionModeEnabled === PostConditionMode.Allow ? true : false
-                            }
-                          />
-                          <Tooltip
-                            label={
-                              <Box>
-                                Enabling Allow mode is less secure than deny mode because it permits
-                                asset transfers that aren't not covered by post conditions. In Deny
-                                mode no other asset transfers are permitted besides those named in
-                                the post conditions
-                              </Box>
-                            }
-                          >
-                            <Flex alignItems="center" marginLeft="8px">
-                              <InfoCircleIcon size="18px" />
-                            </Flex>
-                          </Tooltip>
-                        </Flex>
                         <Box maxWidth="260px" maxHeight="42px" height="42px" marginBottom="16px">
                           <Dropdown
                             defaultOption={{ label: 'Select a post condition', value: undefined }}
@@ -349,7 +353,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                         {postCondition && (
                           <Stack>
                             {postConditionParameterMap[postCondition].map(parameter =>
-                              parameter !== 'Post Condition Code' ? (
+                              parameter !== 'conditionCode' ? (
                                 <Box key={parameter}>
                                   <Text
                                     fontSize="12px"
