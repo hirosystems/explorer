@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Formik } from 'formik';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -20,7 +21,7 @@ import {
   makeStandardSTXPostCondition,
   stringAsciiCV,
 } from '@stacks/transactions';
-import { Box, Button, Flex, Input, Stack, color } from '@stacks/ui';
+import { Box, Button, Flex, Input, Stack, color, usePrevious } from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -182,6 +183,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   );
   const [showPostCondition, setShowPostCondition] = useState(false);
   const [postCondition, setPostCondition] = useState<PostConditionType | undefined>(undefined);
+  const prevIsPostConditionModeEnabled = usePrevious(isPostConditionModeEnabled);
   const network = useNetworkConfig();
 
   const initialFunctionParameterValues = useMemo(
@@ -206,14 +208,14 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     if (!showPostCondition) {
       setPostCondition(undefined);
     }
-    if (showPostCondition) {
-      setPostConditionMode(PostConditionMode.Deny);
+    if (
+      prevIsPostConditionModeEnabled === PostConditionMode.Deny &&
+      isPostConditionModeEnabled === PostConditionMode.Allow &&
+      showPostCondition
+    ) {
+      setShowPostCondition(false);
     }
-    // if (isPostConditionModeEnabled) {
-    //   setPostCondition(undefined);
-    //   setShowPostCondition(false);
-    // }
-  }, [showPostCondition, isPostConditionModeEnabled]);
+  }, [showPostCondition, isPostConditionModeEnabled, prevIsPostConditionModeEnabled]);
 
   const initialPostConditionParameterValues: PostConditionParameters = {
     address: undefined,
@@ -236,10 +238,44 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
       validateOnChange={false}
       validateOnBlur={false}
       validate={values => {
-        const functionParametersErrors = checkFunctionParameters(fn, values);
-        const postConditionParametersErrors = checkPostConditionParameters(values);
-        const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
+        const errors: Record<string, string> = {};
+        Object.keys(values).forEach(arg => {
+          const type = fn.args.find(({ name }) => name === arg)?.type;
+          const isOptional = type && isClarityAbiOptional(type);
+          const optionalTypeIsPrincipal =
+            isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
+          if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
+            const validPrincipal = validateStacksAddress(
+              (values[arg] as NonTupleValueType).toString().split('.')[0]
+            );
+            if (!validPrincipal) {
+              errors[arg] = 'Invalid Stacks address.';
+            }
+          }
+        });
         return errors;
+        // const errors: Record<string, string> = {};
+        // Object.keys(values).forEach(arg => {
+        //   if (arg === 'address' || arg === 'assetAddress') {
+        //     if (!validateStacksAddress(values[arg])) {
+        //       errors[arg] = 'Invalid Stacks address.';
+        //     }
+        //   }
+        //   if (arg === 'amount') {
+        //     if (
+        //       values[arg] < 0 ||
+        //       !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))
+        //     ) {
+        //       errors[arg] = 'Invalid amount';
+        //     }
+        //   }
+        // });
+        // return errors;
+        // const functionParametersErrors = checkFunctionParameters(fn, values);
+        // return functionParametersErrors;
+        // const postConditionParametersErrors = checkPostConditionParameters(values);
+        // const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
+        // return errors;
       }}
       onSubmit={values => {
         const final: Record<string, ClarityValue> = {};
@@ -365,14 +401,15 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                       />
                     ))}
                     {fn.access === 'public' && (
-                      <Button
+                      <PostConditionButton
                         disabled={isPostConditionModeEnabled === PostConditionMode.Allow}
+                        showPostCondition={showPostCondition}
                         onClick={() => {
                           setShowPostCondition(!showPostCondition);
                         }}
                       >
                         {!showPostCondition ? 'Add post condition' : 'Remove post condition'}
-                      </Button>
+                      </PostConditionButton>
                     )}
                     {showPostCondition && (
                       <Box>
@@ -486,3 +523,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     />
   );
 };
+
+const PostConditionButton = styled(Button)<{ disabled: boolean; showPostCondition: boolean }>`
+  background-color: ${props =>
+    props.disabled === true ? '#747478' : props.showPostConditon ? 'red' : null};
+  opacity: ${props => (props.disabled === true ? '0.2' : null)};
+
+  :hover {
+    background-color: ${props => (props.disabled === true ? '#747478' : null)};
+  }
+`;
