@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Formik } from 'formik';
+import { removeListener } from 'process';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { openContractCall } from '@stacks/connect';
@@ -352,28 +353,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           errors.postConditionType = 'Post condition is undefined';
         }
         return errors;
-        // const errors: Record<string, string> = {};
-        // Object.keys(values).forEach(arg => {
-        //   if (arg === 'address' || arg === 'assetAddress') {
-        //     if (!validateStacksAddress(values[arg])) {
-        //       errors[arg] = 'Invalid Stacks address.';
-        //     }
-        //   }
-        //   if (arg === 'amount') {
-        //     if (
-        //       values[arg] < 0 ||
-        //       !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))
-        //     ) {
-        //       errors[arg] = 'Invalid amount';
-        //     }
-        //   }
-        // });
-        // return errors;
-        // const functionParametersErrors = checkFunctionParameters(fn, values);
-        // return functionParametersErrors;
-        // const postConditionParametersErrors = checkPostConditionParameters(values);
-        // const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
-        // return errors;
       }}
       onSubmit={async values => {
         const final: Record<string, ClarityValue> = {};
@@ -623,6 +602,11 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                         setFieldValue('postConditionConditionCode', option.value)
                                       }
                                     />
+                                    {errors && (
+                                      <Caption color={color('feedback-error')}>
+                                        {errors[parameter]}
+                                      </Caption>
+                                    )}
                                   </Box>
                                 )}
                                 {errors && (
