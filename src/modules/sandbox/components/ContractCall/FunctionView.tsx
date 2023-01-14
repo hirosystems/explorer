@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Formik } from 'formik';
+import { removeListener } from 'process';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { openContractCall } from '@stacks/connect';
@@ -32,7 +33,7 @@ import { InfoCircleIcon } from '@components/icons/info-circle';
 import { Section } from '@components/section';
 import { Toggle } from '@components/toggle';
 import { Tooltip } from '@components/tooltip';
-import { Text } from '@components/typography';
+import { Caption, Text } from '@components/typography';
 
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types';
 import { encodeTuple, getTuple } from '../../utils';
@@ -232,50 +233,15 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         {
           ...initialFunctionParameterValues,
           ...initialPostConditionParameterValues,
-          isPostConditionModeEnabled,
         } as any
       }
       validateOnChange={false}
       validateOnBlur={false}
       validate={values => {
-        const errors: Record<string, string> = {};
-        Object.keys(values).forEach(arg => {
-          const type = fn.args.find(({ name }) => name === arg)?.type;
-          const isOptional = type && isClarityAbiOptional(type);
-          const optionalTypeIsPrincipal =
-            isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
-          if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
-            const validPrincipal = validateStacksAddress(
-              (values[arg] as NonTupleValueType).toString().split('.')[0]
-            );
-            if (!validPrincipal) {
-              errors[arg] = 'Invalid Stacks address.';
-            }
-          }
-        });
+        const functionParametersErrors = checkFunctionParameters(fn, values);
+        const postConditionParametersErrors = checkPostConditionParameters(values);
+        const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
         return errors;
-        // const errors: Record<string, string> = {};
-        // Object.keys(values).forEach(arg => {
-        //   if (arg === 'address' || arg === 'assetAddress') {
-        //     if (!validateStacksAddress(values[arg])) {
-        //       errors[arg] = 'Invalid Stacks address.';
-        //     }
-        //   }
-        //   if (arg === 'amount') {
-        //     if (
-        //       values[arg] < 0 ||
-        //       !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))
-        //     ) {
-        //       errors[arg] = 'Invalid amount';
-        //     }
-        //   }
-        // });
-        // return errors;
-        // const functionParametersErrors = checkFunctionParameters(fn, values);
-        // return functionParametersErrors;
-        // const postConditionParametersErrors = checkPostConditionParameters(values);
-        // const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
-        // return errors;
       }}
       onSubmit={values => {
         const final: Record<string, ClarityValue> = {};
@@ -321,16 +287,17 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             functionArgs: Object.values(final),
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
-            postConditions: postCondition
-              ? getPostCondition(postCondition, {
-                  address,
-                  conditionCode,
-                  amount,
-                  assetAddress,
-                  assetContractName,
-                  assetName,
-                })
-              : undefined,
+            postConditions:
+              showPostCondition && postCondition
+                ? getPostCondition(postCondition, {
+                    address,
+                    conditionCode,
+                    amount,
+                    assetAddress,
+                    assetContractName,
+                    assetName,
+                  })
+                : undefined,
             postConditionMode: isPostConditionModeEnabled,
           });
         } else {
@@ -338,14 +305,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         }
       }}
       render={({ handleSubmit, handleChange, values, errors, setFieldValue }) => {
-        if (!isPostConditionModeEnabled) {
-          setFieldValue('address', undefined);
-          setFieldValue('amount', undefined);
-          setFieldValue('conditionCode', undefined);
-          setFieldValue('assetName', undefined);
-          setFieldValue('assetAddress', undefined);
-          setFieldValue('assetContractName', undefined);
-        }
         return (
           <Section
             overflowY="visible"
@@ -371,7 +330,11 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                           : PostConditionMode.Deny
                       )
                     }
-                    label="Allow Mode"
+                    label={
+                      isPostConditionModeEnabled === PostConditionMode.Deny
+                        ? 'Deny Mode'
+                        : 'Allow Mode'
+                    }
                     value={isPostConditionModeEnabled === PostConditionMode.Allow ? true : false}
                   />
                   <Tooltip
@@ -402,13 +365,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                     ))}
                     {fn.access === 'public' && (
                       <PostConditionButton
+                        type="button"
                         disabled={isPostConditionModeEnabled === PostConditionMode.Allow}
                         showPostCondition={showPostCondition}
                         onClick={() => {
                           setShowPostCondition(!showPostCondition);
                         }}
                       >
-                        {!showPostCondition ? 'Add post condition' : 'Remove post condition'}
+                        {!showPostCondition
+                          ? 'Add post condition (optional)'
+                          : 'Remove post condition'}
                       </PostConditionButton>
                     )}
                     {showPostCondition && (
@@ -447,13 +413,17 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                   <Box width="100%">
                                     <Input
                                       width="100%"
-                                      // type={getTypeString(type).includes('int') ? 'number' : 'text'}
+                                      type={parameter === 'amount' ? 'number' : 'text'}
                                       name={parameter}
                                       id={parameter}
                                       onChange={handleChange}
                                       value={values[parameter]}
-                                      // placeholder={`${getTypeString(type)}`}
                                     />
+                                    {errors && (
+                                      <Caption color={color('feedback-error')}>
+                                        {errors[parameter]}
+                                      </Caption>
+                                    )}
                                   </Box>
                                 </Box>
                               ) : (

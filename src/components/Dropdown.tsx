@@ -46,7 +46,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <DropdownMenu ref={dropdownRef} onClick={toggle} colorMode={colorMode}>
-      <Button width="100%" height="100%">
+      <Button width="100%" height="100%" type="button">
         <Flex alignItems="center" whiteSpace="nowrap">
           <Box>{selected.label}</Box>
           <ChevronIcon display="inline" size="24px" direction={isOpen ? 'up' : 'down'} />
