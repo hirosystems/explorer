@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { Formik } from 'formik';
-import { removeListener } from 'process';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { openContractCall } from '@stacks/connect';
@@ -104,7 +103,7 @@ function getPostCondition(
   let postCondition;
 
   if (postConditionType === PostConditionType.Stx) {
-    if (address && conditionCode && amount) {
+    if (address && conditionCode && amount != null && !isNaN(amount) && amount >= 0) {
       postCondition = makeStandardSTXPostCondition(
         address,
         conditionCode as FungibleConditionCode,
@@ -112,7 +111,16 @@ function getPostCondition(
       );
     }
   } else if (postConditionType === PostConditionType.Fungible) {
-    if (address && assetAddress && assetContractName && assetName && conditionCode && amount) {
+    if (
+      address &&
+      assetAddress &&
+      assetContractName &&
+      assetName &&
+      conditionCode &&
+      amount != null &&
+      !isNaN(amount) &&
+      amount >= 0
+    ) {
       const assetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
       postCondition = makeStandardFungiblePostCondition(
         address,
@@ -160,9 +168,15 @@ const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
   return errors;
 };
 
-const checkPostConditionParameters = (values: any) => {
+const checkPostConditionParameters = (
+  values: any,
+  postConditionType: PostConditionType | undefined
+) => {
+  if (!postConditionType) return {};
   const errors: Record<string, string> = {};
   Object.keys(values).forEach(arg => {
+    if (!postConditionParameterMap[postConditionType].includes(arg)) return;
+    if (!values[arg]) errors[arg] = `${postConditionParameterLabels[arg]} is required`;
     if (arg === 'address' || arg === 'assetAddress') {
       if (!validateStacksAddress(values[arg])) {
         errors[arg] = 'Invalid Stacks address.';
@@ -183,7 +197,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
     PostConditionMode.Deny
   );
   const [showPostCondition, setShowPostCondition] = useState(false);
-  const [postCondition, setPostCondition] = useState<PostConditionType | undefined>(undefined);
+  const [postConditionType, setPostConditionType] = useState<PostConditionType | undefined>(
+    undefined
+  );
   const prevIsPostConditionModeEnabled = usePrevious(isPostConditionModeEnabled);
   const network = useNetworkConfig();
 
@@ -207,7 +223,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
 
   useEffect(() => {
     if (!showPostCondition) {
-      setPostCondition(undefined);
+      setPostConditionType(undefined);
     }
     if (
       prevIsPostConditionModeEnabled === PostConditionMode.Deny &&
@@ -239,8 +255,14 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
       validateOnBlur={false}
       validate={values => {
         const functionParametersErrors = checkFunctionParameters(fn, values);
-        const postConditionParametersErrors = checkPostConditionParameters(values);
+        const postConditionParametersErrors = checkPostConditionParameters(
+          values,
+          postConditionType
+        );
         const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
+        if (showPostCondition && !postConditionType) {
+          errors.postConditionType = 'Post condition is undefined';
+        }
         return errors;
       }}
       onSubmit={values => {
@@ -288,8 +310,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
             postConditions:
-              showPostCondition && postCondition
-                ? getPostCondition(postCondition, {
+              showPostCondition && postConditionType
+                ? getPostCondition(postConditionType, {
                     address,
                     conditionCode,
                     amount,
@@ -385,96 +407,106 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                             options={PostConditionOptions}
                             onChange={option => {
                               if (option.value === PostConditionType.Stx) {
-                                setPostCondition(PostConditionType.Stx);
+                                setPostConditionType(PostConditionType.Stx);
                               } else if (option.value === PostConditionType.Fungible) {
-                                setPostCondition(PostConditionType.Fungible);
+                                setPostConditionType(PostConditionType.Fungible);
                               } else if (option.value === PostConditionType.NonFungible) {
-                                setPostCondition(PostConditionType.NonFungible);
+                                setPostConditionType(PostConditionType.NonFungible);
                               }
                             }}
                           />
+                          {errors && (
+                            <Caption color={color('feedback-error')}>
+                              {errors.postConditionType}
+                            </Caption>
+                          )}
                         </Box>
 
-                        {postCondition && (
+                        {postConditionType && (
                           <Stack>
-                            {postConditionParameterMap[postCondition].map(parameter =>
-                              parameter !== 'conditionCode' ? (
-                                <Box key={parameter}>
-                                  <Text
-                                    fontSize="12px"
-                                    fontWeight="500"
-                                    display="block"
-                                    color={color('text-caption')}
-                                    htmlFor={parameter}
-                                    mb="tight"
-                                  >
-                                    {postConditionParameterLabels[parameter]}
-                                  </Text>
-                                  <Box width="100%">
-                                    <Input
-                                      width="100%"
-                                      type={parameter === 'amount' ? 'number' : 'text'}
-                                      name={parameter}
-                                      id={parameter}
-                                      onChange={handleChange}
-                                      value={values[parameter]}
-                                    />
-                                    {errors && (
-                                      <Caption color={color('feedback-error')}>
-                                        {errors[parameter]}
-                                      </Caption>
-                                    )}
+                            {postConditionParameterMap[postConditionType].map(parameter => (
+                              <Box>
+                                {parameter !== 'conditionCode' ? (
+                                  <Box key={parameter}>
+                                    <Text
+                                      fontSize="12px"
+                                      fontWeight="500"
+                                      display="block"
+                                      color={color('text-caption')}
+                                      htmlFor={parameter}
+                                      mb="tight"
+                                    >
+                                      {postConditionParameterLabels[parameter]}
+                                    </Text>
+                                    <Box width="100%">
+                                      <Input
+                                        width="100%"
+                                        type={parameter === 'amount' ? 'number' : 'text'}
+                                        name={parameter}
+                                        id={parameter}
+                                        onChange={handleChange}
+                                        value={values[parameter]}
+                                      />
+                                    </Box>
                                   </Box>
-                                </Box>
-                              ) : (
-                                <Box
-                                  maxWidth="260px"
-                                  maxHeight="42px"
-                                  height="42px"
-                                  marginBottom="16px"
-                                  key={parameter}
-                                >
-                                  <Dropdown
-                                    defaultOption={{
-                                      label: `Select a condition code`,
-                                      value: undefined,
-                                    }}
-                                    options={
-                                      postCondition === PostConditionType.NonFungible
-                                        ? [
-                                            {
-                                              label: 'Does not send',
-                                              value: NonFungibleConditionCode.DoesNotSend,
-                                            },
-                                            {
-                                              label: 'Sends',
-                                              value: NonFungibleConditionCode.Sends,
-                                            },
-                                          ]
-                                        : [
-                                            { label: 'Equal', value: FungibleConditionCode.Equal },
-                                            {
-                                              label: 'Greater',
-                                              value: FungibleConditionCode.Greater,
-                                            },
-                                            {
-                                              label: 'GreaterEqual',
-                                              value: FungibleConditionCode.GreaterEqual,
-                                            },
-                                            { label: 'Less', value: FungibleConditionCode.Less },
-                                            {
-                                              label: 'LessEqual',
-                                              value: FungibleConditionCode.LessEqual,
-                                            },
-                                          ]
-                                    }
-                                    onChange={option =>
-                                      setFieldValue('conditionCode', option.value)
-                                    }
-                                  />
-                                </Box>
-                              )
-                            )}
+                                ) : (
+                                  <Box
+                                    maxWidth="260px"
+                                    maxHeight="42px"
+                                    height="42px"
+                                    marginBottom="16px"
+                                    key={parameter}
+                                  >
+                                    <Dropdown
+                                      defaultOption={{
+                                        label: `Select a condition code`,
+                                        value: undefined,
+                                      }}
+                                      options={
+                                        postConditionType === PostConditionType.NonFungible
+                                          ? [
+                                              {
+                                                label: 'Does not send',
+                                                value: NonFungibleConditionCode.DoesNotSend,
+                                              },
+                                              {
+                                                label: 'Sends',
+                                                value: NonFungibleConditionCode.Sends,
+                                              },
+                                            ]
+                                          : [
+                                              {
+                                                label: 'Equal',
+                                                value: FungibleConditionCode.Equal,
+                                              },
+                                              {
+                                                label: 'Greater',
+                                                value: FungibleConditionCode.Greater,
+                                              },
+                                              {
+                                                label: 'GreaterEqual',
+                                                value: FungibleConditionCode.GreaterEqual,
+                                              },
+                                              { label: 'Less', value: FungibleConditionCode.Less },
+                                              {
+                                                label: 'LessEqual',
+                                                value: FungibleConditionCode.LessEqual,
+                                              },
+                                            ]
+                                      }
+                                      onChange={option =>
+                                        setFieldValue('conditionCode', option.value)
+                                      }
+                                    />
+                                  </Box>
+                                )}
+                                {errors && (
+                                  <Caption color={color('feedback-error')}>
+                                    {errors[parameter]}
+                                  </Caption>
+                                )}
+                              </Box>
+                            ))}
                           </Stack>
                         )}
                       </Box>
