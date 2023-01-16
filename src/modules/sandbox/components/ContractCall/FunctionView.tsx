@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { Formik } from 'formik';
-import { removeListener } from 'process';
 import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { openContractCall } from '@stacks/connect';
@@ -262,9 +261,15 @@ const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
   return errors;
 };
 
-const checkPostConditionParameters = (values: any) => {
+const checkPostConditionParameters = (
+  values: any,
+  postConditionType: PostConditionType | undefined
+) => {
+  if (!postConditionType) return {};
   const errors: Record<string, string> = {};
   Object.keys(values).forEach(arg => {
+    if (!postConditionParameterMap[postConditionType].includes(arg)) return;
+    if (!values[arg]) errors[arg] = `${postConditionParameterLabels[arg]} is required`;
     if (arg === 'address' || arg === 'assetAddress') {
       if (!validateStacksAddress(values[arg])) {
         errors[arg] = 'Invalid Stacks address.';
