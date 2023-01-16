@@ -528,10 +528,13 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
 
 const PostConditionButton = styled(Button)<{ disabled: boolean; showPostCondition: boolean }>`
   background-color: ${props =>
-    props.disabled === true ? '#747478' : props.showPostConditon ? 'red' : null};
+    props.disabled === true ? '#747478' : props.showPostCondition ? '#dc3545' : null};
   opacity: ${props => (props.disabled === true ? '0.2' : null)};
 
   :hover {
-    background-color: ${props => (props.disabled === true ? '#747478' : null)};
+    background-color: ${props =>
+      props.disabled === true ? '#747478' : props.showPostCondition ? '#dc3545' : null};
+    filter: ${props =>
+      props.disabled === true ? null : props.showPostCondition ? 'brightness(85%)' : null};
   }
 `;
