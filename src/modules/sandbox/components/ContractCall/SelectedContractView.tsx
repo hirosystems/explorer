@@ -26,7 +26,6 @@ import { selectShowRightPanel } from '../../sandbox-slice';
 import { Layout } from '../Layout';
 import { AvailableFunctionsView } from './AvailableFunctionsView';
 import { FunctionView } from './FunctionView';
-import { FunctionViewWithRHF } from './FunctionViewWithRHF';
 
 const BackLink: React.FC<{ href: string }> = ({ href }) => {
   const [isHovered, bind] = useHover();
@@ -163,24 +162,6 @@ export const SelectedContractView: FC<{
                   </NextLink>
                 }
               />
-              {/* <FunctionViewWithRHF
-                contractId={contractId}
-                fn={
-                  contract?.abi?.functions?.find(
-                    (fn: any) => fn.name === functionName
-                  ) as unknown as ClarityAbiFunction
-                }
-                cancelButton={
-                  <NextLink
-                    href={buildUrl(`/sandbox/contract-call/${contractId}`, activeNetwork)}
-                    passHref
-                  >
-                    <Caption _hover={{ cursor: 'pointer', color: color('text-title') }} mt="base">
-                      Cancel
-                    </Caption>
-                  </NextLink>
-                }
-              /> */}
             </Box>
           ) : (
             <AvailableFunctionsView contract={contract} contractId={contractId} />
