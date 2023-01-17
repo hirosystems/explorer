@@ -26,7 +26,6 @@ import { selectShowRightPanel } from '../../sandbox-slice';
 import { Layout } from '../Layout';
 import { AvailableFunctionsView } from './AvailableFunctionsView';
 import { FunctionView } from './FunctionView';
-import { FunctionViewWithRHF } from './FunctionViewWithRHF';
 
 const BackLink: React.FC<{ href: string }> = ({ href }) => {
   const [isHovered, bind] = useHover();

@@ -1,6 +1,6 @@
 {
   "name": "@hiro/explorer",
-  "description": "The source code for the Stacks Blockƒtypein explorer.",
+  "description": "The source code for the Stacks Blockchain explorer.",
   "scripts": {
     "build": "next telemetry disable && next build",
     "build:analyze": "next telemetry disable && ANALYZE=true next build",
