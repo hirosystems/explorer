@@ -21,7 +21,7 @@ import {
   makeStandardSTXPostCondition,
   stringAsciiCV,
 } from '@stacks/transactions';
-import { Box, Button, Flex, Input, Stack, color, usePrevious } from '@stacks/ui';
+import { Box, Button, Flex, Input, Stack, color, useColorMode, usePrevious } from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -202,6 +202,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   );
   const prevIsPostConditionModeEnabled = usePrevious(isPostConditionModeEnabled);
   const network = useNetworkConfig();
+  const { colorMode } = useColorMode();
 
   const initialFunctionParameterValues = useMemo(
     () =>
@@ -393,6 +394,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                         onClick={() => {
                           setShowPostCondition(!showPostCondition);
                         }}
+                        colorMode={colorMode}
                       >
                         {!showPostCondition
                           ? 'Add post condition (optional)'
@@ -526,15 +528,42 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   );
 };
 
-const PostConditionButton = styled(Button)<{ disabled: boolean; showPostCondition: boolean }>`
+const PostConditionButton = styled(Button)<{
+  disabled: boolean;
+  showPostCondition: boolean;
+  colorMode: ColorModeString | undefined;
+}>`
   background-color: ${props =>
-    props.disabled === true ? '#747478' : props.showPostCondition ? '#dc3545' : null};
+    props.disabled === true
+      ? '#747478'
+      : props.showPostCondition
+      ? '#dc3545'
+      : props.colorMode === 'light'
+      ? 'black'
+      : 'white'};
   opacity: ${props => (props.disabled === true ? '0.2' : null)};
+  color: ${props => (props.colorMode === 'light' ? 'white' : 'black')};
+
+  /* .Dropdown--button {
+    background-color: ${props => (props.colorMode === 'light' ? 'black' : 'white')};
+  } */
 
   :hover {
     background-color: ${props =>
-      props.disabled === true ? '#747478' : props.showPostCondition ? '#dc3545' : null};
+      props.disabled === true
+        ? '#505053'
+        : props.showPostCondition
+        ? '#dc3545'
+        : props.colorMode === 'light'
+        ? '#040404c7'
+        : 'white'};
     filter: ${props =>
-      props.disabled === true ? null : props.showPostCondition ? 'brightness(85%)' : null};
+      props.disabled === true
+        ? null
+        : props.showPostCondition
+        ? 'brightness(85%)'
+        : props.colorMode === 'light'
+        ? null
+        : 'brightness(85%)'};
   }
 `;

@@ -46,7 +46,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <DropdownMenu ref={dropdownRef} onClick={toggle} colorMode={colorMode}>
-      <Button width="100%" height="100%" type="button">
+      <Button width="100%" height="100%" type="button" className="Dropdown--button">
         <Flex alignItems="center" whiteSpace="nowrap">
           <Box>{selected.label}</Box>
           <ChevronIcon display="inline" size="24px" direction={isOpen ? 'up' : 'down'} />
@@ -94,6 +94,16 @@ const DropdownMenu = styled.div<{ colorMode: ColorModeString | undefined }>`
   height: 100%;
   overflow: visible;
   position: relative;
+
+  .Dropdown--button {
+    background-color: ${props => (props.colorMode === 'light' ? 'black' : 'white')};
+    color: ${props => (props.colorMode === 'light' ? 'white' : 'black')};
+
+    :hover {
+      background-color: ${props => (props.colorMode === 'light' ? '#505053' : 'white')};
+      filter: ${props => (props.colorMode === 'light' ? null : 'brightness(85%)')};
+    }
+  }
 
   ul {
     width: 100%;
