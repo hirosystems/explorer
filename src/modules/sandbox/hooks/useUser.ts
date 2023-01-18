@@ -66,7 +66,7 @@ export const useUser = () => {
     hasTransactions:
       !!transactionsData?.results?.length || !!mempoolTransactionsData?.results?.length,
     connect: (authOptions?: Partial<AuthOptions>) =>
-      dispatch(connect({ activeNetworkMode: activeNetworkMode, authOptions: authOptions })),
+      dispatch(connect({ activeNetworkMode, authOptions })),
     disconnect: () => dispatch(disconnect()),
   };
 };

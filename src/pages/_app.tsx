@@ -1,3 +1,4 @@
+import { createTxFilterSlice } from '@features/transactions-filter/transactions-filter-slice';
 import 'modern-normalize/modern-normalize.css';
 import type { AppContext, AppProps } from 'next/app';
 import App from 'next/app';
@@ -60,12 +61,65 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
   );
 }
 
+const getSearchParamsFromNextUrl = (url: string | undefined) => {
+  if (!url) {
+    return {};
+  }
+  const searchParamsString = url.split('?')[1];
+  if (!searchParamsString) {
+    return {};
+  }
+
+  const searchParamsArray = searchParamsString.split('&');
+  if (!searchParamsArray) {
+    return {};
+  }
+
+  const searchParams: Record<string, string> = {};
+  searchParamsArray.forEach(param => {
+    const keyValueTuple = param.split('=');
+    const key = keyValueTuple[0];
+    const value = keyValueTuple[1];
+    searchParams[key] = value;
+  });
+
+  return searchParams;
+};
+
+const getNetworkMode = (chain: string) => {
+  if (chain === NetworkModes.Devnet) return NetworkModes.Devnet;
+  else if (chain === NetworkModes.Mainnet) return NetworkModes.Mainnet;
+  else if (chain === NetworkModes.Testnet) return NetworkModes.Testnet;
+  else return undefined;
+};
+
 ExplorerApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
+
   const query = appContext.ctx.query;
-  const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
-    NetworkModes.Mainnet) as NetworkModes;
-  const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
+
+  const nextUrl = appContext.ctx.req?.url;
+  const searchParams = getSearchParamsFromNextUrl(nextUrl);
+  const chain = searchParams.chain;
+  const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
+  const api = searchParams.api;
+
+  const queryNetworkMode = Array.isArray(query.chain)
+    ? (query.chain[0] as NetworkModes)
+    : query.chain
+    ? (query.chain as NetworkModes)
+    : networkModeFromNextUrl
+    ? networkModeFromNextUrl
+    : NetworkModes.Mainnet;
+
+  const queryApiUrl = Array.isArray(query.api)
+    ? query.api[0]
+    : query.api
+    ? query.api
+    : api
+    ? api
+    : undefined;
+
   store.dispatch(initialize({ queryNetworkMode, apiUrls: NetworkModeUrlMap, queryApiUrl }));
   console.log(
     '[debug] store.getState().network',
@@ -76,6 +130,7 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
   console.log('[debug] queryNetworkMode', queryNetworkMode);
   console.log('[debug] queryApiUrl', queryApiUrl);
   console.log('[debug] query', query);
+
   return {
     ...appProps,
     ...appProps.pageProps,

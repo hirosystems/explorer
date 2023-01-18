@@ -15,7 +15,7 @@ export const generateTypesQueryString = (types?: Transaction['tx_type'][]) => {
   return '';
 };
 
-export const getNetworkModeFromNetworkId = (networkId: ChainID) => {
+export const getNetworkModeFromNetworkId = (networkId: ChainID): NetworkModes | undefined => {
   switch (networkId) {
     case ChainID.Mainnet:
       return NetworkModes.Mainnet;

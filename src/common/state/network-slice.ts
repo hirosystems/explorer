@@ -11,6 +11,7 @@ import { getCustomNetworksFromLS } from '@common/utils';
 export interface ApiUrls {
   [NetworkModes.Mainnet]: string;
   [NetworkModes.Testnet]: string;
+  [NetworkModes.Devnet]: string;
 }
 
 export interface NetworkState {
@@ -25,6 +26,7 @@ const initialState: NetworkState = {
   apiUrls: {
     [NetworkModes.Mainnet]: '',
     [NetworkModes.Testnet]: '',
+    [NetworkModes.Devnet]: '',
   },
   activeNetworkKey: '',
   customNetworks: getCustomNetworksFromLS(),
@@ -108,11 +110,11 @@ export const selectNetworks = createSelector([selectNetworkSlice], networkSlice 
     networkId: ChainID.Testnet,
     mode: NetworkModes.Testnet,
   },
-  [DEFAULT_DEVNET_SERVER]: {
+  [networkSlice.apiUrls[NetworkModes.Devnet]]: {
     label: 'devnet',
-    url: DEFAULT_DEVNET_SERVER,
+    url: networkSlice.apiUrls[NetworkModes.Devnet],
     networkId: ChainID.Testnet,
-    mode: NetworkModes.Testnet,
+    mode: NetworkModes.Devnet,
   },
   ...networkSlice.customNetworks,
 }));

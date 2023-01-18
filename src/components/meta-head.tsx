@@ -35,6 +35,8 @@ export const Meta = ({
   const withMode = (title: string) => {
     if (network.mode === 'testnet') {
       return `${title} [Testnet mode]`;
+    } else if (network.mode === 'devnet') {
+      return `${title} [Devnet mode]`;
     }
     return title;
   };
