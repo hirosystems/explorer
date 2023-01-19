@@ -1,7 +1,7 @@
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { ChainID } from '@stacks/transactions';
 
-import { NetworkModes } from '@common/types/network';
+import { NetworkMode, NetworkModes } from '@common/types/network';
 
 export const constructLimitAndOffsetQueryParams = (limit: number, offset?: number): string =>
   `limit=${limit}${offset ? `&offset=${offset}` : ''}`;
@@ -15,12 +15,14 @@ export const generateTypesQueryString = (types?: Transaction['tx_type'][]) => {
   return '';
 };
 
-export const getNetworkModeFromNetworkId = (networkId: ChainID) => {
+export const getNetworkModeFromNetworkId = (networkId: ChainID): NetworkModes | undefined => {
   switch (networkId) {
     case ChainID.Mainnet:
       return NetworkModes.Mainnet;
     case ChainID.Testnet:
       return NetworkModes.Testnet;
+    case ChainID.Devnet:
+      return NetworkModes.Devnet;
     default:
       return undefined;
   }
