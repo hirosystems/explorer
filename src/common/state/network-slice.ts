@@ -34,11 +34,13 @@ const initialState: NetworkState = {
 
 const RELOAD_DELAY = 500;
 
-const reloadWithNewNetwork = (network: Network) =>
+const reloadWithNewNetwork = (
+  network: Network // TODO: probably the issue
+) =>
   setTimeout(() => {
     if (typeof window !== 'undefined') {
       const href = new URL(window.location.href);
-      href.searchParams.set('chain', network.mode);
+      href.searchParams.set('chain', network.mode); // TODO: this is my fix for url
       if (network.isCustomNetwork) {
         href.searchParams.set('api', network.url);
       } else {
