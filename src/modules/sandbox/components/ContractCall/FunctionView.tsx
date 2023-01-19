@@ -21,7 +21,17 @@ import {
   makeStandardSTXPostCondition,
   stringAsciiCV,
 } from '@stacks/transactions';
-import { Box, Button, Flex, Input, Stack, color, useColorMode, usePrevious } from '@stacks/ui';
+import {
+  Box,
+  Button,
+  ColorModeString,
+  Flex,
+  Input,
+  Stack,
+  color,
+  useColorMode,
+  usePrevious,
+} from '@stacks/ui';
 
 import { CONNECT_AUTH_ORIGIN } from '@common/constants';
 import { useNetworkConfig } from '@common/hooks/use-network-config';
@@ -52,31 +62,35 @@ enum PostConditionType {
 }
 
 const postConditionParameterMap = {
-  [PostConditionType.Stx]: ['address', 'conditionCode', 'amount'],
+  [PostConditionType.Stx]: [
+    'postConditionAddress',
+    'postConditionConditionCode',
+    'postConditionAmount',
+  ],
   [PostConditionType.Fungible]: [
-    'address',
-    'conditionCode',
-    'amount',
-    'assetAddress',
-    'assetContractName',
-    'assetName',
+    'postConditionAddress',
+    'postConditionConditionCode',
+    'postConditionAmount',
+    'postConditionAssetAddress',
+    'postConditionAssetContractName',
+    'postConditionAssetName',
   ],
   [PostConditionType.NonFungible]: [
-    'address',
-    'conditionCode',
-    'assetAddress',
-    'assetContractName',
-    'assetName',
+    'postConditionAddress',
+    'postConditionConditionCode',
+    'postConditionAssetAddress',
+    'postConditionAssetContractName',
+    'postConditionAssetName',
   ],
 };
 
 const postConditionParameterLabels: Record<string, string> = {
-  address: 'Address',
-  conditionCode: 'Condition Code',
-  amount: 'Amount',
-  assetAddress: 'Asset Address',
-  assetContractName: 'Asset Contract Name',
-  assetName: 'Asset Name',
+  postConditionAddress: 'Address',
+  postConditionConditionCode: 'Condition Code',
+  postConditionAmount: 'Amount',
+  postConditionAssetAddress: 'Asset Address',
+  postConditionAssetContractName: 'Asset Contract Name',
+  postConditionAssetName: 'Asset Name',
 };
 
 const PostConditionOptions = [
@@ -86,57 +100,83 @@ const PostConditionOptions = [
 ];
 
 interface PostConditionParameters {
-  address?: string;
-  conditionCode?: NonFungibleConditionCode | FungibleConditionCode;
-  amount?: number;
-  assetAddress?: string;
-  assetContractName?: string;
-  assetName?: string;
+  postConditionAddress?: string;
+  postConditionConditionCode?: NonFungibleConditionCode | FungibleConditionCode;
+  postConditionAmount?: number;
+  postConditionAssetAddress?: string;
+  postConditionAssetContractName?: string;
+  postConditionAssetName?: string;
 }
 
 function getPostCondition(
   postConditionType: PostConditionType,
   postConditionParameters: PostConditionParameters
 ): PostCondition[] {
-  const { address, conditionCode, amount, assetAddress, assetContractName, assetName } =
-    postConditionParameters;
+  const {
+    postConditionAddress,
+    postConditionConditionCode,
+    postConditionAmount,
+    postConditionAssetAddress,
+    postConditionAssetContractName,
+    postConditionAssetName,
+  } = postConditionParameters;
   let postCondition;
 
   if (postConditionType === PostConditionType.Stx) {
-    if (address && conditionCode && amount != null && !isNaN(amount) && amount >= 0) {
+    if (
+      postConditionAddress &&
+      postConditionConditionCode &&
+      postConditionAmount != null &&
+      !isNaN(postConditionAmount) &&
+      postConditionAmount >= 0
+    ) {
       postCondition = makeStandardSTXPostCondition(
-        address,
-        conditionCode as FungibleConditionCode,
-        amount
+        postConditionAddress,
+        postConditionConditionCode as FungibleConditionCode,
+        postConditionAmount
       );
     }
   } else if (postConditionType === PostConditionType.Fungible) {
     if (
-      address &&
-      assetAddress &&
-      assetContractName &&
-      assetName &&
-      conditionCode &&
-      amount != null &&
-      !isNaN(amount) &&
-      amount >= 0
+      postConditionAddress &&
+      postConditionAssetAddress &&
+      postConditionAssetContractName &&
+      postConditionAssetName &&
+      postConditionConditionCode &&
+      postConditionAmount != null &&
+      !isNaN(postConditionAmount) &&
+      postConditionAmount >= 0
     ) {
-      const assetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
+      const assetInfo = createAssetInfo(
+        postConditionAssetAddress,
+        postConditionAssetContractName,
+        ''
+      );
       postCondition = makeStandardFungiblePostCondition(
-        address,
-        conditionCode as FungibleConditionCode,
-        amount,
+        postConditionAddress,
+        postConditionConditionCode as FungibleConditionCode,
+        postConditionAmount,
         assetInfo
       );
     }
   } else if (postConditionType === PostConditionType.NonFungible) {
-    if (address && assetAddress && assetContractName && assetName && conditionCode) {
-      const assetInfo = createAssetInfo(assetAddress, assetContractName, assetName);
+    if (
+      postConditionAddress &&
+      postConditionAssetAddress &&
+      postConditionAssetContractName &&
+      postConditionAssetName &&
+      postConditionConditionCode
+    ) {
+      const assetInfo = createAssetInfo(
+        postConditionAssetAddress,
+        postConditionAssetContractName,
+        postConditionAssetName
+      );
       postCondition = makeStandardNonFungiblePostCondition(
-        address,
-        conditionCode as NonFungibleConditionCode,
+        postConditionAddress,
+        postConditionConditionCode as NonFungibleConditionCode,
         assetInfo,
-        stringAsciiCV(assetName)
+        stringAsciiCV(postConditionAssetName)
       );
     }
   } else {
@@ -177,12 +217,12 @@ const checkPostConditionParameters = (
   Object.keys(values).forEach(arg => {
     if (!postConditionParameterMap[postConditionType].includes(arg)) return;
     if (!values[arg]) errors[arg] = `${postConditionParameterLabels[arg]} is required`;
-    if (arg === 'address' || arg === 'assetAddress') {
+    if (arg === 'postConditionAddress' || arg === 'postConditionAssetAddress') {
       if (!validateStacksAddress(values[arg])) {
         errors[arg] = 'Invalid Stacks address.';
       }
     }
-    if (arg === 'amount') {
+    if (arg === 'postConditionAmount') {
       if (values[arg] < 0 || !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))) {
         errors[arg] = 'Invalid amount';
       }
@@ -236,12 +276,12 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   }, [showPostCondition, isPostConditionModeEnabled, prevIsPostConditionModeEnabled]);
 
   const initialPostConditionParameterValues: PostConditionParameters = {
-    address: undefined,
-    amount: undefined,
-    conditionCode: undefined,
-    assetName: undefined,
-    assetAddress: undefined,
-    assetContractName: undefined,
+    postConditionAddress: undefined,
+    postConditionAmount: undefined,
+    postConditionConditionCode: undefined,
+    postConditionAssetName: undefined,
+    postConditionAssetAddress: undefined,
+    postConditionAssetContractName: undefined,
   };
 
   return (
@@ -300,8 +340,26 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           }
         });
         if (fn.access === 'public') {
-          const { address, conditionCode, amount, assetAddress, assetContractName, assetName } =
-            values;
+          const {
+            postConditionAddress,
+            postConditionConditionCode,
+            postConditionAmount,
+            postConditionAssetAddress,
+            postConditionAssetContractName,
+            postConditionAssetName,
+          } = values;
+
+          const postConditions =
+            showPostCondition && postConditionType
+              ? getPostCondition(postConditionType, {
+                  postConditionAddress,
+                  postConditionConditionCode,
+                  postConditionAmount,
+                  postConditionAssetAddress,
+                  postConditionAssetContractName,
+                  postConditionAssetName,
+                })
+              : undefined;
 
           void openContractCall({
             contractAddress: contractId.split('.')[0],
@@ -310,17 +368,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             functionArgs: Object.values(final),
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
-            postConditions:
-              showPostCondition && postConditionType
-                ? getPostCondition(postConditionType, {
-                    address,
-                    conditionCode,
-                    amount,
-                    assetAddress,
-                    assetContractName,
-                    assetName,
-                  })
-                : undefined,
+            postConditions,
+
             postConditionMode: isPostConditionModeEnabled,
           });
         } else {
@@ -428,7 +477,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                           <Stack>
                             {postConditionParameterMap[postConditionType].map(parameter => (
                               <Box>
-                                {parameter !== 'conditionCode' ? (
+                                {parameter !== 'postConditionConditionCode' ? (
                                   <Box key={parameter}>
                                     <Text
                                       fontSize="12px"
@@ -443,7 +492,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                     <Box width="100%">
                                       <Input
                                         width="100%"
-                                        type={parameter === 'amount' ? 'number' : 'text'}
+                                        type={
+                                          parameter === 'postConditionAmount' ? 'number' : 'text'
+                                        }
                                         name={parameter}
                                         id={parameter}
                                         onChange={handleChange}
@@ -497,7 +548,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                             ]
                                       }
                                       onChange={option =>
-                                        setFieldValue('conditionCode', option.value)
+                                        setFieldValue('postConditionConditionCode', option.value)
                                       }
                                     />
                                   </Box>
