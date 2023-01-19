@@ -270,12 +270,12 @@ const checkPostConditionParameters = (
   Object.keys(values).forEach(arg => {
     if (!postConditionParameterMap[postConditionType].includes(arg)) return;
     if (!values[arg]) errors[arg] = `${postConditionParameterLabels[arg]} is required`;
-    if (arg === 'address' || arg === 'assetAddress') {
+    if (arg === 'postConditionAddress' || arg === 'postConditionAssetAddress') {
       if (!validateStacksAddress(values[arg])) {
         errors[arg] = 'Invalid Stacks address.';
       }
     }
-    if (arg === 'amount') {
+    if (arg === 'postConditionAmount') {
       if (values[arg] < 0 || !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))) {
         errors[arg] = 'Invalid amount';
       }
