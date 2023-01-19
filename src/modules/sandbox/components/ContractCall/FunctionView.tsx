@@ -61,7 +61,9 @@ enum PostConditionType {
   NonFungible = 'NonFungiblePostCondition',
 }
 
-const postConditionParameterMap = {
+type PostConditionParameterKeys = keyof PostConditionParameters;
+
+const postConditionParameterMap: Record<PostConditionType, PostConditionParameterKeys[]> = {
   [PostConditionType.Stx]: [
     'postConditionAddress',
     'postConditionConditionCode',
@@ -187,7 +189,11 @@ function getPostCondition(
   return [postCondition];
 }
 
-type FormType = Record<string, ValueType | ListValueType>;
+interface FormType {
+  [key: string]: ValueType | ListValueType;
+}
+
+type InitialValuesType = FormType & PostConditionParameters;
 
 const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
   const errors: Record<string, string> = {};
@@ -209,7 +215,7 @@ const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
 };
 
 const checkPostConditionParameters = (
-  values: any,
+  values: InitialValuesType,
   postConditionType: PostConditionType | undefined
 ) => {
   if (!postConditionType) return {};
@@ -290,7 +296,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         {
           ...initialFunctionParameterValues,
           ...initialPostConditionParameterValues,
-        } as any
+        } as InitialValuesType
       }
       validateOnChange={false}
       validateOnBlur={false}
@@ -369,7 +375,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
             postConditions,
-
             postConditionMode: isPostConditionModeEnabled,
           });
         } else {
