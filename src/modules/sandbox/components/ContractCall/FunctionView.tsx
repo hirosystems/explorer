@@ -262,7 +262,7 @@ const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
 };
 
 const checkPostConditionParameters = (
-  values: any,
+  values: InitialValuesType,
   postConditionType: PostConditionType | undefined
 ) => {
   if (!postConditionType) return {};
