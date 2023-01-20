@@ -61,6 +61,15 @@ enum PostConditionType {
   NonFungible = 'NonFungiblePostCondition',
 }
 
+interface PostConditionParameters {
+  postConditionAddress?: string;
+  postConditionConditionCode?: NonFungibleConditionCode | FungibleConditionCode;
+  postConditionAmount?: number;
+  postConditionAssetAddress?: string;
+  postConditionAssetContractName?: string;
+  postConditionAssetName?: string;
+}
+
 type PostConditionParameterKeys = keyof PostConditionParameters;
 
 const postConditionParameterMap: Record<PostConditionType, PostConditionParameterKeys[]> = {
@@ -100,15 +109,6 @@ const PostConditionOptions = [
   { label: 'Fungible Post Condition', value: PostConditionType.Fungible },
   { label: 'Non-Fungible Post Condition', value: PostConditionType.NonFungible },
 ];
-
-interface PostConditionParameters {
-  postConditionAddress?: string;
-  postConditionConditionCode?: NonFungibleConditionCode | FungibleConditionCode;
-  postConditionAmount?: number;
-  postConditionAssetAddress?: string;
-  postConditionAssetContractName?: string;
-  postConditionAssetName?: string;
-}
 
 function getPostCondition(
   postConditionType: PostConditionType,
@@ -152,7 +152,7 @@ function getPostCondition(
       const assetInfo = createAssetInfo(
         postConditionAssetAddress,
         postConditionAssetContractName,
-        ''
+        postConditionAssetName
       );
       postCondition = makeStandardFungiblePostCondition(
         postConditionAddress,
@@ -374,7 +374,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             functionArgs: Object.values(final),
             network,
             authOrigin: CONNECT_AUTH_ORIGIN,
-            postConditions,
+            postConditions: postConditions,
             postConditionMode: isPostConditionModeEnabled,
           });
         } else {
