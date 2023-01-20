@@ -60,12 +60,41 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
   );
 }
 
+const getSearchParamsFromUrl = (url: string) => {
+  const searchParamsString = url.split('?')[1];
+  const searchParamsArray = searchParamsString.split('&');
+  const searchParams: Record<string, string> = {};
+  searchParamsArray.forEach(param => {
+    const keyValueTuple = param.split('=');
+    const key = keyValueTuple[0];
+    const value = keyValueTuple[1];
+    searchParams[key] = value;
+  });
+  return searchParams;
+};
+
+const getNetworkMode = (chain: string) => {
+  if (chain === NetworkModes.Devnet) return NetworkModes.Devnet;
+  else if (chain === NetworkModes.Mainnet) return NetworkModes.Mainnet;
+  else if (chain === NetworkModes.Testnet) return NetworkModes.Testnet;
+  else return undefined;
+};
+
 ExplorerApp.getInitialProps = async (appContext: AppContext) => {
   const appProps = await App.getInitialProps(appContext);
+
+  const nextUrl = appContext.ctx.req?.url;
+  let chain = '',
+    api = '';
+  if (nextUrl) {
+    const searchParams = getSearchParamsFromUrl(nextUrl);
+    chain = searchParams.chain;
+    api = searchParams.api;
+  }
   const query = appContext.ctx.query;
-  const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
-    NetworkModes.Mainnet) as NetworkModes;
-  const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
+  const queryNetworkMode = getNetworkMode(chain) ?? NetworkModes.Mainnet;
+  const queryApiUrl = api;
+
   store.dispatch(initialize({ queryNetworkMode, apiUrls: NetworkModeUrlMap, queryApiUrl }));
   console.log(
     '[debug] store.getState().network',
@@ -76,6 +105,7 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
   console.log('[debug] queryNetworkMode', queryNetworkMode);
   console.log('[debug] queryApiUrl', queryApiUrl);
   console.log('[debug] query', query);
+
   return {
     ...appProps,
     ...appProps.pageProps,

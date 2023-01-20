@@ -112,9 +112,9 @@ export const selectNetworks = createSelector([selectNetworkSlice], networkSlice 
     networkId: ChainID.Testnet,
     mode: NetworkModes.Testnet,
   },
-  [DEFAULT_DEVNET_SERVER]: {
+  [networkSlice.apiUrls[NetworkModes.Devnet]]: {
     label: 'devnet',
-    url: DEFAULT_DEVNET_SERVER,
+    url: networkSlice.apiUrls[NetworkModes.Devnet],
     networkId: ChainID.Devnet,
     mode: NetworkModes.Devnet,
   },
