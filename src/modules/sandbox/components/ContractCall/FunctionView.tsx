@@ -220,7 +220,8 @@ const checkPostConditionParameters = (
 ) => {
   if (!postConditionType) return {};
   const errors: Record<string, string> = {};
-  Object.keys(values).forEach(arg => {
+  Object.keys(values).forEach((arg: string | keyof PostConditionParameters) => {
+    // @ts-ignore
     if (!postConditionParameterMap[postConditionType].includes(arg)) return;
     if (!values[arg]) errors[arg] = `${postConditionParameterLabels[arg]} is required`;
     if (arg === 'postConditionAddress' || arg === 'postConditionAssetAddress') {
@@ -229,7 +230,8 @@ const checkPostConditionParameters = (
       }
     }
     if (arg === 'postConditionAmount') {
-      if (values[arg] < 0 || !(Number.isFinite(values[arg]) && Number.isInteger(values[arg]))) {
+      // @ts-ignore
+      if (Number.isInteger(values[arg]) && !Number.isFinite(values[arg]) && values[arg] < 0) {
         errors[arg] = 'Invalid amount';
       }
     }
