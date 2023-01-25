@@ -1,3 +1,11 @@
+# [1.70.0](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.70.0) (2023-01-25)
+
+
+### Features
+
+* **post-conditions:** relayed changes from first pc branch ([d88555e](https://github.com/hirosystems/explorer/commit/d88555eb54963faf9151bcb58cbbf6fbf5e3a331))
+* **post-conditions:** relayed the rest of the changes ([36a7b56](https://github.com/hirosystems/explorer/commit/36a7b5663a3ade388abc6862df489e490e50de3d))
+
 ## [1.69.1](https://github.com/hirosystems/explorer/compare/v1.69.0...v1.69.1) (2023-01-24)
 
 
