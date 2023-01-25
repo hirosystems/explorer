@@ -1,3 +1,11 @@
+## [1.69.1](https://github.com/hirosystems/explorer/compare/v1.69.0...v1.69.1) (2023-01-24)
+
+
+### Bug Fixes
+
+* add error check for non-existent transaction on txid page ([168bc48](https://github.com/hirosystems/explorer/commit/168bc4890556b533ca9da1000775c8ff3ed59234))
+* remove old bg image ([9b0a87a](https://github.com/hirosystems/explorer/commit/9b0a87ac5f782a93ac28283e6428c68632ebc564))
+
 # [1.69.0](https://github.com/hirosystems/explorer/compare/v1.68.1...v1.69.0) (2022-12-20)
 
 
