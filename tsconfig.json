@@ -30,5 +30,5 @@
     "incremental": true
   },
   "exclude": ["node_modules", ".next"],
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "common.d.ts"]
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx", "common.d.ts", ".eslintrc.js"]
 }
