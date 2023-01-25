@@ -63,7 +63,7 @@ const Switch = ({
 };
 
 export const Toggle: React.FC<
-  { label: string; value: boolean; size?: 'small' | 'default' } & FlexProps
+  { label?: string; value: boolean; size?: 'small' | 'default' } & FlexProps
 > = ({ label, onClick, value, size = 'default', ...rest }) => {
   const toggled = value;
   const handleClick = (e: any) => {
