@@ -68,20 +68,18 @@ const NetworkItem: React.FC<ItemProps> = ({
   const isMainnet = networkItem.url === mainnet;
   const isTestnet = networkItem.url === testnet;
   const isDefault = isMainnet || isTestnet;
-  let networkItemMode: NetworkModes | undefined = networkItem.mode;
+  const networkItemMode: NetworkModes = networkItem.mode;
 
   const doNotFetch = isDisabled || !networkItem.url || isDefault;
-
   const { data, error } = useSWR(!!doNotFetch ? null : networkItem.url, async () => {
     // this will only run if the item url is not one of the defaults (mainnet/testnet)
     const response = await fetchFromApi(networkItem.url)(DEFAULT_V2_INFO_ENDPOINT);
     return response.json();
   });
-
   // Custom network id
-  if (!isDefault && data) {
-    networkItemMode = getNetworkModeFromNetworkId(data?.network_id && parseInt(data?.network_id));
-  }
+  const customNetworkItemId =
+    !isDefault && data ? data?.network_id && parseInt(data?.network_id) : undefined;
+  const customNetworkItemMode = getNetworkModeFromNetworkId(customNetworkItemId as ChainID);
 
   const handleClick = React.useCallback(
     e => {
@@ -111,9 +109,9 @@ const NetworkItem: React.FC<ItemProps> = ({
       >
         <Flex alignItems="center">
           <Title display="block">{networkItem.label}</Title>
-          {networkItemMode ? (
+          {networkItemMode || customNetworkItemMode ? (
             <Badge bg={color('bg-4')} ml="tight" border={border()} color={color('text-caption')}>
-              {networkItemMode}
+              {networkItemMode || customNetworkItemMode}
             </Badge>
           ) : null}
         </Flex>
