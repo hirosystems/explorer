@@ -242,49 +242,6 @@ const checkPostConditionParameters = (
   return errors;
 };
 
-const checkFunctionParameters = (fn: ClarityAbiFunction, values: any) => {
-  const errors: Record<string, string> = {};
-  Object.keys(values).forEach(arg => {
-    const type = fn.args.find(({ name }) => name === arg)?.type;
-    const isOptional = type && isClarityAbiOptional(type);
-    const optionalTypeIsPrincipal =
-      isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
-    if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
-      const validPrincipal = validateStacksAddress(
-        (values[arg] as NonTupleValueType).toString().split('.')[0]
-      );
-      if (!validPrincipal) {
-        errors[arg] = 'Invalid Stacks address.';
-      }
-    }
-  });
-  return errors;
-};
-
-const checkPostConditionParameters = (
-  values: InitialValuesType,
-  postConditionType: PostConditionType | undefined
-) => {
-  if (!postConditionType) return {};
-  const errors: Record<string, string> = {};
-  Object.keys(values).forEach(arg => {
-    if (!postConditionParameterMap[postConditionType].includes(arg)) return;
-    if (!values[arg]) errors[arg] = `${postConditionParameterLabels[arg]} is required`;
-    if (arg === 'postConditionAddress' || arg === 'postConditionAssetAddress') {
-      if (!validateStacksAddress(values[arg])) {
-        errors[arg] = 'Invalid Stacks address.';
-      }
-    }
-    if (arg === 'postConditionAmount') {
-      // @ts-ignore
-      if (Number.isInteger(values[arg]) && !Number.isFinite(values[arg]) && values[arg] < 0) {
-        errors[arg] = 'Invalid amount';
-      }
-    }
-  });
-  return errors;
-};
-
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
   const [isPostConditionModeEnabled, setPostConditionMode] = useState<PostConditionMode>(
@@ -608,11 +565,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                                         setFieldValue('postConditionConditionCode', option.value)
                                       }
                                     />
-                                    {errors && (
-                                      <Caption color={color('feedback-error')}>
-                                        {errors[parameter]}
-                                      </Caption>
-                                    )}
                                   </Box>
                                 )}
                                 {errors && (
