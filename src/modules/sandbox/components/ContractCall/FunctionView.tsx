@@ -5,6 +5,9 @@ import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { openContractCall } from '@stacks/connect';
 import {
   ClarityAbiFunction,
+  ClarityAbiType,
+  ClarityAbiTypeId,
+  ClarityAbiTypePrincipal,
   ClarityValue,
   FungibleConditionCode,
   NonFungibleConditionCode,
@@ -314,8 +317,9 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         }
         return errors;
       }}
-      onSubmit={values => {
+      onSubmit={async values => {
         const final: Record<string, ClarityValue> = {};
+
         Object.keys(values).forEach(arg => {
           const type = fn.args.find(({ name }) => name === arg)?.type;
           if (!type) return;
@@ -368,17 +372,20 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                   postConditionAssetName,
                 })
               : undefined;
-
-          void openContractCall({
-            contractAddress: contractId.split('.')[0],
-            contractName: contractId.split('.')[1],
-            functionName: encodeURIComponent(fn.name),
-            functionArgs: Object.values(final),
-            network,
-            authOrigin: CONNECT_AUTH_ORIGIN,
-            postConditions: postConditions,
-            postConditionMode: isPostConditionModeEnabled,
-          });
+          try {
+            await openContractCall({
+              contractAddress: contractId.split('.')[0],
+              contractName: contractId.split('.')[1],
+              functionName: encodeURIComponent(fn.name),
+              functionArgs: Object.values(final),
+              network,
+              authOrigin: CONNECT_AUTH_ORIGIN,
+              postConditions: postConditions,
+              postConditionMode: isPostConditionModeEnabled,
+            });
+          } catch (err) {
+            console.log({ err });
+          }
         } else {
           setReadonlyValue(Object.values(final));
         }
@@ -586,7 +593,10 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   );
 };
 
-const PostConditionButton = styled(Button)<{
+const PostConditionButton = styled(Button, {
+  shouldForwardProp: propName =>
+    propName !== 'disabled' && propName !== 'showPostCondition' && propName !== 'colorMode',
+})<{
   disabled: boolean;
   showPostCondition: boolean;
   colorMode: ColorModeString | undefined;
@@ -601,10 +611,6 @@ const PostConditionButton = styled(Button)<{
       : 'white'};
   opacity: ${props => (props.disabled === true ? '0.2' : null)};
   color: ${props => (props.colorMode === 'light' ? 'white' : 'black')};
-
-  /* .Dropdown--button {
-    background-color: ${props => (props.colorMode === 'light' ? 'black' : 'white')};
-  } */
 
   :hover {
     background-color: ${props =>
