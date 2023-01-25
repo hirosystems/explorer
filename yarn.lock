@@ -741,6 +741,13 @@
   dependencies:
     "@emotion/memoize" "0.7.4"
 
+"@emotion/is-prop-valid@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-1.2.0.tgz#7f2d35c97891669f7e276eb71c83376a5dc44c83"
+  integrity sha512-3aDpDprjM0AwaxGE09bOPkNxHpBd+kA6jty3RnaEXdweX1DF1U3VQpPYb0g1IStAuK7SVQ1cy+bNBBKp4W3Fjg==
+  dependencies:
+    "@emotion/memoize" "^0.8.0"
+
 "@emotion/memoize@0.7.4":
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
@@ -795,6 +802,18 @@
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.2.1.tgz#0767e0305230e894897cadb6c8df2c51e61a6c2c"
   integrity sha512-zxRBwl93sHMsOj4zs+OslQKg/uhF38MB+OMKoCrVuS0nyTkqnau+BM3WGEoOptg9Oz45T/aIGs1qbVAsEFo3nA==
+
+"@emotion/styled@^11.10.5":
+  version "11.10.5"
+  resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.10.5.tgz#1fe7bf941b0909802cb826457e362444e7e96a79"
+  integrity sha512-8EP6dD7dMkdku2foLoruPCNkRevzdcBaY6q0l0OsbyJK+x8D9HWjX27ARiSIKNF634hY9Zdoedh8bJCiva8yZw==
+  dependencies:
+    "@babel/runtime" "^7.18.3"
+    "@emotion/babel-plugin" "^11.10.5"
+    "@emotion/is-prop-valid" "^1.2.0"
+    "@emotion/serialize" "^1.1.1"
+    "@emotion/use-insertion-effect-with-fallbacks" "^1.0.0"
+    "@emotion/utils" "^1.2.0"
 
 "@emotion/unitless@^0.8.0":
   version "0.8.0"
@@ -1379,6 +1398,11 @@
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.1.3.tgz#360afc77610e0a61f3417e497dcf36862e4f8111"
   integrity sha512-CE0FCR57H2acVI5UOzIGSSIYxZ6v/HOhDR0Ro9VLyhnzLwx0o8W1mmgaqlEUx4049qJDlIBRztv5k+MM8vbO3A==
+
+"@noble/hashes@^1.1.3":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.1.5.tgz#1a0377f3b9020efe2fae03290bd2a12140c95c11"
+  integrity sha512-LTMZiiLc+V4v1Yi16TD6aX2gmtKszNye0pQgbaLqkvhIqP7nVsSaJsWloGQjJfJ8offaoP5GtX3yY5swbcJxxQ==
 
 "@noble/secp256k1@^1.5.5":
   version "1.6.0"
@@ -2718,6 +2742,14 @@
     "@types/bn.js" "^5.1.0"
     "@types/node" "^18.0.4"
 
+"@stacks/common@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@stacks/common/-/common-6.0.0.tgz#ce80a11ca5d16db8276891db3ecc8e4f2eb1b43a"
+  integrity sha512-tETwccvbYvaZ7u3ZucWNMOIPN97r6IPeZXKIFhLc1KSVaWSGEPTtZcwVp+Rz3mu2XgI2pg37SUrOWXSL7OOkDw==
+  dependencies:
+    "@types/bn.js" "^5.1.0"
+    "@types/node" "^18.0.4"
+
 "@stacks/connect-react@20.0.0":
   version "20.0.0"
   resolved "https://registry.yarnpkg.com/@stacks/connect-react/-/connect-react-20.0.0.tgz#c64223cc940c4e2fa64595dbaa1597370afbbe07"
@@ -2798,7 +2830,7 @@
     "@stacks/common" "^4.1.0"
     cross-fetch "^3.1.5"
 
-"@stacks/network@^4.0.1", "@stacks/network@^4.1.0", "@stacks/network@^4.3.0":
+"@stacks/network@^4.0.1", "@stacks/network@^4.3.0":
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/@stacks/network/-/network-4.3.0.tgz#5d2815078d2baea7cccc45117b26a675de5d5908"
   integrity sha512-X97IFfhJe5aZu8F1tOvYCzoIxPD5PH/NB24/WDZ+JH5Loho1D7zk1zZ6bOtQknaSfezDyi6wsZwKC/7Mxg959A==
@@ -2812,6 +2844,14 @@
   integrity sha512-fv5eCuWv+NkuhgubDvzymoEOBAEfxq/AGLF25ghMCA7dYfsb80iRKr5dwKgUIFCUWcqmzLBJUVmzxFnXkblF8g==
   dependencies:
     "@stacks/common" "^5.0.0"
+    cross-fetch "^3.1.5"
+
+"@stacks/network@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@stacks/network/-/network-6.1.0.tgz#19f00f54edd7c52ca948c83bdec22d694de29b9d"
+  integrity sha512-kJ7Btpw7M9qxnimwmszZomJZdzqQmlKDX7NoIGqlbjpy1TJ0FRHjnqELLNgK0qKLlzkw06SwWNOaxiFytdmCHg==
+  dependencies:
+    "@stacks/common" "^6.0.0"
     cross-fetch "^3.1.5"
 
 "@stacks/prettier-config@0.0.10":
@@ -2862,22 +2902,17 @@
   resolved "https://registry.yarnpkg.com/@stacks/stacks-blockchain-api-types/-/stacks-blockchain-api-types-4.2.0-stacks-2.1.1.tgz#321bfd103f923b44c9541823cdc15479b9558417"
   integrity sha512-0ljUJbWyDTXbDg6kK/xb+X6LyxpJdn3V1Z3h35NQScgKrJvyaND21eooo9NjLdizY2/25WyDxhMutoeySWgigA==
 
-"@stacks/transactions@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-4.1.0.tgz#f8cbf715bd0279c4236435926b640da435ed30e6"
-  integrity sha512-NS3DkZh8WziUQaze6RY5ft1v5bmq1wHjYEoCMzzhdreJ+Sp74ZADaO38fQQGcEcVdOhcM31k2oh6DgJEmBXVUQ==
+"@stacks/transactions@6.1.0":
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-6.1.0.tgz#e175b76daf6e7fa3113082805ba35c8624f32335"
+  integrity sha512-5+6M6wvUiO3HQAWP77y80crJXtoDHaiirY3dnwrkUCwJD/021JRYDNCzeW8QDrtAaAlpCcmtjUh/Nv8Vwtb4mg==
   dependencies:
-    "@noble/hashes" "^1.0.0"
-    "@noble/secp256k1" "^1.5.5"
-    "@stacks/common" "^4.1.0"
-    "@stacks/network" "^4.1.0"
-    "@types/node" "^14.14.43"
-    "@types/sha.js" "^2.4.0"
-    c32check "^1.1.3"
+    "@noble/hashes" "^1.1.3"
+    "@noble/secp256k1" "^1.6.3"
+    "@stacks/common" "^6.0.0"
+    "@stacks/network" "^6.1.0"
+    c32check "^2.0.0"
     lodash.clonedeep "^4.5.0"
-    ripemd160-min "^0.0.6"
-    sha.js "^2.4.11"
-    smart-buffer "^4.1.0"
 
 "@stacks/transactions@^4.3.0":
   version "4.3.0"
