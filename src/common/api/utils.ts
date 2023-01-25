@@ -21,8 +21,6 @@ export const getNetworkModeFromNetworkId = (networkId: ChainID): NetworkModes | 
       return NetworkModes.Mainnet;
     case ChainID.Testnet:
       return NetworkModes.Testnet;
-    case ChainID.Devnet:
-      return NetworkModes.Devnet;
     default:
       return undefined;
   }
