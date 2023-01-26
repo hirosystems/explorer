@@ -10,7 +10,6 @@ import { NetworkModes } from '@common/types/network';
 export const NetworkIdModeMap: { [key in ChainID]: NetworkModes } = {
   [ChainID.Mainnet]: NetworkModes.Mainnet,
   [ChainID.Testnet]: NetworkModes.Testnet,
-  [ChainID.Devnet]: NetworkModes.Devnet,
 };
 
 export const NetworkModeUrlMap: Record<NetworkModes, string> = {
