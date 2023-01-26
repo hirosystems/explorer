@@ -111,7 +111,7 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
     : networkModeFromNextUrl
     ? networkModeFromNextUrl
     : NetworkModes.Mainnet;
- 
+
   const queryApiUrl = Array.isArray(query.api)
     ? query.api[0]
     : query.api
