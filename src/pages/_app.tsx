@@ -1,3 +1,4 @@
+import { createTxFilterSlice } from '@features/transactions-filter/transactions-filter-slice';
 import 'modern-normalize/modern-normalize.css';
 import type { AppContext, AppProps } from 'next/app';
 import App from 'next/app';
@@ -60,6 +61,22 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
   );
 }
 
+const getSearchParamsFromNextUrl = (url: string | undefined) => {
+  if (!url) {
+    return {};
+  }
+  const searchParamsString = url.split('?')[1];
+  const searchParamsArray = searchParamsString.split('&');
+  const searchParams: Record<string, string> = {};
+  searchParamsArray.forEach(param => {
+    const keyValueTuple = param.split('=');
+    const key = keyValueTuple[0];
+    const value = keyValueTuple[1];
+    searchParams[key] = value;
+  });
+  return searchParams;
+};
+
 const getNetworkMode = (chain: string) => {
   if (chain === NetworkModes.Devnet) return NetworkModes.Devnet;
   else if (chain === NetworkModes.Mainnet) return NetworkModes.Mainnet;
@@ -72,10 +89,32 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
 
   const query = appContext.ctx.query;
 
-  const nextUrl = new URL(appContext.ctx.req?.url ?? '');
-  const chain = nextUrl.searchParams.get('chain');
+  // const nextUrl = new URL(appContext.ctx.req?.url ?? '');
+  // const chain = nextUrl.searchParams.get('chain');
+  // const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
+  // const api = nextUrl.searchParams.get('api');
+
+  // const nextUrl = appContext.ctx.req?.url;
+  // const nextUrl = window.location;
+
+  const searchParams = new URLSearchParams(nextUrl ?? '');
+  const chain = searchParams.get('chain');
   const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
-  const api = nextUrl.searchParams.get('api');
+  const api = searchParams.get('api');
+
+  console.log({
+    nextUrl,
+    searchParams,
+    chain,
+    networkModeFromNextUrl,
+    api,
+    queryChain: query.chain,
+    queryApi: query.api,
+    keys: searchParams.keys(),
+    url: appContext.ctx.req?.url,
+    query: appContext.ctx.query,
+    windowLocation: window.location,
+  });
 
   const queryNetworkMode = Array.isArray(query.chain)
     ? (query.chain[0] as NetworkModes)
