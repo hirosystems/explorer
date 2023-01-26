@@ -60,22 +60,6 @@ function ExplorerApp({ Component, ...rest }: ExplorerAppProps) {
   );
 }
 
-const getSearchParamsFromNextUrl = (url: string | undefined) => {
-  if (!url) {
-    return {};
-  }
-  const searchParamsString = url.split('?')[1];
-  const searchParamsArray = searchParamsString.split('&');
-  const searchParams: Record<string, string> = {};
-  searchParamsArray.forEach(param => {
-    const keyValueTuple = param.split('=');
-    const key = keyValueTuple[0];
-    const value = keyValueTuple[1];
-    searchParams[key] = value;
-  });
-  return searchParams;
-};
-
 const getNetworkMode = (chain: string) => {
   if (chain === NetworkModes.Devnet) return NetworkModes.Devnet;
   else if (chain === NetworkModes.Mainnet) return NetworkModes.Mainnet;
@@ -88,16 +72,25 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
 
   const query = appContext.ctx.query;
 
-  const nextUrl = appContext.ctx.req?.url;
-  const searchParams = getSearchParamsFromNextUrl(nextUrl);
-  const chain = searchParams.chain;
-  const api = searchParams.api;
+  const nextUrl = new URL(appContext.ctx.req?.url ?? '');
+  const chain = nextUrl.searchParams.get('chain');
+  const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
+  const api = nextUrl.searchParams.get('api');
 
-  const queryNetworkMode =
-    ((Array.isArray(query.chain) ? query.chain[0] : query.chain) as NetworkModes) ||
-    getNetworkMode(chain) ||
-    NetworkModes.Mainnet;
-  const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api ? api : undefined;
+  const queryNetworkMode = Array.isArray(query.chain)
+    ? (query.chain[0] as NetworkModes)
+    : query.chain
+    ? (query.chain as NetworkModes)
+    : networkModeFromNextUrl
+    ? networkModeFromNextUrl
+    : NetworkModes.Mainnet;
+  const queryApiUrl = Array.isArray(query.api)
+    ? query.api[0]
+    : query.api
+    ? query.api
+    : api
+    ? api
+    : undefined;
 
   store.dispatch(initialize({ queryNetworkMode, apiUrls: NetworkModeUrlMap, queryApiUrl }));
   console.log(
