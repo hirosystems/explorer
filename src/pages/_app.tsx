@@ -98,38 +98,11 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
 
   const query = appContext.ctx.query;
 
-  const nextUrl = appContext.ctx.req?.url || '';
+  const nextUrl = appContext.ctx.req?.url;
   const searchParams = getSearchParamsFromNextUrl(nextUrl);
   const chain = searchParams.chain;
   const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
   const api = searchParams.api;
-
-  // const nextUrl = new URL(appContext.ctx.req?.url ?? '');
-  // const chain = nextUrl.searchParams.get('chain');
-  // const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
-  // const api = nextUrl.searchParams.get('api');
-
-  // const nextUrl = appContext.ctx.req?.url;
-  // const nextUrl = window.location;
-
-  // const searchParams = new URLSearchParams(nextUrl ?? '');
-  // const chain = searchParams.get('chain');
-  // const networkModeFromNextUrl = chain ? getNetworkMode(chain) : undefined;
-  // const api = searchParams.get('api');
-
-  // console.log({
-  //   nextUrl,
-  //   searchParams,
-  //   chain,
-  //   networkModeFromNextUrl,
-  //   api,
-  //   queryChain: query.chain,
-  //   queryApi: query.api,
-  //   keys: searchParams.keys(),
-  //   url: appContext.ctx.req?.url,
-  //   query: appContext.ctx.query,
-  //   windowLocation: window.location,
-  // });
 
   const queryNetworkMode = Array.isArray(query.chain)
     ? (query.chain[0] as NetworkModes)
@@ -138,10 +111,7 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
     : networkModeFromNextUrl
     ? networkModeFromNextUrl
     : NetworkModes.Mainnet;
-  // const queryNetworkMode = Array.isArray(query.chain)
-  //   ? (query.chain[0] as NetworkModes)
-  //   : (query.chain as NetworkModes);
-
+ 
   const queryApiUrl = Array.isArray(query.api)
     ? query.api[0]
     : query.api
@@ -149,7 +119,6 @@ ExplorerApp.getInitialProps = async (appContext: AppContext) => {
     : api
     ? api
     : undefined;
-  // const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
 
   store.dispatch(initialize({ queryNetworkMode, apiUrls: NetworkModeUrlMap, queryApiUrl }));
   console.log(
