@@ -1,3 +1,10 @@
+## [1.70.2](https://github.com/hirosystems/explorer/compare/v1.70.1...v1.70.2) (2023-01-27)
+
+
+### Bug Fixes
+
+* **disabled-pc:** disabled prop should be forwarded ([d0ffa68](https://github.com/hirosystems/explorer/commit/d0ffa68301632e73d82de3b9c85ea613977197fa))
+
 ## [1.70.1](https://github.com/hirosystems/explorer/compare/v1.70.0...v1.70.1) (2023-01-27)
 
 
