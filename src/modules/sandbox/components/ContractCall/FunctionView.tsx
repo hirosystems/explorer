@@ -5,9 +5,6 @@ import React, { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import { openContractCall } from '@stacks/connect';
 import {
   ClarityAbiFunction,
-  ClarityAbiType,
-  ClarityAbiTypeId,
-  ClarityAbiTypePrincipal,
   ClarityValue,
   FungibleConditionCode,
   NonFungibleConditionCode,
