@@ -1,3 +1,22 @@
+## [1.70.1](https://github.com/hirosystems/explorer/compare/v1.70.0...v1.70.1) (2023-01-27)
+
+
+### Bug Fixes
+
+* **network-switching:** checkpoint ([e3d3cba](https://github.com/hirosystems/explorer/commit/e3d3cba1386661ebf8fda0a47e9d9f6e4ed7e19a))
+* **network-switching:** checkpoint before pushing ([cf07df8](https://github.com/hirosystems/explorer/commit/cf07df896e0d3b69e3d153eb6c9401936198454d))
+* **network-switching:** cleaning up pr ([2d9c871](https://github.com/hirosystems/explorer/commit/2d9c871bbddac090bd9352865de4e7214d433bbf))
+* **network-switching:** fix build issue ([92d2e7b](https://github.com/hirosystems/explorer/commit/92d2e7bf6dc3cfc0907f9865552139b1961e2b59))
+* **network-switching:** fix build issue ([818d6c3](https://github.com/hirosystems/explorer/commit/818d6c3257c2cc5a2a01ba00d06692459a35f98c))
+* **network-switching:** fix linting issue. refactor manual url search param logic ([74ae61d](https://github.com/hirosystems/explorer/commit/74ae61d75eeeb8064814f23d56cfd5fb7911e922))
+* **network-switching:** fixing lint issue and adding better network mode distinction ([2988b99](https://github.com/hirosystems/explorer/commit/2988b99fe4da58cff465d7970cef9f2d26307b07))
+* **network-switching:** next not providing query. reverting to manually capturing search params ([4a6ff34](https://github.com/hirosystems/explorer/commit/4a6ff34156d4564e0c4130155b080e459b435664))
+* **network-switching:** readying pr ([9618623](https://github.com/hirosystems/explorer/commit/9618623bb9b732ace3867878b3cc152f952d7193))
+* **network-switching:** readying pr ([4ac005e](https://github.com/hirosystems/explorer/commit/4ac005ee4321998f597f246c60787b3660e859d9))
+* **network-switching:** restored network mode code + fallback to mine ([f3a5cad](https://github.com/hirosystems/explorer/commit/f3a5caddbd9eeb46a62d80f9b2ee55cd7a8c4c5f))
+* **network-switching:** show devnet in network badge. network switching looks more stable ([ea504f0](https://github.com/hirosystems/explorer/commit/ea504f0362d996a058c8ec9de9b70f4cb682bf59))
+* **network-switching:** work in progress ([eb1de30](https://github.com/hirosystems/explorer/commit/eb1de302b6ebc8ccbe55aa0fcd546928ceaf2137))
+
 # [1.70.0](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.70.0) (2023-01-25)
 
 
