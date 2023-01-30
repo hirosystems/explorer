@@ -11,7 +11,7 @@ import { Badge, BadgeProps } from '@components/badge';
 
 export const NetworkModeBanner: React.FC<BadgeProps> = props => {
   const networkMode = useAppSelector(selectActiveNetwork).mode;
-  return networkMode === 'testnet' || networkMode === 'devnet' ? (
+  return networkMode === 'testnet' ? (
     <Badge flexShrink={0} bg="white" {...props}>
       <Flex alignItems="center">
         <Box

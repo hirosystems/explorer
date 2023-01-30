@@ -1,3 +1,16 @@
+# [1.70.0](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.70.0) (2023-01-30)
+
+
+### Bug Fixes
+
+* **disabled-pc:** disabled prop should be forwarded ([45a0c5b](https://github.com/hirosystems/explorer/commit/45a0c5bad47a3ec78031384f318de18779a1c266))
+* **network-switching:** show devnet in network badge. network switching looks more stable ([8e62552](https://github.com/hirosystems/explorer/commit/8e625523e2f3af4399abab9e55b7801380922d56))
+
+
+### Features
+
+* **post-conditions:** relayed changes from first pc branch ([c9b13a5](https://github.com/hirosystems/explorer/commit/c9b13a5e40608047672125de8afe8d9b5a1f2c09))
+
 ## [1.70.2](https://github.com/hirosystems/explorer/compare/v1.70.1...v1.70.2) (2023-01-27)
 
 

@@ -594,7 +594,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
 };
 
 const PostConditionButton = styled(Button, {
-  shouldForwardProp: propName => propName !== 'showPostCondition' && propName !== 'colorMode',
+  shouldForwardProp: propName =>
+    propName !== 'disabled' && propName !== 'showPostCondition' && propName !== 'colorMode',
 })<{
   disabled: boolean;
   showPostCondition: boolean;
