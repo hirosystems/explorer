@@ -37,7 +37,7 @@ interface ReadOnlyOptions {
 
 const cvToHex = (cv: ClarityValue) => {
   const serialized = serializeCV(cv);
-  return `0x${serialized.toString()}`;
+  return `0x${serialized.toString('hex')}`;
 };
 
 export const callReadOnlyFunction = async ({
