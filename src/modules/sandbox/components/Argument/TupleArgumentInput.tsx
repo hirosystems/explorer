@@ -1,11 +1,6 @@
 import React, { FC } from 'react';
 
-import {
-  ClarityAbiTypeOptional,
-  ClarityAbiTypeTuple,
-  getTypeString,
-  isClarityAbiOptional,
-} from '@stacks/transactions';
+import { ClarityAbiTypeTuple, getTypeString, isClarityAbiOptional } from '@stacks/transactions';
 import { Box, Input, Stack, color } from '@stacks/ui';
 
 import { Caption, Text } from '@components/typography';
@@ -15,7 +10,7 @@ import { CommonArgumentInputProps } from './types';
 
 export const TupleArgumentInput: FC<
   CommonArgumentInputProps & {
-    type: ClarityAbiTypeTuple | ClarityAbiTypeOptional;
+    type: ClarityAbiTypeTuple;
     value: TupleValueType;
     tuple: ClarityAbiTypeTuple['tuple'];
   }
@@ -40,24 +35,12 @@ export const TupleArgumentInput: FC<
             <Box width="100%">
               <Input
                 width="100%"
-                type={
-                  getTypeString(
-                    isOptional
-                      ? (type.optional as ClarityAbiTypeTuple).tuple[i].type
-                      : type.tuple[i].type
-                  ).includes('int')
-                    ? 'number'
-                    : 'text'
-                }
+                type={getTypeString(type.tuple[i].type).includes('int') ? 'number' : 'text'}
                 name={`${name}.${tupleEntry.name}`}
                 id={name}
                 onChange={handleChange}
                 value={value[tupleEntry.name]}
-                placeholder={
-                  isOptional
-                    ? `${getTypeString((type.optional as ClarityAbiTypeTuple).tuple[i].type)}`
-                    : `${getTypeString(type.tuple[i].type)}`
-                }
+                placeholder={`${getTypeString(type.tuple[i].type)}`}
               />
               {error && <Caption color={color('feedback-error')}>{error}</Caption>}
             </Box>
