@@ -1,3 +1,17 @@
+## [1.69.2](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.69.2) (2023-01-30)
+
+
+### Bug Fixes
+
+* **network-switching:** show devnet in network badge. network switching looks more stable ([8e62552](https://github.com/hirosystems/explorer/commit/8e625523e2f3af4399abab9e55b7801380922d56))
+
+
+### Reverts
+
+* Revert "feat(post-conditions): relayed changes from first pc branch" ([a50f420](https://github.com/hirosystems/explorer/commit/a50f42074a59d399273399817fe43882bdc1df4d))
+* Revert "fix: add error check for non-existent transaction on txid page" ([2b71d11](https://github.com/hirosystems/explorer/commit/2b71d11a301736f00031811e5d0758f26ae0fe4f))
+* Revert "fix: remove old bg image" ([20d285d](https://github.com/hirosystems/explorer/commit/20d285d5ed32095577ebc27ad713b3a6cebe7c04))
+
 # [1.70.0](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.70.0) (2023-01-30)
 
 
