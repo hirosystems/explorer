@@ -1,8 +1,8 @@
 import { Global, css } from '@emotion/react';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 
 import type { BoxProps } from '@stacks/ui';
-import { Box } from '@stacks/ui';
+import { Box, transition } from '@stacks/ui';
 import type { ForwardRefExoticComponentWithAs } from '@stacks/ui-core';
 import { forwardRefWithAs } from '@stacks/ui-core';
 
@@ -28,28 +28,68 @@ const GlobalStyles = () => (
         .metaverse-bg {
           display: none;
           opacity: 0.65;
-          background-image: linear-gradient(
-            30deg,
-            rgba(98, 135, 221, 1) 0%,
-            rgba(231, 72, 92, 1) 58%,
-            rgba(102, 137, 221, 1) 100%
-          );
+          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format,compress&w=1800'),
+            linear-gradient(
+              30deg,
+              rgba(98, 135, 221, 1) 0%,
+              rgba(231, 72, 92, 1) 58%,
+              rgba(102, 137, 221, 1) 100%
+            );
         }
       }
 
       html.light {
         .metaverse-bg {
-          background-image: linear-gradient(
-            30deg,
-            rgba(98, 135, 221, 1) 0%,
-            rgba(231, 72, 92, 1) 58%,
-            rgba(102, 137, 221, 1) 100%
-          );
+          background-image: url('https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format,compress&w=1800'),
+            linear-gradient(
+              30deg,
+              rgba(98, 135, 221, 1) 0%,
+              rgba(231, 72, 92, 1) 58%,
+              rgba(102, 137, 221, 1) 100%
+            );
         }
       }
     `}
   />
 );
+
+const Grain: React.FC<BoxProps> = memo(props => (
+  <Box
+    as="img"
+    src="https://blockstack-www.imgix.net/metaverse/grain.jpg?auto=format,compress&w=1800"
+    width="100%"
+    position="absolute"
+    left={0}
+    top={0}
+    mixBlendMode="multiply"
+    minWidth="1600px"
+    zIndex={999999}
+    imageRendering="crisp-edges"
+    {...props}
+  />
+));
+
+const Video: React.FC = memo(() => {
+  const ref = useRef<null | HTMLVideoElement>(null);
+  useEffect(() => {
+    if (ref.current && ref.current.playbackRate && ref.current.playbackRate === 1) {
+      ref.current.playbackRate = 0.85;
+    }
+  }, [ref.current]);
+  return (
+    <video
+      className="metaverse-video"
+      playsInline
+      autoPlay
+      muted
+      loop
+      ref={ref}
+      poster="https://blockstack-www.imgix.net/metaverse/gradient.jpg?auto=format&w=1800"
+    >
+      <source src="https://blockstack-www.imgix.net/metaverse/video.mp4" type="video/mp4" />
+    </video>
+  );
+});
 
 export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = memo(
   forwardRefWithAs<BoxProps, 'div'>(({ as = 'div', height = '530px', ...rest }, ref) => {
@@ -64,6 +104,8 @@ export const MetaverseBg: ForwardRefExoticComponentWithAs<BoxProps, 'div'> = mem
         overflow="hidden"
       >
         <GlobalStyles />
+        <Grain opacity={0.45} />
+        <Grain />
         <Box
           className="metaverse-bg"
           as={as}
