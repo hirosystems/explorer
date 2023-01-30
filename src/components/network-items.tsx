@@ -17,7 +17,7 @@ import {
   selectNetworks,
   setActiveNetwork,
 } from '@common/state/network-slice';
-import { Network, NetworkModes } from '@common/types/network';
+import { Network } from '@common/types/network';
 import { border } from '@common/utils';
 
 import { Badge } from '@components/badge';
@@ -49,51 +49,50 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
 };
 
 interface ItemProps extends ItemWrapperProps {
-  networkItem: Network;
+  item: Network;
   isCustom?: boolean;
 }
 
-const NetworkItem: React.FC<ItemProps> = ({
-  networkItem,
-  isActive,
-  isDisabled,
-  onClick,
-  isCustom,
-  ...rest
-}) => {
+const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
   const dispatch = useAppDispatch();
   const analytics = useAnalytics();
   const { mainnet, testnet } = useAppSelector(selectApiUrls);
 
-  const isMainnet = networkItem.url === mainnet;
-  const isTestnet = networkItem.url === testnet;
+  const isMainnet = item.url === mainnet;
+  const isTestnet = item.url === testnet;
   const isDefault = isMainnet || isTestnet;
-  const networkItemMode: NetworkModes = networkItem.mode;
+  let itemNetworkId: ChainID.Mainnet | ChainID.Testnet = isMainnet
+    ? ChainID.Mainnet
+    : ChainID.Testnet;
 
-  const doNotFetch = isDisabled || !networkItem.url || isDefault;
-  const { data, error } = useSWR(!!doNotFetch ? null : networkItem.url, async () => {
+  const doNotFetch = isDisabled || !item.url || isDefault;
+
+  const { data, error } = useSWR(!!doNotFetch ? null : item.url, async () => {
     // this will only run if the item url is not one of the defaults (mainnet/testnet)
-    const response = await fetchFromApi(networkItem.url)(DEFAULT_V2_INFO_ENDPOINT);
+    const response = await fetchFromApi(item.url)(DEFAULT_V2_INFO_ENDPOINT);
     return response.json();
   });
+
   // Custom network id
-  const customNetworkItemId =
-    !isDefault && data ? data?.network_id && parseInt(data?.network_id) : undefined;
-  const customNetworkItemMode = getNetworkModeFromNetworkId(customNetworkItemId as ChainID);
+  if (!isDefault && data) {
+    itemNetworkId = data?.network_id && parseInt(data?.network_id);
+  }
+
+  const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
 
   const handleClick = React.useCallback(
     e => {
       analytics.track({
         event: 'network-selected',
         properties: {
-          selectedNetworkUrl: networkItem.url,
+          selectedNetworkUrl: item.url,
           time: Date.now(),
         },
       });
 
       onClick?.(e);
     },
-    [analytics, networkItem.url, onClick]
+    [itemNetworkMode]
   );
 
   return (
@@ -108,17 +107,15 @@ const NetworkItem: React.FC<ItemProps> = ({
         onClick={handleClick}
       >
         <Flex alignItems="center">
-          <Title display="block">{networkItem.label}</Title>
-          {networkItemMode || customNetworkItemMode ? (
+          <Title display="block">{item.label}</Title>
+          {itemNetworkMode ? (
             <Badge bg={color('bg-4')} ml="tight" border={border()} color={color('text-caption')}>
-              {networkItemMode || customNetworkItemMode}
+              {itemNetworkMode}
             </Badge>
           ) : null}
         </Flex>
         <Caption display="block">
-          {networkItem?.url?.includes('//')
-            ? networkItem?.url?.split('//')[1]
-            : networkItem?.url || isDisabled}
+          {item?.url?.includes('//') ? item?.url?.split('//')[1] : item?.url || isDisabled}
         </Caption>
       </Stack>
       <Flex
@@ -134,7 +131,7 @@ const NetworkItem: React.FC<ItemProps> = ({
                 zIndex={999}
                 color={color('text-caption')}
                 icon={IconTrash}
-                onClick={() => dispatch(removeCustomNetwork(networkItem))}
+                onClick={() => dispatch(removeCustomNetwork(item))}
               />
             </Tooltip>
           </>
@@ -179,9 +176,9 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
       {networks.map((network, key) => {
         const isActive = activeNetwork.url === network.url;
         return (
-          <NetworkItem
+          <Item
             isActive={isActive}
-            networkItem={network}
+            item={network}
             key={key}
             data-test={`network-${network}`}
             isCustom={key >= 3}
