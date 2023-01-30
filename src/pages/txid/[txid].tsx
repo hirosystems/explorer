@@ -29,13 +29,13 @@ const TransactionPage: NextPage<TransactionPageProps> = ({ error, isPossiblyVali
     staleTime: 2000,
   };
 
-  const { isError: isTxError } = useQuery(
+  const { data: tx } = useQuery(
     transactionQK(TransactionQueryKeys.transaction, txid),
     queries.fetchSingleTransaction({ txId: txid }),
     queryOptions
   );
 
-  if (error || isTxError)
+  if (error)
     return (
       <>
         <Meta title="Transaction not found" />
