@@ -1,3 +1,10 @@
+## [1.70.4](https://github.com/hirosystems/explorer/compare/v1.70.3...v1.70.4) (2023-02-15)
+
+
+### Bug Fixes
+
+* attempt to fix branch ([1f4e33d](https://github.com/hirosystems/explorer/commit/1f4e33d91ec539a401c5273071ac65f8f3903cbd))
+
 ## [1.69.2](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.69.2) (2023-02-15)
 
 
