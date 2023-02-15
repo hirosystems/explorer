@@ -57,15 +57,17 @@ const ContentWrapper = (props: GridProps) => {
 };
 
 const AddressPage: NextPage<any> = arg => {
-  const { error } = arg;
-
   const queries = useAddressQueries();
   const apiServer = useAppSelector(selectActiveNetwork).url;
 
   const { query } = useRouter();
   const address = query.principal as string;
 
-  const { data: balance } = useQuery(
+  const {
+    data: balance,
+    isError,
+    isLoading,
+  } = useQuery(
     addressQK(AddressQueryKeys.accountBalance, address),
     queries.fetchAccountBalance(address),
     { refetchOnWindowFocus: true }
@@ -83,7 +85,7 @@ const AddressPage: NextPage<any> = arg => {
 
   const hasTokenBalances = hasTokenBalance(balance);
 
-  if (error)
+  if (isError)
     return (
       <>
         <Meta title="Address not found" />
@@ -107,7 +109,7 @@ const AddressPage: NextPage<any> = arg => {
       <ContentWrapper>
         <Stack spacing="extra-loose">
           <AddressSummary
-            principal={address}
+            principal={isLoading ? '' : address}
             hasTokenBalances={hasTokenBalances}
             balances={balance}
             lastExecutedTxNonce={nonces?.last_executed_tx_nonce}
