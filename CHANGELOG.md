@@ -1,3 +1,12 @@
+## [1.69.2](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.69.2) (2023-02-15)
+
+
+### Bug Fixes
+
+* address page error state ([f4ada4d](https://github.com/hirosystems/explorer/commit/f4ada4dc0f5c7aa6d26dfbf58eece33af8dd1b54))
+* **disabled-pc:** disabled prop should be forwarded ([45a0c5b](https://github.com/hirosystems/explorer/commit/45a0c5bad47a3ec78031384f318de18779a1c266))
+* **network-switching:** show devnet in network badge. network switching looks more stable ([8e62552](https://github.com/hirosystems/explorer/commit/8e625523e2f3af4399abab9e55b7801380922d56))
+
 ## [1.69.2](https://github.com/hirosystems/explorer/compare/v1.69.1...v1.69.2) (2023-01-30)
 
 
