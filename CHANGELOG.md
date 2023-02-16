@@ -1,3 +1,10 @@
+# [1.71.0](https://github.com/hirosystems/explorer/compare/v1.70.4...v1.71.0) (2023-02-16)
+
+
+### Features
+
+* remove Stacks UI ([a7c28fb](https://github.com/hirosystems/explorer/commit/a7c28fbcd079eca9237cbe752497d998648d4bd6))
+
 ## [1.70.4](https://github.com/hirosystems/explorer/compare/v1.70.3...v1.70.4) (2023-02-15)
 
 
