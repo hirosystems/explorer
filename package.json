@@ -75,7 +75,7 @@
     "onigasm": "2.2.5",
     "pluralize": "8.0.0",
     "preact-render-to-string": "5.1.19",
-    "prismjs": "1.24.1",
+    "prismjs": "1.27.0",
     "react": "18.2.0",
     "react-aria": "3.8.0",
     "react-cookie": "^4.1.1",
