@@ -1,3 +1,10 @@
+# [1.74.0](https://github.com/hirosystems/explorer/compare/v1.73.0...v1.74.0) (2023-02-17)
+
+
+### Features
+
+* deploy ([8f73fdd](https://github.com/hirosystems/explorer/commit/8f73fddd30b5c6c7350617625a08603603d4b18b))
+
 # [1.73.0](https://github.com/hirosystems/explorer/compare/v1.72.0...v1.73.0) (2023-02-17)
 
 
