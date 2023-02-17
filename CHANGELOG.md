@@ -1,3 +1,10 @@
+# [1.72.0](https://github.com/hirosystems/explorer/compare/v1.71.0...v1.72.0) (2023-02-17)
+
+
+### Features
+
+* update sentry and add global error handling ([0026f2b](https://github.com/hirosystems/explorer/commit/0026f2bc2308e12f1c60e29c607d1cfab67ea3af))
+
 # [1.71.0](https://github.com/hirosystems/explorer/compare/v1.70.4...v1.71.0) (2023-02-16)
 
 
