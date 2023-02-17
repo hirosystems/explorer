@@ -1,3 +1,10 @@
+# [1.73.0](https://github.com/hirosystems/explorer/compare/v1.72.0...v1.73.0) (2023-02-17)
+
+
+### Features
+
+* remove middleware ([b6d39b4](https://github.com/hirosystems/explorer/commit/b6d39b4ee3bf8677f6d1af1012852c8a021e9741))
+
 # [1.72.0](https://github.com/hirosystems/explorer/compare/v1.71.0...v1.72.0) (2023-02-17)
 
 
