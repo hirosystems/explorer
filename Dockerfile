@@ -1,73 +1,57 @@
-# Install dependencies only when needed
-FROM node:16-alpine AS deps
+FROM node:16-alpine AS build
 
-# ARG SEGMENT_WRITE_KEY
-# ARG SENTRY_AUTH_TOKEN
-# ARG SENTRY_DSN
-# ARG SENTRY_LOG_LEVEL=warn
-# ARG NODE_ENV=production
+ARG SEGMENT_WRITE_KEY
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_DSN
+ARG SENTRY_LOG_LEVEL=warn
+ARG NODE_ENV=production
 
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN yarn
-
-
-# Rebuild the source code only when needed
-FROM node:16-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+RUN apk --no-cache add --virtual \
+  native-deps \
+  g++ \
+  gcc \
+  libgcc \
+  libstdc++ \
+  linux-headers \
+  make \
+  python3 \
+  && npm install --quiet node-gyp -g \
+  && yarn \
+  && apk del native-deps
 
 RUN yarn build
 
-# If using npm comment out above and use below instead
-# RUN npm run build
+RUN yarn cache clean
 
-# Production image, copy all the files and run next
-FROM node:16-alpine AS runner
+FROM node:16-alpine
 
-# ARG SEGMENT_WRITE_KEY
-# ARG SENTRY_AUTH_TOKEN
-# ARG SENTRY_DSN
-# ARG SENTRY_LOG_LEVEL=warn
-# ARG NODE_ENV=production
+ARG SEGMENT_WRITE_KEY
+ARG SENTRY_AUTH_TOKEN
+ARG SENTRY_DSN
+ARG SENTRY_LOG_LEVEL=warn
+ARG NODE_ENV=production
 
 # Set ENVs so they persist after image is built
-# ENV SEGMENT_WRITE_KEY=${SEGMENT_WRITE_KEY}
-# ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-# ENV SENTRY_DSN=${SENTRY_DSN}
-# ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
-# ENV NODE_ENV=${NODE_ENV}
+ENV SEGMENT_WRITE_KEY=${SEGMENT_WRITE_KEY}
+ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+ENV SENTRY_DSN=${SENTRY_DSN}
+ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
+ENV NODE_ENV=${NODE_ENV}
+
+RUN apk --no-cache add --virtual \
+  yarn
 
 WORKDIR /app
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+COPY --from=build /app/next.config.js /app/next.config.js
+COPY --from=build /app/public /app/public
+COPY --from=build /app/.next/static /app/.next/static
+COPY --from=build /app/.next/standalone /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# COPY --from=builder /app/next.config.js /app/next.config.js
-# COPY --from=builder /app/public /app/public
-# COPY --from=builder /app/.next/static /app/.next/static
-# COPY --from=builder /app/.next/standalone /app
-
-USER nextjs
 
 EXPOSE 3000
-
-ENV PORT 3000
-
-CMD ["node", "server.js"]
+CMD [ "node", "server.js" ]

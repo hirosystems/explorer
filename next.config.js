@@ -3,7 +3,7 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const withBundleAnalyzer =
   process.env.ANALYZE === 'true' ? require('@next/bundle-analyzer')() : x => x;
 
-const hasSentryDsn = !!process.env.SENTRY_DSN;
+const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
 
 const moduleExports = withBundleAnalyzer({
   eslint: {
@@ -34,17 +34,13 @@ const moduleExports = withBundleAnalyzer({
     X_API_KEY: process.env.X_API_KEY,
   },
   output: 'standalone',
-  // reactStrictMode: true,
-  // experimental: {
-  //   appDir: true,
-  // },
 });
 
 const sentryWebpackPluginOptions = {
   silent: false,
 };
 
-const nextConfig = hasSentryDsn
+const nextConfig = !!SENTRY_DSN
   ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
   : moduleExports;
 

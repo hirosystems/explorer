@@ -4,7 +4,7 @@ import { MessageWithIcon } from '@/components/message-with-icon';
 import { Section } from '@/components/section';
 import { Box, Grid, Stack } from '@/ui/components';
 import { Title } from '@/ui/typography';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/nextjs';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { TbAlertOctagon } from 'react-icons/tb';
