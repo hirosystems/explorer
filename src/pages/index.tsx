@@ -3,7 +3,7 @@ import { Meta } from '@/components/meta-head';
 import { FC } from 'react';
 
 const Home: FC = () => {
-  console.log('[DEBUG] rendering home');
+  console.log('[DEBUG] rendering home page');
   return (
     <>
       <Meta />
