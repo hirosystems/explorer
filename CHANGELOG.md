@@ -1,3 +1,10 @@
+## [1.74.1](https://github.com/hirosystems/explorer/compare/v1.74.0...v1.74.1) (2023-02-19)
+
+
+### Reverts
+
+* Revert "feat: remove middleware" ([fe795c0](https://github.com/hirosystems/explorer/commit/fe795c03232ee18f34f3cca43d4e30ce215e927a))
+
 # [1.74.0](https://github.com/hirosystems/explorer/compare/v1.73.0...v1.74.0) (2023-02-17)
 
 
