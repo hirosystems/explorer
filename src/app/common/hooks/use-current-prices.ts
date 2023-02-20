@@ -8,7 +8,11 @@ const getCurrentBtcPrice = async () =>
     .then(data => data?.rates?.usd?.value);
 
 export const useCurrentBtcPrice = () =>
-  useQuery('current-btc-price', getCurrentBtcPrice, { staleTime: 30 * 60 * 1000 });
+  useQuery('current-btc-price', getCurrentBtcPrice, {
+    staleTime: 30 * 60 * 1000,
+    suspense: false,
+    retry: false,
+  });
 
 const getCurrentStxPrice = async () =>
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=blockstack,bitcoin&vs_currencies=usd')
@@ -17,7 +21,13 @@ const getCurrentStxPrice = async () =>
 
 export const useCurrentStxPrice = (
   options?: UseQueryOptions<any, unknown, any, 'current-stx-price'>
-) => useQuery('current-stx-price', getCurrentStxPrice, { staleTime: 30 * 60 * 1000, ...options });
+) =>
+  useQuery('current-stx-price', getCurrentStxPrice, {
+    staleTime: 30 * 60 * 1000,
+    suspense: false,
+    retry: false,
+    ...options,
+  });
 
 const getHistoricalStxPrice = async ({ queryKey }: QueryFunctionContext) => {
   const [_, date] = queryKey;
@@ -38,5 +48,7 @@ export const useHistoricalStxPrice = (
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
+    suspense: false,
+    retry: false,
     ...options,
   });
