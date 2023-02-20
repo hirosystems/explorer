@@ -1,3 +1,10 @@
+# [1.75.0](https://github.com/hirosystems/explorer/compare/v1.74.1...v1.75.0) (2023-02-20)
+
+
+### Features
+
+* disable price suspense ([0aaa303](https://github.com/hirosystems/explorer/commit/0aaa303ef84c10e8ffd648bda595114e818529e6))
+
 ## [1.74.1](https://github.com/hirosystems/explorer/compare/v1.74.0...v1.74.1) (2023-02-19)
 
 
