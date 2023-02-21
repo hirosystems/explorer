@@ -37,10 +37,10 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
         }
         return errors;
       }}
-      onSubmit={({ principal, contract_name }) =>
-        router.push(buildUrl(`/sandbox/contract-call/${principal}.${contract_name}`, network))
-      }
-      render={({ handleChange, handleBlur, values, setValues, errors }) => (
+      onSubmit={({ principal, contract_name }) => {
+        router.push(buildUrl(`/sandbox/contract-call/${principal}.${contract_name}`, network));
+      }}
+      render={({ handleChange, handleBlur, values, setValues, errors, handleSubmit }) => (
         <Form>
           <Flex flexDirection="column" p="24px">
             <Box as="form">
@@ -113,7 +113,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
                   color={colorMode === 'light' ? '#000' : '#fff'}
                 />
                 <Box>
-                  <Button type="submit">Get contract</Button>
+                  <Button onClick={() => handleSubmit()}>Get contract11</Button>
                 </Box>
               </Stack>
             </Box>
