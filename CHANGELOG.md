@@ -1,3 +1,10 @@
+## [1.75.2](https://github.com/hirosystems/explorer/compare/v1.75.1...v1.75.2) (2023-02-21)
+
+
+### Bug Fixes
+
+* typo ([c219f0d](https://github.com/hirosystems/explorer/commit/c219f0d2953a6ddaa5aed6c1b33ea3aac428fefe))
+
 ## [1.75.1](https://github.com/hirosystems/explorer/compare/v1.75.0...v1.75.1) (2023-02-21)
 
 
