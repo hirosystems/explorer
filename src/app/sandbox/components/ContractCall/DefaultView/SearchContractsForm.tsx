@@ -113,7 +113,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
                   color={colorMode === 'light' ? '#000' : '#fff'}
                 />
                 <Box>
-                  <Button onClick={() => handleSubmit()}>Get contract11</Button>
+                  <Button onClick={() => handleSubmit()}>Get contract</Button>
                 </Box>
               </Stack>
             </Box>
