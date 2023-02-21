@@ -1,3 +1,10 @@
+## [1.75.1](https://github.com/hirosystems/explorer/compare/v1.75.0...v1.75.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* contract search form ([221a364](https://github.com/hirosystems/explorer/commit/221a364c2aa2a01a8e27d2a215fea0e3d63cf6bf))
+
 # [1.75.0](https://github.com/hirosystems/explorer/compare/v1.74.1...v1.75.0) (2023-02-20)
 
 
