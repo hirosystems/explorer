@@ -28,11 +28,11 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
     const icon = useMemo(
       () =>
         isOriginator ? (
-          <Circle bg={'bg'} size={'40px'}>
+          <Circle bg={'bg'} size={'40px'} marginLeft={'56px'}>
             <TbArrowUp color={'invert'} fill={'bg'} size={'16px'} />
           </Circle>
         ) : (
-          <Circle bg={'bg'} size={'40px'}>
+          <Circle bg={'bg'} size={'40px'} marginLeft={'56px'}>
             <TbArrowDown color={'invert'} fill={'bg'} size={'16px'} />
           </Circle>
         ),
@@ -41,7 +41,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
 
     const leftTitle = useMemo(
       () => (
-        <Title fontWeight="500" display="block" fontSize="16px">
+        <Title fontWeight="500" display="block" fontSize="16px" marginLeft={'56px'}>
           {title}
         </Title>
       ),
@@ -57,6 +57,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
           alignItems="center"
           flexWrap="wrap"
           divider={<Caption>∙</Caption>}
+          marginLeft={'56px'}
         >
           <Caption fontWeight="bold">Transfer</Caption>
           {isOriginator && recipient && (

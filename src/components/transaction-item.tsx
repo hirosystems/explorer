@@ -52,7 +52,7 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
     <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
       <Caption
         as={'a'}
-        color={`brand.${useColorMode().colorMode}`}
+        color={`links.${useColorMode().colorMode}`}
         _hover={{
           cursor: 'pointer',
           textDecoration: 'underline',

@@ -4,7 +4,7 @@ import { SectionFooterAction } from '@/components/section-footer-button';
 import { Box } from '@/ui/Box';
 import { Accordion } from '@/ui/components';
 import * as React from 'react';
-import { FC, memo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
 
@@ -19,13 +19,29 @@ export const AddressConfirmedTxsList: FC<{ address: string }> = memo(({ address 
 
   const txsWithTransfers = useInfiniteQueryResult<AddressTransactionWithTransfers>(response);
 
+  const indexes = useMemo(
+    () =>
+      txsWithTransfers
+        .map((txWithTransfers, i) =>
+          !!txWithTransfers.stx_transfers?.length ||
+          !!txWithTransfers.ft_transfers?.length ||
+          !!txWithTransfers.nft_transfers?.length
+            ? i
+            : undefined
+        )
+        .filter(function isDefined<TValue>(value: TValue | undefined): value is TValue {
+          return value !== undefined;
+        }),
+    [txsWithTransfers]
+  );
+
   if (response.isLoading) {
     return <SkeletonGenericTransactionList />;
   }
 
   return (
     <Box position={'relative'} px={'20px'}>
-      <Accordion allowMultiple>
+      <Accordion allowMultiple defaultIndex={indexes}>
         <FilteredTxs txs={txsWithTransfers} TxListItem={TxWithTransferListItem} address={address} />
       </Accordion>
       <SectionFooterAction

@@ -29,8 +29,8 @@ export const useTxTitle = (
       overflow={'hidden'}
       whiteSpace={'nowrap'}
       display={'block'}
-      color={`brand.${useColorMode().colorMode}`}
-      _hover={{ color: `brand.${useColorMode().colorMode}`, textDecoration: 'underline' }}
+      color={`links.${useColorMode().colorMode}`}
+      _hover={{ color: `links.${useColorMode().colorMode}`, textDecoration: 'underline' }}
       {...rest}
     />
   );
