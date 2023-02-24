@@ -72,6 +72,7 @@ const colors = {
   feedbackError: { light: '#CF0000', dark: '#F34D4D' },
   feedbackSuccess: { light: '#00A200', dark: '#49CE49' },
   textInvert: { light: '#fff', dark: '#040404' },
+  links: { light: '#47409c', dark: '#8F91FF' },
 };
 
 export const theme = extendTheme({

@@ -8,7 +8,7 @@ import { FlexProps, Stack } from '@/ui/components';
 import { Caption, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
-import { FC, memo } from 'react';
+import { FC, ReactNode, memo } from 'react';
 
 import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -18,6 +18,10 @@ import { getTransactionTypeLabel } from '../utils/tx';
 
 interface TxsListItemProps extends FlexProps {
   tx: Transaction;
+  leftTitle?: ReactNode;
+  leftSubtitle?: ReactNode;
+  rightTitle?: ReactNode;
+  rightSubtitle?: ReactNode;
 }
 
 const Icon: FC<{ tx: Transaction }> = memo(({ tx }) => (
@@ -80,7 +84,7 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
         >
           <Caption
             as={'a'}
-            color={`brand.${colorMode}`}
+            color={`links.${colorMode}`}
             _hover={{
               cursor: 'pointer',
               textDecoration: 'underline',
@@ -95,15 +99,23 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   );
 });
 
-export const TxListItem: FC<TxsListItemProps> = memo(({ tx, ...rest }) => {
-  const network = useGlobalContext().activeNetwork;
-  const href = buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network);
-  return (
-    <TwoColsListItem
-      icon={<Icon tx={tx} />}
-      leftContent={{ title: <LeftTitle tx={tx} href={href} />, subtitle: <LeftSubtitle tx={tx} /> }}
-      rightContent={{ title: <RightTitle tx={tx} />, subtitle: <RightSubtitle tx={tx} /> }}
-      {...rest}
-    />
-  );
-});
+export const TxListItem: FC<TxsListItemProps> = memo(
+  ({ tx, leftTitle, leftSubtitle, rightTitle, rightSubtitle, ...rest }) => {
+    const network = useGlobalContext().activeNetwork;
+    const href = buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network);
+    return (
+      <TwoColsListItem
+        icon={<Icon tx={tx} />}
+        leftContent={{
+          title: leftTitle || <LeftTitle tx={tx} href={href} />,
+          subtitle: leftSubtitle || <LeftSubtitle tx={tx} />,
+        }}
+        rightContent={{
+          title: rightTitle || <RightTitle tx={tx} />,
+          subtitle: rightSubtitle || <RightSubtitle tx={tx} />,
+        }}
+        {...rest}
+      />
+    );
+  }
+);

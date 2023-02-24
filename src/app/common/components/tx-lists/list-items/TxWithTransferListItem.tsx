@@ -1,4 +1,6 @@
+import { getTransactionTypeLabel } from '@/app/common/components/tx-lists/utils/tx';
 import { useVerticallyStackedElementsBorderStyle } from '@/app/common/styles/border';
+import { AddressArea } from '@/components/transaction-item';
 import { Text } from '@/ui/Text';
 import {
   AccordionButton,
@@ -6,10 +8,13 @@ import {
   AccordionItem,
   AccordionPanel,
   Flex,
+  Stack,
 } from '@/ui/components';
-import React, { FC } from 'react';
+import { Caption } from '@/ui/typography';
+import pluralize from 'pluralize';
+import React, { FC, memo } from 'react';
 
-import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
+import { AddressTransactionWithTransfers, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { FtTransfers } from './FtTransfers';
 import { NftTransfers } from './NftTransfers';
@@ -21,6 +26,25 @@ interface TxWithTransferListItemProps {
   address?: string;
 }
 
+const LeftSubtitle: FC<{ tx: Transaction; transfersCount: number }> = memo(
+  ({ tx, transfersCount }) => (
+    <Stack
+      as="span"
+      isInline
+      gap="4px"
+      alignItems="center"
+      flexWrap="wrap"
+      divider={<Caption>∙</Caption>}
+    >
+      <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
+      <Caption fontWeight="bold">
+        {transfersCount} {pluralize('transfer', transfersCount)}
+      </Caption>
+      <AddressArea tx={tx} />
+    </Stack>
+  )
+);
+
 export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
   tx: { tx, stx_transfers, ft_transfers, nft_transfers },
   address,
@@ -29,7 +53,20 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
   return (
     <AccordionItem border={'none'}>
       <Flex gap={'6px'}>
-        <TxListItem tx={tx} key={`txs-list-item-${tx.tx_id}`} />
+        <TxListItem
+          tx={tx}
+          key={`txs-list-item-${tx.tx_id}`}
+          leftSubtitle={
+            <LeftSubtitle
+              tx={tx}
+              transfersCount={
+                (stx_transfers?.length || 0) +
+                (ft_transfers?.length || 0) +
+                (nft_transfers?.length || 0)
+              }
+            />
+          }
+        />
         <AccordionButton
           flexGrow={0}
           flexShrink={0}

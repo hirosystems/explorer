@@ -2,7 +2,7 @@ import { TwoColsListItem } from '@/common/components/TwoColumnsListItem';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@/common/utils';
 import { BtcStxBlockLinks } from '@/components/btc-stx-block-links';
 import { BlockLink } from '@/components/links';
-import { Circle, Flex, FlexProps, Icon } from '@/ui/components';
+import { Circle, Flex, FlexProps, Icon, Stack } from '@/ui/components';
 import { CheckIcon } from '@/ui/icons';
 import { Caption, Text } from '@/ui/typography';
 import pluralize from 'pluralize';
@@ -40,10 +40,15 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
           ),
           subtitle: (
             <Caption display="block">
-              {'Anchor block' +
+              {addSepBetweenStrings([
+                `${block.microblocks_accepted.length} ${pluralize(
+                  'microblock',
+                  block.microblocks_accepted.length
+                )}`,
+              ]) +
                 ' · ' +
                 addSepBetweenStrings([
-                  `${block.txs.length} ${pluralize('transactions', block.txs.length)}`,
+                  `${block.txs.length} ${pluralize('transaction', block.txs.length)}`,
                 ])}
             </Caption>
           ),
