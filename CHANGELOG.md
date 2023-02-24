@@ -1,3 +1,10 @@
+# [1.76.0](https://github.com/hirosystems/explorer/compare/v1.75.2...v1.76.0) (2023-02-24)
+
+
+### Features
+
+* improvements after the ui release ([3b4c9ad](https://github.com/hirosystems/explorer/commit/3b4c9adab1280b4abfa3ff60604c13dbd921736e))
+
 ## [1.75.2](https://github.com/hirosystems/explorer/compare/v1.75.1...v1.75.2) (2023-02-21)
 
 
