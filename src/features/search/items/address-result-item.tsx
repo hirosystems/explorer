@@ -6,6 +6,7 @@ import { ResultItemWrapper } from '@/features/search/items/result-item-wrapper';
 import { Box, Circle, Flex } from '@/ui/components';
 import { WalletIcon } from '@/ui/icons';
 import { Caption, Title } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
 import { useQuery } from 'react-query';
 
@@ -26,6 +27,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
     () => accountsApi.getAccountStxBalance({ principal }) as Promise<AddressStxBalanceResponse>,
     { staleTime: 3 * 60 * 1000 }
   );
+  const colorMode = useColorMode().colorMode;
   return (
     <AddressLink principal={principal}>
       <ResultItemWrapper>
@@ -34,7 +36,12 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
             <WalletIcon size="16px" />
           </Circle>
           <Box ml="16px">
-            <Title display="block" mb="4px" className={'search-result-title'} color={'midnight'}>
+            <Title
+              display="block"
+              mb="4px"
+              className={'search-result-title'}
+              color={`links.${colorMode}`}
+            >
               {displayName ? `${displayName} (${truncatedPrincipal})` : truncatedPrincipal}
             </Title>
             <Caption>{`${microToStacks(stxBalance?.balance || 0)} STX`}</Caption>

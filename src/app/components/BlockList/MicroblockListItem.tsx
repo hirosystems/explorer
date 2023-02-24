@@ -33,7 +33,7 @@ export const MicroblockListItem: React.FC<{
                 display="block"
                 fontSize={'14px'}
                 as="a"
-                color={`brand.${useColorMode().colorMode}`}
+                color={`links.${useColorMode().colorMode}`}
                 _hover={{
                   cursor: 'pointer',
                   textDecoration: 'underline',

@@ -76,7 +76,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
           fontWeight={500}
           fontSize={'15px'}
           as={'a'}
-          color={`brand.${useColorMode().colorMode}`}
+          color={`links.${useColorMode().colorMode}`}
           _hover={{
             cursor: 'pointer',
             textDecoration: 'underline',
