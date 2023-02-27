@@ -1,3 +1,10 @@
+# [1.78.0](https://github.com/hirosystems/explorer/compare/v1.77.2...v1.78.0) (2023-02-27)
+
+
+### Features
+
+* refetch tx on focus ([7e6ed5b](https://github.com/hirosystems/explorer/commit/7e6ed5becf28c2f9a6983f682af121325bcc1d16))
+
 ## [1.77.2](https://github.com/hirosystems/explorer/compare/v1.77.1...v1.77.2) (2023-02-27)
 
 
