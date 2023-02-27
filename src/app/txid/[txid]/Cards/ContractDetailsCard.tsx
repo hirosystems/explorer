@@ -30,7 +30,7 @@ export const ContractDetailsCard: React.FC<{ contractId: string }> = ({ contract
   const { data: contract } = useQuery(
     transactionQK(TransactionQueryKeys.contract, contractId),
     queries.fetchContract(contractId),
-    { enabled: !!contractId }
+    { enabled: !!contractId, suspense: false }
   );
 
   if (!contract) return null;
