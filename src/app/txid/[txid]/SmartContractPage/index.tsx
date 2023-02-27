@@ -27,14 +27,12 @@ export const SmartContractPage: React.FC<{
   const { data: contract } = useQuery(
     transactionQK(TransactionQueryKeys.contract, contractId),
     queries.fetchContract(contractId),
-    { enabled: !!contractId }
+    { enabled: !!contractId && tx.tx_status !== 'pending', suspense: false }
   );
 
   const source = contract?.source_code;
 
   if (!contractId) return null;
-  if (IS_BROWSER && (window as any)?.location?.search?.includes('err=2'))
-    throw new Error('test tx error');
   return (
     <TxPage
       tx={tx}
