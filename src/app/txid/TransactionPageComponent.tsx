@@ -29,7 +29,11 @@ const TransactionPageComponentBase: FC<{ txId: string; claritySyntax: Record<str
 
   const isContractId = txId.includes('.');
 
-  const { data: mainTx } = useTxById(api, { txId: txId }, { enabled: !isContractId });
+  const { data: mainTx } = useTxById(
+    api,
+    { txId: txId },
+    { enabled: !isContractId, refetchOnWindowFocus: true }
+  );
   const { data: contract } = useContractById(
     api,
     { contractId: txId },
