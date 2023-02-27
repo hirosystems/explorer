@@ -5,7 +5,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
   if (tx?.tx_status === 'pending') {
     return TransactionStatus.PENDING;
-  } else if (tx?.tx_status === 'success' && tx.is_unanchored) {
+  } else if (tx?.tx_status === 'success' && (tx.is_unanchored || tx?.block_hash === '0x')) {
     return TransactionStatus.SUCCESS_MICROBLOCK;
   } else if (tx?.tx_status === 'success' && !tx.is_unanchored) {
     if (!tx.canonical || !tx.microblock_canonical) {
