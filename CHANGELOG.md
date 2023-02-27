@@ -1,3 +1,10 @@
+## [1.78.1](https://github.com/hirosystems/explorer/compare/v1.78.0...v1.78.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* allow contract name as tx id ([d6559ed](https://github.com/hirosystems/explorer/commit/d6559ed77a92702c514339b52d9f7b59af4303d4))
+
 # [1.78.0](https://github.com/hirosystems/explorer/compare/v1.77.2...v1.78.0) (2023-02-27)
 
 
