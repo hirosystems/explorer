@@ -27,7 +27,7 @@ export const SmartContractPage: React.FC<{
   const { data: contract } = useQuery(
     transactionQK(TransactionQueryKeys.contract, contractId),
     queries.fetchContract(contractId),
-    { enabled: !!contractId && tx.tx_status !== 'pending', suspense: false }
+    { enabled: !!contractId, suspense: false }
   );
 
   const source = contract?.source_code;

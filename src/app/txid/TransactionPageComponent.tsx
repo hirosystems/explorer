@@ -34,11 +34,7 @@ const TransactionPageComponentBase: FC<{ txId: string; claritySyntax: Record<str
     { txId: txId },
     { enabled: !isContractId, refetchOnWindowFocus: true }
   );
-  const { data: contract } = useContractById(
-    api,
-    { contractId: txId },
-    { enabled: isContractId && mainTx.tx_status !== 'pending', suspense: false }
-  );
+  const { data: contract } = useContractById(api, { contractId: txId }, { enabled: isContractId });
   const { data: contractTx } = useTxById(
     api,
     { txId: contract?.tx_id || '' },
