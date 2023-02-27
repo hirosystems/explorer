@@ -1,3 +1,10 @@
+# [1.77.0](https://github.com/hirosystems/explorer/compare/v1.76.0...v1.77.0) (2023-02-27)
+
+
+### Features
+
+* handle 0x block hash ([1663ed5](https://github.com/hirosystems/explorer/commit/1663ed5ab1fc4ab94107156b4c52f6be130c54e9))
+
 # [1.76.0](https://github.com/hirosystems/explorer/compare/v1.75.2...v1.76.0) (2023-02-24)
 
 
