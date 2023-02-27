@@ -30,7 +30,11 @@ const TransactionPageComponentBase: FC<{ txId: string; claritySyntax: Record<str
   const isContractId = txId.includes('.');
 
   const { data: mainTx } = useTxById(api, { txId: txId }, { enabled: !isContractId });
-  const { data: contract } = useContractById(api, { contractId: txId }, { enabled: isContractId });
+  const { data: contract } = useContractById(
+    api,
+    { contractId: txId },
+    { enabled: isContractId && mainTx.tx_status !== 'pending', suspense: false }
+  );
   const { data: contractTx } = useTxById(
     api,
     { txId: contract?.tx_id || '' },
