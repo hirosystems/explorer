@@ -1,3 +1,10 @@
+## [1.77.1](https://github.com/hirosystems/explorer/compare/v1.77.0...v1.77.1) (2023-02-27)
+
+
+### Bug Fixes
+
+* contract fetch for pending txs ([a8e8d2c](https://github.com/hirosystems/explorer/commit/a8e8d2cae2f92fc30b55022577ea240eb3d8130d))
+
 # [1.77.0](https://github.com/hirosystems/explorer/compare/v1.76.0...v1.77.0) (2023-02-27)
 
 
