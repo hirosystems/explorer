@@ -1,6 +1,5 @@
 'use client';
 
-import { SSRData } from '@/app/common/SSRData';
 import { useAppSelector } from '@/common/state/hooks';
 import { NetworkMode } from '@/common/types/network';
 import { cache } from '@emotion/css';
@@ -33,12 +32,24 @@ export const AppConfig: React.FC<{
     });
   }, []);
 
-  // if (typeof window === 'undefined') {
-  //   return null;
-  // }
-
   useEffect(() => {
-    toast(`You're viewing the ${SSRData.getInstance().networkMode} Explorer`);
+    toast(
+      <div>
+        You're viewing the {queryNetworkMode}
+        {queryApiUrl ? (
+          <>
+            <br />
+            {queryApiUrl}
+          </>
+        ) : null}{' '}
+        Explorer
+      </div>,
+      {
+        style: {
+          textAlign: 'center',
+        },
+      }
+    );
   }, []);
 
   return (

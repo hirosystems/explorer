@@ -18,7 +18,8 @@ export type TxStatus =
   | 'success_anchor_block'
   | 'success_microblock'
   | 'non_canonical'
-  | 'failed';
+  | 'failed'
+  | 'dropped';
 
 export type TokenTransferTxs = TokenTransferTransaction | MempoolTokenTransferTransaction;
 export type CoinbaseTxs = CoinbaseTransaction | MempoolCoinbaseTransaction;
