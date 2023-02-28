@@ -1,3 +1,10 @@
+# [1.79.0](https://github.com/hirosystems/explorer/compare/v1.78.1...v1.79.0) (2023-02-28)
+
+
+### Features
+
+* refactor fast follows ([c7a5eba](https://github.com/hirosystems/explorer/commit/c7a5ebaf69b56fdc6ba3cebee6f4c64870d9058a))
+
 ## [1.78.1](https://github.com/hirosystems/explorer/compare/v1.78.0...v1.78.1) (2023-02-27)
 
 
