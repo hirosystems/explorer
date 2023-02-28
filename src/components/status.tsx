@@ -18,6 +18,7 @@ const labelMap = {
   success_microblock: 'Included in microblock',
   non_canonical: 'Non-canonical (orphaned)',
   failed: 'Failed',
+  dropped: 'Dropped',
 };
 
 const iconMap = {
@@ -27,6 +28,7 @@ const iconMap = {
   success_microblock: () => <MicroblockIcon fill="white" />,
   non_canonical: HiOutlineExclamationCircle,
   failed: HiOutlineExclamationCircle,
+  dropped: HiOutlineExclamationCircle,
 };
 
 interface StatusProps extends FlexProps {

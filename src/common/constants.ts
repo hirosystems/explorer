@@ -83,6 +83,7 @@ export const TransactionStatus: Record<string, TxStatus> = {
   SUCCESS_MICROBLOCK: 'success_microblock',
   NON_CANONICAL: 'non_canonical',
   FAILED: 'failed',
+  DROPPED: 'dropped',
 };
 
 export const BTC_BNS_CONTRACT = 'SP000000000000000000002Q6VF78.bns::names';

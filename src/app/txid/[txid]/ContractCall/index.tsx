@@ -38,7 +38,6 @@ export const ContractCallPage: FC<{
       contractId={contractId}
       txDetails={<TxDetails tx={tx} block={block} />}
     >
-      <TxDetails tx={tx} block={block} />
       <FunctionSummarySection
         result={result}
         summary={tx.contract_call}
