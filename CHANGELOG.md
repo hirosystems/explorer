@@ -1,3 +1,10 @@
+# [1.81.0](https://github.com/hirosystems/explorer/compare/v1.80.0...v1.81.0) (2023-03-01)
+
+
+### Features
+
+* display next cycle when stacked stx is zero ([ae51161](https://github.com/hirosystems/explorer/commit/ae51161c696be2d85ff452c8a272c58a26a498f8))
+
 # [1.80.0](https://github.com/hirosystems/explorer/compare/v1.79.0...v1.80.0) (2023-03-01)
 
 
