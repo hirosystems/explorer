@@ -6,9 +6,11 @@ import { MobileMenu } from '@/components/mobile-menu';
 import { NetworkModeBanner } from '@/components/network-mode-banner';
 import { NetworkSwitcherItem } from '@/components/network-switcher';
 import { SearchComponent } from '@/features/search/search';
-import { StatusBar } from '@/features/status-bar/status-bar';
-import { Box, BoxProps, Flex, FlexProps, IconButton } from '@/ui/components';
+import { Indicator, StatusBar, StatusBarBase } from '@/features/status-bar/status-bar';
+import { Box, BoxProps, Flex, FlexProps, IconButton, TextLink } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
+import { Text } from '@/ui/typography';
+import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
@@ -72,6 +74,22 @@ export const Header: React.FC<
   return (
     <>
       <StatusBar />
+      <StatusBarBase
+        indicator={Indicator.minor}
+        content={
+          <Text textAlign={'center'} fontWeight={400} fontSize={'14px'} color={'#000'}>
+            Stacks 2.1 has been approved and released,{' '}
+            <TextLink
+              href={'https://stx.is/upgrade2.1'}
+              target={'_blank'}
+              borderBottom={'1px solid #000'}
+            >
+              please upgrade
+            </TextLink>{' '}
+            as soon as possible.
+          </Text>
+        }
+      />
       <HeaderBar
         mx="auto"
         width="100%"

@@ -1,10 +1,10 @@
-import { Box, Icon, TextLink } from '@/ui/components';
+import { Box, Flex, Icon, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';
 import { css } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
 
-enum Indicator {
+export enum Indicator {
   none = 'none',
   minor = 'minor',
   major = 'major',
@@ -31,13 +31,10 @@ const wrapperStyle = css`
   padding: 0 32px;
 `;
 
-const iconStyle = css`
-  margin-right: 9px;
-  position: relative;
-  top: 2px;
-`;
+const getColor = (indicator: Indicator) =>
+  indicator === Indicator.critical ? '#C83532' : '#A96500';
 
-export const StatusBar: React.FC = () => {
+export const StatusBar: FC = () => {
   const [status, setStatus] = useState<StatusProps>({
     description: '',
     indicator: Indicator.none,
@@ -48,36 +45,51 @@ export const StatusBar: React.FC = () => {
       .then(data => setStatus(data.status));
   }, []);
   const { indicator, description } = status;
+  return (
+    <StatusBarBase
+      indicator={indicator}
+      content={
+        <>
+          <Text color={getColor(indicator)} fontWeight={500} fontSize={'14px'} lineHeight={'1.5'}>
+            {description}
+            {description.endsWith('.') ? '' : '.'}
+          </Text>{' '}
+          <Text fontWeight={400} fontSize={'14px'} color={'#000'} lineHeight={'1.5'}>
+            More information on the{' '}
+            <TextLink
+              href="https://status.hiro.so/"
+              target="_blank"
+              css={css`
+                display: inline;
+              `}
+            >
+              Hiro status page
+            </TextLink>
+            .
+          </Text>
+        </>
+      }
+    />
+  );
+};
+
+export const StatusBarBase: FC<{ indicator: Indicator; content: ReactNode }> = ({
+  content,
+  indicator,
+}) => {
   if (indicator === Indicator.none) return null;
-  const color = indicator === Indicator.critical ? '#C83532' : '#A96500';
   const icon =
     indicator === Indicator.critical ? (
-      <Icon as={BsExclamationCircle} color={color} css={iconStyle} />
+      <Icon as={BsExclamationCircle} color={getColor(indicator)} />
     ) : (
-      <Icon as={BsExclamationTriangle} color={color} css={iconStyle} />
+      <Icon as={BsExclamationTriangle} color={getColor(indicator)} />
     );
   return (
     <Box css={backgroundStyle}>
-      <Box css={wrapperStyle}>
+      <Flex css={wrapperStyle} alignItems={'center'} justifyContent={'center'} gap={'9px'}>
         {icon}
-        <Text color={color} fontWeight={500} fontSize={'14px'} lineHeight={'1.5'}>
-          {description}
-          {description.endsWith('.') ? '' : '.'}
-        </Text>{' '}
-        <Text fontWeight={400} fontSize={'14px'} lineHeight={'1.5'}>
-          More information on the{' '}
-          <TextLink
-            href="https://status.hiro.so/"
-            target="_blank"
-            css={css`
-              display: inline;
-            `}
-          >
-            Hiro status page
-          </TextLink>
-          .
-        </Text>
-      </Box>
+        {content}
+      </Flex>
     </Box>
   );
 };
