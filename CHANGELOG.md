@@ -1,3 +1,10 @@
+# [1.80.0](https://github.com/hirosystems/explorer/compare/v1.79.0...v1.80.0) (2023-03-01)
+
+
+### Features
+
+* stacks 2.1 banner ([b00488f](https://github.com/hirosystems/explorer/commit/b00488fa0c317db1356d1771d5cd6f35bfbd5664))
+
 # [1.79.0](https://github.com/hirosystems/explorer/compare/v1.78.1...v1.79.0) (2023-02-28)
 
 
