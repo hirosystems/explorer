@@ -13,13 +13,10 @@ export const StackingCycle: FC<
     caption: ReactNode;
   } & GridProps
 > = ({ title, stackedSTX, caption, ...rest }) => {
-  if (!stackedSTX) {
-    return <SkeletonStatSection />;
-  }
   return (
     <StatSection
       title={title}
-      bodyMainText={numberToString(stackedSTX)}
+      bodyMainText={stackedSTX ? numberToString(stackedSTX) : '0'}
       bodySecondaryText=" STX stacked"
       caption={caption}
       {...rest}
