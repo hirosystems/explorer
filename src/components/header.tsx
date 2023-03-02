@@ -78,13 +78,13 @@ export const Header: React.FC<
         indicator={Indicator.minor}
         content={
           <Text textAlign={'center'} fontWeight={400} fontSize={'14px'} color={'#000'}>
-            Stacks 2.1 has been approved and released,{' '}
+            Stacks 2.1 has been approved and released. If you run a node, learn more about how to{' '}
             <TextLink
-              href={'https://stx.is/upgrade2.1'}
+              href={'https://stacks.org/stacks-2-1-helpdesk#!/tab/521355772-4'}
               target={'_blank'}
               borderBottom={'1px solid #000'}
             >
-              please upgrade
+              start your upgrade
             </TextLink>{' '}
             as soon as possible.
           </Text>
