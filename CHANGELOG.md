@@ -1,3 +1,10 @@
+# [1.82.0](https://github.com/hirosystems/explorer/compare/v1.81.0...v1.82.0) (2023-03-02)
+
+
+### Features
+
+* update banner text ([753af22](https://github.com/hirosystems/explorer/commit/753af22625ffaa904507925ea472ad455dd82075))
+
 # [1.81.0](https://github.com/hirosystems/explorer/compare/v1.80.0...v1.81.0) (2023-03-01)
 
 
