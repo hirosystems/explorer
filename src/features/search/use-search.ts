@@ -93,13 +93,7 @@ function blockToSearchResult(block: Block): FoundResult {
   const blockResult: BlockSearchResult = {
     entity_id: block.hash,
     entity_type: SearchResultType.BlockHash,
-    block_data: {
-      canonical: block.canonical,
-      hash: block.hash,
-      parent_block_hash: block.parent_block_hash,
-      burn_block_time: block.burn_block_time,
-      height: block.height,
-    },
+    block_data: block,
     tx_count: block.txs?.length || 0,
   };
   return {
