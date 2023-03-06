@@ -1,3 +1,10 @@
+## [1.82.1](https://github.com/hirosystems/explorer/compare/v1.82.0...v1.82.1) (2023-03-06)
+
+
+### Bug Fixes
+
+* block search result missing data ([38cbaa7](https://github.com/hirosystems/explorer/commit/38cbaa790b55b2616d6dc4edb295b72aa27272d0))
+
 # [1.82.0](https://github.com/hirosystems/explorer/compare/v1.81.0...v1.82.0) (2023-03-02)
 
 
