@@ -5,6 +5,7 @@ import { useGlobalContext } from '@/common/context/useAppContext';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Network } from '@/common/types/network';
 import { closeModal } from '@/components/modals/modal-slice';
+import { Checkbox } from '@/ui/Checkbox';
 import {
   Box,
   Button,
@@ -19,6 +20,7 @@ import { useRouter } from 'next/router';
 import { string } from 'yup';
 
 import { ChainID } from '@stacks/transactions';
+import { getQueryParams } from '@/app/common/utils/buildUrl';
 
 const buildCustomNetworkUrl = (url: string) => {
   const hostname = encodeURIComponent(new URL(url).hostname);
@@ -38,6 +40,7 @@ const fetchCustomNetworkId: (url: string) => Promise<ChainID | undefined> = (url
 interface FormValues {
   label: string;
   url: string;
+  isSubnet: boolean;
   genericError?: string;
 }
 
@@ -53,6 +56,7 @@ export const AddNetworkForm: React.FC = () => {
       initialValues={{
         label: '',
         url: '',
+        isSubnet: false,
       }}
       validate={async (values: FormValues) => {
         const errors: FormikErrors<FormValues> = {};
@@ -86,7 +90,7 @@ export const AddNetworkForm: React.FC = () => {
         }
         return errors;
       }}
-      onSubmit={async ({ url, label }) => {
+      onSubmit={async ({ url, label, isSubnet }) => {
         const networkUrl = buildCustomNetworkUrl(url);
         const networkId = await fetchCustomNetworkId(networkUrl);
 
@@ -97,9 +101,10 @@ export const AddNetworkForm: React.FC = () => {
             networkId,
             mode: NetworkIdModeMap[networkId],
             isCustomNetwork: true,
+            isSubnet,
           };
           void addCustomNetwork(network)
-            .then(() => router.push(`/?chain=${network.mode}&api=${network.url}`))
+            .then(() => router.push(`/${getQueryParams(network)}`))
             .then(() => router.reload());
         }
 
@@ -124,6 +129,14 @@ export const AddNetworkForm: React.FC = () => {
                     <FormLabel>URL</FormLabel>
                     <Input {...field} placeholder="https://" />
                     <FormErrorMessage>{form.errors.url}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="isSubnet">
+                {({ field, form }: FieldProps<string, FormValues>) => (
+                  <FormControl isInvalid={!!form.errors.isSubnet && !!form.touched.isSubnet}>
+                    <Checkbox {...field}>This is a subnet</Checkbox>
+                    <FormErrorMessage>{form.errors.isSubnet}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>

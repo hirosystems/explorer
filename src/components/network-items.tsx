@@ -27,6 +27,7 @@ import { useQuery } from 'react-query';
 
 import { CoreNodeInfoResponse } from '@stacks/blockchain-api-client/src/generated/models';
 import { ChainID } from '@stacks/transactions';
+import { getQueryParams } from '@/app/common/utils/buildUrl';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
@@ -105,7 +106,11 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
       >
         <Flex alignItems="center">
           <Title display="block">{item.label}</Title>
-          {itemNetworkMode ? (
+          {item.isSubnet ? (
+            <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
+              subnet
+            </Badge>
+          ) : itemNetworkMode ? (
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               {itemNetworkMode}
             </Badge>
@@ -187,13 +192,7 @@ export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemCli
               setTimeout(() => {
                 onItemClick?.(network);
                 if (!isActive) {
-                  void router
-                    .push(
-                      `/?chain=${network.mode}${
-                        network.isCustomNetwork ? `&api=${network.url}` : ''
-                      }`
-                    )
-                    .then(() => router.reload());
+                  void router.push(`/${getQueryParams(network)}`).then(() => router.reload());
                 }
               }, 250);
             }}

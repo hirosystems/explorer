@@ -9,7 +9,14 @@ import type { AppContext } from 'next/app';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-function ExplorerApp({ Component, cookies, apiUrls, queryNetworkMode, queryApiUrl }: any) {
+function ExplorerApp({
+  Component,
+  cookies,
+  apiUrls,
+  queryNetworkMode,
+  queryApiUrl,
+  querySubnet,
+}: any) {
   return (
     <ErrorBoundary
       fallbackRender={({ error, resetErrorBoundary }) => (
@@ -21,12 +28,14 @@ function ExplorerApp({ Component, cookies, apiUrls, queryNetworkMode, queryApiUr
         apiUrls={apiUrls}
         queryNetworkMode={queryNetworkMode}
         queryApiUrl={queryApiUrl}
+        querySubnet={querySubnet}
       >
         <Providers
           cookies={cookies}
           queryNetworkMode={queryNetworkMode}
           queryApiUrl={queryApiUrl}
           apiUrls={apiUrls}
+          querySubnet={querySubnet}
         >
           <PageWrapper>
             <Component />
@@ -42,11 +51,13 @@ ExplorerApp.getInitialProps = (appContext: AppContext) => {
   const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
+  const querySubnet = Array.isArray(query.subnet) ? query.subnet[0] : query.subnet;
   return {
     cookies: appContext.ctx.req?.headers?.cookie || (IS_BROWSER ? document?.cookie : ''),
     apiUrls: NetworkModeUrlMap,
     queryNetworkMode,
     queryApiUrl,
+    querySubnet,
   };
 };
 

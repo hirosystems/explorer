@@ -3,14 +3,7 @@ import { Network } from '@/common/types/network';
 import { forwardRef } from '@chakra-ui/react';
 import Link, { LinkProps } from 'next/link';
 import React from 'react';
-
-export const buildUrl = (href: LinkProps['href'], network: Network): string => {
-  const url = `${href}?chain=${encodeURIComponent(network?.mode)}`;
-  if (network?.isCustomNetwork) {
-    return `${url}&api=${network.url}`;
-  }
-  return url;
-};
+import { buildUrl } from '@/app/common/utils/buildUrl';
 
 export const ExplorerLink = forwardRef<LinkProps, 'a'>(({ href, ...rest }, ref) => {
   const network = useGlobalContext().activeNetwork;

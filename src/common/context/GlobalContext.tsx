@@ -37,6 +37,7 @@ export const AppContextProvider: FC<any> = ({
   queryNetworkMode,
   queryApiUrl,
   apiUrls,
+  querySubnet,
   children,
 }) => {
   if (IS_BROWSER && (window as any)?.location?.search?.includes('err=1'))
@@ -44,7 +45,8 @@ export const AppContextProvider: FC<any> = ({
   const customNetworksCookie = JSON.parse(cookie.parse(cookies || '').customNetworks || '{}');
   const [_, setCookie] = useCookies(['customNetworks']);
   const [customNetworks, setCustomNetworks] = useState(customNetworksCookie);
-  const activeNetworkKey = queryApiUrl || apiUrls[queryNetworkMode];
+  const activeNetworkKey = querySubnet || queryApiUrl || apiUrls[queryNetworkMode];
+  const isUrlPassedSubnet = !!querySubnet && !customNetworks[querySubnet];
   const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
@@ -67,8 +69,19 @@ export const AppContextProvider: FC<any> = ({
         isCustomNetwork: true,
       },
       ...customNetworks,
+      ...(isUrlPassedSubnet
+        ? {
+            [querySubnet]: {
+              isSubnet: true,
+              url: querySubnet,
+              label: 'subnet',
+              networkId: 0,
+              mode: NetworkModes.Mainnet,
+            },
+          }
+        : {}),
     }),
-    [apiUrls, customNetworks]
+    [apiUrls, customNetworks, isUrlPassedSubnet, querySubnet]
   );
 
   return (

@@ -12,6 +12,7 @@ import { StxIcon } from '@/ui/icons/StxIcon';
 import { Text } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
+import { useGlobalContext } from '@/common/context/useAppContext';
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
   return (
@@ -47,6 +48,7 @@ const HeaderBar: React.FC<FlexProps> = React.memo(props => (
 ));
 
 const Navigation: React.FC = () => {
+  const { activeNetwork } = useGlobalContext();
   return (
     <>
       <Flex alignItems="center" display={['none', 'none', 'none', 'flex']} gap={'16px'}>
@@ -57,9 +59,11 @@ const Navigation: React.FC = () => {
         <ExplorerLink href={'/blocks'}>
           <HeaderTextItem>Blocks</HeaderTextItem>
         </ExplorerLink>
-        <ExplorerLink href={'/sandbox/deploy'}>
-          <HeaderTextItem>Sandbox</HeaderTextItem>
-        </ExplorerLink>
+        {!activeNetwork.isSubnet && (
+          <ExplorerLink href={'/sandbox/deploy'}>
+            <HeaderTextItem>Sandbox</HeaderTextItem>
+          </ExplorerLink>
+        )}
         <NetworkSwitcherItem />
         <BtcStxPrice />
       </Flex>
