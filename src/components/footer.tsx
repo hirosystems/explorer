@@ -1,5 +1,5 @@
 import { useGlobalContext } from '@/common/context/useAppContext';
-import { buildUrl } from '@/components/links';
+import { buildUrl } from '@/app/common/utils/buildUrl';
 import { Box, Flex, TextLink } from '@/ui/components';
 import Link, { LinkProps } from 'next/link';
 import React, { FC, HTMLProps } from 'react';
@@ -50,7 +50,9 @@ export const Footer: FC = () => {
         <Flex display="flex" flexDirection={'column'} gap="5px">
           <Flex pb={['8px', '8px', 'unset']} pr={['unset', 'unset', '16px']} gap={'16px'}>
             <FooterLink href={buildUrl('/transactions', network)}>Recent transactions</FooterLink>
-            <FooterLink href={buildUrl('/sandbox/deploy', network)}>Sandbox</FooterLink>
+            {!network.isSubnet && (
+              <FooterLink href={buildUrl('/sandbox/deploy', network)}>Sandbox</FooterLink>
+            )}
             <FooterLink
               href="https://immunefi.com/bounty/stacks/"
               target="_blank"

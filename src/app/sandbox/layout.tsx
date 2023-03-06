@@ -11,18 +11,28 @@ import { Header } from './layout/Header';
 import { RightPanel } from './layout/RightPanel';
 import { SideNav } from './layout/SideNav';
 import { selectShowRightPanel } from './sandbox-slice';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { useRouter } from 'next/router';
+import { getQueryParams } from '@/app/common/utils/buildUrl';
 
 const Layout: FC = ({ children }) => {
   const { isConnected } = useUser();
-
+  const router = useRouter();
+  const colorMode = useColorMode().colorMode;
+  const { activeNetwork } = useGlobalContext();
   const showRightPanel = useAppSelector(selectShowRightPanel);
+
+  if (activeNetwork.isSubnet) {
+    void router.replace(`/${getQueryParams(activeNetwork)}`);
+    return null;
+  }
 
   return (
     <>
       <Flex
         borderWidth={'1px'}
         borderRadius="12px"
-        bg={`bg.${useColorMode().colorMode}`}
+        bg={`bg.${colorMode}`}
         flexDirection="column"
         flexGrow={1}
         flexShrink={1}

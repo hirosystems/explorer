@@ -25,6 +25,7 @@ export const Providers: FC<any> = ({
   cookies,
   queryNetworkMode,
   queryApiUrl,
+  querySubnet,
   apiUrls,
 }) => {
   return (
@@ -34,6 +35,7 @@ export const Providers: FC<any> = ({
           <AppConfig
             queryNetworkMode={queryNetworkMode}
             queryApiUrl={queryApiUrl}
+            querySubnet={querySubnet}
             apiUrls={apiUrls}
           >
             <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

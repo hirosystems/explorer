@@ -14,4 +14,5 @@ export interface Network {
   mode: NetworkModes;
   wsUrl?: string;
   isCustomNetwork?: boolean;
+  isSubnet?: boolean;
 }

@@ -18,7 +18,8 @@ export const AppConfig: React.FC<{
   apiUrls: any;
   queryNetworkMode: NetworkMode;
   queryApiUrl?: string;
-}> = ({ children, queryApiUrl, queryNetworkMode, apiUrls }) => {
+  querySubnet?: string;
+}> = ({ children, queryApiUrl, queryNetworkMode, querySubnet, apiUrls }) => {
   const { events } = useRouter();
   const userSession = useAppSelector(selectUserSession);
 
@@ -35,11 +36,11 @@ export const AppConfig: React.FC<{
   useEffect(() => {
     toast(
       <div>
-        You're viewing the {queryNetworkMode}
-        {queryApiUrl ? (
+        You're viewing {querySubnet ? 'a subnet' : `the ${queryNetworkMode}`}
+        {querySubnet || queryApiUrl ? (
           <>
             <br />
-            {queryApiUrl}
+            {querySubnet || queryApiUrl}
           </>
         ) : null}{' '}
         Explorer

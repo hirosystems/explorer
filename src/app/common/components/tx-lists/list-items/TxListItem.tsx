@@ -2,7 +2,7 @@ import { TwoColsListItem } from '@/common/components/TwoColumnsListItem';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { truncateMiddle } from '@/common/utils';
 import { getTransactionStatus } from '@/common/utils/transactions';
-import { ExplorerLink, buildUrl } from '@/components/links';
+import { ExplorerLink } from '@/components/links';
 import { AddressArea, Timestamp } from '@/components/transaction-item';
 import { FlexProps, Stack } from '@/ui/components';
 import { Caption, Title } from '@/ui/typography';
@@ -15,6 +15,7 @@ import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TxIcon } from '../../TxIcon';
 import { useTxTitle } from '../common/utils/tx';
 import { getTransactionTypeLabel } from '../utils/tx';
+import { buildUrl } from '@/app/common/utils/buildUrl';
 
 interface TxsListItemProps extends FlexProps {
   tx: Transaction;

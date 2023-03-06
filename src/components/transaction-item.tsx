@@ -1,7 +1,8 @@
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { toRelativeTime, truncateMiddle } from '@/common/utils';
 import { getTransactionStatus } from '@/common/utils/transactions';
-import { ExplorerLink, buildUrl } from '@/components/links';
+import { ExplorerLink } from '@/components/links';
+import { buildUrl } from '@/app/common/utils/buildUrl';
 import { BoxProps, Circle, Flex, FlexProps, Icon, Stack, Tooltip } from '@/ui/components';
 import { Caption, Text, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';

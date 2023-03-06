@@ -1,10 +1,17 @@
 import { Network } from '@/common/types/network';
 import { LinkProps } from 'next/link';
 
-export const buildUrl = (href: LinkProps['href'], network: Network): string => {
-  const url = `${href}?chain=${encodeURIComponent(network?.mode)}`;
-  if (network?.isCustomNetwork) {
-    return `${url}&api=${network.url}`;
+export const getQueryParams = (network: Network): string => {
+  const suffix = `?chain=${encodeURIComponent(network?.mode)}`;
+  if (network?.isSubnet) {
+    return `${suffix}&subnet=${network.url}`;
   }
-  return url;
+  if (network?.isCustomNetwork) {
+    return `${suffix}&api=${network.url}`;
+  }
+  return suffix;
+};
+
+export const buildUrl = (href: LinkProps['href'], network: Network): string => {
+  return `${href}${getQueryParams(network)}`;
 };
