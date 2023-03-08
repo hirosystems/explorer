@@ -11,8 +11,11 @@ import { Modals } from '@/components/modals';
 import { NetworkModeToast } from '@/components/network-mode-toast';
 import { Notice } from '@/components/notice';
 import { SearchComponent } from '@/features/search/search';
+import { Indicator, StatusBar, StatusBarBase } from '@/features/status-bar/status-bar';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
+import { Text } from '@/ui/Text';
+import { TextLink } from '@/ui/TextLink';
 import { useColorMode } from '@chakra-ui/react';
 import { FC } from 'react';
 
@@ -20,6 +23,31 @@ export const PageWrapper: FC = ({ children }) => {
   const colorMode = useColorMode().colorMode;
   return (
     <>
+      <Box
+        position={'sticky'}
+        width={'100%'}
+        zIndex={'1001'}
+        top={'0'}
+        backdropFilter={'blur(10px)'}
+      >
+        <StatusBar />
+        <StatusBarBase
+          indicator={Indicator.minor}
+          content={
+            <Text textAlign={'center'} fontWeight={400} fontSize={'14px'} color={'#000'}>
+              Stacks 2.1 has been approved and released. If you run a node, learn more about how to{' '}
+              <TextLink
+                href={'https://stacks.org/stacks-2-1-helpdesk#!/tab/521355772-4'}
+                target={'_blank'}
+                borderBottom={'1px solid #000'}
+              >
+                start your upgrade
+              </TextLink>{' '}
+              as soon as possible.
+            </Text>
+          }
+        />
+      </Box>
       <Flex
         maxWidth="100vw"
         overflowX="hidden"
