@@ -1,3 +1,10 @@
+# [1.84.0](https://github.com/hirosystems/explorer/compare/v1.83.0...v1.84.0) (2023-03-09)
+
+
+### Features
+
+* sentry: ignore 404 errors ([9eea1dc](https://github.com/hirosystems/explorer/commit/9eea1dc4e8e8b6a7b4e1d8c5f998fd2f371098d4))
+
 # [1.83.0](https://github.com/hirosystems/explorer/compare/v1.82.1...v1.83.0) (2023-03-09)
 
 
