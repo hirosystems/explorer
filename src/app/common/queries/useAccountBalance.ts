@@ -1,0 +1,27 @@
+import { useApi } from '@/common/api/client';
+import { getNextPageParam } from '@/common/utils';
+import { UseQueryOptions, useInfiniteQuery, useQuery } from 'react-query';
+
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+
+import { ONE_MINUTE } from './query-stale-time';
+
+export const useAccountBalance = (
+  api: ReturnType<typeof useApi>,
+  { address = '' }: { address?: string },
+  options: UseQueryOptions<any, any, AddressBalanceResponse, any> = {}
+) => {
+  return useQuery(
+    ['accountBalance', address],
+    () =>
+      api.accountsApi.getAccountBalance({
+        principal: address,
+      }),
+    {
+      getNextPageParam,
+      staleTime: ONE_MINUTE,
+      enabled: !!address,
+      ...options,
+    }
+  );
+};
