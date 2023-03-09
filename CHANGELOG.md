@@ -1,3 +1,10 @@
+# [1.83.0](https://github.com/hirosystems/explorer/compare/v1.82.1...v1.83.0) (2023-03-09)
+
+
+### Features
+
+* sticky status bar ([c7e1473](https://github.com/hirosystems/explorer/commit/c7e14736313ccc4169172c6907158a96688d27b0))
+
 ## [1.82.1](https://github.com/hirosystems/explorer/compare/v1.82.0...v1.82.1) (2023-03-06)
 
 
