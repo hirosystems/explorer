@@ -1,6 +1,8 @@
 'use client';
 
 import { PageTitle } from '@/app/common/components/PageTitle';
+import { useAccountBalance } from '@/app/common/queries/useAccountBalance';
+import { useNftHoldings } from '@/app/common/queries/useNftHoldings';
 import { useApi } from '@/common/api/client';
 import { microStxToStx, truncateMiddle } from '@/common/utils';
 import { hasTokenBalance } from '@/common/utils/accounts';
@@ -9,11 +11,8 @@ import { StxBalances } from '@/components/balances/stx-balance-card';
 import { Meta } from '@/components/meta-head';
 import { UnlockingScheduleModal } from '@/components/modals/unlocking-schedule';
 import { AddressSummary } from '@/features/address-page/address-summary';
-import { AddressQueryKeys, addressQK } from '@/features/address/query-keys';
-import { useAddressQueries } from '@/features/address/use-address-queries';
 import { Grid, GridProps, Stack } from '@/ui/components';
 import * as React from 'react';
-import { useQuery } from 'react-query';
 
 import { AddressTxListTabs } from '../../common/components/tx-lists/tabs/AddressTxListTabs';
 import { useAddressNonces } from '../../common/queries/useAddressNonces';
@@ -32,21 +31,18 @@ const ContentWrapper = (props: GridProps) => {
 };
 
 export default function AddressPage({ params: { principal } }: any) {
-  const queries = useAddressQueries();
   const api = useApi();
 
-  const { data: balance } = useQuery(
-    addressQK(AddressQueryKeys.accountBalance, principal),
-    queries.fetchAccountBalance(principal),
+  const { data: balance } = useAccountBalance(
+    api,
+    { address: principal },
     { refetchOnWindowFocus: true }
   );
-
-  const { data: nftHoldings } = useQuery(
-    addressQK(AddressQueryKeys.nftHoldings, principal),
-    queries.fetchNftHoldings(principal),
+  const { data: nftHoldings } = useNftHoldings(
+    api,
+    { address: principal },
     { refetchOnWindowFocus: true }
   );
-
   const { data: nonces } = useAddressNonces(api, { address: principal });
 
   const hasTokenBalances = hasTokenBalance(balance);

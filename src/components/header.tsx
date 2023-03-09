@@ -72,34 +72,53 @@ export const Header: React.FC<
   { isHome?: boolean; fullWidth?: boolean; networkMode?: string } & FlexProps
 > = React.memo(({ isHome, fullWidth, networkMode, ...props }) => {
   return (
-    <HeaderBar
-      mx="auto"
-      width="100%"
-      maxWidth={isHome || fullWidth ? '100%' : '1280px'}
-      justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
-      {...props}
-    >
-      <LogoNavItem />
-      <Flex
-        mx={['none', 'none', 'auto']}
+    <>
+      <StatusBar />
+      <StatusBarBase
+        indicator={Indicator.minor}
+        content={
+          <Text textAlign={'center'} fontWeight={400} fontSize={'14px'} color={'#000'}>
+            Stacks 2.1 has been approved and released. If you run a node, learn more about how to{' '}
+            <TextLink
+              href={'https://stacks.org/stacks-2-1-helpdesk#!/tab/521355772-4'}
+              target={'_blank'}
+              borderBottom={'1px solid #000'}
+            >
+              start your upgrade
+            </TextLink>{' '}
+            as soon as possible.
+          </Text>
+        }
+      />
+      <HeaderBar
+        mx="auto"
         width="100%"
+        maxWidth={isHome || fullWidth ? '100%' : '1280px'}
         justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
-        pl={['unset', 'unset', '20px']}
-        maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
-        alignItems="center"
+        {...props}
       >
-        <Flex alignItems="center" flexGrow={1} gap={'8px'}>
-          <SearchComponent
-            display={['none', 'none', 'block', 'block']}
-            variant="small"
-            mr="16px"
-            width="100%"
-            maxWidth="760px"
-          />
-          <NetworkModeBanner />
+        <LogoNavItem />
+        <Flex
+          mx={['none', 'none', 'auto']}
+          width="100%"
+          justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
+          pl={['unset', 'unset', '20px']}
+          maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
+          alignItems="center"
+        >
+          <Flex alignItems="center" flexGrow={1} gap={'8px'}>
+            <SearchComponent
+              display={['none', 'none', 'block', 'block']}
+              variant="small"
+              mr="16px"
+              width="100%"
+              maxWidth="760px"
+            />
+            <NetworkModeBanner />
+          </Flex>
+          <Navigation />
         </Flex>
-        <Navigation />
-      </Flex>
-    </HeaderBar>
+      </HeaderBar>
+    </>
   );
 });

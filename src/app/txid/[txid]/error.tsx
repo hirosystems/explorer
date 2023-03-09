@@ -13,9 +13,10 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { TbAlertOctagon } from 'react-icons/tb';
 
-export default function Error({ error }: { error: Error; reset: () => void }) {
+export default function Error({ error }: { error: any; reset: () => void }) {
   useEffect(() => {
     console.error(error);
+    if (error.status === 404) return;
     Sentry.captureException(error);
   }, [error]);
   const network = useGlobalContext().activeNetwork;
