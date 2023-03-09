@@ -9,9 +9,10 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { TbAlertOctagon } from 'react-icons/tb';
 
-export default function Error({ error, reset }: { error: Error; reset: () => void }) {
+export default function Error({ error, reset }: { error: any; reset: () => void }) {
   useEffect(() => {
     console.error(error);
+    if (error.status === 404) return;
     Sentry.captureException(error);
   }, [error]);
   return (
