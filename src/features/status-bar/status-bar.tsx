@@ -86,7 +86,7 @@ export const StatusBarBase: FC<{ indicator: Indicator; content: ReactNode }> = (
     );
   return (
     <Box css={backgroundStyle}>
-      <Flex css={wrapperStyle} alignItems={'center'} justifyContent={'center'} gap={'9px'}>
+      <Flex css={wrapperStyle} alignItems={'center'} justifyContent={'center'} gap={'20px'}>
         {icon}
         {content}
       </Flex>
