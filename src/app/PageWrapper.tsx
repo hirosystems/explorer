@@ -44,6 +44,17 @@ export const PageWrapper: FC = ({ children }) => {
                 start your upgrade
               </TextLink>{' '}
               as soon as possible.
+              <br />
+              <br />
+              Domain Migrations planned for Hiro-hosted Services. Learn more{' '}
+              <TextLink
+                href={'https://forum.stacks.org/t/domain-migrations-for-hiro-hosted-services/14609'}
+                target={'_blank'}
+                borderBottom={'1px solid #000'}
+              >
+                here
+              </TextLink>
+              .
             </Text>
           }
         />
