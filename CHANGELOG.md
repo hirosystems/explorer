@@ -1,3 +1,10 @@
+# [1.85.0](https://github.com/hirosystems/explorer/compare/v1.84.0...v1.85.0) (2023-03-10)
+
+
+### Features
+
+* migration banner ([b0e89f8](https://github.com/hirosystems/explorer/commit/b0e89f8cef0f08d42327cb9e467350360debc6a2))
+
 # [1.84.0](https://github.com/hirosystems/explorer/compare/v1.83.0...v1.84.0) (2023-03-09)
 
 
