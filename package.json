@@ -95,7 +95,7 @@
     "utf-8-validate": "^6.0.2",
     "valid-url": "1.0.9",
     "web-api-hooks": "3.0.2",
-    "webpack": "5.47.0",
+    "webpack": "5.76.0",
     "yup": "0.32.9"
   },
   "devDependencies": {
