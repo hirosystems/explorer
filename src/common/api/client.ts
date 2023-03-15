@@ -58,7 +58,10 @@ export function apiClients(config: Configuration) {
 const unanchoredMiddleware: Middleware = {
   pre: (context: RequestContext) => {
     const url = new URL(context.url);
-    if (!url.toString().includes('/v2')) url.searchParams.set('unanchored', 'true');
+    const urlStr = url.toString();
+    if (!(urlStr.includes('/v2') || urlStr.includes('/ft/metadata'))) {
+      url.searchParams.set('unanchored', 'true');
+    }
     return Promise.resolve({
       init: context.init,
       url: url.toString(),
