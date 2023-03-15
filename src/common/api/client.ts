@@ -63,6 +63,7 @@ const unanchoredMiddleware: Middleware = {
       urlStr += '/';
     } else if (!urlStr.includes('/v2')) {
       url.searchParams.set('unanchored', 'true');
+      urlStr = url.toString();
     }
     return Promise.resolve({
       init: context.init,
