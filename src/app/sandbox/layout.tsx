@@ -3,7 +3,7 @@
 import { useAppSelector } from '@/common/state/hooks';
 import { Flex, Grid } from '@/ui/components';
 import { useColorMode } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 
 import { useUser } from './hooks/useUser';
 import { ConnectToStacks } from './layout/ConnectToStacks';
@@ -12,7 +12,7 @@ import { RightPanel } from './layout/RightPanel';
 import { SideNav } from './layout/SideNav';
 import { selectShowRightPanel } from './sandbox-slice';
 
-const Layout: FC = ({ children }) => {
+const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { isConnected } = useUser();
 
   const showRightPanel = useAppSelector(selectShowRightPanel);

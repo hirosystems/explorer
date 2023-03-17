@@ -6,7 +6,7 @@ import { Text } from '@/ui/typography';
 import React from 'react';
 
 interface SectionProps extends Omit<FlexProps, 'title'> {
-  title?: string | React.FC;
+  title?: any;
 }
 
 const SectionHeader: React.FC<SectionProps> = React.memo(({ title: Title, children, ...rest }) => {

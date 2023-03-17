@@ -7,7 +7,7 @@ import { Button, ButtonProps } from './Button';
 
 export type ButtonLink = ButtonProps;
 export const ButtonLink = forwardRef<ButtonProps, 'a'>(({ children, ...rest }, ref) => (
-  <Button as={Link} {...rest}>
+  <Button as={Link as any} {...rest}>
     {children}
   </Button>
 ));

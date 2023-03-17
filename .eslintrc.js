@@ -1,9 +1,5 @@
 module.exports = {
-  extends: [
-    '@stacks/eslint-config',
-    'plugin:react-hooks/recommended',
-    'plugin:storybook/recommended',
-  ],
+  extends: ['plugin:react-hooks/recommended', 'plugin:storybook/recommended'],
   plugins: ['react', 'react-hooks'],
   parser: '@typescript-eslint/parser',
   parserOptions: {

@@ -22,7 +22,7 @@ export const useTxTitle = (
   const network = useGlobalContext().activeNetwork;
   const TxLink: FC<{ href?: string } & BoxProps> = ({ href = txHref, ...rest }) => (
     <Box
-      as={Link}
+      as={Link as any}
       href={href}
       {...(openInNewTab && { target: '_blank' })}
       textOverflow={'ellipsis'}

@@ -5,7 +5,7 @@ import { NetworkMode } from '@/common/types/network';
 import { cache } from '@emotion/css';
 import { CacheProvider } from '@emotion/react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { PropsWithChildren, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 import { Connect } from '@stacks/connect-react';
@@ -14,11 +14,13 @@ import { selectUserSession } from '../app/sandbox/sandbox-slice';
 
 declare const window: any;
 
-export const AppConfig: React.FC<{
-  apiUrls: any;
-  queryNetworkMode: NetworkMode;
-  queryApiUrl?: string;
-}> = ({ children, queryApiUrl, queryNetworkMode, apiUrls }) => {
+export const AppConfig: React.FC<
+  PropsWithChildren<{
+    apiUrls: any;
+    queryNetworkMode: NetworkMode;
+    queryApiUrl?: string;
+  }>
+> = ({ children, queryApiUrl, queryNetworkMode, apiUrls }) => {
   const { events } = useRouter();
   const userSession = useAppSelector(selectUserSession);
 

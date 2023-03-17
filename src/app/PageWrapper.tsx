@@ -17,9 +17,9 @@ import { Flex } from '@/ui/Flex';
 import { Text } from '@/ui/Text';
 import { TextLink } from '@/ui/TextLink';
 import { useColorMode } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
-export const PageWrapper: FC = ({ children }) => {
+export const PageWrapper: FC<PropsWithChildren> = ({ children }) => {
   const colorMode = useColorMode().colorMode;
   return (
     <>

@@ -1,7 +1,7 @@
 import { Text } from '@/ui/typography';
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
-export const Value: FC = ({ children }) => (
+export const Value: FC<PropsWithChildren> = ({ children }) => (
   <Text fontWeight={500} fontSize={'14px'} lineHeight={'1em'}>
     {children}
   </Text>

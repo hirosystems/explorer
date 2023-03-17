@@ -18,10 +18,10 @@ RUN apk --no-cache add --virtual \
   libstdc++ \
   linux-headers \
   make \
-  python3 \
-  && npm install --quiet node-gyp -g \
-  && yarn \
-  && apk del native-deps
+  python3
+RUN npm install --quiet node-gyp -g
+RUN yarn --frozen-lockfile
+RUN apk del native-deps
 
 RUN yarn build
 
@@ -55,3 +55,4 @@ COPY --from=build /app/.next/standalone /app
 
 EXPOSE 3000
 CMD [ "node", "server.js" ]
+

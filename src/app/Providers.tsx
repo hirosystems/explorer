@@ -4,7 +4,7 @@ import { store } from '@/common/state/store';
 import { AppConfig } from '@/components/app-config';
 import { UIProvider } from '@/ui/UIProvider';
 import * as React from 'react';
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
     },
   },
 });
-export const Providers: FC<any> = ({
+export const Providers: FC<PropsWithChildren<any>> = ({
   children,
   cookies,
   queryNetworkMode,
