@@ -41,14 +41,14 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
           subtitle: (
             <Caption display="block">
               {addSepBetweenStrings([
-                `${block.microblocks_accepted.length} ${pluralize(
+                `${block?.microblocks_accepted?.length || 0} ${pluralize(
                   'microblock',
-                  block.microblocks_accepted.length
+                  block?.microblocks_accepted?.length || 0
                 )}`,
               ]) +
                 ' · ' +
                 addSepBetweenStrings([
-                  `${block.txs.length} ${pluralize('transaction', block.txs.length)}`,
+                  `${block?.txs?.length || 0} ${pluralize('transaction', block?.txs?.length || 0)}`,
                 ])}
             </Caption>
           ),
