@@ -1,3 +1,10 @@
+## [1.85.1](https://github.com/hirosystems/explorer/compare/v1.85.0...v1.85.1) (2023-03-17)
+
+
+### Bug Fixes
+
+* search error on hiro domain ([1f769f0](https://github.com/hirosystems/explorer/commit/1f769f0aaf9c388ea0760e0dee4ffa7a4c3b3a46))
+
 # [1.85.0](https://github.com/hirosystems/explorer/compare/v1.84.0...v1.85.0) (2023-03-10)
 
 
