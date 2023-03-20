@@ -20,7 +20,7 @@ RUN apk --no-cache add --virtual \
   make \
   python3 \
   && npm install --quiet node-gyp -g \
-  && yarn \
+  && yarn --immutable\
   && apk del native-deps
 
 RUN yarn build
