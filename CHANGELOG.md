@@ -1,3 +1,10 @@
+# [1.86.0](https://github.com/hirosystems/explorer/compare/v1.85.1...v1.86.0) (2023-03-20)
+
+
+### Features
+
+* 2.1 Activation banner ([c96fbb2](https://github.com/hirosystems/explorer/commit/c96fbb2a78ee20ebea14ca5f7d8cd84ed39ace3c))
+
 ## [1.85.1](https://github.com/hirosystems/explorer/compare/v1.85.0...v1.85.1) (2023-03-17)
 
 
