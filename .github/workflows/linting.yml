@@ -22,9 +22,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '18.9.0'
+      - name: Install pnpm
+        run: npm install -g pnpm
       - name: Install Prettier
-        run: yarn add prettier@2.3.0
+        run: pnpm add prettier@2.8.1
       - name: Lint Prettier
-        run: yarn lint:prettier
+        run: pnpm run lint:prettier
         env:
           CI: true

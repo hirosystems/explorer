@@ -11,6 +11,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '18.9.0'
-      - run: yarn install
+      - run: pnpm i
       - name: Run unit tests
-        run: yarn test:unit
+        run: pnpm run test:unit

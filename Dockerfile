@@ -10,22 +10,9 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk --no-cache add --virtual \
-  native-deps \
-  g++ \
-  gcc \
-  libgcc \
-  libstdc++ \
-  linux-headers \
-  make \
-  python3 \
-  && npm install --quiet node-gyp -g \
-  && yarn \
-  && apk del native-deps
-
-RUN yarn build
-
-RUN yarn cache clean
+RUN npm install -g pnpm
+RUN pnpm i
+RUN pnpm build
 
 FROM node:16-alpine
 
@@ -41,9 +28,6 @@ ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 ENV SENTRY_DSN=${SENTRY_DSN}
 ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
 ENV NODE_ENV=${NODE_ENV}
-
-RUN apk --no-cache add --virtual \
-  yarn
 
 WORKDIR /app
 
