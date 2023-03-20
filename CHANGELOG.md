@@ -1,3 +1,10 @@
+## [1.86.1](https://github.com/hirosystems/explorer/compare/v1.86.0...v1.86.1) (2023-03-20)
+
+
+### Bug Fixes
+
+* frozen-lockfile ([cd8ccb4](https://github.com/hirosystems/explorer/commit/cd8ccb4165a26713cfa0128c2a2303ad59bf75ae))
+
 # [1.86.0](https://github.com/hirosystems/explorer/compare/v1.85.1...v1.86.0) (2023-03-20)
 
 
