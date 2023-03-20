@@ -2,7 +2,7 @@
 
 import { Flex, FlexProps } from '@/ui/components';
 import { Text, TextProps } from '@/ui/typography';
-import { forwardRef } from '@chakra-ui/system';
+import { forwardRef } from '@chakra-ui/react';
 import * as React from 'react';
 
 export type BadgeProps = FlexProps & { labelProps?: TextProps };

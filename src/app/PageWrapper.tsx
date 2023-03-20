@@ -35,7 +35,7 @@ export const PageWrapper: FC = ({ children }) => {
           indicator={Indicator.minor}
           content={
             <Text textAlign={'center'} fontWeight={400} fontSize={'14px'} color={'#000'}>
-              Stacks 2.1 is now activated and PoX-2 instantiated. If you run a node, you need to {' '}
+              Stacks 2.1 is now activated and PoX-2 instantiated. If you run a node, you need to{' '}
               <TextLink
                 href={'https://stacks.org/stacks-2-1-helpdesk#!/tab/521355772-4'}
                 target={'_blank'}
@@ -43,9 +43,11 @@ export const PageWrapper: FC = ({ children }) => {
               >
                 upgrade
               </TextLink>{' '}
-              NOW! Here's our {' '}
+              NOW! Here's our{' '}
               <TextLink
-                href={'https://archive.hiro.so/mainnet/stacks-blockchain/mainnet-stacks-blockchain-2.05.0.6.0-20230218.tar.gz'}
+                href={
+                  'https://archive.hiro.so/mainnet/stacks-blockchain/mainnet-stacks-blockchain-2.05.0.6.0-20230218.tar.gz'
+                }
                 target={'_blank'}
                 borderBottom={'1px solid #000'}
               >
