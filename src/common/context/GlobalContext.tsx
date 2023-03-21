@@ -1,5 +1,5 @@
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@/common/constants';
-import { NetworkModeUrlMap } from '@/common/constants/network';
+import { NetworkModeApiProxyUrlMap, NetworkModeUrlMap } from '@/common/constants/network';
 import { Network, NetworkModes } from '@/common/types/network';
 import cookie from 'cookie';
 import { FC, createContext, useMemo, useState } from 'react';
@@ -23,6 +23,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
   activeNetwork: {
     label: 'stacks.co',
     url: NetworkModeUrlMap[NetworkModes.Mainnet],
+    apiProxyUrl: NetworkModeApiProxyUrlMap[NetworkModes.Mainnet],
     networkId: ChainID.Mainnet,
     mode: NetworkModes.Mainnet,
   },
@@ -37,6 +38,7 @@ export const AppContextProvider: FC<any> = ({
   queryNetworkMode,
   queryApiUrl,
   apiUrls,
+  apiProxyUrls,
   children,
 }) => {
   if (IS_BROWSER && (window as any)?.location?.search?.includes('err=1'))
@@ -45,30 +47,33 @@ export const AppContextProvider: FC<any> = ({
   const [_, setCookie] = useCookies(['customNetworks']);
   const [customNetworks, setCustomNetworks] = useState(customNetworksCookie);
   const activeNetworkKey = queryApiUrl || apiUrls[queryNetworkMode];
-  const networks: Record<string, Network> = useMemo(
+  const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
         label: 'stacks.co',
         url: apiUrls[NetworkModes.Mainnet],
+        apiProxyUrl: apiProxyUrls[NetworkModes.Mainnet],
         networkId: ChainID.Mainnet,
         mode: NetworkModes.Mainnet,
       },
       [apiUrls[NetworkModes.Testnet]]: {
         label: 'stacks.co',
         url: apiUrls[NetworkModes.Testnet],
+        apiProxyUrl: apiProxyUrls[NetworkModes.Testnet],
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
       },
       [DEFAULT_DEVNET_SERVER]: {
         label: 'devnet',
         url: DEFAULT_DEVNET_SERVER,
+        apiProxyUrl: '',
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
         isCustomNetwork: true,
       },
       ...customNetworks,
     }),
-    [apiUrls, customNetworks]
+    [apiProxyUrls, apiUrls, customNetworks]
   );
 
   return (

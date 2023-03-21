@@ -18,6 +18,7 @@ export const NftBalances: React.FC<{ balances: AddressBalanceResponse; bnsHexVal
   bnsHexValues,
 }) => {
   const verticallyStackedElementsBorderStyle = useVerticallyStackedElementsBorderStyle();
+  console.log('balances.non_fungible_tokens', balances.non_fungible_tokens);
   return Object.keys(balances.non_fungible_tokens).length ? (
     <Box css={verticallyStackedElementsBorderStyle}>
       {Object.keys(balances.non_fungible_tokens).map((key, index, arr) => (

@@ -1,39 +1,28 @@
+import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
+import { useNftMetadata } from '@/app/common/queries/useNftMetadata';
 import { useApi } from '@/common/api/client';
 import { getAssetNameParts } from '@/common/utils';
-import { useQuery } from 'react-query';
 
 export function useTokenMetadata(
   token: string,
   tokenType: 'non_fungible_tokens' | 'fungible_tokens'
 ) {
   const { address, contract } = getAssetNameParts(token);
-  const { fungibleTokensApi, nonFungibleTokensApi } = useApi();
-  const T_24H_IN_MS = 1000 * 60 * 60 * 24;
+  const api = useApi();
+  const contractId = `${address}.${contract}`;
   return {
-    ftMetadata: useQuery(
-      ['ft-metadata', token],
-      () => {
-        const contractId = `${address}.${contract}`;
-        return fungibleTokensApi.getContractFtMetadata({
-          contractId,
-        });
-      },
+    ftMetadata: useFtMetadata(
+      api,
+      { contractId },
       {
-        staleTime: T_24H_IN_MS,
         enabled: tokenType === 'fungible_tokens',
-        suspense: false,
       }
     ),
-    nftMetadata: useQuery(
-      ['nft-metadata', token],
-      () => {
-        const contractId = `${address}.${contract}`;
-        return nonFungibleTokensApi.getContractNftMetadata({ contractId });
-      },
+    nftMetadata: useNftMetadata(
+      api,
+      { contractId, tokenId: 1 },
       {
-        staleTime: T_24H_IN_MS,
-        enabled: false, // disable till API support. tokenType === 'non_fungible_tokens',
-        suspense: false,
+        enabled: tokenType === 'non_fungible_tokens',
       }
     ),
   };

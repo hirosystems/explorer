@@ -1,6 +1,6 @@
 'use client';
 
-import { useContractFtMetadata } from '@/app/common/queries/useContractFtMetadata';
+import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
 import { useApi } from '@/common/api/client';
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@/common/utils';
 import { TxLink } from '@/components/links';
@@ -27,7 +27,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   const { address, asset, contract } = getAssetNameParts(token);
   const contractId = `${address}.${contract}`;
 
-  const { data: ftMetadata } = useContractFtMetadata(api, { contractId });
+  const { data: ftMetadata } = useFtMetadata(api, { contractId });
 
   const totalType = tokenType === 'non_fungible_tokens' ? 'count' : 'balance';
 

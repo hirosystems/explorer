@@ -38,6 +38,7 @@ const fetchCustomNetworkId: (url: string) => Promise<ChainID | undefined> = (url
 interface FormValues {
   label: string;
   url: string;
+  apiProxyUrl: string;
   genericError?: string;
 }
 
@@ -53,6 +54,7 @@ export const AddNetworkForm: React.FC = () => {
       initialValues={{
         label: '',
         url: '',
+        apiProxyUrl: '',
       }}
       validate={async (values: FormValues) => {
         const errors: FormikErrors<FormValues> = {};
@@ -124,6 +126,17 @@ export const AddNetworkForm: React.FC = () => {
                     <FormLabel>URL</FormLabel>
                     <Input {...field} placeholder="https://" />
                     <FormErrorMessage>{form.errors.url}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
+              <Field name="apiProxyUrl">
+                {({ field, form }: FieldProps<string, FormValues>) => (
+                  <FormControl isInvalid={!!form.errors.apiProxyUrl && !!form.touched.apiProxyUrl}>
+                    <FormLabel>
+                      Proxy URL (optional - currently used for metadata endpoints)
+                    </FormLabel>
+                    <Input {...field} placeholder="https://" />
+                    <FormErrorMessage>{form.errors.apiProxyUrl}</FormErrorMessage>
                   </FormControl>
                 )}
               </Field>

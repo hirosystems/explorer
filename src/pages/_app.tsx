@@ -2,14 +2,21 @@ import { PageWrapper } from '@/app/PageWrapper';
 import { Providers } from '@/app/Providers';
 import AppError from '@/app/error';
 import { IS_BROWSER } from '@/common/constants';
-import { NetworkModeUrlMap } from '@/common/constants/network';
+import { NetworkModeApiProxyUrlMap, NetworkModeUrlMap } from '@/common/constants/network';
 import { AppContextProvider } from '@/common/context/GlobalContext';
 import { NetworkModes } from '@/common/types/network';
 import type { AppContext } from 'next/app';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-function ExplorerApp({ Component, cookies, apiUrls, queryNetworkMode, queryApiUrl }: any) {
+function ExplorerApp({
+  Component,
+  cookies,
+  apiUrls,
+  apiProxyUrls,
+  queryNetworkMode,
+  queryApiUrl,
+}: any) {
   return (
     <ErrorBoundary
       fallbackRender={({ error, resetErrorBoundary }) => (
@@ -21,6 +28,7 @@ function ExplorerApp({ Component, cookies, apiUrls, queryNetworkMode, queryApiUr
         apiUrls={apiUrls}
         queryNetworkMode={queryNetworkMode}
         queryApiUrl={queryApiUrl}
+        apiProxyUrls={apiProxyUrls}
       >
         <Providers
           cookies={cookies}
@@ -42,15 +50,10 @@ ExplorerApp.getInitialProps = (appContext: AppContext) => {
   const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
-  console.log('SSR Props', {
-    cookies: appContext.ctx.req?.headers?.cookie || (IS_BROWSER ? document?.cookie : ''),
-    apiUrls: NetworkModeUrlMap,
-    queryNetworkMode,
-    queryApiUrl,
-  });
   return {
     cookies: appContext.ctx.req?.headers?.cookie || (IS_BROWSER ? document?.cookie : ''),
     apiUrls: NetworkModeUrlMap,
+    apiProxyUrls: NetworkModeApiProxyUrlMap,
     queryNetworkMode,
     queryApiUrl,
   };

@@ -1,6 +1,10 @@
 import { fetcher as fetchApi } from '@/common/api/fetch';
 import { MICROBLOCKS_ENABLED } from '@/common/constants';
 import { useGlobalContext } from '@/common/context/useAppContext';
+import {
+  Configuration as TokenMetadataApiConfiguration,
+  TokensApi,
+} from '@hirosystems/token-metadata-api-client';
 
 import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
 import {
@@ -23,7 +27,7 @@ import {
  * Our mega api clients function. This is a combo of all clients that the blockchain-api-client package offers.
  * @param config - the `@stacks/blockchain-api-client` configuration object
  */
-export function apiClients(config: Configuration) {
+export function apiClients(config: Configuration, proxyApiConfig: TokenMetadataApiConfiguration) {
   const smartContractsApi = new SmartContractsApi(config);
   const accountsApi = new AccountsApi(config);
   const infoApi = new InfoApi(config);
@@ -36,6 +40,7 @@ export function apiClients(config: Configuration) {
   const rosettaApi = new RosettaApi(config);
   const fungibleTokensApi = new FungibleTokensApi(config);
   const nonFungibleTokensApi = new NonFungibleTokensApi(config);
+  const tokenMetadataApi = new TokensApi(proxyApiConfig);
 
   return {
     smartContractsApi,
@@ -50,6 +55,7 @@ export function apiClients(config: Configuration) {
     rosettaApi,
     fungibleTokensApi,
     nonFungibleTokensApi,
+    tokenMetadataApi,
     config,
   };
 }
@@ -65,8 +71,6 @@ const unanchoredMiddleware: Middleware = {
     });
   },
 };
-
-// we use to to create our api client config on both the server and client
 export function createConfig(basePath?: string) {
   const middleware: Middleware[] = [];
   if (MICROBLOCKS_ENABLED) middleware.push(unanchoredMiddleware);
@@ -78,6 +82,9 @@ export function createConfig(basePath?: string) {
 }
 
 export const useApi = () => {
-  const config = createConfig(useGlobalContext().activeNetwork.url);
-  return apiClients(config);
+  const apiConfig = createConfig(useGlobalContext().activeNetwork.url);
+  const proxyApiConfig = new TokenMetadataApiConfiguration({
+    basePath: useGlobalContext().activeNetwork.apiProxyUrl,
+  });
+  return apiClients(apiConfig, proxyApiConfig);
 };

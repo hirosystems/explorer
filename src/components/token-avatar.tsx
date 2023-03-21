@@ -42,7 +42,7 @@ interface DefaultTokenImageProps {
 
 function DefaultTokenImage({ asset }: DefaultTokenImageProps) {
   return (
-    <Circle size="32px" mr="16px">
+    <Circle size="36px" mr="16px">
       {asset[0].toUpperCase()}
     </Circle>
   );

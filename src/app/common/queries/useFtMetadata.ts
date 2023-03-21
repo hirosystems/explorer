@@ -1,17 +1,14 @@
 import { useApi } from '@/common/api/client';
 import { UseQueryOptions, useQuery } from 'react-query';
 
-export const useContractFtMetadata = (
+export const useFtMetadata = (
   api: ReturnType<typeof useApi>,
   { contractId }: { contractId: string },
   options: UseQueryOptions<any, any, any, any> = {}
 ) => {
   return useQuery(
     ['contractFtMetadata', contractId],
-    () =>
-      api.fungibleTokensApi.getContractFtMetadata({
-        contractId,
-      }),
+    () => api.tokenMetadataApi.getFtMetadata(contractId),
     {
       retry: false,
       staleTime: Infinity,
