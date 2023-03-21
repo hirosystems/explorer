@@ -34,12 +34,12 @@ export const CONNECT_AUTH_ORIGIN =
 export const DEFAULT_TESTNET_SERVER =
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  'https://stacks-node-api.testnet.stacks.co';
+  'https://api.testnet.hiro.so';
 
 export const DEFAULT_MAINNET_SERVER =
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
   process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  'https://stacks-node-api.stacks.co';
+  'https://api.hiro.so';
 
 export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
 
