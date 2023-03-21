@@ -1,3 +1,10 @@
+# [1.89.0](https://github.com/hirosystems/explorer/compare/v1.88.0...v1.89.0) (2023-03-21)
+
+
+### Features
+
+* disable suspense for info endpoint ([3070c41](https://github.com/hirosystems/explorer/commit/3070c41c670c128ce4235a59bb661e65b627d25f))
+
 # [1.88.0](https://github.com/hirosystems/explorer/compare/v1.87.0...v1.88.0) (2023-03-21)
 
 
