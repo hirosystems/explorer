@@ -212,7 +212,8 @@ export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse
   const queries = useAddressQueries();
   const { data: stacksInfo } = useQuery(
     addressQK(AddressQueryKeys.coreApiInfo),
-    queries.fetchCoreApiInfo()
+    queries.fetchCoreApiInfo(),
+    { suspense: false }
   );
 
   return (
