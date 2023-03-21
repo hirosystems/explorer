@@ -1,3 +1,10 @@
+# [1.88.0](https://github.com/hirosystems/explorer/compare/v1.87.0...v1.88.0) (2023-03-21)
+
+
+### Features
+
+* change api urls to hiro.so ([f48f190](https://github.com/hirosystems/explorer/commit/f48f19018c337be5b5a552124fe0017173747019))
+
 # [1.87.0](https://github.com/hirosystems/explorer/compare/v1.86.1...v1.87.0) (2023-03-21)
 
 
