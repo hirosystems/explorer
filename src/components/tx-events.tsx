@@ -1,6 +1,6 @@
 'use client';
 
-import { useContractFtMetadata } from '@/app/common/queries/useContractFtMetadata';
+import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
 import { useApi } from '@/common/api/client';
 import {
   addSepBetweenStrings,
@@ -265,7 +265,7 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
 
   const memo = event.event_type === 'stx_asset' ? event.asset.memo || '' : '';
 
-  const { data: ftMetadata } = useContractFtMetadata(
+  const { data: ftMetadata } = useFtMetadata(
     api,
     { contractId },
     { enabled: !!contractId && event.event_type === 'fungible_token_asset' }

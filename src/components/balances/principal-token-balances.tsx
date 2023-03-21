@@ -13,16 +13,18 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
-export const NftBalances: React.FC<{ balances: AddressBalanceResponse; bnsHexValues: any }> = ({
-  balances,
-  bnsHexValues,
-}) => {
+export const NftBalances: React.FC<{
+  balances: AddressBalanceResponse;
+  bnsHexValues: any;
+  nftHoldings?: NonFungibleTokenHoldingsList;
+}> = ({ balances, bnsHexValues, nftHoldings }) => {
   const verticallyStackedElementsBorderStyle = useVerticallyStackedElementsBorderStyle();
   return Object.keys(balances.non_fungible_tokens).length ? (
     <Box css={verticallyStackedElementsBorderStyle}>
       {Object.keys(balances.non_fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
           amount={balances.non_fungible_tokens[key]?.count || ''}
+          holdings={nftHoldings?.results?.filter(nftHolding => nftHolding.asset_identifier === key)}
           key={index}
           token={key}
           tokenType="non_fungible_tokens"
@@ -94,7 +96,11 @@ export const TokenBalancesCard: React.FC<
             <FtBalances balances={balances} />
           </TabPanel>
           <TabPanel>
-            <NftBalances balances={balances} bnsHexValues={bnsHexValues} />
+            <NftBalances
+              balances={balances}
+              nftHoldings={nftHoldings}
+              bnsHexValues={bnsHexValues}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>
