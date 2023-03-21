@@ -1,3 +1,10 @@
+# [1.87.0](https://github.com/hirosystems/explorer/compare/v1.86.1...v1.87.0) (2023-03-21)
+
+
+### Features
+
+* stats error boundary ([f544df2](https://github.com/hirosystems/explorer/commit/f544df2b3036776c0258f85337ae0d2f8d97a434))
+
 ## [1.86.1](https://github.com/hirosystems/explorer/compare/v1.86.0...v1.86.1) (2023-03-20)
 
 
