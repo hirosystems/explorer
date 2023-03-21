@@ -27,19 +27,13 @@ export const APP_DETAILS = {
 };
 
 export const CONNECT_AUTH_ORIGIN =
-  process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
-  process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN ||
-  'https://pr-725.app.stacks.engineering';
-
-export const DEFAULT_TESTNET_SERVER =
-  process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  process.env.NEXT_PUBLIC_TESTNET_API_SERVER ||
-  'https://api.testnet.hiro.so';
+  process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || 'https://pr-725.app.stacks.engineering';
 
 export const DEFAULT_MAINNET_SERVER =
-  process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  process.env.NEXT_PUBLIC_MAINNET_API_SERVER ||
-  'https://api.hiro.so';
+  process.env.NEXT_PUBLIC_MAINNET_API_SERVER || 'https://api.hiro.so';
+
+export const DEFAULT_TESTNET_SERVER =
+  process.env.NEXT_PUBLIC_TESTNET_API_SERVER || 'https://api.testnet.hiro.so';
 
 export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
 

@@ -45,7 +45,7 @@ export const AppContextProvider: FC<any> = ({
   const [_, setCookie] = useCookies(['customNetworks']);
   const [customNetworks, setCustomNetworks] = useState(customNetworksCookie);
   const activeNetworkKey = queryApiUrl || apiUrls[queryNetworkMode];
-  const networks: Record<string, Network> = useMemo(
+  const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
         label: 'stacks.co',

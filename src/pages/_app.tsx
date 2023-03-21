@@ -42,12 +42,6 @@ ExplorerApp.getInitialProps = (appContext: AppContext) => {
   const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;
-  console.log('SSR Props', {
-    cookies: appContext.ctx.req?.headers?.cookie || (IS_BROWSER ? document?.cookie : ''),
-    apiUrls: NetworkModeUrlMap,
-    queryNetworkMode,
-    queryApiUrl,
-  });
   return {
     cookies: appContext.ctx.req?.headers?.cookie || (IS_BROWSER ? document?.cookie : ''),
     apiUrls: NetworkModeUrlMap,

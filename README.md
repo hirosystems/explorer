@@ -18,14 +18,14 @@ To run the explorer locally, first [clone this repo](https://docs.github.com/en/
 Next let's make sure you have the tools to install the projects dependencies:
 
 1. Install [NodeJS](https://nodejs.dev/) that includes `npm`
-1. Install [Yarn](https://yarnpkg.com/)
+1. Install [Pnpm](https://pnpm.io/installation)
 
 We highly recommend using [Homebrew](https://brew.sh/).
 
-Now open your Terminal, and make sure you are in the `/explorer` folder to run `yarn` to install the dependencies:
+Now open your Terminal, and make sure you are in the `/explorer` folder to run `pnpm i` to install the dependencies:
 
 ```sh
-yarn
+pnpm i
 ```
 
 ### Env variables
@@ -45,12 +45,12 @@ If you are in a mac, you'll need to add this to `/etc/paths`
 
 ### Run in development mode
 
-To build and run the application locally, you can run this yarn task which will launch the application at http://localhost:3000.
+To build and run the application locally, you can run this pnpm task which will launch the application at http://localhost:3000.
 
 ```sh
-yarn dev
+pnpm dev
 ```
 
 ### Building for production
 
-To build for production, run `yarn build` which will run the default next.js build task.
+To build for production, run `pnpm build` which will run the default next.js build task.
