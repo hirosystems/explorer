@@ -1,3 +1,10 @@
+# [1.90.0](https://github.com/hirosystems/explorer/compare/v1.89.0...v1.90.0) (2023-03-22)
+
+
+### Features
+
+* use token metadata api ([c1677da](https://github.com/hirosystems/explorer/commit/c1677dad89eb6e33970e805bcc43a85e8c647af6))
+
 # [1.89.0](https://github.com/hirosystems/explorer/compare/v1.88.0...v1.89.0) (2023-03-21)
 
 
