@@ -10,11 +10,13 @@ import {
   encodeClarityValue,
   isClarityAbiOptional,
   isClarityAbiTuple,
+  noneCV,
   serializeCV,
+  someCV,
   tupleCV,
 } from '@stacks/transactions';
 
-import { TupleValueType } from './types/values';
+import { NonTupleValueType, TupleValueType } from './types/values';
 
 export interface ClarityFunctionArg {
   name: string;
@@ -93,4 +95,12 @@ export const encodeTuple = (tuple: ClarityAbiTypeTuple['tuple'], value: TupleVal
     return acc;
   }, {} as Record<string, ClarityValue>);
   return tupleCV(tupleData);
+};
+
+export const encodeOptional = (optionalType: ClarityAbiType, value: NonTupleValueType) => {
+  if (value) {
+    return someCV(encodeClarityValue(optionalType, value.toString()));
+  } else {
+    return noneCV();
+  }
 };

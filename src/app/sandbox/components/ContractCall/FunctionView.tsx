@@ -21,7 +21,7 @@ import {
 
 import { useStacksNetwork } from '../../../common/hooks/use-stacks-network';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
-import { encodeTuple, getTuple } from '../../utils';
+import { encodeOptional, encodeTuple, getTuple } from '../../utils';
 import { Argument } from '../Argument';
 import { ReadOnlyField } from './ReadOnlyField';
 
@@ -105,11 +105,10 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                   )
             );
             final[arg] = listCV(listData);
+          } else if (optionalType) {
+            final[arg] = encodeOptional(optionalType, values[arg] as NonTupleValueType);
           } else {
-            final[arg] = encodeClarityValue(
-              optionalType || type,
-              (values[arg] as NonTupleValueType).toString()
-            );
+            final[arg] = encodeClarityValue(type, (values[arg] as NonTupleValueType).toString());
           }
         });
         if (fn.access === 'public') {
