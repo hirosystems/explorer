@@ -1,3 +1,10 @@
+## [1.90.1](https://github.com/hirosystems/explorer/compare/v1.90.0...v1.90.1) (2023-03-22)
+
+
+### Bug Fixes
+
+* **sandbox:** handle optional function args ([#956](https://github.com/hirosystems/explorer/issues/956)) ([d41f0cd](https://github.com/hirosystems/explorer/commit/d41f0cd2968b03adcd2fcd6277fbf164d1801dcf))
+
 # [1.90.0](https://github.com/hirosystems/explorer/compare/v1.89.0...v1.90.0) (2023-03-22)
 
 
