@@ -17,11 +17,12 @@ import {
   isClarityAbiOptional,
   isClarityAbiPrimitive,
   listCV,
+  someCV,
 } from '@stacks/transactions';
 
 import { useStacksNetwork } from '../../../common/hooks/use-stacks-network';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
-import { encodeOptional, encodeTuple, getTuple } from '../../utils';
+import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';
 import { Argument } from '../Argument';
 import { ReadOnlyField } from './ReadOnlyField';
 
@@ -88,7 +89,11 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
           const isList = isClarityAbiList(type);
           const optionalType = isClarityAbiOptional(type) ? type?.optional : undefined;
           if (tuple) {
-            final[arg] = encodeTuple(tuple, values[arg] as TupleValueType);
+            if (optionalType) {
+              final[arg] = encodeOptionalTuple(tuple, values[arg] as TupleValueType);
+            } else {
+              final[arg] = encodeTuple(tuple, values[arg] as TupleValueType);
+            }
           } else if (isList) {
             const listValues = values[arg] as ListValueType;
             const listType = type.list.type;

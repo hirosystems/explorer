@@ -88,7 +88,10 @@ export const getTuple = (type?: ClarityAbiType): ClarityAbiTypeTuple['tuple'] | 
   if (isOptional && isClarityAbiTuple(type?.optional)) return type?.optional?.tuple;
 };
 
-export const encodeTuple = (tuple: ClarityAbiTypeTuple['tuple'], value: TupleValueType) => {
+export const encodeTuple = (
+  tuple: ClarityAbiTypeTuple['tuple'],
+  value: TupleValueType
+): ClarityValue => {
   const tupleData = tuple.reduce((acc, tupleEntry) => {
     const _type = tupleEntry.type;
     acc[tupleEntry.name] = encodeClarityValue(_type, value[tupleEntry.name].toString());
@@ -97,9 +100,27 @@ export const encodeTuple = (tuple: ClarityAbiTypeTuple['tuple'], value: TupleVal
   return tupleCV(tupleData);
 };
 
-export const encodeOptional = (optionalType: ClarityAbiType, value: NonTupleValueType) => {
+export const encodeOptional = (
+  optionalType: ClarityAbiType,
+  value: NonTupleValueType
+): ClarityValue => {
   if (value) {
     return someCV(encodeClarityValue(optionalType, value.toString()));
+  } else {
+    return noneCV();
+  }
+};
+
+const allValuesNotEmpty = (value: TupleValueType) => {
+  return Object.values(value).reduce((previous, value) => previous && value !== '', true);
+};
+
+export const encodeOptionalTuple = (
+  optionalType: ClarityAbiTypeTuple['tuple'],
+  value: TupleValueType
+): ClarityValue => {
+  if (allValuesNotEmpty(value)) {
+    return someCV(encodeTuple(optionalType, value));
   } else {
     return noneCV();
   }

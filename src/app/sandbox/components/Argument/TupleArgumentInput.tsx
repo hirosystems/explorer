@@ -17,6 +17,7 @@ export const TupleArgumentInput: FC<
   }
 > = ({ name, type, handleChange, error, value, tuple }) => {
   const isOptional = isClarityAbiOptional(type);
+  const tupleType = isOptional ? (type.optional as ClarityAbiTypeTuple) : type;
   return (
     <Box>
       <Stack id={name} isInline spacing="16px" width="100%">
@@ -37,12 +38,12 @@ export const TupleArgumentInput: FC<
             <Box width="100%">
               <Input
                 width="100%"
-                type={getTypeString(type.tuple[i].type).includes('int') ? 'number' : 'text'}
+                type={getTypeString(tupleType.tuple[i].type).includes('int') ? 'number' : 'text'}
                 name={`${name}.${tupleEntry.name}`}
                 id={name}
                 onChange={handleChange}
                 value={value[tupleEntry.name]}
-                placeholder={`${getTypeString(type.tuple[i].type)}`}
+                placeholder={`${getTypeString(tupleType.tuple[i].type)}`}
               />
               {error && <Caption color={'feedbackError'}>{error}</Caption>}
             </Box>
