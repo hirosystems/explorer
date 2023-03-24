@@ -153,7 +153,7 @@ export const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransacti
     const date = getRelativeTimestamp(tx);
 
     return (
-      <Text ml="8px" fontSize="14px" textAlign="right" color={'textBody'} suppressHydrationWarning>
+      <Text fontSize="14px" textAlign="right" color={'textBody'} suppressHydrationWarning>
         {date}
       </Text>
     );

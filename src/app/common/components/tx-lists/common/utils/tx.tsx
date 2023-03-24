@@ -38,14 +38,16 @@ export const useTxTitle = (
     case 'smart_contract':
       return (
         <TxLink>
-          {getContractName(tx?.smart_contract?.contract_id)}: {tx.tx_id}
+          {getContractName(tx?.smart_contract?.contract_id)}
+          <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
         </TxLink>
       );
     case 'contract_call':
       return (
         <Stack alignItems="center" isInline>
           <TxLink>
-            {getFunctionName(tx)}: {tx.tx_id}
+            {getFunctionName(tx)}
+            <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
           </TxLink>
           <Box color={'textCaption'} size="14px">
             <TbArrowLeft size="14px" />
@@ -60,12 +62,10 @@ export const useTxTitle = (
       );
     case 'token_transfer':
       return (
-        <Flex
-          flexDirection={['column', 'column', 'row']}
-          alignItems={['flex-start', 'flex-start', 'center']}
-        >
+        <Flex flexDirection={['row']} alignItems={['center']}>
           <TxLink>
-            {microToStacks(tx.token_transfer.amount)} STX: {tx.tx_id}
+            {microToStacks(tx.token_transfer.amount)} STX
+            <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
           </TxLink>
           {showPrice && <StxPriceButton tx={tx} value={Number(tx.token_transfer.amount)} />}
         </Flex>
@@ -73,7 +73,8 @@ export const useTxTitle = (
     case 'coinbase':
       return (
         <TxLink>
-          Block #{(tx as Transaction).block_height} coinbase: {tx.tx_id}
+          Block #{(tx as Transaction).block_height} coinbase
+          <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
         </TxLink>
       );
     default:
