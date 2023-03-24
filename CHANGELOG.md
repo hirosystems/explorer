@@ -1,3 +1,10 @@
+## [1.91.1](https://github.com/hirosystems/explorer/compare/v1.91.0...v1.91.1) (2023-03-24)
+
+
+### Bug Fixes
+
+* **sandbox:** handle optional tuples better ([6372c6d](https://github.com/hirosystems/explorer/commit/6372c6d51fa24daab5d2796090c86ab7d650cedb))
+
 # [1.91.0](https://github.com/hirosystems/explorer/compare/v1.90.1...v1.91.0) (2023-03-24)
 
 
