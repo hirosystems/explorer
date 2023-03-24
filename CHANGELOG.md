@@ -1,3 +1,10 @@
+# [1.91.0](https://github.com/hirosystems/explorer/compare/v1.90.1...v1.91.0) (2023-03-24)
+
+
+### Features
+
+* responsive txs list ([79051a5](https://github.com/hirosystems/explorer/commit/79051a5133f4b9f8c75a7e832e0050ec017a1b3f))
+
 ## [1.90.1](https://github.com/hirosystems/explorer/compare/v1.90.0...v1.90.1) (2023-03-22)
 
 
