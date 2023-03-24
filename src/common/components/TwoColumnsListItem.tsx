@@ -28,18 +28,20 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
         {...rest}
       >
         <Box width={'40px'}>{icon}</Box>
-        <Flex direction={'column'} gap={'6px'} minWidth={0}>
-          <Flex direction={'column'} minHeight={'24px'} justifyContent={'center'}>
-            {leftContent.title}
+        <Flex width={'100%'} minWidth={'0px'} direction={['column', 'row']} gap={['8px', '0px']}>
+          <Flex direction={'column'} gap={'6px'} minWidth={0}>
+            <Flex direction={'column'} minHeight={'24px'} justifyContent={'center'}>
+              {leftContent.title}
+            </Flex>
+            <Box>{leftContent.subtitle}</Box>
           </Flex>
-          <Box>{leftContent.subtitle}</Box>
+          {rightContent && (
+            <Flex direction={'column'} gap={'8px'} ml={['0px', 'auto']} flexShrink={0}>
+              <Box alignSelf={['flex-start', 'flex-end']}>{rightContent.title}</Box>
+              <Box alignSelf={['flex-start', 'flex-end']}>{rightContent.subtitle}</Box>
+            </Flex>
+          )}
         </Flex>
-        {rightContent && (
-          <Flex direction={'column'} gap={'8px'} ml={'auto'} flexShrink={0}>
-            <Box alignSelf={'flex-end'}>{rightContent.title}</Box>
-            <Box alignSelf={'flex-end'}>{rightContent.subtitle}</Box>
-          </Flex>
-        )}
       </Flex>
     );
   }

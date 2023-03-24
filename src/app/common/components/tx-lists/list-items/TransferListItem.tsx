@@ -28,11 +28,11 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
     const icon = useMemo(
       () =>
         isOriginator ? (
-          <Circle bg={'bg'} size={'40px'} marginLeft={'56px'}>
+          <Circle bg={'bg'} size={'40px'}>
             <TbArrowUp color={'invert'} fill={'bg'} size={'16px'} />
           </Circle>
         ) : (
-          <Circle bg={'bg'} size={'40px'} marginLeft={'56px'}>
+          <Circle bg={'bg'} size={'40px'}>
             <TbArrowDown color={'invert'} fill={'bg'} size={'16px'} />
           </Circle>
         ),
@@ -41,7 +41,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
 
     const leftTitle = useMemo(
       () => (
-        <Title fontWeight="500" display="block" fontSize="16px" marginLeft={'56px'}>
+        <Title fontWeight="500" display="block" fontSize="16px">
           {title}
         </Title>
       ),
@@ -57,17 +57,15 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
           alignItems="center"
           flexWrap="wrap"
           divider={<Caption>∙</Caption>}
-          marginLeft={'56px'}
         >
-          <Caption fontWeight="bold">Transfer</Caption>
           {isOriginator && recipient && (
             <Caption>
-              To <PrincipalLink principal={recipient} />
+              to <PrincipalLink principal={recipient} />
             </Caption>
           )}
           {!isOriginator && sender && (
             <Caption>
-              From <PrincipalLink principal={sender} />
+              from <PrincipalLink principal={sender} />
             </Caption>
           )}
         </Stack>
@@ -77,7 +75,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
 
     const rightTitle = useMemo(
       () => (
-        <Text ml="8px" fontSize="14px" textAlign="right" color={'textBody'}>
+        <Text fontSize="14px" textAlign="right" color={'textBody'}>
           {amount}
         </Text>
       ),
@@ -89,6 +87,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
         icon={icon}
         leftContent={{ title: leftTitle, subtitle: leftSubtitle }}
         rightContent={{ title: rightTitle, subtitle: null }}
+        pl={'56px'}
       />
     );
   }
