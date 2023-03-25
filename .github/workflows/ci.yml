@@ -20,33 +20,28 @@ on:
       - '**/package.json'
   workflow_dispatch:
 
-jobs:
-  pre_run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@ad6cb1b847ffb509a69b745b6ee2f1d14dfe14b8
-        with:
-          access_token: ${{ github.token }}
+concurrency:
+  group: ${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
+  cancel-in-progress: true
 
+jobs:
   build-publish:
     runs-on: ubuntu-latest
     outputs:
       docker_image_digest: ${{ steps.docker_push.outputs.digest }}
       version: ${{ steps.docker_meta.outputs.version }}
-      sem_version_bool: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v2
+        uses: cycjimmy/semantic-release-action@v3
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SEMANTIC_RELEASE_PACKAGE: ${{ github.event.repository.name }}
         with:
-          semantic_version: 19
           extra_plugins: |
             @semantic-release/changelog
             @semantic-release/git
@@ -59,24 +54,24 @@ jobs:
 
       - name: Docker meta
         id: docker_meta
-        uses: docker/metadata-action@v3
+        uses: docker/metadata-action@v4
         with:
           images: ${{ github.repository }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
-            type=semver,pattern={{version}},value=${{ steps.semantic.outputs.new_release_version }},enable=${{ steps.semantic.outputs.new_release_version != '' }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ steps.semantic.outputs.new_release_version }},enable=${{ steps.semantic.outputs.new_release_version != '' }}
+            type=semver,pattern={{version}},value=${{ steps.semantic.outputs.new_release_version }},enable=${{ steps.semantic.outputs.new_release_published == 'true' }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ steps.semantic.outputs.new_release_version }},enable=${{ steps.semantic.outputs.new_release_published == 'true' }}
 
       - name: Login to Dockerhub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build/Tag/Push Image
         id: docker_push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
@@ -91,43 +86,79 @@ jobs:
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag/digest: ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }}"'
 
-  deploy-staging:
+  deploy-dev:
     runs-on: ubuntu-latest
     needs:
       - build-publish
     env:
-      DEPLOY_ENV: staging
+      DEPLOY_ENV: dev
     environment:
-      name: k8s-staging
-      url: https://explorer.staging.blockstack.xyz/
-    concurrency:
-      group: k8s-staging-${{ github.ref }}
-      cancel-in-progress: true
+      name: k8s-dev
+      url: https://explorer.dev.hiro.so/
     steps:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
+          ref: explorer
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
-          argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
-          argocd_username: ${{ secrets.ARGOCD_USERNAME }}
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
-          file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
+          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
 
-  auto-approve-staging:
+  auto-approve-dev:
     runs-on: ubuntu-latest
-    if: needs.build-publish.outputs.sem_version_bool == 'true'
+    if: needs.build-publish.outputs.new_release_published == 'true'
     needs:
       - build-publish
     steps:
       - name: Approve pending deployment
         run: |
+          sleep 5
+          ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
+          if [[ -n "${ENV_ID}" ]]; then
+            curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
+          fi
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs:
+      - build-publish
+      - deploy-dev
+    env:
+      DEPLOY_ENV: stg
+    environment:
+      name: k8s-staging
+      url: https://explorer.stg.hiro.so/
+    steps:
+      - name: Checkout actions repo
+        uses: actions/checkout@v3
+        with:
+          ref: explorer
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
+
+      - name: Deploy Explorer
+        uses: ./actions/deploy
+        with:
+          docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
+          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          gh_token: ${{ secrets.GH_TOKEN }}
+
+  auto-approve-staging:
+    runs-on: ubuntu-latest
+    if: needs.build-publish.outputs.new_release_published == 'true'
+    needs:
+      - build-publish
+      - deploy-dev
+    steps:
+      - name: Approve pending deployment
+        run: |
+          sleep 5
           ENV_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" | jq -r '.[0].environment.id // empty')
           if [[ -n "${ENV_ID}" ]]; then
             curl -s -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/hirosystems/explorer/actions/runs/${{ github.run_id }}/pending_deployments" -d "{\"environment_ids\":[${ENV_ID}],\"state\":\"approved\",\"comment\":\"auto approve\"}"
@@ -135,31 +166,26 @@ jobs:
 
   deploy-prod:
     runs-on: ubuntu-latest
-    if: needs.build-publish.outputs.sem_version_bool == 'true'
+    if: needs.build-publish.outputs.new_release_published == 'true'
     needs:
       - build-publish
       - deploy-staging
     env:
-      DEPLOY_ENV: prod
+      DEPLOY_ENV: prd
     environment:
       name: k8s-prod
-      url: https://explorer.stacks.co/
-    concurrency:
-      group: k8s-prod-${{ github.ref }}
-      cancel-in-progress: true
+      url: https://explorer.hiro.so/
     steps:
       - name: Checkout actions repo
         uses: actions/checkout@v3
         with:
+          ref: explorer
           token: ${{ secrets.GH_TOKEN }}
           repository: ${{ secrets.DEVOPS_ACTIONS_REPO }}
 
       - name: Deploy Explorer
         uses: ./actions/deploy
         with:
-          argocd_apps: ${{ env.DEPLOY_ENV }}.${{ github.event.repository.name }}
-          argocd_password: ${{ secrets.ARGOCD_PASSWORD }}
-          argocd_username: ${{ secrets.ARGOCD_USERNAME }}
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
-          file_pattern: sites/explorer/${{ env.DEPLOY_ENV }}/deployment.yaml
+          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
