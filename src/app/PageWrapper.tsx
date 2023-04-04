@@ -21,6 +21,7 @@ import { FC } from 'react';
 
 export const PageWrapper: FC = ({ children }) => {
   const colorMode = useColorMode().colorMode;
+
   return (
     <>
       <Box
