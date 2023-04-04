@@ -1,3 +1,17 @@
+# [1.92.0](https://github.com/hirosystems/explorer/compare/v1.91.1...v1.92.0) (2023-04-04)
+
+
+### Bug Fixes
+
+* add api header ([0d24de0](https://github.com/hirosystems/explorer/commit/0d24de01073807553024f3e4022f70a88194370e))
+* deploy ([013fbc4](https://github.com/hirosystems/explorer/commit/013fbc4a3c6597ba54b551227b7372fbfb01758c))
+* tests on ci ([833856f](https://github.com/hirosystems/explorer/commit/833856f37d77298af7c04e3654ff45fb8d93f616))
+
+
+### Features
+
+* remove upgrade banner ([58a9e4a](https://github.com/hirosystems/explorer/commit/58a9e4a1336a2a7e45f731a46dc3a2d4fd0f8a3c))
+
 ## [1.91.1](https://github.com/hirosystems/explorer/compare/v1.91.0...v1.91.1) (2023-03-24)
 
 
