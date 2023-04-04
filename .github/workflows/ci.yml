@@ -107,7 +107,7 @@ jobs:
         uses: ./actions/deploy
         with:
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
-          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
 
   auto-approve-dev:
@@ -146,7 +146,7 @@ jobs:
         uses: ./actions/deploy
         with:
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
-          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
 
   auto-approve-staging:
@@ -187,5 +187,5 @@ jobs:
         uses: ./actions/deploy
         with:
           docker_tag: ${{ needs.build-publish.outputs.docker_image_digest }}
-          file_pattern: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
+          application_path: manifests/sites/explorer/${{ env.DEPLOY_ENV }}/base/kustomization.yaml
           gh_token: ${{ secrets.GH_TOKEN }}
