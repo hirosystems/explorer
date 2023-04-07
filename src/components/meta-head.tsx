@@ -41,7 +41,7 @@ export const Meta = ({
     <Head>
       <title>{withMode(title === defaultTitle ? title : `${title} - ${defaultTitle}`)}</title>
       <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="https://explorer.hiro.so/" />
+      <meta property="og:site_name" content="https://explorer.hiro.so" />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@stacks" />
       <meta name="twitter:creator" content="@stacks" />
