@@ -21,7 +21,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
   cookies: '',
   apiUrls: NetworkModeUrlMap,
   activeNetwork: {
-    label: 'stacks.co',
+    label: 'hiro.so',
     url: NetworkModeUrlMap[NetworkModes.Mainnet],
     networkId: ChainID.Mainnet,
     mode: NetworkModes.Mainnet,
@@ -48,13 +48,13 @@ export const AppContextProvider: FC<any> = ({
   const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
-        label: 'stacks.co',
+        label: 'hiro.so',
         url: apiUrls[NetworkModes.Mainnet],
         networkId: ChainID.Mainnet,
         mode: NetworkModes.Mainnet,
       },
       [apiUrls[NetworkModes.Testnet]]: {
-        label: 'stacks.co',
+        label: 'hiro.so',
         url: apiUrls[NetworkModes.Testnet],
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
