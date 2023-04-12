@@ -1,3 +1,10 @@
+# [1.93.0](https://github.com/hirosystems/explorer/compare/v1.92.0...v1.93.0) (2023-04-12)
+
+
+### Features
+
+* subnets network updates ([4da9a29](https://github.com/hirosystems/explorer/commit/4da9a29351e9164b86b6f1b2e98619c150319d9d))
+
 # [1.92.0](https://github.com/hirosystems/explorer/compare/v1.91.1...v1.92.0) (2023-04-04)
 
 
