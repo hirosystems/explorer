@@ -32,22 +32,6 @@ export const PageWrapper: FC = ({ children }) => {
         backdropFilter={'blur(10px)'}
       >
         <StatusBar />
-        <StatusBarBase
-          indicator={Indicator.minor}
-          content={
-            <Text textAlign={'center'} fontWeight={400} fontSize={'14px'} color={'#000'}>
-              Domain Migrations planned for Hiro-hosted Services. Learn more{' '}
-              <TextLink
-                href={'https://forum.stacks.org/t/domain-migrations-for-hiro-hosted-services/14609'}
-                target={'_blank'}
-                borderBottom={'1px solid #000'}
-              >
-                here
-              </TextLink>
-              .
-            </Text>
-          }
-        />
       </Box>
       <Flex
         maxWidth="100vw"
