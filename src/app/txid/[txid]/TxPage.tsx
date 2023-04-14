@@ -19,6 +19,7 @@ import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchai
 import { TwoColumnPage } from '../../common/components/TwoColumnPage';
 import { BtcAnchorBlockCard } from './Cards/BtcAnchorBlockCard';
 import { ContractDetailsCard } from './Cards/ContractDetailsCard';
+import { useGlobalContext } from '@/common/context/useAppContext';
 
 export const TxPage: React.FC<{
   tx: Transaction | MempoolTransaction;
@@ -28,7 +29,10 @@ export const TxPage: React.FC<{
 }> = ({ tx, block, contractId, txDetails, children }) => {
   const txStatus = getTransactionStatus(tx);
   const queries = useTransactionQueries();
-  const showBlocksVisualizer = txStatus === 'success_microblock' || txStatus === 'pending';
+  const { activeNetwork } = useGlobalContext();
+
+  const showBlocksVisualizer =
+    !activeNetwork.isSubnet && (txStatus === 'success_microblock' || txStatus === 'pending');
 
   const { data: balance } = useQuery(
     transactionQK(TransactionQueryKeys.accountBalance, contractId),

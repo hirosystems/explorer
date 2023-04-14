@@ -34,14 +34,25 @@ const moduleExports = withBundleAnalyzer({
     X_API_KEY: process.env.X_API_KEY,
   },
   output: 'standalone',
+  async redirects() {
+    return [
+      {
+        source: '/sandbox',
+        destination: '/sandbox/deploy',
+        permanent: false,
+      },
+    ];
+  },
 });
 
 const sentryWebpackPluginOptions = {
   silent: false,
 };
 
-const nextConfig = !!SENTRY_DSN
-  ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
-  : moduleExports;
+// const nextConfig = !!SENTRY_DSN
+//   ? withSentryConfig(moduleExports, sentryWebpackPluginOptions)
+//   : moduleExports;
+
+const nextConfig = moduleExports;
 
 module.exports = nextConfig;
