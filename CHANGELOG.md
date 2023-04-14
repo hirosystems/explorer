@@ -1,3 +1,10 @@
+# [1.94.0](https://github.com/hirosystems/explorer/compare/v1.93.0...v1.94.0) (2023-04-14)
+
+
+### Features
+
+* subnets fast follows ([c551f1c](https://github.com/hirosystems/explorer/commit/c551f1c85616a53c2919e7dc6e241e41f3b82375))
+
 # [1.93.0](https://github.com/hirosystems/explorer/compare/v1.92.0...v1.93.0) (2023-04-12)
 
 
