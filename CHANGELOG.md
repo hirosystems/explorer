@@ -1,3 +1,10 @@
+# [1.95.0](https://github.com/hirosystems/explorer/compare/v1.94.0...v1.95.0) (2023-04-20)
+
+
+### Features
+
+* hide pox-2.stack-increase ([d50155f](https://github.com/hirosystems/explorer/commit/d50155f1913e99732a9017304d1934270b29b51c))
+
 # [1.94.0](https://github.com/hirosystems/explorer/compare/v1.93.0...v1.94.0) (2023-04-14)
 
 
