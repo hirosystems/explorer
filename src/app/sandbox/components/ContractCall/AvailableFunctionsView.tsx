@@ -67,6 +67,15 @@ export const AbiFunction = forwardRef<
   );
 });
 
+function showFn(contractId: string, abiFn: any) {
+  return (
+    abiFn.access !== 'private' &&
+    abiFn.name !== 'stack-increase' &&
+    contractId !== 'SP000000000000000000002Q6VF78.pox-2' &&
+    contractId !== 'ST000000000000000000002AMW42H.pox-2'
+  );
+}
+
 export const AvailableFunctionsView: FC<{
   contract: ContractWithParsedAbi;
   contractId: string;
@@ -74,7 +83,7 @@ export const AvailableFunctionsView: FC<{
   <Section overflowY="auto" flexGrow={1} title="Available functions">
     {contract?.abi?.functions.map(
       (abiFn: any) =>
-        abiFn.access !== 'private' && (
+        hideFn(contractId, abiFn) && (
           <ExplorerLink
             href={`/sandbox/contract-call/${contractId}/${abiFn.name}`}
             key={abiFn.name}
