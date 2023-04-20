@@ -5,7 +5,7 @@ import { validateStacksAddress } from '@/common/utils';
 import { Section } from '@/components/section';
 import { Box, Button, Flex, Stack } from '@/ui/components';
 import { Form, Formik } from 'formik';
-import React, { FC, ReactNode, useMemo, useState } from 'react';
+import { FC, ReactNode, useMemo, useState } from 'react';
 import { useQueryClient } from 'react-query';
 
 import { openContractCall } from '@stacks/connect';
@@ -17,9 +17,10 @@ import {
   isClarityAbiOptional,
   isClarityAbiPrimitive,
   listCV,
-  someCV,
 } from '@stacks/transactions';
 
+import { showFn } from '@/app/common/utils/sandbox';
+import { Text } from '@/ui/Text';
 import { useStacksNetwork } from '../../../common/hooks/use-stacks-network';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
 import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';
@@ -56,6 +57,24 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
       }, {} as FormType),
     [fn]
   );
+
+  if (!showFn(contractId, fn)) {
+    return (
+      <Section
+        overflowY="auto"
+        flexGrow={1}
+        title={`${fn.name} (${fn.access} function)`}
+        borderRadius={'0'}
+      >
+        <Box p="32px">
+          <Stack>
+            <Text>Invalid function for {contractId}.</Text>
+            {cancelButton}
+          </Stack>
+        </Box>
+      </Section>
+    );
+  }
 
   return (
     <Formik
