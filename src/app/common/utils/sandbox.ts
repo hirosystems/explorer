@@ -2,7 +2,8 @@
  * Predicate that a function of a contract should be shown.
  *
  * Functions that are private should NOT be shown
- * Functions that are pox-2.stacks-increase should NOT be shown
+ * Functions that are pox-2.stacks-increase should NOT be
+ * shown as it is invalid since Stacks 2.2
  *
  * @param contractId the contract id
  * @param abiFn the abi of the function or
