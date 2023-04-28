@@ -98,17 +98,16 @@ export const StatusBarBase: FC<{ indicator: Indicator; content: ReactNode }> = (
   );
 };
 
-const HIDE_ALERT_LOCAL_STORAGE_KEY = 'hide-hiro-alert';
-
-export const AlertBarBase: FC<{ indicator: Indicator; content: ReactNode }> = ({
-  content,
-  indicator,
-}) => {
-  const [hideAlert, setHideAlert] = useState(true);
+export const AlertBarBase: FC<{
+  indicator: Indicator;
+  content: ReactNode;
+  dismissLSKey?: string;
+}> = ({ content, indicator, dismissLSKey }) => {
+  const [hideAlert, setHideAlert] = useState(false);
   const localStorage = IS_BROWSER && (window as any).localStorage;
   useEffect(() => {
-    setHideAlert(localStorage?.getItem?.(HIDE_ALERT_LOCAL_STORAGE_KEY) === 'true' || false);
-  }, [localStorage]);
+    if (dismissLSKey) setHideAlert(localStorage?.getItem?.(dismissLSKey) === 'true' || false);
+  }, [dismissLSKey, localStorage]);
   if (hideAlert || indicator === Indicator.none) return null;
   const icon =
     indicator === Indicator.critical ? (
@@ -128,16 +127,18 @@ export const AlertBarBase: FC<{ indicator: Indicator; content: ReactNode }> = ({
       <Flex css={wrapperStyle} gap={'16px'}>
         {icon}
         {content}
-        <Icon
-          as={RiCloseLine}
-          size={4}
-          color={'textCaption'}
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            setHideAlert(true);
-            localStorage.setItem(HIDE_ALERT_LOCAL_STORAGE_KEY, 'true');
-          }}
-        />
+        {!!dismissLSKey && (
+          <Icon
+            as={RiCloseLine}
+            size={4}
+            color={'textCaption'}
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setHideAlert(true);
+              localStorage.setItem(dismissLSKey, 'true');
+            }}
+          />
+        )}
       </Flex>
     </Flex>
   );
