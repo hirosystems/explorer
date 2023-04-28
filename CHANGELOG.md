@@ -1,3 +1,15 @@
+# [1.96.0](https://github.com/hirosystems/explorer/compare/v1.95.0...v1.96.0) (2023-04-28)
+
+
+### Bug Fixes
+
+* changes the URL for the version of the stacks node ([905334b](https://github.com/hirosystems/explorer/commit/905334b174cb5e8f679dbef3cbf6b4a5fe99e212))
+
+
+### Features
+
+* stacks network update alert ([074a34c](https://github.com/hirosystems/explorer/commit/074a34c497eb7c5e9a2abb28245270741ca65af6))
+
 # [1.95.0](https://github.com/hirosystems/explorer/compare/v1.94.0...v1.95.0) (2023-04-20)
 
 
