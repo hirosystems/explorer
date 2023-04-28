@@ -57,7 +57,7 @@ export const PageWrapper: FC = ({ children }) => {
                   The Stacks network will be undergoing two hard-forks, as{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacksgov/sips/pull/127"
+                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
