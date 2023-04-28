@@ -104,7 +104,7 @@ export const AlertBarBase: FC<{ indicator: Indicator; content: ReactNode }> = ({
   content,
   indicator,
 }) => {
-  const [hideAlert, setHideAlert] = useState(false);
+  const [hideAlert, setHideAlert] = useState(true);
   const localStorage = IS_BROWSER && (window as any).localStorage;
   useEffect(() => {
     setHideAlert(localStorage?.getItem?.(HIDE_ALERT_LOCAL_STORAGE_KEY) === 'true' || false);
