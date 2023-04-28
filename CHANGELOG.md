@@ -1,3 +1,10 @@
+## [1.96.1](https://github.com/hirosystems/explorer/compare/v1.96.0...v1.96.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* alert bar initial state ([285178c](https://github.com/hirosystems/explorer/commit/285178c07f886cf07113afb5e3989d64c08936ac))
+
 # [1.96.0](https://github.com/hirosystems/explorer/compare/v1.95.0...v1.96.0) (2023-04-28)
 
 
