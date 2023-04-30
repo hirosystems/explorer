@@ -40,9 +40,16 @@ export const StatusBar: FC = () => {
     indicator: Indicator.none,
   });
   useEffect(() => {
-    void fetch('https://status.hiro.so/api/v2/status.json')
-      .then(res => res.json())
-      .then(data => setStatus(data.status));
+    async function fetchData() {
+      try {
+        const response = await fetch('https://status.hiro.so/api/v2/status.json');
+        const data = await response.json();
+        setStatus(data.status);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchData();
   }, []);
   const { indicator, description } = status;
   return (
