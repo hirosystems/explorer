@@ -1,8 +1,12 @@
+'use client';
+
 import { Box, Flex, Icon, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';
 import { css } from '@emotion/react';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
+import { RiCloseLine } from 'react-icons/ri';
+import { IS_BROWSER } from '@/common/constants';
 
 export enum Indicator {
   none = 'none',
@@ -98,5 +102,51 @@ export const StatusBarBase: FC<{ indicator: Indicator; content: ReactNode }> = (
         {content}
       </Flex>
     </Box>
+  );
+};
+
+export const AlertBarBase: FC<{
+  indicator: Indicator;
+  content: ReactNode;
+  dismissLSKey?: string;
+}> = ({ content, indicator, dismissLSKey }) => {
+  const [hideAlert, setHideAlert] = useState(false);
+  const localStorage = IS_BROWSER && (window as any).localStorage;
+  useEffect(() => {
+    if (dismissLSKey) setHideAlert(localStorage?.getItem?.(dismissLSKey) === 'true' || false);
+  }, [dismissLSKey, localStorage]);
+  if (hideAlert || indicator === Indicator.none) return null;
+  const icon =
+    indicator === Indicator.critical ? (
+      <Icon as={BsExclamationCircle} color={getColor(indicator)} />
+    ) : (
+      <Icon as={BsExclamationTriangle} color={getColor(indicator)} />
+    );
+  return (
+    <Flex
+      backgroundColor={'#FDF1DD'}
+      width={'100%'}
+      zIndex={2}
+      alignItems={'center'}
+      justifyContent={'center'}
+      padding={'16px 0 19px 0'}
+    >
+      <Flex css={wrapperStyle} gap={'16px'}>
+        {icon}
+        {content}
+        {!!dismissLSKey && (
+          <Icon
+            as={RiCloseLine}
+            size={4}
+            color={'textCaption'}
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setHideAlert(true);
+              localStorage.setItem(dismissLSKey, 'true');
+            }}
+          />
+        )}
+      </Flex>
+    </Flex>
   );
 };

@@ -1,3 +1,29 @@
+# [1.97.0](https://github.com/hirosystems/explorer/compare/v1.96.1...v1.97.0) (2023-04-28)
+
+
+### Features
+
+* remove alert dismiss button ([cdb1492](https://github.com/hirosystems/explorer/commit/cdb14925df7c4cde209113bacc07cb4507b0005a))
+
+## [1.96.1](https://github.com/hirosystems/explorer/compare/v1.96.0...v1.96.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* alert bar initial state ([285178c](https://github.com/hirosystems/explorer/commit/285178c07f886cf07113afb5e3989d64c08936ac))
+
+# [1.96.0](https://github.com/hirosystems/explorer/compare/v1.95.0...v1.96.0) (2023-04-28)
+
+
+### Bug Fixes
+
+* changes the URL for the version of the stacks node ([905334b](https://github.com/hirosystems/explorer/commit/905334b174cb5e8f679dbef3cbf6b4a5fe99e212))
+
+
+### Features
+
+* stacks network update alert ([074a34c](https://github.com/hirosystems/explorer/commit/074a34c497eb7c5e9a2abb28245270741ca65af6))
+
 # [1.95.0](https://github.com/hirosystems/explorer/compare/v1.94.0...v1.95.0) (2023-04-20)
 
 
