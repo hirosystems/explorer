@@ -5,7 +5,7 @@ import { NetworkMode } from '@/common/types/network';
 import { cache } from '@emotion/css';
 import { CacheProvider } from '@emotion/react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
 
 import { Connect } from '@stacks/connect-react';
@@ -23,20 +23,25 @@ export const AppConfig: React.FC<{
   const { events } = useRouter();
   const userSession = useAppSelector(selectUserSession);
 
+  const memoizedAnalyticsPage = useCallback((url: string) => {
+    console.log('routeChangeComplete');
+    window.analytics?.page(url);
+  }, []);
+
   useEffect(() => {
     console.log('mount');
     if (!window.analytics) return;
     console.log('analytics');
-    events.on('routeChangeComplete', (url: string) => {
-      console.log('routeChangeComplete');
-      return window.analytics?.page(url);
-    });
-  }, []);
+    events.on('routeChangeComplete', memoizedAnalyticsPage);
+    return () => {
+      events.off('routeChangeComplete', memoizedAnalyticsPage);
+    };
+  }, [memoizedAnalyticsPage]);
 
-  useEffect(() => {
-    toast(
+  const memoizedToastMessage = useMemo(() => {
+    return (
       <div>
-        You're viewing {querySubnet ? 'a subnet' : `the ${queryNetworkMode}`}
+        You're viewing {querySubnet ? 'a subnet' : `the \${queryNetworkMode}`}
         {querySubnet || queryApiUrl ? (
           <>
             <br />
@@ -44,22 +49,29 @@ export const AppConfig: React.FC<{
           </>
         ) : null}{' '}
         Explorer
-      </div>,
-      {
-        style: {
-          textAlign: 'center',
-        },
-      }
+      </div>
     );
+  }, [querySubnet, queryApiUrl, queryNetworkMode]);
+
+  useEffect(() => {
+    toast(memoizedToastMessage, {
+      style: {
+        textAlign: 'center',
+      },
+    });
+  }, [memoizedToastMessage]);
+
+  const memoizedAppDetails = useMemo(() => {
+    return {
+      name: 'Stacks Explorer',
+      icon: '/stx-circle.png',
+    };
   }, []);
 
   return (
     <Connect
       authOptions={{
-        appDetails: {
-          name: 'Stacks Explorer',
-          icon: '/stx-circle.png',
-        },
+        appDetails: memoizedAppDetails,
         userSession,
       }}
     >
