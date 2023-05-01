@@ -1,3 +1,10 @@
+# [1.98.0](https://github.com/hirosystems/explorer/compare/v1.97.0...v1.98.0) (2023-05-01)
+
+
+### Features
+
+* hide stats box ([719e96a](https://github.com/hirosystems/explorer/commit/719e96a88d509eacf4454480b7e921e6106c9f3f))
+
 # [1.97.0](https://github.com/hirosystems/explorer/compare/v1.96.1...v1.97.0) (2023-04-28)
 
 
