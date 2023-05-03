@@ -1,3 +1,10 @@
+# [1.99.0](https://github.com/hirosystems/explorer/compare/v1.98.1...v1.99.0) (2023-05-03)
+
+
+### Features
+
+* redeploy ([cd54806](https://github.com/hirosystems/explorer/commit/cd548068c99d0bacec0523e02c89a12886646002))
+
 ## [1.98.1](https://github.com/hirosystems/explorer/compare/v1.98.0...v1.98.1) (2023-05-03)
 
 
