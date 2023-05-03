@@ -1,3 +1,10 @@
+## [1.98.1](https://github.com/hirosystems/explorer/compare/v1.98.0...v1.98.1) (2023-05-03)
+
+
+### Bug Fixes
+
+* updates the banner with the current information about sip 23 ([f8cc4ea](https://github.com/hirosystems/explorer/commit/f8cc4eaa037114782a6451bd11efd31145f928c2))
+
 # [1.98.0](https://github.com/hirosystems/explorer/compare/v1.97.0...v1.98.0) (2023-05-01)
 
 
