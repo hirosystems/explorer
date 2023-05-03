@@ -57,12 +57,12 @@ export const PageWrapper: FC = ({ children }) => {
                   The Stacks network will be undergoing two hard-forks, as{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
+                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-023/sip-023-emergency-fix-traits.md"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
                   >
-                    outlined in SIP-022
+                    outlined in SIP-023
                   </TextLink>
                   .
                 </ListItem>
@@ -70,12 +70,12 @@ export const PageWrapper: FC = ({ children }) => {
                   This update will require miners and operators to upgrade to{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.2.0.0.1"
+                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.3.0.0.0"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
                   >
-                    stacks-node version 2.2.0.0.1
+                    stacks-node version 2.3.0.0.0
                   </TextLink>
                 </ListItem>
                 <ListItem>
