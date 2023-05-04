@@ -194,6 +194,9 @@ dependencies:
   react-cookie:
     specifier: 4.1.1
     version: 4.1.1(react@18.2.0)
+  react-csv:
+    specifier: 2.0.3
+    version: 2.0.3
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
@@ -388,9 +391,6 @@ devDependencies:
   prettier:
     specifier: 2.8.1
     version: 2.8.1
-  react-csv:
-    specifier: 2.0.3
-    version: 2.0.3
   ts-unused-exports:
     specifier: 8.0.0
     version: 8.0.0(typescript@4.7.4)
@@ -16638,7 +16638,7 @@ packages:
 
   /react-csv@2.0.3:
     resolution: {integrity: sha512-exyAdFLAxtuM4wNwLYrlKyPYLiJ7e0mv9tqPAd3kq+k1CiJFtznevR3yP0icv5q/y200w+lzNgi7TQn1Wrhu0w==}
-    dev: true
+    dev: false
 
   /react-docgen-typescript@2.2.2(typescript@4.7.4):
     resolution: {integrity: sha512-tvg2ZtOpOi6QDwsb3GZhOjDkkX0h8Z2gipvTg6OVMUyoYoURhEiRNePT8NZItTVCDh39JJHnLdfCOkzoLbFnTg==}
