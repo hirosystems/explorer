@@ -11,7 +11,7 @@ import { useFilterState } from '../app/common/hooks/use-filter-state';
 export const FilterButton = memo(() => {
   const { toggleFilterVisibility } = useFilterState();
   return (
-    <Box position="relative" marginLeft={'auto'} alignSelf={'center'}>
+    <Box position="relative" marginLeft={'16px'} alignSelf={'center'}>
       <Caption
         display="flex"
         alignItems="center"
