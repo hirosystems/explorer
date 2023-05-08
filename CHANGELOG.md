@@ -1,3 +1,10 @@
+## [1.99.1](https://github.com/hirosystems/explorer/compare/v1.99.0...v1.99.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* z-index in multiple components ([be6ad07](https://github.com/hirosystems/explorer/commit/be6ad075891edc168a221e6b9c57276608f8442c))
+
 # [1.99.0](https://github.com/hirosystems/explorer/compare/v1.98.1...v1.99.0) (2023-05-03)
 
 
