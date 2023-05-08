@@ -18,7 +18,6 @@ export const FilterButton = memo(() => {
         _hover={{ cursor: 'pointer', color: 'textTitle' }}
         data-test="filter-button"
         position="relative"
-        zIndex={999}
         onClick={toggleFilterVisibility}
       >
         <Icon as={FiFilter} mr="4px" color="currentColor" size="13px" strokeWidth={1.5} />

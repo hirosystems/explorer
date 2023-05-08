@@ -39,13 +39,7 @@ const RightPanelBase: FC = () => {
                 gap={'8px'}
               >
                 <StxIcon strokeWidth={2} color="currentColor" size="18px" />
-                <Text
-                  fontWeight={600}
-                  fontSize={'24px'}
-                  display="block"
-                  position="relative"
-                  zIndex={2}
-                >
+                <Text fontWeight={600} fontSize={'24px'} display="block" position="relative">
                   {balance?.stx?.balance ? microToStacks(balance.stx.balance) : 0} STX
                 </Text>
               </Flex>

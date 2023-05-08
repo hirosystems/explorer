@@ -63,7 +63,6 @@ const Faucet: NextPage = () => {
           <Grid
             placeItems="center"
             position="absolute"
-            zIndex={99}
             bottom="-5px"
             left="-5px"
             size="42px"

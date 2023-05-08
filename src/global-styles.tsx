@@ -177,7 +177,6 @@ const globalStyles = css`
 
   .portal {
     position: relative;
-    z-index: 99;
   }
 
   a {
@@ -313,7 +312,6 @@ const globalStyles = css`
     line-height: 1;
     position: relative;
     overflow: hidden;
-    z-index: 1;
   }
 
   .ssr-skeleton:after {

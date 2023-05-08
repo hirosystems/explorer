@@ -8,7 +8,7 @@ import { TbChevronDown } from 'react-icons/tb';
 const Dropdown: React.FC<BoxProps & { show?: boolean; onItemClick?: () => void }> = memo(
   ({ onItemClick }) => {
     return (
-      <Box top="100%" pt="16px" right={0} position="absolute">
+      <Box top="100%" pt="16px" right={0} position="absolute" zIndex={1}>
         <Box
           borderWidth="1px"
           overflow="hidden"

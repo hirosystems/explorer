@@ -72,7 +72,6 @@ const Filter = () => {
         alignItems="center"
         _hover={{ cursor: 'pointer', color: 'textTitle' }}
         position="relative"
-        zIndex={999}
         onClick={toggleFilterVisibility}
       >
         <Icon as={TbFilter} mr="4px" color="currentColor" size="16px" strokeWidth={1.5} />
