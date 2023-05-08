@@ -1,3 +1,10 @@
+## [1.100.1](https://github.com/hirosystems/explorer/compare/v1.100.0...v1.100.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* updates the version of stacks on the banner ([9f10660](https://github.com/hirosystems/explorer/commit/9f106600262498c5879d65479f95ffca5d02df10))
+
 # [1.100.0](https://github.com/hirosystems/explorer/compare/v1.99.1...v1.100.0) (2023-05-08)
 
 
