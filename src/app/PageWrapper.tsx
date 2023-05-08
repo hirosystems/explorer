@@ -64,12 +64,12 @@ export const PageWrapper: FC = ({ children }) => {
                   This update will require miners and operators to upgrade to{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.3.0.0.0"
+                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.3.0.0.1"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
                   >
-                    stacks-node version 2.3.0.0.0
+                    stacks-node version 2.3.0.0.1
                   </TextLink>
                 </ListItem>
                 <ListItem>
