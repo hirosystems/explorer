@@ -1,3 +1,10 @@
+# [1.100.0](https://github.com/hirosystems/explorer/compare/v1.99.1...v1.100.0) (2023-05-08)
+
+
+### Features
+
+* add stacks 2.1 contracts ([ba76ecf](https://github.com/hirosystems/explorer/commit/ba76ecfaa336f596b98c7b2348bcf29b29a84cc3))
+
 ## [1.99.1](https://github.com/hirosystems/explorer/compare/v1.99.0...v1.99.1) (2023-05-08)
 
 
