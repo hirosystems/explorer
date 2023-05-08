@@ -6,11 +6,8 @@ import { MobileMenu } from '@/components/mobile-menu';
 import { NetworkModeBanner } from '@/components/network-mode-banner';
 import { NetworkSwitcherItem } from '@/components/network-switcher';
 import { SearchComponent } from '@/features/search/search';
-import { Indicator, StatusBar, StatusBarBase } from '@/features/status-bar/status-bar';
-import { Box, BoxProps, Flex, FlexProps, IconButton, TextLink } from '@/ui/components';
+import { Box, BoxProps, Flex, FlexProps, IconButton } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
-import { Text } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
 import { useGlobalContext } from '@/common/context/useAppContext';
 
@@ -42,7 +39,6 @@ const HeaderBar: React.FC<FlexProps> = React.memo(props => (
     px={['16px', '16px', '32px']}
     width="100%"
     position="relative"
-    zIndex={1000}
     {...props}
   />
 ));

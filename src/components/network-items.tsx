@@ -41,7 +41,6 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
       alignItems="center"
       justifyContent="space-between"
       position="relative"
-      zIndex="999"
       bg={isDisabled ? 'bg-4' : 'bg'}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
       _hover={{
@@ -125,7 +124,6 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
           <Tooltip label="Remove network">
             <IconButton
               position="relative"
-              zIndex={999}
               color={`textCaption.${colorMode}`}
               size={'21px'}
               icon={

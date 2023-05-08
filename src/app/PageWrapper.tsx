@@ -31,13 +31,7 @@ export const PageWrapper: FC = ({ children }) => {
 
   return (
     <>
-      <Box
-        position={'sticky'}
-        width={'100%'}
-        zIndex={'1001'}
-        top={'0'}
-        backdropFilter={'blur(10px)'}
-      >
+      <Box position={'sticky'} width={'100%'} top={'0'} backdropFilter={'blur(10px)'} zIndex={2}>
         <StatusBar />
         <AlertBarBase
           indicator={Indicator.major}
@@ -123,14 +117,7 @@ export const PageWrapper: FC = ({ children }) => {
         >
           <SearchComponent variant="small" mr="16px" width="100%" maxWidth="760px" />
         </Flex>
-        <Flex
-          flexDirection="column"
-          width="100%"
-          minHeight="100%"
-          position="relative"
-          zIndex={2}
-          flexGrow={1}
-        >
+        <Flex flexDirection="column" width="100%" minHeight="100%" position="relative" flexGrow={1}>
           {SITE_NOTICE_ENABLED && (
             <Box px="20px">
               <Notice label={SITE_NOTICE_BANNER_LABEL} message={SITE_NOTICE_BANNER_MESSAGE} />

@@ -121,7 +121,7 @@ export const MobileMenu: React.FC = () => {
   }, [setState]);
 
   return (
-    <Box display={['block', 'block', 'block', 'none']}>
+    <Box display={['block', 'block', 'block', 'none']} zIndex={3}>
       <IconButton
         size="42px"
         onClick={handleOpen}
@@ -138,7 +138,6 @@ export const MobileMenu: React.FC = () => {
           width="100vw"
           bg="rgba(0,0,0,0.5)"
           pointerEvents={isClosed ? 'none' : 'all'}
-          zIndex={9999}
         >
           <Flex
             flexDirection="column"

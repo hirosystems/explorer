@@ -46,7 +46,7 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
       />
 
       {isLoading ? (
-        <Box position="absolute" zIndex={99} right={isSmall ? '48px' : '64px'}>
+        <Box position="absolute" right={isSmall ? '48px' : '64px'}>
           <Spinner size="18px" color="white" />
         </Box>
       ) : null}
@@ -58,11 +58,11 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         onClick={() => dispatch(clearSearchTerm())}
         position="absolute"
         right="16px"
-        zIndex={5}
         size={isSmall ? '28px' : '36px'}
         aria-label={'Clear search bar'}
         borderRadius={'50%'}
         _hover={{ bg: 'rgba(255, 255, 255, 0.15)' }}
+        zIndex={1}
       />
 
       <Flex
@@ -72,7 +72,6 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         width={isSmall ? '38px' : '50px'}
         top={0}
         height={defaultHeight}
-        zIndex={99}
       >
         <Box
           as={TbSearch}

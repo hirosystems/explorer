@@ -57,7 +57,7 @@ const SearchResultsCardWrapper: React.FC<BoxProps & { title?: string; actions?: 
       color={`textCaption.${useColorMode().colorMode}`}
       position="absolute"
       width="100%"
-      zIndex={99}
+      zIndex={1}
       boxShadow="high"
       borderWidth="1px"
       overflow="auto"

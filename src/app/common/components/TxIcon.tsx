@@ -28,13 +28,13 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
   const colorMode = useColorMode().colorMode;
   if (txStatus === TransactionStatus.PENDING) {
     return (
-      <Circle size="16px" position="absolute" bottom="-2px" right="-4px" zIndex={10}>
+      <Circle size="16px" position="absolute" bottom="-2px" right="-4px">
         <ClockIcon color={`invert.${colorMode}`} fill={`bg.${colorMode}`} />
       </Circle>
     );
   } else if (txStatus === TransactionStatus.FAILED) {
     return (
-      <Circle size="16px" position="absolute" bottom="-2px" right="-4px" zIndex={10}>
+      <Circle size="16px" position="absolute" bottom="-2px" right="-4px">
         <FailedIcon color={`feedbackError.${colorMode}`} fill={`bg.${colorMode}`} />
       </Circle>
     );
@@ -47,7 +47,6 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
         bottom="-2px"
         right="-4px"
         boxShadow={'none'}
-        zIndex={10}
       >
         <MicroblockIcon color={`bg.${colorMode}`} fill={`bg.${colorMode}`} size="10px" />
       </Circle>

@@ -22,7 +22,6 @@ interface StatusProps {
 const backgroundStyle = css`
   width: 100%;
   background: rgba(255, 255, 255, 0.8);
-  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +118,6 @@ export const AlertBarBase: FC<{
     <Flex
       backgroundColor={'#FDF1DD'}
       width={'100%'}
-      zIndex={2}
       alignItems={'center'}
       justifyContent={'center'}
       padding={'16px 0 19px 0'}

@@ -66,7 +66,6 @@ export const LeftSection: FC = () => {
             icon={<RiCloseLine size={'16px'} />}
             aria-label={'clear contract name field'}
             size={'30px'}
-            zIndex={1}
           />
         </Flex>
       </Flex>

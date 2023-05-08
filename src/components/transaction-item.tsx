@@ -49,7 +49,7 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
   principal,
   ...rest
 }) => (
-  <Flex display="inline-flex" position={'relative'} zIndex={2} as="span" {...rest}>
+  <Flex display="inline-flex" position={'relative'} as="span" {...rest}>
     <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
       <Caption
         as={'a'}
@@ -165,7 +165,7 @@ export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
   <>
     {'·'}
     <Tooltip label="Nonce">
-      <Caption as="span" text-align="right" ml="6px" style={{ zIndex: 1 }}>
+      <Caption as="span" text-align="right" ml="6px">
         {nonce.toString() + 'n'}
       </Caption>
     </Tooltip>

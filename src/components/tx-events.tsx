@@ -64,7 +64,6 @@ const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) =>
   const Icon = getIcon(type);
   return (
     <Circle
-      zIndex={99}
       size="20px"
       bg={'bg'}
       borderWidth="1px"

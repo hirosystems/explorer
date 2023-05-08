@@ -21,7 +21,6 @@ export const Truncate = React.memo(({ children, offset = 8 }: any) => {
             color: selected ? 'white' : undefined,
           }}
           position="relative"
-          zIndex={1}
         >
           {truncateMiddle(children, offset)}
         </Box>

@@ -103,7 +103,7 @@ export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
       {...rest}
     >
       <Box
-        zIndex={100}
+        zIndex={1}
         p="16px"
         pb="24px"
         top="1px"

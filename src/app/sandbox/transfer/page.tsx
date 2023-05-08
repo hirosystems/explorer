@@ -98,7 +98,6 @@ const Page: NextPage = () => {
                       <Badge
                         color={`textCaption.${colorMode}`}
                         position="absolute"
-                        zIndex={999}
                         right="68px"
                         onClick={() => {
                           const total = BigInt(balance?.stx?.balance || 0) - BigInt(fee.toString());
