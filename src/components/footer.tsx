@@ -2,7 +2,8 @@ import { useGlobalContext } from '@/common/context/useAppContext';
 import { buildUrl } from '@/app/common/utils/buildUrl';
 import { Box, Flex, TextLink } from '@/ui/components';
 import Link, { LinkProps } from 'next/link';
-import React, { FC, HTMLProps } from 'react';
+import React, { FC, HTMLProps, useEffect, useState } from 'react';
+import { fetchVersionNumber } from '@/app/common/server-calls/fetchVersionNumber';
 
 const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
   children,
@@ -30,6 +31,12 @@ const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
 
 export const Footer: FC = () => {
   const network = useGlobalContext().activeNetwork;
+  const [versionNumber, setVersionNumber] = useState<string | null>(null);
+
+  useEffect(() => {
+    void fetchVersionNumber().then(version => setVersionNumber(version));
+  }, []);
+
   return (
     <Box
       mx="auto"
@@ -72,22 +79,35 @@ export const Footer: FC = () => {
           </Box>
         </Flex>
 
-        <Flex ml={['unset', 'unset', 'auto']} gap={'16px'}>
-          <FooterLink
-            href="https://github.com/hirosystems/explorer/issues/new/choose"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-          >
-            Submit report or request
-          </FooterLink>
-          <FooterLink href="mailto:support@hiro.so">Support</FooterLink>
-          <FooterLink
-            href="https://www.hiro.so/p/terms-privacy"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-          >
-            Terms & Privacy
-          </FooterLink>
+        <Flex display="flex" marginLeft={'auto'} flexDirection={'column'} gap="5px">
+          <Flex ml={['unset', 'unset', 'auto']} gap={'16px'}>
+            <FooterLink
+              href="https://github.com/hirosystems/explorer/issues/new/choose"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              Submit report or request
+            </FooterLink>
+            <FooterLink href="mailto:support@hiro.so">Support</FooterLink>
+            <FooterLink
+              href="https://www.hiro.so/p/terms-privacy"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+            >
+              Terms & Privacy
+            </FooterLink>
+          </Flex>
+          {versionNumber && (
+            <Box marginLeft={'auto'}>
+              <FooterLink
+                href={`https://github.com/hirosystems/explorer/releases/tag/${versionNumber}`}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+              >
+                Version {versionNumber}
+              </FooterLink>
+            </Box>
+          )}
         </Flex>
       </Flex>
     </Box>
