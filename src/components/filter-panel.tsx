@@ -18,6 +18,7 @@ const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
   GetTransactionListTypeEnum.contract_call,
   GetTransactionListTypeEnum.token_transfer,
   GetTransactionListTypeEnum.coinbase,
+  GetTransactionListTypeEnum.poison_microblock,
 ];
 
 export const FilteredMessage: React.FC<GridProps> = ({ ...rest }) => {
@@ -131,7 +132,7 @@ export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
         </Flex>
         <Flex justifyContent="flex-start">
           <Stack alignItems="flex-start" spacing="16px" mr="16px">
-            {[FILTERABLE_TYPES[0], FILTERABLE_TYPES[1]].map(type => (
+            {[FILTERABLE_TYPES[0], FILTERABLE_TYPES[1], FILTERABLE_TYPES[2]].map(type => (
               <CheckableElement
                 onClick={() => toggleFilter(type)}
                 value={activeFilters[type]}
@@ -142,7 +143,7 @@ export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
             ))}
           </Stack>
           <Stack alignItems="flex-start" spacing="16px">
-            {[FILTERABLE_TYPES[2], FILTERABLE_TYPES[3]].map(type => (
+            {[FILTERABLE_TYPES[3], FILTERABLE_TYPES[4]].map(type => (
               <CheckableElement
                 onClick={() => toggleFilter(type)}
                 value={activeFilters[type]}
