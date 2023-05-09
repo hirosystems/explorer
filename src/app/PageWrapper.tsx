@@ -73,8 +73,7 @@ export const PageWrapper: FC = ({ children }) => {
                   </TextLink>
                 </ListItem>
                 <ListItem>
-                  Additionally, this update will disabled Stacking, and any locked STX will be
-                  unlocked. For more details,{' '}
+                  Additionally, this update will disable Stacking, and any locked STX will be unlocked. For more details,{' '}
                   <TextLink
                     display="inline"
                     href="https://forum.stacks.org/t/a-bug-in-stacks-increase-call-is-impacting-stacking-rewards-this-cycle/14867"
