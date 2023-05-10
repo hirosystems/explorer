@@ -1,3 +1,10 @@
+## [1.100.2](https://github.com/hirosystems/explorer/compare/v1.100.1...v1.100.2) (2023-05-10)
+
+
+### Bug Fixes
+
+* alert wording ([c1e9f79](https://github.com/hirosystems/explorer/commit/c1e9f798912864ce90f3a195c2471c3e5c6b22aa))
+
 ## [1.100.1](https://github.com/hirosystems/explorer/compare/v1.100.0...v1.100.1) (2023-05-08)
 
 
