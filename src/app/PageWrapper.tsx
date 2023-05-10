@@ -73,7 +73,7 @@ export const PageWrapper: FC = ({ children }) => {
                   </TextLink>
                 </ListItem>
                 <ListItem>
-                  Additionally, this update will disabled Stacking, and any locked STX will be
+                  Additionally, this update will disable Stacking, and any locked STX will be
                   unlocked. For more details,{' '}
                   <TextLink
                     display="inline"
