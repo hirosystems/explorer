@@ -1,4 +1,4 @@
-import { CSVDownloadButton } from '@/components/csv-download-button';
+import { CSVDownloadButton } from '@/components/CSVDownloadButton';
 import { FilterButton } from '@/components/filter-button';
 import { Tab } from '@/ui/Tab';
 import { TabList } from '@/ui/TabList';
