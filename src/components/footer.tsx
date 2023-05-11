@@ -2,8 +2,8 @@ import { useGlobalContext } from '@/common/context/useAppContext';
 import { buildUrl } from '@/app/common/utils/buildUrl';
 import { Box, Flex, TextLink } from '@/ui/components';
 import Link, { LinkProps } from 'next/link';
-import React, { FC, HTMLProps, useEffect, useState } from 'react';
-import { fetchVersionNumber } from '@/app/common/server-calls/fetchVersionNumber';
+import React, { FC, HTMLProps } from 'react';
+import { RELEASE_TAG_NAME } from '@/common/constants';
 
 const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
   children,
@@ -31,11 +31,6 @@ const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
 
 export const Footer: FC = () => {
   const network = useGlobalContext().activeNetwork;
-  const [versionNumber, setVersionNumber] = useState<string | null>(null);
-
-  useEffect(() => {
-    void fetchVersionNumber().then(version => setVersionNumber(version));
-  }, []);
 
   return (
     <Box
@@ -97,14 +92,14 @@ export const Footer: FC = () => {
               Terms & Privacy
             </FooterLink>
           </Flex>
-          {versionNumber && (
+          {RELEASE_TAG_NAME && (
             <Box marginLeft={'auto'}>
               <FooterLink
-                href={`https://github.com/hirosystems/explorer/releases/tag/${versionNumber}`}
+                href={`https://github.com/hirosystems/explorer/releases/tag/${RELEASE_TAG_NAME}`}
                 target="_blank"
                 rel="noopener noreferrer nofollow"
               >
-                Version {versionNumber}
+                Version {RELEASE_TAG_NAME}
               </FooterLink>
             </Box>
           )}

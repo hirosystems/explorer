@@ -32,6 +32,7 @@ const moduleExports = withBundleAnalyzer({
     VERSION: process.env.VERSION,
     SENTRY_DSN: process.env.SENTRY_DSN,
     X_API_KEY: process.env.X_API_KEY,
+    RELEASE_TAG_NAME:process.env.RELEASE_TAG_NAME
   },
   output: 'standalone',
   async redirects() {
