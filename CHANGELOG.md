@@ -1,3 +1,10 @@
+# [1.101.0](https://github.com/hirosystems/explorer/compare/v1.100.2...v1.101.0) (2023-05-11)
+
+
+### Features
+
+* update alert version ([7c712d5](https://github.com/hirosystems/explorer/commit/7c712d51597edd2fce0ce034e95f31e6f0976182))
+
 ## [1.100.2](https://github.com/hirosystems/explorer/compare/v1.100.1...v1.100.2) (2023-05-10)
 
 
