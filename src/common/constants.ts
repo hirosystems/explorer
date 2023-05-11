@@ -50,6 +50,9 @@ export const withApiServer = (apiServer: string) => (path?: string) =>
 
 export const X_API_KEY = process.env.X_API_KEY ?? process.env.X_API_KEY ?? '';
 
+export const RELEASE_TAG_NAME =
+  process.env.RELEASE_TAG_NAME ?? process.env.RELEASE_TAG_NAME ?? null;
+
 export const HIRO_HEADERS: HeadersInit = {
   'x-api-key': X_API_KEY,
   'x-hiro-product': 'explorer',
