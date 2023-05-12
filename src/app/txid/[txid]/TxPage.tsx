@@ -1,3 +1,4 @@
+import { useGlobalContext } from '@/common/context/useAppContext';
 import { hasStxBalance, hasTokenBalance } from '@/common/utils/accounts';
 import { getTransactionStatus } from '@/common/utils/transactions';
 import { TokenBalancesCard } from '@/components/balances/principal-token-balances';
@@ -19,7 +20,6 @@ import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchai
 import { TwoColumnPage } from '../../common/components/TwoColumnPage';
 import { BtcAnchorBlockCard } from './Cards/BtcAnchorBlockCard';
 import { ContractDetailsCard } from './Cards/ContractDetailsCard';
-import { useGlobalContext } from '@/common/context/useAppContext';
 
 export const TxPage: React.FC<{
   tx: Transaction | MempoolTransaction;

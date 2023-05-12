@@ -1,3 +1,4 @@
+import { useGlobalContext } from '@/common/context/useAppContext';
 import { BtcStxPrice } from '@/components/btc-stx-price';
 import { ColorModeButton } from '@/components/color-mode-button';
 import { HeaderTextItem } from '@/components/header-text-item';
@@ -9,7 +10,6 @@ import { SearchComponent } from '@/features/search/search';
 import { Box, BoxProps, Flex, FlexProps, IconButton } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import React from 'react';
-import { useGlobalContext } from '@/common/context/useAppContext';
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
   return (

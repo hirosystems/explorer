@@ -11,20 +11,15 @@ import { Modals } from '@/components/modals';
 import { NetworkModeToast } from '@/components/network-mode-toast';
 import { Notice } from '@/components/notice';
 import { SearchComponent } from '@/features/search/search';
-import {
-  AlertBarBase,
-  Indicator,
-  StatusBar,
-  StatusBarBase,
-} from '@/features/status-bar/status-bar';
+import { AlertBarBase, Indicator, StatusBar } from '@/features/status-bar/status-bar';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
+import { ListItem } from '@/ui/ListItem';
+import { Text } from '@/ui/Text';
+import { TextLink } from '@/ui/TextLink';
+import { UnorderedList } from '@/ui/UnorderedList';
 import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
-import { Text } from '@/ui/Text';
-import { UnorderedList } from '@/ui/UnorderedList';
-import { ListItem } from '@/ui/ListItem';
-import { TextLink } from '@/ui/TextLink';
 
 export const PageWrapper: FC = ({ children }) => {
   const colorMode = useColorMode().colorMode;
@@ -51,12 +46,12 @@ export const PageWrapper: FC = ({ children }) => {
                   The Stacks network will be undergoing two hard-forks, as{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-023/sip-023-emergency-fix-traits.md"
+                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
                   >
-                    outlined in SIP-023
+                    outlined in SIP-022
                   </TextLink>
                   .
                 </ListItem>
@@ -73,8 +68,7 @@ export const PageWrapper: FC = ({ children }) => {
                   </TextLink>
                 </ListItem>
                 <ListItem>
-                  Additionally, this update will disable Stacking, and any locked STX will be
-                  unlocked. For more details,{' '}
+                  Currently, Stacking is disabled, and any locked STX is unlocked. For more details,{' '}
                   <TextLink
                     display="inline"
                     href="https://forum.stacks.org/t/a-bug-in-stacks-increase-call-is-impacting-stacking-rewards-this-cycle/14867"

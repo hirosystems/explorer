@@ -3,12 +3,12 @@
 import { Card } from '@/components/card';
 import * as React from 'react';
 import { FC } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { CurrentStackingCycle } from './CurrentStackingCycle';
 import { LastBlock } from './LastBlock';
 import { NextStackingCycle } from './NextStackingCycle';
 import { StxSupply } from './StxSupply';
-import { ErrorBoundary } from 'react-error-boundary';
 
 export const Stats: FC = () => {
   return (
