@@ -1,3 +1,16 @@
+# [1.102.0](https://github.com/hirosystems/explorer/compare/v1.101.0...v1.102.0) (2023-05-12)
+
+
+### Bug Fixes
+
+* added react-csv in the  dependencies ([03c3fd5](https://github.com/hirosystems/explorer/commit/03c3fd57a47c104431eba90d09375ca8e33eb6ea))
+* review fixes ([5e62dfb](https://github.com/hirosystems/explorer/commit/5e62dfb5948d75a41c032226422713f43cba7011))
+
+
+### Features
+
+* added button to download transactions as CSV ([16ce701](https://github.com/hirosystems/explorer/commit/16ce701137dc6ffbde2a062bde5e92cd0af38559))
+
 # [1.101.0](https://github.com/hirosystems/explorer/compare/v1.100.2...v1.101.0) (2023-05-11)
 
 
