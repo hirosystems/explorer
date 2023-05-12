@@ -1,3 +1,16 @@
+# [1.103.0](https://github.com/hirosystems/explorer/compare/v1.102.0...v1.103.0) (2023-05-12)
+
+
+### Bug Fixes
+
+* added release tagname from workflow files ([34e658d](https://github.com/hirosystems/explorer/commit/34e658d1626402e7645a630ff6b1ff0166a5b145))
+* linting issue resolved ([d198979](https://github.com/hirosystems/explorer/commit/d1989791595546a41269a83dbf4d187ed0b4c23e))
+
+
+### Features
+
+* added github release version number in footer ([7c4a4df](https://github.com/hirosystems/explorer/commit/7c4a4dfc4c763a5b4f2b1523b8526ba06358e7f2))
+
 # [1.102.0](https://github.com/hirosystems/explorer/compare/v1.101.0...v1.102.0) (2023-05-12)
 
 
