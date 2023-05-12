@@ -51,12 +51,12 @@ export const PageWrapper: FC = ({ children }) => {
                   The Stacks network will be undergoing two hard-forks, as{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-023/sip-023-emergency-fix-traits.md"
+                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
                   >
-                    outlined in SIP-023
+                    outlined in SIP-022
                   </TextLink>
                   .
                 </ListItem>
@@ -73,7 +73,7 @@ export const PageWrapper: FC = ({ children }) => {
                   </TextLink>
                 </ListItem>
                 <ListItem>
-                  Additionally, this update will disable Stacking, and any locked STX will be
+                  Currently, Stacking is disabled, and any locked STX is
                   unlocked. For more details,{' '}
                   <TextLink
                     display="inline"
