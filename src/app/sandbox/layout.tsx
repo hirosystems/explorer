@@ -1,8 +1,11 @@
 'use client';
 
+import { getQueryParams } from '@/app/common/utils/buildUrl';
+import { useGlobalContext } from '@/common/context/useAppContext';
 import { useAppSelector } from '@/common/state/hooks';
 import { Flex, Grid } from '@/ui/components';
 import { useColorMode } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 
 import { useUser } from './hooks/useUser';
@@ -11,9 +14,6 @@ import { Header } from './layout/Header';
 import { RightPanel } from './layout/RightPanel';
 import { SideNav } from './layout/SideNav';
 import { selectShowRightPanel } from './sandbox-slice';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { useRouter } from 'next/router';
-import { getQueryParams } from '@/app/common/utils/buildUrl';
 
 const Layout: FC = ({ children }) => {
   const { isConnected } = useUser();

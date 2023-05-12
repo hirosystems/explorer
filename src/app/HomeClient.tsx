@@ -1,6 +1,7 @@
 'use client';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
 import { Grid } from '@/ui/Grid';
 import { Title } from '@/ui/typography';
 import * as React from 'react';
@@ -9,7 +10,6 @@ import { FC } from 'react';
 import { DefaultTxListTabs } from './common/components/tx-lists/tabs/DefaultTxListTabs';
 import { BlocksList } from './components/BlockList';
 import { Stats } from './stats/Stats';
-import { useGlobalContext } from '@/common/context/useAppContext';
 
 export const HomeClientBase: FC = () => {
   console.log('[DEBUG] rendering home');

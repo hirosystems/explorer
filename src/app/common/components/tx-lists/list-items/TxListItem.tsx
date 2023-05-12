@@ -1,3 +1,4 @@
+import { buildUrl } from '@/app/common/utils/buildUrl';
 import { TwoColsListItem } from '@/common/components/TwoColumnsListItem';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { truncateMiddle } from '@/common/utils';
@@ -15,7 +16,6 @@ import type { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TxIcon } from '../../TxIcon';
 import { useTxTitle } from '../common/utils/tx';
 import { getTransactionTypeLabel } from '../utils/tx';
-import { buildUrl } from '@/app/common/utils/buildUrl';
 
 interface TxsListItemProps extends FlexProps {
   tx: Transaction;

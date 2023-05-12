@@ -1,12 +1,12 @@
 'use client';
 
+import { IS_BROWSER } from '@/common/constants';
 import { Box, Flex, Icon, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';
 import { css } from '@emotion/react';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
 import { RiCloseLine } from 'react-icons/ri';
-import { IS_BROWSER } from '@/common/constants';
 
 export enum Indicator {
   none = 'none',

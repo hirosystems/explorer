@@ -1,9 +1,8 @@
 import { getAssetNameParts } from '@/common/utils';
 import { imageCanonicalUriFromFtMetadata } from '@/common/utils/token-utils';
 import { Circle } from '@/ui/components';
-import React, { useEffect, useState } from 'react';
-
 import { FtMetadataResponse, NftMetadataResponse } from '@hirosystems/token-metadata-api-client';
+import React, { useEffect, useState } from 'react';
 
 export function FtAvatar({
   token,

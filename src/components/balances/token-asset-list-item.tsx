@@ -1,6 +1,7 @@
 'use client';
 
 import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
+import { useNftMetadata } from '@/app/common/queries/useNftMetadata';
 import { useApi } from '@/common/api/client';
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@/common/utils';
 import { TxLink } from '@/components/links';
@@ -9,10 +10,10 @@ import { Box, Flex, FlexProps, Stack } from '@/ui/components';
 import { Caption, Text } from '@/ui/typography';
 import React from 'react';
 
-import { FtAvatar, NftAvatar } from '../token-avatar';
-import { useNftMetadata } from '@/app/common/queries/useNftMetadata';
 import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
-import { hexToCV, IntCV } from '@stacks/transactions';
+import { IntCV, hexToCV } from '@stacks/transactions';
+
+import { FtAvatar, NftAvatar } from '../token-avatar';
 
 interface TokenAssetListItemProps extends FlexProps {
   amount: string;
