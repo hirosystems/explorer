@@ -64,7 +64,7 @@ export const StatusBar: FC = () => {
             {description}
             {description.endsWith('.') ? '' : '.'}
           </Text>{' '}
-          <Text fontWeight={400} fontSize={'14px'} color={'#000'} lineHeight={'1.5'}>
+          <Text fontWeight={400} fontSize={'14px'} color={'#000000'} lineHeight={'1.5'}>
             More information on the{' '}
             <TextLink
               href="https://status.hiro.so/"

@@ -85,7 +85,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
                   onBlur={handleBlur}
                   value={values.principal}
                   placeholder="Enter the contract address"
-                  color={colorMode === 'light' ? '#000' : '#fff'}
+                  color={colorMode === 'light' ? '#000000' : '#FFFFFF'}
                   onPaste={(e: React.ClipboardEvent<HTMLInputElement>) =>
                     onPaste(e, (value: string) => {
                       const cleanValue = value.trim().toString();
@@ -110,7 +110,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
                   onBlur={handleBlur}
                   value={values.contract_name}
                   placeholder="Enter the contract name"
-                  color={colorMode === 'light' ? '#000' : '#fff'}
+                  color={colorMode === 'light' ? '#000000' : '#FFFFFF'}
                 />
                 <Box>
                   <Button onClick={() => handleSubmit()}>Get contract</Button>
