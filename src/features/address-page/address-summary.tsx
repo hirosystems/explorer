@@ -35,11 +35,15 @@ export const AddressSummary = ({
               value={<Value>{`${microToStacks(balances?.stx?.total_fees_sent)} STX`}</Value>}
             />
           )}
-          {lastExecutedTxNonce !== 'undefined' && (
+          {lastExecutedTxNonce !== undefined && (
             <KeyValueHorizontal
               label={'Last executed tx nonce'}
               value={
-                <Value>{lastExecutedTxNonce || "This account hasn't executed a tx yet"}</Value>
+                <Value>
+                  {lastExecutedTxNonce !== null
+                    ? lastExecutedTxNonce.toString()
+                    : "This account hasn't executed a tx yet"}
+                </Value>
               }
             />
           )}
