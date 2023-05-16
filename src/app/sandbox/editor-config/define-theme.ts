@@ -13,7 +13,7 @@ export function defineTheme(monaco: Monaco) {
       'diffEditor.insertedTextBackground': '#00809b33',
       'dropdown.background': '#1d1f23',
       'dropdown.border': '#181a1f',
-      'editor.background': '#000',
+      'editor.background': '#000000',
       'editor.findMatchBackground': '#42557b',
       'editor.findMatchHighlightBackground': '#314365',
       'editor.lineHighlightBackground': '#383e4a',
