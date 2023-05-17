@@ -32,7 +32,7 @@ export const Title = forwardRef<TextProps, 'span'>(({ as, ...props }, ref) => (
 
 export const Pre = forwardRef<TextProps, 'pre'>(({ as = 'pre', ...props }, ref) => (
   <Text
-    display="inline"
+    display="inline-block"
     fontFamily={`"Fira Code", monospace`}
     bg={`bg.${useColorMode().colorMode}`}
     borderRadius="8px"
