@@ -18,7 +18,7 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
   if (type?.includes('tuple')) {
     return (
       <Box width="100%">
-        <Pre>{result?.repr}</Pre>
+        <Pre>{value.type}</Pre>
         <Stack mt="32px" spacing="16px" width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;

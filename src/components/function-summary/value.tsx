@@ -122,7 +122,7 @@ export const FunctionSummaryClarityValue = ({
       <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
         <NextLink href="/address/[principal]" as={`/address/${principal}`} passHref legacyBehavior>
           <TextLink as="a" {...rest}>
-            {principal}
+            {arg.repr}
           </TextLink>
         </NextLink>
         <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
