@@ -26,66 +26,6 @@ export const PageWrapper: FC = ({ children }) => {
 
   return (
     <>
-      <Box position={'sticky'} width={'100%'} top={'0'} backdropFilter={'blur(10px)'} zIndex={2}>
-        <StatusBar />
-        <AlertBarBase
-          indicator={Indicator.major}
-          content={
-            <Flex direction={'column'} gap={'8px'} flexGrow={1}>
-              <Text fontWeight={700} fontSize={'14px'} lineHeight={'16px'} color={'#303030'}>
-                Stacks network upgrade
-              </Text>
-              <UnorderedList
-                paddingLeft={'8px'}
-                fontWeight={400}
-                fontSize={'14px'}
-                lineHeight={'20px'}
-                color={'#303030'}
-              >
-                <ListItem>
-                  The Stacks network will be undergoing two hard-forks, as{' '}
-                  <TextLink
-                    display="inline"
-                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
-                    target="_blank"
-                    color={'#1068BF'}
-                    borderBottom={'1px solid #1068BF'}
-                  >
-                    outlined in SIP-022
-                  </TextLink>
-                  .
-                </ListItem>
-                <ListItem>
-                  This update will require miners and operators to upgrade to{' '}
-                  <TextLink
-                    display="inline"
-                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.4.0.0.0"
-                    target="_blank"
-                    color={'#1068BF'}
-                    borderBottom={'1px solid #1068BF'}
-                  >
-                    stacks-node version 2.4.0.0.0
-                  </TextLink>
-                  .
-                </ListItem>
-                <ListItem>
-                  Stacking will be re-enabled with this release. For more details,{' '}
-                  <TextLink
-                    display="inline"
-                    href="https://forum.stacks.org/t/stacks-2-4-is-here-stacking-to-be-re-enabled/15024"
-                    target="_blank"
-                    color={'#1068BF'}
-                    borderBottom={'1px solid #1068BF'}
-                  >
-                    see this post
-                  </TextLink>
-                  .
-                </ListItem>
-              </UnorderedList>
-            </Flex>
-          }
-        />
-      </Box>
       <Flex
         maxWidth="100vw"
         overflowX="hidden"
@@ -101,6 +41,66 @@ export const PageWrapper: FC = ({ children }) => {
               : undefined,
         }}
       >
+        <Box position={'sticky'} width={'100%'} top={'0'} backdropFilter={'blur(10px)'} zIndex={2}>
+          <StatusBar />
+          <AlertBarBase
+            indicator={Indicator.major}
+            content={
+              <Flex direction={'column'} gap={'8px'} flexGrow={1}>
+                <Text fontWeight={700} fontSize={'14px'} lineHeight={'16px'} color={'#303030'}>
+                  Stacks network upgrade
+                </Text>
+                <UnorderedList
+                  paddingLeft={'8px'}
+                  fontWeight={400}
+                  fontSize={'14px'}
+                  lineHeight={'20px'}
+                  color={'#303030'}
+                >
+                  <ListItem>
+                    The Stacks network will be undergoing two hard-forks, as{' '}
+                    <TextLink
+                      display="inline"
+                      href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
+                      target="_blank"
+                      color={'#1068BF'}
+                      borderBottom={'1px solid #1068BF'}
+                    >
+                      outlined in SIP-022
+                    </TextLink>
+                    .
+                  </ListItem>
+                  <ListItem>
+                    This update will require miners and operators to upgrade to{' '}
+                    <TextLink
+                      display="inline"
+                      href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.4.0.0.0"
+                      target="_blank"
+                      color={'#1068BF'}
+                      borderBottom={'1px solid #1068BF'}
+                    >
+                      stacks-node version 2.4.0.0.0
+                    </TextLink>
+                    .
+                  </ListItem>
+                  <ListItem>
+                    Stacking will be re-enabled with this release. For more details,{' '}
+                    <TextLink
+                      display="inline"
+                      href="https://forum.stacks.org/t/stacks-2-4-is-here-stacking-to-be-re-enabled/15024"
+                      target="_blank"
+                      color={'#1068BF'}
+                      borderBottom={'1px solid #1068BF'}
+                    >
+                      see this post
+                    </TextLink>
+                    .
+                  </ListItem>
+                </UnorderedList>
+              </Flex>
+            }
+          />
+        </Box>
         <Header fullWidth={true} />
         <Flex
           display={['block', 'block', 'none', 'none']}
