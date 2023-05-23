@@ -1,3 +1,10 @@
+## [1.104.1](https://github.com/hirosystems/explorer/compare/v1.104.0...v1.104.1) (2023-05-23)
+
+
+### Bug Fixes
+
+* updates the banner with 2.4 information ([22a74c2](https://github.com/hirosystems/explorer/commit/22a74c20b513ca9c5f70c8db0f8bac820bb4f401))
+
 # [1.104.0](https://github.com/hirosystems/explorer/compare/v1.103.0...v1.104.0) (2023-05-12)
 
 
