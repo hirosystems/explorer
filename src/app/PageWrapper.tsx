@@ -59,19 +59,20 @@ export const PageWrapper: FC = ({ children }) => {
                   This update will require miners and operators to upgrade to{' '}
                   <TextLink
                     display="inline"
-                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.3.0.0.2"
+                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.4.0.0.0"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
                   >
-                    stacks-node version 2.3.0.0.2
+                    stacks-node version 2.4.0.0.0
                   </TextLink>
+                  .
                 </ListItem>
                 <ListItem>
-                  Currently, Stacking is disabled, and any locked STX is unlocked. For more details,{' '}
+                  Stacking will be re-enabled with this release. For more details,{' '}
                   <TextLink
                     display="inline"
-                    href="https://forum.stacks.org/t/a-bug-in-stacks-increase-call-is-impacting-stacking-rewards-this-cycle/14867"
+                    href="https://forum.stacks.org/t/stacks-2-4-is-here-stacking-to-be-re-enabled/15024"
                     target="_blank"
                     color={'#1068BF'}
                     borderBottom={'1px solid #1068BF'}
