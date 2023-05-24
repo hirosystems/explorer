@@ -1,3 +1,13 @@
+## [1.104.2](https://github.com/hirosystems/explorer/compare/v1.104.1...v1.104.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* added proper code for colors ([ecd1ca8](https://github.com/hirosystems/explorer/commit/ecd1ca8969facc4bac587ec4fb8d23f8af0cf7be))
+* lint fix ([530b07f](https://github.com/hirosystems/explorer/commit/530b07f677fe7e360f21c12390aa220607399e88))
+* principal value not showing ([7f66b51](https://github.com/hirosystems/explorer/commit/7f66b5109d4a19a26a7d4e132822c1bf4d8b4b62))
+* transaction value showing correctly ([7eebc03](https://github.com/hirosystems/explorer/commit/7eebc03edc1c32362c7c8e78d83164abc49f7ffb))
+
 ## [1.104.1](https://github.com/hirosystems/explorer/compare/v1.104.0...v1.104.1) (2023-05-23)
 
 
