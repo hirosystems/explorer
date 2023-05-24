@@ -1,3 +1,10 @@
+## [1.104.3](https://github.com/hirosystems/explorer/compare/v1.104.2...v1.104.3) (2023-05-24)
+
+
+### Bug Fixes
+
+* fixed the lastExecutedTxNonce value ([f2976eb](https://github.com/hirosystems/explorer/commit/f2976eb8e970bb21e1ba9f6828de06e7a1b51161))
+
 ## [1.104.2](https://github.com/hirosystems/explorer/compare/v1.104.1...v1.104.2) (2023-05-24)
 
 
