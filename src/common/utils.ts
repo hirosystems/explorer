@@ -222,7 +222,7 @@ export const getUsdValue = (
 ): string => {
   const amountInStx = isInMicroStacks ? (microToStacks(stxAmount, false) as number) : stxAmount;
   const price = amountInStx * stxPrice;
-  return price === 0 ? '$0' : (price > 0 && price < 0.01) ? '<$0.01' : usdFormatter.format(price);
+  return price === 0 ? '$0' : price > 0 && price < 0.01 ? '<$0.01' : usdFormatter.format(price);
 };
 
 /**
@@ -257,8 +257,8 @@ export const getAssetNameParts = (fullyRealizedName: string) => {
 export const getMemoString = (string: string): string | null =>
   string
     ? Buffer.from(string.replace('0x', '').replace(/^(0{2})+|(0{2})+$/g, ''), 'hex').toString(
-      'utf8'
-    )
+        'utf8'
+      )
     : null;
 
 export const startPad = (n: number, z = 2, s = '0'): string =>
@@ -406,10 +406,10 @@ export function getContractId(
   return isContract
     ? txPageQuery
     : transaction?.tx_type === 'smart_contract'
-      ? transaction.smart_contract.contract_id
-      : transaction?.tx_type === 'contract_call'
-        ? transaction.contract_call.contract_id
-        : undefined;
+    ? transaction.smart_contract.contract_id
+    : transaction?.tx_type === 'contract_call'
+    ? transaction.contract_call.contract_id
+    : undefined;
 }
 
 export const usdFormatter = new Intl.NumberFormat('en-US', {
