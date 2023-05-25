@@ -25,6 +25,8 @@
   "dependencies": {
     "@chakra-ui/react": "2.4.6",
     "@chakra-ui/theme-tools": "2.0.16",
+    "@contentful/rich-text-react-renderer": "15.16.4",
+    "@contentful/rich-text-types": "16.1.0",
     "@emotion/cache": "11.10.5",
     "@emotion/core": "11.0.0",
     "@emotion/css": "11.10.5",
@@ -61,6 +63,7 @@
     "buffer": "6.0.3",
     "bufferutil": "4.0.7",
     "c32check": "1.1.2",
+    "contentful": "10.2.1",
     "cookie": "0.5.0",
     "dayjs": "1.11.7",
     "express": "4.17.1",

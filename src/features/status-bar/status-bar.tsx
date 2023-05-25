@@ -29,9 +29,8 @@ const backgroundStyle = css`
 `;
 
 const wrapperStyle = css`
-  width: 100%;
   max-width: 1280px;
-  padding: 0 32px;
+  padding: 16px 0 8px 0;
 `;
 
 const getColor = (indicator: Indicator) =>
@@ -119,18 +118,36 @@ export const AlertBarBase: FC<{
     indicator === Indicator.critical ? (
       <Icon as={BsExclamationCircle} color={getColor(indicator)} />
     ) : (
-      <Icon as={BsExclamationTriangle} color={getColor(indicator)} />
+      <Icon as={BsExclamationTriangle} color={`black`} width={`16px`} height={`16px;`} />
     );
   return (
     <Flex
-      backgroundColor={'#FDF1DD'}
-      width={'100%'}
-      alignItems={'center'}
+      alignItems={'start'}
+      align-content={`start`}
       justifyContent={'center'}
-      padding={'16px 0 19px 0'}
+      borderTop={`8px solid rgba(255, 191, 0, 1)`}
+      backdropFilter={`blur(10px)`}
+      boxShadow={`
+      // inset 0px 5px 10px 0px rgba(255, 191, 0, .4),
+      inset 0px -100px 50px -40px rgba(0,0,0,0.3),
+      inset 0px -10px 30px -10px rgba(0,0,0,0.5)
+      `}
+      color={'var(--stacks-colors-white)'}
+      backgroundColor={`rgba(0,0,0,.1)`}
+      backgroundImage={`radial-gradient(ellipse at top, rgba(255, 191, 0, .3) 0%, transparent 100%);`}
     >
       <Flex css={wrapperStyle} gap={'16px'}>
-        {icon}
+        <Box
+          alignSelf={`start`}
+          display={`flex`}
+          alignItems={`center`}
+          justifyContent={`center`}
+          size={`40px`}
+          borderRadius={`1000px`}
+          background={`rgba(255, 191, 0, 1)`}
+        >
+          {icon}
+        </Box>
         {content}
         {!!dismissLSKey && (
           <Icon
