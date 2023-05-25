@@ -30,7 +30,6 @@ export const ContractCallPage: FC<{
 
   const source = contract?.source_code;
   if (!contractId) return null;
-
   return (
     <TxPage
       tx={tx}
@@ -44,7 +43,7 @@ export const ContractCallPage: FC<{
         btc={null}
         txStatus={txStatus}
       />
-      <PostConditions conditions={tx.post_conditions} mode={tx.post_condition_mode} />
+      <PostConditions tx={tx} />
       <ContractSource
         sourceTx={tx.contract_call.contract_id}
         source={source}
