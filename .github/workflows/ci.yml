@@ -82,6 +82,7 @@ jobs:
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             SENTRY_LOG_LEVEL=debug
             X_API_KEY=${{ secrets.X_API_KEY }}
+            CMS_URL=${{ secrets.CMS_URL }}
             RELEASE_TAG_NAME=${{ github.event.release.tag_name }}
 
       - name: Deployment Info

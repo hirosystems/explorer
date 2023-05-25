@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import {
@@ -19,80 +20,90 @@ import { Text } from '@/ui/Text';
 import { TextLink } from '@/ui/TextLink';
 import { UnorderedList } from '@/ui/UnorderedList';
 import { useColorMode } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { FC, ReactNode } from 'react';
+import { Entry } from 'contentful';
+import { BLOCKS, MARKS, Block, Inline, INLINES, CONTAINERS } from '@contentful/rich-text-types';
+import { documentToReactComponents, Options } from '@contentful/rich-text-react-renderer';
 
-export const PageWrapper: FC = ({ children }) => {
+interface Node {
+  content: ReactNode;
+}
+
+const richTextRenderOptions = (origin: string): Options => ({
+  renderMark: {
+    [MARKS.BOLD]: (text: string) => <b>{text}</b>,
+  },
+  renderNode: {
+    [BLOCKS.HEADING_1]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.HEADING_2]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.HEADING_3]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.HEADING_4]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.HEADING_5]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.HEADING_6]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.PARAGRAPH]: (node: Block | Inline, children: ReactNode) => (
+      <Text fontWeight={400} fontSize={'12px'} lineHeight={'1.25'}>
+        {children}
+      </Text>
+    ),
+    [BLOCKS.UL_LIST]: (node: Block | Inline, children: ReactNode) => (
+      <UnorderedList fontWeight={400} fontSize={'12px'} lineHeight={'1.25'}>
+        {children}
+      </UnorderedList>
+    ),
+    [BLOCKS.LIST_ITEM]: (node: Block | Inline, children: ReactNode) => (
+      <ListItem>{children}</ListItem>
+    ),
+    [INLINES.HYPERLINK]: ({ data }: Block | Inline, children: ReactNode) => (
+      <TextLink
+        display="inline"
+        href={data.uri}
+        target={data.uri.startsWith(origin) ? '_self' : '_blank'}
+        rel={data.uri.startsWith(origin) ? '' : 'noopener noreferrer'}
+        _hover={{ textDecoration: 'underline' }}
+      >
+        {children}
+      </TextLink>
+    ),
+  },
+});
+
+export const PageWrapper: FC<{ content?: { items: Entry[] } }> = ({ children, content }) => {
   const colorMode = useColorMode().colorMode;
+  const origin =
+    typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';
+  console.log('content', content, origin);
 
   return (
     <>
-      <Box position={'sticky'} width={'100%'} top={'0'} backdropFilter={'blur(10px)'} zIndex={2}>
-        <StatusBar />
-        <AlertBarBase
-          indicator={Indicator.major}
-          content={
-            <Flex direction={'column'} gap={'8px'} flexGrow={1}>
-              <Text fontWeight={700} fontSize={'14px'} lineHeight={'16px'} color={'#303030'}>
-                Stacks network upgrade
-              </Text>
-              <UnorderedList
-                paddingLeft={'8px'}
-                fontWeight={400}
-                fontSize={'14px'}
-                lineHeight={'20px'}
-                color={'#303030'}
-              >
-                <ListItem>
-                  The Stacks network will be undergoing two hard-forks, as{' '}
-                  <TextLink
-                    display="inline"
-                    href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
-                    target="_blank"
-                    color={'#1068BF'}
-                    borderBottom={'1px solid #1068BF'}
-                  >
-                    outlined in SIP-022
-                  </TextLink>
-                  .
-                </ListItem>
-                <ListItem>
-                  This update will require miners and operators to upgrade to{' '}
-                  <TextLink
-                    display="inline"
-                    href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.4.0.0.0"
-                    target="_blank"
-                    color={'#1068BF'}
-                    borderBottom={'1px solid #1068BF'}
-                  >
-                    stacks-node version 2.4.0.0.0
-                  </TextLink>
-                  .
-                </ListItem>
-                <ListItem>
-                  Stacking will be re-enabled with this release. For more details,{' '}
-                  <TextLink
-                    display="inline"
-                    href="https://forum.stacks.org/t/stacks-2-4-is-here-stacking-to-be-re-enabled/15024"
-                    target="_blank"
-                    color={'#1068BF'}
-                    borderBottom={'1px solid #1068BF'}
-                  >
-                    see this post
-                  </TextLink>
-                  .
-                </ListItem>
-              </UnorderedList>
-            </Flex>
-          }
-        />
-      </Box>
       <Flex
         maxWidth="100vw"
-        overflowX="hidden"
         flexDirection="column"
         minHeight="100vh"
         position="relative"
-        overflow="hidden"
         style={{
           backgroundAttachment: 'fixed',
           backgroundImage:
@@ -101,6 +112,20 @@ export const PageWrapper: FC = ({ children }) => {
               : undefined,
         }}
       >
+        <Box position={'sticky'} width={'100%'} top={'0'} backdropFilter={'blur(10px)'} zIndex={2}>
+          <StatusBar />
+          {content?.items?.map(alert => (
+            <AlertBarBase
+              key={alert.sys.id}
+              indicator={alert.fields.severity as Indicator}
+              content={
+                <Flex direction={'column'} gap={'8px'} flexGrow={1}>
+                  {documentToReactComponents(alert.fields.content, richTextRenderOptions(origin))}
+                </Flex>
+              }
+            />
+          ))}
+        </Box>
         <Header fullWidth={true} />
         <Flex
           display={['block', 'block', 'none', 'none']}

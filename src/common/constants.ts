@@ -49,6 +49,7 @@ export const withApiServer = (apiServer: string) => (path?: string) =>
   path ? apiServer + path : apiServer;
 
 export const X_API_KEY = process.env.X_API_KEY ?? process.env.X_API_KEY ?? '';
+export const CMS_URL = process.env.CMS_URL ?? process.env.CMS_URL ?? '';
 
 export const RELEASE_TAG_NAME =
   process.env.RELEASE_TAG_NAME ?? process.env.RELEASE_TAG_NAME ?? null;
