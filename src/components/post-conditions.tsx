@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 
 import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import {
+  MempoolTransaction,
   PostCondition,
   PostConditionFungible,
   PostConditionFungibleConditionCode,
@@ -28,6 +29,7 @@ import {
 
 import { ListItem } from '../app/common/components/ListItem';
 import { useVerticallyStackedElementsBorderStyle } from '../app/common/styles/border';
+import { StxPriceButton } from '@/app/common/components/StxPriceButton';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -139,7 +141,15 @@ const getAddressValue = (condition: PostCondition) => {
   }
 };
 
-const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: boolean }) => {
+const Condition = ({
+  tx,
+  condition,
+  isLast,
+}: {
+  tx: Transaction | MempoolTransaction;
+  condition: PostCondition;
+  isLast?: boolean;
+}) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
   const { fungibleTokensApi } = useApi();
 
@@ -166,6 +176,9 @@ const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: b
             ? ftDecimals((condition as any).amount, ftMetadata?.decimals || 0)
             : getAmount(condition)}{' '}
           {ftMetadata?.symbol || getConditionTicker(condition)}
+          {getConditionTicker(condition) === 'STX' && (
+            <StxPriceButton tx={tx} value={Number(getAmount(condition))} />
+          )}
         </>
       }
       subTitle={truncateMiddle(getAddressValue(condition), 8)}
@@ -175,38 +188,44 @@ const Condition = ({ condition, isLast }: { condition: PostCondition; isLast?: b
 
 export const PostConditions: React.FC<
   {
-    failed?: boolean;
-    conditions?: PostCondition[];
-    mode?: Transaction['post_condition_mode'];
+    tx: Transaction | MempoolTransaction;
   } & FlexProps
-> = ({ conditions, mode, failed, ...rest }) => (
-  <Section
-    title="Post conditions"
-    topRight={
-      mode
-        ? () => (
-            <Badge color={'textBody'} bg={'bgAlt'} border={'none'}>
-              {capitalize(mode)} mode
-            </Badge>
-          )
-        : undefined
-    }
-    {...rest}
-  >
-    <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
-      {conditions?.length ? (
-        <>
-          {conditions.map((condition: PostCondition, key) => (
-            <Condition isLast={key === conditions.length - 1} condition={condition} key={key} />
-          ))}
-        </>
-      ) : (
-        <Grid placeItems="center" px="16px" py="32px">
-          <Caption my="0" p="0" fontSize="14px">
-            This transaction has no post-conditions.
-          </Caption>
-        </Grid>
-      )}
-    </Box>
-  </Section>
-);
+> = ({ tx }) => {
+  const { post_conditions: conditions, post_condition_mode: mode } = tx;
+  return (
+    <Section
+      title="Post conditions"
+      topRight={
+        mode
+          ? () => (
+              <Badge color={'textBody'} bg={'bgAlt'} border={'none'}>
+                {capitalize(mode)} mode
+              </Badge>
+            )
+          : undefined
+      }
+      {...tx}
+    >
+      <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
+        {conditions?.length ? (
+          <>
+            {conditions.map((condition: PostCondition, key) => (
+              <Condition
+                tx={tx}
+                isLast={key === conditions.length - 1}
+                condition={condition}
+                key={key}
+              />
+            ))}
+          </>
+        ) : (
+          <Grid placeItems="center" px="16px" py="32px">
+            <Caption my="0" p="0" fontSize="14px">
+              This transaction has no post-conditions.
+            </Caption>
+          </Grid>
+        )}
+      </Box>
+    </Section>
+  );
+};
