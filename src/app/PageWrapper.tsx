@@ -28,11 +28,11 @@ export const PageWrapper: FC = ({ children }) => {
     <>
       <Flex
         maxWidth="100vw"
-        overflowX="hidden"
+        // overflowX="hidden"
         flexDirection="column"
         minHeight="100vh"
         position="relative"
-        overflow="hidden"
+        // overflow="hidden"
         style={{
           backgroundAttachment: 'fixed',
           backgroundImage:
@@ -41,21 +41,21 @@ export const PageWrapper: FC = ({ children }) => {
               : undefined,
         }}
       >
-        <Box position={'sticky'} width={'100%'} top={'0'} backdropFilter={'blur(10px)'} zIndex={2}>
+        <Box position={'sticky'} top={'0'} zIndex={2}>
           <StatusBar />
           <AlertBarBase
             indicator={Indicator.major}
             content={
               <Flex direction={'column'} gap={'8px'} flexGrow={1}>
-                <Text fontWeight={700} fontSize={'14px'} lineHeight={'16px'} color={'#303030'}>
+                <Text fontWeight={700} fontSize={'15px'} lineHeight={'1.2'}>
                   Stacks network upgrade
                 </Text>
                 <UnorderedList
-                  paddingLeft={'8px'}
+                  // paddingLeft={'8px'}
                   fontWeight={400}
-                  fontSize={'14px'}
-                  lineHeight={'20px'}
-                  color={'#303030'}
+                  fontSize={'12px'}
+                  lineHeight={'1.25'}
+                  // color={'#303030'}
                 >
                   <ListItem>
                     The Stacks network will be undergoing two hard-forks, as{' '}
@@ -63,8 +63,8 @@ export const PageWrapper: FC = ({ children }) => {
                       display="inline"
                       href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md"
                       target="_blank"
-                      color={'#1068BF'}
-                      borderBottom={'1px solid #1068BF'}
+                      // color={'#1068BF'}
+                      // borderBottom={'1px solid #1068BF'}
                     >
                       outlined in SIP-022
                     </TextLink>
@@ -76,8 +76,8 @@ export const PageWrapper: FC = ({ children }) => {
                       display="inline"
                       href="https://github.com/stacks-network/stacks-blockchain/releases/tag/2.4.0.0.0"
                       target="_blank"
-                      color={'#1068BF'}
-                      borderBottom={'1px solid #1068BF'}
+                      // color={'#1068BF'}
+                      // borderBottom={'1px solid #1068BF'}
                     >
                       stacks-node version 2.4.0.0.0
                     </TextLink>
@@ -89,8 +89,8 @@ export const PageWrapper: FC = ({ children }) => {
                       display="inline"
                       href="https://forum.stacks.org/t/stacks-2-4-is-here-stacking-to-be-re-enabled/15024"
                       target="_blank"
-                      color={'#1068BF'}
-                      borderBottom={'1px solid #1068BF'}
+                      // color={'#1068BF'}
+                      // borderBottom={'1px solid #1068BF'}
                     >
                       see this post
                     </TextLink>
