@@ -1,6 +1,7 @@
 'use client';
 
 import { ONE_MINUTE } from '@/app/common/queries/query-stale-time';
+import { getQueryParams } from '@/app/common/utils/buildUrl';
 import { getNetworkModeFromNetworkId } from '@/common/api/utils';
 import { Badge } from '@/common/components/Badge';
 import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@/common/constants';
@@ -27,7 +28,6 @@ import { useQuery } from 'react-query';
 
 import { CoreNodeInfoResponse } from '@stacks/blockchain-api-client/src/generated/models';
 import { ChainID } from '@stacks/transactions';
-import { getQueryParams } from '@/app/common/utils/buildUrl';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;

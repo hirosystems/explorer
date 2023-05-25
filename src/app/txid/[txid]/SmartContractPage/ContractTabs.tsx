@@ -1,4 +1,5 @@
 import { useVerticallyStackedElementsBorderStyle } from '@/app/common/styles/border';
+import { showFn } from '@/app/common/utils/sandbox';
 import { useAppDispatch } from '@/common/state/hooks';
 import { ContractWithParsedAbi } from '@/common/types/contract';
 import { CodeEditor } from '@/ui/CodeEditor';
@@ -8,11 +9,11 @@ import { FC, useState } from 'react';
 
 import { ClarityAbiFunction } from '@stacks/transactions';
 
-import { showFn } from '@/app/common/utils/sandbox';
 import { AbiFunction } from '../../../sandbox/components/ContractCall/AvailableFunctionsView';
 import { FunctionView } from '../../../sandbox/components/ContractCall/FunctionView';
 import { useUser } from '../../../sandbox/hooks/useUser';
 import { setUserData } from '../../../sandbox/sandbox-slice';
+
 export const ContractTabs: FC<{
   contractId: string;
   source?: string;

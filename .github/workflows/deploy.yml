@@ -48,6 +48,7 @@ jobs:
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             SENTRY_LOG_LEVEL=debug
             X_API_KEY=${{ secrets.X_API_KEY }}
+            RELEASE_TAG_NAME=${{ github.event.release.tag_name }}
 
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag/digest: ${{ github.ref_type == "branch" ? ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} }}"'

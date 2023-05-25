@@ -1,8 +1,10 @@
 'use client';
 
+import { showFn } from '@/app/common/utils/sandbox';
 import { CONNECT_AUTH_ORIGIN } from '@/common/constants';
 import { validateStacksAddress } from '@/common/utils';
 import { Section } from '@/components/section';
+import { Text } from '@/ui/Text';
 import { Box, Button, Flex, Stack } from '@/ui/components';
 import { Form, Formik } from 'formik';
 import { FC, ReactNode, useMemo, useState } from 'react';
@@ -19,8 +21,6 @@ import {
   listCV,
 } from '@stacks/transactions';
 
-import { showFn } from '@/app/common/utils/sandbox';
-import { Text } from '@/ui/Text';
 import { useStacksNetwork } from '../../../common/hooks/use-stacks-network';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
 import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';

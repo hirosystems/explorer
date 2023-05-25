@@ -1,6 +1,6 @@
+import { buildUrl } from '@/app/common/utils/buildUrl';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { getContractName, getFunctionName, microToStacks } from '@/common/utils';
-import { buildUrl } from '@/app/common/utils/buildUrl';
 import { Flex } from '@/ui/Flex';
 import { Stack } from '@/ui/Stack';
 import { Box, BoxProps } from '@/ui/components';

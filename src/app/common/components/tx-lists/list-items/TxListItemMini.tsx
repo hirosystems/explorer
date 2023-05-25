@@ -1,7 +1,7 @@
+import { buildUrl } from '@/app/common/utils/buildUrl';
 import { TwoColsListItem } from '@/common/components/TwoColumnsListItem';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { getTransactionStatus } from '@/common/utils/transactions';
-import { buildUrl } from '@/app/common/utils/buildUrl';
 import { AddressArea } from '@/components/transaction-item';
 import { Stack } from '@/ui/components';
 import { Caption, Title } from '@/ui/typography';

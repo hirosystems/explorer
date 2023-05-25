@@ -1,3 +1,57 @@
+# [1.104.0](https://github.com/hirosystems/explorer/compare/v1.103.0...v1.104.0) (2023-05-12)
+
+
+### Features
+
+* update alert ([b29b9d3](https://github.com/hirosystems/explorer/commit/b29b9d3f6bccc8c50d359569797d80d4321240ea))
+
+# [1.103.0](https://github.com/hirosystems/explorer/compare/v1.102.0...v1.103.0) (2023-05-12)
+
+
+### Bug Fixes
+
+* added release tagname from workflow files ([34e658d](https://github.com/hirosystems/explorer/commit/34e658d1626402e7645a630ff6b1ff0166a5b145))
+* linting issue resolved ([d198979](https://github.com/hirosystems/explorer/commit/d1989791595546a41269a83dbf4d187ed0b4c23e))
+
+
+### Features
+
+* added github release version number in footer ([7c4a4df](https://github.com/hirosystems/explorer/commit/7c4a4dfc4c763a5b4f2b1523b8526ba06358e7f2))
+
+# [1.102.0](https://github.com/hirosystems/explorer/compare/v1.101.0...v1.102.0) (2023-05-12)
+
+
+### Bug Fixes
+
+* added react-csv in the  dependencies ([03c3fd5](https://github.com/hirosystems/explorer/commit/03c3fd57a47c104431eba90d09375ca8e33eb6ea))
+* review fixes ([5e62dfb](https://github.com/hirosystems/explorer/commit/5e62dfb5948d75a41c032226422713f43cba7011))
+
+
+### Features
+
+* added button to download transactions as CSV ([16ce701](https://github.com/hirosystems/explorer/commit/16ce701137dc6ffbde2a062bde5e92cd0af38559))
+
+# [1.101.0](https://github.com/hirosystems/explorer/compare/v1.100.2...v1.101.0) (2023-05-11)
+
+
+### Features
+
+* update alert version ([7c712d5](https://github.com/hirosystems/explorer/commit/7c712d51597edd2fce0ce034e95f31e6f0976182))
+
+## [1.100.2](https://github.com/hirosystems/explorer/compare/v1.100.1...v1.100.2) (2023-05-10)
+
+
+### Bug Fixes
+
+* alert wording ([c1e9f79](https://github.com/hirosystems/explorer/commit/c1e9f798912864ce90f3a195c2471c3e5c6b22aa))
+
+## [1.100.1](https://github.com/hirosystems/explorer/compare/v1.100.0...v1.100.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* updates the version of stacks on the banner ([9f10660](https://github.com/hirosystems/explorer/commit/9f106600262498c5879d65479f95ffca5d02df10))
+
 # [1.100.0](https://github.com/hirosystems/explorer/compare/v1.99.1...v1.100.0) (2023-05-08)
 
 

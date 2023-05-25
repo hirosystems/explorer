@@ -1,3 +1,5 @@
+import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
+import { useApi } from '@/common/api/client';
 import { ftDecimals, getAssetNameParts } from '@/common/utils';
 import { getTicker } from '@/components/tx-events';
 import { FC, Fragment } from 'react';
@@ -6,8 +8,6 @@ import { AddressTransactionWithTransfersFtTransfers } from '@stacks/blockchain-a
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TransferListItem } from './TransferListItem';
-import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
-import { useApi } from '@/common/api/client';
 
 interface FtTransfersProps {
   address: string;

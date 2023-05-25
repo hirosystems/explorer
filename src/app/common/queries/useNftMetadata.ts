@@ -1,6 +1,6 @@
 import { useApi } from '@/common/api/client';
-import { UseQueryOptions, useQuery } from 'react-query';
 import { NftMetadataResponse } from '@hirosystems/token-metadata-api-client';
+import { UseQueryOptions, useQuery } from 'react-query';
 
 export const useNftMetadata = (
   api: ReturnType<typeof useApi>,

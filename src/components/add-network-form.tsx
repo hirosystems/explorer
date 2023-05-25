@@ -1,3 +1,4 @@
+import { getQueryParams } from '@/app/common/utils/buildUrl';
 import { fetchFromApi } from '@/common/api/fetch';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@/common/constants';
 import { NetworkIdModeMap } from '@/common/constants/network';
@@ -20,7 +21,6 @@ import { useRouter } from 'next/router';
 import { string } from 'yup';
 
 import { ChainID } from '@stacks/transactions';
-import { getQueryParams } from '@/app/common/utils/buildUrl';
 
 const buildCustomNetworkUrl = (url: string) => {
   const hostname = encodeURIComponent(new URL(url).hostname);

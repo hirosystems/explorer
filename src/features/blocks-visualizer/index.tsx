@@ -1,7 +1,7 @@
+import { buildUrl } from '@/app/common/utils/buildUrl';
 import { useApi } from '@/common/api/client';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { NetworkModes } from '@/common/types/network';
-import { buildUrl } from '@/app/common/utils/buildUrl';
 import { Box, Icon, Spinner, Tooltip } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { useColorMode } from '@chakra-ui/react';
