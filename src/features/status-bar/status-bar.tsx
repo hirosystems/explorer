@@ -30,6 +30,32 @@ const backgroundStyle = css`
 const wrapperStyle = css`
   max-width: 1280px;
   padding: 16px 0;
+  @keyframes breathe {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(0.7);
+    }
+  }
+
+  @keyframes jump {
+    from {
+      transform: scale(1) rotateY(0);
+    }
+    40% {
+      transform: scale(3) rotateY(800deg);
+      filter: hue-rotate(-40deg);
+      filter: drop-shadow(0 0 20px rgba(0,0,0,.6))
+    }
+    70% {
+      transform: scale(.6);
+    }
+    100%{
+      transform: scale(1);
+    }
+  }
+
 `;
 
 const getColor = (indicator: Indicator) =>
@@ -115,13 +141,9 @@ export const AlertBarBase: FC<{
   if (hideAlert || indicator === Indicator.none) return null;
   const icon =
     indicator === Indicator.critical ? (
-      <Icon as={BsExclamationCircle} color={getColor(indicator)}/>
+      <Icon as={BsExclamationCircle} color={getColor(indicator)} />
     ) : (
-      <Icon as={BsExclamationTriangle}
-      color={`black`}
-      width={`16px`}
-      height={`16px;`}
-      />
+      <Icon as={BsExclamationTriangle} color={`black`} width={`16px`} height={`16px;`} />
     );
   return (
     <Flex
@@ -131,29 +153,42 @@ export const AlertBarBase: FC<{
       borderTop={`8px solid rgba(255, 191, 0, 1)`}
       backdropFilter={`blur(10px)`}
       boxShadow={`
-      // inset 0px 5px 10px 0px rgba(255, 191, 0, .4),
       inset 0px -100px 50px -40px rgba(0,0,0,0.3),
       inset 0px -10px 30px -10px rgba(0,0,0,0.5)
       `}
       color={'var(--stacks-colors-white)'}
       backgroundColor={`rgba(0,0,0,.1)`}
       backgroundImage={`radial-gradient(ellipse at top, rgba(255, 191, 0, .3) 0%, transparent 100%);`}
-
     >
-      <Flex 
-      css={wrapperStyle} gap={'16px'}>
-        <Box
-        alignSelf={`start`}
-        display={`flex`}
-        alignItems={`center`}
-        justifyContent={`center`}
-        size={`40px`}
-        borderRadius={`1000px`}
+      <Flex css={wrapperStyle} gap={'16px'}>
+        <Box position={`relative`}>
+          <Box
+            alignSelf={`start`}
+            display={`flex`}
+            alignItems={`center`}
+            justifyContent={`center`}
+            size={`40px`}
+            borderRadius={`1000px`}
+            background={`rgba(255, 191, 0, 1)`}
+            animation={`1.4s ease-in-out 2 alternate jump`}
+          >
+            {icon}
+          </Box>
 
-        background={`rgba(255, 191, 0, 1)`}
-        >
-        {icon}
+          <Box
+            background={`transparent`}
+            position={`absolute`}
+            left={`0`}
+            top={`0`}
+            size={`40px`}
+            zIndex={`-1`}
+            borderRadius={`1000px`}
+            boxShadow={`0 0 20px rgba(255, 191, 0, .7)`}
+            animation={`1s ease-in-out infinite alternate breathe`}
+            animationDelay={`1.6s`}
+          ></Box>
         </Box>
+
         {content}
         {!!dismissLSKey && (
           <Icon
