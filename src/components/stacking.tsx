@@ -52,8 +52,9 @@ export const StackingPercentage = ({ balances, address }: any) => {
     const isStacking = unlockBlock > currentBlock;
 
     return (
-      <Box px="20px">
-        <Stack spacing="8px" py="24px">
+      <Box mt="15px">
+        <Caption>Stacking progress</Caption>
+        <Stack spacing="8px" py="10px">
           {isStacking ? (
             <Box mx="auto" size="64px">
               <PercentageCircle percentage={stackingPercentage} />
@@ -63,15 +64,8 @@ export const StackingPercentage = ({ balances, address }: any) => {
               <StxIcon color={'bg'} size="24px" />
             </Circle>
           )}
-          <Caption mx="auto">Stacking progress</Caption>
           {isStacking ? (
             <Box mt="4px">
-              <Flex position="relative" mb="12px" justifyContent="center" alignItems="center">
-                <Title fontSize={2} fontWeight={500} color={'textTitle'}>
-                  {stackingPercentage.toLocaleString(undefined, { maximumFractionDigits: 2 })}%
-                  completed
-                </Title>
-              </Flex>
               <Box textAlign="center">
                 <Caption mb="12px">
                   ~{blocksUntilUnlocked.toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
