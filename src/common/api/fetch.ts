@@ -15,8 +15,8 @@ export const fetcher = async (input: RequestInfo, init: RequestInit = {}) => {
 
 export const fetchFromApi =
   (apiServer: string) =>
-    async (path: string, opts = {}) => {
-      return fetcher(withApiServer(apiServer)(path), {
-        ...opts,
-      });
-    };
+  async (path: string, opts = {}) => {
+    return fetcher(withApiServer(apiServer)(path), {
+      ...opts,
+    });
+  };
