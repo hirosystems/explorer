@@ -1,3 +1,10 @@
+# [1.106.0](https://github.com/hirosystems/explorer/compare/v1.105.0...v1.106.0) (2023-05-31)
+
+
+### Features
+
+* remove alert and display stats ([9ab1699](https://github.com/hirosystems/explorer/commit/9ab16998c4ca1e62bcc342fcac8fad4302831698))
+
 # [1.105.0](https://github.com/hirosystems/explorer/compare/v1.104.4...v1.105.0) (2023-05-31)
 
 
