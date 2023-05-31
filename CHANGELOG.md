@@ -1,3 +1,10 @@
+## [1.104.4](https://github.com/hirosystems/explorer/compare/v1.104.3...v1.104.4) (2023-05-31)
+
+
+### Bug Fixes
+
+* stack progress button fixed ([d4b15c1](https://github.com/hirosystems/explorer/commit/d4b15c1b9e483d8b40f1417a864ae62ef6be1a26))
+
 ## [1.104.3](https://github.com/hirosystems/explorer/compare/v1.104.2...v1.104.3) (2023-05-24)
 
 
