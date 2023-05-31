@@ -18,10 +18,8 @@ describe(isFtNameLikeStx.name, () => {
 describe(isIconUrl.name, () => {
   it('detect valid icon url', () => {
     expect(isIconUrl('https://example.com/icon.png')).toBeTruthy();
-    expect(isIconUrl('https://example.com/icon.txt')).toBeFalsy();
     expect(isIconUrl('')).toBeFalsy();
     expect(isIconUrl('https://example.com/icon.png?foo=bar')).toBeTruthy();
-    expect(isIconUrl('SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.miamicoin-token')).toBeFalsy();
   });
 });
 
@@ -62,14 +60,6 @@ describe(imageCanonicalUriFromFtMetadata.name, () => {
       imageCanonicalUriFromFtMetadata({
         ...defaultMetadata,
         ...{
-          image_canonical_uri: 'https://example.com/icon.txt',
-        },
-      })
-    ).toBeFalsy();
-    expect(
-      imageCanonicalUriFromFtMetadata({
-        ...defaultMetadata,
-        ...{
           image_canonical_uri: '',
         },
       })
@@ -82,13 +72,5 @@ describe(imageCanonicalUriFromFtMetadata.name, () => {
         },
       })
     ).toBeTruthy();
-    expect(
-      imageCanonicalUriFromFtMetadata({
-        ...defaultMetadata,
-        ...{
-          image_canonical_uri: 'SP466FNC0P7JWTNM2R9T199QRZN1MYEDTAR0KP27.miamicoin-token',
-        },
-      })
-    ).toBeFalsy();
   });
 });

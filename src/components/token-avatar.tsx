@@ -14,7 +14,7 @@ export function FtAvatar({
   const { asset } = getAssetNameParts(token);
   const imageCanonicalUri = imageCanonicalUriFromFtMetadata(tokenMetadata);
   return imageCanonicalUri ? (
-    <TokenImage url={imageCanonicalUri} />
+    <TokenImage url={imageCanonicalUri} alt={asset} />
   ) : (
     <DefaultTokenImage asset={asset} />
   );
@@ -46,7 +46,7 @@ export function NftAvatar({
     contentType?.startsWith('video') ? (
       <TokenVideo url={url} />
     ) : (
-      <TokenImage url={url} />
+      <TokenImage url={url} alt={asset} />
     )
   ) : (
     <DefaultTokenImage asset={asset} />
@@ -55,21 +55,36 @@ export function NftAvatar({
 
 interface TokenImageProps {
   url: string;
+  alt: string;
 }
 
-const TokenImage = ({ url }: TokenImageProps) => {
+const TokenImage = ({ url, alt }: TokenImageProps) => {
+  const [imageUrl, setImageUrl] = useState<string>(encodeURI(decodeURI(url)));
+  const fallbackImageUrl = imageUrl.replace(
+    'https://ipfs.io/ipfs/',
+    'https://cloudflare-ipfs.com/ipfs/'
+  );
   return (
     <img
       width={'36px'}
       height={'36px'}
-      src={encodeURI(decodeURI(url))}
+      src={imageUrl}
+      onError={e => {
+        if (imageUrl !== fallbackImageUrl) {
+          setImageUrl(fallbackImageUrl);
+        }
+      }}
       style={{ marginRight: '16px' }}
-      alt="token-image"
+      alt={alt}
     />
   );
 };
 
-const TokenVideo = ({ url }: TokenImageProps) => {
+interface TokenVideoProps {
+  url: string;
+}
+
+const TokenVideo = ({ url }: TokenVideoProps) => {
   return (
     <video width={'36px'} height={'36px'} src={encodeURI(url)} style={{ marginRight: '16px' }} />
   );
