@@ -31,7 +31,7 @@ export const HomeClientBase: FC = () => {
       >
         Stacks Explorer
       </Title>
-      {!activeNetwork.isSubnet && false && <Stats />}
+      {!activeNetwork.isSubnet && <Stats />}
       <DefaultTxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
       <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
     </Grid>
