@@ -1,3 +1,10 @@
+# [1.105.0](https://github.com/hirosystems/explorer/compare/v1.104.4...v1.105.0) (2023-05-31)
+
+
+### Features
+
+* display ft ipfs images ([d54113d](https://github.com/hirosystems/explorer/commit/d54113d020a3580e171f950eabf195097c9024ef))
+
 ## [1.104.4](https://github.com/hirosystems/explorer/compare/v1.104.3...v1.104.4) (2023-05-31)
 
 
