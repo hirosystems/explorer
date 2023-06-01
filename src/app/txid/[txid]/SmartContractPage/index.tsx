@@ -40,7 +40,7 @@ export const SmartContractPage: React.FC<{
       contractId={contractId}
       txDetails={<TxDetails tx={tx} block={block} />}
     >
-      <PostConditions mode={tx.post_condition_mode} conditions={tx.post_conditions} />
+      <PostConditions tx={tx} />
       <ContractTabs
         source={source}
         contract={contract}
