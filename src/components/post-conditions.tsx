@@ -118,7 +118,7 @@ const getConditionTicker = (condition: PostCondition) => {
 
 const getAmount = (condition: PostCondition) => {
   if (condition.type === 'stx') {
-    return microStxToStx(condition.amount);
+    return Number(condition.amount);
   }
 
   if (condition.type === 'fungible') {
