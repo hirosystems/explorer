@@ -17,11 +17,11 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
   const hasType = !type?.includes('UnknownType');
 
   const getReprValue = (item: any) => {
-    let reprValue = item?.value === null ? 'none' : item?.value;
+    let reprValue = item?.value ?? 'none';
     if (item?.type?.includes('list')) {
-      reprValue = item?.value?.map((listEntry: any) => listEntry?.value).join(', ');
+      reprValue = item.value?.map((listEntry: any) => listEntry?.value).join(', ');
     }
-    return reprValue;
+    return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue.toString();
   };
 
   if (type?.includes('tuple')) {
@@ -32,7 +32,7 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const entry = value.value[name];
-            const repr = getReprValue(entry.value);
+            const repr = getReprValue(entry);
             return (
               <Box
                 borderBottom={!isLast ? '1px solid' : undefined}
