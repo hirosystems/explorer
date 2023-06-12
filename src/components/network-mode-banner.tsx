@@ -4,7 +4,13 @@ import { capitalize } from '@/common/utils';
 import { Flex } from '@/ui/components';
 import { Text } from '@/ui/typography';
 import { FC } from 'react';
-import { TestnetAvailibityIcon } from './testnet-availability/avail-icon';
+import dynamic from 'next/dynamic';
+import { TestnetPendingIcon } from './testnet-status-icon';
+
+const TestnetAvailibityIcon = dynamic(() => import('./testnet-status-icon'), {
+  loading: () => <TestnetPendingIcon />,
+  ssr: false,
+});
 
 export const NetworkModeBanner: FC = () => {
   const networkMode = useGlobalContext().activeNetwork.mode;
