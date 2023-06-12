@@ -15,6 +15,15 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
   if (!result) return null;
   const { success, type, value } = cvToJSON(hexToCV(result.hex));
   const hasType = !type?.includes('UnknownType');
+
+  const getReprValue = (item: any) => {
+    let reprValue = item?.value === null ? 'none' : item?.value;
+    if (item?.type?.includes('list')) {
+      reprValue = item?.value?.map((listEntry: any) => listEntry?.value).join(', ');
+    }
+    return reprValue;
+  };
+
   if (type?.includes('tuple')) {
     return (
       <Box width="100%">
@@ -23,10 +32,7 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const entry = value.value[name];
-            let repr = entry.value === null ? 'none' : entry.value.toString();
-            if (entry.type.includes('list')) {
-              repr = entry.value.map((listEntry: any) => listEntry.value).join(', ');
-            }
+            const repr = getReprValue(entry.value);
             return (
               <Box
                 borderBottom={!isLast ? '1px solid' : undefined}

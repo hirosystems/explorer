@@ -79,22 +79,22 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
 
 const getValue = (arg: { name: string; type: any; repr: any; value: any }, btc: null | string) => {
   if (arg.type === 'uint') {
-    const value = arg.repr.replace('u', '');
-    if (arg.name.includes('ustx')) {
+    const value = arg?.repr?.replace('u', '');
+    if (arg?.name?.includes('ustx')) {
       return `${microToStacks(value)} STX`;
     }
     return parseInt(value).toLocaleString();
   }
-  if (arg.type.includes('tuple')) {
-    const value = tupleToArr(arg.repr);
+  if (arg?.type?.includes('tuple')) {
+    const value = tupleToArr(arg?.repr);
 
     return (
       <>
-        <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />
+        <TupleResult isPoxAddr={arg?.name === 'pox-addr'} btc={btc} tuple={value} />
       </>
     );
   }
-  return arg.repr;
+  return arg?.repr;
 };
 
 export const FunctionSummaryClarityValue = ({
@@ -106,7 +106,7 @@ export const FunctionSummaryClarityValue = ({
   btc: null | string;
 }) => {
   if (arg.type === 'principal') {
-    const principal = arg.hex ? (cvToJSON(hexToCV(arg.hex)) || {}).value : '';
+    const principal = arg?.hex ? (cvToJSON(hexToCV(arg?.hex)) || {}).value : '';
     const isContract = principal.includes('.');
     if (isContract) {
       return (
