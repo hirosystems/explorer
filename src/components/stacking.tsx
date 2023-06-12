@@ -40,6 +40,19 @@ export const StackingPercentage = ({ balances, address }: any) => {
       );
     }
 
+    // "stx": {
+    //   "balance": "20000000833049",
+    //     "burnchain_lock_height": 793920,
+    //     "burnchain_unlock_height": 802550,
+    //     "lock_height": 108990,
+    //     "lock_tx_id": "0x5d12e9d0c19cefa22ca6b954c518ddf390c1884704246d77ab78a0e54bbd9740",
+    //     "locked": "20000000000000",
+    //     "total_fees_sent": "0",
+    //     "total_miner_rewards_received": "0",
+    //     "total_received": "50239431333049",
+    //     "total_sent": "30239430500000"
+    // }
+
     const currentBlock = stacksInfo?.burn_block_height;
     const lockBlock = balances?.stx?.burnchain_lock_height;
     const unlockBlock = balances?.stx?.burnchain_unlock_height;
@@ -47,6 +60,8 @@ export const StackingPercentage = ({ balances, address }: any) => {
     const totalBlocksInStackingPeriod = unlockBlock - lockBlock;
     const blocksUntilUnlocked = unlockBlock - currentBlock;
     const blocksCompleted = totalBlocksInStackingPeriod - blocksUntilUnlocked;
+    console.log('blocksCompleted', blocksCompleted);
+    console.log('totalBlocksInStackingPeriod', totalBlocksInStackingPeriod);
     const stackingPercentage = (blocksCompleted / totalBlocksInStackingPeriod) * 100;
 
     const isStacking = unlockBlock > currentBlock;

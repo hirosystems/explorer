@@ -47,7 +47,7 @@ const darkColors = {
   textInvert: '#040404',
 };
 
-const colors = {
+export const colors = {
   accent: { light: '#5546FF', dark: '#7F80FF' },
   brand: { light: '#5546FF', dark: '#8F91FF' },
   bg: { light: '#fff', dark: '#040404' },
