@@ -1,0 +1,3126 @@
+[
+  {
+    "weekStartDateTs": "1686441600",
+    "numberOfContributors": 132
+  },
+  {
+    "weekStartDateTs": "1685836800",
+    "numberOfContributors": 139
+  },
+  {
+    "weekStartDateTs": "1685232000",
+    "numberOfContributors": 146
+  },
+  {
+    "weekStartDateTs": "1684627200",
+    "numberOfContributors": 152
+  },
+  {
+    "weekStartDateTs": "1684022400",
+    "numberOfContributors": 160
+  },
+  {
+    "weekStartDateTs": "1683417600",
+    "numberOfContributors": 164
+  },
+  {
+    "weekStartDateTs": "1682812800",
+    "numberOfContributors": 160
+  },
+  {
+    "weekStartDateTs": "1682208000",
+    "numberOfContributors": 167
+  },
+  {
+    "weekStartDateTs": "1681603200",
+    "numberOfContributors": 168
+  },
+  {
+    "weekStartDateTs": "1680998400",
+    "numberOfContributors": 168
+  },
+  {
+    "weekStartDateTs": "1680393600",
+    "numberOfContributors": 171
+  },
+  {
+    "weekStartDateTs": "1679788800",
+    "numberOfContributors": 179
+  },
+  {
+    "weekStartDateTs": "1679184000",
+    "numberOfContributors": 194
+  },
+  {
+    "weekStartDateTs": "1678579200",
+    "numberOfContributors": 193
+  },
+  {
+    "weekStartDateTs": "1677974400",
+    "numberOfContributors": 200
+  },
+  {
+    "weekStartDateTs": "1677369600",
+    "numberOfContributors": 207
+  },
+  {
+    "weekStartDateTs": "1676764800",
+    "numberOfContributors": 213
+  },
+  {
+    "weekStartDateTs": "1676160000",
+    "numberOfContributors": 211
+  },
+  {
+    "weekStartDateTs": "1675555200",
+    "numberOfContributors": 217
+  },
+  {
+    "weekStartDateTs": "1674950400",
+    "numberOfContributors": 225
+  },
+  {
+    "weekStartDateTs": "1674345600",
+    "numberOfContributors": 238
+  },
+  {
+    "weekStartDateTs": "1673740800",
+    "numberOfContributors": 250
+  },
+  {
+    "weekStartDateTs": "1673136000",
+    "numberOfContributors": 271
+  },
+  {
+    "weekStartDateTs": "1672531200",
+    "numberOfContributors": 286
+  },
+  {
+    "weekStartDateTs": "1671926400",
+    "numberOfContributors": 307
+  },
+  {
+    "weekStartDateTs": "1671321600",
+    "numberOfContributors": 316
+  },
+  {
+    "weekStartDateTs": "1670716800",
+    "numberOfContributors": 321
+  },
+  {
+    "weekStartDateTs": "1670112000",
+    "numberOfContributors": 330
+  },
+  {
+    "weekStartDateTs": "1669507200",
+    "numberOfContributors": 328
+  },
+  {
+    "weekStartDateTs": "1668902400",
+    "numberOfContributors": 339
+  },
+  {
+    "weekStartDateTs": "1668297600",
+    "numberOfContributors": 347
+  },
+  {
+    "weekStartDateTs": "1667692800",
+    "numberOfContributors": 346
+  },
+  {
+    "weekStartDateTs": "1667088000",
+    "numberOfContributors": 355
+  },
+  {
+    "weekStartDateTs": "1666483200",
+    "numberOfContributors": 354
+  },
+  {
+    "weekStartDateTs": "1665878400",
+    "numberOfContributors": 355
+  },
+  {
+    "weekStartDateTs": "1665273600",
+    "numberOfContributors": 355
+  },
+  {
+    "weekStartDateTs": "1664668800",
+    "numberOfContributors": 346
+  },
+  {
+    "weekStartDateTs": "1664064000",
+    "numberOfContributors": 346
+  },
+  {
+    "weekStartDateTs": "1663459200",
+    "numberOfContributors": 356
+  },
+  {
+    "weekStartDateTs": "1662854400",
+    "numberOfContributors": 356
+  },
+  {
+    "weekStartDateTs": "1662249600",
+    "numberOfContributors": 355
+  },
+  {
+    "weekStartDateTs": "1661644800",
+    "numberOfContributors": 348
+  },
+  {
+    "weekStartDateTs": "1661040000",
+    "numberOfContributors": 345
+  },
+  {
+    "weekStartDateTs": "1660435200",
+    "numberOfContributors": 356
+  },
+  {
+    "weekStartDateTs": "1659830400",
+    "numberOfContributors": 349
+  },
+  {
+    "weekStartDateTs": "1659225600",
+    "numberOfContributors": 346
+  },
+  {
+    "weekStartDateTs": "1658620800",
+    "numberOfContributors": 341
+  },
+  {
+    "weekStartDateTs": "1658016000",
+    "numberOfContributors": 335
+  },
+  {
+    "weekStartDateTs": "1657411200",
+    "numberOfContributors": 342
+  },
+  {
+    "weekStartDateTs": "1656806400",
+    "numberOfContributors": 344
+  },
+  {
+    "weekStartDateTs": "1656201600",
+    "numberOfContributors": 333
+  },
+  {
+    "weekStartDateTs": "1655596800",
+    "numberOfContributors": 318
+  },
+  {
+    "weekStartDateTs": "1654992000",
+    "numberOfContributors": 328
+  },
+  {
+    "weekStartDateTs": "1654387200",
+    "numberOfContributors": 334
+  },
+  {
+    "weekStartDateTs": "1653782400",
+    "numberOfContributors": 328
+  },
+  {
+    "weekStartDateTs": "1653177600",
+    "numberOfContributors": 326
+  },
+  {
+    "weekStartDateTs": "1652572800",
+    "numberOfContributors": 321
+  },
+  {
+    "weekStartDateTs": "1651968000",
+    "numberOfContributors": 326
+  },
+  {
+    "weekStartDateTs": "1651363200",
+    "numberOfContributors": 336
+  },
+  {
+    "weekStartDateTs": "1650758400",
+    "numberOfContributors": 347
+  },
+  {
+    "weekStartDateTs": "1650153600",
+    "numberOfContributors": 352
+  },
+  {
+    "weekStartDateTs": "1649548800",
+    "numberOfContributors": 365
+  },
+  {
+    "weekStartDateTs": "1648944000",
+    "numberOfContributors": 372
+  },
+  {
+    "weekStartDateTs": "1648339200",
+    "numberOfContributors": 382
+  },
+  {
+    "weekStartDateTs": "1647734400",
+    "numberOfContributors": 387
+  },
+  {
+    "weekStartDateTs": "1647129600",
+    "numberOfContributors": 387
+  },
+  {
+    "weekStartDateTs": "1646524800",
+    "numberOfContributors": 399
+  },
+  {
+    "weekStartDateTs": "1645920000",
+    "numberOfContributors": 406
+  },
+  {
+    "weekStartDateTs": "1645315200",
+    "numberOfContributors": 417
+  },
+  {
+    "weekStartDateTs": "1644710400",
+    "numberOfContributors": 417
+  },
+  {
+    "weekStartDateTs": "1644105600",
+    "numberOfContributors": 423
+  },
+  {
+    "weekStartDateTs": "1643500800",
+    "numberOfContributors": 426
+  },
+  {
+    "weekStartDateTs": "1642896000",
+    "numberOfContributors": 433
+  },
+  {
+    "weekStartDateTs": "1642291200",
+    "numberOfContributors": 450
+  },
+  {
+    "weekStartDateTs": "1641686400",
+    "numberOfContributors": 467
+  },
+  {
+    "weekStartDateTs": "1641081600",
+    "numberOfContributors": 478
+  },
+  {
+    "weekStartDateTs": "1640476800",
+    "numberOfContributors": 499
+  },
+  {
+    "weekStartDateTs": "1639872000",
+    "numberOfContributors": 529
+  },
+  {
+    "weekStartDateTs": "1639267200",
+    "numberOfContributors": 544
+  },
+  {
+    "weekStartDateTs": "1638662400",
+    "numberOfContributors": 548
+  },
+  {
+    "weekStartDateTs": "1638057600",
+    "numberOfContributors": 550
+  },
+  {
+    "weekStartDateTs": "1637452800",
+    "numberOfContributors": 558
+  },
+  {
+    "weekStartDateTs": "1636848000",
+    "numberOfContributors": 574
+  },
+  {
+    "weekStartDateTs": "1636243200",
+    "numberOfContributors": 572
+  },
+  {
+    "weekStartDateTs": "1635638400",
+    "numberOfContributors": 573
+  },
+  {
+    "weekStartDateTs": "1635033600",
+    "numberOfContributors": 583
+  },
+  {
+    "weekStartDateTs": "1634428800",
+    "numberOfContributors": 573
+  },
+  {
+    "weekStartDateTs": "1633824000",
+    "numberOfContributors": 555
+  },
+  {
+    "weekStartDateTs": "1633219200",
+    "numberOfContributors": 555
+  },
+  {
+    "weekStartDateTs": "1632614400",
+    "numberOfContributors": 536
+  },
+  {
+    "weekStartDateTs": "1632009600",
+    "numberOfContributors": 523
+  },
+  {
+    "weekStartDateTs": "1631404800",
+    "numberOfContributors": 520
+  },
+  {
+    "weekStartDateTs": "1630800000",
+    "numberOfContributors": 509
+  },
+  {
+    "weekStartDateTs": "1630195200",
+    "numberOfContributors": 498
+  },
+  {
+    "weekStartDateTs": "1629590400",
+    "numberOfContributors": 484
+  },
+  {
+    "weekStartDateTs": "1628985600",
+    "numberOfContributors": 475
+  },
+  {
+    "weekStartDateTs": "1628380800",
+    "numberOfContributors": 471
+  },
+  {
+    "weekStartDateTs": "1627776000",
+    "numberOfContributors": 454
+  },
+  {
+    "weekStartDateTs": "1627171200",
+    "numberOfContributors": 434
+  },
+  {
+    "weekStartDateTs": "1626566400",
+    "numberOfContributors": 439
+  },
+  {
+    "weekStartDateTs": "1625961600",
+    "numberOfContributors": 433
+  },
+  {
+    "weekStartDateTs": "1625356800",
+    "numberOfContributors": 431
+  },
+  {
+    "weekStartDateTs": "1624752000",
+    "numberOfContributors": 431
+  },
+  {
+    "weekStartDateTs": "1624147200",
+    "numberOfContributors": 425
+  },
+  {
+    "weekStartDateTs": "1623542400",
+    "numberOfContributors": 423
+  },
+  {
+    "weekStartDateTs": "1622937600",
+    "numberOfContributors": 416
+  },
+  {
+    "weekStartDateTs": "1622332800",
+    "numberOfContributors": 405
+  },
+  {
+    "weekStartDateTs": "1621728000",
+    "numberOfContributors": 400
+  },
+  {
+    "weekStartDateTs": "1621123200",
+    "numberOfContributors": 392
+  },
+  {
+    "weekStartDateTs": "1620518400",
+    "numberOfContributors": 392
+  },
+  {
+    "weekStartDateTs": "1619913600",
+    "numberOfContributors": 400
+  },
+  {
+    "weekStartDateTs": "1619308800",
+    "numberOfContributors": 388
+  },
+  {
+    "weekStartDateTs": "1618704000",
+    "numberOfContributors": 389
+  },
+  {
+    "weekStartDateTs": "1618099200",
+    "numberOfContributors": 389
+  },
+  {
+    "weekStartDateTs": "1617494400",
+    "numberOfContributors": 386
+  },
+  {
+    "weekStartDateTs": "1616889600",
+    "numberOfContributors": 391
+  },
+  {
+    "weekStartDateTs": "1616284800",
+    "numberOfContributors": 378
+  },
+  {
+    "weekStartDateTs": "1615680000",
+    "numberOfContributors": 370
+  },
+  {
+    "weekStartDateTs": "1615075200",
+    "numberOfContributors": 368
+  },
+  {
+    "weekStartDateTs": "1614470400",
+    "numberOfContributors": 372
+  },
+  {
+    "weekStartDateTs": "1613865600",
+    "numberOfContributors": 377
+  },
+  {
+    "weekStartDateTs": "1613260800",
+    "numberOfContributors": 389
+  },
+  {
+    "weekStartDateTs": "1612656000",
+    "numberOfContributors": 384
+  },
+  {
+    "weekStartDateTs": "1612051200",
+    "numberOfContributors": 383
+  },
+  {
+    "weekStartDateTs": "1611446400",
+    "numberOfContributors": 386
+  },
+  {
+    "weekStartDateTs": "1610841600",
+    "numberOfContributors": 384
+  },
+  {
+    "weekStartDateTs": "1610236800",
+    "numberOfContributors": 382
+  },
+  {
+    "weekStartDateTs": "1609632000",
+    "numberOfContributors": 382
+  },
+  {
+    "weekStartDateTs": "1609027200",
+    "numberOfContributors": 379
+  },
+  {
+    "weekStartDateTs": "1608422400",
+    "numberOfContributors": 386
+  },
+  {
+    "weekStartDateTs": "1607817600",
+    "numberOfContributors": 378
+  },
+  {
+    "weekStartDateTs": "1607212800",
+    "numberOfContributors": 363
+  },
+  {
+    "weekStartDateTs": "1606608000",
+    "numberOfContributors": 361
+  },
+  {
+    "weekStartDateTs": "1606003200",
+    "numberOfContributors": 350
+  },
+  {
+    "weekStartDateTs": "1605398400",
+    "numberOfContributors": 350
+  },
+  {
+    "weekStartDateTs": "1604793600",
+    "numberOfContributors": 357
+  },
+  {
+    "weekStartDateTs": "1604188800",
+    "numberOfContributors": 358
+  },
+  {
+    "weekStartDateTs": "1603584000",
+    "numberOfContributors": 358
+  },
+  {
+    "weekStartDateTs": "1602979200",
+    "numberOfContributors": 345
+  },
+  {
+    "weekStartDateTs": "1602374400",
+    "numberOfContributors": 347
+  },
+  {
+    "weekStartDateTs": "1601769600",
+    "numberOfContributors": 333
+  },
+  {
+    "weekStartDateTs": "1601164800",
+    "numberOfContributors": 317
+  },
+  {
+    "weekStartDateTs": "1600560000",
+    "numberOfContributors": 294
+  },
+  {
+    "weekStartDateTs": "1599955200",
+    "numberOfContributors": 290
+  },
+  {
+    "weekStartDateTs": "1599350400",
+    "numberOfContributors": 288
+  },
+  {
+    "weekStartDateTs": "1598745600",
+    "numberOfContributors": 288
+  },
+  {
+    "weekStartDateTs": "1598140800",
+    "numberOfContributors": 292
+  },
+  {
+    "weekStartDateTs": "1597536000",
+    "numberOfContributors": 293
+  },
+  {
+    "weekStartDateTs": "1596931200",
+    "numberOfContributors": 295
+  },
+  {
+    "weekStartDateTs": "1596326400",
+    "numberOfContributors": 299
+  },
+  {
+    "weekStartDateTs": "1595721600",
+    "numberOfContributors": 304
+  },
+  {
+    "weekStartDateTs": "1595116800",
+    "numberOfContributors": 303
+  },
+  {
+    "weekStartDateTs": "1594512000",
+    "numberOfContributors": 323
+  },
+  {
+    "weekStartDateTs": "1593907200",
+    "numberOfContributors": 326
+  },
+  {
+    "weekStartDateTs": "1593302400",
+    "numberOfContributors": 342
+  },
+  {
+    "weekStartDateTs": "1592697600",
+    "numberOfContributors": 339
+  },
+  {
+    "weekStartDateTs": "1592092800",
+    "numberOfContributors": 350
+  },
+  {
+    "weekStartDateTs": "1591488000",
+    "numberOfContributors": 353
+  },
+  {
+    "weekStartDateTs": "1590883200",
+    "numberOfContributors": 349
+  },
+  {
+    "weekStartDateTs": "1590278400",
+    "numberOfContributors": 348
+  },
+  {
+    "weekStartDateTs": "1589673600",
+    "numberOfContributors": 322
+  },
+  {
+    "weekStartDateTs": "1589068800",
+    "numberOfContributors": 310
+  },
+  {
+    "weekStartDateTs": "1588464000",
+    "numberOfContributors": 305
+  },
+  {
+    "weekStartDateTs": "1587859200",
+    "numberOfContributors": 301
+  },
+  {
+    "weekStartDateTs": "1587254400",
+    "numberOfContributors": 300
+  },
+  {
+    "weekStartDateTs": "1586649600",
+    "numberOfContributors": 295
+  },
+  {
+    "weekStartDateTs": "1586044800",
+    "numberOfContributors": 287
+  },
+  {
+    "weekStartDateTs": "1585440000",
+    "numberOfContributors": 284
+  },
+  {
+    "weekStartDateTs": "1584835200",
+    "numberOfContributors": 276
+  },
+  {
+    "weekStartDateTs": "1584230400",
+    "numberOfContributors": 258
+  },
+  {
+    "weekStartDateTs": "1583625600",
+    "numberOfContributors": 248
+  },
+  {
+    "weekStartDateTs": "1583020800",
+    "numberOfContributors": 244
+  },
+  {
+    "weekStartDateTs": "1582416000",
+    "numberOfContributors": 249
+  },
+  {
+    "weekStartDateTs": "1581811200",
+    "numberOfContributors": 249
+  },
+  {
+    "weekStartDateTs": "1581206400",
+    "numberOfContributors": 251
+  },
+  {
+    "weekStartDateTs": "1580601600",
+    "numberOfContributors": 244
+  },
+  {
+    "weekStartDateTs": "1579996800",
+    "numberOfContributors": 255
+  },
+  {
+    "weekStartDateTs": "1579392000",
+    "numberOfContributors": 261
+  },
+  {
+    "weekStartDateTs": "1578787200",
+    "numberOfContributors": 269
+  },
+  {
+    "weekStartDateTs": "1578182400",
+    "numberOfContributors": 275
+  },
+  {
+    "weekStartDateTs": "1577577600",
+    "numberOfContributors": 275
+  },
+  {
+    "weekStartDateTs": "1576972800",
+    "numberOfContributors": 280
+  },
+  {
+    "weekStartDateTs": "1576368000",
+    "numberOfContributors": 283
+  },
+  {
+    "weekStartDateTs": "1575763200",
+    "numberOfContributors": 290
+  },
+  {
+    "weekStartDateTs": "1575158400",
+    "numberOfContributors": 287
+  },
+  {
+    "weekStartDateTs": "1574553600",
+    "numberOfContributors": 287
+  },
+  {
+    "weekStartDateTs": "1573948800",
+    "numberOfContributors": 297
+  },
+  {
+    "weekStartDateTs": "1573344000",
+    "numberOfContributors": 315
+  },
+  {
+    "weekStartDateTs": "1572739200",
+    "numberOfContributors": 297
+  },
+  {
+    "weekStartDateTs": "1572134400",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1571529600",
+    "numberOfContributors": 302
+  },
+  {
+    "weekStartDateTs": "1570924800",
+    "numberOfContributors": 297
+  },
+  {
+    "weekStartDateTs": "1570320000",
+    "numberOfContributors": 294
+  },
+  {
+    "weekStartDateTs": "1569715200",
+    "numberOfContributors": 287
+  },
+  {
+    "weekStartDateTs": "1569110400",
+    "numberOfContributors": 285
+  },
+  {
+    "weekStartDateTs": "1568505600",
+    "numberOfContributors": 294
+  },
+  {
+    "weekStartDateTs": "1567900800",
+    "numberOfContributors": 298
+  },
+  {
+    "weekStartDateTs": "1567296000",
+    "numberOfContributors": 297
+  },
+  {
+    "weekStartDateTs": "1566691200",
+    "numberOfContributors": 303
+  },
+  {
+    "weekStartDateTs": "1566086400",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1565481600",
+    "numberOfContributors": 300
+  },
+  {
+    "weekStartDateTs": "1564876800",
+    "numberOfContributors": 305
+  },
+  {
+    "weekStartDateTs": "1564272000",
+    "numberOfContributors": 301
+  },
+  {
+    "weekStartDateTs": "1563667200",
+    "numberOfContributors": 305
+  },
+  {
+    "weekStartDateTs": "1563062400",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1562457600",
+    "numberOfContributors": 305
+  },
+  {
+    "weekStartDateTs": "1561852800",
+    "numberOfContributors": 307
+  },
+  {
+    "weekStartDateTs": "1561248000",
+    "numberOfContributors": 305
+  },
+  {
+    "weekStartDateTs": "1560643200",
+    "numberOfContributors": 306
+  },
+  {
+    "weekStartDateTs": "1560038400",
+    "numberOfContributors": 300
+  },
+  {
+    "weekStartDateTs": "1559433600",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1558828800",
+    "numberOfContributors": 297
+  },
+  {
+    "weekStartDateTs": "1558224000",
+    "numberOfContributors": 290
+  },
+  {
+    "weekStartDateTs": "1557619200",
+    "numberOfContributors": 289
+  },
+  {
+    "weekStartDateTs": "1557014400",
+    "numberOfContributors": 292
+  },
+  {
+    "weekStartDateTs": "1556409600",
+    "numberOfContributors": 290
+  },
+  {
+    "weekStartDateTs": "1555804800",
+    "numberOfContributors": 303
+  },
+  {
+    "weekStartDateTs": "1555200000",
+    "numberOfContributors": 305
+  },
+  {
+    "weekStartDateTs": "1554595200",
+    "numberOfContributors": 316
+  },
+  {
+    "weekStartDateTs": "1553990400",
+    "numberOfContributors": 309
+  },
+  {
+    "weekStartDateTs": "1553385600",
+    "numberOfContributors": 300
+  },
+  {
+    "weekStartDateTs": "1552780800",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1552176000",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1551571200",
+    "numberOfContributors": 287
+  },
+  {
+    "weekStartDateTs": "1550966400",
+    "numberOfContributors": 301
+  },
+  {
+    "weekStartDateTs": "1550361600",
+    "numberOfContributors": 301
+  },
+  {
+    "weekStartDateTs": "1549756800",
+    "numberOfContributors": 301
+  },
+  {
+    "weekStartDateTs": "1549152000",
+    "numberOfContributors": 302
+  },
+  {
+    "weekStartDateTs": "1548547200",
+    "numberOfContributors": 296
+  },
+  {
+    "weekStartDateTs": "1547942400",
+    "numberOfContributors": 290
+  },
+  {
+    "weekStartDateTs": "1547337600",
+    "numberOfContributors": 281
+  },
+  {
+    "weekStartDateTs": "1546732800",
+    "numberOfContributors": 293
+  },
+  {
+    "weekStartDateTs": "1546128000",
+    "numberOfContributors": 292
+  },
+  {
+    "weekStartDateTs": "1545523200",
+    "numberOfContributors": 298
+  },
+  {
+    "weekStartDateTs": "1544918400",
+    "numberOfContributors": 306
+  },
+  {
+    "weekStartDateTs": "1544313600",
+    "numberOfContributors": 310
+  },
+  {
+    "weekStartDateTs": "1543708800",
+    "numberOfContributors": 304
+  },
+  {
+    "weekStartDateTs": "1543104000",
+    "numberOfContributors": 306
+  },
+  {
+    "weekStartDateTs": "1542499200",
+    "numberOfContributors": 304
+  },
+  {
+    "weekStartDateTs": "1541894400",
+    "numberOfContributors": 298
+  },
+  {
+    "weekStartDateTs": "1541289600",
+    "numberOfContributors": 281
+  },
+  {
+    "weekStartDateTs": "1540684800",
+    "numberOfContributors": 275
+  },
+  {
+    "weekStartDateTs": "1540080000",
+    "numberOfContributors": 276
+  },
+  {
+    "weekStartDateTs": "1539475200",
+    "numberOfContributors": 259
+  },
+  {
+    "weekStartDateTs": "1538870400",
+    "numberOfContributors": 253
+  },
+  {
+    "weekStartDateTs": "1538265600",
+    "numberOfContributors": 247
+  },
+  {
+    "weekStartDateTs": "1537660800",
+    "numberOfContributors": 243
+  },
+  {
+    "weekStartDateTs": "1537056000",
+    "numberOfContributors": 248
+  },
+  {
+    "weekStartDateTs": "1536451200",
+    "numberOfContributors": 244
+  },
+  {
+    "weekStartDateTs": "1535846400",
+    "numberOfContributors": 244
+  },
+  {
+    "weekStartDateTs": "1535241600",
+    "numberOfContributors": 247
+  },
+  {
+    "weekStartDateTs": "1534636800",
+    "numberOfContributors": 248
+  },
+  {
+    "weekStartDateTs": "1534032000",
+    "numberOfContributors": 252
+  },
+  {
+    "weekStartDateTs": "1533427200",
+    "numberOfContributors": 251
+  },
+  {
+    "weekStartDateTs": "1532822400",
+    "numberOfContributors": 259
+  },
+  {
+    "weekStartDateTs": "1532217600",
+    "numberOfContributors": 262
+  },
+  {
+    "weekStartDateTs": "1531612800",
+    "numberOfContributors": 259
+  },
+  {
+    "weekStartDateTs": "1531008000",
+    "numberOfContributors": 266
+  },
+  {
+    "weekStartDateTs": "1530403200",
+    "numberOfContributors": 271
+  },
+  {
+    "weekStartDateTs": "1529798400",
+    "numberOfContributors": 265
+  },
+  {
+    "weekStartDateTs": "1529193600",
+    "numberOfContributors": 264
+  },
+  {
+    "weekStartDateTs": "1528588800",
+    "numberOfContributors": 270
+  },
+  {
+    "weekStartDateTs": "1527984000",
+    "numberOfContributors": 264
+  },
+  {
+    "weekStartDateTs": "1527379200",
+    "numberOfContributors": 266
+  },
+  {
+    "weekStartDateTs": "1526774400",
+    "numberOfContributors": 260
+  },
+  {
+    "weekStartDateTs": "1526169600",
+    "numberOfContributors": 265
+  },
+  {
+    "weekStartDateTs": "1525564800",
+    "numberOfContributors": 257
+  },
+  {
+    "weekStartDateTs": "1524960000",
+    "numberOfContributors": 258
+  },
+  {
+    "weekStartDateTs": "1524355200",
+    "numberOfContributors": 258
+  },
+  {
+    "weekStartDateTs": "1523750400",
+    "numberOfContributors": 244
+  },
+  {
+    "weekStartDateTs": "1523145600",
+    "numberOfContributors": 241
+  },
+  {
+    "weekStartDateTs": "1522540800",
+    "numberOfContributors": 239
+  },
+  {
+    "weekStartDateTs": "1521936000",
+    "numberOfContributors": 239
+  },
+  {
+    "weekStartDateTs": "1521331200",
+    "numberOfContributors": 234
+  },
+  {
+    "weekStartDateTs": "1520726400",
+    "numberOfContributors": 234
+  },
+  {
+    "weekStartDateTs": "1520121600",
+    "numberOfContributors": 223
+  },
+  {
+    "weekStartDateTs": "1519516800",
+    "numberOfContributors": 217
+  },
+  {
+    "weekStartDateTs": "1518912000",
+    "numberOfContributors": 206
+  },
+  {
+    "weekStartDateTs": "1518307200",
+    "numberOfContributors": 207
+  },
+  {
+    "weekStartDateTs": "1517702400",
+    "numberOfContributors": 208
+  },
+  {
+    "weekStartDateTs": "1517097600",
+    "numberOfContributors": 212
+  },
+  {
+    "weekStartDateTs": "1516492800",
+    "numberOfContributors": 216
+  },
+  {
+    "weekStartDateTs": "1515888000",
+    "numberOfContributors": 211
+  },
+  {
+    "weekStartDateTs": "1515283200",
+    "numberOfContributors": 211
+  },
+  {
+    "weekStartDateTs": "1514678400",
+    "numberOfContributors": 202
+  },
+  {
+    "weekStartDateTs": "1514073600",
+    "numberOfContributors": 201
+  },
+  {
+    "weekStartDateTs": "1513468800",
+    "numberOfContributors": 199
+  },
+  {
+    "weekStartDateTs": "1512864000",
+    "numberOfContributors": 206
+  },
+  {
+    "weekStartDateTs": "1512259200",
+    "numberOfContributors": 204
+  },
+  {
+    "weekStartDateTs": "1511654400",
+    "numberOfContributors": 207
+  },
+  {
+    "weekStartDateTs": "1511049600",
+    "numberOfContributors": 202
+  },
+  {
+    "weekStartDateTs": "1510444800",
+    "numberOfContributors": 203
+  },
+  {
+    "weekStartDateTs": "1509840000",
+    "numberOfContributors": 203
+  },
+  {
+    "weekStartDateTs": "1509235200",
+    "numberOfContributors": 194
+  },
+  {
+    "weekStartDateTs": "1508630400",
+    "numberOfContributors": 200
+  },
+  {
+    "weekStartDateTs": "1508025600",
+    "numberOfContributors": 198
+  },
+  {
+    "weekStartDateTs": "1507420800",
+    "numberOfContributors": 192
+  },
+  {
+    "weekStartDateTs": "1506816000",
+    "numberOfContributors": 191
+  },
+  {
+    "weekStartDateTs": "1506211200",
+    "numberOfContributors": 189
+  },
+  {
+    "weekStartDateTs": "1505606400",
+    "numberOfContributors": 190
+  },
+  {
+    "weekStartDateTs": "1505001600",
+    "numberOfContributors": 194
+  },
+  {
+    "weekStartDateTs": "1504396800",
+    "numberOfContributors": 202
+  },
+  {
+    "weekStartDateTs": "1503792000",
+    "numberOfContributors": 197
+  },
+  {
+    "weekStartDateTs": "1503187200",
+    "numberOfContributors": 200
+  },
+  {
+    "weekStartDateTs": "1502582400",
+    "numberOfContributors": 201
+  },
+  {
+    "weekStartDateTs": "1501977600",
+    "numberOfContributors": 206
+  },
+  {
+    "weekStartDateTs": "1501372800",
+    "numberOfContributors": 200
+  },
+  {
+    "weekStartDateTs": "1500768000",
+    "numberOfContributors": 195
+  },
+  {
+    "weekStartDateTs": "1500163200",
+    "numberOfContributors": 195
+  },
+  {
+    "weekStartDateTs": "1499558400",
+    "numberOfContributors": 195
+  },
+  {
+    "weekStartDateTs": "1498953600",
+    "numberOfContributors": 190
+  },
+  {
+    "weekStartDateTs": "1498348800",
+    "numberOfContributors": 188
+  },
+  {
+    "weekStartDateTs": "1497744000",
+    "numberOfContributors": 183
+  },
+  {
+    "weekStartDateTs": "1497139200",
+    "numberOfContributors": 173
+  },
+  {
+    "weekStartDateTs": "1496534400",
+    "numberOfContributors": 167
+  },
+  {
+    "weekStartDateTs": "1495929600",
+    "numberOfContributors": 162
+  },
+  {
+    "weekStartDateTs": "1495324800",
+    "numberOfContributors": 153
+  },
+  {
+    "weekStartDateTs": "1494720000",
+    "numberOfContributors": 147
+  },
+  {
+    "weekStartDateTs": "1494115200",
+    "numberOfContributors": 149
+  },
+  {
+    "weekStartDateTs": "1493510400",
+    "numberOfContributors": 152
+  },
+  {
+    "weekStartDateTs": "1492905600",
+    "numberOfContributors": 147
+  },
+  {
+    "weekStartDateTs": "1492300800",
+    "numberOfContributors": 138
+  },
+  {
+    "weekStartDateTs": "1491696000",
+    "numberOfContributors": 136
+  },
+  {
+    "weekStartDateTs": "1491091200",
+    "numberOfContributors": 137
+  },
+  {
+    "weekStartDateTs": "1490486400",
+    "numberOfContributors": 147
+  },
+  {
+    "weekStartDateTs": "1489881600",
+    "numberOfContributors": 150
+  },
+  {
+    "weekStartDateTs": "1489276800",
+    "numberOfContributors": 148
+  },
+  {
+    "weekStartDateTs": "1488672000",
+    "numberOfContributors": 143
+  },
+  {
+    "weekStartDateTs": "1488067200",
+    "numberOfContributors": 140
+  },
+  {
+    "weekStartDateTs": "1487462400",
+    "numberOfContributors": 139
+  },
+  {
+    "weekStartDateTs": "1486857600",
+    "numberOfContributors": 135
+  },
+  {
+    "weekStartDateTs": "1486252800",
+    "numberOfContributors": 139
+  },
+  {
+    "weekStartDateTs": "1485648000",
+    "numberOfContributors": 146
+  },
+  {
+    "weekStartDateTs": "1485043200",
+    "numberOfContributors": 149
+  },
+  {
+    "weekStartDateTs": "1484438400",
+    "numberOfContributors": 152
+  },
+  {
+    "weekStartDateTs": "1483833600",
+    "numberOfContributors": 148
+  },
+  {
+    "weekStartDateTs": "1483228800",
+    "numberOfContributors": 142
+  },
+  {
+    "weekStartDateTs": "1482624000",
+    "numberOfContributors": 145
+  },
+  {
+    "weekStartDateTs": "1482019200",
+    "numberOfContributors": 145
+  },
+  {
+    "weekStartDateTs": "1481414400",
+    "numberOfContributors": 144
+  },
+  {
+    "weekStartDateTs": "1480809600",
+    "numberOfContributors": 145
+  },
+  {
+    "weekStartDateTs": "1480204800",
+    "numberOfContributors": 147
+  },
+  {
+    "weekStartDateTs": "1479600000",
+    "numberOfContributors": 143
+  },
+  {
+    "weekStartDateTs": "1478995200",
+    "numberOfContributors": 142
+  },
+  {
+    "weekStartDateTs": "1478390400",
+    "numberOfContributors": 142
+  },
+  {
+    "weekStartDateTs": "1477785600",
+    "numberOfContributors": 134
+  },
+  {
+    "weekStartDateTs": "1477180800",
+    "numberOfContributors": 134
+  },
+  {
+    "weekStartDateTs": "1476576000",
+    "numberOfContributors": 131
+  },
+  {
+    "weekStartDateTs": "1475971200",
+    "numberOfContributors": 135
+  },
+  {
+    "weekStartDateTs": "1475366400",
+    "numberOfContributors": 129
+  },
+  {
+    "weekStartDateTs": "1474761600",
+    "numberOfContributors": 125
+  },
+  {
+    "weekStartDateTs": "1474156800",
+    "numberOfContributors": 121
+  },
+  {
+    "weekStartDateTs": "1473552000",
+    "numberOfContributors": 124
+  },
+  {
+    "weekStartDateTs": "1472947200",
+    "numberOfContributors": 117
+  },
+  {
+    "weekStartDateTs": "1472342400",
+    "numberOfContributors": 119
+  },
+  {
+    "weekStartDateTs": "1471737600",
+    "numberOfContributors": 119
+  },
+  {
+    "weekStartDateTs": "1471132800",
+    "numberOfContributors": 115
+  },
+  {
+    "weekStartDateTs": "1470528000",
+    "numberOfContributors": 117
+  },
+  {
+    "weekStartDateTs": "1469923200",
+    "numberOfContributors": 121
+  },
+  {
+    "weekStartDateTs": "1469318400",
+    "numberOfContributors": 120
+  },
+  {
+    "weekStartDateTs": "1468713600",
+    "numberOfContributors": 120
+  },
+  {
+    "weekStartDateTs": "1468108800",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1467504000",
+    "numberOfContributors": 123
+  },
+  {
+    "weekStartDateTs": "1466899200",
+    "numberOfContributors": 129
+  },
+  {
+    "weekStartDateTs": "1466294400",
+    "numberOfContributors": 128
+  },
+  {
+    "weekStartDateTs": "1465689600",
+    "numberOfContributors": 129
+  },
+  {
+    "weekStartDateTs": "1465084800",
+    "numberOfContributors": 125
+  },
+  {
+    "weekStartDateTs": "1464480000",
+    "numberOfContributors": 126
+  },
+  {
+    "weekStartDateTs": "1463875200",
+    "numberOfContributors": 122
+  },
+  {
+    "weekStartDateTs": "1463270400",
+    "numberOfContributors": 123
+  },
+  {
+    "weekStartDateTs": "1462665600",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1462060800",
+    "numberOfContributors": 120
+  },
+  {
+    "weekStartDateTs": "1461456000",
+    "numberOfContributors": 122
+  },
+  {
+    "weekStartDateTs": "1460851200",
+    "numberOfContributors": 120
+  },
+  {
+    "weekStartDateTs": "1460246400",
+    "numberOfContributors": 121
+  },
+  {
+    "weekStartDateTs": "1459641600",
+    "numberOfContributors": 121
+  },
+  {
+    "weekStartDateTs": "1459036800",
+    "numberOfContributors": 122
+  },
+  {
+    "weekStartDateTs": "1458432000",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1457827200",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1457222400",
+    "numberOfContributors": 119
+  },
+  {
+    "weekStartDateTs": "1456617600",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1456012800",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1455408000",
+    "numberOfContributors": 117
+  },
+  {
+    "weekStartDateTs": "1454803200",
+    "numberOfContributors": 114
+  },
+  {
+    "weekStartDateTs": "1454198400",
+    "numberOfContributors": 115
+  },
+  {
+    "weekStartDateTs": "1453593600",
+    "numberOfContributors": 119
+  },
+  {
+    "weekStartDateTs": "1452988800",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1452384000",
+    "numberOfContributors": 117
+  },
+  {
+    "weekStartDateTs": "1451779200",
+    "numberOfContributors": 115
+  },
+  {
+    "weekStartDateTs": "1451174400",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1450569600",
+    "numberOfContributors": 121
+  },
+  {
+    "weekStartDateTs": "1449964800",
+    "numberOfContributors": 125
+  },
+  {
+    "weekStartDateTs": "1449360000",
+    "numberOfContributors": 125
+  },
+  {
+    "weekStartDateTs": "1448755200",
+    "numberOfContributors": 129
+  },
+  {
+    "weekStartDateTs": "1448150400",
+    "numberOfContributors": 131
+  },
+  {
+    "weekStartDateTs": "1447545600",
+    "numberOfContributors": 133
+  },
+  {
+    "weekStartDateTs": "1446940800",
+    "numberOfContributors": 131
+  },
+  {
+    "weekStartDateTs": "1446336000",
+    "numberOfContributors": 129
+  },
+  {
+    "weekStartDateTs": "1445731200",
+    "numberOfContributors": 125
+  },
+  {
+    "weekStartDateTs": "1445126400",
+    "numberOfContributors": 125
+  },
+  {
+    "weekStartDateTs": "1444521600",
+    "numberOfContributors": 122
+  },
+  {
+    "weekStartDateTs": "1443916800",
+    "numberOfContributors": 124
+  },
+  {
+    "weekStartDateTs": "1443312000",
+    "numberOfContributors": 124
+  },
+  {
+    "weekStartDateTs": "1442707200",
+    "numberOfContributors": 123
+  },
+  {
+    "weekStartDateTs": "1442102400",
+    "numberOfContributors": 121
+  },
+  {
+    "weekStartDateTs": "1441497600",
+    "numberOfContributors": 116
+  },
+  {
+    "weekStartDateTs": "1440892800",
+    "numberOfContributors": 117
+  },
+  {
+    "weekStartDateTs": "1440288000",
+    "numberOfContributors": 124
+  },
+  {
+    "weekStartDateTs": "1439683200",
+    "numberOfContributors": 120
+  },
+  {
+    "weekStartDateTs": "1439078400",
+    "numberOfContributors": 118
+  },
+  {
+    "weekStartDateTs": "1438473600",
+    "numberOfContributors": 112
+  },
+  {
+    "weekStartDateTs": "1437868800",
+    "numberOfContributors": 111
+  },
+  {
+    "weekStartDateTs": "1437264000",
+    "numberOfContributors": 111
+  },
+  {
+    "weekStartDateTs": "1436659200",
+    "numberOfContributors": 109
+  },
+  {
+    "weekStartDateTs": "1436054400",
+    "numberOfContributors": 108
+  },
+  {
+    "weekStartDateTs": "1435449600",
+    "numberOfContributors": 106
+  },
+  {
+    "weekStartDateTs": "1434844800",
+    "numberOfContributors": 105
+  },
+  {
+    "weekStartDateTs": "1434240000",
+    "numberOfContributors": 106
+  },
+  {
+    "weekStartDateTs": "1433635200",
+    "numberOfContributors": 104
+  },
+  {
+    "weekStartDateTs": "1433030400",
+    "numberOfContributors": 102
+  },
+  {
+    "weekStartDateTs": "1432425600",
+    "numberOfContributors": 100
+  },
+  {
+    "weekStartDateTs": "1431820800",
+    "numberOfContributors": 100
+  },
+  {
+    "weekStartDateTs": "1431216000",
+    "numberOfContributors": 99
+  },
+  {
+    "weekStartDateTs": "1430611200",
+    "numberOfContributors": 100
+  },
+  {
+    "weekStartDateTs": "1430006400",
+    "numberOfContributors": 98
+  },
+  {
+    "weekStartDateTs": "1429401600",
+    "numberOfContributors": 95
+  },
+  {
+    "weekStartDateTs": "1428796800",
+    "numberOfContributors": 91
+  },
+  {
+    "weekStartDateTs": "1428192000",
+    "numberOfContributors": 89
+  },
+  {
+    "weekStartDateTs": "1427587200",
+    "numberOfContributors": 85
+  },
+  {
+    "weekStartDateTs": "1426982400",
+    "numberOfContributors": 88
+  },
+  {
+    "weekStartDateTs": "1426377600",
+    "numberOfContributors": 88
+  },
+  {
+    "weekStartDateTs": "1425772800",
+    "numberOfContributors": 88
+  },
+  {
+    "weekStartDateTs": "1425168000",
+    "numberOfContributors": 87
+  },
+  {
+    "weekStartDateTs": "1424563200",
+    "numberOfContributors": 85
+  },
+  {
+    "weekStartDateTs": "1423958400",
+    "numberOfContributors": 81
+  },
+  {
+    "weekStartDateTs": "1423353600",
+    "numberOfContributors": 80
+  },
+  {
+    "weekStartDateTs": "1422748800",
+    "numberOfContributors": 80
+  },
+  {
+    "weekStartDateTs": "1422144000",
+    "numberOfContributors": 84
+  },
+  {
+    "weekStartDateTs": "1421539200",
+    "numberOfContributors": 87
+  },
+  {
+    "weekStartDateTs": "1420934400",
+    "numberOfContributors": 87
+  },
+  {
+    "weekStartDateTs": "1420329600",
+    "numberOfContributors": 86
+  },
+  {
+    "weekStartDateTs": "1419724800",
+    "numberOfContributors": 85
+  },
+  {
+    "weekStartDateTs": "1419120000",
+    "numberOfContributors": 84
+  },
+  {
+    "weekStartDateTs": "1418515200",
+    "numberOfContributors": 83
+  },
+  {
+    "weekStartDateTs": "1417910400",
+    "numberOfContributors": 83
+  },
+  {
+    "weekStartDateTs": "1417305600",
+    "numberOfContributors": 78
+  },
+  {
+    "weekStartDateTs": "1416700800",
+    "numberOfContributors": 78
+  },
+  {
+    "weekStartDateTs": "1416096000",
+    "numberOfContributors": 80
+  },
+  {
+    "weekStartDateTs": "1415491200",
+    "numberOfContributors": 81
+  },
+  {
+    "weekStartDateTs": "1414886400",
+    "numberOfContributors": 81
+  },
+  {
+    "weekStartDateTs": "1414281600",
+    "numberOfContributors": 76
+  },
+  {
+    "weekStartDateTs": "1413676800",
+    "numberOfContributors": 72
+  },
+  {
+    "weekStartDateTs": "1413072000",
+    "numberOfContributors": 69
+  },
+  {
+    "weekStartDateTs": "1412467200",
+    "numberOfContributors": 69
+  },
+  {
+    "weekStartDateTs": "1411862400",
+    "numberOfContributors": 73
+  },
+  {
+    "weekStartDateTs": "1411257600",
+    "numberOfContributors": 73
+  },
+  {
+    "weekStartDateTs": "1410652800",
+    "numberOfContributors": 75
+  },
+  {
+    "weekStartDateTs": "1410048000",
+    "numberOfContributors": 75
+  },
+  {
+    "weekStartDateTs": "1409443200",
+    "numberOfContributors": 76
+  },
+  {
+    "weekStartDateTs": "1408838400",
+    "numberOfContributors": 74
+  },
+  {
+    "weekStartDateTs": "1408233600",
+    "numberOfContributors": 74
+  },
+  {
+    "weekStartDateTs": "1407628800",
+    "numberOfContributors": 74
+  },
+  {
+    "weekStartDateTs": "1407024000",
+    "numberOfContributors": 76
+  },
+  {
+    "weekStartDateTs": "1406419200",
+    "numberOfContributors": 76
+  },
+  {
+    "weekStartDateTs": "1405814400",
+    "numberOfContributors": 80
+  },
+  {
+    "weekStartDateTs": "1405209600",
+    "numberOfContributors": 79
+  },
+  {
+    "weekStartDateTs": "1404604800",
+    "numberOfContributors": 86
+  },
+  {
+    "weekStartDateTs": "1404000000",
+    "numberOfContributors": 83
+  },
+  {
+    "weekStartDateTs": "1403395200",
+    "numberOfContributors": 84
+  },
+  {
+    "weekStartDateTs": "1402790400",
+    "numberOfContributors": 82
+  },
+  {
+    "weekStartDateTs": "1402185600",
+    "numberOfContributors": 84
+  },
+  {
+    "weekStartDateTs": "1401580800",
+    "numberOfContributors": 87
+  },
+  {
+    "weekStartDateTs": "1400976000",
+    "numberOfContributors": 87
+  },
+  {
+    "weekStartDateTs": "1400371200",
+    "numberOfContributors": 89
+  },
+  {
+    "weekStartDateTs": "1399766400",
+    "numberOfContributors": 92
+  },
+  {
+    "weekStartDateTs": "1399161600",
+    "numberOfContributors": 94
+  },
+  {
+    "weekStartDateTs": "1398556800",
+    "numberOfContributors": 93
+  },
+  {
+    "weekStartDateTs": "1397952000",
+    "numberOfContributors": 90
+  },
+  {
+    "weekStartDateTs": "1397347200",
+    "numberOfContributors": 89
+  },
+  {
+    "weekStartDateTs": "1396742400",
+    "numberOfContributors": 90
+  },
+  {
+    "weekStartDateTs": "1396137600",
+    "numberOfContributors": 88
+  },
+  {
+    "weekStartDateTs": "1395532800",
+    "numberOfContributors": 90
+  },
+  {
+    "weekStartDateTs": "1394928000",
+    "numberOfContributors": 86
+  },
+  {
+    "weekStartDateTs": "1394323200",
+    "numberOfContributors": 89
+  },
+  {
+    "weekStartDateTs": "1393718400",
+    "numberOfContributors": 90
+  },
+  {
+    "weekStartDateTs": "1393113600",
+    "numberOfContributors": 86
+  },
+  {
+    "weekStartDateTs": "1392508800",
+    "numberOfContributors": 83
+  },
+  {
+    "weekStartDateTs": "1391904000",
+    "numberOfContributors": 77
+  },
+  {
+    "weekStartDateTs": "1391299200",
+    "numberOfContributors": 76
+  },
+  {
+    "weekStartDateTs": "1390694400",
+    "numberOfContributors": 77
+  },
+  {
+    "weekStartDateTs": "1390089600",
+    "numberOfContributors": 71
+  },
+  {
+    "weekStartDateTs": "1389484800",
+    "numberOfContributors": 68
+  },
+  {
+    "weekStartDateTs": "1388880000",
+    "numberOfContributors": 69
+  },
+  {
+    "weekStartDateTs": "1388275200",
+    "numberOfContributors": 62
+  },
+  {
+    "weekStartDateTs": "1387670400",
+    "numberOfContributors": 60
+  },
+  {
+    "weekStartDateTs": "1387065600",
+    "numberOfContributors": 60
+  },
+  {
+    "weekStartDateTs": "1386460800",
+    "numberOfContributors": 62
+  },
+  {
+    "weekStartDateTs": "1385856000",
+    "numberOfContributors": 66
+  },
+  {
+    "weekStartDateTs": "1385251200",
+    "numberOfContributors": 67
+  },
+  {
+    "weekStartDateTs": "1384646400",
+    "numberOfContributors": 67
+  },
+  {
+    "weekStartDateTs": "1384041600",
+    "numberOfContributors": 70
+  },
+  {
+    "weekStartDateTs": "1383436800",
+    "numberOfContributors": 74
+  },
+  {
+    "weekStartDateTs": "1382832000",
+    "numberOfContributors": 74
+  },
+  {
+    "weekStartDateTs": "1382227200",
+    "numberOfContributors": 78
+  },
+  {
+    "weekStartDateTs": "1381622400",
+    "numberOfContributors": 82
+  },
+  {
+    "weekStartDateTs": "1381017600",
+    "numberOfContributors": 83
+  },
+  {
+    "weekStartDateTs": "1380412800",
+    "numberOfContributors": 81
+  },
+  {
+    "weekStartDateTs": "1379808000",
+    "numberOfContributors": 79
+  },
+  {
+    "weekStartDateTs": "1379203200",
+    "numberOfContributors": 77
+  },
+  {
+    "weekStartDateTs": "1378598400",
+    "numberOfContributors": 74
+  },
+  {
+    "weekStartDateTs": "1377993600",
+    "numberOfContributors": 70
+  },
+  {
+    "weekStartDateTs": "1377388800",
+    "numberOfContributors": 70
+  },
+  {
+    "weekStartDateTs": "1376784000",
+    "numberOfContributors": 66
+  },
+  {
+    "weekStartDateTs": "1376179200",
+    "numberOfContributors": 61
+  },
+  {
+    "weekStartDateTs": "1375574400",
+    "numberOfContributors": 56
+  },
+  {
+    "weekStartDateTs": "1374969600",
+    "numberOfContributors": 52
+  },
+  {
+    "weekStartDateTs": "1374364800",
+    "numberOfContributors": 54
+  },
+  {
+    "weekStartDateTs": "1373760000",
+    "numberOfContributors": 51
+  },
+  {
+    "weekStartDateTs": "1373155200",
+    "numberOfContributors": 54
+  },
+  {
+    "weekStartDateTs": "1372550400",
+    "numberOfContributors": 55
+  },
+  {
+    "weekStartDateTs": "1371945600",
+    "numberOfContributors": 57
+  },
+  {
+    "weekStartDateTs": "1371340800",
+    "numberOfContributors": 55
+  },
+  {
+    "weekStartDateTs": "1370736000",
+    "numberOfContributors": 59
+  },
+  {
+    "weekStartDateTs": "1370131200",
+    "numberOfContributors": 59
+  },
+  {
+    "weekStartDateTs": "1369526400",
+    "numberOfContributors": 60
+  },
+  {
+    "weekStartDateTs": "1368921600",
+    "numberOfContributors": 58
+  },
+  {
+    "weekStartDateTs": "1368316800",
+    "numberOfContributors": 59
+  },
+  {
+    "weekStartDateTs": "1367712000",
+    "numberOfContributors": 59
+  },
+  {
+    "weekStartDateTs": "1367107200",
+    "numberOfContributors": 58
+  },
+  {
+    "weekStartDateTs": "1366502400",
+    "numberOfContributors": 56
+  },
+  {
+    "weekStartDateTs": "1365897600",
+    "numberOfContributors": 58
+  },
+  {
+    "weekStartDateTs": "1365292800",
+    "numberOfContributors": 57
+  },
+  {
+    "weekStartDateTs": "1364688000",
+    "numberOfContributors": 57
+  },
+  {
+    "weekStartDateTs": "1364083200",
+    "numberOfContributors": 57
+  },
+  {
+    "weekStartDateTs": "1363478400",
+    "numberOfContributors": 54
+  },
+  {
+    "weekStartDateTs": "1362873600",
+    "numberOfContributors": 50
+  },
+  {
+    "weekStartDateTs": "1362268800",
+    "numberOfContributors": 50
+  },
+  {
+    "weekStartDateTs": "1361664000",
+    "numberOfContributors": 51
+  },
+  {
+    "weekStartDateTs": "1361059200",
+    "numberOfContributors": 53
+  },
+  {
+    "weekStartDateTs": "1360454400",
+    "numberOfContributors": 51
+  },
+  {
+    "weekStartDateTs": "1359849600",
+    "numberOfContributors": 50
+  },
+  {
+    "weekStartDateTs": "1359244800",
+    "numberOfContributors": 52
+  },
+  {
+    "weekStartDateTs": "1358640000",
+    "numberOfContributors": 51
+  },
+  {
+    "weekStartDateTs": "1358035200",
+    "numberOfContributors": 56
+  },
+  {
+    "weekStartDateTs": "1357430400",
+    "numberOfContributors": 55
+  },
+  {
+    "weekStartDateTs": "1356825600",
+    "numberOfContributors": 53
+  },
+  {
+    "weekStartDateTs": "1356220800",
+    "numberOfContributors": 51
+  },
+  {
+    "weekStartDateTs": "1355616000",
+    "numberOfContributors": 51
+  },
+  {
+    "weekStartDateTs": "1355011200",
+    "numberOfContributors": 47
+  },
+  {
+    "weekStartDateTs": "1354406400",
+    "numberOfContributors": 47
+  },
+  {
+    "weekStartDateTs": "1353801600",
+    "numberOfContributors": 43
+  },
+  {
+    "weekStartDateTs": "1353196800",
+    "numberOfContributors": 42
+  },
+  {
+    "weekStartDateTs": "1352592000",
+    "numberOfContributors": 43
+  },
+  {
+    "weekStartDateTs": "1351987200",
+    "numberOfContributors": 40
+  },
+  {
+    "weekStartDateTs": "1351382400",
+    "numberOfContributors": 36
+  },
+  {
+    "weekStartDateTs": "1350777600",
+    "numberOfContributors": 29
+  },
+  {
+    "weekStartDateTs": "1350172800",
+    "numberOfContributors": 28
+  },
+  {
+    "weekStartDateTs": "1349568000",
+    "numberOfContributors": 29
+  },
+  {
+    "weekStartDateTs": "1348963200",
+    "numberOfContributors": 31
+  },
+  {
+    "weekStartDateTs": "1348358400",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1347753600",
+    "numberOfContributors": 34
+  },
+  {
+    "weekStartDateTs": "1347148800",
+    "numberOfContributors": 34
+  },
+  {
+    "weekStartDateTs": "1346544000",
+    "numberOfContributors": 34
+  },
+  {
+    "weekStartDateTs": "1345939200",
+    "numberOfContributors": 36
+  },
+  {
+    "weekStartDateTs": "1345334400",
+    "numberOfContributors": 40
+  },
+  {
+    "weekStartDateTs": "1344729600",
+    "numberOfContributors": 38
+  },
+  {
+    "weekStartDateTs": "1344124800",
+    "numberOfContributors": 33
+  },
+  {
+    "weekStartDateTs": "1343520000",
+    "numberOfContributors": 30
+  },
+  {
+    "weekStartDateTs": "1342915200",
+    "numberOfContributors": 30
+  },
+  {
+    "weekStartDateTs": "1342310400",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1341705600",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1341100800",
+    "numberOfContributors": 33
+  },
+  {
+    "weekStartDateTs": "1340496000",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1339891200",
+    "numberOfContributors": 33
+  },
+  {
+    "weekStartDateTs": "1339286400",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1338681600",
+    "numberOfContributors": 30
+  },
+  {
+    "weekStartDateTs": "1338076800",
+    "numberOfContributors": 29
+  },
+  {
+    "weekStartDateTs": "1337472000",
+    "numberOfContributors": 31
+  },
+  {
+    "weekStartDateTs": "1336867200",
+    "numberOfContributors": 26
+  },
+  {
+    "weekStartDateTs": "1336262400",
+    "numberOfContributors": 27
+  },
+  {
+    "weekStartDateTs": "1335657600",
+    "numberOfContributors": 28
+  },
+  {
+    "weekStartDateTs": "1335052800",
+    "numberOfContributors": 30
+  },
+  {
+    "weekStartDateTs": "1334448000",
+    "numberOfContributors": 29
+  },
+  {
+    "weekStartDateTs": "1333843200",
+    "numberOfContributors": 33
+  },
+  {
+    "weekStartDateTs": "1333238400",
+    "numberOfContributors": 34
+  },
+  {
+    "weekStartDateTs": "1332633600",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1332028800",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1331424000",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1330819200",
+    "numberOfContributors": 32
+  },
+  {
+    "weekStartDateTs": "1330214400",
+    "numberOfContributors": 30
+  },
+  {
+    "weekStartDateTs": "1329609600",
+    "numberOfContributors": 29
+  },
+  {
+    "weekStartDateTs": "1329004800",
+    "numberOfContributors": 29
+  },
+  {
+    "weekStartDateTs": "1328400000",
+    "numberOfContributors": 27
+  },
+  {
+    "weekStartDateTs": "1327795200",
+    "numberOfContributors": 25
+  },
+  {
+    "weekStartDateTs": "1327190400",
+    "numberOfContributors": 25
+  },
+  {
+    "weekStartDateTs": "1326585600",
+    "numberOfContributors": 24
+  },
+  {
+    "weekStartDateTs": "1325980800",
+    "numberOfContributors": 23
+  },
+  {
+    "weekStartDateTs": "1325376000",
+    "numberOfContributors": 23
+  },
+  {
+    "weekStartDateTs": "1324771200",
+    "numberOfContributors": 22
+  },
+  {
+    "weekStartDateTs": "1324166400",
+    "numberOfContributors": 21
+  },
+  {
+    "weekStartDateTs": "1323561600",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1322956800",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1322352000",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1321747200",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1321142400",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1320537600",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1319932800",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1319328000",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1318723200",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1318118400",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1317513600",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1316908800",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1316304000",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1315699200",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1315094400",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1314489600",
+    "numberOfContributors": 19
+  },
+  {
+    "weekStartDateTs": "1313884800",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1313280000",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1312675200",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1312070400",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1311465600",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1310860800",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1310256000",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1309651200",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1309046400",
+    "numberOfContributors": 18
+  },
+  {
+    "weekStartDateTs": "1308441600",
+    "numberOfContributors": 17
+  },
+  {
+    "weekStartDateTs": "1307836800",
+    "numberOfContributors": 15
+  },
+  {
+    "weekStartDateTs": "1307232000",
+    "numberOfContributors": 16
+  },
+  {
+    "weekStartDateTs": "1306627200",
+    "numberOfContributors": 15
+  },
+  {
+    "weekStartDateTs": "1306022400",
+    "numberOfContributors": 14
+  },
+  {
+    "weekStartDateTs": "1305417600",
+    "numberOfContributors": 11
+  },
+  {
+    "weekStartDateTs": "1304812800",
+    "numberOfContributors": 12
+  },
+  {
+    "weekStartDateTs": "1304208000",
+    "numberOfContributors": 12
+  },
+  {
+    "weekStartDateTs": "1303603200",
+    "numberOfContributors": 11
+  },
+  {
+    "weekStartDateTs": "1302998400",
+    "numberOfContributors": 10
+  },
+  {
+    "weekStartDateTs": "1302393600",
+    "numberOfContributors": 10
+  },
+  {
+    "weekStartDateTs": "1301788800",
+    "numberOfContributors": 10
+  },
+  {
+    "weekStartDateTs": "1301184000",
+    "numberOfContributors": 10
+  },
+  {
+    "weekStartDateTs": "1300579200",
+    "numberOfContributors": 10
+  },
+  {
+    "weekStartDateTs": "1299974400",
+    "numberOfContributors": 9
+  },
+  {
+    "weekStartDateTs": "1299369600",
+    "numberOfContributors": 8
+  },
+  {
+    "weekStartDateTs": "1298764800",
+    "numberOfContributors": 9
+  },
+  {
+    "weekStartDateTs": "1298160000",
+    "numberOfContributors": 10
+  },
+  {
+    "weekStartDateTs": "1297555200",
+    "numberOfContributors": 9
+  },
+  {
+    "weekStartDateTs": "1296950400",
+    "numberOfContributors": 9
+  },
+  {
+    "weekStartDateTs": "1296345600",
+    "numberOfContributors": 9
+  },
+  {
+    "weekStartDateTs": "1295740800",
+    "numberOfContributors": 9
+  },
+  {
+    "weekStartDateTs": "1295136000",
+    "numberOfContributors": 8
+  },
+  {
+    "weekStartDateTs": "1294531200",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1293926400",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1293321600",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1292716800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1292112000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1291507200",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1290297600",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1289692800",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1289088000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1287273600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1286668800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1286064000",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1285459200",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1284854400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1284249600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1283644800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1283040000",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1282435200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1281830400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1281225600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1280620800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1280016000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1279411200",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1278806400",
+    "numberOfContributors": 7
+  },
+  {
+    "weekStartDateTs": "1278201600",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1277596800",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1276992000",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1276387200",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1275782400",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1275177600",
+    "numberOfContributors": 6
+  },
+  {
+    "weekStartDateTs": "1274572800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1273968000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1273363200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1272758400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1272153600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1271548800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1270944000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1270339200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1268524800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1267315200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1266710400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1266105600",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1265500800",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1264896000",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1264291200",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1263686400",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1263081600",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1262476800",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1261872000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1261267200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1260662400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1260057600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1259452800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1258848000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1258243200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1257638400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1257033600",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1256428800",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1255824000",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1255219200",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1254614400",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1254009600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1253404800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1252800000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1252195200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1251590400",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1250380800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1249776000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1247961600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1246752000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1246147200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1245542400",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1244937600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1244332800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1243728000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1243123200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1241913600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1241308800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1240704000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1240099200",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1238889600",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1238284800",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1237680000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1237075200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1236470400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1235865600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1235260800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1234656000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1234051200",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1233446400",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1232841600",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1232236800",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1231632000",
+    "numberOfContributors": 5
+  },
+  {
+    "weekStartDateTs": "1231027200",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1230422400",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1229212800",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1228608000",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1228003200",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1227398400",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1226793600",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1226188800",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1225584000",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1224979200",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1224374400",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1223769600",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1223164800",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1222560000",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1221955200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1221350400",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1220140800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1219536000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1218931200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1209859200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1208649600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1208044800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1207440000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1206835200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1206230400",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1205625600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1205020800",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1204416000",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1203811200",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1203206400",
+    "numberOfContributors": 4
+  },
+  {
+    "weekStartDateTs": "1202601600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1201996800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1201392000",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1200787200",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1200182400",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1199577600",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1198972800",
+    "numberOfContributors": 3
+  },
+  {
+    "weekStartDateTs": "1198368000",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1197763200",
+    "numberOfContributors": 2
+  },
+  {
+    "weekStartDateTs": "1197158400",
+    "numberOfContributors": 2
+  }
+]

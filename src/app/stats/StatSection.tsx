@@ -1,14 +1,16 @@
-import { Box, Flex, Grid } from '@/ui/components';
+import { Box, Flex, Grid, GridProps } from '@/ui/components';
 import * as React from 'react';
 import { FC, ReactNode } from 'react';
 
-export const StatSection: FC<{
-  title: ReactNode;
-  bodyMainText: ReactNode;
-  bodySecondaryText: ReactNode;
-  caption: ReactNode;
-}> = ({ title, bodyMainText, bodySecondaryText, caption, ...rest }) => (
-  <Grid p={'24px'} height={'131px'} {...rest}>
+export const StatSection: FC<
+  {
+    title: ReactNode;
+    bodyMainText: ReactNode;
+    bodySecondaryText: ReactNode;
+    caption?: ReactNode;
+  } & GridProps
+> = ({ title, bodyMainText, bodySecondaryText, caption, ...rest }) => (
+  <Grid p={'24px'} height={caption ? '131px' : 'auto'} {...rest}>
     <Box color={'textTitle'} fontWeight="500" mb={'9px'} style={{ whiteSpace: 'nowrap' }}>
       {title}
     </Box>

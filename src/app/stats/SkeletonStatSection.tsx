@@ -7,7 +7,7 @@ import { StatSection } from './StatSection';
 
 export const SkeletonStatSection: FC<GridProps> = props => (
   <StatSection
-    title={<ExplorerSkeletonLoader width={'75%'} />}
+    title={(<ExplorerSkeletonLoader width={'75%'} />) as any}
     bodyMainText={<ExplorerSkeletonLoader width={'80px'} />}
     bodySecondaryText={<ExplorerSkeletonLoader width={'60px'} />}
     caption={<ExplorerSkeletonLoader width={'90%'} />}
