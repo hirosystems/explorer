@@ -13,13 +13,13 @@ Before you can run Explorer on your machine locally, you must first clone the [E
 Once you have cloned the Explorer repositories, you will need to install the following project dependencies:
 
 - [NodeJS](https://nodejs.dev/en/) that includes `npm`
-- [Yarn](https://yarnpkg.com/)
+- [PNPM](https://pnpm.io/installation/)
 - [Homebrew](https://brew.sh/)
 
 > **_NOTE:_**
 >
 > Although Homebrew is not required to install and operate Explorer, it is highly recommended.
 
-Open your terminal window, and make sure you are in the `/explorer` folder. Run the `yarn` to install the dependencies:
+Open your terminal window, and make sure you are in the `/explorer` folder. Run the below command to install the dependencies:
 
-`yarn`
+`pnpm i`
