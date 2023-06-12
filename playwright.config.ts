@@ -67,7 +67,7 @@ if (!process.env.PLAYWRIGHT_TEST_BASE_URL) {
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   config.webServer = {
-    command: 'yarn dev',
+    command: 'pnpm dev',
     port: 3000,
     timeout: 120 * 1000,
     reuseExistingServer: !process.env.CI,

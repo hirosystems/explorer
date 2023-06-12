@@ -6,7 +6,7 @@
     "build": "next telemetry disable && next build",
     "build:analyze": "next telemetry disable && ANALYZE=true next build",
     "dev": "next dev",
-    "lint": "yarn run lint:eslint && yarn run lint:prettier",
+    "lint": "pnpm run lint:eslint && pnpm run lint:prettier",
     "lint:eslint": "eslint --ext .ts,.tsx ./src",
     "lint:fix": "eslint --ext .ts,.tsx ./src/ -f unix --fix && prettier --write src/**/*.{ts,tsx} *.js",
     "lint:prettier": "prettier --check \"src/**/*.{ts,tsx}\" *.js *.json",

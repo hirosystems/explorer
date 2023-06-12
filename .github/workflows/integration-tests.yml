@@ -27,11 +27,11 @@
 #       - uses: actions/setup-node@v2
 #         with:
 #           node-version: '18.9.0'
-#       - run: yarn install
+#       - run: pnpm install
 #       - run: npx playwright install --with-deps
 #       - name: Run tests
 #         run: |
 #           xvfb-run --auto-servernum -- \
-#             yarn run test:e2e
+#             pnpm run test:e2e
 #         env:
 #           PLAYWRIGHT_TEST_BASE_URL: ${{ steps.vercel_action.outputs.preview-url }}
