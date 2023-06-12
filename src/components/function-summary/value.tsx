@@ -77,7 +77,16 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
   );
 };
 
-const getValue = (arg: { name: string; type: any; repr: any; value: any }, btc: null | string) => {
+const isJSONString = (str: string) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+const getValue = (arg: any, btc: null | string) => {
   if (arg.type === 'uint') {
     const value = arg?.repr?.replace('u', '');
     if (arg?.name?.includes('ustx')) {
@@ -94,7 +103,7 @@ const getValue = (arg: { name: string; type: any; repr: any; value: any }, btc: 
       </>
     );
   }
-  return arg?.repr;
+  return isJSONString(arg?.repr) ? JSON.parse(arg?.repr).value : arg?.repr;
 };
 
 export const FunctionSummaryClarityValue = ({
