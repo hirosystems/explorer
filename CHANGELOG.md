@@ -1,3 +1,10 @@
+## [1.106.1](https://github.com/hirosystems/explorer/compare/v1.106.0...v1.106.1) (2023-06-12)
+
+
+### Bug Fixes
+
+* percentage circle bug ([218a7da](https://github.com/hirosystems/explorer/commit/218a7dabf6bbab4979ab7143e12f653223e6c795))
+
 # [1.106.0](https://github.com/hirosystems/explorer/compare/v1.105.0...v1.106.0) (2023-05-31)
 
 
