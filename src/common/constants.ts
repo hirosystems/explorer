@@ -35,6 +35,8 @@ export const DEFAULT_MAINNET_SERVER =
 export const DEFAULT_TESTNET_SERVER =
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER || 'https://api.testnet.hiro.so';
 
+export const SYSTEM_STATUS_URL = process.env.SYSTEM_STATUS_URL || 'https://status.hiro.so';
+
 export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
 
 export const VERSION = process.env.VERSION || process.env.VERSION || packageJson.version;

@@ -7,11 +7,16 @@ import {
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { ConnectState, sandboxSlice } from '../../app/sandbox/sandbox-slice';
+import {
+  TestnetAvailabilityState,
+  testnetAvailabilitySlice,
+} from '@/components/testnet-availability/testnet-availability-slice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
   connect: sandboxSlice.reducer,
+  testnetAvailability: testnetAvailabilitySlice.reducer,
   ...filterReducers,
 });
 
@@ -34,6 +39,7 @@ export interface RootState extends TxFilters {
   modal: ModalState;
   search: SearchState;
   connect: ConnectState;
+  testnetAvailability: TestnetAvailabilityState;
 }
 
 export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];

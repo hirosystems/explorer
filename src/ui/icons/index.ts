@@ -6,3 +6,4 @@ export * from './CheckIcon';
 export * from './StxIcon';
 export * from './CodeIcon';
 export * from './FunctionIcon';
+export * from './ExclamationCircleIcon';
