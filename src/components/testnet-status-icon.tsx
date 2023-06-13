@@ -4,7 +4,7 @@ import { FlaskIcon, ExclamationCircleIcon } from '@/ui/icons';
 import { useColorMode } from '@chakra-ui/react';
 import { useTestnetStatus } from '@/app/common/queries/useTestnetStatus';
 import { useApi } from '@/common/api/client';
-import { ONE_MINUTE } from '@/app/common/queries/query-stale-time';
+import dayjs from 'dayjs';
 
 export const TestnetPendingIcon = (): React.ReactElement => {
   const colorMode = useColorMode().colorMode;
@@ -36,9 +36,9 @@ const TestnetStatusIcon = (): React.ReactElement => {
 function showWarn(ts: string | null | undefined): boolean {
   if (!ts) return true;
   try {
-    const diffInMs = Date.now() - new Date(ts).getTime();
-    if (diffInMs > ONE_MINUTE * 60) return true;
-    return false;
+    const now = dayjs();
+    const blockTs = dayjs(ts);
+    return now.diff(blockTs, 'hour') > 1;
   } catch (_) {
     return true;
   }
@@ -47,12 +47,7 @@ function showWarn(ts: string | null | undefined): boolean {
 function generateTitle(ts: string | null | undefined) {
   if (!ts) return 'Testnet might be experiencing downtime!';
   try {
-    const diffInMs = Date.now() - new Date(ts).getTime();
-    const diffInMin = Math.floor(diffInMs / 1000 / 60);
-
-    if (diffInMin > 1) return `Last block was processed ${diffInMin} minutes ago.`;
-    if (diffInMin < 1) return 'Last block was processed a few seconds ago.';
-    return 'Last block was processed a minute ago.';
+    return 'Last block processed - ' + dayjs(ts).fromNow();
   } catch (_) {
     return 'Testnet might be experiencing downtime!';
   }
