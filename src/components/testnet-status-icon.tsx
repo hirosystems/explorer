@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Icon, Spinner } from '@/ui/components';
 import { FlaskIcon, ExclamationCircleIcon } from '@/ui/icons';
-import { SYSTEM_STATUS_URL } from '@/common/constants';
 import { useColorMode } from '@chakra-ui/react';
 import { useTestnetStatus } from '@/app/common/queries/useTestnetStatus';
 import { useApi } from '@/common/api/client';
@@ -13,7 +12,6 @@ export const TestnetPendingIcon = (): React.ReactElement => {
 };
 
 const TestnetStatusIcon = (): React.ReactElement => {
-  const redirectToStatusPage = () => window.open(SYSTEM_STATUS_URL, '_blank');
   const colorMode = useColorMode().colorMode;
   const api = useApi();
   const { isLoading, data: chainTipTs } = useTestnetStatus(api);
@@ -29,7 +27,6 @@ const TestnetStatusIcon = (): React.ReactElement => {
         color={'orange'}
         size="16px"
         mr="4px"
-        onClick={redirectToStatusPage}
         title={title}
         cursor={'pointer'}
       />
@@ -64,9 +61,9 @@ function generateTitle(ts: string | null | undefined) {
     const diffInMs = Date.now() - new Date(ts).getTime();
     const diffInMin = Math.floor(diffInMs / 1000 / 60);
 
-    if (diffInMin > 1) return `Last block added ${diffInMin} minutes ago.`;
-    if (diffInMin < 1) return 'Last block processed a few seconds ago.';
-    return 'Last block processed a minute ago.';
+    if (diffInMin > 1) return `Last block was processed ${diffInMin} minutes ago.`;
+    if (diffInMin < 1) return 'Last block was processed a few seconds ago.';
+    return 'Last block was processed a minute ago.';
   } catch (_) {
     return 'Testnet might be experiencing downtime!';
   }
