@@ -64,9 +64,9 @@ function generateTitle(ts: string | null | undefined) {
     const diffInMs = Date.now() - new Date(ts).getTime();
     const diffInMin = Math.floor(diffInMs / 1000 / 60);
 
-    if (diffInMin > 1) return `Last txn processed ${diffInMin} minutes ago.`;
-    if (diffInMin < 1) return 'Last txn processed a few seconds ago.';
-    return 'Last txn processed a minute ago.';
+    if (diffInMin > 1) return `Last block added ${diffInMin} minutes ago.`;
+    if (diffInMin < 1) return 'Last block processed a few seconds ago.';
+    return 'Last block processed a minute ago.';
   } catch (_) {
     return 'Testnet might be experiencing downtime!';
   }
