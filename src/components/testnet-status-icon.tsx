@@ -19,23 +19,12 @@ const TestnetStatusIcon = (): React.ReactElement => {
   const title = useMemo(() => generateTitle(chainTipTs), [chainTipTs]);
 
   if (isLoading) return <TestnetPendingIcon />;
-
-  if (showWarn(chainTipTs))
-    return (
-      <Icon
-        as={ExclamationCircleIcon}
-        color={'orange'}
-        size="16px"
-        mr="4px"
-        title={title}
-        cursor={'pointer'}
-      />
-    );
+  const showWarning = showWarn(chainTipTs);
 
   return (
     <Icon
-      as={FlaskIcon}
-      color={`brand.${colorMode}`}
+      as={showWarning ? ExclamationCircleIcon : FlaskIcon}
+      color={showWarning ? 'orange' : `brand.${colorMode}`}
       size="16px"
       mr="4px"
       title={title}
