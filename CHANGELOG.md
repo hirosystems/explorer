@@ -1,3 +1,11 @@
+## [1.106.2](https://github.com/hirosystems/explorer/compare/v1.106.1...v1.106.2) (2023-06-13)
+
+
+### Bug Fixes
+
+* doc mismatch ([9d0fc25](https://github.com/hirosystems/explorer/commit/9d0fc256447378e13fab547abed3f554b8e9b4b9))
+* replace yarn usage with pnpm ([726f23f](https://github.com/hirosystems/explorer/commit/726f23fa7061ccaf322970b4d3f6f6140d7de9e6))
+
 ## [1.106.1](https://github.com/hirosystems/explorer/compare/v1.106.0...v1.106.1) (2023-06-12)
 
 
