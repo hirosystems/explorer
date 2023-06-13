@@ -7,7 +7,7 @@ import { FC } from 'react';
 import dynamic from 'next/dynamic';
 import { TestnetPendingIcon } from './testnet-status-icon';
 
-const TestnetAvailibityIcon = dynamic(() => import('./testnet-status-icon'), {
+const TestnetStatusIcon = dynamic(() => import('./testnet-status-icon'), {
   loading: () => <TestnetPendingIcon />,
   ssr: false,
 });
@@ -18,7 +18,7 @@ export const NetworkModeBanner: FC = () => {
   return (
     <Badge bg="white" border={'none'}>
       <Flex alignItems="center" as={'span'}>
-        <TestnetAvailibityIcon />
+        <TestnetStatusIcon />
         <Text color={`textTitle.light`} whiteSpace={'nowrap'} as={'span'}>
           {capitalize(networkMode)} mode
         </Text>
