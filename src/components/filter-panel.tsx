@@ -111,7 +111,7 @@ export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
         width="100%"
         borderRadius="0 0 16px 16px"
         willChange="transform, opacity"
-        boxShadow="high"
+        boxShadow="lg"
         pointerEvents="all"
         transition={`280ms cubic-bezier(0.4, 0, 0.2, 1)`}
         transitionProperty="opacity, transform"
