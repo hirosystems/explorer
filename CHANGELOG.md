@@ -1,3 +1,10 @@
+## [1.106.4](https://github.com/hirosystems/explorer/compare/v1.106.3...v1.106.4) (2023-06-16)
+
+
+### Bug Fixes
+
+* filter modal overflow and shadow ([07482d4](https://github.com/hirosystems/explorer/commit/07482d45e42f3c55a24b3b76096aa17301e4e100))
+
 ## [1.106.3](https://github.com/hirosystems/explorer/compare/v1.106.2...v1.106.3) (2023-06-16)
 
 
