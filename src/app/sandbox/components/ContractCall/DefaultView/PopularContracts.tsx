@@ -9,7 +9,7 @@ import { TbChartBar, TbCurrencyBitcoin, TbCurrencyDollar, TbSignature } from 're
 
 const defaultContracts = (address: string) => [
   {
-    name: 'pox-2',
+    name: 'pox-3',
     address,
     description: '',
     icon: TbCurrencyBitcoin,
