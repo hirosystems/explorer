@@ -24,7 +24,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
       enableReinitialize={true}
       initialValues={{
         principal: rootContractAddress,
-        contract_name: 'pox',
+        contract_name: 'pox-3',
       }}
       validate={values => {
         const errors: any = {};
