@@ -1,3 +1,11 @@
+## [1.106.3](https://github.com/hirosystems/explorer/compare/v1.106.2...v1.106.3) (2023-06-16)
+
+
+### Bug Fixes
+
+* replace pox-2 by pox-3 ([915bef8](https://github.com/hirosystems/explorer/commit/915bef8eedee7d9c5e20e7d621d65cad0a4ee31a))
+* use pox-3 as default contract ([926bd13](https://github.com/hirosystems/explorer/commit/926bd13d52ed517fe6795061bca6c9a8af656051))
+
 ## [1.106.2](https://github.com/hirosystems/explorer/compare/v1.106.1...v1.106.2) (2023-06-13)
 
 
