@@ -17,9 +17,9 @@ export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResul
   const hasType = !type?.includes('UnknownType');
 
   const getReprValue = (item: any) => {
-    let reprValue = item?.value ?? 'none';
-    if (item?.type?.includes('list')) {
-      reprValue = item.value?.map((listEntry: any) => listEntry?.value).join(', ');
+    let reprValue = item.value ?? 'none';
+    if (item.type.includes('list')) {
+      reprValue = item.value.map((listEntry: any) => listEntry.value).join(', ');
     }
     return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue.toString();
   };
