@@ -118,7 +118,7 @@ const getConditionTicker = (condition: PostCondition) => {
 
 const getAmount = (condition: PostCondition) => {
   if (condition.type === 'stx') {
-    return Number(condition.amount);
+    return microStxToStx(Number(condition.amount) * 100);
   }
 
   if (condition.type === 'fungible') {
@@ -176,8 +176,8 @@ const Condition = ({
             ? ftDecimals((condition as any).amount, ftMetadata?.decimals || 0)
             : getAmount(condition)}{' '}
           {ftMetadata?.symbol || getConditionTicker(condition)}
-          {getConditionTicker(condition) === 'STX' && (
-            <StxPriceButton tx={tx} value={Number(getAmount(condition))} />
+          {condition.type === 'stx' && (
+            <StxPriceButton tx={tx} value={Number(condition.amount) * 100} />
           )}
         </>
       }
