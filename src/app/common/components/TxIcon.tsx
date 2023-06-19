@@ -15,13 +15,16 @@ import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): IconType => {
-  if (txType === 'smart_contract') {
-    return BsCodeSlash;
+  switch (txType) {
+    case 'smart_contract':
+      return BsCodeSlash;
+
+    case 'contract_call':
+      return FunctionIcon;
+
+    default:
+      return StxIcon;
   }
-  if (txType === 'contract_call') {
-    return FunctionIcon;
-  }
-  return StxIcon;
 };
 
 const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
