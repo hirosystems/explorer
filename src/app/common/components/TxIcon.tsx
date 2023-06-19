@@ -10,6 +10,8 @@ import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
 import { IconType } from 'react-icons';
 import { BsCodeSlash } from 'react-icons/bs';
+import { TbBrandCoinbase } from 'react-icons/tb';
+import { RxCube } from 'react-icons/rx';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
@@ -21,6 +23,12 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): IconType => {
 
     case 'contract_call':
       return FunctionIcon;
+
+    case 'coinbase':
+      return TbBrandCoinbase;
+
+    case 'poison_microblock':
+      return RxCube;
 
     default:
       return StxIcon;
