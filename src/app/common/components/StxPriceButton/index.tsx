@@ -25,7 +25,9 @@ export const StxPriceButton: FC<StxPriceButtonProps> = ({ tx, value }) => {
   const [initialRender, setInitialRender] = useState(true);
   const toggleStxPrice = useCallback(() => {
     if (initialRender) setInitialRender(false);
-    historicalStxPrice && setTooltipContentIndex((tooltipContentIndex + 1) % tooltipContent.length);
+    if (historicalStxPrice !== undefined) {
+      setTooltipContentIndex((tooltipContentIndex + 1) % tooltipContent.length);
+    }
   }, [initialRender, tooltipContentIndex, historicalStxPrice]);
   const showCurrentPriceForCompletedTransactions = tooltipContentIndex !== 1;
   const currentPriceFormatted = useMemo(
