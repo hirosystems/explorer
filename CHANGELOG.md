@@ -1,3 +1,10 @@
+## [1.106.5](https://github.com/hirosystems/explorer/compare/v1.106.4...v1.106.5) (2023-06-20)
+
+
+### Bug Fixes
+
+* update title for overview ([b0697cc](https://github.com/hirosystems/explorer/commit/b0697cc0426e33cecfc34452bd2563a59f5ca401))
+
 ## [1.106.4](https://github.com/hirosystems/explorer/compare/v1.106.3...v1.106.4) (2023-06-16)
 
 
