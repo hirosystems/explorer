@@ -1,3 +1,11 @@
+## [1.106.6](https://github.com/hirosystems/explorer/compare/v1.106.5...v1.106.6) (2023-06-21)
+
+
+### Bug Fixes
+
+* stxPriceButton click gives NaN ([e19e855](https://github.com/hirosystems/explorer/commit/e19e855ae1e07f3e9e6c20849d1baf0194a8cac9))
+* stxPriceButton click gives NaN ([4fde072](https://github.com/hirosystems/explorer/commit/4fde072d428ca0210e93b8948cd4bdce32bbc843))
+
 ## [1.106.5](https://github.com/hirosystems/explorer/compare/v1.106.4...v1.106.5) (2023-06-20)
 
 
