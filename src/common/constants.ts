@@ -84,3 +84,8 @@ export const TransactionStatus: Record<string, TxStatus> = {
 };
 
 export const BTC_BNS_CONTRACT = 'SP000000000000000000002Q6VF78.bns::names';
+
+export const SUBNETS_PARENT_NETWORK_IDS = {
+  mainnet: '0xff000000',
+  testnet: '0x17000000',
+};
