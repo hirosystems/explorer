@@ -10,18 +10,22 @@ interface FunctionSummaryResultProps {
   result: Transaction['tx_result'];
   txStatus: string | undefined;
 }
+interface ReprValueProps {
+  type: string;
+  value: string | number | (string | number)[];
+}
 
 export const FunctionSummaryResult = ({ result, txStatus }: FunctionSummaryResultProps) => {
   if (!result) return null;
   const { success, type, value } = cvToJSON(hexToCV(result.hex));
   const hasType = !type?.includes('UnknownType');
 
-  const getReprValue = (item: any) => {
-    let reprValue = item.value ?? 'none';
-    if (item.type.includes('list')) {
-      reprValue = item.value.map((listEntry: any) => listEntry.value).join(', ');
+  const getReprValue = ({ type, value }: ReprValueProps) => {
+    let reprValue = value ?? 'none';
+    if (type.includes('list') && Array.isArray(value)) {
+      reprValue = value.map((listEntry: any) => listEntry.value).join(', ');
     }
-    return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue.toString();
+    return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue;
   };
 
   if (type?.includes('tuple')) {
