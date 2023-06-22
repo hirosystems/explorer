@@ -28,11 +28,18 @@ const buildCustomNetworkUrl = (url: string) => {
   return `${hostname === 'localhost' ? 'http://' : 'https://'}${hostname}${port ? `:${port}` : ''}`;
 };
 
-const fetchCustomNetworkId: (url: string) => Promise<ChainID | undefined> = (url: string) => {
+const fetchCustomNetworkId: (url: string, isSubnet: boolean) => Promise<ChainID | undefined> = (
+  url,
+  isSubnet
+) => {
   return fetchFromApi(url)(DEFAULT_V2_INFO_ENDPOINT)
     .then(res => res.json())
     .then(res =>
-      Object.values(ChainID).includes(res.network_id) ? (res.network_id as ChainID) : undefined
+      !isSubnet
+        ? Object.values(ChainID).includes(res.network_id)
+          ? (res.network_id as ChainID)
+          : undefined
+        : res.network_id
     )
     .catch();
 };
@@ -75,7 +82,10 @@ export const AddNetworkForm: React.FC = () => {
             errors.url = 'Please check the formatting of the URL passed.';
           } else {
             try {
-              const networkId = await fetchCustomNetworkId(buildCustomNetworkUrl(values.url));
+              const networkId = await fetchCustomNetworkId(
+                buildCustomNetworkUrl(values.url),
+                values.isSubnet
+              );
               if (!networkId) {
                 errors.genericError = 'The API did not return a valid network_id.';
               }
@@ -92,7 +102,7 @@ export const AddNetworkForm: React.FC = () => {
       }}
       onSubmit={async ({ url, label, isSubnet }) => {
         const networkUrl = buildCustomNetworkUrl(url);
-        const networkId = await fetchCustomNetworkId(networkUrl);
+        const networkId = await fetchCustomNetworkId(networkUrl, isSubnet);
 
         if (networkId) {
           const network: Network = {
