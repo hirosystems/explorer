@@ -71,6 +71,7 @@ export const StatusBar: FC = () => {
               target="_blank"
               css={css`
                 display: inline;
+                text-decoration: underline;
               `}
             >
               Hiro status page
