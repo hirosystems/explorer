@@ -176,9 +176,7 @@ const Condition = ({
             ? ftDecimals((condition as any).amount, ftMetadata?.decimals || 0)
             : getAmount(condition)}
           {ftMetadata?.symbol || getConditionTicker(condition)}
-          {condition.type === 'stx' && (
-            <StxPriceButton tx={tx} value={Number(condition.amount) * 100} />
-          )}
+          {condition.type === 'stx' && <StxPriceButton tx={tx} value={Number(condition.amount)} />}
         </>
       }
       subTitle={truncateMiddle(getAddressValue(condition), 8)}
