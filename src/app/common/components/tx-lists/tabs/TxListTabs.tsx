@@ -1,5 +1,6 @@
 import { CSVDownloadButton } from '@/components/CSVDownloadButton';
 import { FilterButton } from '@/components/filter-button';
+import { Box } from '@/ui/Box';
 import { Tab } from '@/ui/Tab';
 import { TabList } from '@/ui/TabList';
 import { TabPanel } from '@/ui/TabPanel';
@@ -22,8 +23,10 @@ export const TxListTabs: FC<{
       <TabList>
         <Tab>Confirmed</Tab>
         <Tab>Pending</Tab>
-        {isAddressPage && <CSVDownloadButton />}
-        <FilterButton />
+        <Box marginLeft={'auto'} display={'flex'} gap={4}>
+          {isAddressPage && <CSVDownloadButton />}
+          <FilterButton />
+        </Box>
       </TabList>
       <TabPanels>
         <TabPanel>{confirmedList}</TabPanel>
