@@ -1,3 +1,10 @@
+# [1.107.0](https://github.com/hirosystems/explorer/compare/v1.106.6...v1.107.0) (2023-06-23)
+
+
+### Features
+
+* skip network id check for subnets ([b79d7b5](https://github.com/hirosystems/explorer/commit/b79d7b5dba01974fc526dcde31faecbcb13d9bf0))
+
 ## [1.106.6](https://github.com/hirosystems/explorer/compare/v1.106.5...v1.106.6) (2023-06-21)
 
 
