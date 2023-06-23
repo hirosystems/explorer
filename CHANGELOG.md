@@ -1,3 +1,10 @@
+## [1.107.1](https://github.com/hirosystems/explorer/compare/v1.107.0...v1.107.1) (2023-06-23)
+
+
+### Bug Fixes
+
+* add underline to the link in alert ([8c0f48e](https://github.com/hirosystems/explorer/commit/8c0f48ed741ef0064f094c1d4ebca75e6397f896))
+
 # [1.107.0](https://github.com/hirosystems/explorer/compare/v1.106.6...v1.107.0) (2023-06-23)
 
 
