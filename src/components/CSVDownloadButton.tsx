@@ -2,7 +2,6 @@
 
 import { Box, Icon } from '@/ui/components';
 import { CSVDownload } from 'react-csv';
-import { Caption } from '@/ui/typography';
 import React, { memo, useEffect, useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
 import { useRouter } from 'next/router';
@@ -26,17 +25,19 @@ export const CSVDownloadButton = memo(() => {
 
   return (
     <Box position="relative" marginLeft={'auto'} alignSelf={'center'}>
-      <Caption
-        display="flex"
+      <Box
+        as="button"
         alignItems="center"
+        color={'textCaption.light'}
+        display="flex"
+        fontSize="12px"
         _hover={{ cursor: 'pointer', color: 'textTitle' }}
         data-test="csv-download-button"
-        position="relative"
         onClick={donwloadCSV}
       >
         <Icon as={FiDownload} mr="4px" color="currentColor" size="13px" strokeWidth={1.5} />
         Export as CSV
-      </Caption>
+      </Box>
       {!!transactionData.length && <CSVDownload data={transactionData} />}
     </Box>
   );
