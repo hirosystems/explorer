@@ -1,3 +1,17 @@
+# [1.108.0](https://github.com/hirosystems/explorer/compare/v1.107.1...v1.108.0) (2023-06-23)
+
+
+### Bug Fixes
+
+* changed logic to get the exact dollar value ([a3266f6](https://github.com/hirosystems/explorer/commit/a3266f671bb9bdc6952d973d2a267445e0044fae))
+* modified logic for stx button ([fe2b26d](https://github.com/hirosystems/explorer/commit/fe2b26d5d74ba0e28da05178591a26dd267141ce))
+* reverted back to initial logic ([755113e](https://github.com/hirosystems/explorer/commit/755113ec568c6d98a8ddb8e54d41fcabc93935b8))
+
+
+### Features
+
+* add stx price button to post conditions ([0f95530](https://github.com/hirosystems/explorer/commit/0f9553046a1d964e47ad361754badfab3804274f))
+
 ## [1.107.1](https://github.com/hirosystems/explorer/compare/v1.107.0...v1.107.1) (2023-06-23)
 
 
