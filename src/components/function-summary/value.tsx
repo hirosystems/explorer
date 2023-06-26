@@ -1,6 +1,6 @@
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { NetworkModes } from '@/common/types/network';
-import { microToStacks } from '@/common/utils';
+import { isJSONString, microToStacks } from '@/common/utils';
 import { TxLink } from '@/components/links';
 import { Box, Flex, TextLink } from '@/ui/components';
 import { Caption, Text } from '@/ui/typography';
@@ -77,16 +77,14 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
   );
 };
 
-const isJSONString = (str: string) => {
-  try {
-    JSON.parse(str);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
-const getValue = (arg: any, btc: null | string) => {
+export const getValue = (
+  arg: {
+    type: string;
+    repr: string;
+    name: string;
+  },
+  btc: null | string
+) => {
   if (arg.type === 'uint') {
     const value = arg.repr.replace('u', '');
     if (arg.name.includes('ustx')) {

@@ -258,8 +258,8 @@ export const getAssetNameParts = (fullyRealizedName: string) => {
 export const getMemoString = (string: string): string | null =>
   string
     ? Buffer.from(string.replace('0x', '').replace(/^(0{2})+|(0{2})+$/g, ''), 'hex').toString(
-        'utf8'
-      )
+      'utf8'
+    )
     : null;
 
 export const startPad = (n: number, z = 2, s = '0'): string =>
@@ -407,10 +407,10 @@ export function getContractId(
   return isContract
     ? txPageQuery
     : transaction?.tx_type === 'smart_contract'
-    ? transaction.smart_contract.contract_id
-    : transaction?.tx_type === 'contract_call'
-    ? transaction.contract_call.contract_id
-    : undefined;
+      ? transaction.smart_contract.contract_id
+      : transaction?.tx_type === 'contract_call'
+        ? transaction.contract_call.contract_id
+        : undefined;
 }
 
 export const usdFormatter = new Intl.NumberFormat('en-US', {
@@ -484,4 +484,13 @@ export function microStxToStx(microStx: string | number): number | string {
 export const getFaviconName = (txStatus?: TxStatus) => {
   const suffix = txStatus === 'pending' ? 'pending' : txStatus === 'failed' ? 'failed' : 'success';
   return `favicon${txStatus ? `-${suffix}` : ''}`;
+};
+
+export const isJSONString = (str: string) => {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
