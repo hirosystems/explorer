@@ -14,18 +14,18 @@ interface ReprValueProps {
   value: string | number | (string | number)[];
 }
 
+const getReprValue = ({ type, value }: ReprValueProps) => {
+  let reprValue = value.toString() ?? 'none';
+  if (type.includes('list') && Array.isArray(value)) {
+    reprValue = value.map((listEntry: any) => listEntry.value).join(', ');
+  }
+  return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue;
+};
+
 export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) => {
   if (!result) return null;
   const { success, type, value } = cvToJSON(hexToCV(result.hex));
   const hasType = !type?.includes('UnknownType');
-
-  const getReprValue = ({ type, value }: ReprValueProps) => {
-    let reprValue = value ?? 'none';
-    if (type.includes('list') && Array.isArray(value)) {
-      reprValue = value.map((listEntry: any) => listEntry.value).join(', ');
-    }
-    return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue;
-  };
 
   if (type?.includes('tuple')) {
     return (
