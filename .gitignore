@@ -14,6 +14,7 @@ _old/
 yalc.lock
 .vercel
 yarn-error.log
+coverage
 
 # Sentry
 .sentryclirc

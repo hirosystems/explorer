@@ -138,8 +138,8 @@ dependencies:
     specifier: 8.1.4
     version: 8.1.4(react-dom@18.2.0)(react@18.2.0)
   husky:
-    specifier: 6.0.0
-    version: 6.0.0
+    specifier: 8.0.3
+    version: 8.0.3
   mdi-react:
     specifier: 7.5.0
     version: 7.5.0(react@18.2.0)
@@ -12946,8 +12946,10 @@ packages:
     engines: {node: '>=10.17.0'}
     dev: true
 
-  /husky@6.0.0:
-    resolution: {integrity: sha512-SQS2gDTB7tBN486QSoKPKQItZw97BMOd+Kdb6ghfpBc0yXyzrddI0oDV5MkDAbuB4X2mO3/nj60TRMcYxwzZeQ==}
+  /husky@8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: false
 
   /iconv-lite@0.4.24:
