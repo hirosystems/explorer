@@ -14,4 +14,8 @@ jobs:
       - run: npm install -g pnpm
       - run: pnpm i
       - name: Run unit tests
-        run: pnpm run test:unit
+        run: pnpm run test:unit --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
