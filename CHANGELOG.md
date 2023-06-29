@@ -1,3 +1,10 @@
+## [1.109.1](https://github.com/hirosystems/explorer/compare/v1.109.0...v1.109.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* codecov on main branch ([9e5e77b](https://github.com/hirosystems/explorer/commit/9e5e77bef76c52c00e6b00aa99be8380f646c59a))
+
 # [1.109.0](https://github.com/hirosystems/explorer/compare/v1.108.0...v1.109.0) (2023-06-29)
 
 
