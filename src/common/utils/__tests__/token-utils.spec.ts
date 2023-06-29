@@ -1,5 +1,5 @@
-import { imageCanonicalUriFromFtMetadata, isFtNameLikeStx } from './token-utils';
-import { isIconUrl } from './url-utils';
+import { imageCanonicalUriFromFtMetadata, isFtNameLikeStx } from '../token-utils';
+import { isIconUrl } from '../url-utils';
 
 describe(isFtNameLikeStx.name, () => {
   it('detect impersonating token names', () => {
