@@ -1,6 +1,16 @@
 name: Code checks
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
+    tags-ignore:
+      - '**'
+    paths-ignore:
+      - '**/CHANGELOG.md'
+      - '**/package.json'
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   test-unit:
