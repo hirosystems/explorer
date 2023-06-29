@@ -34,7 +34,7 @@ Please **do not** use the issue tracker for personal support requests or to ask 
 Development of the Explorer happens in the open on GitHub, and we are grateful to the community for contributing bugfixes and improvements. Read below to learn how you can take part in improving the Stacks Explorer.
 
 ### Code of Conduct
-We have adopted the [Contributor Covenant](https://www.contributor-covenant.org/), and we expect project participants to adhere to it. 
+Please read the Explorer's [Code of conduct](https://github.com/hirosystems/explorer/blob/main/CODE_OF_CONDUCT.md) since we expect project participants to adhere to it. 
 
 ### Contributing Guide
 Read our [contributing guide](https://github.com/hirosystems/explorer/blob/main/.github/CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes.
