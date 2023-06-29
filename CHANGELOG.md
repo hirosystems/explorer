@@ -1,3 +1,10 @@
+## [1.109.3](https://github.com/hirosystems/explorer/compare/v1.109.2...v1.109.3) (2023-06-29)
+
+
+### Bug Fixes
+
+* test coverage report ([60f095b](https://github.com/hirosystems/explorer/commit/60f095b9eb2059d558b6c799d47bf5e2fbac7a15))
+
 ## [1.109.2](https://github.com/hirosystems/explorer/compare/v1.109.1...v1.109.2) (2023-06-29)
 
 
