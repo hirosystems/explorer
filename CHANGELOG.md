@@ -1,3 +1,10 @@
+## [1.109.2](https://github.com/hirosystems/explorer/compare/v1.109.1...v1.109.2) (2023-06-29)
+
+
+### Bug Fixes
+
+* readme codecov badge ([90abb61](https://github.com/hirosystems/explorer/commit/90abb61a4ab39778a96c2b1dfd24f77069c5e380))
+
 ## [1.109.1](https://github.com/hirosystems/explorer/compare/v1.109.0...v1.109.1) (2023-06-29)
 
 
