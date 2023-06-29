@@ -5,7 +5,7 @@
 
 
 ![CI/CD](https://github.com/blockstack/explorer/actions/workflows/ci.yml/badge.svg)
-[![codecov](https://codecov.io/gh/hirosystems/explorer/branch/master/graph/badge.svg?token=03EGMFTMO0)](https://codecov.io/gh/hirosystems/explorer)
+[![codecov](https://codecov.io/gh/hirosystems/explorer/branch/main/graph/badge.svg?token=03EGMFTMO0)](https://codecov.io/gh/hirosystems/explorer)
 
 | Environment | Status                                                                                   |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
