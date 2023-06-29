@@ -1,3 +1,17 @@
+# [1.109.0](https://github.com/hirosystems/explorer/compare/v1.108.0...v1.109.0) (2023-06-29)
+
+
+### Bug Fixes
+
+* semantic release ([3e45303](https://github.com/hirosystems/explorer/commit/3e453037ef81064a86ab7a297f09b5bddae037a0))
+* semantic release ([ac01453](https://github.com/hirosystems/explorer/commit/ac0145360edb3c592c7d852167a6e98a7db9bea3))
+* semantic release ([caccaa6](https://github.com/hirosystems/explorer/commit/caccaa6432b3ed4aee0d9379e59069a275593042))
+
+
+### Features
+
+* codecov integration ([710a9ca](https://github.com/hirosystems/explorer/commit/710a9caccdfc3be7eaa89f66fa62ec8a25dbc0e1))
+
 # [1.108.0](https://github.com/hirosystems/explorer/compare/v1.107.1...v1.108.0) (2023-06-23)
 
 
