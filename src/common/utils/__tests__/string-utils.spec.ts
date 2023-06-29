@@ -1,4 +1,4 @@
-import { convertUnicodeToAscii } from './string-utils';
+import { convertUnicodeToAscii } from '../string-utils';
 
 describe(convertUnicodeToAscii.name, () => {
   it('should convert unicode to ascii', () => {

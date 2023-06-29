@@ -1,9 +1,9 @@
 import { renderHook, act } from '@testing-library/react';
-import { useTxsCSVData } from './useTxsCSVData';
+import { useTxsCSVData } from '../useTxsCSVData';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
-import { store } from '../state/store';
-import { addressBalanceMockData, addressTxsMockData, mockAddress } from '../mockData/txsData';
+import { store } from '../../state/store';
+import { addressBalanceMockData, addressTxsMockData, mockAddress } from '../../mockData/txsData';
 import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
 
 const queryClient = new QueryClient();
