@@ -7,17 +7,7 @@ import { css } from '@emotion/react';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
 import { RiCloseLine } from 'react-icons/ri';
-
-export enum Indicator {
-  none = 'none',
-  minor = 'minor',
-  major = 'major',
-  critical = 'critical',
-}
-interface StatusProps {
-  description: string;
-  indicator: Indicator;
-}
+import { Statuspage, Incident, IncidentImpact } from 'statuspage.io';
 
 const backgroundStyle = css`
   width: 100%;
@@ -34,36 +24,51 @@ const wrapperStyle = css`
   padding: 0 32px;
 `;
 
-const getColor = (indicator: Indicator) =>
-  indicator === Indicator.critical ? '#C83532' : '#A96500';
+export const getColor = (incidentImpact: IncidentImpact) =>
+  incidentImpact === IncidentImpact.Critical ? '#C83532' : '#A96500';
+
+const statuspage = new Statuspage('0f54fx204jpt');
+
+const incidentImpactSeverity: Record<IncidentImpact, number> = {
+  [IncidentImpact.None]: 0,
+  [IncidentImpact.Minor]: 1,
+  [IncidentImpact.Major]: 2,
+  [IncidentImpact.Critical]: 3,
+};
 
 export const StatusBar: FC = () => {
-  const [status, setStatus] = useState<StatusProps>({
-    description: '',
-    indicator: Indicator.none,
-  });
+  const [unresolvedIncidents, setUnresolvedIncidents] = useState<Incident[]>([]);
   useEffect(() => {
-    async function fetchData() {
+    async function fetchIncidents() {
       try {
-        const response = await fetch('https://status.hiro.so/api/v2/status.json');
-        const data = await response.json();
-        setStatus(data.status);
+        setUnresolvedIncidents((await statuspage.api.incidents.getUnresolved()).incidents);
       } catch (error) {
         console.error(error);
       }
     }
-    fetchData();
+    void fetchIncidents();
   }, []);
-  const { indicator, description } = status;
+  const allIncidents = unresolvedIncidents.map(({ name }) => name).join(' - ');
+  const highestImpact = unresolvedIncidents.reduce(
+    (acc, { impact }) =>
+      incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
+    IncidentImpact.None
+  );
   return (
     <StatusBarBase
-      indicator={indicator}
+      impact={highestImpact}
       content={
-        <>
-          <Text color={getColor(indicator)} fontWeight={500} fontSize={'14px'} lineHeight={'1.5'}>
-            {description}
-            {description.endsWith('.') ? '' : '.'}
-          </Text>{' '}
+        <Flex>
+          <Text
+            color={getColor(highestImpact)}
+            fontWeight={500}
+            fontSize={'14px'}
+            lineHeight={'1.5'}
+          >
+            {allIncidents}
+            {allIncidents.endsWith('.') ? '' : '.'}
+          </Text>
+          &nbsp;
           <Text fontWeight={400} fontSize={'14px'} color={'#000000'} lineHeight={'1.5'}>
             More information on the{' '}
             <TextLink
@@ -78,22 +83,22 @@ export const StatusBar: FC = () => {
             </TextLink>
             .
           </Text>
-        </>
+        </Flex>
       }
     />
   );
 };
 
-export const StatusBarBase: FC<{ indicator: Indicator; content: ReactNode }> = ({
+export const StatusBarBase: FC<{ impact: IncidentImpact; content: ReactNode }> = ({
   content,
-  indicator,
+  impact,
 }) => {
-  if (indicator === Indicator.none) return null;
+  if (impact === IncidentImpact.None) return null;
   const icon =
-    indicator === Indicator.critical ? (
-      <Icon as={BsExclamationCircle} color={getColor(indicator)} />
+    impact === IncidentImpact.Critical ? (
+      <Icon as={BsExclamationCircle} color={getColor(impact)} />
     ) : (
-      <Icon as={BsExclamationTriangle} color={getColor(indicator)} />
+      <Icon as={BsExclamationTriangle} color={getColor(impact)} />
     );
   return (
     <Box css={backgroundStyle}>
@@ -106,21 +111,21 @@ export const StatusBarBase: FC<{ indicator: Indicator; content: ReactNode }> = (
 };
 
 export const AlertBarBase: FC<{
-  indicator: Indicator;
+  impact: IncidentImpact;
   content: ReactNode;
   dismissLSKey?: string;
-}> = ({ content, indicator, dismissLSKey }) => {
+}> = ({ content, impact, dismissLSKey }) => {
   const [hideAlert, setHideAlert] = useState(false);
   const localStorage = IS_BROWSER && (window as any).localStorage;
   useEffect(() => {
     if (dismissLSKey) setHideAlert(localStorage?.getItem?.(dismissLSKey) === 'true' || false);
   }, [dismissLSKey, localStorage]);
-  if (hideAlert || indicator === Indicator.none) return null;
+  if (hideAlert || impact === IncidentImpact.None) return null;
   const icon =
-    indicator === Indicator.critical ? (
-      <Icon as={BsExclamationCircle} color={getColor(indicator)} />
+    impact === IncidentImpact.Critical ? (
+      <Icon as={BsExclamationCircle} color={getColor(impact)} />
     ) : (
-      <Icon as={BsExclamationTriangle} color={getColor(indicator)} />
+      <Icon as={BsExclamationTriangle} color={getColor(impact)} />
     );
   return (
     <Flex
