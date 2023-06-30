@@ -1,3 +1,10 @@
+# [1.110.0](https://github.com/hirosystems/explorer/compare/v1.109.3...v1.110.0) (2023-06-30)
+
+
+### Features
+
+* display incident title in status bar ([54d3fb0](https://github.com/hirosystems/explorer/commit/54d3fb012cbaded4206a4382b255c9e00d44314c))
+
 ## [1.109.3](https://github.com/hirosystems/explorer/compare/v1.109.2...v1.109.3) (2023-06-29)
 
 
