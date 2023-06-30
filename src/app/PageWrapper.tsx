@@ -11,13 +11,9 @@ import { Modals } from '@/components/modals';
 import { NetworkModeToast } from '@/components/network-mode-toast';
 import { Notice } from '@/components/notice';
 import { SearchComponent } from '@/features/search/search';
-import { AlertBarBase, Indicator, StatusBar } from '@/features/status-bar/status-bar';
+import { StatusBar } from '@/features/status-bar/StatusBar';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
-import { ListItem } from '@/ui/ListItem';
-import { Text } from '@/ui/Text';
-import { TextLink } from '@/ui/TextLink';
-import { UnorderedList } from '@/ui/UnorderedList';
 import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
