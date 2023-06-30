@@ -1,3 +1,10 @@
+## [1.110.1](https://github.com/hirosystems/explorer/compare/v1.110.0...v1.110.1) (2023-06-30)
+
+
+### Bug Fixes
+
+* readme environment badges ([7cb80a3](https://github.com/hirosystems/explorer/commit/7cb80a36155f4eea60466bc243cc8eebd0a5afad))
+
 # [1.110.0](https://github.com/hirosystems/explorer/compare/v1.109.3...v1.110.0) (2023-06-30)
 
 
