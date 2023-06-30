@@ -7,10 +7,11 @@
 ![CI/CD](https://github.com/blockstack/explorer/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/hirosystems/explorer/branch/main/graph/badge.svg?token=03EGMFTMO0)](https://codecov.io/gh/hirosystems/explorer)
 
-| Environment | Status                                                                                   |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Prod        | [![Prod App Status](https://argocd.blockstack.xyz/api/badge?name=prod.explorer&revision=true)](https://argocd.blockstack.xyz/applications/prod.explorer)          |
-| Staging     | [![Staging App Status](https://argocd.blockstack.xyz/api/badge?name=staging.explorer&revision=true)](https://argocd.blockstack.xyz/applications/staging.explorer) |
+| Environment | Status                                                                                                                                                         |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Prod        | ![Prod App Status](https://argo-cd.hiro.tools/api/badge?name=explorer&revision=true)          |
+| Staging     | ![Staging App Status](https://argo-cd.stg.hiro.tools/api/badge?name=explorer&revision=true) |
+| Dev         | ![Dev App Status](https://argo-cd.dev.hiro.tools/api/badge?name=explorer&revision=true)    |
 
 # Stacks Explorer
 
