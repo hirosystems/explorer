@@ -1,3 +1,10 @@
+## [1.110.2](https://github.com/hirosystems/explorer/compare/v1.110.1...v1.110.2) (2023-07-05)
+
+
+### Bug Fixes
+
+* status page id ([18e27b0](https://github.com/hirosystems/explorer/commit/18e27b09e6855b0794c36976e86506c867d43334))
+
 ## [1.110.1](https://github.com/hirosystems/explorer/compare/v1.110.0...v1.110.1) (2023-06-30)
 
 
