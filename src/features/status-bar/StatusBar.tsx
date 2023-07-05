@@ -27,7 +27,7 @@ const wrapperStyle = css`
 export const getColor = (incidentImpact: IncidentImpact) =>
   incidentImpact === IncidentImpact.Critical ? '#C83532' : '#A96500';
 
-const statuspage = new Statuspage('0f54fx204jpt');
+const statuspage = new Statuspage('3111l89394q4');
 
 const incidentImpactSeverity: Record<IncidentImpact, number> = {
   [IncidentImpact.None]: 0,
