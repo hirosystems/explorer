@@ -1,3 +1,10 @@
+## [1.110.3](https://github.com/hirosystems/explorer/compare/v1.110.2...v1.110.3) (2023-07-06)
+
+
+### Bug Fixes
+
+* make action buttons from TxListTabs semantic and aligned ([45284ad](https://github.com/hirosystems/explorer/commit/45284adf47abfc8b3982bd8fd692997dabd84244))
+
 ## [1.110.2](https://github.com/hirosystems/explorer/compare/v1.110.1...v1.110.2) (2023-07-05)
 
 
