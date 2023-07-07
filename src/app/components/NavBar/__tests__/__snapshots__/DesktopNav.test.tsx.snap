@@ -3,16 +3,16 @@
 exports[`DesktopNav should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="chakra-stack css-1yubk4m"
+    class="chakra-stack css-1o2h1ld"
   >
     <div
-      class="css-1txr7ua"
+      class="css-15159ky"
     >
       <div
         aria-controls="popover-content-:r1:"
         aria-expanded="false"
         aria-haspopup="dialog"
-        class="css-1dz1cl"
+        class="css-1dc63cv"
         id="popover-trigger-:r1:"
       >
         <a
@@ -52,13 +52,13 @@ exports[`DesktopNav should render correctly 1`] = `
       </div>
     </div>
     <div
-      class="css-1txr7ua"
+      class="css-15159ky"
     >
       <div
         aria-controls="popover-content-:r3:"
         aria-expanded="false"
         aria-haspopup="dialog"
-        class="css-1dz1cl"
+        class="css-1dc63cv"
         id="popover-trigger-:r3:"
       >
         <a

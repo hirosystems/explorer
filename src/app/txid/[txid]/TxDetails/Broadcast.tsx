@@ -10,10 +10,9 @@ import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizonta
 import { Value } from '../../../common/components/Value';
 import { isInMempool } from '../utils';
 
-export const Broadcasted: FC<{
+export const Broadcast: FC<{
   tx: Transaction | MempoolTransaction;
 }> = ({ tx }) => {
-
   if (!isInMempool(tx)) return null;
 
   const ts = tx.receipt_time;
@@ -25,7 +24,7 @@ export const Broadcasted: FC<{
 
   return (
     <KeyValueHorizontal
-      label={'Broadcasted'}
+      label={'Broadcast'}
       value={
         <>
           <Box>

@@ -3,10 +3,10 @@
 exports[`MicroblockListItem component renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-brzhns"
+    class="css-r9yb24"
   >
     <span
-      class="chakra-stack css-1h7m9p5"
+      class="chakra-stack css-mx5gzi"
     >
       <div
         class="css-1gqk193"
@@ -30,10 +30,10 @@ exports[`MicroblockListItem component renders correctly 1`] = `
         </svg>
       </div>
       <span
-        class="chakra-stack css-x6ucgl"
+        class="chakra-stack css-ueng8y"
       >
         <div
-          class="css-1exw3s2"
+          class="css-20iiw3"
         >
           <a
             class="chakra-text css-jqqks0"
@@ -51,7 +51,7 @@ exports[`MicroblockListItem component renders correctly 1`] = `
       </span>
     </span>
     <span
-      class="chakra-stack css-afdpdg"
+      class="chakra-stack css-tprkve"
     >
       <span
         class="chakra-text css-zousv3"

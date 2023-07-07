@@ -11,7 +11,7 @@ import {
 import { useVerticallyStackedElementsBorderStyle } from '../../../common/styles/border';
 import { BlockHash } from '../TxDetails/BlockHash';
 import { BlockHeight } from '../TxDetails/BlockHeight';
-import { Broadcasted } from '../TxDetails/Broadcasted';
+import { Broadcast } from '../TxDetails/Broadcast';
 import { ContractName } from '../TxDetails/ContractName';
 import { Fees } from '../TxDetails/Fees';
 import { ID } from '../TxDetails/ID';
@@ -36,7 +36,7 @@ export const TxDetails: React.FC<TxDetailsProps> = ({ tx, block }) => {
             <Fees tx={tx} />
             <Nonce tx={tx} />
             <BlockHeight tx={tx} block={block} />
-            <Broadcasted tx={tx} />
+            <Broadcast tx={tx} />
             <BlockHash tx={tx} />
             <NonCanonical tx={tx} />
           </Box>
