@@ -111,7 +111,7 @@ export const FunctionSummaryClarityValue = ({
     if (isContract) {
       return (
         <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-          <TxLink txid={principal}>
+          <TxLink txId={principal}>
             <TextLink as="a">{principal}</TextLink>
           </TxLink>
           <Caption>{getPrettyClarityValueType(arg.type)}</Caption>

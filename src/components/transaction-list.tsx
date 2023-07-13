@@ -19,8 +19,8 @@ const Item: React.FC<
   { tx: MempoolTransaction | Transaction; isLast?: boolean; principal?: string } & BoxProps
 > = React.memo(({ tx, principal, ...rest }) => {
   return (
-    <Flex>
-      <TxLink txid={tx.tx_id} {...rest}>
+    <Flex {...rest}>
+      <TxLink txId={tx.tx_id}>
         <Box as="a" position="absolute" size="100%" />
       </TxLink>
       <TxItem as="span" tx={tx} principal={principal} key={tx.tx_id} />

@@ -75,6 +75,7 @@ export const useSearchQuery = (id: string) => {
       retry: false,
       refetchOnWindowFocus: false,
       staleTime: 1 * 60 * 1000,
+      suspense: false,
     }
   );
 };

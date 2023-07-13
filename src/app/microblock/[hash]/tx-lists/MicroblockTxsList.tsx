@@ -36,7 +36,7 @@ export const MicroblockTxsList: FC<MicroblockTxsListProps> = memo(({ microblockH
               leftContent={{
                 title: (
                   <Title fontWeight="500" display="block" fontSize="15px">
-                    <TxLink txid={txId}>{truncateMiddle(txId)}</TxLink>
+                    <TxLink txId={txId}>{truncateMiddle(txId)}</TxLink>
                   </Title>
                 ),
                 subtitle: null,
