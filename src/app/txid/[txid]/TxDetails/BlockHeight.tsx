@@ -11,6 +11,8 @@ import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizonta
 import { Value } from '../../../common/components/Value';
 import { isInMempool, isInMicroblock } from '../utils';
 
+import { useMediaQuery } from '@chakra-ui/react'
+
 export const BlockHeight: FC<{
   tx: Transaction | MempoolTransaction;
   block?: Block;
@@ -24,6 +26,8 @@ export const BlockHeight: FC<{
     ts * 1000
   ).toLocaleDateString()}`;
 
+  const [isOnTouchScreen] = useMediaQuery('(hover: none)')
+
   return (
     <KeyValueHorizontal
       label={'Block height'}
@@ -35,12 +39,21 @@ export const BlockHeight: FC<{
             stxBlockHash={tx.block_hash}
           />
           <Box ml="16px">
-            <Tooltip label={readableTs}>
+            {isOnTouchScreen ? (
               <Flex alignItems="center">
                 <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
-                <Value>{toRelativeTime(ts * 1000)}</Value>
+                <Value>{toRelativeTime(ts * 1000)} - {readableTs}</Value>
               </Flex>
-            </Tooltip>
+            ) : (
+              <Tooltip label={readableTs}>
+                <Flex alignItems="center">
+                  <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
+                  <Value>{toRelativeTime(ts * 1000)}</Value>
+                </Flex>
+              </Tooltip>
+            )
+            }
+
           </Box>
         </>
       }
