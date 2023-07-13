@@ -1,6 +1,7 @@
 import { toRelativeTime } from '@/common/utils';
 import { BtcStxBlockLinks } from '@/components/btc-stx-block-links';
 import { Box, Flex, Icon, Tooltip } from '@/ui/components';
+import { useMediaQuery } from '@/ui/hooks/useMediaQuery';
 import * as React from 'react';
 import { FC } from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
@@ -24,6 +25,8 @@ export const BlockHeight: FC<{
     ts * 1000
   ).toLocaleDateString()}`;
 
+  const [isOnTouchScreen] = useMediaQuery('(hover: none)')
+
   return (
     <KeyValueHorizontal
       label={'Block height'}
@@ -35,12 +38,21 @@ export const BlockHeight: FC<{
             stxBlockHash={tx.block_hash}
           />
           <Box ml="16px">
-            <Tooltip label={readableTs}>
+            {isOnTouchScreen ? (
               <Flex alignItems="center">
                 <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
-                <Value>{toRelativeTime(ts * 1000)}</Value>
+                <Value>{toRelativeTime(ts * 1000)} - {readableTs}</Value>
               </Flex>
-            </Tooltip>
+            ) : (
+              <Tooltip label={readableTs}>
+                <Flex alignItems="center">
+                  <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
+                  <Value>{toRelativeTime(ts * 1000)}</Value>
+                </Flex>
+              </Tooltip>
+            )
+            }
+
           </Box>
         </>
       }
