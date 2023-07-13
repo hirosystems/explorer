@@ -71,7 +71,7 @@ export const StackingPercentage = ({ balances, address }: any) => {
                   ~{blocksUntilUnlocked.toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
                   blocks remaining
                 </Caption>
-                <TxLink txid={balances?.stx?.lock_tx_id}>
+                <TxLink txId={balances?.stx?.lock_tx_id}>
                   <TextLink target="_blank" color={'brand'} fontSize={0}>
                     View Stacking transaction
                   </TextLink>
@@ -83,7 +83,7 @@ export const StackingPercentage = ({ balances, address }: any) => {
               <Title mb="12px" fontSize={2} fontWeight={500} color={'textTitle'}>
                 Completed at #{unlockBlock}
               </Title>
-              <TxLink txid={balances?.stx?.lock_tx_id}>
+              <TxLink txId={balances?.stx?.lock_tx_id}>
                 <TextLink target="_blank" color={'brand'} fontSize={0}>
                   View Stacking transaction
                 </TextLink>

@@ -10,22 +10,30 @@ export const ExplorerLink = forwardRef<LinkProps, 'a'>(({ href, ...rest }, ref) 
   return <Link ref={ref} legacyBehavior href={buildUrl(href, network)} passHref {...rest} />;
 });
 
-export const TxLink: React.FC<{ txid: string }> = React.memo(({ txid, ...rest }) => {
-  return <ExplorerLink href={`/txid/${encodeURIComponent(txid)}`} {...rest} />;
-});
+export const TxLink = forwardRef<Partial<LinkProps> & { txId: string }, 'a'>(
+  ({ txId, ...rest }, ref) => {
+    return <ExplorerLink ref={ref} href={`/txid/${encodeURIComponent(txId)}`} {...rest} />;
+  }
+);
 
-export const MicroblockLink: React.FC<{ hash: string }> = React.memo(({ hash, ...rest }) => {
-  return <ExplorerLink href={`/microblock/${encodeURIComponent(hash)}`} {...rest} />;
-});
+export const MicroBlockLink = forwardRef<Partial<LinkProps> & { hash: string }, 'a'>(
+  ({ hash, ...rest }, ref) => {
+    return <ExplorerLink ref={ref} href={`/microblock/${encodeURIComponent(hash)}`} {...rest} />;
+  }
+);
 
-export const BlockLink: React.FC<{ hash: string }> = React.memo(({ hash, ...rest }) => {
-  return <ExplorerLink href={`/block/${encodeURIComponent(hash)}`} {...rest} />;
-});
+export const BlockLink = forwardRef<Partial<LinkProps> & { hash: string }, 'a'>(
+  ({ hash, ...rest }, ref) => {
+    return <ExplorerLink ref={ref} href={`/block/${encodeURIComponent(hash)}`} {...rest} />;
+  }
+);
 
-export const AddressLink: React.FC<{ principal: string }> = React.memo(({ principal, ...rest }) => {
-  return principal.includes('.') ? (
-    <TxLink txid={principal} {...rest} />
-  ) : (
-    <ExplorerLink href={`/address/${encodeURIComponent(principal)}`} {...rest} />
-  );
-});
+export const AddressLink = forwardRef<Partial<LinkProps> & { principal: string }, 'a'>(
+  ({ principal, ...rest }, ref) => {
+    return principal.includes('.') ? (
+      <TxLink ref={ref} txId={principal} {...rest} />
+    ) : (
+      <ExplorerLink ref={ref} href={`/address/${encodeURIComponent(principal)}`} {...rest} />
+    );
+  }
+);
