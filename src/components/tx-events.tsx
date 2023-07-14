@@ -255,10 +255,7 @@ function parseInput(input: string): ParsedObject {
 
 
 function cleanString(str: string): any {
-  // Remove '(tuple' from start and ')' from end
-  
   const cleanString = parseInput(str);
-  console.log(cleanString);
   return cleanString;
 }
 
@@ -289,7 +286,7 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return <>{event.contract_log.value.repr}<br /><pre>{handleContractLogHex(event.contract_log.value.repr)}</pre></>
+      return <pre>{handleContractLogHex(event.contract_log.value.repr)}</pre>
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:
