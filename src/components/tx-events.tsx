@@ -213,16 +213,68 @@ const getParticipants = (event: TransactionEvent) => {
   return null;
 };
 
+/**
+ * FUNCTION TO CLEAN THE OUTPUT 
+ * 
+ * Takes the clean repr and output a json like object
+ * */
+type ParsedObject = { [key: string]: string | ParsedObject };
+
+function parseInput(input: string): ParsedObject {
+    const stack: any[] = [{}];
+    let currentKey = '';
+    let i = 0;
+
+    while (i < input.length) {
+        const char = input[i];
+        if (char === '(') {
+            if (currentKey) {
+                const newObj = {};
+                stack[stack.length - 1][currentKey] = newObj;
+                stack.push(newObj);
+                currentKey = '';
+            }
+        } else if (char === ')') {
+            stack.pop();
+        } else if (char === ' ' && currentKey) {
+            if (input[i + 1] !== '(') {
+                let value = '';
+                while (input[++i] !== ' ' && input[i] !== ')') {
+                    value += input[i];
+                }
+                stack[stack.length - 1][currentKey] = value;
+                currentKey = '';
+            }
+        } else if (char !== ' ') {
+            currentKey += char;
+        }
+        i++;
+    }
+    return stack[0];
+}
+
+
+function cleanString(str: string): any {
+  const cleanString = parseInput(str);
+  return cleanString;
+}
+
+function reprToJson(repr: string) {
+  const parsed = cleanString(repr);
+  return JSON.stringify(parsed, null, 2).replace(/\\"/g, '"');
+}
+
 // handle if the print is a hex, convert it to string if so
 function handleContractLogHex(repr: string) {
   if (repr?.startsWith('0x')) {
     try {
       return Buffer.from(repr.replace('0x', ''), 'hex').toString('utf8');
     } catch (e) {
-      return repr;
+      return reprToJson(repr);
     }
   }
-  return repr;
+  
+  return reprToJson(repr);
 }
 
 const getName = (event: TransactionEvent) => {
@@ -234,7 +286,7 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return handleContractLogHex(event.contract_log.value.repr);
+      return <pre>{handleContractLogHex(event.contract_log.value.repr)}</pre>
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:
