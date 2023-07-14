@@ -213,16 +213,87 @@ const getParticipants = (event: TransactionEvent) => {
   return null;
 };
 
+/**
+ * FUNCTION TO CLEAN THE OUTPUT 
+ * 
+ * Takes the clean repr and output a json like object
+ * */
+type ParsedObjectType = { [key: string]: string | ParsedObjectType };
+
+const parseToObject = (str: string, startIndex = 0, secondTime = false) => {
+  let obj: ParsedObjectType = {}; // object to collect keys and values
+  let key = ''; // key placeholder
+  let value = ''; // value placeholder
+  let index = startIndex; // current index in the string
+  let openBrackets = 0; // counter to keep track of parentheses level
+
+  if (secondTime === true) {
+    openBrackets = 1;
+  }
+
+  while (index < str.length) {
+    let char = str[index];
+
+    if (char === '(') {
+      openBrackets++; // increase parentheses level
+      if (openBrackets === 2) {
+        console.log("<= openBrackets === 2 =>")
+        // we encountered a start of a new object
+        // parse this object recursively
+        let nestedObj = parseToObject(str, index + 1, true);
+        obj[key] = nestedObj.obj; // assign nested object to the key
+        index = nestedObj.endIndex; // update index to continue parsing after nested object
+        key = ''; // clear key placeholder
+        value = ''; // clear value placeholder
+        openBrackets--; // decrease parentheses level to match the end bracket of this nested object
+        continue; // skip usual processing of '('
+      }
+    } else if (char === ')') {
+      openBrackets--; // decrease parentheses level
+      if (openBrackets === 0 && key !== '' && value !== '') {
+        obj[key.trim()] = value.trim(); // assign value to the key
+        key = ''; // clear key placeholder
+        value = ''; // clear value placeholder
+      }
+    } else if (char === ' ' && openBrackets === 1 && value !== '') {
+      key = value; // consider string before space as a key
+      value = ''; // clear value placeholder
+    } else if (openBrackets > 0) {
+      value += char; // add char to value
+    }
+
+    index++; // move to the next char
+  }
+
+  // return parsed object and index to continue parsing
+  return {obj, endIndex: index};
+};
+
+
+function cleanString(str: string): any {
+  // Remove '(tuple' from start and ')' from end
+  let clean = str.trim().substring(6, str.length - 1).trim();
+  const cleanString = parseToObject(clean);
+  return cleanString;
+}
+
+function reprToJson(repr: string) {
+  const parsed = cleanString(repr);
+  const parsedData= parsed.obj;
+  return JSON.stringify(parsedData, null, 2).replace(/\\"/g, '"');
+}
+
 // handle if the print is a hex, convert it to string if so
 function handleContractLogHex(repr: string) {
   if (repr?.startsWith('0x')) {
     try {
       return Buffer.from(repr.replace('0x', ''), 'hex').toString('utf8');
     } catch (e) {
-      return repr;
+      return reprToJson(repr);
     }
   }
-  return repr;
+  
+  return reprToJson(repr);
 }
 
 const getName = (event: TransactionEvent) => {
@@ -234,7 +305,7 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return handleContractLogHex(event.contract_log.value.repr);
+      return <pre>{handleContractLogHex(event.contract_log.value.repr)}</pre>
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:
