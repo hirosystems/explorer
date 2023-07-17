@@ -8,7 +8,7 @@ import { WalletIcon } from '@/ui/icons';
 import { Caption, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { AddressStxBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 

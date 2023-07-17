@@ -5,7 +5,7 @@ import { useGlobalContext } from '@/common/context/useAppContext';
 import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
 import { getTransactionQueries } from '@/features/transaction/use-transaction-queries';
 import { FC } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { DefaultView } from '../../components/ContractCall/DefaultView';
 import { SelectedContractView } from '../../components/ContractCall/SelectedContractView';
@@ -14,7 +14,7 @@ const ContractCall: FC<any> = ({ params: { params } }) => {
   const contractId = params?.[0] || '';
   const functionName = params?.[1] || '';
   const { infoApi } = useApi();
-  const { data: poxInfo } = useQuery('pox-info', () => infoApi.getPoxInfo(), { staleTime: 5000 });
+  const { data: poxInfo } = useQuery(['pox-info'], () => infoApi.getPoxInfo(), { staleTime: 5000 });
   const rootContractAddress = poxInfo?.contract_id?.split('.')?.[0];
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 

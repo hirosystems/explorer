@@ -15,7 +15,7 @@ import { getBlockQueries } from '@/features/block/use-block-queries';
 import { getTransactionQueries } from '@/features/transaction/use-transaction-queries';
 import { Box } from '@/ui/components';
 import * as React from 'react';
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { KeyValueHorizontal } from '../../common/components/KeyValueHorizontal';
 import { Value } from '../../common/components/Value';

@@ -12,7 +12,7 @@ import { Caption, Text, Title } from '@/ui/typography';
 import dayjs from 'dayjs';
 import React from 'react';
 import { TbAlertTriangle, TbInfoCircle } from 'react-icons/tb';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 

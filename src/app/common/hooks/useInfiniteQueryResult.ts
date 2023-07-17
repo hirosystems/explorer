@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { UseInfiniteQueryResult } from 'react-query';
+import { UseInfiniteQueryResult } from '@tanstack/react-query';
 
 interface GenericResponseType<T> {
   limit: number;

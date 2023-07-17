@@ -1,5 +1,5 @@
 import { useApi } from '@/common/api/client';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export const useMicroblockByHash = (
   api: ReturnType<typeof useApi>,

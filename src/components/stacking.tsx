@@ -10,7 +10,7 @@ import { Box, Circle, Flex, Stack, TextLink } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Caption, Text, Title } from '@/ui/typography';
 import * as React from 'react';
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 export const StackingPercentage = ({ balances, address }: any) => {
   const queries = useAddressQueries();

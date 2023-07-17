@@ -8,7 +8,7 @@ import { StxIcon } from '@/ui/icons/StxIcon';
 import { Text, Title } from '@/ui/typography';
 import type { NextPage } from 'next';
 import React from 'react';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { useUser } from '../hooks/useUser';
 

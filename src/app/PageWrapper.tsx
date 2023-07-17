@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  PAGE_MAX_WIDTH,
   SITE_NOTICE_BANNER_LABEL,
   SITE_NOTICE_BANNER_MESSAGE,
   SITE_NOTICE_ENABLED,
@@ -11,11 +12,11 @@ import { Modals } from '@/components/modals';
 import { NetworkModeToast } from '@/components/network-mode-toast';
 import { Notice } from '@/components/notice';
 import { SearchComponent } from '@/features/search/search';
-import { StatusBar } from '@/features/status-bar/StatusBar';
+import { StatusBar } from '@/features/status-bar';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
 import { useColorMode } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 export const PageWrapper: FC = ({ children }) => {
   const colorMode = useColorMode().colorMode;
@@ -40,37 +41,45 @@ export const PageWrapper: FC = ({ children }) => {
               : undefined,
         }}
       >
-        <Header fullWidth={true} />
-        <Flex
-          display={['block', 'block', 'none', 'none']}
-          p="8px"
-          mx="auto"
-          width="100%"
-          flexDirection={'column'}
-          px={'16px'}
-        >
-          <SearchComponent variant="small" mr="16px" width="100%" maxWidth="760px" />
-        </Flex>
-        <Flex flexDirection="column" width="100%" minHeight="100%" position="relative" flexGrow={1}>
-          {SITE_NOTICE_ENABLED && (
-            <Box px="20px">
-              <Notice label={SITE_NOTICE_BANNER_LABEL} message={SITE_NOTICE_BANNER_MESSAGE} />
-            </Box>
-          )}
+        <Box marginLeft={`calc(100vw - 100%)`}>
+          <Header />
           <Flex
-            as="main"
+            display={['block', 'block', 'none', 'none']}
+            p="8px"
             mx="auto"
             width="100%"
-            flexGrow={1}
-            height="100%"
-            maxWidth={'1280px'}
-            flexDirection="column"
-            px={['16px', '16px', '32px']}
+            flexDirection={'column'}
+            px={'16px'}
           >
-            {children}
+            <SearchComponent variant="small" mr="16px" width="100%" maxWidth="760px" />
           </Flex>
-          <Footer />
-        </Flex>
+          <Flex
+            flexDirection="column"
+            width="100%"
+            minHeight="100%"
+            position="relative"
+            flexGrow={1}
+          >
+            {SITE_NOTICE_ENABLED && (
+              <Box px="20px">
+                <Notice label={SITE_NOTICE_BANNER_LABEL} message={SITE_NOTICE_BANNER_MESSAGE} />
+              </Box>
+            )}
+            <Flex
+              as="main"
+              mx="auto"
+              width="100%"
+              flexGrow={1}
+              height="100%"
+              maxWidth={PAGE_MAX_WIDTH}
+              flexDirection="column"
+              px={['16px', '16px', '32px']}
+            >
+              {children}
+            </Flex>
+            <Footer />
+          </Flex>
+        </Box>
       </Flex>
       <Modals />
       <NetworkModeToast />

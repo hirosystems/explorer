@@ -12,7 +12,7 @@ import { BiAtom, BiLinkExternal } from 'react-icons/bi';
 import { BsCodeSlash } from 'react-icons/bs';
 import { MdOutlineChecklistRtl } from 'react-icons/md';
 import { RxTokens } from 'react-icons/rx';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 const PluralizedItem: React.FC<TextProps & { array: any[]; label: string }> = ({
   array,

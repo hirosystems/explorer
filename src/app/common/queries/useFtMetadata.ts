@@ -1,6 +1,6 @@
 import { useApi } from '@/common/api/client';
 import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export const useFtMetadata = (
   api: ReturnType<typeof useApi>,

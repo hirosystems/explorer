@@ -1,9 +1,9 @@
 import { useApi } from '@/common/api/client';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export const useStxSupply = () => {
   const { infoApi } = useApi();
-  const { data: stxSupplyData } = useQuery('stx-supply', () => infoApi.getStxSupply({}), {
+  const { data: stxSupplyData } = useQuery(['stx-supply'], () => infoApi.getStxSupply({}), {
     suspense: true,
     staleTime: 30 * 60 * 1000,
   });

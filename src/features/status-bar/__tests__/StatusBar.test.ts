@@ -1,5 +1,5 @@
 import { IncidentImpact } from 'statuspage.io';
-import { getColor } from '@/features/status-bar/StatusBar';
+import { getColor } from '../utils';
 
 describe('StatusBar', () => {
   describe('getColor', () => {

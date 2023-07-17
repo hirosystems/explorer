@@ -13,7 +13,7 @@ import { useTransactionQueries } from '@/features/transaction/use-transaction-qu
 import { Box, Flex } from '@/ui/components';
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 

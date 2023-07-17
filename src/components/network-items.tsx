@@ -24,7 +24,7 @@ import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { TbCheck, TbTrash } from 'react-icons/tb';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { CoreNodeInfoResponse } from '@stacks/blockchain-api-client/src/generated/models';
 import { ChainID } from '@stacks/transactions';
@@ -75,7 +75,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
 
   const doNotFetch = isDisabled || !item.url || isDefault;
 
-  const { data, error, isLoading } = useQuery<CoreNodeInfoResponse, Error>(
+  const { data, error, isFetching } = useQuery<CoreNodeInfoResponse, Error>(
     ['customNetworkApiInfo', item.url],
     getCustomNetworkApiInfo(item.url),
     {
@@ -93,7 +93,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
   const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
 
   return (
-    <ItemWrapper isActive={isActive} isDisabled={!!isDisabled || !!error || isLoading} {...rest}>
+    <ItemWrapper isActive={isActive} isDisabled={!!isDisabled || !!error || isFetching} {...rest}>
       <Stack
         pl="32px"
         pr={'32px'}
@@ -136,7 +136,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
               _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
             />
           </Tooltip>
-        ) : isLoading ? (
+        ) : isFetching ? (
           <Spinner size="18px" opacity={0.5} color={'#666'} />
         ) : !!error ? (
           <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>

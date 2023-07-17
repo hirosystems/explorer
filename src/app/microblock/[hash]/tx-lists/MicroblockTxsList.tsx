@@ -32,6 +32,7 @@ export const MicroblockTxsList: FC<MicroblockTxsListProps> = memo(({ microblockH
         {!!txIds.length ? (
           txIds.map((txId: string) => (
             <TwoColsListItem
+              key={txId}
               icon={<TxIcon txType={'token_transfer'} />}
               leftContent={{
                 title: (
@@ -45,7 +46,6 @@ export const MicroblockTxsList: FC<MicroblockTxsListProps> = memo(({ microblockH
           ))
         ) : (
           <Grid placeItems="center" px="16px" py="32px">
-            <Box as="img" src="/no-txs.svg" alt="No transactions yet" />
             <Text color={'textCaption'} mt="32px">
               No transactions yet
             </Text>

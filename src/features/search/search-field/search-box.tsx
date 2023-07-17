@@ -16,7 +16,7 @@ interface SearchBoxProps {
 export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
   const dispatch = useAppDispatch();
   const {
-    query: { isLoading },
+    query: { isFetching },
     searchTerm,
   } = useSearch();
 
@@ -28,7 +28,7 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
 
   const isSmall = variant === 'small';
   const inputLeftOffset = isSmall ? '38px' : '50px';
-  const inputRightOffset = isLoading ? '92px' : '60px';
+  const inputRightOffset = isFetching ? '92px' : '60px';
   const defaultHeight = isSmall ? '38px' : '64px';
 
   return (
@@ -45,8 +45,8 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         onBlur={() => setTimeout(() => dispatch(blur()), 200)}
       />
 
-      {isLoading ? (
-        <Box position="absolute" right={isSmall ? '48px' : '64px'}>
+      {isFetching ? (
+        <Box position="absolute" right={isSmall ? '48px' : '64px'} zIndex={1}>
           <Spinner size="18px" color="white" />
         </Box>
       ) : null}

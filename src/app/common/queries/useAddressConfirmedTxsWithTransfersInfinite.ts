@@ -1,7 +1,7 @@
 import { useApi } from '@/common/api/client';
 import { DEFAULT_LIST_LIMIT } from '@/common/constants';
 import { getNextPageParam } from '@/common/utils';
-import { UseQueryOptions, useInfiniteQuery } from 'react-query';
+import { UseQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 
 import { TWO_MINUTES } from './query-stale-time';
 
@@ -22,6 +22,7 @@ export const useAddressConfirmedTxsWithTransfersInfinite = (
       getNextPageParam,
       staleTime: TWO_MINUTES,
       enabled: !!address,
+      suspense: false,
       ...options,
     }
   );

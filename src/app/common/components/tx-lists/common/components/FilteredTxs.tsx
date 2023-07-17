@@ -1,3 +1,5 @@
+'use client';
+
 import { FilteredMessage } from '@/components/filter-panel';
 import { Box, Grid } from '@/ui/components';
 import { Text } from '@/ui/typography';
@@ -46,7 +48,6 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
     );
   return (
     <Grid placeItems="center" px="16px" py="32px">
-      <Box as="img" src="/no-txs.svg" alt="No transactions yet" />
       <Text color={'textCaption'} mt="32px">
         No transactions
       </Text>

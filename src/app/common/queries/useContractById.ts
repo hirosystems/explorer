@@ -1,6 +1,6 @@
 import { useApi } from '@/common/api/client';
 import { ContractWithParsedAbi } from '@/common/types/contract';
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export const useContractById = (
   api: ReturnType<typeof useApi>,

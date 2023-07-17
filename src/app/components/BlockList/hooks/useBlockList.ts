@@ -1,7 +1,7 @@
 import { getNextPageParam } from '@/common/utils';
 import { BlockQueryKeys } from '@/features/block/query-keys';
 import { useHomeQueries } from '@/features/home/useHomeQueries';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 export function useBlockList(limit: number) {
   const queries = useHomeQueries();

@@ -164,12 +164,6 @@ const globalStyles = css`
     height: 100%;
   }
 
-  body.chakra-ui-light #stacks-explorer-wrapper {
-    background-attachment: fixed;
-    background-image: linear-gradient(transparent, transparent 530px, white 530px),
-      linear-gradient(30deg, rgb(98, 135, 221), rgb(231, 72, 92) 58%, rgb(102, 137, 221) 100%);
-  }
-
   .prism-code *::selection {
     background-color: #aab3ff;
     color: white !important;
