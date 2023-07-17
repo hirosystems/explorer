@@ -12,7 +12,7 @@ import { BigNumber } from 'bignumber.js';
 import { Form, Formik } from 'formik';
 import type { NextPage } from 'next';
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { openSTXTransfer } from '@stacks/connect';
 
@@ -21,7 +21,7 @@ import { useUser } from '../hooks/useUser';
 
 const Page: NextPage = () => {
   const { feesApi } = useApi();
-  const { data: feeData } = useQuery('transfer-fees', () => feesApi.getFeeTransfer());
+  const { data: feeData } = useQuery(['transfer-fees'], () => feesApi.getFeeTransfer());
   const network = useStacksNetwork();
   const { isConnected, balance, stxAddress } = useUser();
   const fee = feeData ? new BigNumber(feeData as any).multipliedBy(180) : 0;

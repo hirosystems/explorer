@@ -16,6 +16,12 @@ export const TxLink = forwardRef<Partial<LinkProps> & { txId: string }, 'a'>(
   }
 );
 
+export const TokenLink = forwardRef<Partial<LinkProps> & { tokenId: string }, 'a'>(
+  ({ tokenId, ...rest }, ref) => {
+    return <ExplorerLink ref={ref} href={`/token/${encodeURIComponent(tokenId)}`} {...rest} />;
+  }
+);
+
 export const MicroBlockLink = forwardRef<Partial<LinkProps> & { hash: string }, 'a'>(
   ({ hash, ...rest }, ref) => {
     return <ExplorerLink ref={ref} href={`/microblock/${encodeURIComponent(hash)}`} {...rest} />;

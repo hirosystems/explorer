@@ -10,6 +10,7 @@ import { SearchComponent } from '@/features/search/search';
 import { Box, BoxProps, Flex, FlexProps, IconButton } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import React from 'react';
+import { PAGE_MAX_WIDTH } from '@/common/constants';
 
 export const LogoNavItem = React.memo((props: BoxProps) => {
   return (
@@ -68,24 +69,16 @@ const Navigation: React.FC = () => {
   );
 };
 
-export const Header: React.FC<
-  { isHome?: boolean; fullWidth?: boolean; networkMode?: string } & FlexProps
-> = React.memo(({ isHome, fullWidth, networkMode, ...props }) => {
+export const Header: React.FC = React.memo(() => {
   return (
-    <HeaderBar
-      mx="auto"
-      width="100%"
-      maxWidth={isHome || fullWidth ? '100%' : '1280px'}
-      justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
-      {...props}
-    >
+    <HeaderBar mx="auto" width="100%" maxWidth={PAGE_MAX_WIDTH}>
       <LogoNavItem />
       <Flex
         mx={['none', 'none', 'auto']}
         width="100%"
-        justifyContent={isHome || fullWidth ? 'space-between' : 'unset'}
+        justifyContent={'space-between'}
         pl={['unset', 'unset', '20px']}
-        maxWidth={isHome || fullWidth ? 'unset' : '1280px'}
+        maxWidth={PAGE_MAX_WIDTH}
         alignItems="center"
       >
         <Flex alignItems="center" flexGrow={1} gap={'8px'}>

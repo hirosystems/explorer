@@ -9,11 +9,18 @@ export const StatSection: FC<{
   caption: ReactNode;
 }> = ({ title, bodyMainText, bodySecondaryText, caption, ...rest }) => (
   <Grid p={'24px'} height={'131px'} {...rest}>
-    <Box color={'textTitle'} fontWeight="500" mb={'9px'} style={{ whiteSpace: 'nowrap' }}>
+    <Box fontWeight="500" mb={'9px'} style={{ whiteSpace: 'nowrap' }}>
       {title}
     </Box>
-    <Flex fontSize={'27px'} mb={'6px'} color={'textTitle'} alignItems={'baseline'} wrap={'nowrap'}>
-      <Box fontSize={'27px'} mr={'6px'} style={{ whiteSpace: 'nowrap' }}>
+    <Flex fontSize={'27px'} mb={'6px'} alignItems={'baseline'} wrap={'nowrap'} minW={'0'}>
+      <Box
+        fontSize={'27px'}
+        mr={'6px'}
+        style={{ whiteSpace: 'nowrap' }}
+        textOverflow={'ellipsis'}
+        overflow={'hidden'}
+        whiteSpace={'nowrap'}
+      >
         {bodyMainText}{' '}
       </Box>
       <Box fontSize={'14px'} style={{ whiteSpace: 'nowrap' }}>

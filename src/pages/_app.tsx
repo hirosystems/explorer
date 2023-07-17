@@ -16,6 +16,7 @@ function ExplorerApp({
   queryNetworkMode,
   queryApiUrl,
   querySubnet,
+  pageProps,
 }: any) {
   return (
     <ErrorBoundary
@@ -38,7 +39,7 @@ function ExplorerApp({
           querySubnet={querySubnet}
         >
           <PageWrapper>
-            <Component />
+            <Component {...pageProps} />
           </PageWrapper>
         </Providers>
       </AppContextProvider>

@@ -1,3 +1,5 @@
+'use client';
+
 import { useApi } from '@/common/api/client';
 import { SkeletonGenericTransactionList } from '@/components/loaders/skeleton-transaction';
 import { SectionFooterAction } from '@/components/section-footer-button';

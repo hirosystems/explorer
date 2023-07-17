@@ -16,7 +16,7 @@ import { getTransactionQueries } from '@/features/transaction/use-transaction-qu
 import { Box, Flex, Icon, Stack, Tooltip } from '@/ui/components';
 import * as React from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
-import { useQueries, useQuery } from 'react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -47,21 +47,9 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
     { ...queryOptions, enabled: !!microblock }
   );
 
-  const useQueriesOptionsForTransactions = microblock?.txs.map(txId => {
-    return {
-      queryKey: microblockQK(MicroblockQueryKeys.tx, txId),
-      queryFn: transactionQueries.fetchSingleTransaction({ txId }),
-      enabled: !!microblock,
-    };
-  });
-
-  const dataTransactions = useQueries(useQueriesOptionsForTransactions ?? []);
-
   if (!microblock || !block) return null;
 
   const title = `Microblock ${truncateMiddle(microblock.microblock_hash)}`;
-
-  const transactions = dataTransactions?.map(({ data }) => data as Transaction).filter(tx => !!tx);
 
   const readableTs = `${new Date(block.burn_block_time * 1000).toLocaleTimeString()} ${new Date(
     block.burn_block_time * 1000
@@ -107,7 +95,7 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
             </Box>
           </Section>
         </PageWrapper>
-        {transactions?.length ? (
+        {microblock.txs?.length ? (
           <MicroblockTxsList microblockHash={hash} />
         ) : (
           <Section title={'Transactions'} mt={'32px'}>

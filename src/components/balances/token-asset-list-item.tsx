@@ -4,14 +4,14 @@ import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
 import { useNftMetadata } from '@/app/common/queries/useNftMetadata';
 import { useApi } from '@/common/api/client';
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@/common/utils';
-import { TxLink } from '@/components/links';
+import { TokenLink } from '@/components/links';
 import { getTicker } from '@/components/tx-events';
 import { Box, Flex, FlexProps, Stack } from '@/ui/components';
 import { Caption, Text } from '@/ui/typography';
 import React from 'react';
 
 import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
-import { IntCV, hexToCV } from '@stacks/transactions';
+import { hexToCV, IntCV } from '@stacks/transactions';
 
 import { FtAvatar, NftAvatar } from '../token-avatar';
 
@@ -65,13 +65,13 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
             <Text color={'textTitle'} fontWeight="600">
               {bnsName || asset}
             </Text>
-            <Stack isInline spacing="4px" divider={<Caption>∙</Caption>} wrap="wrap">
+            <Stack isInline gap="4px" divider={<Caption>∙</Caption>} wrap="wrap">
               <Caption>
                 {tokenType === 'fungible_tokens'
                   ? ftMetadata?.symbol || getTicker(asset).toUpperCase()
                   : getTicker(asset).toUpperCase()}
               </Caption>
-              <TxLink txId={`${address}.${contract}`}>
+              <TokenLink tokenId={`${address}.${contract}`}>
                 <Caption
                   target="_blank"
                   _hover={{
@@ -79,9 +79,9 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
                   }}
                   as="a"
                 >
-                  View contract
+                  View token
                 </Caption>
-              </TxLink>
+              </TokenLink>
             </Stack>
           </Stack>
         </Flex>

@@ -8,7 +8,7 @@ import { Text } from '@/ui/Text';
 import { Box, Button, Flex, Stack } from '@/ui/components';
 import { Form, Formik } from 'formik';
 import { FC, ReactNode, useMemo, useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { openContractCall } from '@stacks/connect';
 import {

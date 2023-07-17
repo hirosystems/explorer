@@ -105,7 +105,6 @@ export const TransactionList: React.FC<
           </Box>
         ) : (
           <Grid placeItems="center" px="16px" py="32px">
-            <Box as="img" src="/no-txs.svg" alt="No transactions yet" />
             <Text color={'textCaption'} mt="32px">
               No transactions yet
             </Text>

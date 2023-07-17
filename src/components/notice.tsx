@@ -2,6 +2,7 @@ import { ExclamationMarkCircleIcon } from '@/ui/ExclamationMarkCircleIcon';
 import { Box, Flex, FlexProps } from '@/ui/components';
 import { Text } from '@/ui/typography';
 import React from 'react';
+import { PAGE_MAX_WIDTH } from '@/common/constants';
 
 export const Notice = ({
   label,
@@ -23,7 +24,7 @@ export const Notice = ({
       justifyContent={['center', 'center', 'flex-start']}
       mx="auto"
       width="100%"
-      maxWidth="1280px"
+      maxWidth={PAGE_MAX_WIDTH}
       flexDirection={['column', 'column', 'row']}
       px={['16px']}
     >

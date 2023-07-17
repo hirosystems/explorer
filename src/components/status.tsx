@@ -35,9 +35,7 @@ interface StatusProps extends FlexProps {
   txStatus: TxStatus;
 }
 
-export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
-  const IconComponent = iconMap[txStatus];
-  const label = labelMap[txStatus];
+export const StyledBadge: React.FC = ({ children }) => {
   return (
     <Badge
       labelProps={{ display: 'flex', alignItems: 'center', gap: '4px' }}
@@ -46,10 +44,19 @@ export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
       color="white"
       bg="rgba(255,255,255,0.24)"
       border={'none'}
-      {...rest}
     >
+      {children}
+    </Badge>
+  );
+};
+
+export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
+  const IconComponent = iconMap[txStatus];
+  const label = labelMap[txStatus];
+  return (
+    <StyledBadge>
       <Icon as={IconComponent} size="16px" color="currentColor" />
       {label}
-    </Badge>
+    </StyledBadge>
   );
 };

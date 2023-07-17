@@ -3,7 +3,7 @@ import { useGlobalContext } from '@/common/context/useAppContext';
 import { Box, Flex, TextLink } from '@/ui/components';
 import Link, { LinkProps } from 'next/link';
 import React, { FC, HTMLProps } from 'react';
-import { RELEASE_TAG_NAME } from '@/common/constants';
+import { PAGE_MAX_WIDTH, RELEASE_TAG_NAME } from '@/common/constants';
 
 const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
   children,
@@ -36,7 +36,7 @@ export const Footer: FC = () => {
     <Box
       mx="auto"
       width="100%"
-      maxWidth={'1280px'}
+      maxWidth={PAGE_MAX_WIDTH}
       mt={'32px'}
       mb={['16px', '16px', '32px']}
       px={['16px', '16px', '32px']}

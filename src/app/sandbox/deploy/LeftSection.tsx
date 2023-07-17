@@ -7,7 +7,7 @@ import { Caption, Title } from '@/ui/typography';
 import React, { FC, useState } from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import { TbTools } from 'react-icons/tb';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { openContractDeploy } from '@stacks/connect';
 

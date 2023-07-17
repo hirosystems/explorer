@@ -3,7 +3,7 @@ import {
   AddressTransactionsWithTransfersListResponse,
   AddressTransactionWithTransfers,
 } from '@stacks/stacks-blockchain-api-types';
-import { InfiniteData, useQueryClient } from 'react-query';
+import { InfiniteData, useQueryClient } from '@tanstack/react-query';
 
 import { useFilterState } from '@/app/common/hooks/use-filter-state';
 import { microStxToStx, microToStacks } from '../utils';
@@ -36,9 +36,9 @@ export const useTxsCSVData = () => {
       queryKey: ['accountBalance', address],
     });
 
-    const balance = addressBalanceQueryData[0][1].stx.balance;
+    const balance = addressBalanceQueryData[0][1]?.stx.balance;
 
-    const txs = txsQueryData[0][1].pages.reduce<AddressTransactionWithTransfers[]>(
+    const txs = txsQueryData[0][1]?.pages.reduce<AddressTransactionWithTransfers[]>(
       (acc, { results }) => {
         return acc.concat(results);
       },
@@ -46,7 +46,7 @@ export const useTxsCSVData = () => {
     );
 
     const filteredTxs = txs?.filter(tx => activeFilters[tx.tx.tx_type]);
-    return formatTxsCSVData(filteredTxs, balance);
+    return filteredTxs && balance ? formatTxsCSVData(filteredTxs, balance) : [];
   };
 
   const formatTxsCSVData = (

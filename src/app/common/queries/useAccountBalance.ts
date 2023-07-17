@@ -1,6 +1,6 @@
 import { useApi } from '@/common/api/client';
 import { getNextPageParam } from '@/common/utils';
-import { UseQueryOptions, useInfiniteQuery, useQuery } from 'react-query';
+import { UseQueryOptions, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 

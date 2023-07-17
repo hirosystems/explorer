@@ -1,3 +1,5 @@
+'use client';
+
 import { Pending } from '@/components/status';
 import { Box, Flex, Grid } from '@/ui/components';
 import { Caption } from '@/ui/typography';

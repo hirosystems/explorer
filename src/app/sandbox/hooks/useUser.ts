@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
 import { useAddressQueries } from '@/features/address/use-address-queries';
 import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
 import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { AuthOptions } from '@stacks/connect/dist/types/types/auth';
 import {

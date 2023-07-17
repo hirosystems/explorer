@@ -1,12 +1,12 @@
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export const useNextStackingCycle = () => {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 
   const { data: poxData } = useQuery(
-    'pox-info-raw',
+    ['pox-info-raw'],
     () => fetch(`${activeNetworkUrl}/v2/pox`).then(res => res.json()),
     {
       suspense: true,

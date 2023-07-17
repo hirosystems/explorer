@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import { FiFilter } from 'react-icons/fi';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 

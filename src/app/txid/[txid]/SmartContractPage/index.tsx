@@ -3,7 +3,7 @@ import { PostConditions } from '@/components/post-conditions';
 import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
 import { useTransactionQueries } from '@/features/transaction/use-transaction-queries';
 import * as React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import {
   Block,

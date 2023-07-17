@@ -1,6 +1,6 @@
 'use client';
 
-import { QueryFunctionContext, UseQueryOptions, useQuery } from 'react-query';
+import { QueryFunctionContext, UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 const getCurrentBtcPrice = async () =>
   fetch('https://api.coingecko.com/api/v3/exchange_rates')
@@ -8,7 +8,7 @@ const getCurrentBtcPrice = async () =>
     .then(data => data?.rates?.usd?.value);
 
 export const useCurrentBtcPrice = () =>
-  useQuery('current-btc-price', getCurrentBtcPrice, {
+  useQuery(['current-btc-price'], getCurrentBtcPrice, {
     staleTime: 30 * 60 * 1000,
     suspense: false,
     retry: false,
@@ -19,10 +19,8 @@ const getCurrentStxPrice = async () =>
     .then(res => res.json())
     .then(data => data?.blockstack?.usd);
 
-export const useCurrentStxPrice = (
-  options?: UseQueryOptions<any, unknown, any, 'current-stx-price'>
-) =>
-  useQuery('current-stx-price', getCurrentStxPrice, {
+export const useCurrentStxPrice = (options?: UseQueryOptions<any, unknown, any, any>) =>
+  useQuery(['current-stx-price'], getCurrentStxPrice, {
     staleTime: 30 * 60 * 1000,
     suspense: false,
     retry: false,

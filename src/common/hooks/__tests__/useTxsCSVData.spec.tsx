@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { useTxsCSVData } from '../useTxsCSVData';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { store } from '../../state/store';
 import { addressBalanceMockData, addressTxsMockData, mockAddress } from '../../mockData/txsData';

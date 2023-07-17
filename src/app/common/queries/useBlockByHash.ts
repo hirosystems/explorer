@@ -1,5 +1,5 @@
 import { useApi } from '@/common/api/client';
-import { UseQueryOptions, useQuery } from 'react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export const useBlockByHash = (
   api: ReturnType<typeof useApi>,

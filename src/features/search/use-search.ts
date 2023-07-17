@@ -10,7 +10,7 @@ import {
 } from '@/common/types/search-results';
 import { isNumeric } from '@/common/utils';
 import { selectSearchTerm } from '@/features/search/search-slice';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { Block } from '@stacks/blockchain-api-client';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';

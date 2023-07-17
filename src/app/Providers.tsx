@@ -6,7 +6,7 @@ import { UIProvider } from '@/ui/UIProvider';
 import * as React from 'react';
 import { FC } from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 
 const queryClient = new QueryClient({
