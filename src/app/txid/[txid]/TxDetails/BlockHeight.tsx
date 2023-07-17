@@ -1,6 +1,7 @@
 import { toRelativeTime } from '@/common/utils';
 import { BtcStxBlockLinks } from '@/components/btc-stx-block-links';
 import { Box, Flex, Icon, Tooltip } from '@/ui/components';
+import { useMediaQuery } from '@/ui/hooks/useMediaQuery';
 import * as React from 'react';
 import { FC } from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
@@ -10,8 +11,6 @@ import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchai
 import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
 import { Value } from '../../../common/components/Value';
 import { isInMempool, isInMicroblock } from '../utils';
-
-import { useMediaQuery } from '@chakra-ui/react'
 
 export const BlockHeight: FC<{
   tx: Transaction | MempoolTransaction;
