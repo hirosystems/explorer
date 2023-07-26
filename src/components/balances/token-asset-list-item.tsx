@@ -71,7 +71,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
                   ? ftMetadata?.symbol || getTicker(asset).toUpperCase()
                   : getTicker(asset).toUpperCase()}
               </Caption>
-              <TxLink txid={`${address}.${contract}`}>
+              <TxLink txId={`${address}.${contract}`}>
                 <Caption
                   target="_blank"
                   _hover={{

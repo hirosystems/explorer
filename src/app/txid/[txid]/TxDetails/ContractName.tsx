@@ -25,7 +25,7 @@ export const ContractName: FC<{
       <KeyValueHorizontal
         label={'Contract'}
         value={
-          <TxLink txid={tx.contract_call.contract_id}>
+          <TxLink txId={tx.contract_call.contract_id}>
             <TextLink as="a">
               <Value>{tx.contract_call.contract_id}</Value>
             </TextLink>
@@ -40,7 +40,7 @@ export const ContractName: FC<{
       <KeyValueHorizontal
         label={'Contract'}
         value={
-          <TxLink txid={tx.smart_contract.contract_id}>
+          <TxLink txId={tx.smart_contract.contract_id}>
             <TextLink as="a">
               <Value>{tx.smart_contract.contract_id}</Value>
             </TextLink>

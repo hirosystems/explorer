@@ -25,7 +25,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
   const { data: stxBalance } = useQuery(
     ['stx-balance', principal],
     () => accountsApi.getAccountStxBalance({ principal }) as Promise<AddressStxBalanceResponse>,
-    { staleTime: 3 * 60 * 1000 }
+    { staleTime: 3 * 60 * 1000, suspense: false }
   );
   const colorMode = useColorMode().colorMode;
   return (
