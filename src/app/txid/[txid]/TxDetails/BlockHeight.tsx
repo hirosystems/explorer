@@ -25,7 +25,7 @@ export const BlockHeight: FC<{
     ts * 1000
   ).toLocaleDateString()}`;
 
-  const [isOnTouchScreen] = useMediaQuery('(hover: none)')
+  const [isOnTouchScreen] = useMediaQuery('(hover: none)');
 
   return (
     <KeyValueHorizontal
@@ -41,7 +41,9 @@ export const BlockHeight: FC<{
             {isOnTouchScreen ? (
               <Flex alignItems="center">
                 <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
-                <Value>{toRelativeTime(ts * 1000)} - {readableTs}</Value>
+                <Value>
+                  {toRelativeTime(ts * 1000)} - {readableTs}
+                </Value>
               </Flex>
             ) : (
               <Tooltip label={readableTs}>
@@ -50,9 +52,7 @@ export const BlockHeight: FC<{
                   <Value>{toRelativeTime(ts * 1000)}</Value>
                 </Flex>
               </Tooltip>
-            )
-            }
-
+            )}
           </Box>
         </>
       }
