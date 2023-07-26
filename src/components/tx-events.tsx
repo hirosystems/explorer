@@ -214,45 +214,44 @@ const getParticipants = (event: TransactionEvent) => {
 };
 
 /**
- * FUNCTION TO CLEAN THE OUTPUT 
- * 
+ * FUNCTION TO CLEAN THE OUTPUT
+ *
  * Takes the clean repr and output a json like object
  * */
 type ParsedObject = { [key: string]: string | ParsedObject };
 
 function parseInput(input: string): ParsedObject {
-    const stack: any[] = [{}];
-    let currentKey = '';
-    let i = 0;
+  const stack: any[] = [{}];
+  let currentKey = '';
+  let i = 0;
 
-    while (i < input.length) {
-        const char = input[i];
-        if (char === '(') {
-            if (currentKey) {
-                const newObj = {};
-                stack[stack.length - 1][currentKey] = newObj;
-                stack.push(newObj);
-                currentKey = '';
-            }
-        } else if (char === ')') {
-            stack.pop();
-        } else if (char === ' ' && currentKey) {
-            if (input[i + 1] !== '(') {
-                let value = '';
-                while (input[++i] !== ' ' && input[i] !== ')') {
-                    value += input[i];
-                }
-                stack[stack.length - 1][currentKey] = value;
-                currentKey = '';
-            }
-        } else if (char !== ' ') {
-            currentKey += char;
+  while (i < input.length) {
+    const char = input[i];
+    if (char === '(') {
+      if (currentKey) {
+        const newObj = {};
+        stack[stack.length - 1][currentKey] = newObj;
+        stack.push(newObj);
+        currentKey = '';
+      }
+    } else if (char === ')') {
+      stack.pop();
+    } else if (char === ' ' && currentKey) {
+      if (input[i + 1] !== '(') {
+        let value = '';
+        while (input[++i] !== ' ' && input[i] !== ')') {
+          value += input[i];
         }
-        i++;
+        stack[stack.length - 1][currentKey] = value;
+        currentKey = '';
+      }
+    } else if (char !== ' ') {
+      currentKey += char;
     }
-    return stack[0];
+    i++;
+  }
+  return stack[0];
 }
-
 
 function cleanString(str: string): any {
   const cleanString = parseInput(str);
@@ -273,7 +272,7 @@ function handleContractLogHex(repr: string) {
       return reprToJson(repr);
     }
   }
-  
+
   return reprToJson(repr);
 }
 
@@ -286,7 +285,7 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return <pre>{handleContractLogHex(event.contract_log.value.repr)}</pre>
+      return <pre>{handleContractLogHex(event.contract_log.value.repr)}</pre>;
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:
