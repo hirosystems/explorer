@@ -85,7 +85,7 @@ export const ContractDetailsCard: React.FC<{ contractId: string }> = ({ contract
           </Flex>
         </Stack>
         <Grid borderTopWidth="1px" placeItems="center" py="16px">
-          <TxLink txid={contractId}>
+          <TxLink txId={contractId}>
             <Flex
               as="a"
               target="_blank"

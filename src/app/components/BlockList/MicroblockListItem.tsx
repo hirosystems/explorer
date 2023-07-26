@@ -1,5 +1,5 @@
 import { toRelativeTime } from '@/common/utils';
-import { MicroblockLink } from '@/components/links';
+import { MicroBlockLink } from '@/components/links';
 import { Circle, Flex, Icon, Stack } from '@/ui/components';
 import { Caption, Text, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
@@ -28,7 +28,7 @@ export const MicroblockListItem: React.FC<{
         </Circle>
         <Stack spacing="8px" as="span" minWidth={0}>
           <Flex alignItems="center" minWidth={0}>
-            <MicroblockLink hash={hash}>
+            <MicroBlockLink hash={hash}>
               <Title
                 display="block"
                 fontSize={'14px'}
@@ -45,7 +45,7 @@ export const MicroblockListItem: React.FC<{
               >
                 {hash}
               </Title>
-            </MicroblockLink>
+            </MicroBlockLink>
           </Flex>
           <Caption display="block">Microblock</Caption>
         </Stack>

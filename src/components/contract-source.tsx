@@ -26,7 +26,7 @@ export const ContractSource: React.FC<
       topRight={
         sourceTx
           ? () => (
-              <TxLink txid={sourceTx}>
+              <TxLink txId={sourceTx}>
                 <Badge
                   as="a"
                   _hover={{ bg: '#eee', cursor: 'pointer' }}

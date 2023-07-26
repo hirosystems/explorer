@@ -1,3 +1,10 @@
+## [1.110.4](https://github.com/hirosystems/explorer/compare/v1.110.3...v1.110.4) (2023-07-13)
+
+
+### Bug Fixes
+
+* search bar crash ([57defa1](https://github.com/hirosystems/explorer/commit/57defa1e42230c28f80b67c3382c6342b4579354))
+
 ## [1.110.3](https://github.com/hirosystems/explorer/compare/v1.110.2...v1.110.3) (2023-07-06)
 
 

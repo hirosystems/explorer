@@ -46,7 +46,7 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
   return (
     <Section
       topRight={() => (
-        <TxLink txid={contract_id}>
+        <TxLink txId={contract_id}>
           <Flex
             as="a"
             target="_blank"
