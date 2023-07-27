@@ -10,6 +10,8 @@ import { useMemo } from 'react';
 
 import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import WhyTxFail from './why-tx-fail';
+
 export interface TitleProps {
   contractName?: string;
   tx: MempoolTransaction | Transaction;
@@ -37,6 +39,7 @@ const Tags = ({
   );
 
 const TxTags = ({
+  tx,
   txStatus,
   type,
 }: TitleProps & {
@@ -46,6 +49,7 @@ const TxTags = ({
   <Stack isInline spacing="8px" mt={'0px !important'}>
     <Tags type={type} />
     {txStatus && <Status txStatus={txStatus as any} />}
+    <WhyTxFail tx={tx} />
   </Stack>
 );
 
