@@ -1,3 +1,12 @@
+## [1.110.5](https://github.com/hirosystems/explorer/compare/v1.110.4...v1.110.5) (2023-07-28)
+
+
+### Bug Fixes
+
+* prettier ([40fdf85](https://github.com/hirosystems/explorer/commit/40fdf85082942c858510f6f25d1fa4146dcd8e97))
+* time on mobile view ([1625204](https://github.com/hirosystems/explorer/commit/1625204e7addacd6879d17b623e4508b0f757570))
+* wrap useMediaQuery under ui ([289b391](https://github.com/hirosystems/explorer/commit/289b3914d6a9c1ca143cd72aefdc6edcff35268f))
+
 ## [1.110.4](https://github.com/hirosystems/explorer/compare/v1.110.3...v1.110.4) (2023-07-13)
 
 
