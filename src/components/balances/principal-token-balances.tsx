@@ -43,10 +43,14 @@ export const NftBalances: React.FC<{
   );
 };
 
-export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) =>
-  Object.keys(balances.fungible_tokens).length ? (
+export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) => {
+  const FTokens = Object.keys(balances.fungible_tokens).filter(
+    key => Number(balances.fungible_tokens[key]?.balance) > 0
+  );
+
+  return FTokens.length ? (
     <>
-      {Object.keys(balances.fungible_tokens).map((key, index, arr) => (
+      {FTokens?.map((key, index, arr) => (
         <TokenAssetListItem
           amount={balances.fungible_tokens[key]?.balance || ''}
           key={index}
@@ -60,6 +64,7 @@ export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ bal
       <Caption>This account has no tokens.</Caption>
     </Grid>
   );
+};
 
 export const TokenBalancesCard: React.FC<
   FlexProps & { balances: AddressBalanceResponse; nftHoldings?: NonFungibleTokenHoldingsList }

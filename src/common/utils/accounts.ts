@@ -10,8 +10,9 @@ export const hasTokenBalance = (balances?: AddressBalanceResponse) => {
   let totalFt = 0;
   let totalNft = 0;
   if (balances?.fungible_tokens) {
-    totalFt =
-      (balances.fungible_tokens && Object.keys(balances?.fungible_tokens || {}).length) || 0;
+    Object.keys(balances?.fungible_tokens || {}).forEach(key => {
+      totalFt += parseInt(balances?.fungible_tokens?.[key]?.balance || '0');
+    });
   }
   if (balances.non_fungible_tokens) {
     totalNft = Object.keys(balances?.non_fungible_tokens || {}).length;
