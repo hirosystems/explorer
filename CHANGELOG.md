@@ -1,3 +1,10 @@
+# [1.111.0](https://github.com/hirosystems/explorer/compare/v1.110.5...v1.111.0) (2023-07-31)
+
+
+### Features
+
+* ft page ([8baff00](https://github.com/hirosystems/explorer/commit/8baff007f338b239c625602b99a3d5809da593f9))
+
 ## [1.110.5](https://github.com/hirosystems/explorer/compare/v1.110.4...v1.110.5) (2023-07-28)
 
 
