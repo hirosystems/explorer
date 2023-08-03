@@ -3,7 +3,7 @@ import { isReactComponent } from '@/common/utils';
 import { Card } from '@/components/card';
 import { Box, Flex, FlexProps, Spinner } from '@/ui/components';
 import { Text } from '@/ui/typography';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface SectionProps extends Omit<FlexProps, 'title'> {
   title?: string | React.FC;
@@ -34,7 +34,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title: Title, childr
 });
 
 export const Section: React.FC<
-  { topRight?: any; isLoading?: boolean; headerProps?: SectionProps } & SectionProps
+  { topRight?: ReactNode; isLoading?: boolean; headerProps?: SectionProps } & SectionProps
 > = React.memo(
   ({
     title,
@@ -51,13 +51,7 @@ export const Section: React.FC<
           <SectionHeader title={title} {...headerProps}>
             <Flex justifyContent="flex-end" alignItems="center">
               {isLoading ? <Spinner size="sm" color={'textCaption'} opacity={0.5} /> : null}
-              {isReactComponent(TopRight) ? (
-                <Box ml="16px">
-                  <TopRight />
-                </Box>
-              ) : (
-                TopRight
-              )}
+              {TopRight}
             </Flex>
           </SectionHeader>
         ) : null}

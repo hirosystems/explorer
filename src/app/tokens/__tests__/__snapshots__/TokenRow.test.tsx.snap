@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TokenRow renders correctly 1`] = `
+<table
+  className="chakra-table css-1dupj0l"
+>
+  <tr
+    className="css-1dupj0l"
+  >
+    <td
+      className="css-xbj9s6"
+    >
+      <div
+        className="css-164kf5i"
+      >
+        <div
+          className="css-n9bdsq"
+        >
+          T
+        </div>
+        <a
+          className="chakra-text css-1pdvkva"
+          href="/token/0x5678?chain=mainnet"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          TestToken
+           (
+          TT
+          )
+        </a>
+      </div>
+    </td>
+    <td
+      className="css-1hpakfx"
+    >
+      <span
+        className="chakra-text css-1s346xd"
+      >
+        <a
+          href="/txid/0x1234?chain=mainnet"
+          onClick={[Function]}
+          onMouseEnter={[Function]}
+          onTouchStart={[Function]}
+        >
+          0x1234
+        </a>
+      </span>
+    </td>
+    <td
+      className="css-oz02zu"
+      data-is-numeric={true}
+    >
+      <span
+        className="chakra-text css-1tlynor"
+      >
+        1.00M
+      </span>
+    </td>
+  </tr>
+</table>
+`;

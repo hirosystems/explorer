@@ -458,6 +458,15 @@ export const getCustomNetworksFromLS = () => {
 export const numberToString = (value: number) => {
   const mil = 1e6;
   const bil = 1e9;
+  const tril = 1e12;
+  const quadril = 1e15;
+
+  if (value >= quadril) {
+    return `${(value / quadril).toFixed(2)}Q`;
+  }
+  if (value >= tril) {
+    return `${(value / tril).toFixed(2)}T`;
+  }
   if (value >= bil) {
     return `${(value / bil).toFixed(2)}B`;
   }

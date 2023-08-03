@@ -45,7 +45,7 @@ interface ContractInfoProps {
 const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } }) => {
   return (
     <Section
-      topRight={() => (
+      topRight={
         <TxLink txId={contract_id}>
           <Flex
             as="a"
@@ -60,7 +60,7 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
             <Icon as={BiLinkExternal} ml="8px" color="currentColor" size="16px" />
           </Flex>
         </TxLink>
-      )}
+      }
       flexShrink={0}
       mb="32px"
       title="Contract details"
