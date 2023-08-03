@@ -101,7 +101,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
   const [qrShowing, setQrShowing] = React.useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
 
-  const TopRight = () => (
+  const TopRight = (
     <Box position="relative">
       <Tooltip label={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
         <IconButton

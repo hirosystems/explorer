@@ -1,7 +1,7 @@
 import type { GetServerSideProps } from 'next';
 import { apiClients, createConfig } from '@/common/api/client';
 import { DEFAULT_MAINNET_SERVER } from '@/common/constants';
-import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client/dist/configuration';
+import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client';
 
 import { TokenPage } from '@/app/token/[tokenId]';
 

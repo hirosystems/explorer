@@ -12,7 +12,7 @@ jest.mock('@/common/api/client', () => ({
   createConfig: jest.fn(),
 }));
 
-jest.mock('@hirosystems/token-metadata-api-client/dist/configuration', () => ({
+jest.mock('@hirosystems/token-metadata-api-client', () => ({
   Configuration: jest.fn(),
 }));
 
