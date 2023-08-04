@@ -1,3 +1,10 @@
+## [1.111.1](https://github.com/hirosystems/explorer/compare/v1.111.0...v1.111.1) (2023-08-04)
+
+
+### Bug Fixes
+
+* holdings indicator incosistent ([f24a53f](https://github.com/hirosystems/explorer/commit/f24a53f559896484c7d6d50e2c1a5027fb747acc))
+
 # [1.111.0](https://github.com/hirosystems/explorer/compare/v1.110.5...v1.111.0) (2023-07-31)
 
 
