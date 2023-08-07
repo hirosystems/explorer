@@ -10,6 +10,7 @@ import React from 'react';
 import { LinksMenu } from '@/app/token/[tokenId]/LinksMenu';
 
 function TokenPage({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: TokenInfoProps }) {
+  console.log('tokenInfo', tokenInfo);
   if (!tokenInfo.basic) throw new Error('Could not find token info');
 
   const { name, symbol } = tokenInfo.basic;

@@ -214,6 +214,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
 
     return {
       props: {
+        redisUrl: process.env.REDIS_URL,
         basic: {
           name,
           symbol,
