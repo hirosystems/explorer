@@ -22,16 +22,20 @@ import { string } from 'yup';
 
 import { ChainID } from '@stacks/transactions';
 
-const buildCustomNetworkUrl = (url: string) => {
-  const hostname = encodeURIComponent(new URL(url).hostname);
-  const port = encodeURIComponent(new URL(url).port);
-  return `${hostname === 'localhost' ? 'http://' : 'https://'}${hostname}${port ? `:${port}` : ''}`;
+export const buildCustomNetworkUrl = (url: string) => {
+  const urlObj = new URL(url);
+  const hostname = encodeURIComponent(urlObj.hostname);
+  const port = encodeURIComponent(urlObj.port);
+  const pathname = !urlObj?.pathname || urlObj.pathname === '/' ? '' : urlObj.pathname;
+  return `${hostname === 'localhost' ? 'http://' : 'https://'}${hostname}${port ? `:${port}` : ''}${
+    pathname || ''
+  }`;
 };
 
-const fetchCustomNetworkId: (url: string, isSubnet: boolean) => Promise<ChainID | undefined> = (
-  url,
-  isSubnet
-) => {
+export const fetchCustomNetworkId: (
+  url: string,
+  isSubnet: boolean
+) => Promise<ChainID | undefined> = (url, isSubnet) => {
   return fetchFromApi(url)(DEFAULT_V2_INFO_ENDPOINT)
     .then(res => res.json())
     .then(res =>
@@ -136,7 +140,7 @@ export const AddNetworkForm: React.FC = () => {
               <Field name="url">
                 {({ field, form }: FieldProps<string, FormValues>) => (
                   <FormControl isInvalid={!!form.errors.url && !!form.touched.url}>
-                    <FormLabel>URL</FormLabel>
+                    <FormLabel>Base URL</FormLabel>
                     <Input {...field} placeholder="https://" />
                     <FormErrorMessage>{form.errors.url}</FormErrorMessage>
                   </FormControl>

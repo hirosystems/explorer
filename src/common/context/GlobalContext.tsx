@@ -1,11 +1,12 @@
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@/common/constants';
-import { NetworkModeUrlMap } from '@/common/constants/network';
+import { NetworkIdModeMap, NetworkModeUrlMap } from '@/common/constants/network';
 import { Network, NetworkModes } from '@/common/types/network';
 import cookie from 'cookie';
-import { FC, createContext, useMemo, useState } from 'react';
+import { FC, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { ChainID } from '@stacks/transactions';
+import { buildCustomNetworkUrl, fetchCustomNetworkId } from '@/components/add-network-form';
 
 interface GlobalContextProps {
   cookies: string;
@@ -84,36 +85,59 @@ export const AppContextProvider: FC<any> = ({
     [apiUrls, customNetworks, isUrlPassedSubnet, querySubnet]
   );
 
+  const addCustomNetwork = useCallback(
+    (network: Network) => {
+      return new Promise(resolve => {
+        setCookie('customNetworks', JSON.stringify({ ...customNetworks, [network.url]: network }), {
+          path: '/',
+          maxAge: 3600, // Expires after 1hr
+          sameSite: true,
+        });
+        setTimeout(() => {
+          setCustomNetworks({
+            ...customNetworks,
+            [network.url]: { ...network, isCustomNetwork: true },
+          });
+          resolve(true);
+        }, 100);
+      });
+    },
+    [customNetworks, setCookie]
+  );
+
+  // If the API URL from the query is not available, add it to custom networks
+  useEffect(() => {
+    const addCustomNetworkFromQuery = async () => {
+      const networkUrl = buildCustomNetworkUrl(queryApiUrl);
+      const networkId = await fetchCustomNetworkId(networkUrl, false);
+      if (networkId) {
+        const network: Network = {
+          label: queryApiUrl,
+          url: networkUrl,
+          networkId,
+          mode: NetworkIdModeMap[networkId],
+          isCustomNetwork: true,
+          isSubnet: false,
+        };
+        void addCustomNetwork(network);
+      }
+    };
+
+    if (queryApiUrl && !networks[queryApiUrl]) {
+      void addCustomNetworkFromQuery();
+    }
+  }, [queryApiUrl, networks, addCustomNetwork]);
+
   return (
     <GlobalContext.Provider
       value={{
-        activeNetwork: networks[activeNetworkKey],
+        activeNetwork: networks[activeNetworkKey] || {},
         activeNetworkKey,
         cookies,
         apiUrls,
-        addCustomNetwork: (network: Network) => {
-          return new Promise(resolve => {
-            setCookie(
-              'customNetworks',
-              JSON.stringify({ ...customNetworks, [network.url]: network }),
-              {
-                path: '/',
-                maxAge: 3600, // Expires after 1hr
-                sameSite: true,
-              }
-            );
-            setTimeout(() => {
-              setCustomNetworks({
-                ...customNetworks,
-                [network.url]: { ...network, isCustomNetwork: true },
-              });
-              resolve(true);
-            }, 100);
-          });
-        },
+        addCustomNetwork,
         removeCustomNetwork: (network: Network) => {
           const { [network.url]: omitted, ...remainingCustomNetworks } = customNetworks;
-          console.log('remainingCustomNetworks', remainingCustomNetworks);
           setCookie('customNetworks', JSON.stringify(remainingCustomNetworks), {
             path: '/',
             maxAge: 3600, // Expires after 1hr
