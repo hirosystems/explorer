@@ -1,3 +1,10 @@
+## [1.112.1](https://github.com/hirosystems/explorer/compare/v1.112.0...v1.112.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* add redis url to next config ([3c3ca8a](https://github.com/hirosystems/explorer/commit/3c3ca8a4f868531b90ade10ff16b3f6474fc60c7))
+
 # [1.112.0](https://github.com/hirosystems/explorer/compare/v1.111.1...v1.112.0) (2023-08-07)
 
 
