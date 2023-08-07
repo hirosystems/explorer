@@ -4,6 +4,7 @@ import { DEFAULT_MAINNET_SERVER } from '@/common/constants';
 import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client/dist/configuration';
 
 import { TokenPage } from '@/app/token/[tokenId]';
+import { getCacheClient } from '@/common/utils/cache-client';
 
 interface TokenLinks {
   websites: string[];
@@ -86,15 +87,39 @@ async function getTokenFromCoinGecko(tokenId: string) {
   }
 }
 
+// async function getCachedTokenInfo(tokenId: string) {
+//   try {
+//     const cachedTokenInfo = await getCacheClient().get(tokenId);
+//     if (cachedTokenInfo) {
+//       return JSON.parse(cachedTokenInfo);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
+  console.log('getServerSideProps');
   const tokenId = Array.isArray(params?.tokenId) ? params?.tokenId[0] : params?.tokenId;
   const isMainnet = query.chain === 'mainnet';
   const isCustomApi = !!query.api;
+  const cacheClient = getCacheClient();
 
   try {
     if (!tokenId || !isMainnet || isCustomApi) {
       throw new Error('cannot fetch token info for this request');
     }
+
+    // check if token data exist in redis cache
+    // const cachedTokenInfo = await getCachedTokenInfo(tokenId);
+    // if (cachedTokenInfo) {
+    //   console.log('cache hit');
+    //   return {
+    //     props: JSON.parse(cachedTokenInfo),
+    //   };
+    // }
+    //
+    // console.log('cache miss');
 
     const { tokenMetadataApi } = apiClients(
       createConfig(DEFAULT_MAINNET_SERVER),
