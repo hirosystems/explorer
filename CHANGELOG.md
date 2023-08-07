@@ -1,3 +1,10 @@
+# [1.112.0](https://github.com/hirosystems/explorer/compare/v1.111.1...v1.112.0) (2023-08-07)
+
+
+### Features
+
+* implement caching ([40017cb](https://github.com/hirosystems/explorer/commit/40017cbca567086e366e500ae93d21a87a2d8a4c))
+
 ## [1.111.1](https://github.com/hirosystems/explorer/compare/v1.111.0...v1.111.1) (2023-08-04)
 
 
