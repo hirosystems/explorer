@@ -8,9 +8,11 @@ import { Stack } from '@/ui/Stack';
 import { Tabs } from './Tabs';
 import React from 'react';
 import { LinksMenu } from '@/app/token/[tokenId]/LinksMenu';
+import { REDIS_URL } from '@/common/constants';
 
 function TokenPage({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: TokenInfoProps }) {
   console.log('tokenInfo', tokenInfo);
+  console.log('redis_url', REDIS_URL);
   if (!tokenInfo.basic) throw new Error('Could not find token info');
 
   const { name, symbol } = tokenInfo.basic;
