@@ -43,6 +43,7 @@ jobs:
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
+            REDIS_URL=${{ secrets.REDIS_URL }}
             SEGMENT_WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}

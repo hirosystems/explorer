@@ -91,3 +91,5 @@ export const SUBNETS_PARENT_NETWORK_IDS = {
 };
 
 export const PAGE_MAX_WIDTH = '1280px';
+
+export const REDIS_URL = process.env.REDIS_URL || '';

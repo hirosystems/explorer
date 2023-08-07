@@ -69,6 +69,7 @@
     "formik": "2.2.9",
     "framer-motion": "8.1.4",
     "husky": "8.0.3",
+    "ioredis": "5.3.2",
     "mdi-react": "7.5.0",
     "modern-normalize": "1.1.0",
     "monaco-editor": "0.36.1",
@@ -97,6 +98,7 @@
     "react-simple-code-editor": "0.11.0",
     "react-ssr-prepass": "npm:preact-ssr-prepass",
     "schema-inspector": "2.0.1",
+    "server-only": "0.0.1",
     "statuspage.io": "3.2.5",
     "swr": "0.5.6",
     "unique-names-generator": "4.6.0",
@@ -189,5 +191,12 @@
     "buffer": "6.0.3",
     "schema-inspector": "2.0.0",
     "ssri": "8.0.1"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false,
+    "net": false,
+    "tls": false
   }
 }
