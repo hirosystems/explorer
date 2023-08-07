@@ -33,6 +33,7 @@ const moduleExports = withBundleAnalyzer({
     SENTRY_DSN: process.env.SENTRY_DSN,
     X_API_KEY: process.env.X_API_KEY,
     RELEASE_TAG_NAME: process.env.RELEASE_TAG_NAME,
+    REDIS_URL: process.env.REDIS_URL,
   },
   output: 'standalone',
   async redirects() {
