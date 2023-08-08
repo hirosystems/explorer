@@ -87,39 +87,37 @@ async function getTokenFromCoinGecko(tokenId: string) {
   }
 }
 
-// async function getCachedTokenInfo(tokenId: string) {
-//   try {
-//     const cachedTokenInfo = await getCacheClient().get(tokenId);
-//     if (cachedTokenInfo) {
-//       return JSON.parse(cachedTokenInfo);
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
+async function getCachedTokenInfo(tokenId: string) {
+  try {
+    const cachedTokenInfo = await getCacheClient().get(tokenId);
+    if (cachedTokenInfo) {
+      return JSON.parse(cachedTokenInfo);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   console.log('getServerSideProps');
   const tokenId = Array.isArray(params?.tokenId) ? params?.tokenId[0] : params?.tokenId;
   const isMainnet = query.chain === 'mainnet';
   const isCustomApi = !!query.api;
-  const cacheClient = getCacheClient();
 
   try {
     if (!tokenId || !isMainnet || isCustomApi) {
       throw new Error('cannot fetch token info for this request');
     }
 
-    // check if token data exist in redis cache
-    // const cachedTokenInfo = await getCachedTokenInfo(tokenId);
-    // if (cachedTokenInfo) {
-    //   console.log('cache hit');
-    //   return {
-    //     props: JSON.parse(cachedTokenInfo),
-    //   };
-    // }
-    //
-    // console.log('cache miss');
+    const cachedTokenInfo = await getCachedTokenInfo(tokenId);
+    if (cachedTokenInfo) {
+      console.log('cache hit', cachedTokenInfo);
+      return {
+        props: cachedTokenInfo,
+      };
+    }
+
+    console.log('cache miss');
 
     const { tokenMetadataApi } = apiClients(
       createConfig(DEFAULT_MAINNET_SERVER),
@@ -212,35 +210,38 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       ],
     };
 
-    return {
-      props: {
-        redisUrl: process.env.REDIS_URL,
-        basic: {
-          name,
-          symbol,
-          totalSupply,
-        },
-        extended: {
-          categories,
-
-          links,
-          circulatingSupply,
-          fullyDilutedValuation,
-          tvl,
-
-          currentPrice,
-          priceChangePercentage24h,
-          currentPriceInBtc,
-          priceInBtcChangePercentage24h,
-
-          marketCap,
-
-          tradingVolume24h,
-          tradingVolumeChangePercentage24h,
-
-          developerData,
-        },
+    const tokenInfo = {
+      basic: {
+        name,
+        symbol,
+        totalSupply,
       },
+      extended: {
+        categories,
+
+        links,
+        circulatingSupply,
+        fullyDilutedValuation,
+        tvl,
+
+        currentPrice,
+        priceChangePercentage24h,
+        currentPriceInBtc,
+        priceInBtcChangePercentage24h,
+
+        marketCap,
+
+        tradingVolume24h,
+        tradingVolumeChangePercentage24h,
+
+        developerData,
+      },
+    };
+
+    await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
+
+    return {
+      props: tokenInfo,
     };
   } catch (error) {
     console.error(error);
