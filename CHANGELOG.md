@@ -1,3 +1,10 @@
+# [1.116.0](https://github.com/hirosystems/explorer/compare/v1.115.0...v1.116.0) (2023-08-08)
+
+
+### Features
+
+* test redis connection ([6413ee0](https://github.com/hirosystems/explorer/commit/6413ee087c9d01cc898114a8fdbc0f7dd51e151f))
+
 # [1.115.0](https://github.com/hirosystems/explorer/compare/v1.114.0...v1.115.0) (2023-08-07)
 
 
