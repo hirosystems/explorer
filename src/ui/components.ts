@@ -45,3 +45,7 @@ export * from './Th';
 export * from './Td';
 export * from './Show';
 export * from './Hide';
+export * from './Collapse';
+export * from './Popover';
+export * from './PopoverTrigger';
+export * from './PopoverContent';

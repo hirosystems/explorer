@@ -7,7 +7,6 @@ const Home: FC = () => {
   return (
     <>
       <Meta />
-
       <HomeClient />
     </>
   );

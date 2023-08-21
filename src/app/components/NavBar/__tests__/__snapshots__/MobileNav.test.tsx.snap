@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MobileNav should render correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="chakra-stack css-j054pp"
+  >
+    <div
+      class="css-hwh8lq"
+    >
+      <button
+        aria-label="Change color mode"
+        class="chakra-button css-wulgol"
+        title="Toggle color mode"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="none"
+          focusable="false"
+          height="1em"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+            stroke="none"
+          />
+          <path
+            d="M3 3l18 18"
+          />
+          <path
+            d="M16 12a4 4 0 0 0 -4 -4m-2.834 1.177a4 4 0 0 0 5.66 5.654"
+          />
+          <path
+            d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"
+          />
+        </svg>
+      </button>
+      <button
+        aria-label="Close menu"
+        class="chakra-button css-11sr1fv"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          fill="none"
+          focusable="false"
+          height="32px"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="32px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+            stroke="none"
+          />
+          <path
+            d="M18 6l-12 12"
+          />
+          <path
+            d="M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="css-xar605"
+    >
+      <div
+        class="chakra-stack css-1bf3tp6"
+      >
+        <a
+          class="css-loh7ac"
+          href="#"
+        >
+          <span
+            class="chakra-text css-pjr8e0"
+          >
+            Mobile Sample Item 1
+          </span>
+          <svg
+            class="chakra-icon css-1uilshh"
+            fill="currentColor"
+            focusable="false"
+            height="1em"
+            stroke="currentColor"
+            stroke-width="0"
+            viewBox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+              fill-rule="evenodd"
+            />
+          </svg>
+        </a>
+        <div
+          class="chakra-collapse"
+          style="overflow: hidden; display: none; opacity: 0; height: 0px;"
+        >
+          <div
+            class="chakra-stack css-sgwtyh"
+          >
+            <a
+              class="css-9sazr8"
+              href="#"
+            >
+              Mobile Sub Item 1
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="chakra-stack css-1bf3tp6"
+      >
+        <a
+          class="css-loh7ac"
+          href="#"
+        >
+          <span
+            class="chakra-text css-pjr8e0"
+          >
+            Mobile Sample Item 2
+          </span>
+        </a>
+        <div
+          class="chakra-collapse"
+          style="overflow: hidden; display: none; opacity: 0; height: 0px;"
+        >
+          <div
+            class="chakra-stack css-sgwtyh"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

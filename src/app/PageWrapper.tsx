@@ -7,7 +7,6 @@ import {
   SITE_NOTICE_ENABLED,
 } from '@/common/constants';
 import { Footer } from '@/components/footer';
-import { Header } from '@/components/header';
 import { Modals } from '@/components/modals';
 import { NetworkModeToast } from '@/components/network-mode-toast';
 import { Notice } from '@/components/notice';
@@ -17,6 +16,7 @@ import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
 import { useColorMode } from '@chakra-ui/react';
 import { FC } from 'react';
+import { NavBar } from '@/app/components/NavBar';
 
 export const PageWrapper: FC = ({ children }) => {
   const colorMode = useColorMode().colorMode;
@@ -42,7 +42,7 @@ export const PageWrapper: FC = ({ children }) => {
         }}
       >
         <Box marginLeft={`calc(100vw - 100%)`}>
-          <Header />
+          <NavBar />
           <Flex
             display={['block', 'block', 'none', 'none']}
             p="8px"

@@ -78,6 +78,7 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
           transform="translateX(4px) scaleX(-1)"
           color="white"
           size={isSmall ? '16px' : '18px'}
+          zIndex={1}
         />
       </Flex>
     </Flex>
