@@ -54,7 +54,7 @@ export const NavBar: FC = () => {
       {
         id: 'tokens',
         label: 'Tokens',
-        href: '/tokens',
+        href: buildUrl('/tokens', activeNetwork),
       },
       {
         id: 'sandbox',
