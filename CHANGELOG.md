@@ -1,3 +1,10 @@
+# [1.118.0](https://github.com/hirosystems/explorer/compare/v1.117.0...v1.118.0) (2023-08-22)
+
+
+### Features
+
+* nav menu revamp ([4d48823](https://github.com/hirosystems/explorer/commit/4d48823aa4c48908e7f4d26ccc58bfe9362891b6))
+
 # [1.117.0](https://github.com/hirosystems/explorer/compare/v1.116.0...v1.117.0) (2023-08-22)
 
 
