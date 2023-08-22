@@ -1,3 +1,10 @@
+## [1.118.1](https://github.com/hirosystems/explorer/compare/v1.118.0...v1.118.1) (2023-08-22)
+
+
+### Bug Fixes
+
+* tokens page url ([225e8a8](https://github.com/hirosystems/explorer/commit/225e8a8ddfc491e33c5edca37d127cb3ec9f7fd1))
+
 # [1.118.0](https://github.com/hirosystems/explorer/compare/v1.117.0...v1.118.0) (2023-08-22)
 
 
