@@ -24,24 +24,22 @@ export const ContractSource: React.FC<
     <Section
       title={'Source code'}
       topRight={
-        sourceTx
-          ? () => (
-              <TxLink txId={sourceTx}>
-                <Badge
-                  as="a"
-                  _hover={{ bg: '#eee', cursor: 'pointer' }}
-                  color={'textBody'}
-                  bg={'bgAlt'}
-                  target="_blank"
-                  labelProps={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}
-                  border={'none'}
-                >
-                  View deployment
-                  <Box as={TbChevronRight} ml="4px" size="14px" display={'inline'} />
-                </Badge>
-              </TxLink>
-            )
-          : undefined
+        sourceTx ? (
+          <TxLink txId={sourceTx}>
+            <Badge
+              as="a"
+              _hover={{ bg: '#eee', cursor: 'pointer' }}
+              color={'textBody'}
+              bg={'bgAlt'}
+              target="_blank"
+              labelProps={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}
+              border={'none'}
+            >
+              View deployment
+              <Box as={TbChevronRight} ml="4px" size="14px" display={'inline'} />
+            </Badge>
+          </TxLink>
+        ) : null
       }
     >
       <CodeEditor code={source} claritySyntax={claritySyntax} />

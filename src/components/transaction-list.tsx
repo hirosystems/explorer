@@ -95,7 +95,7 @@ export const TransactionList: React.FC<
   const hasVisibleTxs = !!filteredTxs.length;
 
   return (
-    <Section title={'Transactions'} topRight={Filter} {...rest}>
+    <Section title={'Transactions'} topRight={<Filter />} {...rest}>
       <Box px="24px">
         {hasTxs && !hasVisibleTxs ? (
           <FilteredMessage />
