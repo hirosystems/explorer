@@ -1,3 +1,10 @@
+## [1.118.2](https://github.com/hirosystems/explorer/compare/v1.118.1...v1.118.2) (2023-08-25)
+
+
+### Bug Fixes
+
+* filter component rendering ([245134e](https://github.com/hirosystems/explorer/commit/245134e28f1f90a0a9dc0161acf4be3a113aea22))
+
 ## [1.118.1](https://github.com/hirosystems/explorer/compare/v1.118.0...v1.118.1) (2023-08-22)
 
 
