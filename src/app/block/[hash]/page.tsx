@@ -85,7 +85,7 @@ export default function BlockSinglePage({ params: { hash } }: any) {
       {blockTransactionsResponse.isLoading ? (
         <SectionBoxSkeleton />
       ) : !!blockTransactionsResponse.data ? (
-        <Section title={'Transactions'} topRight={FilterButton} mt="32px">
+        <Section title={'Transactions'} topRight={<FilterButton />} mt="32px">
           <Box flexGrow={1}>
             <BlockTxsList blockHash={hash} />
           </Box>
