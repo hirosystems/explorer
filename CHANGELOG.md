@@ -1,3 +1,10 @@
+# [1.119.0](https://github.com/hirosystems/explorer/compare/v1.118.2...v1.119.0) (2023-08-30)
+
+
+### Features
+
+* add custom network in query; support base url including path ([bcb7d03](https://github.com/hirosystems/explorer/commit/bcb7d0349d20119c11552f6f4a900acf0b343812))
+
 ## [1.118.2](https://github.com/hirosystems/explorer/compare/v1.118.1...v1.118.2) (2023-08-25)
 
 
