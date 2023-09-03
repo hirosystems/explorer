@@ -39,7 +39,7 @@ const TokensList: FC = () => {
             <Icon as={TbSearch} color={`textCaption.${colorMode}`} />
           </InputRightElement>
           <Input
-            type="tel"
+            type="text"
             placeholder="Token name, symbol or address"
             _placeholder={{ color: `textCaption.${colorMode}` }}
             width={['200px', '300px']}
