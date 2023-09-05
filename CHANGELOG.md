@@ -1,3 +1,10 @@
+## [1.119.1](https://github.com/hirosystems/explorer/compare/v1.119.0...v1.119.1) (2023-09-05)
+
+
+### Bug Fixes
+
+* change search input type on token list ([d6c2961](https://github.com/hirosystems/explorer/commit/d6c29618de843af8e03f0342e180205835e9c150))
+
 # [1.119.0](https://github.com/hirosystems/explorer/compare/v1.118.2...v1.119.0) (2023-08-30)
 
 
