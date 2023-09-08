@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MicroblockListItem component renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-brzhns"
+  >
+    <span
+      class="chakra-stack css-1h7m9p5"
+    >
+      <div
+        class="css-1gqk193"
+      >
+        <svg
+          class="chakra-icon css-1bc6rbx"
+          fill="none"
+          focusable="false"
+          height="16px"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="16px"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <polygon
+            points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+          />
+        </svg>
+      </div>
+      <span
+        class="chakra-stack css-x6ucgl"
+      >
+        <div
+          class="css-1exw3s2"
+        >
+          <a
+            class="chakra-text css-jqqks0"
+            href="/microblock/mockHash?chain=mainnet"
+          >
+            mockHash
+          </a>
+        </div>
+        <span
+          class="chakra-text css-1h2w9sn"
+          style="user-select: none;"
+        >
+          Microblock
+        </span>
+      </span>
+    </span>
+    <span
+      class="chakra-stack css-afdpdg"
+    >
+      <span
+        class="chakra-text css-zousv3"
+      >
+        MockRelativeTime1619047871000
+      </span>
+    </span>
+  </div>
+</DocumentFragment>
+`;

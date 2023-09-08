@@ -29,7 +29,6 @@ export function NftAvatar({
 }) {
   const { asset } = getAssetNameParts(token);
   const url = tokenMetadata?.metadata?.cached_image;
-  console.log('url', url, tokenMetadata?.metadata?.cached_image);
   const [contentType, setContentType] = useState<string | null>('image');
   useEffect(() => {
     if (!url) return;

@@ -5,43 +5,80 @@ import { SkeletonBlockList } from '@/components/loaders/skeleton-text';
 import { Section } from '@/components/section';
 import { SectionFooterAction } from '@/components/section-footer-button';
 import { Accordion } from '@/ui/Accordion';
-import { AccordionButton } from '@/ui/AccordionButton';
-import { AccordionIcon } from '@/ui/AccordionIcon';
-import { AccordionItem } from '@/ui/AccordionItem';
-import { AccordionPanel } from '@/ui/AccordionPanel';
-import { Flex, Grid, Spinner } from '@/ui/components';
-import { Caption, Text } from '@/ui/typography';
+import { FormControl, FormLabel, Switch } from '@/ui/components';
+import { Text } from '@/ui/typography';
 import dynamic from 'next/dynamic';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Block } from '@stacks/blockchain-api-client';
+import { Block, connectWebSocketClient } from '@stacks/blockchain-api-client';
 
 import { useInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
 import { useBlockListInfinite } from '../../common/queries/useBlockListInfinite';
-import { useVerticallyStackedElementsBorderStyle } from '../../common/styles/border';
-import { BlockListItem } from './BlockListItem';
-import { MicroblockListItem } from './MicroblockListItem';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { AnimatedBlockAndMicroblocksItem } from '@/app/components/BlockList/AnimatedBlockAndMicroblocksItem';
+import { EnhancedBlock } from '@/app/components/BlockList/types';
+import { DEFAULT_LIST_LIMIT } from '@/common/constants';
 
 const BlocksListBase: React.FC<{
   limit?: number;
 }> = ({ limit }) => {
+  const [isLive, setIsLive] = React.useState(false);
+  const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
+  const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
+  const activeNetwork = useGlobalContext().activeNetwork;
   const api = useApi();
   const response = useBlockListInfinite(api);
   const { isError, isFetchingNextPage, fetchNextPage, hasNextPage } = response;
 
   const blocks = useInfiniteQueryResult<Block>(response, limit);
 
+  useEffect(() => {
+    setInitialBlocks(blocks);
+  }, [blocks]);
+
+  useEffect(() => {
+    if (!isLive) return;
+    let sub: {
+      unsubscribe?: () => Promise<void>;
+    };
+    const subscribe = async () => {
+      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://'));
+      sub = await client.subscribeBlocks(block => {
+        setLatestBlocks(prevLatestBlocks => [
+          { ...block, microblock_tx_count: {}, animate: true },
+          ...prevLatestBlocks,
+        ]);
+      });
+    };
+    void subscribe();
+    return () => {
+      if (sub?.unsubscribe) {
+        void sub.unsubscribe();
+      }
+    };
+  }, [activeNetwork.url, isLive]);
+
+  const [counter, setCounter] = useState(10000000);
+
+  const allBlocks = useMemo(() => {
+    return [...latestBlocks, ...initialBlocks]
+      .sort((a, b) => (b.height || 0) - (a.height || 0))
+      .reduce((acc: EnhancedBlock[], block, index) => {
+        if (!acc.some(b => b.height === block.height)) {
+          acc.push({ ...block, destroy: index >= (limit || DEFAULT_LIST_LIMIT) });
+        }
+        return acc;
+      }, []);
+  }, [initialBlocks, latestBlocks, limit]);
+
+  const removeOldBlock = useCallback((block: EnhancedBlock) => {
+    setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+    setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+  }, []);
+
   if (isError) return <Text>Failed to load blocks</Text>;
 
-  if (!blocks?.length)
-    return (
-      <Grid alignContent="center" flexGrow={1} px="16px" py="64px" placeItems="center">
-        <Spinner size="lg" color={'textCaption'} />
-        <Caption mt="32px" maxWidth="38ch">
-          Blocks should start streaming in soon.
-        </Caption>
-      </Grid>
-    );
+  if (!allBlocks?.length) return <SkeletonBlockList />;
 
   return (
     <Section
@@ -49,44 +86,23 @@ const BlocksListBase: React.FC<{
       gridColumnStart={['1', '1', '2']}
       gridColumnEnd={['2', '2', '3']}
       minWidth={0}
+      topRight={
+        <FormControl display="flex" alignItems="center">
+          <FormLabel htmlFor="blocks-live-view-switch" mb="0">
+            live view
+          </FormLabel>
+          <Switch id="blocks-live-view-switch" onChange={() => setIsLive(!isLive)} />
+        </FormControl>
+      }
     >
       <Accordion allowMultiple>
-        {blocks?.map((block, index, arr) => {
-          return (
-            <AccordionItem key={block.hash} pl={'20px'} border={'none'}>
-              <Flex gap={'6px'}>
-                <BlockListItem block={block} data-test={`block-${index}`} />
-                <AccordionButton
-                  flexGrow={0}
-                  flexShrink={0}
-                  width={'30px'}
-                  ml={'auto'}
-                  p={0}
-                  justifyContent={'center'}
-                >
-                  <AccordionIcon />
-                </AccordionButton>
-              </Flex>
-              <AccordionPanel p={'0 30px 0 0'} css={useVerticallyStackedElementsBorderStyle}>
-                {!!block.microblocks_accepted?.length ? (
-                  block.microblocks_accepted.map((microblockHash, microblockIndex) => (
-                    <MicroblockListItem
-                      blockTime={block.burn_block_time}
-                      hash={microblockHash}
-                      index={microblockIndex}
-                      length={arr.length}
-                      key={microblockHash}
-                    />
-                  ))
-                ) : (
-                  <Text fontSize={'14px'} p={'20px'} align={'center'}>
-                    No Microblocks
-                  </Text>
-                )}
-              </AccordionPanel>
-            </AccordionItem>
-          );
-        })}
+        {allBlocks?.map(block => (
+          <AnimatedBlockAndMicroblocksItem
+            block={block}
+            key={block.hash}
+            onAnimationExit={() => removeOldBlock(block)}
+          />
+        ))}
       </Accordion>
       <SectionFooterAction
         isLoading={isFetchingNextPage}

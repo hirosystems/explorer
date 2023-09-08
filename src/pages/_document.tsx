@@ -40,7 +40,6 @@ export default class MyDocument extends Document<DocumentProps> {
       apiKey: SEGMENT_WRITE_KEY,
       page: true,
     };
-    console.log('opts', opts);
     return snippet.min(opts);
   }
 

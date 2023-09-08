@@ -300,7 +300,6 @@ export const BlocksVisualizer: React.FC = () => {
 
   const lastFourBlocks = (blocks?.pages?.[0]?.results || []).slice(0, 4).reverse();
   if (lastFourBlocks.length === 0) return null;
-  console.log(lastFourBlocks);
   const lastBlock = lastFourBlocks[3];
   return (
     <Box css={wrapperStyle}>

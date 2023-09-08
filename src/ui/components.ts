@@ -49,3 +49,4 @@ export * from './Collapse';
 export * from './Popover';
 export * from './PopoverTrigger';
 export * from './PopoverContent';
+export * from './Switch';

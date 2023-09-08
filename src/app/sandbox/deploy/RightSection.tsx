@@ -61,7 +61,9 @@ export const RightSection: FC<LeftSectionProps> = ({ claritySyntax }) => {
               wordSeparators: '`~!@#$%^&*()=+[{]}\\|;:\'",.<>/?',
             });
           }}
-          wrapperClassName="clarity-editor-wrapper"
+          wrapperProps={{
+            className: 'clarity-editor-wrapper',
+          }}
           className="clarity-editor"
           defaultLanguage="clarity"
           theme="vs-dark"

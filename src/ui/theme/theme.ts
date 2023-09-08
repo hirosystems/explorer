@@ -1,5 +1,6 @@
 import { StyleFunctionProps, extendTheme } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
+import { switchTheme } from '@/ui/theme/switchTheme';
 
 const lightColors = {
   accent: '#5546FF',
@@ -72,6 +73,7 @@ const colors = {
   feedbackSuccess: { light: '#00A200', dark: '#49CE49' },
   textInvert: { light: '#fff', dark: '#040404' },
   links: { light: '#47409c', dark: '#8F91FF' },
+  switchBg: { light: '#cbd5e0', dark: '#cbd5e0' },
 };
 
 export const theme = extendTheme({
@@ -98,6 +100,7 @@ export const theme = extendTheme({
     body: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'",
   },
   components: {
+    Switch: switchTheme,
     // Tabs: tabsTheme,
   },
 });
