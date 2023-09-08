@@ -24,11 +24,8 @@ export const AppConfig: React.FC<{
   const userSession = useAppSelector(selectUserSession);
 
   useEffect(() => {
-    console.log('mount');
     if (!window.analytics) return;
-    console.log('analytics');
     events.on('routeChangeComplete', (url: string) => {
-      console.log('routeChangeComplete');
       return window.analytics?.page(url);
     });
   }, []);

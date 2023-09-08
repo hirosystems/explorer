@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Flex } from '@/ui/Flex';
 import { Text } from '@/ui/Text';
 import { useColorMode } from '@chakra-ui/react';
 import { Icon } from '@/ui/Icon';
 import { BsChevronRight } from 'react-icons/bs';
 
-export const NavLabel: FC = ({ children }) => (
+export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
   <Flex height={'50px'} alignItems={'center'}>
     <Text
       color={`textTitle.${useColorMode().colorMode}`}

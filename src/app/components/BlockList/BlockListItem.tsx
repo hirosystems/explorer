@@ -2,7 +2,7 @@ import { TwoColsListItem } from '@/common/components/TwoColumnsListItem';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '@/common/utils';
 import { BtcStxBlockLinks } from '@/components/btc-stx-block-links';
 import { BlockLink } from '@/components/links';
-import { Circle, Flex, FlexProps, Icon, Stack } from '@/ui/components';
+import { Circle, Flex, FlexProps, Icon } from '@/ui/components';
 import { CheckIcon } from '@/ui/icons';
 import { Caption, Text } from '@/ui/typography';
 import pluralize from 'pluralize';

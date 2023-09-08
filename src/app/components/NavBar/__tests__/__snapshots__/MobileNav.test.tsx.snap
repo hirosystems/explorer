@@ -3,10 +3,10 @@
 exports[`MobileNav should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="chakra-stack css-j054pp"
+    class="chakra-stack css-4xpai1"
   >
     <div
-      class="css-hwh8lq"
+      class="css-sw0q0z"
     >
       <button
         aria-label="Change color mode"
@@ -79,10 +79,10 @@ exports[`MobileNav should render correctly 1`] = `
       class="css-xar605"
     >
       <div
-        class="chakra-stack css-1bf3tp6"
+        class="chakra-stack css-bi0nzx"
       >
         <a
-          class="css-loh7ac"
+          class="css-3xyie7"
           href="#"
         >
           <span
@@ -91,7 +91,7 @@ exports[`MobileNav should render correctly 1`] = `
             Mobile Sample Item 1
           </span>
           <svg
-            class="chakra-icon css-1uilshh"
+            class="chakra-icon css-3tv48m"
             fill="currentColor"
             focusable="false"
             height="1em"
@@ -112,7 +112,7 @@ exports[`MobileNav should render correctly 1`] = `
           style="overflow: hidden; display: none; opacity: 0; height: 0px;"
         >
           <div
-            class="chakra-stack css-sgwtyh"
+            class="chakra-stack css-k96o6u"
           >
             <a
               class="css-9sazr8"
@@ -124,10 +124,10 @@ exports[`MobileNav should render correctly 1`] = `
         </div>
       </div>
       <div
-        class="chakra-stack css-1bf3tp6"
+        class="chakra-stack css-bi0nzx"
       >
         <a
-          class="css-loh7ac"
+          class="css-3xyie7"
           href="#"
         >
           <span
@@ -141,7 +141,7 @@ exports[`MobileNav should render correctly 1`] = `
           style="overflow: hidden; display: none; opacity: 0; height: 0px;"
         >
           <div
-            class="chakra-stack css-sgwtyh"
+            class="chakra-stack css-k96o6u"
           />
         </div>
       </div>

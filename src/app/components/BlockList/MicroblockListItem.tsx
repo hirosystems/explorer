@@ -10,8 +10,7 @@ export const MicroblockListItem: React.FC<{
   blockTime: number;
   hash: string;
   index: number;
-  length: number;
-}> = ({ blockTime, hash, index, length, ...rest }) => {
+}> = ({ blockTime, hash, index, ...rest }) => {
   return (
     <Flex
       justifyContent="space-between"

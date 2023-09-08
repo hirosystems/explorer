@@ -99,7 +99,6 @@ async function getCachedTokenInfo(tokenId: string) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
-  console.log('getServerSideProps');
   const tokenId = Array.isArray(params?.tokenId) ? params?.tokenId[0] : params?.tokenId;
   const isMainnet = query.chain === 'mainnet';
   const isCustomApi = !!query.api;

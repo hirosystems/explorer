@@ -51,7 +51,7 @@ export const SkeletonForType = (props: { type: string | undefined }) => {
 export const SkeletonBlockList = () => {
   return (
     <Section title="Recent Blocks">
-      <Flex flexDirection="column" flexGrow={1} px="20px">
+      <Flex flexDirection="column" flexGrow={1} px="20px" data-testid="skeleton-block-list">
         {[...Array(10)].map((_, i) => (
           <SkeletonBlock key={i} />
         ))}

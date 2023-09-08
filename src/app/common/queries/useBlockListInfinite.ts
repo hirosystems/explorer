@@ -13,9 +13,6 @@ export const useBlockListInfinite = (api: ReturnType<typeof useApi>) => {
         limit: DEFAULT_LIST_LIMIT,
         offset: pageParam || 0,
       }),
-    // new Promise(function (resolve) {
-    //   setTimeout(() => resolve([]), 1000000);
-    // }),
     { getNextPageParam, staleTime: TWO_MINUTES }
   );
 };

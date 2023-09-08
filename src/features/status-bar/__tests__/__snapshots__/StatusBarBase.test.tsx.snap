@@ -5,7 +5,7 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
   className="css-giyt3z"
 >
   <div
-    className="css-hrvs1m"
+    className="css-xl7qkt"
   >
     <svg
       className="chakra-icon css-15nyr1i"
@@ -42,7 +42,7 @@ exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
   className="css-giyt3z"
 >
   <div
-    className="css-hrvs1m"
+    className="css-xl7qkt"
   >
     <svg
       className="chakra-icon css-ptzomh"

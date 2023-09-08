@@ -15,10 +15,10 @@ import { StatusBar } from '@/features/status-bar';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
 import { useColorMode } from '@chakra-ui/react';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { NavBar } from '@/app/components/NavBar';
 
-export const PageWrapper: FC = ({ children }) => {
+export const PageWrapper: FC<{ children: ReactNode }> = ({ children }) => {
   const colorMode = useColorMode().colorMode;
 
   return (
