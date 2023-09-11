@@ -1,3 +1,10 @@
+# [1.120.0](https://github.com/hirosystems/explorer/compare/v1.119.1...v1.120.0) (2023-09-11)
+
+
+### Features
+
+* blocks live view ([1d83bbd](https://github.com/hirosystems/explorer/commit/1d83bbd224505090b09f98e8c19d14037cce52ba))
+
 ## [1.119.1](https://github.com/hirosystems/explorer/compare/v1.119.0...v1.119.1) (2023-09-05)
 
 
