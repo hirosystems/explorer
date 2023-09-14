@@ -42,14 +42,6 @@ jobs:
           push: true
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
-          build-args: |
-            REDIS_URL=${{ secrets.REDIS_URL }}
-            SEGMENT_WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
-            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
-            SENTRY_DSN=${{ secrets.SENTRY_DSN }}
-            SENTRY_LOG_LEVEL=debug
-            X_API_KEY=${{ secrets.X_API_KEY }}
-            RELEASE_TAG_NAME=${{ github.event.release.tag_name }}
 
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag/digest: ${{ github.ref_type == "branch" ? ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }} || ${{ github.ref_name }} }}"'
