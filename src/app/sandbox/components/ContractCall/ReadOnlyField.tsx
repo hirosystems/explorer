@@ -39,7 +39,11 @@ export const ReadOnlyField: FC<ReadOnlyProps> = ({
         network: stacksNetwork,
         senderAddress: stxAddress,
       }),
-    { suspense: false }
+    {
+      suspense: false,
+      staleTime: 0,
+      cacheTime: 0,
+    }
   );
 
   if (!data) return null;
