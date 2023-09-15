@@ -1,3 +1,10 @@
+## [1.120.1](https://github.com/hirosystems/explorer/compare/v1.120.0...v1.120.1) (2023-09-15)
+
+
+### Bug Fixes
+
+* read-only function call caching ([6c39eb8](https://github.com/hirosystems/explorer/commit/6c39eb86f98bbfcd8521c6ddbe626798e052a21c))
+
 # [1.120.0](https://github.com/hirosystems/explorer/compare/v1.119.1...v1.120.0) (2023-09-11)
 
 
