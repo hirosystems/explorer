@@ -1,3 +1,10 @@
+## [1.120.2](https://github.com/hirosystems/explorer/compare/v1.120.1...v1.120.2) (2023-09-19)
+
+
+### Bug Fixes
+
+* redis environment variable ([726b182](https://github.com/hirosystems/explorer/commit/726b182ac4d50b3357446783c3d4a76eef452ac1))
+
 ## [1.120.1](https://github.com/hirosystems/explorer/compare/v1.120.0...v1.120.1) (2023-09-15)
 
 
