@@ -1,3 +1,10 @@
+## [1.120.3](https://github.com/hirosystems/explorer/compare/v1.120.2...v1.120.3) (2023-09-19)
+
+
+### Bug Fixes
+
+* swap network ids ([b4e827f](https://github.com/hirosystems/explorer/commit/b4e827f4fef0de0d20b77a9b3f38d57f435aee7b))
+
 ## [1.120.2](https://github.com/hirosystems/explorer/compare/v1.120.1...v1.120.2) (2023-09-19)
 
 
