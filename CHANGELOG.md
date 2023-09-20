@@ -1,3 +1,11 @@
+# [1.121.0](https://github.com/hirosystems/explorer/compare/v1.120.3...v1.121.0) (2023-09-20)
+
+
+### Features
+
+* show receipt time on transaction page ([3d5f1e8](https://github.com/hirosystems/explorer/commit/3d5f1e8e123ea43c3ad569b0e1a70e09eb2a15e6))
+* show receipt time on transaction page ([42deb34](https://github.com/hirosystems/explorer/commit/42deb34812185e7169577f1def057d91762e8579))
+
 ## [1.120.3](https://github.com/hirosystems/explorer/compare/v1.120.2...v1.120.3) (2023-09-19)
 
 
