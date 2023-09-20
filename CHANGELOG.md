@@ -1,3 +1,18 @@
+# [1.123.0](https://github.com/hirosystems/explorer/compare/v1.122.0...v1.123.0) (2023-09-20)
+
+
+### Bug Fixes
+
+* lint fix ([fe80f8b](https://github.com/hirosystems/explorer/commit/fe80f8b89d5f380d2a483b4f0e45ae13c074db5d))
+* rectified the incorrect tuple value ([36ae278](https://github.com/hirosystems/explorer/commit/36ae2786a8fb6957f45ded23d749e91736fe7cad))
+* removed ? wherever not required ([cfb6f06](https://github.com/hirosystems/explorer/commit/cfb6f06f1dc37d94c25fba395031ed13de0b01ea))
+
+
+### Features
+
+* added types and handled variables ([add0edb](https://github.com/hirosystems/explorer/commit/add0edbfc1b403be4fe2b035b68082e1639595d1))
+* modified functions and added tests ([24d351a](https://github.com/hirosystems/explorer/commit/24d351ade0fd640869ccbdce612efdb0e8c46bb5))
+
 # [1.122.0](https://github.com/hirosystems/explorer/compare/v1.121.0...v1.122.0) (2023-09-20)
 
 
