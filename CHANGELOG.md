@@ -1,3 +1,11 @@
+# [1.122.0](https://github.com/hirosystems/explorer/compare/v1.121.0...v1.122.0) (2023-09-20)
+
+
+### Features
+
+* added coinbase icon ([982bc17](https://github.com/hirosystems/explorer/commit/982bc17e619db10f4e93c5bbc6b2519d4e908e2e))
+* added poison microblock icon ([bc6553d](https://github.com/hirosystems/explorer/commit/bc6553d5269f1bfd7088cccd2a70372620c07333))
+
 # [1.121.0](https://github.com/hirosystems/explorer/compare/v1.120.3...v1.121.0) (2023-09-20)
 
 
