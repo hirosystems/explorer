@@ -4,7 +4,7 @@ import { Box } from '@/ui/components';
 import { css } from '@emotion/react';
 import React from 'react';
 
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
 interface BlockResultItemProps {
   result: FoundResult;

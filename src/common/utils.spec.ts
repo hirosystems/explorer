@@ -13,7 +13,7 @@ describe('isJSONString', () => {
 
   test('returns false for a non-string input', () => {
     const nonStringInput = { key: 'value' };
-    expect(isJSONString(nonStringInput)).toBe(false);
+    expect(isJSONString(nonStringInput as any)).toBe(false);
   });
 
   test('returns false for an empty string', () => {

@@ -2,7 +2,7 @@
 
 import { Badge } from '@/common/components/Badge';
 import { MODALS } from '@/common/constants';
-import { selectOpenedModal } from '@/components/modals/modal-slice';
+import { useOpenedModal } from '@/components/modals/modal-slice';
 import { PercentageCircle } from '@/components/percentage-circle';
 import { Section } from '@/components/section';
 import { AddressQueryKeys, addressQK } from '@/features/address/query-keys';
@@ -208,7 +208,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
 export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse }> = ({
   balance,
 }) => {
-  const isOpen = selectOpenedModal() === MODALS.UNLOCKING_SCHEDULE;
+  const isOpen = useOpenedModal() === MODALS.UNLOCKING_SCHEDULE;
   const queries = useAddressQueries();
   const { data: stacksInfo } = useQuery(
     addressQK(AddressQueryKeys.coreApiInfo),

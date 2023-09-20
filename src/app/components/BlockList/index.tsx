@@ -10,7 +10,8 @@ import { Text } from '@/ui/typography';
 import dynamic from 'next/dynamic';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Block, connectWebSocketClient } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
+import { connectWebSocketClient } from '@stacks/blockchain-api-client';
 
 import { useInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
 import { useBlockListInfinite } from '../../common/queries/useBlockListInfinite';
@@ -43,7 +44,7 @@ const BlocksListBase: React.FC<{
     };
     const subscribe = async () => {
       const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://'));
-      sub = await client.subscribeBlocks(block => {
+      sub = await client.subscribeBlocks((block: any) => {
         setLatestBlocks(prevLatestBlocks => [
           { ...block, microblock_tx_count: {}, animate: true },
           ...prevLatestBlocks,

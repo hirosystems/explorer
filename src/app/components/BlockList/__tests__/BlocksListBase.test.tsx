@@ -2,11 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import BlocksListBase from '../';
 import { useBlockListInfinite as useBlockListInfiniteActual } from '@/app/common/queries/useBlockListInfinite';
-import {
-  Block,
-  connectWebSocketClient as connectWebSocketClientActual,
-  StacksApiWebSocketClient,
-} from '@stacks/blockchain-api-client';
+import { connectWebSocketClient as connectWebSocketClientActual } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
+import { StacksApiWebSocketClient } from '@stacks/blockchain-api-client';
+
 import { EnhancedBlock } from '@/app/components/BlockList/types';
 
 const useBlockListInfinite = useBlockListInfiniteActual as jest.MockedFunction<

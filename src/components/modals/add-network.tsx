@@ -1,13 +1,13 @@
 import { MODALS } from '@/common/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { AddNetworkForm } from '@/components/add-network-form';
-import { selectOpenedModal } from '@/components/modals/modal-slice';
+import { useOpenedModal } from '@/components/modals/modal-slice';
 import { Box, Modal, Stack, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';
 import { FC } from 'react';
 
 export const AddNetworkModal: FC = () => {
-  const modal = selectOpenedModal();
+  const modal = useOpenedModal();
   const dispatch = useAppDispatch();
   const isOpen = modal === MODALS.ADD_NETWORK;
   return (

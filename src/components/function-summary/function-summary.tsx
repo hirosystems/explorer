@@ -28,7 +28,7 @@ export const FunctionSummarySection = memo<{
           />
           <KeyValueHorizontal
             label="Result"
-            value={<FunctionSummaryResult result={result} txStatus={txStatus} />}
+            value={<FunctionSummaryResult result={result} />}
             labelProps={{ alignSelf: 'flex-start' }}
           />
           <KeyValueHorizontal

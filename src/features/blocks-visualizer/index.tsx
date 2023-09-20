@@ -12,7 +12,7 @@ import { AiFillCheckCircle } from 'react-icons/ai';
 import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
 import { TbCurrencyBitcoin } from 'react-icons/tb';
 
-import { Block as BlockType } from '@stacks/blockchain-api-client';
+import { Block as BlockType } from '@stacks/stacks-blockchain-api-types';
 
 import { useBlockListInfinite } from '../../app/common/queries/useBlockListInfinite';
 

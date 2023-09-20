@@ -16,6 +16,8 @@ export const BlockHeight: FC<{
   tx: Transaction | MempoolTransaction;
   block?: Block;
 }> = ({ tx, block }) => {
+  const [isOnTouchScreen] = useMediaQuery('(hover: none)');
+
   if (isInMempool(tx) || isInMicroblock(tx)) return null;
 
   const ts = tx.parent_burn_block_time || tx.burn_block_time;
@@ -24,8 +26,6 @@ export const BlockHeight: FC<{
   const readableTs = `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(
     ts * 1000
   ).toLocaleDateString()}`;
-
-  const [isOnTouchScreen] = useMediaQuery('(hover: none)');
 
   return (
     <KeyValueHorizontal

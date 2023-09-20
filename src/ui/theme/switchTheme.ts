@@ -2,11 +2,9 @@ import { switchAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 
-const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(
-  switchAnatomy.keys
-);
+const multiStyleConfigHelpers = createMultiStyleConfigHelpers(switchAnatomy.keys);
 
-const baseStyle = definePartsStyle(props => ({
+const baseStyle = multiStyleConfigHelpers.definePartsStyle(props => ({
   thumb: {
     bg: mode(`#fff`, `bg4.dark`)(props),
   },
@@ -18,4 +16,4 @@ const baseStyle = definePartsStyle(props => ({
   },
 }));
 
-export const switchTheme = defineMultiStyleConfig({ baseStyle });
+export const switchTheme = multiStyleConfigHelpers.defineMultiStyleConfig({ baseStyle });

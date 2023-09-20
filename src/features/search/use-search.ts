@@ -12,7 +12,7 @@ import { isNumeric } from '@/common/utils';
 import { selectSearchTerm } from '@/features/search/search-slice';
 import { useQuery } from '@tanstack/react-query';
 
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
 import { useDebounce } from '../../app/common/hooks/use-debounce';
