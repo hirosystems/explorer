@@ -1,3 +1,10 @@
+## [1.123.2](https://github.com/hirosystems/explorer/compare/v1.123.1...v1.123.2) (2023-09-20)
+
+
+### Bug Fixes
+
+* function summary result ([87bfb6a](https://github.com/hirosystems/explorer/commit/87bfb6ae30053de04265b06a8950869e6b4bdf2b))
+
 ## [1.123.1](https://github.com/hirosystems/explorer/compare/v1.123.0...v1.123.1) (2023-09-20)
 
 
