@@ -1,3 +1,10 @@
+## [1.123.1](https://github.com/hirosystems/explorer/compare/v1.123.0...v1.123.1) (2023-09-20)
+
+
+### Bug Fixes
+
+* unit test ([22aa467](https://github.com/hirosystems/explorer/commit/22aa467cc384456e860384b113cd3fa798c57cc9))
+
 # [1.123.0](https://github.com/hirosystems/explorer/compare/v1.122.0...v1.123.0) (2023-09-20)
 
 
