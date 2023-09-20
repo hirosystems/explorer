@@ -7,7 +7,7 @@ import { useVerticallyStackedElementsBorderStyle } from '@/app/common/styles/bor
 import { MicroblockListItem } from './MicroblockListItem';
 import { Text } from '@/ui/Text';
 import React, { memo } from 'react';
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 import { BlockListItem } from './BlockListItem';
 
 export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = memo(

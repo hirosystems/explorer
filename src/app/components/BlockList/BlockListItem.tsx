@@ -8,7 +8,7 @@ import { Caption, Text } from '@/ui/typography';
 import pluralize from 'pluralize';
 import React from 'react';
 
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
 export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
   ({ block, ...rest }) => {

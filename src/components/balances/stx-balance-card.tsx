@@ -80,6 +80,7 @@ interface StxBalancesProps {
 }
 
 export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
+  const colorMode = useColorMode().colorMode;
   const dispatch = useAppDispatch();
   const tokenOfferingData = balances?.token_offering_locked;
 
@@ -126,7 +127,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
               alignItems="flex-start"
               py="24px"
             >
-              <Circle bg={`brand.${useColorMode().colorMode}`} mr="16px" size="36px">
+              <Circle bg={`brand.${colorMode}`} mr="16px" size="36px">
                 <StxIcon color="white" size="16px" />
               </Circle>
               <Stack spacing="8px" pr="16px">

@@ -27,4 +27,4 @@ export const modalSlice = createSlice({
 
 export const { openModal, closeModal } = modalSlice.actions;
 
-export const selectOpenedModal = () => useAppSelector(state => state.modal.openedModal);
+export const useOpenedModal = () => useAppSelector(state => state.modal.openedModal);

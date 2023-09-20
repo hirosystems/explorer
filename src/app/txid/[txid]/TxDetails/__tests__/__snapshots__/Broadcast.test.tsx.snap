@@ -3,21 +3,21 @@
 exports[`<Broadcast /> renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-1pxgzpz"
+    class="css-1vao8g8"
   >
     <div
-      class="css-14yezot"
+      class="css-wasqz"
     >
       Broadcast
     </div>
     <div
-      class="css-15u2v2k"
+      class="css-1q1jcsf"
     >
       <div
         class="css-1dupj0l"
       >
         <div
-          class="css-15159ky"
+          class="css-1txr7ua"
         >
           <svg
             class="chakra-icon css-1p0vfbv"
