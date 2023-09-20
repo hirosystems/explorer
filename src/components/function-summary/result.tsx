@@ -15,7 +15,7 @@ interface ReprValueProps {
 }
 
 const getReprValue = ({ type, value }: ReprValueProps) => {
-  let reprValue = value.toString() ?? 'none';
+  let reprValue = value ?? 'none';
   if (type.includes('list') && Array.isArray(value)) {
     reprValue = value.map((listEntry: any) => listEntry.value).join(', ');
   }
