@@ -1,3 +1,10 @@
+## [1.123.3](https://github.com/hirosystems/explorer/compare/v1.123.2...v1.123.3) (2023-09-22)
+
+
+### Bug Fixes
+
+* load more blocks ([e8458e3](https://github.com/hirosystems/explorer/commit/e8458e3a6eade740208c18260cb4718888e11066))
+
 ## [1.123.2](https://github.com/hirosystems/explorer/compare/v1.123.1...v1.123.2) (2023-09-20)
 
 
