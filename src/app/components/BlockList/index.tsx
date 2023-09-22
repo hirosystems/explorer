@@ -19,6 +19,7 @@ import { useGlobalContext } from '@/common/context/useAppContext';
 import { AnimatedBlockAndMicroblocksItem } from '@/app/components/BlockList/AnimatedBlockAndMicroblocksItem';
 import { EnhancedBlock } from '@/app/components/BlockList/types';
 import { DEFAULT_LIST_LIMIT } from '@/common/constants';
+import { BlockAndMicroblocksItem } from '@/app/components/BlockList/BlockAndMicroblocksItem';
 
 const BlocksListBase: React.FC<{
   limit?: number;
@@ -97,21 +98,27 @@ const BlocksListBase: React.FC<{
       }
     >
       <Accordion allowMultiple>
-        {allBlocks?.map(block => (
-          <AnimatedBlockAndMicroblocksItem
-            block={block}
-            key={block.hash}
-            onAnimationExit={() => removeOldBlock(block)}
-          />
-        ))}
+        {allBlocks?.map(block =>
+          isLive ? (
+            <AnimatedBlockAndMicroblocksItem
+              block={block}
+              key={block.hash}
+              onAnimationExit={() => removeOldBlock(block)}
+            />
+          ) : (
+            <BlockAndMicroblocksItem block={block} key={block.hash} />
+          )
+        )}
       </Accordion>
-      <SectionFooterAction
-        isLoading={isFetchingNextPage}
-        hasNextPage={hasNextPage}
-        href={limit ? '/blocks' : undefined}
-        fetchNextPage={limit ? undefined : fetchNextPage}
-        label={'blocks'}
-      />
+      {!isLive && (
+        <SectionFooterAction
+          isLoading={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+          href={limit ? '/blocks' : undefined}
+          fetchNextPage={limit ? undefined : fetchNextPage}
+          label={'blocks'}
+        />
+      )}
     </Section>
   );
 };
