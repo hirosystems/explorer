@@ -8,6 +8,7 @@ import React, { FC, useState } from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import { TbTools } from 'react-icons/tb';
 import { useQueryClient } from '@tanstack/react-query';
+import { FiExternalLink } from 'react-icons/fi';
 
 import { openContractDeploy } from '@stacks/connect';
 
@@ -57,7 +58,7 @@ export const LeftSection: FC = () => {
           pr="84px"
           color={'textBody'}
         />
-        <Flex position="absolute" right="8px">
+        <Flex position="absolute" right="44px">
           <IconButton
             color={'textBody'}
             onClick={() => {
@@ -68,8 +69,6 @@ export const LeftSection: FC = () => {
             size={'30px'}
           />
         </Flex>
-      </Flex>
-      <Stack alignItems="center" justifyContent={'center'} isInline spacing="8px" mt="20px">
         <Box onClick={() => dispatch(toggleCodeToolbar())}>
           <Tooltip label="Contract tools">
             <IconButton
@@ -79,6 +78,8 @@ export const LeftSection: FC = () => {
             />
           </Tooltip>
         </Box>
+      </Flex>
+      <Stack alignItems="center" justifyContent={'center'} isInline spacing="8px" mt="20px">
         <Button
           onClick={() =>
             isConnected
@@ -92,6 +93,25 @@ export const LeftSection: FC = () => {
           width="100%"
         >
           {isConnected ? 'Deploy' : 'Connect Stacks Wallet'}
+        </Button>
+      </Stack>
+      <Stack mt={'10px'}>
+        <Button
+          color={'textBody'}
+          variant="outline"
+          _hover={{ background: '#F9F9FA' }}
+          bg={'bg'}
+          rightIcon={<FiExternalLink />}
+          onClick={() => {
+            const paramsBase64 = { name: contractName, sourceCode: codeBody };
+            const state = btoa(JSON.stringify(paramsBase64));
+
+            // 'state' param is used by Auth0 to forward the params after the login portal
+            window.open(`https://platform.hiro.so/projects/import?state=${state}`);
+          }}
+          width="100%"
+        >
+          Save Contract in Hiro Platform
         </Button>
       </Stack>
     </>
