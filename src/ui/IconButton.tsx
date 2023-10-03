@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   IconButton as CUIIconButton,
   IconButtonProps as CUIIconButtonProps,
-  forwardRef,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
@@ -17,7 +15,7 @@ export const IconButton = forwardRef<IconButtonProps, 'button'>(
       height={size || rest.height}
       minWidth={size || rest.minWidth}
       minHeight={size || rest.minHeight}
-      bg={'transparent'}
+      bg="transparent"
       _hover={{ bg: 'rgba(255, 255, 255, 0.15)' }}
       isRound
       {...rest}

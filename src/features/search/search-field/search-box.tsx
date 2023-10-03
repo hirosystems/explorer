@@ -1,11 +1,10 @@
+import { FormEvent, memo, useEffect } from 'react';
+import { TbSearch, TbX } from 'react-icons/tb';
 import { useAppDispatch } from '@/common/state/hooks';
 import { SearchInput } from '@/features/search/search-field/search-input';
 import { blur, clearSearchTerm, focus, setSearchTerm } from '@/features/search/search-slice';
 import { useSearch } from '@/features/search/use-search';
 import { Box, Flex, IconButton, Spinner } from '@/ui/components';
-import * as React from 'react';
-import { useEffect } from 'react';
-import { TbSearch, TbX } from 'react-icons/tb';
 
 type Variant = 'default' | 'small';
 
@@ -13,7 +12,7 @@ interface SearchBoxProps {
   variant?: Variant;
 }
 
-export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
+export const SearchBox = memo(({ variant }: SearchBoxProps) => {
   const dispatch = useAppDispatch();
   const {
     query: { isFetching },
@@ -37,7 +36,7 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         height={defaultHeight}
         pl={inputLeftOffset}
         pr={inputRightOffset}
-        onChange={(e: React.FormEvent<HTMLInputElement>) => {
+        onChange={(e: FormEvent<HTMLInputElement>) => {
           dispatch(setSearchTerm(e.currentTarget.value));
         }}
         value={searchTerm}
@@ -59,8 +58,8 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         position="absolute"
         right="16px"
         size={isSmall ? '28px' : '36px'}
-        aria-label={'Clear search bar'}
-        borderRadius={'50%'}
+        aria-label="Clear search bar"
+        borderRadius="50%"
         _hover={{ bg: 'rgba(255, 255, 255, 0.15)' }}
         zIndex={1}
       />

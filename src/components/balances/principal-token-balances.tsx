@@ -1,23 +1,25 @@
-import { useVerticallyStackedElementsBorderStyle } from '@/app/common/styles/border';
-import { hexToString } from '@/common/utils';
-import { TokenAssetListItem } from '@/components/balances/token-asset-list-item';
-import { Section } from '@/components/section';
-import { Box, FlexProps, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@/ui/components';
-import { Caption } from '@/ui/typography';
-import * as React from 'react';
 import { useMemo } from 'react';
-
 import {
   AddressBalanceResponse,
   NonFungibleTokenHoldingsList,
 } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { useVerticallyStackedElementsBorderStyle } from '@/appPages/common/styles/border';
+import { hexToString } from '@/common/utils';
+import { TokenAssetListItem } from '@/components/balances/token-asset-list-item';
+import { Section } from '@/components/section';
+import { Box, FlexProps, Grid, Tab, TabList, TabPanel, TabPanels, Tabs } from '@/ui/components';
+import { Caption } from '@/ui/typography';
 
-export const NftBalances: React.FC<{
+export function NftBalances({
+  balances,
+  bnsHexValues,
+  nftHoldings,
+}: {
   balances: AddressBalanceResponse;
   bnsHexValues: any;
   nftHoldings?: NonFungibleTokenHoldingsList;
-}> = ({ balances, bnsHexValues, nftHoldings }) => {
+}) {
   const verticallyStackedElementsBorderStyle = useVerticallyStackedElementsBorderStyle();
   return Object.keys(balances.non_fungible_tokens).length ? (
     <Box css={verticallyStackedElementsBorderStyle}>
@@ -41,9 +43,9 @@ export const NftBalances: React.FC<{
       <Caption>This account has no collectibles.</Caption>
     </Grid>
   );
-};
+}
 
-export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ balances }) => {
+export function FtBalances({ balances }: { balances: AddressBalanceResponse }) {
   const FTokens = Object.keys(balances.fungible_tokens).filter(
     key => Number(balances.fungible_tokens[key]?.balance) > 0
   );
@@ -64,34 +66,39 @@ export const FtBalances: React.FC<{ balances: AddressBalanceResponse }> = ({ bal
       <Caption>This account has no tokens.</Caption>
     </Grid>
   );
-};
+}
 
-export const TokenBalancesCard: React.FC<
-  FlexProps & { balances: AddressBalanceResponse; nftHoldings?: NonFungibleTokenHoldingsList }
-> = ({ balances, nftHoldings, ...rest }) => {
+export function TokenBalancesCard({
+  balances,
+  nftHoldings,
+  ...rest
+}: FlexProps & { balances: AddressBalanceResponse; nftHoldings?: NonFungibleTokenHoldingsList }) {
   const bnsHexValues = useMemo(
     () =>
       nftHoldings?.results
         ?.filter(nftHolding => nftHolding.asset_identifier.endsWith('.bns::names'))
-        ?.reduce((acc, data) => {
-          acc[data.asset_identifier] = data.value?.hex
-            ? {
-                name: hexToString(
-                  cvToJSON(hexToCV(data.value.hex))?.value?.name?.value?.replace('0x', '')
-                ),
-                namespace: hexToString(
-                  cvToJSON(hexToCV(data.value.hex))?.value?.namespace?.value?.replace('0x', '')
-                ),
-              }
-            : {};
-          return acc;
-        }, {} as Record<string, { name?: string; namespace?: string }>) || {},
+        ?.reduce(
+          (acc, data) => {
+            acc[data.asset_identifier] = data.value?.hex
+              ? {
+                  name: hexToString(
+                    cvToJSON(hexToCV(data.value.hex))?.value?.name?.value?.replace('0x', '')
+                  ),
+                  namespace: hexToString(
+                    cvToJSON(hexToCV(data.value.hex))?.value?.namespace?.value?.replace('0x', '')
+                  ),
+                }
+              : {};
+            return acc;
+          },
+          {} as Record<string, { name?: string; namespace?: string }>
+        ) || {},
     [nftHoldings]
   );
 
   return (
     <Section mb="32px" title="Holdings" {...rest}>
-      <Tabs variant={'soft-rounded'} borderRadius={'0px'} border={'none'} isLazy bg={'transparent'}>
+      <Tabs variant="soft-rounded" borderRadius="0px" border="none" isLazy bg="transparent">
         <TabList>
           <Tab fontSize="12px">Tokens</Tab>
           <Tab fontSize="12px">Collectibles</Tab>
@@ -111,4 +118,4 @@ export const TokenBalancesCard: React.FC<
       </Tabs>
     </Section>
   );
-};
+}

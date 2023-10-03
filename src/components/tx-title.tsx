@@ -1,14 +1,12 @@
-import { PageTitle } from '@/app/common/components/PageTitle';
+import { useMemo } from 'react';
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TxStatus } from '@/common/types/tx';
 import { getContractName, getFunctionName, microToStacks } from '@/common/utils';
 import { getTransactionStatus } from '@/common/utils/transactions';
 import { Status } from '@/components/status';
 import { Tag, TagProps } from '@/components/tags';
-import { Box, BoxProps, Flex, Stack, StackProps } from '@/ui/components';
+import { Box, BoxProps, Stack, StackProps } from '@/ui/components';
 import { Title } from '@/ui/typography';
-import { useMemo } from 'react';
-
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export interface TitleProps {
   contractName?: string;
@@ -43,7 +41,7 @@ const TxTags = ({
   txStatus?: TxStatus;
   type: Transaction['tx_type'] | MempoolTransaction['tx_type'];
 } & BoxProps) => (
-  <Stack isInline spacing="8px" mt={'0px !important'}>
+  <Stack isInline spacing="8px" mt="0px !important">
     <Tags type={type} />
     {txStatus && <Status txStatus={txStatus as any} />}
   </Stack>
@@ -70,8 +68,8 @@ export const TxTitle = ({ contractName, tx, ...rest }: TitleProps & StackProps) 
   const txStatus = useMemo(() => getTransactionStatus(tx), [tx]);
 
   return (
-    <Stack {...rest} mb={'24px'}>
-      <Title as="h1" color="white" fontSize="36px" mt={'72px'} mb={'16px'}>
+    <Stack {...rest} mb="24px">
+      <Title as="h1" color="white" fontSize="36px" mt="72px" mb="16px">
         {getTxTitle(tx)}
       </Title>
       <TxTags tx={tx} txStatus={txStatus} type={tx.tx_type} />

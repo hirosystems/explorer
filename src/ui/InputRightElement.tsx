@@ -1,9 +1,7 @@
-'use client';
-
 import {
-  InputRightElement as CUIInputRightElement,
-  InputElementProps as CUIInputRightElementProps,
   forwardRef,
+  InputElementProps as CUIInputRightElementProps,
+  InputRightElement as CUIInputRightElement,
   useColorMode,
 } from '@chakra-ui/react';
 

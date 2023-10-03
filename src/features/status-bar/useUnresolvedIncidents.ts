@@ -8,6 +8,5 @@ export function useUnresolvedIncidents() {
     queryKey: ['unresolvedIncidents'],
     queryFn: () => statusPage.api.incidents.getUnresolved(),
     refetchInterval: 1000 * 60 * 10,
-    suspense: true,
   });
 }

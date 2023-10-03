@@ -1,14 +1,11 @@
-import { Flex, FlexProps } from '@/ui/components';
-import React, { FC } from 'react';
+import React from 'react';
 import { forwardRef } from '@chakra-ui/react';
-import Link, { LinkProps } from 'next/link';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { buildUrl } from '@/app/common/utils/buildUrl';
+import { Flex, FlexProps } from '@/ui/components';
 
 export const ResultItemWrapper = forwardRef<FlexProps, 'div'>(({ children, ...rest }, ref) => (
   <Flex ref={ref}>
     <Flex
-      as={'a'}
+      as="a"
       p="24px"
       alignItems="center"
       position="relative"

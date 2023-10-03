@@ -12,6 +12,7 @@ import {
   TokenTransferTransaction,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { Singleton } from '@/common/types/utils';
 
 export type TxStatus =
   | 'pending'
@@ -68,3 +69,7 @@ export type TxData<T> = T extends NonContractTxs
   : T extends ContractCallTxs
   ? TxDataContractCall
   : TxDataContractDeploy;
+
+export type FunctionArg = Singleton<
+  Required<Required<ContractCallTransaction['contract_call']>['function_args']>
+>;

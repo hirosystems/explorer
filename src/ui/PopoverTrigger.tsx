@@ -1,8 +1,6 @@
-'use client';
-
 import { PopoverTrigger as CUIPopoverTrigger } from '@chakra-ui/react';
-import { FC } from 'react';
+import { ReactNode } from 'react';
 
-export const PopoverTrigger: FC = ({ children, ...rest }) => (
-  <CUIPopoverTrigger {...rest}>{children}</CUIPopoverTrigger>
-);
+export function PopoverTrigger({ children, ...rest }: { children: ReactNode }) {
+  return <CUIPopoverTrigger {...rest}>{children}</CUIPopoverTrigger>;
+}

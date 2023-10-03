@@ -1,9 +1,8 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 import { DEFAULT_TX_EVENTS_LIMIT } from '@/common/constants';
 import { getNextPageParam } from '@/common/utils';
-import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
-import { useInfiniteQuery } from '@tanstack/react-query';
-
-import { TransactionEvent } from '@stacks/stacks-blockchain-api-types';
+import { transactionQK, TransactionQueryKeys } from '@/features/transaction/query-keys';
 
 import { useTransactionQueries } from './use-transaction-queries';
 

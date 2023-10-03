@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Tooltip as CUITooltip,
   TooltipProps as CUITooltipProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 
@@ -13,8 +11,8 @@ export const Tooltip = forwardRef<TooltipProps, 'div'>(({ children, ...rest }, r
     placement="top"
     hasArrow
     arrowSize={10}
-    p={'8px'}
-    borderRadius={'5px'}
+    p="8px"
+    borderRadius="5px"
     bg={`invert.${useColorMode().colorMode}`}
     ref={ref}
     closeOnClick={false}

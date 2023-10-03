@@ -1,23 +1,20 @@
-'use client';
-
+import dayjs from 'dayjs';
+import React from 'react';
+import { TbAlertTriangle, TbInfoCircle } from 'react-icons/tb';
+import { useQuery } from '@tanstack/react-query';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 import { Badge } from '@/common/components/Badge';
 import { MODALS } from '@/common/constants';
 import { useOpenedModal } from '@/components/modals/modal-slice';
 import { PercentageCircle } from '@/components/percentage-circle';
 import { Section } from '@/components/section';
-import { AddressQueryKeys, addressQK } from '@/features/address/query-keys';
+import { addressQK, AddressQueryKeys } from '@/features/address/query-keys';
 import { useAddressQueries } from '@/features/address/use-address-queries';
 import { Box, BoxProps, Flex, Grid, Modal, Stack, Tooltip } from '@/ui/components';
 import { Caption, Text, Title } from '@/ui/typography';
-import dayjs from 'dayjs';
-import React from 'react';
-import { TbAlertTriangle, TbInfoCircle } from 'react-icons/tb';
-import { useQuery } from '@tanstack/react-query';
 
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-
-const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest }) => {
-  const value = Number(Number(amount) / Math.pow(10, 6));
+function StxAmount({ amount, ...rest }: BoxProps & { amount: number }) {
+  const value = Number(Number(amount) / 10 ** 6);
 
   const [stx, ustx] = value
     .toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })
@@ -31,12 +28,15 @@ const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest })
       <Box as="span"> STX</Box>
     </Box>
   );
-};
+}
 
-const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: number }> = ({
+function OverviewCard({
   balance,
   stacksTipHeight,
-}) => {
+}: {
+  balance?: AddressBalanceResponse;
+  stacksTipHeight?: number;
+}) {
   const tokenOfferingData = balance?.token_offering_locked;
   if (!tokenOfferingData) return null;
   const { total_locked, total_unlocked, unlock_schedule } = tokenOfferingData;
@@ -86,7 +86,7 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
           >
             <Stack>
               <Caption>Unlocked</Caption>
-              <StxAmount color={'textBody'} amount={totalThatHasUnlocked} />
+              <StxAmount color="textBody" amount={totalThatHasUnlocked} />
             </Stack>
           </Flex>
           <Flex
@@ -98,19 +98,22 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
           >
             <Stack>
               <Caption>Locked</Caption>
-              <StxAmount color={'textBody'} amount={parseFloat(total_locked)} />
+              <StxAmount color="textBody" amount={parseFloat(total_locked)} />
             </Stack>
           </Flex>
         </Stack>
       </Stack>
     </Section>
   );
-};
+}
 
-const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: number }> = ({
+function Table({
   balance,
   stacksTipHeight,
-}) => {
+}: {
+  balance?: AddressBalanceResponse;
+  stacksTipHeight?: number;
+}) {
   const tokenOfferingData = balance?.token_offering_locked;
   if (!tokenOfferingData) return null;
   const { unlock_schedule } = tokenOfferingData;
@@ -118,7 +121,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
   return (
     <Section mt="32px" px="32px" pb="8px" pt={['8px', '8px', 'unset']}>
       <Grid
-        borderBottom={'1px solid'}
+        borderBottom="1px solid"
         pb="16px"
         pt="24px"
         width="100%"
@@ -129,7 +132,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
         <Flex>
           <Caption>Est. Date</Caption>
           <Tooltip label="Based on average Bitcoin block time.">
-            <Box size="16px" color={'textCaption'} ml="8px">
+            <Box size="16px" color="textCaption" ml="8px">
               <TbInfoCircle size="16px" />
             </Box>
           </Tooltip>
@@ -160,10 +163,10 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
             justifyContent="flex-start"
             position="relative"
           >
-            <Box fontWeight={[500, 500, 'unset']} mb={['8px', '8px', 'unset']} color={'textBody'}>
+            <Box fontWeight={[500, 500, 'unset']} mb={['8px', '8px', 'unset']} color="textBody">
               <Box display={['inline', 'inline', 'none']}>Block </Box>#{block_height}
             </Box>
-            <Box mb={['16px', '16px', 'unset']} color={'textBody'}>
+            <Box mb={['16px', '16px', 'unset']} color="textBody">
               {relativeTime}
             </Box>
             <Flex
@@ -173,11 +176,11 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
               right={0}
             >
               {isReceived ? (
-                <Badge bg={'feedbackSuccess'} border={'none'}>
+                <Badge bg="feedbackSuccess" border="none">
                   Received
                 </Badge>
               ) : (
-                <Badge color={'textBody'} bg={'border'} border={'none'}>
+                <Badge color="textBody" bg="border" border="none">
                   Locked
                 </Badge>
               )}
@@ -188,7 +191,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
             <StxAmount
               textAlign={['left', 'left', 'right']}
               amount={parseFloat(amount)}
-              color={'textBody'}
+              color="textBody"
             />
             <Caption my="8px" mt="16px" display={['block', 'block', 'none']}>
               Cumulative
@@ -196,32 +199,29 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
             <StxAmount
               textAlign={['left', 'left', 'right']}
               amount={cumulativeAmount}
-              color={'textBody'}
+              color="textBody"
             />
           </Grid>
         );
       })}
     </Section>
   );
-};
+}
 
-export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse }> = ({
-  balance,
-}) => {
+export function UnlockingScheduleModal({ balance }: { balance?: AddressBalanceResponse }) {
   const isOpen = useOpenedModal() === MODALS.UNLOCKING_SCHEDULE;
   const queries = useAddressQueries();
   const { data: stacksInfo } = useQuery(
     addressQK(AddressQueryKeys.coreApiInfo),
-    queries.fetchCoreApiInfo(),
-    { suspense: false }
+    queries.fetchCoreApiInfo()
   );
 
   return (
-    <Modal isOpen={isOpen} title={'Unlocking schedule'}>
-      <Box width="100%" maxWidth="960px" bg={'bg'} maxHeight="calc(100vh - 64px)" overflow="auto">
+    <Modal isOpen={isOpen} title="Unlocking schedule">
+      <Box width="100%" maxWidth="960px" bg="bg" maxHeight="calc(100vh - 64px)" overflow="auto">
         <Stack spacing="16px">
           <Box>
-            <Text fontSize={'14px'} color={'textBody'} lineHeight="22px" maxWidth="72ch">
+            <Text fontSize="14px" color="textBody" lineHeight="22px" maxWidth="72ch">
               This address participated in the Stacks token offering. Its STX is subject to the
               unlocking schedule detailed below. The dates are estimates and can vary depending on
               the Bitcoin block time.
@@ -232,7 +232,7 @@ export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse
             <Section p="16px" mt="32px">
               <Stack isInline alignItems="center">
                 <Box size="18px">
-                  <TbAlertTriangle color={'feedbackAlert'} size="18px" />
+                  <TbAlertTriangle color="feedbackAlert" size="18px" />
                 </Box>
                 <Caption>This table only shows data from after the launch of Stacks 2.0</Caption>
               </Stack>
@@ -243,4 +243,4 @@ export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse
       </Box>
     </Modal>
   );
-};
+}

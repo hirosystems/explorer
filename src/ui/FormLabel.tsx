@@ -1,5 +1,3 @@
-'use client';
-
 import {
   FormLabel as CUIFormLabel,
   FormLabelProps as CUIFormLabelProps,
@@ -16,8 +14,8 @@ export const FormLabel = forwardRef<FormLabelProps, 'div'>(({ children, size, ..
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    fontSize={'12px'}
-    colo={'textCaption'}
+    fontSize="12px"
+    colo="textCaption"
     {...rest}
   >
     {children}

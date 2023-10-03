@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   MenuDivider as CUIMenuDivider,
   MenuDividerProps as CUIMenuDividerProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

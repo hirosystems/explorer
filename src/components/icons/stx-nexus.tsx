@@ -1,6 +1,6 @@
-import { Box, BoxProps } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
 import React from 'react';
+import { Box, BoxProps } from '@/ui/components';
 
 export const StxNexus = forwardRef<BoxProps, 'svg'>(
   ({ color = 'white', as = 'svg', ...props }, ref) => (

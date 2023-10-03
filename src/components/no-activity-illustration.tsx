@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@/ui/components';
 import React from 'react';
+import { Box, BoxProps } from '@/ui/components';
 
 export function NoActivityIllustration(props: BoxProps) {
   return (

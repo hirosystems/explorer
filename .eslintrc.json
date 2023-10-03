@@ -1,0 +1,44 @@
+{
+  "root": true,
+  "extends": [
+    "prettier",
+    "plugin:@next/next/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:storybook/recommended"
+  ],
+  "plugins": ["prettier", "@typescript-eslint", "react-hooks"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module",
+    "project": ["tsconfig.json"]
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "eslintrc.js",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "arrow-body-style": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/prefer-default-export": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/require-default-props": "off",
+    "react/function-component-definition": "off",
+    "no-promise-executor-return": "warn",
+    "no-restricted-syntax": 0,
+    "no-use-before-define": "off",
+    "no-nested-ternary": "off",
+    "no-await-in-loop": "off",
+    "no-plusplus": "off",
+    "prefer-destructuring": "warn",
+    "no-unused-vars": "warn",
+    "react/jsx-props-no-spreading": "off",
+    "import/extensions": "off"
+  }
+}

@@ -1,27 +1,27 @@
+import { ReactNode } from 'react';
 import { MODALS } from '@/common/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { AddNetworkForm } from '@/components/add-network-form';
 import { useOpenedModal } from '@/components/modals/modal-slice';
 import { Box, Modal, Stack, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';
-import { FC } from 'react';
 
-export const AddNetworkModal: FC = () => {
+export function AddNetworkModal(props: { children?: ReactNode }) {
   const modal = useOpenedModal();
   const dispatch = useAppDispatch();
   const isOpen = modal === MODALS.ADD_NETWORK;
   return (
-    <Modal title={'Add a network'} isOpen={isOpen}>
+    <Modal title="Add a network" isOpen={isOpen}>
       <Stack spacing="16px">
         <Box>
-          <Text fontSize={'14px'} color={'textBody'}>
+          <Text fontSize="14px" color="textBody">
             Use this form to add a new instance of the{' '}
             <TextLink
               display="inline"
               as="a"
               href="https://github.com/blockstack/stacks-blockchain-api"
               target="_blank"
-              color={'accent'}
+              color="accent"
             >
               Stacks Blockchain API
             </TextLink>
@@ -32,4 +32,4 @@ export const AddNetworkModal: FC = () => {
       </Stack>
     </Modal>
   );
-};
+}

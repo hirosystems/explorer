@@ -1,5 +1,3 @@
-'use client';
-
 import {
   FormErrorMessage as CUIFormErrorMessage,
   FormErrorMessageProps as CUIFormErrorMessageProps,

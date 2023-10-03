@@ -2,3 +2,6 @@
 node_modules
 .next
 .now
+jest.config.js
+jest.setup.js
+.eslintrc.json

@@ -1,10 +1,8 @@
-'use client';
-
+import { css } from '@emotion/react';
+import { IncidentImpact } from 'statuspage.io';
+import { ReactNode } from 'react';
 import { Flex, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';
-import { css } from '@emotion/react';
-import { FC } from 'react';
-import { IncidentImpact, Statuspage } from 'statuspage.io';
 import { getColor } from './utils';
 import { StatusBarBase } from '@/features/status-bar/StatusBarBase';
 import { useUnresolvedIncidents } from '@/features/status-bar/useUnresolvedIncidents';
@@ -16,7 +14,7 @@ const incidentImpactSeverity: Record<IncidentImpact, number> = {
   [IncidentImpact.Critical]: 3,
 };
 
-const StatusBar: FC = () => {
+export function StatusBar(props: { children?: ReactNode }) {
   const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
 
   const allIncidents = unresolvedIncidentsResponse?.incidents?.map(({ name }) => name).join(' - ');
@@ -31,17 +29,12 @@ const StatusBar: FC = () => {
       impact={highestImpact}
       content={
         <Flex>
-          <Text
-            color={getColor(highestImpact)}
-            fontWeight={500}
-            fontSize={'14px'}
-            lineHeight={'1.5'}
-          >
+          <Text color={getColor(highestImpact)} fontWeight={500} fontSize="14px" lineHeight="1.5">
             {allIncidents}
             {allIncidents.endsWith('.') ? '' : '.'}
           </Text>
           &nbsp;
-          <Text fontWeight={400} fontSize={'14px'} color={'#000000'} lineHeight={'1.5'}>
+          <Text fontWeight={400} fontSize="14px" color="#000000" lineHeight="1.5">
             More information on the{' '}
             <TextLink
               href="https://status.hiro.so/"
@@ -59,6 +52,4 @@ const StatusBar: FC = () => {
       }
     />
   );
-};
-
-export default StatusBar;
+}

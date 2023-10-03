@@ -1,9 +1,7 @@
-'use client';
-
 import {
-  Tbody as CUITbody,
-  TableBodyProps as CUITbodyProps,
   forwardRef,
+  TableBodyProps as CUITbodyProps,
+  Tbody as CUITbody,
   useColorMode,
 } from '@chakra-ui/react';
 

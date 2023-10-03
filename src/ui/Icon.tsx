@@ -1,6 +1,4 @@
-'use client';
-
-import { Icon as CUIIcon, IconProps as CUIIconProps, forwardRef } from '@chakra-ui/react';
+import { forwardRef, Icon as CUIIcon, IconProps as CUIIconProps } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
 

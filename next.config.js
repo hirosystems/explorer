@@ -6,11 +6,8 @@ const withBundleAnalyzer =
 const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN;
 
 const moduleExports = withBundleAnalyzer({
-  eslint: {
-    // Warning: Dangerously allow production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
+  reactStrictMode: true,
+  swcMinify: true,
   output: 'standalone',
   async redirects() {
     return [

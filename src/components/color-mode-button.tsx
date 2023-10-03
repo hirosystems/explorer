@@ -1,9 +1,8 @@
-import { IconButton, IconButtonProps } from '@/ui/components';
 import { useColorMode } from '@chakra-ui/react';
-import { FC } from 'react';
 import { TbSun, TbSunOff } from 'react-icons/tb';
+import { IconButton, IconButtonProps } from '@/ui/components';
 
-export const ColorModeButton: FC<IconButtonProps> = props => {
+export function ColorModeButton(props: IconButtonProps) {
   const { colorMode, toggleColorMode } = useColorMode();
   const Icon = colorMode === 'light' ? TbSun : TbSunOff;
   return (
@@ -15,4 +14,4 @@ export const ColorModeButton: FC<IconButtonProps> = props => {
       {...props}
     />
   );
-};
+}

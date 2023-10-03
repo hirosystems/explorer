@@ -1,7 +1,5 @@
-'use client';
-
-import { Box, BoxProps } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
+import { Box, BoxProps } from '@/ui/components';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -30,7 +28,7 @@ export const ChevronIcon = forwardRef<ChevronProps, 'div'>(
   ({ direction, size = '16px', style = {}, ...props }, ref) => (
     <Box
       ref={ref}
-      as={'svg'}
+      as="svg"
       width={size}
       height={size}
       viewBox="0 0 16 16"

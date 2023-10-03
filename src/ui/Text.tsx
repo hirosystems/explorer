@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Text as CUIText,
   TextProps as CUITextProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 
@@ -12,7 +10,7 @@ export const Text = forwardRef<TextProps, 'span'>(({ as = 'span', children, ...r
   <CUIText
     as={as}
     ref={ref}
-    display={'block'}
+    display="block"
     borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >

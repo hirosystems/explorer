@@ -1,3 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
+import { Block } from '@stacks/stacks-blockchain-api-types';
+import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 import { useApi } from '@/common/api/client';
 import { BTC_BNS_CONTRACT } from '@/common/constants';
 import { useAppSelector } from '@/common/state/hooks';
@@ -10,12 +13,10 @@ import {
 } from '@/common/types/search-results';
 import { isNumeric } from '@/common/utils';
 import { selectSearchTerm } from '@/features/search/search-slice';
-import { useQuery } from '@tanstack/react-query';
 
-import { Block } from '@stacks/stacks-blockchain-api-types';
-import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
+import { useDebounce } from '../../appPages/common/hooks/use-debounce';
 
-import { useDebounce } from '../../app/common/hooks/use-debounce';
+type ErrorWithJsonResponse = { json: () => Promise<{ found: boolean }> };
 
 export const useSearchQuery = (id: string) => {
   const { searchApi, blocksApi, nonFungibleTokensApi } = useApi();
@@ -28,15 +29,15 @@ export const useSearchQuery = (id: string) => {
 
       if (isBtcName) {
         try {
-          const nftHistory = await nonFungibleTokensApi.getNftHistory({
+          const nftHistory = (await nonFungibleTokensApi.getNftHistory({
             assetIdentifier: BTC_BNS_CONTRACT,
             value: cvToHex(
               tupleCV({
-                ['name']: bufferCVFromString(id.replace(new RegExp('.btc$'), '')),
-                ['namespace']: bufferCVFromString('btc'),
+                name: bufferCVFromString(id.replace(new RegExp('.btc$'), '')),
+                namespace: bufferCVFromString('btc'),
               })
             ),
-          });
+          })) as unknown as { results: { recipient: string }[] }; // missing API type
           if (nftHistory.results.length) {
             foundResult = nftHistoryToSearchResult(nftHistory.results[0], id);
           }
@@ -53,8 +54,10 @@ export const useSearchQuery = (id: string) => {
         try {
           foundResult = await searchApi.searchById({ id, includeMetadata: true });
         } catch (e) {
+          const errorWithJsonResponse: ErrorWithJsonResponse =
+            e as unknown as ErrorWithJsonResponse; // missing API type
           try {
-            const data = await e.json();
+            const data = await errorWithJsonResponse.json();
             if (data && 'found' in data) {
               notFoundResult = data;
             }
@@ -64,18 +67,17 @@ export const useSearchQuery = (id: string) => {
 
       if (foundResult) {
         return foundResult as FoundResult;
-      } else if (notFoundResult) {
-        return notFoundResult as NotFoundResult;
-      } else {
-        return undefined;
       }
+      if (notFoundResult) {
+        return notFoundResult as NotFoundResult;
+      }
+      return undefined;
     },
     {
       enabled: !!id,
       retry: false,
       refetchOnWindowFocus: false,
       staleTime: 1 * 60 * 1000,
-      suspense: false,
     }
   );
 };
@@ -103,7 +105,12 @@ function blockToSearchResult(block: Block): FoundResult {
   };
 }
 
-function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundResult {
+function nftHistoryToSearchResult(
+  nftHistoryEntry: {
+    recipient: string;
+  },
+  bnsName: string
+): FoundResult {
   const blockResult: AddressSearchResult = {
     entity_id: nftHistoryEntry.recipient,
     entity_type: SearchResultType.StandardAddress,

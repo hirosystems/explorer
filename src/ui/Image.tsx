@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Image as CUIImage,
   ImageProps as CUIImageProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

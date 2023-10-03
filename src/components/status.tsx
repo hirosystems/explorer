@@ -1,10 +1,11 @@
+import { useColorMode } from '@chakra-ui/react';
+
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { ReactNode } from 'react';
 import { Badge } from '@/common/components/Badge';
 import { TxStatus } from '@/common/types/tx';
 import { FlexProps, Icon, Spinner } from '@/ui/components';
 import { CheckIcon } from '@/ui/icons';
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 import { LoaderQuarter } from './icons/loader-quarter';
 import { MicroblockIcon } from './icons/microblock';
@@ -35,22 +36,22 @@ interface StatusProps extends FlexProps {
   txStatus: TxStatus;
 }
 
-export const StyledBadge: React.FC = ({ children }) => {
+export function StyledBadge({ children }: { children: ReactNode }) {
   return (
     <Badge
       labelProps={{ display: 'flex', alignItems: 'center', gap: '4px' }}
       background={`bg.${useColorMode().colorMode}`}
-      gap={'4px'}
+      gap="4px"
       color="white"
       bg="rgba(255,255,255,0.24)"
-      border={'none'}
+      border="none"
     >
       {children}
     </Badge>
   );
-};
+}
 
-export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
+export function Status({ txStatus, ...rest }: StatusProps) {
   const IconComponent = iconMap[txStatus];
   const label = labelMap[txStatus];
   return (
@@ -59,4 +60,4 @@ export const Status: React.FC<StatusProps> = ({ txStatus, ...rest }) => {
       {label}
     </StyledBadge>
   );
-};
+}

@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Checkbox as CUICheckbox,
   CheckboxProps as CUICheckboxProps,

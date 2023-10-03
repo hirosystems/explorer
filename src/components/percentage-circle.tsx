@@ -1,7 +1,6 @@
 import { Box, BoxProps } from '@/ui/components';
-import * as React from 'react';
 
-export const PercentageCircle: React.FC<BoxProps & { percentage: number }> = ({ percentage }) => {
+export function PercentageCircle({ percentage }: BoxProps & { percentage: number }) {
   return (
     <Box strokeWidth={2} strokeLinecap="round" as="svg" viewBox="0 0 35 35">
       <Box
@@ -13,9 +12,9 @@ export const PercentageCircle: React.FC<BoxProps & { percentage: number }> = ({ 
       a 15.9155 15.9155 0 0 1 0 -31.831"
         stroke="#444"
       />
-      <text fontSize={'8'} x="10" y="20">
+      <text fontSize="8" x="10" y="20">
         {`${Math.round(percentage)}%`}
       </text>
     </Box>
   );
-};
+}

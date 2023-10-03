@@ -1,3 +1,7 @@
+import { useColorMode } from '@chakra-ui/react';
+import { css } from '@emotion/react';
+import { Fragment } from 'react';
+import { HiOutlineArrowSmRight } from 'react-icons/hi';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { NetworkModes } from '@/common/types/network';
 import { Circle } from '@/components/circle';
@@ -6,10 +10,6 @@ import { Box, Icon, TextLink } from '@/ui/components';
 import { BitcoinIcon } from '@/ui/icons';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Text } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import { css } from '@emotion/react';
-import { FC, Fragment } from 'react';
-import { HiOutlineArrowSmRight } from 'react-icons/hi';
 
 interface BtcStxBlockLinksProps {
   btcBlockHeight?: number;
@@ -57,25 +57,25 @@ const linkStyle = (secondary?: boolean, clickable?: boolean, fontSize?: string) 
   `}
 `;
 
-export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
+export function BtcStxBlockLinks({
   btcBlockHeight,
   stxBlockHeight,
   stxBlockHash,
   fontSize,
-}) => {
+}: BtcStxBlockLinksProps) {
   const activeNetworkMode = useGlobalContext().activeNetwork.mode;
   const btcLinkPathPrefix = activeNetworkMode === NetworkModes.Testnet ? '/testnet' : '';
 
   return (
     <Box css={wrapperStyle}>
-      <Circle size={18} backgroundColor={`accent.light`} css={iconStyle}>
+      <Circle size={18} backgroundColor="accent.light" css={iconStyle}>
         <StxIcon strokeWidth={2} size="11px" color="white" />
       </Circle>
       <BlockLink hash={stxBlockHash}>
         <Text
           fontWeight={500}
-          fontSize={'15px'}
-          as={'a'}
+          fontSize="15px"
+          as="a"
           color={`links.${useColorMode().colorMode}`}
           _hover={{
             cursor: 'pointer',
@@ -86,9 +86,9 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
         </Text>
       </BlockLink>
       {btcBlockHeight && (
-        <Fragment>
-          <Icon as={HiOutlineArrowSmRight} size="14px" color={'#747478'} m={'0 2px'} />
-          <Icon as={BitcoinIcon} color={'#f7931a'} size={19} css={iconStyle} />
+        <>
+          <Icon as={HiOutlineArrowSmRight} size="14px" color="#747478" m="0 2px" />
+          <Icon as={BitcoinIcon} color="#f7931a" size={19} css={iconStyle} />
           <TextLink
             css={linkStyle(true, true, fontSize)}
             href={`https://mempool.space${btcLinkPathPrefix}/block/${btcBlockHeight}`}
@@ -96,8 +96,8 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
           >
             #{btcBlockHeight}
           </TextLink>
-        </Fragment>
+        </>
       )}
     </Box>
   );
-};
+}

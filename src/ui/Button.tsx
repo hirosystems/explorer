@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Button as CUIButton,
   ButtonProps as CUIButtonProps,
@@ -14,8 +12,8 @@ export const Button = forwardRef<ButtonProps, 'button'>(({ children, ...rest }, 
   <CUIButton
     ref={ref}
     bg={`accent.${useColorMode().colorMode}`}
-    color={'white'}
-    fontSize={'14px'}
+    color="white"
+    fontSize="14px"
     _hover={{ bg: 'accent.dark' }}
     {...rest}
   >

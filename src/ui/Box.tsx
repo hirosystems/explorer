@@ -1,5 +1,3 @@
-'use client';
-
 import { Box as CUIBox, BoxProps as CUIBoxProps, forwardRef, useColorMode } from '@chakra-ui/react';
 
 import { UIComponent } from './types';

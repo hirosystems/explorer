@@ -1,6 +1,4 @@
-'use client';
-
-import { Select as CUISelect, SelectProps as CUISelectProps, forwardRef } from '@chakra-ui/react';
+import { forwardRef, Select as CUISelect, SelectProps as CUISelectProps } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
 

@@ -1,7 +1,6 @@
+import { Microblock } from '@stacks/stacks-blockchain-api-types';
 import { apiClients, createConfig } from '@/common/api/client';
 import { useGlobalContext } from '@/common/context/useAppContext';
-
-import { Microblock } from '@stacks/stacks-blockchain-api-types';
 
 export const getMicroblockQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));

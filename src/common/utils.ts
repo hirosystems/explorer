@@ -1,6 +1,3 @@
-import { CustomNetworksLSKey } from '@/common/constants/network';
-import { Network, NetworkMode, NetworkModes } from '@/common/types/network';
-import { ContractCallTxs, TxStatus } from '@/common/types/tx';
 import BigNumber from 'bignumber.js';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
@@ -15,6 +12,9 @@ import {
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 import { ChainID } from '@stacks/transactions';
+import { ContractCallTxs, TxStatus } from '@/common/types/tx';
+import { Network, NetworkMode, NetworkModes } from '@/common/types/network';
+import { CustomNetworksLSKey } from '@/common/constants/network';
 
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
@@ -108,12 +108,11 @@ export const truncateMiddle = (input: string, offset = 5): string => {
     const start = parts[0]?.substr(0, offset);
     const end = parts[0]?.substr(parts[0].length - offset, parts[0].length);
     return `${start}…${end}.${parts[1]}`;
-  } else {
-    // everything else
-    const start = input?.substr(0, offset);
-    const end = input?.substr(input.length - offset, input.length);
-    return `${start}…${end}`;
   }
+  // everything else
+  const start = input?.substr(0, offset);
+  const end = input?.substr(input.length - offset, input.length);
+  return `${start}…${end}`;
 };
 
 /**
@@ -149,7 +148,7 @@ export const validateContractName = (contractString: string): boolean => {
 };
 
 export const queryWith0x = (query: string): string =>
-  query.includes('.') ? query : !query.includes('0x') ? '0x' + query : query;
+  query.includes('.') ? query : !query.includes('0x') ? `0x${query}` : query;
 
 export const handleTxIdValidation = (query?: string): { success: boolean; message?: string } => {
   if (!query || !query.trim().length) {
@@ -176,12 +175,11 @@ export const handleTxIdValidation = (query?: string): { success: boolean; messag
     return {
       success: true,
     };
-  } else {
-    return {
-      success: false,
-      message: 'Transaction ID hash seems invalid.',
-    };
   }
+  return {
+    success: false,
+    message: 'Transaction ID hash seems invalid.',
+  };
 };
 
 export const formatStacksAmount = (amountInStacks: number): string => {
@@ -201,7 +199,7 @@ export const microToStacks = (
   amountInMicroStacks: string | number,
   localString = true
 ): number | string => {
-  const value = Number(Number(amountInMicroStacks) / Math.pow(10, 6));
+  const value = Number(Number(amountInMicroStacks) / 10 ** 6);
   if (localString) {
     return formatStacksAmount(value);
   }
@@ -217,7 +215,7 @@ export const microToStacks = (
  */
 export const getUsdValue = (
   stxAmount: number,
-  stxPrice: number,
+  stxPrice?: number,
   isInMicroStacks = false
 ): string => {
   if (!stxAmount || !stxPrice) return 'N/A';
@@ -266,7 +264,7 @@ export const startPad = (n: number, z = 2, s = '0'): string =>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-  (n + '').length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : n + '';
+  `${n}`.length <= z ? ['', '-'][+(n < 0)] + (s.repeat(z) + Math.abs(n)).slice(-1 * z) : `${n}`;
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const clarityValuetoHumanReadable = (value: any): string | null => {
@@ -279,7 +277,7 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
     .filter(_s => _s)
     .forEach((string, index, array) => {
       if (index < array.length - 1) {
-        str += (string as string) + ` ${sep} `;
+        str += `${string as string} ${sep} `;
       } else {
         str += string;
       }
@@ -316,10 +314,7 @@ export function stringToHslColor(str: string, saturation: number, lightness: num
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }
 
-export const onPaste = (
-  event: React.ClipboardEvent<HTMLInputElement>,
-  callback: (string: string) => any
-) => {
+export const onPaste = (event: any, callback: (string: string) => any) => {
   if (typeof navigator === 'undefined' || typeof window === 'undefined') return;
   if (event.clipboardData) {
     // used in some browsers for clipboardData
@@ -478,7 +473,7 @@ export const numberToString = (value: number) => {
 };
 
 export function microStxToStx(microStx: string | number): number | string {
-  return Number(Number(microStx) / Math.pow(10, 6));
+  return Number(Number(microStx) / 10 ** 6);
 }
 
 export const getFaviconName = (txStatus?: TxStatus) => {

@@ -1,6 +1,6 @@
-import { Box, BoxProps } from '@/ui/components';
 import React from 'react';
 import { RiCloseLine } from 'react-icons/ri';
+import { Box, BoxProps } from '@/ui/components';
 
 export const CloseButton = (props: BoxProps & { onClick?: any }) => (
   <Box

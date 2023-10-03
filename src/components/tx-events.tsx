@@ -1,6 +1,12 @@
-'use client';
-
-import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
+import { useColorMode } from '@chakra-ui/react';
+import React, { Fragment, memo } from 'react';
+import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
+import {
+  Transaction,
+  TransactionEvent,
+  TransactionEventAssetType,
+} from '@stacks/stacks-blockchain-api-types';
+import { useFtMetadata } from '@/appPages/common/queries/useFtMetadata';
 import { useApi } from '@/common/api/client';
 import {
   addSepBetweenStrings,
@@ -17,35 +23,24 @@ import { useInfiniteTransactionEvents } from '@/features/transaction/use-infinit
 import { Box, Circle, Flex, Grid, Stack } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Caption } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import React, { FC, Fragment, useEffect, useState } from 'react';
-import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
 
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import {
-  Transaction,
-  TransactionEvent,
-  TransactionEventAssetType,
-} from '@stacks/stacks-blockchain-api-types';
-
-import { ListItem } from '../app/common/components/ListItem';
-import { useVerticallyStackedElementsBorderStyle } from '../app/common/styles/border';
+import { ListItem } from '../appPages/common/components/ListItem';
+import { useVerticallyStackedElementsBorderStyle } from '../appPages/common/styles/border';
 import { Pending } from './status';
+import { TransactionEventFungibleAsset } from '@stacks/stacks-blockchain-api-types/generated';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {
     const parts = name.split('-');
     if (parts.length >= 3) {
       return `${parts[0][0]}${parts[1][0]}${parts[2][0]}`;
-    } else {
-      return `${parts[0][0]}${parts[1][0]}${parts[1][1]}`;
     }
-  } else {
-    if (name.length >= 3) {
-      return `${name[0]}${name[1]}${name[2]}`;
-    }
-    return name;
+    return `${parts[0][0]}${parts[1][0]}${parts[1][1]}`;
   }
+  if (name.length >= 3) {
+    return `${name[0]}${name[1]}${name[2]}`;
+  }
+  return name;
 };
 
 const getIcon = (type: TransactionEventAssetType) => {
@@ -65,21 +60,21 @@ const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) =>
   return (
     <Circle
       size="20px"
-      bg={'bg'}
+      bg="bg"
       borderWidth="1px"
       position="absolute"
-      top={'-4px'}
+      top="-4px"
       right="-2px"
-      color={'accent'}
+      color="accent"
     >
       <Icon size="14px" color="currentColor" />
     </Circle>
   );
 };
 
-export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
+export const ItemIcon = memo(({ event }: { event: TransactionEvent }) => {
   const type = event.event_type;
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
   const name =
     event.event_type === 'fungible_token_asset' ||
     event.event_type === 'non_fungible_token_asset' ||
@@ -98,9 +93,9 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
     case 'smart_contract_log':
       return (
         <Grid
-          bg={'bg'}
+          bg="bg"
           borderWidth="1px"
-          color={'textBody'}
+          color="textBody"
           size="48px"
           placeItems="center"
           borderRadius="12px"
@@ -149,7 +144,7 @@ export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
 const getAssetAmounts = (event: TransactionEvent) => {
   switch (event.event_type) {
     case 'fungible_token_asset':
-      return parseFloat((event as any).asset.amount).toLocaleString(undefined, {
+      return parseFloat(event.asset.amount).toLocaleString(undefined, {
         minimumFractionDigits: 2,
         maximumFractionDigits: 6,
       });
@@ -242,7 +237,7 @@ const getName = (event: TransactionEvent) => {
   }
 };
 
-const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
+function Item({ event }: { event: TransactionEvent }) {
   const api = useApi();
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
@@ -287,7 +282,10 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
             {assetAmounts && (
               <Caption>
                 {ftMetadata
-                  ? ftDecimals((event as any).asset.amount, ftMetadata?.decimals || 0)
+                  ? ftDecimals(
+                      (event as TransactionEventFungibleAsset).asset.amount,
+                      ftMetadata?.decimals || 0
+                    )
                   : assetAmounts}{' '}
                 {assetId &&
                   (ftMetadata?.symbol || getTicker(getAssetNameParts(assetId).asset).toUpperCase())}
@@ -299,7 +297,7 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
           {memo && (
             <Stack flexWrap="nowrap" spacing="4px" isInline divider={<Caption>∙</Caption>}>
               <Caption fontWeight="bold">Memo</Caption>
-              <Caption wordBreak={'break-all'}>{memo}</Caption>
+              <Caption wordBreak="break-all">{memo}</Caption>
             </Stack>
           )}
         </>
@@ -307,13 +305,13 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
       rightItem={event.event_index}
     />
   );
-};
+}
 
 interface EventsProps {
   tx: Transaction;
 }
 
-export const Events: FC<EventsProps> = ({ tx }) => {
+export function Events({ tx }: EventsProps) {
   const { data, ...actions } = useInfiniteTransactionEvents(tx.tx_id, tx.event_count, tx.events);
   if (tx.event_count === 0) return null;
 
@@ -325,9 +323,7 @@ export const Events: FC<EventsProps> = ({ tx }) => {
         ))}
         {data?.pages.map(page => (
           <Fragment key={page.offset}>
-            {page?.results.map((event, index) => (
-              <Item key={index} event={event} />
-            ))}
+            {page?.results.map((event, index) => <Item key={index} event={event} />)}
           </Fragment>
         ))}
       </Box>
@@ -338,8 +334,12 @@ export const Events: FC<EventsProps> = ({ tx }) => {
           px="16px"
           py="16px"
           _hover={{ color: 'textTitle', cursor: 'pointer' }}
-          onClick={() => actions.hasNextPage && actions.fetchNextPage()}
-          color={'textCaption'}
+          onClick={() => {
+            if (actions.hasNextPage) {
+              void actions.fetchNextPage();
+            }
+          }}
+          color="textCaption"
         >
           {actions.isFetchingNextPage ? (
             <Flex alignItems="center" justifyContent="center">
@@ -355,4 +355,4 @@ export const Events: FC<EventsProps> = ({ tx }) => {
       )}
     </Section>
   );
-};
+}

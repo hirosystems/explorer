@@ -1,8 +1,8 @@
-import { Box, BoxProps } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
-import React from 'react';
+import React, { FC } from 'react';
+import { Box, BoxProps } from '@/ui/components';
 
-export type SvgProps = React.FC<BoxProps>;
+export type SvgProps = FC<BoxProps>;
 
 export const BaseSvg = forwardRef<BoxProps, 'svg'>(({ as = 'svg', ...rest }, ref) => (
   <Box

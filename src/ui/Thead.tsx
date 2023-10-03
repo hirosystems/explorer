@@ -1,9 +1,7 @@
-'use client';
-
 import {
-  Thead as CUIThead,
-  TableHeadProps as CUITheadProps,
   forwardRef,
+  TableHeadProps as CUITheadProps,
+  Thead as CUIThead,
   useColorMode,
 } from '@chakra-ui/react';
 

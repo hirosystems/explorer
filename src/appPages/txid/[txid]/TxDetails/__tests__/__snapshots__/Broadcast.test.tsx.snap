@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Broadcast /> renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="css-pnih9e"
+  >
+    <div
+      class="css-wasqz"
+    >
+      Broadcast
+    </div>
+    <div
+      class="css-1q1jcsf"
+    >
+      <div
+        class="css-1dupj0l"
+      >
+        <div
+          class="css-1txr7ua"
+        >
+          <svg
+            class="chakra-icon css-1p0vfbv"
+            fill="currentColor"
+            focusable="false"
+            height="16px"
+            stroke="currentColor"
+            stroke-width="0"
+            viewBox="0 0 1024 1024"
+            width="16px"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+            />
+            <path
+              d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z"
+            />
+          </svg>
+          <span
+            class="chakra-text css-14nx52v"
+          >
+            9 months ago
+          </span>
+        </div>
+      </div>
+    </div>
+    <button
+      aria-label="copy row"
+      class="chakra-button fancy-copy css-13ha820"
+      type="button"
+    >
+      <svg
+        aria-hidden="true"
+        color="textBody"
+        fill="currentColor"
+        focusable="false"
+        height="20px"
+        stroke="currentColor"
+        stroke-width="1.75"
+        viewBox="0 0 1024 1024"
+        width="20px"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M832 64H296c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h496v688c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8V96c0-17.7-14.3-32-32-32zM704 192H192c-17.7 0-32 14.3-32 32v530.7c0 8.5 3.4 16.6 9.4 22.6l173.3 173.3c2.2 2.2 4.7 4 7.4 5.5v1.9h4.2c3.5 1.3 7.2 2 11 2H704c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32zM350 856.2L263.9 770H350v86.2zM664 888H414V746c0-22.1-17.9-40-40-40H232V264h432v624z"
+        />
+      </svg>
+    </button>
+  </div>
+</DocumentFragment>
+`;

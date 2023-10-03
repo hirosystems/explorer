@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useUnresolvedIncidents } from '../useUnresolvedIncidents';
 import { waitFor } from '@testing-library/react';
+import { useUnresolvedIncidents } from '../useUnresolvedIncidents';
 
 const mockedIncidents = [
   {

@@ -15,7 +15,7 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
       stroke="currentColor"
       strokeWidth="0"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }
@@ -52,7 +52,7 @@ exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
       stroke="currentColor"
       strokeWidth="0"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }

@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Tabs as CUITabs,
   TabsProps as CUITabsProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

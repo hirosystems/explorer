@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Spinner as CUISpinner,
   SpinnerProps as CUISpinnerProps,
-  forwardRef,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';

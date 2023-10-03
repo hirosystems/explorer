@@ -1,15 +1,13 @@
-import { HomeClient } from '@/app/HomeClient';
+import { HomePage } from '@/appPages/HomeClient';
 import { Meta } from '@/components/meta-head';
-import { FC } from 'react';
 
-const Home: FC = () => {
-  console.log('[DEBUG] rendering home page');
+function Home() {
   return (
     <>
       <Meta />
-      <HomeClient />
+      <HomePage />
     </>
   );
-};
+}
 
 export default Home;

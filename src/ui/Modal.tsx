@@ -1,32 +1,23 @@
-'use client';
-
-import { useAppDispatch } from '@/common/state/hooks';
-import { closeModal } from '@/components/modals/modal-slice';
-import { Button } from '@/ui/components';
 import {
   Modal as CUIModal,
-  ModalProps as CUIModalProps,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  ModalProps as CUIModalProps,
 } from '@chakra-ui/react';
-import { FC } from 'react';
+import { useAppDispatch } from '@/common/state/hooks';
+import { closeModal } from '@/components/modals/modal-slice';
+import { Button } from '@/ui/components';
 
 export type ModalProps = Omit<CUIModalProps, 'onClose'> & {
   title: string;
   primaryAction?: { label: string; onClick: () => void };
   secondaryAction?: { label: string; onClick: () => void };
 };
-export const Modal: FC<ModalProps> = ({
-  children,
-  primaryAction,
-  secondaryAction,
-  title,
-  ...rest
-}) => {
+export function Modal({ children, primaryAction, secondaryAction, title, ...rest }: ModalProps) {
   const dispatch = useAppDispatch();
   const onClose = () => {
     dispatch(closeModal());
@@ -53,4 +44,4 @@ export const Modal: FC<ModalProps> = ({
       </ModalContent>
     </CUIModal>
   );
-};
+}

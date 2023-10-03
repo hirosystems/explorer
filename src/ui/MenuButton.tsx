@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   MenuButton as CUIMenuButton,
   MenuButtonProps as CUIMenuButtonProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

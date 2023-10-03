@@ -1,11 +1,9 @@
-'use client';
-
-import { Box, Icon } from '@/ui/components';
 import { CSVDownload } from 'react-csv';
 import React, { memo, useEffect, useState } from 'react';
 import { FiDownload } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import { useColorMode } from '@chakra-ui/react';
+import { Box, Icon } from '@/ui/components';
 import { CSVDownloadObjectType, useTxsCSVData } from '@/common/hooks/useTxsCSVData';
 
 export const CSVDownloadButton = memo(() => {
@@ -24,10 +22,10 @@ export const CSVDownloadButton = memo(() => {
     setTransactionData(formattedTxnData);
   };
 
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   return (
-    <Box position="relative" marginLeft={'auto'} alignSelf={'center'}>
+    <Box position="relative" marginLeft="auto" alignSelf="center">
       <Box
         as="button"
         alignItems="center"

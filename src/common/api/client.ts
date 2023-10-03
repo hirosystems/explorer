@@ -1,11 +1,7 @@
-import { fetcher as fetchApi } from '@/common/api/fetch';
-import { MICROBLOCKS_ENABLED } from '@/common/constants';
-import { useGlobalContext } from '@/common/context/useAppContext';
 import {
   Configuration as TokenMetadataApiConfiguration,
   TokensApi,
 } from '@hirosystems/token-metadata-api-client';
-
 import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
 import {
   AccountsApi,
@@ -22,6 +18,9 @@ import {
   SmartContractsApi,
   TransactionsApi,
 } from '@stacks/blockchain-api-client';
+import { fetcher as fetchApi } from '@/common/api/fetch';
+import { MICROBLOCKS_ENABLED } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
 
 /**
  * Our mega api clients function. This is a combo of all clients that the blockchain-api-client package offers.

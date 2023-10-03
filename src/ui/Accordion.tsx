@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Accordion as CUIAccordion,
   AccordionProps as CUIAccordionProps,

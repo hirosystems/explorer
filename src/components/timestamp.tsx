@@ -1,15 +1,14 @@
+import { TbClock } from 'react-icons/tb';
 import { toRelativeTime } from '@/common/utils';
 import { Box, Flex, Tooltip } from '@/ui/components';
-import * as React from 'react';
-import { TbClock } from 'react-icons/tb';
 
-import { Value } from '../app/common/components/Value';
+import { Value } from '../appPages/common/components/Value';
 
 interface TimestampProps {
   ts: number;
 }
 
-export const Timestamp: React.FC<TimestampProps> = ({ ts }) => {
+export function Timestamp({ ts }: TimestampProps) {
   const readableTimestamp = ts
     ? `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(ts * 1000).toLocaleDateString()}`
     : '';
@@ -22,4 +21,4 @@ export const Timestamp: React.FC<TimestampProps> = ({ ts }) => {
       </Flex>
     </Tooltip>
   );
-};
+}

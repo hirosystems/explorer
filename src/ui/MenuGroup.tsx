@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   MenuGroup as CUIMenuGroup,
   MenuGroupProps as CUIMenuGroupProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

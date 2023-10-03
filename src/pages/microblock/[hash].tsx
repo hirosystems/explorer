@@ -1,11 +1,11 @@
-import AppMicroblockPageError from '@/app/microblock/[hash]/error';
-import { SkeletonPageWithOneColumn } from '@/components/loaders/skeleton-transaction';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import * as React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 
-const AppMicroblockPage = dynamic(() => import('../../app/microblock/[hash]/page'), {
+import { ErrorBoundary } from 'react-error-boundary';
+import { SkeletonPageWithOneColumn } from '@/components/loaders/skeleton-transaction';
+import AppMicroblockPageError from '@/appPages/microblock/[hash]/error';
+
+const AppMicroblockPage = dynamic(() => import('../../appPages/microblock/[hash]/page'), {
   loading: () => <SkeletonPageWithOneColumn />,
   ssr: false,
 });

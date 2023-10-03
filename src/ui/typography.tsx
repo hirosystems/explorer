@@ -1,7 +1,4 @@
-'use client';
-
 import { forwardRef, useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
 
 import { Text, TextProps } from './Text';
 
@@ -41,7 +38,7 @@ export const Pre = forwardRef<TextProps, 'pre'>(({ as = 'pre', ...props }, ref) 
     boxShadow="low"
     px="8px"
     py="8px"
-    color={'textBody'}
+    color="textBody"
     ref={ref}
     {...props}
     style={{

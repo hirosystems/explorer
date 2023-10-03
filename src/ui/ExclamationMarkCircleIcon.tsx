@@ -1,7 +1,5 @@
-'use client';
-
-import { Box, BoxProps } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
+import { Box, BoxProps } from '@/ui/components';
 
 export const ExclamationMarkCircleIcon = forwardRef<BoxProps, 'div'>((props, ref) => (
   <Box ref={ref} {...props}>

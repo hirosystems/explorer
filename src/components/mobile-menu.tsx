@@ -1,11 +1,11 @@
+import { useColorMode } from '@chakra-ui/react';
+import React, { useCallback, useState } from 'react';
+import { TbArrowLeft, TbMenu2, TbX } from 'react-icons/tb';
 import { ColorModeButton } from '@/components/color-mode-button';
 import { HeaderTextItem } from '@/components/header-text-item';
 import { ExplorerLink } from '@/components/links';
 import { NetworkItems } from '@/components/network-items';
 import { Box, Flex, IconButton } from '@/ui/components';
-import { useColorMode } from '@chakra-ui/react';
-import React from 'react';
-import { TbArrowLeft, TbMenu2, TbX } from 'react-icons/tb';
 
 enum Visibility {
   CLOSED = 'closed',
@@ -21,99 +21,108 @@ enum Views {
 
 type ViewsState = Views.INDEX | Views.NETWORK;
 
-const NetworkView: React.FC<{
+function NetworkView({
+  handleClose,
+}: {
   handleSetNetworkView: () => void;
   handleSetIndexView: () => void;
   handleClose: () => void;
-}> = ({ handleClose }) => (
-  <Box width="100%">
-    <HeaderTextItem
-      px="32px"
-      color={`invert.${useColorMode().colorMode}`}
-      mb="32px"
-      fontSize={'32px'}
-    >
-      Switch network
-    </HeaderTextItem>
-    <NetworkItems
-      onItemClick={() => {
-        handleClose();
-      }}
-    />
-  </Box>
-);
+}) {
+  return (
+    <Box width="100%">
+      <HeaderTextItem
+        px="32px"
+        color={`invert.${useColorMode().colorMode}`}
+        mb="32px"
+        fontSize="32px"
+      >
+        Switch network
+      </HeaderTextItem>
+      <NetworkItems
+        onItemClick={() => {
+          handleClose();
+        }}
+      />
+    </Box>
+  );
+}
 
-const IndexView: React.FC<{
+function IndexView({
+  handleSetNetworkView,
+  handleClose,
+}: {
   handleClose: () => void;
   handleSetNetworkView: () => void;
   handleSetIndexView: () => void;
-}> = ({ handleSetNetworkView, handleClose }) => (
-  <Flex flexDirection="column" alignItems="flex-end" px="32px">
-    <ExplorerLink href={'/'}>
+}) {
+  return (
+    <Flex flexDirection="column" alignItems="flex-end" px="32px">
+      <ExplorerLink href="/">
+        <HeaderTextItem
+          color={`invert.${useColorMode().colorMode}`}
+          mb="32px"
+          fontSize="32px"
+          onClick={handleClose}
+        >
+          Home
+        </HeaderTextItem>
+      </ExplorerLink>
+      <ExplorerLink href="/transactions">
+        <HeaderTextItem
+          color={`invert.${useColorMode().colorMode}`}
+          mb="32px"
+          fontSize="32px"
+          onClick={handleClose}
+        >
+          Transactions
+        </HeaderTextItem>
+      </ExplorerLink>
+      <ExplorerLink href="/blocks">
+        <HeaderTextItem
+          color={`invert.${useColorMode().colorMode}`}
+          mb="32px"
+          fontSize="32px"
+          onClick={handleClose}
+        >
+          Blocks
+        </HeaderTextItem>
+      </ExplorerLink>
+      <ExplorerLink href="/sandbox/deploy">
+        <HeaderTextItem
+          color={`invert.${useColorMode().colorMode}`}
+          mb="32px"
+          fontSize="32px"
+          onClick={handleClose}
+        >
+          Sandbox
+        </HeaderTextItem>
+      </ExplorerLink>
       <HeaderTextItem
+        onClick={handleSetNetworkView}
         color={`invert.${useColorMode().colorMode}`}
-        mb="32px"
-        fontSize={'32px'}
-        onClick={handleClose}
+        fontSize="32px"
       >
-        Home
+        Switch network
       </HeaderTextItem>
-    </ExplorerLink>
-    <ExplorerLink href={'/transactions'}>
-      <HeaderTextItem
-        color={`invert.${useColorMode().colorMode}`}
-        mb="32px"
-        fontSize={'32px'}
-        onClick={handleClose}
-      >
-        Transactions
-      </HeaderTextItem>
-    </ExplorerLink>
-    <ExplorerLink href={'/blocks'}>
-      <HeaderTextItem
-        color={`invert.${useColorMode().colorMode}`}
-        mb="32px"
-        fontSize={'32px'}
-        onClick={handleClose}
-      >
-        Blocks
-      </HeaderTextItem>
-    </ExplorerLink>
-    <ExplorerLink href={'/sandbox/deploy'}>
-      <HeaderTextItem
-        color={`invert.${useColorMode().colorMode}`}
-        mb="32px"
-        fontSize={'32px'}
-        onClick={handleClose}
-      >
-        Sandbox
-      </HeaderTextItem>
-    </ExplorerLink>
-    <HeaderTextItem
-      onClick={handleSetNetworkView}
-      color={`invert.${useColorMode().colorMode}`}
-      fontSize={'32px'}
-    >
-      Switch network
-    </HeaderTextItem>
-  </Flex>
-);
+    </Flex>
+  );
+}
 
-export const MobileMenu: React.FC = () => {
-  const [state, setState] = React.useState<VisibilityState>(Visibility.CLOSED);
-  const [view, setView] = React.useState<ViewsState>(Views.INDEX);
+export function MobileMenu() {
+  const [state, setState] = useState<VisibilityState>(Visibility.CLOSED);
+  const [view, setView] = useState<ViewsState>(Views.INDEX);
   const isClosed = state === Visibility.CLOSED;
   const isOpen = state === Visibility.OPEN;
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   const handleSetNetworkView = () => setView(Views.NETWORK);
   const handleSetIndexView = () => setView(Views.INDEX);
 
-  const handleOpen = React.useCallback(() => {
+  const handleOpen = useCallback(() => {
     return setState(() => Visibility.OPEN);
   }, [setState]);
 
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     setState(() => Visibility.CLOSED);
     setTimeout(() => {
       handleSetIndexView();
@@ -127,7 +136,7 @@ export const MobileMenu: React.FC = () => {
         onClick={handleOpen}
         color="white"
         icon={<TbMenu2 size="24px" />}
-        aria-label={'Open menu'}
+        aria-label="Open menu"
       />
       {isOpen && (
         <Box
@@ -144,7 +153,7 @@ export const MobileMenu: React.FC = () => {
             alignItems="flex-end"
             py="32px"
             bg={`bg.${colorMode}`}
-            borderLeftWidth={'1px'}
+            borderLeftWidth="1px"
             width="90vw"
             ml="10vw"
             height="100vh"
@@ -155,22 +164,22 @@ export const MobileMenu: React.FC = () => {
                   onClick={handleSetIndexView}
                   size="48px"
                   color={`invert.${colorMode}`}
-                  icon={<TbArrowLeft size={'32px'} />}
-                  aria-label={'Network'}
+                  icon={<TbArrowLeft size="32px" />}
+                  aria-label="Network"
                 />
               ) : (
                 <ColorModeButton
                   color={`invert.${colorMode}`}
                   size="48px"
-                  aria-label={'Change color mode'}
+                  aria-label="Change color mode"
                 />
               )}
               <IconButton
                 onClick={handleClose}
                 size="48px"
                 color={`invert.${colorMode}`}
-                icon={<TbX size={'32px'} />}
-                aria-label={'Close menu'}
+                icon={<TbX size="32px" />}
+                aria-label="Close menu"
               />
             </Flex>
             {view === Views.NETWORK ? (
@@ -191,4 +200,4 @@ export const MobileMenu: React.FC = () => {
       )}
     </Box>
   );
-};
+}

@@ -9,7 +9,6 @@ import Document, {
   Main,
   NextScript,
 } from 'next/document';
-import * as React from 'react';
 
 import { GlobalStyles, PrismTheme, TextAreaOverrides } from '../global-styles';
 
@@ -52,7 +51,7 @@ export default class MyDocument extends Document<DocumentProps> {
           <meta name="apple-mobile-web-app-status-bar-style" content="#6287DD" />
           {NODE_ENV === 'production' && (
             <>
-              <script async src="https://www.googletagmanager.com/gtag/js?id=G-NB2VBT0KY2"></script>
+              <script async src="https://www.googletagmanager.com/gtag/js?id=G-NB2VBT0KY2" />
               <script
                 dangerouslySetInnerHTML={{
                   __html: `window.dataLayer = window.dataLayer || [];

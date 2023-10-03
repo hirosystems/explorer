@@ -1,9 +1,7 @@
-'use client';
-
 import {
-  Th as CUITh,
-  TableColumnHeaderProps as CUIThProps,
   forwardRef,
+  TableColumnHeaderProps as CUIThProps,
+  Th as CUITh,
   useColorMode,
 } from '@chakra-ui/react';
 

@@ -1,11 +1,11 @@
-import AppAddressPageError from '@/app/address/[principal]/error';
-import { SkeletonPageWithTwoColumns } from '@/components/loaders/skeleton-transaction';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import * as React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 
-const AppAddressPage = dynamic(() => import('../../app/address/[principal]/page'), {
+import { ErrorBoundary } from 'react-error-boundary';
+import { SkeletonPageWithTwoColumns } from '@/components/loaders/skeleton-transaction';
+import AppAddressPageError from '@/appPages/address/[principal]/error';
+
+const AppAddressPage = dynamic(() => import('../../appPages/address/[principal]/page'), {
   loading: () => <SkeletonPageWithTwoColumns />,
   ssr: false,
 });

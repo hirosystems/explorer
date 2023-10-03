@@ -1,7 +1,7 @@
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
-export const NetworkModeToast: React.FC = () => {
+export function NetworkModeToast() {
   return (
     <Toaster
       position="bottom-center"
@@ -16,4 +16,4 @@ export const NetworkModeToast: React.FC = () => {
       }}
     />
   );
-};
+}

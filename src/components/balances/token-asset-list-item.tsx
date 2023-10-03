@@ -1,17 +1,14 @@
-'use client';
-
-import { useFtMetadata } from '@/app/common/queries/useFtMetadata';
-import { useNftMetadata } from '@/app/common/queries/useNftMetadata';
+import React from 'react';
+import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
+import { hexToCV, IntCV } from '@stacks/transactions';
+import { useFtMetadata } from '@/appPages/common/queries/useFtMetadata';
+import { useNftMetadata } from '@/appPages/common/queries/useNftMetadata';
 import { useApi } from '@/common/api/client';
 import { ftDecimals, getAssetNameParts, initBigNumber } from '@/common/utils';
 import { TokenLink } from '@/components/links';
 import { getTicker } from '@/components/tx-events';
 import { Box, Flex, FlexProps, Stack } from '@/ui/components';
 import { Caption, Text } from '@/ui/typography';
-import React from 'react';
-
-import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
-import { hexToCV, IntCV } from '@stacks/transactions';
 
 import { FtAvatar, NftAvatar } from '../token-avatar';
 
@@ -22,17 +19,17 @@ interface TokenAssetListItemProps extends FlexProps {
   bnsName?: string;
   holdings?: NonFungibleTokenHolding[];
 }
-export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
+export function TokenAssetListItem({
   amount,
   token,
   tokenType,
   bnsName,
   holdings,
-}) => {
+}: TokenAssetListItemProps) {
   const api = useApi();
   const { address, asset, contract } = getAssetNameParts(token);
   const contractId = `${address}.${contract}`;
-  const firstNftValue = !!holdings?.length
+  const firstNftValue = holdings?.length
     ? (hexToCV(holdings[0].value.hex) as IntCV).value
     : undefined;
 
@@ -55,14 +52,14 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
   return (
     <Flex justifyContent="space-between" px="16px" py="16px">
       <Box>
-        <Flex alignItems="center" mb={'4px'} gap={'4px'}>
+        <Flex alignItems="center" mb="4px" gap="4px">
           {tokenType === 'non_fungible_tokens' ? (
             <NftAvatar token={token} tokenMetadata={nftMetadata} />
           ) : (
             <FtAvatar token={token} tokenMetadata={ftMetadata} />
           )}
           <Stack spacing="4px">
-            <Text color={'textTitle'} fontWeight="600">
+            <Text color="textTitle" fontWeight="600">
               {bnsName || asset}
             </Text>
             <Stack isInline gap="4px" divider={<Caption>∙</Caption>} wrap="wrap">
@@ -87,7 +84,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
         </Flex>
       </Box>
       <Flex justifyContent="flex-end" alignItems="center" textAlign="right">
-        <Text color={'textBody'} textAlign="right">
+        <Text color="textBody" textAlign="right">
           {totalType === 'balance'
             ? ftDecimals(amount, ftMetadata?.decimals || 0)
             : parseInt(amount).toLocaleString()}
@@ -95,4 +92,4 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
       </Flex>
     </Flex>
   );
-};
+}

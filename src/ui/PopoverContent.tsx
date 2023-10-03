@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   PopoverContent as CUIPopoverContent,
   PopoverContentProps as CUIPopoverContentProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

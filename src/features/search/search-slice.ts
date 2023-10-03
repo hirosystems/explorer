@@ -1,7 +1,5 @@
-'use client';
-
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/common/state/store';
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 export interface SearchState {
   searchTerm: string;

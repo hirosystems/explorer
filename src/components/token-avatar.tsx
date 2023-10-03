@@ -1,8 +1,8 @@
+import { FtMetadataResponse, NftMetadataResponse } from '@hirosystems/token-metadata-api-client';
+import React, { useEffect, useState } from 'react';
 import { getAssetNameParts } from '@/common/utils';
 import { imageCanonicalUriFromFtMetadata } from '@/common/utils/token-utils';
 import { Circle } from '@/ui/components';
-import { FtMetadataResponse, NftMetadataResponse } from '@hirosystems/token-metadata-api-client';
-import React, { useEffect, useState } from 'react';
 
 export function FtAvatar({
   token,
@@ -65,8 +65,8 @@ const TokenImage = ({ url, alt }: TokenImageProps) => {
   );
   return (
     <img
-      width={'36px'}
-      height={'36px'}
+      width="36px"
+      height="36px"
       src={imageUrl}
       onError={e => {
         if (imageUrl !== fallbackImageUrl) {
@@ -84,9 +84,7 @@ interface TokenVideoProps {
 }
 
 const TokenVideo = ({ url }: TokenVideoProps) => {
-  return (
-    <video width={'36px'} height={'36px'} src={encodeURI(url)} style={{ marginRight: '16px' }} />
-  );
+  return <video width="36px" height="36px" src={encodeURI(url)} style={{ marginRight: '16px' }} />;
 };
 
 interface DefaultTokenImageProps {

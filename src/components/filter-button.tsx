@@ -1,19 +1,17 @@
-'use client';
-
-import { FilterPanel } from '@/components/filter-panel';
-import { Box, Icon } from '@/ui/components';
 import React, { memo } from 'react';
 import { FiFilter } from 'react-icons/fi';
 import { useColorMode } from '@chakra-ui/react';
+import { Box, Icon } from '@/ui/components';
+import { FilterPanel } from '@/components/filter-panel';
 
-import { useFilterState } from '../app/common/hooks/use-filter-state';
+import { useFilterState } from '../appPages/common/hooks/use-filter-state';
 
 export const FilterButton = memo(() => {
   const { toggleFilterVisibility } = useFilterState();
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   return (
-    <Box position="relative" marginLeft={'auto'} marginRight={'16px'} alignSelf={'center'}>
+    <Box position="relative" marginLeft="auto" marginRight="16px" alignSelf="center">
       <Box
         as="button"
         alignItems="center"

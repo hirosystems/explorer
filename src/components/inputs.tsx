@@ -1,6 +1,6 @@
-import { Input as InputBase, InputProps } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
-import * as React from 'react';
+
+import { Input as InputBase, InputProps } from '@/ui/components';
 
 export const Input = forwardRef<InputProps, 'input'>((props, ref) => (
   <InputBase

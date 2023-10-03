@@ -1,25 +1,30 @@
-'use client';
-
-import { useAppSelector } from '@/common/state/hooks';
-import { NetworkMode } from '@/common/types/network';
 import { cache } from '@emotion/css';
 import { CacheProvider } from '@emotion/react';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 import { Connect } from '@stacks/connect-react';
+import { NetworkMode } from '@/common/types/network';
+import { useAppSelector } from '@/common/state/hooks';
 
-import { selectUserSession } from '../app/sandbox/sandbox-slice';
+import { selectUserSession } from '../appPages/sandbox/sandbox-slice';
 
 declare const window: any;
 
-export const AppConfig: React.FC<{
+export function AppConfig({
+  children,
+  queryApiUrl,
+  queryNetworkMode,
+  querySubnet,
+  apiUrls,
+}: {
   apiUrls: any;
   queryNetworkMode: NetworkMode;
   queryApiUrl?: string;
   querySubnet?: string;
-}> = ({ children, queryApiUrl, queryNetworkMode, querySubnet, apiUrls }) => {
+  children?: ReactNode;
+}) {
   const { events } = useRouter();
   const userSession = useAppSelector(selectUserSession);
 
@@ -63,4 +68,4 @@ export const AppConfig: React.FC<{
       <CacheProvider value={cache}>{children}</CacheProvider>
     </Connect>
   );
-};
+}

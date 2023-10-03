@@ -1,20 +1,19 @@
-import { buildUrl } from '@/app/common/utils/buildUrl';
+import { useColorMode } from '@chakra-ui/react';
+
+import { HiOutlineArrowSmRight } from 'react-icons/hi';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { memo, ReactNode } from 'react';
+import { buildUrl } from '@/appPages/common/utils/buildUrl';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { toRelativeTime, truncateMiddle } from '@/common/utils';
 import { getTransactionStatus } from '@/common/utils/transactions';
 import { ExplorerLink } from '@/components/links';
 import { BoxProps, Circle, Flex, FlexProps, Icon, Stack, Tooltip } from '@/ui/components';
 import { Caption, Text, Title } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
-import { FC } from 'react';
-import { HiOutlineArrowSmRight } from 'react-icons/hi';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-
-import { TxIcon, getTxTypeIcon } from '../app/common/components/TxIcon';
-import { useTxTitle } from '../app/common/components/tx-lists/common/utils/tx';
-import { getTransactionTypeLabel } from '../app/common/components/tx-lists/utils/tx';
+import { getTxTypeIcon, TxIcon } from '../appPages/common/components/TxIcon';
+import { useTxTitle } from '../appPages/common/components/tx-lists/common/utils/tx';
+import { getTransactionTypeLabel } from '../appPages/common/components/tx-lists/utils/tx';
 
 export { getTxTypeIcon };
 
@@ -33,40 +32,40 @@ export interface TxItemProps extends FlexProps {
 }
 
 const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
-  const date =
-    typeof (tx as any).burn_block_time !== 'undefined' && (tx as any).burn_block_time !== -1
-      ? toRelativeTime((tx as any).burn_block_time * 1000)
-      : (tx as any).burn_block_time === -1
-      ? toRelativeTime((tx as any).parent_burn_block_time * 1000)
-      : (tx as any).receipt_time
-      ? toRelativeTime((tx as any).receipt_time * 1000)
-      : 'Pending...';
-
-  return date;
+  if ('burn_block_time' in tx) {
+    if (tx.burn_block_time !== -1) {
+      return toRelativeTime(tx.burn_block_time * 1000);
+    } else {
+      return toRelativeTime(tx.parent_burn_block_time * 1000);
+    }
+  }
+  if (tx.receipt_time) {
+    return toRelativeTime(tx.receipt_time * 1000);
+  }
+  return 'Pending...';
 };
 
-export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
-  principal,
-  ...rest
-}) => (
-  <Flex display="inline-flex" position={'relative'} as="span" {...rest}>
-    <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
-      <Caption
-        as={'a'}
-        color={`links.${useColorMode().colorMode}`}
-        _hover={{
-          cursor: 'pointer',
-          textDecoration: 'underline',
-        }}
-        textDecoration="none"
-      >
-        {truncateMiddle(principal)}
-      </Caption>
-    </ExplorerLink>
-  </Flex>
-);
+export function PrincipalLink({ principal, ...rest }: FlexProps & { principal: string }) {
+  return (
+    <Flex display="inline-flex" position="relative" as="span" {...rest}>
+      <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
+        <Caption
+          as="a"
+          color={`links.${useColorMode().colorMode}`}
+          _hover={{
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
+          textDecoration="none"
+        >
+          {truncateMiddle(principal)}
+        </Caption>
+      </ExplorerLink>
+    </Flex>
+  );
+}
 
-export const AddressArea = React.memo(
+export const AddressArea = memo(
   ({
     tx,
     principal,
@@ -80,7 +79,8 @@ export const AddressArea = React.memo(
             <PrincipalLink principal={tx.token_transfer.recipient_address} />
           </Stack>
         );
-      } else if (tx.token_transfer.recipient_address === principal) {
+      }
+      if (tx.token_transfer.recipient_address === principal) {
         return (
           <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
             <Caption display={['none', 'none', 'none', 'block']}>Received from</Caption>
@@ -91,7 +91,7 @@ export const AddressArea = React.memo(
       return (
         <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
           <PrincipalLink principal={tx.sender_address} />
-          <Flex as="span" color={'textCaption'}>
+          <Flex as="span" color="textCaption">
             <Icon as={HiOutlineArrowSmRight} strokeWidth="1.5" size="15px" />
           </Flex>
           <PrincipalLink principal={tx.token_transfer.recipient_address} />
@@ -123,56 +123,68 @@ export const AddressArea = React.memo(
   }
 );
 
-const TxItemTitleArea = React.memo(({ title, tx, principal }: any) => (
-  <Stack as="span" spacing="8px" flexWrap="wrap" minWidth={0}>
-    <Title
-      className={'search-result-title'}
-      fontWeight="500"
-      display="block"
-      fontSize="16px"
-      color={'midnight'}
-    >
-      {title}
-    </Title>
-    <Stack
-      as="span"
-      isInline
-      spacing="4px"
-      alignItems="center"
-      flexWrap="wrap"
-      divider={<Caption>∙</Caption>}
-    >
-      <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
-      <AddressArea principal={principal} tx={tx} />
-    </Stack>
-  </Stack>
-));
-
-export const Timestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> = React.memo(
-  props => {
-    const { tx } = props;
-    const date = getRelativeTimestamp(tx);
-
+const TxItemTitleArea = memo(
+  ({
+    title,
+    tx,
+    principal,
+  }: {
+    title: string | ReactNode;
+    tx: Transaction | MempoolTransaction;
+    principal?: string;
+  }) => {
     return (
-      <Text fontSize="14px" textAlign="right" color={'textBody'} suppressHydrationWarning>
-        {date}
-      </Text>
+      <Stack as="span" spacing="8px" flexWrap="wrap" minWidth={0}>
+        <Title
+          className="search-result-title"
+          fontWeight="500"
+          display="block"
+          fontSize="16px"
+          color="midnight"
+        >
+          {title}
+        </Title>
+        <Stack
+          as="span"
+          isInline
+          spacing="4px"
+          alignItems="center"
+          flexWrap="wrap"
+          divider={<Caption>∙</Caption>}
+        >
+          <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
+          <AddressArea principal={principal} tx={tx} />
+        </Stack>
+      </Stack>
     );
   }
 );
 
-export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
-  <>
-    {'·'}
-    <Tooltip label="Nonce">
-      <Caption as="span" text-align="right" ml="6px">
-        {nonce.toString() + 'n'}
-      </Caption>
-    </Tooltip>
-  </>
-));
+export const Timestamp = memo((props: BoxProps & { tx: Transaction | MempoolTransaction }) => {
+  const { tx } = props;
+  const date = getRelativeTimestamp(tx);
 
-export const TxItem: FC<TxItemProps> = props => {
+  return (
+    <Text fontSize="14px" textAlign="right" color="textBody" suppressHydrationWarning>
+      {date}
+    </Text>
+  );
+});
+
+export const Nonce = memo(({ nonce }: { nonce: number }) => {
+  return (
+    <>
+      ·
+      <Tooltip label="Nonce">
+        <Caption as="span" text-align="right" ml="6px">
+          {`${nonce.toString()}n`}
+        </Caption>
+      </Tooltip>
+    </>
+  );
+});
+
+export function TxItem(props: TxItemProps) {
   const {
     tx,
     isFocused,
@@ -188,7 +200,7 @@ export const TxItem: FC<TxItemProps> = props => {
   const title = useTxTitle(tx, href, true);
   const isPending = tx.tx_status === 'pending';
   const isConfirmed = tx.tx_status === 'success';
-  const isAnchored = !(tx as any).is_unanchored;
+  const isAnchored = ('is_unanchored' in tx && !tx.is_unanchored) || !('is_unanchored' in tx);
   const didFail = !isPending && !isConfirmed;
   return (
     <Flex
@@ -229,7 +241,7 @@ export const TxItem: FC<TxItemProps> = props => {
               {isConfirmed && isAnchored && 'In anchor block'}
               {didFail && 'Failed'}
             </Caption>
-            {'·'}
+            ·
             <Caption mt="1px" ml="6px" mr={isPending ? '6px' : undefined}>
               {truncateMiddle(tx.tx_id, 4)}
             </Caption>
@@ -239,4 +251,4 @@ export const TxItem: FC<TxItemProps> = props => {
       ) : null}
     </Flex>
   );
-};
+}

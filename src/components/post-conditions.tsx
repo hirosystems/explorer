@@ -1,3 +1,16 @@
+import { useColorMode } from '@chakra-ui/react';
+import pluralize from 'pluralize';
+import React, { useEffect, useState } from 'react';
+import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
+import {
+  MempoolTransaction,
+  PostCondition,
+  PostConditionFungible,
+  PostConditionFungibleConditionCode,
+  PostConditionNonFungible,
+  PostConditionNonFungibleConditionCode,
+  Transaction,
+} from '@stacks/stacks-blockchain-api-types';
 import { useApi } from '@/common/api/client';
 import { Badge } from '@/common/components/Badge';
 import {
@@ -12,24 +25,10 @@ import { getTicker } from '@/components/tx-events';
 import { Box, Circle, FlexProps, Grid } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Caption } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import pluralize from 'pluralize';
-import React, { useEffect, useState } from 'react';
 
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
-import {
-  MempoolTransaction,
-  PostCondition,
-  PostConditionFungible,
-  PostConditionFungibleConditionCode,
-  PostConditionNonFungible,
-  PostConditionNonFungibleConditionCode,
-  Transaction,
-} from '@stacks/stacks-blockchain-api-types';
-
-import { ListItem } from '../app/common/components/ListItem';
-import { useVerticallyStackedElementsBorderStyle } from '../app/common/styles/border';
-import { StxPriceButton } from '@/app/common/components/StxPriceButton';
+import { ListItem } from '../appPages/common/components/ListItem';
+import { useVerticallyStackedElementsBorderStyle } from '../appPages/common/styles/border';
+import { StxPriceButton } from '@/appPages/common/components/StxPriceButton';
 
 const getConditionType = (type: PostCondition['type']) => {
   switch (type) {
@@ -51,17 +50,15 @@ const constructPostConditionAssetId = (
 const getFirstLetterOfAsset = (value: string) => {
   if (value.includes('::')) {
     return value.split('::')[1][0];
-  } else {
-    if (value.includes('.')) {
-      const parts = value.split('.');
-      if (validateStacksAddress(parts[0])) {
-        return value[1][0];
-      } else {
-        return value[0][0];
-      }
-    }
-    return value[0];
   }
+  if (value.includes('.')) {
+    const parts = value.split('.');
+    if (validateStacksAddress(parts[0])) {
+      return value[1][0];
+    }
+    return value[0][0];
+  }
+  return value[0];
 };
 
 const getPrettyCode = (
@@ -89,13 +86,13 @@ const getPrettyCode = (
 };
 
 const ConditionAsset = ({ condition }: { condition: PostCondition }) => {
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
   switch (condition.type) {
     case 'fungible':
     case 'non_fungible':
       const assetId = constructPostConditionAssetId(condition.asset);
       const letter = getFirstLetterOfAsset(assetId);
-      return <Circle size={'48px'}>{letter.toUpperCase()}</Circle>;
+      return <Circle size="48px">{letter.toUpperCase()}</Circle>;
     case 'stx':
       return (
         <Circle size="48px" bg={`accent.${colorMode}`}>
@@ -144,20 +141,17 @@ const getAddressValue = (condition: PostCondition) => {
 const Condition = ({
   tx,
   condition,
-  isLast,
 }: {
   tx: Transaction | MempoolTransaction;
   condition: PostCondition;
-  isLast?: boolean;
 }) => {
   const [ftMetadata, setFtMetadata] = useState<FungibleTokenMetadata | undefined>();
   const { fungibleTokensApi } = useApi();
 
   useEffect(() => {
     const getFtMetadata = async () => {
-      const contractId = `${(condition as any).asset.contract_address}.${
-        (condition as any).asset.contract_name
-      }`;
+      if (condition.type !== 'fungible') return;
+      const contractId = `${condition.asset.contract_address}.${condition.asset.contract_name}`;
       const data = await fungibleTokensApi.getContractFtMetadata({
         contractId,
       });
@@ -172,8 +166,8 @@ const Condition = ({
       title={
         <>
           {capitalize(getPrettyCode(condition.condition_code, true))}{' '}
-          {ftMetadata
-            ? ftDecimals((condition as any).amount, ftMetadata?.decimals || 0)
+          {ftMetadata && condition.type !== 'non_fungible'
+            ? ftDecimals(condition.amount, ftMetadata?.decimals || 0)
             : getAmount(condition)}
           {ftMetadata?.symbol || getConditionTicker(condition)}
           {condition.type === 'stx' && <StxPriceButton tx={tx} value={Number(condition.amount)} />}
@@ -184,34 +178,28 @@ const Condition = ({
   );
 };
 
-export const PostConditions: React.FC<
-  {
-    tx: Transaction | MempoolTransaction;
-  } & FlexProps
-> = ({ tx }) => {
+export function PostConditions({
+  tx,
+}: {
+  tx: Transaction | MempoolTransaction;
+} & FlexProps) {
   const { post_conditions: conditions, post_condition_mode: mode } = tx;
   return (
     <Section
       title="Post conditions"
       topRight={
         mode ? (
-          <Badge color={'textBody'} bg={'bgAlt'} border={'none'}>
+          <Badge color="textBody" bg="bgAlt" border="none">
             {capitalize(mode)} mode
           </Badge>
         ) : null
       }
-      {...tx}
     >
       <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
         {conditions?.length ? (
           <>
             {conditions.map((condition: PostCondition, key) => (
-              <Condition
-                tx={tx}
-                isLast={key === conditions.length - 1}
-                condition={condition}
-                key={key}
-              />
+              <Condition tx={tx} condition={condition} key={key} />
             ))}
           </>
         ) : (
@@ -224,4 +212,4 @@ export const PostConditions: React.FC<
       </Box>
     </Section>
   );
-};
+}

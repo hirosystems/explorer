@@ -1,14 +1,16 @@
+import { css } from '@emotion/react';
+
+import { Fragment, ReactNode } from 'react';
 import { usdFormatter } from '@/common/utils';
 import { Circle } from '@/components/circle';
-import { Box, Icon, Flex } from '@/ui/components';
+import { Box, Flex, Icon } from '@/ui/components';
 import { BitcoinIcon } from '@/ui/icons';
 import { StxIcon } from '@/ui/icons/StxIcon';
-import { css } from '@emotion/react';
-import dynamic from 'next/dynamic';
-import * as React from 'react';
-import { FC, Fragment } from 'react';
 
-import { useCurrentBtcPrice, useCurrentStxPrice } from '../app/common/hooks/use-current-prices';
+import {
+  useCurrentBtcPrice,
+  useCurrentStxPrice,
+} from '../appPages/common/hooks/use-current-prices';
 import { ExplorerSkeletonLoader } from '@/components/loaders/skeleton-common';
 
 const wrapperStyle = css`
@@ -31,7 +33,7 @@ const iconStyle = css`
   }
 `;
 
-export const BtcStxPrice: FC = () => {
+export function BtcStxPrice(props: { children?: ReactNode }) {
   const {
     data: btcPrice,
     isFetching: isBtcPriceFetching,
@@ -46,22 +48,22 @@ export const BtcStxPrice: FC = () => {
   const formattedStxPrice = stxPrice ? usdFormatter.format(stxPrice) : '';
 
   return (
-    <Fragment>
+    <>
       <Box css={wrapperStyle}>
         <Circle size={18} bg="white" css={iconStyle}>
-          <Icon as={BitcoinIcon} color={'#f7931a'} size={19} />
+          <Icon as={BitcoinIcon} color="#f7931a" size={19} />
         </Circle>
         <Flex
           fontWeight={500}
-          fontSize={'14px'}
-          alignItems={'center'}
-          minWidth={'65px'}
-          suppressHydrationWarning={true}
+          fontSize="14px"
+          alignItems="center"
+          minWidth="65px"
+          suppressHydrationWarning
         >
           {isBtcPriceError ? (
             'N/A'
           ) : isBtcPriceFetching || false ? (
-            <ExplorerSkeletonLoader width={'70px'} height={'15px'} />
+            <ExplorerSkeletonLoader width="70px" height="15px" />
           ) : (
             formattedBtcPrice
           )}
@@ -73,20 +75,20 @@ export const BtcStxPrice: FC = () => {
         </Circle>
         <Flex
           fontWeight={500}
-          fontSize={'14px'}
-          alignItems={'center'}
-          minWidth={'35px'}
-          suppressHydrationWarning={true}
+          fontSize="14px"
+          alignItems="center"
+          minWidth="35px"
+          suppressHydrationWarning
         >
           {isStxPriceError ? (
             'N/A'
           ) : isStxPriceFetching ? (
-            <ExplorerSkeletonLoader width={'35px'} height={'15px'} />
+            <ExplorerSkeletonLoader width="35px" height="15px" />
           ) : (
             formattedStxPrice
           )}
         </Flex>
       </Box>
-    </Fragment>
+    </>
   );
-};
+}

@@ -1,3 +1,6 @@
+import React from 'react';
+
+import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import {
   getContractName,
   getFunctionName,
@@ -5,9 +8,6 @@ import {
   microToStacks,
   truncateMiddle,
 } from '@/common/utils';
-import React from 'react';
-
-import type { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getTxErrorMessage = (tx: Transaction | MempoolTransaction): string | undefined => {
   switch (tx.tx_status) {

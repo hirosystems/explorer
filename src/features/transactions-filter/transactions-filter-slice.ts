@@ -1,9 +1,7 @@
-'use client';
-
-import { RootState } from '@/common/state/store';
-import { PayloadAction, Reducer, createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction, Reducer } from '@reduxjs/toolkit';
 
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
+import { RootState } from '@/common/state/store';
 
 export enum TxFilterTypes {
   HomepageTxFilter = 'HomepageTxFilter',

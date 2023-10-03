@@ -1,9 +1,9 @@
-import { Box, Flex, FlexProps, Icon } from '@/ui/components';
-import { Text, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
+
 import { HiOutlineExclamation } from 'react-icons/hi';
 import { RiCloseLine } from 'react-icons/ri';
+import { Text, Title } from '@/ui/typography';
+import { Box, Flex, FlexProps, Icon } from '@/ui/components';
 
 interface AlertError {
   name?: string;
@@ -16,19 +16,14 @@ interface AlertProps {
   showClearErrors?: boolean;
 }
 
-export const Alert: React.FC<AlertProps & FlexProps> = ({
-  error,
-  clearError,
-  showClearErrors,
-  ...rest
-}) => {
+export function Alert({ error, clearError, showClearErrors, ...rest }: AlertProps & FlexProps) {
   const clearErrors = () => console.log('clear');
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   return error ? (
     <Flex
       borderRadius="12px"
-      borderWidth={'1px'}
+      borderWidth="1px"
       alignItems={['flex-start', 'flex-start', 'center']}
       color="#F9A14D"
       bg={`bg.${colorMode}`}
@@ -39,7 +34,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
     >
       <Flex
         borderRadius="12px 0 0 12px"
-        bg={'bg'}
+        bg="bg"
         py={['none', 'none', '8px']}
         alignItems="center"
         justifyContent="center"
@@ -76,7 +71,7 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
             }}
             px="16px"
             ml="auto"
-            color={'textBody'}
+            color="textBody"
             role="button"
             title="Clear error"
             aria-label="Clear error"
@@ -91,4 +86,4 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
       </Flex>
     </Flex>
   ) : null;
-};
+}

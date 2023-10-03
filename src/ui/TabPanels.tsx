@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   TabPanels as CUITabPanels,
   TabPanelsProps as CUITabPanelsProps,
-  forwardRef,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';

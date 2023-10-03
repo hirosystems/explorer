@@ -1,7 +1,5 @@
-'use client';
-
-import { TxFilterTypes } from '@/features/transactions-filter/transactions-filter-slice';
 import { usePathname } from 'next/navigation';
+import { TxFilterTypes } from '@/features/transactions-filter/transactions-filter-slice';
 
 const pathnameFilterScopeMap: Record<string, TxFilterTypes> = {
   '/transactions': TxFilterTypes.TxsPageTxFilter,

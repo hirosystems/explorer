@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@/ui/components';
 import React from 'react';
 import { FiSlash } from 'react-icons/fi';
+import { Box, BoxProps } from '@/ui/components';
 
-export const FailedIcon: React.FC<BoxProps> = props => <Box as={FiSlash} {...props} />;
+export const FailedIcon: FC<BoxProps> = props => <Box as={FiSlash} {...props} />;

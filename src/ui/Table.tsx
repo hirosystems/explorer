@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Table as CUITable,
   TableProps as CUITableProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

@@ -1,20 +1,20 @@
-import { buildUrl } from '@/app/common/utils/buildUrl';
-import { useApi } from '@/common/api/client';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { NetworkModes } from '@/common/types/network';
-import { Box, Icon, Spinner, Tooltip } from '@/ui/components';
-import { StxIcon } from '@/ui/icons/StxIcon';
 import { useColorMode } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { AiFillCheckCircle } from 'react-icons/ai';
 import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
 import { TbCurrencyBitcoin } from 'react-icons/tb';
 
 import { Block as BlockType } from '@stacks/stacks-blockchain-api-types';
+import { StxIcon } from '@/ui/icons/StxIcon';
+import { Box, Icon, Spinner, Tooltip } from '@/ui/components';
+import { NetworkModes } from '@/common/types/network';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { useApi } from '@/common/api/client';
+import { buildUrl } from '@/appPages/common/utils/buildUrl';
 
-import { useBlockListInfinite } from '../../app/common/queries/useBlockListInfinite';
+import { useBlockListInfinite } from '../../appPages/common/queries/useBlockListInfinite';
 
 const wrapperStyle = css`
   display: flex;
@@ -167,26 +167,24 @@ interface BlockProps {
 
 interface BlockInfoProps {
   tooltip: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   time: string;
 }
 
-const BlockInfo: React.FC<BlockInfoProps> = ({ tooltip, icon, time }) => (
-  <Box css={timeStyle}>
-    <Tooltip label={tooltip}>
-      <Box css={timeContainerStyle}>
-        {icon}
-        {time}
-      </Box>
-    </Tooltip>
-  </Box>
-);
+function BlockInfo({ tooltip, icon, time }: BlockInfoProps) {
+  return (
+    <Box css={timeStyle}>
+      <Tooltip label={tooltip}>
+        <Box css={timeContainerStyle}>
+          {icon}
+          {time}
+        </Box>
+      </Tooltip>
+    </Box>
+  );
+}
 
-const Block: React.FC<BlockProps> = ({
-  displayBlockchainIcons,
-  previousBtcBlockBurnTime,
-  block,
-}) => {
+function Block({ displayBlockchainIcons, previousBtcBlockBurnTime, block }: BlockProps) {
   const stxBlockHeight = block.height;
   const btcBlockBurnTime = block.burn_block_time;
   const btcBlockHeight = block.burn_block_height;
@@ -197,18 +195,18 @@ const Block: React.FC<BlockProps> = ({
   const router = useRouter();
   const network = useGlobalContext().activeNetwork;
   const btcLinkPathPrefix = network.mode === NetworkModes.Testnet ? '/testnet' : '';
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   return (
     <Box css={blockWrapperStyle} bg={`block.${colorMode}`}>
       <Box css={blockAndArrowStyle}>
         {displayBlockchainIcons && (
-          <Box css={blockchainIconWrapperStyle} backgroundColor={'#f7931a'}>
-            <TbCurrencyBitcoin color={'#fff'} />
+          <Box css={blockchainIconWrapperStyle} backgroundColor="#f7931a">
+            <TbCurrencyBitcoin color="#fff" />
           </Box>
         )}
         <Box
-          className={'block-box'}
+          className="block-box"
           css={blockStyle}
           onClick={() => {
             window
@@ -218,7 +216,7 @@ const Block: React.FC<BlockProps> = ({
         >
           {btcBlockHeight}
         </Box>
-        <Icon as={BsArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
+        <Icon as={BsArrowRight} color="#d9d9d9" css={arrowStyle} size="37px" />
       </Box>
       <BlockInfo
         tooltip={
@@ -226,7 +224,7 @@ const Block: React.FC<BlockProps> = ({
             ? `This block took longer than expected`
             : 'This block was mined in under 10 minutes.'
         }
-        icon={<Icon as={BlockInfoIcon} size={'20px'} color={'#757b83'} css={iconStyle} />}
+        icon={<Icon as={BlockInfoIcon} size="20px" color="#757b83" css={iconStyle} />}
         time={timeBetweenBlocksFormatted}
       />
       <Box css={blockAndArrowStyle}>
@@ -237,26 +235,26 @@ const Block: React.FC<BlockProps> = ({
         )}
         <Box
           css={blockStyle}
-          className={'block-box'}
+          className="block-box"
           onClick={() => router.push(buildUrl(`/block/${encodeURIComponent(block.hash)}`, network))}
         >
           {stxBlockHeight}
         </Box>
-        <Icon as={BsArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
+        <Icon as={BsArrowRight} color="#d9d9d9" css={arrowStyle} size="37px" />
       </Box>
     </Box>
   );
-};
+}
 
 interface CurrentBlockProps {
   lastBlock: BlockType;
 }
 
-const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
+function CurrentBlock({ lastBlock }: CurrentBlockProps) {
   const btcBlockHeight = lastBlock.burn_block_height + 1;
   const stxBlockHeight = lastBlock.height + 1;
   const lastBtcBlockBurnTime = lastBlock.burn_block_time;
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   const [currentBlockWaitTime, setCurrentBlockWaitTime] = useState(
     Math.ceil(Date.now() / 1000) - lastBtcBlockBurnTime
@@ -274,7 +272,7 @@ const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
   return (
     <Box css={currentBlockStyle} bg={`lightBlock.${colorMode}`}>
       <Box css={blockAndArrowStyle}>
-        <Box className={'block-box'} css={blockStyle}>
+        <Box className="block-box" css={blockStyle}>
           {btcBlockHeight}
         </Box>
       </Box>
@@ -284,15 +282,15 @@ const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
         time={formattedBlockWaitTime}
       />
       <Box css={blockAndArrowStyle}>
-        <Box css={blockStyle} className={'block-box'}>
+        <Box css={blockStyle} className="block-box">
           {stxBlockHeight}
         </Box>
       </Box>
     </Box>
   );
-};
+}
 
-export const BlocksVisualizer: React.FC = () => {
+export function BlocksVisualizer() {
   const api = useApi();
   const { data: blocks, isLoading } = useBlockListInfinite(api);
 
@@ -316,4 +314,4 @@ export const BlocksVisualizer: React.FC = () => {
       <CurrentBlock lastBlock={lastBlock} />
     </Box>
   );
-};
+}

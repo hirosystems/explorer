@@ -1,12 +1,12 @@
-import { ModalState, modalSlice } from '@/components/modals/modal-slice';
-import { SearchState, searchSlice } from '@/features/search/search-slice';
-import {
-  TxFilters,
-  filterReducers,
-} from '@/features/transactions-filter/transactions-filter-slice';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { modalSlice, ModalState } from '@/components/modals/modal-slice';
+import { searchSlice, SearchState } from '@/features/search/search-slice';
+import {
+  filterReducers,
+  TxFilters,
+} from '@/features/transactions-filter/transactions-filter-slice';
 
-import { ConnectState, sandboxSlice } from '../../app/sandbox/sandbox-slice';
+import { ConnectState, sandboxSlice } from '../../appPages/sandbox/sandbox-slice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,

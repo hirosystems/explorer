@@ -1,7 +1,12 @@
-'use client';
-
-import { ONE_MINUTE } from '@/app/common/queries/query-stale-time';
-import { getQueryParams } from '@/app/common/utils/buildUrl';
+import { useColorMode } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React, { memo } from 'react';
+import { TbCheck, TbTrash } from 'react-icons/tb';
+import { useQuery } from '@tanstack/react-query';
+import { CoreNodeInfoResponse } from '@stacks/blockchain-api-client/src/generated/models';
+import { ChainID } from '@stacks/transactions';
+import { ONE_MINUTE } from '@/appPages/common/queries/query-stale-time';
+import { getQueryParams } from '@/appPages/common/utils/buildUrl';
 import { getNetworkModeFromNetworkId } from '@/common/api/utils';
 import { Badge } from '@/common/components/Badge';
 import { DEFAULT_V2_INFO_ENDPOINT, MODALS } from '@/common/constants';
@@ -20,21 +25,13 @@ import {
   Tooltip,
 } from '@/ui/components';
 import { Caption, Title } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { TbCheck, TbTrash } from 'react-icons/tb';
-import { useQuery } from '@tanstack/react-query';
-
-import { CoreNodeInfoResponse } from '@stacks/blockchain-api-client/src/generated/models';
-import { ChainID } from '@stacks/transactions';
 
 interface ItemWrapperProps extends FlexProps {
   isDisabled?: string | boolean;
   isActive?: boolean;
 }
 
-const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...props }) => {
+function ItemWrapper({ isActive, isDisabled, ...props }: ItemWrapperProps) {
   return (
     <Flex
       opacity={isDisabled ? 0.5 : 1}
@@ -50,7 +47,7 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({ isActive, isDisabled, ...prop
       {...props}
     />
   );
-};
+}
 
 interface ItemProps extends ItemWrapperProps {
   item: Network;
@@ -60,12 +57,12 @@ interface ItemProps extends ItemWrapperProps {
 const getCustomNetworkApiInfo = (baseUrl: string) => () =>
   fetch(`${baseUrl}${DEFAULT_V2_INFO_ENDPOINT}`).then(res => res.json());
 
-const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCustom, ...rest }) => {
+function Item({ item, isActive, isDisabled, onClick, isCustom, ...rest }: ItemProps) {
   const {
     removeCustomNetwork,
     apiUrls: { mainnet, testnet },
   } = useGlobalContext();
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
   const isMainnet = item.url === mainnet;
   const isTestnet = item.url === testnet;
   const isDefault = isMainnet || isTestnet;
@@ -81,7 +78,6 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
     {
       staleTime: ONE_MINUTE,
       enabled: !doNotFetch,
-      suspense: false,
       useErrorBoundary: false,
     }
   );
@@ -96,7 +92,7 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
     <ItemWrapper isActive={isActive} isDisabled={!!isDisabled || !!error || isFetching} {...rest}>
       <Stack
         pl="32px"
-        pr={'32px'}
+        pr="32px"
         py="16px"
         width="100%"
         flexGrow={1}
@@ -119,26 +115,26 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
           {item?.url?.includes('//') ? item?.url?.split('//')[1] : item?.url || isDisabled}
         </Caption>
       </Stack>
-      <Flex alignItems="center" pr={'32px'} py="16px" position={'relative'}>
+      <Flex alignItems="center" pr="32px" py="16px" position="relative">
         {isCustom && !isActive ? (
           <Tooltip label="Remove network">
             <IconButton
               position="relative"
               color={`textCaption.${colorMode}`}
-              size={'21px'}
+              size="21px"
               icon={
                 <span>
-                  <TbTrash size={'21px'} />
+                  <TbTrash size="21px" />
                 </span>
               }
               onClick={() => removeCustomNetwork(item)}
-              aria-label={'Remove network'}
+              aria-label="Remove network"
               _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
             />
           </Tooltip>
         ) : isFetching ? (
-          <Spinner size="18px" opacity={0.5} color={'#666'} />
-        ) : !!error ? (
+          <Spinner size="18px" opacity={0.5} color="#666" />
+        ) : error ? (
           <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
         ) : isActive ? (
           <Box as={TbCheck} color={`feedbackSuccess.${colorMode}`} size="18px" />
@@ -146,9 +142,9 @@ const Item: React.FC<ItemProps> = ({ item, isActive, isDisabled, onClick, isCust
       </Flex>
     </ItemWrapper>
   );
-};
+}
 
-const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
+function AddNetwork({ onClick, ...rest }: ItemWrapperProps) {
   const dispatch = useAppDispatch();
 
   return (
@@ -165,13 +161,13 @@ const AddNetwork: React.FC<ItemWrapperProps> = ({ onClick, ...rest }) => {
       <Title fontWeight={400}>Add a network</Title>
     </ItemWrapper>
   );
-};
+}
 
 interface NetworkItemsProps extends BoxProps {
   onItemClick?: (item?: any) => void;
 }
 
-export const NetworkItems: React.FC<NetworkItemsProps> = React.memo(({ onItemClick }) => {
+export const NetworkItems = memo(({ onItemClick }: NetworkItemsProps) => {
   const { networks, activeNetwork } = useGlobalContext();
   const router = useRouter();
 

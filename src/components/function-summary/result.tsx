@@ -3,15 +3,18 @@ import { Box, Flex, Stack } from '@/ui/components';
 import { Caption, Pre } from '@/ui/typography';
 import { TbAlertTriangle, TbCircleCheck } from 'react-icons/tb';
 
-import type { Transaction } from '@stacks/stacks-blockchain-api-types';
-import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { ClarityType, cvToJSON, hexToCV } from '@stacks/transactions';
+import { AbstractTransaction } from '@stacks/stacks-blockchain-api-types/generated';
 
-interface FunctionSummaryResultProps {
-  result: Transaction['tx_result'];
-}
 interface ReprValueProps {
   type: string;
   value: string | number | (string | number)[];
+}
+
+interface ClarityJson {
+  type: string;
+  value: boolean | string | null | ClarityJson | ClarityJson[] | Record<string, ClarityJson>;
+  success: boolean;
 }
 
 const getReprValue = ({ type, value }: ReprValueProps) => {
@@ -22,17 +25,19 @@ const getReprValue = ({ type, value }: ReprValueProps) => {
   return typeof reprValue === 'object' ? JSON.stringify(reprValue) : reprValue;
 };
 
-export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) => {
+export function FunctionSummaryResult({ result }: { result?: AbstractTransaction['tx_result'] }) {
   if (!result) return null;
-  const { success, type, value } = cvToJSON(hexToCV(result.hex));
+  const resultHex = result.hex;
+  const clarityValue = hexToCV(result.hex);
+  const { success, type, value } = cvToJSON(clarityValue) as ClarityJson; // missing Stacks.js type
   const hasType = !type?.includes('UnknownType');
 
-  if (type?.includes('tuple')) {
+  if (clarityValue.type === ClarityType.Tuple) {
     return (
       <Box width="100%">
-        <Pre>{value.type}</Pre>
+        <Pre>{clarityValue.type}</Pre>
         <Stack mt="32px" spacing="16px" width="100%">
-          {Object.keys(value.value).map((name: string, index: number) => {
+          {Object.keys(value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const entry = value.value[name];
             const repr = getReprValue(entry);
@@ -83,4 +88,4 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
       </Box>
     );
   }
-};
+}

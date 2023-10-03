@@ -1,9 +1,7 @@
-'use client';
-
 import {
-  Tr as CUITr,
-  TableRowProps as CUITrProps,
   forwardRef,
+  TableRowProps as CUITrProps,
+  Tr as CUITr,
   useColorMode,
 } from '@chakra-ui/react';
 

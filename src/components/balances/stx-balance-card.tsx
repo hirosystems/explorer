@@ -1,3 +1,9 @@
+import { useColorMode } from '@chakra-ui/react';
+import vkQr from '@vkontakte/vk-qr';
+
+import { TbQrcode, TbX } from 'react-icons/tb';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import { memo, useMemo, useState } from 'react';
 import { MODALS } from '@/common/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import {
@@ -12,14 +18,8 @@ import { StackingPercentage } from '@/components/stacking';
 import { Box, BoxProps, Circle, Flex, Grid, IconButton, Stack, Tooltip } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Caption, Text } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import vkQr from '@vkontakte/vk-qr';
-import * as React from 'react';
-import { TbQrcode, TbX } from 'react-icons/tb';
 
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-
-import { useCurrentStxPrice } from '../../app/common/hooks/use-current-prices';
+import { useCurrentStxPrice } from '../../appPages/common/hooks/use-current-prices';
 
 export const BalanceItem = ({ balance, ...rest }: any) => {
   const { data: stxPrice } = useCurrentStxPrice();
@@ -50,8 +50,8 @@ export const BalanceItem = ({ balance, ...rest }: any) => {
   );
 };
 
-const QRcode: React.FC<{ principal: string } & BoxProps> = React.memo(({ principal, ...rest }) => {
-  const qrSvg = React.useMemo(
+const QRCode = memo(({ principal, ...rest }: { principal: string } & BoxProps) => {
+  const qrSvg = useMemo(
     () =>
       vkQr.createQR(principal, {
         qrSize: 256,
@@ -79,8 +79,8 @@ interface StxBalancesProps {
   principal: string;
 }
 
-export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal }) => {
-  const colorMode = useColorMode().colorMode;
+export function StxBalances({ balances, principal }: StxBalancesProps) {
+  const { colorMode } = useColorMode();
   const dispatch = useAppDispatch();
   const tokenOfferingData = balances?.token_offering_locked;
 
@@ -99,7 +99,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
   const minerRewardsBalance = microToStacks(minerRewards, false);
   const isStacking = locked > 0;
 
-  const [qrShowing, setQrShowing] = React.useState(false);
+  const [qrShowing, setQrShowing] = useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
 
   const TopRight = (
@@ -111,7 +111,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
           right="-12px"
           icon={qrShowing ? <TbX /> : <TbQrcode />}
           onClick={toggleViewQrCode}
-          aria-label={'toggle view QR code'}
+          aria-label="toggle view QR code"
         />
       </Tooltip>
     </Box>
@@ -131,7 +131,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
                 <StxIcon color="white" size="16px" />
               </Circle>
               <Stack spacing="8px" pr="16px">
-                <BalanceItem fontWeight="500" color={'textTitle'} balance={totalBalance} />
+                <BalanceItem fontWeight="500" color="textTitle" balance={totalBalance} />
                 <Caption>Total balance</Caption>
               </Stack>
             </Flex>
@@ -146,31 +146,29 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
                 py="24px"
               >
                 <Caption>Available</Caption>
-                <BalanceItem color={'textTitle'} balance={availableBalance} />
+                <BalanceItem color="textTitle" balance={availableBalance} />
               </Stack>
             </Box>
           ) : null}
           {minerRewards > 0 ? (
-            <>
-              <Box px="20px">
-                <Stack
-                  borderBottom={!!tokenOfferingData ? '1px solid' : 'unset'}
-                  spacing="8px"
-                  py="24px"
-                >
-                  <Caption>Miner rewards</Caption>
-                  <BalanceItem color={'textTitle'} balance={minerRewardsBalance} />
-                </Stack>
-              </Box>
-            </>
+            <Box px="20px">
+              <Stack
+                borderBottom={tokenOfferingData ? '1px solid' : 'unset'}
+                spacing="8px"
+                py="24px"
+              >
+                <Caption>Miner rewards</Caption>
+                <BalanceItem color="textTitle" balance={minerRewardsBalance} />
+              </Stack>
+            </Box>
           ) : null}
-          {!!tokenOfferingData ? (
+          {tokenOfferingData ? (
             <Box px="20px">
               <Stack borderBottom={isStacking ? '1px solid' : undefined} spacing="8px" py="24px">
                 <Caption>Locked</Caption>
                 <Flex alignItems="baseline" justifyContent="space-between">
                   <BalanceItem
-                    color={'textTitle'}
+                    color="textTitle"
                     balance={microToStacks(tokenOfferingData.total_locked)}
                   />
                   <Box
@@ -179,7 +177,7 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
                     _hover={{
                       cursor: 'pointer',
                     }}
-                    color={'brand'}
+                    color="brand"
                   >
                     View schedule
                   </Box>
@@ -188,20 +186,18 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
             </Box>
           ) : null}
           {isStacking ? (
-            <>
-              <Box px="20px">
-                <Stack borderBottomWidth="1px" spacing="8px" py="24px">
-                  <Caption>Stacked amount (locked)</Caption>
-                  <BalanceItem color={'textTitle'} balance={stackedBalance} />
-                </Stack>
-                <StackingPercentage balances={balances} address={principal} />
-              </Box>
-            </>
+            <Box px="20px">
+              <Stack borderBottomWidth="1px" spacing="8px" py="24px">
+                <Caption>Stacked amount (locked)</Caption>
+                <BalanceItem color="textTitle" balance={stackedBalance} />
+              </Stack>
+              <StackingPercentage balances={balances} address={principal} />
+            </Box>
           ) : null}
         </>
       ) : (
         <Grid placeItems="center" pt="32px" pb="24px" width="100%">
-          <QRcode principal={principal} />
+          <QRCode principal={principal} />
           <Caption
             mt="16px"
             onClick={toggleViewQrCode}
@@ -216,4 +212,4 @@ export const StxBalances: React.FC<StxBalancesProps> = ({ balances, principal })
       )}
     </Section>
   );
-};
+}

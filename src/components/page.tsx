@@ -1,21 +1,17 @@
-'use client';
-
+import dayjs from 'dayjs';
+import React from 'react';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionStatus } from '@/common/constants';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { getTransactionStatus } from '@/common/utils/transactions';
 import { Alert } from '@/components/alert';
-import { Notice } from '@/components/notice';
 import { Box } from '@/ui/components';
-import dayjs from 'dayjs';
-import React from 'react';
-
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 interface TxAlertsProps {
   tx: MempoolTransaction | Transaction;
 }
 
-export const TxAlerts: React.FC<TxAlertsProps> = ({ tx }) => {
+export function TxAlerts({ tx }: TxAlertsProps) {
   const networkMode = useGlobalContext().activeNetwork.mode;
   // for testnet, show after 4 hours. for mainnet, show after 24 hours
   const HOURS_NOTICE_TESTNET = 4;
@@ -70,4 +66,4 @@ export const TxAlerts: React.FC<TxAlertsProps> = ({ tx }) => {
       ) : null}
     </Box>
   );
-};
+}

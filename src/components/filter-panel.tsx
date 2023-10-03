@@ -1,17 +1,17 @@
-import { Badge } from '@/common/components/Badge';
-import { FilterIcon } from '@/components/icons/filter';
-import { Tag } from '@/components/tags';
-import { Box, Flex, Grid, GridProps, IconButton, Stack } from '@/ui/components';
-import { Text, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon';
 import CheckboxMarkedCircleOutlineIcon from 'mdi-react/CheckboxMarkedCircleOutlineIcon';
-import React from 'react';
+import React, { memo } from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
+import { Text, Title } from '@/ui/typography';
+import { Box, Flex, Grid, GridProps, IconButton, Stack } from '@/ui/components';
+import { Tag } from '@/components/tags';
+import { FilterIcon } from '@/components/icons/filter';
+import { Badge } from '@/common/components/Badge';
 
-import { useFilterState } from '../app/common/hooks/use-filter-state';
+import { useFilterState } from '../appPages/common/hooks/use-filter-state';
 
 const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
   GetTransactionListTypeEnum.smart_contract,
@@ -21,7 +21,7 @@ const FILTERABLE_TYPES: GetTransactionListTypeEnum[] = [
   GetTransactionListTypeEnum.poison_microblock,
 ];
 
-export const FilteredMessage: React.FC<GridProps> = ({ ...rest }) => {
+export function FilteredMessage({ ...rest }: GridProps) {
   const { toggleFilterVisibility } = useFilterState();
   return (
     <Grid p="32px" placeItems="center" textAlign="center" {...rest}>
@@ -31,24 +31,24 @@ export const FilteredMessage: React.FC<GridProps> = ({ ...rest }) => {
           placeItems="center"
           size="72px"
           borderRadius="100%"
-          color={'textTitle'}
+          color="textTitle"
           mb="20px"
         >
-          <Box color={'accent'} transform="translateY(2px)" size="48px">
+          <Box color="accent" transform="translateY(2px)" size="48px">
             <FilterIcon size="48px" />
           </Box>
         </Grid>
         <Title mb="8px" fontSize="20px">
           Transactions filtered
         </Title>
-        <Text maxWidth="30ch" mx="auto" lineHeight="1.8" color={'textBody'}>
+        <Text maxWidth="30ch" mx="auto" lineHeight="1.8" color="textBody">
           You have confirmed transactions, but they aren't currently visible due to your filter
           settings.
         </Text>
         <Flex alignItems="center" justifyContent="center" mx="auto" mt="16px">
           <Badge
             _hover={{ cursor: 'pointer', bg: 'bgAlt' }}
-            color={'textBody'}
+            color="textBody"
             onClick={toggleFilterVisibility}
           >
             Change filters
@@ -57,7 +57,7 @@ export const FilteredMessage: React.FC<GridProps> = ({ ...rest }) => {
       </Box>
     </Grid>
   );
-};
+}
 
 const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   const handleClick = () => {
@@ -80,9 +80,9 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
   );
 };
 
-export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
+export const FilterPanel = memo(({ showBorder, bg, ...rest }: any) => {
   const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } = useFilterState();
-  const colorMode = useColorMode().colorMode;
+  const { colorMode } = useColorMode();
 
   if (!isVisible) return null;
 
@@ -113,13 +113,13 @@ export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
         willChange="transform, opacity"
         boxShadow="lg"
         pointerEvents="all"
-        transition={`280ms cubic-bezier(0.4, 0, 0.2, 1)`}
+        transition="280ms cubic-bezier(0.4, 0, 0.2, 1)"
         transitionProperty="opacity, transform"
         borderWidth="1px"
         borderColor={`border.${colorMode}`}
         bg={`bg.${colorMode}`}
       >
-        <Box position="absolute" top={'-48px'} left="0" width="100%" bg={'bg'} height="50px" />
+        <Box position="absolute" top="-48px" left="0" width="100%" bg="bg" height="50px" />
         <Flex pb="16px" alignItems="center" justifyContent="space-between">
           <Title>Filter transactions</Title>
           <Stack isInline alignItems="center">

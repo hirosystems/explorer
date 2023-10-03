@@ -1,10 +1,9 @@
+import { useColorMode } from '@chakra-ui/react';
+
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Badge } from '@/common/components/Badge';
 import { TransactionType } from '@/common/constants';
 import { FlexProps, Icon } from '@/ui/components';
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
-
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { getTxTypeIcon } from './transaction-item';
 
@@ -36,11 +35,11 @@ export const Tag = ({ type, ...rest }: TagProps) => {
       labelProps={{ display: 'flex', alignItems: 'center', gap: '4px' }}
       background={`bg.${useColorMode().colorMode}`}
       color={`textBody.${useColorMode().colorMode}`}
-      gap={'4px'}
-      border={'none'}
+      gap="4px"
+      border="none"
       {...rest}
     >
-      <Icon size={'16px'} color="currentColor" as={TypeIcon} />
+      <Icon size="16px" color="currentColor" as={TypeIcon} />
       {txTypeNamesMap[type]}
     </Badge>
   );

@@ -1,7 +1,8 @@
+import Head from 'next/head';
+import { Fragment } from 'react';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { TxStatus } from '@/common/types/tx';
-import Head from 'next/head';
-import React from 'react';
+import { NetworkModes } from '@/common/types/network';
 
 const defaultTitle = 'Stacks Explorer by Hiro';
 
@@ -31,7 +32,7 @@ export const Meta = ({
   const network = useGlobalContext().activeNetwork;
 
   const withMode = (title: string) => {
-    if (network.mode === 'testnet') {
+    if (network.mode === NetworkModes.Testnet) {
       return `${title} [Testnet mode]`;
     }
     return title;
@@ -47,11 +48,11 @@ export const Meta = ({
       <meta name="twitter:creator" content="@stacks" />
       <meta
         property="og:image"
-        content={`https://blockstack-www.imgix.net/stacks-explorer-og.png?auto=format,compress`}
+        content="https://blockstack-www.imgix.net/stacks-explorer-og.png?auto=format,compress"
       />
       <meta
         name="twitter:image"
-        content={`https://blockstack-www.imgix.net/stacks-explorer-og.png?auto=format,compress`}
+        content="https://blockstack-www.imgix.net/stacks-explorer-og.png?auto=format,compress"
       />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@stacks" />
@@ -60,10 +61,10 @@ export const Meta = ({
       <meta property="og:description" content={description} />
       {labels?.length
         ? labels.map(({ label, data }, key) => (
-            <React.Fragment key={key}>
+            <Fragment key={key}>
               <meta name={`twitter:label${key + 1}`} content={label} />
               <meta name={`twitter:data${key + 1}`} content={data} />
-            </React.Fragment>
+            </Fragment>
           ))
         : null}
       <link rel="icon" type="image/svg+xml" href={`/static/${filename}.png`} />

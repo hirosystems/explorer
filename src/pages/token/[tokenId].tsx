@@ -1,9 +1,9 @@
 import type { GetServerSideProps } from 'next';
+import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client';
 import { apiClients, createConfig } from '@/common/api/client';
 import { DEFAULT_MAINNET_SERVER } from '@/common/constants';
-import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client';
 
-import { TokenPage } from '@/app/token/[tokenId]';
+import { Token } from '@/appPages/token/[tokenId]';
 import { getCacheClient } from '@/common/utils/cache-client';
 
 interface TokenLinks {
@@ -60,9 +60,9 @@ export interface TokenInfoProps {
 
 async function searchCoinGeckoTokens(tokenSymbol: string) {
   try {
-    const tokenSearchResponse = await (
+    const tokenSearchResponse = (await (
       await fetch(`https://api.coingecko.com/api/v3/search?query=${tokenSymbol}`)
-    ).json();
+    ).json()) as { coins: { symbol: string; id: string }[] };
     const token = (tokenSearchResponse?.coins || []).find(
       (coin: { symbol: string; id: string }) =>
         coin.symbol?.toLowerCase() === tokenSymbol.toLowerCase()
@@ -78,20 +78,77 @@ async function searchCoinGeckoTokens(tokenSymbol: string) {
 
 async function getTokenFromCoinGecko(tokenId: string) {
   try {
-    const tokenInfoResponse = await (
+    const tokenInfoResponse = (await (
       await fetch(`https://api.coingecko.com/api/v3/coins/${tokenId}?localization=false`)
-    ).json();
+    ).json()) as {
+      name: string | null;
+      symbol: string | null;
+      categories: string[];
+      market_data: {
+        circulating_supply: number | null;
+        total_supply: number | null;
+        fully_diluted_valuation: {
+          usd: number | null;
+        };
+        total_value_locked: {
+          usd: number | null;
+        };
+        current_price: {
+          usd: number | null;
+          btc: number | null;
+        };
+        price_change_percentage_24h: number | null;
+        price_change_percentage_24h_in_currency: {
+          btc: number | null;
+        };
+        market_cap: {
+          usd: number | null;
+        };
+        total_volume: {
+          usd: number | null;
+        };
+        volume_change_percentage_24h: number | null;
+      };
+      links: {
+        homepage: string[] | null;
+        blockchain_site: string[] | null;
+        chat_url: string[] | null;
+        telegram_channel_identifier: string | null;
+        official_forum_url: string[] | null;
+        announcement_url: string[] | null;
+        repos_url: {
+          github: string[] | null;
+          bitbucket: string[] | null;
+        };
+        twitter_screen_name: string | null;
+      };
+      developer_data: {
+        forks: number | null;
+        stars: number | null;
+        subscribers: number | null;
+        total_issues: number | null;
+        closed_issues: number | null;
+        pull_requests_merged: number | null;
+        pull_request_contributors: number | null;
+        code_additions_deletions_4_weeks: {
+          additions: number | null;
+          deletions: number | null;
+        } | null;
+        commit_count_4_weeks: number | null;
+        last_4_weeks_commit_activity_series: [] | null;
+      };
+    };
     return tokenInfoResponse;
   } catch (error) {
     console.error(error);
   }
 }
 
-async function getCachedTokenInfo(tokenId: string) {
+async function getCachedTokenInfo(tokenId: string): Promise<TokenInfoProps | undefined> {
   try {
     const cachedTokenInfo = await getCacheClient().get(tokenId);
     if (cachedTokenInfo) {
-      return JSON.parse(cachedTokenInfo);
+      return JSON.parse(cachedTokenInfo) as TokenInfoProps;
     }
   } catch (error) {
     console.error(error);
@@ -138,9 +195,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       symbol: tokenSymbol,
       totalSupply:
         tokenMetadata?.total_supply && tokenMetadata?.decimals
-          ? Number(
-              BigInt(tokenMetadata?.total_supply) / BigInt(Math.pow(10, tokenMetadata?.decimals))
-            )
+          ? Number(BigInt(tokenMetadata?.total_supply) / BigInt(10 ** tokenMetadata?.decimals))
           : null,
     };
 
@@ -248,4 +303,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
   }
 };
 
-export default TokenPage;
+export default Token;

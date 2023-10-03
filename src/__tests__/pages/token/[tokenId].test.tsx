@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 import { getServerSideProps } from '../../../pages/token/[tokenId]';
 import { apiClients as apiClientsActual } from '@/common/api/client';
 

@@ -1,10 +1,11 @@
-import { renderHook, act } from '@testing-library/react';
-import { useTxsCSVData } from '../useTxsCSVData';
+import { renderHook } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
+import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
+import { useTxsCSVData } from '../useTxsCSVData';
 import { store } from '../../state/store';
 import { addressBalanceMockData, addressTxsMockData, mockAddress } from '../../mockData/txsData';
-import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
+import { ReactNode } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -15,7 +16,7 @@ queryClient.setQueryData(
 
 queryClient.setQueryData(['accountBalance', mockAddress], addressBalanceMockData);
 
-const wrapper = ({ children }: { children: React.ReactNode }) => (
+const wrapper = ({ children }: { children: ReactNode }) => (
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   </Provider>

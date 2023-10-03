@@ -47,7 +47,7 @@ export const getStackingStartBlockHeight = (
   transactions?: MempoolTransaction[] | Transaction[]
 ) => {
   if (transactions && transactions.length) {
-    const latestStackStxTx = (transactions as any).find(
+    const latestStackStxTx = transactions.find(
       (tx: MempoolTransaction | Transaction) =>
         tx.tx_type === 'contract_call' &&
         tx.tx_status === 'success' &&

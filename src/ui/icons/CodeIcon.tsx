@@ -1,11 +1,11 @@
-import { Box } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
 import React from 'react';
 import { IconBaseProps } from 'react-icons';
+import { Box } from '@/ui/components';
 
 export const CodeIcon = forwardRef<IconBaseProps, 'svg'>(({ size = '44px' }, ref) => (
   <Box
-    as={'svg'}
+    as="svg"
     viewBox="0 0 24 24"
     strokeWidth="1"
     stroke="currentColor"

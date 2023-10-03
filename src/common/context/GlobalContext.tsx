@@ -1,11 +1,11 @@
-import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@/common/constants';
-import { NetworkIdModeMap, NetworkModeUrlMap } from '@/common/constants/network';
-import { Network, NetworkModes } from '@/common/types/network';
 import cookie from 'cookie';
-import { FC, createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { ChainID } from '@stacks/transactions';
+import { Network, NetworkModes } from '@/common/types/network';
+import { NetworkIdModeMap, NetworkModeUrlMap } from '@/common/constants/network';
+import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@/common/constants';
 import { buildCustomNetworkUrl, fetchCustomNetworkId } from '@/components/add-network-form';
 
 interface GlobalContextProps {
@@ -33,14 +33,14 @@ export const GlobalContext = createContext<GlobalContextProps>({
   networks: {},
 });
 
-export const AppContextProvider: FC<any> = ({
+export function AppContextProvider({
   cookies,
   queryNetworkMode,
   queryApiUrl,
   apiUrls,
   querySubnet,
   children,
-}) => {
+}: any) {
   if (IS_BROWSER && (window as any)?.location?.search?.includes('err=1'))
     throw new Error('test error');
   const customNetworksCookie = JSON.parse(cookie.parse(cookies || '').customNetworks || '{}');
@@ -151,4 +151,4 @@ export const AppContextProvider: FC<any> = ({
       {children}
     </GlobalContext.Provider>
   );
-};
+}

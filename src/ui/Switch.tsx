@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   Switch as CUISwitch,
   SwitchProps as CUISwitchProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

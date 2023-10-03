@@ -1,5 +1,3 @@
-'use client';
-
 import {
   FormControl as CUIFormControl,
   FormControlProps as CUIFormControlProps,

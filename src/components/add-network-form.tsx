@@ -1,4 +1,8 @@
-import { getQueryParams } from '@/app/common/utils/buildUrl';
+import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
+import { useRouter } from 'next/router';
+import { string } from 'yup';
+import { ChainID } from '@stacks/transactions';
+import { getQueryParams } from '@/appPages/common/utils/buildUrl';
 import { fetchFromApi } from '@/common/api/fetch';
 import { DEFAULT_V2_INFO_ENDPOINT } from '@/common/constants';
 import { NetworkIdModeMap } from '@/common/constants/network';
@@ -16,11 +20,6 @@ import {
   Input,
   Stack,
 } from '@/ui/components';
-import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
-import { useRouter } from 'next/router';
-import { string } from 'yup';
-
-import { ChainID } from '@stacks/transactions';
 
 export const buildCustomNetworkUrl = (url: string) => {
   const urlObj = new URL(url);
@@ -55,7 +54,7 @@ interface FormValues {
   genericError?: string;
 }
 
-export const AddNetworkForm: React.FC = () => {
+export function AddNetworkForm() {
   const dispatch = useAppDispatch();
   const { addCustomNetwork } = useGlobalContext();
   const router = useRouter();
@@ -124,7 +123,8 @@ export const AddNetworkForm: React.FC = () => {
 
         dispatch(closeModal());
       }}
-      render={({ isValidating }) => (
+    >
+      {({ isValidating }) => (
         <Form>
           <Stack spacing="24px">
             <Stack spacing="16px">
@@ -170,6 +170,6 @@ export const AddNetworkForm: React.FC = () => {
           </Stack>
         </Form>
       )}
-    />
+    </Formik>
   );
-};
+}

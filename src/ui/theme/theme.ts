@@ -1,4 +1,4 @@
-import { StyleFunctionProps, extendTheme } from '@chakra-ui/react';
+import { extendTheme, StyleFunctionProps } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 import { switchTheme } from '@/ui/theme/switchTheme';
 

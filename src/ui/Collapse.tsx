@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Collapse as CUICollapse,
   CollapseProps as CUICollapseProps,

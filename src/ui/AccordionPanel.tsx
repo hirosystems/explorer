@@ -1,5 +1,3 @@
-'use client';
-
 import {
   AccordionPanel as CUIAccordionPanel,
   AccordionPanelProps as CUIAccordionPanelProps,

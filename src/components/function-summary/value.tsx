@@ -1,17 +1,17 @@
+import NextLink from 'next/link';
+
+import { cvToJSON, hexToCV } from '@stacks/transactions';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { NetworkModes } from '@/common/types/network';
 import { isJSONString, microToStacks } from '@/common/utils';
 import { TxLink } from '@/components/links';
 import { Box, Flex, TextLink } from '@/ui/components';
 import { Caption, Text } from '@/ui/typography';
-import NextLink from 'next/link';
-import * as React from 'react';
 
-import { cvToJSON, hexToCV } from '@stacks/transactions';
+import { Value } from '../../appPages/common/components/Value';
+import { FunctionArg } from '@/common/types/tx';
 
-import { Value } from '../../app/common/components/Value';
-
-const getPrettyClarityValueType = (type: any) => {
+const getPrettyClarityValueType = (type: string) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
     switch (type) {
       case 'bool':
@@ -38,7 +38,15 @@ const tupleToArr = (tuple: string) =>
     .split(') (')
     .map(item => item.split(' '));
 
-const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
+const TupleResult = ({
+  tuple,
+  isPoxAddr,
+  btc,
+}: {
+  tuple: string[][];
+  isPoxAddr: boolean;
+  btc: null | string;
+}) => {
   const networkMode = useGlobalContext().activeNetwork.mode;
   const btcLinkPathPrefix = networkMode === NetworkModes.Testnet ? '/testnet' : '';
   let additional: any = null;
@@ -59,7 +67,7 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
 
   return (
     <>
-      {tuple.map((entry: any, index: number, arr: any[]) =>
+      {tuple.map((entry, index: number, arr: any[]) =>
         entry && entry.length ? (
           <Box
             display="block"
@@ -95,13 +103,9 @@ export const getValue = (
   if (arg.type.includes('tuple')) {
     const value = tupleToArr(arg.repr);
 
-    return (
-      <>
-        <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />
-      </>
-    );
+    return <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />;
   }
-  return isJSONString(arg.repr) ? JSON.parse(arg.repr).value : arg.repr;
+  return isJSONString(arg.repr) ? (JSON.parse(arg.repr) as { value: string }).value : arg.repr;
 };
 
 export const FunctionSummaryClarityValue = ({
@@ -109,11 +113,13 @@ export const FunctionSummaryClarityValue = ({
   btc,
   ...rest
 }: {
-  arg: any;
+  arg: FunctionArg;
   btc: null | string;
 }) => {
   if (arg.type === 'principal') {
-    const principal = arg.hex ? (cvToJSON(hexToCV(arg.hex)) || {}).value : '';
+    const principal = arg.hex
+      ? ((cvToJSON(hexToCV(arg.hex)) as { value: string }) || {}).value // missing Stacks.js type
+      : '';
     const isContract = principal.includes('.');
     if (isContract) {
       return (

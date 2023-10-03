@@ -1,3 +1,6 @@
+import { useColorMode } from '@chakra-ui/react';
+
+import { memo, ReactNode, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
 import { SearchErrorMessage } from '@/features/search/dropdown/error-message';
 import { SearchResultItem } from '@/features/search/items/search-result-item';
@@ -5,16 +8,15 @@ import { clearSearchTerm, selectIsSearchFieldFocused } from '@/features/search/s
 import { useSearch } from '@/features/search/use-search';
 import { Box, BoxProps, Flex, Spinner } from '@/ui/components';
 import { Caption } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
-import { ReactNode } from 'react';
 
-const SearchingIndicator: React.FC = React.memo(() => (
-  <Flex alignItems="center">
-    <Spinner size="18px" opacity={0.5} mr="8px" />
-    <Caption>Searching</Caption>
-  </Flex>
-));
+const SearchingIndicator = memo(function () {
+  return (
+    <Flex alignItems="center">
+      <Spinner size="18px" opacity={0.5} mr="8px" />
+      <Caption>Searching</Caption>
+    </Flex>
+  );
+});
 
 interface CardActionsProps {
   isLoading?: boolean;
@@ -22,7 +24,7 @@ interface CardActionsProps {
   hasResults?: boolean;
 }
 
-const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResults }) => {
+function CardActions({ isLoading, hasError, hasResults }: CardActionsProps) {
   const dispatch = useAppDispatch();
   return (
     <Box opacity={isLoading || hasResults || hasError ? 1 : 0}>
@@ -41,14 +43,14 @@ const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResul
       ) : null}
     </Box>
   );
-};
+}
 
-const SearchResultsCardWrapper: React.FC<BoxProps & { title?: string; actions?: ReactNode }> = ({
+function SearchResultsCardWrapper({
   title,
   actions,
   children,
   ...rest
-}) => {
+}: BoxProps & { title?: string; actions?: ReactNode }) {
   return (
     <Box
       borderRadius="12px"
@@ -78,9 +80,9 @@ const SearchResultsCardWrapper: React.FC<BoxProps & { title?: string; actions?: 
       <>{children}</>
     </Box>
   );
-};
+}
 
-export const SearchResultsCard: React.FC = () => {
+export function SearchResultsCard() {
   const {
     query: { data, isLoading, error },
     searchTerm,
@@ -89,7 +91,7 @@ export const SearchResultsCard: React.FC = () => {
   const hasError = !!error || (data && !data?.found);
   const hasResults = !hasError && data?.found;
   const errorMessage = searchTerm && !data?.found && data?.error ? data.error : '';
-  const getTitle = React.useMemo(() => {
+  const getTitle = useMemo(() => {
     if (hasError) {
       return 'Not found';
     }
@@ -114,4 +116,4 @@ export const SearchResultsCard: React.FC = () => {
       </>
     </SearchResultsCardWrapper>
   );
-};
+}

@@ -1,18 +1,24 @@
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { getNextPageParam } from '@/common/utils';
 import { getStackingStartBlockHeight } from '@/common/utils/accounts';
 import { TxLink } from '@/components/links';
 import { PercentageCircle } from '@/components/percentage-circle';
 import { Pending } from '@/components/status';
-import { AddressQueryKeys, addressQK } from '@/features/address/query-keys';
+import { addressQK, AddressQueryKeys } from '@/features/address/query-keys';
 import { useAddressQueries } from '@/features/address/use-address-queries';
-import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
+import { transactionQK, TransactionQueryKeys } from '@/features/transaction/query-keys';
 import { Box, Circle, Flex, Stack, TextLink } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Caption, Text, Title } from '@/ui/typography';
-import * as React from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
-export const StackingPercentage = ({ balances, address }: any) => {
+export const StackingPercentage = ({
+  balances,
+  address,
+}: {
+  balances: AddressBalanceResponse;
+  address: string;
+}) => {
   const queries = useAddressQueries();
   const { data: stacksInfo } = useQuery(
     addressQK(AddressQueryKeys.coreApiInfo),
@@ -20,7 +26,8 @@ export const StackingPercentage = ({ balances, address }: any) => {
   );
   const { data } = useInfiniteQuery(
     transactionQK(TransactionQueryKeys.transactionsForAddress, address),
-    ({ pageParam }) => queries.fetchTransactionsForAddress(address, undefined, pageParam || 0)(),
+    ({ pageParam }: { pageParam?: number }) =>
+      queries.fetchTransactionsForAddress(address, undefined, pageParam || 0)(),
     { getNextPageParam }
   );
   const stackingStartBlock = getStackingStartBlockHeight(data?.pages?.[0]?.results);
@@ -33,7 +40,7 @@ export const StackingPercentage = ({ balances, address }: any) => {
             <Caption>Stacking progress</Caption>
             <Flex alignItems="center">
               <Pending size="14px" mr="8px" />
-              <Text color={'textTitle'}>Calculating...</Text>
+              <Text color="textTitle">Calculating...</Text>
             </Flex>
           </Stack>
         </Box>
@@ -60,8 +67,8 @@ export const StackingPercentage = ({ balances, address }: any) => {
               <PercentageCircle percentage={stackingPercentage} />
             </Box>
           ) : (
-            <Circle mx="auto" size="48px" mb="16px" bg={'invert'}>
-              <StxIcon color={'bg'} size="24px" />
+            <Circle mx="auto" size="48px" mb="16px" bg="invert">
+              <StxIcon color="bg" size="24px" />
             </Circle>
           )}
           {isStacking ? (
@@ -72,7 +79,7 @@ export const StackingPercentage = ({ balances, address }: any) => {
                   blocks remaining
                 </Caption>
                 <TxLink txId={balances?.stx?.lock_tx_id}>
-                  <TextLink target="_blank" color={'brand'} fontSize={0}>
+                  <TextLink target="_blank" color="brand" fontSize={0}>
                     View Stacking transaction
                   </TextLink>
                 </TxLink>
@@ -80,11 +87,11 @@ export const StackingPercentage = ({ balances, address }: any) => {
             </Box>
           ) : (
             <Box textAlign="center">
-              <Title mb="12px" fontSize={2} fontWeight={500} color={'textTitle'}>
+              <Title mb="12px" fontSize={2} fontWeight={500} color="textTitle">
                 Completed at #{unlockBlock}
               </Title>
               <TxLink txId={balances?.stx?.lock_tx_id}>
-                <TextLink target="_blank" color={'brand'} fontSize={0}>
+                <TextLink target="_blank" color="brand" fontSize={0}>
                   View Stacking transaction
                 </TextLink>
               </TxLink>

@@ -1,14 +1,13 @@
-import { apiClients, createConfig } from '@/common/api/client';
-import { DEFAULT_LIST_LIMIT } from '@/common/constants';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { ApiResponseWithResultsOffset } from '@/common/types/api';
-
 import {
   AddressBalanceResponse,
   MempoolTransactionListResponse,
   NonFungibleTokenHoldingsList,
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
+import { apiClients, createConfig } from '@/common/api/client';
+import { DEFAULT_LIST_LIMIT } from '@/common/constants';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { ApiResponseWithResultsOffset } from '@/common/types/api';
 
 export const getAddressQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -19,13 +18,13 @@ export const getAddressQueries = (networkUrl: string) => {
     fetchAccountBalance: (address: string) => () => {
       return clients.accountsApi.getAccountBalance({
         principal: address,
-      }) as unknown as AddressBalanceResponse;
+      }) as unknown as AddressBalanceResponse; // missing API type
     },
     fetchNftHoldings: (address: string) => () => {
       return clients.nonFungibleTokensApi.getNftHoldings({
         principal: address,
         limit: 200,
-      }) as unknown as NonFungibleTokenHoldingsList;
+      }) as unknown as NonFungibleTokenHoldingsList; // missing API type
     },
     fetchAccountInfo: (address: string) => () => {
       return clients.accountsApi.getAccountInfo({ principal: address });
@@ -37,7 +36,7 @@ export const getAddressQueries = (networkUrl: string) => {
           principal: address,
           offset,
           limit,
-        }) as unknown as ApiResponseWithResultsOffset<Transaction>;
+        }) as unknown as ApiResponseWithResultsOffset<Transaction>; // missing API type
       },
     fetchMempoolTransactionsForAddress:
       (address: string, limit = DEFAULT_LIST_LIMIT, offset = 0) =>
@@ -46,7 +45,7 @@ export const getAddressQueries = (networkUrl: string) => {
           address,
           offset,
           limit,
-        }) as unknown as MempoolTransactionListResponse;
+        }) as unknown as MempoolTransactionListResponse; // missing API type
       },
   };
 };

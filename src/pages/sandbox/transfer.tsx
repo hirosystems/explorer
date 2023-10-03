@@ -1,22 +1,10 @@
-import { SkeletonSandbox } from '@/components/loaders/skeleton-transaction';
-import { Spinner } from '@/ui/Spinner';
-import dynamic from 'next/dynamic';
-import * as React from 'react';
+import SandboxTransferPage from '../../appPages/sandbox/transfer/page';
+import Layout from '@/appPages/sandbox/layout';
 
-const AppSandboxTransferPage = dynamic(() => import('../../app/sandbox/transfer/page'), {
-  loading: () => <Spinner alignSelf={'center'} justifySelf={'center'} size={'32px'} />,
-  ssr: false,
-});
-
-const Layout = dynamic(() => import('@/app/sandbox/layout'), {
-  loading: () => <SkeletonSandbox />,
-  ssr: false,
-});
-
-export default function SandboxTransferPage() {
+export default function SandboxTransfer() {
   return (
     <Layout>
-      <AppSandboxTransferPage />
+      <SandboxTransferPage />
     </Layout>
   );
 }

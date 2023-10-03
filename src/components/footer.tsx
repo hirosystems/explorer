@@ -1,24 +1,19 @@
-import { buildUrl } from '@/app/common/utils/buildUrl';
+import Link, { LinkProps } from 'next/link';
+import React, { HTMLProps, ReactNode } from 'react';
+import { buildUrl } from '@/appPages/common/utils/buildUrl';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { Box, Flex, TextLink } from '@/ui/components';
-import Link, { LinkProps } from 'next/link';
-import React, { FC, HTMLProps } from 'react';
 import { PAGE_MAX_WIDTH, RELEASE_TAG_NAME } from '@/common/constants';
 
-const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
-  children,
-  href,
-  target,
-  rel,
-}) => {
+function FooterLink({ children, href, target, rel }: LinkProps & HTMLProps<HTMLAnchorElement>) {
   return (
     <Link href={href} passHref legacyBehavior>
       <TextLink
         cursor="pointer"
         textStyle="body.small"
-        color={'textCaption'}
+        color="textCaption"
         textDecoration="none"
-        fontSize={'14px'}
+        fontSize="14px"
         _hover={{ textDecoration: 'underline' }}
         target={target}
         rel={rel}
@@ -27,9 +22,9 @@ const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
       </TextLink>
     </Link>
   );
-};
+}
 
-export const Footer: FC = () => {
+export function Footer(props: { children?: ReactNode }) {
   const network = useGlobalContext().activeNetwork;
 
   return (
@@ -37,7 +32,7 @@ export const Footer: FC = () => {
       mx="auto"
       width="100%"
       maxWidth={PAGE_MAX_WIDTH}
-      mt={'32px'}
+      mt="32px"
       mb={['16px', '16px', '32px']}
       px={['16px', '16px', '32px']}
     >
@@ -47,10 +42,10 @@ export const Footer: FC = () => {
         alignItems={['center', 'center', 'unset']}
         textAlign={['center', 'center', 'unset']}
         borderTop="1px solid var(--stacks-colors-border)"
-        px={'unset'}
+        px="unset"
       >
-        <Flex display="flex" flexDirection={'column'} gap="5px">
-          <Flex pb={['8px', '8px', 'unset']} pr={['unset', 'unset', '16px']} gap={'16px'}>
+        <Flex display="flex" flexDirection="column" gap="5px">
+          <Flex pb={['8px', '8px', 'unset']} pr={['unset', 'unset', '16px']} gap="16px">
             <FooterLink href={buildUrl('/transactions', network)}>Recent transactions</FooterLink>
             {!network.isSubnet && (
               <FooterLink href={buildUrl('/sandbox/deploy', network)}>Sandbox</FooterLink>
@@ -74,8 +69,8 @@ export const Footer: FC = () => {
           </Box>
         </Flex>
 
-        <Flex display="flex" marginLeft={'auto'} flexDirection={'column'} gap="5px">
-          <Flex ml={['unset', 'unset', 'auto']} gap={'16px'}>
+        <Flex display="flex" marginLeft="auto" flexDirection="column" gap="5px">
+          <Flex ml={['unset', 'unset', 'auto']} gap="16px">
             <FooterLink
               href="https://github.com/hirosystems/explorer/issues/new/choose"
               target="_blank"
@@ -93,7 +88,7 @@ export const Footer: FC = () => {
             </FooterLink>
           </Flex>
           {RELEASE_TAG_NAME && (
-            <Box marginLeft={'auto'}>
+            <Box marginLeft="auto">
               <FooterLink
                 href={`https://github.com/hirosystems/explorer/releases/tag/${RELEASE_TAG_NAME}`}
                 target="_blank"
@@ -107,4 +102,4 @@ export const Footer: FC = () => {
       </Flex>
     </Box>
   );
-};
+}

@@ -1,11 +1,10 @@
-import { theme } from '@/ui/theme/theme';
 import { ChakraProvider, ChakraProviderProps, cookieStorageManagerSSR } from '@chakra-ui/react';
-import { FC } from 'react';
+import { theme } from '@/ui/theme/theme';
 
 export interface UIProviderProps extends ChakraProviderProps {
   cookies?: string;
 }
-export const UIProvider: FC<UIProviderProps> = props => {
+export function UIProvider(props: UIProviderProps) {
   const { cookies = '', children } = props;
   const colorModeManager = cookieStorageManagerSSR(cookies);
   return (
@@ -13,4 +12,4 @@ export const UIProvider: FC<UIProviderProps> = props => {
       {children}
     </ChakraProvider>
   );
-};
+}

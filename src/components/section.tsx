@@ -1,19 +1,19 @@
+import React, { memo, ReactNode } from 'react';
 import { SECTION_HEADER_HEIGHT } from '@/common/constants/sizes';
 import { isReactComponent } from '@/common/utils';
 import { Card } from '@/components/card';
-import { Box, Flex, FlexProps, Spinner } from '@/ui/components';
+import { Flex, FlexProps, Spinner } from '@/ui/components';
 import { Text } from '@/ui/typography';
-import React, { ReactNode } from 'react';
 
 interface SectionProps extends Omit<FlexProps, 'title'> {
-  title?: string | React.FC;
+  title?: string;
 }
 
-const SectionHeader: React.FC<SectionProps> = React.memo(({ title: Title, children, ...rest }) => {
+const SectionHeader = memo(({ title: Title, children, ...rest }: SectionProps) => {
   return (
     <Flex
       alignItems="center"
-      bg={'bg'}
+      bg="bg"
       justifyContent="space-between"
       borderBottomWidth="1px"
       flexShrink={0}
@@ -24,8 +24,8 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title: Title, childr
       {...rest}
     >
       {Title ? (
-        <Text color={'textTitle'} fontWeight="500" py={'10px'}>
-          {isReactComponent(Title) ? <Title /> : Title}
+        <Text color="textTitle" fontWeight="500" py="10px">
+          {Title}
         </Text>
       ) : null}
       {children}
@@ -33,9 +33,7 @@ const SectionHeader: React.FC<SectionProps> = React.memo(({ title: Title, childr
   );
 });
 
-export const Section: React.FC<
-  { topRight?: ReactNode; isLoading?: boolean; headerProps?: SectionProps } & SectionProps
-> = React.memo(
+export const Section = memo(
   ({
     title,
     topRight: TopRight = null,
@@ -44,13 +42,13 @@ export const Section: React.FC<
     headerProps = {},
     isLoading,
     ...rest
-  }) => {
+  }: { topRight?: ReactNode; isLoading?: boolean; headerProps?: SectionProps } & SectionProps) => {
     return (
       <Card {...rest}>
         {title || TopRight ? (
           <SectionHeader title={title} {...headerProps}>
             <Flex justifyContent="flex-end" alignItems="center">
-              {isLoading ? <Spinner size="sm" color={'textCaption'} opacity={0.5} /> : null}
+              {isLoading ? <Spinner size="sm" color="textCaption" opacity={0.5} /> : null}
               {TopRight}
             </Flex>
           </SectionHeader>

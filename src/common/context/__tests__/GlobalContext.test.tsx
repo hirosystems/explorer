@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { AppContextProvider, GlobalContext } from '../GlobalContext';
 import { render, screen, waitFor } from '@testing-library/react';
+import { AppContextProvider, GlobalContext } from '../GlobalContext';
 import { fetchCustomNetworkId } from '@/components/add-network-form';
 
 jest.mock('@/components/add-network-form', () => ({

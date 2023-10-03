@@ -1,9 +1,7 @@
-'use client';
-
 import {
   AccordionIcon as CUIAccordionIcon,
-  IconProps as CUIAccordionIconProps,
   forwardRef,
+  IconProps as CUIAccordionIconProps,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';

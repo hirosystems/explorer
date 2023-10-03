@@ -1,12 +1,12 @@
+import { useClickOutside } from 'use-events';
 import { truncateMiddle } from '@/common/utils';
 import { Box, Flex } from '@/ui/components';
-import * as React from 'react';
-import { useClickOutside } from 'use-events';
+import { memo, useCallback, useRef, useState } from 'react';
 
-export const Truncate = React.memo(({ children, offset = 8 }: any) => {
-  const [selected, setSelected] = React.useState(false);
-  const ref = React.useRef<HTMLDivElement | null>(null);
-  const handleDoubleClick = React.useCallback(() => {
+export const Truncate = memo(({ children, offset = 8 }: any) => {
+  const [selected, setSelected] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const handleDoubleClick = useCallback(() => {
     setSelected(true);
   }, []);
 

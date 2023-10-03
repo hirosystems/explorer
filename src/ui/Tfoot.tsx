@@ -1,9 +1,7 @@
-'use client';
-
 import {
-  Tfoot as CUITfoot,
-  TableFooterProps as CUITfootProps,
   forwardRef,
+  TableFooterProps as CUITfootProps,
+  Tfoot as CUITfoot,
   useColorMode,
 } from '@chakra-ui/react';
 

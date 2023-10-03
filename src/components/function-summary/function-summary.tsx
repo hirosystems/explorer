@@ -1,18 +1,17 @@
+import { memo } from 'react';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { FunctionSummaryArguments } from '@/components/function-summary/args';
 import { FunctionSummaryName } from '@/components/function-summary/function-name';
 import { FunctionSummaryResult } from '@/components/function-summary/result';
 import { Section } from '@/components/section';
 import { Box, Flex } from '@/ui/components';
-import * as React from 'react';
-import { memo } from 'react';
 
-import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
-
-import { KeyValueHorizontal } from '../../app/common/components/KeyValueHorizontal';
-import { useVerticallyStackedElementsBorderStyle } from '../../app/common/styles/border';
+import { KeyValueHorizontal } from '../../appPages/common/components/KeyValueHorizontal';
+import { useVerticallyStackedElementsBorderStyle } from '../../appPages/common/styles/border';
+import { AbstractTransaction } from '@stacks/stacks-blockchain-api-types/generated';
 
 export const FunctionSummarySection = memo<{
-  result?: any;
+  result?: AbstractTransaction['tx_result'];
   summary: ContractCallTransaction['contract_call'];
   btc: null | string;
   txStatus: string | undefined;

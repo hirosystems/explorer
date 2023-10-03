@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   ListProps as CUIListProps,
   UnorderedList as CUIUnorderedList,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

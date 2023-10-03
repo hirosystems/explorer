@@ -5,7 +5,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 import { InfiniteData, useQueryClient } from '@tanstack/react-query';
 
-import { useFilterState } from '@/app/common/hooks/use-filter-state';
+import { useFilterState } from '@/appPages/common/hooks/use-filter-state';
 import { microStxToStx, microToStacks } from '../utils';
 
 export type CSVDownloadObjectType = {

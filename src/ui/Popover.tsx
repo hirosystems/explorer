@@ -1,5 +1,3 @@
-'use client';
-
 import { Popover as CUIPopover, PopoverProps as CUIPopoverProps } from '@chakra-ui/react';
 
 import { UIComponent } from './types';

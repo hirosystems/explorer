@@ -1,9 +1,7 @@
-'use client';
-
 import {
+  forwardRef,
   InputGroup as CUIInputGroup,
   InputGroupProps as CUIInputGroupProps,
-  forwardRef,
   useColorMode,
 } from '@chakra-ui/react';
 

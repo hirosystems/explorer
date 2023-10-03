@@ -1,13 +1,14 @@
-import { PageWrapper } from '@/app/PageWrapper';
-import { Providers } from '@/app/Providers';
-import AppError from '@/app/error';
+import type { AppContext } from 'next/app';
+
+import { ErrorBoundary } from 'react-error-boundary';
+import { PageWrapper } from '@/appPages/PageWrapper';
+import { Providers } from '@/appPages/Providers';
+import AppError from '@/appPages/error';
 import { IS_BROWSER } from '@/common/constants';
 import { NetworkModeUrlMap } from '@/common/constants/network';
 import { AppContextProvider } from '@/common/context/GlobalContext';
 import { NetworkModes } from '@/common/types/network';
-import type { AppContext } from 'next/app';
-import * as React from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { FC, ReactNode } from 'react';
 
 function ExplorerApp({
   Component,
@@ -17,12 +18,24 @@ function ExplorerApp({
   queryApiUrl,
   querySubnet,
   pageProps,
-}: any) {
+}: {
+  Component: FC;
+  cookies: string;
+  apiUrls: Record<NetworkModes, string>;
+  queryNetworkMode: NetworkModes;
+  queryApiUrl: string;
+  querySubnet: string;
+  pageProps: Record<string, unknown>;
+}) {
   return (
     <ErrorBoundary
-      fallbackRender={({ error, resetErrorBoundary }) => (
-        <AppError error={error} reset={resetErrorBoundary} />
-      )}
+      fallbackRender={({
+        error,
+        resetErrorBoundary,
+      }: {
+        error: Error;
+        resetErrorBoundary: () => void;
+      }) => <AppError error={error} reset={resetErrorBoundary} />}
     >
       <AppContextProvider
         cookies={cookies}
@@ -48,7 +61,7 @@ function ExplorerApp({
 }
 
 ExplorerApp.getInitialProps = (appContext: AppContext) => {
-  const query = appContext.ctx.query;
+  const { query } = appContext.ctx;
   const queryNetworkMode = ((Array.isArray(query.chain) ? query.chain[0] : query.chain) ||
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = Array.isArray(query.api) ? query.api[0] : query.api;

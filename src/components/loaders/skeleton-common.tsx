@@ -1,11 +1,11 @@
 import 'react-loading-skeleton/dist/skeleton.css';
 
 export const SkeletonPageTitle = () => {
-  return <ExplorerSkeletonLoader width={'400px'} height={'31px'} />;
+  return <ExplorerSkeletonLoader width="400px" height="31px" />;
 };
 
 export const SkeletonTag = () => {
-  return <ExplorerSkeletonLoader width={'110px'} height={'24px'} />;
+  return <ExplorerSkeletonLoader width="110px" height="24px" />;
 };
 
 export const ExplorerSkeletonLoader = ({

@@ -1,5 +1,3 @@
-'use client';
-
 import { Fade as CUIFade, FadeProps as CUIFadeProps, forwardRef } from '@chakra-ui/react';
 
 export type FadeProps = CUIFadeProps;

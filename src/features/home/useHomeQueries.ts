@@ -1,9 +1,8 @@
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { apiClients, createConfig } from '@/common/api/client';
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '@/common/constants';
 import { useGlobalContext } from '@/common/context/useAppContext';
 import { ApiResponseWithResultsOffset } from '@/common/types/api';
-
-import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getHomeQueries = (networkUrl: string) => {
   const clients = apiClients(createConfig(networkUrl));
@@ -14,21 +13,21 @@ export const getHomeQueries = (networkUrl: string) => {
         clients.blocksApi.getBlockList({
           limit,
           offset,
-        }) as unknown as ApiResponseWithResultsOffset<Block>,
+        }) as unknown as ApiResponseWithResultsOffset<Block>, // missing API type
     fetchConfirmedTransactions:
       (limit = DEFAULT_LIST_LIMIT_SMALL, offset = 0) =>
       () =>
         clients.transactionsApi.getTransactionList({
           limit,
           offset,
-        }) as unknown as ApiResponseWithResultsOffset<Transaction>,
+        }) as unknown as ApiResponseWithResultsOffset<Transaction>, // missing API type
     fetchMempoolTransactions:
       (limit = DEFAULT_LIST_LIMIT_SMALL, offset = 0) =>
       () =>
         clients.transactionsApi.getMempoolTransactionList({
           limit,
           offset,
-        }) as unknown as ApiResponseWithResultsOffset<MempoolTransaction>,
+        }) as unknown as ApiResponseWithResultsOffset<MempoolTransaction>, // missing API type
   };
 };
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { forwardRef } from '@chakra-ui/react';
 import Link from 'next/link';
 

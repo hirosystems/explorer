@@ -1,13 +1,14 @@
 import { Meta } from '@/components/meta-head';
-import * as React from 'react';
 
-import AppBlocksPage from '../app/blocks/page';
+import BlocksPage from '../appPages/blocks/page';
 
-export default function BlocksPage() {
+function Blocks() {
   return (
     <>
       <Meta title="Recent Blocks" />
-      <AppBlocksPage />
+      <BlocksPage />
     </>
   );
 }
+
+export default Blocks;

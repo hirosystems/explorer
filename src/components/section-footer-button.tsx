@@ -1,29 +1,27 @@
-'use client';
-
+import { useColorMode } from '@chakra-ui/react';
+import React from 'react';
 import { Pending } from '@/components/status';
 import { Box, Flex, Grid } from '@/ui/components';
 import { Caption } from '@/ui/typography';
-import { useColorMode } from '@chakra-ui/react';
-import React from 'react';
 
 import { ExplorerLink } from './links';
 
 interface SectionFooterButtonPropsBase {
   isLoading?: boolean;
   hasNextPage?: boolean;
-  fetchNextPage?: () => void;
+  fetchNextPage?: () => any;
   href?: string;
   label: string;
 }
 
-export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
+export function SectionFooterAction({
   fetchNextPage,
   isLoading,
   href,
   label,
   hasNextPage,
-}) => {
-  const colorMode = useColorMode().colorMode;
+}: SectionFooterButtonPropsBase) {
+  const { colorMode } = useColorMode();
   if (href) {
     return (
       <ExplorerLink href={href}>
@@ -34,7 +32,7 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
           py="16px"
           placeItems="center"
           _hover={{ color: 'textTitle' }}
-          color={'textCaption'}
+          color="textCaption"
         >
           <Caption color="currentColor">View all {label}</Caption>
         </Grid>
@@ -51,7 +49,7 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
         placeItems="center"
         _hover={{ color: 'textTitle', cursor: 'pointer' }}
         onClick={() => fetchNextPage()}
-        color={'textCaption'}
+        color="textCaption"
       >
         <Caption color="currentColor">
           {isLoading ? (
@@ -67,4 +65,4 @@ export const SectionFooterAction: React.FC<SectionFooterButtonPropsBase> = ({
     );
   }
   return null;
-};
+}
