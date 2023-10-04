@@ -18,10 +18,8 @@ import { Box, Circle, Flex, Grid, Stack } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { Caption } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
-import React, { FC, Fragment, useEffect, useState } from 'react';
+import React, { FC, Fragment } from 'react';
 import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
-
-import { FungibleTokenMetadata } from '@stacks/blockchain-api-client';
 import {
   Transaction,
   TransactionEvent,
@@ -31,6 +29,7 @@ import {
 import { ListItem } from '../app/common/components/ListItem';
 import { useVerticallyStackedElementsBorderStyle } from '../app/common/styles/border';
 import { Pending } from './status';
+import { deserialize, prettyPrint } from '@stacks/transactions/dist/cl';
 
 export const getTicker = (name: string) => {
   if (name.includes('-')) {
@@ -213,16 +212,21 @@ const getParticipants = (event: TransactionEvent) => {
   return null;
 };
 
-// handle if the print is a hex, convert it to string if so
-function handleContractLogHex(repr: string) {
+function formatValue(repr: string, hex: string) {
+  const value = deserialize(hex);
+  const formattedString = prettyPrint(value, 2);
+  return formattedString;
+}
+
+function handleContractLogHex(repr: string, hex: string) {
   if (repr?.startsWith('0x')) {
     try {
       return Buffer.from(repr.replace('0x', ''), 'hex').toString('utf8');
     } catch (e) {
-      return repr;
+      return formatValue(repr, hex);
     }
   }
-  return repr;
+  return formatValue(repr, hex);
 }
 
 const getName = (event: TransactionEvent) => {
@@ -234,7 +238,11 @@ const getName = (event: TransactionEvent) => {
     case 'stx_lock':
       return `${microToStacks(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
-      return handleContractLogHex(event.contract_log.value.repr);
+      return (
+        <pre style={{ whiteSpace: 'pre-wrap' }}>
+          {handleContractLogHex(event.contract_log.value.repr, event.contract_log.value.hex)}
+        </pre>
+      );
     case 'stx_asset':
       return event.asset?.value ? `${microToStacks(event.asset?.value)} STX` : 'STX transfer';
     default:

@@ -5,13 +5,13 @@ import {
   ClarityAbiType,
   ClarityAbiTypeTuple,
   ClarityValue,
+  cvToHex,
   cvToString,
   deserializeCV,
   encodeClarityValue,
   isClarityAbiOptional,
   isClarityAbiTuple,
   noneCV,
-  serializeCV,
   someCV,
   tupleCV,
 } from '@stacks/transactions';
@@ -36,11 +36,6 @@ interface ReadOnlyOptions {
   functionArgs: ClarityValue[];
   network: StacksNetwork;
 }
-
-const cvToHex = (cv: ClarityValue) => {
-  const serialized = serializeCV(cv);
-  return `0x${serialized.toString('hex')}`;
-};
 
 export const callReadOnlyFunction = async ({
   senderAddress,
