@@ -1,3 +1,10 @@
+# [1.124.0](https://github.com/hirosystems/explorer/compare/v1.123.3...v1.124.0) (2023-10-05)
+
+
+### Features
+
+* upgrade stacks.js ([47c86dd](https://github.com/hirosystems/explorer/commit/47c86dd4a8c8931ce52cde621317c648eb5897cb))
+
 ## [1.123.3](https://github.com/hirosystems/explorer/compare/v1.123.2...v1.123.3) (2023-09-22)
 
 
