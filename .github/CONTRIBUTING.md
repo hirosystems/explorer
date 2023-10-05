@@ -43,7 +43,7 @@ Before submitting a pull request, please make sure the following is done:
 
 #### Building for production
 
-Once you are are happy woith your code change, run these commands to be ready to send a PR
+Once you are are happy with your code change, run these commands to be ready to send a PR
 
 - Run `pnpm lint` to lint your code with eslint and run pritter to follow our coding guidelines
 - Run `pnpm test:unit` to run unit test
