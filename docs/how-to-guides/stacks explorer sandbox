@@ -1,22 +1,15 @@
-### Overview
+# Explorer Sandbox
 
 Within the Stacks Explorer, there's a handy developer [Sandbox](https://explorer.hiro.so/sandbox/deploy?chain=mainnet) that lets you explore, deploy and execute Clarity contracts. The Explorer Sandbox has four main features. In order to use the Explorer Sandbox, you must first connect a Stacks-compatible wallet.
 
 ## Write & Deploy
 [Write & Delpoy](https://explorer.hiro.so/sandbox/deploy?chain=mainnet) is a simple user interface to edit and deploy contracts. It works on mainnet and testnet. In this code editor, you can copy/ paste code from another source, use sample contracts and change contract parameters. If you want to save your contracts, you can also connect to the [Hiro Platform](https://platform.hiro.so/).
 
-[insert screen shot]
-
 ## Function Call
 [Function call](https://explorer.hiro.so/sandbox/contract-call?chain=mainnet) lets you call any function within a contract. You can chose from the most popular contracts on Stacks or search for your own. 
 
-[to do write an example for calling an NFT mint function from the Sandbox]
-[insert screen shot]
-
-
 ## STX Transfer
 [STX transfer](https://explorer.hiro.so/sandbox/transfer?chain=mainnet) makes it easy to send STX from your connected wallet to another STX compatible address.
-
 
 ## Testnet Faucet
 To access the [Testnet Faucet feature](https://explorer.hiro.so/sandbox/faucet?chain=testnet), you must be on the Testnet Network. Read more about [STX Testnet tokens](https://docs.hiro.so/api/get-stx-testnet-tokens) daily limits here or check out this short video on [how to get STX testnet tokens](https://www.youtube.com/watch?v=r9QNUvysZBE).   
