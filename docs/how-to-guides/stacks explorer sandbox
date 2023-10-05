@@ -3,51 +3,22 @@
 Within the Stacks Explorer, there's a handy developer [Sandbox](https://explorer.hiro.so/sandbox/deploy?chain=mainnet) that lets you explore, deploy and execute Clarity contracts. The Explorer Sandbox has four main features. In order to use the Explorer Sandbox, you must first connect a Stacks-compatible wallet.
 
 ## Write & Deploy
-Write & Delpoy is a simple user interface to edit and deploy contracts. It works on mainnet and testnet. In this code editor, you can copy/ paste code from another source, use sample contracts and change parameters on the fly. If you want to save your contracts, you can also connect to the Hiro Platform.
+[Write & Delpoy](https://explorer.hiro.so/sandbox/deploy?chain=mainnet) is a simple user interface to edit and deploy contracts. It works on mainnet and testnet. In this code editor, you can copy/ paste code from another source, use sample contracts and change contract parameters. If you want to save your contracts, you can also connect to the [Hiro Platform](https://platform.hiro.so/).
 
 [insert screen shot]
 
 ## Function Call
-Function call lets you call any function within a contract. You can chose from the most popular contracts on Stacks or search for your own. 
+[Function call](https://explorer.hiro.so/sandbox/contract-call?chain=mainnet) lets you call any function within a contract. You can chose from the most popular contracts on Stacks or search for your own. 
 
 [to do write an example for calling an NFT mint function from the Sandbox]
 [insert screen shot]
 
 
--------
-need to still update this copy! 
-
 ## STX Transfer
-3. stx transfer, send stx and send it to them
+[STX transfer](https://explorer.hiro.so/sandbox/transfer?chain=mainnet) makes it easy to send STX from your connected wallet to another STX compatible address.
 
 
 ## Testnet Faucet
-4. faucet (edited) 
+To access the [Testnet Faucet feature](https://explorer.hiro.so/sandbox/faucet?chain=testnet), you must be on the Testnet Network. Read more about [STX Testnet tokens](https://docs.hiro.so/api/get-stx-testnet-tokens) daily limits here or check out this short video on [how to get STX testnet tokens](https://www.youtube.com/watch?v=r9QNUvysZBE).   
 
-
-[REFERENCE COPY FROM OTHER REPOS]
-Chainhooks are a powerful feature that enables you to trigger an action based upon a predicate event occurring automatically. Adhering to an event-based architecture, chainhooks allow you to pre-determine an underlying set of events that, when triggered, set into motion a logical series of follow-on steps and actions to address the specific event that was triggered.
-
-Topics covered in this guide:
-
-Chainhooks design
-Use chainhooks
-References
-Design
-Chainhooks were designed with a very specific set of requirements and limitations to make them easy to work within a development environment. These constraints include portability and performance.
-
-portability and performance
-Hiro designed the event observer as a library, choosing to embed the library in Clarinet so you can run it on your local machine. You may also execute the library on the server side and then propagate these HTTP events to your other components.
-
-correctness
-Since blockchains can be forked and since some period of uncertainty may arise as to which chain tip asserts itself as the canonical chain, there are challenges to guaranteeing the validity of a triggered predicate. There are many different ways you can end up with a state slightly differing from the canonical state, which is why correctness is an inherent limitation of chainhooks.
-
-Using chainhooks
-The chainhook-event-observer is a sidecar program that observes a given stacks node. Although this layer is open source, Hiro is currently developing a managed version. In the meantime, you are encouraged to run your own stacks node with your own chainhook-event observer.
-
-In terms of the deployment lifecycle, you can begin using chainhooks locally, using the latest version of Clarinet, or you may deploy chainhooks in your own environment.
-
-Note: If you choose to deploy chainhooks in your own environment, please be aware that you are responsible for your own deployment instead of relying on Hiro's default deployment architecture.
-
-how to guide for sandbox
-introduction to sandbox
+For all of these features, you can search contracts that you have interacted with previously by selecting the wallet detail side panel. Simply click the hamburger menu on the right-hand side of the Sandbox for a list of contracts associated with the connected wallet. You have the option to redeploy the contract, load in the contract editor or copy the contract to interact with different function calls. 
