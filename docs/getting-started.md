@@ -4,39 +4,29 @@ Title: Getting Started
 
 # Getting Started
 
-The Explorer is built with [React](https://reactjs.org/), [next.js](https://github.com/vercel/next.js) and [@stacks/ui](https://github.com/hirosystems/ui).
+The Explorer is built with [React](https://reactjs.org/), [next.js](https://github.com/vercel/next.js) and [Chakra UI](https://chakra-ui.com/).
 
 ## Prerequisites
 
-To run the explorer locally, you must first clone the [Explorer repository](https://github.com/hirosystems/explorer).
-
-You must also enusre you have installed the project dependencies listed below.
-
+Before running the Explorer, ensure that you have the following tools installed:
 - [NodeJS](https://nodejs.dev/en/) that includes `npm`
 - [PNPM](https://pnpm.io/installation/)
 
-It is also highly recommended you install [Homebrew](https://brew.sh/).
+If you are using a mac, we highly recommend using [Homebrew](https://brew.sh/) to install these tools.
 
-## Installing Project Dependencies
+You should also be [familiar with Git](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources).
 
-To install project dependencies:
+## Run in development mode
+- Fork the [repository](https://github.com/hirosystems/explorer)
+- Navigate to the project folder
+- Create your branch from `main` following [Semantic Commit Messages](https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716)
+- Run `pnpm i` in the repository root to install dependencies.
+- Run `pnpm dev` to run the application at http://localhost:3000
+- If you are changing existing functions or creating a new one, make sure to write unit tests.
 
-1. Open your terminal window and make sure you are in the `/explorer` folder.
-2. Run the `pnpm i` command to install the project dependencies.
+## Building for production
+If you want to submit a contribution or suggest a code change, run these commands to be ready to send a PR
 
-## Setting Environment Variables
-
-The Explorer application needs the environment variables listed below to work properly. 
-
-```
-NEXT_PUBLIC_MAINNET_API_SERVER=https://api.hiro.so
-NEXT_PUBLIC_TESTNET_API_SERVER=https://api.testnet.hiro.so
-NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER=https://explorer-api.legacy.blockstack.org
-NEXT_PUBLIC_DEPLOYMENT_URL=https://explorer.hiro.so
-NEXT_PUBLIC_MAINNET_ENABLED="true"
-NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL="10000"
-```
-
-> **_NOTE:_**
->
-> If you are working in a macOS environment, you will need to add these variable to `/etc/paths`.
+Run `pnpm lint` to lint your code with eslint and run pritter to follow our coding guidelines
+Run `pnpm test:unit` to run unit test
+Run `pnpm build` to build the Stacks Explorer for production
