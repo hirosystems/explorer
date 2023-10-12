@@ -1,3 +1,10 @@
+## [1.124.1](https://github.com/hirosystems/explorer/compare/v1.124.0...v1.124.1) (2023-10-12)
+
+
+### Bug Fixes
+
+* add button to save contract to Hiro platform ([b062507](https://github.com/hirosystems/explorer/commit/b062507bbee83fa4627c675afcef7cdfffd8a23d))
+
 # [1.124.0](https://github.com/hirosystems/explorer/compare/v1.123.3...v1.124.0) (2023-10-05)
 
 
