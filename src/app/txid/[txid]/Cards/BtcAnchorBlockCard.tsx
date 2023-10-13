@@ -12,8 +12,7 @@ import { KeyValueVertical } from '../../../common/components/KeyValueVertical';
 import { useVerticallyStackedElementsBorderStyle } from '../../../common/styles/border';
 
 export const BtcAnchorBlockCard: FC<{ block: Block }> = ({ block }) => {
-  const networkMode = useGlobalContext().activeNetwork.mode;
-  const btcLinkPathPrefix = networkMode === NetworkModes.Testnet ? '/testnet' : '';
+  const { btcBlockBaseUrl, btcTxBaseUrl } = useGlobalContext().activeNetwork;
 
   return (
     <Section title="Bitcoin anchor">
@@ -21,11 +20,7 @@ export const BtcAnchorBlockCard: FC<{ block: Block }> = ({ block }) => {
         <KeyValueVertical
           label={'Bitcoin block height'}
           value={
-            <TextLink
-              as="a"
-              target="_blank"
-              href={`https://mempool.space${btcLinkPathPrefix}/block/${block.burn_block_height}`}
-            >
+            <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${block.burn_block_height}`}>
               <Text fontSize={'14px'} fontWeight={500}>
                 #{block.burn_block_height}
               </Text>
@@ -39,10 +34,7 @@ export const BtcAnchorBlockCard: FC<{ block: Block }> = ({ block }) => {
             <TextLink
               as="a"
               target="_blank"
-              href={`https://mempool.space${btcLinkPathPrefix}/block/${block.burn_block_hash.replace(
-                '0x',
-                ''
-              )}`}
+              href={`${btcBlockBaseUrl}/${block.burn_block_hash.replace('0x', '')}`}
             >
               <Text fontSize={'14px'} fontWeight={500}>
                 {truncateMiddle(block.burn_block_hash, 8)}
@@ -57,10 +49,7 @@ export const BtcAnchorBlockCard: FC<{ block: Block }> = ({ block }) => {
             <TextLink
               as="a"
               target="_blank"
-              href={`https://mempool.space${btcLinkPathPrefix}/tx/${block.miner_txid.replace(
-                '0x',
-                ''
-              )}`}
+              href={`${btcTxBaseUrl}/${block.miner_txid.replace('0x', '')}`}
             >
               <Text fontSize={'14px'} fontWeight={500}>
                 {truncateMiddle(block.miner_txid, 8)}

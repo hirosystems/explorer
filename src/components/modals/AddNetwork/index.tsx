@@ -1,6 +1,6 @@
 import { MODALS } from '@/common/constants';
 import { useAppDispatch } from '@/common/state/hooks';
-import { AddNetworkForm } from '@/components/add-network-form';
+import { AddNetworkForm } from './AddNetworkForm';
 import { useOpenedModal } from '@/components/modals/modal-slice';
 import { Box, Modal, Stack, TextLink } from '@/ui/components';
 import { Text } from '@/ui/typography';

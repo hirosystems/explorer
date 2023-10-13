@@ -15,11 +15,10 @@ import { selectUserSession } from '../app/sandbox/sandbox-slice';
 declare const window: any;
 
 export const AppConfig: React.FC<{
-  apiUrls: any;
   queryNetworkMode: NetworkMode;
   queryApiUrl?: string;
   querySubnet?: string;
-}> = ({ children, queryApiUrl, queryNetworkMode, querySubnet, apiUrls }) => {
+}> = ({ children, queryApiUrl, queryNetworkMode, querySubnet }) => {
   const { events } = useRouter();
   const userSession = useAppSelector(selectUserSession);
 

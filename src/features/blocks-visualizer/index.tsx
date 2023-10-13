@@ -1,7 +1,6 @@
 import { buildUrl } from '@/app/common/utils/buildUrl';
 import { useApi } from '@/common/api/client';
 import { useGlobalContext } from '@/common/context/useAppContext';
-import { NetworkModes } from '@/common/types/network';
 import { Box, Icon, Spinner, Tooltip } from '@/ui/components';
 import { StxIcon } from '@/ui/icons/StxIcon';
 import { useColorMode } from '@chakra-ui/react';
@@ -196,7 +195,6 @@ const Block: React.FC<BlockProps> = ({
   const timeBetweenBlocksFormatted = secondsToString(timeBetweenBlocks);
   const router = useRouter();
   const network = useGlobalContext().activeNetwork;
-  const btcLinkPathPrefix = network.mode === NetworkModes.Testnet ? '/testnet' : '';
   const colorMode = useColorMode().colorMode;
 
   return (
@@ -211,9 +209,7 @@ const Block: React.FC<BlockProps> = ({
           className={'block-box'}
           css={blockStyle}
           onClick={() => {
-            window
-              ?.open(`https://mempool.space${btcLinkPathPrefix}/block/${btcBlockHeight}`, '_blank')
-              ?.focus();
+            window?.open(`${network.btcBlockBaseUrl}/${btcBlockHeight}`, '_blank')?.focus();
           }}
         >
           {btcBlockHeight}

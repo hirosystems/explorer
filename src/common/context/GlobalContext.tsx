@@ -1,16 +1,28 @@
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@/common/constants';
-import { NetworkIdModeMap, NetworkModeUrlMap } from '@/common/constants/network';
+import {
+  NetworkIdModeMap,
+  NetworkModeBtcBlockBaseUrlMap,
+  NetworkModeBtcTxBaseUrlMap,
+  NetworkModeBtcAddressBaseUrlMap,
+  NetworkModeUrlMap,
+} from '@/common/constants/network';
 import { Network, NetworkModes } from '@/common/types/network';
 import cookie from 'cookie';
 import { FC, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { ChainID } from '@stacks/transactions';
-import { buildCustomNetworkUrl, fetchCustomNetworkId } from '@/components/add-network-form';
+import {
+  buildCustomNetworkUrl,
+  fetchCustomNetworkId,
+} from '@/components/modals/AddNetwork/AddNetworkForm';
 
 interface GlobalContextProps {
   cookies: string;
   apiUrls: Record<NetworkModes, string>;
+  btcBlockBaseUrls: Record<NetworkModes, string>;
+  btcTxBaseUrls: Record<NetworkModes, string>;
+  btcAddressBaseUrls: Record<NetworkModes, string>;
   activeNetwork: Network;
   activeNetworkKey: string;
   addCustomNetwork: (network: Network) => Promise<any>;
@@ -21,9 +33,15 @@ interface GlobalContextProps {
 export const GlobalContext = createContext<GlobalContextProps>({
   cookies: '',
   apiUrls: NetworkModeUrlMap,
+  btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap,
+  btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap,
+  btcAddressBaseUrls: NetworkModeBtcAddressBaseUrlMap,
   activeNetwork: {
     label: 'hiro.so',
     url: NetworkModeUrlMap[NetworkModes.Mainnet],
+    btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
+    btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
+    btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
     networkId: ChainID.Mainnet,
     mode: NetworkModes.Mainnet,
   },
@@ -38,7 +56,13 @@ export const AppContextProvider: FC<any> = ({
   queryNetworkMode,
   queryApiUrl,
   apiUrls,
+  btcBlockBaseUrls,
+  btcTxBaseUrls,
+  btcAddressBaseUrls,
   querySubnet,
+  queryBtcBlockBaseUrl,
+  queryBtcTxBaseUrl,
+  queryBtcAddressBaseUrl,
   children,
 }) => {
   if (IS_BROWSER && (window as any)?.location?.search?.includes('err=1'))
@@ -53,18 +77,27 @@ export const AppContextProvider: FC<any> = ({
       [apiUrls[NetworkModes.Mainnet]]: {
         label: 'hiro.so',
         url: apiUrls[NetworkModes.Mainnet],
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
         networkId: ChainID.Mainnet,
         mode: NetworkModes.Mainnet,
       },
       [apiUrls[NetworkModes.Testnet]]: {
         label: 'hiro.so',
         url: apiUrls[NetworkModes.Testnet],
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
       },
       [DEFAULT_DEVNET_SERVER]: {
         label: 'devnet',
         url: DEFAULT_DEVNET_SERVER,
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
         isCustomNetwork: true,
@@ -75,6 +108,11 @@ export const AppContextProvider: FC<any> = ({
             [querySubnet]: {
               isSubnet: true,
               url: querySubnet,
+              btcBlockBaseUrl:
+                queryBtcBlockBaseUrl || NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
+              btcTxBaseUrl: queryBtcTxBaseUrl || NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
+              btcAddressBaseUrl:
+                queryBtcAddressBaseUrl || NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
               label: 'subnet',
               networkId: 0,
               mode: NetworkModes.Mainnet,
@@ -82,7 +120,15 @@ export const AppContextProvider: FC<any> = ({
           }
         : {}),
     }),
-    [apiUrls, customNetworks, isUrlPassedSubnet, querySubnet]
+    [
+      apiUrls,
+      customNetworks,
+      isUrlPassedSubnet,
+      queryBtcBlockBaseUrl,
+      queryBtcTxBaseUrl,
+      queryBtcAddressBaseUrl,
+      querySubnet,
+    ]
   );
 
   const addCustomNetwork = useCallback(
@@ -114,6 +160,11 @@ export const AppContextProvider: FC<any> = ({
         const network: Network = {
           label: queryApiUrl,
           url: networkUrl,
+          btcBlockBaseUrl:
+            queryBtcBlockBaseUrl || NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
+          btcTxBaseUrl: queryBtcTxBaseUrl || NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
+          btcAddressBaseUrl:
+            queryBtcAddressBaseUrl || NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
           networkId,
           mode: NetworkIdModeMap[networkId],
           isCustomNetwork: true,
@@ -126,7 +177,14 @@ export const AppContextProvider: FC<any> = ({
     if (queryApiUrl && !networks[queryApiUrl]) {
       void addCustomNetworkFromQuery();
     }
-  }, [queryApiUrl, networks, addCustomNetwork]);
+  }, [
+    queryApiUrl,
+    networks,
+    addCustomNetwork,
+    queryBtcBlockBaseUrl,
+    queryBtcTxBaseUrl,
+    queryBtcAddressBaseUrl,
+  ]);
 
   return (
     <GlobalContext.Provider
@@ -135,6 +193,9 @@ export const AppContextProvider: FC<any> = ({
         activeNetworkKey,
         cookies,
         apiUrls,
+        btcBlockBaseUrls,
+        btcTxBaseUrls,
+        btcAddressBaseUrls,
         addCustomNetwork,
         removeCustomNetwork: (network: Network) => {
           const { [network.url]: omitted, ...remainingCustomNetworks } = customNetworks;

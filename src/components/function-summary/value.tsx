@@ -39,18 +39,13 @@ const tupleToArr = (tuple: string) =>
     .map(item => item.split(' '));
 
 const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
-  const networkMode = useGlobalContext().activeNetwork.mode;
-  const btcLinkPathPrefix = networkMode === NetworkModes.Testnet ? '/testnet' : '';
+  const { btcAddressBaseUrl } = useGlobalContext().activeNetwork;
   let additional: any = null;
   if (isPoxAddr && btc) {
     additional = (
       <Box display="block" as="span">
         <Caption mb="4px">BTC address (converted)</Caption>
-        <Text
-          target="_blank"
-          as={TextLink}
-          href={`https://mempool.space${btcLinkPathPrefix}/address/${btc}`}
-        >
+        <Text target="_blank" as={TextLink} href={`${btcAddressBaseUrl}/${btc}`}>
           {btc}
         </Text>
       </Box>
