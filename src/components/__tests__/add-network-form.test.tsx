@@ -1,4 +1,4 @@
-import { buildCustomNetworkUrl } from '../add-network-form';
+import { buildCustomNetworkUrl } from '../modals/AddNetwork/AddNetworkForm';
 
 describe('buildCustomNetworkUrl', () => {
   const cases = [

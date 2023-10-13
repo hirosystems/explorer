@@ -36,7 +36,6 @@ export const Providers: FC<any> = ({
             queryNetworkMode={queryNetworkMode}
             queryApiUrl={queryApiUrl}
             querySubnet={querySubnet}
-            apiUrls={apiUrls}
           >
             <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
           </AppConfig>

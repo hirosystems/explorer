@@ -34,22 +34,24 @@ export const Modal: FC<ModalProps> = ({
   return (
     <CUIModal onClose={onClose} {...rest}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent pb={'var(--stacks-space-4)'}>
         {title && <ModalHeader>{title}</ModalHeader>}
         <ModalCloseButton />
         <ModalBody>{children}</ModalBody>
-        <ModalFooter>
-          {primaryAction && (
-            <Button colorScheme="blue" mr={3} onClick={primaryAction.onClick}>
-              {primaryAction.label}
-            </Button>
-          )}
-          {secondaryAction && (
-            <Button variant="ghost" onClick={secondaryAction.onClick}>
-              {secondaryAction.label}
-            </Button>
-          )}
-        </ModalFooter>
+        {!!primaryAction || !!secondaryAction ? (
+          <ModalFooter>
+            {primaryAction && (
+              <Button colorScheme="blue" mr={3} onClick={primaryAction.onClick}>
+                {primaryAction.label}
+              </Button>
+            )}
+            {secondaryAction && (
+              <Button variant="ghost" onClick={secondaryAction.onClick}>
+                {secondaryAction.label}
+              </Button>
+            )}
+          </ModalFooter>
+        ) : null}
       </ModalContent>
     </CUIModal>
   );

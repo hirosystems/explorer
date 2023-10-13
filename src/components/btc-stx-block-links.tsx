@@ -63,8 +63,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
   stxBlockHash,
   fontSize,
 }) => {
-  const activeNetworkMode = useGlobalContext().activeNetwork.mode;
-  const btcLinkPathPrefix = activeNetworkMode === NetworkModes.Testnet ? '/testnet' : '';
+  const { btcBlockBaseUrl } = useGlobalContext().activeNetwork;
 
   return (
     <Box css={wrapperStyle}>
@@ -91,7 +90,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
           <Icon as={BitcoinIcon} color={'#f7931a'} size={19} css={iconStyle} />
           <TextLink
             css={linkStyle(true, true, fontSize)}
-            href={`https://mempool.space${btcLinkPathPrefix}/block/${btcBlockHeight}`}
+            href={`${btcBlockBaseUrl}/${btcBlockHeight}`}
             target="_blank"
           >
             #{btcBlockHeight}

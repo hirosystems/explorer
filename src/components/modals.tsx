@@ -1,6 +1,6 @@
 'use client';
 
-import { AddNetworkModal } from '@/components/modals/add-network';
+import { AddNetworkModal } from '@/components/modals/AddNetwork';
 import React from 'react';
 
 export const Modals: React.FC = () => {

@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { AppContextProvider, GlobalContext } from '../GlobalContext';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fetchCustomNetworkId } from '@/components/add-network-form';
+import { fetchCustomNetworkId } from '@/components/modals/AddNetwork/AddNetworkForm';
 
-jest.mock('@/components/add-network-form', () => ({
-  ...jest.requireActual('@/components/add-network-form'),
+jest.mock('@/components/modals/AddNetwork/AddNetworkForm', () => ({
+  ...jest.requireActual('@/components/modals/AddNetwork/AddNetworkForm'),
   fetchCustomNetworkId: jest.fn(() => '1111'),
 }));
 

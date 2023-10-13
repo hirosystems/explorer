@@ -1,6 +1,7 @@
 import { StyleFunctionProps, extendTheme } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 import { switchTheme } from '@/ui/theme/switchTheme';
+import { checkboxTheme } from '@/ui/theme/checkboxTheme';
 
 const lightColors = {
   accent: '#5546FF',
@@ -101,6 +102,7 @@ export const theme = extendTheme({
   },
   components: {
     Switch: switchTheme,
+    Checkbox: checkboxTheme,
     // Tabs: tabsTheme,
   },
 });
