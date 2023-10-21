@@ -1,3 +1,10 @@
+# [1.125.0](https://github.com/hirosystems/explorer/compare/v1.124.1...v1.125.0) (2023-10-21)
+
+
+### Features
+
+* display faucet error message ([a6e81ac](https://github.com/hirosystems/explorer/commit/a6e81ac32d56ec618fb5aea010080e3ff6593e09))
+
 ## [1.124.1](https://github.com/hirosystems/explorer/compare/v1.124.0...v1.124.1) (2023-10-12)
 
 
