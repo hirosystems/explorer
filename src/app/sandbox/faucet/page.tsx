@@ -12,6 +12,24 @@ import { useMutation } from '@tanstack/react-query';
 
 import { useUser } from '../hooks/useUser';
 
+function getErrorMessage(error: any) {
+  if (!error) return '';
+  const defaultErrorMessage = 'Something went wrong, please try again later.';
+  if (!!error?.message) {
+    return error.message;
+  }
+  if (!!error?.status) {
+    switch (error.status) {
+      case 429:
+        return 'Too many requests, please try again later.';
+      default:
+        return defaultErrorMessage;
+    }
+  } else {
+    return defaultErrorMessage;
+  }
+}
+
 const Faucet: NextPage = () => {
   const { faucetsApi } = useApi();
   const { stxAddress } = useUser();
@@ -24,7 +42,7 @@ const Faucet: NextPage = () => {
   } = useMutation((staking?: boolean) =>
     faucetsApi.runFaucetStx({ address: stxAddress, ...(staking ? { staking: true } : {}) })
   );
-  const errorMessage = isError && error instanceof Error ? error.message : '';
+  const errorMessage = getErrorMessage(error);
   const handleStackingRequest = () => {
     if (stackingIndex <= 3) {
       setIndex(i => ++i);
@@ -90,7 +108,7 @@ const Faucet: NextPage = () => {
         >
           Need STX to test the network? The faucet can top you up!
         </Text>
-        {isError ? (
+        {!!errorMessage ? (
           <Box
             mt="16px"
             borderRadius="6px"
@@ -102,11 +120,7 @@ const Faucet: NextPage = () => {
             lineHeight="1.8"
             wordBreak="break-all"
           >
-            {errorMessage === 'Too many requests'
-              ? "Sorry, you've hit your limit for today. Try again tomorrow."
-              : errorMessage.includes('ConflictingNonceInMempool')
-              ? 'There is a pending faucet transaction, try again soon!'
-              : errorMessage}
+            {errorMessage}
           </Box>
         ) : null}
 
