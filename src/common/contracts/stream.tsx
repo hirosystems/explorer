@@ -2,52 +2,35 @@ export const streamContract = {
   name: 'stream',
   source: `;; stream contract
 
-(define-public (say-hi)
-  (ok "hello world")
-)
-
-(define-public (echo-number (val int))
-  (ok val)
-)
-
-;; streams
+(define-constant ERR_STREAM_NOT_FOUND (err u1004))
 
 (define-map streams
-  ((id uint))
-  (
-    (start-block uint)
-    (recipient principal)
-    (sender principal)
-  )
+  uint
+  {
+    start-block: uint,
+    recipient: principal,
+    sender: principal,
+  }
 )
 
 (define-data-var next-stream-id uint u1)
 
-(define-public (make-stream
-    (recipient principal)
-  )
-  (begin
-    (map-set streams 
-      ((id (var-get next-stream-id)))
-      (
-        (start-block block-height)
-        (recipient recipient)
-        (sender tx-sender)
-      )
+(define-public (make-stream (recipient principal))
+  (let ((stream-id (var-get next-stream-id)))
+    (map-set streams
+      stream-id
+      {
+        start-block: block-height,
+        recipient: recipient,
+        sender: tx-sender,
+      }
     )
-    (var-set next-stream-id (+ (var-get next-stream-id) u1))
-    (ok 'true)
+    (ok (var-set next-stream-id (+ stream-id u1)))
   )
 )
 
-(define-public (get-stream
-    (stream-id uint)
-  )
-  (
-    ok
-    (unwrap-panic
-      (map-get? streams (tuple (id stream-id)))
-    )
-  )
-)`,
+(define-public (get-stream (stream-id uint))
+  (ok (unwrap! (map-get? streams stream-id) ERR_STREAM_NOT_FOUND))
+)
+`,
 };
