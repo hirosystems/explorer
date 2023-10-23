@@ -1,3 +1,10 @@
+# [1.126.0](https://github.com/hirosystems/explorer/compare/v1.125.0...v1.126.0) (2023-10-23)
+
+
+### Features
+
+* btc explorer network config ([b50f2da](https://github.com/hirosystems/explorer/commit/b50f2da032dfbadd6afa2d8d3ff469bd99754b4a))
+
 # [1.125.0](https://github.com/hirosystems/explorer/compare/v1.124.1...v1.125.0) (2023-10-21)
 
 
