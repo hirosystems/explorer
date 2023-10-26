@@ -14,6 +14,7 @@ import { TbCurrencyBitcoin } from 'react-icons/tb';
 import { Block as BlockType } from '@stacks/stacks-blockchain-api-types';
 
 import { useBlockListInfinite } from '../../app/common/queries/useBlockListInfinite';
+import { useBlockFullness } from '@/features/block/useBlockFullness';
 
 const wrapperStyle = css`
   display: flex;
@@ -196,6 +197,7 @@ const Block: React.FC<BlockProps> = ({
   const router = useRouter();
   const network = useGlobalContext().activeNetwork;
   const colorMode = useColorMode().colorMode;
+  const blockFullness = useBlockFullness(block);
 
   return (
     <Box css={blockWrapperStyle} bg={`block.${colorMode}`}>
@@ -235,6 +237,9 @@ const Block: React.FC<BlockProps> = ({
           css={blockStyle}
           className={'block-box'}
           onClick={() => router.push(buildUrl(`/block/${encodeURIComponent(block.hash)}`, network))}
+          background={`linear-gradient(to right, var(--stacks-colors-brand-dark) ${
+            Math.random() * 100
+          }%, #d9d9d9 0);`}
         >
           {stxBlockHeight}
         </Box>

@@ -62,3 +62,24 @@ export const Section: React.FC<
     );
   }
 );
+
+interface SectionWithControlsProps extends Omit<FlexProps, 'title'> {
+  title: string;
+  controls?: ReactNode;
+  footer?: ReactNode;
+}
+
+export function SectionWithControls({ title, controls, footer }: SectionWithControlsProps) {
+  return (
+    <Card padding="16px 24px">
+      <Text mb={'16.5px'} fontWeight={500} lineHeight={'1.5em'}>
+        {title}
+      </Text>
+      {controls}
+      <Flex flex={1}></Flex>
+      <Flex mt={'16px'} width={'100%'}>
+        {footer}
+      </Flex>
+    </Card>
+  );
+}

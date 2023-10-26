@@ -8,14 +8,19 @@ import * as React from 'react';
 import { FC } from 'react';
 
 import { DefaultTxListTabs } from './common/components/tx-lists/tabs/DefaultTxListTabs';
-import { BlocksList } from './components/BlockList';
+import { BlockList } from '@/features/blocks/components/BlockList';
 import { Stats } from './stats/Stats';
 
 export const HomeClientBase: FC = () => {
   console.log('[DEBUG] rendering home');
   const { activeNetwork } = useGlobalContext();
   return (
-    <Grid mt="32px" gap="32px" width="100%" gridTemplateColumns={['100%', '100%', '0.6fr 0.4fr']}>
+    <Grid
+      mt="32px"
+      gap="32px"
+      width="100%"
+      gridTemplateColumns={['100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
+    >
       <Title
         as="h1"
         fontSize="36px"
@@ -33,7 +38,8 @@ export const HomeClientBase: FC = () => {
       </Title>
       {!activeNetwork.isSubnet && <Stats />}
       <DefaultTxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
-      <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+
+      <BlockList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
     </Grid>
   );
 };

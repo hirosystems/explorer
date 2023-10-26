@@ -2,6 +2,7 @@ import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import packageJson from '../../package.json';
 import { TxStatus } from './types/tx';
+import { NetworkModes } from '@/common/types/network';
 
 export const MICROBLOCKS_ENABLED = true;
 
@@ -111,3 +112,20 @@ export const SUBNETS_PARENT_NETWORK_IDS = {
 export const PAGE_MAX_WIDTH = '1280px';
 
 export const REDIS_URL = process.env.REDIS_URL || '';
+
+export const BLOCK_LIMIT: Record<NetworkModes, Record<string, number>> = {
+  [NetworkModes.Mainnet]: {
+    write_length: 15_000_000,
+    write_count: 15_000,
+    read_length: 100_000_000,
+    read_count: 15_000,
+    runtime: 5_000_000_000,
+  },
+  [NetworkModes.Testnet]: {
+    write_length: 15_0_000_000,
+    write_count: 5_0_000,
+    read_length: 1_000_000_000,
+    read_count: 5_0_000,
+    runtime: 100_000_000_000,
+  },
+};
