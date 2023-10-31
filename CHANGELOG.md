@@ -1,3 +1,10 @@
+## [1.126.1](https://github.com/hirosystems/explorer/compare/v1.126.0...v1.126.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* segment key ([33aebdc](https://github.com/hirosystems/explorer/commit/33aebdc8c7c3608b48bcfbe71708f70de1abc074))
+
 # [1.126.0](https://github.com/hirosystems/explorer/compare/v1.125.0...v1.126.0) (2023-10-23)
 
 
