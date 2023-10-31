@@ -89,8 +89,8 @@ ExplorerApp.getInitialProps = (appContext: AppContext) => {
     queryApiUrl,
     queryBtcBlockBaseUrl,
     queryBtcTxBaseUrl,
-    queryBtcAddressBaseUrl,
     querySubnet,
+    queryBtcAddressBaseUrl,
   };
 };
 

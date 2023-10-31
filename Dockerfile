@@ -14,6 +14,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install -g pnpm
+RUN npm install -g node-gyp
 RUN pnpm i
 RUN pnpm build
 
