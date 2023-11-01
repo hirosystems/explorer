@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '18.9.0'
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@8.9.1
       - name: Install Prettier
         run: pnpm add prettier@2.8.1
       - name: Lint Prettier
