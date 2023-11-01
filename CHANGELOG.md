@@ -1,3 +1,11 @@
+## [1.126.2](https://github.com/hirosystems/explorer/compare/v1.126.1...v1.126.2) (2023-11-01)
+
+
+### Bug Fixes
+
+* pnpm version ([82671cf](https://github.com/hirosystems/explorer/commit/82671cfe5b63c4435f295328dd799a0fdf950382))
+* set pnpm version for gh workflow ([be6ef3f](https://github.com/hirosystems/explorer/commit/be6ef3fea16529b078c486598840df796c40f738))
+
 ## [1.126.1](https://github.com/hirosystems/explorer/compare/v1.126.0...v1.126.1) (2023-10-31)
 
 
