@@ -1,3 +1,10 @@
+# [1.127.0](https://github.com/hirosystems/explorer/compare/v1.126.2...v1.127.0) (2023-11-06)
+
+
+### Features
+
+* new section layout ([b9f5bfe](https://github.com/hirosystems/explorer/commit/b9f5bfe540df78c46240215e8bdb9f907e36871f))
+
 ## [1.126.2](https://github.com/hirosystems/explorer/compare/v1.126.1...v1.126.2) (2023-11-01)
 
 
