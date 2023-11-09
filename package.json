@@ -43,7 +43,7 @@
     "@react-stately/toggle": "3.6.1",
     "@reduxjs/toolkit": "1.9.5",
     "@segment/snippet": "4.16.2",
-    "@sentry/nextjs": "7.67.0",
+    "@sentry/nextjs": "7.77.0",
     "@stacks/auth": "6.9.0",
     "@stacks/blockchain-api-client": "7.3.2",
     "@stacks/common": "6.8.1",
