@@ -1,3 +1,10 @@
+## [1.127.1](https://github.com/hirosystems/explorer/compare/v1.127.0...v1.127.1) (2023-11-10)
+
+
+### Bug Fixes
+
+* sandbox clarity example syntax ([ac6a43a](https://github.com/hirosystems/explorer/commit/ac6a43a1b454962e674acb923f5f51438a0c2007))
+
 # [1.127.0](https://github.com/hirosystems/explorer/compare/v1.126.2...v1.127.0) (2023-11-06)
 
 
