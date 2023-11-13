@@ -8,7 +8,8 @@ import * as React from 'react';
 import { FC } from 'react';
 
 import { DefaultTxListTabs } from './common/components/tx-lists/tabs/DefaultTxListTabs';
-import { BlocksList } from './components/BlockList';
+import { BlocksList } from '@/features/blocks/components/BlockList';
+// import { BlocksList as OldBlocksList } from './components/BlockList';
 import { Stats } from './stats/Stats';
 
 export const HomeClientBase: FC = () => {
@@ -39,7 +40,7 @@ export const HomeClientBase: FC = () => {
       {!activeNetwork.isSubnet && <Stats />}
       <DefaultTxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
 
-      <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+      <BlocksList />
     </Grid>
   );
 };
