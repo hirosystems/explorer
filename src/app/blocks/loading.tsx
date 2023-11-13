@@ -63,7 +63,7 @@ export default function Loading() {
           minHeight={SECTION_HEADER_HEIGHT}
         >
           <Text color={'textTitle'} fontWeight="500" py={'10px'}>
-            Recent Blocks
+            Recent Blocks1
           </Text>
         </Flex>
         <Flex flexDirection="column" flexGrow={1}>

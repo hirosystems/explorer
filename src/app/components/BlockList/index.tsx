@@ -84,7 +84,7 @@ const BlocksListBase: React.FC<{
 
   return (
     <Section
-      title="Recent Blocks"
+      title="Recent Blocks2"
       gridColumnStart={['1', '1', '2']}
       gridColumnEnd={['2', '2', '3']}
       minWidth={0}

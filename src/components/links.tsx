@@ -1,6 +1,5 @@
 import { buildUrl } from '@/app/common/utils/buildUrl';
 import { useGlobalContext } from '@/common/context/useAppContext';
-import { Network } from '@/common/types/network';
 import { forwardRef } from '@chakra-ui/react';
 import Link, { LinkProps } from 'next/link';
 import React from 'react';

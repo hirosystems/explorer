@@ -17,13 +17,19 @@ import { HiOutlineHashtag } from 'react-icons/hi';
 import { BsGrid } from 'react-icons/bs';
 import { Tooltip } from '@/ui/Tooltip';
 import { HiMiniArrowUpRight } from 'react-icons/hi2';
-
+import { BlockWithFullnessGroupedByBtcBlock } from '@/features/blocks/components/BlockWithFullnessGroupedByBtcBlock';
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { useApi } from '@/common/api/client';
+import { useBlockListInfinite } from '@/app/common/queries/useBlockListInfinite';
+import { useInfiniteQueryResult } from '@/app/common/hooks/useInfiniteQueryResult';
+import { Block } from '@stacks/stacks-blockchain-api-types';
+import { DEFAULT_BLOCKS_LIST_LIMIT } from '@/common/constants';
 const spin = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 `;
 
-export function BlockList() {
+export function BlocksList() {
   const colorMode = useColorMode().colorMode;
   const [loading, setLoading] = React.useState(false);
   const [oldBlocksCount, setOldBlocksCount] = React.useState(0);
@@ -32,6 +38,36 @@ export function BlockList() {
   const [liveUpdates, setLiveUpdates] = React.useState(false);
   const [heightView, setHeightView] = React.useState(false);
   const [blockView, setBlockView] = React.useState(true);
+
+  const activeNetwork = useGlobalContext().activeNetwork;
+  const api = useApi();
+  const response = useBlockListInfinite(api);
+  const { isError, isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  const blocks = useInfiniteQueryResult<Block>(response, 3);
+  const blocksGroupedByBurnBlock = blocks?.reduce((acc, block) => {
+    const burnBlockHeight = block.burn_block_height;
+    if (!acc[burnBlockHeight]) {
+      acc[burnBlockHeight] = [];
+    }
+    acc[burnBlockHeight].push(block);
+    return acc;
+  }, {} as Record<string, Block[]>);
+
+  // create a mock copy of blocksGroupedByBurnBlock which each burnBlockHeight has 75 blocks, create a copy and set block hash to random string
+  const blocksGroupedByBurnBlockMock = Object.keys(blocksGroupedByBurnBlock).reduce(
+    (acc, burnBlockHeight) => {
+      acc[burnBlockHeight] = [];
+      for (let i = 0; i < 75; i++) {
+        const block = blocksGroupedByBurnBlock[burnBlockHeight][0];
+        acc[burnBlockHeight].push({
+          ...block,
+          hash: Math.random().toString(36).substring(7),
+        });
+      }
+      return acc;
+    },
+    {} as Record<string, Block[]>
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -45,9 +81,9 @@ export function BlockList() {
   }, [newBlocksCount]);
   return (
     <SectionWithControls
-      title="Recent Blocks"
+      title="Recent Blocks4"
       controls={
-        <Stack spacing={'6px'}>
+        <Stack gap={'6px'} mb={'18px'}>
           <Flex justifyContent={'space-between'}>
             <FormControl display="flex" alignItems="center" gap={'12px'} minW={0}>
               <Switch
@@ -135,7 +171,7 @@ export function BlockList() {
           <Flex
             justifyContent={'space-between'}
             backgroundColor={'#F5F5F7'}
-            margin={'4.5px -24px 6px -24px'}
+            margin={'4.5px -24px 0 -24px'}
             padding={'8px 24px'}
             gap={'5px'}
           >
@@ -154,11 +190,9 @@ export function BlockList() {
               new Stacks blocks have come in
             </Text>
             <TextLink
-              href={'javascript:void(0)'}
               color={`brand.${colorMode}`}
               _hover={{ textDecoration: 'underline' }}
               onClick={() => {
-                console.log('clicked');
                 setLoading(true);
                 setOldBlocksCount(newBlocksCount);
                 setNewBlocksCount(0);
@@ -201,7 +235,22 @@ export function BlockList() {
         </>
       }
     >
-      abc
+      <Stack width={'100%'} gap={'18px'}>
+        <BlockWithFullnessGroupedByBtcBlock
+          isCurrent
+          burnBlockHeight={''}
+          blocks={Object.values(blocksGroupedByBurnBlockMock)[0]}
+        />
+        {Object.keys(blocksGroupedByBurnBlockMock).map((burnBlockHeight, i) => {
+          if (i === 0) return null;
+          return (
+            <BlockWithFullnessGroupedByBtcBlock
+              burnBlockHeight={burnBlockHeight}
+              blocks={blocksGroupedByBurnBlockMock[burnBlockHeight]}
+            />
+          );
+        })}
+      </Stack>
     </SectionWithControls>
   );
 }
