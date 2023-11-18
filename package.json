@@ -101,7 +101,7 @@
     "react-ssr-prepass": "npm:preact-ssr-prepass",
     "schema-inspector": "2.0.3",
     "server-only": "0.0.1",
-    "statuspage.io": "3.2.5",
+    "statuspage.io": "3.2.6",
     "swr": "2.2.2",
     "unique-names-generator": "4.7.1",
     "use-events": "1.4.2",
