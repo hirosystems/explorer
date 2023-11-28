@@ -1,3 +1,5 @@
+'use client';
+
 import dayjs from 'dayjs';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -7,7 +9,7 @@ import {
   useSuspenseHistoricalStxPrice,
 } from '../../queries/useCurrentPrices';
 
-export const useStxPriceForTx = (tx: Transaction | MempoolTransaction) => {
+export const useSuspenseStxPriceForTx = (tx: Transaction | MempoolTransaction) => {
   const hasBlockHeight = 'block_height' in tx;
   const blockBurnTime = hasBlockHeight
     ? tx.parent_burn_block_time_iso || tx.burn_block_time_iso

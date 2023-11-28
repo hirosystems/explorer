@@ -7,11 +7,10 @@ import * as React from 'react';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
-import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Tooltip } from '../../../ui/Tooltip';
 import { getUsdValue } from '../../utils/utils';
-import { useStxPriceForTx } from './useStxPriceForTx';
+import { useSuspenseStxPriceForTx } from './useStxPriceForTx';
 
 const initialTooltipContent = 'Displaying current value; Click to show value on day of txn';
 
@@ -23,7 +22,7 @@ interface StxPriceButtonProps {
 }
 
 const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
-  const { historicalStxPrice, currentStxPrice } = useStxPriceForTx(tx);
+  const { historicalStxPrice, currentStxPrice } = useSuspenseStxPriceForTx(tx);
   const [tooltipContentIndex, setTooltipContentIndex] = useState(0);
   const [initialRender, setInitialRender] = useState(true);
   const toggleStxPrice = useCallback(() => {
