@@ -28,7 +28,7 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
   const [initialRender, setInitialRender] = useState(true);
   const toggleStxPrice = useCallback(() => {
     if (initialRender) setInitialRender(false);
-    if (historicalStxPrice !== undefined) {
+    if (!!historicalStxPrice) {
       setTooltipContentIndex((tooltipContentIndex + 1) % tooltipContent.length);
     }
   }, [initialRender, tooltipContentIndex, historicalStxPrice]);
