@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { NODE_ENV } from '../../common/constants/env';
 
 export function GA() {
+  console.log('NODE_ENV', NODE_ENV)
   if (NODE_ENV !== 'production') return null;
   return (
     <>

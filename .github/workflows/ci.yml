@@ -82,7 +82,6 @@ jobs:
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
           build-args: |
-            SEGMENT_WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
             NEXT_PUBLIC_SEGMENT_WRITE_KEY=${{ secrets.SEGMENT_WRITE_KEY }}
 
       - name: Deployment Info
