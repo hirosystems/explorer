@@ -1,3 +1,10 @@
+## [1.128.3](https://github.com/hirosystems/explorer/compare/v1.128.2...v1.128.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* move env vars to env.ts ([fa6593b](https://github.com/hirosystems/explorer/commit/fa6593ba3c1103a90dceff309096c80be749c3b6))
+
 ## [1.128.2](https://github.com/hirosystems/explorer/compare/v1.128.1...v1.128.2) (2023-11-28)
 
 
