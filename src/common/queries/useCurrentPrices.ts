@@ -10,7 +10,7 @@ import {
 const getCurrentBtcPrice = async () =>
   fetch('https://api.coingecko.com/api/v3/exchange_rates')
     .then(res => res.json())
-    .then(data => data?.rates?.usd?.value);
+    .then(data => data?.rates?.usd?.value || 0);
 
 export const useCurrentBtcPrice = () =>
   useQuery({
@@ -23,7 +23,7 @@ export const useCurrentBtcPrice = () =>
 const getCurrentStxPrice = async () =>
   fetch('https://api.coingecko.com/api/v3/simple/price?ids=blockstack,bitcoin&vs_currencies=usd')
     .then(res => res.json())
-    .then(data => data?.blockstack?.usd);
+    .then(data => data?.blockstack?.usd || 0);
 
 export const useSuspenseCurrentStxPrice = (options?: UseQueryOptions<any, unknown, any, any>) =>
   useSuspenseQuery({
@@ -40,7 +40,7 @@ const getHistoricalStxPrice = async ({ queryKey }: QueryFunctionContext) => {
     `https://api.coingecko.com/api/v3/coins/blockstack/history?date=${date}&localization=false`
   )
     .then(res => res.json())
-    .then(data => data?.market_data?.current_price?.usd);
+    .then(data => data?.market_data?.current_price?.usd || 0);
 };
 
 export const useSuspenseHistoricalStxPrice = (
