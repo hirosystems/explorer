@@ -1,23 +1,26 @@
-import { clarity } from '@/ui/CodeEditor/clarity';
+'use client';
+
 import Editor, { EditorProps, Monaco } from '@monaco-editor/react';
 import Prism from 'prismjs';
-import 'prismjs/components/prism-json';
 import { FC, memo, useState } from 'react';
+import { MdExpand } from 'react-icons/md';
 
 import { autocomplete, hover } from '../../app/sandbox/editor-config/autocomplete';
 import { defineTheme } from '../../app/sandbox/editor-config/define-theme';
 import { liftOff } from '../../app/sandbox/editor-config/init';
 import { configLanguage } from '../../app/sandbox/editor-config/language';
-import { Button } from '@/ui/Button';
-import { Box } from '@/ui/Box';
-import { MdExpand } from 'react-icons/md';
-import { IconButton } from '@/ui/IconButton';
+import { claritySyntax } from '../../common/constants/claritySyntax';
+import { Box } from '../Box';
+import { IconButton } from '../IconButton';
+import { clarity } from './clarity';
 
 clarity(Prism);
 
-const CodeEditorBase: FC<
-  { code: string; claritySyntax?: Record<string, any> } & Partial<EditorProps>
-> = ({ code, claritySyntax, height: defaultHeight = 252, ...editorProps }) => {
+const CodeEditorBase: FC<{ code: string } & Partial<EditorProps>> = ({
+  code,
+  height: defaultHeight = 252,
+  ...editorProps
+}) => {
   const handleEditorWillMount = async (monaco: Monaco) => {
     configLanguage(monaco);
     hover(monaco);

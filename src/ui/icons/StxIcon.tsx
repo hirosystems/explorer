@@ -1,9 +1,10 @@
 'use client';
 
-import { Box } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
 import React from 'react';
 import { IconBaseProps } from 'react-icons';
+
+import { Box } from '../Box';
 
 export const StxIcon = forwardRef<IconBaseProps, 'svg'>(
   ({ color = 'currentColor', strokeWidth = '1.5', size, ...props }, ref) => (

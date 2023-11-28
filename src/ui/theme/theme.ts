@@ -1,53 +1,9 @@
+'use client';
+
 import { StyleFunctionProps, extendTheme } from '@chakra-ui/react';
-import { mode } from '@chakra-ui/theme-tools';
-import { switchTheme } from '@/ui/theme/switchTheme';
-import { checkboxTheme } from '@/ui/theme/checkboxTheme';
 
-const lightColors = {
-  accent: '#5546FF',
-  brand: '#5546FF',
-  bg: '#fff',
-  bg2: '#fff',
-  bg3: '#fff',
-  bg4: '#F7F7FA',
-  bgAlt: '#F7F7FA',
-  bgLight: '#fff',
-  invert: '#040404',
-  textHover: '#5546FF',
-  textTitle: '#141416',
-  textCaption: '#747478',
-  textBody: '#424248',
-  icon: '#9C9CA2',
-  inputPlaceholder: '#747478',
-  border: '#F0F0F2',
-  feedbackAlert: '#FE9000',
-  feedbackError: '#CF0000',
-  feedbackSuccess: '#00A200',
-  textInvert: '#fff',
-};
-
-const darkColors = {
-  accent: '#7F80FF',
-  brand: '#7F80FF',
-  bg: '#040404',
-  bg2: '#0A0A0A',
-  bg3: '#141416',
-  bg4: '#1E1E20',
-  bgAlt: '#1E1E20',
-  bgLight: '#1E1E20',
-  invert: '#ffffff',
-  textHover: '#7F80FF',
-  textTitle: '#ffffff',
-  textCaption: '#9C9CA2',
-  textBody: '#F7F7FA',
-  icon: '#9C9CA2',
-  inputPlaceholder: '#9C9CA2',
-  border: '#202020',
-  feedbackAlert: '#FFB44D',
-  feedbackError: '#F34D4D',
-  feedbackSuccess: '#49CE49',
-  textInvert: '#040404',
-};
+import { checkboxTheme } from './checkboxTheme';
+import { switchTheme } from './switchTheme';
 
 const colors = {
   accent: { light: '#5546FF', dark: '#7F80FF' },
@@ -86,9 +42,7 @@ export const theme = extendTheme({
   colors,
   styles: {
     global: (props: StyleFunctionProps) => ({
-      body: {
-        bg: mode('#fff', 'rgb(4, 4, 4)')(props),
-      },
+      body: {},
     }),
   },
   lineHeights: {

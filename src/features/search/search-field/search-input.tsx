@@ -1,6 +1,7 @@
-import { Input, InputProps } from '@/ui/components';
-import * as React from 'react';
 import { FC } from 'react';
+import * as React from 'react';
+
+import { Input, InputProps } from '../../../ui/Input';
 
 const StyledInput: FC<InputProps> = props => (
   <Input

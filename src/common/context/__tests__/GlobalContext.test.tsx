@@ -1,12 +1,32 @@
-import { useContext } from 'react';
-import { AppContextProvider, GlobalContext } from '../GlobalContext';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fetchCustomNetworkId } from '@/components/modals/AddNetwork/AddNetworkForm';
+import { useSearchParams as useSearchParamsActual } from 'next/navigation';
+import { useContext } from 'react';
 
-jest.mock('@/components/modals/AddNetwork/AddNetworkForm', () => ({
-  ...jest.requireActual('@/components/modals/AddNetwork/AddNetworkForm'),
-  fetchCustomNetworkId: jest.fn(() => '1111'),
+import { fetchCustomNetworkId } from '../../components/modals/AddNetwork/utils';
+import {
+  NetworkModeBtcAddressBaseUrlMap,
+  NetworkModeBtcBlockBaseUrlMap,
+  NetworkModeBtcTxBaseUrlMap,
+} from '../../constants/network';
+import { AppContextProvider, GlobalContext } from '../GlobalContext';
+
+const useSearchParams = useSearchParamsActual as jest.MockedFunction<typeof useSearchParamsActual>;
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: jest.fn(() => ({
+    get: (key: string) => {
+      if (key === 'chain') return 'custom';
+      return null;
+    },
+  })),
 }));
+
+jest.mock('../../components/modals/AddNetwork/utils', () => ({
+  ...jest.requireActual('../../components/modals/AddNetwork/utils'),
+  fetchCustomNetworkId: jest.fn(() => Promise.resolve('custom-network-id')),
+}));
+
+const customApiUrl = 'https://my-custom-api-url.com/something';
 
 const GlobalContextTestComponent = () => {
   const { activeNetwork, networks } = useContext(GlobalContext);
@@ -29,9 +49,24 @@ const getContextField = (fieldId: string) => {
 };
 
 describe('GlobalContext', () => {
+  beforeEach(() => {
+    useSearchParams.mockReset();
+  });
   it('renders provider and children without error', () => {
+    useSearchParams.mockReturnValue({
+      get: (key: string) => {
+        if (key === 'chain') return 'custom';
+        return null;
+      },
+    } as any);
     render(
-      <AppContextProvider apiUrls={apiUrls}>
+      <AppContextProvider
+        headerCookies={''}
+        apiUrls={apiUrls}
+        btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
+        btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
+        btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
+      >
         <GlobalContextTestComponent />
       </AppContextProvider>
     );
@@ -40,10 +75,21 @@ describe('GlobalContext', () => {
   });
 
   it('adds a custom network from a query string', async () => {
-    const customApiUrl = 'https://my-custom-api-url.com/something';
-
+    useSearchParams.mockReturnValue({
+      get: (key: string) => {
+        if (key === 'chain') return 'custom';
+        if (key === 'api') return customApiUrl;
+        return null;
+      },
+    } as any);
     render(
-      <AppContextProvider apiUrls={apiUrls} queryApiUrl={customApiUrl}>
+      <AppContextProvider
+        headerCookies={''}
+        apiUrls={apiUrls}
+        btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
+        btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
+        btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
+      >
         <GlobalContextTestComponent />
       </AppContextProvider>
     );

@@ -1,16 +1,15 @@
-'use client';
-
-import { Section } from '@/components/section';
-import { CodeEditor } from '@/ui/CodeEditor';
-import { Box, Flex } from '@/ui/components';
 import React, { FC, ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import { ClarityAbiFunction, ClarityValue } from '@stacks/transactions';
 
-import { useStacksNetwork } from '../../../common/hooks/use-stacks-network';
+import { Section } from '../../../../common/components/Section';
+import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
+import { useCallReadOnlyFunction } from '../../../../common/queries/useCallReadOnlyFunction';
+import { Box } from '../../../../ui/Box';
+import { CodeEditor } from '../../../../ui/CodeEditor';
+import { Flex } from '../../../../ui/Flex';
 import { useUser } from '../../hooks/useUser';
-import { callReadOnlyFunction, parseReadOnlyResponse } from '../../utils';
+import { parseReadOnlyResponse } from '../../utils';
 
 interface ReadOnlyProps {
   readOnlyValue: ClarityValue[];
@@ -28,23 +27,13 @@ export const ReadOnlyField: FC<ReadOnlyProps> = ({
   const { stxAddress } = useUser();
   const stacksNetwork = useStacksNetwork();
 
-  const { data } = useQuery(
-    ['readonly', contractId, fn.name],
-    () =>
-      callReadOnlyFunction({
-        contractName: contractId.split('.')[1],
-        contractAddress: contractId.split('.')[0],
-        functionName: fn.name,
-        functionArgs: readOnlyValue,
-        network: stacksNetwork,
-        senderAddress: stxAddress,
-      }),
-    {
-      suspense: false,
-      staleTime: 0,
-      cacheTime: 0,
-    }
-  );
+  const { data } = useCallReadOnlyFunction({
+    contractId: contractId,
+    fn: fn,
+    readOnlyValue: readOnlyValue,
+    stacksNetwork: stacksNetwork,
+    stxAddress: stxAddress,
+  });
 
   if (!data) return null;
 

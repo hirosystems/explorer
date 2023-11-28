@@ -1,13 +1,14 @@
-'use client';
-
-import { Box, Button, Flex, Icon } from '@/ui/components';
-import { Text } from '@/ui/typography';
 import { FieldArray } from 'formik';
 import React, { FC } from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 
 import { ClarityAbiTypeList } from '@stacks/transactions';
 
+import { Box } from '../../../../ui/Box';
+import { Button } from '../../../../ui/Button';
+import { Flex } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
+import { Text } from '../../../../ui/Text';
 import { ListValueType } from '../../types/values';
 import { getTuple } from '../../utils';
 import { Argument } from './index';
@@ -23,10 +24,13 @@ export const ListArgumentInput: FC<
   const maxLength = type.list.length;
   const listTuple = getTuple(listItemsType);
   const emptyEntry = !!listTuple
-    ? listTuple.reduce((tupleAcc, tupleEntry) => {
-        tupleAcc[tupleEntry.name] = '';
-        return tupleAcc;
-      }, {} as Record<string, string | number>)
+    ? listTuple.reduce(
+        (tupleAcc, tupleEntry) => {
+          tupleAcc[tupleEntry.name] = '';
+          return tupleAcc;
+        },
+        {} as Record<string, string | number>
+      )
     : '';
   return (
     <FieldArray name={name}>

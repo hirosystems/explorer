@@ -1,14 +1,14 @@
-import { useAppDispatch } from '@/common/state/hooks';
-import { Box } from '@/ui/Box';
-import { Button } from '@/ui/Button';
-import { Circle } from '@/ui/Circle';
-import { Flex } from '@/ui/Flex';
-import { IconButton } from '@/ui/IconButton';
-import { Stack } from '@/ui/Stack';
-import { Caption } from '@/ui/typography';
 import React, { FC } from 'react';
 import { TbMenu2, TbUser } from 'react-icons/tb';
 
+import { useAppDispatch } from '../../../common/state/hooks';
+import { Box } from '../../../ui/Box';
+import { Button } from '../../../ui/Button';
+import { Circle } from '../../../ui/Circle';
+import { Flex } from '../../../ui/Flex';
+import { IconButton } from '../../../ui/IconButton';
+import { Stack } from '../../../ui/Stack';
+import { Caption } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 import { setUserData, toggleRightPanel } from '../sandbox-slice';
 

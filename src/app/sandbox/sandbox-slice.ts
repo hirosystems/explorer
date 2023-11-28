@@ -1,12 +1,13 @@
 'use client';
 
-import { APP_DETAILS } from '@/common/constants';
-import { helloWorldContract } from '@/common/contracts/hello-world-contract';
-import { RootState } from '@/common/state/store';
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
 import { AppConfig, UserData, UserSession, showConnect } from '@stacks/connect';
 import { AuthOptions } from '@stacks/connect/dist/types/types/auth';
+
+import { APP_DETAILS } from '../../common/constants/constants';
+import { helloWorldContract } from '../../common/constants/contracts/hello-world-contract';
+import { RootState } from '../../common/state/store';
 
 export interface ConnectState {
   userSession: UserSession;
@@ -16,7 +17,7 @@ export interface ConnectState {
   showCodeToolbar: boolean;
 }
 
-const initialState: ConnectState = {
+export const initialState: ConnectState = {
   userSession: new UserSession({ appConfig: new AppConfig(['store_write', 'publish_data']) }),
   userData: undefined,
   codeBody: helloWorldContract.source,

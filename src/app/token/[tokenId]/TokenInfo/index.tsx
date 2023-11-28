@@ -1,15 +1,13 @@
-'use client';
-
-import { Card } from '@/components/card';
-import * as React from 'react';
 import { FC } from 'react';
+import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import { Card } from '../../../../common/components/Card';
+import { TokenInfoProps } from '../types';
 import { MarketCap } from './MarketCap';
 import { Price } from './Price';
-import { Transaction } from './Transaction';
 import { Supply } from './Supply';
-import { TokenInfoProps } from '@/pages/token/[tokenId]';
+import { Transaction } from './Transaction';
 
 export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tokenInfo, txId }) => {
   return (

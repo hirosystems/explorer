@@ -1,14 +1,13 @@
-'use client';
-
-import { RootState } from '@/common/state/store';
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
+
+import { RootState } from '../../common/state/store';
 
 export interface SearchState {
   searchTerm: string;
   isFocused: boolean;
 }
 
-const initialState: SearchState = {
+export const initialState: SearchState = {
   searchTerm: '',
   isFocused: false,
 };

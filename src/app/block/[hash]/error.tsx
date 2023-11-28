@@ -1,44 +1,49 @@
 'use client';
 
-import { MessageWithIcon } from '@/components/message-with-icon';
-import { Meta } from '@/components/meta-head';
-import { Section } from '@/components/section';
-import { ButtonLink } from '@/ui/ButtonLink';
-import { Box, Grid, Stack } from '@/ui/components';
-import { Title } from '@/ui/typography';
-import * as Sentry from '@sentry/nextjs';
-import * as React from 'react';
 import { useEffect } from 'react';
-import { TbAlertOctagon } from 'react-icons/tb';
+import * as React from 'react';
 
-export default function Error({ error }: { error: any; reset: () => void }) {
+import { ErrorMessageLayout } from '../../../common/components/ErrorMessageLayout';
+import { Section } from '../../../common/components/Section';
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useError } from '../../../common/hooks/useError';
+import { ExplorerError } from '../../../common/types/Error';
+import { buildUrl } from '../../../common/utils/buildUrl';
+import { Box } from '../../../ui/Box';
+import { ButtonLink } from '../../../ui/ButtonLink';
+import { Flex } from '../../../ui/Flex';
+import { Grid } from '../../../ui/Grid';
+import { Stack } from '../../../ui/Stack';
+import { PageTitle } from '../../_components/PageTitle';
+
+const defaultErrorMessage = 'Failed to fetch block';
+
+export default function Error({ error }: { error: ExplorerError; reset: () => void }) {
   useEffect(() => {
     console.error(error);
     if (error.status === 404) return;
-    Sentry.captureException(error);
   }, [error]);
+  const network = useGlobalContext().activeNetwork;
+  const { errorName, errorStatusCode, errorMessage } = useError(error, defaultErrorMessage);
   return (
-    <>
-      <Meta title="Block hash not found" />
-      <Title mb={['16px', '16px', '0']} mt="64px" as="h1" color="white" fontSize="36px">
-        Block not found
-      </Title>
-      <Section mt="32px">
+    <Flex direction={'column'} mt="32px" gap="32px">
+      <PageTitle>{defaultErrorMessage}</PageTitle>
+      <Section>
         <Grid placeItems="center" p="32px" minHeight="350px">
           <Box>
-            <MessageWithIcon
-              icon={TbAlertOctagon}
-              title="This hash doesn't seem right."
-              message="This page isn't available, and it looks like the block hash provided isn't correct."
+            <ErrorMessageLayout
+              errorStatusCode={errorStatusCode}
+              title={errorName}
+              message={errorMessage}
               action={
                 <Stack isInline spacing="16px">
                   <Box>
-                    <ButtonLink href="/" mt="24px">
+                    <ButtonLink href={buildUrl('/', network)} mt="24px">
                       Go home
                     </ButtonLink>
                   </Box>
                   <Box>
-                    <ButtonLink href="/blocks" variant="secondary" mt="24px">
+                    <ButtonLink href={buildUrl('/blocks', network)} variant="secondary" mt="24px">
                       All blocks
                     </ButtonLink>
                   </Box>
@@ -48,6 +53,6 @@ export default function Error({ error }: { error: any; reset: () => void }) {
           </Box>
         </Grid>
       </Section>
-    </>
+    </Flex>
   );
 }

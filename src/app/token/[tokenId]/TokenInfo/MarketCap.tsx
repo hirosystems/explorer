@@ -1,15 +1,16 @@
-import { Flex, GridProps } from '@/ui/components';
 import { FC } from 'react';
 
-import { TrendArrow } from '@/app/token/[tokenId]/TokenInfo/TrendArrow';
-import { numberToString } from '@/common/utils';
-import { StatSection } from '@/app/stats/StatSection';
+import { numberToString } from '../../../../common/utils/utils';
+import { Flex } from '../../../../ui/Flex';
+import { GridProps } from '../../../../ui/Grid';
+import { StatSection } from '../../../_components/Stats/StatSection';
+import { TrendArrow } from './TrendArrow';
 
 export const MarketCap: FC<
   GridProps & {
-    marketCap: number | null;
-    tradingVolume24h: number | null;
-    tradingVolumeChangePercentage24h: number | null;
+    marketCap: number | null | undefined;
+    tradingVolume24h: number | null | undefined;
+    tradingVolumeChangePercentage24h: number | null | undefined;
   }
 > = ({ marketCap, tradingVolumeChangePercentage24h, tradingVolume24h, ...gridProps }) => {
   return (

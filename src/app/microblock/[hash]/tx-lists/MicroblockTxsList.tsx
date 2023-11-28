@@ -1,15 +1,18 @@
-import { TxIcon } from '@/app/common/components/TxIcon';
-import { useMicroblockByHash } from '@/app/common/queries/useMicroblockByHash';
-import { useApi } from '@/common/api/client';
-import { TwoColsListItem } from '@/common/components/TwoColumnsListItem';
-import { truncateMiddle } from '@/common/utils';
-import { TxLink } from '@/components/links';
-import { SkeletonGenericTransactionList } from '@/components/loaders/skeleton-transaction';
-import { Section } from '@/components/section';
-import { Box, Grid } from '@/ui/components';
-import { Text, Title } from '@/ui/typography';
-import * as React from 'react';
+'use client';
+
 import { FC, memo } from 'react';
+import * as React from 'react';
+
+import { TxLink } from '../../../../common/components/ExplorerLinks';
+import { Section } from '../../../../common/components/Section';
+import { TwoColsListItem } from '../../../../common/components/TwoColumnsListItem';
+import { TxIcon } from '../../../../common/components/TxIcon';
+import { SkeletonGenericTransactionList } from '../../../../common/components/loaders/skeleton-transaction';
+import { useSuspenseMicroblockByHash } from '../../../../common/queries/useMicroblockByHash';
+import { truncateMiddle } from '../../../../common/utils/utils';
+import { Box } from '../../../../ui/Box';
+import { Grid } from '../../../../ui/Grid';
+import { Text, Title } from '../../../../ui/typography';
 
 interface MicroblockTxsListProps {
   microblockHash: string;
@@ -17,8 +20,7 @@ interface MicroblockTxsListProps {
 }
 
 export const MicroblockTxsList: FC<MicroblockTxsListProps> = memo(({ microblockHash, limit }) => {
-  const api = useApi();
-  const { isLoading, data } = useMicroblockByHash(api, { microblockHash });
+  const { isLoading, data } = useSuspenseMicroblockByHash(microblockHash);
 
   if (isLoading) {
     return <SkeletonGenericTransactionList />;

@@ -1,3 +1,5 @@
+'use client';
+
 export const mockAddress = 'RWRQ3K1NR0ZE7H';
 export const addressTxsMockData = {
   pages: [

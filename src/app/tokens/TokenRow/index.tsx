@@ -1,17 +1,14 @@
-'use client';
-
-import { FC } from 'react';
-import { Tr } from '@/ui/Tr';
-import { Td } from '@/ui/Td';
-import { numberToString } from '@/common/utils';
-import { Circle } from '@/ui/Circle';
-import { Image } from '@/ui/Image';
-import { Flex } from '@/ui/Flex';
-import { Text } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
-import { TokenLink, TxLink } from '@/components/links';
-import { Show } from '@/ui/Show';
-import { Th } from '@/ui/Th';
+import { FC } from 'react';
+
+import { TokenLink, TxLink } from '../../../common/components/ExplorerLinks';
+import { numberToString } from '../../../common/utils/utils';
+import { Circle } from '../../../ui/Circle';
+import { Flex } from '../../../ui/Flex';
+import { Image } from '../../../ui/Image';
+import { Td } from '../../../ui/Td';
+import { Text } from '../../../ui/Text';
+import { Tr } from '../../../ui/Tr';
 
 export const TokenRow: FC<{
   name: string;

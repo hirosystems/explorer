@@ -1,14 +1,18 @@
-'use client';
-
-import { buildUrl } from '@/app/common/utils/buildUrl';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { onPaste, validateStacksAddress } from '@/common/utils';
-import { Box, Button, Flex, Input, Stack, TextLink } from '@/ui/components';
-import { Caption, Text, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
+
+import { useGlobalContext } from '../../../../../common/context/useAppContext';
+import { buildUrl } from '../../../../../common/utils/buildUrl';
+import { onPaste, validateStacksAddress } from '../../../../../common/utils/utils';
+import { Box } from '../../../../../ui/Box';
+import { Button } from '../../../../../ui/Button';
+import { Flex } from '../../../../../ui/Flex';
+import { Input } from '../../../../../ui/Input';
+import { Stack } from '../../../../../ui/Stack';
+import { TextLink } from '../../../../../ui/TextLink';
+import { Caption, Text, Title } from '../../../../../ui/typography';
 
 export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
   rootContractAddress,

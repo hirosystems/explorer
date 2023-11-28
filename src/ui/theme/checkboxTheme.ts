@@ -1,3 +1,5 @@
+'use client';
+
 import { checkboxAnatomy } from '@chakra-ui/anatomy';
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';

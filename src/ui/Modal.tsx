@@ -1,8 +1,5 @@
 'use client';
 
-import { useAppDispatch } from '@/common/state/hooks';
-import { closeModal } from '@/components/modals/modal-slice';
-import { Button } from '@/ui/components';
 import {
   Modal as CUIModal,
   ModalProps as CUIModalProps,
@@ -14,6 +11,10 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { FC } from 'react';
+
+import { closeModal } from '../common/components/modals/modal-slice';
+import { useAppDispatch } from '../common/state/hooks';
+import { Button } from './Button';
 
 export type ModalProps = Omit<CUIModalProps, 'onClose'> & {
   title: string;

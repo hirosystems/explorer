@@ -1,31 +1,25 @@
-'use client';
-
-import { FC } from 'react';
-import {
-  Grid,
-  Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Table,
-  TableContainer,
-  Tbody,
-  Th,
-  Thead,
-  Tr,
-} from '@/ui/components';
-import { Section } from '@/components/section';
-import { TokenRow } from '@/app/tokens/TokenRow';
-import { SectionFooterAction } from '@/components/section-footer-button';
-import { TbSearch } from 'react-icons/tb';
 import { useColorMode } from '@chakra-ui/react';
-import { Text } from '@/ui/Text';
-import { useTokens } from '@/app/tokens/useTokens';
+import dynamic from 'next/dynamic';
+import { useState } from 'react';
+import { TbSearch } from 'react-icons/tb';
 
-const TokensList: FC = () => {
+import { Section } from '../../../common/components/Section';
+import { useDebounce } from '../../../common/hooks/useDebounce';
+import { Icon } from '../../../ui/Icon';
+import { Input } from '../../../ui/Input';
+import { InputGroup } from '../../../ui/InputGroup';
+import { InputRightElement } from '../../../ui/InputRightElement';
+import { TokenTableSkeleton } from './TokenTableSkeleton';
+
+const TokenTable = dynamic(() => import('./TokenTable').then(module => module.TokenTable), {
+  ssr: false,
+  loading: () => <TokenTableSkeleton />,
+});
+
+export function TokensList() {
   const colorMode = useColorMode().colorMode;
-  const { searchTerm, setSearchTerm, allFtTokensDeduped, isLoading, hasMore, loadMore } =
-    useTokens();
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   return (
     <Section
@@ -50,59 +44,7 @@ const TokensList: FC = () => {
         </InputGroup>
       }
     >
-      {!!allFtTokensDeduped.length ? (
-        <TableContainer>
-          <Table
-            variant="simple"
-            overflowX={'auto'}
-            __css={{ tableLayout: 'fixed', width: 'full' }}
-          >
-            <Thead>
-              <Tr>
-                <Th padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
-                  Token
-                </Th>
-                <Th padding={'10px'} display={['none', 'none', 'table-cell']}>
-                  Tx ID
-                </Th>
-                <Th isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
-                  Total supply
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {allFtTokensDeduped.map(
-                (ftToken, i) =>
-                  !!ftToken.name && (
-                    <TokenRow
-                      key={ftToken.tx_id}
-                      name={ftToken.name}
-                      txId={ftToken.tx_id}
-                      symbol={ftToken.symbol}
-                      totalSupply={ftToken.total_supply}
-                      imgUrl={ftToken.image_uri}
-                      tokenId={(ftToken as any).contract_principal}
-                    />
-                  )
-              )}
-            </Tbody>
-          </Table>
-          <SectionFooterAction
-            isLoading={isLoading}
-            hasNextPage={hasMore}
-            fetchNextPage={loadMore}
-            label={'tokens'}
-          />
-        </TableContainer>
-      ) : (
-        <Grid placeItems="center" px="16px" py="32px" width={'100%'}>
-          <Text color={'textCaption'} mt="32px">
-            No tokens found
-          </Text>
-        </Grid>
-      )}
+      <TokenTable debouncedSearchTerm={debouncedSearchTerm} />
     </Section>
   );
-};
-
-export default TokensList;
+}

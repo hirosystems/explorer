@@ -1,11 +1,12 @@
-'use client';
-
-import { Box, Input, Stack } from '@/ui/components';
-import { Caption, Text } from '@/ui/typography';
 import React, { FC } from 'react';
 
 import { ClarityAbiTypeTuple, getTypeString, isClarityAbiOptional } from '@stacks/transactions';
 
+import { Box } from '../../../../ui/Box';
+import { Input } from '../../../../ui/Input';
+import { Stack } from '../../../../ui/Stack';
+import { Text } from '../../../../ui/Text';
+import { Caption } from '../../../../ui/typography';
 import { TupleValueType } from '../../types/values';
 import { CommonArgumentInputProps } from './types';
 

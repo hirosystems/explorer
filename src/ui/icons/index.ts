@@ -1,3 +1,5 @@
+'use client';
+
 export * from './WalletIcon';
 export * from './FilterIcon';
 export * from './BitcoinIcon';

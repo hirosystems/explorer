@@ -1,12 +1,6 @@
 'use client';
 
-import { useApi } from '@/common/api/client';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import { useAddressQueries } from '@/features/address/use-address-queries';
-import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
 import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 
 import { AuthOptions } from '@stacks/connect/dist/types/types/auth';
 import {
@@ -14,9 +8,12 @@ import {
   MempoolTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { useInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
-import { useAddressConfirmedTxsWithTransfersInfinite } from '../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
-import { useAddressMempoolTxsInfinite } from '../../common/queries/useAddressMempoolTxsInfinite';
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
+import { useAccountBalance } from '../../../common/queries/useAccountBalance';
+import { useAddressConfirmedTxsWithTransfersInfinite } from '../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
+import { useAddressMempoolTxsInfinite } from '../../../common/queries/useAddressMempoolTxsInfinite';
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import {
   connect,
   disconnect,
@@ -25,14 +22,12 @@ import {
   setUserData,
 } from '../sandbox-slice';
 
-export const useUser = () => {
-  const api = useApi();
+export function useUser() {
   const dispatch = useAppDispatch();
   const activeNetworkMode = useGlobalContext().activeNetwork.mode;
   const userSession = useAppSelector(selectUserSession);
   const userData = useAppSelector(selectUserData);
   const [mounted, setMounted] = useState(false);
-  const queries = useAddressQueries();
 
   useEffect(() => setMounted(true), []);
 
@@ -43,23 +38,13 @@ export const useUser = () => {
   }, []);
 
   const isConnected = mounted && !!userData;
-  const stxAddress = userData?.profile?.stxAddress?.[activeNetworkMode];
+  const stxAddress: string | undefined = userData?.profile?.stxAddress?.[activeNetworkMode];
 
-  const confirmedTxsResponse = useAddressConfirmedTxsWithTransfersInfinite(
-    api,
-    {
-      address: stxAddress,
-    },
-    { suspense: false }
-  );
+  const confirmedTxsResponse = useAddressConfirmedTxsWithTransfersInfinite(stxAddress);
 
-  const mempoolTxsResponse = useAddressMempoolTxsInfinite(api, { address: stxAddress });
+  const mempoolTxsResponse = useAddressMempoolTxsInfinite(stxAddress);
 
-  const { data: balance } = useQuery(
-    transactionQK(TransactionQueryKeys.accountBalance, stxAddress),
-    () => queries.fetchAccountBalance(stxAddress)(),
-    { enabled: !!stxAddress, suspense: false }
-  );
+  const { data: balance } = useAccountBalance(stxAddress);
 
   const transactionsWithTransfers =
     useInfiniteQueryResult<AddressTransactionWithTransfers>(confirmedTxsResponse);
@@ -84,4 +69,4 @@ export const useUser = () => {
       dispatch(connect({ activeNetworkMode: activeNetworkMode, authOptions: authOptions })),
     disconnect: () => dispatch(disconnect()),
   };
-};
+}

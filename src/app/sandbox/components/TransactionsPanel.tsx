@@ -1,35 +1,37 @@
-'use client';
-
-import { buildUrl } from '@/app/common/utils/buildUrl';
-import { Badge } from '@/common/components/Badge';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { useAppDispatch } from '@/common/state/hooks';
-import { FilterPanel, FilteredMessage } from '@/components/filter-panel';
-import { InfoCircleIcon } from '@/components/icons/info-circle';
-import { ExplorerLink } from '@/components/links';
-import { TransactionQueryKeys, transactionQK } from '@/features/transaction/query-keys';
-import { useTransactionQueries } from '@/features/transaction/use-transaction-queries';
-import { Accordion } from '@/ui/Accordion';
-import { AccordionButton } from '@/ui/AccordionButton';
-import { AccordionIcon } from '@/ui/AccordionIcon';
-import { AccordionItem } from '@/ui/AccordionItem';
-import { AccordionPanel } from '@/ui/AccordionPanel';
-import { Box, Flex, Icon, IconButton, Stack } from '@/ui/components';
-import { FunctionIcon } from '@/ui/icons';
-import { Caption, Text, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import React, { FC } from 'react';
+import React, { Fragment } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import { FiFilter } from 'react-icons/fi';
-import { useQuery } from '@tanstack/react-query';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { MempoolTxListItemMini } from '../../common/components/tx-lists/list-items/MempoolTxListItemMini';
-import { TxListItemMini } from '../../common/components/tx-lists/list-items/TxListItemMini';
-import { useFilterState } from '../../common/hooks/use-filter-state';
-import { useVerticallyStackedElementsBorderStyle } from '../../common/styles/border';
+import { Badge } from '../../../common/components/Badge';
+import { ExplorerLink } from '../../../common/components/ExplorerLinks';
+import { InfoCircleIcon } from '../../../common/components/icons/info-circle';
+import { MempoolTxListItemMini } from '../../../common/components/tx-lists/list-items/MempoolTxListItemMini';
+import { TxListItemMini } from '../../../common/components/tx-lists/list-items/TxListItemMini';
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
+import { useSuspenseContractById } from '../../../common/queries/useContractById';
+import { useAppDispatch } from '../../../common/state/hooks';
+import { buildUrl } from '../../../common/utils/buildUrl';
+import { FilterPanel, FilteredMessage } from '../../../features/txs-filter/FilterPanel';
+import { useFilterState } from '../../../features/txs-filter/useFilterState';
+import { Accordion } from '../../../ui/Accordion';
+import { AccordionButton } from '../../../ui/AccordionButton';
+import { AccordionIcon } from '../../../ui/AccordionIcon';
+import { AccordionItem } from '../../../ui/AccordionItem';
+import { AccordionPanel } from '../../../ui/AccordionPanel';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
+import { IconButton } from '../../../ui/IconButton';
+import { Stack } from '../../../ui/Stack';
+import { FunctionIcon } from '../../../ui/icons';
+import { Caption, Text, Title } from '../../../ui/typography';
+import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
+import { useUser } from '../hooks/useUser';
 import { setCodeBody, toggleRightPanel } from '../sandbox-slice';
 
 const PanelHeader: React.FC = () => {
@@ -202,21 +204,16 @@ const TxDetailsFunctions = ({
   ) : null;
 };
 
-const TxDetails: React.FC<{ tx: Transaction }> = React.memo(({ tx }) => {
+function TxDetailsBase({ tx }: { tx: Transaction }) {
   const contractId =
     tx.tx_type === 'smart_contract'
       ? tx.smart_contract.contract_id
       : tx.tx_type === 'contract_call'
-      ? tx.contract_call.contract_id
-      : '';
-  const queries = useTransactionQueries();
+        ? tx.contract_call.contract_id
+        : undefined;
   const colorMode = useColorMode().colorMode;
 
-  const { data: contract } = useQuery(
-    transactionQK(TransactionQueryKeys.contract, contractId),
-    queries.fetchContract(contractId),
-    { staleTime: Infinity, enabled: !!contractId }
-  );
+  const { data: contract } = useSuspenseContractById(contractId);
 
   const hasFunctionsAvailable =
     tx.tx_type === 'smart_contract' &&
@@ -256,13 +253,18 @@ const TxDetails: React.FC<{ tx: Transaction }> = React.memo(({ tx }) => {
       </Box>
     </>
   );
-});
+}
 
-export const TransactionsPanel: FC<{
-  transactions: Transaction[];
-  mempoolTransactions: MempoolTransaction[];
-  stxAddress: string;
-}> = React.memo(({ transactions, mempoolTransactions, stxAddress }) => {
+function TxDetails({ tx }: { tx: Transaction }) {
+  return (
+    <ExplorerErrorBoundary>
+      <TxDetailsBase tx={tx} />
+    </ExplorerErrorBoundary>
+  );
+}
+
+export function TransactionsPanel() {
+  const { transactions, mempoolTransactions } = useUser();
   const { activeFilters } = useFilterState();
 
   const filteredTxs = (transactions || []).filter(tx => activeFilters[tx.tx_type]);
@@ -341,4 +343,4 @@ export const TransactionsPanel: FC<{
       </Flex>
     </Flex>
   );
-});
+}

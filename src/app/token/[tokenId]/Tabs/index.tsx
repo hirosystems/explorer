@@ -1,26 +1,23 @@
-'use client';
+import * as React from 'react';
 
-import { TabsProps } from '@/ui/Tabs';
-import { FC } from 'react';
-import { TabsContainer } from '@/app/common/components/TabsContainer';
-import { AddressConfirmedTxsList } from '@/app/common/components/tx-lists/address-lists/AddressConfirmedTxsList';
-import { AddressMempoolTxsList } from '@/app/common/components/tx-lists/address-lists/AddressMempoolTxsList';
-import { useApi } from '@/common/api/client';
-import { useContractById } from '@/app/common/queries/useContractById';
-import { claritySyntax } from '@/app/common/claritySyntax';
-import { CodeEditor } from '@/ui/CodeEditor';
-import { ContractAvailableFunctions } from '@/app/common/components/ContractAvailableFunctions';
-import { TokenInfoProps } from '@/pages/token/[tokenId]';
-import { Developers } from '@/app/token/[tokenId]/Tabs/Developers';
+import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
+import { TabsContainer } from '../../../../common/components/TabsContainer';
+import { AddressConfirmedTxsList } from '../../../../common/components/tx-lists/address-lists/AddressConfirmedTxsList';
+import { AddressMempoolTxsList } from '../../../../common/components/tx-lists/address-lists/AddressMempoolTxsList';
+import { useSuspenseContractById } from '../../../../common/queries/useContractById';
+import { CodeEditor } from '../../../../ui/CodeEditor';
+import { TabsProps } from '../../../../ui/Tabs';
+import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
+import { DeveloperData } from '../types';
+import { Developers } from './Developers';
 
-export const Tabs: FC<
-  {
-    tokenId: string;
-    developerData?: TokenInfoProps['extended']['developerData'];
-  } & Partial<TabsProps>
-> = ({ tokenId, developerData, ...tabsProps }) => {
-  const api = useApi();
-  const { data: contract } = useContractById(api, { contractId: tokenId }, { enabled: !!tokenId });
+interface TokenTabsProps extends Partial<TabsProps> {
+  tokenId: string;
+  developerData?: DeveloperData;
+}
+
+export function TokenTabsBase({ tokenId, developerData, ...tabsProps }: TokenTabsProps) {
+  const { data: contract } = useSuspenseContractById(tokenId);
   const source = contract?.source_code;
   return (
     <TabsContainer
@@ -37,7 +34,7 @@ export const Tabs: FC<
           ? [
               {
                 title: 'Source code',
-                content: <CodeEditor code={source} claritySyntax={claritySyntax} height={500} />,
+                content: <CodeEditor code={source} height={500} />,
               },
             ]
           : []),
@@ -63,4 +60,12 @@ export const Tabs: FC<
       {...tabsProps}
     />
   );
-};
+}
+
+export function Tabs(props: TokenTabsProps) {
+  return (
+    <ExplorerErrorBoundary tryAgainButton>
+      <TokenTabsBase {...props} />
+    </ExplorerErrorBoundary>
+  );
+}

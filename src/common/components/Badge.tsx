@@ -1,9 +1,10 @@
 'use client';
 
-import { Flex, FlexProps } from '@/ui/components';
-import { Text, TextProps } from '@/ui/typography';
 import { forwardRef } from '@chakra-ui/react';
 import * as React from 'react';
+
+import { Flex, FlexProps } from '../../ui/Flex';
+import { Text, TextProps } from '../../ui/Text';
 
 export type BadgeProps = FlexProps & { labelProps?: TextProps };
 export const Badge = forwardRef<BadgeProps, 'div'>(({ children, labelProps, ...rest }, ref) => (
@@ -14,7 +15,6 @@ export const Badge = forwardRef<BadgeProps, 'div'>(({ children, labelProps, ...r
     borderRadius="24px"
     py="4px"
     px={['8px', '8px', '12px']}
-    color="white"
     borderWidth="1px"
     {...rest}
   >

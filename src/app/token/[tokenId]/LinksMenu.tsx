@@ -1,16 +1,17 @@
-import { TokenInfoProps } from '@/pages/token/[tokenId]';
 import { useColorMode } from '@chakra-ui/react';
-import { Menu } from '@/ui/Menu';
-import { MenuButton } from '@/ui/MenuButton';
-import { Button } from '@/ui/Button';
-import { Icon } from '@/ui/Icon';
-import { BsChevronDown } from 'react-icons/bs';
-import { MenuList } from '@/ui/MenuList';
 import React from 'react';
-import { LinksGroup } from '@/app/token/[tokenId]/LinksGroup';
-import { MenuDivider } from '@/ui/MenuDivider';
+import { BsChevronDown } from 'react-icons/bs';
 
-export function LinksMenu(props: { links: TokenInfoProps['extended']['links'] }) {
+import { Button } from '../../../ui/Button';
+import { Icon } from '../../../ui/Icon';
+import { Menu } from '../../../ui/Menu';
+import { MenuButton } from '../../../ui/MenuButton';
+import { MenuDivider } from '../../../ui/MenuDivider';
+import { MenuList } from '../../../ui/MenuList';
+import { LinksGroup } from './LinksGroup';
+import { TokenLinks } from './types';
+
+export function LinksMenu(props: { links: TokenLinks }) {
   const colorMode = useColorMode().colorMode;
   return (
     <Menu>

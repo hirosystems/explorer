@@ -1,21 +1,23 @@
-import { useCallback, useMemo, useState } from 'react';
-import { useDebounce } from '@/app/common/hooks/use-debounce';
-import { useFtTokens } from '@/app/tokens/useFtTokens';
-import { useInfiniteQueryResult } from '@/app/common/hooks/useInfiniteQueryResult';
-import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
+'use client';
 
-export const useTokens = (): {
-  searchTerm: string;
-  setSearchTerm: (searchTerm: string) => void;
+import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
+import { useCallback, useMemo } from 'react';
+
+import {
+  useInfiniteQueryResult,
+  useSuspenseInfiniteQueryResult,
+} from '../../common/hooks/useInfiniteQueryResult';
+import { useFtTokens, useSuspenseFtTokens } from '../../common/queries/useFtTokens';
+
+export const useSuspenseTokens = (
+  debouncedSearchTerm: string
+): {
   allFtTokensDeduped: FtBasicMetadataResponse[];
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;
 } => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  const searchByNameResponse = useFtTokens({ name: debouncedSearchTerm || undefined });
+  const searchByNameResponse = useSuspenseFtTokens({ name: debouncedSearchTerm || undefined });
 
   const searchBySymbol = !!debouncedSearchTerm;
   const searchByAddress = new RegExp('^[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{28,41}').test(
@@ -32,7 +34,7 @@ export const useTokens = (): {
   );
 
   const ftTokensSearchedByName =
-    useInfiniteQueryResult<FtBasicMetadataResponse>(searchByNameResponse);
+    useSuspenseInfiniteQueryResult<FtBasicMetadataResponse>(searchByNameResponse);
   const ftTokensSearchedBySymbol =
     useInfiniteQueryResult<FtBasicMetadataResponse>(searchBySymbolResponse);
   const ftTokensSearchedByAddress =
@@ -95,5 +97,5 @@ export const useTokens = (): {
     searchBySymbolResponse.isFetching,
   ]);
 
-  return { searchTerm, setSearchTerm, allFtTokensDeduped, isLoading, hasMore, loadMore };
+  return { allFtTokensDeduped, isLoading, hasMore, loadMore };
 };

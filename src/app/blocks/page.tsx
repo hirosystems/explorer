@@ -1,17 +1,26 @@
 'use client';
 
-import { PageTitle } from '@/app/common/components/PageTitle';
-import { Flex } from '@/ui/components';
 import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
 
-import { BlocksList } from '../components/BlockList';
+import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
+import { Flex } from '../../ui/components';
+import { PageTitle } from '../_components/PageTitle';
+import Loading from './loading';
 
-const BlocksPage: NextPage = () => (
-  <Flex direction={'column'}>
-    <PageTitle>Blocks</PageTitle>
-    <BlocksList />
-  </Flex>
-);
+const BlocksList = dynamic(() => import('../_components/BlockList').then(mod => mod.BlocksList), {
+  loading: () => <SkeletonBlockList />,
+  ssr: false,
+});
+
+const BlocksPage: NextPage = () => {
+  return (
+    <Flex direction={'column'} mt="32px" gap="32px">
+      <PageTitle>Blocks</PageTitle>
+      <BlocksList />
+    </Flex>
+  );
+};
 
 export default BlocksPage;

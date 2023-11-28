@@ -1,7 +1,9 @@
-import { Box, Flex } from '@/ui/components';
-import { Caption } from '@/ui/typography';
 import * as React from 'react';
 import { TbAlertTriangle } from 'react-icons/tb';
+
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { Caption } from '../../../ui/typography';
 
 export const SearchErrorMessage: React.FC<{ message: string; hint?: string }> = React.memo(
   ({ message, hint }) => (

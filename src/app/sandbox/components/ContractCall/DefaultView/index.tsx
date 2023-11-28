@@ -1,8 +1,7 @@
-'use client';
-
-import { Box, Grid } from '@/ui/components';
 import React, { FC } from 'react';
 
+import { Box } from '../../../../../ui/Box';
+import { Grid } from '../../../../../ui/Grid';
 import { PopularContracts } from './PopularContracts';
 import { SearchContractsForm } from './SearchContractsForm';
 

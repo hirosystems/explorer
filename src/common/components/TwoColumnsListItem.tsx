@@ -1,7 +1,11 @@
-import { leftLineCss } from '@/common/styles/hover';
-import { Box, Flex, FlexProps } from '@/ui/components';
+'use client';
+
 import { useColorMode } from '@chakra-ui/react';
 import { FC, ReactNode, memo } from 'react';
+
+import { Box } from '../../ui/Box';
+import { Flex, FlexProps } from '../../ui/Flex';
+import { leftLineCss } from '../styles/hover';
 
 interface TwoColumnsListProps extends FlexProps {
   icon: ReactNode;

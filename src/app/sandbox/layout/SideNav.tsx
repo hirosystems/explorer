@@ -1,15 +1,13 @@
-'use client';
-
-import { buildUrl } from '@/app/common/utils/buildUrl';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { DropIcon } from '@/components/icons/drop';
-import { Icon, Stack, StackProps } from '@/ui/components';
-import { FunctionIcon } from '@/ui/icons';
-import { StxIcon } from '@/ui/icons/StxIcon';
 import { useColorMode } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
+import { DropIcon } from '../../../common/components/icons/drop';
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { buildUrl } from '../../../common/utils/buildUrl';
+import { Icon } from '../../../ui/Icon';
+import { Stack, StackProps } from '../../../ui/Stack';
+import { FunctionIcon, StxIcon } from '../../../ui/icons';
 import { ClarityIcon } from '../components/ClarityIcon';
 import { useUser } from '../hooks/useUser';
 import { NavItem } from './NavItem';
@@ -21,7 +19,7 @@ export const SideNav: React.FC<StackProps> = () => {
   const { colorMode } = useColorMode();
   const iconColor = colorMode === 'dark' ? { color: 'brand' } : {};
   return (
-    <Stack borderRightWidth={'1px'}>
+    <Stack borderRightWidth={'1px'} gap={'0'}>
       <NavItem
         label={'Write & Deploy Contracts'}
         url={buildUrl(`/sandbox/deploy`, network)}

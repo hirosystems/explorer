@@ -1,7 +1,8 @@
 'use client';
 
-import { Box, BoxProps } from '@/ui/components';
 import { forwardRef } from '@chakra-ui/react';
+
+import { Box, BoxProps } from './Box';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 

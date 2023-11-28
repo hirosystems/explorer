@@ -1,3 +1,5 @@
+'use client';
+
 import { css } from '@emotion/react';
 
 const container = (colorMode: string) => css`
@@ -23,7 +25,9 @@ export const bottomLineCss = (colorMode: string) => css`
     height: 3px;
     left: 50%;
     width: 0;
-    transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1), left 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transition:
+      width 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+      left 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     &:hover {
       width: 100%;
       left: 0;
@@ -43,7 +47,9 @@ export const leftLineCss = (colorMode: string) => css`
     width: 3px;
     top: 50%;
     height: 0;
-    transition: height 0.5s cubic-bezier(0.23, 1, 0.32, 1), top 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transition:
+      height 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+      top 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     &:hover {
       height: 100%;
       top: 0;

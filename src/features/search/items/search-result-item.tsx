@@ -1,8 +1,9 @@
-import { FoundResult, SearchResultType } from '@/common/types/search-results';
-import { AddressResultItem } from '@/features/search/items/address-result-item';
-import { BlockResultItem } from '@/features/search/items/block-result-item';
-import { TxResultItem } from '@/features/search/items/tx-result-item';
 import React from 'react';
+
+import { FoundResult, SearchResultType } from '../../../common/types/search-results';
+import { AddressResultItem } from './address-result-item';
+import { BlockResultItem } from './block-result-item';
+import { TxResultItem } from './tx-result-item';
 
 interface SearchResultItemProps {
   result: FoundResult;

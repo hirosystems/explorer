@@ -1,5 +1,6 @@
 module.exports = {
   ...require('@stacks/prettier-config'),
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
   importOrder: [
     '^@stacks/(.*)$',
     '^@ui/(.*)$',

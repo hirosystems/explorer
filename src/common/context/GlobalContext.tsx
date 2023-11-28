@@ -1,21 +1,22 @@
-import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '@/common/constants';
-import {
-  NetworkIdModeMap,
-  NetworkModeBtcBlockBaseUrlMap,
-  NetworkModeBtcTxBaseUrlMap,
-  NetworkModeBtcAddressBaseUrlMap,
-  NetworkModeUrlMap,
-} from '@/common/constants/network';
-import { Network, NetworkModes } from '@/common/types/network';
+'use client';
+
 import cookie from 'cookie';
-import { FC, createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { ChainID } from '@stacks/transactions';
+
+import { buildCustomNetworkUrl, fetchCustomNetworkId } from '../components/modals/AddNetwork/utils';
+import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '../constants/constants';
 import {
-  buildCustomNetworkUrl,
-  fetchCustomNetworkId,
-} from '@/components/modals/AddNetwork/AddNetworkForm';
+  NetworkIdModeMap,
+  NetworkModeBtcAddressBaseUrlMap,
+  NetworkModeBtcBlockBaseUrlMap,
+  NetworkModeBtcTxBaseUrlMap,
+  NetworkModeUrlMap,
+} from '../constants/network';
+import { Network, NetworkModes } from '../types/network';
 
 interface GlobalContextProps {
   cookies: string;
@@ -51,20 +52,42 @@ export const GlobalContext = createContext<GlobalContextProps>({
   networks: {},
 });
 
-export const AppContextProvider: FC<any> = ({
-  cookies,
-  queryNetworkMode,
-  queryApiUrl,
+export const AppContextProvider: FC<{
+  headerCookies: string | null;
+  apiUrls: Record<NetworkModes, string>;
+  btcBlockBaseUrls: Record<NetworkModes, string>;
+  btcTxBaseUrls: Record<NetworkModes, string>;
+  btcAddressBaseUrls: Record<NetworkModes, string>;
+  children: ReactNode;
+}> = ({
+  headerCookies,
   apiUrls,
   btcBlockBaseUrls,
   btcTxBaseUrls,
   btcAddressBaseUrls,
-  querySubnet,
-  queryBtcBlockBaseUrl,
-  queryBtcTxBaseUrl,
-  queryBtcAddressBaseUrl,
   children,
 }) => {
+  const cookies = headerCookies || (IS_BROWSER ? document?.cookie : '');
+  const searchParams = useSearchParams();
+  const chain = searchParams?.get('chain');
+  const api = searchParams?.get('api');
+  const subnet = searchParams?.get('subnet');
+  const btcBlockBaseUrl = searchParams?.get('btcBlockBaseUrl');
+  const btcTxBaseUrl = searchParams?.get('btcTxBaseUrl');
+  const btcAddressBaseUrl = searchParams?.get('btcAddressBaseUrl');
+
+  const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||
+    NetworkModes.Mainnet) as NetworkModes;
+  const queryApiUrl = Array.isArray(api) ? api[0] : api;
+  const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
+  const queryBtcBlockBaseUrl = Array.isArray(btcBlockBaseUrl)
+    ? btcBlockBaseUrl[0]
+    : btcBlockBaseUrl;
+  const queryBtcTxBaseUrl = Array.isArray(btcTxBaseUrl) ? btcTxBaseUrl[0] : btcTxBaseUrl;
+  const queryBtcAddressBaseUrl = Array.isArray(btcAddressBaseUrl)
+    ? btcAddressBaseUrl[0]
+    : btcAddressBaseUrl;
+
   if (IS_BROWSER && (window as any)?.location?.search?.includes('err=1'))
     throw new Error('test error');
   const customNetworksCookie = JSON.parse(cookie.parse(cookies || '').customNetworks || '{}');

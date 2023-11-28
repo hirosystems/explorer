@@ -1,3 +1,5 @@
+'use client';
+
 export const clarity = (Prism: any) => {
   function primitive(pattern: string) {
     return RegExp('([\\s([])' + pattern + '(?=[\\s)])');

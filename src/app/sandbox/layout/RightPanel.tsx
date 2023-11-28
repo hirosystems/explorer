@@ -1,22 +1,20 @@
-import { SkeletonRightPanel } from '@/app/sandbox/layout/SkeletonRightPanel';
-import { useAppSelector } from '@/common/state/hooks';
-import { microToStacks, truncateMiddle } from '@/common/utils';
-import { Box } from '@/ui/Box';
-import { Flex } from '@/ui/Flex';
-import { IconButton } from '@/ui/IconButton';
-import { Stack } from '@/ui/Stack';
-import { Tooltip } from '@/ui/Tooltip';
-import { StxIcon } from '@/ui/icons/StxIcon';
-import { Caption, Text } from '@/ui/typography';
-import dynamic from 'next/dynamic';
-import React, { FC } from 'react';
+import React from 'react';
 import { MdOutlineLogout } from 'react-icons/md';
 
+import { useAppSelector } from '../../../common/state/hooks';
+import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { IconButton } from '../../../ui/IconButton';
+import { Stack } from '../../../ui/Stack';
+import { Tooltip } from '../../../ui/Tooltip';
+import { StxIcon } from '../../../ui/icons';
+import { Caption, Text } from '../../../ui/typography';
 import { TransactionsPanel } from '../components/TransactionsPanel';
 import { useUser } from '../hooks/useUser';
 import { selectShowRightPanel } from '../sandbox-slice';
 
-const RightPanelBase: FC = () => {
+export function RightPanel() {
   const { isConnected, disconnect, stxAddress, transactions, mempoolTransactions, balance } =
     useUser();
   const showRightPanel = useAppSelector(selectShowRightPanel);
@@ -40,7 +38,7 @@ const RightPanelBase: FC = () => {
               >
                 <StxIcon strokeWidth={2} color="currentColor" size="18px" />
                 <Text fontWeight={600} fontSize={'24px'} display="block" position="relative">
-                  {balance?.stx?.balance ? microToStacks(balance.stx.balance) : 0} STX
+                  {balance?.stx?.balance ? microToStacksFormatted(balance.stx.balance) : 0} STX
                 </Text>
               </Flex>
             </Stack>
@@ -69,17 +67,7 @@ const RightPanelBase: FC = () => {
           </Stack>
         </Box>
       ) : null}
-      <TransactionsPanel
-        transactions={transactions || []}
-        mempoolTransactions={mempoolTransactions || []}
-        stxAddress={stxAddress}
-      />
+      <TransactionsPanel />
     </Flex>
   );
-};
-
-export default RightPanelBase;
-
-export const RightPanel = dynamic(() => import('./RightPanel'), {
-  loading: () => <SkeletonRightPanel />,
-});
+}

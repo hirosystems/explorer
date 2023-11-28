@@ -1,14 +1,17 @@
 'use client';
 
-import { PageTitle } from '@/app/common/components/PageTitle';
 import type { NextPage } from 'next';
-import { TokensList } from '@/app/tokens/TokensList';
+import * as React from 'react';
+
+import { Flex } from '../../ui/Flex';
+import { PageTitle } from '../_components/PageTitle';
+import { TokensList } from './TokensList/TokensList';
 
 const TokensPage: NextPage = () => (
-  <>
+  <Flex direction={'column'} mt="32px" gap="32px">
     <PageTitle>Token Tracker</PageTitle>
     <TokensList />
-  </>
+  </Flex>
 );
 
 export default TokensPage;

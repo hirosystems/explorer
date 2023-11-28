@@ -11,7 +11,7 @@ test.describe('/txid page', () => {
             page,
           }) => {
             await page.goto(`/txid/${txid}?chain=${network}`);
-            await expect(page.locator('[data-test=txid-title')).toBeTruthy();
+            await expect(page.locator('[data-test=tx-title')).toBeTruthy();
           });
         });
       });

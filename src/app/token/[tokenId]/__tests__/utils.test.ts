@@ -1,7 +1,8 @@
-import { StxIcon } from '@/ui/icons';
-import { isExplorerLink, getUrlName, getLinkIcon } from '../utils';
-import { BsDiscord, BsTwitter } from 'react-icons/bs';
 import { BiLinkExternal, BiLogoTelegram } from 'react-icons/bi';
+import { BsDiscord, BsTwitter } from 'react-icons/bs';
+
+import { StxIcon } from '../../../../ui/icons';
+import { getLinkIcon, getUrlName, isExplorerLink } from '../utils';
 
 describe('isExplorerLink', () => {
   it('should return true for stacks.co explorer url', () => {

@@ -1,15 +1,14 @@
 import { FC } from 'react';
 import { AiOutlineEye, AiOutlineStar } from 'react-icons/ai';
-import { TokenInfoProps } from '@/pages/token/[tokenId]';
-import { PiGitCommitDuotone, PiGitForkDuotone, PiGitMergeDuotone } from 'react-icons/pi';
-import { Flex } from '@/ui/Flex';
 import { MdPeopleOutline } from 'react-icons/md';
+import { PiGitCommitDuotone, PiGitForkDuotone, PiGitMergeDuotone } from 'react-icons/pi';
 import { VscDiffAdded, VscDiffRemoved } from 'react-icons/vsc';
+
+import { Flex } from '../../../../ui/Flex';
+import { DeveloperData } from '../types';
 import { DeveloperStat } from './DeveloperStat';
 
-export const Developers: FC<{ developerData: TokenInfoProps['extended']['developerData'] }> = ({
-  developerData,
-}) => {
+export const Developers: FC<{ developerData: DeveloperData }> = ({ developerData }) => {
   const developerStat = [
     {
       value: developerData?.forks || 0,

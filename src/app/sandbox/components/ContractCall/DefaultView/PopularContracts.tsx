@@ -1,11 +1,11 @@
-'use client';
-
-import { ExplorerLink } from '@/components/links';
-import { Section } from '@/components/section';
-import { Circle, Stack } from '@/ui/components';
-import { Caption, Title } from '@/ui/typography';
 import React, { FC } from 'react';
 import { TbChartBar, TbCurrencyBitcoin, TbCurrencyDollar, TbSignature } from 'react-icons/tb';
+
+import { ExplorerLink } from '../../../../../common/components/ExplorerLinks';
+import { Section } from '../../../../../common/components/Section';
+import { Circle } from '../../../../../ui/Circle';
+import { Stack } from '../../../../../ui/Stack';
+import { Caption, Title } from '../../../../../ui/typography';
 
 const defaultContracts = (address: string) => [
   {

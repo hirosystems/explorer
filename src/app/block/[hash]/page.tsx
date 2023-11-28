@@ -1,58 +1,47 @@
 'use client';
 
-import { PageTitle } from '@/app/common/components/PageTitle';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { BtcStxBlockLinks } from '@/components/btc-stx-block-links';
-import { FilterButton } from '@/components/filter-button';
-import '@/components/loaders/skeleton-text';
-import { SectionBoxSkeleton } from '@/components/loaders/skeleton-transaction';
-import { Meta } from '@/components/meta-head';
-import { PageWrapper } from '@/components/page-wrapper';
-import { Section } from '@/components/section';
-import { Timestamp } from '@/components/timestamp';
-import { BlockQueryKeys, blockQK } from '@/features/block/query-keys';
-import { getBlockQueries } from '@/features/block/use-block-queries';
-import { getTransactionQueries } from '@/features/transaction/use-transaction-queries';
-import { Box } from '@/ui/components';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
-import { KeyValueHorizontal } from '../../common/components/KeyValueHorizontal';
-import { Value } from '../../common/components/Value';
-import { useVerticallyStackedElementsBorderStyle } from '../../common/styles/border';
-import { BtcAnchorBlockCard } from '../../txid/[txid]/Cards/BtcAnchorBlockCard';
-import { BlockTxsList } from './tx-lists/BlockTxsList';
+import { BtcStxBlockLinks } from '../../../common/components/BtcStxBlockLinks';
+import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
+import { Section } from '../../../common/components/Section';
+import { Timestamp } from '../../../common/components/Timestamp';
+import { Value } from '../../../common/components/Value';
+import '../../../common/components/loaders/skeleton-text';
+import { SkeletonTransactionList } from '../../../common/components/loaders/skeleton-transaction';
+import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
+import { useSuspenseBlockByHash } from '../../../common/queries/useBlockByHash';
+import { Box, Flex, Grid } from '../../../ui/components';
+import { PageTitle } from '../../_components/PageTitle';
+import { BlockBtcAnchorBlockCard } from './BlockBtcAnchorBlockCard';
 
-export default function BlockSinglePage({ params: { hash } }: any) {
-  const networkUrl = useGlobalContext().activeNetwork.url;
-  const blockQueries = getBlockQueries(networkUrl);
-  const transactionQueries = getTransactionQueries(networkUrl);
+const BlockTxsList = dynamic(
+  () => import('./tx-lists/BlockTxsList').then(mod => mod.BlockTxsList),
+  {
+    loading: () => (
+      <Section title={'Transactions'}>
+        <SkeletonTransactionList />
+      </Section>
+    ),
+    ssr: false,
+  }
+);
 
-  const queryOptions = {
-    refetchOnWindowFocus: true,
-    retry: 0,
-    staleTime: Infinity,
-  };
-
-  const { data: block } = useQuery(
-    blockQK(BlockQueryKeys.block, hash),
-    blockQueries.fetchBlock(hash),
-    queryOptions
-  );
-
-  const blockTransactionsResponse = useInfiniteQuery(
-    blockQK(BlockQueryKeys.blockTransactions, hash),
-    transactionQueries.fetchBlockTransactions(hash),
-    queryOptions
-  );
-
+export default function BlockPage({ params: { hash } }: any) {
+  const { data: block } = useSuspenseBlockByHash(hash, { refetchOnWindowFocus: true });
   const title = (block && `Block #${block.height.toLocaleString()}`) || '';
 
   return (
-    <>
-      <Meta title={title} />
+    <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>{title}</PageTitle>
-      <PageWrapper>
+      <Grid
+        gridColumnGap="32px"
+        gridTemplateColumns={['100%', '100%', 'repeat(1, calc(100% - 352px) 320px)']}
+        gridRowGap={['32px', '32px', 'unset']}
+        maxWidth="100%"
+        alignItems="flex-start"
+      >
         <Section title="Summary">
           <Box px="16px" css={useVerticallyStackedElementsBorderStyle}>
             <KeyValueHorizontal label={'Hash'} value={<Value>{hash}</Value>} copyValue={hash} />
@@ -80,17 +69,9 @@ export default function BlockSinglePage({ params: { hash } }: any) {
             )}
           </Box>
         </Section>
-        {block ? <BtcAnchorBlockCard block={block} /> : null}
-      </PageWrapper>
-      {blockTransactionsResponse.isLoading ? (
-        <SectionBoxSkeleton />
-      ) : !!blockTransactionsResponse.data ? (
-        <Section title={'Transactions'} topRight={<FilterButton />} mt="32px">
-          <Box flexGrow={1}>
-            <BlockTxsList blockHash={hash} />
-          </Box>
-        </Section>
-      ) : null}
-    </>
+        <BlockBtcAnchorBlockCard />
+      </Grid>
+      <BlockTxsList blockHash={hash} />
+    </Flex>
   );
 }

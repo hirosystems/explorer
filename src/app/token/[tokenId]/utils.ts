@@ -1,6 +1,7 @@
-import { BsDiscord, BsTwitter } from 'react-icons/bs';
-import { StxIcon } from '@/ui/icons';
 import { BiLinkExternal, BiLogoTelegram } from 'react-icons/bi';
+import { BsDiscord, BsTwitter } from 'react-icons/bs';
+
+import { StxIcon } from '../../../ui/icons';
 
 export const isExplorerLink = (url: string) => {
   return url.includes('explorer.stacks.co') || url.includes('explorer.hiro.so');

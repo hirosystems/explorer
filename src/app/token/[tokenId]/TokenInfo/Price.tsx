@@ -1,15 +1,17 @@
-import { Flex, GridProps } from '@/ui/components';
-import { FC } from 'react';
 import { useColorMode } from '@chakra-ui/react';
-import { TrendArrow } from '@/app/token/[tokenId]/TokenInfo/TrendArrow';
-import { StatSection } from '@/app/stats/StatSection';
+import { FC } from 'react';
+
+import { Flex } from '../../../../ui/Flex';
+import { GridProps } from '../../../../ui/Grid';
+import { StatSection } from '../../../_components/Stats/StatSection';
+import { TrendArrow } from './TrendArrow';
 
 export const Price: FC<
   GridProps & {
-    currentPrice: number | null;
-    priceChangePercentage24h: number | null;
-    currentPriceInBtc: number | null;
-    priceInBtcChangePercentage24h: number | null;
+    currentPrice: number | null | undefined;
+    priceChangePercentage24h: number | null | undefined;
+    currentPriceInBtc: number | null | undefined;
+    priceInBtcChangePercentage24h: number | null | undefined;
   }
 > = ({
   currentPrice,

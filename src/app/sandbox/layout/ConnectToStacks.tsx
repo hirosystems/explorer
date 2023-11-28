@@ -1,10 +1,10 @@
-import { useAppDispatch } from '@/common/state/hooks';
-import { Button } from '@/ui/Button';
-import { Flex } from '@/ui/Flex';
-import { Stack } from '@/ui/Stack';
-import { Title } from '@/ui/typography';
 import React, { FC } from 'react';
 
+import { useAppDispatch } from '../../../common/state/hooks';
+import { Button } from '../../../ui/Button';
+import { Flex } from '../../../ui/Flex';
+import { Stack } from '../../../ui/Stack';
+import { Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 import { setUserData } from '../sandbox-slice';
 

@@ -1,17 +1,17 @@
-'use client';
-
-import { showFn } from '@/app/common/utils/sandbox';
-import { Badge } from '@/common/components/Badge';
-import { ContractWithParsedAbi } from '@/common/types/contract';
-import { ArrowRightIcon } from '@/components/icons/arrow-right';
-import { ExplorerLink } from '@/components/links';
-import { Section } from '@/components/section';
-import { Flex, Grid } from '@/ui/components';
-import { Text } from '@/ui/typography';
 import { forwardRef, useColorMode } from '@chakra-ui/react';
 import { mdiApi, mdiFunction } from '@mdi/js';
 import Icon from '@mdi/react';
 import { FC } from 'react';
+
+import { Badge } from '../../../../common/components/Badge';
+import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
+import { Section } from '../../../../common/components/Section';
+import { ArrowRightIcon } from '../../../../common/components/icons/arrow-right';
+import { ContractWithParsedAbi } from '../../../../common/types/contract';
+import { showFn } from '../../../../common/utils/sandbox';
+import { Flex } from '../../../../ui/Flex';
+import { Grid } from '../../../../ui/Grid';
+import { Text } from '../../../../ui/Text';
 
 export const AbiFunction = forwardRef<
   {
