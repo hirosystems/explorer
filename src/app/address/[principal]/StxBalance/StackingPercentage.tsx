@@ -30,9 +30,6 @@ export const StackingPercentage = ({
   const firstPageTxs = data?.pages?.[0]?.results.map(txWithTransfers => txWithTransfers.tx);
   const stackingStartBlock = getStackingStartBlockHeight(firstPageTxs);
 
-  console.log('stackingStartBlock', stackingStartBlock);
-  console.log('data', data?.pages);
-
   if (stackingStartBlock) {
     if (!stacksInfo) {
       return (
