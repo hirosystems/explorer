@@ -10,7 +10,6 @@ export function Analytics() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    console.log('analytics', analytics);
     void analytics?.page();
   }, [pathname, searchParams]);
 

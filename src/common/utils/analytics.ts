@@ -2,9 +2,7 @@
 
 import { AnalyticsBrowser } from '@segment/analytics-next';
 
-import { NEXT_PUBLIC_SEGMENT_WRITE_KEY } from "../constants/env";
-
-console.log('NEXT_PUBLIC_SEGMENT_WRITE_KEY', NEXT_PUBLIC_SEGMENT_WRITE_KEY)
+import { NEXT_PUBLIC_SEGMENT_WRITE_KEY } from '../constants/env';
 
 export const analytics = NEXT_PUBLIC_SEGMENT_WRITE_KEY
   ? AnalyticsBrowser.load({
