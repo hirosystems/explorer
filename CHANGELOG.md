@@ -1,3 +1,10 @@
+## [1.132.1](https://github.com/hirosystems/explorer/compare/v1.132.0...v1.132.1) (2023-11-28)
+
+
+### Bug Fixes
+
+* env vars ([fa4db7f](https://github.com/hirosystems/explorer/commit/fa4db7f6540cdfab95762e4c46d229a1d06ba32a))
+
 # [1.132.0](https://github.com/hirosystems/explorer/compare/v1.131.0...v1.132.0) (2023-11-28)
 
 
