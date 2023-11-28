@@ -1,3 +1,10 @@
+# [1.129.0](https://github.com/hirosystems/explorer/compare/v1.128.3...v1.129.0) (2023-11-28)
+
+
+### Features
+
+* test analytics ([8e0b168](https://github.com/hirosystems/explorer/commit/8e0b1686757621ad6ec0a3d238ff011e2a1ef93a))
+
 ## [1.128.3](https://github.com/hirosystems/explorer/compare/v1.128.2...v1.128.3) (2023-11-28)
 
 
