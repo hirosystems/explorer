@@ -31,7 +31,6 @@ export const RELEASE_TAG_NAME =
   process.env.RELEASE_TAG_NAME ?? process.env.RELEASE_TAG_NAME ?? null;
 export const REDIS_URL = process.env.REDIS_URL || '';
 export const NODE_ENV = process.env.NODE_ENV || '';
-export const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY || '';
 export const NEXT_PUBLIC_SEGMENT_WRITE_KEY = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || '';
 
 export const HIRO_HEADERS: HeadersInit = {
