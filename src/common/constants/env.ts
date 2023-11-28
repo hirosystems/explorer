@@ -37,3 +37,5 @@ export const HIRO_HEADERS: HeadersInit = {
   'x-hiro-product': 'explorer',
   'x-hiro-version': VERSION,
 };
+
+console.log('process.env', process.env);
