@@ -1,8 +1,9 @@
-import { FC } from 'react';
 import { As, useColorMode } from '@chakra-ui/react';
-import { Flex, FlexProps } from '@/ui/Flex';
-import { Text } from '@/ui/Text';
-import { Icon } from '@/ui/Icon';
+import { FC } from 'react';
+
+import { Flex, FlexProps } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
+import { Text } from '../../../../ui/Text';
 
 export const DeveloperStat: FC<
   {

@@ -1,26 +1,48 @@
-import { PageWrapper } from '@/app/PageWrapper';
-import { cookies } from 'next/headers';
+import { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { ReactNode } from 'react';
+import * as React from 'react';
 
-import { Providers } from './Providers';
-import './global-style/code-editor.css';
-import './global-style/global.css';
-import './global-style/prism-theme.css';
+import { meta } from '../common/constants/meta';
+import {
+  NetworkModeBtcAddressBaseUrlMap,
+  NetworkModeBtcBlockBaseUrlMap,
+  NetworkModeBtcTxBaseUrlMap,
+  NetworkModeUrlMap,
+} from '../common/constants/network';
+import { AppContextProvider } from '../common/context/GlobalContext';
+import { Analytics } from './_components/Analytics';
+import { GA } from './_components/GA';
+import { GlobalStyles, PrismTheme, TextAreaOverrides } from './_components/GlobalStyles';
+import { PageWrapper } from './_components/PageWrapper';
+import { Providers } from './_components/Providers';
 
-const colorModeCookieName = 'chakra-ui-color-mode';
+export async function generateMetadata(): Promise<Metadata> {
+  return Promise.resolve(meta);
+}
 
-export default function RootLayout({ children }: any) {
-  const colorModeCookie = cookies().get(colorModeCookieName) || {
-    name: colorModeCookieName,
-    value: 'light',
-  };
+export default function RootLayout({ children }: { children: ReactNode }) {
+  const headersList = headers();
   return (
     <html lang="en">
-      <head />
+      {GlobalStyles}
+      {TextAreaOverrides}
+      {PrismTheme}
       <body>
-        <Providers colorModeCookie={`${colorModeCookie.name}=${colorModeCookie.value}`}>
-          <PageWrapper>{children}</PageWrapper>
-        </Providers>
+        <AppContextProvider
+          headerCookies={headersList.get('cookie')}
+          apiUrls={NetworkModeUrlMap}
+          btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
+          btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
+          btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
+        >
+          <Providers headerCookies={headersList.get('cookie')}>
+            <PageWrapper>{children}</PageWrapper>
+          </Providers>
+        </AppContextProvider>
       </body>
+      <GA />
+      <Analytics />
     </html>
   );
 }

@@ -1,3 +1,8 @@
+'use client';
+
+import { ChainID } from '@stacks/transactions';
+
+import { NetworkModes } from '../types/network';
 import {
   DEFAULT_MAINNET_SERVER,
   DEFAULT_TESTNET_SERVER,
@@ -7,10 +12,7 @@ import {
   TESTNET_BTC_ADDRESS_BASE_URL,
   TESTNET_BTC_BLOCK_BASE_URL,
   TESTNET_BTC_TX_BASE_URL,
-} from '@/common/constants';
-import { NetworkModes } from '@/common/types/network';
-
-import { ChainID } from '@stacks/transactions';
+} from './env';
 
 export const NetworkIdModeMap: { [key in ChainID]: NetworkModes } = {
   [ChainID.Mainnet]: NetworkModes.Mainnet,

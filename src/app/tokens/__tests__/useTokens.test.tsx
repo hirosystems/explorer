@@ -1,21 +1,27 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook, act } from '@testing-library/react-hooks';
-import { useTokens } from '../useTokens';
-import { FC } from 'react';
-import { useInfiniteQueryResult } from '@/app/common/hooks/useInfiniteQueryResult';
-import { useFtTokens } from '@/app/tokens/useFtTokens';
+import { renderHook } from '@testing-library/react';
+import { ReactNode } from 'react';
 
-jest.mock('@/app/tokens/useFtTokens');
-jest.mock('@/app/common/hooks/useInfiniteQueryResult');
+import { useSuspenseFtTokens as useSuspenseFtTokensActual } from '../../../common/queries/useFtTokens';
+import { useSuspenseTokens } from '../useTokens';
+
+const useSuspenseFtTokens = useSuspenseFtTokensActual as jest.MockedFunction<
+  typeof useSuspenseFtTokensActual
+>;
+
+jest.mock('../../../common/queries/useFtTokens', () => ({
+  useSuspenseFtTokens: jest.fn(() => ({})),
+  useFtTokens: jest.fn(() => ({})),
+}));
 
 describe('useTokens', () => {
   const queryClient = new QueryClient();
-  const wrapper: FC = ({ children }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  function wrapper({ children }: { children: ReactNode }) {
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  }
 
   beforeEach(() => {
-    (useFtTokens as jest.Mock).mockReturnValue({
+    useSuspenseFtTokens.mockReturnValue({
       data: {
         pages: [
           {
@@ -23,29 +29,19 @@ describe('useTokens', () => {
           },
         ],
       },
-    });
-    (useInfiniteQueryResult as jest.Mock).mockImplementation(
-      response => response.data.pages[0].results
-    );
+    } as any);
+    // (useSuspenseInfiniteQueryResult as jest.Mock).mockImplementation(
+    //   response => response.data.pages[0].results
+    // );
   });
 
   it('initializes with default values', () => {
-    const { result } = renderHook(() => useTokens(), { wrapper });
+    const { result } = renderHook(() => useSuspenseTokens(''), { wrapper });
 
-    expect(result.current.searchTerm).toBe('');
     expect(result.current.allFtTokensDeduped).toEqual([]);
     expect(result.current.isLoading).toBe(false);
     expect(result.current.hasMore).toBe(false);
     expect(typeof result.current.loadMore).toBe('function');
-  });
-
-  it('updates searchTerm correctly', () => {
-    const { result } = renderHook(() => useTokens(), { wrapper });
-
-    act(() => {
-      result.current.setSearchTerm('new term');
-    });
-    expect(result.current.searchTerm).toBe('new term');
   });
 
   it('returns deduped tokens', () => {
@@ -54,22 +50,20 @@ describe('useTokens', () => {
       { tx_id: 'token2', name: 'token2', symbol: 'token2' },
     ];
 
-    (useFtTokens as jest.Mock).mockImplementationOnce(params => {
-      return {
-        data: {
-          pages: [
-            {
-              results: [
-                ...tokens,
-                tokens[0], // duplicate token
-              ],
-            },
-          ],
-        },
-      };
-    });
+    useSuspenseFtTokens.mockReturnValue({
+      data: {
+        pages: [
+          {
+            results: [
+              ...tokens,
+              tokens[0], // duplicate token
+            ],
+          },
+        ],
+      },
+    } as any);
 
-    const { result } = renderHook(() => useTokens(), { wrapper });
+    const { result } = renderHook(() => useSuspenseTokens(''), { wrapper });
     expect(result.current.allFtTokensDeduped).toEqual(tokens);
   });
 });

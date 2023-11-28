@@ -64,7 +64,7 @@ type TxDataContractDeploy = TxDataWithContract<ContractDeployTxs>;
 export type TxData<T> = T extends NonContractTxs
   ? Tx<T>
   : T extends MempoolSmartContractTransaction
-  ? Tx<MempoolSmartContractTransaction>
-  : T extends ContractCallTxs
-  ? TxDataContractCall
-  : TxDataContractDeploy;
+    ? Tx<MempoolSmartContractTransaction>
+    : T extends ContractCallTxs
+      ? TxDataContractCall
+      : TxDataContractDeploy;

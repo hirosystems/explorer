@@ -1,4 +1,4 @@
-FROM node:16-alpine AS build
+FROM node:18-alpine AS build
 
 ARG REDIS_URL
 ARG SEGMENT_WRITE_KEY
@@ -17,7 +17,7 @@ RUN npm install -g pnpm@8.9.1
 RUN pnpm i
 RUN pnpm build
 
-FROM node:16-alpine
+FROM node:18-alpine
 
 ARG REDIS_URL
 ARG SEGMENT_WRITE_KEY

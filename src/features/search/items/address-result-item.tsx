@@ -1,16 +1,16 @@
-import { useApi } from '@/common/api/client';
-import { FoundResult } from '@/common/types/search-results';
-import { microToStacks, truncateMiddle } from '@/common/utils';
-import { AddressLink } from '@/components/links';
-import { ResultItemWrapper } from '@/features/search/items/result-item-wrapper';
-import { Box, Circle, Flex } from '@/ui/components';
-import { WalletIcon } from '@/ui/icons';
-import { Caption, Title } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 
-import { AddressStxBalanceResponse } from '@stacks/stacks-blockchain-api-types';
+import { AddressLink } from '../../../common/components/ExplorerLinks';
+import { useAccountStxBalance } from '../../../common/queries/useAccountStxBalance';
+import { FoundResult } from '../../../common/types/search-results';
+import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
+import { Box } from '../../../ui/Box';
+import { Circle } from '../../../ui/Circle';
+import { Flex } from '../../../ui/Flex';
+import { WalletIcon } from '../../../ui/icons';
+import { Caption, Title } from '../../../ui/typography';
+import { ResultItemWrapper } from './result-item-wrapper';
 
 interface AddressResultItemProps {
   result: FoundResult;
@@ -21,12 +21,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
   const displayName =
     result.result.entity_type === 'standard_address' ? result.result.display_name : '';
   const truncatedPrincipal = truncateMiddle(principal, 4);
-  const { accountsApi } = useApi();
-  const { data: stxBalance } = useQuery(
-    ['stx-balance', principal],
-    () => accountsApi.getAccountStxBalance({ principal }) as Promise<AddressStxBalanceResponse>,
-    { staleTime: 3 * 60 * 1000, suspense: false }
-  );
+  const { data: stxBalance } = useAccountStxBalance(principal);
   const colorMode = useColorMode().colorMode;
   return (
     <AddressLink principal={principal}>
@@ -44,7 +39,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
             >
               {displayName ? `${displayName} (${truncatedPrincipal})` : truncatedPrincipal}
             </Title>
-            <Caption>{`${microToStacks(stxBalance?.balance || 0)} STX`}</Caption>
+            <Caption>{`${microToStacksFormatted(stxBalance?.balance || 0)} STX`}</Caption>
           </Box>
         </Flex>
       </ResultItemWrapper>

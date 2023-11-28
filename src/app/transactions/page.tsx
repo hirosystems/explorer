@@ -1,19 +1,18 @@
 'use client';
 
-import { PageTitle } from '@/app/common/components/PageTitle';
-import { Box } from '@/ui/components';
-import { Title } from '@/ui/typography';
 import { NextPage } from 'next';
 import React from 'react';
 
-import { DefaultTxListTabs } from '../common/components/tx-lists/tabs/DefaultTxListTabs';
+import { DefaultTxListTabs } from '../../common/components/tx-lists/tabs/DefaultTxListTabs';
+import { Flex } from '../../ui/Flex';
+import { PageTitle } from '../_components/PageTitle';
 
 const TransactionsPage: NextPage = () => {
   return (
-    <>
+    <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>Transactions</PageTitle>
       <DefaultTxListTabs />
-    </>
+    </Flex>
   );
 };
 

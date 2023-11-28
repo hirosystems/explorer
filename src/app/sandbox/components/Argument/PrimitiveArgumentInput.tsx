@@ -1,11 +1,11 @@
-'use client';
-
-import { Box, Input } from '@/ui/components';
-import { Caption, Text } from '@/ui/typography';
 import React, { FC } from 'react';
 
 import { ClarityAbiType, getTypeString } from '@stacks/transactions';
 
+import { Box } from '../../../../ui/Box';
+import { Input } from '../../../../ui/Input';
+import { Text } from '../../../../ui/Text';
+import { Caption } from '../../../../ui/typography';
 import { CommonArgumentInputProps } from './types';
 
 export const PrimitiveArgumentInput: FC<

@@ -1,18 +1,21 @@
-'use client';
-
-import { helloWorldContract } from '@/common/contracts/hello-world-contract';
-import { kvStoreContract } from '@/common/contracts/kv-store';
-import { statusContract } from '@/common/contracts/status';
-import { streamContract } from '@/common/contracts/stream';
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import { Box, Flex, IconButton, Select, Stack, Tooltip } from '@/ui/components';
-import { Caption } from '@/ui/typography';
 import { useClipboard } from '@chakra-ui/react';
 import { useMonaco } from '@monaco-editor/react';
 import React from 'react';
 import { AiOutlineCopy } from 'react-icons/ai';
 import { RiCloseLine } from 'react-icons/ri';
 
+import { helloWorldContract } from '../../../common/constants/contracts/hello-world-contract';
+import { kvStoreContract } from '../../../common/constants/contracts/kv-store';
+import { statusContract } from '../../../common/constants/contracts/status';
+import { streamContract } from '../../../common/constants/contracts/stream';
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { IconButton } from '../../../ui/IconButton';
+import { Select } from '../../../ui/Select';
+import { Stack } from '../../../ui/Stack';
+import { Tooltip } from '../../../ui/Tooltip';
+import { Caption } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 import {
   selectCodeBody,

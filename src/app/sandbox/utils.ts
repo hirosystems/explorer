@@ -1,11 +1,9 @@
-import { HIRO_HEADERS } from '@/common/constants';
+'use client';
 
-import { StacksNetwork } from '@stacks/network';
 import {
   ClarityAbiType,
   ClarityAbiTypeTuple,
   ClarityValue,
-  cvToHex,
   cvToString,
   deserializeCV,
   encodeClarityValue,
@@ -16,57 +14,8 @@ import {
   tupleCV,
 } from '@stacks/transactions';
 
+import { ReadOnlyResponse } from '../../common/types/ReadOnlyResponse';
 import { NonTupleValueType, TupleValueType } from './types/values';
-
-export interface ClarityFunctionArg {
-  name: string;
-  type: ClarityAbiType;
-}
-
-interface ReadOnlyResponse {
-  okay: boolean;
-  result: string;
-}
-
-interface ReadOnlyOptions {
-  senderAddress: string;
-  contractName: string;
-  contractAddress: string;
-  functionName: string;
-  functionArgs: ClarityValue[];
-  network: StacksNetwork;
-}
-
-export const callReadOnlyFunction = async ({
-  senderAddress,
-  contractName,
-  contractAddress,
-  functionName,
-  functionArgs,
-  network,
-}: ReadOnlyOptions): Promise<ReadOnlyResponse> => {
-  const url = `${
-    network.coreApiUrl
-  }/v2/contracts/call-read/${contractAddress}/${contractName}/${encodeURIComponent(functionName)}`;
-
-  const args = functionArgs.map(arg => cvToHex(arg));
-
-  const body = JSON.stringify({
-    sender: senderAddress,
-    arguments: args,
-  });
-
-  const response = await fetch(url, {
-    method: 'POST',
-    body,
-    headers: {
-      'Content-Type': 'application/json',
-      ...HIRO_HEADERS,
-    },
-  });
-
-  return response.json();
-};
 
 export const parseReadOnlyResponse = ({ result }: ReadOnlyResponse) => {
   const hex = result.slice(2);
@@ -87,11 +36,14 @@ export const encodeTuple = (
   tuple: ClarityAbiTypeTuple['tuple'],
   value: TupleValueType
 ): ClarityValue => {
-  const tupleData = tuple.reduce((acc, tupleEntry) => {
-    const _type = tupleEntry.type;
-    acc[tupleEntry.name] = encodeClarityValue(_type, value[tupleEntry.name].toString());
-    return acc;
-  }, {} as Record<string, ClarityValue>);
+  const tupleData = tuple.reduce(
+    (acc, tupleEntry) => {
+      const _type = tupleEntry.type;
+      acc[tupleEntry.name] = encodeClarityValue(_type, value[tupleEntry.name].toString());
+      return acc;
+    },
+    {} as Record<string, ClarityValue>
+  );
   return tupleCV(tupleData);
 };
 

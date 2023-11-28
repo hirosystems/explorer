@@ -1,18 +1,3 @@
-'use client';
-
-import { buildUrl } from '@/app/common/utils/buildUrl';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { useAppSelector } from '@/common/state/hooks';
-import { ContractWithParsedAbi } from '@/common/types/contract';
-import { truncateMiddle } from '@/common/utils';
-import { ArrowLeftIcon } from '@/components/icons/arrow-left';
-import { FungibleTokenIcon } from '@/components/icons/fungible-token';
-import { TxLink } from '@/components/links';
-import { PluralizedCaption } from '@/components/pluralized-caption';
-import { Section } from '@/components/section';
-import { Box, Flex, Grid, Icon, Stack } from '@/ui/components';
-import { FunctionIcon } from '@/ui/icons';
-import { Caption, Title } from '@/ui/typography';
 import NextLink from 'next/link';
 import React, { FC } from 'react';
 import { BiAtom, BiLinkExternal } from 'react-icons/bi';
@@ -20,10 +5,27 @@ import { MdOutlineChecklistRtl } from 'react-icons/md';
 
 import { ClarityAbiFunction } from '@stacks/transactions';
 
-import { TxIcon } from '../../../common/components/TxIcon';
+import { TxLink } from '../../../../common/components/ExplorerLinks';
+import { Section } from '../../../../common/components/Section';
+import { TxIcon } from '../../../../common/components/TxIcon';
+import { ArrowLeftIcon } from '../../../../common/components/icons/arrow-left';
+import { FungibleTokenIcon } from '../../../../common/components/icons/fungible-token';
+import { useGlobalContext } from '../../../../common/context/useAppContext';
+import { useAppSelector } from '../../../../common/state/hooks';
+import { ContractWithParsedAbi } from '../../../../common/types/contract';
+import { buildUrl } from '../../../../common/utils/buildUrl';
+import { truncateMiddle } from '../../../../common/utils/utils';
+import { Box } from '../../../../ui/Box';
+import { Flex } from '../../../../ui/Flex';
+import { Grid } from '../../../../ui/Grid';
+import { Icon } from '../../../../ui/Icon';
+import { Stack } from '../../../../ui/Stack';
+import { FunctionIcon } from '../../../../ui/icons';
+import { Caption, Title } from '../../../../ui/typography';
 import { selectShowRightPanel } from '../../sandbox-slice';
 import { AvailableFunctionsView } from './AvailableFunctionsView';
 import { FunctionView } from './FunctionView';
+import { PluralizedCaption } from './PluralizedCaption';
 
 const BackLink: React.FC<{ href: string }> = ({ href }) => {
   return (

@@ -1,10 +1,11 @@
-import { BlockListItem } from '@/app/components/BlockList/BlockListItem';
-import { FoundResult } from '@/common/types/search-results';
-import { Box } from '@/ui/components';
 import { css } from '@emotion/react';
 import React from 'react';
 
 import { Block } from '@stacks/stacks-blockchain-api-types';
+
+import { BlockListItem } from '../../../app/_components/BlockList/BlockListItem';
+import { FoundResult } from '../../../common/types/search-results';
+import { Box } from '../../../ui/Box';
 
 interface BlockResultItemProps {
   result: FoundResult;

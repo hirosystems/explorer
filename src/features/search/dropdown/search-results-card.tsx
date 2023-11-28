@@ -1,13 +1,16 @@
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import { SearchErrorMessage } from '@/features/search/dropdown/error-message';
-import { SearchResultItem } from '@/features/search/items/search-result-item';
-import { clearSearchTerm, selectIsSearchFieldFocused } from '@/features/search/search-slice';
-import { useSearch } from '@/features/search/use-search';
-import { Box, BoxProps, Flex, Spinner } from '@/ui/components';
-import { Caption } from '@/ui/typography';
 import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
+
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { Box, BoxProps } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { Spinner } from '../../../ui/Spinner';
+import { Caption } from '../../../ui/typography';
+import { SearchResultItem } from '../items/search-result-item';
+import { clearSearchTerm, selectIsSearchFieldFocused } from '../search-slice';
+import { useSearch } from '../useSearch';
+import { SearchErrorMessage } from './error-message';
 
 const SearchingIndicator: React.FC = React.memo(() => (
   <Flex alignItems="center">
@@ -86,8 +89,8 @@ export const SearchResultsCard: React.FC = () => {
     searchTerm,
   } = useSearch();
   const isFocused = useAppSelector(selectIsSearchFieldFocused);
-  const hasError = !!error || (data && !data?.found);
-  const hasResults = !hasError && data?.found;
+  const hasError = !!error || !!(data && !data?.found);
+  const hasResults = !hasError && !!data?.found;
   const errorMessage = searchTerm && !data?.found && data?.error ? data.error : '';
   const getTitle = React.useMemo(() => {
     if (hasError) {

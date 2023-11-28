@@ -1,9 +1,10 @@
-import { MempoolTxListItem } from '@/app/common/components/tx-lists/list-items/MempoolTxListItem';
-import { TxListItem } from '@/app/common/components/tx-lists/list-items/TxListItem';
-import { FoundResult } from '@/common/types/search-results';
-import { Box } from '@/ui/components';
 import { css } from '@emotion/react';
 import React from 'react';
+
+import { MempoolTxListItem } from '../../../common/components/tx-lists/list-items/MempoolTxListItem';
+import { TxListItem } from '../../../common/components/tx-lists/list-items/TxListItem';
+import { FoundResult } from '../../../common/types/search-results';
+import { Box } from '../../../ui/Box';
 
 interface TxResultItemProps {
   result: FoundResult;

@@ -1,11 +1,14 @@
-import { Box, Flex, GridProps } from '@/ui/components';
-import { FC } from 'react';
-import { TxLink } from '@/components/links';
 import { useColorMode } from '@chakra-ui/react';
-import { numberToString } from '@/common/utils';
-import { StatSection } from '@/app/stats/StatSection';
+import { FC } from 'react';
 
-export const Transaction: FC<GridProps & { txId: string; tvl: number | null }> = ({
+import { TxLink } from '../../../../common/components/ExplorerLinks';
+import { numberToString } from '../../../../common/utils/utils';
+import { Box } from '../../../../ui/Box';
+import { Flex } from '../../../../ui/Flex';
+import { GridProps } from '../../../../ui/Grid';
+import { StatSection } from '../../../_components/Stats/StatSection';
+
+export const Transaction: FC<GridProps & { txId: string; tvl: number | null | undefined }> = ({
   tvl,
   txId,
   ...gridProps

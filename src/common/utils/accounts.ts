@@ -1,3 +1,5 @@
+'use client';
+
 import {
   AddressBalanceResponse,
   ContractCallTransaction,
@@ -43,9 +45,7 @@ export const hasStxBalance = (balances?: AddressBalanceResponse) => {
   return hasBalance;
 };
 
-export const getStackingStartBlockHeight = (
-  transactions?: MempoolTransaction[] | Transaction[]
-) => {
+export const getStackingStartBlockHeight = (transactions?: Transaction[]) => {
   if (transactions && transactions.length) {
     const latestStackStxTx = (transactions as any).find(
       (tx: MempoolTransaction | Transaction) =>

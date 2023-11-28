@@ -1,6 +1,7 @@
-// import 'server-only';
 import Redis from 'ioredis';
-import { REDIS_URL } from '@/common/constants';
+import 'server-only';
+
+import { REDIS_URL } from '../constants/env';
 
 let client: Redis;
 

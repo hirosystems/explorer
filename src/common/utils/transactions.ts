@@ -1,11 +1,11 @@
-import { TransactionStatus } from '@/common/constants';
+'use client';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { TransactionStatus } from '../constants/constants';
+
 export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
-  if (tx?.tx_status === 'pending') {
-    return TransactionStatus.PENDING;
-  } else if (tx?.tx_status === 'success' && (tx.is_unanchored || tx?.block_hash === '0x')) {
+  if (tx?.tx_status === 'success' && (tx.is_unanchored || tx?.block_hash === '0x')) {
     return TransactionStatus.SUCCESS_MICROBLOCK;
   } else if (tx?.tx_status === 'success' && !tx.is_unanchored) {
     if (!tx.canonical || !tx.microblock_canonical) {
@@ -23,4 +23,5 @@ export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
   ) {
     return TransactionStatus.DROPPED;
   }
+  return TransactionStatus.PENDING;
 }

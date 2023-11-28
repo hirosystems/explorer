@@ -1,3 +1,5 @@
+'use client';
+
 import { isWebUri } from 'valid-url';
 
 export const isIconUrl = (url: string): boolean => !!isWebUri(url) && isImage(url);

@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, Menu as CUIMenu, MenuProps as CUIMenuProps } from '@chakra-ui/react';
+import { Menu as CUIMenu, MenuProps as CUIMenuProps, forwardRef } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
 

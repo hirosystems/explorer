@@ -1,5 +1,5 @@
 import { Monaco } from '@monaco-editor/react';
-import { IRange, Position, editor, languages } from 'monaco-editor/esm/vs/editor/editor.api';
+import { IRange, Position, editor, languages } from 'monaco-editor';
 
 import { clarity } from './clarity-reference';
 
@@ -74,10 +74,10 @@ export function autocomplete(monaco: Monaco) {
         /(nft-get-balance|nft-get-supply|nft-mint|nft-burn|nft-get-owner|nft-transfer)\?\s$/.exec(
           textUntilPosition
         ) &&
-        [...nfts].length > 0
+        Array.from(nfts).length > 0
       ) {
         return {
-          suggestions: [...nfts].map(nft => ({
+          suggestions: Array.from(nfts).map(nft => ({
             label: nft,
             insertText: nft,
             kind: monaco.languages.CompletionItemKind.Constant,
@@ -89,10 +89,10 @@ export function autocomplete(monaco: Monaco) {
         /(ft-get-balance|ft-get-supply|ft-mint|ft-burn|ft-get-owner|ft-transfer)\?\s$/.exec(
           textUntilPosition
         ) &&
-        [...fts].length > 0
+        Array.from(fts).length > 0
       ) {
         return {
-          suggestions: [...fts].map(nft => ({
+          suggestions: Array.from(fts).map(nft => ({
             label: nft,
             insertText: nft,
             kind: monaco.languages.CompletionItemKind.Constant,
@@ -125,12 +125,13 @@ export function hover(monaco: Monaco) {
     provideHover: (model: editor.ITextModel, position: Position) => {
       const word = model.getWordAtPosition(position);
       const hyphenWordPattern = new RegExp(/((?:\w+-)+\w+)/, 'g');
-      const wordsWithHyphens: string[] = [
-        ...new Set([
-          ...[...model.getLineContent(position.lineNumber).matchAll(hyphenWordPattern)].flat(),
-        ]),
-      ];
-
+      const wordsWithHyphens: string[] = Array.from(
+        new Set([
+          ...Array.from(
+            model.getLineContent(position.lineNumber).matchAll(hyphenWordPattern)
+          ).flat(),
+        ])
+      );
       const token =
         (word?.word && wordsWithHyphens?.find(t => t.includes(word.word))) || word?.word;
 

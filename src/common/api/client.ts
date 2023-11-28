@@ -1,12 +1,8 @@
-import { fetcher as fetchApi } from '@/common/api/fetch';
-import { MICROBLOCKS_ENABLED } from '@/common/constants';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import {
-  Configuration as TokenMetadataApiConfiguration,
-  TokensApi,
-} from '@hirosystems/token-metadata-api-client';
+'use client';
 
-import type { Middleware, RequestContext } from '@stacks/blockchain-api-client';
+import { TokensApi } from '@hirosystems/token-metadata-api-client';
+import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client/dist/configuration';
+
 import {
   AccountsApi,
   BlocksApi,
@@ -16,17 +12,18 @@ import {
   FungibleTokensApi,
   InfoApi,
   MicroblocksApi,
+  Middleware,
   NonFungibleTokensApi,
+  RequestContext,
   RosettaApi,
   SearchApi,
   SmartContractsApi,
   TransactionsApi,
 } from '@stacks/blockchain-api-client';
 
-/**
- * Our mega api clients function. This is a combo of all clients that the blockchain-api-client package offers.
- * @param config - the `@stacks/blockchain-api-client` configuration object
- */
+import { MICROBLOCKS_ENABLED } from '../constants/constants';
+import { fetcher as fetchApi } from './fetch';
+
 export function apiClients(
   config: Configuration,
   tokenMetadataApiConfig?: TokenMetadataApiConfiguration
@@ -85,11 +82,3 @@ export function createConfig(basePath?: string) {
     middleware,
   });
 }
-
-export const useApi = () => {
-  const apiConfig = createConfig(useGlobalContext().activeNetwork.url);
-  const tokenMetadataApiConfig = new TokenMetadataApiConfiguration({
-    basePath: useGlobalContext().activeNetwork.url,
-  });
-  return apiClients(apiConfig, tokenMetadataApiConfig);
-};

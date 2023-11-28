@@ -1,11 +1,17 @@
-import { useAppDispatch } from '@/common/state/hooks';
-import { SearchInput } from '@/features/search/search-field/search-input';
-import { blur, clearSearchTerm, focus, setSearchTerm } from '@/features/search/search-slice';
-import { useSearch } from '@/features/search/use-search';
-import { Box, Flex, IconButton, Spinner } from '@/ui/components';
+'use client';
+
 import * as React from 'react';
 import { useEffect } from 'react';
 import { TbSearch, TbX } from 'react-icons/tb';
+
+import { useAppDispatch } from '../../../common/state/hooks';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { IconButton } from '../../../ui/IconButton';
+import { Spinner } from '../../../ui/Spinner';
+import { blur, clearSearchTerm, focus, setSearchTerm } from '../search-slice';
+import { useSearch } from '../useSearch';
+import { SearchInput } from './search-input';
 
 type Variant = 'default' | 'small';
 

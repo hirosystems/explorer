@@ -1,8 +1,9 @@
-import { Grid } from '@/ui/Grid';
-import { Tooltip } from '@/ui/Tooltip';
 import { useColorMode } from '@chakra-ui/react';
 import Link from 'next/link';
 import { FC, ReactNode } from 'react';
+
+import { Grid } from '../../../ui/Grid';
+import { Tooltip } from '../../../ui/Tooltip';
 
 export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean; url: string }> = ({
   label,

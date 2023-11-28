@@ -1,11 +1,13 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import { Box, Stack } from '@/ui/components';
-import { Caption } from '@/ui/typography';
 import Editor, { Monaco } from '@monaco-editor/react';
-import { FC, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
+import { claritySyntax } from '../../../common/constants/claritySyntax';
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { Box } from '../../../ui/Box';
+import { Stack } from '../../../ui/Stack';
+import { Caption } from '../../../ui/typography';
 import { ClarityIcon } from '../components/ClarityIcon';
 import { Toolbar } from '../components/Toolbar';
 import { autocomplete, hover } from '../editor-config/autocomplete';
@@ -14,11 +16,7 @@ import { liftOff } from '../editor-config/init';
 import { configLanguage } from '../editor-config/language';
 import { selectCodeBody, setCodeBody } from '../sandbox-slice';
 
-interface LeftSectionProps {
-  claritySyntax: Record<string, any>;
-}
-
-export const RightSection: FC<LeftSectionProps> = ({ claritySyntax }) => {
+export function RightSection() {
   const [loaded, setLoaded] = useState(false);
   const dispatch = useAppDispatch();
   const codeBody = useAppSelector(selectCodeBody);
@@ -34,7 +32,7 @@ export const RightSection: FC<LeftSectionProps> = ({ claritySyntax }) => {
         setLoaded(true);
       }
     },
-    [loaded, claritySyntax]
+    [loaded]
   );
   return (
     <>
@@ -81,4 +79,4 @@ export const RightSection: FC<LeftSectionProps> = ({ claritySyntax }) => {
       </Box>
     </>
   );
-};
+}

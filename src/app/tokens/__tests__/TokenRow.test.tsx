@@ -1,6 +1,7 @@
 import renderer from 'react-test-renderer';
+
+import { Table } from '../../../ui/Table';
 import { TokenRow } from '../TokenRow';
-import { Table } from '@/ui/Table';
 
 describe('TokenRow', () => {
   it('renders correctly', () => {

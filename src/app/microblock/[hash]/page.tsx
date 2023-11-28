@@ -1,51 +1,36 @@
 'use client';
 
-import { PageTitle } from '@/app/common/components/PageTitle';
-import { MicroblockTxsList } from '@/app/microblock/[hash]/tx-lists/MicroblockTxsList';
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { toRelativeTime, truncateMiddle } from '@/common/utils';
-import { SkeletonTransactionList } from '@/components/loaders/skeleton-transaction';
-import { Meta } from '@/components/meta-head';
-import { PageWrapper } from '@/components/page-wrapper';
-import { Section } from '@/components/section';
-import { BlockQueryKeys, blockQK } from '@/features/block/query-keys';
-import { getBlockQueries } from '@/features/block/use-block-queries';
-import { MicroblockQueryKeys, microblockQK } from '@/features/microblock/query-keys';
-import { getMicroblockQueries } from '@/features/microblock/use-microblock-queries';
-import { getTransactionQueries } from '@/features/transaction/use-transaction-queries';
-import { Box, Flex, Icon, Stack, Tooltip } from '@/ui/components';
 import * as React from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
-import { useQueries, useQuery } from '@tanstack/react-query';
 
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
-
-import { KeyValueHorizontal } from '../../common/components/KeyValueHorizontal';
-import { Value } from '../../common/components/Value';
-import { useVerticallyStackedElementsBorderStyle } from '../../common/styles/border';
+import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
+import { Section } from '../../../common/components/Section';
+import { Value } from '../../../common/components/Value';
+import { SkeletonTransactionList } from '../../../common/components/loaders/skeleton-transaction';
+import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
+import { useSuspenseBlockByHash } from '../../../common/queries/useBlockByHash';
+import { useSuspenseMicroblockByHash } from '../../../common/queries/useMicroblockByHash';
+import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { Grid } from '../../../ui/Grid';
+import { Icon } from '../../../ui/Icon';
+import { Stack } from '../../../ui/Stack';
+import { Tooltip } from '../../../ui/Tooltip';
+import { PageTitle } from '../../_components/PageTitle';
+import { MicroblockTxsList } from './tx-lists/MicroblockTxsList';
 
 export default function MicroblockSinglePage({ params: { hash } }: any) {
-  const networkUrl = useGlobalContext().activeNetwork.url;
-  const queries = getMicroblockQueries(networkUrl);
-  const transactionQueries = getTransactionQueries(networkUrl);
-  const blockQueries = getBlockQueries(networkUrl);
-
   const queryOptions = {
     refetchOnWindowFocus: true,
     retry: 0,
   };
 
-  const { data: microblock } = useQuery(
-    microblockQK(MicroblockQueryKeys.microblock, hash),
-    queries.fetchMicroblock(hash),
-    queryOptions
-  );
+  const { data: microblock } = useSuspenseMicroblockByHash(hash, queryOptions);
 
-  const { data: block } = useQuery(
-    blockQK(BlockQueryKeys.block, microblock?.block_hash || ''),
-    blockQueries.fetchBlock(microblock?.block_hash),
-    { ...queryOptions, enabled: !!microblock }
-  );
+  const { data: block } = useSuspenseBlockByHash(microblock?.block_hash, {
+    ...queryOptions,
+  });
 
   if (!microblock || !block) return null;
 
@@ -56,11 +41,16 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
   ).toLocaleDateString()}`;
 
   return (
-    <>
-      <Meta title={title} />
+    <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>{title}</PageTitle>
       <Stack gap="16px">
-        <PageWrapper fullWidth>
+        <Grid
+          gridColumnGap="32px"
+          gridTemplateColumns={'100%'}
+          gridRowGap={['32px', '32px', 'unset']}
+          maxWidth="100%"
+          alignItems="flex-start"
+        >
           <Section title="Summary">
             <Box px="16px" css={useVerticallyStackedElementsBorderStyle}>
               <KeyValueHorizontal label={'Hash'} value={<Value>{hash}</Value>} copyValue={hash} />
@@ -94,7 +84,7 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
               />
             </Box>
           </Section>
-        </PageWrapper>
+        </Grid>
         {microblock.txs?.length ? (
           <MicroblockTxsList microblockHash={hash} />
         ) : (
@@ -105,6 +95,6 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
           </Section>
         )}
       </Stack>
-    </>
+    </Flex>
   );
 }

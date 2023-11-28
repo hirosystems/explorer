@@ -1,10 +1,10 @@
-import { ExplorerSkeletonLoader } from '@/components/loaders/skeleton-common';
-import { Box } from '@/ui/Box';
-import { Flex } from '@/ui/Flex';
 import React, { FC } from 'react';
-import { Td } from '@/ui/Td';
-import { Tr } from '@/ui/Tr';
-import { Show } from '@/ui/components';
+
+import { ExplorerSkeletonLoader } from '../../../common/components/loaders/skeleton-common';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { Td } from '../../../ui/Td';
+import { Tr } from '../../../ui/Tr';
 
 export const Loading: FC = () => {
   return (

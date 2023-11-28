@@ -1,10 +1,15 @@
-import { numberToString } from '@/common/utils';
-import { Flex, GridProps } from '@/ui/components';
 import { FC } from 'react';
-import { StatSection } from '@/app/stats/StatSection';
+
+import { numberToString } from '../../../../common/utils/utils';
+import { Flex } from '../../../../ui/Flex';
+import { GridProps } from '../../../../ui/Grid';
+import { StatSection } from '../../../_components/Stats/StatSection';
 
 export const Supply: FC<
-  GridProps & { circulatingSupply: number | null; totalSupply: number | null }
+  GridProps & {
+    circulatingSupply: number | null | undefined;
+    totalSupply: number | null | undefined;
+  }
 > = ({ circulatingSupply, totalSupply, ...gridProps }) => {
   return (
     <StatSection

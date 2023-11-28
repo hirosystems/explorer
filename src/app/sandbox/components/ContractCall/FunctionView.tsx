@@ -1,14 +1,8 @@
 'use client';
 
-import { showFn } from '@/app/common/utils/sandbox';
-import { CONNECT_AUTH_ORIGIN } from '@/common/constants';
-import { validateStacksAddress } from '@/common/utils';
-import { Section } from '@/components/section';
-import { Text } from '@/ui/Text';
-import { Box, Button, Flex, Stack } from '@/ui/components';
+import { useQueryClient } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import { FC, ReactNode, useMemo, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { openContractCall } from '@stacks/connect';
 import {
@@ -21,7 +15,16 @@ import {
   listCV,
 } from '@stacks/transactions';
 
-import { useStacksNetwork } from '../../../common/hooks/use-stacks-network';
+import { Section } from '../../../../common/components/Section';
+import { CONNECT_AUTH_ORIGIN } from '../../../../common/constants/env';
+import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
+import { showFn } from '../../../../common/utils/sandbox';
+import { validateStacksAddress } from '../../../../common/utils/utils';
+import { Box } from '../../../../ui/Box';
+import { Button } from '../../../../ui/Button';
+import { Flex } from '../../../../ui/Flex';
+import { Stack } from '../../../../ui/Stack';
+import { Text } from '../../../../ui/Text';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
 import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';
 import { Argument } from '../Argument';
@@ -46,13 +49,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         const tuple = getTuple(arg.type);
         const isList = isClarityAbiList(arg.type);
         argsAcc[arg.name] = !!tuple
-          ? tuple.reduce((tupleAcc, tupleEntry) => {
-              tupleAcc[tupleEntry.name] = '';
-              return tupleAcc;
-            }, {} as Record<string, string | number>)
+          ? tuple.reduce(
+              (tupleAcc, tupleEntry) => {
+                tupleAcc[tupleEntry.name] = '';
+                return tupleAcc;
+              },
+              {} as Record<string, string | number>
+            )
           : isList
-          ? []
-          : '';
+            ? []
+            : '';
         return argsAcc;
       }, {} as FormType),
     [fn]

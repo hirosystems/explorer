@@ -1,9 +1,9 @@
-import { MenuGroup } from '@/ui/MenuGroup';
-import { MenuItem } from '@/ui/MenuItem';
-import { TextLink } from '@/ui/TextLink';
-import { Icon } from '@/ui/Icon';
-import { Text } from '@/ui/Text';
-import { getLinkIcon, getUrlName, isExplorerLink } from '@/app/token/[tokenId]/utils';
+import { Icon } from '../../../ui/Icon';
+import { MenuGroup } from '../../../ui/MenuGroup';
+import { MenuItem } from '../../../ui/MenuItem';
+import { Text } from '../../../ui/Text';
+import { TextLink } from '../../../ui/TextLink';
+import { getLinkIcon, getUrlName, isExplorerLink } from './utils';
 
 export const LinksGroup = ({ title, links }: { title: string; links: string[] }) => {
   if (!links.length) return null;

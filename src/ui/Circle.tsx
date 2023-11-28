@@ -1,7 +1,8 @@
 'use client';
 
-import { Grid, GridProps } from '@/ui/components';
 import { forwardRef, useColorMode } from '@chakra-ui/react';
+
+import { Grid, GridProps } from './Grid';
 
 export type CircleProps = GridProps;
 export const Circle = forwardRef<GridProps, 'div'>(

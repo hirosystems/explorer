@@ -1,9 +1,10 @@
-import { FC } from 'react';
-import { Icon } from '@/ui/Icon';
 import { useColorMode } from '@chakra-ui/react';
-import { Text } from '@/ui/Text';
-import { Flex } from '@/ui/Flex';
-import { AiOutlineCaretUp, AiOutlineCaretDown } from 'react-icons/ai';
+import { FC } from 'react';
+import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
+
+import { Flex } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
+import { Text } from '../../../../ui/Text';
 
 export const TrendArrow: FC<{ change: number; size: string }> = ({ change, size }) => {
   const colorMode = useColorMode().colorMode;

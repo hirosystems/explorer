@@ -1,23 +1,29 @@
 'use client';
 
-import { CONNECT_AUTH_ORIGIN } from '@/common/constants';
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import { Box, Button, Flex, IconButton, Input, Stack, Tooltip } from '@/ui/components';
-import { Caption, Title } from '@/ui/typography';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { FC, useState } from 'react';
+import { FiExternalLink } from 'react-icons/fi';
 import { RiCloseLine } from 'react-icons/ri';
 import { TbTools } from 'react-icons/tb';
-import { useQueryClient } from '@tanstack/react-query';
-import { FiExternalLink } from 'react-icons/fi';
 
 import { openContractDeploy } from '@stacks/connect';
 
-import { useRandomName } from '../../common/hooks/use-random-name';
-import { useStacksNetwork } from '../../common/hooks/use-stacks-network';
+import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
+import { useRandomName } from '../../../common/hooks/useRandomName';
+import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { Box } from '../../../ui/Box';
+import { Button } from '../../../ui/Button';
+import { Flex } from '../../../ui/Flex';
+import { IconButton } from '../../../ui/IconButton';
+import { Input } from '../../../ui/Input';
+import { Stack } from '../../../ui/Stack';
+import { Tooltip } from '../../../ui/Tooltip';
+import { Caption, Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 import { selectCodeBody, setUserData, toggleCodeToolbar } from '../sandbox-slice';
 
-export const LeftSection: FC = () => {
+export function LeftSection() {
   const dispatch = useAppDispatch();
   const randomName = useRandomName();
   const { isConnected, connect } = useUser();
@@ -116,4 +122,4 @@ export const LeftSection: FC = () => {
       </Stack>
     </>
   );
-};
+}

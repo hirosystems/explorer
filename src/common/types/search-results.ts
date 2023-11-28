@@ -1,3 +1,5 @@
+'use client';
+
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export enum SearchResultType {

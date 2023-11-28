@@ -1,4 +1,7 @@
-import { HIRO_HEADERS, withApiServer } from '@/common/constants';
+'use client';
+
+import { withApiServer } from '../constants/constants';
+import { HIRO_HEADERS } from '../constants/env';
 
 export const fetcher = (input: RequestInfo, init: RequestInit = {}) => {
   const initHeaders = init.headers || {};

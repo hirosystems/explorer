@@ -1,7 +1,6 @@
-'use client';
-
-import { Box, BoxProps } from '@/ui/components';
 import React from 'react';
+
+import { Box, BoxProps } from '../../../ui/Box';
 
 export function ClarityIcon(props: BoxProps) {
   return (
