@@ -1,3 +1,10 @@
+## [1.128.1](https://github.com/hirosystems/explorer/compare/v1.128.0...v1.128.1) (2023-11-28)
+
+
+### Bug Fixes
+
+* convert stx price hook to a client component ([f236724](https://github.com/hirosystems/explorer/commit/f236724218e0e5d30e1594c8e2e6269fefcf8d92))
+
 # [1.128.0](https://github.com/hirosystems/explorer/compare/v1.127.1...v1.128.0) (2023-11-28)
 
 
