@@ -1,3 +1,10 @@
+# [1.132.0](https://github.com/hirosystems/explorer/compare/v1.131.0...v1.132.0) (2023-11-28)
+
+
+### Features
+
+* test env vars ([dce5831](https://github.com/hirosystems/explorer/commit/dce5831475e838331e7135020fae791a5f6976f7))
+
 # [1.131.0](https://github.com/hirosystems/explorer/compare/v1.130.0...v1.131.0) (2023-11-28)
 
 
