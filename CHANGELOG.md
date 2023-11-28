@@ -1,3 +1,10 @@
+# [1.128.0](https://github.com/hirosystems/explorer/compare/v1.127.1...v1.128.0) (2023-11-28)
+
+
+### Features
+
+* upgrade to next.js 14 ([f78940b](https://github.com/hirosystems/explorer/commit/f78940b65f460877794e7c6c29428aa887e87b97))
+
 ## [1.127.1](https://github.com/hirosystems/explorer/compare/v1.127.0...v1.127.1) (2023-11-10)
 
 
