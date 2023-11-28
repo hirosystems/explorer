@@ -1,3 +1,10 @@
+## [1.128.2](https://github.com/hirosystems/explorer/compare/v1.128.1...v1.128.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* add default prices ([da66de5](https://github.com/hirosystems/explorer/commit/da66de58e5740aed7941624baa5b1bc6cc3ea2d1))
+
 ## [1.128.1](https://github.com/hirosystems/explorer/compare/v1.128.0...v1.128.1) (2023-11-28)
 
 
