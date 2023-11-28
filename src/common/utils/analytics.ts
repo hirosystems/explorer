@@ -1,8 +1,7 @@
 'use client';
 
 import { AnalyticsBrowser } from '@segment/analytics-next';
-
-const { SEGMENT_WRITE_KEY } = process.env;
+import { SEGMENT_WRITE_KEY } from "../constants/env";
 
 export const analytics = SEGMENT_WRITE_KEY
   ? AnalyticsBrowser.load({
