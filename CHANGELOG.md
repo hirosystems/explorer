@@ -1,3 +1,10 @@
+# [1.133.0](https://github.com/hirosystems/explorer/compare/v1.132.1...v1.133.0) (2023-11-29)
+
+
+### Features
+
+* add sharp for image processing ([9ad8987](https://github.com/hirosystems/explorer/commit/9ad8987d061c11c6b86e56de25d1fae1c40badee))
+
 ## [1.132.1](https://github.com/hirosystems/explorer/compare/v1.132.0...v1.132.1) (2023-11-28)
 
 
