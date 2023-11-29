@@ -1,3 +1,10 @@
+## [1.133.1](https://github.com/hirosystems/explorer/compare/v1.133.0...v1.133.1) (2023-11-29)
+
+
+### Bug Fixes
+
+* logs cleanup ([17365c0](https://github.com/hirosystems/explorer/commit/17365c041694fd706a381f4a94a5d98ec0df7071))
+
 # [1.133.0](https://github.com/hirosystems/explorer/compare/v1.132.1...v1.133.0) (2023-11-29)
 
 
