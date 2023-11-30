@@ -57,7 +57,7 @@ async function getBasicTokenInfo(
       throw new Error('cannot fetch token info for this request');
     }
 
-    console.log('cache miss');
+    console.log('[debug] cache miss');
 
     const tokenMetadataResponse = await fetch(
       `${DEFAULT_MAINNET_SERVER}/metadata/v1/ft/${tokenId}`
@@ -206,7 +206,7 @@ export async function getTokenInfo(
 
     const cachedTokenInfo = await getCachedTokenInfo(tokenId);
     if (cachedTokenInfo) {
-      console.log('cache hit', cachedTokenInfo);
+      console.log('[debug] cache hit');
       return cachedTokenInfo;
     }
 
