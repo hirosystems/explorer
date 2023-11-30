@@ -97,6 +97,7 @@
     "react-ssr-prepass": "npm:preact-ssr-prepass",
     "schema-inspector": "2.0.3",
     "server-only": "0.0.1",
+    "sharp": "^0.33.0",
     "statuspage.io": "3.2.6",
     "swr": "2.2.2",
     "unique-names-generator": "4.7.1",

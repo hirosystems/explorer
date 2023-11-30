@@ -7,14 +7,14 @@ let client: Redis;
 
 export function getCacheClient() {
   if (!REDIS_URL) {
-    console.log('REDIS_URL is not defined');
+    console.log('[debug] REDIS_URL is not defined');
     return {
       get: () => Promise.resolve(),
       set: () => undefined,
     };
   }
 
-  console.log('REDIS_URL: ', REDIS_URL);
+  console.log('[debug] REDIS_URL: ', REDIS_URL);
 
   if (!client) {
     client = new Redis(REDIS_URL);
@@ -24,7 +24,7 @@ export function getCacheClient() {
     });
 
     client.on('connect', () => {
-      console.log('Connected to Redis!');
+      console.log('[debug] Connected to Redis!');
     });
   }
 

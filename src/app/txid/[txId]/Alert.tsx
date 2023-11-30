@@ -27,7 +27,6 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
   showClearErrors,
   ...rest
 }) => {
-  const clearErrors = () => console.log('clear');
   const colorMode = useColorMode().colorMode;
 
   return error ? (
@@ -87,7 +86,6 @@ export const Alert: React.FC<AlertProps & FlexProps> = ({
             title="Clear error"
             aria-label="Clear error"
             onClick={() => {
-              clearErrors();
               clearError && clearError();
             }}
           >
