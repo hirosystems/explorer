@@ -14,7 +14,8 @@ async function searchCoinGeckoTokens(tokenSymbol: string) {
         coin.symbol?.toLowerCase() === tokenSymbol.toLowerCase()
     );
     if (!token?.id) {
-      console.error("couldn't find token in Coingecko");
+      console.log(`[debug] couldn't find token with symbol ${tokenSymbol} in Coingecko`);
+      return;
     }
     return token;
   } catch (error) {
