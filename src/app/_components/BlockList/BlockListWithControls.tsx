@@ -138,7 +138,7 @@ export function BlockListWithControls() {
           <Flex
             justifyContent={'space-between'}
             backgroundColor={'#F5F5F7'}
-            margin={'4.5px -24px 6px -24px'}
+            margin={'4.5px -35px 6px -35px'}
             padding={'8px 24px'}
             gap={'5px'}
           >

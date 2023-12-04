@@ -5,6 +5,7 @@ import * as React from 'react';
 import { Fragment } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
+import { StacksIconCircle } from '../../../common/components/StacksIconCircle';
 import { ExplorerSkeletonLoader } from '../../../common/components/loaders/skeleton-common';
 import {
   useCurrentBtcPrice,
@@ -14,7 +15,7 @@ import { usdFormatter } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { BitcoinIcon, StxIcon } from '../../../ui/icons';
+import { BitcoinIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 
 const wrapperStyle = css`
@@ -73,9 +74,7 @@ function BtcStxPriceBase() {
         </Flex>
       </Box>
       <Box css={wrapperStyle}>
-        <Circle size={18} bg="accent.light" css={iconStyle}>
-          <Icon as={StxIcon} strokeWidth={2} size="11px" color="white" />
-        </Circle>
+        <StacksIconCircle />
         <Flex
           fontWeight={500}
           fontSize={'14px'}

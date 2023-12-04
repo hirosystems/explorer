@@ -2,12 +2,14 @@
 
 import dynamic from 'next/dynamic';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import { SkeletonBlockList } from '../common/components/loaders/skeleton-text';
 import { DefaultTxListTabs } from '../common/components/tx-lists/tabs/DefaultTxListTabs';
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useAppContext';
 import { Grid } from '../ui/Grid';
+import { BlockListContextProvider } from './_components/BlockList/context';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
 
@@ -16,8 +18,17 @@ const BlocksList = dynamic(() => import('./_components/BlockList').then(mod => m
   ssr: false,
 });
 
+const BlockListLayoutA = dynamic(
+  () => import('./_components/BlockList/BlockListLayoutA').then(mod => mod.BlockListLayoutA),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
+
 export default function Home() {
   const { activeNetwork } = useGlobalContext();
+  console.log('rendering home');
   return (
     <Grid
       mt="32px"
@@ -28,7 +39,9 @@ export default function Home() {
       <PageTitle>Stacks Explorer</PageTitle>
       {!activeNetwork.isSubnet && <Stats />}
       <DefaultTxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
-      <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+      <BlockListContextProvider limit={6}>
+        <BlockListLayoutA />
+      </BlockListContextProvider>
     </Grid>
   );
 }

@@ -71,16 +71,22 @@ interface SectionWithControlsProps extends Omit<FlexProps, 'title'> {
   title: string;
   controls?: ReactNode;
   footer?: ReactNode;
+  children?: ReactNode;
 }
 
-export function SectionWithControls({ title, controls, footer }: SectionWithControlsProps) {
+export function SectionWithControls({
+  title,
+  controls,
+  footer,
+  children,
+}: SectionWithControlsProps) {
   return (
-    <Card padding="16px 24px">
+    <Card padding="16px 36px">
       <Text mb={'16.5px'} fontWeight={500} lineHeight={'1.5em'}>
         {title}
       </Text>
       {controls}
-      <Flex flex={1}></Flex>
+      <Flex flex={1}>{children}</Flex>
       <Flex mt={'16px'} width={'100%'}>
         {footer}
       </Flex>
