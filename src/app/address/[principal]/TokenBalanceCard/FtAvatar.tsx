@@ -15,6 +15,7 @@ interface FtAvatarProps {
 
 export function FtAvatar({ token, contractId }: FtAvatarProps) {
   const { data: tokenMetadata } = useFtMetadata(contractId);
+
   const { asset } = getAssetNameParts(token);
   const { url, contentType } = useImageUrl(tokenMetadata);
   return <TokenAvatar contentType={contentType} url={url} asset={asset} />;
