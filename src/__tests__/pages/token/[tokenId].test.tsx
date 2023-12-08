@@ -80,7 +80,6 @@ describe('getTokenInfo', () => {
         totalSupply: null,
       },
     });
-    expect(console.error).toBeCalledWith("couldn't find token in Coingecko");
   });
 
   it('returns token info if CoinGecko has token', async () => {

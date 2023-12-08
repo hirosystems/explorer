@@ -3,19 +3,22 @@ import renderer from 'react-test-renderer';
 import { Table } from '../../../ui/Table';
 import { TokenRow } from '../TokenRow';
 
+const tokenMetadata = {
+  name: 'TestToken',
+  tx_id: '0x1234',
+  contract_principal: '0x5678',
+  symbol: 'TT',
+  total_supply: '1000000',
+  image_uri: 'https://example.com/token.png',
+  sender_address: '0x1234',
+};
+
 describe('TokenRow', () => {
   it('renders correctly', () => {
     const tree = renderer
       .create(
         <Table>
-          <TokenRow
-            name="TestToken"
-            txId="0x1234"
-            tokenId="0x5678"
-            imgUrl="https://example.com/token.png"
-            symbol="TT"
-            totalSupply="1000000"
-          />
+          <TokenRow ftToken={tokenMetadata} />
         </Table>
       )
       .toJSON();

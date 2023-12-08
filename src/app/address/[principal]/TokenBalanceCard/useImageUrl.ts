@@ -1,14 +1,12 @@
 'use client';
 
-import { FtMetadataResponse, NftMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { useEffect, useState } from 'react';
 
-export function useImageUrl(tokenMetadata?: FtMetadataResponse | NftMetadataResponse) {
-  const url = tokenMetadata?.metadata?.cached_image;
+export function useImageUrl(metadataImageUrl?: string) {
   const [contentType, setContentType] = useState<string | null>('image');
   useEffect(() => {
-    if (!url) return;
-    void fetch(url)
+    if (!metadataImageUrl) return;
+    void fetch(metadataImageUrl)
       .then(response => {
         setContentType(response.headers.get('content-type'));
       })
@@ -16,6 +14,6 @@ export function useImageUrl(tokenMetadata?: FtMetadataResponse | NftMetadataResp
         // corrupted image
         setContentType(null);
       });
-  }, [url]);
-  return { url, contentType };
+  }, [metadataImageUrl]);
+  return { url: metadataImageUrl, contentType };
 }
