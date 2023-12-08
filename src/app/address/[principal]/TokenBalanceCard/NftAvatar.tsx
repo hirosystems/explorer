@@ -4,7 +4,6 @@ import React from 'react';
 
 import { useNftMetadata } from '../../../../common/queries/useNftMetadata';
 import { TokenAvatar } from './TokenAvatar';
-import { useImageUrl } from './useImageUrl';
 
 interface NftAvatarProps {
   asset: string;
@@ -18,6 +17,5 @@ export function NftAvatar({ token, contractId, firstNftValue, asset }: NftAvatar
     { contractId, tokenId: Number(firstNftValue) },
     { enabled: !!firstNftValue, retry: 1, retryDelay: 2000 }
   );
-  const { url, contentType } = useImageUrl(tokenMetadata);
-  return <TokenAvatar contentType={contentType} url={url} asset={asset} />;
+  return <TokenAvatar metadataImageUrl={tokenMetadata?.metadata?.cached_image} asset={asset} />;
 }

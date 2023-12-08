@@ -13,11 +13,24 @@ exports[`TokenRow renders correctly 1`] = `
       <div
         className="css-fj90sq"
       >
-        <div
-          className="css-n9bdsq"
-        >
-          T
-        </div>
+        <img
+          alt="TT"
+          data-nimg="1"
+          decoding="async"
+          height={36}
+          loading="lazy"
+          onError={[Function]}
+          onLoad={[Function]}
+          src="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75"
+          srcSet="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=48&q=75 1x, /_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75 2x"
+          style={
+            Object {
+              "color": "transparent",
+              "marginRight": "16px",
+            }
+          }
+          width={36}
+        />
         <a
           className="chakra-text css-1pdvkva"
           href="/token/0x5678?chain=mainnet"
@@ -26,9 +39,8 @@ exports[`TokenRow renders correctly 1`] = `
           onTouchStart={[Function]}
         >
           TestToken
-           (
-          TT
-          )
+           
+          (TT)
         </a>
       </div>
     </td>

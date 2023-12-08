@@ -49,7 +49,7 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
             firstNftValue={firstNftValue}
           />
         ) : (
-          <FtAvatar asset={asset} token={token} contractId={contractId} />
+          <FtAvatar token={token} contractId={contractId} />
         )
       }
       asset={bnsName || asset}

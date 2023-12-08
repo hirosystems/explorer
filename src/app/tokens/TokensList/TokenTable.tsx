@@ -48,18 +48,7 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
         </Thead>
         <Tbody>
           {allFtTokensDeduped.map(
-            (ftToken, i) =>
-              !!ftToken.name && (
-                <TokenRow
-                  key={ftToken.tx_id}
-                  name={ftToken.name}
-                  txId={ftToken.tx_id}
-                  symbol={ftToken.symbol}
-                  totalSupply={ftToken.total_supply}
-                  imgUrl={ftToken.image_uri}
-                  tokenId={(ftToken as any).contract_principal}
-                />
-              )
+            (ftToken, i) => !!ftToken.name && <TokenRow ftToken={ftToken} key={ftToken.tx_id} />
           )}
         </Tbody>
       </Table>
