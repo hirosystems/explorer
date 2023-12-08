@@ -1,3 +1,10 @@
+# [1.135.0](https://github.com/hirosystems/explorer/compare/v1.134.0...v1.135.0) (2023-12-08)
+
+
+### Features
+
+* use nextjs image component ([aad96c8](https://github.com/hirosystems/explorer/commit/aad96c8ebe880756322bef71acd0f5c07c2fca4e))
+
 # [1.134.0](https://github.com/hirosystems/explorer/compare/v1.133.1...v1.134.0) (2023-12-08)
 
 
