@@ -6,7 +6,10 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { AddressTxListTabs } from '../../../../common/components/tx-lists/tabs/AddressTxListTabs';
-import { useSuspenseContractById } from '../../../../common/queries/useContractById';
+import {
+  useContractById,
+  useSuspenseContractById,
+} from '../../../../common/queries/useContractById';
 import { getTxContractId } from '../../../../common/utils/utils';
 import { PostConditions } from '../PostConditions';
 import { TxPage } from '../TxPage';
@@ -19,14 +22,18 @@ export function SmartContractTx({
   tx: SmartContractTransaction | MempoolSmartContractTransaction;
 }) {
   const txContractId = getTxContractId(tx);
-  const { data: contract } = useSuspenseContractById(txContractId);
-  const source = contract.source_code;
+  const { data: contract } = useContractById(txContractId);
+  const source = contract?.source_code;
 
   return (
     <TxPage tx={tx} contractId={txContractId} txDetails={<TxDetails tx={tx} />}>
       <PostConditions tx={tx} />
-      <ContractTabs source={source} contract={contract} contractId={txContractId} />
-      <AddressTxListTabs address={txContractId} />
+      {!!txContractId && (
+        <>
+          <ContractTabs source={source} contract={contract} contractId={txContractId} />
+          <AddressTxListTabs address={txContractId} />
+        </>
+      )}
     </TxPage>
   );
 }
