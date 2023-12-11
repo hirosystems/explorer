@@ -1,3 +1,10 @@
+## [1.135.1](https://github.com/hirosystems/explorer/compare/v1.135.0...v1.135.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* skip fixing contract for pending contract deploy txs ([052ae9c](https://github.com/hirosystems/explorer/commit/052ae9c1bfee3fc56fbabb557ed30d6ca5cf9833))
+
 # [1.135.0](https://github.com/hirosystems/explorer/compare/v1.134.0...v1.135.0) (2023-12-08)
 
 
