@@ -231,16 +231,12 @@ export function getLocaleDecimalSeparator() {
 }
 
 export function getTxContractId(
-  tx:
-    | ContractCallTransaction
-    | MempoolContractCallTransaction
-    | SmartContractTransaction
-    | MempoolSmartContractTransaction
+  tx: ContractCallTransaction | MempoolContractCallTransaction | SmartContractTransaction // not MempoolSmartContractTransaction, as the contract won't be deployed yet
 ): string;
 export function getTxContractId(tx: Transaction | MempoolTransaction): string | undefined;
 
 export function getTxContractId(tx: Transaction | MempoolTransaction) {
-  if (tx.tx_type === 'smart_contract') {
+  if (tx.tx_type === 'smart_contract' && tx.tx_status === 'success') {
     return tx.smart_contract.contract_id;
   }
   if (tx.tx_type === 'contract_call') {

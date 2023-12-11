@@ -180,7 +180,7 @@ interface BlockInfoProps {
 const BlockInfo: React.FC<BlockInfoProps> = ({ tooltip, icon, time }) => (
   <Box css={timeStyle}>
     <Tooltip label={tooltip}>
-      <Box css={timeContainerStyle}>
+      <Box css={timeContainerStyle} suppressHydrationWarning>
         {icon}
         {time}
       </Box>
@@ -312,6 +312,7 @@ function BlocksVisualizerBase() {
               if (i === 0) return null;
               return (
                 <Block
+                  key={block.hash}
                   block={block}
                   previousBtcBlockBurnTime={lastFourBlocks[i - 1]?.burn_block_time}
                   displayBlockchainIcons={i == 1}
