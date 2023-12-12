@@ -1,3 +1,10 @@
+## [1.135.2](https://github.com/hirosystems/explorer/compare/v1.135.1...v1.135.2) (2023-12-12)
+
+
+### Bug Fixes
+
+* prevent iframe injection in another page ([0492470](https://github.com/hirosystems/explorer/commit/0492470cc2ac3a350ba92faa3ad8a5e27467368a))
+
 ## [1.135.1](https://github.com/hirosystems/explorer/compare/v1.135.0...v1.135.1) (2023-12-11)
 
 
