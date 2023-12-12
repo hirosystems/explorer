@@ -1,7 +1,7 @@
 'use client';
 
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 import { BsChevronDown, BsChevronRight } from 'react-icons/bs';
 
@@ -145,7 +145,7 @@ export const AddNetworkForm: FC = () => {
           };
           void addCustomNetwork(network)
             .then(() => router.push(`/${getQueryParams(network)}`))
-            .then(() => router.reload());
+            .then(() => setTimeout(() => window.location.reload(), 500));
         }
 
         dispatch(closeModal());
