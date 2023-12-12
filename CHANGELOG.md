@@ -1,3 +1,10 @@
+## [1.135.3](https://github.com/hirosystems/explorer/compare/v1.135.2...v1.135.3) (2023-12-12)
+
+
+### Bug Fixes
+
+* add nextwork route update ([6cfa7b1](https://github.com/hirosystems/explorer/commit/6cfa7b12ea120c255ff2be7560cbc3d7ffe74a27))
+
 ## [1.135.2](https://github.com/hirosystems/explorer/compare/v1.135.1...v1.135.2) (2023-12-12)
 
 
