@@ -1,3 +1,10 @@
+## [1.135.4](https://github.com/hirosystems/explorer/compare/v1.135.3...v1.135.4) (2023-12-20)
+
+
+### Bug Fixes
+
+* add sharp env var ([754986b](https://github.com/hirosystems/explorer/commit/754986ba6d9f4df9963ce4c702b01e58c06ca323))
+
 ## [1.135.3](https://github.com/hirosystems/explorer/compare/v1.135.2...v1.135.3) (2023-12-12)
 
 
