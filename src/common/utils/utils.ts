@@ -320,5 +320,7 @@ export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
         : 'Coinbase';
     case 'poison_microblock':
       return `Poison microblock transaction`;
+    case 'tenure_change':
+      return `Tenure change`;
   }
 };

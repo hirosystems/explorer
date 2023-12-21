@@ -18,6 +18,7 @@ const txTypeNamesMap = {
   [TransactionType.TOKEN_TRANSFER]: 'Token transfer',
   [TransactionType.COINBASE]: 'Coinbase',
   [TransactionType.POISON_MICROBLOCK]: 'Poison-microblock',
+  tenure_change: 'Tenure change',
 };
 
 export interface TagProps extends FlexProps {

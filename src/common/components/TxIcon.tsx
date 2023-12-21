@@ -2,6 +2,7 @@ import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
 import { IconType } from 'react-icons';
 import { BsCodeSlash } from 'react-icons/bs';
+import { PiArrowBendDownRight } from 'react-icons/pi';
 import { RxCube } from 'react-icons/rx';
 import { TbBrandCoinbase } from 'react-icons/tb';
 
@@ -30,6 +31,9 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): IconType => {
 
     case 'poison_microblock':
       return RxCube;
+
+    case 'tenure_change':
+      return PiArrowBendDownRight;
 
     default:
       return StxIcon;

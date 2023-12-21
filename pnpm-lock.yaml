@@ -279,8 +279,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@stacks/stacks-blockchain-api-types':
-    specifier: 7.3.2
-    version: 7.3.2
+    specifier: 7.4.0-nakamoto.6
+    version: 7.4.0-nakamoto.6
   '@testing-library/jest-dom':
     specifier: 5.16.5
     version: 5.16.5
@@ -4616,6 +4616,11 @@ packages:
 
   /@stacks/stacks-blockchain-api-types@7.3.2:
     resolution: {integrity: sha512-1r0+eqEWOOo7UYrFq9HGbc02DVME3NVCW/45sNKPN31PkOMMaK59DHragPJ2QbxPFiutVDUCS924+48+o3+0Tw==}
+    dev: false
+
+  /@stacks/stacks-blockchain-api-types@7.4.0-nakamoto.6:
+    resolution: {integrity: sha512-8muZdkquqVBvHboa8eWBr1bMerhfcAjjWawGWMRAHmAGBN87QUhY6IM5Hbsd+T9gWgqsPVccs1UKx7jxy795IA==}
+    dev: true
 
   /@stacks/transactions@6.9.0:
     resolution: {integrity: sha512-hSs9+0Ew++GwMZMgPObOx0iVCQRxkiCqI+DHdPEikAmg2utpyLh2/txHOjfSIkQHvcBfJJ6O5KphmxDP4gUqiA==}

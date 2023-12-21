@@ -112,7 +112,7 @@
     "@playwright/test": "1.40.0",
     "@stacks/eslint-config": "2.0.0",
     "@stacks/prettier-config": "0.0.10",
-    "@stacks/stacks-blockchain-api-types": "7.3.2",
+    "@stacks/stacks-blockchain-api-types": "7.4.0-nakamoto.6",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "14.0.0",
     "@testing-library/user-event": "14.4.3",
