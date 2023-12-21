@@ -16,7 +16,7 @@ export enum TxFilterTypes {
 export type TxFilters = { [key in TxFilterTypes]: TxFilterState };
 
 export interface TxFilterState {
-  activeFilters: Record<GetTransactionListTypeEnum, boolean>;
+  activeFilters: Record<string, boolean>;
   isVisible: boolean;
 }
 
@@ -27,6 +27,7 @@ export const initialState: TxFilterState = {
     [GetTransactionListTypeEnum.token_transfer]: true,
     [GetTransactionListTypeEnum.smart_contract]: true,
     [GetTransactionListTypeEnum.poison_microblock]: true,
+    tenure_change: true,
   },
   isVisible: false,
 };
@@ -35,7 +36,7 @@ const createSliceOptions = (filterType: TxFilterTypes) => ({
   name: filterType,
   initialState,
   reducers: {
-    toggleFilter: (state: TxFilterState, action: PayloadAction<GetTransactionListTypeEnum>) => {
+    toggleFilter: (state: TxFilterState, action: PayloadAction<string>) => {
       state.activeFilters[action.payload] = !state.activeFilters[action.payload];
     },
     toggleVisibility: (state: TxFilterState) => {

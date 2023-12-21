@@ -14,7 +14,7 @@ export const useFilterState = () => {
     dispatch(txFilters[filterScope].actions.toggleVisibility());
   };
 
-  const toggleFilter = (filter: GetTransactionListTypeEnum) => {
+  const toggleFilter = (filter: string) => {
     dispatch(txFilters[filterScope].actions.toggleFilter(filter));
   };
 

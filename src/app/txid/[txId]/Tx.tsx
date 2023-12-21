@@ -5,6 +5,7 @@ import { CoinbasePage } from './CoinbasePage';
 import { ContractCallPage } from './ContractCall';
 import { PoisonMicroblock } from './PoisonMicroblock';
 import { SmartContractTx } from './SmartContract/SmartContractTx';
+import { TenureChangePage } from './TenureChange';
 import { TokenTransferPage } from './TokenTransfer';
 
 export function Tx({ txId }: { txId: string }) {
@@ -19,6 +20,8 @@ export function Tx({ txId }: { txId: string }) {
   if (tx.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
 
   if (tx.tx_type === 'smart_contract') return <SmartContractTx tx={tx} />;
+
+  if (tx.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
   return null;
 }

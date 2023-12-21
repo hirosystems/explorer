@@ -12,5 +12,7 @@ export const getTransactionTypeLabel = (value: TransactionType) => {
       return 'Contract deploy';
     case 'poison_microblock':
       return 'Poison microblock';
+    case 'tenure_change':
+      return 'Tenure change';
   }
 };

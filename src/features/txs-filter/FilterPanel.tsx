@@ -11,6 +11,7 @@ import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
 import { Badge } from '../../common/components/Badge';
 import { TxTypeTag } from '../../common/components/TxTypeTag';
 import { FilterIcon } from '../../common/components/icons/filter';
+import { useGlobalContext } from '../../common/context/useAppContext';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Grid, GridProps } from '../../ui/Grid';
@@ -95,6 +96,7 @@ const CheckableElement = ({ type, value: toggled, onClick, ...rest }: any) => {
 export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
   const { toggleFilter, toggleFilterVisibility, isVisible, activeFilters } = useFilterState();
   const colorMode = useColorMode().colorMode;
+  const activeNetworkUrl = useGlobalContext().activeNetwork.url;
 
   if (!isVisible) return null;
 
@@ -164,6 +166,16 @@ export const FilterPanel = React.memo(({ showBorder, bg, ...rest }: any) => {
                 data-test={type}
               />
             ))}
+            {activeNetworkUrl === 'https://api.nakamoto-1.hiro.so' ||
+            activeNetworkUrl === 'https://nakaneon.stacks.tel' ? (
+              <CheckableElement
+                onClick={() => toggleFilter('tenure_change')}
+                value={activeFilters['tenure_change']}
+                type={'tenure_change'}
+                key={'tenure_change'}
+                data-test={'tenure_change'}
+              />
+            ) : null}
           </Stack>
         </Flex>
       </Box>
