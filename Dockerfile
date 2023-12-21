@@ -14,6 +14,7 @@ WORKDIR /app
 COPY . .
 
 RUN npm install -g pnpm@8.9.1
+RUN npm install sharp@0.33.1
 RUN pnpm i
 RUN pnpm build
 
