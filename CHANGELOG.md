@@ -1,3 +1,10 @@
+# [1.136.0](https://github.com/hirosystems/explorer/compare/v1.135.5...v1.136.0) (2023-12-21)
+
+
+### Features
+
+* tenure change tx support ([0df8d25](https://github.com/hirosystems/explorer/commit/0df8d2510d1730f27249225eadb8accaa27c2939))
+
 ## [1.135.5](https://github.com/hirosystems/explorer/compare/v1.135.4...v1.135.5) (2023-12-21)
 
 
