@@ -153,7 +153,7 @@ export const AddNetworkForm: FC = () => {
     >
       {({ isValidating }) => (
         <Form>
-          <Stack spacing="16px">
+          <Stack gap={4}>
             <Field name="label">
               {({ field, form }: FieldProps<string, FormValues>) => (
                 <FormControl isInvalid={!!form.errors.label && !!form.touched.label}>
@@ -175,7 +175,9 @@ export const AddNetworkForm: FC = () => {
             <Field name="isSubnet">
               {({ field, form }: FieldProps<string, FormValues>) => (
                 <FormControl isInvalid={!!form.errors.isSubnet && !!form.touched.isSubnet}>
-                  <Checkbox {...field}>This is a subnet</Checkbox>
+                  <Checkbox variant={'outline'} {...field}>
+                    This is a subnet
+                  </Checkbox>
                   <FormErrorMessage>{form.errors.isSubnet}</FormErrorMessage>
                 </FormControl>
               )}
@@ -184,19 +186,17 @@ export const AddNetworkForm: FC = () => {
           <Accordion allowMultiple mt={'16px'}>
             <AccordionItem borderBottom={'none'}>
               {({ isExpanded }) => (
-                <>
-                  <AccordionButton paddingLeft={0}>
+                <Stack gap={4}>
+                  <AccordionButton paddingLeft={0} gap={2}>
                     {isExpanded ? (
                       <Icon as={BsChevronDown} w={3} h={3} />
                     ) : (
                       <Icon as={BsChevronRight} w={3} h={3} />
                     )}{' '}
-                    <Text fontSize={14} position={'relative'} bottom={'1px'} ml={'5px'}>
-                      BTC Explorer URLs
-                    </Text>
+                    <Text fontSize={'sm'}>BTC Explorer URLs</Text>
                   </AccordionButton>
                   <AccordionPanel>
-                    <Stack gap={'10px'}>
+                    <Stack gap={4}>
                       <Field name="btcBlockBaseUrl">
                         {({ field, form }: FieldProps<string, FormValues>) => (
                           <FormControl
@@ -236,7 +236,7 @@ export const AddNetworkForm: FC = () => {
                       </Field>
                     </Stack>
                   </AccordionPanel>
-                </>
+                </Stack>
               )}
             </AccordionItem>
           </Accordion>

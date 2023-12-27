@@ -11,9 +11,5 @@ import { UIComponent } from './types';
 
 export type MenuDividerProps = CUIMenuDividerProps & UIComponent;
 export const MenuDivider = forwardRef<MenuDividerProps, 'hr'>(
-  ({ children, size, ...rest }, ref) => (
-    <CUIMenuDivider borderColor={`border.${useColorMode().colorMode}`} {...rest}>
-      {children}
-    </CUIMenuDivider>
-  )
+  ({ children, size, ...rest }, ref) => <CUIMenuDivider {...rest}>{children}</CUIMenuDivider>
 );

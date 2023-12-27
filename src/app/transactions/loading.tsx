@@ -2,22 +2,19 @@
 
 import React from 'react';
 
-import { ExplorerSkeletonLoader } from '../../common/components/loaders/skeleton-common';
-import { SkeletonTransactionList } from '../../common/components/loaders/skeleton-transaction';
-import { TxListTabs } from '../../common/components/tx-lists/tabs/TxListTabs';
+import { SkeletonTxsList } from '../../features/txs-list/SkeletonTxsList';
+import { TxListTabsBase } from '../../features/txs-list/tabs/TxListTabsBase';
 import { Flex } from '../../ui/Flex';
+import { Skeleton } from '../../ui/Skeleton';
 import { PageTitle } from '../_components/PageTitle';
 
 export default function Loading() {
   return (
     <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>
-        <ExplorerSkeletonLoader width={'400px'} height={'31px'} />
+        <Skeleton width={'400px'} height={'43px'} />
       </PageTitle>
-      <TxListTabs
-        confirmedList={<SkeletonTransactionList />}
-        mempoolList={<SkeletonTransactionList />}
-      />
+      <TxListTabsBase confirmedList={<SkeletonTxsList />} mempoolList={<SkeletonTxsList />} />
     </Flex>
   );
 }

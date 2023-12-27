@@ -1,18 +1,16 @@
-import { useColorMode } from '@chakra-ui/react';
 import React, { FC, ReactNode } from 'react';
-import { BsChevronRight } from 'react-icons/bs';
+import { PiCaretRight } from 'react-icons/pi';
 
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
 export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
-  <Flex height={'50px'} alignItems={'center'}>
+  <Flex height={'50px'} alignItems={'center'} color="black">
     <Text
-      color={`textTitle.${useColorMode().colorMode}`}
       _groupHover={{ textDecoration: 'underline' }}
-      fontWeight={500}
-      fontSize={'13px'}
+      fontWeight={'medium'}
+      fontSize={'xs'}
       textAlign={'left'}
     >
       {children}
@@ -26,7 +24,7 @@ export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
       align={'center'}
       flex={1}
     >
-      <Icon w={3} h={3} as={BsChevronRight} color={`textCaption.${useColorMode().colorMode}`} />
+      <Icon w={3} h={3} as={PiCaretRight} />
     </Flex>
   </Flex>
 );

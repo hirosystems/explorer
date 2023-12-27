@@ -13,6 +13,7 @@ import { Box } from '../ui/Box';
 import { Button } from '../ui/Button';
 import { ButtonLink } from '../ui/ButtonLink';
 import { Grid } from '../ui/Grid';
+import { HStack } from '../ui/HStack';
 import { Stack } from '../ui/Stack';
 import { PageTitle } from './_components/PageTitle';
 
@@ -42,7 +43,7 @@ export default function Error({
               title={errorName}
               message={errorMessage}
               action={
-                <Stack isInline spacing="16px">
+                <HStack gap={4}>
                   <Box>
                     <ButtonLink href={buildUrl('/', network)} mt="24px">
                       Go home
@@ -53,7 +54,7 @@ export default function Error({
                       Try again
                     </Button>
                   </Box>
-                </Stack>
+                </HStack>
               }
             />
           </Box>

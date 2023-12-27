@@ -1,11 +1,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { FC } from 'react';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { Card } from '../../../common/components/Card';
+import { FlexProps } from '../../../ui/Flex';
 import { SkeletonStatSection } from './SkeletonStatSection';
 import { Wrapper } from './Wrapper';
 
@@ -35,15 +34,18 @@ export const NextStackingCycle = dynamic(
   }
 );
 
-export const Stats: FC = () => {
+export function Stats(props: FlexProps) {
   return (
     <ErrorBoundary fallbackRender={() => null}>
-      <Wrapper>
-        <StxSupply borderRightWidth={['0px', '0px', '1px', '1px']} />
-        <LastBlock borderRightWidth={['0px', '0px', '0px', '1px']} />
-        <CurrentStackingCycle borderRightWidth={['0px', '0px', '1px', '1px']} />
+      <Wrapper {...props}>
+        <StxSupply borderRightWidth={['0px', '0px', '1px', '1px']} borderColor={'border'} />
+        <LastBlock borderRightWidth={['0px', '0px', '0px', '1px']} borderColor={'border'} />
+        <CurrentStackingCycle
+          borderRightWidth={['0px', '0px', '1px', '1px']}
+          borderColor={'border'}
+        />
         <NextStackingCycle />
       </Wrapper>
     </ErrorBoundary>
   );
-};
+}

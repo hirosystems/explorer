@@ -17,7 +17,6 @@ export const ListItem = forwardRef<ListItemProps, 'li'>(({ children, size, ...re
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

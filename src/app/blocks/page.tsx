@@ -16,10 +16,10 @@ const BlocksList = dynamic(() => import('../_components/BlockList').then(mod => 
 
 const BlocksPage: NextPage = () => {
   return (
-    <Flex direction={'column'} mt="32px" gap="32px">
+    <>
       <PageTitle>Blocks</PageTitle>
       <BlocksList />
-    </Flex>
+    </>
   );
 };
 

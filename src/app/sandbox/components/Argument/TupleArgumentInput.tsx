@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { ClarityAbiTypeTuple, getTypeString, isClarityAbiOptional } from '@stacks/transactions';
 
 import { Box } from '../../../../ui/Box';
+import { HStack } from '../../../../ui/HStack';
 import { Input } from '../../../../ui/Input';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
@@ -21,14 +22,13 @@ export const TupleArgumentInput: FC<
   const tupleType = isOptional ? (type.optional as ClarityAbiTypeTuple) : type;
   return (
     <Box>
-      <Stack id={name} isInline spacing="16px" width="100%">
+      <HStack id={name} gap={4} width="100%">
         {tuple.map((tupleEntry, i) => (
           <Box flexGrow={1} key={tupleEntry.name}>
             <Text
               fontSize="12px"
               fontWeight="500"
               display="block"
-              color={'textCaption'}
               as={'label'}
               htmlFor={name}
               mb="8px"
@@ -50,7 +50,7 @@ export const TupleArgumentInput: FC<
             </Box>
           </Box>
         ))}
-      </Stack>
+      </HStack>
     </Box>
   );
 };

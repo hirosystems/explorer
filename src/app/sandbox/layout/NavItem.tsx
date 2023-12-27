@@ -1,8 +1,7 @@
-import { useColorMode } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Link } from '@chakra-ui/next-js';
+import { useColorModeValue } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
-import { Grid } from '../../../ui/Grid';
 import { Tooltip } from '../../../ui/Tooltip';
 
 export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean; url: string }> = ({
@@ -11,25 +10,26 @@ export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean;
   isSelected,
   url,
 }) => {
-  const colorMode = useColorMode().colorMode;
+  const selectedBg = useColorModeValue(`slate.150`, `slate.800`);
+  const hoverBg = useColorModeValue(`slate.100`, `slate.900`);
+  const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
     <Tooltip placement="left" label={label} key={url}>
-      <Link href={url} passHref style={{ margin: '0' }}>
-        <Grid
-          bg={isSelected ? `block.${colorMode}` : `bg.${colorMode}`}
-          borderBottomWidth="1px"
-          borderRightWidth="1px"
-          size="72px"
-          placeItems="center"
-          justifyContent="center"
-          color={`textTitle.${colorMode}`}
-          _hover={{
-            cursor: 'pointer',
-            bg: `block.${colorMode}`,
-          }}
-        >
-          {icon}
-        </Grid>
+      <Link
+        href={url}
+        display={'flex'}
+        bg={isSelected ? selectedBg : undefined}
+        borderBottom="1px"
+        borderColor={borderColor}
+        width={16}
+        height={16}
+        alignItems="center"
+        justifyContent="center"
+        _hover={{
+          bg: hoverBg,
+        }}
+      >
+        {icon}
       </Link>
     </Tooltip>
   );

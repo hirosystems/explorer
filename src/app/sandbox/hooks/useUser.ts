@@ -48,7 +48,7 @@ export function useUser() {
 
   const transactionsWithTransfers =
     useInfiniteQueryResult<AddressTransactionWithTransfers>(confirmedTxsResponse);
-  const transactions = useMemo(
+  const txs = useMemo(
     () => transactionsWithTransfers.map(tx => tx.tx),
     [transactionsWithTransfers]
   );
@@ -58,13 +58,13 @@ export function useUser() {
     isConnected,
     userData,
     stxAddress,
-    transactions,
+    txs,
     mempoolTransactions,
     balance,
     userSession,
     refetchTransactions: confirmedTxsResponse.refetch,
     refetchMempoolTransactions: mempoolTxsResponse.refetch,
-    hasTransactions: !!transactions.length || !!mempoolTransactions.length,
+    hasTransactions: !!txs.length || !!mempoolTransactions.length,
     connect: (authOptions?: Partial<AuthOptions>) =>
       dispatch(connect({ activeNetworkMode: activeNetworkMode, authOptions: authOptions })),
     disconnect: () => dispatch(disconnect()),

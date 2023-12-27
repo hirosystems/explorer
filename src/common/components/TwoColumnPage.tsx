@@ -11,22 +11,12 @@ export const TwoColumnPage: React.FC<{
   rightContent: ReactNode;
 }> = ({ title, leftContent, rightContent }) => {
   return (
-    <Flex direction={'column'} mt="32px" gap="32px">
+    <>
       {title}
-      <Grid
-        gridColumnGap="32px"
-        gridTemplateColumns={[
-          '100%',
-          '100%',
-          rightContent ? 'repeat(1, calc(100% - 352px) 320px)' : '100%',
-        ]}
-        gridRowGap={['32px', '32px', 'unset']}
-        maxWidth="100%"
-        alignItems="flex-start"
-      >
-        <Stack spacing="32px">{leftContent}</Stack>
-        {rightContent && <Stack spacing="32px">{rightContent}</Stack>}
+      <Grid gap={7} gridTemplateColumns={['100%', '100%', 'minmax(0, 1fr) 320px']}>
+        <Stack gap={7}>{leftContent}</Stack>
+        <Stack gap={7}>{rightContent}</Stack>
       </Grid>
-    </Flex>
+    </>
   );
 };

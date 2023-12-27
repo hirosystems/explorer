@@ -1,11 +1,11 @@
 'use client';
 
 import { useColorMode } from '@chakra-ui/react';
-import { css } from '@emotion/react';
+import * as React from 'react';
 import { FC, Fragment } from 'react';
-import { HiOutlineArrowSmRight } from 'react-icons/hi';
+import { PiArrowRightLight } from 'react-icons/pi';
 
-import { Box } from '../../ui/Box';
+import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Text } from '../../ui/Text';
 import { TextLink } from '../../ui/TextLink';
@@ -21,45 +21,6 @@ interface BtcStxBlockLinksProps {
   fontSize?: string;
 }
 
-const wrapperStyle = css`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
-const iconStyle = css`
-  position: relative;
-  margin-right: 3px;
-  border-radius: 18px;
-  svg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-`;
-
-const linkStyle = (secondary?: boolean, clickable?: boolean, fontSize?: string) => css`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-  text-decoration: none;
-  ${fontSize ? `font-size: ${fontSize};` : 'font-size: 14px;'}
-  ${clickable &&
-  `
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  `}
-  ${secondary &&
-  `
-    color: #747478;
-    font-size: 12px;
-  `}
-`;
-
 export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
   btcBlockHeight,
   stxBlockHeight,
@@ -69,37 +30,27 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
   const { btcBlockBaseUrl } = useGlobalContext().activeNetwork;
 
   return (
-    <Box css={wrapperStyle}>
-      <Circle size={18} backgroundColor={`accent.light`} css={iconStyle}>
-        <StxIcon strokeWidth={2} size="11px" color="white" />
+    <Flex flexWrap={'wrap'} alignItems={'center'} gap={1.5}>
+      <Circle size={4.5} bg="purple.600">
+        <Icon as={StxIcon} size={2.5} color="white" />
       </Circle>
-      <BlockLink hash={stxBlockHash}>
-        <Text
-          fontWeight={500}
-          fontSize={'15px'}
-          as={'a'}
-          color={`links.${useColorMode().colorMode}`}
-          _hover={{
-            cursor: 'pointer',
-            textDecoration: 'underline',
-          }}
-        >
-          #{stxBlockHeight}
-        </Text>
+      <BlockLink hash={stxBlockHash} fontWeight={'medium'} fontSize={'sm'}>
+        #{stxBlockHeight}
       </BlockLink>
       {btcBlockHeight && (
         <Fragment>
-          <Icon as={HiOutlineArrowSmRight} size="14px" color={'#747478'} m={'0 2px'} />
-          <Icon as={BitcoinIcon} color={'#f7931a'} size={19} css={iconStyle} />
+          <Icon as={PiArrowRightLight} size={4} color={'slate.700'} />
+          <Icon as={BitcoinIcon} size={4.5} />
           <TextLink
-            css={linkStyle(true, true, fontSize)}
             href={`${btcBlockBaseUrl}/${btcBlockHeight}`}
             target="_blank"
+            fontSize={'sm'}
+            color={'secondaryText'}
           >
             #{btcBlockHeight}
           </TextLink>
         </Fragment>
       )}
-    </Box>
+    </Flex>
   );
 };

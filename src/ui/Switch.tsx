@@ -17,7 +17,6 @@ export const Switch = forwardRef<SwitchProps, 'div'>(({ children, size, ...rest 
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     position={'relative'}
     top={'1px'}
     {...rest}

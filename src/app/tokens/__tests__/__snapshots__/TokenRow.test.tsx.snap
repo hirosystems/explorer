@@ -2,16 +2,16 @@
 
 exports[`TokenRow renders correctly 1`] = `
 <table
-  className="chakra-table css-1dupj0l"
+  className="chakra-table css-0"
 >
   <tr
-    className="css-1dupj0l"
+    className="css-0"
   >
     <td
-      className="css-xbj9s6"
+      className="css-15d3wjr"
     >
       <div
-        className="css-fj90sq"
+        className="css-axw7ok"
       >
         <img
           alt="TT"
@@ -32,11 +32,8 @@ exports[`TokenRow renders correctly 1`] = `
           width={36}
         />
         <a
-          className="chakra-text css-1pdvkva"
+          className="chakra-link css-hygcjl"
           href="/token/0x5678?chain=mainnet"
-          onClick={[Function]}
-          onMouseEnter={[Function]}
-          onTouchStart={[Function]}
         >
           TestToken
            
@@ -45,27 +42,25 @@ exports[`TokenRow renders correctly 1`] = `
       </div>
     </td>
     <td
-      className="css-1hpakfx"
+      className="css-55yph6"
     >
       <span
-        className="chakra-text css-1s346xd"
+        className="chakra-text css-q62vf"
       >
         <a
+          className="chakra-link css-0"
           href="/txid/0x1234?chain=mainnet"
-          onClick={[Function]}
-          onMouseEnter={[Function]}
-          onTouchStart={[Function]}
         >
           0x1234
         </a>
       </span>
     </td>
     <td
-      className="css-oz02zu"
+      className="css-1ttiw4m"
       data-is-numeric={true}
     >
       <span
-        className="chakra-text css-1tlynor"
+        className="chakra-text css-ae4fie"
       >
         1.00M
       </span>

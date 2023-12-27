@@ -2,6 +2,7 @@
 
 import { useColorMode } from '@chakra-ui/react';
 import React, { FC, Fragment } from 'react';
+import { IconType } from 'react-icons';
 import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
 
 import {
@@ -11,11 +12,11 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 import { deserialize, prettyPrint } from '@stacks/transactions/dist/cl';
 
+import { Circle } from '../../../common/components/Circle';
 import { AddressLink } from '../../../common/components/ExplorerLinks';
-import { ListItem } from '../../../common/components/ListItem';
 import { Section } from '../../../common/components/Section';
+import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { Pending } from '../../../common/components/status';
-import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { useFtMetadata } from '../../../common/queries/useFtMetadata';
 import { useTxEventsByIdInfinite } from '../../../common/queries/useTxEventsByIdInfinite';
 import {
@@ -27,10 +28,10 @@ import {
   truncateMiddle,
 } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
-import { Circle } from '../../../ui/Circle';
 import { Flex } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
-import { Stack } from '../../../ui/Stack';
+import { HStack } from '../../../ui/HStack';
+import { Icon } from '../../../ui/Icon';
 import { StxIcon } from '../../../ui/icons';
 import { Caption } from '../../../ui/typography';
 import { SenderRecipient } from './SenderRecipient';
@@ -51,7 +52,7 @@ export const getTicker = (name: string) => {
   }
 };
 
-const getIcon = (type: TransactionEventAssetType) => {
+const getIcon = (type: string) => {
   switch (type) {
     case 'burn':
       return TbTrash;
@@ -59,6 +60,8 @@ const getIcon = (type: TransactionEventAssetType) => {
       return TbPlus;
     case 'transfer':
       return TbArrowRight;
+    default:
+      return null;
   }
 };
 
@@ -80,74 +83,17 @@ const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) =>
   );
 };
 
-export const ItemIcon = React.memo(({ event }: { event: TransactionEvent }) => {
-  const type = event.event_type;
-  const colorMode = useColorMode().colorMode;
-  const name =
+function getEventIcon(event: TransactionEvent) {
+  if (event.event_type === 'smart_contract_log') return TbAlignLeft;
+
+  if (
     event.event_type === 'fungible_token_asset' ||
-    event.event_type === 'non_fungible_token_asset' ||
-    event.event_type === 'stx_asset'
-      ? event.asset.asset_id
-      : undefined;
+    event.event_type === 'non_fungible_token_asset'
+  )
+    return getIcon(event.asset.asset_event_type);
 
-  const assetEventType =
-    event.event_type === 'fungible_token_asset' ||
-    event.event_type === 'non_fungible_token_asset' ||
-    event.event_type === 'stx_asset'
-      ? event.asset.asset_event_type
-      : undefined;
-
-  switch (type) {
-    case 'smart_contract_log':
-      return (
-        <Grid
-          bg={'bg'}
-          borderWidth="1px"
-          color={'textBody'}
-          size="48px"
-          placeItems="center"
-          borderRadius="12px"
-          boxShadow="mid"
-          flexShrink={0}
-        >
-          <TbAlignLeft strokeWidth="2" size="16px" />
-        </Grid>
-      );
-    case 'fungible_token_asset':
-      return name ? (
-        <Circle flexShrink={0} textTransform="uppercase" size="48px" position="relative">
-          {assetEventType ? (
-            <AssetEventTypeBubble type={assetEventType as TransactionEventAssetType} />
-          ) : null}
-          {getAssetNameParts(name).asset[0]}
-        </Circle>
-      ) : null;
-
-    case 'non_fungible_token_asset':
-      return name ? (
-        <Circle flexShrink={0} textTransform="uppercase" size="48px" position="relative">
-          {assetEventType ? (
-            <AssetEventTypeBubble type={assetEventType as TransactionEventAssetType} />
-          ) : null}
-          {getAssetNameParts(name).asset[0]}
-        </Circle>
-      ) : null;
-
-    default:
-      return (
-        <Grid
-          flexShrink={0}
-          bg={`accent.${colorMode}`}
-          mr="8px"
-          size="48px"
-          placeItems="center"
-          borderRadius="48px"
-        >
-          <StxIcon size="22px" />
-        </Grid>
-      );
-  }
-});
+  return StxIcon;
+}
 
 const getAssetAmounts = (event: TransactionEvent) => {
   switch (event.event_type) {
@@ -282,40 +228,43 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
   });
 
   return (
-    <ListItem
-      icon={<ItemIcon event={event} />}
-      title={name}
-      subTitle={
-        <>
-          <Stack
-            flexWrap="wrap"
-            alignItems="center"
-            gap="4px"
-            isInline
-            divider={<Caption>∙</Caption>}
-          >
-            {assetEventType ? <Caption fontWeight="bold">{assetEventType}</Caption> : null}
-            {assetAmounts && (
-              <Caption>
-                {ftMetadata
-                  ? ftDecimals((event as any).asset.amount, ftMetadata?.decimals || 0)
-                  : assetAmounts}{' '}
-                {assetId &&
-                  (ftMetadata?.symbol || getTicker(getAssetNameParts(assetId).asset).toUpperCase())}
-              </Caption>
-            )}
-            {participants && participants}
-            {tokenType && <Caption>{tokenType}</Caption>}
-          </Stack>
-          {memo && (
-            <Stack flexWrap="nowrap" spacing="4px" isInline divider={<Caption>∙</Caption>}>
-              <Caption fontWeight="bold">Memo</Caption>
-              <Caption wordBreak={'break-all'}>{memo}</Caption>
-            </Stack>
-          )}
-        </>
+    <TwoColsListItem
+      icon={
+        <Circle size={10}>
+          <Icon as={getEventIcon(event)} size={4} />
+        </Circle>
       }
-      rightItem={event.event_index}
+      leftContent={{
+        title: name,
+        subtitle: (
+          <>
+            <HStack flexWrap="wrap" alignItems="center" gap={1} divider={<Caption>∙</Caption>}>
+              {assetEventType ? <Caption fontWeight={'semibold'}>{assetEventType}</Caption> : null}
+              {assetAmounts && (
+                <Caption>
+                  {ftMetadata
+                    ? ftDecimals((event as any).asset.amount, ftMetadata?.decimals || 0)
+                    : assetAmounts}{' '}
+                  {assetId &&
+                    (ftMetadata?.symbol ||
+                      getTicker(getAssetNameParts(assetId).asset).toUpperCase())}
+                </Caption>
+              )}
+              {participants && participants}
+              {tokenType && <Caption>{tokenType}</Caption>}
+            </HStack>
+            {memo && (
+              <HStack flexWrap="nowrap" gap={1} divider={<Caption>∙</Caption>}>
+                <Caption fontWeight={'semibold'}>Memo</Caption>
+                <Caption textOverflow={'ellipsis'} overflow={'hidden'} whiteSpace={'nowrap'}>
+                  {memo}
+                </Caption>
+              </HStack>
+            )}
+          </>
+        ),
+      }}
+      rightContent={{ title: event.event_index }}
     />
   );
 };
@@ -333,7 +282,7 @@ export const Events: FC<EventsProps> = ({ tx }) => {
 
   return (
     <Section title="Events">
-      <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
+      <>
         {tx.events.map((event, index) => (
           <Item key={index} event={event} />
         ))}
@@ -342,7 +291,7 @@ export const Events: FC<EventsProps> = ({ tx }) => {
             {page?.results.map((event, index) => <Item key={index} event={event} />)}
           </Fragment>
         ))}
-      </Box>
+      </>
       {(actions.isFetchingNextPage || actions.hasNextPage) && (
         <Box
           as="a"
@@ -351,7 +300,6 @@ export const Events: FC<EventsProps> = ({ tx }) => {
           py="16px"
           _hover={{ color: 'textTitle', cursor: 'pointer' }}
           onClick={() => actions.hasNextPage && actions.fetchNextPage()}
-          color={'textCaption'}
         >
           {actions.isFetchingNextPage ? (
             <Flex alignItems="center" justifyContent="center">

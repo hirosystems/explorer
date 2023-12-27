@@ -11,7 +11,7 @@ export const PluralizedCaption: React.FC<TextProps & { array?: any[]; label: str
   label,
   ...rest
 }) => (
-  <Caption color={'textBody'} fontSize="14px" {...rest}>
+  <Caption fontSize="14px" {...rest}>
     {array?.length || 0} {pluralize(label, array?.length || 0)}
   </Caption>
 );

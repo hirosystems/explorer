@@ -1,16 +1,38 @@
-import { FC } from 'react';
 import * as React from 'react';
+import { FC } from 'react';
 
-import { ExplorerSkeletonLoader } from '../../../common/components/loaders/skeleton-common';
+import { Box } from '../../../ui/Box';
 import { GridProps } from '../../../ui/Grid';
+import { Skeleton } from '../../../ui/Skeleton';
+import { SkeletonText } from '../../../ui/SkeletonText';
+import { Text } from '../../../ui/Text';
 import { StatSection } from './StatSection';
 
 export const SkeletonStatSection: FC<GridProps> = props => (
   <StatSection
-    title={<ExplorerSkeletonLoader width={'75%'} />}
-    bodyMainText={<ExplorerSkeletonLoader width={'80px'} />}
-    bodySecondaryText={<ExplorerSkeletonLoader width={'60px'} />}
-    caption={<ExplorerSkeletonLoader width={'90%'} />}
+    title={
+      <Skeleton height={'full'} width={'75%'}>
+        <Text fontSize={'xs'} width={24}>
+          -
+        </Text>
+      </Skeleton>
+    }
+    bodyMainText={
+      <Skeleton>
+        <Text fontSize={'xl'} width={24}>
+          -
+        </Text>
+      </Skeleton>
+    }
+    bodySecondaryText={null}
+    caption={
+      <Skeleton height={'full'} width={'90%'}>
+        <Text fontSize={'xs'} width={24}>
+          -
+        </Text>
+      </Skeleton>
+    }
+    borderColor={'border'}
     {...props}
   />
 );

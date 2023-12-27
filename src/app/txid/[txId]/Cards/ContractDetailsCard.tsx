@@ -5,12 +5,12 @@ import { BsCodeSlash } from 'react-icons/bs';
 import { MdOutlineChecklistRtl } from 'react-icons/md';
 import { RxTokens } from 'react-icons/rx';
 
+import { Circle } from '../../../../common/components/Circle';
 import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../common/components/Section';
 import { useSuspenseContractById } from '../../../../common/queries/useContractById';
 import { getContractName, truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Circle } from '../../../../ui/Circle';
 import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
@@ -25,7 +25,7 @@ const PluralizedItem: React.FC<TextProps & { array: any[]; label: string }> = ({
   label,
   ...rest
 }) => (
-  <Text color={'textBody'} fontSize="14px" {...rest}>
+  <Text fontSize="14px" {...rest}>
     {array.length} {pluralize(label, array.length)}
   </Text>
 );
@@ -53,28 +53,28 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
             </Box>
           </Flex>
         </Flex>
-        <Stack spacing="8px" py="16px">
+        <Stack gap={2} py="16px">
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <FunctionIcon color={'textCaption'} size="20px" />
+              <FunctionIcon size="20px" />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.functions || []} label="function" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <BiAtom color={'textCaption'} size="20px" />
+              <BiAtom size="20px" />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.variables || []} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <MdOutlineChecklistRtl color={'textCaption'} size="20px" />
+              <MdOutlineChecklistRtl size="20px" />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.maps || []} label="map" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <RxTokens color={'textCaption'} size="20px" />
+              <RxTokens size="20px" />
             </Box>
             <PluralizedItem
               ml="8px"
@@ -87,20 +87,12 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
           </Flex>
         </Stack>
         <Grid borderTopWidth="1px" placeItems="center" py="16px">
-          <TxLink txId={contractId}>
-            <Flex
-              as="a"
-              target="_blank"
-              color={'accent'}
-              textDecoration="none"
-              _hover={{ textDecoration: 'underline' }}
-              alignItems="center"
-              gap={'8px'}
-            >
+          <TxLink txId={contractId} target="_blank" color={'accent'}>
+            <Flex alignItems="center" gap={'8px'}>
               <Caption transform="translateY(1px)" color="currentColor">
                 View deployment
               </Caption>
-              <BiLinkExternal color={'textCaption'} size="16px" />
+              <BiLinkExternal size="16px" />
             </Flex>
           </TxLink>
         </Grid>

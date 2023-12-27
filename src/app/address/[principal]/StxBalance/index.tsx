@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Fragment } from 'react';
 import { TbQrcode, TbX } from 'react-icons/tb';
 
+import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { openModal } from '../../../../common/components/modals/modal-slice';
 import { MODALS } from '../../../../common/constants/constants';
@@ -11,9 +12,11 @@ import { useAppDispatch } from '../../../../common/state/hooks';
 import { hasStxBalance } from '../../../../common/utils/accounts';
 import { microToStacks } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Circle } from '../../../../ui/Circle';
+import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
+import { HStack } from '../../../../ui/HStack';
+import { Icon } from '../../../../ui/Icon';
 import { IconButton } from '../../../../ui/IconButton';
 import { Stack } from '../../../../ui/Stack';
 import { Tooltip } from '../../../../ui/Tooltip';
@@ -72,85 +75,62 @@ function StxBalanceBase({ address }: StxBalanceProps) {
   return (
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
-        <>
-          <Box px="20px">
-            <Flex
-              borderBottom={isStacking || !!tokenOfferingData ? '1px solid' : 'unset'}
-              alignItems="flex-start"
-              py="24px"
-            >
-              <Circle bg={`brand.${colorMode}`} mr="16px" size="36px">
-                <StxIcon color="white" size="16px" />
-              </Circle>
-              <Stack spacing="8px" pr="16px">
-                <BalanceItem fontWeight="500" color={'textTitle'} balance={totalBalance} />
-                <Caption>Total balance</Caption>
-              </Stack>
-            </Flex>
-          </Box>
+        <Stack
+          sx={{
+            '& > *:not(:last-child)': {
+              borderBottom: '1px',
+            },
+          }}
+        >
+          <HStack gap={4} py={4}>
+            <Circle bg={'brand'} size={10}>
+              <Icon as={StxIcon} size={4} color="white" />
+            </Circle>
+            <Stack gap={2}>
+              <Caption>Total balance</Caption>
+              <BalanceItem balance={totalBalance} />
+            </Stack>
+          </HStack>
           {isStacking || !!tokenOfferingData ? (
-            <Box px="20px">
-              <Stack
-                borderBottom={
-                  isStacking || minerRewards > 0 || !!tokenOfferingData ? '1px solid' : 'unset'
-                }
-                spacing="8px"
-                py="24px"
-              >
-                <Caption>Available</Caption>
-                <BalanceItem color={'textTitle'} balance={availableBalance} />
-              </Stack>
-            </Box>
+            <Stack gap={2} py={4}>
+              <Caption>Available</Caption>
+              <BalanceItem balance={availableBalance} />
+            </Stack>
           ) : null}
           {minerRewards > 0 ? (
-            <>
-              <Box px="20px">
-                <Stack
-                  borderBottom={!!tokenOfferingData ? '1px solid' : 'unset'}
-                  spacing="8px"
-                  py="24px"
-                >
-                  <Caption>Miner rewards</Caption>
-                  <BalanceItem color={'textTitle'} balance={minerRewardsBalance} />
-                </Stack>
-              </Box>
-            </>
+            <Stack gap={2} py={4}>
+              <Caption>Miner rewards</Caption>
+              <BalanceItem balance={minerRewardsBalance} />
+            </Stack>
           ) : null}
           {!!tokenOfferingData ? (
-            <Box px="20px">
-              <Stack borderBottom={isStacking ? '1px solid' : undefined} spacing="8px" py="24px">
-                <Caption>Locked</Caption>
-                <Flex alignItems="baseline" justifyContent="space-between">
-                  <BalanceItem
-                    color={'textTitle'}
-                    balance={microToStacks(tokenOfferingData.total_locked)}
-                  />
-                  <Box
-                    onClick={() => dispatch(openModal(MODALS.UNLOCKING_SCHEDULE))}
-                    fontSize={1}
-                    _hover={{
-                      cursor: 'pointer',
-                    }}
-                    color={'brand'}
-                  >
-                    View schedule
-                  </Box>
-                </Flex>
-              </Stack>
-            </Box>
+            <Stack gap={2} py={4}>
+              <Caption>Locked</Caption>
+              <BalanceItem balance={microToStacks(tokenOfferingData.total_locked)} />
+              <Button
+                onClick={() => dispatch(openModal(MODALS.UNLOCKING_SCHEDULE))}
+                variant={'secondary'}
+              >
+                View schedule
+              </Button>
+            </Stack>
           ) : null}
           {isStacking ? (
-            <>
-              <Box px="20px">
-                <Stack borderBottomWidth="1px" spacing="8px" py="24px">
-                  <Caption>Stacked amount (locked)</Caption>
-                  <BalanceItem color={'textTitle'} balance={stackedBalance} />
-                </Stack>
-                <StackingPercentage balance={balance} address={address} />
-              </Box>
-            </>
+            <Box
+              sx={{
+                '& > *:not(:last-child)': {
+                  borderBottom: '1px',
+                },
+              }}
+            >
+              <Stack gap={2} py={4}>
+                <Caption>Stacked amount (locked)</Caption>
+                <BalanceItem balance={stackedBalance} />
+              </Stack>
+              <StackingPercentage balance={balance} address={address} />
+            </Box>
           ) : null}
-        </>
+        </Stack>
       ) : (
         <Grid placeItems="center" pt="32px" pb="24px" width="100%">
           <QRcode address={address} />

@@ -3,11 +3,13 @@
 import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
 import { HiOutlineArrowSmRight } from 'react-icons/hi';
+import { PiArrowRightLight } from 'react-icons/pi';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { BoxProps } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
+import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
 import { Stack } from '../../ui/Stack';
 import { Tooltip } from '../../ui/Tooltip';
@@ -49,7 +51,6 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
   <Flex display="inline-flex" position={'relative'} as="span" {...rest}>
     <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
       <Caption
-        as={'a'}
         color={`links.${useColorMode().colorMode}`}
         _hover={{
           cursor: 'pointer',
@@ -64,35 +65,31 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
 );
 
 export const AddressArea = React.memo(
-  ({
-    tx,
-    principal,
-    ...rest
-  }: { tx: Transaction | MempoolTransaction; principal?: string } & FlexProps) => {
+  ({ tx, principal }: { tx: Transaction | MempoolTransaction; principal?: string } & FlexProps) => {
     if (tx.tx_type === 'token_transfer') {
       if (tx.sender_address === principal) {
         return (
-          <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
+          <HStack flexWrap="wrap">
             <Caption display={['none', 'none', 'none', 'block']}>Sent to</Caption>
             <PrincipalLink principal={tx.token_transfer.recipient_address} />
-          </Stack>
+          </HStack>
         );
       } else if (tx.token_transfer.recipient_address === principal) {
         return (
-          <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
+          <HStack flexWrap="wrap">
             <Caption display={['none', 'none', 'none', 'block']}>Received from</Caption>
             <PrincipalLink principal={tx.sender_address} />
-          </Stack>
+          </HStack>
         );
       }
       return (
-        <Stack flexWrap="wrap" isInline {...({ as: 'span', ...rest } as any)}>
+        <HStack flexWrap="wrap">
           <PrincipalLink principal={tx.sender_address} />
-          <Flex as="span" color={'textCaption'}>
-            <Icon as={HiOutlineArrowSmRight} strokeWidth="1.5" size="15px" />
+          <Flex as="span">
+            <Icon as={PiArrowRightLight} size={3} />
           </Flex>
           <PrincipalLink principal={tx.token_transfer.recipient_address} />
-        </Stack>
+        </HStack>
       );
     }
     if (tx.tx_type === 'contract_call') {
@@ -128,20 +125,11 @@ export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransac
     const { tx } = props;
     const date = getRelativeTimestamp(tx);
 
-    return (
-      <Text fontSize="14px" textAlign="right" color={'textBody'} suppressHydrationWarning>
-        {date}
-      </Text>
-    );
+    return <>{date}</>;
   });
 
 export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
-  <>
-    {'·'}
-    <Tooltip label="Nonce">
-      <Caption as="span" text-align="right" ml="6px">
-        {nonce.toString() + 'n'}
-      </Caption>
-    </Tooltip>
-  </>
+  <Tooltip label="Nonce">
+    <Caption as="span">{nonce.toString() + 'n'}</Caption>
+  </Tooltip>
 ));

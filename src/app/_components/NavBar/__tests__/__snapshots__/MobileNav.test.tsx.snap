@@ -3,147 +3,119 @@
 exports[`MobileNav should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="chakra-stack css-4xpai1"
+    class="chakra-stack css-1kyhbj8"
   >
     <div
-      class="css-sw0q0z"
+      class="css-gg4vpm"
     >
       <button
         aria-label="Change color mode"
-        class="chakra-button css-wulgol"
+        class="chakra-button css-1fthbo8"
         title="Toggle color mode"
         type="button"
       >
         <svg
           aria-hidden="true"
-          fill="none"
+          fill="currentColor"
           focusable="false"
           height="1em"
           stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
+          stroke-width="0"
+          viewBox="0 0 256 256"
           width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M0 0h24v24H0z"
-            fill="none"
-            stroke="none"
-          />
-          <path
-            d="M3 3l18 18"
-          />
-          <path
-            d="M16 12a4 4 0 0 0 -4 -4m-2.834 1.177a4 4 0 0 0 5.66 5.654"
-          />
-          <path
-            d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"
+            d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"
           />
         </svg>
       </button>
       <button
         aria-label="Close menu"
-        class="chakra-button css-11sr1fv"
+        class="chakra-button css-12w4gwb"
         type="button"
       >
         <svg
           aria-hidden="true"
-          fill="none"
+          fill="currentColor"
           focusable="false"
-          height="32px"
+          height="1em"
           stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          width="32px"
+          stroke-width="0"
+          viewBox="0 0 256 256"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
-            d="M0 0h24v24H0z"
-            fill="none"
-            stroke="none"
-          />
-          <path
-            d="M18 6l-12 12"
-          />
-          <path
-            d="M6 6l12 12"
+            d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"
           />
         </svg>
       </button>
     </div>
     <div
-      class="css-xar605"
+      class="chakra-stack css-1q7sb2n"
     >
-      <div
-        class="chakra-stack css-bi0nzx"
+      <a
+        class="css-tz7dko"
+        href="#"
       >
-        <a
-          class="css-3xyie7"
-          href="#"
+        <span
+          class="chakra-text css-13o7eu2"
         >
-          <span
-            class="chakra-text css-pjr8e0"
-          >
-            Mobile Sample Item 1
-          </span>
-          <svg
-            class="chakra-icon css-3tv48m"
-            fill="currentColor"
-            focusable="false"
-            height="1em"
-            stroke="currentColor"
-            stroke-width="0"
-            viewBox="0 0 16 16"
-            width="1em"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-              fill-rule="evenodd"
-            />
-          </svg>
-        </a>
+          Mobile Sample Item 1
+        </span>
+        <svg
+          class="chakra-icon css-3tv48m"
+          fill="currentColor"
+          focusable="false"
+          height="1em"
+          stroke="currentColor"
+          stroke-width="0"
+          viewBox="0 0 256 256"
+          width="1em"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"
+          />
+        </svg>
+      </a>
+      <div
+        class="chakra-collapse"
+        style="overflow: hidden; display: none; opacity: 0; height: 0px;"
+      >
         <div
-          class="chakra-collapse"
-          style="overflow: hidden; display: none; opacity: 0; height: 0px;"
+          class="chakra-stack css-1s2q0he"
         >
-          <div
-            class="chakra-stack css-k96o6u"
+          <a
+            class="css-1ak55br"
+            href="#"
           >
-            <a
-              class="css-9sazr8"
-              href="#"
-            >
-              Mobile Sub Item 1
-            </a>
-          </div>
+            Mobile Sub Item 1
+          </a>
         </div>
       </div>
-      <div
-        class="chakra-stack css-bi0nzx"
+    </div>
+    <div
+      class="chakra-stack css-1q7sb2n"
+    >
+      <a
+        class="css-tz7dko"
+        href="#"
       >
-        <a
-          class="css-3xyie7"
-          href="#"
+        <span
+          class="chakra-text css-13o7eu2"
         >
-          <span
-            class="chakra-text css-pjr8e0"
-          >
-            Mobile Sample Item 2
-          </span>
-        </a>
+          Mobile Sample Item 2
+        </span>
+      </a>
+      <div
+        class="chakra-collapse"
+        style="overflow: hidden; display: none; opacity: 0; height: 0px;"
+      >
         <div
-          class="chakra-collapse"
-          style="overflow: hidden; display: none; opacity: 0; height: 0px;"
-        >
-          <div
-            class="chakra-stack css-k96o6u"
-          />
-        </div>
+          class="chakra-stack css-1s2q0he"
+        />
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@ import { TransactionStatus } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
-import { Alert } from './Alert';
+import { AlertBase } from './Alert';
 
 interface TxAlertsBaseProps {
   tx: Transaction | MempoolTransaction;
@@ -40,30 +40,9 @@ function TxAlertsBase({ tx }: TxAlertsBaseProps) {
 
   return (
     <>
-      {isFailed ? (
-        <Alert
-          error={{
-            name: 'Notice',
-            message: failedMessage,
-          }}
-        />
-      ) : null}
-      {isLongPending ? (
-        <Alert
-          error={{
-            name: 'Notice',
-            message: longPendingMessage,
-          }}
-        />
-      ) : null}
-      {isNonCanonical ? (
-        <Alert
-          error={{
-            name: 'Notice',
-            message: nonCanonicalMessage,
-          }}
-        />
-      ) : null}
+      {isFailed ? <AlertBase status={'warning'} message={failedMessage} /> : null}
+      {isLongPending ? <AlertBase status={'warning'} message={longPendingMessage} /> : null}
+      {isNonCanonical ? <AlertBase status={'warning'} message={nonCanonicalMessage} /> : null}
     </>
   );
 }

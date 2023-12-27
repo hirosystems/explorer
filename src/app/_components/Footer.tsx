@@ -1,7 +1,6 @@
 'use client';
 
-import Link, { LinkProps } from 'next/link';
-import React, { FC, HTMLProps } from 'react';
+import React, { FC } from 'react';
 
 import { PAGE_MAX_WIDTH } from '../../common/constants/constants';
 import { RELEASE_TAG_NAME } from '../../common/constants/env';
@@ -9,28 +8,12 @@ import { useGlobalContext } from '../../common/context/useAppContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
-import { TextLink } from '../../ui/TextLink';
+import { Link, LinkProps } from '../../ui/Link';
 
-const FooterLink: FC<LinkProps & HTMLProps<HTMLAnchorElement>> = ({
-  children,
-  href,
-  target,
-  rel,
-}) => {
+const FooterLink: FC<LinkProps> = ({ children, href, target, rel }) => {
   return (
-    <Link href={href} passHref legacyBehavior>
-      <TextLink
-        cursor="pointer"
-        textStyle="body.small"
-        color={'textCaption'}
-        textDecoration="none"
-        fontSize={'14px'}
-        _hover={{ textDecoration: 'underline' }}
-        target={target}
-        rel={rel}
-      >
-        {children}
-      </TextLink>
+    <Link href={href} fontSize={'xs'} target={target} rel={rel}>
+      {children}
     </Link>
   );
 };

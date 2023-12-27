@@ -23,5 +23,6 @@ export function useSuspenseConfirmedTransactionsInfinite(): UseSuspenseInfiniteQ
     initialPageParam: 0,
     getNextPageParam,
     staleTime: TWO_MINUTES,
+    refetchOnWindowFocus: true,
   });
 }

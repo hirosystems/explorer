@@ -2,48 +2,22 @@
 
 import { css } from '@emotion/react';
 
-const container = (colorMode: string) => css`
-  border-bottom: 1px solid var(--stacks-colors-border-${colorMode});
+const container = () => css`
   position: relative;
-  &:last-child {
-    border-bottom: none;
-  }
 `;
 
 const common = css`
   display: block;
   content: '';
   position: absolute;
-  background: var(--stacks-colors-accent-light);
+  background: var(--stacks-colors-brand);
 `;
 
-export const bottomLineCss = (colorMode: string) => css`
-  ${container(colorMode)};
+export const leftLineCss = () => css`
+  ${container()};
   &:after {
     ${common};
-    bottom: 0;
-    height: 3px;
-    left: 50%;
-    width: 0;
-    transition:
-      width 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-      left 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    &:hover {
-      width: 100%;
-      left: 0;
-    }
-  }
-  &:hover:after {
-    width: 100%;
-    left: 0;
-  }
-`;
-
-export const leftLineCss = (colorMode: string) => css`
-  ${container(colorMode)};
-  &:after {
-    ${common};
-    left: -21px;
+    left: calc(var(--stacks-space-6) * -1);
     width: 3px;
     top: 50%;
     height: 0;

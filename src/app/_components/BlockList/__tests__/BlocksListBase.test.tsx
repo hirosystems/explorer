@@ -1,4 +1,3 @@
-import { hash } from '@noble/hashes/_assert';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
@@ -10,6 +9,7 @@ import {
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useSuspenseBlockListInfinite as useSuspenseBlockListInfiniteActual } from '../../../../common/queries/useBlockListInfinite';
+import '../../../../common/utils/test-utils/matchMedia.mock';
 import { BlocksList } from '../index';
 import { EnhancedBlock } from '../types';
 

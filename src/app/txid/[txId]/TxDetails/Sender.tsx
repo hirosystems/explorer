@@ -1,7 +1,7 @@
 'use client';
 
-import { FC } from 'react';
 import * as React from 'react';
+import { FC } from 'react';
 import { TbArrowUpRight } from 'react-icons/tb';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -9,24 +9,25 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { Box } from '../../../../ui/Box';
-import { Stack } from '../../../../ui/Stack';
-import { TextLink } from '../../../../ui/TextLink';
+import { HStack } from '../../../../ui/HStack';
 import { getSenderName } from '../utils';
 
 export const Sender: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => (
   <KeyValueHorizontal
     label={getSenderName(tx.tx_type)}
     value={
-      <Stack isInline>
-        <Box color={'textCaption'}>
+      <HStack>
+        <Box>
           <TbArrowUpRight size="16px" />
         </Box>
-        <ExplorerLink href={`/address/${encodeURIComponent(tx.sender_address)}`}>
-          <TextLink as="a" fontSize={'14px'} fontWeight={500}>
-            {tx.sender_address}
-          </TextLink>
+        <ExplorerLink
+          fontSize={'14px'}
+          fontWeight={'medium'}
+          href={`/address/${encodeURIComponent(tx.sender_address)}`}
+        >
+          {tx.sender_address}
         </ExplorerLink>
-      </Stack>
+      </HStack>
     }
     copyValue={tx.sender_address}
   />

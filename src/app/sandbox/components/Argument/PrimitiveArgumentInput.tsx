@@ -15,15 +15,7 @@ export const PrimitiveArgumentInput: FC<
   }
 > = ({ name, type, handleChange, error, value }) => (
   <Box>
-    <Text
-      fontSize="12px"
-      fontWeight="500"
-      display="block"
-      color={'textCaption'}
-      as={'label'}
-      htmlFor={name}
-      mb="8px"
-    >
+    <Text fontSize="12px" fontWeight="500" display="block" as={'label'} htmlFor={name} mb="8px">
       {name}
     </Text>
     <Box width="100%">

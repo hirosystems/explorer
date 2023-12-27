@@ -20,7 +20,7 @@ export const SenderRecipient: React.FC<SenderRecipientProps> = React.memo(
       <Caption display="inline-block">
         <AddressLink principal={sender}>{truncateMiddle(sender)}</AddressLink>
       </Caption>
-      <Icon as={TbArrowRight} size="15px" strokeWidth="1.5" color={'textCaption'} />
+      <Icon as={TbArrowRight} size="15px" strokeWidth="1.5" />
       <Caption display="inline-block">
         <AddressLink principal={recipient}>{truncateMiddle(recipient)}</AddressLink>
       </Caption>

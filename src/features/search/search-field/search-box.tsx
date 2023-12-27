@@ -2,24 +2,20 @@
 
 import * as React from 'react';
 import { useEffect } from 'react';
-import { TbSearch, TbX } from 'react-icons/tb';
+import { PiMagnifyingGlass, PiX } from 'react-icons/pi';
 
 import { useAppDispatch } from '../../../common/state/hooks';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
+import { InputGroup } from '../../../ui/InputGroup';
+import { InputLeftElement } from '../../../ui/InputLeftElement';
+import { InputRightElement } from '../../../ui/InputRightElement';
 import { Spinner } from '../../../ui/Spinner';
 import { blur, clearSearchTerm, focus, setSearchTerm } from '../search-slice';
 import { useSearch } from '../useSearch';
 import { SearchInput } from './search-input';
 
-type Variant = 'default' | 'small';
-
-interface SearchBoxProps {
-  variant?: Variant;
-}
-
-export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
+export const SearchBox = React.memo(() => {
   const dispatch = useAppDispatch();
   const {
     query: { isFetching },
@@ -28,21 +24,16 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
 
   useEffect(() => {
     dispatch(clearSearchTerm());
-  }, []);
+  }, [dispatch]);
 
-  const showClearButton = true;
-
-  const isSmall = variant === 'small';
-  const inputLeftOffset = isSmall ? '38px' : '50px';
-  const inputRightOffset = isFetching ? '92px' : '60px';
-  const defaultHeight = isSmall ? '38px' : '64px';
+  const showClearButton = searchTerm !== '' && !isFetching;
 
   return (
-    <Flex height={defaultHeight} alignItems="center" position="relative">
+    <InputGroup>
+      <InputLeftElement pointerEvents="none">
+        <Icon as={PiMagnifyingGlass} size={4} color="white" />
+      </InputLeftElement>
       <SearchInput
-        height={defaultHeight}
-        pl={inputLeftOffset}
-        pr={inputRightOffset}
         onChange={(e: React.FormEvent<HTMLInputElement>) => {
           dispatch(setSearchTerm(e.currentTarget.value));
         }}
@@ -50,43 +41,22 @@ export const SearchBox = React.memo(({ variant }: SearchBoxProps) => {
         onFocus={() => dispatch(focus())}
         onBlur={() => setTimeout(() => dispatch(blur()), 200)}
       />
-
       {isFetching ? (
-        <Box position="absolute" right={isSmall ? '48px' : '64px'} zIndex={1}>
-          <Spinner size="18px" color="white" />
-        </Box>
+        <InputRightElement>
+          <Spinner w={4} h={4} color="white" />
+        </InputRightElement>
+      ) : showClearButton ? (
+        <InputRightElement>
+          <IconButton
+            bg="transparent"
+            color="white"
+            icon={<Icon as={PiX} size={3} />}
+            onClick={() => dispatch(clearSearchTerm())}
+            aria-label={'Clear search bar'}
+            _hover={{ bg: 'transparent' }}
+          />
+        </InputRightElement>
       ) : null}
-      <IconButton
-        bg="transparent"
-        color="white"
-        icon={<TbX width={isSmall ? '16px' : '24px'} height={isSmall ? '16px' : '24px'} />}
-        opacity={showClearButton ? 1 : 0}
-        onClick={() => dispatch(clearSearchTerm())}
-        position="absolute"
-        right="16px"
-        size={isSmall ? '28px' : '36px'}
-        aria-label={'Clear search bar'}
-        borderRadius={'50%'}
-        _hover={{ bg: 'rgba(255, 255, 255, 0.15)' }}
-        zIndex={1}
-      />
-
-      <Flex
-        alignItems="center"
-        justifyContent="center"
-        position="absolute"
-        width={isSmall ? '38px' : '50px'}
-        top={0}
-        height={defaultHeight}
-      >
-        <Box
-          as={TbSearch}
-          transform="translateX(4px) scaleX(-1)"
-          color="white"
-          size={isSmall ? '16px' : '18px'}
-          zIndex={1}
-        />
-      </Flex>
-    </Flex>
+    </InputGroup>
   );
 });

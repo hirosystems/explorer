@@ -2,9 +2,9 @@ import * as React from 'react';
 
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { TabsContainer } from '../../../../common/components/TabsContainer';
-import { AddressConfirmedTxsList } from '../../../../common/components/tx-lists/address-lists/AddressConfirmedTxsList';
-import { AddressMempoolTxsList } from '../../../../common/components/tx-lists/address-lists/AddressMempoolTxsList';
 import { useSuspenseContractById } from '../../../../common/queries/useContractById';
+import { AddressConfirmedTxsList } from '../../../../features/txs-list/AddressConfirmedTxsList';
+import { AddressMempoolTxsList } from '../../../../features/txs-list/AddressMempoolTxsList';
 import { CodeEditor } from '../../../../ui/CodeEditor';
 import { TabsProps } from '../../../../ui/Tabs';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
@@ -16,7 +16,7 @@ interface TokenTabsProps extends Partial<TabsProps> {
   developerData?: DeveloperData;
 }
 
-export function TokenTabsBase({ tokenId, developerData, ...tabsProps }: TokenTabsProps) {
+export function TokenTabsBase({ tokenId, developerData }: TokenTabsProps) {
   const { data: contract } = useSuspenseContractById(tokenId);
   const source = contract?.source_code;
   return (
@@ -57,7 +57,6 @@ export function TokenTabsBase({ tokenId, developerData, ...tabsProps }: TokenTab
       ]}
       actions={null}
       gridColumnEnd={'3'}
-      {...tabsProps}
     />
   );
 }

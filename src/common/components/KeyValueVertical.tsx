@@ -37,7 +37,6 @@ export const KeyValueVertical: FC<KeyValueVerticalProps> = ({ label, value, copy
         <Flex
           flexDirection={['column', 'column', 'row']}
           alignItems={['flex-start', 'flex-start', 'center']}
-          color={'textBody'}
         >
           {value}
         </Flex>

@@ -20,13 +20,9 @@ function ContractSourceBase({ txContractId }: { txContractId: string }) {
     <Section
       title={'Source code'}
       topRight={
-        <TxLink txId={txContractId}>
+        <TxLink txId={txContractId} _hover={{ bg: '#eee', cursor: 'pointer' }} target="_blank">
           <Badge
-            as="a"
-            _hover={{ bg: '#eee', cursor: 'pointer' }}
-            color={'textBody'}
             bg={'bgAlt'}
-            target="_blank"
             labelProps={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}
             border={'none'}
           >

@@ -1,15 +1,15 @@
 'use client';
 
 import { forwardRef } from '@chakra-ui/react';
-import Link, { LinkProps } from 'next/link';
 import React from 'react';
 
+import { Link, LinkProps } from '../../ui/Link';
 import { useGlobalContext } from '../context/useAppContext';
 import { buildUrl } from '../utils/buildUrl';
 
 export const ExplorerLink = forwardRef<LinkProps, 'a'>(({ href, ...rest }, ref) => {
   const network = useGlobalContext().activeNetwork;
-  return <Link ref={ref} legacyBehavior href={buildUrl(href, network)} passHref {...rest} />;
+  return <Link ref={ref} href={buildUrl(href!, network)} {...rest} />;
 });
 
 export const TxLink = forwardRef<Partial<LinkProps> & { txId: string }, 'a'>(

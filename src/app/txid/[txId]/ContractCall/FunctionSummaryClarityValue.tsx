@@ -1,16 +1,11 @@
-import NextLink from 'next/link';
 import * as React from 'react';
 
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
-import { TxLink } from '../../../../common/components/ExplorerLinks';
+import { AddressLink, TxLink } from '../../../../common/components/ExplorerLinks';
 import { Value } from '../../../../common/components/Value';
 import { useGlobalContext } from '../../../../common/context/useAppContext';
-import {
-  isJSONString,
-  microToStacks,
-  microToStacksFormatted,
-} from '../../../../common/utils/utils';
+import { isJSONString, microToStacksFormatted } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { TextLink } from '../../../../ui/TextLink';
@@ -104,40 +99,27 @@ export const getValue = (
   return isJSONString(arg.repr) ? JSON.parse(arg.repr).value : arg.repr;
 };
 
-export const FunctionSummaryClarityValue = ({
-  arg,
-  btc,
-  ...rest
-}: {
-  arg: any;
-  btc: null | string;
-}) => {
+export const FunctionSummaryClarityValue = ({ arg, btc }: { arg: any; btc: null | string }) => {
   if (arg.type === 'principal') {
     const principal = arg.hex ? (cvToJSON(hexToCV(arg.hex)) || {}).value : '';
     const isContract = principal.includes('.');
     if (isContract) {
       return (
-        <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-          <TxLink txId={principal}>
-            <TextLink as="a">{principal}</TextLink>
-          </TxLink>
+        <Flex width="100%" flexGrow={1} justifyContent="space-between">
+          <TxLink txId={principal}>{principal}</TxLink>
           <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
         </Flex>
       );
     }
     return (
-      <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
-        <NextLink href="/address/[principal]" as={`/address/${principal}`} passHref legacyBehavior>
-          <TextLink as="a" {...rest}>
-            {arg.repr}
-          </TextLink>
-        </NextLink>
+      <Flex width="100%" flexGrow={1} justifyContent="space-between">
+        <AddressLink principal={principal}>{arg.repr}</AddressLink>
         <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
       </Flex>
     );
   }
   return (
-    <Flex width="100%" flexGrow={1} justifyContent="space-between" {...rest}>
+    <Flex width="100%" flexGrow={1} justifyContent="space-between">
       <Value>{getValue(arg, btc)}</Value>
       <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
     </Flex>

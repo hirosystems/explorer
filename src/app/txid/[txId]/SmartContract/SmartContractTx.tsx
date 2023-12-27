@@ -5,12 +5,12 @@ import {
   SmartContractTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { AddressTxListTabs } from '../../../../common/components/tx-lists/tabs/AddressTxListTabs';
 import {
   useContractById,
   useSuspenseContractById,
 } from '../../../../common/queries/useContractById';
 import { getTxContractId } from '../../../../common/utils/utils';
+import { AddressTxListTabs } from '../../../../features/txs-list/tabs/AddressTxListTabs';
 import { PostConditions } from '../PostConditions';
 import { TxPage } from '../TxPage';
 import { ContractTabs } from './ContractTabs';

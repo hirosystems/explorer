@@ -1,7 +1,7 @@
 'use client';
 
+import { Link } from '@chakra-ui/next-js';
 import { forwardRef } from '@chakra-ui/react';
-import Link from 'next/link';
 
 import { Button, ButtonProps } from './Button';
 

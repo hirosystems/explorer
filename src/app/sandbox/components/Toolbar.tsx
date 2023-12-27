@@ -1,3 +1,5 @@
+'use client';
+
 import { useClipboard } from '@chakra-ui/react';
 import { useMonaco } from '@monaco-editor/react';
 import React from 'react';
@@ -11,6 +13,8 @@ import { streamContract } from '../../../common/constants/contracts/stream';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
+import { HStack } from '../../../ui/HStack';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Select } from '../../../ui/Select';
 import { Stack } from '../../../ui/Stack';
@@ -43,6 +47,7 @@ export const Sample = () => {
       flexGrow={1}
       bg={'white'}
       color={`black`}
+      fontSize={'sm'}
     >
       {[helloWorldContract, kvStoreContract, statusContract, streamContract].map(
         ({ name, source }, key: number) => (
@@ -73,37 +78,33 @@ export const Toolbar: React.FC<any> = () => {
     <Flex
       alignItems="center"
       justifyContent="space-between"
-      p="16px"
-      borderBottomWidth="1px"
-      bg="ink"
-      borderBottomColor="rgba(255,255,255,0.15)"
+      p={4}
+      position={'absolute'}
+      top={0}
+      left={0}
+      zIndex={'docked'}
+      width={'full'}
+      bg={'whiteAlpha.400'}
     >
-      <Flex alignItems="center">
-        <Caption mr="8px">Samples</Caption>
-        <Box
-          _hover={{
-            cursor: 'pointer',
-          }}
-          maxWidth="320px"
-        >
-          <Sample />
-        </Box>
+      <Flex alignItems="center" gap={2}>
+        <Caption color={'white'}>Samples</Caption>
+        <Sample />
       </Flex>
-      <Stack ml="auto" isInline>
+      <HStack ml="auto">
         <Box onClick={onCopy}>
           <Tooltip label={hasCopied ? 'Copied!' : 'Copy contract code'}>
             <IconButton
-              icon={<AiOutlineCopy strokeWidth={1.75} size={'20px'} color={'textBody'} />}
+              icon={<Icon as={AiOutlineCopy} size={4} color={'white'} />}
               aria-label={'copy'}
             />
           </Tooltip>
         </Box>
         <IconButton
-          icon={<RiCloseLine strokeWidth={1.75} size={'20px'} color={'textBody'} />}
+          icon={<Icon as={RiCloseLine} size={4} color={'white'} />}
           onClick={() => dispatch(toggleCodeToolbar())}
           aria-label={'close'}
         />
-      </Stack>
+      </HStack>
     </Flex>
   ) : null;
 };

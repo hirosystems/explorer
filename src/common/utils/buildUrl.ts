@@ -1,5 +1,3 @@
-import { LinkProps } from 'next/link';
-
 import { Network } from '../types/network';
 
 export function getQueryParams(network: Network) {
@@ -13,6 +11,6 @@ export function getQueryParams(network: Network) {
   return suffix;
 }
 
-export const buildUrl = (href: LinkProps['href'], network: Network): string => {
+export const buildUrl = (href: string, network: Network): string => {
   return `${href}${getQueryParams(network)}`;
 };

@@ -5,12 +5,15 @@ import { ErrorBoundary } from 'react-error-boundary';
 const renderLoadingComponent = () => null;
 const renderErrorComponent = () => null;
 
-const StatusBarLazy = dynamic(() => import('./StatusBar'), {
-  loading: renderLoadingComponent,
-  ssr: false,
-});
+const IncidentsStatusBar = dynamic(
+  () => import('./IncidentsStatusBar').then(m => m.IncidentsStatusBar),
+  {
+    loading: renderLoadingComponent,
+    ssr: false,
+  }
+);
 
-export const StatusBar = () => (
+export const IncidentsStatusBarWithErrorBoundary = () => (
   <QueryErrorResetBoundary>
     {({ reset }) => (
       <ErrorBoundary
@@ -20,7 +23,7 @@ export const StatusBar = () => (
         }}
         onReset={reset}
       >
-        <StatusBarLazy />
+        <IncidentsStatusBar />
       </ErrorBoundary>
     )}
   </QueryErrorResetBoundary>

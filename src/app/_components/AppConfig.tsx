@@ -7,6 +7,7 @@ import { Connect } from '@stacks/connect-react';
 
 import { useAppSelector } from '../../common/state/hooks';
 import { NetworkMode } from '../../common/types/network';
+import { Text } from '../../ui/Text';
 import { selectUserSession } from '../sandbox/sandbox-slice';
 
 export const AppConfig: React.FC<{
@@ -18,7 +19,7 @@ export const AppConfig: React.FC<{
   const userSession = useAppSelector(selectUserSession);
   useEffect(() => {
     toast(
-      <div>
+      <Text fontSize={'sm'}>
         You're viewing {querySubnet ? 'a subnet' : `the ${queryNetworkMode}`}
         {querySubnet || queryApiUrl ? (
           <>
@@ -27,7 +28,7 @@ export const AppConfig: React.FC<{
           </>
         ) : null}{' '}
         Explorer
-      </div>,
+      </Text>,
       {
         id: 'network-mode-toast',
         style: {

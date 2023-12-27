@@ -17,7 +17,6 @@ export const Thead = forwardRef<TheadProps, 'thead'>(({ children, size, ...rest 
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

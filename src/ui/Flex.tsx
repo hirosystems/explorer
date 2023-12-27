@@ -11,7 +11,7 @@ import { UIComponent } from './types';
 
 export type FlexProps = CUIFlexProps & UIComponent;
 export const Flex = forwardRef<FlexProps, 'div'>(({ children, ...rest }, ref) => (
-  <CUIFlex ref={ref} borderColor={`border.${useColorMode().colorMode}`} {...rest}>
+  <CUIFlex ref={ref} {...rest}>
     {children}
   </CUIFlex>
 ));

@@ -1,12 +1,5 @@
 import packageJson from '../../../package.json';
 
-export const SITE_NOTICE_BANNER_LABEL =
-  process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL ||
-  process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_LABEL;
-export const SITE_NOTICE_BANNER_MESSAGE =
-  process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE ||
-  process.env.NEXT_PUBLIC_SITE_NOTICE_BANNER_MESSAGE;
-export const SITE_NOTICE_ENABLED = SITE_NOTICE_BANNER_LABEL && SITE_NOTICE_BANNER_MESSAGE;
 export const CONNECT_AUTH_ORIGIN =
   process.env.NEXT_PUBLIC_CONNECT_AUTH_ORIGIN || 'https://pr-725.app.stacks.engineering';
 export const DEFAULT_MAINNET_SERVER =

@@ -4,11 +4,11 @@ import * as React from 'react';
 import { TbSearch } from 'react-icons/tb';
 
 import { Section } from '../../common/components/Section';
-import { ExplorerSkeletonLoader } from '../../common/components/loaders/skeleton-common';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { InputGroup } from '../../ui/InputGroup';
 import { InputRightElement } from '../../ui/InputRightElement';
+import { Skeleton } from '../../ui/Skeleton';
 import { useColorMode } from '../../ui/hooks/useColorMode';
 import { PageTitle } from '../_components/PageTitle';
 import { TokenTableSkeleton } from './TokensList/TokenTableSkeleton';
@@ -18,7 +18,7 @@ export default function Loading() {
   return (
     <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>
-        <ExplorerSkeletonLoader width={'400px'} height={'31px'} />
+        <Skeleton width={'400px'} height={'43px'} />
       </PageTitle>
       <Section
         title={'Tokens'}
@@ -30,7 +30,7 @@ export default function Loading() {
             <InputRightElement pointerEvents="none">
               <Icon as={TbSearch} color={`textCaption.${colorMode}`} />
             </InputRightElement>
-            <ExplorerSkeletonLoader width={'200px'} height={'40px'} />
+            <Skeleton width={'200px'} height={'40px'} />
           </InputGroup>
         }
       >

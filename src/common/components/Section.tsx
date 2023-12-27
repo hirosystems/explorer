@@ -1,71 +1,59 @@
 'use client';
 
+import { useColorModeValue } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 
+import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
-import { Spinner } from '../../ui/Spinner';
 import { Text } from '../../ui/Text';
-import { SECTION_HEADER_HEIGHT } from '../constants/sizes';
-import { isReactComponent } from '../utils/utils';
 import { Card } from './Card';
 
 interface SectionProps extends Omit<FlexProps, 'title'> {
-  title?: string;
+  title?: string | ReactNode;
+  topRight?: ReactNode;
 }
 
-const SectionHeader: React.FC<SectionProps> = React.memo(({ title, children, ...rest }) => {
+export function Section({
+  title,
+  topRight: TopRight = null,
+  children,
+  overflowY,
+  px = 6,
+  ...rest
+}: SectionProps) {
+  const titleColor = useColorModeValue('slate.900', 'white');
+  const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
-    <Flex
-      alignItems="center"
-      bg={'bg'}
-      justifyContent="space-between"
-      borderBottomWidth="1px"
-      flexShrink={0}
-      p="12px 16px"
-      borderTopRightRadius="12px"
-      borderTopLeftRadius="12px"
-      minHeight={SECTION_HEADER_HEIGHT}
-      {...rest}
-    >
-      {title ? (
-        <Text color={'textTitle'} fontWeight="500" py={'10px'}>
-          {title}
-        </Text>
-      ) : null}
-      {children}
-    </Flex>
-  );
-});
-
-export const Section: React.FC<
-  { topRight?: ReactNode; isLoading?: boolean; headerProps?: SectionProps } & SectionProps
-> = React.memo(
-  ({
-    title,
-    topRight: TopRight = null,
-    children,
-    overflowY,
-    headerProps = {},
-    isLoading,
-    ...rest
-  }) => {
-    return (
-      <Card {...rest}>
-        {title || TopRight ? (
-          <SectionHeader title={title} {...headerProps}>
+    <Card px={px} height={'fit-content'} {...rest}>
+      {title || TopRight ? (
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          borderBottom="1px"
+          borderColor={borderColor}
+          borderTopRightRadius="xl"
+          borderTopLeftRadius="xl"
+          flexShrink={0}
+          px={6}
+          py={4}
+          mx={-px}
+        >
+          {title ? (
+            <Text color={titleColor} fontWeight="medium">
+              {title}
+            </Text>
+          ) : null}
+          {TopRight ? (
             <Flex justifyContent="flex-end" alignItems="center">
-              {isLoading ? <Spinner size="sm" color={'textCaption'} opacity={0.5} /> : null}
               {TopRight}
             </Flex>
-          </SectionHeader>
-        ) : null}
-        <Flex overflowY={overflowY} flexDirection="column" flexGrow={1}>
-          {children}
+          ) : null}
         </Flex>
-      </Card>
-    );
-  }
-);
+      ) : null}
+      <Box position={'relative'}>{children}</Box>
+    </Card>
+  );
+}
 
 interface SectionWithControlsProps extends Omit<FlexProps, 'title'> {
   title: string;
@@ -75,13 +63,13 @@ interface SectionWithControlsProps extends Omit<FlexProps, 'title'> {
 
 export function SectionWithControls({ title, controls, footer }: SectionWithControlsProps) {
   return (
-    <Card padding="16px 24px">
-      <Text mb={'16.5px'} fontWeight={500} lineHeight={'1.5em'}>
+    <Card px={6} py={4}>
+      <Text mb={4} fontWeight={'medium'} lineHeight={'1.5em'}>
         {title}
       </Text>
       {controls}
       <Flex flex={1}></Flex>
-      <Flex mt={'16px'} width={'100%'}>
+      <Flex mt={4} width={'full'}>
         {footer}
       </Flex>
     </Card>

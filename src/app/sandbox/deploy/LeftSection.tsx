@@ -3,6 +3,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React, { FC, useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
+import { PiX } from 'react-icons/pi';
 import { RiCloseLine } from 'react-icons/ri';
 import { TbTools } from 'react-icons/tb';
 
@@ -12,11 +13,16 @@ import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
 import { useRandomName } from '../../../common/hooks/useRandomName';
 import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { clearSearchTerm } from '../../../features/search/search-slice';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
+import { HStack } from '../../../ui/HStack';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Input } from '../../../ui/Input';
+import { InputGroup } from '../../../ui/InputGroup';
+import { InputRightElement } from '../../../ui/InputRightElement';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption, Title } from '../../../ui/typography';
@@ -50,31 +56,29 @@ export function LeftSection() {
         Write & Deploy
       </Title>
       <Caption mb="8px">Contract name</Caption>
-      <Flex
-        border="1px solid transparent"
-        alignItems="center"
-        borderRadius="24px"
-        position="relative"
-      >
-        <Input
-          as="input"
-          value={contractName}
-          onChange={(e: any) => setContractName(e.target?.value as string)}
-          placeholder="Name your contract"
-          pr="84px"
-          color={'textBody'}
-        />
-        <Flex position="absolute" right="44px">
-          <IconButton
-            color={'textBody'}
-            onClick={() => {
-              setContractName('');
-            }}
-            icon={<RiCloseLine size={'16px'} />}
-            aria-label={'clear contract name field'}
-            size={'30px'}
+      <Flex>
+        <InputGroup
+          border="1px solid transparent"
+          alignItems="center"
+          borderRadius="24px"
+          position="relative"
+        >
+          <Input
+            value={contractName}
+            onChange={(e: any) => setContractName(e.target?.value as string)}
+            placeholder="Name your contract"
+            pr="84px"
           />
-        </Flex>
+          <InputRightElement>
+            <IconButton
+              onClick={() => {
+                setContractName('');
+              }}
+              icon={<RiCloseLine size={'16px'} />}
+              aria-label={'clear contract name field'}
+            />
+          </InputRightElement>
+        </InputGroup>
         <Box onClick={() => dispatch(toggleCodeToolbar())}>
           <Tooltip label="Contract tools">
             <IconButton
@@ -85,7 +89,7 @@ export function LeftSection() {
           </Tooltip>
         </Box>
       </Flex>
-      <Stack alignItems="center" justifyContent={'center'} isInline spacing="8px" mt="20px">
+      <HStack alignItems="center" justifyContent={'center'} gap={2} mt="20px">
         <Button
           onClick={() =>
             isConnected
@@ -97,16 +101,14 @@ export function LeftSection() {
                 })
           }
           width="100%"
+          variant={'primary'}
         >
           {isConnected ? 'Deploy' : 'Connect Stacks Wallet'}
         </Button>
-      </Stack>
+      </HStack>
       <Stack mt={'10px'}>
         <Button
-          color={'textBody'}
-          variant="outline"
-          _hover={{ background: '#F9F9FA' }}
-          bg={'bg'}
+          variant="secondary"
           rightIcon={<FiExternalLink />}
           onClick={() => {
             const paramsBase64 = { name: contractName, sourceCode: codeBody };

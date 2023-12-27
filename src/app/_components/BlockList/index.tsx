@@ -1,19 +1,22 @@
 'use client';
 
+import { useColorModeValue } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
+import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
-import { SectionFooterActions } from '../../../common/components/SectionFooterActions';
 import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { Accordion } from '../../../ui/Accordion';
+import { Box } from '../../../ui/Box';
+import { FlexProps } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
 import { Switch } from '../../../ui/Switch';
@@ -22,9 +25,11 @@ import { AnimatedBlockAndMicroblocksItem } from './AnimatedBlockAndMicroblocksIt
 import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
 import { EnhancedBlock } from './types';
 
-const BlocksListBase: React.FC<{
+function BlocksListBase({
+  limit,
+}: {
   limit?: number;
-}> = ({ limit }) => {
+} & FlexProps) {
   const [isLive, setIsLive] = React.useState(false);
   const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
   const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
@@ -35,13 +40,15 @@ const BlocksListBase: React.FC<{
 
   const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
 
+  const labelColor = useColorModeValue('slate.600', 'slate.400');
+
   useEffect(() => {
     setInitialBlocks(blocks);
   }, [blocks]);
 
   useEffect(() => {
     if (!isLive) return;
-    queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+    void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
     let sub: {
       unsubscribe?: () => Promise<void>;
     };
@@ -88,40 +95,48 @@ const BlocksListBase: React.FC<{
       gridColumnStart={['1', '1', '2']}
       gridColumnEnd={['2', '2', '3']}
       minWidth={0}
+      flexGrow={0}
+      flexShrink={1}
       topRight={
         <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="blocks-live-view-switch" mb="0">
+          <FormLabel htmlFor="blocks-live-view-switch" mb="0" color={labelColor}>
             live view
           </FormLabel>
-          <Switch id="blocks-live-view-switch" onChange={() => setIsLive(!isLive)} />
+          <Switch
+            id="blocks-live-view-switch"
+            isChecked={isLive}
+            onChange={() => setIsLive(!isLive)}
+          />
         </FormControl>
       }
     >
-      <Accordion allowMultiple>
-        {allBlocks?.map(block =>
-          isLive ? (
-            <AnimatedBlockAndMicroblocksItem
-              block={block}
-              key={block.hash}
-              onAnimationExit={() => removeOldBlock(block)}
-            />
-          ) : (
-            <BlockAndMicroblocksItem block={block} key={block.hash} />
-          )
+      <Box pb={6}>
+        <Accordion allowMultiple>
+          {allBlocks?.map(block =>
+            isLive ? (
+              <AnimatedBlockAndMicroblocksItem
+                block={block}
+                key={block.hash}
+                onAnimationExit={() => removeOldBlock(block)}
+              />
+            ) : (
+              <BlockAndMicroblocksItem block={block} key={block.hash} />
+            )
+          )}
+        </Accordion>
+        {!isLive && (
+          <ListFooter
+            isLoading={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            href={limit ? '/blocks' : undefined}
+            fetchNextPage={limit ? undefined : fetchNextPage}
+            label={'blocks'}
+          />
         )}
-      </Accordion>
-      {!isLive && (
-        <SectionFooterActions
-          isLoading={isFetchingNextPage}
-          hasNextPage={hasNextPage}
-          href={limit ? '/blocks' : undefined}
-          fetchNextPage={limit ? undefined : fetchNextPage}
-          label={'blocks'}
-        />
-      )}
+      </Box>
     </Section>
   );
-};
+}
 
 export function BlocksList({ limit }: { limit?: number }) {
   return (

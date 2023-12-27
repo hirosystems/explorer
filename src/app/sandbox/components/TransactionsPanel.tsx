@@ -1,23 +1,25 @@
+'use client';
+
 import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
-import { FiFilter } from 'react-icons/fi';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Badge } from '../../../common/components/Badge';
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
+import { Section } from '../../../common/components/Section';
 import { InfoCircleIcon } from '../../../common/components/icons/info-circle';
-import { MempoolTxListItemMini } from '../../../common/components/tx-lists/list-items/MempoolTxListItemMini';
-import { TxListItemMini } from '../../../common/components/tx-lists/list-items/TxListItemMini';
 import { useGlobalContext } from '../../../common/context/useAppContext';
-import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
-import { useSuspenseContractById } from '../../../common/queries/useContractById';
+import { useContractById } from '../../../common/queries/useContractById';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { FilterPanel, FilteredMessage } from '../../../features/txs-filter/FilterPanel';
+import { FilterButton } from '../../../features/txs-filter/FilterButton';
+import { FilteredMessage } from '../../../features/txs-filter/FilterPanel';
 import { useFilterState } from '../../../features/txs-filter/useFilterState';
+import { MempoolTxListItemMini } from '../../../features/txs-list/ListItem/MempoolTxListItemMini';
+import { TxListItemMini } from '../../../features/txs-list/ListItem/TxListItemMini';
 import { Accordion } from '../../../ui/Accordion';
 import { AccordionButton } from '../../../ui/AccordionButton';
 import { AccordionIcon } from '../../../ui/AccordionIcon';
@@ -25,7 +27,7 @@ import { AccordionItem } from '../../../ui/AccordionItem';
 import { AccordionPanel } from '../../../ui/AccordionPanel';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
+import { HStack } from '../../../ui/HStack';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
 import { FunctionIcon } from '../../../ui/icons';
@@ -35,7 +37,6 @@ import { useUser } from '../hooks/useUser';
 import { setCodeBody, toggleRightPanel } from '../sandbox-slice';
 
 const PanelHeader: React.FC = () => {
-  const { toggleFilterVisibility } = useFilterState();
   return (
     <>
       <Flex
@@ -46,17 +47,7 @@ const PanelHeader: React.FC = () => {
         bg={`bg.${useColorMode().colorMode}`}
       >
         <Caption>Transactions</Caption>
-
-        <Caption
-          display="flex"
-          alignItems="center"
-          _hover={{ cursor: 'pointer', color: 'textTitle' }}
-          onClick={toggleFilterVisibility}
-          gap={'4px'}
-        >
-          <Icon as={FiFilter} color="currentColor" />
-          Filter transactions
-        </Caption>
+        <FilterButton />
       </Flex>
     </>
   );
@@ -133,10 +124,8 @@ const TxDetailsFunctions = ({
         pb="8px"
         pt="12px"
       >
-        <Caption fontWeight="500" color={'textBody'}>
-          Call contract
-        </Caption>
-        <Stack isInline spacing="8px" alignItems="center">
+        <Caption fontWeight="500">Call contract</Caption>
+        <HStack gap={2} alignItems="center">
           <ExplorerLink href={`/sandbox/contract-call/${contractId}`}>
             <Badge
               userSelect="none"
@@ -159,10 +148,10 @@ const TxDetailsFunctions = ({
             }
             aria-label={'toggle function'}
           />
-        </Stack>
+        </HStack>
       </Flex>
       {fnsVisible ? (
-        <Stack maxHeight="120px" overflowX="auto" spacing="0">
+        <Stack maxHeight="120px" overflowX="auto">
           {contractInterface?.abi?.functions?.map((func: any, index: number, arr: any[]) => {
             return func.access !== 'private' ? (
               <Flex
@@ -178,9 +167,7 @@ const TxDetailsFunctions = ({
                   ) : (
                     <FunctionIcon size="18px" />
                   )}
-                  <Caption color={`textBody.${colorMode}`} ml="4px">
-                    {func.name}
-                  </Caption>
+                  <Caption ml="4px">{func.name}</Caption>
                 </Flex>
                 {status === 'success' ? (
                   <ExplorerLink href={`/sandbox/contract-call/${contractId}/${func.name}`}>
@@ -213,7 +200,7 @@ function TxDetailsBase({ tx }: { tx: Transaction }) {
         : undefined;
   const colorMode = useColorMode().colorMode;
 
-  const { data: contract } = useSuspenseContractById(contractId);
+  const { data: contract } = useContractById(contractId);
 
   const hasFunctionsAvailable =
     tx.tx_type === 'smart_contract' &&
@@ -238,9 +225,7 @@ function TxDetailsBase({ tx }: { tx: Transaction }) {
             py="8px"
             alignItems="center"
           >
-            <Caption fontWeight="500" color={`textBody.${colorMode}`}>
-              Redeploy contract
-            </Caption>
+            <Caption fontWeight="500">Redeploy contract</Caption>
             <LoadButton codeBody={contract.source_code} />
           </Flex>
           <TxDetailsFunctions
@@ -264,11 +249,15 @@ function TxDetails({ tx }: { tx: Transaction }) {
 }
 
 export function TransactionsPanel() {
-  const { transactions, mempoolTransactions } = useUser();
+  const { txs, mempoolTransactions } = useUser();
   const { activeFilters } = useFilterState();
 
-  const filteredTxs = (transactions || []).filter(tx => activeFilters[tx.tx_type]);
-  const hasTxButIsFiltered = transactions?.length && filteredTxs?.length === 0;
+  const filteredTxs = useMemo(
+    () => (!activeFilters.length ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type))),
+    [txs, activeFilters]
+  );
+
+  const hasTxButIsFiltered = txs?.length && filteredTxs?.length === 0;
 
   const pendingList = React.useMemo(
     () =>
@@ -297,7 +286,7 @@ export function TransactionsPanel() {
               <AccordionIcon />
             </AccordionButton>
           </Flex>
-          <AccordionPanel css={useVerticallyStackedElementsBorderStyle} borderTopWidth="1px">
+          <AccordionPanel borderTopWidth="1px">
             <TxDetails tx={tx} />
           </AccordionPanel>
         </AccordionItem>
@@ -306,41 +295,20 @@ export function TransactionsPanel() {
   );
 
   return (
-    <Flex
-      position="relative"
-      flexDirection="column"
-      flexGrow={1}
-      bg={`bgAlt.${useColorMode().colorMode}`}
-      borderBottomRightRadius="12px"
-      overflow="hidden"
-    >
-      <PanelHeader />
-      <FilterPanel />
-      <Flex
-        flexDirection="column"
-        flexGrow={1}
-        overflow="auto"
-        bg={`bg.${useColorMode().colorMode}`}
-        position="relative"
-        pl={'20px'}
-        css={useVerticallyStackedElementsBorderStyle}
-      >
-        <>
-          {pendingList}
-          {filteredTxs?.length ? (
-            <Accordion allowMultiple>{txList}</Accordion>
-          ) : hasTxButIsFiltered ? (
-            <FilteredMessage />
-          ) : (
-            <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
-              <Stack textAlign="center">
-                <Title>No Transactions</Title>
-                <Caption>Your list of transactions will display here.</Caption>
-              </Stack>
-            </Flex>
-          )}
-        </>
-      </Flex>
-    </Flex>
+    <Section title={'Transactions'} topRight={<FilterButton />}>
+      {pendingList}
+      {filteredTxs?.length ? (
+        <Accordion allowMultiple>{txList}</Accordion>
+      ) : hasTxButIsFiltered ? (
+        <FilteredMessage />
+      ) : (
+        <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
+          <Stack textAlign="center">
+            <Title>No Transactions</Title>
+            <Caption>Your list of transactions will display here.</Caption>
+          </Stack>
+        </Flex>
+      )}
+    </Section>
   );
 }

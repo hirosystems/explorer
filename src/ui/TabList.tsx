@@ -17,8 +17,6 @@ export const TabList = forwardRef<TabListProps, 'div'>(({ children, size, ...res
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    p={'12px 16px'}
-    borderBottom={`1px solid var(--stacks-colors-border-${useColorMode().colorMode})`}
     {...rest}
   >
     {children}

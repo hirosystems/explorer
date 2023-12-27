@@ -2,11 +2,11 @@
 
 import * as React from 'react';
 import { useMemo } from 'react';
+import { PiInfo } from 'react-icons/pi';
 
-import { InfoCircleIcon } from '../../../../common/components/icons/info-circle';
-import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
+import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
@@ -24,10 +24,8 @@ function NextStackingCycleBase(props: GridProps) {
   } = useSuspenseNextStackingCycle();
   const nextCycleCaption = useMemo(() => {
     return (
-      <Flex fontSize={'12px'} color={'textTitle'} fontWeight="500" alignItems={'center'}>
-        <Text fontSize={'12px'} color={'textCaption'}>
-          {displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in
-        </Text>
+      <Flex alignItems={'center'}>
+        <Text>{displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in</Text>
         &nbsp;
         <Tooltip
           label={`${displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in ${
@@ -51,7 +49,7 @@ function NextStackingCycleBase(props: GridProps) {
               ? 's'
               : ''}
             &nbsp;
-            <InfoCircleIcon width="18px" height="18px" />
+            <Icon as={PiInfo} size={3} />
           </Flex>
         </Tooltip>
       </Flex>

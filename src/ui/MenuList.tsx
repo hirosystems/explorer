@@ -17,7 +17,6 @@ export const MenuList = forwardRef<MenuListProps, 'div'>(({ children, size, ...r
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

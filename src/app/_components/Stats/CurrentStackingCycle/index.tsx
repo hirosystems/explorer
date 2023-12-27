@@ -2,11 +2,12 @@
 
 import * as React from 'react';
 import { useMemo } from 'react';
+import { PiInfo } from 'react-icons/pi';
 
-import { InfoCircleIcon } from '../../../../common/components/icons/info-circle';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
+import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
@@ -19,10 +20,8 @@ function CurrentStackingCycleBase(props: GridProps) {
   const currentCycleCaption = useMemo(() => {
     if (!blocksTilNextCycle) return null;
     return (
-      <Flex fontSize={'12px'} color={'textTitle'} fontWeight="500" alignItems={'center'}>
-        <Text fontSize={'12px'} color={'textCaption'}>
-          Next cycle starts in
-        </Text>
+      <Flex alignItems={'center'}>
+        <Text>Next cycle starts in</Text>
         &nbsp;
         <Tooltip
           label={`Next cycle starts in ${blocksTilNextCycle} block${
@@ -32,7 +31,7 @@ function CurrentStackingCycleBase(props: GridProps) {
           <Flex alignItems={'center'}>
             {approximateDaysTilNextCycle} day{approximateDaysTilNextCycle !== 1 ? 's' : ''}
             &nbsp;
-            <InfoCircleIcon width="18px" height="18px" />
+            <Icon as={PiInfo} size={3} />
           </Flex>
         </Tooltip>
       </Flex>

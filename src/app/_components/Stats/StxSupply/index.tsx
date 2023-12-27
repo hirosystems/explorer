@@ -20,15 +20,7 @@ function StxSupplyBase(props: GridProps) {
       title="STX Supply"
       bodyMainText={numberToString(unlocked_stx ? Number(unlocked_stx) : 0)}
       bodySecondaryText={`/ ${numberToString(total_stx ? Number(total_stx) : 0)}`}
-      caption={
-        <Flex fontSize={'12px'} color={'textTitle'} fontWeight="500" alignItems={'center'}>
-          {Number(unlocked_percent || 0).toFixed(2)}%&nbsp;
-          <Text fontSize={'12px'} color={'textCaption'}>
-            {' '}
-            is unlocked
-          </Text>
-        </Flex>
-      }
+      caption={<>{Number(unlocked_percent || 0).toFixed(2)}% is unlocked</>}
       {...props}
     />
   );

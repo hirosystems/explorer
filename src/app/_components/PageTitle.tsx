@@ -1,23 +1,37 @@
 import { ReactNode } from 'react';
+import * as React from 'react';
 
-import { TextProps, Title } from '../../ui/typography';
+import { TxTypeTag } from '../../common/components/TxTypeTag';
+import { TxStatusLabel } from '../../common/components/status';
+import { getTransactionStatus } from '../../common/utils/transactions';
+import { getTxTitle } from '../../common/utils/utils';
+import { Badge } from '../../ui/Badge';
+import { Flex } from '../../ui/Flex';
+import { HStack } from '../../ui/HStack';
+import { Heading, HeadingProps } from '../../ui/Heading';
+import { TxAlerts } from '../txid/[txId]/TxAlerts';
 
-export function PageTitle({ children, ...props }: { children: ReactNode } & TextProps) {
+export function PageTitle({ children, ...props }: { children: ReactNode } & HeadingProps) {
   return (
-    <Title
+    <Heading
       as="h1"
-      fontSize="36px"
-      display="block"
-      width="100%"
-      mt="40px"
+      fontWeight={'medium'}
+      fontSize="4xl"
+      mt={20}
       mb="0"
-      data-test="homepage-title"
-      color="white"
-      gridColumnStart={'1'}
-      gridColumnEnd={['2', '2', '3']}
+      color={'slate.50'}
       {...props}
     >
       {children}
-    </Title>
+    </Heading>
+  );
+}
+
+export function PageTitleWithTags({ children, tags }: { children: ReactNode; tags?: ReactNode }) {
+  return (
+    <Flex direction={'column'} gap={2} mt={10}>
+      <HStack gap={2}>{tags}</HStack>
+      <PageTitle mt={2}>{children}</PageTitle>
+    </Flex>
   );
 }

@@ -18,7 +18,6 @@ export const TableContainer = forwardRef<TableContainerProps, 'div'>(
       height={size || rest.height}
       minWidth={size || rest.minWidth}
       minHeight={size || rest.minHeight}
-      borderColor={`border.${useColorMode().colorMode}`}
       {...rest}
     >
       {children}

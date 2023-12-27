@@ -175,7 +175,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             <Form>
               <Box p="32px">
                 {fn.args.length ? (
-                  <Stack mb="32px" spacing="16px">
+                  <Stack mb="32px" gap={4}>
                     {fn.args.map(({ name, type }) => (
                       <Argument
                         handleChange={handleChange}

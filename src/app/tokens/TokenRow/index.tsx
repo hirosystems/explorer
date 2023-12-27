@@ -21,29 +21,19 @@ export const TokenRow: FC<{
       <Td padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
         <Flex alignItems={'center'} gap={'8px'}>
           <TokenAvatar metadataImageUrl={ftToken.image_uri} asset={ftToken.symbol || 'FT'} />
-          <TokenLink tokenId={ftToken.contract_principal}>
-            <Text
-              as={'a'}
-              fontSize={'15px'}
-              whiteSpace={'nowrap'}
-              textOverflow={'ellipsis'}
-              overflow={'hidden'}
-              color={`links.${colorMode}`}
-              cursor={'pointer'}
-            >
-              {name} {ftToken.symbol ? `(${ftToken.symbol})` : null}
-            </Text>
+          <TokenLink
+            tokenId={ftToken.contract_principal}
+            fontSize={'sm'}
+            whiteSpace={'nowrap'}
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+          >
+            {name} {ftToken.symbol ? `(${ftToken.symbol})` : null}
           </TokenLink>
         </Flex>
       </Td>
       <Td padding={'10px'} display={['none', 'none', 'table-cell']}>
-        <Text
-          fontSize={'15px'}
-          whiteSpace={'nowrap'}
-          textOverflow={'ellipsis'}
-          overflow={'hidden'}
-          color={`links.${colorMode}`}
-        >
+        <Text fontSize={'15px'} whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'}>
           <TxLink txId={ftToken.tx_id}>{ftToken.tx_id}</TxLink>
         </Text>
       </Td>

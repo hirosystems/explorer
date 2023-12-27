@@ -17,7 +17,6 @@ export const Th = forwardRef<ThProps, 'th'>(({ children, size, ...rest }, ref) =
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

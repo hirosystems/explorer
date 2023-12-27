@@ -8,26 +8,11 @@ import { Text, TextProps } from './Text';
 export * from './Text';
 
 export const Caption = forwardRef<TextProps, 'small'>((props, ref) => (
-  <Text
-    style={{ userSelect: 'none' }}
-    color={`textCaption.${useColorMode().colorMode}`}
-    fontSize="12px"
-    lineHeight="16px"
-    display="inline-block"
-    ref={ref}
-    {...props}
-  />
+  <Text style={{ userSelect: 'none' }} fontSize="xs" display="inline-block" ref={ref} {...props} />
 ));
 
 export const Title = forwardRef<TextProps, 'span'>(({ as, ...props }, ref) => (
-  <Text
-    ref={ref}
-    as={as}
-    display="inline-block"
-    color={`textTitle.${useColorMode().colorMode}`}
-    fontWeight={500}
-    {...props}
-  />
+  <Text ref={ref} as={as} display="inline-block" fontWeight={'medium'} {...props} />
 ));
 
 export const Pre = forwardRef<TextProps, 'pre'>(({ as = 'pre', ...props }, ref) => (
@@ -41,7 +26,6 @@ export const Pre = forwardRef<TextProps, 'pre'>(({ as = 'pre', ...props }, ref) 
     boxShadow="low"
     px="8px"
     py="8px"
-    color={'textBody'}
     ref={ref}
     {...props}
     style={{

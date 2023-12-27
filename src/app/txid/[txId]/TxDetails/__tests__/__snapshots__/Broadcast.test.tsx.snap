@@ -3,21 +3,21 @@
 exports[`<Broadcast /> renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-pnih9e"
+    class="css-1392j1i"
   >
     <div
-      class="css-wasqz"
+      class="css-1malby3"
     >
       Broadcast
     </div>
     <div
-      class="css-1q1jcsf"
+      class="css-s99o7z"
     >
       <div
-        class="css-1dupj0l"
+        class="css-0"
       >
         <div
-          class="css-1txr7ua"
+          class="css-70qvj9"
         >
           <svg
             class="chakra-icon css-1p0vfbv"
@@ -38,7 +38,7 @@ exports[`<Broadcast /> renders correctly 1`] = `
             />
           </svg>
           <span
-            class="chakra-text css-14nx52v"
+            class="chakra-text css-ew98d6"
           >
             a year ago
           </span>
@@ -52,7 +52,6 @@ exports[`<Broadcast /> renders correctly 1`] = `
     >
       <svg
         aria-hidden="true"
-        color="textBody"
         fill="currentColor"
         focusable="false"
         height="20px"

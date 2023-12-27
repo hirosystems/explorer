@@ -17,7 +17,6 @@ export const Tr = forwardRef<TrProps, 'tr'>(({ children, size, ...rest }, ref) =
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

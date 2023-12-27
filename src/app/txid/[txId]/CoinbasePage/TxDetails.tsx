@@ -6,7 +6,6 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { Section } from '../../../../common/components/Section';
-import { useVerticallyStackedElementsBorderStyle } from '../../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { BlockHash } from '../TxDetails/BlockHash';
@@ -23,20 +22,18 @@ interface TxDetailsProps {
 
 export const TxDetails: React.FC<TxDetailsProps> = ({ tx }) => {
   return (
-    <>
-      <Section title="Summary">
-        <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
-          <Box width={['100%']} css={useVerticallyStackedElementsBorderStyle}>
-            <ID tx={tx} />
-            <Sender tx={tx} />
-            <Fees tx={tx} />
-            <Nonce tx={tx} />
-            <BlockHeight tx={tx} />
-            <BlockHash tx={tx} />
-            <NonCanonical tx={tx} />
-          </Box>
-        </Flex>
-      </Section>
-    </>
+    <Section title="Summary">
+      <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
+        <Box width={['100%']}>
+          <ID tx={tx} />
+          <Sender tx={tx} />
+          <Fees tx={tx} />
+          <Nonce tx={tx} />
+          <BlockHeight tx={tx} />
+          <BlockHash tx={tx} />
+          <NonCanonical tx={tx} />
+        </Box>
+      </Flex>
+    </Section>
   );
 };

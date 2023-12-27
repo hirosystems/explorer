@@ -42,14 +42,14 @@ export function BalanceItem({ balance, ...rest }: { balance: number } & FlexProp
   const parts = formattedBalance.split(localeDecimalSeparator);
 
   return (
-    <Flex flexDirection="column" as="span" {...rest} style={{ userSelect: 'all' }}>
+    <Flex flexDirection="column" as="span" {...rest} style={{ userSelect: 'all' }} fontSize={'sm'}>
       <Flex>
-        <Text color="currentColor">{parts[0]}</Text>
-        <Text color="currentColor" opacity={0.65}>
+        <Text fontWeight="semibold">{parts[0]}</Text>
+        <Text fontWeight="semibold">
           {localeDecimalSeparator}
           {parts[1]}
         </Text>
-        <Text ml="4px" color="currentColor">
+        <Text fontWeight="semibold" ml={1}>
           STX
         </Text>
       </Flex>

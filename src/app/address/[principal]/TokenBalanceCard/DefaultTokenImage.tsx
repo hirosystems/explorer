@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Circle } from '../../../../ui/Circle';
+import { Circle } from '../../../../common/components/Circle';
 
 export function DefaultTokenImage({ asset }: { asset: string }) {
   return (

@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
-import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { AccordionButton } from '../../../ui/AccordionButton';
 import { AccordionIcon } from '../../../ui/AccordionIcon';
 import { AccordionItem } from '../../../ui/AccordionItem';
@@ -15,7 +14,11 @@ import { MicroblockListItem } from './MicroblockListItem';
 export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = memo(
   ({ block }) => {
     return (
-      <AccordionItem pl={'20px'} border={'none'}>
+      <AccordionItem
+        border={'none'}
+        borderBottom={'1px solid var(--stacks-colors-border)'}
+        _last={{ border: 'none' }}
+      >
         <Flex gap={'6px'}>
           <BlockListItem block={block} data-test={`block-${block.hash}`} />
           <AccordionButton
@@ -29,7 +32,7 @@ export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = memo(
             <AccordionIcon />
           </AccordionButton>
         </Flex>
-        <AccordionPanel p={'0 30px 0 0'} css={useVerticallyStackedElementsBorderStyle}>
+        <AccordionPanel p={'0 30px 0 0'}>
           {!!block.microblocks_accepted?.length ? (
             block.microblocks_accepted.map((microblockHash, microblockIndex) => (
               <MicroblockListItem

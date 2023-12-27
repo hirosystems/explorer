@@ -12,7 +12,6 @@ export const Box = forwardRef<BoxProps, 'div'>(({ children, size, ...rest }, ref
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

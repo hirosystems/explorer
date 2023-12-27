@@ -31,13 +31,7 @@ export const Price: FC<
         ) : null
       }
       caption={
-        <Flex
-          fontSize={'12px'}
-          color={'textCaption'}
-          fontWeight="500"
-          alignItems={'center'}
-          gap={'6px'}
-        >
+        <Flex fontSize={'12px'} fontWeight="500" alignItems={'center'} gap={'6px'}>
           {currentPriceInBtc ? `${currentPriceInBtc.toFixed(8)} BTC` : 'N/A'}
           {priceInBtcChangePercentage24h ? (
             <TrendArrow change={priceInBtcChangePercentage24h} size={'11px'} />

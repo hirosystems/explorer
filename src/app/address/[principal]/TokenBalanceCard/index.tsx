@@ -52,17 +52,17 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
   if (!hasTokenBalance(balance)) return null;
 
   return (
-    <Section mb="32px" title="Holdings" {...rest}>
-      <Tabs variant={'soft-rounded'} borderRadius={'0px'} border={'none'} isLazy bg={'transparent'}>
+    <Section title="Holdings" {...rest}>
+      <Tabs isLazy>
         <TabList>
-          <Tab fontSize="12px">Tokens</Tab>
-          <Tab fontSize="12px">Collectibles</Tab>
+          <Tab>Tokens</Tab>
+          <Tab>Collectibles</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>
+          <TabPanel gap={0}>
             <FtBalance balance={balance} />
           </TabPanel>
-          <TabPanel>
+          <TabPanel gap={0}>
             <NftBalance balance={balance} nftHoldings={nftHoldings} bnsHexValues={bnsHexValues} />
           </TabPanel>
         </TabPanels>

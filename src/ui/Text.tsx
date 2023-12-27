@@ -9,13 +9,7 @@ import {
 
 export type TextProps = CUITextProps;
 export const Text = forwardRef<TextProps, 'span'>(({ as = 'span', children, ...rest }, ref) => (
-  <CUIText
-    as={as}
-    ref={ref}
-    display={'block'}
-    borderColor={`border.${useColorMode().colorMode}`}
-    {...rest}
-  >
+  <CUIText as={as} ref={ref} display={'block'} {...rest}>
     {children}
   </CUIText>
 ));

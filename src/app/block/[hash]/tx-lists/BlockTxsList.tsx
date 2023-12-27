@@ -4,15 +4,15 @@ import * as React from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
-import { SectionFooterActions } from '../../../../common/components/SectionFooterActions';
 import { SkeletonGenericTransactionList } from '../../../../common/components/loaders/skeleton-transaction';
-import { FilteredTxs } from '../../../../common/components/tx-lists/common/components/FilteredTxs';
-import { TxListItem } from '../../../../common/components/tx-lists/list-items/TxListItem';
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockTxsInfinite } from '../../../../common/queries/useBlockTxsInfinite';
 import { FilterButton } from '../../../../features/txs-filter/FilterButton';
-import { Box } from '../../../../ui/components';
+import { FilteredTxs } from '../../../../features/txs-list/FilteredTxs';
+import { TxListItem } from '../../../../features/txs-list/ListItem/TxListItem';
+import { Box } from '../../../../ui/Box';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
 interface BlockTxsListProps {
@@ -31,9 +31,9 @@ function BlockTxsListBase({ blockHash, limit }: BlockTxsListProps) {
   return (
     <Section title={'Transactions'} topRight={<FilterButton />}>
       <Box flexGrow={1}>
-        <Box position={'relative'} px={'20px'}>
+        <Box position={'relative'}>
           <FilteredTxs txs={txs} TxListItem={TxListItem} />
-          <SectionFooterActions
+          <ListFooter
             isLoading={response.isFetchingNextPage}
             hasNextPage={response.hasNextPage}
             fetchNextPage={limit ? undefined : response.fetchNextPage}

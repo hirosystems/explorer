@@ -15,10 +15,10 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { Badge } from '../../../common/components/Badge';
+import { Circle } from '../../../common/components/Circle';
 import { ListItem } from '../../../common/components/ListItem';
 import { Section } from '../../../common/components/Section';
 import { StxPriceButton } from '../../../common/components/StxPriceButton';
-import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { useContractFtMetadata } from '../../../common/queries/useContractFtMetadata';
 import {
   capitalize,
@@ -28,9 +28,9 @@ import {
   validateStacksAddress,
 } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
-import { Circle } from '../../../ui/Circle';
 import { FlexProps } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
+import { Icon } from '../../../ui/Icon';
 import { StxIcon } from '../../../ui/icons';
 import { Caption } from '../../../ui/typography';
 import { getTicker } from './Events';
@@ -92,7 +92,7 @@ const ConditionAsset = ({ condition }: { condition: PostCondition }) => {
     case 'stx':
       return (
         <Circle size="48px" bg={`accent.${colorMode}`}>
-          <StxIcon size="20px" color="white" />
+          <Icon as={StxIcon} size="20px" color="white" />
         </Circle>
       );
   }
@@ -177,13 +177,13 @@ export const PostConditions: React.FC<
       title="Post conditions"
       topRight={
         mode ? (
-          <Badge color={'textBody'} bg={'bgAlt'} border={'none'}>
+          <Badge bg={'bgAlt'} border={'none'}>
             {capitalize(mode)} mode
           </Badge>
         ) : null
       }
     >
-      <Box px="24px" css={useVerticallyStackedElementsBorderStyle}>
+      <Box px="24px">
         {conditions?.length ? (
           <>
             {conditions.map((condition: PostCondition, key) => (

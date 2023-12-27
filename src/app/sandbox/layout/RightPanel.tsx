@@ -1,10 +1,12 @@
 import React from 'react';
 import { MdOutlineLogout } from 'react-icons/md';
 
+import { Card } from '../../../common/components/Card';
 import { useAppSelector } from '../../../common/state/hooks';
 import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
@@ -15,16 +17,25 @@ import { useUser } from '../hooks/useUser';
 import { selectShowRightPanel } from '../sandbox-slice';
 
 export function RightPanel() {
-  const { isConnected, disconnect, stxAddress, transactions, mempoolTransactions, balance } =
-    useUser();
+  const { isConnected, disconnect, stxAddress, txs, mempoolTransactions, balance } = useUser();
   const showRightPanel = useAppSelector(selectShowRightPanel);
   if (!showRightPanel || !isConnected) return null;
 
   return (
-    <Flex flexGrow={1} flexDirection="column" borderLeftWidth={'1px'}>
+    <Card
+      rounded={'none'}
+      flexGrow={1}
+      flexDirection="column"
+      borderLeftWidth={'1px'}
+      position={'absolute'}
+      right={0}
+      top={0}
+      width={96}
+      height={'full'}
+    >
       {balance ? (
-        <Box bg={'bg'} borderBottomWidth="1px" p="24px">
-          <Stack spacing="16px">
+        <Box bg={'bg'} borderBottomWidth="1px" p={7}>
+          <Stack gap={4}>
             <Stack textAlign="right">
               <Caption>Account balance</Caption>
               <Flex
@@ -36,7 +47,7 @@ export function RightPanel() {
                 color={'textTitle'}
                 gap={'8px'}
               >
-                <StxIcon strokeWidth={2} color="currentColor" size="18px" />
+                <Icon as={StxIcon} size={'18px'} color="black" />
                 <Text fontWeight={600} fontSize={'24px'} display="block" position="relative">
                   {balance?.stx?.balance ? microToStacksFormatted(balance.stx.balance) : 0} STX
                 </Text>
@@ -56,7 +67,6 @@ export function RightPanel() {
                   <Tooltip placement="bottom" label="Sign out">
                     <IconButton
                       size="20px"
-                      color={'textBody'}
                       icon={<MdOutlineLogout size={'14px'} />}
                       aria-label={'sign out'}
                     />
@@ -68,6 +78,6 @@ export function RightPanel() {
         </Box>
       ) : null}
       <TransactionsPanel />
-    </Flex>
+    </Card>
   );
 }
