@@ -1,3 +1,10 @@
+## [1.136.1](https://github.com/hirosystems/explorer/compare/v1.136.0...v1.136.1) (2023-12-27)
+
+
+### Bug Fixes
+
+* refresh block view when switching live view on ([29b146b](https://github.com/hirosystems/explorer/commit/29b146b3d40044e01f1d7cdb2a7ad47d34def6a4))
+
 # [1.136.0](https://github.com/hirosystems/explorer/compare/v1.135.5...v1.136.0) (2023-12-21)
 
 
