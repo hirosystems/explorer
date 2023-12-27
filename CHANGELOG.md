@@ -1,3 +1,10 @@
+## [1.136.2](https://github.com/hirosystems/explorer/compare/v1.136.1...v1.136.2) (2023-12-27)
+
+
+### Bug Fixes
+
+* api url search param ([d71b374](https://github.com/hirosystems/explorer/commit/d71b374f8cfc16298b34515c5588b3e454de194a))
+
 ## [1.136.1](https://github.com/hirosystems/explorer/compare/v1.136.0...v1.136.1) (2023-12-27)
 
 
