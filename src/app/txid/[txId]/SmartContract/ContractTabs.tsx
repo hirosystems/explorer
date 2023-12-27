@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
-import { useVerticallyStackedElementsBorderStyle } from '../../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { CodeEditor } from '../../../../ui/CodeEditor';
 import { Tab } from '../../../../ui/Tab';
@@ -15,12 +14,10 @@ export const ContractTabs: FC<{
   source?: string;
   contract?: ContractWithParsedAbi;
 }> = ({ contractId, source, contract }) => {
-  const verticallyStackedElementsBorderStyle = useVerticallyStackedElementsBorderStyle();
-
   if (!contract) return null;
 
   return (
-    <Tabs variant={'soft-rounded'} isLazy>
+    <Tabs isLazy>
       <TabList>
         {source && <Tab>Source code</Tab>}
         <Tab>Available functions</Tab>
@@ -31,7 +28,7 @@ export const ContractTabs: FC<{
             <CodeEditor code={source} />
           </TabPanel>
         )}
-        <TabPanel css={verticallyStackedElementsBorderStyle}>
+        <TabPanel>
           <ContractAvailableFunctions contractId={contractId} contract={contract} />
         </TabPanel>
       </TabPanels>

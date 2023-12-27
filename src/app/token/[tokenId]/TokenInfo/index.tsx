@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { Card } from '../../../../common/components/Card';
+import { Wrapper } from '../../../_components/Stats/Wrapper';
 import { TokenInfoProps } from '../types';
 import { MarketCap } from './MarketCap';
 import { Price } from './Price';
@@ -12,12 +13,7 @@ import { Transaction } from './Transaction';
 export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tokenInfo, txId }) => {
   return (
     <ErrorBoundary fallbackRender={() => null}>
-      <Card
-        display={'grid'}
-        gridColumnStart={'1'}
-        gridColumnEnd={['2', '2', '3']}
-        gridTemplateColumns={['100%', '100%', '1fr 1fr', '1fr 1fr 1fr 1fr']}
-      >
+      <Wrapper>
         <Supply
           borderRightWidth={['0px', '0px', '1px', '1px']}
           circulatingSupply={tokenInfo.extended?.circulatingSupply}
@@ -37,7 +33,7 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tok
           borderRightWidth={['0px', '0px', '1px', '1px']}
         />
         <Transaction txId={txId} tvl={tokenInfo.extended?.tvl} />
-      </Card>
+      </Wrapper>
     </ErrorBoundary>
   );
 };

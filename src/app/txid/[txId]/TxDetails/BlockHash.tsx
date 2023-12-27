@@ -22,10 +22,8 @@ export const BlockHash: FC<{
     <KeyValueHorizontal
       label={'Block hash'}
       value={
-        <BlockLink hash={tx.block_hash}>
-          <TextLink fontSize={'14px'} fontWeight={500}>
-            {tx.block_hash}
-          </TextLink>
+        <BlockLink hash={tx.block_hash} fontSize={'sm'} fontWeight={'medium'}>
+          {tx.block_hash}
         </BlockLink>
       }
       copyValue={tx.block_hash}

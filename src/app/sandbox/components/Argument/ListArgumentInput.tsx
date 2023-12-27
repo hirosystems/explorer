@@ -59,7 +59,6 @@ export const ListArgumentInput: FC<
                 as={RiCloseLine}
                 size={3}
                 mt={'14px'}
-                color={'textCaption'}
                 style={{ cursor: 'pointer' }}
                 onClick={() => remove(i)}
               />

@@ -1,3 +1,4 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 
@@ -5,7 +6,7 @@ import { Flex, FlexProps } from '../../ui/Flex';
 import { CopyButton } from './CopyButton';
 
 export interface KeyValueHorizontalProps {
-  label: string;
+  label: string | ReactNode;
   value: ReactNode;
   copyValue?: string;
   labelProps?: FlexProps;
@@ -34,6 +35,7 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
   copyValue,
   labelProps,
 }) => {
+  const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
     <Flex
       py={'16px'}
@@ -42,6 +44,9 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
       gap={'10px'}
       flexWrap="nowrap"
       minHeight={'73px'}
+      borderBottom={'1px'}
+      borderColor={borderColor}
+      _last={{ borderBottom: 'unset' }}
     >
       <Flex fontSize={'12px'} color={'textCaption'} width={'140px'} flexShrink={0} {...labelProps}>
         {label}
@@ -49,9 +54,9 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
       <Flex
         flexDirection={['column', 'column', 'row']}
         alignItems={['flex-start', 'flex-start', 'center']}
-        color={'textBody'}
         maxWidth={'calc(100% - 180px)'}
         wordBreak={'break-all'}
+        fontSize={'sm'}
       >
         {value}
       </Flex>

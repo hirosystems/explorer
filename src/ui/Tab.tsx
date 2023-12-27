@@ -12,14 +12,6 @@ export const Tab = forwardRef<TabProps, 'div'>(({ children, size, ...rest }, ref
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderRadius={'12px'}
-    fontSize={'16px'}
-    color={`textCaption.${useColorMode().colorMode}`}
-    p={'10px 20px'}
-    _selected={{
-      bg: `bg4.${useColorMode().colorMode}`,
-      color: `textTitle.${useColorMode().colorMode}`,
-    }}
     {...rest}
   >
     {children}

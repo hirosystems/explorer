@@ -1,22 +1,23 @@
 'use client';
 
+import { useColorModeValue } from '@chakra-ui/react';
 import * as React from 'react';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
+import { Circle } from '../../../../common/components/Circle';
 import { TxLink } from '../../../../common/components/ExplorerLinks';
-import { PercentageCircle } from '../../../../common/components/PercentageCircle';
-import { Pending } from '../../../../common/components/status';
 import { useAddressConfirmedTxsWithTransfersInfinite } from '../../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { useCoreApiInfo } from '../../../../common/queries/useCoreApiInfo';
 import { getStackingStartBlockHeight } from '../../../../common/utils/accounts';
 import { Box } from '../../../../ui/Box';
-import { Circle } from '../../../../ui/Circle';
-import { Flex } from '../../../../ui/Flex';
+import { CircularProgress } from '../../../../ui/CircularProgress';
+import { CircularProgressLabel } from '../../../../ui/CircularProgressLabel';
+import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { TextLink } from '../../../../ui/TextLink';
 import { StxIcon } from '../../../../ui/icons';
-import { Caption, Text, Title } from '../../../../ui/typography';
+import { Caption, Title } from '../../../../ui/typography';
 
 export const StackingPercentage = ({
   balance,
@@ -29,19 +30,18 @@ export const StackingPercentage = ({
   const { data } = useAddressConfirmedTxsWithTransfersInfinite(address);
   const firstPageTxs = data?.pages?.[0]?.results.map(txWithTransfers => txWithTransfers.tx);
   const stackingStartBlock = getStackingStartBlockHeight(firstPageTxs);
+  const progressColor = useColorModeValue('brand', 'purple.400');
 
   if (stackingStartBlock) {
     if (!stacksInfo) {
       return (
-        <Box px="20px">
-          <Stack spacing="8px" py="24px">
-            <Caption>Stacking progress</Caption>
-            <Flex alignItems="center">
-              <Pending size="14px" mr="8px" />
-              <Text color={'textTitle'}>Calculating...</Text>
-            </Flex>
+        <Stack gap={2} py={4}>
+          <Caption>Stacking progress</Caption>
+          <Stack gap={2} alignItems="center">
+            <CircularProgress isIndeterminate color={progressColor} />
+            <Caption>Calculating...</Caption>
           </Stack>
-        </Box>
+        </Stack>
       );
     }
 
@@ -57,46 +57,40 @@ export const StackingPercentage = ({
     const isStacking = unlockBlock > currentBlock;
 
     return (
-      <Box mt="15px">
+      <Stack gap={2} py={4}>
         <Caption>Stacking progress</Caption>
-        <Stack spacing="8px" py="10px">
+        <Stack gap={2} alignItems="center">
           {isStacking ? (
-            <Box mx="auto" size="64px">
-              <PercentageCircle percentage={stackingPercentage} />
-            </Box>
+            <CircularProgress value={stackingPercentage} color={progressColor} size={'180px'}>
+              <CircularProgressLabel>{`${Math.round(stackingPercentage)}%`}</CircularProgressLabel>
+            </CircularProgress>
           ) : (
             <Circle mx="auto" size="48px" mb="16px" bg={'invert'}>
-              <StxIcon color={'bg'} size="24px" />
+              <Icon as={StxIcon} size={'24px'} color="white" />
             </Circle>
           )}
           {isStacking ? (
-            <Box mt="4px">
-              <Box textAlign="center">
-                <Caption mb="12px">
-                  ~{blocksUntilUnlocked.toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
-                  blocks remaining
-                </Caption>
-                <TxLink txId={balance?.stx?.lock_tx_id}>
-                  <TextLink target="_blank" color={'brand'} fontSize={0}>
-                    View Stacking transaction
-                  </TextLink>
-                </TxLink>
-              </Box>
-            </Box>
+            <Stack gap={2} alignItems="center">
+              <Caption mb="12px">
+                ~{blocksUntilUnlocked.toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
+                blocks remaining
+              </Caption>
+              <TxLink txId={balance?.stx?.lock_tx_id} target="_blank" fontSize={'xs'}>
+                View Stacking transaction
+              </TxLink>
+            </Stack>
           ) : (
             <Box textAlign="center">
-              <Title mb="12px" fontSize={2} fontWeight={500} color={'textTitle'}>
+              <Title mb="12px" fontSize={2} fontWeight={'medium'} color={'textTitle'}>
                 Completed at #{unlockBlock}
               </Title>
-              <TxLink txId={balance?.stx?.lock_tx_id}>
-                <TextLink target="_blank" color={'brand'} fontSize={0}>
-                  View Stacking transaction
-                </TextLink>
+              <TxLink txId={balance?.stx?.lock_tx_id} target="_blank" fontSize={'xs'}>
+                View Stacking transaction
               </TxLink>
             </Box>
           )}
         </Stack>
-      </Box>
+      </Stack>
     );
   }
   return null;

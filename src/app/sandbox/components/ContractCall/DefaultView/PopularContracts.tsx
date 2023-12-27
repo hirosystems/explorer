@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import { TbChartBar, TbCurrencyBitcoin, TbCurrencyDollar, TbSignature } from 'react-icons/tb';
 
+import { Circle } from '../../../../../common/components/Circle';
 import { ExplorerLink } from '../../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../../common/components/Section';
-import { Circle } from '../../../../../ui/Circle';
+import { HStack } from '../../../../../ui/HStack';
 import { Stack } from '../../../../../ui/Stack';
 import { Caption, Title } from '../../../../../ui/typography';
 
@@ -37,11 +38,11 @@ const defaultContracts = (address: string) => [
 export const PopularContracts: FC<{ rootContractAddress: string }> = ({ rootContractAddress }) => (
   <>
     <Title fontWeight={400}>Or select from one of these</Title>
-    <Stack mt="24px" spacing="24px">
+    <Stack mt="24px" gap={6}>
       {defaultContracts(rootContractAddress).map(({ name, address, icon: Icon }) => (
         <ExplorerLink href={`/sandbox/contract-call/${address}.${name}`} key={name}>
           <Section color={'textTitle'} p="24px" _hover={{ cursor: 'pointer', color: 'brand' }}>
-            <Stack isInline spacing="16px">
+            <HStack gap={4}>
               <Circle>
                 <Icon />
               </Circle>
@@ -49,7 +50,7 @@ export const PopularContracts: FC<{ rootContractAddress: string }> = ({ rootCont
                 <Title color="currentColor">{name}</Title>
                 <Caption>{address}</Caption>
               </Stack>
-            </Stack>
+            </HStack>
           </Section>
         </ExplorerLink>
       ))}

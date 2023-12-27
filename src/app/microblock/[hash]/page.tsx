@@ -6,11 +6,10 @@ import { AiOutlineClockCircle } from 'react-icons/ai';
 import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
 import { Section } from '../../../common/components/Section';
 import { Value } from '../../../common/components/Value';
-import { SkeletonTransactionList } from '../../../common/components/loaders/skeleton-transaction';
-import { useVerticallyStackedElementsBorderStyle } from '../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { useSuspenseBlockByHash } from '../../../common/queries/useBlockByHash';
 import { useSuspenseMicroblockByHash } from '../../../common/queries/useMicroblockByHash';
 import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
+import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
@@ -41,7 +40,7 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
   ).toLocaleDateString()}`;
 
   return (
-    <Flex direction={'column'} mt="32px" gap="32px">
+    <>
       <PageTitle>{title}</PageTitle>
       <Stack gap="16px">
         <Grid
@@ -52,7 +51,7 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
           alignItems="flex-start"
         >
           <Section title="Summary">
-            <Box px="16px" css={useVerticallyStackedElementsBorderStyle}>
+            <Box px="16px">
               <KeyValueHorizontal label={'Hash'} value={<Value>{hash}</Value>} copyValue={hash} />
               <KeyValueHorizontal
                 label={'Block height'}
@@ -90,11 +89,11 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
         ) : (
           <Section title={'Transactions'} mt={'32px'}>
             <Box px="24px">
-              <SkeletonTransactionList length={microblock?.txs.length} />
+              <SkeletonTxsList txsCount={microblock?.txs.length} />
             </Box>
           </Section>
         )}
       </Stack>
-    </Flex>
+    </>
   );
 }

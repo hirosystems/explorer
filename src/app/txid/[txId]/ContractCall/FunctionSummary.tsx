@@ -5,7 +5,6 @@ import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { Section } from '../../../../common/components/Section';
-import { useVerticallyStackedElementsBorderStyle } from '../../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { FunctionSummaryArguments } from './FunctionSummaryArguments';
@@ -21,7 +20,7 @@ export const FunctionSummary = memo<{
   return (
     <Section title="Function called">
       <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
-        <Box width={['100%']} css={useVerticallyStackedElementsBorderStyle}>
+        <Box width={['100%']}>
           <KeyValueHorizontal
             label="Function"
             value={<FunctionSummaryName summary={summary} />}

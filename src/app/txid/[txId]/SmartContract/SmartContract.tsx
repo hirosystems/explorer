@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { AddressTxListTabs } from '../../../../common/components/tx-lists/tabs/AddressTxListTabs';
 import { useSuspenseContractById } from '../../../../common/queries/useContractById';
 import { useSuspenseTxById } from '../../../../common/queries/useTxById';
+import { AddressTxListTabs } from '../../../../features/txs-list/tabs/AddressTxListTabs';
 import { PostConditions } from '../PostConditions';
 import { TxPage } from '../TxPage';
 import { ContractTabs } from './ContractTabs';

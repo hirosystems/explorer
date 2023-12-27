@@ -3,16 +3,17 @@
 import * as React from 'react';
 
 import { UnlockingScheduleModal } from '../../../common/components/modals/unlocking-schedule';
-import { AddressTxListTabs } from '../../../common/components/tx-lists/tabs/AddressTxListTabs';
 import { useSuspenseAccountBalance } from '../../../common/queries/useAccountBalance';
 import { useAddressNonces } from '../../../common/queries/useAddressNonces';
 import { hasTokenBalance } from '../../../common/utils/accounts';
+import { AddressTxListTabs } from '../../../features/txs-list/tabs/AddressTxListTabs';
 import { Flex, Stack } from '../../../ui/components';
 import { PageTitle } from '../../_components/PageTitle';
 import { AddressSummary } from './AddressSummary';
 import { StxBalance } from './StxBalance';
 import { TokenBalanceCard } from './TokenBalanceCard';
 import { Wrapper } from './Wrapper';
+import Loading from './loading';
 
 export default function AddressPage({ params: { principal } }: any) {
   const { data: balance } = useSuspenseAccountBalance(principal, { refetchOnWindowFocus: true });
@@ -21,11 +22,10 @@ export default function AddressPage({ params: { principal } }: any) {
   const hasTokenBalances = hasTokenBalance(balance);
 
   return (
-    <Flex direction={'column'} mt="32px" gap="32px">
-      <UnlockingScheduleModal balance={balance} />
+    <>
       <PageTitle>Address details</PageTitle>
       <Wrapper>
-        <Stack spacing="32px">
+        <Stack gap={8}>
           <AddressSummary
             principal={principal}
             hasTokenBalances={hasTokenBalances}
@@ -35,12 +35,13 @@ export default function AddressPage({ params: { principal } }: any) {
           <AddressTxListTabs address={principal} />
         </Stack>
         {balance && (
-          <Stack spacing="32px">
+          <Stack gap={8}>
             <StxBalance address={principal} />
             <TokenBalanceCard address={principal} />
           </Stack>
         )}
       </Wrapper>
-    </Flex>
+      <UnlockingScheduleModal balance={balance} />
+    </>
   );
 }

@@ -5,6 +5,8 @@ import { TbAlertTriangle, TbInfoCircle } from 'react-icons/tb';
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import { Box, BoxProps } from '../../../ui/Box';
+import { CircularProgress } from '../../../ui/CircularProgress';
+import { CircularProgressLabel } from '../../../ui/CircularProgressLabel';
 import { Flex } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
 import { Modal } from '../../../ui/Modal';
@@ -14,7 +16,6 @@ import { Caption, Text, Title } from '../../../ui/typography';
 import { MODALS } from '../../constants/constants';
 import { useCoreApiInfo } from '../../queries/useCoreApiInfo';
 import { Badge } from '../Badge';
-import { PercentageCircle } from '../PercentageCircle';
 import { Section } from '../Section';
 import { useOpenedModal } from './modal-slice';
 
@@ -25,11 +26,9 @@ const StxAmount: React.FC<BoxProps & { amount: number }> = ({ amount, ...rest })
     .toLocaleString(undefined, { minimumFractionDigits: 6, maximumFractionDigits: 6 })
     .split('.');
   return (
-    <Box fontVariantNumeric="tabular-nums" {...rest}>
+    <Box fontSize={'xs'} fontVariantNumeric="tabular-nums" {...rest}>
       <Box as="span">{stx}</Box>
-      <Box opacity={0.5} as="span">
-        .{ustx}
-      </Box>
+      <Box as="span">.{ustx}</Box>
       <Box as="span"> STX</Box>
     </Box>
   );
@@ -53,21 +52,23 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
       <Stack spacing={0} flexWrap="wrap" isInline>
         <Stack
           width={['100%', '100%', '40%']}
-          borderRight={['unset', 'unset', '1px solid']}
-          borderBottom={['1px solid', '1px solid', 'unset']}
+          borderRight={['unset', 'unset', '1px']}
+          borderBottom={['1px', '1px', 'unset']}
           pb={['32px', '32px', 'unset']}
         >
           <Flex alignItems="center">
             <Box mr="16px" size="44px">
-              <PercentageCircle size="44px" percentage={percentage} />
+              <CircularProgress value={percentage} color={'brand'}>
+                <CircularProgressLabel>{`${Math.round(percentage)}%`}</CircularProgressLabel>
+              </CircularProgress>
             </Box>
             <Stack>
-              <Title fontSize={3} fontWeight={400}>
+              <Caption>
                 {percentage.toLocaleString('en-US', {
                   maximumFractionDigits: 2,
                 })}
                 % unlocked
-              </Title>
+              </Caption>
               <Caption>{blocksLeft.toLocaleString('en')} blocks remaining</Caption>
             </Stack>
           </Flex>
@@ -79,7 +80,7 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
           isInline
         >
           <Flex
-            borderRight={['unset', 'unset', '1px solid']}
+            borderRight={['unset', 'unset', '1px']}
             justifyContent={['flex-start', 'flex-start', 'center']}
             pb={['32px', '32px', 'unset']}
             px={['unset', 'unset', '32px']}
@@ -88,19 +89,19 @@ const OverviewCard: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight
           >
             <Stack>
               <Caption>Unlocked</Caption>
-              <StxAmount color={'textBody'} amount={totalThatHasUnlocked} />
+              <StxAmount amount={totalThatHasUnlocked} />
             </Stack>
           </Flex>
           <Flex
             pt={['32px', '32px', 'unset']}
-            borderTop={['1px solid', 'unset', 'unset']}
+            borderTop={['1px', 'unset', 'unset']}
             justifyContent={['flex-start', 'flex-start', 'center']}
             width={['100%', '100%', '50%']}
             flexGrow={1}
           >
             <Stack>
               <Caption>Locked</Caption>
-              <StxAmount color={'textBody'} amount={parseFloat(total_locked)} />
+              <StxAmount amount={parseFloat(total_locked)} />
             </Stack>
           </Flex>
         </Stack>
@@ -120,7 +121,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
   return (
     <Section mt="32px" px="32px" pb="8px" pt={['8px', '8px', 'unset']}>
       <Grid
-        borderBottom={'1px solid'}
+        borderBottom={'1px'}
         pb="16px"
         pt="24px"
         width="100%"
@@ -151,7 +152,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
         return (
           <Grid
             alignItems="center"
-            borderBottom={index === arr.length - 1 ? undefined : '1px solid'}
+            borderBottom={index === arr.length - 1 ? undefined : '1px'}
             py={['24px', '24px', '12px']}
             width="100%"
             gridTemplateColumns={[
@@ -162,10 +163,10 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
             justifyContent="flex-start"
             position="relative"
           >
-            <Box fontWeight={[500, 500, 'unset']} mb={['8px', '8px', 'unset']} color={'textBody'}>
+            <Box fontSize={'xs'} mb={['8px', '8px', 'unset']}>
               <Box display={['inline', 'inline', 'none']}>Block </Box>#{block_height}
             </Box>
-            <Box mb={['16px', '16px', 'unset']} color={'textBody'}>
+            <Box fontSize={'xs'} mb={['16px', '16px', 'unset']}>
               {relativeTime}
             </Box>
             <Flex
@@ -179,7 +180,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
                   Received
                 </Badge>
               ) : (
-                <Badge color={'textBody'} bg={'border'} border={'none'}>
+                <Badge bg={'border'} border={'none'}>
                   Locked
                 </Badge>
               )}
@@ -187,19 +188,11 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
             <Caption my="8px" display={['block', 'block', 'none']}>
               Amount
             </Caption>
-            <StxAmount
-              textAlign={['left', 'left', 'right']}
-              amount={parseFloat(amount)}
-              color={'textBody'}
-            />
+            <StxAmount textAlign={['left', 'left', 'right']} amount={parseFloat(amount)} />
             <Caption my="8px" mt="16px" display={['block', 'block', 'none']}>
               Cumulative
             </Caption>
-            <StxAmount
-              textAlign={['left', 'left', 'right']}
-              amount={cumulativeAmount}
-              color={'textBody'}
-            />
+            <StxAmount textAlign={['left', 'left', 'right']} amount={cumulativeAmount} />
           </Grid>
         );
       })}
@@ -215,10 +208,10 @@ export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse
 
   return (
     <Modal isOpen={isOpen} title={'Unlocking schedule'}>
-      <Box width="100%" maxWidth="960px" bg={'bg'} maxHeight="calc(100vh - 64px)" overflow="auto">
+      <Box width="100%" maxWidth="960px" maxHeight="calc(100vh - 64px)" overflow="auto">
         <Stack spacing="16px">
           <Box>
-            <Text fontSize={'14px'} color={'textBody'} lineHeight="22px" maxWidth="72ch">
+            <Text fontSize={'14px'} lineHeight="22px" maxWidth="72ch">
               This address participated in the Stacks token offering. Its STX is subject to the
               unlocking schedule detailed below. The dates are estimates and can vary depending on
               the Bitcoin block time.

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../../../common/components/ErrorMessageLayout';
 import { Section } from '../../../common/components/Section';
@@ -13,7 +13,7 @@ import { Box } from '../../../ui/Box';
 import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
-import { Stack } from '../../../ui/Stack';
+import { HStack } from '../../../ui/HStack';
 import { PageTitle } from '../../_components/PageTitle';
 
 const defaultErrorMessage = 'Failed to fetch token';
@@ -36,7 +36,7 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
               title={errorName}
               message={errorMessage}
               action={
-                <Stack isInline spacing="16px">
+                <HStack gap={4}>
                   <Box>
                     <ButtonLink href={buildUrl('/', network)} mt="24px">
                       Go home
@@ -47,7 +47,7 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
                       All tokens
                     </ButtonLink>
                   </Box>
-                </Stack>
+                </HStack>
               }
             />
           </Box>

@@ -1,0 +1,52 @@
+html,
+body {
+  height: 100%;
+  color: var(--stacks-colors-text)
+}
+
+.prism-code *::selection {
+  background-color: #aab3ff;
+  color: white !important;
+}
+
+.clarity-editor-wrapper {
+  position: absolute !important;
+}
+
+.code-editor {
+  pre {
+    width: fit-content;
+    min-width: 100%;
+    transform: translateY(2px);
+  }
+
+  input,
+  textarea,
+  [contenteditable] {
+    caret-color: white;
+  }
+
+  & * {
+    font-size: 14px !important;
+  }
+
+  textarea {
+    width: 100% !important;
+    padding-left: 76px !important;
+    font-size: 14px !important;
+    padding-top: 2px !important;
+    font-family: 'Fira Code', monospace !important;
+    line-height: 24px !important;
+    outline: transparent;
+  }
+
+  & > div {
+    overflow: initial !important;
+  }
+
+  textarea,
+  pre {
+    white-space: pre !important;
+    overflow-wrap: unset !important;
+  }
+}

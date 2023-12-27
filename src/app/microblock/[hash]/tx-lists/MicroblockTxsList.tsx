@@ -48,9 +48,7 @@ export const MicroblockTxsList: FC<MicroblockTxsListProps> = memo(({ microblockH
           ))
         ) : (
           <Grid placeItems="center" px="16px" py="32px">
-            <Text color={'textCaption'} mt="32px">
-              No transactions yet
-            </Text>
+            <Text mt="32px">No transactions yet</Text>
           </Grid>
         )}
       </Box>

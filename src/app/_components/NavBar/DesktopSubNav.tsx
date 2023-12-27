@@ -1,33 +1,40 @@
+import { LightMode } from '@chakra-ui/react';
 import React from 'react';
 
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { Stack } from '../../../ui/Stack';
+import { Link } from '../../../ui/Link';
 import { NavItem } from './types';
 
-export const DesktopSubNav = ({
-  label,
-  href,
-  onClick,
-  hasDivider,
-}: NavItem & { hasDivider: boolean }) => {
-  const as = onClick ? 'button' : href ? 'a' : 'div';
+export const DesktopSubNav = ({ label, href, onClick }: NavItem) => {
   return (
-    <Flex alignItems={'center'} borderBottomWidth={hasDivider ? '1px' : '0px'}>
-      <Box
-        as={as}
-        {...(as === 'button' ? { onClick } : { href })}
-        role={'group'}
-        display={'block'}
-        rounded={'md'}
-        color={`midnight`}
-        width={'100%'}
-        padding={'0 20px'}
+    <LightMode>
+      <Flex
+        alignItems={'center'}
+        borderBottom="1px"
+        _last={{
+          borderBottom: 'none',
+        }}
       >
-        <Stack direction={'row'} align={'center'}>
-          <Box width={'100%'}>{label}</Box>
-        </Stack>
-      </Box>
-    </Flex>
+        {href ? (
+          <Link href={href} display="block" rounded="md" color="black" width="full" px={5}>
+            {label}
+          </Link>
+        ) : (
+          <Box
+            as={'button'}
+            onClick={onClick}
+            role="group"
+            display="block"
+            rounded="md"
+            color="black"
+            width="full"
+            px={5}
+          >
+            {label}
+          </Box>
+        )}
+      </Flex>
+    </LightMode>
   );
 };

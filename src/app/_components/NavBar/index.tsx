@@ -1,19 +1,21 @@
 'use client';
 
 import { FC, useMemo } from 'react';
-import { RxHamburgerMenu } from 'react-icons/rx';
+import { PiList } from 'react-icons/pi';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
-import { MODALS, PAGE_MAX_WIDTH } from '../../../common/constants/constants';
+import { MODALS } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Network } from '../../../common/types/network';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import { capitalize } from '../../../common/utils/utils';
 import { Search } from '../../../features/search/Search';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
+import { Show } from '../../../ui/Show';
 import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
@@ -27,11 +29,7 @@ import { NavItem } from './types';
 
 export const NavBar: FC = () => {
   const { isOpen, onToggle } = useDisclosure();
-  const {
-    networks,
-    activeNetwork,
-    apiUrls: { mainnet, testnet },
-  } = useGlobalContext();
+  const { networks, activeNetwork } = useGlobalContext();
   const dispatch = useAppDispatch();
 
   const navItems: NavItem[] = useMemo(
@@ -64,7 +62,7 @@ export const NavBar: FC = () => {
       },
       {
         id: 'network',
-        label: 'Network',
+        label: capitalize(activeNetwork.mode),
         children: [
           ...Object.values<Network>(networks).map((network, key) => {
             return {
@@ -86,45 +84,30 @@ export const NavBar: FC = () => {
   );
 
   return (
-    <Box
-      width="100%"
-      maxWidth={PAGE_MAX_WIDTH}
-      margin={'auto'}
-      padding={{ base: '0 16px', md: '0 32px' }}
-    >
-      <Flex align={'center'} justifyContent={'space-between'}>
-        <Flex
-          flex={{ base: 1 }}
-          alignItems={'center'}
-          height={'64px'}
-          gap={'16px'}
-          justifyContent={'space-between'}
-        >
-          <Logo />
-          <Search
-            display={['none', 'none', 'block', 'block']}
-            variant="small"
-            width="100%"
-            maxWidth="760px"
-          />
+    <Box width="full">
+      <Flex alignItems={'center'} flex={{ base: 1 }} gap={6}>
+        <Logo />
+        <Search />
+        <Show above="lg">
           <NetworkModeBanner />
-          <Flex display={{ base: 'none', md: 'flex' }} gap={'16px'}>
+        </Show>
+        <Show above="lg">
+          <Flex gap={3}>
             <ColorModeButton aria-label={'Change color mode'} />
             <DesktopNav navItems={navItems} />
-            <BtcStxPrice />
           </Flex>
-        </Flex>
-
-        <Flex display={{ base: 'flex', md: 'none' }}>
+          <BtcStxPrice />
+        </Show>
+        <Show below="lg">
           <IconButton
             onClick={onToggle}
-            icon={<Icon as={RxHamburgerMenu} w={5} h={5} color={'#fff'} />}
+            icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
             variant={'ghost'}
             aria-label={'Toggle Navigation'}
           />
-        </Flex>
+          {isOpen && <MobileNav navItems={navItems} close={onToggle} />}
+        </Show>
       </Flex>
-      {isOpen && <MobileNav navItems={navItems} close={onToggle} />}
     </Box>
   );
 };

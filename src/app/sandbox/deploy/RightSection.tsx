@@ -6,9 +6,10 @@ import { useCallback, useState } from 'react';
 import { claritySyntax } from '../../../common/constants/claritySyntax';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Box } from '../../../ui/Box';
-import { Stack } from '../../../ui/Stack';
+import { HStack } from '../../../ui/HStack';
+import { Icon } from '../../../ui/Icon';
+import { ClarityIcon } from '../../../ui/icons/ClarityIcon';
 import { Caption } from '../../../ui/typography';
-import { ClarityIcon } from '../components/ClarityIcon';
 import { Toolbar } from '../components/Toolbar';
 import { autocomplete, hover } from '../editor-config/autocomplete';
 import { defineTheme } from '../editor-config/define-theme';
@@ -36,21 +37,13 @@ export function RightSection() {
   );
   return (
     <>
-      <Box
-        px="32px"
-        pb="16px"
-        borderBottomWidth="1px"
-        borderBottomColor="rgba(255,255,255,0.1)"
-        color="white"
-      >
-        <Stack alignItems="center" isInline>
-          <ClarityIcon size="16px" />
-          <Caption transform="translateY(1px)" color="white">
-            Clarity code editor
-          </Caption>
-        </Stack>
-      </Box>
-      <Box size="100%" position="relative">
+      <HStack alignItems="center" borderBottomWidth="1px" color="white" pb={7}>
+        <Icon as={ClarityIcon} size={4} />
+        <Caption transform="translateY(1px)" color="white">
+          Clarity code editor
+        </Caption>
+      </HStack>
+      <Box height={'full'} position="relative">
         <Toolbar />
         <Editor
           beforeMount={handleEditorWillMount}

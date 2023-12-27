@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useVerticallyStackedElementsBorderStyle } from '../../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { Singleton } from '../../../../common/types/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
@@ -20,7 +19,7 @@ export const FunctionSummaryArguments: React.FC<{
 }> = ({ summary, btc }) => {
   const args = (summary?.function_args || []).filter(arg => !!arg);
   return summary.function_args ? (
-    <Box width="100%" css={useVerticallyStackedElementsBorderStyle}>
+    <Box width="100%">
       {args.map((arg: FunctionArg, key: number) => {
         return (
           <Flex

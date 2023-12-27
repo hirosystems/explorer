@@ -1,12 +1,11 @@
-import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
-import { ReactNode } from 'react';
 
+import { Section } from '../../../common/components/Section';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
-import { Box, BoxProps } from '../../../ui/Box';
+import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Spinner } from '../../../ui/Spinner';
-import { Caption } from '../../../ui/typography';
+import { Caption, Text } from '../../../ui/typography';
 import { SearchResultItem } from '../items/search-result-item';
 import { clearSearchTerm, selectIsSearchFieldFocused } from '../search-slice';
 import { useSearch } from '../useSearch';
@@ -46,43 +45,6 @@ const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResul
   );
 };
 
-const SearchResultsCardWrapper: React.FC<BoxProps & { title?: string; actions?: ReactNode }> = ({
-  title,
-  actions,
-  children,
-  ...rest
-}) => {
-  return (
-    <Box
-      borderRadius="12px"
-      mt="16px"
-      bg={`bg.${useColorMode().colorMode}`}
-      color={`textCaption.${useColorMode().colorMode}`}
-      position="absolute"
-      width="100%"
-      zIndex={1}
-      boxShadow="high"
-      borderWidth="1px"
-      overflow="auto"
-      minWidth={0}
-      {...rest}
-    >
-      <Flex
-        borderBottomWidth="1px"
-        justifyContent="space-between"
-        alignItems="center"
-        px="16px"
-        height="48px"
-      >
-        {title && <Caption>{title}</Caption>}
-
-        {actions && actions}
-      </Flex>
-      <>{children}</>
-    </Box>
-  );
-};
-
 export const SearchResultsCard: React.FC = () => {
   const {
     query: { data, isLoading, error },
@@ -92,7 +54,7 @@ export const SearchResultsCard: React.FC = () => {
   const hasError = !!error || !!(data && !data?.found);
   const hasResults = !hasError && !!data?.found;
   const errorMessage = searchTerm && !data?.found && data?.error ? data.error : '';
-  const getTitle = React.useMemo(() => {
+  const title = React.useMemo(() => {
     if (hasError) {
       return 'Not found';
     }
@@ -104,17 +66,21 @@ export const SearchResultsCard: React.FC = () => {
   if (!isFocused || (!hasError && !hasResults)) return null;
 
   return (
-    <SearchResultsCardWrapper
-      title={getTitle}
-      actions={<CardActions hasError={hasError} hasResults={hasResults} isLoading={isLoading} />}
+    <Section
+      title={<Text fontSize={'xs'}>{title}</Text>}
+      topRight={<CardActions hasError={hasError} hasResults={hasResults} isLoading={isLoading} />}
+      position={'absolute'}
+      zIndex={'docked'}
+      mt={4}
+      width={'full'}
     >
-      <>
+      <Box py={6}>
         {errorMessage ? (
           <SearchErrorMessage message={errorMessage} />
         ) : data && data.found ? (
           <SearchResultItem result={data} />
         ) : null}
-      </>
-    </SearchResultsCardWrapper>
+      </Box>
+    </Section>
   );
 };

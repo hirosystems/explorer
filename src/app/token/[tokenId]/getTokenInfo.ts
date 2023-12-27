@@ -58,12 +58,17 @@ async function getBasicTokenInfo(
       throw new Error('cannot fetch token info for this request');
     }
 
-    console.log('[debug] cache miss');
+    console.log(
+      '[debug] cache miss, fetching ',
+      `${DEFAULT_MAINNET_SERVER}/metadata/v1/ft/${tokenId}`
+    );
 
     const tokenMetadataResponse = await fetch(
       `${DEFAULT_MAINNET_SERVER}/metadata/v1/ft/${tokenId}`
     );
+
     const tokenMetadata: FtMetadataResponse = await tokenMetadataResponse.json();
+
     const tokenName = tokenMetadata?.name;
     const tokenSymbol = tokenMetadata?.symbol;
 
@@ -91,7 +96,6 @@ async function getBasicTokenInfo(
 async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenInfo) {
   try {
     const token = await searchCoinGeckoTokens(basicTokenInfo.symbol);
-
     if (!token) {
       return {
         basic: basicTokenInfo,
@@ -99,20 +103,20 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
     }
 
     const tokenInfoResponse = await getTokenFromCoinGecko(token.id);
-
-    if (!tokenInfoResponse) {
+    if (!tokenInfoResponse || tokenInfoResponse?.status?.error_code) {
       return {
         basic: basicTokenInfo,
       };
     }
 
-    const name = tokenInfoResponse?.name || null;
-    const symbol = tokenInfoResponse?.symbol || null;
+    const name = tokenInfoResponse?.name || basicTokenInfo.name || null;
+    const symbol = tokenInfoResponse?.symbol || basicTokenInfo.symbol || null;
     const categories =
       tokenInfoResponse?.categories?.filter((category: string) => !!category) || [];
 
     const circulatingSupply = tokenInfoResponse?.market_data?.circulating_supply || null;
-    const totalSupply = tokenInfoResponse?.market_data?.total_supply || null;
+    const totalSupply =
+      tokenInfoResponse?.market_data?.total_supply || basicTokenInfo.totalSupply || null;
     const fullyDilutedValuation =
       tokenInfoResponse?.market_data?.fully_diluted_valuation?.usd || null;
     const tvl = tokenInfoResponse?.market_data?.total_value_locked?.usd || null;

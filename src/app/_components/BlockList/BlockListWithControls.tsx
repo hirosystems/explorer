@@ -50,7 +50,7 @@ export function BlockListWithControls() {
     <SectionWithControls
       title="Recent Blocks"
       controls={
-        <Stack spacing={'6px'}>
+        <Stack gap={1.5}>
           <Flex justifyContent={'space-between'}>
             <FormControl display="flex" alignItems="center" gap={'12px'} minW={0}>
               <Switch
@@ -158,7 +158,7 @@ export function BlockListWithControls() {
             </Text>
             <TextLink
               href={'javascript:void(0)'}
-              color={`brand.${colorMode}`}
+              color={`brand`}
               _hover={{ textDecoration: 'underline' }}
               onClick={() => {
                 setLoading(true);
@@ -187,20 +187,9 @@ export function BlockListWithControls() {
         </Stack>
       }
       footer={
-        <>
-          <Button
-            width={'100%'}
-            backgroundColor={'#fff'}
-            color={'#242629'}
-            fontWeight={500}
-            borderWidth={'1px'}
-            _hover={{
-              backgroundColor: '#F9F9FA',
-            }}
-          >
-            View all recent blocks <Icon as={HiMiniArrowUpRight} width={'16px'} height={'16px'} />
-          </Button>
-        </>
+        <Button width={'full'} variant={'secondary'}>
+          View all recent blocks <Icon as={HiMiniArrowUpRight} size={4} />
+        </Button>
       }
     ></SectionWithControls>
   );

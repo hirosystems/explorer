@@ -1,7 +1,5 @@
 import { PayloadAction, Reducer, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
-
 import { RootState } from '../../common/state/store';
 
 export enum TxFilterTypes {
@@ -16,19 +14,12 @@ export enum TxFilterTypes {
 export type TxFilters = { [key in TxFilterTypes]: TxFilterState };
 
 export interface TxFilterState {
-  activeFilters: Record<string, boolean>;
+  activeFilters: string[];
   isVisible: boolean;
 }
 
 export const initialState: TxFilterState = {
-  activeFilters: {
-    [GetTransactionListTypeEnum.coinbase]: true,
-    [GetTransactionListTypeEnum.contract_call]: true,
-    [GetTransactionListTypeEnum.token_transfer]: true,
-    [GetTransactionListTypeEnum.smart_contract]: true,
-    [GetTransactionListTypeEnum.poison_microblock]: true,
-    tenure_change: true,
-  },
+  activeFilters: [],
   isVisible: false,
 };
 
@@ -36,11 +27,8 @@ const createSliceOptions = (filterType: TxFilterTypes) => ({
   name: filterType,
   initialState,
   reducers: {
-    toggleFilter: (state: TxFilterState, action: PayloadAction<string>) => {
-      state.activeFilters[action.payload] = !state.activeFilters[action.payload];
-    },
-    toggleVisibility: (state: TxFilterState) => {
-      state.isVisible = !state.isVisible;
+    setActiveFilters: (state: TxFilterState, action: PayloadAction<string[]>) => {
+      state.activeFilters = action.payload;
     },
   },
 });
@@ -49,11 +37,10 @@ export const createTxFilterSlice = (filterType: TxFilterTypes) => {
   const slice = createSlice(createSliceOptions(filterType));
   const selectTxFilter = (state: RootState) => state[filterType];
   const selectActiveFilters = createSelector([selectTxFilter], search => search.activeFilters);
-  const selectIsVisible = createSelector([selectTxFilter], search => search.isVisible);
   return {
     slice,
     actions: slice.actions,
-    selectors: { selectActiveFilters, selectIsVisible },
+    selectors: { selectActiveFilters },
   };
 };
 

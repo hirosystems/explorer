@@ -4,33 +4,21 @@ import React from 'react';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { BtcStxBlockLinks } from '../../../common/components/BtcStxBlockLinks';
-import { BlockLink } from '../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
-import { Circle } from '../../../ui/Circle';
 import { Flex, FlexProps } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
-import { CheckIcon } from '../../../ui/icons';
 import { Caption, Text } from '../../../ui/typography';
 
 export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
   ({ block, ...rest }) => {
     return (
       <TwoColsListItem
-        icon={
-          <BlockLink hash={block.hash}>
-            <Circle size="40px">
-              <Icon as={CheckIcon} size="16px" color={'textCaption.light'} />
-            </Circle>
-          </BlockLink>
-        }
         leftContent={{
           title: (
             <Flex
               onClick={e => {
                 e.stopPropagation();
               }}
-              color={'textTitle'}
               alignItems="center"
             >
               <BtcStxBlockLinks
@@ -42,7 +30,7 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
             </Flex>
           ),
           subtitle: (
-            <Caption display="block">
+            <Caption display="block" color={'secondaryText'}>
               {addSepBetweenStrings([
                 `${block?.microblocks_accepted?.length || 0} ${pluralize(
                   'microblock',
@@ -57,19 +45,8 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
           ),
         }}
         rightContent={{
-          title: (
-            <Text
-              fontSize="14px"
-              width="100%"
-              textAlign="right"
-              color={'textBody'}
-              display="block"
-              suppressHydrationWarning={true}
-            >
-              {toRelativeTime(block.burn_block_time * 1000)}
-            </Text>
-          ),
-          subtitle: <Caption display="block">{truncateMiddle(block.hash)}</Caption>,
+          title: toRelativeTime(block.burn_block_time * 1000),
+          subtitle: truncateMiddle(block.hash),
         }}
         {...rest}
       />

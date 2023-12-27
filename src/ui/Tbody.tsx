@@ -17,7 +17,6 @@ export const Tbody = forwardRef<TbodyProps, 'tbody'>(({ children, size, ...rest 
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

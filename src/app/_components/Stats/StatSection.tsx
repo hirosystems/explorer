@@ -14,25 +14,33 @@ export const StatSection: FC<{
   bodySecondaryText: ReactNode;
   caption: ReactNode;
 }> = ({ title, bodyMainText, bodySecondaryText, caption, ...rest }) => (
-  <Grid p={'24px'} height={'131px'} {...rest}>
-    <Text fontWeight="500" mb={'9px'} style={{ whiteSpace: 'nowrap' }}>
+  <Flex
+    direction={'column'}
+    p={5}
+    height={32}
+    justifyContent={'center'}
+    borderColor={'border'}
+    {...rest}
+  >
+    <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
       {title}
     </Text>
-    <Flex fontSize={'27px'} mb={'6px'} alignItems={'baseline'} wrap={'nowrap'} minW={'0'}>
-      <Box
-        fontSize={'27px'}
-        mr={'6px'}
-        style={{ whiteSpace: 'nowrap' }}
+    <Flex mb={2} alignItems={'baseline'} wrap={'nowrap'} minW={'0'} gap={0.5} fontWeight={'medium'}>
+      <Text
+        fontSize={'xl'}
+        whiteSpace={'nowrap'}
         textOverflow={'ellipsis'}
         overflow={'hidden'}
-        whiteSpace={'nowrap'}
+        color={'text'}
       >
-        {bodyMainText}{' '}
-      </Box>
-      <Box fontSize={'14px'} style={{ whiteSpace: 'nowrap' }}>
+        {bodyMainText}
+      </Text>
+      <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
         {bodySecondaryText}
-      </Box>
+      </Text>
     </Flex>
-    {caption}
-  </Grid>
+    <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+      {caption}
+    </Text>
+  </Flex>
 );

@@ -30,7 +30,7 @@ export const Transaction: FC<GridProps & { txId: string; tvl: number | null | un
       }
       bodySecondaryText={null}
       caption={
-        <Flex fontSize={'12px'} color={'textCaption'} fontWeight="500">
+        <Flex fontSize={'12px'} fontWeight="500">
           TVL: {tvl ? `$${numberToString(tvl)}` : 'N/A'}
         </Flex>
       }

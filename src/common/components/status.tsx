@@ -44,7 +44,7 @@ export function StyledBadge({ children, ...rest }: { children: ReactNode } & Bad
   return (
     <Badge
       labelProps={{ display: 'flex', alignItems: 'center', gap: '4px' }}
-      bg={'rgba(255, 255, 255, 0.24)'}
+      bg={'purple.500'}
       color={'white'}
       gap={'4px'}
       border={'none'}
@@ -61,7 +61,7 @@ export const TxStatusLabel: React.FC<StatusProps> = ({ status, ...rest }) => {
   const label = labelMap[status];
   return (
     <StyledBadge>
-      <Icon as={IconComponent} size="12px" color="currentColor" />
+      <Icon as={IconComponent} size={3} />
       {label}
     </StyledBadge>
   );

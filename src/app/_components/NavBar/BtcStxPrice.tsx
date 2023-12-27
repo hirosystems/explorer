@@ -1,41 +1,34 @@
 'use client';
 
-import { css } from '@emotion/react';
 import * as React from 'react';
-import { Fragment } from 'react';
+import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
-import { ExplorerSkeletonLoader } from '../../../common/components/loaders/skeleton-common';
 import {
   useCurrentBtcPrice,
   useSuspenseCurrentStxPrice,
 } from '../../../common/queries/useCurrentPrices';
 import { usdFormatter } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
+import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
+import { Skeleton } from '../../../ui/Skeleton';
 import { BitcoinIcon, StxIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 
-const wrapperStyle = css`
-  display: flex;
-  color: #fff;
-  gap: 5px;
-  align-items: center;
-`;
-
-const iconStyle = css`
-  position: relative;
-  height: 18px;
-  width: 18px;
-  border-radius: 18px;
-  svg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-`;
+function PriceContainer({
+  icon,
+  children,
+  ...rest
+}: { icon: ReactNode; children: ReactNode } & FlexProps) {
+  return (
+    <Flex color={'slate.50'} gap={1.5} alignItems={'center'} {...rest}>
+      {icon}
+      <Flex fontWeight={'medium'} fontSize={'xs'} flexGrow={1} suppressHydrationWarning={true}>
+        {children}
+      </Flex>
+    </Flex>
+  );
+}
 
 function BtcStxPriceBase() {
   const {
@@ -51,48 +44,33 @@ function BtcStxPriceBase() {
   const formattedBtcPrice = btcPrice ? usdFormatter.format(btcPrice) : '';
   const formattedStxPrice = stxPrice ? usdFormatter.format(stxPrice) : '';
   return (
-    <Fragment>
-      <Box css={wrapperStyle}>
-        <Circle size={18} bg="white" css={iconStyle}>
-          <Icon as={BitcoinIcon} color={'#f7931a'} size={19} />
-        </Circle>
-        <Flex
-          fontWeight={500}
-          fontSize={'14px'}
-          alignItems={'center'}
-          minWidth={'65px'}
-          suppressHydrationWarning={true}
-        >
-          {isBtcPriceError ? (
-            'N/A'
-          ) : isBtcPriceFetching || false ? (
-            <ExplorerSkeletonLoader width={'70px'} height={'15px'} />
-          ) : (
-            formattedBtcPrice
-          )}
-        </Flex>
-      </Box>
-      <Box css={wrapperStyle}>
-        <Circle size={18} bg="accent.light" css={iconStyle}>
-          <Icon as={StxIcon} strokeWidth={2} size="11px" color="white" />
-        </Circle>
-        <Flex
-          fontWeight={500}
-          fontSize={'14px'}
-          alignItems={'center'}
-          minWidth={'35px'}
-          suppressHydrationWarning={true}
-        >
-          {isStxPriceError ? (
-            'N/A'
-          ) : isStxPriceFetching ? (
-            <ExplorerSkeletonLoader width={'35px'} height={'15px'} />
-          ) : (
-            formattedStxPrice
-          )}
-        </Flex>
-      </Box>
-    </Fragment>
+    <Flex gap={6} minWidth={'172px'}>
+      <PriceContainer icon={<Icon as={BitcoinIcon} size={4.5} />} minWidth={'92px'}>
+        {isBtcPriceError || !formattedBtcPrice ? (
+          'N/A'
+        ) : isBtcPriceFetching ? (
+          <Skeleton display={'flex'} flexGrow={1} height={3} />
+        ) : (
+          formattedBtcPrice
+        )}
+      </PriceContainer>
+      <PriceContainer
+        icon={
+          <Circle size={4.5} bg="brand" border={'none'}>
+            <Icon as={StxIcon} size={2.5} color="white" />
+          </Circle>
+        }
+        minWidth={'56px'}
+      >
+        {isStxPriceError || !formattedStxPrice ? (
+          'N/A'
+        ) : isStxPriceFetching ? (
+          <Skeleton display={'flex'} flexGrow={1} height={3} />
+        ) : (
+          formattedStxPrice
+        )}
+      </PriceContainer>
+    </Flex>
   );
 }
 

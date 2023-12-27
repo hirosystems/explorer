@@ -25,7 +25,6 @@ export function ErrorBox({
   const network = useGlobalContext().activeNetwork;
   const errorName = error.name || 'Unknown error';
   const errorMessage = error.message || 'Something went wrong, please try again later.';
-  const colorMode = useColorMode().colorMode;
   return (
     <Flex
       direction={'column'}
@@ -37,12 +36,12 @@ export function ErrorBox({
       padding="10px"
       {...flexProps}
     >
-      <Icon as={VscError} size="24px" color={'gray.700'} />
+      <Icon as={VscError} size="24px" />
       <Flex direction={'column'} alignItems={'center'} gap={'4px'}>
-        <Text color={`feedbackError.${colorMode}`} fontSize={14}>
+        <Text color={`error`} fontSize={14}>
           {errorName}
         </Text>
-        <Text fontSize={12} color={'gray.700'}>
+        <Text fontSize={12} textAlign={'center'}>
           {errorMessage}
         </Text>
       </Flex>

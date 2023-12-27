@@ -48,9 +48,9 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
         <Form>
           <Flex flexDirection="column" p="24px">
             <Box as="form">
-              <Stack spacing="16px">
+              <Stack gap={4}>
                 <Title fontSize="24px">Call a contract</Title>
-                <Text color={'textBody'} maxWidth="42ch" lineHeight="1.6" display="block" my={0}>
+                <Text fontSize={'sm'}>
                   Manually enter contract details below, or load a contract from your transactions
                   to see available functions.
                 </Text>
@@ -117,7 +117,9 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
                   color={colorMode === 'light' ? '#000000' : '#FFFFFF'}
                 />
                 <Box>
-                  <Button onClick={() => handleSubmit()}>Get contract</Button>
+                  <Button onClick={() => handleSubmit()} variant="primary">
+                    Get contract
+                  </Button>
                 </Box>
               </Stack>
             </Box>

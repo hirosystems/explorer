@@ -1,5 +1,3 @@
-'use client';
-
 import { ChainID } from '@stacks/transactions';
 
 import { NetworkModes } from '../types/network';
@@ -38,5 +36,3 @@ export const NetworkModeBtcAddressBaseUrlMap: Record<NetworkModes, string> = {
   [NetworkModes.Mainnet]: MAINNET_BTC_ADDRESS_BASE_URL,
   [NetworkModes.Testnet]: TESTNET_BTC_ADDRESS_BASE_URL,
 };
-
-export const CustomNetworksLSKey = 'CustomNetworks';

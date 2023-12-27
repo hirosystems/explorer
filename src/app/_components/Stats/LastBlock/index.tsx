@@ -10,6 +10,7 @@ import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
+import { BitcoinIcon } from '../../../../ui/icons';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
@@ -24,21 +25,21 @@ function LastBlockBase(props: GridProps) {
       title="Last Block"
       bodyMainText={`#${lastBlockHeight}`}
       bodySecondaryText={
-        <Flex alignItems={'center'}>
-          <Circle size={18} mr={'3px'}>
-            <Icon as={FaBitcoin} color={'icon'} size={18} />
-          </Circle>
-          {lastBurnBlockHeight}
+        <Flex
+          alignItems={'center'}
+          ml={1.5}
+          lineHeight={'1em'}
+          position={'relative'}
+          top={0.5}
+          gap={1.5}
+        >
+          <Icon as={BitcoinIcon} size={4.5} />#{lastBurnBlockHeight}
         </Flex>
       }
       caption={
-        <Box fontSize={'12px'} color={'textCaption'} fontWeight="500">
-          <Text color={'textTitle'} display={'inline-block'}>
-            {lastBlockTxsCount}
-          </Text>{' '}
-          transaction
-          {lastBlockTxsCount !== 1 ? 's' : ''}
-        </Box>
+        <>
+          {lastBlockTxsCount} transaction{lastBlockTxsCount !== 1 ? 's' : ''}
+        </>
       }
       {...props}
     />

@@ -9,7 +9,6 @@ export const DefaultView: FC<{
   rootContractAddress: string;
 }> = ({ rootContractAddress }) => (
   <Grid
-    minHeight="600px"
     width="calc((1142px / 3) * 2)"
     gridTemplateColumns="repeat(2, 1fr)"
     flexGrow={1}

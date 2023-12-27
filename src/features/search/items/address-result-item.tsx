@@ -1,12 +1,12 @@
 import { useColorMode } from '@chakra-ui/react';
 import React from 'react';
 
+import { Circle } from '../../../common/components/Circle';
 import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { useAccountStxBalance } from '../../../common/queries/useAccountStxBalance';
 import { FoundResult } from '../../../common/types/search-results';
 import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
-import { Circle } from '../../../ui/Circle';
 import { Flex } from '../../../ui/Flex';
 import { WalletIcon } from '../../../ui/icons';
 import { Caption, Title } from '../../../ui/typography';
@@ -27,7 +27,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
     <AddressLink principal={principal}>
       <ResultItemWrapper>
         <Flex alignItems="center">
-          <Circle>
+          <Circle size={12}>
             <WalletIcon size="16px" />
           </Circle>
           <Box ml="16px">

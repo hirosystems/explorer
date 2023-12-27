@@ -14,7 +14,6 @@ export * from './Stack';
 export * from './Tooltip';
 export * from './Modal';
 export * from './IconButton';
-export * from './Circle';
 export * from './Spinner';
 export * from './Icon';
 export * from './Input';

@@ -1,21 +1,22 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
 import { FC, ReactNode, memo } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
+import { Show } from '../../ui/Show';
+import { Text } from '../../ui/Text';
 import { leftLineCss } from '../styles/hover';
 
 interface TwoColumnsListProps extends FlexProps {
-  icon: ReactNode;
-  leftContent: {
-    title: ReactNode;
-    subtitle: ReactNode;
+  icon?: ReactNode;
+  leftContent?: {
+    title?: ReactNode;
+    subtitle?: ReactNode;
   };
   rightContent?: {
-    title: ReactNode;
-    subtitle: ReactNode;
+    title?: ReactNode;
+    subtitle?: ReactNode;
   };
 }
 
@@ -24,25 +25,77 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
     return (
       <Flex
         flexGrow={1}
-        gap={'16px'}
+        gap={4}
         alignItems={'center'}
-        py={'24px'}
-        css={leftLineCss(useColorMode().colorMode)}
+        py={6}
+        css={leftLineCss()}
         minWidth={0}
+        borderBottom={'1px'}
+        _last={{ borderBottom: 'unset' }}
         {...rest}
       >
-        <Box width={'40px'}>{icon}</Box>
-        <Flex width={'100%'} minWidth={'0px'} direction={['column', 'row']} gap={['8px', '0px']}>
-          <Flex direction={'column'} gap={'6px'} minWidth={0}>
-            <Flex direction={'column'} minHeight={'24px'} justifyContent={'center'}>
-              {leftContent.title}
+        <Show above="lg">{icon && <Box width={10}>{icon}</Box>}</Show>
+        <Flex
+          width={'full'}
+          minWidth={'0px'}
+          gap={2}
+          direction={['column', 'column', 'column', 'row']}
+          alignItems={'flex-start'}
+        >
+          {leftContent && (
+            <Flex
+              direction={'column'}
+              justifyContent={'center'}
+              gap={2}
+              minWidth={0}
+              flex={'1 1 auto'}
+              width={['full', 'full', 'full', 'auto']}
+            >
+              {leftContent.title !== undefined ? (
+                <Text
+                  alignItems={'center'}
+                  fontSize={'sm'}
+                  fontWeight={'semibold'}
+                  gap={1.5}
+                  minWidth={0}
+                  display={'flex'}
+                >
+                  <Show below="lg">{icon && <Box width={4.5}>{icon}</Box>}</Show>
+                  <Box minWidth={0} width={'full'}>
+                    {leftContent.title}
+                  </Box>
+                </Text>
+              ) : null}
+              {leftContent.subtitle !== undefined ? (
+                <Text fontSize={'xs'} color={'secondaryText'}>
+                  {leftContent.subtitle}
+                </Text>
+              ) : null}
             </Flex>
-            <Box>{leftContent.subtitle}</Box>
-          </Flex>
+          )}
           {rightContent && (
-            <Flex direction={'column'} gap={'8px'} ml={['0px', 'auto']} flexShrink={0}>
-              <Box alignSelf={['flex-start', 'flex-end']}>{rightContent.title}</Box>
-              <Box alignSelf={['flex-start', 'flex-end']}>{rightContent.subtitle}</Box>
+            <Flex
+              direction={'column'}
+              justifyContent={'center'}
+              gap={2}
+              maxWidth={'full'}
+              flex={'0 1 auto'}
+              width={['full', 'full', 'full', 'auto']}
+            >
+              {rightContent.title !== undefined ? (
+                <Text fontSize={'sm'} textAlign={['left', 'left', 'left', 'right']}>
+                  {rightContent.title}
+                </Text>
+              ) : null}
+              {rightContent.subtitle !== undefined ? (
+                <Text
+                  fontSize={'xs'}
+                  color={'secondaryText'}
+                  textAlign={['left', 'left', 'left', 'right']}
+                >
+                  {rightContent.subtitle}
+                </Text>
+              ) : null}
             </Flex>
           )}
         </Flex>

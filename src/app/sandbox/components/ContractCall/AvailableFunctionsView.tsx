@@ -34,26 +34,14 @@ export const AbiFunction = forwardRef<
     >
       <Flex alignItems="center">
         <Flex alignItems="center">
-          <Grid
-            placeItems="center"
-            borderWidth="1px"
-            borderRadius="100%"
-            size="32px"
-            color={'textCaption'}
-          >
+          <Grid placeItems="center" borderWidth="1px" borderRadius="100%" size="32px">
             {abiFn.access === 'read_only' ? (
               <Icon path={mdiApi} size="20px" />
             ) : (
               <Icon path={mdiFunction} size="20px" />
             )}
           </Grid>
-          <Text
-            fontSize="14px"
-            fontFamily={`"Fira Code", monospace`}
-            ml="16px"
-            fontWeight="500"
-            color={'textBody'}
-          >
+          <Text fontSize="14px" fontFamily={`"Fira Code", monospace`} ml="16px" fontWeight="500">
             {abiFn.name}
           </Text>
         </Flex>

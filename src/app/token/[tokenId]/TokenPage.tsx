@@ -3,12 +3,19 @@
 import React from 'react';
 
 import { StyledBadge } from '../../../common/components/status';
+import { getTransactionStatus } from '../../../common/utils/transactions';
+import { getTxTitle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
-import { PageTitle } from '../../_components/PageTitle';
+import { Tag } from '../../../ui/Tag';
+import { TagLabel } from '../../../ui/TagLabel';
+import { TagLeftIcon } from '../../../ui/TagLeftIcon';
+import { StxIcon } from '../../../ui/icons';
+import { PageTitle, PageTitleWithTags } from '../../_components/PageTitle';
 import { LinksMenu } from './LinksMenu';
 import { Tabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
+import Loading from './loading';
 import { TokenInfoProps } from './types';
 
 export function TokenPage({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: TokenInfoProps }) {
@@ -18,26 +25,24 @@ export function TokenPage({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: 
   const categories = tokenInfo.extended?.categories || [];
 
   return (
-    <Flex direction={'column'} mt="32px" gap="32px">
-      <Flex direction={'column'} gap={'8px'} width={'100%'}>
-        {!!categories.length && (
-          <HStack gap="8px">
-            {categories.map(category => (
-              <StyledBadge>{category}</StyledBadge>
+    <>
+      <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
+        {!!categories.length ? (
+          <PageTitleWithTags
+            tags={categories.map(category => (
+              <Tag key={category}>
+                <TagLabel>{category}</TagLabel>
+              </Tag>
             ))}
-          </HStack>
-        )}
-        <Flex
-          alignItems={'center'}
-          justifyContent={'space-between'}
-          width={'100%'}
-          mt={!!categories.length ? '8px' : '40px'}
-        >
-          <PageTitle mt={'0px'}>
+          >
+            {name} ({symbol})
+          </PageTitleWithTags>
+        ) : (
+          <PageTitle>
             {name} ({symbol})
           </PageTitle>
-          {!!tokenInfo.extended?.links && <LinksMenu links={tokenInfo.extended.links} />}
-        </Flex>
+        )}
+        {!!tokenInfo.extended?.links && <LinksMenu links={tokenInfo.extended.links} />}
       </Flex>
       <TokenInfo tokenInfo={tokenInfo} txId={tokenId} />
       <Tabs
@@ -46,6 +51,6 @@ export function TokenPage({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: 
           !!tokenInfo.extended?.links?.repos?.length ? tokenInfo.extended?.developerData : undefined
         }
       />
-    </Flex>
+    </>
   );
 }

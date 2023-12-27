@@ -1,5 +1,6 @@
 import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
+import { PiX } from 'react-icons/pi';
 import { TbX } from 'react-icons/tb';
 
 import { Flex } from '../../../ui/Flex';
@@ -13,35 +14,23 @@ export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navI
   const colorMode = useColorMode().colorMode;
   return (
     <Stack
-      display={{ md: 'none' }}
       position="fixed"
+      height="full"
+      width="full"
+      backgroundColor="bg"
       top={0}
       left={0}
-      height="100vh"
-      width="100vw"
       zIndex={2}
-      backgroundColor={`bg.${colorMode}`}
-      padding={'0 32px'}
+      padding={6}
+      gap={6}
     >
-      <Flex justifyContent={'space-between'} padding={'16px 0'} height={'64px'} mb={'10px'}>
-        <ColorModeButton
-          aria-label={'Change color mode'}
-          color={`invert.${colorMode}`}
-          borderWidth={'1px'}
-        />
-        <IconButton
-          onClick={close}
-          size="40px"
-          color={`invert.${colorMode}`}
-          icon={<TbX size={'32px'} />}
-          aria-label={'Close menu'}
-        />
+      <Flex justifyContent={'space-between'}>
+        <ColorModeButton aria-label={'Change color mode'} color="invert" borderWidth={'1px'} />
+        <IconButton onClick={close} icon={<PiX />} aria-label={'Close menu'} />
       </Flex>
-      <Flex direction={'column'} gap={'16px'}>
-        {navItems.map(navItem => (
-          <MobileNavItem key={navItem.id} {...navItem} />
-        ))}
-      </Flex>
+      {navItems.map(navItem => (
+        <MobileNavItem key={navItem.id} {...navItem} />
+      ))}
     </Stack>
   );
 };

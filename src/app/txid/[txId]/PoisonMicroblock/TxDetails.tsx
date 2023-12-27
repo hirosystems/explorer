@@ -7,7 +7,6 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { Section } from '../../../../common/components/Section';
-import { useVerticallyStackedElementsBorderStyle } from '../../../../common/hooks/useVerticallyStackedElementsBorderStyle';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { BlockHash } from '../TxDetails/BlockHash';
@@ -27,7 +26,7 @@ export const TxDetails: React.FC<TxDetailsProps> = ({ tx }) => {
     <>
       <Section title="Summary">
         <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
-          <Box width={['100%']} css={useVerticallyStackedElementsBorderStyle}>
+          <Box width={['100%']}>
             <Sender tx={tx} />
             <ID tx={tx} />
             <Fees tx={tx} />

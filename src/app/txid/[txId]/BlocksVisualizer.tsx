@@ -235,7 +235,7 @@ const Block: React.FC<BlockProps> = ({
       <Box css={blockAndArrowStyle}>
         {displayBlockchainIcons && (
           <Box css={blockchainIconWrapperStyle} backgroundColor={`accent.${colorMode}`}>
-            <StxIcon color="#fff" size="16px" />
+            <Icon as={StxIcon} size={'16px'} color="white" />
           </Box>
         )}
         <Box

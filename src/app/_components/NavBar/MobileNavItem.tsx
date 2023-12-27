@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BsChevronDown } from 'react-icons/bs';
+import { PiCaretDown } from 'react-icons/pi';
 
 import { Box } from '../../../ui/Box';
 import { Collapse } from '../../../ui/Collapse';
@@ -14,7 +14,7 @@ export const MobileNavItem: FC<NavItem> = ({ label, onClick, children, href }) =
   const { isOpen, onToggle } = useDisclosure();
 
   return (
-    <Stack spacing={4} onClick={children && onToggle}>
+    <Stack gap={4} onClick={children && onToggle} p={1}>
       <Flex
         as="a"
         href={href ?? '#'}
@@ -23,11 +23,12 @@ export const MobileNavItem: FC<NavItem> = ({ label, onClick, children, href }) =
         _hover={{
           textDecoration: 'none',
         }}
+        pr={2}
       >
-        <Text fontSize={'24px'}>{label}</Text>
+        <Text>{label}</Text>
         {children && (
           <Icon
-            as={BsChevronDown}
+            as={PiCaretDown}
             transition={'all .25s ease-in-out'}
             transform={isOpen ? 'rotate(180deg)' : ''}
             w={4}
@@ -35,30 +36,21 @@ export const MobileNavItem: FC<NavItem> = ({ label, onClick, children, href }) =
           />
         )}
       </Flex>
-
-      <Collapse in={isOpen} animateOpacity style={{ marginTop: '0 !important' }}>
-        <Stack
-          mt={2}
-          pl={4}
-          borderLeft={1}
-          borderStyle={'solid'}
-          borderColor={'pink'}
-          align={'start'}
-        >
-          {children &&
-            children.map(child => {
-              const as = child.onClick ? 'button' : child.href ? 'a' : 'div';
-              return (
-                <Box
-                  as={as}
-                  key={child.id}
-                  width={'100%'}
-                  {...(as === 'button' ? { onClick: child.onClick } : { href: child.href })}
-                >
-                  {child.label}
-                </Box>
-              );
-            })}
+      <Collapse in={isOpen}>
+        <Stack mt={2} pl={4} borderLeft={'2px solid var(--stacks-colors-purple-400)'}>
+          {children?.map(child => {
+            const as = child.onClick ? 'button' : child.href ? 'a' : 'div';
+            return (
+              <Box
+                as={as}
+                key={child.id}
+                color="invert"
+                {...(as === 'button' ? { onClick: child.onClick } : { href: child.href })}
+              >
+                {child.label}
+              </Box>
+            );
+          })}
         </Stack>
       </Collapse>
     </Stack>

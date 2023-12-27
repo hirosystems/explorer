@@ -1,24 +1,20 @@
-import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
-import { IconType } from 'react-icons';
 import { BsCodeSlash } from 'react-icons/bs';
-import { PiArrowBendDownRight } from 'react-icons/pi';
+import { PiArrowBendDownRight, PiClock, PiWarningCircle } from 'react-icons/pi';
 import { RxCube } from 'react-icons/rx';
-import { TbBrandCoinbase } from 'react-icons/tb';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
 
-import { Circle } from '../../ui/Circle';
-import { IconProps } from '../../ui/Icon';
+import { Icon, IconProps } from '../../ui/Icon';
+import { useBreakpointValue } from '../../ui/hooks/useBreakpointValue';
 import { FunctionIcon, StxIcon } from '../../ui/icons';
+import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
 import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
-import { ClockIcon } from './icons/clock';
-import { FailedIcon } from './icons/failed';
-import { MicroblockIcon } from './icons/microblock';
+import { Circle } from './Circle';
 
-export const getTxTypeIcon = (txType: Transaction['tx_type']): IconType => {
+export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
   switch (txType) {
     case 'smart_contract':
       return BsCodeSlash;
@@ -27,7 +23,7 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): IconType => {
       return FunctionIcon;
 
     case 'coinbase':
-      return TbBrandCoinbase;
+      return CubeSparkleIcon;
 
     case 'poison_microblock':
       return RxCube;
@@ -41,30 +37,16 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): IconType => {
 };
 
 const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
-  const colorMode = useColorMode().colorMode;
   if (txStatus === TransactionStatus.PENDING) {
     return (
-      <Circle size="16px" position="absolute" bottom="-2px" right="-4px">
-        <ClockIcon color={`invert.${colorMode}`} fill={`bg.${colorMode}`} />
+      <Circle size="4" position="absolute" bottom="-2px" right="-4px">
+        <Icon as={PiClock} color={'text'} bg={'bg'} />
       </Circle>
     );
   } else if (txStatus === TransactionStatus.FAILED) {
     return (
-      <Circle size="16px" position="absolute" bottom="-2px" right="-4px">
-        <FailedIcon color={`feedbackError.${colorMode}`} fill={`bg.${colorMode}`} />
-      </Circle>
-    );
-  } else if (txStatus === TransactionStatus.SUCCESS_MICROBLOCK) {
-    return (
-      <Circle
-        bg={`invert.${colorMode}`}
-        size="16px"
-        position="absolute"
-        bottom="-2px"
-        right="-4px"
-        boxShadow={'none'}
-      >
-        <MicroblockIcon color={`bg.${colorMode}`} fill={`bg.${colorMode}`} size="10px" />
+      <Circle size="4" position="absolute" bottom="-2px" right="-4px">
+        <Icon as={PiWarningCircle} color={'error'} bg={'bg'} />
       </Circle>
     );
   } else {
@@ -82,10 +64,38 @@ export const TxIcon: FC<
 
   const TxIcon = txType ? getTxTypeIcon(txType) : null;
 
+  const circleSize = useBreakpointValue(
+    {
+      lg: '10',
+      md: '4.5',
+      sm: '4.5',
+      xs: '4.5',
+      base: '4.5',
+    },
+    {
+      fallback: 'lg',
+      ssr: false,
+    }
+  );
+
+  const iconSize = useBreakpointValue(
+    {
+      lg: '4',
+      md: '2.5',
+      sm: '2.5',
+      xs: '2.5',
+      base: '2.5',
+    },
+    {
+      fallback: 'lg',
+      ssr: false,
+    }
+  );
+
   return (
-    <Circle size={'40px'} position={'relative'}>
+    <Circle size={circleSize} position={'relative'} border={'1px'}>
       {showTxStatusBubble && <StatusBubble txStatus={txStatus} />}
-      {TxIcon && <TxIcon color={'textCaption.light'} size="16px" />}
+      {TxIcon && <Icon size={iconSize} as={TxIcon} color={'text'} />}
     </Circle>
   );
 };

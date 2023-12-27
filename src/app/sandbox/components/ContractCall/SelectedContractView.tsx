@@ -1,4 +1,4 @@
-import NextLink from 'next/link';
+import { Link as NextLink } from '@chakra-ui/next-js';
 import React, { FC } from 'react';
 import { BiAtom, BiLinkExternal } from 'react-icons/bi';
 import { MdOutlineChecklistRtl } from 'react-icons/md';
@@ -29,10 +29,10 @@ import { PluralizedCaption } from './PluralizedCaption';
 
 const BackLink: React.FC<{ href: string }> = ({ href }) => {
   return (
-    <NextLink href={href} passHref>
+    <NextLink href={href}>
       <Flex alignItems="center" mb="16px" _hover={{ cursor: 'pointer' }}>
         <ArrowLeftIcon mr={'8px'} width={18} />
-        <Box color={'textBody'} transform={'none'} fontSize="14px">
+        <Box transform={'none'} fontSize="14px">
           Back to search
         </Box>
       </Flex>
@@ -48,14 +48,8 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
   return (
     <Section
       topRight={
-        <TxLink txId={contract_id}>
-          <Flex
-            as="a"
-            target="_blank"
-            color={'textCaption'}
-            _hover={{ color: 'textBody' }}
-            alignItems="center"
-          >
+        <TxLink txId={contract_id} target="_blank">
+          <Flex alignItems="center">
             <Caption transform="translateY(1px)" color="currentColor">
               Go to transaction
             </Caption>
@@ -82,25 +76,25 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
         <Stack p="16px">
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={FunctionIcon} color={'textCaption'} size="20px" />
+              <Icon as={FunctionIcon} size="20px" />
             </Box>
             <PluralizedCaption ml="8px" array={abi?.functions} label="function" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={BiAtom} color={'textCaption'} size="20px" />
+              <Icon as={BiAtom} size="20px" />
             </Box>
             <PluralizedCaption ml="8px" array={abi?.variables} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={MdOutlineChecklistRtl} color={'textCaption'} size="20px" />
+              <Icon as={MdOutlineChecklistRtl} size="20px" />
             </Box>
             <PluralizedCaption ml="8px" array={abi?.maps} label="map" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={FungibleTokenIcon} color={'textCaption'} size="20px" />
+              <Icon as={FungibleTokenIcon} size="20px" />
             </Box>
             <PluralizedCaption
               ml="8px"
@@ -124,7 +118,6 @@ export const SelectedContractView: FC<{
   const activeNetwork = useGlobalContext().activeNetwork;
   return (
     <Grid
-      minHeight="600px"
       width={showRightPanel ? 'calc((1142px / 3) * 2)' : '100%'}
       gridTemplateColumns={showRightPanel ? '1fr 1fr' : '1fr 2fr'}
       flexGrow={1}
@@ -144,10 +137,7 @@ export const SelectedContractView: FC<{
               ) as unknown as ClarityAbiFunction
             }
             cancelButton={
-              <NextLink
-                href={buildUrl(`/sandbox/contract-call/${contractId}`, activeNetwork)}
-                passHref
-              >
+              <NextLink href={buildUrl(`/sandbox/contract-call/${contractId}`, activeNetwork)}>
                 <Caption _hover={{ cursor: 'pointer', color: 'textTitle' }} mt="16px">
                   Cancel
                 </Caption>

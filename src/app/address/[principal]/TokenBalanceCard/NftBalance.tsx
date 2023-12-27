@@ -8,15 +8,18 @@ import {
   NonFungibleTokenHoldingsList,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { useVerticallyStackedElementsBorderStyle } from '../../../../common/hooks/useVerticallyStackedElementsBorderStyle';
-import { Box } from '../../../../ui/Box';
+import { TwoColumnsListItemSkeleton } from '../../../../common/components/TwoColumnsListItemSkeleton';
 import { Grid } from '../../../../ui/Grid';
 import { Caption } from '../../../../ui/typography';
-import { TokenAssetListItemSkeleton } from './TokenAssetListItemSkeleton';
 
 const TokenAssetListItem = dynamic(
   () => import('./TokenAssetListItem').then(mod => mod.TokenAssetListItem),
-  { loading: () => <TokenAssetListItemSkeleton />, ssr: false }
+  {
+    loading: () => (
+      <TwoColumnsListItemSkeleton leftContentTitle leftContentSubtitle rightContentTitle />
+    ),
+    ssr: false,
+  }
 );
 
 export const NftBalance: React.FC<{
@@ -24,9 +27,8 @@ export const NftBalance: React.FC<{
   bnsHexValues: any;
   nftHoldings?: NonFungibleTokenHoldingsList;
 }> = ({ balance, bnsHexValues, nftHoldings }) => {
-  const verticallyStackedElementsBorderStyle = useVerticallyStackedElementsBorderStyle();
   return Object.keys(balance.non_fungible_tokens).length ? (
-    <Box css={verticallyStackedElementsBorderStyle}>
+    <>
       {Object.keys(balance.non_fungible_tokens).map((key, index, arr) => (
         <TokenAssetListItem
           amount={balance.non_fungible_tokens[key]?.count || ''}
@@ -41,7 +43,7 @@ export const NftBalance: React.FC<{
           }
         />
       ))}
-    </Box>
+    </>
   ) : (
     <Grid minHeight="220px" textAlign="center" placeItems="center" padding="16px">
       <Caption>This account has no collectibles.</Caption>

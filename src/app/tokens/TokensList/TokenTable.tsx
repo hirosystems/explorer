@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SectionFooterActions } from '../../../common/components/SectionFooterActions';
+import { ListFooter } from '../../../common/components/ListFooter';
 import { Grid } from '../../../ui/Grid';
 import { Table } from '../../../ui/Table';
 import { TableContainer } from '../../../ui/TableContainer';
@@ -10,7 +10,6 @@ import { Th } from '../../../ui/Th';
 import { Thead } from '../../../ui/Thead';
 import { Tr } from '../../../ui/Tr';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
-import { TokenTabsBase } from '../../token/[tokenId]/Tabs';
 import { TokenRow } from '../TokenRow';
 import { useSuspenseTokens } from '../useTokens';
 
@@ -23,10 +22,8 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
     useSuspenseTokens(debouncedSearchTerm);
   if (!allFtTokensDeduped.length) {
     return (
-      <Grid placeItems="center" px="16px" py="32px" width={'100%'}>
-        <Text color={'textCaption'} mt="32px">
-          No tokens found
-        </Text>
+      <Grid placeItems="center" px="16px" py="32px" width={'100%'} minHeight={'container.md'}>
+        <Text fontSize={'sm'}>No tokens found</Text>
       </Grid>
     );
   }
@@ -52,7 +49,7 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
           )}
         </Tbody>
       </Table>
-      <SectionFooterActions
+      <ListFooter
         isLoading={isLoading}
         hasNextPage={hasMore}
         fetchNextPage={loadMore}

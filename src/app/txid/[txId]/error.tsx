@@ -13,6 +13,7 @@ import { Box } from '../../../ui/Box';
 import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
+import { HStack } from '../../../ui/HStack';
 import { Stack } from '../../../ui/Stack';
 import { PageTitle } from '../../_components/PageTitle';
 
@@ -36,7 +37,7 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
               title={errorName}
               message={errorMessage}
               action={
-                <Stack isInline spacing="16px">
+                <HStack gap={4}>
                   <Box>
                     <ButtonLink href={buildUrl('/', network)} mt="24px">
                       Go home
@@ -51,7 +52,7 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
                       All transactions
                     </ButtonLink>
                   </Box>
-                </Stack>
+                </HStack>
               }
             />
           </Box>

@@ -34,7 +34,7 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
     return (
       <Box width="100%">
         <Pre>{value.type}</Pre>
-        <Stack mt="32px" spacing="16px" width="100%">
+        <Stack mt="32px" gap={4} width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const entry = value.value[name];
@@ -74,7 +74,7 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
           )}
           <Pre>{hasType ? type : success ? 'Success' : 'Failed'}</Pre>
         </Flex>
-        <Stack mt="32px" spacing="16px" width="100%">
+        <Stack mt="32px" gap={4} width="100%">
           <FunctionSummaryClarityValue
             btc={null}
             arg={{

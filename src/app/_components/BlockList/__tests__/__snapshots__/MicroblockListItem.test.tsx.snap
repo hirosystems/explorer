@@ -3,13 +3,13 @@
 exports[`MicroblockListItem component renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-brzhns"
+    class="css-1qnwiy1"
   >
     <span
-      class="chakra-stack css-1h7m9p5"
+      class="chakra-stack css-19ovbli"
     >
       <div
-        class="css-1gqk193"
+        class="css-197es7z"
       >
         <svg
           class="chakra-icon css-1bc6rbx"
@@ -30,20 +30,24 @@ exports[`MicroblockListItem component renders correctly 1`] = `
         </svg>
       </div>
       <span
-        class="chakra-stack css-x6ucgl"
+        class="chakra-stack css-on31qd"
       >
         <div
-          class="css-1exw3s2"
+          class="css-ycwyyy"
         >
           <a
-            class="chakra-text css-jqqks0"
+            class="chakra-link css-0"
             href="/microblock/mockHash?chain=mainnet"
           >
-            mockHash
+            <span
+              class="chakra-text css-10wgqlb"
+            >
+              mockHash
+            </span>
           </a>
         </div>
         <span
-          class="chakra-text css-1h2w9sn"
+          class="chakra-text css-15iimks"
           style="user-select: none;"
         >
           Microblock
@@ -51,10 +55,10 @@ exports[`MicroblockListItem component renders correctly 1`] = `
       </span>
     </span>
     <span
-      class="chakra-stack css-afdpdg"
+      class="chakra-stack css-fdzsh0"
     >
       <span
-        class="chakra-text css-zousv3"
+        class="chakra-text css-ui7t6h"
       >
         MockRelativeTime1619047871000
       </span>

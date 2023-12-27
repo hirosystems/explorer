@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { FC, useCallback, useMemo, useState } from 'react';
 import * as React from 'react';
 
@@ -41,22 +41,20 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
     () => getUsdValue(value, historicalStxPrice, true),
     [historicalStxPrice, value]
   );
-  const { colorMode } = useColorMode();
+
   return (
     <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
       <Button
         size={'xs'}
-        bg={colorMode === 'light' ? '#e9e8ff' : 'bg4.dark'}
-        color={'textBody'}
-        _hover={{
-          bg: colorMode === 'light' ? '#d9d7ff' : 'bg4.dark',
-        }}
         ml={'5px'}
         onClick={toggleStxPrice}
-        fontSize={'12px !important'}
+        fontSize={'xs'}
         _focus={{ outline: 0 }}
         flexShrink={0}
         suppressHydrationWarning={true}
+        bg={useColorModeValue('purple.200', 'purple.400')}
+        _hover={{ bg: useColorModeValue('purple.300', 'purple.300') }}
+        color={'black'}
       >
         {showCurrentPriceForCompletedTransactions
           ? currentPriceFormatted

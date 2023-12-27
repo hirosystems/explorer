@@ -2,7 +2,6 @@
 
 import { useContractById } from '../../../../common/queries/useContractById';
 import { useSuspensePoxInfo } from '../../../../common/queries/usePoxInfo';
-import { Wrapper } from '../../Wrapper';
 import { DefaultView } from '../../components/ContractCall/DefaultView';
 import { SelectedContractView } from '../../components/ContractCall/SelectedContractView';
 
@@ -18,19 +17,13 @@ export default function ContractCall({ params: { params } }: { params: { params:
 
   if (!!contractId && !!contract) {
     return (
-      <Wrapper>
-        <SelectedContractView
-          contract={contract}
-          functionName={functionName}
-          contractId={contractId}
-        />
-      </Wrapper>
+      <SelectedContractView
+        contract={contract}
+        functionName={functionName}
+        contractId={contractId}
+      />
     );
   }
 
-  return (
-    <Wrapper>
-      <DefaultView rootContractAddress={rootContractAddress} />
-    </Wrapper>
-  );
+  return <DefaultView rootContractAddress={rootContractAddress} />;
 }

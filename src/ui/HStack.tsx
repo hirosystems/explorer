@@ -11,5 +11,5 @@ import { UIComponent } from './types';
 
 export type HStackProps = CUIHStackProps & UIComponent;
 export const HStack = forwardRef<CUIHStackProps, 'div'>((props, ref) => (
-  <CUIHStack ref={ref} borderColor={`border.${useColorMode().colorMode}`} {...props} />
+  <CUIHStack ref={ref} {...props} />
 ));

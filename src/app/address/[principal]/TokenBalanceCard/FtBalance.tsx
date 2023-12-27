@@ -5,13 +5,18 @@ import * as React from 'react';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
+import { TwoColumnsListItemSkeleton } from '../../../../common/components/TwoColumnsListItemSkeleton';
 import { Grid } from '../../../../ui/Grid';
 import { Caption } from '../../../../ui/typography';
-import { TokenAssetListItemSkeleton } from './TokenAssetListItemSkeleton';
 
 const TokenAssetListItem = dynamic(
   () => import('./TokenAssetListItem').then(mod => mod.TokenAssetListItem),
-  { loading: () => <TokenAssetListItemSkeleton />, ssr: false }
+  {
+    loading: () => (
+      <TwoColumnsListItemSkeleton leftContentTitle leftContentSubtitle rightContentTitle />
+    ),
+    ssr: false,
+  }
 );
 
 export const FtBalance: React.FC<{ balance: AddressBalanceResponse }> = ({ balance }) => {

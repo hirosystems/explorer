@@ -28,9 +28,7 @@ export const ContractName: FC<{
         label={'Contract'}
         value={
           <TxLink txId={tx.contract_call.contract_id}>
-            <TextLink as="a">
-              <Value>{tx.contract_call.contract_id}</Value>
-            </TextLink>
+            <Value>{tx.contract_call.contract_id}</Value>
           </TxLink>
         }
         copyValue={tx.contract_call.contract_id}
@@ -43,9 +41,7 @@ export const ContractName: FC<{
         label={'Contract'}
         value={
           <TxLink txId={tx.smart_contract.contract_id}>
-            <TextLink as="a">
-              <Value>{tx.smart_contract.contract_id}</Value>
-            </TextLink>
+            <Value>{tx.smart_contract.contract_id}</Value>
           </TxLink>
         }
         copyValue={tx.smart_contract.contract_id}

@@ -1,27 +1,18 @@
 import * as React from 'react';
 import { TbAlertTriangle } from 'react-icons/tb';
 
-import { Box } from '../../../ui/Box';
+import { Circle } from '../../../common/components/Circle';
 import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
 import { Caption } from '../../../ui/typography';
 
-export const SearchErrorMessage: React.FC<{ message: string; hint?: string }> = React.memo(
-  ({ message, hint }) => (
-    <Box p="16px">
-      <Flex alignItems="flex-start">
-        <Box flexShrink={0} mr="16px" as={TbAlertTriangle} color={'feedbackError'} />
-        <Caption lineHeight="22px" wordBreak="break-word">
-          {message}
-        </Caption>
-      </Flex>
-      {hint ? (
-        <Flex bg={'bg4'} mt="16px" borderRadius="6px" p="8px" alignItems="center">
-          <Caption mr="8px" fontWeight="600" color={'brand'}>
-            Hint
-          </Caption>
-          <Caption lineHeight="22px">{hint}</Caption>
-        </Flex>
-      ) : null}
-    </Box>
-  )
-);
+export const SearchErrorMessage: React.FC<{ message: string }> = React.memo(({ message }) => (
+  <Flex gap={4}>
+    <Circle size={12}>
+      <Icon as={TbAlertTriangle} size="4" />
+    </Circle>
+    <Caption lineHeight="22px" wordBreak="break-word">
+      {message}
+    </Caption>
+  </Flex>
+));

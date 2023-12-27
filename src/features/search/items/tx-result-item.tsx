@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import React from 'react';
 
-import { MempoolTxListItem } from '../../../common/components/tx-lists/list-items/MempoolTxListItem';
-import { TxListItem } from '../../../common/components/tx-lists/list-items/TxListItem';
 import { FoundResult } from '../../../common/types/search-results';
 import { Box } from '../../../ui/Box';
+import { MempoolTxListItem } from '../../txs-list/ListItem/MempoolTxListItem';
+import { TxListItem } from '../../txs-list/ListItem/TxListItem';
 
 interface TxResultItemProps {
   result: FoundResult;
@@ -22,24 +22,20 @@ export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
 
   if ('block_height' in transaction)
     return (
-      <Box px={'20px'}>
-        <TxListItem
-          tx={transaction}
-          css={css`
-            border: none;
-          `}
-        />
-      </Box>
-    );
-
-  return (
-    <Box px={'20px'}>
-      <MempoolTxListItem
+      <TxListItem
         tx={transaction}
         css={css`
           border: none;
         `}
       />
-    </Box>
+    );
+
+  return (
+    <MempoolTxListItem
+      tx={transaction}
+      css={css`
+        border: none;
+      `}
+    />
   );
 };

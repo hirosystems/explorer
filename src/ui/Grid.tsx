@@ -17,7 +17,6 @@ export const Grid = forwardRef<GridProps, 'div'>(({ children, size, ...rest }, r
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
-    borderColor={`border.${useColorMode().colorMode}`}
     {...rest}
   >
     {children}

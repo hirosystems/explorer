@@ -19,13 +19,7 @@ export const MarketCap: FC<
       bodyMainText={marketCap ? `$${numberToString(marketCap)}` : 'N/A'}
       bodySecondaryText={null}
       caption={
-        <Flex
-          fontSize={'12px'}
-          color={'textCaption'}
-          fontWeight="500"
-          alignItems={'center'}
-          gap={'6px'}
-        >
+        <Flex fontSize={'12px'} fontWeight="500" alignItems={'center'} gap={'6px'}>
           Trading Volume: ${tradingVolume24h ? numberToString(tradingVolume24h) : 'N/A'}
           {tradingVolumeChangePercentage24h ? (
             <TrendArrow change={tradingVolumeChangePercentage24h} size={'11px'} />

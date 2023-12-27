@@ -1,3 +1,4 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import React, { FC } from 'react';
 
 import { useAppDispatch } from '../../../common/state/hooks';
@@ -11,6 +12,7 @@ import { setUserData } from '../sandbox-slice';
 export const ConnectToStacks: FC = () => {
   const dispatch = useAppDispatch();
   const { connect } = useUser();
+  const textColor = useColorModeValue('black', 'white');
 
   return (
     <Flex
@@ -22,7 +24,7 @@ export const ConnectToStacks: FC = () => {
       maxWidth="300px"
       mx="auto"
     >
-      <Stack spacing="32px" textAlign="center">
+      <Stack gap={8} textAlign="center" color={textColor}>
         <Title fontSize={'20px'}>Welcome to the sandbox</Title>
         <Title>Please sign in to continue</Title>
         <Button
@@ -34,6 +36,7 @@ export const ConnectToStacks: FC = () => {
             })
           }
           width="100%"
+          variant="secondary"
         >
           Connect Stacks Wallet
         </Button>

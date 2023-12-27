@@ -6,8 +6,6 @@ import { Flex, FlexProps } from '../../../ui/Flex';
 export const ResultItemWrapper = forwardRef<FlexProps, 'div'>(({ children, ...rest }, ref) => (
   <Flex ref={ref}>
     <Flex
-      as={'a'}
-      p="24px"
       alignItems="center"
       position="relative"
       justifyContent="space-between"

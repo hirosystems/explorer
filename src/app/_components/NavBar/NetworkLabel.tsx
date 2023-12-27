@@ -1,5 +1,6 @@
 import { useColorMode } from '@chakra-ui/react';
 import React, { FC } from 'react';
+import { PiTrash } from 'react-icons/pi';
 import { TbCheck, TbTrash } from 'react-icons/tb';
 
 import { ChainID } from '@stacks/transactions';
@@ -13,6 +14,7 @@ import { Network } from '../../../common/types/network';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Spinner } from '../../../ui/Spinner';
 import { Stack } from '../../../ui/Stack';
@@ -55,6 +57,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
       padding={'15px 0'}
       opacity={isDisabled ? 0.5 : 1}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
+      gap={2}
     >
       <Stack
         as={isDisabled || isActive ? 'div' : 'a'}
@@ -92,11 +95,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
               position="relative"
               color={`textCaption.${colorMode}`}
               size={'21px'}
-              icon={
-                <span>
-                  <TbTrash size={'21px'} />
-                </span>
-              }
+              icon={<Icon as={PiTrash} size={4} />}
               onClick={() => removeCustomNetwork(network)}
               aria-label={'Remove network'}
               _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}

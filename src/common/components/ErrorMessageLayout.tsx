@@ -6,6 +6,8 @@ import { TbAlertOctagon } from 'react-icons/tb';
 
 import { Box, BoxProps } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
+import { Icon } from '../../ui/Icon';
+import { QuestionOctagon } from '../../ui/icons/QuestionOctagon';
 import { Text, Title } from '../../ui/typography';
 import { Circle } from './Circle';
 
@@ -20,26 +22,25 @@ export const ErrorMessageLayout: React.FC<
   return (
     <Box py="32px" textAlign="center">
       {errorStatusCode ? (
-        <Circle
-          size="128px"
-          mx="auto"
-          mb="32px"
-          borderColor={`brand.${colorMode}`}
-          borderWidth={'2px'}
-        >
-          <Text fontSize="48px" fontWeight="bold" color={'gray.600'}>
+        <>
+          <Circle size="72px" mx="auto" borderWidth={'1px'} mb={'14px'}>
+            <Icon as={QuestionOctagon} size="24px" />
+            {/*<TbAlertOctagon size="72px" />*/}
+          </Circle>
+          <Text fontSize="32px" fontWeight="bold" color={'gray.600'}>
             {errorStatusCode}
           </Text>
-        </Circle>
+        </>
       ) : (
-        <Circle size="128px" mx="auto" mb="32px">
-          <TbAlertOctagon size="72px" />
+        <Circle size="72px" mx="auto" borderWidth={'1px'} mb={'14px'}>
+          <Icon as={QuestionOctagon} size="24px" />
+          {/*<TbAlertOctagon size="72px" />*/}
         </Circle>
       )}
-      <Title mb={'12px'} as="h3">
+      <Text mb={'12px'} fontSize="16px">
         {capitalizeFirstLetter(title)}
-      </Title>
-      <Text lineHeight="1.8" fontSize={'14px'} color={'textBody'}>
+      </Text>
+      <Text lineHeight="1.8" fontSize={'14px'}>
         {capitalizeFirstLetter(message)}
       </Text>
       <Flex justifyContent="center">{action}</Flex>

@@ -18,7 +18,6 @@ export const InputRightElement = forwardRef<InputRightElementProps, 'div'>(
       height={size || rest.height}
       minWidth={size || rest.minWidth}
       minHeight={size || rest.minHeight}
-      borderColor={`border.${useColorMode().colorMode}`}
       {...rest}
     >
       {children}
