@@ -1,3 +1,5 @@
+import { hash } from '@noble/hashes/_assert';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 
@@ -34,6 +36,8 @@ window.scrollTo = jest.fn();
 
 const LIMIT = 10;
 
+const queryClient = new QueryClient();
+
 describe('BlocksListBase component', () => {
   let mockSubscribeBlocksCallback: (event: Block) => any;
 
@@ -55,7 +59,11 @@ describe('BlocksListBase component', () => {
   });
 
   it('renders without crashing', () => {
-    render(<BlocksList limit={LIMIT} />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <BlocksList limit={LIMIT} />
+      </QueryClientProvider>
+    );
   });
 
   it('toggles live view on switch click', async () => {
@@ -63,7 +71,11 @@ describe('BlocksListBase component', () => {
       data: { pages: [{ results: [{ hash: '1' }, { hash: '2' }] }] },
     } as any);
 
-    render(<BlocksList limit={LIMIT} />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <BlocksList limit={LIMIT} />
+      </QueryClientProvider>
+    );
 
     const switchElement = screen.getByRole('checkbox', { name: /live view/i });
     expect(switchElement).toBeInTheDocument();
@@ -92,7 +104,11 @@ describe('BlocksListBase component', () => {
       },
     } as any);
 
-    render(<BlocksList limit={LIMIT} />);
+    render(
+      <QueryClientProvider client={queryClient}>
+        <BlocksList limit={LIMIT} />
+      </QueryClientProvider>
+    );
 
     const switchElement = screen.getByRole('checkbox', { name: /live view/i });
 

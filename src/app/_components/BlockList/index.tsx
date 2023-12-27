@@ -1,5 +1,6 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { connectWebSocketClient } from '@stacks/blockchain-api-client';
@@ -30,6 +31,7 @@ const BlocksListBase: React.FC<{
   const activeNetwork = useGlobalContext().activeNetwork;
   const response = useSuspenseBlockListInfinite();
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  const queryClient = useQueryClient();
 
   const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
 
@@ -39,6 +41,7 @@ const BlocksListBase: React.FC<{
 
   useEffect(() => {
     if (!isLive) return;
+    queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
     let sub: {
       unsubscribe?: () => Promise<void>;
     };
@@ -57,7 +60,7 @@ const BlocksListBase: React.FC<{
         void sub.unsubscribe();
       }
     };
-  }, [activeNetwork.url, isLive]);
+  }, [activeNetwork.url, isLive, queryClient]);
 
   const [counter, setCounter] = useState(10000000);
 
