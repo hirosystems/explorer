@@ -6,9 +6,10 @@ import { useGlobalContext } from '../context/useAppContext';
 import { apiClients, createConfig } from './client';
 
 export const useApi = () => {
-  const apiConfig = createConfig(useGlobalContext().activeNetwork.url);
+  const basePath = useGlobalContext().activeNetworkKey;
+  const apiConfig = createConfig(basePath);
   const tokenMetadataApiConfig = new TokenMetadataApiConfiguration({
-    basePath: useGlobalContext().activeNetwork.url,
+    basePath,
   });
   return apiClients(apiConfig, tokenMetadataApiConfig);
 };
