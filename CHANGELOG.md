@@ -1,3 +1,10 @@
+## [1.137.1](https://github.com/hirosystems/explorer/compare/v1.137.0...v1.137.1) (2023-12-29)
+
+
+### Bug Fixes
+
+* network text alignment ([5489f51](https://github.com/hirosystems/explorer/commit/5489f51f181e6dcbf835f9bf394e74ca9ee99cb2))
+
 # [1.137.0](https://github.com/hirosystems/explorer/compare/v1.136.2...v1.137.0) (2023-12-29)
 
 
