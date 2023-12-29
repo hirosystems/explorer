@@ -8,7 +8,7 @@ import { SkeletonText } from '../../ui/SkeletonText';
 export default function Loading() {
   return (
     <Flex mt={46} width={'full'} p={6}>
-      <SkeletonText noOfLines={30} spacing={4} width={'full'} />
+      <SkeletonText noOfLines={30} spacing={4} width={'100%'} />
     </Flex>
   );
 }
