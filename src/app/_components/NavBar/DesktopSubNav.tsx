@@ -30,6 +30,7 @@ export const DesktopSubNav = ({ label, href, onClick }: NavItem) => {
             color="black"
             width="full"
             px={5}
+            textAlign={'left'}
           >
             {label}
           </Box>
