@@ -1,3 +1,10 @@
+## [1.138.2](https://github.com/hirosystems/explorer/compare/v1.138.1...v1.138.2) (2023-12-30)
+
+
+### Bug Fixes
+
+* block list memoization ([b04e792](https://github.com/hirosystems/explorer/commit/b04e7920918858b79c331562f76df4409ccbd25e))
+
 ## [1.138.1](https://github.com/hirosystems/explorer/compare/v1.138.0...v1.138.1) (2023-12-30)
 
 
