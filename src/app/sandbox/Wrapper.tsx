@@ -16,14 +16,12 @@ import { Grid } from '../../ui/Grid';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
 import { IconButton } from '../../ui/IconButton';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 import { Caption } from '../../ui/typography';
 import { PageTitle } from '../_components/PageTitle';
 import { useUser } from './hooks/useUser';
 import { ConnectToStacks } from './layout/ConnectToStacks';
 import { RightPanelSkeleton } from './layout/RightPanelSkeleton';
 import { SideNav } from './layout/SideNav';
-import Loading from './loading';
 import { selectShowRightPanel, setUserData, toggleRightPanel } from './sandbox-slice';
 
 const RightPanel = dynamic(() => import('./layout/RightPanel').then(mod => mod.RightPanel), {

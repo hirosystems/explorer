@@ -15,46 +15,41 @@ export const animationDuration = 0.8;
 export const AnimatedBlockAndMicroblocksItem: FC<{
   block: EnhancedBlock;
   onAnimationExit?: () => void;
-}> = memo(
-  ({ block, onAnimationExit }) => {
-    const [show, setShow] = useState(!block.animate);
-    useEffect(() => {
-      if (block.animate) {
-        setTimeout(() => {
-          setShow(true);
-        }, 100);
-      }
-    }, [block.animate]);
-    useEffect(() => {
-      if (block.destroy) {
-        setShow(false);
-      }
-    }, [block.destroy]);
+}> = ({ block, onAnimationExit }) => {
+  const [show, setShow] = useState(!block.animate);
+  useEffect(() => {
+    if (block.animate) {
+      setTimeout(() => {
+        setShow(true);
+      }, 100);
+    }
+  }, [block.animate]);
+  useEffect(() => {
+    if (block.destroy) {
+      setShow(false);
+    }
+  }, [block.destroy]);
 
-    return (
-      <>
-        <Box borderBottom={'1px'} _last={{ borderBottom: 'none' }}>
-          <Collapse
-            in={show}
-            animateOpacity
-            transition={{
-              enter: { duration: animationDuration },
-              exit: { duration: animationDuration },
-            }}
-            onAnimationComplete={state => {
-              if (state === 'exit') {
-                onAnimationExit?.();
-              }
-            }}
-            data-testid={`block-item-${block.hash}`}
-          >
-            <BlockAndMicroblocksItem block={block} />
-          </Collapse>
-        </Box>
-      </>
-    );
-  },
-  (prevProps, currentProps) =>
-    prevProps.block.hash === currentProps.block.hash &&
-    prevProps.block.destroy === currentProps.block.destroy
-);
+  return (
+    <>
+      <Box borderBottom={'1px'} _last={{ borderBottom: 'none' }}>
+        <Collapse
+          in={show}
+          animateOpacity
+          transition={{
+            enter: { duration: animationDuration },
+            exit: { duration: animationDuration },
+          }}
+          onAnimationComplete={state => {
+            if (state === 'exit') {
+              onAnimationExit?.();
+            }
+          }}
+          data-testid={`block-item-${block.hash}`}
+        >
+          <BlockAndMicroblocksItem block={block} />
+        </Collapse>
+      </Box>
+    </>
+  );
+};
