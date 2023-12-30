@@ -24,25 +24,16 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
 }) => {
   if (href) {
     return (
-      <ExplorerLink href={href} width={'full'} mt={'auto'} variant={'secondary'}>
-        View all recent {label} <Icon as={HiMiniArrowUpRight} width={'16px'} height={'16px'} />
+      <ExplorerLink href={href} mt={'auto'}>
+        <Button variant={'secondary'} width={'full'}>
+          View all recent {label} <Icon as={HiMiniArrowUpRight} width={'16px'} height={'16px'} />
+        </Button>
       </ExplorerLink>
     );
   }
   if (fetchNextPage && hasNextPage) {
     return (
-      <Button
-        onClick={() => fetchNextPage()}
-        width={'full'}
-        bg={'bg'}
-        color={'text'}
-        fontWeight={'medium'}
-        border={'1px'}
-        mt={'auto'}
-        _hover={{
-          bg: 'buttonHoverBg',
-        }}
-      >
+      <Button variant={'secondary'} onClick={() => fetchNextPage()} width={'full'}>
         {isLoading ? 'Loading...' : `Load more ${label}`}
       </Button>
     );
