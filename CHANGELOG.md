@@ -1,3 +1,10 @@
+## [1.138.1](https://github.com/hirosystems/explorer/compare/v1.138.0...v1.138.1) (2023-12-30)
+
+
+### Bug Fixes
+
+* list button style ([3ac6e2c](https://github.com/hirosystems/explorer/commit/3ac6e2c5a896aa56847d89bafdd2e0c59acdffd2))
+
 # [1.138.0](https://github.com/hirosystems/explorer/compare/v1.137.1...v1.138.0) (2023-12-29)
 
 
