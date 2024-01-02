@@ -35,6 +35,8 @@ export function CSVDownloadButton({ address }: { address: string }) {
         _hover={{ cursor: 'pointer', color: 'textTitle' }}
         data-test="csv-download-button"
         onClick={downloadCSV}
+        flexWrap={'nowrap'}
+        whiteSpace={'nowrap'}
       >
         <Icon as={FiDownload} mr="4px" color="currentColor" size="13px" strokeWidth={1.5} />
         Export as CSV

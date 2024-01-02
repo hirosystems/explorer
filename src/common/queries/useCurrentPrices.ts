@@ -25,6 +25,15 @@ const getCurrentStxPrice = async () =>
     .then(res => res.json())
     .then(data => data?.blockstack?.usd || 0);
 
+export const useCurrentStxPrice = (options?: UseQueryOptions<any, unknown, any, any>) =>
+  useQuery({
+    queryKey: ['current-stx-price'],
+    queryFn: getCurrentStxPrice,
+    staleTime: 30 * 60 * 1000,
+    retry: false,
+    ...options,
+  });
+
 export const useSuspenseCurrentStxPrice = (options?: UseQueryOptions<any, unknown, any, any>) =>
   useSuspenseQuery({
     queryKey: ['current-stx-price'],

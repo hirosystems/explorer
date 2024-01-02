@@ -8,7 +8,6 @@ import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { FlexProps } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { TransactionType } from '../constants/constants';
-import { Badge } from './Badge';
 import { getTxTypeIcon } from './TxIcon';
 import { StyledBadge } from './status';
 

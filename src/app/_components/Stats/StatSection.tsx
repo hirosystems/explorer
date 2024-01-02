@@ -4,16 +4,18 @@ import { FC, ReactNode } from 'react';
 import * as React from 'react';
 
 import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
+import { Flex, FlexProps } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
 import { Text } from '../../../ui/Text';
 
-export const StatSection: FC<{
-  title: ReactNode;
-  bodyMainText: ReactNode;
-  bodySecondaryText: ReactNode;
-  caption: ReactNode;
-}> = ({ title, bodyMainText, bodySecondaryText, caption, ...rest }) => (
+export const StatSection: FC<
+  {
+    title: ReactNode;
+    bodyMainText: ReactNode;
+    bodySecondaryText: ReactNode;
+    caption: ReactNode;
+  } & Omit<FlexProps, 'title'>
+> = ({ title, bodyMainText, bodySecondaryText, caption, ...rest }) => (
   <Flex
     direction={'column'}
     p={5}

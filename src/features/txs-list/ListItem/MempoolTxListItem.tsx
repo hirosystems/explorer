@@ -9,6 +9,7 @@ import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/tran
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { getTransactionStatus } from '../../../common/utils/transactions';
+import { MICROSTACKS_IN_STACKS } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
 import { Caption, Title } from '../../../ui/typography';
@@ -75,6 +76,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
           {didFail && 'Failed'}
         </Caption>
         {isPending && <Nonce nonce={tx.nonce} />}
+        {Number(tx.fee_rate) > 0 ? (
+          <Caption whiteSpace={'nowrap'}>
+            fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
+          </Caption>
+        ) : null}
       </HStack>
     ),
     [didFail, isPending, tx.nonce]

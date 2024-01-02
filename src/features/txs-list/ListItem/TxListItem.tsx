@@ -11,7 +11,7 @@ import { AddressArea, TxTimestamp } from '../../../common/components/transaction
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { getTransactionStatus } from '../../../common/utils/transactions';
-import { truncateMiddle } from '../../../common/utils/utils';
+import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
 import { Caption } from '../../../ui/typography';
@@ -77,6 +77,11 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
           <Caption whiteSpace={'nowrap'}>{truncateMiddle(hash, 4)}</Caption>
         </ExplorerLink>
       )}
+      {Number(tx.fee_rate) > 0 ? (
+        <Caption whiteSpace={'nowrap'}>
+          fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
+        </Caption>
+      ) : null}
     </HStack>
   );
 });
