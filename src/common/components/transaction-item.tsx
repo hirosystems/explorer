@@ -113,9 +113,9 @@ export const AddressArea = React.memo(
         </Caption>
       );
     }
-    if (tx.tx_type === 'tenure_change') {
-      return <Caption>Cause: {tx.tenure_change_payload?.cause}</Caption>;
-    }
+    // if (tx.tx_type === 'tenure_change') {
+    //   return <Caption>Cause: {tx.tenure_change_payload?.cause}</Caption>;
+    // }
     return null;
   }
 );

@@ -76,8 +76,8 @@ dependencies:
     specifier: 6.9.0
     version: 6.9.0
   '@stacks/blockchain-api-client':
-    specifier: 7.3.2
-    version: 7.3.2
+    specifier: v7.4.0-beta.2
+    version: 7.4.0-beta.2
   '@stacks/common':
     specifier: 6.8.1
     version: 6.8.1
@@ -279,8 +279,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@stacks/stacks-blockchain-api-types':
-    specifier: 7.4.0-nakamoto.6
-    version: 7.4.0-nakamoto.6
+    specifier: v7.4.0-beta.2
+    version: 7.4.0-beta.2
   '@testing-library/jest-dom':
     specifier: 5.16.5
     version: 5.16.5
@@ -4491,8 +4491,8 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.3.2:
-    resolution: {integrity: sha512-nhFDpA2d5mN2YCmllIUrmkQzd5CEtqAR9XUUrvVOKsLw7pdkF21grbd8ZbKARFLR/l0rYwHB8YW2sL2fv8Ty/A==}
+  /@stacks/blockchain-api-client@7.4.0-beta.2:
+    resolution: {integrity: sha512-pysIQWBfFzVYTwsHSt87E7+ELe/yvHOwq4E02HS4KghLtpb+q92QYi9eqRw9MUkJNDhmYyQpPq83dc3OmCzAAQ==}
     dependencies:
       '@stacks/stacks-blockchain-api-types': 7.3.2
       '@types/ws': 7.4.7
@@ -4618,8 +4618,8 @@ packages:
     resolution: {integrity: sha512-1r0+eqEWOOo7UYrFq9HGbc02DVME3NVCW/45sNKPN31PkOMMaK59DHragPJ2QbxPFiutVDUCS924+48+o3+0Tw==}
     dev: false
 
-  /@stacks/stacks-blockchain-api-types@7.4.0-nakamoto.6:
-    resolution: {integrity: sha512-8muZdkquqVBvHboa8eWBr1bMerhfcAjjWawGWMRAHmAGBN87QUhY6IM5Hbsd+T9gWgqsPVccs1UKx7jxy795IA==}
+  /@stacks/stacks-blockchain-api-types@7.4.0-beta.2:
+    resolution: {integrity: sha512-zwjtSWPhfpRSxsKVfC2A87WaVuWWGLEOCRXw4kthBc5/PvlxvlLiCbs9yzdPBXmdQ+Q4OVj5MYhO8qEsnB+SBA==}
     dev: true
 
   /@stacks/transactions@6.9.0:

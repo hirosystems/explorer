@@ -11,6 +11,7 @@ import {
   FeesApi,
   FungibleTokensApi,
   InfoApi,
+  MempoolApi,
   MicroblocksApi,
   Middleware,
   NonFungibleTokensApi,
@@ -40,6 +41,7 @@ export function apiClients(
   const rosettaApi = new RosettaApi(config);
   const fungibleTokensApi = new FungibleTokensApi(config);
   const nonFungibleTokensApi = new NonFungibleTokensApi(config);
+  const mempoolApi = new MempoolApi(config);
   const tokenMetadataApi = tokenMetadataApiConfig
     ? new TokensApi(tokenMetadataApiConfig)
     : undefined;
@@ -57,6 +59,7 @@ export function apiClients(
     rosettaApi,
     fungibleTokensApi,
     nonFungibleTokensApi,
+    mempoolApi,
     tokenMetadataApi,
     config,
   };

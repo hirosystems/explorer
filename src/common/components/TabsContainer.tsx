@@ -1,6 +1,8 @@
 import { FC, ReactNode } from 'react';
 
-import { FlexProps } from '../../ui/Flex';
+import { Box } from '../../ui/Box';
+import { Flex, FlexProps } from '../../ui/Flex';
+import { Stack } from '../../ui/Stack';
 import { Tab } from '../../ui/Tab';
 import { TabList } from '../../ui/TabList';
 import { TabPanel } from '../../ui/TabPanel';
@@ -10,6 +12,7 @@ import { Section } from './Section';
 
 export const TabsContainer: FC<
   {
+    setTabIndex?: (index: number) => void;
     title?: string | ReactNode;
     tabs: {
       title: string;
@@ -17,14 +20,18 @@ export const TabsContainer: FC<
     }[];
     actions?: ReactNode;
   } & FlexProps
-> = ({ title, tabs, actions, ...props }) => (
+> = ({ setTabIndex, title, tabs, actions, ...props }) => (
   <Section title={title} {...props}>
-    <Tabs isLazy>
+    <Tabs isLazy onChange={index => setTabIndex?.(index)}>
       <TabList flexWrap={'wrap'}>
-        {tabs.map(tab => (
-          <Tab key={`${tab.title}-title`}>{tab.title}</Tab>
-        ))}
-        {actions}
+        <Flex gap={4} width={'full'} direction={['column', 'column', 'column', 'row']}>
+          <Flex width={'full'}>
+            {tabs.map(tab => (
+              <Tab key={`${tab.title}-title`}>{tab.title}</Tab>
+            ))}
+          </Flex>
+          {actions}
+        </Flex>
       </TabList>
       <TabPanels>
         {tabs.map(tab => (
