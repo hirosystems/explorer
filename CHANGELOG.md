@@ -1,3 +1,10 @@
+# [1.140.0](https://github.com/hirosystems/explorer/compare/v1.139.0...v1.140.0) (2024-01-04)
+
+
+### Features
+
+* fetch and cache token price on server ([e488376](https://github.com/hirosystems/explorer/commit/e488376e8f1332fb8ec0c219123c48a187239f1a))
+
 # [1.139.0](https://github.com/hirosystems/explorer/compare/v1.138.2...v1.139.0) (2024-01-04)
 
 
