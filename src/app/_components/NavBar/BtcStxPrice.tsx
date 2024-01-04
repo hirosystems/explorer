@@ -4,14 +4,10 @@ import * as React from 'react';
 import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
-import {
-  useCurrentBtcPrice,
-  useSuspenseCurrentStxPrice,
-} from '../../../common/queries/useCurrentPrices';
+import { TokenPrice } from '../../../common/types/tokenPrice';
 import { usdFormatter } from '../../../common/utils/utils';
 import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { Skeleton } from '../../../ui/Skeleton';
 import { BitcoinIcon, StxIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 
@@ -30,29 +26,13 @@ function PriceContainer({
   );
 }
 
-function BtcStxPriceBase() {
-  const {
-    data: btcPrice,
-    isFetching: isBtcPriceFetching,
-    isError: isBtcPriceError,
-  } = useCurrentBtcPrice();
-  const {
-    data: stxPrice,
-    isFetching: isStxPriceFetching,
-    isError: isStxPriceError,
-  } = useSuspenseCurrentStxPrice();
-  const formattedBtcPrice = btcPrice ? usdFormatter.format(btcPrice) : '';
-  const formattedStxPrice = stxPrice ? usdFormatter.format(stxPrice) : '';
+function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
+  const formattedBtcPrice = tokenPrice.btcPrice ? usdFormatter.format(tokenPrice.btcPrice) : '';
+  const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
   return (
     <Flex gap={6} minWidth={'172px'}>
       <PriceContainer icon={<Icon as={BitcoinIcon} size={4.5} />} minWidth={'92px'}>
-        {isBtcPriceError || !formattedBtcPrice ? (
-          'N/A'
-        ) : isBtcPriceFetching ? (
-          <Skeleton display={'flex'} flexGrow={1} height={3} />
-        ) : (
-          formattedBtcPrice
-        )}
+        {!formattedBtcPrice ? 'N/A' : formattedBtcPrice}
       </PriceContainer>
       <PriceContainer
         icon={
@@ -62,22 +42,16 @@ function BtcStxPriceBase() {
         }
         minWidth={'56px'}
       >
-        {isStxPriceError || !formattedStxPrice ? (
-          'N/A'
-        ) : isStxPriceFetching ? (
-          <Skeleton display={'flex'} flexGrow={1} height={3} />
-        ) : (
-          formattedStxPrice
-        )}
+        {!formattedStxPrice ? 'N/A' : formattedStxPrice}
       </PriceContainer>
     </Flex>
   );
 }
 
-export function BtcStxPrice() {
+export function BtcStxPrice({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <BtcStxPriceBase />
+      <BtcStxPriceBase tokenPrice={tokenPrice} />
     </ExplorerErrorBoundary>
   );
 }

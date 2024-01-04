@@ -5,10 +5,7 @@ import { MempoolFeePrioritiesAll } from '@stacks/blockchain-api-client/src/gener
 
 import { getTxTypeIcon } from '../../common/components/TxIcon';
 import { useSuspenseMempoolFee } from '../../common/queries/usMempoolFee';
-import {
-  useCurrentStxPrice,
-  useSuspenseCurrentStxPrice,
-} from '../../common/queries/useCurrentPrices';
+import { TokenPrice } from '../../common/types/tokenPrice';
 import { MICROSTACKS_IN_STACKS, capitalize, getUsdValue } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
@@ -97,43 +94,41 @@ function MempoolFeeSection({
   );
 }
 
-export function MempoolFeeStats() {
+export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const mempoolFeeResponse = useSuspenseMempoolFee().data as MempoolFeePriorities;
-  const { data: stxPrice } = useCurrentStxPrice();
-  console.log(mempoolFeeResponse);
   return (
     <Wrapper>
       <MempoolFeeSection
         mempoolFeeResponse={mempoolFeeResponse}
         priority={'no_priority'}
-        stxPrice={stxPrice}
+        stxPrice={tokenPrice.stxPrice}
         borderRightWidth={['0px', '0px', '1px', '1px']}
       />
       <MempoolFeeSection
         mempoolFeeResponse={mempoolFeeResponse}
         priority={'low_priority'}
-        stxPrice={stxPrice}
+        stxPrice={tokenPrice.stxPrice}
         borderRightWidth={['0px', '0px', '0px', '1px']}
       />
       <MempoolFeeSection
         mempoolFeeResponse={mempoolFeeResponse}
         priority={'medium_priority'}
-        stxPrice={stxPrice}
+        stxPrice={tokenPrice.stxPrice}
         borderRightWidth={['0px', '0px', '1px', '1px']}
       />
       <MempoolFeeSection
         mempoolFeeResponse={mempoolFeeResponse}
         priority={'high_priority'}
-        stxPrice={stxPrice}
+        stxPrice={tokenPrice.stxPrice}
       />
     </Wrapper>
   );
 }
 
-export function MempoolFeeStatsWithErrorBoundary() {
+export function MempoolFeeStatsWithErrorBoundary({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <MempoolFeeStats />
+      <MempoolFeeStats tokenPrice={tokenPrice} />
     </ExplorerErrorBoundary>
   );
 }

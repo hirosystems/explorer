@@ -4,6 +4,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
+import { TokenPrice } from '../../common/types/tokenPrice';
 import { Flex } from '../../ui/Flex';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
@@ -45,13 +46,19 @@ function WrapperWithBg({ children }: { children: ReactNode }) {
   );
 }
 
-export function PageWrapper({ children }: { children: ReactNode }) {
+export function PageWrapper({
+  tokenPrice,
+  children,
+}: {
+  tokenPrice: TokenPrice;
+  children: ReactNode;
+}) {
   return (
     <>
       <IncidentsStatusBarWithErrorBoundary />
       <WrapperWithBg>
         <Flex mx="auto" width="full" maxWidth="container.xl" flexDirection="column" p={6}>
-          <NavBar />
+          <NavBar tokenPrice={tokenPrice} />
           <Flex direction={'column'} mt={10} gap={7}>
             {children}
           </Flex>

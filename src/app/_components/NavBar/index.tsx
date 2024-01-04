@@ -8,6 +8,7 @@ import { MODALS } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Network } from '../../../common/types/network';
+import { TokenPrice } from '../../../common/types/tokenPrice';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { capitalize } from '../../../common/utils/utils';
 import { Search } from '../../../features/search/Search';
@@ -27,7 +28,7 @@ import { NetworkLabel } from './NetworkLabel';
 import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
 
-export const NavBar: FC = () => {
+export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { isOpen, onToggle } = useDisclosure();
   const { networks, activeNetwork } = useGlobalContext();
   const dispatch = useAppDispatch();
@@ -96,7 +97,7 @@ export const NavBar: FC = () => {
             <ColorModeButton aria-label={'Change color mode'} />
             <DesktopNav navItems={navItems} />
           </Flex>
-          <BtcStxPrice />
+          <BtcStxPrice tokenPrice={tokenPrice} />
         </Show>
         <Show below="lg">
           <IconButton
@@ -110,4 +111,4 @@ export const NavBar: FC = () => {
       </Flex>
     </Box>
   );
-};
+}
