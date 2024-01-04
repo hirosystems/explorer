@@ -1,3 +1,10 @@
+# [1.139.0](https://github.com/hirosystems/explorer/compare/v1.138.2...v1.139.0) (2024-01-04)
+
+
+### Features
+
+* mempool txs sort menu ([2b193b5](https://github.com/hirosystems/explorer/commit/2b193b579b74328441cd47e8b623ab1f44529e33))
+
 ## [1.138.2](https://github.com/hirosystems/explorer/compare/v1.138.1...v1.138.2) (2023-12-30)
 
 
