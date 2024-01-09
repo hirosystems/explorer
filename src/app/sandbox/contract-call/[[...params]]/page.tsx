@@ -1,29 +1,13 @@
 'use client';
 
-import { useContractById } from '../../../../common/queries/useContractById';
-import { useSuspensePoxInfo } from '../../../../common/queries/usePoxInfo';
-import { DefaultView } from '../../components/ContractCall/DefaultView';
-import { SelectedContractView } from '../../components/ContractCall/SelectedContractView';
+import dynamic from 'next/dynamic';
+import * as React from 'react';
 
-export default function ContractCall({ params: { params } }: { params: { params: string[] } }) {
-  const contractId = params?.[0] || undefined;
-  const functionName = params?.[1] || undefined;
-  const { data: poxInfo } = useSuspensePoxInfo();
-  const { data: contract } = useContractById(contractId);
+import Skeleton from '../../skeleton';
 
-  const rootContractAddress = poxInfo?.contract_id?.split('.')?.[0];
+const Page = dynamic(() => import('./PageClient'), {
+  loading: () => <Skeleton />,
+  ssr: false,
+});
 
-  if (!rootContractAddress) return null;
-
-  if (!!contractId && !!contract) {
-    return (
-      <SelectedContractView
-        contract={contract}
-        functionName={functionName}
-        contractId={contractId}
-      />
-    );
-  }
-
-  return <DefaultView rootContractAddress={rootContractAddress} />;
-}
+export default Page;

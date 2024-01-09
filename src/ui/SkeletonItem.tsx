@@ -10,7 +10,7 @@ import {
 import { UIComponent } from './types';
 
 export type SkeletonProps = CUISkeletonProps & UIComponent;
-export const Skeleton = forwardRef<SkeletonProps, 'div'>(({ children, size, ...rest }, ref) => (
+export const SkeletonItem = forwardRef<SkeletonProps, 'div'>(({ children, size, ...rest }, ref) => (
   <LightMode>
     <CUISkeleton ref={ref} {...rest}>
       {children}

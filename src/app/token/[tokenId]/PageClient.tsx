@@ -15,10 +15,16 @@ import { PageTitle, PageTitleWithTags } from '../../_components/PageTitle';
 import { LinksMenu } from './LinksMenu';
 import { Tabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
-import Loading from './loading';
+import Skeleton from './skeleton';
 import { TokenInfoProps } from './types';
 
-export function TokenPage({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: TokenInfoProps }) {
+export default function PageClient({
+  tokenId,
+  tokenInfo,
+}: {
+  tokenId: string;
+  tokenInfo: TokenInfoProps;
+}) {
   if (!tokenInfo.basic) throw new Error('Could not find token info');
 
   const { name, symbol } = tokenInfo.basic;

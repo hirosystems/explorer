@@ -1,5 +1,5 @@
 import { SkeletonPageWithTagsAndTwoColumns } from '../../../common/components/loaders/skeleton-transaction';
 
-export default function Loading() {
+export default function Skeleton() {
   return <SkeletonPageWithTagsAndTwoColumns />;
 }

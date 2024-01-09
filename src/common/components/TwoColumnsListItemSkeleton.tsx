@@ -1,5 +1,5 @@
-import { Skeleton } from '../../ui/Skeleton';
 import { SkeletonCircle } from '../../ui/SkeletonCircle';
+import { SkeletonItem } from '../../ui/SkeletonItem';
 import { TwoColsListItem } from './TwoColumnsListItem';
 
 export function TwoColumnsListItemSkeleton({
@@ -20,18 +20,18 @@ export function TwoColumnsListItemSkeleton({
       icon={icon && <SkeletonCircle width={10} height={10} />}
       leftContent={{
         title: leftContentTitle ? (
-          <Skeleton height={'1em'} width={'50%'} display={'inline-block'} />
+          <SkeletonItem height={'1em'} width={'50%'} display={'inline-block'} />
         ) : null,
         subtitle: leftContentSubtitle ? (
-          <Skeleton height={'1em'} width={'80%'} display={'inline-block'} />
+          <SkeletonItem height={'1em'} width={'80%'} display={'inline-block'} />
         ) : null,
       }}
       rightContent={{
         title: rightContentTitle ? (
-          <Skeleton height={'1em'} width={'60%'} display={'inline-block'} />
+          <SkeletonItem height={'1em'} width={'60%'} display={'inline-block'} />
         ) : null,
         subtitle: rightContentSubtitle ? (
-          <Skeleton height={'1em'} width={'30%'} display={'inline-block'} />
+          <SkeletonItem height={'1em'} width={'30%'} display={'inline-block'} />
         ) : null,
       }}
     />

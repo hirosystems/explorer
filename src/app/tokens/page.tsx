@@ -1,16 +1,13 @@
 'use client';
 
-import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import * as React from 'react';
 
-import { PageTitle } from '../_components/PageTitle';
-import { TokensList } from './TokensList/TokensList';
+import Skeleton from './skeleton';
 
-const TokensPage: NextPage = () => (
-  <>
-    <PageTitle>Token Tracker</PageTitle>
-    <TokensList />
-  </>
-);
+const Page = dynamic(() => import('./PageClient'), {
+  loading: () => <Skeleton />,
+  ssr: false,
+});
 
-export default TokensPage;
+export default Page;
