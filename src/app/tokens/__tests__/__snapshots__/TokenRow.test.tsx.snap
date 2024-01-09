@@ -15,17 +15,11 @@ exports[`TokenRow renders correctly 1`] = `
       >
         <img
           alt="TT"
-          data-nimg="1"
-          decoding="async"
           height={36}
-          loading="lazy"
           onError={[Function]}
-          onLoad={[Function]}
-          src="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75"
-          srcSet="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=48&q=75 1x, /_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75 2x"
+          src="https://example.com/token.png"
           style={
             Object {
-              "color": "transparent",
               "marginRight": "16px",
             }
           }
