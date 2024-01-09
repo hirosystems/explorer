@@ -15,16 +15,14 @@ import { Analytics } from './_components/Analytics';
 import { GA } from './_components/GA';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
-import { getTokenPrice } from './getTokenPriceInfo';
 import './global.css';
 
 export async function generateMetadata(): Promise<Metadata> {
   return Promise.resolve(meta);
 }
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   const headersList = headers();
-  const tokenPrice = await getTokenPrice();
   return (
     <html lang="en">
       <body>
@@ -36,7 +34,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
         >
           <Providers headerCookies={headersList.get('cookie')}>
-            <PageWrapper tokenPrice={tokenPrice}>{children}</PageWrapper>
+            <PageWrapper>{children}</PageWrapper>
           </Providers>
         </AppContextProvider>
       </body>
