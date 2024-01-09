@@ -1,3 +1,10 @@
+## [1.141.1](https://github.com/hirosystems/explorer/compare/v1.141.0...v1.141.1) (2024-01-09)
+
+
+### Bug Fixes
+
+* search box style ([9575e77](https://github.com/hirosystems/explorer/commit/9575e77f915f6c5e66376c9a40287aa2c35f5cfe))
+
 # [1.141.0](https://github.com/hirosystems/explorer/compare/v1.140.0...v1.141.0) (2024-01-09)
 
 
