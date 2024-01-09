@@ -72,7 +72,9 @@ export const SearchResultsCard: React.FC = () => {
       position={'absolute'}
       zIndex={'docked'}
       mt={4}
-      width={'full'}
+      width={'container.md'}
+      maxWidth={'full'}
+      left={0}
     >
       <Box py={6}>
         {errorMessage ? (

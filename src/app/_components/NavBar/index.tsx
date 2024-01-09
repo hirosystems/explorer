@@ -86,7 +86,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   return (
     <Box width="full">
-      <Flex alignItems={'center'} flex={{ base: 1 }} gap={6}>
+      <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
         <Logo />
         <Search />
         <Show above="lg">
