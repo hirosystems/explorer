@@ -1,3 +1,10 @@
+# [1.141.0](https://github.com/hirosystems/explorer/compare/v1.140.0...v1.141.0) (2024-01-09)
+
+
+### Features
+
+* remove next image ([c6a78e9](https://github.com/hirosystems/explorer/commit/c6a78e90ee4ba1233c21910f3b015ec4d8031969))
+
 # [1.140.0](https://github.com/hirosystems/explorer/compare/v1.139.0...v1.140.0) (2024-01-04)
 
 
