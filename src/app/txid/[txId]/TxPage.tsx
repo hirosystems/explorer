@@ -25,7 +25,7 @@ import { BlocksVisualizer } from './BlocksVisualizer';
 import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
 import { TxAlerts } from './TxAlerts';
-import Loading from './loading';
+import Skeleton from './skeleton';
 
 const ContractDetailsCard = dynamic(
   () => import('./Cards/ContractDetailsCard').then(mod => mod.ContractDetailsCard),
@@ -98,7 +98,7 @@ export const TxPage: React.FC<{
     setLoading(false);
   }, 2000);
 
-  if (loading) return <Loading />;
+  if (loading) return <Skeleton />;
 
   return (
     <>

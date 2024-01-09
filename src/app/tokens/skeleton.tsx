@@ -8,17 +8,17 @@ import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { InputGroup } from '../../ui/InputGroup';
 import { InputRightElement } from '../../ui/InputRightElement';
-import { Skeleton } from '../../ui/Skeleton';
+import { SkeletonItem } from '../../ui/SkeletonItem';
 import { useColorMode } from '../../ui/hooks/useColorMode';
 import { PageTitle } from '../_components/PageTitle';
 import { TokenTableSkeleton } from './TokensList/TokenTableSkeleton';
 
-export default function Loading() {
+export default function Skeleton() {
   const colorMode = useColorMode().colorMode;
   return (
     <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>
-        <Skeleton width={'400px'} height={'43px'} />
+        <SkeletonItem width={'400px'} height={'43px'} />
       </PageTitle>
       <Section
         title={'Tokens'}
@@ -30,7 +30,7 @@ export default function Loading() {
             <InputRightElement pointerEvents="none">
               <Icon as={TbSearch} color={`textCaption.${colorMode}`} />
             </InputRightElement>
-            <Skeleton width={'200px'} height={'40px'} />
+            <SkeletonItem width={'200px'} height={'40px'} />
           </InputGroup>
         }
       >

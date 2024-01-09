@@ -1,7 +1,15 @@
-import { TokenPage } from './TokenPage';
+import dynamic from 'next/dynamic';
+import * as React from 'react';
+
+import Skeleton from '../../sandbox/skeleton';
 import { getTokenInfo } from './getTokenInfo';
 
-export default async function Page({
+const Page = dynamic(() => import('./PageClient'), {
+  loading: () => <Skeleton />,
+  ssr: false,
+});
+
+export default async function ({
   params: { tokenId },
   searchParams: { chain, api },
 }: {
@@ -9,5 +17,5 @@ export default async function Page({
   searchParams: { chain: string; api: string };
 }) {
   const tokenInfo = await getTokenInfo(tokenId, chain, api);
-  return <TokenPage tokenId={tokenId} tokenInfo={tokenInfo} />;
+  return <Page tokenId={tokenId} tokenInfo={tokenInfo} />;
 }
