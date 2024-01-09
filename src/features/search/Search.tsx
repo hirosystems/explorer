@@ -6,7 +6,7 @@ import { SearchBox } from './search-field/search-box';
 
 export const Search: React.FC<BoxProps> = ({ ...props }) => {
   return (
-    <Box flexGrow={1} maxWidth={'474px'} mr={'auto'} position={'relative'} {...props}>
+    <Box flexGrow={1} maxWidth={'474px'} mr={'auto'} {...props}>
       <SearchBox />
       <SearchResultsCard />
     </Box>
