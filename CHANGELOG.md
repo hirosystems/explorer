@@ -1,3 +1,10 @@
+# [1.142.0](https://github.com/hirosystems/explorer/compare/v1.141.1...v1.142.0) (2024-01-10)
+
+
+### Features
+
+* dynamically import pages ([95520c0](https://github.com/hirosystems/explorer/commit/95520c06aa574fadac6998688202f75138cd63d0))
+
 ## [1.141.1](https://github.com/hirosystems/explorer/compare/v1.141.0...v1.141.1) (2024-01-09)
 
 
