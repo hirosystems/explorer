@@ -1,3 +1,10 @@
+# [1.143.0](https://github.com/hirosystems/explorer/compare/v1.142.0...v1.143.0) (2024-01-11)
+
+
+### Features
+
+* sort mempool txs ([4f2cc22](https://github.com/hirosystems/explorer/commit/4f2cc22b10a8a91e46279b6a14809d8633a76fb2))
+
 # [1.142.0](https://github.com/hirosystems/explorer/compare/v1.141.1...v1.142.0) (2024-01-10)
 
 
