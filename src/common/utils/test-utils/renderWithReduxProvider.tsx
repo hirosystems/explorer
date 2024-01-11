@@ -14,11 +14,11 @@ import {
   initialState as searchSliceInitialState,
 } from '../../../features/search/search-slice';
 import {
-  TxFilterTypes,
+  TxFilterAndSortTypes,
   TxFilters,
-  filterReducers,
+  filterAndSortReducers,
   initialState as filterSliceInitialState,
-} from '../../../features/txs-filter/transactions-filter-slice';
+} from '../../../features/txsFilterAndSort/txsFilterAndSortSlice';
 import {
   modalSlice,
   initialState as modalSliceInitialState,
@@ -37,7 +37,7 @@ export function renderWithReduxProviders(
       modal: modalSliceInitialState,
       search: searchSliceInitialState,
       connect: sandboxSliceInitialState,
-      ...Object.keys(TxFilterTypes).reduce(
+      ...Object.keys(TxFilterAndSortTypes).reduce(
         (acc, filterType) => ({ ...acc, [filterType]: filterSliceInitialState }),
         {} as TxFilters
       ),
@@ -47,7 +47,7 @@ export function renderWithReduxProviders(
         modal: modalSlice.reducer,
         search: searchSlice.reducer,
         connect: sandboxSlice.reducer,
-        ...filterReducers,
+        ...filterAndSortReducers,
       },
       preloadedState,
     }),

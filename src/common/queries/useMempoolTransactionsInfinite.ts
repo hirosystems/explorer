@@ -1,6 +1,13 @@
-import { UseSuspenseInfiniteQueryResult, useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { InfiniteData } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  UseSuspenseInfiniteQueryResult,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
 
+import {
+  GetMempoolTransactionListOrderByEnum,
+  GetMempoolTransactionListOrderEnum,
+} from '@stacks/blockchain-api-client';
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useApi } from '../api/useApi';
@@ -9,16 +16,19 @@ import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
-export function useSuspenseMempoolTransactionsInfinite(): UseSuspenseInfiniteQueryResult<
-  InfiniteData<GenericResponseType<MempoolTransaction>>
-> {
+export function useSuspenseMempoolTransactionsInfinite(
+  sort: GetMempoolTransactionListOrderByEnum = GetMempoolTransactionListOrderByEnum.age,
+  order: GetMempoolTransactionListOrderEnum = GetMempoolTransactionListOrderEnum.asc
+): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: ['mempoolTransactionsInfinite'],
+    queryKey: ['mempoolTransactionsInfinite', sort, order],
     queryFn: ({ pageParam }) =>
       api.transactionsApi.getMempoolTransactionList({
         limit: DEFAULT_LIST_LIMIT,
         offset: pageParam || 0,
+        order,
+        orderBy: sort,
       }),
     getNextPageParam,
     initialPageParam: 0,

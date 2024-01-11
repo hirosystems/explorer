@@ -24,7 +24,7 @@ import { CoinSparkleIcon } from '../../ui/icons/CoinSparkleIcon';
 import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
 import { DiagonalArrowsIcon } from '../../ui/icons/DiagonalArrowsIcon';
 import { FunctionXIcon } from '../../ui/icons/FunctionX';
-import { useFilterState } from './useFilterState';
+import { useFilterAndSortState } from './useFilterAndSortState';
 
 function FilterItem({
   label,
@@ -59,7 +59,7 @@ function FilterItem({
 }
 
 export const FilterButton = memo(() => {
-  const { setActiveFilters } = useFilterState();
+  const { setActiveFilters } = useFilterAndSortState();
 
   const { value: selectedFilters, getCheckboxProps } = useCheckboxGroup({
     defaultValue: [],

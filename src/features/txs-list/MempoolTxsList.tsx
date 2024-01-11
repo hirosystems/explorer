@@ -9,6 +9,7 @@ import { useSuspenseMempoolTransactionsInfinite } from '../../common/queries/use
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
+import { useFilterAndSortState } from '../txsFilterAndSort/useFilterAndSortState';
 import { FilteredTxs } from './FilteredTxs';
 import { MempoolTxListItem } from './ListItem/MempoolTxListItem';
 
@@ -17,7 +18,8 @@ interface MempoolTxsListProps {
 }
 
 function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
-  const response = useSuspenseMempoolTransactionsInfinite();
+  const { activeSort, activeOrder } = useFilterAndSortState();
+  const response = useSuspenseMempoolTransactionsInfinite(activeSort, activeOrder);
   const txs = useSuspenseInfiniteQueryResult<MempoolTransaction>(response, limit);
 
   if (!txs?.length) {

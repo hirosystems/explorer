@@ -9,8 +9,8 @@ import {
 
 import { Grid } from '../../ui/Grid';
 import { Text } from '../../ui/Text';
-import { FilteredMessage } from '../txs-filter/FilterPanel';
-import { useFilterState } from '../txs-filter/useFilterState';
+import { FilteredMessage } from '../txsFilterAndSort/FilterPanel';
+import { useFilterAndSortState } from '../txsFilterAndSort/useFilterAndSortState';
 
 interface FilteredTxsProps<T extends unknown> {
   txs: T[];
@@ -27,7 +27,7 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
   TxListItem,
   address,
 }: FilteredTxsProps<T>) => {
-  const { activeFilters } = useFilterState();
+  const { activeFilters } = useFilterAndSortState();
   const filteredTxs: T[] = useMemo(
     () =>
       !activeFilters.length ? txs : txs?.filter(tx => activeFilters.includes(getTx(tx).tx_type)),

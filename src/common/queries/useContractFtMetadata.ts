@@ -6,10 +6,7 @@ export function useContractFtMetadata(contractId?: string) {
   const api = useApi();
   return useQuery({
     queryKey: ['contract-ft-metadata', contractId],
-    queryFn: () =>
-      api.fungibleTokensApi.getContractFtMetadata({
-        contractId: contractId!,
-      }),
+    queryFn: () => api.tokenMetadataApi?.getFtMetadata(contractId!),
     enabled: !!contractId,
   });
 }

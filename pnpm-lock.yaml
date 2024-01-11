@@ -76,8 +76,8 @@ dependencies:
     specifier: 6.9.0
     version: 6.9.0
   '@stacks/blockchain-api-client':
-    specifier: v7.4.0-beta.2
-    version: 7.4.0-beta.2
+    specifier: 7.7.1
+    version: 7.7.1
   '@stacks/common':
     specifier: 6.8.1
     version: 6.8.1
@@ -279,8 +279,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@stacks/stacks-blockchain-api-types':
-    specifier: v7.4.0-beta.2
-    version: 7.4.0-beta.2
+    specifier: 7.7.1
+    version: 7.7.1
   '@testing-library/jest-dom':
     specifier: 5.16.5
     version: 5.16.5
@@ -4491,16 +4491,16 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.4.0-beta.2:
-    resolution: {integrity: sha512-pysIQWBfFzVYTwsHSt87E7+ELe/yvHOwq4E02HS4KghLtpb+q92QYi9eqRw9MUkJNDhmYyQpPq83dc3OmCzAAQ==}
+  /@stacks/blockchain-api-client@7.7.1:
+    resolution: {integrity: sha512-56ZSmdJZyLiNVKUcoNtWx6odneNwSs/1ES5FcipINviHJdEyvUxpBku2F5rPqOa3qbYOfGRxeMzv4AJ4VAVrhw==}
     dependencies:
-      '@stacks/stacks-blockchain-api-types': 7.3.2
+      '@stacks/stacks-blockchain-api-types': 7.7.1
       '@types/ws': 7.4.7
       cross-fetch: 3.1.5
       eventemitter3: 4.0.7
       jsonrpc-lite: 2.2.0
-      socket.io-client: 4.6.1
-      ws: 7.5.6
+      socket.io-client: 4.7.3
+      ws: 8.16.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -4614,13 +4614,8 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/stacks-blockchain-api-types@7.3.2:
-    resolution: {integrity: sha512-1r0+eqEWOOo7UYrFq9HGbc02DVME3NVCW/45sNKPN31PkOMMaK59DHragPJ2QbxPFiutVDUCS924+48+o3+0Tw==}
-    dev: false
-
-  /@stacks/stacks-blockchain-api-types@7.4.0-beta.2:
-    resolution: {integrity: sha512-zwjtSWPhfpRSxsKVfC2A87WaVuWWGLEOCRXw4kthBc5/PvlxvlLiCbs9yzdPBXmdQ+Q4OVj5MYhO8qEsnB+SBA==}
-    dev: true
+  /@stacks/stacks-blockchain-api-types@7.7.1:
+    resolution: {integrity: sha512-PN63uXvyr18PqgRWV8xICcDDK3tY5forAp5zjPJFvmI11fWZk90gXS10ol6G5gurr1aEZD1Okx0CCZ6rNNbXfQ==}
 
   /@stacks/transactions@6.9.0:
     resolution: {integrity: sha512-hSs9+0Ew++GwMZMgPObOx0iVCQRxkiCqI+DHdPEikAmg2utpyLh2/txHOjfSIkQHvcBfJJ6O5KphmxDP4gUqiA==}
@@ -7414,12 +7409,12 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /engine.io-client@6.4.0:
-    resolution: {integrity: sha512-GyKPDyoEha+XZ7iEqam49vz6auPnNJ9ZBfy89f+rMMas8AuiMWOZ9PVzu8xb9ZC6rafUqiGHSCfu22ih66E+1g==}
+  /engine.io-client@6.5.3:
+    resolution: {integrity: sha512-9Z0qLB0NIisTRt1DZ/8U2k12RJn8yls/nXMZLn+/N8hANT3TcYjKFKcwbw5zFQiN4NTde3TSY9zb79e1ij6j9Q==}
     dependencies:
       '@socket.io/component-emitter': 3.1.0
       debug: 4.3.4
-      engine.io-parser: 5.0.7
+      engine.io-parser: 5.2.1
       ws: 8.11.0
       xmlhttprequest-ssl: 2.0.0
     transitivePeerDependencies:
@@ -7428,8 +7423,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /engine.io-parser@5.0.7:
-    resolution: {integrity: sha512-P+jDFbvK6lE3n1OL+q9KuzdOFWkkZ/cMV9gol/SbVfpyqfvrfrFTOFJ6fQm2VC3PZHlU3QPhVwmbsCnauHF2MQ==}
+  /engine.io-parser@5.2.1:
+    resolution: {integrity: sha512-9JktcM3u18nU9N2Lz3bWeBgxVgOKpw7yhRaoxQA3FUDZzzw+9WlA6p4G4u0RixNkg14fH7EfEc/RhpurtiROTQ==}
     engines: {node: '>=10.0.0'}
     dev: false
 
@@ -11354,13 +11349,13 @@ packages:
       is-fullwidth-code-point: 3.0.0
     dev: true
 
-  /socket.io-client@4.6.1:
-    resolution: {integrity: sha512-5UswCV6hpaRsNg5kkEHVcbBIXEYoVbMQaHJBXJCyEQ+CiFPV1NIOY0XOFWG4XR4GZcB8Kn6AsRs/9cy9TbqVMQ==}
+  /socket.io-client@4.7.3:
+    resolution: {integrity: sha512-nU+ywttCyBitXIl9Xe0RSEfek4LneYkJxCeNnKCuhwoH4jGXO1ipIUw/VA/+Vvv2G1MTym11fzFC0SxkrcfXDw==}
     engines: {node: '>=10.0.0'}
     dependencies:
       '@socket.io/component-emitter': 3.1.0
       debug: 4.3.4
-      engine.io-client: 6.4.0
+      engine.io-client: 6.5.3
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
       - bufferutil
@@ -12245,19 +12240,6 @@ packages:
       signal-exit: 3.0.7
     dev: true
 
-  /ws@7.5.6:
-    resolution: {integrity: sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==}
-    engines: {node: '>=8.3.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: ^5.0.2
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: false
-
   /ws@8.11.0:
     resolution: {integrity: sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==}
     engines: {node: '>=10.0.0'}
@@ -12283,6 +12265,19 @@ packages:
       utf-8-validate:
         optional: true
     dev: true
+
+  /ws@8.16.0:
+    resolution: {integrity: sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
 
   /xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}

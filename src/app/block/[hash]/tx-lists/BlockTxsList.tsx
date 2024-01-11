@@ -9,9 +9,9 @@ import { Section } from '../../../../common/components/Section';
 import { SkeletonGenericTransactionList } from '../../../../common/components/loaders/skeleton-transaction';
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockTxsInfinite } from '../../../../common/queries/useBlockTxsInfinite';
-import { FilterButton } from '../../../../features/txs-filter/FilterButton';
 import { FilteredTxs } from '../../../../features/txs-list/FilteredTxs';
 import { TxListItem } from '../../../../features/txs-list/ListItem/TxListItem';
+import { FilterButton } from '../../../../features/txsFilterAndSort/FilterButton';
 import { Box } from '../../../../ui/Box';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
