@@ -2,7 +2,6 @@
 
 import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
-import { HiOutlineArrowSmRight } from 'react-icons/hi';
 import { PiArrowRightLight } from 'react-icons/pi';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -11,9 +10,8 @@ import { BoxProps } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
-import { Stack } from '../../ui/Stack';
 import { Tooltip } from '../../ui/Tooltip';
-import { Caption, Text } from '../../ui/typography';
+import { Caption } from '../../ui/typography';
 import { toRelativeTime, truncateMiddle } from '../utils/utils';
 import { ExplorerLink } from './ExplorerLinks';
 
@@ -113,9 +111,9 @@ export const AddressArea = React.memo(
         </Caption>
       );
     }
-    // if (tx.tx_type === 'tenure_change') {
-    //   return <Caption>Cause: {tx.tenure_change_payload?.cause}</Caption>;
-    // }
+    if (tx.tx_type === 'tenure_change') {
+      return <Caption>Cause: {tx.tenure_change_payload?.cause}</Caption>;
+    }
     return null;
   }
 );

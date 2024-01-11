@@ -9,7 +9,7 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { microStxToStx, microToStacksFormatted } from '../../../common/utils/utils';
-import { useFilterState } from '../../txs-filter/useFilterState';
+import { useFilterAndSortState } from '../../txsFilterAndSort/useFilterAndSortState';
 
 export type CSVDownloadObjectType = {
   Date: string;
@@ -26,7 +26,7 @@ export type CSVDownloadObjectType = {
 
 export const useTxsCSVData = () => {
   const queryClient = useQueryClient();
-  const { activeFilters } = useFilterState();
+  const { activeFilters } = useFilterAndSortState();
 
   const getTxsCSVData = (address: string): CSVDownloadObjectType[] => {
     const txsQueryData = queryClient.getQueriesData<

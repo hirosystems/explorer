@@ -15,11 +15,11 @@ import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useContractById } from '../../../common/queries/useContractById';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { FilterButton } from '../../../features/txs-filter/FilterButton';
-import { FilteredMessage } from '../../../features/txs-filter/FilterPanel';
-import { useFilterState } from '../../../features/txs-filter/useFilterState';
 import { MempoolTxListItemMini } from '../../../features/txs-list/ListItem/MempoolTxListItemMini';
 import { TxListItemMini } from '../../../features/txs-list/ListItem/TxListItemMini';
+import { FilterButton } from '../../../features/txsFilterAndSort/FilterButton';
+import { FilteredMessage } from '../../../features/txsFilterAndSort/FilterPanel';
+import { useFilterAndSortState } from '../../../features/txsFilterAndSort/useFilterAndSortState';
 import { Accordion } from '../../../ui/Accordion';
 import { AccordionButton } from '../../../ui/AccordionButton';
 import { AccordionIcon } from '../../../ui/AccordionIcon';
@@ -250,7 +250,7 @@ function TxDetails({ tx }: { tx: Transaction }) {
 
 export function TransactionsPanel() {
   const { txs, mempoolTransactions } = useUser();
-  const { activeFilters } = useFilterState();
+  const { activeFilters } = useFilterAndSortState();
 
   const filteredTxs = useMemo(
     () => (!activeFilters.length ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type))),

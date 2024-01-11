@@ -70,15 +70,15 @@ export const TxTitle = (
           {showPrice && <StxPriceButton tx={tx} value={Number(tx.token_transfer.amount)} />}
         </Flex>
       );
-    // case 'tenure_change':
-    //   return (
-    //     <Flex flexDirection={['row']} alignItems={['center']}>
-    //       <TxLink>
-    //         Tenure change
-    //         <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
-    //       </TxLink>
-    //     </Flex>
-    //   );
+    case 'tenure_change':
+      return (
+        <Flex flexDirection={['row']} alignItems={['center']}>
+          <TxLink>
+            Tenure change
+            <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
+          </TxLink>
+        </Flex>
+      );
     case 'coinbase':
       return (
         <TxLink>

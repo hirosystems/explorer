@@ -28,8 +28,8 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
     case 'poison_microblock':
       return RxCube;
 
-    // case 'tenure_change':
-    //   return PiArrowBendDownRight;
+    case 'tenure_change':
+      return PiArrowBendDownRight;
 
     default:
       return StxIcon;

@@ -9,7 +9,6 @@ import {
   Configuration,
   FaucetsApi,
   FeesApi,
-  FungibleTokensApi,
   InfoApi,
   MempoolApi,
   MicroblocksApi,
@@ -39,7 +38,6 @@ export function apiClients(
   const feesApi = new FeesApi(config);
   const searchApi = new SearchApi(config);
   const rosettaApi = new RosettaApi(config);
-  const fungibleTokensApi = new FungibleTokensApi(config);
   const nonFungibleTokensApi = new NonFungibleTokensApi(config);
   const mempoolApi = new MempoolApi(config);
   const tokenMetadataApi = tokenMetadataApiConfig
@@ -57,7 +55,6 @@ export function apiClients(
     feesApi,
     searchApi,
     rosettaApi,
-    fungibleTokensApi,
     nonFungibleTokensApi,
     mempoolApi,
     tokenMetadataApi,
