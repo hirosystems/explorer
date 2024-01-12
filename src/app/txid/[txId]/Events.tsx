@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { Code } from '@chakra-ui/react'
 import React, { FC, Fragment } from 'react';
 import { IconType } from 'react-icons';
 import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
@@ -189,9 +189,9 @@ const getName = (event: TransactionEvent) => {
       return `${microToStacksFormatted(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
       return (
-        <pre style={{ whiteSpace: 'pre-wrap' }}>
+        <Code style={{ whiteSpace: 'pre-wrap' }} bg={'transparent'} fontSize={'xs'} color={'secondaryText'}>
           {handleContractLogHex(event.contract_log.value.repr, event.contract_log.value.hex)}
-        </pre>
+        </Code>
       );
     case 'stx_asset':
       return event.asset?.value
@@ -230,8 +230,8 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
   return (
     <TwoColsListItem
       icon={
-        <Circle size={10}>
-          <Icon as={getEventIcon(event)} size={4} />
+        <Circle size={4.5}>
+          <Icon as={getEventIcon(event)} size={2.5} />
         </Circle>
       }
       leftContent={{
@@ -264,7 +264,7 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
           </>
         ),
       }}
-      rightContent={{ title: event.event_index }}
+      rightContent={{ title: <Caption fontWeight={'semibold'}>{event.event_index}</Caption> }}
     />
   );
 };

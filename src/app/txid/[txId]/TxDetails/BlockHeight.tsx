@@ -38,13 +38,13 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
     <KeyValueHorizontal
       label={'Block height'}
       value={
-        <>
+        <Flex alignItems={['flex-start', 'flex-start', 'center']} gap={2} direction={['column', 'column', 'row']}>
           <BtcStxBlockLinks
             btcBlockHeight={block?.burn_block_height}
             stxBlockHeight={tx.block_height}
             stxBlockHash={tx.block_hash}
           />
-          <Box ml="16px">
+          <Box>
             {isOnTouchScreen ? (
               <Flex alignItems="center">
                 <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
@@ -61,7 +61,7 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
               </Tooltip>
             )}
           </Box>
-        </>
+        </Flex>
       }
       copyValue={readableTs}
     />
