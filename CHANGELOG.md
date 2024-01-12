@@ -1,3 +1,10 @@
+## [1.143.2](https://github.com/hirosystems/explorer/compare/v1.143.1...v1.143.2) (2024-01-12)
+
+
+### Bug Fixes
+
+* events style mobile ([83dcd69](https://github.com/hirosystems/explorer/commit/83dcd697a74d3866a7f4b3f3b2824434e6aacbfa))
+
 ## [1.143.1](https://github.com/hirosystems/explorer/compare/v1.143.0...v1.143.1) (2024-01-12)
 
 
