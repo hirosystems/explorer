@@ -1,3 +1,10 @@
+## [1.143.1](https://github.com/hirosystems/explorer/compare/v1.143.0...v1.143.1) (2024-01-12)
+
+
+### Bug Fixes
+
+* tx and address page summary mobile style ([3acc1a2](https://github.com/hirosystems/explorer/commit/3acc1a2a4e4d579a6720041ad66eb5a0a92d38af))
+
 # [1.143.0](https://github.com/hirosystems/explorer/compare/v1.142.0...v1.143.0) (2024-01-11)
 
 
