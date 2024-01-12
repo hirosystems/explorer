@@ -11,6 +11,7 @@ import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizo
 import { StxPriceButton } from '../../../../common/components/StxPriceButton';
 import { microToStacks, microToStacksFormatted } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
+import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
@@ -25,13 +26,8 @@ export const Amount: FC<{ tx: TokenTransferTransaction | MempoolTokenTransferTra
     <KeyValueHorizontal
       label={'Amount'}
       value={
-        <>
+        <Flex alignItems={'center'}>
           <HStack alignItems="flex-start" gap={2}>
-            <Box width="24px" position="relative">
-              <Circle position="absolute" left={0} size="24px" bg={'accent'}>
-                <Icon as={StxIcon} size="14px" color="white" />
-              </Circle>
-            </Box>
             <Text fontSize="16px" color={'textTitle'} fontWeight="500">
               {stxValue}{' '}
               <Text as="span" display="inline" opacity="0.5">
@@ -40,7 +36,7 @@ export const Amount: FC<{ tx: TokenTransferTransaction | MempoolTokenTransferTra
             </Text>
           </HStack>
           <StxPriceButton tx={tx} value={Number(tx.token_transfer.amount)} />
-        </>
+        </Flex>
       }
       copyValue={stxValue.toString()}
     />

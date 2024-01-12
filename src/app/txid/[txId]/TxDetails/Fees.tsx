@@ -21,11 +21,8 @@ export const Fees: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => {
     <KeyValueHorizontal
       label={'Fees'}
       value={
-        <>
-          <Flex
-            flexDirection={['column', 'column', 'row']}
-            alignItems={['flex-start', 'flex-start', 'center']}
-          >
+        <Flex alignItems={'center'}>
+          <Flex alignItems={'center'}>
             <Value>{stxValue} STX</Value>
             <StxPriceButton tx={tx} value={Number(tx.fee_rate)} />
           </Flex>
@@ -34,7 +31,7 @@ export const Fees: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => {
               Sponsored
             </Badge>
           ) : null}
-        </>
+        </Flex>
       }
       copyValue={stxValue.toString()}
     />
