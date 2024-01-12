@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 
 import { Flex, FlexProps } from '../../ui/Flex';
+import { Show } from '../../ui/Show';
 import { CopyButton } from './CopyButton';
 
 export interface KeyValueHorizontalProps {
@@ -39,7 +40,7 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
   return (
     <Flex
       py={'16px'}
-      alignItems={'center'}
+      alignItems={['flex-start', 'flex-start', 'center']}
       css={rowStyle}
       gap={'10px'}
       flexWrap="nowrap"
@@ -47,26 +48,35 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
       borderBottom={'1px'}
       borderColor={borderColor}
       _last={{ borderBottom: 'unset' }}
+      direction={['column', 'column', 'row']}
     >
-      <Flex fontSize={'12px'} color={'textCaption'} width={'140px'} flexShrink={0} {...labelProps}>
+      <Flex
+        fontSize={'12px'}
+        color={'textCaption'}
+        width={['full', 'full', '140px']}
+        flexShrink={0}
+        {...labelProps}
+      >
         {label}
       </Flex>
       <Flex
         flexDirection={['column', 'column', 'row']}
         alignItems={['flex-start', 'flex-start', 'center']}
-        maxWidth={'calc(100% - 180px)'}
+        maxWidth={['full', 'full', 'calc(100% - 180px)']}
         wordBreak={'break-all'}
         fontSize={'sm'}
       >
         {value}
       </Flex>
       {copyValue && (
-        <CopyButton
-          className={'fancy-copy'}
-          initialValue={copyValue}
-          aria-label={'copy row'}
-          size={'40px'}
-        />
+        <Show above="lg">
+          <CopyButton
+            className={'fancy-copy'}
+            initialValue={copyValue}
+            aria-label={'copy row'}
+            size={'40px'}
+          />
+        </Show>
       )}
     </Flex>
   );

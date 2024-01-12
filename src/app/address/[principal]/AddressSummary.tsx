@@ -23,7 +23,7 @@ export const AddressSummary = ({
 }: AddressSummaryProps) => {
   return (
     <Section title="Summary">
-      <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
+      <Flex width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']}>
           <KeyValueHorizontal
             label={'Address'}

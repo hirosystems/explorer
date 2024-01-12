@@ -23,7 +23,7 @@ interface TxDetailsProps {
 export const TxDetails: React.FC<TxDetailsProps> = ({ tx }) => {
   return (
     <Section title="Summary">
-      <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
+      <Flex width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']}>
           <ID tx={tx} />
           <Sender tx={tx} />
