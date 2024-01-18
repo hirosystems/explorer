@@ -24,7 +24,7 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
 }) => {
   if (href) {
     return (
-      <ExplorerLink href={href} mt={'auto'}>
+      <ExplorerLink href={href} mt={'auto'} width={'full'}>
         <Button variant={'secondary'} width={'full'}>
           View all recent {label} <Icon as={HiMiniArrowUpRight} width={'16px'} height={'16px'} />
         </Button>

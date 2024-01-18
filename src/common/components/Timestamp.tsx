@@ -21,7 +21,6 @@ export const Timestamp: React.FC<TimestampProps> = ({ ts }) => {
   return (
     <Tooltip label={readableTimestamp}>
       <Flex alignItems="center">
-        <Box as={TbClock} size="16px" mr="4px" />
         <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
       </Flex>
     </Tooltip>

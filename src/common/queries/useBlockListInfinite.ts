@@ -20,13 +20,13 @@ export const useBlockListInfinite = () => {
   });
 };
 
-export const useSuspenseBlockListInfinite = () => {
+export const useSuspenseBlockListInfinite = (limit = DEFAULT_LIST_LIMIT) => {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: ['blockListInfinite'],
+    queryKey: ['blockListInfinite', limit],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlockList({
-        limit: DEFAULT_LIST_LIMIT,
+        limit,
         offset: pageParam || 0,
       }),
     staleTime: TWO_MINUTES,

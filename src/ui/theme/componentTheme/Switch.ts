@@ -11,9 +11,9 @@ const baseStyle = multiStyleConfigHelpers.definePartsStyle(props => ({
     bg: mode(`white`, `black`)(props),
   },
   track: {
-    bg: mode(`slate.300`, `slate.800`)(props),
+    bg: mode(`slate.200`, `slate.800`)(props),
     _checked: {
-      bg: `purple.500`,
+      bg: mode(`purple.600`, `purple.400`)(props),
     },
   },
 }));
