@@ -1,6 +1,6 @@
 'use client';
 
-import { Code } from '@chakra-ui/react'
+import { Code } from '@chakra-ui/react';
 import React, { FC, Fragment } from 'react';
 import { IconType } from 'react-icons';
 import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
@@ -189,7 +189,12 @@ const getName = (event: TransactionEvent) => {
       return `${microToStacksFormatted(event.stx_lock_event.locked_amount)} STX`;
     case 'smart_contract_log':
       return (
-        <Code style={{ whiteSpace: 'pre-wrap' }} bg={'transparent'} fontSize={'xs'} color={'secondaryText'}>
+        <Code
+          style={{ whiteSpace: 'pre-wrap' }}
+          bg={'transparent'}
+          fontSize={'xs'}
+          color={'secondaryText'}
+        >
           {handleContractLogHex(event.contract_log.value.repr, event.contract_log.value.hex)}
         </Code>
       );

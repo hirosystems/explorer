@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import '../../../../../common/utils/test-utils/matchMedia.mock';
 import { Broadcast } from '../Broadcast';
 
 describe('<Broadcast />', () => {

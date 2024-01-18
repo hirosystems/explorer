@@ -36,6 +36,7 @@ export const ConnectToStacks: FC = () => {
             })
           }
           width="100%"
+          height={8}
           variant="secondary"
         >
           Connect Stacks Wallet

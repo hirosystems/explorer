@@ -54,24 +54,3 @@ export function Section({
     </Card>
   );
 }
-
-interface SectionWithControlsProps extends Omit<FlexProps, 'title'> {
-  title: string;
-  controls?: ReactNode;
-  footer?: ReactNode;
-}
-
-export function SectionWithControls({ title, controls, footer }: SectionWithControlsProps) {
-  return (
-    <Card px={6} py={4}>
-      <Text mb={4} fontWeight={'medium'} lineHeight={'1.5em'}>
-        {title}
-      </Text>
-      {controls}
-      <Flex flex={1}></Flex>
-      <Flex mt={4} width={'full'}>
-        {footer}
-      </Flex>
-    </Card>
-  );
-}

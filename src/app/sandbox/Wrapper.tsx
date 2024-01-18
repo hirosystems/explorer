@@ -64,6 +64,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
               size="xs"
               fontSize="xs"
               variant="secondary"
+              height={8}
             >
               Connect Stacks Wallet
             </Button>

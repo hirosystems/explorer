@@ -63,7 +63,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
       },
       {
         id: 'network',
-        label: capitalize(activeNetwork.mode),
+        label: capitalize(activeNetwork.mode ?? 'Custom network'),
         children: [
           ...Object.values<Network>(networks).map((network, key) => {
             return {

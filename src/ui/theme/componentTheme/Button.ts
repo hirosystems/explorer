@@ -15,7 +15,8 @@ export const buttonTheme = defineStyleConfig({
       },
     })),
     secondary: defineStyle(props => ({
-      fontWeight: 'semibold',
+      height: 12,
+      fontWeight: 'medium',
       fontSize: 'sm',
       color: mode(`slate.900`, `slate.50`)(props),
       border: '1px',

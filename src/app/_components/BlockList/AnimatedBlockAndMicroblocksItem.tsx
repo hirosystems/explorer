@@ -31,25 +31,23 @@ export const AnimatedBlockAndMicroblocksItem: FC<{
   }, [block.destroy]);
 
   return (
-    <>
-      <Box borderBottom={'1px'} _last={{ borderBottom: 'none' }}>
-        <Collapse
-          in={show}
-          animateOpacity
-          transition={{
-            enter: { duration: animationDuration },
-            exit: { duration: animationDuration },
-          }}
-          onAnimationComplete={state => {
-            if (state === 'exit') {
-              onAnimationExit?.();
-            }
-          }}
-          data-testid={`block-item-${block.hash}`}
-        >
-          <BlockAndMicroblocksItem block={block} />
-        </Collapse>
-      </Box>
-    </>
+    <Box borderBottom={'1px'} _last={{ borderBottom: 'none' }}>
+      <Collapse
+        in={show}
+        animateOpacity
+        transition={{
+          enter: { duration: animationDuration },
+          exit: { duration: animationDuration },
+        }}
+        onAnimationComplete={state => {
+          if (state === 'exit') {
+            onAnimationExit?.();
+          }
+        }}
+        data-testid={`block-item-${block.hash}`}
+      >
+        <BlockAndMicroblocksItem block={block} />
+      </Collapse>
+    </Box>
   );
 };

@@ -69,8 +69,6 @@ function BlocksListBase({
     };
   }, [activeNetwork.url, isLive, queryClient]);
 
-  const [counter, setCounter] = useState(10000000);
-
   const allBlocks = useMemo(() => {
     return [...latestBlocks, ...initialBlocks]
       .sort((a, b) => (b.height || 0) - (a.height || 0))

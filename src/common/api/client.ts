@@ -6,6 +6,7 @@ import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/tok
 import {
   AccountsApi,
   BlocksApi,
+  BurnBlocksApi,
   Configuration,
   FaucetsApi,
   FeesApi,
@@ -34,6 +35,7 @@ export function apiClients(
   const transactionsApi = new TransactionsApi(config);
   const microblocksApi = new MicroblocksApi(config);
   const blocksApi = new BlocksApi(config);
+  const burnBlocksApi = new BurnBlocksApi(config);
   const faucetsApi = new FaucetsApi(config);
   const feesApi = new FeesApi(config);
   const searchApi = new SearchApi(config);
@@ -51,6 +53,7 @@ export function apiClients(
     transactionsApi,
     microblocksApi,
     blocksApi,
+    burnBlocksApi,
     faucetsApi,
     feesApi,
     searchApi,
