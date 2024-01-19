@@ -46,7 +46,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     networkId: ChainID.Mainnet,
     mode: NetworkModes.Mainnet,
   },
-  activeNetworkKey: NetworkModeUrlMap[NetworkModes.Mainnet],
+  activeNetworkKey: NetworkModeUrlMap[NetworkModes.Mainnet], // TODO: this is a confusing name as it's actually the url for the api based on the network...
   addCustomNetwork: () => Promise.resolve(),
   removeCustomNetwork: () => true,
   networks: {},

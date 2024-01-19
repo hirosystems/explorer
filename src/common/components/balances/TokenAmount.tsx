@@ -1,9 +1,7 @@
 'use client';
 
-import React from 'react';
-
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
-import { useSuspenseFtMetadata } from '../../queries/useFtMetadata';
+import { useFtMetadata, useSuspenseFtMetadata } from '../../queries/useFtMetadata';
 import { ftDecimals } from '../../utils/utils';
 
 interface FtTokenAmountBaseProps {
@@ -11,7 +9,7 @@ interface FtTokenAmountBaseProps {
   contractId: string;
 }
 export function FtTokenAmountBase({ amount, contractId }: FtTokenAmountBaseProps) {
-  const { data: tokenMetadata } = useSuspenseFtMetadata(contractId);
+  const { data: tokenMetadata } = useFtMetadata(contractId);
   return <>{ftDecimals(amount, tokenMetadata?.decimals || 0)}</>;
 }
 
