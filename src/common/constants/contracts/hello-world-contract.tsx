@@ -17,7 +17,7 @@ export const helloWorldContract = {
 
 (define-public (test-emit-event)
   (begin
-    (print "Event! Hello world"
+    (print "Event! Hello world")
     (ok u1)
   )
 )
