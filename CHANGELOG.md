@@ -1,3 +1,12 @@
+## [1.143.3](https://github.com/hirosystems/explorer/compare/v1.143.2...v1.143.3) (2024-01-23)
+
+
+### Bug Fixes
+
+* **sip-10:** captured error and no longer show unknown error for non sip 10 fts ([60386af](https://github.com/hirosystems/explorer/commit/60386af783b5eef8b7eda70fffdcb4d10d9d618e))
+* **sip-10:** cleaning pr ([ba521ce](https://github.com/hirosystems/explorer/commit/ba521ce5af0ff1442d22b30af48060d82cba5244))
+* **sip-10:** cleaning pr ([0fe84ab](https://github.com/hirosystems/explorer/commit/0fe84abc6aa7d2030fdd7d1e70a82a7e18d729af))
+
 ## [1.143.2](https://github.com/hirosystems/explorer/compare/v1.143.1...v1.143.2) (2024-01-12)
 
 
