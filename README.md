@@ -1,4 +1,4 @@
-# Stacks Explorer
+# Explorer
 
 
 ![An image of the Stacks Explorer](/explorer-image.png 'Stacks Explorer')
