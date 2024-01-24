@@ -1,3 +1,10 @@
+# [1.144.0](https://github.com/hirosystems/explorer/compare/v1.143.3...v1.144.0) (2024-01-24)
+
+
+### Features
+
+* block list layout a ([a826ac1](https://github.com/hirosystems/explorer/commit/a826ac1c7120ec4f40df735319257555b9c316db))
+
 ## [1.143.3](https://github.com/hirosystems/explorer/compare/v1.143.2...v1.143.3) (2024-01-23)
 
 
