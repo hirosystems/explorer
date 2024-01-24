@@ -4,22 +4,9 @@ Title: Overview
 
 # Explorer Overview
 
-The Explorer frontend user interface is built with [React](https://reactjs.org/), [next.js](https://github.com/vercel/next.js) and [@stacks/ui](https://github.com/hirosystems/ui).
+The Stacks Explorer is an observability tool that helps users, developers, miners, and investors understand the Stacks Blockchain. It's built with [React](https://reactjs.org/), [next.js](https://github.com/vercel/next.js) and [Chakra UI](https://chakra-ui.com/).
 
-Before you can run Explorer on your machine locally, you must first clone the [Explorer](https://github.com/hirosystems/explorer) repository to obtain all of the necessary files and libraries needed.
+Check out the [Getting Started](https://docs.hiro.so/explorer/getting-started) guide for instructions on how to run the Stacks Explorer locally on your machine and the Sandbox feature guide to learn how to explore, write and deploy contracts within the Stacks Explorer. 
 
-# Project Dependencies
-
-Once you have cloned the Explorer repositories, you will need to install the following project dependencies:
-
-- [NodeJS](https://nodejs.dev/en/) that includes `npm`
-- [PNPM](https://pnpm.io/installation/)
-- [Homebrew](https://brew.sh/)
-
-> **_NOTE:_**
->
-> Although Homebrew is not required to install and operate Explorer, it is highly recommended.
-
-Open your terminal window, and make sure you are in the `/explorer` folder. Run the below command to install the dependencies:
-
-`pnpm i`
+**Contributing**
+Development of the Explorer happens in the open on GitHub, and we are grateful to the community for contributing bug fixes and improvements. Check out our [contribution guide](https://github.com/hirosystems/explorer/blob/main/.github/CONTRIBUTING.md#contributing-to-the-stacks-explorer) to learn about our development process, how to propose bug fixes and improvements, and how to build and test your changes.
