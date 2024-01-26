@@ -1,6 +1,13 @@
+import { CoinSparkleIcon } from '@/ui/icons/CoinSparkleIcon';
 import React, { FC } from 'react';
 import { BsCodeSlash } from 'react-icons/bs';
-import { PiArrowBendDownRight, PiClock, PiWarningCircle } from 'react-icons/pi';
+import {
+  PiArrowBendDoubleUpRightLight,
+  PiArrowBendDownRight,
+  PiClock,
+  PiFireLight,
+  PiWarningCircle,
+} from 'react-icons/pi';
 import { RxCube } from 'react-icons/rx';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -13,9 +20,13 @@ import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
 import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 import { Circle } from './Circle';
+import { TbArrowsDoubleSwNe } from 'react-icons/tb';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
   switch (txType) {
+    case 'token_transfer':
+      return TbArrowsDoubleSwNe;
+
     case 'smart_contract':
       return BsCodeSlash;
 
@@ -25,11 +36,21 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
     case 'coinbase':
       return CubeSparkleIcon;
 
-    case 'poison_microblock':
-      return RxCube;
+    // case 'poison_microblock':
+    //   return RxCube;
 
     case 'tenure_change':
       return PiArrowBendDownRight;
+
+    // sBTC-related transaction types
+    // case 'tenure_extension':
+    //   return PiArrowBendDoubleUpRightLight; // mirror over x-axis to get down arrow
+
+    // case 'burn':
+    //   return PiFireLight;
+
+    // case 'mint':
+    //   CoinSparkleIcon;
 
     default:
       return StxIcon;
