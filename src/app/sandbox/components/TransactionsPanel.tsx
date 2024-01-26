@@ -2,7 +2,7 @@
 
 import { useColorMode } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import React, { Fragment, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -18,7 +18,7 @@ import { buildUrl } from '../../../common/utils/buildUrl';
 import { MempoolTxListItemMini } from '../../../features/txs-list/ListItem/MempoolTxListItemMini';
 import { TxListItemMini } from '../../../features/txs-list/ListItem/TxListItemMini';
 import { FilterButton } from '../../../features/txsFilterAndSort/FilterButton';
-import { FilteredMessage } from '../../../features/txsFilterAndSort/FilterPanel';
+import { AllTransactionsFilteredMessage } from '../../../features/txsFilterAndSort/TransactionMessages';
 import { useFilterAndSortState } from '../../../features/txsFilterAndSort/useFilterAndSortState';
 import { Accordion } from '../../../ui/Accordion';
 import { AccordionButton } from '../../../ui/AccordionButton';
@@ -35,23 +35,6 @@ import { Caption, Text, Title } from '../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useUser } from '../hooks/useUser';
 import { setCodeBody, toggleRightPanel } from '../sandbox-slice';
-
-const PanelHeader: React.FC = () => {
-  return (
-    <>
-      <Flex
-        justifyContent="space-between"
-        px="16px"
-        borderBottomWidth="1px"
-        py="8px"
-        bg={`bg.${useColorMode().colorMode}`}
-      >
-        <Caption>Transactions</Caption>
-        <FilterButton />
-      </Flex>
-    </>
-  );
-};
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const router = useRouter();
@@ -198,7 +181,6 @@ function TxDetailsBase({ tx }: { tx: Transaction }) {
       : tx.tx_type === 'contract_call'
         ? tx.contract_call.contract_id
         : undefined;
-  const colorMode = useColorMode().colorMode;
 
   const { data: contract } = useContractById(contractId);
 
@@ -300,7 +282,7 @@ export function TransactionsPanel() {
       {filteredTxs?.length ? (
         <Accordion allowMultiple>{txList}</Accordion>
       ) : hasTxButIsFiltered ? (
-        <FilteredMessage />
+        <AllTransactionsFilteredMessage />
       ) : (
         <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
           <Stack textAlign="center">

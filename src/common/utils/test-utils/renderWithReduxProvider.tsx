@@ -1,7 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
-import { render } from '@testing-library/react';
+import { configureStore } from '@reduxjs/toolkit';
 import type { RenderOptions } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React, { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 
@@ -23,6 +23,10 @@ import {
   modalSlice,
   initialState as modalSliceInitialState,
 } from '../../components/modals/modal-slice';
+import {
+  initialState as activeTransactionValueFilterInitialState,
+  activeTransactionValueFilterSlice,
+} from '../../state/slices/transaction-value-filter-slice';
 import { AppStore, RootState } from '../../state/store';
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
@@ -37,6 +41,7 @@ export function renderWithReduxProviders(
       modal: modalSliceInitialState,
       search: searchSliceInitialState,
       connect: sandboxSliceInitialState,
+      activeTransactionValueFilter: activeTransactionValueFilterInitialState,
       ...Object.keys(TxFilterAndSortTypes).reduce(
         (acc, filterType) => ({ ...acc, [filterType]: filterSliceInitialState }),
         {} as TxFilters
@@ -47,6 +52,7 @@ export function renderWithReduxProviders(
         modal: modalSlice.reducer,
         search: searchSlice.reducer,
         connect: sandboxSlice.reducer,
+        activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
         ...filterAndSortReducers,
       },
       preloadedState,

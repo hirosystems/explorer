@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';

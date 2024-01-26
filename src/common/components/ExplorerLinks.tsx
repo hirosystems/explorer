@@ -1,22 +1,38 @@
 'use client';
 
 import { forwardRef } from '@chakra-ui/react';
-import React from 'react';
 
 import { Link, LinkProps } from '../../ui/Link';
 import { useGlobalContext } from '../context/useAppContext';
 import { buildUrl } from '../utils/buildUrl';
 
-export const ExplorerLink = forwardRef<LinkProps, 'a'>(({ href, ...rest }, ref) => {
-  const network = useGlobalContext().activeNetwork;
-  return <Link ref={ref} href={buildUrl(href!, network)} {...rest} />;
-});
-
-export const TxLink = forwardRef<Partial<LinkProps> & { txId: string }, 'a'>(
-  ({ txId, ...rest }, ref) => {
-    return <ExplorerLink ref={ref} href={`/txid/${encodeURIComponent(txId)}`} {...rest} />;
+export const ExplorerLink = forwardRef<LinkProps & { openInNewTab?: boolean }, 'a'>(
+  ({ href, openInNewTab, ...rest }, ref) => {
+    const network = useGlobalContext().activeNetwork;
+    return (
+      <Link
+        ref={ref}
+        href={buildUrl(href!, network)}
+        {...(openInNewTab && { target: '_blank' })}
+        {...rest}
+      />
+    );
   }
 );
+
+export const TxLink = forwardRef<
+  Partial<LinkProps> & { txId: string; openInNewTab?: boolean },
+  'a'
+>(({ txId, openInNewTab = false, ...rest }, ref) => {
+  return (
+    <ExplorerLink
+      ref={ref}
+      href={`/txid/${encodeURIComponent(txId)}`}
+      openInNewTab={openInNewTab}
+      {...rest}
+    />
+  );
+});
 
 export const TokenLink = forwardRef<Partial<LinkProps> & { tokenId: string }, 'a'>(
   ({ tokenId, ...rest }, ref) => {

@@ -4,7 +4,6 @@ import {
   MenuList as CUIMenuList,
   MenuListProps as CUIMenuListProps,
   forwardRef,
-  useColorMode,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
@@ -17,6 +16,7 @@ export const MenuList = forwardRef<MenuListProps, 'div'>(({ children, size, ...r
     height={size || rest.height}
     minWidth={size || rest.minWidth}
     minHeight={size || rest.minHeight}
+    sx={{ '& > *:not(:last-child)': { mb: 2 } }}
     {...rest}
   >
     {children}

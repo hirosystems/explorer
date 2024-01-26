@@ -34,13 +34,13 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
         _last={{ borderBottom: 'unset' }}
         {...rest}
       >
-        <Show above="lg">{icon && <Box width={10}>{icon}</Box>}</Show>
+        <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
         <Flex
-          width={'full'}
-          minWidth={'0px'}
+          width="full"
+          minWidth="0px"
           gap={2}
-          direction={['column', 'column', 'column', 'row']}
-          alignItems={'flex-start'}
+          direction={['column', 'column', 'row', 'row', 'row']}
+          alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']}
         >
           {leftContent && (
             <Flex
@@ -60,7 +60,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                   minWidth={0}
                   display={'flex'}
                 >
-                  <Show below="lg">{icon && <Box width={4.5}>{icon}</Box>}</Show>
+                  <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
                   <Box minWidth={0} width={'full'}>
                     {leftContent.title}
                   </Box>
@@ -81,18 +81,13 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
               maxWidth={'full'}
               flex={'0 1 auto'}
               width={['full', 'full', 'full', 'auto']}
+              alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end']}
             >
               {rightContent.title !== undefined ? (
-                <Text fontSize={'sm'} textAlign={['left', 'left', 'left', 'right']}>
-                  {rightContent.title}
-                </Text>
+                <Text fontSize={'sm'}>{rightContent.title}</Text>
               ) : null}
               {rightContent.subtitle !== undefined ? (
-                <Text
-                  fontSize={'xs'}
-                  color={'secondaryText'}
-                  textAlign={['left', 'left', 'left', 'right']}
-                >
+                <Text fontSize={'xs'} color={'secondaryText'}>
                   {rightContent.subtitle}
                 </Text>
               ) : null}

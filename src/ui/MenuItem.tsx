@@ -4,7 +4,6 @@ import {
   MenuItem as CUIMenuItem,
   MenuItemProps as CUIMenuItemProps,
   forwardRef,
-  useColorMode,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';

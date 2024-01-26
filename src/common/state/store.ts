@@ -9,12 +9,17 @@ import {
   filterAndSortReducers,
 } from '../../features/txsFilterAndSort/txsFilterAndSortSlice';
 import { ModalState, modalSlice } from '../components/modals/modal-slice';
+import {
+  TransactionValueFilterState,
+  activeTransactionValueFilterSlice,
+} from './slices/transaction-value-filter-slice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
   connect: sandboxSlice.reducer,
   ...filterAndSortReducers,
+  activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
 });
 
 export const makeStore = () =>
@@ -36,6 +41,7 @@ export interface RootState extends TxFilters {
   modal: ModalState;
   search: SearchState;
   connect: ConnectState;
+  activeTransactionValueFilter: TransactionValueFilterState;
 }
 
 export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];
