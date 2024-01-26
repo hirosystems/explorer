@@ -3,7 +3,6 @@ import { FC, ReactNode, memo } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { ExplorerLink } from '../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea, TxTimestamp } from '../../../common/components/transaction-item';
@@ -16,6 +15,7 @@ import { HStack } from '../../../ui/HStack';
 import { Caption } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
+import { TxLink } from '../../../ui/TxLink';
 
 interface TxsListItemProps extends FlexProps {
   tx: Transaction;
@@ -38,28 +38,38 @@ const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
     <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
     <AddressArea tx={tx} />
     {Number(tx.fee_rate) > 0 ? (
-      <Caption whiteSpace={'nowrap'}>
+      <Caption whiteSpace={'nowrap'} style={{ fontVariantNumeric: 'tabular-nums' }}>
         Fee: {`${(Number(tx.fee_rate) / MICROSTACKS_IN_STACKS).toFixed(4)} STX`}
       </Caption>
     ) : null}
   </HStack>
 ));
 
-const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
-  <HStack
-    as="span"
-    gap="1.5"
-    alignItems="center"
-    justifyContent="flex-end"
-    flexWrap="nowrap"
-    divider={<Caption>∙</Caption>}
-    minWidth={'160px'}
-    _hover={{ color: `links.${useColorMode().colorMode}`, textDecoration: 'underline' }}
-  >
-    <Box display={['none', 'none', 'inline']}>{truncateMiddle(tx.tx_id)}</Box>
-    <TxTimestamp tx={tx} />
-  </HStack>
-));
+const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
+  const network = useGlobalContext().activeNetwork;
+  const href = buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network);
+
+  return (
+    <HStack
+      as="span"
+      gap="1.5"
+      alignItems="center"
+      justifyContent="flex-end"
+      flexWrap="nowrap"
+      divider={<Caption>∙</Caption>}
+      minWidth={'160px'}
+    >
+      <Box
+        display={['none', 'none', 'inline']}
+      >
+        <TxLink href={href} >
+          {truncateMiddle(tx.tx_id)}
+        </TxLink>
+      </Box>
+      <TxTimestamp tx={tx} />
+    </HStack>
+  );
+});
 
 const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   const isConfirmed = tx.tx_status === 'success';
@@ -67,51 +77,28 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   const didFail = !isConfirmed;
   const isInMicroblock = isConfirmed && !isAnchored;
   const isInAnchorBlock = isConfirmed && isAnchored;
-  const colorMode = useColorMode().colorMode;
-  const hash = isInMicroblock
-    ? tx.microblock_hash
-    : isInAnchorBlock
-      ? tx.parent_block_hash
-      : undefined;
+  const blockNumber = isInMicroblock || isInAnchorBlock ? tx.block_height : undefined;
   return (
     <HStack
       as="span"
       gap="1.5"
       alignItems="center"
       flexWrap="nowrap"
+      justifyContent="flex-end"
       divider={<Caption>∙</Caption>}
       minWidth={'160px'}
       color={'secondaryText'}
     >
-      <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace={'nowrap'}>
-        {isConfirmed && !isAnchored && 'In microblock'}
-        {isConfirmed && isAnchored && 'In anchor block'}
-        {didFail && 'Failed'}
-      </Caption>
-      {hash && (
-        <ExplorerLink
-          href={`${isInMicroblock ? '/microblock' : '/block'}/${encodeURIComponent(hash)}`}
-        >
-          <Caption whiteSpace={'nowrap'}>{truncateMiddle(hash, 4)}</Caption>
-        </ExplorerLink>
+      {didFail ? (
+        <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace={'nowrap'}>
+          Failed
+        </Caption>
+      ) : (
+        <Caption whiteSpace={'nowrap'}>Block #{blockNumber}</Caption>
       )}
     </HStack>
   );
 });
-
-interface TxListItemContent {
-  title?: ReactNode;
-  subtitle?: ReactNode;
-}
-
-// const getMemPoolPageTxListContent = (
-//   tx: Transaction
-// ): {
-//   left: TxListItemContent;
-//   right: TxListItemContent;
-// } => {
-
-// };
 
 export const TxListItem: FC<TxsListItemProps> = memo(
   ({ tx, leftTitle, leftSubtitle, rightTitle, rightSubtitle, ...rest }) => {

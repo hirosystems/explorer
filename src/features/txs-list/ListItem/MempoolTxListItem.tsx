@@ -1,3 +1,4 @@
+import { Box, useColorMode } from '@chakra-ui/react';
 import { FC, memo, useMemo } from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
@@ -8,7 +9,7 @@ import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/tran
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { getTransactionStatus } from '../../../common/utils/transactions';
-import { MICROSTACKS_IN_STACKS } from '../../../common/utils/utils';
+import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
 import { Caption, Title } from '../../../ui/typography';
@@ -23,6 +24,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
   const isPending = tx.tx_status === 'pending';
   const didFail = !isPending;
   const network = useGlobalContext().activeNetwork;
+  const colorMode = useColorMode().colorMode;
 
   const icon = useMemo(
     () => <TxIcon txType={tx.tx_type} txStatus={getTransactionStatus(tx)} />,
@@ -52,7 +54,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
         <AddressArea tx={tx} />
         {Number(tx.fee_rate) > 0 ? (
-          <Caption whiteSpace={'nowrap'}>
+          <Caption whiteSpace={'nowrap'} style={{ fontVariantNumeric: 'tabular-nums' }}>
             Fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
           </Caption>
         ) : null}
@@ -61,7 +63,29 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
     [tx]
   );
 
-  const rightTitle = useMemo(() => <TxTimestamp tx={tx} />, [tx]);
+  // const rightTitle = useMemo(() => <TxTimestamp tx={tx} />, [tx]);
+  const rightTitle = useMemo(
+    () => (
+      <HStack
+        as="span"
+        gap="1.5"
+        alignItems="center"
+        justifyContent="flex-end"
+        flexWrap="nowrap"
+        divider={<Caption>∙</Caption>}
+        minWidth={'160px'}
+      >
+        <Box
+          _hover={{ color: `links.${colorMode}`, textDecoration: 'underline' }}
+          display={['none', 'none', 'inline']}
+        >
+          {truncateMiddle(tx.tx_id)}
+        </Box>
+        <TxTimestamp tx={tx} />
+      </HStack>
+    ),
+    [tx]
+  );
 
   const rightSubtitle = useMemo(
     () => (
@@ -83,7 +107,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         {isPending && <Nonce nonce={tx.nonce} />}
       </HStack>
     ),
-    [didFail, isPending, tx.nonce, tx.fee_rate]
+    [didFail, isPending, tx.nonce]
   );
 
   return (
