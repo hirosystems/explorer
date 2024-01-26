@@ -23,7 +23,6 @@ export const TxListTabsBase: FC<
   return (
     <TabsContainer
       setTabIndex={setTabIndex}
-      title={'Recent transactions'}
       tabs={[
         {
           title: 'Confirmed',

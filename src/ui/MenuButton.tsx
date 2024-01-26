@@ -4,23 +4,29 @@ import {
   MenuButton as CUIMenuButton,
   MenuButtonProps as CUIMenuButtonProps,
   forwardRef,
-  useColorMode,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
 
 export type MenuButtonProps = CUIMenuButtonProps & UIComponent;
 export const MenuButton = forwardRef<MenuButtonProps, 'button'>(
-  ({ children, size, ...rest }, ref) => (
-    <CUIMenuButton
-      ref={ref}
-      width={size || rest.width}
-      height={size || rest.height}
-      minWidth={size || rest.minWidth}
-      minHeight={size || rest.minHeight}
-      {...rest}
-    >
-      {children}
-    </CUIMenuButton>
-  )
+  ({ children, size, ...rest }, ref) => {
+    const hoverBg = useColorModeValue('slate.150 !important', 'slate.900');
+
+    return (
+      <CUIMenuButton
+        _hover={{ bg: hoverBg }}
+        _active={{ bg: hoverBg }}
+        ref={ref}
+        width={size || rest.width}
+        height={size || rest.height}
+        minWidth={size || rest.minWidth}
+        minHeight={size || rest.minHeight}
+        {...rest}
+      >
+        {children}
+      </CUIMenuButton>
+    );
+  }
 );

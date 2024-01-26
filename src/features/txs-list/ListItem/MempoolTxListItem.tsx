@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { FC, memo, useMemo } from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
@@ -52,6 +51,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
       >
         <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
         <AddressArea tx={tx} />
+        {Number(tx.fee_rate) > 0 ? (
+          <Caption whiteSpace={'nowrap'}>
+            Fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
+          </Caption>
+        ) : null}
       </HStack>
     ),
     [tx]
@@ -71,19 +75,15 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         justifyContent={'flex-end'}
         color={'secondaryText'}
       >
-        <Caption as="span" data-test="tx-caption">
-          {isPending && 'Pending'}
-          {didFail && 'Failed'}
-        </Caption>
-        {isPending && <Nonce nonce={tx.nonce} />}
-        {Number(tx.fee_rate) > 0 ? (
-          <Caption whiteSpace={'nowrap'}>
-            fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
+        {didFail ? (
+          <Caption as="span" data-test="tx-caption">
+            "Faild"
           </Caption>
         ) : null}
+        {isPending && <Nonce nonce={tx.nonce} />}
       </HStack>
     ),
-    [didFail, isPending, tx.nonce]
+    [didFail, isPending, tx.nonce, tx.fee_rate]
   );
 
   return (

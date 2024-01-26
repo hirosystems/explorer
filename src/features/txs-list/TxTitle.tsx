@@ -65,7 +65,6 @@ export const TxTitle = (
         <Flex flexDirection={['row']} alignItems={['center']} height={'1em'}>
           <TxLink>
             {microToStacksFormatted(tx.token_transfer.amount)} STX
-            <Box display={['none', 'none', 'inline']}>: {tx.tx_id}</Box>
           </TxLink>
           {showPrice && <StxPriceButton tx={tx} value={Number(tx.token_transfer.amount)} />}
         </Flex>

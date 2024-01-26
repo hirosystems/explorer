@@ -29,16 +29,20 @@ export interface TxItemProps extends FlexProps {
   hideRightElements?: boolean;
 }
 
-const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
-  const date =
-    typeof (tx as any).burn_block_time !== 'undefined' && (tx as any).burn_block_time !== -1
-      ? toRelativeTime((tx as any).burn_block_time * 1000)
-      : (tx as any).burn_block_time === -1
-        ? toRelativeTime((tx as any).parent_burn_block_time * 1000)
-        : (tx as any).receipt_time
-          ? toRelativeTime((tx as any).receipt_time * 1000)
-          : 'Pending...';
+const getTransactionTime = (tx: Transaction | MempoolTransaction) => {
+  if (typeof (tx as any).burn_block_time !== 'undefined' && (tx as any).burn_block_time !== -1) {
+    return (tx as any).burn_block_time;
+  } else if ((tx as any).burn_block_time === -1) {
+    return (tx as any).parent_burn_block_time;
+  } else if ((tx as any).receipt_time) {
+    return (tx as any).receipt_time;
+  }
+  return null;
+};
 
+const getRelativeTimestamp = (tx: Transaction | MempoolTransaction) => {
+  const txTime = getTransactionTime(tx);
+  const date = txTime ? toRelativeTime(txTime * 1000) : 'Pending...';
   return date;
 };
 
@@ -121,13 +125,16 @@ export const AddressArea = React.memo(
 export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
   React.memo(props => {
     const { tx } = props;
-    const date = getRelativeTimestamp(tx);
+    const relativeTimestamp = getRelativeTimestamp(tx);
+    const txTime = getTransactionTime(tx);
+    const date = new Date(txTime * 1000);
+    const dateString = date.toUTCString();
 
-    return <>{date}</>;
+    return <Tooltip label={dateString ?? null}>{relativeTimestamp}</Tooltip>;
   });
 
 export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
   <Tooltip label="Nonce">
-    <Caption as="span">{nonce.toString() + 'n'}</Caption>
+    <Caption as="span">Nonce: {nonce.toString()}</Caption>
   </Tooltip>
 ));

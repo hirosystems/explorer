@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/react';
-import { sort } from 'next/dist/build/webpack/loaders/css-loader/src/utils';
-import * as React from 'react';
+import { Box, useColorModeValue } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import { BsChevronDown } from 'react-icons/bs';
+import { GoSortDesc } from 'react-icons/go';
 
 import {
   GetMempoolTransactionListOrderByEnum,
@@ -34,45 +34,84 @@ function getSortOptionLabel(
   }
 }
 
+const StyledContainer = styled(Box)`
+  .menu-button {
+    :hover {
+      background: none;
+    }
+  }
+
+  .menu-list {
+    font-size: 16px;
+  }
+
+  .menu-item {
+    background-color: 'orange !important';
+
+    &:active {
+      background-color: 'orange !important';
+    }
+    :active {
+      background-color: 'orange !important';
+    }
+  }
+
+  .additional-info {
+    margin-left: 12px;
+    margin-top: 4px;
+  }
+`;
+
 export function SortMenu() {
   const { setActiveSort, setActiveOrder, activeSort, activeOrder } = useFilterAndSortState();
   const bg = useColorModeValue('white', 'black');
   const color = useColorModeValue('slate.700', 'slate.400');
+  const blackColor = useColorModeValue('slate.900', 'slate.900');
   const borderColor = useColorModeValue('slate.300', 'slate.900');
+  const hoverBg = useColorModeValue('slate.150 !important', 'slate.900');
 
   return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        rightIcon={<Icon as={BsChevronDown} size={3} />}
-        fontSize={'sm'}
-        bg={bg}
-        color={color}
-        fontWeight={'semibold'}
-        border={'1px'}
-        borderColor={borderColor}
-      >
-        {getSortOptionLabel(activeSort, activeOrder)}
-      </MenuButton>
-      <MenuList fontSize={'sm'} color={color}>
-        {Object.keys(GetMempoolTransactionListOrderByEnum).map(sort =>
-          Object.keys(GetMempoolTransactionListOrderEnum)
-            .reverse()
-            .map(order => (
-              <MenuItem
-                onClick={() => {
-                  setActiveSort(sort as GetMempoolTransactionListOrderByEnum);
-                  setActiveOrder(order as GetMempoolTransactionListOrderEnum);
-                }}
-              >
-                {getSortOptionLabel(
-                  sort as GetMempoolTransactionListOrderByEnum,
-                  order as GetMempoolTransactionListOrderEnum
-                )}
-              </MenuItem>
-            ))
-        )}
-      </MenuList>
-    </Menu>
+    <StyledContainer>
+      <Menu>
+        <MenuButton
+          as={Button}
+          rightIcon={<Icon as={BsChevronDown} size={3} color={blackColor} />}
+          leftIcon={<Icon as={GoSortDesc} size={4} />}
+          fontSize={'sm'}
+          bg={bg}
+          color={color}
+          fontWeight={'semibold'}
+          border={'1px'}
+          borderColor={borderColor}
+        >
+          <Box display="inline" fontWeight="normal">
+            Sort by:{' '}
+          </Box>
+          <Box display="inline" fontWeight="normal" color={blackColor}>
+            {getSortOptionLabel(activeSort, activeOrder)}
+          </Box>
+        </MenuButton>
+        <MenuList fontSize={'sm'} color={color} padding="8px">
+          {Object.keys(GetMempoolTransactionListOrderByEnum).map(sort =>
+            Object.keys(GetMempoolTransactionListOrderEnum)
+              .reverse()
+              .map(order => (
+                <MenuItem
+                  color={blackColor}
+                  onClick={() => {
+                    setActiveSort(sort as GetMempoolTransactionListOrderByEnum);
+                    setActiveOrder(order as GetMempoolTransactionListOrderEnum);
+                  }}
+                >
+                  {getSortOptionLabel(
+                    sort as GetMempoolTransactionListOrderByEnum,
+                    order as GetMempoolTransactionListOrderEnum
+                  )}
+                </MenuItem>
+              ))
+          )}
+        </MenuList>
+      </Menu>
+    </StyledContainer>
   );
 }

@@ -3,7 +3,7 @@ import { TransactionType } from '@stacks/stacks-blockchain-api-types';
 export const getTransactionTypeLabel = (value: TransactionType) => {
   switch (value) {
     case 'token_transfer':
-      return 'STX transfer';
+      return 'Token transfer';
     case 'coinbase':
       return 'Coinbase';
     case 'contract_call':
