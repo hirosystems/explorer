@@ -209,7 +209,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
                   <span
                     class="chakra-text css-nvxyq8"
                   >
-                    in 54062 years
+                    in 54066 years
                   </span>
                 </div>
               </div>
@@ -256,7 +256,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
                   <span
                     class="chakra-text css-nvxyq8"
                   >
-                    in 54062 years
+                    in 54066 years
                   </span>
                 </div>
               </div>
@@ -303,7 +303,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
                   <span
                     class="chakra-text css-nvxyq8"
                   >
-                    in 54062 years
+                    in 54066 years
                   </span>
                 </div>
               </div>
@@ -377,7 +377,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
                 <span
                   class="chakra-text css-nvxyq8"
                 >
-                  in 54062 years
+                  in 54066 years
                 </span>
               </div>
             </div>

@@ -2,7 +2,6 @@
 
 import { Code } from '@chakra-ui/react';
 import React, { FC, Fragment } from 'react';
-import { IconType } from 'react-icons';
 import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
 
 import {
@@ -29,7 +28,6 @@ import {
 } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { StxIcon } from '../../../ui/icons';

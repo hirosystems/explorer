@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useAppContext';
@@ -36,7 +35,7 @@ export default function Home() {
       <Grid
         gap="7"
         width="full"
-        gridTemplateColumns={['100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
+        gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
 

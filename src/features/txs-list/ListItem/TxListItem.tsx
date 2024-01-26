@@ -1,19 +1,17 @@
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
 import { FC, ReactNode, memo } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { ExplorerLink } from '../../../common/components/ExplorerLinks';
+import { BlockLink, TxLink } from '../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea, TxTimestamp } from '../../../common/components/transaction-item';
-import { useGlobalContext } from '../../../common/context/useAppContext';
-import { buildUrl } from '../../../common/utils/buildUrl';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
+import { Stack } from '../../../ui/Stack';
+import { Text } from '../../../ui/Text';
 import { Caption } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
@@ -30,18 +28,49 @@ const Icon: FC<{ tx: Transaction }> = memo(({ tx }) => (
   <TxIcon txType={tx.tx_type} txStatus={getTransactionStatus(tx)} />
 ));
 
-const LeftTitle: FC<{ tx: Transaction; href: string }> = memo(({ tx, href }) => (
-  <>{TxTitle(tx, href, true)}</>
-));
+const LeftTitle: FC<{ tx: Transaction }> = memo(({ tx }) => <TxTitle tx={tx} showPrice={true} />);
 
 const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
-  <HStack as="span" gap="1.5" alignItems="center" flexWrap="wrap" divider={<Caption>∙</Caption>}>
-    <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
+  <Stack
+    as="span"
+    gap="1.5"
+    alignItems={['flex-start', 'center', 'center', 'center']}
+    justifyContent={['center', 'flex-start', 'flex-start', 'flex-start']}
+    flexWrap="nowrap"
+    divider={<Caption display={['none', 'inline', 'inline', 'inline']}>∙</Caption>}
+    direction={['column', 'row', 'row', 'row']}
+  >
+    <Caption fontWeight="semibold" whiteSpace="nowrap">
+      {getTransactionTypeLabel(tx.tx_type)}
+    </Caption>
     <AddressArea tx={tx} />
-  </HStack>
+    {Number(tx.fee_rate) > 0 ? (
+      <Caption whiteSpace={'nowrap'} style={{ fontVariantNumeric: 'tabular-nums' }}>
+        Fee: {`${(Number(tx.fee_rate) / MICROSTACKS_IN_STACKS).toFixed(4)} STX`}
+      </Caption>
+    ) : null}
+  </Stack>
 ));
 
-const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => <TxTimestamp tx={tx} />);
+const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
+  return (
+    <HStack
+      as="span"
+      gap="1.5"
+      alignItems="center"
+      justifyContent="flex-end"
+      flexWrap="nowrap"
+      divider={<Caption>∙</Caption>}
+    >
+      <Text whiteSpace="nowrap">
+        <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
+      </Text>
+      <Text whiteSpace="nowrap">
+        <TxTimestamp tx={tx} />
+      </Text>
+    </HStack>
+  );
+});
 
 const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   const isConfirmed = tx.tx_status === 'success';
@@ -49,52 +78,40 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   const didFail = !isConfirmed;
   const isInMicroblock = isConfirmed && !isAnchored;
   const isInAnchorBlock = isConfirmed && isAnchored;
-  const colorMode = useColorMode().colorMode;
-  const hash = isInMicroblock
-    ? tx.microblock_hash
-    : isInAnchorBlock
-      ? tx.parent_block_hash
-      : undefined;
+  const blockNumber = isInMicroblock || isInAnchorBlock ? tx.block_height : undefined;
   return (
-    <HStack
+    <Stack
       as="span"
       gap="1.5"
-      alignItems="center"
       flexWrap="nowrap"
-      divider={<Caption>∙</Caption>}
-      minWidth={'160px'}
       color={'secondaryText'}
+      divider={<Caption display={['none', 'none', 'inline', 'inline']}>∙</Caption>}
+      direction={['column', 'column', 'row', 'row']}
+      justifyContent={['center', 'center', 'flex-end', 'flex-end']}
+      alignItems={['flex-start', 'flex-start', 'center', 'center']}
+      minWidth={'160px'}
     >
-      <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace={'nowrap'}>
-        {isConfirmed && !isAnchored && 'In microblock'}
-        {isConfirmed && isAnchored && 'In anchor block'}
-        {didFail && 'Failed'}
-      </Caption>
-      {hash && (
-        <ExplorerLink
-          href={`${isInMicroblock ? '/microblock' : '/block'}/${encodeURIComponent(hash)}`}
-        >
-          <Caption whiteSpace={'nowrap'}>{truncateMiddle(hash, 4)}</Caption>
-        </ExplorerLink>
-      )}
-      {Number(tx.fee_rate) > 0 ? (
-        <Caption whiteSpace={'nowrap'}>
-          fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
+      {didFail ? (
+        <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace={'nowrap'}>
+          Failed
         </Caption>
-      ) : null}
-    </HStack>
+      ) : (
+        <BlockLink hash={tx.block_hash} whiteSpace="nowrap">
+          Block #{blockNumber}{' '}
+        </BlockLink>
+        // <Caption whiteSpace='nowrap'></Caption>
+      )}
+    </Stack>
   );
 });
 
 export const TxListItem: FC<TxsListItemProps> = memo(
   ({ tx, leftTitle, leftSubtitle, rightTitle, rightSubtitle, ...rest }) => {
-    const network = useGlobalContext().activeNetwork;
-    const href = buildUrl(`/txid/${encodeURIComponent(tx.tx_id)}`, network);
     return (
       <TwoColsListItem
         icon={<Icon tx={tx} />}
         leftContent={{
-          title: leftTitle || <LeftTitle tx={tx} href={href} />,
+          title: leftTitle || <LeftTitle tx={tx} />,
           subtitle: leftSubtitle || <LeftSubtitle tx={tx} />,
         }}
         rightContent={{

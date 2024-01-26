@@ -7,6 +7,7 @@ import { badgeTheme } from './componentTheme/Badge';
 import { buttonTheme } from './componentTheme/Button';
 import { checkboxTheme } from './componentTheme/Checkbox';
 import { inputTheme } from './componentTheme/Input';
+import { menuTheme } from './componentTheme/Menu';
 import { switchTheme } from './componentTheme/Switch';
 import { tabTheme } from './componentTheme/Tab';
 import { tagTheme } from './componentTheme/Tag';
@@ -52,7 +53,7 @@ export const theme = extendTheme({
       brand: 'purple.600',
       border: {
         default: 'slate.150',
-        _dark: 'slate.900',
+        _dark: 'slate.850',
       },
       borderDark: {
         default: 'slate.300',
@@ -62,6 +63,10 @@ export const theme = extendTheme({
       bg: {
         default: 'white',
         _dark: 'black',
+      },
+      dropdownBgHover: {
+        default: 'slate.150',
+        _dark: 'slate.850',
       },
       invert: {
         default: 'black',
@@ -97,7 +102,8 @@ export const theme = extendTheme({
     heading: openSauce.style.fontFamily,
   },
   sizes: {
-    4.5: '1.125rem',
+    // 4.5: '1.125rem',
+    4: '1rem',
   },
   borders: {
     '1px': '1px solid var(--stacks-colors-border)',
@@ -111,5 +117,6 @@ export const theme = extendTheme({
     Tag: tagTheme,
     Input: inputTheme,
     Button: buttonTheme,
+    Menu: menuTheme,
   },
 });

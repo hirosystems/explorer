@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-import { Fragment } from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';

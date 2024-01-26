@@ -1,5 +1,4 @@
 import { FC, useMemo } from 'react';
-import * as React from 'react';
 
 import {
   AddressTransactionWithTransfers,
@@ -7,9 +6,10 @@ import {
   Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { Grid } from '../../ui/Grid';
-import { Text } from '../../ui/Text';
-import { FilteredMessage } from '../txsFilterAndSort/FilterPanel';
+import {
+  AllTransactionsFilteredMessage,
+  NoTransactionsMessage,
+} from '../txsFilterAndSort/TransactionMessages';
 import { useFilterAndSortState } from '../txsFilterAndSort/useFilterAndSortState';
 
 interface FilteredTxsProps<T extends unknown> {
@@ -37,7 +37,7 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
   const hasTxs = !!txs?.length;
   const hasVisibleTxs = !!filteredTxs?.length;
   const allTxsAreFilteredOut = hasTxs && !hasVisibleTxs;
-  if (allTxsAreFilteredOut) return <FilteredMessage />;
+  if (allTxsAreFilteredOut) return <AllTransactionsFilteredMessage />;
   if (hasVisibleTxs)
     return (
       <>
@@ -46,11 +46,5 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
         ))}
       </>
     );
-  return (
-    <Grid placeItems="center" px="16px" py="32px">
-      <Text color={'textCaption'} mt="32px">
-        No transactions
-      </Text>
-    </Grid>
-  );
+  return <NoTransactionsMessage />;
 };

@@ -8,7 +8,6 @@ import React from 'react';
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
-  MempoolSmartContractTransaction,
   MempoolTransaction,
   SmartContractTransaction,
   Transaction,
@@ -22,9 +21,11 @@ dayjs.extend(updateLocale);
 dayjs.updateLocale('en', {
   relativeTime: {
     future: 'in %s',
-    past: '%s ago',
-    s: 'a few secs',
-    m: 'a min',
+    past: (time: string) => {
+      return time === 'Now' ? time : `${time} ago`;
+    },
+    s: 'Now',
+    m: '1 min',
     mm: '%d mins',
     h: 'an hr',
     hh: '%d hrs',

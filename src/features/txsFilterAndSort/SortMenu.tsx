@@ -1,19 +1,12 @@
-import { useColorModeValue } from '@chakra-ui/react';
-import { sort } from 'next/dist/build/webpack/loaders/css-loader/src/utils';
-import * as React from 'react';
-import { BsChevronDown } from 'react-icons/bs';
+import { useCallback, useMemo } from 'react';
+import { GoSortDesc } from 'react-icons/go';
 
 import {
   GetMempoolTransactionListOrderByEnum,
   GetMempoolTransactionListOrderEnum,
 } from '@stacks/blockchain-api-client';
 
-import { Button } from '../../ui/Button';
-import { Icon } from '../../ui/Icon';
-import { Menu } from '../../ui/Menu';
-import { MenuButton } from '../../ui/MenuButton';
-import { MenuItem } from '../../ui/MenuItem';
-import { MenuList } from '../../ui/MenuList';
+import { FilterMenu } from '../../common/components/FilterMenu';
 import { useFilterAndSortState } from './useFilterAndSortState';
 
 function getSortOptionLabel(
@@ -36,43 +29,30 @@ function getSortOptionLabel(
 
 export function SortMenu() {
   const { setActiveSort, setActiveOrder, activeSort, activeOrder } = useFilterAndSortState();
-  const bg = useColorModeValue('white', 'black');
-  const color = useColorModeValue('slate.700', 'slate.400');
-  const borderColor = useColorModeValue('slate.300', 'slate.900');
 
-  return (
-    <Menu>
-      <MenuButton
-        as={Button}
-        rightIcon={<Icon as={BsChevronDown} size={3} />}
-        fontSize={'sm'}
-        bg={bg}
-        color={color}
-        fontWeight={'semibold'}
-        border={'1px'}
-        borderColor={borderColor}
-      >
-        {getSortOptionLabel(activeSort, activeOrder)}
-      </MenuButton>
-      <MenuList fontSize={'sm'} color={color}>
-        {Object.keys(GetMempoolTransactionListOrderByEnum).map(sort =>
-          Object.keys(GetMempoolTransactionListOrderEnum)
-            .reverse()
-            .map(order => (
-              <MenuItem
-                onClick={() => {
-                  setActiveSort(sort as GetMempoolTransactionListOrderByEnum);
-                  setActiveOrder(order as GetMempoolTransactionListOrderEnum);
-                }}
-              >
-                {getSortOptionLabel(
-                  sort as GetMempoolTransactionListOrderByEnum,
-                  order as GetMempoolTransactionListOrderEnum
-                )}
-              </MenuItem>
-            ))
-        )}
-      </MenuList>
-    </Menu>
+  const filterLabel = useCallback(
+    () => getSortOptionLabel(activeSort, activeOrder),
+    [activeSort, activeOrder]
   );
+
+  const menuItems = useMemo(
+    () =>
+      Object.keys(GetMempoolTransactionListOrderByEnum).flatMap(sort =>
+        Object.keys(GetMempoolTransactionListOrderEnum)
+          .reverse()
+          .map(order => ({
+            onClick: () => {
+              setActiveSort(sort as GetMempoolTransactionListOrderByEnum);
+              setActiveOrder(order as GetMempoolTransactionListOrderEnum);
+            },
+            label: getSortOptionLabel(
+              sort as GetMempoolTransactionListOrderByEnum,
+              order as GetMempoolTransactionListOrderEnum
+            ),
+          }))
+      ),
+    [setActiveSort, setActiveOrder]
+  );
+
+  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={GoSortDesc} />;
 }
