@@ -5,8 +5,8 @@ import { FC, ReactNode, useState } from 'react';
 
 import { TabsContainer } from '../../../common/components/TabsContainer';
 import { Flex, FlexProps } from '../../../ui/Flex';
+import { ShowValueMenu } from '../..//txsFilterAndSort/ShowValueMenu';
 import { FilterButton } from '../../txsFilterAndSort/FilterButton';
-import { ShowValueMenu } from '../../txsFilterAndSort/ShowValueMenu';
 import { SortMenu } from '../../txsFilterAndSort/SortMenu';
 import { CSVDownloadButton } from './CSVDownloadButton';
 
