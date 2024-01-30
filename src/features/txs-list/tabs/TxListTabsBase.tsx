@@ -10,6 +10,7 @@ import { FlexProps } from '../../../ui/Flex';
 import { FilterButton } from '../../txsFilterAndSort/FilterButton';
 import { SortMenu } from '../../txsFilterAndSort/SortMenu';
 import { CSVDownloadButton } from './CSVDownloadButton';
+import { ShowValueMenu } from '../..//txsFilterAndSort/ShowValueMenu';
 
 export const TxListTabsBase: FC<
   {
@@ -37,6 +38,7 @@ export const TxListTabsBase: FC<
         <Box marginLeft={'auto'} display={'flex'} gap={4} width={['100%', '100%', '100%', 'auto']}>
           {!!principal && <CSVDownloadButton address={principal as string} />}
           {tabIndex === 1 && <SortMenu />}
+          <ShowValueMenu />
           <FilterButton />
         </Box>
       }

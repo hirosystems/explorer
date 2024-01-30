@@ -1,13 +1,11 @@
 'use client';
 
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 import { FC, useCallback, useMemo, useState } from 'react';
-import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
-import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Tooltip } from '../../../ui/Tooltip';
 import { getUsdValue } from '../../utils/utils';

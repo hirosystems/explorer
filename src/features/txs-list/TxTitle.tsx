@@ -2,7 +2,7 @@ import { TbArrowLeft } from 'react-icons/tb';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { StxPriceButton } from '../../common/components/StxPriceButton';
+import { StxPrice } from '../../common/components/StxPrice';
 import { useGlobalContext } from '../../common/context/useAppContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { getContractName, getFunctionName, microToStacksFormatted } from '../../common/utils/utils';
@@ -50,7 +50,7 @@ export const TxTitle = (
           <TxLink href={txHref} openInNewTab={openInNewTab}>
             {microToStacksFormatted(tx.token_transfer.amount)} STX
           </TxLink>
-          {showPrice && <StxPriceButton tx={tx} value={Number(tx.token_transfer.amount)} />}
+          {showPrice && <StxPrice tx={tx} value={Number(tx.token_transfer.amount)} />}
         </Flex>
       );
     case 'tenure_change':

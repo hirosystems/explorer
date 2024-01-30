@@ -18,7 +18,7 @@ interface MempoolTxsListProps {
 }
 
 function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
-  const { activeSort, activeOrder } = useFilterAndSortState();
+  const { activeSort, activeOrder } = useFilterAndSortState(); // TODO: not sure I agree these should be in the same state
   const response = useSuspenseMempoolTransactionsInfinite(activeSort, activeOrder);
   const txs = useSuspenseInfiniteQueryResult<MempoolTransaction>(response, limit);
 
