@@ -24,6 +24,7 @@ import {
   initialState as modalSliceInitialState,
 } from '../../components/modals/modal-slice';
 import { AppStore, RootState } from '../../state/store';
+import { initialState as activeTransactionValueFilterInitialState, activeTransactionValueFilterSlice} from '../../state/slices/transaction-value-filter-slice';
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
@@ -37,6 +38,7 @@ export function renderWithReduxProviders(
       modal: modalSliceInitialState,
       search: searchSliceInitialState,
       connect: sandboxSliceInitialState,
+      activeTransactionValueFilter: activeTransactionValueFilterInitialState,
       ...Object.keys(TxFilterAndSortTypes).reduce(
         (acc, filterType) => ({ ...acc, [filterType]: filterSliceInitialState }),
         {} as TxFilters
@@ -47,6 +49,7 @@ export function renderWithReduxProviders(
         modal: modalSlice.reducer,
         search: searchSlice.reducer,
         connect: sandboxSlice.reducer,
+        activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
         ...filterAndSortReducers,
       },
       preloadedState,
