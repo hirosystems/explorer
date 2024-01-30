@@ -11,10 +11,11 @@ import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
 
-const BLOCK_LIST_LAYOUT_A_LIMIT = 19;
-
-const BlocksListA = dynamic(
-  () => import('./_components/BlockList/LayoutA').then(mod => mod.BlockListLayoutA),
+const NonPaginatedBlockListLayoutA = dynamic(
+  () =>
+    import('./_components/BlockList/LayoutA/NonPaginated').then(
+      mod => mod.NonPaginatedBlockListLayoutA
+    ),
   {
     loading: () => <SkeletonBlockList />,
     ssr: false,
@@ -40,7 +41,7 @@ export default function Home() {
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
 
         {activeNetworkKey.indexOf('naka') !== -1 ? (
-          <BlocksListA limit={BLOCK_LIST_LAYOUT_A_LIMIT} />
+          <NonPaginatedBlockListLayoutA />
         ) : (
           <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}

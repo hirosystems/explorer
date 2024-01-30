@@ -29,10 +29,12 @@ export const BurnBlock = memo(function ({ timestamp, height, hash }: ListItemPro
       justifyContent={'space-between'}
       alignItems={'center'}
       borderBottom={'1px'}
-      px={4}
+      pl={4}
+      pr={8}
       height={14}
       backgroundColor={bgColor}
-      marginX={'-6'}
+      mr={'-8'}
+      ml={'-10'}
       color={textColor}
     >
       <HStack gap={1.5}>
@@ -59,7 +61,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash }: ListItemPro
         </TextLink>
       </HStack>
       <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
-        <Box>{truncateMiddle(hash)}</Box>
+        <Box>{truncateMiddle(hash, 3)}</Box>
         {timestamp && <Timestamp ts={timestamp} />}
       </HStack>
     </Flex>

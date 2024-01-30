@@ -32,6 +32,5 @@ export const useSuspenseBlockListInfinite = (limit = DEFAULT_LIST_LIMIT) => {
     staleTime: TWO_MINUTES,
     getNextPageParam,
     initialPageParam: 0,
-    refetchOnWindowFocus: true,
   });
 };

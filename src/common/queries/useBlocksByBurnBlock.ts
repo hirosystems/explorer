@@ -53,7 +53,6 @@ export function useSuspenseBlocksByBurnBlock(
     getNextPageParam,
     initialPageParam: 0,
     staleTime: heightOrHash === 'latest' ? ONE_SECOND * 5 : TWO_MINUTES,
-    refetchOnWindowFocus: true,
     ...options,
   });
 }

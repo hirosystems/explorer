@@ -48,7 +48,6 @@ export function useSuspenseBurnBlocks(
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
-    refetchOnWindowFocus: true,
     ...options,
   });
 }

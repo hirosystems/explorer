@@ -21,7 +21,7 @@ export const Sender: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => 
           <TbArrowUpRight size="16px" />
         </Box>
         <ExplorerLink
-          fontSize={'14px'}
+          fontSize={'xs'}
           fontWeight={'medium'}
           href={`/address/${encodeURIComponent(tx.sender_address)}`}
         >

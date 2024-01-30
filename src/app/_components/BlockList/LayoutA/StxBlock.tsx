@@ -81,7 +81,7 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
           </BlockLink>
         </Flex>
         <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color={secondaryTextColor}>
-          <Box>{truncateMiddle(hash)}</Box>
+          <Box>{truncateMiddle(hash, 3)}</Box>
           {txsCount !== undefined ? <Box>{txsCount} txn</Box> : null}
           <Timestamp ts={timestamp} />
         </HStack>

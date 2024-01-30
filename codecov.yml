@@ -1,2 +1,3 @@
 ignore:
-  "src/ui"
+  - "src/ui"
+  - "src/common/debug.ts"
