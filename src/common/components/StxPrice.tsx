@@ -6,7 +6,7 @@ import { FC, useMemo } from 'react';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
-import { Box } from '../../ui/Box';
+import { Flex } from '../../ui/Flex';
 import { useAppSelector } from '../state/hooks';
 import { TransactionValueFilterTypes } from '../state/slices/transaction-value-filter-slice';
 import { getUsdValue } from '../utils/utils';
@@ -18,8 +18,9 @@ interface StxPriceProps {
 }
 
 const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
-  const { historicalStxPrice, currentStxPrice } = useStxPriceForTx(tx);
-  console.log({ historicalStxPrice, currentStxPrice })
+    const { historicalStxPrice, currentStxPrice } = useStxPriceForTx(tx);
+
+  console.log({ historicalStxPrice, currentStxPrice });
   const activeTransactionValueFilter = useAppSelector(
     state => state.activeTransactionValueFilter.activeTransactionValueFilter
   );
@@ -33,8 +34,12 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
   );
 
   return (
-    <Box
-      size={'xs'}
+    <Flex
+      height="24px"
+      justifyContent={'center'}
+      alignItems={'center'}
+      borderRadius="md"
+      padding="0px 8px"
       ml={'5px'}
       fontSize={'xs'}
       _focus={{ outline: 0 }}
@@ -47,7 +52,7 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
       {activeTransactionValueFilter === TransactionValueFilterTypes.CurrentValue
         ? currentPriceFormatted
         : historicalPriceFormatted}
-    </Box>
+    </Flex>
   );
 };
 
