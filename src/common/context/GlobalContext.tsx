@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
+import { StacksApiWebSocketClient, connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { ChainID } from '@stacks/transactions';
 
 import { buildCustomNetworkUrl, fetchCustomNetworkId } from '../components/modals/AddNetwork/utils';
@@ -29,6 +30,7 @@ interface GlobalContextProps {
   addCustomNetwork: (network: Network) => Promise<any>;
   removeCustomNetwork: (network: Network) => void;
   networks: Record<string, Network>;
+  webSocketClient?: Promise<StacksApiWebSocketClient>;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -50,6 +52,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
   addCustomNetwork: () => Promise.resolve(),
   removeCustomNetwork: () => true,
   networks: {},
+  webSocketClient: undefined,
 });
 
 export const AppContextProvider: FC<{
@@ -230,6 +233,9 @@ export const AppContextProvider: FC<{
           setCustomNetworks(remainingCustomNetworks);
         },
         networks,
+        webSocketClient: activeNetworkKey
+          ? connectWebSocketClient(activeNetworkKey.replace('https://', 'wss://'))
+          : undefined,
       }}
     >
       {children}

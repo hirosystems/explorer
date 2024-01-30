@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Subscription } from 'react-redux';
 
 import {
@@ -14,9 +14,10 @@ import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfi
 import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
 import { UIBlock, UIBlockType } from '../types';
-
-const BURN_BLOCK_LENGTH = 2;
-const STX_BLOCK_LENGTH = 20;
+import { FADE_DURATION } from './consts';
+import { useBlockListContext } from './context';
+import { useBlockListWebSocket } from './useBlockListWebSocket';
+import { useInitialBlockList } from './useInitialBlockList';
 
 const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
   type: UIBlockType.BurnBlock,
@@ -61,144 +62,94 @@ const createUIBlockList = (
   return blockList;
 };
 
-export function useBlockListWebSocket(
-  liveUpdates: boolean,
-  setFadeEffect: (value: boolean) => void
-) {
-  const clientRef = React.useRef<StacksApiWebSocketClient | null>(null);
-  const subRef = React.useRef<any>(null);
-  const activeNetworkUrl = useGlobalContext().activeNetworkKey;
-  const [latestBlocks, setLatestBlocks] = React.useState<{ [key: string]: NakamotoBlock }>({});
-  const [latestBlock, setLatestBlock] = React.useState<NakamotoBlock>();
-
-  useEffect(() => {
-    const subscribe = async () => {
-      if (!clientRef.current) {
-        clientRef.current = await connectWebSocketClient(
-          activeNetworkUrl.replace('https://', 'wss://')
-        );
-      }
-
-      if (subRef.current?.unsubscribe) {
-        await subRef.current.unsubscribe();
-      }
-
-      subRef.current = await clientRef.current.subscribeBlocks((block: any) => {
-        function updateLatestBlocks() {
-          setLatestBlock(block);
-          setLatestBlocks(prevLatestBlocks => {
-            const updatedList = { ...prevLatestBlocks };
-            updatedList[block.hash] = block;
-            return updatedList;
-          });
-        }
-
-        if (liveUpdates) {
-          setFadeEffect(true);
-          setTimeout(() => {
-            updateLatestBlocks();
-            setFadeEffect(false);
-          }, 500);
-        } else {
-          updateLatestBlocks();
-        }
-      });
-    };
-
-    void subscribe();
-
-    return () => {
-      if (subRef.current?.unsubscribe) {
-        void subRef.current?.unsubscribe();
-      }
-    };
-  }, [liveUpdates]);
-
-  const clearLatestBlocks = () => {
-    setLatestBlock(undefined);
-    setLatestBlocks({});
-  };
-
-  return { latestBlocks, clearLatestBlocks, latestBlock };
-}
-
-export function useBlockListData() {
-  const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(
-    useSuspenseBurnBlocks(BURN_BLOCK_LENGTH),
-    BURN_BLOCK_LENGTH
-  );
-
-  const lastBurnBlock = burnBlocks[0];
-  const secondToLastBurnBlock = burnBlocks[1];
-
-  const lastBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(lastBurnBlock.burn_block_height, STX_BLOCK_LENGTH),
-    STX_BLOCK_LENGTH
-  );
-  const secondToLastBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(secondToLastBurnBlock.burn_block_height, STX_BLOCK_LENGTH),
-    STX_BLOCK_LENGTH
-  );
-
-  return {
-    lastBurnBlock,
-    secondToLastBurnBlock,
-    lastBurnBlockStxBlocks,
-    secondToLastBlockStxBlocks,
-  };
-}
-
-export function useBlockList(
-  length: number,
-  liveUpdates: boolean,
-  setFadeEffect: (value: boolean) => void
-) {
+export function useBlockList(length: number) {
   const queryClient = useQueryClient();
-  const [displayedBlocks, setDisplayedBlocks] = React.useState<Record<string, number>>({});
-  const { latestBlocks, latestBlock, clearLatestBlocks } = useBlockListWebSocket(
-    liveUpdates,
-    setFadeEffect
-  );
-
-  const refetch = useCallback(
-    function () {
-      clearLatestBlocks();
-      return Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['getBlocksByBurnBlock'] }),
-        queryClient.invalidateQueries({ queryKey: ['burnBlocks'] }),
-      ]);
-    },
-    [queryClient]
-  );
-
-  useEffect(() => {
-    void refetch();
-  }, [liveUpdates, refetch]);
+  const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
 
   const {
     lastBurnBlock,
     secondToLastBurnBlock,
     lastBurnBlockStxBlocks,
     secondToLastBlockStxBlocks,
-  } = useBlockListData();
+  } = useInitialBlockList();
 
-  if (liveUpdates) {
-    if (latestBlock && !displayedBlocks[latestBlock.hash]) {
+  const initialBlockHashes = useMemo(
+    () =>
+      new Set([
+        ...lastBurnBlockStxBlocks.map(block => block.hash),
+        ...secondToLastBlockStxBlocks.map(block => block.hash),
+      ]),
+    [lastBurnBlockStxBlocks, secondToLastBlockStxBlocks]
+  );
+
+  const initialBurnBlockHashes = useMemo(
+    () => new Set([lastBurnBlock.burn_block_hash, secondToLastBurnBlock.burn_block_hash]),
+    [lastBurnBlock, secondToLastBurnBlock]
+  );
+
+  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
+    initialBlockHashes,
+    initialBurnBlockHashes
+  );
+
+  const updateList = useCallback(
+    async function () {
+      setIsUpdateListLoading(true);
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['getBlocksByBurnBlock'] }),
+        queryClient.invalidateQueries({ queryKey: ['burnBlocks'] }),
+      ]);
+      clearLatestBlocks();
+      setIsUpdateListLoading(false);
+    },
+    [clearLatestBlocks, queryClient, setIsUpdateListLoading]
+  );
+
+  const prevLiveUpdatesRef = useRef(liveUpdates);
+  const prevLatestBlocksCountRef = useRef(latestBlocksCount);
+
+  useEffect(() => {
+    const liveUpdatesToggled = prevLiveUpdatesRef.current !== liveUpdates;
+
+    const receivedLatestBlockWhileLiveUpdates =
+      liveUpdates &&
+      latestBlocksCount > 0 &&
+      prevLatestBlocksCountRef.current !== latestBlocksCount;
+
+    if (liveUpdatesToggled) {
+      setIsUpdateListLoading(true);
+      clearLatestBlocks();
+      updateList().then(() => {
+        setIsUpdateListLoading(false);
+      });
+    } else if (receivedLatestBlockWhileLiveUpdates && latestBlock) {
+      // If latest block belongs to the last burn block, add it to the list, otherwise trigger an update.
       if (latestBlock.burn_block_height === lastBurnBlock.burn_block_height) {
-        lastBurnBlockStxBlocks.unshift(latestBlock);
-        lastBurnBlock.stacks_blocks.unshift(latestBlock.burn_block_hash);
-        setDisplayedBlocks(prevDisplayedBlocks => {
-          const updatedList = { ...prevDisplayedBlocks };
-          updatedList[latestBlock.hash] = latestBlock.height;
-          return updatedList;
-        });
+        setIsUpdateListLoading(true);
+        setTimeout(() => {
+          lastBurnBlockStxBlocks.unshift(latestBlock);
+          lastBurnBlock.stacks_blocks.unshift(latestBlock.hash);
+          setIsUpdateListLoading(false);
+        }, FADE_DURATION);
       } else {
         clearLatestBlocks();
-        setDisplayedBlocks({});
-        void refetch();
+        void updateList();
       }
     }
-  }
+
+    prevLiveUpdatesRef.current = liveUpdates;
+    prevLatestBlocksCountRef.current = latestBlocksCount;
+  }, [
+    liveUpdates,
+    latestBlocksCount,
+    clearLatestBlocks,
+    updateList,
+    setIsUpdateListLoading,
+    latestBlock,
+    lastBurnBlockStxBlocks,
+    lastBurnBlock.stacks_blocks,
+    lastBurnBlock.burn_block_height,
+  ]);
 
   let blockList = createUIBlockList(lastBurnBlock, lastBurnBlockStxBlocks, length);
 
@@ -213,7 +164,7 @@ export function useBlockList(
 
   return {
     blockList,
-    latestBlocks,
-    refetch,
+    latestBlocksCount,
+    updateList,
   };
 }

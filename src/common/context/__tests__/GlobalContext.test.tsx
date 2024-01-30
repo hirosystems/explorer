@@ -21,6 +21,10 @@ jest.mock('next/navigation', () => ({
   })),
 }));
 
+jest.mock('@stacks/blockchain-api-client', () => ({
+  connectWebSocketClient: jest.fn(),
+}));
+
 jest.mock('../../components/modals/AddNetwork/utils', () => ({
   ...jest.requireActual('../../components/modals/AddNetwork/utils'),
   fetchCustomNetworkId: jest.fn(() => Promise.resolve('custom-network-id')),
