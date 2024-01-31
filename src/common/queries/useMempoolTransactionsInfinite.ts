@@ -24,7 +24,6 @@ export function useSuspenseMempoolTransactionsInfinite(
   return useSuspenseInfiniteQuery({
     queryKey: ['mempoolTransactionsInfinite', sort, order],
     queryFn: ({ pageParam }) => {
-      console.log('useSuspenseMempoolTransactionsInfinite', { sort, order, pageParam });
       return api.transactionsApi.getMempoolTransactionList({
         limit: DEFAULT_LIST_LIMIT,
         offset: pageParam || 0,
