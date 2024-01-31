@@ -16,8 +16,6 @@ export const AddressConfirmedTxsList: FC<{ address: string }> = memo(({ address 
   const txsWithTransfers =
     useSuspenseInfiniteQueryResult<AddressTransactionWithTransfers>(response);
 
-  console.log({ txsWithTransfers });
-
   const indexes = useMemo(
     () =>
       txsWithTransfers

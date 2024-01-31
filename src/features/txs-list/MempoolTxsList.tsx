@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
@@ -18,7 +16,8 @@ interface MempoolTxsListProps {
 }
 
 function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
-  const { activeSort, activeOrder } = useFilterAndSortState(); // TODO: not sure I agree these should be in the same state
+  const { activeSort, activeOrder } = useFilterAndSortState();
+  console.log('MemoPoolTxsListBase', { activeSort, activeOrder });
   const response = useSuspenseMempoolTransactionsInfinite(activeSort, activeOrder);
   const txs = useSuspenseInfiniteQueryResult<MempoolTransaction>(response, limit);
 

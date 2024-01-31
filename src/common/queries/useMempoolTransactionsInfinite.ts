@@ -23,13 +23,15 @@ export function useSuspenseMempoolTransactionsInfinite(
   const api = useApi();
   return useSuspenseInfiniteQuery({
     queryKey: ['mempoolTransactionsInfinite', sort, order],
-    queryFn: ({ pageParam }) =>
-      api.transactionsApi.getMempoolTransactionList({
+    queryFn: ({ pageParam }) => {
+      console.log('useSuspenseMempoolTransactionsInfinite', { sort, order, pageParam });
+      return api.transactionsApi.getMempoolTransactionList({
         limit: DEFAULT_LIST_LIMIT,
         offset: pageParam || 0,
         order,
         orderBy: sort,
-      }),
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,

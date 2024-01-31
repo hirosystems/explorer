@@ -21,6 +21,7 @@ import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 import { Circle } from './Circle';
 import { TbArrowsDoubleSwNe } from 'react-icons/tb';
+import { useIsNakamoto } from '../hooks/useIsNakamoto';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
   switch (txType) {
@@ -35,9 +36,6 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
 
     case 'coinbase':
       return CubeSparkleIcon;
-
-    // case 'poison_microblock':
-    //   return RxCube;
 
     case 'tenure_change':
       return PiArrowBendDownRight;

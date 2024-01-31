@@ -1,5 +1,6 @@
 import { Box, useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import { useCallback, useMemo } from 'react';
 import { BsChevronDown } from 'react-icons/bs';
 import { GoSortDesc } from 'react-icons/go';
 
@@ -14,6 +15,7 @@ import { Menu } from '../../ui/Menu';
 import { MenuButton } from '../../ui/MenuButton';
 import { MenuItem } from '../../ui/MenuItem';
 import { MenuList } from '../../ui/MenuList';
+import { useColorMode } from '../../ui/hooks/useColorMode';
 import { useFilterAndSortState } from './useFilterAndSortState';
 
 function getSortOptionLabel(
@@ -64,11 +66,41 @@ const StyledContainer = styled(Box)`
 
 export function SortMenu() {
   const { setActiveSort, setActiveOrder, activeSort, activeOrder } = useFilterAndSortState();
+  console.log({ activeSort, activeOrder });
+
   const bg = useColorModeValue('white', 'black');
   const color = useColorModeValue('slate.700', 'slate.400');
   const blackColor = useColorModeValue('slate.900', 'slate.900');
   const borderColor = useColorModeValue('slate.300', 'slate.900');
-  const hoverBg = useColorModeValue('slate.150 !important', 'slate.900');
+  const { colorMode } = useColorMode();
+  console.log({ colorMode });
+
+  const filterLabel = useCallback(
+    () => getSortOptionLabel(activeSort, activeOrder),
+    [activeSort, activeOrder]
+  );
+
+  const menuItems = useMemo(
+    () =>
+      Object.keys(GetMempoolTransactionListOrderByEnum).flatMap(sort =>
+        Object.keys(GetMempoolTransactionListOrderEnum)
+          .reverse()
+          .map(order => ({
+            onClick: () => {
+              console.log('calling setActiveSort and setActiveOrder', { sort, order });
+              setActiveSort(sort as GetMempoolTransactionListOrderByEnum);
+              setActiveOrder(order as GetMempoolTransactionListOrderEnum);
+            },
+            label: getSortOptionLabel(
+              sort as GetMempoolTransactionListOrderByEnum,
+              order as GetMempoolTransactionListOrderEnum
+            ),
+          }))
+      ),
+    [setActiveSort, setActiveOrder]
+  );
+
+  // return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={GoSortDesc} />;
 
   return (
     <StyledContainer>
@@ -87,7 +119,7 @@ export function SortMenu() {
           <Box display="inline" fontWeight="normal">
             Sort by:{' '}
           </Box>
-          <Box display="inline" fontWeight="normal" color={blackColor}>
+          <Box display="inline" fontWeight="normal" color={color}>
             {getSortOptionLabel(activeSort, activeOrder)}
           </Box>
         </MenuButton>
@@ -97,7 +129,7 @@ export function SortMenu() {
               .reverse()
               .map(order => (
                 <MenuItem
-                  color={blackColor}
+                  color={colorMode === 'light' ? blackColor : color}
                   onClick={() => {
                     setActiveSort(sort as GetMempoolTransactionListOrderByEnum);
                     setActiveOrder(order as GetMempoolTransactionListOrderEnum);
