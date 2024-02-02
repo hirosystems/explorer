@@ -95,6 +95,7 @@
     "react-redux": "8.1.2",
     "react-simple-code-editor": "0.13.1",
     "react-ssr-prepass": "npm:preact-ssr-prepass",
+    "recharts": "^2.11.0",
     "schema-inspector": "2.0.3",
     "server-only": "0.0.1",
     "sharp": "0.33.1",

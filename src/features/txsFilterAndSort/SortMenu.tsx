@@ -1,6 +1,4 @@
 import { FilterMenu } from '@/common/components/FilterMenu';
-import { Box } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import { useCallback, useMemo } from 'react';
 import { GoSortDesc } from 'react-icons/go';
 
@@ -28,34 +26,6 @@ function getSortOptionLabel(
         : 'Highest fee first';
   }
 }
-
-const StyledContainer = styled(Box)`
-  .menu-button {
-    :hover {
-      background: none;
-    }
-  }
-
-  .menu-list {
-    font-size: 16px;
-  }
-
-  .menu-item {
-    background-color: 'orange !important';
-
-    &:active {
-      background-color: 'orange !important';
-    }
-    :active {
-      background-color: 'orange !important';
-    }
-  }
-
-  .additional-info {
-    margin-left: 12px;
-    margin-top: 4px;
-  }
-`;
 
 export function SortMenu() {
   const { setActiveSort, setActiveOrder, activeSort, activeOrder } = useFilterAndSortState();

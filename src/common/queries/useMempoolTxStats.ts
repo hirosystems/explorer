@@ -1,0 +1,29 @@
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+
+import { useApi } from '../api/useApi';
+import { ONE_MINUTE } from './query-stale-time';
+import { MempoolTransactionStatsResponse } from '@stacks/blockchain-api-client';
+
+export function useMempoolTransactionStats(options: any = {}) {
+  const api = useApi();
+  return useQuery<MempoolTransactionStatsResponse>({
+    queryKey: ['mempoolTransactionStats'],
+    queryFn: () => {
+      return api.transactionsApi.getMempoolTransactionStats();
+    },
+    staleTime: ONE_MINUTE,
+    ...options,
+  });
+}
+
+export function useSuspenseMempoolTransactionStats(options: any = {}) {
+  const api = useApi();
+  return useSuspenseQuery<MempoolTransactionStatsResponse>({
+    queryKey: ['mempoolTransactionStats'],
+    queryFn: () => {
+      return api.transactionsApi.getMempoolTransactionStats();
+    },
+    staleTime: ONE_MINUTE,
+    ...options,
+  });
+}

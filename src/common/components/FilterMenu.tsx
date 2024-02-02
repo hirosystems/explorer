@@ -1,9 +1,7 @@
 import { Box, useColorModeValue } from '@chakra-ui/react';
-import styled from '@emotion/styled';
 import { useCallback, useState } from 'react';
 import { IconType } from 'react-icons';
 import { BsChevronDown } from 'react-icons/bs';
-import { PiCurrencyDollar } from 'react-icons/pi';
 
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
@@ -11,34 +9,6 @@ import { Menu } from '../../ui/Menu';
 import { MenuButton } from '../../ui/MenuButton';
 import { MenuItem } from '../../ui/MenuItem';
 import { MenuList } from '../../ui/MenuList';
-
-const StyledContainer = styled(Box)`
-  .menu-button {
-    :hover {
-      background: none;
-    }
-  }
-
-  .menu-list {
-    font-size: 16px;
-  }
-
-  .menu-item {
-    background-color: 'orange !important';
-
-    &:active {
-      background-color: 'orange !important';
-    }
-    :active {
-      background-color: 'orange !important';
-    }
-  }
-
-  .additional-info {
-    margin-left: 12px;
-    margin-top: 4px;
-  }
-`;
 
 interface MenuItem {
   onClick: () => void;
@@ -77,7 +47,6 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
   const filterLabelValue = typeof filterLabel === 'function' ? filterLabel?.() : filterLabel;
 
   return (
-    <StyledContainer>
       <Menu>
         {({ isOpen }) => (
           <>
@@ -119,6 +88,5 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
           </>
         )}
       </Menu>
-    </StyledContainer>
   );
 }
