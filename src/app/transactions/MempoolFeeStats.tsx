@@ -1,8 +1,12 @@
 import { useSuspenseMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
 import { StackDivider, VStack } from '@chakra-ui/react';
-import { LuChevronUpCircle } from 'react-icons/lu';
-import { TbCircleChevronDown, TbCircleChevronUp, TbCircleMinus } from 'react-icons/tb';
-import { Cell, Pie, PieChart } from 'recharts';
+import { useState } from 'react';
+import {
+  TbCircleChevronDown,
+  TbCircleChevronUp,
+  TbCircleChevronsUp,
+  TbCircleMinus,
+} from 'react-icons/tb';
 
 import { MempoolFeePriorities } from '@stacks/blockchain-api-client/src/generated/models';
 import { MempoolFeePrioritiesAll } from '@stacks/blockchain-api-client/src/generated/models/MempoolFeePrioritiesAll';
@@ -19,51 +23,12 @@ import { Icon } from '../../ui/Icon';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
-
-// function MempoolFeeByTxType({
-//   mempoolFeeTokenTransfer,
-//   mempoolFeeContractCall,
-//   mempoolFeeSmartContract,
-// }: {
-//   mempoolFeeTokenTransfer: number;
-//   mempoolFeeContractCall: number;
-//   mempoolFeeSmartContract: number;
-// }) {
-//   return (
-//     <VStack gap={3}>
-//       <Tooltip
-//         label={`Token transfer tx fee: ${mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS} STX`}
-//       >
-//         <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-//           <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
-//           <Box suppressHydrationWarning>
-//             {`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
-//           </Box>
-//         </Flex>
-//       </Tooltip>
-//       <Tooltip
-//         label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
-//       >
-//         <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-//           <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
-//           <Box suppressHydrationWarning>
-//             {`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
-//           </Box>
-//         </Flex>
-//       </Tooltip>
-//       <Tooltip
-//         label={`Smart contract tx fee: ${mempoolFeeSmartContract / MICROSTACKS_IN_STACKS} STX`}
-//       >
-//         <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-//           <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
-//           <Box suppressHydrationWarning>
-//             {`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
-//           </Box>
-//         </Flex>
-//       </Tooltip>
-//     </VStack>
-//   );
-// }
+import {
+  TransactionTypeFilterMenu,
+  TransactionTypeFilterTypes,
+  mapTransactionTypeToFilterValue,
+} from '../_components/Stats/TransactionTypeFilterMenu';
+import { MempoolFeePieChart, getTxTypePieChartColor } from './MempoolFeePieChart';
 
 export const getFeePriorityIcon = (priority: keyof MempoolFeePrioritiesAll) => {
   switch (priority) {
@@ -74,33 +39,38 @@ export const getFeePriorityIcon = (priority: keyof MempoolFeePrioritiesAll) => {
     case 'medium_priority':
       return <Icon as={TbCircleChevronUp} size={4} color="orange.600" />;
     case 'high_priority':
-      return <Icon as={LuChevronUpCircle} size={4} color="green.600" />;
+      return <Icon as={TbCircleChevronsUp} size={4} color="green.600" />;
     default:
       throw new Error('Invalid priority');
   }
 };
 
-function MempoolFeeSection({
+function MempoolFeePrioritCard({
   mempoolFeeResponse,
   priority,
   stxPrice,
-  ...rest
+  txTypeFilter,
 }: {
-  mempoolFeeResponse: MempoolFeePriorities;
+  mempoolFeeResponse: MempoolFeePriorities; // TODO:
   priority: keyof MempoolFeePrioritiesAll;
   stxPrice: number;
+  txTypeFilter: TransactionTypeFilterTypes;
 } & FlexProps) {
-  const mempoolFeeAll = mempoolFeeResponse?.all?.[priority] || 0;
+  const isTxTypeFiltered = txTypeFilter !== TransactionTypeFilterTypes.AverageForAllTransactions;
+  const mempoolFeeAll = isTxTypeFiltered
+    ? mempoolFeeResponse?.[mapTransactionTypeToFilterValue(txTypeFilter)]?.[priority] || 0
+    : mempoolFeeResponse?.all?.[priority] || 0;
   const mempoolFeeTokenTransfer = mempoolFeeResponse?.token_transfer?.[priority] || 0;
   const mempoolFeeContractCall = mempoolFeeResponse?.contract_call?.[priority] || 0;
   const mempoolFeeSmartContract = mempoolFeeResponse?.smart_contract?.[priority] || 0;
+
   const title = capitalize(priority.replaceAll('_', ' '));
 
   return (
-    <Card padding={6} minWidth="260px">
+    <Card padding={6}>
       <Flex gap={2} mt={4} mb={4}>
         {getFeePriorityIcon(priority)}
-        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
+        <Text fontSize={'xs'} fontWeight="semibold" mb={4} whiteSpace={'nowrap'}>
           {title}
         </Text>
       </Flex>
@@ -116,8 +86,7 @@ function MempoolFeeSection({
             textOverflow={'ellipsis'}
             overflow={'hidden'}
             color={'text'}
-            mt={4}
-            mb={4}
+            mb={1}
           >
             {mempoolFeeAll / MICROSTACKS_IN_STACKS} STX
           </Text>
@@ -125,96 +94,93 @@ function MempoolFeeSection({
             {getUsdValue(mempoolFeeAll, stxPrice, true)}
           </Text>
         </Box>
-        <VStack gap={3} alignItems="flex-start">
-          <Tooltip
-            label={`Token transfer tx fee: ${mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS} STX`}
-          >
-            <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-              <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
-              <Box suppressHydrationWarning>
-                {`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
-              </Box>
-            </Flex>
-          </Tooltip>
-          <Tooltip
-            label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
-          >
-            <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-              <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
-              <Box suppressHydrationWarning>
-                {`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
-              </Box>
-            </Flex>
-          </Tooltip>
-          <Tooltip
-            label={`Smart contract tx fee: ${mempoolFeeSmartContract / MICROSTACKS_IN_STACKS} STX`}
-          >
-            <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-              <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
-              <Box suppressHydrationWarning>
-                {`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
-              </Box>
-            </Flex>
-          </Tooltip>
-        </VStack>
+        {isTxTypeFiltered ? null : (
+          <VStack gap={3} alignItems="flex-start">
+            <Tooltip
+              label={`Token transfer tx fee: ${
+                mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
+              } STX`}
+            >
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+                <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
+                <Box suppressHydrationWarning>
+                  {`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
+                </Box>
+              </Flex>
+            </Tooltip>
+            <Tooltip
+              label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
+            >
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+                <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
+                <Box suppressHydrationWarning>
+                  {`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
+                </Box>
+              </Flex>
+            </Tooltip>
+            <Tooltip
+              label={`Smart contract tx fee: ${
+                mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
+              } STX`}
+            >
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+                <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
+                <Box suppressHydrationWarning>
+                  {`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
+                </Box>
+              </Flex>
+            </Tooltip>
+          </VStack>
+        )}
       </VStack>
     </Card>
   );
 }
 
-function getTxTypePieChartColor(txType: string) {
-  switch (txType) {
-    case 'token_transfer':
-      return '#9985FF';
-    case 'contract_call':
-      return '#2D2294';
-    case 'smart_contract':
-      return '#C1D21B';
-    default:
-      return 'purple';
-  }
-}
-
-// const renderActiveShape = props => {
-//   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent } = props;
-
-//   return (
-//     <g>
-//       <Sector
-//         cx={cx}
-//         cy={cy}
-//         innerRadius={innerRadius}
-//         outerRadius={outerRadius}
-//         startAngle={startAngle}
-//         endAngle={endAngle}
-//         fill={fill}
-//       />
-//       <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-//         {`${(percent * 100).toFixed(0)}%`}
-//       </text>
-//     </g>
-//   );
-// };
-
 export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const mempoolFeeResponse = useSuspenseMempoolFee().data as MempoolFeePriorities;
   const mempoolTransactionStats = useSuspenseMempoolTransactionStats().data;
+
+  const [transactionType, setTransactionType] = useState<TransactionTypeFilterTypes>(
+    TransactionTypeFilterTypes.AverageForAllTransactions
+  );
+
   const txTypeCounts = mempoolTransactionStats?.tx_type_counts;
+
   const { poison_microblock, ...filteredTxTypeCounts } = txTypeCounts || {};
+  const filteredMempoolFeeResponse = { ...mempoolFeeResponse };
+
+  const mappedTxType = mapTransactionTypeToFilterValue(transactionType);
+  Object.keys(filteredTxTypeCounts).forEach(key => {
+    if (mappedTxType !== 'all' && key !== mappedTxType) {
+      delete filteredTxTypeCounts[key as keyof typeof filteredTxTypeCounts];
+    }
+  });
+  Object.keys(filteredMempoolFeeResponse).forEach(key => {
+    if (mappedTxType !== 'all' && key !== mappedTxType) {
+      delete filteredMempoolFeeResponse[key as keyof typeof filteredMempoolFeeResponse];
+    }
+  });
+
   const totalTxCount = Object.entries(filteredTxTypeCounts).reduce((acc, [key, val]) => {
     return acc + val;
   }, 0);
-  const pieData = Object.entries(filteredTxTypeCounts).map(([key, value]) => {
-    return {
-      name: key,
-      value: Math.round((value / totalTxCount) * 100),
-    };
-  });
-  console.log({ pieData, filteredTxTypeCounts });
+
   return (
     <Card>
-      <HStack divider={<StackDivider borderColor="slate.200" />}>
-        <Flex padding={6} flexDirection="column">
+      <HStack
+        alignItems="flex-start"
+        display={'grid'}
+        gridColumnStart={'1'}
+        gridColumnEnd={['2', '2', '3']}
+        gridTemplateColumns={['100%', '100%', '260px 1fr']}
+      >
+        <Flex
+          padding={6}
+          flexDirection="column"
+          borderRight={['none', 'none', '1px white solid']}
+          height="100%"
+        >
           <Box
             fontSize="12px"
             fontStyle="normal"
@@ -224,59 +190,37 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           >
             IN MEMPOOL
           </Box>
-          <Box height="fit-content" width="fit-content">
-            <PieChart width={200} height={200}>
-              <Pie
-                paddingAngle={3}
-                data={pieData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label
-                innerRadius={57}
-                outerRadius={67}
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={getTxTypePieChartColor(entry.name)} />
-                ))}
-              </Pie>
-              /
-            </PieChart>
-          </Box>
+          <Flex alignItems="center" height="100%">
+            <MempoolFeePieChart
+              filteredTxTypeCounts={filteredTxTypeCounts}
+              totalTxCount={totalTxCount}
+            />
+          </Flex>
           <VStack gap={3} alignItems="flex-start">
-            <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-              <Box
-                size={3.5}
-                borderRadius="50%"
-                mr={2}
-                backgroundColor={getTxTypePieChartColor('token_transfer')}
-              />
-              <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
-              <Box suppressHydrationWarning>{txTypeCounts.token_transfer} Token transfer</Box>
-            </Flex>
-            <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-              <Box
-                size={3.5}
-                borderRadius="50%"
-                mr={2}
-                backgroundColor={getTxTypePieChartColor('contract_call')}
-              />
-              <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
-              <Box suppressHydrationWarning>{txTypeCounts.contract_call} Function call</Box>
-            </Flex>
-            <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-              <Box
-                size={3.5}
-                borderRadius="50%"
-                mr={2}
-                backgroundColor={getTxTypePieChartColor('smart_contract')}
-              />
+            {Object.entries(filteredTxTypeCounts).map(([key, value]) => {
+              const icon = getTxTypeIcon(key as keyof typeof filteredTxTypeCounts);
+              const text =
+                key === 'token_transfer'
+                  ? 'Token transfer'
+                  : key === 'contract_call'
+                    ? 'Function call'
+                    : key === 'smart_contract'
+                      ? 'Contract deploy'
+                      : null;
 
-              <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
-              <Box suppressHydrationWarning>{txTypeCounts.smart_contract} Contract deploy</Box>
-            </Flex>
+              return (
+                <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+                  <Box
+                    size={2.5}
+                    borderRadius="50%"
+                    mr={2}
+                    backgroundColor={getTxTypePieChartColor('token_transfer')}
+                  />
+                  <Icon as={icon} size={3.5} mr={2} />
+                  <Box suppressHydrationWarning>{text ? `${value} ${text}` : null}</Box>
+                </Flex>
+              );
+            })}
           </VStack>
         </Flex>
         <Flex padding={6} justifyContent="center" flexDirection="column">
@@ -290,56 +234,56 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
             >
               CURRENT FEE RATES
             </Box>
-            <Box>Tx Filter</Box>
+            <TransactionTypeFilterMenu
+              transactionType={transactionType}
+              setTransactionType={setTransactionType}
+            />
           </Flex>
-          <Box
-            display={'grid'}
-            gridColumnStart={'1'}
-            gridColumnEnd={['2', '2', '3']}
-            gridTemplateColumns={[
-              '100%',
-              '100%',
-              'minmax(0, 1fr) minmax(0, 1fr)',
-              'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)',
-            ]}
-          >
-            <HStack gap={3}>
-              <MempoolFeeSection
-                mempoolFeeResponse={mempoolFeeResponse}
+          <Flex alignItems="center" height="100%">
+            <HStack
+              gap={3}
+              display={'grid'}
+              gridColumnStart={'1'}
+              gridColumnEnd={['3', '3', '4']}
+              gridTemplateColumns={[
+                '100%',
+                '100%',
+                'minmax(0, 1fr) minmax(0, 1fr)',
+                'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)',
+              ]}
+            >
+              <MempoolFeePrioritCard
+                mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'no_priority'}
                 stxPrice={tokenPrice.stxPrice}
                 borderRightWidth={['0px', '0px', '1px', '1px']}
+                txTypeFilter={transactionType}
               />
-              <MempoolFeeSection
-                mempoolFeeResponse={mempoolFeeResponse}
+              <MempoolFeePrioritCard
+                mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'low_priority'}
                 stxPrice={tokenPrice.stxPrice}
                 borderRightWidth={['0px', '0px', '0px', '1px']}
+                txTypeFilter={transactionType}
               />
-              <MempoolFeeSection
-                mempoolFeeResponse={mempoolFeeResponse}
+              <MempoolFeePrioritCard
+                mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'medium_priority'}
                 stxPrice={tokenPrice.stxPrice}
                 borderRightWidth={['0px', '0px', '1px', '1px']}
+                txTypeFilter={transactionType}
               />
-              <MempoolFeeSection
-                mempoolFeeResponse={mempoolFeeResponse}
+              <MempoolFeePrioritCard
+                mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'high_priority'}
                 stxPrice={tokenPrice.stxPrice}
+                txTypeFilter={transactionType}
               />
             </HStack>
-          </Box>
+          </Flex>
         </Flex>
       </HStack>
     </Card>
-  );
-}
-
-function MempoolFeeStatsContainer({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  return (
-    <Box>
-      <MempoolFeeStats tokenPrice={tokenPrice} />
-    </Box>
   );
 }
 

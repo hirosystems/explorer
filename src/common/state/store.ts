@@ -17,6 +17,7 @@ const rootReducer = combineReducers({
   connect: sandboxSlice.reducer,
   ...filterAndSortReducers,
   activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
+  
 });
 
 export const makeStore = () =>

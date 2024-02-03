@@ -18,7 +18,7 @@ interface MenuItem {
 interface FilterMenuProps {
   filterLabel: string | (() => string);
   menuItems: MenuItem[];
-  leftIcon: IconType;
+  leftIcon?: IconType;
 }
 
 export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps) {
@@ -53,7 +53,7 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
             <MenuButton
               as={Button}
               rightIcon={<Icon as={BsChevronDown} size={3} color={textColor} />}
-              leftIcon={<Icon as={leftIcon} size={4} color={filterTitleColor} />}
+              leftIcon={leftIcon ? <Icon as={leftIcon} size={4} color={filterTitleColor} /> : null}
               fontSize={'sm'}
               bg={bg}
               fontWeight={'semibold'}

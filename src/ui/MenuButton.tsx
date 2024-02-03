@@ -8,8 +8,12 @@ import {
 } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
+import { ReactNode } from 'react';
 
-export type MenuButtonProps = CUIMenuButtonProps & UIComponent;
+export type MenuButtonProps = CUIMenuButtonProps &
+  UIComponent & {
+    leftIcon?: ReactNode | null;
+  };
 export const MenuButton = forwardRef<MenuButtonProps, 'button'>(
   ({ children, size, ...rest }, ref) => {
     const hoverBg = useColorModeValue('slate.150 !important', 'slate.900');
