@@ -207,6 +207,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
                     : key === 'smart_contract'
                       ? 'Contract deploy'
                       : null;
+              const bg = getTxTypePieChartColor(key);
 
               return (
                 <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
@@ -214,7 +215,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
                     size={2.5}
                     borderRadius="50%"
                     mr={2}
-                    backgroundColor={getTxTypePieChartColor('token_transfer')}
+                    backgroundColor={bg}
                   />
                   <Icon as={icon} size={3.5} mr={2} />
                   <Box suppressHydrationWarning>{text ? `${value} ${text}` : null}</Box>
