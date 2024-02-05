@@ -1,3 +1,10 @@
+## [1.144.1](https://github.com/hirosystems/explorer/compare/v1.144.0...v1.144.1) (2024-02-05)
+
+
+### Bug Fixes
+
+* hello world contract ([9b29136](https://github.com/hirosystems/explorer/commit/9b2913690f592a4776814f5614b4fb51b3d7397e))
+
 # [1.144.0](https://github.com/hirosystems/explorer/compare/v1.143.3...v1.144.0) (2024-01-24)
 
 
