@@ -1,5 +1,5 @@
 import { useSuspenseMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
-import { StackDivider, VStack } from '@chakra-ui/react';
+import { StackDivider, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
   TbCircleChevronDown,
@@ -166,6 +166,8 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
     return acc + val;
   }, 0);
 
+  const textColor = useColorModeValue('slate.700', 'slate.500');
+
   return (
     <Card>
       <HStack
@@ -174,12 +176,16 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
         gridColumnStart={'1'}
         gridColumnEnd={['2', '2', '3']}
         gridTemplateColumns={['100%', '100%', '260px 1fr']}
+        width="100%"
       >
         <Flex
           padding={6}
           flexDirection="column"
-          borderRight={['none', 'none', '1px white solid']}
+          borderColor="border !important"
+          borderRight={['none', 'none', '1px solid', '1px solid']}
+          borderBottom={['1px solid', '1px solid', 'none', 'none']}
           height="100%"
+          width="100%"
         >
           <Box
             fontSize="12px"
@@ -211,27 +217,33 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
               return (
                 <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
-                  <Box
-                    size={2.5}
-                    borderRadius="50%"
-                    mr={2}
-                    backgroundColor={bg}
-                  />
-                  <Icon as={icon} size={3.5} mr={2} />
-                  <Box suppressHydrationWarning>{text ? `${value} ${text}` : null}</Box>
+                  <Box size={2.5} borderRadius="50%" mr={2} backgroundColor={bg} />
+                  <Icon as={icon} size={3.5} mr={2} color={textColor} />
+                  <Box suppressHydrationWarning color={textColor}>
+                    {text ? `${value} ${text}` : null}
+                  </Box>
                 </Flex>
               );
             })}
           </VStack>
         </Flex>
         <Flex padding={6} justifyContent="center" flexDirection="column">
-          <Flex mb={9} justifyContent="space-between">
+          <Flex
+            mb={9}
+            // justifyContent="space-between"
+            display={'grid'}
+            gridColumnStart={'1'}
+            gridColumnEnd={['2', '2', '3', '3']}
+            gridTemplateColumns='minmax(0, 1fr)'
+            justifyContent={['center', 'center', 'space-between', 'space-between']}
+          >
             <Box
               fontSize="12px"
               fontStyle="normal"
               fontWeight={600}
               lineHeight="20px"
               letterSpacing="-0.12px"
+              marginBottom={[5, 5, 0, 0]}
             >
               CURRENT FEE RATES
             </Box>
@@ -252,6 +264,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
                 'minmax(0, 1fr) minmax(0, 1fr)',
                 'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)',
               ]}
+              width="100%"
             >
               <MempoolFeePrioritCard
                 mempoolFeeResponse={filteredMempoolFeeResponse}

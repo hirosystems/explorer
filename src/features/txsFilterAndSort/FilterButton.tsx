@@ -1,13 +1,8 @@
 'use client';
 
 import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
-import React, { ReactNode, memo } from 'react';
-import {
-  PiArrowBendDoubleUpLeft,
-  PiArrowBendDownRight,
-  PiFire,
-  PiFunnelSimple,
-} from 'react-icons/pi';
+import { ReactNode, memo } from 'react';
+import { PiArrowBendDownRight, PiFunnelSimple } from 'react-icons/pi';
 
 import { useGlobalContext } from '../../common/context/useAppContext';
 import { Button } from '../../ui/Button';
@@ -20,7 +15,6 @@ import { MenuItem } from '../../ui/MenuItem';
 import { MenuList } from '../../ui/MenuList';
 import { Text } from '../../ui/Text';
 import { ClarityIcon } from '../../ui/icons/ClarityIcon';
-import { CoinSparkleIcon } from '../../ui/icons/CoinSparkleIcon';
 import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
 import { DiagonalArrowsIcon } from '../../ui/icons/DiagonalArrowsIcon';
 import { FunctionXIcon } from '../../ui/icons/FunctionX';

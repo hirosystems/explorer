@@ -1,7 +1,8 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import { Cell, Pie, PieChart } from 'recharts';
 
 const pieChartWidth = 215;
-const pieChartHeight = 180;
+const pieChartHeight = 200;
 
 const renderCustomizedLabel = ({
   percent,
@@ -43,20 +44,24 @@ const renderCenterCustomizedLabel = ({
   label,
   cx,
   cy,
+  color,
 }: {
   label: string;
   cx: number;
   cy: number;
+  color: string;
 }) => {
+  console.log('color', color);
+  // const textColor = useColorModeValue('text', 'white');
   return (
     <text
       x={cx}
       y={cy}
-      fill="black" // TODO: change for light and dark mode
+      // color="text" // TODO: change for light and dark mode
       textAnchor="middle"
       dominantBaseline="central"
       style={{
-        color: 'var(--Slate-Slate-900, #1C2024)',
+        fill: color,
         fontSize: '20px',
         fontStyle: 'normal',
         fontWeight: 500,
@@ -99,6 +104,8 @@ export function MempoolFeePieChart({
       value: Math.round((value / totalTxCount) * 100),
     };
   });
+  const textColor = useColorModeValue('#1C2024', '#FCFCFD');
+  console.log('textColor', textColor);
   return (
     <PieChart width={pieChartWidth} height={pieChartHeight}>
       <Pie
@@ -122,7 +129,13 @@ export function MempoolFeePieChart({
         label: `${totalTxCount} tx`,
         cx: pieChartWidth / 2,
         cy: pieChartHeight / 2,
+        color: textColor,
       })}
+      {/* <CenterCustomizedLabel
+        label={`${totalTxCount} tx`}
+        cx={pieChartWidth / 2}
+        cy={pieChartHeight / 2}
+      /> */}
     </PieChart>
   );
 }
