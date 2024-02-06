@@ -56,6 +56,7 @@ function MempoolFeePrioritCard({
   stxPrice: number;
   txTypeFilter: TransactionTypeFilterTypes;
 } & FlexProps) {
+  const borderColor = useColorModeValue('slate.200', 'slate.800');
   const isTxTypeFiltered = txTypeFilter !== TransactionTypeFilterTypes.AverageForAllTransactions;
   const mempoolFeeAll = isTxTypeFiltered
     ? mempoolFeeResponse?.[mapTransactionTypeToFilterValue(txTypeFilter)]?.[priority] || 0
@@ -75,7 +76,7 @@ function MempoolFeePrioritCard({
         </Text>
       </Flex>
       <VStack
-        divider={<StackDivider borderColor="slate.200" />}
+        divider={<StackDivider borderColor={borderColor} />}
         spacing={4}
         alignItems="flex-start"
       >
@@ -101,7 +102,7 @@ function MempoolFeePrioritCard({
                 mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
               } STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color='secondaryText'>
                 <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
                 <Box suppressHydrationWarning>
                   {`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
@@ -111,7 +112,7 @@ function MempoolFeePrioritCard({
             <Tooltip
               label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color='secondaryText'>
                 <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
                 <Box suppressHydrationWarning>
                   {`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
@@ -123,7 +124,7 @@ function MempoolFeePrioritCard({
                 mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
               } STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color='secondaryText'>
                 <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
                 <Box suppressHydrationWarning>
                   {`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
@@ -186,6 +187,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           borderBottom={['1px solid', '1px solid', 'none', 'none']}
           height="100%"
           width="100%"
+          alignItems={['center', 'center', 'flex-start']}
         >
           <Box
             fontSize="12px"
@@ -196,7 +198,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           >
             IN MEMPOOL
           </Box>
-          <Flex alignItems="center" height="100%">
+          <Flex alignItems="center" margin="16px 0px">
             <MempoolFeePieChart
               filteredTxTypeCounts={filteredTxTypeCounts}
               totalTxCount={totalTxCount}
@@ -231,26 +233,28 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Flex
             mb={9}
             // justifyContent="space-between"
-            display={'grid'}
-            gridColumnStart={'1'}
-            gridColumnEnd={['2', '2', '3', '3']}
-            gridTemplateColumns='minmax(0, 1fr)'
-            justifyContent={['center', 'center', 'space-between', 'space-between']}
+            display="grid"
+            gridTemplateColumns={['1fr', '1fr', '1fr 1fr']}
+            justifyContent={['center', 'center', 'space-between']}
           >
-            <Box
-              fontSize="12px"
-              fontStyle="normal"
-              fontWeight={600}
-              lineHeight="20px"
-              letterSpacing="-0.12px"
-              marginBottom={[5, 5, 0, 0]}
-            >
-              CURRENT FEE RATES
-            </Box>
-            <TransactionTypeFilterMenu
-              transactionType={transactionType}
-              setTransactionType={setTransactionType}
-            />
+            <Flex justifyContent={['center', 'center', 'flex-start']}>
+              <Box
+                fontSize="12px"
+                fontStyle="normal"
+                fontWeight={600}
+                lineHeight="20px"
+                letterSpacing="-0.12px"
+                marginBottom={[5, 5, 0, 0]}
+              >
+                CURRENT FEE RATES
+              </Box>
+            </Flex>
+            <Flex justifyContent={['center', 'center', 'flex-end']}>
+              <TransactionTypeFilterMenu
+                transactionType={transactionType}
+                setTransactionType={setTransactionType}
+              />
+            </Flex>
           </Flex>
           <Flex alignItems="center" height="100%">
             <HStack

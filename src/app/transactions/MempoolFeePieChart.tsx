@@ -6,8 +6,6 @@ const pieChartHeight = 200;
 
 const renderCustomizedLabel = ({
   percent,
-  x,
-  y,
   cx,
   cy,
   midAngle,
