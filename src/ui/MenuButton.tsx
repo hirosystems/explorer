@@ -6,9 +6,9 @@ import {
   forwardRef,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
 import { UIComponent } from './types';
-import { ReactNode } from 'react';
 
 export type MenuButtonProps = CUIMenuButtonProps &
   UIComponent & {

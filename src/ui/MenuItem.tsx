@@ -13,7 +13,7 @@ export type MenuItemProps = CUIMenuItemProps & UIComponent;
 export const MenuItem = forwardRef<MenuItemProps, 'button'>(({ children, size, ...rest }, ref) => {
   const blackColor = useColorModeValue('slate.900', 'slate.900');
   const hoverBg = useColorModeValue('slate.150 !important', 'slate.900');
-  
+
   return (
     <CUIMenuItem
       padding="12px 16px"

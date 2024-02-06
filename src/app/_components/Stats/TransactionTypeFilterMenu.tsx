@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 
-import { MempoolFeePriorities, MempoolTransactionStatsResponseTxTypeCounts } from '@stacks/blockchain-api-client';
+import { MempoolFeePriorities } from '@stacks/blockchain-api-client';
+
 import { FilterMenu } from '../../../common/components/FilterMenu';
 
 export enum TransactionTypeFilterTypes {
@@ -26,7 +27,9 @@ function getTransactionTypeFilterLabel(transactionType: TransactionTypeFilterTyp
   throw new Error('Invalid transactionType');
 }
 
-export function mapTransactionTypeToFilterValue(txType: TransactionTypeFilterTypes): keyof MempoolFeePriorities {
+export function mapTransactionTypeToFilterValue(
+  txType: TransactionTypeFilterTypes
+): keyof MempoolFeePriorities {
   if (txType === TransactionTypeFilterTypes.AverageForAllTransactions) {
     return 'all';
   }
@@ -53,9 +56,9 @@ export function TransactionTypeFilterMenu({
     () =>
       Object.keys(TransactionTypeFilterTypes).map(filterType => ({
         onClick: () => setTransactionType(filterType as TransactionTypeFilterTypes),
-        label: getTransactionTypeFilterLabel(filterType),
+        label: getTransactionTypeFilterLabel(filterType as TransactionTypeFilterTypes),
       })),
-    [setTransactionType, transactionType]
+    [setTransactionType]
   );
 
   const filterLabel = useCallback(

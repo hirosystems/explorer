@@ -3,16 +3,16 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { useAppSelector } from '../../state/hooks';
 
 export enum TransactionValueFilterTypes {
-    CurrentValue = 'CurrentValue',
-    EstimatedValueOnDayOfTransaction = 'EstimatedValueOnDayOfTransaction',
-  }
+  CurrentValue = 'CurrentValue',
+  EstimatedValueOnDayOfTransaction = 'EstimatedValueOnDayOfTransaction',
+}
 
 export interface TransactionValueFilterState {
-    activeTransactionValueFilter: TransactionValueFilterTypes;
+  activeTransactionValueFilter: TransactionValueFilterTypes;
 }
 
 export const initialState: TransactionValueFilterState = {
-    activeTransactionValueFilter: TransactionValueFilterTypes.CurrentValue,
+  activeTransactionValueFilter: TransactionValueFilterTypes.CurrentValue,
 };
 
 export const activeTransactionValueFilterSlice = createSlice({
@@ -27,4 +27,5 @@ export const activeTransactionValueFilterSlice = createSlice({
 
 export const { setTransactionValueFilter } = activeTransactionValueFilterSlice.actions;
 
-export const useTransactionValue = () => useAppSelector(state => state.activeTransactionValueFilter.activeTransactionValueFilter);
+export const useTransactionValue = () =>
+  useAppSelector(state => state.activeTransactionValueFilter.activeTransactionValueFilter);

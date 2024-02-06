@@ -1,4 +1,4 @@
-import { Box, useColorMode } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { FC, ReactNode, memo } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -12,10 +12,10 @@ import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
+import { TxLink } from '../../../ui/TxLink';
 import { Caption } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
-import { TxLink } from '../../../ui/TxLink';
 
 interface TxsListItemProps extends FlexProps {
   tx: Transaction;
@@ -59,12 +59,8 @@ const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
       divider={<Caption>∙</Caption>}
       minWidth={'160px'}
     >
-      <Box
-        display={['none', 'none', 'inline']}
-      >
-        <TxLink href={href} >
-          {truncateMiddle(tx.tx_id)}
-        </TxLink>
+      <Box display={['none', 'none', 'inline']}>
+        <TxLink href={href}>{truncateMiddle(tx.tx_id)}</TxLink>
       </Box>
       <TxTimestamp tx={tx} />
     </HStack>

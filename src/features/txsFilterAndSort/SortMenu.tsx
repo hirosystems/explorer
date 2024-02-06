@@ -1,4 +1,4 @@
-import { FilterMenu } from '@/common/components/FilterMenu';
+import { FilterMenu } from '../../common/components/FilterMenu';
 import { useCallback, useMemo } from 'react';
 import { GoSortDesc } from 'react-icons/go';
 

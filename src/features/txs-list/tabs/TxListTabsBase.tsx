@@ -1,16 +1,15 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import * as React from 'react';
 import { FC, ReactNode, useState } from 'react';
 
 import { TabsContainer } from '../../../common/components/TabsContainer';
 import { Box } from '../../../ui/Box';
 import { FlexProps } from '../../../ui/Flex';
+import { ShowValueMenu } from '../..//txsFilterAndSort/ShowValueMenu';
 import { FilterButton } from '../../txsFilterAndSort/FilterButton';
 import { SortMenu } from '../../txsFilterAndSort/SortMenu';
 import { CSVDownloadButton } from './CSVDownloadButton';
-import { ShowValueMenu } from '../..//txsFilterAndSort/ShowValueMenu';
 
 export const TxListTabsBase: FC<
   {

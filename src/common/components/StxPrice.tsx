@@ -18,7 +18,7 @@ interface StxPriceProps {
 }
 
 const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
-    const { historicalStxPrice, currentStxPrice } = useStxPriceForTx(tx);
+  const { historicalStxPrice, currentStxPrice } = useStxPriceForTx(tx);
 
   const activeTransactionValueFilter = useAppSelector(
     state => state.activeTransactionValueFilter.activeTransactionValueFilter

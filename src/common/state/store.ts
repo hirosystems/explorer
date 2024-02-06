@@ -9,7 +9,10 @@ import {
   filterAndSortReducers,
 } from '../../features/txsFilterAndSort/txsFilterAndSortSlice';
 import { ModalState, modalSlice } from '../components/modals/modal-slice';
-import { TransactionValueFilterState, activeTransactionValueFilterSlice } from './slices/transaction-value-filter-slice';
+import {
+  TransactionValueFilterState,
+  activeTransactionValueFilterSlice,
+} from './slices/transaction-value-filter-slice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
@@ -17,7 +20,6 @@ const rootReducer = combineReducers({
   connect: sandboxSlice.reducer,
   ...filterAndSortReducers,
   activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
-  
 });
 
 export const makeStore = () =>

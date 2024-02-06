@@ -4,7 +4,11 @@ import { FC } from 'react';
 
 import { Box, BoxProps } from './Box';
 
-export const TxLink: FC<{ href?: string, openInNewTab?: boolean } & BoxProps> = ({ href, openInNewTab = false, ...rest }) => {
+export const TxLink: FC<{ href?: string; openInNewTab?: boolean } & BoxProps> = ({
+  href,
+  openInNewTab = false,
+  ...rest
+}) => {
   const colorMode = useColorMode();
 
   return (

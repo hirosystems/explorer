@@ -102,7 +102,7 @@ function MempoolFeePrioritCard({
                 mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
               } STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color='secondaryText'>
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="secondaryText">
                 <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
                 <Box suppressHydrationWarning>
                   {`${Number((mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
@@ -112,7 +112,7 @@ function MempoolFeePrioritCard({
             <Tooltip
               label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color='secondaryText'>
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="secondaryText">
                 <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
                 <Box suppressHydrationWarning>
                   {`${Number((mempoolFeeContractCall / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX
@@ -124,7 +124,7 @@ function MempoolFeePrioritCard({
                 mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
               } STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color='secondaryText'>
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="secondaryText">
                 <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
                 <Box suppressHydrationWarning>
                   {`${Number((mempoolFeeSmartContract / MICROSTACKS_IN_STACKS).toFixed(3))}`} STX

@@ -47,46 +47,46 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
   const filterLabelValue = typeof filterLabel === 'function' ? filterLabel?.() : filterLabel;
 
   return (
-      <Menu>
-        {({ isOpen }) => (
-          <>
-            <MenuButton
-              as={Button}
-              rightIcon={<Icon as={BsChevronDown} size={3} color={textColor} />}
-              leftIcon={leftIcon ? <Icon as={leftIcon} size={4} color={filterTitleColor} /> : null}
-              fontSize={'sm'}
-              bg={bg}
-              fontWeight={'semibold'}
-              border={'1px'}
-              borderColor={borderColor}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              _hover={{ color: textColor, backgroundColor: hoverBg }}
-              _active={{ color: textColor, backgroundColor: hoverBg }}
-              _focus={{ color: textColor, backgroundColor: hoverBg }}
+    <Menu>
+      {({ isOpen }) => (
+        <>
+          <MenuButton
+            as={Button}
+            rightIcon={<Icon as={BsChevronDown} size={3} color={textColor} />}
+            leftIcon={leftIcon ? <Icon as={leftIcon} size={4} color={filterTitleColor} /> : null}
+            fontSize={'sm'}
+            bg={bg}
+            fontWeight={'semibold'}
+            border={'1px'}
+            borderColor={borderColor}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            _hover={{ color: textColor, backgroundColor: hoverBg }}
+            _active={{ color: textColor, backgroundColor: hoverBg }}
+            _focus={{ color: textColor, backgroundColor: hoverBg }}
+          >
+            <Box
+              display="inline"
+              fontWeight="normal"
+              color={isHoveredOrFocused || isOpen ? textColor : filterTitleColor}
             >
-              <Box
-                display="inline"
-                fontWeight="normal"
-                color={isHoveredOrFocused || isOpen ? textColor : filterTitleColor}
-              >
-                Show:{' '}
-              </Box>
-              <Box display="inline" fontWeight="normal" color={textColor}>
-                {filterLabelValue}
-              </Box>
-            </MenuButton>
-            <MenuList fontSize={'sm'} padding="8px">
-              {menuItems.map(({ label, onClick }) => (
-                <MenuItem color={textColor} onClick={onClick}>
-                  {label}
-                </MenuItem>
-              ))}
-            </MenuList>
-          </>
-        )}
-      </Menu>
+              Show:{' '}
+            </Box>
+            <Box display="inline" fontWeight="normal" color={textColor}>
+              {filterLabelValue}
+            </Box>
+          </MenuButton>
+          <MenuList fontSize={'sm'} padding="8px">
+            {menuItems.map(({ label, onClick }) => (
+              <MenuItem color={textColor} onClick={onClick}>
+                {label}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </>
+      )}
+    </Menu>
   );
 }

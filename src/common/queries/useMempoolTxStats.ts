@@ -1,8 +1,9 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
+import { MempoolTransactionStatsResponse } from '@stacks/blockchain-api-client';
+
 import { useApi } from '../api/useApi';
 import { ONE_MINUTE } from './query-stale-time';
-import { MempoolTransactionStatsResponse } from '@stacks/blockchain-api-client';
 
 export function useMempoolTransactionStats(options: any = {}) {
   const api = useApi();

@@ -1,14 +1,7 @@
-import { CoinSparkleIcon } from '@/ui/icons/CoinSparkleIcon';
 import React, { FC } from 'react';
 import { BsCodeSlash } from 'react-icons/bs';
-import {
-  PiArrowBendDoubleUpRightLight,
-  PiArrowBendDownRight,
-  PiClock,
-  PiFireLight,
-  PiWarningCircle,
-} from 'react-icons/pi';
-import { RxCube } from 'react-icons/rx';
+import { PiArrowBendDownRight, PiClock, PiWarningCircle } from 'react-icons/pi';
+import { TbArrowsDoubleSwNe } from 'react-icons/tb';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
@@ -20,8 +13,6 @@ import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
 import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 import { Circle } from './Circle';
-import { TbArrowsDoubleSwNe } from 'react-icons/tb';
-import { useIsNakamoto } from '../hooks/useIsNakamoto';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
   switch (txType) {

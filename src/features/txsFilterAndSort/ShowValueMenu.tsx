@@ -36,13 +36,10 @@ export function ShowValueMenu() {
       })),
     [dispatch]
   );
-  const filterLabel = useCallback(() => getActiveTransactionValueFilterLabel(activeTransactionValueFilter), [activeTransactionValueFilter]);
-
-  return (
-    <FilterMenu
-      filterLabel={filterLabel}
-      menuItems={menuItems}
-      leftIcon={PiCurrencyDollar}
-    />
+  const filterLabel = useCallback(
+    () => getActiveTransactionValueFilterLabel(activeTransactionValueFilter),
+    [activeTransactionValueFilter]
   );
+
+  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={PiCurrencyDollar} />;
 }
