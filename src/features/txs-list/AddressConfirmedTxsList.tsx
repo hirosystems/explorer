@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { FC, memo, useMemo } from 'react';
 
 import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
@@ -8,7 +7,6 @@ import { SkeletonGenericTransactionList } from '../../common/components/loaders/
 import { useSuspenseInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseAddressConfirmedTxsWithTransfersInfinite } from '../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { Accordion } from '../../ui/Accordion';
-import { Box } from '../../ui/Box';
 import { FilteredTxs } from './FilteredTxs';
 import { TxWithTransferListItem } from './ListItem/TxWithTransferListItem';
 
@@ -17,6 +15,8 @@ export const AddressConfirmedTxsList: FC<{ address: string }> = memo(({ address 
 
   const txsWithTransfers =
     useSuspenseInfiniteQueryResult<AddressTransactionWithTransfers>(response);
+
+  console.log({ txsWithTransfers });
 
   const indexes = useMemo(
     () =>
