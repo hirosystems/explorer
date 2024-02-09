@@ -1,4 +1,3 @@
-import { FilterMenu } from '../../common/components/FilterMenu';
 import { useCallback, useMemo } from 'react';
 import { GoSortDesc } from 'react-icons/go';
 
@@ -7,6 +6,7 @@ import {
   GetMempoolTransactionListOrderEnum,
 } from '@stacks/blockchain-api-client';
 
+import { FilterMenu } from '../../common/components/FilterMenu';
 import { useFilterAndSortState } from './useFilterAndSortState';
 
 function getSortOptionLabel(

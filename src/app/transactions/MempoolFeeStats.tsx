@@ -1,4 +1,4 @@
-import { useSuspenseMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
+import { useSuspenseMempoolTransactionStats } from '../../common/queries/useMempoolTxStats';
 import { StackDivider, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
 import {
