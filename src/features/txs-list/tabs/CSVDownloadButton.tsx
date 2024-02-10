@@ -1,7 +1,7 @@
 'use client';
 
 import { useColorMode } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CSVDownload } from 'react-csv';
 import { FiDownload } from 'react-icons/fi';
 

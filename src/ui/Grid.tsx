@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Grid as CUIGrid,
-  GridProps as CUIGridProps,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+import { Grid as CUIGrid, GridProps as CUIGridProps, forwardRef } from '@chakra-ui/react';
 
 import { UIComponent } from './types';
 
