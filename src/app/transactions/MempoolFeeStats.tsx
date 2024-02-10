@@ -1,6 +1,5 @@
-import { useSuspenseMempoolTransactionStats } from '../../common/queries/useMempoolTxStats';
 import { StackDivider, VStack, useColorModeValue } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   TbCircleChevronDown,
   TbCircleChevronUp,
@@ -14,6 +13,7 @@ import { MempoolFeePrioritiesAll } from '@stacks/blockchain-api-client/src/gener
 import { Card } from '../../common/components/Card';
 import { getTxTypeIcon } from '../../common/components/TxIcon';
 import { useSuspenseMempoolFee } from '../../common/queries/useMempoolFee';
+import { useSuspenseMempoolTransactionStats } from '../../common/queries/useMempoolTxStats';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { MICROSTACKS_IN_STACKS, capitalize, getUsdValue } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
@@ -23,12 +23,12 @@ import { Icon } from '../../ui/Icon';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
+import { MempoolFeePieChart, getTxTypePieChartColor } from './MempoolFeePieChart';
 import {
   TransactionTypeFilterMenu,
   TransactionTypeFilterTypes,
   mapTransactionTypeToFilterValue,
-} from '../_components/Stats/TransactionTypeFilterMenu';
-import { MempoolFeePieChart, getTxTypePieChartColor } from './MempoolFeePieChart';
+} from './TransactionTypeFilterMenu';
 
 export const getFeePriorityIcon = (priority: keyof MempoolFeePrioritiesAll) => {
   switch (priority) {
@@ -45,13 +45,13 @@ export const getFeePriorityIcon = (priority: keyof MempoolFeePrioritiesAll) => {
   }
 };
 
-function MempoolFeePrioritCard({
+function MempoolFeePriorityCard({
   mempoolFeeResponse,
   priority,
   stxPrice,
   txTypeFilter,
 }: {
-  mempoolFeeResponse: MempoolFeePriorities; // TODO:
+  mempoolFeeResponse: MempoolFeePriorities;
   priority: keyof MempoolFeePrioritiesAll;
   stxPrice: number;
   txTypeFilter: TransactionTypeFilterTypes;
@@ -148,20 +148,27 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   const txTypeCounts = mempoolTransactionStats?.tx_type_counts;
 
-  const { poison_microblock, ...filteredTxTypeCounts } = txTypeCounts || {};
-  const filteredMempoolFeeResponse = { ...mempoolFeeResponse };
-
   const mappedTxType = mapTransactionTypeToFilterValue(transactionType);
-  Object.keys(filteredTxTypeCounts).forEach(key => {
-    if (mappedTxType !== 'all' && key !== mappedTxType) {
-      delete filteredTxTypeCounts[key as keyof typeof filteredTxTypeCounts];
-    }
-  });
-  Object.keys(filteredMempoolFeeResponse).forEach(key => {
-    if (mappedTxType !== 'all' && key !== mappedTxType) {
-      delete filteredMempoolFeeResponse[key as keyof typeof filteredMempoolFeeResponse];
-    }
-  });
+
+  const filteredTxTypeCounts = useMemo(() => {
+    const { poison_microblock, ...filteredTxTypeCounts } = txTypeCounts || {};
+    Object.keys(filteredTxTypeCounts).forEach(key => {
+      if (mappedTxType !== 'all' && key !== mappedTxType) {
+        delete filteredTxTypeCounts[key as keyof typeof filteredTxTypeCounts];
+      }
+    });
+    return filteredTxTypeCounts;
+  }, [txTypeCounts, mappedTxType]);
+
+  const filteredMempoolFeeResponse = useMemo(() => {
+    const filteredMempoolFeeResponse = { ...mempoolFeeResponse };
+    Object.keys(filteredMempoolFeeResponse).forEach(key => {
+      if (mappedTxType !== 'all' && key !== mappedTxType) {
+        delete filteredMempoolFeeResponse[key as keyof typeof filteredMempoolFeeResponse];
+      }
+    });
+    return filteredMempoolFeeResponse;
+  }, [mappedTxType, mempoolFeeResponse]);
 
   const totalTxCount = Object.entries(filteredTxTypeCounts).reduce((acc, [key, val]) => {
     return acc + val;
@@ -182,9 +189,18 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <Flex
           padding={6}
           flexDirection="column"
-          borderColor="border !important"
-          borderRight={['none', 'none', '1px solid', '1px solid']}
-          borderBottom={['1px solid', '1px solid', 'none', 'none']}
+          borderRight={[
+            'none',
+            'none',
+            '1px solid var(--stacks-colors-border)',
+            '1px solid var(--stacks-colors-border)',
+          ]}
+          borderBottom={[
+            '1px solid var(--stacks-colors-border)',
+            '1px solid var(--stacks-colors-border)',
+            'none',
+            'none',
+          ]}
           height="100%"
           width="100%"
           alignItems={['center', 'center', 'flex-start']}
@@ -270,28 +286,28 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
               ]}
               width="100%"
             >
-              <MempoolFeePrioritCard
+              <MempoolFeePriorityCard
                 mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'no_priority'}
                 stxPrice={tokenPrice.stxPrice}
                 borderRightWidth={['0px', '0px', '1px', '1px']}
                 txTypeFilter={transactionType}
               />
-              <MempoolFeePrioritCard
+              <MempoolFeePriorityCard
                 mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'low_priority'}
                 stxPrice={tokenPrice.stxPrice}
                 borderRightWidth={['0px', '0px', '0px', '1px']}
                 txTypeFilter={transactionType}
               />
-              <MempoolFeePrioritCard
+              <MempoolFeePriorityCard
                 mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'medium_priority'}
                 stxPrice={tokenPrice.stxPrice}
                 borderRightWidth={['0px', '0px', '1px', '1px']}
                 txTypeFilter={transactionType}
               />
-              <MempoolFeePrioritCard
+              <MempoolFeePriorityCard
                 mempoolFeeResponse={filteredMempoolFeeResponse}
                 priority={'high_priority'}
                 stxPrice={tokenPrice.stxPrice}

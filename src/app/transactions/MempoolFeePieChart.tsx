@@ -49,13 +49,10 @@ const renderCenterCustomizedLabel = ({
   cy: number;
   color: string;
 }) => {
-  console.log('color', color);
-  // const textColor = useColorModeValue('text', 'white');
   return (
     <text
       x={cx}
       y={cy}
-      // color="text" // TODO: change for light and dark mode
       textAnchor="middle"
       dominantBaseline="central"
       style={{
@@ -103,7 +100,6 @@ export function MempoolFeePieChart({
     };
   });
   const textColor = useColorModeValue('#1C2024', '#FCFCFD');
-  console.log('textColor', textColor);
   return (
     <PieChart width={pieChartWidth} height={pieChartHeight}>
       <Pie
@@ -129,11 +125,6 @@ export function MempoolFeePieChart({
         cy: pieChartHeight / 2,
         color: textColor,
       })}
-      {/* <CenterCustomizedLabel
-        label={`${totalTxCount} tx`}
-        cx={pieChartWidth / 2}
-        cy={pieChartHeight / 2}
-      /> */}
     </PieChart>
   );
 }

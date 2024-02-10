@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/blockchain-api-client';
 
-import { FilterMenu } from '../../../common/components/FilterMenu';
+import { FilterMenu } from '../../common/components/FilterMenu';
 
 export enum TransactionTypeFilterTypes {
   AverageForAllTransactions = 'AverageForAllTransactions',
