@@ -7,19 +7,22 @@ import { FiDownload } from 'react-icons/fi';
 
 import { Box } from '../../../ui/Box';
 import { Icon } from '../../../ui/Icon';
-import { CSVDownloadObjectType, useTxsCSVData } from './useTxsCSVData';
+import { CSVDownloadObjectType, useTxsCSVData, useTxsCSVDataNew } from './useTxsCSVData';
 
 export function CSVDownloadButton({ address }: { address: string }) {
   const [transactionData, setTransactionData] = useState<CSVDownloadObjectType[]>([]);
   const { getTxsCSVData } = useTxsCSVData();
+  const { getTxsCSVData: getTxsCSVDataNew } = useTxsCSVDataNew();
 
   useEffect(() => {
     if (transactionData.length) setTransactionData([]);
   }, [transactionData.length]);
 
-  const downloadCSV = () => {
-    const formattedTxnData = getTxsCSVData(address);
-    setTransactionData(formattedTxnData);
+  const downloadCSV = async () => {
+    const formattedTxnData = await getTxsCSVDataNew(address);
+    const formattedTxnDataNew = await getTxsCSVDataNew(address);
+    console.log({ formattedTxnData, formattedTxnDataNew });
+    setTransactionData(formattedTxnDataNew);
   };
 
   const colorMode = useColorMode().colorMode;

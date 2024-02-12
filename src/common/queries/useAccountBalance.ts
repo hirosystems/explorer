@@ -10,6 +10,18 @@ import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 import { useApi } from '../api/useApi';
 import { ONE_MINUTE } from './query-stale-time';
 
+export function useFetchAccountBalance() {
+  const api = useApi();
+
+  const fetchAccountBalance = async (address: string) => {
+    return api.accountsApi.getAccountBalance({
+      principal: address,
+    });
+  };
+
+  return fetchAccountBalance;
+}
+
 export function useAccountBalance(
   address?: string,
   options: Omit<UseQueryOptions<any, any, AddressBalanceResponse, any>, 'queryKey' | 'queryFn'> = {}
