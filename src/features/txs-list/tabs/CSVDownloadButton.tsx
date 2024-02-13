@@ -19,9 +19,10 @@ export function CSVDownloadButton({ address }: { address: string }) {
   }, [transactionData.length]);
 
   const downloadCSV = async () => {
-    const formattedTxnData = await getTxsCSVDataNew(address);
+    // const formattedTxnData = await getTxsCSVData(address);
     const formattedTxnDataNew = await getTxsCSVDataNew(address);
-    console.log({ formattedTxnData, formattedTxnDataNew });
+    // console.log({ formattedTxnData, formattedTxnDataNew });
+    console.log({ formattedTxnDataNew });
     setTransactionData(formattedTxnDataNew);
   };
 

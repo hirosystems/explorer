@@ -5,6 +5,7 @@ import {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
 
@@ -14,60 +15,45 @@ import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
-import { useState, useEffect } from 'react';
-
-export function  useAllTransactions(address) {
+export function useFetchAllTransactions() {
   const api = useApi();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const fetchPage = async (pageParam = 0) => {
-    try {
-      const response = await api.accountsApi.getAccountTransactionsWithTransfers({
-        principal: address,
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam,
-      });
-      return response;
-    } catch (err) {
-      throw err;
-    }
-  };
+  const fetchPage = useCallback(
+    async (address: string, pageParam: number = 0) => {
+      try {
+        const response = await api.accountsApi.getAccountTransactionsWithTransfers({
+          principal: address,
+          limit: DEFAULT_LIST_LIMIT,
+          offset: pageParam,
+        });
+        return response;
+      } catch (err) {
+        throw err;
+      }
+    },
+    [api]
+  );
 
-  const fetchAllPages = async (pageParam = 0, accumulatedData = []) => {
-    if (pageParam === undefined) {
-      return accumulatedData;
-    }
-    try {
-      const response = await fetchPage(pageParam);
-      const nextPageParam = getNextPageParam(response);
-      const newData = [...accumulatedData, ...response.results];
-      return await fetchAllPages(nextPageParam, newData);
-    } catch (err) {
-      throw err;
-    }
-  };
+  const fetchAllPages = useCallback(
+    async (address: string, pageParam: number | undefined, accumulatedData: AddressTransactionWithTransfers[] = []) => {
+      console.log('fetchAllPages', {address, pageParam, accumulatedData})
+      if (pageParam === undefined) {
+        return accumulatedData;
+      }
+      try {
+        const response = await fetchPage(address, pageParam);
+        const nextPageParam = getNextPageParam(response);
+        const newData = [...accumulatedData, ...response.results];
+        return await fetchAllPages(address, nextPageParam, newData as any); // TODO: fix typing
+      } catch (err) {
+        throw err;
+      }
+    },
+    [fetchPage]
+  );
 
-  useEffect(() => {
-    if (!address) return;
-
-    setLoading(true);
-    fetchAllPages()
-      .then((allData) => {
-        setData(allData);
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [address]);
-
-  return { data, loading, error };
-};
-
+  return fetchAllPages;
+}
 
 export function useFetchAddressConfirmedTxsWithTransfers(): (
   address: string

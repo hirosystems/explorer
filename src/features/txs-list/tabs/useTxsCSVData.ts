@@ -6,12 +6,28 @@ import {
   AddressBalanceResponse,
   AddressTransactionWithTransfers,
   AddressTransactionsWithTransfersListResponse,
+  ContractCallTransaction,
+  TokenTransferTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
 import { useFetchAccountBalance } from '../../../common/queries/useAccountBalance';
-import { useFetchAddressConfirmedTxsWithTransfers } from '../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
+import { useFetchAllTransactions } from '../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { microStxToStx, microToStacksFormatted } from '../../../common/utils/utils';
 import { useFilterAndSortState } from '../../txsFilterAndSort/useFilterAndSortState';
+
+export type CSVDownloadObjectType = {
+  Date: string;
+  'Transaction Type': 'Token Transfer';
+  'Sent Amount': string | number;
+  'Sent Currency': string;
+  'Received Amount': string | number;
+  'Received Currency': string;
+  'Fee Amount': string | number;
+  'Fee Currency': string;
+  'Net Worth Amount': string | number;
+  'Net Worth Currency': string;
+  TxHash: string;
+};
 
 const formatTxsCSVData = (
   txs: AddressTransactionWithTransfers[],
@@ -22,37 +38,58 @@ const formatTxsCSVData = (
     const {
       stx_sent,
       stx_received,
-      tx: { burn_block_time_iso, fee_rate, tx_id },
+      tx: { burn_block_time_iso, fee_rate, tx_id, tx_type, nonce, tx_index, sender_address },
     } = transaction;
     if (i > 0) {
       stxBalance += Number(stx_received) - Number(stx_sent);
     }
-    return {
-      Date: burn_block_time_iso,
-      'Sent Amount': microToStacksFormatted(stx_sent),
-      'Sent Currency': 'STX',
-      'Received Amount': microToStacksFormatted(stx_received),
-      'Received Currency': 'STX',
-      'Fee Amount': microToStacksFormatted(fee_rate),
-      'Fee Currency': 'STX',
-      'Net Worth Amount': microStxToStx(stxBalance),
-      'Net Worth Currency': 'STX',
-      TxHash: tx_id,
-    };
+    // stxBalance += Number(stx_received) - Number(stx_sent);
+    if (tx_type === 'token_transfer') {
+      const { ft_transfers } = transaction;
+      const {
+        token_transfer: { recipient_address },
+      } = transaction.tx as TokenTransferTransaction;
+      console.log('token_transfer', { ft_transfers });
+      return {
+        Date: burn_block_time_iso,
+        Nonce: nonce,
+        TxIndex: tx_index,
+        'Transaction Type': 'Token Transfer',
+        'Sent Amount': microToStacksFormatted(stx_sent),
+        'Sent Currency': 'STX',
+        'Received Amount': microToStacksFormatted(stx_received),
+        'Received Currency': 'STX',
+        'Fee Amount': microToStacksFormatted(fee_rate),
+        'Fee Currency': 'STX',
+        'Net Worth Amount': microStxToStx(stxBalance),
+        'Net Worth Currency': 'STX',
+        TxHash: tx_id,
+      };
+    }
+    if (tx_type === 'contract_call') {
+      const {
+        ft_transfers
+      } = transaction
+      const {
+        contract_call: { contract_id, function_name },
+      } = transaction.tx as ContractCallTransaction;
+      return {
+        Date: burn_block_time_iso,
+        Nonce: nonce,
+        TxIndex: tx_index,
+        'Transaction Type': 'Token Transfer',
+        'Sent Amount': microToStacksFormatted(stx_sent),
+        'Sent Currency': 'STX',
+        'Received Amount': microToStacksFormatted(stx_received),
+        'Received Currency': 'STX',
+        'Fee Amount': microToStacksFormatted(fee_rate),
+        'Fee Currency': 'STX',
+        'Net Worth Amount': microStxToStx(stxBalance),
+        'Net Worth Currency': 'STX',
+        TxHash: tx_id,
+      };
+    }
   });
-};
-
-export type CSVDownloadObjectType = {
-  Date: string;
-  'Sent Amount': string | number;
-  'Sent Currency': string;
-  'Received Amount': string | number;
-  'Received Currency': string;
-  'Fee Amount': string | number;
-  'Fee Currency': string;
-  'Net Worth Amount': string | number;
-  'Net Worth Currency': string;
-  TxHash: string;
 };
 
 export const useTxsCSVData = () => {
@@ -93,8 +130,9 @@ export const useTxsCSVData = () => {
 export const useTxsCSVDataNew = () => {
   // const queryClient = useQueryClient();
   // const { activeFilters } = useFilterAndSortState();
-  const fetchAddressConfirmedTxsWithTransfers = useFetchAddressConfirmedTxsWithTransfers();
+  // const fetchAddressConfirmedTxsWithTransfers = useFetchAddressConfirmedTxsWithTransfers();
   const fetchAccountBalance = useFetchAccountBalance();
+  const fetchAllTransactions = useFetchAllTransactions();
 
   const getTxsCSVData = async (address: string): Promise<CSVDownloadObjectType[]> => {
     // const txsQueryData = queryClient.getQueriesData<
@@ -102,7 +140,8 @@ export const useTxsCSVDataNew = () => {
     // >({
     //   queryKey: ['addressConfirmedTxsWithTransfersInfinite', address],
     // });
-    const txsQueryData = await fetchAddressConfirmedTxsWithTransfers(address);
+    // const txsQueryData = await fetchAddressConfirmedTxsWithTransfers(address);
+    const txsQueryData = await fetchAllTransactions(address, 0);
 
     // const addressBalanceQueryData = queryClient.getQueriesData<AddressBalanceResponse>({
     //   queryKey: ['accountBalance', address],
@@ -119,7 +158,8 @@ export const useTxsCSVDataNew = () => {
     //   []
     // );
 
-    const txs = txsQueryData.results;
+    // const txs = txsQueryData.results;
+    const txs = txsQueryData;
     const balance = balanceData.stx.balance;
 
     // const filteredTxs = !activeFilters.length
