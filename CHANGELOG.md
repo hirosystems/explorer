@@ -1,3 +1,10 @@
+# [1.145.0](https://github.com/hirosystems/explorer/compare/v1.144.1...v1.145.0) (2024-02-13)
+
+
+### Features
+
+* block page layout A ([a2774f3](https://github.com/hirosystems/explorer/commit/a2774f3d60931d811e4f6e0790e1996ceb21f7cb))
+
 ## [1.144.1](https://github.com/hirosystems/explorer/compare/v1.144.0...v1.144.1) (2024-02-05)
 
 
