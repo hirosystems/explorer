@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import { PiList } from 'react-icons/pi';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
@@ -41,12 +41,12 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
         children: [
           {
             id: 'signers',
-            label: 'Signers',
+            label: <NavLabel>Signers</NavLabel>,
             href: buildUrl('/signers', activeNetwork),
           },
           {
             id: 'tokens',
-            label: 'Tokens',
+            label: <NavLabel>Tokens</NavLabel>,
             href: buildUrl('/tokens', activeNetwork),
           },
           {

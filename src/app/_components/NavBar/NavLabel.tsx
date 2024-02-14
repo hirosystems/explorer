@@ -12,6 +12,7 @@ export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
       fontWeight={'medium'}
       fontSize={'xs'}
       textAlign={'left'}
+      color='text'
     >
       {children}
     </Text>
