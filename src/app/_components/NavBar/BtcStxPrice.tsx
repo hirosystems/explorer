@@ -31,13 +31,13 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
   return (
     <Flex gap={6} minWidth={'172px'}>
-      <PriceContainer icon={<Icon as={BitcoinIcon} size={4.5} />} minWidth={'92px'}>
+      <PriceContainer icon={<Icon as={BitcoinIcon} size={'18px'} />} minWidth={'92px'}>
         {!formattedBtcPrice ? 'N/A' : formattedBtcPrice}
       </PriceContainer>
       <PriceContainer
         icon={
-          <Circle size={4.5} bg="brand" border={'none'}>
-            <Icon as={StxIcon} size={2.5} color="white" />
+          <Circle size={'18px'} bg="brand" border={'none'}>
+            <Icon as={StxIcon} size={'10px'} color="white" />
           </Circle>
         }
         minWidth={'56px'}
