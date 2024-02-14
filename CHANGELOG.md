@@ -1,3 +1,10 @@
+# [1.146.0](https://github.com/hirosystems/explorer/compare/v1.145.0...v1.146.0) (2024-02-14)
+
+
+### Features
+
+* **ui-updates:** completed ui updates ([bc05c67](https://github.com/hirosystems/explorer/commit/bc05c672a284369a14c036b67484a5effa96eff8))
+
 # [1.145.0](https://github.com/hirosystems/explorer/compare/v1.144.1...v1.145.0) (2024-02-13)
 
 
