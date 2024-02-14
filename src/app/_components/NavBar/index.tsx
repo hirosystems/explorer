@@ -37,8 +37,18 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
     () => [
       {
         id: 'blockchain',
-        label: 'Blockchain',
+        label: 'Explore',
         children: [
+          {
+            id: 'signers',
+            label: 'Signers',
+            href: buildUrl('/signers', activeNetwork),
+          },
+          {
+            id: 'tokens',
+            label: 'Tokens',
+            href: buildUrl('/tokens', activeNetwork),
+          },
           {
             id: 'transactions',
             label: <NavLabel>Transactions</NavLabel>,
@@ -50,11 +60,6 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
             href: buildUrl('/blocks', activeNetwork),
           },
         ],
-      },
-      {
-        id: 'tokens',
-        label: 'Tokens',
-        href: buildUrl('/tokens', activeNetwork),
       },
       {
         id: 'sandbox',

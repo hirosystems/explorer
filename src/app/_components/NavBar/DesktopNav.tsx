@@ -7,7 +7,6 @@ import { Link } from '../../../ui/Link';
 import { Popover } from '../../../ui/Popover';
 import { PopoverContent } from '../../../ui/PopoverContent';
 import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Text } from '../../../ui/Text';
 import { DesktopSubNav } from './DesktopSubNav';
 import { NavItem } from './types';
 
