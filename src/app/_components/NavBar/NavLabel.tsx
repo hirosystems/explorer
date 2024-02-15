@@ -6,21 +6,23 @@ import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
 export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
-  <Flex height={'50px'} alignItems={'center'} color="black">
+  <Flex height={'50px'} alignItems={'center'}>
     <Text
       _groupHover={{ textDecoration: 'underline' }}
       fontWeight={'medium'}
       fontSize={'xs'}
       textAlign={'left'}
-      color='text'
+      color="text"
+      padding="2 3"
     >
       {children}
     </Text>
     <Flex
       transition={'all .3s ease'}
-      transform={'translateX(-10px)'}
+      // transform={'translateX(-10px)'}
       opacity={0}
-      _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
+      // _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
+      _groupHover={{ opacity: '100%' }}
       justify={'flex-end'}
       align={'center'}
       flex={1}
