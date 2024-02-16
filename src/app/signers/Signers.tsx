@@ -1,6 +1,7 @@
 import { MempoolFeePriorities } from '@stacks/blockchain-api-client/src/generated/models';
 import { MempoolFeePrioritiesAll } from '@stacks/blockchain-api-client/src/generated/models/MempoolFeePrioritiesAll';
 
+import { Card } from '../../common/components/Card';
 import { getTxTypeIcon } from '../../common/components/TxIcon';
 import { useSuspenseMempoolFee } from '../../common/queries/usMempoolFee';
 import { MICROSTACKS_IN_STACKS, capitalize, getUsdValue } from '../../common/utils/utils';
@@ -8,11 +9,12 @@ import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
+import { Link } from '../../ui/Link';
+import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
-import { Caption } from '../../ui/typography';
+import { Caption, Title } from '../../ui/typography';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { StatSection } from '../_components/Stats/StatSection';
-import { Wrapper } from '../_components/Stats/Wrapper';
 
 function MempoolFeeByTxType({
   mempoolFeeTokenTransfer,
@@ -91,74 +93,330 @@ function MempoolFeeSection({
   );
 }
 
-function CurrentCycle(title: string) {
+function CurrentCycleCard({
+  title,
+  bodyMainText,
+  bodySecondaryText,
+  caption,
+  ...rest
+}: {
+  title: string;
+  bodyMainText: string;
+  bodySecondaryText: string;
+  caption: string;
+}) {
   return (
-    <Flex
-    direction={'column'}
-    p={5}
-    height={32}
-    justifyContent={'center'}
-    borderColor={'border'}
-    {...rest}
-  >
-    <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
-      {title}
-    </Text>
-    <Flex mb={2} alignItems={'baseline'} wrap={'nowrap'} minW={'0'} gap={0.5} fontWeight={'medium'}>
-      <Text
-        fontSize={'xl'}
-        whiteSpace={'nowrap'}
-        textOverflow={'ellipsis'}
-        overflow={'hidden'}
-        color={'text'}
+    <Card>
+      <Flex
+        direction={'column'}
+        p={5}
+        height={32}
+        justifyContent={'center'}
+        borderColor={'border'}
+        {...rest}
       >
-        {bodyMainText}
-      </Text>
-      <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
-        {bodySecondaryText}
-      </Text>
-    </Flex>
-    <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
-      {caption}
-    </Text>
-  </Flex>
+        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
+          {title}
+        </Text>
+        <Flex
+          mb={2}
+          alignItems={'baseline'}
+          wrap={'nowrap'}
+          minW={'0'}
+          gap={0.5}
+          fontWeight={'medium'}
+        >
+          <Text
+            fontSize={'xl'}
+            whiteSpace={'nowrap'}
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+            color={'text'}
+          >
+            {bodyMainText}
+          </Text>
+          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+            {bodySecondaryText}
+          </Text>
+        </Flex>
+        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+          {caption}
+        </Text>
+      </Flex>
+    </Card>
   );
 }
 
-function StxStaked() {
+function StxStakedCard({
+  title,
+  bodyMainText,
+  bodySecondaryText,
+  caption,
+  ...rest
+}: {
+  title: string;
+  bodyMainText: string;
+  bodySecondaryText: string;
+  caption: string;
+}) {
   return (
-    <Wrapper>
-      <StatSection title="STX staked" bodyMainText="0 STX" bodySecondaryText="$0.00" />
-    </Wrapper>
+    <Card>
+      <Flex
+        direction={'column'}
+        p={5}
+        height={32}
+        justifyContent={'center'}
+        borderColor={'border'}
+        {...rest}
+      >
+        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
+          {title}
+        </Text>
+        <Flex
+          mb={2}
+          alignItems={'baseline'}
+          wrap={'nowrap'}
+          minW={'0'}
+          gap={0.5}
+          fontWeight={'medium'}
+        >
+          <Text
+            fontSize={'xl'}
+            whiteSpace={'nowrap'}
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+            color={'text'}
+          >
+            {bodyMainText}
+          </Text>
+          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+            {bodySecondaryText}
+          </Text>
+        </Flex>
+        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+          {caption}
+        </Text>
+      </Flex>
+    </Card>
   );
 }
 
-function StxLocked() {
+function StxLockedCard({
+  title,
+  bodyMainText,
+  bodySecondaryText,
+  caption,
+  ...rest
+}: {
+  title: string;
+  bodyMainText: string;
+  bodySecondaryText: string;
+  caption: string;
+}) {
   return (
-    <Wrapper>
-      <StatSection title="STX locked" bodyMainText="0 STX" bodySecondaryText="$0.00" />
-    </Wrapper>
+    <Card>
+      <Flex
+        direction={'column'}
+        p={5}
+        height={32}
+        justifyContent={'center'}
+        borderColor={'border'}
+        {...rest}
+      >
+        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
+          {title}
+        </Text>
+        <Flex
+          mb={2}
+          alignItems={'baseline'}
+          wrap={'nowrap'}
+          minW={'0'}
+          gap={0.5}
+          fontWeight={'medium'}
+        >
+          <Text
+            fontSize={'xl'}
+            whiteSpace={'nowrap'}
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+            color={'text'}
+          >
+            {bodyMainText}
+          </Text>
+          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+            {bodySecondaryText}
+          </Text>
+        </Flex>
+        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+          {caption}
+        </Text>
+      </Flex>
+    </Card>
   );
 }
 
-function AddressesStacking() {
+function AddressesStackingCard({
+  title,
+  bodyMainText,
+  bodySecondaryText,
+  caption,
+  ...rest
+}: {
+  title: string;
+  bodyMainText: string;
+  bodySecondaryText: string;
+  caption: string;
+}) {
   return (
-    <Wrapper>
-      <StatSection title="Addresses stacking" bodyMainText="0" />
-    </Wrapper>
+    <Card>
+      <Flex
+        direction={'column'}
+        p={5}
+        height={32}
+        justifyContent={'center'}
+        borderColor={'border'}
+        {...rest}
+      >
+        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
+          {title}
+        </Text>
+        <Flex
+          mb={2}
+          alignItems={'baseline'}
+          wrap={'nowrap'}
+          minW={'0'}
+          gap={0.5}
+          fontWeight={'medium'}
+        >
+          <Text
+            fontSize={'xl'}
+            whiteSpace={'nowrap'}
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+            color={'text'}
+          >
+            {bodyMainText}
+          </Text>
+          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+            {bodySecondaryText}
+          </Text>
+        </Flex>
+        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+          {caption}
+        </Text>
+      </Flex>
+    </Card>
+  );
+}
+
+function NextCycleCard({
+  title,
+  bodyMainText,
+  bodySecondaryText,
+  caption,
+  ...rest
+}: {
+  title: string;
+  bodyMainText: string;
+  bodySecondaryText: string;
+  caption: string;
+}) {
+  return (
+    <Card>
+      <Flex
+        direction={'column'}
+        p={5}
+        height={32}
+        justifyContent={'center'}
+        borderColor={'border'}
+        {...rest}
+      >
+        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
+          {title}
+        </Text>
+        <Flex
+          mb={2}
+          alignItems={'baseline'}
+          wrap={'nowrap'}
+          minW={'0'}
+          gap={0.5}
+          fontWeight={'medium'}
+        >
+          <Text
+            fontSize={'xl'}
+            whiteSpace={'nowrap'}
+            textOverflow={'ellipsis'}
+            overflow={'hidden'}
+            color={'text'}
+          >
+            {bodyMainText}
+          </Text>
+          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+            {bodySecondaryText}
+          </Text>
+        </Flex>
+        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+          {caption}
+        </Text>
+      </Flex>
+    </Card>
   );
 }
 
 export function Signers() {
   const mempoolFeeResponse = useSuspenseMempoolFee().data as MempoolFeePriorities;
   return (
-    <Wrapper>
-      <CurrentCycle />
-      <StxStaked />
-      <StxLocked />
-      <AddressesStacking />
-      <NextCycle>
-    </Wrapper>
+    <Card width="full" flexDirection="column" padding={7}>
+      <Flex justifyContent="space-between" width="full" mb={4}>
+        <Title>Stacking</Title>
+        <Link href="/">See Stacking historical data</Link>
+      </Flex>
+      <Flex
+        // sx={{
+        //   '& > *:not(:last-child)': {
+        //     mr: 4,
+        //   },
+        // }}
+        flexWrap="wrap"
+      >
+        <Box
+          display="grid"
+          gridTemplateColumns="minmax(0, 1fr) auto auto auto auto"
+          gap={4}
+        >
+          <CurrentCycleCard
+            title="nothing"
+            bodyMainText="nothing"
+            bodySecondaryText="nothing"
+            caption="nothing"
+          />
+          <StxStakedCard
+            title="nothing"
+            bodyMainText="nothing"
+            bodySecondaryText="nothing"
+            caption="nothing"
+          />
+          <StxLockedCard
+            title="nothing"
+            bodyMainText="nothing"
+            bodySecondaryText="nothing"
+            caption="nothing"
+          />
+          <AddressesStackingCard
+            title="nothing"
+            bodyMainText="nothing"
+            bodySecondaryText="nothing"
+            caption="nothing"
+          />
+          <NextCycleCard
+            title="nothing"
+            bodyMainText="nothing"
+            bodySecondaryText="nothing"
+            caption="nothing"
+          />
+        </Box>
+      </Flex>
+    </Card>
   );
 }
 
