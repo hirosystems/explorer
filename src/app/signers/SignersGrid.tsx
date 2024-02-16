@@ -1,39 +1,128 @@
-import React from 'react';
-import { Grid, GridItem, Box, Text } from '@chakra-ui/react';
+import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 
-const SignerGrid = () => {
+import { Card } from '../../common/components/Card';
+import { Flex } from '../../ui/Flex';
+import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
+
+const GridHeaderItem = ({ headerTitle }: { headerTitle: string }) => {
   return (
-    <Grid
-      templateColumns="repeat(5, 1fr)" // Defines the number of columns
-      gap={4}
-    >
-      {/* Define the header row */}
-      <GridItem colSpan={5} bg="gray.100" p={4}>
-        <Text>40 Active Signers</Text>
-      </GridItem>
-
-      {/* Repeat this structure for each row of data */}
-      {data.map((signer, index) => (
-        <>
-          <GridItem colSpan={1} bg="purple.100" p={4}>
-            <Text>{signer.key}</Text>
-          </GridItem>
-          <GridItem colSpan={1} bg="purple.100" p={4}>
-            <Text>{signer.address}</Text>
-          </GridItem>
-          <GridItem colSpan={1} bg="purple.100" p={4}>
-            <Text>{signer.votingPower}</Text>
-          </GridItem>
-          <GridItem colSpan={1} bg="purple.100" p={4}>
-            <Text>{signer.stxStacked}</Text>
-          </GridItem>
-          <GridItem colSpan={1} bg="purple.100" p={4}>
-            <Text>{signer.lastVoteSlot}</Text>
-          </GridItem>
-        </>
-      ))}
-    </Grid>
+    <GridItem colSpan={1} p={4}>
+      <Flex
+        bg="border"
+        padding="8px 10px"
+        borderRadius="6px"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Text fontWeight="medium" whiteSpace="nowrap" fontSize="xs" color="slate.800">
+          {headerTitle}
+        </Text>
+      </Flex>
+    </GridItem>
   );
 };
 
-export default MyGrid;
+const gridHeaders = [
+  '#',
+  'Signer key',
+  'Asociated address',
+  'Voting power',
+  'STX staked',
+  'Last vote slot',
+];
+
+const GridHeaders = () => {
+  return (
+    <>
+      {gridHeaders.map(header => (
+        <GridHeaderItem headerTitle={header} />
+      ))}
+    </>
+  );
+};
+
+const TestGridRows = () => {
+  const testGridRowData = {
+    signerKey: 'CW9C7HBwAMgqNdXW9W9C7HB2w',
+    associatedAddress: 'ST2M...73ZG',
+    votingPower: '23.4%',
+    stxStaked: '1,878,325',
+    lastVoteSlot: '24525621 (-1)',
+  };
+  const numRows = Array.from({ length: 10 }, (_, i) => i + 1);
+  return (
+    <>
+      {numRows.map(num => (
+        <>
+          <GridItem colSpan={1} p={4}>
+            <Flex justifyContent="center" alignItems="center">
+              <Text whiteSpace="nowrap" fontSize="sm">
+                {num}
+              </Text>
+            </Flex>
+          </GridItem>
+          <GridItem colSpan={1} p={4}>
+            <Text whiteSpace="nowrap" fontSize="sm">
+              {testGridRowData.signerKey}
+            </Text>
+          </GridItem>
+          <GridItem colSpan={1} p={4}>
+            <Text whiteSpace="nowrap" fontSize="sm">
+              {testGridRowData.associatedAddress}
+            </Text>
+          </GridItem>
+          <GridItem colSpan={1} p={4}>
+            <Text whiteSpace="nowrap" fontSize="sm">
+              {testGridRowData.votingPower}
+            </Text>
+          </GridItem>
+          <GridItem colSpan={1} p={4}>
+            <Text whiteSpace="nowrap" fontSize="sm">
+              {testGridRowData.stxStaked}
+            </Text>
+          </GridItem>
+          <GridItem colSpan={1} p={4}>
+            <Text whiteSpace="nowrap" fontSize="sm">
+              {testGridRowData.lastVoteSlot}
+            </Text>
+          </GridItem>
+        </>
+      ))}
+    </>
+  );
+};
+
+const SignerGrid = () => {
+  const [votingPowerSortOrder, setVotingPowerSortOrder] = useState<VotingPowerSortOrder>(
+    VotingPowerSortOrder.Desc
+  );
+
+  return (
+    <Card width="full">
+      <Flex
+        p="12px 28px"
+        borderBottom="1px solid var(--stacks-colors-border)"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Text fontWeight="medium">40 Active Signers</Text>
+        <SortByVotingPowerFilter
+          votingPowerSortOrder={votingPowerSortOrder}
+          setVotingPowerSortOrder={setVotingPowerSortOrder}
+        />
+      </Flex>
+      <Grid
+        templateColumns="repeat(6, auto)"
+        gap={4}
+        width="full"
+        p="28px"
+      >
+        <GridHeaders />
+        <TestGridRows />
+      </Grid>
+    </Card>
+  );
+};
+
+export default SignerGrid;
