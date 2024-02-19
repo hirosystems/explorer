@@ -1,3 +1,10 @@
+## [1.146.1](https://github.com/hirosystems/explorer/compare/v1.146.0...v1.146.1) (2024-02-19)
+
+
+### Bug Fixes
+
+* **header-icons:** fixed header icons ([c8648da](https://github.com/hirosystems/explorer/commit/c8648da89a28649e35599c8ff68feb6ce566c854))
+
 # [1.146.0](https://github.com/hirosystems/explorer/compare/v1.145.0...v1.146.0) (2024-02-14)
 
 
