@@ -62,7 +62,7 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
       <Flex
         flexDirection={['column', 'column', 'row']}
         alignItems={['flex-start', 'flex-start', 'center']}
-        maxWidth={['full', 'full', 'calc(100% - 180px)']}
+        maxWidth="full"
         wordBreak={'break-all'}
         fontSize={'sm'}
       >

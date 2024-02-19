@@ -18,6 +18,7 @@ export const FunctionSummaryArguments: React.FC<{
   btc: null | string;
 }> = ({ summary, btc }) => {
   const args = (summary?.function_args || []).filter(arg => !!arg);
+  console.log({ summary, btc, args });
   return summary.function_args ? (
     <Box width="100%">
       {args.map((arg: FunctionArg, key: number) => {
