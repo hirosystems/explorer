@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { Flex } from '../../ui/Flex';
+import { HStack } from '../../ui/HStack';
+import { ProgressBar } from './ProgressBar';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 
 const GridHeaderItem = ({ headerTitle }: { headerTitle: string }) => {
@@ -73,9 +75,12 @@ const TestGridRows = () => {
             </Text>
           </GridItem>
           <GridItem colSpan={1} p={4}>
-            <Text whiteSpace="nowrap" fontSize="sm">
-              {testGridRowData.votingPower}
-            </Text>
+            <HStack flexWrap="nowrap">
+              <ProgressBar progressPercentage={23.4} height="12px" />
+              <Text whiteSpace="nowrap" fontSize="sm" color="secondaryText">
+                {testGridRowData.votingPower}
+              </Text>
+            </HStack>
           </GridItem>
           <GridItem colSpan={1} p={4}>
             <Text whiteSpace="nowrap" fontSize="sm">
@@ -112,8 +117,9 @@ const SignerGrid = () => {
           setVotingPowerSortOrder={setVotingPowerSortOrder}
         />
       </Flex>
+      {/* <Grid templateColumns="repeat(6, auto)" gap={4} width="full" p="28px"> */}
       <Grid
-        templateColumns="repeat(6, auto)"
+        templateColumns="auto auto auto 1fr auto auto"
         gap={4}
         width="full"
         p="28px"

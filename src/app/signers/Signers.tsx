@@ -11,18 +11,7 @@ import { Text } from '../../ui/Text';
 import { Title } from '../../ui/typography';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 
-function CurrentCycleCard({
-  title,
-  bodyMainText,
-  bodySecondaryText,
-  caption,
-  ...rest
-}: {
-  title: string;
-  bodyMainText: string;
-  bodySecondaryText: string;
-  caption: string;
-}) {
+function CurrentCycleCard() {
   const currentCyleProgressPercentage = 57.8;
   const pieData = [
     {
@@ -38,7 +27,7 @@ function CurrentCycleCard({
   const pieChartHeight = 50;
 
   // Customized active shape with rounded edges
-  const renderActiveShape = props => {
+  const renderActiveShape = (props: any) => {
     const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
 
     return (
@@ -119,6 +108,7 @@ function CurrentCycleCard({
       </PieChart>
     </Box>
   );
+
   return (
     <Card padding={6}>
       <Flex mb={3}>
@@ -129,18 +119,18 @@ function CurrentCycleCard({
           </Text>
           <Box whiteSpace="nowrap">
             <Text
-              fontSize={'xl'}
+              fontSize="xl"
               fontWeight="medium"
-              whiteSpace={'nowrap'}
+              whiteSpace="nowrap"
               display="inline-block"
               mr={1}
             >
               77
             </Text>
             <Text
-              fontSize={'md'}
+              fontSize="md"
               fontWeight="14px"
-              whiteSpace={'nowrap'}
+              whiteSpace="nowrap"
               display="inline-block"
               color="secondaryText"
             >
@@ -156,219 +146,55 @@ function CurrentCycleCard({
   );
 }
 
-function StxStakedCard({
-  title,
-  bodyMainText,
-  bodySecondaryText,
-  caption,
-  ...rest
+function StatCardBase({
+  statTitle,
+  statValue,
+  moreInfo,
 }: {
-  title: string;
-  bodyMainText: string;
-  bodySecondaryText: string;
-  caption: string;
+  statTitle: string;
+  statValue: string;
+  moreInfo: string;
 }) {
   return (
-    <Card>
-      <Flex
-        direction={'column'}
-        p={5}
-        height={32}
-        justifyContent={'center'}
-        borderColor={'border'}
-        {...rest}
-      >
-        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
-          {title}
+    <Card padding={6}>
+      <Stack gap={3}>
+        <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
+          {statTitle}
         </Text>
-        <Flex
-          mb={2}
-          alignItems={'baseline'}
-          wrap={'nowrap'}
-          minW={'0'}
-          gap={0.5}
-          fontWeight={'medium'}
-        >
-          <Text
-            fontSize={'xl'}
-            whiteSpace={'nowrap'}
-            textOverflow={'ellipsis'}
-            overflow={'hidden'}
-            color={'text'}
-          >
-            {bodyMainText}
-          </Text>
-          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
-            {bodySecondaryText}
-          </Text>
-        </Flex>
-        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
-          {caption}
+        <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
+          {statValue}
         </Text>
-      </Flex>
+        <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+          {moreInfo}
+        </Text>
+      </Stack>
     </Card>
   );
 }
 
-function StxLockedCard({
-  title,
-  bodyMainText,
-  bodySecondaryText,
-  caption,
-  ...rest
-}: {
-  title: string;
-  bodyMainText: string;
-  bodySecondaryText: string;
-  caption: string;
-}) {
+function StxStakedCard() {
+  return <StatCardBase statTitle="STX Staked" statValue="234.23M" moreInfo="$431,425 / 12.3 BTC" />;
+}
+
+function StxLockedCard() {
   return (
-    <Card>
-      <Flex
-        direction={'column'}
-        p={5}
-        height={32}
-        justifyContent={'center'}
-        borderColor={'border'}
-        {...rest}
-      >
-        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
-          {title}
-        </Text>
-        <Flex
-          mb={2}
-          alignItems={'baseline'}
-          wrap={'nowrap'}
-          minW={'0'}
-          gap={0.5}
-          fontWeight={'medium'}
-        >
-          <Text
-            fontSize={'xl'}
-            whiteSpace={'nowrap'}
-            textOverflow={'ellipsis'}
-            overflow={'hidden'}
-            color={'text'}
-          >
-            {bodyMainText}
-          </Text>
-          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
-            {bodySecondaryText}
-          </Text>
-        </Flex>
-        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
-          {caption}
-        </Text>
-      </Flex>
-    </Card>
+    <StatCardBase statTitle="Locked" statValue="65.3%" moreInfo="/ 1.44B circulating supply" />
   );
 }
 
-function AddressesStackingCard({
-  title,
-  bodyMainText,
-  bodySecondaryText,
-  caption,
-  ...rest
-}: {
-  title: string;
-  bodyMainText: string;
-  bodySecondaryText: string;
-  caption: string;
-}) {
+function AddressesStackingCard() {
   return (
-    <Card>
-      <Flex
-        direction={'column'}
-        p={5}
-        height={32}
-        justifyContent={'center'}
-        borderColor={'border'}
-        {...rest}
-      >
-        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
-          {title}
-        </Text>
-        <Flex
-          mb={2}
-          alignItems={'baseline'}
-          wrap={'nowrap'}
-          minW={'0'}
-          gap={0.5}
-          fontWeight={'medium'}
-        >
-          <Text
-            fontSize={'xl'}
-            whiteSpace={'nowrap'}
-            textOverflow={'ellipsis'}
-            overflow={'hidden'}
-            color={'text'}
-          >
-            {bodyMainText}
-          </Text>
-          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
-            {bodySecondaryText}
-          </Text>
-        </Flex>
-        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
-          {caption}
-        </Text>
-      </Flex>
-    </Card>
+    <StatCardBase
+      statTitle="Addresses Stacking"
+      statValue="2,443"
+      moreInfo="↗︎23,4% more than previous cycle"
+    />
   );
 }
 
-function NextCycleCard({
-  title,
-  bodyMainText,
-  bodySecondaryText,
-  caption,
-  ...rest
-}: {
-  title: string;
-  bodyMainText: string;
-  bodySecondaryText: string;
-  caption: string;
-}) {
+function NextCycleCard() {
   return (
-    <Card>
-      <Flex
-        direction={'column'}
-        p={5}
-        height={32}
-        justifyContent={'center'}
-        borderColor={'border'}
-        {...rest}
-      >
-        <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
-          {title}
-        </Text>
-        <Flex
-          mb={2}
-          alignItems={'baseline'}
-          wrap={'nowrap'}
-          minW={'0'}
-          gap={0.5}
-          fontWeight={'medium'}
-        >
-          <Text
-            fontSize={'xl'}
-            whiteSpace={'nowrap'}
-            textOverflow={'ellipsis'}
-            overflow={'hidden'}
-            color={'text'}
-          >
-            {bodyMainText}
-          </Text>
-          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
-            {bodySecondaryText}
-          </Text>
-        </Flex>
-        <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
-          {caption}
-        </Text>
-      </Flex>
-    </Card>
+    <StatCardBase statTitle="Next cycle" statValue="78" moreInfo="Starts in ~8 days at #889300" />
   );
 }
 
@@ -376,7 +202,7 @@ export function Signers() {
   return (
     <Card width="full" flexDirection="column" padding={7}>
       <Flex justifyContent="space-between" width="full" mb={4}>
-        <Title>Stacking</Title>
+        <Text fontSize='xs' fontWeight='semibold'>STACKING</Text>
         <Flex alignItems="center">
           <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
             See Stacking historical data
@@ -385,37 +211,12 @@ export function Signers() {
         </Flex>
       </Flex>
       <Flex flexWrap="wrap">
-        <Box display="grid" gridTemplateColumns="minmax(0, 1fr) auto auto auto auto" gap={4}>
-          <CurrentCycleCard
-            title="nothing"
-            bodyMainText="nothing"
-            bodySecondaryText="nothing"
-            caption="nothing"
-          />
-          <StxStakedCard
-            title="nothing"
-            bodyMainText="nothing"
-            bodySecondaryText="nothing"
-            caption="nothing"
-          />
-          <StxLockedCard
-            title="nothing"
-            bodyMainText="nothing"
-            bodySecondaryText="nothing"
-            caption="nothing"
-          />
-          <AddressesStackingCard
-            title="nothing"
-            bodyMainText="nothing"
-            bodySecondaryText="nothing"
-            caption="nothing"
-          />
-          <NextCycleCard
-            title="nothing"
-            bodyMainText="nothing"
-            bodySecondaryText="nothing"
-            caption="nothing"
-          />
+        <Box display="grid" gridTemplateColumns="repeat(5, auto)" gap={4}>
+          <CurrentCycleCard />
+          <StxStakedCard />
+          <StxLockedCard />
+          <AddressesStackingCard />
+          <NextCycleCard />
         </Box>
       </Flex>
     </Card>
