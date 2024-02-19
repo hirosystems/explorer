@@ -1,13 +1,9 @@
 'use client';
 
-import * as React from 'react';
-
 import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
-import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
