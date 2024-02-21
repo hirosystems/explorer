@@ -1,3 +1,10 @@
+# [1.147.0](https://github.com/hirosystems/explorer/compare/v1.146.1...v1.147.0) (2024-02-21)
+
+
+### Features
+
+* **mempool-header:** added mempool header ([614aaf8](https://github.com/hirosystems/explorer/commit/614aaf868733f6d2c206d9e341e99b8b22f95716))
+
 ## [1.146.1](https://github.com/hirosystems/explorer/compare/v1.146.0...v1.146.1) (2024-02-19)
 
 
