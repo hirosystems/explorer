@@ -1,3 +1,10 @@
+## [1.147.1](https://github.com/hirosystems/explorer/compare/v1.147.0...v1.147.1) (2024-02-21)
+
+
+### Bug Fixes
+
+* icon regression ([8b230f0](https://github.com/hirosystems/explorer/commit/8b230f0bb76287e0b38ea15f5919fb4c49082252))
+
 # [1.147.0](https://github.com/hirosystems/explorer/compare/v1.146.1...v1.147.0) (2024-02-21)
 
 
