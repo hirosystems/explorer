@@ -1,33 +1,33 @@
+import { ColorMode } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
+import { useColorMode } from '../../ui/hooks/useColorMode';
 
 const ProgressBarContainer = styled(Flex)<{
+  $colorMode: ColorMode;
   $progressPercentage: number;
   $height: string;
 }>`
-  background-color: #e0e1e6; /* The lighter grey background */
-  border-radius: 10px; /* Adjust for desired roundness */
+  background-color: ${props =>
+    props.$colorMode === 'light'
+      ? 'var(--stacks-colors-slate-250)'
+      : 'var(--stacks-colors-slate-850)'};
+  border-radius: 10px;
   align-items: center;
   height: ${props => props.$height};
   width: 100%;
 
   .progress-bar-fill {
-    /* background-color: #5546ff; The fill color */
     width: ${props => `${props.$progressPercentage}%`};
     height: 100%;
-    border-radius: 8px; /* Adjust for desired roundness on the fill */
+    border-radius: 8px; 
     background: linear-gradient(
       to right,
       #5546ff 0%,
       rgba(85, 70, 255, 0.37) 100%
-    ); /* The linear gradient */
-  }
-
-  .progress-bar-text {
-    margin-left: 10px; /* Space between the bar and the text */
-    font-size: 0.9em;
+    ); 
   }
 `;
 
@@ -38,8 +38,15 @@ export const ProgressBar = ({
   progressPercentage: number;
   height: string;
 }) => {
+  const colorModeContext = useColorMode();
+  const colorMode = colorModeContext.colorMode;
+
   return (
-    <ProgressBarContainer $progressPercentage={progressPercentage} $height={height}>
+    <ProgressBarContainer
+      $colorMode={colorMode}
+      $progressPercentage={progressPercentage}
+      $height={height}
+    >
       <Box className="progress-bar-fill" />
     </ProgressBarContainer>
   );

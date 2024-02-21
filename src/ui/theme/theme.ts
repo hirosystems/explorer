@@ -56,6 +56,10 @@ export const theme = extendTheme({
         default: 'slate.100',
         _dark: 'slate.900',
       },
+      textOnGrayBg: {
+        default: 'slate.700',
+        _dark: 'slate.250',
+      },
     },
   },
   styles: {

@@ -2,6 +2,7 @@ import { Grid, GridItem, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { ProgressBar } from './ProgressBar';
@@ -11,13 +12,13 @@ const GridHeaderItem = ({ headerTitle }: { headerTitle: string }) => {
   return (
     <GridItem colSpan={1} p={4}>
       <Flex
-        bg="border"
+        bg="dropdownBgHover"
         padding="8px 10px"
         borderRadius="6px"
         justifyContent="center"
         alignItems="center"
       >
-        <Text fontWeight="medium" whiteSpace="nowrap" fontSize="xs" color="slate.800">
+        <Text fontWeight="medium" whiteSpace="nowrap" fontSize="xs" color="textOnGrayBg">
           {headerTitle}
         </Text>
       </Flex>
@@ -57,7 +58,7 @@ const TestGridRows = () => {
     <>
       {numRows.map(num => (
         <>
-          <GridItem colSpan={1} p={4}>
+          <GridItem colSpan={1} p={4} borderRight="1px solid white">
             <Flex justifyContent="center" alignItems="center">
               <Text whiteSpace="nowrap" fontSize="sm">
                 {num}
@@ -76,7 +77,9 @@ const TestGridRows = () => {
           </GridItem>
           <GridItem colSpan={1} p={4}>
             <HStack flexWrap="nowrap">
-              <ProgressBar progressPercentage={23.4} height="12px" />
+              <Box display={['none', 'none', 'none', 'block']} height="12px" width=" 100%">
+                <ProgressBar progressPercentage={23.4} height="12px" />
+              </Box>
               <Text whiteSpace="nowrap" fontSize="sm" color="secondaryText">
                 {testGridRowData.votingPower}
               </Text>
@@ -108,8 +111,10 @@ const SignerGrid = () => {
       <Flex
         p="12px 28px"
         borderBottom="1px solid var(--stacks-colors-border)"
-        justifyContent="space-between"
-        alignItems="center"
+        flexDirection={['column', 'column', 'row', 'row']}
+        justifyContent={['center', 'center', 'space-between', 'space-between']}
+        alignItems={['flex-start', 'flex-start', 'center', 'center']}
+        gap={[5, 5, 0, 0]}
       >
         <Text fontWeight="medium">40 Active Signers</Text>
         <SortByVotingPowerFilter
@@ -123,6 +128,7 @@ const SignerGrid = () => {
         gap={4}
         width="full"
         p="28px"
+        overflow="auto"
       >
         <GridHeaders />
         <TestGridRows />
