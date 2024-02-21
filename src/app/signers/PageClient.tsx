@@ -2,8 +2,8 @@
 
 import { Flex } from '../../ui/Flex';
 import { PageTitle } from '../_components/PageTitle';
-import SignersGrid from './SignersGrid';
 import { SignersHeaderWithErrorBoundary } from './SignersHeader';
+import SignersTable from './SignersTable';
 
 export default function () {
   return (
@@ -12,7 +12,7 @@ export default function () {
         <PageTitle>Signers</PageTitle>
       </Flex>
       <SignersHeaderWithErrorBoundary />
-      <SignersGrid />
+      <SignersTable />
     </>
   );
 }
