@@ -251,7 +251,7 @@ function NextCycleCard() {
   } = useSuspenseNextStackingCycle();
 
   const moreInfo = (
-    <Flex gap={1} alignItems='center'>
+    <Flex gap={1} alignItems="center">
       <Text fontSize="xs" fontWeight="medium" color="secondaryText">
         {`Starts in ~${
           displayPreparePhaseInfo
@@ -273,19 +273,33 @@ function NextCycleCard() {
   );
 }
 
-export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const colorModeContext = useColorMode();
-  const colorMode = colorModeContext.colorMode;
+export function SignersHeaderLayout({
+  title,
+  currentCycleCard,
+  stxStakedCard,
+  stxLockedCard,
+  addressesStackingCard,
+  nextCycleCard,
+  historicalStackingDataLink,
+}: {
+  title: ReactNode;
+  currentCycleCard: ReactNode;
+  stxStakedCard: ReactNode;
+  stxLockedCard: ReactNode;
+  addressesStackingCard: ReactNode;
+  nextCycleCard: ReactNode;
+  historicalStackingDataLink: ReactNode;
+}) {
   return (
     <Card width="full" flexDirection="column" padding={7} gap={4}>
       <Box width="full">
         <Text fontSize="xs" fontWeight="semibold">
-          STACKING
+          {title}
         </Text>
       </Box>
       <Flex flexWrap="wrap" gap={4}>
         <Box display={['block', 'block', 'block', 'none']} width="100%">
-          <CurrentCycleCard colorMode={colorMode} />
+          {currentCycleCard}
         </Box>
         <Box
           display="grid"
@@ -293,22 +307,38 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
           width="100%"
           gap={4}
         >
-          <Box display={['none', 'none', 'none', 'block']}>
-            <CurrentCycleCard colorMode={colorMode} />
-          </Box>
-          <StxStakedCard tokenPrice={tokenPrice} />
-          <StxLockedCard />
-          <AddressesStackingCard />
-          <NextCycleCard />
+          <Box display={['none', 'none', 'none', 'block']}>{currentCycleCard}</Box>
+          {stxStakedCard}
+          {stxLockedCard}
+          {addressesStackingCard}
+          {nextCycleCard}
         </Box>
       </Flex>
-      <Flex alignItems="center">
-        <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
-          See Stacking historical data
-        </Link>
-        <Icon as={PiArrowRightLight} size={'12px'} color="secondaryText" />
-      </Flex>
+      {historicalStackingDataLink}
     </Card>
+  );
+}
+
+export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
+  const colorModeContext = useColorMode();
+  const colorMode = colorModeContext.colorMode;
+  return (
+    <SignersHeaderLayout
+      title="STACKING"
+      currentCycleCard={<CurrentCycleCard colorMode={colorMode} />}
+      stxStakedCard={<StxStakedCard tokenPrice={tokenPrice} />}
+      stxLockedCard={<StxLockedCard />}
+      addressesStackingCard={<AddressesStackingCard />}
+      nextCycleCard={<NextCycleCard />}
+      historicalStackingDataLink={
+        <Flex alignItems="center">
+          <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
+            See Stacking historical data
+          </Link>
+          <Icon as={PiArrowRightLight} size={'12px'} color="secondaryText" />
+        </Flex>
+      }
+    />
   );
 }
 
