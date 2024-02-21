@@ -26,22 +26,13 @@ export function SortByVotingPowerFilter({
 }) {
   const menuItems = useMemo(
     () =>
-      Object.values(VotingPowerSortOrder)
-        .map(order => {
-          console.log({
-            order,
-            VotingPowerSortOrderAsc: VotingPowerSortOrder.Asc,
-            VotingPowerSortOrderDesc: VotingPowerSortOrder.Desc,
-            votingPowerSortOrder,
-          });
-          return {
-            onClick: () => {
-              setVotingPowerSortOrder(order as VotingPowerSortOrder);
-            },
-            label: getSortOptionLabel(order as VotingPowerSortOrder),
-          };
-        }),
-    [setVotingPowerSortOrder, votingPowerSortOrder]
+      Object.values(VotingPowerSortOrder).map(order => ({
+        onClick: () => {
+          setVotingPowerSortOrder(order as VotingPowerSortOrder);
+        },
+        label: getSortOptionLabel(order as VotingPowerSortOrder),
+      })),
+    [setVotingPowerSortOrder]
   );
 
   return (
