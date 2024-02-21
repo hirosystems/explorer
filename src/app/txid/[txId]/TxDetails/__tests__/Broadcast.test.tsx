@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/react';
-import React from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 

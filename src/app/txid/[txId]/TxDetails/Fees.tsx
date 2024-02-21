@@ -1,7 +1,6 @@
 'use client';
 
 import { FC } from 'react';
-import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -9,8 +8,7 @@ import { Badge } from '../../../../common/components/Badge';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { StxPriceButton } from '../../../../common/components/StxPriceButton';
 import { Value } from '../../../../common/components/Value';
-import { StyledBadge } from '../../../../common/components/status';
-import { microToStacks, microToStacksFormatted } from '../../../../common/utils/utils';
+import { microToStacksFormatted } from '../../../../common/utils/utils';
 import { Flex } from '../../../../ui/Flex';
 import { useColorMode } from '../../../../ui/hooks/useColorMode';
 

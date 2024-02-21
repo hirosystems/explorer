@@ -49,6 +49,11 @@ export const COLORS = {
     600: '#5546FF',
     700: '#2323C7',
     800: '#0F0FA9',
+    850: '#2D2294',
     900: '#0B0A63',
+  },
+  others: {
+    lilac: '#9985FF',
+    limeGreen: '#C1D21B',
   },
 };

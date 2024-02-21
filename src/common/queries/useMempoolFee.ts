@@ -1,13 +1,5 @@
-import {
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { address } from 'bitcoinjs-lib';
-
-import { MempoolFeePriorities } from '@stacks/blockchain-api-client/src/generated/models';
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import { useApi } from '../api/useApi';
 import { ONE_MINUTE } from './query-stale-time';
