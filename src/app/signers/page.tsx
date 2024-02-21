@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic';
 
 import Skeleton from './skeleton';
+import { getTokenPrice } from '../getTokenPriceInfo';
 
 const Page = dynamic(() => import('./PageClient'), {
   loading: () => <Skeleton />,
@@ -8,5 +9,6 @@ const Page = dynamic(() => import('./PageClient'), {
 });
 
 export default async function () {
-  return <Page />;
+  const tokenPrice = await getTokenPrice();
+  return <Page tokenPrice={tokenPrice} />;
 }

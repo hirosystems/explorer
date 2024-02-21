@@ -1,30 +1,39 @@
+import { TokenPrice } from '@/common/types/tokenPrice';
 import { ColorMode, useColorMode } from '@chakra-ui/react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { PiArrowRightLight } from 'react-icons/pi';
 import { Cell, Pie, PieChart, Sector } from 'recharts';
 
 import { Card } from '../../common/components/Card';
+import { useSuspenseStxSupply } from '../../common/queries/useStxSupply';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
+import { BitcoinIcon } from '../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
+import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
 
 function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
+  const {
+    currentCycleId,
+    currentCycleProgressPercentage,
+    approximateDaysSinceCurrentCycleStart,
+    approximateDaysTilNextCycle,
+  } = useSuspenseCurrentStackingCycle();
   const [gradientId] = useState(`colorUv-${Math.random()}`);
 
-  const currentCyleProgressPercentage = 57.8;
   const pieData = [
     {
       name: 'cycle_remaining',
-      value: 100 - currentCyleProgressPercentage,
+      value: Number.parseFloat((1 - currentCycleProgressPercentage).toFixed(1)),
     },
     {
       name: 'cycle_progress',
-      value: currentCyleProgressPercentage,
+      value: Number.parseFloat(currentCycleProgressPercentage.toFixed(1)),
     },
   ];
   const pieChartWidth = 50;
@@ -133,7 +142,7 @@ function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
               display="inline-block"
               mr={1}
             >
-              77
+              {currentCycleId}
             </Text>
             <Text
               fontSize="md"
@@ -142,13 +151,13 @@ function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
               display="inline-block"
               color="secondaryText"
             >
-              {`(${currentCyleProgressPercentage}%)`}
+              {`(${(currentCycleProgressPercentage * 100).toFixed(1)}%)`}
             </Text>
           </Box>
         </Stack>
       </Flex>
       <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="secondaryText">
-        Started ~12 days ago / Ends in ~7 days
+        {`Started ~${approximateDaysSinceCurrentCycleStart} days ago / Ends in ~${approximateDaysTilNextCycle} days`}
       </Text>
     </Card>
   );
@@ -161,7 +170,7 @@ function StatCardBase({
 }: {
   statTitle: string;
   statValue: string;
-  moreInfo: string;
+  moreInfo: string | ReactNode;
 }) {
   return (
     <Card padding={6}>
@@ -172,21 +181,53 @@ function StatCardBase({
         <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
           {statValue}
         </Text>
-        <Text fontSize="xs" fontWeight="medium" color="secondaryText">
-          {moreInfo}
-        </Text>
+        {typeof moreInfo === 'string' ? (
+          <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+            {moreInfo}
+          </Text>
+        ) : (
+          moreInfo
+        )}
       </Stack>
     </Card>
   );
 }
 
-function StxStakedCard() {
-  return <StatCardBase statTitle="STX Staked" statValue="234.23M" moreInfo="$431,425 / 12.3 BTC" />;
+function StxStakedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
+  const {
+    data: { total_stx, unlocked_stx },
+  } = useSuspenseStxSupply();
+  const stxStakedFormatted = `${(
+    (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) /
+    1_000_000
+  ).toFixed(2)}M`;
+  const stxStakedUsd =
+    tokenPrice.stxPrice * (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx));
+  const stxStakedUsdFormatted = `$${Math.round(stxStakedUsd).toLocaleString()}`;
+  const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
+  const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
+  const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
+
+  return <StatCardBase statTitle="STX Staked" statValue={stxStakedFormatted} moreInfo={moreInfo} />;
 }
 
 function StxLockedCard() {
+  const {
+    data: { total_stx, unlocked_stx },
+  } = useSuspenseStxSupply();
+  const stxLockedPercentageFormatted = `${(
+    ((Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) / Number.parseInt(total_stx)) *
+    100
+  ).toFixed(1)}%`;
+  const stxCirculatingSupplyInBillions = `${(Number.parseInt(unlocked_stx) / 1_000_000_000).toFixed(
+    2
+  )}B`;
   return (
-    <StatCardBase statTitle="Locked" statValue="65.3%" moreInfo="/ 1.44B circulating supply" />
+    <StatCardBase
+      statTitle="Locked"
+      statValue={stxLockedPercentageFormatted}
+      moreInfo={`/ ${stxCirculatingSupplyInBillions} circulating supply`}
+    />
   );
 }
 
@@ -202,20 +243,37 @@ function AddressesStackingCard() {
 
 function NextCycleCard() {
   const {
-    nextCycleStackedSTX,
-    approximateDaysTilNextCycleRewardPhase,
+    currenrRewardCycleId,
+    nextCycleBurnBlockHeightStart,
     displayPreparePhaseInfo,
-    blocksTilNextCyclePreparePhase,
-    blocksTilNextCycleRewardPhase,
     approximateDaysTilNextCyclePreparePhase,
+    approximateDaysTilNextCycleRewardPhase,
   } = useSuspenseNextStackingCycle();
 
+  const moreInfo = (
+    <Flex gap={1} alignItems='center'>
+      <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+        {`Starts in ~${
+          displayPreparePhaseInfo
+            ? approximateDaysTilNextCyclePreparePhase
+            : approximateDaysTilNextCycleRewardPhase
+        }
+        at ${nextCycleBurnBlockHeightStart}`}
+      </Text>
+      <Icon as={BitcoinIcon} size={4.5} />
+    </Flex>
+  );
+
   return (
-    <StatCardBase statTitle="Next cycle" statValue="78" moreInfo="Starts in ~8 days at #889300" />
+    <StatCardBase
+      statTitle="Next cycle"
+      statValue={currenrRewardCycleId.toString()}
+      moreInfo={moreInfo}
+    />
   );
 }
 
-export function SignersHeader() {
+export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const colorModeContext = useColorMode();
   const colorMode = colorModeContext.colorMode;
   return (
@@ -238,7 +296,7 @@ export function SignersHeader() {
           <Box display={['none', 'none', 'none', 'block']}>
             <CurrentCycleCard colorMode={colorMode} />
           </Box>
-          <StxStakedCard />
+          <StxStakedCard tokenPrice={tokenPrice} />
           <StxLockedCard />
           <AddressesStackingCard />
           <NextCycleCard />
@@ -254,10 +312,10 @@ export function SignersHeader() {
   );
 }
 
-export function SignersHeaderWithErrorBoundary() {
+export function SignersHeaderWithErrorBoundary({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <SignersHeader />
+      <SignersHeader tokenPrice={tokenPrice} />
     </ExplorerErrorBoundary>
   );
 }
