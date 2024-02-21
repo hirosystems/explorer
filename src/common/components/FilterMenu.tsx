@@ -19,7 +19,7 @@ interface MenuItem {
 interface FilterMenuProps {
   filterLabel: string | (() => string);
   menuItems: MenuItem[] | ReactNode[];
-  leftIcon: IconType;
+  leftIcon?: IconType;
 }
 
 function isMenuItemArray(items: any[]): items is { label: string; onClick: () => void }[] {
@@ -41,9 +41,13 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
           <MenuButton
             as={Button}
             rightIcon={<Icon as={BsChevronDown} size={3} color="text" />}
-            leftIcon={<Icon as={leftIcon} size={4} color={isOpen ? 'text' : 'secondaryText'} />}
+            leftIcon={
+              leftIcon ? (
+                <Icon as={leftIcon} size={4} color={isOpen ? 'text' : 'secondaryText'} />
+              ) : null
+            }
             fontSize={'sm'}
-            bg={'bg'}
+            bg="bg"
             fontWeight={'semibold'}
             border={'1px'}
             borderColor={borderColor}

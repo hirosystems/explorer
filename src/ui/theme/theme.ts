@@ -101,8 +101,10 @@ export const theme = extendTheme({
     body: inter.style.fontFamily,
     heading: openSauce.style.fontFamily,
   },
+  fontWeights: {
+    medium: 500,
+  },
   sizes: {
-    // 4.5: '1.125rem',
     4: '1rem',
   },
   borders: {
