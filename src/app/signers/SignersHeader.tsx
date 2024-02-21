@@ -1,3 +1,5 @@
+import { ColorMode, useColorMode } from '@chakra-ui/react';
+import { useState } from 'react';
 import { PiArrowRightLight } from 'react-icons/pi';
 import { Cell, Pie, PieChart, Sector } from 'recharts';
 
@@ -8,10 +10,12 @@ import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
-import { Title } from '../../ui/typography';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
+import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
 
-function CurrentCycleCard() {
+function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
+  const [gradientId] = useState(`colorUv-${Math.random()}`);
+
   const currentCyleProgressPercentage = 57.8;
   const pieData = [
     {
@@ -40,7 +44,11 @@ function CurrentCycleCard() {
           outerRadius={outerRadius}
           startAngle={0} // Start from the top of the circle
           endAngle={360} // Full circle
-          fill="#E0E1E6" // The 'cycle_remaining' color
+          fill={
+            colorMode === 'light'
+              ? 'var(--stacks-colors-slate-250)'
+              : 'var(--stacks-colors-slate-850)'
+          }
         />
         {/* Active 'cycle_progress' segment */}
         <Sector
@@ -67,7 +75,7 @@ function CurrentCycleCard() {
       <PieChart width={pieChartWidth} height={pieChartHeight}>
         <defs>
           <linearGradient
-            id="colorUv"
+            id={gradientId}
             x1="28.1198"
             y1="27.8877"
             x2="8.60376"
@@ -98,7 +106,7 @@ function CurrentCycleCard() {
             return (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.name === 'cycle_remaining' ? '#E0E1E6' : 'url(#colorUv)'}
+                fill={entry.name === 'cycle_remaining' ? '#E0E1E6' : `url(#${gradientId})`}
                 stroke="none"
                 strokeWidth={0}
               />
@@ -110,7 +118,7 @@ function CurrentCycleCard() {
   );
 
   return (
-    <Card padding={6}>
+    <Card padding={6} height="100%">
       <Flex mb={3}>
         <Box mr="16px">{piechart}</Box>
         <Stack gap={3}>
@@ -193,40 +201,63 @@ function AddressesStackingCard() {
 }
 
 function NextCycleCard() {
+  const {
+    nextCycleStackedSTX,
+    approximateDaysTilNextCycleRewardPhase,
+    displayPreparePhaseInfo,
+    blocksTilNextCyclePreparePhase,
+    blocksTilNextCycleRewardPhase,
+    approximateDaysTilNextCyclePreparePhase,
+  } = useSuspenseNextStackingCycle();
+
   return (
     <StatCardBase statTitle="Next cycle" statValue="78" moreInfo="Starts in ~8 days at #889300" />
   );
 }
 
-export function Signers() {
+export function SignersHeader() {
+  const colorModeContext = useColorMode();
+  const colorMode = colorModeContext.colorMode;
   return (
-    <Card width="full" flexDirection="column" padding={7}>
-      <Flex justifyContent="space-between" width="full" mb={4}>
-        <Text fontSize='xs' fontWeight='semibold'>STACKING</Text>
-        <Flex alignItems="center">
-          <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
-            See Stacking historical data
-          </Link>
-          <Icon as={PiArrowRightLight} size={'12px'} color="secondaryText" />
-        </Flex>
-      </Flex>
-      <Flex flexWrap="wrap">
-        <Box display="grid" gridTemplateColumns="repeat(5, auto)" gap={4}>
-          <CurrentCycleCard />
+    <Card width="full" flexDirection="column" padding={7} gap={4}>
+      <Box width="full">
+        <Text fontSize="xs" fontWeight="semibold">
+          STACKING
+        </Text>
+      </Box>
+      <Flex flexWrap="wrap" gap={4}>
+        <Box display={['block', 'block', 'block', 'none']} width="100%">
+          <CurrentCycleCard colorMode={colorMode} />
+        </Box>
+        <Box
+          display="grid"
+          gridTemplateColumns={['50% 50%', '50% 50%', '50% 50%', 'repeat(5, 1fr)']}
+          width="100%"
+          gap={4}
+        >
+          <Box display={['none', 'none', 'none', 'block']}>
+            <CurrentCycleCard colorMode={colorMode} />
+          </Box>
           <StxStakedCard />
           <StxLockedCard />
           <AddressesStackingCard />
           <NextCycleCard />
         </Box>
       </Flex>
+      <Flex alignItems="center">
+        <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
+          See Stacking historical data
+        </Link>
+        <Icon as={PiArrowRightLight} size={'12px'} color="secondaryText" />
+      </Flex>
     </Card>
   );
 }
 
-export function SignersWithErrorBoundary() {
+export function SignersHeaderWithErrorBoundary() {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <Signers />
+      <SignersHeader />
     </ExplorerErrorBoundary>
   );
 }
