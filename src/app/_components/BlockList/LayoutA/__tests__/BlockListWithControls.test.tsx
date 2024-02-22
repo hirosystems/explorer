@@ -4,6 +4,8 @@ import { UIBlock, UIBlockType } from '../../types';
 import { BlockListWithControls } from '../BlockListWithControls';
 import { BlockListProvider } from '../Provider';
 
+const date = new Date('2024-01-01T00:00:00Z').getTime();
+
 describe('BlockListWithControls', () => {
   it('renders correctly', () => {
     const blockList: UIBlock[] = [
@@ -11,28 +13,28 @@ describe('BlockListWithControls', () => {
         type: UIBlockType.Block,
         height: 1,
         hash: 'hash1',
-        timestamp: Date.now(),
+        timestamp: date,
         txsCount: 5,
       },
       {
         type: UIBlockType.Block,
         height: 2,
         hash: 'hash2',
-        timestamp: Date.now(),
+        timestamp: date,
         txsCount: 10,
       },
       {
         type: UIBlockType.Block,
         height: 3,
         hash: 'hash3',
-        timestamp: Date.now(),
+        timestamp: date,
         txsCount: 15,
       },
       {
         type: UIBlockType.BurnBlock,
         height: 4,
         hash: 'hash4',
-        timestamp: Date.now(),
+        timestamp: date,
         txsCount: 30,
       },
       {

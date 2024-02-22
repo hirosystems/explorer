@@ -12,11 +12,10 @@ export const StatusBarBase: FC<{ impact: IncidentImpact; content: ReactNode }> =
   content,
   impact,
 }) => {
-  if (impact === IncidentImpact.None) return null;
   const icon =
     impact === IncidentImpact.Critical ? (
       <Icon as={BsExclamationCircle} color={getColor(impact)} />
-    ) : (
+    ) : impact === IncidentImpact.None ? null : (
       <Icon as={BsExclamationTriangle} color={getColor(impact)} />
     );
   return (
