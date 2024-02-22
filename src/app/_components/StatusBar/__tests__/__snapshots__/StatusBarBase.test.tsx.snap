@@ -11,7 +11,7 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
       className="css-g55u9n"
     >
       <svg
-        className="chakra-icon css-15nyr1i"
+        className="chakra-icon css-1fimugm"
         fill="currentColor"
         focusable={false}
         height="1em"
@@ -52,7 +52,7 @@ exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
       className="css-g55u9n"
     >
       <svg
-        className="chakra-icon css-ptzomh"
+        className="chakra-icon css-16jze27"
         fill="currentColor"
         focusable={false}
         height="1em"

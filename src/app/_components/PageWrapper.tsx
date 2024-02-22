@@ -2,14 +2,19 @@
 
 import { useColorModeValue } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
+import { IncidentImpact } from 'statuspage.io';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Flex } from '../../ui/Flex';
+import { Text } from '../../ui/Text';
+import { TextLink } from '../../ui/TextLink';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
+import { StatusBarBase } from './StatusBar/StatusBarBase';
+import { getColor } from './StatusBar/utils';
 
 function WrapperWithBg({ children }: { children: ReactNode }) {
   return (
@@ -56,6 +61,23 @@ export function PageWrapper({
   return (
     <>
       <IncidentsStatusBarWithErrorBoundary />
+      <StatusBarBase
+        impact={IncidentImpact.None}
+        content={
+          <TextLink href="https://stx.is/hiro-explorer-vote" target="_blank">
+            <Flex direction={['column', 'column', 'row']} gap={1}>
+              <Text
+                color={getColor(IncidentImpact.None)}
+                fontWeight={'medium'}
+                fontSize={'14px'}
+                lineHeight={'1.5'}
+              >
+                The Nakamoto SIP is up for community vote until Bitcoin block 833950 (~March 9th).
+              </Text>
+            </Flex>
+          </TextLink>
+        }
+      />
       <WrapperWithBg>
         <Flex mx="auto" width="full" maxWidth="container.xl" flexDirection="column" p={6}>
           <NavBar tokenPrice={tokenPrice} />
