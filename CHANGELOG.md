@@ -1,3 +1,10 @@
+# [1.148.0](https://github.com/hirosystems/explorer/compare/v1.147.1...v1.148.0) (2024-02-22)
+
+
+### Features
+
+* **add-nonce:** added nonce ([577e225](https://github.com/hirosystems/explorer/commit/577e225a4735638d8987084848923a877fc008b2))
+
 ## [1.147.1](https://github.com/hirosystems/explorer/compare/v1.147.0...v1.147.1) (2024-02-21)
 
 
