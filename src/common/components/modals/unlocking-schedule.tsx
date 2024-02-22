@@ -12,7 +12,7 @@ import { Grid } from '../../../ui/Grid';
 import { Modal } from '../../../ui/Modal';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
-import { Caption, Text, Title } from '../../../ui/typography';
+import { Caption, Text } from '../../../ui/typography';
 import { MODALS } from '../../constants/constants';
 import { useCoreApiInfo } from '../../queries/useCoreApiInfo';
 import { Badge } from '../Badge';

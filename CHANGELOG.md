@@ -1,3 +1,24 @@
+# [1.148.0](https://github.com/hirosystems/explorer/compare/v1.147.1...v1.148.0) (2024-02-22)
+
+
+### Features
+
+* **add-nonce:** added nonce ([577e225](https://github.com/hirosystems/explorer/commit/577e225a4735638d8987084848923a877fc008b2))
+
+## [1.147.1](https://github.com/hirosystems/explorer/compare/v1.147.0...v1.147.1) (2024-02-21)
+
+
+### Bug Fixes
+
+* icon regression ([8b230f0](https://github.com/hirosystems/explorer/commit/8b230f0bb76287e0b38ea15f5919fb4c49082252))
+
+# [1.147.0](https://github.com/hirosystems/explorer/compare/v1.146.1...v1.147.0) (2024-02-21)
+
+
+### Features
+
+* **mempool-header:** added mempool header ([614aaf8](https://github.com/hirosystems/explorer/commit/614aaf868733f6d2c206d9e341e99b8b22f95716))
+
 ## [1.146.1](https://github.com/hirosystems/explorer/compare/v1.146.0...v1.146.1) (2024-02-19)
 
 

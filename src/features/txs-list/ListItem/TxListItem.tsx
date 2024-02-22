@@ -2,10 +2,10 @@ import { FC, ReactNode, memo } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { BlockLink, TxLink } from '../../../common/components/ExplorerLinks';
+import { TxLink } from '../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { TxIcon } from '../../../common/components/TxIcon';
-import { AddressArea, TxTimestamp } from '../../../common/components/transaction-item';
+import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/transaction-item';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
@@ -96,10 +96,17 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
           Failed
         </Caption>
       ) : (
-        <BlockLink hash={tx.block_hash} whiteSpace="nowrap">
-          Block #{blockNumber}{' '}
-        </BlockLink>
-        // <Caption whiteSpace='nowrap'></Caption>
+        <HStack
+          as="span"
+          gap="1.5"
+          alignItems="center"
+          justifyContent="flex-end"
+          flexWrap="nowrap"
+          divider={<Caption>∙</Caption>}
+        >
+          <Caption whiteSpace={'nowrap'}>Block #{blockNumber}</Caption>
+          <Nonce nonce={tx.nonce} />
+        </HStack>
       )}
     </Stack>
   );
