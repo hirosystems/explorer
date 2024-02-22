@@ -1,7 +1,7 @@
 import { TokenPrice } from '@/common/types/tokenPrice';
 import { ColorMode, useColorMode } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
-import { PiArrowRightLight } from 'react-icons/pi';
+import { PiArrowDownRightBold, PiArrowRightLight, PiArrowUpRightBold } from 'react-icons/pi';
 import { Cell, Pie, PieChart, Sector } from 'recharts';
 
 import { Card } from '../../common/components/Card';
@@ -55,7 +55,7 @@ function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
           endAngle={360} // Full circle
           fill={
             colorMode === 'light'
-              ? 'var(--stacks-colors-slate-250)'
+              ? 'var(--stacks-colors-purple-200)'
               : 'var(--stacks-colors-slate-850)'
           }
         />
@@ -84,7 +84,7 @@ function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
       <PieChart width={pieChartWidth} height={pieChartHeight}>
         <defs>
           <linearGradient
-            id={gradientId}
+            id={`${gradientId}-light`}
             x1="28.1198"
             y1="27.8877"
             x2="8.60376"
@@ -93,6 +93,19 @@ function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
           >
             <stop stopColor="#5546FF" />
             <stop offset="1" stopColor="#5546FF" stopOpacity="0.37" />
+          </linearGradient>
+        </defs>
+        <defs>
+          <linearGradient
+            id={`${gradientId}-dark`}
+            x1="21.7866"
+            y1="25.8877"
+            x2="2.27051"
+            y2="35.4809"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#5C6CF2" />
+            <stop offset="1" stop-color="#7F97F1" />
           </linearGradient>
         </defs>
         <Pie
@@ -115,9 +128,15 @@ function CurrentCycleCard({ colorMode }: { colorMode: ColorMode }) {
             return (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.name === 'cycle_remaining' ? '#E0E1E6' : `url(#${gradientId})`}
+                fill={
+                  entry.name === 'cycle_remaining'
+                    ? 'var(--stacks-colors-purple-200)'
+                    : `url(#${
+                        colorMode === 'light' ? `${gradientId}-light` : `${gradientId}-dark`
+                      })`
+                }
                 stroke="none"
-                strokeWidth={0}
+                strokeWidth={4}
               />
             );
           })}
@@ -232,13 +251,21 @@ function StxLockedCard() {
 }
 
 function AddressesStackingCard() {
-  return (
-    <StatCardBase
-      statTitle="Addresses Stacking"
-      statValue="2,443"
-      moreInfo="↗︎23,4% more than previous cycle"
-    />
+  const randomStat = Math.floor(Math.random() * 201) - 100; // Random number between -100 and 100 TODO: replace with actual data
+  const randomStatFormatted = `${randomStat}%`;
+  const icon = randomStat > 0 ? PiArrowUpRightBold : PiArrowDownRightBold;
+  const modifier = randomStat > 0 ? 'more' : 'less';
+
+  const moreInfo = (
+    <Flex gap={1} alignItems="flex-start" flexWrap="nowrap">
+      <Icon as={icon} size={4} color={randomStat > 0 ? 'success' : 'critical'} />
+      <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+        {`${randomStatFormatted} ${modifier} than previous cycle`}
+      </Text>
+    </Flex>
   );
+
+  return <StatCardBase statTitle="Addresses Stacking" statValue={'2,443'} moreInfo={moreInfo} />;
 }
 
 function NextCycleCard() {
@@ -251,7 +278,7 @@ function NextCycleCard() {
   } = useSuspenseNextStackingCycle();
 
   const moreInfo = (
-    <Flex gap={1} alignItems="center">
+    <Flex gap={1} alignItems="flex-start">
       <Text fontSize="xs" fontWeight="medium" color="secondaryText">
         {`Starts in ~${
           displayPreparePhaseInfo
@@ -314,7 +341,7 @@ export function SignersHeaderLayout({
           {nextCycleCard}
         </Box>
       </Flex>
-      {historicalStackingDataLink}
+      {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
     </Card>
   );
 }

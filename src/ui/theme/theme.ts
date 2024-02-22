@@ -60,6 +60,14 @@ export const theme = extendTheme({
         default: 'slate.700',
         _dark: 'slate.250',
       },
+      success: {
+        default: 'green.600',
+        _dark: 'green.500',
+      },
+      critical: {
+        default: 'red.600',
+        _dark: 'red.500',
+      },
     },
   },
   styles: {
