@@ -12,7 +12,7 @@ const ProgressBarContainer = styled(Flex)<{
 }>`
   background-color: ${props =>
     props.$colorMode === 'light'
-      ? 'var(--stacks-colors-slate-250)'
+      ? 'var(--stacks-colors-purple-200)'
       : 'var(--stacks-colors-slate-850)'};
   border-radius: 10px;
   align-items: center;
@@ -22,15 +22,13 @@ const ProgressBarContainer = styled(Flex)<{
   .progress-bar-fill {
     width: ${props => `${props.$progressPercentage}%`};
     height: 100%;
-    border-radius: 8px; 
-    background: linear-gradient(
-      to right,
-      #5546ff 0%,
-      rgba(85, 70, 255, 0.37) 100%
-    ); 
+    border-radius: 8px;
+    background: ${props =>
+      props.$colorMode === 'light'
+        ? ' linear-gradient(to right, #5546ff 0%, rgba(85, 70, 255, 0.37) 100%);'
+        : 'linear-gradient(to right, #5C6CF2, #7F97F1)'};
   }
 `;
-
 export const ProgressBar = ({
   progressPercentage,
   height,
