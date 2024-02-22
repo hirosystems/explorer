@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { AddressLink, TxLink } from '../../../../common/components/ExplorerLinks';
@@ -7,7 +5,7 @@ import { Value } from '../../../../common/components/Value';
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 import { isJSONString, microToStacksFormatted } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
+import { HStack } from '../../../../ui/HStack';
 import { TextLink } from '../../../../ui/TextLink';
 import { Caption, Text } from '../../../../ui/typography';
 
@@ -96,7 +94,7 @@ export const getValue = (
       </>
     );
   }
-  return isJSONString(arg.repr) ? JSON.parse(arg.repr).value : arg.repr;
+  return isJSONString(arg.repr) ? JSON.parse(arg.repr) : arg.repr;
 };
 
 export const FunctionSummaryClarityValue = ({ arg, btc }: { arg: any; btc: null | string }) => {
@@ -105,23 +103,23 @@ export const FunctionSummaryClarityValue = ({ arg, btc }: { arg: any; btc: null 
     const isContract = principal.includes('.');
     if (isContract) {
       return (
-        <Flex width="100%" flexGrow={1} justifyContent="space-between">
+        <HStack width="100%" flexGrow={1} gap={2}>
           <TxLink txId={principal}>{principal}</TxLink>
           <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
-        </Flex>
+        </HStack>
       );
     }
     return (
-      <Flex width="100%" flexGrow={1} justifyContent="space-between">
+      <HStack width="100%" flexGrow={1} gap={2}>
         <AddressLink principal={principal}>{arg.repr}</AddressLink>
         <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
-      </Flex>
+      </HStack>
     );
   }
   return (
-    <Flex width="100%" flexGrow={1} justifyContent="space-between">
+    <HStack width="100%" flexGrow={1} gap={2}>
       <Value>{getValue(arg, btc)}</Value>
       <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
-    </Flex>
+    </HStack>
   );
 };
