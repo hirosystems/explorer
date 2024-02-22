@@ -24,8 +24,15 @@ export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => 
       borderRadius="6px"
       justifyContent="center"
       alignItems="center"
+      width='fit-content'
     >
-      <Text fontWeight="medium" whiteSpace="nowrap" fontSize="xs" color="textOnGrayBg">
+      <Text
+        fontWeight="medium"
+        whiteSpace="nowrap"
+        fontSize="xs"
+        color="textOnGrayBg"
+        textTransform="none" // Add this line to override text-transform
+      >
         {headerTitle}
       </Text>
     </Flex>
@@ -35,7 +42,7 @@ export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => 
 export const signersTableHeaders = [
   '#',
   'Signer key',
-  'Asociated address',
+  'Associated address',
   'Voting power',
   'STX staked',
   'Last vote slot',
@@ -143,7 +150,7 @@ export function SignersTableLayout({
         {numSigners}
         {votingPowerSortDrodpown}
       </Flex>
-      <Box overflowX="auto" width="full">
+      <Box overflowX="auto" width="full" padding="12px 24px">
         <Table
           width="full"
           sx={{
