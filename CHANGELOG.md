@@ -1,3 +1,10 @@
+## [1.148.1](https://github.com/hirosystems/explorer/compare/v1.148.0...v1.148.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* string-args ([#1455](https://github.com/hirosystems/explorer/issues/1455)) ([a6c49f8](https://github.com/hirosystems/explorer/commit/a6c49f8fd6f043b709d52d475749278e3f937f5a))
+
 # [1.148.0](https://github.com/hirosystems/explorer/compare/v1.147.1...v1.148.0) (2024-02-22)
 
 
