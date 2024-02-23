@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { AddressLink, ExplorerLink } from '../../common/components/ExplorerLinks';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -10,6 +11,7 @@ import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
 import { Td } from '../../ui/Td';
 import { Text } from '../../ui/Text';
+import { TextLink } from '../../ui/TextLink';
 import { Th } from '../../ui/Th';
 import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
@@ -24,7 +26,7 @@ export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => 
       borderRadius="6px"
       justifyContent="center"
       alignItems="center"
-      width='fit-content'
+      width="fit-content"
     >
       <Text
         fontWeight="medium"
@@ -32,6 +34,7 @@ export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => 
         fontSize="xs"
         color="textOnGrayBg"
         textTransform="none" // Add this line to override text-transform
+        letterSpacing="normal"
       >
         {headerTitle}
       </Text>
@@ -82,7 +85,7 @@ const SignerTableRow = ({
 }) => {
   return (
     <Tr>
-      <Td padding="24px 12px" textAlign="center">
+      <Td padding="24px 12px">
         <Text whiteSpace="nowrap" fontSize="sm">
           {index}
         </Text>
@@ -90,17 +93,17 @@ const SignerTableRow = ({
       <Td padding="24px 12px">
         <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           <Show above="lg">
-            <Text>{signerKey}</Text>
+            <ExplorerLink>{signerKey}</ExplorerLink>
           </Show>
           <Show below="lg">
-            <Text>{truncateMiddle(signerKey)}</Text>
+            <ExplorerLink>{truncateMiddle(signerKey)}</ExplorerLink>
           </Show>
         </Text>
       </Td>
       <Td padding="24px 12px">
-        <Text whiteSpace="nowrap" fontSize="sm">
+        <AddressLink principal={associatedAddress} whiteSpace="nowrap" fontSize="sm" color="secondaryText">
           {associatedAddress}
-        </Text>
+        </AddressLink>
       </Td>
       <Td padding="24px 12px">
         <HStack flexWrap="nowrap">
