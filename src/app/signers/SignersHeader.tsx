@@ -212,7 +212,7 @@ function StatCardBase({
   );
 }
 
-function StxStakedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
+function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const {
     data: { total_stx, unlocked_stx },
   } = useSuspenseStxSupply();
@@ -227,7 +227,9 @@ function StxStakedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
   const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
 
-  return <StatCardBase statTitle="STX Staked" statValue={stxStakedFormatted} moreInfo={moreInfo} />;
+  return (
+    <StatCardBase statTitle="STX Stacked" statValue={stxStakedFormatted} moreInfo={moreInfo} />
+  );
 }
 
 function StxLockedCard() {
@@ -307,8 +309,8 @@ export function SignersHeaderLayout({
   stxLockedCard,
   addressesStackingCard,
   nextCycleCard,
-  historicalStackingDataLink,
-}: {
+} // historicalStackingDataLink,
+: {
   title: ReactNode;
   currentCycleCard: ReactNode;
   stxStakedCard: ReactNode;
@@ -353,7 +355,7 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
     <SignersHeaderLayout
       title="STACKING"
       currentCycleCard={<CurrentCycleCard colorMode={colorMode} />}
-      stxStakedCard={<StxStakedCard tokenPrice={tokenPrice} />}
+      stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
       stxLockedCard={<StxLockedCard />}
       addressesStackingCard={<AddressesStackingCard />}
       nextCycleCard={<NextCycleCard />}
