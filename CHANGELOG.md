@@ -1,3 +1,10 @@
+## [1.148.2](https://github.com/hirosystems/explorer/compare/v1.148.1...v1.148.2) (2024-02-26)
+
+
+### Bug Fixes
+
+* remove middleware to prevent redirects ([dbfec94](https://github.com/hirosystems/explorer/commit/dbfec9484623b599c660df3c6887cb26c8bf8c43))
+
 ## [1.148.1](https://github.com/hirosystems/explorer/compare/v1.148.0...v1.148.1) (2024-02-22)
 
 
