@@ -28,9 +28,9 @@ export function SortByVotingPowerFilter({
     () =>
       Object.values(VotingPowerSortOrder).map(order => ({
         onClick: () => {
-          setVotingPowerSortOrder(order as VotingPowerSortOrder);
+          setVotingPowerSortOrder(order);
         },
-        label: getSortOptionLabel(order as VotingPowerSortOrder),
+        label: getSortOptionLabel(order),
       })),
     [setVotingPowerSortOrder]
   );

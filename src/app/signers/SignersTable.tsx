@@ -1,7 +1,8 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 
-import { Card } from '../../common/components/Card';
 import { AddressLink, ExplorerLink } from '../../common/components/ExplorerLinks';
+import { Section } from '../../common/components/Section';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -11,7 +12,6 @@ import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
 import { Td } from '../../ui/Td';
 import { Text } from '../../ui/Text';
-import { TextLink } from '../../ui/TextLink';
 import { Th } from '../../ui/Th';
 import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
@@ -19,11 +19,12 @@ import { ProgressBar } from './ProgressBar';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 
 export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
-  <Th padding="24px 12px">
+  <Th py={3} px={6}>
     <Flex
       bg="dropdownBgHover"
-      padding="8px 10px"
-      borderRadius="6px"
+      px={2.5}
+      py={2}
+      borderRadius="md"
       justifyContent="center"
       alignItems="center"
       width="fit-content"
@@ -32,8 +33,8 @@ export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => 
         fontWeight="medium"
         whiteSpace="nowrap"
         fontSize="xs"
-        color="textOnGrayBg"
-        textTransform="none" // Add this line to override text-transform
+        color={useColorModeValue('slate.700', 'slate.250')}
+        textTransform="none"
         letterSpacing="normal"
       >
         {headerTitle}
@@ -85,12 +86,12 @@ const SignerTableRow = ({
 }) => {
   return (
     <Tr>
-      <Td padding="24px 12px">
+      <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {index}
         </Text>
       </Td>
-      <Td padding="24px 12px">
+      <Td py={3} px={6}>
         <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           <Show above="lg">
             <ExplorerLink>{signerKey}</ExplorerLink>
@@ -100,27 +101,32 @@ const SignerTableRow = ({
           </Show>
         </Text>
       </Td>
-      <Td padding="24px 12px">
-        <AddressLink principal={associatedAddress} whiteSpace="nowrap" fontSize="sm" color="secondaryText">
+      <Td py={3} px={6}>
+        <AddressLink
+          principal={associatedAddress}
+          whiteSpace="nowrap"
+          fontSize="sm"
+          color="secondaryText"
+        >
           {associatedAddress}
         </AddressLink>
       </Td>
-      <Td padding="24px 12px">
+      <Td py={3} px={6}>
         <HStack flexWrap="nowrap">
           <Box display={['none', 'none', 'none', 'block']} height="12px" width="100%">
-            <ProgressBar progressPercentage={23.4} height="12px" />
+            <ProgressBar progressPercentage={23.4} />
           </Box>
           <Text whiteSpace="nowrap" fontSize="sm" color="secondaryText">
             {votingPower}
           </Text>
         </HStack>
       </Td>
-      <Td padding="24px 12px">
+      <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {stxStaked}
         </Text>
       </Td>
-      <Td padding="24px 12px">
+      <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {lastVoteSlot}
         </Text>
@@ -131,73 +137,44 @@ const SignerTableRow = ({
 
 export function SignersTableLayout({
   numSigners,
-  votingPowerSortDrodpown,
   signersTableHeaders,
   signersTableRows,
+  votingPowerSortOrder,
+  setVotingPowerSortOrder,
 }: {
   numSigners: ReactNode;
-  votingPowerSortDrodpown: ReactNode;
   signersTableHeaders: ReactNode;
   signersTableRows: ReactNode;
+  votingPowerSortOrder: VotingPowerSortOrder;
+  setVotingPowerSortOrder: (order: VotingPowerSortOrder) => void;
 }) {
   return (
-    <Card width="full">
-      <Flex
-        p="12px 28px"
-        borderBottom="1px solid var(--stacks-colors-border)"
-        flexDirection={['column', 'column', 'row', 'row']}
-        justifyContent={['center', 'center', 'space-between', 'space-between']}
-        alignItems={['flex-start', 'flex-start', 'center', 'center']}
-        gap={[5, 5, 0, 0]}
-      >
-        {numSigners}
-        {votingPowerSortDrodpown}
-      </Flex>
-      <Box overflowX="auto" width="full" padding="12px 24px">
-        <Table
-          width="full"
-          sx={{
-            td: { borderColor: 'border' },
-            th: { borderBottom: 'none' },
-            'th:first-of-type': {
-              borderRight: [
-                '2px solid var(--stacks-colors-border)',
-                '2px solid var(--stacks-colors-border)',
-                'none',
-                'none',
-              ],
-            },
-            'tr > td:first-of-type': {
-              borderRight: [
-                '2px solid var(--stacks-colors-border)',
-                '2px solid var(--stacks-colors-border)',
-                'none',
-                'none',
-              ],
-            },
-          }}
-        >
-          <Thead>{signersTableHeaders}</Thead>
-          <Tbody>{signersTableRows}</Tbody>
-        </Table>
-      </Box>
-    </Card>
-  );
-}
-
-const SignerTable = () => {
-  const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
-  const numRows = Array.from({ length: 10 }, (_, i) => i + 1); // TODO: replace with actual data
-
-  return (
-    <SignersTableLayout
-      numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
-      votingPowerSortDrodpown={
+    <Section
+      title={numSigners}
+      topRight={
         <SortByVotingPowerFilter
           setVotingPowerSortOrder={setVotingPowerSortOrder}
           votingPowerSortOrder={votingPowerSortOrder}
         />
       }
+    >
+      <Table width="full">
+        <Thead>{signersTableHeaders}</Thead>
+        <Tbody>{signersTableRows}</Tbody>
+      </Table>
+    </Section>
+  );
+}
+
+const SignerTable = () => {
+  const numRows = Array.from({ length: 10 }, (_, i) => i + 1); // TODO: replace with actual data
+  const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
+
+  return (
+    <SignersTableLayout
+      votingPowerSortOrder={votingPowerSortOrder}
+      setVotingPowerSortOrder={setVotingPowerSortOrder}
+      numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
       signersTableRows={numRows.map((_, index) => (
         <SignerTableRow key={index} index={index} {...testGridRowData} />

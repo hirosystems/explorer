@@ -31,7 +31,6 @@ export const theme = extendTheme({
         default: 'slate.300',
         _dark: 'slate.700',
       },
-      error: 'red.600',
       bg: {
         default: 'white',
         _dark: 'black',
@@ -56,15 +55,11 @@ export const theme = extendTheme({
         default: 'slate.100',
         _dark: 'slate.900',
       },
-      textOnGrayBg: {
-        default: 'slate.700',
-        _dark: 'slate.250',
-      },
       success: {
         default: 'green.600',
         _dark: 'green.500',
       },
-      critical: {
+      error: {
         default: 'red.600',
         _dark: 'red.500',
       },
@@ -93,7 +88,6 @@ export const theme = extendTheme({
   },
   borders: {
     '1px': '1px solid var(--stacks-colors-border)',
-    dark_1px: '1px solid var(--stacks-colors-borderDark)',
   },
   components: {
     Switch: switchTheme,

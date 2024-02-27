@@ -11,6 +11,7 @@ import { PageTitle } from '../_components/PageTitle';
 import { SkeletonStatSection } from '../_components/Stats/SkeletonStatSection';
 import { SignersHeaderLayout } from './SignersHeader';
 import { SignersTableLayout, signersTableHeaders } from './SignersTable';
+import { VotingPowerSortOrder } from './SortByVotingPowerFilter';
 
 const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
   const cols = Array.from({ length: numCols }, (_, i) => i + 1);
@@ -18,7 +19,7 @@ const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
   return (
     <Tr>
       {cols.map((_, index) => (
-        <Td padding="24px 12px" textAlign="center">
+        <Td py={3} px={6} textAlign="center">
           <SkeletonItem width="full" height="14px" />
         </Td>
       ))}
@@ -27,11 +28,12 @@ const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
 };
 
 const TableHeaderSkeleton = () => (
-  <Th padding="24px 12px">
+  <Th py={3} px={6}>
     <Flex
       bg="dropdownBgHover"
-      padding="8px 10px"
-      borderRadius="6px"
+      px={2.5}
+      py={2}
+      borderRadius="md"
       justifyContent="center"
       alignItems="center"
     >
@@ -41,7 +43,7 @@ const TableHeaderSkeleton = () => (
 );
 
 export default function Skeleton() {
-  const numRows = Array.from({ length: 10 }, (_, i) => i + 1); // TODO: replace with actual data
+  const numRows = Array.from({ length: 10 }, (_, i) => i + 1);
   const numCols = Array.from({ length: signersTableHeaders.length }, (_, i) => i + 1);
 
   return (
@@ -81,13 +83,14 @@ export default function Skeleton() {
       />
       <SignersTableLayout
         numSigners={<SkeletonItem width="30%" height="40px" />}
-        votingPowerSortDrodpown={<SkeletonItem width="30%" height="40px" />}
         signersTableHeaders={numCols.map(() => (
           <TableHeaderSkeleton />
         ))}
         signersTableRows={numRows.map(() => (
           <TableRowSkeleton numCols={signersTableHeaders.length} />
         ))}
+        votingPowerSortOrder={VotingPowerSortOrder.Asc}
+        setVotingPowerSortOrder={() => {}}
       />
     </>
   );
