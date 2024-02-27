@@ -158,10 +158,12 @@ export function SignersTableLayout({
         />
       }
     >
-      <Table width="full">
-        <Thead>{signersTableHeaders}</Thead>
-        <Tbody>{signersTableRows}</Tbody>
-      </Table>
+      <Box overflowX={'auto'}>
+        <Table width="full">
+          <Thead>{signersTableHeaders}</Thead>
+          <Tbody>{signersTableRows}</Tbody>
+        </Table>
+      </Box>
     </Section>
   );
 }
