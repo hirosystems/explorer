@@ -1,3 +1,11 @@
+## [1.148.3](https://github.com/hirosystems/explorer/compare/v1.148.2...v1.148.3) (2024-02-27)
+
+
+### Bug Fixes
+
+* **favicon:** updated favicon ([a5b379e](https://github.com/hirosystems/explorer/commit/a5b379e9380903b4d515a30d1d107ba353c1c9a0))
+* **favicon:** work in progress ([1018892](https://github.com/hirosystems/explorer/commit/1018892a7a25f03d92a3ab4444bbbb65aaf15a9c))
+
 ## [1.148.2](https://github.com/hirosystems/explorer/compare/v1.148.1...v1.148.2) (2024-02-26)
 
 
