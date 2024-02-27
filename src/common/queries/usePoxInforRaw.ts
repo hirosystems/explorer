@@ -56,7 +56,7 @@ interface PoxInfo {
   ];
 }
 
-export function useSuspensePoxInforRaw() {
+export function useSuspensePoxInfoRaw() {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
   return useSuspenseQuery<PoxInfo>({
     queryKey: ['pox-info-raw'],

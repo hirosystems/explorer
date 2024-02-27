@@ -80,15 +80,11 @@ export const theme = extendTheme({
         default: 'black',
         _dark: 'white',
       },
-      textOnGrayBg: {
-        default: 'slate.700',
-        _dark: 'slate.250',
-      },
       success: {
         default: 'green.600',
         _dark: 'green.500',
       },
-      critical: {
+      error: {
         default: 'red.600',
         _dark: 'red.500',
       },
