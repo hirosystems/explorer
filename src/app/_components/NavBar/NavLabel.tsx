@@ -19,10 +19,9 @@ export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
     </Text>
     <Flex
       transition={'all .3s ease'}
-      // transform={'translateX(-10px)'}
+      transform={'translateX(-10px)'}
       opacity={0}
-      // _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
-      _groupHover={{ opacity: '100%' }}
+      _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
       justify={'flex-end'}
       align={'center'}
       flex={1}

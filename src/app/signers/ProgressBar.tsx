@@ -1,51 +1,18 @@
-import { ColorMode } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import { useColorModeValue } from '@chakra-ui/react';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 
-const ProgressBarContainer = styled(Flex)<{
-  $colorMode: ColorMode;
-  $progressPercentage: number;
-  $height: string;
-}>`
-  background-color: ${props =>
-    props.$colorMode === 'light'
-      ? 'var(--stacks-colors-purple-200)'
-      : 'var(--stacks-colors-slate-850)'};
-  border-radius: 10px;
-  align-items: center;
-  height: ${props => props.$height};
-  width: 100%;
-
-  .progress-bar-fill {
-    width: ${props => `${props.$progressPercentage}%`};
-    height: 100%;
-    border-radius: 8px;
-    background: ${props =>
-      props.$colorMode === 'light'
-        ? ' linear-gradient(to right, #5546ff 0%, rgba(85, 70, 255, 0.37) 100%);'
-        : 'linear-gradient(to right, #5C6CF2, #7F97F1)'};
-  }
-`;
-export const ProgressBar = ({
-  progressPercentage,
-  height,
-}: {
-  progressPercentage: number;
-  height: string;
-}) => {
-  const colorModeContext = useColorMode();
-  const colorMode = colorModeContext.colorMode;
+export const ProgressBar = ({ progressPercentage }: { progressPercentage: number }) => {
+  const bgColor = useColorModeValue('purple.200', 'slate.850');
+  const progressColor = useColorModeValue(
+    'linear-gradient(to right, var(--stacks-colors-purple-600) 0%, var(--stacks-colors-purple-400) 100%)',
+    'linear-gradient(to right, var(--stacks-colors-purple-500), var(--stacks-colors-purple-400))'
+  );
 
   return (
-    <ProgressBarContainer
-      $colorMode={colorMode}
-      $progressPercentage={progressPercentage}
-      $height={height}
-    >
-      <Box className="progress-bar-fill" />
-    </ProgressBarContainer>
+    <Flex bg={bgColor} rounded={'full'} alignItems={'center'} height={3} width={'full'}>
+      <Box bg={progressColor} width={`${progressPercentage}%`} height={'full'} rounded={'full'} />
+    </Flex>
   );
 };
