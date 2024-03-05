@@ -101,7 +101,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
       >
         {didFail ? (
           <Caption as="span" data-test="tx-caption">
-            "Faild"
+            "Failed"
           </Caption>
         ) : null}
         {isPending && <Nonce nonce={tx.nonce} />}
