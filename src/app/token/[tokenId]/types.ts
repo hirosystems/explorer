@@ -25,8 +25,8 @@ export interface DeveloperData {
 }
 
 export interface BasicTokenInfo {
-  name: string;
-  symbol: string;
+  name: string | null;
+  symbol: string | null;
   totalSupply: number | null;
 }
 
@@ -37,8 +37,6 @@ export interface TokenInfoProps {
 
     links: TokenLinks;
     circulatingSupply: number | null;
-    fullyDilutedValuation: number | null;
-    tvl: number | null;
 
     currentPrice: number | null;
     priceChangePercentage24h: number | null;
@@ -51,5 +49,6 @@ export interface TokenInfoProps {
     tradingVolumeChangePercentage24h: number | null;
 
     developerData: DeveloperData;
+    marketCapRank: number | null;
   };
 }

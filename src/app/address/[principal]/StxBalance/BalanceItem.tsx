@@ -2,19 +2,18 @@
 
 import * as React from 'react';
 
-import { useSuspenseCurrentStxPrice } from '../../../../common/queries/useCurrentPrices';
+import { useSuspenseStxPrice } from '../../../../common/queries/useCurrentPrices';
 import {
   formatStacksAmount,
   getLocaleDecimalSeparator,
   getUsdValue,
 } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
 import { Flex, FlexProps } from '../../../../ui/Flex';
 import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
 function UsdBalanceBase({ balance }: { balance: number }) {
-  const { data: stxPrice } = useSuspenseCurrentStxPrice();
+  const { data: stxPrice } = useSuspenseStxPrice();
   const usdBalance = getUsdValue(balance, stxPrice);
 
   if (!usdBalance) {

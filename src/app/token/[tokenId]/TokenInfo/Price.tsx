@@ -11,15 +11,8 @@ export const Price: FC<
     currentPrice: number | null | undefined;
     priceChangePercentage24h: number | null | undefined;
     currentPriceInBtc: number | null | undefined;
-    priceInBtcChangePercentage24h: number | null | undefined;
   }
-> = ({
-  currentPrice,
-  priceChangePercentage24h,
-  currentPriceInBtc,
-  priceInBtcChangePercentage24h,
-  ...gridProps
-}) => {
+> = ({ currentPrice, priceChangePercentage24h, currentPriceInBtc, ...gridProps }) => {
   const colorMode = useColorMode().colorMode;
   return (
     <StatSection
@@ -33,9 +26,6 @@ export const Price: FC<
       caption={
         <Flex fontSize={'12px'} fontWeight="500" alignItems={'center'} gap={'6px'}>
           {currentPriceInBtc ? `${currentPriceInBtc.toFixed(8)} BTC` : 'N/A'}
-          {priceInBtcChangePercentage24h ? (
-            <TrendArrow change={priceInBtcChangePercentage24h} size={'11px'} />
-          ) : null}
         </Flex>
       }
       {...gridProps}

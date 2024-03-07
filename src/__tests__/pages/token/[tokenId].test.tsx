@@ -2,10 +2,8 @@ import '@testing-library/jest-dom';
 import '@testing-library/jest-dom/extend-expect';
 
 import { getTokenInfo } from '../../../app/token/[tokenId]/getTokenInfo';
-import { apiClients as apiClientsActual } from '../../../common/api/client';
 
 global.fetch = jest.fn();
-const apiClients = apiClientsActual as jest.MockedFunction<any>;
 const fetch = global.fetch as jest.MockedFunction<any>;
 
 jest.mock('../../../common/api/client', () => ({
@@ -59,30 +57,7 @@ describe('getTokenInfo', () => {
     expect(console.error).toBeCalledWith(new Error('token not found'));
   });
 
-  it('returns basic token info if CoinGecko does not have the token', async () => {
-    const tokenId = 'token1';
-    const chain = 'mainnet';
-
-    fetch
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValueOnce({ name: 'NAME', symbol: 'SYMBOL' }),
-      })
-      .mockResolvedValueOnce({
-        json: jest.fn().mockResolvedValueOnce({ coins: [] }),
-      });
-
-    const result = await getTokenInfo(tokenId, chain);
-
-    expect(result).toEqual({
-      basic: {
-        name: 'NAME',
-        symbol: 'SYMBOL',
-        totalSupply: null,
-      },
-    });
-  });
-
-  it('returns token info if CoinGecko has token', async () => {
+  it('returns token info', async () => {
     const tokenId = 'token1';
     const chain = 'mainnet';
 
@@ -110,7 +85,6 @@ describe('getTokenInfo', () => {
         circulatingSupply: null,
         currentPrice: null,
         currentPriceInBtc: null,
-        fullyDilutedValuation: null,
         links: {
           announcements: [],
           blockchain: [],
@@ -122,11 +96,22 @@ describe('getTokenInfo', () => {
         },
         marketCap: null,
         priceChangePercentage24h: null,
-        priceInBtcChangePercentage24h: null,
         tradingVolume24h: null,
         tradingVolumeChangePercentage24h: null,
-        tvl: null,
-        developerData: {},
+        marketCapRank: null,
+        priceInBtcChangePercentage24h: null,
+        developerData: {
+          closed_issues: null,
+          code_additions_deletions_4_weeks: null,
+          commit_count_4_weeks: null,
+          forks: null,
+          last_4_weeks_commit_activity_series: null,
+          pull_request_contributors: null,
+          pull_requests_merged: null,
+          stars: null,
+          subscribers: null,
+          total_issues: null,
+        },
       },
     });
   });
