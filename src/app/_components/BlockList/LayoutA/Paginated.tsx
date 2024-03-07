@@ -16,8 +16,14 @@ function PaginatedBlockListLayoutABase() {
   const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
   const [latestBlocksToShow, setLatestBlocksToShow] = useState<UISingleBlock[]>([]);
 
-  const { initialBlockList, initialBurnBlocks, updateList, hasNextPage, isFetchingNextPage } =
-    usePaginatedBlockList();
+  const {
+    initialBlockList,
+    initialBurnBlocks,
+    updateList,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = usePaginatedBlockList();
 
   const initialBlockHashes = useMemo(() => {
     return new Set(initialBlockList.map(block => block.hash));
@@ -88,6 +94,7 @@ function PaginatedBlockListLayoutABase() {
   return (
     <BlockListWithControls
       enablePagination
+      fetchNextPage={fetchNextPage}
       blockList={blockList}
       latestBlocksCount={latestBlocksCount}
       updateList={showLatestBlocksWithFadeEffect}
