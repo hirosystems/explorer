@@ -1,3 +1,10 @@
+## [1.148.4](https://github.com/hirosystems/explorer/compare/v1.148.3...v1.148.4) (2024-03-07)
+
+
+### Bug Fixes
+
+* block page pagination ([e563a74](https://github.com/hirosystems/explorer/commit/e563a74f1aaafeeb9e58aa659aa2ecac60cc3cc2))
+
 ## [1.148.3](https://github.com/hirosystems/explorer/compare/v1.148.2...v1.148.3) (2024-02-27)
 
 
