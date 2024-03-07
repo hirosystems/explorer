@@ -12,7 +12,9 @@ import { useSuspenseBlockTxsInfinite } from '../../../../common/queries/useBlock
 import { FilteredTxs } from '../../../../features/txs-list/FilteredTxs';
 import { TxListItem } from '../../../../features/txs-list/ListItem/TxListItem';
 import { FilterButton } from '../../../../features/txsFilterAndSort/FilterButton';
+import { ShowValueMenu } from '../../../../features/txsFilterAndSort/ShowValueMenu';
 import { Box } from '../../../../ui/Box';
+import { Flex } from '../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
 interface BlockTxsListProps {
@@ -29,7 +31,15 @@ function BlockTxsListBase({ blockHash, limit }: BlockTxsListProps) {
   }
 
   return (
-    <Section title={'Transactions'} topRight={<FilterButton />}>
+    <Section
+      title={'Transactions'}
+      topRight={
+        <Flex gap={4} direction={['column', 'row']}>
+          <ShowValueMenu />
+          <FilterButton />
+        </Flex>
+      }
+    >
       <Box flexGrow={1}>
         <Box position={'relative'}>
           <FilteredTxs txs={txs} TxListItem={TxListItem} />

@@ -23,7 +23,6 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tok
           currentPrice={tokenInfo.extended?.currentPrice}
           priceChangePercentage24h={tokenInfo.extended?.priceChangePercentage24h}
           currentPriceInBtc={tokenInfo.extended?.currentPriceInBtc}
-          priceInBtcChangePercentage24h={tokenInfo.extended?.priceInBtcChangePercentage24h}
           borderRightWidth={['0px', '0px', '0px', '1px']}
         />
         <MarketCap
@@ -32,7 +31,7 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tok
           tradingVolumeChangePercentage24h={tokenInfo.extended?.tradingVolumeChangePercentage24h}
           borderRightWidth={['0px', '0px', '1px', '1px']}
         />
-        <Transaction txId={txId} tvl={tokenInfo.extended?.tvl} />
+        <Transaction txId={txId} marketCapRank={tokenInfo.extended?.marketCapRank} />
       </Wrapper>
     </ErrorBoundary>
   );

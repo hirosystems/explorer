@@ -65,7 +65,7 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
           <MenuList fontSize={'sm'} padding="8px">
             {isMenuItemArray(menuItems)
               ? menuItems.map(({ label, onClick }) => (
-                  <MenuItem color={'text'} onClick={onClick}>
+                  <MenuItem color={'text'} onClick={onClick} key={label}>
                     {label}
                   </MenuItem>
                 ))

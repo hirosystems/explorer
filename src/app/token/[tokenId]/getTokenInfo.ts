@@ -1,34 +1,19 @@
 import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 
-import { DEFAULT_MAINNET_SERVER } from '../../../common/constants/env';
+import { DEFAULT_MAINNET_SERVER, LUNAR_CRUSH_API_KEY } from '../../../common/constants/env';
+import { LunarCrushCoin } from '../../../common/types/lunarCrush';
 import { getCacheClient } from '../../../common/utils/cache-client';
-import { BasicTokenInfo, TokenInfoProps, TokenLinks } from './types';
+import { BasicTokenInfo, DeveloperData, TokenInfoProps, TokenLinks } from './types';
 
-async function searchCoinGeckoTokens(tokenSymbol: string) {
+async function getToken(tokenId: string): Promise<LunarCrushCoin | undefined> {
   try {
-    const tokenSearchResponse = await (
-      await fetch(`https://api.coingecko.com/api/v3/search?query=${tokenSymbol}`)
+    return await (
+      await fetch(`https://lunarcrush.com/api4/public/coins/${tokenId}/v1`, {
+        headers: {
+          Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
+        },
+      })
     ).json();
-    const token = (tokenSearchResponse?.coins || []).find(
-      (coin: { symbol: string; id: string }) =>
-        coin.symbol?.toLowerCase() === tokenSymbol.toLowerCase()
-    );
-    if (!token?.id) {
-      console.log(`[debug] couldn't find token with symbol ${tokenSymbol} in Coingecko`);
-      return;
-    }
-    return token;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function getTokenFromCoinGecko(tokenId: string) {
-  try {
-    const tokenInfoResponse = await (
-      await fetch(`https://api.coingecko.com/api/v3/coins/${tokenId}?localization=false`)
-    ).json();
-    return tokenInfoResponse;
   } catch (error) {
     console.error(error);
   }
@@ -76,7 +61,7 @@ async function getBasicTokenInfo(
       throw new Error('token not found');
     }
 
-    const basicTokenInfo = {
+    return {
       name: tokenMetadata?.metadata?.name || tokenName,
       symbol: tokenSymbol,
       totalSupply:
@@ -86,8 +71,6 @@ async function getBasicTokenInfo(
             )
           : null,
     };
-
-    return basicTokenInfo;
   } catch (error) {
     console.error(error);
   }
@@ -95,67 +78,52 @@ async function getBasicTokenInfo(
 
 async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenInfo) {
   try {
-    const token = await searchCoinGeckoTokens(basicTokenInfo.symbol);
-    if (!token) {
+    const tokenInfoResponse = await getToken(tokenId);
+    if (!tokenInfoResponse || tokenInfoResponse?.error) {
       return {
         basic: basicTokenInfo,
       };
     }
 
-    const tokenInfoResponse = await getTokenFromCoinGecko(token.id);
-    if (!tokenInfoResponse || tokenInfoResponse?.status?.error_code) {
-      return {
-        basic: basicTokenInfo,
-      };
-    }
+    const name = tokenInfoResponse?.data?.name || basicTokenInfo.name || null;
+    const symbol = tokenInfoResponse?.data?.symbol || basicTokenInfo.symbol || null;
+    const categories: string[] = [];
 
-    const name = tokenInfoResponse?.name || basicTokenInfo.name || null;
-    const symbol = tokenInfoResponse?.symbol || basicTokenInfo.symbol || null;
-    const categories =
-      tokenInfoResponse?.categories?.filter((category: string) => !!category) || [];
+    const circulatingSupply = tokenInfoResponse?.data?.circulating_supply || null;
+    const totalSupply = basicTokenInfo.totalSupply || null;
 
-    const circulatingSupply = tokenInfoResponse?.market_data?.circulating_supply || null;
-    const totalSupply =
-      tokenInfoResponse?.market_data?.total_supply || basicTokenInfo.totalSupply || null;
-    const fullyDilutedValuation =
-      tokenInfoResponse?.market_data?.fully_diluted_valuation?.usd || null;
-    const tvl = tokenInfoResponse?.market_data?.total_value_locked?.usd || null;
+    const currentPrice = tokenInfoResponse?.data?.price || null;
+    const currentPriceInBtc = tokenInfoResponse?.data?.price_btc || null;
+    const priceChangePercentage24h = tokenInfoResponse?.data?.percent_change_24h || null;
+    const priceInBtcChangePercentage24h = null;
 
-    const currentPrice = tokenInfoResponse?.market_data?.current_price?.usd || null;
-    const currentPriceInBtc = tokenInfoResponse?.market_data?.current_price?.btc || null;
-    const priceChangePercentage24h =
-      tokenInfoResponse?.market_data?.price_change_percentage_24h || null;
-    const priceInBtcChangePercentage24h =
-      tokenInfoResponse?.market_data?.price_change_percentage_24h_in_currency?.btc || null;
-
-    const marketCap = tokenInfoResponse?.market_data?.market_cap?.usd || null;
-    const tradingVolume24h = tokenInfoResponse?.market_data?.total_volume?.usd || null;
-    const tradingVolumeChangePercentage24h =
-      tokenInfoResponse?.market_data?.volume_change_percentage_24h || null;
-    const developerData = tokenInfoResponse?.developer_data || {};
+    const marketCap = tokenInfoResponse?.data?.market_cap || null;
+    const tradingVolume24h = tokenInfoResponse?.data?.volume_24h || null;
+    const tradingVolumeChangePercentage24h = null;
+    const developerData: DeveloperData = {
+      forks: null,
+      stars: null,
+      subscribers: null,
+      total_issues: null,
+      closed_issues: null,
+      pull_requests_merged: null,
+      pull_request_contributors: null,
+      code_additions_deletions_4_weeks: null,
+      commit_count_4_weeks: null,
+      last_4_weeks_commit_activity_series: null,
+    };
 
     const links: TokenLinks = {
-      websites: tokenInfoResponse?.links?.homepage?.filter((link: string) => !!link) || [],
-      blockchain: tokenInfoResponse?.links?.blockchain_site?.filter((link: string) => !!link) || [],
-      chat: [
-        ...(tokenInfoResponse?.links?.chat_url?.filter((link: string) => !!link) || []),
-        ...(tokenInfoResponse?.links?.telegram_channel_identifier
-          ? [`https://t.me/${tokenInfoResponse.links.telegram_channel_identifier}`]
-          : []),
-      ],
-      forums: tokenInfoResponse?.links?.official_forum_url?.filter((link: string) => !!link) || [],
-      announcements:
-        tokenInfoResponse?.links?.announcement_url?.filter((link: string) => !!link) || [],
-      repos: [
-        ...(tokenInfoResponse?.links?.repos_url?.github?.filter((link: string) => !!link) || []),
-        ...(tokenInfoResponse?.links?.repos_url?.bitbucket?.filter((link: string) => !!link) || []),
-      ],
-      social: [
-        ...(tokenInfoResponse?.links?.twitter_screen_name
-          ? [`https://twitter.com/${tokenInfoResponse.links.twitter_screen_name}`]
-          : []),
-      ],
+      websites: [],
+      blockchain: [],
+      chat: [],
+      forums: [],
+      announcements: [],
+      repos: [],
+      social: [],
     };
+
+    const marketCapRank = tokenInfoResponse?.data?.market_cap_rank || null;
 
     const tokenInfo = {
       basic: {
@@ -168,8 +136,6 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
 
         links,
         circulatingSupply,
-        fullyDilutedValuation,
-        tvl,
 
         currentPrice,
         priceChangePercentage24h,
@@ -182,6 +148,7 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
         tradingVolumeChangePercentage24h,
 
         developerData,
+        marketCapRank,
       },
     };
 

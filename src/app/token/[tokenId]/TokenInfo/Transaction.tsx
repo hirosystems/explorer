@@ -8,15 +8,13 @@ import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
 import { StatSection } from '../../../_components/Stats/StatSection';
 
-export const Transaction: FC<GridProps & { txId: string; tvl: number | null | undefined }> = ({
-  tvl,
-  txId,
-  ...gridProps
-}) => {
+export const Transaction: FC<
+  GridProps & { txId: string; marketCapRank: number | null | undefined }
+> = ({ marketCapRank, txId, ...gridProps }) => {
   const colorMode = useColorMode().colorMode;
   return (
     <StatSection
-      title="Contract transaction"
+      title="Contract Transaction"
       bodyMainText={
         <Box
           textOverflow={'ellipsis'}
@@ -31,7 +29,7 @@ export const Transaction: FC<GridProps & { txId: string; tvl: number | null | un
       bodySecondaryText={null}
       caption={
         <Flex fontSize={'12px'} fontWeight="500">
-          TVL: {tvl ? `$${numberToString(tvl)}` : 'N/A'}
+          Market Cap Rank: {marketCapRank || 'N/A'}
         </Flex>
       }
       {...gridProps}

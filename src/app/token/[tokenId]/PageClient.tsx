@@ -48,7 +48,7 @@ export default function PageClient({
             {name} ({symbol})
           </PageTitle>
         )}
-        {!!tokenInfo.extended?.links && <LinksMenu links={tokenInfo.extended.links} />}
+        {/*{!!tokenInfo.extended?.links && <LinksMenu links={tokenInfo.extended.links} />}*/}
       </Flex>
       <TokenInfo tokenInfo={tokenInfo} txId={tokenId} />
       <Tabs

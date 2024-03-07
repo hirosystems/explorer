@@ -90,8 +90,8 @@ function BlocksListBase({
   return (
     <Section
       title="Recent Blocks"
-      gridColumnStart={['1', '1', '2']}
-      gridColumnEnd={['2', '2', '3']}
+      gridColumnStart={['1', '1', '1', '2']}
+      gridColumnEnd={['2', '2', '2', '3']}
       minWidth={0}
       flexGrow={0}
       flexShrink={1}

@@ -13,7 +13,6 @@ import {
 import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { Value } from '../../../../common/components/Value';
-import { TextLink } from '../../../../ui/TextLink';
 
 export const ContractName: FC<{
   tx:

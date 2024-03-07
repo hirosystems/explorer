@@ -1,17 +1,27 @@
+import { LUNAR_CRUSH_API_KEY } from '../common/constants/env';
+import { LunarCrushCoin } from '../common/types/lunarCrush';
 import { TokenPrice } from '../common/types/tokenPrice';
 import { getCacheClient } from '../common/utils/cache-client';
 
 const TOKEN_PRICE_CACHE_KEY = 'token-price';
 
-export const getCurrentBtcPrice = async () =>
-  fetch('https://api.coingecko.com/api/v3/exchange_rates')
+export const getCurrentBtcPrice = async (): Promise<number> =>
+  fetch('https://lunarcrush.com/api4/public/coins/btc/v1', {
+    headers: {
+      Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
+    },
+  })
     .then(res => res.json())
-    .then(data => data?.rates?.usd?.value || 0);
+    .then(data => data?.data?.price || 0);
 
-export const getCurrentStxPrice = async () =>
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=blockstack,bitcoin&vs_currencies=usd')
+export const getCurrentStxPrice = async (): Promise<number> =>
+  fetch('https://lunarcrush.com/api4/public/coins/stx/v1', {
+    headers: {
+      Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
+    },
+  })
     .then(res => res.json())
-    .then(data => data?.blockstack?.usd || 0);
+    .then(data => data?.data?.price || 0);
 
 async function getCachedTokenPrice() {
   try {

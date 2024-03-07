@@ -54,11 +54,11 @@ export const Footer: FC = () => {
           </Flex>
           <Box>
             <FooterLink
-              href="https://www.coingecko.com/"
+              href="https://lunarcrush.com/"
               target="_blank"
               rel="noopener noreferrer nofollow"
             >
-              Market data provided by CoinGecko
+              Market data provided by LunarCrush
             </FooterLink>
           </Box>
         </Flex>
