@@ -1,3 +1,10 @@
+# [1.149.0](https://github.com/hirosystems/explorer/compare/v1.148.4...v1.149.0) (2024-03-08)
+
+
+### Features
+
+* replace coingecko with lunarcrush ([6097aca](https://github.com/hirosystems/explorer/commit/6097acad61a534c4dc2046dba3084d16f6f5ca98))
+
 ## [1.148.4](https://github.com/hirosystems/explorer/compare/v1.148.3...v1.148.4) (2024-03-07)
 
 
