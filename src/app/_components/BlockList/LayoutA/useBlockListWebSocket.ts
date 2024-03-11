@@ -59,13 +59,12 @@ export function useBlockListWebSocket(
 
   const clearLatestBlocks = () => {
     setLatestBlocks([]);
-    latestBlockHashes.current = new Set();
   };
 
   return {
     latestUIBlocks: latestBlocks,
     latestBlock,
-    latestBlocksCount: latestBlockHashes.current.size,
+    latestBlocksCount: latestBlocks.filter(block => block.type === UIBlockType.Block).length,
     clearLatestBlocks,
   };
 }
