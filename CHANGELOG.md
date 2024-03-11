@@ -1,3 +1,10 @@
+# [1.150.0](https://github.com/hirosystems/explorer/compare/v1.149.1...v1.150.0) (2024-03-11)
+
+
+### Features
+
+* remove voting banner ([c71ec08](https://github.com/hirosystems/explorer/commit/c71ec081aeea7f8d3006f7d35c47023bc6400c47))
+
 ## [1.149.1](https://github.com/hirosystems/explorer/compare/v1.149.0...v1.149.1) (2024-03-11)
 
 
