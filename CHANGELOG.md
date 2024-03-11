@@ -1,3 +1,10 @@
+## [1.150.1](https://github.com/hirosystems/explorer/compare/v1.150.0...v1.150.1) (2024-03-11)
+
+
+### Bug Fixes
+
+* address tx events pagination ([6c044a1](https://github.com/hirosystems/explorer/commit/6c044a1a0e6252a067c089f56000aa2b7d31e7fb))
+
 # [1.150.0](https://github.com/hirosystems/explorer/compare/v1.149.1...v1.150.0) (2024-03-11)
 
 
