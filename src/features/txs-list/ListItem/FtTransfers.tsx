@@ -11,16 +11,14 @@ import { TransferListItem } from './TransferListItem';
 interface FtTransfersProps {
   address: string;
   ftTransfers: AddressTransactionWithTransfersFtTransfers[];
-  tx: Transaction;
 }
 
-const TransferListItemWithMetaSymbol: FC<{
+export const TransferListItemWithMetaSymbol: FC<{
   ftTransfer: AddressTransactionWithTransfersFtTransfers;
-  tx: Transaction;
   sender?: string;
   recipient?: string;
   isOriginator: boolean;
-}> = ({ ftTransfer, tx, sender, recipient, isOriginator }) => {
+}> = ({ ftTransfer, sender, recipient, isOriginator }) => {
   const { asset, address, contract } = getAssetNameParts(ftTransfer.asset_identifier);
   const contractId = `${address}.${contract}`;
   const { data: ftMetadata } = useFtMetadata(contractId);
@@ -38,14 +36,13 @@ const TransferListItemWithMetaSymbol: FC<{
   );
 };
 
-export const FtTransfers: FC<FtTransfersProps> = ({ address, ftTransfers, tx }) => (
+export const FtTransfers: FC<FtTransfersProps> = ({ address, ftTransfers }) => (
   <Fragment>
     {ftTransfers.map((ftTransfer, i) => {
       return (
         <TransferListItemWithMetaSymbol
           ftTransfer={ftTransfer}
           key={`ft-transfer-${i}`}
-          tx={tx}
           sender={ftTransfer.sender}
           recipient={ftTransfer.recipient}
           isOriginator={address === ftTransfer.sender}

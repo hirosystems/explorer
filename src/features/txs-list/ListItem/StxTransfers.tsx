@@ -9,10 +9,9 @@ import { TransferListItem } from './TransferListItem';
 interface StxTransfersProps {
   address: string;
   stxTransfers: AddressTransactionWithTransfersStxTransfers[];
-  tx: Transaction;
 }
 
-export const StxTransfers: FC<StxTransfersProps> = ({ address, stxTransfers, tx }) => (
+export const StxTransfers: FC<StxTransfersProps> = ({ address, stxTransfers }) => (
   <Fragment>
     {stxTransfers.map((stxTransfer, i) => (
       <TransferListItem
