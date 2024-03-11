@@ -76,8 +76,8 @@ dependencies:
     specifier: 6.9.0
     version: 6.9.0
   '@stacks/blockchain-api-client':
-    specifier: 7.7.1
-    version: 7.7.1
+    specifier: 7.9.0-beta.1
+    version: 7.9.0-beta.1
   '@stacks/common':
     specifier: 6.8.1
     version: 6.8.1
@@ -282,8 +282,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@stacks/stacks-blockchain-api-types':
-    specifier: 7.7.1
-    version: 7.7.1
+    specifier: 7.9.0-beta.1
+    version: 7.9.0-beta.1
   '@testing-library/jest-dom':
     specifier: 5.16.5
     version: 5.16.5
@@ -4494,8 +4494,8 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.7.1:
-    resolution: {integrity: sha512-56ZSmdJZyLiNVKUcoNtWx6odneNwSs/1ES5FcipINviHJdEyvUxpBku2F5rPqOa3qbYOfGRxeMzv4AJ4VAVrhw==}
+  /@stacks/blockchain-api-client@7.9.0-beta.1:
+    resolution: {integrity: sha512-628fBKukUR2lykkO7GVjl/dSRRgX2DnU3NsxLywsM98q+IiOaLqMeJmU3n48BkgXUrH8wxg2b54Ixfhw+nuc/A==}
     dependencies:
       '@stacks/stacks-blockchain-api-types': 7.7.1
       '@types/ws': 7.4.7
@@ -4619,6 +4619,11 @@ packages:
 
   /@stacks/stacks-blockchain-api-types@7.7.1:
     resolution: {integrity: sha512-PN63uXvyr18PqgRWV8xICcDDK3tY5forAp5zjPJFvmI11fWZk90gXS10ol6G5gurr1aEZD1Okx0CCZ6rNNbXfQ==}
+    dev: false
+
+  /@stacks/stacks-blockchain-api-types@7.9.0-beta.1:
+    resolution: {integrity: sha512-zJ5g4YUW3MxE+fZSU7WznZHCjQK0bhLwx5v1QSZisMR1rVARQdP6Dw7qULiCEu5div44jVO5y5VBrJYjO309Rw==}
+    dev: true
 
   /@stacks/transactions@6.9.0:
     resolution: {integrity: sha512-hSs9+0Ew++GwMZMgPObOx0iVCQRxkiCqI+DHdPEikAmg2utpyLh2/txHOjfSIkQHvcBfJJ6O5KphmxDP4gUqiA==}
@@ -9709,7 +9714,7 @@ packages:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
-      ws: 8.14.2
+      ws: 8.16.0
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -12472,19 +12477,6 @@ packages:
         optional: true
     dev: false
 
-  /ws@8.14.2:
-    resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: true
-
   /ws@8.16.0:
     resolution: {integrity: sha512-HS0c//TP7Ina87TfiPUz1rQzMhHrl/SG2guqRcTOIUYD2q8uhUdNHZYJUaQ8aTGPzCh+c6oawMKW35nFl1dxyQ==}
     engines: {node: '>=10.0.0'}
@@ -12496,7 +12488,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: false
 
   /xml-name-validator@4.0.0:
     resolution: {integrity: sha512-ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==}

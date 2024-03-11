@@ -1,5 +1,6 @@
 import { FC, useMemo } from 'react';
 
+import { AddressTransaction } from '@stacks/blockchain-api-client/src/generated/models';
 import {
   AddressTransactionWithTransfers,
   MempoolTransaction,
@@ -11,6 +12,7 @@ import {
   NoTransactionsMessage,
 } from '../txsFilterAndSort/TransactionMessages';
 import { useFilterAndSortState } from '../txsFilterAndSort/useFilterAndSortState';
+import { TxListItem } from './ListItem/TxListItem';
 
 interface FilteredTxsProps<T extends unknown> {
   txs: T[];
@@ -18,7 +20,11 @@ interface FilteredTxsProps<T extends unknown> {
   address?: string;
 }
 
-type PossibleTxTypes = Transaction | MempoolTransaction | AddressTransactionWithTransfers;
+type PossibleTxTypes =
+  | Transaction
+  | MempoolTransaction
+  | AddressTransactionWithTransfers
+  | AddressTransaction;
 
 const getTx = (tx: PossibleTxTypes) => ('tx' in tx ? tx.tx : tx);
 
@@ -30,6 +36,8 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
   const { activeFilters } = useFilterAndSortState();
   const filteredTxs: T[] = useMemo(
     () =>
+      // TODO: fix type
+      // @ts-ignore
       !activeFilters.length ? txs : txs?.filter(tx => activeFilters.includes(getTx(tx).tx_type)),
     [txs, activeFilters]
   );
@@ -42,6 +50,8 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
     return (
       <>
         {filteredTxs?.map(tx => (
+          // TODO: fix type
+          // @ts-ignore
           <TxListItem tx={tx} address={address} key={`tx-list-item-${getTx(tx).tx_id}`} />
         ))}
       </>

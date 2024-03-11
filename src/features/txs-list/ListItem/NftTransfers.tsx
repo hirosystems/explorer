@@ -10,10 +10,9 @@ import { TransferListItem } from './TransferListItem';
 interface NftTransfersProps {
   address: string;
   nftTransfers: AddressTransactionWithTransfersNftTransfers[];
-  tx: Transaction;
 }
 
-export const NftTransfers: FC<NftTransfersProps> = ({ address, nftTransfers, tx }) => (
+export const NftTransfers: FC<NftTransfersProps> = ({ address, nftTransfers }) => (
   <Fragment>
     {nftTransfers.map((nftTransfer, i) => {
       const collection = nftTransfer.asset_identifier.split('::')[1] || 'NFT';
