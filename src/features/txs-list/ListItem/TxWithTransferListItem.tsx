@@ -1,9 +1,7 @@
-import exp from 'node:constants';
 import pluralize from 'pluralize';
 import React, { FC, memo } from 'react';
 
-import { AddressTransaction } from '@stacks/blockchain-api-client/src/generated/models';
-import { AddressTransactionWithTransfers, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { AddressTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { getTicker } from '../../../app/txid/[txId]/Events';
 import { AddressArea } from '../../../common/components/transaction-item';
@@ -14,16 +12,13 @@ import { AccordionButton } from '../../../ui/AccordionButton';
 import { AccordionIcon } from '../../../ui/AccordionIcon';
 import { AccordionItem } from '../../../ui/AccordionItem';
 import { AccordionPanel } from '../../../ui/AccordionPanel';
+import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
-import { Stack } from '../../../ui/Stack';
 import { Caption, Text } from '../../../ui/typography';
 import { getTransactionTypeLabel } from '../utils';
-import { FtTransfers, TransferListItemWithMetaSymbol } from './FtTransfers';
-import { NftTransfers } from './NftTransfers';
-import { StxTransfers } from './StxTransfers';
-import { TransferListItem } from './TransferListItem';
+import { TransferListItem, TransferListItemWithMetaSymbol } from './TransferListItem';
 import { TxListItem } from './TxListItem';
 
 interface TxWithTransferListItemProps {
@@ -31,7 +26,12 @@ interface TxWithTransferListItemProps {
   address?: string;
 }
 
-const LeftSubtitle: FC<{ tx: Transaction; eventsCount: number }> = memo(({ tx, eventsCount }) => (
+const LeftSubtitle: FC<{
+  tx: Transaction;
+  transferCount: number;
+  mintCount: number;
+  burnCount: number;
+}> = memo(({ tx, transferCount, mintCount, burnCount }) => (
   <HStack
     color={'secondaryText'}
     as="span"
@@ -41,19 +41,36 @@ const LeftSubtitle: FC<{ tx: Transaction; eventsCount: number }> = memo(({ tx, e
     divider={<Caption>∙</Caption>}
   >
     <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
-    <Caption fontWeight="semibold">
-      {eventsCount} {pluralize('event', eventsCount)}
-    </Caption>
+    {!!transferCount && (
+      <Caption fontWeight="semibold">
+        {transferCount} {pluralize('transfer', transferCount)}
+      </Caption>
+    )}
+    {!!mintCount && (
+      <Caption fontWeight="semibold">
+        {mintCount} {pluralize('mint', mintCount)}
+      </Caption>
+    )}
+    {!!burnCount && (
+      <Caption fontWeight="semibold">
+        {burnCount} {pluralize('burn', burnCount)}
+      </Caption>
+    )}
     <AddressArea tx={tx} />
   </HStack>
 ));
 
 function TxEvents({ address, txId }: { address: string; txId: string }) {
-  console.log(address, txId);
   const response = useAddressTransactionEventsInfinite(address, txId);
   const events = useInfiniteQueryResult(response);
+  if (response.isLoading)
+    return (
+      <Flex alignItems={'center'} justifyContent={'center'} p={4}>
+        <Text fontSize={'sm'}>Loading...</Text>
+      </Flex>
+    );
   return (
-    <>
+    <Box px={8} pb={4}>
       {events.map(event => {
         switch (event.type) {
           case 'ft':
@@ -64,9 +81,11 @@ function TxEvents({ address, txId }: { address: string; txId: string }) {
                 sender={event.data.sender}
                 recipient={event.data.recipient}
                 isOriginator={address === event.data.sender}
+                type={'Fungible token'}
+                index={event.event_index}
               />
             );
-          case 'ntf':
+          case 'nft':
             const collection = event.data.asset_identifier.split('::')[1] || 'NFT';
             const { asset } = getAssetNameParts(event.data.asset_identifier);
             const symbol = getTicker(asset).toUpperCase();
@@ -78,6 +97,8 @@ function TxEvents({ address, txId }: { address: string; txId: string }) {
                 recipient={event.data.recipient}
                 amount={`1 ${symbol}`}
                 isOriginator={address === event.data.sender}
+                type={'Non-fungible token'}
+                index={event.event_index}
               />
             );
           case 'stx':
@@ -91,36 +112,31 @@ function TxEvents({ address, txId }: { address: string; txId: string }) {
                   event.data.amount ? microToStacksFormatted(event.data.amount).toString() : '-'
                 } STX`}
                 isOriginator={address === event.data.sender}
+                type={'STX'}
+                index={event.event_index}
               />
             );
         }
       })}
       {response.hasNextPage && (
         <Button variant={'secondary'} onClick={() => response.fetchNextPage()} width={'full'}>
-          {response.isLoading ? 'Loading...' : `Load more events`}
+          {response.isFetching ? 'Loading...' : `Load more events`}
         </Button>
       )}
-    </>
+    </Box>
   );
 }
 
 export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
-  tx: { tx: transaction, stx_sent, stx_received, events },
+  tx: { tx, events },
   address,
 }) => {
-  const [expanded, setExpanded] = React.useState(false);
   if (!address) return null;
-  const tx = transaction as any;
-  const eventsCount =
-    (events?.ft?.transfer || 0) +
-    (events?.nft?.transfer || 0) +
-    (events?.stx?.transfer || 0) +
-    (events?.ft?.mint || 0) +
-    (events?.nft?.mint || 0) +
-    (events?.stx?.mint || 0) +
-    (events?.ft?.burn || 0) +
-    (events?.nft?.burn || 0) +
-    (events?.stx?.burn || 0);
+  const transferCount =
+    (events?.ft?.transfer || 0) + (events?.nft?.transfer || 0) + (events?.stx?.transfer || 0);
+  const mintCount = (events?.ft?.mint || 0) + (events?.nft?.mint || 0) + (events?.stx?.mint || 0);
+  const burnCount = (events?.ft?.burn || 0) + (events?.nft?.burn || 0) + (events?.stx?.burn || 0);
+  const eventsCount = transferCount + mintCount + burnCount;
   return (
     <AccordionItem border={'none'} borderBottom={'1px'} _last={{ borderBottom: 'unset' }}>
       {({ isExpanded }) => (
@@ -129,7 +145,14 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
             <TxListItem
               tx={tx}
               key={`txs-list-item-${tx.tx_id}`}
-              leftSubtitle={<LeftSubtitle tx={tx} eventsCount={eventsCount} />}
+              leftSubtitle={
+                <LeftSubtitle
+                  tx={tx}
+                  transferCount={transferCount}
+                  mintCount={mintCount}
+                  burnCount={burnCount}
+                />
+              }
             />
             {eventsCount > 0 ? (
               <AccordionButton

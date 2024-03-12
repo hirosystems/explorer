@@ -1,7 +1,7 @@
 import { Network } from '../types/network';
 
 export function getQueryParams(network: Network) {
-  const suffix = `?chain=${encodeURIComponent(network?.mode)}`;
+  const suffix = `?chain=${encodeURIComponent(network?.mode || 'mainnet')}`;
   if (network?.isSubnet) {
     return `${suffix}&subnet=${network.url}`;
   }
