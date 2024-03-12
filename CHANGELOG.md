@@ -1,3 +1,10 @@
+## [1.150.2](https://github.com/hirosystems/explorer/compare/v1.150.1...v1.150.2) (2024-03-12)
+
+
+### Bug Fixes
+
+* contract tx url ([6e17ac7](https://github.com/hirosystems/explorer/commit/6e17ac7096555fa66ac705397c0d45f0d03c0384))
+
 ## [1.150.1](https://github.com/hirosystems/explorer/compare/v1.150.0...v1.150.1) (2024-03-11)
 
 
