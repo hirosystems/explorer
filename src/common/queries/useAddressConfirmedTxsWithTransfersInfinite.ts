@@ -6,8 +6,11 @@ import {
 } from '@tanstack/react-query';
 import { InfiniteData } from '@tanstack/react-query';
 
-import { AddressTransaction } from '@stacks/blockchain-api-client/src/generated/models';
-import { AddressTransactionWithTransfers } from '@stacks/stacks-blockchain-api-types';
+import {
+  AddressTransaction,
+  AddressTransactionEvent,
+  AddressTransactionWithTransfers,
+} from '@stacks/stacks-blockchain-api-types';
 
 import { useApi } from '../api/useApi';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
@@ -36,35 +39,11 @@ export function useAddressConfirmedTxsWithTransfersInfinite(
   });
 }
 
-export function useSuspenseAddressConfirmedTxsWithTransfersInfinite(
-  address?: string,
-  options: any = {}
-): UseSuspenseInfiniteQueryResult<
-  InfiniteData<GenericResponseType<AddressTransactionWithTransfers>>
-> {
-  const api = useApi();
-  if (!address) throw new Error('Address is required');
-  return useSuspenseInfiniteQuery({
-    queryKey: ['addressConfirmedTxsWithTransfersInfinite', address],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.accountsApi.getAccountTransactionsWithTransfers({
-        principal: address,
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam || 0,
-      }),
-    getNextPageParam,
-    initialPageParam: 0,
-    staleTime: TWO_MINUTES,
-    ...options,
-  });
-}
-
 export function useAddressTransactionEventsInfinite(
   address?: string,
   txId?: string,
   options: any = {}
-  // TODO: fix type
-): UseInfiniteQueryResult<InfiniteData<GenericResponseType<any>>> {
+): UseInfiniteQueryResult<InfiniteData<GenericResponseType<AddressTransactionEvent>>> {
   const api = useApi();
   return useInfiniteQuery({
     queryKey: ['addressConfirmedTxsWithTransfersInfinite', address, txId],
@@ -79,32 +58,6 @@ export function useAddressTransactionEventsInfinite(
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
     enabled: !!address && !!txId,
-    ...options,
-  });
-}
-
-export function useSuspenseAddressTransactionEventsInfinite(
-  address?: string,
-  txId?: string,
-  options: any = {}
-  // TODO: fix type
-): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<any>>> {
-  const api = useApi();
-  if (!address) throw new Error('Address is required');
-  if (!txId) throw new Error('txId is required');
-  return useSuspenseInfiniteQuery({
-    queryKey: ['addressConfirmedTxsWithTransfersInfinite', address],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getAddressTransactionEvents({
-        address: address,
-        txId: txId,
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam || 0,
-      }),
-    getNextPageParam,
-
-    initialPageParam: 0,
-    staleTime: TWO_MINUTES,
     ...options,
   });
 }

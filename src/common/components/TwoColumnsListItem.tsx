@@ -10,6 +10,7 @@ import { leftLineCss } from '../styles/hover';
 
 interface TwoColumnsListProps extends FlexProps {
   icon?: ReactNode;
+  hoverEffect?: boolean;
   leftContent?: {
     title?: ReactNode;
     subtitle?: ReactNode;
@@ -21,14 +22,14 @@ interface TwoColumnsListProps extends FlexProps {
 }
 
 export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
-  ({ icon, leftContent, rightContent, ...rest }) => {
+  ({ icon, leftContent, rightContent, hoverEffect = true, ...rest }) => {
     return (
       <Flex
         flexGrow={1}
         gap={4}
         alignItems={'center'}
         py={6}
-        css={leftLineCss()}
+        css={hoverEffect ? leftLineCss() : undefined}
         minWidth={0}
         borderBottom={'1px'}
         _last={{ borderBottom: 'unset' }}
