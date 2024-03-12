@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
@@ -36,6 +36,17 @@ export function BlockListWithControls({
     liveUpdates,
     setLiveUpdates,
   } = useBlockListContext();
+
+  const lastClickTimeRef = useRef(0);
+
+  const toggleLiveUpdates = useCallback(() => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current > 2000) {
+      lastClickTimeRef.current = now;
+      setLiveUpdates(!liveUpdates);
+    }
+  }, [liveUpdates, setLiveUpdates]);
+
   return (
     <Section title="Recent Blocks">
       <Box pb={6}>
@@ -48,7 +59,7 @@ export function BlockListWithControls({
             isDisabled: true,
           }}
           liveUpdates={{
-            onChange: () => setLiveUpdates(!liveUpdates),
+            onChange: toggleLiveUpdates,
             isChecked: liveUpdates,
           }}
           horizontal={horizontalControls}
