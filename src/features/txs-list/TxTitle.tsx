@@ -37,11 +37,7 @@ export const TxTitle = ({
           <Box color={'textCaption'} size="14px">
             <TbArrowLeft size="14px" />
           </Box>
-          <TxLink
-            txId={tx.tx_id}
-            href={buildUrl(`/txid/${tx.contract_call.contract_id}`, network)}
-            overflow={'none'}
-          >
+          <TxLink txId={tx.contract_call.contract_id} overflow={'none'}>
             {getContractName(tx.contract_call.contract_id)}
           </TxLink>
         </HStack>
