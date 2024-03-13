@@ -1,3 +1,10 @@
+# [1.151.0](https://github.com/hirosystems/explorer/compare/v1.150.2...v1.151.0) (2024-03-13)
+
+
+### Features
+
+* throttle live updates toggle ([697dd5d](https://github.com/hirosystems/explorer/commit/697dd5ded85d8a531c7547f6890ba58e6cc632b9))
+
 ## [1.150.2](https://github.com/hirosystems/explorer/compare/v1.150.1...v1.150.2) (2024-03-12)
 
 
