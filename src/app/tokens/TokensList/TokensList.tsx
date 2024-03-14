@@ -1,18 +1,14 @@
 import { useColorMode } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { PiWarningLight } from 'react-icons/pi';
 import { TbSearch } from 'react-icons/tb';
 
 import { Section } from '../../../common/components/Section';
 import { useDebounce } from '../../../common/hooks/useDebounce';
-import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Input } from '../../../ui/Input';
 import { InputGroup } from '../../../ui/InputGroup';
 import { InputRightElement } from '../../../ui/InputRightElement';
-import { Link } from '../../../ui/Link';
-import { Text } from '../../../ui/Text';
 import { TokenTableSkeleton } from './TokenTableSkeleton';
 
 const TokenTable = dynamic(() => import('./TokenTable').then(module => module.TokenTable), {
@@ -49,7 +45,6 @@ export function TokensList() {
       }
     >
       <TokenTable debouncedSearchTerm={debouncedSearchTerm} />
-     
     </Section>
   );
 }
