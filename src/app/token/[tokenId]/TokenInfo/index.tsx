@@ -33,7 +33,6 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tok
         />
         <Transaction txId={txId} marketCapRank={tokenInfo.extended?.marketCapRank} />
       </Wrapper>
-    <Sip10Disclaimer />
 
     </ErrorBoundary>
   );
