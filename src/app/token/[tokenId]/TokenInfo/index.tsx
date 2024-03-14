@@ -2,13 +2,13 @@ import { FC } from 'react';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { Card } from '../../../../common/components/Card';
 import { Wrapper } from '../../../_components/Stats/Wrapper';
 import { TokenInfoProps } from '../types';
 import { MarketCap } from './MarketCap';
 import { Price } from './Price';
 import { Supply } from './Supply';
 import { Transaction } from './Transaction';
+import { Sip10Disclaimer } from '../../../../common/components/Sip10Disclaimer';
 
 export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tokenInfo, txId }) => {
   return (
@@ -33,6 +33,8 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tok
         />
         <Transaction txId={txId} marketCapRank={tokenInfo.extended?.marketCapRank} />
       </Wrapper>
+    <Sip10Disclaimer />
+
     </ErrorBoundary>
   );
 };
