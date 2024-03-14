@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
 import { FlexProps } from '../../../ui/Flex';
 import { SkeletonTxsList } from '../SkeletonTxsList';
@@ -23,11 +22,16 @@ export const MempoolTxsList = dynamic(
   }
 );
 
-export function TxListTabs({ limit, ...props }: { limit?: number } & FlexProps) {
+export function TxListTabs({
+  limit,
+  showFilterButton,
+  ...props
+}: { limit?: number; showFilterButton?: boolean } & FlexProps) {
   return (
     <TxListTabsBase
       confirmedList={<ConfirmedTxsList limit={limit} />}
       mempoolList={<MempoolTxsList limit={limit} />}
+      showFilterButton={showFilterButton}
       {...props}
     />
   );

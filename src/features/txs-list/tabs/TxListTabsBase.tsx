@@ -14,8 +14,9 @@ export const TxListTabsBase: FC<
   {
     confirmedList: ReactNode;
     mempoolList: ReactNode;
+    showFilterButton?: boolean;
   } & FlexProps
-> = ({ confirmedList, mempoolList, ...props }) => {
+> = ({ confirmedList, mempoolList, showFilterButton = true, ...props }) => {
   const principal = useParams().principal;
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -43,7 +44,7 @@ export const TxListTabsBase: FC<
           {!!principal && <CSVDownloadButton address={principal as string} />}
           {tabIndex === 1 && <SortMenu />}
           <ShowValueMenu />
-          <FilterButton />
+          {showFilterButton && <FilterButton />}
         </Flex>
       }
       {...props}
