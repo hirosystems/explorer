@@ -13,7 +13,6 @@ import { NavItem } from './types';
 export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navItems, close }) => {
   const isStatusBarActive = useAppSelector(selectIsStatusBarActive);
 
-    // Function to handle scroll behavior
     const handleScroll = (event: Event) => {
       event.preventDefault();
     };
