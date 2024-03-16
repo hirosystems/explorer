@@ -1,24 +1,25 @@
-import { useColorMode } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { PiX } from 'react-icons/pi';
-import { TbX } from 'react-icons/tb';
 
+import { useAppSelector } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
+import { selectIsStatusBarActive } from '../StatusBar/status-bar-slice';
 import { ColorModeButton } from './ColorModeButton';
 import { MobileNavItem } from './MobileNavItem';
 import { NavItem } from './types';
 
 export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navItems, close }) => {
-  const colorMode = useColorMode().colorMode;
+  const isStatusBarActive = useAppSelector(selectIsStatusBarActive);
+
   return (
     <Stack
       position="fixed"
       height="full"
       width="full"
       backgroundColor="bg"
-      top={0}
+      top={isStatusBarActive ? '82px' : 0}
       left={0}
       zIndex={2}
       padding={6}

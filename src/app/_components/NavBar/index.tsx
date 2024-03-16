@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import { PiList } from 'react-icons/pi';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
@@ -86,7 +86,12 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   return (
     <Box width="full">
-      <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
+      <Flex
+        alignItems={'center'}
+        flex={{ base: 1 }}
+        gap={6}
+        position={'relative'}
+      >
         <Logo />
         <Search />
         <Show above="lg">
@@ -100,13 +105,15 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <BtcStxPrice tokenPrice={tokenPrice} />
         </Show>
         <Show below="lg">
-          <IconButton
-            onClick={onToggle}
-            icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
-            variant={'ghost'}
-            aria-label={'Toggle Navigation'}
-          />
-          {isOpen && <MobileNav navItems={navItems} close={onToggle} />}
+          <Box position="relative">
+            <IconButton
+              onClick={onToggle}
+              icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
+              variant={'ghost'}
+              aria-label={'Toggle Navigation'}
+            />
+            {isOpen && <MobileNav navItems={navItems} close={onToggle} />}
+          </Box>
         </Show>
       </Flex>
     </Box>
