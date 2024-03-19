@@ -33,7 +33,7 @@ const LeftSubtitle: FC<{
   burnCount: number;
 }> = memo(({ tx, transferCount, mintCount, burnCount }) => (
   <HStack
-    color={'secondaryText'}
+    color={'textSubdued'}
     as="span"
     gap={1}
     alignItems="center"

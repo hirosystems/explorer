@@ -69,7 +69,7 @@ const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) =>
   return (
     <Circle
       size="20px"
-      bg={'bg'}
+      bg={'surface'}
       borderWidth="1px"
       position="absolute"
       top={'-4px'}
@@ -191,7 +191,7 @@ const getName = (event: TransactionEvent) => {
           style={{ whiteSpace: 'pre-wrap' }}
           bg={'transparent'}
           fontSize={'xs'}
-          color={'secondaryText'}
+          color={'textSubdued'}
         >
           {handleContractLogHex(event.contract_log.value.repr, event.contract_log.value.hex)}
         </Code>

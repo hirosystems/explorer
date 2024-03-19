@@ -27,7 +27,7 @@ const MessageBase = ({
           alignItems="center"
           height="100%"
           width="100%"
-          color="secondaryText"
+          color="textSubdued"
         >
           <Icon as={icon} size={30} />
         </Flex>

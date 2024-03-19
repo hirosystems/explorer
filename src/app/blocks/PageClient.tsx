@@ -2,7 +2,6 @@
 
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
 import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
 import { useGlobalContext } from '../../common/context/useAppContext';
@@ -16,6 +15,17 @@ const BlocksList = dynamic(() => import('../_components/BlockList').then(mod => 
 const PaginatedBlockListLayoutA = dynamic(
   () =>
     import('../_components/BlockList/LayoutA/Paginated').then(mod => mod.PaginatedBlockListLayoutA),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
+
+const NonPaginatedBlockListGroupedByBurnBlock = dynamic(
+  () =>
+    import('../_components/BlockList/GroupedByBurnBlock/NonPaginated').then(
+      mod => mod.NonPaginatedBlockListGroupedByBurnBlock
+    ),
   {
     loading: () => <SkeletonBlockList />,
     ssr: false,

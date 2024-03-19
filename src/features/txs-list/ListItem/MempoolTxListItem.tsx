@@ -92,7 +92,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         as="span"
         gap="1.5"
         flexWrap="nowrap"
-        color={'secondaryText'}
+        color={'textSubdued'}
         divider={<Caption display={['none', 'none', 'inline', 'inline']}>∙</Caption>}
         direction={['column', 'column', 'row', 'row']}
         justifyContent={['center', 'center', 'flex-end', 'flex-end']}
