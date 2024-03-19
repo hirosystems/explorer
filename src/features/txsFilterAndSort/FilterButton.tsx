@@ -34,7 +34,12 @@ function FilterItem({
   checkboxProps: CheckboxProps;
 }) {
   return (
-    <MenuItem bg={'bg'} _hover={{ bg: 'none' }} _active={{ bg: 'none' }} _focus={{ bg: 'none' }}>
+    <MenuItem
+      bg={'surface'}
+      _hover={{ bg: 'none' }}
+      _active={{ bg: 'none' }}
+      _focus={{ bg: 'none' }}
+    >
       <HStack
         gap={2}
         as="label"
@@ -101,22 +106,22 @@ export const FilterButton = memo(() => {
               <Icon
                 size={4}
                 as={PiFunnelSimple}
-                color={isHoveredOrFocused || isOpen ? 'text' : 'secondaryText'}
+                color={isHoveredOrFocused || isOpen ? 'text' : 'textSubdued'}
               />
             }
-            bg="bg"
-            color="secondaryText"
+            bg="surface"
+            color="textSubdued"
             border={'1px'}
             borderColor={borderColor}
             fontWeight={'semibold'}
             fontSize={'sm'}
-            _hover={{ color: 'text', backgroundColor: 'border' }}
-            _active={{ color: 'text', backgroundColor: 'border' }}
-            _focus={{ color: 'text', backgroundColor: 'border' }}
+            _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
+            _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
+            _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
           >
             Filters {selectedFilters.length > 0 && `(${selectedFilters.length})`}
           </MenuButton>
-          <MenuList bg={'bg'}>
+          <MenuList bg={'surface'}>
             <FilterItem
               label={'Coinbase'}
               icon={<Icon as={CubeSparkleIcon} color={'text'} />}

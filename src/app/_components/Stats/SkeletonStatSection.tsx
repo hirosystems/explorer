@@ -30,7 +30,7 @@ export const SkeletonStatSection: FC<GridProps> = props => (
         </Text>
       </SkeletonItem>
     }
-    borderColor={'border'}
+    borderColor={'borderPrimary'}
     {...props}
   />
 );

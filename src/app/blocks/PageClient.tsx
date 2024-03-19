@@ -22,12 +22,28 @@ const PaginatedBlockListLayoutA = dynamic(
   }
 );
 
+const NonPaginatedBlockListGroupedByBurnBlock = dynamic(
+  () =>
+    import('../_components/BlockList/GroupedByBurnBlock/NonPaginated').then(
+      mod => mod.NonPaginatedBlockListGroupedByBurnBlock
+    ),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
+
 const BlocksPage: NextPage = () => {
   const { activeNetworkKey } = useGlobalContext();
   return (
     <>
       <PageTitle>Blocks</PageTitle>
-      {activeNetworkKey.indexOf('naka') !== -1 ? <PaginatedBlockListLayoutA /> : <BlocksList />}
+      {/*{activeNetworkKey.indexOf('naka') !== -1 ? <PaginatedBlockListLayoutA /> : <BlocksList />}*/}
+      {activeNetworkKey.indexOf('naka') !== -1 ? (
+        <NonPaginatedBlockListGroupedByBurnBlock />
+      ) : (
+        <BlocksList />
+      )}
     </>
   );
 };

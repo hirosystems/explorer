@@ -15,7 +15,7 @@ export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = ({ block }) =
   return (
     <AccordionItem
       border={'none'}
-      borderBottom={'1px solid var(--stacks-colors-border)'}
+      borderBottom={'1px solid var(--stacks-colors-borderPrimary)'}
       _last={{ border: 'none' }}
     >
       <Flex gap={'6px'}>

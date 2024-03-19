@@ -35,7 +35,7 @@ export const Footer: FC = () => {
         flexDirection={['column', 'column', 'row']}
         alignItems={['center', 'center', 'unset']}
         textAlign={['center', 'center', 'unset']}
-        borderTop="1px solid var(--stacks-colors-border)"
+        borderTop="1px solid var(--stacks-colors-borderPrimary)"
         px={'unset'}
       >
         <Flex display="flex" flexDirection={'column'} gap="5px">

@@ -38,11 +38,11 @@ export function Stats(props: FlexProps) {
   return (
     <ErrorBoundary fallbackRender={() => null}>
       <Wrapper {...props}>
-        <StxSupply borderRightWidth={['0px', '0px', '1px', '1px']} borderColor={'border'} />
-        <LastBlock borderRightWidth={['0px', '0px', '0px', '1px']} borderColor={'border'} />
+        <StxSupply borderRightWidth={['0px', '0px', '1px', '1px']} borderColor={'borderPrimary'} />
+        <LastBlock borderRightWidth={['0px', '0px', '0px', '1px']} borderColor={'borderPrimary'} />
         <CurrentStackingCycle
           borderRightWidth={['0px', '0px', '1px', '1px']}
-          borderColor={'border'}
+          borderColor={'borderPrimary'}
         />
         <NextStackingCycle />
       </Wrapper>

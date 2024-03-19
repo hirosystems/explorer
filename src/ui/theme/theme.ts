@@ -23,38 +23,57 @@ export const theme = extendTheme({
   semanticTokens: {
     colors: {
       brand: 'purple.600',
-      border: {
-        default: 'slate.150',
+      borderPrimary: {
+        default: 'slate.250',
         _dark: 'slate.850',
       },
-      borderDark: {
-        default: 'slate.300',
-        _dark: 'slate.700',
+      borderSecondary: {
+        default: 'slate.150',
+        _dark: 'slate.900',
       },
-      error: 'red.600',
-      bg: {
+      error: {
+        default: 'red.600',
+        _dark: 'red.500',
+      },
+      success: {
+        default: 'green.600',
+        _dark: 'green.500',
+      },
+      surface: {
         default: 'white',
         _dark: 'black',
       },
-      dropdownBgHover: {
+      surfaceHighlight: {
         default: 'slate.150',
-        _dark: 'slate.850',
-      },
-      invert: {
-        default: 'black',
-        _dark: 'white',
+        _dark: 'slate.900',
       },
       text: {
         default: 'slate.900',
         _dark: 'slate.50',
       },
-      secondaryText: {
+      textSubdued: {
         default: 'slate.700',
         _dark: 'slate.600',
       },
-      buttonHoverBg: {
-        default: 'slate.100',
-        _dark: 'slate.900',
+      interactive: {
+        default: 'purple.600',
+        _dark: 'purple.400',
+      },
+      hoverBackground: {
+        default: 'slate.150',
+        _dark: 'slate.850',
+      },
+      icon: {
+        default: 'slate.900',
+        _dark: 'slate.50',
+      },
+      iconSubdued: {
+        default: 'slate.700',
+        _dark: 'slate.600',
+      },
+      invert: {
+        default: 'black',
+        _dark: 'white',
       },
     },
   },
@@ -80,8 +99,8 @@ export const theme = extendTheme({
     4.5: '1.125rem',
   },
   borders: {
-    '1px': '1px solid var(--stacks-colors-border)',
-    dark_1px: '1px solid var(--stacks-colors-borderDark)',
+    '1px': '1px solid var(--stacks-colors-borderPrimary)',
+    dark_1px: '1px solid var(--stacks-colors-borderSecondary)',
   },
   components: {
     Switch: switchTheme,

@@ -43,19 +43,19 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
             rightIcon={<Icon as={BsChevronDown} size={3} color="text" />}
             leftIcon={
               leftIcon ? (
-                <Icon as={leftIcon} size={4} color={isOpen ? 'text' : 'secondaryText'} />
+                <Icon as={leftIcon} size={4} color={isOpen ? 'text' : 'textSubdued'} />
               ) : null
             }
             fontSize={'sm'}
-            bg="bg"
+            bg="surface"
             fontWeight={'semibold'}
             border={'1px'}
             borderColor={borderColor}
-            _hover={{ color: 'text', backgroundColor: 'border' }}
-            _active={{ color: 'text', backgroundColor: 'border' }}
-            _focus={{ color: 'text', backgroundColor: 'border' }}
+            _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
+            _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
+            _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
           >
-            <Box display="inline" fontWeight="normal" color={isOpen ? 'text' : 'secondaryText'}>
+            <Box display="inline" fontWeight="normal" color={isOpen ? 'text' : 'textSubdued'}>
               Show:{' '}
             </Box>
             <Box display="inline" fontWeight="normal" color={'text'}>

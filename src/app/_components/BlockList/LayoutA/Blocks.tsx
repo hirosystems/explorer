@@ -44,6 +44,7 @@ export function Blocks({
                     <Icon as={StxIcon} size={2.5} color={'white'} />
                   ) : undefined
                 }
+                hasBorder={i < blockList.length && blockList[i + 1].type === UIBlockType.Block}
               />
             );
           case UIBlockType.BurnBlock:

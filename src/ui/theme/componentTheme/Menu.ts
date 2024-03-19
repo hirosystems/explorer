@@ -11,28 +11,28 @@ const baseStyle = definePartsStyle(props => ({
   // this will style the MenuButton component
   button: {
     _hover: {
-      bg: 'dropdownBgHover',
+      bg: 'hoverBackground',
     },
     _active: {
-      bg: 'dropdownBgHover',
+      bg: 'hoverBackground',
     },
   },
   // this will style the MenuList component
   list: {
-    border: 'border',
-    bg: 'bg',
+    border: 'borderPrimary',
+    bg: 'surface',
   },
   // this will style the MenuItem and MenuItemOption components
   item: {
     padding: '2 3',
     borderRadius: '10px',
     color: 'text',
-    bg: 'bg',
+    bg: 'surface',
     _hover: {
-      bg: 'dropdownBgHover',
+      bg: 'hoverBackground',
     },
     _active: {
-      bg: 'dropdownBgHover',
+      bg: 'hoverBackground',
     },
   },
 }));

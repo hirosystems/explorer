@@ -68,7 +68,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 </Text>
               ) : null}
               {leftContent.subtitle !== undefined ? (
-                <Text fontSize={'xs'} color={'secondaryText'}>
+                <Text fontSize={'xs'} color={'textSubdued'}>
                   {leftContent.subtitle}
                 </Text>
               ) : null}
@@ -88,7 +88,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 <Text fontSize={'sm'}>{rightContent.title}</Text>
               ) : null}
               {rightContent.subtitle !== undefined ? (
-                <Text fontSize={'xs'} color={'secondaryText'}>
+                <Text fontSize={'xs'} color={'textSubdued'}>
                   {rightContent.subtitle}
                 </Text>
               ) : null}
