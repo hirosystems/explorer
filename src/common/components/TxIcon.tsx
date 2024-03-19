@@ -119,7 +119,7 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
       position="absolute"
       bottom={'0px'}
       right={'0px'}
-      bg="bg"
+      bg="surface"
       transform="translate(35%, 35%)"
       border={'1px'}
       rounded={'full'}
@@ -131,7 +131,7 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
         height={`${statusBubbleIconSize}px`}
         width={`${statusBubbleIconSize}px`}
         color={color}
-        bg={'bg'}
+        bg={'surface'}
       />
     </Flex>
   );
@@ -164,7 +164,7 @@ export const TxIcon: FC<
       position="relative"
       bottom={'0px'}
       right={'0px'}
-      bg="bg"
+      bg="surface"
       border={'1px'}
       rounded={'full'}
       alignItems={'center'}

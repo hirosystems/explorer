@@ -122,7 +122,7 @@ const PageClient: NextPage = () => {
                       flexGrow={1}
                     />
                     <Grid
-                      bg={'bg'}
+                      bg={'surface'}
                       position="absolute"
                       right="1px"
                       top="1px"

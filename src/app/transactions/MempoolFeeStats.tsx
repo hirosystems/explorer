@@ -93,7 +93,7 @@ function MempoolFeePriorityCard({
           >
             {mempoolFeeAll / MICROSTACKS_IN_STACKS} STX
           </Text>
-          <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+          <Text fontSize={'sm'} color={'textSubdued'} whiteSpace={'nowrap'}>
             {getUsdValue(mempoolFeeAll, stxPrice, true)}
           </Text>
         </Box>
@@ -104,7 +104,7 @@ function MempoolFeePriorityCard({
                 mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
               } STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="secondaryText">
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
                 <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
                 <Box
                   fontSize="12px"
@@ -119,7 +119,7 @@ function MempoolFeePriorityCard({
             <Tooltip
               label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="secondaryText">
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
                 <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
                 <Box
                   fontSize="12px"
@@ -136,7 +136,7 @@ function MempoolFeePriorityCard({
                 mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
               } STX`}
             >
-              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="secondaryText">
+              <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
                 <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
                 <Box
                   fontSize="12px"
@@ -209,12 +209,12 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           borderRight={[
             'none',
             'none',
-            '1px solid var(--stacks-colors-border)',
-            '1px solid var(--stacks-colors-border)',
+            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-borderPrimary)',
           ]}
           borderBottom={[
-            '1px solid var(--stacks-colors-border)',
-            '1px solid var(--stacks-colors-border)',
+            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-borderPrimary)',
             'none',
             'none',
           ]}

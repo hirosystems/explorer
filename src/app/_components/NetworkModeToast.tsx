@@ -12,7 +12,7 @@ export const NetworkModeToast: React.FC = () => {
           width: '540px',
           height: '68px',
           fontSize: '16px',
-          color: 'bg',
+          color: 'surface',
           backgroundColor: 'invert',
         },
       }}

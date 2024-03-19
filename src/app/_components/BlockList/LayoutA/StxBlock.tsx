@@ -17,9 +17,17 @@ interface ListItemProps {
   timestamp: number;
   txsCount?: number;
   icon?: ReactNode;
+  hasBorder?: boolean;
 }
 
-export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon }: ListItemProps) {
+export const StxBlock = memo(function ({
+  timestamp,
+  height,
+  hash,
+  txsCount,
+  icon,
+  hasBorder,
+}: ListItemProps) {
   const textColor = useColorModeValue('slate.900', 'slate.50');
   const secondaryTextColor = useColorModeValue('slate.700', 'slate.600');
   const borderColor = useColorModeValue('slate.300', 'slate.800');
@@ -29,20 +37,14 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
       borderLeft={icon ? undefined : '1px'}
       borderColor={borderColor}
       position="relative"
-      __css={{
-        '>div': {
-          borderTop: '1px',
-        },
-        '&:first-child >div': {
-          borderTop: 'none',
-        },
-      }}
+      className={'stx-block'}
     >
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
         flexGrow={1}
         height={14}
+        borderBottom={hasBorder ? '1px' : 'none'}
         _after={
           icon
             ? {

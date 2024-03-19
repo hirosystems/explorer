@@ -180,7 +180,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
                   Received
                 </Badge>
               ) : (
-                <Badge bg={'border'} border={'none'}>
+                <Badge bg={'borderPrimary'} border={'none'}>
                   Locked
                 </Badge>
               )}

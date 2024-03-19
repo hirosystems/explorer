@@ -38,7 +38,7 @@ export const MempoolTxListItemMini: FC<MempoolTxsListItemProps> = memo(({ tx }) 
         alignItems="center"
         flexWrap="wrap"
         divider={<Caption>∙</Caption>}
-        color={'secondaryText'}
+        color={'textSubdued'}
       >
         <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
         <AddressArea tx={tx} />
