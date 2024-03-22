@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useAppContext';
+import { useIsNakamoto } from '../common/hooks/useIsNakamoto';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
@@ -27,7 +28,8 @@ const BlocksList = dynamic(() => import('./_components/BlockList').then(mod => m
 });
 
 export default function Home() {
-  const { activeNetwork, activeNetworkKey } = useGlobalContext();
+  const { activeNetwork } = useGlobalContext();
+  const isNakamoto = useIsNakamoto();
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
@@ -39,7 +41,7 @@ export default function Home() {
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
 
-        {activeNetworkKey.indexOf('naka') !== -1 ? (
+        {isNakamoto ? (
           <NonPaginatedBlockListLayoutA />
         ) : (
           <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />

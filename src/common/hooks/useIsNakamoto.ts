@@ -1,6 +1,8 @@
 import { useGlobalContext } from '../context/useAppContext';
+import { NetworkModes } from '../types/network';
 
 export function useIsNakamoto() {
-  const activeNetworkUrl = useGlobalContext().activeNetworkKey;
-  return activeNetworkUrl.indexOf('naka') !== -1;
+  const { activeNetwork, activeNetworkKey } = useGlobalContext();
+  const activeNetworkMode = activeNetwork.mode;
+  return activeNetworkMode === NetworkModes.Testnet || activeNetworkKey.indexOf('naka') !== -1;
 }
