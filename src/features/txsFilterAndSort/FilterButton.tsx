@@ -1,10 +1,10 @@
 'use client';
 
+import { useIsNakamoto } from '@/common/hooks/useIsNakamoto';
 import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
 import { PiArrowBendDownRight, PiFunnelSimple } from 'react-icons/pi';
 
-import { useGlobalContext } from '../../common/context/useAppContext';
 import { Button } from '../../ui/Button';
 import { Checkbox, CheckboxProps } from '../../ui/Checkbox';
 import { HStack } from '../../ui/HStack';
@@ -85,7 +85,7 @@ export const FilterButton = memo(() => {
     },
   });
 
-  const activeNetworkUrl = useGlobalContext().activeNetworkKey;
+  const isNakamoto = useIsNakamoto();
 
   return (
     <Menu placement={'bottom-end'} closeOnSelect={false}>
@@ -152,7 +152,7 @@ export const FilterButton = memo(() => {
             {/*  selectedFilters={selectedFilters}*/}
             {/*  checkboxProps={getCheckboxProps({ value: 'mint' })}*/}
             {/*/>*/}
-            {activeNetworkUrl.indexOf('naka') !== -1 ? (
+            {isNakamoto ? (
               <FilterItem
                 label={'Tenure change'}
                 icon={<Icon as={PiArrowBendDownRight} color={'text'} />}
