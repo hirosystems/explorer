@@ -1,14 +1,25 @@
+import { useGlobalContext } from '@/common/context/useAppContext';
+import { useSuspenseInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
+import { useSuspenseBlockListInfinite } from '@/common/queries/useBlockListInfinite';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
+import { BurnBlock, StacksApiSocketClient } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
-import { UIBlock, UIBlockType } from '../types';
+import { EnhancedBlock, UIBlock, UIBlockType } from '../types';
 import { FADE_DURATION } from './consts';
 import { useBlockListContext } from './context';
+import { useStacksApiSocketClient } from './use-stacks-api-socket-client';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockList } from './useInitialBlockList';
+
+('use client');
+
+interface Subscription {
+  unsubscribe(): Promise<void>;
+}
 
 const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
   type: UIBlockType.BurnBlock,
@@ -53,7 +64,103 @@ const createUIBlockList = (
   return blockList;
 };
 
-export function useBlockList(length: number) {
+export function useBlockList2(limit: number) {
+  const [isLive, setIsLive] = useState(false);
+  const [groupByBtcBlock, setGroupByBtcBlock] = useState(false);
+
+  const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
+  const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
+
+  const activeNetwork = useGlobalContext().activeNetwork;
+
+  const response = useSuspenseBlockListInfinite(); // queryKey: ['blockListInfinite', limit]
+  const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+
+  // const { data: blocks, isFetchingNextPage, fetchNextPage, hasNextPage } = useSuspenseBlockListInfinite();
+
+  const queryClient = useQueryClient();
+
+  console.log('BlockList/index', { blocks });
+
+  useEffect(() => {
+    setInitialBlocks(blocks);
+  }, [blocks]);
+
+  const { connect: stacksApiSocketConnect, disconnect: stacksApiSocketDisconnect } =
+    useStacksApiSocketClient();
+
+  useEffect(() => {
+    if (isLive) {
+      void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+      stacksApiSocketConnect((socketClient: StacksApiSocketClient | undefined) => {
+        socketClient?.subscribeBlocks((block: any) => {
+          setLatestBlocks(prevLatestBlocks => [
+            { ...block, microblock_tx_count: {}, animate: true },
+            ...prevLatestBlocks,
+          ]);
+        });
+      });
+    } else {
+      stacksApiSocketDisconnect();
+    }
+  }, [isLive, activeNetwork.url, stacksApiSocketConnect, stacksApiSocketDisconnect, queryClient]);
+
+  // useEffect(() => {
+  //   if (!isLive) return;
+  //   void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+  //   let sub: {
+  //     unsubscribe?: () => Promise<void>;
+  //   };
+  //   const subscribe = async () => {
+  //     const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://')); // TODO: Save this as ref so that when the live toggle is switched off, we can close the connection. Return subscribe and unsunscribe functions from the hook
+  //     sub = await client.subscribeBlocks((block: any) => {
+  //       setLatestBlocks(prevLatestBlocks => [
+  //         { ...block, microblock_tx_count: {}, animate: true },
+  //         ...prevLatestBlocks,
+  //       ]);
+  //     });
+  //   };
+  //   void subscribe();
+  //   return () => {
+  //     if (sub?.unsubscribe) {
+  //       void sub.unsubscribe();
+  //     }
+  //   };
+  // }, [activeNetwork.url, isLive, queryClient]);
+
+  // const allBlocks = useMemo(() => {
+  //   return [...latestBlocks, ...initialBlocks]
+  //     .sort((a, b) => (b.height || 0) - (a.height || 0))
+  //     .reduce((acc: EnhancedBlock[], block, index) => {
+  //       if (!acc.some(b => b.height === block.height)) {
+  //         acc.push({ ...block, destroy: index >= (limit || DEFAULT_LIST_LIMIT) });
+  //       }
+  //       return acc;
+  //     }, []);
+  // }, [initialBlocks, latestBlocks, limit]);
+
+  // // whats happening here?
+  // const removeOldBlock = useCallback((block: EnhancedBlock) => {
+  //   setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+  //   setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+  // }, []);
+
+  if (groupByBtcBlock) {
+    // TODO: group by btc block
+  }
+
+  return {
+    setIsLive,
+    setGroupByBtcBlock,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+    blocks,
+  };
+}
+
+export function useBlockList1() {
   const queryClient = useQueryClient();
   const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
 

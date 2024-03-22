@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';

@@ -23,7 +23,9 @@ import { Switch } from '../../../ui/Switch';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { AnimatedBlockAndMicroblocksItem } from './AnimatedBlockAndMicroblocksItem';
 import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
+import { useBlockList } from './LayoutA/useBlockList';
 import { EnhancedBlock } from './types';
+import { BlockListProvider } from './LayoutA/Provider';
 
 function BlocksListBase({
   limit,
@@ -34,11 +36,16 @@ function BlocksListBase({
   const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
   const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
   const activeNetwork = useGlobalContext().activeNetwork;
-  const response = useSuspenseBlockListInfinite();
+
+  const response = useSuspenseBlockListInfinite(); // queryKey: ['blockListInfinite', limit]
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+
   const queryClient = useQueryClient();
 
-  const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+  console.log('BlockList/index', { blocks });
+  const { blockList, updateList, latestBlocksCount } = useBlockList(17);
+  console.log('BlockList/index', { blockList });
 
   const labelColor = useColorModeValue('slate.600', 'slate.400');
 
@@ -53,7 +60,7 @@ function BlocksListBase({
       unsubscribe?: () => Promise<void>;
     };
     const subscribe = async () => {
-      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://'));
+      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://')); // TODO: Save this as ref so that when the live toggle is switched off, we can close the connection. Return subscribe and unsunscribe functions from the hook
       sub = await client.subscribeBlocks((block: any) => {
         setLatestBlocks(prevLatestBlocks => [
           { ...block, microblock_tx_count: {}, animate: true },
@@ -80,6 +87,8 @@ function BlocksListBase({
       }, []);
   }, [initialBlocks, latestBlocks, limit]);
 
+
+  // whats happening here?
   const removeOldBlock = useCallback((block: EnhancedBlock) => {
     setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
     setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
@@ -148,7 +157,9 @@ export function BlocksList({ limit }: { limit?: number }) {
       }}
       tryAgainButton
     >
-      <BlocksListBase limit={limit} />
+      <BlockListProvider>
+        <BlocksListBase limit={limit} />
+      </BlockListProvider>
     </ExplorerErrorBoundary>
   );
 }

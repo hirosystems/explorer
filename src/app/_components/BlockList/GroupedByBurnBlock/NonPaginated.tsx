@@ -1,13 +1,8 @@
 'use client';
 
-import { Block } from 'bitcoinjs-lib';
-import React from 'react';
-
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { ListHeader } from '../../ListHeader';
 import { BlockListProvider } from '../LayoutA/Provider';
 import { UIBlockType } from '../types';
 import { BlocksGroup } from './BlocksGroup';

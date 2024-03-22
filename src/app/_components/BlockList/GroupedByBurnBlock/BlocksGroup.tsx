@@ -1,10 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import { hash } from '@noble/hashes/_assert';
-import * as React from 'react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { PiArrowElbowLeftDown } from 'react-icons/pi';
-
-import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { Circle } from '../../../../common/components/Circle';
 import { BlockLink } from '../../../../common/components/ExplorerLinks';
@@ -19,8 +16,7 @@ import { Text } from '../../../../ui/Text';
 import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
-import { StxBlock } from '../LayoutA/StxBlock';
-import { UIBlockType, UISingleBlock } from '../types';
+import { UISingleBlock } from '../types';
 
 interface BlocksGroupProps {
   burnBlock: UISingleBlock;
