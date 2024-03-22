@@ -13,22 +13,22 @@ import { NavItem } from './types';
 export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navItems, close }) => {
   const isStatusBarActive = useAppSelector(selectIsStatusBarActive);
 
-    const handleScroll = (event: Event) => {
-      event.preventDefault();
-    };
-  
-    // Disable scrolling when the menu is open
-    useEffect(() => {
-      if (document.body) {
-        document.body.style.overflow = 'hidden';
-        document.addEventListener('scroll', handleScroll, { passive: false });
-  
-        return () => {
-          document.body.style.overflow = '';
-          document.removeEventListener('scroll', handleScroll);
-        };
-      }
-    }, []);
+  const handleScroll = (event: Event) => {
+    event.preventDefault();
+  };
+
+  // Disable scrolling when the menu is open
+  useEffect(() => {
+    if (document.body) {
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('scroll', handleScroll, { passive: false });
+
+      return () => {
+        document.body.style.overflow = '';
+        document.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
 
   return (
     <Stack

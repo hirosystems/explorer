@@ -27,7 +27,7 @@ export function IncidentsStatusBar() {
       incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
     IncidentImpact.None
   );
-  
+
   useEffect(() => {
     if (allIncidents || highestImpact) dispatch(setStatusBar(true));
   }, [allIncidents, highestImpact, dispatch]);
