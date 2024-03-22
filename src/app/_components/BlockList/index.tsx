@@ -2,7 +2,7 @@
 
 import { useColorModeValue } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { Block } from '@stacks/stacks-blockchain-api-types';
@@ -32,7 +32,8 @@ function BlocksListBase({
 }: {
   limit?: number;
 } & FlexProps) {
-  const [isLive, setIsLive] = React.useState(false);
+  // const [isLive, setIsLive] = useState(false);
+
   const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
   const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
   const activeNetwork = useGlobalContext().activeNetwork;
@@ -44,8 +45,14 @@ function BlocksListBase({
   const queryClient = useQueryClient();
 
   console.log('BlockList/index', { blocks });
-  const { blocks: blocksFromUseBlockList } = useBlockList2(17);
-  console.log('BlockList/index', { blocksFromUseBlockList });
+  const {
+    blocks: blocksFromUseBlockList,
+    setIsGroupedByBtcBlock,
+    isGroupedByBtcBlock,
+    isLive,
+    setIsLive,
+  } = useBlockList2(17);
+  console.log('BlockList/index', { blocksFromUseBlockList, isGroupedByBtcBlock, isLive });
 
   const labelColor = useColorModeValue('slate.600', 'slate.400');
 
@@ -106,12 +113,20 @@ function BlocksListBase({
       topRight={
         <FormControl display="flex" alignItems="center">
           <FormLabel htmlFor="blocks-live-view-switch" mb="0" color={labelColor}>
-            live view
+            Live Updates
           </FormLabel>
           <Switch
             id="blocks-live-view-switch"
             isChecked={isLive}
             onChange={() => setIsLive(!isLive)}
+          />
+          <FormLabel htmlFor="blocks-live-view-switch" mb="0" color={labelColor}>
+            Group by Bitcoin block
+          </FormLabel>
+          <Switch
+            id="blocks-live-view-switch"
+            isChecked={isGroupedByBtcBlock}
+            onChange={() => setIsGroupedByBtcBlock(!isGroupedByBtcBlock)}
           />
         </FormControl>
       }
