@@ -1,12 +1,9 @@
 'use client';
 
-import { ScaleFade, SlideFade } from '@chakra-ui/react';
-import { FC, memo, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { Box } from '../../../ui/Box';
-import { Button } from '../../../ui/Button';
 import { Collapse } from '../../../ui/Collapse';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
 import { EnhancedBlock } from './types';
 
