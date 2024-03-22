@@ -4,7 +4,6 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
-import { useGlobalContext } from '../../common/context/useAppContext';
 import { useIsNakamoto } from '../../common/hooks/useIsNakamoto';
 import { PageTitle } from '../_components/PageTitle';
 
@@ -23,8 +22,6 @@ const PaginatedBlockListLayoutA = dynamic(
 );
 
 const BlocksPage: NextPage = () => {
-  const { activeNetwork, activeNetworkKey } = useGlobalContext();
-  const activeNetworkMode = activeNetwork.mode;
   const isNakamoto = useIsNakamoto();
 
   return (

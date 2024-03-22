@@ -1,6 +1,6 @@
 'use client';
 
-import { useIsNakamoto } from '@/common/hooks/useIsNakamoto';
+import { useIsNakamoto } from '../../common/hooks/useIsNakamoto';
 import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
 import { PiArrowBendDownRight, PiFunnelSimple } from 'react-icons/pi';
