@@ -14,8 +14,7 @@ import { useBlockListContext } from './context';
 import { useStacksApiSocketClient } from './use-stacks-api-socket-client';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockList } from './useInitialBlockList';
-
-('use client');
+import { group } from 'console';
 
 interface Subscription {
   unsubscribe(): Promise<void>;
@@ -64,6 +63,27 @@ const createUIBlockList = (
   return blockList;
 };
 
+interface blocksGroupedByParentHash {
+  [parentHash: string]: Block[];
+}
+
+
+
+function groupBlocksByParentHash(blocks: Block[]): Record<string, Block[]> {
+  const groupedBlocks: Record<string, Block[]> = {};
+
+  blocks.forEach(block => {
+    const parentHash = block.parent_block_hash;
+    if (!groupedBlocks[parentHash]) {
+      groupedBlocks[parentHash] = [block];
+    } else {
+      groupedBlocks[parentHash].push(block);
+    }
+  });
+
+  return groupedBlocks;
+}
+
 export function useBlockList2(limit: number) {
   const [isLive, setIsLive] = useState(false);
   const [groupByBtcBlock, setGroupByBtcBlock] = useState(false);
@@ -74,14 +94,15 @@ export function useBlockList2(limit: number) {
   const activeNetwork = useGlobalContext().activeNetwork;
 
   const response = useSuspenseBlockListInfinite(); // queryKey: ['blockListInfinite', limit]
+  console.log('useBlockList copy', { response });
+
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+  console.log('useBlockList copy', { blocks });
 
   // const { data: blocks, isFetchingNextPage, fetchNextPage, hasNextPage } = useSuspenseBlockListInfinite();
 
   const queryClient = useQueryClient();
-
-  console.log('BlockList/index', { blocks });
 
   useEffect(() => {
     setInitialBlocks(blocks);
@@ -95,7 +116,7 @@ export function useBlockList2(limit: number) {
       void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
       stacksApiSocketConnect((socketClient: StacksApiSocketClient | undefined) => {
         socketClient?.subscribeBlocks((block: any) => {
-          setLatestBlocks(prevLatestBlocks => [
+          setLatestBlocks(prevLatestBlocks => [ // TODO: or I could just push this onto the blocks array
             { ...block, microblock_tx_count: {}, animate: true },
             ...prevLatestBlocks,
           ]);
@@ -146,8 +167,35 @@ export function useBlockList2(limit: number) {
   //   setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
   // }, []);
 
+  // const allBlocks = useMemo(() => {
+  //   console.log('useBlockList copy', { initialBlocks, latestBlocks });
+
+  //   const blocks = [...latestBlocks, ...initialBlocks].sort(
+  //     (a, b) => (b.height || 0) - (a.height || 0)
+  //   ); // desc sort by height
+  //   // .reduce((acc: EnhancedBlock[], block, index) => {
+  //   //   if (!acc.some(b => b.height === block.height)) {
+  //   //     acc.push({ ...block, destroy: index >= (limit || DEFAULT_LIST_LIMIT) });
+  //   //   }
+  //   //   return acc;
+  //   // }, []);
+  //   console.log('useBlockList copy', { allBlocks: blocks });
+  // }, [initialBlocks, latestBlocks]);
+
+  // whats happening here?
+  const removeOldBlock = useCallback((block: EnhancedBlock) => {
+    setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+    setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+  }, []);
+
+  let blocksResult = [...latestBlocks, ...initialBlocks].sort(
+    (a, b) => (b.height || 0) - (a.height || 0)
+  ); // desc 
+
   if (groupByBtcBlock) {
     // TODO: group by btc block
+    blocksResult = groupBlocksByParentHash(blocksResult);
+
   }
 
   return {
@@ -156,7 +204,8 @@ export function useBlockList2(limit: number) {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-    blocks,
+    blocks: allBlocks,
+    removeOldBlock,
   };
 }
 

@@ -23,9 +23,9 @@ import { Switch } from '../../../ui/Switch';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { AnimatedBlockAndMicroblocksItem } from './AnimatedBlockAndMicroblocksItem';
 import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
-import { useBlockList } from './LayoutA/useBlockList';
-import { EnhancedBlock } from './types';
 import { BlockListProvider } from './LayoutA/Provider';
+import { useBlockList2 } from './LayoutA/useBlockList copy';
+import { EnhancedBlock } from './types';
 
 function BlocksListBase({
   limit,
@@ -44,8 +44,8 @@ function BlocksListBase({
   const queryClient = useQueryClient();
 
   console.log('BlockList/index', { blocks });
-  const { blockList, updateList, latestBlocksCount } = useBlockList(17);
-  console.log('BlockList/index', { blockList });
+  const { blocks: blocksFromUseBlockList } = useBlockList2(17);
+  console.log('BlockList/index', { blocksFromUseBlockList });
 
   const labelColor = useColorModeValue('slate.600', 'slate.400');
 
@@ -86,7 +86,6 @@ function BlocksListBase({
         return acc;
       }, []);
   }, [initialBlocks, latestBlocks, limit]);
-
 
   // whats happening here?
   const removeOldBlock = useCallback((block: EnhancedBlock) => {
