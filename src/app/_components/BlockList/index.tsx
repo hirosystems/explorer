@@ -68,7 +68,7 @@ function BlocksListBase({
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useBlockList2(limit);
+  } = useBlockList2();
   console.log('BlockList/index', { blocks, isGroupedByBtcBlock, isLive });
 
  
