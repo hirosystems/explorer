@@ -10,6 +10,8 @@ import { BlocksGroup } from './BlocksGroup';
 const LIST_LENGTH = 17;
 
 function NonPaginatedBlockListGroupedByBurnBlockBase() {
+  
+
   const blockList = [
     {
       type: UIBlockType.Block,

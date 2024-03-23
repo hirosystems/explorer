@@ -26,13 +26,16 @@ export function useStacksApiSocketClient(): {
         const connection = StacksApiSocketClient.connect({ url: socketUrl });
         socketClient.current = connection;
         socketClient.current.socket.on('connect', () => {
+          console.log('Connected to socket. About to run handleOnConnect')
           handleOnConnect?.(socketClient.current || undefined);
           isSocketClientConnecting.current = false;
         });
         socketClient.current.socket.on('disconnect', () => {
+          console.log('Disconnected from socket')
           isSocketClientConnecting.current = false;
         });
         socketClient.current.socket.on('connect_error', error => {
+          console.error('Socket connection error', error);
           isSocketClientConnecting.current = false;
         });
       } catch (error) {
@@ -44,6 +47,7 @@ export function useStacksApiSocketClient(): {
 
   const disconnect = useCallback(() => {
     if (socketClient.current?.socket.connected) {
+      console.log('Disconnecting from socket')
       socketClient.current.socket.close();
     }
   }, []);
