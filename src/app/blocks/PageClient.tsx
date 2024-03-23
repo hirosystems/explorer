@@ -37,7 +37,7 @@ const BlocksPage: NextPage = () => {
   const { activeNetworkKey } = useGlobalContext();
   return (
     <>
-      <PageTitle>Blocks</PageTitle>
+      <PageTitle>Recent blocks</PageTitle>
       {/*{activeNetworkKey.indexOf('naka') !== -1 ? <PaginatedBlockListLayoutA /> : <BlocksList />}*/}
       {activeNetworkKey.indexOf('naka') !== -1 ? (
         <NonPaginatedBlockListGroupedByBurnBlock />

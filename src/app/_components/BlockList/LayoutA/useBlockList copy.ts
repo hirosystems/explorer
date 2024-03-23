@@ -4,16 +4,15 @@ import { useSuspenseBlockListInfinite } from '@/common/queries/useBlockListInfin
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 
-import { BurnBlock, StacksApiSocketClient } from '@stacks/blockchain-api-client';
+import { BurnBlock, connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { EnhancedBlock, UIBlock, UIBlockType } from '../types';
-import { useStacksApiSocketClient } from './use-stacks-api-socket-client';
 
-interface Subscription {
-  unsubscribe(): Promise<void>;
-}
+// interface Subscription {
+//   unsubscribe(): Promise<void>;
+// }
 
 const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
   type: UIBlockType.BurnBlock,
@@ -59,25 +58,25 @@ const createUIBlockList = (
 };
 
 interface BlocksGroupedByParentHash {
-  [parentHash: string]: EnhancedBlock[];
+  [btcBlockHeight: string]: EnhancedBlock[];
 }
 
-function groupBlocksByParentHash(blocks: Block[]): Record<string, Block[]> {
+function groupBlocksByBtcBlock(blocks: Block[]): Record<string, Block[]> {
   const groupedBlocks: Record<string, Block[]> = {};
 
   blocks.forEach(block => {
-    const parentHash = block.parent_block_hash;
-    if (!groupedBlocks[parentHash]) {
-      groupedBlocks[parentHash] = [block];
+    const btcBlockNum = block.burn_block_height;
+    if (!groupedBlocks[btcBlockNum]) {
+      groupedBlocks[btcBlockNum] = [block];
     } else {
-      groupedBlocks[parentHash].push(block);
+      groupedBlocks[btcBlockNum].push(block);
     }
   });
 
   return groupedBlocks;
 }
 
-export function useBlockList2(limit: number): {
+export function useBlockList2(limit?: number): {
   setIsLive: (value: React.SetStateAction<boolean>) => void;
   isLive: boolean;
   setIsGroupedByBtcBlock: (value: React.SetStateAction<boolean>) => void;
@@ -86,6 +85,7 @@ export function useBlockList2(limit: number): {
   fetchNextPage: () => void;
   hasNextPage: boolean;
   blocks: EnhancedBlock[] | BlocksGroupedByParentHash;
+  blocksGroupedByBtcBlock: BlocksGroupedByParentHash;
   removeOldBlock: (block: EnhancedBlock) => void;
 } {
   const [isLive, setIsLive] = useState(false);
@@ -111,49 +111,48 @@ export function useBlockList2(limit: number): {
     setInitialBlocks(blocks);
   }, [blocks]);
 
-  const { connect: stacksApiSocketConnect, disconnect: stacksApiSocketDisconnect } =
-    useStacksApiSocketClient();
+  // const { connect: stacksApiSocketConnect, disconnect: stacksApiSocketDisconnect } =
+  //   useStacksApiSocketClient();
 
   useEffect(() => {
-    if (isLive) {
-      void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
-      stacksApiSocketConnect((socketClient: StacksApiSocketClient | undefined) => {
-        socketClient?.subscribeBlocks((block: any) => {
-          setLatestBlocks(prevLatestBlocks => [
-            // TODO: or I could just push this onto the blocks array
-            { ...block, microblock_tx_count: {}, animate: true },
-            ...prevLatestBlocks,
-          ]);
-        });
+    // if (isLive) {
+    //   void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+    //   stacksApiSocketConnect((socketClient: StacksApiSocketClient | undefined) => {
+    //     console.log('socketClient?.subscribeBlocks...');
+    //     socketClient?.subscribeBlocks((block: any) => {
+    //       console.log('new block received', block);
+    //       setLatestBlocks(prevLatestBlocks => [
+    //         // TODO: or I could just push this onto the blocks array
+    //         { ...block, microblock_tx_count: {}, animate: true },
+    //         ...prevLatestBlocks,
+    //       ]);
+    //     });
+    //   });
+    // } else {
+    //   stacksApiSocketDisconnect();
+    // }
+    if (!isLive) return;
+    void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+    let sub: {
+      unsubscribe?: () => Promise<void>;
+    };
+    const subscribe = async () => {
+      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://')); // TODO: Save this as ref so that when the live toggle is switched off, we can close the connection. Return subscribe and unsunscribe functions from the hook
+      sub = await client.subscribeBlocks((block: any) => {
+        setLatestBlocks(prevLatestBlocks => [
+          { ...block, microblock_tx_count: {}, animate: true },
+          ...prevLatestBlocks,
+        ]);
       });
-    } else {
-      stacksApiSocketDisconnect();
-    }
-  }, [isLive, activeNetwork.url, stacksApiSocketConnect, stacksApiSocketDisconnect, queryClient]);
-
-  // useEffect(() => {
-  //   if (!isLive) return;
-  //   void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
-  //   let sub: {
-  //     unsubscribe?: () => Promise<void>;
-  //   };
-  //   const subscribe = async () => {
-  //     const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://')); // TODO: Save this as ref so that when the live toggle is switched off, we can close the connection. Return subscribe and unsunscribe functions from the hook
-  //     sub = await client.subscribeBlocks((block: any) => {
-  //       setLatestBlocks(prevLatestBlocks => [
-  //         { ...block, microblock_tx_count: {}, animate: true },
-  //         ...prevLatestBlocks,
-  //       ]);
-  //     });
-  //   };
-  //   void subscribe();
-  //   return () => {
-  //     if (sub?.unsubscribe) {
-  //       void sub.unsubscribe();
-  //     }
-  //   };
-  // }, [activeNetwork.url, isLive, queryClient]);
-
+    };
+    void subscribe();
+    return () => {
+      if (sub?.unsubscribe) {
+        void sub.unsubscribe();
+      }
+    };
+  }, [isLive, activeNetwork.url, queryClient]);
+  
   // const allBlocks = useMemo(() => {
   //   return [...latestBlocks, ...initialBlocks]
   //     .sort((a, b) => (b.height || 0) - (a.height || 0))
@@ -165,28 +164,6 @@ export function useBlockList2(limit: number): {
   //     }, []);
   // }, [initialBlocks, latestBlocks, limit]);
 
-  // // whats happening here?
-  // const removeOldBlock = useCallback((block: EnhancedBlock) => {
-  //   setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
-  //   setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
-  // }, []);
-
-  // const allBlocks = useMemo(() => {
-  //   console.log('useBlockList copy', { initialBlocks, latestBlocks });
-
-  //   const blocks = [...latestBlocks, ...initialBlocks].sort(
-  //     (a, b) => (b.height || 0) - (a.height || 0)
-  //   ); // desc sort by height
-  //   // .reduce((acc: EnhancedBlock[], block, index) => {
-  //   //   if (!acc.some(b => b.height === block.height)) {
-  //   //     acc.push({ ...block, destroy: index >= (limit || DEFAULT_LIST_LIMIT) });
-  //   //   }
-  //   //   return acc;
-  //   // }, []);
-  //   console.log('useBlockList copy', { allBlocks: blocks });
-  // }, [initialBlocks, latestBlocks]);
-
-  // whats happening here?
   const removeOldBlock = useCallback((block: EnhancedBlock) => {
     setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
     setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
@@ -196,11 +173,7 @@ export function useBlockList2(limit: number): {
     (a, b) => (b.height || 0) - (a.height || 0)
   ); // desc
 
-  let blocksGroupedByParentHash: BlocksGroupedByParentHash = {};
-  if (isGroupedByBtcBlock) {
-    // TODO: group by btc block
-    blocksGroupedByParentHash = groupBlocksByParentHash(blocks);
-  }
+  const blocksGroupedByParentHash = groupBlocksByBtcBlock(blocks);
 
   return {
     setIsLive,
@@ -210,115 +183,8 @@ export function useBlockList2(limit: number): {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-    blocks: isGroupedByBtcBlock ? blocksGroupedByParentHash : formattedBlocks,
+    blocks: formattedBlocks,
+    blocksGroupedByBtcBlock: blocksGroupedByParentHash,
     removeOldBlock,
   };
 }
-
-// export function useBlockList1() {
-//   const queryClient = useQueryClient();
-//   const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
-
-//   const {
-//     lastBurnBlock,
-//     secondToLastBurnBlock,
-//     lastBurnBlockStxBlocks,
-//     secondToLastBlockStxBlocks,
-//   } = useInitialBlockList();
-
-//   const initialBlockHashes = useMemo(
-//     () =>
-//       new Set([
-//         ...lastBurnBlockStxBlocks.map(block => block.hash),
-//         ...secondToLastBlockStxBlocks.map(block => block.hash),
-//       ]),
-//     [lastBurnBlockStxBlocks, secondToLastBlockStxBlocks]
-//   );
-
-//   // Initial burn block hashes are used to filter out blocks that were already added to the list
-//   const initialBurnBlockHashes = useMemo(
-//     () => new Set([lastBurnBlock.burn_block_hash, secondToLastBurnBlock.burn_block_hash]),
-//     [lastBurnBlock, secondToLastBurnBlock]
-//   );
-
-//   const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
-//     initialBlockHashes,
-//     initialBurnBlockHashes
-//   );
-
-//   const updateList = useCallback(
-//     async function () {
-//       setIsUpdateListLoading(true);
-//       await Promise.all([
-//         queryClient.invalidateQueries({ queryKey: ['getBlocksByBurnBlock'] }), // TODO: make these constants
-//         queryClient.invalidateQueries({ queryKey: ['burnBlocks'] }),
-//       ]);
-//       clearLatestBlocks();
-//       setIsUpdateListLoading(false);
-//     },
-//     [clearLatestBlocks, queryClient, setIsUpdateListLoading]
-//   );
-
-//   const prevLiveUpdatesRef = useRef(liveUpdates);
-//   const prevLatestBlocksCountRef = useRef(latestBlocksCount);
-
-//   useEffect(() => {
-//     const liveUpdatesToggled = prevLiveUpdatesRef.current !== liveUpdates;
-
-//     const receivedLatestBlockWhileLiveUpdates =
-//       liveUpdates &&
-//       latestBlocksCount > 0 &&
-//       prevLatestBlocksCountRef.current !== latestBlocksCount;
-
-//     if (liveUpdatesToggled) {
-//       setIsUpdateListLoading(true);
-//       clearLatestBlocks();
-//       updateList().then(() => {
-//         setIsUpdateListLoading(false);
-//       });
-//     } else if (receivedLatestBlockWhileLiveUpdates && latestBlock) {
-//       // If latest block belongs to the last burn block, add it to the list, otherwise trigger an update.
-//       if (latestBlock.burn_block_height === lastBurnBlock.burn_block_height) {
-//         setIsUpdateListLoading(true);
-//         setTimeout(() => {
-//           lastBurnBlockStxBlocks.unshift(latestBlock);
-//           lastBurnBlock.stacks_blocks.unshift(latestBlock.hash);
-//           setIsUpdateListLoading(false);
-//         }, FADE_DURATION);
-//       } else {
-//         clearLatestBlocks();
-//         void updateList();
-//       }
-//     }
-
-//     prevLiveUpdatesRef.current = liveUpdates;
-//     prevLatestBlocksCountRef.current = latestBlocksCount;
-//   }, [
-//     liveUpdates,
-//     latestBlocksCount,
-//     clearLatestBlocks,
-//     updateList,
-//     setIsUpdateListLoading,
-//     latestBlock,
-//     lastBurnBlockStxBlocks,
-//     lastBurnBlock.stacks_blocks,
-//     lastBurnBlock.burn_block_height,
-//   ]);
-
-//   let blockList = createUIBlockList(lastBurnBlock, lastBurnBlockStxBlocks, length);
-
-//   if (blockList.length < length) {
-//     const secondToLastBlockList = createUIBlockList(
-//       secondToLastBurnBlock,
-//       secondToLastBlockStxBlocks,
-//       length - blockList.length
-//     );
-//     blockList = blockList.concat(secondToLastBlockList);
-//   }
-
-//   return {
-//     blockList,
-//     latestBlocksCount,
-//     updateList,
-//   };
-// }

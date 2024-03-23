@@ -1,31 +1,42 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-
-import { connectWebSocketClient } from '@stacks/blockchain-api-client';
-import { Block } from '@stacks/stacks-blockchain-api-types';
-
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
 import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
-import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useAppContext';
-import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { Accordion } from '../../../ui/Accordion';
 import { Box } from '../../../ui/Box';
-import { FlexProps } from '../../../ui/Flex';
+import { Flex, FlexProps } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
 import { Switch } from '../../../ui/Switch';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { AnimatedBlockAndMicroblocksItem } from './AnimatedBlockAndMicroblocksItem';
 import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
+import { BlocksGroup } from './GroupedByBurnBlock/BlocksGroup';
 import { BlockListProvider } from './LayoutA/Provider';
 import { useBlockList2 } from './LayoutA/useBlockList copy';
-import { EnhancedBlock } from './types';
+import { EnhancedBlock, UIBlockType, UISingleBlock } from './types';
+
+function BtcBlock({
+  burnBlock,
+  blockList,
+}: {
+  burnBlock: UISingleBlock;
+  blockList: UISingleBlock[];
+}) {
+  return (
+    <Section>
+      <Box overflowX={'auto'} py={6}>
+        <BlocksGroup
+          burnBlock={burnBlock}
+          stxBlocks={blockList}
+          // latestBlocksCount={latestBlocksCount}
+          // updateList={updateList}
+        />
+      </Box>
+    </Section>
+  );
+}
 
 function BlocksListBase({
   limit,
@@ -33,116 +44,118 @@ function BlocksListBase({
   limit?: number;
 } & FlexProps) {
   // const [isLive, setIsLive] = useState(false);
+  // const labelColor = useColorModeValue('slate.600', 'slate.400'); // TODO: get rid of this
 
-  const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
-  const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
-  const activeNetwork = useGlobalContext().activeNetwork;
+  // const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
+  // const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
+  // const activeNetwork = useGlobalContext().activeNetwork;
 
-  const response = useSuspenseBlockListInfinite(); // queryKey: ['blockListInfinite', limit]
-  const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+  // const response = useSuspenseBlockListInfinite(); // queryKey: ['blockListInfinite', limit]
+  // const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  // const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  console.log('BlockList/index', { blocks });
+  // console.log('BlockList/index', { blocks });
   const {
-    blocks: blocksFromUseBlockList,
+    blocks,
+    blocksGroupedByBtcBlock: blocksGroupedByParentHash,
     setIsGroupedByBtcBlock,
     isGroupedByBtcBlock,
     isLive,
     setIsLive,
-  } = useBlockList2(17);
-  console.log('BlockList/index', { blocksFromUseBlockList, isGroupedByBtcBlock, isLive });
+    removeOldBlock,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useBlockList2(limit);
+  console.log('BlockList/index', { blocks, isGroupedByBtcBlock, isLive });
 
-  const labelColor = useColorModeValue('slate.600', 'slate.400');
+ 
 
-  useEffect(() => {
-    setInitialBlocks(blocks);
-  }, [blocks]);
-
-  useEffect(() => {
-    if (!isLive) return;
-    void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
-    let sub: {
-      unsubscribe?: () => Promise<void>;
-    };
-    const subscribe = async () => {
-      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://')); // TODO: Save this as ref so that when the live toggle is switched off, we can close the connection. Return subscribe and unsunscribe functions from the hook
-      sub = await client.subscribeBlocks((block: any) => {
-        setLatestBlocks(prevLatestBlocks => [
-          { ...block, microblock_tx_count: {}, animate: true },
-          ...prevLatestBlocks,
-        ]);
-      });
-    };
-    void subscribe();
-    return () => {
-      if (sub?.unsubscribe) {
-        void sub.unsubscribe();
-      }
-    };
-  }, [activeNetwork.url, isLive, queryClient]);
-
-  const allBlocks = useMemo(() => {
-    return [...latestBlocks, ...initialBlocks]
-      .sort((a, b) => (b.height || 0) - (a.height || 0))
-      .reduce((acc: EnhancedBlock[], block, index) => {
-        if (!acc.some(b => b.height === block.height)) {
-          acc.push({ ...block, destroy: index >= (limit || DEFAULT_LIST_LIMIT) });
-        }
-        return acc;
-      }, []);
-  }, [initialBlocks, latestBlocks, limit]);
-
-  // whats happening here?
-  const removeOldBlock = useCallback((block: EnhancedBlock) => {
-    setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
-    setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
-  }, []);
-
-  if (!allBlocks?.length) return <SkeletonBlockList />;
+  if (
+    (isGroupedByBtcBlock && Object.keys(blocksGroupedByParentHash).length === 0) ||
+    !blocks?.length
+  )
+    return <SkeletonBlockList />;
 
   return (
     <Section
-      title="Recent Blocks"
+      // title="Recent Blocks"
       gridColumnStart={['1', '1', '1', '2']}
       gridColumnEnd={['2', '2', '2', '3']}
       minWidth={0}
       flexGrow={0}
       flexShrink={1}
-      topRight={
+      title={
         <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="blocks-live-view-switch" mb="0" color={labelColor}>
-            Live Updates
-          </FormLabel>
-          <Switch
-            id="blocks-live-view-switch"
-            isChecked={isLive}
-            onChange={() => setIsLive(!isLive)}
-          />
-          <FormLabel htmlFor="blocks-live-view-switch" mb="0" color={labelColor}>
-            Group by Bitcoin block
-          </FormLabel>
-          <Switch
-            id="blocks-live-view-switch"
-            isChecked={isGroupedByBtcBlock}
-            onChange={() => setIsGroupedByBtcBlock(!isGroupedByBtcBlock)}
-          />
+          <Flex gap={2}>
+            <Flex gap={1} alignItems="center">
+              <FormLabel htmlFor="blocks-live-view-switch" mb="0" color="secondaryText">
+                Group by Bitcoin block
+              </FormLabel>
+              <Switch
+                id="blocks-live-view-switch"
+                isChecked={isGroupedByBtcBlock}
+                onChange={() => setIsGroupedByBtcBlock(!isGroupedByBtcBlock)}
+              />
+            </Flex>
+            <Flex gap={1} alignItems="center">
+              <FormLabel htmlFor="blocks-live-view-switch" mb="0" color="secondaryText">
+                Live Updates
+              </FormLabel>
+              <Switch
+                id="blocks-live-view-switch"
+                isChecked={isLive}
+                onChange={() => setIsLive(!isLive)}
+              />
+            </Flex>
+          </Flex>
         </FormControl>
       }
     >
-      <Box pb={6}>
+      <Flex flexDirection="column" pb={6} pt={6} gap={6}>
         <Accordion allowMultiple>
-          {allBlocks?.map(block =>
-            isLive ? (
-              <AnimatedBlockAndMicroblocksItem
-                block={block}
-                key={block.hash}
-                onAnimationExit={() => removeOldBlock(block)}
-              />
-            ) : (
-              <BlockAndMicroblocksItem block={block} key={block.hash} />
+          {!isGroupedByBtcBlock ? (
+            (blocks as EnhancedBlock[])?.map(block =>
+              isLive ? (
+                <AnimatedBlockAndMicroblocksItem
+                  block={block}
+                  key={block.hash}
+                  onAnimationExit={() => removeOldBlock(block)}
+                />
+              ) : (
+                <BlockAndMicroblocksItem block={block} key={block.hash} />
+              )
             )
+          ) : (
+            <Flex flexDirection="column" gap={6}>
+              {Object.entries(blocksGroupedByParentHash).map(([burnBlockHeight, stxBlocks]) => {
+                const stxBlock = blocksGroupedByParentHash[burnBlockHeight][0];
+                const burnBlock: UISingleBlock = {
+                  type: UIBlockType.BurnBlock,
+                  height: stxBlock.burn_block_height,
+                  hash: stxBlock.burn_block_hash,
+                  timestamp: stxBlock.burn_block_time,
+                };
+                return (
+                  <BtcBlock
+                    key={stxBlock.burn_block_hash}
+                    burnBlock={burnBlock}
+                    blockList={stxBlocks.map(
+                      block =>
+                        ({
+                          type: UIBlockType.Block,
+                          height: block.height,
+                          hash: block.hash,
+                          timestamp: block.burn_block_time,
+                          txsCount: block.txs.length,
+                        }) as UISingleBlock
+                    )}
+                  />
+                );
+              })}
+            </Flex>
           )}
         </Accordion>
         {!isLive && (
@@ -154,7 +167,7 @@ function BlocksListBase({
             label={'blocks'}
           />
         )}
-      </Box>
+      </Flex>
     </Section>
   );
 }
