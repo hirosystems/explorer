@@ -21,6 +21,7 @@ import { UISingleBlock } from '../types';
 interface BlocksGroupProps {
   burnBlock: UISingleBlock;
   stxBlocks: UISingleBlock[];
+  index?: number;
 }
 
 const GroupHeader = () => {
@@ -145,9 +146,9 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
   );
 }
 
-export function BlocksGroup({ burnBlock, stxBlocks }: BlocksGroupProps) {
+export function BlocksGroup({ burnBlock, stxBlocks, index }: BlocksGroupProps) {
   return (
-    <Box border={'1px'} rounded={'lg'} p={4}>
+    <Box border={'1px'} rounded={'lg'} p={4} key={burnBlock.hash}>
       <Flex alignItems={'center'} gap={1.5}>
         <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
         <Icon as={BitcoinIcon} size={4.5} />
@@ -159,6 +160,7 @@ export function BlocksGroup({ burnBlock, stxBlocks }: BlocksGroupProps) {
             {truncateMiddle(burnBlock.hash, 6)}
           </Text>
           <Timestamp ts={burnBlock.timestamp} />
+          <Text>{index}</Text>
         </HStack>
       </Flex>
       <ScrollableDiv>

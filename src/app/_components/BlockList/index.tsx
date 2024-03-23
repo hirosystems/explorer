@@ -20,9 +20,11 @@ import { EnhancedBlock, UIBlockType, UISingleBlock } from './types';
 function BtcBlock({
   burnBlock,
   blockList,
+  index
 }: {
   burnBlock: UISingleBlock;
   blockList: UISingleBlock[];
+  index?: number;
 }) {
   return (
     <Section>
@@ -30,6 +32,7 @@ function BtcBlock({
         <BlocksGroup
           burnBlock={burnBlock}
           stxBlocks={blockList}
+          index={index}
           // latestBlocksCount={latestBlocksCount}
           // updateList={updateList}
         />
@@ -43,23 +46,9 @@ function BlocksListBase({
 }: {
   limit?: number;
 } & FlexProps) {
-  // const [isLive, setIsLive] = useState(false);
-  // const labelColor = useColorModeValue('slate.600', 'slate.400'); // TODO: get rid of this
-
-  // const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
-  // const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
-  // const activeNetwork = useGlobalContext().activeNetwork;
-
-  // const response = useSuspenseBlockListInfinite(); // queryKey: ['blockListInfinite', limit]
-  // const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  // const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
-
-  // const queryClient = useQueryClient();
-
-  // console.log('BlockList/index', { blocks });
   const {
     blocks,
-    blocksGroupedByBtcBlock: blocksGroupedByParentHash,
+    blocksGroupedByBtcBlock,
     setIsGroupedByBtcBlock,
     isGroupedByBtcBlock,
     isLive,
@@ -69,19 +58,13 @@ function BlocksListBase({
     fetchNextPage,
     hasNextPage,
   } = useBlockList2();
-  console.log('BlockList/index', { blocks, isGroupedByBtcBlock, isLive });
+  console.log('BlockList/index', { blocks, blocksGroupedByBtcBlock, blocksGroupedByBtcBlockNum: Object.keys(blocksGroupedByBtcBlock).length, isGroupedByBtcBlock, isLive });
 
- 
-
-  if (
-    (isGroupedByBtcBlock && Object.keys(blocksGroupedByParentHash).length === 0) ||
-    !blocks?.length
-  )
+  if ((isGroupedByBtcBlock && Object.keys(blocksGroupedByBtcBlock).length === 0) || !blocks?.length)
     return <SkeletonBlockList />;
 
   return (
     <Section
-      // title="Recent Blocks"
       gridColumnStart={['1', '1', '1', '2']}
       gridColumnEnd={['2', '2', '2', '3']}
       minWidth={0}
@@ -130,8 +113,8 @@ function BlocksListBase({
             )
           ) : (
             <Flex flexDirection="column" gap={6}>
-              {Object.entries(blocksGroupedByParentHash).map(([burnBlockHeight, stxBlocks]) => {
-                const stxBlock = blocksGroupedByParentHash[burnBlockHeight][0];
+              {Object.entries(blocksGroupedByBtcBlock).map(([burnBlockHeight, stxBlocks], index) => {
+                const stxBlock = blocksGroupedByBtcBlock[burnBlockHeight][0];
                 const burnBlock: UISingleBlock = {
                   type: UIBlockType.BurnBlock,
                   height: stxBlock.burn_block_height,
@@ -141,6 +124,7 @@ function BlocksListBase({
                 return (
                   <BtcBlock
                     key={stxBlock.burn_block_hash}
+                    index={index}
                     burnBlock={burnBlock}
                     blockList={stxBlocks.map(
                       block =>
