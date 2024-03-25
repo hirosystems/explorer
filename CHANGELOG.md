@@ -1,3 +1,10 @@
+# [1.153.0](https://github.com/hirosystems/explorer/compare/v1.152.0...v1.153.0) (2024-03-25)
+
+
+### Features
+
+* nakamoto homepage blocks view ([9491ff6](https://github.com/hirosystems/explorer/commit/9491ff6d0a462bcc29ab1b29b1a99ee718e5e7b8))
+
 # [1.152.0](https://github.com/hirosystems/explorer/compare/v1.151.1...v1.152.0) (2024-03-25)
 
 
