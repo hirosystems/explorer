@@ -7,19 +7,19 @@ import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
+import { Flex, FlexProps } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { TextLink } from '../../../../ui/TextLink';
 import { BitcoinIcon } from '../../../../ui/icons';
 
-interface ListItemProps {
+interface ListItemProps extends FlexProps {
   height: number | string;
   hash: string;
   timestamp?: number;
 }
-export const BurnBlock = memo(function ({ timestamp, height, hash }: ListItemProps) {
+export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps }: ListItemProps) {
   const { btcBlockBaseUrl } = useGlobalContext().activeNetwork;
   const bgColor = useColorModeValue('slate.150', 'slate.900');
   const textColor = useColorModeValue('slate.700', 'slate.500');
@@ -36,6 +36,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash }: ListItemPro
       mr={'-8'}
       ml={'-10'}
       color={textColor}
+      {...flexProps}
     >
       <HStack gap={1.5}>
         <Icon
