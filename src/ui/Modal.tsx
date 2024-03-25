@@ -20,6 +20,7 @@ export type ModalProps = Omit<CUIModalProps, 'onClose'> & {
   title: string;
   primaryAction?: { label: string; onClick: () => void };
   secondaryAction?: { label: string; onClick: () => void };
+  onClose?: () => void;
 };
 export const Modal: FC<ModalProps> = ({
   children,

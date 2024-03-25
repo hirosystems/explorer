@@ -18,6 +18,7 @@ import {
   NetworkModeUrlMap,
 } from '../constants/network';
 import { Network, NetworkModes } from '../types/network';
+import { removeTrailingSlash } from '../utils/utils';
 
 interface GlobalContextProps {
   cookies: string;
@@ -81,7 +82,7 @@ export const AppContextProvider: FC<{
 
   const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||
     NetworkModes.Mainnet) as NetworkModes;
-  const queryApiUrl = Array.isArray(api) ? api[0] : api;
+  const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
   const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
   const queryBtcBlockBaseUrl = Array.isArray(btcBlockBaseUrl)
     ? btcBlockBaseUrl[0]
@@ -108,6 +109,16 @@ export const AppContextProvider: FC<{
         btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
         networkId: ChainID.Mainnet,
         mode: NetworkModes.Mainnet,
+      },
+      'https://api.nakamoto.testnet.hiro.so': {
+        label: 'Nakamoto',
+        url: 'https://api.nakamoto.testnet.hiro.so',
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
+        networkId: ChainID.Testnet,
+        mode: NetworkModes.Testnet,
+        isCustomNetwork: true,
       },
       [apiUrls[NetworkModes.Testnet]]: {
         label: 'hiro.so',
