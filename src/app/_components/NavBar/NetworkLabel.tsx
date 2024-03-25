@@ -67,11 +67,27 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
       >
         <Flex alignItems="center">
           <Title display="block" fontSize={'14px'}>
-            {network.label}
+            {network.label === 'https://api.nakamoto.testnet.hiro.so' ? 'Nakamoto' : network.label}
           </Title>
           {network.isSubnet ? (
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               subnet
+            </Badge>
+          ) : network.label === 'Nakamoto' ||
+            network.label === 'https://api.nakamoto.testnet.hiro.so' ? (
+            <Badge
+              color={'purple.600'}
+              bg={'purple.100'}
+              px={'2'}
+              py={'1'}
+              fontSize={'xs'}
+              rounded={'full'}
+              border={'1px'}
+              borderColor={'purple.300'}
+              fontWeight={'medium'}
+              ml="8px"
+            >
+              {itemNetworkMode}
             </Badge>
           ) : itemNetworkMode ? (
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
@@ -88,7 +104,11 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
           <Spinner size="18px" opacity={0.5} color={'#666'} data-testid="spinner" />
         ) : !!error ? (
           <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
-        ) : network.isCustomNetwork && !isDevnet && !isActive ? (
+        ) : network.isCustomNetwork &&
+          !isDevnet &&
+          !isActive &&
+          network.label !== 'Nakamoto' &&
+          network.label !== 'https://api.nakamoto.testnet.hiro.so' ? (
           <Tooltip label="Remove network">
             <IconButton
               disabled={isDisabled}

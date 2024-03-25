@@ -1,4 +1,4 @@
-import { isJSONString } from '../utils';
+import { isJSONString, removeTrailingSlash } from '../utils';
 
 describe('isJSONString', () => {
   test('returns true for a valid JSON string', () => {
@@ -24,5 +24,21 @@ describe('isJSONString', () => {
   test('returns false for non-JSON strings', () => {
     const nonJsonString = 'Hello, World!';
     expect(isJSONString(nonJsonString)).toBe(false);
+  });
+});
+
+describe('removeTrailingSlash', () => {
+  test('removes trailing slash from a string', () => {
+    const url = 'https://example.com/';
+    expect(removeTrailingSlash(url)).toBe('https://example.com');
+  });
+
+  test('returns original string if there is no trailing slash', () => {
+    const url = 'https://example.com';
+    expect(removeTrailingSlash(url)).toBe('https://example.com');
+  });
+
+  test('handles undefined', () => {
+    expect(removeTrailingSlash(undefined)).toBe('');
   });
 });

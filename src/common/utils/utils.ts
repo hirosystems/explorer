@@ -325,3 +325,8 @@ export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
       return `Tenure change`;
   }
 };
+
+export function removeTrailingSlash(url?: string) {
+  if (!url) return '';
+  return url.replace(/\/$/, '');
+}
