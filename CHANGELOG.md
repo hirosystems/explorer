@@ -1,3 +1,10 @@
+# [1.152.0](https://github.com/hirosystems/explorer/compare/v1.151.1...v1.152.0) (2024-03-25)
+
+
+### Features
+
+* nakamoto modal and network updates ([498fd93](https://github.com/hirosystems/explorer/commit/498fd93f6b7039180c8eb67a56f4a4dc1cc5dd01))
+
 ## [1.151.1](https://github.com/hirosystems/explorer/compare/v1.151.0...v1.151.1) (2024-03-13)
 
 
