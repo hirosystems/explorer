@@ -6,6 +6,10 @@ import React, { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 
 import {
+  statusBarSlice,
+  initialState as statusBarSliceInitialState,
+} from '../../../app/_components/StatusBar/status-bar-slice';
+import {
   sandboxSlice,
   initialState as sandboxSliceInitialState,
 } from '../../../app/sandbox/sandbox-slice';
@@ -23,10 +27,6 @@ import {
   modalSlice,
   initialState as modalSliceInitialState,
 } from '../../components/modals/modal-slice';
-import {
-  statusBarSlice,
-  initialState as statusBarSliceInitialState,
-} from '../../../app/_components/StatusBar/status-bar-slice';
 import {
   initialState as activeTransactionValueFilterInitialState,
   activeTransactionValueFilterSlice,
