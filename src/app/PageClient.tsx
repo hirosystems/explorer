@@ -21,10 +21,10 @@ const NonPaginatedBlockListLayoutA = dynamic(
   }
 );
 
-const NonPaginatedBlockListGroupedByBurnBlock = dynamic(
+const HomePageBlockListGroupedByBtcBlock = dynamic(
   () =>
-    import('./_components/BlockList/GroupedByBurnBlock/NonPaginated').then(
-      mod => mod.NonPaginatedBlockListGroupedByBurnBlock
+    import('./_components/BlockList/GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock').then(
+      mod => mod.HomePageBlockListGroupedByBtcBlock
     ),
   {
     loading: () => <SkeletonBlockList />,
@@ -51,7 +51,7 @@ export default function Home() {
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
 
         {activeNetworkKey.indexOf('naka') !== -1 ? (
-          <NonPaginatedBlockListGroupedByBurnBlock />
+          <HomePageBlockListGroupedByBtcBlock />
         ) : (
           <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}

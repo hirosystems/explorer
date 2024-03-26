@@ -2,7 +2,6 @@
 
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
 import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
 import { useGlobalContext } from '../../common/context/useAppContext';
@@ -33,6 +32,17 @@ const NonPaginatedBlockListGroupedByBurnBlock = dynamic(
   }
 );
 
+const BlocksPageBlockListGroupedByBtcBlock = dynamic(
+  () =>
+    import('../_components/BlockList/GroupedByBurnBlock/BlocksPageBlockListGroupedByBtcBlock').then(
+      mod => mod.BlocksPageBlockListGroupedByBtcBlock
+    ),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
+
 const BlocksPage: NextPage = () => {
   const { activeNetworkKey } = useGlobalContext();
   return (
@@ -40,7 +50,7 @@ const BlocksPage: NextPage = () => {
       <PageTitle>Recent blocks</PageTitle>
       {/*{activeNetworkKey.indexOf('naka') !== -1 ? <PaginatedBlockListLayoutA /> : <BlocksList />}*/}
       {activeNetworkKey.indexOf('naka') !== -1 ? (
-        <NonPaginatedBlockListGroupedByBurnBlock />
+        <BlocksPageBlockListGroupedByBtcBlock />
       ) : (
         <BlocksList />
       )}

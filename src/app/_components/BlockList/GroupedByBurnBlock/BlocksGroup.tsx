@@ -16,13 +16,9 @@ import { Text } from '../../../../ui/Text';
 import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
+import { BlockCount } from '../LayoutA/BlockCount';
 import { UISingleBlock } from '../types';
-
-interface BlocksGroupProps {
-  burnBlock: UISingleBlock;
-  stxBlocks: UISingleBlock[];
-  index?: number;
-}
+import { BurnBlock } from '../LayoutA/BurnBlock';
 
 const GroupHeader = () => {
   const borderColor = useColorModeValue('slate.300', 'slate.800');
@@ -113,6 +109,7 @@ const BlockItem = ({ block, icon }: { block: UISingleBlock; icon?: ReactNode }) 
   );
 };
 
+
 function ScrollableDiv({ children }: { children: ReactNode }) {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -146,7 +143,25 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
   );
 }
 
-export function BlocksGroup({ burnBlock, stxBlocks, index }: BlocksGroupProps) {
+export interface BlocksGroupProps {
+  burnBlock: UISingleBlock;
+  stxBlocks: UISingleBlock[];
+  stxBlocksDisplayLimit?: number;
+}
+
+export function BlocksGroup({
+  burnBlock,
+  stxBlocks,
+  stxBlocksDisplayLimit = stxBlocks.length,
+}: BlocksGroupProps) {
+  const stxBlocksNotDisplayed = burnBlock.txsCount ? burnBlock.txsCount - (stxBlocksDisplayLimit || 0) : 0;
+  // console.log({ 
+  //   burnBlockHeight: burnBlock.height,
+  //   burnBlock,
+  //   stxBlocks,
+  //   stxBlocksDisplayLimit,
+  //   stxBlocksNotDisplayed
+  // })
   return (
     <Box border={'1px'} rounded={'lg'} p={4} key={burnBlock.hash}>
       <Flex alignItems={'center'} gap={1.5}>
@@ -160,13 +175,12 @@ export function BlocksGroup({ burnBlock, stxBlocks, index }: BlocksGroupProps) {
             {truncateMiddle(burnBlock.hash, 6)}
           </Text>
           <Timestamp ts={burnBlock.timestamp} />
-          <Text>{index}</Text>
         </HStack>
       </Flex>
       <ScrollableDiv>
         <Grid templateColumns="repeat(4, 1fr)" gap={4} width={'full'} rowGap={4}>
           <GroupHeader />
-          {stxBlocks.map((stxBlock, i) => (
+          {stxBlocks.slice(0, stxBlocksDisplayLimit).map((stxBlock, i) => (
             <>
               <BlockItem
                 key={i}
@@ -215,6 +229,7 @@ export function BlocksGroup({ burnBlock, stxBlocks, index }: BlocksGroupProps) {
           ))}
         </Grid>
       </ScrollableDiv>
+      {stxBlocksNotDisplayed > 0 ? <BlockCount count={stxBlocksNotDisplayed} /> : null}
     </Box>
   );
 }

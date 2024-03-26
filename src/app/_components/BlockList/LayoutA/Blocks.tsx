@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { StxIcon } from '../../../../ui/icons';
@@ -29,9 +27,9 @@ export function Blocks({
     >
       {blockList.map((block, i) => {
         switch (block.type) {
-          case UIBlockType.Block:
+          case UIBlockType.StxBlock:
             const isFirstStxBlockInBurnBlock =
-              i === 0 || (i > 0 && blockList[i - 1].type === UIBlockType.BurnBlock);
+              i === 0 || (i > 0 && blockList[i - 1].type === UIBlockType.BurnBlock); // what is this check for? -  (i > 0 && blockList[i - 1].type === UIBlockType.BurnBlock. It's to make sure to skip Burn Blocks that dont have any stxx txs. Stacks tx should be first
             return (
               <StxBlock
                 key={block.hash}
@@ -44,7 +42,7 @@ export function Blocks({
                     <Icon as={StxIcon} size={2.5} color={'white'} />
                   ) : undefined
                 }
-                hasBorder={i < blockList.length && blockList[i + 1].type === UIBlockType.Block}
+                hasBorder={i < blockList.length && blockList[i + 1].type === UIBlockType.StxBlock}
               />
             );
           case UIBlockType.BurnBlock:

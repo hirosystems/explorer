@@ -1,12 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockListInfinite } from '../../../../common/queries/useBlockListInfinite';
 import { UIBlockType, UISingleBlock } from '../types';
-import { useBlockListContext } from './context';
 
 export function usePaginatedBlockList() {
   const queryClient = useQueryClient();
@@ -41,7 +40,7 @@ export function usePaginatedBlockList() {
             acc[block.burn_block_hash] = [];
           }
           acc[block.burn_block_hash].push({
-            type: UIBlockType.Block,
+            type: UIBlockType.StxBlock,
             height: block.height,
             hash: block.hash,
             timestamp: block.burn_block_time,

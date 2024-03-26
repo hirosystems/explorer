@@ -10,21 +10,21 @@ describe('BlockListWithControls', () => {
   it('renders correctly', () => {
     const blockList: UIBlock[] = [
       {
-        type: UIBlockType.Block,
+        type: UIBlockType.StxBlock,
         height: 1,
         hash: 'hash1',
         timestamp: date,
         txsCount: 5,
       },
       {
-        type: UIBlockType.Block,
+        type: UIBlockType.StxBlock,
         height: 2,
         hash: 'hash2',
         timestamp: date,
         txsCount: 10,
       },
       {
-        type: UIBlockType.Block,
+        type: UIBlockType.StxBlock,
         height: 3,
         hash: 'hash3',
         timestamp: date,

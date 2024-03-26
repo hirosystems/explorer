@@ -22,7 +22,7 @@ const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
 });
 
 const createBlockUIBlock = (block: NakamotoBlock): UIBlock => ({
-  type: UIBlockType.Block,
+  type: UIBlockType.StxBlock,
   height: block.height,
   hash: block.hash,
   timestamp: block.burn_block_time,
@@ -152,7 +152,7 @@ export function useBlockList2(limit?: number): {
       }
     };
   }, [isLive, activeNetwork.url, queryClient]);
-  
+
   // const allBlocks = useMemo(() => {
   //   return [...latestBlocks, ...initialBlocks]
   //     .sort((a, b) => (b.height || 0) - (a.height || 0))

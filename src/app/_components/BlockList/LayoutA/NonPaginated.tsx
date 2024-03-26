@@ -10,7 +10,6 @@ const LIST_LENGTH = 17;
 
 function NonPaginatedBlockListLayoutABase() {
   const { blockList, updateList, latestBlocksCount } = useBlockList(LIST_LENGTH);
-  console.log({ blockList });
 
   return (
     <BlockListWithControls

@@ -5,7 +5,6 @@ import {
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { address } from 'bitcoinjs-lib';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
@@ -15,12 +14,14 @@ import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
+export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
+
 export function useBurnBlocks(
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const api = useApi();
   return useInfiniteQuery({
-    queryKey: ['burnBlocks'],
+    queryKey: [BURN_BLOCKS_QUERY_KEY],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.burnBlocksApi.getBurnBlocks({
         limit: DEFAULT_BURN_BLOCKS_LIMIT,
@@ -39,7 +40,7 @@ export function useSuspenseBurnBlocks(
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: ['burnBlocks'],
+    queryKey: [BURN_BLOCKS_QUERY_KEY],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.burnBlocksApi.getBurnBlocks({
         limit,

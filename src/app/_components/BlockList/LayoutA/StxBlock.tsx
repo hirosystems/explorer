@@ -28,9 +28,11 @@ export const StxBlock = memo(function ({
   icon,
   hasBorder,
 }: ListItemProps) {
+  // TODO: lots of new colors that aren't in the theme. We should either add them or make them conform to the theme
   const textColor = useColorModeValue('slate.900', 'slate.50');
   const secondaryTextColor = useColorModeValue('slate.700', 'slate.600');
   const borderColor = useColorModeValue('slate.300', 'slate.800');
+
   return (
     <Box
       pl={4}

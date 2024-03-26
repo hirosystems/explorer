@@ -6,14 +6,14 @@ import {
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { useApi } from '../api/useApi';
-import { DEFAULT_BURN_BLOCKS_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { ONE_SECOND, TWO_MINUTES } from './query-stale-time';
+
+export const GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY = 'getBlocksByBurnBlock';
 
 export function useBlocksByBurnBlock(
   heightOrHash: string | number,
@@ -22,7 +22,7 @@ export function useBlocksByBurnBlock(
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
   return useInfiniteQuery({
-    queryKey: ['getBlocksByBurnBlock', heightOrHash],
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,
@@ -43,7 +43,7 @@ export function useSuspenseBlocksByBurnBlock(
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: ['getBlocksByBurnBlock', heightOrHash],
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,
