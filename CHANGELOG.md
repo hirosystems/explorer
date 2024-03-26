@@ -1,3 +1,10 @@
+## [1.155.1](https://github.com/hirosystems/explorer/compare/v1.155.0...v1.155.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* mobile banner ([#1519](https://github.com/hirosystems/explorer/issues/1519)) ([9392b8a](https://github.com/hirosystems/explorer/commit/9392b8a430a9b1f250332f330ca072858db61048))
+
 # [1.155.0](https://github.com/hirosystems/explorer/compare/v1.154.1...v1.155.0) (2024-03-26)
 
 
