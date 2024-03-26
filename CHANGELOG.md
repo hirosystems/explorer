@@ -1,3 +1,10 @@
+## [1.154.1](https://github.com/hirosystems/explorer/compare/v1.154.0...v1.154.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* **coinbase-tx-item:** removed coinbase from tx title ([#1517](https://github.com/hirosystems/explorer/issues/1517)) ([431c471](https://github.com/hirosystems/explorer/commit/431c47104d022955890dae4f77a25dfdc26ee90e))
+
 # [1.154.0](https://github.com/hirosystems/explorer/compare/v1.153.0...v1.154.0) (2024-03-26)
 
 
