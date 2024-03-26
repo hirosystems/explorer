@@ -1,8 +1,8 @@
 'use client';
 
-import { Sip10Disclaimer } from '../../common/components/Sip10Disclaimer';
 import type { NextPage } from 'next';
 
+import { Sip10Disclaimer } from '../../common/components/Sip10Disclaimer';
 import { PageTitle } from '../_components/PageTitle';
 import { TokensList } from './TokensList/TokensList';
 
