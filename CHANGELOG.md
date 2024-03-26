@@ -1,3 +1,10 @@
+# [1.155.0](https://github.com/hirosystems/explorer/compare/v1.154.1...v1.155.0) (2024-03-26)
+
+
+### Features
+
+* **remove-filter-from-txs-on-homepage:** done ([#1518](https://github.com/hirosystems/explorer/issues/1518)) ([66e6a6b](https://github.com/hirosystems/explorer/commit/66e6a6bdab6f0519b31bf55871b95898f9b79f10))
+
 ## [1.154.1](https://github.com/hirosystems/explorer/compare/v1.154.0...v1.154.1) (2024-03-26)
 
 
