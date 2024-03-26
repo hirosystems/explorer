@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
 import { FC } from 'react';
 import { PiFlask } from 'react-icons/pi';
 
@@ -13,7 +12,6 @@ import { Text } from '../../../ui/Text';
 
 export const NetworkModeBanner: FC = () => {
   const networkMode = useGlobalContext().activeNetwork.mode;
-  const colorMode = useColorMode().colorMode;
   if (networkMode !== 'testnet') return null;
   return (
     <Badge bg="white" border={'none'}>

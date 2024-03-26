@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import { PiList } from 'react-icons/pi';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
