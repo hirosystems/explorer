@@ -38,7 +38,7 @@ export default function Home() {
         width="full"
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
-        <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
+        <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
 
         {activeNetworkKey.indexOf('naka') !== -1 ? (
           <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
