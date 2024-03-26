@@ -22,10 +22,10 @@ const NonPaginatedBlockListLayoutA = dynamic(
   }
 );
 
-const NonPaginatedBlockListGroupedByBurnBlock = dynamic(
+const HomePageBlockListGroupedByBtcBlock = dynamic(
   () =>
-    import('./_components/BlockList/GroupedByBurnBlock/NonPaginated').then(
-      mod => mod.NonPaginatedBlockListGroupedByBurnBlock
+    import('./_components/BlockList/GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock').then(
+      mod => mod.HomePageBlockListGroupedByBtcBlock
     ),
   {
     loading: () => <SkeletonBlockList />,

@@ -18,7 +18,7 @@ const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
 });
 
 const createBlockUIBlock = (block: NakamotoBlock): UIBlock => ({
-  type: UIBlockType.Block,
+  type: UIBlockType.StxBlock,
   height: block.height,
   hash: block.hash,
   timestamp: block.burn_block_time,
@@ -134,17 +134,18 @@ export function useBlockList(length: number) {
   }, [
     liveUpdates,
     latestBlocksCount,
-    clearLatestBlocks,
-    updateList,
-    setIsUpdateListLoading,
     latestBlock,
     lastBurnBlockStxBlocks,
     lastBurnBlock.stacks_blocks,
     lastBurnBlock.burn_block_height,
+    clearLatestBlocks,
+    updateList,
+    setIsUpdateListLoading,
   ]);
 
   let blockList = createUIBlockList(lastBurnBlock, lastBurnBlockStxBlocks, length);
 
+  // If the list is not long enough, give the secondLatestBurnBlock and its associated stx blocks the same UI treatment as the latestBurnBlock
   if (blockList.length < length) {
     const secondToLastBlockList = createUIBlockList(
       secondToLastBurnBlock,

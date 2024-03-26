@@ -1,145 +1,125 @@
 'use client';
 
+import { useColorModeValue } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { connectWebSocketClient } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
+
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
 import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
+import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { Accordion } from '../../../ui/Accordion';
 import { Box } from '../../../ui/Box';
-import { Flex, FlexProps } from '../../../ui/Flex';
+import { FlexProps } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
 import { Switch } from '../../../ui/Switch';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { AnimatedBlockAndMicroblocksItem } from './AnimatedBlockAndMicroblocksItem';
 import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
-import { BlocksGroup } from './GroupedByBurnBlock/BlocksGroup';
-import { BlockListProvider } from './LayoutA/Provider';
-import { useBlockList2 } from './LayoutA/useBlockList copy';
-import { EnhancedBlock, UIBlockType, UISingleBlock } from './types';
-
-function BtcBlock({
-  burnBlock,
-  blockList,
-  index
-}: {
-  burnBlock: UISingleBlock;
-  blockList: UISingleBlock[];
-  index?: number;
-}) {
-  return (
-    <Section>
-      <Box overflowX={'auto'} py={6}>
-        <BlocksGroup
-          burnBlock={burnBlock}
-          stxBlocks={blockList}
-          index={index}
-          // latestBlocksCount={latestBlocksCount}
-          // updateList={updateList}
-        />
-      </Box>
-    </Section>
-  );
-}
+import { EnhancedBlock } from './types';
 
 function BlocksListBase({
   limit,
 }: {
   limit?: number;
 } & FlexProps) {
-  const {
-    blocks,
-    blocksGroupedByBtcBlock,
-    setIsGroupedByBtcBlock,
-    isGroupedByBtcBlock,
-    isLive,
-    setIsLive,
-    removeOldBlock,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-  } = useBlockList2();
-  console.log('BlockList/index', { blocks, blocksGroupedByBtcBlock, blocksGroupedByBtcBlockNum: Object.keys(blocksGroupedByBtcBlock).length, isGroupedByBtcBlock, isLive });
+  const [isLive, setIsLive] = React.useState(false);
+  const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
+  const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
+  const activeNetwork = useGlobalContext().activeNetwork;
+  const response = useSuspenseBlockListInfinite();
+  const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  const queryClient = useQueryClient();
 
-  if ((isGroupedByBtcBlock && Object.keys(blocksGroupedByBtcBlock).length === 0) || !blocks?.length)
-    return <SkeletonBlockList />;
+  const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+
+  const labelColor = useColorModeValue('slate.600', 'slate.400');
+
+  useEffect(() => {
+    setInitialBlocks(blocks);
+  }, [blocks]);
+
+  useEffect(() => {
+    if (!isLive) return;
+    void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+    let sub: {
+      unsubscribe?: () => Promise<void>;
+    };
+    const subscribe = async () => {
+      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://'));
+      sub = await client.subscribeBlocks((block: any) => {
+        setLatestBlocks(prevLatestBlocks => [
+          { ...block, microblock_tx_count: {}, animate: true },
+          ...prevLatestBlocks,
+        ]);
+      });
+    };
+    void subscribe();
+    return () => {
+      if (sub?.unsubscribe) {
+        void sub.unsubscribe();
+      }
+    };
+  }, [activeNetwork.url, isLive, queryClient]);
+
+  const allBlocks = useMemo(() => {
+    return [...latestBlocks, ...initialBlocks]
+      .sort((a, b) => (b.height || 0) - (a.height || 0))
+      .reduce((acc: EnhancedBlock[], block, index) => {
+        if (!acc.some(b => b.height === block.height)) {
+          acc.push({ ...block, destroy: index >= (limit || DEFAULT_LIST_LIMIT) });
+        }
+        return acc;
+      }, []);
+  }, [initialBlocks, latestBlocks, limit]);
+
+  const removeOldBlock = useCallback((block: EnhancedBlock) => {
+    setInitialBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+    setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
+  }, []);
+
+  if (!allBlocks?.length) return <SkeletonBlockList />;
 
   return (
     <Section
+      title="Recent Blocks"
       gridColumnStart={['1', '1', '1', '2']}
       gridColumnEnd={['2', '2', '2', '3']}
       minWidth={0}
       flexGrow={0}
       flexShrink={1}
-      title={
+      topRight={
         <FormControl display="flex" alignItems="center">
-          <Flex gap={2}>
-            <Flex gap={1} alignItems="center">
-              <FormLabel htmlFor="blocks-live-view-switch" mb="0" color="secondaryText">
-                Group by Bitcoin block
-              </FormLabel>
-              <Switch
-                id="blocks-live-view-switch"
-                isChecked={isGroupedByBtcBlock}
-                onChange={() => setIsGroupedByBtcBlock(!isGroupedByBtcBlock)}
-              />
-            </Flex>
-            <Flex gap={1} alignItems="center">
-              <FormLabel htmlFor="blocks-live-view-switch" mb="0" color="secondaryText">
-                Live Updates
-              </FormLabel>
-              <Switch
-                id="blocks-live-view-switch"
-                isChecked={isLive}
-                onChange={() => setIsLive(!isLive)}
-              />
-            </Flex>
-          </Flex>
+          <FormLabel htmlFor="blocks-live-view-switch" mb="0" color={labelColor}>
+            live view
+          </FormLabel>
+          <Switch
+            id="blocks-live-view-switch"
+            isChecked={isLive}
+            onChange={() => setIsLive(!isLive)}
+          />
         </FormControl>
       }
     >
-      <Flex flexDirection="column" pb={6} pt={6} gap={6}>
+      <Box pb={6}>
         <Accordion allowMultiple>
-          {!isGroupedByBtcBlock ? (
-            (blocks as EnhancedBlock[])?.map(block =>
-              isLive ? (
-                <AnimatedBlockAndMicroblocksItem
-                  block={block}
-                  key={block.hash}
-                  onAnimationExit={() => removeOldBlock(block)}
-                />
-              ) : (
-                <BlockAndMicroblocksItem block={block} key={block.hash} />
-              )
+          {allBlocks?.map(block =>
+            isLive ? (
+              <AnimatedBlockAndMicroblocksItem
+                block={block}
+                key={block.hash}
+                onAnimationExit={() => removeOldBlock(block)}
+              />
+            ) : (
+              <BlockAndMicroblocksItem block={block} key={block.hash} />
             )
-          ) : (
-            <Flex flexDirection="column" gap={6}>
-              {Object.entries(blocksGroupedByBtcBlock).map(([burnBlockHeight, stxBlocks], index) => {
-                const stxBlock = blocksGroupedByBtcBlock[burnBlockHeight][0];
-                const burnBlock: UISingleBlock = {
-                  type: UIBlockType.BurnBlock,
-                  height: stxBlock.burn_block_height,
-                  hash: stxBlock.burn_block_hash,
-                  timestamp: stxBlock.burn_block_time,
-                };
-                return (
-                  <BtcBlock
-                    key={stxBlock.burn_block_hash}
-                    index={index}
-                    burnBlock={burnBlock}
-                    blockList={stxBlocks.map(
-                      block =>
-                        ({
-                          type: UIBlockType.Block,
-                          height: block.height,
-                          hash: block.hash,
-                          timestamp: block.burn_block_time,
-                          txsCount: block.txs.length,
-                        }) as UISingleBlock
-                    )}
-                  />
-                );
-              })}
-            </Flex>
           )}
         </Accordion>
         {!isLive && (
@@ -151,7 +131,7 @@ function BlocksListBase({
             label={'blocks'}
           />
         )}
-      </Flex>
+      </Box>
     </Section>
   );
 }
@@ -168,9 +148,7 @@ export function BlocksList({ limit }: { limit?: number }) {
       }}
       tryAgainButton
     >
-      <BlockListProvider>
-        <BlocksListBase limit={limit} />
-      </BlockListProvider>
+      <BlocksListBase limit={limit} />
     </ExplorerErrorBoundary>
   );
 }

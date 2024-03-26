@@ -3,13 +3,13 @@ import { Block } from '@stacks/stacks-blockchain-api-types';
 export type EnhancedBlock = Block & { destroy?: boolean; animate?: boolean };
 
 export enum UIBlockType {
-  Block = 'block',
+  StxBlock = 'stx-block',
   BurnBlock = 'burn_block',
   Count = 'count',
 }
 
 export interface UISingleBlock {
-  type: UIBlockType.Block | UIBlockType.BurnBlock;
+  type: UIBlockType.StxBlock | UIBlockType.BurnBlock;
   height: number | string;
   hash: string;
   timestamp: number;

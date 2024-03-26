@@ -10,26 +10,24 @@ import { BlocksGroup } from './BlocksGroup';
 const LIST_LENGTH = 17;
 
 function NonPaginatedBlockListGroupedByBurnBlockBase() {
-  
-
   const blockList = [
     {
-      type: UIBlockType.Block,
+      type: UIBlockType.StxBlock,
       height: 10001,
       hash: '0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
     },
     {
-      type: UIBlockType.Block,
+      type: UIBlockType.StxBlock,
       height: 10002,
       hash: '0xrerqreqwjdhgjhdgj0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
     },
     {
-      type: UIBlockType.Block,
+      type: UIBlockType.StxBlock,
       height: 10003,
       hash: '0xbxvcbxvcbvxcbvxc0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
     },
     {
-      type: UIBlockType.Block,
+      type: UIBlockType.StxBlock,
       height: 10004,
       hash: '0xjhjhfhgjhdjdhjhhj0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
     },

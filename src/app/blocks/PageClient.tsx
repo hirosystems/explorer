@@ -32,6 +32,17 @@ const NonPaginatedBlockListGroupedByBurnBlock = dynamic(
   }
 );
 
+const BlocksPageBlockListGroupedByBtcBlock = dynamic(
+  () =>
+    import('../_components/BlockList/GroupedByBurnBlock/BlocksPageBlockListGroupedByBtcBlock').then(
+      mod => mod.BlocksPageBlockListGroupedByBtcBlock
+    ),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
+
 const BlocksPage: NextPage = () => {
   const { activeNetworkKey } = useGlobalContext();
   return (
