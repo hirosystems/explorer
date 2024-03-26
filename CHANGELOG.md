@@ -1,3 +1,10 @@
+# [1.154.0](https://github.com/hirosystems/explorer/compare/v1.153.0...v1.154.0) (2024-03-26)
+
+
+### Features
+
+* legal notification ([#1527](https://github.com/hirosystems/explorer/issues/1527)) ([9a124b3](https://github.com/hirosystems/explorer/commit/9a124b3e16294f0833f72497013682de9896a866))
+
 # [1.153.0](https://github.com/hirosystems/explorer/compare/v1.152.0...v1.153.0) (2024-03-25)
 
 
