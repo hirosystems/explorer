@@ -5,6 +5,7 @@ import {
   ModalFooter,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 import { Badge } from '../../../ui/Badge';
@@ -29,6 +30,8 @@ export function NakamotoModal() {
     localStorage.setItem('nakamotoModalShown', 'true');
     setIsOpen(false);
   };
+
+  const queryClient = useQueryClient();
 
   return (
     <Modal title={'Nakamoto'} isOpen={isOpen} onClose={() => handleClose()}>
@@ -60,7 +63,10 @@ export function NakamotoModal() {
             <ButtonLink
               variant={'primary'}
               href={'/?chain=testnet&api=https://api.nakamoto.testnet.hiro.so'}
-              onClick={handleClose}
+              onClick={() => {
+                handleClose();
+                void queryClient.clear();
+              }}
               _hover={{ textDecoration: 'none' }}
             >
               Switch to Testnet

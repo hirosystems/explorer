@@ -2,33 +2,26 @@
 
 import { useColorModeValue } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
-import pluralize from 'pluralize';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
-import { BtcStxBlockLinks } from '../../../common/components/BtcStxBlockLinks';
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
-import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
-import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
-import { Accordion } from '../../../ui/Accordion';
 import { Box } from '../../../ui/Box';
 import { Collapse } from '../../../ui/Collapse';
-import { Flex, FlexProps } from '../../../ui/Flex';
+import { FlexProps } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
 import { Switch } from '../../../ui/Switch';
 import { StxIcon } from '../../../ui/icons';
-import { Caption } from '../../../ui/typography';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { BurnBlock } from './LayoutA/BurnBlock';
 import { StxBlock } from './LayoutA/StxBlock';
@@ -53,9 +46,9 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
           ml={'-6'}
           pl={5}
           pr={6}
-          key={block.hash}
-          hash={block.hash}
-          height={block.height}
+          key={block.burn_block_hash}
+          hash={block.burn_block_hash}
+          height={block.burn_block_height}
           timestamp={block.burn_block_time}
         />
       </>
@@ -108,6 +101,10 @@ export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = ({ block }) =
   return <BlockListItem block={block} data-test={`block-${block.hash}`} />;
 };
 
+interface Subscription {
+  unsubscribe(): Promise<void>;
+}
+
 function UpdatedBlocksListBase({
   limit,
 }: {
@@ -125,19 +122,30 @@ function UpdatedBlocksListBase({
 
   const labelColor = useColorModeValue('slate.600', 'slate.400');
 
-  useEffect(() => {
-    setInitialBlocks(blocks);
-  }, [blocks]);
+  const { webSocketClient } = useGlobalContext();
+
+  const lastClickTimeRef = useRef(0);
+
+  const toggleLiveUpdates = useCallback(() => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current > 2000) {
+      lastClickTimeRef.current = now;
+      setIsLive(!isLive);
+    }
+  }, [isLive]);
 
   useEffect(() => {
     if (!isLive) return;
+    setLatestBlocks([]);
     void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
-    let sub: {
-      unsubscribe?: () => Promise<void>;
-    };
+    let subscription: Subscription;
     const subscribe = async () => {
-      const client = await connectWebSocketClient(activeNetwork.url.replace('https://', 'wss://'));
-      sub = await client.subscribeBlocks((block: any) => {
+      if (!webSocketClient) {
+        return;
+      }
+      subscription = await (
+        await webSocketClient
+      )?.subscribeBlocks((block: any) => {
         setLatestBlocks(prevLatestBlocks => [
           { ...block, microblock_tx_count: {}, animate: true },
           ...prevLatestBlocks,
@@ -146,11 +154,13 @@ function UpdatedBlocksListBase({
     };
     void subscribe();
     return () => {
-      if (sub?.unsubscribe) {
-        void sub.unsubscribe();
-      }
+      subscription?.unsubscribe();
     };
-  }, [activeNetwork.url, isLive, queryClient]);
+  }, [isLive, queryClient, webSocketClient]);
+
+  useEffect(() => {
+    setInitialBlocks(blocks);
+  }, [blocks]);
 
   const allBlocks = useMemo(() => {
     return [...latestBlocks, ...initialBlocks]
@@ -186,7 +196,7 @@ function UpdatedBlocksListBase({
           <Switch
             id="blocks-live-view-switch"
             isChecked={isLive}
-            onChange={() => setIsLive(!isLive)}
+            onChange={() => toggleLiveUpdates()}
           />
         </FormControl>
       }
