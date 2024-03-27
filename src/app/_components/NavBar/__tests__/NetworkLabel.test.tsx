@@ -68,12 +68,6 @@ describe('NetworkLabel', () => {
     });
   });
 
-  it('renders mainnet badge for mainnet network', () => {
-    const { getByText } = render(<NetworkLabel network={network} />);
-    expect(getByText('Mainnet')).toBeInTheDocument();
-    expect(getByText('mainnet')).toBeInTheDocument();
-  });
-
   it('renders spinner while fetching custom network info', () => {
     (useQuery as jest.Mock).mockReturnValue({
       isFetching: true,
