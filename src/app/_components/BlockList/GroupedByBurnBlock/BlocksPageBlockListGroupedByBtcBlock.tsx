@@ -12,6 +12,7 @@ import { BlockListProvider } from '../LayoutA/Provider';
 import { UpdateBar } from '../LayoutA/UpdateBar';
 import { useBlockListContext } from '../LayoutA/context';
 import { BlocksGroup } from './BlocksGroup';
+import { BlocksPageHeaders } from './BlocksPageHeaders';
 import { useBlockListGroupedByBtcBlockBlocksPage } from './useBlockListGroupedByBtcBlockBlocksPage';
 
 function BlocksPageBlockListGroupedByBtcBlockBase() {
@@ -26,34 +27,6 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
     fetchNextPage,
   } = useBlockListGroupedByBtcBlockBlocksPage(10);
 
-  // const blockList = [
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10001,
-  //     hash: '0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10002,
-  //     hash: '0xrerqreqwjdhgjhdgj0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10003,
-  //     hash: '0xbxvcbxvcbvxcbvxc0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10004,
-  //     hash: '0xjhjhfhgjhdjdhjhhj0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  // ];
-
-  // const burnBlock = {
-  //   height: 332141,
-  //   hash: '0xhfgjdkhbafgkjhdafjkhdsafjkhflkjdsahfjkhdsafhdsafdsaf',
-  //   timestamp: 0,
-  // };
   const lastClickTimeRef = useRef(0);
   const toggleLiveUpdates = useCallback(() => {
     const now = Date.now();
@@ -118,7 +91,6 @@ export function BlocksPageBlockListGroupedByBtcBlock() {
     <ExplorerErrorBoundary
       Wrapper={Section}
       wrapperProps={{
-        title: 'Recent Blocks',
         gridColumnStart: ['1', '1', '2'],
         gridColumnEnd: ['2', '2', '3'],
         minWidth: 0,
@@ -126,6 +98,7 @@ export function BlocksPageBlockListGroupedByBtcBlock() {
       tryAgainButton
     >
       <BlockListProvider>
+        <BlocksPageHeaders />
         <BlocksPageBlockListGroupedByBtcBlockBase />
       </BlockListProvider>
     </ExplorerErrorBoundary>
