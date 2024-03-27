@@ -20,34 +20,6 @@ function HomePageBlockListGroupedByBtcBlockBase() {
     useBlockListContext();
   const { blockList, updateBlockList, latestBlocksCount } = useBlockListGroupedByBtcBlockHomePage();
 
-  // const blockList = [
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10001,
-  //     hash: '0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10002,
-  //     hash: '0xrerqreqwjdhgjhdgj0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10003,
-  //     hash: '0xbxvcbxvcbvxcbvxc0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  //   {
-  //     type: UIBlockType.StxBlock,
-  //     height: 10004,
-  //     hash: '0xjhjhfhgjhdjdhjhhj0xfdsadfdasfdasfjhdgf0xfdsadfdasfdasfjhdgf',
-  //   },
-  // ];
-
-  // const burnBlock = {
-  //   height: 332141,
-  //   hash: '0xhfgjdkhbafgkjhdafjkhdsafjkhflkjdsahfjkhdsafhdsafdsaf',
-  //   timestamp: 0,
-  // };
   const lastClickTimeRef = useRef(0);
   const toggleLiveUpdates = useCallback(() => {
     const now = Date.now();
