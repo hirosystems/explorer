@@ -1,3 +1,10 @@
+# [1.156.0](https://github.com/hirosystems/explorer/compare/v1.155.2...v1.156.0) (2024-03-27)
+
+
+### Features
+
+* nakamoto status bar ([0fbad6b](https://github.com/hirosystems/explorer/commit/0fbad6b0e5a8c17eb712196e12de0e295fda6acd))
+
 ## [1.155.2](https://github.com/hirosystems/explorer/compare/v1.155.1...v1.155.2) (2024-03-27)
 
 
