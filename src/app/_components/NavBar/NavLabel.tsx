@@ -6,12 +6,14 @@ import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
 export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
-  <Flex height={'50px'} alignItems={'center'} color="black">
+  <Flex height={'50px'} alignItems={'center'}>
     <Text
       _groupHover={{ textDecoration: 'underline' }}
       fontWeight={'medium'}
       fontSize={'xs'}
       textAlign={'left'}
+      color="text"
+      padding="2 3"
     >
       {children}
     </Text>
