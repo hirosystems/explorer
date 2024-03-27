@@ -1,3 +1,10 @@
+## [1.155.2](https://github.com/hirosystems/explorer/compare/v1.155.1...v1.155.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* nakamoto testnet fast follows ([d9ddcbe](https://github.com/hirosystems/explorer/commit/d9ddcbe53dc1e40900a0483aa022ee9b20f06c1e))
+
 ## [1.155.1](https://github.com/hirosystems/explorer/compare/v1.155.0...v1.155.1) (2024-03-26)
 
 
