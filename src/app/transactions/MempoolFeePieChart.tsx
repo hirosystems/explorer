@@ -103,6 +103,7 @@ export function MempoolFeePieChart({
   const textColor = useColorModeValue('black', 'white');
   const theme = useTheme();
   const secondaryTextColor = useColorModeValue(theme.colors.slate[700], theme.colors.slate[500]);
+  
   return (
     <PieChart width={pieChartWidth} height={pieChartHeight}>
       <Pie
