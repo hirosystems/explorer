@@ -62,7 +62,7 @@ export function NakamotoModal() {
             </Text>
             <ButtonLink
               variant={'primary'}
-              href={'/?chain=testnet&api=https://api.nakamoto.testnet.hiro.so'}
+              href={'/?chain=testnet'}
               onClick={() => {
                 handleClose();
                 void queryClient.clear();

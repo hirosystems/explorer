@@ -41,7 +41,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
   btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap,
   btcAddressBaseUrls: NetworkModeBtcAddressBaseUrlMap,
   activeNetwork: {
-    label: 'hiro.so',
+    label: 'Stacks Mainnet',
     url: NetworkModeUrlMap[NetworkModes.Mainnet],
     btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
     btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
@@ -102,7 +102,7 @@ export const AppContextProvider: FC<{
   const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
-        label: 'hiro.so',
+        label: 'Stack Mainnet',
         url: apiUrls[NetworkModes.Mainnet],
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
@@ -111,7 +111,7 @@ export const AppContextProvider: FC<{
         mode: NetworkModes.Mainnet,
       },
       'https://api.nakamoto.testnet.hiro.so': {
-        label: 'Nakamoto',
+        label: 'Nakamoto Testnet',
         url: 'https://api.nakamoto.testnet.hiro.so',
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
@@ -121,7 +121,7 @@ export const AppContextProvider: FC<{
         isCustomNetwork: true,
       },
       [apiUrls[NetworkModes.Testnet]]: {
-        label: 'hiro.so',
+        label: 'Stacks Testnet',
         url: apiUrls[NetworkModes.Testnet],
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
@@ -130,7 +130,7 @@ export const AppContextProvider: FC<{
         mode: NetworkModes.Testnet,
       },
       [DEFAULT_DEVNET_SERVER]: {
-        label: 'devnet',
+        label: 'Devnet',
         url: DEFAULT_DEVNET_SERVER,
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
