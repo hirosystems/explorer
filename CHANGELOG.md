@@ -1,3 +1,10 @@
+# [1.157.0](https://github.com/hirosystems/explorer/compare/v1.156.0...v1.157.0) (2024-03-27)
+
+
+### Features
+
+* epoch 2.5 testnet updates ([464ef34](https://github.com/hirosystems/explorer/commit/464ef34f7d16225413d7aac64ee1357f34ffc665))
+
 # [1.156.0](https://github.com/hirosystems/explorer/compare/v1.155.2...v1.156.0) (2024-03-27)
 
 
