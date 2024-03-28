@@ -11,7 +11,7 @@ import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks'
 import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
 import { UIBlockType, UISingleBlock } from '../types';
-import { BlocksGroupProps } from './BlocksGroup';
+import { BlocksGroupProps } from './BurnBlockGroup';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 
 const STX_BLOCK_LENGTH = 10;
@@ -19,10 +19,9 @@ const BURN_BLOCK_LENGTH = 10;
 
 export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) {
   const queryClient = useQueryClient();
-  const { setIsUpdateListLoading: setIsBlockListUpdateLoading, liveUpdates: isLiveUpdateEnabled } =
-    useBlockListContext();
+  const { setBlockListLoading, liveUpdates: isLiveUpdatesEnabled } = useBlockListContext();
 
-  const response = useSuspenseBurnBlocks(BURN_BLOCK_LENGTH);
+  const response = useSuspenseBurnBlocks(BURN_BLOCK_LENGTH, {}, 'blockList');
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
 
@@ -38,82 +37,77 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
     [latestBurnBlockStxBlocks]
   );
   const burnBlockHashes = useMemo(
-    () =>
-      new Set([
-        ...burnBlocks.map(block => block.burn_block_hash),
-      ]),
+    () => new Set([...burnBlocks.map(block => block.burn_block_hash)]),
     [burnBlocks]
   );
 
   const {
-    latestBlock: latestStxBlock,
-    latestBlocksCount: latestStxBlocksWaitingToBeLoaded,
+    latestBlock: latestStxBlockFromWebSocket,
+    latestBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(stxBlockHashes, burnBlockHashes); // TODO: fix this
 
   const updateBlockList = useCallback(
     async function () {
-      setIsBlockListUpdateLoading(true);
+      setBlockListLoading(true);
       await Promise.all([
-        // invalidates queries so that they can be refetched
+        // Invalidates queries so they will be refetched
         queryClient.invalidateQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
         queryClient.invalidateQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
       ]);
-      clearLatestStxBlocksFromWebSocket(); // clears blocks from socket connection
-      setIsBlockListUpdateLoading(false);
+      clearLatestStxBlocksFromWebSocket(); // clears updates since we are get the latest data from refetching the queries
+      setBlockListLoading(false);
     },
-    [clearLatestStxBlocksFromWebSocket, queryClient, setIsBlockListUpdateLoading]
+    [clearLatestStxBlocksFromWebSocket, queryClient, setBlockListLoading]
   );
 
-  const prevIsLiveUpdateEnabledRef = useRef(isLiveUpdateEnabled);
-  const prevLatestBlocksCountRef = useRef(latestStxBlocksWaitingToBeLoaded);
+  const prevIsLiveUpdateEnabledRef = useRef(isLiveUpdatesEnabled);
+  const prevLatestStxBlocksCountRef = useRef(latestStxBlocksCountFromWebSocket);
 
   useEffect(() => {
-    const liveUpdatesJustToggled = prevIsLiveUpdateEnabledRef.current !== isLiveUpdateEnabled;
+    const liveUpdatesToggled = prevIsLiveUpdateEnabledRef.current !== isLiveUpdatesEnabled;
 
-    // If live updates are enabled and oe or more new blocks have been received, verified by checking the latest block count and the previous latest block count, then
+    // If live updates are enabled and one or more new blocks have been received, verified by checking the latest block count and the previous latest block count, then
     // add the latest block to the list of blocks
-    const receivedLatestBlockWhileLiveUpdates =
-      isLiveUpdateEnabled &&
-      latestStxBlocksWaitingToBeLoaded > 0 && // data coming from the websocket
-      prevLatestBlocksCountRef.current !== latestStxBlocksWaitingToBeLoaded;
+    const receivedLatestStxBlockFromLiveUpdates =
+      isLiveUpdatesEnabled &&
+      latestStxBlocksCountFromWebSocket > 0 && // stx blocks data coming from the websocket
+      prevLatestStxBlocksCountRef.current !== latestStxBlocksCountFromWebSocket;
 
-    // If live updates have just been toggled, then refetch/update the block list
-    if (liveUpdatesJustToggled) {
-      setIsBlockListUpdateLoading(true);
-      clearLatestStxBlocksFromWebSocket();
+    // If live updates have been toggled, then refetch/update the block list
+    if (liveUpdatesToggled) {
+      setBlockListLoading(true); // TODO: can I remove the setBlockListLoading(true) and setBlockListLoading(false) from here? since it's already in the updateBlockList function
       updateBlockList().then(() => {
-        setIsBlockListUpdateLoading(false);
+        setBlockListLoading(false);
       });
-    } else if (receivedLatestBlockWhileLiveUpdates && latestStxBlock) {
+    } else if (receivedLatestStxBlockFromLiveUpdates && latestStxBlockFromWebSocket) {
       // If latest stx block belongs to the latest burn block, add it to the latest burn block list of stx blocks
-      if (latestStxBlock.burn_block_height === latestBurnBlock.burn_block_height) {
-        setIsBlockListUpdateLoading(true);
+      if (latestStxBlockFromWebSocket.burn_block_height === latestBurnBlock.burn_block_height) {
+        setBlockListLoading(true);
         setTimeout(() => {
-          latestBurnBlockStxBlocks.unshift(latestStxBlock);
-          latestBurnBlock.stacks_blocks.unshift(latestStxBlock.hash);
-          setIsBlockListUpdateLoading(false);
+          latestBurnBlockStxBlocks.unshift(latestStxBlockFromWebSocket);
+          latestBurnBlock.stacks_blocks.unshift(latestStxBlockFromWebSocket.hash);
+          setBlockListLoading(false);
         }, FADE_DURATION);
       } else {
-        // Otherwise, we have a new burn block, and in this situation, adding a new burn block is the equivalent of refetching/updating the block list
-        clearLatestStxBlocksFromWebSocket();
-        void updateBlockList();
+        // Otherwise, we have a new burn block, in which case, adding a new burn block is the equivalent of refetching/updating the block list
+        updateBlockList();
       }
     }
 
-    prevIsLiveUpdateEnabledRef.current = isLiveUpdateEnabled;
-    prevLatestBlocksCountRef.current = latestStxBlocksWaitingToBeLoaded;
+    prevIsLiveUpdateEnabledRef.current = isLiveUpdatesEnabled;
+    prevLatestStxBlocksCountRef.current = latestStxBlocksCountFromWebSocket;
   }, [
-    latestStxBlock,
-    latestStxBlocksWaitingToBeLoaded,
-    isLiveUpdateEnabled,
+    latestStxBlockFromWebSocket,
+    latestStxBlocksCountFromWebSocket,
+    isLiveUpdatesEnabled,
     latestBurnBlock,
     latestBurnBlockStxBlocks,
     latestBurnBlock.stacks_blocks,
     latestBurnBlock.burn_block_height,
     clearLatestStxBlocksFromWebSocket,
     updateBlockList,
-    setIsBlockListUpdateLoading,
+    setBlockListLoading,
   ]);
 
   const restOfBlockList: BlocksGroupProps[] = burnBlocks.slice(1).map(burnBlock => ({
@@ -141,7 +135,7 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
         type: UIBlockType.StxBlock,
         height: block.height,
         hash: block.hash,
-        timestamp: block.burn_block_time,
+        timestamp: block.burn_block_time, // block?.block_time TODO: this is the right timestamp to use, but it seems to be inaccurate
       })),
       stxBlocksDisplayLimit: blockListLimit,
     },
@@ -151,7 +145,7 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
   return {
     blockList,
     updateBlockList,
-    latestBlocksCount: latestStxBlocksWaitingToBeLoaded,
+    latestBlocksCount: latestStxBlocksCountFromWebSocket,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,

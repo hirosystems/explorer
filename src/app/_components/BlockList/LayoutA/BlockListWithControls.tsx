@@ -29,8 +29,8 @@ export function BlockListWithControls({
   horizontalControls?: boolean;
 }) {
   const {
-    isUpdateListLoading,
-    setIsUpdateListLoading,
+    isBlockListLoading: isUpdateListLoading,
+    setBlockListLoading: setIsUpdateListLoading,
     groupedByBtc,
     setGroupedByBtc,
     liveUpdates,

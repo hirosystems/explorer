@@ -10,14 +10,19 @@ import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
 import { UpdateBar } from '../LayoutA/UpdateBar';
 import { useBlockListContext } from '../LayoutA/context';
-import { BlocksGroup } from './BlocksGroup';
+import { BurnBlockGroup } from './BurnBlockGroup';
 import { useBlockListGroupedByBtcBlockHomePage } from './useBlockListGroupedByBtcBlockHomePage';
 
 // const LIST_LENGTH = 17;
 
 function HomePageBlockListGroupedByBtcBlockBase() {
-  const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates, isUpdateListLoading } =
-    useBlockListContext();
+  const {
+    groupedByBtc,
+    setGroupedByBtc,
+    liveUpdates,
+    setLiveUpdates,
+    isBlockListLoading: isUpdateListLoading,
+  } = useBlockListContext();
   const { blockList, updateBlockList, latestBlocksCount } = useBlockListGroupedByBtcBlockHomePage();
 
   const lastClickTimeRef = useRef(0);
@@ -54,7 +59,7 @@ function HomePageBlockListGroupedByBtcBlockBase() {
         )}
         <Flex flexDirection="column" gap={4}>
           {blockList.map(block => (
-            <BlocksGroup
+            <BurnBlockGroup
               burnBlock={block.burnBlock}
               stxBlocks={block.stxBlocks}
               stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}

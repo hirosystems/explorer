@@ -5,7 +5,7 @@ import { Box } from '../../../../ui/Box';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { BlockListProvider } from '../LayoutA/Provider';
 import { UIBlockType } from '../types';
-import { BlocksGroup } from './BlocksGroup';
+import { BurnBlockGroup } from './BurnBlockGroup';
 
 const LIST_LENGTH = 17;
 
@@ -42,7 +42,7 @@ function NonPaginatedBlockListGroupedByBurnBlockBase() {
   return (
     <Section title="Recent Blocks">
       <Box overflowX={'auto'} py={6}>
-        <BlocksGroup
+        <BurnBlockGroup
           burnBlock={burnBlock}
           stxBlocks={blockList}
           // latestBlocksCount={latestBlocksCount}

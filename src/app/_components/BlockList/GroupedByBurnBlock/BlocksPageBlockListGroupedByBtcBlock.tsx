@@ -1,23 +1,31 @@
 'use client';
 
 import { ListFooter } from '@/common/components/ListFooter';
-import { useCallback, useRef } from 'react';
+import { Suspense, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
+import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
 import { UpdateBar } from '../LayoutA/UpdateBar';
+import { FADE_DURATION } from '../LayoutA/consts';
+// TODO: move somewhere else
 import { useBlockListContext } from '../LayoutA/context';
-import { BlocksGroup } from './BlocksGroup';
 import { BlocksPageHeaders } from './BlocksPageHeaders';
+import { BurnBlockGroup } from './BurnBlockGroup';
 import { useBlockListGroupedByBtcBlockBlocksPage } from './useBlockListGroupedByBtcBlockBlocksPage';
 
 function BlocksPageBlockListGroupedByBtcBlockBase() {
-  const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates, isUpdateListLoading } =
-    useBlockListContext();
+  const {
+    groupedByBtc,
+    setGroupedByBtc,
+    liveUpdates,
+    setLiveUpdates,
+    isBlockListLoading: isUpdateListLoading,
+  } = useBlockListContext();
   const {
     blockList,
     updateBlockList,
@@ -40,53 +48,60 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
 
   return (
     <Section>
-      <Box overflowX={'auto'} py={6}>
-        <Controls
-          groupByBtc={{
-            onChange: () => {
-              setGroupedByBtc(!groupedByBtc);
-            },
-            isChecked: groupedByBtc,
-            isDisabled: true,
-          }}
-          liveUpdates={{
-            onChange: toggleLiveUpdates,
-            isChecked: liveUpdates,
-          }}
-          // horizontal={horizontalControls}
+      <Controls
+        groupByBtc={{
+          onChange: () => {
+            setGroupedByBtc(!groupedByBtc);
+          },
+          isChecked: groupedByBtc,
+          isDisabled: true,
+        }}
+        liveUpdates={{
+          onChange: toggleLiveUpdates,
+          isChecked: liveUpdates,
+        }}
+        horizontal={true}
+      />
+      {!liveUpdates && (
+        <UpdateBar
+          isUpdateListLoading={isUpdateListLoading}
+          latestBlocksCount={latestBlocksCount}
+          onClick={updateBlockList}
         />
-        {!liveUpdates && (
-          <UpdateBar
-            isUpdateListLoading={isUpdateListLoading}
-            latestBlocksCount={latestBlocksCount}
-            onClick={updateBlockList}
+      )}
+      <Flex
+        flexDirection="column"
+        gap={4}
+        pt={4}
+        style={{
+          transition: `opacity ${FADE_DURATION / 1000}s`,
+          opacity: isUpdateListLoading ? 0 : 1,
+        }}
+      >
+        {blockList.map(block => (
+          <BurnBlockGroup
+            burnBlock={block.burnBlock}
+            stxBlocks={block.stxBlocks}
+            stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
+          />
+        ))}
+      </Flex>
+      <Box pt={5} pb={5}>
+        {(!liveUpdates || !enablePagination) && (
+          <ListFooter
+            isLoading={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            label={'blocks'}
           />
         )}
-        <Flex flexDirection="column" gap={4}>
-          {blockList.map(block => (
-            <BlocksGroup
-              burnBlock={block.burnBlock}
-              stxBlocks={block.stxBlocks}
-              stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
-            />
-          ))}
-        </Flex>
-        <Box pt={4}>
-          {(!liveUpdates || !enablePagination) && (
-            <ListFooter
-              isLoading={isFetchingNextPage}
-              hasNextPage={hasNextPage}
-              fetchNextPage={fetchNextPage}
-              label={'blocks'}
-            />
-          )}
-        </Box>
       </Box>
     </Section>
   );
 }
 
 export function BlocksPageBlockListGroupedByBtcBlock() {
+  // TODO: fix the suspense fallback
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -99,7 +114,9 @@ export function BlocksPageBlockListGroupedByBtcBlock() {
     >
       <BlockListProvider>
         <BlocksPageHeaders />
-        <BlocksPageBlockListGroupedByBtcBlockBase />
+        <Suspense fallback={<Text>loading...</Text>}>
+          <BlocksPageBlockListGroupedByBtcBlockBase />
+        </Suspense>
       </BlockListProvider>
     </ExplorerErrorBoundary>
   );

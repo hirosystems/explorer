@@ -11,7 +11,7 @@ import { Text } from '../../../../ui/Text';
 import { BitcoinIcon } from '../../../../ui/icons/BitcoinIcon';
 
 function LastBlockCard() {
-  const lastBlock = useSuspenseBurnBlocks(1); // TODO: might need to use web socket here
+  //   const lastBlock = useSuspenseBurnBlocks(1);
 
   return (
     <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
@@ -104,12 +104,12 @@ export function BlocksPageHeaderLayout({
       gridTemplateColumns={['100%', '100%', '100%', 'repeat(3, 33.33%)']}
       sx={{
         '& > *:not(:last-of-type)': {
-          borderBottom: ['1px solid var(--stacks-colors-borderPrimary)', null, null, 'none'], // Apply bottom border on smaller screens
-          borderRight: [null, null, null, '1px solid var(--stacks-colors-borderPrimary)'], // Apply right border on larger screens
+          borderBottom: ['1px solid var(--stacks-colors-borderPrimary)', null, null, 'none'],
+          borderRight: [null, null, null, '1px solid var(--stacks-colors-borderPrimary)'],
         },
         '& > *:last-of-type': {
-          borderBottom: 'none', // Ensure the last item has no bottom border
-          borderRight: 'none', // Ensure the last item has no right border
+          borderBottom: 'none',
+          borderRight: 'none',
         },
       }}
     >

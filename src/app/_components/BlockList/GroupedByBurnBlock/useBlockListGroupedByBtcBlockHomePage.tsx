@@ -6,13 +6,13 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
 import { UIBlockType } from '../types';
-import { BlocksGroupProps } from './BlocksGroup';
+import { BlocksGroupProps } from './BurnBlockGroup';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockListGroupedByBtcBlockHomePage } from './useInitialBlockListGroupedByBtcHomePage';
 
 export function useBlockListGroupedByBtcBlockHomePage() {
   const queryClient = useQueryClient();
-  const { setIsUpdateListLoading: setIsBlockListUpdateLoading, liveUpdates: isLiveUpdateEnabled } =
+  const { setBlockListLoading: setIsBlockListUpdateLoading, liveUpdates: isLiveUpdateEnabled } =
     useBlockListContext();
 
   const {
