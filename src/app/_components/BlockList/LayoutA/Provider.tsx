@@ -10,8 +10,8 @@ export function BlockListProvider({ children }: { children: ReactNode }) {
   return (
     <BlockListContext.Provider
       value={{
-        isUpdateListLoading,
-        setIsUpdateListLoading,
+        isBlockListLoading: isUpdateListLoading,
+        setBlockListLoading: setIsUpdateListLoading,
         groupedByBtc,
         setGroupedByBtc,
         liveUpdates,

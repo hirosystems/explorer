@@ -16,7 +16,7 @@ export const BlockCount = memo(function ({ count }: { count: number }) {
   const iconColor = useColorModeValue('purple.600', 'purple.200');
   const circleColor = useColorModeValue('white', 'black');
   return (
-    <Flex ml={-3} pb={4} pt={1}>
+    <Flex pb={4} pt={1}>
       <ExplorerLink href={'/blocks'}>
         <Text
           display={'flex'}

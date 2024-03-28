@@ -55,7 +55,7 @@ const createUIBlockList = (
 
 export function useBlockList(length: number) {
   const queryClient = useQueryClient();
-  const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
+  const { setBlockListLoading: setIsUpdateListLoading, liveUpdates } = useBlockListContext();
 
   const {
     lastBurnBlock,

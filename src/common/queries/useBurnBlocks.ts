@@ -36,11 +36,14 @@ export function useBurnBlocks(
 
 export function useSuspenseBurnBlocks(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
-  options: any = {}
+  options: any = {},
+  queryKeyExtension?: string
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: [BURN_BLOCKS_QUERY_KEY],
+    queryKey: queryKeyExtension
+      ? [BURN_BLOCKS_QUERY_KEY, queryKeyExtension]
+      : [BURN_BLOCKS_QUERY_KEY],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.burnBlocksApi.getBurnBlocks({
         limit,

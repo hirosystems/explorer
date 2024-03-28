@@ -13,7 +13,7 @@ import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { usePaginatedBlockList } from './usePaginatedBlockList';
 
 function PaginatedBlockListLayoutABase() {
-  const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
+  const { setBlockListLoading: setIsUpdateListLoading, liveUpdates } = useBlockListContext();
   const [latestBlocksToShow, setLatestBlocksToShow] = useState<UISingleBlock[]>([]);
 
   const {
