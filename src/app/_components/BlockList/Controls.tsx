@@ -1,18 +1,16 @@
-import React from 'react';
-
 import { Flex } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
-import { Stack } from '../../../ui/Stack';
+import { Stack, StackProps } from '../../../ui/Stack';
 import { Switch, SwitchProps } from '../../../ui/Switch';
 
-interface ControlsProps {
+interface ControlsProps extends StackProps {
   groupByBtc: SwitchProps;
   liveUpdates: SwitchProps;
   horizontal?: boolean;
 }
 
-export function Controls({ groupByBtc, liveUpdates, horizontal }: ControlsProps) {
+export function Controls({ groupByBtc, liveUpdates, horizontal, ...rest }: ControlsProps) {
   return (
     <>
       <Stack
@@ -21,6 +19,7 @@ export function Controls({ groupByBtc, liveUpdates, horizontal }: ControlsProps)
         marginX={-6}
         px={6}
         direction={horizontal ? ['column', 'row'] : 'column'}
+        {...rest}
       >
         <Flex justifyContent={'space-between'}>
           <FormControl display="flex" alignItems="center" gap={'12px'} minW={0}>

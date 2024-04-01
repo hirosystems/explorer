@@ -55,6 +55,10 @@ export const theme = extendTheme({
         default: 'slate.700',
         _dark: 'slate.600',
       },
+      buttonText: {
+        default: 'brand',
+        _dark: 'purple.400',
+      },
       interactive: {
         default: 'purple.600',
         _dark: 'purple.400',

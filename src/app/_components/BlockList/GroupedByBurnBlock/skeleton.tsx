@@ -5,7 +5,7 @@ import { Grid } from '../../../../ui/Grid';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { BlockPageHeadersSkeleton } from './BlocksPageHeaders';
 
-export function BurnBlockGroupWithTransactionsSkeleton() {
+export function BurnBlockGroupWithTransactionsSkeleton({ numTxs }: { numTxs: number }) {
   return (
     <Box border={'1px'} rounded={'lg'} p={4}>
       <SkeletonText noOfLines={1} height="14px" />
@@ -22,7 +22,7 @@ export function BurnBlockGroupWithTransactionsSkeleton() {
             <SkeletonText noOfLines={1} height="14px" />
           </Flex>
         ))}
-        {Array.from({ length: 10 }).map(() =>
+        {Array.from({ length: numTxs }).map(() =>
           Array.from({ length: 4 }).map(() => <SkeletonText noOfLines={1} height="14px" />)
         )}
       </Grid>
@@ -58,14 +58,42 @@ export function BurnBlockGroupWithoutTransactionsSkeleton() {
   );
 }
 
-export function BurnBlockGroupListSkeleton() {
+export function BurnBlockGroupListSkeleton({
+  numBurnBlockGroupsWithTxs,
+  numTransactionsinBurnBlockGroupWithTxs,
+  numBurnBlockGroupsWithoutTxs,
+}: {
+  numBurnBlockGroupsWithTxs: number;
+  numTransactionsinBurnBlockGroupWithTxs: number;
+  numBurnBlockGroupsWithoutTxs: number;
+}) {
   return (
     <Flex flexDirection="column" gap={4} pt={4}>
-      <BurnBlockGroupWithTransactionsSkeleton />
-      {Array.from({ length: 9 }).map(() => (
-        <BurnBlockGroupWithoutTransactionsSkeleton />
-      ))}
+      {numBurnBlockGroupsWithTxs
+        ? Array.from({ length: numBurnBlockGroupsWithTxs }).map(() => (
+            <BurnBlockGroupWithTransactionsSkeleton
+              numTxs={numTransactionsinBurnBlockGroupWithTxs}
+            />
+          ))
+        : null}
+      {numBurnBlockGroupsWithoutTxs
+        ? Array.from({ length: numBurnBlockGroupsWithoutTxs }).map(() => (
+            <BurnBlockGroupWithoutTransactionsSkeleton />
+          ))
+        : null}
     </Flex>
+  );
+}
+
+export function HomePageBlockListGroupedByBtcBlockSkeleton() {
+  return (
+    <Section title={<SkeletonText noOfLines={1} height="14px" />}>
+      <BurnBlockGroupListSkeleton
+        numBurnBlockGroupsWithTxs={3}
+        numTransactionsinBurnBlockGroupWithTxs={3}
+        numBurnBlockGroupsWithoutTxs={0}
+      />
+    </Section>
   );
 }
 
@@ -73,7 +101,11 @@ export function BlocksPageBlockListGroupedByBtcBlockSkeleton() {
   return (
     <Section title={<SkeletonText noOfLines={1} height="14px" />}>
       <BlockPageHeadersSkeleton />
-      <BurnBlockGroupListSkeleton />
+      <BurnBlockGroupListSkeleton
+        numBurnBlockGroupsWithTxs={1}
+        numTransactionsinBurnBlockGroupWithTxs={10}
+        numBurnBlockGroupsWithoutTxs={9}
+      />
     </Section>
   );
 }
