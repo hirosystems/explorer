@@ -1,3 +1,10 @@
+# [1.159.0](https://github.com/hirosystems/explorer/compare/v1.158.0...v1.159.0) (2024-04-01)
+
+
+### Features
+
+* **change-support-links:** changed href and link text ([#1545](https://github.com/hirosystems/explorer/issues/1545)) ([4880444](https://github.com/hirosystems/explorer/commit/4880444e66d308648f350dc0f822159b666aecfe))
+
 # [1.158.0](https://github.com/hirosystems/explorer/compare/v1.157.0...v1.158.0) (2024-03-27)
 
 
