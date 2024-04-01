@@ -24,7 +24,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
     setGroupedByBtc,
     liveUpdates,
     setLiveUpdates,
-    isBlockListLoading: isUpdateListLoading,
+    isBlockListLoading,
   } = useBlockListContext();
   const {
     blockList,
@@ -64,7 +64,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
       />
       {!liveUpdates && (
         <UpdateBar
-          isUpdateListLoading={isUpdateListLoading}
+          isUpdateListLoading={isBlockListLoading}
           latestBlocksCount={latestBlocksCount}
           onClick={updateBlockList}
         />
@@ -75,7 +75,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
         pt={4}
         style={{
           transition: `opacity ${FADE_DURATION / 1000}s`,
-          opacity: isUpdateListLoading ? 0 : 1,
+          opacity: isBlockListLoading ? 0 : 1,
         }}
       >
         {blockList.map(block => (

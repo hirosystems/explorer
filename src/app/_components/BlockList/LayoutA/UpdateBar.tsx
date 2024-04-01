@@ -1,23 +1,26 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import React, { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { TfiReload } from 'react-icons/tfi';
 
-import { Flex } from '../../../../ui/Flex';
+import { Button } from '../../../../ui/Button';
+import { Flex, FlexProps } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { FADE_DURATION } from './consts';
+
+interface UpdateBarProps extends FlexProps {
+  latestBlocksCount: number;
+  onClick: () => void;
+  isUpdateListLoading: boolean;
+}
 
 export function UpdateBar({
   latestBlocksCount,
   onClick,
   isUpdateListLoading,
-}: {
-  latestBlocksCount: number;
-  onClick: () => void;
-  isUpdateListLoading: boolean;
-}) {
+  ...rest
+}: UpdateBarProps) {
   const bgColor = useColorModeValue('purple.100', 'slate.900');
-  const buttonColor = useColorModeValue('brand', 'purple.400');
   const textColor = useColorModeValue('slate.800', 'slate.400');
   const lastClickTimeRef = useRef(0);
 
@@ -41,6 +44,7 @@ export function UpdateBar({
         transition: `opacity ${FADE_DURATION / 1000}s`,
         opacity: isUpdateListLoading ? 0 : 1,
       }}
+      {...rest}
     >
       <Text
         fontSize={'14px'}
@@ -54,20 +58,18 @@ export function UpdateBar({
         </Text>{' '}
         new Stacks blocks have come in
       </Text>
-      <Text _hover={{ cursor: 'pointer' }} onClick={update}>
-        <Flex alignItems={'center'} gap={'6px'}>
+      <Button variant="text" onClick={update} disabled={latestBlocksCount === 0}>
+        <Flex alignItems={'center'} gap={1.5}>
           <Icon
-            color={buttonColor}
+            color="buttonText"
             as={TfiReload}
             w={'12px'}
             h={'12px'}
             transform={'rotate(90deg) scaleX(-1)'}
           />
-          <Text fontSize={'14px'} color={buttonColor}>
-            Update
-          </Text>
+          Update
         </Flex>
-      </Text>
+      </Button>
     </Flex>
   );
 }
