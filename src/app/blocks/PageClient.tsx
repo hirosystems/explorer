@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic';
 import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
 import { useGlobalContext } from '../../common/context/useAppContext';
 import { PageTitle } from '../_components/PageTitle';
+import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from '../_components/BlockList/GroupedByBurnBlock/skeleton';
 
 const BlocksList = dynamic(() => import('../_components/BlockList').then(mod => mod.BlocksList), {
   loading: () => <SkeletonBlockList />,
@@ -38,7 +39,7 @@ const BlocksPageBlockListGroupedByBtcBlock = dynamic(
       mod => mod.BlocksPageBlockListGroupedByBtcBlock
     ),
   {
-    loading: () => <SkeletonBlockList />,
+    loading: () => <BlocksPageBlockListGroupedByBtcBlockSkeleton />,
     ssr: false,
   }
 );

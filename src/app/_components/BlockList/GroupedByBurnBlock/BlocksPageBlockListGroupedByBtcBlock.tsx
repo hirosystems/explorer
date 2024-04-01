@@ -6,7 +6,6 @@ import { Suspense, useCallback, useRef } from 'react';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
-import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
@@ -14,8 +13,9 @@ import { UpdateBar } from '../LayoutA/UpdateBar';
 import { FADE_DURATION } from '../LayoutA/consts';
 // TODO: move somewhere else
 import { useBlockListContext } from '../LayoutA/context';
-import { BlocksPageHeaders } from './BlocksPageHeaders';
+import { BlockPageHeadersSkeleton, BlocksPageHeaders } from './BlocksPageHeaders';
 import { BurnBlockGroup } from './BurnBlockGroup';
+import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
 import { useBlockListGroupedByBtcBlockBlocksPage } from './useBlockListGroupedByBtcBlockBlocksPage';
 
 function BlocksPageBlockListGroupedByBtcBlockBase() {
@@ -113,8 +113,11 @@ export function BlocksPageBlockListGroupedByBtcBlock() {
       tryAgainButton
     >
       <BlockListProvider>
-        <BlocksPageHeaders />
-        <Suspense fallback={<Text>loading...</Text>}>
+        <Suspense fallback={<BlockPageHeadersSkeleton />}>
+          <BlocksPageHeaders />
+        </Suspense>
+
+        <Suspense fallback={<BlocksPageBlockListGroupedByBtcBlockSkeleton />}>
           <BlocksPageBlockListGroupedByBtcBlockBase />
         </Suspense>
       </BlockListProvider>
