@@ -3,9 +3,9 @@
 import { ReactNode } from 'react';
 
 import { Card } from '../../../../common/components/Card';
-import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
+import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { BitcoinIcon } from '../../../../ui/icons/BitcoinIcon';
@@ -87,6 +87,22 @@ function LastConfirmedBitcoinBlockCard() {
   );
 }
 
+export function BlockPageHeaderSkeleton() {
+  return (
+    <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
+      <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
+        <SkeletonText noOfLines={1} height="14px" />
+      </Text>
+      <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
+        <SkeletonText noOfLines={1} height="14px" />
+      </Text>
+      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
+        <SkeletonText noOfLines={1} height="14px" />
+      </Text>
+    </Stack>
+  );
+}
+
 export function BlocksPageHeaderLayout({
   lastBlockCard,
   averageStacksBlockTimeCard,
@@ -126,6 +142,16 @@ export function BlocksPageHeaders() {
       lastBlockCard={<LastBlockCard />}
       averageStacksBlockTimeCard={<AverageStacksBlockTimeCard />}
       lastConfirmedBitcoinBlockCard={<LastConfirmedBitcoinBlockCard />}
+    />
+  );
+}
+
+export function BlockPageHeadersSkeleton() {
+  return (
+    <BlocksPageHeaderLayout
+      lastBlockCard={<BlockPageHeaderSkeleton />}
+      averageStacksBlockTimeCard={<BlockPageHeaderSkeleton />}
+      lastConfirmedBitcoinBlockCard={<BlockPageHeaderSkeleton />}
     />
   );
 }

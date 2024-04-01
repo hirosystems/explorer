@@ -173,6 +173,15 @@ export function BurnBlockGroup({
   const stxBlocksNotDisplayed = burnBlock.txsCount
     ? burnBlock.txsCount - (stxBlocksDisplayLimit || 0)
     : 0;
+  const txSum = stxBlocks.reduce((txSum, stxBlock) => {
+    const txsCount = stxBlock?.txsCount ?? 0;
+    return txSum + txsCount;
+  }, 0);
+  // const totalTime = stxBlocks.reduce((totalTime, stxBlock) => {
+  //   const blockTime = stxBlock.timestamp ?? 0;
+  //   return totalTime + blockTime;
+  // }, 0);
+  // const averageBlockTime = stxBlocks.length ? Math.floor(totalTime / stxBlocks.length) : 0;
   console.log({ burnBlock, stxBlocks, stxBlocksDisplayLimit, stxBlocksNotDisplayed }); // TODO: remove
   // TODO: why are we not using table here?
   return (
@@ -244,6 +253,20 @@ export function BurnBlockGroup({
         </Grid>
       </ScrollableDiv>
       {stxBlocksNotDisplayed > 0 ? <BlockCount count={stxBlocksNotDisplayed} /> : null}
+
+      <Box borderTop="1px solid var(--stacks-colors-borderPrimary)">
+        <HStack divider={<Caption>∙</Caption>} gap={1} pt={4}>
+          <Text color="textSubdued" fontSize="xs">
+            {stxBlocks.length} blocks
+          </Text>
+          <Text color="textSubdued" fontSize="xs">
+            {txSum} transactions
+          </Text>
+          <Text color="textSubdued" fontSize="xs">
+            Average block time: 29 sec.
+          </Text>
+        </HStack>
+      </Box>
     </Box>
   );
 }

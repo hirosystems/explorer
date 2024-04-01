@@ -1,10 +1,12 @@
 'use client';
 
+import { Stack } from '@/ui/Stack';
 import { useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
+import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
@@ -34,22 +36,25 @@ function HomePageBlockListGroupedByBtcBlockBase() {
     }
   }, [liveUpdates, setLiveUpdates]);
   return (
-    <Section>
-      <Box overflowX={'auto'} py={6}>
-        <Controls
-          groupByBtc={{
-            onChange: () => {
-              setGroupedByBtc(!groupedByBtc);
-            },
-            isChecked: groupedByBtc,
-            isDisabled: true,
-          }}
-          liveUpdates={{
-            onChange: toggleLiveUpdates,
-            isChecked: liveUpdates,
-          }}
-          // horizontal={horizontalControls}
-        />
+    <Section py={6}>
+      <Box overflowX={'auto'}>
+        <Stack>
+          <Text fontWeight="medium">Recent Blocks</Text>
+          <Controls
+            groupByBtc={{
+              onChange: () => {
+                setGroupedByBtc(!groupedByBtc);
+              },
+              isChecked: groupedByBtc,
+              isDisabled: true,
+            }}
+            liveUpdates={{
+              onChange: toggleLiveUpdates,
+              isChecked: liveUpdates,
+            }}
+            // horizontal={horizontalControls}
+          />
+        </Stack>
         {!liveUpdates && (
           <UpdateBar
             isUpdateListLoading={isUpdateListLoading}
