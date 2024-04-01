@@ -70,7 +70,7 @@ export const Footer: FC = () => {
               target="_blank"
               rel="noopener noreferrer nofollow"
             >
-              Submit report or request
+              Submit bug or feature request
             </FooterLink>
             <FooterLink href="https://discord.com/channels/621759717756370964/625538774230892545">Community Support</FooterLink>
             <FooterLink
