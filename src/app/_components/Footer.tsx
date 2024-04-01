@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { PAGE_MAX_WIDTH } from '../../common/constants/constants';
 import { RELEASE_TAG_NAME } from '../../common/constants/env';
@@ -72,7 +72,9 @@ export const Footer: FC = () => {
             >
               Submit bug or feature request
             </FooterLink>
-            <FooterLink href="https://discord.com/channels/621759717756370964/625538774230892545">Community Support</FooterLink>
+            <FooterLink href="https://discord.com/channels/621759717756370964/625538774230892545">
+              Community Support
+            </FooterLink>
             <FooterLink
               href="https://www.hiro.so/p/terms-privacy"
               target="_blank"
