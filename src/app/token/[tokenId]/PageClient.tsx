@@ -1,21 +1,12 @@
 'use client';
 
-import React from 'react';
-
-import { StyledBadge } from '../../../common/components/status';
-import { getTransactionStatus } from '../../../common/utils/transactions';
-import { getTxTitle } from '../../../common/utils/utils';
+import { Sip10Disclaimer } from '../../../common/components/Sip10Disclaimer';
 import { Flex } from '../../../ui/Flex';
-import { HStack } from '../../../ui/HStack';
 import { Tag } from '../../../ui/Tag';
 import { TagLabel } from '../../../ui/TagLabel';
-import { TagLeftIcon } from '../../../ui/TagLeftIcon';
-import { StxIcon } from '../../../ui/icons';
 import { PageTitle, PageTitleWithTags } from '../../_components/PageTitle';
-import { LinksMenu } from './LinksMenu';
 import { Tabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
-import Skeleton from './skeleton';
 import { TokenInfoProps } from './types';
 
 export default function PageClient({
@@ -57,6 +48,7 @@ export default function PageClient({
           !!tokenInfo.extended?.links?.repos?.length ? tokenInfo.extended?.developerData : undefined
         }
       />
+      <Sip10Disclaimer />
     </>
   );
 }

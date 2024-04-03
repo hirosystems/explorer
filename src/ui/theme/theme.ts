@@ -7,6 +7,7 @@ import { badgeTheme } from './componentTheme/Badge';
 import { buttonTheme } from './componentTheme/Button';
 import { checkboxTheme } from './componentTheme/Checkbox';
 import { inputTheme } from './componentTheme/Input';
+import { linkTheme } from './componentTheme/Link';
 import { menuTheme } from './componentTheme/Menu';
 import { switchTheme } from './componentTheme/Switch';
 import { tabTheme } from './componentTheme/Tab';
@@ -115,5 +116,6 @@ export const theme = extendTheme({
     Input: inputTheme,
     Button: buttonTheme,
     Menu: menuTheme,
+    Link: linkTheme,
   },
 });

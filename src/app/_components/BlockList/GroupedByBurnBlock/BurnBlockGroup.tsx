@@ -35,8 +35,6 @@ export function ListHeader({ children, ...textProps }: { children: ReactNode } &
   );
 }
 
-const GroupHeaderSkeleton = () => {};
-
 const GroupHeader = () => {
   return (
     <>
@@ -100,6 +98,7 @@ const StxBlockRow = ({ block, icon }: { block: UISingleBlock; icon?: ReactNode }
             backgroundColor: 'borderPrimary',
           },
         }}
+        key={block.hash}
       >
         {icon}
         <BlockLink hash={block.hash}>
@@ -114,7 +113,7 @@ const StxBlockRow = ({ block, icon }: { block: UISingleBlock; icon?: ReactNode }
         </Text>
       </BlockLink>
       <Text color="text" fontWeight={'medium'} flex={1} fontSize={'xs'}>
-        100
+        {block.txsCount}
       </Text>
       <Flex flex={1}>
         <Timestamp ts={block.timestamp} />
@@ -182,7 +181,6 @@ export function BurnBlockGroup({
   //   return totalTime + blockTime;
   // }, 0);
   // const averageBlockTime = stxBlocks.length ? Math.floor(totalTime / stxBlocks.length) : 0;
-  console.log({ burnBlock, stxBlocks, stxBlocksDisplayLimit, stxBlocksNotDisplayed }); // TODO: remove
   // TODO: why are we not using table here?
   return (
     <Box border={'1px'} rounded={'lg'} p={4} key={burnBlock.hash}>
@@ -200,12 +198,12 @@ export function BurnBlockGroup({
         </HStack>
       </Flex>
       <ScrollableDiv>
-        <Grid templateColumns="repeat(4, 1fr)" gap={4} width={'full'} rowGap={4}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={4} width={'full'} rowGap={4} key={burnBlock.hash}>
           <GroupHeader />
           {stxBlocks.slice(0, stxBlocksDisplayLimit).map((stxBlock, i) => (
             <>
               <StxBlockRow
-                key={i}
+                key={stxBlock.hash}
                 block={stxBlock}
                 icon={
                   i === 0 ? (

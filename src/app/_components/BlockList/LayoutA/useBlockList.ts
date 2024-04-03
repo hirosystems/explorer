@@ -4,10 +4,10 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { BurnBlock } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { UIBlock, UIBlockType } from '../types';
 import { FADE_DURATION } from './consts';
 import { useBlockListContext } from './context';
-import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockList } from './useInitialBlockList';
 
 const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({

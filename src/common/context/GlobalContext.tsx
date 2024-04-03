@@ -5,9 +5,12 @@ import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
-import { StacksApiWebSocketClient, connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { ChainID } from '@stacks/transactions';
 
+import {
+  StacksApiSocketClientInfo,
+  useStacksApiSocketClient,
+} from '../../app/_components/BlockList/Sockets/use-stacks-api-socket-client';
 import { buildCustomNetworkUrl, fetchCustomNetworkId } from '../components/modals/AddNetwork/utils';
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '../constants/constants';
 import {
@@ -18,6 +21,7 @@ import {
   NetworkModeUrlMap,
 } from '../constants/network';
 import { Network, NetworkModes } from '../types/network';
+import { removeTrailingSlash } from '../utils/utils';
 
 interface GlobalContextProps {
   cookies: string;
@@ -30,7 +34,8 @@ interface GlobalContextProps {
   addCustomNetwork: (network: Network) => Promise<any>;
   removeCustomNetwork: (network: Network) => void;
   networks: Record<string, Network>;
-  webSocketClient?: Promise<StacksApiWebSocketClient>;
+  // webSocketClient?: Promise<StacksApiWebSocketClient>;
+  stacksApiSocket?: StacksApiSocketClientInfo;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -40,7 +45,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
   btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap,
   btcAddressBaseUrls: NetworkModeBtcAddressBaseUrlMap,
   activeNetwork: {
-    label: 'hiro.so',
+    label: 'Stacks Mainnet',
     url: NetworkModeUrlMap[NetworkModes.Mainnet],
     btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
     btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
@@ -52,7 +57,8 @@ export const GlobalContext = createContext<GlobalContextProps>({
   addCustomNetwork: () => Promise.resolve(),
   removeCustomNetwork: () => true,
   networks: {},
-  webSocketClient: undefined,
+  // webSocketClient: undefined,
+  stacksApiSocket: undefined,
 });
 
 export const AppContextProvider: FC<{
@@ -81,7 +87,7 @@ export const AppContextProvider: FC<{
 
   const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||
     NetworkModes.Mainnet) as NetworkModes;
-  const queryApiUrl = Array.isArray(api) ? api[0] : api;
+  const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
   const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
   const queryBtcBlockBaseUrl = Array.isArray(btcBlockBaseUrl)
     ? btcBlockBaseUrl[0]
@@ -97,11 +103,18 @@ export const AppContextProvider: FC<{
   const [_, setCookie] = useCookies(['customNetworks']);
   const [customNetworks, setCustomNetworks] = useState(customNetworksCookie);
   const activeNetworkKey = querySubnet || queryApiUrl || apiUrls[queryNetworkMode];
+  const {
+    client: stacksApiSocketClient,
+    connect: connectStacksApiSocket,
+    disconnect: disconnectStacksApiSocket,
+    isConnected: isConnectedStacksApiSocket,
+  } = useStacksApiSocketClient(queryNetworkMode);
+
   const isUrlPassedSubnet = !!querySubnet && !customNetworks[querySubnet];
   const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
-        label: 'hiro.so',
+        label: 'Stack Mainnet',
         url: apiUrls[NetworkModes.Mainnet],
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
@@ -109,8 +122,18 @@ export const AppContextProvider: FC<{
         networkId: ChainID.Mainnet,
         mode: NetworkModes.Mainnet,
       },
+      'https://api.nakamoto.testnet.hiro.so': {
+        label: 'Nakamoto Testnet',
+        url: 'https://api.nakamoto.testnet.hiro.so',
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
+        networkId: ChainID.Testnet,
+        mode: NetworkModes.Testnet,
+        isCustomNetwork: true,
+      },
       [apiUrls[NetworkModes.Testnet]]: {
-        label: 'hiro.so',
+        label: 'Stacks Testnet',
         url: apiUrls[NetworkModes.Testnet],
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
@@ -119,7 +142,7 @@ export const AppContextProvider: FC<{
         mode: NetworkModes.Testnet,
       },
       [DEFAULT_DEVNET_SERVER]: {
-        label: 'devnet',
+        label: 'Devnet',
         url: DEFAULT_DEVNET_SERVER,
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
@@ -233,9 +256,15 @@ export const AppContextProvider: FC<{
           setCustomNetworks(remainingCustomNetworks);
         },
         networks,
-        webSocketClient: activeNetworkKey
-          ? connectWebSocketClient(activeNetworkKey.replace('https://', 'wss://'))
-          : undefined,
+        // webSocketClient: activeNetworkKey
+        //   ? connectWebSocketClient(activeNetworkKey.replace('https://', 'wss://'))
+        //   : undefined,
+        stacksApiSocket: {
+          client: stacksApiSocketClient,
+          connect: connectStacksApiSocket,
+          disconnect: disconnectStacksApiSocket,
+          isConnected: isConnectedStacksApiSocket,
+        },
       }}
     >
       {children}

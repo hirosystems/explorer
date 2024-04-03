@@ -1,11 +1,14 @@
 import { css } from '@emotion/react';
+import { useEffect } from 'react';
 import { IncidentImpact } from 'statuspage.io';
 
 import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedIncidents';
+import { useAppDispatch } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { StatusBarBase } from './StatusBarBase';
+import { setStatusBar } from './status-bar-slice';
 import { getColor } from './utils';
 
 const incidentImpactSeverity: Record<IncidentImpact, number> = {
@@ -17,14 +20,20 @@ const incidentImpactSeverity: Record<IncidentImpact, number> = {
 
 export function IncidentsStatusBar() {
   const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
-
+  const dispatch = useAppDispatch();
   const allIncidents = unresolvedIncidentsResponse?.incidents?.map(({ name }) => name).join(' - ');
   const highestImpact = unresolvedIncidentsResponse?.incidents?.reduce(
     (acc, { impact }) =>
       incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
     IncidentImpact.None
   );
+
+  useEffect(() => {
+    if (allIncidents || highestImpact) dispatch(setStatusBar(true));
+  }, [allIncidents, highestImpact, dispatch]);
+
   if (!highestImpact || !allIncidents) return null;
+
   return (
     <StatusBarBase
       impact={highestImpact}

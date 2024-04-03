@@ -1,3 +1,80 @@
+# [1.159.0](https://github.com/hirosystems/explorer/compare/v1.158.0...v1.159.0) (2024-04-01)
+
+
+### Features
+
+* **change-support-links:** changed href and link text ([#1545](https://github.com/hirosystems/explorer/issues/1545)) ([4880444](https://github.com/hirosystems/explorer/commit/4880444e66d308648f350dc0f822159b666aecfe))
+
+# [1.158.0](https://github.com/hirosystems/explorer/compare/v1.157.0...v1.158.0) (2024-03-27)
+
+
+### Features
+
+* redeploy ([35c126b](https://github.com/hirosystems/explorer/commit/35c126bc6651085b9aa328b370ad5033b5255c01))
+
+# [1.157.0](https://github.com/hirosystems/explorer/compare/v1.156.0...v1.157.0) (2024-03-27)
+
+
+### Features
+
+* epoch 2.5 testnet updates ([464ef34](https://github.com/hirosystems/explorer/commit/464ef34f7d16225413d7aac64ee1357f34ffc665))
+
+# [1.156.0](https://github.com/hirosystems/explorer/compare/v1.155.2...v1.156.0) (2024-03-27)
+
+
+### Features
+
+* nakamoto status bar ([0fbad6b](https://github.com/hirosystems/explorer/commit/0fbad6b0e5a8c17eb712196e12de0e295fda6acd))
+
+## [1.155.2](https://github.com/hirosystems/explorer/compare/v1.155.1...v1.155.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* nakamoto testnet fast follows ([d9ddcbe](https://github.com/hirosystems/explorer/commit/d9ddcbe53dc1e40900a0483aa022ee9b20f06c1e))
+
+## [1.155.1](https://github.com/hirosystems/explorer/compare/v1.155.0...v1.155.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* mobile banner ([#1519](https://github.com/hirosystems/explorer/issues/1519)) ([9392b8a](https://github.com/hirosystems/explorer/commit/9392b8a430a9b1f250332f330ca072858db61048))
+
+# [1.155.0](https://github.com/hirosystems/explorer/compare/v1.154.1...v1.155.0) (2024-03-26)
+
+
+### Features
+
+* **remove-filter-from-txs-on-homepage:** done ([#1518](https://github.com/hirosystems/explorer/issues/1518)) ([66e6a6b](https://github.com/hirosystems/explorer/commit/66e6a6bdab6f0519b31bf55871b95898f9b79f10))
+
+## [1.154.1](https://github.com/hirosystems/explorer/compare/v1.154.0...v1.154.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* **coinbase-tx-item:** removed coinbase from tx title ([#1517](https://github.com/hirosystems/explorer/issues/1517)) ([431c471](https://github.com/hirosystems/explorer/commit/431c47104d022955890dae4f77a25dfdc26ee90e))
+
+# [1.154.0](https://github.com/hirosystems/explorer/compare/v1.153.0...v1.154.0) (2024-03-26)
+
+
+### Features
+
+* legal notification ([#1527](https://github.com/hirosystems/explorer/issues/1527)) ([9a124b3](https://github.com/hirosystems/explorer/commit/9a124b3e16294f0833f72497013682de9896a866))
+
+# [1.153.0](https://github.com/hirosystems/explorer/compare/v1.152.0...v1.153.0) (2024-03-25)
+
+
+### Features
+
+* nakamoto homepage blocks view ([9491ff6](https://github.com/hirosystems/explorer/commit/9491ff6d0a462bcc29ab1b29b1a99ee718e5e7b8))
+
+# [1.152.0](https://github.com/hirosystems/explorer/compare/v1.151.1...v1.152.0) (2024-03-25)
+
+
+### Features
+
+* nakamoto modal and network updates ([498fd93](https://github.com/hirosystems/explorer/commit/498fd93f6b7039180c8eb67a56f4a4dc1cc5dd01))
+
 ## [1.151.1](https://github.com/hirosystems/explorer/compare/v1.151.0...v1.151.1) (2024-03-13)
 
 

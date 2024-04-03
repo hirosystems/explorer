@@ -1,21 +1,42 @@
-import React, { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { PiX } from 'react-icons/pi';
 
+import { useAppSelector } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
+import { selectIsStatusBarActive } from '../StatusBar/status-bar-slice';
 import { ColorModeButton } from './ColorModeButton';
 import { MobileNavItem } from './MobileNavItem';
 import { NavItem } from './types';
 
 export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navItems, close }) => {
+  const isStatusBarActive = useAppSelector(selectIsStatusBarActive);
+
+  const handleScroll = (event: Event) => {
+    event.preventDefault();
+  };
+
+  // Disable scrolling when the menu is open
+  useEffect(() => {
+    if (document.body) {
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('scroll', handleScroll, { passive: false });
+
+      return () => {
+        document.body.style.overflow = '';
+        document.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, []);
+
   return (
     <Stack
       position="fixed"
       height="full"
       width="full"
-      backgroundColor="surface"
-      top={0}
+      backgroundColor="bg"
+      top={isStatusBarActive ? '82px' : 0}
       left={0}
       zIndex={2}
       padding={6}

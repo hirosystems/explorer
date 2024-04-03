@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import { Card } from '../../../../common/components/Card';
 import { Flex } from '../../../../ui/Flex';
@@ -136,16 +136,6 @@ export function BlocksPageHeaderLayout({
   );
 }
 
-export function BlocksPageHeaders() {
-  return (
-    <BlocksPageHeaderLayout
-      lastBlockCard={<LastBlockCard />}
-      averageStacksBlockTimeCard={<AverageStacksBlockTimeCard />}
-      lastConfirmedBitcoinBlockCard={<LastConfirmedBitcoinBlockCard />}
-    />
-  );
-}
-
 export function BlockPageHeadersSkeleton() {
   return (
     <BlocksPageHeaderLayout
@@ -153,5 +143,17 @@ export function BlockPageHeadersSkeleton() {
       averageStacksBlockTimeCard={<BlockPageHeaderSkeleton />}
       lastConfirmedBitcoinBlockCard={<BlockPageHeaderSkeleton />}
     />
+  );
+}
+
+export function BlocksPageHeaders() {
+  return (
+    <Suspense fallback={<BlockPageHeadersSkeleton />}>
+      <BlocksPageHeaderLayout
+        lastBlockCard={<LastBlockCard />}
+        averageStacksBlockTimeCard={<AverageStacksBlockTimeCard />}
+        lastConfirmedBitcoinBlockCard={<LastConfirmedBitcoinBlockCard />}
+      />
+    </Suspense>
   );
 }

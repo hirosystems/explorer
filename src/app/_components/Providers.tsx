@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { IS_BROWSER } from '../../common/constants/constants';
 import { store } from '../../common/state/store';
 import { NetworkModes } from '../../common/types/network';
+import { removeTrailingSlash } from '../../common/utils/utils';
 import { UIProvider } from '../../ui/UIProvider';
 import { AppConfig } from './AppConfig';
 
@@ -23,6 +24,7 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 export const Providers: FC<{ headerCookies: string | null; children: ReactNode }> = ({
   children,
   headerCookies,
@@ -35,7 +37,7 @@ export const Providers: FC<{ headerCookies: string | null; children: ReactNode }
 
   const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||
     NetworkModes.Mainnet) as NetworkModes;
-  const queryApiUrl = Array.isArray(api) ? api[0] : api;
+  const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
   const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
   return (
     <CookiesProvider>

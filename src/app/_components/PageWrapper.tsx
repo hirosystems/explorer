@@ -4,6 +4,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import React, { ReactNode } from 'react';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
+import { NakamotoModal } from '../../common/components/modals/Nakamoto';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Flex } from '../../ui/Flex';
 import { Footer } from './Footer';
@@ -56,6 +57,7 @@ export function PageWrapper({
   return (
     <>
       <IncidentsStatusBarWithErrorBoundary />
+      <NakamotoModal />
       <WrapperWithBg>
         <Flex mx="auto" width="full" maxWidth="container.xl" flexDirection="column" p={6}>
           <NavBar tokenPrice={tokenPrice} />

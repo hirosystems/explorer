@@ -5,8 +5,10 @@ import dynamic from 'next/dynamic';
 
 import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
 import { useGlobalContext } from '../../common/context/useAppContext';
-import { PageTitle } from '../_components/PageTitle';
+import { BlocksPageBlockList } from '../_components/BlockList/GroupedByBurnBlock/BlocksPageBlockList';
+import { BlocksPageHeaders } from '../_components/BlockList/GroupedByBurnBlock/BlocksPageHeaders';
 import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from '../_components/BlockList/GroupedByBurnBlock/skeleton';
+import { PageTitle } from '../_components/PageTitle';
 
 const BlocksList = dynamic(() => import('../_components/BlockList').then(mod => mod.BlocksList), {
   loading: () => <SkeletonBlockList />,
@@ -50,11 +52,8 @@ const BlocksPage: NextPage = () => {
     <>
       <PageTitle>Recent blocks</PageTitle>
       {/*{activeNetworkKey.indexOf('naka') !== -1 ? <PaginatedBlockListLayoutA /> : <BlocksList />}*/}
-      {activeNetworkKey.indexOf('naka') !== -1 ? (
-        <BlocksPageBlockListGroupedByBtcBlock />
-      ) : (
-        <BlocksList />
-      )}
+      <BlocksPageHeaders />
+      {activeNetworkKey.indexOf('naka') !== -1 ? <BlocksPageBlockList /> : <PaginatedBlockListLayoutA />}
     </>
   );
 };

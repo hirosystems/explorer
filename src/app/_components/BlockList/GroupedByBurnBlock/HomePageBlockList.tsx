@@ -4,25 +4,19 @@ import { Stack } from '@/ui/Stack';
 import { Suspense, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
+import { DEFAULT_BLOCKS_LIST_LIMIT } from '../../../../common/constants/constants';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
-import { UpdateBar } from '../LayoutA/UpdateBar';
-import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
-import { BurnBlockGroup } from './BurnBlockGroup';
-import { useBlockListGroupedByBtcBlockHomePage } from './useBlockListGroupedByBtcBlockHomePage';
+import { UpdatedBlocksList2 } from '../UpdatedBlockList2';
+import { HomePageBlockListGroupedByBtcBlock2 } from './HomePageBlockListGroupedByBtcBlock';
 import { HomePageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
 
-// const LIST_LENGTH = 17;
-
-function HomePageBlockListGroupedByBtcBlockBase() {
-  const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates, isBlockListLoading } =
-    useBlockListContext();
-  const { blockList, updateBlockList, latestBlocksCount } = useBlockListGroupedByBtcBlockHomePage();
+function HomePageBlockListBase() {
+  const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
 
   const lastClickTimeRef = useRef(0);
   const toggleLiveUpdates = useCallback(() => {
@@ -39,7 +33,9 @@ function HomePageBlockListGroupedByBtcBlockBase() {
           px={5}
           gap={3}
           pb={6}
-          borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+          borderBottom={
+            liveUpdates || !groupedByBtc ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'
+          }
         >
           <Text fontWeight="medium">Recent Blocks</Text>
           <Controls
@@ -48,7 +44,6 @@ function HomePageBlockListGroupedByBtcBlockBase() {
                 setGroupedByBtc(!groupedByBtc);
               },
               isChecked: groupedByBtc,
-              // isDisabled: true,
             }}
             liveUpdates={{
               onChange: toggleLiveUpdates,
@@ -60,38 +55,17 @@ function HomePageBlockListGroupedByBtcBlockBase() {
             border="none"
           />
         </Stack>
-        {!liveUpdates && (
-          <UpdateBar
-            isUpdateListLoading={isBlockListLoading}
-            latestBlocksCount={latestBlocksCount}
-            onClick={updateBlockList}
-            marginX={0}
-          />
+        {groupedByBtc ? (
+          <HomePageBlockListGroupedByBtcBlock2 />
+        ) : (
+          <UpdatedBlocksList2 limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}
-        <Flex
-          flexDirection="column"
-          gap={4}
-          py={4}
-          px={5}
-          style={{
-            transition: `opacity ${FADE_DURATION / 1000}s`,
-            opacity: isBlockListLoading ? 0 : 1,
-          }}
-        >
-          {blockList.map(block => (
-            <BurnBlockGroup
-              burnBlock={block.burnBlock}
-              stxBlocks={block.stxBlocks}
-              stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
-            />
-          ))}
-        </Flex>
       </Box>
     </Section>
   );
 }
 
-export function HomePageBlockListGroupedByBtcBlock() {
+export function HomePageBlockList() {
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -105,7 +79,8 @@ export function HomePageBlockListGroupedByBtcBlock() {
     >
       <BlockListProvider>
         <Suspense fallback={<HomePageBlockListGroupedByBtcBlockSkeleton />}>
-          <HomePageBlockListGroupedByBtcBlockBase />
+          {/** TODO: fix this */}
+          <HomePageBlockListBase />
         </Suspense>
       </BlockListProvider>
     </ExplorerErrorBoundary>

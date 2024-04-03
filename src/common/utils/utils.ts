@@ -168,7 +168,10 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
   return str;
 };
 
-export const toRelativeTime = (ts: number): string => dayjs().to(ts);
+export const toRelativeTime = (ts: number): string => {
+  const val = dayjs().to(ts)
+  return val;
+};
 
 export function isPendingTx(tx: MempoolTransaction | Transaction) {
   const statuses = [
@@ -325,3 +328,8 @@ export const getTxTitle = (transaction: Transaction | MempoolTransaction) => {
       return `Tenure change`;
   }
 };
+
+export function removeTrailingSlash(url?: string) {
+  if (!url) return '';
+  return url.replace(/\/$/, '');
+}

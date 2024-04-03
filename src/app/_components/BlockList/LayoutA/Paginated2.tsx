@@ -1,19 +1,23 @@
 'use client';
 
+import { ListFooter } from '@/common/components/ListFooter';
+import { Box } from '@/ui/Box';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { UISingleBlock } from '../types';
-import { BlockListWithControls } from './BlockListWithControls';
+import { Blocks } from './Blocks';
 import { BlockListProvider } from './Provider';
+import { UpdateBar } from './UpdateBar';
 import { FADE_DURATION } from './consts';
 import { useBlockListContext } from './context';
 import { usePaginatedBlockList } from './usePaginatedBlockList';
 
 function PaginatedBlockListLayoutABase() {
-  const { setBlockListLoading: setIsUpdateListLoading, liveUpdates } = useBlockListContext();
+  const { isBlockListLoading, setBlockListLoading, liveUpdates } = useBlockListContext();
+
   const [latestBlocksToShow, setLatestBlocksToShow] = useState<UISingleBlock[]>([]);
 
   const {
@@ -51,12 +55,12 @@ function PaginatedBlockListLayoutABase() {
   );
 
   const showLatestBlocksWithFadeEffect = useCallback(() => {
-    setIsUpdateListLoading(true);
+    setBlockListLoading(true);
     setTimeout(() => {
       showLatestBlocks();
-      setIsUpdateListLoading(false);
+      setBlockListLoading(false);
     }, FADE_DURATION);
-  }, [setIsUpdateListLoading, showLatestBlocks]);
+  }, [setBlockListLoading, showLatestBlocks]);
 
   const prevLiveUpdatesRef = useRef(liveUpdates);
   const prevLatestBlocksCountRef = useRef(latestBlocksCount);
@@ -70,11 +74,11 @@ function PaginatedBlockListLayoutABase() {
       prevLatestBlocksCountRef.current !== latestBlocksCount;
 
     if (liveUpdatesToggled) {
-      setIsUpdateListLoading(true);
+      setBlockListLoading(true);
       setLatestBlocksToShow([]);
       clearLatestBlocks();
       updateList().then(() => {
-        setIsUpdateListLoading(false);
+        setBlockListLoading(false);
       });
     } else if (receivedLatestBlockWhileLiveUpdates) {
       showLatestBlocksWithFadeEffect();
@@ -88,20 +92,30 @@ function PaginatedBlockListLayoutABase() {
     clearLatestBlocks,
     updateList,
     showLatestBlocksWithFadeEffect,
-    setIsUpdateListLoading,
+    setBlockListLoading,
   ]);
 
   return (
-    <BlockListWithControls
-      enablePagination
-      fetchNextPage={fetchNextPage}
-      blockList={blockList}
-      latestBlocksCount={latestBlocksCount}
-      updateList={showLatestBlocksWithFadeEffect}
-      isFetchingNextPage={isFetchingNextPage}
-      hasNextPage={hasNextPage}
-      horizontalControls
-    />
+    <Box pb={6}>
+      {!liveUpdates && (
+        <UpdateBar
+          isUpdateListLoading={isBlockListLoading}
+          latestBlocksCount={latestBlocksCount}
+          onClick={updateList}
+        />
+      )}
+      <Blocks blockList={blockList} isUpdateListLoading={isBlockListLoading} />
+      <Box pt={4}>
+        {!liveUpdates && (
+          <ListFooter
+            isLoading={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+            label={'blocks'}
+          />
+        )}
+      </Box>
+    </Box>
   );
 }
 

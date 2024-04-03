@@ -1,5 +1,4 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
 import { memo } from 'react';
 import { BsArrowReturnLeft } from 'react-icons/bs';
 
@@ -7,23 +6,22 @@ import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
+import { Flex, FlexProps } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { TextLink } from '../../../../ui/TextLink';
 import { BitcoinIcon } from '../../../../ui/icons';
 
-interface ListItemProps {
+interface ListItemProps extends FlexProps {
   height: number | string;
   hash: string;
   timestamp?: number;
 }
-export const BurnBlock = memo(function ({ timestamp, height, hash }: ListItemProps) {
+export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps }: ListItemProps) {
   const { btcBlockBaseUrl } = useGlobalContext().activeNetwork;
-  const bgColor = useColorModeValue('slate.150', 'slate.900');
-  const textColor = useColorModeValue('slate.700', 'slate.500');
-  const iconColor = useColorModeValue('slate.600', 'slate.800');
+  const textColor = useColorModeValue('slate.700', 'slate.500'); // TODO: no in theme. remove
+  const iconColor = useColorModeValue('slate.600', 'slate.800'); // TODO: no in theme. remove
   return (
     <Flex
       justifyContent={'space-between'}
@@ -32,11 +30,11 @@ export const BurnBlock = memo(function ({ timestamp, height, hash }: ListItemPro
       pl={4}
       pr={8}
       height={14}
-      backgroundColor={bgColor}
+      backgroundColor="surfaceHighlight"
       mr={'-8'}
       ml={'-10'}
       color={textColor}
-      className={'burn-block'}
+      {...flexProps}
     >
       <HStack gap={1.5}>
         <Icon

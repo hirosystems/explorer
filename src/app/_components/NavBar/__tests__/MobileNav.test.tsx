@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
-import React from 'react';
 
+import { renderWithReduxProviders } from '../../../../common/utils/test-utils/renderWithReduxProvider';
 import { MobileNav } from '../MobileNav';
 
 describe('MobileNav', () => {
@@ -28,7 +27,9 @@ describe('MobileNav', () => {
 
     const mockClose = jest.fn();
 
-    const { asFragment } = render(<MobileNav navItems={mockNavItems} close={mockClose} />);
+    const { asFragment } = renderWithReduxProviders(
+      <MobileNav navItems={mockNavItems} close={mockClose} />
+    );
     expect(asFragment()).toMatchSnapshot();
   });
 });

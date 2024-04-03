@@ -10,9 +10,9 @@ import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBloc
 import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
 import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket2';
 import { UIBlockType, UISingleBlock } from '../types';
 import { BlocksGroupProps } from './BurnBlockGroup';
-import { useBlockListWebSocket } from './useBlockListWebSocket';
 
 const STX_BLOCK_LENGTH = 10;
 const BURN_BLOCK_LENGTH = 10;
@@ -135,7 +135,8 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
         type: UIBlockType.StxBlock,
         height: block.height,
         hash: block.hash,
-        timestamp: block.burn_block_time, // block?.block_time TODO: this is the right timestamp to use, but it seems to be inaccurate
+        timestamp: block?.block_time, // block?.block_time TODO: this is the right timestamp to use, but it seems to be inaccurate
+        txsCount: block.tx_count,
       })),
       stxBlocksDisplayLimit: blockListLimit,
     },

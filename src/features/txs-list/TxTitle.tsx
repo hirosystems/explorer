@@ -4,8 +4,6 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { TxLink } from '../../common/components/ExplorerLinks';
 import { StxPrice } from '../../common/components/StxPrice';
-import { useGlobalContext } from '../../common/context/useAppContext';
-import { buildUrl } from '../../common/utils/buildUrl';
 import { getContractName, getFunctionName, microToStacksFormatted } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -20,7 +18,6 @@ export const TxTitle = ({
   showPrice?: boolean;
   openInNewTab?: boolean;
 }) => {
-  const network = useGlobalContext().activeNetwork;
   switch (tx.tx_type) {
     case 'smart_contract':
       return (
@@ -62,7 +59,7 @@ export const TxTitle = ({
     case 'coinbase':
       return (
         <TxLink txId={tx.tx_id} openInNewTab={openInNewTab}>
-          Block #{(tx as Transaction).block_height} coinbase
+          Block #{(tx as Transaction).block_height}
         </TxLink>
       );
     default:

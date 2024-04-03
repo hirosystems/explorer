@@ -14,10 +14,8 @@ import { UpdateBar } from '../LayoutA/UpdateBar';
 import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
 import { BurnBlockGroup } from './BurnBlockGroup';
-import { useBlockListGroupedByBtcBlockHomePage } from './useBlockListGroupedByBtcBlockHomePage';
 import { HomePageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
-
-// const LIST_LENGTH = 17;
+import { useBlockListGroupedByBtcBlockHomePage } from './useBlockListGroupedByBtcBlockHomePage';
 
 function HomePageBlockListGroupedByBtcBlockBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates, isBlockListLoading } =
@@ -109,5 +107,49 @@ export function HomePageBlockListGroupedByBtcBlock() {
         </Suspense>
       </BlockListProvider>
     </ExplorerErrorBoundary>
+  );
+}
+
+function HomePageBlockListGroupedByBtcBlockBase2() {
+  const { liveUpdates, isBlockListLoading } = useBlockListContext();
+  const { blockList, updateBlockList, latestBlocksCount } = useBlockListGroupedByBtcBlockHomePage();
+
+  return (
+    <Box overflowX={'auto'}>
+      {!liveUpdates && (
+        <UpdateBar
+          isUpdateListLoading={isBlockListLoading}
+          latestBlocksCount={latestBlocksCount}
+          onClick={updateBlockList}
+          marginX={0}
+        />
+      )}
+      <Flex
+        flexDirection="column"
+        gap={4}
+        py={4}
+        px={5}
+        style={{
+          transition: `opacity ${FADE_DURATION / 1000}s`,
+          opacity: isBlockListLoading ? 0 : 1,
+        }}
+      >
+        {blockList.map(block => (
+          <BurnBlockGroup
+            burnBlock={block.burnBlock}
+            stxBlocks={block.stxBlocks}
+            stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
+          />
+        ))}
+      </Flex>
+    </Box>
+  );
+}
+
+export function HomePageBlockListGroupedByBtcBlock2() {
+  return (
+    <Suspense fallback={<HomePageBlockListGroupedByBtcBlockSkeleton />}>
+      <HomePageBlockListGroupedByBtcBlockBase2 />
+    </Suspense>
   );
 }

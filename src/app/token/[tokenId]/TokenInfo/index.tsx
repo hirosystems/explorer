@@ -1,8 +1,6 @@
 import { FC } from 'react';
-import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { Card } from '../../../../common/components/Card';
 import { Wrapper } from '../../../_components/Stats/Wrapper';
 import { TokenInfoProps } from '../types';
 import { MarketCap } from './MarketCap';

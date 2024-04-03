@@ -3,9 +3,9 @@ import { useCallback, useRef, useState } from 'react';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { UIBlockType, UISingleBlock } from '../types';
-import { useSubscribeBlocks } from '../useSubscribeBlocks';
+import { useSubscribeBlocks } from './useSubscribeBlocks';
 
-export function useBlockListWebSocket(
+export function useBlockListWebSocket2(
   initialBlockHashes: Set<string>,
   initialBurnBlockHashes: Set<string>
 ) {

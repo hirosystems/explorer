@@ -9,6 +9,7 @@ import { Grid } from '../ui/Grid';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
+import { HomePageBlockList } from './_components/BlockList/GroupedByBurnBlock/HomePageBlockList';
 
 const NonPaginatedBlockListLayoutA = dynamic(
   () =>
@@ -48,11 +49,11 @@ export default function Home() {
         width="full"
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
-        <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} />
-
-        {activeNetworkKey.indexOf('naka') !== -1 ? (
-          <HomePageBlockListGroupedByBtcBlock />
+        <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
+        {activeNetworkKey.indexOf('naka') !== -1 || activeNetworkKey.indexOf('testnet') !== -1 ? (
+          <HomePageBlockList />
         ) : (
+          // <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
           <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}
       </Grid>
