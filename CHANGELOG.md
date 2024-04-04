@@ -1,3 +1,10 @@
+# [1.160.0](https://github.com/hirosystems/explorer/compare/v1.159.0...v1.160.0) (2024-04-04)
+
+
+### Features
+
+* support page ([624885c](https://github.com/hirosystems/explorer/commit/624885cd990bd01c0f1b0c35bbd48c26ab060878))
+
 # [1.159.0](https://github.com/hirosystems/explorer/compare/v1.158.0...v1.159.0) (2024-04-01)
 
 
