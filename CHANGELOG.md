@@ -1,3 +1,10 @@
+# [1.161.0](https://github.com/hirosystems/explorer/compare/v1.160.0...v1.161.0) (2024-04-04)
+
+
+### Features
+
+* support page fast follow ([8b5649c](https://github.com/hirosystems/explorer/commit/8b5649cf4e1c0fbca5da23ec56bf6ce08489c544))
+
 # [1.160.0](https://github.com/hirosystems/explorer/compare/v1.159.0...v1.160.0) (2024-04-04)
 
 
