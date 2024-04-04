@@ -65,7 +65,13 @@ const SupportPage: NextPage = () => {
             </Text>
             <Text fontSize={'sm'}>
               If you are having trouble accessing your wallet or assets in it, please reach out to
-              your wallet provider directly. A list of Stacks wallets can be found here.
+              your wallet provider directly.{' '}
+              <ExternalLink
+                href={'https://www.stacks.co/explore/ecosystem?category=All+Teams#wallets'}
+              >
+                A list of Stacks wallets can be found here
+              </ExternalLink>
+              .
             </Text>
           </Stack>
         </Card>
