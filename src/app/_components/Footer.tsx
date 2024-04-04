@@ -65,15 +65,13 @@ export const Footer: FC = () => {
 
         <Flex display="flex" marginLeft={'auto'} flexDirection={'column'} gap="5px">
           <Flex ml={['unset', 'unset', 'auto']} gap={'16px'}>
+            <FooterLink href="/support">Support</FooterLink>
             <FooterLink
               href="https://github.com/hirosystems/explorer/issues/new/choose"
               target="_blank"
               rel="noopener noreferrer nofollow"
             >
               Submit bug or feature request
-            </FooterLink>
-            <FooterLink href="https://discord.com/channels/621759717756370964/625538774230892545">
-              Community Support
             </FooterLink>
             <FooterLink
               href="https://www.hiro.so/p/terms-privacy"
