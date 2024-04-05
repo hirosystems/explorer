@@ -2,6 +2,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 import { BsArrowReturnLeft } from 'react-icons/bs';
 
+import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
@@ -9,8 +10,6 @@ import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
-import { Text } from '../../../../ui/Text';
-import { TextLink } from '../../../../ui/TextLink';
 import { BitcoinIcon } from '../../../../ui/icons';
 
 interface BtcBlockListItemProps {
@@ -53,18 +52,9 @@ export function BtcBlockListItemContent({ timestamp, height, hash }: BtcBlockLis
           bottom={'1px'}
         />
         <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
-        <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${hash.replace('0x', '')}`}>
-          <Text
-            fontSize={'sm'}
-            color={'textSubdued'}
-            _hover={{
-              textDecoration: 'underline',
-              textDecorationColor: 'textSubdued',
-            }}
-          >
-            #{height}
-          </Text>
-        </TextLink>
+        <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${hash}`}>
+          #{height}
+        </ExplorerLink>
       </HStack>
       <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
         <Box>{truncateMiddle(hash, 3)}</Box>

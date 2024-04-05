@@ -8,12 +8,12 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { Blocks } from '../LayoutA/Blocks';
 import { UpdateBar } from '../LayoutA/UpdateBar';
 import { useBlockListContext } from '../LayoutA/context';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
+import { Blocks } from './Blocks';
 import { BlocksPageBlockListUngroupedSkeleton } from './skeleton';
 import { useUngroupedBlockList } from './useUngroupedBlockList';
 
