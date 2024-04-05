@@ -102,10 +102,32 @@ function StxBlockListItemContent({
   );
 }
 
-export function StxBlockListItem({ children, hasIcon, hasBorder }: StxBlockListItemLayoutProps) {
+interface StxBlockListItemProps {
+  height: number | string;
+  hash: string;
+  timestamp: number;
+  txsCount?: number;
+  icon?: ReactNode;
+  hasBorder: boolean;
+}
+
+export function StxBlockListItem({
+  height,
+  hash,
+  timestamp,
+  txsCount,
+  icon,
+  hasBorder,
+}: StxBlockListItemProps) {
   return (
-    <StxBlockListItemLayout hasIcon={hasIcon} hasBorder={hasBorder}>
-      {children}
+    <StxBlockListItemLayout hasIcon={!!icon} hasBorder={hasBorder}>
+      <StxBlockListItemContent
+        height={height}
+        hash={hash}
+        timestamp={timestamp}
+        txsCount={txsCount}
+        icon={icon}
+      />
     </StxBlockListItemLayout>
   );
 }
