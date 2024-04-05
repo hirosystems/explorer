@@ -268,8 +268,8 @@ export function getNextPageParam(lastPage?: GenericResponseType<any>) {
   const { limit, offset, total } = lastPage;
   const sum = offset + limit;
   const delta = total - sum;
-  const isAtEnd = delta === 0 || Math.sign(delta) === -1;
-  if (Math.abs(delta) === sum || isAtEnd) return undefined;
+  const isAtEnd = delta <= 0;
+  if (isAtEnd) return undefined;
   return sum;
 }
 

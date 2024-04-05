@@ -9,6 +9,7 @@ import { UIBlockType } from '../types';
 import { BlocksGroupProps } from './BurnBlockGroup';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockListGroupedByBtcBlockHomePage } from './useInitialBlockListGroupedByBtcHomePage';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 
 export function useBlockListGroupedByBtcBlockHomePage() {
   const queryClient = useQueryClient();

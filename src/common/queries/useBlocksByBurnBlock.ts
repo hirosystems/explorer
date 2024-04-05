@@ -15,9 +15,11 @@ import { ONE_SECOND, TWO_MINUTES } from './query-stale-time';
 
 export const GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY = 'getBlocksByBurnBlock';
 
+const MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT = 30;
+
 export function useBlocksByBurnBlock(
   heightOrHash: string | number,
-  limit: number,
+  limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
@@ -38,7 +40,7 @@ export function useBlocksByBurnBlock(
 
 export function useSuspenseBlocksByBurnBlock(
   heightOrHash: string | number,
-  limit: number,
+  limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
   options: any = {}
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();

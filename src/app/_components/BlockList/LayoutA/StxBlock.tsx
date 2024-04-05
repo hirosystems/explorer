@@ -31,15 +31,13 @@ export const StxBlock = memo(function ({
   // TODO: lots of new colors that aren't in the theme. We should either add them or make them conform to the theme
   const textColor = useColorModeValue('slate.900', 'slate.50');
   const secondaryTextColor = useColorModeValue('slate.700', 'slate.600');
-  const borderColor = useColorModeValue('slate.300', 'slate.800');
 
   return (
     <Box
       pl={4}
       borderLeft={icon ? undefined : '1px'}
-      borderColor={borderColor}
+      borderColor='borderPrimary'
       position="relative"
-      className={'stx-block'}
     >
       <Flex
         justifyContent={'space-between'}
@@ -49,16 +47,16 @@ export const StxBlock = memo(function ({
         borderBottom={hasBorder ? '1px' : 'none'}
         _after={
           icon
-            ? {
+            ? { // adds a small line underneath the icon of the first block to connect it with the other rows
                 content: '""',
                 position: 'absolute',
                 left: '0',
                 bottom: '0',
                 height: '10px',
                 width: '1px',
-                backgroundColor: borderColor,
+                backgroundColor: 'borderPrimary',
               }
-            : {
+            : { // node
                 content: '""',
                 position: 'absolute',
                 left: '-3px',
@@ -66,7 +64,7 @@ export const StxBlock = memo(function ({
                 transform: 'translateY(-50%)',
                 width: '6px',
                 height: '6px',
-                backgroundColor: borderColor,
+                backgroundColor: 'borderPrimary',
                 borderRadius: '50%',
               }
         }

@@ -10,11 +10,11 @@ import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 
 export const BlockCount = memo(function ({ count }: { count: number }) {
+  // TODO: remove. use theme
   const bgColor = useColorModeValue('purple.100', 'slate.900');
   const bgColorHover = useColorModeValue('purple.200', 'slate.850');
   const textColor = useColorModeValue('purple.600', 'purple.400');
   const iconColor = useColorModeValue('purple.600', 'purple.200');
-  const circleColor = useColorModeValue('white', 'black');
   return (
     <Flex pb={4} pt={1}>
       <ExplorerLink href={'/blocks'}>
@@ -36,7 +36,7 @@ export const BlockCount = memo(function ({ count }: { count: number }) {
           }}
         >
           +{count} {pluralize('block', count)}
-          <Circle size={4.5} bg={circleColor}>
+          <Circle size={4.5} bg="surface">
             <Icon as={PiArrowUpRight} size={2.5} color={iconColor} />
           </Circle>
         </Text>

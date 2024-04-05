@@ -3,7 +3,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { PiArrowElbowLeftDown } from 'react-icons/pi';
 
 import { Circle } from '../../../../common/components/Circle';
-import { BlockLink } from '../../../../common/components/ExplorerLinks';
+import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
@@ -149,7 +149,7 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
       ref={divRef}
       overflowX={'auto'}
       overflowY={'hidden'}
-      py={4}
+      // py={4}
       className={hasHorizontalScroll ? 'has-horizontal-scroll' : ''}
     >
       {children}
@@ -160,10 +160,121 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
 export interface BlocksGroupProps {
   burnBlock: UISingleBlock;
   stxBlocks: UISingleBlock[];
+  /**
+   * TODO: change to
+   * burnBlock: BurnBlock;
+   * stxBlocks: Block[];
+   */
   stxBlocksDisplayLimit?: number;
 }
 
-export function BlocksGroupSkeleton() {}
+export function BurnBlockGroupGrid({
+  burnBlock,
+  stxBlocks,
+  stxBlocksDisplayLimit,
+}: BlocksGroupProps) {
+  const stxBlocksToDisplay = stxBlocksDisplayLimit
+    ? stxBlocks.slice(0, stxBlocksDisplayLimit)
+    : stxBlocks;
+  return (
+    <Grid
+      templateColumns="repeat(4, 1fr)"
+      gap={4}
+      width={'full'}
+      rowGap={4}
+      key={burnBlock.hash}
+      pb={7}
+    >
+      <GroupHeader />
+      {stxBlocksToDisplay.map((stxBlock, i) => (
+        <>
+          <StxBlockRow
+            key={stxBlock.hash}
+            block={stxBlock}
+            icon={
+              i === 0 ? (
+                <Circle size={4.5} bg="brand" border={'none'} position={'absolute'} left={0}>
+                  <Icon as={StxIcon} size={2.5} color={'white'} />
+                </Circle>
+              ) : (
+                <Box // Adds a vertical line to the left of the first column with a circle
+                  bg={'surface'}
+                  width={4.5}
+                  height={16}
+                  top={'calc(var(--stacks-sizes-6) * -1)'}
+                  left={0}
+                  position={'absolute'}
+                  _after={{
+                    content: '""',
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 'var(--stacks-sizes-2)',
+                    height: 'var(--stacks-sizes-2)',
+                    backgroundColor: 'var(--stacks-colors-borderPrimary)',
+                    borderRadius: '50%',
+                  }}
+                  _before={{
+                    content: '""',
+                    position: 'absolute',
+                    left: '0',
+                    right: '0',
+                    margin: 'auto',
+                    top: 0,
+                    width: '1px',
+                    height: 'var(--stacks-sizes-14)',
+                    backgroundColor: 'var(--stacks-colors-borderPrimary)',
+                  }}
+                ></Box>
+              )
+            }
+          />
+          {i < stxBlocks.length - 1 && (
+            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+          )}{' '}
+          {/* TODO: adds a border to the bottom. make this css */}
+        </>
+      ))}
+    </Grid>
+  );
+}
+
+function BitcoinHeader({ burnBlock }: { burnBlock: UISingleBlock }) {
+  return (
+    <Flex alignItems={'center'} gap={1.5} pb={4}>
+      <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
+      <Icon as={BitcoinIcon} size={4.5} />
+      <Text fontSize={'sm'} color={'textSubdued'} fontWeight={'medium'}>
+        {burnBlock.height}
+      </Text>
+      <HStack divider={<Caption>∙</Caption>} gap={1}>
+        <ExplorerLink fontSize="xs" color={'textSubdued'} href={`/btcblock/${burnBlock.hash}`}>
+          {truncateMiddle(burnBlock.hash, 6)}
+        </ExplorerLink>
+        <Timestamp ts={burnBlock.timestamp} />
+      </HStack>
+    </Flex>
+  );
+}
+
+export function Footer({ stxBlocks, txSum }: { stxBlocks: UISingleBlock[]; txSum: number }) {
+  return (
+    <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
+      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4}>
+        <Text color="textSubdued" fontSize="xs">
+          {stxBlocks.length} blocks
+        </Text>
+        <Text color="textSubdued" fontSize="xs">
+          {txSum} transactions
+        </Text>
+        <Text color="textSubdued" fontSize="xs">
+          Average block time: 29 sec.
+        </Text>
+      </HStack>
+    </Box>
+  );
+}
 
 export function BurnBlockGroup({
   burnBlock,
@@ -186,87 +297,16 @@ export function BurnBlockGroup({
   // TODO: why are we not using table here?
   return (
     <Box border={'1px'} rounded={'lg'} p={4} key={burnBlock.hash}>
-      <Flex alignItems={'center'} gap={1.5}>
-        <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
-        <Icon as={BitcoinIcon} size={4.5} />
-        <Text fontSize={'sm'} color={'textSubdued'} fontWeight={'medium'}>
-          {burnBlock.height}
-        </Text>
-        <HStack divider={<Caption>∙</Caption>} gap={1}>
-          <Text fontSize={'xs'} color={'textSubdued'}>
-            {truncateMiddle(burnBlock.hash, 6)}
-          </Text>
-          <Timestamp ts={burnBlock.timestamp} />
-        </HStack>
-      </Flex>
+      <BitcoinHeader burnBlock={burnBlock} />
       <ScrollableDiv>
-        <Grid templateColumns="repeat(4, 1fr)" gap={4} width={'full'} rowGap={4}>
-          <GroupHeader />
-          {stxBlocks.slice(0, stxBlocksDisplayLimit).map((stxBlock, i) => (
-            <>
-              <StxBlockRow
-                key={i}
-                block={stxBlock}
-                icon={
-                  i === 0 ? (
-                    <Circle size={4.5} bg="brand" border={'none'} position={'absolute'} left={0}>
-                      <Icon as={StxIcon} size={2.5} color={'white'} />
-                    </Circle>
-                  ) : (
-                    <Box // Adds a vertical line to the left of the first column with a circle
-                      bg={'surface'}
-                      width={4.5}
-                      height={16}
-                      top={'calc(var(--stacks-sizes-6) * -1)'}
-                      left={0}
-                      position={'absolute'}
-                      _after={{
-                        content: '""',
-                        position: 'absolute',
-                        left: '50%',
-                        top: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        width: 'var(--stacks-sizes-2)',
-                        height: 'var(--stacks-sizes-2)',
-                        backgroundColor: 'var(--stacks-colors-borderPrimary)',
-                        borderRadius: '50%',
-                      }}
-                      _before={{
-                        content: '""',
-                        position: 'absolute',
-                        left: '0',
-                        right: '0',
-                        margin: 'auto',
-                        top: 0,
-                        width: '1px',
-                        height: 'var(--stacks-sizes-14)',
-                        backgroundColor: 'var(--stacks-colors-borderPrimary)',
-                      }}
-                    ></Box>
-                  )
-                }
-              />
-              {i < stxBlocks.length - 1 && <Box gridColumn={'1/5'} borderBottom={'1px'}></Box>}{' '}
-              {/* TODO: adds a border to the bottom. make this css */}
-            </>
-          ))}
-        </Grid>
+        <BurnBlockGroupGrid
+          burnBlock={burnBlock}
+          stxBlocks={stxBlocks}
+          stxBlocksDisplayLimit={stxBlocksDisplayLimit}
+        />
       </ScrollableDiv>
       {stxBlocksNotDisplayed > 0 ? <BlockCount count={stxBlocksNotDisplayed} /> : null}
-
-      <Box borderTop="1px solid var(--stacks-colors-borderPrimary)">
-        <HStack divider={<Caption>∙</Caption>} gap={1} pt={4}>
-          <Text color="textSubdued" fontSize="xs">
-            {stxBlocks.length} blocks
-          </Text>
-          <Text color="textSubdued" fontSize="xs">
-            {txSum} transactions
-          </Text>
-          <Text color="textSubdued" fontSize="xs">
-            Average block time: 29 sec.
-          </Text>
-        </HStack>
-      </Box>
+      <Footer stxBlocks={stxBlocks} txSum={txSum} />
     </Box>
   );
 }

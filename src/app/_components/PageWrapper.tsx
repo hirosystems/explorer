@@ -1,7 +1,7 @@
 'use client';
 
 import { useColorModeValue } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { NakamotoModal } from '../../common/components/modals/Nakamoto';
