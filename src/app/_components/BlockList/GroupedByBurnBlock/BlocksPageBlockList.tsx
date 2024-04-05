@@ -7,8 +7,8 @@ import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
 import { useBlockListContext } from '../LayoutA/context';
-import { PaginatedBlockListLayoutA } from '../Ungrouped/Paginated2';
-import { BlocksPageBlockListGroupedByBtcBlock2 } from './BlocksPageBlockListGroupedByBtcBlock';
+import { BlocksPageUngroupedBlockList } from '../Ungrouped/BlocksPageUngroupedBlockList';
+import { BlocksPageBlockListGroupedByBtcBlock } from './BlocksPageBlockListGroupedByBtcBlock';
 import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
 
 function BlocksPageBlockListBase() {
@@ -38,7 +38,7 @@ function BlocksPageBlockListBase() {
         }}
         horizontal={true}
       />
-      {groupedByBtc ? <BlocksPageBlockListGroupedByBtcBlock2 /> : <PaginatedBlockListLayoutA />}
+      {groupedByBtc ? <BlocksPageBlockListGroupedByBtcBlock /> : <BlocksPageUngroupedBlockList />}
     </Section>
   );
 }

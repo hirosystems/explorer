@@ -3,12 +3,12 @@ import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlocks';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
+import { FADE_DURATION } from '../consts';
 import { UIBlockType } from '../types';
 import { BlocksGroupProps } from './BurnBlockGroup';
 import { useInitialBlockListGroupedByBtcBlockHomePage } from './useInitialBlockListGroupedByBtcHomePage';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 
 export function useBlockListGroupedByBtcBlockHomePage() {
   const queryClient = useQueryClient();
@@ -44,8 +44,8 @@ export function useBlockListGroupedByBtcBlockHomePage() {
   );
 
   const {
-    latestBlock: latestStxBlock,
-    latestBlocksCount: latestStxBlocksWaitingToBeLoaded,
+    latestStxBlock: latestStxBlock,
+    latestStxBlocksCount: latestStxBlocksWaitingToBeLoaded,
     clearLatestBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(initialStxBlockHashes, initialBurnBlockHashes); // TODO: fix this
 

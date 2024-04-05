@@ -6,24 +6,25 @@ import { UIBlockType, UISingleBlock } from '../types';
 import { useSubscribeBlocks } from './useSubscribeBlocks';
 
 export function useBlockListWebSocket(
-  initialBlockHashes: Set<string>,
+  initialStxBlockHashes: Set<string>,
   initialBurnBlockHashes: Set<string>
 ) {
   const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]);
-  const [latestBlock, setLatestBlock] = useState<NakamotoBlock>();
-  const latestBlockHashes = useRef(new Set<string>());
+  const [latestStxBlock, setLatestStxBlock] = useState<NakamotoBlock>();
+  const latestStxBlockHashes = useRef(new Set<string>());
   const latestBurnBlockHashes = useRef(new Set<string>());
 
   const handleBlock = useCallback(
     (block: NakamotoBlock) => {
       function updateLatestBlocks() {
+        // TODO: remove function
         // If the block is already in the list, don't add it again
-        if (latestBlockHashes.current.has(block.hash) || initialBlockHashes.has(block.hash)) {
+        if (latestStxBlockHashes.current.has(block.hash) || initialStxBlockHashes.has(block.hash)) {
           return;
         }
         // Otherwise, add it to the list
-        setLatestBlock(block);
-        latestBlockHashes.current.add(block.hash);
+        setLatestStxBlock(block);
+        latestStxBlockHashes.current.add(block.hash);
 
         const isNewBurnBlock =
           !initialBurnBlockHashes.has(block.burn_block_hash) &&
@@ -54,7 +55,7 @@ export function useBlockListWebSocket(
 
       updateLatestBlocks();
     },
-    [initialBurnBlockHashes, initialBlockHashes]
+    [initialBurnBlockHashes, initialStxBlockHashes]
   );
 
   useSubscribeBlocks(handleBlock);
@@ -65,8 +66,8 @@ export function useBlockListWebSocket(
 
   return {
     latestUIBlocks: latestBlocks,
-    latestBlock,
-    latestBlocksCount: latestBlocks.filter(block => block.type === UIBlockType.StxBlock).length,
+    latestStxBlock: latestStxBlock,
+    latestStxBlocksCount: latestBlocks.filter(block => block.type === UIBlockType.StxBlock).length,
     clearLatestBlocks,
   };
 }

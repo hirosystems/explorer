@@ -5,6 +5,7 @@ import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { SkeletonText } from '../../../../ui/SkeletonText';
+import { Circle } from '../../../../common/components/Circle';
 
 function BitcoinHeaderSkeleton() {
   return (
@@ -40,7 +41,7 @@ function BlockCountSkeleton() {
       mb={3}
     >
       <SkeletonText noOfLines={1} width={20} />
-      <SkeletonCircle height={4.5} width={4.5} bg="surface" />
+      <Circle height={4.5} width={4.5} bg="surface" />
     </Flex>
   );
 }

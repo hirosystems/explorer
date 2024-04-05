@@ -73,6 +73,7 @@ const GroupHeader = () => {
   );
 };
 
+// TODO: ideally this would be a table
 const StxBlockRow = ({ block, icon }: { block: UISingleBlock; icon?: ReactNode }) => {
   return (
     <>
