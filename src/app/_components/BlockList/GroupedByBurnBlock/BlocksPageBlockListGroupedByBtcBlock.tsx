@@ -1,31 +1,21 @@
 'use client';
 
 import { ListFooter } from '@/common/components/ListFooter';
-import { Suspense, useCallback, useRef } from 'react';
+import { Suspense } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { Controls } from '../Controls';
-import { BlockListProvider } from '../LayoutA/Provider';
 import { UpdateBar } from '../LayoutA/UpdateBar';
-import { FADE_DURATION } from '../LayoutA/consts';
-// TODO: move somewhere else
 import { useBlockListContext } from '../LayoutA/context';
-import { BlockPageHeadersSkeleton, BlocksPageHeaders } from './BlocksPageHeaders';
+import { FADE_DURATION } from '../consts';
 import { BurnBlockGroup } from './BurnBlockGroup';
 import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
 import { useBlockListGroupedByBtcBlockBlocksPage } from './useBlockListGroupedByBtcBlockBlocksPage';
 
 function BlocksPageBlockListGroupedByBtcBlockBase() {
-  const {
-    groupedByBtc,
-    setGroupedByBtc,
-    liveUpdates,
-    setLiveUpdates,
-    isBlockListLoading,
-  } = useBlockListContext();
+  const { liveUpdates, isBlockListLoading } = useBlockListContext();
   const {
     blockList,
     updateBlockList,
@@ -34,34 +24,12 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
     hasNextPage,
     fetchNextPage,
   } = useBlockListGroupedByBtcBlockBlocksPage(10);
-
-  const lastClickTimeRef = useRef(0);
-  const toggleLiveUpdates = useCallback(() => {
-    const now = Date.now();
-    if (now - lastClickTimeRef.current > 2000) {
-      lastClickTimeRef.current = now;
-      setLiveUpdates(!liveUpdates);
-    }
-  }, [liveUpdates, setLiveUpdates]);
+  console.log({ liveUpdates });
 
   const enablePagination = true;
 
   return (
-    <Section>
-      <Controls
-        groupByBtc={{
-          onChange: () => {
-            setGroupedByBtc(!groupedByBtc);
-          },
-          isChecked: groupedByBtc,
-          isDisabled: true,
-        }}
-        liveUpdates={{
-          onChange: toggleLiveUpdates,
-          isChecked: liveUpdates,
-        }}
-        horizontal={true}
-      />
+    <>
       {!liveUpdates && (
         <UpdateBar
           isUpdateListLoading={isBlockListLoading}
@@ -80,6 +48,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
       >
         {blockList.map(block => (
           <BurnBlockGroup
+            key={block.burnBlock.hash}
             burnBlock={block.burnBlock}
             stxBlocks={block.stxBlocks}
             stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
@@ -96,12 +65,11 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
           />
         )}
       </Box>
-    </Section>
+    </>
   );
 }
 
 export function BlocksPageBlockListGroupedByBtcBlock() {
-  // TODO: fix the suspense fallback
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -112,15 +80,9 @@ export function BlocksPageBlockListGroupedByBtcBlock() {
       }}
       tryAgainButton
     >
-      <BlockListProvider>
-        <Suspense fallback={<BlockPageHeadersSkeleton />}>
-          <BlocksPageHeaders />
-        </Suspense>
-
-        <Suspense fallback={<BlocksPageBlockListGroupedByBtcBlockSkeleton />}>
-          <BlocksPageBlockListGroupedByBtcBlockBase />
-        </Suspense>
-      </BlockListProvider>
+      <Suspense fallback={<BlocksPageBlockListGroupedByBtcBlockSkeleton />}>
+        <BlocksPageBlockListGroupedByBtcBlockBase />
+      </Suspense>
     </ExplorerErrorBoundary>
   );
 }

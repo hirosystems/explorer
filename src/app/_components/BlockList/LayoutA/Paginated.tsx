@@ -4,10 +4,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
+import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
 import { BlockListWithControls } from './BlockListWithControls';
 import { BlockListProvider } from './Provider';
-import { FADE_DURATION } from './consts';
 import { useBlockListContext } from './context';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { usePaginatedBlockList } from './usePaginatedBlockList';
@@ -33,10 +34,11 @@ function PaginatedBlockListLayoutABase() {
     return new Set(Object.keys(initialBurnBlocks));
   }, [initialBurnBlocks]);
 
-  const { latestUIBlocks, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
-    initialBlockHashes,
-    initialBurnBlockHashes
-  );
+  const {
+    latestUIBlocks,
+    latestStxBlocksCount: latestBlocksCount,
+    clearLatestBlocks,
+  } = useBlockListWebSocket(initialBlockHashes, initialBurnBlockHashes);
 
   const showLatestBlocks = useCallback(() => {
     setLatestBlocksToShow(prevLatestBlocksToShow => {

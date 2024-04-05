@@ -6,7 +6,7 @@ import { Button } from '../../../../ui/Button';
 import { Flex, FlexProps } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
-import { FADE_DURATION } from './consts';
+import { FADE_DURATION } from '../consts';
 
 interface UpdateBarProps extends FlexProps {
   latestBlocksCount: number;

@@ -8,7 +8,6 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
-import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { UIBlockType, UISingleBlock } from '../types';
@@ -43,8 +42,8 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
   );
 
   const {
-    latestBlock: latestStxBlockFromWebSocket,
-    latestBlocksCount: latestStxBlocksCountFromWebSocket,
+    latestStxBlock: latestStxBlockFromWebSocket,
+    latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(stxBlockHashes, burnBlockHashes); // TODO: fix this
 
@@ -85,14 +84,17 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
       // If latest stx block belongs to the latest burn block, add it to the latest burn block list of stx blocks
       if (latestStxBlockFromWebSocket.burn_block_height === latestBurnBlock.burn_block_height) {
         setBlockListLoading(true);
-        setTimeout(() => {
-          latestBurnBlockStxBlocks.unshift(latestStxBlockFromWebSocket);
-          latestBurnBlock.stacks_blocks.unshift(latestStxBlockFromWebSocket.hash);
-          setBlockListLoading(false);
-        }, FADE_DURATION);
+        latestBurnBlockStxBlocks.unshift(latestStxBlockFromWebSocket);
+        latestBurnBlock.stacks_blocks.unshift(latestStxBlockFromWebSocket.hash);
+        setBlockListLoading(false);
+        // setTimeout(() => {
+        //   latestBurnBlockStxBlocks.unshift(latestStxBlockFromWebSocket);
+        //   latestBurnBlock.stacks_blocks.unshift(latestStxBlockFromWebSocket.hash);
+        //   setBlockListLoading(false);
+        // }, FADE_DURATION);
       } else {
         // Otherwise, we have a new burn block, in which case, adding a new burn block is the equivalent of refetching/updating the block list
-        updateBlockList();
+        updateBlockList(); // TODO: I dont think we should query again since we have the data we need to make the update
       }
     }
 
@@ -136,7 +138,8 @@ export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) 
         type: UIBlockType.StxBlock,
         height: block.height,
         hash: block.hash,
-        timestamp: block.burn_block_time, // block?.block_time TODO: this is the right timestamp to use, but it seems to be inaccurate
+        timestamp: block?.block_time, // TODO: this is the right timestamp to use, but it seems to be inaccurate
+        txsCount: block.tx_count,
       })),
       stxBlocksDisplayLimit: blockListLimit,
     },

@@ -67,9 +67,8 @@ export function BlocksPageBlockListUngroupedSkeleton() {
     <Stack pl={4} pr={2} gap={0} width={'full'}>
       <StxBlockListSkeleton numBlocks={10} />
       <BtcBlockListItemSkeleton />
-      <StxBlockListSkeleton numBlocks={10} />
+      <StxBlockListSkeleton numBlocks={30} />
       <BtcBlockListItemSkeleton />
-      <StxBlockListSkeleton numBlocks={3} />
     </Stack>
   );
 }

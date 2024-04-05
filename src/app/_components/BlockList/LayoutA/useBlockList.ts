@@ -4,8 +4,9 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { BurnBlock } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
+import { FADE_DURATION } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
-import { FADE_DURATION } from './consts';
 import { useBlockListContext } from './context';
 import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockList } from './useInitialBlockList';
@@ -79,10 +80,11 @@ export function useBlockList(length: number) {
     [lastBurnBlock, secondToLastBurnBlock]
   );
 
-  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
-    initialBlockHashes,
-    initialBurnBlockHashes
-  );
+  const {
+    latestStxBlock: latestBlock,
+    latestStxBlocksCount: latestBlocksCount,
+    clearLatestBlocks,
+  } = useBlockListWebSocket(initialBlockHashes, initialBurnBlockHashes);
 
   const updateList = useCallback(
     async function () {
