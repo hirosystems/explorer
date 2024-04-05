@@ -1,7 +1,7 @@
 'use client';
 
 import { useColorModeValue } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { NakamotoModal } from '../../common/components/modals/Nakamoto';
@@ -13,6 +13,45 @@ import { NetworkModeToast } from './NetworkModeToast';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
 
 function WrapperWithBg({ children }: { children: ReactNode }) {
+  // const router = useRouter();
+  // const { pathname } = router;
+  // const defaultBg = useColorModeValue(
+  //   `linear-gradient(
+  //            29.53deg,
+  //            #9528F7 2.94%,
+  //            #522DE7 39.91%,
+  //            #221A71 76.87%,
+  //            #0F102B 93.08%
+  //          ),
+  //          white`,
+  //   `linear-gradient(
+  //            29.53deg,
+  //            #9528F7 2.94%,
+  //            #522DE7 39.91%,
+  //            #221A71 76.87%,
+  //            #0F102B 93.08%
+  //          ),
+  //          black`
+  // );
+  // const btcBlockPageBg = useColorModeValue(
+  //   `linear-gradient(
+  //            29.53deg,
+  //            #9528F7 2.94%,
+  //            #522DE7 39.91%,
+  //            #221A71 76.87%,
+  //            #0F102B 93.08%
+  //          ),
+  //          white`,
+  //   `linear-gradient(
+  //            29.53deg,
+  //            #9528F7 2.94%,
+  //            #522DE7 39.91%,
+  //            #221A71 76.87%,
+  //            #0F102B 93.08%
+  //          ),
+  //          black`
+  // );
+
   return (
     <Flex
       maxWidth="100vw"

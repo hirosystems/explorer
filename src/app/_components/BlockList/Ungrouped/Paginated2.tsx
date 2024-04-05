@@ -2,18 +2,19 @@
 
 import { ListFooter } from '@/common/components/ListFooter';
 import { Box } from '@/ui/Box';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { Blocks } from '../LayoutA/Blocks';
+import { BlockListProvider } from '../LayoutA/Provider';
+import { UpdateBar } from '../LayoutA/UpdateBar';
+import { FADE_DURATION } from '../LayoutA/consts';
+import { useBlockListContext } from '../LayoutA/context';
+import { usePaginatedBlockList } from '../LayoutA/usePaginatedBlockList';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { UISingleBlock } from '../types';
-import { Blocks } from './Blocks';
-import { BlockListProvider } from './Provider';
-import { UpdateBar } from './UpdateBar';
-import { FADE_DURATION } from './consts';
-import { useBlockListContext } from './context';
-import { usePaginatedBlockList } from './usePaginatedBlockList';
+import { BlocksPageBlockListUngroupedSkeleton } from './skeleton';
 
 function PaginatedBlockListLayoutABase() {
   const { isBlockListLoading, setBlockListLoading, liveUpdates } = useBlockListContext();
@@ -132,7 +133,10 @@ export function PaginatedBlockListLayoutA() {
       tryAgainButton
     >
       <BlockListProvider>
-        <PaginatedBlockListLayoutABase />
+        <Suspense fallback={<BlocksPageBlockListUngroupedSkeleton />}>
+          <BlocksPageBlockListUngroupedSkeleton />
+          {/* <PaginatedBlockListLayoutABase /> */}
+        </Suspense>
       </BlockListProvider>
     </ExplorerErrorBoundary>
   );

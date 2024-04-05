@@ -7,9 +7,9 @@ import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { Controls } from '../Controls';
 import { BlockListProvider } from '../LayoutA/Provider';
 import { useBlockListContext } from '../LayoutA/context';
+import { PaginatedBlockListLayoutA } from '../Ungrouped/Paginated2';
 import { BlocksPageBlockListGroupedByBtcBlock2 } from './BlocksPageBlockListGroupedByBtcBlock';
 import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
-import { PaginatedBlockListLayoutA } from '../LayoutA/Paginated2';
 
 function BlocksPageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();

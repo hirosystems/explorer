@@ -30,10 +30,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body>
         <AppContextProvider
           headerCookies={headersList.get('cookie')}
-          apiUrls={NetworkModeUrlMap}
-          btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
-          btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
-          btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
+          apiUrls={NetworkModeUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
+          btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
+          btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
+          btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
         >
           <Providers headerCookies={headersList.get('cookie')}>
             <PageWrapper tokenPrice={tokenPrice}>{children}</PageWrapper>

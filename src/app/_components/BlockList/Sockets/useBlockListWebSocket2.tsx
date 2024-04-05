@@ -3,7 +3,7 @@ import { useCallback, useRef, useState } from 'react';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { UIBlockType, UISingleBlock } from '../types';
-import { useSubscribeBlocks } from './useSubscribeBlocks';
+import { useSubscribeBlocks2 } from './useSubscribeBlocks2';
 
 export function useBlockListWebSocket2(
   initialBlockHashes: Set<string>,
@@ -57,7 +57,7 @@ export function useBlockListWebSocket2(
     [initialBurnBlockHashes, initialBlockHashes]
   );
 
-  useSubscribeBlocks(handleBlock);
+  useSubscribeBlocks2(handleBlock);
 
   const clearLatestBlocks = () => {
     setLatestBlocks([]);

@@ -10,7 +10,7 @@ import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBloc
 import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
 import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket2';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { UIBlockType, UISingleBlock } from '../types';
 import { BlocksGroupProps } from './BurnBlockGroup';
 

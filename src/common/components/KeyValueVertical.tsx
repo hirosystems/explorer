@@ -1,16 +1,19 @@
-import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import { FC, ReactNode } from 'react';
 
-import { Flex } from '../../ui/Flex';
+import { Box } from '../../ui/Box';
+import { Flex, FlexProps } from '../../ui/Flex';
+import { Text } from '../../ui/Text';
 import { CopyButton } from './CopyButton';
 
-export interface KeyValueVerticalProps {
+export interface KeyValueVerticalProps extends FlexProps {
   label: string;
   value: ReactNode;
   copyValue?: string;
+  className?: string;
 }
 
-const rowStyle = css`
+const StyledFlexContainer = styled(Flex)`
   .fancy-copy {
     opacity: 0;
     position: relative;
@@ -27,28 +30,31 @@ const rowStyle = css`
   }
 `;
 
-export const KeyValueVertical: FC<KeyValueVerticalProps> = ({ label, value, copyValue }) => {
+export const KeyValueVertical: FC<KeyValueVerticalProps> = ({
+  label,
+  value,
+  copyValue,
+  className,
+  ...rest
+}) => {
   return (
-    <Flex p={'24px 0'} css={rowStyle} gap={'10px'}>
-      <Flex gap={'10px'} direction={'column'}>
-        <Flex fontSize={'12px'} color={'textCaption'} width={'140px'}>
-          {label}
-        </Flex>
-        <Flex
-          flexDirection={['column', 'column', 'row']}
-          alignItems={['flex-start', 'flex-start', 'center']}
-        >
-          {value}
-        </Flex>
+    <StyledFlexContainer p={6} gap={2} flexDirection="column" {...rest} className={className}>
+      <Text fontSize='sm' color='textSubdued'>
+        {label}
+      </Text>
+      <Flex width="100%" justifyContent="space-between" alignItems="center">
+        <Text fontSize='xs'>{value}</Text>
+        {copyValue && (
+          <Box width={8}>
+            <CopyButton
+              className={'fancy-copy'}
+              initialValue={copyValue}
+              aria-label={'copy row'}
+              size={'40px'} // TODO: using hardcoded pixel value. Fix
+            />
+          </Box>
+        )}
       </Flex>
-      {copyValue && (
-        <CopyButton
-          className={'fancy-copy'}
-          initialValue={copyValue}
-          aria-label={'copy row'}
-          size={'40px'}
-        />
-      )}
-    </Flex>
+    </StyledFlexContainer>
   );
 };

@@ -5,10 +5,10 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { FADE_DURATION } from '../LayoutA/consts';
 import { useBlockListContext } from '../LayoutA/context';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket2';
 import { UIBlockType } from '../types';
 import { BlocksGroupProps } from './BurnBlockGroup';
 import { useInitialBlockListGroupedByBtcBlockHomePage } from './useInitialBlockListGroupedByBtcHomePage';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 
 export function useBlockListGroupedByBtcBlockHomePage() {
   const queryClient = useQueryClient();

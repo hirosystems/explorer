@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 
-import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
@@ -12,13 +11,14 @@ interface Subscription {
 
 // TODO: with the new client code, we should be able to use the client directly
 export function useSubscribeBlocks2(handleBlock: (block: NakamotoBlock) => any) {
-  const subscription = useRef<Subscription | null>(null);
-  const { stacksApiSocket } = useGlobalContext();
-  const { client, connect, isConnected } = stacksApiSocket || {};
+  const subscription = useRef<Subscription | undefined>(undefined);
+  const { stacksApiSocketClient } = useGlobalContext();
 
   useEffect(() => {
-    const handleOnConnect = async (client: StacksApiSocketClient) => {
-      subscription.current = client.subscribeBlocks((block: Block) => {
+    const subscribe = async () => {
+      console.log('subscribing to blocks');
+      subscription.current = stacksApiSocketClient?.subscribeBlocks((block: Block) => {
+        console.log('handling block', block);
         handleBlock({
           ...block,
           parent_index_block_hash: '',
@@ -26,12 +26,12 @@ export function useSubscribeBlocks2(handleBlock: (block: NakamotoBlock) => any) 
         });
       });
     };
-    if (!isConnected) {
-      connect?.(handleOnConnect);
+    if (stacksApiSocketClient?.socket.connected) {
+      subscribe();
     }
-    // return () => {
-    //   subscription?.current?.unsubscribe();
-    // };
-  }, [client, handleBlock, connect, isConnected]);
+    return () => {
+      subscription?.current?.unsubscribe();
+    };
+  }, [stacksApiSocketClient, handleBlock]);
   return subscription;
 }

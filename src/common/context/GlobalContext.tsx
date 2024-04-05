@@ -5,12 +5,10 @@ import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
+import { StacksApiSocketClient, StacksApiWebSocketClient, connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { ChainID } from '@stacks/transactions';
 
-import {
-  StacksApiSocketClientInfo,
-  useStacksApiSocketClient,
-} from '../../app/_components/BlockList/Sockets/use-stacks-api-socket-client';
+import { useStacksApiSocketClient } from '../../app/_components/BlockList/Sockets/use-stacks-api-socket-client';
 import { buildCustomNetworkUrl, fetchCustomNetworkId } from '../components/modals/AddNetwork/utils';
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '../constants/constants';
 import {
@@ -34,8 +32,8 @@ interface GlobalContextProps {
   addCustomNetwork: (network: Network) => Promise<any>;
   removeCustomNetwork: (network: Network) => void;
   networks: Record<string, Network>;
-  // webSocketClient?: Promise<StacksApiWebSocketClient>;
-  stacksApiSocket?: StacksApiSocketClientInfo;
+  webSocketClient?: Promise<StacksApiWebSocketClient>;
+  // stacksApiSocketClient: StacksApiSocketClient | null;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -57,8 +55,8 @@ export const GlobalContext = createContext<GlobalContextProps>({
   addCustomNetwork: () => Promise.resolve(),
   removeCustomNetwork: () => true,
   networks: {},
-  // webSocketClient: undefined,
-  stacksApiSocket: undefined,
+  webSocketClient: undefined,
+  // stacksApiSocketClient: null,
 });
 
 export const AppContextProvider: FC<{
@@ -103,12 +101,21 @@ export const AppContextProvider: FC<{
   const [_, setCookie] = useCookies(['customNetworks']);
   const [customNetworks, setCustomNetworks] = useState(customNetworksCookie);
   const activeNetworkKey = querySubnet || queryApiUrl || apiUrls[queryNetworkMode];
-  const {
-    client: stacksApiSocketClient,
-    connect: connectStacksApiSocket,
-    disconnect: disconnectStacksApiSocket,
-    isConnected: isConnectedStacksApiSocket,
-  } = useStacksApiSocketClient(queryNetworkMode);
+
+  // const {
+  //   client: stacksApiSocketClient,
+  //   connect: connectStacksApiSocket,
+  //   disconnect: disconnectStacksApiSocket,
+  // } = useStacksApiSocketClient(queryNetworkMode);
+  // Connect to the stacks api socket, disconnect when the component unmounts, and reconnect if the connection is lost
+  // useEffect(() => {
+  //   if (!stacksApiSocketClient?.socket.connected) {
+  //     connectStacksApiSocket();
+  //   }
+  //   return () => {
+  //     disconnectStacksApiSocket();
+  //   };
+  // }, [stacksApiSocketClient, connectStacksApiSocket, disconnectStacksApiSocket]);
 
   const isUrlPassedSubnet = !!querySubnet && !customNetworks[querySubnet];
   const networks: Record<string, Network> = useMemo<Record<string, Network>>(
@@ -256,15 +263,10 @@ export const AppContextProvider: FC<{
           setCustomNetworks(remainingCustomNetworks);
         },
         networks,
-        // webSocketClient: activeNetworkKey
-        //   ? connectWebSocketClient(activeNetworkKey.replace('https://', 'wss://'))
-        //   : undefined,
-        stacksApiSocket: {
-          client: stacksApiSocketClient,
-          connect: connectStacksApiSocket,
-          disconnect: disconnectStacksApiSocket,
-          isConnected: isConnectedStacksApiSocket,
-        },
+        webSocketClient: activeNetworkKey
+          ? connectWebSocketClient(activeNetworkKey.replace('https://', 'wss://'))
+          : undefined,
+        // stacksApiSocketClient,
       }}
     >
       {children}

@@ -1,6 +1,5 @@
 import { useClipboard } from '@chakra-ui/react';
 import { FC, memo } from 'react';
-import * as React from 'react';
 import { AiOutlineCopy } from 'react-icons/ai';
 
 import { IconButton, IconButtonProps } from '../../ui/IconButton';
@@ -12,7 +11,12 @@ export const CopyButton: FC<IconButtonProps & { initialValue: string }> = memo(
     return (
       <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'}>
         <IconButton
-          icon={<AiOutlineCopy strokeWidth={1.75} size={'20px'} />}
+          icon={
+            <AiOutlineCopy
+              strokeWidth={1.75}
+              size={'20px'}
+            />
+          }
           onClick={onCopy}
           height={'auto'}
           _focus={{ background: 'none' }}

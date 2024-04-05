@@ -1,60 +1,66 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
 
 import { NetworkModes } from '../../../../common/types/network';
 
 export interface StacksApiSocketClientInfo {
-  client: StacksApiSocketClient | null;
+  client: StacksApiSocketClient | undefined;
   connect: (handleOnConnect?: (client: StacksApiSocketClient) => void) => void;
   disconnect: () => void;
-  isConnected: boolean | undefined;
 }
 
 export function useStacksApiSocketClient(network: NetworkModes): StacksApiSocketClientInfo {
-  const socketClient = useRef<StacksApiSocketClient | null>(null);
+  const [socketClient, setSocketClient] = useState<StacksApiSocketClient | undefined>(undefined);
   const socketUrlTracker = useRef<string | null>(null);
   const isSocketClientConnecting = useRef(false);
 
   const connect = useCallback(
     async (handleOnConnect?: (client: StacksApiSocketClient) => void) => {
       if (!network) return;
-      if (socketClient.current?.socket.connected || isSocketClientConnecting.current) {
+      if (socketClient?.socket.connected || isSocketClientConnecting.current) {
         return;
       }
       try {
         isSocketClientConnecting.current = true;
         const socketUrl = `https://api.${network}.hiro.so/`;
         socketUrlTracker.current = socketUrl;
-        const client = StacksApiSocketClient.connect({ url: socketUrl });
-        socketClient.current = client;
-        socketClient.current.socket.on('connect', () => {
+        console.log('Connecting to socket', socketUrl);
+        const client = await StacksApiSocketClient.connect({ url: socketUrl });
+        client.socket.on('connect', () => {
+          console.log('Connected to socket');
+          setSocketClient(client);
           handleOnConnect?.(client);
           isSocketClientConnecting.current = false;
         });
-        socketClient.current.socket.on('disconnect', () => {
+        client.socket.on('disconnect', () => {
+          console.log('Disconnected from socket');
+          setSocketClient(undefined);
           isSocketClientConnecting.current = false;
         });
-        socketClient.current.socket.on('connect_error', error => {
+        client.socket.on('connect_error', error => {
+          console.log('Socket connection error', error);
+          setSocketClient(undefined);
           isSocketClientConnecting.current = false;
         });
       } catch (error) {
+        setSocketClient(undefined);
         isSocketClientConnecting.current = false;
       }
     },
-    [network]
+    [network, socketClient]
   );
 
   const disconnect = useCallback(() => {
-    if (socketClient.current?.socket.connected) {
-      socketClient.current.socket.close();
+    if (socketClient?.socket.connected) {
+      console.log('Disconnecting from socket');
+      socketClient?.socket.close();
     }
-  }, []);
+  }, [socketClient]);
 
   return {
-    client: socketClient.current,
+    client: socketClient,
     connect,
     disconnect,
-    isConnected: socketClient.current?.socket.connected,
   };
 }
