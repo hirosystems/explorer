@@ -3,11 +3,11 @@ import pluralize from 'pluralize';
 import { memo } from 'react';
 import { PiArrowUpRight } from 'react-icons/pi';
 
-import { Circle } from '../../../../common/components/Circle';
-import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
-import { Text } from '../../../../ui/Text';
+import { Circle } from '../../../common/components/Circle';
+import { ExplorerLink } from '../../../common/components/ExplorerLinks';
+import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
+import { Text } from '../../../ui/Text';
 
 export const BlockCount = memo(function ({ count }: { count: number }) {
   // TODO: remove. use theme

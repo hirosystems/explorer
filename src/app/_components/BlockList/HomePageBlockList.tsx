@@ -1,19 +1,39 @@
 'use client';
 
 import { Stack } from '@/ui/Stack';
+import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useRef } from 'react';
 
-import { Section } from '../../../../common/components/Section';
-import { DEFAULT_BLOCKS_LIST_LIMIT } from '../../../../common/constants/constants';
-import { Box } from '../../../../ui/Box';
-import { Text } from '../../../../ui/Text';
-import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { Controls } from '../Controls';
-import { BlockListProvider } from '../LayoutA/Provider';
-import { useBlockListContext } from '../LayoutA/context';
-import { UpdatedBlocksList2 } from '../UpdatedBlockList2';
-import { HomePageBlockListGroupedByBtcBlock2 } from './HomePageBlockListGroupedByBtcBlock';
-import { HomePageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
+import { Section } from '../../../common/components/Section';
+import { Box } from '../../../ui/Box';
+import { Text } from '../../../ui/Text';
+import { ExplorerErrorBoundary } from '../ErrorBoundary';
+import { useBlockListContext } from './BlockListContext';
+import { BlockListProvider } from './BlockListProvider';
+import { Controls } from './Controls';
+import { HomePageBlockListGroupedByBtcBlock } from './GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock';
+import { HomePageBlockListGroupedByBtcBlockSkeleton } from './GroupedByBurnBlock/skeleton';
+import { HomePageBlockListUngroupedSkeleton } from './Ungrouped/skeleton';
+
+const HomePageBlockListGroupedByBtcBlockDynamic = dynamic(
+  () =>
+    import('./GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock').then(
+      mod => mod.HomePageBlockListGroupedByBtcBlock
+    ),
+  {
+    loading: () => <HomePageBlockListGroupedByBtcBlock />,
+    ssr: false,
+  }
+);
+
+const HomePageUngroupedBlockListDynamic = dynamic(
+  () =>
+    import('./Ungrouped/HomePageUngroupedBlockList').then(mod => mod.HomePageUngroupedBlockList),
+  {
+    loading: () => <HomePageBlockListUngroupedSkeleton />,
+    ssr: false,
+  }
+);
 
 function HomePageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
@@ -26,6 +46,7 @@ function HomePageBlockListBase() {
       setLiveUpdates(!liveUpdates);
     }
   }, [liveUpdates, setLiveUpdates]);
+
   return (
     <Section py={6} px={0}>
       <Box overflowX={'auto'}>
@@ -56,9 +77,9 @@ function HomePageBlockListBase() {
           />
         </Stack>
         {groupedByBtc ? (
-          <HomePageBlockListGroupedByBtcBlock2 />
+          <HomePageBlockListGroupedByBtcBlockDynamic />
         ) : (
-          <UpdatedBlocksList2 limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+          <HomePageUngroupedBlockListDynamic />
         )}
       </Box>
     </Section>
@@ -79,7 +100,6 @@ export function HomePageBlockList() {
     >
       <BlockListProvider>
         <Suspense fallback={<HomePageBlockListGroupedByBtcBlockSkeleton />}>
-          {/** TODO: fix this */}
           <HomePageBlockListBase />
         </Suspense>
       </BlockListProvider>

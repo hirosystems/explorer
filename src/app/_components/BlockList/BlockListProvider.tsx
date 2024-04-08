@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 
-import { BlockListContext } from './context';
+import { BlockListContext } from './BlockListContext';
 
 export function BlockListProvider({ children }: { children: ReactNode }) {
   const [isUpdateListLoading, setIsUpdateListLoading] = useState(false);

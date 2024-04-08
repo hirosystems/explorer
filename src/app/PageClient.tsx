@@ -9,34 +9,22 @@ import { Grid } from '../ui/Grid';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
-import { HomePageBlockList } from './_components/BlockList/GroupedByBurnBlock/HomePageBlockList';
 
-const NonPaginatedBlockListLayoutA = dynamic(
-  () =>
-    import('./_components/BlockList/LayoutA/NonPaginated').then(
-      mod => mod.NonPaginatedBlockListLayoutA
-    ),
+const BlocksListDynamic = dynamic(
+  () => import('./_components/BlockList').then(mod => mod.BlocksList),
   {
     loading: () => <SkeletonBlockList />,
     ssr: false,
   }
 );
 
-const HomePageBlockListGroupedByBtcBlock = dynamic(
-  () =>
-    import('./_components/BlockList/GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock').then(
-      mod => mod.HomePageBlockListGroupedByBtcBlock
-    ),
+const HomePageBlockListDynamic = dynamic(
+  () => import('./_components/BlockList/HomePageBlockList').then(mod => mod.HomePageBlockList),
   {
     loading: () => <SkeletonBlockList />,
     ssr: false,
   }
 );
-
-const BlocksList = dynamic(() => import('./_components/BlockList').then(mod => mod.BlocksList), {
-  loading: () => <SkeletonBlockList />,
-  ssr: false,
-});
 
 export default function Home() {
   const { activeNetwork, activeNetworkKey } = useGlobalContext();
@@ -51,10 +39,9 @@ export default function Home() {
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
         {activeNetworkKey.indexOf('naka') !== -1 || activeNetworkKey.indexOf('testnet') !== -1 ? (
-          <HomePageBlockList />
+          <HomePageBlockListDynamic />
         ) : (
-          // <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
-          <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+          <BlocksListDynamic limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}
       </Grid>
     </>

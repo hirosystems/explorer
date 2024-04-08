@@ -1,11 +1,16 @@
-import { SkeletonCircle, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 
+import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { SkeletonText } from '../../../../ui/SkeletonText';
-import { Circle } from '../../../../common/components/Circle';
+import { Stack } from '../../../../ui/Stack';
+import { Text } from '../../../../ui/Text';
+import { ControlsLayout } from '../Controls';
+import { UpdateBarLayout } from '../UpdateBar';
+import { BlocksPageHeaderLayout } from './BlocksPageHeaders';
 
 function BitcoinHeaderSkeleton() {
   return (
@@ -146,5 +151,63 @@ export function BlocksPageBlockListGroupedByBtcBlockSkeleton() {
       numTransactionsinBurnBlockGroupWithTxs={10}
       numBurnBlockGroupsWithoutTxs={9}
     />
+  );
+}
+
+export function BlockPageHeaderSkeleton() {
+  return (
+    <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
+      <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
+        <SkeletonText noOfLines={1} height="14px" />
+      </Text>
+      <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
+        <SkeletonText noOfLines={1} height="14px" />
+      </Text>
+      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
+        <SkeletonText noOfLines={1} height="14px" />
+      </Text>
+    </Stack>
+  );
+}
+
+export function BlockPageHeadersSkeleton() {
+  return (
+    <BlocksPageHeaderLayout
+      lastBlockCard={<BlockPageHeaderSkeleton />}
+      averageStacksBlockTimeCard={<BlockPageHeaderSkeleton />}
+      lastConfirmedBitcoinBlockCard={<BlockPageHeaderSkeleton />}
+    />
+  );
+}
+
+function ControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
+  return (
+    <ControlsLayout horizontal={horizontal}>
+      <Flex gap={2}>
+        <SkeletonText noOfLines={1} width={20} />
+        <SkeletonText noOfLines={1} width={20} />
+      </Flex>
+    </ControlsLayout>
+  );
+}
+
+function UpdateBarSkeleton() {
+  return (
+    <UpdateBarLayout isUpdateListLoading={false}>
+      <Flex justifyContent="space-between" width="full">
+        <SkeletonText noOfLines={1} width={40} />
+        <SkeletonText noOfLines={1} width={40} />
+      </Flex>
+    </UpdateBarLayout>
+  );
+}
+
+export function BlocksPageBlockListSkeleton() {
+  return (
+    <Section>
+      <ControlsSkeleton horizontal />
+      <UpdateBarSkeleton />
+      <BlocksPageBlockListGroupedByBtcBlockSkeleton />
+    </Section>
   );
 }

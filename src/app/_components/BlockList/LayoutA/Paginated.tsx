@@ -4,12 +4,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { useBlockListContext } from '../BlockListContext';
+import { BlockListProvider } from '../BlockListProvider';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
 import { BlockListWithControls } from './BlockListWithControls';
-import { BlockListProvider } from './Provider';
-import { useBlockListContext } from './context';
 import { usePaginatedBlockList } from './usePaginatedBlockList';
 
 function PaginatedBlockListLayoutABase() {

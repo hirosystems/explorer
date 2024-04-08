@@ -18,7 +18,7 @@ import { Value } from '../Value';
 
 export const SkeletonBlock = () => (
   <TwoColsListItem
-    icon={<SkeletonCircle width={'40px'} height={'40px'} />}
+    icon={<SkeletonCircle width={'40px'} height={'40px'} />} // Takes time to load in...
     leftContent={{
       title: <SkeletonItem width={'192px'} height={'15px'} />,
       subtitle: <SkeletonItem width={'180px'} height={'12px'} />,

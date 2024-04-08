@@ -2,7 +2,7 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
+import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
 
 const BURN_BLOCK_LENGTH = 3;
 const STX_BLOCK_LENGTH = 3;

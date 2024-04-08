@@ -1,15 +1,37 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useRef } from 'react';
 
-import { Section } from '../../../../common/components/Section';
-import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { Controls } from '../Controls';
-import { BlockListProvider } from '../LayoutA/Provider';
-import { useBlockListContext } from '../LayoutA/context';
-import { BlocksPageUngroupedBlockList } from '../Ungrouped/BlocksPageUngroupedBlockList';
-import { BlocksPageBlockListGroupedByBtcBlock } from './BlocksPageBlockListGroupedByBtcBlock';
-import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
+import { Section } from '../../../common/components/Section';
+import { ExplorerErrorBoundary } from '../ErrorBoundary';
+import { useBlockListContext } from './BlockListContext';
+import { BlockListProvider } from './BlockListProvider';
+import { Controls } from './Controls';
+import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './GroupedByBurnBlock/skeleton';
+import { BlocksPageBlockListUngroupedSkeleton } from './Ungrouped/skeleton';
+
+const BlocksPageBlockListGroupedByBtcBlockDynamic = dynamic(
+  () =>
+    import('./GroupedByBurnBlock/BlocksPageBlockListGroupedByBtcBlock').then(
+      mod => mod.BlocksPageBlockListGroupedByBtcBlock
+    ),
+  {
+    loading: () => <BlocksPageBlockListGroupedByBtcBlockSkeleton />,
+    ssr: false,
+  }
+);
+
+const BlocksPageUngroupedBlockListDynamic = dynamic(
+  () =>
+    import('./Ungrouped/BlocksPageUngroupedBlockList').then(
+      mod => mod.BlocksPageUngroupedBlockList
+    ),
+  {
+    loading: () => <BlocksPageBlockListUngroupedSkeleton />,
+    ssr: false,
+  }
+);
 
 function BlocksPageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
@@ -38,7 +60,12 @@ function BlocksPageBlockListBase() {
         }}
         horizontal={true}
       />
-      {groupedByBtc ? <BlocksPageBlockListGroupedByBtcBlock /> : <BlocksPageUngroupedBlockList />}
+      {/* {groupedByBtc ? <BlocksPageBlockListGroupedByBtcBlock /> : <BlocksPageUngroupedBlockList />} */}
+      {groupedByBtc ? (
+        <BlocksPageBlockListGroupedByBtcBlockDynamic />
+      ) : (
+        <BlocksPageUngroupedBlockListDynamic />
+      )}
     </Section>
   );
 }

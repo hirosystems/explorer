@@ -4,7 +4,7 @@ import { Circle } from '../../../../common/components/Circle';
 import { Flex } from '../../../../ui/Flex';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { BtcBlockListItemLayout } from './BtcBlockListItem';
-import { StxBlockListItem } from './StxBlockListItem';
+import { StxBlockListItemLayout } from './StxBlockListItem';
 
 function StxBlockListItemContentSkeleton({ hasIcon }: { hasIcon: boolean }) {
   return (
@@ -25,9 +25,9 @@ function StxBlockListItemSkeleton({
   hasBorder: boolean;
 }) {
   return (
-    <StxBlockListItem hasIcon={hasIcon} hasBorder={hasBorder}>
+    <StxBlockListItemLayout hasIcon={hasIcon} hasBorder={hasBorder}>
       <StxBlockListItemContentSkeleton hasIcon={hasIcon} />
-    </StxBlockListItem>
+    </StxBlockListItemLayout>
   );
 }
 

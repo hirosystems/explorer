@@ -1,7 +1,7 @@
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { StxIcon } from '../../../../ui/icons';
-import { BlockCount } from '../LayoutA/BlockCount';
+import { BlockCount } from '../BlockCount';
 import { FADE_DURATION } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
 import { BtcBlockListItem } from './BtcBlockListItem';
@@ -10,9 +10,11 @@ import { StxBlockListItem } from './StxBlockListItem';
 export function Blocks({
   blockList,
   isUpdateListLoading,
+  stxBlocksCountLimit,
 }: {
   blockList: UIBlock[];
   isUpdateListLoading: boolean;
+  stxBlocksCountLimit: number;
 }) {
   return (
     <Stack

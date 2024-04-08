@@ -1,9 +1,9 @@
 import { GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY } from '@/common/queries/useBlocksByBurnBlock';
-import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlocks';
+import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlocksInfinite';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { useBlockListContext } from '../LayoutA/context';
+import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { FADE_DURATION } from '../consts';
 import { UIBlockType } from '../types';
