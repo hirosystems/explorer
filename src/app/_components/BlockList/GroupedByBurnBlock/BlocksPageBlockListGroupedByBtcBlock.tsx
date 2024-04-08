@@ -7,8 +7,8 @@ import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { UpdateBar } from '../LayoutA/UpdateBar';
-import { useBlockListContext } from '../LayoutA/context';
+import { useBlockListContext } from '../BlockListContext';
+import { UpdateBar } from '../UpdateBar';
 import { FADE_DURATION } from '../consts';
 import { BurnBlockGroup } from './BurnBlockGroup';
 import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
@@ -31,11 +31,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
   return (
     <>
       {!liveUpdates && (
-        <UpdateBar
-          isUpdateListLoading={isBlockListLoading}
-          latestBlocksCount={latestBlocksCount}
-          onClick={updateBlockList}
-        />
+        <UpdateBar latestBlocksCount={latestBlocksCount} onClick={updateBlockList} />
       )}
       <Flex
         flexDirection="column"

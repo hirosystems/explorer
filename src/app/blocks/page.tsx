@@ -1,13 +1,12 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
-import Skeleton from './skeleton';
+import BlocksPageSkeleton from './skeleton';
 
 const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
-  ssr: false,
+  loading: () => <BlocksPageSkeleton />,
+  ssr: true,
 });
 
 export default Page;

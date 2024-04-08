@@ -3,11 +3,11 @@ import { useCallback, useRef } from 'react';
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
+import { useBlockListContext } from '../BlockListContext';
 import { Controls } from '../Controls';
+import { UpdateBar } from '../UpdateBar';
 import { UIBlock } from '../types';
 import { Blocks } from './Blocks';
-import { UpdateBar } from './UpdateBar';
-import { useBlockListContext } from './context';
 
 export function BlockListWithControls({
   blockList,

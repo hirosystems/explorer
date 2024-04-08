@@ -1,5 +1,5 @@
 import { GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY } from '@/common/queries/useBlocksByBurnBlock';
-import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlocks';
+import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlocksInfinite';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
@@ -7,8 +7,8 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
-import { useBlockListContext } from '../LayoutA/context';
+import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
+import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { UIBlockType, UISingleBlock } from '../types';
 import { BlocksGroupProps } from './BurnBlockGroup';

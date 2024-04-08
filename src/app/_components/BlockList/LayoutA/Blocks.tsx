@@ -1,9 +1,9 @@
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { StxIcon } from '../../../../ui/icons';
+import { BlockCount } from '../BlockCount';
 import { FADE_DURATION } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
-import { BlockCount } from './BlockCount';
 import { BurnBlock } from './BurnBlock';
 import { StxBlock } from './StxBlock';
 

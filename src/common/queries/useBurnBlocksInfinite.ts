@@ -16,6 +16,7 @@ import { TWO_MINUTES } from './query-stale-time';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
+// TODO: move code into useBurnBlocks
 export function useBurnBlocks(
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {

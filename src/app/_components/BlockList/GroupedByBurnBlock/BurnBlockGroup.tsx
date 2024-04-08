@@ -14,8 +14,10 @@ import { Icon } from '../../../../ui/Icon';
 import { Text, TextProps } from '../../../../ui/Text';
 import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { Caption } from '../../../../ui/typography';
-import { BlockCount } from '../LayoutA/BlockCount';
+import { BlockCount } from '../BlockCount';
 import { UISingleBlock } from '../types';
+
+const PADDING = 4;
 
 export function ListHeader({ children, ...textProps }: { children: ReactNode } & TextProps) {
   const color = useColorModeValue('slate.700', 'slate.250');
@@ -76,50 +78,111 @@ const GroupHeader = () => {
 };
 
 // TODO: ideally this would be a table
-const StxBlockRow = ({ block, icon }: { block: UISingleBlock; icon?: ReactNode }) => {
+const StxBlockRow = ({
+  block,
+  icon,
+  minimized = false,
+}: {
+  block: UISingleBlock;
+  icon?: ReactNode;
+  minimized?: boolean;
+}) => {
   return (
     <>
-      <Flex
-        flex={1}
-        position={'sticky'}
-        left={0}
-        zIndex={'docked'} // TODO: what is this?
-        bg={'surface'}
-        gap={2}
-        pl={7}
-        fontSize={'xs'}
-        sx={{
-          '.has-horizontal-scroll &:before': {
-            // Adds a border to the left of the first column
-            content: '""',
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: '2px',
-            height: 'var(--stacks-sizes-14)',
-            backgroundColor: 'borderPrimary',
-          },
-        }}
-      >
-        {icon}
-        <BlockLink hash={block.hash}>
-          <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
-            #{block.height}
+      {minimized ? (
+        <>
+          <Flex
+            position={'sticky'}
+            left={0}
+            zIndex={'docked'} // TODO: what is this?
+            bg={'surface'}
+            // gap={2}
+            pl={7}
+            fontSize={'xs'}
+            sx={{
+              '.has-horizontal-scroll &:before': {
+                // Adds a border to the left of the first column
+                content: '""',
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: '2px',
+                height: 'var(--stacks-sizes-14)',
+                backgroundColor: 'borderPrimary',
+              },
+            }}
+            key={block.hash}
+            justifySelf="start"
+          >
+            {icon}
+            <BlockLink hash={block.hash}>
+              <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
+                #{block.height}
+              </Text>
+            </BlockLink>
+          </Flex>
+
+          <HStack divider={<Caption>∙</Caption>} gap={1} justifySelf="end">
+            <BlockLink hash={block.hash}>
+              <Text color="textSubdued" fontWeight={'medium'} fontSize={'xs'} whiteSpace="nowrap">
+                {truncateMiddle(block.hash)}
+              </Text>
+            </BlockLink>
+            <Text color="textSubdued" fontWeight={'medium'} fontSize={'xs'}>
+              {block.txsCount || 0} txn
+            </Text>
+            <Flex>
+              <Timestamp ts={block.timestamp} />
+            </Flex>
+          </HStack>
+        </>
+      ) : (
+        <>
+          <Flex
+            flex={1}
+            position={'sticky'}
+            left={0}
+            zIndex={'docked'} // TODO: what is this?
+            bg={'surface'}
+            gap={2}
+            pl={7}
+            fontSize={'xs'}
+            sx={{
+              '.has-horizontal-scroll &:before': {
+                // Adds a border to the left of the first column
+                content: '""',
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                bottom: 0,
+                width: '2px',
+                height: 'var(--stacks-sizes-14)',
+                backgroundColor: 'borderPrimary',
+              },
+            }}
+            key={block.hash}
+          >
+            {icon}
+            <BlockLink hash={block.hash}>
+              <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
+                #{block.height}
+              </Text>
+            </BlockLink>
+          </Flex>
+          <BlockLink hash={block.hash} flex={1}>
+            <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
+              {block.hash}
+            </Text>
+          </BlockLink>
+          <Text color="text" fontWeight={'medium'} flex={1} fontSize={'xs'}>
+            {block.txsCount}
           </Text>
-        </BlockLink>
-      </Flex>
-      <BlockLink hash={block.hash} flex={1}>
-        <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
-          {block.hash}
-        </Text>
-      </BlockLink>
-      <Text color="text" fontWeight={'medium'} flex={1} fontSize={'xs'}>
-        100
-      </Text>
-      <Flex flex={1}>
-        <Timestamp ts={block.timestamp} />
-      </Flex>
+          <Flex flex={1}>
+            <Timestamp ts={block.timestamp} />
+          </Flex>
+        </>
+      )}
     </>
   );
 };
@@ -167,26 +230,29 @@ export interface BlocksGroupProps {
    * stxBlocks: Block[];
    */
   stxBlocksDisplayLimit?: number;
+  minimized?: boolean;
 }
 
 export function BurnBlockGroupGrid({
   burnBlock,
   stxBlocks,
   stxBlocksDisplayLimit,
+  minimized = false,
 }: BlocksGroupProps) {
   const stxBlocksToDisplay = stxBlocksDisplayLimit
     ? stxBlocks.slice(0, stxBlocksDisplayLimit)
     : stxBlocks;
   return (
     <Grid
-      templateColumns="repeat(4, 1fr)"
+      templateColumns={minimized ? 'auto minmax(0, 1fr)' : 'repeat(4, 1fr)'}
       gap={4}
       width={'full'}
       rowGap={4}
       key={burnBlock.hash}
+      pt={4}
       pb={7}
     >
-      <GroupHeader />
+      {minimized ? null : <GroupHeader />}
       {stxBlocksToDisplay.map((stxBlock, i) => (
         <>
           <StxBlockRow
@@ -230,6 +296,7 @@ export function BurnBlockGroupGrid({
                 ></Box>
               )
             }
+            minimized={minimized}
           />
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
@@ -241,14 +308,30 @@ export function BurnBlockGroupGrid({
   );
 }
 
-function BitcoinHeader({ burnBlock }: { burnBlock: UISingleBlock }) {
+function BitcoinHeader({
+  burnBlock,
+  minimized = false,
+}: {
+  burnBlock: UISingleBlock;
+  minimized?: boolean;
+}) {
   return (
-    <Flex alignItems={'center'} gap={1.5} pb={4}>
-      <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
-      <Icon as={BitcoinIcon} size={4.5} />
-      <Text fontSize={'sm'} color={'textSubdued'} fontWeight={'medium'}>
-        {burnBlock.height}
-      </Text>
+    <Flex
+      alignItems={'center'}
+      justifyContent={minimized ? 'space-between' : 'normal'}
+      gap={1.5}
+      pb={3}
+      marginX={-PADDING}
+      px={PADDING}
+      borderBottom={minimized ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+    >
+      <Flex alignItems={'center'} gap={1.5}>
+        <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
+        <Icon as={BitcoinIcon} size={4.5} />
+        <Text fontSize={'sm'} color={'textSubdued'} fontWeight={'medium'}>
+          {burnBlock.height}
+        </Text>
+      </Flex>
       <HStack divider={<Caption>∙</Caption>} gap={1}>
         <ExplorerLink fontSize="xs" color={'textSubdued'} href={`/btcblock/${burnBlock.hash}`}>
           {truncateMiddle(burnBlock.hash, 6)}
@@ -262,7 +345,7 @@ function BitcoinHeader({ burnBlock }: { burnBlock: UISingleBlock }) {
 export function Footer({ stxBlocks, txSum }: { stxBlocks: UISingleBlock[]; txSum: number }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
-      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4}>
+      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} whiteSpace="nowrap">
         <Text color="textSubdued" fontSize="xs">
           {stxBlocks.length} blocks
         </Text>
@@ -281,6 +364,7 @@ export function BurnBlockGroup({
   burnBlock,
   stxBlocks,
   stxBlocksDisplayLimit = stxBlocks.length,
+  minimized = false,
 }: BlocksGroupProps) {
   const stxBlocksNotDisplayed = burnBlock.txsCount
     ? burnBlock.txsCount - (stxBlocksDisplayLimit || 0)
@@ -297,13 +381,14 @@ export function BurnBlockGroup({
   console.log({ burnBlock, stxBlocks, stxBlocksDisplayLimit, stxBlocksNotDisplayed }); // TODO: remove
   // TODO: why are we not using table here?
   return (
-    <Box border={'1px'} rounded={'lg'} p={4} key={burnBlock.hash}>
-      <BitcoinHeader burnBlock={burnBlock} />
+    <Box border={'1px'} rounded={'lg'} p={PADDING} key={burnBlock.hash}>
+      <BitcoinHeader burnBlock={burnBlock} minimized={minimized} />
       <ScrollableDiv>
         <BurnBlockGroupGrid
           burnBlock={burnBlock}
           stxBlocks={stxBlocks}
           stxBlocksDisplayLimit={stxBlocksDisplayLimit}
+          minimized={minimized}
         />
       </ScrollableDiv>
       {stxBlocksNotDisplayed > 0 ? <BlockCount count={stxBlocksNotDisplayed} /> : null}

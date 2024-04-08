@@ -85,7 +85,7 @@ function BlocksListBase({
     setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
   }, []);
 
-  if (!allBlocks?.length) return <SkeletonBlockList />;
+  // if (!allBlocks?.length) return <SkeletonBlockList />; // TODO: fix
 
   return (
     <Section

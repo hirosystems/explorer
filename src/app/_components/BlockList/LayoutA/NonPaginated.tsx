@@ -2,8 +2,8 @@
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { BlockListProvider } from '../BlockListProvider';
 import { BlockListWithControls } from './BlockListWithControls';
-import { BlockListProvider } from './Provider';
 import { useBlockList } from './useBlockList';
 
 const LIST_LENGTH = 17;

@@ -1,21 +1,39 @@
 'use client';
 
 import { Stack } from '@/ui/Stack';
+import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useRef } from 'react';
 
-import { Section } from '../../../../common/components/Section';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Text } from '../../../../ui/Text';
-import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { Controls } from '../Controls';
-import { BlockListProvider } from '../LayoutA/Provider';
-import { UpdateBar } from '../LayoutA/UpdateBar';
-import { FADE_DURATION } from '../LayoutA/consts';
-import { useBlockListContext } from '../LayoutA/context';
-import { BurnBlockGroup } from './BurnBlockGroup';
-import { useBlockListGroupedByBtcBlockHomePage } from './useBlockListGroupedByBtcBlockHomePage';
-import { HomePageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
+import { Section } from '../../../common/components/Section';
+import { Box } from '../../../ui/Box';
+import { Text } from '../../../ui/Text';
+import { ExplorerErrorBoundary } from '../ErrorBoundary';
+import { useBlockListContext } from './BlockListContext';
+import { BlockListProvider } from './BlockListProvider';
+import { Controls } from './Controls';
+import { HomePageBlockListGroupedByBtcBlock } from './GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock';
+import { HomePageBlockListGroupedByBtcBlockSkeleton } from './GroupedByBurnBlock/skeleton';
+import { HomePageBlockListUngroupedSkeleton } from './Ungrouped/skeleton';
+
+const HomePageBlockListGroupedByBtcBlockDynamic = dynamic(
+  () =>
+    import('./GroupedByBurnBlock/HomePageBlockListGroupedByBtcBlock').then(
+      mod => mod.HomePageBlockListGroupedByBtcBlock
+    ),
+  {
+    loading: () => <HomePageBlockListGroupedByBtcBlock />,
+    ssr: false,
+  }
+);
+
+const HomePageUngroupedBlockListDynamic = dynamic(
+  () =>
+    import('./Ungrouped/HomePageUngroupedBlockList').then(mod => mod.HomePageUngroupedBlockList),
+  {
+    loading: () => <HomePageBlockListUngroupedSkeleton />,
+    ssr: false,
+  }
+);
 
 // const LIST_LENGTH = 17;
 
@@ -32,6 +50,7 @@ function HomePageBlockListGroupedByBtcBlockBase() {
       setLiveUpdates(!liveUpdates);
     }
   }, [liveUpdates, setLiveUpdates]);
+
   return (
     <Section py={6} px={0}>
       <Box overflowX={'auto'}>
@@ -60,13 +79,10 @@ function HomePageBlockListGroupedByBtcBlockBase() {
             border="none"
           />
         </Stack>
-        {!liveUpdates && (
-          <UpdateBar
-            isUpdateListLoading={isBlockListLoading}
-            latestBlocksCount={latestBlocksCount}
-            onClick={updateBlockList}
-            marginX={0}
-          />
+        {groupedByBtc ? (
+          <HomePageBlockListGroupedByBtcBlockDynamic />
+        ) : (
+          <HomePageUngroupedBlockListDynamic />
         )}
         <Flex
           flexDirection="column"
@@ -105,7 +121,7 @@ export function HomePageBlockListGroupedByBtcBlock() {
     >
       <BlockListProvider>
         <Suspense fallback={<HomePageBlockListGroupedByBtcBlockSkeleton />}>
-          <HomePageBlockListGroupedByBtcBlockBase />
+          <HomePageBlockListBase />
         </Suspense>
       </BlockListProvider>
     </ExplorerErrorBoundary>

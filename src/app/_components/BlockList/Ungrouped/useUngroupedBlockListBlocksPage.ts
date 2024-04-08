@@ -1,27 +1,20 @@
 'use client';
 
-import { ListFooter } from '@/common/components/ListFooter';
 import { BLOCK_LIST_QUERY_KEY } from '@/common/queries/useBlockListInfinite';
-import { Box } from '@/ui/Box';
 import { useQueryClient } from '@tanstack/react-query';
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Section } from '../../../../common/components/Section';
-import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
-import { UpdateBar } from '../UpdateBar';
 import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
-import { Blocks } from './Blocks';
-import { BlocksPageBlockListUngroupedSkeleton } from './skeleton';
 import { useUngroupedBlockList } from './useUngroupedBlockList';
 
 function runAfterFadeOut(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
 
-function BlocksPageUngroupedBlockListBase() {
+export function useUngroupedBlockListBlocksPage() {
   const {
     isBlockListLoading,
     setBlockListLoading,
@@ -122,46 +115,4 @@ function BlocksPageUngroupedBlockListBase() {
     showLatestBlocks,
     updateBlockListWithQuery,
   ]);
-
-  return (
-    <Box pb={6}>
-      {!isLiveUpdatesEnabled && (
-        <UpdateBar
-          isUpdateListLoading={isBlockListLoading}
-          latestBlocksCount={latestStxBlocksCountFromWebSocket}
-          onClick={updateBlockListWithQuery}
-        />
-      )}
-      <Blocks blockList={blockList} isUpdateListLoading={isBlockListLoading} />
-      <Box pt={4}>
-        {!isLiveUpdatesEnabled && (
-          <ListFooter
-            isLoading={isFetchingNextPage}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            label={'blocks'}
-          />
-        )}
-      </Box>
-    </Box>
-  );
-}
-
-export function BlocksPageUngroupedBlockList() {
-  return (
-    <ExplorerErrorBoundary
-      Wrapper={Section}
-      wrapperProps={{
-        title: 'Recent Blocks',
-        gridColumnStart: ['1', '1', '2'],
-        gridColumnEnd: ['2', '2', '3'],
-        minWidth: 0,
-      }}
-      tryAgainButton
-    >
-      <Suspense fallback={<BlocksPageBlockListUngroupedSkeleton />}>
-        <BlocksPageUngroupedBlockListBase />
-      </Suspense>
-    </ExplorerErrorBoundary>
-  );
 }
