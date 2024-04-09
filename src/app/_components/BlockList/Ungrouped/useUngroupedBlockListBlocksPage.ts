@@ -1,118 +1,149 @@
 'use client';
 
-import { BLOCK_LIST_QUERY_KEY } from '@/common/queries/useBlockListInfinite';
-import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { NakamotoBlock } from '@stacks/blockchain-api-client';
+
 import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
+import { useBlockListWebSocket3 } from '../Sockets/useBlockListWebSocket3';
 import { FADE_DURATION } from '../consts';
-import { UISingleBlock } from '../types';
-import { useUngroupedBlockList } from './useUngroupedBlockList';
+import {
+  BlockListData,
+  convertBlockToBlockListBtcBlock,
+  convertBlockToBlockListStxBlock,
+  generateBlockList,
+  useInitialBlockList,
+} from '../useInitialBlocks';
 
 function runAfterFadeOut(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
 
+function mergeWebSocketUpdates(
+  latestStxBlocksFromWebSocket: NakamotoBlock[],
+  initialBlockListDataMap: Record<string, BlockListData>
+) {
+  const initialBlockListDataMapCopy = Object.assign({}, initialBlockListDataMap);
+  latestStxBlocksFromWebSocket.forEach(stxBlock => {
+    // add the stx block to the existing btc block
+    if (stxBlock.burn_block_hash in initialBlockListDataMap) {
+      initialBlockListDataMapCopy[stxBlock.burn_block_hash].stxBlocks.push(
+        convertBlockToBlockListStxBlock(stxBlock)
+      );
+    } else {
+      // add a new btc block and stx block
+      initialBlockListDataMapCopy[stxBlock.burn_block_hash] = {
+        stxBlocks: [convertBlockToBlockListStxBlock(stxBlock)],
+        btcBlock: convertBlockToBlockListBtcBlock(stxBlock),
+      };
+    }
+  });
+  return generateBlockList(initialBlockListDataMapCopy);
+}
+
 export function useUngroupedBlockListBlocksPage() {
-  const {
-    isBlockListLoading,
-    setBlockListLoading,
-    liveUpdates: isLiveUpdatesEnabled,
-  } = useBlockListContext();
+  const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
   // TODO: dont really need to have a separate hook for this. This is just doing all the organizing of the data behind the hook
-  const { initialBlockList, initialBurnBlocks, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useUngroupedBlockList();
+  const {
+    initialStxBlocks,
+    initialStxBlocksHashes,
+    initialBtcBlocks,
+    initialBtcBlocksHashes,
+    initialBlockListDataMap,
+    initialBlockList,
+    isFetchingNextPage,
+    fetchNextPage,
+    refetchInitialBlockList,
+    hasNextPage,
+  } = useInitialBlockList();
 
-  const [latestBlocksToShow, setLatestBlocksToShow] = useState<UISingleBlock[]>([]);
+  const [latestBlocksToShow, setLatestBlocksToShow] = useState<BlockListData[]>([]);
+
+  const {
+    latestStxBlocks: latestStxBlocksFromWebSocket,
+    latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
+    clearLatestBlocks: clearLatestBlocksFromWebSocket,
+  } = useBlockListWebSocket3(initialStxBlocksHashes);
+
   const blockList = useMemo(
     () => [...latestBlocksToShow, ...initialBlockList],
     [initialBlockList, latestBlocksToShow]
   );
 
-  const blockHashes = useMemo(() => {
-    return new Set(initialBlockList.map(block => block.hash));
-  }, [initialBlockList]);
-
-  const burnBlockHashes = useMemo(() => {
-    return new Set(Object.keys(initialBurnBlocks));
-  }, [initialBurnBlocks]);
-
-  const {
-    latestUIBlocks: latestUIBlockFromWebSocket,
-    latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
-    clearLatestBlocks: clearLatestBlocksFromWebSocket,
-  } = useBlockListWebSocket(blockHashes, burnBlockHashes);
-
+  // This is used to trigger a fade out effect when the block list is updated. 
+  // When the counter is updated, we wait for the fade out effect to finish and then show the fade in effect
   const [blockListUpdateCounter, setBlockListUpdateCounter] = useState(0);
-  // This is used to trigger a fade out effect when the block list is updated. When the counter is updated, we finish loading and show the fade in effect
   const prevBlockListUpdateCounterRef = useRef(blockListUpdateCounter);
-
   useEffect(() => {
     if (prevBlockListUpdateCounterRef.current !== blockListUpdateCounter) {
-      runAfterFadeOut(() => {
-        setBlockListLoading(false);
-      });
+      setBlockListLoading(false);
+      // runAfterFadeOut(() => {
+      //   setBlockListLoading(false);
+      // });
     }
   }, [blockListUpdateCounter, clearLatestBlocksFromWebSocket, setBlockListLoading]);
 
-  const showLatestBlocks = useCallback(() => {
+  const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
-    runAfterFadeOut(() => {
-      setLatestBlocksToShow(prevBlockList => {
-        return [...latestUIBlockFromWebSocket, ...prevBlockList];
-      });
-      clearLatestBlocksFromWebSocket();
-      setBlockListUpdateCounter(prev => prev + 1);
-    });
+    // const newBlockList = mergeWebSocketUpdates(
+    //   latestStxBlocksFromWebSocket,
+    //   initialBlockListDataMap
+    // );
+    setLatestBlocksToShow(latestStxBlocksFromWebSocket);
+    clearLatestBlocksFromWebSocket();
+    setBlockListUpdateCounter(prev => prev + 1);
   }, [
-    latestUIBlockFromWebSocket,
+    latestStxBlocksFromWebSocket,
+    initialBlockListDataMap,
     setLatestBlocksToShow,
     setBlockListLoading,
     clearLatestBlocksFromWebSocket,
   ]);
 
-  const queryClient = useQueryClient();
-  const updateBlockListWithQuery = useCallback(
+  const updateBlockList = useCallback(
     async function () {
       setBlockListLoading(true);
-      runAfterFadeOut(async () => {
-        await Promise.all([
-          // Invalidates queries so they will be refetched
-          queryClient.invalidateQueries({ queryKey: [BLOCK_LIST_QUERY_KEY] }),
-        ]).then(() => {
-          clearLatestBlocksFromWebSocket();
-          setBlockListUpdateCounter(prev => prev + 1);
-        });
+      await refetchInitialBlockList(() => {
+        clearLatestBlocksFromWebSocket();
+        setBlockListUpdateCounter(prev => prev + 1);
       });
     },
-    [clearLatestBlocksFromWebSocket, queryClient, setBlockListLoading]
+    [clearLatestBlocksFromWebSocket, setBlockListLoading, refetchInitialBlockList]
   );
 
-  const prevLiveUpdatesRef = useRef(isLiveUpdatesEnabled);
+  const prevLiveUpdatesRef = useRef(liveUpdates);
   const prevLatestBlocksCountRef = useRef(latestStxBlocksCountFromWebSocket);
-
+  // Handles live updates
   useEffect(() => {
-    const liveUpdatesToggled = prevLiveUpdatesRef.current !== isLiveUpdatesEnabled;
+    const liveUpdatesToggled = prevLiveUpdatesRef.current !== liveUpdates;
 
     const receivedLatestStxBlockFromLiveUpdates =
-      isLiveUpdatesEnabled &&
+      liveUpdates &&
       latestStxBlocksCountFromWebSocket > 0 &&
       prevLatestBlocksCountRef.current !== latestStxBlocksCountFromWebSocket;
 
     if (liveUpdatesToggled) {
-      updateBlockListWithQuery();
+      updateBlockList();
     } else if (receivedLatestStxBlockFromLiveUpdates) {
-      showLatestBlocks();
+      showLatestStxBlocksFromWebSocket();
     }
 
-    prevLiveUpdatesRef.current = isLiveUpdatesEnabled;
+    prevLiveUpdatesRef.current = liveUpdates;
     prevLatestBlocksCountRef.current = latestStxBlocksCountFromWebSocket;
   }, [
-    isLiveUpdatesEnabled,
+    liveUpdates,
     latestStxBlocksCountFromWebSocket,
-    showLatestBlocks,
-    updateBlockListWithQuery,
+    showLatestStxBlocksFromWebSocket,
+    updateBlockList,
   ]);
+
+  return {
+    blockList,
+    updateBlockList,
+    latestStxBlocksCountFromWebSocket,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  };
 }
