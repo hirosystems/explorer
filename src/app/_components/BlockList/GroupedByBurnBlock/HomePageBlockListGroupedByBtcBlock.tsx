@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 
+import { ListFooter } from '../../../../common/components/ListFooter';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { useBlockListContext } from '../BlockListContext';
@@ -38,6 +39,7 @@ function HomePageBlockListGroupedByBtcBlockBase() {
             stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
           />
         ))}
+        {!liveUpdates && <ListFooter href={'/blocks'} label={'blocks'} />}
       </Flex>
     </Box>
   );

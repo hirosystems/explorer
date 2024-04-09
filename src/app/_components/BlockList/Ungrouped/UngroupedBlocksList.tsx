@@ -41,7 +41,7 @@ function BlocksGroupedByBtcBlock({
   stxBlocksLimit,
 }: {
   blocks: BlocksByBtcBlock;
-  stxBlocksLimit: number;
+  stxBlocksLimit?: number;
 }) {
   const btcBlock = blocks.btcBlock;
   const stxBlocks = blocks.stxBlocks;
@@ -62,7 +62,7 @@ function BlocksGroupedByBtcBlock({
           hasBorder={i < stxBlocks.length - 1}
         />
       ))}
-      {stxBlocks.length > stxBlocksLimit && (
+      {stxBlocksLimit && stxBlocks.length > stxBlocksLimit && (
         <BlockCount count={stxBlocks.length - stxBlocksLimit} />
       )}
       <BtcBlockListItem
@@ -80,7 +80,7 @@ export function UngroupedBlockList({
   stxBlocksLimit,
 }: {
   ungroupedBlockList: UngroupedBlockList;
-  stxBlocksLimit: number;
+  stxBlocksLimit?: number;
 }) {
   return (
     <UngroupedBlockListLayout>

@@ -14,13 +14,7 @@ interface UpdateBarProps extends FlexProps {
   onClick: () => void;
 }
 
-export function UpdateBarLayout({
-  children,
-  ...rest
-}: {
-  isUpdateListLoading: boolean;
-  children: ReactNode;
-}) {
+export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
   const { isBlockListLoading } = useBlockListContext();
   const bgColor = useColorModeValue('purple.100', 'slate.900'); // TODO: not in theme. remove
 

@@ -9,7 +9,7 @@ export function useBlockListWebSocket(
   initialStxBlockHashes: Set<string>,
   initialBurnBlockHashes: Set<string>
 ) {
-  const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]);
+  const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]); // TODO: convert to object structure so implementation isnt tied to one ui
   const [latestStxBlock, setLatestStxBlock] = useState<NakamotoBlock>();
   const latestStxBlockHashes = useRef(new Set<string>());
   const latestBurnBlockHashes = useRef(new Set<string>());
