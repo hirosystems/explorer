@@ -1,3 +1,10 @@
+# [1.162.0](https://github.com/hirosystems/explorer/compare/v1.161.0...v1.162.0) (2024-04-09)
+
+
+### Features
+
+* update nextjs ([ce3277b](https://github.com/hirosystems/explorer/commit/ce3277b21ec00b699f08b15bbad17720db32137a))
+
 # [1.161.0](https://github.com/hirosystems/explorer/compare/v1.160.0...v1.161.0) (2024-04-04)
 
 
