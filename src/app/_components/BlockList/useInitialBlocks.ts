@@ -53,43 +53,35 @@ export function useInitialBlockList() {
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const blocks = useSuspenseInfiniteQueryResult<Block>(response);
 
-  const initialStxBlocks: Record<string, BlockListStxBlock> = useMemo(
-    () =>
-      blocks.reduce(
-        (acc, block) => {
-          if (!acc[block.burn_block_hash]) {
-            acc[block.burn_block_hash] = convertBlockToBlockListStxBlock(block);
-          }
-          return acc;
-        },
-        {} as Record<string, BlockListStxBlock>
-      ),
+  const initialStxBlocks: BlockListStxBlock[] = useMemo(
+    () => blocks.map(block => convertBlockToBlockListStxBlock(block)),
     [blocks]
   );
 
-  const initialStxBlocksHashes = useMemo(
-    () => new Set(Object.keys(initialStxBlocks)),
-    [initialStxBlocks]
-  );
+  const initialStxBlocksHashes = useMemo(() => {
+    const stxBlockHashSet = new Set<string>();
+    initialStxBlocks.forEach(block => stxBlockHashSet.add(block.hash));
+    return stxBlockHashSet;
+  }, [initialStxBlocks]);
 
-  const initialBtcBlocks: Record<string, BlockListBtcBlock> = useMemo(
-    () =>
-      blocks.reduce(
-        (acc, block) => {
-          if (!acc[block.burn_block_hash]) {
-            acc[block.burn_block_hash] = convertBlockToBlockListBtcBlock(block);
-          }
-          return acc;
-        },
-        {} as Record<string, BlockListBtcBlock>
-      ),
-    [blocks]
-  );
+//   const initialBtcBlocks: Record<string, BlockListBtcBlock> = useMemo(
+//     () =>
+//       blocks.reduce(
+//         (acc, block) => {
+//           if (!acc[block.burn_block_hash]) {
+//             acc[block.burn_block_hash] = convertBlockToBlockListBtcBlock(block);
+//           }
+//           return acc;
+//         },
+//         {} as Record<string, BlockListBtcBlock>
+//       ),
+//     [blocks]
+//   );
 
-  const initialBtcBlocksHashes = useMemo(
-    () => new Set(Object.keys(initialBtcBlocks)),
-    [initialBtcBlocks]
-  );
+//   const initialBtcBlocksHashes = useMemo(
+//     () => new Set(Object.keys(initialBtcBlocks)),
+//     [initialBtcBlocks]
+//   );
 
   // btc block hash -> BlockListData
   const initialBlockListDataMap: Record<string, BlockListData> = useMemo(
@@ -126,9 +118,9 @@ export function useInitialBlockList() {
   return {
     initialStxBlocks,
     initialStxBlocksHashes,
-    initialBtcBlocks,
-    initialBtcBlocksHashes,
-    initialBlockListDataMap,
+    // initialBtcBlocks,
+    // initialBtcBlocksHashes,
+    // initialBlockListDataMap,
     initialBlockList,
     refetchInitialBlockList,
     isFetchingNextPage,

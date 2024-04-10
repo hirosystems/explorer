@@ -8,7 +8,7 @@ import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { BitcoinIcon } from '../../../../ui/icons/BitcoinIcon';
-import { BlockPageHeadersSkeleton } from './skeleton';
+import { BlockPageHeadersSkeleton } from '../Grouped/skeleton';
 
 function LastBlockCard() {
   //   const lastBlock = useSuspenseBurnBlocks(1);

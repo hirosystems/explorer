@@ -3,29 +3,26 @@
 import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useRef } from 'react';
 
-import { Section } from '../../../common/components/Section';
-import { ExplorerErrorBoundary } from '../ErrorBoundary';
-import { useBlockListContext } from './BlockListContext';
-import { BlockListProvider } from './BlockListProvider';
-import { Controls } from './Controls';
-import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './GroupedByBurnBlock/skeleton';
-import { BlocksPageBlockListUngroupedSkeleton } from './Ungrouped/skeleton';
+import { Section } from '../../../../common/components/Section';
+import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { useBlockListContext } from '../BlockListContext';
+import { BlockListProvider } from '../BlockListProvider';
+import { Controls } from '../Controls';
+import { BlocksPageBlockListGroupedSkeleton } from '../Grouped/skeleton';
+import { BlocksPageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
 
-const BlocksPageBlockListGroupedByBtcBlockDynamic = dynamic(
-  () =>
-    import('./GroupedByBurnBlock/BlocksPageBlockListGroupedByBtcBlock').then(
-      mod => mod.BlocksPageBlockListGroupedByBtcBlock
-    ),
+const BlocksPageBlockListGroupedDynamic = dynamic(
+  () => import('./Grouped/BlocksPageBlockListGrouped').then(mod => mod.BlocksPageBlockListGrouped),
   {
-    loading: () => <BlocksPageBlockListGroupedByBtcBlockSkeleton />,
+    loading: () => <BlocksPageBlockListGroupedSkeleton />,
     ssr: false,
   }
 );
 
-const BlocksPageUngroupedBlockListDynamic = dynamic(
+const BlocksPageBlockListUngroupedDynamic = dynamic(
   () =>
-    import('./Ungrouped/BlocksPageUngroupedBlockList').then(
-      mod => mod.BlocksPageUngroupedBlockList
+    import('./Ungrouped/BlocksPageBlockListUngrouped').then(
+      mod => mod.BlocksPageBlockListUngrouped
     ),
   {
     loading: () => <BlocksPageBlockListUngroupedSkeleton />,
@@ -60,18 +57,16 @@ function BlocksPageBlockListBase() {
         }}
         horizontal={true}
       />
-      {/* {groupedByBtc ? <BlocksPageBlockListGroupedByBtcBlock /> : <BlocksPageUngroupedBlockList />} */}
       {groupedByBtc ? (
-        <BlocksPageBlockListGroupedByBtcBlockDynamic />
+        <BlocksPageBlockListGroupedDynamic />
       ) : (
-        <BlocksPageUngroupedBlockListDynamic />
+        <BlocksPageBlockListUngroupedDynamic />
       )}
     </Section>
   );
 }
 
 export function BlocksPageBlockList() {
-  // TODO: fix the suspense fallback
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -82,11 +77,11 @@ export function BlocksPageBlockList() {
       }}
       tryAgainButton
     >
-      <BlockListProvider>
-        <Suspense fallback={<BlocksPageBlockListGroupedByBtcBlockSkeleton />}>
+      <Suspense fallback={<BlocksPageBlockListGroupedSkeleton />}>
+        <BlockListProvider>
           <BlocksPageBlockListBase />
-        </Suspense>
-      </BlockListProvider>
+        </BlockListProvider>
+      </Suspense>
     </ExplorerErrorBoundary>
   );
 }

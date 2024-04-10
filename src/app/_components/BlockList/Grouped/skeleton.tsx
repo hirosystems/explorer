@@ -8,9 +8,9 @@ import { Grid } from '../../../../ui/Grid';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
+import { BlocksPageHeaderLayout } from '../BlocksPage/BlocksPageHeaders';
 import { ControlsLayout } from '../Controls';
 import { UpdateBarLayout } from '../UpdateBar';
-import { BlocksPageHeaderLayout } from './BlocksPageHeaders';
 
 function BitcoinHeaderSkeleton() {
   return (
@@ -132,7 +132,7 @@ export function BurnBlockGroupListSkeleton({
   );
 }
 
-export function HomePageBlockListGroupedByBtcBlockSkeleton() {
+export function HomePageBlockListGroupedSkeleton() {
   return (
     <Section title={<SkeletonText noOfLines={1} height="14px" />}>
       <BurnBlockGroupListSkeleton
@@ -144,7 +144,7 @@ export function HomePageBlockListGroupedByBtcBlockSkeleton() {
   );
 }
 
-export function BlocksPageBlockListGroupedByBtcBlockSkeleton() {
+export function BlocksPageBlockListGroupedSkeleton() {
   return (
     <BurnBlockGroupListSkeleton
       numBurnBlockGroupsWithTxs={1}
@@ -193,8 +193,8 @@ function ControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
 
 function UpdateBarSkeleton() {
   return (
-    <UpdateBarLayout isUpdateListLoading={false}>
-      <Flex justifyContent="space-between" width="full">
+    <UpdateBarLayout isBlockListLoading={false}>
+      <Flex justifyContent="space-between" alignItems='center' width="full" height={4}>
         <SkeletonText noOfLines={1} width={40} />
         <SkeletonText noOfLines={1} width={40} />
       </Flex>
@@ -207,7 +207,7 @@ export function BlocksPageBlockListSkeleton() {
     <Section>
       <ControlsSkeleton horizontal />
       <UpdateBarSkeleton />
-      <BlocksPageBlockListGroupedByBtcBlockSkeleton />
+      <BlocksPageBlockListGroupedSkeleton />
     </Section>
   );
 }

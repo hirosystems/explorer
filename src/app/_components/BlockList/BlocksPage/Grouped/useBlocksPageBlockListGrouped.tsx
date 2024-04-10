@@ -5,18 +5,18 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
-import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
-import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
-import { UIBlockType, UISingleBlock } from '../types';
-import { BlocksGroupProps } from './BurnBlockGroup';
+import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseBlocksByBurnBlock } from '../../../../../common/queries/useBlocksByBurnBlock';
+import { useSuspenseBurnBlocks } from '../../../../../common/queries/useBurnBlocksInfinite';
+import { useBlockListContext } from '../../BlockListContext';
+import { BlocksGroupProps } from '../../Grouped/BlockListGrouped';
+import { useBlockListWebSocket } from '../../Sockets/useBlockListWebSocket';
+import { UIBlockType, UISingleBlock } from '../../types';
 
 const STX_BLOCK_LENGTH = 10;
 const BURN_BLOCK_LENGTH = 10;
 
-export function useBlockListGroupedByBtcBlockBlocksPage(blockListLimit: number) {
+export function useBlocksPageBlockListGrouped(blockListLimit: number) {
   const queryClient = useQueryClient();
   const { setBlockListLoading, liveUpdates: isLiveUpdatesEnabled } = useBlockListContext();
 

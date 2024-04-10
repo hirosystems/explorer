@@ -4,7 +4,6 @@ import { BsArrowReturnLeft } from 'react-icons/bs';
 
 import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
-import { useGlobalContext } from '../../../../common/context/useAppContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
@@ -21,15 +20,12 @@ export function BtcBlockListItemLayout({ children }: { children: ReactNode }) {
   const textColor = useColorModeValue('slate.700', 'slate.500'); // TODO: not in theme. remove
   return (
     <Flex
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      borderBottom={'1px'}
-      pl={8}
-      pr={8}
+      justifyContent="space-between"
+      alignItems="center"
+      px={6}
+      mx={-6}
       height={14}
       backgroundColor="surfaceHighlight"
-      mr={'-8'}
-      ml={'-10'}
       color={textColor}
     >
       {children}
@@ -38,7 +34,6 @@ export function BtcBlockListItemLayout({ children }: { children: ReactNode }) {
 }
 
 export function BtcBlockListItemContent({ timestamp, height, hash }: BtcBlockListItemProps) {
-  const { btcBlockBaseUrl } = useGlobalContext().activeNetwork;
   const iconColor = useColorModeValue('slate.600', 'slate.800'); // TODO: not in theme. remove
   return (
     <>

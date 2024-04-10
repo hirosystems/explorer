@@ -14,13 +14,19 @@ interface UpdateBarProps extends FlexProps {
   onClick: () => void;
 }
 
-export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
-  const { isBlockListLoading } = useBlockListContext();
+export function UpdateBarLayout({
+  isBlockListLoading,
+  children,
+  ...rest
+}: {
+  isBlockListLoading: boolean;
+  children: ReactNode;
+}) {
   const bgColor = useColorModeValue('purple.100', 'slate.900'); // TODO: not in theme. remove
 
   return (
     <Flex
-      justifyContent={'space-between'}
+      justifyContent="space-between"
       backgroundColor={bgColor}
       marginX={-6}
       px={6}
@@ -40,6 +46,7 @@ export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) 
 export function UpdateBar({ latestBlocksCount, onClick, ...rest }: UpdateBarProps) {
   const textColor = useColorModeValue('slate.800', 'slate.400'); // TODO: not in theme. remove
   const lastClickTimeRef = useRef(0);
+  const { isBlockListLoading } = useBlockListContext();
 
   const update = useCallback(() => {
     const now = Date.now();
@@ -50,7 +57,7 @@ export function UpdateBar({ latestBlocksCount, onClick, ...rest }: UpdateBarProp
   }, [onClick]);
 
   return (
-    <UpdateBarLayout {...rest}>
+    <UpdateBarLayout {...rest} isBlockListLoading={isBlockListLoading}>
       <Text
         fontSize={'sm'}
         color={textColor}
