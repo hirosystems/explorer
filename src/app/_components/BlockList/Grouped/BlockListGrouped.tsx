@@ -2,7 +2,6 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { PiArrowElbowLeftDown } from 'react-icons/pi';
 
-import { Circle } from '../../../../common/components/Circle';
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
@@ -17,11 +16,13 @@ import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { Caption } from '../../../../ui/typography';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
+import { LineAndNode } from '../Ungrouped/BlockListUngrouped';
 import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
 
 const PADDING = 4;
 
+// TODO: move to common components
 export function ListHeader({ children, ...textProps }: { children: ReactNode } & TextProps) {
   const color = useColorModeValue('slate.700', 'slate.250');
   return (
@@ -29,10 +30,10 @@ export function ListHeader({ children, ...textProps }: { children: ReactNode } &
       py={2}
       px={2.5}
       color={color}
-      bg={'hoverBackground'}
-      fontSize={'xs'}
-      rounded={'md'}
-      whiteSpace={'nowrap'}
+      bg="hoverBackground"
+      fontSize="xs"
+      rounded="md"
+      whiteSpace="nowrap"
       {...textProps}
     >
       {children}
@@ -40,31 +41,11 @@ export function ListHeader({ children, ...textProps }: { children: ReactNode } &
   );
 }
 
-const GroupHeaderSkeleton = () => {};
-
+// TODO: move to common components
 const GroupHeader = () => {
   return (
     <>
-      <Box
-        position={'sticky'}
-        left={0}
-        zIndex={'docked'} // TODO: what is this?
-        bg={'surface'}
-        pr={4}
-        sx={{
-          '.has-horizontal-scroll &:before': {
-            // Adds a border to the left of the first column
-            content: '""',
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: '2px',
-            height: 'var(--stacks-sizes-14)',
-            backgroundColor: 'borderPrimary',
-          },
-        }}
-      >
+      <Box position="sticky" left={0} bg="surface" pr={4} sx={mobileBorderCss}>
         <ListHeader width={'fit-content'}>Block height</ListHeader>
       </Box>
       <Box>
@@ -80,119 +61,7 @@ const GroupHeader = () => {
   );
 };
 
-// TODO: ideally this would be a table
-const StxBlockRow = ({
-  block,
-  icon,
-  minimized = false,
-}: {
-  block: UISingleBlock;
-  icon?: ReactNode;
-  minimized?: boolean;
-}) => {
-  return (
-    <>
-      {minimized ? (
-        <>
-          <Flex
-            position={'sticky'}
-            left={0}
-            zIndex={'docked'} // TODO: what is this?
-            bg={'surface'}
-            // gap={2}
-            pl={7}
-            fontSize={'xs'}
-            sx={{
-              '.has-horizontal-scroll &:before': {
-                // Adds a border to the left of the first column
-                content: '""',
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: '2px',
-                height: 'var(--stacks-sizes-14)',
-                backgroundColor: 'borderPrimary',
-              },
-            }}
-            key={block.hash}
-            justifySelf="start"
-          >
-            {icon}
-            <BlockLink hash={block.hash}>
-              <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
-                #{block.height}
-              </Text>
-            </BlockLink>
-          </Flex>
-
-          <HStack divider={<Caption>∙</Caption>} gap={1} justifySelf="end">
-            <BlockLink hash={block.hash}>
-              <Text color="textSubdued" fontWeight={'medium'} fontSize={'xs'} whiteSpace="nowrap">
-                {truncateMiddle(block.hash)}
-              </Text>
-            </BlockLink>
-            <Text color="textSubdued" fontWeight={'medium'} fontSize={'xs'}>
-              {block.txsCount || 0} txn
-            </Text>
-            <Flex>
-              <Timestamp ts={block.timestamp} />
-            </Flex>
-          </HStack>
-        </>
-      ) : (
-        <>
-          <Flex
-            flex={1}
-            position={'sticky'}
-            left={0}
-            zIndex={'docked'} // TODO: what is this?
-            bg={'surface'}
-            gap={2}
-            pl={7}
-            fontSize={'xs'}
-            sx={{
-              '.has-horizontal-scroll &:before': {
-                // Adds a border to the left of the first column
-                content: '""',
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                bottom: 0,
-                width: '2px',
-                height: 'var(--stacks-sizes-14)',
-                backgroundColor: 'borderPrimary',
-              },
-            }}
-            key={block.hash}
-          >
-            {icon}
-            <BlockLink hash={block.hash}>
-              <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
-                #{block.height}
-              </Text>
-            </BlockLink>
-          </Flex>
-
-          <BlockLink hash={block.hash} flex={1}>
-            <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
-              {block.hash}
-            </Text>
-          </BlockLink>
-
-          <Text color="text" fontWeight={'medium'} flex={1} fontSize={'xs'}>
-            {block.txsCount}
-          </Text>
-
-          <Flex flex={1}>
-            <Timestamp ts={block.timestamp} />
-          </Flex>
-        </>
-      )}
-    </>
-  );
-};
-
+// TODO: move to common components
 // adds horizontal scrolling to its children if they overflow the container's width, and adds a class to the container when it has a horizontal scrollbar
 function ScrollableDiv({ children }: { children: ReactNode }) {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
@@ -219,7 +88,6 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
       ref={divRef}
       overflowX={'auto'}
       overflowY={'hidden'}
-      // py={4}
       className={hasHorizontalScroll ? 'has-horizontal-scroll' : ''}
     >
       {children}
@@ -228,86 +96,138 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
 }
 
 export interface BlocksGroupProps {
-  burnBlock: UISingleBlock;
+  burnBlock: UISingleBlock; // TODO: don't use this. Have to change data fetching. Use new websocket hook
   stxBlocks: UISingleBlock[];
   /**
    * TODO: change to
    * burnBlock: BurnBlock;
    * stxBlocks: Block[];
    */
-  stxBlocksDisplayLimit?: number;
+  stxBlocksLimit?: number;
   minimized?: boolean;
 }
 
-export function BurnBlockGroupGrid({
-  burnBlock,
-  stxBlocks,
-  stxBlocksDisplayLimit,
+const mobileBorderCss = {
+  '.has-horizontal-scroll &:before': {
+    // Adds a border to the left of the first column
+    content: '""',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: '2px',
+    height: 'var(--stacks-sizes-14)',
+    backgroundColor: 'borderPrimary',
+  },
+};
+
+const StxBlockRow = ({
+  block,
+  icon,
   minimized = false,
-}: BlocksGroupProps) {
-  const stxBlocksToDisplay = stxBlocksDisplayLimit
-    ? stxBlocks.slice(0, stxBlocksDisplayLimit)
-    : stxBlocks;
+}: {
+  block: UISingleBlock;
+  icon?: ReactNode;
+  minimized?: boolean;
+}) => {
+  return minimized ? (
+    <>
+      <Flex
+        position="sticky"
+        left={0}
+        gap={2}
+        fontSize="xs"
+        sx={mobileBorderCss}
+        key={block.hash}
+        gridColumn="1 / 2"
+        alignItems="center"
+      >
+        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <BlockLink hash={block.hash}>
+          <Text color="text" fontWeight="medium" fontSize="xs">
+            #{block.height}
+          </Text>
+        </BlockLink>
+      </Flex>
+
+      <HStack divider={<Caption>∙</Caption>} gap={1} whiteSpace="nowrap" gridColumn="3 / 4">
+        <BlockLink hash={block.hash}>
+          <Text color="textSubdued" fontWeight="medium" fontSize="xs" whiteSpace="nowrap">
+            {truncateMiddle(block.hash, 3)}
+          </Text>
+        </BlockLink>
+        {block.txsCount !== undefined ? (
+          <Text color="textSubdued" fontWeight="medium" fontSize="xs">
+            {block.txsCount || 0} txn
+          </Text>
+        ) : null}
+        <Timestamp ts={block.timestamp} />
+      </HStack>
+    </>
+  ) : (
+    <>
+      <Flex
+        position="sticky"
+        left={0}
+        zIndex="docked" // TODO: what is this?
+        bg="surface"
+        gap={2}
+        fontSize="xs"
+        sx={mobileBorderCss}
+        key={block.hash}
+        alignItems="center"
+      >
+        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <BlockLink hash={block.hash}>
+          <Text color="text" fontWeight="medium" fontSize="xs">
+            #{block.height}
+          </Text>
+        </BlockLink>
+      </Flex>
+
+      <Flex alignItems="center">
+        <BlockLink hash={block.hash}>
+          <Text color="text" fontWeight="medium" fontSize="xs">
+            {block.hash}
+          </Text>
+        </BlockLink>
+      </Flex>
+
+      <Flex alignItems="center">
+        <Text color="text" fontWeight="medium" fontSize="xs">
+          {block.txsCount}
+        </Text>
+      </Flex>
+
+      <Flex alignItems="center">
+        <Timestamp ts={block.timestamp} />
+      </Flex>
+    </>
+  );
+};
+
+export function BurnBlockGroupGrid({ burnBlock, stxBlocks, minimized }: BlocksGroupProps) {
   return (
     <Grid
-      templateColumns={minimized ? 'auto minmax(0, 1fr)' : 'repeat(4, 1fr)'}
-      gap={4}
+      templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
-      rowGap={4}
+      columnGap={4}
       key={burnBlock.hash}
       pt={4}
       pb={7}
     >
       {minimized ? null : <GroupHeader />}
-      {stxBlocksToDisplay.map((stxBlock, i) => (
+      {stxBlocks.map((stxBlock, i) => (
         <>
           <StxBlockRow
             key={stxBlock.hash}
             block={stxBlock}
-            icon={
-              i === 0 ? (
-                <Circle size={4.5} bg="brand" border={'none'} position={'absolute'} left={0}>
-                  <Icon as={StxIcon} size={2.5} color={'white'} />
-                </Circle>
-              ) : (
-                <Box // Adds a vertical line to the left of the first column with a circle
-                  bg={'surface'}
-                  width={4.5}
-                  height={16}
-                  top={'calc(var(--stacks-sizes-6) * -1)'}
-                  left={0}
-                  position={'absolute'}
-                  _after={{
-                    content: '""',
-                    position: 'absolute',
-                    left: '50%',
-                    top: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 'var(--stacks-sizes-2)',
-                    height: 'var(--stacks-sizes-2)',
-                    backgroundColor: 'var(--stacks-colors-borderPrimary)',
-                    borderRadius: '50%',
-                  }}
-                  _before={{
-                    content: '""',
-                    position: 'absolute',
-                    left: '0',
-                    right: '0',
-                    margin: 'auto',
-                    top: 0,
-                    width: '1px',
-                    height: 'var(--stacks-sizes-14)',
-                    backgroundColor: 'var(--stacks-colors-borderPrimary)',
-                  }}
-                ></Box>
-              )
-            }
+            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
             minimized={minimized}
           />
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
           )}
-          {/* TODO: adds a border to the bottom */}
         </>
       ))}
     </Grid>
@@ -369,16 +289,15 @@ export function Footer({ stxBlocks, txSum }: { stxBlocks: UISingleBlock[]; txSum
 export function BurnBlockGroup({
   burnBlock,
   stxBlocks,
-  stxBlocksDisplayLimit = stxBlocks.length,
+  stxBlocksLimit,
   minimized = false,
 }: BlocksGroupProps) {
-  const stxBlocksNotDisplayed = burnBlock.txsCount
-    ? burnBlock.txsCount - (stxBlocksDisplayLimit || 0)
-    : 0;
+  const stxBlocksNotDisplayed = burnBlock.txsCount ? burnBlock.txsCount - (stxBlocksLimit || 0) : 0;
   const txSum = stxBlocks.reduce((txSum, stxBlock) => {
     const txsCount = stxBlock?.txsCount ?? 0;
     return txSum + txsCount;
   }, 0);
+  const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
   // const totalTime = stxBlocks.reduce((totalTime, stxBlock) => {
   //   const blockTime = stxBlock.timestamp ?? 0;
   //   return totalTime + blockTime;
@@ -392,8 +311,7 @@ export function BurnBlockGroup({
       <ScrollableDiv>
         <BurnBlockGroupGrid
           burnBlock={burnBlock}
-          stxBlocks={stxBlocks}
-          stxBlocksDisplayLimit={stxBlocksDisplayLimit}
+          stxBlocks={stxBlocksShortList}
           minimized={minimized}
         />
       </ScrollableDiv>
@@ -420,15 +338,21 @@ export function BlockListGroupedLayout({ children }: { children: ReactNode }) {
   );
 }
 
-export function BlockListGrouped({ blockList }: { blockList: BlocksGroupProps[] }) {
+export function BlockListGrouped({
+  blockList,
+  minimized,
+}: {
+  blockList: BlocksGroupProps[];
+  minimized: boolean;
+}) {
   return (
     <BlockListGroupedLayout>
       {blockList.map(block => (
         <BurnBlockGroup
-          minimized={true}
+          minimized={minimized}
           burnBlock={block.burnBlock}
           stxBlocks={block.stxBlocks}
-          stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
+          stxBlocksLimit={block.stxBlocksLimit}
         />
       ))}
     </BlockListGroupedLayout>

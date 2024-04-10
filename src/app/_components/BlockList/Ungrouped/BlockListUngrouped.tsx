@@ -10,9 +10,38 @@ import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
+import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { StxIcon } from '../../../../ui/icons';
-import { BlockListStxBlock } from '../types';
+import { BlockCount } from '../BlockCount';
+import { useBlockListContext } from '../BlockListContext';
+import { FADE_DURATION } from '../consts';
+import { BlockListBtcBlock, BlockListStxBlock } from '../types';
+import { BtcBlockListItem } from './BtcBlockListItem';
+
+export interface BlocksByBtcBlock {
+  stxBlocks: BlockListStxBlock[];
+  btcBlock: BlockListBtcBlock;
+}
+
+export type BlockListUngrouped = BlocksByBtcBlock[];
+
+export function BlockListUngroupedLayout({ children }: { children: ReactNode }) {
+  const { isBlockListLoading } = useBlockListContext();
+
+  return (
+    <Stack
+      gap={0}
+      width={'full'}
+      style={{
+        transition: `opacity ${FADE_DURATION / 1000}s`,
+        opacity: isBlockListLoading ? 0 : 1,
+      }}
+    >
+      {children}
+    </Stack>
+  );
+}
 
 interface StxBlockListItemLayoutProps {
   children: ReactNode;
@@ -20,7 +49,8 @@ interface StxBlockListItemLayoutProps {
   hasBorder: boolean;
 }
 
-function LineAndNode({
+// TODO: move to common
+export function LineAndNode({
   rowHeight = 14,
   width = 6,
   icon,
@@ -141,43 +171,6 @@ const GroupHeader = () => {
   );
 };
 
-export function StxBlocksGrid({
-  stxBlocks,
-  minimized,
-}: {
-  stxBlocks: BlockListStxBlock[];
-  minimized: boolean;
-}) {
-  return (
-    <Grid
-      templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
-      width={'full'}
-      columnGap={4}
-      pt={minimized ? 0 : 6}
-      pb={minimized ? 0 : 3}
-    >
-      {minimized ? null : <GroupHeader />}
-      {stxBlocks.map((stxBlock, i) => (
-        <>
-          <StxBlockRow
-            key={stxBlock.hash}
-            height={stxBlock.height}
-            hash={stxBlock.hash}
-            timestamp={stxBlock.timestamp}
-            txsCount={stxBlock.txsCount}
-            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
-            hasBorder={i !== 0}
-            minimized={minimized}
-          />
-          {i < stxBlocks.length - 1 && (
-            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
-          )}
-        </>
-      ))}
-    </Grid>
-  );
-}
-
 function StxBlockRow({
   height,
   hash,
@@ -191,12 +184,11 @@ function StxBlockRow({
   timestamp: number;
   txsCount?: number;
   icon?: ReactNode;
-  hasBorder: boolean;
   minimized?: boolean;
 }) {
   return minimized ? (
     <>
-      <Flex alignItems="center" gridColumn="1 / 2">
+      <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
         <LineAndNode rowHeight={14} width={6} icon={icon} />
         <BlockLink hash={hash}>
           <Text fontSize="sm" color="text" fontWeight="medium">
@@ -205,9 +197,23 @@ function StxBlockRow({
         </BlockLink>
       </Flex>
 
-      <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color="textSubdued" gridColumn="3 / 4">
-        <Box>{truncateMiddle(hash, 3)}</Box>
-        {txsCount !== undefined ? <Box>{txsCount} txn</Box> : null}
+      <HStack
+        divider={<>&nbsp;∙&nbsp;</>}
+        gap={1}
+        whiteSpace="nowrap"
+        color="textSubdued"
+        gridColumn="3 / 4"
+      >
+        <BlockLink hash={hash}>
+          <Text color="textSubdued" fontWeight="medium" fontSize="xs" whiteSpace="nowrap">
+            {truncateMiddle(hash, 3)}
+          </Text>
+        </BlockLink>
+        {txsCount !== undefined ? (
+          <Text color="textSubdued" fontWeight="medium" fontSize="xs">
+            {txsCount || 0} txn
+          </Text>
+        ) : null}
         <Timestamp ts={timestamp} />
       </HStack>
     </>
@@ -243,6 +249,98 @@ function StxBlockRow({
   );
 }
 
+function StxBlocksGrid({
+  stxBlocks,
+  minimized,
+}: {
+  stxBlocks: BlockListStxBlock[];
+  minimized: boolean;
+}) {
+  return (
+    <Grid
+      templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
+      width={'full'}
+      columnGap={4}
+      pt={minimized ? 0 : 6}
+      pb={minimized ? 0 : 3}
+    >
+      {minimized ? null : <GroupHeader />}
+      {stxBlocks.map((stxBlock, i) => (
+        <>
+          <StxBlockRow
+            key={stxBlock.hash}
+            height={stxBlock.height}
+            hash={stxBlock.hash}
+            timestamp={stxBlock.timestamp}
+            txsCount={stxBlock.txsCount}
+            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
+            minimized={minimized}
+          />
+          {i < stxBlocks.length - 1 && (
+            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+          )}
+        </>
+      ))}
+    </Grid>
+  );
+}
+
+// Ironic name for a component that is supposedly ungrouped...
+function StxBlocksGroupedByBtcBlock({
+  blockList,
+  stxBlocksLimit,
+  minimized = false,
+}: {
+  blockList: BlocksByBtcBlock;
+  stxBlocksLimit?: number;
+  minimized?: boolean;
+}) {
+  const btcBlock = blockList.btcBlock;
+  const stxBlocks = blockList.stxBlocks;
+  const stxBlocksShortList = stxBlocksLimit
+    ? blockList.stxBlocks.slice(0, stxBlocksLimit)
+    : blockList.stxBlocks;
+
+  return (
+    <>
+      <StxBlocksGrid key={btcBlock.hash} stxBlocks={stxBlocksShortList} minimized={minimized} />
+      {stxBlocksLimit && stxBlocks.length > stxBlocksLimit && (
+        <BlockCount count={stxBlocks.length - stxBlocksLimit} />
+      )}
+      <BtcBlockListItem
+        key={btcBlock.hash}
+        hash={btcBlock.hash}
+        height={btcBlock.height}
+        timestamp={btcBlock.timestamp}
+      />
+    </>
+  );
+}
+
+export function BlockListUngrouped({
+  blockList,
+  stxBlocksLimit,
+  minimized = false,
+}: {
+  blockList: BlockListUngrouped;
+  stxBlocksLimit?: number;
+  minimized?: boolean;
+}) {
+  return (
+    <BlockListUngroupedLayout>
+      {blockList.map(blocksGroupedByBtcBlock => (
+        <StxBlocksGroupedByBtcBlock
+          key={blocksGroupedByBtcBlock.btcBlock.hash}
+          blockList={blocksGroupedByBtcBlock}
+          stxBlocksLimit={stxBlocksLimit}
+          minimized={minimized}
+        />
+      ))}
+    </BlockListUngroupedLayout>
+  );
+}
+
+// TODO: redo this component
 export function StxBlockListItemLayout({
   children,
   hasIcon,

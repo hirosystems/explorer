@@ -140,7 +140,7 @@ export function useBlocksPageBlockListGrouped(blockListLimit: number) {
         timestamp: block?.block_time, // TODO: this is the right timestamp to use, but it seems to be inaccurate
         txsCount: block.tx_count,
       })),
-      stxBlocksDisplayLimit: blockListLimit,
+      stxBlocksLimit: blockListLimit,
     },
     ...restOfBlockList,
   ];
