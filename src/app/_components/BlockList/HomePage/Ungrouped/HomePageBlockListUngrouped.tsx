@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import { ListFooter } from '../../../../../common/components/ListFooter';
 import { Flex } from '../../../../../ui/Flex';
 import { useBlockListContext } from '../../BlockListContext';
-import { BlockListUngrouped } from '../../Ungrouped/BlocksListUngrouped';
+import { BlockListUngrouped } from '../../Ungrouped/BlockListUngrouped';
 import { HomePageBlockListUngroupedSkeleton } from '../../Ungrouped/skeleton';
 import { UpdateBar } from '../../UpdateBar';
 import { useHomePageBlockListUngrouped } from './useHomePageBlockListUngrouped';

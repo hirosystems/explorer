@@ -132,7 +132,7 @@ export function useHomePageBlockListGrouped() {
         hash: block.hash,
         timestamp: block.burn_block_time,
       })),
-      stxBlocksDisplayLimit: 3,
+      stxBlocksLimit: 3,
     },
     {
       burnBlock: {
@@ -148,7 +148,7 @@ export function useHomePageBlockListGrouped() {
         hash: block.hash,
         timestamp: block.burn_block_time,
       })),
-      stxBlocksDisplayLimit: 3,
+      stxBlocksLimit: 3,
     },
     {
       burnBlock: {
@@ -164,7 +164,7 @@ export function useHomePageBlockListGrouped() {
         hash: block.hash,
         timestamp: block.burn_block_time,
       })),
-      stxBlocksDisplayLimit: 3,
+      stxBlocksLimit: 3,
     },
   ];
 

@@ -3,8 +3,8 @@ import { Stack } from '@/ui/Stack';
 import { Circle } from '../../../../common/components/Circle';
 import { Flex } from '../../../../ui/Flex';
 import { SkeletonText } from '../../../../ui/SkeletonText';
+import { StxBlockListItemLayout } from './BlockListUngrouped';
 import { BtcBlockListItemLayout } from './BtcBlockListItem';
-import { StxBlockListItemLayout } from './StxBlockListItem';
 
 function StxBlockListItemContentSkeleton({ hasIcon }: { hasIcon: boolean }) {
   return (

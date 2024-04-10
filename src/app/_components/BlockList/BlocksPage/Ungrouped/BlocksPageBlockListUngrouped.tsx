@@ -7,11 +7,11 @@ import { Suspense } from 'react';
 import { Section } from '../../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../../ErrorBoundary';
 import { useBlockListContext } from '../../BlockListContext';
+import { BlockListUngrouped } from '../../Ungrouped/BlockListUngrouped';
 import { BlocksPageBlockListUngroupedSkeleton } from '../../Ungrouped/skeleton';
 import { UpdateBar } from '../../UpdateBar';
 import { FADE_DURATION } from '../../consts';
 import { useBlocksPageBlockListUngrouped } from './useBlocksPageBlockListUngrouped';
-import { BlockListUngrouped } from '../../Ungrouped/BlocksListUngrouped';
 
 function runAfterFadeOut(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
@@ -123,7 +123,7 @@ function BlocksPageBlockListUngroupedBase() {
     isFetchingNextPage,
     updateBlockList,
   } = useBlocksPageBlockListUngrouped();
-  console.log({ blockList })
+  console.log({ blockList });
 
   return (
     <Box pb={6}>

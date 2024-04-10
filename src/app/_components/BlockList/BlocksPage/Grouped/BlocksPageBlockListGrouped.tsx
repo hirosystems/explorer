@@ -8,10 +8,9 @@ import { Box } from '../../../../../ui/Box';
 import { Flex } from '../../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../../ErrorBoundary';
 import { useBlockListContext } from '../../BlockListContext';
-import { BurnBlockGroup } from '../../Grouped/BlockListGrouped';
+import { BlockListGrouped } from '../../Grouped/BlockListGrouped';
 import { BlocksPageBlockListGroupedSkeleton } from '../../Grouped/skeleton';
 import { UpdateBar } from '../../UpdateBar';
-import { FADE_DURATION } from '../../consts';
 import { useBlocksPageBlockListGrouped } from './useBlocksPageBlockListGrouped';
 
 function BlocksPageBlockListGroupedBase() {
@@ -33,23 +32,8 @@ function BlocksPageBlockListGroupedBase() {
       {!liveUpdates && (
         <UpdateBar latestBlocksCount={latestBlocksCount} onClick={updateBlockList} />
       )}
-      <Flex
-        flexDirection="column"
-        gap={4}
-        pt={4}
-        style={{
-          transition: `opacity ${FADE_DURATION / 1000}s`,
-          opacity: isBlockListLoading ? 0 : 1,
-        }}
-      >
-        {blockList.map(block => (
-          <BurnBlockGroup
-            key={block.burnBlock.hash}
-            burnBlock={block.burnBlock}
-            stxBlocks={block.stxBlocks}
-            stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
-          />
-        ))}
+      <Flex flexDirection="column" gap={4} pt={4}>
+        <BlockListGrouped blockList={blockList} minimized={false} />
       </Flex>
       <Box pt={5} pb={5}>
         {(!liveUpdates || !enablePagination) && (

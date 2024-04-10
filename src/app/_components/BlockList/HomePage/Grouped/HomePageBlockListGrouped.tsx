@@ -28,7 +28,7 @@ function HomePageBlockListGroupedBase() {
         />
       )}
       <Flex flexDirection="column" px={6} py={4} gap={4}>
-        <BlockListGrouped blockList={blockList} />
+        <BlockListGrouped blockList={blockList} minimized={true} />
         {!liveUpdates && <ListFooter href={'/blocks'} label={'blocks'} />}
       </Flex>
     </>
