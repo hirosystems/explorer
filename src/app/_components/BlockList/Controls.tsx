@@ -12,16 +12,18 @@ interface ControlsProps extends StackProps {
 }
 
 export function ControlsLayout({
+  liveUpdates,
   horizontal,
   children,
   ...rest
 }: {
+  liveUpdates?: boolean;
   horizontal?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <Flex
-      borderBottom={'1px'}
+      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
       py={4}
       marginX={-6}
       px={6}
@@ -35,7 +37,7 @@ export function ControlsLayout({
 
 export function Controls({ groupByBtc, liveUpdates, horizontal, ...rest }: ControlsProps) {
   return (
-    <ControlsLayout horizontal={horizontal} {...rest}>
+    <ControlsLayout liveUpdates={liveUpdates.isChecked} horizontal={horizontal} {...rest}>
       <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
         <Switch id="group-by-btc" {...groupByBtc} />
         <FormLabel

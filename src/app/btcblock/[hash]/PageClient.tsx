@@ -1,8 +1,7 @@
 'use client';
 
-import { BurnBlockGroupGrid } from '@/app/_components/BlockList/GroupedByBurnBlock/BurnBlockGroup';
+import { BurnBlockGroupGrid } from '@/app/_components/BlockList/Grouped/BlockListGrouped';
 import { UIBlockType, UISingleBlock } from '@/app/_components/BlockList/types';
-import { BlockBtcAnchorBlockCard } from '@/app/block/[hash]/BlockBtcAnchorBlockCard';
 import { NavBlock, NavDirection } from '@/app/btcblock/[hash]/NavBlock';
 import { ListFooter } from '@/common/components/ListFooter';
 import { useSuspenseInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';

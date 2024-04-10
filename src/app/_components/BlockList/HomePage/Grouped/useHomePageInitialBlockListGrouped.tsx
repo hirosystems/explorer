@@ -1,13 +1,13 @@
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
-import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
+import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseBlocksByBurnBlock } from '../../../../../common/queries/useBlocksByBurnBlock';
+import { useSuspenseBurnBlocks } from '../../../../../common/queries/useBurnBlocksInfinite';
 
 const BURN_BLOCK_LENGTH = 3;
 const STX_BLOCK_LENGTH = 3;
 
-export function useInitialBlockListGroupedByBtcBlockHomePage() {
+export function useHomePageInitialBlockListGrouped() {
   const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(
     useSuspenseBurnBlocks(BURN_BLOCK_LENGTH),
     BURN_BLOCK_LENGTH

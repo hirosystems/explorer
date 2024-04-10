@@ -3,15 +3,14 @@ import { BURN_BLOCKS_QUERY_KEY } from '@/common/queries/useBurnBlocksInfinite';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
-import { FADE_DURATION } from '../consts';
-import { UIBlockType } from '../types';
-import { BlocksGroupProps } from './BurnBlockGroup';
-import { useBlockListWebSocket } from './useBlockListWebSocket';
-import { useInitialBlockListGroupedByBtcBlockHomePage } from './useInitialBlockListGroupedByBtcHomePage';
+import { useBlockListContext } from '../../BlockListContext';
+import { BlocksGroupProps } from '../../Grouped/BlockListGrouped';
+import { useBlockListWebSocket } from '../../Sockets/useBlockListWebSocket';
+import { FADE_DURATION } from '../../consts';
+import { UIBlockType } from '../../types';
+import { useHomePageInitialBlockListGrouped } from './useHomePageInitialBlockListGrouped';
 
-export function useBlockListGroupedByBtcBlockHomePage() {
+export function useHomePageBlockListGrouped() {
   const queryClient = useQueryClient();
   const { setBlockListLoading: setIsBlockListUpdateLoading, liveUpdates: isLiveUpdateEnabled } =
     useBlockListContext();
@@ -23,7 +22,7 @@ export function useBlockListGroupedByBtcBlockHomePage() {
     secondLatestBurnBlockStxBlocks,
     thirdLatestBurnBlock,
     thirdLatestBurnBlockStxBlocks,
-  } = useInitialBlockListGroupedByBtcBlockHomePage();
+  } = useHomePageInitialBlockListGrouped();
 
   const initialStxBlockHashes = useMemo(
     () =>

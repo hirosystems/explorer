@@ -11,10 +11,13 @@ import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
+import { Stack } from '../../../../ui/Stack';
 import { Text, TextProps } from '../../../../ui/Text';
 import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { Caption } from '../../../../ui/typography';
 import { BlockCount } from '../BlockCount';
+import { useBlockListContext } from '../BlockListContext';
+import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
 
 const PADDING = 4;
@@ -170,14 +173,17 @@ const StxBlockRow = ({
               </Text>
             </BlockLink>
           </Flex>
+
           <BlockLink hash={block.hash} flex={1}>
             <Text color="text" fontWeight={'medium'} fontSize={'xs'}>
               {block.hash}
             </Text>
           </BlockLink>
+
           <Text color="text" fontWeight={'medium'} flex={1} fontSize={'xs'}>
             {block.txsCount}
           </Text>
+
           <Flex flex={1}>
             <Timestamp ts={block.timestamp} />
           </Flex>
@@ -300,8 +306,8 @@ export function BurnBlockGroupGrid({
           />
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
-          )}{' '}
-          {/* TODO: adds a border to the bottom. make this css */}
+          )}
+          {/* TODO: adds a border to the bottom */}
         </>
       ))}
     </Grid>
@@ -394,5 +400,37 @@ export function BurnBlockGroup({
       {stxBlocksNotDisplayed > 0 ? <BlockCount count={stxBlocksNotDisplayed} /> : null}
       <Footer stxBlocks={stxBlocks} txSum={txSum} />
     </Box>
+  );
+}
+
+export function BlockListGroupedLayout({ children }: { children: ReactNode }) {
+  const { isBlockListLoading } = useBlockListContext();
+
+  return (
+    <Stack
+      gap={4}
+      width={'full'}
+      style={{
+        transition: `opacity ${FADE_DURATION / 1000}s`,
+        opacity: isBlockListLoading ? 0 : 1,
+      }}
+    >
+      {children}
+    </Stack>
+  );
+}
+
+export function BlockListGrouped({ blockList }: { blockList: BlocksGroupProps[] }) {
+  return (
+    <BlockListGroupedLayout>
+      {blockList.map(block => (
+        <BurnBlockGroup
+          minimized={true}
+          burnBlock={block.burnBlock}
+          stxBlocks={block.stxBlocks}
+          stxBlocksDisplayLimit={block.stxBlocksDisplayLimit}
+        />
+      ))}
+    </BlockListGroupedLayout>
   );
 }

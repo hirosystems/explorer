@@ -4,20 +4,20 @@ import { ListFooter } from '@/common/components/ListFooter';
 import { Box } from '@/ui/Box';
 import { Suspense } from 'react';
 
-import { Section } from '../../../../common/components/Section';
-import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { useBlockListContext } from '../BlockListContext';
-import { UpdateBar } from '../UpdateBar';
-import { FADE_DURATION } from '../consts';
-import { UngroupedBlockList } from './UngroupedBlocksList';
-import { BlocksPageBlockListUngroupedSkeleton } from './skeleton';
-import { useUngroupedBlockListBlocksPage } from './useUngroupedBlockListBlocksPage';
+import { Section } from '../../../../../common/components/Section';
+import { ExplorerErrorBoundary } from '../../../ErrorBoundary';
+import { useBlockListContext } from '../../BlockListContext';
+import { BlocksPageBlockListUngroupedSkeleton } from '../../Ungrouped/skeleton';
+import { UpdateBar } from '../../UpdateBar';
+import { FADE_DURATION } from '../../consts';
+import { useBlocksPageBlockListUngrouped } from './useBlocksPageBlockListUngrouped';
+import { BlockListUngrouped } from '../../Ungrouped/BlocksListUngrouped';
 
 function runAfterFadeOut(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
 
-function BlocksPageUngroupedBlockListBase() {
+function BlocksPageBlockListUngroupedBase() {
   const { liveUpdates } = useBlockListContext();
 
   // // TODO: dont really need to have a separate hook for this. This is just doing all the organizing of the data behind the hook
@@ -122,7 +122,8 @@ function BlocksPageUngroupedBlockListBase() {
     fetchNextPage,
     isFetchingNextPage,
     updateBlockList,
-  } = useUngroupedBlockListBlocksPage();
+  } = useBlocksPageBlockListUngrouped();
+  console.log({ blockList })
 
   return (
     <Box pb={6}>
@@ -132,7 +133,7 @@ function BlocksPageUngroupedBlockListBase() {
           onClick={updateBlockList}
         />
       )}
-      <UngroupedBlockList ungroupedBlockList={blockList} />
+      <BlockListUngrouped blockList={blockList} />
       <Box pt={4}>
         {!liveUpdates && (
           <ListFooter
@@ -147,7 +148,7 @@ function BlocksPageUngroupedBlockListBase() {
   );
 }
 
-export function BlocksPageUngroupedBlockList() {
+export function BlocksPageBlockListUngrouped() {
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -160,7 +161,7 @@ export function BlocksPageUngroupedBlockList() {
       tryAgainButton
     >
       <Suspense fallback={<BlocksPageBlockListUngroupedSkeleton />}>
-        <BlocksPageUngroupedBlockListBase />
+        <BlocksPageBlockListUngroupedBase />
       </Suspense>
     </ExplorerErrorBoundary>
   );

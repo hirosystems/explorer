@@ -3,18 +3,18 @@
 import { ListFooter } from '@/common/components/ListFooter';
 import { Suspense } from 'react';
 
-import { Section } from '../../../../common/components/Section';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { ExplorerErrorBoundary } from '../../ErrorBoundary';
-import { useBlockListContext } from '../BlockListContext';
-import { UpdateBar } from '../UpdateBar';
-import { FADE_DURATION } from '../consts';
-import { BurnBlockGroup } from './BurnBlockGroup';
-import { BlocksPageBlockListGroupedByBtcBlockSkeleton } from './skeleton';
-import { useBlockListGroupedByBtcBlockBlocksPage } from './useBlockListGroupedByBtcBlockBlocksPage';
+import { Section } from '../../../../../common/components/Section';
+import { Box } from '../../../../../ui/Box';
+import { Flex } from '../../../../../ui/Flex';
+import { ExplorerErrorBoundary } from '../../../ErrorBoundary';
+import { useBlockListContext } from '../../BlockListContext';
+import { BurnBlockGroup } from '../../Grouped/BlockListGrouped';
+import { BlocksPageBlockListGroupedSkeleton } from '../../Grouped/skeleton';
+import { UpdateBar } from '../../UpdateBar';
+import { FADE_DURATION } from '../../consts';
+import { useBlocksPageBlockListGrouped } from './useBlocksPageBlockListGrouped';
 
-function BlocksPageBlockListGroupedByBtcBlockBase() {
+function BlocksPageBlockListGroupedBase() {
   const { liveUpdates, isBlockListLoading } = useBlockListContext();
   const {
     blockList,
@@ -23,7 +23,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
-  } = useBlockListGroupedByBtcBlockBlocksPage(10);
+  } = useBlocksPageBlockListGrouped(10);
   console.log({ liveUpdates });
 
   const enablePagination = true;
@@ -65,7 +65,7 @@ function BlocksPageBlockListGroupedByBtcBlockBase() {
   );
 }
 
-export function BlocksPageBlockListGroupedByBtcBlock() {
+export function BlocksPageBlockListGrouped() {
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -76,8 +76,8 @@ export function BlocksPageBlockListGroupedByBtcBlock() {
       }}
       tryAgainButton
     >
-      <Suspense fallback={<BlocksPageBlockListGroupedByBtcBlockSkeleton />}>
-        <BlocksPageBlockListGroupedByBtcBlockBase />
+      <Suspense fallback={<BlocksPageBlockListGroupedSkeleton />}>
+        <BlocksPageBlockListGroupedBase />
       </Suspense>
     </ExplorerErrorBoundary>
   );

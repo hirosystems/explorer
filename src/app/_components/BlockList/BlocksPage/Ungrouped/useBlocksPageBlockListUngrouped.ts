@@ -2,55 +2,69 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { NakamotoBlock } from '@stacks/blockchain-api-client';
+import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
-import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket3 } from '../Sockets/useBlockListWebSocket3';
-import { FADE_DURATION } from '../consts';
+import { useBlockListContext } from '../../BlockListContext';
+import { useBlockListWebSocket3 } from '../../Sockets/useBlockListWebSocket3';
+import { FADE_DURATION } from '../../consts';
 import {
   BlockListData,
   convertBlockToBlockListBtcBlock,
   convertBlockToBlockListStxBlock,
-  generateBlockList,
   useInitialBlockList,
-} from '../useInitialBlocks';
+} from '../../useInitialBlocks';
 
 function runAfterFadeOut(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
 
-function mergeWebSocketUpdates(
-  latestStxBlocksFromWebSocket: NakamotoBlock[],
-  initialBlockListDataMap: Record<string, BlockListData>
-) {
-  const initialBlockListDataMapCopy = Object.assign({}, initialBlockListDataMap);
-  latestStxBlocksFromWebSocket.forEach(stxBlock => {
-    // add the stx block to the existing btc block
-    if (stxBlock.burn_block_hash in initialBlockListDataMap) {
-      initialBlockListDataMapCopy[stxBlock.burn_block_hash].stxBlocks.push(
-        convertBlockToBlockListStxBlock(stxBlock)
-      );
+function generateBlockList(stxBlocks: (Block | NakamotoBlock)[]) {
+  if (stxBlocks.length === 0) return [];
+  const blockList = [
+    {
+      stxBlocks: [convertBlockToBlockListStxBlock(stxBlocks[0])],
+      btcBlock: convertBlockToBlockListBtcBlock(stxBlocks[0]),
+    },
+  ];
+  if (stxBlocks.length === 1) return blockList;
+  for (let i = 1; i < stxBlocks.length; i++) {
+    const stxBlock = stxBlocks[i];
+    const latestBtcBlock = blockList[blockList.length - 1];
+    if (latestBtcBlock.btcBlock.hash === stxBlock.burn_block_hash) {
+      latestBtcBlock.stxBlocks.push(convertBlockToBlockListStxBlock(stxBlock));
     } else {
-      // add a new btc block and stx block
-      initialBlockListDataMapCopy[stxBlock.burn_block_hash] = {
+      blockList.push({
         stxBlocks: [convertBlockToBlockListStxBlock(stxBlock)],
         btcBlock: convertBlockToBlockListBtcBlock(stxBlock),
-      };
+      });
     }
-  });
-  return generateBlockList(initialBlockListDataMapCopy);
+  }
+  return blockList;
 }
 
-export function useUngroupedBlockListBlocksPage() {
+function mergeBlockLists(newblockList: BlockListData[], initialBlockList: BlockListData[]) {
+  if (newblockList.length === 0) return initialBlockList;
+  const earliestBtcBlock = newblockList[newblockList.length - 1];
+  const latestBtcBlock = initialBlockList[0];
+  if (earliestBtcBlock.btcBlock.hash === latestBtcBlock.btcBlock.hash) {
+    const btcBlock = earliestBtcBlock.btcBlock || latestBtcBlock.btcBlock;
+    const stxBlocks = [...earliestBtcBlock.stxBlocks, ...latestBtcBlock.stxBlocks];
+    return [
+      ...newblockList.slice(0, newblockList.length - 1),
+      { btcBlock, stxBlocks },
+      ,
+      ...initialBlockList.slice(1),
+    ];
+  } else {
+    return [...newblockList, ...initialBlockList];
+  }
+}
+
+export function useBlocksPageBlockListUngrouped() {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
-  // TODO: dont really need to have a separate hook for this. This is just doing all the organizing of the data behind the hook
   const {
-    initialStxBlocks,
     initialStxBlocksHashes,
-    initialBtcBlocks,
-    initialBtcBlocksHashes,
-    initialBlockListDataMap,
     initialBlockList,
     isFetchingNextPage,
     fetchNextPage,
@@ -58,7 +72,7 @@ export function useUngroupedBlockListBlocksPage() {
     hasNextPage,
   } = useInitialBlockList();
 
-  const [latestBlocksToShow, setLatestBlocksToShow] = useState<BlockListData[]>([]);
+  const [webSocketBlockList, setWebSocketBlockList] = useState<BlockListData[]>([]);
 
   const {
     latestStxBlocks: latestStxBlocksFromWebSocket,
@@ -66,12 +80,7 @@ export function useUngroupedBlockListBlocksPage() {
     clearLatestBlocks: clearLatestBlocksFromWebSocket,
   } = useBlockListWebSocket3(initialStxBlocksHashes);
 
-  const blockList = useMemo(
-    () => [...latestBlocksToShow, ...initialBlockList],
-    [initialBlockList, latestBlocksToShow]
-  );
-
-  // This is used to trigger a fade out effect when the block list is updated. 
+  // This is used to trigger a fade out effect when the block list is updated.
   // When the counter is updated, we wait for the fade out effect to finish and then show the fade in effect
   const [blockListUpdateCounter, setBlockListUpdateCounter] = useState(0);
   const prevBlockListUpdateCounterRef = useRef(blockListUpdateCounter);
@@ -86,17 +95,13 @@ export function useUngroupedBlockListBlocksPage() {
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
-    // const newBlockList = mergeWebSocketUpdates(
-    //   latestStxBlocksFromWebSocket,
-    //   initialBlockListDataMap
-    // );
-    setLatestBlocksToShow(latestStxBlocksFromWebSocket);
+    const websocketBlockList = generateBlockList(latestStxBlocksFromWebSocket);
+    setWebSocketBlockList(websocketBlockList);
     clearLatestBlocksFromWebSocket();
     setBlockListUpdateCounter(prev => prev + 1);
   }, [
     latestStxBlocksFromWebSocket,
-    initialBlockListDataMap,
-    setLatestBlocksToShow,
+    setWebSocketBlockList,
     setBlockListLoading,
     clearLatestBlocksFromWebSocket,
   ]);
@@ -137,6 +142,11 @@ export function useUngroupedBlockListBlocksPage() {
     showLatestStxBlocksFromWebSocket,
     updateBlockList,
   ]);
+
+  const blockList = useMemo(
+    () => mergeBlockLists(webSocketBlockList, initialBlockList),
+    [webSocketBlockList, initialBlockList]
+  );
 
   return {
     blockList,

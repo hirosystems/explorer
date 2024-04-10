@@ -1,29 +1,25 @@
 import { ReactNode } from 'react';
 
-import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
-import { StxIcon } from '../../../../ui/icons';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { FADE_DURATION } from '../consts';
 import { BlockListBtcBlock, BlockListStxBlock } from '../types';
 import { BtcBlockListItem } from './BtcBlockListItem';
-import { StxBlockListItem } from './StxBlockListItem';
+import { StxBlocksGrid } from './StxBlockListItem';
 
 export interface BlocksByBtcBlock {
   stxBlocks: BlockListStxBlock[];
   btcBlock: BlockListBtcBlock;
 }
 
-export type UngroupedBlockList = BlocksByBtcBlock[]; // Ironic the ungrouped block list is grouped by btc block...
+export type BlockListUngrouped = BlocksByBtcBlock[];
 
-export function UngroupedBlockListLayout({ children }: { children: ReactNode }) {
+export function BlockListUngroupedLayout({ children }: { children: ReactNode }) {
   const { isBlockListLoading } = useBlockListContext();
 
   return (
     <Stack
-      pl={4}
-      pr={2}
       gap={0}
       width={'full'}
       style={{
@@ -36,32 +32,24 @@ export function UngroupedBlockListLayout({ children }: { children: ReactNode }) 
   );
 }
 
-function BlocksGroupedByBtcBlock({
-  blocks,
+function StxBlocksGroupedByBtcBlock({
+  blockList,
   stxBlocksLimit,
+  minimized = false,
 }: {
-  blocks: BlocksByBtcBlock;
+  blockList: BlocksByBtcBlock;
   stxBlocksLimit?: number;
+  minimized?: boolean;
 }) {
-  const btcBlock = blocks.btcBlock;
-  const stxBlocks = blocks.stxBlocks;
+  const btcBlock = blockList.btcBlock;
+  const stxBlocks = blockList.stxBlocks;
   const stxBlocksShortList = stxBlocksLimit
-    ? blocks.stxBlocks.slice(0, stxBlocksLimit)
-    : blocks.stxBlocks;
+    ? blockList.stxBlocks.slice(0, stxBlocksLimit)
+    : blockList.stxBlocks;
 
   return (
     <>
-      {stxBlocksShortList.map((block, i) => (
-        <StxBlockListItem
-          key={block.hash}
-          hash={block.hash}
-          height={block.height}
-          timestamp={block.timestamp}
-          txsCount={block.txsCount}
-          icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
-          hasBorder={i < stxBlocks.length - 1}
-        />
-      ))}
+      <StxBlocksGrid key={btcBlock.hash} stxBlocks={stxBlocksShortList} minimized={minimized} />
       {stxBlocksLimit && stxBlocks.length > stxBlocksLimit && (
         <BlockCount count={stxBlocks.length - stxBlocksLimit} />
       )}
@@ -75,22 +63,25 @@ function BlocksGroupedByBtcBlock({
   );
 }
 
-export function UngroupedBlockList({
-  ungroupedBlockList,
+export function BlockListUngrouped({
+  blockList,
   stxBlocksLimit,
+  minimized = false,
 }: {
-  ungroupedBlockList: UngroupedBlockList;
+  blockList: BlockListUngrouped;
   stxBlocksLimit?: number;
+  minimized?: boolean;
 }) {
   return (
-    <UngroupedBlockListLayout>
-      {ungroupedBlockList.map((blocksGroupedByBtcBlock, i) => (
-        <BlocksGroupedByBtcBlock
+    <BlockListUngroupedLayout>
+      {blockList.map(blocksGroupedByBtcBlock => (
+        <StxBlocksGroupedByBtcBlock
           key={blocksGroupedByBtcBlock.btcBlock.hash}
-          blocks={blocksGroupedByBtcBlock}
+          blockList={blocksGroupedByBtcBlock}
           stxBlocksLimit={stxBlocksLimit}
+          minimized={minimized}
         />
       ))}
-    </UngroupedBlockListLayout>
+    </BlockListUngroupedLayout>
   );
 }

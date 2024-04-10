@@ -3,7 +3,7 @@
 import {
   BlockPageHeadersSkeleton,
   BlocksPageBlockListSkeleton,
-} from '../_components/BlockList/GroupedByBurnBlock/skeleton';
+} from '../_components/BlockList/Grouped/skeleton';
 import { BlocksPageLayout } from './PageClient';
 
 export default function BlocksPageSkeleton() {

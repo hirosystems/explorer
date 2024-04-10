@@ -5,15 +5,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
-import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
 import {
   BLOCK_LIST_QUERY_KEY,
   useSuspenseBlocksInfiniteNew,
-} from '../../../../common/queries/useBlockListInfinite';
-import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
-import { FADE_DURATION } from '../consts';
-import { BlockListBtcBlock, BlockListStxBlock, UISingleBlock } from '../types';
+} from '../../../../../common/queries/useBlockListInfinite';
+import { useBlockListContext } from '../../BlockListContext';
+import { useBlockListWebSocket } from '../../Sockets/useBlockListWebSocket';
+import { FADE_DURATION } from '../../consts';
+import { BlockListBtcBlock, BlockListStxBlock, UISingleBlock } from '../../types';
 
 const LIMIT = 3;
 
@@ -30,7 +30,7 @@ function runAfterFadeOut(callback: () => void) {
  * If just toggling live, requery to update
  * If receving new blocks while live, reorganize state to accomodate new blocks
  */
-export function useUngroupedBlockListHomePage() {
+export function useHomePageBlockListUngrouped() {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
   const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]);

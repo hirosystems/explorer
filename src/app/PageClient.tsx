@@ -10,6 +10,7 @@ import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { UpdatedBlocksList } from './_components/BlockList/UpdatedBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
+import { NextPage } from 'next';
 
 const BlocksListDynamic = dynamic(
   () => import('./_components/BlockList').then(mod => mod.BlocksList),
@@ -20,14 +21,15 @@ const BlocksListDynamic = dynamic(
 );
 
 const HomePageBlockListDynamic = dynamic(
-  () => import('./_components/BlockList/HomePageBlockList').then(mod => mod.HomePageBlockList),
+  () =>
+    import('./_components/BlockList/HomePage/HomePageBlockList').then(mod => mod.HomePageBlockList),
   {
     loading: () => <SkeletonBlockList />,
     ssr: false,
   }
 );
 
-export default function Home() {
+const Home: NextPage = () => {
   const { activeNetwork, activeNetworkKey } = useGlobalContext();
   return (
     <>
@@ -45,3 +47,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;
