@@ -14,7 +14,7 @@ import { HomePageBlockListGroupedSkeleton } from '../Grouped/skeleton';
 import { HomePageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
 
 const HomePageBlockListGroupedByBtcBlockDynamic = dynamic(
-  () => import('./Grouped/HomePageBlockListGrouped').then(mod => mod.HomePageBlockListGrouped),
+  () => import('./HomePageBlockListGrouped').then(mod => mod.HomePageBlockListGrouped),
   {
     loading: () => <HomePageBlockListGroupedSkeleton />,
     ssr: false,
@@ -22,8 +22,7 @@ const HomePageBlockListGroupedByBtcBlockDynamic = dynamic(
 );
 
 const HomePageUngroupedBlockListDynamic = dynamic(
-  () =>
-    import('./Ungrouped/HomePageBlockListUngrouped').then(mod => mod.HomePageBlockListUngrouped),
+  () => import('./HomePageBlockListUngrouped').then(mod => mod.HomePageBlockListUngrouped),
   {
     loading: () => <HomePageBlockListUngroupedSkeleton />,
     ssr: false,

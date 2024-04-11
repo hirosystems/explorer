@@ -1,16 +1,19 @@
+import { Icon } from '@/ui/Icon';
+import { StxIcon } from '@/ui/icons';
 import { useColorModeValue } from '@chakra-ui/react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
-import { Grid } from '../../../../ui/Grid';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { BlocksPageHeaderLayout } from '../BlocksPage/BlocksPageHeaders';
 import { ControlsLayout } from '../Controls';
+import { BlockListRowSkeleton } from '../Ungrouped/skeleton';
 import { UpdateBarLayout } from '../UpdateBar';
+import { BurnBlockGroupGridLayout } from './BlockListGrouped';
 
 function BitcoinHeaderSkeleton() {
   return (
@@ -51,11 +54,11 @@ function BlockCountSkeleton() {
   );
 }
 
-function GridHeaderRowSkeleton() {
+export function BlockListGridHeaderRowSkeleton() {
   return (
     <>
       {Array.from({ length: 4 }).map((_, colIndex) => (
-        <Flex
+        <Flex // TODO: get styles from component
           bg="hoverBackground"
           px={2.5}
           py={2}
@@ -72,32 +75,25 @@ function GridHeaderRowSkeleton() {
   );
 }
 
-function GridRowSkeleton({ numTxs }: { numTxs: number }) {
-  if (numTxs === 0) {
-    return null;
-  }
-  return (
-    <>
-      {Array.from({ length: numTxs }).map((_, rowIndex) =>
-        Array.from({ length: 4 }).map((_, colIndex) => (
-          <SkeletonText
-            noOfLines={1}
-            key={`burn-block-group-tx-skeleton-${rowIndex}-${colIndex}`}
-          />
-        ))
-      )}
-    </>
-  );
-}
-
-export function BurnBlockGroupSkeleton({ numTxs }: { numTxs: number }) {
+export function BurnBlockGroupSkeleton({
+  numTxs,
+  minimized,
+}: {
+  numTxs: number;
+  minimized?: boolean;
+}) {
   return (
     <Box border={'1px'} rounded={'lg'} p={4}>
       <BitcoinHeaderSkeleton />
-      <Grid templateColumns="repeat(4, 1fr)" gap={4} width={'full'} rowGap={4} pb={2}>
-        <GridHeaderRowSkeleton />
-        <GridRowSkeleton numTxs={numTxs} />
-      </Grid>
+      <BurnBlockGroupGridLayout minimized={minimized}>
+        {minimized ? null : <BlockListGridHeaderRowSkeleton />}
+        {Array.from({ length: numTxs }).map((_, rowIndex) => (
+          <BlockListRowSkeleton
+            icon={rowIndex === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
+            minimized={minimized}
+          />
+        ))}
+      </BurnBlockGroupGridLayout>
       <BlockCountSkeleton />
       <FooterSkeleton />
     </Box>
@@ -108,24 +104,31 @@ export function BurnBlockGroupListSkeleton({
   numBurnBlockGroupsWithTxs,
   numTransactionsinBurnBlockGroupWithTxs,
   numBurnBlockGroupsWithoutTxs,
+  minimized,
 }: {
   numBurnBlockGroupsWithTxs: number;
   numTransactionsinBurnBlockGroupWithTxs: number;
   numBurnBlockGroupsWithoutTxs: number;
+  minimized?: boolean;
 }) {
   return (
-    <Flex flexDirection="column" gap={4} py={6} key="burn-block-group-list-skeleton">
+    <Flex flexDirection="column" gap={4} py={6} px={6} key="burn-block-group-list-skeleton">
       {numBurnBlockGroupsWithTxs
         ? Array.from({ length: numBurnBlockGroupsWithTxs }).map((_, i) => (
             <BurnBlockGroupSkeleton
               numTxs={numTransactionsinBurnBlockGroupWithTxs}
-              key={`burn-block-group-skeleton-${i}`}
+              key={`burn-block-group-skeleton-with-txs-${i}`}
+              minimized={minimized}
             />
           ))
         : null}
       {numBurnBlockGroupsWithoutTxs
         ? Array.from({ length: numBurnBlockGroupsWithoutTxs }).map((_, i) => (
-            <BurnBlockGroupSkeleton numTxs={0} key={`burn-block-group-skeleton-${i}`} />
+            <BurnBlockGroupSkeleton
+              numTxs={0}
+              key={`burn-block-group-skeleton-w/o-txs-${i}`}
+              minimized={minimized}
+            />
           ))
         : null}
     </Flex>
@@ -134,13 +137,12 @@ export function BurnBlockGroupListSkeleton({
 
 export function HomePageBlockListGroupedSkeleton() {
   return (
-    <Section title={<SkeletonText noOfLines={1} height="14px" />}>
-      <BurnBlockGroupListSkeleton
-        numBurnBlockGroupsWithTxs={3}
-        numTransactionsinBurnBlockGroupWithTxs={3}
-        numBurnBlockGroupsWithoutTxs={0}
-      />
-    </Section>
+    <BurnBlockGroupListSkeleton
+      numBurnBlockGroupsWithTxs={3}
+      numTransactionsinBurnBlockGroupWithTxs={3}
+      numBurnBlockGroupsWithoutTxs={0}
+      minimized={true}
+    />
   );
 }
 
@@ -194,7 +196,7 @@ function ControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
 function UpdateBarSkeleton() {
   return (
     <UpdateBarLayout isBlockListLoading={false}>
-      <Flex justifyContent="space-between" alignItems='center' width="full" height={4}>
+      <Flex justifyContent="space-between" alignItems="center" width="full" height={4}>
         <SkeletonText noOfLines={1} width={40} />
         <SkeletonText noOfLines={1} width={40} />
       </Flex>

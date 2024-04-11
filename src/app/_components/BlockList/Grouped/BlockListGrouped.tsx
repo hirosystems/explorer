@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { PiArrowElbowLeftDown } from 'react-icons/pi';
 
@@ -11,51 +10,41 @@ import { Grid } from '../../../../ui/Grid';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
-import { Text, TextProps } from '../../../../ui/Text';
+import { Text } from '../../../../ui/Text';
 import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { Caption } from '../../../../ui/typography';
+import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
-import { LineAndNode } from '../Ungrouped/BlockListUngrouped';
+import { LineAndNode } from '../LineAndNode';
 import { FADE_DURATION } from '../consts';
-import { UISingleBlock } from '../types';
+import { BlockListBtcBlock, BlockListStxBlock } from '../types';
+import { BlockListData } from '../utils';
 
 const PADDING = 4;
 
-// TODO: move to common components
-export function ListHeader({ children, ...textProps }: { children: ReactNode } & TextProps) {
-  const color = useColorModeValue('slate.700', 'slate.250');
-  return (
-    <Text
-      py={2}
-      px={2.5}
-      color={color}
-      bg="hoverBackground"
-      fontSize="xs"
-      rounded="md"
-      whiteSpace="nowrap"
-      {...textProps}
-    >
-      {children}
-    </Text>
-  );
-}
-
-// TODO: move to common components
 const GroupHeader = () => {
   return (
     <>
       <Box position="sticky" left={0} bg="surface" pr={4} sx={mobileBorderCss}>
-        <ListHeader width={'fit-content'}>Block height</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Block height
+        </ListHeader>
       </Box>
       <Box>
-        <ListHeader width={'fit-content'}>Block hash</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Block hash
+        </ListHeader>
       </Box>
       <Box>
-        <ListHeader width={'fit-content'}>Transactions</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Transactions
+        </ListHeader>
       </Box>
       <Box>
-        <ListHeader width={'fit-content'}>Timestamp</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Timestamp
+        </ListHeader>
       </Box>
     </>
   );
@@ -95,18 +84,6 @@ function ScrollableDiv({ children }: { children: ReactNode }) {
   );
 }
 
-export interface BlocksGroupProps {
-  burnBlock: UISingleBlock; // TODO: don't use this. Have to change data fetching. Use new websocket hook
-  stxBlocks: UISingleBlock[];
-  /**
-   * TODO: change to
-   * burnBlock: BurnBlock;
-   * stxBlocks: Block[];
-   */
-  stxBlocksLimit?: number;
-  minimized?: boolean;
-}
-
 const mobileBorderCss = {
   '.has-horizontal-scroll &:before': {
     // Adds a border to the left of the first column
@@ -122,11 +99,11 @@ const mobileBorderCss = {
 };
 
 const StxBlockRow = ({
-  block,
+  stxBlock,
   icon,
   minimized = false,
 }: {
-  block: UISingleBlock;
+  stxBlock: BlockListStxBlock;
   icon?: ReactNode;
   minimized?: boolean;
 }) => {
@@ -138,30 +115,30 @@ const StxBlockRow = ({
         gap={2}
         fontSize="xs"
         sx={mobileBorderCss}
-        key={block.hash}
+        key={stxBlock.hash}
         gridColumn="1 / 2"
         alignItems="center"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} />
-        <BlockLink hash={block.hash}>
+        <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="xs">
-            #{block.height}
+            #{stxBlock.height}
           </Text>
         </BlockLink>
       </Flex>
 
       <HStack divider={<Caption>∙</Caption>} gap={1} whiteSpace="nowrap" gridColumn="3 / 4">
-        <BlockLink hash={block.hash}>
+        <BlockLink hash={stxBlock.hash}>
           <Text color="textSubdued" fontWeight="medium" fontSize="xs" whiteSpace="nowrap">
-            {truncateMiddle(block.hash, 3)}
+            {truncateMiddle(stxBlock.hash, 3)}
           </Text>
         </BlockLink>
-        {block.txsCount !== undefined ? (
+        {stxBlock.txsCount !== undefined ? (
           <Text color="textSubdued" fontWeight="medium" fontSize="xs">
-            {block.txsCount || 0} txn
+            {stxBlock.txsCount || 0} txn
           </Text>
         ) : null}
-        <Timestamp ts={block.timestamp} />
+        <Timestamp ts={stxBlock.timestamp} />
       </HStack>
     </>
   ) : (
@@ -174,54 +151,73 @@ const StxBlockRow = ({
         gap={2}
         fontSize="xs"
         sx={mobileBorderCss}
-        key={block.hash}
+        key={stxBlock.hash}
         alignItems="center"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} />
-        <BlockLink hash={block.hash}>
+        <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="xs">
-            #{block.height}
+            #{stxBlock.height}
           </Text>
         </BlockLink>
       </Flex>
 
       <Flex alignItems="center">
-        <BlockLink hash={block.hash}>
+        <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="xs">
-            {block.hash}
+            {stxBlock.hash}
           </Text>
         </BlockLink>
       </Flex>
 
       <Flex alignItems="center">
         <Text color="text" fontWeight="medium" fontSize="xs">
-          {block.txsCount}
+          {stxBlock.txsCount}
         </Text>
       </Flex>
 
       <Flex alignItems="center">
-        <Timestamp ts={block.timestamp} />
+        <Timestamp ts={stxBlock.timestamp} />
       </Flex>
     </>
   );
 };
 
-export function BurnBlockGroupGrid({ burnBlock, stxBlocks, minimized }: BlocksGroupProps) {
+export function BurnBlockGroupGridLayout({
+  minimized,
+  children,
+}: {
+  minimized?: boolean;
+  children: ReactNode;
+}) {
   return (
     <Grid
       templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
       columnGap={4}
-      key={burnBlock.hash}
-      pt={4}
-      pb={7}
+      // pt={4}
+      // pb={7}
     >
+      {children}
+    </Grid>
+  );
+}
+
+export function BurnBlockGroupGrid({
+  stxBlocks,
+  minimized,
+}: {
+  stxBlocks: BlockListStxBlock[]; // TODO: remove
+  minimized: boolean;
+}) {
+  return (
+    <BurnBlockGroupGridLayout minimized={minimized}>
       {minimized ? null : <GroupHeader />}
       {stxBlocks.map((stxBlock, i) => (
         <>
           <StxBlockRow
-            key={stxBlock.hash}
-            block={stxBlock}
+            key={`stx-block-row-${stxBlock.hash}`}
+            stxBlock={stxBlock}
             icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
             minimized={minimized}
           />
@@ -230,15 +226,15 @@ export function BurnBlockGroupGrid({ burnBlock, stxBlocks, minimized }: BlocksGr
           )}
         </>
       ))}
-    </Grid>
+    </BurnBlockGroupGridLayout>
   );
 }
 
 function BitcoinHeader({
-  burnBlock,
+  btcBlock,
   minimized = false,
 }: {
-  burnBlock: UISingleBlock;
+  btcBlock: BlockListBtcBlock;
   minimized?: boolean;
 }) {
   return (
@@ -255,20 +251,20 @@ function BitcoinHeader({
         <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
         <Icon as={BitcoinIcon} size={4.5} />
         <Text fontSize={'sm'} color={'textSubdued'} fontWeight={'medium'}>
-          {burnBlock.height}
+          {btcBlock.height}
         </Text>
       </Flex>
       <HStack divider={<Caption>∙</Caption>} gap={1}>
-        <ExplorerLink fontSize="xs" color={'textSubdued'} href={`/btcblock/${burnBlock.hash}`}>
-          {truncateMiddle(burnBlock.hash, 6)}
+        <ExplorerLink fontSize="xs" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>
+          {truncateMiddle(btcBlock.hash, 6)}
         </ExplorerLink>
-        <Timestamp ts={burnBlock.timestamp} />
+        <Timestamp ts={btcBlock.timestamp} />
       </HStack>
     </Flex>
   );
 }
 
-export function Footer({ stxBlocks, txSum }: { stxBlocks: UISingleBlock[]; txSum: number }) {
+export function Footer({ stxBlocks, txSum }: { stxBlocks: BlockListStxBlock[]; txSum: number }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} whiteSpace="nowrap">
@@ -286,13 +282,21 @@ export function Footer({ stxBlocks, txSum }: { stxBlocks: UISingleBlock[]; txSum
   );
 }
 
+export interface BlocksGroupProps {
+  btcBlock: BlockListBtcBlock;
+  stxBlocks: BlockListStxBlock[];
+  stxBlocksLimit?: number;
+  minimized?: boolean;
+}
+
 export function BurnBlockGroup({
-  burnBlock,
+  btcBlock,
   stxBlocks,
   stxBlocksLimit,
   minimized = false,
 }: BlocksGroupProps) {
-  const stxBlocksNotDisplayed = burnBlock.txsCount ? burnBlock.txsCount - (stxBlocksLimit || 0) : 0;
+  const numStxBlocks = btcBlock.txsCount ?? stxBlocks.length;
+  const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || 0);
   const txSum = stxBlocks.reduce((txSum, stxBlock) => {
     const txsCount = stxBlock?.txsCount ?? 0;
     return txSum + txsCount;
@@ -303,19 +307,13 @@ export function BurnBlockGroup({
   //   return totalTime + blockTime;
   // }, 0);
   // const averageBlockTime = stxBlocks.length ? Math.floor(totalTime / stxBlocks.length) : 0;
-  console.log({ burnBlock, stxBlocks, stxBlocksDisplayLimit, stxBlocksNotDisplayed }); // TODO: remove
-  // TODO: why are we not using table here?
   return (
-    <Box border={'1px'} rounded={'lg'} p={PADDING} key={burnBlock.hash}>
-      <BitcoinHeader burnBlock={burnBlock} minimized={minimized} />
+    <Box border={'1px'} rounded={'lg'} p={PADDING} key={btcBlock.hash}>
+      <BitcoinHeader btcBlock={btcBlock} minimized={minimized} />
       <ScrollableDiv>
-        <BurnBlockGroupGrid
-          burnBlock={burnBlock}
-          stxBlocks={stxBlocksShortList}
-          minimized={minimized}
-        />
+        <BurnBlockGroupGrid stxBlocks={stxBlocksShortList} minimized={minimized} />
       </ScrollableDiv>
-      {stxBlocksNotDisplayed > 0 ? <BlockCount count={stxBlocksNotDisplayed} /> : null}
+      {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
       <Footer stxBlocks={stxBlocks} txSum={txSum} />
     </Box>
   );
@@ -341,18 +339,21 @@ export function BlockListGroupedLayout({ children }: { children: ReactNode }) {
 export function BlockListGrouped({
   blockList,
   minimized,
+  stxBlocksLimit,
 }: {
-  blockList: BlocksGroupProps[];
+  blockList: BlockListData[];
   minimized: boolean;
+  stxBlocksLimit?: number;
 }) {
   return (
     <BlockListGroupedLayout>
       {blockList.map(block => (
         <BurnBlockGroup
-          minimized={minimized}
-          burnBlock={block.burnBlock}
+          key={`burn-block-group-${block.btcBlock.hash}`}
+          btcBlock={block.btcBlock}
           stxBlocks={block.stxBlocks}
-          stxBlocksLimit={block.stxBlocksLimit}
+          minimized={minimized}
+          stxBlocksLimit={stxBlocksLimit}
         />
       ))}
     </BlockListGroupedLayout>

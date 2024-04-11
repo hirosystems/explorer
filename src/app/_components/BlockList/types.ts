@@ -47,4 +47,3 @@ export interface BlockListBlock {
   timestamp: number;
   txsCount?: number;
 }
-

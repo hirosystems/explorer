@@ -4,7 +4,7 @@ import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/model
 
 import { useSubscribeBlocks } from './useSubscribeBlocks';
 
-export function useBlockListWebSocket3(initialStxBlockHashes: Set<string>) {
+export function useBlockListWebSocket2(initialStxBlockHashes: Set<string>) {
   const [latestStxBlocks, setLatestStxBlocks] = useState<NakamotoBlock[]>([]);
   const stxBlockHashes = useRef(new Set<string>());
 
@@ -23,14 +23,15 @@ export function useBlockListWebSocket3(initialStxBlockHashes: Set<string>) {
   );
 
   useSubscribeBlocks(handleBlock);
+  // useSubscribeBlocks2(handleBlock);
 
-  const clearLatestBlocks = () => {
+  const clearLatestStxBlocks = () => {
     setLatestStxBlocks([]);
   };
 
   return {
     latestStxBlocks,
     latestStxBlocksCount: latestStxBlocks.length,
-    clearLatestBlocks,
+    clearLatestStxBlocks,
   };
 }

@@ -2,22 +2,21 @@
 
 import { Suspense } from 'react';
 
-import { ListFooter } from '../../../../../common/components/ListFooter';
-import { Flex } from '../../../../../ui/Flex';
-import { useBlockListContext } from '../../BlockListContext';
-import { BlockListGrouped } from '../../Grouped/BlockListGrouped';
-import { HomePageBlockListGroupedSkeleton } from '../../Grouped/skeleton';
-import { UpdateBar } from '../../UpdateBar';
-import { useHomePageBlockListGrouped } from './useHomePageBlockListGrouped';
+import { ListFooter } from '../../../../common/components/ListFooter';
+import { Flex } from '../../../../ui/Flex';
+import { useBlockListContext } from '../BlockListContext';
+import { BlockListGrouped } from '../Grouped/BlockListGrouped';
+import { HomePageBlockListGroupedSkeleton } from '../Grouped/skeleton';
+import { UpdateBar } from '../UpdateBar';
+import { useHomePageBlockList } from '../data/useHomePageBlockList';
 
 function HomePageBlockListGroupedBase() {
-  const { liveUpdates, isBlockListLoading } = useBlockListContext();
+  const { liveUpdates } = useBlockListContext();
   const {
     blockList,
     updateBlockList,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
-  } = useHomePageBlockListGrouped();
-
+  } = useHomePageBlockList();
   return (
     <>
       {!liveUpdates && (
@@ -28,7 +27,7 @@ function HomePageBlockListGroupedBase() {
         />
       )}
       <Flex flexDirection="column" px={6} py={4} gap={4}>
-        <BlockListGrouped blockList={blockList} minimized={true} />
+        <BlockListGrouped blockList={blockList} minimized={true} stxBlocksLimit={3} />
         {!liveUpdates && <ListFooter href={'/blocks'} label={'blocks'} />}
       </Flex>
     </>

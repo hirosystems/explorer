@@ -5,10 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
-import { StacksApiSocketClient, StacksApiWebSocketClient, connectWebSocketClient } from '@stacks/blockchain-api-client';
+import { StacksApiWebSocketClient, connectWebSocketClient } from '@stacks/blockchain-api-client';
 import { ChainID } from '@stacks/transactions';
 
-import { useStacksApiSocketClient } from '../../app/_components/BlockList/Sockets/use-stacks-api-socket-client';
 import { buildCustomNetworkUrl, fetchCustomNetworkId } from '../components/modals/AddNetwork/utils';
 import { DEFAULT_DEVNET_SERVER, IS_BROWSER } from '../constants/constants';
 import {
