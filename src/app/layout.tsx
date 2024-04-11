@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
-import * as React from 'react';
 import { ReactNode } from 'react';
 
 import { meta } from '../common/constants/meta';

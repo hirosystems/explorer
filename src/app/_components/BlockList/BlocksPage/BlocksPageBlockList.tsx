@@ -12,7 +12,7 @@ import { BlocksPageBlockListGroupedSkeleton } from '../Grouped/skeleton';
 import { BlocksPageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
 
 const BlocksPageBlockListGroupedDynamic = dynamic(
-  () => import('./Grouped/BlocksPageBlockListGrouped').then(mod => mod.BlocksPageBlockListGrouped),
+  () => import('./BlocksPageBlockListGrouped').then(mod => mod.BlocksPageBlockListGrouped),
   {
     loading: () => <BlocksPageBlockListGroupedSkeleton />,
     ssr: false,
@@ -20,10 +20,7 @@ const BlocksPageBlockListGroupedDynamic = dynamic(
 );
 
 const BlocksPageBlockListUngroupedDynamic = dynamic(
-  () =>
-    import('./Ungrouped/BlocksPageBlockListUngrouped').then(
-      mod => mod.BlocksPageBlockListUngrouped
-    ),
+  () => import('./BlocksPageBlockListUngrouped').then(mod => mod.BlocksPageBlockListUngrouped),
   {
     loading: () => <BlocksPageBlockListUngroupedSkeleton />,
     ssr: false,

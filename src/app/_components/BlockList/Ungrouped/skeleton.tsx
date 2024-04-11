@@ -1,47 +1,88 @@
 import { Stack } from '@/ui/Stack';
+import { ReactNode } from 'react';
 
-import { Circle } from '../../../../common/components/Circle';
+import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
+import { HStack } from '../../../../ui/HStack';
+import { Icon } from '../../../../ui/Icon';
 import { SkeletonText } from '../../../../ui/SkeletonText';
-import { StxBlockListItemLayout } from './BlockListUngrouped';
-import { BtcBlockListItemLayout } from './BtcBlockListItem';
+import { StxIcon } from '../../../../ui/icons';
+import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
+import { LineAndNode } from '../LineAndNode';
+import { StxBlocksGridLayout } from './BlockListUngrouped';
+import { BtcBlockRowLayout } from './BtcBlockRow';
 
-function StxBlockListItemContentSkeleton({ hasIcon }: { hasIcon: boolean }) {
-  return (
+// layout was copied
+export function BlockListRowSkeleton({
+  icon,
+  minimized,
+}: {
+  icon?: ReactNode;
+  minimized?: boolean;
+}) {
+  return minimized ? (
     <>
-      <Flex alignItems="center">
-        {hasIcon && <Circle height={4.5} width={4.5} ml={-6} mr={2} bg="brand" border="none" />}
+      <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
+        <LineAndNode rowHeight={14} width={6} icon={icon} />
         <SkeletonText noOfLines={1} width={20} />
       </Flex>
-      <SkeletonText noOfLines={1} width={20} />
+
+      <HStack
+        divider={<>&nbsp;∙&nbsp;</>}
+        gap={1}
+        whiteSpace="nowrap"
+        color="textSubdued"
+        gridColumn="3 / 4"
+      >
+        <SkeletonText noOfLines={1} width={10} />
+        <SkeletonText noOfLines={1} width={10} />
+        <SkeletonText noOfLines={1} width={10} />
+      </HStack>
     </>
-  );
-}
-function StxBlockListItemSkeleton({
-  hasIcon,
-  hasBorder,
-}: {
-  hasIcon: boolean;
-  hasBorder: boolean;
-}) {
-  return (
-    <StxBlockListItemLayout hasIcon={hasIcon} hasBorder={hasBorder}>
-      <StxBlockListItemContentSkeleton hasIcon={hasIcon} />
-    </StxBlockListItemLayout>
+  ) : (
+    <>
+      <Flex alignItems="center">
+        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <SkeletonText noOfLines={1} width={20} />
+      </Flex>
+
+      <Flex alignItems="center">
+        <SkeletonText noOfLines={1} width={20} />
+      </Flex>
+
+      <Flex alignItems="center">
+        <SkeletonText noOfLines={1} width={20} />
+      </Flex>
+
+      <Flex alignItems="center">
+        <SkeletonText noOfLines={1} width={20} />
+      </Flex>
+    </>
   );
 }
 
-export function StxBlockListSkeleton({ numBlocks }: { numBlocks: number }) {
+export function StxBlocksGridSkeleton({
+  numBlocks,
+  minimized,
+}: {
+  numBlocks: number;
+  minimized?: boolean;
+}) {
   return (
-    <>
+    <StxBlocksGridLayout minimized={minimized}>
+      {minimized ? null : <BlockListGridHeaderRowSkeleton />}
       {Array.from({ length: numBlocks }).map((_, i) => (
-        <StxBlockListItemSkeleton
-          hasIcon={i === 0}
-          hasBorder={i < numBlocks - 1}
-          key={`stx-block-list-item-skeleton-${i}`}
-        />
+        <>
+          <BlockListRowSkeleton
+            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
+            minimized={minimized}
+          />
+          {i < numBlocks - 1 && (
+            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+          )}
+        </>
       ))}
-    </>
+    </StxBlocksGridLayout>
   );
 }
 
@@ -54,25 +95,34 @@ function BtcBlockListItemContentSkeleton() {
   );
 }
 
-function BtcBlockListItemSkeleton() {
+function BtcBlockListItemSkeleton({ minimized }: { minimized?: boolean }) {
   return (
-    <BtcBlockListItemLayout>
+    <BtcBlockRowLayout mx={minimized ? 'unset' : -12}>
       <BtcBlockListItemContentSkeleton />
-    </BtcBlockListItemLayout>
+    </BtcBlockRowLayout>
   );
 }
 
 export function BlocksPageBlockListUngroupedSkeleton() {
   return (
-    <Stack pl={4} pr={2} gap={0} width={'full'}>
-      <StxBlockListSkeleton numBlocks={10} />
+    <Stack px={6} gap={0} width={'full'}>
+      <StxBlocksGridSkeleton numBlocks={10} />
       <BtcBlockListItemSkeleton />
-      <StxBlockListSkeleton numBlocks={30} />
+      <StxBlocksGridSkeleton numBlocks={30} />
       <BtcBlockListItemSkeleton />
     </Stack>
   );
 }
 
 export function HomePageBlockListUngroupedSkeleton() {
-  return <></>;
+  return (
+    <Stack px={6} gap={0} width={'full'}>
+      <StxBlocksGridSkeleton numBlocks={5} minimized={true} />
+      <BtcBlockListItemSkeleton minimized={true} />
+      <StxBlocksGridSkeleton numBlocks={5} minimized={true} />
+      <BtcBlockListItemSkeleton minimized={true} />
+      <StxBlocksGridSkeleton numBlocks={5} minimized={true} />
+      <BtcBlockListItemSkeleton minimized={true} />
+    </Stack>
+  );
 }

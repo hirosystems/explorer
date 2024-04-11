@@ -11,10 +11,12 @@ import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
+import { useRouter } from 'next/router';
 
 function WrapperWithBg({ children }: { children: ReactNode }) {
   // const router = useRouter();
   // const { pathname } = router;
+  // console.log({ pathname })
   // const defaultBg = useColorModeValue(
   //   `linear-gradient(
   //            29.53deg,

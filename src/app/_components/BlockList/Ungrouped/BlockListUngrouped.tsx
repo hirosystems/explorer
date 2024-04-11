@@ -1,7 +1,5 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
-import { Circle } from '../../../../common/components/Circle';
 import { BlockLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
@@ -13,18 +11,14 @@ import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { StxIcon } from '../../../../ui/icons';
+import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
+import { LineAndNode } from '../LineAndNode';
 import { FADE_DURATION } from '../consts';
-import { BlockListBtcBlock, BlockListStxBlock } from '../types';
-import { BtcBlockListItem } from './BtcBlockListItem';
-
-export interface BlocksByBtcBlock {
-  stxBlocks: BlockListStxBlock[];
-  btcBlock: BlockListBtcBlock;
-}
-
-export type BlockListUngrouped = BlocksByBtcBlock[];
+import { BlockListStxBlock } from '../types';
+import { BlockListData } from '../utils';
+import { BtcBlockRow } from './BtcBlockRow';
 
 export function BlockListUngroupedLayout({ children }: { children: ReactNode }) {
   const { isBlockListLoading } = useBlockListContext();
@@ -43,96 +37,6 @@ export function BlockListUngroupedLayout({ children }: { children: ReactNode }) 
   );
 }
 
-interface StxBlockListItemLayoutProps {
-  children: ReactNode;
-  hasIcon: boolean;
-  hasBorder: boolean;
-}
-
-// TODO: move to common
-export function LineAndNode({
-  rowHeight = 14,
-  width = 6,
-  icon,
-}: {
-  rowHeight: number;
-  width: number;
-  icon?: ReactNode;
-}) {
-  return (
-    <Flex height={rowHeight} width={width} alignItems="center" position="relative">
-      {icon ? (
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          height="calc(100% + 1px)"
-          width="full"
-          position="absolute"
-          bg="surface"
-        >
-          <Circle size={4.5} bg="brand" border="none">
-            {icon}
-          </Circle>
-          <Box
-            position="absolute" // the little bit of line needed to connect the icon to the other lines with nodes
-            bottom={0}
-            height="20%"
-            width="1px"
-            bg="borderPrimary"
-            border="1px solid var(---stacks-colors-borderPrimary)"
-          />
-        </Flex>
-      ) : (
-        <Flex
-          justifyContent="center"
-          height="calc(100% + 1px)"
-          width="full"
-          position="absolute"
-          top={0}
-          bottom={0}
-          bg="surface"
-        >
-          <Box
-            height="full" // the line
-            width="1px"
-            bg="borderPrimary"
-            border="1px solid var(---stacks-colors-borderPrimary)"
-          />
-          <Box
-            position="absolute" // the node
-            width={2}
-            height={2}
-            borderRadius="50%"
-            bg="borderPrimary"
-            transform="translateY(-50%)"
-            top="50%"
-          />
-        </Flex>
-      )}
-    </Flex>
-  );
-}
-
-// TODO: copied from BlockListGrouped
-export function ListHeader({ children, ...textProps }: { children: ReactNode } & TextProps) {
-  const color = useColorModeValue('slate.700', 'slate.250');
-  return (
-    <Text
-      py={2}
-      px={2.5}
-      color={color}
-      bg={'hoverBackground'}
-      fontSize={'xs'}
-      rounded={'md'}
-      whiteSpace={'nowrap'}
-      {...textProps}
-    >
-      {children}
-    </Text>
-  );
-}
-
-// TODO: copied from BlockListGrouped
 const GroupHeader = () => {
   return (
     <>
@@ -156,16 +60,24 @@ const GroupHeader = () => {
           },
         }}
       >
-        <ListHeader width={'fit-content'}>Block height</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Block height
+        </ListHeader>{' '}
       </Box>
       <Box>
-        <ListHeader width={'fit-content'}>Block hash</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Block hash
+        </ListHeader>
       </Box>
       <Box>
-        <ListHeader width={'fit-content'}>Transactions</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Transactions
+        </ListHeader>
       </Box>
       <Box>
-        <ListHeader width={'fit-content'}>Timestamp</ListHeader>
+        <ListHeader width="fit-content" bg="hoverBackground">
+          Timestamp
+        </ListHeader>
       </Box>
     </>
   );
@@ -249,12 +161,12 @@ function StxBlockRow({
   );
 }
 
-function StxBlocksGrid({
-  stxBlocks,
+export function StxBlocksGridLayout({
+  children,
   minimized,
 }: {
-  stxBlocks: BlockListStxBlock[];
-  minimized: boolean;
+  children: ReactNode;
+  minimized?: boolean;
 }) {
   return (
     <Grid
@@ -264,6 +176,20 @@ function StxBlocksGrid({
       pt={minimized ? 0 : 6}
       pb={minimized ? 0 : 3}
     >
+      {children}
+    </Grid>
+  );
+}
+
+function StxBlocksGrid({
+  stxBlocks,
+  minimized,
+}: {
+  stxBlocks: BlockListStxBlock[];
+  minimized: boolean;
+}) {
+  return (
+    <StxBlocksGridLayout>
       {minimized ? null : <GroupHeader />}
       {stxBlocks.map((stxBlock, i) => (
         <>
@@ -281,7 +207,7 @@ function StxBlocksGrid({
           )}
         </>
       ))}
-    </Grid>
+    </StxBlocksGridLayout>
   );
 }
 
@@ -291,7 +217,7 @@ function StxBlocksGroupedByBtcBlock({
   stxBlocksLimit,
   minimized = false,
 }: {
-  blockList: BlocksByBtcBlock;
+  blockList: BlockListData;
   stxBlocksLimit?: number;
   minimized?: boolean;
 }) {
@@ -300,6 +226,9 @@ function StxBlocksGroupedByBtcBlock({
   const stxBlocksShortList = stxBlocksLimit
     ? blockList.stxBlocks.slice(0, stxBlocksLimit)
     : blockList.stxBlocks;
+  const numStxBlocks = btcBlock.txsCount ?? stxBlocks.length;
+  const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || stxBlocks.length);
+  console.log({ numStxBlocks, numStxBlocksNotDisplayed, stxBlocksLimit, btcBlock, stxBlocks });
 
   return (
     <>
@@ -307,7 +236,8 @@ function StxBlocksGroupedByBtcBlock({
       {stxBlocksLimit && stxBlocks.length > stxBlocksLimit && (
         <BlockCount count={stxBlocks.length - stxBlocksLimit} />
       )}
-      <BtcBlockListItem
+      {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
+      <BtcBlockRow
         key={btcBlock.hash}
         hash={btcBlock.hash}
         height={btcBlock.height}
@@ -322,73 +252,20 @@ export function BlockListUngrouped({
   stxBlocksLimit,
   minimized = false,
 }: {
-  blockList: BlockListUngrouped;
+  blockList: BlockListData[];
   stxBlocksLimit?: number;
   minimized?: boolean;
 }) {
   return (
     <BlockListUngroupedLayout>
-      {blockList.map(blocksGroupedByBtcBlock => (
+      {blockList.map(bl => (
         <StxBlocksGroupedByBtcBlock
-          key={blocksGroupedByBtcBlock.btcBlock.hash}
-          blockList={blocksGroupedByBtcBlock}
+          key={bl.btcBlock.hash}
+          blockList={bl}
           stxBlocksLimit={stxBlocksLimit}
           minimized={minimized}
         />
       ))}
     </BlockListUngroupedLayout>
-  );
-}
-
-// TODO: redo this component
-export function StxBlockListItemLayout({
-  children,
-  hasIcon,
-  hasBorder,
-}: StxBlockListItemLayoutProps) {
-  return (
-    <Box
-      ml={2.5}
-      pl={3.5}
-      borderLeft={hasIcon ? undefined : '1px'} // the line through the node
-      borderColor="borderPrimary"
-      position="relative"
-      height={14}
-    >
-      <Flex
-        height="full"
-        justifyContent="space-between"
-        alignItems="center"
-        flexGrow={1}
-        borderBottom={hasBorder ? '1px solid var(--stacks-colors-borderSecondary)' : 'none'}
-        _after={
-          hasIcon
-            ? {
-                // adds a little line to the left of the first block with an icon
-                content: '""',
-                position: 'absolute',
-                left: '0px',
-                bottom: '0',
-                height: '10px',
-                width: '1px',
-                backgroundColor: 'borderPrimary',
-              }
-            : {
-                // node
-                content: '""',
-                position: 'absolute',
-                left: '-3px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '6px',
-                height: '6px',
-                backgroundColor: 'borderPrimary',
-                borderRadius: '50%',
-              }
-        }
-      >
-        {children}
-      </Flex>
-    </Box>
   );
 }

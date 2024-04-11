@@ -6,17 +6,17 @@ import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
+import { Flex, FlexProps } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { BitcoinIcon } from '../../../../ui/icons';
 
-interface BtcBlockListItemProps {
+interface BtcBlockRowProps {
   height: number | string;
   hash: string;
   timestamp?: number;
 }
-export function BtcBlockListItemLayout({ children }: { children: ReactNode }) {
+export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children: ReactNode }) {
   const textColor = useColorModeValue('slate.700', 'slate.500'); // TODO: not in theme. remove
   return (
     <Flex
@@ -27,13 +27,14 @@ export function BtcBlockListItemLayout({ children }: { children: ReactNode }) {
       height={14}
       backgroundColor="surfaceHighlight"
       color={textColor}
+      {...rest}
     >
       {children}
     </Flex>
   );
 }
 
-export function BtcBlockListItemContent({ timestamp, height, hash }: BtcBlockListItemProps) {
+export function BtcBlockRowContent({ timestamp, height, hash }: BtcBlockRowProps) {
   const iconColor = useColorModeValue('slate.600', 'slate.800'); // TODO: not in theme. remove
   return (
     <>
@@ -59,10 +60,10 @@ export function BtcBlockListItemContent({ timestamp, height, hash }: BtcBlockLis
   );
 }
 
-export function BtcBlockListItem({ timestamp, height, hash }: BtcBlockListItemProps) {
+export function BtcBlockRow({ timestamp, height, hash }: BtcBlockRowProps) {
   return (
-    <BtcBlockListItemLayout>
-      <BtcBlockListItemContent timestamp={timestamp} height={height} hash={hash} />
-    </BtcBlockListItemLayout>
+    <BtcBlockRowLayout>
+      <BtcBlockRowContent timestamp={timestamp} height={height} hash={hash} />
+    </BtcBlockRowLayout>
   );
 }
