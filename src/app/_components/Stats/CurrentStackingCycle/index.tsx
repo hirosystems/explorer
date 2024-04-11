@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { PiInfo } from 'react-icons/pi';
 
-import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
@@ -12,6 +11,7 @@ import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StackingCycle } from '../StackingCycle';
+import { StatSection } from '../StatSection';
 import { useSuspenseCurrentStackingCycle } from './useCurrentStackingCycle';
 
 function CurrentStackingCycleBase(props: GridProps) {
@@ -50,9 +50,14 @@ function CurrentStackingCycleBase(props: GridProps) {
 export function CurrentStackingCycle(props: GridProps) {
   return (
     <ExplorerErrorBoundary
-      Wrapper={Box}
-      wrapperProps={{ borderRightWidth: ['0px', '0px', '1px', '1px'] }}
-      tryAgainButton
+      renderContent={() => (
+        <StatSection
+          title={'Current Stacking Cycle'}
+          bodyMainText={'-'}
+          bodySecondaryText={<Text ml={1}>STX stacked</Text>}
+          caption={'N/A'}
+        />
+      )}
     >
       <CurrentStackingCycleBase {...props} />
     </ExplorerErrorBoundary>
