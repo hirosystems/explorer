@@ -11,6 +11,7 @@ import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StackingCycle } from '../StackingCycle';
+import { StatSection } from '../StatSection';
 import { useSuspenseNextStackingCycle } from './useNextStackingCycle';
 
 function NextStackingCycleBase(props: GridProps) {
@@ -73,7 +74,16 @@ function NextStackingCycleBase(props: GridProps) {
 
 export function NextStackingCycle(props: GridProps) {
   return (
-    <ExplorerErrorBoundary tryAgainButton>
+    <ExplorerErrorBoundary
+      renderContent={() => (
+        <StatSection
+          title={'Next Stacking Cycle'}
+          bodyMainText={'-'}
+          bodySecondaryText={<Text ml={1}>STX stacked</Text>}
+          caption={'N/A'}
+        />
+      )}
+    >
       <NextStackingCycleBase {...props} />
     </ExplorerErrorBoundary>
   );
