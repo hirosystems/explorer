@@ -25,8 +25,6 @@ export function ControlsLayout({
     <Flex
       borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
       py={4}
-      marginX={-6}
-      px={6}
       direction={horizontal ? ['column', 'row'] : 'column'}
       {...rest}
     >

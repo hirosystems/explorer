@@ -17,7 +17,7 @@ import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
-import { FADE_DURATION } from '../consts';
+import { FADE_DURATION, mobileBorderCss } from '../consts';
 import { BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
 
@@ -87,19 +87,7 @@ const GroupHeader = () => {
         zIndex={'docked'} // TODO: what is this?
         bg={'surface'}
         pr={4}
-        sx={{
-          '.has-horizontal-scroll &:before': {
-            // Adds a border to the left of the first column
-            content: '""',
-            position: 'absolute',
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: '2px',
-            height: 'var(--stacks-sizes-14)',
-            backgroundColor: 'borderPrimary',
-          },
-        }}
+        sx={mobileBorderCss}
       >
         <ListHeader width="fit-content" bg="hoverBackground">
           Block height
@@ -214,8 +202,8 @@ export function StxBlocksGridLayout({
       templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
       columnGap={4}
-      pt={minimized ? 0 : 6}
-      pb={minimized ? 0 : 3}
+      // pt={minimized ? 0 : 6}
+      // pb={minimized ? 0 : 3}
     >
       {children}
     </Grid>
@@ -289,7 +277,8 @@ export function BlockListUngroupedLayout({ children }: { children: ReactNode }) 
 
   return (
     <Stack
-      gap={0}
+      mt={6}
+      gap={5}
       width={'full'}
       style={{
         transition: `opacity ${FADE_DURATION / 1000}s`,

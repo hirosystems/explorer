@@ -42,11 +42,10 @@ function HomePageBlockListBase() {
   }, [liveUpdates, setLiveUpdates]);
 
   return (
-    <Section py={6} px={0}>
+    <Section py={5} px={6}>
       <Stack
-        px={5}
         gap={3}
-        pb={6}
+        mb={6}
         borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
       >
         <Text fontWeight="medium">Recent Blocks</Text>

@@ -1,17 +1,16 @@
 import { Stack } from '@/ui/Stack';
 import { ReactNode } from 'react';
+import { PiCircleFill } from 'react-icons/pi';
 
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { SkeletonText } from '../../../../ui/SkeletonText';
-import { StxIcon } from '../../../../ui/icons';
 import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
 import { LineAndNode } from '../LineAndNode';
 import { BtcBlockRowLayout, StxBlocksGridLayout } from './BlockListUngrouped';
 
-// layout was copied
 export function BlockListRowSkeleton({
   icon,
   minimized,
@@ -73,7 +72,7 @@ export function StxBlocksGridSkeleton({
       {Array.from({ length: numBlocks }).map((_, i) => (
         <>
           <BlockListRowSkeleton
-            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
+            icon={i === 0 ? <Icon as={PiCircleFill} size={2.5} fill="borderPrimary" /> : undefined}
             minimized={minimized}
             key={`block-list-row-skeleton-${i}`}
           />
