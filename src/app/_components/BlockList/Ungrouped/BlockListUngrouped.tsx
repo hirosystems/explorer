@@ -235,7 +235,7 @@ function StxBlocksGrid({
       {stxBlocks.map((stxBlock, i) => (
         <>
           <StxBlockRow
-            key={stxBlock.hash}
+            key={`stx-block-grid-row-${i}-${stxBlock.hash}`}
             height={stxBlock.height}
             hash={stxBlock.hash}
             timestamp={stxBlock.timestamp}
@@ -272,7 +272,7 @@ function StxBlocksGroupedByBtcBlock({
 
   return (
     <>
-      <StxBlocksGrid key={btcBlock.hash} stxBlocks={stxBlocksShortList} minimized={minimized} />
+      <StxBlocksGrid stxBlocks={stxBlocksShortList} minimized={minimized} />
       {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
       <BtcBlockRow
         key={btcBlock.hash}

@@ -12,25 +12,22 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     useHomePageInitialBlockList();
 
   // initially the block list is the initial blocklist
-  const [blockList, setBlockList] = useState<BlockListData[]>(initialBlockList);
-
+  const blockList = useRef<BlockListData[]>(initialBlockList);
   // when the initial block list changes, reset the block list to the initial blocklist
   useEffect(() => {
-    setBlockList(initialBlockList);
+    blockList.current = initialBlockList;
   }, [initialBlockList]);
 
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback(
     (blockListUpdates: BlockListData[]) => {
-      setBlockList(prevBlockList => {
-        const newBlockList = mergeBlockLists(blockListUpdates, prevBlockList).slice(
-          0,
-          btcBlockLimit
-        );
-        return newBlockList;
-      });
+      const newBlockList = mergeBlockLists(blockListUpdates, blockList.current).slice(
+        0,
+        btcBlockLimit
+      );
+      blockList.current = newBlockList;
     },
-    [setBlockList, btcBlockLimit]
+    [btcBlockLimit]
   );
 
   const {
@@ -106,7 +103,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
   ]);
 
   return {
-    blockList,
+    blockList: blockList.current,
     updateBlockList: updateBlockListWithQuery,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
   };

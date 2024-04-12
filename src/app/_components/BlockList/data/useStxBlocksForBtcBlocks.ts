@@ -11,9 +11,10 @@ export function useStxBlocksForBtcBlocks(btcBlocks: BurnBlock[]) {
   });
 
   const stxBlocksResults = useQueries({ queries: stxBlockQueries });
-  console.log({ stxBlocksResults });
+
   const stxBlocks = stxBlocksResults.flatMap(
     result => result.data?.results || (result.data as any)?.pages[0].results || []
   );
+
   return stxBlocks;
 }
