@@ -7,7 +7,7 @@ import { Text } from '../../ui/Text';
 import { CopyButton } from './CopyButton';
 
 export interface KeyValueVerticalProps extends FlexProps {
-  label: string;
+  label: ReactNode;
   value: ReactNode;
   copyValue?: string;
   className?: string;
@@ -39,11 +39,11 @@ export const KeyValueVertical: FC<KeyValueVerticalProps> = ({
 }) => {
   return (
     <StyledFlexContainer p={6} gap={2} flexDirection="column" {...rest} className={className}>
-      <Text fontSize='sm' color='textSubdued'>
+      <Text fontSize="sm" color="textSubdued">
         {label}
       </Text>
       <Flex width="100%" justifyContent="space-between" alignItems="center">
-        <Text fontSize='xs'>{value}</Text>
+        <Text fontSize="xs">{value}</Text>
         {copyValue && (
           <Box width={8}>
             <CopyButton
