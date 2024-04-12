@@ -7,7 +7,7 @@ import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { ExplorerLink } from './ExplorerLinks';
 
-interface SectionFooterButtonPropsBase {
+interface SectionFooterButtonPropsBase extends ButtonProps {
   isLoading?: boolean;
   hasNextPage?: boolean;
   fetchNextPage?: () => void;
@@ -21,11 +21,12 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
   href,
   label,
   hasNextPage,
+  ...rest
 }) => {
   if (href) {
     return (
       <ExplorerLink href={href} mt={'auto'} width={'full'}>
-        <Button variant={'secondary'} width={'full'}>
+        <Button variant={'secondary'} width={'full'} {...rest}>
           View all recent {label} <Icon as={HiMiniArrowUpRight} width={'16px'} height={'16px'} />
         </Button>
       </ExplorerLink>
@@ -33,7 +34,7 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
   }
   if (fetchNextPage && hasNextPage) {
     return (
-      <Button variant={'secondary'} onClick={() => fetchNextPage()} width={'full'}>
+      <Button variant={'secondary'} onClick={() => fetchNextPage()} width={'full'} {...rest}>
         {isLoading ? 'Loading...' : `Load more ${label}`}
       </Button>
     );

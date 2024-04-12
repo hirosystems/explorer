@@ -45,11 +45,12 @@ export function useSuspenseBurnBlocks(
     queryKey: queryKeyExtension
       ? [BURN_BLOCKS_QUERY_KEY, queryKeyExtension]
       : [BURN_BLOCKS_QUERY_KEY],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.burnBlocksApi.getBurnBlocks({
+    queryFn: ({ pageParam }: { pageParam: number }) => {
+      return api.burnBlocksApi.getBurnBlocks({
         limit,
         offset: pageParam,
-      }),
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,

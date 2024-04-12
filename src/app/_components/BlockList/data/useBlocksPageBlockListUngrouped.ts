@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
-import { useHomePageInitialBlockList } from './useHomePageInitialBlockList';
+import { useBlocksPageBlockListUngroupedInitialBlockList } from './useBlocksPageBlockListUngroupedInitialBlockList';
 
 export function useBlocksPageBlockListUngrouped() {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
@@ -17,7 +17,7 @@ export function useBlocksPageBlockListUngrouped() {
     fetchNextPage,
     refetchInitialBlockList,
     hasNextPage,
-  } = useHomePageInitialBlockList();
+  } = useBlocksPageBlockListUngroupedInitialBlockList();
 
   // initially the block list is the initial blocklist
   const [blockList, setBlockList] = useState<BlockListData[]>(initialBlockList);
@@ -38,9 +38,9 @@ export function useBlocksPageBlockListUngrouped() {
   const prevBlockListUpdateCounterRef = useRef(blockListUpdateCounter);
   useEffect(() => {
     if (prevBlockListUpdateCounterRef.current !== blockListUpdateCounter) {
-      waitForFadeAnimation(() => {
-        setBlockListLoading(false);
-      });
+      // waitForFadeAnimation(() => {
+      setBlockListLoading(false);
+      // });
     }
   }, [blockListUpdateCounter, clearLatestStxBlocksFromWebSocket, setBlockListLoading]);
 
@@ -61,7 +61,8 @@ export function useBlocksPageBlockListUngrouped() {
       const websocketBlockList = generateBlockList(latestStxBlocksFromWebSocket);
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
-      setBlockListUpdateCounter(prev => prev + 1);
+      setBlockListLoading(false);
+      // setBlockListUpdateCounter(prev => prev + 1);
     });
   }, [
     latestStxBlocksFromWebSocket,
