@@ -1,8 +1,13 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { useSuspenseBlocksByBurnBlock } from '@/common/queries/useBlocksByBurnBlock';
+import { ReactNode, Suspense } from 'react';
+
+import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { Card } from '../../../../common/components/Card';
+import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
@@ -11,8 +16,14 @@ import { BitcoinIcon } from '../../../../ui/icons/BitcoinIcon';
 import { BlockPageHeadersSkeleton } from '../Grouped/skeleton';
 
 function LastBlockCard() {
-  //   const lastBlock = useSuspenseBurnBlocks(1);
-
+  const response = useSuspenseBurnBlocks(1);
+  const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  const btcBlock = burnBlocks[0];
+  const stxBlocks = useSuspenseInfiniteQueryResult(
+    useSuspenseBlocksByBurnBlock(btcBlock.burn_block_height, 1),
+    1
+  );
+  const lastStxBlock = stxBlocks[0];
   return (
     <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
@@ -20,7 +31,7 @@ function LastBlockCard() {
       </Text>
       <Flex alignItems="center" gap={2}>
         <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
-          #124009
+          #{lastStxBlock.height}
         </Text>
         <Flex alignItems="center" gap={1}>
           <Icon as={BitcoinIcon} size={4.5} />
@@ -32,12 +43,12 @@ function LastBlockCard() {
             mr={1}
             color="textSubdued"
           >
-            #889300
+            #{btcBlock.burn_block_height}
           </Text>
         </Flex>
       </Flex>
       <Text fontSize="xs" fontWeight="medium" color="textSubdued">
-        435 transactions
+        {btcBlock.stacks_blocks.length} transactions
       </Text>
     </Stack>
   );
