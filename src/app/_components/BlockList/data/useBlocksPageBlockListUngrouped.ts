@@ -98,7 +98,7 @@ export function useBlocksPageBlockListUngrouped() {
   return {
     blockList: blockList.current,
     latestStxBlocksCountFromWebSocket,
-    updateBlockList: updateBlockListWithQuery,
+    updateBlockList: showLatestStxBlocksFromWebSocket,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
     isFetchingNextPage,
     fetchNextPage,

@@ -1,12 +1,11 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
-import { Box } from '../../..//ui/Box';
+import { BlockPageSkeleton } from './skeleton';
 
 const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Box>Loading</Box>,
+  loading: () => <BlockPageSkeleton />,
   ssr: false,
 });
 

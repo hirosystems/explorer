@@ -1,14 +1,14 @@
-import { Icon } from '@/ui/Icon';
-import { StxIcon } from '@/ui/icons';
 import { useColorModeValue } from '@chakra-ui/react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
+import { StxIcon } from '../../../../ui/icons';
 import { BlocksPageHeaderLayout } from '../BlocksPage/BlocksPageHeaders';
 import { ControlsLayout } from '../Controls';
 import { BlockListRowSkeleton } from '../Ungrouped/skeleton';
@@ -23,7 +23,7 @@ function BitcoinHeaderSkeleton() {
   );
 }
 
-function FooterSkeleton() {
+export function FooterSkeleton() {
   return (
     <Box pt={4} borderTop="1px solid var(--stacks-colors-borderPrimary)">
       <SkeletonText noOfLines={1} width={60} />

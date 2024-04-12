@@ -1,7 +1,7 @@
 'use client';
 
 import { BurnBlockGroupGrid } from '@/app/_components/BlockList/Grouped/BlockListGrouped';
-import { UIBlockType, UISingleBlock } from '@/app/_components/BlockList/types';
+import { createBlockListStxBlock } from '@/app/_components/BlockList/utils';
 import { NavBlock, NavDirection } from '@/app/btcblock/[hash]/NavBlock';
 import { ListFooter } from '@/common/components/ListFooter';
 import { useSuspenseInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
@@ -10,6 +10,7 @@ import { useSuspenseBurnBlock } from '@/common/queries/useBurnBlock';
 
 import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
+import { ScrollableBox } from '../../../app/_components/BlockList/ScrollableDiv';
 import { Section } from '../../../common/components/Section';
 import '../../../common/components/loaders/skeleton-text';
 import { Box } from '../../../ui/Box';
@@ -28,24 +29,7 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
   const stxBlocksResponse = useSuspenseBlocksByBurnBlock(btcBlock.burn_block_height, 15);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = stxBlocksResponse;
   const stxBlocks = useSuspenseInfiniteQueryResult<NakamotoBlock>(stxBlocksResponse);
-
-  const burnBlockArg = {
-    type: UIBlockType.BurnBlock,
-    height: btcBlock.burn_block_height,
-    hash: btcBlock.burn_block_hash,
-    timestamp: btcBlock.burn_block_time,
-    txsCount: btcBlock.stacks_blocks.length,
-  } as UISingleBlock;
-  const stxBlocksArg = stxBlocks.map(
-    block =>
-      ({
-        type: UIBlockType.StxBlock,
-        height: block.height,
-        hash: block.hash,
-        timestamp: block?.block_time, // block?.block_time TODO: this is the right timestamp to use, but it seems to be inaccurate
-        txsCount: block.tx_count,
-      }) as UISingleBlock
-  );
+  const blockListStxBlocks = stxBlocks.map(block => createBlockListStxBlock(block));
 
   return (
     <>
@@ -63,9 +47,9 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
       <TowColLayout>
         <Section title={`${btcBlock.stacks_blocks.length} Stacks Blocks`}>
           <Box py={2}>
-            <Box pt={3}>
-              <BurnBlockGroupGrid burnBlock={burnBlockArg} stxBlocks={stxBlocksArg} />
-            </Box>
+            <ScrollableBox pt={3}>
+              <BurnBlockGroupGrid stxBlocks={blockListStxBlocks} minimized={false} />
+            </ScrollableBox>
             <ListFooter
               isLoading={isFetchingNextPage}
               hasNextPage={hasNextPage}

@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react';
 import { PiArrowElbowLeftDown } from 'react-icons/pi';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
@@ -17,6 +17,7 @@ import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
+import { ScrollableBox } from '../ScrollableDiv';
 import { FADE_DURATION } from '../consts';
 import { BlockListBtcBlock, BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
@@ -49,40 +50,6 @@ const GroupHeader = () => {
     </>
   );
 };
-
-// TODO: move to common components
-// adds horizontal scrolling to its children if they overflow the container's width, and adds a class to the container when it has a horizontal scrollbar
-function ScrollableDiv({ children }: { children: ReactNode }) {
-  const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
-  const divRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const checkForScroll = () => {
-      if (divRef.current) {
-        const { scrollWidth, clientWidth } = divRef.current;
-        if (scrollWidth > clientWidth) {
-          setHasHorizontalScroll(true);
-        } else {
-          setHasHorizontalScroll(false);
-        }
-      }
-    };
-    checkForScroll();
-    window.addEventListener('resize', checkForScroll);
-    return () => window.removeEventListener('resize', checkForScroll);
-  }, []);
-
-  return (
-    <Box
-      ref={divRef}
-      overflowX={'auto'}
-      overflowY={'hidden'}
-      className={hasHorizontalScroll ? 'has-horizontal-scroll' : ''}
-    >
-      {children}
-    </Box>
-  );
-}
 
 const mobileBorderCss = {
   '.has-horizontal-scroll &:before': {
@@ -222,7 +189,12 @@ export function BurnBlockGroupGrid({
             minimized={minimized}
           />
           {i < stxBlocks.length - 1 && (
-            <Box key={`stx-block-row-border-bottom-${i}`} gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+            <Box
+              key={`stx-block-row-border-bottom-${i}`}
+              gridColumn={'1/5'}
+              borderBottom={'1px'}
+              borderColor="borderSecondary"
+            ></Box>
           )}
         </>
       ))}
@@ -310,9 +282,9 @@ export function BurnBlockGroup({
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING} key={btcBlock.hash}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} />
-      <ScrollableDiv>
+      <ScrollableBox>
         <BurnBlockGroupGrid stxBlocks={stxBlocksShortList} minimized={minimized} />
-      </ScrollableDiv>
+      </ScrollableBox>
       {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
       <Footer stxBlocks={stxBlocks} txSum={txSum} />
     </Box>
