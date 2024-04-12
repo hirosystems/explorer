@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
@@ -36,25 +36,13 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket2(initialStxBlocksHashes);
 
-  // This is used to trigger a fade out effect when the block list is updated.
-  // When the counter is updated, we wait for the fade out effect to finish and then show the fade in effect
-  const [blockListUpdateCounter, setBlockListUpdateCounter] = useState(0);
-  const prevBlockListUpdateCounterRef = useRef(blockListUpdateCounter);
-  useEffect(() => {
-    if (prevBlockListUpdateCounterRef.current !== blockListUpdateCounter) {
-      waitForFadeAnimation(() => {
-        setBlockListLoading(false);
-      });
-    }
-  }, [blockListUpdateCounter, clearLatestStxBlocksFromWebSocket, setBlockListLoading]);
-
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
     waitForFadeAnimation(() => {
       const websocketBlockList = generateBlockList(latestStxBlocksFromWebSocket);
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
-      setBlockListUpdateCounter(prev => prev + 1);
+      setBlockListLoading(false);
     });
   }, [
     latestStxBlocksFromWebSocket,
@@ -69,7 +57,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
       waitForFadeAnimation(async () => {
         await refetchInitialBlockList(() => {
           clearLatestStxBlocksFromWebSocket();
-          setBlockListUpdateCounter(prev => prev + 1);
+          setBlockListLoading(false);
         });
       });
     },
