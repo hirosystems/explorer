@@ -1,3 +1,10 @@
+# [1.163.0](https://github.com/hirosystems/explorer/compare/v1.162.0...v1.163.0) (2024-04-12)
+
+
+### Features
+
+* home stats error ui ([6dddb58](https://github.com/hirosystems/explorer/commit/6dddb58483535c63263ae7ad6aa8f83b348a7f90))
+
 # [1.162.0](https://github.com/hirosystems/explorer/compare/v1.161.0...v1.162.0) (2024-04-09)
 
 
