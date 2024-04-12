@@ -42,6 +42,7 @@ const Home: NextPage = () => {
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
         {activeNetworkKey.indexOf('naka') !== -1 || activeNetworkKey.indexOf('testnet') !== -1 ? (
           <HomePageBlockListDynamic />
+          // <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         ) : (
           <BlocksListDynamic limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}

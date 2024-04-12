@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
@@ -9,23 +8,24 @@ import { useBlockListContext } from '../BlockListContext';
 import { BlockListProvider } from '../BlockListProvider';
 import { Controls } from '../Controls';
 import { BlocksPageBlockListGroupedSkeleton } from '../Grouped/skeleton';
-import { BlocksPageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
+import { BlocksPageBlockListGrouped } from './BlocksPageBlockListGrouped';
+import { BlocksPageBlockListUngrouped } from './BlocksPageBlockListUngrouped';
 
-const BlocksPageBlockListGroupedDynamic = dynamic(
-  () => import('./BlocksPageBlockListGrouped').then(mod => mod.BlocksPageBlockListGrouped),
-  {
-    loading: () => <BlocksPageBlockListGroupedSkeleton />,
-    ssr: false,
-  }
-);
+// const BlocksPageBlockListGroupedDynamic = dynamic(
+//   () => import('./BlocksPageBlockListGrouped').then(mod => mod.BlocksPageBlockListGrouped),
+//   {
+//     loading: () => <BlocksPageBlockListGroupedSkeleton />,
+//     ssr: false,
+//   }
+// );
 
-const BlocksPageBlockListUngroupedDynamic = dynamic(
-  () => import('./BlocksPageBlockListUngrouped').then(mod => mod.BlocksPageBlockListUngrouped),
-  {
-    loading: () => <BlocksPageBlockListUngroupedSkeleton />,
-    ssr: false,
-  }
-);
+// const BlocksPageBlockListUngroupedDynamic = dynamic(
+//   () => import('./BlocksPageBlockListUngrouped').then(mod => mod.BlocksPageBlockListUngrouped),
+//   {
+//     loading: () => <BlocksPageBlockListUngroupedSkeleton />,
+//     ssr: false,
+//   }
+// );
 
 function BlocksPageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
@@ -55,9 +55,11 @@ function BlocksPageBlockListBase() {
         horizontal={true}
       />
       {groupedByBtc ? (
-        <BlocksPageBlockListGroupedDynamic />
+        // <BlocksPageBlockListGroupedDynamic />
+        <BlocksPageBlockListGrouped />
       ) : (
-        <BlocksPageBlockListUngroupedDynamic />
+        // <BlocksPageBlockListUngroupedDynamic />
+        <BlocksPageBlockListUngrouped />
       )}
     </Section>
   );

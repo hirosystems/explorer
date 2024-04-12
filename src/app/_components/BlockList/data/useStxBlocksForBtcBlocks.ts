@@ -1,25 +1,19 @@
 import { useGetBlocksByBurnBlockQuery } from '@/common/queries/useBlocksByBurnBlock';
 import { useQueries } from '@tanstack/react-query';
 
-export function useStxBlocksForBtcBlocks(
-  btcBlocks: BurnBlock[],
-  numStxBlocksperBtcBlock: number,
-  btcBlocksRequiringStxBlocks?: boolean[]
-) {
+import { BurnBlock } from '@stacks/blockchain-api-client';
+
+export function useStxBlocksForBtcBlocks(btcBlocks: BurnBlock[]) {
   const getQuery = useGetBlocksByBurnBlockQuery();
 
-  const stxBlockQueries = btcBlocks.map((btcBlock, i) => {
-    const isEnabled = !!btcBlocksRequiringStxBlocks && btcBlocksRequiringStxBlocks[i];
-
-    return isEnabled
-      ? getQuery(btcBlock.burn_block_height, numStxBlocksperBtcBlock)
-      : {
-          queryKey: ['stxBlocks', btcBlock.burn_block_height, 'disabled'],
-          queryFn: () => Promise.resolve(null),
-          enabled: false,
-        };
+  const stxBlockQueries = btcBlocks.map(btcBlock => {
+    return getQuery(btcBlock.burn_block_height);
   });
 
   const stxBlocksResults = useQueries({ queries: stxBlockQueries });
-  return stxBlocksResults.map(result => result.data ?? null);
+  console.log({ stxBlocksResults });
+  const stxBlocks = stxBlocksResults.flatMap(
+    result => result.data?.results || (result.data as any)?.pages[0].results || []
+  );
+  return stxBlocks;
 }

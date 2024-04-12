@@ -20,15 +20,16 @@ const MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT = 30;
 export function useGetBlocksByBurnBlockQuery() {
   const api = useApi();
 
-  // Return a function that constructs the query structure
-  return (heightOrHash: string | number, numStxBlocksperBtcBlock: number) => ({
-    queryKey: ['stxBlocks', heightOrHash],
-    queryFn: () => api.blocksApi.getBlocksByBurnBlock({
-      heightOrHash,
-      limit: numStxBlocksperBtcBlock,
-    }),
+  return (heightOrHash: string | number, numStxBlocksperBtcBlock?: number) => ({
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
+    queryFn: () =>
+      api.blocksApi.getBlocksByBurnBlock({
+        heightOrHash,
+        limit: numStxBlocksperBtcBlock || MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
+      }),
   });
 }
+
 export function useBlocksByBurnBlock(
   heightOrHash: string | number,
   limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,

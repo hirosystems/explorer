@@ -1,16 +1,18 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode } from 'react';
+import { BsArrowReturnLeft } from 'react-icons/bs';
 
-import { BlockLink } from '../../../../common/components/ExplorerLinks';
+import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
+import { Flex, FlexProps } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
-import { StxIcon } from '../../../../ui/icons';
+import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
 import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
@@ -18,22 +20,61 @@ import { LineAndNode } from '../LineAndNode';
 import { FADE_DURATION } from '../consts';
 import { BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
-import { BtcBlockRow } from './BtcBlockRow';
 
-export function BlockListUngroupedLayout({ children }: { children: ReactNode }) {
-  const { isBlockListLoading } = useBlockListContext();
-
+interface BtcBlockRowProps {
+  height: number | string;
+  hash: string;
+  timestamp?: number;
+}
+export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children: ReactNode }) {
+  const textColor = useColorModeValue('slate.700', 'slate.500'); // TODO: not in theme. remove
   return (
-    <Stack
-      gap={0}
-      width={'full'}
-      style={{
-        transition: `opacity ${FADE_DURATION / 1000}s`,
-        opacity: isBlockListLoading ? 0 : 1,
-      }}
+    <Flex
+      justifyContent="space-between"
+      alignItems="center"
+      px={6}
+      mx={-6}
+      height={14}
+      backgroundColor="surfaceHighlight"
+      color={textColor}
+      {...rest}
     >
       {children}
-    </Stack>
+    </Flex>
+  );
+}
+
+export function BtcBlockRowContent({ timestamp, height, hash }: BtcBlockRowProps) {
+  const iconColor = useColorModeValue('slate.600', 'slate.800'); // TODO: not in theme. remove
+  return (
+    <>
+      <HStack gap={1.5}>
+        <Icon
+          as={BsArrowReturnLeft}
+          transform={'rotate(90deg)'}
+          size={2.5}
+          color={iconColor}
+          position={'relative'}
+          bottom={'1px'}
+        />
+        <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
+        <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${hash}`}>
+          #{height}
+        </ExplorerLink>
+      </HStack>
+      <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+        <Box>{truncateMiddle(hash, 3)}</Box>
+        {timestamp && <Timestamp ts={timestamp} />}
+      </HStack>
+    </>
+  );
+}
+
+export function BtcBlockRow({ timestamp, height, hash }: BtcBlockRowProps) {
+  return (
+    <BtcBlockRowLayout>
+      <BtcBlockRowContent timestamp={timestamp} height={height} hash={hash} />
+    </BtcBlockRowLayout>
   );
 }
 
@@ -131,7 +172,7 @@ function StxBlockRow({
     </>
   ) : (
     <>
-      <Flex alignItems="center">
+      <Flex alignItems="center" gap={2}>
         <LineAndNode rowHeight={14} width={6} icon={icon} />
         <BlockLink hash={hash}>
           <Text fontSize="sm" color="text" fontWeight="medium">
@@ -228,14 +269,10 @@ function StxBlocksGroupedByBtcBlock({
     : blockList.stxBlocks;
   const numStxBlocks = btcBlock.txsCount ?? stxBlocks.length;
   const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || stxBlocks.length);
-  console.log({ numStxBlocks, numStxBlocksNotDisplayed, stxBlocksLimit, btcBlock, stxBlocks });
 
   return (
     <>
       <StxBlocksGrid key={btcBlock.hash} stxBlocks={stxBlocksShortList} minimized={minimized} />
-      {stxBlocksLimit && stxBlocks.length > stxBlocksLimit && (
-        <BlockCount count={stxBlocks.length - stxBlocksLimit} />
-      )}
       {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
       <BtcBlockRow
         key={btcBlock.hash}
@@ -244,6 +281,23 @@ function StxBlocksGroupedByBtcBlock({
         timestamp={btcBlock.timestamp}
       />
     </>
+  );
+}
+
+export function BlockListUngroupedLayout({ children }: { children: ReactNode }) {
+  const { isBlockListLoading } = useBlockListContext();
+
+  return (
+    <Stack
+      gap={0}
+      width={'full'}
+      style={{
+        transition: `opacity ${FADE_DURATION / 1000}s`,
+        opacity: isBlockListLoading ? 0 : 1,
+      }}
+    >
+      {children}
+    </Stack>
   );
 }
 
@@ -260,7 +314,7 @@ export function BlockListUngrouped({
     <BlockListUngroupedLayout>
       {blockList.map(bl => (
         <StxBlocksGroupedByBtcBlock
-          key={bl.btcBlock.hash}
+          key={`stx-blocks-grouped-by-btc-block-${bl.btcBlock.hash}`}
           blockList={bl}
           stxBlocksLimit={stxBlocksLimit}
           minimized={minimized}

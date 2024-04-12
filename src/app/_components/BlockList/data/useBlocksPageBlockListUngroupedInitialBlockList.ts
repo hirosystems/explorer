@@ -4,25 +4,27 @@ import { useCallback, useMemo } from 'react';
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import {
-  GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY,
-  useSuspenseBlocksByBurnBlock,
-} from '../../../../common/queries/useBlocksByBurnBlock';
+import { GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY } from '../../../../common/queries/useBlocksByBurnBlock';
 import {
   BURN_BLOCKS_QUERY_KEY,
   useSuspenseBurnBlocks,
 } from '../../../../common/queries/useBurnBlocksInfinite';
-import { BURN_BLOCKS_QUERY_KEY_EXTENSION } from '../consts';
+import { BURN_BLOCKS_BLOCK_LIST_UNGROUPED_QUERY_KEY_EXTENSION } from '../consts';
 import { generateBlockList } from '../utils';
+import { useStxBlocksForBtcBlocks } from './useStxBlocksForBtcBlocks';
 
-export function useHomePageInitialBlockList(blockListLimit: number = 3) {
-  const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
+export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: number = 3) {
+  const response = useSuspenseBurnBlocks(
+    blockListLimit,
+    {},
+    BURN_BLOCKS_BLOCK_LIST_UNGROUPED_QUERY_KEY_EXTENSION
+  );
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  console.log({ btcBlocks });
 
-  const latestBurnBlock = btcBlocks[0];
-  const secondLatestBurnBlock = btcBlocks[1];
-  const thirdLatestBurnBlock = btcBlocks[2];
+  const initialStxBlocks = useStxBlocksForBtcBlocks(btcBlocks);
+  console.log({ initialStxBlocks });
 
   const btcBlocksMap = useMemo(() => {
     const map = {} as Record<string, BurnBlock>;
@@ -31,17 +33,6 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
     });
     return map;
   }, [btcBlocks]);
-
-  // TODO:
-  const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height)
-  );
-  const secondLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(secondLatestBurnBlock.burn_block_height)
-  );
-  const thirdLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(thirdLatestBurnBlock.burn_block_height)
-  );
 
   const queryClient = useQueryClient();
   const refetchInitialBlockList = useCallback(
@@ -62,15 +53,6 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
       callback();
     },
     [queryClient]
-  );
-
-  const initialStxBlocks = useMemo(
-    () => [
-      ...latestBurnBlockStxBlocks,
-      ...secondLatestBurnBlockStxBlocks,
-      ...thirdLatestBurnBlockStxBlocks,
-    ],
-    [latestBurnBlockStxBlocks, secondLatestBurnBlockStxBlocks, thirdLatestBurnBlockStxBlocks]
   );
 
   const initialStxBlocksHashes = useMemo(

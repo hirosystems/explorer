@@ -9,8 +9,7 @@ import { SkeletonText } from '../../../../ui/SkeletonText';
 import { StxIcon } from '../../../../ui/icons';
 import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
 import { LineAndNode } from '../LineAndNode';
-import { StxBlocksGridLayout } from './BlockListUngrouped';
-import { BtcBlockRowLayout } from './BtcBlockRow';
+import { BtcBlockRowLayout, StxBlocksGridLayout } from './BlockListUngrouped';
 
 // layout was copied
 export function BlockListRowSkeleton({
@@ -86,7 +85,7 @@ export function StxBlocksGridSkeleton({
   );
 }
 
-function BtcBlockListItemContentSkeleton() {
+function BtcBlockRowContentSkeleton() {
   return (
     <>
       <SkeletonText noOfLines={1} width={20} />
@@ -95,10 +94,10 @@ function BtcBlockListItemContentSkeleton() {
   );
 }
 
-function BtcBlockListItemSkeleton({ minimized }: { minimized?: boolean }) {
+function BtcBlockRowSkeleton({ minimized }: { minimized?: boolean }) {
   return (
     <BtcBlockRowLayout mx={minimized ? 'unset' : -12}>
-      <BtcBlockListItemContentSkeleton />
+      <BtcBlockRowContentSkeleton />
     </BtcBlockRowLayout>
   );
 }
@@ -107,9 +106,9 @@ export function BlocksPageBlockListUngroupedSkeleton() {
   return (
     <Stack px={6} gap={0} width={'full'}>
       <StxBlocksGridSkeleton numBlocks={10} />
-      <BtcBlockListItemSkeleton />
+      <BtcBlockRowSkeleton />
       <StxBlocksGridSkeleton numBlocks={30} />
-      <BtcBlockListItemSkeleton />
+      <BtcBlockRowSkeleton />
     </Stack>
   );
 }
@@ -118,11 +117,11 @@ export function HomePageBlockListUngroupedSkeleton() {
   return (
     <Stack px={6} gap={0} width={'full'}>
       <StxBlocksGridSkeleton numBlocks={5} minimized={true} />
-      <BtcBlockListItemSkeleton minimized={true} />
+      <BtcBlockRowSkeleton minimized={true} />
       <StxBlocksGridSkeleton numBlocks={5} minimized={true} />
-      <BtcBlockListItemSkeleton minimized={true} />
+      <BtcBlockRowSkeleton minimized={true} />
       <StxBlocksGridSkeleton numBlocks={5} minimized={true} />
-      <BtcBlockListItemSkeleton minimized={true} />
+      <BtcBlockRowSkeleton minimized={true} />
     </Stack>
   );
 }
