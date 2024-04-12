@@ -18,7 +18,7 @@ import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
 import { ScrollableBox } from '../ScrollableDiv';
-import { FADE_DURATION } from '../consts';
+import { FADE_DURATION, mobileBorderCss } from '../consts';
 import { BlockListBtcBlock, BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
 
@@ -49,20 +49,6 @@ const GroupHeader = () => {
       </Box>
     </>
   );
-};
-
-const mobileBorderCss = {
-  '.has-horizontal-scroll &:before': {
-    // Adds a border to the left of the first column
-    content: '""',
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: '2px',
-    height: 'var(--stacks-sizes-14)',
-    backgroundColor: 'borderPrimary',
-  },
 };
 
 const StxBlockRow = ({
@@ -162,8 +148,6 @@ export function BurnBlockGroupGridLayout({
       templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
       columnGap={4}
-      // pt={4}
-      // pb={7}
     >
       {children}
     </Grid>
@@ -222,9 +206,9 @@ function BitcoinHeader({
       <Flex alignItems={'center'} gap={1.5}>
         <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
         <Icon as={BitcoinIcon} size={4.5} />
-        <Text fontSize={'sm'} color={'textSubdued'} fontWeight={'medium'}>
+        <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>
           {btcBlock.height}
-        </Text>
+        </ExplorerLink>
       </Flex>
       <HStack divider={<Caption>∙</Caption>} gap={1}>
         <ExplorerLink fontSize="xs" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>

@@ -1,8 +1,10 @@
+import { SkeletonItem } from '@/ui/SkeletonItem';
 import { useColorModeValue } from '@chakra-ui/react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
+import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
 import { SkeletonText } from '../../../../ui/SkeletonText';
@@ -23,9 +25,19 @@ function BitcoinHeaderSkeleton() {
   );
 }
 
-export function FooterSkeleton() {
+export function BlockListLoadMoreButtonSkeleton({ ...rest }) {
   return (
-    <Box pt={4} borderTop="1px solid var(--stacks-colors-borderPrimary)">
+    <Box width="full" {...rest}>
+      <Button borderTop="1px solid var(--stacks-colors-borderPrimary)" width="full">
+        <SkeletonText noOfLines={1} width={60} />
+      </Button>
+    </Box>
+  );
+}
+
+export function BurnBlockGroupFooterSkeleton() {
+  return (
+    <Box borderTop="1px solid var(--stacks-colors-borderSecondary)" pt={4}>
       <SkeletonText noOfLines={1} width={60} />
     </Box>
   );
@@ -96,7 +108,7 @@ export function BurnBlockGroupSkeleton({
         ))}
       </BurnBlockGroupGridLayout>
       <BlockCountSkeleton />
-      <FooterSkeleton />
+      <BurnBlockGroupFooterSkeleton />
     </Box>
   );
 }
@@ -113,7 +125,7 @@ export function BurnBlockGroupListSkeleton({
   minimized?: boolean;
 }) {
   return (
-    <Flex flexDirection="column" gap={4} py={6} px={6} key="burn-block-group-list-skeleton">
+    <Flex flexDirection="column" gap={4} py={6} key="burn-block-group-list-skeleton">
       {numBurnBlockGroupsWithTxs
         ? Array.from({ length: numBurnBlockGroupsWithTxs }).map((_, i) => (
             <BurnBlockGroupSkeleton
@@ -187,8 +199,8 @@ function ControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
     <ControlsLayout horizontal={horizontal}>
       <Flex gap={2}>
-        <SkeletonText noOfLines={1} width={20} />
-        <SkeletonText noOfLines={1} width={20} />
+        <SkeletonItem height={5} width={20} />
+        <SkeletonItem height={5} width={20} />
       </Flex>
     </ControlsLayout>
   );

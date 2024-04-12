@@ -4,7 +4,6 @@ import { Circle } from '../../../common/components/Circle';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 
-// TODO: move to common
 export function LineAndNode({
   rowHeight = 14,
   width = 6,

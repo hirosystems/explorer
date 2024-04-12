@@ -3,11 +3,10 @@
 import { BurnBlockGroupGridLayout } from '@/app/_components/BlockList/Grouped/BlockListGrouped';
 import {
   BlockListGridHeaderRowSkeleton,
-  FooterSkeleton,
+  BlockListLoadMoreButtonSkeleton,
 } from '@/app/_components/BlockList/Grouped/skeleton';
 import { BlockListRowSkeleton } from '@/app/_components/BlockList/Ungrouped/skeleton';
 import { SkeletonItem } from '@/ui/SkeletonItem';
-import { SkeletonText } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 import { ScrollableBox } from '../../../app/_components/BlockList/ScrollableDiv';
@@ -64,7 +63,7 @@ export function BlockPageSkeleton() {
                 ))}
               </BurnBlockGroupGridLayout>
             </ScrollableBox>
-            <FooterSkeleton />
+            <BlockListLoadMoreButtonSkeleton pt={4} pb={6} />
           </Box>
         </Section>
         <BitcoinAnchorDetailsSkeleton />

@@ -23,10 +23,9 @@ function HomePageBlockListUngroupedBase() {
         <UpdateBar
           latestBlocksCount={latestStxBlocksCountFromWebSocket}
           onClick={updateBlockList}
-          marginX={0}
         />
       )}
-      <Flex flexDirection="column" gap={4} px={6}>
+      <Flex flexDirection="column" gap={5}>
         <BlockListUngrouped blockList={blockList} stxBlocksLimit={5} minimized={true} />
         {!liveUpdates && <ListFooter href={'/blocks'} label={'blocks'} />}
       </Flex>

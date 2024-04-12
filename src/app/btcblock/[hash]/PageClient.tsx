@@ -51,6 +51,8 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
               <BurnBlockGroupGrid stxBlocks={blockListStxBlocks} minimized={false} />
             </ScrollableBox>
             <ListFooter
+              pt={4}
+              pb={6}
               isLoading={isFetchingNextPage}
               hasNextPage={hasNextPage}
               fetchNextPage={fetchNextPage}
