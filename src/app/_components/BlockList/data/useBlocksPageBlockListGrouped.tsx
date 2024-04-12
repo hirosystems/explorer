@@ -18,10 +18,10 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
   } = useBlocksPageBlockListGroupedInitialBlockList(btcBlockLimit);
 
   // initially the block list is the initial blocklist
-  const [blockList, setBlockList] = useState<BlockListData[]>(initialBlockList);
+  const blockList = useRef<BlockListData[]>(initialBlockList);
   // when the initial block list changes, reset the block list to the initial blocklist
   useEffect(() => {
-    setBlockList(initialBlockList);
+    blockList.current = initialBlockList;
   }, [initialBlockList]);
 
   const {
@@ -43,15 +43,10 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
   }, [blockListUpdateCounter, clearLatestStxBlocksFromWebSocket, setBlockListLoading]);
 
   // manually update the block list with block list updates from the websocket
-  const updateBlockListManually = useCallback(
-    (blockListUpdates: BlockListData[]) => {
-      setBlockList(prevBlockList => {
-        const newBlockList = mergeBlockLists(blockListUpdates, prevBlockList);
-        return newBlockList;
-      });
-    },
-    [setBlockList]
-  );
+  const updateBlockListManually = useCallback((blockListUpdates: BlockListData[]) => {
+    const newBlockList = mergeBlockLists(blockListUpdates, blockList.current);
+    blockList.current = newBlockList;
+  }, []);
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
@@ -108,7 +103,7 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
   ]);
 
   return {
-    blockList,
+    blockList: blockList.current,
     updateBlockList: updateBlockListWithQuery,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
     isFetchingNextPage,

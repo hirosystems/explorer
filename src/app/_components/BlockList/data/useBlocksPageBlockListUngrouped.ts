@@ -20,10 +20,10 @@ export function useBlocksPageBlockListUngrouped() {
   } = useBlocksPageBlockListUngroupedInitialBlockList();
 
   // initially the block list is the initial blocklist
-  const [blockList, setBlockList] = useState<BlockListData[]>(initialBlockList);
+  const blockList = useRef<BlockListData[]>(initialBlockList);
   // when the initial block list changes, reset the block list to the initial blocklist
   useEffect(() => {
-    setBlockList(initialBlockList);
+    blockList.current = initialBlockList;
   }, [initialBlockList]);
 
   const {
@@ -47,12 +47,10 @@ export function useBlocksPageBlockListUngrouped() {
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback(
     (blockListUpdates: BlockListData[]) => {
-      setBlockList(prevBlockList => {
-        const newBlockList = mergeBlockLists(blockListUpdates, prevBlockList);
-        return newBlockList;
-      });
+      const newBlockList = mergeBlockLists(blockListUpdates, blockList.current);
+      blockList.current = newBlockList;
     },
-    [setBlockList]
+    []
   );
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
@@ -111,7 +109,7 @@ export function useBlocksPageBlockListUngrouped() {
   ]);
 
   return {
-    blockList,
+    blockList: blockList.current,
     latestStxBlocksCountFromWebSocket,
     updateBlockList: updateBlockListWithQuery,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,

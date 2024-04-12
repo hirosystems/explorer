@@ -75,9 +75,15 @@ export function StxBlocksGridSkeleton({
           <BlockListRowSkeleton
             icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
             minimized={minimized}
+            key={`block-list-row-skeleton-${i}`}
           />
           {i < numBlocks - 1 && (
-            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+            <Box
+              key={`block-list-row-border-bottom-${i}`}
+              gridColumn={'1/5'}
+              borderBottom={'1px'}
+              borderColor="borderSecondary"
+            ></Box>
           )}
         </>
       ))}

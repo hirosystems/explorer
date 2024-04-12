@@ -91,6 +91,7 @@ export function BurnBlockGroupSkeleton({
           <BlockListRowSkeleton
             icon={rowIndex === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
             minimized={minimized}
+            key={`block-list-row-skeleton-${rowIndex}`}
           />
         ))}
       </BurnBlockGroupGridLayout>

@@ -64,7 +64,7 @@ export function useBlocksPageBlockListGroupedInitialBlockList(blockListLimit: nu
 
   const initialBlockList = useMemo(() => {
     const startOfBlockList = generateBlockList(latestBurnBlockStxBlocks, btcBlocksMap);
-    const restOfBlockList = burnBlocks.map(block => ({
+    const restOfBlockList = burnBlocks.slice(1).map(block => ({
       btcBlock: {
         type: 'btc_block',
         height: block.burn_block_height,

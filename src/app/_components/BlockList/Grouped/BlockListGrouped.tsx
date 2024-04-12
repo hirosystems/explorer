@@ -222,7 +222,7 @@ export function BurnBlockGroupGrid({
             minimized={minimized}
           />
           {i < stxBlocks.length - 1 && (
-            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+            <Box key={`stx-block-row-border-bottom-${i}`} gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
           )}
         </>
       ))}

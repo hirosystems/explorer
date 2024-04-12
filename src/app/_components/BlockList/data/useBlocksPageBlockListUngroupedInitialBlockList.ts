@@ -21,10 +21,8 @@ export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: 
   );
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
-  console.log({ btcBlocks });
 
   const initialStxBlocks = useStxBlocksForBtcBlocks(btcBlocks);
-  console.log({ initialStxBlocks });
 
   const btcBlocksMap = useMemo(() => {
     const map = {} as Record<string, BurnBlock>;
@@ -49,7 +47,7 @@ export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: 
         queryClient.refetchQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
       ]);
 
-      // Run your callback after refetching
+      // Run callback after refetching
       callback();
     },
     [queryClient]

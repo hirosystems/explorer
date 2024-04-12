@@ -20,9 +20,9 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
 
-  const latestBurnBlock = btcBlocks[0];
-  const secondLatestBurnBlock = btcBlocks[1];
-  const thirdLatestBurnBlock = btcBlocks[2];
+  const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
+  const secondLatestBurnBlock = useMemo(() => btcBlocks[1], [btcBlocks]);
+  const thirdLatestBurnBlock = useMemo(() => btcBlocks[2], [btcBlocks]);
 
   const btcBlocksMap = useMemo(() => {
     const map = {} as Record<string, BurnBlock>;
@@ -32,7 +32,6 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
     return map;
   }, [btcBlocks]);
 
-  // TODO:
   const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
     useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height)
   );
