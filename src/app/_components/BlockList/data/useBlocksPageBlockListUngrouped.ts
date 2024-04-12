@@ -32,18 +32,6 @@ export function useBlocksPageBlockListUngrouped() {
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket2(initialStxBlocksHashes);
 
-  // This is used to trigger a fade out effect when the block list is updated.
-  // When the counter is updated, we wait for the fade out effect to finish and then show the fade in effect
-  const [blockListUpdateCounter, setBlockListUpdateCounter] = useState(0);
-  const prevBlockListUpdateCounterRef = useRef(blockListUpdateCounter);
-  useEffect(() => {
-    if (prevBlockListUpdateCounterRef.current !== blockListUpdateCounter) {
-      // waitForFadeAnimation(() => {
-      setBlockListLoading(false);
-      // });
-    }
-  }, [blockListUpdateCounter, clearLatestStxBlocksFromWebSocket, setBlockListLoading]);
-
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback(
     (blockListUpdates: BlockListData[]) => {
@@ -60,7 +48,6 @@ export function useBlocksPageBlockListUngrouped() {
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
       setBlockListLoading(false);
-      // setBlockListUpdateCounter(prev => prev + 1);
     });
   }, [
     latestStxBlocksFromWebSocket,
@@ -75,7 +62,7 @@ export function useBlocksPageBlockListUngrouped() {
       waitForFadeAnimation(async () => {
         clearLatestStxBlocksFromWebSocket();
         await refetchInitialBlockList(() => {
-          setBlockListUpdateCounter(prev => prev + 1);
+          setBlockListLoading(false);
         });
       });
     },
