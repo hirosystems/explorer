@@ -88,13 +88,9 @@ export const getValue = (
   if (arg.type.includes('tuple')) {
     const value = tupleToArr(arg.repr);
 
-    return (
-      <>
-        <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />
-      </>
-    );
+    return <TupleResult isPoxAddr={arg.name === 'pox-addr'} btc={btc} tuple={value} />;
   }
-  return isJSONString(arg.repr) ? JSON.parse(arg.repr) : arg.repr;
+  return arg.repr;
 };
 
 export const FunctionSummaryClarityValue = ({ arg, btc }: { arg: any; btc: null | string }) => {
