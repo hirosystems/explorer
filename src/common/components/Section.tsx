@@ -1,7 +1,7 @@
 'use client';
 
 import { useColorModeValue } from '@chakra-ui/react';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
@@ -29,7 +29,7 @@ export function Section({
           alignItems={['flex-start', 'center']}
           justifyContent="space-between"
           borderBottom="1px"
-          borderColor='borderSecondary'
+          borderColor="borderSecondary"
           borderTopRightRadius="xl"
           borderTopLeftRadius="xl"
           flexShrink={0}

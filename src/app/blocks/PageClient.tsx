@@ -29,10 +29,13 @@ const PaginatedBlockListLayoutADynamic = dynamic(
   }
 );
 
-const BlocksListDynamic = dynamic(() => import('../_components/BlockList').then(mod => mod.BlocksList), {
-  loading: () => <SkeletonBlockList />,
-  ssr: false,
-});
+const BlocksListDynamic = dynamic(
+  () => import('../_components/BlockList').then(mod => mod.BlocksList),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
 
 export function BlocksPageLayout({
   blocksPageHeaders,
@@ -58,8 +61,8 @@ const BlocksPage: NextPage = () => {
       blocksList={
         activeNetworkKey.indexOf('naka') !== -1 ? (
           <BlocksPageBlockListDynamic />
-          // <PaginatedBlockListLayoutADynamic />
         ) : (
+          // <PaginatedBlockListLayoutADynamic />
           <BlocksListDynamic />
         )
       }

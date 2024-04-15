@@ -1,5 +1,6 @@
 'use client';
 
+import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
@@ -9,7 +10,6 @@ import { Grid } from '../ui/Grid';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
-import { NextPage } from 'next';
 
 const BlocksListDynamic = dynamic(
   () => import('./_components/BlockList').then(mod => mod.BlocksList),
@@ -42,13 +42,13 @@ const Home: NextPage = () => {
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
         {activeNetworkKey.indexOf('naka') !== -1 || activeNetworkKey.indexOf('testnet') !== -1 ? (
           <HomePageBlockListDynamic />
-          // <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         ) : (
+          // <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
           <BlocksListDynamic limit={DEFAULT_BLOCKS_LIST_LIMIT} />
         )}
       </Grid>
     </>
   );
-}
+};
 
 export default Home;

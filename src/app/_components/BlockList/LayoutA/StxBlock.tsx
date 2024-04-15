@@ -1,5 +1,4 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
 import { ReactNode, memo } from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
@@ -36,7 +35,7 @@ export const StxBlock = memo(function ({
     <Box
       pl={4}
       borderLeft={icon ? undefined : '1px'}
-      borderColor='borderPrimary'
+      borderColor="borderPrimary"
       position="relative"
     >
       <Flex
@@ -47,7 +46,8 @@ export const StxBlock = memo(function ({
         borderBottom={hasBorder ? '1px' : 'none'}
         _after={
           icon
-            ? { // adds a small line underneath the icon of the first block to connect it with the other rows
+            ? {
+                // adds a small line underneath the icon of the first block to connect it with the other rows
                 content: '""',
                 position: 'absolute',
                 left: '0',
@@ -56,7 +56,8 @@ export const StxBlock = memo(function ({
                 width: '1px',
                 backgroundColor: 'borderPrimary',
               }
-            : { // node
+            : {
+                // node
                 content: '""',
                 position: 'absolute',
                 left: '-3px',

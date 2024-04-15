@@ -169,7 +169,7 @@ export const addSepBetweenStrings = (strings: (string | undefined)[], sep = '∙
 };
 
 export const toRelativeTime = (ts: number): string => {
-  const val = dayjs().to(ts)
+  const val = dayjs().to(ts);
   return val;
 };
 

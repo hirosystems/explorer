@@ -11,49 +11,8 @@ import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
-import { useRouter } from 'next/router';
 
 function WrapperWithBg({ children }: { children: ReactNode }) {
-  // const router = useRouter();
-  // const { pathname } = router;
-  // console.log({ pathname })
-  // const defaultBg = useColorModeValue(
-  //   `linear-gradient(
-  //            29.53deg,
-  //            #9528F7 2.94%,
-  //            #522DE7 39.91%,
-  //            #221A71 76.87%,
-  //            #0F102B 93.08%
-  //          ),
-  //          white`,
-  //   `linear-gradient(
-  //            29.53deg,
-  //            #9528F7 2.94%,
-  //            #522DE7 39.91%,
-  //            #221A71 76.87%,
-  //            #0F102B 93.08%
-  //          ),
-  //          black`
-  // );
-  // const btcBlockPageBg = useColorModeValue(
-  //   `linear-gradient(
-  //            29.53deg,
-  //            #9528F7 2.94%,
-  //            #522DE7 39.91%,
-  //            #221A71 76.87%,
-  //            #0F102B 93.08%
-  //          ),
-  //          white`,
-  //   `linear-gradient(
-  //            29.53deg,
-  //            #9528F7 2.94%,
-  //            #522DE7 39.91%,
-  //            #221A71 76.87%,
-  //            #0F102B 93.08%
-  //          ),
-  //          black`
-  // );
-
   return (
     <Flex
       maxWidth="100vw"

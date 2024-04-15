@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
@@ -33,13 +33,10 @@ export function useBlocksPageBlockListUngrouped() {
   } = useBlockListWebSocket2(initialStxBlocksHashes);
 
   // manually update the block list with block list updates from the websocket
-  const updateBlockListManually = useCallback(
-    (blockListUpdates: BlockListData[]) => {
-      const newBlockList = mergeBlockLists(blockListUpdates, blockList.current);
-      blockList.current = newBlockList;
-    },
-    []
-  );
+  const updateBlockListManually = useCallback((blockListUpdates: BlockListData[]) => {
+    const newBlockList = mergeBlockLists(blockListUpdates, blockList.current);
+    blockList.current = newBlockList;
+  }, []);
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);

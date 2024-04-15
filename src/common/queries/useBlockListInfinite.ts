@@ -5,8 +5,7 @@ import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
-
-export const BLOCK_LIST_QUERY_KEY = 'blockListInfinite'
+export const BLOCK_LIST_QUERY_KEY = 'blockListInfinite';
 
 export const useBlockListInfinite = () => {
   const api = useApi();
