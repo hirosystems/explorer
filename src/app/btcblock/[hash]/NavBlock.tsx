@@ -1,7 +1,7 @@
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { buildUrl } from '@/common/utils/buildUrl';
-import { PiArrowLeft, PiArrowLeftBold, PiArrowRight, PiArrowRightBold } from 'react-icons/pi';
+import { PiArrowLeftBold, PiArrowRightBold } from 'react-icons/pi';
 
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { buildUrl } from '../../../common/utils/buildUrl';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';

@@ -1,4 +1,3 @@
-import { Stack } from '@/ui/Stack';
 import { ReactNode } from 'react';
 import { PiCircleFill } from 'react-icons/pi';
 
@@ -7,6 +6,7 @@ import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { SkeletonText } from '../../../../ui/SkeletonText';
+import { Stack } from '../../../../ui/Stack';
 import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
 import { LineAndNode } from '../LineAndNode';
 import { BtcBlockRowLayout, StxBlocksGridLayout } from './BlockListUngrouped';

@@ -1,12 +1,12 @@
 'use client';
 
-import { useSuspenseBlocksByBurnBlock } from '@/common/queries/useBlocksByBurnBlock';
 import { ReactNode, Suspense } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { Card } from '../../../../common/components/Card';
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';

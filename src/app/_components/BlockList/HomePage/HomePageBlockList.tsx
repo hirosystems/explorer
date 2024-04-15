@@ -1,10 +1,10 @@
 'use client';
 
-import { Stack } from '@/ui/Stack';
 import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
+import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';

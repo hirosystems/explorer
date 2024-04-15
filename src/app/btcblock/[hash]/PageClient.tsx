@@ -1,18 +1,17 @@
 'use client';
 
-import { BurnBlockGroupGrid } from '@/app/_components/BlockList/Grouped/BlockListGrouped';
-import { createBlockListStxBlock } from '@/app/_components/BlockList/utils';
-import { NavBlock, NavDirection } from '@/app/btcblock/[hash]/NavBlock';
-import { ListFooter } from '@/common/components/ListFooter';
-import { useSuspenseInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
-import { useSuspenseBlocksByBurnBlock } from '@/common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlock } from '@/common/queries/useBurnBlock';
-
 import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
+import { BurnBlockGroupGrid } from '../../../app/_components/BlockList/Grouped/BlockListGrouped';
 import { ScrollableBox } from '../../../app/_components/BlockList/ScrollableDiv';
+import { createBlockListStxBlock } from '../../../app/_components/BlockList/utils';
+import { NavBlock, NavDirection } from '../../../app/btcblock/[hash]/NavBlock';
+import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
 import '../../../common/components/loaders/skeleton-text';
+import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
+import { useSuspenseBlocksByBurnBlock } from '../../../common/queries/useBlocksByBurnBlock';
+import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { PageTitle } from '../../_components/PageTitle';

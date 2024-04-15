@@ -1,5 +1,4 @@
-import { Flex } from '@/ui/Flex';
-
+import { Flex } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
 import { StackProps } from '../../../ui/Stack';
