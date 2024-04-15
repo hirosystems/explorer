@@ -6,7 +6,7 @@ import { useBlockList } from '../useBlockList';
 
 const LAST_BURN_BLOCK_STX_BLOCKS_COUNT = 50;
 
-jest.mock('../useBlockListWebSocket', () => ({
+jest.mock('../../Sockets/useBlockListWebSocket', () => ({
   useBlockListWebSocket: jest.fn().mockImplementation(() => ({
     latestUIBlocks: [],
     latestBlocksCount: 0,
