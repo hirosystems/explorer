@@ -1,17 +1,17 @@
 'use client';
 
-import { useParamsBlockHash } from '@/app/block/[hash]/useParamsBlockHash';
-import { useSuspenseBurnBlock } from '@/common/queries/useBurnBlock';
-import { Flex } from '@/ui/Flex';
-import { Link } from '@/ui/Link';
-import { BitcoinIcon } from '@/ui/icons/BitcoinIcon';
 import styled from '@emotion/styled';
 
+import { useParamsBlockHash } from '../../../app/block/[hash]/useParamsBlockHash';
 import { KeyValueVertical } from '../../../common/components/KeyValueVertical';
 import { Section } from '../../../common/components/Section';
 import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
+import { Flex } from '../../../ui/Flex';
+import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
+import { BitcoinIcon } from '../../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
 const StyledSection = styled(Section)`

@@ -1,21 +1,21 @@
 'use client';
 
-import { BurnBlockGroupGridLayout } from '@/app/_components/BlockList/Grouped/BlockListGrouped';
+import styled from '@emotion/styled';
+
+import { BurnBlockGroupGridLayout } from '../../../app/_components/BlockList/Grouped/BlockListGrouped';
 import {
   BlockListGridHeaderRowSkeleton,
   BlockListLoadMoreButtonSkeleton,
-} from '@/app/_components/BlockList/Grouped/skeleton';
-import { BlockListRowSkeleton } from '@/app/_components/BlockList/Ungrouped/skeleton';
-import { SkeletonItem } from '@/ui/SkeletonItem';
-import styled from '@emotion/styled';
-
+} from '../../../app/_components/BlockList/Grouped/skeleton';
 import { ScrollableBox } from '../../../app/_components/BlockList/ScrollableDiv';
+import { BlockListRowSkeleton } from '../../../app/_components/BlockList/Ungrouped/skeleton';
 import { KeyValueVertical } from '../../../common/components/KeyValueVertical';
 import { Section } from '../../../common/components/Section';
 import '../../../common/components/loaders/skeleton-text';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
+import { SkeletonItem } from '../../../ui/SkeletonItem';
 import { StxIcon } from '../../../ui/icons';
 import { TowColLayout } from '../../_components/TwoColLayout';
 

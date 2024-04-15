@@ -1,4 +1,3 @@
-import { SkeletonItem } from '@/ui/SkeletonItem';
 import { useColorModeValue } from '@chakra-ui/react';
 
 import { Circle } from '../../../../common/components/Circle';
@@ -7,6 +6,7 @@ import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
+import { SkeletonItem } from '../../../../ui/SkeletonItem';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';

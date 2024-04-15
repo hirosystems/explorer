@@ -1,8 +1,8 @@
 'use client';
 
-import { ListFooter } from '@/common/components/ListFooter';
 import { Suspense } from 'react';
 
+import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
