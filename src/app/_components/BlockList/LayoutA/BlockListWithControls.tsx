@@ -30,7 +30,6 @@ export function BlockListWithControls({
 }) {
   const {
     isBlockListLoading: isUpdateListLoading,
-    setBlockListLoading: setIsUpdateListLoading,
     groupedByBtc,
     setGroupedByBtc,
     liveUpdates,
@@ -64,13 +63,7 @@ export function BlockListWithControls({
           }}
           horizontal={horizontalControls}
         />
-        {!liveUpdates && (
-          <UpdateBar
-            isUpdateListLoading={isUpdateListLoading}
-            latestBlocksCount={latestBlocksCount}
-            onClick={updateList}
-          />
-        )}
+        {!liveUpdates && <UpdateBar latestBlocksCount={latestBlocksCount} onClick={updateList} />}
         <Blocks blockList={blockList} isUpdateListLoading={isUpdateListLoading} />
         <Box pt={4}>
           {(!liveUpdates || !enablePagination) && (
