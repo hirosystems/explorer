@@ -1,3 +1,10 @@
+## [1.163.1](https://github.com/hirosystems/explorer/compare/v1.163.0...v1.163.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* repr parsing error ([4bc200c](https://github.com/hirosystems/explorer/commit/4bc200c72175ae33bff022fdc7c5bc0ca55012f4))
+
 # [1.163.0](https://github.com/hirosystems/explorer/compare/v1.162.0...v1.163.0) (2024-04-12)
 
 
