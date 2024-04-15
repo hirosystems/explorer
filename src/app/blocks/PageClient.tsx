@@ -33,10 +33,13 @@ const PaginatedBlockListLayoutADynamic = dynamic(
   }
 );
 
-const BlocksListDynamic = dynamic(() => import('../_components/BlockList').then(mod => mod.BlocksList), {
-  loading: () => <SkeletonBlockList />,
-  ssr: false,
-});
+const BlocksListDynamic = dynamic(
+  () => import('../_components/BlockList').then(mod => mod.BlocksList),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
 
 export function BlocksPageLayout({
   blocksPageHeaders,

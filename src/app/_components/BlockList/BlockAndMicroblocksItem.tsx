@@ -10,7 +10,7 @@ import { Flex } from '../../../ui/Flex';
 import { Text } from '../../../ui/Text';
 import { BlockListItem } from './BlockListItem';
 import { MicroblockListItem } from './MicroblockListItem';
-// TODO: delete file
+
 export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = ({ block }) => {
   return (
     <AccordionItem

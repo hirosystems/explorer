@@ -1,5 +1,6 @@
 'use client';
 
+import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
@@ -10,7 +11,6 @@ import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { UpdatedBlocksList } from './_components/BlockList/UpdatedBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
-import { NextPage } from 'next';
 
 const BlocksListDynamic = dynamic(
   () => import('./_components/BlockList').then(mod => mod.BlocksList),
@@ -46,6 +46,6 @@ const Home: NextPage = () => {
       </Grid>
     </>
   );
-}
+};
 
 export default Home;
