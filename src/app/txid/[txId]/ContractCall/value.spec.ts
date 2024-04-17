@@ -36,7 +36,7 @@ describe('getValue', () => {
       name: 'some-name',
     };
     const btc = null;
-    const expected = { value: 123 };
+    const expected = '{"value": 123}';
 
     const result = getValue(arg, btc);
 
