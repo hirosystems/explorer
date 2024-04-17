@@ -54,11 +54,12 @@ export function useBlocksByBurnBlock(
 export function useSuspenseBlocksByBurnBlock(
   heightOrHash: string | number,
   limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
-  options: any = {}
+  options: any = {},
+  queryKeyExtension?: string
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, queryKeyExtension],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,

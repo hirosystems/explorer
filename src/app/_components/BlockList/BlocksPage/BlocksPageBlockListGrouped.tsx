@@ -23,6 +23,7 @@ function BlocksPageBlockListGroupedBase() {
     hasNextPage,
     fetchNextPage,
   } = useBlocksPageBlockListGrouped();
+  console.log({ blockList });
 
   return (
     <>
