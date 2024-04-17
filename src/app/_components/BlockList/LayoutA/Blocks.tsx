@@ -1,13 +1,11 @@
-import React from 'react';
-
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { StxIcon } from '../../../../ui/icons';
-import { UIBlock, UIBlockType } from '../types';
 import { BlockCount } from '../BlockCount';
+import { FADE_DURATION } from '../consts';
+import { UIBlock, UIBlockType } from '../types';
 import { BurnBlock } from './BurnBlock';
 import { StxBlock } from './StxBlock';
-import { FADE_DURATION } from '../consts';
 
 export function Blocks({
   blockList,

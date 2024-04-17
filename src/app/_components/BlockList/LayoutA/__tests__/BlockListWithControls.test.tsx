@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 
+import { BlockListProvider } from '../../BlockListProvider';
 import { UIBlock, UIBlockType } from '../../types';
 import { BlockListWithControls } from '../BlockListWithControls';
-import { BlockListProvider } from '../Provider';
 
 const date = new Date('2024-01-01T00:00:00Z').getTime();
 
