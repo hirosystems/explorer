@@ -36,7 +36,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
       mr={'-8'}
       ml={'-10'}
       color={textColor}
-      className={'burn-block'}
+      {...flexProps}
     >
       <HStack gap={1.5}>
         <Icon
@@ -51,10 +51,10 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
         <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${hash.replace('0x', '')}`}>
           <Text
             fontSize={'sm'}
-            color={'textSubdued'}
+            color={'secondaryText'}
             _hover={{
               textDecoration: 'underline',
-              textDecorationColor: 'textSubdued',
+              textDecorationColor: 'secondaryText',
             }}
           >
             #{height}

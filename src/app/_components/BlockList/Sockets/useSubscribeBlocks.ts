@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../../common/context/useAppContext';
 
 interface Subscription {
   unsubscribe(): Promise<void>;

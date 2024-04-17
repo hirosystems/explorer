@@ -6,26 +6,22 @@ import { UIBlockType, UISingleBlock } from '../types';
 import { useSubscribeBlocks } from './useSubscribeBlocks';
 
 export function useBlockListWebSocket(
-  initialStxBlockHashes: Set<string>,
+  initialBlockHashes: Set<string>,
   initialBurnBlockHashes: Set<string>
 ) {
-  const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]); // TODO: convert to object structure so implementation isnt tied to one ui
-  const [latestStxBlock, setLatestStxBlock] = useState<NakamotoBlock>();
-  const latestStxBlockHashes = useRef(new Set<string>());
+  const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]);
+  const [latestBlock, setLatestBlock] = useState<NakamotoBlock>();
+  const latestBlockHashes = useRef(new Set<string>());
   const latestBurnBlockHashes = useRef(new Set<string>());
 
   const handleBlock = useCallback(
     (block: NakamotoBlock) => {
       function updateLatestBlocks() {
-        // TODO: remove function
-        // If the block is already in the list, don't add it again
-        if (latestStxBlockHashes.current.has(block.hash) || initialStxBlockHashes.has(block.hash)) {
+        if (latestBlockHashes.current.has(block.hash) || initialBlockHashes.has(block.hash)) {
           return;
         }
-        // Otherwise, add it to the list
-        setLatestStxBlock(block);
-        latestStxBlockHashes.current.add(block.hash);
-
+        setLatestBlock(block);
+        latestBlockHashes.current.add(block.hash);
         const isNewBurnBlock =
           !initialBurnBlockHashes.has(block.burn_block_hash) &&
           !latestBurnBlockHashes.current.has(block.burn_block_hash);
@@ -43,7 +39,7 @@ export function useBlockListWebSocket(
         }
         setLatestBlocks(prevLatestBlocks => [
           {
-            type: UIBlockType.StxBlock,
+            type: UIBlockType.Block,
             height: block.height,
             hash: block.hash,
             timestamp: block.burn_block_time,
@@ -55,7 +51,7 @@ export function useBlockListWebSocket(
 
       updateLatestBlocks();
     },
-    [initialBurnBlockHashes, initialStxBlockHashes]
+    [initialBurnBlockHashes, initialBlockHashes]
   );
 
   useSubscribeBlocks(handleBlock);
@@ -66,8 +62,8 @@ export function useBlockListWebSocket(
 
   return {
     latestUIBlocks: latestBlocks,
-    latestStxBlock: latestStxBlock,
-    latestStxBlocksCount: latestBlocks.filter(block => block.type === UIBlockType.StxBlock).length,
+    latestBlock,
+    latestBlocksCount: latestBlocks.filter(block => block.type === UIBlockType.Block).length,
     clearLatestBlocks,
   };
 }

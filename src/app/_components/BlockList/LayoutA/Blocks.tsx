@@ -1,11 +1,13 @@
+import React from 'react';
+
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { StxIcon } from '../../../../ui/icons';
-import { BlockCount } from '../BlockCount';
-import { FADE_DURATION } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
+import { BlockCount } from '../BlockCount';
 import { BurnBlock } from './BurnBlock';
 import { StxBlock } from './StxBlock';
+import { FADE_DURATION } from '../consts';
 
 export function Blocks({
   blockList,
@@ -27,11 +29,10 @@ export function Blocks({
     >
       {blockList.map((block, i) => {
         switch (block.type) {
-          case UIBlockType.StxBlock:
+          case UIBlockType.Block:
             const isFirstStxBlockInBurnBlock =
-              i === 0 || (i > 0 && blockList[i - 1].type === UIBlockType.BurnBlock); // what is this check for? -  (i > 0 && blockList[i - 1].type === UIBlockType.BurnBlock. It's to make sure to skip Burn Blocks that dont have any stxx txs. Stacks tx should be first
+              i === 0 || (i > 0 && blockList[i - 1].type === UIBlockType.BurnBlock);
             return (
-              // TODO: update to use new component
               <StxBlock
                 key={block.hash}
                 hash={block.hash}
@@ -43,10 +44,9 @@ export function Blocks({
                     <Icon as={StxIcon} size={2.5} color={'white'} />
                   ) : undefined
                 }
-                hasBorder={i < blockList.length && blockList[i + 1].type === UIBlockType.StxBlock}
               />
             );
-          case UIBlockType.BurnBlock: // TODO: update to use new component
+          case UIBlockType.BurnBlock:
             return (
               <BurnBlock
                 key={block.hash}

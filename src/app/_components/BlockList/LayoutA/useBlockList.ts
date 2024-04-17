@@ -18,7 +18,7 @@ const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
 });
 
 const createBlockUIBlock = (block: NakamotoBlock): UIBlock => ({
-  type: UIBlockType.StxBlock,
+  type: UIBlockType.Block,
   height: block.height,
   hash: block.hash,
   timestamp: block.burn_block_time,
@@ -55,7 +55,7 @@ const createUIBlockList = (
 
 export function useBlockList(length: number) {
   const queryClient = useQueryClient();
-  const { setBlockListLoading: setIsUpdateListLoading, liveUpdates } = useBlockListContext();
+  const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
   const {
     lastBurnBlock,
@@ -73,29 +73,27 @@ export function useBlockList(length: number) {
     [lastBurnBlockStxBlocks, secondToLastBlockStxBlocks]
   );
 
-  // Initial burn block hashes are used to filter out blocks that were already added to the list
   const initialBurnBlockHashes = useMemo(
     () => new Set([lastBurnBlock.burn_block_hash, secondToLastBurnBlock.burn_block_hash]),
     [lastBurnBlock, secondToLastBurnBlock]
   );
 
-  const {
-    latestStxBlock: latestBlock,
-    latestStxBlocksCount: latestBlocksCount,
-    clearLatestBlocks,
-  } = useBlockListWebSocket(initialBlockHashes, initialBurnBlockHashes);
+  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
+    initialBlockHashes,
+    initialBurnBlockHashes
+  );
 
   const updateList = useCallback(
     async function () {
-      setIsUpdateListLoading(true);
+      setBlockListLoading(true);
       await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['getBlocksByBurnBlock'] }), // TODO: make these constants
+        queryClient.invalidateQueries({ queryKey: ['getBlocksByBurnBlock'] }),
         queryClient.invalidateQueries({ queryKey: ['burnBlocks'] }),
       ]);
       clearLatestBlocks();
-      setIsUpdateListLoading(false);
+      setBlockListLoading(false);
     },
-    [clearLatestBlocks, queryClient, setIsUpdateListLoading]
+    [clearLatestBlocks, queryClient, setBlockListLoading]
   );
 
   const prevLiveUpdatesRef = useRef(liveUpdates);
@@ -110,19 +108,19 @@ export function useBlockList(length: number) {
       prevLatestBlocksCountRef.current !== latestBlocksCount;
 
     if (liveUpdatesToggled) {
-      setIsUpdateListLoading(true);
+      setBlockListLoading(true);
       clearLatestBlocks();
       updateList().then(() => {
-        setIsUpdateListLoading(false);
+        setBlockListLoading(false);
       });
     } else if (receivedLatestBlockWhileLiveUpdates && latestBlock) {
       // If latest block belongs to the last burn block, add it to the list, otherwise trigger an update.
       if (latestBlock.burn_block_height === lastBurnBlock.burn_block_height) {
-        setIsUpdateListLoading(true);
+        setBlockListLoading(true);
         setTimeout(() => {
           lastBurnBlockStxBlocks.unshift(latestBlock);
           lastBurnBlock.stacks_blocks.unshift(latestBlock.hash);
-          setIsUpdateListLoading(false);
+          setBlockListLoading(false);
         }, FADE_DURATION);
       } else {
         clearLatestBlocks();
@@ -135,18 +133,17 @@ export function useBlockList(length: number) {
   }, [
     liveUpdates,
     latestBlocksCount,
+    clearLatestBlocks,
+    updateList,
+    setBlockListLoading,
     latestBlock,
     lastBurnBlockStxBlocks,
     lastBurnBlock.stacks_blocks,
     lastBurnBlock.burn_block_height,
-    clearLatestBlocks,
-    updateList,
-    setIsUpdateListLoading,
   ]);
 
   let blockList = createUIBlockList(lastBurnBlock, lastBurnBlockStxBlocks, length);
 
-  // If the list is not long enough, give the secondLatestBurnBlock and its associated stx blocks the same UI treatment as the latestBurnBlock
   if (blockList.length < length) {
     const secondToLastBlockList = createUIBlockList(
       secondToLastBurnBlock,

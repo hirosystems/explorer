@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Section } from '../../../common/components/Section';
 import { TwoColumnsListItemSkeleton } from '../../../common/components/TwoColumnsListItemSkeleton';
 
-// TODO: delete
 export const SkeletonBlockList = () => {
   return (
     <Section title="Recent Blocks">

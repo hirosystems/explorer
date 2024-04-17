@@ -28,13 +28,8 @@ export function BlockListWithControls({
   fetchNextPage?: () => void;
   horizontalControls?: boolean;
 }) {
-  const {
-    isBlockListLoading: isUpdateListLoading,
-    groupedByBtc,
-    setGroupedByBtc,
-    liveUpdates,
-    setLiveUpdates,
-  } = useBlockListContext();
+  const { isBlockListLoading, groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } =
+    useBlockListContext();
 
   const lastClickTimeRef = useRef(0);
 
@@ -64,7 +59,7 @@ export function BlockListWithControls({
           horizontal={horizontalControls}
         />
         {!liveUpdates && <UpdateBar latestBlocksCount={latestBlocksCount} onClick={updateList} />}
-        <Blocks blockList={blockList} isUpdateListLoading={isUpdateListLoading} />
+        <Blocks blockList={blockList} isUpdateListLoading={isBlockListLoading} />
         <Box pt={4}>
           {(!liveUpdates || !enablePagination) && (
             <ListFooter

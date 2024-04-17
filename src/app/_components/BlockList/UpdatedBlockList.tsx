@@ -8,6 +8,7 @@ import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
+import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
@@ -177,7 +178,7 @@ function UpdatedBlocksListBase({
     setLatestBlocks(prevBlocks => prevBlocks.filter(b => b.height !== block.height));
   }, []);
 
-  // if (!allBlocks?.length) return <SkeletonBlockList />; // TODO: fix
+  if (!allBlocks?.length) return <SkeletonBlockList />;
 
   return (
     <Section

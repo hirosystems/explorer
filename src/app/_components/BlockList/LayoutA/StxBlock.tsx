@@ -1,4 +1,5 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import * as React from 'react';
 import { ReactNode, memo } from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
@@ -16,48 +17,44 @@ interface ListItemProps {
   timestamp: number;
   txsCount?: number;
   icon?: ReactNode;
-  hasBorder?: boolean;
 }
 
-export const StxBlock = memo(function ({
-  timestamp,
-  height,
-  hash,
-  txsCount,
-  icon,
-  hasBorder,
-}: ListItemProps) {
-  // TODO: lots of new colors that aren't in the theme. We should either add them or make them conform to the theme
+export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon }: ListItemProps) {
   const textColor = useColorModeValue('slate.900', 'slate.50');
   const secondaryTextColor = useColorModeValue('slate.700', 'slate.600');
-
+  const borderColor = useColorModeValue('slate.300', 'slate.800');
   return (
     <Box
       pl={4}
       borderLeft={icon ? undefined : '1px'}
-      borderColor="borderPrimary"
+      borderColor={borderColor}
       position="relative"
+      __css={{
+        '>div': {
+          borderTop: '1px',
+        },
+        '&:first-child >div': {
+          borderTop: 'none',
+        },
+      }}
     >
       <Flex
         justifyContent={'space-between'}
         alignItems={'center'}
         flexGrow={1}
         height={14}
-        borderBottom={hasBorder ? '1px' : 'none'}
         _after={
           icon
             ? {
-                // adds a small line underneath the icon of the first block to connect it with the other rows
                 content: '""',
                 position: 'absolute',
                 left: '0',
                 bottom: '0',
                 height: '10px',
                 width: '1px',
-                backgroundColor: 'borderPrimary',
+                backgroundColor: borderColor,
               }
             : {
-                // node
                 content: '""',
                 position: 'absolute',
                 left: '-3px',
@@ -65,7 +62,7 @@ export const StxBlock = memo(function ({
                 transform: 'translateY(-50%)',
                 width: '6px',
                 height: '6px',
-                backgroundColor: 'borderPrimary',
+                backgroundColor: borderColor,
                 borderRadius: '50%',
               }
         }
