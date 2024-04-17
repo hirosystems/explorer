@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { FC, useEffect } from 'react';
-=======
-import React, { FC } from 'react';
->>>>>>> e74175d (feat: grouped by btc block list view)
 import { PiX } from 'react-icons/pi';
 
 import { useAppSelector } from '../../../common/state/hooks';
