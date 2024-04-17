@@ -40,7 +40,7 @@ export function usePaginatedBlockList() {
             acc[block.burn_block_hash] = [];
           }
           acc[block.burn_block_hash].push({
-            type: UIBlockType.StxBlock,
+            type: UIBlockType.Block,
             height: block.height,
             hash: block.hash,
             timestamp: block.burn_block_time,
