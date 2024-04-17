@@ -147,10 +147,10 @@ exports[`BlockListWithControls renders correctly 1`] = `
           style="transition: opacity 0.7s; opacity: 1;"
         >
           <div
-            class="css-1le0uvk"
+            class="css-c7wx4b"
           >
             <div
-              class="css-1kf10wp"
+              class="css-g8y6qd"
             >
               <div
                 class="css-k008qs"
@@ -209,10 +209,10 @@ exports[`BlockListWithControls renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="css-1nfh67l"
+            class="css-8mx47l"
           >
             <div
-              class="css-orw2h0"
+              class="css-hu3jac"
             >
               <div
                 class="css-k008qs"
@@ -256,10 +256,10 @@ exports[`BlockListWithControls renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="css-1nfh67l"
+            class="css-8mx47l"
           >
             <div
-              class="css-2uyc25"
+              class="css-hu3jac"
             >
               <div
                 class="css-k008qs"
@@ -303,7 +303,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="css-1r6wm6e"
+            class="css-k0mx8y"
           >
             <div
               class="chakra-stack css-1xwk49h"
@@ -349,7 +349,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
                 target="_blank"
               >
                 <span
-                  class="chakra-text css-19nhksf"
+                  class="chakra-text css-6xh8zb"
                 >
                   #4
                 </span>
