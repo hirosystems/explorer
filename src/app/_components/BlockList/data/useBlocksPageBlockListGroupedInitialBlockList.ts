@@ -33,7 +33,7 @@ export function useBlocksPageBlockListGroupedInitialBlockList(blockListLimit: nu
   }, [burnBlocks]);
 
   const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height)
+    useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height, 10, {}, 'blocks-page')
   );
 
   const initialStxBlockHashes = useMemo(

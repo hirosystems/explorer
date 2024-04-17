@@ -26,7 +26,7 @@ export const buttonTheme = defineStyleConfig({
       },
     })),
     text: defineStyle(props => ({
-      padding: 0,
+      padding: '0 !important',
       border: 'none',
       background: 'none',
       fontWeight: 'medium',
