@@ -1,3 +1,10 @@
+# [1.165.0](https://github.com/hirosystems/explorer/compare/v1.164.0...v1.165.0) (2024-04-18)
+
+
+### Features
+
+* release banner fast follow ([df24f45](https://github.com/hirosystems/explorer/commit/df24f45a84388ca95c9aefd557b088c4e15bf199))
+
 # [1.164.0](https://github.com/hirosystems/explorer/compare/v1.163.2...v1.164.0) (2024-04-18)
 
 
