@@ -3,11 +3,7 @@
 import { useMemo } from 'react';
 import { PiList } from 'react-icons/pi';
 
-import { openModal } from '../../../common/components/modals/modal-slice';
-import { MODALS } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
-import { useAppDispatch } from '../../../common/state/hooks';
-import { Network } from '../../../common/types/network';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { capitalize } from '../../../common/utils/utils';
@@ -21,40 +17,23 @@ import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { DesktopNav } from './DesktopNav';
+import { ExploreItems } from './ExploreItems';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
-import { NavLabel } from './NavLabel';
-import { NetworkLabel } from './NetworkLabel';
+import { NetworkItems } from './NetworkItems';
 import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { isOpen, onToggle } = useDisclosure();
-  const { networks, activeNetwork } = useGlobalContext();
-  const dispatch = useAppDispatch();
+  const { activeNetwork } = useGlobalContext();
 
   const navItems: NavItem[] = useMemo(
     () => [
       {
-        id: 'blockchain',
-        label: 'Blockchain',
-        children: [
-          {
-            id: 'transactions',
-            label: <NavLabel>Transactions</NavLabel>,
-            href: buildUrl('/transactions', activeNetwork),
-          },
-          {
-            id: 'blocks',
-            label: <NavLabel>Blocks</NavLabel>,
-            href: buildUrl('/blocks', activeNetwork),
-          },
-        ],
-      },
-      {
-        id: 'tokens',
-        label: 'Tokens',
-        href: buildUrl('/tokens', activeNetwork),
+        id: 'explore',
+        label: 'Explore',
+        children: <ExploreItems />,
       },
       {
         id: 'sandbox',
@@ -64,24 +43,10 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
       {
         id: 'network',
         label: capitalize(activeNetwork.mode ?? 'Custom network'),
-        children: [
-          ...Object.values<Network>(networks).map((network, key) => {
-            return {
-              id: network.url,
-              label: <NetworkLabel network={network} key={key} />,
-            };
-          }),
-          {
-            id: 'add-network',
-            label: <NavLabel>Add a network</NavLabel>,
-            onClick: () => {
-              dispatch(openModal(MODALS.ADD_NETWORK));
-            },
-          },
-        ],
+        children: <NetworkItems />,
       },
     ],
-    [activeNetwork, networks, dispatch]
+    [activeNetwork]
   );
 
   return (

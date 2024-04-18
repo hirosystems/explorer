@@ -7,8 +7,6 @@ import { Link } from '../../../ui/Link';
 import { Popover } from '../../../ui/Popover';
 import { PopoverContent } from '../../../ui/PopoverContent';
 import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Text } from '../../../ui/Text';
-import { DesktopSubNav } from './DesktopSubNav';
 import { NavItem } from './types';
 
 export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
@@ -45,12 +43,8 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
               </Flex>
             </PopoverTrigger>
             {navItem.children && (
-              <PopoverContent boxShadow={'xl'} bg={`white`} rounded={'xl'} mt={4}>
-                <Flex direction={'column'}>
-                  {navItem.children.map((child, index) => (
-                    <DesktopSubNav key={child.id} {...child} />
-                  ))}
-                </Flex>
+              <PopoverContent boxShadow={'xl'} bg="bg" rounded={'xl'} mt={4} width="fit-content">
+                {navItem.children}
               </PopoverContent>
             )}
           </Popover>

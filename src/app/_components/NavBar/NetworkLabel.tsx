@@ -54,7 +54,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
     <Flex
       justifyContent={'space-between'}
       width={'100%'}
-      padding={'15px 0'}
+      padding={3}
       opacity={isDisabled ? 0.5 : 1}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
       gap={2}
