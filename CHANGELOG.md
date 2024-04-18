@@ -1,3 +1,10 @@
+# [1.164.0](https://github.com/hirosystems/explorer/compare/v1.163.2...v1.164.0) (2024-04-18)
+
+
+### Features
+
+* release banner ([952b4fc](https://github.com/hirosystems/explorer/commit/952b4fc83e87f570ce31d5027612dd58f5619d83))
+
 ## [1.163.2](https://github.com/hirosystems/explorer/compare/v1.163.1...v1.163.2) (2024-04-18)
 
 
