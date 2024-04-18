@@ -86,7 +86,7 @@ export function PageWrapper({
               </TextLink>{' '}
               of the Stacks Blockchain has been released.
               <br />
-              This kicks off the 1st step of the 2 part
+              This kicks off the 1st step of the 2 part{' '}
               <TextLink
                 href="https://docs.stacks.co/nakamoto-upgrade/nakamoto-rollout-plan"
                 target="_blank"
