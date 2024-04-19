@@ -33,27 +33,6 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { isOpen, onToggle } = useDisclosure();
   const { networks, activeNetwork } = useGlobalContext();
   const isDesktop = useIsDesktop();
-
-  // const navItems: NavItem[] = useMemo(
-  //   () => [
-  //     {
-  //       id: 'explore',
-  //       label: 'Explore',
-  //       children: <ExploreItems />,
-  //     },
-  //     {
-  //       id: 'sandbox',
-  //       label: 'Sandbox',
-  //       href: buildUrl('/sandbox/deploy', activeNetwork),
-  //     },
-  //     {
-  //       id: 'network',
-  //       label: capitalize(activeNetwork.mode ?? 'Custom network'),
-  //       children: <NetworkItems />,
-  //     },
-  //   ],
-  //   [activeNetwork]
-  // );
   const dispatch = useAppDispatch();
 
   const navItems: NavItem[] = useMemo(
