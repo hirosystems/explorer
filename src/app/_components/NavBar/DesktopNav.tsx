@@ -7,6 +7,7 @@ import { Link } from '../../../ui/Link';
 import { Popover } from '../../../ui/Popover';
 import { PopoverContent } from '../../../ui/PopoverContent';
 import { PopoverTrigger } from '../../../ui/PopoverTrigger';
+import { LabelWrapper } from './LabelWrapper';
 import { NavItem } from './types';
 
 export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
@@ -43,8 +44,10 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
               </Flex>
             </PopoverTrigger>
             {navItem.children && (
-              <PopoverContent boxShadow={'xl'} bg="bg" rounded={'xl'} mt={4} width="fit-content">
-                {navItem.children}
+              <PopoverContent boxShadow={'xl'} bg="bg" rounded={'xl'} mt={4} width="fit-content" p={2}>
+                {navItem.children.map(child => (
+                  <LabelWrapper {...child} />
+                ))}
               </PopoverContent>
             )}
           </Popover>

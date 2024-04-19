@@ -1,7 +1,11 @@
 'use client';
 
+import { openModal } from '@/common/components/modals/modal-slice';
+import { MODALS } from '@/common/constants/constants';
+import { useAppDispatch } from '@/common/state/hooks';
+import { Network } from '@/common/types/network';
 import { useMemo } from 'react';
-import { PiList } from 'react-icons/pi';
+import { PiList, PiPlusBold } from 'react-icons/pi';
 
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { TokenPrice } from '../../../common/types/tokenPrice';
@@ -17,23 +21,63 @@ import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { DesktopNav } from './DesktopNav';
-import { ExploreItems } from './ExploreItems';
 import { Logo } from './Logo';
 import { MobileNav } from './MobileNav';
-import { NetworkItems } from './NetworkItems';
+import { NavLabel } from './NavLabel';
+import { NetworkLabel } from './NetworkLabel';
 import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
+import { useIsDesktop } from './utils';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { isOpen, onToggle } = useDisclosure();
-  const { activeNetwork } = useGlobalContext();
+  const { networks, activeNetwork } = useGlobalContext();
+  const isDesktop = useIsDesktop();
+
+  // const navItems: NavItem[] = useMemo(
+  //   () => [
+  //     {
+  //       id: 'explore',
+  //       label: 'Explore',
+  //       children: <ExploreItems />,
+  //     },
+  //     {
+  //       id: 'sandbox',
+  //       label: 'Sandbox',
+  //       href: buildUrl('/sandbox/deploy', activeNetwork),
+  //     },
+  //     {
+  //       id: 'network',
+  //       label: capitalize(activeNetwork.mode ?? 'Custom network'),
+  //       children: <NetworkItems />,
+  //     },
+  //   ],
+  //   [activeNetwork]
+  // );
+  const dispatch = useAppDispatch();
 
   const navItems: NavItem[] = useMemo(
     () => [
       {
         id: 'explore',
         label: 'Explore',
-        children: <ExploreItems />,
+        children: [
+          {
+            id: 'blocks',
+            label: <NavLabel>Blocks</NavLabel>,
+            href: buildUrl('/blocks', activeNetwork),
+          },
+          {
+            id: 'tokens',
+            label: <NavLabel>Tokens</NavLabel>,
+            href: buildUrl('/tokens', activeNetwork),
+          },
+          {
+            id: 'transactions',
+            label: <NavLabel>Transactions</NavLabel>,
+            href: buildUrl('/transactions', activeNetwork),
+          },
+        ],
       },
       {
         id: 'sandbox',
@@ -43,36 +87,57 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
       {
         id: 'network',
         label: capitalize(activeNetwork.mode ?? 'Custom network'),
-        children: <NetworkItems />,
+        children: [
+          ...Object.values<Network>(networks).map((network, key) => {
+            return {
+              id: network.url,
+              label: <NetworkLabel network={network} key={key} />,
+            };
+          }),
+          {
+            id: 'add-network',
+            label: (
+              <NavLabel icon={<Icon as={PiPlusBold} size={4} color={'text'} />}>
+                Add a network
+              </NavLabel>
+            ),
+            onClick: () => {
+              dispatch(openModal(MODALS.ADD_NETWORK));
+            },
+          },
+        ],
       },
     ],
-    [activeNetwork]
+    [activeNetwork, networks, dispatch]
   );
 
   return (
     <Box width="full">
       <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
-        <Logo />
+        <Logo color="white" />
         <Search />
         <Show above="lg">
           <NetworkModeBanner />
         </Show>
-        <Show above="lg">
-          <Flex gap={3}>
-            <ColorModeButton aria-label={'Change color mode'} />
-            <DesktopNav navItems={navItems} />
-          </Flex>
-          <BtcStxPrice tokenPrice={tokenPrice} />
-        </Show>
-        <Show below="lg">
-          <IconButton
-            onClick={onToggle}
-            icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
-            variant={'ghost'}
-            aria-label={'Toggle Navigation'}
-          />
-          {isOpen && <MobileNav navItems={navItems} close={onToggle} />}
-        </Show>
+        {isDesktop ? (
+          <>
+            <Flex gap={3}>
+              <ColorModeButton aria-label={'Change color mode'} />
+              <DesktopNav navItems={navItems} />
+            </Flex>
+            <BtcStxPrice tokenPrice={tokenPrice} />
+          </>
+        ) : (
+          <>
+            <IconButton
+              onClick={onToggle}
+              icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
+              variant={'ghost'}
+              aria-label={'Toggle Navigation'}
+            />
+            {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
+          </>
+        )}
       </Flex>
     </Box>
   );

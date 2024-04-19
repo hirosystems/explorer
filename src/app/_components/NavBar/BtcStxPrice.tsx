@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
@@ -10,6 +9,7 @@ import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { BitcoinIcon, StxIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
+import { useIsDesktop } from './utils';
 
 function PriceContainer({
   icon,
@@ -29,9 +29,14 @@ function PriceContainer({
 function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const formattedBtcPrice = tokenPrice.btcPrice ? usdFormatter.format(tokenPrice.btcPrice) : '';
   const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
+  const isDesktop = useIsDesktop();
   return (
     <Flex gap={6} minWidth={'172px'}>
-      <PriceContainer icon={<Icon as={BitcoinIcon} size={'18px'} />} minWidth={'92px'}>
+      <PriceContainer
+        icon={<Icon as={BitcoinIcon} size={'18px'} />}
+        minWidth={'92px'}
+        {...(isDesktop ? {} : { color: 'text' })}
+      >
         {!formattedBtcPrice ? 'N/A' : formattedBtcPrice}
       </PriceContainer>
       <PriceContainer
@@ -41,6 +46,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </Circle>
         }
         minWidth={'56px'}
+        {...(isDesktop ? {} : { color: 'text' })}
       >
         {!formattedStxPrice ? 'N/A' : formattedStxPrice}
       </PriceContainer>

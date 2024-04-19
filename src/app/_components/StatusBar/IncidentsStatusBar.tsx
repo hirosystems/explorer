@@ -23,18 +23,24 @@ export function IncidentsStatusBar() {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
   const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
   const dispatch = useAppDispatch();
-  const allIncidents = unresolvedIncidentsResponse?.incidents?.map(({ name }) => name).join(' - ');
-  const highestImpact = unresolvedIncidentsResponse?.incidents?.reduce(
-    (acc, { impact }) =>
-      incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
-    IncidentImpact.None
-  );
+  const incidents = unresolvedIncidentsResponse?.incidents;
+  const allIncidents = incidents ? incidents?.map(({ name }) => name).join(' - ') : undefined;
+  const highestImpact = incidents
+    ? incidents.reduce(
+        (acc, { impact }) =>
+          incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
+        IncidentImpact.None
+      )
+    : IncidentImpact.None;
+  const incidentImpact = highestImpact != null && highestImpact !== IncidentImpact.None;
 
   useEffect(() => {
-    if (allIncidents || highestImpact) dispatch(setStatusBar(true));
-  }, [allIncidents, highestImpact, dispatch]);
+    if (allIncidents || incidentImpact) {
+      dispatch(setStatusBar(true));
+    }
+  }, [allIncidents, incidentImpact, dispatch]);
 
-  if (!highestImpact || !allIncidents) return null;
+  if (!incidentImpact || !allIncidents) return null;
 
   const isTestnetUpdate = allIncidents.includes('Testnet Update:');
 

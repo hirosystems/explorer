@@ -1,7 +1,7 @@
 import { useColorMode } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { PiTrash } from 'react-icons/pi';
-import { TbCheck, TbTrash } from 'react-icons/tb';
+import { TbCheck } from 'react-icons/tb';
 
 import { ChainID } from '@stacks/transactions';
 
@@ -19,9 +19,20 @@ import { IconButton } from '../../../ui/IconButton';
 import { Spinner } from '../../../ui/Spinner';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
+import { useBreakpointValue } from '../../../ui/hooks/useBreakpointValue';
 import { Caption, Title } from '../../../ui/typography';
 
+const mobileNetworkLabelStyles = {
+  py: 3,
+};
+
+const desktopNetworkLabelStyles = {
+  p: 3,
+};
+
 export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
+  const isDesktop = useBreakpointValue({ base: false, lg: true });
+
   const {
     activeNetwork,
     removeCustomNetwork,
@@ -54,7 +65,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
     <Flex
       justifyContent={'space-between'}
       width={'100%'}
-      padding={3}
+      {...(isDesktop ? desktopNetworkLabelStyles : mobileNetworkLabelStyles)}
       opacity={isDisabled ? 0.5 : 1}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
       gap={2}

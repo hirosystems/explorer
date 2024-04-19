@@ -6,16 +6,13 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const blockBurnTime = searchParams.get('blockBurnTime');
 
-  console.log('blockBurnTime', blockBurnTime);
   if (!blockBurnTime || blockBurnTime === 'current') {
-    console.log(11);
     const response = await fetch('https://lunarcrush.com/api4/public/coins/stx/v1', {
       headers: {
         Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
       },
     });
     const data = await response.json();
-    console.log(data);
     return Response.json({ price: data?.data?.price || 0 });
   }
 

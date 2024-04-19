@@ -2,16 +2,16 @@ import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Link } from '../../../ui/Link';
 import { NavItem } from './types';
+import { useIsDesktop } from './utils';
 
-export const DesktopSubNav = ({ label, href, onClick }: NavItem) => {
+export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
+  const isDesktop = useIsDesktop();
   return (
     <Flex
       alignItems={'center'}
       borderRadius="xl"
-      _hover={{
-        bg: 'dropdownBgHover',
-      }}
       width="full"
+      {...(isDesktop ? { _hover: { bg: 'dropdownBgHover' } } : {})}
     >
       {href ? (
         <Link
@@ -28,7 +28,6 @@ export const DesktopSubNav = ({ label, href, onClick }: NavItem) => {
         <Box
           as={'button'}
           onClick={onClick}
-          role="group"
           display="block"
           rounded="md"
           color="text"

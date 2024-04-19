@@ -1,22 +1,41 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
-import { FC } from 'react';
+import { ColorMode, useColorMode } from '@chakra-ui/react';
 import { PiMoon, PiSunDim } from 'react-icons/pi';
-import { TbSun, TbSunOff } from 'react-icons/tb';
 
 import { IconButton, IconButtonProps } from '../../../ui/IconButton';
 
-export const ColorModeButton: FC<IconButtonProps> = props => {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const Icon = colorMode === 'light' ? PiSunDim : PiMoon;
+export function ColorModeButton({
+  colorModeOverride,
+  ...rest
+}: {
+  colorModeOverride?: ColorMode;
+} & IconButtonProps) {
+  const { colorMode, toggleColorMode, setColorMode } = useColorMode();
+  const Icon = colorModeOverride
+    ? colorModeOverride === 'light'
+      ? PiSunDim
+      : PiMoon
+    : colorMode === 'light'
+      ? PiSunDim
+      : PiMoon;
+  const onClick = () => {
+    if (colorModeOverride) {
+      setColorMode(colorModeOverride === 'light' ? 'light' : 'dark');
+    } else {
+      toggleColorMode();
+    }
+  };
   return (
     <IconButton
       icon={<Icon />}
-      onClick={toggleColorMode}
+      onClick={onClick}
       color="white"
       title="Toggle color mode"
-      {...props}
+      _hover={{
+        bg: 'dropdownBgHover',
+      }}
+      {...rest}
     />
   );
-};
+}
