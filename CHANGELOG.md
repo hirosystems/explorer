@@ -1,3 +1,10 @@
+## [1.165.2](https://github.com/hirosystems/explorer/compare/v1.165.1...v1.165.2) (2024-04-19)
+
+
+### Bug Fixes
+
+* unit test ([9b0199d](https://github.com/hirosystems/explorer/commit/9b0199d0586dc6883e88e0a95ccdcd59a8dc6d55))
+
 ## [1.165.1](https://github.com/hirosystems/explorer/compare/v1.165.0...v1.165.1) (2024-04-19)
 
 
