@@ -16,7 +16,6 @@ import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
-import { StxIcon } from '../../../../ui/icons';
 
 export const Amount: FC<{ tx: TokenTransferTransaction | MempoolTokenTransferTransaction }> = ({
   tx,

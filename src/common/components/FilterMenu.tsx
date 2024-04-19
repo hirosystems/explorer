@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import { CaretDown } from '@phosphor-icons/react';
+import { Icon as IconType } from '@phosphor-icons/react';
 import { ReactNode, isValidElement } from 'react';
-import { IconType } from 'react-icons';
-import { BsChevronDown } from 'react-icons/bs';
 
 import { Box } from '../../ui/Box';
 import { Button } from '../../ui/Button';
@@ -40,7 +40,7 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
         <>
           <MenuButton
             as={Button}
-            rightIcon={<Icon as={BsChevronDown} size={3} color="text" />}
+            rightIcon={<Icon as={CaretDown} size={3} color="text" />}
             leftIcon={
               leftIcon ? (
                 <Icon as={leftIcon} size={4} color={isOpen ? 'text' : 'textSubdued'} />

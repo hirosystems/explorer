@@ -1,8 +1,8 @@
 'use client';
 
+import { Info } from '@phosphor-icons/react';
 import * as React from 'react';
 import { useMemo } from 'react';
-import { PiInfo } from 'react-icons/pi';
 
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
@@ -31,7 +31,7 @@ function CurrentStackingCycleBase(props: GridProps) {
           <Flex alignItems={'center'}>
             {approximateDaysTilNextCycle} day{approximateDaysTilNextCycle !== 1 ? 's' : ''}
             &nbsp;
-            <Icon as={PiInfo} size={3} />
+            <Icon as={Info} size={3} />
           </Flex>
         </Tooltip>
       </Flex>

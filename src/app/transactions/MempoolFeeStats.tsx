@@ -1,11 +1,11 @@
 import { StackDivider, VStack, useColorModeValue } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
 import {
-  TbCircleChevronDown,
-  TbCircleChevronUp,
-  TbCircleChevronsUp,
-  TbCircleMinus,
-} from 'react-icons/tb';
+  CaretCircleDoubleUp,
+  CaretCircleDown,
+  CaretCircleUp,
+  MinusCircle,
+} from '@phosphor-icons/react';
+import { useMemo, useState } from 'react';
 
 import { MempoolFeePriorities } from '@stacks/blockchain-api-client/src/generated/models';
 import { MempoolFeePrioritiesAll } from '@stacks/blockchain-api-client/src/generated/models/MempoolFeePrioritiesAll';
@@ -33,13 +33,13 @@ import {
 export const getFeePriorityIcon = (priority: keyof MempoolFeePrioritiesAll) => {
   switch (priority) {
     case 'no_priority':
-      return <Icon as={TbCircleMinus} size={4} color="slate.600" />;
+      return <Icon as={MinusCircle} size={4} color="slate.600" />;
     case 'low_priority':
-      return <Icon as={TbCircleChevronDown} size={4} color="red.600" />;
+      return <Icon as={CaretCircleDown} size={4} color="red.600" />;
     case 'medium_priority':
-      return <Icon as={TbCircleChevronUp} size={4} color="orange.600" />;
+      return <Icon as={CaretCircleUp} size={4} color="orange.600" />;
     case 'high_priority':
-      return <Icon as={TbCircleChevronsUp} size={4} color="green.600" />;
+      return <Icon as={CaretCircleDoubleUp} size={4} color="green.600" />;
     default:
       throw new Error('Invalid priority');
   }

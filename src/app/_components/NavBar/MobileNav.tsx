@@ -1,6 +1,6 @@
 import { Divider } from '@chakra-ui/react';
+import { X } from '@phosphor-icons/react';
 import { useEffect } from 'react';
-import { PiX } from 'react-icons/pi';
 
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { Flex } from '../../../ui/Flex';
@@ -56,7 +56,7 @@ export function MobileNav({
     >
       <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
         <Logo />
-        <IconButton onClick={close} icon={<Icon as={PiX} size={6} />} aria-label={'Close menu'} />
+        <IconButton onClick={close} icon={<Icon as={X} size={6} />} aria-label={'Close menu'} />
       </Flex>
       <Flex justifyContent={'space-between'}>
         <Flex gap={3}>

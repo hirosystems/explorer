@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import { ArrowBendDownLeft } from '@phosphor-icons/react';
 import * as React from 'react';
 import { memo } from 'react';
-import { BsArrowReturnLeft } from 'react-icons/bs';
 
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useAppContext';
@@ -12,7 +12,7 @@ import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { TextLink } from '../../../../ui/TextLink';
-import { BitcoinIcon } from '../../../../ui/icons';
+import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 
 interface ListItemProps extends FlexProps {
   height: number | string;
@@ -40,7 +40,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
     >
       <HStack gap={1.5}>
         <Icon
-          as={BsArrowReturnLeft}
+          as={ArrowBendDownLeft}
           transform={'rotate(90deg)'}
           size={2.5}
           color={iconColor}

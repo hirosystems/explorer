@@ -1,7 +1,7 @@
 'use client';
 
+import { List, Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
-import { PiList, PiPlusBold } from 'react-icons/pi';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
 import { MODALS } from '../../../common/constants/constants';
@@ -74,9 +74,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
           {
             id: 'add-network',
             label: (
-              <NavLabel icon={<Icon as={PiPlusBold} size={4} color={'text'} />}>
-                Add a network
-              </NavLabel>
+              <NavLabel icon={<Icon as={Plus} size={4} color={'text'} />}>Add a network</NavLabel>
             ),
             onClick: () => {
               dispatch(openModal(MODALS.ADD_NETWORK));
@@ -106,7 +104,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <Show below="lg">
           <IconButton
             onClick={onToggle}
-            icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
+            icon={<Icon as={List} w={6} h={6} color={'white'} />}
             variant={'ghost'}
             aria-label={'Toggle Navigation'}
           />

@@ -1,6 +1,6 @@
+import { ArrowDownRight } from '@phosphor-icons/react';
 import * as React from 'react';
 import { FC } from 'react';
-import { TbArrowDownRight } from 'react-icons/tb';
 
 import {
   MempoolTokenTransferTransaction,
@@ -20,7 +20,7 @@ export const Recipient: FC<{ tx: TokenTransferTransaction | MempoolTokenTransfer
     value={
       <HStack>
         <Box>
-          <TbArrowDownRight size="16px" />
+          <ArrowDownRight size={4} />
         </Box>
         <ExplorerLink
           fontSize={'14px'}

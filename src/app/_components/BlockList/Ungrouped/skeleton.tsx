@@ -1,5 +1,5 @@
+import { Circle } from '@phosphor-icons/react';
 import React from 'react';
-import { PiCircleFill } from 'react-icons/pi';
 
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
@@ -20,7 +20,7 @@ export function BlockListRowSkeleton({
   isLast?: boolean;
   isFirst?: boolean;
 }) {
-  const icon = isFirst ? <Icon as={PiCircleFill} size={2.5} fill="borderPrimary" /> : null;
+  const icon = isFirst ? <Icon as={Circle} size={2.5} fill="borderPrimary" /> : null;
   return minimized ? (
     <>
       <Flex alignItems="center" gridColumn="1 / 2" gap={2}>

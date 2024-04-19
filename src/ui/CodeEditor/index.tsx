@@ -1,9 +1,9 @@
 'use client';
 
 import Editor, { EditorProps, Monaco } from '@monaco-editor/react';
+import { FrameCorners } from '@phosphor-icons/react';
 import Prism from 'prismjs';
 import { FC, memo, useState } from 'react';
-import { MdExpand } from 'react-icons/md';
 
 import { autocomplete, hover } from '../../app/sandbox/editor-config/autocomplete';
 import { defineTheme } from '../../app/sandbox/editor-config/define-theme';
@@ -70,7 +70,7 @@ const CodeEditorBase: FC<{ code: string } & Partial<EditorProps>> = ({
         position={'absolute'}
         bottom={0}
         right={0}
-        icon={<MdExpand color={'white'} />}
+        icon={<FrameCorners color={'white'} />}
       ></IconButton>
     </Box>
   );

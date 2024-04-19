@@ -1,8 +1,7 @@
 'use client';
 
+import { CaretRight } from '@phosphor-icons/react';
 import * as React from 'react';
-import { Fragment } from 'react';
-import { TbChevronRight } from 'react-icons/tb';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { Box } from '../../ui/Box';
@@ -27,7 +26,7 @@ function ContractSourceBase({ txContractId }: { txContractId: string }) {
             border={'none'}
           >
             View deployment
-            <Box as={TbChevronRight} ml="4px" size="14px" display={'inline'} />
+            <Box as={CaretRight} ml="4px" size="14px" display={'inline'} />
           </Badge>
         </TxLink>
       }

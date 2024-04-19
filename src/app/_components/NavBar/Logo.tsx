@@ -1,6 +1,6 @@
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
 import { Icon, IconProps } from '../../../ui/Icon';
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 
 export function Logo({ ...iconProps }: IconProps) {
   return (

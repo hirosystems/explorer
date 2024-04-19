@@ -1,8 +1,14 @@
+import {
+  Eye,
+  GitCommit,
+  GitFork,
+  GitMerge,
+  MinusSquare,
+  PlusSquare,
+  Star,
+  Users,
+} from '@phosphor-icons/react';
 import { FC } from 'react';
-import { AiOutlineEye, AiOutlineStar } from 'react-icons/ai';
-import { MdPeopleOutline } from 'react-icons/md';
-import { PiGitCommitDuotone, PiGitForkDuotone, PiGitMergeDuotone } from 'react-icons/pi';
-import { VscDiffAdded, VscDiffRemoved } from 'react-icons/vsc';
 
 import { Flex } from '../../../../ui/Flex';
 import { DeveloperData } from '../types';
@@ -13,17 +19,17 @@ export const Developers: FC<{ developerData: DeveloperData }> = ({ developerData
     {
       value: developerData?.forks || 0,
       label: 'Forks',
-      icon: PiGitForkDuotone,
+      icon: GitFork,
     },
     {
       value: developerData?.stars || 0,
       label: 'Stars',
-      icon: AiOutlineStar,
+      icon: Star,
     },
     {
       value: developerData?.subscribers || 0,
       label: 'Subscribers',
-      icon: AiOutlineEye,
+      icon: Eye,
     },
     {
       value: `${developerData?.closed_issues || 0} / ${developerData?.total_issues || 0}`,
@@ -33,27 +39,27 @@ export const Developers: FC<{ developerData: DeveloperData }> = ({ developerData
     {
       value: developerData?.pull_requests_merged || 0,
       label: 'PRs merged',
-      icon: PiGitMergeDuotone,
+      icon: GitMerge,
     },
     {
       value: developerData?.pull_request_contributors || 0,
       label: 'PR contributors',
-      icon: MdPeopleOutline,
+      icon: Users,
     },
     {
       value: developerData?.commit_count_4_weeks || 0,
       label: 'Commits (4 weeks)',
-      icon: PiGitCommitDuotone,
+      icon: GitCommit,
     },
     {
       value: developerData?.code_additions_deletions_4_weeks?.additions || 0,
       label: 'Additions (4 weeks)',
-      icon: VscDiffAdded,
+      icon: PlusSquare,
     },
     {
       value: developerData?.code_additions_deletions_4_weeks?.deletions || 0,
       label: 'Deletions (4 weeks)',
-      icon: VscDiffRemoved,
+      icon: MinusSquare,
     },
   ];
   return (

@@ -1,6 +1,6 @@
-import { IconBaseProps } from 'react-icons';
+import { IconProps } from '@phosphor-icons/react';
 
-export function QuestionOctagon({ color = '#C83532', size = 26, ...rest }: IconBaseProps) {
+export function QuestionOctagon({ color = '#C83532', size = 26, ...rest }: IconProps) {
   return (
     <svg
       width={size}

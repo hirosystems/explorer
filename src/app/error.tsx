@@ -1,9 +1,7 @@
 'use client';
 
-import { Code } from '@chakra-ui/react';
-import { useEffect } from 'react';
 import * as React from 'react';
-import { TbAlertOctagon } from 'react-icons/tb';
+import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
 import { Section } from '../common/components/Section';
@@ -14,7 +12,6 @@ import { Button } from '../ui/Button';
 import { ButtonLink } from '../ui/ButtonLink';
 import { Grid } from '../ui/Grid';
 import { HStack } from '../ui/HStack';
-import { Stack } from '../ui/Stack';
 import { PageTitle } from './_components/PageTitle';
 
 export default function Error({

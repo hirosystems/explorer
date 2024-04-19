@@ -13,7 +13,7 @@ import { Grid } from '../../../ui/Grid';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { Text, Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 

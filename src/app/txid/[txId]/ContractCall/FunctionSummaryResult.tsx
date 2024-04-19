@@ -1,4 +1,4 @@
-import { TbAlertTriangle, TbCircleCheck } from 'react-icons/tb';
+import { CheckCircle, Warning } from '@phosphor-icons/react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
@@ -68,9 +68,9 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
       <Box width="100%">
         <Flex alignItems="center">
           {success ? (
-            <Box mr="8px" color={'feedbackSuccess'} as={TbCircleCheck} />
+            <Box mr="8px" color={'feedbackSuccess'} as={CheckCircle} />
           ) : (
-            <Box mr="8px" color={'feedbackError'} as={TbAlertTriangle} />
+            <Box mr="8px" color={'feedbackError'} as={Warning} />
           )}
           <Pre>{hasType ? type : success ? 'Success' : 'Failed'}</Pre>
         </Flex>

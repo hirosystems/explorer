@@ -1,6 +1,6 @@
+import { Lightning } from '@phosphor-icons/react';
 import React from 'react';
-import { FiZap } from 'react-icons/fi';
 
 import { Box, BoxProps } from '../../../ui/Box';
 
-export const MicroblockIcon: React.FC<BoxProps> = props => <Box as={FiZap} {...props} />;
+export const MicroblockIcon: React.FC<BoxProps> = props => <Box as={Lightning} {...props} />;

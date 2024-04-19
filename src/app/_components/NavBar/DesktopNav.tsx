@@ -1,5 +1,5 @@
+import { CaretDown } from '@phosphor-icons/react';
 import { FC } from 'react';
-import { PiCaretDown } from 'react-icons/pi';
 
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
@@ -40,7 +40,7 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                 >
                   {navItem.label}
                 </Link>
-                {navItem.children && <Icon as={PiCaretDown} size={3.5} color={'white'} />}
+                {navItem.children && <Icon as={CaretDown} size={3.5} color={'white'} />}
               </Flex>
             </PopoverTrigger>
             {navItem.children && (

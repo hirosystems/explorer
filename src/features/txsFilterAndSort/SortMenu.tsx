@@ -1,5 +1,5 @@
+import { SortDescending } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
-import { GoSortDesc } from 'react-icons/go';
 
 import {
   GetMempoolTransactionListOrderByEnum,
@@ -54,5 +54,5 @@ export function SortMenu() {
     [setActiveSort, setActiveOrder]
   );
 
-  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={GoSortDesc} />;
+  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={SortDescending} />;
 }

@@ -1,6 +1,4 @@
 import { forwardRef, useColorMode } from '@chakra-ui/react';
-import { mdiApi, mdiFunction } from '@mdi/js';
-import Icon from '@mdi/react';
 import { FC } from 'react';
 
 import { Badge } from '../../../../common/components/Badge';
@@ -11,7 +9,10 @@ import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { showFn } from '../../../../common/utils/sandbox';
 import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
+import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
+import FunctionReadOnlyIcon from '../../../../ui/icons/FunctionReadOnly';
+import FunctionXIcon from '../../../../ui/icons/FunctionX';
 
 export const AbiFunction = forwardRef<
   {
@@ -36,9 +37,9 @@ export const AbiFunction = forwardRef<
         <Flex alignItems="center">
           <Grid placeItems="center" borderWidth="1px" borderRadius="100%" size="32px">
             {abiFn.access === 'read_only' ? (
-              <Icon path={mdiApi} size="20px" />
+              <Icon as={FunctionXIcon} size={4} />
             ) : (
-              <Icon path={mdiFunction} size="20px" />
+              <Icon as={FunctionReadOnlyIcon} size={5} />
             )}
           </Grid>
           <Text fontSize="14px" fontFamily={`"Fira Code", monospace`} ml="16px" fontWeight="500">

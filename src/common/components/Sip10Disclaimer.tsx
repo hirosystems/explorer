@@ -1,4 +1,4 @@
-import { PiWarningLight } from 'react-icons/pi';
+import { Warning } from '@phosphor-icons/react';
 
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
@@ -8,7 +8,7 @@ import { Text } from '../../ui/Text';
 export function Sip10Disclaimer() {
   return (
     <Flex>
-      <Icon as={PiWarningLight} color="secondaryText" mr={2} size={4} />
+      <Icon as={Warning} color="secondaryText" mr={2} size={4} />
       <Text color="secondaryText" fontSize="sm" lineHeight="tall" letterSpacing="normal">
         Please note that SIP-10 data is extracted from third party providers. We make no
         representations or warranties as to the third party content and do not guarantee its

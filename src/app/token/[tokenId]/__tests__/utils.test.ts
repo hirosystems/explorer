@@ -1,7 +1,6 @@
-import { BiLinkExternal, BiLogoTelegram } from 'react-icons/bi';
-import { BsDiscord, BsTwitter } from 'react-icons/bs';
+import { ArrowSquareOut, DiscordLogo, TelegramLogo, TwitterLogo } from '@phosphor-icons/react';
 
-import { StxIcon } from '../../../../ui/icons';
+import StxIcon from '../../../../ui/icons/StxIcon';
 import { getLinkIcon, getUrlName, isExplorerLink } from '../utils';
 
 describe('isExplorerLink', () => {
@@ -34,7 +33,7 @@ describe('getUrlName', () => {
 
 describe('getLinkIcon', () => {
   it('should return BsDiscord for discord url', () => {
-    expect(getLinkIcon('https://discord.com/')).toBe(BsDiscord);
+    expect(getLinkIcon('https://discord.com/')).toBe(DiscordLogo);
   });
 
   it('should return StxIcon for explorer url', () => {
@@ -42,14 +41,14 @@ describe('getLinkIcon', () => {
   });
 
   it('should return BsTwitter for twitter url', () => {
-    expect(getLinkIcon('https://twitter.com/')).toBe(BsTwitter);
+    expect(getLinkIcon('https://twitter.com/')).toBe(TwitterLogo);
   });
 
   it('should return BiLogoTelegram for telegram url', () => {
-    expect(getLinkIcon('https://t.me/')).toBe(BiLogoTelegram);
+    expect(getLinkIcon('https://t.me/')).toBe(TelegramLogo);
   });
 
   it('should return BiLinkExternal for any other url', () => {
-    expect(getLinkIcon('https://github.com')).toBe(BiLinkExternal);
+    expect(getLinkIcon('https://github.com')).toBe(ArrowSquareOut);
   });
 });

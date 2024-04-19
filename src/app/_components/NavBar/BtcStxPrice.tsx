@@ -7,7 +7,8 @@ import { TokenPrice } from '../../../common/types/tokenPrice';
 import { usdFormatter } from '../../../common/utils/utils';
 import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { BitcoinIcon, StxIcon } from '../../../ui/icons';
+import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 
 function PriceContainer({

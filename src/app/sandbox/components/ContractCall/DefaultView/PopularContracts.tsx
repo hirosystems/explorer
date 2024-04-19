@@ -1,11 +1,12 @@
+import { ChartBar, CurrencyDollar, Signature } from '@phosphor-icons/react';
 import React, { FC } from 'react';
-import { TbChartBar, TbCurrencyBitcoin, TbCurrencyDollar, TbSignature } from 'react-icons/tb';
 
 import { Circle } from '../../../../../common/components/Circle';
 import { ExplorerLink } from '../../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../../common/components/Section';
 import { HStack } from '../../../../../ui/HStack';
 import { Stack } from '../../../../../ui/Stack';
+import BitcoinIcon from '../../../../../ui/icons/BitcoinIcon';
 import { Caption, Title } from '../../../../../ui/typography';
 
 const defaultContracts = (address: string) => [
@@ -13,25 +14,25 @@ const defaultContracts = (address: string) => [
     name: 'pox-4',
     address,
     description: '',
-    icon: TbCurrencyBitcoin,
+    icon: BitcoinIcon,
   },
   {
     name: 'bns',
     address,
     description: '',
-    icon: TbSignature,
+    icon: Signature,
   },
   {
     name: 'cost-voting',
     address,
     description: '',
-    icon: TbChartBar,
+    icon: ChartBar,
   },
   {
     name: 'costs-3',
     address,
     description: '',
-    icon: TbCurrencyDollar,
+    icon: CurrencyDollar,
   },
 ];
 

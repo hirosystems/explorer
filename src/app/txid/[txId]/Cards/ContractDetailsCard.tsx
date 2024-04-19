@@ -1,9 +1,6 @@
+import { ArrowSquareOut, Atom, CirclesFour, Code, ListChecks } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
-import * as React from 'react';
-import { BiAtom, BiLinkExternal } from 'react-icons/bi';
-import { BsCodeSlash } from 'react-icons/bs';
-import { MdOutlineChecklistRtl } from 'react-icons/md';
-import { RxTokens } from 'react-icons/rx';
+import { FC } from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { TxLink } from '../../../../common/components/ExplorerLinks';
@@ -16,11 +13,11 @@ import { Grid } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text, TextProps } from '../../../../ui/Text';
-import { FunctionIcon } from '../../../../ui/icons';
+import FunctionXIcon from '../../../../ui/icons/FunctionX';
 import { Caption, Title } from '../../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
-const PluralizedItem: React.FC<TextProps & { array: any[]; label: string }> = ({
+const PluralizedItem: FC<TextProps & { array: any[]; label: string }> = ({
   array,
   label,
   ...rest
@@ -43,7 +40,7 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
         <Flex borderBottomWidth="1px" py="16px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
             <Circle>
-              <Icon as={BsCodeSlash} color={'textTitle'} position="relative" size="16px" />
+              <Icon as={Code} color={'textTitle'} position="relative" size={4} />
             </Circle>
             <Box ml="16px">
               <Title mb="8px" display="block" mt="0" as="h4">
@@ -56,25 +53,25 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
         <Stack gap={2} py="16px">
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <FunctionIcon size="20px" />
+              <Icon as={FunctionXIcon} size={5} />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.functions || []} label="function" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <BiAtom size="20px" />
+              <Atom size={5} />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.variables || []} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <MdOutlineChecklistRtl size="20px" />
+              <ListChecks size={5} />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.maps || []} label="map" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <RxTokens size="20px" />
+              <CirclesFour size={5} />
             </Box>
             <PluralizedItem
               ml="8px"
@@ -92,7 +89,7 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
               <Caption transform="translateY(1px)" color="currentColor">
                 View deployment
               </Caption>
-              <BiLinkExternal size="16px" />
+              <ArrowSquareOut size={4} />
             </Flex>
           </TxLink>
         </Grid>

@@ -1,7 +1,6 @@
-import { BiLinkExternal, BiLogoTelegram } from 'react-icons/bi';
-import { BsDiscord, BsTwitter } from 'react-icons/bs';
+import { ArrowSquareOut, DiscordLogo, TelegramLogo, TwitterLogo } from '@phosphor-icons/react';
 
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 
 export const isExplorerLink = (url: string) => {
   return url.includes('explorer.stacks.co') || url.includes('explorer.hiro.so');
@@ -18,16 +17,16 @@ export const getUrlName = (url: string) => {
 
 export const getLinkIcon = (url: string) => {
   if (url.includes('discord.com/')) {
-    return BsDiscord;
+    return DiscordLogo;
   }
   if (isExplorerLink(url)) {
     return StxIcon;
   }
   if (url.includes('twitter.com/')) {
-    return BsTwitter;
+    return TwitterLogo;
   }
   if (url.includes('/t.me/')) {
-    return BiLogoTelegram;
+    return TelegramLogo;
   }
-  return BiLinkExternal;
+  return ArrowSquareOut;
 };

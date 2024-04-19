@@ -1,7 +1,7 @@
 import { useColorMode } from '@chakra-ui/react';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { TbSearch } from 'react-icons/tb';
 
 import { Section } from '../../../common/components/Section';
 import { useDebounce } from '../../../common/hooks/useDebounce';
@@ -30,7 +30,7 @@ export function TokensList() {
       topRight={
         <InputGroup>
           <InputRightElement pointerEvents="none">
-            <Icon as={TbSearch} color={`textCaption.${colorMode}`} />
+            <Icon as={MagnifyingGlass} color={`textCaption.${colorMode}`} />
           </InputRightElement>
           <Input
             variant={'outline'}

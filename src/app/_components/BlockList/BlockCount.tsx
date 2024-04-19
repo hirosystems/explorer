@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
 import { memo } from 'react';
-import { PiArrowUpRight } from 'react-icons/pi';
 
 import { Circle } from '../../../common/components/Circle';
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
@@ -45,7 +45,7 @@ export const BlockCount = memo(function ({
         >
           +{count} {pluralize('block', count)}
           <Circle size={4.5} bg="surface">
-            <Icon as={PiArrowUpRight} size={2.5} color={iconColor} />
+            <Icon as={ArrowUpRight} size={2.5} color={iconColor} />
           </Circle>
         </Text>
       </ExplorerLink>

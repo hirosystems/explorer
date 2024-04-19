@@ -1,4 +1,4 @@
-import { TbArrowLeft } from 'react-icons/tb';
+import { ArrowLeft } from '@phosphor-icons/react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -32,7 +32,7 @@ export const TxTitle = ({
             {getFunctionName(tx)}
           </TxLink>
           <Box color={'textCaption'} size="14px">
-            <TbArrowLeft size="14px" />
+            <ArrowLeft size="14px" />
           </Box>
           <TxLink txId={tx.contract_call.contract_id} overflow={'none'}>
             {getContractName(tx.contract_call.contract_id)}

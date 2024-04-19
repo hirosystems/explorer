@@ -1,7 +1,7 @@
 'use client';
 
+import { ArrowRight } from '@phosphor-icons/react';
 import React from 'react';
-import { TbArrowRight } from 'react-icons/tb';
 
 import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { truncateMiddle } from '../../../common/utils/utils';
@@ -20,7 +20,7 @@ export const SenderRecipient: React.FC<SenderRecipientProps> = React.memo(
       <Caption display="inline-block">
         <AddressLink principal={sender}>{truncateMiddle(sender)}</AddressLink>
       </Caption>
-      <Icon as={TbArrowRight} size="15px" strokeWidth="1.5" />
+      <Icon as={ArrowRight} size="15px" strokeWidth="1.5" />
       <Caption display="inline-block">
         <AddressLink principal={recipient}>{truncateMiddle(recipient)}</AddressLink>
       </Caption>

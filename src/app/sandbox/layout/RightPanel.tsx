@@ -1,5 +1,5 @@
+import { SignOut } from '@phosphor-icons/react';
 import React from 'react';
-import { MdOutlineLogout } from 'react-icons/md';
 
 import { Card } from '../../../common/components/Card';
 import { useAppSelector } from '../../../common/state/hooks';
@@ -10,14 +10,14 @@ import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { Caption, Text } from '../../../ui/typography';
 import { TransactionsPanel } from '../components/TransactionsPanel';
 import { useUser } from '../hooks/useUser';
 import { selectShowRightPanel } from '../sandbox-slice';
 
 export function RightPanel() {
-  const { isConnected, disconnect, stxAddress, txs, mempoolTransactions, balance } = useUser();
+  const { isConnected, disconnect, stxAddress, balance } = useUser();
   const showRightPanel = useAppSelector(selectShowRightPanel);
   if (!showRightPanel || !isConnected) return null;
 
@@ -65,11 +65,7 @@ export function RightPanel() {
                   ml="8px"
                 >
                   <Tooltip placement="bottom" label="Sign out">
-                    <IconButton
-                      size="20px"
-                      icon={<MdOutlineLogout size={'14px'} />}
-                      aria-label={'sign out'}
-                    />
+                    <IconButton size="20px" icon={<SignOut size={3.5} />} aria-label={'sign out'} />
                   </Tooltip>
                 </Box>
               </Flex>

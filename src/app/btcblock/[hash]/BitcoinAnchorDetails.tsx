@@ -11,7 +11,7 @@ import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
-import { BitcoinIcon } from '../../../ui/icons/BitcoinIcon';
+import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
 const StyledSection = styled(Section)`

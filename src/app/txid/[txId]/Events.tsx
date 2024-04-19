@@ -1,14 +1,10 @@
 'use client';
 
 import { Code } from '@chakra-ui/react';
-import React, { FC, Fragment } from 'react';
-import { TbAlignLeft, TbArrowRight, TbPlus, TbTrash } from 'react-icons/tb';
+import { ArrowRight, Icon as IconType, Plus, TextAlignLeft, Trash } from '@phosphor-icons/react';
+import { FC, Fragment } from 'react';
 
-import {
-  Transaction,
-  TransactionEvent,
-  TransactionEventAssetType,
-} from '@stacks/stacks-blockchain-api-types';
+import { Transaction, TransactionEvent } from '@stacks/stacks-blockchain-api-types';
 import { deserialize, prettyPrint } from '@stacks/transactions/dist/cl';
 
 import { Circle } from '../../../common/components/Circle';
@@ -30,7 +26,7 @@ import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { Caption } from '../../../ui/typography';
 import { SenderRecipient } from './SenderRecipient';
 
@@ -50,39 +46,21 @@ export const getTicker = (name: string) => {
   }
 };
 
-const getIcon = (type: string) => {
+const getIcon = (type: string): IconType | null => {
   switch (type) {
     case 'burn':
-      return TbTrash;
+      return Trash;
     case 'mint':
-      return TbPlus;
+      return Plus;
     case 'transfer':
-      return TbArrowRight;
+      return ArrowRight;
     default:
       return null;
   }
 };
 
-const AssetEventTypeBubble = ({ type }: { type?: TransactionEventAssetType }) => {
-  if (!type) return null;
-  const Icon = getIcon(type);
-  return (
-    <Circle
-      size="20px"
-      bg={'surface'}
-      borderWidth="1px"
-      position="absolute"
-      top={'-4px'}
-      right="-2px"
-      color={'accent'}
-    >
-      <Icon size="14px" color="currentColor" />
-    </Circle>
-  );
-};
-
 function getEventIcon(event: TransactionEvent) {
-  if (event.event_type === 'smart_contract_log') return TbAlignLeft;
+  if (event.event_type === 'smart_contract_log') return TextAlignLeft;
 
   if (
     event.event_type === 'fungible_token_asset' ||
@@ -205,7 +183,7 @@ const getName = (event: TransactionEvent) => {
   }
 };
 
-const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
+const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
   const name = getName(event);
   const assetEventType = getAssetEventType(event);
   const assetAmounts = getAssetAmounts(event);
@@ -230,12 +208,16 @@ const Item: React.FC<{ event: TransactionEvent }> = ({ event }) => {
     enabled: !!contractId && event.event_type === 'fungible_token_asset',
   });
 
+  const eventIcon = getEventIcon(event);
+
   return (
     <TwoColsListItem
       icon={
-        <Circle size={4.5}>
-          <Icon as={getEventIcon(event)} size={2.5} />
-        </Circle>
+        eventIcon ? (
+          <Circle size={4.5}>
+            <Icon as={eventIcon} size={2.5} />
+          </Circle>
+        ) : null
       }
       leftContent={{
         title: name,

@@ -1,10 +1,8 @@
 'use client';
 
+import { ArrowSquareOut, Toolbox, X } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
-import { FiExternalLink } from 'react-icons/fi';
-import { RiCloseLine } from 'react-icons/ri';
-import { TbTools } from 'react-icons/tb';
+import { useCallback, useState } from 'react';
 
 import { openContractDeploy } from '@stacks/connect';
 
@@ -35,7 +33,7 @@ export function LeftSection() {
   const codeBody = useAppSelector(selectCodeBody);
   const queryClient = useQueryClient();
 
-  const onDeploy = React.useCallback(() => {
+  const onDeploy = useCallback(() => {
     void openContractDeploy({
       network,
       postConditionMode: 0x01,
@@ -71,18 +69,14 @@ export function LeftSection() {
               onClick={() => {
                 setContractName('');
               }}
-              icon={<RiCloseLine size={'16px'} />}
+              icon={<X size={4} />}
               aria-label={'clear contract name field'}
             />
           </InputRightElement>
         </InputGroup>
         <Box onClick={() => dispatch(toggleCodeToolbar())}>
           <Tooltip label="Contract tools">
-            <IconButton
-              icon={<TbTools size={'16px'} />}
-              aria-label={'contract tools'}
-              size={'40px'}
-            />
+            <IconButton icon={<Toolbox size={4} />} aria-label={'contract tools'} size={'40px'} />
           </Tooltip>
         </Box>
       </Flex>
@@ -106,7 +100,7 @@ export function LeftSection() {
       <Stack mt={'10px'}>
         <Button
           variant="secondary"
-          rightIcon={<FiExternalLink />}
+          rightIcon={<ArrowSquareOut />}
           onClick={() => {
             const paramsBase64 = { name: contractName, sourceCode: codeBody };
             const state = btoa(JSON.stringify(paramsBase64));

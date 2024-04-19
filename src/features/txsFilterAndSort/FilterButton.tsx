@@ -1,8 +1,8 @@
 'use client';
 
 import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
+import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
-import { PiArrowBendDownRight, PiFunnelSimple } from 'react-icons/pi';
 
 import { useGlobalContext } from '../../common/context/useAppContext';
 import { Button } from '../../ui/Button';
@@ -14,10 +14,10 @@ import { MenuButton } from '../../ui/MenuButton';
 import { MenuItem } from '../../ui/MenuItem';
 import { MenuList } from '../../ui/MenuList';
 import { Text } from '../../ui/Text';
-import { ClarityIcon } from '../../ui/icons/ClarityIcon';
-import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
-import { DiagonalArrowsIcon } from '../../ui/icons/DiagonalArrowsIcon';
-import { FunctionXIcon } from '../../ui/icons/FunctionX';
+import ClarityIcon from '../../ui/icons/ClarityIcon';
+import CubeSparkleIcon from '../../ui/icons/CubeSparkleIcon';
+import DiagonalArrowsIcon from '../../ui/icons/DiagonalArrowsIcon';
+import FunctionXIcon from '../../ui/icons/FunctionX';
 import { useFilterAndSortState } from './useFilterAndSortState';
 
 function FilterItem({
@@ -105,7 +105,7 @@ export const FilterButton = memo(() => {
             leftIcon={
               <Icon
                 size={4}
-                as={PiFunnelSimple}
+                as={FunnelSimple}
                 color={isHoveredOrFocused || isOpen ? 'text' : 'textSubdued'}
               />
             }
@@ -131,7 +131,7 @@ export const FilterButton = memo(() => {
             />
             {/*<FilterItem*/}
             {/*  label={'Burn'}*/}
-            {/*  icon={<Icon as={PiFire} color={'text'} />}*/}
+            {/*  icon={<Icon as={Fire} color={'text'} />}*/}
             {/*  value={'burn'}*/}
             {/*  selectedFilters={selectedFilters}*/}
             {/*  checkboxProps={getCheckboxProps({ value: 'burn' })}*/}
@@ -160,7 +160,7 @@ export const FilterButton = memo(() => {
             {activeNetworkUrl.indexOf('naka') !== -1 ? (
               <FilterItem
                 label={'Tenure change'}
-                icon={<Icon as={PiArrowBendDownRight} color={'text'} />}
+                icon={<Icon as={ArrowBendDownRight} color={'text'} />}
                 value={'tenure_change'}
                 selectedFilters={selectedFilters}
                 checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
@@ -168,7 +168,7 @@ export const FilterButton = memo(() => {
             ) : null}
             {/*<FilterItem*/}
             {/*  label={'Tenure extension'}*/}
-            {/*  icon={<Icon as={PiArrowBendDoubleUpLeft} color={'text'} transform={'rotate(180deg)'} />}*/}
+            {/*  icon={<Icon as={ArrowBendDoubleUpLeft} color={'text'} transform={'rotate(180deg)'} />}*/}
             {/*  value={'tenureExtension'}*/}
             {/*  selectedFilters={selectedFilters}*/}
             {/*  checkboxProps={getCheckboxProps({ value: 'tenureExtension' })}*/}

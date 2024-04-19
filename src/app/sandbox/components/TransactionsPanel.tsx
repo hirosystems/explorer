@@ -1,9 +1,9 @@
 'use client';
 
 import { useColorMode } from '@chakra-ui/react';
+import { CaretDown } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
-import { BsChevronDown } from 'react-icons/bs';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -28,9 +28,10 @@ import { AccordionPanel } from '../../../ui/AccordionPanel';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
-import { FunctionIcon } from '../../../ui/icons';
+import FunctionXIcon from '../../../ui/icons/FunctionX';
 import { Caption, Text, Title } from '../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useUser } from '../hooks/useUser';
@@ -126,9 +127,7 @@ const TxDetailsFunctions = ({
             onClick={() => {
               setFnsVisibility(s => !s);
             }}
-            icon={
-              <BsChevronDown size={'16px'} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />
-            }
+            icon={<CaretDown size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />}
             aria-label={'toggle function'}
           />
         </HStack>
@@ -148,7 +147,7 @@ const TxDetailsFunctions = ({
                   {func.access === 'read_only' ? (
                     <InfoCircleIcon size="18px" />
                   ) : (
-                    <FunctionIcon size="18px" />
+                    <Icon as={FunctionXIcon} size="18px" />
                   )}
                   <Caption ml="4px">{func.name}</Caption>
                 </Flex>

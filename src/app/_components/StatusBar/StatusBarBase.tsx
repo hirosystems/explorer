@@ -1,5 +1,5 @@
+import { Warning, WarningCircle } from '@phosphor-icons/react';
 import { ReactNode, forwardRef } from 'react';
-import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
 import { IncidentImpact } from 'statuspage.io';
 
 import { PAGE_MAX_WIDTH } from '../../../common/constants/constants';
@@ -14,9 +14,9 @@ export const StatusBarBase = forwardRef<
 >(({ content, impact }, ref) => {
   const icon =
     impact === IncidentImpact.Critical ? (
-      <Icon as={BsExclamationCircle} color={getColor(impact)} />
+      <Icon as={WarningCircle} color={getColor(impact)} />
     ) : impact === IncidentImpact.None ? null : (
-      <Icon as={BsExclamationTriangle} color={getColor(impact)} />
+      <Icon as={Warning} color={getColor(impact)} />
     );
   return (
     <Box

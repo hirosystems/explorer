@@ -1,8 +1,8 @@
 'use client';
 
 import { useColorMode } from '@chakra-ui/react';
+import { ArrowRight } from '@phosphor-icons/react';
 import * as React from 'react';
-import { PiArrowRightLight } from 'react-icons/pi';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -88,7 +88,7 @@ export const AddressArea = React.memo(
         <HStack flexWrap="nowrap" whiteSpace="nowrap">
           <PrincipalLink principal={tx.sender_address} />
           <Flex as="span">
-            <Icon as={PiArrowRightLight} size={3} />
+            <Icon as={ArrowRight} size={3} />
           </Flex>
           <PrincipalLink principal={tx.token_transfer.recipient_address} />
         </HStack>

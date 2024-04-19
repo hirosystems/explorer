@@ -1,6 +1,6 @@
+import { X } from '@phosphor-icons/react';
 import { FieldArray } from 'formik';
 import React, { FC } from 'react';
-import { RiCloseLine } from 'react-icons/ri';
 
 import { ClarityAbiTypeList } from '@stacks/transactions';
 
@@ -56,7 +56,7 @@ export const ListArgumentInput: FC<
                 value={listItemValue}
               />
               <Icon
-                as={RiCloseLine}
+                as={X}
                 size={3}
                 mt={'14px'}
                 style={{ cursor: 'pointer' }}

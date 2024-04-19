@@ -1,14 +1,10 @@
+import { Check, CircleNotch, Icon, WarningCircle } from '@phosphor-icons/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { IconType } from 'react-icons';
-import { FiCheck } from 'react-icons/fi';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import { PiCircleNotch } from 'react-icons/pi';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { getTxTypeIcon } from '../../../common/components/TxIcon';
-import { MicroblockIcon } from '../../../common/components/icons/microblock';
 import { TransactionType } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { getTransactionStatus } from '../../../common/utils/transactions';
@@ -36,14 +32,13 @@ const txTypeNamesMap = {
   tenure_change: 'Tenure change',
 };
 
-const txStatusIconMap: Record<string, IconType> = {
-  pending: PiCircleNotch,
-  success: FiCheck,
-  success_anchor_block: FiCheck,
-  success_microblock: () => <MicroblockIcon fill="white" />,
-  non_canonical: HiOutlineExclamationCircle,
-  failed: HiOutlineExclamationCircle,
-  dropped: HiOutlineExclamationCircle,
+const txStatusIconMap: Record<string, Icon> = {
+  pending: CircleNotch,
+  success: Check,
+  success_anchor_block: Check,
+  non_canonical: WarningCircle,
+  failed: WarningCircle,
+  dropped: WarningCircle,
 };
 
 const txStatusLabelMap = {

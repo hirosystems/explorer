@@ -1,6 +1,6 @@
 'use client';
 
-import { AiOutlineClockCircle } from 'react-icons/ai';
+import { Clock } from '@phosphor-icons/react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -49,7 +49,7 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
           <Box>
             {isOnTouchScreen ? (
               <Flex alignItems="center">
-                <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
+                <Icon as={Clock} size={4} mr="4px" />
                 <Value suppressHydrationWarning={true}>
                   {toRelativeTime(ts * 1000)} - {readableTs}
                 </Value>
@@ -57,7 +57,7 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
             ) : (
               <Tooltip label={readableTs}>
                 <Flex alignItems="center">
-                  <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
+                  <Icon as={Clock} size={4} mr="4px" />
                   <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
                 </Flex>
               </Tooltip>

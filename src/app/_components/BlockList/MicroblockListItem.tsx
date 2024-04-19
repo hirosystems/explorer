@@ -1,5 +1,5 @@
+import { Lightning } from '@phosphor-icons/react';
 import React from 'react';
-import { FiZap } from 'react-icons/fi';
 
 import { Circle } from '../../../common/components/Circle';
 import { MicroBlockLink } from '../../../common/components/ExplorerLinks';
@@ -26,7 +26,7 @@ export const MicroblockListItem: React.FC<{
     >
       <HStack as="span" alignItems="center" gap={4} minWidth={0}>
         <Circle size="40px" flexShrink={0}>
-          <Icon as={FiZap} size="16px" fill={'textCaption.light'} color={'textCaption.light'} />
+          <Icon as={Lightning} size={4} fill={'textCaption.light'} color={'textCaption.light'} />
         </Circle>
         <Stack gap={2} as="span" minWidth={0}>
           <Flex alignItems="center" minWidth={0}>

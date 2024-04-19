@@ -2,14 +2,14 @@
 
 import { useColorMode } from '@chakra-ui/react';
 import { css } from '@emotion/react';
+import { ArrowRight, CheckCircle, WarningCircle } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { AiFillCheckCircle } from 'react-icons/ai';
-import { BsArrowRight, BsFillExclamationCircleFill } from 'react-icons/bs';
-import { TbCurrencyBitcoin } from 'react-icons/tb';
+import { useEffect, useState } from 'react';
+import * as React from 'react';
 
 import { Block as BlockType } from '@stacks/stacks-blockchain-api-types/generated';
 
+import { Circle } from '../../../common/components/Circle';
 import { Section } from '../../../common/components/Section';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
@@ -19,7 +19,8 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Spinner } from '../../../ui/Spinner';
 import { Tooltip } from '../../../ui/Tooltip';
-import { StxIcon } from '../../../ui/icons';
+import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
 const wrapperStyle = css`
@@ -198,7 +199,7 @@ const Block: React.FC<BlockProps> = ({
   const btcBlockHeight = block.burn_block_height;
   const timeBetweenBlocks = btcBlockBurnTime - previousBtcBlockBurnTime;
   const delayedBlock = timeBetweenBlocks && timeBetweenBlocks >= 11 * 60;
-  const BlockInfoIcon = delayedBlock ? BsFillExclamationCircleFill : AiFillCheckCircle;
+  const BlockInfoIcon = delayedBlock ? WarningCircle : CheckCircle;
   const timeBetweenBlocksFormatted = secondsToString(timeBetweenBlocks);
   const router = useRouter();
   const network = useGlobalContext().activeNetwork;
@@ -209,7 +210,7 @@ const Block: React.FC<BlockProps> = ({
       <Box css={blockAndArrowStyle}>
         {displayBlockchainIcons && (
           <Box css={blockchainIconWrapperStyle} backgroundColor={'#f7931a'}>
-            <TbCurrencyBitcoin color={'#fff'} />
+            <Icon as={BitcoinIcon} color={'#fff'} size={6} />
           </Box>
         )}
         <Box
@@ -221,7 +222,7 @@ const Block: React.FC<BlockProps> = ({
         >
           {btcBlockHeight}
         </Box>
-        <Icon as={BsArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
+        <Icon as={ArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
       </Box>
       <BlockInfo
         tooltip={
@@ -234,9 +235,9 @@ const Block: React.FC<BlockProps> = ({
       />
       <Box css={blockAndArrowStyle}>
         {displayBlockchainIcons && (
-          <Box css={blockchainIconWrapperStyle} backgroundColor={`accent.${colorMode}`}>
-            <Icon as={StxIcon} size={'16px'} color="white" />
-          </Box>
+          <Circle css={blockchainIconWrapperStyle} bg="brand" border={'none'}>
+            <Icon as={StxIcon} size={3} color="white" />
+          </Circle>
         )}
         <Box
           css={blockStyle}
@@ -245,7 +246,7 @@ const Block: React.FC<BlockProps> = ({
         >
           {stxBlockHeight}
         </Box>
-        <Icon as={BsArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
+        <Icon as={ArrowRight} color={'#d9d9d9'} css={arrowStyle} size={'37px'} />
       </Box>
     </Box>
   );

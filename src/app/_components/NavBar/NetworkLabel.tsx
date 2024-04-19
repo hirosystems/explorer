@@ -1,7 +1,6 @@
 import { useColorMode, useColorModeValue } from '@chakra-ui/react';
-import { FC } from 'react';
-import { PiTrash } from 'react-icons/pi';
-import { TbCheck } from 'react-icons/tb';
+import { Check, Trash } from '@phosphor-icons/react';
+import React, { FC } from 'react';
 
 import { ChainID } from '@stacks/transactions';
 
@@ -114,14 +113,14 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
               position="relative"
               color={`textCaption.${colorMode}`}
               size={'21px'}
-              icon={<Icon as={PiTrash} size={4} />}
+              icon={<Icon as={Trash} size={4} />}
               onClick={() => removeCustomNetwork(network)}
               aria-label={'Remove network'}
               _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
             />
           </Tooltip>
         ) : isActive ? (
-          <Box as={TbCheck} color={`feedbackSuccess.${colorMode}`} size="18px" />
+          <Box as={Check} color={`feedbackSuccess.${colorMode}`} size="18px" />
         ) : null}
       </Flex>
     </Flex>

@@ -1,6 +1,5 @@
+import { ArrowBendDownRight, Clock, WarningCircle } from '@phosphor-icons/react';
 import React, { FC } from 'react';
-import { PiArrowBendDownRight, PiClock, PiWarningCircle } from 'react-icons/pi';
-import { TbArrowsDoubleSwNe } from 'react-icons/tb';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
@@ -8,35 +7,37 @@ import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
 import { Flex } from '../../ui/Flex';
 import { Icon, IconProps } from '../../ui/Icon';
 import { useBreakpointValue } from '../../ui/hooks/useBreakpointValue';
-import { FunctionIcon, StxIcon } from '../../ui/icons';
-import { ClarityIcon } from '../../ui/icons/ClarityIcon';
-import { CubeSparkleIcon } from '../../ui/icons/CubeSparkleIcon';
+import ClarityIcon from '../../ui/icons/ClarityIcon';
+import CubeSparkleIcon from '../../ui/icons/CubeSparkleIcon';
+import DiagonalArrowsIcon from '../../ui/icons/DiagonalArrowsIcon';
+import FunctionXIcon from '../../ui/icons/FunctionX';
+import StxIcon from '../../ui/icons/StxIcon';
 import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
   switch (txType) {
     case 'token_transfer':
-      return TbArrowsDoubleSwNe;
+      return DiagonalArrowsIcon;
 
     case 'smart_contract':
       return ClarityIcon;
 
     case 'contract_call':
-      return FunctionIcon;
+      return FunctionXIcon;
 
     case 'coinbase':
       return CubeSparkleIcon;
 
     case 'tenure_change':
-      return PiArrowBendDownRight;
+      return ArrowBendDownRight;
 
     // sBTC-related transaction types
     // case 'tenure_extension':
-    //   return PiArrowBendDoubleUpRightLight; // mirror over x-axis to get down arrow
+    //   return ArrowBendDoubleUpRightLight; // mirror over x-axis to get down arrow
 
     // case 'burn':
-    //   return PiFireLight;
+    //   return FireLight;
 
     // case 'mint':
     //   CoinSparkleIcon;
@@ -101,9 +102,9 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
 
   const icon =
     txStatus === TransactionStatus.PENDING
-      ? PiClock
+      ? Clock
       : txStatus === TransactionStatus.FAILED
-        ? PiWarningCircle
+        ? WarningCircle
         : undefined;
   const color =
     txStatus === TransactionStatus.PENDING
