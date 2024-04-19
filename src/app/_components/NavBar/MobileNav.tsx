@@ -38,7 +38,7 @@ export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navI
       backgroundColor="bg"
       top={isStatusBarActive ? '82px' : 0}
       left={0}
-      zIndex={2}
+      zIndex={'sticky'}
       padding={6}
       gap={6}
     >
