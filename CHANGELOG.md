@@ -1,3 +1,10 @@
+## [1.165.1](https://github.com/hirosystems/explorer/compare/v1.165.0...v1.165.1) (2024-04-19)
+
+
+### Bug Fixes
+
+* mobile menu z-index ([eedd3a2](https://github.com/hirosystems/explorer/commit/eedd3a21db2dd05370a8efcb4d90db9b2280d4b1))
+
 # [1.165.0](https://github.com/hirosystems/explorer/compare/v1.164.0...v1.165.0) (2024-04-18)
 
 
