@@ -1,16 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { FaBitcoin } from 'react-icons/fa';
 
-import { Circle } from '../../../../common/components/Circle';
 import { useSuspenseBlockListInfinite } from '../../../../common/queries/useBlockListInfinite';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
-import { Text } from '../../../../ui/Text';
-import { BitcoinIcon } from '../../../../ui/icons';
+import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 

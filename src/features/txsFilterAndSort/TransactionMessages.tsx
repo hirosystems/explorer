@@ -1,8 +1,8 @@
 'use client';
 
+import { XCircle } from '@phosphor-icons/react';
+import { Icon as IconType } from '@phosphor-icons/react';
 import React from 'react';
-import { IconType } from 'react-icons';
-import { LuSearchX } from 'react-icons/lu';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -47,14 +47,14 @@ const MessageBase = ({
 };
 
 export const NoTransactionsMessage: React.FC<GridProps> = ({ ...rest }) => (
-  <MessageBase title="No transactions" icon={LuSearchX} {...rest} />
+  <MessageBase title="No transactions" icon={XCircle} {...rest} />
 );
 
 export const AllTransactionsFilteredMessage: React.FC<GridProps> = ({ ...rest }) => (
   <MessageBase
     title="No transactions"
     description="Filters only apply to loaded transactions. Load more transactions to find transactions with your filter settings, or choose a different filter combination."
-    icon={LuSearchX}
+    icon={XCircle}
     {...rest}
   />
 );

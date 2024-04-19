@@ -1,5 +1,5 @@
+import { CurrencyDollar } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
-import { PiCurrencyDollar } from 'react-icons/pi';
 
 import { FilterMenu } from '../../common/components/FilterMenu';
 import { useAppDispatch, useAppSelector } from '../../common/state/hooks';
@@ -41,5 +41,5 @@ export function ShowValueMenu() {
     [activeTransactionValueFilter]
   );
 
-  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={PiCurrencyDollar} />;
+  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={CurrencyDollar} />;
 }

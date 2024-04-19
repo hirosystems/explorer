@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Box } from '../../../ui/Box';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
-import { ClarityIcon } from '../../../ui/icons/ClarityIcon';
+import ClarityIcon from '../../../ui/icons/ClarityIcon';
 import { Caption } from '../../../ui/typography';
 import { Toolbar } from '../components/Toolbar';
 import { autocomplete, hover } from '../editor-config/autocomplete';

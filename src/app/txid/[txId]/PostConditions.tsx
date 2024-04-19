@@ -31,7 +31,7 @@ import { Box } from '../../../ui/Box';
 import { FlexProps } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
 import { Icon } from '../../../ui/Icon';
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { Caption } from '../../../ui/typography';
 import { getTicker } from './Events';
 

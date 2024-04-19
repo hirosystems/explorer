@@ -1,7 +1,6 @@
 import { useColorMode } from '@chakra-ui/react';
+import { QrCode, X } from '@phosphor-icons/react';
 import * as React from 'react';
-import { Fragment } from 'react';
-import { TbQrcode, TbX } from 'react-icons/tb';
 
 import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
@@ -13,14 +12,13 @@ import { hasStxBalance } from '../../../../common/utils/accounts';
 import { microToStacks } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
-import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { IconButton } from '../../../../ui/IconButton';
 import { Stack } from '../../../../ui/Stack';
 import { Tooltip } from '../../../../ui/Tooltip';
-import { StxIcon } from '../../../../ui/icons';
+import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption } from '../../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { BalanceItem } from './BalanceItem';
@@ -62,7 +60,7 @@ function StxBalanceBase({ address }: StxBalanceProps) {
           position="absolute"
           top="-18px"
           right="-12px"
-          icon={qrShowing ? <TbX /> : <TbQrcode />}
+          icon={qrShowing ? <X /> : <QrCode />}
           onClick={toggleViewQrCode}
           aria-label={'toggle view QR code'}
         />

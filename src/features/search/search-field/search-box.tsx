@@ -1,8 +1,8 @@
 'use client';
 
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { PiMagnifyingGlass, PiX } from 'react-icons/pi';
 
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Icon } from '../../../ui/Icon';
@@ -31,7 +31,7 @@ export const SearchBox = React.memo(() => {
   return (
     <InputGroup>
       <InputLeftElement pointerEvents="none">
-        <Icon as={PiMagnifyingGlass} size={4} color="white" />
+        <Icon as={MagnifyingGlass} size={4} color="white" />
       </InputLeftElement>
       <SearchInput
         onChange={(e: React.FormEvent<HTMLInputElement>) => {
@@ -50,7 +50,7 @@ export const SearchBox = React.memo(() => {
           <IconButton
             bg="transparent"
             color="white"
-            icon={<Icon as={PiX} size={3} />}
+            icon={<Icon as={X} size={3} />}
             onClick={() => dispatch(clearSearchTerm())}
             aria-label={'Clear search bar'}
             _hover={{ bg: 'transparent' }}

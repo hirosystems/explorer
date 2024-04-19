@@ -1,9 +1,9 @@
 'use client';
 
 import { useColorMode } from '@chakra-ui/react';
+import { DownloadSimple } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { CSVDownload } from 'react-csv';
-import { FiDownload } from 'react-icons/fi';
 
 import { Box } from '../../../ui/Box';
 import { Icon } from '../../../ui/Icon';
@@ -38,7 +38,7 @@ export function CSVDownloadButton({ address }: { address: string }) {
         flexWrap={'nowrap'}
         whiteSpace={'nowrap'}
       >
-        <Icon as={FiDownload} mr="4px" color="currentColor" size="13px" strokeWidth={1.5} />
+        <Icon as={DownloadSimple} mr="4px" color="currentColor" size="13px" strokeWidth={1.5} />
         Export as CSV
       </Box>
       {!!transactionData.length && <CSVDownload data={transactionData} />}

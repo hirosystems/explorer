@@ -1,4 +1,4 @@
-import { PiArrowLeftBold, PiArrowRightBold } from 'react-icons/pi';
+import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
@@ -24,7 +24,7 @@ export function NavBlock({ href, direction }: { href: string; direction: NavDire
     >
       <Flex alignItems="center" justifyContent="center" height="100%" width="100%">
         <Icon
-          as={direction === NavDirection.Forward ? PiArrowRightBold : PiArrowLeftBold}
+          as={direction === NavDirection.Forward ? ArrowRight : ArrowLeft}
           size={4}
           fill="var(--stacks-colors-slate-50)"
         />

@@ -1,5 +1,5 @@
+import { ArrowElbowLeftDown } from '@phosphor-icons/react';
 import React, { ReactNode } from 'react';
-import { PiArrowElbowLeftDown } from 'react-icons/pi';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
@@ -11,14 +11,15 @@ import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
-import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
+import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
+import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
 import { ScrollableBox } from '../ScrollableDiv';
-import { FADE_DURATION, getFadeAnimationStyle, mobileBorderCss } from '../consts';
+import { getFadeAnimationStyle, mobileBorderCss } from '../consts';
 import { BlockListBtcBlock, BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
 
@@ -207,7 +208,7 @@ function BitcoinHeader({
       flexWrap={'wrap'}
     >
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
-        <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
+        <Icon as={ArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
         <Icon as={BitcoinIcon} size={4.5} />
         <ExplorerLink
           fontSize="sm"

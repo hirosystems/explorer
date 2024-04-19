@@ -15,8 +15,7 @@ import { CircularProgress } from '../../../../ui/CircularProgress';
 import { CircularProgressLabel } from '../../../../ui/CircularProgressLabel';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
-import { TextLink } from '../../../../ui/TextLink';
-import { StxIcon } from '../../../../ui/icons';
+import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption, Title } from '../../../../ui/typography';
 
 export const StackingPercentage = ({

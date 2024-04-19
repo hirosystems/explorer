@@ -1,8 +1,8 @@
 'use client';
 
+import { Clock } from '@phosphor-icons/react';
 import { FC } from 'react';
 import * as React from 'react';
-import { AiOutlineClockCircle } from 'react-icons/ai';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -35,7 +35,7 @@ export const Broadcast: FC<{
           <Box>
             <Tooltip label={readableTs}>
               <Flex alignItems="center">
-                <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
+                <Icon as={Clock} size={4} mr="4px" />
                 <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
               </Flex>
             </Tooltip>

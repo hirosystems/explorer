@@ -1,11 +1,11 @@
 'use client';
 
-import { createIcon } from '@chakra-ui/react';
+import { Icon, IconBase, IconWeight } from '@phosphor-icons/react';
+import { ReactElement, forwardRef } from 'react';
 
-export const DiagonalArrowsIcon = createIcon({
-  displayName: 'DiagonalArrowsIcon',
-  viewBox: '0 0 17 17',
-  path: (
+const weights = new Map<IconWeight, ReactElement>([
+  [
+    'regular',
     <>
       <path
         d="M11.5475 7.44141H14.595V10.4889"
@@ -31,6 +31,14 @@ export const DiagonalArrowsIcon = createIcon({
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </>
-  ),
-});
+    </>,
+  ],
+]);
+
+const DiagonalArrowsIcon: Icon = forwardRef((props, ref) => (
+  <IconBase ref={ref} {...props} weights={weights} viewBox={'0 0 17 17'} />
+));
+
+DiagonalArrowsIcon.displayName = 'DiagonalArrowsIcon';
+
+export default DiagonalArrowsIcon;

@@ -1,7 +1,7 @@
 'use client';
 
+import { ArrowUpRight } from '@phosphor-icons/react';
 import React from 'react';
-import { HiMiniArrowUpRight } from 'react-icons/hi2';
 
 import { Box, BoxProps } from '../../ui/Box';
 import { Button } from '../../ui/Button';
@@ -29,7 +29,7 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
       <Box {...rest} width={'full'}>
         <ExplorerLink href={href} mt={'auto'} width={'full'}>
           <Button variant={'secondary'} width={'full'}>
-            View all recent {label} <Icon as={HiMiniArrowUpRight} width={'16px'} height={'16px'} />
+            View all recent {label} <Icon as={ArrowUpRight} size={4} />
           </Button>
         </ExplorerLink>
       </Box>

@@ -1,12 +1,12 @@
 'use client';
 
 import { forwardRef } from '@chakra-ui/react';
+import { IconProps } from '@phosphor-icons/react';
 import React from 'react';
-import { IconBaseProps } from 'react-icons';
 
 import { Box } from '../Box';
 
-export const WalletIcon = forwardRef<IconBaseProps, 'svg'>(({ size = '44px' }, ref) => (
+const WalletIcon = forwardRef<IconProps, 'svg'>(({ size = '44px' }, ref) => (
   <Box
     as={'svg'}
     viewBox="0 0 24 24"
@@ -22,3 +22,5 @@ export const WalletIcon = forwardRef<IconBaseProps, 'svg'>(({ size = '44px' }, r
     <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
   </Box>
 ));
+
+export default WalletIcon;

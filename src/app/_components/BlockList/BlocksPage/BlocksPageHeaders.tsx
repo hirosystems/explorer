@@ -12,7 +12,7 @@ import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
-import { BitcoinIcon } from '../../../../ui/icons/BitcoinIcon';
+import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import { BlockPageHeadersSkeleton } from '../Grouped/skeleton';
 
 function LastBlockCard() {

@@ -1,6 +1,6 @@
+import { Info, Warning } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 import React from 'react';
-import { TbAlertTriangle, TbInfoCircle } from 'react-icons/tb';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
@@ -133,7 +133,7 @@ const Table: React.FC<{ balance?: AddressBalanceResponse; stacksTipHeight?: numb
           <Caption>Est. Date</Caption>
           <Tooltip label="Based on average Bitcoin block time.">
             <Box size="16px" color={'textCaption'} ml="8px">
-              <TbInfoCircle size="16px" />
+              <Info size={4} />
             </Box>
           </Tooltip>
         </Flex>
@@ -222,7 +222,7 @@ export const UnlockingScheduleModal: React.FC<{ balance?: AddressBalanceResponse
             <Section p="16px" mt="32px">
               <Stack isInline alignItems="center">
                 <Box size="18px">
-                  <TbAlertTriangle color={'feedbackAlert'} size="18px" />
+                  <Warning color={'feedbackAlert'} size="18px" />
                 </Box>
                 <Caption>This table only shows data from after the launch of Stacks 2.0</Caption>
               </Stack>

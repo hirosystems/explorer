@@ -8,7 +8,7 @@ import { FoundResult } from '../../../common/types/search-results';
 import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { WalletIcon } from '../../../ui/icons';
+import WalletIcon from '../../../ui/icons/WalletIcon';
 import { Caption, Title } from '../../../ui/typography';
 import { ResultItemWrapper } from './result-item-wrapper';
 

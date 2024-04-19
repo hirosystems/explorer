@@ -1,8 +1,8 @@
 'use client';
 
+import { ArrowUpRight } from '@phosphor-icons/react';
 import * as React from 'react';
 import { FC } from 'react';
-import { TbArrowUpRight } from 'react-icons/tb';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -18,7 +18,7 @@ export const Sender: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => 
     value={
       <HStack>
         <Box>
-          <TbArrowUpRight size="16px" />
+          <ArrowUpRight size={4} />
         </Box>
         <ExplorerLink
           fontSize={'xs'}

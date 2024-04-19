@@ -1,6 +1,5 @@
-import { useColorMode } from '@chakra-ui/react';
+import { XCircle } from '@phosphor-icons/react';
 import * as React from 'react';
-import { VscError } from 'react-icons/vsc';
 
 import { useGlobalContext } from '../../common/context/useAppContext';
 import { buildUrl } from '../../common/utils/buildUrl';
@@ -36,7 +35,7 @@ export function ErrorBox({
       padding="10px"
       {...flexProps}
     >
-      <Icon as={VscError} size="24px" />
+      <Icon as={XCircle} size={6} />
       <Flex direction={'column'} alignItems={'center'} gap={'4px'}>
         <Text color={`error`} fontSize={14}>
           {errorName}

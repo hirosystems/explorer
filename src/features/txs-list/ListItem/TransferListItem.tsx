@@ -1,24 +1,20 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { FC, memo, useMemo } from 'react';
+import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import * as React from 'react';
-import { TbArrowDown, TbArrowUp } from 'react-icons/tb';
+import { FC, memo, useMemo } from 'react';
 
 import { AddressTransactionWithTransfersFtTransfers } from '@stacks/blockchain-api-client';
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { getTicker } from '../../../app/txid/[txId]/Events';
 import { Circle } from '../../../common/components/Circle';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { PrincipalLink } from '../../../common/components/transaction-item';
-import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useFtMetadata } from '../../../common/queries/useFtMetadata';
-import { buildUrl } from '../../../common/utils/buildUrl';
 import { ftDecimals, getAssetNameParts } from '../../../common/utils/utils';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
-import { Stack } from '../../../ui/Stack';
 import { useBreakpointValue } from '../../../ui/hooks/useBreakpointValue';
-import { Caption, Text, Title } from '../../../ui/typography';
+import { Caption } from '../../../ui/typography';
 
 interface TransferListItemProps {
   title: string;
@@ -67,11 +63,11 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
       () =>
         isOriginator ? (
           <Circle bg={iconBg} size={circleSize}>
-            <Icon as={TbArrowUp} size={iconSize} color={iconColor} />
+            <Icon as={ArrowUp} size={iconSize} color={iconColor} />
           </Circle>
         ) : (
           <Circle bg={iconBg} size={circleSize}>
-            <Icon as={TbArrowDown} size={iconSize} color={iconColor} />
+            <Icon as={ArrowDown} size={iconSize} color={iconColor} />
           </Circle>
         ),
       [iconBg, iconColor, circleSize, iconSize, isOriginator]

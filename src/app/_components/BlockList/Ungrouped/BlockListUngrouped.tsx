@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import { ArrowBendDownLeft } from '@phosphor-icons/react';
 import React, { ReactNode } from 'react';
-import { BsArrowReturnLeft } from 'react-icons/bs';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
@@ -12,7 +12,8 @@ import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
-import { BitcoinIcon, StxIcon } from '../../../../ui/icons';
+import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
+import StxIcon from '../../../../ui/icons/StxIcon';
 import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
@@ -52,7 +53,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
     <>
       <HStack gap={1.5}>
         <Icon
-          as={BsArrowReturnLeft}
+          as={ArrowBendDownLeft}
           transform={'rotate(90deg)'}
           size={2.5}
           color={iconColor}

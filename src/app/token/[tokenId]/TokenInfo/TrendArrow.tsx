@@ -1,6 +1,6 @@
 import { useColorMode } from '@chakra-ui/react';
+import { CaretDown, CaretUp } from '@phosphor-icons/react';
 import { FC } from 'react';
-import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
 
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
@@ -12,14 +12,14 @@ export const TrendArrow: FC<{ change: number; size: string }> = ({ change, size 
     <Flex alignItems={'center'}>
       {change >= 0 ? (
         <Icon
-          as={AiOutlineCaretUp}
+          as={CaretUp}
           size={size}
           fill={`feedbackSuccess.${colorMode}`}
           color={`feedbackSuccess.${colorMode}`}
         />
       ) : (
         <Icon
-          as={AiOutlineCaretDown}
+          as={CaretDown}
           size={size}
           fill={`feedbackError.${colorMode}`}
           color={`feedbackError.${colorMode}`}

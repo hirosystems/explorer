@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import { ArrowCounterClockwise } from '@phosphor-icons/react';
 import { ReactNode, Suspense, useCallback, useRef } from 'react';
-import { TfiReload } from 'react-icons/tfi';
 
 import { Button } from '../../../ui/Button';
 import { Flex, FlexProps } from '../../../ui/Flex';
@@ -81,7 +81,7 @@ export function UpdateBarBase({
         <Flex alignItems={'center'} gap={1.5}>
           <Icon
             color="buttonText"
-            as={TfiReload}
+            as={ArrowCounterClockwise}
             w={'12px'}
             h={'12px'}
             transform={'rotate(90deg) scaleX(-1)'}

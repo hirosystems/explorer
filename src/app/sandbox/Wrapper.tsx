@@ -1,9 +1,9 @@
 'use client';
 
+import { List, User } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { ReactNode } from 'react';
-import { TbMenu2, TbUser } from 'react-icons/tb';
 
 import { Circle } from '../../common/components/Circle';
 import { Section } from '../../common/components/Section';
@@ -72,14 +72,14 @@ export function Wrapper({ children }: { children: ReactNode }) {
             <HStack gap={6}>
               <HStack alignItems="center">
                 <Circle size={5}>
-                  <Icon as={TbUser} size={3.5} />
+                  <Icon as={User} size={3.5} />
                 </Circle>
                 <Caption>{userData?.identityAddress}</Caption>
               </HStack>
               <HStack alignItems="center">
                 <IconButton
                   onClick={() => dispatch(toggleRightPanel())}
-                  icon={<TbMenu2 />}
+                  icon={<List />}
                   aria-label={'Toggle right panel'}
                   size={'4'}
                 />

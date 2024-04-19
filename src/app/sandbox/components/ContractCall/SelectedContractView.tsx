@@ -1,7 +1,6 @@
 import { Link as NextLink } from '@chakra-ui/next-js';
+import { ArrowSquareOut, Atom, ListChecks } from '@phosphor-icons/react';
 import React, { FC } from 'react';
-import { BiAtom, BiLinkExternal } from 'react-icons/bi';
-import { MdOutlineChecklistRtl } from 'react-icons/md';
 
 import { ClarityAbiFunction } from '@stacks/transactions';
 
@@ -20,7 +19,7 @@ import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
-import { FunctionIcon } from '../../../../ui/icons';
+import FunctionXIcon from '../../../../ui/icons/FunctionX';
 import { Caption, Title } from '../../../../ui/typography';
 import { selectShowRightPanel } from '../../sandbox-slice';
 import { AvailableFunctionsView } from './AvailableFunctionsView';
@@ -53,7 +52,7 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
             <Caption transform="translateY(1px)" color="currentColor">
               Go to transaction
             </Caption>
-            <Icon as={BiLinkExternal} ml="8px" color="currentColor" size="16px" />
+            <Icon as={ArrowSquareOut} ml="8px" color="currentColor" size="16px" />
           </Flex>
         </TxLink>
       }
@@ -76,19 +75,19 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
         <Stack p="16px">
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={FunctionIcon} size="20px" />
+              <Icon as={FunctionXIcon} size={5} />
             </Box>
             <PluralizedCaption ml="8px" array={abi?.functions} label="function" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={BiAtom} size="20px" />
+              <Icon as={Atom} size="20px" />
             </Box>
             <PluralizedCaption ml="8px" array={abi?.variables} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={MdOutlineChecklistRtl} size="20px" />
+              <Icon as={ListChecks} size={5} />
             </Box>
             <PluralizedCaption ml="8px" array={abi?.maps} label="map" />
           </Flex>

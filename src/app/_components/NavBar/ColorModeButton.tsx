@@ -1,8 +1,8 @@
 'use client';
 
 import { ColorMode, useColorMode } from '@chakra-ui/react';
+import { Moon, SunDim } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
-import { PiMoon, PiSunDim } from 'react-icons/pi';
 
 import { IconButton, IconButtonProps } from '../../../ui/IconButton';
 
@@ -17,11 +17,11 @@ export function ColorModeButton({
     () =>
       colorModeOverride
         ? colorModeOverride === 'light'
-          ? PiSunDim
-          : PiMoon
+          ? SunDim
+          : Moon
         : colorMode === 'light'
-          ? PiSunDim
-          : PiMoon,
+          ? SunDim
+          : Moon,
     [colorMode, colorModeOverride]
   );
   const onClick = useCallback(() => {

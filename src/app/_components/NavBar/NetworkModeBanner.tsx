@@ -1,7 +1,7 @@
 'use client';
 
+import { Flask } from '@phosphor-icons/react';
 import { FC } from 'react';
-import { PiFlask } from 'react-icons/pi';
 
 import { Badge } from '../../../common/components/Badge';
 import { useGlobalContext } from '../../../common/context/useAppContext';
@@ -16,7 +16,7 @@ export const NetworkModeBanner: FC = () => {
   return (
     <Badge bg="white" border={'none'}>
       <Flex alignItems="center" as={'span'}>
-        <Icon as={PiFlask} color={'black'} size={4} />
+        <Icon as={Flask} color={'black'} size={4} />
         <Text color={'black'} whiteSpace={'nowrap'} as={'span'}>
           {capitalize(networkMode)}
         </Text>

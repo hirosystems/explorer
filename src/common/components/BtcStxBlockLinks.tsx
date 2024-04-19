@@ -1,12 +1,13 @@
 'use client';
 
+import { ArrowRight } from '@phosphor-icons/react';
 import { FC, Fragment } from 'react';
-import { PiArrowRightLight } from 'react-icons/pi';
 
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { TextLink } from '../../ui/TextLink';
-import { BitcoinIcon, StxIcon } from '../../ui/icons';
+import BitcoinIcon from '../../ui/icons/BitcoinIcon';
+import StxIcon from '../../ui/icons/StxIcon';
 import { useGlobalContext } from '../context/useAppContext';
 import { Circle } from './Circle';
 import { BlockLink } from './ExplorerLinks';
@@ -36,7 +37,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
       </BlockLink>
       {btcBlockHeight && (
         <Fragment>
-          <Icon as={PiArrowRightLight} size={4} color={'slate.700'} />
+          <Icon as={ArrowRight} size={4} color={'slate.700'} />
           <Icon as={BitcoinIcon} size={4.5} />
           <TextLink
             href={`${btcBlockBaseUrl}/${btcBlockHeight}`}

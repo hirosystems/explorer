@@ -1,14 +1,12 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { Check, WarningCircle } from '@phosphor-icons/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 import { FlexProps } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Spinner } from '../../ui/Spinner';
-import { CheckIcon } from '../../ui/icons';
 import { TxStatus } from '../types/tx';
 import { Badge, BadgeProps } from './Badge';
 import { LoaderQuarter } from './icons/loader-quarter';
@@ -28,12 +26,12 @@ const labelMap = {
 
 const iconMap = {
   pending: Spinner,
-  success: CheckIcon,
-  success_anchor_block: CheckIcon,
+  success: Check,
+  success_anchor_block: Check,
   success_microblock: () => <MicroblockIcon fill="white" />,
-  non_canonical: HiOutlineExclamationCircle,
-  failed: HiOutlineExclamationCircle,
-  dropped: HiOutlineExclamationCircle,
+  non_canonical: WarningCircle,
+  failed: WarningCircle,
+  dropped: WarningCircle,
 };
 
 interface StatusProps extends FlexProps {

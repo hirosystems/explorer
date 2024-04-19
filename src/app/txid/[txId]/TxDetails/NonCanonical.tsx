@@ -1,6 +1,6 @@
 'use client';
 
-import QuestionMarkCircleOutlineIcon from 'mdi-react/QuestionMarkCircleOutlineIcon';
+import { Question } from '@phosphor-icons/react';
 import { FC } from 'react';
 import * as React from 'react';
 
@@ -10,6 +10,7 @@ import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizo
 import { TransactionStatus } from '../../../../common/constants/constants';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
 import { IconButton } from '../../../../ui/IconButton';
 
 export const NonCanonical: FC<{
@@ -29,7 +30,7 @@ export const NonCanonical: FC<{
           </Box>
           <IconButton
             ml="8px"
-            icon={<QuestionMarkCircleOutlineIcon />}
+            icon={<Icon as={Question} />}
             as="a"
             href="https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#committing-to-a-chain-tip"
             target="_blank"

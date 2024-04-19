@@ -21,6 +21,13 @@ export function NakamotoModal() {
 
   useEffect(() => {
     const nakamotoModalShown = localStorage.getItem('nakamoto25ModalShown');
+    try {
+      const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
+      // to run performance testing without the modal
+      if (dismissQueryParam === 'nakamoto') {
+        return;
+      }
+    } catch (e) {}
     if (!nakamotoModalShown || nakamotoModalShown === 'false') {
       setIsOpen(true);
     }

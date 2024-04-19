@@ -1,9 +1,9 @@
 'use client';
 
+import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
-import { BsChevronDown, BsChevronRight } from 'react-icons/bs';
 
 import { Accordion } from '../../../../ui/Accordion';
 import { AccordionButton } from '../../../../ui/AccordionButton';
@@ -189,9 +189,9 @@ export const AddNetworkForm: FC = () => {
                 <Stack gap={4}>
                   <AccordionButton paddingLeft={0} gap={2}>
                     {isExpanded ? (
-                      <Icon as={BsChevronDown} w={3} h={3} />
+                      <Icon as={CaretDown} w={3} h={3} />
                     ) : (
-                      <Icon as={BsChevronRight} w={3} h={3} />
+                      <Icon as={CaretRight} w={3} h={3} />
                     )}{' '}
                     <Text fontSize={'sm'}>BTC Explorer URLs</Text>
                   </AccordionButton>

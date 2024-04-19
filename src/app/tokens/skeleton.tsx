@@ -1,7 +1,7 @@
 'use client';
 
+import { MagnifyingGlass } from '@phosphor-icons/react';
 import * as React from 'react';
-import { TbSearch } from 'react-icons/tb';
 
 import { Section } from '../../common/components/Section';
 import { Flex } from '../../ui/Flex';
@@ -28,7 +28,7 @@ export default function Skeleton() {
         topRight={
           <InputGroup>
             <InputRightElement pointerEvents="none">
-              <Icon as={TbSearch} color={`textCaption.${colorMode}`} />
+              <Icon as={MagnifyingGlass} color={`textCaption.${colorMode}`} />
             </InputRightElement>
             <SkeletonItem width={'200px'} height={'40px'} />
           </InputGroup>

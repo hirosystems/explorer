@@ -1,6 +1,6 @@
 import { useColorMode } from '@chakra-ui/react';
+import { CaretDown } from '@phosphor-icons/react';
 import React from 'react';
-import { BsChevronDown } from 'react-icons/bs';
 
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
@@ -20,7 +20,7 @@ export function LinksMenu(props: { links: TokenLinks }) {
         backgroundColor={colorMode === 'light' ? 'white' : 'transparent'}
         variant={colorMode === 'light' ? undefined : 'outline'}
         color={'textTitle.light'}
-        rightIcon={<Icon as={BsChevronDown} size="11px" color={'textCaption.light'} />}
+        rightIcon={<Icon as={CaretDown} size="11px" color={'textCaption.light'} />}
         _hover={{ backgroundColor: colorMode === 'light' ? 'white' : 'transparent' }}
       >
         Links

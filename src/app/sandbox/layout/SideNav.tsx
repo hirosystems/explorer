@@ -1,4 +1,4 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -7,8 +7,9 @@ import { useGlobalContext } from '../../../common/context/useAppContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Icon } from '../../../ui/Icon';
 import { Stack, StackProps } from '../../../ui/Stack';
-import { FunctionIcon, StxIcon } from '../../../ui/icons';
-import { ClarityIcon } from '../../../ui/icons/ClarityIcon';
+import ClarityIcon from '../../../ui/icons/ClarityIcon';
+import FunctionXIcon from '../../../ui/icons/FunctionX';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { useUser } from '../hooks/useUser';
 import { NavItem } from './NavItem';
 
@@ -29,7 +30,7 @@ export const SideNav: React.FC<StackProps> = () => {
       <NavItem
         label={'Call Functions'}
         url={buildUrl(`/sandbox/contract-call`, network)}
-        icon={<Icon as={FunctionIcon} size={5} color={iconColor} />}
+        icon={<Icon as={FunctionXIcon} size={5} color={iconColor} />}
         isSelected={pathname?.startsWith('/sandbox/contract-call')}
       />
       <NavItem

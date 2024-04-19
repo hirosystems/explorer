@@ -2,9 +2,8 @@
 
 import { useClipboard } from '@chakra-ui/react';
 import { useMonaco } from '@monaco-editor/react';
+import { CopySimple, X } from '@phosphor-icons/react';
 import React from 'react';
-import { AiOutlineCopy } from 'react-icons/ai';
-import { RiCloseLine } from 'react-icons/ri';
 
 import { helloWorldContract } from '../../../common/constants/contracts/hello-world-contract';
 import { kvStoreContract } from '../../../common/constants/contracts/kv-store';
@@ -17,7 +16,6 @@ import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Select } from '../../../ui/Select';
-import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
@@ -94,13 +92,13 @@ export const Toolbar: React.FC<any> = () => {
         <Box onClick={onCopy}>
           <Tooltip label={hasCopied ? 'Copied!' : 'Copy contract code'}>
             <IconButton
-              icon={<Icon as={AiOutlineCopy} size={4} color={'white'} />}
+              icon={<Icon as={CopySimple} size={4} color={'white'} />}
               aria-label={'copy'}
             />
           </Tooltip>
         </Box>
         <IconButton
-          icon={<Icon as={RiCloseLine} size={4} color={'white'} />}
+          icon={<Icon as={X} size={4} color={'white'} />}
           onClick={() => dispatch(toggleCodeToolbar())}
           aria-label={'close'}
         />

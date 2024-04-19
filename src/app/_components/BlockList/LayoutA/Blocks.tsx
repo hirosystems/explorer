@@ -1,6 +1,6 @@
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
-import { StxIcon } from '../../../../ui/icons';
+import StxIcon from '../../../../ui/icons/StxIcon';
 import { BlockCount } from '../BlockCount';
 import { getFadeAnimationStyle } from '../consts';
 import { UIBlock, UIBlockType } from '../types';

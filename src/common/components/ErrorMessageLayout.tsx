@@ -2,13 +2,12 @@
 
 import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
-import { TbAlertOctagon } from 'react-icons/tb';
 
 import { Box, BoxProps } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { QuestionOctagon } from '../../ui/icons/QuestionOctagon';
-import { Text, Title } from '../../ui/typography';
+import { Text } from '../../ui/typography';
 import { Circle } from './Circle';
 
 function capitalizeFirstLetter(string: string) {

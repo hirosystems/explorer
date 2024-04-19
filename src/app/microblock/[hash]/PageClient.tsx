@@ -1,7 +1,7 @@
 'use client';
 
+import { Clock } from '@phosphor-icons/react';
 import * as React from 'react';
-import { AiOutlineClockCircle } from 'react-icons/ai';
 
 import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
 import { Section } from '../../../common/components/Section';
@@ -64,7 +64,7 @@ export default function MicroblockSinglePage({ params: { hash } }: any) {
                   <Box>
                     <Tooltip label={readableTs}>
                       <Flex alignItems="center">
-                        <Icon as={AiOutlineClockCircle} size="16px" mr="4px" />
+                        <Icon as={Clock} size="16px" mr="4px" />
                         <Value>{toRelativeTime(block.burn_block_time * 1000)}</Value>
                       </Flex>
                     </Tooltip>

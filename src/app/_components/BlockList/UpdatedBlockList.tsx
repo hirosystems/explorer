@@ -20,7 +20,7 @@ import { FormLabel } from '../../../ui/FormLabel';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
 import { Switch } from '../../../ui/Switch';
-import { StxIcon } from '../../../ui/icons';
+import StxIcon from '../../../ui/icons/StxIcon';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { BurnBlock } from './LayoutA/BurnBlock';
 import { StxBlock } from './LayoutA/StxBlock';
