@@ -1,3 +1,10 @@
+# [1.166.0](https://github.com/hirosystems/explorer/compare/v1.165.3...v1.166.0) (2024-04-22)
+
+
+### Features
+
+* epoc 2.5 updates ([c6a03aa](https://github.com/hirosystems/explorer/commit/c6a03aa9f1adbc24d5a9a54ad2e694ba3dd437dc))
+
 ## [1.165.3](https://github.com/hirosystems/explorer/compare/v1.165.2...v1.165.3) (2024-04-22)
 
 
