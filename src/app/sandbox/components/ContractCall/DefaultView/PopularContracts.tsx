@@ -10,7 +10,7 @@ import { Caption, Title } from '../../../../../ui/typography';
 
 const defaultContracts = (address: string) => [
   {
-    name: 'pox-3',
+    name: 'pox-4',
     address,
     description: '',
     icon: TbCurrencyBitcoin,
