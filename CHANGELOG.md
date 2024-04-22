@@ -1,3 +1,10 @@
+## [1.166.1](https://github.com/hirosystems/explorer/compare/v1.166.0...v1.166.1) (2024-04-22)
+
+
+### Bug Fixes
+
+* typo ([3d65149](https://github.com/hirosystems/explorer/commit/3d65149dca4c38f20d954b72db21e3b345f274e0))
+
 # [1.166.0](https://github.com/hirosystems/explorer/compare/v1.165.3...v1.166.0) (2024-04-22)
 
 
