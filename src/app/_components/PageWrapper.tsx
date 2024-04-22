@@ -75,14 +75,14 @@ export function PageWrapper({
             >
               A new version{' '}
               <TextLink
-                href="https://github.com/stacks-network/stacks-core/releases/tag/2.5.0.0.2"
+                href="https://github.com/stacks-network/stacks-core/releases/tag/2.5.0.0.3"
                 target="_blank"
                 css={css`
                   display: inline;
                   text-decoration: underline;
                 `}
               >
-                2.5.0.0.2
+                2.5.0.0.3
               </TextLink>{' '}
               of the Stacks Blockchain has been released.
               <br />
