@@ -1,3 +1,11 @@
+## [1.166.2](https://github.com/hirosystems/explorer/compare/v1.166.1...v1.166.2) (2024-04-22)
+
+
+### Bug Fixes
+
+* updated banner with mainnet instantiation ([e195bd1](https://github.com/hirosystems/explorer/commit/e195bd1f1c8b811c2fa81a4538d86373262d2ca2))
+* updated lint ([5a53580](https://github.com/hirosystems/explorer/commit/5a535807826fe3f1b0fd3e3af3affe099f3e9c0f))
+
 ## [1.166.1](https://github.com/hirosystems/explorer/compare/v1.166.0...v1.166.1) (2024-04-22)
 
 
