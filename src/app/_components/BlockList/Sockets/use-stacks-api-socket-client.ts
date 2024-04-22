@@ -2,28 +2,26 @@ import { useCallback, useRef, useState } from 'react';
 
 import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
 
-import { NetworkModes } from '../../../../common/types/network';
-
 export interface StacksApiSocketClientInfo {
-  client: StacksApiSocketClient | undefined;
+  client: StacksApiSocketClient | null;
   connect: (handleOnConnect?: (client: StacksApiSocketClient) => void) => void;
   disconnect: () => void;
 }
 
-export function useStacksApiSocketClient(network: NetworkModes): StacksApiSocketClientInfo {
-  const [socketClient, setSocketClient] = useState<StacksApiSocketClient | undefined>(undefined);
+export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientInfo {
+  const [socketClient, setSocketClient] = useState<StacksApiSocketClient | null>(null);
   const socketUrlTracker = useRef<string | null>(null);
   const isSocketClientConnecting = useRef(false);
 
   const connect = useCallback(
     async (handleOnConnect?: (client: StacksApiSocketClient) => void) => {
-      if (!network) return;
+      if (!apiUrl) return;
       if (socketClient?.socket.connected || isSocketClientConnecting.current) {
         return;
       }
       try {
         isSocketClientConnecting.current = true;
-        const socketUrl = `https://api.${network}.hiro.so/`;
+        const socketUrl = apiUrl;
         socketUrlTracker.current = socketUrl;
         console.log('Connecting to socket', socketUrl);
         const client = await StacksApiSocketClient.connect({ url: socketUrl });
@@ -35,20 +33,20 @@ export function useStacksApiSocketClient(network: NetworkModes): StacksApiSocket
         });
         client.socket.on('disconnect', () => {
           console.log('Disconnected from socket');
-          setSocketClient(undefined);
+          setSocketClient(null);
           isSocketClientConnecting.current = false;
         });
         client.socket.on('connect_error', error => {
           console.log('Socket connection error', error);
-          setSocketClient(undefined);
+          setSocketClient(null);
           isSocketClientConnecting.current = false;
         });
       } catch (error) {
-        setSocketClient(undefined);
+        setSocketClient(null);
         isSocketClientConnecting.current = false;
       }
     },
-    [network, socketClient]
+    [apiUrl, socketClient]
   );
 
   const disconnect = useCallback(() => {

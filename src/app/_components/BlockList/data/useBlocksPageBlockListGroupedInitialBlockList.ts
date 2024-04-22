@@ -20,26 +20,25 @@ const BURN_BLOCKS_QUERY_KEY_EXTENSION = 'blockList';
 export function useBlocksPageBlockListGroupedInitialBlockList(blockListLimit: number) {
   const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
 
-  const latestBurnBlock = useMemo(() => burnBlocks[0], [burnBlocks]);
+  const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
 
   const btcBlocksMap = useMemo(() => {
     const map = {} as Record<string, BurnBlock>;
-    burnBlocks.forEach(block => {
+    btcBlocks.forEach(block => {
       map[block.burn_block_hash] = block;
     });
     return map;
-  }, [burnBlocks]);
+  }, [btcBlocks]);
 
   const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
     useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height, 10, {}, 'blocks-page')
   );
 
-  const initialStxBlockHashes = useMemo(
-    () => new Set([...latestBurnBlockStxBlocks.map(block => block.hash)]),
-    [latestBurnBlockStxBlocks]
-  );
+  const initialStxBlockHashes = useMemo(() => {
+    return new Set([...latestBurnBlockStxBlocks.map(block => block.hash)]);
+  }, [latestBurnBlockStxBlocks]);
 
   const queryClient = useQueryClient();
   const refetchInitialBlockList = useCallback(
@@ -64,17 +63,18 @@ export function useBlocksPageBlockListGroupedInitialBlockList(blockListLimit: nu
 
   const initialBlockList = useMemo(() => {
     const startOfBlockList = generateBlockList(latestBurnBlockStxBlocks, btcBlocksMap);
-    const restOfBlockList = burnBlocks.slice(1).map(block => ({
+    const restOfBlockList = btcBlocks.slice(1).map(block => ({
       btcBlock: {
         type: 'btc_block',
         height: block.burn_block_height,
         hash: block.burn_block_hash,
         timestamp: block.burn_block_time,
+        txsCount: block.stacks_blocks.length,
       } as BlockListBtcBlock,
       stxBlocks: [],
     }));
     return [...startOfBlockList, ...restOfBlockList];
-  }, [latestBurnBlockStxBlocks, burnBlocks, btcBlocksMap]);
+  }, [latestBurnBlockStxBlocks, btcBlocks, btcBlocksMap]);
 
   return {
     initialStxBlockHashes,

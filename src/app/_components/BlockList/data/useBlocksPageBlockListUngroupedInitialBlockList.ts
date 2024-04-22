@@ -1,19 +1,21 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueries, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import { GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY } from '../../../../common/queries/useBlocksByBurnBlock';
+import {
+  GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY,
+  useGetStxBlocksByBurnBlockQuery,
+} from '../../../../common/queries/useBlocksByBurnBlock';
 import {
   BURN_BLOCKS_QUERY_KEY,
   useSuspenseBurnBlocks,
 } from '../../../../common/queries/useBurnBlocksInfinite';
 import { BURN_BLOCKS_BLOCK_LIST_UNGROUPED_QUERY_KEY_EXTENSION } from '../consts';
 import { generateBlockList } from '../utils';
-import { useStxBlocksForBtcBlocks } from './useStxBlocksForBtcBlocks';
 
-export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: number = 3) {
+export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: number) {
   const response = useSuspenseBurnBlocks(
     blockListLimit,
     {},
@@ -21,16 +23,34 @@ export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: 
   );
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  const btcBlocksMemo = useMemo(() => {
+    return btcBlocks;
+  }, [btcBlocks]);
 
-  const initialStxBlocks = useStxBlocksForBtcBlocks(btcBlocks);
+  const getQuery = useGetStxBlocksByBurnBlockQuery();
+  const stxBlockQueries = useMemo(
+    () =>
+      btcBlocks.map(btcBlock => {
+        return getQuery(btcBlock.burn_block_height);
+      }),
+    [btcBlocks]
+  );
+  const stxBlocksResults = useQueries({ queries: stxBlockQueries });
+  const initialStxBlocks = useMemo(
+    () =>
+      stxBlocksResults.flatMap(
+        result => result.data?.results || (result.data as any)?.pages[0].results || []
+      ),
+    [btcBlocks]
+  );
 
   const btcBlocksMap = useMemo(() => {
     const map = {} as Record<string, BurnBlock>;
-    btcBlocks.forEach(block => {
+    btcBlocksMemo.forEach(block => {
       map[block.burn_block_hash] = block;
     });
     return map;
-  }, [btcBlocks]);
+  }, [btcBlocksMemo]);
 
   const queryClient = useQueryClient();
   const refetchInitialBlockList = useCallback(
@@ -53,15 +73,13 @@ export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: 
     [queryClient]
   );
 
-  const initialStxBlocksHashes = useMemo(
-    () => new Set(initialStxBlocks.map(block => block.hash)),
-    [initialStxBlocks]
-  );
+  const initialStxBlocksHashes = useMemo(() => {
+    return new Set(initialStxBlocks.map(block => block.hash));
+  }, [initialStxBlocks]);
 
-  const initialBlockList = useMemo(
-    () => generateBlockList(initialStxBlocks, btcBlocksMap),
-    [initialStxBlocks, btcBlocksMap]
-  );
+  const initialBlockList = useMemo(() => {
+    return generateBlockList(initialStxBlocks, btcBlocksMap);
+  }, [initialStxBlocks, btcBlocksMap]);
 
   return {
     initialBlockList,

@@ -13,6 +13,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
 
   // initially the block list is the initial blocklist
   const blockList = useRef<BlockListData[]>(initialBlockList);
+
   // when the initial block list changes, reset the block list to the initial blocklist
   useEffect(() => {
     blockList.current = initialBlockList;
@@ -34,7 +35,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     latestStxBlocks: latestStxBlocksFromWebSocket,
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
-  } = useBlockListWebSocket2(initialStxBlocksHashes);
+  } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes, );
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);

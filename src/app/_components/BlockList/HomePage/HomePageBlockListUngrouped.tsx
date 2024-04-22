@@ -15,13 +15,12 @@ function HomePageBlockListUngroupedBase() {
   const {
     blockList,
     updateBlockList,
-    latestBlocksCount: latestStxBlocksCountFromWebSocket,
   } = useHomePageBlockList();
   return (
     <>
       {!liveUpdates && (
         <UpdateBar
-          latestBlocksCount={latestStxBlocksCountFromWebSocket}
+          blockList={blockList}
           onClick={updateBlockList}
         />
       )}

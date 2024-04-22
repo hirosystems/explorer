@@ -39,6 +39,19 @@ export function getBtcTxsCount(btcBlockMap: BtcBlockMap, stxBlock: Block | Nakam
 
 export type BlockListData = { stxBlocks: BlockListStxBlock[]; btcBlock: BlockListBtcBlock };
 
+export function getApproximateStxBlocksPerMinuteFromBlockList(blockList: BlockListData[]) {
+  const approximateTimeBetweenBtcBlocks = 10;
+  if (!blockList || blockList.length === 0) return 0;
+  const btcBlocksWithTxCounts = blockList.filter(({ btcBlock }) => !!btcBlock?.txsCount);
+  const numBtcBlocks = btcBlocksWithTxCounts.length;
+  const numStxBlocks = btcBlocksWithTxCounts.reduce(
+    (acc, { btcBlock }) => (btcBlock?.txsCount ? acc + btcBlock?.txsCount : acc),
+    0
+  );
+  const result = (numStxBlocks / numBtcBlocks) * approximateTimeBetweenBtcBlocks;
+  return result.toFixed(0);
+}
+
 export function waitForFadeAnimation(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
@@ -76,7 +89,6 @@ export function generateBlockList(
 }
 
 export function mergeBlockLists(newblockList: BlockListData[], initialBlockList: BlockListData[]) {
-  console.log('merging block lists', { newblockList, initialBlockList });
   if (newblockList.length === 0) return initialBlockList;
   const earliestBtcBlock = newblockList[newblockList.length - 1];
   const latestBtcBlock = initialBlockList[0];

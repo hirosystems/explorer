@@ -258,13 +258,6 @@ export function BurnBlockGroup({
     return txSum + txsCount;
   }, 0);
   const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
-  console.log({
-    stxBlocksShortList,
-    stxBlocksLimit,
-    stxBlocks,
-    numStxBlocks,
-    numStxBlocksNotDisplayed,
-  });
   // const totalTime = stxBlocks.reduce((totalTime, stxBlock) => {
   //   const blockTime = stxBlock.timestamp ?? 0;
   //   return totalTime + blockTime;

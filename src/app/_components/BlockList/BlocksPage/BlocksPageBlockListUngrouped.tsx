@@ -17,7 +17,6 @@ function BlocksPageBlockListUngroupedBase() {
 
   const {
     blockList,
-    latestStxBlocksCountFromWebSocket,
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
@@ -28,7 +27,7 @@ function BlocksPageBlockListUngroupedBase() {
     <Box pb={6}>
       {!liveUpdates && (
         <UpdateBar
-          latestBlocksCount={latestStxBlocksCountFromWebSocket}
+          blockList={blockList}
           onClick={updateBlockList}
         />
       )}

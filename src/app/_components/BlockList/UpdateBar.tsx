@@ -8,11 +8,7 @@ import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 import { useBlockListContext } from './BlockListContext';
 import { FADE_DURATION } from './consts';
-
-interface UpdateBarProps extends FlexProps {
-  latestBlocksCount: number;
-  onClick: () => void;
-}
+import { BlockListData, getApproximateStxBlocksPerMinuteFromBlockList } from './utils';
 
 export function UpdateBarLayout({
   isBlockListLoading,
@@ -43,7 +39,14 @@ export function UpdateBarLayout({
   );
 }
 
-export function UpdateBar({ latestBlocksCount, onClick, ...rest }: UpdateBarProps) {
+export function UpdateBar({
+  blockList,
+  onClick,
+  ...rest
+}: {
+  blockList: BlockListData[];
+  onClick: () => void;
+} & FlexProps) {
   const textColor = useColorModeValue('slate.800', 'slate.400'); // TODO: not in theme. remove
   const lastClickTimeRef = useRef(0);
   const { isBlockListLoading } = useBlockListContext();
@@ -66,11 +69,10 @@ export function UpdateBar({ latestBlocksCount, onClick, ...rest }: UpdateBarProp
         whiteSpace={'nowrap'}
       >
         <Text display={'inline'} fontWeight={700}>
-          {latestBlocksCount}
-        </Text>{' '}
-        new Stacks blocks have come in
+          {`~${getApproximateStxBlocksPerMinuteFromBlockList(blockList)} Stacks blocks mined per min.`}
+        </Text>
       </Text>
-      <Button variant="text" onClick={update} disabled={latestBlocksCount === 0}>
+      <Button variant="text" onClick={update}>
         <Flex alignItems={'center'} gap={1.5}>
           <Icon
             color="buttonText"

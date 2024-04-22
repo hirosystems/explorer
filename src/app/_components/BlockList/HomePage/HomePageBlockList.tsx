@@ -45,8 +45,10 @@ function HomePageBlockListBase() {
     <Section py={5} px={6}>
       <Stack
         gap={3}
-        mb={6}
+        pb={6}
         borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+        marginX={-6}
+        px={6}
       >
         <Text fontWeight="medium">Recent Blocks</Text>
         <Controls
@@ -62,7 +64,6 @@ function HomePageBlockListBase() {
           }}
           padding={0}
           gap={3}
-          marginX={0}
           border="none"
         />
       </Stack>

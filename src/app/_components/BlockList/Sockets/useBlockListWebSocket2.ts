@@ -3,8 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { useSubscribeBlocks } from './useSubscribeBlocks';
+import { useSubscribeBlocks2 } from './useSubscribeBlocks2';
 
-export function useBlockListWebSocket2(initialStxBlockHashes: Set<string>) {
+export function useBlockListWebSocket2(liveUpdates: boolean, initialStxBlockHashes: Set<string>) {
   const [latestStxBlocks, setLatestStxBlocks] = useState<NakamotoBlock[]>([]);
 
   const stxBlockHashes = useRef(new Set<string>(initialStxBlockHashes));
@@ -24,8 +25,7 @@ export function useBlockListWebSocket2(initialStxBlockHashes: Set<string>) {
     stxBlockHashes.current.add(stxBlock.hash);
   }, []);
 
-  useSubscribeBlocks(handleBlock);
-  // useSubscribeBlocks2(handleBlock);
+  useSubscribeBlocks2(liveUpdates, handleBlock);
 
   const clearLatestStxBlocks = () => {
     setLatestStxBlocks([]);

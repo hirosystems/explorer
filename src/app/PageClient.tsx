@@ -8,7 +8,6 @@ import { useGlobalContext } from '../common/context/useAppContext';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
-import { UpdatedBlocksList } from './_components/BlockList/UpdatedBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
 

@@ -30,12 +30,12 @@ export function useSuspenseInfiniteQueryResult<T>(
   response: UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<T>>>,
   limit?: number
 ) {
-  return useMemo(
-    () =>
+  return useMemo(() => {
+    return (
       response.data?.pages
         .map(page => page.results)
         .flat()
-        .slice(0, limit) || [],
-    [limit, response.data?.pages]
-  );
+        .slice(0, limit) || []
+    );
+  }, [limit, response.data?.pages]);
 }

@@ -15,18 +15,24 @@ import { ONE_SECOND, TWO_MINUTES } from './query-stale-time';
 
 export const GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY = 'getBlocksByBurnBlock';
 
-const MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT = 30;
+export const MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT = 30;
 
-export function useGetBlocksByBurnBlockQuery() {
+export function useGetStxBlocksByBurnBlockQuery() {
   const api = useApi();
 
-  return (heightOrHash: string | number, numStxBlocksperBtcBlock?: number) => ({
-    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
+  return (
+    heightOrHash: string | number,
+    numStxBlocksperBtcBlock: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT
+  ) => ({
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, 'special'],
     queryFn: () =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,
-        limit: numStxBlocksperBtcBlock || MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
+        limit: numStxBlocksperBtcBlock,
       }),
+    staleTime: TWO_MINUTES,
+    cacheTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

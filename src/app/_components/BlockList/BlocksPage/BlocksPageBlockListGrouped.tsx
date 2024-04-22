@@ -18,17 +18,15 @@ function BlocksPageBlockListGroupedBase() {
   const {
     blockList,
     updateBlockList,
-    latestBlocksCount,
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
   } = useBlocksPageBlockListGrouped();
-  console.log({ blockList });
 
   return (
     <>
       {!liveUpdates && (
-        <UpdateBar latestBlocksCount={latestBlocksCount} onClick={updateBlockList} />
+        <UpdateBar blockList={blockList} onClick={updateBlockList} />
       )}
       <Flex flexDirection="column" gap={4} pt={4}>
         <BlockListGrouped blockList={blockList} minimized={false} stxBlocksLimit={10} />

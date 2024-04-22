@@ -12,8 +12,8 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
     initialStxBlockHashes,
     initialBlockList,
     refetchInitialBlockList,
-    isFetchingNextPage,
     fetchNextPage,
+    isFetchingNextPage,
     hasNextPage,
   } = useBlocksPageBlockListGroupedInitialBlockList(btcBlockLimit);
 
@@ -28,7 +28,7 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
     latestStxBlocks: latestStxBlocksFromWebSocket,
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
-  } = useBlockListWebSocket2(initialStxBlockHashes);
+  } = useBlockListWebSocket2(liveUpdates, initialStxBlockHashes);
 
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback((blockListUpdates: BlockListData[]) => {

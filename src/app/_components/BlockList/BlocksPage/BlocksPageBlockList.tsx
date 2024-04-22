@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
+import { Stack } from '../../../../ui/Stack';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListProvider } from '../BlockListProvider';
@@ -10,22 +11,6 @@ import { Controls } from '../Controls';
 import { BlocksPageBlockListGroupedSkeleton } from '../Grouped/skeleton';
 import { BlocksPageBlockListGrouped } from './BlocksPageBlockListGrouped';
 import { BlocksPageBlockListUngrouped } from './BlocksPageBlockListUngrouped';
-
-// const BlocksPageBlockListGroupedDynamic = dynamic(
-//   () => import('./BlocksPageBlockListGrouped').then(mod => mod.BlocksPageBlockListGrouped),
-//   {
-//     loading: () => <BlocksPageBlockListGroupedSkeleton />,
-//     ssr: false,
-//   }
-// );
-
-// const BlocksPageBlockListUngroupedDynamic = dynamic(
-//   () => import('./BlocksPageBlockListUngrouped').then(mod => mod.BlocksPageBlockListUngrouped),
-//   {
-//     loading: () => <BlocksPageBlockListUngroupedSkeleton />,
-//     ssr: false,
-//   }
-// );
 
 function BlocksPageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
@@ -41,26 +26,26 @@ function BlocksPageBlockListBase() {
 
   return (
     <Section>
-      <Controls
-        groupByBtc={{
-          onChange: () => {
-            setGroupedByBtc(!groupedByBtc);
-          },
-          isChecked: groupedByBtc,
-        }}
-        liveUpdates={{
-          onChange: toggleLiveUpdates,
-          isChecked: liveUpdates,
-        }}
-        horizontal={true}
-      />
-      {groupedByBtc ? (
-        // <BlocksPageBlockListGroupedDynamic />
-        <BlocksPageBlockListGrouped />
-      ) : (
-        // <BlocksPageBlockListUngroupedDynamic />
-        <BlocksPageBlockListUngrouped />
-      )}
+      <Stack
+        marginX={-6}
+        px={6}
+        borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+      >
+        <Controls
+          groupByBtc={{
+            onChange: () => {
+              setGroupedByBtc(!groupedByBtc);
+            },
+            isChecked: groupedByBtc,
+          }}
+          liveUpdates={{
+            onChange: toggleLiveUpdates,
+            isChecked: liveUpdates,
+          }}
+          horizontal={true}
+        />
+      </Stack>
+      {groupedByBtc ? <BlocksPageBlockListGrouped /> : <BlocksPageBlockListUngrouped />}
     </Section>
   );
 }

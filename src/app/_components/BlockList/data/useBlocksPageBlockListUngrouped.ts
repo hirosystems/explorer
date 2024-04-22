@@ -7,21 +7,22 @@ import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
 import { useBlocksPageBlockListUngroupedInitialBlockList } from './useBlocksPageBlockListUngroupedInitialBlockList';
 
-export function useBlocksPageBlockListUngrouped() {
+export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
   const {
     initialStxBlocksHashes,
     initialBlockList,
-    isFetchingNextPage,
-    fetchNextPage,
     refetchInitialBlockList,
+    fetchNextPage,
+    isFetchingNextPage,
     hasNextPage,
-  } = useBlocksPageBlockListUngroupedInitialBlockList();
+  } = useBlocksPageBlockListUngroupedInitialBlockList(btcBlockLimit);
 
   // initially the block list is the initial blocklist
   const blockList = useRef<BlockListData[]>(initialBlockList);
   // when the initial block list changes, reset the block list to the initial blocklist
+  //TODO: this is the issue!!!!!! it keeps firing, resetting the list back to the initial list
   useEffect(() => {
     blockList.current = initialBlockList;
   }, [initialBlockList]);
@@ -30,7 +31,7 @@ export function useBlocksPageBlockListUngrouped() {
     latestStxBlocks: latestStxBlocksFromWebSocket,
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
-  } = useBlockListWebSocket2(initialStxBlocksHashes);
+  } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes);
 
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback((blockListUpdates: BlockListData[]) => {
@@ -94,8 +95,7 @@ export function useBlocksPageBlockListUngrouped() {
 
   return {
     blockList: blockList.current,
-    latestStxBlocksCountFromWebSocket,
-    updateBlockList: showLatestStxBlocksFromWebSocket,
+    updateBlockList: updateBlockListWithQuery,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
     isFetchingNextPage,
     fetchNextPage,
