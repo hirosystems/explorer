@@ -102,7 +102,7 @@ export const AppContextProvider: FC<{
   const networks: Record<string, Network> = useMemo<Record<string, Network>>(
     () => ({
       [apiUrls[NetworkModes.Mainnet]]: {
-        label: 'Stack Mainnet',
+        label: 'Stacks Mainnet',
         url: apiUrls[NetworkModes.Mainnet],
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
