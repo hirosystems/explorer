@@ -20,14 +20,14 @@ export function NakamotoModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const nakamotoModalShown = localStorage.getItem('nakamotoModalShown');
+    const nakamotoModalShown = localStorage.getItem('nakamoto25ModalShown');
     if (!nakamotoModalShown || nakamotoModalShown === 'false') {
       setIsOpen(true);
     }
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem('nakamotoModalShown', 'true');
+    localStorage.setItem('nakamoto25ModalShown', 'true');
     setIsOpen(false);
   };
 
@@ -37,7 +37,11 @@ export function NakamotoModal() {
     <Modal title={'Nakamoto'} isOpen={isOpen} onClose={() => handleClose()}>
       <ModalOverlay />
       <ModalContent width={'762px'} maxWidth={'full'}>
-        <ModalCloseButton />
+        <ModalCloseButton
+          _focus={{
+            boxShadow: 'none',
+          }}
+        />
         <ModalBody pt={'12'}>
           <Flex direction={'column'} alignItems={'center'} gap={'6'}>
             <Badge
@@ -54,26 +58,28 @@ export function NakamotoModal() {
               NAKAMOTO UPGRADE
             </Badge>
             <Text fontSize={'4xl'} textAlign={'center'}>
-              ✨A glimpse into Nakamoto✨
+              Nakamoto 2.5 is live on Mainnet! 🎉
             </Text>
             <Image src={'/nakamoto.png'} alt={'Nakamoto'} />
-            <Text fontSize={'md'} textAlign={'center'}>
-              Use the Explorer on Testnet to see how Blocks will behave on the Nakamoto upgrade.
-            </Text>
             <ButtonLink
               variant={'primary'}
-              href={'/?chain=testnet'}
+              href={'/?chain=mainnet'}
               onClick={() => {
                 handleClose();
                 void queryClient.clear();
               }}
               _hover={{ textDecoration: 'none' }}
             >
-              Switch to Testnet
+              Explore Nakamoto
             </ButtonLink>
             <ModalFooter borderTop={'1px'} width={'full'} justifyContent={'center'}>
-              <TextLink color={'purple.600'} href={'https://docs.hiro.so/nakamoto'} fontSize={'sm'}>
-                Learn more about Nakamoto Testnet ↗
+              <TextLink
+                color={'purple.600'}
+                href={'https://docs.hiro.so/nakamoto'}
+                fontSize={'sm'}
+                target={'_blank'}
+              >
+                Learn more about Nakamoto ↗
               </TextLink>
             </ModalFooter>
           </Flex>

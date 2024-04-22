@@ -110,6 +110,15 @@ export const AppContextProvider: FC<{
         networkId: ChainID.Mainnet,
         mode: NetworkModes.Mainnet,
       },
+      [apiUrls[NetworkModes.Testnet]]: {
+        label: 'Stacks Testnet',
+        url: apiUrls[NetworkModes.Testnet],
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
+        networkId: ChainID.Testnet,
+        mode: NetworkModes.Testnet,
+      },
       'https://api.nakamoto.testnet.hiro.so': {
         label: 'Nakamoto Testnet',
         url: 'https://api.nakamoto.testnet.hiro.so',
@@ -119,15 +128,6 @@ export const AppContextProvider: FC<{
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
         isCustomNetwork: true,
-      },
-      [apiUrls[NetworkModes.Testnet]]: {
-        label: 'Stacks Testnet',
-        url: apiUrls[NetworkModes.Testnet],
-        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
-        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
-        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
-        networkId: ChainID.Testnet,
-        mode: NetworkModes.Testnet,
       },
       [DEFAULT_DEVNET_SERVER]: {
         label: 'Devnet',
