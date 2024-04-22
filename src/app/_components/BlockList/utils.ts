@@ -8,7 +8,7 @@ export function createBlockListStxBlock(stxBlock: Block | NakamotoBlock): BlockL
     type: 'stx_block',
     height: stxBlock.height,
     hash: stxBlock.hash,
-    timestamp: stxBlock.burn_block_time,
+    timestamp: stxBlock?.block_time,
     txsCount:
       'txs' in stxBlock
         ? (stxBlock as Block).txs.length

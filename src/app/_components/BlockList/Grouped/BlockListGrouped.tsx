@@ -202,19 +202,25 @@ function BitcoinHeader({
       marginX={-PADDING}
       px={PADDING}
       borderBottom={minimized ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+      flexWrap={'wrap'}
     >
-      <Flex alignItems={'center'} gap={1.5}>
+      <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
         <Icon as={PiArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
         <Icon as={BitcoinIcon} size={4.5} />
         <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>
           {btcBlock.height}
         </ExplorerLink>
       </Flex>
-      <HStack divider={<Caption>∙</Caption>} gap={1}>
-        <ExplorerLink fontSize="xs" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>
+      <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+        <ExplorerLink
+          fontSize="xs"
+          color={'textSubdued'}
+          href={`/btcblock/${btcBlock.hash}`}
+          whiteSpace={'nowrap'}
+        >
           {truncateMiddle(btcBlock.hash, 6)}
         </ExplorerLink>
-        <Timestamp ts={btcBlock.timestamp} />
+        <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
       </HStack>
     </Flex>
   );
@@ -223,14 +229,14 @@ function BitcoinHeader({
 export function Footer({ stxBlocks, txSum }: { stxBlocks: BlockListStxBlock[]; txSum: number }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
-      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} whiteSpace="nowrap">
-        <Text color="textSubdued" fontSize="xs">
+      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
+        <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {stxBlocks.length} blocks
         </Text>
-        <Text color="textSubdued" fontSize="xs">
+        <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {txSum} transactions
         </Text>
-        <Text color="textSubdued" fontSize="xs">
+        <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           Average block time: 29 sec.
         </Text>
       </HStack>

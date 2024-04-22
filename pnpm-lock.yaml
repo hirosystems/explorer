@@ -76,8 +76,8 @@ dependencies:
     specifier: 6.9.0
     version: 6.9.0
   '@stacks/blockchain-api-client':
-    specifier: 7.9.0-beta.1
-    version: 7.9.0-beta.1
+    specifier: 7.10.0
+    version: 7.10.0
   '@stacks/common':
     specifier: 6.8.1
     version: 6.8.1
@@ -4295,8 +4295,8 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.9.0-beta.1:
-    resolution: {integrity: sha512-628fBKukUR2lykkO7GVjl/dSRRgX2DnU3NsxLywsM98q+IiOaLqMeJmU3n48BkgXUrH8wxg2b54Ixfhw+nuc/A==}
+  /@stacks/blockchain-api-client@7.10.0:
+    resolution: {integrity: sha512-VQbJDJuHrj2TWDmYE2Tymqa6yMCvNkc8SXPeHgX1k1BuNKFe7HUHv1r4wA24cRpoTSpM14URJOscKLBaDyklpg==}
     dependencies:
       '@stacks/stacks-blockchain-api-types': 7.7.1
       '@types/ws': 7.4.7

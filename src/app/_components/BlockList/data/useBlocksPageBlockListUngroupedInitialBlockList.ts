@@ -1,7 +1,7 @@
-import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
+import { BurnBlock, NakamotoBlockListResponse } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import {
@@ -23,36 +23,29 @@ export function useBlocksPageBlockListUngroupedInitialBlockList(blockListLimit: 
   );
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
-  const btcBlocksMemo = useMemo(() => {
-    return btcBlocks;
-  }, [btcBlocks]);
-
+  const queryClient = useQueryClient();
   const getQuery = useGetStxBlocksByBurnBlockQuery();
-  const stxBlockQueries = useMemo(
-    () =>
-      btcBlocks.map(btcBlock => {
+  const stxBlockQueries = useMemo(() => {
+    return {
+      queries: btcBlocks.map(btcBlock => {
         return getQuery(btcBlock.burn_block_height);
       }),
-    [btcBlocks]
-  );
-  const stxBlocksResults = useQueries({ queries: stxBlockQueries });
-  const initialStxBlocks = useMemo(
-    () =>
-      stxBlocksResults.flatMap(
-        result => result.data?.results || (result.data as any)?.pages[0].results || []
-      ),
-    [btcBlocks]
-  );
+      combine: (response: UseQueryResult<NakamotoBlockListResponse, Error>[]) => {
+        const result = response.flatMap(data => data.data?.results || []);
+        return result;
+      },
+    };
+  }, [btcBlocks, getQuery]);
+  const initialStxBlocks = useQueries(stxBlockQueries, queryClient);
 
   const btcBlocksMap = useMemo(() => {
     const map = {} as Record<string, BurnBlock>;
-    btcBlocksMemo.forEach(block => {
+    btcBlocks.forEach(block => {
       map[block.burn_block_hash] = block;
     });
     return map;
-  }, [btcBlocksMemo]);
+  }, [btcBlocks]);
 
-  const queryClient = useQueryClient();
   const refetchInitialBlockList = useCallback(
     async function (callback: () => void) {
       // Invalidate queries first
