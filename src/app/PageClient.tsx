@@ -40,11 +40,7 @@ export default function Home() {
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
 
-        {activeNetworkKey.indexOf('naka') !== -1 || activeNetworkKey.indexOf('testnet') !== -1 ? (
-          <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
-        ) : (
-          <BlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
-        )}
+        <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
       </Grid>
     </>
   );

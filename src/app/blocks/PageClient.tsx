@@ -27,11 +27,7 @@ const BlocksPage: NextPage = () => {
   return (
     <>
       <PageTitle>Blocks</PageTitle>
-      {activeNetworkKey.indexOf('naka') !== -1 || activeNetworkKey.indexOf('testnet') !== -1 ? (
-        <PaginatedBlockListLayoutA />
-      ) : (
-        <BlocksList />
-      )}
+      <PaginatedBlockListLayoutA />
     </>
   );
 };

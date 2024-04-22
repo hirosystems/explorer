@@ -75,9 +75,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               subnet
             </Badge>
-          ) : network.label.includes('Nakamoto') ||
-            network.label === 'https://api.nakamoto.testnet.hiro.so' ||
-            network.url.includes('api.testnet') ? (
+          ) : (
             <Badge
               color={'purple.600'}
               bg={'purple.100'}
@@ -92,7 +90,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             >
               Nakamoto
             </Badge>
-          ) : null}
+          )}
         </Flex>
         <Caption display="block">
           {network?.url?.includes('//') ? network?.url?.split('//')[1] : network?.url}
