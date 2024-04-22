@@ -86,7 +86,8 @@ export function PageWrapper({
               </TextLink>{' '}
               of the Stacks Blockchain has been released.
               <br />
-              Stacks Mainnet has now been instantiated with Nakamoto! This kicks off the 1st step of the 2 part
+              Stacks Mainnet has now been instantiated with Nakamoto! This kicks off the 1st step of
+              the 2 part
               <TextLink
                 href="https://docs.stacks.co/nakamoto-upgrade/nakamoto-rollout-plan"
                 target="_blank"
@@ -95,6 +96,7 @@ export function PageWrapper({
                   text-decoration: underline;
                 `}
               >
+                {' '}
                 Nakamoto launch process
               </TextLink>
             </Text>
