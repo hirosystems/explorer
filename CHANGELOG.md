@@ -1,3 +1,10 @@
+## [1.165.3](https://github.com/hirosystems/explorer/compare/v1.165.2...v1.165.3) (2024-04-22)
+
+
+### Bug Fixes
+
+* 2.5.0.0.3 New Release banner ([8d940e1](https://github.com/hirosystems/explorer/commit/8d940e194ac203ba5c5f6b16341b5721926573a9))
+
 ## [1.165.2](https://github.com/hirosystems/explorer/compare/v1.165.1...v1.165.2) (2024-04-19)
 
 
