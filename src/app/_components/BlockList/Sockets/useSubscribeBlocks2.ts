@@ -12,7 +12,7 @@ interface Subscription {
 
 export function useSubscribeBlocks2(
   liveUpdates: boolean,
-  handleBlock: (block: NakamotoBlock) => any
+  handleBlock: (block: NakamotoBlock | Block) => void
 ) {
   const subscription = useRef<Subscription | undefined>(undefined);
   const { stacksApiSocketClientInfo } = useGlobalContext();

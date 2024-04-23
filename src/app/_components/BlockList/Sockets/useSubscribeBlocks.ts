@@ -1,38 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
+import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 
 interface Subscription {
-  unsubscribe(): Promise<void>;
+  unsubscribe(): void;
 }
 
-export function useSubscribeBlocks(handleBlock: (block: NakamotoBlock) => any) {
-  const [subscription, setSubscription] = useState<Subscription>();
-  const { webSocketClient } = useGlobalContext();
+export function useSubscribeBlocks(handleBlock: (block: NakamotoBlock | Block) => void) {
+  const subscription = useRef<Subscription | undefined>(undefined);
+  const { stacksApiSocketClientInfo } = useGlobalContext();
+  const { client, connect, disconnect } = stacksApiSocketClientInfo || {};
+
   useEffect(() => {
-    let subscription: Subscription;
-    const subscribe = async () => {
-      if (!webSocketClient) {
-        return;
-      }
-      subscription = await (
-        await webSocketClient
-      )?.subscribeBlocks((block: Block) => {
+    const subscribe = async (client: StacksApiSocketClient) => {
+      subscription.current = client?.subscribeBlocks((block: Block) => {
         handleBlock({
           ...block,
           parent_index_block_hash: '',
           tx_count: 0,
         });
       });
-      setSubscription(subscription);
     };
-    void subscribe();
+
+    if (!client?.socket.connected) {
+      connect?.(client => subscribe(client));
+    }
     return () => {
-      subscription?.unsubscribe();
+      disconnect?.();
     };
-  }, [handleBlock, webSocketClient]);
+  }, [client, handleBlock, connect, disconnect]);
   return subscription;
 }
