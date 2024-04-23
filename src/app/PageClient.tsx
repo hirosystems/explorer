@@ -19,6 +19,14 @@ const BlocksListDynamic = dynamic(
   }
 );
 
+const UpdatedBlockListDynamic = dynamic(
+  () => import('./_components/BlockList/UpdatedBlockList').then(mod => mod.UpdatedBlocksList),
+  {
+    loading: () => <SkeletonBlockList />,
+    ssr: false,
+  }
+);
+
 const HomePageBlockListDynamic = dynamic(
   () =>
     import('./_components/BlockList/HomePage/HomePageBlockList').then(mod => mod.HomePageBlockList),
@@ -29,7 +37,8 @@ const HomePageBlockListDynamic = dynamic(
 );
 
 const Home: NextPage = () => {
-  const { activeNetwork, activeNetworkKey } = useGlobalContext();
+  const { activeNetworkKey, activeNetwork } = useGlobalContext();
+  const chain = activeNetwork.mode;
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>

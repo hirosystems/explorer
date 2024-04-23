@@ -54,7 +54,8 @@ export function BlocksPageLayout({
 }
 
 const BlocksPage: NextPage = () => {
-  const { activeNetworkKey } = useGlobalContext();
+  const { activeNetworkKey, activeNetwork } = useGlobalContext();
+  const chain = activeNetwork.mode;
   return (
     <>
       <PageTitle>Blocks</PageTitle>
