@@ -37,7 +37,9 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
           href={`/btcblock/${prevBlock?.burn_block_hash}`}
           direction={NavDirection.Backward}
         />
-        <PageTitle margin={0}>{`BTC Block #${btcBlock?.burn_block_height.toLocaleString()}`}</PageTitle>
+        <PageTitle
+          margin={0}
+        >{`BTC Block #${btcBlock?.burn_block_height.toLocaleString()}`}</PageTitle>
         <NavBlock
           href={`/btcblock/${nextBlock?.burn_block_hash}`}
           direction={NavDirection.Forward}
@@ -47,7 +49,11 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
         <Section title={`${btcBlock.stacks_blocks.length} Stacks Blocks`}>
           <Box py={2}>
             <ScrollableBox pt={3}>
-              <BurnBlockGroupGrid stxBlocks={blockListStxBlocks} minimized={false} />
+              <BurnBlockGroupGrid
+                stxBlocks={blockListStxBlocks}
+                minimized={false}
+                numStxBlocksNotDisplayed={hasNextPage ? 1 : 0}
+              />
             </ScrollableBox>
             <ListFooter
               pt={4}
