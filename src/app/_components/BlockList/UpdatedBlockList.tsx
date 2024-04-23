@@ -4,13 +4,12 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Block } from '@stacks/stacks-blockchain-api-types';
+import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
 import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { Box } from '../../../ui/Box';
@@ -25,6 +24,7 @@ import { StxIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { BurnBlock } from './LayoutA/BurnBlock';
 import { StxBlock } from './LayoutA/StxBlock';
+import { useSubscribeBlocks2 } from './Sockets/useSubscribeBlocks2';
 import { EnhancedBlock } from './types';
 
 export const animationDuration = 0.8;
@@ -101,28 +101,35 @@ export const BlockAndMicroblocksItem: React.FC<{ block: Block }> = ({ block }) =
   return <BlockListItem block={block} data-test={`block-${block.hash}`} />;
 };
 
-interface Subscription {
-  unsubscribe(): Promise<void>;
-}
-
 function UpdatedBlocksListBase({
   limit,
 }: {
   limit?: number;
 } & FlexProps) {
-  const [isLive, setIsLive] = React.useState(false);
+  const [isLive, setIsLive] = useState(false);
   const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
   const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
-  const activeNetwork = useGlobalContext().activeNetwork;
+
   const response = useSuspenseBlockListInfinite();
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  const queryClient = useQueryClient();
-
   const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+
+  const queryClient = useQueryClient();
 
   const labelColor = useColorModeValue('slate.600', 'slate.400');
 
-  const { webSocketClient } = useGlobalContext();
+  const handleBlock = useCallback((block: Block | NakamotoBlock) => {
+    setLatestBlocks(prevLatestBlocks => [
+      { ...block, microblock_tx_count: {}, animate: true } as EnhancedBlock,
+      ...prevLatestBlocks,
+    ]);
+  }, []);
+  useSubscribeBlocks2(isLive, handleBlock);
+  useEffect(() => {
+    if (!isLive) return;
+    setLatestBlocks([]);
+    void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
+  }, [isLive, queryClient]);
 
   const lastClickTimeRef = useRef(0);
 
@@ -133,30 +140,6 @@ function UpdatedBlocksListBase({
       setIsLive(!isLive);
     }
   }, [isLive]);
-
-  useEffect(() => {
-    if (!isLive) return;
-    setLatestBlocks([]);
-    void queryClient.invalidateQueries({ queryKey: ['blockListInfinite'] });
-    let subscription: Subscription;
-    const subscribe = async () => {
-      if (!webSocketClient) {
-        return;
-      }
-      subscription = await (
-        await webSocketClient
-      )?.subscribeBlocks((block: any) => {
-        setLatestBlocks(prevLatestBlocks => [
-          { ...block, microblock_tx_count: {}, animate: true },
-          ...prevLatestBlocks,
-        ]);
-      });
-    };
-    void subscribe();
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, [isLive, queryClient, webSocketClient]);
 
   useEffect(() => {
     setInitialBlocks(blocks);
