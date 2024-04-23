@@ -45,7 +45,7 @@ export function UpdateBar({
   latestBlocksCount,
   ...rest
 }: {
-  blockList: BlockListData[];
+  blockList?: BlockListData[];
   onClick: () => void;
   latestBlocksCount?: number;
 } & FlexProps) {
@@ -73,9 +73,11 @@ export function UpdateBar({
         <Text display={'inline'} fontWeight={700}>
           {latestBlocksCount
             ? latestBlocksCount
-            : `~${getApproximateStxBlocksPerMinuteFromBlockList(
-                blockList
-              )} Stacks blocks mined per min.`}
+            : blockList
+              ? `~${getApproximateStxBlocksPerMinuteFromBlockList(
+                  blockList
+                )} Stacks blocks mined per min.`
+              : ''}
         </Text>
       </Text>
       <Button variant="text" onClick={update}>
