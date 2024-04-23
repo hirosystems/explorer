@@ -56,6 +56,8 @@ export function BlocksPageLayout({
 const BlocksPage: NextPage = () => {
   const { activeNetworkKey, activeNetwork } = useGlobalContext();
   const chain = activeNetwork.mode;
+  const isTestnet = chain === NetworkModes.Testnet;
+  const isNakaTestnet = chain === NetworkModes.Testnet && activeNetworkKey.indexOf('naka') !== -1;
   return (
     <>
       <PageTitle>Blocks</PageTitle>

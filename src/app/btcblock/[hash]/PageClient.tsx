@@ -37,7 +37,7 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
           href={`/btcblock/${prevBlock?.burn_block_hash}`}
           direction={NavDirection.Backward}
         />
-        <PageTitle margin={0}>{`Block #${btcBlock?.burn_block_height.toLocaleString()}`}</PageTitle>
+        <PageTitle margin={0}>{`BTC Block #${btcBlock?.burn_block_height.toLocaleString()}`}</PageTitle>
         <NavBlock
           href={`/btcblock/${nextBlock?.burn_block_hash}`}
           direction={NavDirection.Forward}

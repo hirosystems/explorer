@@ -28,7 +28,7 @@ const BlockTxsList = dynamic(
 
 export default function BlockPage({ params: { hash } }: any) {
   const { data: block } = useSuspenseBlockByHash(hash, { refetchOnWindowFocus: true });
-  const title = (block && `Block #${block.height.toLocaleString()}`) || '';
+  const title = (block && `STX Block #${block.height.toLocaleString()}`) || '';
   return (
     <>
       <PageTitle>{title}</PageTitle>

@@ -8,10 +8,12 @@ export function LineAndNode({
   rowHeight = 14,
   width = 6,
   icon,
+  isLast,
 }: {
   rowHeight: number;
   width: number;
   icon?: ReactNode;
+  isLast?: boolean;
 }) {
   return (
     <Flex height={rowHeight} width={width} alignItems="center" position="relative">
@@ -50,7 +52,9 @@ export function LineAndNode({
           bg="surface"
         >
           <Box
-            height="full" // the line
+            position={"relative"}
+            top={0} // the line
+            height={isLast ? '50%' : 'full'} // the line
             width="1px"
             bg="borderPrimary"
             border="1px solid var(---stacks-colors-borderPrimary)"

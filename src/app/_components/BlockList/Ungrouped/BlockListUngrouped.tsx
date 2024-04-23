@@ -17,6 +17,7 @@ import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
+import { ScrollableBox } from '../ScrollableDiv';
 import { FADE_DURATION, mobileBorderCss } from '../consts';
 import { BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
@@ -117,20 +118,23 @@ function StxBlockRow({
   hash,
   timestamp,
   txsCount,
-  icon,
   minimized,
+  isFirst,
+  isLast,
 }: {
   height: number | string;
   hash: string;
   timestamp: number;
   txsCount?: number;
-  icon?: ReactNode;
   minimized?: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
 }) {
+  const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : null;
   return minimized ? (
     <>
       <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
-        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={hash}>
           <Text fontSize="sm" color="text" fontWeight="medium">
             #{height}
@@ -161,7 +165,7 @@ function StxBlockRow({
   ) : (
     <>
       <Flex alignItems="center" gap={2}>
-        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={hash}>
           <Text fontSize="sm" color="text" fontWeight="medium">
             #{height}
@@ -202,8 +206,6 @@ export function StxBlocksGridLayout({
       templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
       columnGap={4}
-      // pt={minimized ? 0 : 6}
-      // pb={minimized ? 0 : 3}
     >
       {children}
     </Grid>
@@ -212,13 +214,15 @@ export function StxBlocksGridLayout({
 
 function StxBlocksGrid({
   stxBlocks,
-  minimized,
+  minimized = false,
+  numStxBlocksNotDisplayed,
 }: {
   stxBlocks: BlockListStxBlock[];
-  minimized: boolean;
+  minimized?: boolean;
+  numStxBlocksNotDisplayed: number;
 }) {
   return (
-    <StxBlocksGridLayout>
+    <StxBlocksGridLayout minimized={minimized}>
       {minimized ? null : <GroupHeader />}
       {stxBlocks.map((stxBlock, i) => (
         <>
@@ -228,8 +232,9 @@ function StxBlocksGrid({
             hash={stxBlock.hash}
             timestamp={stxBlock.timestamp}
             txsCount={stxBlock.txsCount}
-            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
             minimized={minimized}
+            isFirst={i === 0}
+            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed === 0}
           />
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
@@ -259,8 +264,14 @@ function StxBlocksGroupedByBtcBlock({
   const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || stxBlocks.length);
 
   return (
-    <>
-      <StxBlocksGrid stxBlocks={stxBlocksShortList} minimized={minimized} />
+    <Box mt={4}>
+      <ScrollableBox>
+        <StxBlocksGrid
+          stxBlocks={stxBlocksShortList}
+          minimized={minimized}
+          numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
+        />
+      </ScrollableBox>
       {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
       <BtcBlockRow
         key={btcBlock.hash}
@@ -268,7 +279,7 @@ function StxBlocksGroupedByBtcBlock({
         height={btcBlock.height}
         timestamp={btcBlock.timestamp}
       />
-    </>
+    </Box>
   );
 }
 
@@ -277,8 +288,6 @@ export function BlockListUngroupedLayout({ children }: { children: ReactNode }) 
 
   return (
     <Stack
-      mt={6}
-      gap={5}
       width={'full'}
       style={{
         transition: `opacity ${FADE_DURATION / 1000}s`,

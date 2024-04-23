@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import { PiCircleFill } from 'react-icons/pi';
 
 import { Box } from '../../../../ui/Box';
@@ -12,16 +11,19 @@ import { LineAndNode } from '../LineAndNode';
 import { BtcBlockRowLayout, StxBlocksGridLayout } from './BlockListUngrouped';
 
 export function BlockListRowSkeleton({
-  icon,
   minimized,
+  isLast,
+  isFirst,
 }: {
-  icon?: ReactNode;
   minimized?: boolean;
+  isLast?: boolean;
+  isFirst?: boolean;
 }) {
+  const icon = isFirst ? <Icon as={PiCircleFill} size={2.5} fill="borderPrimary" /> : null;
   return minimized ? (
     <>
       <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
-        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <SkeletonText noOfLines={1} width={20} />
       </Flex>
 
@@ -40,7 +42,7 @@ export function BlockListRowSkeleton({
   ) : (
     <>
       <Flex alignItems="center">
-        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <SkeletonText noOfLines={1} width={20} />
       </Flex>
 
@@ -72,9 +74,10 @@ export function StxBlocksGridSkeleton({
       {Array.from({ length: numBlocks }).map((_, i) => (
         <>
           <BlockListRowSkeleton
-            icon={i === 0 ? <Icon as={PiCircleFill} size={2.5} fill="borderPrimary" /> : undefined}
             minimized={minimized}
             key={`block-list-row-skeleton-${i}`}
+            isLast={i === numBlocks - 1}
+            isFirst={i === 0}
           />
           {i < numBlocks - 1 && (
             <Box

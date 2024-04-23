@@ -53,13 +53,16 @@ const GroupHeader = () => {
 
 const StxBlockRow = ({
   stxBlock,
-  icon,
   minimized = false,
+  isFirst,
+  isLast,
 }: {
   stxBlock: BlockListStxBlock;
-  icon?: ReactNode;
   minimized?: boolean;
+  isFirst?: boolean;
+  isLast?: boolean;
 }) => {
+  const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined;
   return minimized ? (
     <>
       <Flex
@@ -72,7 +75,7 @@ const StxBlockRow = ({
         gridColumn="1 / 2"
         alignItems="center"
       >
-        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="xs">
             #{stxBlock.height}
@@ -99,7 +102,7 @@ const StxBlockRow = ({
       <Flex
         position="sticky"
         left={0}
-        zIndex="docked" 
+        zIndex="docked"
         bg="surface"
         gap={2}
         fontSize="xs"
@@ -107,7 +110,7 @@ const StxBlockRow = ({
         key={stxBlock.hash}
         alignItems="center"
       >
-        <LineAndNode rowHeight={14} width={6} icon={icon} />
+        <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="xs">
             #{stxBlock.height}
@@ -157,9 +160,11 @@ export function BurnBlockGroupGridLayout({
 export function BurnBlockGroupGrid({
   stxBlocks,
   minimized,
+  numStxBlocksNotDisplayed,
 }: {
-  stxBlocks: BlockListStxBlock[]; // TODO: remove
+  stxBlocks: BlockListStxBlock[];
   minimized: boolean;
+  numStxBlocksNotDisplayed: number;
 }) {
   return (
     <BurnBlockGroupGridLayout minimized={minimized}>
@@ -169,8 +174,9 @@ export function BurnBlockGroupGrid({
           <StxBlockRow
             key={`stx-block-row-${stxBlock.hash}`}
             stxBlock={stxBlock}
-            icon={i === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
             minimized={minimized}
+            isFirst={i === 0}
+            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed === 0}
           />
           {i < stxBlocks.length - 1 && (
             <Box
@@ -264,16 +270,15 @@ export function BurnBlockGroup({
     return txSum + txsCount;
   }, 0);
   const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
-  // const totalTime = stxBlocks.reduce((totalTime, stxBlock) => {
-  //   const blockTime = stxBlock.timestamp ?? 0;
-  //   return totalTime + blockTime;
-  // }, 0);
-  // const averageBlockTime = stxBlocks.length ? Math.floor(totalTime / stxBlocks.length) : 0;
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING} key={btcBlock.hash}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} />
       <ScrollableBox>
-        <BurnBlockGroupGrid stxBlocks={stxBlocksShortList} minimized={minimized} />
+        <BurnBlockGroupGrid
+          stxBlocks={stxBlocksShortList}
+          minimized={minimized}
+          numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
+        />
       </ScrollableBox>
       {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
       <Footer stxBlocks={stxBlocks} txSum={txSum} />

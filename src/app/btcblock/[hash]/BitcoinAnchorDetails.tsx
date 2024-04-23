@@ -101,7 +101,7 @@ export function BitcoinAnchorDetailsBase() {
         }
       />
       {/** TODO: rethink this. getting total stx txs would require querying for all stx blocks upfront, which means we wouldn't need a load more button */}
-      <KeyValueVertical
+      {/* <KeyValueVertical
         className="key-value-vertical"
         label={'Total Stacks transactions included'}
         value={
@@ -109,9 +109,9 @@ export function BitcoinAnchorDetailsBase() {
             2421
           </Text>
         }
-      />
+      /> */}
       {/** TODO: the API doesn't currently support this */}
-      <KeyValueVertical
+      {/* <KeyValueVertical
         className="key-value-vertical"
         label={'Average Stacks block time'}
         value={
@@ -119,7 +119,7 @@ export function BitcoinAnchorDetailsBase() {
             23 seconds
           </Text>
         }
-      />
+      /> */}
     </StyledSection>
   );
 }
