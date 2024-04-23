@@ -4,8 +4,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { connectWebSocketClient } from '@stacks/blockchain-api-client';
-import { Block } from '@stacks/stacks-blockchain-api-types';
+import { Block, connectWebSocketClient } from '@stacks/blockchain-api-client';
 
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
