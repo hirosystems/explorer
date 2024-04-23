@@ -99,7 +99,7 @@ const StxBlockRow = ({
       <Flex
         position="sticky"
         left={0}
-        zIndex="docked" // TODO: what is this?
+        zIndex="docked" 
         bg="surface"
         gap={2}
         fontSize="xs"

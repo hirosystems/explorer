@@ -8,7 +8,6 @@ import { BlockAndMicroblocksItem } from './BlockAndMicroblocksItem';
 import { EnhancedBlock } from './types';
 
 export const animationDuration = 0.8;
-// TODO: delete file
 export const AnimatedBlockAndMicroblocksItem: FC<{
   block: EnhancedBlock;
   onAnimationExit?: () => void;

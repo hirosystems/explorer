@@ -84,7 +84,7 @@ const GroupHeader = () => {
       <Box
         position={'sticky'}
         left={0}
-        zIndex={'docked'} // TODO: what is this?
+        zIndex={'docked'}
         bg={'surface'}
         pr={4}
         sx={mobileBorderCss}
