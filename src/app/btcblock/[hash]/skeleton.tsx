@@ -14,9 +14,7 @@ import { Section } from '../../../common/components/Section';
 import '../../../common/components/loaders/skeleton-text';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { SkeletonItem } from '../../../ui/SkeletonItem';
-import { StxIcon } from '../../../ui/icons';
 import { TowColLayout } from '../../_components/TwoColLayout';
 
 const StyledSection = styled(Section)`
@@ -54,9 +52,8 @@ export function BlockPageSkeleton() {
                 <BlockListGridHeaderRowSkeleton />
                 {Array.from({ length: 15 }).map((_, rowIndex) => (
                   <BlockListRowSkeleton
-                    icon={
-                      rowIndex === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined
-                    }
+                    isFirst={rowIndex === 0}
+                    isLast={rowIndex === 14}
                     minimized={false}
                     key={`block-list-row-skeleton-${rowIndex}`}
                   />

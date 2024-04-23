@@ -12,14 +12,6 @@ import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
 
-const BlocksListDynamic = dynamic(
-  () => import('./_components/BlockList').then(mod => mod.BlocksList),
-  {
-    loading: () => <SkeletonBlockList />,
-    ssr: false,
-  }
-);
-
 const UpdatedBlockListDynamic = dynamic(
   () => import('./_components/BlockList/UpdatedBlockList').then(mod => mod.UpdatedBlocksList),
   {
@@ -40,6 +32,7 @@ const HomePageBlockListDynamic = dynamic(
 const Home: NextPage = () => {
   const { activeNetworkKey, activeNetwork } = useGlobalContext();
   const chain = activeNetwork.mode;
+  const isNakaTestnet = chain === NetworkModes.Testnet && activeNetworkKey.indexOf('naka') !== -1;
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
@@ -50,8 +43,11 @@ const Home: NextPage = () => {
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
-
-        <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+        {isNakaTestnet ? (
+          <HomePageBlockListDynamic />
+        ) : (
+          <UpdatedBlockListDynamic limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+        )}
       </Grid>
     </>
   );
