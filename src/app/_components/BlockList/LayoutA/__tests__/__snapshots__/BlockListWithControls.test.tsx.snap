@@ -21,7 +21,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
         class="css-1gdm77d"
       >
         <div
-          class="css-1ptb7kr"
+          class="css-zhmvqp"
         >
           <div
             class="chakra-form-control css-8ghjt3"
@@ -109,10 +109,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
           >
             <span
               class="chakra-text css-1csk9zj"
-            >
-              0
-            </span>
-             new Stacks blocks have come in
+            />
           </span>
           <button
             class="chakra-button css-4xx2wk"
@@ -376,7 +373,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="css-1jtpro1"
+            class="css-1vu7rur"
           >
             <a
               class="chakra-link css-0"
