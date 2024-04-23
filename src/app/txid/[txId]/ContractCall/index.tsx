@@ -1,25 +1,15 @@
-import dynamic from 'next/dynamic';
-
 import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { SkeletonTransactionDetails } from '../../../../common/components/loaders/skeleton-transaction';
+import { ContractSource } from '../../../../common/components/contract-source';
 import { getTransactionStatus } from '../../../../common/utils/transactions';
 import { getTxContractId } from '../../../../common/utils/utils';
 import { PostConditions } from '../PostConditions';
 import { TxPage } from '../TxPage';
 import { FunctionSummary } from './FunctionSummary';
 import { TxDetails } from './TxDetails';
-
-const ContractSource = dynamic(
-  () => import('../../../../common/components/contract-source').then(mod => mod.ContractSource),
-  {
-    ssr: false,
-    loading: () => <SkeletonTransactionDetails />,
-  }
-);
 
 export function ContractCallPage({
   tx,
