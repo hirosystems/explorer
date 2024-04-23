@@ -55,7 +55,7 @@ export const signersTableHeaders = [
 export const SignersTableHeaders = () => (
   <Tr>
     {signersTableHeaders.map((header, index) => (
-      <SignersTableHeader key={index} headerTitle={header} />
+      <SignersTableHeader key={`signers-table-header-${index}`} headerTitle={header} />
     ))}
   </Tr>
 );
@@ -179,7 +179,7 @@ const SignerTable = () => {
       numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
       signersTableRows={numRows.map((_, index) => (
-        <SignerTableRow key={index} index={index} {...testGridRowData} />
+        <SignerTableRow key={`signers=table-row-${index}`} index={index} {...testGridRowData} />
       ))}
     />
   );
