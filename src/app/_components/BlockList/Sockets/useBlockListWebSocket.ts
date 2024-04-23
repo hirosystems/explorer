@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 
+import { Block } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { UIBlockType, UISingleBlock } from '../types';
@@ -10,12 +11,12 @@ export function useBlockListWebSocket(
   initialBurnBlockHashes: Set<string>
 ) {
   const [latestBlocks, setLatestBlocks] = useState<UISingleBlock[]>([]);
-  const [latestBlock, setLatestBlock] = useState<NakamotoBlock>();
+  const [latestBlock, setLatestBlock] = useState<NakamotoBlock | Block>();
   const latestBlockHashes = useRef(new Set<string>());
   const latestBurnBlockHashes = useRef(new Set<string>());
 
   const handleBlock = useCallback(
-    (block: NakamotoBlock) => {
+    (block: NakamotoBlock | Block) => {
       function updateLatestBlocks() {
         if (latestBlockHashes.current.has(block.hash) || initialBlockHashes.has(block.hash)) {
           return;
@@ -43,7 +44,7 @@ export function useBlockListWebSocket(
             height: block.height,
             hash: block.hash,
             timestamp: block.burn_block_time,
-            txsCount: block.tx_count,
+            txsCount: (block as NakamotoBlock)?.tx_count,
           },
           ...prevLatestBlocks,
         ]);

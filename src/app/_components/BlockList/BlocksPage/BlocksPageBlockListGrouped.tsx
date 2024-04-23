@@ -15,19 +15,12 @@ import { useBlocksPageBlockListGrouped } from '../data/useBlocksPageBlockListGro
 
 function BlocksPageBlockListGroupedBase() {
   const { liveUpdates } = useBlockListContext();
-  const {
-    blockList,
-    updateBlockList,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useBlocksPageBlockListGrouped();
+  const { blockList, updateBlockList, isFetchingNextPage, hasNextPage, fetchNextPage } =
+    useBlocksPageBlockListGrouped();
 
   return (
     <>
-      {!liveUpdates && (
-        <UpdateBar blockList={blockList} onClick={updateBlockList} />
-      )}
+      {!liveUpdates && <UpdateBar blockList={blockList} onClick={updateBlockList} />}
       <Flex flexDirection="column" gap={4} pt={4}>
         <BlockListGrouped blockList={blockList} minimized={false} stxBlocksLimit={10} />
       </Flex>

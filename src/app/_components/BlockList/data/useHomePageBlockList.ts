@@ -35,7 +35,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     latestStxBlocks: latestStxBlocksFromWebSocket,
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
-  } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes, );
+  } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes);
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);

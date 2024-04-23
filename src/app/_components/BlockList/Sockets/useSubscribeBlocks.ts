@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
 
-import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
+import { Block, StacksApiSocketClient } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
-import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 
@@ -17,9 +16,9 @@ export function useSubscribeBlocks(handleBlock: (block: NakamotoBlock | Block) =
 
   useEffect(() => {
     const subscribe = async (client: StacksApiSocketClient) => {
-      subscription.current = client?.subscribeBlocks((block: Block) => {
+      subscription.current = client?.subscribeBlocks(block => {
         handleBlock({
-          ...block,
+          ...(block as Block),
           parent_index_block_hash: '',
           tx_count: 0,
         });

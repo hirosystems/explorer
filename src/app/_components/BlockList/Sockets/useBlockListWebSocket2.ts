@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
-import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useSubscribeBlocks2 } from './useSubscribeBlocks2';
+import { Block } from '@stacks/blockchain-api-client';
 
 export function useBlockListWebSocket2(liveUpdates: boolean, initialStxBlockHashes: Set<string>) {
   const [latestStxBlocks, setLatestStxBlocks] = useState<(NakamotoBlock | Block)[]>([]);

@@ -1,6 +1,5 @@
 'use client';
 
-
 import { Flex, FlexProps } from '../../ui/Flex';
 import { Tooltip } from '../../ui/Tooltip';
 import { toRelativeTime } from '../utils/utils';
@@ -10,8 +9,8 @@ interface TimestampProps {
   ts: number;
 }
 
-export function  Timestamp({ ts, ...rest } : TimestampProps & FlexProps) {
-  const readableTimestamp = ts 
+export function Timestamp({ ts, ...rest }: TimestampProps & FlexProps) {
+  const readableTimestamp = ts
     ? `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(ts * 1000).toLocaleDateString()}`
     : '';
 
@@ -22,4 +21,4 @@ export function  Timestamp({ ts, ...rest } : TimestampProps & FlexProps) {
       </Flex>
     </Tooltip>
   );
-};
+}

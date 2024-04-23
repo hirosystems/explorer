@@ -15,22 +15,12 @@ import { useBlocksPageBlockListUngrouped } from '../data/useBlocksPageBlockListU
 function BlocksPageBlockListUngroupedBase() {
   const { liveUpdates } = useBlockListContext();
 
-  const {
-    blockList,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-    updateBlockList,
-  } = useBlocksPageBlockListUngrouped();
+  const { blockList, hasNextPage, fetchNextPage, isFetchingNextPage, updateBlockList } =
+    useBlocksPageBlockListUngrouped();
 
   return (
     <Box pb={6}>
-      {!liveUpdates && (
-        <UpdateBar
-          blockList={blockList}
-          onClick={updateBlockList}
-        />
-      )}
+      {!liveUpdates && <UpdateBar blockList={blockList} onClick={updateBlockList} />}
       <BlockListUngrouped blockList={blockList} />
       <Box pt={4}>
         {!liveUpdates && (

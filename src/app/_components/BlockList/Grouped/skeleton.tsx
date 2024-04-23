@@ -5,12 +5,10 @@ import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
 import { SkeletonItem } from '../../../../ui/SkeletonItem';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
-import { StxIcon } from '../../../../ui/icons';
 import { BlocksPageHeaderLayout } from '../BlocksPage/BlocksPageHeaders';
 import { ControlsLayout } from '../Controls';
 import { BlockListRowSkeleton } from '../Ungrouped/skeleton';
@@ -101,7 +99,8 @@ export function BurnBlockGroupSkeleton({
         {minimized ? null : <BlockListGridHeaderRowSkeleton />}
         {Array.from({ length: numTxs }).map((_, rowIndex) => (
           <BlockListRowSkeleton
-            icon={rowIndex === 0 ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined}
+            isFirst={rowIndex === 0}
+            isLast={rowIndex === numTxs - 1}
             minimized={minimized}
             key={`block-list-row-skeleton-${rowIndex}`}
           />

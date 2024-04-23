@@ -12,18 +12,10 @@ import { useHomePageBlockList } from '../data/useHomePageBlockList';
 
 function HomePageBlockListUngroupedBase() {
   const { liveUpdates } = useBlockListContext();
-  const {
-    blockList,
-    updateBlockList,
-  } = useHomePageBlockList();
+  const { blockList, updateBlockList } = useHomePageBlockList();
   return (
     <>
-      {!liveUpdates && (
-        <UpdateBar
-          blockList={blockList}
-          onClick={updateBlockList}
-        />
-      )}
+      {!liveUpdates && <UpdateBar blockList={blockList} onClick={updateBlockList} />}
       <Flex flexDirection="column" gap={5}>
         <BlockListUngrouped blockList={blockList} stxBlocksLimit={5} minimized={true} />
         {!liveUpdates && <ListFooter href={'/blocks'} label={'blocks'} />}

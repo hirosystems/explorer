@@ -31,8 +31,8 @@ export function LineAndNode({
           <Circle size={4.5} bg="brand" border="none">
             {icon}
           </Circle>
-          <Box
-            position="absolute" // the little bit of line needed to connect the icon to the other lines with nodes
+          <Box // the little bit of line needed to connect the icon to the other lines with nodes
+            position="absolute"
             bottom={0}
             height="20%"
             width="1px"
@@ -51,16 +51,16 @@ export function LineAndNode({
           bottom={0}
           bg="surface"
         >
-          <Box
-            position={"relative"}
-            top={0} // the line
-            height={isLast ? '50%' : 'full'} // the line
+          <Box // the line
+            position={'relative'}
+            top={0}
+            height={isLast ? '50%' : 'full'} // if it's the last line, only draw half of it
             width="1px"
             bg="borderPrimary"
             border="1px solid var(---stacks-colors-borderPrimary)"
           />
-          <Box
-            position="absolute" // the node
+          <Box // the node
+            position="absolute"
             width={2}
             height={2}
             borderRadius="50%"
