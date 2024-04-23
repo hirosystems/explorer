@@ -25,7 +25,7 @@ function LastBlockCard() {
   );
   const lastStxBlock = stxBlocks[0];
   return (
-    <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
+    <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
         LAST BLOCK
       </Text>
