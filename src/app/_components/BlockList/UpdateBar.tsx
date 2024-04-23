@@ -42,10 +42,12 @@ export function UpdateBarLayout({
 export function UpdateBar({
   blockList,
   onClick,
+  latestBlocksCount,
   ...rest
 }: {
   blockList: BlockListData[];
   onClick: () => void;
+  latestBlocksCount?: number;
 } & FlexProps) {
   const textColor = useColorModeValue('slate.800', 'slate.400'); // TODO: not in theme. remove
   const lastClickTimeRef = useRef(0);
@@ -69,7 +71,11 @@ export function UpdateBar({
         whiteSpace={'nowrap'}
       >
         <Text display={'inline'} fontWeight={700}>
-          {`~${getApproximateStxBlocksPerMinuteFromBlockList(blockList)} Stacks blocks mined per min.`}
+          {latestBlocksCount
+            ? latestBlocksCount
+            : `~${getApproximateStxBlocksPerMinuteFromBlockList(
+                blockList
+              )} Stacks blocks mined per min.`}
         </Text>
       </Text>
       <Button variant="text" onClick={update}>
