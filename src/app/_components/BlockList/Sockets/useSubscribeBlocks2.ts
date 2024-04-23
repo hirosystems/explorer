@@ -19,9 +19,9 @@ export function useSubscribeBlocks2(
 
   useEffect(() => {
     const subscribe = async (client: StacksApiSocketClient) => {
-      subscription.current = client?.subscribeBlocks((block) => {
+      subscription.current = client?.subscribeBlocks(block => {
         handleBlock({
-          ...block as Block,
+          ...(block as Block),
           parent_index_block_hash: '',
           tx_count: 0,
         });
