@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { ReactNode } from 'react';
 import { IconType } from 'react-icons';
@@ -10,7 +9,6 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { getTxTypeIcon } from '../../../common/components/TxIcon';
 import { MicroblockIcon } from '../../../common/components/icons/microblock';
-import { SkeletonTransactionDetails } from '../../../common/components/loaders/skeleton-transaction';
 import { TransactionType } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
 import { getTransactionStatus } from '../../../common/utils/transactions';
@@ -21,35 +19,13 @@ import { TagLabel } from '../../../ui/TagLabel';
 import { TagLeftIcon } from '../../../ui/TagLeftIcon';
 import { PageTitleWithTags } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
+import { StxBalance } from '../../address/[principal]/StxBalance';
+import { TokenBalanceCard } from '../../address/[principal]/TokenBalanceCard';
 import { BlocksVisualizer } from './BlocksVisualizer';
+import { ContractDetailsCard } from './Cards/ContractDetailsCard';
 import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
 import { TxAlerts } from './TxAlerts';
-import Skeleton from './skeleton';
-
-const ContractDetailsCard = dynamic(
-  () => import('./Cards/ContractDetailsCard').then(mod => mod.ContractDetailsCard),
-  {
-    ssr: false,
-    loading: () => <SkeletonTransactionDetails />,
-  }
-);
-
-const StxBalance = dynamic(
-  () => import('../../address/[principal]/StxBalance').then(mod => mod.StxBalance),
-  {
-    ssr: false,
-    loading: () => <SkeletonTransactionDetails />,
-  }
-);
-
-const TokenBalanceCard = dynamic(
-  () => import('../../address/[principal]/TokenBalanceCard').then(mod => mod.TokenBalanceCard),
-  {
-    ssr: false,
-    loading: () => <SkeletonTransactionDetails />,
-  }
-);
 
 const txTypeNamesMap = {
   [TransactionType.SMART_CONTRACT]: 'Contract deploy',
@@ -91,14 +67,6 @@ export const TxPage: React.FC<{
 
   const showBlocksVisualizer =
     !activeNetwork.isSubnet && (txStatus === 'success_microblock' || txStatus === 'pending');
-
-  const [loading, setLoading] = React.useState(true);
-
-  setTimeout(() => {
-    setLoading(false);
-  }, 2000);
-
-  if (loading) return <Skeleton />;
 
   return (
     <>
