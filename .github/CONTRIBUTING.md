@@ -25,14 +25,13 @@ If you are using a mac, we highly recommend using [Homebrew](https://brew.sh/) t
 
 You should also be [familiar with Git](https://docs.github.com/en/get-started/quickstart/git-and-github-learning-resources).
 
-
 ### Sending a Pull Request
 
 The Explorer team is monitoring for pull requests. We will review your pull request and either merge it, request changes to it, or close it with an explanation.
 
 Before submitting a pull request, please make sure the following is done:
 
-#### Run in development mode 
+#### Run in development mode
 
 - Fork [the repository](https://github.com/hirosystems/explorer)
 - Navigate to the project folder
