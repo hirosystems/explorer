@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { useGlobalContext } from '../../common/context/useAppContext';
+import { NetworkModes } from '../../common/types/network';
 import { BlocksPageBlockListSkeleton } from '../_components/BlockList/Grouped/skeleton';
 import { PaginatedBlockListLayoutA } from '../_components/BlockList/LayoutA/Paginated';
 import { SkeletonBlockList } from '../_components/BlockList/SkeletonBlockList';
