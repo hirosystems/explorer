@@ -234,7 +234,7 @@ export function StxBlocksGridLayout({
     <Grid
       templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
-      columnGap={4}
+      columnGap={minimized ? 0 : 4}
     >
       {children}
     </Grid>

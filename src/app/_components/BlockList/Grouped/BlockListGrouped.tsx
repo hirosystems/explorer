@@ -149,7 +149,11 @@ export function BurnBlockGroupGridLayout({
   children: ReactNode;
 }) {
   return (
-    <Grid templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'} width={'full'}>
+    <Grid
+      templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
+      width={'full'}
+      columnGap={minimized ? 0 : 4}
+    >
       {children}
     </Grid>
   );
