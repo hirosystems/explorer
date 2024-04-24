@@ -1,3 +1,10 @@
+# [1.167.0](https://github.com/hirosystems/explorer/compare/v1.166.2...v1.167.0) (2024-04-24)
+
+
+### Features
+
+* remove status bar ([bf15dc0](https://github.com/hirosystems/explorer/commit/bf15dc0b4dd8969c02692a90d74f68e28aed9d94))
+
 ## [1.166.2](https://github.com/hirosystems/explorer/compare/v1.166.1...v1.166.2) (2024-04-22)
 
 
