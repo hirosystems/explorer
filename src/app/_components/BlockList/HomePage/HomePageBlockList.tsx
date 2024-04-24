@@ -43,13 +43,7 @@ function HomePageBlockListBase() {
 
   return (
     <Section py={5} px={6}>
-      <Stack
-        gap={3}
-        pb={6}
-        borderBottom={liveUpdates ? '1px' : 'none'}
-        marginX={-6}
-        px={6}
-      >
+      <Stack gap={3} pb={6} borderBottom={liveUpdates ? '1px' : 'none'} marginX={-6} px={6}>
         <Text fontWeight="medium">Recent Blocks</Text>
         <Controls
           groupByBtc={{

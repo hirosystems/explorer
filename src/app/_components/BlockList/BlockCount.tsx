@@ -9,7 +9,13 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
-export const BlockCount = memo(function ({ count, btcBlockHash }: { count: number, btcBlockHash?: string}) {
+export const BlockCount = memo(function ({
+  count,
+  btcBlockHash,
+}: {
+  count: number;
+  btcBlockHash?: string;
+}) {
   // TODO: remove. use theme
   const bgColor = useColorModeValue('purple.100', 'slate.900');
   const bgColorHover = useColorModeValue('purple.200', 'slate.850');

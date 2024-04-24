@@ -693,7 +693,10 @@ describe('getApproximateStxBlocksPerMinuteFromBlockList', () => {
   });
 
   test('rounds result to nearest integer', () => {
-    const blockList = [{ btcBlock: { txsCount: 3 } }, { btcBlock: { txsCount: 7 } }] as BlockListData[];
+    const blockList = [
+      { btcBlock: { txsCount: 3 } },
+      { btcBlock: { txsCount: 7 } },
+    ] as BlockListData[];
     // Exact calculation would be 5.0 per minute, expect rounding to apply from toFixed(0)
     expect(getApproximateStxBlocksPerMinuteFromBlockList(blockList)).toBe('50');
   });

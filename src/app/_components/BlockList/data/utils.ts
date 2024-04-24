@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
-import { useMemo } from 'react';
 
 export function useBtcBlocksMap(btcBlocks: BurnBlock[]) {
   return useMemo(() => {

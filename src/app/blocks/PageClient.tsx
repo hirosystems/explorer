@@ -51,7 +51,8 @@ export function BlocksPageLayout({
 const BlocksPage: NextPage = () => {
   const { activeNetworkKey, activeNetwork } = useGlobalContext();
   const chain = activeNetwork.mode;
-  const isNaka1Testnet = chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
+  const isNaka1Testnet =
+    chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
   return (
     <BlocksPageLayout
       title={isNaka1Testnet ? 'Recent blocks' : 'Blocks'}
