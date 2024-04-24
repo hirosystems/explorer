@@ -41,13 +41,14 @@ export type BlockListData = { stxBlocks: BlockListStxBlock[]; btcBlock: BlockLis
 
 export function getApproximateStxBlocksPerMinuteFromBlockList(blockList: BlockListData[]) {
   const approximateTimeBetweenBtcBlocks = 10;
-  if (!blockList || blockList.length === 0) return 0;
+  if (!blockList || blockList.length === 0) return '0';
   const btcBlocksWithTxCounts = blockList.filter(({ btcBlock }) => !!btcBlock?.txsCount);
   const numBtcBlocks = btcBlocksWithTxCounts.length;
   const numStxBlocks = btcBlocksWithTxCounts.reduce(
     (acc, { btcBlock }) => (btcBlock?.txsCount ? acc + btcBlock?.txsCount : acc),
     0
   );
+  if (numStxBlocks === 0) return '0';
   const result = (numStxBlocks / numBtcBlocks) * approximateTimeBetweenBtcBlocks;
   return result.toFixed(0);
 }
