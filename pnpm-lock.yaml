@@ -76,8 +76,8 @@ dependencies:
     specifier: 6.9.0
     version: 6.9.0
   '@stacks/blockchain-api-client':
-    specifier: 7.9.0-beta.1
-    version: 7.9.0-beta.1
+    specifier: 7.10.0
+    version: 7.10.0
   '@stacks/common':
     specifier: 6.8.1
     version: 6.8.1
@@ -4295,8 +4295,8 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.9.0-beta.1:
-    resolution: {integrity: sha512-628fBKukUR2lykkO7GVjl/dSRRgX2DnU3NsxLywsM98q+IiOaLqMeJmU3n48BkgXUrH8wxg2b54Ixfhw+nuc/A==}
+  /@stacks/blockchain-api-client@7.10.0:
+    resolution: {integrity: sha512-VQbJDJuHrj2TWDmYE2Tymqa6yMCvNkc8SXPeHgX1k1BuNKFe7HUHv1r4wA24cRpoTSpM14URJOscKLBaDyklpg==}
     dependencies:
       '@stacks/stacks-blockchain-api-types': 7.7.1
       '@types/ws': 7.4.7
@@ -6570,7 +6570,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001570
+      caniuse-lite: 1.0.30001607
       electron-to-chromium: 1.4.615
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
@@ -6661,9 +6661,6 @@ packages:
   /caniuse-lite@1.0.30001564:
     resolution: {integrity: sha512-DqAOf+rhof+6GVx1y+xzbFPeOumfQnhYzVnZD6LAXijR77yPtm9mfOcqOnT3mpnJiZVT+kwLAFnRlZcIz+c6bg==}
     dev: true
-
-  /caniuse-lite@1.0.30001570:
-    resolution: {integrity: sha512-+3e0ASu4sw1SWaoCtvPeyXp+5PsjigkSt8OXZbF9StH5pQWbxEjLAZE3n8Aup5udop1uRiKA7a4utUk/uoSpUw==}
 
   /caniuse-lite@1.0.30001607:
     resolution: {integrity: sha512-WcvhVRjXLKFB/kmOFVwELtMxyhq3iM/MvmXcyCe2PNf166c39mptscOc/45TTS96n2gpNV2z7+NakArTWZCQ3w==}
