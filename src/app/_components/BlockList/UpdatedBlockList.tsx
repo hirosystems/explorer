@@ -24,7 +24,7 @@ import { StxIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { BurnBlock } from './LayoutA/BurnBlock';
 import { StxBlock } from './LayoutA/StxBlock';
-import { useSubscribeBlocks2 } from './Sockets/useSubscribeBlocks2';
+import { useSubscribeBlocks } from './Sockets/useSubscribeBlocks';
 import { EnhancedBlock } from './types';
 
 export const animationDuration = 0.8;
@@ -124,7 +124,7 @@ function UpdatedBlocksListBase({
       ...prevLatestBlocks,
     ]);
   }, []);
-  useSubscribeBlocks2(isLive, handleBlock);
+  useSubscribeBlocks(isLive, handleBlock);
   useEffect(() => {
     if (!isLive) return;
     setLatestBlocks([]);

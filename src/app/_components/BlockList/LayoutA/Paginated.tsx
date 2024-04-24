@@ -6,7 +6,7 @@ import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListProvider } from '../BlockListProvider';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
+import { useBlockListWebSocketUIBlock } from '../Sockets/useBlockListWebSocketUIBlock';
 import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
 import { BlockListWithControls } from './BlockListWithControls';
@@ -33,7 +33,7 @@ function PaginatedBlockListLayoutABase() {
     return new Set(Object.keys(initialBurnBlocks));
   }, [initialBurnBlocks]);
 
-  const { latestUIBlocks, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
+  const { latestUIBlocks, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocketUIBlock(
     initialBlockHashes,
     initialBurnBlockHashes
   );

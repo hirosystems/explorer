@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
 import { useBlocksPageUngroupedInitialBlockList } from './useBlocksPageUngroupedInitialBlockList';
 
@@ -30,7 +30,7 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
     latestStxBlocks: latestStxBlocksFromWebSocket,
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
-  } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes);
+  } = useBlockListWebSocket(liveUpdates, initialStxBlocksHashes);
 
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback(

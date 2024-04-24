@@ -5,7 +5,7 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
+import { useBlockListWebSocketUIBlock } from '../Sockets/useBlockListWebSocketUIBlock';
 import { FADE_DURATION } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
 import { useInitialBlockList } from './useInitialBlockList';
@@ -78,7 +78,7 @@ export function useBlockList(length: number) {
     [lastBurnBlock, secondToLastBurnBlock]
   );
 
-  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
+  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocketUIBlock(
     initialBlockHashes,
     initialBurnBlockHashes
   );

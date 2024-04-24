@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useBlockListContext } from '../BlockListContext';
-import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
+import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
 import { useHomePageInitialBlockList } from './useHomePageInitialBlockList';
 
@@ -31,7 +31,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     latestStxBlocks: latestStxBlocksFromWebSocket,
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
-  } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes);
+  } = useBlockListWebSocket(liveUpdates, initialStxBlocksHashes);
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);

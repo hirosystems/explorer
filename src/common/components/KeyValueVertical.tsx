@@ -50,7 +50,7 @@ export const KeyValueVertical: FC<KeyValueVerticalProps> = ({
               className={'fancy-copy'}
               initialValue={copyValue}
               aria-label={'copy row'}
-              size={'40px'} // TODO: using hardcoded pixel value. Fix
+              size={'40px'}
             />
           </Box>
         )}
