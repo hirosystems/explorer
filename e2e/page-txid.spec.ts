@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
 
 import { txs } from './transactions-test-vector';
-
 test.describe('/txid page', () => {
   test.describe('Loads the transactions txid pages', () => {
     Object.keys(txs).forEach(network => {

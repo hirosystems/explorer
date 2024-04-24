@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
 
 import { blocks } from './blocks-test-vector';
-
 test.describe('/block page', () => {
   test.describe('Loads the block pages', () => {
     Object.keys(blocks).forEach(network => {

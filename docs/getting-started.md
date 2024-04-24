@@ -26,7 +26,7 @@ To install project dependencies:
 
 ## Setting Environment Variables
 
-The Explorer application needs the environment variables listed below to work properly.
+The Explorer application needs the environment variables listed below to work properly. 
 
 ```
 NEXT_PUBLIC_MAINNET_API_SERVER=https://api.hiro.so
