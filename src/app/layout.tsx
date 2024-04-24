@@ -11,7 +11,6 @@ import {
   NetworkModeUrlMap,
 } from '../common/constants/network';
 import { AppContextProvider } from '../common/context/GlobalContext';
-import { Analytics } from './_components/Analytics';
 import { GA } from './_components/GA';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
@@ -41,7 +40,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         </AppContextProvider>
       </body>
       <GA />
-      <Analytics />
     </html>
   );
 }
