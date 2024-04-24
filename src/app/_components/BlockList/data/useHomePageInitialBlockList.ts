@@ -14,6 +14,7 @@ import {
 } from '../../../../common/queries/useBurnBlocksInfinite';
 import { BURN_BLOCKS_QUERY_KEY_EXTENSION } from '../consts';
 import { generateBlockList } from '../utils';
+import { useBtcBlocksMap, useRefetchInitialBlockList } from './utils';
 
 export function useHomePageInitialBlockList(blockListLimit: number = 3) {
   const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
@@ -24,13 +25,7 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
   const secondLatestBurnBlock = useMemo(() => btcBlocks[1], [btcBlocks]);
   const thirdLatestBurnBlock = useMemo(() => btcBlocks[2], [btcBlocks]);
 
-  const btcBlocksMap = useMemo(() => {
-    const map = {} as Record<string, BurnBlock>;
-    btcBlocks.forEach(block => {
-      map[block.burn_block_hash] = block;
-    });
-    return map;
-  }, [btcBlocks]);
+  const btcBlocksMap = useBtcBlocksMap(btcBlocks);
 
   const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
     useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height)
@@ -42,26 +37,30 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
     useSuspenseBlocksByBurnBlock(thirdLatestBurnBlock.burn_block_height)
   );
 
+  const refetchInitialBlockList = useRefetchInitialBlockList([
+    [BURN_BLOCKS_QUERY_KEY],
+    [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY],
+  ]);
   const queryClient = useQueryClient();
-  const refetchInitialBlockList = useCallback(
-    async function (callback: () => void) {
-      // Invalidate queries first
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
-        queryClient.invalidateQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
-      ]);
+  // const refetchInitialBlockList = useCallback(
+  //   async function (callback: () => void) {
+  //     // Invalidate queries first
+  //     await Promise.all([
+  //       queryClient.invalidateQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
+  //       queryClient.invalidateQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
+  //     ]);
 
-      // After invalidation, refetch the required queries
-      await Promise.all([
-        queryClient.refetchQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
-        queryClient.refetchQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
-      ]);
+  //     // After invalidation, refetch the required queries
+  //     await Promise.all([
+  //       queryClient.refetchQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
+  //       queryClient.refetchQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
+  //     ]);
 
-      // Run your callback after refetching
-      callback();
-    },
-    [queryClient]
-  );
+  //     // Run your callback after refetching
+  //     callback();
+  //   },
+  //   [queryClient]
+  // );
 
   const initialStxBlocks = useMemo(
     () => [

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
@@ -12,23 +12,19 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     useHomePageInitialBlockList();
 
   // initially the block list is the initial blocklist
-  const blockList = useRef<BlockListData[]>(initialBlockList);
-
+  const [blockList, setBlockList] = useState<BlockListData[]>(initialBlockList);
   // when the initial block list changes, reset the block list to the initial blocklist
   useEffect(() => {
-    blockList.current = initialBlockList;
+    setBlockList(initialBlockList);
   }, [initialBlockList]);
 
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback(
     (blockListUpdates: BlockListData[]) => {
-      const newBlockList = mergeBlockLists(blockListUpdates, blockList.current).slice(
-        0,
-        btcBlockLimit
-      );
-      blockList.current = newBlockList;
+      const newBlockList = mergeBlockLists(blockListUpdates, blockList).slice(0, btcBlockLimit);
+      setBlockList(newBlockList);
     },
-    [btcBlockLimit]
+    [blockList, btcBlockLimit]
   );
 
   const {
@@ -92,7 +88,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
   ]);
 
   return {
-    blockList: blockList.current,
+    blockList,
     updateBlockList: updateBlockListWithQuery,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
   };

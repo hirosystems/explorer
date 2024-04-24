@@ -96,7 +96,7 @@ export function BurnBlockGroupSkeleton({
     <Box border={'1px'} rounded={'lg'} p={4}>
       <BitcoinHeaderSkeleton />
       <BurnBlockGroupGridLayout minimized={minimized}>
-        {minimized ? null : <BlockListGridHeaderRowSkeleton />}
+        {minimized || numTxs === 0 ? null : <BlockListGridHeaderRowSkeleton />}
         {Array.from({ length: numTxs }).map((_, rowIndex) => (
           <BlockListRowSkeleton
             isFirst={rowIndex === 0}

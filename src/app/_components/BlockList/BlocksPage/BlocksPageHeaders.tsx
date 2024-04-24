@@ -56,7 +56,7 @@ function LastBlockCard() {
 
 function AverageStacksBlockTimeCard() {
   return (
-    <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
+    <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
         AVERAGE STACKS BLOCK TIME
       </Text>
@@ -72,7 +72,7 @@ function AverageStacksBlockTimeCard() {
 
 function LastConfirmedBitcoinBlockCard() {
   return (
-    <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
+    <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
         IN THE LAST CONFIRMED BITCOIN BLOCK
       </Text>

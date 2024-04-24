@@ -26,6 +26,7 @@ interface BtcBlockRowProps {
   height: number | string;
   hash: string;
   timestamp?: number;
+  isFirst: boolean;
 }
 export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children: ReactNode }) {
   const textColor = useColorModeValue('slate.700', 'slate.500'); // TODO: not in theme. remove
@@ -45,7 +46,7 @@ export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children:
   );
 }
 
-export function BtcBlockRowContent({ timestamp, height, hash }: BtcBlockRowProps) {
+export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBlockRowProps) {
   const iconColor = useColorModeValue('slate.600', 'slate.800'); // TODO: not in theme. remove
   return (
     <>
@@ -59,22 +60,33 @@ export function BtcBlockRowContent({ timestamp, height, hash }: BtcBlockRowProps
           bottom={'1px'}
         />
         <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
-        <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${hash}`}>
+        <ExplorerLink
+          fontSize="sm"
+          color={'textSubdued'}
+          href={isFirst ? '#' : `/btcblock/${hash}`}
+        >
           #{height}
         </ExplorerLink>
       </HStack>
       <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
-        <Box>{truncateMiddle(hash, 3)}</Box>
+        <ExplorerLink
+          fontSize="xs"
+          color={'textSubdued'}
+          href={isFirst ? '#' : `/btcblock/${hash}`}
+          whiteSpace={'nowrap'}
+        >
+          {truncateMiddle(hash, 6)}
+        </ExplorerLink>
         {timestamp && <Timestamp ts={timestamp} />}
       </HStack>
     </>
   );
 }
 
-export function BtcBlockRow({ timestamp, height, hash }: BtcBlockRowProps) {
+export function BtcBlockRow({ timestamp, height, hash, isFirst }: BtcBlockRowProps) {
   return (
     <BtcBlockRowLayout>
-      <BtcBlockRowContent timestamp={timestamp} height={height} hash={hash} />
+      <BtcBlockRowContent timestamp={timestamp} height={height} hash={hash} isFirst={isFirst} />
     </BtcBlockRowLayout>
   );
 }
@@ -133,7 +145,16 @@ function StxBlockRow({
   const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : null;
   return minimized ? (
     <>
-      <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
+      <Flex
+        position="sticky"
+        left={0}
+        alignItems="center"
+        gridColumn="1 / 2"
+        gap={2}
+        sx={mobileBorderCss}
+        zIndex="docked"
+        bg="surface"
+      >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={hash}>
           <Text fontSize="sm" color="text" fontWeight="medium">
@@ -164,7 +185,15 @@ function StxBlockRow({
     </>
   ) : (
     <>
-      <Flex alignItems="center" gap={2}>
+      <Flex
+        alignItems="center"
+        gap={2}
+        position="sticky"
+        left={0}
+        sx={mobileBorderCss}
+        zIndex="docked"
+        bg="surface"
+      >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={hash}>
           <Text fontSize="sm" color="text" fontWeight="medium">
@@ -250,10 +279,12 @@ function StxBlocksGroupedByBtcBlock({
   blockList,
   stxBlocksLimit,
   minimized = false,
+  isFirst,
 }: {
   blockList: BlockListData;
   stxBlocksLimit?: number;
   minimized?: boolean;
+  isFirst: boolean;
 }) {
   const btcBlock = blockList.btcBlock;
   const stxBlocks = blockList.stxBlocks;
@@ -272,12 +303,15 @@ function StxBlocksGroupedByBtcBlock({
           numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
         />
       </ScrollableBox>
-      {numStxBlocksNotDisplayed > 0 ? <BlockCount count={numStxBlocksNotDisplayed} /> : null}
+      {numStxBlocksNotDisplayed > 0 ? (
+        <BlockCount count={numStxBlocksNotDisplayed} btcBlockHash={btcBlock.hash} />
+      ) : null}
       <BtcBlockRow
         key={btcBlock.hash}
         hash={btcBlock.hash}
         height={btcBlock.height}
         timestamp={btcBlock.timestamp}
+        isFirst={isFirst}
       />
     </Box>
   );
@@ -310,12 +344,13 @@ export function BlockListUngrouped({
 }) {
   return (
     <BlockListUngroupedLayout>
-      {blockList.map(bl => (
+      {blockList.map((bl, i) => (
         <StxBlocksGroupedByBtcBlock
           key={`stx-blocks-grouped-by-btc-block-${bl.btcBlock.hash}`}
           blockList={bl}
           stxBlocksLimit={stxBlocksLimit}
           minimized={minimized}
+          isFirst={i === 0}
         />
       ))}
     </BlockListUngroupedLayout>

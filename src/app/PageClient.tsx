@@ -32,7 +32,7 @@ const HomePageBlockListDynamic = dynamic(
 const Home: NextPage = () => {
   const { activeNetworkKey, activeNetwork } = useGlobalContext();
   const chain = activeNetwork.mode;
-  const isNakaTestnet = chain === NetworkModes.Testnet && activeNetworkKey.indexOf('naka') !== -1;
+  const isNaka1Testnet = chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
@@ -43,7 +43,7 @@ const Home: NextPage = () => {
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
-        {isNakaTestnet ? (
+        {isNaka1Testnet ? (
           <HomePageBlockListDynamic />
         ) : (
           <UpdatedBlockListDynamic limit={DEFAULT_BLOCKS_LIST_LIMIT} />

@@ -9,7 +9,7 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
-export const BlockCount = memo(function ({ count }: { count: number }) {
+export const BlockCount = memo(function ({ count, btcBlockHash }: { count: number, btcBlockHash?: string}) {
   // TODO: remove. use theme
   const bgColor = useColorModeValue('purple.100', 'slate.900');
   const bgColorHover = useColorModeValue('purple.200', 'slate.850');
@@ -17,7 +17,7 @@ export const BlockCount = memo(function ({ count }: { count: number }) {
   const iconColor = useColorModeValue('purple.600', 'purple.200');
   return (
     <Flex py={3}>
-      <ExplorerLink href={'/blocks'}>
+      <ExplorerLink href={btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
         <Text
           display={'flex'}
           color={textColor}

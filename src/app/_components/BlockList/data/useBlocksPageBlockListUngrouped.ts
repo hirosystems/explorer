@@ -1,11 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
-import { useBlocksPageBlockListUngroupedInitialBlockList } from './useBlocksPageBlockListUngroupedInitialBlockList';
+import { useBlocksPageUngroupedInitialBlockList } from './useBlocksPageUngroupedInitialBlockList';
 
 export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
@@ -17,14 +17,13 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useBlocksPageBlockListUngroupedInitialBlockList(btcBlockLimit);
+  } = useBlocksPageUngroupedInitialBlockList(btcBlockLimit);
 
   // initially the block list is the initial blocklist
-  const blockList = useRef<BlockListData[]>(initialBlockList);
+  const [blockList, setBlockList] = useState<BlockListData[]>(initialBlockList);
   // when the initial block list changes, reset the block list to the initial blocklist
-  //TODO: this is the issue!!!!!! it keeps firing, resetting the list back to the initial list
   useEffect(() => {
-    blockList.current = initialBlockList;
+    setBlockList(initialBlockList);
   }, [initialBlockList]);
 
   const {
@@ -34,10 +33,13 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
   } = useBlockListWebSocket2(liveUpdates, initialStxBlocksHashes);
 
   // manually update the block list with block list updates from the websocket
-  const updateBlockListManually = useCallback((blockListUpdates: BlockListData[]) => {
-    const newBlockList = mergeBlockLists(blockListUpdates, blockList.current);
-    blockList.current = newBlockList;
-  }, []);
+  const updateBlockListManually = useCallback(
+    (blockListUpdates: BlockListData[]) => {
+      const newBlockList = mergeBlockLists(blockListUpdates, blockList);
+      setBlockList(newBlockList);
+    },
+    [blockList]
+  );
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
@@ -94,7 +96,7 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
   ]);
 
   return {
-    blockList: blockList.current,
+    blockList,
     updateBlockList: updateBlockListWithQuery,
     latestBlocksCount: latestStxBlocksCountFromWebSocket,
     isFetchingNextPage,

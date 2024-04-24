@@ -1,5 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
@@ -14,23 +13,18 @@ import {
 } from '../../../../common/queries/useBurnBlocksInfinite';
 import { BlockListBtcBlock } from '../types';
 import { generateBlockList } from '../utils';
+import { useBtcBlocksMap, useRefetchInitialBlockList } from './utils';
 
 const BURN_BLOCKS_QUERY_KEY_EXTENSION = 'blockList';
 
-export function useBlocksPageBlockListGroupedInitialBlockList(blockListLimit: number) {
+export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
   const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
 
   const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
 
-  const btcBlocksMap = useMemo(() => {
-    const map = {} as Record<string, BurnBlock>;
-    btcBlocks.forEach(block => {
-      map[block.burn_block_hash] = block;
-    });
-    return map;
-  }, [btcBlocks]);
+  const btcBlocksMap = useBtcBlocksMap(btcBlocks);
 
   const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
     useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height, 10, {}, 'blocks-page')
@@ -40,26 +34,10 @@ export function useBlocksPageBlockListGroupedInitialBlockList(blockListLimit: nu
     return new Set([...latestBurnBlockStxBlocks.map(block => block.hash)]);
   }, [latestBurnBlockStxBlocks]);
 
-  const queryClient = useQueryClient();
-  const refetchInitialBlockList = useCallback(
-    async function (callback: () => void) {
-      // Invalidate queries first
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
-        queryClient.invalidateQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
-      ]);
-
-      // After invalidation, refetch the required queries
-      await Promise.all([
-        queryClient.refetchQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
-        queryClient.refetchQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
-      ]);
-
-      // Run your callback after refetching
-      callback();
-    },
-    [queryClient]
-  );
+  const refetchInitialBlockList = useRefetchInitialBlockList([
+    [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY],
+    [BURN_BLOCKS_QUERY_KEY],
+  ]);
 
   const initialBlockList = useMemo(() => {
     const startOfBlockList = generateBlockList(latestBurnBlockStxBlocks, btcBlocksMap);

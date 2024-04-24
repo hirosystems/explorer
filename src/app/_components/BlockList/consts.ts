@@ -6,9 +6,8 @@ export const mobileBorderCss = {
     // Adds a border to the left of the first column
     content: '""',
     position: 'absolute',
-    right: '-6px',
+    right: '1px',
     top: 0,
-    bottom: 0,
     width: '2px',
     height: 'var(--stacks-sizes-14)',
     backgroundColor: 'borderPrimary',

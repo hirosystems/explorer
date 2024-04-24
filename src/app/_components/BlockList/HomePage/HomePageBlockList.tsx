@@ -46,7 +46,7 @@ function HomePageBlockListBase() {
       <Stack
         gap={3}
         pb={6}
-        borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+        borderBottom={liveUpdates ? '1px' : 'none'}
         marginX={-6}
         px={6}
       >

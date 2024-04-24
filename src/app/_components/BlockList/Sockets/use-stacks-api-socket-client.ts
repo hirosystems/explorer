@@ -23,21 +23,17 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
         isSocketClientConnecting.current = true;
         const socketUrl = apiUrl;
         socketUrlTracker.current = socketUrl;
-        console.log('Connecting to socket', socketUrl);
         const client = await StacksApiSocketClient.connect({ url: socketUrl });
         client.socket.on('connect', () => {
-          console.log('Connected to socket');
           setSocketClient(client);
           handleOnConnect?.(client);
           isSocketClientConnecting.current = false;
         });
         client.socket.on('disconnect', () => {
-          console.log('Disconnected from socket');
           setSocketClient(null);
           isSocketClientConnecting.current = false;
         });
         client.socket.on('connect_error', error => {
-          console.log('Socket connection error', error);
           setSocketClient(null);
           isSocketClientConnecting.current = false;
         });
@@ -51,7 +47,6 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
 
   const disconnect = useCallback(() => {
     if (socketClient?.socket.connected) {
-      console.log('Disconnecting from socket');
       socketClient?.socket.close();
     }
   }, [socketClient]);
