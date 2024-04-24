@@ -25,7 +25,6 @@ export const RELEASE_TAG_NAME =
 export const REDIS_URL = process.env.REDIS_URL || '';
 export const LUNAR_CRUSH_API_KEY = process.env.LUNAR_CRUSH_API_KEY || '';
 export const NODE_ENV = process.env.NODE_ENV || '';
-export const NEXT_PUBLIC_SEGMENT_WRITE_KEY = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || '';
 
 export const HIRO_HEADERS: HeadersInit = {
   'x-api-key': X_API_KEY,
