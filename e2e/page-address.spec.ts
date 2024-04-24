@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+
 import { addresses, emptyAddresses } from './addresses-test-vector';
 
 async function hasTransactions(page) {

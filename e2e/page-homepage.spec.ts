@@ -1,4 +1,5 @@
-import { expect, Page, test } from '@playwright/test';
+import { Page, expect, test } from '@playwright/test';
+
 import { hasBlocks } from './block-utils';
 
 const txTypes = [

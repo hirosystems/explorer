@@ -1,5 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
+
 import { GetTransactionListTypeEnum } from '@stacks/blockchain-api-client';
+
 import { txs } from './mocks';
 
 test.describe('Transaction page', () => {
