@@ -17,6 +17,7 @@ import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
 import { ProgressBar } from './ProgressBar';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
+import { SignerInfo } from './data/useSigners';
 
 export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
   <Th py={3} px={6}>
@@ -167,20 +168,48 @@ export function SignersTableLayout({
     </Section>
   );
 }
+interface SignerRowInfo {
+  signerKey: string;
+  associatedAddress: string;
+  votingPower: string;
+  stxStaked: string;
+  lastVoteSlot: string;
+}
+function generateSignerRowData(singerInfo: SignerInfo): SignerRowInfo {
+  return {
+    signerKey: singerInfo.signing_key,
+    associatedAddress: 'ST2M...73ZG', // TODO: fix
+    votingPower: `${singerInfo.weight_percent.toFixed(2)}%`, // TODO: format
+    stxStaked: parseFloat(singerInfo.stacked_amount).toLocaleString(), // TODO: format
+    lastVoteSlot: '24525621 (-1)',
+  };
+}
 
 const SignerTable = () => {
   const numRows = Array.from({ length: 10 }, (_, i) => i + 1); // TODO: replace with actual data
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
 
+  const { currentCycleId } = useSuspenseCurrentStackingCycle();
+  const {
+    data: { results: signers },
+  } = useSuspensePoxSigners(66);
+  console.log({ signers });
   return (
     <SignersTableLayout
       votingPowerSortOrder={votingPowerSortOrder}
       setVotingPowerSortOrder={setVotingPowerSortOrder}
       numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
-      signersTableRows={numRows.map((_, index) => (
-        <SignerTableRow key={`signers=table-row-${index}`} index={index} {...testGridRowData} />
+      signersTableRows={(signers as SignerInfo[]).map((signer, index) => (
+        <SignerTableRow
+          key={`signers=table-row-${index}`}
+          index={index}
+          {...generateSignerRowData(signer)}
+        />
       ))}
+      // signersTableRows={numRows.map((_, index) => (
+      //   <SignerTableRow key={`signers=table-row-${index}`} index={index} {...testGridRowData} />
+      // ))}
     />
   );
 };
