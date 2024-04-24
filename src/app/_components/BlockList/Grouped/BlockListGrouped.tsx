@@ -239,12 +239,12 @@ function BitcoinHeader({
   );
 }
 
-export function Footer({ stxBlocks, txSum }: { stxBlocks: BlockListStxBlock[]; txSum: number }) {
+export function Footer({ btcBlock, txSum }: { btcBlock: BlockListBtcBlock; txSum: number }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {stxBlocks.length} blocks
+          {btcBlock.txsCount} blocks
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {txSum} transactions
@@ -290,7 +290,7 @@ export function BurnBlockGroup({
       {numStxBlocksNotDisplayed > 0 ? (
         <BlockCount count={numStxBlocksNotDisplayed} btcBlockHash={btcBlock.hash} />
       ) : null}
-      <Footer stxBlocks={stxBlocks} txSum={txSum} />
+      <Footer btcBlock={btcBlock} txSum={txSum} />
     </Box>
   );
 }

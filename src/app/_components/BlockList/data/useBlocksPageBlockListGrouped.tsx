@@ -5,7 +5,7 @@ import { useBlockListWebSocket2 } from '../Sockets/useBlockListWebSocket2';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
 import { useBlocksGroupedInitialBlockList } from './useBlocksPageGroupedInitialBlockList';
 
-export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
+export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 3) {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
   const {
