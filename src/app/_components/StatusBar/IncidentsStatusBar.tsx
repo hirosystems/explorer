@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { useEffect } from 'react';
 import { IncidentImpact } from 'statuspage.io';
 
+import { useGlobalContext } from '../../../common/context/useAppContext';
 import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedIncidents';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';
@@ -19,6 +20,7 @@ const incidentImpactSeverity: Record<IncidentImpact, number> = {
 };
 
 export function IncidentsStatusBar() {
+  const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
   const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
   const dispatch = useAppDispatch();
   const allIncidents = unresolvedIncidentsResponse?.incidents?.map(({ name }) => name).join(' - ');
@@ -34,6 +36,10 @@ export function IncidentsStatusBar() {
 
   if (!highestImpact || !allIncidents) return null;
 
+  const isTestnetUpdate = allIncidents.includes('Testnet Update:');
+
+  if (isTestnetUpdate && !isTestnet) return null;
+
   return (
     <StatusBarBase
       impact={highestImpact}
@@ -44,25 +50,33 @@ export function IncidentsStatusBar() {
             fontWeight={'medium'}
             fontSize={'14px'}
             lineHeight={'1.5'}
+            display={'inline'}
           >
             {allIncidents}
             {allIncidents.endsWith('.') ? '' : '.'}
+            <Text
+              fontWeight={400}
+              fontSize={'14px'}
+              color={'#000000'}
+              lineHeight={'1.5'}
+              display={'inline'}
+            >
+              {' '}
+              More information on the{' '}
+              <TextLink
+                href="https://status.hiro.so/"
+                target="_blank"
+                css={css`
+                  display: inline;
+                  text-decoration: underline;
+                `}
+              >
+                Hiro status page
+              </TextLink>
+              .
+            </Text>
           </Text>
           &nbsp;
-          <Text fontWeight={400} fontSize={'14px'} color={'#000000'} lineHeight={'1.5'}>
-            More information on the{' '}
-            <TextLink
-              href="https://status.hiro.so/"
-              target="_blank"
-              css={css`
-                display: inline;
-                text-decoration: underline;
-              `}
-            >
-              Hiro status page
-            </TextLink>
-            .
-          </Text>
         </Flex>
       }
     />
