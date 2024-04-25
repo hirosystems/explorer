@@ -1,3 +1,11 @@
+# [1.168.0](https://github.com/hirosystems/explorer/compare/v1.167.0...v1.168.0) (2024-04-25)
+
+
+### Features
+
+* remove segment ([9e3ca04](https://github.com/hirosystems/explorer/commit/9e3ca0445627e59aea9405fb17368d8e63a13ba5))
+* status bar updates ([9e8faaa](https://github.com/hirosystems/explorer/commit/9e8faaa8a4ef581ca739239918afac4c43ab377f))
+
 # [1.167.0](https://github.com/hirosystems/explorer/compare/v1.166.2...v1.167.0) (2024-04-24)
 
 
