@@ -1,3 +1,10 @@
+# [1.169.0](https://github.com/hirosystems/explorer/compare/v1.168.0...v1.169.0) (2024-04-25)
+
+
+### Features
+
+* performance improvement testing ([cf8e7a1](https://github.com/hirosystems/explorer/commit/cf8e7a111aec772c320f5030b5f9ab570e52a171))
+
 # [1.168.0](https://github.com/hirosystems/explorer/compare/v1.167.0...v1.168.0) (2024-04-25)
 
 
