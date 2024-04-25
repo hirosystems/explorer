@@ -11,11 +11,12 @@ interface Subscription {
 
 export function useSubscribeBlocks(
   liveUpdates: boolean,
-  handleBlock: (block: NakamotoBlock | Block) => void
+  handleBlock: (block: NakamotoBlock | Block) => void,
+  handleError?: (client: StacksApiSocketClient | null) => void
 ) {
   const subscription = useRef<Subscription | undefined>(undefined);
   const { stacksApiSocketClientInfo } = useGlobalContext();
-  const { client, connect, disconnect } = stacksApiSocketClientInfo || {};
+  const { connect, disconnect } = stacksApiSocketClientInfo || {};
 
   useEffect(() => {
     const subscribe = async (client: StacksApiSocketClient) => {
@@ -28,15 +29,15 @@ export function useSubscribeBlocks(
       });
     };
 
-    if (liveUpdates && !client?.socket.connected) {
-      connect?.(client => subscribe(client));
+    if (liveUpdates) {
+      connect?.(client => subscribe(client), handleError);
     }
-    if (!liveUpdates && client?.socket.connected) {
+    if (!liveUpdates) {
       disconnect?.();
     }
     return () => {
       disconnect?.();
     };
-  }, [client, handleBlock, connect, liveUpdates, disconnect]);
+  }, [handleBlock, connect, liveUpdates, disconnect, handleError]);
   return subscription;
 }
