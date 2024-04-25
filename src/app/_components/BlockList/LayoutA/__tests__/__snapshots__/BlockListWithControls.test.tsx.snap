@@ -102,15 +102,11 @@ exports[`BlockListWithControls renders correctly 1`] = `
         </div>
         <div
           class="css-1g6pedm"
-          style="transition: opacity 0.7s; opacity: 1;"
         >
           <span
-            class="chakra-text css-vmwkl5"
-          >
-            <span
-              class="chakra-text css-1csk9zj"
-            />
-          </span>
+            class="chakra-text css-bn5ftu"
+            style="transition: opacity 0.7s; opacity: 1;"
+          />
           <button
             class="chakra-button css-4xx2wk"
             type="button"
