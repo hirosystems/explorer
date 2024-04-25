@@ -1,7 +1,9 @@
+import { ApiResponseWithResultsOffset } from '@/common/types/api';
 import { useColorModeValue } from '@chakra-ui/react';
-import { ReactNode, useState } from 'react';
+import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
+import { ReactNode, useMemo, useState } from 'react';
 
-import { AddressLink, ExplorerLink } from '../../common/components/ExplorerLinks';
+import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
@@ -15,9 +17,11 @@ import { Text } from '../../ui/Text';
 import { Th } from '../../ui/Th';
 import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
+import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { ProgressBar } from './ProgressBar';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
-import { SignerInfo } from './data/useSigners';
+import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
+import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 
 export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
   <Th py={3} px={6}>
@@ -50,67 +54,52 @@ export const signersTableHeaders = [
   'Associated address',
   'Voting power',
   'STX staked',
-  'Last vote slot',
 ];
 
 export const SignersTableHeaders = () => (
   <Tr>
-    {signersTableHeaders.map((header, index) => (
-      <SignersTableHeader key={`signers-table-header-${index}`} headerTitle={header} />
+    {signersTableHeaders.map(header => (
+      <SignersTableHeader key={`signers-table-header-${header}`} headerTitle={header} />
     ))}
   </Tr>
 );
 
-const testGridRowData = {
-  // TODO: replace with actual data
-  signerKey: 'CW9C7HBwAMgqNdXW9W9C7HB2w',
-  associatedAddress: 'ST2M...73ZG',
-  votingPower: '23.4%',
-  stxStaked: '1,878,325',
-  lastVoteSlot: '24525621 (-1)',
-};
-
 const SignerTableRow = ({
   index,
   signerKey,
-  associatedAddress,
   votingPower,
   stxStaked,
-  lastVoteSlot,
+  stackers,
 }: {
   index: number;
-  signerKey: string;
-  associatedAddress: string;
-  votingPower: string;
-  stxStaked: string;
-  lastVoteSlot: string;
-}) => {
+} & SignerRowInfo) => {
   return (
     <Tr>
       <Td py={3} px={6}>
-        <Text whiteSpace="nowrap" fontSize="sm">
+        <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {index}
         </Text>
       </Td>
       <Td py={3} px={6}>
         <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-          <Show above="lg">
-            <ExplorerLink>{signerKey}</ExplorerLink>
-          </Show>
-          <Show below="lg">
-            <ExplorerLink>{truncateMiddle(signerKey)}</ExplorerLink>
-          </Show>
+          <Show above="lg">{truncateMiddle(signerKey)}</Show>
+          <Show below="lg">{truncateMiddle(signerKey)}</Show>
         </Text>
       </Td>
       <Td py={3} px={6}>
-        <AddressLink
-          principal={associatedAddress}
-          whiteSpace="nowrap"
-          fontSize="sm"
-          color="secondaryText"
-        >
-          {associatedAddress}
-        </AddressLink>
+        <Flex textOverflow="ellipsis" overflow="hidden">
+          {stackers?.map((stacker, index) => (
+            <AddressLink
+              key={index}
+              principal={stacker.stacker_address}
+              whiteSpace="nowrap"
+              fontSize="sm"
+              color="secondaryText"
+            >
+              {truncateMiddle(stacker.stacker_address)}
+            </AddressLink>
+          ))}
+        </Flex>
       </Td>
       <Td py={3} px={6}>
         <HStack flexWrap="nowrap">
@@ -125,11 +114,6 @@ const SignerTableRow = ({
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {stxStaked}
-        </Text>
-      </Td>
-      <Td py={3} px={6}>
-        <Text whiteSpace="nowrap" fontSize="sm">
-          {lastVoteSlot}
         </Text>
       </Td>
     </Tr>
@@ -170,46 +154,56 @@ export function SignersTableLayout({
 }
 interface SignerRowInfo {
   signerKey: string;
-  associatedAddress: string;
   votingPower: string;
   stxStaked: string;
-  lastVoteSlot: string;
+  stackers: SignersStackersData[];
 }
-function generateSignerRowData(singerInfo: SignerInfo): SignerRowInfo {
+function formatSignerRowData(
+  singerInfo: SignerInfo,
+  stackers: SignersStackersData[]
+): SignerRowInfo {
   return {
     signerKey: singerInfo.signing_key,
-    associatedAddress: 'ST2M...73ZG', // TODO: fix
-    votingPower: `${singerInfo.weight_percent.toFixed(2)}%`, // TODO: format
-    stxStaked: parseFloat(singerInfo.stacked_amount).toLocaleString(), // TODO: format
-    lastVoteSlot: '24525621 (-1)',
+    votingPower: `${singerInfo.weight_percent.toFixed(2)}%`,
+    stxStaked: parseFloat(singerInfo.stacked_amount).toLocaleString(),
+    stackers,
   };
 }
 
 const SignerTable = () => {
-  const numRows = Array.from({ length: 10 }, (_, i) => i + 1); // TODO: replace with actual data
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
-
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
+  const constantCycleId = 560;
   const {
     data: { results: signers },
-  } = useSuspensePoxSigners(66);
-  console.log({ signers });
+  } = useSuspensePoxSigners(constantCycleId);
+  const queryClient = useQueryClient();
+  const getQuery = useGetStackersBySignerQuery();
+  const signersStackersQueries = useMemo(() => {
+    return {
+      queries: signers.map(signer => {
+        return getQuery(constantCycleId, signer.signing_key);
+      }),
+      combine: (
+        response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
+      ) => response.map(r => r.data?.results ?? []),
+    };
+  }, [signers, getQuery]);
+  const signersStackers = useQueries(signersStackersQueries, queryClient);
+  const signersData = signers.map((signer, index) => {
+    return {
+      ...formatSignerRowData(signer, signersStackers[index]),
+    };
+  });
   return (
     <SignersTableLayout
       votingPowerSortOrder={votingPowerSortOrder}
       setVotingPowerSortOrder={setVotingPowerSortOrder}
       numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
-      signersTableRows={(signers as SignerInfo[]).map((signer, index) => (
-        <SignerTableRow
-          key={`signers=table-row-${index}`}
-          index={index}
-          {...generateSignerRowData(signer)}
-        />
+      signersTableRows={signers.map((signer, i) => (
+        <SignerTableRow key={`signers=table-row-${i}`} index={i} {...signersData[i]} />
       ))}
-      // signersTableRows={numRows.map((_, index) => (
-      //   <SignerTableRow key={`signers=table-row-${index}`} index={index} {...testGridRowData} />
-      // ))}
     />
   );
 };

@@ -220,10 +220,22 @@ function StatCardBase({
   );
 }
 
+const mainnetStxSupply = {
+  total: 1818000000.0,
+  unloc: 1454129436.661443,
+  anotherProperty: 'nasdoiuwhfiuwhewife',
+};
+const testnetStxSupply = {
+  total: 1818000000.0,
+  unloc: 41477906609.855454,
+  anotherProperty: 'nasdoiuwhfiuwhewife',
+};
 function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const {
     data: { total_stx, unlocked_stx },
   } = useSuspenseStxSupply();
+  console.log({ total_stx, unlocked_stx });
+
   const stxStakedFormatted = `${(
     (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) /
     1_000_000
