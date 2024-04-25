@@ -1,13 +1,13 @@
-import React, { useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
+import { useBlockListContext } from '../BlockListContext';
 import { Controls } from '../Controls';
+import { UpdateBar } from '../UpdateBar';
 import { UIBlock } from '../types';
 import { Blocks } from './Blocks';
-import { UpdateBar } from './UpdateBar';
-import { useBlockListContext } from './context';
 
 export function BlockListWithControls({
   blockList,
@@ -28,14 +28,8 @@ export function BlockListWithControls({
   fetchNextPage?: () => void;
   horizontalControls?: boolean;
 }) {
-  const {
-    isUpdateListLoading,
-    setIsUpdateListLoading,
-    groupedByBtc,
-    setGroupedByBtc,
-    liveUpdates,
-    setLiveUpdates,
-  } = useBlockListContext();
+  const { isBlockListLoading, groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } =
+    useBlockListContext();
 
   const lastClickTimeRef = useRef(0);
 
@@ -64,14 +58,8 @@ export function BlockListWithControls({
           }}
           horizontal={horizontalControls}
         />
-        {!liveUpdates && (
-          <UpdateBar
-            isUpdateListLoading={isUpdateListLoading}
-            latestBlocksCount={latestBlocksCount}
-            onClick={updateList}
-          />
-        )}
-        <Blocks blockList={blockList} isUpdateListLoading={isUpdateListLoading} />
+        {!liveUpdates && <UpdateBar latestBlocksCount={latestBlocksCount} onClick={updateList} />}
+        <Blocks blockList={blockList} isUpdateListLoading={isBlockListLoading} />
         <Box pt={4}>
           {(!liveUpdates || !enablePagination) && (
             <ListFooter

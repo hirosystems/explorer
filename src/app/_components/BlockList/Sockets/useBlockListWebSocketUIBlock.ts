@@ -1,12 +1,11 @@
 import { useCallback, useRef, useState } from 'react';
 
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
-import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { UIBlockType, UISingleBlock } from '../types';
-import { useSubscribeBlocks } from '../useSubscribeBlocks';
+import { useSubscribeBlocksUIBlock } from './useSubscribeBlocksUIBlock';
 
-export function useBlockListWebSocket(
+export function useBlockListWebSocketUIBlock(
   initialBlockHashes: Set<string>,
   initialBurnBlockHashes: Set<string>
 ) {
@@ -44,7 +43,7 @@ export function useBlockListWebSocket(
             height: block.height,
             hash: block.hash,
             timestamp: block.burn_block_time,
-            txsCount: block.tx_count,
+            txsCount: block?.tx_count,
           },
           ...prevLatestBlocks,
         ]);
@@ -55,7 +54,7 @@ export function useBlockListWebSocket(
     [initialBurnBlockHashes, initialBlockHashes]
   );
 
-  useSubscribeBlocks(handleBlock);
+  useSubscribeBlocksUIBlock(handleBlock);
 
   const clearLatestBlocks = () => {
     setLatestBlocks([]);

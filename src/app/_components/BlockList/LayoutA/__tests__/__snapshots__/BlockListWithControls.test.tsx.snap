@@ -6,7 +6,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
     class="css-16e8ooo"
   >
     <div
-      class="css-1b9enxg"
+      class="css-1kk2bc1"
     >
       <span
         class="chakra-text css-hnwgpl"
@@ -21,53 +21,49 @@ exports[`BlockListWithControls renders correctly 1`] = `
         class="css-1gdm77d"
       >
         <div
-          class="chakra-stack css-1lzfyzp"
+          class="css-zhmvqp"
         >
           <div
-            class="css-gg4vpm"
+            class="chakra-form-control css-8ghjt3"
+            role="group"
           >
-            <div
-              class="chakra-form-control css-1v0vze3"
-              role="group"
+            <label
+              class="chakra-switch css-1tv0hy9"
+              data-checked=""
+              data-disabled=""
             >
-              <label
-                class="chakra-switch css-1tv0hy9"
+              <input
+                aria-disabled="true"
+                aria-invalid="false"
+                checked=""
+                class="chakra-switch__input"
+                disabled=""
+                id="group-by-btc"
+                style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; width: 1px; margin: -1px; padding: 0px; overflow: hidden; white-space: nowrap; position: absolute;"
+                type="checkbox"
+                value=""
+              />
+              <span
+                aria-hidden="true"
+                class="chakra-switch__track css-14qxnv8"
                 data-checked=""
                 data-disabled=""
               >
-                <input
-                  aria-disabled="true"
-                  aria-invalid="false"
-                  checked=""
-                  class="chakra-switch__input"
-                  disabled=""
-                  id="group-by-btc"
-                  style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; width: 1px; margin: -1px; padding: 0px; overflow: hidden; white-space: nowrap; position: absolute;"
-                  type="checkbox"
-                  value=""
-                />
                 <span
-                  aria-hidden="true"
-                  class="chakra-switch__track css-14qxnv8"
+                  class="chakra-switch__thumb css-0"
                   data-checked=""
                   data-disabled=""
-                >
-                  <span
-                    class="chakra-switch__thumb css-0"
-                    data-checked=""
-                    data-disabled=""
-                  />
-                </span>
-              </label>
-              <label
-                class="chakra-form__label css-2edo7i"
-                colo="textCaption"
-                for="group-by-btc"
-                id="field-:r0:-label"
-              >
-                Group by Bitcoin block
-              </label>
-            </div>
+                />
+              </span>
+            </label>
+            <label
+              class="chakra-form__label css-2edo7i"
+              colo="textCaption"
+              for="group-by-btc"
+              id="field-:r0:-label"
+            >
+              Group by Bitcoin block
+            </label>
           </div>
           <div
             class="chakra-form-control css-guqklo"
@@ -106,26 +102,20 @@ exports[`BlockListWithControls renders correctly 1`] = `
         </div>
         <div
           class="css-1g6pedm"
-          style="transition: opacity 0.7s; opacity: 1;"
         >
           <span
-            class="chakra-text css-1eiok6j"
-          >
-            <span
-              class="chakra-text css-1csk9zj"
-            >
-              0
-            </span>
-             new Stacks blocks have come in
-          </span>
-          <span
-            class="chakra-text css-1q6cug2"
+            class="chakra-text css-bn5ftu"
+            style="transition: opacity 0.7s; opacity: 1;"
+          />
+          <button
+            class="chakra-button css-4xx2wk"
+            type="button"
           >
             <div
-              class="css-172hjuw"
+              class="css-4xvjmy"
             >
               <svg
-                class="chakra-icon css-1dgznug"
+                class="chakra-icon css-ta9ayi"
                 fill="currentColor"
                 focusable="false"
                 height="1em"
@@ -141,13 +131,9 @@ exports[`BlockListWithControls renders correctly 1`] = `
                   d="M6 8h-6v-6h1v4.109c1.013-3.193 4.036-5.484 7.5-5.484 3.506 0 6.621 2.36 7.574 5.739l-0.963 0.271c-0.832-2.95-3.551-5.011-6.611-5.011-3.226 0.001-6.016 2.276-6.708 5.376h4.208v1zM11 9v1h4.208c-0.693 3.101-3.479 5.375-6.708 5.375-3.062 0-5.78-2.061-6.611-5.011l-0.963 0.271c0.952 3.379 4.067 5.739 7.574 5.739 3.459 0 6.475-2.28 7.5-5.482v4.108h1v-6h-6z"
                 />
               </svg>
-              <span
-                class="chakra-text css-arsoxi"
-              >
-                Update
-              </span>
+              Update
             </div>
-          </span>
+          </button>
         </div>
         <div
           class="chakra-stack css-1dg20yu"
@@ -383,7 +369,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
             </div>
           </div>
           <div
-            class="css-1jixim0"
+            class="css-1vu7rur"
           >
             <a
               class="chakra-link css-0"
@@ -394,7 +380,7 @@ exports[`BlockListWithControls renders correctly 1`] = `
               >
                 +25 blocks
                 <div
-                  class="css-10s7be0"
+                  class="css-1u87arr"
                 >
                   <svg
                     class="chakra-icon css-1nguf4z"

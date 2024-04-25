@@ -21,7 +21,7 @@ export const StatSection: FC<
     p={5}
     height={32}
     justifyContent={'center'}
-    borderColor={'border'}
+    borderColor={'borderPrimary'}
     {...rest}
   >
     <Text fontSize={'xs'} fontWeight="semibold" mb={3} whiteSpace={'nowrap'}>
@@ -37,11 +37,11 @@ export const StatSection: FC<
       >
         {bodyMainText}
       </Text>
-      <Text fontSize={'sm'} color={'secondaryText'} whiteSpace={'nowrap'}>
+      <Text fontSize={'sm'} color={'textSubdued'} whiteSpace={'nowrap'}>
         {bodySecondaryText}
       </Text>
     </Flex>
-    <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'secondaryText'}>
+    <Text fontSize={'xs'} lineHeight={'none'} fontWeight="medium" color={'textSubdued'}>
       {caption}
     </Text>
   </Flex>

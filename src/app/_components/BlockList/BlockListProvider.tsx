@@ -1,6 +1,6 @@
 import { ReactNode, useState } from 'react';
 
-import { BlockListContext } from './context';
+import { BlockListContext } from './BlockListContext';
 
 export function BlockListProvider({ children }: { children: ReactNode }) {
   const [isUpdateListLoading, setIsUpdateListLoading] = useState(false);
@@ -10,8 +10,8 @@ export function BlockListProvider({ children }: { children: ReactNode }) {
   return (
     <BlockListContext.Provider
       value={{
-        isUpdateListLoading,
-        setIsUpdateListLoading,
+        isBlockListLoading: isUpdateListLoading,
+        setBlockListLoading: setIsUpdateListLoading,
         groupedByBtc,
         setGroupedByBtc,
         liveUpdates,

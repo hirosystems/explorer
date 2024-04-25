@@ -1,13 +1,11 @@
-import React from 'react';
-
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { StxIcon } from '../../../../ui/icons';
+import { BlockCount } from '../BlockCount';
+import { getFadeAnimationStyle } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
-import { BlockCount } from './BlockCount';
 import { BurnBlock } from './BurnBlock';
 import { StxBlock } from './StxBlock';
-import { FADE_DURATION } from './consts';
 
 export function Blocks({
   blockList,
@@ -17,16 +15,7 @@ export function Blocks({
   isUpdateListLoading: boolean;
 }) {
   return (
-    <Stack
-      pl={4}
-      pr={2}
-      gap={0}
-      width={'full'}
-      style={{
-        transition: `opacity ${FADE_DURATION / 1000}s`,
-        opacity: isUpdateListLoading ? 0 : 1,
-      }}
-    >
+    <Stack pl={4} pr={2} gap={0} width={'full'} style={getFadeAnimationStyle(isUpdateListLoading)}>
       {blockList.map((block, i) => {
         switch (block.type) {
           case UIBlockType.Block:

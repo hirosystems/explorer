@@ -7,7 +7,7 @@ import { BtcStxBlockLinks } from '../../../common/components/BtcStxBlockLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
 import { Flex, FlexProps } from '../../../ui/Flex';
-import { Caption, Text } from '../../../ui/typography';
+import { Caption } from '../../../ui/typography';
 
 export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
   ({ block, ...rest }) => {
@@ -30,7 +30,7 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
             </Flex>
           ),
           subtitle: (
-            <Caption display="block" color={'secondaryText'}>
+            <Caption display="block" color={'textSubdued'}>
               {addSepBetweenStrings([
                 `${block?.microblocks_accepted?.length || 0} ${pluralize(
                   'microblock',

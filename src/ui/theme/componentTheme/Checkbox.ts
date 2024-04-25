@@ -11,7 +11,7 @@ export const checkboxTheme = multiStyleConfigHelpers.defineMultiStyleConfig({
   variants: {
     outline: multiStyleConfigHelpers.definePartsStyle(props => ({
       control: {
-        bg: 'bg',
+        bg: 'surface',
         borderColor: mode(`slate.300`, `slate.700`)(props),
         _checked: {
           bg: mode(`purple.600`, `purple.400`)(props),
@@ -22,7 +22,7 @@ export const checkboxTheme = multiStyleConfigHelpers.defineMultiStyleConfig({
           },
         },
         _hover: {
-          bg: 'bg',
+          bg: 'surface',
           borderColor: mode(`slate.300`, `slate.700`)(props),
         },
       },

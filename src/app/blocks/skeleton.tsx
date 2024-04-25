@@ -1,18 +1,17 @@
 'use client';
 
-import React from 'react';
+import {
+  BlockPageHeadersSkeleton,
+  BlocksPageBlockListSkeleton,
+} from '../_components/BlockList/Grouped/skeleton';
+import { BlocksPageLayout } from './PageClient';
 
-import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
-import { SkeletonItem as SkeletonElement } from '../../ui/SkeletonItem';
-import { PageTitle } from '../_components/PageTitle';
-
-export default function Skeleton() {
+export default function BlocksPageSkeleton() {
   return (
-    <>
-      <PageTitle>
-        <SkeletonElement width={'400px'} height={'43px'} />
-      </PageTitle>
-      <SkeletonBlockList />
-    </>
+    <BlocksPageLayout
+      title="Recent Blocks"
+      blocksPageHeaders={<BlockPageHeadersSkeleton />}
+      blocksList={<BlocksPageBlockListSkeleton />}
+    />
   );
 }

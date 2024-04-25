@@ -2,18 +2,39 @@
 
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
-import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
 import { useGlobalContext } from '../../common/context/useAppContext';
+import { NetworkModes } from '../../common/types/network';
+import {
+  BlockPageHeadersSkeleton,
+  BlocksPageBlockListSkeleton,
+} from '../_components/BlockList/Grouped/skeleton';
+import { SkeletonBlockList } from '../_components/BlockList/SkeletonBlockList';
 import { PageTitle } from '../_components/PageTitle';
 
-const BlocksList = dynamic(() => import('../_components/BlockList').then(mod => mod.BlocksList), {
-  loading: () => <SkeletonBlockList />,
-  ssr: false,
-});
+const BlocksPageHeadersDynamic = dynamic(
+  () =>
+    import('../_components/BlockList/BlocksPage/BlocksPageHeaders').then(
+      mod => mod.BlocksPageHeaders
+    ),
+  {
+    loading: () => <BlockPageHeadersSkeleton />,
+    ssr: false,
+  }
+);
 
-const PaginatedBlockListLayoutA = dynamic(
+const BlocksPageBlockListDynamic = dynamic(
+  () =>
+    import('../_components/BlockList/BlocksPage/BlocksPageBlockList').then(
+      mod => mod.BlocksPageBlockList
+    ),
+  {
+    loading: () => <BlocksPageBlockListSkeleton />,
+    ssr: false,
+  }
+);
+
+const PaginatedBlockListLayoutADynamic = dynamic(
   () =>
     import('../_components/BlockList/LayoutA/Paginated').then(mod => mod.PaginatedBlockListLayoutA),
   {
@@ -22,13 +43,37 @@ const PaginatedBlockListLayoutA = dynamic(
   }
 );
 
-const BlocksPage: NextPage = () => {
-  const { activeNetworkKey } = useGlobalContext();
+export function BlocksPageLayout({
+  title,
+  blocksPageHeaders,
+  blocksList,
+}: {
+  title: string;
+  blocksPageHeaders: React.ReactNode;
+  blocksList: React.ReactNode;
+}) {
   return (
     <>
-      <PageTitle>Blocks</PageTitle>
-      <PaginatedBlockListLayoutA />
+      <PageTitle>{title}</PageTitle>
+      {blocksPageHeaders}
+      {blocksList}
     </>
+  );
+}
+
+const BlocksPage: NextPage = () => {
+  const { activeNetworkKey, activeNetwork } = useGlobalContext();
+  const chain = activeNetwork.mode;
+  const isNaka1Testnet =
+    chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
+  return (
+    <BlocksPageLayout
+      title={isNaka1Testnet ? 'Recent blocks' : 'Blocks'}
+      blocksPageHeaders={isNaka1Testnet ? <BlocksPageHeadersDynamic /> : null}
+      blocksList={
+        isNaka1Testnet ? <BlocksPageBlockListDynamic /> : <PaginatedBlockListLayoutADynamic />
+      }
+    />
   );
 };
 

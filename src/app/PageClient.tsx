@@ -1,34 +1,40 @@
 'use client';
 
+import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useAppContext';
+import { NetworkModes } from '../common/types/network';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';
+import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
-import { UpdatedBlocksList } from './_components/BlockList/UpdatedBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
 
-const NonPaginatedBlockListLayoutA = dynamic(
-  () =>
-    import('./_components/BlockList/LayoutA/NonPaginated').then(
-      mod => mod.NonPaginatedBlockListLayoutA
-    ),
+const UpdatedBlockListDynamic = dynamic(
+  () => import('./_components/BlockList/UpdatedBlockList').then(mod => mod.UpdatedBlocksList),
   {
     loading: () => <SkeletonBlockList />,
     ssr: false,
   }
 );
 
-const BlocksList = dynamic(() => import('./_components/BlockList').then(mod => mod.BlocksList), {
-  loading: () => <SkeletonBlockList />,
-  ssr: false,
-});
+const HomePageBlockListDynamic = dynamic(
+  () =>
+    import('./_components/BlockList/HomePage/HomePageBlockList').then(mod => mod.HomePageBlockList),
+  {
+    loading: () => <HomePageBlockListSkeleton />,
+    ssr: false,
+  }
+);
 
-export default function Home() {
-  const { activeNetwork, activeNetworkKey } = useGlobalContext();
+const Home: NextPage = () => {
+  const { activeNetworkKey, activeNetwork } = useGlobalContext();
+  const chain = activeNetwork.mode;
+  const isNaka1Testnet =
+    chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
@@ -39,9 +45,14 @@ export default function Home() {
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
         <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
-
-        <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+        {isNaka1Testnet ? (
+          <HomePageBlockListDynamic />
+        ) : (
+          <UpdatedBlockListDynamic limit={DEFAULT_BLOCKS_LIST_LIMIT} />
+        )}
       </Grid>
     </>
   );
-}
+};
+
+export default Home;

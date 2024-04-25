@@ -10,7 +10,7 @@ export const inputTheme = multiStyleConfigHelpers.defineMultiStyleConfig({
     outline: multiStyleConfigHelpers.definePartsStyle(props => ({
       field: {
         fontSize: 'sm',
-        borderColor: 'border',
+        borderColor: 'borderPrimary',
         _placeholder: {
           color: mode(`slate.600`, `slate.500`)(props),
         },

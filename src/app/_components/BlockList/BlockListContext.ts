@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, createContext, useContext } from 'react';
 
 interface BlockListContextType {
-  isUpdateListLoading: boolean;
-  setIsUpdateListLoading: Dispatch<SetStateAction<boolean>>;
+  isBlockListLoading: boolean;
+  setBlockListLoading: Dispatch<SetStateAction<boolean>>;
   groupedByBtc: boolean;
   setGroupedByBtc: Dispatch<SetStateAction<boolean>>;
   liveUpdates: boolean;

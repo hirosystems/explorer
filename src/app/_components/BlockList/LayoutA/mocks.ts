@@ -1,4 +1,4 @@
-jest.mock('./context', () => ({
+jest.mock('../BlockListContext', () => ({
   useBlockListContext: jest.fn().mockImplementation(() => ({
     setIsUpdateListLoading: jest.fn(),
     isUpdateListLoading: false,
@@ -9,7 +9,7 @@ jest.mock('./context', () => ({
   })),
 }));
 
-jest.mock('./useBlockListWebSocket', () => ({
+jest.mock('../Sockets/useBlockListWebSocket', () => ({
   useBlockListWebSocket: jest.fn().mockImplementation(() => ({
     latestUIBlocks: [],
     latestBlocksCount: 0,

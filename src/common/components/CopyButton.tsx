@@ -1,6 +1,5 @@
 import { useClipboard } from '@chakra-ui/react';
 import { FC, memo } from 'react';
-import * as React from 'react';
 import { AiOutlineCopy } from 'react-icons/ai';
 
 import { IconButton, IconButtonProps } from '../../ui/IconButton';

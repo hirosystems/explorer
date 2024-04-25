@@ -25,5 +25,17 @@ export const buttonTheme = defineStyleConfig({
         bgColor: mode(`slate.200`, `slate.900`)(props),
       },
     })),
+    text: defineStyle(props => ({
+      padding: '0 !important',
+      border: 'none',
+      background: 'none',
+      fontWeight: 'medium',
+      fontSize: 'sm',
+      color: 'buttonText',
+      height: 'auto',
+      _hover: {
+        textDecoration: 'underline',
+      },
+    })),
   },
 });

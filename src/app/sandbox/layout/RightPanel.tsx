@@ -34,7 +34,7 @@ export function RightPanel() {
       height={'full'}
     >
       {balance ? (
-        <Box bg={'bg'} borderBottomWidth="1px" p={7}>
+        <Box bg={'surface'} borderBottomWidth="1px" p={7}>
           <Stack gap={4}>
             <Stack textAlign="right">
               <Caption>Account balance</Caption>

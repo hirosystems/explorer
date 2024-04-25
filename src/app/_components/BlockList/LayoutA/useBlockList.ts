@@ -1,22 +1,13 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Subscription } from 'react-redux';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import {
-  BurnBlock,
-  StacksApiWebSocketClient,
-  connectWebSocketClient,
-} from '@stacks/blockchain-api-client';
+import { BurnBlock } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
-import { useGlobalContext } from '../../../../common/context/useAppContext';
-import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocks';
+import { useBlockListContext } from '../BlockListContext';
+import { useBlockListWebSocketUIBlock } from '../Sockets/useBlockListWebSocketUIBlock';
+import { FADE_DURATION } from '../consts';
 import { UIBlock, UIBlockType } from '../types';
-import { FADE_DURATION } from './consts';
-import { useBlockListContext } from './context';
-import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { useInitialBlockList } from './useInitialBlockList';
 
 const createBurnBlockUIBlock = (burnBlock: BurnBlock): UIBlock => ({
@@ -64,7 +55,7 @@ const createUIBlockList = (
 
 export function useBlockList(length: number) {
   const queryClient = useQueryClient();
-  const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
+  const { setBlockListLoading, liveUpdates } = useBlockListContext();
 
   const {
     lastBurnBlock,
@@ -87,22 +78,22 @@ export function useBlockList(length: number) {
     [lastBurnBlock, secondToLastBurnBlock]
   );
 
-  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
+  const { latestBlock, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocketUIBlock(
     initialBlockHashes,
     initialBurnBlockHashes
   );
 
   const updateList = useCallback(
     async function () {
-      setIsUpdateListLoading(true);
+      setBlockListLoading(true);
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['getBlocksByBurnBlock'] }),
         queryClient.invalidateQueries({ queryKey: ['burnBlocks'] }),
       ]);
       clearLatestBlocks();
-      setIsUpdateListLoading(false);
+      setBlockListLoading(false);
     },
-    [clearLatestBlocks, queryClient, setIsUpdateListLoading]
+    [clearLatestBlocks, queryClient, setBlockListLoading]
   );
 
   const prevLiveUpdatesRef = useRef(liveUpdates);
@@ -117,19 +108,19 @@ export function useBlockList(length: number) {
       prevLatestBlocksCountRef.current !== latestBlocksCount;
 
     if (liveUpdatesToggled) {
-      setIsUpdateListLoading(true);
+      setBlockListLoading(true);
       clearLatestBlocks();
       updateList().then(() => {
-        setIsUpdateListLoading(false);
+        setBlockListLoading(false);
       });
     } else if (receivedLatestBlockWhileLiveUpdates && latestBlock) {
       // If latest block belongs to the last burn block, add it to the list, otherwise trigger an update.
       if (latestBlock.burn_block_height === lastBurnBlock.burn_block_height) {
-        setIsUpdateListLoading(true);
+        setBlockListLoading(true);
         setTimeout(() => {
           lastBurnBlockStxBlocks.unshift(latestBlock);
           lastBurnBlock.stacks_blocks.unshift(latestBlock.hash);
-          setIsUpdateListLoading(false);
+          setBlockListLoading(false);
         }, FADE_DURATION);
       } else {
         clearLatestBlocks();
@@ -144,7 +135,7 @@ export function useBlockList(length: number) {
     latestBlocksCount,
     clearLatestBlocks,
     updateList,
-    setIsUpdateListLoading,
+    setBlockListLoading,
     latestBlock,
     lastBurnBlockStxBlocks,
     lastBurnBlock.stacks_blocks,

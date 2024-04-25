@@ -4,16 +4,16 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { useBlockListContext } from '../BlockListContext';
+import { BlockListProvider } from '../BlockListProvider';
+import { useBlockListWebSocketUIBlock } from '../Sockets/useBlockListWebSocketUIBlock';
+import { FADE_DURATION } from '../consts';
 import { UISingleBlock } from '../types';
 import { BlockListWithControls } from './BlockListWithControls';
-import { BlockListProvider } from './Provider';
-import { FADE_DURATION } from './consts';
-import { useBlockListContext } from './context';
-import { useBlockListWebSocket } from './useBlockListWebSocket';
 import { usePaginatedBlockList } from './usePaginatedBlockList';
 
 function PaginatedBlockListLayoutABase() {
-  const { setIsUpdateListLoading, liveUpdates } = useBlockListContext();
+  const { setBlockListLoading, liveUpdates } = useBlockListContext();
   const [latestBlocksToShow, setLatestBlocksToShow] = useState<UISingleBlock[]>([]);
 
   const {
@@ -33,7 +33,7 @@ function PaginatedBlockListLayoutABase() {
     return new Set(Object.keys(initialBurnBlocks));
   }, [initialBurnBlocks]);
 
-  const { latestUIBlocks, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocket(
+  const { latestUIBlocks, latestBlocksCount, clearLatestBlocks } = useBlockListWebSocketUIBlock(
     initialBlockHashes,
     initialBurnBlockHashes
   );
@@ -51,12 +51,12 @@ function PaginatedBlockListLayoutABase() {
   );
 
   const showLatestBlocksWithFadeEffect = useCallback(() => {
-    setIsUpdateListLoading(true);
+    setBlockListLoading(true);
     setTimeout(() => {
       showLatestBlocks();
-      setIsUpdateListLoading(false);
+      setBlockListLoading(false);
     }, FADE_DURATION);
-  }, [setIsUpdateListLoading, showLatestBlocks]);
+  }, [setBlockListLoading, showLatestBlocks]);
 
   const prevLiveUpdatesRef = useRef(liveUpdates);
   const prevLatestBlocksCountRef = useRef(latestBlocksCount);
@@ -70,11 +70,11 @@ function PaginatedBlockListLayoutABase() {
       prevLatestBlocksCountRef.current !== latestBlocksCount;
 
     if (liveUpdatesToggled) {
-      setIsUpdateListLoading(true);
+      setBlockListLoading(true);
       setLatestBlocksToShow([]);
       clearLatestBlocks();
       updateList().then(() => {
-        setIsUpdateListLoading(false);
+        setBlockListLoading(false);
       });
     } else if (receivedLatestBlockWhileLiveUpdates) {
       showLatestBlocksWithFadeEffect();
@@ -88,7 +88,7 @@ function PaginatedBlockListLayoutABase() {
     clearLatestBlocks,
     updateList,
     showLatestBlocksWithFadeEffect,
-    setIsUpdateListLoading,
+    setBlockListLoading,
   ]);
 
   return (

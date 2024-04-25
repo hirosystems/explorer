@@ -6,23 +6,44 @@ import {
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
 import { useApi } from '../api/useApi';
-import { DEFAULT_BURN_BLOCKS_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { ONE_SECOND, TWO_MINUTES } from './query-stale-time';
 
+export const GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY = 'getBlocksByBurnBlock';
+
+export const MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT = 30;
+
+export function useGetStxBlocksByBurnBlockQuery() {
+  const api = useApi();
+
+  return (
+    heightOrHash: string | number,
+    numStxBlocksperBtcBlock: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT
+  ) => ({
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, 'special'],
+    queryFn: () =>
+      api.blocksApi.getBlocksByBurnBlock({
+        heightOrHash,
+        limit: numStxBlocksperBtcBlock,
+      }),
+    staleTime: TWO_MINUTES,
+    cacheTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
+}
+
 export function useBlocksByBurnBlock(
   heightOrHash: string | number,
-  limit: number,
+  limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
   return useInfiniteQuery({
-    queryKey: ['getBlocksByBurnBlock', heightOrHash],
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,
@@ -38,12 +59,13 @@ export function useBlocksByBurnBlock(
 
 export function useSuspenseBlocksByBurnBlock(
   heightOrHash: string | number,
-  limit: number,
-  options: any = {}
+  limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
+  options: any = {},
+  queryKeyExtension?: string
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: ['getBlocksByBurnBlock', heightOrHash],
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, queryKeyExtension],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,

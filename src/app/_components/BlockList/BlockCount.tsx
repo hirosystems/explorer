@@ -3,21 +3,27 @@ import pluralize from 'pluralize';
 import { memo } from 'react';
 import { PiArrowUpRight } from 'react-icons/pi';
 
-import { Circle } from '../../../../common/components/Circle';
-import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
-import { Text } from '../../../../ui/Text';
+import { Circle } from '../../../common/components/Circle';
+import { ExplorerLink } from '../../../common/components/ExplorerLinks';
+import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
+import { Text } from '../../../ui/Text';
 
-export const BlockCount = memo(function ({ count }: { count: number }) {
+export const BlockCount = memo(function ({
+  count,
+  btcBlockHash,
+}: {
+  count: number;
+  btcBlockHash?: string;
+}) {
+  // TODO: remove. use theme
   const bgColor = useColorModeValue('purple.100', 'slate.900');
   const bgColorHover = useColorModeValue('purple.200', 'slate.850');
   const textColor = useColorModeValue('purple.600', 'purple.400');
   const iconColor = useColorModeValue('purple.600', 'purple.200');
-  const circleColor = useColorModeValue('white', 'black');
   return (
-    <Flex ml={-3} pb={4} pt={1}>
-      <ExplorerLink href={'/blocks'}>
+    <Flex py={3}>
+      <ExplorerLink href={btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
         <Text
           display={'flex'}
           color={textColor}
@@ -36,7 +42,7 @@ export const BlockCount = memo(function ({ count }: { count: number }) {
           }}
         >
           +{count} {pluralize('block', count)}
-          <Circle size={4.5} bg={circleColor}>
+          <Circle size={4.5} bg="surface">
             <Icon as={PiArrowUpRight} size={2.5} color={iconColor} />
           </Circle>
         </Text>
