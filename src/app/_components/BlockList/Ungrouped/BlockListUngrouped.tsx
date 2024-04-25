@@ -1,5 +1,5 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { BsArrowReturnLeft } from 'react-icons/bs';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
@@ -18,7 +18,7 @@ import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
 import { ScrollableBox } from '../ScrollableDiv';
-import { FADE_DURATION, mobileBorderCss } from '../consts';
+import { getFadeAnimationStyle, mobileBorderCss } from '../consts';
 import { BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
 
@@ -254,9 +254,8 @@ function StxBlocksGrid({
     <StxBlocksGridLayout minimized={minimized}>
       {minimized ? null : <GroupHeader />}
       {stxBlocks.map((stxBlock, i) => (
-        <>
+        <React.Fragment key={`stx-block-row-${stxBlock.hash}`}>
           <StxBlockRow
-            key={`stx-block-grid-row-${i}-${stxBlock.hash}`}
             height={stxBlock.height}
             hash={stxBlock.hash}
             timestamp={stxBlock.timestamp}
@@ -268,7 +267,7 @@ function StxBlocksGrid({
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
           )}
-        </>
+        </React.Fragment>
       ))}
     </StxBlocksGridLayout>
   );
@@ -307,7 +306,6 @@ function StxBlocksGroupedByBtcBlock({
         <BlockCount count={numStxBlocksNotDisplayed} btcBlockHash={btcBlock.hash} />
       ) : null}
       <BtcBlockRow
-        key={btcBlock.hash}
         hash={btcBlock.hash}
         height={btcBlock.height}
         timestamp={btcBlock.timestamp}
@@ -321,13 +319,7 @@ export function BlockListUngroupedLayout({ children }: { children: ReactNode }) 
   const { isBlockListLoading } = useBlockListContext();
 
   return (
-    <Stack
-      width={'full'}
-      style={{
-        transition: `opacity ${FADE_DURATION / 1000}s`,
-        opacity: isBlockListLoading ? 0 : 1,
-      }}
-    >
+    <Stack width={'full'} style={getFadeAnimationStyle(isBlockListLoading)}>
       {children}
     </Stack>
   );

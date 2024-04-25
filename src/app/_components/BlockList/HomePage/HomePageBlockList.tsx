@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Suspense, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Stack } from '../../../../ui/Stack';
@@ -13,7 +13,7 @@ import { Controls } from '../Controls';
 import { HomePageBlockListGroupedSkeleton } from '../Grouped/skeleton';
 import { HomePageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
 
-const HomePageBlockListGroupedByBtcBlockDynamic = dynamic(
+const HomePageBlockListGroupedDynamic = dynamic(
   () => import('./HomePageBlockListGrouped').then(mod => mod.HomePageBlockListGrouped),
   {
     loading: () => <HomePageBlockListGroupedSkeleton />,
@@ -21,7 +21,7 @@ const HomePageBlockListGroupedByBtcBlockDynamic = dynamic(
   }
 );
 
-const HomePageUngroupedBlockListDynamic = dynamic(
+const HomePageBlockListUngroupedDynamic = dynamic(
   () => import('./HomePageBlockListUngrouped').then(mod => mod.HomePageBlockListUngrouped),
   {
     loading: () => <HomePageBlockListUngroupedSkeleton />,
@@ -61,11 +61,7 @@ function HomePageBlockListBase() {
           border="none"
         />
       </Stack>
-      {groupedByBtc ? (
-        <HomePageBlockListGroupedByBtcBlockDynamic />
-      ) : (
-        <HomePageUngroupedBlockListDynamic />
-      )}
+      {groupedByBtc ? <HomePageBlockListGroupedDynamic /> : <HomePageBlockListUngroupedDynamic />}
     </Section>
   );
 }
@@ -83,9 +79,7 @@ export function HomePageBlockList() {
       tryAgainButton
     >
       <BlockListProvider>
-        <Suspense fallback={<HomePageBlockListGroupedSkeleton />}>
-          <HomePageBlockListBase />
-        </Suspense>
+        <HomePageBlockListBase />
       </BlockListProvider>
     </ExplorerErrorBoundary>
   );

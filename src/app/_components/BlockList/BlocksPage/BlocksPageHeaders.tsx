@@ -102,11 +102,12 @@ export function BlocksPageHeaderLayout({
   lastBlockCard,
   averageStacksBlockTimeCard,
   lastConfirmedBitcoinBlockCard,
+  ...rest
 }: {
   lastBlockCard: ReactNode;
   averageStacksBlockTimeCard: ReactNode;
   lastConfirmedBitcoinBlockCard: ReactNode;
-}) {
+} & React.ComponentProps<typeof Card>) {
   return (
     <Card
       width="full"
@@ -123,6 +124,7 @@ export function BlocksPageHeaderLayout({
           borderRight: 'none',
         },
       }}
+      {...rest}
     >
       {lastBlockCard}
       {averageStacksBlockTimeCard}

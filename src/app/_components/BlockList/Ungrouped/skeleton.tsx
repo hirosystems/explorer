@@ -1,3 +1,4 @@
+import React from 'react';
 import { PiCircleFill } from 'react-icons/pi';
 
 import { Box } from '../../../../ui/Box';
@@ -69,27 +70,23 @@ export function StxBlocksGridSkeleton({
   minimized?: boolean;
 }) {
   return (
-    <StxBlocksGridLayout minimized={minimized}>
-      {minimized ? null : <BlockListGridHeaderRowSkeleton />}
-      {Array.from({ length: numBlocks }).map((_, i) => (
-        <>
-          <BlockListRowSkeleton
-            minimized={minimized}
-            key={`block-list-row-skeleton-${i}`}
-            isLast={i === numBlocks - 1}
-            isFirst={i === 0}
-          />
-          {i < numBlocks - 1 && (
-            <Box
-              key={`block-list-row-border-bottom-${i}`}
-              gridColumn={'1/5'}
-              borderBottom={'1px'}
-              borderColor="borderSecondary"
-            ></Box>
-          )}
-        </>
-      ))}
-    </StxBlocksGridLayout>
+    <Box mt={4}>
+      <StxBlocksGridLayout minimized={minimized}>
+        {minimized ? null : <BlockListGridHeaderRowSkeleton />}
+        {Array.from({ length: numBlocks }).map((_, i) => (
+          <React.Fragment key={`stx-blocks-grid-row-skeleton-${i}`}>
+            <BlockListRowSkeleton
+              minimized={minimized}
+              isLast={i === numBlocks - 1}
+              isFirst={i === 0}
+            />
+            {i < numBlocks - 1 && (
+              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+            )}
+          </React.Fragment>
+        ))}
+      </StxBlocksGridLayout>
+    </Box>
   );
 }
 

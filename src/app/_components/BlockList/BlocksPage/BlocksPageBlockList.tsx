@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Stack } from '../../../../ui/Stack';
@@ -8,7 +8,6 @@ import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListProvider } from '../BlockListProvider';
 import { Controls } from '../Controls';
-import { BlocksPageBlockListGroupedSkeleton } from '../Grouped/skeleton';
 import { BlocksPageBlockListGrouped } from './BlocksPageBlockListGrouped';
 import { BlocksPageBlockListUngrouped } from './BlocksPageBlockListUngrouped';
 
@@ -61,11 +60,9 @@ export function BlocksPageBlockList() {
       }}
       tryAgainButton
     >
-      <Suspense fallback={<BlocksPageBlockListGroupedSkeleton />}>
-        <BlockListProvider>
-          <BlocksPageBlockListBase />
-        </BlockListProvider>
-      </Suspense>
+      <BlockListProvider>
+        <BlocksPageBlockListBase />
+      </BlockListProvider>
     </ExplorerErrorBoundary>
   );
 }

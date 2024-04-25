@@ -1,5 +1,5 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { ReactNode, useCallback, useRef } from 'react';
+import { ReactNode, Suspense, useCallback, useRef } from 'react';
 import { TfiReload } from 'react-icons/tfi';
 
 import { Button } from '../../../ui/Button';
@@ -7,17 +7,11 @@ import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 import { useBlockListContext } from './BlockListContext';
-import { FADE_DURATION } from './consts';
+import { UpdateBarSkeleton } from './Grouped/skeleton';
+import { getFadeAnimationStyle } from './consts';
 import { BlockListData, getApproximateStxBlocksPerMinuteFromBlockList } from './utils';
 
-export function UpdateBarLayout({
-  isBlockListLoading,
-  children,
-  ...rest
-}: {
-  isBlockListLoading: boolean;
-  children: ReactNode;
-}) {
+export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
   const bgColor = useColorModeValue('purple.100', 'slate.900'); // TODO: not in theme. remove
 
   return (
@@ -28,10 +22,6 @@ export function UpdateBarLayout({
       px={6}
       py={2.5}
       gap={1}
-      style={{
-        transition: `opacity ${FADE_DURATION / 1000}s`,
-        opacity: isBlockListLoading ? 0 : 1,
-      }}
       {...rest}
     >
       {children}
@@ -39,7 +29,13 @@ export function UpdateBarLayout({
   );
 }
 
-export function UpdateBar({
+interface UpdateBarProps {
+  blockList?: BlockListData[];
+  onClick: () => void;
+  latestBlocksCount?: number;
+}
+
+export function UpdateBarBase({
   blockList,
   onClick,
   latestBlocksCount,
@@ -62,23 +58,24 @@ export function UpdateBar({
   }, [onClick]);
 
   return (
-    <UpdateBarLayout {...rest} isBlockListLoading={isBlockListLoading}>
+    <UpdateBarLayout {...rest}>
       <Text
         fontSize={'sm'}
         color={textColor}
         textOverflow={'ellipsis'}
         overflow={'hidden'}
         whiteSpace={'nowrap'}
+        fontWeight={700}
+        display={'inline'}
+        style={getFadeAnimationStyle(isBlockListLoading)}
       >
-        <Text display={'inline'} fontWeight={700}>
-          {latestBlocksCount
-            ? latestBlocksCount
-            : blockList
-              ? `~${getApproximateStxBlocksPerMinuteFromBlockList(
-                  blockList
-                )} Stacks blocks mined per min.`
-              : ''}
-        </Text>
+        {latestBlocksCount
+          ? latestBlocksCount
+          : blockList
+            ? `~${getApproximateStxBlocksPerMinuteFromBlockList(
+                blockList
+              )} Stacks blocks mined per min.`
+            : ''}
       </Text>
       <Button variant="text" onClick={update}>
         <Flex alignItems={'center'} gap={1.5}>
@@ -93,5 +90,23 @@ export function UpdateBar({
         </Flex>
       </Button>
     </UpdateBarLayout>
+  );
+}
+
+export function UpdateBar({ // not needed
+  blockList,
+  onClick,
+  latestBlocksCount,
+  ...rest
+}: UpdateBarProps & FlexProps) {
+  return (
+    <Suspense fallback={<UpdateBarSkeleton />}>
+      <UpdateBarBase
+        latestBlocksCount={latestBlocksCount}
+        blockList={blockList}
+        onClick={onClick}
+        {...rest}
+      />
+    </Suspense>
   );
 }

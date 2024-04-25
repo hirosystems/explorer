@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { PiArrowElbowLeftDown } from 'react-icons/pi';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
@@ -18,7 +18,7 @@ import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
 import { LineAndNode } from '../LineAndNode';
 import { ScrollableBox } from '../ScrollableDiv';
-import { FADE_DURATION, mobileBorderCss } from '../consts';
+import { FADE_DURATION, getFadeAnimationStyle, mobileBorderCss } from '../consts';
 import { BlockListBtcBlock, BlockListStxBlock } from '../types';
 import { BlockListData } from '../utils';
 
@@ -71,7 +71,6 @@ const StxBlockRow = ({
         gap={2}
         fontSize="sm"
         sx={mobileBorderCss}
-        key={stxBlock.hash}
         gridColumn="1 / 2"
         alignItems="center"
         zIndex="docked"
@@ -109,7 +108,6 @@ const StxBlockRow = ({
         gap={2}
         fontSize="sm"
         sx={mobileBorderCss}
-        key={stxBlock.hash}
         alignItems="center"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
@@ -172,23 +170,17 @@ export function BurnBlockGroupGrid({
     <BurnBlockGroupGridLayout minimized={minimized}>
       {minimized || stxBlocks.length === 0 ? null : <GroupHeader />}
       {stxBlocks.map((stxBlock, i) => (
-        <>
+        <React.Fragment key={`stx-block-row-${stxBlock.hash}`}>
           <StxBlockRow
-            key={`stx-block-row-${stxBlock.hash}`}
             stxBlock={stxBlock}
             minimized={minimized}
             isFirst={i === 0}
             isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed === 0}
           />
           {i < stxBlocks.length - 1 && (
-            <Box
-              key={`stx-block-row-border-bottom-${stxBlock.hash}`}
-              gridColumn={'1/5'}
-              borderBottom={'1px'}
-              borderColor="borderSecondary"
-            ></Box>
+            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
           )}
-        </>
+        </React.Fragment>
       ))}
     </BurnBlockGroupGridLayout>
   );
@@ -279,7 +271,7 @@ export function BurnBlockGroup({
   }, 0);
   const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
   return (
-    <Box border={'1px'} rounded={'lg'} p={PADDING} key={btcBlock.hash}>
+    <Box border={'1px'} rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />
       <ScrollableBox>
         <BurnBlockGroupGrid
@@ -303,10 +295,7 @@ export function BlockListGroupedLayout({ children }: { children: ReactNode }) {
     <Stack
       gap={4}
       width={'full'}
-      style={{
-        transition: `opacity ${FADE_DURATION / 1000}s`,
-        opacity: isBlockListLoading ? 0 : 1,
-      }}
+      style={getFadeAnimationStyle(isBlockListLoading)}
     >
       {children}
     </Stack>

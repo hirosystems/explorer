@@ -114,12 +114,12 @@ export function BurnBlockGroupSkeleton({
 
 export function BurnBlockGroupListSkeleton({
   numBurnBlockGroupsWithTxs,
-  numTransactionsinBurnBlockGroupWithTxs,
+  numTxsinBurnBlockGroupWithTxs,
   numBurnBlockGroupsWithoutTxs,
   minimized,
 }: {
   numBurnBlockGroupsWithTxs: number;
-  numTransactionsinBurnBlockGroupWithTxs: number;
+  numTxsinBurnBlockGroupWithTxs: number;
   numBurnBlockGroupsWithoutTxs: number;
   minimized?: boolean;
 }) {
@@ -128,7 +128,7 @@ export function BurnBlockGroupListSkeleton({
       {numBurnBlockGroupsWithTxs
         ? Array.from({ length: numBurnBlockGroupsWithTxs }).map((_, i) => (
             <BurnBlockGroupSkeleton
-              numTxs={numTransactionsinBurnBlockGroupWithTxs}
+              numTxs={numTxsinBurnBlockGroupWithTxs}
               key={`burn-block-group-skeleton-with-txs-${i}`}
               minimized={minimized}
             />
@@ -151,7 +151,7 @@ export function HomePageBlockListGroupedSkeleton() {
   return (
     <BurnBlockGroupListSkeleton
       numBurnBlockGroupsWithTxs={3}
-      numTransactionsinBurnBlockGroupWithTxs={3}
+      numTxsinBurnBlockGroupWithTxs={3}
       numBurnBlockGroupsWithoutTxs={0}
       minimized={true}
     />
@@ -162,7 +162,7 @@ export function BlocksPageBlockListGroupedSkeleton() {
   return (
     <BurnBlockGroupListSkeleton
       numBurnBlockGroupsWithTxs={1}
-      numTransactionsinBurnBlockGroupWithTxs={10}
+      numTxsinBurnBlockGroupWithTxs={10}
       numBurnBlockGroupsWithoutTxs={9}
     />
   );
@@ -170,15 +170,15 @@ export function BlocksPageBlockListGroupedSkeleton() {
 
 export function BlockPageHeaderSkeleton() {
   return (
-    <Stack padding="22px 38px" gap={3} alignItems="flex-start" flexWrap="nowrap">
+    <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap" justifyContent="center">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
-        <SkeletonText noOfLines={1} height="14px" />
+        <SkeletonText noOfLines={1} height="14px" skeletonHeight="14px" width={80} />
       </Text>
       <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
-        <SkeletonText noOfLines={1} height="14px" />
+        <SkeletonText noOfLines={1} height="14px" skeletonHeight="14px" width={40} />
       </Text>
       <Text fontSize="xs" fontWeight="medium" color="textSubdued">
-        <SkeletonText noOfLines={1} height="14px" />
+        <SkeletonText noOfLines={1} height="14px" skeletonHeight="14px" width={80} />
       </Text>
     </Stack>
   );
@@ -196,18 +196,16 @@ export function BlockPageHeadersSkeleton() {
 
 function ControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
-    <ControlsLayout horizontal={horizontal}>
-      <Flex gap={2}>
-        <SkeletonItem height={5} width={20} />
-        <SkeletonItem height={5} width={20} />
-      </Flex>
+    <ControlsLayout horizontal={horizontal} gap={3}>
+      <SkeletonItem height={5} width={20} />
+      <SkeletonItem height={5} width={20} />
     </ControlsLayout>
   );
 }
 
-function UpdateBarSkeleton() {
+export function UpdateBarSkeleton() {
   return (
-    <UpdateBarLayout isBlockListLoading={false}>
+    <UpdateBarLayout>
       <Flex justifyContent="space-between" alignItems="center" width="full" height={4}>
         <SkeletonText noOfLines={1} width={40} />
         <SkeletonText noOfLines={1} width={40} />
@@ -222,6 +220,16 @@ export function BlocksPageBlockListSkeleton() {
       <ControlsSkeleton horizontal />
       <UpdateBarSkeleton />
       <BlocksPageBlockListGroupedSkeleton />
+    </Section>
+  );
+}
+
+export function HomePageBlockListSkeleton() {
+  return (
+    <Section>
+      <ControlsSkeleton />
+      <UpdateBarSkeleton />
+      <HomePageBlockListGroupedSkeleton />
     </Section>
   );
 }

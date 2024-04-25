@@ -8,6 +8,7 @@ import { useGlobalContext } from '../common/context/useAppContext';
 import { NetworkModes } from '../common/types/network';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';
+import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
 import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
@@ -24,7 +25,7 @@ const HomePageBlockListDynamic = dynamic(
   () =>
     import('./_components/BlockList/HomePage/HomePageBlockList').then(mod => mod.HomePageBlockList),
   {
-    loading: () => <SkeletonBlockList />,
+    loading: () => <HomePageBlockListSkeleton />,
     ssr: false,
   }
 );

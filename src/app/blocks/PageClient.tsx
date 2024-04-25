@@ -5,10 +5,23 @@ import dynamic from 'next/dynamic';
 
 import { useGlobalContext } from '../../common/context/useAppContext';
 import { NetworkModes } from '../../common/types/network';
-import { BlocksPageHeaders } from '../_components/BlockList/BlocksPage/BlocksPageHeaders';
-import { BlocksPageBlockListSkeleton } from '../_components/BlockList/Grouped/skeleton';
+import {
+  BlockPageHeadersSkeleton,
+  BlocksPageBlockListSkeleton,
+} from '../_components/BlockList/Grouped/skeleton';
 import { SkeletonBlockList } from '../_components/BlockList/SkeletonBlockList';
 import { PageTitle } from '../_components/PageTitle';
+
+const BlocksPageHeadersDynamic = dynamic(
+  () =>
+    import('../_components/BlockList/BlocksPage/BlocksPageHeaders').then(
+      mod => mod.BlocksPageHeaders
+    ),
+  {
+    loading: () => <BlockPageHeadersSkeleton />,
+    ssr: false,
+  }
+);
 
 const BlocksPageBlockListDynamic = dynamic(
   () =>
@@ -56,7 +69,7 @@ const BlocksPage: NextPage = () => {
   return (
     <BlocksPageLayout
       title={isNaka1Testnet ? 'Recent blocks' : 'Blocks'}
-      blocksPageHeaders={isNaka1Testnet ? <BlocksPageHeaders /> : null}
+      blocksPageHeaders={isNaka1Testnet ? <BlocksPageHeadersDynamic /> : null}
       blocksList={
         isNaka1Testnet ? <BlocksPageBlockListDynamic /> : <PaginatedBlockListLayoutADynamic />
       }

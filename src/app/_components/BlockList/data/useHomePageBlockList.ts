@@ -87,7 +87,6 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     updateBlockListWithQuery,
   ]);
 
-  console.log('blockList', blockList);
   return {
     blockList,
     updateBlockList: updateBlockListWithQuery,

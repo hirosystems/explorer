@@ -13,3 +13,7 @@ export const mobileBorderCss = {
     backgroundColor: 'borderPrimary',
   },
 };
+export const getFadeAnimationStyle = (isBlockListLoading: boolean) => ({
+  transition: `opacity ${FADE_DURATION / 1000}s`,
+  opacity: isBlockListLoading ? 0 : 1,
+});

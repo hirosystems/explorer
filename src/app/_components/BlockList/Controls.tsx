@@ -1,4 +1,6 @@
-import { Flex } from '../../../ui/Flex';
+import { ReactNode } from 'react';
+
+import { Flex, FlexProps } from '../../../ui/Flex';
 import { FormControl } from '../../../ui/FormControl';
 import { FormLabel } from '../../../ui/FormLabel';
 import { StackProps } from '../../../ui/Stack';
@@ -16,8 +18,8 @@ export function ControlsLayout({
   ...rest
 }: {
   horizontal?: boolean;
-  children: React.ReactNode;
-}) {
+  children: ReactNode;
+} & FlexProps) {
   return (
     <Flex py={4} direction={horizontal ? ['column', 'row'] : 'column'} {...rest}>
       {children}
