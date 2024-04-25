@@ -292,11 +292,7 @@ export function BlockListGroupedLayout({ children }: { children: ReactNode }) {
   const { isBlockListLoading } = useBlockListContext();
 
   return (
-    <Stack
-      gap={4}
-      width={'full'}
-      style={getFadeAnimationStyle(isBlockListLoading)}
-    >
+    <Stack gap={4} width={'full'} style={getFadeAnimationStyle(isBlockListLoading)}>
       {children}
     </Stack>
   );

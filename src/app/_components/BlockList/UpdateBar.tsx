@@ -93,7 +93,8 @@ export function UpdateBarBase({
   );
 }
 
-export function UpdateBar({ // not needed
+export function UpdateBar({
+  // not needed
   blockList,
   onClick,
   latestBlocksCount,
