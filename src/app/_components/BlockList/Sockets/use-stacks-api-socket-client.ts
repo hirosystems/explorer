@@ -20,6 +20,7 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
       socketClient?.socket.removeAllListeners();
       socketClient?.socket.close();
       setSocketClient(null);
+      isSocketClientConnecting.current = false;
     }
   }, [socketClient]);
 
@@ -38,24 +39,20 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
         client.socket.on('connect', () => {
           setSocketClient(client);
           handleOnConnect?.(client);
-          isSocketClientConnecting.current = false;
         });
         client.socket.on('disconnect', () => {
           client.socket.removeAllListeners();
           client.socket.close();
           disconnect();
-          isSocketClientConnecting.current = false;
         });
         client.socket.on('connect_error', error => {
           client.socket.removeAllListeners();
           client.socket.close();
           disconnect();
-          isSocketClientConnecting.current = false;
           handleError?.(client);
         });
       } catch (error) {
         disconnect();
-        isSocketClientConnecting.current = false;
       }
     },
     [apiUrl, socketClient, disconnect]
