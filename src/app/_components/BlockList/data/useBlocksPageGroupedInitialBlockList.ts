@@ -22,6 +22,15 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
 
+  // Remove duplicates
+  const uniqueBtcBlocks = useMemo(() => {
+    const blockMap = new Map();
+    btcBlocks.forEach(block => {
+      blockMap.set(block.burn_block_hash, block);
+    });
+    return Array.from(blockMap.values());
+  }, [btcBlocks]);
+
   const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
 
   const btcBlocksMap = useBtcBlocksMap(btcBlocks);
@@ -41,7 +50,7 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
 
   const initialBlockList = useMemo(() => {
     const startOfBlockList = generateBlockList(latestBurnBlockStxBlocks, btcBlocksMap);
-    const restOfBlockList = btcBlocks.slice(1).map(block => ({
+    const restOfBlockList = uniqueBtcBlocks.slice(1).map(block => ({
       btcBlock: {
         type: 'btc_block',
         height: block.burn_block_height,
@@ -52,7 +61,7 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
       stxBlocks: [],
     }));
     return [...startOfBlockList, ...restOfBlockList];
-  }, [latestBurnBlockStxBlocks, btcBlocks, btcBlocksMap]);
+  }, [latestBurnBlockStxBlocks, btcBlocksMap, uniqueBtcBlocks]);
 
   return {
     initialStxBlockHashes,
