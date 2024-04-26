@@ -1,13 +1,13 @@
 'use client';
 
-import { openModal } from '@/common/components/modals/modal-slice';
-import { MODALS } from '@/common/constants/constants';
-import { useAppDispatch } from '@/common/state/hooks';
-import { Network } from '@/common/types/network';
 import { useMemo } from 'react';
 import { PiList, PiPlusBold } from 'react-icons/pi';
 
+import { openModal } from '../../../common/components/modals/modal-slice';
+import { MODALS } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useAppDispatch } from '../../../common/state/hooks';
+import { Network } from '../../../common/types/network';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { capitalize } from '../../../common/utils/utils';
