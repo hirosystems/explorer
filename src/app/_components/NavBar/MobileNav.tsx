@@ -8,7 +8,7 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
-import { selectIsStatusBarActive } from '../StatusBar/status-bar-slice';
+import { selectIsStatusBarActive, selectStatusBarHeight } from '../StatusBar/status-bar-slice';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { LabelWrapper } from './LabelWrapper';
@@ -24,8 +24,6 @@ export function MobileNav({
   navItems: NavItem[];
   close: () => void;
 }) {
-  const isStatusBarActive = useAppSelector(selectIsStatusBarActive);
-
   const handleScroll = (event: Event) => {
     event.preventDefault();
   };
@@ -52,7 +50,7 @@ export function MobileNav({
       height="full"
       width="full"
       backgroundColor="surface"
-      top={isStatusBarActive ? '82px' : 0}
+      top={0}
       left={0}
       zIndex={'overlay'}
       padding={6}

@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { ReactNode, forwardRef } from 'react';
 import { BsExclamationCircle, BsExclamationTriangle } from 'react-icons/bs';
 import { IncidentImpact } from 'statuspage.io';
 
@@ -8,10 +8,10 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { getColor } from './utils';
 
-export const StatusBarBase: FC<{ impact: IncidentImpact; content: ReactNode }> = ({
-  content,
-  impact,
-}) => {
+export const StatusBarBase = forwardRef<
+  HTMLDivElement,
+  { impact: IncidentImpact; content: ReactNode }
+>(({ content, impact }, ref) => {
   const icon =
     impact === IncidentImpact.Critical ? (
       <Icon as={BsExclamationCircle} color={getColor(impact)} />
@@ -25,6 +25,7 @@ export const StatusBarBase: FC<{ impact: IncidentImpact; content: ReactNode }> =
       top={'0'}
       backdropFilter={'blur(10px)'}
       zIndex={'banner'}
+      ref={ref}
     >
       <Box
         width={'100%'}
@@ -48,4 +49,4 @@ export const StatusBarBase: FC<{ impact: IncidentImpact; content: ReactNode }> =
       </Box>
     </Box>
   );
-};
+});
