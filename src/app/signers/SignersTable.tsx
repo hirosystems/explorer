@@ -1,5 +1,7 @@
 import { ApiResponseWithResultsOffset } from '@/common/types/api';
+import { Table } from '@/ui/Table';
 import { useColorModeValue } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
 import { ReactNode, useMemo, useState } from 'react';
 
@@ -10,7 +12,6 @@ import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Show } from '../../ui/Show';
-import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
 import { Td } from '../../ui/Td';
 import { Text } from '../../ui/Text';
@@ -23,8 +24,18 @@ import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPow
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 
+const StyledTable = styled(Table)`
+  th {
+    border: none;
+  }
+
+  tr:last-child td {
+    border: none;
+  }
+`;
+
 export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
-  <Th py={3} px={6}>
+  <Th py={3} px={6} border="none">
     <Flex
       bg="dropdownBgHover"
       px={2.5}
@@ -66,15 +77,24 @@ export const SignersTableHeaders = () => (
 
 const SignerTableRow = ({
   index,
+  isFirst,
+  isLast,
   signerKey,
   votingPower,
   stxStaked,
   stackers,
 }: {
   index: number;
+  isFirst: boolean;
+  isLast: boolean;
 } & SignerRowInfo) => {
   return (
-    <Tr>
+    <Tr
+      style={{
+        borderTop: isFirst ? 'none' : '',
+        borderBottom: isLast ? 'none' : '',
+      }}
+    >
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {index}
@@ -144,10 +164,10 @@ export function SignersTableLayout({
       }
     >
       <Box overflowX={'auto'}>
-        <Table width="full">
+        <StyledTable width="full">
           <Thead>{signersTableHeaders}</Thead>
           <Tbody>{signersTableRows}</Tbody>
-        </Table>
+        </StyledTable>
       </Box>
     </Section>
   );
@@ -174,6 +194,9 @@ const SignerTable = () => {
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
   const constantCycleId = 560;
+  // const constantCycleId = currentCycleId;
+  console.log({ constantCycleId });
+
   const {
     data: { results: signers },
   } = useSuspensePoxSigners(constantCycleId);
@@ -202,7 +225,13 @@ const SignerTable = () => {
       numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
       signersTableRows={signers.map((signer, i) => (
-        <SignerTableRow key={`signers=table-row-${i}`} index={i} {...signersData[i]} />
+        <SignerTableRow
+          key={`signers=table-row-${i}`}
+          index={i}
+          {...signersData[i]}
+          isFirst={i === 0}
+          isLast={i === signers.length - 1}
+        />
       ))}
     />
   );

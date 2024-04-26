@@ -1,5 +1,6 @@
 import { TokenPrice } from '@/common/types/tokenPrice';
 import { useColorMode } from '@chakra-ui/react';
+import pluralize from 'pluralize';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { PiArrowDownRightBold, PiArrowRightLight, PiArrowUpRightBold } from 'react-icons/pi';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
@@ -63,6 +64,12 @@ function CurrentCycleCard() {
                 ? 'var(--stacks-colors-purple-200)'
                 : 'var(--stacks-colors-slate-850)'
             }
+            strokeWidth={0.5}
+            stroke={
+              colorMode === 'light'
+                ? 'var(--stacks-colors-purple-200)'
+                : 'var(--stacks-colors-slate-850)'
+            }
           />
           {/* Active 'cycle_progress' segment */}
           <Sector
@@ -74,6 +81,8 @@ function CurrentCycleCard() {
             endAngle={endAngle}
             fill={fill}
             cornerRadius={outerRadius / 5}
+            strokeWidth={0.5}
+            stroke={fill}
           />
         </>
       );
@@ -92,7 +101,7 @@ function CurrentCycleCard() {
         <PieChart width={pieChartWidth} height={pieChartHeight}>
           <defs>
             <linearGradient
-              id={`${gradientId}-light`}
+              id={`${gradientId}-light`} // def for pie chart progress gradient for light mode
               x1="28.1198"
               y1="27.8877"
               x2="8.60376"
@@ -105,7 +114,7 @@ function CurrentCycleCard() {
           </defs>
           <defs>
             <linearGradient
-              id={`${gradientId}-dark`}
+              id={`${gradientId}-dark`} // def for pie chart progress gradient for dark mode
               x1="21.7866"
               y1="25.8877"
               x2="2.27051"
@@ -141,8 +150,14 @@ function CurrentCycleCard() {
                       ? 'var(--stacks-colors-purple-200)'
                       : `url(#${`${gradientId}-${colorMode}`})`
                   }
-                  stroke="none"
-                  strokeWidth={4}
+                  stroke={
+                    entry.name === 'cycle_remaining' && colorMode === 'light'
+                      ? 'var(--stacks-colors-purple-200)'
+                      : entry.name === 'cycle_remaining' && colorMode === 'dark'
+                        ? 'var(--stacks-colors-slate-850)'
+                        : ''
+                  } // Ensure there's no stroke applied, or set it to match the background color
+                  strokeWidth={0.5}
                 />
               );
             })}
@@ -184,7 +199,13 @@ function CurrentCycleCard() {
         </Stack>
       </Flex>
       <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="secondaryText">
-        {`Started ~${approximateDaysSinceCurrentCycleStart} days ago / Ends in ~${approximateDaysTilNextCycle} days`}
+        {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
+          'day',
+          approximateDaysSinceCurrentCycleStart
+        )} ago / Ends in ~${approximateDaysTilNextCycle} ${pluralize(
+          'day',
+          approximateDaysTilNextCycle
+        )}`}
       </Text>
     </Card>
   );
@@ -220,16 +241,6 @@ function StatCardBase({
   );
 }
 
-const mainnetStxSupply = {
-  total: 1818000000.0,
-  unloc: 1454129436.661443,
-  anotherProperty: 'nasdoiuwhfiuwhewife',
-};
-const testnetStxSupply = {
-  total: 1818000000.0,
-  unloc: 41477906609.855454,
-  anotherProperty: 'nasdoiuwhfiuwhewife',
-};
 function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const {
     data: { total_stx, unlocked_stx },
@@ -248,7 +259,15 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
 
   return (
-    <StatCardBase statTitle="STX Stacked" statValue={stxStakedFormatted} moreInfo={moreInfo} />
+    <StatCardBase
+      statTitle="STX Stacked"
+      statValue={stxStakedFormatted}
+      moreInfo={
+        <Text fontSize="xs" fontWeight="medium" color="secondaryText" whiteSpace="nowrap">
+          {moreInfo}
+        </Text>
+      }
+    />
   );
 }
 
@@ -265,22 +284,22 @@ function StxLockedCard() {
   )}B`;
   return (
     <StatCardBase
-      statTitle="Locked"
+      statTitle="Total stacked"
       statValue={stxLockedPercentageFormatted}
-      moreInfo={`/ ${stxCirculatingSupplyInBillions} circulating supply`}
+      moreInfo={`of ${stxCirculatingSupplyInBillions} circulating supply`}
     />
   );
 }
 
 function AddressesStackingCard() {
   const randomStat = Math.floor(Math.random() * 201) - 100; // Random number between -100 and 100 TODO: replace with actual data
-  const randomStatFormatted = `${randomStat}%`;
+  const randomStatFormatted = `${Math.abs(randomStat)}%`;
   const icon = randomStat > 0 ? PiArrowUpRightBold : PiArrowDownRightBold;
   const modifier = randomStat > 0 ? 'more' : 'less';
 
   const moreInfo = (
     <Flex gap={1} alignItems="flex-start" flexWrap="nowrap">
-      <Icon as={icon} size={4} color={randomStat > 0 ? 'success' : 'critical'} />
+      <Icon as={icon} size={4} color={randomStat > 0 ? 'green.600' : 'red.600'} />
       <Text fontSize="xs" fontWeight="medium" color="secondaryText">
         {`${randomStatFormatted} ${modifier} than previous cycle`}
       </Text>
@@ -306,10 +325,17 @@ function NextCycleCard() {
           displayPreparePhaseInfo
             ? approximateDaysTilNextCyclePreparePhase
             : approximateDaysTilNextCycleRewardPhase
-        }
-        at ${nextCycleBurnBlockHeightStart}`}
+        } ${pluralize(
+          'day',
+          displayPreparePhaseInfo
+            ? approximateDaysTilNextCyclePreparePhase
+            : approximateDaysTilNextCycleRewardPhase
+        )}
+        at`}{' '}
+        <Text fontSize="xs" fontWeight="medium" color="secondaryText" whiteSpace="nowrap">
+          <Icon as={BitcoinIcon} size={4.5} /> {`#${nextCycleBurnBlockHeightStart}`}
+        </Text>
       </Text>
-      <Icon as={BitcoinIcon} size={4.5} />
     </Flex>
   );
 
