@@ -103,7 +103,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           )}
         </Flex>
-        <Caption display="block" color="secondaryText" fontWeight="regular" fontSize="sm">
+        <Caption display="block" color="textSubdued" fontWeight="regular" fontSize="sm">
           {network?.url?.includes('//') ? network?.url?.split('//')[1] : network?.url}
         </Caption>
       </Stack>

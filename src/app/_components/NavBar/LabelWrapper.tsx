@@ -11,7 +11,7 @@ export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
       alignItems={'center'}
       borderRadius="xl"
       width="full"
-      {...(isDesktop ? { _hover: { bg: 'dropdownBgHover' } } : {})}
+      {...(isDesktop ? { _hover: { bg: 'hoverBackground' } } : {})}
     >
       {href ? (
         <Link

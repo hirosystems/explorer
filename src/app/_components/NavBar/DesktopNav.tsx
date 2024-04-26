@@ -15,7 +15,7 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
     <Flex gap={6}>
       {navItems.map(navItem => (
         <Flex key={navItem.id} alignItems={'center'}>
-          <Popover trigger={'hover'} placement={'bottom-start'} isLazy isOpen>
+          <Popover trigger={'hover'} placement={'bottom-start'} isLazy>
             <PopoverTrigger>
               <Flex
                 gap={1.5}
@@ -44,7 +44,7 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
               </Flex>
             </PopoverTrigger>
             {navItem.children && (
-              <PopoverContent boxShadow={'xl'} bg="bg" rounded={'xl'} mt={4} width="fit-content" p={2} borderColor='borderSecondary'>
+              <PopoverContent boxShadow={'xl'} bg="surface" rounded={'xl'} mt={4} width="fit-content" p={2} borderColor='borderSecondary'>
                 {navItem.children.map(child => (
                   <LabelWrapper {...child} />
                 ))}
