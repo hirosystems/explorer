@@ -5,6 +5,7 @@ import { ChainID } from '@stacks/transactions';
 
 import { useGlobalContext } from '../../../../common/context/useAppContext';
 import { Network, NetworkModes } from '../../../../common/types/network';
+import { useBreakpointValue } from '../../../../ui/hooks/useBreakpointValue';
 import { NetworkLabel } from '../NetworkLabel';
 
 jest.mock('../../../../common/context/useAppContext', () => ({
@@ -25,6 +26,10 @@ jest.mock('@chakra-ui/react', () => {
 
 jest.mock('@tanstack/react-query', () => ({
   useQuery: jest.fn(),
+}));
+
+jest.mock('../../../../ui/hooks/useBreakpointValue', () => ({
+  useBreakpointValue: jest.fn().mockImplementation(() => (true)),
 }));
 
 const network: Network = {
@@ -66,6 +71,8 @@ describe('NetworkLabel', () => {
       error: null,
       isFetching: false,
     });
+
+    (useBreakpointValue as jest.Mock).mockReturnValue(true);
   });
 
   it('renders spinner while fetching custom network info', () => {
