@@ -1,3 +1,10 @@
+## [1.169.1](https://github.com/hirosystems/explorer/compare/v1.169.0...v1.169.1) (2024-04-26)
+
+
+### Bug Fixes
+
+* **socket-errors:** fixed ([#1598](https://github.com/hirosystems/explorer/issues/1598)) ([73c1505](https://github.com/hirosystems/explorer/commit/73c1505cf741d0f585156c4934cff1ed04ce9256))
+
 # [1.169.0](https://github.com/hirosystems/explorer/compare/v1.168.0...v1.169.0) (2024-04-25)
 
 
