@@ -12,9 +12,11 @@ import { Text } from '../../../ui/Text';
 export const BlockCount = memo(function ({
   count,
   btcBlockHash,
+  isFirst,
 }: {
   count: number;
   btcBlockHash?: string;
+  isFirst?: boolean;
 }) {
   // TODO: remove. use theme
   const bgColor = useColorModeValue('purple.100', 'slate.900');
@@ -23,7 +25,7 @@ export const BlockCount = memo(function ({
   const iconColor = useColorModeValue('purple.600', 'purple.200');
   return (
     <Flex py={3}>
-      <ExplorerLink href={btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
+      <ExplorerLink href={isFirst ? '#' : btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
         <Text
           display={'flex'}
           color={textColor}

@@ -24,7 +24,7 @@ export const StatusBarBase: FC<{ impact: IncidentImpact; content: ReactNode }> =
       width={'100%'}
       top={'0'}
       backdropFilter={'blur(10px)'}
-      zIndex={'docked'}
+      zIndex={'banner'}
     >
       <Box
         width={'100%'}

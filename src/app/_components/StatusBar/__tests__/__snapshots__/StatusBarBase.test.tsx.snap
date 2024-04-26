@@ -2,7 +2,7 @@
 
 exports[`StatusBarBase renders correctly (critical impact) 1`] = `
 <div
-  className="css-lv2dgf"
+  className="css-xksux6"
 >
   <div
     className="css-8vwxnf"
@@ -43,7 +43,7 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
 
 exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
 <div
-  className="css-lv2dgf"
+  className="css-xksux6"
 >
   <div
     className="css-8vwxnf"

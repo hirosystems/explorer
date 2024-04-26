@@ -303,7 +303,11 @@ function StxBlocksGroupedByBtcBlock({
         />
       </ScrollableBox>
       {numStxBlocksNotDisplayed > 0 ? (
-        <BlockCount count={numStxBlocksNotDisplayed} btcBlockHash={btcBlock.hash} />
+        <BlockCount
+          count={numStxBlocksNotDisplayed}
+          btcBlockHash={btcBlock.hash}
+          isFirst={isFirst}
+        />
       ) : null}
       <BtcBlockRow
         hash={btcBlock.hash}
