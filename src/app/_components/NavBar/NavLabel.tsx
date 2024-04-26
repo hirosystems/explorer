@@ -25,7 +25,7 @@ export function NavLabel({ children, icon }: { children: ReactNode; icon?: React
       {...(isDesktop ? desktopNavLabelStyles : mobileNavLabelStyles)}
     >
       {icon}
-      <Text fontWeight={'medium'} fontSize={'sm'} textAlign={'left'} color="text">
+      <Text fontWeight={'regular'} fontSize={'sm'} textAlign={'left'} color="text">
         {children}
       </Text>
     </Flex>

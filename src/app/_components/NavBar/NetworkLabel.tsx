@@ -77,7 +77,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
         cursor={isDisabled ? 'not-allowed' : isActive ? 'unset' : 'pointer'}
       >
         <Flex alignItems="center">
-          <Title display="block" fontSize={'14px'}>
+          <Title display="block" fontSize={'sm'} fontWeight="normal">
             {network.label === 'https://api.nakamoto.testnet.hiro.so'
               ? 'Nakamoto Testnet'
               : network.label}
@@ -88,14 +88,14 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           ) : (
             <Badge
-              color={'purple.600'}
-              bg={'purple.100'}
+              color={colorMode === 'light' ? 'purple.600' : 'pruple.300'}
+              bg={colorMode === 'light' ? 'purple.100' : 'purple.900'}
               px={'2'}
               py={'1'}
               fontSize={'xs'}
               rounded={'full'}
               border={'1px'}
-              borderColor={'purple.300'}
+              borderColor={colorMode === 'light' ? 'purple.300' : 'purple.700'}
               fontWeight={'medium'}
               ml="8px"
             >
@@ -103,7 +103,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           )}
         </Flex>
-        <Caption display="block">
+        <Caption display="block" color="secondaryText" fontWeight="regular" fontSize="sm">
           {network?.url?.includes('//') ? network?.url?.split('//')[1] : network?.url}
         </Caption>
       </Stack>

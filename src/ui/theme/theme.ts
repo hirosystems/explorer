@@ -80,6 +80,10 @@ export const theme = extendTheme({
         default: 'black',
         _dark: 'white',
       },
+      borderSecondary: {
+        default: 'slate.150',
+        _dark: 'slate.900',
+      },
     },
   },
   styles: {
