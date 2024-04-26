@@ -29,7 +29,7 @@ jest.mock('@tanstack/react-query', () => ({
 }));
 
 jest.mock('../../../../ui/hooks/useBreakpointValue', () => ({
-  useBreakpointValue: jest.fn().mockImplementation(() => (true)),
+  useBreakpointValue: jest.fn().mockImplementation(() => true),
 }));
 
 const network: Network = {
