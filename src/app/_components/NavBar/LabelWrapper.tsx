@@ -2,16 +2,16 @@ import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Link } from '../../../ui/Link';
 import { NavItem } from './types';
-import { useIsDesktop } from './utils';
 
 export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
-  const isDesktop = useIsDesktop();
   return (
     <Flex
       alignItems={'center'}
       borderRadius="xl"
       width="full"
-      {...(isDesktop ? { _hover: { bg: 'hoverBackground' } } : {})}
+      _hover={{
+        bg: { base: 'transparent', lg: 'hoverBackground' },
+      }}
     >
       {href ? (
         <Link

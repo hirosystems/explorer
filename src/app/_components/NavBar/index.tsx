@@ -27,12 +27,10 @@ import { NavLabel } from './NavLabel';
 import { NetworkLabel } from './NetworkLabel';
 import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
-import { useIsDesktop } from './utils';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { isOpen, onToggle } = useDisclosure();
   const { networks, activeNetwork } = useGlobalContext();
-  const isDesktop = useIsDesktop();
   const dispatch = useAppDispatch();
 
   const navItems: NavItem[] = useMemo(
@@ -98,25 +96,22 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <Show above="lg">
           <NetworkModeBanner />
         </Show>
-        {isDesktop ? (
-          <>
-            <Flex gap={3}>
-              <ColorModeButton aria-label={'Change color mode'} />
-              <DesktopNav navItems={navItems} />
-            </Flex>
-            <BtcStxPrice tokenPrice={tokenPrice} />
-          </>
-        ) : (
-          <>
-            <IconButton
-              onClick={onToggle}
-              icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
-              variant={'ghost'}
-              aria-label={'Toggle Navigation'}
-            />
-            {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
-          </>
-        )}
+        <Show above="lg">
+          <Flex gap={3}>
+            <ColorModeButton aria-label={'Change color mode'} />
+            <DesktopNav navItems={navItems} />
+          </Flex>
+          <BtcStxPrice tokenPrice={tokenPrice} />
+        </Show>
+        <Show below="lg">
+          <IconButton
+            onClick={onToggle}
+            icon={<Icon as={PiList} w={6} h={6} color={'white'} />}
+            variant={'ghost'}
+            aria-label={'Toggle Navigation'}
+          />
+          {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
+        </Show>
       </Flex>
     </Box>
   );

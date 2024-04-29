@@ -9,7 +9,6 @@ import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { BitcoinIcon, StxIcon } from '../../../ui/icons';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
-import { useIsDesktop } from './utils';
 
 function PriceContainer({
   icon,
@@ -29,13 +28,12 @@ function PriceContainer({
 function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const formattedBtcPrice = tokenPrice.btcPrice ? usdFormatter.format(tokenPrice.btcPrice) : '';
   const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
-  const isDesktop = useIsDesktop();
   return (
     <Flex gap={6} minWidth={'172px'}>
       <PriceContainer
-        icon={<Icon as={BitcoinIcon} size={'18px'} />}
+        icon={<Icon as={BitcoinIcon} size={4.5} />}
         minWidth={'92px'}
-        {...(isDesktop ? {} : { color: 'text' })}
+        color={{ base: 'text', lg: 'initial' }}
       >
         {!formattedBtcPrice ? 'N/A' : formattedBtcPrice}
       </PriceContainer>
@@ -46,7 +44,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </Circle>
         }
         minWidth={'56px'}
-        {...(isDesktop ? {} : { color: 'text' })}
+        color={{ base: 'text', lg: 'initial' }}
       >
         {!formattedStxPrice ? 'N/A' : formattedStxPrice}
       </PriceContainer>

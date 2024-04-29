@@ -1,11 +1,10 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { FC } from 'react';
 import { PiTrash } from 'react-icons/pi';
 import { TbCheck } from 'react-icons/tb';
 
 import { ChainID } from '@stacks/transactions';
 
-import { getNetworkModeFromNetworkId } from '../../../common/api/utils';
 import { Badge } from '../../../common/components/Badge';
 import { DEFAULT_DEVNET_SERVER } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
@@ -19,20 +18,9 @@ import { IconButton } from '../../../ui/IconButton';
 import { Spinner } from '../../../ui/Spinner';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
-import { useBreakpointValue } from '../../../ui/hooks/useBreakpointValue';
 import { Caption, Title } from '../../../ui/typography';
 
-const mobileNetworkLabelStyles = {
-  py: 3,
-};
-
-const desktopNetworkLabelStyles = {
-  p: 3,
-};
-
 export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
-
   const {
     activeNetwork,
     removeCustomNetwork,
@@ -57,15 +45,18 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
     itemNetworkId = data?.network_id && parseInt(data.network_id.toString());
   }
 
-  const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
   const isActive = activeNetwork.url === network.url;
   const networkHref = buildUrl('/', network);
+  const badgeColor = useColorModeValue('purple.600', 'purple.300');
+  const badgeBg = useColorModeValue('purple.100', 'purple.900');
+  const badgeBorder = useColorModeValue('purple.300', 'purple.700');
 
   return (
     <Flex
       justifyContent={'space-between'}
       width={'100%'}
-      {...(isDesktop ? desktopNetworkLabelStyles : mobileNetworkLabelStyles)}
+      py={3}
+      px={{ base: 0, lg: 3 }}
       opacity={isDisabled ? 0.5 : 1}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
       gap={2}
@@ -88,14 +79,14 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           ) : (
             <Badge
-              color={colorMode === 'light' ? 'purple.600' : 'pruple.300'}
-              bg={colorMode === 'light' ? 'purple.100' : 'purple.900'}
+              color={badgeColor}
+              bg={badgeBg}
               px={'2'}
               py={'1'}
               fontSize={'xs'}
               rounded={'full'}
               border={'1px'}
-              borderColor={colorMode === 'light' ? 'purple.300' : 'purple.700'}
+              borderColor={badgeBorder}
               fontWeight={'medium'}
               ml="8px"
             >

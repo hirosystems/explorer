@@ -2,13 +2,11 @@ import { Divider } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { PiX } from 'react-icons/pi';
 
-import { useAppSelector } from '../../../common/state/hooks';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
-import { selectIsStatusBarActive, selectStatusBarHeight } from '../StatusBar/status-bar-slice';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { LabelWrapper } from './LabelWrapper';
