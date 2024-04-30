@@ -15,14 +15,20 @@ import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
 function WrapperWithBg({ children }: { children: ReactNode }) {
   return (
     <Flex
-      maxWidth="100vw"
-      minHeight="100vh"
-      overflowX="hidden"
+      paddingTop={4}
+      px={4}
+      background={'surface'}
       direction="column"
-      position="relative"
-      overflow="hidden"
-      bg={useColorModeValue(
-        `linear-gradient(
+    >
+      <Flex
+        className="header-bg"
+        maxWidth="100vw"
+        minHeight="100vh"
+        overflowX="hidden"
+        position="relative"
+        overflow="hidden"
+        bg={useColorModeValue(
+          `linear-gradient(
                  29.53deg, 
                  #9528F7 2.94%, 
                  #522DE7 39.91%, 
@@ -30,19 +36,20 @@ function WrapperWithBg({ children }: { children: ReactNode }) {
                  #0F102B 93.08%
                ), 
                white`,
-        `linear-gradient(
+          `linear-gradient(
                  29.53deg, 
-                 #9528F7 2.94%, 
-                 #522DE7 39.91%, 
-                 #221A71 76.87%, 
-                 #0F102B 93.08%
+                 rgba(149, 40, 247, 0.5) 2.94%,  
+                 rgba(82, 45, 231, 0.5) 39.91%,   
+                 rgba(34, 26, 113, 0.5) 76.87%,   
+                 rgba(15, 16, 43, 0.5) 93.08%
                ), 
                black`
-      )}
-      bgRepeat="no-repeat, repeat"
-      bgSize="100% 530px, 100% 100%"
-    >
-      {children}
+        )}
+        bgRepeat="no-repeat, repeat"
+        bgSize="100% 530px, 100% 100%"
+      >
+        {children}
+      </Flex>
     </Flex>
   );
 }
