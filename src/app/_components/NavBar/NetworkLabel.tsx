@@ -1,11 +1,10 @@
-import { useColorMode } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { FC } from 'react';
 import { PiTrash } from 'react-icons/pi';
-import { TbCheck, TbTrash } from 'react-icons/tb';
+import { TbCheck } from 'react-icons/tb';
 
 import { ChainID } from '@stacks/transactions';
 
-import { getNetworkModeFromNetworkId } from '../../../common/api/utils';
 import { Badge } from '../../../common/components/Badge';
 import { DEFAULT_DEVNET_SERVER } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useAppContext';
@@ -46,15 +45,18 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
     itemNetworkId = data?.network_id && parseInt(data.network_id.toString());
   }
 
-  const itemNetworkMode = getNetworkModeFromNetworkId(itemNetworkId);
   const isActive = activeNetwork.url === network.url;
   const networkHref = buildUrl('/', network);
+  const badgeColor = useColorModeValue('purple.600', 'purple.300');
+  const badgeBg = useColorModeValue('purple.100', 'purple.900');
+  const badgeBorder = useColorModeValue('purple.300', 'purple.700');
 
   return (
     <Flex
       justifyContent={'space-between'}
       width={'100%'}
-      padding={'15px 0'}
+      py={3}
+      px={{ base: 0, lg: 3 }}
       opacity={isDisabled ? 0.5 : 1}
       cursor={isDisabled ? 'not-allowed' : 'unset'}
       gap={2}
@@ -66,7 +68,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
         cursor={isDisabled ? 'not-allowed' : isActive ? 'unset' : 'pointer'}
       >
         <Flex alignItems="center">
-          <Title display="block" fontSize={'14px'}>
+          <Title display="block" fontSize={'sm'} fontWeight="normal">
             {network.label === 'https://api.nakamoto.testnet.hiro.so'
               ? 'Nakamoto Testnet'
               : network.label}
@@ -77,14 +79,14 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           ) : (
             <Badge
-              color={'purple.600'}
-              bg={'purple.100'}
+              color={badgeColor}
+              bg={badgeBg}
               px={'2'}
               py={'1'}
               fontSize={'xs'}
               rounded={'full'}
               border={'1px'}
-              borderColor={'purple.300'}
+              borderColor={badgeBorder}
               fontWeight={'medium'}
               ml="8px"
             >
@@ -92,7 +94,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           )}
         </Flex>
-        <Caption display="block">
+        <Caption display="block" color="textSubdued" fontWeight="regular" fontSize="sm">
           {network?.url?.includes('//') ? network?.url?.split('//')[1] : network?.url}
         </Caption>
       </Stack>

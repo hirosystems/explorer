@@ -1,30 +1,24 @@
-import React, { FC, ReactNode } from 'react';
-import { PiCaretRight } from 'react-icons/pi';
+import { ReactNode } from 'react';
 
 import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
-export const NavLabel: FC<{ children: ReactNode }> = ({ children }) => (
-  <Flex height={'50px'} alignItems={'center'} color="black">
-    <Text
-      _groupHover={{ textDecoration: 'underline' }}
-      fontWeight={'medium'}
-      fontSize={'xs'}
-      textAlign={'left'}
-    >
-      {children}
-    </Text>
+export function NavLabel({ children, icon }: { children: ReactNode; icon?: ReactNode }) {
+  return (
     <Flex
-      transition={'all .3s ease'}
-      transform={'translateX(-10px)'}
-      opacity={0}
-      _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
-      justify={'flex-end'}
-      align={'center'}
-      flex={1}
+      alignItems={'center'}
+      gap={2}
+      sx={{
+        py: { base: 5, lg: 2 },
+        px: { lg: 3 },
+        height: { lg: 7 },
+        boxSizing: ['border-box', 'border-box', 'border-box', 'content-box'],
+      }}
     >
-      <Icon w={3} h={3} as={PiCaretRight} />
+      {icon}
+      <Text fontWeight={'regular'} fontSize={'sm'} textAlign={'left'} color="text">
+        {children}
+      </Text>
     </Flex>
-  </Flex>
-);
+  );
+}

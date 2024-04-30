@@ -16,7 +16,7 @@ exports[`DesktopNav should render correctly 1`] = `
         id="popover-trigger-:r1:"
       >
         <a
-          class="chakra-link css-uzv5li"
+          class="chakra-link css-1x94c5x"
           href="#"
         >
           Sample Item 1
@@ -42,7 +42,7 @@ exports[`DesktopNav should render correctly 1`] = `
         style="visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;"
       >
         <section
-          class="chakra-popover__content css-1kjb8d7"
+          class="chakra-popover__content css-1yl3xd7"
           id="popover-content-:r1:"
           role="tooltip"
           style="transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.95) translateZ(0);"
@@ -61,7 +61,7 @@ exports[`DesktopNav should render correctly 1`] = `
         id="popover-trigger-:r3:"
       >
         <a
-          class="chakra-link css-yne82k"
+          class="chakra-link css-6qsqed"
           href="#"
         >
           Sample Item 2

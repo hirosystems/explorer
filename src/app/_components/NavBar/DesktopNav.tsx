@@ -7,8 +7,7 @@ import { Link } from '../../../ui/Link';
 import { Popover } from '../../../ui/Popover';
 import { PopoverContent } from '../../../ui/PopoverContent';
 import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Text } from '../../../ui/Text';
-import { DesktopSubNav } from './DesktopSubNav';
+import { LabelWrapper } from './LabelWrapper';
 import { NavItem } from './types';
 
 export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
@@ -33,8 +32,8 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                 <Link
                   href={navItem.href ?? '#'}
                   color={'slate.50'}
-                  fontSize="xs"
-                  fontWeight={'medium'}
+                  fontSize="sm"
+                  fontWeight={'regular'}
                   _hover={{
                     textDecoration: navItem.children ? 'none' : 'underline',
                   }}
@@ -45,12 +44,18 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
               </Flex>
             </PopoverTrigger>
             {navItem.children && (
-              <PopoverContent boxShadow={'xl'} bg={`white`} rounded={'xl'} mt={4}>
-                <Flex direction={'column'}>
-                  {navItem.children.map((child, index) => (
-                    <DesktopSubNav key={child.id} {...child} />
-                  ))}
-                </Flex>
+              <PopoverContent
+                boxShadow={'xl'}
+                bg="surface"
+                rounded={'xl'}
+                mt={4}
+                width="fit-content"
+                p={2}
+                borderColor="borderSecondary"
+              >
+                {navItem.children.map(child => (
+                  <LabelWrapper {...child} />
+                ))}
               </PopoverContent>
             )}
           </Popover>

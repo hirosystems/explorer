@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
@@ -31,7 +30,11 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
   return (
     <Flex gap={6} minWidth={'172px'}>
-      <PriceContainer icon={<Icon as={BitcoinIcon} size={'18px'} />} minWidth={'92px'}>
+      <PriceContainer
+        icon={<Icon as={BitcoinIcon} size={4.5} />}
+        minWidth={'92px'}
+        color={{ base: 'text', lg: 'initial' }}
+      >
         {!formattedBtcPrice ? 'N/A' : formattedBtcPrice}
       </PriceContainer>
       <PriceContainer
@@ -41,6 +44,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </Circle>
         }
         minWidth={'56px'}
+        color={{ base: 'text', lg: 'initial' }}
       >
         {!formattedStxPrice ? 'N/A' : formattedStxPrice}
       </PriceContainer>

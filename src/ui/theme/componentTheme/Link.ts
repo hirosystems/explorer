@@ -11,5 +11,11 @@ export const linkTheme = defineStyleConfig({
         textDecoration: 'none',
       },
     })),
+    noUnderline: defineStyle({
+      textDecoration: 'none',
+      _hover: {
+        textDecoration: 'none',
+      },
+    }),
   },
 });

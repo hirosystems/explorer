@@ -1,20 +1,19 @@
-import { FC } from 'react';
-
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
-import { Icon } from '../../../ui/Icon';
+import { Icon, IconProps } from '../../../ui/Icon';
 import { StxIcon } from '../../../ui/icons';
 
-export const Logo: FC = () => {
+export function Logo({ ...iconProps }: IconProps) {
   return (
     <ExplorerLink href={'/'}>
       <Icon
         as={StxIcon}
-        size="22px"
-        color="white"
+        size={6}
+        fill="bg"
         flexShrink={0}
         aria-label="Homepage"
         title="Stacks Explorer"
+        {...iconProps}
       />
     </ExplorerLink>
   );
-};
+}

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { IncidentImpact } from 'statuspage.io';
 
 import { useGlobalContext } from '../../../common/context/useAppContext';
@@ -9,7 +9,7 @@ import { Flex } from '../../../ui/Flex';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { StatusBarBase } from './StatusBarBase';
-import { setStatusBar } from './status-bar-slice';
+import { setStatusBar, setStatusBarHeight } from './status-bar-slice';
 import { getColor } from './utils';
 
 const incidentImpactSeverity: Record<IncidentImpact, number> = {
@@ -23,18 +23,27 @@ export function IncidentsStatusBar() {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
   const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
   const dispatch = useAppDispatch();
-  const allIncidents = unresolvedIncidentsResponse?.incidents?.map(({ name }) => name).join(' - ');
-  const highestImpact = unresolvedIncidentsResponse?.incidents?.reduce(
-    (acc, { impact }) =>
-      incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
-    IncidentImpact.None
-  );
+  const incidents = unresolvedIncidentsResponse?.incidents;
+  const allIncidents = incidents ? incidents?.map(({ name }) => name).join(' - ') : undefined;
+  const highestImpact = incidents
+    ? incidents.reduce(
+        (acc, { impact }) =>
+          incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
+        IncidentImpact.None
+      )
+    : IncidentImpact.None;
+  const incidentImpact = highestImpact != null && highestImpact !== IncidentImpact.None;
+
+  const statusBarRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (allIncidents || highestImpact) dispatch(setStatusBar(true));
-  }, [allIncidents, highestImpact, dispatch]);
+    if (allIncidents || incidentImpact) {
+      dispatch(setStatusBarHeight(statusBarRef.current?.clientHeight || 0));
+      dispatch(setStatusBar(true));
+    }
+  }, [allIncidents, incidentImpact, dispatch]);
 
-  if (!highestImpact || !allIncidents) return null;
+  if (!incidentImpact || !allIncidents) return null;
 
   const isTestnetUpdate = allIncidents.includes('Testnet Update:');
 
@@ -42,6 +51,7 @@ export function IncidentsStatusBar() {
 
   return (
     <StatusBarBase
+      ref={statusBarRef}
       impact={highestImpact}
       content={
         <Flex>

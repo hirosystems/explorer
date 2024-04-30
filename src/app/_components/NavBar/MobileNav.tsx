@@ -1,21 +1,33 @@
-import { FC, useEffect } from 'react';
+import { Divider } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { PiX } from 'react-icons/pi';
 
-import { useAppSelector } from '../../../common/state/hooks';
+import { TokenPrice } from '../../../common/types/tokenPrice';
 import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
-import { selectIsStatusBarActive } from '../StatusBar/status-bar-slice';
+import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
-import { MobileNavItem } from './MobileNavItem';
+import { LabelWrapper } from './LabelWrapper';
+import { Logo } from './Logo';
 import { NavItem } from './types';
 
-export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navItems, close }) => {
-  const isStatusBarActive = useAppSelector(selectIsStatusBarActive);
-
+export function MobileNav({
+  tokenPrice,
+  navItems,
+  close,
+}: {
+  tokenPrice: TokenPrice;
+  navItems: NavItem[];
+  close: () => void;
+}) {
   const handleScroll = (event: Event) => {
     event.preventDefault();
   };
+
+  const explorerNavItems = navItems.find(navItem => navItem.id === 'explore')?.children;
+  const networkNavItems = navItems.find(navItem => navItem.id === 'network')?.children;
 
   // Disable scrolling when the menu is open
   useEffect(() => {
@@ -36,19 +48,44 @@ export const MobileNav: FC<{ navItems: NavItem[]; close: () => void }> = ({ navI
       height="full"
       width="full"
       backgroundColor="surface"
-      top={isStatusBarActive ? '82px' : 0}
+      top={0}
       left={0}
       zIndex={'overlay'}
       padding={6}
-      gap={6}
+      gap={3}
     >
-      <Flex justifyContent={'space-between'}>
-        <ColorModeButton aria-label={'Change color mode'} color="invert" borderWidth={'1px'} />
-        <IconButton onClick={close} icon={<PiX />} aria-label={'Close menu'} />
+      <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
+        <Logo />
+        <IconButton onClick={close} icon={<Icon as={PiX} size={6} />} aria-label={'Close menu'} />
       </Flex>
-      {navItems.map(navItem => (
-        <MobileNavItem key={navItem.id} {...navItem} />
-      ))}
+      <Flex justifyContent={'space-between'}>
+        <Flex gap={3}>
+          <ColorModeButton
+            aria-label={'Change color mode'}
+            color="invert"
+            borderWidth={'1px'}
+            colorModeOverride="light"
+            borderRadius="xl"
+          />
+          <ColorModeButton
+            aria-label={'Change color mode'}
+            color="invert"
+            borderWidth={'1px'}
+            colorModeOverride="dark"
+            borderRadius="xl"
+          />
+        </Flex>
+        <BtcStxPrice tokenPrice={tokenPrice} />
+      </Flex>
+      <Stack divider={<Divider borderColor="border" />}>
+        {explorerNavItems?.map((navItem, i) => (
+          <>
+            <LabelWrapper {...navItem} />
+            {i === explorerNavItems.length - 1 && <Divider borderColor="border" />}
+          </>
+        ))}
+      </Stack>
+      <Stack spacing={3}>{networkNavItems?.map(navItem => <LabelWrapper {...navItem} />)}</Stack>
     </Stack>
   );
-};
+}

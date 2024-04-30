@@ -1,9 +1,8 @@
 'use client';
 
 import { useQueryClient } from '@tanstack/react-query';
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { FiExternalLink } from 'react-icons/fi';
-import { PiX } from 'react-icons/pi';
 import { RiCloseLine } from 'react-icons/ri';
 import { TbTools } from 'react-icons/tb';
 
@@ -13,12 +12,10 @@ import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
 import { useRandomName } from '../../../common/hooks/useRandomName';
 import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
-import { clearSearchTerm } from '../../../features/search/search-slice';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
-import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Input } from '../../../ui/Input';
 import { InputGroup } from '../../../ui/InputGroup';

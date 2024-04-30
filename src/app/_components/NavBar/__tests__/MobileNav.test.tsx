@@ -28,7 +28,14 @@ describe('MobileNav', () => {
     const mockClose = jest.fn();
 
     const { asFragment } = renderWithReduxProviders(
-      <MobileNav navItems={mockNavItems} close={mockClose} />
+      <MobileNav
+        navItems={mockNavItems}
+        close={mockClose}
+        tokenPrice={{
+          btcPrice: 0,
+          stxPrice: 0,
+        }}
+      />
     );
     expect(asFragment()).toMatchSnapshot();
   });

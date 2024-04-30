@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { PiList } from 'react-icons/pi';
+import { PiList, PiPlusBold } from 'react-icons/pi';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
 import { MODALS } from '../../../common/constants/constants';
@@ -36,25 +36,25 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const navItems: NavItem[] = useMemo(
     () => [
       {
-        id: 'blockchain',
-        label: 'Blockchain',
+        id: 'explore',
+        label: 'Explore',
         children: [
-          {
-            id: 'transactions',
-            label: <NavLabel>Transactions</NavLabel>,
-            href: buildUrl('/transactions', activeNetwork),
-          },
           {
             id: 'blocks',
             label: <NavLabel>Blocks</NavLabel>,
             href: buildUrl('/blocks', activeNetwork),
           },
+          {
+            id: 'tokens',
+            label: <NavLabel>Tokens</NavLabel>,
+            href: buildUrl('/tokens', activeNetwork),
+          },
+          {
+            id: 'transactions',
+            label: <NavLabel>Transactions</NavLabel>,
+            href: buildUrl('/transactions', activeNetwork),
+          },
         ],
-      },
-      {
-        id: 'tokens',
-        label: 'Tokens',
-        href: buildUrl('/tokens', activeNetwork),
       },
       {
         id: 'sandbox',
@@ -73,7 +73,11 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
           }),
           {
             id: 'add-network',
-            label: <NavLabel>Add a network</NavLabel>,
+            label: (
+              <NavLabel icon={<Icon as={PiPlusBold} size={4} color={'text'} />}>
+                Add a network
+              </NavLabel>
+            ),
             onClick: () => {
               dispatch(openModal(MODALS.ADD_NETWORK));
             },
@@ -87,7 +91,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <Box width="full">
       <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
-        <Logo />
+        <Logo color="white" />
         <Search />
         <Show above="lg">
           <NetworkModeBanner />
@@ -106,7 +110,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
             variant={'ghost'}
             aria-label={'Toggle Navigation'}
           />
-          {isOpen && <MobileNav navItems={navItems} close={onToggle} />}
+          {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
         </Show>
       </Flex>
     </Box>
