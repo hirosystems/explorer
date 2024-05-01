@@ -1,4 +1,3 @@
-import { useColorMode } from '@chakra-ui/react';
 import { QrCode, X } from '@phosphor-icons/react';
 import * as React from 'react';
 
@@ -6,7 +5,7 @@ import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { openModal } from '../../../../common/components/modals/modal-slice';
 import { MODALS } from '../../../../common/constants/constants';
-import { useSuspenseAccountBalance } from '../../../../common/queries/useAccountBalance';
+import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
 import { useAppDispatch } from '../../../../common/state/hooks';
 import { hasStxBalance } from '../../../../common/utils/accounts';
 import { microToStacks } from '../../../../common/utils/utils';
@@ -30,10 +29,12 @@ interface StxBalanceProps {
 }
 
 function StxBalanceBase({ address }: StxBalanceProps) {
-  const colorMode = useColorMode().colorMode;
+  const [qrShowing, setQrShowing] = React.useState(false);
   const dispatch = useAppDispatch();
-  const { data: balance } = useSuspenseAccountBalance(address);
+  const { data: balance } = useAccountBalance(address);
   const tokenOfferingData = balance?.token_offering_locked;
+
+  if (!balance) return null;
 
   const stxBalance =
     typeof parseInt(balance?.stx?.balance) === 'number' ? parseInt(balance?.stx?.balance) : 0;
@@ -50,7 +51,6 @@ function StxBalanceBase({ address }: StxBalanceProps) {
   const minerRewardsBalance = microToStacks(minerRewards);
   const isStacking = locked > 0;
 
-  const [qrShowing, setQrShowing] = React.useState(false);
   const toggleViewQrCode = () => setQrShowing(v => !v);
 
   const TopRight = (

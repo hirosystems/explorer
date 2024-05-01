@@ -263,7 +263,7 @@ export const Events: FC<EventsProps> = ({ tx }) => {
     enabled: tx.event_count > tx.events.length,
   });
 
-  if (tx.event_count === 0) return null;
+  if (tx.event_count === 0 || actions.isLoading) return null;
 
   return (
     <Section title="Events">

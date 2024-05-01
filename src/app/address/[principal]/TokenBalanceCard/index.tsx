@@ -1,13 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { Section } from '../../../../common/components/Section';
-import { useSuspenseAccountBalance } from '../../../../common/queries/useAccountBalance';
-import { useSuspenseNftHoldings } from '../../../../common/queries/useNftHoldings';
+import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
+import { useNftHoldings } from '../../../../common/queries/useNftHoldings';
 import { hasTokenBalance } from '../../../../common/utils/accounts';
 import { hexToString } from '../../../../common/utils/utils';
 import { Tab } from '../../../../ui/Tab';
@@ -24,8 +24,9 @@ interface TokenBalanceCardProps {
 }
 
 function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
-  const { data: balance } = useSuspenseAccountBalance(address);
-  const { data: nftHoldings } = useSuspenseNftHoldings(address, { refetchOnWindowFocus: true });
+  const { data: balance } = useAccountBalance(address);
+  const { data: nftHoldings } = useNftHoldings(address, { refetchOnWindowFocus: true });
+
   const bnsHexValues = useMemo(
     () =>
       nftHoldings?.results
@@ -49,7 +50,7 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
     [nftHoldings]
   );
 
-  if (!hasTokenBalance(balance)) return null;
+  if (!balance || !hasTokenBalance(balance)) return null;
 
   return (
     <Section title="Holdings" {...rest}>

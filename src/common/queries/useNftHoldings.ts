@@ -5,6 +5,24 @@ import { NonFungibleTokenHoldingsList } from '@stacks/stacks-blockchain-api-type
 import { useApi } from '../api/useApi';
 import { ONE_MINUTE } from './query-stale-time';
 
+export const useNftHoldings = (
+  address?: string,
+  options: any = {}
+): UseSuspenseQueryResult<NonFungibleTokenHoldingsList> => {
+  const api = useApi();
+  return useSuspenseQuery({
+    queryKey: ['nftHoldings', address],
+    queryFn: () =>
+      api.nonFungibleTokensApi.getNftHoldings({
+        principal: address!,
+        limit: 200,
+      }),
+    staleTime: ONE_MINUTE,
+    enabled: !!address,
+    ...options,
+  });
+};
+
 export const useSuspenseNftHoldings = (
   address?: string,
   options: any = {}
