@@ -1,3 +1,10 @@
+## [1.170.1](https://github.com/hirosystems/explorer/compare/v1.170.0...v1.170.1) (2024-05-01)
+
+
+### Bug Fixes
+
+* performance issues ([eaa84e1](https://github.com/hirosystems/explorer/commit/eaa84e1da3e612b1a7a87b6f8c198b6afafe5322))
+
 # [1.170.0](https://github.com/hirosystems/explorer/compare/v1.169.1...v1.170.0) (2024-04-29)
 
 
