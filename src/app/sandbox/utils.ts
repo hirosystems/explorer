@@ -6,7 +6,7 @@ import {
   ClarityValue,
   cvToString,
   deserializeCV,
-  encodeClarityValue,
+  encodeAbiClarityValue,
   isClarityAbiOptional,
   isClarityAbiTuple,
   noneCV,
@@ -39,7 +39,7 @@ export const encodeTuple = (
   const tupleData = tuple.reduce(
     (acc, tupleEntry) => {
       const _type = tupleEntry.type;
-      acc[tupleEntry.name] = encodeClarityValue(_type, value[tupleEntry.name].toString());
+      acc[tupleEntry.name] = encodeAbiClarityValue(value[tupleEntry.name].toString(), _type);
       return acc;
     },
     {} as Record<string, ClarityValue>
@@ -52,7 +52,7 @@ export const encodeOptional = (
   value: NonTupleValueType
 ): ClarityValue => {
   if (value) {
-    return someCV(encodeClarityValue(optionalType, value.toString()));
+    return someCV(encodeAbiClarityValue(value.toString(), optionalType));
   } else {
     return noneCV();
   }
