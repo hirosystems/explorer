@@ -1,3 +1,10 @@
+## [1.170.2](https://github.com/hirosystems/explorer/compare/v1.170.1...v1.170.2) (2024-05-03)
+
+
+### Bug Fixes
+
+* replace encodeClarityValue with encodeAbiClarityValue ([#1608](https://github.com/hirosystems/explorer/issues/1608)) ([42238b9](https://github.com/hirosystems/explorer/commit/42238b94ebfea94ffaea07ca1d50f51538556922))
+
 ## [1.170.1](https://github.com/hirosystems/explorer/compare/v1.170.0...v1.170.1) (2024-05-01)
 
 
