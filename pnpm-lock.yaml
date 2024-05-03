@@ -76,8 +76,8 @@ importers:
         specifier: 7.10.0
         version: 7.10.0
       '@stacks/common':
-        specifier: 6.13.0
-        version: 6.13.0
+        specifier: 6.15.1-pr.0bcf867e.0+0bcf867e
+        version: 6.15.1-pr.0bcf867e.0
       '@stacks/connect':
         specifier: 7.7.1
         version: 7.7.1
@@ -91,8 +91,8 @@ importers:
         specifier: 6.13.0
         version: 6.13.0
       '@stacks/transactions':
-        specifier: 6.15.0
-        version: 6.15.0
+        specifier: 6.15.1-pr.0bcf867e.0+0bcf867e
+        version: 6.15.1-pr.0bcf867e.0
       '@tanstack/react-query':
         specifier: 5.8.4
         version: 5.8.4(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -2019,6 +2019,12 @@ packages:
   '@stacks/common@6.13.0':
     resolution: {integrity: sha512-wwzyihjaSdmL6NxKvDeayy3dqM0L0Q2sawmdNtzJDi0FnXuJGm5PeapJj7bEfcI9XwI7Bw5jZoC6mCn9nc5YIw==}
 
+  '@stacks/common@6.15.1-pr.0bcf867e.0':
+    resolution: {integrity: sha512-IN9mULbKdP0GLQxuGoiu29AbtyAgXuFsh2/3wbfmMcAWrXSsOfe7zCNpOQoyY897beyM9ORrsRBidII1HD2SvA==}
+
+  '@stacks/common@6.15.1-pr.e36e2015.5':
+    resolution: {integrity: sha512-TMpyBvtYU/Irc9u9PDb8mqKSQHVgGQKIZvzZF58Rg60xQ038bJ8JEqmxrGnP5sEPbyUEBH3BX5fcvkRCokww6g==}
+
   '@stacks/connect-react@22.4.2':
     resolution: {integrity: sha512-7hYKFyOzhbbCsrinXDjgcEps960s0b/iVGddf7sruDg3RLHwK8R6og2fHw9KovZ/UrZT3nZKjA/DNnK0pV/vmA==}
     peerDependencies:
@@ -2045,6 +2051,9 @@ packages:
   '@stacks/network@6.13.0':
     resolution: {integrity: sha512-Ss/Da4BNyPBBj1OieM981fJ7SkevKqLPkzoI1+Yo7cYR2df+0FipIN++Z4RfpJpc8ne60vgcx7nJZXQsiGhKBQ==}
 
+  '@stacks/network@6.15.1-pr.e36e2015.5':
+    resolution: {integrity: sha512-lk7YnXi6B/ycTvLlZdoPUv1nStTxhNfZ46IEu/eTYBdXYbw0c8JdNT62GEyaAYyXnxg/MFKNqGxRgJp2oYArsg==}
+
   '@stacks/prettier-config@0.0.10':
     resolution: {integrity: sha512-MrYWGEgO/mYR8TOZIKknQEHbFQZ5VyAD/s8eF2Yxr6Lgalt2alVEh+6ODehVP2uepkyXPmJzLbaQYs8/L4E78Q==}
 
@@ -2062,6 +2071,9 @@ packages:
 
   '@stacks/transactions@6.15.0':
     resolution: {integrity: sha512-P6XKDcqqycPy+KBJBw8+5N+u57D8moJN7msYdde1gYXERmvOo9ht/MNREWWQ7SAM7Nlhau5mpezCdYCzXOCilQ==}
+
+  '@stacks/transactions@6.15.1-pr.0bcf867e.0':
+    resolution: {integrity: sha512-F5ByS04/btEAC7FnBmUMAp6SrhO43FweuLclr/cfzMu1kHLgGkhqASB8vkazsFH1SWEISRLoeQ/fxwIw1ItMjA==}
 
   '@stencil/core@2.22.3':
     resolution: {integrity: sha512-kmVA0M/HojwsfkeHsifvHVIYe4l5tin7J5+DLgtl8h6WWfiMClND5K3ifCXXI2ETDNKiEk21p6jql3Fx9o2rng==}
@@ -8215,6 +8227,16 @@ snapshots:
       '@types/bn.js': 5.1.5
       '@types/node': 18.18.12
 
+  '@stacks/common@6.15.1-pr.0bcf867e.0':
+    dependencies:
+      '@types/bn.js': 5.1.5
+      '@types/node': 18.18.12
+
+  '@stacks/common@6.15.1-pr.e36e2015.5':
+    dependencies:
+      '@types/bn.js': 5.1.5
+      '@types/node': 18.18.12
+
   '@stacks/connect-react@22.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@stacks/connect': 7.7.1
@@ -8275,6 +8297,13 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  '@stacks/network@6.15.1-pr.e36e2015.5':
+    dependencies:
+      '@stacks/common': 6.15.1-pr.e36e2015.5
+      cross-fetch: 3.1.8
+    transitivePeerDependencies:
+      - encoding
+
   '@stacks/prettier-config@0.0.10':
     dependencies:
       prettier: 2.5.1
@@ -8311,6 +8340,17 @@ snapshots:
       '@noble/secp256k1': 1.7.1
       '@stacks/common': 6.13.0
       '@stacks/network': 6.13.0
+      c32check: 2.0.0
+      lodash.clonedeep: 4.5.0
+    transitivePeerDependencies:
+      - encoding
+
+  '@stacks/transactions@6.15.1-pr.0bcf867e.0':
+    dependencies:
+      '@noble/hashes': 1.1.5
+      '@noble/secp256k1': 1.7.1
+      '@stacks/common': 6.15.1-pr.0bcf867e.0
+      '@stacks/network': 6.15.1-pr.e36e2015.5
       c32check: 2.0.0
       lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
