@@ -8,7 +8,7 @@ import { openContractCall } from '@stacks/connect';
 import {
   ClarityAbiFunction,
   ClarityValue,
-  encodeClarityValue,
+  encodeAbiClarityValue,
   isClarityAbiList,
   isClarityAbiOptional,
   isClarityAbiPrimitive,
@@ -129,16 +129,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             const listData = listValues.map(listValue =>
               listTuple
                 ? encodeTuple(listTuple, listValue as TupleValueType)
-                : encodeClarityValue(
-                    optionalListType || listType,
-                    (listValue as NonTupleValueType).toString()
+                : encodeAbiClarityValue(
+                  (listValue as NonTupleValueType).toString(),
+                  optionalListType || listType
                   )
             );
             final[arg] = listCV(listData);
           } else if (optionalType) {
             final[arg] = encodeOptional(optionalType, values[arg] as NonTupleValueType);
           } else {
-            final[arg] = encodeClarityValue(type, (values[arg] as NonTupleValueType).toString());
+            final[arg] = encodeAbiClarityValue((values[arg] as NonTupleValueType).toString(), type);
           }
         });
         if (fn.access === 'public') {
