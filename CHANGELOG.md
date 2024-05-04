@@ -1,3 +1,10 @@
+## [1.170.3](https://github.com/hirosystems/explorer/compare/v1.170.2...v1.170.3) (2024-05-04)
+
+
+### Bug Fixes
+
+* **price-text:** fixed color of price txt ([#1609](https://github.com/hirosystems/explorer/issues/1609)) ([388e5a6](https://github.com/hirosystems/explorer/commit/388e5a6ea304d778be35ae9758d5f7abf94cd3c0))
+
 ## [1.170.2](https://github.com/hirosystems/explorer/compare/v1.170.1...v1.170.2) (2024-05-03)
 
 
