@@ -34,7 +34,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
       <PriceContainer
         icon={<Icon as={BitcoinIcon} size={4.5} />}
         minWidth={'92px'}
-        color={{ base: 'text', lg: 'initial' }}
+        color={{ base: 'text', lg: 'slate.50' }}
       >
         {!formattedBtcPrice ? 'N/A' : formattedBtcPrice}
       </PriceContainer>
@@ -45,7 +45,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </Circle>
         }
         minWidth={'56px'}
-        color={{ base: 'text', lg: 'initial' }}
+        color={{ base: 'text', lg: 'slate.50' }}
       >
         {!formattedStxPrice ? 'N/A' : formattedStxPrice}
       </PriceContainer>
