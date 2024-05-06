@@ -130,8 +130,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
               listTuple
                 ? encodeTuple(listTuple, listValue as TupleValueType)
                 : encodeAbiClarityValue(
-                  (listValue as NonTupleValueType).toString(),
-                  optionalListType || listType
+                    (listValue as NonTupleValueType).toString(),
+                    optionalListType || listType
                   )
             );
             final[arg] = listCV(listData);
