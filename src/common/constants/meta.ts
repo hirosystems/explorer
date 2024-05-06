@@ -22,10 +22,10 @@ export const meta: Metadata = {
     creator: '@stacks',
     images: '/StacksExplorer-OG.jpg',
   },
-  icons: {
-    icon: {
-      type: 'image/svg+xml',
-      url: '/static/favicon.png',
-    },
-  },
+  // icons: {
+  //   icon: {
+  //     type: 'image/svg+xml',
+  //     url: '/static/favicon.png',
+  //   },
+  // },
 };

@@ -12,7 +12,7 @@ import { menuTheme } from './componentTheme/Menu';
 import { switchTheme } from './componentTheme/Switch';
 import { tabTheme } from './componentTheme/Tab';
 import { tagTheme } from './componentTheme/Tag';
-import { inter, openSauce } from './fonts';
+import { inter } from './fonts';
 
 export const theme = extendTheme({
   config: {
@@ -95,7 +95,7 @@ export const theme = extendTheme({
   },
   fonts: {
     body: inter.style.fontFamily,
-    heading: openSauce.style.fontFamily,
+    // heading: openSauce.style.fontFamily,
   },
   fontWeights: {
     medium: 500,
