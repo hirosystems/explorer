@@ -1,3 +1,10 @@
+# [1.171.0](https://github.com/hirosystems/explorer/compare/v1.170.3...v1.171.0) (2024-05-06)
+
+
+### Features
+
+* add build args for browser variables ([714131e](https://github.com/hirosystems/explorer/commit/714131e9dd4a57f4643f1a14a64d5c52874e9be5))
+
 ## [1.170.3](https://github.com/hirosystems/explorer/compare/v1.170.2...v1.170.3) (2024-05-04)
 
 
