@@ -1,3 +1,11 @@
+## [1.171.1](https://github.com/hirosystems/explorer/compare/v1.171.0...v1.171.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* lint ([51c98d2](https://github.com/hirosystems/explorer/commit/51c98d251c0b88676d36d370cb0557fe2668413d))
+* package.json to reduce vulnerabilities ([b63f0b6](https://github.com/hirosystems/explorer/commit/b63f0b6c2a6023d8bf312f4a63380bec8d79e5a7))
+
 # [1.171.0](https://github.com/hirosystems/explorer/compare/v1.170.3...v1.171.0) (2024-05-06)
 
 
