@@ -1,3 +1,10 @@
+## [1.171.2](https://github.com/hirosystems/explorer/compare/v1.171.1...v1.171.2) (2024-05-06)
+
+
+### Bug Fixes
+
+* google analytics loading ([1bc299a](https://github.com/hirosystems/explorer/commit/1bc299a547285715f14d0d0b411f24bb76677bae))
+
 ## [1.171.1](https://github.com/hirosystems/explorer/compare/v1.171.0...v1.171.1) (2024-05-06)
 
 
