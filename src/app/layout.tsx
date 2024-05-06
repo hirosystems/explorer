@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { ReactNode } from 'react';
@@ -10,7 +11,6 @@ import {
   NetworkModeUrlMap,
 } from '../common/constants/network';
 import { AppContextProvider } from '../common/context/GlobalContext';
-import { GA } from './_components/GA';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getTokenPrice } from './getTokenPriceInfo';
@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </Providers>
         </AppContextProvider>
       </body>
-      <GA />
+      <GoogleAnalytics gaId="G-NB2VBT0KY2" />
     </html>
   );
 }
