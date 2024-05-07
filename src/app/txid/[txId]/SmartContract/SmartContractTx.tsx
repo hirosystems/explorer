@@ -5,10 +5,7 @@ import {
   SmartContractTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import {
-  useContractById,
-  useSuspenseContractById,
-} from '../../../../common/queries/useContractById';
+import { useContractById } from '../../../../common/queries/useContractById';
 import { getTxContractId } from '../../../../common/utils/utils';
 import { AddressTxListTabs } from '../../../../features/txs-list/tabs/AddressTxListTabs';
 import { PostConditions } from '../PostConditions';
