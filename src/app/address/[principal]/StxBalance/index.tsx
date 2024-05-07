@@ -1,4 +1,3 @@
-import { useColorMode } from '@chakra-ui/react';
 import { QrCode, X } from '@phosphor-icons/react';
 import * as React from 'react';
 
@@ -6,7 +5,7 @@ import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { openModal } from '../../../../common/components/modals/modal-slice';
 import { MODALS } from '../../../../common/constants/constants';
-import { useSuspenseAccountBalance } from '../../../../common/queries/useAccountBalance';
+import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
 import { useAppDispatch } from '../../../../common/state/hooks';
 import { hasStxBalance } from '../../../../common/utils/accounts';
 import { microToStacks } from '../../../../common/utils/utils';
@@ -30,19 +29,22 @@ interface StxBalanceProps {
 }
 
 function StxBalanceBase({ address }: StxBalanceProps) {
-  const colorMode = useColorMode().colorMode;
   const dispatch = useAppDispatch();
-  const { data: balance } = useSuspenseAccountBalance(address);
+  const { data: balance } = useAccountBalance(address);
   const tokenOfferingData = balance?.token_offering_locked;
 
   const stxBalance =
-    typeof parseInt(balance?.stx?.balance) === 'number' ? parseInt(balance?.stx?.balance) : 0;
+    typeof parseInt(balance?.stx?.balance || '0') === 'number'
+      ? parseInt(balance?.stx?.balance || '0')
+      : 0;
   const minerRewards =
-    typeof parseInt(balance?.stx?.total_miner_rewards_received) === 'number'
-      ? parseInt(balance?.stx?.total_miner_rewards_received)
+    typeof parseInt(balance?.stx?.total_miner_rewards_received || '0') === 'number'
+      ? parseInt(balance?.stx?.total_miner_rewards_received || '0')
       : 0;
   const locked =
-    typeof parseInt(balance?.stx?.locked) === 'number' ? parseInt(balance?.stx?.locked) : 0;
+    typeof parseInt(balance?.stx?.locked || '0') === 'number'
+      ? parseInt(balance?.stx?.locked || '0')
+      : 0;
   const tokenOfferingLocked = parseInt(tokenOfferingData?.total_locked || '0');
   const totalBalance = microToStacks(stxBalance + tokenOfferingLocked);
   const availableBalance = microToStacks(stxBalance - locked);
@@ -125,7 +127,7 @@ function StxBalanceBase({ address }: StxBalanceProps) {
                 <Caption>Stacked amount (locked)</Caption>
                 <BalanceItem balance={stackedBalance} />
               </Stack>
-              <StackingPercentage balance={balance} address={address} />
+              {!!balance && <StackingPercentage balance={balance} address={address} />}
             </Box>
           ) : null}
         </Stack>
