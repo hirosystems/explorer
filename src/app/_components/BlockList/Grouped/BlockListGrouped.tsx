@@ -210,23 +210,29 @@ function BitcoinHeader({
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
         <Icon as={ArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
         <Icon as={BitcoinIcon} size={4.5} />
-        <ExplorerLink
-          fontSize="sm"
-          color={'textSubdued'}
-          href={isFirst ? '#' : `/btcblock/${btcBlock.hash}`}
-        >
-          #{btcBlock.height}
-        </ExplorerLink>
+        {isFirst ? (
+          <Text fontSize="sm" color={'textSubdued'}>
+            {btcBlock.height}
+          </Text>
+        ) : (
+          <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>
+            #{btcBlock.height}
+          </ExplorerLink>
+        )}
       </Flex>
       <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
-        <ExplorerLink
-          fontSize="xs"
-          color={'textSubdued'}
-          href={isFirst ? '#' : `/btcblock/${btcBlock.hash}`}
-          whiteSpace={'nowrap'}
-        >
-          {truncateMiddle(btcBlock.hash, 6)}
-        </ExplorerLink>
+        {isFirst ? (
+          <Text fontSize="xs" color={'textSubdued'} whiteSpace={'nowrap'}>
+            {truncateMiddle(btcBlock.hash, 6)}
+          </Text>
+        ) : (
+          <ExplorerLink
+            fontSize="xs"
+            color={'textSubdued'}
+            href={`/btcblock/${btcBlock.hash}`}
+            whiteSpace={'nowrap'}
+          ></ExplorerLink>
+        )}
         <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
       </HStack>
     </Flex>
