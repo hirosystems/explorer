@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
 import { memo, useMemo } from 'react';
-import { ArrowUpRight } from '@phosphor-icons/react';
 
 import { Circle } from '../../../common/components/Circle';
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
