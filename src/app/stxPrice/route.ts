@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
 
   if (!blockBurnTime || blockBurnTime === 'current') {
     const response = await fetch('https://lunarcrush.com/api4/public/coins/stx/v1', {
+      next: { revalidate: 10 * 60 }, // Revalidate every 10 minutes
       headers: {
         Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
       },
