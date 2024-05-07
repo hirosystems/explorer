@@ -1,3 +1,10 @@
+## [1.172.1](https://github.com/hirosystems/explorer/compare/v1.172.0...v1.172.1) (2024-05-07)
+
+
+### Bug Fixes
+
+* **blocklist-links:** removed link styling 4 1st btc blk ([#1605](https://github.com/hirosystems/explorer/issues/1605)) ([0b63a43](https://github.com/hirosystems/explorer/commit/0b63a4348fb1cf42f05ca014b16babd23727629e))
+
 # [1.172.0](https://github.com/hirosystems/explorer/compare/v1.171.2...v1.172.0) (2024-05-07)
 
 
