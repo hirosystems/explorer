@@ -1,3 +1,10 @@
+# [1.174.0](https://github.com/hirosystems/explorer/compare/v1.173.0...v1.174.0) (2024-05-07)
+
+
+### Features
+
+* parallelize tx page requests fast follow ([0e9bf14](https://github.com/hirosystems/explorer/commit/0e9bf14201b63125bb57efc241221d1c91112573))
+
 # [1.173.0](https://github.com/hirosystems/explorer/compare/v1.172.1...v1.173.0) (2024-05-07)
 
 
