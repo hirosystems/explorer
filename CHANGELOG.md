@@ -1,3 +1,10 @@
+# [1.172.0](https://github.com/hirosystems/explorer/compare/v1.171.2...v1.172.0) (2024-05-07)
+
+
+### Features
+
+* token price caching ([2810f2e](https://github.com/hirosystems/explorer/commit/2810f2e17bb4aa275a445a8dd16b61d08a45495f))
+
 ## [1.171.2](https://github.com/hirosystems/explorer/compare/v1.171.1...v1.171.2) (2024-05-06)
 
 
