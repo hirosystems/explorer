@@ -6,7 +6,10 @@ import { Fragment, useMemo } from 'react';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { Section } from '../../../../common/components/Section';
-import { useSuspenseAccountBalance } from '../../../../common/queries/useAccountBalance';
+import {
+  useAccountBalance,
+  useSuspenseAccountBalance,
+} from '../../../../common/queries/useAccountBalance';
 import { useSuspenseNftHoldings } from '../../../../common/queries/useNftHoldings';
 import { hasTokenBalance } from '../../../../common/utils/accounts';
 import { hexToString } from '../../../../common/utils/utils';
@@ -24,7 +27,7 @@ interface TokenBalanceCardProps {
 }
 
 function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
-  const { data: balance } = useSuspenseAccountBalance(address);
+  const { data: balance } = useAccountBalance(address);
   const { data: nftHoldings } = useSuspenseNftHoldings(address, { refetchOnWindowFocus: true });
   const bnsHexValues = useMemo(
     () =>
@@ -59,11 +62,11 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
           <Tab>Collectibles</Tab>
         </TabList>
         <TabPanels>
+          <TabPanel gap={0}>{!!balance && <FtBalance balance={balance} />}</TabPanel>
           <TabPanel gap={0}>
-            <FtBalance balance={balance} />
-          </TabPanel>
-          <TabPanel gap={0}>
-            <NftBalance balance={balance} nftHoldings={nftHoldings} bnsHexValues={bnsHexValues} />
+            {!!balance && (
+              <NftBalance balance={balance} nftHoldings={nftHoldings} bnsHexValues={bnsHexValues} />
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>
