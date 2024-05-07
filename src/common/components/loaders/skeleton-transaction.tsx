@@ -15,6 +15,8 @@ import { Section } from '../Section';
 import { TwoColumnPage } from '../TwoColumnPage';
 import { TwoColsListItem } from '../TwoColumnsListItem';
 import { Value } from '../Value';
+import { RightBoxSkeleton } from './RightBox';
+import { randomWidth } from './consts';
 
 export const SkeletonBlock = () => (
   <TwoColsListItem
@@ -123,9 +125,6 @@ export const SkeletonTransactionDetails = () => {
 };
 
 export const SkeletonPageWithTagsAndTwoColumns = () => {
-  const randomWidth = [
-    94, 115, 99, 89, 142, 160, 85, 117, 125, 94, 115, 99, 89, 142, 160, 94, 115, 85, 117, 125,
-  ];
   return (
     <TwoColumnPage
       title={<SkeletonTransactionTitle />}
@@ -154,21 +153,7 @@ export const SkeletonPageWithTagsAndTwoColumns = () => {
           </Flex>
         </Section>
       }
-      rightContent={
-        <Section title={<SkeletonItem width={'200px'} height={'20px'} />}>
-          <Flex width="100%" flexDirection={['column', 'column', 'row']}>
-            <Box width={['100%']}>
-              {Array.from({ length: 20 }).map((_, i) => (
-                <KeyValueHorizontal
-                  key={i}
-                  label={<SkeletonItem width={`${randomWidth[i]}px`} height={'14px'} />}
-                  value={null}
-                />
-              ))}
-            </Box>
-          </Flex>
-        </Section>
-      }
+      rightContent={<RightBoxSkeleton />}
     />
   );
 };

@@ -12,7 +12,7 @@ import { Block as BlockType } from '@stacks/stacks-blockchain-api-types/generate
 import { Circle } from '../../../common/components/Circle';
 import { Section } from '../../../common/components/Section';
 import { useGlobalContext } from '../../../common/context/useAppContext';
-import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
+import { useBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
@@ -297,7 +297,7 @@ const CurrentBlock: React.FC<CurrentBlockProps> = ({ lastBlock }) => {
 };
 
 function BlocksVisualizerBase() {
-  const { data: blocks, isLoading } = useSuspenseBlockListInfinite();
+  const { data: blocks, isLoading } = useBlockListInfinite();
 
   if (isLoading) return <Spinner />;
 

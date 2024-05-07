@@ -2,6 +2,7 @@
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { RightBoxSkeleton } from '../../../../common/components/loaders/RightBox';
 import { BtcAnchorBlockCardBase } from '../../../_components/BtcAnchorBlockCard';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { useTxBlock } from '../useTxBlock';
@@ -11,7 +12,8 @@ interface TxBtcAnchorBlockCardBaseProps {
 }
 
 function TxBtcAnchorBlockCardBase({ tx }: TxBtcAnchorBlockCardBaseProps) {
-  const { data: block } = useTxBlock(tx);
+  const { data: block, isLoading } = useTxBlock(tx);
+  if (isLoading) return <RightBoxSkeleton />;
   return <BtcAnchorBlockCardBase block={block} />;
 }
 

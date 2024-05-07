@@ -6,14 +6,14 @@ import * as React from 'react';
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { Box } from '../../ui/Box';
 import { CodeEditor } from '../../ui/CodeEditor';
-import { useSuspenseContractById } from '../queries/useContractById';
+import { useContractById } from '../queries/useContractById';
 import { Badge } from './Badge';
 import { TxLink } from './ExplorerLinks';
 import { Section } from './Section';
 
 function ContractSourceBase({ txContractId }: { txContractId: string }) {
-  const { data: txContract } = useSuspenseContractById(txContractId);
-  const source = txContract.source_code;
+  const { data: txContract } = useContractById(txContractId);
+  const source = txContract?.source_code;
   if (!source) return null;
   return (
     <Section

@@ -5,7 +5,8 @@ import { FC } from 'react';
 import { Circle } from '../../../../common/components/Circle';
 import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../common/components/Section';
-import { useSuspenseContractById } from '../../../../common/queries/useContractById';
+import { RightBoxSkeleton } from '../../../../common/components/loaders/RightBox';
+import { useContractById } from '../../../../common/queries/useContractById';
 import { getContractName, truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
@@ -32,7 +33,11 @@ interface ContractDetailsCardProps {
 }
 
 function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
-  const { data: contract } = useSuspenseContractById(contractId);
+  const { data: contract, isLoading } = useContractById(contractId);
+
+  if (isLoading) return <RightBoxSkeleton />;
+
+  if (!contract) return null;
 
   return (
     <Section flexShrink={0} minWidth="200px" title="Contract details">
