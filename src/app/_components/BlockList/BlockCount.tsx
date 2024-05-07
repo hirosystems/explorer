@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
+import { PiArrowUpRight } from 'react-icons/pi';
 
 import { Circle } from '../../../common/components/Circle';
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
@@ -23,32 +23,46 @@ export const BlockCount = memo(function ({
   const bgColorHover = useColorModeValue('purple.200', 'slate.850');
   const textColor = useColorModeValue('purple.600', 'purple.400');
   const iconColor = useColorModeValue('purple.600', 'purple.200');
+  const content = useMemo(() => {
+    return (
+      <Text
+        display={'flex'}
+        color={textColor}
+        fontSize={'xs'}
+        bg={bgColor}
+        rounded={'full'}
+        px={2}
+        alignItems={'center'}
+        gap={1}
+        width={'fit-content'}
+        height={8}
+        _hover={
+          isFirst
+            ? {}
+            : {
+                textDecoration: 'underline',
+                bg: bgColorHover,
+                textDecorationColor: textColor,
+              }
+        }
+      >
+        +{count} {pluralize('block', count)}
+        <Circle size={4.5} bg="surface">
+          <Icon as={PiArrowUpRight} size={2.5} color={iconColor} />
+        </Circle>
+      </Text>
+    );
+  }, [count, bgColor, bgColorHover, textColor, iconColor, isFirst]);
+
   return (
     <Flex py={3}>
-      <ExplorerLink href={isFirst ? '#' : btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
-        <Text
-          display={'flex'}
-          color={textColor}
-          fontSize={'xs'}
-          bg={bgColor}
-          rounded={'full'}
-          px={2}
-          alignItems={'center'}
-          gap={1}
-          width={'fit-content'}
-          height={8}
-          _hover={{
-            textDecoration: 'underline',
-            bg: bgColorHover,
-            textDecorationColor: textColor,
-          }}
-        >
-          +{count} {pluralize('block', count)}
-          <Circle size={4.5} bg="surface">
-            <Icon as={ArrowUpRight} size={2.5} color={iconColor} />
-          </Circle>
-        </Text>
-      </ExplorerLink>
+      {isFirst ? (
+        <>{content}</>
+      ) : (
+        <ExplorerLink href={btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
+          {content}
+        </ExplorerLink>
+      )}
     </Flex>
   );
 });

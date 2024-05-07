@@ -61,23 +61,31 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
           bottom={'1px'}
         />
         <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
-        <ExplorerLink
-          fontSize="sm"
-          color={'textSubdued'}
-          href={isFirst ? '#' : `/btcblock/${hash}`}
-        >
-          #{height}
-        </ExplorerLink>
+        {isFirst ? (
+          <Text fontSize="sm" color="textSubdued" fontWeight="medium">
+            {height}
+          </Text>
+        ) : (
+          <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${hash}`}>
+            #{height}
+          </ExplorerLink>
+        )}
       </HStack>
       <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
-        <ExplorerLink
-          fontSize="xs"
-          color={'textSubdued'}
-          href={isFirst ? '#' : `/btcblock/${hash}`}
-          whiteSpace={'nowrap'}
-        >
-          {truncateMiddle(hash, 6)}
-        </ExplorerLink>
+        {isFirst ? (
+          <Text fontSize="xs" color="textSubdued" whiteSpace="nowrap">
+            {truncateMiddle(hash, 6)}
+          </Text>
+        ) : (
+          <ExplorerLink
+            fontSize="xs"
+            color={'textSubdued'}
+            href={`/btcblock/${hash}`}
+            whiteSpace={'nowrap'}
+          >
+            {truncateMiddle(hash, 6)}
+          </ExplorerLink>
+        )}
         {timestamp && <Timestamp ts={timestamp} />}
       </HStack>
     </>
