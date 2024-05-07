@@ -7,6 +7,7 @@ const TOKEN_PRICE_CACHE_KEY = 'token-price';
 
 export const getCurrentBtcPrice = async (): Promise<number> =>
   fetch('https://lunarcrush.com/api4/public/coins/btc/v1', {
+    next: { revalidate: 10 * 60 }, // Revalidate every 10
     headers: {
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
     },
@@ -16,6 +17,7 @@ export const getCurrentBtcPrice = async (): Promise<number> =>
 
 export const getCurrentStxPrice = async (): Promise<number> =>
   fetch('https://lunarcrush.com/api4/public/coins/stx/v1', {
+    next: { revalidate: 10 * 60 }, // Revalidate every 10
     headers: {
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
     },
