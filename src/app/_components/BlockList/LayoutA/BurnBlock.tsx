@@ -51,10 +51,10 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
         <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${hash.replace('0x', '')}`}>
           <Text
             fontSize={'sm'}
-            color={'secondaryText'}
+            color={'textSubdued'}
             _hover={{
               textDecoration: 'underline',
-              textDecorationColor: 'secondaryText',
+              textDecorationColor: 'textSubdued',
             }}
           >
             #{height}

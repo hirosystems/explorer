@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
-import { ReactNode, useMemo, useState } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 
 import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
@@ -34,10 +34,12 @@ const StyledTable = styled(Table)`
   }
 `;
 
+const NUM_OF_ADDRESSES_TO_SHOW = 2;
+
 export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
   <Th py={3} px={6} border="none">
     <Flex
-      bg="dropdownBgHover"
+      bg="hoverBackground"
       px={2.5}
       py={2}
       borderRadius="md"
@@ -97,7 +99,7 @@ const SignerTableRow = ({
     >
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
-          {index}
+          {index + 1}
         </Text>
       </Td>
       <Td py={3} px={6}>
@@ -108,16 +110,27 @@ const SignerTableRow = ({
       </Td>
       <Td py={3} px={6}>
         <Flex textOverflow="ellipsis" overflow="hidden">
-          {stackers?.map((stacker, index) => (
-            <AddressLink
-              key={index}
-              principal={stacker.stacker_address}
-              whiteSpace="nowrap"
-              fontSize="sm"
-              color="secondaryText"
-            >
-              {truncateMiddle(stacker.stacker_address)}
-            </AddressLink>
+          {stackers.slice(0, NUM_OF_ADDRESSES_TO_SHOW).map((stacker, index) => (
+            <React.Fragment key={stacker.stacker_address}>
+              <AddressLink
+                principal={stacker.stacker_address}
+                whiteSpace="nowrap"
+                fontSize="sm"
+                color="textSubdued"
+              >
+                {truncateMiddle(stacker.stacker_address)}
+              </AddressLink>
+              {index < stackers.length - 1 && (
+                <Text color="textSubdued" fontSize="sm">
+                  ,&nbsp;
+                </Text>
+              )}
+              {stackers && stackers.length > NUM_OF_ADDRESSES_TO_SHOW ? (
+                <Text color="textSubdued" fontSize="sm">
+                  &nbsp;+{stackers.length - NUM_OF_ADDRESSES_TO_SHOW}&nbsp;more
+                </Text>
+              ) : null}
+            </React.Fragment>
           ))}
         </Flex>
       </Td>
@@ -126,14 +139,14 @@ const SignerTableRow = ({
           <Box display={['none', 'none', 'none', 'block']} height="12px" width="100%">
             <ProgressBar progressPercentage={votingPower} />
           </Box>
-          <Text whiteSpace="nowrap" fontSize="sm" color="secondaryText">
+          <Text whiteSpace="nowrap" fontSize="sm" color="textSubdued">
             {`${votingPower.toFixed(2)}%`}
           </Text>
         </HStack>
       </Td>
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
-          {stxStaked}
+          {Number(stxStaked.toFixed(0)).toLocaleString()}
         </Text>
       </Td>
     </Tr>
@@ -175,7 +188,7 @@ export function SignersTableLayout({
 interface SignerRowInfo {
   signerKey: string;
   votingPowerPercentage: number;
-  stxStaked: string;
+  stxStaked: number;
   stackers: SignersStackersData[];
 }
 
@@ -186,7 +199,7 @@ function formatSignerRowData(
   return {
     signerKey: singerInfo.signing_key,
     votingPowerPercentage: singerInfo.weight_percent,
-    stxStaked: parseFloat(singerInfo.stacked_amount).toLocaleString(),
+    stxStaked: parseFloat(singerInfo.stacked_amount) / 1_000_000,
     stackers,
   };
 }
@@ -231,7 +244,7 @@ const SignerTable = () => {
     <SignersTableLayout
       votingPowerSortOrder={votingPowerSortOrder}
       setVotingPowerSortOrder={setVotingPowerSortOrder}
-      numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
+      numSigners={<Text fontWeight="medium">{signersData.length} Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
       signersTableRows={signersData.map((signer, i) => (
         <SignerTableRow

@@ -1,3 +1,4 @@
+import { numberToString } from '@/common/utils/utils';
 import { useColorMode } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
@@ -5,7 +6,6 @@ import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
-import { useSuspenseStxSupply } from '../../common/queries/useStxSupply';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -17,6 +17,7 @@ import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
+import { useStxSupply } from './data/usStxSupply';
 
 function CurrentCycleCard() {
   const {
@@ -191,14 +192,14 @@ function CurrentCycleCard() {
               fontWeight="14px"
               whiteSpace="nowrap"
               display="inline-block"
-              color="secondaryText"
+              color="textSubdued"
             >
               {`(${(currentCycleProgressPercentage * 100).toFixed(1)}%)`}
             </Text>
           </Box>
         </Stack>
       </Flex>
-      <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="secondaryText">
+      <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="textSubdued">
         {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
           'day',
           approximateDaysSinceCurrentCycleStart
@@ -230,7 +231,7 @@ function StatCardBase({
           {statValue}
         </Text>
         {typeof moreInfo === 'string' ? (
-          <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+          <Text fontSize="xs" fontWeight="medium" color="textSubdued">
             {moreInfo}
           </Text>
         ) : (
@@ -242,23 +243,19 @@ function StatCardBase({
 }
 
 function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const {
-    data: { total_stx, unlocked_stx },
-  } = useSuspenseStxSupply();
-
-  const stxStakedInMillions =
-    (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) / 1_000_000;
-  const stxStakedFormatted = `${stxStakedInMillions.toFixed(2)}M`;
-  const stxStakedUsd = tokenPrice.stxPrice * stxStakedInMillions;
+  const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
+  // const stxStakedInMillions = lockedSupply / 1_000_000;
+  // const stxStakedFormatted = `${stxStakedInMillions.toFixed(2)}M`;
+  const stxStakedUsd = tokenPrice.stxPrice * lockedSupply;
   const stxStakedUsdFormatted = `$${Math.round(stxStakedUsd).toLocaleString()}`;
   const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
   const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
   const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
   console.log('StxStackedCard', {
-    total_stx,
-    unlocked_stx,
-    isUnlockedStxGreaterThanTotalStx: Number.parseInt(unlocked_stx) > Number.parseInt(total_stx),
-    stxStaked: stxStakedInMillions,
+    totalSupply,
+    lockedSupply,
+    unlockedSupply,
+    // stxStaked: stxStakedInMillions,
     tokenPrice,
     stxStakedUsd,
     stxStakedUsdFormatted,
@@ -270,9 +267,9 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <StatCardBase
       statTitle="STX Stacked"
-      statValue={stxStakedFormatted}
+      statValue={numberToString(lockedSupply)}
       moreInfo={
-        <Text fontSize="xs" fontWeight="medium" color="secondaryText" whiteSpace="nowrap">
+        <Text fontSize="xs" fontWeight="medium" color="textSubdued" whiteSpace="nowrap">
           {moreInfo}
         </Text>
       }
@@ -281,30 +278,21 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
 }
 
 function StxLockedCard() {
-  const {
-    data: { total_stx, unlocked_stx },
-  } = useSuspenseStxSupply();
-  const stxStaked = Number.parseInt(total_stx) - Number.parseInt(unlocked_stx);
+  const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
 
-  const stxLockedPercentageFormatted = `${((stxStaked / Number.parseInt(total_stx)) * 100).toFixed(
-    1
-  )}%`;
-  const stxCirculatingSupplyInBillions = `${(Number.parseInt(unlocked_stx) / 1_000_000_000).toFixed(
-    2
-  )}B`;
+  const stxLockedPercentageFormatted = `${((lockedSupply / totalSupply) * 100).toFixed(1)}%`;
+  // const stxCirculatingSupplyInBillions = numberToString(totalSupply) // `${(totalSupply / 1_000_000_000).toFixed(2)}B`;
   console.log('StxLockedCard', {
-    total_stx,
-    unlocked_stx,
-    isUnlockedStxGreaterThanTotalStx: Number.parseInt(unlocked_stx) > Number.parseInt(total_stx),
-    stxStaked,
+    isUnlockedStxGreaterThanTotalStx: unlockedSupply > totalSupply,
+    stxStaked: lockedSupply,
     stxLockedPercentageFormatted,
-    stxCirculatingSupplyInBillions,
+    // stxCirculatingSupplyInBillions,
   });
   return (
     <StatCardBase
       statTitle="Total stacked"
       statValue={stxLockedPercentageFormatted}
-      moreInfo={`of ${stxCirculatingSupplyInBillions} circulating supply`}
+      moreInfo={`of ${numberToString(totalSupply)} circulating supply`}
     />
   );
 }
@@ -319,7 +307,7 @@ function AddressesStackingCard() {
   const moreInfo = (
     <Flex gap={1} alignItems="flex-start" flexWrap="nowrap">
       <Icon as={icon} size={4} color={randomStat > 0 ? 'green.600' : 'red.600'} />
-      <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
         {`${randomStatFormatted} ${modifier} than previous cycle`}
       </Text>
     </Flex>
@@ -339,7 +327,7 @@ function NextCycleCard() {
 
   const moreInfo = (
     <Flex gap={1} alignItems="flex-start">
-      <Text fontSize="xs" fontWeight="medium" color="secondaryText">
+      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
         {`Starts in ~${
           displayPreparePhaseInfo
             ? approximateDaysTilNextCyclePreparePhase
@@ -351,7 +339,14 @@ function NextCycleCard() {
             : approximateDaysTilNextCycleRewardPhase
         )}
         at`}{' '}
-        <Text fontSize="xs" fontWeight="medium" color="secondaryText" whiteSpace="nowrap">
+        <Text
+          fontSize="xs"
+          fontWeight="medium"
+          color="textSubdued"
+          whiteSpace="nowrap"
+          display="flex"
+          alignItems="center"
+        >
           <Icon as={BitcoinIcon} size={4.5} /> {`#${nextCycleBurnBlockHeightStart}`}
         </Text>
       </Text>
@@ -373,7 +368,7 @@ export function SignersHeaderLayout({
   stxStakedCard,
   stxLockedCard,
   addressesStackingCard,
-  nextCycleCard, // historicalStackingDataLink,
+  nextCycleCard,
 }: {
   title: ReactNode;
   currentCycleCard: ReactNode;
@@ -423,10 +418,10 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
       nextCycleCard={<NextCycleCard />}
       historicalStackingDataLink={
         <Flex alignItems="center">
-          <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
+          <Link href="/" color="textSubdued" fontSize="xs" mr={1}>
             See Stacking historical data
           </Link>
-          <Icon as={ArrowRight} size={'12px'} color="secondaryText" />
+          <Icon as={ArrowRight} size={'12px'} color="textSubdued" />
         </Flex>
       }
     />

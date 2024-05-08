@@ -30,7 +30,7 @@ const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
 const TableHeaderSkeleton = () => (
   <Th py={3} px={6}>
     <Flex
-      bg="dropdownBgHover"
+      bg="hoverBackground"
       px={2.5}
       py={2}
       borderRadius="md"
