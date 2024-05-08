@@ -211,11 +211,21 @@ const SignerTable = () => {
     };
   }, [signers, getQuery, currentCycleId]);
   const signersStackers = useQueries(signersStackersQueries, queryClient);
-  const signersData = signers.map((signer, index) => {
-    return {
-      ...formatSignerRowData(signer, signersStackers[index]),
-    };
-  });
+  const signersData = useMemo(
+    () =>
+      signers
+        .map((signer, index) => {
+          return {
+            ...formatSignerRowData(signer, signersStackers[index]),
+          };
+        })
+        .sort((a, b) =>
+          votingPowerSortOrder === 'desc'
+            ? b.votingPowerPercentage - a.votingPowerPercentage
+            : a.votingPowerPercentage - b.votingPowerPercentage
+        ),
+    [signers, signersStackers, votingPowerSortOrder]
+  );
 
   return (
     <SignersTableLayout
@@ -223,21 +233,15 @@ const SignerTable = () => {
       setVotingPowerSortOrder={setVotingPowerSortOrder}
       numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
-      signersTableRows={signers
-        .sort((a, b) =>
-          votingPowerSortOrder === 'desc'
-            ? b.weight_percent - a.weight_percent
-            : a.weight_percent - b.weight_percent
-        )
-        .map((signer, i) => (
-          <SignerTableRow
-            key={`signers=table-row-${i}`}
-            index={i}
-            {...signersData[i]}
-            isFirst={i === 0}
-            isLast={i === signers.length - 1}
-          />
-        ))}
+      signersTableRows={signersData.map((signer, i) => (
+        <SignerTableRow
+          key={`signers=table-row-${i}`}
+          index={i}
+          {...signersData[i]}
+          isFirst={i === 0}
+          isLast={i === signers.length - 1}
+        />
+      ))}
     />
   );
 };
