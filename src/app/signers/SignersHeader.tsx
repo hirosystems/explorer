@@ -1,4 +1,3 @@
-import { numberToString } from '@/common/utils/utils';
 import { useColorMode } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
@@ -7,6 +6,7 @@ import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
+import { numberToString } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';

@@ -1,5 +1,5 @@
-import { useSuspensePoxInfoRaw } from '@/common/queries/usePoxInforRaw';
-import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
+import { useSuspensePoxInfoRaw } from '../../../common/queries/usePoxInforRaw';
+import { MICROSTACKS_IN_STACKS } from '../../../common/utils/utils';
 
 export function useStxSupply() {
   const { data: poxData } = useSuspensePoxInfoRaw();
