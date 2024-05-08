@@ -80,14 +80,6 @@ export const theme = extendTheme({
         default: 'black',
         _dark: 'white',
       },
-      success: {
-        default: 'green.600',
-        _dark: 'green.500',
-      },
-      error: {
-        default: 'red.600',
-        _dark: 'red.500',
-      },
     },
   },
   styles: {
