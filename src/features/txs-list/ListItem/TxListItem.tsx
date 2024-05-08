@@ -36,7 +36,7 @@ const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
     gap="1.5"
     alignItems={['flex-start', 'center', 'center', 'center']}
     justifyContent={['center', 'flex-start', 'flex-start', 'flex-start']}
-    flexWrap="nowrap"
+    flexWrap="wrap"
     divider={<Caption display={['none', 'inline', 'inline', 'inline']}>∙</Caption>}
     direction={['column', 'row', 'row', 'row']}
   >
@@ -83,13 +83,13 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
     <Stack
       as="span"
       gap="1.5"
-      flexWrap="nowrap"
+      // flexWrap="nowrap"
       color={'textSubdued'}
       divider={<Caption display={['none', 'none', 'inline', 'inline']}>∙</Caption>}
       direction={['column', 'column', 'row', 'row']}
       justifyContent={['center', 'center', 'flex-end', 'flex-end']}
       alignItems={['flex-start', 'flex-start', 'center', 'center']}
-      minWidth={'160px'}
+      // minWidth={'160px'}
     >
       {didFail ? (
         <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace={'nowrap'}>
@@ -105,7 +105,7 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
           divider={<Caption>∙</Caption>}
         >
           <Caption whiteSpace={'nowrap'}>Block #{blockNumber}</Caption>
-          <Nonce nonce={tx.nonce} />
+          <Nonce nonceVal={tx.nonce} whiteSpace="nowrap" />
         </HStack>
       )}
     </Stack>

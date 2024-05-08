@@ -11,11 +11,11 @@ import { leftLineCss } from '../styles/hover';
 interface TwoColumnsListProps extends FlexProps {
   icon?: ReactNode;
   hoverEffect?: boolean;
-  leftContent?: {
+  leftContent: {
     title?: ReactNode;
     subtitle?: ReactNode;
   };
-  rightContent?: {
+  rightContent: {
     title?: ReactNode;
     subtitle?: ReactNode;
   };
@@ -27,10 +27,10 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
       <Flex
         flexGrow={1}
         gap={4}
-        alignItems={'center'}
+        alignItems="center"
         py={6}
         css={hoverEffect ? leftLineCss() : undefined}
-        minWidth={0}
+        width={'full'}
         borderBottom={'1px'}
         _last={{ borderBottom: 'unset' }}
         {...rest}
@@ -38,12 +38,70 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
         <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
         <Flex
           width="full"
-          minWidth="0px"
           gap={2}
-          direction={['column', 'column', 'row', 'row', 'row']}
-          alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']}
+          // direction={['column', 'column', 'row', 'row', 'row']}
+          direction="column"
+          overflow="hidden"
+          // alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']}
         >
-          {leftContent && (
+          <Flex
+            width="full"
+            direction="row"
+            justifyContent="space-between"
+            flexWrap="nowrap"
+            gap={2}
+          >
+            {leftContent.title && (
+              <Text // TODO: remove this styling
+                alignItems="center"
+                fontSize="sm"
+                fontWeight="semibold"
+                gap={1.5}
+                display="flex"
+                overflow="hidden"
+                flex="0 1 auto"
+                flexWrap="nowrap"
+                minWidth="0"
+              >
+                <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
+                <Box minWidth="0" flex="1 1 0">
+                  {leftContent.title}
+                </Box>
+              </Text>
+            )}
+            {rightContent.title && (
+              <Text
+                fontSize="sm"
+                display="flex"
+                flexWrap="nowrap"
+                minWidth="0"
+                flex="0 1 auto"
+                // justifyContent="flex-end"
+              >
+                {rightContent.title}
+              </Text>
+            )}
+          </Flex>
+          <Flex width="full" direction="row" justifyContent="space-between" minWidth="0">
+            {leftContent.subtitle && (
+              <Text fontSize={'xs'} color={'textSubdued'} minWidth="0" flex="1 1 auto">
+                {leftContent.subtitle}
+              </Text>
+            )}
+            {rightContent.subtitle && (
+              <Text
+                fontSize={'xs'}
+                color={'textSubdued'}
+                minWidth="0"
+                flex="0 1 auto"
+                justifyContent="flex-end"
+              >
+                {rightContent.subtitle}
+              </Text>
+            )}
+          </Flex>
+
+          {/* {leftContent && (
             <Flex
               direction={'column'}
               justifyContent={'center'}
@@ -54,9 +112,9 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
             >
               {leftContent.title !== undefined ? (
                 <Text
-                  alignItems={'center'}
-                  fontSize={'sm'}
-                  fontWeight={'semibold'}
+                  alignItems='center'
+                  fontSize='sm'
+                  fontWeight='semibold'
                   gap={1.5}
                   minWidth={0}
                   display={'flex'}
@@ -85,7 +143,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
               alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end']}
             >
               {rightContent.title !== undefined ? (
-                <Text fontSize={'sm'}>{rightContent.title}</Text>
+                <Text fontSize='sm'>{rightContent.title}</Text>
               ) : null}
               {rightContent.subtitle !== undefined ? (
                 <Text fontSize={'xs'} color={'textSubdued'}>
@@ -93,7 +151,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 </Text>
               ) : null}
             </Flex>
-          )}
+          )} */}
         </Flex>
       </Flex>
     );
