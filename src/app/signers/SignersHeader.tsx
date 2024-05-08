@@ -1,19 +1,19 @@
-import { TokenPrice } from '@/common/types/tokenPrice';
 import { useColorMode } from '@chakra-ui/react';
+import { ArrowDownRight, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { PiArrowDownRightBold, PiArrowRightLight, PiArrowUpRightBold } from 'react-icons/pi';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
 import { useSuspenseStxSupply } from '../../common/queries/useStxSupply';
+import { TokenPrice } from '../../common/types/tokenPrice';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
-import { BitcoinIcon } from '../../ui/icons';
+import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
@@ -245,18 +245,27 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const {
     data: { total_stx, unlocked_stx },
   } = useSuspenseStxSupply();
-  console.log({ total_stx, unlocked_stx });
 
-  const stxStakedFormatted = `${(
-    (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) /
-    1_000_000
-  ).toFixed(2)}M`;
-  const stxStakedUsd =
-    tokenPrice.stxPrice * (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx));
+  const stxStakedInMillions =
+    (Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) / 1_000_000;
+  const stxStakedFormatted = `${stxStakedInMillions.toFixed(2)}M`;
+  const stxStakedUsd = tokenPrice.stxPrice * stxStakedInMillions;
   const stxStakedUsdFormatted = `$${Math.round(stxStakedUsd).toLocaleString()}`;
   const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
   const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
   const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
+  console.log('StxStackedCard', {
+    total_stx,
+    unlocked_stx,
+    isUnlockedStxGreaterThanTotalStx: Number.parseInt(unlocked_stx) > Number.parseInt(total_stx),
+    stxStaked: stxStakedInMillions,
+    tokenPrice,
+    stxStakedUsd,
+    stxStakedUsdFormatted,
+    stxStakedBtc,
+    stxStakedBtcFormatted,
+    moreInfo,
+  });
 
   return (
     <StatCardBase
@@ -275,13 +284,22 @@ function StxLockedCard() {
   const {
     data: { total_stx, unlocked_stx },
   } = useSuspenseStxSupply();
-  const stxLockedPercentageFormatted = `${(
-    ((Number.parseInt(total_stx) - Number.parseInt(unlocked_stx)) / Number.parseInt(total_stx)) *
-    100
-  ).toFixed(1)}%`;
+  const stxStaked = Number.parseInt(total_stx) - Number.parseInt(unlocked_stx);
+
+  const stxLockedPercentageFormatted = `${((stxStaked / Number.parseInt(total_stx)) * 100).toFixed(
+    1
+  )}%`;
   const stxCirculatingSupplyInBillions = `${(Number.parseInt(unlocked_stx) / 1_000_000_000).toFixed(
     2
   )}B`;
+  console.log('StxLockedCard', {
+    total_stx,
+    unlocked_stx,
+    isUnlockedStxGreaterThanTotalStx: Number.parseInt(unlocked_stx) > Number.parseInt(total_stx),
+    stxStaked,
+    stxLockedPercentageFormatted,
+    stxCirculatingSupplyInBillions,
+  });
   return (
     <StatCardBase
       statTitle="Total stacked"
@@ -294,8 +312,9 @@ function StxLockedCard() {
 function AddressesStackingCard() {
   const randomStat = Math.floor(Math.random() * 201) - 100; // Random number between -100 and 100 TODO: replace with actual data
   const randomStatFormatted = `${Math.abs(randomStat)}%`;
-  const icon = randomStat > 0 ? PiArrowUpRightBold : PiArrowDownRightBold;
+  const icon = randomStat > 0 ? ArrowUpRight : ArrowDownRight;
   const modifier = randomStat > 0 ? 'more' : 'less';
+  console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
 
   const moreInfo = (
     <Flex gap={1} alignItems="flex-start" flexWrap="nowrap">
@@ -407,7 +426,7 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Link href="/" color="secondaryText" fontSize="xs" mr={1}>
             See Stacking historical data
           </Link>
-          <Icon as={PiArrowRightLight} size={'12px'} color="secondaryText" />
+          <Icon as={ArrowRight} size={'12px'} color="secondaryText" />
         </Flex>
       }
     />

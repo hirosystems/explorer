@@ -1,5 +1,5 @@
+import { SortDescending } from '@phosphor-icons/react';
 import { useMemo } from 'react';
-import { GoSortDesc } from 'react-icons/go';
 
 import { FilterMenu } from '../../common/components/FilterMenu';
 
@@ -39,7 +39,7 @@ export function SortByVotingPowerFilter({
     <FilterMenu
       filterLabel={() => getSortOptionLabel(votingPowerSortOrder)}
       menuItems={menuItems}
-      leftIcon={GoSortDesc}
+      leftIcon={SortDescending}
     />
   );
 }

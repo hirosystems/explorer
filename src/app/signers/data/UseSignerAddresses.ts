@@ -1,15 +1,8 @@
 // Add missing import statement
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { TEN_MINUTES, TWO_MINUTES } from '@/common/queries/query-stale-time';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-// export interface SignerInfo {
-//   signing_key: string;
-//   weight: number;
-//   stacked_amount: string;
-//   weight_percent: number;
-//   stacked_amount_percent: number;
-// }
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { TEN_MINUTES, TWO_MINUTES } from '../../../common/queries/query-stale-time';
 
 const SIGNER_ADDRESSES_QUERY_KEY = 'signer-addresses';
 

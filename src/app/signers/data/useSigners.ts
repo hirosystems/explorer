@@ -1,8 +1,8 @@
-// Add missing import statement
-import { useGlobalContext } from '@/common/context/useAppContext';
-import { TEN_MINUTES } from '@/common/queries/query-stale-time';
-import { ApiResponseWithResultsOffset } from '@/common/types/api';
 import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { useGlobalContext } from '../../../common/context/useAppContext';
+import { TEN_MINUTES } from '../../../common/queries/query-stale-time';
+import { ApiResponseWithResultsOffset } from '../../../common/types/api';
 
 export interface SignerInfo {
   signing_key: string;

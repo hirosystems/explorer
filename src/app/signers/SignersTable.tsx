@@ -1,5 +1,3 @@
-import { ApiResponseWithResultsOffset } from '@/common/types/api';
-import { Table } from '@/ui/Table';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
@@ -7,11 +5,13 @@ import { ReactNode, useMemo, useState } from 'react';
 
 import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
+import { ApiResponseWithResultsOffset } from '../../common/types/api';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Show } from '../../ui/Show';
+import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
 import { Td } from '../../ui/Td';
 import { Text } from '../../ui/Text';
@@ -80,7 +80,7 @@ const SignerTableRow = ({
   isFirst,
   isLast,
   signerKey,
-  votingPower,
+  votingPowerPercentage: votingPower,
   stxStaked,
   stackers,
 }: {
@@ -124,10 +124,10 @@ const SignerTableRow = ({
       <Td py={3} px={6}>
         <HStack flexWrap="nowrap">
           <Box display={['none', 'none', 'none', 'block']} height="12px" width="100%">
-            <ProgressBar progressPercentage={23.4} />
+            <ProgressBar progressPercentage={votingPower} />
           </Box>
           <Text whiteSpace="nowrap" fontSize="sm" color="secondaryText">
-            {votingPower}
+            {`${votingPower.toFixed(2)}%`}
           </Text>
         </HStack>
       </Td>
@@ -174,17 +174,18 @@ export function SignersTableLayout({
 }
 interface SignerRowInfo {
   signerKey: string;
-  votingPower: string;
+  votingPowerPercentage: number;
   stxStaked: string;
   stackers: SignersStackersData[];
 }
+
 function formatSignerRowData(
   singerInfo: SignerInfo,
   stackers: SignersStackersData[]
 ): SignerRowInfo {
   return {
     signerKey: singerInfo.signing_key,
-    votingPower: `${singerInfo.weight_percent.toFixed(2)}%`,
+    votingPowerPercentage: singerInfo.weight_percent,
     stxStaked: parseFloat(singerInfo.stacked_amount).toLocaleString(),
     stackers,
   };
@@ -193,46 +194,50 @@ function formatSignerRowData(
 const SignerTable = () => {
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
-  const constantCycleId = 560;
-  // const constantCycleId = currentCycleId;
-  console.log({ constantCycleId });
 
   const {
     data: { results: signers },
-  } = useSuspensePoxSigners(constantCycleId);
+  } = useSuspensePoxSigners(currentCycleId);
   const queryClient = useQueryClient();
   const getQuery = useGetStackersBySignerQuery();
   const signersStackersQueries = useMemo(() => {
     return {
       queries: signers.map(signer => {
-        return getQuery(constantCycleId, signer.signing_key);
+        return getQuery(currentCycleId, signer.signing_key);
       }),
       combine: (
         response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
       ) => response.map(r => r.data?.results ?? []),
     };
-  }, [signers, getQuery]);
+  }, [signers, getQuery, currentCycleId]);
   const signersStackers = useQueries(signersStackersQueries, queryClient);
   const signersData = signers.map((signer, index) => {
     return {
       ...formatSignerRowData(signer, signersStackers[index]),
     };
   });
+
   return (
     <SignersTableLayout
       votingPowerSortOrder={votingPowerSortOrder}
       setVotingPowerSortOrder={setVotingPowerSortOrder}
       numSigners={<Text fontWeight="medium">40 Active Signers</Text>}
       signersTableHeaders={<SignersTableHeaders />}
-      signersTableRows={signers.map((signer, i) => (
-        <SignerTableRow
-          key={`signers=table-row-${i}`}
-          index={i}
-          {...signersData[i]}
-          isFirst={i === 0}
-          isLast={i === signers.length - 1}
-        />
-      ))}
+      signersTableRows={signers
+        .sort((a, b) =>
+          votingPowerSortOrder === 'desc'
+            ? b.weight_percent - a.weight_percent
+            : a.weight_percent - b.weight_percent
+        )
+        .map((signer, i) => (
+          <SignerTableRow
+            key={`signers=table-row-${i}`}
+            index={i}
+            {...signersData[i]}
+            isFirst={i === 0}
+            isLast={i === signers.length - 1}
+          />
+        ))}
     />
   );
 };
