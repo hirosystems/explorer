@@ -39,6 +39,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         </AppContextProvider>
       </body>
       <GoogleAnalytics gaId="G-NB2VBT0KY2" />
+      <script
+        async
+        type="text/javascript"
+        src="https://www.lightboxcdn.com/vendor/94b8df2e-6c46-4cd4-b3dc-ecb7c357ccaf/lightbox_speed.js"
+      ></script>
     </html>
   );
 }
