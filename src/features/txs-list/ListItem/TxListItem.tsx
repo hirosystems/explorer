@@ -44,7 +44,7 @@ const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
     <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
     <AddressArea tx={tx} />
     {Number(tx.fee_rate) > 0 ? (
-      <Caption whiteSpace='nowrap' style={{ fontVariantNumeric: 'tabular-nums' }}>
+      <Caption whiteSpace="nowrap" style={{ fontVariantNumeric: 'tabular-nums' }}>
         Fee: {`${(Number(tx.fee_rate) / MICROSTACKS_IN_STACKS).toFixed(4)} STX`}
       </Caption>
     ) : null}
@@ -82,7 +82,7 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
       flexWrap="wrap"
     >
       {didFail ? (
-        <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace='nowrap'>
+        <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace="nowrap">
           Failed
         </Caption>
       ) : (
@@ -93,7 +93,7 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
           flexWrap="wrap"
           gap={1.5}
         >
-          <Caption whiteSpace='nowrap'>Block #{blockNumber}</Caption>
+          <Caption whiteSpace="nowrap">Block #{blockNumber}</Caption>
           <Nonce nonceVal={tx.nonce} whiteSpace="nowrap" />
         </Stack>
       )}
