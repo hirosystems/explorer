@@ -199,7 +199,13 @@ function CurrentCycleCard() {
           </Box>
         </Stack>
       </Flex>
-      <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="textSubdued">
+      <Text
+        fontSize={'xs'}
+        whiteSpace="nowrap"
+        fontWeight="medium"
+        color="textSubdued"
+        lineHeight={4}
+      >
         {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
           'day',
           approximateDaysSinceCurrentCycleStart
@@ -231,7 +237,7 @@ function StatCardBase({
           {statValue}
         </Text>
         {typeof moreInfo === 'string' ? (
-          <Text fontSize="xs" fontWeight="medium" color="textSubdued">
+          <Text fontSize="xs" fontWeight="medium" color="textSubdued" lineHeight={4}>
             {moreInfo}
           </Text>
         ) : (
@@ -244,8 +250,6 @@ function StatCardBase({
 
 function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
-  // const stxStakedInMillions = lockedSupply / 1_000_000;
-  // const stxStakedFormatted = `${stxStakedInMillions.toFixed(2)}M`;
   const stxStakedUsd = tokenPrice.stxPrice * lockedSupply;
   const stxStakedUsdFormatted = `$${Math.round(stxStakedUsd).toLocaleString()}`;
   const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
@@ -255,7 +259,6 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
     totalSupply,
     lockedSupply,
     unlockedSupply,
-    // stxStaked: stxStakedInMillions,
     tokenPrice,
     stxStakedUsd,
     stxStakedUsdFormatted,
@@ -266,10 +269,16 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   return (
     <StatCardBase
-      statTitle="STX Stacked"
+      statTitle="STX stacked"
       statValue={numberToString(lockedSupply)}
       moreInfo={
-        <Text fontSize="xs" fontWeight="medium" color="textSubdued" whiteSpace="nowrap">
+        <Text
+          fontSize="xs"
+          fontWeight="medium"
+          color="textSubdued"
+          whiteSpace="nowrap"
+          lineHeight={4}
+        >
           {moreInfo}
         </Text>
       }
@@ -281,12 +290,10 @@ function StxLockedCard() {
   const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
 
   const stxLockedPercentageFormatted = `${((lockedSupply / totalSupply) * 100).toFixed(1)}%`;
-  // const stxCirculatingSupplyInBillions = numberToString(totalSupply) // `${(totalSupply / 1_000_000_000).toFixed(2)}B`;
   console.log('StxLockedCard', {
     isUnlockedStxGreaterThanTotalStx: unlockedSupply > totalSupply,
     stxStaked: lockedSupply,
     stxLockedPercentageFormatted,
-    // stxCirculatingSupplyInBillions,
   });
   return (
     <StatCardBase
@@ -305,15 +312,16 @@ function AddressesStackingCard() {
   console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
 
   const moreInfo = (
-    <Flex gap={1} alignItems="flex-start" flexWrap="nowrap">
-      <Icon as={icon} size={4} color={randomStat > 0 ? 'green.600' : 'red.600'} />
-      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
-        {`${randomStatFormatted} ${modifier} than previous cycle`}
+    <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
+      <Text display="inline" whiteSpace="nowrap">
+        <Icon as={icon} size={3} color={randomStat > 0 ? 'green.600' : 'red.600'} />
+        &nbsp;{`${randomStatFormatted}`}&nbsp;
       </Text>
-    </Flex>
+      <Text display="inline">{`${modifier} than previous cycle`}</Text>
+    </Text>
   );
 
-  return <StatCardBase statTitle="Addresses Stacking" statValue={'2,443'} moreInfo={moreInfo} />;
+  return <StatCardBase statTitle="Addresses stacking" statValue={'2,443'} moreInfo={moreInfo} />;
 }
 
 function NextCycleCard() {
@@ -326,8 +334,8 @@ function NextCycleCard() {
   } = useSuspenseNextStackingCycle();
 
   const moreInfo = (
-    <Flex gap={1} alignItems="flex-start">
-      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
+    <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
+      <Text display="inline">
         {`Starts in ~${
           displayPreparePhaseInfo
             ? approximateDaysTilNextCyclePreparePhase
@@ -338,19 +346,14 @@ function NextCycleCard() {
             ? approximateDaysTilNextCyclePreparePhase
             : approximateDaysTilNextCycleRewardPhase
         )}
-        at`}{' '}
-        <Text
-          fontSize="xs"
-          fontWeight="medium"
-          color="textSubdued"
-          whiteSpace="nowrap"
-          display="flex"
-          alignItems="center"
-        >
-          <Icon as={BitcoinIcon} size={4.5} /> {`#${nextCycleBurnBlockHeightStart}`}
-        </Text>
+        at`}
+        &nbsp;
       </Text>
-    </Flex>
+      <Text display="inline" whiteSpace="nowrap">
+        <Icon as={BitcoinIcon} size={3} />
+        &nbsp;{`#${nextCycleBurnBlockHeightStart}`}
+      </Text>
+    </Text>
   );
 
   return (

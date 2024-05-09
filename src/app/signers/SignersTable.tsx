@@ -9,7 +9,6 @@ import { ApiResponseWithResultsOffset } from '../../common/types/api';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
-import { HStack } from '../../ui/HStack';
 import { Show } from '../../ui/Show';
 import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
@@ -19,7 +18,6 @@ import { Th } from '../../ui/Th';
 import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
-import { ProgressBar } from './ProgressBar';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
@@ -66,7 +64,7 @@ export const signersTableHeaders = [
   'Signer key',
   'Associated address',
   'Voting power',
-  'STX staked',
+  'STX stacked',
 ];
 
 export const SignersTableHeaders = () => (
@@ -135,14 +133,9 @@ const SignerTableRow = ({
         </Flex>
       </Td>
       <Td py={3} px={6}>
-        <HStack flexWrap="nowrap">
-          <Box display={['none', 'none', 'none', 'block']} height="12px" width="100%">
-            <ProgressBar progressPercentage={votingPower} />
-          </Box>
-          <Text whiteSpace="nowrap" fontSize="sm" color="textSubdued">
-            {`${votingPower.toFixed(2)}%`}
-          </Text>
-        </HStack>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {`${votingPower.toFixed(2)}%`}
+        </Text>
       </Td>
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
