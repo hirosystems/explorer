@@ -9,7 +9,6 @@ import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/tran
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
-import { HStack } from '../../../ui/HStack';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { Caption } from '../../../ui/typography';
@@ -28,21 +27,21 @@ const Icon: FC<{ tx: Transaction }> = memo(({ tx }) => (
   <TxIcon txType={tx.tx_type} txStatus={getTransactionStatus(tx)} />
 ));
 
-const LeftTitle: FC<{ tx: Transaction }> = memo(({ tx }) => <TxTitle tx={tx} showPrice={true} />);
+const LeftTitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
+  <Text whiteSpace="nowrap">
+    <TxTitle tx={tx} showPrice={true} />
+  </Text>
+));
 
 const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
   <Stack
     as="span"
-    gap="1.5"
-    alignItems={['flex-start', 'center', 'center', 'center']}
-    justifyContent={['center', 'flex-start', 'flex-start', 'flex-start']}
+    direction={['column', 'column', 'row', 'row', 'row']}
+    divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
     flexWrap="wrap"
-    divider={<Caption display={['none', 'inline', 'inline', 'inline']}>∙</Caption>}
-    direction={['column', 'row', 'row', 'row']}
+    gap={1.5}
   >
-    <Caption fontWeight="semibold" whiteSpace="nowrap">
-      {getTransactionTypeLabel(tx.tx_type)}
-    </Caption>
+    <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
     <AddressArea tx={tx} />
     {Number(tx.fee_rate) > 0 ? (
       <Caption whiteSpace={'nowrap'} style={{ fontVariantNumeric: 'tabular-nums' }}>
@@ -54,21 +53,16 @@ const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
 
 const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   return (
-    <HStack
+    <Stack
       as="span"
-      gap="1.5"
-      alignItems="center"
-      justifyContent="flex-end"
-      flexWrap="nowrap"
-      divider={<Caption>∙</Caption>}
+      direction={['column', 'column', 'row', 'row', 'row']}
+      divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+      flexWrap="wrap"
+      gap={1.5}
     >
-      <Text whiteSpace="nowrap">
-        <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
-      </Text>
-      <Text whiteSpace="nowrap">
-        <TxTimestamp tx={tx} />
-      </Text>
-    </HStack>
+      <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
+      <TxTimestamp tx={tx} />
+    </Stack>
   );
 });
 
@@ -82,31 +76,26 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
   return (
     <Stack
       as="span"
-      gap="1.5"
-      // flexWrap="nowrap"
-      color={'textSubdued'}
-      divider={<Caption display={['none', 'none', 'inline', 'inline']}>∙</Caption>}
-      direction={['column', 'column', 'row', 'row']}
-      justifyContent={['center', 'center', 'flex-end', 'flex-end']}
-      alignItems={['flex-start', 'flex-start', 'center', 'center']}
-      // minWidth={'160px'}
+      gap={1.5}
+      direction={['column', 'column', 'row', 'row', 'row']}
+      divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+      flexWrap="wrap"
     >
       {didFail ? (
         <Caption data-test="tx-caption" color={didFail ? 'error' : undefined} whiteSpace={'nowrap'}>
           Failed
         </Caption>
       ) : (
-        <HStack
+        <Stack
           as="span"
-          gap="1.5"
-          alignItems="center"
-          justifyContent="flex-end"
-          flexWrap="nowrap"
-          divider={<Caption>∙</Caption>}
+          direction={['column', 'column', 'row', 'row', 'row']}
+          divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+          flexWrap="wrap"
+          gap={1.5}
         >
           <Caption whiteSpace={'nowrap'}>Block #{blockNumber}</Caption>
           <Nonce nonceVal={tx.nonce} whiteSpace="nowrap" />
-        </HStack>
+        </Stack>
       )}
     </Stack>
   );

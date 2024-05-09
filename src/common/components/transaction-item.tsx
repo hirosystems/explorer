@@ -133,12 +133,6 @@ export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransac
     return <Tooltip label={dateString}>{relativeTimestamp}</Tooltip>;
   });
 
-// export const Nonce: React.FC<TextProps & { nonce: number }> = React.memo(({ nonce, ...rest }) => (
-//   <Caption as="span" {...rest}>
-//     Nonce: {nonce.toString()}
-//   </Caption>
-// ));
-
 export function Nonce({ nonceVal, ...rest }: TextProps & { nonceVal: number }) {
   return (
     <Caption as="span" {...rest}>
