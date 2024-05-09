@@ -82,19 +82,32 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
               </Text>
             )}
           </Flex>
-          <Flex width="full" direction="row" justifyContent="space-between" minWidth="0">
+          <Flex width="full" direction="row" justifyContent="space-between" minWidth="0" gap={2}>
             {leftContent.subtitle && (
-              <Text fontSize={'xs'} color={'textSubdued'} minWidth="0" flex="1 1 auto">
+              // <Flex flex="1 1 auto" flexWrap="wrap" minWidth="0">
+              <Text
+                // display="flex"
+                fontSize="xs"
+                color="textSubdued"
+                flex="1 1 auto"
+                flexWrap="wrap"
+                alignItems="flex-start"
+
+                // minWidth="0"
+              >
                 {leftContent.subtitle}
               </Text>
+              // </Flex>
             )}
             {rightContent.subtitle && (
               <Text
-                fontSize={'xs'}
-                color={'textSubdued'}
+                display="flex"
+                fontSize="xs"
+                color="textSubdued"
                 minWidth="0"
                 flex="0 1 auto"
                 justifyContent="flex-end"
+                alignItems="flex-start"
               >
                 {rightContent.subtitle}
               </Text>
@@ -126,7 +139,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 </Text>
               ) : null}
               {leftContent.subtitle !== undefined ? (
-                <Text fontSize={'xs'} color={'textSubdued'}>
+                <Text fontSize='xs' color='textSubdued'>
                   {leftContent.subtitle}
                 </Text>
               ) : null}
@@ -146,7 +159,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 <Text fontSize='sm'>{rightContent.title}</Text>
               ) : null}
               {rightContent.subtitle !== undefined ? (
-                <Text fontSize={'xs'} color={'textSubdued'}>
+                <Text fontSize='xs' color='textSubdued'>
                   {rightContent.subtitle}
                 </Text>
               ) : null}
