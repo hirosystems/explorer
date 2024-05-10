@@ -11,11 +11,11 @@ import { leftLineCss } from '../styles/hover';
 interface TwoColumnsListProps extends FlexProps {
   icon?: ReactNode;
   hoverEffect?: boolean;
-  leftContent: {
+  leftContent?: {
     title?: ReactNode;
     subtitle?: ReactNode;
   };
-  rightContent: {
+  rightContent?: {
     title?: ReactNode;
     subtitle?: ReactNode;
   };
