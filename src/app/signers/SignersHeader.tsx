@@ -1,8 +1,9 @@
-import { useColorMode } from '@chakra-ui/react';
+import { FormControl } from '@/ui/FormControl';
+import { FormLabel } from '@/ui/FormLabel';
+import { Switch } from '@/ui/Switch';
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
-import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
+import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
@@ -15,208 +16,10 @@ import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
-import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
+import { CurrentCycleCard } from './CurrentCycle';
+import { SignersDistribution } from './SignerDistribution';
 import { useStxSupply } from './data/usStxSupply';
-
-function CurrentCycleCard() {
-  const {
-    currentCycleId,
-    currentCycleProgressPercentage,
-    approximateDaysSinceCurrentCycleStart,
-    approximateDaysTilNextCycle,
-  } = useSuspenseCurrentStackingCycle();
-  const colorMode = useColorMode().colorMode;
-  const [gradientId] = useState(`colorUv-${Math.random()}`);
-
-  const pieData = useMemo(
-    () => [
-      {
-        name: 'cycle_remaining',
-        value: Number.parseFloat((1 - currentCycleProgressPercentage).toFixed(1)),
-      },
-      {
-        name: 'cycle_progress',
-        value: Number.parseFloat(currentCycleProgressPercentage.toFixed(1)),
-      },
-    ],
-    [currentCycleProgressPercentage]
-  );
-
-  const pieChartWidth = 50;
-  const pieChartHeight = 50;
-
-  const renderActiveShape = useCallback(
-    (props: SectorProps) => {
-      const { cx, cy, innerRadius, outerRadius = 0, startAngle, endAngle, fill } = props;
-
-      return (
-        <>
-          {/* Background sector for 'cycle_remaining' to visually merge the segments */}
-          <Sector
-            cx={cx}
-            cy={cy}
-            innerRadius={innerRadius}
-            outerRadius={outerRadius}
-            startAngle={0}
-            endAngle={360}
-            fill={
-              colorMode === 'light'
-                ? 'var(--stacks-colors-purple-200)'
-                : 'var(--stacks-colors-slate-850)'
-            }
-            strokeWidth={0.5}
-            stroke={
-              colorMode === 'light'
-                ? 'var(--stacks-colors-purple-200)'
-                : 'var(--stacks-colors-slate-850)'
-            }
-          />
-          {/* Active 'cycle_progress' segment */}
-          <Sector
-            cx={cx}
-            cy={cy}
-            innerRadius={innerRadius}
-            outerRadius={outerRadius}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            fill={fill}
-            cornerRadius={outerRadius / 5}
-            strokeWidth={0.5}
-            stroke={fill}
-          />
-        </>
-      );
-    },
-    [colorMode]
-  );
-
-  const pieChart = useMemo(
-    () => (
-      <Box
-        width={pieChartWidth}
-        height={pieChartHeight}
-        minWidth={pieChartWidth}
-        minHeight={pieChartHeight}
-      >
-        <PieChart width={pieChartWidth} height={pieChartHeight}>
-          <defs>
-            <linearGradient
-              id={`${gradientId}-light`} // def for pie chart progress gradient for light mode
-              x1="28.1198"
-              y1="27.8877"
-              x2="8.60376"
-              y2="37.4809"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#5546FF" />
-              <stop offset="1" stopColor="#5546FF" stopOpacity="0.37" />
-            </linearGradient>
-          </defs>
-          <defs>
-            <linearGradient
-              id={`${gradientId}-dark`} // def for pie chart progress gradient for dark mode
-              x1="21.7866"
-              y1="25.8877"
-              x2="2.27051"
-              y2="35.4809"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#5C6CF2" />
-              <stop offset="1" stopColor="#7F97F1" />
-            </linearGradient>
-          </defs>
-          <Pie
-            paddingAngle={0}
-            startAngle={90}
-            endAngle={-270}
-            data={pieData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={false}
-            innerRadius={14}
-            outerRadius={22}
-            activeIndex={1} // Index of the segment you want to be rounded
-            activeShape={renderActiveShape}
-          >
-            {pieData.map((entry, index) => {
-              return (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={
-                    entry.name === 'cycle_remaining'
-                      ? 'var(--stacks-colors-purple-200)'
-                      : `url(#${`${gradientId}-${colorMode}`})`
-                  }
-                  stroke={
-                    entry.name === 'cycle_remaining' && colorMode === 'light'
-                      ? 'var(--stacks-colors-purple-200)'
-                      : entry.name === 'cycle_remaining' && colorMode === 'dark'
-                        ? 'var(--stacks-colors-slate-850)'
-                        : ''
-                  } // Ensure there's no stroke applied, or set it to match the background color
-                  strokeWidth={0.5}
-                />
-              );
-            })}
-          </Pie>
-        </PieChart>
-      </Box>
-    ),
-    [colorMode, gradientId, pieData, renderActiveShape]
-  );
-
-  return (
-    <Card padding={6} height="100%">
-      <Flex mb={3}>
-        <Box mr="16px">{pieChart}</Box>
-        <Stack gap={3}>
-          <Text fontSize={'xs'} fontWeight="medium" whiteSpace={'nowrap'}>
-            Current cycle
-          </Text>
-          <Box whiteSpace="nowrap">
-            <Text
-              fontSize="xl"
-              fontWeight="medium"
-              whiteSpace="nowrap"
-              display="inline-block"
-              mr={1}
-            >
-              {currentCycleId}
-            </Text>
-            <Text
-              fontSize="md"
-              fontWeight="14px"
-              whiteSpace="nowrap"
-              display="inline-block"
-              color="textSubdued"
-            >
-              {`(${(currentCycleProgressPercentage * 100).toFixed(1)}%)`}
-            </Text>
-          </Box>
-        </Stack>
-      </Flex>
-      <Text
-        fontSize={'xs'}
-        whiteSpace="nowrap"
-        fontWeight="medium"
-        color="textSubdued"
-        lineHeight={4}
-      >
-        {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
-          'day',
-          approximateDaysSinceCurrentCycleStart
-        )} ago / Ends in ~${approximateDaysTilNextCycle} ${pluralize(
-          'day',
-          approximateDaysTilNextCycle
-        )}`}
-      </Text>
-    </Card>
-  );
-}
 
 function StatCardBase({
   statTitle,
@@ -228,7 +31,7 @@ function StatCardBase({
   moreInfo: string | ReactNode;
 }) {
   return (
-    <Card padding={6}>
+    <Card padding={6} height="100%">
       <Stack gap={3}>
         <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
           {statTitle}
@@ -366,14 +169,16 @@ function NextCycleCard() {
 }
 
 export function SignersHeaderLayout({
-  title,
+  stackingTitle,
+  signerTitle,
   currentCycleCard,
   stxStakedCard,
   stxLockedCard,
   addressesStackingCard,
   nextCycleCard,
 }: {
-  title: ReactNode;
+  stackingTitle: ReactNode;
+  signerTitle: ReactNode;
   currentCycleCard: ReactNode;
   stxStakedCard: ReactNode;
   stxLockedCard: ReactNode;
@@ -383,28 +188,71 @@ export function SignersHeaderLayout({
 }) {
   return (
     <Card width="full" flexDirection="column" padding={7} gap={4}>
-      <Box width="full">
-        <Text fontSize="xs" fontWeight="semibold">
-          {title}
-        </Text>
+      <Box
+        display="grid"
+        gridTemplateColumns={['100%', '100%', '100%', 'repeat(2, 1fr)', 'repeat(2, 1fr)']}
+        gap={4}
+        className="stipido"
+      >
+        <Stack width="full" gap={4}>
+          <Flex
+            direction={['column', 'column', 'row', 'row', 'row']}
+            justifyContent="space-between"
+            gap={4}
+          >
+            <Text fontSize="xs" fontWeight="semibold">
+              {signerTitle}
+            </Text>
+            <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
+              <Switch id="show-public-signers" />
+              <FormLabel
+                htmlFor="show-public-signers"
+                mb="0"
+                fontSize={'14px'}
+                lineHeight={'1.5em'}
+                fontWeight={400}
+                textOverflow={'ellipsis'}
+                overflow={'hidden'}
+                whiteSpace={'nowrap'}
+              >
+                Show only public signers
+              </FormLabel>
+            </FormControl>
+          </Flex>
+          <SignersDistribution />
+        </Stack>
+        <Stack width="full" gap={4}>
+          <Text fontSize="xs" fontWeight="semibold">
+            {stackingTitle}
+          </Text>
+          <Box
+            display={['grid', 'grid', 'none', 'grid', 'grid']}
+            gridTemplateColumns="50% 50%"
+            width="100%"
+            gap={4}
+          >
+            <Box gridColumn={['span 2', 'span 2', 'span 1', 'span 2', 'span 2']}>
+              {currentCycleCard}
+            </Box>
+            {stxStakedCard}
+            {stxLockedCard}
+            {addressesStackingCard}
+            {nextCycleCard}
+          </Box>
+          <Stack width="100%" display={['none', 'none', 'flex', 'none', 'none']} gap={4}>
+            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" width="100%" gap={4}>
+              {currentCycleCard}
+              {stxStakedCard}
+            </Box>
+            <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" width="100%" gap={4}>
+              {stxLockedCard}
+              {addressesStackingCard}
+              {nextCycleCard}
+            </Box>
+          </Stack>
+        </Stack>
       </Box>
-      <Flex flexWrap="wrap" gap={4}>
-        <Box display={['block', 'block', 'block', 'none']} width="100%">
-          {currentCycleCard}
-        </Box>
-        <Box
-          display="grid"
-          gridTemplateColumns={['50% 50%', '50% 50%', '50% 50%', 'repeat(5, 1fr)']}
-          width="100%"
-          gap={4}
-        >
-          <Box display={['none', 'none', 'none', 'block']}>{currentCycleCard}</Box>
-          {stxStakedCard}
-          {stxLockedCard}
-          {addressesStackingCard}
-          {nextCycleCard}
-        </Box>
-      </Flex>
+
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
     </Card>
   );
@@ -413,7 +261,8 @@ export function SignersHeaderLayout({
 export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <SignersHeaderLayout
-      title="STACKING"
+      stackingTitle="STACKING"
+      signerTitle="SIGNER DISTRIBUTION"
       currentCycleCard={<CurrentCycleCard />}
       stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
       stxLockedCard={<StxLockedCard />}
