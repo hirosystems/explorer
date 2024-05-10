@@ -44,14 +44,29 @@ function getSignerDistributionPieChartStrokeWidth(votingPowerPercentage: number)
   }
 }
 
-function SignersDistributionLegend({ signers }: { signers: SignerInfo[] }) {
+function SignersDistributionLegend({
+  signers,
+  onlyShowPublicSigners,
+}: {
+  signers: SignerInfo[];
+  onlyShowPublicSigners: boolean;
+}) {
+  const filiteredSigners = onlyShowPublicSigners
+    ? signers.filter(signer => getSignerKeyName(signer.signing_key) !== 'unknown')
+    : signers;
+
   // TODO: Probably need to add an ellipsis to the text
   return (
     <Stack gap={2}>
-      {signers.map(signer => (
+      {filiteredSigners.map(signer => (
         <Flex justifyContent="space-between" key={signer.signing_key}>
           <Flex direction="row" gap={2} alignItems="center">
-            <Box borderRadius="50%" fill={'something'} />
+            <Box
+              height={2}
+              width={2}
+              borderRadius="50%"
+              backgroundColor={getSignerDistributionPieChartColor(signer.weight_percent)}
+            />
             <Text fontSize="sm">{getSignerKeyName(signer.signing_key)}</Text>
           </Flex>
           <Text fontSize="sm" fontWeight="semibold">
@@ -84,42 +99,23 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
   const renderActiveShape = useCallback((props: SectorProps) => {
     const { cx, cy, innerRadius, outerRadius = 0, startAngle, endAngle, fill } = props;
 
+    // You can modify this calculation to suit your scaling needs
+    const radiusOffset = value / 100;
+    const dynamicOuterRadius = outerRadius + radiusOffset;
+
     return (
-      <>
-        {/* Background sector for 'cycle_remaining' to visually merge the segments */}
-        {/* <Sector
-              cx={cx}
-              cy={cy}
-              innerRadius={innerRadius}
-              outerRadius={outerRadius}
-              startAngle={0}
-              endAngle={360}
-              fill={
-                colorMode === 'light'
-                  ? 'var(--stacks-colors-purple-200)'
-                  : 'var(--stacks-colors-slate-850)'
-              }
-              strokeWidth={0.5}
-              stroke={
-                colorMode === 'light'
-                  ? 'var(--stacks-colors-purple-200)'
-                  : 'var(--stacks-colors-slate-850)'
-              }
-            /> */}
-        {/* Active 'cycle_progress' segment */}
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-          cornerRadius={outerRadius / 5}
-          strokeWidth={0.5}
-          stroke={fill}
-        />
-      </>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        cornerRadius={outerRadius / 5}
+        strokeWidth={0.5}
+        stroke={fill}
+      />
     );
   }, []);
 
@@ -131,7 +127,12 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
       //   minWidth={pieChartWidth}
       //   minHeight={pieChartHeight}
       // >
-      <ResponsiveContainer width={pieChartWidth} height={pieChartHeight}>
+      <ResponsiveContainer
+        width={pieChartWidth}
+        height={pieChartHeight}
+        // width="75%"
+        // height="75%"
+      >
         <PieChart width={pieChartWidth} height={pieChartHeight}>
           <Pie
             paddingAngle={0}
@@ -144,8 +145,8 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
             cy="50%"
             labelLine={false}
             label={false}
-            innerRadius={14}
-            outerRadius={22}
+            innerRadius={40}
+            outerRadius={80}
             // activeIndex={1} // Index of the segment you want to be rounded
             activeShape={renderActiveShape}
           >
@@ -170,7 +171,11 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
   return pieChart;
 }
 
-export function SignersDistribution() {
+export function SignersDistribution({
+  onlyShowPublicSigners = false, // TODO: change to true
+}: {
+  onlyShowPublicSigners?: boolean;
+}) {
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
   const {
     data: { results: signers },
@@ -188,11 +193,14 @@ export function SignersDistribution() {
 
   return (
     <Card padding={6} height="100%">
-      <Flex justifyContent="center" alignItems="center">
+      <Flex height="100%" justifyContent="center" alignItems="center">
         <Grid templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}>
           <SignersDistributionPieChart signers={signers} />
           <Box display={['block', 'block', 'block', 'none', 'none']}>
-            <SignersDistributionLegend signers={signers} />
+            <SignersDistributionLegend
+              signers={signers}
+              onlyShowPublicSigners={onlyShowPublicSigners}
+            />
           </Box>
         </Grid>
       </Flex>

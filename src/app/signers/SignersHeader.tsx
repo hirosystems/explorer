@@ -3,7 +3,7 @@ import { FormLabel } from '@/ui/FormLabel';
 import { Switch } from '@/ui/Switch';
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
@@ -186,6 +186,8 @@ export function SignersHeaderLayout({
   nextCycleCard: ReactNode;
   historicalStackingDataLink: ReactNode;
 }) {
+  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
+
   return (
     <Card width="full" flexDirection="column" padding={7} gap={4}>
       <Box
@@ -199,15 +201,23 @@ export function SignersHeaderLayout({
             direction={['column', 'column', 'row', 'row', 'row']}
             justifyContent="space-between"
             gap={4}
+            height={6}
+            alignItems="center"
           >
             <Text fontSize="xs" fontWeight="semibold">
               {signerTitle}
             </Text>
             <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
-              <Switch id="show-public-signers" />
+              <Switch
+                id="only-show-public-signers"
+                onChange={() => {
+                  setOnlyShowPublicSigners(!onlyShowPublicSigners);
+                }}
+                isChecked={onlyShowPublicSigners}
+              />
               <FormLabel
-                htmlFor="show-public-signers"
-                mb="0"
+                htmlFor="only-show-public-signers"
+                m="0"
                 fontSize={'14px'}
                 lineHeight={'1.5em'}
                 fontWeight={400}
@@ -219,12 +229,14 @@ export function SignersHeaderLayout({
               </FormLabel>
             </FormControl>
           </Flex>
-          <SignersDistribution />
+          <SignersDistribution onlyShowPublicSigners={onlyShowPublicSigners} />
         </Stack>
         <Stack width="full" gap={4}>
-          <Text fontSize="xs" fontWeight="semibold">
-            {stackingTitle}
-          </Text>
+          <Flex height={6} alignItems="center">
+            <Text fontSize="xs" fontWeight="semibold">
+              {stackingTitle}
+            </Text>
+          </Flex>
           <Box
             display={['grid', 'grid', 'none', 'grid', 'grid']}
             gridTemplateColumns="50% 50%"

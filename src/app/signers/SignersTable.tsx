@@ -32,7 +32,7 @@ const StyledTable = styled(Table)`
   }
 `;
 
-const NUM_OF_ADDRESSES_TO_SHOW = 2;
+const NUM_OF_ADDRESSES_TO_SHOW = 1;
 
 export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
   <Th py={3} px={6} border="none">
