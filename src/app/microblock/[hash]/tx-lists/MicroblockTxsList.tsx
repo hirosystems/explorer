@@ -1,7 +1,6 @@
 'use client';
 
 import { FC, memo } from 'react';
-import * as React from 'react';
 
 import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../common/components/Section';
