@@ -65,11 +65,11 @@ function getSignerDistributionPieChartStrokeWidth(votingPowerPercentage: number)
   }
 }
 function SignerLegendItem({
-  signerSigningKey: signerName,
+  signerName,
   signerVotingPower,
   ...rest
 }: {
-  signerSigningKey: string;
+  signerName: string;
   signerVotingPower: number;
 } & TextProps) {
   return (
@@ -99,17 +99,35 @@ function SignersDistributionLegend({
   signers: SignerInfo[];
   onlyShowPublicSigners: boolean;
 }) {
+  const knownSigners = useMemo(
+    () =>
+      signers
+        .filter(signer => getSignerKeyName(signer.signing_key) !== 'unknown')
+        .map(signer => ({
+          value: signer.weight_percent,
+          name: getSignerKeyName(signer.signing_key),
+        })),
+    [signers]
+  );
+  const unknownSigners = useMemo(
+    () =>
+      signers
+        .filter(signer => getSignerKeyName(signer.signing_key) === 'unknown')
+        .reduce((acc, signer) => acc + signer.weight_percent, 0),
+    [signers]
+  );
+
   const filiteredSigners = onlyShowPublicSigners
-    ? signers.filter(signer => getSignerKeyName(signer.signing_key) !== 'unknown')
-    : signers;
+    ? knownSigners
+    : knownSigners.concat({ name: 'Private signers', value: unknownSigners });
 
   return (
     <Stack gap={2}>
       {filiteredSigners.map(signer => (
         <SignerLegendItem
-          key={signer.signing_key}
-          signerSigningKey={getSignerKeyName(signer.signing_key)}
-          signerVotingPower={signer.weight_percent}
+          key={signer.name}
+          signerName={signer.name}
+          signerVotingPower={signer.value}
         />
       ))}
     </Stack>
@@ -242,7 +260,7 @@ export function SignersDistributionPieChart({
             paddingY={2}
           >
             <SignerLegendItem
-              signerSigningKey={payload[0].name}
+              signerName={payload[0].name}
               signerVotingPower={payload[0].value}
               color="slate.50"
             />
