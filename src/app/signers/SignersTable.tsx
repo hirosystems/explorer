@@ -7,7 +7,6 @@ import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
 import { ApiResponseWithResultsOffset } from '../../common/types/api';
 import { truncateMiddle } from '../../common/utils/utils';
-import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Show } from '../../ui/Show';
 import { Table } from '../../ui/Table';
@@ -17,9 +16,10 @@ import { Text } from '../../ui/Text';
 import { Th } from '../../ui/Th';
 import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
+import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
-import { SIGNER_KEY_MAP } from './consts';
+import { SIGNER_KEY_MAP, mobileBorderCss } from './consts';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 
@@ -35,8 +35,14 @@ const StyledTable = styled(Table)`
 
 const NUM_OF_ADDRESSES_TO_SHOW = 1;
 
-export const SignersTableHeader = ({ headerTitle }: { headerTitle: string }) => (
-  <Th py={3} px={6} border="none">
+export const SignersTableHeader = ({
+  headerTitle,
+  isFirst,
+}: {
+  headerTitle: string;
+  isFirst: boolean;
+}) => (
+  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}}>
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -70,8 +76,12 @@ export const signersTableHeaders = [
 
 export const SignersTableHeaders = () => (
   <Tr>
-    {signersTableHeaders.map(header => (
-      <SignersTableHeader key={`signers-table-header-${header}`} headerTitle={header} />
+    {signersTableHeaders.map((header, i) => (
+      <SignersTableHeader
+        key={`signers-table-header-${header}`}
+        headerTitle={header}
+        isFirst={i === 0}
+      />
     ))}
   </Tr>
 );
@@ -96,7 +106,7 @@ const SignerTableRow = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6}>
+      <Td py={3} px={6} sx={mobileBorderCss}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {index + 1}
         </Text>
@@ -170,12 +180,12 @@ export function SignersTableLayout({
         />
       }
     >
-      <Box overflowX={'auto'}>
+      <ScrollableBox>
         <StyledTable width="full">
           <Thead>{signersTableHeaders}</Thead>
           <Tbody>{signersTableRows}</Tbody>
         </StyledTable>
-      </Box>
+      </ScrollableBox>
     </Section>
   );
 }

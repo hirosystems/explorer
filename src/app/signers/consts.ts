@@ -64,3 +64,8 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
     name: 'Luxor',
   },
 };
+export const mobileBorderCss = {
+  '.has-horizontal-scroll &': {
+    borderRight: '2px solid var(--stacks-colors-borderPrimary)',
+  },
+};

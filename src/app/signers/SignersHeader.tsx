@@ -52,28 +52,17 @@ function StatCardBase({
 }
 
 function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
-  const stxStakedUsd = tokenPrice.stxPrice * lockedSupply;
+  const { stackedSupply } = useStxSupply();
+  const stxStakedUsd = tokenPrice.stxPrice * stackedSupply;
   const stxStakedUsdFormatted = `$${Math.round(stxStakedUsd).toLocaleString()}`;
   const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
   const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
   const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
-  // console.log('StxStackedCard', {
-  //   totalSupply,
-  //   lockedSupply,
-  //   unlockedSupply,
-  //   tokenPrice,
-  //   stxStakedUsd,
-  //   stxStakedUsdFormatted,
-  //   stxStakedBtc,
-  //   stxStakedBtcFormatted,
-  //   moreInfo,
-  // });
 
   return (
     <StatCardBase
       statTitle="STX stacked"
-      statValue={numberToString(lockedSupply)}
+      statValue={numberToString(stackedSupply)}
       moreInfo={
         <Text
           fontSize="xs"
@@ -90,19 +79,17 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
 }
 
 function StxLockedCard() {
-  const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
+  const { stackedSupply, circulatingSupply } = useStxSupply();
 
-  const stxLockedPercentageFormatted = `${((lockedSupply / totalSupply) * 100).toFixed(1)}%`;
-  // console.log('StxLockedCard', {
-  //   isUnlockedStxGreaterThanTotalStx: unlockedSupply > totalSupply,
-  //   stxStaked: lockedSupply,
-  //   stxLockedPercentageFormatted,
-  // });
+  const stxStackedPercentageFormatted = `${((stackedSupply / circulatingSupply) * 100).toFixed(
+    1
+  )}%`;
+
   return (
     <StatCardBase
       statTitle="Total stacked"
-      statValue={stxLockedPercentageFormatted}
-      moreInfo={`of ${numberToString(totalSupply)} circulating supply`}
+      statValue={stxStackedPercentageFormatted}
+      moreInfo={`of ${numberToString(circulatingSupply)} circulating supply`}
     />
   );
 }
@@ -112,7 +99,7 @@ function AddressesStackingCard() {
   const randomStatFormatted = `${Math.abs(randomStat)}%`;
   const icon = randomStat > 0 ? ArrowUpRight : ArrowDownRight;
   const modifier = randomStat > 0 ? 'more' : 'less';
-  // console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
+  console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
 
   const moreInfo = (
     <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
@@ -196,7 +183,14 @@ export function SignersHeaderLayout({
         gap={8}
         className="stupido"
       >
-        <Stack width="full" gap={4} paddingY={7} paddingLeft={7} paddingRight={[7, 7, 7, 0, 0]}>
+        <Stack
+          width="full"
+          gap={4}
+          paddingTop={7}
+          paddingBottom={[0, 0, 0, 7, 7]}
+          paddingLeft={7}
+          paddingRight={[7, 7, 7, 0, 0]}
+        >
           <Flex
             direction={['column', 'column', 'row', 'row', 'row']}
             justifyContent="space-between"
@@ -237,7 +231,15 @@ export function SignersHeaderLayout({
           display={['none', 'none', 'none', 'block', 'block']}
           margin={0}
         />
-        <Stack width="full" gap={4} paddingY={7} paddingRight={7} paddingLeft={[7, 7, 7, 0, 0]}>
+        <Stack
+          width="full"
+          gap={4}
+          paddingY={7}
+          paddingRight={7}
+          paddingLeft={[7, 7, 7, 0, 0]}
+          paddingBottom={7}
+          paddingTop={[0, 0, 0, 7, 7]}
+        >
           <Flex height={6} alignItems="center">
             <Text fontSize="xs" fontWeight="semibold">
               {stackingTitle}

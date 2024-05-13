@@ -6,8 +6,7 @@ export function useStxSupply() {
   const { total_liquid_supply_ustx, current_cycle: { stacked_ustx = 0 } = ({} = {}) } =
     poxData || {};
   return {
-    totalSupply: (stacked_ustx + total_liquid_supply_ustx) / MICROSTACKS_IN_STACKS,
-    unlockedSupply: total_liquid_supply_ustx / MICROSTACKS_IN_STACKS,
-    lockedSupply: stacked_ustx / MICROSTACKS_IN_STACKS,
+    circulatingSupply: total_liquid_supply_ustx / MICROSTACKS_IN_STACKS,
+    stackedSupply: stacked_ustx / MICROSTACKS_IN_STACKS,
   };
 }
