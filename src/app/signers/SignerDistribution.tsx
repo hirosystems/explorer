@@ -80,15 +80,21 @@ function SignersDistributionLegend({
 
 // TODO: split out
 export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[] }) {
+  const baseInnerRadius = 40;
+  const baseOuterRadius = 80;
+  const scaleFactor = 0.1; // Adjust based on your requirements
+
   const pieData = useMemo(
     () =>
       signers.map(signer => ({
         name: getSignerKeyName(signer.signing_key),
         value: signer.weight_percent,
+        innerRadius: baseInnerRadius + signer.weight_percent * scaleFactor,
+        outerRadius: baseOuterRadius + signer.weight_percent * scaleFactor,
       })),
+
     [signers]
   );
-  console.log({ pieData });
 
   const pieChartWidth = 200;
   const pieChartHeight = 200;
@@ -97,18 +103,25 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
   const colorMode = useColorMode().colorMode;
 
   const renderActiveShape = useCallback((props: SectorProps) => {
-    const { cx, cy, innerRadius, outerRadius = 0, startAngle, endAngle, fill } = props;
+    const { cx, cy, innerRadius, outerRadius = 0, startAngle, endAngle, fill, value, name } = props;
 
-    // You can modify this calculation to suit your scaling needs
-    const radiusOffset = value / 100;
-    const dynamicOuterRadius = outerRadius + radiusOffset;
+    // Define a base size and a scale factor
+    const baseSize = 10; // Base increment size
+    const scaleFactor = 0.1; // Adjust this factor to increase or decrease the impact of the value on size
+
+    // Calculate dynamic radii based on the value
+    const increment = value * scaleFactor;
+    const dynamicInnerRadius = innerRadius + increment;
+    const dynamicOuterRadius = outerRadius + increment;
+    console.log({ name, value, increment, dynamicInnerRadius, dynamicOuterRadius });
 
     return (
       <Sector
         cx={cx}
         cy={cy}
         innerRadius={innerRadius}
-        outerRadius={outerRadius}
+        // outerRadius={outerRadius}
+        outerRadius={dynamicOuterRadius}
         startAngle={startAngle}
         endAngle={endAngle}
         fill={fill}
@@ -118,6 +131,8 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
       />
     );
   }, []);
+
+  const activeIndex = 0; // Constant index for all segments
 
   const pieChart = useMemo(
     () => (
@@ -145,17 +160,21 @@ export function SignersDistributionPieChart({ signers }: { signers: SignerInfo[]
             cy="50%"
             labelLine={false}
             label={false}
-            innerRadius={40}
-            outerRadius={80}
-            // activeIndex={1} // Index of the segment you want to be rounded
+            // innerRadius={40}
+            // outerRadius={80}
+            activeIndex={activeIndex} // Index of the segment you want to be rounded
             activeShape={renderActiveShape}
+            // content={<CustomSector />}
+
+            // innerRadius={data => data.innerRadius}
+            // outerRadius={data => data.outerRadius}
           >
             {pieData.map((entry, index) => {
               return (
                 <Cell
-                  key={`cell-${entry.name}`}
+                  key={`cell-${index}`}
                   fill={getSignerDistributionPieChartColor(entry.value)}
-                  stroke={getSignerDistributionPieChartColor(entry.value)} // Ensure there's no stroke applied, or set it to match the background color
+                  // stroke={getSignerDistributionPieChartColor(entry.value)} // Ensure there's no stroke applied, or set it to match the background color
                   strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
                 />
               );
@@ -189,7 +208,6 @@ export function SignersDistribution({
       })),
     [signers]
   );
-  console.log({ pieData });
 
   return (
     <Card padding={6} height="100%">

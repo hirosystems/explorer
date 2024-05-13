@@ -220,8 +220,8 @@ dependencies:
     specifier: npm:preact-ssr-prepass
     version: /preact-ssr-prepass@1.2.1(preact@10.19.3)
   recharts:
-    specifier: 2.12.0
-    version: 2.12.0(react-dom@18.2.0)(react@18.2.0)
+    specifier: 2.12.7
+    version: 2.12.7(react-dom@18.2.0)(react@18.2.0)
   schema-inspector:
     specifier: 2.0.0
     version: 2.0.0
@@ -9840,8 +9840,8 @@ packages:
       decimal.js-light: 2.5.1
     dev: false
 
-  /recharts@2.12.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-rVNcdNQ5b7+40Ue7mcEKZJyEv+3SUk2bDEVvOyXPDXXVE7TU3lrvnJUgAvO36hSzhRP2DnAamKXvHLFIFOU0Ww==}
+  /recharts@2.12.7(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-hlLJMhPQfv4/3NBSAyq3gzGg4h2v69RJh6KU7b3pXYNNAELs9kEoXOjbkxdXpALqKBoVmVptGfLpxdaVYqjmXQ==}
     engines: {node: '>=14'}
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0

@@ -58,17 +58,17 @@ function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
   const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
   const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
-  console.log('StxStackedCard', {
-    totalSupply,
-    lockedSupply,
-    unlockedSupply,
-    tokenPrice,
-    stxStakedUsd,
-    stxStakedUsdFormatted,
-    stxStakedBtc,
-    stxStakedBtcFormatted,
-    moreInfo,
-  });
+  // console.log('StxStackedCard', {
+  //   totalSupply,
+  //   lockedSupply,
+  //   unlockedSupply,
+  //   tokenPrice,
+  //   stxStakedUsd,
+  //   stxStakedUsdFormatted,
+  //   stxStakedBtc,
+  //   stxStakedBtcFormatted,
+  //   moreInfo,
+  // });
 
   return (
     <StatCardBase
@@ -93,11 +93,11 @@ function StxLockedCard() {
   const { totalSupply, lockedSupply, unlockedSupply } = useStxSupply();
 
   const stxLockedPercentageFormatted = `${((lockedSupply / totalSupply) * 100).toFixed(1)}%`;
-  console.log('StxLockedCard', {
-    isUnlockedStxGreaterThanTotalStx: unlockedSupply > totalSupply,
-    stxStaked: lockedSupply,
-    stxLockedPercentageFormatted,
-  });
+  // console.log('StxLockedCard', {
+  //   isUnlockedStxGreaterThanTotalStx: unlockedSupply > totalSupply,
+  //   stxStaked: lockedSupply,
+  //   stxLockedPercentageFormatted,
+  // });
   return (
     <StatCardBase
       statTitle="Total stacked"
@@ -112,7 +112,7 @@ function AddressesStackingCard() {
   const randomStatFormatted = `${Math.abs(randomStat)}%`;
   const icon = randomStat > 0 ? ArrowUpRight : ArrowDownRight;
   const modifier = randomStat > 0 ? 'more' : 'less';
-  console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
+  // console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
 
   const moreInfo = (
     <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
@@ -186,7 +186,7 @@ export function SignersHeaderLayout({
   nextCycleCard: ReactNode;
   historicalStackingDataLink: ReactNode;
 }) {
-  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
+  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false); // TODO: don't really like this here
 
   return (
     <Card width="full" flexDirection="column" padding={7} gap={4}>
