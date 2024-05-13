@@ -47,7 +47,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 flexWrap="wrap"
                 gap={2}
               >
-                {leftContent.title && (
+                {leftContent?.title && (
                   <Text
                     alignItems="center"
                     gap={1.5}
@@ -59,7 +59,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                     {leftContent.title}
                   </Text>
                 )}
-                {rightContent.title && <Text fontSize="sm">{rightContent.title}</Text>}
+                {rightContent?.title && <Text fontSize="sm">{rightContent.title}</Text>}
               </Flex>
               <Flex
                 width="full"
@@ -69,12 +69,12 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 flexWrap="wrap"
                 gap={2}
               >
-                {leftContent.subtitle && (
+                {leftContent?.subtitle && (
                   <Text fontSize="xs" color="textSubdued">
                     {leftContent.subtitle}
                   </Text>
                 )}
-                {rightContent.subtitle && (
+                {rightContent?.subtitle && (
                   <Text fontSize="xs" color="textSubdued">
                     {rightContent.subtitle}
                   </Text>
@@ -96,7 +96,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
             {...rest}
           >
             <Flex width="full" gap={2} direction="column">
-              {leftContent.title && (
+              {leftContent?.title && (
                 <Text
                   alignItems="center"
                   gap={1.5}
@@ -108,13 +108,13 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                   {leftContent.title}
                 </Text>
               )}
-              {leftContent.subtitle && (
+              {leftContent?.subtitle && (
                 <Text fontSize="xs" color="textSubdued">
                   {leftContent.subtitle}
                 </Text>
               )}
-              {rightContent.title && <Text fontSize="sm">{rightContent.title}</Text>}
-              {rightContent.subtitle && (
+              {rightContent?.title && <Text fontSize="sm">{rightContent.title}</Text>}
+              {rightContent?.subtitle && (
                 <Text fontSize="xs" color="textSubdued">
                   {rightContent.subtitle}
                 </Text>
