@@ -53,7 +53,8 @@ export default function Skeleton() {
       </PageTitle>
 
       <SignersHeaderLayout
-        title={<SkeletonItem width="30%" height="14px" />}
+        signerTitle={<SkeletonItem width="30%" height="14px" />}
+        stackingTitle={<SkeletonItem width="30%" height="14px" />}
         currentCycleCard={
           <Card>
             <SkeletonStatSection />
