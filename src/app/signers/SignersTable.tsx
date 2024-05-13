@@ -245,7 +245,7 @@ const SignerTable = () => {
   );
 
   useEffect(() => {
-    console.log({ signers, SIGNER_KEY_MAP });
+    console.log({ signers, SIGNER_KEY_MAP: SIGNER_KEY_MAP });
   }, [signers]);
 
   return (
