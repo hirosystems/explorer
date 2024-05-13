@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
-import React, { ReactNode, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
@@ -19,6 +19,7 @@ import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
+import { SIGNER_KEY_MAP } from './consts';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 
@@ -232,6 +233,10 @@ const SignerTable = () => {
         ),
     [signers, signersStackers, votingPowerSortOrder]
   );
+
+  useEffect(() => {
+    console.log({ signers, SIGNER_KEY_MAP });
+  }, [signers]);
 
   return (
     <SignersTableLayout

@@ -189,20 +189,20 @@ export function SignersHeaderLayout({
   const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false); // TODO: don't really like this here
 
   return (
-    <Card width="full" flexDirection="column" padding={7} gap={4}>
-      <Box
-        display="grid"
-        gridTemplateColumns={['100%', '100%', '100%', 'repeat(2, 1fr)', 'repeat(2, 1fr)']}
-        gap={4}
-        className="stipido"
+    <Card width="full" flexDirection="column" gap={4}>
+      <Stack
+        display="flex"
+        flexDirection={['column', 'column', 'column', 'row', 'row']}
+        gap={8}
+        className="stupido"
       >
-        <Stack width="full" gap={4}>
+        <Stack width="full" gap={4} paddingY={7} paddingLeft={7} paddingRight={[7, 7, 7, 0, 0]}>
           <Flex
             direction={['column', 'column', 'row', 'row', 'row']}
             justifyContent="space-between"
             gap={4}
-            height={6}
-            alignItems="center"
+            height={['auto', 'auto', 6, 6, 6]}
+            alignItems={['flex-start', 'flex-start', 'flex-start', 'center', 'center']}
           >
             <Text fontSize="xs" fontWeight="semibold">
               {signerTitle}
@@ -231,7 +231,13 @@ export function SignersHeaderLayout({
           </Flex>
           <SignersDistribution onlyShowPublicSigners={onlyShowPublicSigners} />
         </Stack>
-        <Stack width="full" gap={4}>
+        <Box
+          width="1px"
+          border="1px solid var(--stacks-colors-borderSecondary)"
+          display={['none', 'none', 'none', 'block', 'block']}
+          margin={0}
+        />
+        <Stack width="full" gap={4} paddingY={7} paddingRight={7} paddingLeft={[7, 7, 7, 0, 0]}>
           <Flex height={6} alignItems="center">
             <Text fontSize="xs" fontWeight="semibold">
               {stackingTitle}
@@ -239,9 +245,11 @@ export function SignersHeaderLayout({
           </Flex>
           <Box
             display={['grid', 'grid', 'none', 'grid', 'grid']}
-            gridTemplateColumns="50% 50%"
+            gridTemplateColumns="repeat(2, 1fr)"
             width="100%"
             gap={4}
+            className="original-signer-headers"
+            boxSizing="border-box"
           >
             <Box gridColumn={['span 2', 'span 2', 'span 1', 'span 2', 'span 2']}>
               {currentCycleCard}
@@ -263,8 +271,7 @@ export function SignersHeaderLayout({
             </Box>
           </Stack>
         </Stack>
-      </Box>
-
+      </Stack>
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
     </Card>
   );
