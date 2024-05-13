@@ -1,14 +1,14 @@
-import { Box } from '@/ui/Box';
-import { Flex } from '@/ui/Flex';
-import { Grid } from '@/ui/Grid';
-import { Stack } from '@/ui/Stack';
-import { Text, TextProps } from '@/ui/Text';
 import { ColorMode, useBreakpointValue, useColorMode } from '@chakra-ui/react';
 import { useCallback, useMemo } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
 import { Card } from '../../common/components/Card';
+import { Box } from '../../ui/Box';
+import { Flex } from '../../ui/Flex';
+import { Grid } from '../../ui/Grid';
+import { Stack } from '../../ui/Stack';
+import { Text, TextProps } from '../../ui/Text';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 import { getSignerKeyName } from './utils';
