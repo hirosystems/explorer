@@ -1,25 +1,27 @@
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from '@phosphor-icons/react';
+import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
 import pluralize from 'pluralize';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { ApiResponseWithResultsOffset } from '../../common/types/api';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { numberToString } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
-import { FormControl } from '../../ui/FormControl';
-import { FormLabel } from '../../ui/FormLabel';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
-import { Switch } from '../../ui/Switch';
 import { Text } from '../../ui/Text';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
+import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
 import { CurrentCycleCard } from './CurrentCycle';
-import { SignersDistribution } from './SignerDistribution';
+import { SignerDistributionHeader, SignersDistribution } from './SignerDistribution';
+import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { useStxSupply } from './data/usStxSupply';
+import { useSuspensePoxSigners } from './data/useSigners';
 
 function StatCardBase({
   statTitle,
@@ -53,32 +55,45 @@ function StatCardBase({
 
 function StxStackedCard({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { stackedSupply } = useStxSupply();
-  const stxStakedUsd = tokenPrice.stxPrice * stackedSupply;
-  const stxStakedUsdFormatted = `$${Math.round(stxStakedUsd).toLocaleString()}`;
-  const stxStakedBtc = stxStakedUsd / tokenPrice.btcPrice;
-  const stxStakedBtcFormatted = `${stxStakedBtc.toFixed(1)} BTC`;
-  const moreInfo = `${stxStakedUsdFormatted} / ${stxStakedBtcFormatted}`;
+  const stackedStxUsdValue =
+    tokenPrice.stxPrice != null ? tokenPrice.stxPrice * stackedSupply : undefined;
+  const stackedStxUsdValueFormatted = stackedStxUsdValue
+    ? `$${Math.round(stackedStxUsdValue).toLocaleString()}`
+    : undefined;
+  const stackedStxBtcValue =
+    stackedStxUsdValue && tokenPrice.btcPrice != null && tokenPrice.btcPrice !== 0
+      ? stackedStxUsdValue / tokenPrice.btcPrice
+      : undefined;
+  const stackedStxBtcValueFormatted = stackedStxBtcValue
+    ? `${stackedStxBtcValue.toFixed(1)} BTC`
+    : undefined;
+  const moreInfo =
+    stackedStxUsdValueFormatted && stackedStxBtcValueFormatted
+      ? `${stackedStxUsdValueFormatted} / ${stackedStxBtcValueFormatted}`
+      : undefined;
 
   return (
     <StatCardBase
       statTitle="STX stacked"
       statValue={numberToString(stackedSupply)}
       moreInfo={
-        <Text
-          fontSize="xs"
-          fontWeight="medium"
-          color="textSubdued"
-          whiteSpace="nowrap"
-          lineHeight={4}
-        >
-          {moreInfo}
-        </Text>
+        moreInfo ? (
+          <Text
+            fontSize="xs"
+            fontWeight="medium"
+            color="textSubdued"
+            whiteSpace="nowrap"
+            lineHeight={4}
+          >
+            {moreInfo}
+          </Text>
+        ) : null
       }
     />
   );
 }
 
-function StxLockedCard() {
+function TotalStackedCard() {
   const { stackedSupply, circulatingSupply } = useStxSupply();
 
   const stxStackedPercentageFormatted = `${((stackedSupply / circulatingSupply) * 100).toFixed(
@@ -89,29 +104,78 @@ function StxLockedCard() {
     <StatCardBase
       statTitle="Total stacked"
       statValue={stxStackedPercentageFormatted}
-      moreInfo={`of ${numberToString(circulatingSupply)} circulating supply`}
+      moreInfo={`/ ${numberToString(circulatingSupply)} circulating supply`}
     />
   );
 }
 
 function AddressesStackingCard() {
-  const randomStat = Math.floor(Math.random() * 201) - 100; // Random number between -100 and 100 TODO: replace with actual data
-  const randomStatFormatted = `${Math.abs(randomStat)}%`;
-  const icon = randomStat > 0 ? ArrowUpRight : ArrowDownRight;
-  const modifier = randomStat > 0 ? 'more' : 'less';
-  console.log('AddressesStackingCard - this data is unavailable atm and is randomly generated');
+  const { currentCycleId } = useSuspenseCurrentStackingCycle();
+  const previousCycleId = useMemo(() => currentCycleId - 1, [currentCycleId]);
 
-  const moreInfo = (
+  const {
+    data: { results: currentCycleSigners },
+  } = useSuspensePoxSigners(currentCycleId);
+  const {
+    data: { results: previousCycleSigners },
+  } = useSuspensePoxSigners(previousCycleId);
+
+  const queryClient = useQueryClient();
+  const getQuery = useGetStackersBySignerQuery();
+  const currentCycleSignersStackersQueries = useMemo(() => {
+    return {
+      queries: currentCycleSigners.map(signer => {
+        return getQuery(currentCycleId, signer.signing_key);
+      }),
+      combine: (
+        response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
+      ) => response.map(r => r.data?.results ?? []),
+    };
+  }, [currentCycleSigners, getQuery, currentCycleId]);
+  const previousCycleSignersStackersQueries = useMemo(() => {
+    return {
+      queries: previousCycleSigners
+        ? previousCycleSigners.map(signer => {
+            return getQuery(previousCycleId, signer.signing_key);
+          })
+        : [],
+      combine: (
+        response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
+      ) => response.map(r => r.data?.results ?? []),
+    };
+  }, [previousCycleSigners, getQuery, previousCycleId]);
+
+  const currentCycleSignersStackers = useQueries(currentCycleSignersStackersQueries, queryClient);
+  const previousCycleSignersStackers = useQueries(previousCycleSignersStackersQueries, queryClient);
+
+  const numCurrentCycleStackers = currentCycleSignersStackers.length;
+  const numPreviousCycleStackers = previousCycleSignersStackers.length;
+
+  const rate = numPreviousCycleStackers
+    ? (numCurrentCycleStackers - numPreviousCycleStackers) / numPreviousCycleStackers
+    : undefined;
+
+  const moreInfo = rate ? (
     <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
       <Text display="inline" whiteSpace="nowrap">
-        <Icon as={icon} size={3} color={randomStat > 0 ? 'green.600' : 'red.600'} />
-        &nbsp;{`${randomStatFormatted}`}&nbsp;
+        <Icon
+          as={rate > 0 ? ArrowUpRight : ArrowDownRight}
+          size={3}
+          color={rate > 0 ? 'green.600' : 'red.600'}
+        />
+        &nbsp;{`${rate * 100}%`}&nbsp;
       </Text>
-      <Text display="inline">{`${modifier} than previous cycle`}</Text>
+      <Text display="inline">{`${rate > 0 ? 'more' : 'less'} than previous cycle`}</Text>
     </Text>
-  );
+  ) : null;
 
-  return <StatCardBase statTitle="Addresses stacking" statValue={'2,443'} moreInfo={moreInfo} />;
+  return (
+    <StatCardBase
+      statTitle="Addresses stacking"
+      statValue={numCurrentCycleStackers.toString()}
+      moreInfo={moreInfo}
+    />
+  );
 }
 
 function NextCycleCard() {
@@ -157,32 +221,27 @@ function NextCycleCard() {
 
 export function SignersHeaderLayout({
   stackingTitle,
-  signerTitle,
   currentCycleCard,
   stxStakedCard,
   stxLockedCard,
   addressesStackingCard,
   nextCycleCard,
+  signerDistribution,
+  signerDistributionHeader,
 }: {
   stackingTitle: ReactNode;
-  signerTitle: ReactNode;
   currentCycleCard: ReactNode;
   stxStakedCard: ReactNode;
   stxLockedCard: ReactNode;
   addressesStackingCard: ReactNode;
   nextCycleCard: ReactNode;
+  signerDistributionHeader: ReactNode;
+  signerDistribution: ReactNode;
   historicalStackingDataLink: ReactNode;
 }) {
-  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false); // TODO: don't really like this here
-
   return (
     <Card width="full" flexDirection="column" gap={4}>
-      <Stack
-        display="flex"
-        flexDirection={['column', 'column', 'column', 'row', 'row']}
-        gap={8}
-        className="stupido"
-      >
+      <Stack display="flex" flexDirection={['column', 'column', 'column', 'row', 'row']} gap={8}>
         <Stack
           width="full"
           gap={4}
@@ -191,39 +250,8 @@ export function SignersHeaderLayout({
           paddingLeft={7}
           paddingRight={[7, 7, 7, 0, 0]}
         >
-          <Flex
-            direction={['column', 'column', 'row', 'row', 'row']}
-            justifyContent="space-between"
-            gap={4}
-            height={['auto', 'auto', 6, 6, 6]}
-            alignItems={['flex-start', 'flex-start', 'flex-start', 'center', 'center']}
-          >
-            <Text fontSize="xs" fontWeight="semibold">
-              {signerTitle}
-            </Text>
-            <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
-              <Switch
-                id="only-show-public-signers"
-                onChange={() => {
-                  setOnlyShowPublicSigners(!onlyShowPublicSigners);
-                }}
-                isChecked={onlyShowPublicSigners}
-              />
-              <FormLabel
-                htmlFor="only-show-public-signers"
-                m="0"
-                fontSize={'14px'}
-                lineHeight={'1.5em'}
-                fontWeight={400}
-                textOverflow={'ellipsis'}
-                overflow={'hidden'}
-                whiteSpace={'nowrap'}
-              >
-                Show only public signers
-              </FormLabel>
-            </FormControl>
-          </Flex>
-          <SignersDistribution onlyShowPublicSigners={onlyShowPublicSigners} />
+          {signerDistributionHeader}
+          {signerDistribution}
         </Stack>
         <Box
           width="1px"
@@ -250,7 +278,6 @@ export function SignersHeaderLayout({
             gridTemplateColumns="repeat(2, 1fr)"
             width="100%"
             gap={4}
-            className="original-signer-headers"
             boxSizing="border-box"
           >
             <Box gridColumn={['span 2', 'span 2', 'span 1', 'span 2', 'span 2']}>
@@ -280,15 +307,24 @@ export function SignersHeaderLayout({
 }
 
 export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
+  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
+
   return (
     <SignersHeaderLayout
       stackingTitle="STACKING"
-      signerTitle="SIGNER DISTRIBUTION"
       currentCycleCard={<CurrentCycleCard />}
       stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
-      stxLockedCard={<StxLockedCard />}
+      stxLockedCard={<TotalStackedCard />}
       addressesStackingCard={<AddressesStackingCard />}
       nextCycleCard={<NextCycleCard />}
+      signerDistributionHeader={
+        <SignerDistributionHeader
+          signerTitle="SIGNER DISTRIBUTION"
+          onlyShowPublicSigners={onlyShowPublicSigners}
+          setOnlyShowPublicSigners={setOnlyShowPublicSigners}
+        />
+      }
+      signerDistribution={<SignersDistribution onlyShowPublicSigners={onlyShowPublicSigners} />}
       historicalStackingDataLink={
         <Flex alignItems="center">
           <Link href="/" color="textSubdued" fontSize="xs" mr={1}>

@@ -12,8 +12,11 @@ import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import { Card } from '../../common/components/Card';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
+import { FormControl } from '../../ui/FormControl';
+import { FormLabel } from '../../ui/FormLabel';
 import { Grid } from '../../ui/Grid';
 import { Stack } from '../../ui/Stack';
+import { Switch } from '../../ui/Switch';
 import { Text, TextProps } from '../../ui/Text';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
@@ -425,10 +428,9 @@ export function SignersDistribution({
   } = useSuspensePoxSigners(currentCycleId);
 
   return (
-    <Card padding={6} height="100%" className="card">
-      <Flex className="flex" height="100%" width="100%" justifyContent="center" alignItems="center">
+    <Card padding={6} height="100%">
+      <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
         <Grid
-          className="grid"
           height="100%"
           width="100%"
           templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
@@ -450,5 +452,50 @@ export function SignersDistribution({
         </Grid>
       </Flex>
     </Card>
+  );
+}
+
+export function SignerDistributionHeader({
+  signerTitle,
+  setOnlyShowPublicSigners,
+  onlyShowPublicSigners,
+}: {
+  signerTitle: string;
+  setOnlyShowPublicSigners: (value: boolean) => void;
+  onlyShowPublicSigners: boolean;
+}) {
+  return (
+    <Flex
+      direction={['column', 'column', 'row', 'row', 'row']}
+      justifyContent="space-between"
+      gap={4}
+      height={['auto', 'auto', 6, 6, 6]}
+      alignItems={['flex-start', 'flex-start', 'flex-start', 'center', 'center']}
+    >
+      <Text fontSize="xs" fontWeight="semibold">
+        {signerTitle}
+      </Text>
+      <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
+        <Switch
+          id="only-show-public-signers"
+          onChange={() => {
+            setOnlyShowPublicSigners(!onlyShowPublicSigners);
+          }}
+          isChecked={onlyShowPublicSigners}
+        />
+        <FormLabel
+          htmlFor="only-show-public-signers"
+          m="0"
+          fontSize={'14px'}
+          lineHeight={'1.5em'}
+          fontWeight={400}
+          textOverflow={'ellipsis'}
+          overflow={'hidden'}
+          whiteSpace={'nowrap'}
+        >
+          Show only public signers
+        </FormLabel>
+      </FormControl>
+    </Flex>
   );
 }

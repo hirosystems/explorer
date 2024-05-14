@@ -1,6 +1,7 @@
 'use client';
 
-import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
+import { useStxSupply } from '@/app/signers/data/usStxSupply';
+
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { GridProps } from '../../../../ui/Grid';
@@ -8,15 +9,14 @@ import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
 function StxSupplyBase(props: GridProps) {
-  const {
-    data: { total_stx, unlocked_stx, unlocked_percent },
-  } = useSuspenseStxSupply();
+  const { stackedSupply, circulatingSupply } = useStxSupply();
+
   return (
     <StatSection
-      title="STX Supply"
-      bodyMainText={numberToString(unlocked_stx ? Number(unlocked_stx) : 0)}
-      bodySecondaryText={`/ ${numberToString(total_stx ? Number(total_stx) : 0)}`}
-      caption={<>{Number(unlocked_percent || 0).toFixed(2)}% is unlocked</>}
+      title="Circulating Supply"
+      bodyMainText={numberToString(circulatingSupply)}
+      bodySecondaryText={null}
+      caption={<>{((stackedSupply / circulatingSupply) * 100).toFixed(1)}% stacked</>}
       {...props}
     />
   );

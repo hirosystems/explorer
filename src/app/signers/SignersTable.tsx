@@ -29,7 +29,7 @@ const StyledTable = styled(Table)`
   }
 
   tr:last-child td {
-    border: none;
+    border-bottom: none;
   }
 `;
 
@@ -243,10 +243,6 @@ const SignerTable = () => {
         ),
     [signers, signersStackers, votingPowerSortOrder]
   );
-
-  useEffect(() => {
-    console.log({ signers, SIGNER_KEY_MAP: SIGNER_KEY_MAP });
-  }, [signers]);
 
   return (
     <SignersTableLayout
