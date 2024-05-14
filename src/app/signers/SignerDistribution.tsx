@@ -1,5 +1,11 @@
-import { ColorMode, useBreakpointValue, useColorMode } from '@chakra-ui/react';
-import { useCallback, useMemo } from 'react';
+import {
+  ColorMode,
+  WithCSSVar,
+  useBreakpointValue,
+  useColorMode,
+  useTheme,
+} from '@chakra-ui/react';
+import { useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
@@ -12,6 +18,24 @@ import { Text, TextProps } from '../../ui/Text';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 import { getSignerKeyName } from './utils';
+
+declare type Dict<T = any> = Record<string, T>;
+
+function getColorWithOpacity(color: string, opacity: number, theme: WithCSSVar<Dict>) {
+  const rgb = hexToRgb(color);
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
+}
+
+function hexToRgb(hex: string) {
+  hex = hex.replace(/^#/, '');
+
+  let bigint = parseInt(hex, 16);
+  let r = (bigint >> 16) & 255;
+  let g = (bigint >> 8) & 255;
+  let b = bigint & 255;
+
+  return { r, g, b };
+}
 
 function getShrinkFactor(value: number) {
   if (value < 2) {
@@ -46,6 +70,28 @@ function getSignerDistributionPieChartColor(votingPowerPercentage: number, color
     return colorMode === 'light'
       ? 'var(--stacks-colors-slate-250)'
       : 'var(--stacks-colors-slate-800)';
+  }
+}
+
+function getSignerDistributionPieChartHex(
+  votingPowerPercentage: number,
+  colorMode: ColorMode,
+  theme: WithCSSVar<Dict>
+) {
+  if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
+    return theme.colors['purple'][200];
+  } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
+    return theme.colors['purple'][300];
+  } else if (votingPowerPercentage >= 5 && votingPowerPercentage < 10) {
+    return theme.colors['purple'][400];
+  } else if (votingPowerPercentage >= 10 && votingPowerPercentage < 15) {
+    return theme.colors['purple'][500];
+  } else if (votingPowerPercentage >= 15 && votingPowerPercentage < 20) {
+    return theme.colors['purple'][600];
+  } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
+    return theme.colors['purple'][700];
+  } else {
+    return colorMode === 'light' ? theme.colors['slate'][250] : theme.colors['slate'][800];
   }
 }
 
@@ -134,7 +180,7 @@ function SignersDistributionLegend({
   );
 }
 
-const startAngle = 120;
+const startAngle = 30;
 const endAngle = -(360 - startAngle);
 
 export function SignersDistributionPieChart({
@@ -177,6 +223,7 @@ export function SignersDistributionPieChart({
           });
   }, [signers, onlyShowPublicSigners]);
   const colorMode = useColorMode().colorMode;
+  const theme = useTheme();
 
   const showLabels = useBreakpointValue({ sm: false, md: false, lg: true, xl: true, '2xl': true });
 
@@ -205,11 +252,38 @@ export function SignersDistributionPieChart({
       const RADIAN = Math.PI / 180;
       const sin = Math.sin(-RADIAN * midAngle);
       const cos = Math.cos(-RADIAN * midAngle);
-      const sx = cx + (dynamicOuterRadius + 10) * cos;
-      const sy = cy + (dynamicOuterRadius + 10) * sin;
-      const mx = cx + (dynamicOuterRadius + 30) * cos;
-      const my = cy + (dynamicOuterRadius + 30) * sin;
-      const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+
+      // sx and sy: The starting coordinates of the line, which are located at the outer edge of the pie slice.
+      const sx = cx + (dynamicOuterRadius + 5) * cos;
+      const sy = cy + (dynamicOuterRadius + 5) * sin;
+
+      // Function to calculate the label distance based on the angle
+      const calculateLabelRadius = (angle: number) => {
+        const baseRadius = dynamicOuterRadius + 10;
+        const maxOffset = 70;
+        const angleMod = Math.abs(angle) % 360;
+
+        let offset;
+        if (angleMod >= 0 && angleMod < 90) {
+          offset = (angleMod / 90) * maxOffset;
+        } else if (angleMod >= 90 && angleMod < 180) {
+          offset = ((180 - angleMod) / 90) * maxOffset;
+        } else if (angleMod >= 180 && angleMod < 270) {
+          offset = ((angleMod - 180) / 90) * maxOffset;
+        } else {
+          offset = ((360 - angleMod) / 90) * maxOffset;
+        }
+
+        return baseRadius + offset;
+      };
+
+      const labelRadius = calculateLabelRadius(midAngle);
+
+      const mx = cx + labelRadius * cos;
+      const my = cy + labelRadius * sin;
+
+      // ex and ey: The ending coordinates of the line, which are where the label text is positioned.
+      const ex = mx + (cos >= 0 ? 1 : -1) * 20; // Adjust label horizontal position
       const ey = my;
       const textAnchor = cos >= 0 ? 'start' : 'end';
 
@@ -233,8 +307,9 @@ export function SignersDistributionPieChart({
                 fill="none"
               />
               <text
-                x={ex + (cos >= 0 ? 1 : -1) * 12}
+                x={ex}
                 y={ey}
+                dy={4} // Adjust this value to align the text vertically with the line
                 textAnchor={textAnchor}
                 fill="var(--stacks-colors-textSubdued)"
                 fontSize="var(--stacks-fontSizes-xs)"
@@ -278,12 +353,22 @@ export function SignersDistributionPieChart({
     [pieData]
   );
 
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  const onPieEnter = (_: any, index: number) => {
+    setActiveIndex(index);
+  };
+
+  const onPieLeave = () => {
+    setActiveIndex(-1);
+  };
+
   const pieChart = useMemo(
     () => (
-      <ResponsiveContainer className="responsive-container">
+      <ResponsiveContainer>
         <PieChart>
           <Pie
-            paddingAngle={1}
+            paddingAngle={2}
             startAngle={startAngle}
             endAngle={endAngle}
             data={pieData}
@@ -297,12 +382,23 @@ export function SignersDistributionPieChart({
             outerRadius={80}
             activeIndex={activeIndices} // Set all indices to active so they can be custom rendered
             activeShape={renderActiveShape}
+            onMouseEnter={onPieEnter}
+            onMouseLeave={onPieLeave}
           >
             {pieData.map((entry, index) => {
               return (
                 <Cell
                   key={`cell-${index}`}
-                  fill={getSignerDistributionPieChartColor(entry.value, colorMode)}
+                  fill={
+                    index === activeIndex
+                      ? getColorWithOpacity(
+                          getSignerDistributionPieChartHex(entry.value, colorMode, theme),
+                          0.8,
+                          theme
+                        )
+                      : getSignerDistributionPieChartColor(entry.value, colorMode)
+                  }
+                  opacity={index === activeIndex ? 0.8 : 1}
                   strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
                 />
               );
@@ -312,7 +408,7 @@ export function SignersDistributionPieChart({
         </PieChart>
       </ResponsiveContainer>
     ),
-    [pieData, renderActiveShape, activeIndices, colorMode, CustomTooltip]
+    [pieData, renderActiveShape, activeIndices, colorMode, CustomTooltip, activeIndex, theme]
   );
 
   return pieChart;
@@ -338,7 +434,7 @@ export function SignersDistribution({
           templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
         >
           <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Box height="350px" width="100%">
+            <Box height="360px" width="100%">
               <SignersDistributionPieChart
                 signers={signers}
                 onlyShowPublicSigners={onlyShowPublicSigners}

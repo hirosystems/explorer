@@ -9,10 +9,9 @@ export function ScrollableBox({ children, ...rest }: BoxProps & { children: Reac
 
   useEffect(() => {
     const checkForScroll = () => {
-      console.log('checking for scroll')
       if (divRef.current) {
         const { scrollWidth, clientWidth } = divRef.current;
-        console.log({ scrollWidth, clientWidth })
+        console.log({ scrollWidth, clientWidth });
         if (scrollWidth > clientWidth) {
           setHasHorizontalScroll(true);
         } else {
