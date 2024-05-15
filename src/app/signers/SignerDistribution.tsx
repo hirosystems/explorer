@@ -1,13 +1,44 @@
+import React, { ReactNode, Suspense } from 'react';
+
 import { Card } from '../../common/components/Card';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
+import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignersDistributionLegend } from './SignerDistributionLegend';
 import { SignersDistributionPieChart } from './SignerDistributionPieChart';
 import { useSuspensePoxSigners } from './data/useSigners';
+import { SignersDistributionSkeleton } from './skeleton';
 
-export function SignersDistribution({
+export function SignersDistributionLayout({
+  signersDistributionPieChart,
+  signersDistributionLegend,
+}: {
+  signersDistributionPieChart: ReactNode;
+  signersDistributionLegend: ReactNode;
+}) {
+  return (
+    <Card padding={6} height="100%">
+      <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
+        <Grid
+          height="100%"
+          width="100%"
+          templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
+        >
+          <Flex justifyContent="center" alignItems="center" height="360px" width="100%">
+            {signersDistributionPieChart}
+          </Flex>
+          <Box display={['block', 'block', 'block', 'none', 'none']}>
+            {signersDistributionLegend}
+          </Box>
+        </Grid>
+      </Flex>
+    </Card>
+  );
+}
+
+export function SignersDistributionBase({
   onlyShowPublicSigners = false,
 }: {
   onlyShowPublicSigners?: boolean;
@@ -18,29 +49,45 @@ export function SignersDistribution({
   } = useSuspensePoxSigners(currentCycleId);
 
   return (
-    <Card padding={6} height="100%">
-      <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
-        <Grid
-          height="100%"
-          width="100%"
-          templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
-        >
-          <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Box height="360px" width="100%">
-              <SignersDistributionPieChart
-                signers={signers}
-                onlyShowPublicSigners={onlyShowPublicSigners}
-              />
-            </Box>
-          </Flex>
-          <Box display={['block', 'block', 'block', 'none', 'none']}>
-            <SignersDistributionLegend
-              signers={signers}
-              onlyShowPublicSigners={onlyShowPublicSigners}
-            />
-          </Box>
-        </Grid>
-      </Flex>
-    </Card>
+    <SignersDistributionLayout
+      signersDistributionPieChart={
+        <SignersDistributionPieChart
+          signers={signers}
+          onlyShowPublicSigners={onlyShowPublicSigners}
+        />
+      }
+      signersDistributionLegend={
+        <SignersDistributionLegend
+          signers={signers}
+          onlyShowPublicSigners={onlyShowPublicSigners}
+        />
+      }
+    />
+  );
+}
+
+export function SignersDistribution({
+  onlyShowPublicSigners = false,
+}: {
+  onlyShowPublicSigners?: boolean;
+}) {
+  const fetchData = () => new Promise(resolve => setTimeout(() => resolve('data'), 100000));
+
+  const DataComponent = React.lazy(() =>
+    fetchData().then(data => ({ default: () => <div>{data}</div> }))
+  );
+
+  const BuggyComponent = () => {
+    throw new Error('Test error');
+  };
+
+  return (
+    <ExplorerErrorBoundary tryAgainButton>
+      <Suspense fallback={<SignersDistributionSkeleton />}>
+        {/* <DataComponent /> */}
+        {/* <BuggyComponent /> */}
+        <SignersDistributionBase onlyShowPublicSigners={onlyShowPublicSigners} />
+      </Suspense>
+    </ExplorerErrorBoundary>
   );
 }

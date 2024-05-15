@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic';
 
 import { getTokenPrice } from '../getTokenPriceInfo';
-import Skeleton from './skeleton';
+import { SignersPageSkeleton } from './skeleton';
 
 const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
+  loading: () => <SignersPageSkeleton />,
   ssr: false,
 });
 

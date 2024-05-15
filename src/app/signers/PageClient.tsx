@@ -3,7 +3,7 @@
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Flex } from '../../ui/Flex';
 import { PageTitle } from '../_components/PageTitle';
-import { SignersHeaderWithErrorBoundary } from './SignersHeader';
+import { SignersHeader } from './SignersHeader';
 import SignersTable from './SignersTable';
 
 export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
@@ -12,7 +12,7 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
       <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
         <PageTitle>Signers</PageTitle>
       </Flex>
-      <SignersHeaderWithErrorBoundary tokenPrice={tokenPrice} />
+      <SignersHeader tokenPrice={tokenPrice} />
       <SignersTable />
     </>
   );

@@ -1,6 +1,7 @@
 import { useColorMode } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import { useCallback, useMemo, useState } from 'react';
+import { Suspense } from 'react';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
@@ -8,9 +9,11 @@ import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
+import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+import { SignersStatsSectionSkeleton } from './skeleton';
 
-export function CurrentCycleCard() {
+export function CurrentCycleCardBase() {
   const {
     currentCycleId,
     currentCycleProgressPercentage,
@@ -206,5 +209,15 @@ export function CurrentCycleCard() {
         )}`}
       </Text>
     </Card>
+  );
+}
+
+export function CurrentCycleCard() {
+  return (
+    <ExplorerErrorBoundary Wrapper={Card} tryAgainButton>
+      <Suspense fallback={<SignersStatsSectionSkeleton />}>
+        <CurrentCycleCardBase />
+      </Suspense>
+    </ExplorerErrorBoundary>
   );
 }

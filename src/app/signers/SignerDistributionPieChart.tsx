@@ -140,13 +140,15 @@ export const calculateLabelRadius = (radius: number, angle: number) => {
 const startAngle = 30;
 const endAngle = -(360 - startAngle);
 
+interface SignersDistributionPieChartProps {
+  signers: SignerInfo[];
+  onlyShowPublicSigners: boolean;
+}
+
 export function SignersDistributionPieChart({
   signers,
   onlyShowPublicSigners,
-}: {
-  signers: SignerInfo[];
-  onlyShowPublicSigners: boolean;
-}) {
+}: SignersDistributionPieChartProps) {
   const pieData = useMemo(() => {
     const knownSignersWithPercentageGreaterThan2 = signers
       .filter(
@@ -330,8 +332,7 @@ export function SignersDistributionPieChart({
                     index === activeIndex
                       ? getColorWithOpacity(
                           getSignerDistributionPieChartHex(entry.value, colorMode, theme),
-                          0.8,
-                          theme
+                          0.8
                         )
                       : getSignerDistributionPieChartColor(entry.value, colorMode)
                   }

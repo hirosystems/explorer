@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
-import React, { ReactNode, useMemo, useState } from 'react';
+import React, { ReactNode, Suspense, useMemo, useState } from 'react';
 
 import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
@@ -17,11 +17,13 @@ import { Th } from '../../ui/Th';
 import { Thead } from '../../ui/Thead';
 import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
+import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 import { mobileBorderCss } from './consts';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
+import { SignersTableSkeleton } from './skeleton';
 
 const StyledTable = styled(Table)`
   th {
@@ -208,7 +210,7 @@ function formatSignerRowData(
   };
 }
 
-const SignerTable = () => {
+const SignersTableBase = () => {
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
 
@@ -260,6 +262,37 @@ const SignerTable = () => {
         />
       ))}
     />
+  );
+};
+
+const SignerTable = () => {
+  const fetchData = () => new Promise(resolve => setTimeout(() => resolve('data'), 100000));
+
+  const DataComponent = React.lazy(() =>
+    fetchData().then(data => ({ default: () => <div>{data}</div> }))
+  );
+
+  const BuggyComponent = () => {
+    throw new Error('Test error');
+  };
+
+  return (
+    <ExplorerErrorBoundary
+      Wrapper={Section}
+      wrapperProps={{
+        title: 'Signers',
+        gridColumnStart: ['1', '1', '2'],
+        gridColumnEnd: ['2', '2', '3'],
+        minWidth: 0,
+      }}
+      tryAgainButton
+    >
+      <Suspense fallback={<SignersTableSkeleton />}>
+        {/* <DataComponent /> */}
+        {/* <BuggyComponent /> */}
+        <SignersTableBase />
+      </Suspense>
+    </ExplorerErrorBoundary>
   );
 };
 

@@ -10,6 +10,7 @@ import { Th } from '../../ui/Th';
 import { Tr } from '../../ui/Tr';
 import { PageTitle } from '../_components/PageTitle';
 import { SkeletonStatSection } from '../_components/Stats/SkeletonStatSection';
+import { SignersDistributionLayout } from './SignerDistribution';
 import { SignersHeaderLayout } from './SignersHeader';
 import { SignersTableLayout, signersTableHeaders } from './SignersTable';
 import { VotingPowerSortOrder } from './SortByVotingPowerFilter';
@@ -43,66 +44,70 @@ const TableHeaderSkeleton = () => (
   </Th>
 );
 
-export default function Skeleton() {
+export const PieChartSkeleton = () => <SkeletonCircle size="150" />;
+
+export const SignersDistributionSkeleton = () => (
+  <SignersDistributionLayout
+    signersDistributionPieChart={<PieChartSkeleton />}
+    signersDistributionLegend={null}
+  />
+);
+
+export const SignersTableSkeleton = () => {
   const numRows = Array.from({ length: 10 }, (_, i) => i + 1);
   const numCols = Array.from({ length: signersTableHeaders.length }, (_, i) => i + 1);
 
+  return (
+    <SignersTableLayout
+      numSigners={<SkeletonItem width="30%" height="40px" />}
+      signersTableHeaders={
+        <Tr>
+          {numCols.map((_, i) => (
+            <TableHeaderSkeleton key={`table-header-skeleton-${i}`} />
+          ))}
+        </Tr>
+      }
+      signersTableRows={numRows.map((_, i) => (
+        <TableRowSkeleton numCols={signersTableHeaders.length} key={`table-row-skeleton-${i}`} />
+      ))}
+      votingPowerSortOrder={VotingPowerSortOrder.Asc}
+      setVotingPowerSortOrder={() => {}}
+    />
+  );
+};
+
+export const SignersStatsSectionSkeleton = () => (
+  <Card>
+    <SkeletonStatSection />
+  </Card>
+);
+
+export const SignersHeaderSkeleton = () => (
+  <SignersHeaderLayout
+    stackingTitle={<SkeletonItem width="30%" height="14px" />}
+    currentCycleCard={<SignersStatsSectionSkeleton />}
+    stxStakedCard={<SignersStatsSectionSkeleton />}
+    stxLockedCard={<SignersStatsSectionSkeleton />}
+    addressesStackingCard={<SignersStatsSectionSkeleton />}
+    nextCycleCard={<SignersStatsSectionSkeleton />}
+    signerDistribution={
+      <Card height="100%" justifyContent="center" alignItems="center">
+        <SkeletonCircle size="150" />
+      </Card>
+    }
+    signerDistributionHeader={<SkeletonItem width="30%" height="14px" />}
+    historicalStackingDataLink={<SkeletonItem width="30%" height="14px" />}
+  />
+);
+
+export function SignersPageSkeleton() {
   return (
     <>
       <PageTitle>
         <SkeletonItem width={'400px'} height={'43px'} />
       </PageTitle>
-
-      <SignersHeaderLayout
-        stackingTitle={<SkeletonItem width="30%" height="14px" />}
-        currentCycleCard={
-          <Card>
-            <SkeletonStatSection />
-          </Card>
-        }
-        stxStakedCard={
-          <Card>
-            <SkeletonStatSection />
-          </Card>
-        }
-        stxLockedCard={
-          <Card>
-            <SkeletonStatSection />
-          </Card>
-        }
-        addressesStackingCard={
-          <Card>
-            <SkeletonStatSection />
-          </Card>
-        }
-        nextCycleCard={
-          <Card>
-            <SkeletonStatSection />
-          </Card>
-        }
-        signerDistribution={
-          <Card height="100%" justifyContent="center" alignItems="center">
-            <SkeletonCircle size="150" />
-          </Card>
-        }
-        signerDistributionHeader={<SkeletonItem width="30%" height="14px" />}
-        historicalStackingDataLink={<SkeletonItem width="30%" height="14px" />}
-      />
-      <SignersTableLayout
-        numSigners={<SkeletonItem width="30%" height="40px" />}
-        signersTableHeaders={
-          <Tr>
-            {numCols.map((_, i) => (
-              <TableHeaderSkeleton key={`table-header-skeleton-${i}`} />
-            ))}
-          </Tr>
-        }
-        signersTableRows={numRows.map((_, i) => (
-          <TableRowSkeleton numCols={signersTableHeaders.length} key={`table-row-skeleton-${i}`} />
-        ))}
-        votingPowerSortOrder={VotingPowerSortOrder.Asc}
-        setVotingPowerSortOrder={() => {}}
-      />
+      <SignersHeaderSkeleton />
+      <SignersTableSkeleton />
     </>
   );
 }
