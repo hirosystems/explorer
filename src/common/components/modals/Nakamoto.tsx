@@ -28,9 +28,10 @@ export function NakamotoModal() {
         return;
       }
     } catch (e) {}
-    if (!nakamotoModalShown || nakamotoModalShown === 'false') {
-      setIsOpen(true);
-    }
+    // TODO: temporarily disable the modal
+    // if (!nakamotoModalShown || nakamotoModalShown === 'false') {
+    //   setIsOpen(true);
+    // }
   }, []);
 
   const handleClose = () => {
