@@ -23,7 +23,6 @@ export const DEFAULT_DEVNET_SERVER = 'http://localhost:3999';
 export enum MODALS {
   SEARCH = 'modals/search',
   ADD_NETWORK = 'modals/add-network',
-  UNLOCKING_SCHEDULE = 'modals/unlocking-schedule',
   NAKAMOTO = 'modals/nakamoto',
 }
 

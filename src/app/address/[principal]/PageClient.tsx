@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 
-import { UnlockingScheduleModal } from '../../../common/components/modals/unlocking-schedule';
 import { useSuspenseAccountBalance } from '../../../common/queries/useAccountBalance';
 import { useAddressNonces } from '../../../common/queries/useAddressNonces';
 import { hasTokenBalance } from '../../../common/utils/accounts';
@@ -40,7 +39,6 @@ export default function AddressPage({ params: { principal } }: any) {
           </Stack>
         )}
       </Wrapper>
-      <UnlockingScheduleModal balance={balance} />
     </>
   );
 }
