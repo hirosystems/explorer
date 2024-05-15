@@ -90,9 +90,13 @@ export default function Skeleton() {
       />
       <SignersTableLayout
         numSigners={<SkeletonItem width="30%" height="40px" />}
-        signersTableHeaders={numCols.map((_, i) => (
-          <TableHeaderSkeleton key={`table-header-skeleton-${i}`} />
-        ))}
+        signersTableHeaders={
+          <Tr>
+            {numCols.map((_, i) => (
+              <TableHeaderSkeleton key={`table-header-skeleton-${i}`} />
+            ))}
+          </Tr>
+        }
         signersTableRows={numRows.map((_, i) => (
           <TableRowSkeleton numCols={signersTableHeaders.length} key={`table-row-skeleton-${i}`} />
         ))}
