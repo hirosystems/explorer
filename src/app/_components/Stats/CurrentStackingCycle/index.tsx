@@ -10,13 +10,17 @@ import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { SkeletonStatSection } from '../SkeletonStatSection';
 import { StackingCycle } from '../StackingCycle';
 import { StatSection } from '../StatSection';
-import { useSuspenseCurrentStackingCycle } from './useCurrentStackingCycle';
+import {
+  useCurrentStackingCycle,
+  useSuspenseCurrentStackingCycle,
+} from './useCurrentStackingCycle';
 
 function CurrentStackingCycleBase(props: GridProps) {
   const { currentCycleStackedSTX, blocksTilNextCycle, approximateDaysTilNextCycle } =
-    useSuspenseCurrentStackingCycle();
+    useCurrentStackingCycle();
   const currentCycleCaption = useMemo(() => {
     if (!blocksTilNextCycle) return null;
     return (
@@ -37,6 +41,8 @@ function CurrentStackingCycleBase(props: GridProps) {
       </Flex>
     );
   }, [approximateDaysTilNextCycle, blocksTilNextCycle]);
+  if (!currentCycleStackedSTX)
+    return <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />;
   return (
     <StackingCycle
       title="Current Stacking Cycle"

@@ -2,17 +2,20 @@
 
 import * as React from 'react';
 
-import { useSuspenseBlockListInfinite } from '../../../../common/queries/useBlockListInfinite';
+import { useBlockListInfinite } from '../../../../common/queries/useBlockListInfinite';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { SkeletonStatSection } from '../SkeletonStatSection';
 import { StatSection } from '../StatSection';
 
 function LastBlockBase(props: GridProps) {
-  const { data: blocks } = useSuspenseBlockListInfinite();
+  const { data: blocks } = useBlockListInfinite();
+  if (!blocks) return <SkeletonStatSection borderRightWidth={['0px', '0px', '0px', '1px']} />;
+
   const lastBlockHeight = blocks?.pages?.[0]?.results?.[0]?.height;
   const lastBurnBlockHeight = blocks?.pages?.[0]?.results?.[0]?.burn_block_height;
   const lastBlockTxsCount = blocks?.pages?.[0]?.results?.[0]?.txs?.length;

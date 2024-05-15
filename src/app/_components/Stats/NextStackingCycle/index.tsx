@@ -10,9 +10,10 @@ import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { SkeletonStatSection } from '../SkeletonStatSection';
 import { StackingCycle } from '../StackingCycle';
 import { StatSection } from '../StatSection';
-import { useSuspenseNextStackingCycle } from './useNextStackingCycle';
+import { useNextStackingCycle } from './useNextStackingCycle';
 
 function NextStackingCycleBase(props: GridProps) {
   const {
@@ -22,7 +23,7 @@ function NextStackingCycleBase(props: GridProps) {
     blocksTilNextCyclePreparePhase,
     blocksTilNextCycleRewardPhase,
     approximateDaysTilNextCyclePreparePhase,
-  } = useSuspenseNextStackingCycle();
+  } = useNextStackingCycle();
   const nextCycleCaption = useMemo(() => {
     return (
       <Flex alignItems={'center'}>
@@ -62,6 +63,7 @@ function NextStackingCycleBase(props: GridProps) {
     blocksTilNextCycleRewardPhase,
     displayPreparePhaseInfo,
   ]);
+  if (!nextCycleStackedSTX) return <SkeletonStatSection />;
   return (
     <StackingCycle
       title="Next Stacking Cycle"

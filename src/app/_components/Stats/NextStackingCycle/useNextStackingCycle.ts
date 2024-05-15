@@ -1,9 +1,17 @@
-import { useSuspensePoxInforRaw } from '../../../../common/queries/usePoxInforRaw';
+import { usePoxInfoRaw, useSuspensePoxInfoRaw } from '../../../../common/queries/usePoxInforRaw';
 import { MICROSTACKS_IN_STACKS } from '../../../../common/utils/utils';
 
-export function useSuspenseNextStackingCycle() {
-  const { data: poxData } = useSuspensePoxInforRaw();
-
+function getNextCycleInfo(poxData: any) {
+  if (!poxData) {
+    return {
+      nextCycleStackedSTX: 0,
+      approximateDaysTilNextCycleRewardPhase: 0,
+      displayPreparePhaseInfo: false,
+      blocksTilNextCyclePreparePhase: 0,
+      blocksTilNextCycleRewardPhase: 0,
+      approximateDaysTilNextCyclePreparePhase: 0,
+    };
+  }
   const { next_cycle } = poxData || {};
   const nextCycleStackedSTX = (next_cycle?.stacked_ustx || 0) / MICROSTACKS_IN_STACKS;
   const blocksTilNextCyclePreparePhase = next_cycle?.blocks_until_prepare_phase || 0;
@@ -25,4 +33,14 @@ export function useSuspenseNextStackingCycle() {
     blocksTilNextCycleRewardPhase,
     approximateDaysTilNextCyclePreparePhase,
   };
+}
+
+export function useNextStackingCycle() {
+  const { data: poxData } = usePoxInfoRaw();
+  return getNextCycleInfo(poxData);
+}
+
+export function useSuspenseNextStackingCycle() {
+  const { data: poxData } = useSuspensePoxInfoRaw();
+  return getNextCycleInfo(poxData);
 }

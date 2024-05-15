@@ -2,19 +2,18 @@
 
 import * as React from 'react';
 
-import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
+import { useStxSupply } from '../../../../common/queries/useStxSupply';
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
-import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
+import { SkeletonStatSection } from '../SkeletonStatSection';
 import { StatSection } from '../StatSection';
 
 function StxSupplyBase(props: GridProps) {
-  const {
-    data: { total_stx, unlocked_stx, unlocked_percent },
-  } = useSuspenseStxSupply();
+  const { data } = useStxSupply();
+  if (!data) return <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />;
+  const { total_stx, unlocked_stx, unlocked_percent } = data;
   return (
     <StatSection
       title="STX Supply"

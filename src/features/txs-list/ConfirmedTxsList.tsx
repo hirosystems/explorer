@@ -4,21 +4,31 @@ import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { ListFooter } from '../../common/components/ListFooter';
-import { useSuspenseInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseConfirmedTransactionsInfinite } from '../../common/queries/useConfirmedTransactionsInfinite';
+import {
+  useInfiniteQueryResult,
+  useSuspenseInfiniteQueryResult,
+} from '../../common/hooks/useInfiniteQueryResult';
+import {
+  useConfirmedTransactionsInfinite,
+  useSuspenseConfirmedTransactionsInfinite,
+} from '../../common/queries/useConfirmedTransactionsInfinite';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { FilteredTxs } from './FilteredTxs';
 import { TxListItem } from './ListItem/TxListItem';
+import { SkeletonTxsList } from './SkeletonTxsList';
 
 interface ConfirmedTxsListProps {
   limit?: number;
 }
 
 function ConfirmedTxsListBase({ limit }: ConfirmedTxsListProps) {
-  const response = useSuspenseConfirmedTransactionsInfinite();
-  const txs = useSuspenseInfiniteQueryResult<Transaction>(response, limit);
+  const response = useConfirmedTransactionsInfinite();
+  const txs = useInfiniteQueryResult<Transaction>(response, limit);
+  if (response.isFetching) {
+    return <SkeletonTxsList />;
+  }
 
   if (!txs?.length) {
     return (
