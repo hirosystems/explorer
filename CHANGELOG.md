@@ -1,3 +1,15 @@
+# [1.175.0](https://github.com/hirosystems/explorer/compare/v1.174.0...v1.175.0) (2024-05-15)
+
+
+### Bug Fixes
+
+* use lunarcrush stx id instead of alias ([f6c7eae](https://github.com/hirosystems/explorer/commit/f6c7eae8e6526bb2f43d9cc2c31ae705302f08e7))
+
+
+### Features
+
+* footer newsletter form ([dd4e31b](https://github.com/hirosystems/explorer/commit/dd4e31bb932b7577ac400f3cafca13ec4c64945c))
+
 # [1.174.0](https://github.com/hirosystems/explorer/compare/v1.173.0...v1.174.0) (2024-05-07)
 
 
