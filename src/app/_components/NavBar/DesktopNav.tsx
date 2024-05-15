@@ -54,7 +54,7 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                 borderColor="borderSecondary"
               >
                 {navItem.children.map(child => (
-                  <LabelWrapper {...child} />
+                  <LabelWrapper {...child} key={child.id} />
                 ))}
               </PopoverContent>
             )}

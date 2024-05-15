@@ -11,7 +11,7 @@ import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
 import { Tooltip } from '../../ui/Tooltip';
-import { Caption } from '../../ui/typography';
+import { Caption, TextProps } from '../../ui/typography';
 import { toRelativeTime, truncateMiddle } from '../utils/utils';
 import { ExplorerLink } from './ExplorerLinks';
 
@@ -133,6 +133,10 @@ export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransac
     return <Tooltip label={dateString}>{relativeTimestamp}</Tooltip>;
   });
 
-export const Nonce: React.FC<{ nonce: number }> = React.memo(({ nonce }) => (
-  <Caption as="span">Nonce: {nonce.toString()}</Caption>
-));
+export function Nonce({ nonceVal, ...rest }: TextProps & { nonceVal: number }) {
+  return (
+    <Caption as="span" {...rest}>
+      Nonce: {nonceVal.toString()}
+    </Caption>
+  );
+}

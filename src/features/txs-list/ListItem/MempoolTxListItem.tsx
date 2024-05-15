@@ -1,4 +1,3 @@
-import { useColorMode } from '@chakra-ui/react';
 import { FC, memo, useMemo } from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
@@ -10,9 +9,7 @@ import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/tran
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
 import { FlexProps } from '../../../ui/Flex';
-import { HStack } from '../../../ui/HStack';
 import { Stack } from '../../../ui/Stack';
-import { Text } from '../../../ui/Text';
 import { Caption, Title } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
@@ -25,7 +22,6 @@ interface MempoolTxsListItemProps extends FlexProps {
 export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...rest }) => {
   const isPending = tx.tx_status === 'pending';
   const didFail = !isPending;
-  const colorMode = useColorMode().colorMode;
 
   const icon = useMemo(
     () => <TxIcon txType={tx.tx_type} txStatus={getTransactionStatus(tx)} />,
@@ -33,7 +29,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
   );
   const leftTitle = useMemo(
     () => (
-      <Title display="block" fontSize="sm">
+      <Title display="block" fontSize="sm" whiteSpace="nowrap">
         <TxTitle tx={tx} showPrice={true} />
       </Title>
     ),
@@ -44,19 +40,15 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
     () => (
       <Stack
         as="span"
-        gap="1.5"
-        alignItems={['flex-start', 'center', 'center', 'center']}
-        justifyContent={['center', 'flex-start', 'flex-start', 'flex-start']}
+        gap={1.5}
+        direction={['column', 'column', 'row', 'row', 'row']}
+        divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
         flexWrap="nowrap"
-        divider={<Caption display={['none', 'inline', 'inline', 'inline']}>∙</Caption>}
-        direction={['column', 'row', 'row', 'row']}
       >
-        <Caption fontWeight="semibold" whiteSpace="nowrap">
-          {getTransactionTypeLabel(tx.tx_type)}
-        </Caption>
+        <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
         <AddressArea tx={tx} />
         {Number(tx.fee_rate) > 0 ? (
-          <Caption whiteSpace={'nowrap'} style={{ fontVariantNumeric: 'tabular-nums' }}>
+          <Caption whiteSpace="nowrap" style={{ fontVariantNumeric: 'tabular-nums' }}>
             Fee: {`${Number(tx.fee_rate) / MICROSTACKS_IN_STACKS} STX`}
           </Caption>
         ) : null}
@@ -67,21 +59,16 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
 
   const rightTitle = useMemo(
     () => (
-      <HStack
+      <Stack
         as="span"
+        direction={['column', 'column', 'row', 'row', 'row']}
+        divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+        flexWrap="wrap"
         gap={1.5}
-        alignItems="center"
-        justifyContent="flex-end"
-        flexWrap="nowrap"
-        divider={<Caption>∙</Caption>}
       >
-        <Text whiteSpace="nowrap">
-          <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
-        </Text>
-        <Text whiteSpace="nowrap">
-          <TxTimestamp tx={tx} />
-        </Text>
-      </HStack>
+        <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
+        <TxTimestamp tx={tx} />
+      </Stack>
     ),
     [tx]
   );
@@ -90,21 +77,17 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
     () => (
       <Stack
         as="span"
-        gap="1.5"
-        flexWrap="nowrap"
-        color={'textSubdued'}
-        divider={<Caption display={['none', 'none', 'inline', 'inline']}>∙</Caption>}
-        direction={['column', 'column', 'row', 'row']}
-        justifyContent={['center', 'center', 'flex-end', 'flex-end']}
-        alignItems={['flex-start', 'flex-start', 'center', 'center']}
-        minWidth={'160px'}
+        gap={1.5}
+        direction={['column', 'column', 'row', 'row', 'row']}
+        divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+        flexWrap="wrap"
       >
         {didFail ? (
           <Caption as="span" data-test="tx-caption">
             "Failed"
           </Caption>
         ) : null}
-        {isPending && <Nonce nonce={tx.nonce} />}
+        {isPending && <Nonce nonceVal={tx.nonce} whiteSpace="nowrap" />}
       </Stack>
     ),
     [didFail, isPending, tx.nonce]

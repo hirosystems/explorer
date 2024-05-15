@@ -24,78 +24,105 @@ interface TwoColumnsListProps extends FlexProps {
 export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
   ({ icon, leftContent, rightContent, hoverEffect = true, ...rest }) => {
     return (
-      <Flex
-        flexGrow={1}
-        gap={4}
-        alignItems={'center'}
-        py={6}
-        css={hoverEffect ? leftLineCss() : undefined}
-        minWidth={0}
-        borderBottom={'1px'}
-        _last={{ borderBottom: 'unset' }}
-        {...rest}
-      >
-        <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
-        <Flex
-          width="full"
-          minWidth="0px"
-          gap={2}
-          direction={['column', 'column', 'row', 'row', 'row']}
-          alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end', 'flex-end']}
-        >
-          {leftContent && (
-            <Flex
-              direction={'column'}
-              justifyContent={'center'}
-              gap={2}
-              minWidth={0}
-              flex={'1 1 auto'}
-              width={['full', 'full', 'full', 'auto']}
-            >
-              {leftContent.title !== undefined ? (
+      <>
+        <Show above="md">
+          <Flex
+            flexGrow={1}
+            gap={4}
+            alignItems="center"
+            py={6}
+            css={hoverEffect ? leftLineCss() : undefined}
+            width="full"
+            borderBottom="1px"
+            _last={{ borderBottom: 'unset' }}
+            {...rest}
+          >
+            <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
+            <Flex width="full" gap={2} direction="column" overflow="hidden">
+              <Flex
+                width="full"
+                minWidth="0"
+                direction="row"
+                justifyContent="space-between"
+                flexWrap="wrap"
+                gap={2}
+              >
+                {leftContent?.title && (
+                  <Text
+                    alignItems="center"
+                    gap={1.5}
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    display="flex"
+                  >
+                    <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
+                    {leftContent.title}
+                  </Text>
+                )}
+                {rightContent?.title && <Text fontSize="sm">{rightContent.title}</Text>}
+              </Flex>
+              <Flex
+                width="full"
+                minWidth="0"
+                direction="row"
+                justifyContent="space-between"
+                flexWrap="wrap"
+                gap={2}
+              >
+                {leftContent?.subtitle && (
+                  <Text fontSize="xs" color="textSubdued">
+                    {leftContent.subtitle}
+                  </Text>
+                )}
+                {rightContent?.subtitle && (
+                  <Text fontSize="xs" color="textSubdued">
+                    {rightContent.subtitle}
+                  </Text>
+                )}
+              </Flex>
+            </Flex>
+          </Flex>
+        </Show>
+        <Show below="md">
+          <Flex
+            flexGrow={1}
+            gap={4}
+            alignItems="center"
+            py={6}
+            css={hoverEffect ? leftLineCss() : undefined}
+            width="full"
+            borderBottom="1px"
+            _last={{ borderBottom: 'unset' }}
+            {...rest}
+          >
+            <Flex width="full" gap={2} direction="column">
+              {leftContent?.title && (
                 <Text
-                  alignItems={'center'}
-                  fontSize={'sm'}
-                  fontWeight={'semibold'}
+                  alignItems="center"
                   gap={1.5}
-                  minWidth={0}
-                  display={'flex'}
+                  fontSize="sm"
+                  fontWeight="semibold"
+                  display="flex"
                 >
                   <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
-                  <Box minWidth={0} width={'full'}>
-                    {leftContent.title}
-                  </Box>
+                  {leftContent.title}
                 </Text>
-              ) : null}
-              {leftContent.subtitle !== undefined ? (
-                <Text fontSize={'xs'} color={'textSubdued'}>
+              )}
+              {leftContent?.subtitle && (
+                <Text fontSize="xs" color="textSubdued">
                   {leftContent.subtitle}
                 </Text>
-              ) : null}
-            </Flex>
-          )}
-          {rightContent && (
-            <Flex
-              direction={'column'}
-              justifyContent={'center'}
-              gap={2}
-              maxWidth={'full'}
-              flex={'0 1 auto'}
-              width={['full', 'full', 'full', 'auto']}
-              alignItems={['flex-start', 'flex-start', 'flex-end', 'flex-end']}
-            >
-              {rightContent.title !== undefined ? (
-                <Text fontSize={'sm'}>{rightContent.title}</Text>
-              ) : null}
-              {rightContent.subtitle !== undefined ? (
-                <Text fontSize={'xs'} color={'textSubdued'}>
+              )}
+              {rightContent?.title && <Text fontSize="sm">{rightContent.title}</Text>}
+              {rightContent?.subtitle && (
+                <Text fontSize="xs" color="textSubdued">
                   {rightContent.subtitle}
                 </Text>
-              ) : null}
+              )}
             </Flex>
-          )}
-        </Flex>
-      </Flex>
+          </Flex>
+        </Show>
+      </>
     );
   }
 );
