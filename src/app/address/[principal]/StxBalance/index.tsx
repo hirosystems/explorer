@@ -3,14 +3,10 @@ import * as React from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
-import { openModal } from '../../../../common/components/modals/modal-slice';
-import { MODALS } from '../../../../common/constants/constants';
 import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
-import { useAppDispatch } from '../../../../common/state/hooks';
 import { hasStxBalance } from '../../../../common/utils/accounts';
 import { microToStacks } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Button } from '../../../../ui/Button';
 import { Grid } from '../../../../ui/Grid';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
@@ -29,7 +25,6 @@ interface StxBalanceProps {
 }
 
 function StxBalanceBase({ address }: StxBalanceProps) {
-  const dispatch = useAppDispatch();
   const { data: balance } = useAccountBalance(address);
   const tokenOfferingData = balance?.token_offering_locked;
 
@@ -101,18 +96,6 @@ function StxBalanceBase({ address }: StxBalanceProps) {
             <Stack gap={2} py={4}>
               <Caption>Miner rewards</Caption>
               <BalanceItem balance={minerRewardsBalance} />
-            </Stack>
-          ) : null}
-          {!!tokenOfferingData ? (
-            <Stack gap={2} py={4}>
-              <Caption>Locked</Caption>
-              <BalanceItem balance={microToStacks(tokenOfferingData.total_locked)} />
-              <Button
-                onClick={() => dispatch(openModal(MODALS.UNLOCKING_SCHEDULE))}
-                variant={'secondary'}
-              >
-                View schedule
-              </Button>
             </Stack>
           ) : null}
           {isStacking ? (
