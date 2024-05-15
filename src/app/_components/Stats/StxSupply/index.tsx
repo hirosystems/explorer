@@ -1,10 +1,9 @@
 'use client';
 
-import { useStxSupply } from '@/app/signers/data/usStxSupply';
-
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { GridProps } from '../../../../ui/Grid';
+import { useStxSupply } from '../../../signers/data/usStxSupply';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 

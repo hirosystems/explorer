@@ -1,11 +1,11 @@
 'use client';
 
-import { SkeletonCircle } from '@/ui/SkeletonCircle';
 import { Box, extendTheme } from '@chakra-ui/react';
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 
 import { Card } from '../../common/components/Card';
 import { Flex } from '../../ui/Flex';
+import { SkeletonCircle } from '../../ui/SkeletonCircle';
 import { SkeletonItem } from '../../ui/SkeletonItem';
 import { SkeletonText } from '../../ui/SkeletonText';
 import { Td } from '../../ui/Td';
