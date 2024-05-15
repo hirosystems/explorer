@@ -16,7 +16,7 @@ export const getCurrentBtcPrice = async (): Promise<number> =>
     .then(data => data?.data?.price || 0);
 
 export const getCurrentStxPrice = async (): Promise<number> =>
-  fetch('https://lunarcrush.com/api4/public/coins/stx/v1', {
+  fetch('https://lunarcrush.com/api4/public/coins/830/v1', {
     next: { revalidate: 10 * 60 }, // Revalidate every 10
     headers: {
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
