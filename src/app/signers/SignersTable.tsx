@@ -266,16 +266,6 @@ const SignersTableBase = () => {
 };
 
 const SignerTable = () => {
-  const fetchData = () => new Promise(resolve => setTimeout(() => resolve('data'), 100000));
-
-  const DataComponent = React.lazy(() =>
-    fetchData().then(data => ({ default: () => <div>{data}</div> }))
-  );
-
-  const BuggyComponent = () => {
-    throw new Error('Test error');
-  };
-
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -288,8 +278,6 @@ const SignerTable = () => {
       tryAgainButton
     >
       <Suspense fallback={<SignersTableSkeleton />}>
-        {/* <DataComponent /> */}
-        {/* <BuggyComponent /> */}
         <SignersTableBase />
       </Suspense>
     </ExplorerErrorBoundary>

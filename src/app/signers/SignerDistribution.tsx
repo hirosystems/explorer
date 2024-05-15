@@ -1,4 +1,4 @@
-import React, { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { Box } from '../../ui/Box';
@@ -71,21 +71,9 @@ export function SignersDistribution({
 }: {
   onlyShowPublicSigners?: boolean;
 }) {
-  const fetchData = () => new Promise(resolve => setTimeout(() => resolve('data'), 100000));
-
-  const DataComponent = React.lazy(() =>
-    fetchData().then(data => ({ default: () => <div>{data}</div> }))
-  );
-
-  const BuggyComponent = () => {
-    throw new Error('Test error');
-  };
-
   return (
     <ExplorerErrorBoundary tryAgainButton>
       <Suspense fallback={<SignersDistributionSkeleton />}>
-        {/* <DataComponent /> */}
-        {/* <BuggyComponent /> */}
         <SignersDistributionBase onlyShowPublicSigners={onlyShowPublicSigners} />
       </Suspense>
     </ExplorerErrorBoundary>
