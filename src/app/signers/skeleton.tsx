@@ -1,8 +1,5 @@
 'use client';
 
-import { Box, extendTheme } from '@chakra-ui/react';
-import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
-
 import { Card } from '../../common/components/Card';
 import { Flex } from '../../ui/Flex';
 import { SkeletonCircle } from '../../ui/SkeletonCircle';
@@ -23,7 +20,7 @@ const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
   return (
     <Tr>
       {cols.map((_, index) => (
-        <Td py={3} px={6} textAlign="center">
+        <Td py={3} px={6} textAlign="center" key={`table-row-skeleton-${index}`}>
           <SkeletonItem width="full" height="14px" />
         </Td>
       ))}
@@ -93,11 +90,11 @@ export default function Skeleton() {
       />
       <SignersTableLayout
         numSigners={<SkeletonItem width="30%" height="40px" />}
-        signersTableHeaders={numCols.map(() => (
-          <TableHeaderSkeleton />
+        signersTableHeaders={numCols.map((_, i) => (
+          <TableHeaderSkeleton key={`table-header-skeleton-${i}`} />
         ))}
-        signersTableRows={numRows.map(() => (
-          <TableRowSkeleton numCols={signersTableHeaders.length} />
+        signersTableRows={numRows.map((_, i) => (
+          <TableRowSkeleton numCols={signersTableHeaders.length} key={`table-row-skeleton-${i}`} />
         ))}
         votingPowerSortOrder={VotingPowerSortOrder.Asc}
         setVotingPowerSortOrder={() => {}}
@@ -105,38 +102,3 @@ export default function Skeleton() {
     </>
   );
 }
-
-const data = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-const PieChartSkeleton = () => {
-  return (
-    <Box width="100%" height="100%">
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie data={data} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" dataKey="value">
-            {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    </Box>
-  );
-};
-
-const theme = extendTheme({
-  styles: {
-    global: {
-      'html, body, #root': {
-        height: '100%',
-      },
-    },
-  },
-});

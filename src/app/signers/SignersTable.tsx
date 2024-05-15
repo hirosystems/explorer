@@ -1,7 +1,7 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 
 import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
@@ -19,7 +19,7 @@ import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
-import { SIGNER_KEY_MAP, mobileBorderCss } from './consts';
+import { mobileBorderCss } from './consts';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 
@@ -252,7 +252,7 @@ const SignerTable = () => {
       signersTableHeaders={<SignersTableHeaders />}
       signersTableRows={signersData.map((signer, i) => (
         <SignerTableRow
-          key={`signers=table-row-${i}`}
+          key={`signers-table-row-${signer.signerKey}`}
           index={i}
           {...signersData[i]}
           isFirst={i === 0}
