@@ -25,7 +25,7 @@ import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 
 const StyledTable = styled(Table)`
   th {
-    border: none;
+    border-bottom: none;
   }
 
   tr:last-child td {
