@@ -1,3 +1,10 @@
+# [1.177.0](https://github.com/hirosystems/explorer/compare/v1.176.0...v1.177.0) (2024-05-15)
+
+
+### Features
+
+* remove schedule modal ([3b71efc](https://github.com/hirosystems/explorer/commit/3b71efc67f71d32c7737e86ab8f51d85680ce625))
+
 # [1.176.0](https://github.com/hirosystems/explorer/compare/v1.175.0...v1.176.0) (2024-05-15)
 
 
