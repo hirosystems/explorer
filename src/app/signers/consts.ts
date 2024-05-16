@@ -33,27 +33,27 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
   },
   '0x034df3feda207a1cd4f31ae2b58f136a0d382d23419ef8d06569fa538202ba8aed': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-chorus-one-v1',
-    name: 'StackingDAO (Chorus one)',
+    name: 'Chorus one (StackingDAO)',
   },
   '0x03cc1da6f6235699284987f7d3a98a950b0c693cdbed87ab33c04f61e2dfb6a177': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-despread-v1',
-    name: 'StackingDAO (Despread)',
+    name: 'Despread (StackingDAO)',
   },
   '0x0215245613e31de2ec2e7f2c4facb45724be2e49d9d42abb0a5e571322593b36bf': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-kiln-v1',
-    name: 'StackingDAO (Kiln)',
+    name: 'Kiln (StackingDAO)',
   },
-  // '029e1245f007bd8f76d5ce67e759acd21f8b0f2538a80713468f7524bf3fff6136': {
+  // '0x029e1245f007bd8f76d5ce67e759acd21f8b0f2538a80713468f7524bf3fff6136': {
   //     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-luganodes-v1',
-  //     name: 'StackingDAO (Luganodes)'
+  //     name: 'Luganodes (StackingDAO)'
   // },
   '0x0244869db071d334ff8e5cd94956ae7b60a4abd41f83f3c9d66ab314718151d94d': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-restake-v1',
-    name: 'StackingDAO (Restake)',
+    name: 'Restake (StackingDAO)',
   },
   '0x03a541c1ec2cfb32da48cfadf439c9b2f27d166bbffa18a178c7a6a0d54cfa7813': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-blockdaemon-v1',
-    name: 'StackingDAO (Blockdaemon)',
+    name: 'Blockdaemon (StackingDAO)',
   },
   '0x02877ce29ba35458b827a6ea18510b9058ae4c30e2c33d288f2982c13497caec6e': {
     poolOperator: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
