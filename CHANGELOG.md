@@ -1,3 +1,10 @@
+# [1.178.0](https://github.com/hirosystems/explorer/compare/v1.177.1...v1.178.0) (2024-05-16)
+
+
+### Features
+
+* signers page ([#1467](https://github.com/hirosystems/explorer/issues/1467)) ([687a883](https://github.com/hirosystems/explorer/commit/687a8833248cd69bb3a93b93d2646f10afe8abb0))
+
 ## [1.177.1](https://github.com/hirosystems/explorer/compare/v1.177.0...v1.177.1) (2024-05-16)
 
 
