@@ -1,3 +1,10 @@
+## [1.178.2](https://github.com/hirosystems/explorer/compare/v1.178.1...v1.178.2) (2024-05-16)
+
+
+### Bug Fixes
+
+* **signers:** label fix ([#1632](https://github.com/hirosystems/explorer/issues/1632)) ([d98376a](https://github.com/hirosystems/explorer/commit/d98376aca8a15ea1aeb7fa67ec3b1ac3c6ae28c3))
+
 ## [1.178.1](https://github.com/hirosystems/explorer/compare/v1.178.0...v1.178.1) (2024-05-16)
 
 
