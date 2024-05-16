@@ -10,6 +10,7 @@ import {
 import {
   BURN_BLOCKS_QUERY_KEY,
   useSuspenseBurnBlocks,
+  useSuspenseBurnBlocks2,
 } from '../../../../common/queries/useBurnBlocksInfinite';
 import { BURN_BLOCKS_QUERY_KEY_EXTENSION } from '../consts';
 import { generateBlockList } from '../utils';
@@ -17,7 +18,7 @@ import { useBtcBlocksMap, useRefetchInitialBlockList } from './utils';
 import { BurnBlockWithTxCount } from '../types';
 
 export function useHomePageInitialBlockList(blockListLimit: number = 3) {
-  const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
+  const response = useSuspenseBurnBlocks2(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlockWithTxCount>(response);
 

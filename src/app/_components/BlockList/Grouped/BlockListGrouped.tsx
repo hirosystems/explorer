@@ -239,15 +239,21 @@ function BitcoinHeader({
   );
 }
 
-export function Footer({ btcBlock, txSum }: { btcBlock: BlockListBtcBlock; txSum: number }) {
+export function Footer({
+  btcBlock,
+  stxBlocks,
+}: {
+  btcBlock: BlockListBtcBlock;
+  stxBlocks: BlockListStxBlock[];
+}) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {btcBlock.txsCount} blocks
+          {stxBlocks.length} blocks
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {txSum} transactions
+          {btcBlock.txsCount} transactions
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           Average block time: 29 sec.
@@ -272,10 +278,6 @@ export function BurnBlockGroup({
 }) {
   const numStxBlocks = btcBlock.txsCount ?? stxBlocks.length;
   const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || 0);
-  const txSum = stxBlocks.reduce((txSum, stxBlock) => {
-    const txsCount = stxBlock?.txsCount ?? 0;
-    return txSum + txsCount;
-  }, 0);
   const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING}>
@@ -294,7 +296,7 @@ export function BurnBlockGroup({
           isFirst={isFirst}
         />
       ) : null}
-      <Footer btcBlock={btcBlock} txSum={txSum} />
+      <Footer btcBlock={btcBlock} stxBlocks={stxBlocks} />
     </Box>
   );
 }
