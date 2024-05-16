@@ -6,7 +6,7 @@ import { numberToString } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { StatCardBase } from './StatsCardBase';
-import { useStxSupply } from './data/usStxSupply';
+import { useStxSupply } from './data/useStxSupply';
 import { SignersStatsSectionSkeleton } from './skeleton';
 
 export function StxStackedCardBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
