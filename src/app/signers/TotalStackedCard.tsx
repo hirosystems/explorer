@@ -1,25 +1,24 @@
-import { useSuspenseStxSupply } from '@/common/queries/useStxSupply';
 import { Suspense } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { numberToString } from '../../common/utils/utils';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { StatCardBase } from './StatsCardBase';
+import { useStxSupply } from './data/useStxSupply';
 import { SignersStatsSectionSkeleton } from './skeleton';
 
 export function TotalStackedCardBase() {
-  const {
-    data: { total_stx, unlocked_percent },
-  } = useSuspenseStxSupply();
-  console.log({ unlocked_percent });
+  const { circulatingSupply, stackedSupply } = useStxSupply();
 
-  const stxStackedPercentageFormatted = `${(100 - Number(unlocked_percent)).toFixed(2)}%`;
+  const stxStackedPercentageFormatted = `${((stackedSupply / circulatingSupply) * 100).toFixed(
+    2
+  )}%`;
 
   return (
     <StatCardBase
       statTitle="Total stacked"
       statValue={stxStackedPercentageFormatted}
-      moreInfo={`/ ${numberToString(Number(total_stx))} circulating supply`}
+      moreInfo={`of ${numberToString(circulatingSupply)} circulating supply`}
     />
   );
 }
