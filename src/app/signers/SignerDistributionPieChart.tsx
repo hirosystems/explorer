@@ -149,37 +149,46 @@ export function SignersDistributionPieChart({
   signers,
   onlyShowPublicSigners,
 }: SignersDistributionPieChartProps) {
+  if (!signers) {
+    throw new Error('Signers data is not available');
+  }
+
   const pieData = useMemo(() => {
-    const knownSignersWithPercentageGreaterThan2 = signers
+    const thresholdPercentage = 1;
+    const knownSignersWithPercentageGreaterThanThreshold = signers
       .filter(
-        signer => getSignerKeyName(signer.signing_key) !== 'unknown' && signer.weight_percent > 1
+        signer =>
+          getSignerKeyName(signer.signing_key) !== 'unknown' &&
+          signer.weight_percent > thresholdPercentage
       )
       .map(signer => ({
         name: getSignerKeyName(signer.signing_key),
         value: signer.weight_percent,
       }));
-    const knownSignersWithPercentageLessThan2 = signers
+    const knownSignersWithPercentageLessThanThreshold = signers
       .filter(
-        signer => getSignerKeyName(signer.signing_key) !== 'unknown' && signer.weight_percent <= 1
+        signer =>
+          getSignerKeyName(signer.signing_key) !== 'unknown' &&
+          signer.weight_percent <= thresholdPercentage
       )
       .reduce((acc, signer) => acc + signer.weight_percent, 0);
     const unknownSignersPercentage = signers
       .filter(signer => getSignerKeyName(signer.signing_key) === 'unknown')
       .reduce((acc, signer) => acc + signer.weight_percent, 0);
-    return onlyShowPublicSigners
-      ? knownSignersWithPercentageGreaterThan2.concat({
-          name: 'Others',
-          value: knownSignersWithPercentageLessThan2,
-        })
-      : knownSignersWithPercentageGreaterThan2
-          .concat({
-            name: 'Others',
-            value: knownSignersWithPercentageLessThan2,
-          })
-          .concat({
-            name: 'Private signers',
-            value: unknownSignersPercentage,
-          });
+    let signersData = knownSignersWithPercentageGreaterThanThreshold;
+    if (knownSignersWithPercentageLessThanThreshold > thresholdPercentage) {
+      signersData = signersData.concat({
+        name: 'Others',
+        value: knownSignersWithPercentageLessThanThreshold,
+      });
+    }
+    if (!onlyShowPublicSigners) {
+      signersData = signersData.concat({
+        name: 'Private signers',
+        value: unknownSignersPercentage,
+      });
+    }
+    return signersData;
   }, [signers, onlyShowPublicSigners]);
   const colorMode = useColorMode().colorMode;
   const theme = useTheme();
