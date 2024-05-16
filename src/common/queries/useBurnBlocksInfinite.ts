@@ -13,6 +13,7 @@ import { DEFAULT_BURN_BLOCKS_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
+import { BurnBlockWithTxCount } from '@/app/_components/BlockList/types';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
@@ -39,7 +40,7 @@ export function useSuspenseBurnBlocks(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
   options: any = {},
   queryKeyExtension?: string
-): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
+): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlockWithTxCount>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
     queryKey: queryKeyExtension
