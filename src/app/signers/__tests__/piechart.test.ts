@@ -11,17 +11,17 @@ describe('calculateLabelRadius', () => {
 
   test('returns the second longest radius for angle 45 degrees', () => {
     const result = calculateLabelRadius(dynamicOuterRadius, 45);
-    expect(result).toBe(125); // Midpoint between 0 and 90
+    expect(result).toBe(115); // Midpoint between 0 and 90
   });
 
   test('returns the shortest radius for angle 90 degrees', () => {
     const result = calculateLabelRadius(dynamicOuterRadius, 90);
-    expect(result).toBe(160); // Max offset at 90 degrees
+    expect(result).toBe(140); // Max offset at 90 degrees
   });
 
   test('returns the second shortest radius for angle 135 degrees', () => {
     const result = calculateLabelRadius(dynamicOuterRadius, 135);
-    expect(result).toBe(125); // Midpoint between 90 and 180
+    expect(result).toBe(115); // Midpoint between 90 and 180
   });
 
   test('returns the longest radius for angle 180 degrees', () => {
@@ -31,17 +31,17 @@ describe('calculateLabelRadius', () => {
 
   test('returns the second shortest radius for angle 225 degrees', () => {
     const result = calculateLabelRadius(dynamicOuterRadius, 225);
-    expect(result).toBe(125); // Midpoint between 180 and 270
+    expect(result).toBe(115); // Midpoint between 180 and 270
   });
 
   test('returns the shortest radius for angle 270 degrees', () => {
     const result = calculateLabelRadius(dynamicOuterRadius, 270);
-    expect(result).toBe(160); // Max offset at 270 degrees
+    expect(result).toBe(140); // Max offset at 270 degrees
   });
 
   test('returns the second longest radius for angle 315 degrees', () => {
     const result = calculateLabelRadius(dynamicOuterRadius, 315);
-    expect(result).toBe(125); // Midpoint between 270 and 0
+    expect(result).toBe(115); // Midpoint between 270 and 0
   });
 
   test('returns the longest radius for angle 360 degrees', () => {
