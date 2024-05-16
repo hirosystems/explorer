@@ -1,11 +1,10 @@
 'use client';
 
-import { useStxSupply } from '@/app/signers/data/useStxSupply';
-
 import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { GridProps } from '../../../../ui/Grid';
+import { useStxSupply } from '../../../signers/data/useStxSupply';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
