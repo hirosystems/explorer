@@ -1,3 +1,10 @@
+## [1.178.1](https://github.com/hirosystems/explorer/compare/v1.178.0...v1.178.1) (2024-05-16)
+
+
+### Bug Fixes
+
+* **signers:** fixed edge cases ([#1631](https://github.com/hirosystems/explorer/issues/1631)) ([cdfb420](https://github.com/hirosystems/explorer/commit/cdfb42073cbcd66bd2d4b25986a608a2a1da1b2a))
+
 # [1.178.0](https://github.com/hirosystems/explorer/compare/v1.177.1...v1.178.0) (2024-05-16)
 
 
