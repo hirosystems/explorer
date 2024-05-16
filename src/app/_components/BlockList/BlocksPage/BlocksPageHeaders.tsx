@@ -14,6 +14,7 @@ import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import { BlockPageHeadersSkeleton } from '../Grouped/skeleton';
+import { useSuspenseAverageBlockTimes } from '../data/useAverageBlockTimes';
 
 function LastBlockCard() {
   const response = useSuspenseBurnBlocks(1);
@@ -55,13 +56,17 @@ function LastBlockCard() {
 }
 
 function AverageStacksBlockTimeCard() {
+  const {
+    data: { last_24h },
+  } = useSuspenseAverageBlockTimes();
+
   return (
     <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
         AVERAGE STACKS BLOCK TIME
       </Text>
       <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
-        48 sec.
+        {last_24h} sec.
       </Text>
       <Text fontSize="xs" fontWeight="medium" color="textSubdued">
         In the last 24hs.
