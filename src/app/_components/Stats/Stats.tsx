@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { FlexProps } from '../../../ui/Flex';

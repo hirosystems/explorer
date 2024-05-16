@@ -38,7 +38,7 @@ export function ColorModeButton({
       color="white"
       title="Toggle color mode"
       _hover={{
-        bg: 'dropdownBgHover',
+        bg: 'hoverBackground',
       }}
       {...rest}
     />

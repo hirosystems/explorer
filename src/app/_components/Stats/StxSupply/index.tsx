@@ -1,26 +1,28 @@
 'use client';
 
-import * as React from 'react';
-
 import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
-import { Text } from '../../../../ui/Text';
+import { useStxSupply } from '../../../signers/data/useStxSupply';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
 function StxSupplyBase(props: GridProps) {
   const {
-    data: { total_stx, unlocked_stx, unlocked_percent },
+    data: { total_stx, unlocked_stx },
   } = useSuspenseStxSupply();
+  const { circulatingSupply, stackedSupply } = useStxSupply();
+  const stxStackedPercentageFormatted = `${((stackedSupply / circulatingSupply) * 100).toFixed(
+    2
+  )}%`;
+
   return (
     <StatSection
       title="STX Supply"
       bodyMainText={numberToString(unlocked_stx ? Number(unlocked_stx) : 0)}
       bodySecondaryText={`/ ${numberToString(total_stx ? Number(total_stx) : 0)}`}
-      caption={<>{Number(unlocked_percent || 0).toFixed(2)}% is unlocked</>}
+      caption={<>{stxStackedPercentageFormatted} stacked</>}
       {...props}
     />
   );

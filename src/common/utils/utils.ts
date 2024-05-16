@@ -85,6 +85,15 @@ export const truncateMiddle = (input: string, offset = 5): string => {
   }
 };
 
+export function truncateText(text: string, limit: number) {
+  if (text.length <= limit) {
+    return text;
+  }
+  const cutOffPoint = limit - 3;
+  const truncatedText = text.substring(0, cutOffPoint) + '...';
+  return truncatedText;
+}
+
 export const formatStacksAmount = (amountInStacks: number): string => {
   return amountInStacks.toLocaleString(undefined, {
     minimumFractionDigits: 2,

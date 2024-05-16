@@ -28,7 +28,7 @@ export function ScrollableBox({ children, ...rest }: BoxProps & { children: Reac
       ref={divRef}
       overflowX={'auto'}
       overflowY={'hidden'}
-      className={hasHorizontalScroll ? 'has-horizontal-scroll' : ''}
+      className={hasHorizontalScroll ? 'scrollableBox has-horizontal-scroll' : 'scrollableBox'}
     >
       {children}
     </Box>

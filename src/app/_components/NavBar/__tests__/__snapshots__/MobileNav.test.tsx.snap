@@ -57,7 +57,7 @@ exports[`MobileNav should render correctly 1`] = `
       >
         <button
           aria-label="Change color mode"
-          class="chakra-button css-o5jzuk"
+          class="chakra-button css-13w3vg7"
           title="Toggle color mode"
           type="button"
         >
@@ -77,7 +77,7 @@ exports[`MobileNav should render correctly 1`] = `
         </button>
         <button
           aria-label="Change color mode"
-          class="chakra-button css-o5jzuk"
+          class="chakra-button css-13w3vg7"
           title="Toggle color mode"
           type="button"
         >
