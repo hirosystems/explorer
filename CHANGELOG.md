@@ -1,3 +1,10 @@
+## [1.178.3](https://github.com/hirosystems/explorer/compare/v1.178.2...v1.178.3) (2024-05-16)
+
+
+### Bug Fixes
+
+* **signers-distro-chart-size:** changed chart size ([#1633](https://github.com/hirosystems/explorer/issues/1633)) ([cb5ab17](https://github.com/hirosystems/explorer/commit/cb5ab1759571f45b16573195dd0493d530dee513))
+
 ## [1.178.2](https://github.com/hirosystems/explorer/compare/v1.178.1...v1.178.2) (2024-05-16)
 
 
