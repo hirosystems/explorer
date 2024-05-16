@@ -1,3 +1,10 @@
+## [1.177.1](https://github.com/hirosystems/explorer/compare/v1.177.0...v1.177.1) (2024-05-16)
+
+
+### Bug Fixes
+
+* **homepage-loading:** fixed homepage loading ([#1630](https://github.com/hirosystems/explorer/issues/1630)) ([87b2c70](https://github.com/hirosystems/explorer/commit/87b2c709e25be85ea405b1cf8587c9261f6114e8))
+
 # [1.177.0](https://github.com/hirosystems/explorer/compare/v1.176.0...v1.177.0) (2024-05-15)
 
 
