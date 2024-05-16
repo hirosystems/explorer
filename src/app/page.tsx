@@ -1,12 +1,11 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import * as React from 'react';
 
-import Skeleton from './skeleton';
+import HomePageSkeleton from './skeleton';
 
 const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
+  loading: () => <HomePageSkeleton />,
   ssr: false,
 });
 
