@@ -34,7 +34,7 @@ export type BtcBlockMap = Record<string, BurnBlock>;
 
 export function getBtcTxsCount(btcBlockMap: BtcBlockMap, stxBlock: Block | NakamotoBlock) {
   const btcBlockHash = stxBlock.burn_block_hash;
-  return btcBlockMap[btcBlockHash].stacks_blocks.length;
+  return (btcBlockMap[btcBlockHash] as any).total_tx_count ?? 0; // TODO: needs @stacks/blockchain-api-client update
 }
 
 export type BlockListData = { stxBlocks: BlockListStxBlock[]; btcBlock: BlockListBtcBlock };

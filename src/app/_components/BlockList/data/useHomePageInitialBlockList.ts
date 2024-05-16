@@ -1,5 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
@@ -15,11 +14,12 @@ import {
 import { BURN_BLOCKS_QUERY_KEY_EXTENSION } from '../consts';
 import { generateBlockList } from '../utils';
 import { useBtcBlocksMap, useRefetchInitialBlockList } from './utils';
+import { BurnBlockWithTxCount } from '../types';
 
 export function useHomePageInitialBlockList(blockListLimit: number = 3) {
   const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlockWithTxCount>(response);
 
   const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
   const secondLatestBurnBlock = useMemo(() => btcBlocks[1], [btcBlocks]);
@@ -41,26 +41,6 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
     [BURN_BLOCKS_QUERY_KEY],
     [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY],
   ]);
-  const queryClient = useQueryClient();
-  // const refetchInitialBlockList = useCallback(
-  //   async function (callback: () => void) {
-  //     // Invalidate queries first
-  //     await Promise.all([
-  //       queryClient.invalidateQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
-  //       queryClient.invalidateQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
-  //     ]);
-
-  //     // After invalidation, refetch the required queries
-  //     await Promise.all([
-  //       queryClient.refetchQueries({ queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY] }),
-  //       queryClient.refetchQueries({ queryKey: [BURN_BLOCKS_QUERY_KEY] }),
-  //     ]);
-
-  //     // Run your callback after refetching
-  //     callback();
-  //   },
-  //   [queryClient]
-  // );
 
   const initialStxBlocks = useMemo(
     () => [
