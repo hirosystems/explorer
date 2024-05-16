@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-
 import { Section } from '../common/components/Section';
 import { SkeletonTxsList } from '../features/txs-list/SkeletonTxsList';
 import { Grid } from '../ui/Grid';
@@ -10,7 +8,7 @@ import { PageTitle } from './_components/PageTitle';
 import { SkeletonStatSection } from './_components/Stats/SkeletonStatSection';
 import { Wrapper } from './_components/Stats/Wrapper';
 
-export default function Skeleton() {
+export default function HomePageSkeleton() {
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>

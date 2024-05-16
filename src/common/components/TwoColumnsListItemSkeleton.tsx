@@ -1,5 +1,6 @@
+import { SkeletonText } from '@chakra-ui/react';
+
 import { SkeletonCircle } from '../../ui/SkeletonCircle';
-import { SkeletonItem } from '../../ui/SkeletonItem';
 import { TwoColsListItem } from './TwoColumnsListItem';
 
 export function TwoColumnsListItemSkeleton({
@@ -20,18 +21,18 @@ export function TwoColumnsListItemSkeleton({
       icon={icon && <SkeletonCircle width={10} height={10} />}
       leftContent={{
         title: leftContentTitle ? (
-          <SkeletonItem height={'1em'} width={'50%'} display={'inline-block'} />
+          <SkeletonText noOfLines={1} skeletonHeight="1em" width={64} />
         ) : null,
         subtitle: leftContentSubtitle ? (
-          <SkeletonItem height={'1em'} width={'80%'} display={'inline-block'} />
+          <SkeletonText noOfLines={1} skeletonHeight="1em" width={80} />
         ) : null,
       }}
       rightContent={{
         title: rightContentTitle ? (
-          <SkeletonItem height={'1em'} width={'60%'} display={'inline-block'} />
+          <SkeletonText noOfLines={1} skeletonHeight="1em" width={52} />
         ) : null,
         subtitle: rightContentSubtitle ? (
-          <SkeletonItem height={'1em'} width={'30%'} display={'inline-block'} />
+          <SkeletonText noOfLines={1} skeletonHeight="1em" width={32} />
         ) : null,
       }}
     />

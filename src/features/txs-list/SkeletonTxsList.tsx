@@ -8,10 +8,10 @@ export function SkeletonTxsList({ txsCount = 10 }: { txsCount?: number }) {
       {[...Array(txsCount)].map((_, i) => (
         <TwoColumnsListItemSkeleton
           key={i}
-          leftContentSubtitle
           leftContentTitle
-          rightContentSubtitle
+          leftContentSubtitle
           rightContentTitle
+          rightContentSubtitle
         />
       ))}
     </>
