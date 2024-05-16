@@ -217,6 +217,11 @@ const SignersTableBase = () => {
   const {
     data: { results: signers },
   } = useSuspensePoxSigners(currentCycleId);
+
+  if (!signers) {
+    throw new Error('Signers data is not available');
+  }
+
   const queryClient = useQueryClient();
   const getQuery = useGetStackersBySignerQuery();
   const signersStackersQueries = useMemo(() => {

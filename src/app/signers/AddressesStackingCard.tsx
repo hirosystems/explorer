@@ -20,6 +20,11 @@ export function AddressesStackingCardBase() {
   const {
     data: { results: currentCycleSigners },
   } = useSuspensePoxSigners(currentCycleId);
+
+  if (!currentCycleSigners) {
+    throw new Error('No stacking data available');
+  }
+
   const {
     data: { results: previousCycleSigners },
   } = useSuspensePoxSigners(previousCycleId);
