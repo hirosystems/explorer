@@ -34,8 +34,8 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
           width="full"
           borderBottom="1px"
           _last={{ borderBottom: 'unset' }}
-          {...rest}
           display={['none', 'none', 'flex', 'flex', 'flex']}
+          {...rest}
         >
           <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
           <Flex width="full" gap={2} direction="column" overflow="hidden">
@@ -59,7 +59,6 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                   {leftContent.title}
                 </Text>
               )}
-
               {rightContent?.title && <Text fontSize="sm">{rightContent.title}</Text>}
             </Flex>
             <Flex
