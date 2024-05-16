@@ -120,7 +120,7 @@ export function getShrinkValue(innerRadius: number, outerRadius: number, value: 
 // Function to calculate the label distance based on the angle
 export const calculateLabelRadius = (radius: number, angle: number) => {
   const baseRadius = radius + 10;
-  const maxOffset = 70;
+  const maxOffset = 50;
   const angleMod = Math.abs(angle) % 360;
 
   let offset;
@@ -326,8 +326,8 @@ export function SignersDistributionPieChart({
             cy="50%"
             labelLine={false}
             label={false}
-            innerRadius={40}
-            outerRadius={80}
+            innerRadius={60}
+            outerRadius={120}
             activeIndex={activeIndices} // Set all indices to active so they can be custom rendered
             activeShape={renderActiveShape}
             onMouseEnter={onPieEnter}
