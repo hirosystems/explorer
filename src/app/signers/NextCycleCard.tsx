@@ -12,7 +12,7 @@ import { SignersStatsSectionSkeleton } from './skeleton';
 
 export function NextCycleCardBase() {
   const {
-    currentRewardCycleId,
+    nextRewardCycleId,
     nextCycleBurnBlockHeightStart,
     displayPreparePhaseInfo,
     approximateDaysTilNextCyclePreparePhase,
@@ -45,7 +45,7 @@ export function NextCycleCardBase() {
   return (
     <StatCardBase
       statTitle="Next cycle"
-      statValue={currentRewardCycleId.toString()}
+      statValue={nextRewardCycleId.toString()}
       moreInfo={moreInfo}
     />
   );
