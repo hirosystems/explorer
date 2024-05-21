@@ -1,3 +1,10 @@
+## [1.178.4](https://github.com/hirosystems/explorer/compare/v1.178.3...v1.178.4) (2024-05-21)
+
+
+### Bug Fixes
+
+* signer page next cycle id ([6064b5a](https://github.com/hirosystems/explorer/commit/6064b5a8ac8a9cc86e5ff10adccdc27e59353f6b))
+
 ## [1.178.3](https://github.com/hirosystems/explorer/compare/v1.178.2...v1.178.3) (2024-05-16)
 
 
