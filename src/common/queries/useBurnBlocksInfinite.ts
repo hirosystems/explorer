@@ -59,25 +59,3 @@ export function useSuspenseBurnBlocks(
     ...options,
   });
 }
-
-export function useSuspenseBurnBlocks2(
-  limit = DEFAULT_BURN_BLOCKS_LIMIT,
-  options: any = {},
-  queryKeyExtension?: string
-): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlockWithTxCount>>> {
-  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
-  const queryParameters = limit ? `?limit=${limit}` : '';
-  return useSuspenseInfiniteQuery({
-    queryKey: queryKeyExtension
-      ? [BURN_BLOCKS_QUERY_KEY, queryKeyExtension]
-      : [BURN_BLOCKS_QUERY_KEY],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      fetch(
-        `${activeNetworkUrl}/extended/v2/burn-blocks${queryParameters}&offset=${pageParam}`
-      ).then(res => res.json()),
-    getNextPageParam,
-    initialPageParam: 0,
-    staleTime: TWO_MINUTES,
-    ...options,
-  });
-}

@@ -57,6 +57,8 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
         hash: block.burn_block_hash,
         timestamp: block.burn_block_time,
         txsCount: block.stacks_blocks.length,
+        blockCount: block.stacks_blocks.length,
+        avgBlockTime: block.avg_block_time,
       } as BlockListBtcBlock,
       stxBlocks: [],
     }));
