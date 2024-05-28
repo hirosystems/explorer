@@ -1,3 +1,10 @@
+# [1.179.0](https://github.com/hirosystems/explorer/compare/v1.178.4...v1.179.0) (2024-05-28)
+
+
+### Features
+
+* update meta description ([faedc7b](https://github.com/hirosystems/explorer/commit/faedc7bd0283548f41e14583f431ee20a9166d75))
+
 ## [1.178.4](https://github.com/hirosystems/explorer/compare/v1.178.3...v1.178.4) (2024-05-21)
 
 
