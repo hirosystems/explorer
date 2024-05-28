@@ -99,7 +99,7 @@ describe('GlobalContext', () => {
     );
 
     const networks = getContextField('networks');
-    expect(Object.keys(networks).length).toBe(4);
+    expect(Object.keys(networks).length).toBe(5);
 
     await waitFor(() => {
       expect(fetchCustomNetworkId).toHaveBeenCalledWith(customApiUrl, false);
@@ -107,7 +107,8 @@ describe('GlobalContext', () => {
 
     await waitFor(() => {
       const updatedNetworks = getContextField('networks');
-      expect(Object.keys(updatedNetworks).length).toBe(5);
+      console.log('Object.keys(updatedNetworks).length', Object.keys(updatedNetworks).length);
+      expect(Object.keys(updatedNetworks).length).toBe(6);
       expect(updatedNetworks[customApiUrl].isCustomNetwork).toBe(true);
     });
   });

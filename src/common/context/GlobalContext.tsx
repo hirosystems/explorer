@@ -129,6 +129,16 @@ export const AppContextProvider: FC<{
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
       },
+      'https://api.old.testnet.hiro.so': {
+        label: 'Stacks Testnet (archive)',
+        url: 'https://api.old.testnet.hiro.so',
+        btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
+        btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
+        btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
+        networkId: ChainID.Testnet,
+        mode: NetworkModes.Testnet,
+        isCustomNetwork: true,
+      },
       'https://api.nakamoto.testnet.hiro.so': {
         label: 'Nakamoto Testnet',
         url: 'https://api.nakamoto.testnet.hiro.so',
