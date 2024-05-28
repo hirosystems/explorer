@@ -26,8 +26,10 @@ export function SignersDistributionLayout({
           width="100%"
           templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
         >
-          <Flex justifyContent="center" alignItems="center" height="360px" width="100%">
-            {signersDistributionPieChart}
+          <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
+            <Box height="99%" width="99%">
+              {signersDistributionPieChart}
+            </Box>
           </Flex>
           <Box display={['block', 'block', 'block', 'none', 'none']}>
             {signersDistributionLegend}
