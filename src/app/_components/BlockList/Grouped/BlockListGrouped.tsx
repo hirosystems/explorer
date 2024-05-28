@@ -241,22 +241,20 @@ function BitcoinHeader({
 
 export function Footer({
   btcBlock,
-  stxBlocks,
 }: {
   btcBlock: BlockListBtcBlock;
-  stxBlocks: BlockListStxBlock[];
 }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {stxBlocks.length} blocks
+          {btcBlock.blockCount} blocks
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {btcBlock.txsCount} transactions
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          Average block time: 29 sec.
+          Average block time: {btcBlock.avgBlockTime?.toFixed(2)} sec.
         </Text>
       </HStack>
     </Box>
@@ -276,7 +274,7 @@ export function BurnBlockGroup({
   minimized?: boolean;
   isFirst: boolean;
 }) {
-  const numStxBlocks = btcBlock.txsCount ?? stxBlocks.length;
+  const numStxBlocks = btcBlock.blockCount;
   const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || 0);
   const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
   return (

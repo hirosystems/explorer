@@ -19,23 +19,20 @@ export function createBlockListStxBlock(stxBlock: Block | NakamotoBlock): BlockL
 }
 export function createBlockListBtcBlock(
   stxBlock: Block | NakamotoBlock,
-  txsCount?: number
+  btcBlock: BurnBlock
 ): BlockListBtcBlock {
   return {
     type: 'btc_block',
     height: stxBlock.burn_block_height,
     hash: stxBlock.burn_block_hash,
     timestamp: stxBlock.burn_block_time,
-    txsCount,
+    txsCount: btcBlock.total_tx_count ?? 0,
+    blockCount: btcBlock.stacks_blocks.length,
+    avgBlockTime: btcBlock.avg_block_time,
   };
 }
 
 export type BtcBlockMap = Record<string, BurnBlock>;
-
-export function getBtcTxsCount(btcBlockMap: BtcBlockMap, stxBlock: Block | NakamotoBlock) {
-  const btcBlockHash = stxBlock.burn_block_hash;
-  return (btcBlockMap[btcBlockHash] as any).total_tx_count ?? 0; // TODO: needs @stacks/blockchain-api-client update
-}
 
 export type BlockListData = { stxBlocks: BlockListStxBlock[]; btcBlock: BlockListBtcBlock };
 
@@ -57,20 +54,22 @@ export function waitForFadeAnimation(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
 
-export function generateBlockList(
-  stxBlocks: (Block | NakamotoBlock)[],
-  btcBlocksMap?: BtcBlockMap
-) {
+export function generateBlockList(stxBlocks: (Block | NakamotoBlock)[], btcBlocksMap: BtcBlockMap) {
   if (stxBlocks.length === 0) return [];
+
+  const firstStxBlock = stxBlocks[0];
+  const firstBtcBlock = btcBlocksMap[firstStxBlock.burn_block_hash];
   const blockList = [
     {
-      stxBlocks: [createBlockListStxBlock(stxBlocks[0])],
+      stxBlocks: [createBlockListStxBlock(firstStxBlock)],
       btcBlock: btcBlocksMap
-        ? createBlockListBtcBlock(stxBlocks[0], getBtcTxsCount(btcBlocksMap, stxBlocks[0]))
-        : createBlockListBtcBlock(stxBlocks[0]),
+        ? createBlockListBtcBlock(firstStxBlock, firstBtcBlock)
+        : createBlockListBtcBlock(firstStxBlock, firstBtcBlock),
     },
   ];
+
   if (stxBlocks.length === 1) return blockList;
+
   for (let i = 1; i < stxBlocks.length; i++) {
     const stxBlock = stxBlocks[i];
     const latestBtcBlock = blockList[blockList.length - 1].btcBlock;
@@ -78,11 +77,10 @@ export function generateBlockList(
     if (latestBtcBlock.hash === stxBlock.burn_block_hash) {
       latesStxBlocks.push(createBlockListStxBlock(stxBlock));
     } else {
+      const btcBlock = btcBlocksMap[stxBlock.burn_block_hash];
       blockList.push({
         stxBlocks: [createBlockListStxBlock(stxBlock)],
-        btcBlock: btcBlocksMap
-          ? createBlockListBtcBlock(stxBlock, getBtcTxsCount(btcBlocksMap, stxBlock))
-          : createBlockListBtcBlock(stxBlock),
+        btcBlock: createBlockListBtcBlock(stxBlock, btcBlock),
       });
     }
   }
