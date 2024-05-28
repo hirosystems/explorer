@@ -12,14 +12,13 @@ import {
   useSuspenseBurnBlocks,
 } from '../../../../common/queries/useBurnBlocksInfinite';
 import { BURN_BLOCKS_QUERY_KEY_EXTENSION } from '../consts';
-import { BurnBlockWithTxCount } from '../types';
 import { generateBlockList } from '../utils';
 import { useBtcBlocksMap, useRefetchInitialBlockList } from './utils';
 
 export function useHomePageInitialBlockList(blockListLimit: number = 3) {
   const response = useSuspenseBurnBlocks(blockListLimit, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlockWithTxCount>(response);
+  const btcBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
 
   const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
   const secondLatestBurnBlock = useMemo(() => btcBlocks[1], [btcBlocks]);

@@ -1,4 +1,3 @@
-import { BurnBlockWithTxCount } from '@/app/_components/BlockList/types';
 import {
   InfiniteData,
   UseInfiniteQueryResult,
@@ -11,7 +10,6 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useApi } from '../api/useApi';
 import { DEFAULT_BURN_BLOCKS_LIMIT } from '../constants/constants';
-import { useGlobalContext } from '../context/useAppContext';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
@@ -41,7 +39,7 @@ export function useSuspenseBurnBlocks(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
   options: any = {},
   queryKeyExtension?: string
-): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlockWithTxCount>>> {
+): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
     queryKey: queryKeyExtension

@@ -239,11 +239,7 @@ function BitcoinHeader({
   );
 }
 
-export function Footer({
-  btcBlock,
-}: {
-  btcBlock: BlockListBtcBlock;
-}) {
+export function Footer({ btcBlock }: { btcBlock: BlockListBtcBlock }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
@@ -294,7 +290,7 @@ export function BurnBlockGroup({
           isFirst={isFirst}
         />
       ) : null}
-      <Footer btcBlock={btcBlock} stxBlocks={stxBlocks} />
+      <Footer btcBlock={btcBlock} />
     </Box>
   );
 }
