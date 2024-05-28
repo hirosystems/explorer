@@ -40,8 +40,3 @@ export interface BlockListStxBlock {
   timestamp: number;
   txsCount?: number;
 }
-
-export interface BurnBlockWithTxCount extends BurnBlock {
-  total_tx_count: number;
-  avg_block_time: number;
-}
