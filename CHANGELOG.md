@@ -1,3 +1,10 @@
+# [1.181.0](https://github.com/hirosystems/explorer/compare/v1.180.0...v1.181.0) (2024-05-30)
+
+
+### Features
+
+* optimize homepage ([fac925f](https://github.com/hirosystems/explorer/commit/fac925f2889722e649d83efe9a6a9fe5c6d16a06))
+
 # [1.180.0](https://github.com/hirosystems/explorer/compare/v1.179.0...v1.180.0) (2024-05-30)
 
 
