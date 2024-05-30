@@ -1,6 +1,8 @@
 import {
   InfiniteData,
+  UseInfiniteQueryResult,
   UseSuspenseInfiniteQueryResult,
+  useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
@@ -15,6 +17,31 @@ import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
+
+export function useMempoolTransactionsInfinite(
+  sort: GetMempoolTransactionListOrderByEnum = GetMempoolTransactionListOrderByEnum.age,
+  order: GetMempoolTransactionListOrderEnum = GetMempoolTransactionListOrderEnum.asc
+): UseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
+  const api = useApi();
+  return useInfiniteQuery({
+    queryKey: ['mempoolTransactionsInfinite', sort, order],
+    queryFn: ({ pageParam }) =>
+      api.transactionsApi.getMempoolTransactionList({
+        limit: DEFAULT_LIST_LIMIT,
+        offset: pageParam || 0,
+        order,
+        orderBy: sort,
+      }),
+    getNextPageParam,
+    initialPageParam: 0,
+    staleTime: TWO_MINUTES,
+    refetchOnMount: false,
+    retry: false,
+    refetchOnReconnect: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
+  });
+}
 
 export function useSuspenseMempoolTransactionsInfinite(
   sort: GetMempoolTransactionListOrderByEnum = GetMempoolTransactionListOrderByEnum.age,

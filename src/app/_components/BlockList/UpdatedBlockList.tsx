@@ -10,8 +10,8 @@ import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
 import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
-import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
+import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
+import { useBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { Box } from '../../../ui/Box';
 import { Collapse } from '../../../ui/Collapse';
 import { FlexProps } from '../../../ui/Flex';
@@ -110,9 +110,9 @@ function UpdatedBlocksListBase({
   const [initialBlocks, setInitialBlocks] = useState<EnhancedBlock[]>([]);
   const [latestBlocks, setLatestBlocks] = useState<EnhancedBlock[]>([]);
 
-  const response = useSuspenseBlockListInfinite();
+  const response = useBlockListInfinite();
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
-  const blocks = useSuspenseInfiniteQueryResult<Block>(response, limit);
+  const blocks = useInfiniteQueryResult<Block>(response, limit);
 
   const queryClient = useQueryClient();
 
