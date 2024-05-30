@@ -37,7 +37,8 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
         <Stack mt="32px" gap={4} width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
-            const entry = value.value[name];
+            const isNestedType = Object.keys(value.value).includes('type');
+            const entry = isNestedType ? value.value : value.value[name];
             const repr = getReprValue(entry);
             return (
               <Box

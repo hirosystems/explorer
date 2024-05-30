@@ -101,21 +101,21 @@ export const FunctionSummaryClarityValue = ({ arg, btc }: { arg: any; btc: null 
       return (
         <HStack width="100%" flexGrow={1} gap={2}>
           <TxLink txId={principal}>{principal}</TxLink>
-          <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
+          <Caption whiteSpace={'nowrap'}>{getPrettyClarityValueType(arg.type)}</Caption>
         </HStack>
       );
     }
     return (
       <HStack width="100%" flexGrow={1} gap={2}>
         <AddressLink principal={principal}>{arg.repr}</AddressLink>
-        <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
+        <Caption whiteSpace={'nowrap'}>{getPrettyClarityValueType(arg.type)}</Caption>
       </HStack>
     );
   }
   return (
     <HStack width="100%" flexGrow={1} gap={2}>
       <Value>{getValue(arg, btc)}</Value>
-      <Caption>{getPrettyClarityValueType(arg.type)}</Caption>
+      <Caption whiteSpace={'nowrap'}>{getPrettyClarityValueType(arg.type)}</Caption>
     </HStack>
   );
 };
