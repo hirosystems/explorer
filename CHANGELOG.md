@@ -1,3 +1,10 @@
+## [1.181.1](https://github.com/hirosystems/explorer/compare/v1.181.0...v1.181.1) (2024-05-30)
+
+
+### Bug Fixes
+
+* nested optional tuple bug ([11f85fe](https://github.com/hirosystems/explorer/commit/11f85fe5d89e5baa293b3cb666b80030695c5003))
+
 # [1.181.0](https://github.com/hirosystems/explorer/compare/v1.180.0...v1.181.0) (2024-05-30)
 
 
