@@ -1,15 +1,24 @@
+import * as React from 'react';
+
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { ListFooter } from '../../common/components/ListFooter';
-import { useSuspenseInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
-import { useSuspenseMempoolTransactionsInfinite } from '../../common/queries/useMempoolTransactionsInfinite';
+import {
+  useInfiniteQueryResult,
+  useSuspenseInfiniteQueryResult,
+} from '../../common/hooks/useInfiniteQueryResult';
+import {
+  useMempoolTransactionsInfinite,
+  useSuspenseMempoolTransactionsInfinite,
+} from '../../common/queries/useMempoolTransactionsInfinite';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { useFilterAndSortState } from '../txsFilterAndSort/useFilterAndSortState';
 import { FilteredTxs } from './FilteredTxs';
 import { MempoolTxListItem } from './ListItem/MempoolTxListItem';
+import { SkeletonTxsList } from './SkeletonTxsList';
 
 interface MempoolTxsListProps {
   limit?: number;
@@ -17,8 +26,10 @@ interface MempoolTxsListProps {
 
 function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
   const { activeSort, activeOrder } = useFilterAndSortState();
-  const response = useSuspenseMempoolTransactionsInfinite(activeSort, activeOrder);
-  const txs = useSuspenseInfiniteQueryResult<MempoolTransaction>(response, limit);
+  const response = useMempoolTransactionsInfinite(activeSort, activeOrder);
+  const txs = useInfiniteQueryResult<MempoolTransaction>(response, limit);
+
+  if (response.isLoading || response.isFetching) return <SkeletonTxsList />;
 
   if (!txs?.length) {
     return (
