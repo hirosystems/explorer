@@ -1,3 +1,10 @@
+# [1.180.0](https://github.com/hirosystems/explorer/compare/v1.179.0...v1.180.0) (2024-05-30)
+
+
+### Features
+
+* add testnet archive network ([bfe7e61](https://github.com/hirosystems/explorer/commit/bfe7e61ab421da1c168f0a50a26b82c6f119027d))
+
 # [1.179.0](https://github.com/hirosystems/explorer/compare/v1.178.4...v1.179.0) (2024-05-28)
 
 
