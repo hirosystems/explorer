@@ -349,22 +349,22 @@ export function SignersDistributionPieChart({
                 x1={startX}
                 y1={startY}
                 x2={middleX}
-                y2={adjustedLabelPositions[name].middleY}
+                y2={adjustedLabelPositions[name as string].middleY}
                 stroke="var(--stacks-colors-borderPrimary)"
                 strokeWidth={1}
               />
               <line
                 x1={middleX}
-                y1={adjustedLabelPositions[name].middleY}
+                y1={adjustedLabelPositions[name as string].middleY}
                 x2={endX}
-                y2={adjustedLabelPositions[name].middleY}
+                y2={adjustedLabelPositions[name as string].middleY}
                 stroke="var(--stacks-colors-borderPrimary)"
                 strokeWidth={1}
               />
               <text
                 ref={el => (textRefs.current[index] = el)}
                 x={endX}
-                y={adjustedLabelPositions[name].middleY}
+                y={adjustedLabelPositions[name as string].middleY}
                 fill="var(--stacks-colors-textSubdued)"
                 fontStyle="Helvetica"
                 textAnchor={textAnchor}
