@@ -68,7 +68,13 @@ export function SignersHeaderLayout({
           </Flex>
           <Box
             display="grid"
-            gridTemplateColumns="repeat(2, 1fr)"
+            gridTemplateColumns={[
+              '100%',
+              'repeat(2, 1fr)',
+              'repeat(2, 1fr)',
+              'repeat(2, 1fr)',
+              'repeat(2, 1fr)',
+            ]}
             width="100%"
             gap={4}
             boxSizing="border-box"
