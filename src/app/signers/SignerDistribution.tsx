@@ -24,14 +24,14 @@ export function SignersDistributionLayout({
         <Grid
           height="100%"
           width="100%"
-          templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
+          templateColumns={['100%', '100%', '50% 50%', '50% 50%', '100%']}
         >
           <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Box height="300px" width="100%">
+            <Flex height="250px" width="100%" alignItems="center" justifyContent="center">
               {signersDistributionPieChart}
-            </Box>
+            </Flex>
           </Flex>
-          <Box display={['block', 'block', 'block', 'none', 'none']}>
+          <Box display={['block', 'block', 'block', 'block', 'none']}>
             <Flex height="100%" width="100%" alignItems="center">
               {signersDistributionLegend}
             </Flex>

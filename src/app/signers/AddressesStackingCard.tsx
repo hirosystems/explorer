@@ -13,6 +13,7 @@ import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSign
 import { useSuspensePoxSigners } from './data/useSigners';
 import { SignersStatsSectionSkeleton } from './skeleton';
 
+// TODO: This is currently not being used, but it may be in the future
 export function AddressesStackingCardBase() {
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
   const previousCycleId = useMemo(() => currentCycleId - 1, [currentCycleId]);
