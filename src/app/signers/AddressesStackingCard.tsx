@@ -69,7 +69,6 @@ export function AddressesStackingCardBase() {
         ).toFixed(2)
       )
     : undefined;
-  console.log({ rate });
 
   const moreInfo = rate ? (
     <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
