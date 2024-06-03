@@ -19,7 +19,7 @@ export function SignersDistributionLayout({
   signersDistributionLegend: ReactNode;
 }) {
   return (
-    <Card padding={6} height="100%">
+    <Card padding={6} height="100%" width="100%">
       <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
         <Grid
           height="100%"
@@ -27,12 +27,14 @@ export function SignersDistributionLayout({
           templateColumns={['100%', '100%', '50% 50%', '100%', '100%']}
         >
           <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Box height="99%" width="99%">
+            <Box height="300px" width="100%">
               {signersDistributionPieChart}
             </Box>
           </Flex>
           <Box display={['block', 'block', 'block', 'none', 'none']}>
-            {signersDistributionLegend}
+            <Flex height="100%" width="100%" alignItems="center">
+              {signersDistributionLegend}
+            </Flex>
           </Box>
         </Grid>
       </Flex>

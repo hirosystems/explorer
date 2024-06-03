@@ -61,8 +61,14 @@ export function AddressesStackingCardBase() {
   const numPreviousCycleStackers = previousCycleSignersStackers.length;
 
   const rate = numPreviousCycleStackers
-    ? (numCurrentCycleStackers - numPreviousCycleStackers) / numPreviousCycleStackers
+    ? Number(
+        (
+          ((numCurrentCycleStackers - numPreviousCycleStackers) / numPreviousCycleStackers) *
+          100
+        ).toFixed(2)
+      )
     : undefined;
+  console.log({ rate });
 
   const moreInfo = rate ? (
     <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
@@ -72,7 +78,7 @@ export function AddressesStackingCardBase() {
           size={3}
           color={rate > 0 ? 'green.600' : 'red.600'}
         />
-        &nbsp;{`${rate * 100}%`}&nbsp;
+        &nbsp;{`${rate}%`}&nbsp;
       </Text>
       <Text display="inline">{`${rate > 0 ? 'more' : 'less'} than previous cycle`}</Text>
     </Text>

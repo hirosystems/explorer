@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip, TooltipProps } from 'recharts';
-import { PieLabelRenderProps, PieSectorDataItem } from 'recharts/types/polar/Pie';
+import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
 import { Box } from '../../ui/Box';
 import { SignerLegendItem } from './SignerDistributionLegend';
@@ -137,86 +137,80 @@ export const calculateLabelRadius = (radius: number, angle: number) => {
   return baseRadius + offset;
 };
 
-const startAngle = 30;
+const startAngle = 0;
 const endAngle = -(360 - startAngle);
 const innerRadius = 50;
 const outerRadius = 100;
 
-interface LabelPosition {
-  x: number;
-  y: number;
-  name: string;
-  textAnchor: 'start' | 'end';
-}
-
-const calculateLabelPositions = (
-  data: DataEntry[],
-  cx: number,
-  cy: number,
-  // midAngle: number,
-  nameWidth: string,
-) => {
-  const RADIAN = Math.PI / 180;
-  const startX = (cx as number) + (outerRadius as number) * Math.cos(-midAngle * RADIAN);
-  const startY = (cy as number) + (outerRadius as number) * Math.sin(-midAngle * RADIAN);
-  const middleX =
-  (cx as number) + ((outerRadius as number) + 10) * Math.cos(-midAngle * RADIAN);
-const middleY =
-  (cy as number) + ((outerRadius as number) + 10) * Math.sin(-midAngle * RADIAN);
-const terminalX = middleX > cx ? cx + 240 : cx - 240;
-
-const text = `${addEllipsis(name || '', 20)}`;
-const textWidth = textRefs.current[index]?.getBBox().width
-
-const endX = middleX > cx ? terminalX - textWidth + 5 : terminalX + textWidth - 5;
-
-const textAnchor = middleX > (cx as number) ? 'start' : 'end';
-
-  // const RADIAN = Math.PI / 180;
-  return data.map((entry, index) => {
-    const midAngle = (index / data.length) * 360 - 90;
-    const radius = outerRadius + 10; // Adjust radius for label positioning outside the pie
-
-    const startX = (cx as number) + (outerRadius as number) * Math.cos(-midAngle * RADIAN);
-  const startY = (cy as number) + (outerRadius as number) * Math.sin(-midAngle * RADIAN);
-  const middleX =
-  (cx as number) + ((outerRadius as number) + 10) * Math.cos(-midAngle * RADIAN);
-const middleY =
-  (cy as number) + ((outerRadius as number) + 10) * Math.sin(-midAngle * RADIAN);
-const terminalX = middleX > cx ? cx + 240 : cx - 240;
-
-const text = `${addEllipsis(name || '', 20)}`;
-const textWidth = textRefs.current[index]?.getBBox().width
-
-const endX = middleX > cx ? terminalX - textWidth + 5 : terminalX + textWidth - 5;
-
-const textAnchor = middleX > (cx as number) ? 'start' : 'end';
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    const textAnchor = x > cx ? 'start' : 'end';
-    return { name: entry.name, x, y, textAnchor };
-  });
+type LabelData = {
+  middleY: number;
+  midAngle: number;
 };
 
-const adjustLabelPositions = (positions: LabelPosition[]) => {
-  const adjustedPositions = [...positions];
-  const labelHeight = 20; // Approximate height of the label
+type Entries = [string, LabelData][];
 
-  for (let i = 0; i < adjustedPositions.length - 1; i++) {
-    for (let j = i + 1; j < adjustedPositions.length; j++) {
-      if (Math.abs(adjustedPositions[i].y - adjustedPositions[j].y) < labelHeight) {
-        // If labels overlap, adjust the y position
-        adjustedPositions[j].y = adjustedPositions[i].y + labelHeight;
+function adjustLabelPositions(
+  labelPositions: Record<string, { middleY: number; midAngle: number }>,
+  cy: number,
+  labelHeight: number
+) {
+  // Convert object to an array of [key, value] pairs
+  let entries: Entries = Object.entries(labelPositions);
+
+  // Split entries into quarters based on midAngle
+  let quarters: Entries[] = [[], [], [], []];
+  for (let [key, val] of entries) {
+    const { midAngle } = val;
+    const absMidAngle = Math.abs(midAngle);
+    if (absMidAngle >= 0 && absMidAngle < 90) {
+      quarters[0].push([key, val]);
+    } else if (absMidAngle >= 90 && absMidAngle < 180) {
+      quarters[1].push([key, val]);
+    } else if (absMidAngle >= 180 && absMidAngle < 270) {
+      quarters[2].push([key, val]);
+    } else if (absMidAngle >= 270 && absMidAngle < 360) {
+      quarters[3].push([key, val]);
+    }
+  }
+
+  // Adjust label positions within each quarter
+  for (let quarter of quarters) {
+    // Sort entries based on midAngle
+    quarter.sort((a, b) => a[1].midAngle - b[1].midAngle);
+
+    for (let i = 0; i < quarter.length - 1; i++) {
+      let [currentKey, currentVal] = quarter[i];
+      let [nextKey, nextVal] = quarter[i + 1];
+
+      // Check if the next value is too close to the current value
+      if (Math.abs(currentVal.middleY - nextVal.middleY) < labelHeight) {
+        if (nextVal.middleY > cy) {
+          // Move the next label down
+          quarter[i + 1][1].middleY = currentVal.middleY + labelHeight;
+        } else {
+          // Move the next label up
+          quarter[i + 1][1].middleY = currentVal.middleY - labelHeight;
+        }
       }
     }
   }
 
-  return adjustedPositions;
-};
+  // Merge the adjusted quarters back into a single object
+  const adjustedEntries = quarters.flat();
+  const result = Object.fromEntries(adjustedEntries);
+  return result;
+}
 
 function addEllipsis(value: string, limit: number) {
   if (value.length < limit) return value;
   return `${value.substring(0, limit)}...`;
+}
+
+interface PieData {
+  name: string;
+  value: number;
+  index: number;
+  midAngle: number;
 }
 
 interface SignersDistributionPieChartProps {
@@ -232,7 +226,7 @@ export function SignersDistributionPieChart({
     throw new Error('Signers data is not available');
   }
 
-  const pieData = useMemo(() => {
+  const pieData: PieData[] = useMemo(() => {
     const thresholdPercentage = 1;
     const knownSignersWithPercentageGreaterThanThreshold = signers
       .filter(
@@ -267,10 +261,13 @@ export function SignersDistributionPieChart({
         value: unknownSignersPercentage,
       });
     }
-    signersData = signersData.map((signer, i) => ({
-      ...signer,
-      index: i,
-    }));
+
+    signersData = signersData
+      .map((signer, i) => {
+        return { ...signer, index: i };
+      })
+      .sort((a, b) => b.value - a.value);
+
     return signersData;
   }, [signers, onlyShowPublicSigners]);
   const colorMode = useColorMode().colorMode;
@@ -294,14 +291,10 @@ export function SignersDistributionPieChart({
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-
-  const [labelPositions, setLabelPositions] = useState<LabelPosition[]>([]);
+  const labelPositions = useRef<Record<string, { middleY: number; midAngle: number }>>({});
   useEffect(() => {
-    const initialPositions = calculateLabelPositions(pieData, 200, 200, 80);
-    const adjustedPositions = adjustLabelPositions(initialPositions);
-    setLabelPositions(adjustedPositions);
-  }, [pieData]);
-
+    labelPositions.current = {};
+  }, [onlyShowPublicSigners]);
 
   const renderActiveShape = useCallback(
     ({
@@ -317,6 +310,8 @@ export function SignersDistributionPieChart({
       midAngle = 0,
       payload,
     }: PieSectorDataItem) => {
+      // console.log('renderActiveShape', { name, value, midAngle });
+
       // Calculate dynamic radii based on the value
       const smallestWidth = (outerRadius - innerRadius) / 1.5;
       const shrinkableWidth = outerRadius - innerRadius - smallestWidth;
@@ -325,7 +320,7 @@ export function SignersDistributionPieChart({
       const shrinkValue = shrinkFactor * shrinkMultiple;
       const dynamicInnerRadius = innerRadius + shrinkValue;
       const dynamicOuterRadius = outerRadius - shrinkValue;
-      const {index} = payload;
+      const { index } = payload;
 
       // const RADIAN = Math.PI / 180;
       // const sin = Math.sin(-RADIAN * midAngle);
@@ -347,31 +342,33 @@ export function SignersDistributionPieChart({
 
       // const horizontalX = x > (cx as number) ? (cx as number) + (outerRadius as number) + 100 : (cx as number) - (outerRadius as number) - 100; // Fixed x position for labels
 
-
-
       const RADIAN = Math.PI / 180;
-      const startX = (cx as number) + (outerRadius as number) * Math.cos(-midAngle * RADIAN);
-      const startY = (cy as number) + (outerRadius as number) * Math.sin(-midAngle * RADIAN);
+      const startX = (cx as number) + (dynamicOuterRadius + 5) * Math.cos(-midAngle * RADIAN);
+      const startY = (cy as number) + (dynamicOuterRadius + 5) * Math.sin(-midAngle * RADIAN);
       const middleX =
         (cx as number) + ((outerRadius as number) + 10) * Math.cos(-midAngle * RADIAN);
-      const middleY =
-        (cy as number) + ((outerRadius as number) + 10) * Math.sin(-midAngle * RADIAN);
-      const terminalX = middleX > cx ? cx + 240 : cx - 240;
+      let middleY = (cy as number) + ((outerRadius as number) + 10) * Math.sin(-midAngle * RADIAN);
 
-      const text = `${addEllipsis(name || '', 20)}`;
-      const textWidth = textRefs.current[index]?.getBBox().width
-
-      const endX = middleX > cx ? terminalX - textWidth + 5 : terminalX + textWidth - 5;
-
+      const textSize = 14;
+      const { width } = dimensions;
+      const terminalX = middleX > cx ? cx + width / 2 : cx - width / 2;
+      const text = `${addEllipsis(name || '', textSize)}`;
+      const textWidth = textRefs.current[index]?.getBBox().width;
+      const endX = middleX > cx ? terminalX - textWidth : terminalX + textWidth;
       const textAnchor = middleX > (cx as number) ? 'start' : 'end';
 
-      console.log({ name, startY, middleY});
+      if (!((name as string) in labelPositions.current)) {
+        labelPositions.current[name as string] = { middleY, midAngle };
+      }
+      const adjustedLabelPositions = adjustLabelPositions(labelPositions.current, cy, textSize);
 
-      // console.log({ name, textWidth: textRefs.current[index]?.getBBox().width, textRefs: textRefs.current[index] });
-
-      const positions = calculateLabelPositions(pieData, cx as number, cy as number, outerRadius as number, midAngle, textWidth);
-      const adjustedPositions = adjustLabelPositions(positions);
-      console.log({ positions, adjustedPositions, labelPositions });
+      // console.log({
+      //   name,
+      //   middleY,
+      //   midAngle,
+      //   labelPositions: labelPositions.current,
+      //   adjustedLabelPositions,
+      // });
 
       return (
         <g>
@@ -410,31 +407,36 @@ export function SignersDistributionPieChart({
                 x1={startX}
                 y1={startY}
                 x2={middleX}
-                y2={middleY}
+                y2={adjustedLabelPositions[name].middleY}
                 stroke="var(--stacks-colors-borderPrimary)"
                 strokeWidth={1}
               />
               <line
                 x1={middleX}
-                y1={middleY}
+                y1={adjustedLabelPositions[name].middleY}
                 x2={endX}
-                y2={middleY}
+                y2={adjustedLabelPositions[name].middleY}
                 stroke="var(--stacks-colors-borderPrimary)"
                 strokeWidth={1}
               />
-              <circle cx={startX} cy={startY} r={3} fill="red" />
-              <circle cx={middleX} cy={middleY} r={3} fill="blue" />
-              <circle cx={endX} cy={middleY} r={3} fill="green" />
-              <circle cx={terminalX} cy={middleY} r={3} fill="purple" />
+              {/* <circle cx={startX} cy={startY} r={3} fill="red" />
+              <circle cx={middleX} cy={adjustedLabelPositions[name].middleY} r={3} fill="blue" />
+              <circle cx={endX} cy={adjustedLabelPositions[name].middleY} r={3} fill="green" />
+              <circle
+                cx={terminalX}
+                cy={adjustedLabelPositions[name].middleY}
+                r={3}
+                fill="purple"
+              /> */}
               <text
                 ref={el => (textRefs.current[index] = el)}
                 x={endX}
-                y={middleY}
+                y={adjustedLabelPositions[name].middleY}
                 fill="var(--stacks-colors-textSubdued)"
                 fontStyle="Helvetica"
                 textAnchor={textAnchor}
                 dominantBaseline="central"
-                fontSize={'14px'}
+                fontSize={textSize}
               >
                 {text}
               </text>
@@ -444,7 +446,7 @@ export function SignersDistributionPieChart({
         </g>
       );
     },
-    [showLabels]
+    [showLabels, dimensions]
   );
 
   const CustomTooltip = useCallback(
@@ -488,49 +490,48 @@ export function SignersDistributionPieChart({
 
   const pieChart = useMemo(
     () => (
-      <Box ref={containerRef} height='100%' width='100%'>
-
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie
-            paddingAngle={2}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            data={pieData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={false}
-            innerRadius={innerRadius}
-            outerRadius={outerRadius}
-            activeIndex={activeIndices} // Set all indices to active so they can be custom rendered
-            activeShape={renderActiveShape}
-            onMouseEnter={onPieEnter}
-            onMouseLeave={onPieLeave}
-          >
-            {pieData.map((entry, index) => {
-              return (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={
-                    index === activeIndex
-                      ? getColorWithOpacity(
-                          getSignerDistributionPieChartHex(entry.value, colorMode, theme),
-                          0.8
-                        )
-                      : getSignerDistributionPieChartColor(entry.value, colorMode)
-                  }
-                  opacity={index === activeIndex ? 0.8 : 1}
-                  strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
-                />
-              );
-            })}
-          </Pie>
-          <Tooltip content={<CustomTooltip />} />
-        </PieChart>
-      </ResponsiveContainer>
+      <Box ref={containerRef} height="100%" width="100%">
+        {/* <ResponsiveContainer> */}
+          <PieChart height={100} width={100}>
+            <Pie
+              paddingAngle={2}
+              startAngle={startAngle}
+              endAngle={endAngle}
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={false}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
+              activeIndex={activeIndices} // Set all indices to active so they can be custom rendered
+              activeShape={renderActiveShape}
+              onMouseEnter={onPieEnter}
+              onMouseLeave={onPieLeave}
+            >
+              {pieData.map((entry, index) => {
+                return (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      index === activeIndex
+                        ? getColorWithOpacity(
+                            getSignerDistributionPieChartHex(entry.value, colorMode, theme),
+                            0.8
+                          )
+                        : getSignerDistributionPieChartColor(entry.value, colorMode)
+                    }
+                    opacity={index === activeIndex ? 0.8 : 1}
+                    strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
+                  />
+                );
+              })}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
+          </PieChart>
+        {/* </ResponsiveContainer> */}
       </Box>
     ),
     [pieData, renderActiveShape, activeIndices, colorMode, CustomTooltip, activeIndex, theme]

@@ -68,7 +68,7 @@ export function SignersDistributionLegend({
         .sort((a, b) => b.value - a.value);
 
   return (
-    <Stack gap={2}>
+    <Stack gap={2} width='100%'>
       {filiteredSigners.map(signer => (
         <SignerLegendItem
           key={signer.name}

@@ -9,7 +9,6 @@ import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
-import { AddressesStackingCard } from './AddressesStackingCard';
 import { CurrentCycleCard } from './CurrentCycle';
 import { NextCycleCard } from './NextCycleCard';
 import { SignersDistribution } from './SignerDistribution';
@@ -22,7 +21,7 @@ export function SignersHeaderLayout({
   currentCycleCard,
   stxStakedCard,
   stxLockedCard,
-  addressesStackingCard,
+  // addressesStackingCard,
   nextCycleCard,
   signerDistribution,
   signerDistributionHeader,
@@ -31,7 +30,7 @@ export function SignersHeaderLayout({
   currentCycleCard: ReactNode;
   stxStakedCard: ReactNode;
   stxLockedCard: ReactNode;
-  addressesStackingCard: ReactNode;
+  // addressesStackingCard: ReactNode;
   nextCycleCard: ReactNode;
   signerDistributionHeader: ReactNode;
   signerDistribution: ReactNode;
@@ -39,7 +38,12 @@ export function SignersHeaderLayout({
 }) {
   return (
     <Card width="full" flexDirection="column" gap={4}>
-      <Stack display="flex" flexDirection={['column', 'column', 'column', 'row', 'row']} gap={8}>
+      <Stack
+        display="flex"
+        flexDirection={['column', 'column', 'column', 'row', 'row']}
+        gap={8}
+        // height="100%"
+      >
         <Stack
           width="full"
           gap={4}
@@ -53,12 +57,14 @@ export function SignersHeaderLayout({
         </Stack>
         <Box
           width="1px"
+          // height="100%"
           border="1px solid var(--stacks-colors-borderSecondary)"
           display={['none', 'none', 'none', 'block', 'block']}
           margin={0}
         />
         <Stack
           width="full"
+          // height="100%"
           gap={4}
           paddingY={7}
           paddingRight={7}
@@ -72,21 +78,22 @@ export function SignersHeaderLayout({
             </Text>
           </Flex>
           <Box
-            display={['grid', 'grid', 'none', 'grid', 'grid']}
+            // display={['grid', 'grid', 'grid', 'grid', 'grid']}
+            display="grid"
             gridTemplateColumns="repeat(2, 1fr)"
             width="100%"
             gap={4}
             boxSizing="border-box"
           >
-            <Box gridColumn={['span 2', 'span 2', 'span 1', 'span 2', 'span 2']}>
+            {/* <Box gridColumn={['span 1', 'span 1', 'span 1', 'span 1', 'span 1']}> */}
               {currentCycleCard}
-            </Box>
+            {/* </Box> */}
             {stxStakedCard}
             {stxLockedCard}
-            {addressesStackingCard}
+            {/* {addressesStackingCard} */}
             {nextCycleCard}
           </Box>
-          <Stack width="100%" display={['none', 'none', 'flex', 'none', 'none']} gap={4}>
+          {/* <Stack width="100%" display={['none', 'none', 'flex', 'none', 'none']} gap={4}>
             <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" width="100%" gap={4}>
               {currentCycleCard}
               {stxStakedCard}
@@ -96,7 +103,7 @@ export function SignersHeaderLayout({
               {addressesStackingCard}
               {nextCycleCard}
             </Box>
-          </Stack>
+          </Stack> */}
         </Stack>
       </Stack>
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
@@ -113,7 +120,7 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
       currentCycleCard={<CurrentCycleCard />}
       stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
       stxLockedCard={<TotalStackedCard />}
-      addressesStackingCard={<AddressesStackingCard />}
+      // addressesStackingCard={<AddressesStackingCard />}
       nextCycleCard={<NextCycleCard />}
       signerDistributionHeader={
         <SignerDistributionHeader
