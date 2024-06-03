@@ -46,8 +46,10 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
 
   const isActive = activeNetwork.url === network.url;
   const networkHref = buildUrl('/', network);
-  const badgeColor = useColorModeValue('purple.600', 'purple.300');
-  const badgeBg = useColorModeValue('purple.100', 'purple.900');
+  const purpleBadgeColor = useColorModeValue('purple.600', 'purple.300');
+  const purpleBadgeBg = useColorModeValue('purple.100', 'purple.900');
+  const greenBadgeColor = useColorModeValue('green.600', 'green.300');
+  const greenBadgeBg = useColorModeValue('green.100', 'green.900');
   const badgeBorder = useColorModeValue('purple.300', 'purple.700');
 
   return (
@@ -76,10 +78,25 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               subnet
             </Badge>
+          ) : network.label === 'Stacks Testnet' ? (
+            <Badge
+              color={greenBadgeColor}
+              bg={greenBadgeBg}
+              px={'2'}
+              py={'1'}
+              fontSize={'xs'}
+              rounded={'full'}
+              border={'1px'}
+              borderColor={badgeBorder}
+              fontWeight={'medium'}
+              ml="8px"
+            >
+              Now Live!
+            </Badge>
           ) : (
             <Badge
-              color={badgeColor}
-              bg={badgeBg}
+              color={purpleBadgeColor}
+              bg={purpleBadgeBg}
               px={'2'}
               py={'1'}
               fontSize={'xs'}
