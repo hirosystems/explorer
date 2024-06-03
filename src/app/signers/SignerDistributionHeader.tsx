@@ -1,15 +1,15 @@
-import { Icon } from '@/ui/Icon';
-import { Link } from '@/ui/Link';
-import { Tooltip } from '@/ui/Tooltip';
-import { useDisclosure } from '@/ui/hooks/useDisclosure';
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { Question, X } from '@phosphor-icons/react';
 
 import { Flex } from '../../ui/Flex';
 import { FormControl } from '../../ui/FormControl';
 import { FormLabel } from '../../ui/FormLabel';
+import { Icon } from '../../ui/Icon';
+import { Link } from '../../ui/Link';
 import { Switch } from '../../ui/Switch';
 import { Text } from '../../ui/Text';
+import { Tooltip } from '../../ui/Tooltip';
+import { useDisclosure } from '../../ui/hooks/useDisclosure';
 
 export function SignerDistributionHeader({
   signerTitle,
@@ -41,15 +41,14 @@ export function SignerDistributionHeader({
           <ModalOverlay />
           <ModalContent>
             <Flex flexDirection="column" p={6} gap={4}>
-              <Flex justifyContent='space-between'>
-              <Flex gap={2} alignItems="center">
-                <Icon as={Question} size={6} color="iconSubdued" onClick={onToggle} />
-                <Text fontSize={20} fontWeight="medium">
-                  What's a Signer?
-                </Text>
-              </Flex>
-              <Icon as={X} size={6} color="iconSubdued" onClick={onToggle} />
-
+              <Flex justifyContent="space-between">
+                <Flex gap={2} alignItems="center">
+                  <Icon as={Question} size={6} color="iconSubdued" onClick={onToggle} />
+                  <Text fontSize={20} fontWeight="medium">
+                    What's a Signer?
+                  </Text>
+                </Flex>
+                <Icon as={X} size={6} color="iconSubdued" onClick={onToggle} />
               </Flex>
               <Text lineHeight={5} fontSize={14}>
                 The Nakamoto upgrade introduces a new role of "Signer." Signers participate in the
