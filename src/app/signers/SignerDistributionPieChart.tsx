@@ -146,7 +146,6 @@ function adjustLabelPositions(
   cy: number,
   labelHeight: number
 ) {
-  // Convert object to an array of [key, value] pairs
   let entries: Entries = Object.entries(labelPositions);
 
   // Split entries into quarters based on midAngle
