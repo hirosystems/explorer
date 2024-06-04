@@ -4,6 +4,8 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import { GeoJSON, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
+import { Continent } from './SignersMapCard';
+
 // Fixing the default icon issue
 // delete L.Icon.Default.prototype._getIconUrl;
 
@@ -77,7 +79,8 @@ const DotOverlay = () => {
   return <Box style={dotStyle}></Box>;
 };
 
-export const CryptoNodesMap = ({ nodes }) => {
+export function SignersMap({ activeContinent }: { activeContinent: Continent | null }) {
+  const nodes = cryptoNodes;
   const [geoJsonData, setGeoJsonData] = useState(null);
 
   useEffect(() => {
@@ -100,9 +103,9 @@ export const CryptoNodesMap = ({ nodes }) => {
     <div style={{ height: '100%', width: '100%', position: 'relative' }}>
       <MapContainer
         center={[20, 0]}
-        zoom={2}
-        minZoom={2}
-        maxZoom={2}
+        zoom={1}
+        minZoom={1}
+        maxZoom={4}
         scrollWheelZoom={false}
         doubleClickZoom={false}
         zoomControl={false}
@@ -114,9 +117,13 @@ export const CryptoNodesMap = ({ nodes }) => {
           // filter: 'grayscale(100%)'
         }}
       >
-        <TileLayer
+        {/* <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        /> */}
+        <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         />
         {geoJsonData && <GeoJSON data={geoJsonData} onEachFeature={onEachCountry} />}
         {/* <Marker position={[0, 0]} /> */}
@@ -139,15 +146,15 @@ export const CryptoNodesMap = ({ nodes }) => {
           boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
         }}
       >
-        <h3>{nodes.length} Nodes</h3>
+        {/* <h3>{nodes.length} Nodes</h3>
         <ul>
           {nodes.map((node, index) => (
             <li key={index}>{`Node ${index + 1}: ${node.lat}, ${node.lng}`}</li>
           ))}
-        </ul>
+        </ul> */}
       </div>
     </div>
   );
-};
+}
 
-export default CryptoNodesMap;
+export default SignersMap;

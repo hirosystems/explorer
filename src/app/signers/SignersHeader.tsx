@@ -13,8 +13,10 @@ import { CurrentCycleCard } from './CurrentCycle';
 import { NextCycleCard } from './NextCycleCard';
 import { SignersDistribution } from './SignerDistribution';
 import { SignerDistributionHeader } from './SignerDistributionHeader';
+import SignersMap from './SignersMap';
 import { StxStackedCard } from './StxStackedCard';
 import { TotalStackedCard } from './TotalStackedCard';
+import { SignersMapCard } from './SignersMapCard';
 
 export function SignersHeaderLayout({
   stackingHeader,
@@ -36,24 +38,29 @@ export function SignersHeaderLayout({
 }) {
   return (
     <Card width="full" flexDirection="column" gap={4}>
-      <Stack display="flex" flexDirection={['column', 'column', 'column', 'column', 'row']} gap={8}>
-        <Stack
-          width="full"
-          gap={4}
-          paddingTop={7}
-          paddingBottom={[0, 0, 0, 7, 7]}
-          paddingLeft={7}
-          paddingRight={[7, 7, 7, 7, 0]}
-        >
-          {signerDistributionHeader}
-          {signerDistribution}
-        </Stack>
-        <Box
+      <Stack>
+        <Flex flexDirection={['column', 'column', 'column', 'column', 'row']} gap={8}>
+          <Stack
+            width="50%"
+            gap={4}
+            paddingTop={7}
+            paddingBottom={[0, 0, 0, 7, 7]}
+            paddingLeft={7}
+            paddingRight={[7, 7, 7, 7, 0]}
+          >
+            {signerDistributionHeader}
+            {signerDistribution}
+          </Stack>
+          {/* <Box
           width="1px"
           border="1px solid var(--stacks-colors-borderSecondary)"
           display={['none', 'none', 'none', 'block', 'block']}
           margin={0}
-        />
+        /> */}
+          <Card width="50%" p={6}>
+            <SignersMapCard />
+          </Card>
+        </Flex>
         <Stack
           width="full"
           gap={4}
@@ -86,6 +93,7 @@ export function SignersHeaderLayout({
           </Box>
         </Stack>
       </Stack>
+
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
     </Card>
   );
