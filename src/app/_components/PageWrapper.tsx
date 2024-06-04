@@ -77,7 +77,7 @@ export function PageWrapper({
               <Text fontWeight={'bold'} display={'inline'}>
                 Testnet Update:
               </Text>{' '}
-              Primary Testnet is now Live and ready to use. More details{' '}
+              The Primary Stacks Testnet is reset and now live on Bitcoin Regtest. More details{' '}
               <TextLink
                 href="https://docs.stacks.co/nakamoto-upgrade/nakamoto-and-primary-testnet"
                 target="_blank"
