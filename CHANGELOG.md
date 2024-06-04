@@ -1,3 +1,10 @@
+# [1.183.0](https://github.com/hirosystems/explorer/compare/v1.182.0...v1.183.0) (2024-06-04)
+
+
+### Features
+
+* network dropdown update ([82ee550](https://github.com/hirosystems/explorer/commit/82ee5500b57b0bc019603f696bf6abe52fe88e4a))
+
 # [1.182.0](https://github.com/hirosystems/explorer/compare/v1.181.1...v1.182.0) (2024-06-03)
 
 
