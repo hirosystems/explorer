@@ -63,6 +63,10 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
     poolOperator: 'SP3CPP71K21BKT8952BN0FFZQDEDKQ3BMB9M9J8X4',
     name: 'Luxor',
   },
+  '0x03ed732eab6b99b90315f9b58ce9c3e2d1991bc4e9cfa59841535c0ef7dbba38e0': {
+    poolOperator: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
+    name: 'Planbetter Pool',
+  },
 };
 export const mobileBorderCss = {
   '.has-horizontal-scroll &': {

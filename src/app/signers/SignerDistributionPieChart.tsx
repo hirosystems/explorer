@@ -5,7 +5,7 @@ import {
   useColorMode,
   useTheme,
 } from '@chakra-ui/react';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Sector, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
@@ -109,14 +109,6 @@ function getSignerDistributionPieChartStrokeWidth(votingPowerPercentage: number)
   }
 }
 
-export function getShrinkValue(innerRadius: number, outerRadius: number, value: number) {
-  const smallestWidth = (outerRadius - innerRadius) / 1.5;
-  const shrinkableWidth = outerRadius - innerRadius - smallestWidth;
-  const shrinkFactor = shrinkableWidth / 7; // 7 is the number of ranges we have made
-  const shrinkMultiple = getShrinkFactor(value);
-  const shrinkValue = shrinkFactor * shrinkMultiple;
-}
-
 // Function to calculate the label distance based on the angle
 export const calculateLabelRadius = (radius: number, angle: number) => {
   const baseRadius = radius + 10;
@@ -137,8 +129,80 @@ export const calculateLabelRadius = (radius: number, angle: number) => {
   return baseRadius + offset;
 };
 
-const startAngle = 30;
+const startAngle = 0;
 const endAngle = -(360 - startAngle);
+const innerRadius = 40;
+const outerRadius = 85;
+
+type LabelData = {
+  middleY: number;
+  midAngle: number;
+};
+
+type Entries = [string, LabelData][];
+
+function adjustLabelPositions(
+  labelPositions: Record<string, { middleY: number; midAngle: number }>,
+  cy: number,
+  labelHeight: number
+) {
+  // Convert object to an array of [key, value] pairs
+  let entries: Entries = Object.entries(labelPositions);
+
+  // Split entries into quarters based on midAngle
+  let quarters: Entries[] = [[], [], [], []];
+  for (let [key, val] of entries) {
+    const { midAngle } = val;
+    const absMidAngle = Math.abs(midAngle);
+    if (absMidAngle >= 0 && absMidAngle < 90) {
+      quarters[0].push([key, val]);
+    } else if (absMidAngle >= 90 && absMidAngle < 180) {
+      quarters[1].push([key, val]);
+    } else if (absMidAngle >= 180 && absMidAngle < 270) {
+      quarters[2].push([key, val]);
+    } else if (absMidAngle >= 270 && absMidAngle < 360) {
+      quarters[3].push([key, val]);
+    }
+  }
+
+  // Adjust label positions within each quarter
+  for (let quarter of quarters) {
+    // Sort entries based on midAngle
+    quarter.sort((a, b) => a[1].midAngle - b[1].midAngle);
+
+    for (let i = 0; i < quarter.length - 1; i++) {
+      let [currentKey, currentVal] = quarter[i];
+      let [nextKey, nextVal] = quarter[i + 1];
+
+      // Check if the next value is too close to the current value
+      if (Math.abs(currentVal.middleY - nextVal.middleY) < labelHeight) {
+        if (nextVal.middleY > cy) {
+          // Move the next label down
+          quarter[i + 1][1].middleY = currentVal.middleY + labelHeight;
+        } else {
+          // Move the next label up
+          quarter[i + 1][1].middleY = currentVal.middleY - labelHeight;
+        }
+      }
+    }
+  }
+
+  // Merge the adjusted quarters back into a single object
+  const adjustedEntries = quarters.flat();
+  const result = Object.fromEntries(adjustedEntries);
+  return result;
+}
+
+function addEllipsis(value: string, limit: number) {
+  if (value.length < limit) return value;
+  return `${value.substring(0, limit)}...`;
+}
+
+interface PieData {
+  name: string;
+  value: number;
+  index: number;
+}
 
 interface SignersDistributionPieChartProps {
   signers: SignerInfo[];
@@ -153,7 +217,7 @@ export function SignersDistributionPieChart({
     throw new Error('Signers data is not available');
   }
 
-  const pieData = useMemo(() => {
+  const pieData: PieData[] = useMemo(() => {
     const thresholdPercentage = 1;
     const knownSignersWithPercentageGreaterThanThreshold = signers
       .filter(
@@ -188,12 +252,40 @@ export function SignersDistributionPieChart({
         value: unknownSignersPercentage,
       });
     }
-    return signersData;
+
+    const signersDataWithIndex: PieData[] = signersData
+      .map((signer, i) => {
+        return { ...signer, index: i };
+      })
+      .sort((a, b) => b.value - a.value);
+
+    return signersDataWithIndex;
   }, [signers, onlyShowPublicSigners]);
   const colorMode = useColorMode().colorMode;
   const theme = useTheme();
 
-  const showLabels = useBreakpointValue({ sm: false, md: false, lg: true, xl: true, '2xl': true });
+  const showLabels = useBreakpointValue({ sm: false, md: false, lg: false, xl: true, '2xl': true });
+  const textRefs = useRef<(SVGTextElement | null)[]>([]);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ width, height });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  const labelPositions = useRef<Record<string, { middleY: number; midAngle: number }>>({});
+  useEffect(() => {
+    labelPositions.current = {};
+  }, [onlyShowPublicSigners]);
 
   const renderActiveShape = useCallback(
     ({
@@ -207,6 +299,7 @@ export function SignersDistributionPieChart({
       value = 0,
       name,
       midAngle = 0,
+      payload,
     }: PieSectorDataItem) => {
       // Calculate dynamic radii based on the value
       const smallestWidth = (outerRadius - innerRadius) / 1.5;
@@ -216,24 +309,27 @@ export function SignersDistributionPieChart({
       const shrinkValue = shrinkFactor * shrinkMultiple;
       const dynamicInnerRadius = innerRadius + shrinkValue;
       const dynamicOuterRadius = outerRadius - shrinkValue;
+      const { index } = payload as unknown as PieData;
 
       const RADIAN = Math.PI / 180;
-      const sin = Math.sin(-RADIAN * midAngle);
-      const cos = Math.cos(-RADIAN * midAngle);
+      const startX = (cx as number) + (dynamicOuterRadius + 5) * Math.cos(-midAngle * RADIAN);
+      const startY = (cy as number) + (dynamicOuterRadius + 5) * Math.sin(-midAngle * RADIAN);
+      const middleX =
+        (cx as number) + ((outerRadius as number) + 10) * Math.cos(-midAngle * RADIAN);
+      let middleY = (cy as number) + ((outerRadius as number) + 10) * Math.sin(-midAngle * RADIAN);
 
-      // sx and sy: The starting coordinates of the line, which are located at the outer edge of the pie slice.
-      const sx = cx + (dynamicOuterRadius + 5) * cos;
-      const sy = cy + (dynamicOuterRadius + 5) * sin;
+      const textSize = 14;
+      const { width } = dimensions;
+      const terminalX = middleX > cx ? cx + width / 2 : cx - width / 2;
+      const text = `${addEllipsis(name || '', textSize)}`;
+      const textWidth = textRefs.current[index]?.getBBox().width || 0;
+      const endX = middleX > cx ? terminalX - textWidth : terminalX + textWidth;
+      const textAnchor = middleX > (cx as number) ? 'start' : 'end';
 
-      const labelRadius = calculateLabelRadius(dynamicOuterRadius, midAngle);
-
-      const mx = cx + labelRadius * cos;
-      const my = cy + labelRadius * sin;
-
-      // ex and ey: The ending coordinates of the line, which are where the label text is positioned.
-      const ex = mx + (cos >= 0 ? 1 : -1) * 20; // Adjust label horizontal position
-      const ey = my;
-      const textAnchor = cos >= 0 ? 'start' : 'end';
+      if (!((name as string) in labelPositions.current)) {
+        labelPositions.current[name as string] = { middleY, midAngle };
+      }
+      const adjustedLabelPositions = adjustLabelPositions(labelPositions.current, cy, textSize);
 
       return (
         <g>
@@ -249,27 +345,41 @@ export function SignersDistributionPieChart({
           />
           {showLabels ? (
             <>
-              <path
-                d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+              <line
+                x1={startX}
+                y1={startY}
+                x2={middleX}
+                y2={adjustedLabelPositions[name as string].middleY}
                 stroke="var(--stacks-colors-borderPrimary)"
-                fill="none"
+                strokeWidth={1}
+              />
+              <line
+                x1={middleX}
+                y1={adjustedLabelPositions[name as string].middleY}
+                x2={endX}
+                y2={adjustedLabelPositions[name as string].middleY}
+                stroke="var(--stacks-colors-borderPrimary)"
+                strokeWidth={1}
               />
               <text
-                x={ex}
-                y={ey}
-                dy={4} // Adjust this value to align the text vertically with the line
-                textAnchor={textAnchor}
+                ref={el => (textRefs.current[index] = el)}
+                x={endX}
+                y={adjustedLabelPositions[name as string].middleY}
                 fill="var(--stacks-colors-textSubdued)"
-                fontSize="var(--stacks-fontSizes-xs)"
+                fontStyle="Helvetica"
+                textAnchor={textAnchor}
+                dominantBaseline="central"
+                fontSize={textSize}
               >
-                {name}
+                {text}
               </text>
+              <span className="Nick-Span" />
             </>
           ) : null}
         </g>
       );
     },
-    [showLabels]
+    [showLabels, dimensions]
   );
 
   const CustomTooltip = useCallback(
@@ -313,47 +423,49 @@ export function SignersDistributionPieChart({
 
   const pieChart = useMemo(
     () => (
-      <ResponsiveContainer>
-        <PieChart>
-          <Pie
-            paddingAngle={2}
-            startAngle={startAngle}
-            endAngle={endAngle}
-            data={pieData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={false}
-            innerRadius={60}
-            outerRadius={120}
-            activeIndex={activeIndices} // Set all indices to active so they can be custom rendered
-            activeShape={renderActiveShape}
-            onMouseEnter={onPieEnter}
-            onMouseLeave={onPieLeave}
-          >
-            {pieData.map((entry, index) => {
-              return (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={
-                    index === activeIndex
-                      ? getColorWithOpacity(
-                          getSignerDistributionPieChartHex(entry.value, colorMode, theme),
-                          0.8
-                        )
-                      : getSignerDistributionPieChartColor(entry.value, colorMode)
-                  }
-                  opacity={index === activeIndex ? 0.8 : 1}
-                  strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
-                />
-              );
-            })}
-          </Pie>
-          <Tooltip content={<CustomTooltip />} />
-        </PieChart>
-      </ResponsiveContainer>
+      <Box ref={containerRef} height="100%" width="100%">
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie
+              paddingAngle={2}
+              startAngle={startAngle}
+              endAngle={endAngle}
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={false}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
+              activeIndex={activeIndices} // Set all indices to active so they can be custom rendered
+              activeShape={renderActiveShape}
+              onMouseEnter={onPieEnter}
+              onMouseLeave={onPieLeave}
+            >
+              {pieData.map((entry, index) => {
+                return (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      index === activeIndex
+                        ? getColorWithOpacity(
+                            getSignerDistributionPieChartHex(entry.value, colorMode, theme),
+                            0.8
+                          )
+                        : getSignerDistributionPieChartColor(entry.value, colorMode)
+                    }
+                    opacity={index === activeIndex ? 0.8 : 1}
+                    strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
+                  />
+                );
+              })}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
+          </PieChart>
+        </ResponsiveContainer>
+      </Box>
     ),
     [pieData, renderActiveShape, activeIndices, colorMode, CustomTooltip, activeIndex, theme]
   );

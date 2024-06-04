@@ -13,6 +13,7 @@ import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSign
 import { useSuspensePoxSigners } from './data/useSigners';
 import { SignersStatsSectionSkeleton } from './skeleton';
 
+// TODO: This is currently not being used, but it may be in the future
 export function AddressesStackingCardBase() {
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
   const previousCycleId = useMemo(() => currentCycleId - 1, [currentCycleId]);
@@ -61,7 +62,12 @@ export function AddressesStackingCardBase() {
   const numPreviousCycleStackers = previousCycleSignersStackers.length;
 
   const rate = numPreviousCycleStackers
-    ? (numCurrentCycleStackers - numPreviousCycleStackers) / numPreviousCycleStackers
+    ? Number(
+        (
+          ((numCurrentCycleStackers - numPreviousCycleStackers) / numPreviousCycleStackers) *
+          100
+        ).toFixed(2)
+      )
     : undefined;
 
   const moreInfo = rate ? (
@@ -72,7 +78,7 @@ export function AddressesStackingCardBase() {
           size={3}
           color={rate > 0 ? 'green.600' : 'red.600'}
         />
-        &nbsp;{`${rate * 100}%`}&nbsp;
+        &nbsp;{`${rate}%`}&nbsp;
       </Text>
       <Text display="inline">{`${rate > 0 ? 'more' : 'less'} than previous cycle`}</Text>
     </Text>
