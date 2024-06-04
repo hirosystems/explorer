@@ -121,7 +121,7 @@ export const AppContextProvider: FC<{
         mode: NetworkModes.Mainnet,
       },
       [apiUrls[NetworkModes.Testnet]]: {
-        label: 'Stacks Testnet',
+        label: 'Stacks Testnet (Primary)',
         url: apiUrls[NetworkModes.Testnet],
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
@@ -129,9 +129,9 @@ export const AppContextProvider: FC<{
         networkId: ChainID.Testnet,
         mode: NetworkModes.Testnet,
       },
-      'https://api.old.testnet.hiro.so': {
-        label: 'Stacks Testnet (archive)',
-        url: 'https://api.old.testnet.hiro.so',
+      'https://api.nakamoto.testnet.hiro.so': {
+        label: 'Nakamoto Testnet',
+        url: 'https://api.nakamoto.testnet.hiro.so',
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
         btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
@@ -139,9 +139,9 @@ export const AppContextProvider: FC<{
         mode: NetworkModes.Testnet,
         isCustomNetwork: true,
       },
-      'https://api.nakamoto.testnet.hiro.so': {
-        label: 'Nakamoto Testnet',
-        url: 'https://api.nakamoto.testnet.hiro.so',
+      'https://api.old.testnet.hiro.so': {
+        label: 'Stacks Testnet (Archive)',
+        url: 'https://api.old.testnet.hiro.so',
         btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
         btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
         btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
