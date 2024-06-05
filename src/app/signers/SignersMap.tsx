@@ -1,108 +1,167 @@
-import { Box } from '@/ui/Box';
+import { useBreakpointValue } from '@chakra-ui/react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
-import { GeoJSON, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import 'proj4';
+import 'proj4leaflet';
+import { useCallback, useEffect } from 'react';
+import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 
 import { Continent } from './SignersMapCard';
 
-// Fixing the default icon issue
-// delete L.Icon.Default.prototype._getIconUrl;
-
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl: markerIcon2x,
-//   iconUrl: markerIcon,
-//   shadowUrl: markerShadow,
-// });
-
-// Fixing the default icon issue
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl: '/marker-icon.svg',
-//   iconUrl: '/marker-icon.svg',
-//   shadowUrl: '/marker-shadow.svg',
-//   iconSize: [50, 50], // Adjust icon size
-//   iconAnchor: [25, 50], // Adjust icon anchor point
-//   shadowSize: [50, 50], // Adjust shadow size
-//   shadowAnchor: [25, 50], // Adjust shadow anchor point
-// });
-
-// const legalIcon = new Icon({
-//   iconUrl,
-//   iconSize: [35, 35], // size of the icon
-//   iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-//   popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
-// });
-// Fixing the default icon issue
-// let DefaultIcon = L.icon({
-//   iconUrl: markerIcon,
-//   shadowUrl: markerShadow,
-// });
-
-let DefaultIcon = L.icon({
-  iconUrl: '/marker-icon.svg', // Use the public URL
-  shadowUrl: '/marker-shadow.svg', // Use the public URL
+const defaultIcon = new L.Icon({
+  iconUrl: '/default-marker-icon.svg',
 });
 
-L.Marker.prototype.options.icon = DefaultIcon;
+const activeIcon = new L.Icon({
+  iconUrl: '/active-marker-icon.svg',
+});
 
-export const cryptoNodes = [
-  { lat: 37.7749, lng: -122.4194 }, // San Francisco
-  { lat: 51.5074, lng: -0.1278 }, // London
-  { lat: 48.8566, lng: 2.3522 }, // Paris
-  { lat: 35.6895, lng: 139.6917 }, // Tokyo
-  { lat: 40.7128, lng: -74.006 }, // New York
-  { lat: 55.7558, lng: 37.6173 }, // Moscow
-  // Add more nodes as needed
-];
-// export const cryptoNodes = [
-//   [37.7749, -122.4194], // San Francisco
-//   [51.5074, -0.1278], // London
-//   [48.8566, 2.3522], // Paris
-//   [35.6895, 139.6917], // Tokyo
-//   [40.7128, -74.006], // New York
-//   [55.7558, 37.6173], // Moscow
-// ];
+interface CenterAndZoom {
+  center: [number, number];
+  zoom: number;
+}
 
-const DotOverlay = () => {
-  const dotStyle = {
-    background: `radial-gradient(circle, #6c63ff 1px, rgba(255,255,255,0) 1px)`,
-    backgroundSize: '10px 10px',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 400,
-    pointerEvents: 'none',
-  };
+const MapUpdater = ({ activeContinent }: { activeContinent: Continent | null }) => {
+  const map = useMap();
 
-  return <Box style={dotStyle}></Box>;
-};
+  const northAmericaCenterAndZoom = useBreakpointValue({
+    base: { center: [37, -100], zoom: 3 },
+    xl: { center: [33, -95], zoom: 3 },
+  }) as CenterAndZoom;
+  const africaCenterAndZoom = useBreakpointValue({
+    base: { center: [9, 18], zoom: 3 },
+    xl: { center: [9, 18], zoom: 3 },
+  }) as CenterAndZoom;
+  const europeCenterAndZoom = useBreakpointValue({
+    base: { center: [48, 0], zoom: 4 },
+    xl: { center: [46, 12], zoom: 4 },
+  }) as CenterAndZoom;
+  const australiaCenterAndZoom = useBreakpointValue({
+    base: { center: [-25, 133], zoom: 4 },
+    xl: { center: [-25, 133], zoom: 4 },
+  }) as CenterAndZoom;
+  const southAmericaCenterAndZoom = useBreakpointValue({
+    base: { center: [-20, -61], zoom: 3 },
+    xl: { center: [-20, -61], zoom: 3 },
+  }) as CenterAndZoom;
+  const asiaCenterAndZoom = useBreakpointValue({
+    base: { center: [20, 150], zoom: 3 },
+    xl: { center: [17, 115], zoom: 3 },
+  }) as CenterAndZoom;
 
-export function SignersMap({ activeContinent }: { activeContinent: Continent | null }) {
-  const nodes = cryptoNodes;
-  const [geoJsonData, setGeoJsonData] = useState(null);
+  const getContinetCenterAndZoom = useCallback(
+    (continent: Continent | null): CenterAndZoom => {
+      switch (continent) {
+        case Continent.NorthAmerica:
+          return northAmericaCenterAndZoom;
+        case Continent.Africa:
+          return africaCenterAndZoom;
+        case Continent.Europe:
+          return europeCenterAndZoom;
+        case Continent.Australia:
+          return australiaCenterAndZoom;
+        case Continent.SouthAmerica:
+          return southAmericaCenterAndZoom;
+        case Continent.Asia:
+          return asiaCenterAndZoom;
+        default:
+          return { center: [20, 0], zoom: 1 };
+      }
+    },
+    [
+      northAmericaCenterAndZoom,
+      africaCenterAndZoom,
+      europeCenterAndZoom,
+      australiaCenterAndZoom,
+      southAmericaCenterAndZoom,
+      asiaCenterAndZoom,
+    ]
+  );
 
   useEffect(() => {
-    // Fetch the GeoJSON data for country boundaries and names
-    fetch('path/to/your/countries.geojson')
-      .then(response => response.json())
-      .then(data => setGeoJsonData(data));
-  }, []);
+    const { center, zoom } = getContinetCenterAndZoom(activeContinent);
+    map.setView(center, zoom);
+  }, [map, activeContinent, getContinetCenterAndZoom]);
 
-  const onEachCountry = (country, layer) => {
-    const countryName = country.properties.name;
-    layer.bindTooltip(countryName, {
-      permanent: true,
-      direction: 'center',
-      className: 'country-label',
-    });
-  };
+  return null;
+};
 
+const continentBoundaries: Record<
+  Continent,
+  { minLat: number; maxLat: number; minLng: number; maxLng: number }
+> = {
+  Africa: {
+    minLat: -34.833333,
+    maxLat: 37.348222,
+    minLng: -17.625,
+    maxLng: 51.272,
+  },
+  Asia: {
+    minLat: -10.0,
+    maxLat: 81.858711,
+    minLng: 26.0,
+    maxLng: 180.0,
+  },
+  Europe: {
+    minLat: 34.0,
+    maxLat: 71.0,
+    minLng: -25.0,
+    maxLng: 40.0,
+  },
+  'North America': {
+    minLat: 5.493,
+    maxLat: 83.6341,
+    minLng: -168.1195,
+    maxLng: -52.233,
+  },
+  'South America': {
+    minLat: -56.05,
+    maxLat: 13.5,
+    minLng: -81.73,
+    maxLng: -34.58,
+  },
+  Australia: {
+    minLat: -47.0,
+    maxLat: -10.0,
+    minLng: 112.0,
+    maxLng: 179.0,
+  },
+  // Antarctica: {
+  //   minLat: -90.0,
+  //   maxLat: -60.0,
+  //   minLng: -180.0,
+  //   maxLng: 180.0,
+  // },
+};
+
+export function getContinent(latitude: number, longitude: number) {
+  for (const [continent, bounds] of Object.entries(continentBoundaries)) {
+    if (
+      latitude >= bounds.minLat &&
+      latitude <= bounds.maxLat &&
+      longitude >= bounds.minLng &&
+      longitude <= bounds.maxLng
+    ) {
+      return continent as Continent;
+    }
+  }
+  return undefined;
+}
+
+export function SignersMap({
+  signersLocation,
+  activeContinent,
+}: {
+  signersLocation: {
+    lat: number;
+    lng: number;
+  }[];
+  activeContinent: Continent | null;
+}) {
   return (
-    <div style={{ height: '100%', width: '100%', position: 'relative' }}>
+    <div style={{ height: '100%', width: '100%', position: 'relative', borderRadius: 'xl' }}>
       <MapContainer
-        center={[20, 0]}
+        center={[0, 0]}
         zoom={1}
         minZoom={1}
         maxZoom={4}
@@ -110,49 +169,46 @@ export function SignersMap({ activeContinent }: { activeContinent: Continent | n
         doubleClickZoom={false}
         zoomControl={false}
         dragging={false}
-        attributionControl={false} // Disables the default attribution control
+        attributionControl={false}
+        className="roberto"
         style={{
           height: '100%',
           width: '100%',
-          // filter: 'grayscale(100%)'
+          backgroundColor: 'var(--stacks-colors-slate-100)',
+          borderRadius: '0.75rem',
         }}
+        bounds={[
+          [85, -180],
+          [-85, 180],
+        ]}
+        maxBoundsViscosity={1.0}
+        maxBounds={[
+          [85, -180],
+          [-85, 180],
+        ]}
       >
-        {/* <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        /> */}
         <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+          // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
+          url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q
+          "
+          noWrap={true} // Prevents the map from repeating itself
+          minZoom={1}
+          maxZoom={4}
+          bounds={[
+            [85, -180],
+            [-85, 180],
+          ]} // Setting the bounds to prevent wrapping
         />
-        {geoJsonData && <GeoJSON data={geoJsonData} onEachFeature={onEachCountry} />}
-        {/* <Marker position={[0, 0]} /> */}
-        {nodes.map((node, index) => (
-          <Marker key={index} position={[node.lat, node.lng]}>
-            <Popup>{`Node ${index + 1}: ${node.lat}, ${node.lng}`}</Popup>
-          </Marker>
+        {signersLocation.map((node, index) => (
+          <Marker
+            key={index}
+            position={[node.lat, node.lng]}
+            icon={activeContinent === getContinent(node.lat, node.lng) ? activeIcon : defaultIcon}
+          />
         ))}
-        {/* <DotOverlay /> */}
+        <MapUpdater activeContinent={activeContinent} />
       </MapContainer>
-      <div
-        style={{
-          zIndex: 1000,
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'white',
-          padding: '10px',
-          borderRadius: '8px',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
-        }}
-      >
-        {/* <h3>{nodes.length} Nodes</h3>
-        <ul>
-          {nodes.map((node, index) => (
-            <li key={index}>{`Node ${index + 1}: ${node.lat}, ${node.lng}`}</li>
-          ))}
-        </ul> */}
-      </div>
     </div>
   );
 }

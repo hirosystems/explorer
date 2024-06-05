@@ -64,6 +64,8 @@ export function getSignerDistributionPieChartColor(
     return 'var(--stacks-colors-purple-600)';
   } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
     return 'var(--stacks-colors-purple-700)';
+  } else if (votingPowerPercentage >= 25 && votingPowerPercentage < 30) {
+    return 'var(--stacks-colors-purple-800)';
   } else {
     return colorMode === 'light'
       ? 'var(--stacks-colors-slate-250)'
