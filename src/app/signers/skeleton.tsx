@@ -1,8 +1,7 @@
 'use client';
 
-import { Button } from '@/ui/Button';
-
 import { Card } from '../../common/components/Card';
+import { Button } from '../../ui/Button';
 import { Flex } from '../../ui/Flex';
 import { SkeletonCircle } from '../../ui/SkeletonCircle';
 import { SkeletonItem } from '../../ui/SkeletonItem';
@@ -87,7 +86,7 @@ const SignersMapContinentPillSkeleton = () => {
       backgroundColor={'surface'}
       onClick={() => {}}
     >
-      <SkeletonItem  height="14px" width={20} />
+      <SkeletonItem height="14px" width={20} />
     </Button>
   );
 };

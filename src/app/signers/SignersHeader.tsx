@@ -1,11 +1,11 @@
-import { Box } from '@/ui/Box';
-import { Grid } from '@/ui/Grid';
 import { ArrowRight } from '@phosphor-icons/react';
 import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
+import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
+import { Grid } from '../../ui/Grid';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
@@ -14,7 +14,7 @@ import { CurrentCycleCard } from './CurrentCycle';
 import { NextCycleCard } from './NextCycleCard';
 import { SignersDistribution } from './SignerDistribution';
 import { SignerDistributionHeader } from './SignerDistributionHeader';
-import { SignersMapComponent, SignersMapComponentBase } from './SignersMapComponent';
+import { SignersMapComponent } from './SignersMapComponent';
 import { StxStackedCard } from './StxStackedCard';
 
 export function SignersHeaderLayout({

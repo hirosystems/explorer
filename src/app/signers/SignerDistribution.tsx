@@ -1,10 +1,10 @@
-import { Box } from '@/ui/Box';
-import { Stack } from '@/ui/Stack';
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
+import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';

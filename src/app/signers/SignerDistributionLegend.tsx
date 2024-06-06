@@ -128,7 +128,9 @@ export function SignersDistributionLegend({
         </>
       }
       footNotes={
-        numStackingDaoSigners.current > 0 ? <Text color="textSubdued">* Stacking DAO pool</Text> : null
+        numStackingDaoSigners.current > 0 ? (
+          <Text color="textSubdued">* Stacking DAO pool</Text>
+        ) : null
       }
     />
   );

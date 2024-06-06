@@ -1,11 +1,11 @@
-import { Card } from '@/common/components/Card';
-import { Box } from '@/ui/Box';
-import { Button } from '@/ui/Button';
-import { Flex } from '@/ui/Flex';
-import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
 import { ReactNode, Suspense, useState } from 'react';
 
+import { Card } from '../../common/components/Card';
+import { Box } from '../../ui/Box';
+import { Button } from '../../ui/Button';
+import { Flex } from '../../ui/Flex';
+import { Stack } from '../../ui/Stack';
+import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import SignersMap, { getContinent } from './SignersMap';
 import { SignersMapSkeleton } from './skeleton';

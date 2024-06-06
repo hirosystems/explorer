@@ -1,6 +1,6 @@
-import { FormControl } from '@/ui/FormControl';
-import { FormLabel } from '@/ui/FormLabel';
-import { Switch } from '@/ui/Switch';
+import { FormControl } from '../../ui/FormControl';
+import { FormLabel } from '../../ui/FormLabel';
+import { Switch } from '../../ui/Switch';
 
 export function SignersDistributionFilter({
   onlyShowPublicSigners,
