@@ -6,7 +6,7 @@ import 'proj4leaflet';
 import { useCallback, useEffect } from 'react';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 
-import { Continent } from './SignersMapCard';
+import { Continent } from './SignersMapComponent';
 
 const defaultIcon = new L.Icon({
   iconUrl: '/default-marker-icon.svg',
@@ -159,56 +159,54 @@ export function SignersMap({
   activeContinent: Continent | null;
 }) {
   return (
-    <div style={{ height: '100%', width: '100%', position: 'relative', borderRadius: 'xl' }}>
-      <MapContainer
-        center={[0, 0]}
-        zoom={1}
+    <MapContainer
+      center={[0, 0]}
+      zoom={1}
+      minZoom={1}
+      maxZoom={4}
+      scrollWheelZoom={false}
+      doubleClickZoom={false}
+      zoomControl={false}
+      dragging={false}
+      attributionControl={false}
+      className="roberto"
+      style={{
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'var(--stacks-colors-slate-100)',
+        borderRadius: '0.75rem',
+      }}
+      bounds={[
+        [85, -180],
+        [-85, 180],
+      ]}
+      maxBoundsViscosity={1.0}
+      maxBounds={[
+        [85, -180],
+        [-85, 180],
+      ]}
+    >
+      <TileLayer
+        // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+        // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
+        url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q"
+        noWrap={true}
         minZoom={1}
         maxZoom={4}
-        scrollWheelZoom={false}
-        doubleClickZoom={false}
-        zoomControl={false}
-        dragging={false}
-        attributionControl={false}
-        className="roberto"
-        style={{
-          height: '100%',
-          width: '100%',
-          backgroundColor: 'var(--stacks-colors-slate-100)',
-          borderRadius: '0.75rem',
-        }}
         bounds={[
           [85, -180],
           [-85, 180],
-        ]}
-        maxBoundsViscosity={1.0}
-        maxBounds={[
-          [85, -180],
-          [-85, 180],
-        ]}
-      >
-        <TileLayer
-          // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-          // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
-          url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q"
-          noWrap={true} // Prevents the map from repeating itself
-          minZoom={1}
-          maxZoom={4}
-          bounds={[
-            [85, -180],
-            [-85, 180],
-          ]} // Setting the bounds to prevent wrapping
+        ]} // Setting the bounds to prevent wrapping
+      />
+      {signersLocation.map((node, index) => (
+        <Marker
+          key={index}
+          position={[node.lat, node.lng]}
+          icon={activeContinent === getContinent(node.lat, node.lng) ? activeIcon : defaultIcon}
         />
-        {signersLocation.map((node, index) => (
-          <Marker
-            key={index}
-            position={[node.lat, node.lng]}
-            icon={activeContinent === getContinent(node.lat, node.lng) ? activeIcon : defaultIcon}
-          />
-        ))}
-        <MapUpdater activeContinent={activeContinent} />
-      </MapContainer>
-    </div>
+      ))}
+      <MapUpdater activeContinent={activeContinent} />
+    </MapContainer>
   );
 }
 

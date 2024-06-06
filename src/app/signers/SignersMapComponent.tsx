@@ -4,9 +4,11 @@ import { Button } from '@/ui/Button';
 import { Flex } from '@/ui/Flex';
 import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
-import { useState } from 'react';
+import { ReactNode, Suspense, useState } from 'react';
 
+import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import SignersMap, { getContinent } from './SignersMap';
+import { SignersMapSkeleton } from './skeleton';
 import { useSignersLocation } from './useSignerLocations';
 
 export enum Continent {
@@ -64,7 +66,22 @@ export function ContinentPill({
   );
 }
 
-export function SignersMapCard() {
+export function SignersMapComponentLayout({ map, pills }: { map: ReactNode; pills: ReactNode }) {
+  return (
+    <Card height="100%" width="100%" p={6}>
+      <Stack height="100%" width="100%" gap={6}>
+        <Box flex="1" minHeight={0} width="100%" borderRadius="xl">
+          {map}
+        </Box>
+        <Flex flexWrap="wrap" gap={3}>
+          {pills}
+        </Flex>
+      </Stack>
+    </Card>
+  );
+}
+
+export function SignersMapComponentBase() {
   const [activeContinent, setActiveContinent] = useState<Continent | null>(null);
   const { data: signersLocations } = useSignersLocation();
   const signersLocationData = signersLocations.map(({ ll }) => ({ lat: ll[0], lng: ll[1] }));
@@ -81,12 +98,10 @@ export function SignersMapCard() {
     if (!continent) return;
     continentSignersCount[continent] += 1;
   });
-  return (
-    <Card height="100%" width="100%" p={6}>
-      <Stack height="100%" width="100%" gap={6}>
-        <Box flex="1" minHeight={0} width="100%" borderRadius="xl">
-          <SignersMap signersLocation={signersLocationData} activeContinent={activeContinent} />
-        </Box>
+  return signersLocationData?.length > 0 ? (
+    <SignersMapComponentLayout
+      map={<SignersMap signersLocation={signersLocationData} activeContinent={activeContinent} />}
+      pills={
         <Flex flexWrap="wrap" gap={3}>
           {Object.values(Continent).map(
             continent =>
@@ -106,7 +121,25 @@ export function SignersMapCard() {
               )
           )}
         </Flex>
-      </Stack>
+      }
+    />
+  ) : (
+    <Card display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
+      <Text>No signers found</Text>
     </Card>
+  );
+}
+
+export function SignersMapComponent() {
+  return (
+    <ExplorerErrorBoundary
+      Wrapper={Card}
+      wrapperProps={{ height: '100%', width: '100%' }}
+      tryAgainButton
+    >
+      <Suspense fallback={<SignersMapSkeleton />}>
+        <SignersMapComponentBase />
+      </Suspense>
+    </ExplorerErrorBoundary>
   );
 }

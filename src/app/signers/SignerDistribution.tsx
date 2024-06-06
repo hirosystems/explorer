@@ -5,6 +5,7 @@ import { ReactNode, Suspense, useState } from 'react';
 import { Card } from '../../common/components/Card';
 import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
+import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignersDistributionLegend } from './SignerDistributionLegend';
@@ -37,7 +38,13 @@ export function SignersDistributionLayout({
           {signersDistributionFilter}
         </Stack>
         <Box mt={[6, 6, 0, 0, 0]}>
-          <Flex height="100%" width="100%" alignItems="center" justifyContent="center">
+          <Flex
+            height="100%"
+            width="100%"
+            alignItems="center"
+            justifyContent="center"
+            className="reatrdio"
+          >
             {signersDistributionLegend}
           </Flex>
         </Box>
@@ -53,7 +60,7 @@ export function SignersDistributionBase() {
   } = useSuspensePoxSigners(currentCycleId);
   const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
 
-  return (
+  return signers.length > 0 ? (
     <SignersDistributionLayout
       signersDistributionFilter={
         <SignersDistributionFilter
@@ -74,6 +81,10 @@ export function SignersDistributionBase() {
         />
       }
     />
+  ) : (
+    <Card display="flex" justifyContent="center" alignItems="center" height="100%" width="100%">
+      <Text>No signers found</Text>
+    </Card>
   );
 }
 

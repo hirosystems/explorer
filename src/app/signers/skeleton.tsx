@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@/ui/Button';
+
 import { Card } from '../../common/components/Card';
 import { Flex } from '../../ui/Flex';
 import { SkeletonCircle } from '../../ui/SkeletonCircle';
@@ -11,7 +13,9 @@ import { Tr } from '../../ui/Tr';
 import { PageTitle } from '../_components/PageTitle';
 import { SkeletonStatSection } from '../_components/Stats/SkeletonStatSection';
 import { SignersDistributionLayout } from './SignerDistribution';
+import { SignerLegendItem, SignersDistributionLegendLayout } from './SignerDistributionLegend';
 import { SignersHeaderLayout } from './SignersHeader';
+import { SignersMapComponentLayout } from './SignersMapComponent';
 import { SignersTableLayout, signersTableHeaders } from './SignersTable';
 import { VotingPowerSortOrder } from './SortByVotingPowerFilter';
 
@@ -46,13 +50,6 @@ const TableHeaderSkeleton = () => (
 
 export const PieChartSkeleton = () => <SkeletonCircle size="150" />;
 
-export const SignersDistributionSkeleton = () => (
-  <SignersDistributionLayout
-    signersDistributionPieChart={<PieChartSkeleton />}
-    signersDistributionLegend={null}
-  />
-);
-
 export const SignersTableSkeleton = () => {
   const numRows = Array.from({ length: 10 }, (_, i) => i + 1);
   const numCols = Array.from({ length: signersTableHeaders.length }, (_, i) => i + 1);
@@ -82,16 +79,60 @@ export const SignersStatsSectionSkeleton = () => (
   </Card>
 );
 
+const SignersMapContinentPillSkeleton = () => {
+  return (
+    <Button
+      borderRadius="full"
+      border="1px solid var(--stacks-colors-borderSecondary)"
+      backgroundColor={'surface'}
+      onClick={() => {}}
+    >
+      <SkeletonItem  height="14px" width={20} />
+    </Button>
+  );
+};
+export const SignersMapSkeleton = () => (
+  <SignersMapComponentLayout
+    map={<SkeletonItem height="100%" width="100%" borderRadius="xl" />}
+    pills={[...Array(3)].map((_, i) => (
+      <SignersMapContinentPillSkeleton key={`signer-map-continent-pill-${i}`} />
+    ))}
+  />
+);
+
+export const SignersLegendItemSkeleton = () => (
+  <SignerLegendItem
+    signerName={<SkeletonText noOfLines={1} height="14px" width={20} />}
+    signerVotingPower={<SkeletonText noOfLines={1} height="14px" width={10} />}
+  />
+);
+
+export const SignersLegendSkeleton = () => (
+  <SignersDistributionLegendLayout
+    signersLegendItems={[...Array(10)].map((_, i) => (
+      <SignersLegendItemSkeleton key={`signer-legend-item-${i}`} />
+    ))}
+  />
+);
+
+export const SignersDistributionSkeleton = () => (
+  <SignersDistributionLayout
+    signersDistributionPieChart={<PieChartSkeleton />}
+    signersDistributionLegend={<SignersLegendSkeleton />}
+    signersDistributionFilter={null}
+  />
+);
+
 export const SignersHeaderSkeleton = () => (
   <SignersHeaderLayout
     stackingHeader={<SkeletonItem width="30%" height="14px" />}
     currentCycleCard={<SignersStatsSectionSkeleton />}
     stxStakedCard={<SignersStatsSectionSkeleton />}
-    stxLockedCard={<SignersStatsSectionSkeleton />}
     nextCycleCard={<SignersStatsSectionSkeleton />}
     signerDistribution={<SignersDistributionSkeleton />}
     signerDistributionHeader={<SkeletonItem width="30%" height="14px" />}
     historicalStackingDataLink={<SkeletonItem width="30%" height="14px" />}
+    signersMap={<SignersMapSkeleton />}
   />
 );
 

@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { ReactNode, useMemo, useRef } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -13,8 +13,8 @@ export function SignerLegendItem({
   signerVotingPower,
   ...rest
 }: {
-  signerName: string;
-  signerVotingPower: number;
+  signerName: string | ReactNode;
+  signerVotingPower: number | ReactNode;
 } & TextProps) {
   return (
     <Flex justifyContent="space-between" gap={2}>
@@ -23,15 +23,27 @@ export function SignerLegendItem({
           height={2}
           width={2}
           borderRadius="50%"
-          backgroundColor={getSignerDistributionPieChartColor(signerVotingPower, 'light')}
+          backgroundColor={
+            typeof signerVotingPower === 'number'
+              ? getSignerDistributionPieChartColor(signerVotingPower, 'light')
+              : 'textSubdued'
+          }
         />
-        <Text fontSize="sm" {...rest}>
-          {signerName}
-        </Text>
+        {typeof signerName === 'string' ? (
+          <Text fontSize="sm" {...rest}>
+            {signerName}
+          </Text>
+        ) : (
+          signerName
+        )}
       </Flex>
-      <Text fontSize="sm" fontWeight="semibold" {...rest}>
-        {signerVotingPower.toFixed(2)}%
-      </Text>
+      {typeof signerVotingPower === 'number' ? (
+        <Text fontSize="sm" fontWeight="semibold" {...rest}>
+          {signerVotingPower.toFixed(2)}%
+        </Text>
+      ) : (
+        signerVotingPower
+      )}
     </Flex>
   );
 }
@@ -46,6 +58,23 @@ function removeStackingDaoFromName(name: string) {
   return newName;
 }
 
+export function SignersDistributionLegendLayout({
+  signersLegendItems,
+  footNotes,
+}: {
+  signersLegendItems: ReactNode;
+  footNotes?: ReactNode;
+}) {
+  return (
+    <Stack alignItems="space-between" gap={6} className="nicky nick">
+      <Stack flex="1" minHeight={0} gap={2}>
+        {signersLegendItems}
+      </Stack>
+      {footNotes}
+    </Stack>
+  );
+}
+
 export function SignersDistributionLegend({
   signers,
   onlyShowPublicSigners,
@@ -53,14 +82,22 @@ export function SignersDistributionLegend({
   signers: SignerInfo[];
   onlyShowPublicSigners: boolean;
 }) {
+  const numStackingDaoSigners = useRef(0);
   const knownSigners = useMemo(
     () =>
       signers
         .filter(signer => getSignerKeyName(signer.signing_key) !== 'unknown')
-        .map(signer => ({
-          value: signer.weight_percent,
-          name: removeStackingDaoFromName(getSignerKeyName(signer.signing_key)),
-        })),
+        .map(signer => {
+          let name = getSignerKeyName(signer.signing_key);
+          let nameWithoutStackingDao = removeStackingDaoFromName(name);
+          if (nameWithoutStackingDao !== name) {
+            numStackingDaoSigners.current += 1;
+          }
+          return {
+            value: signer.weight_percent,
+            name: nameWithoutStackingDao,
+          };
+        }),
     [signers]
   );
   const unknownSigners = useMemo(
@@ -78,17 +115,21 @@ export function SignersDistributionLegend({
         .sort((a, b) => b.value - a.value);
 
   return (
-    <Stack alignItems="space-between" height="100%" gap={6}>
-      <Stack flex="1" minHeight={0} gap={2}>
-        {filteredSigners.map(signer => (
-          <SignerLegendItem
-            key={signer.name}
-            signerName={signer.name}
-            signerVotingPower={signer.value}
-          />
-        ))}
-      </Stack>
-      <Text color="textSubdued">* Stacking DAO pool</Text>
-    </Stack>
+    <SignersDistributionLegendLayout
+      signersLegendItems={
+        <>
+          {filteredSigners.map((signer, index) => (
+            <SignerLegendItem
+              key={index}
+              signerName={signer.name}
+              signerVotingPower={signer.value}
+            />
+          ))}
+        </>
+      }
+      footNotes={
+        numStackingDaoSigners.current > 0 ? <Text color="textSubdued">* Stacking DAO pool</Text> : null
+      }
+    />
   );
 }

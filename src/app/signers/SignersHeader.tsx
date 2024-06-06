@@ -14,7 +14,7 @@ import { CurrentCycleCard } from './CurrentCycle';
 import { NextCycleCard } from './NextCycleCard';
 import { SignersDistribution } from './SignerDistribution';
 import { SignerDistributionHeader } from './SignerDistributionHeader';
-import { SignersMapCard } from './SignersMapCard';
+import { SignersMapComponent, SignersMapComponentBase } from './SignersMapComponent';
 import { StxStackedCard } from './StxStackedCard';
 
 export function SignersHeaderLayout({
@@ -110,7 +110,7 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Icon as={ArrowRight} size={'12px'} color="textSubdued" />
         </Flex>
       }
-      signersMap={<SignersMapCard />}
+      signersMap={<SignersMapComponent />}
     />
   );
 }
