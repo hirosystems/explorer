@@ -1,5 +1,6 @@
-import { useGlobalContext } from '@/common/context/useAppContext';
 import { UseSuspenseQueryResult, useSuspenseQuery } from '@tanstack/react-query';
+
+import { useGlobalContext } from '../../../../common/context/useAppContext';
 
 const AVERAGE_BLOCK_TIMES_QUERY_KEY = '/extended/v2/blocks/average-times';
 
