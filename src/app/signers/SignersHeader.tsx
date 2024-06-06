@@ -16,13 +16,11 @@ import { SignersDistribution } from './SignerDistribution';
 import { SignerDistributionHeader } from './SignerDistributionHeader';
 import { SignersMapCard } from './SignersMapCard';
 import { StxStackedCard } from './StxStackedCard';
-import { TotalStackedCard } from './TotalStackedCard';
 
 export function SignersHeaderLayout({
   stackingHeader,
   currentCycleCard,
   stxStakedCard,
-  stxLockedCard,
   nextCycleCard,
   signerDistributionHeader,
   signerDistribution,
@@ -31,7 +29,6 @@ export function SignersHeaderLayout({
   stackingHeader: ReactNode;
   currentCycleCard: ReactNode;
   stxStakedCard: ReactNode;
-  stxLockedCard: ReactNode;
   nextCycleCard: ReactNode;
   signerDistributionHeader: ReactNode;
   signerDistribution: ReactNode;
@@ -72,10 +69,10 @@ export function SignersHeaderLayout({
           <Grid
             gridTemplateColumns={[
               '100%',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
+              '100%',
+              'repeat(3, 1fr)',
+              'repeat(3, 1fr)',
+              'repeat(3, 1fr)',
             ]}
             width="100%"
             gap={4}
@@ -83,12 +80,10 @@ export function SignersHeaderLayout({
           >
             {currentCycleCard}
             {stxStakedCard}
-            {stxLockedCard}
             {nextCycleCard}
           </Grid>
         </Stack>
       </Stack>
-
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
     </Card>
   );
@@ -104,7 +99,6 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
       }
       currentCycleCard={<CurrentCycleCard />}
       stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
-      stxLockedCard={<TotalStackedCard />}
       nextCycleCard={<NextCycleCard />}
       signerDistributionHeader={<SignerDistributionHeader signerTitle="SIGNER DISTRIBUTION" />}
       signerDistribution={<SignersDistribution />}
