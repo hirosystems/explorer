@@ -190,8 +190,7 @@ export function SignersMap({
         <TileLayer
           // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
           // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
-          url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q
-          "
+          url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q"
           noWrap={true} // Prevents the map from repeating itself
           minZoom={1}
           maxZoom={4}

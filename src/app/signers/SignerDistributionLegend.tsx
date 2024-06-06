@@ -36,6 +36,16 @@ export function SignerLegendItem({
   );
 }
 
+function removeStackingDaoFromName(name: string) {
+  let newName = name;
+  if (name.includes('(StackingDAO)')) {
+    newName = newName.replace('(StackingDAO)', '');
+    newName = newName.trim();
+    newName += '*';
+  }
+  return newName;
+}
+
 export function SignersDistributionLegend({
   signers,
   onlyShowPublicSigners,
@@ -49,7 +59,7 @@ export function SignersDistributionLegend({
         .filter(signer => getSignerKeyName(signer.signing_key) !== 'unknown')
         .map(signer => ({
           value: signer.weight_percent,
-          name: getSignerKeyName(signer.signing_key),
+          name: removeStackingDaoFromName(getSignerKeyName(signer.signing_key)),
         })),
     [signers]
   );
@@ -61,21 +71,24 @@ export function SignersDistributionLegend({
     [signers]
   );
 
-  const filiteredSigners = onlyShowPublicSigners
+  const filteredSigners = onlyShowPublicSigners
     ? knownSigners
     : knownSigners
         .concat({ name: 'Private signers', value: unknownSigners })
         .sort((a, b) => b.value - a.value);
 
   return (
-    <Stack gap={2} width="100%">
-      {filiteredSigners.map(signer => (
-        <SignerLegendItem
-          key={signer.name}
-          signerName={signer.name}
-          signerVotingPower={signer.value}
-        />
-      ))}
+    <Stack alignItems="space-between" height="100%" gap={6}>
+      <Stack flex="1" minHeight={0} gap={2}>
+        {filteredSigners.map(signer => (
+          <SignerLegendItem
+            key={signer.name}
+            signerName={signer.name}
+            signerVotingPower={signer.value}
+          />
+        ))}
+      </Stack>
+      <Text color="textSubdued">* Stacking DAO pool</Text>
     </Stack>
   );
 }

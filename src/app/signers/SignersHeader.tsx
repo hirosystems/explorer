@@ -1,7 +1,7 @@
 import { Box } from '@/ui/Box';
 import { Grid } from '@/ui/Grid';
 import { ArrowRight } from '@phosphor-icons/react';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
@@ -40,12 +40,12 @@ export function SignersHeaderLayout({
 }) {
   return (
     <Card width="full" flexDirection="column" gap={4}>
-      <Stack py={8}>
+      <Stack py={8} gap={4}>
         <Box px={8}>{signerDistributionHeader}</Box>
         <Grid gridTemplateColumns={['100%', '100%', '100%', '100%', 'repeat(2, 1fr)']} gap={8}>
           <Box
-            height={500}
-            paddingBottom={[0, 0, 0, 7, 7]}
+            height={['auto', 'auto', 500, 500, 500]}
+            paddingBottom={[0, 0, 0, 0, 7]}
             paddingLeft={7}
             paddingRight={[7, 7, 7, 7, 0]}
           >
@@ -53,7 +53,7 @@ export function SignersHeaderLayout({
           </Box>
           <Box
             height={500}
-            paddingBottom={[0, 0, 0, 7, 7]}
+            paddingBottom={[0, 0, 0, 0, 7]}
             paddingRight={7}
             paddingLeft={[7, 7, 7, 7, 0]}
           >
@@ -95,8 +95,6 @@ export function SignersHeaderLayout({
 }
 
 export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
-
   return (
     <SignersHeaderLayout
       stackingHeader={
@@ -108,14 +106,8 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
       stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
       stxLockedCard={<TotalStackedCard />}
       nextCycleCard={<NextCycleCard />}
-      signerDistributionHeader={
-        <SignerDistributionHeader
-          signerTitle="SIGNER DISTRIBUTION"
-          onlyShowPublicSigners={onlyShowPublicSigners}
-          setOnlyShowPublicSigners={setOnlyShowPublicSigners}
-        />
-      }
-      signerDistribution={<SignersDistribution onlyShowPublicSigners={onlyShowPublicSigners} />}
+      signerDistributionHeader={<SignerDistributionHeader signerTitle="SIGNER DISTRIBUTION" />}
+      signerDistribution={<SignersDistribution />}
       historicalStackingDataLink={
         <Flex alignItems="center">
           <Link href="/" color="textSubdued" fontSize="xs" mr={1}>

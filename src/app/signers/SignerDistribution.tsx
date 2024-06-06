@@ -1,59 +1,66 @@
-import { ReactNode, Suspense } from 'react';
+import { Box } from '@/ui/Box';
+import { Stack } from '@/ui/Stack';
+import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
-import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignersDistributionLegend } from './SignerDistributionLegend';
 import { SignersDistributionPieChart } from './SignerDistributionPieChart';
+import { SignersDistributionFilter } from './SignersDistributionFilter';
 import { useSuspensePoxSigners } from './data/useSigners';
 import { SignersDistributionSkeleton } from './skeleton';
 
 export function SignersDistributionLayout({
   signersDistributionPieChart,
   signersDistributionLegend,
+  signersDistributionFilter,
 }: {
   signersDistributionPieChart: ReactNode;
   signersDistributionLegend: ReactNode;
+  signersDistributionFilter: ReactNode;
 }) {
   return (
     <Card padding={6} height="100%" width="100%">
-      <Flex height="100%" width="100%" justifyContent="center" alignItems="center">
-        <Grid
-          height="100%"
-          width="100%"
-          templateColumns={['100%', '100%', '50% 50%', '50% 50%', '100%']}
-        >
-          <Flex justifyContent="center" alignItems="center" height="100%" width="100%">
-            <Flex height="250px" width="100%" alignItems="center" justifyContent="center">
-              {signersDistributionPieChart}
-            </Flex>
+      <Grid
+        height="100%"
+        width="100%"
+        templateColumns={['100%', '100%', '50% 50%', '50% 50%', '50% 50%']}
+        gap={4}
+      >
+        <Stack justifyContent="center" alignItems="center" height="100%" width="100%" gap={6}>
+          <Flex flex="1" minHeight={0} justifyContent="center" alignItems="center">
+            {signersDistributionPieChart}
           </Flex>
-          <Box display={['block', 'block', 'block', 'block', 'none']}>
-            <Flex height="100%" width="100%" alignItems="center">
-              {signersDistributionLegend}
-            </Flex>
-          </Box>
-        </Grid>
-      </Flex>
+          {signersDistributionFilter}
+        </Stack>
+        <Box mt={[6, 6, 0, 0, 0]}>
+          <Flex height="100%" width="100%" alignItems="center" justifyContent="center">
+            {signersDistributionLegend}
+          </Flex>
+        </Box>
+      </Grid>
     </Card>
   );
 }
 
-export function SignersDistributionBase({
-  onlyShowPublicSigners = false,
-}: {
-  onlyShowPublicSigners?: boolean;
-}) {
+export function SignersDistributionBase() {
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
   const {
     data: { results: signers },
   } = useSuspensePoxSigners(currentCycleId);
+  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
 
   return (
     <SignersDistributionLayout
+      signersDistributionFilter={
+        <SignersDistributionFilter
+          onlyShowPublicSigners={onlyShowPublicSigners}
+          setOnlyShowPublicSigners={setOnlyShowPublicSigners}
+        />
+      }
       signersDistributionPieChart={
         <SignersDistributionPieChart
           signers={signers}
@@ -70,15 +77,11 @@ export function SignersDistributionBase({
   );
 }
 
-export function SignersDistribution({
-  onlyShowPublicSigners = false,
-}: {
-  onlyShowPublicSigners?: boolean;
-}) {
+export function SignersDistribution() {
   return (
     <ExplorerErrorBoundary tryAgainButton>
       <Suspense fallback={<SignersDistributionSkeleton />}>
-        <SignersDistributionBase onlyShowPublicSigners={onlyShowPublicSigners} />
+        <SignersDistributionBase />
       </Suspense>
     </ExplorerErrorBoundary>
   );
