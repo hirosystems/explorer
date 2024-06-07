@@ -48,10 +48,12 @@ export function ContinentPill({
         <Box
           backgroundColor={isActive ? 'purple.600' : 'slate.400'}
           height={2}
+          minHeight={2}
           width={2}
+          minWidth={2}
           borderRadius="50%"
         />
-        <Flex alignItems="center">
+        <Flex alignItems="center" flexWrap='wrap'>
           <Text color={isActive ? 'purple.600' : 'textSubdued'} fontWeight="medium">
             {name}
           </Text>
