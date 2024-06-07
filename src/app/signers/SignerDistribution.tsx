@@ -43,7 +43,6 @@ export function SignersDistributionLayout({
             width="100%"
             alignItems="center"
             justifyContent="center"
-            className="reatrdio"
           >
             {signersDistributionLegend}
           </Flex>

@@ -66,7 +66,7 @@ export function SignersDistributionLegendLayout({
   footNotes?: ReactNode;
 }) {
   return (
-    <Stack justifyContent="space-between" className="nicky nick">
+    <Stack height="100%" gap={6}>
       <Stack flex="1" minHeight={0} gap={2}>
         {signersLegendItems}
       </Stack>

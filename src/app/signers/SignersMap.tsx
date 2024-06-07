@@ -179,7 +179,6 @@ export function SignersMap({
         zoomControl={false}
         dragging={false}
         attributionControl={false}
-        className="roberto"
         style={{
           height: '100%',
           width: '100%',
