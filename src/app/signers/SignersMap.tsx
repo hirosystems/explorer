@@ -1,11 +1,11 @@
 import { useBreakpointValue } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import 'proj4';
-import 'proj4leaflet';
 import { useCallback, useEffect } from 'react';
 import { MapContainer, Marker, TileLayer, useMap } from 'react-leaflet';
 
+import { Box } from '../../ui/Box';
 import { Continent } from './SignersMapComponent';
 
 const defaultIcon = new L.Icon({
@@ -20,6 +20,15 @@ interface CenterAndZoom {
   center: [number, number];
   zoom: number;
 }
+
+const StyledContainer = styled(Box)`
+  height: 100%;
+  width: 100%;
+  
+  .leaflet-marker-icon {
+    cursor: default;
+  }
+`;
 
 const MapUpdater = ({ activeContinent }: { activeContinent: Continent | null }) => {
   const map = useMap();
@@ -159,54 +168,57 @@ export function SignersMap({
   activeContinent: Continent | null;
 }) {
   return (
-    <MapContainer
-      center={[0, 0]}
-      zoom={1}
-      minZoom={1}
-      maxZoom={4}
-      scrollWheelZoom={false}
-      doubleClickZoom={false}
-      zoomControl={false}
-      dragging={false}
-      attributionControl={false}
-      className="roberto"
-      style={{
-        height: '100%',
-        width: '100%',
-        backgroundColor: 'var(--stacks-colors-slate-100)',
-        borderRadius: '0.75rem',
-      }}
-      bounds={[
-        [85, -180],
-        [-85, 180],
-      ]}
-      maxBoundsViscosity={1.0}
-      maxBounds={[
-        [85, -180],
-        [-85, 180],
-      ]}
-    >
-      <TileLayer
-        // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-        // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
-        url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q"
-        noWrap={true}
+    <StyledContainer>
+      <MapContainer
+        center={[0, 0]}
+        zoom={1}
         minZoom={1}
         maxZoom={4}
+        scrollWheelZoom={false}
+        doubleClickZoom={false}
+        zoomControl={false}
+        dragging={false}
+        attributionControl={false}
+        className="roberto"
+        style={{
+          height: '100%',
+          width: '100%',
+          backgroundColor: 'var(--stacks-colors-slate-100)',
+          borderRadius: '0.75rem',
+        }}
         bounds={[
           [85, -180],
           [-85, 180],
-        ]} // Setting the bounds to prevent wrapping
-      />
-      {signersLocation.map((node, index) => (
-        <Marker
-          key={index}
-          position={[node.lat, node.lng]}
-          icon={activeContinent === getContinent(node.lat, node.lng) ? activeIcon : defaultIcon}
+        ]}
+        maxBoundsViscosity={1.0}
+        maxBounds={[
+          [85, -180],
+          [-85, 180],
+        ]}
+      >
+        <TileLayer
+          // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+          // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
+          url="https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q"
+          noWrap={true}
+          minZoom={1}
+          maxZoom={4}
+          bounds={[
+            [85, -180],
+            [-85, 180],
+          ]} // Setting the bounds to prevent wrapping
         />
-      ))}
-      <MapUpdater activeContinent={activeContinent} />
-    </MapContainer>
+        {signersLocation.map((node, index) => (
+          <Marker
+            key={index}
+            position={[node.lat, node.lng]}
+            icon={activeContinent === getContinent(node.lat, node.lng) ? activeIcon : defaultIcon}
+            style={{}}
+          />
+        ))}
+        <MapUpdater activeContinent={activeContinent} />
+      </MapContainer>
+    </StyledContainer>
   );
 }
 

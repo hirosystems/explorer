@@ -66,11 +66,11 @@ export function SignersDistributionLegendLayout({
   footNotes?: ReactNode;
 }) {
   return (
-    <Stack alignItems="space-between" gap={6} className="nicky nick">
+    <Stack justifyContent="space-between" className="nicky nick">
       <Stack flex="1" minHeight={0} gap={2}>
         {signersLegendItems}
       </Stack>
-      {footNotes}
+      <Box>{footNotes}</Box>
     </Stack>
   );
 }
@@ -129,7 +129,9 @@ export function SignersDistributionLegend({
       }
       footNotes={
         numStackingDaoSigners.current > 0 ? (
-          <Text color="textSubdued">* Stacking DAO pool</Text>
+          <Text color="textSubdued" fontSize="xs">
+            * Stacking DAO pool
+          </Text>
         ) : null
       }
     />

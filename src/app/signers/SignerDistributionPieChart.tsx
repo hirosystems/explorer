@@ -68,24 +68,10 @@ function getSignerDistributionPieChartHex(
     return theme.colors['purple'][600];
   } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
     return theme.colors['purple'][700];
+  } else if (votingPowerPercentage >= 25 && votingPowerPercentage < 30) {
+    return theme.colors['purple'][800];
   } else {
     return colorMode === 'light' ? theme.colors['slate'][250] : theme.colors['slate'][800];
-  }
-}
-
-function getSignerDistributionPieChartStrokeWidth(votingPowerPercentage: number) {
-  if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
-    return 0.5;
-  } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
-    return 1;
-  } else if (votingPowerPercentage >= 5 && votingPowerPercentage < 10) {
-    return 1.5;
-  } else if (votingPowerPercentage >= 10 && votingPowerPercentage < 15) {
-    return 2;
-  } else if (votingPowerPercentage >= 15 && votingPowerPercentage < 20) {
-    return 2.5;
-  } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
-    return 3;
   }
 }
 
@@ -295,8 +281,6 @@ export function SignersDistributionPieChart({
                       )
                     : getSignerDistributionPieChartColor(entry.value, colorMode)
                 }
-                opacity={index === activeIndex ? 0.8 : 1}
-                strokeWidth={getSignerDistributionPieChartStrokeWidth(entry.value)}
               />
             );
           })}
