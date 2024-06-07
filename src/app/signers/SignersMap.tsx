@@ -24,7 +24,7 @@ interface CenterAndZoom {
 const StyledContainer = styled(Box)`
   height: 100%;
   width: 100%;
-  
+
   .leaflet-marker-icon {
     cursor: default;
   }
@@ -212,7 +212,6 @@ export function SignersMap({
             key={index}
             position={[node.lat, node.lng]}
             icon={activeContinent === getContinent(node.lat, node.lng) ? activeIcon : defaultIcon}
-            style={{}}
           />
         ))}
         <MapUpdater activeContinent={activeContinent} />
