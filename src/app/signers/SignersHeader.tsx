@@ -66,23 +66,25 @@ export function SignersHeaderLayout({
           <Flex height={6} alignItems="center">
             {stackingHeader}
           </Flex>
-          <Grid
-            gridTemplateColumns={[
-              '100%',
-              '100%',
-              'repeat(3, 1fr)',
-              'repeat(3, 1fr)',
-              'repeat(3, 1fr)',
-            ]}
-            width="100%"
-            height="100%"
-            gap={4}
-            boxSizing="border-box"
-          >
-            {currentCycleCard}
-            {stxStakedCard}
-            {nextCycleCard}
-          </Grid>
+          <Stack>
+            <Grid
+              gridTemplateColumns={[
+                '100%',
+                '100%',
+                'repeat(3, 1fr)',
+                'repeat(3, 1fr)',
+                'repeat(3, 1fr)',
+              ]}
+              width="100%"
+              height="100%"
+              gap={4}
+              boxSizing="border-box"
+            >
+              {currentCycleCard}
+              {stxStakedCard}
+              {nextCycleCard}
+            </Grid>
+          </Stack>
         </Stack>
       </Stack>
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
