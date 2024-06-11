@@ -62,7 +62,7 @@ export function SignersHeaderLayout({
           border="1px solid var(--stacks-colors-borderSecondary)"
           display={['none', 'none', 'none', 'none', 'block']}
         />
-        <Stack width="full" gap={4} pt={7} px={7}>
+        <Stack width="full" height="100%" gap={4} pt={7} px={7}>
           <Flex height={6} alignItems="center">
             {stackingHeader}
           </Flex>
