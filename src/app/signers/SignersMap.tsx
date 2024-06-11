@@ -2,7 +2,7 @@ import { useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import L, { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvent } from 'react-leaflet';
 
 import { Box } from '../../ui/Box';
@@ -21,19 +21,61 @@ const BOUNDS = [
   [-85, 180],
 ] as LatLngTuple[];
 
-const defaultIconLight = new L.Icon({
-  iconUrl: '/default-marker-icon-light.svg',
+const activeMarkerSvgDark = `
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <circle cx="10" cy="10" r="10" fill="#7F97F1" opacity="0.3"/>
+  <circle cx="10" cy="10" r="4" fill="#7F97F1"/>
+</svg>
+`;
+
+const activeMarkerSvgLight = `
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+  <circle cx="10" cy="10" r="10" fill="#5546FF" opacity="0.3"/>
+  <circle cx="10" cy="10" r="4" fill="#5546FF"/>
+</svg>
+`;
+
+const defaultMarkerSvgLight = `
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+  <circle cx="4" cy="4" r="4" fill="#7F97F1"/>
+</svg>
+`;
+
+const defaultMarkerSvgDark = `
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
+  <circle cx="4" cy="4" r="4" fill="#4446FF"/>
+</svg>
+`;
+
+const defaultMarkerIconLight = new L.DivIcon({
+  html: defaultMarkerSvgLight,
+  className: 'custom-div-icon',
+  iconSize: [8, 8],
+  iconAnchor: [4, 4],
 });
 
-const activeIconLight = new L.Icon({
-  iconUrl: '/active-marker-icon-light.svg',
-});
-const defaultIconDark = new L.Icon({
-  iconUrl: '/default-marker-icon-dark.svg',
+const defaultMarkerIconDark = new L.DivIcon({
+  html: defaultMarkerSvgDark,
+  className: 'custom-div-icon',
+  iconSize: [8, 8],
+  iconAnchor: [4, 4],
 });
 
-const activeIconDark = new L.Icon({
-  iconUrl: '/active-marker-icon-dark.svg',
+const activeMarkerIconLight = new L.DivIcon({
+  html: activeMarkerSvgLight,
+  className: 'custom-div-icon',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+const activeMarkerIconDark = new L.DivIcon({
+  html: activeMarkerSvgDark,
+  className: 'custom-div-icon',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+});
+
+const exactIcon = new L.Icon({
+  iconUrl: '/exact-marker.svg',
 });
 
 interface CenterAndZoom {
@@ -48,10 +90,27 @@ const StyledContainer = styled(Box)`
   .leaflet-marker-icon {
     cursor: default;
   }
+
+  .custom-div-icon {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
 `;
 
-const MapUpdater = ({ activeContinent }: { activeContinent: Continent | null }) => {
+const ContinentZoomHandler = ({
+  activeContinent,
+  setActiveMarkerLatLng,
+}: {
+  activeContinent: Continent | null;
+  setActiveMarkerLatLng: (marketLatLng: MarkerLatLng | undefined) => void;
+}) => {
   const map = useMap();
+  const prevActiveContinent = useRef<Continent | null>(activeContinent);
 
   const northAmericaCenterAndZoom = useBreakpointValue({
     base: { center: [50, -100], zoom: 2 },
@@ -103,7 +162,7 @@ const MapUpdater = ({ activeContinent }: { activeContinent: Continent | null }) 
         case Continent.Asia:
           return asiaCenterAndZoom;
         default:
-          return { center: [20, 0], zoom: 1 };
+          return { center: INITIAL_VIEW.center, zoom: INITIAL_VIEW.zoom } as CenterAndZoom;
       }
     },
     [
@@ -117,9 +176,15 @@ const MapUpdater = ({ activeContinent }: { activeContinent: Continent | null }) 
   );
 
   useEffect(() => {
-    const { center, zoom } = getContinetCenterAndZoom(activeContinent);
+    if (prevActiveContinent.current === activeContinent) return;
+    prevActiveContinent.current = activeContinent;
+    const centerAndZoom = getContinetCenterAndZoom(activeContinent);
+    const { center, zoom } = centerAndZoom;
     map.setView(center, zoom);
-  }, [map, activeContinent, getContinetCenterAndZoom]);
+    if (activeContinent === null) {
+      setActiveMarkerLatLng(undefined);
+    }
+  }, [map, activeContinent, getContinetCenterAndZoom, setActiveMarkerLatLng]);
 
   return null;
 };
@@ -129,40 +194,30 @@ interface MarkerLatLng {
   lng: number;
 }
 
-const MarkerClickHandler = ({
-  markerLatLng,
-  markerClicked,
-}: {
-  markerLatLng: MarkerLatLng | undefined;
-  markerClicked: MutableRefObject<boolean>;
-}) => {
+const MarkerClickHandler = ({ markerLatLng }: { markerLatLng: MarkerLatLng | undefined }) => {
   const map = useMap();
+
+  const prevMarkerLatLng = useRef<MarkerLatLng | undefined>(markerLatLng);
+  const newMarkerClicked =
+    (prevMarkerLatLng.current === undefined && markerLatLng !== undefined) ||
+    (prevMarkerLatLng.current &&
+      markerLatLng &&
+      prevMarkerLatLng.current.lat !== markerLatLng.lat) ||
+    (prevMarkerLatLng.current && markerLatLng && prevMarkerLatLng.current.lng !== markerLatLng.lng);
+  useEffect(() => {
+    prevMarkerLatLng.current = markerLatLng;
+  }, [markerLatLng]);
 
   useEffect(() => {
-    if (!markerLatLng) return;
+    if (!newMarkerClicked) return;
     const { lat, lng } = markerLatLng;
-    markerClicked.current = true;
     map.setView([lat, lng], 4);
-  }, [markerLatLng, map, markerClicked]);
+  }, [markerLatLng, map, newMarkerClicked]);
 
   return null;
 };
 
-const MapClickHandler = ({ newMarkerClicked }: { newMarkerClicked: MutableRefObject<boolean> }) => {
-  const map = useMap();
-
-  useMapEvent('click', event => {
-    const target = event?.originalEvent?.target as HTMLElement;
-    if (!target.closest('.leaflet-marker-icon') && !newMarkerClicked.current) {
-      map.setView(INITIAL_VIEW.center, INITIAL_VIEW.zoom);
-    }
-    newMarkerClicked.current === false;
-  });
-
-  return null;
-};
-
-const ResetActiveMarkerHandler = ({
+const MapClickHandler = ({
   setActiveMarkerLatLng,
   setActiveContinent,
 }: {
@@ -170,24 +225,15 @@ const ResetActiveMarkerHandler = ({
   setActiveContinent: (continent: Continent | null) => void;
 }) => {
   const map = useMap();
-  const zoom = map.getZoom();
-  const prevZoomRef = useRef(map.getZoom());
 
-  useEffect(() => {
-    const handleZoomEnd = () => {
-      const currentZoom = map.getZoom();
-      if (prevZoomRef.current !== currentZoom && currentZoom === 1) {
-        setActiveMarkerLatLng(undefined);
-        setActiveContinent(null);
-      }
-      prevZoomRef.current = currentZoom;
-    };
-
-    map.on('zoomend', handleZoomEnd);
-    return () => {
-      map.off('zoomend', handleZoomEnd);
-    };
-  }, [zoom, setActiveMarkerLatLng, setActiveContinent, map]);
+  useMapEvent('click', event => {
+    const target = event?.originalEvent?.target as HTMLElement;
+    if (!target.closest('.leaflet-marker-icon')) {
+      map.setView(INITIAL_VIEW.center, INITIAL_VIEW.zoom);
+      setActiveMarkerLatLng(undefined);
+      setActiveContinent(null);
+    }
+  });
 
   return null;
 };
@@ -232,12 +278,12 @@ const continentBoundaries: Record<
     minLng: 112.0,
     maxLng: 179.0,
   },
-  // Antarctica: {
-  //   minLat: -90.0,
-  //   maxLat: -60.0,
-  //   minLng: -180.0,
-  //   maxLng: 180.0,
-  // },
+  Antarctica: {
+    minLat: -90.0,
+    maxLat: -60.0,
+    minLng: -180.0,
+    maxLng: 180.0,
+  },
 };
 
 export function getContinent(latitude: number, longitude: number) {
@@ -267,20 +313,6 @@ export function SignersMap({
   setActiveContinent: (continent: Continent | null) => void;
 }) {
   const [activeMarkerLatLng, setActiveMarkerLatLng] = useState<MarkerLatLng | undefined>(undefined);
-  const markerClicked = useRef(false);
-  const prevMarkerLatLng = useRef(activeMarkerLatLng);
-  const newMarkerClicked = useRef(false);
-
-  useEffect(() => {
-    if (prevMarkerLatLng.current && activeMarkerLatLng) {
-      const { lat: prevLat, lng: prevLng } = prevMarkerLatLng.current;
-      const { lat: currLat, lng: currLng } = activeMarkerLatLng;
-      if (prevLat !== currLat || prevLng !== currLng) {
-        newMarkerClicked.current = true;
-      }
-    }
-    prevMarkerLatLng.current = activeMarkerLatLng;
-  }, [activeMarkerLatLng]);
 
   const handleMarkerClick = useCallback(
     (lat: number, lng: number) => {
@@ -297,8 +329,8 @@ export function SignersMap({
     'var(--stacks-colors-slate-100)',
     'var(--stacks-colors-slate-900)'
   );
-  const activeIcon = useColorModeValue(activeIconLight, activeIconDark);
-  const defaultIcon = useColorModeValue(defaultIconLight, defaultIconDark);
+  const activeIcon = useColorModeValue(activeMarkerIconLight, activeMarkerIconDark);
+  const defaultIcon = useColorModeValue(defaultMarkerIconLight, defaultMarkerIconDark);
 
   return (
     <StyledContainer>
@@ -346,10 +378,12 @@ export function SignersMap({
             }}
           />
         ))}
-        <MapUpdater activeContinent={activeContinent} />
-        <MarkerClickHandler markerLatLng={activeMarkerLatLng} markerClicked={markerClicked} />
-        <MapClickHandler newMarkerClicked={newMarkerClicked} />
-        <ResetActiveMarkerHandler
+        <ContinentZoomHandler
+          activeContinent={activeContinent}
+          setActiveMarkerLatLng={setActiveMarkerLatLng}
+        />
+        <MarkerClickHandler markerLatLng={activeMarkerLatLng} />
+        <MapClickHandler
           setActiveMarkerLatLng={setActiveMarkerLatLng}
           setActiveContinent={setActiveContinent}
         />

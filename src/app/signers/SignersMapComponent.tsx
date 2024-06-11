@@ -1,3 +1,4 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
@@ -18,7 +19,7 @@ export enum Continent {
   Africa = 'Africa',
   Asia = 'Asia',
   Australia = 'Australia',
-  //   Antarctica = 'Antarctica',
+  Antarctica = 'Antarctica',
 }
 
 export function ContinentPill({
@@ -35,18 +36,20 @@ export function ContinentPill({
   activeContinent?: Continent | null;
 }) {
   const isActive = activeContinent === name;
+  const activeBackgroundColor = useColorModeValue('purple.100', 'slate.850');
+  const activeTextColor = useColorModeValue('purple.600', 'purple.400');
   return (
     <Button
       borderRadius="full"
-      border={`1px solid ${
-        isActive ? 'var(--stacks-colors-purple-300)' : 'var(--stacks-colors-borderSecondary)'
-      }`}
-      backgroundColor={isActive ? 'purple.100' : 'surface'}
+      border="1px"
+      borderStyle="solid"
+      borderColor={isActive ? activeTextColor : 'var(--stacks-colors-borderSecondary)'}
+      backgroundColor={isActive ? activeBackgroundColor : 'surface'}
       onClick={onClick}
     >
       <Flex gap={2} alignItems="center">
         <Box
-          backgroundColor={isActive ? 'purple.600' : 'slate.400'}
+          backgroundColor={isActive ? activeTextColor : 'slate.400'}
           height={2}
           minHeight={2}
           width={2}
@@ -54,12 +57,12 @@ export function ContinentPill({
           borderRadius="50%"
         />
         <Flex alignItems="center" flexWrap="wrap">
-          <Text color={isActive ? 'purple.600' : 'textSubdued'} fontWeight="medium">
+          <Text color={isActive ? activeTextColor : 'textSubdued'} fontWeight="medium">
             {name}
           </Text>
           &nbsp;
           <Text
-            color={isActive ? 'purple.600' : 'textSubdued'}
+            color={isActive ? activeTextColor : 'textSubdued'}
             fontWeight="normal"
           >{`${numNodes} nodes (${percentageNodes.toFixed(2)}%)`}</Text>
         </Flex>
@@ -94,6 +97,7 @@ export function SignersMapComponentBase() {
     [Continent.Africa]: 0,
     [Continent.Asia]: 0,
     [Continent.Australia]: 0,
+    [Continent.Antarctica]: 0,
   };
   signersLocationData.forEach(({ lat, lng }) => {
     const continent = getContinent(lat, lng);

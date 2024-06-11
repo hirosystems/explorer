@@ -128,7 +128,7 @@ const SignerTableRow = ({
           <Show below="lg">{truncateMiddle(signerKey)}</Show>
         </Text>
       </Td>
-      <Td py={3} px={6} sx={mobileBorderCss}>
+      <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {getEntityName(signerKey)}
         </Text>
