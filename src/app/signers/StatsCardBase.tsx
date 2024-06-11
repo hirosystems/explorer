@@ -14,7 +14,7 @@ export function StatCardBase({
   moreInfo: string | ReactNode;
 }) {
   return (
-    <Card padding={6} height="100%">
+    <Card padding={6} height="100%" width="100%">
       <Stack gap={3}>
         <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
           {statTitle}

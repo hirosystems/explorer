@@ -1,7 +1,6 @@
 import { useColorMode } from '@chakra-ui/react';
 import pluralize from 'pluralize';
-import { useCallback, useMemo, useState } from 'react';
-import { Suspense } from 'react';
+import { Suspense, useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
@@ -164,7 +163,7 @@ export function CurrentCycleCardBase() {
   );
 
   return (
-    <Card padding={6} height="100%">
+    <Card padding={6} height="100%" width="100%">
       <Flex mb={3}>
         <Box mr="16px">{pieChart}</Box>
         <Stack gap={3}>
