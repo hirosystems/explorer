@@ -80,15 +80,9 @@ export function SignersHeaderLayout({
             gap={4}
             boxSizing="border-box"
           >
-            <Flex flex={1}>
-              {currentCycleCard}
-            </Flex>
-            <Flex flex={1}>
-              {stxStakedCard}
-            </Flex>
-            <Flex flex={1}>
-              {nextCycleCard}
-            </Flex>
+            <Flex flex={1}>{currentCycleCard}</Flex>
+            <Flex flex={1}>{stxStakedCard}</Flex>
+            <Flex flex={1}>{nextCycleCard}</Flex>
           </Flex>
         </Stack>
       </Stack>
