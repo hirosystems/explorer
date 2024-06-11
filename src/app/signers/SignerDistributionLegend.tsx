@@ -1,10 +1,10 @@
-import { useColorMode } from '@/ui/hooks/useColorMode';
 import { ReactNode, useMemo, useRef } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';
 import { Text, TextProps } from '../../ui/Text';
+import { useColorMode } from '../../ui/hooks/useColorMode';
 import { getSignerDistributionPieChartColor } from './SignerDistributionPieChart';
 import { SignerInfo } from './data/useSigners';
 import { getSignerKeyName } from './utils';

@@ -1,11 +1,11 @@
-import { Box } from '@/ui/Box';
-import { Stack } from '@/ui/Stack';
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { Question, X } from '@phosphor-icons/react';
 
+import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
+import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
 import { useDisclosure } from '../../ui/hooks/useDisclosure';
