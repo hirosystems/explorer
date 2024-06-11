@@ -75,6 +75,7 @@ export function SignersHeaderLayout({
               'repeat(3, 1fr)',
             ]}
             width="100%"
+            height="100%"
             gap={4}
             boxSizing="border-box"
           >

@@ -1,3 +1,4 @@
+import { useColorMode } from '@/ui/hooks/useColorMode';
 import { useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import L, { LatLngTuple } from 'leaflet';
@@ -313,6 +314,11 @@ export function SignersMap({
   setActiveContinent: (continent: Continent | null) => void;
 }) {
   const [activeMarkerLatLng, setActiveMarkerLatLng] = useState<MarkerLatLng | undefined>(undefined);
+  const { colorMode } = useColorMode();
+  const [mapKey, setMapKey] = useState(0);
+  useEffect(() => {
+    setMapKey(prevKey => prevKey + 1);
+  }, [colorMode]);
 
   const handleMarkerClick = useCallback(
     (lat: number, lng: number) => {
@@ -335,6 +341,7 @@ export function SignersMap({
   return (
     <StyledContainer>
       <MapContainer
+        key={mapKey}
         center={INITIAL_VIEW.center}
         zoom={INITIAL_VIEW.zoom}
         minZoom={1}
