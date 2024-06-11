@@ -1,3 +1,5 @@
+import { Box } from '@/ui/Box';
+import { Stack } from '@/ui/Stack';
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { Question, X } from '@phosphor-icons/react';
 
@@ -20,7 +22,7 @@ export function SignerDistributionHeader({ signerTitle }: { signerTitle: string 
         <Tooltip label="What's a Signer?">
           <Icon as={Question} size={4} color="iconSubdued" onClick={onToggle} />
         </Tooltip>
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
             <Flex flexDirection="column" p={6} gap={4}>
@@ -33,21 +35,40 @@ export function SignerDistributionHeader({ signerTitle }: { signerTitle: string 
                 </Flex>
                 <Icon as={X} size={6} color="iconSubdued" onClick={onToggle} />
               </Flex>
-              <Text lineHeight={5} fontSize={14}>
-                The Nakamoto upgrade introduces a new role of "Signer." Signers participate in the
-                Stacks protocol by validating and signing the blocks produced by Stacks miners. In
-                order to continue to receive PoX payouts for stacking their STX tokens, Stackers
-                must either become Signers themselves or delegate this responsibility to another
-                Signer, such as via a Stacking Pool or hosted service. For more details on this
-                please see the{' '}
-                <Link
-                  href="https://docs.stacks.co/nakamoto-upgrade/signing-and-stacking/stacking-flow"
-                  color="purple.600"
-                >
-                  Stacks Docs
-                </Link>
-                .
-              </Text>
+              <Box>
+                <Stack gap={10}>
+                  <Text lineHeight={5} fontSize={14}>
+                    The Nakamoto upgrade introduces a new role of "Signer." Signers participate in
+                    the Stacks protocol by validating and signing the blocks produced by Stacks
+                    miners. In order to continue to receive PoX payouts for stacking their STX
+                    tokens, Stackers must either become Signers themselves or delegate this
+                    responsibility to another Signer, such as via a Stacking Pool or hosted service.
+                    For more details on this please see the{' '}
+                    <Link
+                      href="https://docs.stacks.co/nakamoto-upgrade/signing-and-stacking/stacking-flow"
+                      color="interactive"
+                    >
+                      Stacks Docs
+                    </Link>
+                    .
+                  </Text>
+                  <Stack gap={4}>
+                    <Text fontSize={20} fontWeight="medium">
+                      Run a Signer
+                    </Text>
+                    <Text fontSize={14}>
+                      If you're intereseted in running a Signer, checkout the{' '}
+                      <Link
+                        href="https://docs.stacks.co/nakamoto-upgrade/signing-and-stacking/running-a-signer"
+                        color="interactive"
+                      >
+                        documentation
+                      </Link>
+                      .
+                    </Text>
+                  </Stack>
+                </Stack>
+              </Box>
             </Flex>
           </ModalContent>
         </Modal>

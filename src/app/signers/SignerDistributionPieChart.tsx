@@ -27,9 +27,15 @@ export function hexToRgb(hex: string) {
 }
 
 export function getSignerDistributionPieChartColor(
+  isKnownSigner: boolean,
   votingPowerPercentage: number,
   colorMode: ColorMode
 ) {
+  if (!isKnownSigner) {
+    return colorMode === 'light'
+      ? 'var(--stacks-colors-slate-250)'
+      : 'var(--stacks-colors-slate-800)';
+  }
   if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
     return 'var(--stacks-colors-purple-200)';
   } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
@@ -42,20 +48,20 @@ export function getSignerDistributionPieChartColor(
     return 'var(--stacks-colors-purple-600)';
   } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
     return 'var(--stacks-colors-purple-700)';
-  } else if (votingPowerPercentage >= 25 && votingPowerPercentage < 30) {
+  } else if (votingPowerPercentage >= 25) {
     return 'var(--stacks-colors-purple-800)';
-  } else {
-    return colorMode === 'light'
-      ? 'var(--stacks-colors-slate-250)'
-      : 'var(--stacks-colors-slate-800)';
   }
 }
 
 function getSignerDistributionPieChartHex(
+  isKnownSigner: boolean,
   votingPowerPercentage: number,
   colorMode: ColorMode,
   theme: WithCSSVar<Dict>
 ) {
+  if (!isKnownSigner) {
+    return colorMode === 'light' ? theme.colors['slate'][250] : theme.colors['slate'][800];
+  }
   if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
     return theme.colors['purple'][200];
   } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
@@ -68,10 +74,8 @@ function getSignerDistributionPieChartHex(
     return theme.colors['purple'][600];
   } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
     return theme.colors['purple'][700];
-  } else if (votingPowerPercentage >= 25 && votingPowerPercentage < 30) {
+  } else if (votingPowerPercentage >= 25) {
     return theme.colors['purple'][800];
-  } else {
-    return colorMode === 'light' ? theme.colors['slate'][250] : theme.colors['slate'][800];
   }
 }
 
@@ -180,28 +184,21 @@ export function SignersDistributionPieChart({
         name: getSignerKeyName(signer.signing_key),
         value: signer.weight_percent,
       }));
-    const knownSignersWithPercentageLessThanThreshold = signers
+    const unknownSignersWithPercentageGreaterThanThreshold = signers
       .filter(
         signer =>
-          getSignerKeyName(signer.signing_key) !== 'unknown' &&
-          signer.weight_percent <= thresholdPercentage
+          getSignerKeyName(signer.signing_key) === 'unknown' &&
+          signer.weight_percent > thresholdPercentage
       )
-      .reduce((acc, signer) => acc + signer.weight_percent, 0);
-    const unknownSignersPercentage = signers
-      .filter(signer => getSignerKeyName(signer.signing_key) === 'unknown')
-      .reduce((acc, signer) => acc + signer.weight_percent, 0);
+      .map(signer => ({
+        name: 'Other signer',
+        value: signer.weight_percent,
+      }));
+
     let signersData = knownSignersWithPercentageGreaterThanThreshold;
-    if (knownSignersWithPercentageLessThanThreshold > thresholdPercentage) {
-      signersData = signersData.concat({
-        name: 'Others',
-        value: knownSignersWithPercentageLessThanThreshold,
-      });
-    }
+
     if (!onlyShowPublicSigners) {
-      signersData = signersData.concat({
-        name: 'Private signers',
-        value: unknownSignersPercentage,
-      });
+      signersData = signersData.concat(unknownSignersWithPercentageGreaterThanThreshold);
     }
 
     return signersData;
@@ -222,6 +219,7 @@ export function SignersDistributionPieChart({
             <SignerLegendItem
               signerName={payload[0].name}
               signerVotingPower={payload[0].value}
+              isKnownSigner={payload[0].name !== 'Other signer'}
               color="slate.50"
             />
           </Box>
@@ -276,10 +274,19 @@ export function SignersDistributionPieChart({
                 fill={
                   index === activeIndex
                     ? getColorWithOpacity(
-                        getSignerDistributionPieChartHex(entry.value, colorMode, theme),
+                        getSignerDistributionPieChartHex(
+                          entry.name !== 'Other signer',
+                          entry.value,
+                          colorMode,
+                          theme
+                        ),
                         0.8
                       )
-                    : getSignerDistributionPieChartColor(entry.value, colorMode)
+                    : getSignerDistributionPieChartColor(
+                        entry.name !== 'Other signer',
+                        entry.value,
+                        colorMode
+                      )
                 }
               />
             );

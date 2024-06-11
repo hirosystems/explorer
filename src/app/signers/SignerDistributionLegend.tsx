@@ -1,3 +1,4 @@
+import { useColorMode } from '@/ui/hooks/useColorMode';
 import { ReactNode, useMemo, useRef } from 'react';
 
 import { Box } from '../../ui/Box';
@@ -11,11 +12,14 @@ import { getSignerKeyName } from './utils';
 export function SignerLegendItem({
   signerName,
   signerVotingPower,
+  isKnownSigner = true,
   ...rest
 }: {
   signerName: string | ReactNode;
   signerVotingPower: number | ReactNode;
+  isKnownSigner?: boolean;
 } & TextProps) {
+  const colorMode = useColorMode();
   return (
     <Flex justifyContent="space-between" gap={2}>
       <Flex direction="row" gap={2} alignItems="center">
@@ -25,7 +29,11 @@ export function SignerLegendItem({
           borderRadius="50%"
           backgroundColor={
             typeof signerVotingPower === 'number'
-              ? getSignerDistributionPieChartColor(signerVotingPower, 'light')
+              ? getSignerDistributionPieChartColor(
+                  isKnownSigner,
+                  signerVotingPower,
+                  colorMode.colorMode
+                )
               : 'textSubdued'
           }
         />
@@ -48,12 +56,11 @@ export function SignerLegendItem({
   );
 }
 
-function removeStackingDaoFromName(name: string) {
+export function removeStackingDaoFromName(name: string) {
   let newName = name;
   if (name.includes('(StackingDAO)')) {
     newName = newName.replace('(StackingDAO)', '');
     newName = newName.trim();
-    newName += '*';
   }
   return newName;
 }
@@ -67,10 +74,10 @@ export function SignersDistributionLegendLayout({
 }) {
   return (
     <Stack height="100%" gap={6}>
-      <Stack flex="1" minHeight={0} gap={2}>
+      <Stack flex="1" minHeight={0} gap={2} justifyContent="center">
         {signersLegendItems}
       </Stack>
-      <Box>{footNotes}</Box>
+      {footNotes ? <Box>{footNotes}</Box> : null}
     </Stack>
   );
 }
@@ -101,17 +108,17 @@ export function SignersDistributionLegend({
     [signers]
   );
   const unknownSigners = useMemo(
-    () =>
-      signers
-        .filter(signer => getSignerKeyName(signer.signing_key) === 'unknown')
-        .reduce((acc, signer) => acc + signer.weight_percent, 0),
+    () => signers.filter(signer => getSignerKeyName(signer.signing_key) === 'unknown'),
     [signers]
   );
 
   const filteredSigners = onlyShowPublicSigners
     ? knownSigners
     : knownSigners
-        .concat({ name: 'Private signers', value: unknownSigners })
+        .concat({
+          name: `Other signers (${unknownSigners.length})`,
+          value: unknownSigners.reduce((acc, signer) => acc + signer.weight_percent, 0),
+        })
         .sort((a, b) => b.value - a.value);
 
   return (
@@ -123,16 +130,10 @@ export function SignersDistributionLegend({
               key={index}
               signerName={signer.name}
               signerVotingPower={signer.value}
+              isKnownSigner={!signer.name.includes(`Other signers`)}
             />
           ))}
         </>
-      }
-      footNotes={
-        numStackingDaoSigners.current > 0 ? (
-          <Text color="textSubdued" fontSize="xs">
-            * Stacking DAO pool
-          </Text>
-        ) : null
       }
     />
   );

@@ -38,12 +38,7 @@ export function SignersDistributionLayout({
           {signersDistributionFilter}
         </Stack>
         <Box mt={[6, 6, 0, 0, 0]}>
-          <Flex
-            height="100%"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-          >
+          <Flex height="100%" width="100%" alignItems="center" justifyContent="center">
             {signersDistributionLegend}
           </Flex>
         </Box>

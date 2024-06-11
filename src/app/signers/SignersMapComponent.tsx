@@ -53,7 +53,7 @@ export function ContinentPill({
           minWidth={2}
           borderRadius="50%"
         />
-        <Flex alignItems="center" flexWrap='wrap'>
+        <Flex alignItems="center" flexWrap="wrap">
           <Text color={isActive ? 'purple.600' : 'textSubdued'} fontWeight="medium">
             {name}
           </Text>
@@ -102,7 +102,13 @@ export function SignersMapComponentBase() {
   });
   return signersLocationData?.length > 0 ? (
     <SignersMapComponentLayout
-      map={<SignersMap signersLocation={signersLocationData} activeContinent={activeContinent} />}
+      map={
+        <SignersMap
+          signersLocation={signersLocationData}
+          activeContinent={activeContinent}
+          setActiveContinent={setActiveContinent}
+        />
+      }
       pills={
         <Flex flexWrap="wrap" gap={3}>
           {Object.values(Continent).map(
