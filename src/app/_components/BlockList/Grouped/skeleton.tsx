@@ -207,8 +207,8 @@ export function UpdateBarSkeleton() {
   return (
     <UpdateBarLayout>
       <Flex justifyContent="space-between" alignItems="center" width="full" height={4}>
-        <SkeletonText noOfLines={1} width={40} />
-        <SkeletonText noOfLines={1} width={40} />
+        <SkeletonItem height={4} width={40} />
+        <SkeletonItem height={4} width={40} />
       </Flex>
     </UpdateBarLayout>
   );

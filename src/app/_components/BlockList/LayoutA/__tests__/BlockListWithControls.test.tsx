@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
 
 import { BlockListProvider } from '../../BlockListProvider';
@@ -5,6 +6,8 @@ import { UIBlock, UIBlockType } from '../../types';
 import { BlockListWithControls } from '../BlockListWithControls';
 
 const date = new Date('2024-01-01T00:00:00Z').getTime();
+
+const queryClient = new QueryClient();
 
 describe('BlockListWithControls', () => {
   it('renders correctly', () => {
@@ -50,17 +53,19 @@ describe('BlockListWithControls', () => {
     const fetchNextPage = jest.fn();
 
     const { asFragment } = render(
-      <BlockListProvider>
-        <BlockListWithControls
-          blockList={blockList}
-          latestBlocksCount={latestBlocksCount}
-          updateList={updateList}
-          enablePagination={enablePagination}
-          isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      </BlockListProvider>
+      <QueryClientProvider client={queryClient}>
+        <BlockListProvider>
+          <BlockListWithControls
+            blockList={blockList}
+            latestBlocksCount={latestBlocksCount}
+            updateList={updateList}
+            enablePagination={enablePagination}
+            isFetchingNextPage={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        </BlockListProvider>
+      </QueryClientProvider>
     );
     expect(asFragment()).toMatchSnapshot();
   });
