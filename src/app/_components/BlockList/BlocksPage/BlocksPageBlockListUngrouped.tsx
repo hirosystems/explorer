@@ -20,7 +20,7 @@ function BlocksPageBlockListUngroupedBase() {
 
   return (
     <Box pb={6}>
-      {!liveUpdates && <UpdateBar blockList={blockList} onClick={updateBlockList} />}
+      {!liveUpdates && <UpdateBar onClick={updateBlockList} />}
       <BlockListUngrouped blockList={blockList} />
       <Box pt={4}>
         {!liveUpdates && (

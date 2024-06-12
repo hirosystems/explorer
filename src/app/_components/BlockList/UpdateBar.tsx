@@ -9,7 +9,7 @@ import { Text } from '../../../ui/Text';
 import { useBlockListContext } from './BlockListContext';
 import { UpdateBarSkeleton } from './Grouped/skeleton';
 import { getFadeAnimationStyle } from './consts';
-import { BlockListData, getApproximateStxBlocksPerMinuteFromBlockList } from './utils';
+import { useSuspenseAverageBlockTimes } from './data/useAverageBlockTimes';
 
 export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
   const bgColor = useColorModeValue('purple.100', 'slate.900'); // TODO: not in theme. remove
@@ -30,24 +30,24 @@ export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) 
 }
 
 interface UpdateBarProps {
-  blockList?: BlockListData[];
   onClick: () => void;
   latestBlocksCount?: number;
 }
 
 export function UpdateBarBase({
-  blockList,
   onClick,
   latestBlocksCount,
   ...rest
 }: {
-  blockList?: BlockListData[];
   onClick: () => void;
   latestBlocksCount?: number;
 } & FlexProps) {
   const textColor = useColorModeValue('slate.800', 'slate.400'); // TODO: not in theme. remove
   const lastClickTimeRef = useRef(0);
   const { isBlockListLoading } = useBlockListContext();
+  const {
+    data: { last_24h },
+  } = useSuspenseAverageBlockTimes();
 
   const update = useCallback(() => {
     const now = Date.now();
@@ -69,13 +69,7 @@ export function UpdateBarBase({
         display={'inline'}
         style={getFadeAnimationStyle(isBlockListLoading)}
       >
-        {latestBlocksCount
-          ? latestBlocksCount
-          : blockList
-            ? `~${getApproximateStxBlocksPerMinuteFromBlockList(
-                blockList
-              )} Stacks blocks mined per min.`
-            : ''}
+        {latestBlocksCount ? latestBlocksCount : `TPS: ~${last_24h} blocks/s.`}
       </Text>
       <Button variant="text" onClick={update}>
         <Flex alignItems={'center'} gap={1.5}>
@@ -93,21 +87,10 @@ export function UpdateBarBase({
   );
 }
 
-export function UpdateBar({
-  // not needed
-  blockList,
-  onClick,
-  latestBlocksCount,
-  ...rest
-}: UpdateBarProps & FlexProps) {
+export function UpdateBar({ onClick, latestBlocksCount, ...rest }: UpdateBarProps & FlexProps) {
   return (
     <Suspense fallback={<UpdateBarSkeleton />}>
-      <UpdateBarBase
-        latestBlocksCount={latestBlocksCount}
-        blockList={blockList}
-        onClick={onClick}
-        {...rest}
-      />
+      <UpdateBarBase latestBlocksCount={latestBlocksCount} onClick={onClick} {...rest} />
     </Suspense>
   );
 }

@@ -15,7 +15,7 @@ function HomePageBlockListGroupedBase() {
   const { blockList, updateBlockList } = useHomePageBlockList();
   return (
     <>
-      {!liveUpdates && <UpdateBar blockList={blockList} onClick={updateBlockList} />}
+      {!liveUpdates && <UpdateBar onClick={updateBlockList} />}
       <Flex flexDirection="column" pt={5} gap={4}>
         <BlockListGrouped blockList={blockList} minimized={true} stxBlocksLimit={3} />
         {!liveUpdates && <ListFooter href={'/blocks'} label={'blocks'} />}

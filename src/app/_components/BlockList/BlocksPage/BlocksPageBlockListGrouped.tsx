@@ -20,7 +20,7 @@ function BlocksPageBlockListGroupedBase() {
 
   return (
     <>
-      {!liveUpdates && <UpdateBar blockList={blockList} onClick={updateBlockList} />}
+      {!liveUpdates && <UpdateBar onClick={updateBlockList} />}
       <Flex flexDirection="column" gap={4} pt={4}>
         <BlockListGrouped blockList={blockList} minimized={false} stxBlocksLimit={10} />
       </Flex>

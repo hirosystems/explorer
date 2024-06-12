@@ -239,18 +239,15 @@ function BitcoinHeader({
   );
 }
 
-export function Footer({ btcBlock }: { btcBlock: BlockListBtcBlock }) {
+export function Footer({ txsCount, blocksCount }: { txsCount: number; blocksCount: number }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {btcBlock.blockCount} blocks
+          {blocksCount} blocks
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {btcBlock.txsCount} transactions
-        </Text>
-        <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          Average block time: {btcBlock.avgBlockTime?.toFixed(2)} sec.
+          {txsCount} transactions
         </Text>
       </HStack>
     </Box>
@@ -260,25 +257,30 @@ export function Footer({ btcBlock }: { btcBlock: BlockListBtcBlock }) {
 export function BurnBlockGroup({
   btcBlock,
   stxBlocks,
+  isFirst,
   stxBlocksLimit,
   minimized = false,
-  isFirst,
 }: {
   btcBlock: BlockListBtcBlock;
   stxBlocks: BlockListStxBlock[];
+  isFirst: boolean;
   stxBlocksLimit?: number;
   minimized?: boolean;
-  isFirst: boolean;
 }) {
-  const numStxBlocks = btcBlock.blockCount;
-  const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || 0);
-  const stxBlocksShortList = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
+  const unaccountedStxBlocks = stxBlocks.length - btcBlock.blockCount;
+  const unaccountedTxs = stxBlocks
+    .slice(0, unaccountedStxBlocks)
+    .reduce((acc, block) => acc + (block.txsCount || 0), 0);
+  const txsCount = isFirst ? btcBlock.txsCount + unaccountedTxs : btcBlock.txsCount;
+  const blocksCount = isFirst ? btcBlock.blockCount + unaccountedStxBlocks : btcBlock.blockCount;
+  const numStxBlocksNotDisplayed = blocksCount - (stxBlocksLimit || 0);
+  const displayedStxBlocks = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />
       <ScrollableBox>
         <BurnBlockGroupGrid
-          stxBlocks={stxBlocksShortList}
+          stxBlocks={displayedStxBlocks}
           minimized={minimized}
           numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
         />
@@ -290,7 +292,7 @@ export function BurnBlockGroup({
           isFirst={isFirst}
         />
       ) : null}
-      <Footer btcBlock={btcBlock} />
+      <Footer txsCount={txsCount} blocksCount={blocksCount} />
     </Box>
   );
 }

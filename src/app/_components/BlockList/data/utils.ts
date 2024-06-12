@@ -3,13 +3,17 @@ import { useMemo } from 'react';
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
+export function generateBtcBlocksMap(btcBlocks: BurnBlock[]) {
+  const map = {} as Record<string, BurnBlock>;
+  btcBlocks.forEach(block => {
+    map[block.burn_block_hash] = block;
+  });
+  return map;
+}
+
 export function useBtcBlocksMap(btcBlocks: BurnBlock[]) {
   return useMemo(() => {
-    const map = {} as Record<string, BurnBlock>;
-    btcBlocks.forEach(block => {
-      map[block.burn_block_hash] = block;
-    });
-    return map;
+    return generateBtcBlocksMap(btcBlocks);
   }, [btcBlocks]);
 }
 
