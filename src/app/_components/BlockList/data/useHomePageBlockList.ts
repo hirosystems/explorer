@@ -4,6 +4,27 @@ import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
 import { useHomePageInitialBlockList } from './useHomePageInitialBlockList';
+import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
+
+// fetch the btc blocks for the stx blocks
+const useBlockListBtcBlocks = (latestStxBlocks: (Block | NakamotoBlock)[]) => {
+  const btcBlockHashes = new Set<string>();
+  latestStxBlocks.forEach(block => {
+    if ('burn_block_hash' in block) {
+      btcBlockHashes.add(block.burn_block_hash);
+    }
+  });
+
+  useEffect(() => {
+    
+  })
+
+
+
+
+};
+
+  
 
 export function useHomePageBlockList(btcBlockLimit: number = 3) {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
@@ -32,6 +53,10 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     latestStxBlocksCount: latestStxBlocksCountFromWebSocket,
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(liveUpdates, initialStxBlocksHashes);
+
+  const {
+    latestBtcBlocks
+  } = useBlockListBtcBlocks(latestStxBlocksFromWebSocket);
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
