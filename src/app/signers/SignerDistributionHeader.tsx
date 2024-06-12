@@ -22,7 +22,7 @@ export function SignerDistributionHeader({ signerTitle }: { signerTitle: string 
         <Tooltip label="What's a Signer?">
           <Icon as={Question} size={4} color="iconSubdued" onClick={onToggle} />
         </Tooltip>
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
           <ModalContent>
             <Flex flexDirection="column" p={6} gap={4}>

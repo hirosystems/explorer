@@ -88,10 +88,6 @@ const StyledContainer = styled(Box)`
   height: 100%;
   width: 100%;
 
-  .leaflet-marker-icon {
-    cursor: default;
-  }
-
   .custom-div-icon {
     background: none;
     border: none;
