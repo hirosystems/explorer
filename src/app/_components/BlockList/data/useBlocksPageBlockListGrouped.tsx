@@ -3,7 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
+import { useBlockListBtcBlocks } from './useBlockListBtcBlocks';
 import { useBlocksGroupedInitialBlockList } from './useBlocksPageGroupedInitialBlockList';
+import { generateBtcBlocksMap } from './utils';
 
 export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
@@ -39,10 +41,15 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
     [blockList]
   );
 
+  const { btcBlocks: latestBtcBlocks } = useBlockListBtcBlocks(latestStxBlocksFromWebSocket);
+
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
     waitForFadeAnimation(() => {
-      const websocketBlockList = generateBlockList(latestStxBlocksFromWebSocket);
+      const websocketBlockList = generateBlockList(
+        latestStxBlocksFromWebSocket,
+        generateBtcBlocksMap(latestBtcBlocks)
+      );
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
       setBlockListLoading(false);
@@ -52,6 +59,7 @@ export function useBlocksPageBlockListGrouped(btcBlockLimit: number = 10) {
     updateBlockListManually,
     setBlockListLoading,
     clearLatestStxBlocksFromWebSocket,
+    latestBtcBlocks,
   ]);
 
   const updateBlockListWithQuery = useCallback(

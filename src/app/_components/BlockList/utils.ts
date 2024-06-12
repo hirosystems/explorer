@@ -55,7 +55,7 @@ export function waitForFadeAnimation(callback: () => void) {
 }
 
 export function generateBlockList(stxBlocks: (Block | NakamotoBlock)[], btcBlocksMap: BtcBlockMap) {
-  if (stxBlocks.length === 0) return [];
+  if (stxBlocks.length === 0 || Object.keys(btcBlocksMap).length === 0) return [];
 
   const firstStxBlock = stxBlocks[0];
   const firstBtcBlock = btcBlocksMap[firstStxBlock.burn_block_hash];

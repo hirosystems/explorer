@@ -296,17 +296,18 @@ function StxBlocksGroupedByBtcBlock({
 }) {
   const btcBlock = blockList.btcBlock;
   const stxBlocks = blockList.stxBlocks;
-  const stxBlocksShortList = stxBlocksLimit
+  const unaccountedStxBlocks = stxBlocks.length - btcBlock.blockCount;
+  const blocksCount = isFirst ? btcBlock.blockCount + unaccountedStxBlocks : btcBlock.blockCount;
+  const numStxBlocksNotDisplayed = blocksCount - (stxBlocksLimit || 0);
+  const displayedStxBlocks = stxBlocksLimit
     ? blockList.stxBlocks.slice(0, stxBlocksLimit)
     : blockList.stxBlocks;
-  const numStxBlocks = btcBlock.txsCount ?? stxBlocks.length;
-  const numStxBlocksNotDisplayed = numStxBlocks - (stxBlocksLimit || stxBlocks.length);
 
   return (
     <Box mt={4}>
       <ScrollableBox>
         <StxBlocksGrid
-          stxBlocks={stxBlocksShortList}
+          stxBlocks={displayedStxBlocks}
           minimized={minimized}
           numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
         />

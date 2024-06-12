@@ -3,28 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
+import { useBlockListBtcBlocks } from './useBlockListBtcBlocks';
 import { useHomePageInitialBlockList } from './useHomePageInitialBlockList';
-import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
-
-// fetch the btc blocks for the stx blocks
-const useBlockListBtcBlocks = (latestStxBlocks: (Block | NakamotoBlock)[]) => {
-  const btcBlockHashes = new Set<string>();
-  latestStxBlocks.forEach(block => {
-    if ('burn_block_hash' in block) {
-      btcBlockHashes.add(block.burn_block_hash);
-    }
-  });
-
-  useEffect(() => {
-    
-  })
-
-
-
-
-};
-
-  
+import { generateBtcBlocksMap } from './utils';
 
 export function useHomePageBlockList(btcBlockLimit: number = 3) {
   const { setBlockListLoading, liveUpdates } = useBlockListContext();
@@ -54,14 +35,15 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(liveUpdates, initialStxBlocksHashes);
 
-  const {
-    latestBtcBlocks
-  } = useBlockListBtcBlocks(latestStxBlocksFromWebSocket);
+  const { btcBlocks: latestBtcBlocks } = useBlockListBtcBlocks(latestStxBlocksFromWebSocket);
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
     waitForFadeAnimation(() => {
-      const websocketBlockList = generateBlockList(latestStxBlocksFromWebSocket);
+      const websocketBlockList = generateBlockList(
+        latestStxBlocksFromWebSocket,
+        generateBtcBlocksMap(latestBtcBlocks)
+      );
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
       setBlockListLoading(false);
@@ -71,6 +53,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     updateBlockListManually,
     setBlockListLoading,
     clearLatestStxBlocksFromWebSocket,
+    latestBtcBlocks,
   ]);
 
   const updateBlockListWithQuery = useCallback(
