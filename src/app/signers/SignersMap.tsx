@@ -115,7 +115,7 @@ const ContinentZoomHandler = ({
     xl: { center: [33, -95], zoom: 3 },
   }) as CenterAndZoom;
   const africaCenterAndZoom = useBreakpointValue({
-    // TODO: tune
+    // TODO: tune coordinates
     base: { center: [9, 18], zoom: 3 },
     md: { center: [9, 18], zoom: 3 },
     xl: { center: [9, 18], zoom: 3 },
@@ -126,13 +126,13 @@ const ContinentZoomHandler = ({
     xl: { center: [46, 12], zoom: 4 },
   }) as CenterAndZoom;
   const australiaCenterAndZoom = useBreakpointValue({
-    // TODO: tune
+    // TODO: tune coordinates
     base: { center: [-25, 133], zoom: 4 },
     md: { center: [-25, 133], zoom: 4 },
     xl: { center: [-25, 133], zoom: 4 },
   }) as CenterAndZoom;
   const southAmericaCenterAndZoom = useBreakpointValue({
-    // TODO: tune
+    // TODO: tune coordinates
     base: { center: [-20, -61], zoom: 3 },
     md: { center: [-20, -61], zoom: 3 },
     xl: { center: [-20, -61], zoom: 3 },
