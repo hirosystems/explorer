@@ -1,3 +1,10 @@
+## [1.183.1](https://github.com/hirosystems/explorer/compare/v1.183.0...v1.183.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* **deploy:** need to deploy signers map ([89d51bb](https://github.com/hirosystems/explorer/commit/89d51bb255577cfab9a95b6a86405f8f08f0c64f))
+
 # [1.183.0](https://github.com/hirosystems/explorer/compare/v1.182.0...v1.183.0) (2024-06-04)
 
 
