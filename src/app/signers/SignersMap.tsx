@@ -360,13 +360,7 @@ export function SignersMap({
         maxBoundsViscosity={1.0}
         maxBounds={BOUNDS}
       >
-        <TileLayer
-          url={mapUrl}
-          noWrap={true}
-          minZoom={1}
-          maxZoom={4}
-          bounds={BOUNDS}
-        />
+        <TileLayer url={mapUrl} noWrap={true} minZoom={1} maxZoom={4} bounds={BOUNDS} />
         {signersLocation.map((node, index) => (
           <Marker
             key={index}
