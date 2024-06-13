@@ -195,15 +195,18 @@ const MarkerClickHandler = ({ markerLatLng }: { markerLatLng: MarkerLatLng | und
   const map = useMap();
 
   const prevMarkerLatLng = useRef<MarkerLatLng | undefined>(markerLatLng);
+
+  useEffect(() => {
+    prevMarkerLatLng.current = markerLatLng;
+  }, [markerLatLng]);
+
+  // A new marker is clicked if the previous marker is undefined and the current marker is defined, or if the lat/lng of the current marker is different from the previous marker
   const newMarkerClicked =
     (prevMarkerLatLng.current === undefined && markerLatLng !== undefined) ||
     (prevMarkerLatLng.current &&
       markerLatLng &&
       prevMarkerLatLng.current.lat !== markerLatLng.lat) ||
     (prevMarkerLatLng.current && markerLatLng && prevMarkerLatLng.current.lng !== markerLatLng.lng);
-  useEffect(() => {
-    prevMarkerLatLng.current = markerLatLng;
-  }, [markerLatLng]);
 
   useEffect(() => {
     if (!newMarkerClicked) return;
@@ -358,8 +361,6 @@ export function SignersMap({
         maxBounds={BOUNDS}
       >
         <TileLayer
-          // url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-          // url="https://{s}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}{r}.png"
           url={mapUrl}
           noWrap={true}
           minZoom={1}

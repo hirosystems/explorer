@@ -68,13 +68,6 @@ export function SignersHeaderLayout({
           </Flex>
           <Flex
             flexDirection={['column', 'column', 'row', 'row', 'row']}
-            // gridTemplateColumns={[
-            //   '100%',
-            //   '100%',
-            //   'repeat(3, 1fr)',
-            //   'repeat(3, 1fr)',
-            //   'repeat(3, 1fr)',
-            // ]}
             width="100%"
             height="100%"
             gap={4}
