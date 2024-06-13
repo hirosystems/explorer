@@ -1,6 +1,5 @@
+import { useApi } from '@/common/api/useApi';
 import { UseSuspenseQueryResult, useSuspenseQuery } from '@tanstack/react-query';
-
-import { useGlobalContext } from '../../../../common/context/useAppContext';
 
 const AVERAGE_BLOCK_TIMES_QUERY_KEY = '/extended/v2/blocks/average-times';
 
@@ -12,11 +11,10 @@ interface AverageBlockTimesResponse {
 }
 
 export function useSuspenseAverageBlockTimes(): UseSuspenseQueryResult<AverageBlockTimesResponse> {
-  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+  const api = useApi();
   return useSuspenseQuery({
     queryKey: [AVERAGE_BLOCK_TIMES_QUERY_KEY],
-    queryFn: () =>
-      fetch(`${activeNetworkUrl}/extended/v2/blocks/average-times`).then(res => res.json()),
+    queryFn: () => api.blocksApi.getAverageBlockTimes(),
     staleTime: 30 * 60 * 1000,
   });
 }

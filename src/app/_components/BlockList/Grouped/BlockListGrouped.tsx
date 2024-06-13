@@ -1,5 +1,5 @@
 import { ArrowElbowLeftDown } from '@phosphor-icons/react';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
@@ -239,15 +239,21 @@ function BitcoinHeader({
   );
 }
 
-export function Footer({ txsCount, blocksCount }: { txsCount: number; blocksCount: number }) {
+export function Footer({
+  txsCount,
+  blocksCount,
+}: {
+  txsCount: number | undefined;
+  blocksCount: number | undefined;
+}) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
       <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {blocksCount} blocks
+          {blocksCount ? blocksCount : '-'} blocks
         </Text>
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
-          {txsCount} transactions
+          {txsCount ? txsCount : '-'} transactions
         </Text>
       </HStack>
     </Box>
@@ -267,14 +273,31 @@ export function BurnBlockGroup({
   stxBlocksLimit?: number;
   minimized?: boolean;
 }) {
-  const unaccountedStxBlocks = stxBlocks.length - btcBlock.blockCount;
-  const unaccountedTxs = stxBlocks
-    .slice(0, unaccountedStxBlocks)
-    .reduce((acc, block) => acc + (block.txsCount || 0), 0);
-  const txsCount = isFirst ? btcBlock.txsCount + unaccountedTxs : btcBlock.txsCount;
-  const blocksCount = isFirst ? btcBlock.blockCount + unaccountedStxBlocks : btcBlock.blockCount;
-  const numStxBlocksNotDisplayed = blocksCount - (stxBlocksLimit || 0);
-  const displayedStxBlocks = stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks;
+  const unaccountedStxBlocks = btcBlock.blockCount ? stxBlocks.length - btcBlock.blockCount : 0;
+  const unaccountedTxs = useMemo(
+    () =>
+      unaccountedStxBlocks > 0
+        ? stxBlocks
+            .slice(0, unaccountedStxBlocks)
+            .reduce((acc, block) => acc + (block.txsCount || 0), 0)
+        : 0,
+    [stxBlocks, unaccountedStxBlocks]
+  );
+  const txsCount = btcBlock.txsCount
+    ? isFirst
+      ? btcBlock.txsCount + unaccountedTxs
+      : btcBlock.txsCount
+    : undefined;
+  const blocksCount = btcBlock.blockCount
+    ? isFirst
+      ? btcBlock.blockCount + unaccountedStxBlocks
+      : btcBlock.blockCount
+    : undefined;
+  const numStxBlocksNotDisplayed = blocksCount ? blocksCount - (stxBlocksLimit || 0) : 0;
+  const displayedStxBlocks = useMemo(
+    () => (stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks),
+    [stxBlocks, stxBlocksLimit]
+  );
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />

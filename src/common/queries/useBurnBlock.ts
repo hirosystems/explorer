@@ -8,16 +8,17 @@ import {
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useApi } from '../api/useApi';
-import { useGlobalContext } from '../context/useAppContext';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
 export function useGetBurnBlockQuery() {
-  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+  const api = useApi();
   return (heightOrHash: string | number) => ({
     queryKey: [BURN_BLOCKS_QUERY_KEY, heightOrHash],
     queryFn: () =>
-      fetch(`${activeNetworkUrl}/extended/v2/burn-blocks/${heightOrHash}`).then(res => res.json()),
+      api.burnBlocksApi.getBurnBlock({
+        heightOrHash,
+      }),
     cacheTime: 15 * 60 * 1000,
   });
 }
