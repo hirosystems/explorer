@@ -1,10 +1,11 @@
 import { ArrowRight } from '@phosphor-icons/react';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
+import { Grid } from '../../ui/Grid';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
@@ -13,77 +14,69 @@ import { CurrentCycleCard } from './CurrentCycle';
 import { NextCycleCard } from './NextCycleCard';
 import { SignersDistribution } from './SignerDistribution';
 import { SignerDistributionHeader } from './SignerDistributionHeader';
+import { SignersMapComponent } from './SignersMapComponent';
 import { StxStackedCard } from './StxStackedCard';
-import { TotalStackedCard } from './TotalStackedCard';
 
 export function SignersHeaderLayout({
   stackingHeader,
   currentCycleCard,
   stxStakedCard,
-  stxLockedCard,
   nextCycleCard,
-  signerDistribution,
   signerDistributionHeader,
+  signerDistribution,
+  signersMap,
 }: {
   stackingHeader: ReactNode;
   currentCycleCard: ReactNode;
   stxStakedCard: ReactNode;
-  stxLockedCard: ReactNode;
   nextCycleCard: ReactNode;
   signerDistributionHeader: ReactNode;
   signerDistribution: ReactNode;
+  signersMap: ReactNode;
   historicalStackingDataLink: ReactNode;
 }) {
   return (
     <Card width="full" flexDirection="column" gap={4}>
-      <Stack display="flex" flexDirection={['column', 'column', 'column', 'column', 'row']} gap={8}>
-        <Stack
-          width="full"
-          gap={4}
-          paddingTop={7}
-          paddingBottom={[0, 0, 0, 7, 7]}
-          paddingLeft={7}
-          paddingRight={[7, 7, 7, 7, 0]}
-        >
-          {signerDistributionHeader}
-          {signerDistribution}
-        </Stack>
+      <Stack py={8} gap={4}>
+        <Box px={8}>{signerDistributionHeader}</Box>
+        <Grid gridTemplateColumns={['100%', '100%', '100%', '100%', 'repeat(2, 1fr)']} gap={8}>
+          <Box
+            height={['auto', 'auto', 500, 500, 500]}
+            paddingBottom={[0, 0, 0, 0, 7]}
+            paddingLeft={7}
+            paddingRight={[7, 7, 7, 7, 0]}
+          >
+            {signerDistribution}
+          </Box>
+          <Box
+            height={500}
+            paddingBottom={[0, 0, 0, 0, 7]}
+            paddingRight={7}
+            paddingLeft={[7, 7, 7, 7, 0]}
+          >
+            {signersMap}
+          </Box>
+        </Grid>
         <Box
-          width="1px"
+          width="100%"
           border="1px solid var(--stacks-colors-borderSecondary)"
-          display={['none', 'none', 'none', 'block', 'block']}
-          margin={0}
+          display={['none', 'none', 'none', 'none', 'block']}
         />
-        <Stack
-          width="full"
-          gap={4}
-          paddingY={7}
-          paddingRight={7}
-          paddingLeft={[7, 7, 7, 7, 0]}
-          paddingBottom={7}
-          paddingTop={[0, 0, 0, 7, 7]}
-        >
+        <Stack width="full" height="100%" gap={4} pt={7} px={7}>
           <Flex height={6} alignItems="center">
             {stackingHeader}
           </Flex>
-          <Box
-            display="grid"
-            gridTemplateColumns={[
-              '100%',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-              'repeat(2, 1fr)',
-            ]}
+          <Flex
+            flexDirection={['column', 'column', 'row', 'row', 'row']}
             width="100%"
+            height="100%"
             gap={4}
             boxSizing="border-box"
           >
-            {currentCycleCard}
-            {stxStakedCard}
-            {stxLockedCard}
-            {nextCycleCard}
-          </Box>
+            <Flex flex={1}>{currentCycleCard}</Flex>
+            <Flex flex={1}>{stxStakedCard}</Flex>
+            <Flex flex={1}>{nextCycleCard}</Flex>
+          </Flex>
         </Stack>
       </Stack>
       {/* {historicalStackingDataLink} TODO: Add back when the stacking page is done */}
@@ -92,8 +85,6 @@ export function SignersHeaderLayout({
 }
 
 export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
-
   return (
     <SignersHeaderLayout
       stackingHeader={
@@ -103,16 +94,9 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
       }
       currentCycleCard={<CurrentCycleCard />}
       stxStakedCard={<StxStackedCard tokenPrice={tokenPrice} />}
-      stxLockedCard={<TotalStackedCard />}
       nextCycleCard={<NextCycleCard />}
-      signerDistributionHeader={
-        <SignerDistributionHeader
-          signerTitle="SIGNER DISTRIBUTION"
-          onlyShowPublicSigners={onlyShowPublicSigners}
-          setOnlyShowPublicSigners={setOnlyShowPublicSigners}
-        />
-      }
-      signerDistribution={<SignersDistribution onlyShowPublicSigners={onlyShowPublicSigners} />}
+      signerDistributionHeader={<SignerDistributionHeader signerTitle="SIGNER DISTRIBUTION" />}
+      signerDistribution={<SignersDistribution />}
       historicalStackingDataLink={
         <Flex alignItems="center">
           <Link href="/" color="textSubdued" fontSize="xs" mr={1}>
@@ -121,6 +105,7 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Icon as={ArrowRight} size={'12px'} color="textSubdued" />
         </Flex>
       }
+      signersMap={<SignersMapComponent />}
     />
   );
 }

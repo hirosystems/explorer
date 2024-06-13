@@ -1,35 +1,20 @@
 import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
 import { Question, X } from '@phosphor-icons/react';
 
+import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
-import { FormControl } from '../../ui/FormControl';
-import { FormLabel } from '../../ui/FormLabel';
 import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
-import { Switch } from '../../ui/Switch';
+import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
 import { useDisclosure } from '../../ui/hooks/useDisclosure';
 
-export function SignerDistributionHeader({
-  signerTitle,
-  setOnlyShowPublicSigners,
-  onlyShowPublicSigners,
-}: {
-  signerTitle: string;
-  setOnlyShowPublicSigners: (value: boolean) => void;
-  onlyShowPublicSigners: boolean;
-}) {
+export function SignerDistributionHeader({ signerTitle }: { signerTitle: string }) {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   return (
-    <Flex
-      direction={['column', 'column', 'row', 'row', 'row']}
-      justifyContent="space-between"
-      gap={4}
-      height={['auto', 'auto', 6, 6, 6]}
-      alignItems={['flex-start', 'flex-start', 'flex-start', 'center', 'center']}
-    >
+    <Flex direction="row" height="auto" alignItems="center">
       <Flex gap={2} alignItems="center">
         <Text fontSize="xs" fontWeight="semibold">
           {signerTitle}
@@ -50,46 +35,44 @@ export function SignerDistributionHeader({
                 </Flex>
                 <Icon as={X} size={6} color="iconSubdued" onClick={onToggle} />
               </Flex>
-              <Text lineHeight={5} fontSize={14}>
-                The Nakamoto upgrade introduces a new role of "Signer." Signers participate in the
-                Stacks protocol by validating and signing the blocks produced by Stacks miners. In
-                order to continue to receive PoX payouts for stacking their STX tokens, Stackers
-                must either become Signers themselves or delegate this responsibility to another
-                Signer, such as via a Stacking Pool or hosted service. For more details on this
-                please see the{' '}
-                <Link
-                  href="https://docs.stacks.co/nakamoto-upgrade/signing-and-stacking/stacking-flow"
-                  color="purple.600"
-                >
-                  Stacks Docs
-                </Link>
-                .
-              </Text>
+              <Box>
+                <Stack gap={10}>
+                  <Text lineHeight={5} fontSize={14}>
+                    The Nakamoto upgrade introduces a new role of "Signer." Signers participate in
+                    the Stacks protocol by validating and signing the blocks produced by Stacks
+                    miners. In order to continue to receive PoX payouts for stacking their STX
+                    tokens, Stackers must either become Signers themselves or delegate this
+                    responsibility to another Signer, such as via a Stacking Pool or hosted service.
+                    For more details on this please see the{' '}
+                    <Link
+                      href="https://docs.stacks.co/nakamoto-upgrade/signing-and-stacking/stacking-flow"
+                      color="interactive"
+                    >
+                      Stacks Docs
+                    </Link>
+                    .
+                  </Text>
+                  <Stack gap={4}>
+                    <Text fontSize={20} fontWeight="medium">
+                      Run a Signer
+                    </Text>
+                    <Text fontSize={14}>
+                      If you're intereseted in running a Signer, checkout the{' '}
+                      <Link
+                        href="https://docs.stacks.co/nakamoto-upgrade/signing-and-stacking/running-a-signer"
+                        color="interactive"
+                      >
+                        documentation
+                      </Link>
+                      .
+                    </Text>
+                  </Stack>
+                </Stack>
+              </Box>
             </Flex>
           </ModalContent>
         </Modal>
       </Flex>
-      <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
-        <Switch
-          id="only-show-public-signers"
-          onChange={() => {
-            setOnlyShowPublicSigners(!onlyShowPublicSigners);
-          }}
-          isChecked={onlyShowPublicSigners}
-        />
-        <FormLabel
-          htmlFor="only-show-public-signers"
-          m="0"
-          fontSize={'14px'}
-          lineHeight={'1.5em'}
-          fontWeight={400}
-          textOverflow={'ellipsis'}
-          overflow={'hidden'}
-          whiteSpace={'nowrap'}
-        >
-          Show only public signers
-        </FormLabel>
-      </FormControl>
     </Flex>
   );
 }

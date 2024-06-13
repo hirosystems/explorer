@@ -19,11 +19,13 @@ import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 import { mobileBorderCss } from './consts';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 import { SignersTableSkeleton } from './skeleton';
+import { getSignerKeyName } from './utils';
 
 const StyledTable = styled(Table)`
   th {
@@ -44,7 +46,7 @@ export const SignersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}}>
+  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -71,6 +73,7 @@ export const SignersTableHeader = ({
 export const signersTableHeaders = [
   '#',
   'Signer key',
+  'Entity',
   'Associated address',
   'Voting power',
   'STX stacked',
@@ -87,6 +90,11 @@ export const SignersTableHeaders = () => (
     ))}
   </Tr>
 );
+
+function getEntityName(signerKey: string) {
+  const entityName = removeStackingDaoFromName(getSignerKeyName(signerKey));
+  return entityName === 'unknown' ? '-' : entityName;
+}
 
 const SignerTableRow = ({
   index,
@@ -113,10 +121,16 @@ const SignerTableRow = ({
           {index + 1}
         </Text>
       </Td>
+
       <Td py={3} px={6}>
         <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
           <Show above="lg">{truncateMiddle(signerKey)}</Show>
           <Show below="lg">{truncateMiddle(signerKey)}</Show>
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
+          {getEntityName(signerKey)}
         </Text>
       </Td>
       <Td py={3} px={6}>
@@ -129,7 +143,7 @@ const SignerTableRow = ({
                 fontSize="sm"
                 color="textSubdued"
               >
-                {truncateMiddle(stacker.stacker_address)}
+                {truncateMiddle(stacker.stacker_address, 5, 5)}
               </AddressLink>
               {index < stackers.length - 1 && (
                 <Text color="textSubdued" fontSize="sm">
