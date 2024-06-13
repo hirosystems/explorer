@@ -28,9 +28,9 @@ export interface BlockListBtcBlock {
   height: number | string;
   hash: string;
   timestamp: number;
-  txsCount: number;
-  blockCount: number;
-  avgBlockTime: number;
+  txsCount: number | undefined;
+  blockCount: number | undefined;
+  avgBlockTime: number | undefined;
 }
 
 export interface BlockListStxBlock {

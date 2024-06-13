@@ -17,18 +17,29 @@ export function createBlockListStxBlock(stxBlock: Block | NakamotoBlock): BlockL
           : 0,
   };
 }
-export function createBlockListBtcBlock(
-  stxBlock: Block | NakamotoBlock,
-  btcBlock: BurnBlock
+export function createBlockListBtcBlock(btcBlock: BurnBlock): BlockListBtcBlock {
+  return {
+    type: 'btc_block',
+    height: btcBlock.burn_block_height,
+    hash: btcBlock.burn_block_hash,
+    timestamp: btcBlock.burn_block_time,
+    txsCount: btcBlock.total_tx_count,
+    blockCount: btcBlock.stacks_blocks.length,
+    avgBlockTime: btcBlock.avg_block_time,
+  };
+}
+
+export function createBlockListBtcBlockFromStxBlock(
+  stxBlock: Block | NakamotoBlock
 ): BlockListBtcBlock {
   return {
     type: 'btc_block',
     height: stxBlock.burn_block_height,
     hash: stxBlock.burn_block_hash,
     timestamp: stxBlock.burn_block_time,
-    txsCount: btcBlock.total_tx_count ?? 0,
-    blockCount: btcBlock.stacks_blocks.length,
-    avgBlockTime: btcBlock.avg_block_time,
+    txsCount: undefined,
+    blockCount: undefined,
+    avgBlockTime: undefined,
   };
 }
 
@@ -54,7 +65,10 @@ export function waitForFadeAnimation(callback: () => void) {
   setTimeout(callback, FADE_DURATION);
 }
 
-export function generateBlockList(stxBlocks: (Block | NakamotoBlock)[], btcBlocksMap: BtcBlockMap) {
+export function generateBlockList(
+  stxBlocks: (Block | NakamotoBlock)[],
+  btcBlocksMap: BtcBlockMap
+): BlockListData[] {
   if (stxBlocks.length === 0 || Object.keys(btcBlocksMap).length === 0) return [];
 
   const firstStxBlock = stxBlocks[0];
@@ -63,8 +77,10 @@ export function generateBlockList(stxBlocks: (Block | NakamotoBlock)[], btcBlock
     {
       stxBlocks: [createBlockListStxBlock(firstStxBlock)],
       btcBlock: btcBlocksMap
-        ? createBlockListBtcBlock(firstStxBlock, firstBtcBlock)
-        : createBlockListBtcBlock(firstStxBlock, firstBtcBlock),
+        ? createBlockListBtcBlock(firstBtcBlock)
+        : firstBtcBlock
+          ? createBlockListBtcBlock(firstBtcBlock)
+          : createBlockListBtcBlockFromStxBlock(firstStxBlock),
     },
   ];
 
@@ -73,14 +89,16 @@ export function generateBlockList(stxBlocks: (Block | NakamotoBlock)[], btcBlock
   for (let i = 1; i < stxBlocks.length; i++) {
     const stxBlock = stxBlocks[i];
     const latestBtcBlock = blockList[blockList.length - 1].btcBlock;
-    const latesStxBlocks = blockList[blockList.length - 1].stxBlocks;
+    const latestStxBlocks = blockList[blockList.length - 1].stxBlocks;
     if (latestBtcBlock.hash === stxBlock.burn_block_hash) {
-      latesStxBlocks.push(createBlockListStxBlock(stxBlock));
+      latestStxBlocks.push(createBlockListStxBlock(stxBlock));
     } else {
       const btcBlock = btcBlocksMap[stxBlock.burn_block_hash];
       blockList.push({
         stxBlocks: [createBlockListStxBlock(stxBlock)],
-        btcBlock: createBlockListBtcBlock(stxBlock, btcBlock),
+        btcBlock: btcBlock
+          ? createBlockListBtcBlock(btcBlock)
+          : createBlockListBtcBlockFromStxBlock(stxBlock),
       });
     }
   }
