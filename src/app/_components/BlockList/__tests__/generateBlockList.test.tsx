@@ -2,6 +2,9 @@ import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import {
   BtcBlockMap,
+  createBlockListBtcBlock,
+  createBlockListBtcBlockFromStxBlock,
+  createBlockListStxBlock,
   generateBlockList,
 } from '../utils';
 
@@ -93,9 +96,12 @@ const btcBlocksMap: BtcBlockMap = {
   },
 };
 
-// Mock implementations for createBlockListStxBlock and createBlockListBtcBlock
 jest.mock('../utils', () => ({
-  createBlockListStxBlock: jest.fn(block => ({ ...block, transformed: true })),
+  ...jest.requireActual('../utils'),
+  createBlockListStxBlock: jest.fn(stxBlock => {
+    console.log('using mock createBlockListStxBlock');
+    return { ...stxBlock, transformed: true };
+  }),
   createBlockListBtcBlock: jest.fn(btcBlock => ({ ...btcBlock, transformed: true })),
   createBlockListBtcBlockFromStxBlock: jest.fn(stxBlock => ({ ...stxBlock, transformed: true })),
 }));
