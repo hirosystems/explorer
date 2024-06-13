@@ -327,8 +327,8 @@ export function SignersMap({
   );
 
   const mapUrl = useColorModeValue(
-    'https://api.mapbox.com/styles/v1/nbarnett26/clx1zj9jn07iw01nx9hqm4f7r/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q',
-    'https://api.mapbox.com/styles/v1/nbarnett26/clx2d7zbu02ex01qmd80k5nmi/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmJhcm5ldHQyNiIsImEiOiJjbHgxend0NjcwY2JoMnJxMWVoMzc5aXE2In0.ZYDrw3nKDZ4qK673fAxk_Q'
+    'https://api.mapbox.com/styles/v1/hirodevops/clxdkx7fd005q01qm005n87ce/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGlyb2Rldm9wcyIsImEiOiJjbHhka3pjcnEwNzN5MnBwb2V5OThmZnI1In0.heTDCQlm2ukAytME9J0CRA',
+    'https://api.mapbox.com/styles/v1/hirodevops/clxdkyqza004k01qk4ogagsvj/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGlyb2Rldm9wcyIsImEiOiJjbHhka3pjcnEwNzN5MnBwb2V5OThmZnI1In0.heTDCQlm2ukAytME9J0CRA'
   );
   const mapContainerBackgroundColor = useColorModeValue(
     'var(--stacks-colors-slate-100)',

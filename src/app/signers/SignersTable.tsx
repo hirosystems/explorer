@@ -46,7 +46,7 @@ export const SignersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}}>
+  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -143,7 +143,7 @@ const SignerTableRow = ({
                 fontSize="sm"
                 color="textSubdued"
               >
-                {truncateMiddle(stacker.stacker_address)}
+                {truncateMiddle(stacker.stacker_address, 5, 5)}
               </AddressLink>
               {index < stackers.length - 1 && (
                 <Text color="textSubdued" fontSize="sm">
