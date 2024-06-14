@@ -63,37 +63,6 @@ export function PageWrapper({
   return (
     <>
       <IncidentsStatusBarWithErrorBoundary />
-      <StatusBarBase
-        impact={IncidentImpact.None}
-        content={
-          <Flex>
-            <Text
-              color={getColor(IncidentImpact.None)}
-              fontWeight={'medium'}
-              fontSize={'14px'}
-              lineHeight={'1.5'}
-              display={'inline'}
-            >
-              <Text fontWeight={'bold'} display={'inline'}>
-                Testnet Update:
-              </Text>{' '}
-              The Primary Stacks Testnet is reset and now live on Bitcoin Regtest. More details{' '}
-              <TextLink
-                href="https://docs.stacks.co/nakamoto-upgrade/nakamoto-and-primary-testnet"
-                target="_blank"
-                css={css`
-                  display: inline;
-                  text-decoration: underline;
-                `}
-              >
-                here
-              </TextLink>
-              .
-            </Text>
-            &nbsp;
-          </Flex>
-        }
-      />
       <NakamotoModal />
       <WrapperWithBg>
         <Flex mx="auto" width="full" maxWidth="container.xl" flexDirection="column" p={6}>
