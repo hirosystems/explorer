@@ -6,10 +6,6 @@ import React, { PropsWithChildren } from 'react';
 import { Provider } from 'react-redux';
 
 import {
-  statusBarSlice,
-  initialState as statusBarSliceInitialState,
-} from '../../../app/_components/StatusBar/status-bar-slice';
-import {
   sandboxSlice,
   initialState as sandboxSliceInitialState,
 } from '../../../app/sandbox/sandbox-slice';
@@ -50,7 +46,6 @@ export function renderWithReduxProviders(
         (acc, filterType) => ({ ...acc, [filterType]: filterSliceInitialState }),
         {} as TxFilters
       ),
-      statusBar: statusBarSliceInitialState,
     },
     store = configureStore({
       reducer: {
@@ -58,7 +53,6 @@ export function renderWithReduxProviders(
         search: searchSlice.reducer,
         connect: sandboxSlice.reducer,
         activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
-        statusBar: statusBarSlice.reducer,
         ...filterAndSortReducers,
       },
       preloadedState,

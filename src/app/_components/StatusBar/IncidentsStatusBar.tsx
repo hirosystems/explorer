@@ -1,94 +1,59 @@
+import { useColorModeValue } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { useEffect, useRef } from 'react';
-import { IncidentImpact } from 'statuspage.io';
+import { useRef } from 'react';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedIncidents';
-import { useAppDispatch } from '../../../common/state/hooks';
-import { Flex } from '../../../ui/Flex';
+import { Flex, FlexProps } from '../../../ui/Flex';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
+import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { StatusBarBase } from './StatusBarBase';
-import { setStatusBar, setStatusBarHeight } from './status-bar-slice';
 import { getColor } from './utils';
 
-const incidentImpactSeverity: Record<IncidentImpact, number> = {
-  [IncidentImpact.None]: 0,
-  [IncidentImpact.Minor]: 1,
-  [IncidentImpact.Major]: 2,
-  [IncidentImpact.Critical]: 3,
-};
-
-export function IncidentsStatusBar() {
+export function IncidentsStatusBar(props: FlexProps) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
-  const { data: unresolvedIncidentsResponse } = useUnresolvedIncidents();
-  const dispatch = useAppDispatch();
+  const { data: unresolvedIncidentsResponse, isFetching } = useUnresolvedIncidents();
   const incidents = unresolvedIncidentsResponse?.incidents;
-  const allIncidents = incidents ? incidents?.map(({ name }) => name).join(' - ') : undefined;
-  const highestImpact = incidents
-    ? incidents.reduce(
-        (acc, { impact }) =>
-          incidentImpactSeverity[impact] > incidentImpactSeverity[acc] ? impact : acc,
-        IncidentImpact.None
-      )
-    : IncidentImpact.None;
-  const incidentImpact = highestImpact != null && highestImpact !== IncidentImpact.None;
-
   const statusBarRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (allIncidents || incidentImpact) {
-      dispatch(setStatusBarHeight(statusBarRef.current?.clientHeight || 0));
-      dispatch(setStatusBar(true));
-    }
-  }, [allIncidents, incidentImpact, dispatch]);
-
-  if (!incidentImpact || !allIncidents) return null;
-
-  const isTestnetUpdate = allIncidents.includes('Testnet Update:');
-
-  if (isTestnetUpdate && !isTestnet) return null;
+  const colorMode = useColorMode().colorMode;
 
   return (
-    <StatusBarBase
-      ref={statusBarRef}
-      impact={highestImpact}
-      content={
-        <Flex>
-          <Text
-            color={getColor(highestImpact)}
-            fontWeight={'medium'}
-            fontSize={'14px'}
-            lineHeight={'1.5'}
-            display={'inline'}
-          >
-            {allIncidents}
-            {allIncidents.endsWith('.') ? '' : '.'}
-            <Text
-              fontWeight={400}
-              fontSize={'14px'}
-              color={'#000000'}
-              lineHeight={'1.5'}
-              display={'inline'}
-            >
-              {' '}
-              More information on the{' '}
-              <TextLink
-                href="https://status.hiro.so/"
-                target="_blank"
-                css={css`
-                  display: inline;
-                  text-decoration: underline;
-                `}
-              >
-                Hiro status page
-              </TextLink>
-              .
-            </Text>
-          </Text>
-          &nbsp;
-        </Flex>
-      }
-    />
+    <Flex direction={'column'} {...props}>
+      {incidents?.map(({ name, impact }) => {
+        const isTestnetUpdate = name.includes('Testnet Update:');
+        if (isTestnetUpdate && !isTestnet) return null;
+        return (
+          <StatusBarBase
+            ref={statusBarRef}
+            impact={impact}
+            content={
+              <Flex direction={'column'} gap={'8px'} flexGrow={1}>
+                <Text fontSize={'xs'} display={'inline'}>
+                  {name}
+                  {name.endsWith('.') ? '' : '.'}
+                  <Text fontSize={'xs'} display={'inline'}>
+                    {' '}
+                    More information on the{' '}
+                    <TextLink
+                      href="https://status.hiro.so/"
+                      target="_blank"
+                      color={getColor(impact, colorMode)}
+                      css={css`
+                        display: inline;
+                        text-decoration: underline;
+                      `}
+                    >
+                      Hiro status page
+                    </TextLink>
+                    .
+                  </Text>
+                </Text>
+              </Flex>
+            }
+          />
+        );
+      })}
+    </Flex>
   );
 }
