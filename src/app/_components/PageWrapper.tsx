@@ -1,22 +1,23 @@
 'use client';
 
 import { useColorModeValue } from '@chakra-ui/react';
-import { css } from '@emotion/react';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { ReactNode } from 'react';
-import { IncidentImpact } from 'statuspage.io';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { NakamotoModal } from '../../common/components/modals/Nakamoto';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
+import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
+import { getRichTextRenderOptions } from '../../common/utils/getRichTextRenderOptions';
 import { Flex } from '../../ui/Flex';
-import { Text } from '../../ui/Text';
-import { TextLink } from '../../ui/TextLink';
+import { useColorMode } from '../../ui/hooks/useColorMode';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
+import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { StatusBarBase } from './StatusBar/StatusBarBase';
-import { getColor } from './StatusBar/utils';
 
 function WrapperWithBg({ children }: { children: ReactNode }) {
   return (
@@ -56,13 +57,32 @@ function WrapperWithBg({ children }: { children: ReactNode }) {
 export function PageWrapper({
   tokenPrice,
   children,
+  statusBarContent,
 }: {
   tokenPrice: TokenPrice;
   children: ReactNode;
+  statusBarContent: IncidentContent;
 }) {
+  const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
+  const incidentsToShow = statusBarContent?.items?.filter(
+    alert => (alert.fields.showOnTestnet && isTestnet) || (alert.fields.showOnMainnet && !isTestnet)
+  );
+
+  const statusBarBg = useColorModeValue('black', 'white');
+  const colorMode = useColorMode().colorMode;
+
   return (
     <>
-      <IncidentsStatusBarWithErrorBoundary />
+      <Flex
+        direction={'column'}
+        width={'100%'}
+        top={'0'}
+        backdropFilter={'blur(10px)'}
+        background={statusBarBg}
+      >
+        <IncidentsStatusBarWithErrorBoundary />
+        <CMSStatusBars statusBarContent={statusBarContent} />
+      </Flex>
       <NakamotoModal />
       <WrapperWithBg>
         <Flex mx="auto" width="full" maxWidth="container.xl" flexDirection="column" p={6}>

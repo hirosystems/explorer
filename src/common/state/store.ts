@@ -2,7 +2,6 @@
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { StatusBarState, statusBarSlice } from '../../app/_components/StatusBar/status-bar-slice';
 import { ConnectState, sandboxSlice } from '../../app/sandbox/sandbox-slice';
 import { SearchState, searchSlice } from '../../features/search/search-slice';
 import {
@@ -21,7 +20,6 @@ const rootReducer = combineReducers({
   connect: sandboxSlice.reducer,
   ...filterAndSortReducers,
   activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
-  statusBar: statusBarSlice.reducer,
 });
 
 export const makeStore = () =>
@@ -44,7 +42,6 @@ export interface RootState extends TxFilters {
   search: SearchState;
   connect: ConnectState;
   activeTransactionValueFilter: TransactionValueFilterState;
-  statusBar: StatusBarState;
 }
 
 export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];

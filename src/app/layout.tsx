@@ -7,6 +7,7 @@ import { meta } from '../common/constants/meta';
 import { GlobalContextProvider } from '../common/context/GlobalContextProvider';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
+import { getStatusBarContent } from './getStatusBarContent';
 import { getTokenPrice } from './getTokenPriceInfo';
 import './global.css';
 
@@ -17,12 +18,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const headersList = headers();
   const tokenPrice = await getTokenPrice();
+  const statusBarContent = await getStatusBarContent();
   return (
     <html lang="en">
       <body>
         <GlobalContextProvider headerCookies={headersList.get('cookie')}>
           <Providers headerCookies={headersList.get('cookie')}>
-            <PageWrapper tokenPrice={tokenPrice}>{children}</PageWrapper>
+            <PageWrapper tokenPrice={tokenPrice} statusBarContent={statusBarContent}>
+              {children}
+            </PageWrapper>
           </Providers>
         </GlobalContextProvider>
       </body>

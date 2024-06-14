@@ -1,47 +1,39 @@
-import { Warning, WarningCircle } from '@phosphor-icons/react';
+import { useColorModeValue } from '@chakra-ui/react';
+import { Info, Warning } from '@phosphor-icons/react';
 import { ReactNode, forwardRef } from 'react';
 import { IncidentImpact } from 'statuspage.io';
 
 import { PAGE_MAX_WIDTH } from '../../../common/constants/constants';
-import { Box } from '../../../ui/Box';
+import { Box, BoxProps } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
+import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { getColor } from './utils';
 
 export const StatusBarBase = forwardRef<
   HTMLDivElement,
-  { impact: IncidentImpact; content: ReactNode }
->(({ content, impact }, ref) => {
+  { impact: IncidentImpact; content: ReactNode } & Omit<BoxProps, 'content'>
+>(({ content, impact, ...boxProps }, ref) => {
+  const colorMode = useColorMode().colorMode;
+  const textColor = useColorModeValue('slate.50', 'slate.900');
+  const borderColor = useColorModeValue('slate.850', 'slate.250');
   const icon =
-    impact === IncidentImpact.Critical ? (
-      <Icon as={WarningCircle} color={getColor(impact)} />
-    ) : impact === IncidentImpact.None ? null : (
-      <Icon as={Warning} color={getColor(impact)} />
+    !impact || impact === IncidentImpact.None ? (
+      <Icon as={Info} color={getColor(impact, colorMode)} />
+    ) : (
+      <Icon as={Warning} color={getColor(impact, colorMode)} />
     );
   return (
-    <Box
-      position={'sticky'}
-      width={'100%'}
-      top={'0'}
-      backdropFilter={'blur(10px)'}
-      zIndex={'banner'}
-      ref={ref}
-    >
-      <Box
-        width={'100%'}
-        background={'rgba(255, 255, 255, 0.8)'}
-        display={'flex'}
-        alignItems={'center'}
-        justifyContent={'center'}
-        padding={'20px 0'}
-      >
+    <Box ref={ref} borderTop={`1px`} borderColor={borderColor} py={3} {...boxProps}>
+      <Box width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
         <Flex
-          width={'100%'}
           maxWidth={PAGE_MAX_WIDTH}
           padding={'0 32px'}
           alignItems={'center'}
           justifyContent={'center'}
-          gap={'20px'}
+          gap={1.5}
+          color={textColor}
+          fontWeight={'medium'}
         >
           {icon}
           {content}

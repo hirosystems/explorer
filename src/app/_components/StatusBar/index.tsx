@@ -2,6 +2,8 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import { FlexProps } from '../../../ui/Flex';
+
 const renderLoadingComponent = () => null;
 const renderErrorComponent = () => null;
 
@@ -13,7 +15,7 @@ const IncidentsStatusBar = dynamic(
   }
 );
 
-export const IncidentsStatusBarWithErrorBoundary = () => (
+export const IncidentsStatusBarWithErrorBoundary = (props: FlexProps) => (
   <QueryErrorResetBoundary>
     {({ reset }) => (
       <ErrorBoundary
@@ -23,7 +25,7 @@ export const IncidentsStatusBarWithErrorBoundary = () => (
         }}
         onReset={reset}
       >
-        <IncidentsStatusBar />
+        <IncidentsStatusBar {...props} />
       </ErrorBoundary>
     )}
   </QueryErrorResetBoundary>

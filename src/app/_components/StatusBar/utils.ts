@@ -1,14 +1,13 @@
 import { IncidentImpact } from 'statuspage.io';
 
-export const getColor = (incidentImpact: IncidentImpact) => {
+export const getColor = (incidentImpact: IncidentImpact, colorMode: string) => {
   switch (incidentImpact) {
     case IncidentImpact.Critical:
-      return 'red.600';
     case IncidentImpact.Major:
-      return 'orange.600';
+      return colorMode === 'light' ? 'red.500' : 'red.600';
     case IncidentImpact.Minor:
-      return 'green.600';
+      return colorMode === 'light' ? 'orange.500' : 'orange.600';
+    default:
+      return colorMode === 'light' ? 'purple.400' : 'purple.600';
   }
-
-  return 'slate.850';
 };
