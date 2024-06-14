@@ -1,3 +1,10 @@
+# [1.184.0](https://github.com/hirosystems/explorer/compare/v1.183.1...v1.184.0) (2024-06-14)
+
+
+### Features
+
+* remove testnet status bar ([107747a](https://github.com/hirosystems/explorer/commit/107747ab5ea4954510cb966962e109ed4ac3289e))
+
 ## [1.183.1](https://github.com/hirosystems/explorer/compare/v1.183.0...v1.183.1) (2024-06-13)
 
 
