@@ -69,7 +69,7 @@ export function UpdateBarBase({
         display={'inline'}
         style={getFadeAnimationStyle(isBlockListLoading)}
       >
-        {latestBlocksCount ? latestBlocksCount : `${last_24h} Stacks blocks mined per sec.`}
+        {latestBlocksCount ? latestBlocksCount : `Avg. block time: ${last_24h}s`}
       </Text>
       <Button variant="text" onClick={update}>
         <Flex alignItems={'center'} gap={1.5}>
