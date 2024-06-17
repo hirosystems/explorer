@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownLeft } from '@phosphor-icons/react';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
@@ -282,7 +282,6 @@ function StxBlocksGrid({
   );
 }
 
-// Ironic name for a component that is supposedly ungrouped...
 function StxBlocksGroupedByBtcBlock({
   blockList,
   stxBlocksLimit,
@@ -296,12 +295,17 @@ function StxBlocksGroupedByBtcBlock({
 }) {
   const btcBlock = blockList.btcBlock;
   const stxBlocks = blockList.stxBlocks;
-  const unaccountedStxBlocks = stxBlocks.length - btcBlock.blockCount;
-  const blocksCount = isFirst ? btcBlock.blockCount + unaccountedStxBlocks : btcBlock.blockCount;
-  const numStxBlocksNotDisplayed = blocksCount - (stxBlocksLimit || 0);
-  const displayedStxBlocks = stxBlocksLimit
-    ? blockList.stxBlocks.slice(0, stxBlocksLimit)
-    : blockList.stxBlocks;
+  const unaccountedStxBlocks = btcBlock.blockCount ? stxBlocks.length - btcBlock.blockCount : 0;
+  const blocksCount = btcBlock.blockCount
+    ? isFirst
+      ? btcBlock.blockCount + unaccountedStxBlocks
+      : btcBlock.blockCount
+    : undefined;
+  const numStxBlocksNotDisplayed = blocksCount ? blocksCount - (stxBlocksLimit || 0) : 0;
+  const displayedStxBlocks = useMemo(
+    () => (stxBlocksLimit ? blockList.stxBlocks.slice(0, stxBlocksLimit) : blockList.stxBlocks),
+    [blockList.stxBlocks, stxBlocksLimit]
+  );
 
   return (
     <Box mt={4}>
