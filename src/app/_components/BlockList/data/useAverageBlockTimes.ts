@@ -1,5 +1,6 @@
-import { useApi } from '@/common/api/useApi';
 import { UseSuspenseQueryResult, useSuspenseQuery } from '@tanstack/react-query';
+
+import { useApi } from '../../../../common/api/useApi';
 
 const AVERAGE_BLOCK_TIMES_QUERY_KEY = '/extended/v2/blocks/average-times';
 
