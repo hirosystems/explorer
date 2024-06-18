@@ -1,3 +1,10 @@
+## [1.184.1](https://github.com/hirosystems/explorer/compare/v1.184.0...v1.184.1) (2024-06-18)
+
+
+### Bug Fixes
+
+* remove tx events duplicate ([584baf8](https://github.com/hirosystems/explorer/commit/584baf82cbf5c28c4bf7a7b1c878918eff3d5139))
+
 # [1.184.0](https://github.com/hirosystems/explorer/compare/v1.183.1...v1.184.0) (2024-06-14)
 
 
