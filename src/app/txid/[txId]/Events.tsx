@@ -268,9 +268,6 @@ export const Events: FC<EventsProps> = ({ tx }) => {
   return (
     <Section title="Events">
       <>
-        {tx.events.map((event, index) => (
-          <Item key={index} event={event} />
-        ))}
         {data?.pages.map(page => (
           <Fragment key={page.offset}>
             {page?.results.map((event, index) => <Item key={index} event={event} />)}
