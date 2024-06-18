@@ -1,3 +1,28 @@
+# [1.185.0](https://github.com/hirosystems/explorer/compare/v1.184.1...v1.185.0) (2024-06-18)
+
+
+### Bug Fixes
+
+* **blocklist:** added last 24 hr avg block time ([65a22af](https://github.com/hirosystems/explorer/commit/65a22afa02bc9bc254b91b4062040756c0f67fe3))
+* **blocklist:** added test ([7f8f982](https://github.com/hirosystems/explorer/commit/7f8f98228eaab94ffae9410afc6da5be543521a9))
+* **blocklist:** cleaning pr ([58b71fe](https://github.com/hirosystems/explorer/commit/58b71fe30d283a4549680ae3e5ce58d98d043fbc))
+* **blocklist:** cleaning pr ([b2fdd66](https://github.com/hirosystems/explorer/commit/b2fdd665614cee0babf1ef516b27da4b57c19698))
+* **blocklist:** fix block time text ([fe45771](https://github.com/hirosystems/explorer/commit/fe45771e46c4c1cae1815de455a635bffe9500cb))
+* **blocklist:** fix test ([8247ab9](https://github.com/hirosystems/explorer/commit/8247ab935bf9a7605289dae4b56d8b402e79bce4))
+* **blocklist:** fixing build issue ([f79b7dc](https://github.com/hirosystems/explorer/commit/f79b7dcc2525509290d764531ad1d8d9c22ca222))
+* **blocklist:** fixing build issue ([2ba2e02](https://github.com/hirosystems/explorer/commit/2ba2e02f3f1716a5dedb46d34bd12b1cc2b21657))
+* **blocklist:** getting data now ([5d9b03b](https://github.com/hirosystems/explorer/commit/5d9b03b02dad3219aad702bff735d208e4798496))
+* **blocklist:** handle needing to query for btc block ([75c14e7](https://github.com/hirosystems/explorer/commit/75c14e7c9ce3a1ecda83a6371acd3e6df59b75cd))
+* **blocklist:** work in progress ([6495987](https://github.com/hirosystems/explorer/commit/6495987dbf30980ab61de02e3ac50c304a2b1b19))
+* **blocklist:** work in progress ([0c90087](https://github.com/hirosystems/explorer/commit/0c900872c8cf67a88e56bc78cc5fc282a9b93888))
+* **blocklist:** work in progress ([a4a0b22](https://github.com/hirosystems/explorer/commit/a4a0b22aefaa01960e2be77197c0c98aa7475d7a))
+* **blocklist:** work in progress ([7ea9099](https://github.com/hirosystems/explorer/commit/7ea9099cc0cb470503c0a232827dce404cf05132))
+
+
+### Features
+
+* **signers-map2:** fixing build ([bc4ecc1](https://github.com/hirosystems/explorer/commit/bc4ecc1bd3de15872edbefd3dd39decf90b1f31f))
+
 ## [1.184.1](https://github.com/hirosystems/explorer/compare/v1.184.0...v1.184.1) (2024-06-18)
 
 
