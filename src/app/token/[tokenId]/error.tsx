@@ -1,11 +1,10 @@
 'use client';
 
-import * as React from 'react';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../../../common/components/ErrorMessageLayout';
 import { Section } from '../../../common/components/Section';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useError } from '../../../common/hooks/useError';
 import { ExplorerError } from '../../../common/types/Error';
 import { buildUrl } from '../../../common/utils/buildUrl';

@@ -3,11 +3,11 @@
 import { List, User } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Circle } from '../../common/components/Circle';
 import { Section } from '../../common/components/Section';
-import { useGlobalContext } from '../../common/context/useAppContext';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { useAppDispatch, useAppSelector } from '../../common/state/hooks';
 import { getQueryParams } from '../../common/utils/buildUrl';
 import { Button } from '../../ui/Button';

@@ -9,7 +9,7 @@ import { Section } from '../../../../common/components/Section';
 import { TxIcon } from '../../../../common/components/TxIcon';
 import { ArrowLeftIcon } from '../../../../common/components/icons/arrow-left';
 import { FungibleTokenIcon } from '../../../../common/components/icons/fungible-token';
-import { useGlobalContext } from '../../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useAppSelector } from '../../../../common/state/hooks';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { buildUrl } from '../../../../common/utils/buildUrl';

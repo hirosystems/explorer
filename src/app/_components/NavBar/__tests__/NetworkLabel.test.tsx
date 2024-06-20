@@ -3,12 +3,12 @@ import { fireEvent, render } from '@testing-library/react';
 
 import { ChainID } from '@stacks/transactions';
 
-import { useGlobalContext } from '../../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { Network, NetworkModes } from '../../../../common/types/network';
 import { useBreakpointValue } from '../../../../ui/hooks/useBreakpointValue';
 import { NetworkLabel } from '../NetworkLabel';
 
-jest.mock('../../../../common/context/useAppContext', () => ({
+jest.mock('../../../../common/context/useGlobalContext', () => ({
   useGlobalContext: jest.fn().mockReturnValue({
     activeNetwork: { url: 'testUrl' },
     removeCustomNetwork: jest.fn(),

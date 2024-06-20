@@ -2,8 +2,8 @@ import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { AddressLink, TxLink } from '../../../../common/components/ExplorerLinks';
 import { Value } from '../../../../common/components/Value';
-import { useGlobalContext } from '../../../../common/context/useAppContext';
-import { isJSONString, microToStacksFormatted } from '../../../../common/utils/utils';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
+import { microToStacksFormatted } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { HStack } from '../../../../ui/HStack';
 import { TextLink } from '../../../../ui/TextLink';

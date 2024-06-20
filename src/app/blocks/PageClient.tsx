@@ -3,7 +3,7 @@
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
-import { useGlobalContext } from '../../common/context/useAppContext';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { NetworkModes } from '../../common/types/network';
 import {
   BlockPageHeadersSkeleton,

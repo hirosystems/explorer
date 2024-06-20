@@ -1,7 +1,7 @@
 // Add missing import statement
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { TEN_MINUTES, TWO_MINUTES } from '../../../common/queries/query-stale-time';
 
 const SIGNER_ADDRESSES_QUERY_KEY = 'signer-addresses';

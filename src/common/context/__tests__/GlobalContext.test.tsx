@@ -8,7 +8,7 @@ import {
   NetworkModeBtcBlockBaseUrlMap,
   NetworkModeBtcTxBaseUrlMap,
 } from '../../constants/network';
-import { AppContextProvider, GlobalContext } from '../GlobalContext';
+import { GloablContext, GlobalContextProvider } from '../GlobalContextProvider';
 
 const useSearchParams = useSearchParamsActual as jest.MockedFunction<typeof useSearchParamsActual>;
 
@@ -33,7 +33,7 @@ jest.mock('../../components/modals/AddNetwork/utils', () => ({
 const customApiUrl = 'https://my-custom-api-url.com/something';
 
 const GlobalContextTestComponent = () => {
-  const { activeNetwork, networks } = useContext(GlobalContext);
+  const { activeNetwork, networks } = useContext(GloablContext);
   return (
     <div>
       <div>Global Context Test</div>
@@ -64,7 +64,7 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <AppContextProvider
+      <GlobalContextProvider
         headerCookies={''}
         apiUrls={apiUrls}
         btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
@@ -72,7 +72,7 @@ describe('GlobalContext', () => {
         btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
       >
         <GlobalContextTestComponent />
-      </AppContextProvider>
+      </GlobalContextProvider>
     );
 
     expect(screen.getByText('Global Context Test')).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <AppContextProvider
+      <GlobalContextProvider
         headerCookies={''}
         apiUrls={apiUrls}
         btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
@@ -95,7 +95,7 @@ describe('GlobalContext', () => {
         btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
       >
         <GlobalContextTestComponent />
-      </AppContextProvider>
+      </GlobalContextProvider>
     );
 
     const networks = getContextField('networks');

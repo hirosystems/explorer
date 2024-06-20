@@ -3,7 +3,7 @@
 import { forwardRef } from '@chakra-ui/react';
 
 import { Link, LinkProps } from '../../ui/Link';
-import { useGlobalContext } from '../context/useAppContext';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { buildUrl } from '../utils/buildUrl';
 
 export const ExplorerLink = forwardRef<LinkProps & { openInNewTab?: boolean }, 'a'>(

@@ -4,14 +4,14 @@ import { useColorMode } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { ArrowRight, CheckCircle, WarningCircle } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import { Block as BlockType } from '@stacks/stacks-blockchain-api-types/generated';
 
 import { Circle } from '../../../common/components/Circle';
 import { Section } from '../../../common/components/Section';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Box } from '../../../ui/Box';

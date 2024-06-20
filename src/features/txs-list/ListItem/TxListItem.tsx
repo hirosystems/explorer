@@ -28,7 +28,7 @@ const Icon: FC<{ tx: Transaction }> = memo(({ tx }) => (
 ));
 
 const LeftTitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
-  <Text whiteSpace="nowrap">
+  <Text whiteSpace="nowrap" height={6}>
     <TxTitle tx={tx} showPrice={true} />
   </Text>
 ));
@@ -59,6 +59,8 @@ const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
       divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
       flexWrap="wrap"
       gap={1.5}
+      alignItems="center"
+      height={6}
     >
       <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
       <TxTimestamp tx={tx} />

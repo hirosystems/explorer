@@ -4,7 +4,7 @@ import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
 
-import { useGlobalContext } from '../../common/context/useAppContext';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { Button } from '../../ui/Button';
 import { Checkbox, CheckboxProps } from '../../ui/Checkbox';
 import { HStack } from '../../ui/HStack';

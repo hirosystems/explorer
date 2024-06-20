@@ -8,7 +8,7 @@ import {
   MempoolTransaction,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useAccountBalance } from '../../../common/queries/useAccountBalance';
 import { useAddressConfirmedTxsWithTransfersInfinite } from '../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';

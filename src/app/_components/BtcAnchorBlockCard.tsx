@@ -4,7 +4,7 @@ import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { KeyValueVertical } from '../../common/components/KeyValueVertical';
 import { Section } from '../../common/components/Section';
-import { useGlobalContext } from '../../common/context/useAppContext';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { TextLink } from '../../ui/TextLink';

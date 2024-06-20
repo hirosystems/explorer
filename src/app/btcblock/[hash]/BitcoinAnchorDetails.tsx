@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { useParamsBlockHash } from '../../../app/block/[hash]/useParamsBlockHash';
 import { KeyValueVertical } from '../../../common/components/KeyValueVertical';
 import { Section } from '../../../common/components/Section';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';

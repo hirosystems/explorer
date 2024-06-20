@@ -6,7 +6,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { getTxTypeIcon } from '../../../common/components/TxIcon';
 import { TransactionType } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { getTxTitle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';

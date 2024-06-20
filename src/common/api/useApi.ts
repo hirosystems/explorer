@@ -2,7 +2,7 @@
 
 import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client';
 
-import { useGlobalContext } from '../context/useAppContext';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { apiClients, createConfig } from './client';
 
 export const useApi = () => {

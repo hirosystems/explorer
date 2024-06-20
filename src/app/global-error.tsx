@@ -1,16 +1,12 @@
 'use client';
 
-import * as React from 'react';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
 import { Section } from '../common/components/Section';
-import { useGlobalContext } from '../common/context/useAppContext';
-import { buildUrl } from '../common/utils/buildUrl';
+import { useGlobalContext } from '../common/context/useGlobalContext';
 import { Box } from '../ui/Box';
-import { ButtonLink } from '../ui/ButtonLink';
 import { Grid } from '../ui/Grid';
-import { Stack } from '../ui/Stack';
 
 export default function Error({
   error,

@@ -1,12 +1,12 @@
 import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
-import React, { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { ChainID } from '@stacks/transactions';
 
 import { Badge } from '../../../common/components/Badge';
 import { DEFAULT_DEVNET_SERVER } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useCustomNetworkApiInfo } from '../../../common/queries/useCustomNetworkApiInfo';
 import { Network } from '../../../common/types/network';
 import { buildUrl } from '../../../common/utils/buildUrl';
@@ -51,6 +51,16 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
   const greenBadgeColor = useColorModeValue('green.600', 'green.300');
   const greenBadgeBg = useColorModeValue('green.100', 'green.900');
   const badgeBorder = useColorModeValue('purple.300', 'purple.700');
+
+  const isNetworkRemovable = useMemo(
+    () =>
+      network.isCustomNetwork &&
+      !isDevnet &&
+      !isActive &&
+      !network.label.includes('Nakamoto') &&
+      network.label !== 'https://api.nakamoto.testnet.hiro.so',
+    [network.isCustomNetwork, isDevnet, isActive, network.label]
+  );
 
   return (
     <Flex
@@ -119,11 +129,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
           <Spinner size="18px" opacity={0.5} color={'#666'} data-testid="spinner" />
         ) : !!error ? (
           <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
-        ) : network.isCustomNetwork &&
-          !isDevnet &&
-          !isActive &&
-          !network.label.includes('Nakamoto') &&
-          network.label !== 'https://api.nakamoto.testnet.hiro.so' ? (
+        ) : isNetworkRemovable ? (
           <Tooltip label="Remove network">
             <IconButton
               disabled={isDisabled}

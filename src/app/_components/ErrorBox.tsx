@@ -1,7 +1,6 @@
 import { XCircle } from '@phosphor-icons/react';
-import * as React from 'react';
 
-import { useGlobalContext } from '../../common/context/useAppContext';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { Button } from '../../ui/Button';
 import { ButtonLink } from '../../ui/ButtonLink';

@@ -1,5 +1,4 @@
 import { ArrowDownRight } from '@phosphor-icons/react';
-import * as React from 'react';
 import { FC } from 'react';
 
 import {
@@ -9,8 +8,8 @@ import {
 
 import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
-import { Box } from '../../../../ui/Box';
 import { HStack } from '../../../../ui/HStack';
+import { Icon } from '../../../../ui/Icon';
 
 export const Recipient: FC<{ tx: TokenTransferTransaction | MempoolTokenTransferTransaction }> = ({
   tx,
@@ -19,9 +18,7 @@ export const Recipient: FC<{ tx: TokenTransferTransaction | MempoolTokenTransfer
     label={'Recipient'}
     value={
       <HStack>
-        <Box>
-          <ArrowDownRight size={4} />
-        </Box>
+        <Icon as={ArrowDownRight} size={4} />
         <ExplorerLink
           fontSize={'14px'}
           fontWeight={'medium'}

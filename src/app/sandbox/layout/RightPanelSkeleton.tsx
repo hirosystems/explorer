@@ -14,6 +14,7 @@ export function RightPanelSkeleton() {
       width={96}
       height={'full'}
       p={7}
+      overflow="hidden"
     >
       <SkeletonText noOfLines={50} spacing={4} />
     </Card>

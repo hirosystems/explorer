@@ -64,19 +64,19 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Atom size={5} />
+              <Icon as={Atom} size={5} />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.variables || []} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <ListChecks size={5} />
+              <Icon as={ListChecks} size={5} />
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.maps || []} label="map" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <CirclesFour size={5} />
+              <Icon as={CirclesFour} size={5} />
             </Box>
             <PluralizedItem
               ml="8px"

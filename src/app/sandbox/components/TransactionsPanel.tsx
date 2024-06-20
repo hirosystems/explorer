@@ -11,7 +11,7 @@ import { Badge } from '../../../common/components/Badge';
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
 import { Section } from '../../../common/components/Section';
 import { InfoCircleIcon } from '../../../common/components/icons/info-circle';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useContractById } from '../../../common/queries/useContractById';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { buildUrl } from '../../../common/utils/buildUrl';

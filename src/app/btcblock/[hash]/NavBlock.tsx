@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';

@@ -1,12 +1,11 @@
 'use client';
 
 import dayjs from 'dayjs';
-import React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatus } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { AlertBase } from './Alert';

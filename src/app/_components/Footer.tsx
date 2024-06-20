@@ -5,7 +5,7 @@ import { FC } from 'react';
 
 import { PAGE_MAX_WIDTH } from '../../common/constants/constants';
 import { RELEASE_TAG_NAME } from '../../common/constants/env';
-import { useGlobalContext } from '../../common/context/useAppContext';
+import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';

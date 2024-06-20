@@ -1,4 +1,4 @@
-import { useGlobalContext } from '../context/useAppContext';
+import { useGlobalContext } from '../context/useGlobalContext';
 
 export function useIsNakamoto() {
   const activeNetworkUrl = useGlobalContext().activeNetworkKey;
