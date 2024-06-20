@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
 
-import { useGlobalContext } from '../../../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../../../common/utils/buildUrl';
 import { onPaste, validateStacksAddress } from '../../../../../common/utils/utils';
 import { Box } from '../../../../../ui/Box';

@@ -1,6 +1,6 @@
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
 
-import { useGlobalContext } from '../context/useAppContext';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { NetworkModes } from '../types/network';
 import { fetchWithApiKey } from '../utils/fetchWithApiKey';
 

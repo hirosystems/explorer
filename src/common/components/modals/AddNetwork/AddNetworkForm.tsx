@@ -3,8 +3,9 @@
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
+import { promiseWrapper } from '../../../../common/utils/utils';
 import { Accordion } from '../../../../ui/Accordion';
 import { AccordionButton } from '../../../../ui/AccordionButton';
 import { AccordionItem } from '../../../../ui/AccordionItem';
@@ -20,7 +21,7 @@ import { Input } from '../../../../ui/Input';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { NetworkIdModeMap } from '../../../constants/network';
-import { useGlobalContext } from '../../../context/useAppContext';
+import { useGlobalContext } from '../../../context/useGlobalContext';
 import { useAppDispatch } from '../../../state/hooks';
 import { Network } from '../../../types/network';
 import { getQueryParams } from '../../../utils/buildUrl';
@@ -143,7 +144,7 @@ export const AddNetworkForm: FC = () => {
             isCustomNetwork: true,
             isSubnet,
           };
-          void addCustomNetwork(network)
+          promiseWrapper(addCustomNetwork)(network)
             .then(() => router.push(`/${getQueryParams(network)}`))
             .then(() => setTimeout(() => window.location.reload(), 500));
         }

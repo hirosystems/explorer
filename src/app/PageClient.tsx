@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
-import { useGlobalContext } from '../common/context/useAppContext';
+import { useGlobalContext } from '../common/context/useGlobalContext';
 import { NetworkModes } from '../common/types/network';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';

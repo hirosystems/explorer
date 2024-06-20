@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { DropIcon } from '../../../common/components/icons/drop';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Icon } from '../../../ui/Icon';
 import { Stack, StackProps } from '../../../ui/Stack';

@@ -4,7 +4,7 @@ import { Flask } from '@phosphor-icons/react';
 import { FC } from 'react';
 
 import { Badge } from '../../../common/components/Badge';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { capitalize } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';

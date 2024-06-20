@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
 import { MODALS } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Network } from '../../../common/types/network';
 import { TokenPrice } from '../../../common/types/tokenPrice';

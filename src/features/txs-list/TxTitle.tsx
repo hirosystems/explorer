@@ -41,7 +41,7 @@ export const TxTitle = ({
       );
     case 'token_transfer':
       return (
-        <Flex flexDirection={['row']} alignItems={['center']} height={'1em'}>
+        <Flex flexDirection={['row']} alignItems={['center']}>
           <TxLink txId={tx.tx_id} openInNewTab={openInNewTab}>
             {microToStacksFormatted(tx.token_transfer.amount)} STX
           </TxLink>

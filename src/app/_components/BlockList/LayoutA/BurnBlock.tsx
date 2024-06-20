@@ -1,10 +1,9 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownLeft } from '@phosphor-icons/react';
-import * as React from 'react';
 import { memo } from 'react';
 
 import { Timestamp } from '../../../../common/components/Timestamp';
-import { useGlobalContext } from '../../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex, FlexProps } from '../../../../ui/Flex';

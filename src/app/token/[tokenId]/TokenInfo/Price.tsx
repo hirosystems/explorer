@@ -1,4 +1,3 @@
-import { useColorMode } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { Flex } from '../../../../ui/Flex';
@@ -13,7 +12,6 @@ export const Price: FC<
     currentPriceInBtc: number | null | undefined;
   }
 > = ({ currentPrice, priceChangePercentage24h, currentPriceInBtc, ...gridProps }) => {
-  const colorMode = useColorMode().colorMode;
   return (
     <StatSection
       title="Price"

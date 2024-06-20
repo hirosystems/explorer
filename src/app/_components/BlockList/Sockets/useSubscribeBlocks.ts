@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Block, StacksApiSocketClient } from '@stacks/blockchain-api-client';
 import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
 
-import { useGlobalContext } from '../../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 
 interface Subscription {
   unsubscribe(): void;

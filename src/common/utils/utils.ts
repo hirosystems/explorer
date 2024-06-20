@@ -343,3 +343,18 @@ export function removeTrailingSlash(url?: string) {
   if (!url) return '';
   return url.replace(/\/$/, '');
 }
+
+export function promiseWrapper<T, Args extends any[]>(
+  func: (...args: Args) => T | Promise<T>
+): (...args: Args) => Promise<T> {
+  return function (...args: Args): Promise<T> {
+    return new Promise((resolve, reject) => {
+      try {
+        const result = func(...args);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+}

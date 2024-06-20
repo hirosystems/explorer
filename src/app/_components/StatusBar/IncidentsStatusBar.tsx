@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import { useEffect, useRef } from 'react';
 import { IncidentImpact } from 'statuspage.io';
 
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedIncidents';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';

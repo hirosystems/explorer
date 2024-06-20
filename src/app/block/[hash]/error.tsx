@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
-import * as React from 'react';
 
 import { ErrorMessageLayout } from '../../../common/components/ErrorMessageLayout';
 import { Section } from '../../../common/components/Section';
-import { useGlobalContext } from '../../../common/context/useAppContext';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useError } from '../../../common/hooks/useError';
 import { ExplorerError } from '../../../common/types/Error';
 import { buildUrl } from '../../../common/utils/buildUrl';
@@ -14,7 +13,6 @@ import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
 import { HStack } from '../../../ui/HStack';
-import { Stack } from '../../../ui/Stack';
 import { PageTitle } from '../../_components/PageTitle';
 
 const defaultErrorMessage = 'Failed to fetch block';

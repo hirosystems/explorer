@@ -4,13 +4,7 @@ import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 
 import { meta } from '../common/constants/meta';
-import {
-  NetworkModeBtcAddressBaseUrlMap,
-  NetworkModeBtcBlockBaseUrlMap,
-  NetworkModeBtcTxBaseUrlMap,
-  NetworkModeUrlMap,
-} from '../common/constants/network';
-import { AppContextProvider } from '../common/context/GlobalContext';
+import { GlobalContextProvider } from '../common/context/GlobalContextProvider';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getTokenPrice } from './getTokenPriceInfo';
@@ -26,17 +20,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <AppContextProvider
-          headerCookies={headersList.get('cookie')}
-          apiUrls={NetworkModeUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
-          btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
-          btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
-          btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap} // TODO: why does this need to be in context? remove. make a function that returns these. network should be in redux not context
-        >
+        <GlobalContextProvider headerCookies={headersList.get('cookie')}>
           <Providers headerCookies={headersList.get('cookie')}>
             <PageWrapper tokenPrice={tokenPrice}>{children}</PageWrapper>
           </Providers>
-        </AppContextProvider>
+        </GlobalContextProvider>
       </body>
       <GoogleAnalytics gaId="G-NB2VBT0KY2" />
       <script

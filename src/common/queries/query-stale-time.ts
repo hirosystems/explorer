@@ -4,3 +4,4 @@ export const TWO_MINUTES = 2 * ONE_MINUTE;
 export const THREE_MINUTES = 3 * ONE_MINUTE;
 export const FIVE_MINUTES = 5 * ONE_MINUTE;
 export const TEN_MINUTES = 10 * ONE_MINUTE;
+export const ONE_HOUR = 60 * ONE_MINUTE;

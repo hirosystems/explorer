@@ -8,7 +8,7 @@ import { Icon } from '../../ui/Icon';
 import { TextLink } from '../../ui/TextLink';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import StxIcon from '../../ui/icons/StxIcon';
-import { useGlobalContext } from '../context/useAppContext';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { Circle } from './Circle';
 import { BlockLink } from './ExplorerLinks';
 
