@@ -8,13 +8,15 @@ import { TxListTabsBase } from './TxListTabsBase';
 export function TxListTabs({
   limit,
   showFilterButton,
+  showValueMenu,
   ...props
-}: { limit?: number; showFilterButton?: boolean } & FlexProps) {
+}: { limit?: number; showFilterButton?: boolean; showValueMenu?: boolean } & FlexProps) {
   return (
     <TxListTabsBase
       confirmedList={<ConfirmedTxsList limit={limit} />}
       mempoolList={<MempoolTxsList limit={limit} />}
       showFilterButton={showFilterButton}
+      showValueMenu={showValueMenu}
       {...props}
     />
   );
