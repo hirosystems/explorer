@@ -5,12 +5,12 @@ import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 
 export function LineAndNode({
-  rowHeight = 14,
-  width = 6,
+  rowHeight,
+  width,
   icon,
   isLast,
 }: {
-  rowHeight: number;
+  rowHeight: number | string;
   width: number;
   icon?: ReactNode;
   isLast?: boolean;
@@ -21,7 +21,7 @@ export function LineAndNode({
         <Flex
           justifyContent="center"
           alignItems="center"
-          height="calc(100% + 1px)"
+          height="calc(100% + 2px)"
           top={0}
           width="full"
           position="absolute"
@@ -34,7 +34,7 @@ export function LineAndNode({
           <Box // the little bit of line needed to connect the icon to the other lines with nodes
             position="absolute"
             bottom={0}
-            height="20%"
+            height={isLast ? '0%' : '20%'} // if it's the last line, don't draw the line at all
             width="1px"
             bg="borderPrimary"
             border="1px solid var(---stacks-colors-borderPrimary)"
@@ -43,7 +43,7 @@ export function LineAndNode({
       ) : (
         <Flex
           justifyContent="center"
-          height="calc(100% + 1px)"
+          height="calc(100% + 2px)"
           width="full"
           position="absolute"
           zIndex={0}

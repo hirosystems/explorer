@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useCallback, useRef } from 'react';
+import { ReactNode, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Stack } from '../../../../ui/Stack';
@@ -29,40 +29,67 @@ const HomePageBlockListUngroupedDynamic = dynamic(
   }
 );
 
+export function HomePageBlockListLayout({ children }: { children: ReactNode }) {
+  return (
+    <Section py={5} px={6}>
+      {children}
+    </Section>
+  );
+}
+
+export function HomePageControlsLayout({
+  liveUpdates,
+  children,
+}: {
+  liveUpdates?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <Stack gap={3} pb={6} marginX={-6} px={6} py={5} borderBottom={liveUpdates ? '1px' : 'none'}>
+      {children}
+    </Stack>
+  );
+}
+
 function HomePageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
 
   const lastClickTimeRef = useRef(0);
-  const toggleLiveUpdates = useCallback(() => {
-    const now = Date.now();
-    if (now - lastClickTimeRef.current > 2000) {
-      lastClickTimeRef.current = now;
-      setLiveUpdates(!liveUpdates);
-    }
-  }, [liveUpdates, setLiveUpdates]);
+  const toggleLiveUpdates = useCallback(
+    (immediately?: boolean) => {
+      const now = Date.now();
+      if (immediately || now - lastClickTimeRef.current > 2000) {
+        lastClickTimeRef.current = now;
+        setLiveUpdates(!liveUpdates);
+      }
+    },
+    [liveUpdates, setLiveUpdates]
+  );
 
   return (
-    <Section py={5} px={6}>
-      <Stack gap={3} pb={6} borderBottom={liveUpdates ? '1px' : 'none'} marginX={-6} px={6}>
+    <HomePageBlockListLayout>
+      <HomePageControlsLayout liveUpdates={liveUpdates}>
         <Text fontWeight="medium">Recent Blocks</Text>
         <Controls
           groupByBtc={{
             onChange: () => {
               setGroupedByBtc(!groupedByBtc);
+              if (liveUpdates) {
+                toggleLiveUpdates(true);
+              }
             },
             isChecked: groupedByBtc,
           }}
           liveUpdates={{
-            onChange: toggleLiveUpdates,
+            onChange: () => toggleLiveUpdates(),
             isChecked: liveUpdates,
           }}
           padding={0}
-          gap={3}
           border="none"
         />
-      </Stack>
+      </HomePageControlsLayout>
       {groupedByBtc ? <HomePageBlockListGroupedDynamic /> : <HomePageBlockListUngroupedDynamic />}
-    </Section>
+    </HomePageBlockListLayout>
   );
 }
 

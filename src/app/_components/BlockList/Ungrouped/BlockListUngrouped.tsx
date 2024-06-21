@@ -1,5 +1,5 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { ArrowBendDownLeft } from '@phosphor-icons/react';
+import { ArrowBendDownLeft, Clock } from '@phosphor-icons/react';
 import React, { ReactNode, useMemo } from 'react';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
@@ -63,7 +63,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
         <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
         {isFirst ? (
           <Text fontSize="sm" color="textSubdued" fontWeight="medium">
-            {height}
+            Next Bitcoin block
           </Text>
         ) : (
           <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${hash}`}>
@@ -71,23 +71,28 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
           </ExplorerLink>
         )}
       </HStack>
-      <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+      <Box>
         {isFirst ? (
-          <Text fontSize="xs" color="textSubdued" whiteSpace="nowrap">
-            {truncateMiddle(hash, 6)}
-          </Text>
+          <Flex gap={1} alignItems="center">
+            <Icon as={Clock} size={4} color="iconSubdued" />
+            <Text color="textSubdued" fontSize="xs">
+              Unconfirmed
+            </Text>
+          </Flex>
         ) : (
-          <ExplorerLink
-            fontSize="xs"
-            color={'textSubdued'}
-            href={`/btcblock/${hash}`}
-            whiteSpace={'nowrap'}
-          >
-            {truncateMiddle(hash, 6)}
-          </ExplorerLink>
+          <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+            <ExplorerLink
+              fontSize="xs"
+              color={'textSubdued'}
+              href={`/btcblock/${hash}`}
+              whiteSpace={'nowrap'}
+            >
+              {truncateMiddle(hash, 6)}
+            </ExplorerLink>
+            {timestamp && <Timestamp ts={timestamp} />}
+          </HStack>
         )}
-        {timestamp && <Timestamp ts={timestamp} />}
-      </HStack>
+      </Box>
     </>
   );
 }
@@ -178,6 +183,7 @@ function StxBlockRow({
         whiteSpace="nowrap"
         color="textSubdued"
         gridColumn="3 / 4"
+        justifyContent="flex-end"
       >
         <BlockLink hash={hash}>
           <Text color="textSubdued" fontWeight="medium" fontSize="xs" whiteSpace="nowrap">
@@ -271,7 +277,7 @@ function StxBlocksGrid({
             txsCount={stxBlock.txsCount}
             minimized={minimized}
             isFirst={i === 0}
-            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed === 0}
+            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed <= 0}
           />
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>

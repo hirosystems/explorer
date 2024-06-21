@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef } from 'react';
+import { ReactNode, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
 import { Stack } from '../../../../ui/Stack';
@@ -11,41 +11,66 @@ import { Controls } from '../Controls';
 import { BlocksPageBlockListGrouped } from './BlocksPageBlockListGrouped';
 import { BlocksPageBlockListUngrouped } from './BlocksPageBlockListUngrouped';
 
+export function BlocksPageBlockListLayout({ children }: { children: ReactNode }) {
+  return <Section>{children}</Section>;
+}
+
+export function BlocksPageControlsLayout({
+  liveUpdates,
+  children,
+}: {
+  liveUpdates?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <Stack
+      marginX={-6}
+      px={6}
+      py={5}
+      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+    >
+      {children}
+    </Stack>
+  );
+}
+
 function BlocksPageBlockListBase() {
   const { groupedByBtc, setGroupedByBtc, liveUpdates, setLiveUpdates } = useBlockListContext();
 
   const lastClickTimeRef = useRef(0);
-  const toggleLiveUpdates = useCallback(() => {
-    const now = Date.now();
-    if (now - lastClickTimeRef.current > 2000) {
-      lastClickTimeRef.current = now;
-      setLiveUpdates(!liveUpdates);
-    }
-  }, [liveUpdates, setLiveUpdates]);
+  const toggleLiveUpdates = useCallback(
+    (immediately?: boolean) => {
+      const now = Date.now();
+      if (immediately || now - lastClickTimeRef.current > 2000) {
+        lastClickTimeRef.current = now;
+        setLiveUpdates(!liveUpdates);
+      }
+    },
+    [liveUpdates, setLiveUpdates]
+  );
 
   return (
-    <Section>
-      <Stack
-        marginX={-6}
-        px={6}
-        borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
-      >
+    <BlocksPageBlockListLayout>
+      <BlocksPageControlsLayout liveUpdates={liveUpdates}>
         <Controls
           groupByBtc={{
             onChange: () => {
               setGroupedByBtc(!groupedByBtc);
+              if (liveUpdates) {
+                toggleLiveUpdates(true);
+              }
             },
             isChecked: groupedByBtc,
           }}
           liveUpdates={{
-            onChange: toggleLiveUpdates,
+            onChange: () => toggleLiveUpdates(),
             isChecked: liveUpdates,
           }}
           horizontal={true}
         />
-      </Stack>
+      </BlocksPageControlsLayout>
       {groupedByBtc ? <BlocksPageBlockListGrouped /> : <BlocksPageBlockListUngrouped />}
-    </Section>
+    </BlocksPageBlockListLayout>
   );
 }
 

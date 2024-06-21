@@ -3,7 +3,7 @@
 import { Section } from '../common/components/Section';
 import { SkeletonTxsList } from '../features/txs-list/SkeletonTxsList';
 import { Grid } from '../ui/Grid';
-import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
+import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
 import { PageTitle } from './_components/PageTitle';
 import { SkeletonStatSection } from './_components/Stats/SkeletonStatSection';
 import { Wrapper } from './_components/Stats/Wrapper';
@@ -26,7 +26,7 @@ export default function HomePageSkeleton() {
         <Section title={'Transactions'}>
           <SkeletonTxsList />
         </Section>
-        <SkeletonBlockList />
+        <HomePageBlockListSkeleton />
       </Grid>
     </>
   );

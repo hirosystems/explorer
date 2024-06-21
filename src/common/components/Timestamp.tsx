@@ -2,7 +2,7 @@
 
 import { Flex, FlexProps } from '../../ui/Flex';
 import { Tooltip } from '../../ui/Tooltip';
-import { toRelativeTime } from '../utils/utils';
+import RelativeTimeDisplay from './RelativeTimeDisplay';
 import { Value } from './Value';
 
 interface TimestampProps {
@@ -17,7 +17,9 @@ export function Timestamp({ ts, ...rest }: TimestampProps & FlexProps) {
   return (
     <Tooltip label={readableTimestamp}>
       <Flex alignItems="center" {...rest}>
-        <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
+        <Value suppressHydrationWarning={true}>
+          <RelativeTimeDisplay timestampInMs={ts} />
+        </Value>
       </Flex>
     </Tooltip>
   );

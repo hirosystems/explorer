@@ -8,7 +8,6 @@ export type BtcBlockMap = Record<string, BurnBlock>;
 export type BlockListData = { stxBlocks: BlockListStxBlock[]; btcBlock: BlockListBtcBlock };
 
 export function createBlockListStxBlock(stxBlock: Block | NakamotoBlock): BlockListStxBlock {
-  console.log('using the actual createBlockListStxBlock function');
   return {
     type: 'stx_block',
     height: stxBlock.height,
@@ -23,7 +22,6 @@ export function createBlockListStxBlock(stxBlock: Block | NakamotoBlock): BlockL
   };
 }
 export function createBlockListBtcBlock(btcBlock: BurnBlock): BlockListBtcBlock {
-  console.log('using the actual createBlockListBtcBlock function');
   return {
     type: 'btc_block',
     height: btcBlock.burn_block_height,
@@ -38,7 +36,6 @@ export function createBlockListBtcBlock(btcBlock: BurnBlock): BlockListBtcBlock 
 export function createBlockListBtcBlockFromStxBlock(
   stxBlock: Block | NakamotoBlock
 ): BlockListBtcBlock {
-  console.log('using the actual createBlockListBtcBlockFromStxBlock function');
   return {
     type: 'btc_block',
     height: stxBlock.burn_block_height,
