@@ -2,6 +2,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowCounterClockwise } from '@phosphor-icons/react';
 import { ReactNode, Suspense, useCallback, useRef } from 'react';
 
+import RelativeTimeDisplay from '../../../common/components/RelativeTimeDisplay';
 import { Button } from '../../../ui/Button';
 import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
@@ -9,7 +10,7 @@ import { Text } from '../../../ui/Text';
 import { useBlockListContext } from './BlockListContext';
 import { UpdateBarSkeleton } from './Grouped/skeleton';
 import { getFadeAnimationStyle } from './consts';
-import { useSuspenseAverageBlockTimes } from './data/useAverageBlockTimes';
+import { BlockListData } from './utils';
 
 export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
   const bgColor = useColorModeValue('purple.100', 'slate.900'); // TODO: not in theme. remove
@@ -32,22 +33,22 @@ export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) 
 interface UpdateBarProps {
   onClick: () => void;
   latestBlocksCount?: number;
+  latestBlock?: BlockListData;
 }
 
 export function UpdateBarBase({
   onClick,
   latestBlocksCount,
+  latestBlock,
   ...rest
 }: {
   onClick: () => void;
   latestBlocksCount?: number;
+  latestBlock?: BlockListData;
 } & FlexProps) {
   const textColor = useColorModeValue('slate.800', 'slate.400'); // TODO: not in theme. remove
   const lastClickTimeRef = useRef(0);
   const { isBlockListLoading } = useBlockListContext();
-  const {
-    data: { last_24h },
-  } = useSuspenseAverageBlockTimes();
 
   const update = useCallback(() => {
     const now = Date.now();
@@ -56,6 +57,16 @@ export function UpdateBarBase({
       onClick();
     }
   }, [onClick]);
+
+  const latestStxBlock = latestBlock?.stxBlocks[0];
+
+  const text = latestBlocksCount ? (
+    <>{latestBlocksCount}</>
+  ) : latestStxBlock ? (
+    <>
+      Last update <RelativeTimeDisplay timestampInMs={latestStxBlock.timestamp} />
+    </>
+  ) : null;
 
   return (
     <UpdateBarLayout {...rest}>
@@ -69,16 +80,15 @@ export function UpdateBarBase({
         display={'inline'}
         style={getFadeAnimationStyle(isBlockListLoading)}
       >
-        {latestBlocksCount ? latestBlocksCount : `Avg. block time: ${last_24h}s`}
+        {text}
       </Text>
       <Button variant="text" onClick={update}>
         <Flex alignItems={'center'} gap={1.5}>
           <Icon
             color="buttonText"
             as={ArrowCounterClockwise}
-            w={'12px'}
-            h={'12px'}
-            transform={'rotate(90deg) scaleX(-1)'}
+            size={3}
+            transform={'rotate(0deg) scaleX(-1)'}
           />
           Update
         </Flex>
@@ -87,10 +97,20 @@ export function UpdateBarBase({
   );
 }
 
-export function UpdateBar({ onClick, latestBlocksCount, ...rest }: UpdateBarProps & FlexProps) {
+export function UpdateBar({
+  onClick,
+  latestBlocksCount,
+  latestBlock,
+  ...rest
+}: UpdateBarProps & FlexProps) {
   return (
     <Suspense fallback={<UpdateBarSkeleton />}>
-      <UpdateBarBase latestBlocksCount={latestBlocksCount} onClick={onClick} {...rest} />
+      <UpdateBarBase
+        latestBlocksCount={latestBlocksCount}
+        latestBlock={latestBlock}
+        onClick={onClick}
+        {...rest}
+      />
     </Suspense>
   );
 }

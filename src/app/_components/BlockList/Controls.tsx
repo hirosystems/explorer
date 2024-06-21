@@ -21,7 +21,7 @@ export function ControlsLayout({
   children: ReactNode;
 } & FlexProps) {
   return (
-    <Flex py={4} direction={horizontal ? ['column', 'row'] : 'column'} {...rest}>
+    <Flex direction={horizontal ? ['column', 'row'] : 'column'} gap={3} {...rest}>
       {children}
     </Flex>
   );
@@ -35,6 +35,7 @@ export function Controls({ groupByBtc, liveUpdates, horizontal, ...rest }: Contr
         <FormLabel
           htmlFor="group-by-btc"
           mb="0"
+          mr={0}
           fontSize={'14px'}
           lineHeight={'1.5em'}
           fontWeight={400}
@@ -50,6 +51,7 @@ export function Controls({ groupByBtc, liveUpdates, horizontal, ...rest }: Contr
         <FormLabel
           htmlFor="live-updates"
           mb="0"
+          mr={0}
           fontSize={'14px'}
           lineHeight={'1.5em'}
           fontWeight={400}

@@ -1,4 +1,4 @@
-import { ArrowElbowLeftDown } from '@phosphor-icons/react';
+import { ArrowElbowLeftDown, Clock } from '@phosphor-icons/react';
 import React, { ReactNode, useMemo } from 'react';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
@@ -80,12 +80,18 @@ const StxBlockRow = ({
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="sm">
-            #{stxBlock.height}
+            #{stxBlock.height} isLast: {isLast?.toString()}
           </Text>
         </BlockLink>
       </Flex>
 
-      <HStack divider={<Caption>∙</Caption>} gap={1} whiteSpace="nowrap" gridColumn="3 / 4">
+      <HStack
+        divider={<Caption>∙</Caption>}
+        gap={1}
+        whiteSpace="nowrap"
+        gridColumn="3 / 4"
+        justifyContent="flex-end"
+      >
         <BlockLink hash={stxBlock.hash}>
           <Text color="textSubdued" fontWeight="medium" fontSize="xs" whiteSpace="nowrap">
             {truncateMiddle(stxBlock.hash, 3)}
@@ -176,7 +182,7 @@ export function BurnBlockGroupGrid({
             stxBlock={stxBlock}
             minimized={minimized}
             isFirst={i === 0}
-            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed === 0}
+            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed <= 0}
           />
           {i < stxBlocks.length - 1 && (
             <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
@@ -206,35 +212,52 @@ function BitcoinHeader({
       px={PADDING}
       borderBottom={minimized ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
       flexWrap={'wrap'}
+      // height={5}
     >
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
-        <Icon as={ArrowElbowLeftDown} size={3.5} color={'textSubdued'} />
+        <Icon as={ArrowElbowLeftDown} size={3.5} color="textSubdued" />
         <Icon as={BitcoinIcon} size={4.5} />
         {isFirst ? (
-          <Text fontSize="sm" color={'textSubdued'}>
-            {btcBlock.height}
-          </Text>
+          <Flex height="full" alignItems="center">
+            <Text fontSize="sm" color="textSubdued">
+              Next Bitcoin block
+            </Text>
+          </Flex>
         ) : (
-          <ExplorerLink fontSize="sm" color={'textSubdued'} href={`/btcblock/${btcBlock.hash}`}>
-            #{btcBlock.height}
-          </ExplorerLink>
+          <Flex height="full" alignItems="center">
+            <ExplorerLink
+              fontSize="sm"
+              color="textSubdued"
+              href={`/btcblock/${btcBlock.hash}`}
+              height="full"
+            >
+              #{btcBlock.height}
+            </ExplorerLink>
+          </Flex>
         )}
       </Flex>
-      <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+      <Box>
         {isFirst ? (
-          <Text fontSize="xs" color={'textSubdued'} whiteSpace={'nowrap'}>
-            {truncateMiddle(btcBlock.hash, 6)}
-          </Text>
+          <Flex gap={1} alignItems="center">
+            <Icon as={Clock} size={4} color="iconSubdued" />
+            <Text color="textSubdued" fontSize="xs">
+              Unconfirmed
+            </Text>
+          </Flex>
         ) : (
-          <ExplorerLink
-            fontSize="xs"
-            color={'textSubdued'}
-            href={`/btcblock/${btcBlock.hash}`}
-            whiteSpace={'nowrap'}
-          ></ExplorerLink>
+          <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+            <ExplorerLink
+              fontSize="xs"
+              color="textSubdued"
+              href={`/btcblock/${btcBlock.hash}`}
+              whiteSpace={'nowrap'}
+            >
+              {truncateMiddle(btcBlock.hash, 6)}
+            </ExplorerLink>
+            <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
+          </HStack>
         )}
-        <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
-      </HStack>
+      </Box>
     </Flex>
   );
 }
@@ -266,12 +289,14 @@ export function BurnBlockGroup({
   isFirst,
   stxBlocksLimit,
   minimized = false,
+  onlyShowStxBlocksForFirstBtcBlock,
 }: {
   btcBlock: BlockListBtcBlock;
   stxBlocks: BlockListStxBlock[];
   isFirst: boolean;
   stxBlocksLimit?: number;
   minimized?: boolean;
+  onlyShowStxBlocksForFirstBtcBlock?: boolean;
 }) {
   const unaccountedStxBlocks = btcBlock.blockCount ? stxBlocks.length - btcBlock.blockCount : 0;
   const unaccountedTxs = useMemo(
@@ -293,7 +318,14 @@ export function BurnBlockGroup({
       ? btcBlock.blockCount + unaccountedStxBlocks
       : btcBlock.blockCount
     : undefined;
-  const numStxBlocksNotDisplayed = blocksCount ? blocksCount - (stxBlocksLimit || 0) : 0;
+  const numStxBlocksNotDisplayed =
+    onlyShowStxBlocksForFirstBtcBlock && !isFirst
+      ? blocksCount
+        ? blocksCount
+        : 0
+      : blocksCount
+        ? blocksCount - (stxBlocksLimit || 0)
+        : 0;
   const displayedStxBlocks = useMemo(
     () => (stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks),
     [stxBlocks, stxBlocksLimit]
@@ -301,13 +333,15 @@ export function BurnBlockGroup({
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />
-      <ScrollableBox>
-        <BurnBlockGroupGrid
-          stxBlocks={displayedStxBlocks}
-          minimized={minimized}
-          numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
-        />
-      </ScrollableBox>
+      {onlyShowStxBlocksForFirstBtcBlock && !isFirst ? null : (
+        <ScrollableBox>
+          <BurnBlockGroupGrid
+            stxBlocks={displayedStxBlocks}
+            minimized={minimized}
+            numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
+          />
+        </ScrollableBox>
+      )}
       {numStxBlocksNotDisplayed > 0 ? (
         <BlockCount
           count={numStxBlocksNotDisplayed}
@@ -334,10 +368,12 @@ export function BlockListGrouped({
   blockList,
   minimized,
   stxBlocksLimit,
+  onlyShowStxBlocksForFirstBtcBlock,
 }: {
   blockList: BlockListData[];
   minimized: boolean;
   stxBlocksLimit?: number;
+  onlyShowStxBlocksForFirstBtcBlock?: boolean;
 }) {
   return (
     <BlockListGroupedLayout>
@@ -349,6 +385,7 @@ export function BlockListGrouped({
           minimized={minimized}
           stxBlocksLimit={stxBlocksLimit}
           isFirst={i === 0}
+          onlyShowStxBlocksForFirstBtcBlock={onlyShowStxBlocksForFirstBtcBlock}
         />
       ))}
     </BlockListGroupedLayout>

@@ -1,7 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
 
 import { Circle } from '../../../../common/components/Circle';
-import { Section } from '../../../../common/components/Section';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
@@ -9,8 +8,13 @@ import { SkeletonItem } from '../../../../ui/SkeletonItem';
 import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
+import {
+  BlocksPageBlockListLayout,
+  BlocksPageControlsLayout,
+} from '../BlocksPage/BlocksPageBlockList';
 import { BlocksPageHeaderLayout } from '../BlocksPage/BlocksPageHeaders';
 import { ControlsLayout } from '../Controls';
+import { HomePageBlockListLayout, HomePageControlsLayout } from '../HomePage/HomePageBlockList';
 import { BlockListRowSkeleton } from '../Ungrouped/skeleton';
 import { UpdateBarLayout } from '../UpdateBar';
 import { BurnBlockGroupGridLayout } from './BlockListGrouped';
@@ -194,12 +198,26 @@ export function BlockPageHeadersSkeleton() {
   );
 }
 
-function ControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
+function HomePageControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
-    <ControlsLayout horizontal={horizontal} gap={3}>
-      <SkeletonItem height={5} width={20} />
-      <SkeletonItem height={5} width={20} />
-    </ControlsLayout>
+    <HomePageControlsLayout>
+      <SkeletonItem height={5} width={'90px'} />
+      <ControlsLayout horizontal={horizontal}>
+        <SkeletonItem height={5} width={20} />
+        <SkeletonItem height={5} width={20} />
+      </ControlsLayout>
+    </HomePageControlsLayout>
+  );
+}
+
+function BlocksPageControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
+  return (
+    <BlocksPageControlsLayout>
+      <ControlsLayout horizontal={horizontal} gap={3}>
+        <SkeletonItem height={5} width={20} />
+        <SkeletonItem height={5} width={20} />
+      </ControlsLayout>
+    </BlocksPageControlsLayout>
   );
 }
 
@@ -216,20 +234,20 @@ export function UpdateBarSkeleton() {
 
 export function BlocksPageBlockListSkeleton() {
   return (
-    <Section>
-      <ControlsSkeleton horizontal />
+    <BlocksPageBlockListLayout>
+      <BlocksPageControlsSkeleton horizontal />
       <UpdateBarSkeleton />
       <BlocksPageBlockListGroupedSkeleton />
-    </Section>
+    </BlocksPageBlockListLayout>
   );
 }
 
 export function HomePageBlockListSkeleton() {
   return (
-    <Section>
-      <ControlsSkeleton />
+    <HomePageBlockListLayout>
+      <HomePageControlsSkeleton />
       <UpdateBarSkeleton />
       <HomePageBlockListGroupedSkeleton />
-    </Section>
+    </HomePageBlockListLayout>
   );
 }

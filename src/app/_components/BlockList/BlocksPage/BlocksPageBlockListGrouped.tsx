@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
@@ -17,22 +17,26 @@ function BlocksPageBlockListGroupedBase() {
   const { liveUpdates } = useBlockListContext();
   const { blockList, updateBlockList, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useBlocksPageBlockListGrouped();
+  const latestBlock = useMemo(() => blockList?.[0], [blockList]);
 
   return (
     <>
-      {!liveUpdates && <UpdateBar onClick={updateBlockList} />}
+      {!liveUpdates && <UpdateBar onClick={updateBlockList} latestBlock={latestBlock} />}
       <Flex flexDirection="column" gap={4} pt={4}>
-        <BlockListGrouped blockList={blockList} minimized={false} stxBlocksLimit={10} />
+        <BlockListGrouped
+          blockList={blockList}
+          minimized={false}
+          stxBlocksLimit={10}
+          onlyShowStxBlocksForFirstBtcBlock={true}
+        />
       </Flex>
       <Box pt={5} pb={5}>
-        {!liveUpdates && (
-          <ListFooter
-            isLoading={isFetchingNextPage}
-            hasNextPage={hasNextPage}
-            fetchNextPage={fetchNextPage}
-            label={'blocks'}
-          />
-        )}
+        <ListFooter
+          isLoading={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+          label={'blocks'}
+        />
       </Box>
     </>
   );
