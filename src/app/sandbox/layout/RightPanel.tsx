@@ -1,5 +1,4 @@
 import { SignOut } from '@phosphor-icons/react';
-import React from 'react';
 
 import { Card } from '../../../common/components/Card';
 import { useAppSelector } from '../../../common/state/hooks';
@@ -65,7 +64,12 @@ export function RightPanel() {
                   ml="8px"
                 >
                   <Tooltip placement="bottom" label="Sign out">
-                    <IconButton size="20px" icon={<SignOut size={3.5} />} aria-label={'sign out'} />
+                    <IconButton
+                      height={5}
+                      width={5}
+                      icon={<Icon as={SignOut} size={3.5} />}
+                      aria-label={'sign out'}
+                    />
                   </Tooltip>
                 </Box>
               </Flex>
