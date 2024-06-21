@@ -36,7 +36,11 @@ const Home: NextPage = () => {
         width="full"
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
-        <TxListTabs limit={DEFAULT_LIST_LIMIT_SMALL} showFilterButton={false} />
+        <TxListTabs
+          limit={DEFAULT_LIST_LIMIT_SMALL}
+          showFilterButton={false}
+          showValueMenu={false}
+        />
         {isNaka1Testnet ? (
           <HomePageBlockListDynamic />
         ) : (
