@@ -1,3 +1,10 @@
+## [1.185.4](https://github.com/hirosystems/explorer/compare/v1.185.3...v1.185.4) (2024-06-24)
+
+
+### Bug Fixes
+
+* **mobile-menu:** fixed scroll issue ([ee5f862](https://github.com/hirosystems/explorer/commit/ee5f8620c22d4f24a58e3e6a8f272ad4bbefa924))
+
 ## [1.185.3](https://github.com/hirosystems/explorer/compare/v1.185.2...v1.185.3) (2024-06-24)
 
 
