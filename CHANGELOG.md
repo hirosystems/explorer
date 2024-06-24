@@ -1,3 +1,10 @@
+## [1.185.1](https://github.com/hirosystems/explorer/compare/v1.185.0...v1.185.1) (2024-06-24)
+
+
+### Bug Fixes
+
+* **show-value-menu:** hid the show value menu on home page ([b50de92](https://github.com/hirosystems/explorer/commit/b50de92f68f0ef2ccfeb6e1c42b92edddc320c5c))
+
 # [1.185.0](https://github.com/hirosystems/explorer/compare/v1.184.1...v1.185.0) (2024-06-18)
 
 
