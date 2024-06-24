@@ -53,6 +53,7 @@ export function MobileNav({
       zIndex={'overlay'}
       padding={6}
       gap={3}
+      overflow="scroll"
     >
       <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
         <Logo />
