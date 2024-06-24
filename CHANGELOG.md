@@ -1,3 +1,10 @@
+## [1.185.2](https://github.com/hirosystems/explorer/compare/v1.185.1...v1.185.2) (2024-06-24)
+
+
+### Bug Fixes
+
+* **update-stacks-connect:** fixed sign out icon ([a06a5c9](https://github.com/hirosystems/explorer/commit/a06a5c974e56b079af016f06a9587871b1bf34ac))
+
 ## [1.185.1](https://github.com/hirosystems/explorer/compare/v1.185.0...v1.185.1) (2024-06-24)
 
 
