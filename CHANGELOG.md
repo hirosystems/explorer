@@ -1,3 +1,10 @@
+## [1.185.5](https://github.com/hirosystems/explorer/compare/v1.185.4...v1.185.5) (2024-06-24)
+
+
+### Bug Fixes
+
+* **blocklist-loading:** fixes several blocklist issues ([9c26cd3](https://github.com/hirosystems/explorer/commit/9c26cd338cccb61e127319173b3d9fc335a40e0b))
+
 ## [1.185.4](https://github.com/hirosystems/explorer/compare/v1.185.3...v1.185.4) (2024-06-24)
 
 
