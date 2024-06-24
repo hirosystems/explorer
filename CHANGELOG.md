@@ -1,3 +1,10 @@
+## [1.185.3](https://github.com/hirosystems/explorer/compare/v1.185.2...v1.185.3) (2024-06-24)
+
+
+### Bug Fixes
+
+* **regressions:** fixed a couple bugs ([b50d898](https://github.com/hirosystems/explorer/commit/b50d898344d5bb56e1899c2fd98ca23bee80cd79))
+
 ## [1.185.2](https://github.com/hirosystems/explorer/compare/v1.185.1...v1.185.2) (2024-06-24)
 
 
