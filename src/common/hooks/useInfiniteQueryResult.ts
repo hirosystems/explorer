@@ -31,11 +31,9 @@ export function useSuspenseInfiniteQueryResult<T>(
   limit?: number
 ) {
   return useMemo(() => {
-    return (
-      response.data?.pages
-        .map(page => page.results)
-        .flat()
-        .slice(0, limit) || []
-    );
+    return response.data?.pages
+      .map(page => page.results)
+      .flat()
+      .slice(0, limit) || []
   }, [limit, response.data?.pages]);
 }

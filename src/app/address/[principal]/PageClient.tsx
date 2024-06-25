@@ -1,17 +1,28 @@
 'use client';
 
-import * as React from 'react';
-
 import { useSuspenseAccountBalance } from '../../../common/queries/useAccountBalance';
 import { useAddressNonces } from '../../../common/queries/useAddressNonces';
 import { hasTokenBalance } from '../../../common/utils/accounts';
 import { AddressTxListTabs } from '../../../features/txs-list/tabs/AddressTxListTabs';
+import { Grid, GridProps } from '../../../ui/Grid';
 import { Stack } from '../../../ui/components';
 import { PageTitle } from '../../_components/PageTitle';
 import { AddressSummary } from './AddressSummary';
 import { StxBalance } from './StxBalance';
 import { TokenBalanceCard } from './TokenBalanceCard';
-import { Wrapper } from './Wrapper';
+
+export function AddressPageLayout(props: GridProps) {
+  return (
+    <Grid
+      gridColumnGap={8}
+      gridTemplateColumns={['100%', '100%', 'repeat(1, calc(100% - 352px) 320px)']}
+      gridRowGap={[8, 8, 'unset']}
+      maxWidth="100%"
+      alignItems="flex-start"
+      {...props}
+    />
+  );
+}
 
 export default function AddressPage({ params: { principal } }: any) {
   const { data: balance } = useSuspenseAccountBalance(principal, { refetchOnWindowFocus: true });
@@ -22,7 +33,7 @@ export default function AddressPage({ params: { principal } }: any) {
   return (
     <>
       <PageTitle>Address details</PageTitle>
-      <Wrapper>
+      <AddressPageLayout>
         <Stack gap={8}>
           <AddressSummary
             principal={principal}
@@ -32,13 +43,11 @@ export default function AddressPage({ params: { principal } }: any) {
           />
           <AddressTxListTabs address={principal} />
         </Stack>
-        {balance && (
-          <Stack gap={8}>
-            <StxBalance address={principal} />
-            <TokenBalanceCard address={principal} />
-          </Stack>
-        )}
-      </Wrapper>
+        <Stack gap={8}>
+          <StxBalance address={principal} />
+          <TokenBalanceCard address={principal} />
+        </Stack>
+      </AddressPageLayout>
     </>
   );
 }

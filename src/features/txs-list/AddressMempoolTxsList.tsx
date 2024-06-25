@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { FC, memo } from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';

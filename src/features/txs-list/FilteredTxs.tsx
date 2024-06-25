@@ -25,7 +25,9 @@ type PossibleTxTypes =
   | AddressTransactionWithTransfers
   | AddressTransaction;
 
-const getTx = (tx: PossibleTxTypes) => ('tx' in tx ? tx.tx : tx);
+const getTx = (tx: PossibleTxTypes) => {
+  return 'tx' in tx ? tx.tx : tx;
+};
 
 export const FilteredTxs = <T extends PossibleTxTypes>({
   txs,
@@ -35,7 +37,9 @@ export const FilteredTxs = <T extends PossibleTxTypes>({
   const { activeFilters } = useFilterAndSortState();
   const filteredTxs: T[] = useMemo(
     () =>
-      !activeFilters.length ? txs : txs?.filter(tx => activeFilters.includes(getTx(tx).tx_type)),
+      activeFilters.length === 0
+        ? txs
+        : txs?.filter(tx => activeFilters.includes(getTx(tx).tx_type)),
     [txs, activeFilters]
   );
 

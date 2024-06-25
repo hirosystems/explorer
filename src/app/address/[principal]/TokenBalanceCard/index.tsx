@@ -1,17 +1,12 @@
 'use client';
 
-import * as React from 'react';
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { Section } from '../../../../common/components/Section';
-import {
-  useAccountBalance,
-  useSuspenseAccountBalance,
-} from '../../../../common/queries/useAccountBalance';
+import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
 import { useSuspenseNftHoldings } from '../../../../common/queries/useNftHoldings';
-import { hasTokenBalance } from '../../../../common/utils/accounts';
 import { hexToString } from '../../../../common/utils/utils';
 import { Tab } from '../../../../ui/Tab';
 import { TabList } from '../../../../ui/TabList';
@@ -51,8 +46,6 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
         ) || {},
     [nftHoldings]
   );
-
-  if (!hasTokenBalance(balance)) return null;
 
   return (
     <Section title="Holdings" {...rest}>
