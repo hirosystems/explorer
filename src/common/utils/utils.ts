@@ -125,7 +125,7 @@ export const getUsdValue = (
   stxPrice: number,
   isInMicroStacks = false
 ): string => {
-  if (!stxAmount || !stxPrice) return 'N/A';
+  if (!stxPrice) return 'N/A';
   const amountInStx = isInMicroStacks ? microToStacks(stxAmount) : stxAmount;
   const price = amountInStx * stxPrice;
   return price > 0 && price < 0.01 ? '<$0.01' : usdFormatter.format(price);

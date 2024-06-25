@@ -10,17 +10,21 @@ import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 import { useApi } from '../api/useApi';
 import { ONE_MINUTE } from './query-stale-time';
 
+const ACCOUNT_BALANCE_QUERY_KEY = 'accountBalance';
+
 export function useAccountBalance(
   address?: string,
   options: Omit<UseQueryOptions<any, any, AddressBalanceResponse, any>, 'queryKey' | 'queryFn'> = {}
 ) {
   const api = useApi();
   return useQuery({
-    queryKey: ['accountBalance', address],
+    queryKey: [ACCOUNT_BALANCE_QUERY_KEY, address],
     queryFn: () => {
-      return api.accountsApi.getAccountBalance({
-        principal: address!,
+      if (!address) return undefined;
+      const response = api.accountsApi.getAccountBalance({
+        principal: address,
       });
+      return response;
     },
     staleTime: ONE_MINUTE,
     enabled: !!address,
@@ -38,11 +42,13 @@ export function useSuspenseAccountBalance(
   const api = useApi();
   if (!address) throw new Error('Address is required');
   return useSuspenseQuery({
-    queryKey: ['accountBalance', address],
+    queryKey: [ACCOUNT_BALANCE_QUERY_KEY, address],
     queryFn: () => {
-      return api.accountsApi.getAccountBalance({
+      const response = api.accountsApi.getAccountBalance({
         principal: address,
       });
+
+      return response;
     },
     staleTime: ONE_MINUTE,
     ...options,

@@ -20,13 +20,13 @@ const TokenAssetListItem = dynamic(
 );
 
 export const FtBalance: React.FC<{ balance: AddressBalanceResponse }> = ({ balance }) => {
-  const FTokens = Object.keys(balance.fungible_tokens).filter(
+  const ft = Object.keys(balance.fungible_tokens).filter(
     key => Number(balance.fungible_tokens[key]?.balance) > 0
   );
 
-  return FTokens.length ? (
+  return ft.length > 0 ? (
     <>
-      {FTokens?.map((key, index, arr) => (
+      {ft.map((key, index, arr) => (
         <TokenAssetListItem
           amount={balance.fungible_tokens[key]?.balance || ''}
           key={index}

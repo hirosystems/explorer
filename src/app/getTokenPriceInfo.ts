@@ -1,5 +1,4 @@
 import { LUNAR_CRUSH_API_KEY } from '../common/constants/env';
-import { LunarCrushCoin } from '../common/types/lunarCrush';
 import { TokenPrice } from '../common/types/tokenPrice';
 import { getCacheClient } from '../common/utils/cache-client';
 

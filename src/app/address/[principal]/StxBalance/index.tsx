@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
-import { hasStxBalance } from '../../../../common/utils/accounts';
 import { microToStacks } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Grid } from '../../../../ui/Grid';
@@ -64,8 +63,6 @@ function StxBalanceBase({ address }: StxBalanceProps) {
       </Tooltip>
     </Box>
   );
-
-  if (!hasStxBalance(balance)) return null;
 
   return (
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
