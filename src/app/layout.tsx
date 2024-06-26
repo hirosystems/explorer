@@ -1,4 +1,4 @@
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { ReactNode } from 'react';
@@ -31,6 +31,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         </GlobalContextProvider>
       </body>
       <GoogleAnalytics gaId="G-NB2VBT0KY2" />
+      <GoogleTagManager gtmId="GTM-W534HQ4X" />
       <script
         async
         type="text/javascript"
