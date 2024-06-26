@@ -1,3 +1,15 @@
+# [1.186.0](https://github.com/hirosystems/explorer/compare/v1.185.5...v1.186.0) (2024-06-26)
+
+
+### Bug Fixes
+
+* nft link to ft page ([bc52a7c](https://github.com/hirosystems/explorer/commit/bc52a7c8ee79471c530f776fb124198ad061f702))
+
+
+### Features
+
+* status bar revamp ([dd8ae06](https://github.com/hirosystems/explorer/commit/dd8ae06ad0ee290fc540b6e8a0278b875965c2da))
+
 ## [1.185.5](https://github.com/hirosystems/explorer/compare/v1.185.4...v1.185.5) (2024-06-24)
 
 
