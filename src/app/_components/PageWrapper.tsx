@@ -1,23 +1,18 @@
 'use client';
 
 import { useColorModeValue } from '@chakra-ui/react';
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { ReactNode } from 'react';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { NakamotoModal } from '../../common/components/modals/Nakamoto';
-import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { getRichTextRenderOptions } from '../../common/utils/getRichTextRenderOptions';
 import { Flex } from '../../ui/Flex';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
-import { IncidentsStatusBarWithErrorBoundary } from './StatusBar';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
-import { StatusBarBase } from './StatusBar/StatusBarBase';
+import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
 
 function WrapperWithBg({ children }: { children: ReactNode }) {
   return (
@@ -63,14 +58,7 @@ export function PageWrapper({
   children: ReactNode;
   statusBarContent: IncidentContent;
 }) {
-  const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
-  const incidentsToShow = statusBarContent?.items?.filter(
-    alert => (alert.fields.showOnTestnet && isTestnet) || (alert.fields.showOnMainnet && !isTestnet)
-  );
-
   const statusBarBg = useColorModeValue('black', 'white');
-  const colorMode = useColorMode().colorMode;
-
   return (
     <>
       <Flex

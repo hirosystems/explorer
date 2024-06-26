@@ -1,6 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { css } from '@emotion/react';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { useRef } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedIncidents';
@@ -11,7 +12,7 @@ import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { StatusBarBase } from './StatusBarBase';
 import { getColor } from './utils';
 
-export function IncidentsStatusBar(props: FlexProps) {
+function IncidentsStatusBar(props: FlexProps) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
   const { data: unresolvedIncidentsResponse, isFetching } = useUnresolvedIncidents();
   const incidents = unresolvedIncidentsResponse?.incidents;
@@ -55,5 +56,23 @@ export function IncidentsStatusBar(props: FlexProps) {
         );
       })}
     </Flex>
+  );
+}
+
+export function IncidentsStatusBarWithErrorBoundary(props: FlexProps) {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary
+          fallbackRender={() => null}
+          onError={error => {
+            console.log(error);
+          }}
+          onReset={reset}
+        >
+          <IncidentsStatusBar {...props} />
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
   );
 }
