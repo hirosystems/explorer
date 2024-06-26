@@ -1,3 +1,10 @@
+## [1.186.1](https://github.com/hirosystems/explorer/compare/v1.186.0...v1.186.1) (2024-06-26)
+
+
+### Bug Fixes
+
+* **maps-testnet:** showing custom error message ([2c1813a](https://github.com/hirosystems/explorer/commit/2c1813a66f877262e1634664c75e8440d2d7d486))
+
 # [1.186.0](https://github.com/hirosystems/explorer/compare/v1.185.5...v1.186.0) (2024-06-26)
 
 
