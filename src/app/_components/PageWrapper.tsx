@@ -56,7 +56,7 @@ export function PageWrapper({
 }: {
   tokenPrice: TokenPrice;
   children: ReactNode;
-  statusBarContent: IncidentContent;
+  statusBarContent: IncidentContent | null;
 }) {
   const statusBarBg = useColorModeValue('black', 'white');
   return (

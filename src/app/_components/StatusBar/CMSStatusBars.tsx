@@ -7,11 +7,14 @@ import { Flex } from '../../../ui/Flex';
 import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { StatusBarBase } from './StatusBarBase';
 
-export function CMSStatusBars({ statusBarContent }: { statusBarContent: IncidentContent }) {
+export function CMSStatusBars({ statusBarContent }: { statusBarContent: IncidentContent | null }) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
-  const incidentsToShow = statusBarContent?.items?.filter(
-    alert => (alert.fields.showOnTestnet && isTestnet) || (alert.fields.showOnMainnet && !isTestnet)
-  );
+  const incidentsToShow = !statusBarContent
+    ? []
+    : statusBarContent?.items?.filter(
+        alert =>
+          (alert.fields.showOnTestnet && isTestnet) || (alert.fields.showOnMainnet && !isTestnet)
+      );
   const colorMode = useColorMode().colorMode;
   return (
     <Flex
