@@ -17,9 +17,11 @@ export function useSignersLocation() {
   return useSuspenseQuery<SignerLocation[]>({
     queryKey: [SIGNER_LOCATION_QUERY_KEY],
     queryFn: () =>
-      fetch(`https://assets.hiro.so/stacks/${activeNetwork.mode}/crawler/signer-nodes.json`).then(
-        res => res.json()
-      ),
+      fetch(`https://assets.hiro.so/stacks/${activeNetwork.mode}/crawler/signer-nodes.json`)
+        .then(res => res.json())
+        .catch(err => {
+          throw new Error('No signer location data available.');
+        }),
     staleTime: TEN_MINUTES,
   });
 }

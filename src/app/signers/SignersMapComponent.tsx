@@ -144,11 +144,7 @@ export function SignersMapComponentBase() {
 
 export function SignersMapComponent() {
   return (
-    <ExplorerErrorBoundary
-      Wrapper={Card}
-      wrapperProps={{ height: '100%', width: '100%' }}
-      tryAgainButton
-    >
+    <ExplorerErrorBoundary Wrapper={Card} wrapperProps={{ height: '100%', width: '100%' }}>
       <Suspense fallback={<SignersMapSkeleton />}>
         <SignersMapComponentBase />
       </Suspense>
