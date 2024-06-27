@@ -1,3 +1,10 @@
+# [1.187.0](https://github.com/hirosystems/explorer/compare/v1.186.1...v1.187.0) (2024-06-27)
+
+
+### Features
+
+* add docker build for arm ([227a139](https://github.com/hirosystems/explorer/commit/227a13922ba12b89a038ad5bb3b05e4cbd1d78da))
+
 ## [1.186.1](https://github.com/hirosystems/explorer/compare/v1.186.0...v1.186.1) (2024-06-26)
 
 
