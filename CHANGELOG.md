@@ -1,3 +1,10 @@
+# [1.188.0](https://github.com/hirosystems/explorer/compare/v1.187.0...v1.188.0) (2024-06-27)
+
+
+### Features
+
+* **google-tag-manager:** added gtm ([85005bb](https://github.com/hirosystems/explorer/commit/85005bb789e7cec86cb71a536f7d21809d2e013b))
+
 # [1.187.0](https://github.com/hirosystems/explorer/compare/v1.186.1...v1.187.0) (2024-06-27)
 
 
