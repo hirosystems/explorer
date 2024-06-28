@@ -1,3 +1,10 @@
+## [1.188.1](https://github.com/hirosystems/explorer/compare/v1.188.0...v1.188.1) (2024-06-28)
+
+
+### Bug Fixes
+
+* **no-tx-addr:** showing ui when no txs ([f512d38](https://github.com/hirosystems/explorer/commit/f512d3869ee9e88dd70420940bea7ef7cafdad20))
+
 # [1.188.0](https://github.com/hirosystems/explorer/compare/v1.187.0...v1.188.0) (2024-06-27)
 
 
