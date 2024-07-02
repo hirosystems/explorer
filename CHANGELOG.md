@@ -1,3 +1,10 @@
+## [1.188.2](https://github.com/hirosystems/explorer/compare/v1.188.1...v1.188.2) (2024-07-02)
+
+
+### Bug Fixes
+
+* **orphan-blocks:** added kv pair to show canonical status ([3c4ab83](https://github.com/hirosystems/explorer/commit/3c4ab838f54e0d003b387fa2229794964a948a06))
+
 ## [1.188.1](https://github.com/hirosystems/explorer/compare/v1.188.0...v1.188.1) (2024-06-28)
 
 
