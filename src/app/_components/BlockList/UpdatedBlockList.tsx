@@ -8,7 +8,6 @@ import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
-import { SkeletonBlockList } from '../../../common/components/loaders/skeleton-text';
 import { DEFAULT_LIST_LIMIT } from '../../../common/constants/constants';
 import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
@@ -24,6 +23,7 @@ import StxIcon from '../../../ui/icons/StxIcon';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 import { BurnBlock } from './LayoutA/BurnBlock';
 import { StxBlock } from './LayoutA/StxBlock';
+import { SkeletonBlockList } from './SkeletonBlockList';
 import { useSubscribeBlocks } from './Sockets/useSubscribeBlocks';
 import { EnhancedBlock } from './types';
 

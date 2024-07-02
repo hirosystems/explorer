@@ -1,14 +1,18 @@
 'use client';
 
 import { Section } from '../common/components/Section';
+import { useIsNakamoto1Testnet } from '../common/hooks/useIsNakamoto';
 import { SkeletonTxsList } from '../features/txs-list/SkeletonTxsList';
 import { Grid } from '../ui/Grid';
 import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
+import { SkeletonBlockList } from './_components/BlockList/SkeletonBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { SkeletonStatSection } from './_components/Stats/SkeletonStatSection';
 import { Wrapper } from './_components/Stats/Wrapper';
 
 export default function HomePageSkeleton() {
+  const isNaka1Testnet = useIsNakamoto1Testnet();
+
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
@@ -26,7 +30,7 @@ export default function HomePageSkeleton() {
         <Section title={'Transactions'}>
           <SkeletonTxsList />
         </Section>
-        <HomePageBlockListSkeleton />
+        {isNaka1Testnet ? <HomePageBlockListSkeleton /> : <SkeletonBlockList />}
       </Grid>
     </>
   );
