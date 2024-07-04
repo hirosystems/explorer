@@ -1,3 +1,10 @@
+## [1.188.3](https://github.com/hirosystems/explorer/compare/v1.188.2...v1.188.3) (2024-07-04)
+
+
+### Bug Fixes
+
+* tx events query condition ([dfbd530](https://github.com/hirosystems/explorer/commit/dfbd530262295622a302b80930e27d83bb1bbf36))
+
 ## [1.188.2](https://github.com/hirosystems/explorer/compare/v1.188.1...v1.188.2) (2024-07-02)
 
 
