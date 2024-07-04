@@ -259,9 +259,7 @@ interface EventsProps {
 }
 
 export const Events: FC<EventsProps> = ({ tx }) => {
-  const { data, ...actions } = useTxEventsByIdInfinite(tx.tx_id, {
-    enabled: tx.event_count > tx.events.length,
-  });
+  const { data, ...actions } = useTxEventsByIdInfinite(tx.tx_id);
 
   if (tx.event_count === 0) return null;
 
