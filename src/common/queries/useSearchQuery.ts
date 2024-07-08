@@ -4,7 +4,7 @@ import {
   GetTransactionListOrderEnum,
   GetTransactionListSortByEnum,
 } from '@stacks/blockchain-api-client';
-import { Block } from '@stacks/stacks-blockchain-api-types';
+import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV, validateStacksAddress } from '@stacks/transactions';
 
 import { useApi } from '../api/useApi';
@@ -96,8 +96,8 @@ export function useSearchQuery(id: string) {
   return useQuery({
     queryKey: ['search', id],
     queryFn: async () => {
-      let foundResult;
-      let notFoundResult;
+      let foundResult: FoundResult | undefined = undefined;
+      let notFoundResult: NotFoundResult | undefined = undefined;
       if (isAdvancedSearch) {
         const txsResponse = await api.transactionsApi.getTransactionList({
           limit: 3,
@@ -107,7 +107,7 @@ export function useSearchQuery(id: string) {
           order: GetTransactionListOrderEnum.desc,
           ...advancedSearchQuery,
         });
-        const txs = txsResponse?.results || [];
+        const txs = (txsResponse?.results as Transaction[]) || ([] as Transaction[]);
         foundResult = {
           found: true,
           result: {
@@ -141,11 +141,25 @@ export function useSearchQuery(id: string) {
         } catch (e) {}
       } else {
         try {
-          foundResult = await searchApi.searchById({ id, includeMetadata: true });
+          foundResult = (await searchApi.searchById({ id, includeMetadata: true })) as FoundResult; // TODO: The API needs to add the type
         } catch (e: any) {
           try {
             const data = await e.json();
             if (data && 'found' in data) {
+              // An address for which the API doesn't have data is still a valid address that can be shown on the explorer
+              if (
+                (data as NotFoundResult).result?.entity_type === SearchResultType.StandardAddress &&
+                data.found === false
+              ) {
+                foundResult = {
+                  found: true,
+                  result: {
+                    entity_type: SearchResultType.StandardAddress,
+                    entity_id: id,
+                  },
+                };
+              }
+            } else {
               notFoundResult = data;
             }
           } catch (e) {}
