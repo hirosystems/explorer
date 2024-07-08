@@ -1,7 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
+import {
+  GetTransactionListOrderEnum,
+  GetTransactionListSortByEnum,
+} from '@stacks/blockchain-api-client';
 import { Block } from '@stacks/stacks-blockchain-api-types';
-import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
+import { bufferCVFromString, cvToHex, tupleCV, validateStacksAddress } from '@stacks/transactions';
 
 import { useApi } from '../api/useApi';
 import { BTC_BNS_CONTRACT } from '../constants/constants';
@@ -39,16 +43,80 @@ function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundR
   };
 }
 
+type AdvancedSearchKeywords = 'from:' | 'to:' | 'before:' | 'after:';
+type AdvancedSearchConfig = Record<
+  AdvancedSearchKeywords,
+  { filter: string; isValid: (value: string) => boolean; transform: (value: string) => any }
+>;
+
+export const advancedSearchConfig: AdvancedSearchConfig = {
+  'from:': {
+    filter: 'fromAddress',
+    isValid: validateStacksAddress,
+    transform: (value: string) => value,
+  },
+  'to:': {
+    filter: 'toAddress',
+    isValid: validateStacksAddress,
+    transform: (value: string) => value,
+  },
+  'before:': {
+    filter: 'endTime',
+    isValid: (date: string) => /^\d{4}-\d{2}-\d{2}$/.test(date) && !!Date.parse(date),
+    transform: (value: string) => Date.parse(value) / 1000,
+  },
+  'after:': {
+    filter: 'startTime',
+    isValid: (date: string) => /^\d{4}-\d{2}-\d{2}$/.test(date) && !!Date.parse(date),
+    transform: (value: string) => Date.parse(value) / 1000,
+  },
+};
+
+export function parseAdvancedSearchQuery(id: string) {
+  const query: Record<string, string> = {};
+  const isAdvancedSearch = Object.keys(advancedSearchConfig).some(term => id.includes(term));
+  if (!isAdvancedSearch) return query;
+  Object.entries(advancedSearchConfig).forEach(([key, config]) => {
+    const index = id.indexOf(key);
+    if (index !== -1) {
+      const value = id.slice(index + key.length).split(' ')[0];
+      if (!config.isValid(value)) return;
+      query[config.filter] = config.transform(value);
+    }
+  });
+  return query;
+}
+
 export function useSearchQuery(id: string) {
   const { searchApi, blocksApi, nonFungibleTokensApi } = useApi();
   const isBtcName = id.endsWith('.btc');
+  const advancedSearchQuery = parseAdvancedSearchQuery(id);
+  const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
+  const api = useApi();
   return useQuery({
     queryKey: ['search', id],
     queryFn: async () => {
       let foundResult;
       let notFoundResult;
-
-      if (isBtcName) {
+      if (isAdvancedSearch) {
+        const txsResponse = await api.transactionsApi.getTransactionList({
+          limit: 3,
+          offset: 0,
+          unanchored: true,
+          sortBy: GetTransactionListSortByEnum.burn_block_time,
+          order: GetTransactionListOrderEnum.desc,
+          ...advancedSearchQuery,
+        });
+        const txs = txsResponse?.results || [];
+        foundResult = {
+          found: true,
+          result: {
+            entity_id: id,
+            entity_type: SearchResultType.TxList,
+            txs,
+          },
+        };
+      } else if (isBtcName) {
         try {
           const nftHistory = await nonFungibleTokensApi.getNftHistory({
             assetIdentifier: BTC_BNS_CONTRACT,

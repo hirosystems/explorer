@@ -10,6 +10,7 @@ export enum SearchResultType {
   ContractAddress = 'contract_address',
   UnknownHash = 'unknown_hash',
   InvalidTerm = 'invalid_term',
+  TxList = 'tx_list',
 }
 
 export interface FoundResult {
@@ -19,7 +20,8 @@ export interface FoundResult {
     | ContractSearchResult
     | TxSearchResult
     | MempoolTxSearchResult
-    | BlockSearchResult;
+    | BlockSearchResult
+    | TxListResult;
 }
 
 export interface NotFoundResult {
@@ -69,5 +71,12 @@ export interface BlockSearchResult {
   entity_id: string;
   block_data: Partial<Block>;
   tx_count: number;
+  metadata?: any;
+}
+
+export interface TxListResult {
+  entity_type: SearchResultType.TxList;
+  entity_id: string;
+  txs: Transaction[];
   metadata?: any;
 }

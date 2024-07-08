@@ -3,6 +3,7 @@ import React from 'react';
 import { FoundResult, SearchResultType } from '../../../common/types/search-results';
 import { AddressResultItem } from './address-result-item';
 import { BlockResultItem } from './block-result-item';
+import { TxListResultItem } from './tx-list-result-item';
 import { TxResultItem } from './tx-result-item';
 
 interface SearchResultItemProps {
@@ -19,5 +20,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) =>
       return <TxResultItem result={result} />;
     case SearchResultType.StandardAddress:
       return <AddressResultItem result={result} />;
+    case SearchResultType.TxList:
+      return <TxListResultItem result={result} />;
   }
 };

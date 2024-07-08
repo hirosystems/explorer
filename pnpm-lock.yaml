@@ -79,8 +79,8 @@ dependencies:
     specifier: 6.15.0
     version: 6.15.0
   '@stacks/blockchain-api-client':
-    specifier: 7.11.0-beta.5
-    version: 7.11.0-beta.5
+    specifier: 7.12.0
+    version: 7.12.0
   '@stacks/common':
     specifier: 6.15.1-pr.0bcf867e.0+0bcf867e
     version: 6.15.1-pr.0bcf867e.0
@@ -282,8 +282,8 @@ devDependencies:
     specifier: 0.0.10
     version: 0.0.10
   '@stacks/stacks-blockchain-api-types':
-    specifier: 7.9.0-beta.1
-    version: 7.9.0-beta.1
+    specifier: 7.12.0
+    version: 7.12.0
   '@testing-library/jest-dom':
     specifier: 5.16.5
     version: 5.16.5
@@ -4269,10 +4269,10 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.11.0-beta.5:
-    resolution: {integrity: sha512-Gh1kp4PCqGbUtOt4SYKicYfDSexykhCrhIELqsK1hJt6tYrdwI8pjJ2f17wj/lSQngPvBPvTCtnV19AydJnUKw==}
+  /@stacks/blockchain-api-client@7.12.0:
+    resolution: {integrity: sha512-N0Pxc8ZK0FQe4CtabDvs2oj2+9E0nrcCt3A3bx8QgZUWS7DPtIaqX3gK6aDSu0k8kD/v5lQQyVrISbNDAeygqQ==}
     dependencies:
-      '@stacks/stacks-blockchain-api-types': 7.7.1
+      '@stacks/stacks-blockchain-api-types': 7.12.0
       '@types/ws': 7.4.7
       cross-fetch: 3.1.5
       eventemitter3: 4.0.7
@@ -4435,13 +4435,8 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/stacks-blockchain-api-types@7.7.1:
-    resolution: {integrity: sha512-PN63uXvyr18PqgRWV8xICcDDK3tY5forAp5zjPJFvmI11fWZk90gXS10ol6G5gurr1aEZD1Okx0CCZ6rNNbXfQ==}
-    dev: false
-
-  /@stacks/stacks-blockchain-api-types@7.9.0-beta.1:
-    resolution: {integrity: sha512-zJ5g4YUW3MxE+fZSU7WznZHCjQK0bhLwx5v1QSZisMR1rVARQdP6Dw7qULiCEu5div44jVO5y5VBrJYjO309Rw==}
-    dev: true
+  /@stacks/stacks-blockchain-api-types@7.12.0:
+    resolution: {integrity: sha512-y76wTzp472m66qHEVvWErxopUqj8ZHYds+odyIjDciTG/u4YG1DwohaCPzgCP3X1fiB6qZ82wMt1VlivYwiuMQ==}
 
   /@stacks/transactions@6.15.0:
     resolution: {integrity: sha512-P6XKDcqqycPy+KBJBw8+5N+u57D8moJN7msYdde1gYXERmvOo9ht/MNREWWQ7SAM7Nlhau5mpezCdYCzXOCilQ==}
