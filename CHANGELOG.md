@@ -1,3 +1,10 @@
+# [1.190.0](https://github.com/hirosystems/explorer/compare/v1.189.0...v1.190.0) (2024-07-09)
+
+
+### Features
+
+* advanced search with keywords ([da62740](https://github.com/hirosystems/explorer/commit/da627402dfbaa7e08d72a89120962992e44baeba))
+
 # [1.189.0](https://github.com/hirosystems/explorer/compare/v1.188.3...v1.189.0) (2024-07-04)
 
 
