@@ -16,8 +16,10 @@ export function useSuspenseNextStackingCycle() {
   const nextCycleStackedSTX = (stacked_ustx || 0) / MICROSTACKS_IN_STACKS;
   const blocksTilNextCyclePreparePhase = blocks_until_prepare_phase || 0;
   const blocksTilNextCycleRewardPhase = blocks_until_reward_phase || 0;
-  const nextCycleBurnBlockHeightStart =
+  const preparePhaseBurnBlockHeightStart =
     currentBurnchainBlockHeight + blocksTilNextCyclePreparePhase;
+  const rewardPhaseBurnBlockHeightStart =
+    currentBurnchainBlockHeight + blocksTilNextCycleRewardPhase;
 
   const numberOfTenMinutesInDay = (24 * 60) / 10;
   const approximateDaysTilNextCyclePreparePhase = Math.floor(
@@ -36,6 +38,7 @@ export function useSuspenseNextStackingCycle() {
     blocksTilNextCyclePreparePhase,
     blocksTilNextCycleRewardPhase,
     approximateDaysTilNextCyclePreparePhase,
-    nextCycleBurnBlockHeightStart,
+    preparePhaseBurnBlockHeightStart,
+    rewardPhaseBurnBlockHeightStart,
   };
 }
