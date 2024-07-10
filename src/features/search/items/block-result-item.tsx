@@ -15,7 +15,12 @@ export const BlockResultItem: React.FC<BlockResultItemProps> = ({ result }) => {
 
   return (
     <BlockListItem
-      block={{ ...result.result.block_data, txs: [...Array(result.result.tx_count)] } as Block}
+      block={
+        {
+          ...result.result.block_data,
+          txs: result.result?.metadata?.txs || [...Array(result.result.tx_count)],
+        } as Block
+      }
       p={0}
       css={css`
         border: none;
