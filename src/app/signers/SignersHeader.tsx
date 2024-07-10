@@ -10,7 +10,7 @@ import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
-import { CurrentCycleCard } from './CurrentCycle';
+import { CurrentCycleCard } from './CurrentCycleCard';
 import { NextCycleCard } from './NextCycleCard';
 import { SignersDistribution } from './SignerDistribution';
 import { SignerDistributionHeader } from './SignerDistributionHeader';
