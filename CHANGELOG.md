@@ -1,3 +1,10 @@
+## [1.190.2](https://github.com/hirosystems/explorer/compare/v1.190.1...v1.190.2) (2024-07-11)
+
+
+### Bug Fixes
+
+* **blocklist-loading-skeleton:** fixed ([38c13dc](https://github.com/hirosystems/explorer/commit/38c13dc011f20cadbc8427a1222e1223ded9e311))
+
 ## [1.190.1](https://github.com/hirosystems/explorer/compare/v1.190.0...v1.190.1) (2024-07-11)
 
 
