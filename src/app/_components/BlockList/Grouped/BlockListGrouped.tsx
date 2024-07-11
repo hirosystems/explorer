@@ -80,7 +80,7 @@ const StxBlockRow = ({
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={stxBlock.hash}>
           <Text color="text" fontWeight="medium" fontSize="sm">
-            #{stxBlock.height} isLast: {isLast?.toString()}
+            #{stxBlock.height}
           </Text>
         </BlockLink>
       </Flex>
