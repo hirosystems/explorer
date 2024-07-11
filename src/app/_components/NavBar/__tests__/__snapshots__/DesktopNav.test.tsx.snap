@@ -40,7 +40,7 @@ exports[`DesktopNav should render correctly 1`] = `
         style="visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;"
       >
         <section
-          class="chakra-popover__content css-1yl3xd7"
+          class="chakra-popover__content css-1fqoc9d"
           id="popover-content-:r1:"
           role="tooltip"
           style="transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.95) translateZ(0);"

@@ -19,6 +19,12 @@ import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption, Title } from '../../../ui/typography';
 
+const ellipsisStyle: React.CSSProperties = {
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+};
+
 export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
   const {
     activeNetwork,
@@ -64,8 +70,9 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
 
   return (
     <Flex
-      justifyContent={'space-between'}
-      width={'100%'}
+      justifyContent="space-between"
+      width="full"
+      maxWidth="full"
       py={3}
       px={{ base: 0, lg: 3 }}
       opacity={isDisabled ? 0.5 : 1}
@@ -77,9 +84,17 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
         {...(!!networkHref && (!isDisabled || isActive) ? { href: networkHref } : {})}
         flexGrow={1}
         cursor={isDisabled ? 'not-allowed' : isActive ? 'unset' : 'pointer'}
+        minWidth={0}
       >
-        <Flex alignItems="center">
-          <Title display="block" fontSize={'sm'} fontWeight="normal">
+        <Flex alignItems="center" width="full">
+          <Title
+            display="block"
+            fontSize={'sm'}
+            fontWeight="normal"
+            style={ellipsisStyle}
+            title={network.label}
+            maxWidth="100%"
+          >
             {network.label === 'https://api.nakamoto.testnet.hiro.so'
               ? 'Nakamoto Testnet'
               : network.label}
@@ -120,7 +135,16 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             </Badge>
           )}
         </Flex>
-        <Caption display="block" color="textSubdued" fontWeight="regular" fontSize="sm">
+        <Caption
+          display="block"
+          color="textSubdued"
+          fontWeight="regular"
+          fontSize="sm"
+          style={ellipsisStyle}
+          title={network?.url?.includes('//') ? network?.url?.split('//')[1] : network?.url}
+          textAlign="left"
+          maxWidth="100%"
+        >
           {network?.url?.includes('//') ? network?.url?.split('//')[1] : network?.url}
         </Caption>
       </Stack>

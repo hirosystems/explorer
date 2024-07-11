@@ -50,6 +50,7 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                 rounded={'xl'}
                 mt={4}
                 width="fit-content"
+                maxWidth={500}
                 p={2}
                 borderColor="borderSecondary"
               >
