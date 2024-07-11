@@ -19,21 +19,13 @@ export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
           display="block"
           rounded="md"
           color="text"
-          width="fit-content"
+          width="full"
           variant="noUnderline"
         >
           {label}
         </Link>
       ) : (
-        <Box
-          as={'button'}
-          onClick={onClick}
-          display="block"
-          rounded="md"
-          color="text"
-          width="full"
-          textAlign={'left'}
-        >
+        <Box as={'button'} onClick={onClick} display="block" rounded="md" color="text" width="full">
           {label}
         </Box>
       )}
