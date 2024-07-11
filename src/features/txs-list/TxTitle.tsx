@@ -1,5 +1,3 @@
-import { ArrowLeft } from '@phosphor-icons/react';
-
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TxLink } from '../../common/components/ExplorerLinks';
@@ -7,7 +5,6 @@ import { StxPrice } from '../../common/components/StxPrice';
 import { getContractName, getFunctionName, microToStacksFormatted } from '../../common/utils/utils';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
-import { HStack } from '../../ui/HStack';
 
 export const TxTitle = ({
   tx,
@@ -27,17 +24,24 @@ export const TxTitle = ({
       );
     case 'contract_call':
       return (
-        <HStack alignItems="center" whiteSpace="nowrap">
-          <TxLink txId={tx.tx_id} openInNewTab={openInNewTab}>
+        <Flex height="full" alignItems="center" whiteSpace="nowrap">
+          <TxLink txId={tx.tx_id} openInNewTab={openInNewTab} fontSize="md" fontWeight="medium">
             {getFunctionName(tx)}
           </TxLink>
-          <Box color={'textCaption'} size="14px">
-            <ArrowLeft size="14px" />
+          &nbsp;
+          <Box color="textSubdued" display="inline">
+            (
+            <TxLink
+              txId={tx.contract_call.contract_id}
+              overflow={'none'}
+              fontSize="sm"
+              fontWeight="medium"
+            >
+              {getContractName(tx.contract_call.contract_id)}
+            </TxLink>
+            )
           </Box>
-          <TxLink txId={tx.contract_call.contract_id} overflow={'none'}>
-            {getContractName(tx.contract_call.contract_id)}
-          </TxLink>
-        </HStack>
+        </Flex>
       );
     case 'token_transfer':
       return (
