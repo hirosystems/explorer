@@ -1,3 +1,10 @@
+## [1.190.1](https://github.com/hirosystems/explorer/compare/v1.190.0...v1.190.1) (2024-07-11)
+
+
+### Bug Fixes
+
+* tx count in block search result ([3e26f00](https://github.com/hirosystems/explorer/commit/3e26f0022882044da1fdaa5fece80b180447d277))
+
 # [1.190.0](https://github.com/hirosystems/explorer/compare/v1.189.0...v1.190.0) (2024-07-09)
 
 
