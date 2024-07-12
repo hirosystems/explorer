@@ -1,3 +1,10 @@
+## [1.190.3](https://github.com/hirosystems/explorer/compare/v1.190.2...v1.190.3) (2024-07-12)
+
+
+### Bug Fixes
+
+* block list regression ([1b87906](https://github.com/hirosystems/explorer/commit/1b87906967dc5c9a288932d488b22ae52f456475))
+
 ## [1.190.2](https://github.com/hirosystems/explorer/compare/v1.190.1...v1.190.2) (2024-07-11)
 
 
