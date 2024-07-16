@@ -1,3 +1,10 @@
+## [1.190.4](https://github.com/hirosystems/explorer/compare/v1.190.3...v1.190.4) (2024-07-16)
+
+
+### Bug Fixes
+
+* consistent rendering for 0x ([b534659](https://github.com/hirosystems/explorer/commit/b5346590d7afa7e8c25716b0d5b20e7f2197c9b7))
+
 ## [1.190.3](https://github.com/hirosystems/explorer/compare/v1.190.2...v1.190.3) (2024-07-12)
 
 
