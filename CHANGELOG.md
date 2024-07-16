@@ -1,3 +1,10 @@
+## [1.190.6](https://github.com/hirosystems/explorer/compare/v1.190.5...v1.190.6) (2024-07-16)
+
+
+### Bug Fixes
+
+* devnet text overflow ([7750b02](https://github.com/hirosystems/explorer/commit/7750b02e25036918dffe613a64baadd62f6a5a11))
+
 ## [1.190.5](https://github.com/hirosystems/explorer/compare/v1.190.4...v1.190.5) (2024-07-16)
 
 
