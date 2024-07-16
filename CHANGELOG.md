@@ -1,3 +1,10 @@
+## [1.190.5](https://github.com/hirosystems/explorer/compare/v1.190.4...v1.190.5) (2024-07-16)
+
+
+### Bug Fixes
+
+* cycle start block on signers page ([4b9aeff](https://github.com/hirosystems/explorer/commit/4b9aeff48ec50a62d7679365d53e4f72ae34d9f0))
+
 ## [1.190.4](https://github.com/hirosystems/explorer/compare/v1.190.3...v1.190.4) (2024-07-16)
 
 
