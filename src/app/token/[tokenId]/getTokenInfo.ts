@@ -36,10 +36,11 @@ async function getBasicTokenInfo(
   api?: string
 ): Promise<BasicTokenInfo | undefined> {
   const isMainnet = chain === 'mainnet';
-  const isCustomApi = !!api;
+  // const isCustomApi = !!api;
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
+    // if (!tokenId || !isMainnet || isCustomApi) {
+    if (!tokenId || !isMainnet) {
       throw new Error('cannot fetch token info for this request');
     }
 
@@ -173,7 +174,8 @@ export async function getTokenInfo(
   console.log('This is happening on the server', { tokenId, chain, api });
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
+    // if (!tokenId || !isMainnet || isCustomApi) {
+    if (!tokenId || !isMainnet) {
       throw new Error('cannot fetch token info for this request');
     }
 

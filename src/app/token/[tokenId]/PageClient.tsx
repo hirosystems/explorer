@@ -48,6 +48,7 @@ export default function PageClient({
         developerData={
           !!tokenInfo.extended?.links?.repos?.length ? tokenInfo.extended?.developerData : undefined
         }
+        tokenInfo={tokenInfo}
       />
       <Sip10Disclaimer />
     </>
