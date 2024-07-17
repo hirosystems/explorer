@@ -61,6 +61,7 @@ export function removeStackingDaoFromName(name: string) {
   if (name.includes('(StackingDAO)')) {
     newName = newName.replace('(StackingDAO)', '');
     newName = newName.trim();
+    newName = newName + '*';
   }
   return newName;
 }
@@ -134,6 +135,11 @@ export function SignersDistributionLegend({
             />
           ))}
         </>
+      }
+      footNotes={
+        <Text fontSize="medium" color="textSubdued">
+          *Stacking DAO pool
+        </Text>
       }
     />
   );
