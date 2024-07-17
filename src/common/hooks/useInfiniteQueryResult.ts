@@ -12,10 +12,12 @@ export interface GenericResponseType<T> {
   results: T[];
 }
 
-export function useInfiniteQueryResult<T>(
-  response: UseInfiniteQueryResult<InfiniteData<GenericResponseType<T>>>,
-  limit?: number
-) {
+export type ResponseType<T, R extends GenericResponseType<T> = GenericResponseType<T>> = R;
+
+export function useInfiniteQueryResult<
+  T,
+  R extends GenericResponseType<T> = GenericResponseType<T>,
+>(response: UseInfiniteQueryResult<InfiniteData<ResponseType<T, R>>>, limit?: number) {
   return useMemo(
     () =>
       response.data?.pages
@@ -26,10 +28,10 @@ export function useInfiniteQueryResult<T>(
   );
 }
 
-export function useSuspenseInfiniteQueryResult<T>(
-  response: UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<T>>>,
-  limit?: number
-) {
+export function useSuspenseInfiniteQueryResult<
+  T,
+  R extends GenericResponseType<T> = GenericResponseType<T>,
+>(response: UseSuspenseInfiniteQueryResult<InfiniteData<ResponseType<T, R>>>, limit?: number) {
   return useMemo(() => {
     return (
       response.data?.pages
