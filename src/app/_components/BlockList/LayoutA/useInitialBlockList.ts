@@ -1,4 +1,4 @@
-import { BurnBlock } from '@stacks/blockchain-api-client';
+import { BurnBlock, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
@@ -16,11 +16,11 @@ export function useInitialBlockList() {
   const lastBurnBlock = burnBlocks[0];
   const secondToLastBurnBlock = burnBlocks[1];
 
-  const lastBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
+  const lastBurnBlockStxBlocks = useSuspenseInfiniteQueryResult<NakamotoBlock>(
     useSuspenseBlocksByBurnBlock(lastBurnBlock.burn_block_height, STX_BLOCK_LENGTH),
     STX_BLOCK_LENGTH
   );
-  const secondToLastBlockStxBlocks = useSuspenseInfiniteQueryResult(
+  const secondToLastBlockStxBlocks = useSuspenseInfiniteQueryResult<NakamotoBlock>(
     useSuspenseBlocksByBurnBlock(secondToLastBurnBlock.burn_block_height, STX_BLOCK_LENGTH),
     STX_BLOCK_LENGTH
   );

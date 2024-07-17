@@ -1,6 +1,8 @@
 import { ArrowElbowLeftDown } from '@phosphor-icons/react';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
+import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
+
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
@@ -332,7 +334,7 @@ export function BurnBlockGroup({
     'additional-stx-blocks-loaded'
   );
   const { fetchNextPage, hasNextPage } = response;
-  const additionalStxBlocksLoaded = useInfiniteQueryResult(response);
+  const additionalStxBlocksLoaded = useInfiniteQueryResult<Block | NakamotoBlock>(response);
 
   const handleLoadMoreStxBlocks = useCallback(() => {
     setEnabled(true);
@@ -381,7 +383,7 @@ export function BurnBlockGroup({
     },
     'last-stx-block'
   );
-  const lastStxBlock = useInfiniteQueryResult(lastStxBlockResponse)[0];
+  const lastStxBlock = useInfiniteQueryResult<Block | NakamotoBlock>(lastStxBlockResponse)[0];
   const lastStxBlockFormatted = useMemo(
     () => (lastStxBlock ? createBlockListStxBlock(lastStxBlock) : null),
     [lastStxBlock]

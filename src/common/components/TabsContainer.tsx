@@ -40,7 +40,7 @@ export const TabsContainer: FC<
       </TabList>
       <TabPanels>
         {tabs.map(tab => (
-          <TabPanel key={`${tab.title}-content`} height={'100%'}>
+          <TabPanel key={`${tab.title}-content`} height={'100%'} py={4}>
             {tab.content}
           </TabPanel>
         ))}

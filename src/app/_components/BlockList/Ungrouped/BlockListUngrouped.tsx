@@ -2,6 +2,8 @@ import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownLeft, Clock } from '@phosphor-icons/react';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
+import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
+
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
@@ -355,7 +357,7 @@ function StxBlocksGroupedByBtcBlock({
     'additional-stx-blocks-loaded'
   );
   const { fetchNextPage, hasNextPage } = response;
-  const additionalStxBlocks = useInfiniteQueryResult(response);
+  const additionalStxBlocks = useInfiniteQueryResult<Block | NakamotoBlock>(response);
 
   const handleLoadMoreStxBlocks = useCallback(() => {
     setEnabled(true);
@@ -391,7 +393,7 @@ function StxBlocksGroupedByBtcBlock({
     },
     'last-stx-block'
   );
-  const lastStxBlock = useInfiniteQueryResult(lastStxBlockResponse)[0];
+  const lastStxBlock = useInfiniteQueryResult<Block | NakamotoBlock>(lastStxBlockResponse)[0];
   const lastStxBlockFormatted = useMemo(
     () => (lastStxBlock ? createBlockListStxBlock(lastStxBlock) : null),
     [lastStxBlock]

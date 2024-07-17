@@ -1,17 +1,9 @@
-import * as React from 'react';
-
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { ListFooter } from '../../common/components/ListFooter';
-import {
-  useInfiniteQueryResult,
-  useSuspenseInfiniteQueryResult,
-} from '../../common/hooks/useInfiniteQueryResult';
-import {
-  useMempoolTransactionsInfinite,
-  useSuspenseMempoolTransactionsInfinite,
-} from '../../common/queries/useMempoolTransactionsInfinite';
+import { useInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
+import { useMempoolTransactionsInfinite } from '../../common/queries/useMempoolTransactionsInfinite';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';

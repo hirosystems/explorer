@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
+import { Block, BurnBlock, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import {
@@ -26,13 +26,13 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
 
   const btcBlocksMap = useBtcBlocksMap(btcBlocks);
 
-  const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
+  const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult<Block | NakamotoBlock>(
     useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height, 3)
   );
-  const secondLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
+  const secondLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult<Block | NakamotoBlock>(
     useSuspenseBlocksByBurnBlock(secondLatestBurnBlock.burn_block_height, 3)
   );
-  const thirdLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
+  const thirdLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult<Block | NakamotoBlock>(
     useSuspenseBlocksByBurnBlock(thirdLatestBurnBlock.burn_block_height, 3)
   );
 

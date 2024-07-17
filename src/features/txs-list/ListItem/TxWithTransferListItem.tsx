@@ -1,7 +1,11 @@
 import pluralize from 'pluralize';
-import React, { FC, memo } from 'react';
+import { FC, memo } from 'react';
 
-import { AddressTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import {
+  AddressTransaction,
+  AddressTransactionEvent,
+  Transaction,
+} from '@stacks/stacks-blockchain-api-types';
 
 import { getTicker } from '../../../app/txid/[txId]/Events';
 import { AddressArea } from '../../../common/components/transaction-item';
@@ -62,7 +66,7 @@ const LeftSubtitle: FC<{
 
 function TxEvents({ address, txId }: { address: string; txId: string }) {
   const response = useAddressTransactionEventsInfinite(address, txId);
-  const events = useInfiniteQueryResult(response);
+  const events = useInfiniteQueryResult<AddressTransactionEvent>(response);
   if (response.isLoading)
     return (
       <Flex alignItems={'center'} justifyContent={'center'} p={4}>

@@ -46,17 +46,8 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
   }, [uniqueBtcBlocks, getQuery]);
   const initialStxBlocks = useQueries(stxBlockQueries, queryClient);
 
-  // const latestBurnBlock = useMemo(() => btcBlocks[0], [btcBlocks]);
-
   const btcBlocksMap = useBtcBlocksMap(btcBlocks);
 
-  // const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-  //   useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height, undefined, {}, 'blocks-page')
-  // );
-
-  // const initialStxBlockHashes = useMemo(() => {
-  //   return new Set([...latestBurnBlockStxBlocks.map(block => block.hash)]);
-  // }, [latestBurnBlockStxBlocks]);
   const initialStxBlockHashes = useMemo(() => {
     return new Set(initialStxBlocks.map(block => block.hash));
   }, [initialStxBlocks]);
@@ -69,23 +60,6 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
     [BURN_BLOCKS_QUERY_KEY],
     [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY],
   ]);
-
-  // const initialBlockList = useMemo(() => {
-  //   const startOfBlockList = generateBlockList(latestBurnBlockStxBlocks, btcBlocksMap);
-  //   const restOfBlockList = uniqueBtcBlocks.slice(1).map(block => ({
-  //     btcBlock: {
-  //       type: 'btc_block',
-  //       height: block.burn_block_height,
-  //       hash: block.burn_block_hash,
-  //       timestamp: block.burn_block_time,
-  //       txsCount: block.stacks_blocks.length,
-  //       blockCount: block.stacks_blocks.length,
-  //       avgBlockTime: block.avg_block_time,
-  //     } as BlockListBtcBlock,
-  //     stxBlocks: [],
-  //   }));
-  //   return [...startOfBlockList, ...restOfBlockList];
-  // }, [latestBurnBlockStxBlocks, btcBlocksMap, uniqueBtcBlocks]);
 
   return {
     initialStxBlockHashes,

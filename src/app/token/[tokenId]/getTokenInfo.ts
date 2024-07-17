@@ -1,8 +1,9 @@
 import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 
-import { DEFAULT_MAINNET_SERVER, LUNAR_CRUSH_API_KEY } from '../../../common/constants/env';
+import { LUNAR_CRUSH_API_KEY } from '../../../common/constants/env';
 import { LunarCrushCoin } from '../../../common/types/lunarCrush';
 import { getCacheClient } from '../../../common/utils/cache-client';
+import { getApiUrl } from '../../../common/utils/network-utils';
 import { BasicTokenInfo, DeveloperData, TokenInfoProps, TokenLinks } from './types';
 
 async function getToken(tokenId: string): Promise<LunarCrushCoin | undefined> {
@@ -35,22 +36,17 @@ async function getBasicTokenInfo(
   chain: string,
   api?: string
 ): Promise<BasicTokenInfo | undefined> {
-  const isMainnet = chain === 'mainnet';
   const isCustomApi = !!api;
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
-      throw new Error('cannot fetch token info for this request');
+    const apiUrl = isCustomApi ? api : getApiUrl(chain);
+    if (!tokenId || !apiUrl || isCustomApi) {
+      throw new Error('Unable to fetch token info for this request');
     }
 
-    console.log(
-      '[debug] cache miss, fetching ',
-      `${DEFAULT_MAINNET_SERVER}/metadata/v1/ft/${tokenId}`
-    );
+    console.log('[debug] cache miss, fetching ', `${apiUrl}/metadata/v1/ft/${tokenId}`);
 
-    const tokenMetadataResponse = await fetch(
-      `${DEFAULT_MAINNET_SERVER}/metadata/v1/ft/${tokenId}`
-    );
+    const tokenMetadataResponse = await fetch(`${apiUrl}/metadata/v1/ft/${tokenId}`);
 
     const tokenMetadata: FtMetadataResponse = await tokenMetadataResponse.json();
 
@@ -154,6 +150,7 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
 
     await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
 
+    console.log('tokenInfo', tokenInfo);
     return tokenInfo;
   } catch (error) {
     console.error(error);
@@ -168,11 +165,10 @@ export async function getTokenInfo(
   chain: string,
   api?: string
 ): Promise<TokenInfoProps> {
-  const isMainnet = chain === 'mainnet';
   const isCustomApi = !!api;
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
+    if (!tokenId || isCustomApi) {
       throw new Error('cannot fetch token info for this request');
     }
 
@@ -187,7 +183,8 @@ export async function getTokenInfo(
       return {};
     }
 
-    return getDetailedTokenInfo(tokenId, basicTokenInfo);
+    const detailedTokenInfo = await getDetailedTokenInfo(tokenId, basicTokenInfo);
+    return detailedTokenInfo;
   } catch (error) {
     console.error(error);
     return {};

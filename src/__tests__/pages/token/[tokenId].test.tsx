@@ -22,16 +22,6 @@ describe('getTokenInfo', () => {
     jest.clearAllMocks();
   });
 
-  it('skips fetching token for testnet', async () => {
-    const tokenId = 'token1';
-    const chain = 'testnet';
-
-    const result = await getTokenInfo(tokenId, chain);
-
-    expect(result).toEqual({});
-    expect(console.error).toBeCalledWith(new Error('cannot fetch token info for this request'));
-  });
-
   it('skips fetching token for custom api', async () => {
     const tokenId = 'token1';
     const chain = 'mainnet';
