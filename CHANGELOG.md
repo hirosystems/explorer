@@ -1,3 +1,10 @@
+## [1.190.7](https://github.com/hirosystems/explorer/compare/v1.190.6...v1.190.7) (2024-07-17)
+
+
+### Bug Fixes
+
+* added search exception in case an addr is not found ([12be44c](https://github.com/hirosystems/explorer/commit/12be44cac04355637cc21e505588ee2d65e9cdac))
+
 ## [1.190.6](https://github.com/hirosystems/explorer/compare/v1.190.5...v1.190.6) (2024-07-16)
 
 
