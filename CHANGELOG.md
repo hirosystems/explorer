@@ -1,3 +1,10 @@
+# [1.191.0](https://github.com/hirosystems/explorer/compare/v1.190.7...v1.191.0) (2024-07-17)
+
+
+### Features
+
+* add kiln as a signer ([23b58eb](https://github.com/hirosystems/explorer/commit/23b58ebc3a5c42d752ddf08479a374d94e1c02f8))
+
 ## [1.190.7](https://github.com/hirosystems/explorer/compare/v1.190.6...v1.190.7) (2024-07-17)
 
 
