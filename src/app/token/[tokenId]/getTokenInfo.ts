@@ -170,6 +170,7 @@ export async function getTokenInfo(
 ): Promise<TokenInfoProps> {
   const isMainnet = chain === 'mainnet';
   const isCustomApi = !!api;
+  console.log('This is happening on the server', { tokenId, chain, api });
 
   try {
     if (!tokenId || !isMainnet || isCustomApi) {
@@ -177,6 +178,7 @@ export async function getTokenInfo(
     }
 
     const cachedTokenInfo = await getCachedTokenInfo(tokenId);
+    console.log('got past the cache code', { cachedTokenInfo });
     if (cachedTokenInfo) {
       console.log('[debug] cache hit');
       return cachedTokenInfo;
