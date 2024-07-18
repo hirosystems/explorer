@@ -1,4 +1,5 @@
 import { ListFooter } from '@/common/components/ListFooter';
+import { useSuspenseInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
@@ -7,7 +8,7 @@ import { ScrollableBox } from '../../../../app/_components/BlockList/ScrollableD
 import { mobileBorderCss } from '../../../../app/_components/BlockList/consts';
 import { ExplorerErrorBoundary } from '../../../../app/_components/ErrorBoundary';
 import { Section } from '../../../../common/components/Section';
-import { truncateMiddle } from '../../../../common/utils/utils';
+import { getContractName, truncateMiddle } from '../../../../common/utils/utils';
 import { Flex } from '../../../../ui/Flex';
 import { Table } from '../../../../ui/Table';
 import { Tbody } from '../../../../ui/Tbody';
@@ -16,7 +17,8 @@ import { Text } from '../../../../ui/Text';
 import { Th } from '../../../../ui/Th';
 import { Thead } from '../../../../ui/Thead';
 import { Tr } from '../../../../ui/Tr';
-import { useSuspenseFtHolders } from './data/useHolders';
+import { TokenInfoProps } from '../types';
+import { HolderInfo, HolderResponseType, useSuspenseFtHolders } from './data/useHolders';
 
 const StyledTable = styled(Table)`
   th {
@@ -59,17 +61,26 @@ export const HoldersTableHeader = ({
   </Th>
 );
 
-export const holdersTableHeaders = ['#', 'Address', 'Quantity', 'Percentage', 'Value'];
+type HeaderValue = '#' | 'Address' | 'Quantity' | 'Percentage' | 'Value';
+export const holdersTableHeaders: HeaderValue[] = [
+  '#',
+  'Address',
+  'Quantity',
+  'Percentage',
+  'Value',
+];
 
-export const HoldersTableHeaders = () => (
+export const HoldersTableHeaders = ({ hasPrice }: { hasPrice: boolean }) => (
   <Tr>
-    {holdersTableHeaders.map((header, i) => (
-      <HoldersTableHeader
-        key={`holders-table-header-${header}`}
-        headerTitle={header}
-        isFirst={i === 0}
-      />
-    ))}
+    {holdersTableHeaders.map((header, i) => {
+      return !hasPrice && header === 'Value' ? null : (
+        <HoldersTableHeader
+          key={`holders-table-header-${header}`}
+          headerTitle={header}
+          isFirst={i === 0}
+        />
+      );
+    })}
   </Tr>
 );
 
@@ -84,7 +95,7 @@ function generateHolderRowInfo(
   address: string,
   balance: number,
   totalSupply: number,
-  tokenPrice: number | null
+  tokenPrice: number | null | undefined
 ): HolderRowInfo {
   return {
     address,
@@ -108,6 +119,7 @@ const HolderTableRow = ({
   isFirst: boolean;
   isLast: boolean;
 } & HolderRowInfo) => {
+  const hasPrice = !!!value;
   return (
     <Tr
       style={{
@@ -137,11 +149,13 @@ const HolderTableRow = ({
           {percentage}
         </Text>
       </Td>
-      <Td py={3} px={6}>
-        <Text whiteSpace="nowrap" fontSize="sm">
-          {value}
-        </Text>
-      </Td>
+      {hasPrice ? (
+        <Td py={3} px={6}>
+          <Text whiteSpace="nowrap" fontSize="sm">
+            {value}
+          </Text>
+        </Td>
+      ) : null}
     </Tr>
   );
 };
@@ -169,14 +183,20 @@ export function HoldersTableLayout({
 
 const HoldersTableBase = ({
   tokenId,
-  tokenPrice,
+  tokenInfo,
 }: {
   tokenId: string;
-  tokenPrice: number | null;
+  tokenInfo: TokenInfoProps;
 }) => {
-  const {
-    data: { results: holderBalances, total: totalNumHolders, total_supply: totalSupply },
-  } = useSuspenseFtHolders(tokenId);
+  const tokenPrice = tokenInfo.extended?.currentPrice;
+  // const tokenName = tokenInfo.basic?.name;
+  const tokenName = getContractName(tokenId);
+  const fullyQualifiedTokenName = `${tokenId}::${tokenName}`;
+
+  const response = useSuspenseFtHolders(fullyQualifiedTokenName);
+  const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
+  const { total: totalNumHolders, total_supply: totalSupply } = response.data.pages[0];
+  const holderBalances = useSuspenseInfiniteQueryResult<HolderInfo, HolderResponseType>(response);
 
   if (!holderBalances || !totalNumHolders || !totalSupply) {
     throw new Error('Holders data is not available');
@@ -186,7 +206,7 @@ const HoldersTableBase = ({
     <>
       <HoldersTableLayout
         numHolders={<Text fontWeight="medium">{totalNumHolders.toLocaleString()} Holders</Text>}
-        holdersTableHeaders={<HoldersTableHeaders />}
+        holdersTableHeaders={<HoldersTableHeaders hasPrice={!!tokenPrice} />}
         holdersTableRows={holderBalances.map((holder, i) => {
           const { address, balance } = holder;
           return (
@@ -201,6 +221,7 @@ const HoldersTableBase = ({
               )}
               isFirst={i === 0}
               isLast={i === holderBalances.length - 1}
+              hasPrice={!!tokenPrice}
             />
           );
         })}
@@ -215,7 +236,7 @@ const HoldersTableBase = ({
   );
 };
 
-const HoldersTable = ({ tokenId, tokenPrice }: { tokenId: string; tokenPrice: number | null }) => {
+const HoldersTable = ({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: TokenInfoProps }) => {
   return (
     <ExplorerErrorBoundary
       Wrapper={Section}
@@ -230,7 +251,7 @@ const HoldersTable = ({ tokenId, tokenPrice }: { tokenId: string; tokenPrice: nu
       {/* TODO: create HoldersTableSkelelton */}
       {/* <Suspense fallback={<HoldersTableSkeleton />}> */}
       <Suspense fallback={<Text>Skeleton placeholder</Text>}>
-        <HoldersTableBase tokenId={tokenId} tokenPrice={tokenPrice} />
+        <HoldersTableBase tokenId={tokenId} tokenInfo={tokenInfo} />
       </Suspense>
     </ExplorerErrorBoundary>
   );

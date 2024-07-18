@@ -62,6 +62,8 @@ async function getBasicTokenInfo(
       throw new Error('token not found');
     }
 
+    console.log({ tokenMetadata });
+
     return {
       name: tokenMetadata?.metadata?.name || tokenName,
       symbol: tokenSymbol,
@@ -155,6 +157,7 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
 
     await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
 
+    console.log('tokenInfo', tokenInfo);
     return tokenInfo;
   } catch (error) {
     console.error(error);
@@ -171,7 +174,6 @@ export async function getTokenInfo(
 ): Promise<TokenInfoProps> {
   const isMainnet = chain === 'mainnet';
   const isCustomApi = !!api;
-  console.log('This is happening on the server', { tokenId, chain, api });
 
   try {
     // if (!tokenId || !isMainnet || isCustomApi) {
@@ -180,7 +182,6 @@ export async function getTokenInfo(
     }
 
     const cachedTokenInfo = await getCachedTokenInfo(tokenId);
-    console.log('got past the cache code', { cachedTokenInfo });
     if (cachedTokenInfo) {
       console.log('[debug] cache hit');
       return cachedTokenInfo;
@@ -191,7 +192,9 @@ export async function getTokenInfo(
       return {};
     }
 
-    return getDetailedTokenInfo(tokenId, basicTokenInfo);
+    const detailedTokenInfo = await getDetailedTokenInfo(tokenId, basicTokenInfo);
+    console.log('detailedTokenInfo', detailedTokenInfo);
+    return detailedTokenInfo;
   } catch (error) {
     console.error(error);
     return {};

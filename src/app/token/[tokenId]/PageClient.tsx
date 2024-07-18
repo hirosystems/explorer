@@ -16,12 +16,11 @@ export default function PageClient({
   tokenId: string;
   tokenInfo: TokenInfoProps;
 }) {
-  console.log("This is not happening on the server", { tokenId, tokenInfo })
   if (!tokenInfo.basic) throw new Error('Could not find token info');
 
   const { name, symbol } = tokenInfo.basic;
   const categories = tokenInfo.extended?.categories || [];
-
+  
   return (
     <>
       <Flex justifyContent={'space-between'} alignItems={'flex-end'}>

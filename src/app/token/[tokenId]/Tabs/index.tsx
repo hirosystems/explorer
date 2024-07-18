@@ -56,7 +56,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           : []),
         {
           title: 'Holders',
-          content: <HoldersTable tokenId={tokenId} tokenPrice={tokenInfo.extended?.currentPrice} />,
+          content: <HoldersTable tokenId={tokenId} tokenInfo={tokenInfo} />,
         },
       ]}
       actions={null}
