@@ -1,3 +1,10 @@
+# [1.192.0](https://github.com/hirosystems/explorer/compare/v1.191.0...v1.192.0) (2024-07-18)
+
+
+### Features
+
+* update supply information ([63e3a13](https://github.com/hirosystems/explorer/commit/63e3a131af87bfbb497082e5f23bb9b54294e539))
+
 # [1.191.0](https://github.com/hirosystems/explorer/compare/v1.190.7...v1.191.0) (2024-07-17)
 
 
