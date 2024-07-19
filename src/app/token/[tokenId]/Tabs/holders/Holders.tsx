@@ -2,23 +2,24 @@ import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
 
-import { ScrollableBox } from '../../../../app/_components/BlockList/ScrollableDiv';
-import { mobileBorderCss } from '../../../../app/_components/BlockList/consts';
-import { ExplorerErrorBoundary } from '../../../../app/_components/ErrorBoundary';
-import { ListFooter } from '../../../../common/components/ListFooter';
-import { Section } from '../../../../common/components/Section';
-import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
-import { getContractName, truncateMiddle } from '../../../../common/utils/utils';
-import { Flex } from '../../../../ui/Flex';
-import { Table } from '../../../../ui/Table';
-import { Tbody } from '../../../../ui/Tbody';
-import { Td } from '../../../../ui/Td';
-import { Text } from '../../../../ui/Text';
-import { Th } from '../../../../ui/Th';
-import { Thead } from '../../../../ui/Thead';
-import { Tr } from '../../../../ui/Tr';
-import { TokenInfoProps } from '../types';
-import { HolderInfo, HolderResponseType, useSuspenseFtHolders } from './data/useHolders';
+import { ListFooter } from '../../../../../common/components/ListFooter';
+import { Section } from '../../../../../common/components/Section';
+import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
+import { getContractName, truncateMiddle } from '../../../../../common/utils/utils';
+import { Flex } from '../../../../../ui/Flex';
+import { Table } from '../../../../../ui/Table';
+import { Tbody } from '../../../../../ui/Tbody';
+import { Td } from '../../../../../ui/Td';
+import { Text } from '../../../../../ui/Text';
+import { Th } from '../../../../../ui/Th';
+import { Thead } from '../../../../../ui/Thead';
+import { Tr } from '../../../../../ui/Tr';
+import { ScrollableBox } from '../../../../_components/BlockList/ScrollableDiv';
+import { mobileBorderCss } from '../../../../_components/BlockList/consts';
+import { ExplorerErrorBoundary } from '../../../../_components/ErrorBoundary';
+import { TokenInfoProps } from '../../types';
+import { HolderInfo, HolderResponseType, useSuspenseFtHolders } from '../data/useHolders';
+import { HoldersTableSkeleton } from './skeleton';
 
 const StyledTable = styled(Table)`
   th {
@@ -189,9 +190,10 @@ const HoldersTableBase = ({
   tokenInfo: TokenInfoProps;
 }) => {
   const tokenPrice = tokenInfo.extended?.currentPrice;
-  // const tokenName = tokenInfo.basic?.name;
   const tokenName = getContractName(tokenId);
-  const fullyQualifiedTokenName = `${tokenId}::${tokenName}`;
+  // TODO: use asset id from token metadata. api is going to add it soon
+  // const fullyQualifiedTokenName = `${tokenId}::${tokenName}`;
+  const fullyQualifiedTokenName = `${tokenId}::ststx`; // works only for ststx
 
   const response = useSuspenseFtHolders(fullyQualifiedTokenName);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
@@ -221,7 +223,6 @@ const HoldersTableBase = ({
               )}
               isFirst={i === 0}
               isLast={i === holderBalances.length - 1}
-              hasPrice={!!tokenPrice}
             />
           );
         })}
@@ -248,9 +249,7 @@ const HoldersTable = ({ tokenId, tokenInfo }: { tokenId: string; tokenInfo: Toke
       }}
       tryAgainButton
     >
-      {/* TODO: create HoldersTableSkelelton */}
-      {/* <Suspense fallback={<HoldersTableSkeleton />}> */}
-      <Suspense fallback={<Text>Skeleton placeholder</Text>}>
+      <Suspense fallback={<HoldersTableSkeleton />}>
         <HoldersTableBase tokenId={tokenId} tokenInfo={tokenInfo} />
       </Suspense>
     </ExplorerErrorBoundary>

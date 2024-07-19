@@ -62,8 +62,6 @@ async function getBasicTokenInfo(
       throw new Error('token not found');
     }
 
-    console.log({ tokenMetadata });
-
     return {
       name: tokenMetadata?.metadata?.name || tokenName,
       symbol: tokenSymbol,
@@ -193,7 +191,6 @@ export async function getTokenInfo(
     }
 
     const detailedTokenInfo = await getDetailedTokenInfo(tokenId, basicTokenInfo);
-    console.log('detailedTokenInfo', detailedTokenInfo);
     return detailedTokenInfo;
   } catch (error) {
     console.error(error);

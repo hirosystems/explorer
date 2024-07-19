@@ -40,9 +40,13 @@ export function Section({
           gap={4}
         >
           {title ? (
-            <Text color={titleColor} fontWeight="medium">
-              {title}
-            </Text>
+            typeof title === 'string' ? (
+              <Text color={titleColor} fontWeight="medium">
+                {title}
+              </Text>
+            ) : (
+              title
+            )
           ) : null}
           {TopRight ? (
             <Flex justifyContent="flex-end" alignItems="center">

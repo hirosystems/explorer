@@ -8,7 +8,7 @@ import { TabsProps } from '../../../../ui/Tabs';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { DeveloperData, TokenInfoProps } from '../types';
 import { Developers } from './Developers';
-import HoldersTable from './Holders';
+import HoldersTable from './holders/Holders';
 
 interface TokenTabsProps extends Partial<TabsProps> {
   tokenId: string;
