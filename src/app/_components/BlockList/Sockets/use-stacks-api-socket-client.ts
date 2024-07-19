@@ -6,11 +6,13 @@ export interface StacksApiSocketClientInfo {
   client: StacksApiSocketClient | null;
   connect: (
     handleOnConnect?: (client: StacksApiSocketClient) => void,
+    handleDisconnect?: (client: StacksApiSocketClient | null) => void,
     handleError?: (client: StacksApiSocketClient | null) => void
   ) => void;
   disconnect: () => void;
 }
 
+// ws abstraction layer that handles low level socket connection and disconnection logic
 export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientInfo {
   const [socketClient, setSocketClient] = useState<StacksApiSocketClient | null>(null);
   const isSocketClientConnecting = useRef(false);
@@ -27,6 +29,7 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
   const connect = useCallback(
     async (
       handleOnConnect?: (client: StacksApiSocketClient) => void,
+      handleOnDisconnect?: (client: StacksApiSocketClient | null) => void,
       handleError?: (client: StacksApiSocketClient | null) => void
     ) => {
       if (!apiUrl) return;
@@ -44,6 +47,7 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
           client.socket.removeAllListeners();
           client.socket.close();
           disconnect();
+          handleOnDisconnect?.(client);
         });
         client.socket.on('connect_error', error => {
           client.socket.removeAllListeners();

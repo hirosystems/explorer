@@ -22,6 +22,7 @@ import { ContractDetailsCard } from './Cards/ContractDetailsCard';
 import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
 import { TxAlerts } from './TxAlerts';
+import { TxSubscriptionButton } from './TxSubscriptionButton';
 
 const txTypeNamesMap = {
   [TransactionType.SMART_CONTRACT]: 'Contract deploy',
@@ -76,6 +77,7 @@ export const TxPage: React.FC<{
               <TagLeftIcon as={txStatusIconMap[getTransactionStatus(tx)]} />
               <TagLabel>{txStatusLabelMap[getTransactionStatus(tx)]}</TagLabel>
             </Tag>
+            <TxSubscriptionButton tx={tx} />
           </>
         }
       >
