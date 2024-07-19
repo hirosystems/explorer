@@ -40,7 +40,8 @@ export function useSuspenseFtHolders(fullyQualifiedTokenId: string, options: any
 
   return useSuspenseInfiniteQuery<HolderResponseType>({
     queryKey: [HOLDERS_QUERY_KEY, fullyQualifiedTokenId],
-    queryFn: ({ pageParam }: { pageParam: number }) => fetchHolders(fullyQualifiedTokenId, pageParam, options),
+    queryFn: ({ pageParam }: { pageParam: number }) =>
+      fetchHolders(fullyQualifiedTokenId, pageParam, options),
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TEN_MINUTES,

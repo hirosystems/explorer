@@ -20,7 +20,7 @@ export default function PageClient({
 
   const { name, symbol } = tokenInfo.basic;
   const categories = tokenInfo.extended?.categories || [];
-  
+
   return (
     <>
       <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
