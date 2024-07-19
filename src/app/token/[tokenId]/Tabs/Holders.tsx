@@ -1,5 +1,3 @@
-import { ListFooter } from '@/common/components/ListFooter';
-import { useSuspenseInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
@@ -7,7 +5,9 @@ import { ReactNode, Suspense } from 'react';
 import { ScrollableBox } from '../../../../app/_components/BlockList/ScrollableDiv';
 import { mobileBorderCss } from '../../../../app/_components/BlockList/consts';
 import { ExplorerErrorBoundary } from '../../../../app/_components/ErrorBoundary';
+import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
+import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { getContractName, truncateMiddle } from '../../../../common/utils/utils';
 import { Flex } from '../../../../ui/Flex';
 import { Table } from '../../../../ui/Table';
