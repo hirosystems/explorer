@@ -23,12 +23,7 @@ function BlocksPageBlockListGroupedBase() {
     <>
       {!liveUpdates && <UpdateBar onClick={updateBlockList} latestBlock={latestBlock} />}
       <Flex flexDirection="column" gap={4} pt={4}>
-        <BlockListGrouped
-          blockList={blockList}
-          minimized={false}
-          stxBlocksLimit={10}
-          onlyShowStxBlocksForFirstBtcBlock={true}
-        />
+        <BlockListGrouped blockList={blockList} minimized={false} stxBlocksLimit={undefined} />
       </Flex>
       <Box pt={5} pb={5}>
         <ListFooter

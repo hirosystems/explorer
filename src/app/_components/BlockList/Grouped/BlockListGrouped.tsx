@@ -1,8 +1,10 @@
-import { ArrowElbowLeftDown, Clock } from '@phosphor-icons/react';
-import React, { ReactNode, useMemo } from 'react';
+import { ArrowElbowLeftDown } from '@phosphor-icons/react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
+import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
+import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
@@ -21,7 +23,7 @@ import { LineAndNode } from '../LineAndNode';
 import { ScrollableBox } from '../ScrollableDiv';
 import { getFadeAnimationStyle, mobileBorderCss } from '../consts';
 import { BlockListBtcBlock, BlockListStxBlock } from '../types';
-import { BlockListData } from '../utils';
+import { BlockListData, createBlockListStxBlock } from '../utils';
 
 const PADDING = 4;
 
@@ -158,6 +160,7 @@ export function BurnBlockGroupGridLayout({
       templateColumns={minimized ? 'auto 1fr auto' : 'repeat(4, 1fr)'}
       width={'full'}
       columnGap={minimized ? 0 : 4}
+      mb="1px"
     >
       {children}
     </Grid>
@@ -165,31 +168,70 @@ export function BurnBlockGroupGridLayout({
 }
 
 export function BurnBlockGroupGrid({
+  blocksCount,
   stxBlocks,
-  minimized,
-  numStxBlocksNotDisplayed,
+  lastStxBlock = null,
+  stxBlocksLimit,
+  minimized = false,
+  isFirst = false,
+  loadMoreStxBlocksHandler,
+  displayBlocksCount = true,
 }: {
   stxBlocks: BlockListStxBlock[];
-  minimized: boolean;
-  numStxBlocksNotDisplayed: number;
+  blocksCount: number;
+  lastStxBlock?: BlockListStxBlock | null;
+  stxBlocksLimit?: number;
+  isFirst?: boolean;
+  minimized?: boolean;
+  loadMoreStxBlocksHandler?: () => void;
+  displayBlocksCount?: boolean;
 }) {
+  const stxBlocksToDisplay = useMemo(
+    () => (stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks),
+    [stxBlocks, stxBlocksLimit]
+  );
+  const numStxBlocksNotDisplayed = blocksCount - stxBlocksToDisplay.length;
+  const showLastStxBlock = lastStxBlock && numStxBlocksNotDisplayed > 1;
+
   return (
-    <BurnBlockGroupGridLayout minimized={minimized}>
-      {minimized || stxBlocks.length === 0 ? null : <GroupHeader />}
-      {stxBlocks.map((stxBlock, i) => (
-        <React.Fragment key={`stx-block-row-${stxBlock.hash}`}>
-          <StxBlockRow
-            stxBlock={stxBlock}
+    <Stack gap={0}>
+      <BurnBlockGroupGridLayout minimized={minimized}>
+        {minimized || stxBlocksToDisplay.length === 0 ? null : <GroupHeader />}
+        {stxBlocksToDisplay.map((stxBlock, i) => (
+          <React.Fragment key={`stx-block-row-${stxBlock.hash}`}>
+            <StxBlockRow
+              stxBlock={stxBlock}
+              minimized={minimized}
+              isFirst={i === 0}
+              isLast={i === stxBlocksToDisplay.length - 1 && numStxBlocksNotDisplayed <= 0}
+            />
+            {i < stxBlocksToDisplay.length - 1 && (
+              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+            )}
+          </React.Fragment>
+        ))}
+      </BurnBlockGroupGridLayout>
+      {displayBlocksCount && numStxBlocksNotDisplayed > 0 ? (
+        <Box py={2}>
+          <BlockCount
+            count={showLastStxBlock ? numStxBlocksNotDisplayed - 1 : numStxBlocksNotDisplayed}
+            isFirst={isFirst}
+            loadMoreStxBlocksHandler={loadMoreStxBlocksHandler}
             minimized={minimized}
-            isFirst={i === 0}
-            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed <= 0}
           />
-          {i < stxBlocks.length - 1 && (
-            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
-          )}
-        </React.Fragment>
-      ))}
-    </BurnBlockGroupGridLayout>
+        </Box>
+      ) : null}
+      {showLastStxBlock ? (
+        <BurnBlockGroupGridLayout minimized={minimized}>
+          <StxBlockRow
+            stxBlock={lastStxBlock}
+            minimized={minimized}
+            isFirst={false}
+            isLast={true}
+          />
+        </BurnBlockGroupGridLayout>
+      ) : null}
+    </Stack>
   );
 }
 
@@ -212,51 +254,33 @@ function BitcoinHeader({
       px={PADDING}
       borderBottom={minimized ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
       flexWrap={'wrap'}
-      // height={5}
     >
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
         <Icon as={ArrowElbowLeftDown} size={3.5} color="textSubdued" />
         <Icon as={BitcoinIcon} size={4.5} />
-        {isFirst ? (
-          <Flex height="full" alignItems="center">
-            <Text fontSize="sm" color="textSubdued">
-              Next Bitcoin block
-            </Text>
-          </Flex>
-        ) : (
-          <Flex height="full" alignItems="center">
-            <ExplorerLink
-              fontSize="sm"
-              color="textSubdued"
-              href={`/btcblock/${btcBlock.hash}`}
-              height="full"
-            >
-              #{btcBlock.height}
-            </ExplorerLink>
-          </Flex>
-        )}
+        <Flex height="full" alignItems="center">
+          <ExplorerLink
+            fontSize="sm"
+            color="textSubdued"
+            href={`/btcblock/${btcBlock.hash}`}
+            height="full"
+          >
+            #{btcBlock.height}
+          </ExplorerLink>
+        </Flex>
       </Flex>
       <Box>
-        {isFirst ? (
-          <Flex gap={1} alignItems="center">
-            <Icon as={Clock} size={4} color="iconSubdued" />
-            <Text color="textSubdued" fontSize="xs">
-              Unconfirmed
-            </Text>
-          </Flex>
-        ) : (
-          <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
-            <ExplorerLink
-              fontSize="xs"
-              color="textSubdued"
-              href={`/btcblock/${btcBlock.hash}`}
-              whiteSpace={'nowrap'}
-            >
-              {truncateMiddle(btcBlock.hash, 6)}
-            </ExplorerLink>
-            <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
-          </HStack>
-        )}
+        <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+          <ExplorerLink
+            fontSize="xs"
+            color="textSubdued"
+            href={`/btcblock/${btcBlock.hash}`}
+            whiteSpace={'nowrap'}
+          >
+            {truncateMiddle(btcBlock.hash, 6)}
+          </ExplorerLink>
+          <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
+        </HStack>
       </Box>
     </Flex>
   );
@@ -289,66 +313,94 @@ export function BurnBlockGroup({
   isFirst,
   stxBlocksLimit,
   minimized = false,
-  onlyShowStxBlocksForFirstBtcBlock,
 }: {
   btcBlock: BlockListBtcBlock;
   stxBlocks: BlockListStxBlock[];
   isFirst: boolean;
   stxBlocksLimit?: number;
   minimized?: boolean;
-  onlyShowStxBlocksForFirstBtcBlock?: boolean;
 }) {
-  const unaccountedStxBlocks = btcBlock.blockCount ? stxBlocks.length - btcBlock.blockCount : 0;
+  const [enabled, setEnabled] = useState(false);
+
+  const response = useBlocksByBurnBlock(
+    btcBlock.height,
+    10,
+    stxBlocks.length,
+    {
+      enabled,
+    },
+    'additional-stx-blocks-loaded'
+  );
+  const { fetchNextPage, hasNextPage } = response;
+  const additionalStxBlocksLoaded = useInfiniteQueryResult(response);
+
+  const handleLoadMoreStxBlocks = useCallback(() => {
+    setEnabled(true);
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage]);
+
+  const allStxBlocks = useMemo(() => {
+    return stxBlocks.concat(additionalStxBlocksLoaded.map(createBlockListStxBlock));
+  }, [stxBlocks, additionalStxBlocksLoaded]);
+
+  // Live updates cause unaccounted blocks and txs
+  const unaccountedStxBlocks = useMemo(
+    () => Math.max(0, allStxBlocks.length - btcBlock.blockCount),
+    [allStxBlocks, btcBlock.blockCount]
+  );
   const unaccountedTxs = useMemo(
     () =>
       unaccountedStxBlocks > 0
-        ? stxBlocks
+        ? allStxBlocks
             .slice(0, unaccountedStxBlocks)
             .reduce((acc, block) => acc + (block.txsCount || 0), 0)
         : 0,
-    [stxBlocks, unaccountedStxBlocks]
+    [allStxBlocks, unaccountedStxBlocks]
   );
-  const txsCount = btcBlock.txsCount
-    ? isFirst
-      ? btcBlock.txsCount + unaccountedTxs
-      : btcBlock.txsCount
-    : undefined;
-  const blocksCount = btcBlock.blockCount
-    ? isFirst
-      ? btcBlock.blockCount + unaccountedStxBlocks
-      : btcBlock.blockCount
-    : undefined;
-  const numStxBlocksNotDisplayed =
-    onlyShowStxBlocksForFirstBtcBlock && !isFirst
-      ? blocksCount
-        ? blocksCount
-        : 0
-      : blocksCount
-        ? blocksCount - (stxBlocksLimit || 0)
-        : 0;
-  const displayedStxBlocks = useMemo(
-    () => (stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks),
-    [stxBlocks, stxBlocksLimit]
+
+  const txsCount = isFirst
+    ? btcBlock.txsCount + unaccountedTxs // For the first btc block, if live is on, then the btc block tx count can be stale and we need to account for the unaccounted txs
+    : btcBlock.txsCount;
+  const blocksCount = useMemo(
+    () => (isFirst ? btcBlock.blockCount + unaccountedStxBlocks : btcBlock.blockCount),
+    [btcBlock, unaccountedStxBlocks, isFirst]
   );
+
+  const queryForLastStxBlockRequired = useMemo(
+    () => allStxBlocks.length < blocksCount,
+    [allStxBlocks, blocksCount]
+  );
+  const lastStxBlockResponse = useBlocksByBurnBlock(
+    btcBlock.height,
+    1,
+    blocksCount - 1,
+    {
+      enabled: queryForLastStxBlockRequired,
+    },
+    'last-stx-block'
+  );
+  const lastStxBlock = useInfiniteQueryResult(lastStxBlockResponse)[0];
+  const lastStxBlockFormatted = useMemo(
+    () => (lastStxBlock ? createBlockListStxBlock(lastStxBlock) : null),
+    [lastStxBlock]
+  );
+
   return (
     <Box border={'1px'} rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />
-      {onlyShowStxBlocksForFirstBtcBlock && !isFirst ? null : (
-        <ScrollableBox>
-          <BurnBlockGroupGrid
-            stxBlocks={displayedStxBlocks}
-            minimized={minimized}
-            numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
-          />
-        </ScrollableBox>
-      )}
-      {numStxBlocksNotDisplayed > 0 ? (
-        <BlockCount
-          count={numStxBlocksNotDisplayed}
-          btcBlockHash={btcBlock.hash}
+      <ScrollableBox>
+        <BurnBlockGroupGrid
+          stxBlocks={allStxBlocks}
+          blocksCount={blocksCount}
+          lastStxBlock={lastStxBlockFormatted}
+          stxBlocksLimit={stxBlocksLimit}
+          minimized={minimized}
           isFirst={isFirst}
+          loadMoreStxBlocksHandler={handleLoadMoreStxBlocks}
         />
-      ) : null}
+      </ScrollableBox>
       <Footer txsCount={txsCount} blocksCount={blocksCount} />
     </Box>
   );
@@ -368,12 +420,10 @@ export function BlockListGrouped({
   blockList,
   minimized,
   stxBlocksLimit,
-  onlyShowStxBlocksForFirstBtcBlock,
 }: {
   blockList: BlockListData[];
   minimized: boolean;
   stxBlocksLimit?: number;
-  onlyShowStxBlocksForFirstBtcBlock?: boolean;
 }) {
   return (
     <BlockListGroupedLayout>
@@ -385,7 +435,6 @@ export function BlockListGrouped({
           minimized={minimized}
           stxBlocksLimit={stxBlocksLimit}
           isFirst={i === 0}
-          onlyShowStxBlocksForFirstBtcBlock={onlyShowStxBlocksForFirstBtcBlock}
         />
       ))}
     </BlockListGroupedLayout>

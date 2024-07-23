@@ -41,9 +41,9 @@ export function createBlockListBtcBlockFromStxBlock(
     height: stxBlock.burn_block_height,
     hash: stxBlock.burn_block_hash,
     timestamp: stxBlock.burn_block_time,
-    txsCount: undefined,
-    blockCount: undefined,
-    avgBlockTime: undefined,
+    txsCount: 0,
+    blockCount: 0,
+    avgBlockTime: 0,
   };
 }
 
@@ -119,3 +119,20 @@ export function mergeBlockLists(newblockList: BlockListData[], initialBlockList:
     return [...newblockList, ...initialBlockList];
   }
 }
+
+// export function mergeStxBlockLists(newblockList: BlockListStxBlock[], initialBlockList: BlockListStxBlock[]) {
+//   if (newblockList.length === 0) return initialBlockList;
+//   const earliestStxBlock = newblockList[newblockList.length - 1];
+//   const latestStxBlock = initialBlockList[0];
+//   if (earliestStxBlock.hash === latestStxBlock.hash) {
+//     const btcBlock = earliestStxBlock.btcBlock || latestStxBlock.btcBlock;
+//     const stxBlocks = [...earliestStxBlock.stxBlocks, ...latestStxBlock.stxBlocks];
+//     return [
+//       ...newblockList.slice(0, newblockList.length - 1),
+//       { btcBlock, stxBlocks },
+//       ...initialBlockList.slice(1),
+//     ];
+//   } else {
+//     return [...newblockList, ...initialBlockList];
+//   }
+// }

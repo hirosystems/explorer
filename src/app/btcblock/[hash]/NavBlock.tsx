@@ -11,7 +11,15 @@ export enum NavDirection {
   Backward = 'backward',
 }
 
-export function NavBlock({ href, direction }: { href: string; direction: NavDirection }) {
+export function NavBlock({
+  href,
+  direction,
+  isDisabled,
+}: {
+  href: string;
+  direction: NavDirection;
+  isDisabled?: boolean;
+}) {
   const network = useGlobalContext().activeNetwork;
 
   return (
@@ -21,6 +29,15 @@ export function NavBlock({ href, direction }: { href: string; direction: NavDire
       width={8}
       border="2px solid var(--stacks-colors-slate-50)"
       borderRadius="md"
+      style={
+        isDisabled
+          ? {
+              cursor: 'not-allowed',
+              pointerEvents: 'none',
+              opacity: 0.5,
+            }
+          : {}
+      }
     >
       <Flex alignItems="center" justifyContent="center" height="100%" width="100%">
         <Icon

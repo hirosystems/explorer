@@ -2,6 +2,7 @@ import {
   UseQueryResult,
   UseSuspenseQueryResult,
   useQuery,
+  useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 
@@ -10,6 +11,43 @@ import { BurnBlock } from '@stacks/blockchain-api-client';
 import { useApi } from '../api/useApi';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
+
+export function useFetchBurnBlock(): (heightOrHash: string | number) => Promise<BurnBlock> {
+  const api = useApi();
+  const queryClient = useQueryClient();
+
+  return async (heightOrHash: string | number) => {
+    const queryKey = [BURN_BLOCKS_QUERY_KEY, heightOrHash];
+
+    const cachedData = queryClient.getQueryData<BurnBlock>(queryKey);
+    if (cachedData) {
+      return cachedData;
+    }
+
+    // Fetch the data and update the cache
+    const fetchBurnBlock = async (): Promise<BurnBlock> => {
+      return api.burnBlocksApi.getBurnBlock({ heightOrHash });
+    };
+
+    return queryClient.fetchQuery<BurnBlock>({
+      queryKey,
+      queryFn: fetchBurnBlock,
+      staleTime: Infinity,
+    });
+  };
+}
+
+export function useFetchMultipleBurnBlocks(): (
+  heightOrHashes: (string | number)[]
+) => Promise<BurnBlock[]> {
+  const fetchBurnBlock = useFetchBurnBlock();
+
+  return async (heightOrHashes: (string | number)[]) => {
+    const burnBlockPromises = heightOrHashes.map(heightOrHash => fetchBurnBlock(heightOrHash));
+
+    return await Promise.all(burnBlockPromises);
+  };
+}
 
 export function useGetBurnBlockQuery() {
   const api = useApi();
@@ -23,7 +61,7 @@ export function useGetBurnBlockQuery() {
   });
 }
 
-export function useBurnBlocks(
+export function useBurnBlock(
   heightOrHash: number | string,
   options: any = {}
 ): UseQueryResult<BurnBlock> {
@@ -46,10 +84,7 @@ export function useSuspenseBurnBlock(
   const api = useApi();
   return useSuspenseQuery({
     queryKey: ['burn-block', heightOrHash],
-    queryFn: () =>
-      api.burnBlocksApi.getBurnBlock({
-        heightOrHash,
-      }),
+    queryFn: () => api.burnBlocksApi.getBurnBlock({ heightOrHash }),
     staleTime: Infinity,
     ...options,
   });

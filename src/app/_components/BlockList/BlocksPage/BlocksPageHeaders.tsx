@@ -76,6 +76,9 @@ function AverageStacksBlockTimeCard() {
 }
 
 function LastConfirmedBitcoinBlockCard() {
+  const response = useSuspenseBurnBlocks(1);
+  const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  const btcBlock = burnBlocks[0];
   return (
     <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">
       <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
@@ -84,7 +87,7 @@ function LastConfirmedBitcoinBlockCard() {
       <Flex width="full" display="grid" gridTemplateColumns={['repeat(2, 50%)']}>
         <Stack gap={2}>
           <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
-            214
+            {btcBlock.stacks_blocks.length}
           </Text>
           <Text fontSize="xs" fontWeight="medium" color="textSubdued">
             Stacks blocks
@@ -92,7 +95,7 @@ function LastConfirmedBitcoinBlockCard() {
         </Stack>
         <Stack gap={2}>
           <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
-            4354
+            {btcBlock.total_tx_count}
           </Text>
           <Text fontSize="xs" fontWeight="medium" color="textSubdued">
             Stacks transactions
