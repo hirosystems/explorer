@@ -9,6 +9,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
 import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
@@ -38,7 +39,7 @@ export function BitcoinAnchorDetailsBase() {
         value={
           <Link target="_blank" href={`${btcBlockBaseUrl}/${btcBlock.burn_block_height}`}>
             <Flex alignItems="center" gap={2}>
-              <BitcoinIcon height={5} width={5} />
+              <Icon as={BitcoinIcon} size={5} />
               <Text fontSize="sm" fontWeight="medium">
                 #{btcBlock.burn_block_height}
               </Text>

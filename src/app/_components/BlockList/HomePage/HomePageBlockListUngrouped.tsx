@@ -18,7 +18,7 @@ function HomePageBlockListUngroupedBase() {
     <>
       {!liveUpdates && <UpdateBar onClick={updateBlockList} latestBlock={latestBlock} />}
       <Flex flexDirection="column" gap={5}>
-        <BlockListUngrouped blockList={blockList} stxBlocksLimit={5} minimized={true} />
+        <BlockListUngrouped blockList={blockList} stxBlocksLimit={3} minimized={true} />
         <ListFooter href={'/blocks'} label={'blocks'} />
       </Flex>
     </>

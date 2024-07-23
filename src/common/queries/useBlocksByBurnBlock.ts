@@ -39,11 +39,14 @@ export function useGetStxBlocksByBurnBlockQuery() {
 export function useBlocksByBurnBlock(
   heightOrHash: string | number,
   limit: number = MAX_STX_BLOCKS_PER_BURN_BLOCK_LIMIT,
-  options: any = {}
+  offset?: number,
+  options?: object,
+  queryKeyExtension?: string
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<NakamotoBlock>>> {
   const api = useApi();
+  const rangeQueryKey = offset ? `${offset}-${offset + limit}` : '';
   return useInfiniteQuery({
-    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash],
+    queryKey: [GET_BLOCKS_BY_BURN_BLOCK_QUERY_KEY, heightOrHash, rangeQueryKey, queryKeyExtension],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.blocksApi.getBlocksByBurnBlock({
         heightOrHash,
@@ -51,7 +54,7 @@ export function useBlocksByBurnBlock(
         offset: pageParam,
       }),
     getNextPageParam,
-    initialPageParam: 0,
+    initialPageParam: offset ?? 0,
     staleTime: heightOrHash === 'latest' ? ONE_SECOND * 5 : TWO_MINUTES,
     ...options,
   });
@@ -73,8 +76,9 @@ export function useSuspenseBlocksByBurnBlock(
         offset: pageParam,
       }),
     getNextPageParam,
-    initialPageParam: 0,
+    initialPageParam: options.offset ?? 0,
     staleTime: heightOrHash === 'latest' ? ONE_SECOND * 5 : TWO_MINUTES,
+    enabled: false,
     ...options,
   });
 }

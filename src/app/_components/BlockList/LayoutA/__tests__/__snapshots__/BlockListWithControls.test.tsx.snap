@@ -366,37 +366,29 @@ exports[`BlockListWithControls renders correctly 1`] = `
               </div>
             </div>
           </div>
-          <div
-            class="css-1vu7rur"
+          <button
+            class="chakra-button css-xy4o8h"
+            type="button"
           >
-            <a
-              class="chakra-link css-0"
-              href="/blocks?chain=mainnet"
+            <span
+              class="chakra-text css-21mxti"
             >
-              <span
-                class="chakra-text css-1cy56wk"
+              +25 blocks
+              <svg
+                class="chakra-icon css-1nguf4z"
+                fill="currentColor"
+                focusable="false"
+                height="2.5"
+                viewBox="0 0 256 256"
+                width="2.5"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                +25 blocks
-                <div
-                  class="css-1u87arr"
-                >
-                  <svg
-                    class="chakra-icon css-1nguf4z"
-                    fill="currentColor"
-                    focusable="false"
-                    height="2.5"
-                    viewBox="0 0 256 256"
-                    width="2.5"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"
-                    />
-                  </svg>
-                </div>
-              </span>
-            </a>
-          </div>
+                <path
+                  d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"
+                />
+              </svg>
+            </span>
+          </button>
         </div>
         <div
           class="css-37urdo"
