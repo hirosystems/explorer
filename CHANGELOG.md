@@ -1,3 +1,10 @@
+# [1.193.0](https://github.com/hirosystems/explorer/compare/v1.192.0...v1.193.0) (2024-07-24)
+
+
+### Features
+
+* added figment signer ([d052f1c](https://github.com/hirosystems/explorer/commit/d052f1c3e60d6a7f5ab2e012133c39fd212f1508))
+
 # [1.192.0](https://github.com/hirosystems/explorer/compare/v1.191.0...v1.192.0) (2024-07-18)
 
 
