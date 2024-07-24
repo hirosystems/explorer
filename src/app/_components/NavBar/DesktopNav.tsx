@@ -1,6 +1,7 @@
 import { CaretDown } from '@phosphor-icons/react';
 import { FC } from 'react';
 
+import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
@@ -44,20 +45,22 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
               </Flex>
             </PopoverTrigger>
             {navItem.children && (
-              <PopoverContent
-                boxShadow={'xl'}
-                bg="surface"
-                rounded={'xl'}
-                mt={4}
-                width="fit-content"
-                maxWidth={500}
-                p={2}
-                borderColor="borderSecondary"
-              >
-                {navItem.children.map(child => (
-                  <LabelWrapper {...child} key={child.id} />
-                ))}
-              </PopoverContent>
+              <Box h="full" w="full" zIndex="popover">
+                <PopoverContent
+                  boxShadow={'xl'}
+                  bg="surface"
+                  rounded={'xl'}
+                  mt={4}
+                  width="fit-content"
+                  maxWidth={500}
+                  p={2}
+                  borderColor="borderSecondary"
+                >
+                  {navItem.children.map(child => (
+                    <LabelWrapper {...child} key={child.id} />
+                  ))}
+                </PopoverContent>
+              </Box>
             )}
           </Popover>
         </Flex>

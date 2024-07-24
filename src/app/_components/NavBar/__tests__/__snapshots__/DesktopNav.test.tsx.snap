@@ -36,16 +36,20 @@ exports[`DesktopNav should render correctly 1`] = `
         </svg>
       </div>
       <div
-        class="chakra-popover__popper css-0"
-        style="visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;"
+        class="css-14g0vpv"
       >
-        <section
-          class="chakra-popover__content css-1fqoc9d"
-          id="popover-content-:r1:"
-          role="tooltip"
-          style="transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.95) translateZ(0);"
-          tabindex="-1"
-        />
+        <div
+          class="chakra-popover__popper css-0"
+          style="visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;"
+        >
+          <section
+            class="chakra-popover__content css-1fqoc9d"
+            id="popover-content-:r1:"
+            role="tooltip"
+            style="transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.95) translateZ(0);"
+            tabindex="-1"
+          />
+        </div>
       </div>
     </div>
     <div
