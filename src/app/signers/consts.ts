@@ -71,6 +71,10 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
     poolOperator: '',
     name: 'Kiln',
   },
+  '0x025f9fd3d308e7306e154d9a5466a5aee6918258cdb08924ade59bea04f472b339': {
+    poolOperator: '',
+    name: 'Figment',
+  },
 };
 export const mobileBorderCss = {
   '.has-horizontal-scroll &': {

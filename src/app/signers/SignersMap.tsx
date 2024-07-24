@@ -75,10 +75,6 @@ const activeMarkerIconDark = new L.DivIcon({
   iconAnchor: [10, 10],
 });
 
-const exactIcon = new L.Icon({
-  iconUrl: '/exact-marker.svg',
-});
-
 interface CenterAndZoom {
   center: [number, number];
   zoom: number;
