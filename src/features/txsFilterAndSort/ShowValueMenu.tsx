@@ -17,7 +17,7 @@ function getActiveTransactionValueFilterLabel(
   if (
     activeTransactionValueFilter === TransactionValueFilterTypes.EstimatedValueOnDayOfTransaction
   ) {
-    return 'Estimated value on day of transaction';
+    return 'Est. value on tx day';
   }
   throw new Error('Invalid activeTransactionValueFilter');
 }

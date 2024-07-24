@@ -2,25 +2,24 @@
 
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useAppDispatch } from '../../../common/state/hooks';
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { InputGroup } from '../../../ui/InputGroup';
-import { InputLeftElement } from '../../../ui/InputLeftElement';
-import { InputRightElement } from '../../../ui/InputRightElement';
 import { Spinner } from '../../../ui/Spinner';
-import { blur, clearSearchTerm, focus, setSearchTerm } from '../search-slice';
-import { useSearch } from '../useSearch';
+import { Text } from '../../../ui/Text';
+import { clearSearchTerm, selectIsSearchFieldFocused, selectSearchTerm } from '../search-slice';
 import { SearchInput } from './search-input';
 
-export const SearchBox = React.memo(() => {
+export const SearchBox = React.memo(({ isFetching }: { isFetching: boolean }) => {
   const dispatch = useAppDispatch();
-  const {
-    query: { isFetching },
-    searchTerm,
-  } = useSearch();
+  const searchTerm = useAppSelector(selectSearchTerm);
+  const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
+
+  const [tempSearchTerm, setTempSearchTerm] = useState('');
 
   useEffect(() => {
     dispatch(clearSearchTerm());
@@ -30,33 +29,50 @@ export const SearchBox = React.memo(() => {
 
   return (
     <InputGroup>
-      <InputLeftElement pointerEvents="none">
-        <Icon as={MagnifyingGlass} size={4} color="white" />
-      </InputLeftElement>
-      <SearchInput
-        onChange={(e: React.FormEvent<HTMLInputElement>) => {
-          dispatch(setSearchTerm(e.currentTarget.value));
+      <Flex
+        width="full"
+        alignItems="center"
+        gap={2}
+        bgColor="whiteAlpha.200"
+        border="1px"
+        borderColor="whiteAlpha.600"
+        borderRadius="xl"
+        transitionProperty="border"
+        backdropFilter={'blur(24px)'}
+        _focusWithin={{
+          bgColor: 'whiteAlpha.300',
         }}
-        value={searchTerm}
-        onFocus={() => dispatch(focus())}
-        onBlur={() => setTimeout(() => dispatch(blur()), 200)}
-      />
-      {isFetching ? (
-        <InputRightElement>
-          <Spinner w={4} h={4} color="white" />
-        </InputRightElement>
-      ) : showClearButton ? (
-        <InputRightElement>
+      >
+        <Icon as={MagnifyingGlass} size={4} color="white" ml={3} />
+        <SearchInput tempSearchTerm={tempSearchTerm} setTempSearchTerm={setTempSearchTerm} />
+        {isFetching ? (
+          <Spinner w={4} h={4} color="white" mr={3} />
+        ) : showClearButton ? (
           <IconButton
             bg="transparent"
             color="white"
+            size={4}
             icon={<Icon as={X} size={3} />}
-            onClick={() => dispatch(clearSearchTerm())}
+            onClick={() => {
+              setTempSearchTerm('');
+              dispatch(clearSearchTerm());
+            }}
             aria-label={'Clear search bar'}
             _hover={{ bg: 'transparent' }}
+            mr={3}
           />
-        </InputRightElement>
-      ) : null}
+        ) : tempSearchTerm === '' && isSearchFieldFocused ? (
+          <Text
+            color={'whiteAlpha.700'}
+            fontSize={'xs'}
+            whiteSpace={'nowrap'}
+            mr={3.5}
+            fontStyle={'italic'}
+          >
+            Press Enter to search
+          </Text>
+        ) : null}
+      </Flex>
     </InputGroup>
   );
 });

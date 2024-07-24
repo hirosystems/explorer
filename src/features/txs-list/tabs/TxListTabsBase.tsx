@@ -7,7 +7,7 @@ import { TabsContainer } from '../../../common/components/TabsContainer';
 import { Flex, FlexProps } from '../../../ui/Flex';
 import { ShowValueMenu } from '../..//txsFilterAndSort/ShowValueMenu';
 import { FilterButton } from '../../txsFilterAndSort/FilterButton';
-import { SortMenu } from '../../txsFilterAndSort/SortMenu';
+import { MempoolTxsSortMenu } from '../../txsFilterAndSort/SortMenu';
 import { CSVDownloadButton } from './CSVDownloadButton';
 
 export const TxListTabsBase: FC<
@@ -43,7 +43,7 @@ export const TxListTabsBase: FC<
           width="auto"
         >
           {!!principal && <CSVDownloadButton address={principal as string} />}
-          {tabIndex === 1 && <SortMenu />}
+          {tabIndex === 1 && <MempoolTxsSortMenu />}
           {showValueMenu && <ShowValueMenu />}
           {showFilterButton && <FilterButton />}
         </Flex>

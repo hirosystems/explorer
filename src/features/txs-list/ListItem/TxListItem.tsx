@@ -21,6 +21,7 @@ interface TxsListItemProps extends FlexProps {
   leftSubtitle?: ReactNode;
   rightTitle?: ReactNode;
   rightSubtitle?: ReactNode;
+  simple?: boolean;
 }
 
 const Icon: FC<{ tx: Transaction }> = memo(({ tx }) => (
@@ -104,7 +105,7 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
 });
 
 export const TxListItem: FC<TxsListItemProps> = memo(
-  ({ tx, leftTitle, leftSubtitle, rightTitle, rightSubtitle, ...rest }) => {
+  ({ tx, leftTitle, leftSubtitle, rightTitle, rightSubtitle, simple, ...rest }) => {
     return (
       <TwoColsListItem
         icon={<Icon tx={tx} />}
@@ -112,10 +113,14 @@ export const TxListItem: FC<TxsListItemProps> = memo(
           title: leftTitle || <LeftTitle tx={tx} />,
           subtitle: leftSubtitle || <LeftSubtitle tx={tx} />,
         }}
-        rightContent={{
-          title: rightTitle || <RightTitle tx={tx} />,
-          subtitle: rightSubtitle || <RightSubtitle tx={tx} />,
-        }}
+        rightContent={
+          simple
+            ? undefined
+            : {
+                title: rightTitle || <RightTitle tx={tx} />,
+                subtitle: rightSubtitle || <RightSubtitle tx={tx} />,
+              }
+        }
         {...rest}
       />
     );

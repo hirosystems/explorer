@@ -1,74 +1,115 @@
 import * as React from 'react';
 
 import { Section } from '../../../common/components/Section';
-import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import {
+  advancedSearchConfig,
+  filterToFormattedValueMap,
+  filterToKeywordMap,
+  parseAdvancedSearchQuery,
+  useSearchQuery,
+} from '../../../common/queries/useSearchQuery';
+import { useAppSelector } from '../../../common/state/hooks';
 import { Box } from '../../../ui/Box';
+import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
-import { Spinner } from '../../../ui/Spinner';
-import { Caption, Text } from '../../../ui/typography';
+import { Text } from '../../../ui/typography';
+import { NoTxs } from '../NoTxs';
 import { SearchResultItem } from '../items/search-result-item';
-import { clearSearchTerm, selectIsSearchFieldFocused } from '../search-slice';
-import { useSearch } from '../useSearch';
-import { SearchErrorMessage } from './error-message';
+import { selectIsSearchFieldFocused, selectSearchTerm } from '../search-slice';
+import { SearchSkeleton } from './SearchSkeleton';
 
-const SearchingIndicator: React.FC = React.memo(() => (
-  <Flex alignItems="center">
-    <Spinner size="18px" opacity={0.5} mr="8px" />
-    <Caption>Searching</Caption>
-  </Flex>
-));
-
-interface CardActionsProps {
-  isLoading?: boolean;
-  hasError?: boolean;
-  hasResults?: boolean;
+function SearchResultHeader({
+  advancedSearchQuery,
+  searchTerm,
+}: {
+  advancedSearchQuery: ReturnType<typeof parseAdvancedSearchQuery>;
+  searchTerm: string;
+}) {
+  const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
+  if (!!searchTerm) {
+    if (isAdvancedSearch) {
+      return (
+        <Flex rowGap={2} columnGap={2.5} flexWrap={'wrap'} alignItems={'center'}>
+          <Text fontSize={'xs'} color="textSubdued">
+            Search results for:
+          </Text>
+          {Object.keys(advancedSearchQuery).map(key => (
+            <Text key={key} fontSize={'xs'} color="textSubdued">
+              <Text
+                display="inline-block"
+                bg="surfaceHighlight"
+                borderRadius="md"
+                py={1.5}
+                whiteSpace="pre"
+                textTransform={'uppercase'}
+              >
+                {' '}
+                {filterToKeywordMap[key]}{' '}
+              </Text>{' '}
+              {filterToFormattedValueMap[key](advancedSearchQuery[key])}
+            </Text>
+          ))}
+        </Flex>
+      );
+    } else {
+      return (
+        <Text fontSize={'xs'} color="textSubdued">
+          Search results for: {searchTerm}
+        </Text>
+      );
+    }
+  } else {
+    return (
+      <>
+        <Text fontSize={'xs'} color="textSubdued">
+          Tip: filter your search by using keywords.
+        </Text>
+        <Flex rowGap={2} columnGap={2.5} flexWrap={'wrap'}>
+          {Object.keys(advancedSearchConfig).map(key => (
+            <Text key={key} fontSize={'xs'}>
+              <Text
+                display="inline-block"
+                bg="surfaceHighlight"
+                borderRadius="md"
+                color="textSubdued"
+                py={1.5}
+                whiteSpace="pre"
+                textTransform={'uppercase'}
+              >
+                {' '}
+                {key} ({advancedSearchConfig[key].type}){' '}
+              </Text>
+            </Text>
+          ))}
+        </Flex>
+      </>
+    );
+  }
 }
 
-const CardActions: React.FC<CardActionsProps> = ({ isLoading, hasError, hasResults }) => {
-  const dispatch = useAppDispatch();
-  return (
-    <Box opacity={isLoading || hasResults || hasError ? 1 : 0}>
-      {isLoading ? (
-        <SearchingIndicator />
-      ) : hasError || hasResults ? (
-        <Caption
-          as="button"
-          border="0"
-          bg="transparent"
-          _hover={{ cursor: 'pointer', color: 'brand' }}
-          onClick={() => dispatch(clearSearchTerm())}
-        >
-          Clear {hasResults ? 'results' : 'error'}
-        </Caption>
-      ) : null}
-    </Box>
-  );
-};
-
-export const SearchResultsCard: React.FC = () => {
-  const {
-    query: { data, isLoading, error },
-    searchTerm,
-  } = useSearch();
+export function SearchResultsCard({
+  searchResponse,
+}: {
+  searchResponse: ReturnType<typeof useSearchQuery>;
+}) {
+  const { data, isLoading, error } = searchResponse;
+  const searchTerm = useAppSelector(selectSearchTerm);
   const isFocused = useAppSelector(selectIsSearchFieldFocused);
   const hasError = !!error || !!(data && !data?.found);
   const hasResults = !hasError && !!data?.found;
-  const errorMessage = searchTerm && !data?.found && data?.error ? data.error : '';
-  const title = React.useMemo(() => {
-    if (hasError) {
-      return 'Not found';
-    }
-    if (hasResults) {
-      return 'Search results';
-    }
-  }, [hasError, hasResults]);
+  const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
+  const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
+  const searchQueryParams = new URLSearchParams();
+  Object.entries(advancedSearchQuery).forEach(([key, value]) => {
+    searchQueryParams.append(key, value);
+  });
 
-  if (!isFocused || (!hasError && !hasResults)) return null;
+  if (!isFocused) return null;
+
+  const totalCount = data && 'metadata' in data.result ? data?.result?.metadata?.totalCount : 0;
 
   return (
     <Section
-      title={<Text fontSize={'xs'}>{title}</Text>}
-      topRight={<CardActions hasError={hasError} hasResults={hasResults} isLoading={isLoading} />}
       position={'absolute'}
       zIndex={'docked'}
       mt={4}
@@ -76,13 +117,37 @@ export const SearchResultsCard: React.FC = () => {
       maxWidth={'full'}
       left={0}
     >
-      <Box py={6}>
-        {errorMessage ? (
-          <SearchErrorMessage message={errorMessage} />
-        ) : data && data.found ? (
-          <SearchResultItem result={data} />
-        ) : null}
+      <Flex
+        direction={'column'}
+        gap={3}
+        py={4}
+        px={6}
+        borderBottom={hasResults || hasError ? '1px' : undefined}
+        mx={-6}
+      >
+        <SearchResultHeader advancedSearchQuery={advancedSearchQuery} searchTerm={searchTerm} />
+      </Flex>
+      <Box>
+        {!searchTerm ? null : isLoading ? (
+          <SearchSkeleton />
+        ) : data?.found ? (
+          <Box py={!isAdvancedSearch ? 6 : 0}>
+            <SearchResultItem result={data} />
+          </Box>
+        ) : (
+          <NoTxs />
+        )}
       </Box>
+      {totalCount > 5 && (
+        <ButtonLink
+          variant={'secondary'}
+          width={'full'}
+          href={`/search?${searchQueryParams.toString()}`}
+          mb={6}
+        >
+          View {totalCount} results
+        </ButtonLink>
+      )}
     </Section>
   );
-};
+}

@@ -3,7 +3,9 @@ import { PayloadAction, Reducer, createSelector, createSlice } from '@reduxjs/to
 import {
   GetMempoolTransactionListOrderByEnum,
   GetMempoolTransactionListOrderEnum,
+  GetTransactionListOrderEnum,
 } from '@stacks/blockchain-api-client';
+import { GetTransactionListSortByEnum } from '@stacks/blockchain-api-client';
 
 import { RootState } from '../../common/state/store';
 
@@ -14,21 +16,26 @@ export enum TxFilterAndSortTypes {
   BlocksPageTxFilter = 'BlocksPageTxFilter',
   SandboxTxFilter = 'SandboxTxFilter',
   AddressTxFilter = 'AddressTxFilter',
+  SearchTxFilter = 'SearchTxFilter',
 }
 
 export type TxFilters = { [key in TxFilterAndSortTypes]: TxFilterAndSortState };
 
 export interface TxFilterAndSortState {
   activeFilters: string[];
-  activeSort: GetMempoolTransactionListOrderByEnum;
-  activeOrder: GetMempoolTransactionListOrderEnum;
+  activeMempoolTxsSort: GetMempoolTransactionListOrderByEnum;
+  activeMempoolTxsOrder: GetMempoolTransactionListOrderEnum;
+  activeConfirmedTxsSort: GetTransactionListSortByEnum;
+  activeConfirmedTxsOrder: GetTransactionListOrderEnum;
   isVisible: boolean;
 }
 
 export const initialState: TxFilterAndSortState = {
   activeFilters: [],
-  activeSort: GetMempoolTransactionListOrderByEnum.age,
-  activeOrder: GetMempoolTransactionListOrderEnum.desc,
+  activeMempoolTxsSort: GetMempoolTransactionListOrderByEnum.age,
+  activeMempoolTxsOrder: GetMempoolTransactionListOrderEnum.desc,
+  activeConfirmedTxsSort: GetTransactionListSortByEnum.burn_block_time,
+  activeConfirmedTxsOrder: GetTransactionListOrderEnum.desc,
   isVisible: false,
 };
 
@@ -39,17 +46,29 @@ const createSliceOptions = (filterType: TxFilterAndSortTypes) => ({
     setActiveFilters: (state: TxFilterAndSortState, action: PayloadAction<string[]>) => {
       state.activeFilters = action.payload;
     },
-    setActiveSort: (
+    setMempoolTxsActiveSort: (
       state: TxFilterAndSortState,
       action: PayloadAction<GetMempoolTransactionListOrderByEnum>
     ) => {
-      state.activeSort = action.payload;
+      state.activeMempoolTxsSort = action.payload;
     },
-    setActiveOrder: (
+    setMempoolTxsActiveOrder: (
       state: TxFilterAndSortState,
       action: PayloadAction<GetMempoolTransactionListOrderEnum>
     ) => {
-      state.activeOrder = action.payload;
+      state.activeMempoolTxsOrder = action.payload;
+    },
+    setConfirmedTxsActiveSort: (
+      state: TxFilterAndSortState,
+      action: PayloadAction<GetTransactionListSortByEnum>
+    ) => {
+      state.activeConfirmedTxsSort = action.payload;
+    },
+    setConfirmedTxsActiveOrder: (
+      state: TxFilterAndSortState,
+      action: PayloadAction<GetTransactionListOrderEnum>
+    ) => {
+      state.activeConfirmedTxsOrder = action.payload;
     },
   },
 });
@@ -58,12 +77,32 @@ export const createTxFilterAndSortSlice = (filterType: TxFilterAndSortTypes) => 
   const slice = createSlice(createSliceOptions(filterType));
   const selectTxFilter = (state: RootState) => state[filterType];
   const selectActiveFilters = createSelector([selectTxFilter], state => state.activeFilters);
-  const selectActiveSort = createSelector([selectTxFilter], state => state.activeSort);
-  const selectActiveOrder = createSelector([selectTxFilter], state => state.activeOrder);
+  const selectMempoolTxsActiveSort = createSelector(
+    [selectTxFilter],
+    state => state.activeMempoolTxsSort
+  );
+  const selectMempoolTxsActiveOrder = createSelector(
+    [selectTxFilter],
+    state => state.activeMempoolTxsOrder
+  );
+  const selectConfirmedTxsActiveSort = createSelector(
+    [selectTxFilter],
+    state => state.activeConfirmedTxsSort
+  );
+  const selectConfirmedTxsActiveOrder = createSelector(
+    [selectTxFilter],
+    state => state.activeConfirmedTxsOrder
+  );
   return {
     slice,
     actions: slice.actions,
-    selectors: { selectActiveFilters, selectActiveSort, selectActiveOrder },
+    selectors: {
+      selectActiveFilters,
+      selectMempoolTxsActiveSort,
+      selectMempoolTxsActiveOrder,
+      selectConfirmedTxsActiveSort,
+      selectConfirmedTxsActiveOrder,
+    },
   };
 };
 

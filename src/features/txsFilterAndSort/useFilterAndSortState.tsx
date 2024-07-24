@@ -3,6 +3,8 @@
 import {
   GetMempoolTransactionListOrderByEnum,
   GetMempoolTransactionListOrderEnum,
+  GetTransactionListOrderEnum,
+  GetTransactionListSortByEnum,
 } from '@stacks/blockchain-api-client';
 
 import { useAppDispatch, useAppSelector } from '../../common/state/hooks';
@@ -17,20 +19,40 @@ export const useFilterAndSortState = () => {
     dispatch(txFilterAndSort[filterScope].actions.setActiveFilters(filters));
   };
 
-  const setActiveSort = (sort: GetMempoolTransactionListOrderByEnum) => {
-    dispatch(txFilterAndSort[filterScope].actions.setActiveSort(sort));
+  const setMempoolTxsActiveSort = (sort: GetMempoolTransactionListOrderByEnum) => {
+    dispatch(txFilterAndSort[filterScope].actions.setMempoolTxsActiveSort(sort));
   };
 
-  const setActiveOrder = (order: GetMempoolTransactionListOrderEnum) => {
-    dispatch(txFilterAndSort[filterScope].actions.setActiveOrder(order));
+  const setMempoolTxsActiveOrder = (order: GetMempoolTransactionListOrderEnum) => {
+    dispatch(txFilterAndSort[filterScope].actions.setMempoolTxsActiveOrder(order));
+  };
+
+  const setConfirmedTxsActiveSort = (sort: GetTransactionListSortByEnum) => {
+    dispatch(txFilterAndSort[filterScope].actions.setConfirmedTxsActiveSort(sort));
+  };
+
+  const setConfirmedTxsActiveOrder = (order: GetTransactionListOrderEnum) => {
+    dispatch(txFilterAndSort[filterScope].actions.setConfirmedTxsActiveOrder(order));
   };
 
   return {
     setActiveFilters,
-    setActiveSort,
-    setActiveOrder,
+    setMempoolTxsActiveSort,
+    setMempoolTxsActiveOrder,
+    setConfirmedTxsActiveSort,
+    setConfirmedTxsActiveOrder,
     activeFilters: useAppSelector(txFilterAndSort[filterScope].selectors.selectActiveFilters),
-    activeSort: useAppSelector(txFilterAndSort[filterScope].selectors.selectActiveSort),
-    activeOrder: useAppSelector(txFilterAndSort[filterScope].selectors.selectActiveOrder),
+    activeMempoolTxsSort: useAppSelector(
+      txFilterAndSort[filterScope].selectors.selectMempoolTxsActiveSort
+    ),
+    activeMempoolTxsOrder: useAppSelector(
+      txFilterAndSort[filterScope].selectors.selectMempoolTxsActiveOrder
+    ),
+    activeConfirmedTxsSort: useAppSelector(
+      txFilterAndSort[filterScope].selectors.selectConfirmedTxsActiveSort
+    ),
+    activeConfirmedTxsOrder: useAppSelector(
+      txFilterAndSort[filterScope].selectors.selectConfirmedTxsActiveOrder
+    ),
   };
 };

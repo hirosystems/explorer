@@ -25,8 +25,8 @@ interface MempoolTxsListProps {
 }
 
 function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
-  const { activeSort, activeOrder } = useFilterAndSortState();
-  const response = useMempoolTransactionsInfinite(activeSort, activeOrder);
+  const { activeMempoolTxsSort, activeMempoolTxsOrder } = useFilterAndSortState();
+  const response = useMempoolTransactionsInfinite(activeMempoolTxsSort, activeMempoolTxsOrder);
   const txs = useInfiniteQueryResult<MempoolTransaction>(response, limit);
 
   if (response.isLoading || response.isFetching) return <SkeletonTxsList />;
