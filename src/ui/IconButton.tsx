@@ -8,7 +8,7 @@ import {
 
 import { UIComponent } from './types';
 
-export type IconButtonProps = CUIIconButtonProps & UIComponent;
+export type IconButtonProps = Omit<CUIIconButtonProps, 'size'> & UIComponent;
 export const IconButton = forwardRef<IconButtonProps, 'button'>(
   ({ children, size, ...rest }, ref) => (
     <CUIIconButton

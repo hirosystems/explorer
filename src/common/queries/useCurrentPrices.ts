@@ -2,6 +2,8 @@
 
 import { QueryFunctionContext, UseQueryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
+import { ONE_HOUR } from './query-stale-time';
+
 const getHistoricalStxPrice = async ({ queryKey }: QueryFunctionContext) => {
   const [_, blockBurnTime] = queryKey;
   return fetch(`/stxPrice?blockBurnTime=${blockBurnTime}`)
@@ -12,14 +14,16 @@ const getHistoricalStxPrice = async ({ queryKey }: QueryFunctionContext) => {
 export const useSuspenseStxPrice = (
   blockBurnTime?: string,
   options?: Partial<UseQueryOptions<any, unknown, any, string[]>>
-) =>
-  useSuspenseQuery({
-    queryKey: ['stx-price', blockBurnTime || 'current'],
+) => {
+  const blockBurnTimeDate = blockBurnTime?.split('T')[0];
+  return useSuspenseQuery({
+    queryKey: ['stx-price', blockBurnTimeDate ? blockBurnTime.split('T')[0] : 'current'],
     queryFn: getHistoricalStxPrice,
-    staleTime: blockBurnTime ? Infinity : 30 * 60 * 1000,
+    staleTime: blockBurnTime ? Infinity : ONE_HOUR * 3,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchOnReconnect: false,
     retry: false,
     ...options,
   });
+};

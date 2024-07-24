@@ -12,6 +12,7 @@ const pathnameFilterScopeMap: Record<string, TxFilterAndSortTypes> = {
   '/sandbox/contract-call': TxFilterAndSortTypes.SandboxTxFilter,
   '/sandbox/faucet': TxFilterAndSortTypes.SandboxTxFilter,
   '/sandbox/transfer': TxFilterAndSortTypes.SandboxTxFilter,
+  '/search': TxFilterAndSortTypes.SearchTxFilter,
   '/': TxFilterAndSortTypes.HomepageTxFilter,
 };
 

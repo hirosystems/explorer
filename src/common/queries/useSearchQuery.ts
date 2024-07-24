@@ -1,3 +1,4 @@
+import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -5,7 +6,7 @@ import {
   GetTransactionListSortByEnum,
 } from '@stacks/blockchain-api-client';
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
-import { bufferCVFromString, cvToHex, tupleCV, validateStacksAddress } from '@stacks/transactions';
+import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
 import { useApi } from '../api/useApi';
 import { BTC_BNS_CONTRACT } from '../constants/constants';
@@ -43,44 +44,101 @@ function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundR
   };
 }
 
-type AdvancedSearchKeywords = 'from:' | 'to:' | 'before:' | 'after:';
+export async function searchByBnsName(api: ReturnType<typeof useApi>, bnsName: string) {
+  try {
+    const nftHistory = await api.nonFungibleTokensApi.getNftHistory({
+      assetIdentifier: BTC_BNS_CONTRACT,
+      value: cvToHex(
+        tupleCV({
+          ['name']: bufferCVFromString(bnsName.replace(new RegExp('.btc$'), '')),
+          ['namespace']: bufferCVFromString('btc'),
+        })
+      ),
+    });
+    if (nftHistory.results.length) {
+      return nftHistoryToSearchResult(nftHistory.results[0], bnsName);
+    }
+  } catch (e) {}
+}
+
+export type AdvancedSearchKeywords = 'FROM:' | 'TO:' | 'BEFORE:' | 'AFTER:';
+
 type AdvancedSearchConfig = Record<
-  AdvancedSearchKeywords,
-  { filter: string; isValid: (value: string) => boolean; transform: (value: string) => any }
+  string,
+  { filter: string; type: string; transform: (value: string) => any }
 >;
 
+export const filterToKeywordMap: Record<string, AdvancedSearchKeywords> = {
+  fromAddress: 'FROM:',
+  toAddress: 'TO:',
+  endTime: 'BEFORE:',
+  startTime: 'AFTER:',
+};
+
+export function formatTimestamp(value: string) {
+  const utcDate = new UTCDate(Number(value) * 1000);
+  const month = utcDate.getUTCMonth();
+  const day = utcDate.getUTCDate();
+  const year = utcDate.getUTCFullYear();
+  if (isNaN(month) || isNaN(day) || isNaN(year)) return 'invalid date';
+  return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+
+export const filterToFormattedValueMap: Record<string, (value: string) => string> = {
+  fromAddress: (value: string) => value,
+  toAddress: (value: string) => value,
+  endTime: formatTimestamp,
+  startTime: formatTimestamp,
+};
+
 export const advancedSearchConfig: AdvancedSearchConfig = {
-  'from:': {
+  'FROM:': {
     filter: 'fromAddress',
-    isValid: validateStacksAddress,
+    type: 'address',
     transform: (value: string) => value,
   },
-  'to:': {
+  'TO:': {
     filter: 'toAddress',
-    isValid: validateStacksAddress,
+    type: 'address',
     transform: (value: string) => value,
   },
-  'before:': {
+  'BEFORE:': {
     filter: 'endTime',
-    isValid: (date: string) => /^\d{4}-\d{2}-\d{2}$/.test(date) && !!Date.parse(date),
-    transform: (value: string) => Date.parse(value) / 1000,
+    type: 'YYYY-MM-DD',
+    transform: (value: string) => {
+      const [year, month, day] = value.split('-').map(Number);
+      const utcDate = new UTCDate(year, month - 1, day, 23, 59, 59);
+      return Math.floor(utcDate.getTime() / 1000);
+    },
   },
-  'after:': {
+  'AFTER:': {
     filter: 'startTime',
-    isValid: (date: string) => /^\d{4}-\d{2}-\d{2}$/.test(date) && !!Date.parse(date),
-    transform: (value: string) => Date.parse(value) / 1000,
+    type: 'YYYY-MM-DD',
+    transform: (value: string) => {
+      const [year, month, day] = value.split('-').map(Number);
+      const utcDate = new UTCDate(year, month - 1, day, 0, 0, 0);
+      return Math.floor(utcDate.getTime() / 1000);
+    },
   },
 };
 
+export const advancedSearchKeywords: string[] = Object.keys(
+  advancedSearchConfig
+) as AdvancedSearchKeywords[];
+
+const splitRegex = new RegExp(`/ +/|(${advancedSearchKeywords.join('|')})`);
+
 export function parseAdvancedSearchQuery(id: string) {
   const query: Record<string, string> = {};
-  const isAdvancedSearch = Object.keys(advancedSearchConfig).some(term => id.includes(term));
+  const isAdvancedSearch = advancedSearchKeywords.some(term => id.includes(term));
   if (!isAdvancedSearch) return query;
   Object.entries(advancedSearchConfig).forEach(([key, config]) => {
     const index = id.indexOf(key);
     if (index !== -1) {
-      const value = id.slice(index + key.length).split(' ')[0];
-      if (!config.isValid(value)) return;
+      const value = id
+        .slice(index + key.length)
+        .split(splitRegex)[0]
+        .trim();
       query[config.filter] = config.transform(value);
     }
   });
@@ -94,13 +152,23 @@ export function useSearchQuery(id: string) {
   const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
   const api = useApi();
   return useQuery({
-    queryKey: ['search', id],
+    queryKey: ['search', isAdvancedSearch ? JSON.stringify(advancedSearchQuery) : id],
     queryFn: async () => {
       let foundResult: FoundResult | undefined = undefined;
       let notFoundResult: NotFoundResult | undefined = undefined;
       if (isAdvancedSearch) {
+        if (advancedSearchQuery.fromAddress?.endsWith('.btc')) {
+          advancedSearchQuery.fromAddress =
+            (await searchByBnsName(api, advancedSearchQuery.fromAddress))?.result.entity_id ||
+            advancedSearchQuery.fromAddress;
+        }
+        if (advancedSearchQuery.toAddress?.endsWith('.btc')) {
+          advancedSearchQuery.toAddress =
+            (await searchByBnsName(api, advancedSearchQuery.toAddress))?.result.entity_id ||
+            advancedSearchQuery.toAddress;
+        }
         const txsResponse = await api.transactionsApi.getTransactionList({
-          limit: 3,
+          limit: 5,
           offset: 0,
           unanchored: true,
           sortBy: GetTransactionListSortByEnum.burn_block_time,
@@ -114,23 +182,13 @@ export function useSearchQuery(id: string) {
             entity_id: id,
             entity_type: SearchResultType.TxList,
             txs,
+            metadata: {
+              totalCount: txsResponse.total,
+            },
           },
         };
       } else if (isBtcName) {
-        try {
-          const nftHistory = await nonFungibleTokensApi.getNftHistory({
-            assetIdentifier: BTC_BNS_CONTRACT,
-            value: cvToHex(
-              tupleCV({
-                ['name']: bufferCVFromString(id.replace(new RegExp('.btc$'), '')),
-                ['namespace']: bufferCVFromString('btc'),
-              })
-            ),
-          });
-          if (nftHistory.results.length) {
-            foundResult = nftHistoryToSearchResult(nftHistory.results[0], id);
-          }
-        } catch (e) {}
+        foundResult = await searchByBnsName(api, id);
       } else if (isNumeric(id)) {
         // Fetch block height if numeric
         try {
@@ -158,9 +216,9 @@ export function useSearchQuery(id: string) {
                     entity_id: id,
                   },
                 };
+              } else {
+                notFoundResult = data;
               }
-            } else {
-              notFoundResult = data;
             }
           } catch (e) {}
         }

@@ -31,7 +31,7 @@ export const Footer: FC = () => {
       mx="auto"
       width="100%"
       maxWidth={PAGE_MAX_WIDTH}
-      mt={'32px'}
+      mt={'auto'}
       mb={['16px', '16px', '32px']}
       px={['16px', '16px', '32px']}
     >

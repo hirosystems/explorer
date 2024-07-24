@@ -1,34 +1,126 @@
+import { red } from 'next/dist/lib/picocolors';
 import * as React from 'react';
+import { useState } from 'react';
 
+import { advancedSearchKeywords } from '../../../common/queries/useSearchQuery';
+import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
 import { Input, InputProps } from '../../../ui/Input';
+import { Text } from '../../../ui/Text';
+import { blur, focus, selectIsSearchFieldFocused, setSearchTerm } from '../search-slice';
 
-export function SearchInput(props: InputProps) {
+export function SearchInput({
+  tempSearchTerm,
+  setTempSearchTerm,
+  ...rest
+}: {
+  tempSearchTerm: string;
+  setTempSearchTerm: (value: string) => void;
+} & InputProps) {
+  const dispatch = useAppDispatch();
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const reg = new RegExp(`(${advancedSearchKeywords.join('|')})`, 'gi');
+  const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
+
   return (
-    <Input
-      id="search-bar"
-      name="search-bar"
-      display="block"
-      borderRadius="xl"
-      bg="whiteAlpha.200"
-      type="text"
-      fontSize="sm"
-      color="slate.50"
-      borderColor="whiteAlpha.600"
-      transitionProperty="border,box-shadow"
-      boxShadow={'0 0 0 1px var(--stacks-colors-whiteAlpha-200)'}
-      autoComplete="off"
-      placeholder="Search the Stacks blockchain"
-      pl={12}
-      maxW={'lg'}
-      _placeholder={{ color: 'white' }}
-      _hover={{
-        borderColor: 'whiteAlpha.500',
-      }}
-      _focus={{
-        borderColor: 'whiteAlpha.500',
-        boxShadow: '0 0 0 1px var(--stacks-colors-whiteAlpha-500)',
-      }}
-      {...props}
-    />
+    <Flex position="relative" alignItems={'center'} maxW={'lg'} width={'full'} overflow="hidden">
+      <Input
+        id="search-bar"
+        name="search-bar"
+        display="block"
+        type="search"
+        autoComplete="off"
+        autoCapitalize={'off'}
+        autoCorrect={'off'}
+        placeholder={isSearchFieldFocused ? '' : 'Search the Stacks blockchain'}
+        enterKeyHint={'search'}
+        outline={'none'}
+        border={'none'}
+        fontSize="sm"
+        color="transparent"
+        bg={'transparent'}
+        p={0}
+        zIndex="docked"
+        width={'full'}
+        sx={{
+          caretColor: 'var(--stacks-colors-slate-50)',
+          '::-webkit-search-cancel-button': {
+            display: 'none',
+          },
+          '::placeholder': {
+            color: 'slate.250',
+          },
+        }}
+        _placeholder={{ color: 'white' }}
+        _hover={{
+          border: 'none',
+          outline: 'none',
+          boxShadow: 'none',
+          '::placeholder': {
+            color: 'slate.50',
+          },
+        }}
+        _focus={{
+          border: 'none',
+          outline: 'none',
+          boxShadow: 'none',
+        }}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            dispatch(setSearchTerm(tempSearchTerm));
+          }
+        }}
+        onChange={(e: React.FormEvent<HTMLInputElement>) => {
+          const formattedValue = e.currentTarget.value.replace(reg, match => match.toUpperCase());
+          setTempSearchTerm(formattedValue);
+        }}
+        onScroll={(e: React.FormEvent<HTMLInputElement>) =>
+          setScrollLeft(e.currentTarget.scrollLeft)
+        }
+        onFocus={() => dispatch(focus())}
+        onBlur={() => setTimeout(() => dispatch(blur()), 200)}
+        value={tempSearchTerm}
+        {...rest}
+      />
+      <Box
+        color="slate.50"
+        fontSize="sm"
+        lineHeight="1em"
+        position="absolute"
+        display="flex"
+        alignItems="center"
+        whiteSpace="pre"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        width={'fit-content'}
+        justifyContent={'flex-start'}
+        style={{ transform: `translateX(-${scrollLeft}px)` }}
+        height={'full'}
+      >
+        {tempSearchTerm
+          ?.toString()
+          ?.split(new RegExp(`(${advancedSearchKeywords.join('|')})`, 'g'))
+          ?.map((segment, index) =>
+            advancedSearchKeywords.includes(segment) ? (
+              <Text
+                key={index}
+                display="inline-block"
+                bg="whiteAlpha.300"
+                borderRadius="md"
+                color="white"
+                py={1}
+                whiteSpace="pre"
+                textTransform={'uppercase'}
+              >
+                {segment}
+              </Text>
+            ) : (
+              <React.Fragment key={index}>{segment}</React.Fragment>
+            )
+          )}
+      </Box>
+    </Flex>
   );
 }

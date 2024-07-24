@@ -77,9 +77,16 @@ export function PageWrapper({
       </Flex>
       <NakamotoModal />
       <WrapperWithBg>
-        <Flex mx="auto" width="full" maxWidth="container.xl" flexDirection="column" p={6}>
+        <Flex
+          mx="auto"
+          width="full"
+          maxWidth="container.xl"
+          flexDirection="column"
+          p={6}
+          minHeight={'100vh'}
+        >
           <NavBar tokenPrice={tokenPrice} />
-          <Flex direction={'column'} mt={10} gap={7}>
+          <Flex direction={'column'} mt={10} mb={8} gap={7}>
             {children}
           </Flex>
           <Footer />
