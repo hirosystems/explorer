@@ -11,6 +11,7 @@ import {
 } from '../_components/BlockList/Grouped/skeleton';
 import { SkeletonBlockList } from '../_components/BlockList/SkeletonBlockList';
 import { PageTitle } from '../_components/PageTitle';
+import { BlocksTableSkeleton } from './blocklist-table/skeleton';
 
 const BlocksPageHeadersDynamic = dynamic(
   () =>
@@ -30,6 +31,14 @@ const BlocksPageBlockListDynamic = dynamic(
     ),
   {
     loading: () => <BlocksPageBlockListSkeleton />,
+    ssr: false,
+  }
+);
+
+const BlocksPageBlocksTableDynamic = dynamic(
+  () => import('./blocklist-table/BlocksTable').then(mod => mod.BlocksTable),
+  {
+    loading: () => <BlocksTableSkeleton />,
     ssr: false,
   }
 );
@@ -71,7 +80,7 @@ const BlocksPage: NextPage = () => {
       title={isNaka1Testnet ? 'Recent blocks' : 'Blocks'}
       blocksPageHeaders={isNaka1Testnet ? <BlocksPageHeadersDynamic /> : null}
       blocksList={
-        isNaka1Testnet ? <BlocksPageBlockListDynamic /> : <PaginatedBlockListLayoutADynamic />
+        isNaka1Testnet ? <BlocksPageBlocksTableDynamic /> : <PaginatedBlockListLayoutADynamic />
       }
     />
   );

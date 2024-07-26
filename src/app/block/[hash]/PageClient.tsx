@@ -59,7 +59,7 @@ export default function BlockPage({ params: { hash } }: any) {
               />
               <KeyValueHorizontal
                 label={'Mined'}
-                value={<Timestamp ts={block.burn_block_time} />}
+                value={<Timestamp timestampInMs={block.burn_block_time} />}
               />
               <KeyValueHorizontal
                 label={'Transactions'}

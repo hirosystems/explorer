@@ -62,7 +62,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
       </HStack>
       <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
         <Box>{truncateMiddle(hash, 3)}</Box>
-        {timestamp && <Timestamp ts={timestamp} />}
+        {timestamp && <Timestamp timestampInMs={timestamp} />}
       </HStack>
     </Flex>
   );

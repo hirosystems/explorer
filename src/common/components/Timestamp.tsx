@@ -6,13 +6,13 @@ import RelativeTimeDisplay from './RelativeTimeDisplay';
 import { Value } from './Value';
 
 interface TimestampProps {
-  ts: number;
+  timestampInMs: number;
 }
 
-export function Timestamp({ ts, ...rest }: TimestampProps & FlexProps) {
-  const readableTimestamp = ts
-    ? `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(ts * 1000).toLocaleDateString()}`
-    : '';
+export function Timestamp({ timestampInMs: ts, ...rest }: TimestampProps & FlexProps) {
+  const timeString = ts ? new Date(ts).toLocaleTimeString() : '';
+  const dateString = ts ? new Date(ts).toLocaleDateString() : '';
+  const readableTimestamp = ts ? `${timeString} ${dateString}` : '';
 
   return (
     <Tooltip label={readableTimestamp}>

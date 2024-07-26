@@ -89,7 +89,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
             >
               {truncateMiddle(hash, 6)}
             </ExplorerLink>
-            {timestamp && <Timestamp ts={timestamp} />}
+            {timestamp && <Timestamp timestampInMs={timestamp} />}
           </HStack>
         )}
       </Box>
@@ -195,7 +195,7 @@ function StxBlockRow({
             {txsCount || 0} txn
           </Text>
         ) : null}
-        <Timestamp ts={timestamp} />
+        <Timestamp timestampInMs={timestamp} />
       </HStack>
     </>
   ) : (
@@ -232,7 +232,7 @@ function StxBlockRow({
       </Flex>
 
       <Flex alignItems="center">
-        <Timestamp ts={timestamp} />
+        <Timestamp timestampInMs={timestamp} />
       </Flex>
     </>
   );

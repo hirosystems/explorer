@@ -36,33 +36,3 @@ export const useSuspenseBlockListInfinite = (limit = DEFAULT_LIST_LIMIT) => {
     initialPageParam: 0,
   });
 };
-
-export const useBlocksInfiniteNew = () => {
-  const api = useApi();
-  return useInfiniteQuery({
-    queryKey: [BLOCK_LIST_QUERY_KEY],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.blocksApi.getBlocks({
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam || 0,
-      }),
-    staleTime: TWO_MINUTES,
-    getNextPageParam,
-    initialPageParam: 0,
-  });
-};
-
-export const useSuspenseBlocksInfiniteNew = (limit = DEFAULT_LIST_LIMIT) => {
-  const api = useApi();
-  return useSuspenseInfiniteQuery({
-    queryKey: [BLOCK_LIST_QUERY_KEY, limit],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.blocksApi.getBlocks({
-        limit,
-        offset: pageParam || 0,
-      }),
-    staleTime: TWO_MINUTES,
-    getNextPageParam,
-    initialPageParam: 0,
-  });
-};

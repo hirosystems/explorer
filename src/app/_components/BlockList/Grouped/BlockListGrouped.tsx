@@ -102,7 +102,7 @@ const StxBlockRow = ({
             {stxBlock.txsCount || 0} txn
           </Text>
         ) : null}
-        <Timestamp ts={stxBlock.timestamp} />
+        <Timestamp timestampInMs={stxBlock.timestamp} />
       </HStack>
     </>
   ) : (
@@ -140,7 +140,7 @@ const StxBlockRow = ({
       </Flex>
 
       <Flex alignItems="center">
-        <Timestamp ts={stxBlock.timestamp} />
+        <Timestamp timestampInMs={stxBlock.timestamp} />
       </Flex>
     </>
   );
@@ -254,7 +254,7 @@ function BitcoinHeader({
             >
               {truncateMiddle(btcBlock.hash, 6)}
             </ExplorerLink>
-            <Timestamp ts={btcBlock.timestamp} whiteSpace={'nowrap'} />
+            <Timestamp timestampInMs={btcBlock.timestamp} whiteSpace={'nowrap'} />
           </HStack>
         )}
       </Box>

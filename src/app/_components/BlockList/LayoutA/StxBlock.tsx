@@ -1,5 +1,4 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
 import { ReactNode, memo } from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
@@ -83,7 +82,7 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
         <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color={secondaryTextColor}>
           <Box>{truncateMiddle(hash, 3)}</Box>
           {txsCount !== undefined ? <Box>{txsCount} txn</Box> : null}
-          <Timestamp ts={timestamp} />
+          <Timestamp timestampInMs={timestamp} />
         </HStack>
       </Flex>
     </Box>
