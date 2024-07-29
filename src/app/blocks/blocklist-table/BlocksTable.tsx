@@ -1,4 +1,3 @@
-import { Timestamp } from '@/common/components/Timestamp';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useMemo } from 'react';
@@ -8,6 +7,7 @@ import { Block } from '@stacks/blockchain-api-client';
 import { BlockLink } from '../../../common/components/ExplorerLinks';
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
+import { Timestamp } from '../../../common/components/Timestamp';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlockListInfinite } from '../../../common/queries/useBlockListInfinite';
 import { truncateMiddle } from '../../../common/utils/utils';
