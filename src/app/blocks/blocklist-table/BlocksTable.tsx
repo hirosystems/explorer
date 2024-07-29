@@ -1,7 +1,7 @@
 import { Timestamp } from '@/common/components/Timestamp';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense, useMemo } from 'react';
 
 import { Block } from '@stacks/blockchain-api-client';
 
@@ -203,11 +203,20 @@ const BlocksTableBase = () => {
   const blocksListResponse = useSuspenseBlockListInfinite();
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = blocksListResponse;
   const blocks = useSuspenseInfiniteQueryResult<Block>(blocksListResponse);
+  const uniqueBlocks = useMemo(() => {
+    const uniqueBlockMap = new Map();
+    blocks.forEach(block => {
+      if (!uniqueBlockMap.has(block.height)) {
+        uniqueBlockMap.set(block.height, block);
+      }
+    });
+    return Array.from(uniqueBlockMap.values());
+  }, [blocks]);
 
   return (
     <BlocksTableLayout
       blocksTableHeaders={<BlocksTableHeaders />}
-      blocksTableRows={blocks.map((block, i) => (
+      blocksTableRows={uniqueBlocks.map((block, i) => (
         <BlocksTableRow
           key={`blocks-table-row-${block.hash}`}
           index={i}
