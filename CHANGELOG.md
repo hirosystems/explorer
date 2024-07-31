@@ -1,3 +1,10 @@
+# [1.194.0](https://github.com/hirosystems/explorer/compare/v1.193.0...v1.194.0) (2024-07-31)
+
+
+### Features
+
+* remove now live testnet badge ([10e9b66](https://github.com/hirosystems/explorer/commit/10e9b668cbb2eaafc9e9248c5c78c9167d3b4a2e))
+
 # [1.193.0](https://github.com/hirosystems/explorer/compare/v1.192.0...v1.193.0) (2024-07-24)
 
 
