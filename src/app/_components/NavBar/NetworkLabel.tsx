@@ -103,22 +103,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               subnet
             </Badge>
-          ) : network.label === 'Stacks Testnet (Primary)' ? (
-            <Badge
-              color={greenBadgeColor}
-              bg={greenBadgeBg}
-              px={'2'}
-              py={'1'}
-              fontSize={'xs'}
-              rounded={'full'}
-              border={'1px'}
-              borderColor={badgeBorder}
-              fontWeight={'medium'}
-              ml="8px"
-            >
-              Now Live!
-            </Badge>
-          ) : (
+          ) : network.label === 'Stacks Testnet (Primary)' ? null : (
             <Badge
               color={purpleBadgeColor}
               bg={purpleBadgeBg}
