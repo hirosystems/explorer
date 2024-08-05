@@ -36,12 +36,12 @@ export const Footer: FC = () => {
       px={['16px', '16px', '32px']}
     >
       <Flex direction={'column'} suppressHydrationWarning={true}>
-        {isHomePage && colorMode === 'light' && (
+        {/* {isHomePage && colorMode === 'light' && (
           <div
             id={'lightbox-inline-form-50d327d3-62d7-4896-a6d3-1363b5923751'}
             style={{ textAlign: 'center', backgroundColor: 'transparent' }}
           ></div>
-        )}
+        )} */}
         <Flex
           flexDirection={['column', 'column', 'row']}
           alignItems={['center', 'center', 'unset']}
