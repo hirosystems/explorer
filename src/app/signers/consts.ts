@@ -23,13 +23,9 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
     poolOperator: 'SP1VTA9RRQA8FS9KSGGB6PAG89VDSPEYRY74JZASC',
     name: 'Senseinode',
   },
-  '0x026f474e6910a1d5d254ba9ad19fe6a4b9133b7690765257680507a730037929ab': {
+  '0x02254a34747123978819f2a90506f76cb057fe3fbff6d8721a0d9cf8e9412d0e60': {
     poolOperator: 'SP2A2HGHMS3EQYRS8E0ACQ64DMS3P6C57A6VBE45V',
     name: 'Chorus One',
-  },
-  '0x02254a34747123978819f2a90506f76cb057fe3fbff6d8721a0d9cf8e9412d0e60': {
-    poolOperator: 'SP21D6BW36TSGWAZS8K4JAJVTNXWKQN9G3TH5MG6A',
-    name: 'Blockdaemon',
   },
   '0x034df3feda207a1cd4f31ae2b58f136a0d382d23419ef8d06569fa538202ba8aed': {
     poolOperator: 'SP4SZE494VC2YC5JYG7AYFQ44F5Q4PYV7DVMDPBG.stacking-pool-signer-chorus-one-v1',
