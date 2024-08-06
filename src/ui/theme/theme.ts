@@ -23,7 +23,7 @@ export const theme = extendTheme({
   colors: COLORS,
   semanticTokens: {
     colors: {
-      brand: 'purple.600',
+      brand: '#FC6432',
       borderPrimary: {
         default: 'slate.250',
         _dark: 'slate.850',
