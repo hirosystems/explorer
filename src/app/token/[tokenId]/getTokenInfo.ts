@@ -172,7 +172,8 @@ export async function getTokenInfo(
   const isCustomApi = !!api;
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
+    // if (!tokenId || !isMainnet || isCustomApi) {
+    if (!tokenId) {
       throw new Error('cannot fetch token info for this request');
     }
 
