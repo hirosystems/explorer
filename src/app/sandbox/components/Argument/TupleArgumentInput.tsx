@@ -46,7 +46,7 @@ export const TupleArgumentInput: FC<
                 value={value[tupleEntry.name]}
                 placeholder={`${getTypeString(tupleType.tuple[i].type)}`}
               />
-              {error && <Caption color={'feedbackError'}>{error}</Caption>}
+              {error && <Caption color={'error'}>{error}</Caption>}
             </Box>
           </Box>
         ))}

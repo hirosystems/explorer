@@ -15,7 +15,7 @@ import {
 } from '@stacks/transactions';
 
 import { ReadOnlyResponse } from '../../common/types/ReadOnlyResponse';
-import { NonTupleValueType, TupleValueType } from './types/values';
+import { TupleValueType } from './types/values';
 
 export const parseReadOnlyResponse = ({ result }: ReadOnlyResponse) => {
   const hex = result.slice(2);
@@ -47,12 +47,13 @@ export const encodeTuple = (
   return tupleCV(tupleData);
 };
 
-export const encodeOptional = (
-  optionalType: ClarityAbiType,
-  value: NonTupleValueType
-): ClarityValue => {
+export const encodeOptional = (optionalType: ClarityAbiType, value: string): ClarityValue => {
   if (value) {
-    return someCV(encodeAbiClarityValue(value.toString(), optionalType));
+    try {
+      return someCV(encodeAbiClarityValue(value, optionalType));
+    } catch (e) {
+      return noneCV();
+    }
   } else {
     return noneCV();
   }
