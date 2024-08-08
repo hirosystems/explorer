@@ -1,17 +1,19 @@
 'use client';
 
+import { Info } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Form, Formik } from 'formik';
-import { FC, ReactNode, useMemo, useState } from 'react';
+import { Form, Formik, FormikErrors } from 'formik';
+import { ChangeEvent, FC, ReactNode, useMemo, useState } from 'react';
 
+import { asciiToBytes, bytesToHex } from '@stacks/common';
 import { openContractCall } from '@stacks/connect';
 import {
   ClarityAbiFunction,
   ClarityValue,
+  PostConditionMode,
   encodeAbiClarityValue,
   isClarityAbiList,
   isClarityAbiOptional,
-  isClarityAbiPrimitive,
   listCV,
 } from '@stacks/transactions';
 
@@ -19,15 +21,25 @@ import { Section } from '../../../../common/components/Section';
 import { CONNECT_AUTH_ORIGIN } from '../../../../common/constants/env';
 import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
 import { showFn } from '../../../../common/utils/sandbox';
-import { validateStacksAddress } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
+import { Switch } from '../../../../ui/Switch';
 import { Text } from '../../../../ui/Text';
+import { Tooltip } from '../../../../ui/Tooltip';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
 import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';
 import { Argument } from '../Argument';
+import {
+  PostConditionForm,
+  PostConditionParameters,
+  checkFunctionParameters,
+  checkPostConditionParameters,
+  getPostCondition,
+  isPostConditionParameter,
+} from './PostConditionForm';
 import { ReadOnlyField } from './ReadOnlyField';
 
 interface FunctionViewProps {
@@ -36,14 +48,42 @@ interface FunctionViewProps {
   cancelButton: ReactNode;
 }
 
-type FormType = Record<string, ValueType | ListValueType>;
+interface FormType {
+  [key: string]: ValueType | ListValueType;
+}
+
+export type FormikHandleChangeFunction = {
+  (e: ChangeEvent<any>): void;
+  <T = string | ChangeEvent<any>>(
+    field: T
+  ): T extends ChangeEvent<any> ? void : (e: string | ChangeEvent<any>) => void;
+};
+
+export type FormikSetFieldValueFunction = (
+  field: string,
+  value: any,
+  shouldValidate?: boolean
+) => Promise<void | FormikErrors<FunctionFormikState>>;
+
+export type FunctionFormikState = FormType & PostConditionParameters;
 
 export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButton }) => {
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
   const network = useStacksNetwork();
   const queryClient = useQueryClient();
 
-  const initialValues = useMemo(
+  const initialPostConditionParameterValues: PostConditionParameters = {
+    postConditionMode: PostConditionMode.Deny,
+    postConditionType: undefined,
+    postConditionAddress: undefined,
+    postConditionAmount: undefined,
+    postConditionConditionCode: undefined,
+    postConditionAssetName: undefined,
+    postConditionAssetAddress: undefined,
+    postConditionAssetContractName: undefined,
+  };
+
+  const initialFunctionParameterValues = useMemo(
     () =>
       fn.args.reduce((argsAcc, arg) => {
         const tuple = getTuple(arg.type);
@@ -84,30 +124,28 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={
+        {
+          ...initialFunctionParameterValues,
+          ...initialPostConditionParameterValues,
+        } as FunctionFormikState
+      }
       validateOnChange={false}
       validateOnBlur={false}
       validate={values => {
-        const errors: Record<string, string> = {};
-        Object.keys(values).forEach(arg => {
-          const type = fn.args.find(({ name }) => name === arg)?.type;
-          const isOptional = type && isClarityAbiOptional(type);
-          const optionalTypeIsPrincipal =
-            isOptional && isClarityAbiPrimitive(type.optional) && type.optional === 'principal';
-          if (type === 'principal' || (optionalTypeIsPrincipal && !!values[arg])) {
-            const validPrincipal = validateStacksAddress(
-              (values[arg] as NonTupleValueType).toString().split('.')[0]
-            );
-            if (!validPrincipal) {
-              errors[arg] = 'Invalid Stacks address.';
-            }
-          }
-        });
+        const functionParametersErrors = checkFunctionParameters(fn, values);
+        const postConditionParametersErrors = checkPostConditionParameters(values);
+        const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
+        console.log({ errors, numErrors: Object.keys(errors).length, values });
         return errors;
       }}
-      onSubmit={values => {
+      onSubmit={async values => {
         const final: Record<string, ClarityValue> = {};
+
         Object.keys(values).forEach(arg => {
+          if (isPostConditionParameter(arg)) {
+            return;
+          }
           const type = fn.args.find(({ name }) => name === arg)?.type;
           if (!type) return;
           const tuple = getTuple(type);
@@ -136,11 +174,27 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             );
             final[arg] = listCV(listData);
           } else if (optionalType) {
-            final[arg] = encodeOptional(optionalType, values[arg] as NonTupleValueType);
+            const val =
+              arg === 'memo'
+                ? bytesToHex(asciiToBytes((values[arg] as NonTupleValueType).toString()))
+                : values[arg];
+            final[arg] = encodeOptional(optionalType, val.toString());
           } else {
             final[arg] = encodeAbiClarityValue((values[arg] as NonTupleValueType).toString(), type);
           }
         });
+
+        const {
+          postConditionMode,
+          postConditionType,
+          postConditionAddress,
+          postConditionConditionCode,
+          postConditionAmount,
+          postConditionAssetAddress,
+          postConditionAssetContractName,
+          postConditionAssetName,
+        } = values;
+
         if (fn.access === 'public') {
           void openContractCall({
             contractAddress: contractId.split('.')[0],
@@ -152,51 +206,115 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
             onFinish: () => {
               void queryClient.invalidateQueries({ queryKey: ['addressMempoolTxsInfinite'] });
             },
+            postConditions:
+              values.postConditionMode === PostConditionMode.Allow
+                ? undefined
+                : getPostCondition({
+                    postConditionType,
+                    postConditionAddress,
+                    postConditionConditionCode,
+                    postConditionAmount,
+                    postConditionAssetAddress,
+                    postConditionAssetContractName,
+                    postConditionAssetName,
+                  }),
+            postConditionMode,
           });
         } else {
           setReadonlyValue(Object.values(final));
         }
       }}
-      render={({ handleChange, values, errors }) => (
-        <Section
-          overflowY="auto"
-          flexGrow={1}
-          title={`${fn.name} (${fn.access} function)`}
-          borderRadius={'0'}
-        >
-          {readOnlyValue ? (
-            <ReadOnlyField
-              fn={fn}
-              readOnlyValue={readOnlyValue}
-              contractId={contractId}
-              cancelButton={cancelButton}
-            />
-          ) : (
-            <Form>
-              <Box p="32px">
-                {fn.args.length ? (
-                  <Stack mb="32px" gap={4}>
-                    {fn.args.map(({ name, type }) => (
-                      <Argument
-                        handleChange={handleChange}
-                        name={name}
-                        type={type}
-                        error={errors[name]}
-                        key={name}
-                        value={values[name]}
+    >
+      {({ handleSubmit, handleChange, values, errors, setFieldValue }) => {
+        return (
+          <Section
+            overflowY="visible"
+            flexGrow={1}
+            title={`${fn.name} (${fn.access} function)`}
+            borderRadius={'0'}
+          >
+            {readOnlyValue ? (
+              <ReadOnlyField
+                fn={fn}
+                readOnlyValue={readOnlyValue}
+                contractId={contractId}
+                cancelButton={cancelButton}
+              />
+            ) : (
+              <Box p={4}>
+                <Form onSubmit={handleSubmit}>
+                  <Stack gap={4}>
+                    <Flex justifyContent="flex-end" alignItems="center" gap={2}>
+                      <Text fontSize="sm">
+                        {values.postConditionMode === PostConditionMode.Deny
+                          ? 'Deny Mode'
+                          : 'Allow Mode'}
+                      </Text>
+                      <Switch
+                        id="post-condition-mode"
+                        onChange={() => {
+                          setFieldValue(
+                            'postConditionMode',
+                            values.postConditionMode === PostConditionMode.Deny
+                              ? PostConditionMode.Allow
+                              : PostConditionMode.Deny
+                          );
+                        }}
+                        isChecked={values.postConditionMode === PostConditionMode.Allow}
                       />
-                    ))}
+                      <Tooltip
+                        label={
+                          <Box>
+                            Allow mode is less secure than Deny mode. Allow mode permits asset
+                            transfers that are not covered by post conditions. In Deny mode no other
+                            asset transfers are permitted besides those named in the post conditions
+                          </Box>
+                        }
+                      >
+                        <Icon as={Info} size={5} />
+                      </Tooltip>
+                    </Flex>
+                    {fn.args.length ? (
+                      <Stack mb="extra-loose" spacing="base" gap={4}>
+                        {fn.args.map(({ name, type }) => (
+                          <Argument
+                            handleChange={handleChange}
+                            name={name}
+                            type={type}
+                            error={errors[name]}
+                            key={name}
+                            value={values[name]}
+                          />
+                        ))}
+                        {fn.access === 'public' && (
+                          <PostConditionForm
+                            values={values}
+                            errors={errors}
+                            formikSetFieldValue={setFieldValue}
+                            handleChange={handleChange}
+                          />
+                        )}
+                      </Stack>
+                    ) : null}
+                    <Flex flexDirection="column" alignItems="center" justifyContent="center">
+                      <Button
+                        type="submit"
+                        onClick={e => {
+                          e.preventDefault();
+                          handleSubmit();
+                        }}
+                      >
+                        Call function
+                      </Button>
+                      {cancelButton}
+                    </Flex>
                   </Stack>
-                ) : null}
-                <Flex flexDirection="column" alignItems="center" justifyContent="center">
-                  <Button type="submit">Call function</Button>
-                  {cancelButton}
-                </Flex>
+                </Form>
               </Box>
-            </Form>
-          )}
-        </Section>
-      )}
-    />
+            )}
+          </Section>
+        );
+      }}
+    </Formik>
   );
 };

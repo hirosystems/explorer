@@ -27,7 +27,6 @@ const PageClient: NextPage = () => {
   const network = useStacksNetwork();
   const { isConnected, balance, stxAddress } = useUser();
   const fee = feeData ? new BigNumber(feeData as any).multipliedBy(180) : 0;
-  const colorMode = useColorMode().colorMode;
 
   return (
     <Formik

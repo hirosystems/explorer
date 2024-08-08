@@ -17,7 +17,6 @@ export default function PageClient({
   tokenInfo: TokenInfoProps;
 }) {
   if (!tokenInfo.basic) throw new Error('Could not find token info');
-
   const { name, symbol } = tokenInfo.basic;
   const categories = tokenInfo.extended?.categories || [];
 

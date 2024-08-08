@@ -1,0 +1,123 @@
+import { FungibleConditionCode, PostConditionType } from '@stacks/transactions';
+
+import { FunctionFormikState } from '../FunctionView';
+import { checkPostConditionParameters } from '../PostConditionForm';
+
+describe('checkPostConditionParameters', () => {
+  it('should return no errors when post condition is not enabled', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: false,
+      postConditionType: PostConditionType.Fungible,
+      postConditionConditionCode: FungibleConditionCode.Equal,
+      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAmount: 12345,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: 'asset-contract-name',
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({});
+  });
+
+  it('should return no errors when all values are correct', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: true,
+      postConditionType: PostConditionType.Fungible,
+      postConditionConditionCode: FungibleConditionCode.Equal,
+      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAmount: 12345,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: 'asset-contract-name',
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({});
+  });
+
+  it('should return error if postConditionType is missing', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: true,
+      postConditionType: undefined,
+      postConditionConditionCode: FungibleConditionCode.Equal,
+      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAmount: 12345,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: 'asset-contract-name',
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({
+      postConditionType: 'Post condition type is required',
+    });
+  });
+
+  it('should return error if postConditionConditionCode is missing', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: true,
+      postConditionType: PostConditionType.Fungible,
+      postConditionConditionCode: undefined,
+      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAmount: 12345,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: 'asset-contract-name',
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({
+      postConditionConditionCode: 'Condition Code is required',
+    });
+  });
+
+  it('should return error for invalid Stacks address', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: true,
+      postConditionType: PostConditionType.Fungible,
+      postConditionConditionCode: FungibleConditionCode.Equal,
+      postConditionAddress: 'INVALID_ADDRESS',
+      postConditionAmount: 12345,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: 'asset-contract-name',
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({
+      postConditionAddress: 'Invalid Stacks address',
+    });
+  });
+
+  it('should return error if postConditionAmount is not a valid number', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: true,
+      postConditionType: PostConditionType.Fungible,
+      postConditionConditionCode: FungibleConditionCode.Equal,
+      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAmount: -1,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: 'asset-contract-name',
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({
+      postConditionAmount: 'Invalid amount',
+    });
+  });
+
+  it('should return multiple errors if there are multiple errors', () => {
+    const pcValues: FunctionFormikState = {
+      isPostConditionEnabled: true,
+      postConditionType: PostConditionType.Fungible,
+      postConditionConditionCode: FungibleConditionCode.Equal,
+      postConditionAddress: 'INVALID_ADDRESS',
+      postConditionAmount: -1,
+      postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postConditionAssetContractName: undefined,
+      postConditionAssetName: 'asset-name',
+    } as FunctionFormikState;
+
+    expect(checkPostConditionParameters(pcValues)).toEqual({
+      postConditionAmount: 'Invalid amount',
+      postConditionAddress: 'Invalid Stacks address',
+      postConditionAssetContractName: 'Asset Contract Name is required',
+    });
+  });
+});

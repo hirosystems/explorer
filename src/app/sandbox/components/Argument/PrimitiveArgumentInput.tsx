@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { ClarityAbiType, getTypeString } from '@stacks/transactions';
 
@@ -28,7 +28,7 @@ export const PrimitiveArgumentInput: FC<
         value={value}
         placeholder={`${getTypeString(type)}`}
       />
-      {error && <Caption color={'feedbackError'}>{error}</Caption>}
+      {error && <Caption color={'error'}>{error}</Caption>}
     </Box>
   </Box>
 );
