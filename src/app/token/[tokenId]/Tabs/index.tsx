@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { TabsContainer } from '../../../../common/components/TabsContainer';
 import { useSuspenseContractById } from '../../../../common/queries/useContractById';
@@ -8,15 +6,17 @@ import { AddressMempoolTxsList } from '../../../../features/txs-list/AddressMemp
 import { CodeEditor } from '../../../../ui/CodeEditor';
 import { TabsProps } from '../../../../ui/Tabs';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
-import { DeveloperData } from '../types';
+import { DeveloperData, TokenInfoProps } from '../types';
 import { Developers } from './Developers';
+import HoldersTable from './holders/Holders';
 
 interface TokenTabsProps extends Partial<TabsProps> {
   tokenId: string;
+  tokenInfo: TokenInfoProps;
   developerData?: DeveloperData;
 }
 
-export function TokenTabsBase({ tokenId, developerData }: TokenTabsProps) {
+export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsProps) {
   const { data: contract } = useSuspenseContractById(tokenId);
   const source = contract?.source_code;
   return (
@@ -54,6 +54,10 @@ export function TokenTabsBase({ tokenId, developerData }: TokenTabsProps) {
               },
             ]
           : []),
+        {
+          title: 'Holders',
+          content: <HoldersTable tokenId={tokenId} tokenInfo={tokenInfo} />,
+        },
       ]}
       actions={null}
       gridColumnEnd={'3'}

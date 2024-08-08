@@ -2,7 +2,7 @@
 
 import { ReactNode, Suspense } from 'react';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
+import { BurnBlock, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { Card } from '../../../../common/components/Card';
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
@@ -17,13 +17,11 @@ import { BlockPageHeadersSkeleton } from '../Grouped/skeleton';
 import { useSuspenseAverageBlockTimes } from '../data/useAverageBlockTimes';
 
 function LastBlockCard() {
-  const response = useSuspenseBurnBlocks(1);
-  const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
+  const burnBlockResponse = useSuspenseBurnBlocks(1);
+  const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(burnBlockResponse);
   const btcBlock = burnBlocks[0];
-  const stxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(btcBlock.burn_block_height, 1),
-    1
-  );
+  const stxBlockResponse = useSuspenseBlocksByBurnBlock(btcBlock.burn_block_height, 1);
+  const stxBlocks = useSuspenseInfiniteQueryResult<NakamotoBlock>(stxBlockResponse, 1);
   const lastStxBlock = stxBlocks[0];
   return (
     <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">

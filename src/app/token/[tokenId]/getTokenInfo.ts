@@ -36,10 +36,11 @@ async function getBasicTokenInfo(
   api?: string
 ): Promise<BasicTokenInfo | undefined> {
   const isMainnet = chain === 'mainnet';
-  const isCustomApi = !!api;
+  // const isCustomApi = !!api;
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
+    // if (!tokenId || !isMainnet || isCustomApi) {
+    if (!tokenId || !isMainnet) {
       throw new Error('cannot fetch token info for this request');
     }
 
@@ -154,6 +155,7 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
 
     await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
 
+    console.log('tokenInfo', tokenInfo);
     return tokenInfo;
   } catch (error) {
     console.error(error);
@@ -172,7 +174,8 @@ export async function getTokenInfo(
   const isCustomApi = !!api;
 
   try {
-    if (!tokenId || !isMainnet || isCustomApi) {
+    // if (!tokenId || !isMainnet || isCustomApi) {
+    if (!tokenId || !isMainnet) {
       throw new Error('cannot fetch token info for this request');
     }
 
@@ -187,7 +190,8 @@ export async function getTokenInfo(
       return {};
     }
 
-    return getDetailedTokenInfo(tokenId, basicTokenInfo);
+    const detailedTokenInfo = await getDetailedTokenInfo(tokenId, basicTokenInfo);
+    return detailedTokenInfo;
   } catch (error) {
     console.error(error);
     return {};
