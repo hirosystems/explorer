@@ -38,6 +38,7 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                   _hover={{
                     textDecoration: navItem.children ? 'none' : 'underline',
                   }}
+                  whiteSpace={'nowrap'}
                 >
                   {navItem.label}
                 </Link>

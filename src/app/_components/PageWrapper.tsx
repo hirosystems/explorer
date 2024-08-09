@@ -15,6 +15,7 @@ import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
+import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
 
 const StyledWrapper = styled(Box)<{ bg: string }>`
   font-variant-ligatures: no-contextual;
@@ -72,6 +73,7 @@ export function PageWrapper({
         backdropFilter={'blur(10px)'}
         background={statusBarBg}
       >
+        <NonHiroNetworkWarningBar />
         <IncidentsStatusBarWithErrorBoundary />
         <CMSStatusBars statusBarContent={statusBarContent} />
       </Flex>
