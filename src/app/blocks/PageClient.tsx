@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
 import { useGlobalContext } from '../../common/context/useGlobalContext';
+import { useIsNakamotoTestnet } from '../../common/hooks/useIsNakamoto';
 import { NetworkModes } from '../../common/types/network';
 import {
   BlockPageHeadersSkeleton,
@@ -63,15 +64,13 @@ export function BlocksPageLayout({
 
 const BlocksPage: NextPage = () => {
   const { activeNetworkKey, activeNetwork } = useGlobalContext();
-  const chain = activeNetwork.mode;
-  const isNaka1Testnet =
-    chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
+  const isNakamotoTestnet = useIsNakamotoTestnet();
   return (
     <BlocksPageLayout
-      title={isNaka1Testnet ? 'Recent blocks' : 'Blocks'}
-      blocksPageHeaders={isNaka1Testnet ? <BlocksPageHeadersDynamic /> : null}
+      title={isNakamotoTestnet ? 'Recent blocks' : 'Blocks'}
+      blocksPageHeaders={isNakamotoTestnet ? <BlocksPageHeadersDynamic /> : null}
       blocksList={
-        isNaka1Testnet ? <BlocksPageBlockListDynamic /> : <PaginatedBlockListLayoutADynamic />
+        isNakamotoTestnet ? <BlocksPageBlockListDynamic /> : <PaginatedBlockListLayoutADynamic />
       }
     />
   );

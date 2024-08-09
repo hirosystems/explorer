@@ -6,10 +6,15 @@ export function useIsNakamoto() {
   return activeNetworkUrl.indexOf('naka') !== -1;
 }
 
-export function useIsNakamoto1Testnet() {
+export function useIsNakamotoTestnet() {
   const { activeNetworkKey, activeNetwork } = useGlobalContext();
   const chain = activeNetwork.mode;
   const isNaka1Testnet =
     chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-1') !== -1;
-  return isNaka1Testnet;
+  const isNaka2Testnet =
+    chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-2') !== -1;
+  const isNaka3Testnet =
+    chain === NetworkModes.Testnet && activeNetworkKey.indexOf('nakamoto-3') !== -1;
+
+  return isNaka1Testnet || isNaka2Testnet || isNaka3Testnet;
 }

@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
-import { useIsNakamoto1Testnet } from '../common/hooks/useIsNakamoto';
+import { useIsNakamotoTestnet } from '../common/hooks/useIsNakamoto';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';
 import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
@@ -24,7 +24,7 @@ const HomePageBlockListDynamic = dynamic(
 
 const Home: NextPage = () => {
   const { activeNetwork } = useGlobalContext();
-  const isNaka1Testnet = useIsNakamoto1Testnet();
+  const isNakamotoTestnet = useIsNakamotoTestnet();
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
@@ -39,7 +39,7 @@ const Home: NextPage = () => {
           showFilterButton={false}
           showValueMenu={false}
         />
-        {isNaka1Testnet ? (
+        {isNakamotoTestnet ? (
           <HomePageBlockListDynamic />
         ) : (
           <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
