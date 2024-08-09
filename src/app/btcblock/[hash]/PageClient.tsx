@@ -11,7 +11,7 @@ import { Section } from '../../../common/components/Section';
 import '../../../common/components/loaders/skeleton-text';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlocksByBurnBlock } from '../../../common/queries/useBlocksByBurnBlock';
-import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
+import { useBurnBlock, useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { PageTitle } from '../../_components/PageTitle';
@@ -22,13 +22,13 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
   const { data: btcBlock } = useSuspenseBurnBlock(hash);
   const btcBlockHeight = btcBlock?.burn_block_height;
 
-  const { data: prevBlock } = useSuspenseBurnBlock(btcBlockHeight - 1);
-  const { data: nextBlock } = useSuspenseBurnBlock(btcBlockHeight + 1);
+  const { data: prevBlock, isError: isPrevBlockError } = useBurnBlock(btcBlockHeight - 1);
+  const { data: nextBlock, isError: isNextBlockError } = useBurnBlock(btcBlockHeight + 1);
 
   const stxBlocksResponse = useSuspenseBlocksByBurnBlock(btcBlock.burn_block_height, 15);
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = stxBlocksResponse;
   const stxBlocks = useSuspenseInfiniteQueryResult<NakamotoBlock>(stxBlocksResponse);
-  const blockListStxBlocks = stxBlocks.map(block => createBlockListStxBlock(block));
+  const blockListStxBlocks = stxBlocks.map(createBlockListStxBlock);
 
   return (
     <>
@@ -36,6 +36,7 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
         <NavBlock
           href={`/btcblock/${prevBlock?.burn_block_hash}`}
           direction={NavDirection.Backward}
+          isDisabled={isPrevBlockError}
         />
         <PageTitle
           margin={0}
@@ -43,6 +44,7 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
         <NavBlock
           href={`/btcblock/${nextBlock?.burn_block_hash}`}
           direction={NavDirection.Forward}
+          isDisabled={isNextBlockError}
         />
       </Flex>
       <TowColLayout>
@@ -51,8 +53,8 @@ export default function BitcoinBlockPage({ params: { hash } }: any) {
             <ScrollableBox pt={3}>
               <BurnBlockGroupGrid
                 stxBlocks={blockListStxBlocks}
-                minimized={false}
-                numStxBlocksNotDisplayed={hasNextPage ? 1 : 0}
+                blocksCount={btcBlock.stacks_blocks.length}
+                displayBlocksCount={false}
               />
             </ScrollableBox>
             <ListFooter

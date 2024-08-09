@@ -27,13 +27,13 @@ export function useHomePageInitialBlockList(blockListLimit: number = 3) {
   const btcBlocksMap = useBtcBlocksMap(btcBlocks);
 
   const latestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height)
+    useSuspenseBlocksByBurnBlock(latestBurnBlock.burn_block_height, 3)
   );
   const secondLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(secondLatestBurnBlock.burn_block_height)
+    useSuspenseBlocksByBurnBlock(secondLatestBurnBlock.burn_block_height, 3)
   );
   const thirdLatestBurnBlockStxBlocks = useSuspenseInfiniteQueryResult(
-    useSuspenseBlocksByBurnBlock(thirdLatestBurnBlock.burn_block_height)
+    useSuspenseBlocksByBurnBlock(thirdLatestBurnBlock.burn_block_height, 3)
   );
 
   const refetchInitialBlockList = useRefetchInitialBlockList([

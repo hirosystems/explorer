@@ -21,7 +21,7 @@ export function LineAndNode({
         <Flex
           justifyContent="center"
           alignItems="center"
-          height="calc(100% + 2px)"
+          height="calc(100% + 1px)"
           top={0}
           width="full"
           position="absolute"
@@ -36,14 +36,14 @@ export function LineAndNode({
             bottom={0}
             height={isLast ? '0%' : '20%'} // if it's the last line, don't draw the line at all
             width="1px"
-            bg="borderPrimary"
+            bg="brand"
             border="1px solid var(---stacks-colors-borderPrimary)"
           />
         </Flex>
       ) : (
         <Flex
           justifyContent="center"
-          height="calc(100% + 2px)"
+          height="calc(100% + 1px)"
           width="full"
           position="absolute"
           zIndex={0}
@@ -56,7 +56,7 @@ export function LineAndNode({
             top={0}
             height={isLast ? '50%' : 'full'} // if it's the last line, only draw half of it
             width="1px"
-            bg="borderPrimary"
+            bg="brand"
             border="1px solid var(---stacks-colors-borderPrimary)"
           />
           <Box // the node
@@ -64,7 +64,7 @@ export function LineAndNode({
             width={2}
             height={2}
             borderRadius="50%"
-            bg="borderPrimary"
+            bg="brand"
             transform="translateY(-50%)"
             top="50%"
           />

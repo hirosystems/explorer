@@ -1,9 +1,11 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownLeft, Clock } from '@phosphor-icons/react';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
+import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
+import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex, FlexProps } from '../../../../ui/Flex';
@@ -21,7 +23,7 @@ import { LineAndNode } from '../LineAndNode';
 import { ScrollableBox } from '../ScrollableDiv';
 import { getFadeAnimationStyle, mobileBorderCss } from '../consts';
 import { BlockListStxBlock } from '../types';
-import { BlockListData } from '../utils';
+import { BlockListData, createBlockListStxBlock } from '../utils';
 
 interface BtcBlockRowProps {
   height: number | string;
@@ -257,34 +259,73 @@ export function StxBlocksGridLayout({
 }
 
 function StxBlocksGrid({
+  blocksCount,
   stxBlocks,
+  lastStxBlock,
+  stxBlocksLimit,
   minimized = false,
-  numStxBlocksNotDisplayed,
+  isFirst,
+  loadMoreStxBlocksHandler,
 }: {
   stxBlocks: BlockListStxBlock[];
+  lastStxBlock: BlockListStxBlock | null;
+  stxBlocksLimit?: number;
+  blocksCount: number;
   minimized?: boolean;
-  numStxBlocksNotDisplayed: number;
+  isFirst: boolean;
+  loadMoreStxBlocksHandler?: () => void;
 }) {
+  const stxBlocksToDisplay = useMemo(
+    () => (stxBlocksLimit ? stxBlocks.slice(0, stxBlocksLimit) : stxBlocks),
+    [stxBlocks, stxBlocksLimit]
+  );
+  const numStxBlocksNotDisplayed = blocksCount - stxBlocksToDisplay.length;
+  const showLastStxBlock = lastStxBlock && numStxBlocksNotDisplayed > 1;
+
   return (
-    <StxBlocksGridLayout minimized={minimized}>
-      {minimized ? null : <GroupHeader />}
-      {stxBlocks.map((stxBlock, i) => (
-        <React.Fragment key={`stx-block-row-${stxBlock.hash}`}>
-          <StxBlockRow
-            height={stxBlock.height}
-            hash={stxBlock.hash}
-            timestamp={stxBlock.timestamp}
-            txsCount={stxBlock.txsCount}
+    <Stack gap={0}>
+      <StxBlocksGridLayout minimized={minimized}>
+        {minimized ? null : <GroupHeader />}
+        {stxBlocksToDisplay.map((stxBlock, i) => (
+          <React.Fragment key={`stx-block-row-${stxBlock.hash}`}>
+            <StxBlockRow
+              height={stxBlock.height}
+              hash={stxBlock.hash}
+              timestamp={stxBlock.timestamp}
+              txsCount={stxBlock.txsCount}
+              minimized={minimized}
+              isFirst={i === 0}
+              isLast={i === stxBlocksToDisplay.length - 1 && numStxBlocksNotDisplayed <= 0}
+            />
+            {i < stxBlocksToDisplay.length - 1 && (
+              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+            )}
+          </React.Fragment>
+        ))}
+      </StxBlocksGridLayout>
+      {numStxBlocksNotDisplayed > 0 ? (
+        <Box py={2}>
+          <BlockCount
+            count={showLastStxBlock ? numStxBlocksNotDisplayed - 1 : numStxBlocksNotDisplayed}
+            isFirst={isFirst}
             minimized={minimized}
-            isFirst={i === 0}
-            isLast={i === stxBlocks.length - 1 && numStxBlocksNotDisplayed <= 0}
+            loadMoreStxBlocksHandler={loadMoreStxBlocksHandler}
           />
-          {i < stxBlocks.length - 1 && (
-            <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
-          )}
-        </React.Fragment>
-      ))}
-    </StxBlocksGridLayout>
+        </Box>
+      ) : null}
+      {showLastStxBlock ? (
+        <StxBlocksGridLayout minimized={minimized}>
+          <StxBlockRow
+            height={lastStxBlock.height}
+            hash={lastStxBlock.hash}
+            timestamp={lastStxBlock.timestamp}
+            minimized={minimized}
+            isFirst={false}
+            isLast={true}
+          />
+        </StxBlocksGridLayout>
+      ) : null}
+    </Stack>
   );
 }
 
@@ -301,34 +342,74 @@ function StxBlocksGroupedByBtcBlock({
 }) {
   const btcBlock = blockList.btcBlock;
   const stxBlocks = blockList.stxBlocks;
-  const unaccountedStxBlocks = btcBlock.blockCount ? stxBlocks.length - btcBlock.blockCount : 0;
-  const blocksCount = btcBlock.blockCount
-    ? isFirst
-      ? btcBlock.blockCount + unaccountedStxBlocks
-      : btcBlock.blockCount
-    : undefined;
-  const numStxBlocksNotDisplayed = blocksCount ? blocksCount - (stxBlocksLimit || 0) : 0;
-  const displayedStxBlocks = useMemo(
-    () => (stxBlocksLimit ? blockList.stxBlocks.slice(0, stxBlocksLimit) : blockList.stxBlocks),
-    [blockList.stxBlocks, stxBlocksLimit]
+
+  const [enabled, setEnabled] = useState(false);
+
+  const response = useBlocksByBurnBlock(
+    btcBlock.height,
+    stxBlocksLimit,
+    stxBlocks.length,
+    {
+      enabled,
+    },
+    'additional-stx-blocks-loaded'
+  );
+  const { fetchNextPage, hasNextPage } = response;
+  const additionalStxBlocks = useInfiniteQueryResult(response);
+
+  const handleLoadMoreStxBlocks = useCallback(() => {
+    setEnabled(true);
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage]);
+
+  const allStxBlocks = useMemo(() => {
+    return stxBlocks.concat(additionalStxBlocks.map(createBlockListStxBlock));
+  }, [stxBlocks, additionalStxBlocks]);
+
+  // Live updates cause unaccounted blocks and txs
+  const unaccountedStxBlocks = useMemo(
+    () => Math.max(0, allStxBlocks.length - btcBlock.blockCount),
+    [allStxBlocks, btcBlock.blockCount]
+  );
+  const blocksCount = useMemo(
+    () => (isFirst ? btcBlock.blockCount + unaccountedStxBlocks : btcBlock.blockCount),
+    [btcBlock, unaccountedStxBlocks, isFirst]
+  );
+
+  const queryForLastStxBlockRequired = useMemo(
+    () => allStxBlocks.length < blocksCount,
+    [allStxBlocks, blocksCount]
+  );
+  const lastStxBlockResponse = useBlocksByBurnBlock(
+    btcBlock.height,
+    1,
+    blocksCount - 1,
+    {
+      enabled: queryForLastStxBlockRequired,
+    },
+    'last-stx-block'
+  );
+  const lastStxBlock = useInfiniteQueryResult(lastStxBlockResponse)[0];
+  const lastStxBlockFormatted = useMemo(
+    () => (lastStxBlock ? createBlockListStxBlock(lastStxBlock) : null),
+    [lastStxBlock]
   );
 
   return (
     <Box mt={4}>
       <ScrollableBox>
         <StxBlocksGrid
-          stxBlocks={displayedStxBlocks}
+          blocksCount={blocksCount}
+          stxBlocks={allStxBlocks}
+          lastStxBlock={lastStxBlockFormatted}
           minimized={minimized}
-          numStxBlocksNotDisplayed={numStxBlocksNotDisplayed}
+          isFirst={isFirst}
+          stxBlocksLimit={stxBlocksLimit}
+          loadMoreStxBlocksHandler={handleLoadMoreStxBlocks}
         />
       </ScrollableBox>
-      {numStxBlocksNotDisplayed > 0 ? (
-        <BlockCount
-          count={numStxBlocksNotDisplayed}
-          btcBlockHash={btcBlock.hash}
-          isFirst={isFirst}
-        />
-      ) : null}
       <BtcBlockRow
         hash={btcBlock.hash}
         height={btcBlock.height}

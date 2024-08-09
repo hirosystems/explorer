@@ -22,7 +22,7 @@ function BlocksPageBlockListUngroupedBase() {
   return (
     <Box pb={6}>
       {!liveUpdates && <UpdateBar onClick={updateBlockList} latestBlock={latestBlock} />}
-      <BlockListUngrouped blockList={blockList} stxBlocksLimit={10} />
+      <BlockListUngrouped blockList={blockList} stxBlocksLimit={undefined} />
       <Box pt={4}>
         <ListFooter
           isLoading={isFetchingNextPage}

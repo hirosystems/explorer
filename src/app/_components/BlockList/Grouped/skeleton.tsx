@@ -165,9 +165,9 @@ export function HomePageBlockListGroupedSkeleton() {
 export function BlocksPageBlockListGroupedSkeleton() {
   return (
     <BurnBlockGroupListSkeleton
-      numBurnBlockGroupsWithTxs={1}
+      numBurnBlockGroupsWithTxs={3}
       numTxsinBurnBlockGroupWithTxs={10}
-      numBurnBlockGroupsWithoutTxs={9}
+      numBurnBlockGroupsWithoutTxs={0}
     />
   );
 }

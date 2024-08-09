@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useFetchMultipleBurnBlocks } from '../../../../common/queries/useBurnBlock';
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
-import { useBlockListBtcBlocks } from './useBlockListBtcBlocks';
 import { useBlocksPageUngroupedInitialBlockList } from './useBlocksPageUngroupedInitialBlockList';
 import { generateBtcBlocksMap } from './utils';
 
@@ -34,7 +34,7 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(liveUpdates, initialStxBlocksHashes);
 
-  const { btcBlocks: latestBtcBlocks } = useBlockListBtcBlocks(latestStxBlocksFromWebSocket);
+  const fetchBurnBlocks = useFetchMultipleBurnBlocks();
 
   // manually update the block list with block list updates from the websocket
   const updateBlockListManually = useCallback(
@@ -47,10 +47,13 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
-    waitForFadeAnimation(() => {
+    waitForFadeAnimation(async () => {
+      const btcBlocks = await fetchBurnBlocks(
+        latestStxBlocksFromWebSocket.map(block => block.burn_block_hash)
+      );
       const websocketBlockList = generateBlockList(
         latestStxBlocksFromWebSocket,
-        generateBtcBlocksMap(latestBtcBlocks)
+        generateBtcBlocksMap(btcBlocks)
       );
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
@@ -61,7 +64,7 @@ export function useBlocksPageBlockListUngrouped(btcBlockLimit: number = 3) {
     updateBlockListManually,
     setBlockListLoading,
     clearLatestStxBlocksFromWebSocket,
-    latestBtcBlocks,
+    fetchBurnBlocks,
   ]);
 
   const updateBlockListWithQuery = useCallback(

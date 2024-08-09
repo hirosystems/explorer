@@ -1,4 +1,4 @@
-import { Block, BurnBlock } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/blockchain-api-client';
 
 export type EnhancedBlock = Block & { destroy?: boolean; animate?: boolean };
 
@@ -28,9 +28,9 @@ export interface BlockListBtcBlock {
   height: number | string;
   hash: string;
   timestamp: number;
-  txsCount: number | undefined;
-  blockCount: number | undefined;
-  avgBlockTime: number | undefined;
+  txsCount: number;
+  blockCount: number;
+  avgBlockTime: number;
 }
 
 export interface BlockListStxBlock {

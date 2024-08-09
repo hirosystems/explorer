@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useFetchMultipleBurnBlocks } from '../../../../common/queries/useBurnBlock';
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocket } from '../Sockets/useBlockListWebSocket';
 import { BlockListData, generateBlockList, mergeBlockLists, waitForFadeAnimation } from '../utils';
-import { useBlockListBtcBlocks } from './useBlockListBtcBlocks';
 import { useHomePageInitialBlockList } from './useHomePageInitialBlockList';
 import { generateBtcBlocksMap } from './utils';
 
@@ -35,14 +35,17 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     clearLatestStxBlocks: clearLatestStxBlocksFromWebSocket,
   } = useBlockListWebSocket(liveUpdates, initialStxBlocksHashes);
 
-  const { btcBlocks: latestBtcBlocks } = useBlockListBtcBlocks(latestStxBlocksFromWebSocket);
+  const fetchBurnBlocks = useFetchMultipleBurnBlocks();
 
   const showLatestStxBlocksFromWebSocket = useCallback(() => {
     setBlockListLoading(true);
-    waitForFadeAnimation(() => {
+    waitForFadeAnimation(async () => {
+      const btcBlocks = await fetchBurnBlocks(
+        latestStxBlocksFromWebSocket.map(block => block.burn_block_hash)
+      );
       const websocketBlockList = generateBlockList(
         latestStxBlocksFromWebSocket,
-        generateBtcBlocksMap(latestBtcBlocks)
+        generateBtcBlocksMap(btcBlocks)
       );
       updateBlockListManually(websocketBlockList);
       clearLatestStxBlocksFromWebSocket();
@@ -53,7 +56,7 @@ export function useHomePageBlockList(btcBlockLimit: number = 3) {
     updateBlockListManually,
     setBlockListLoading,
     clearLatestStxBlocksFromWebSocket,
-    latestBtcBlocks,
+    fetchBurnBlocks,
   ]);
 
   const updateBlockListWithQuery = useCallback(

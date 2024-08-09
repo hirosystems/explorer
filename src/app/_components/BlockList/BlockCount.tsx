@@ -1,68 +1,66 @@
 import { useColorModeValue } from '@chakra-ui/react';
-import { ArrowUpRight } from '@phosphor-icons/react';
+import { CaretDown } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 
-import { Circle } from '../../../common/components/Circle';
-import { ExplorerLink } from '../../../common/components/ExplorerLinks';
-import { Flex } from '../../../ui/Flex';
+import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
 export const BlockCount = memo(function ({
   count,
-  btcBlockHash,
   isFirst,
+  loadMoreStxBlocksHandler,
+  minimized = false,
 }: {
   count: number;
-  btcBlockHash?: string;
   isFirst?: boolean;
+  loadMoreStxBlocksHandler?: () => void;
+  minimized?: boolean;
 }) {
-  // TODO: remove. use theme
   const bgColor = useColorModeValue('purple.100', 'slate.900');
   const bgColorHover = useColorModeValue('purple.200', 'slate.850');
   const textColor = useColorModeValue('purple.600', 'purple.400');
   const iconColor = useColorModeValue('purple.600', 'purple.200');
-  const content = useMemo(() => {
-    return (
+  const canLoadMore = !minimized && !isFirst;
+
+  return (
+    <Button
+      onClick={canLoadMore ? loadMoreStxBlocksHandler : () => {}}
+      cursor={canLoadMore ? 'pointer' : 'default'}
+      py={3}
+      px={2}
+      width="fit-content"
+      height={8}
+      bg={bgColor}
+      rounded="full"
+      _hover={
+        canLoadMore
+          ? {
+              bg: bgColorHover,
+            }
+          : {
+              bg: bgColor,
+            }
+      }
+    >
       <Text
-        display={'flex'}
-        color={textColor}
-        fontSize={'xs'}
-        bg={bgColor}
-        rounded={'full'}
-        px={2}
-        alignItems={'center'}
+        display="flex"
+        color={canLoadMore ? textColor : 'text'}
+        fontSize="xs"
+        alignItems="center"
         gap={1}
-        width={'fit-content'}
-        height={8}
-        _hover={
-          isFirst
-            ? {}
-            : {
-                textDecoration: 'underline',
-                bg: bgColorHover,
+        _groupHover={
+          canLoadMore
+            ? {
                 textDecorationColor: textColor,
               }
+            : {}
         }
       >
         +{count} {pluralize('block', count)}
-        <Circle size={4.5} bg="surface">
-          <Icon as={ArrowUpRight} size={2.5} color={iconColor} />
-        </Circle>
+        {canLoadMore ? <Icon as={CaretDown} size={2.5} color={iconColor} /> : null}
       </Text>
-    );
-  }, [count, bgColor, bgColorHover, textColor, iconColor, isFirst]);
-
-  return (
-    <Flex py={3}>
-      {isFirst ? (
-        <>{content}</>
-      ) : (
-        <ExplorerLink href={btcBlockHash ? `btcblock/${btcBlockHash}` : '/blocks'}>
-          {content}
-        </ExplorerLink>
-      )}
-    </Flex>
+    </Button>
   );
 });
