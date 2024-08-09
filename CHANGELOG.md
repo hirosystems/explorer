@@ -1,3 +1,10 @@
+# [1.196.0](https://github.com/hirosystems/explorer/compare/v1.195.0...v1.196.0) (2024-08-09)
+
+
+### Features
+
+* enable new block view for naka 2 and 3 ([db81a23](https://github.com/hirosystems/explorer/commit/db81a23ea74af52b51ca89c9de5e568dbe9d9ca6))
+
 # [1.195.0](https://github.com/hirosystems/explorer/compare/v1.194.0...v1.195.0) (2024-08-08)
 
 
