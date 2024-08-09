@@ -16,7 +16,7 @@ exports[`DesktopNav should render correctly 1`] = `
         id="popover-trigger-:r1:"
       >
         <a
-          class="chakra-link css-1x94c5x"
+          class="chakra-link css-1srd4ia"
           href="#"
         >
           Sample Item 1
@@ -63,7 +63,7 @@ exports[`DesktopNav should render correctly 1`] = `
         id="popover-trigger-:r3:"
       >
         <a
-          class="chakra-link css-6qsqed"
+          class="chakra-link css-1gplkz"
           href="#"
         >
           Sample Item 2
