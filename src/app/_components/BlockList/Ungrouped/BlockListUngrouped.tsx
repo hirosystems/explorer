@@ -32,7 +32,7 @@ interface BtcBlockRowProps {
   isFirst: boolean;
 }
 export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children: ReactNode }) {
-  const textColor = useColorModeValue('slate.700', 'slate.500'); // TODO: not in theme. remove
+  const textColor = useColorModeValue('slate.700', 'slate.500');
   return (
     <Flex
       justifyContent="space-between"
