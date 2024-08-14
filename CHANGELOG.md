@@ -1,3 +1,10 @@
+## [1.196.1](https://github.com/hirosystems/explorer/compare/v1.196.0...v1.196.1) (2024-08-14)
+
+
+### Bug Fixes
+
+* deploy main to prod ([90a7926](https://github.com/hirosystems/explorer/commit/90a7926c08fb44d7344f1f08d0ade1eafb867cf4))
+
 # [1.196.0](https://github.com/hirosystems/explorer/compare/v1.195.0...v1.196.0) (2024-08-09)
 
 
