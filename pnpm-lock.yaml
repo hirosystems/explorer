@@ -250,8 +250,8 @@ dependencies:
     specifier: 0.0.1
     version: 0.0.1
   statuspage.io:
-    specifier: 3.2.6
-    version: 3.2.6
+    specifier: 3.2.8
+    version: 3.2.8
   swr:
     specifier: 2.2.2
     version: 2.2.2(react@18.2.0)
@@ -5433,18 +5433,18 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios@1.6.1:
-    resolution: {integrity: sha512-vfBmhDpKafglh0EldBEbVuoe7DyAavGSLWhuSm5ZSEKQnHhBf0xAAwybbNH1IkrJNGnS/VG4I5yxig1pCEXE4g==}
+  /axios@1.6.8:
+    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
     dependencies:
-      follow-redirects: 1.15.3
+      follow-redirects: 1.15.6
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
 
-  /axios@1.6.8:
-    resolution: {integrity: sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==}
+  /axios@1.7.2:
+    resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -7269,16 +7269,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       tslib: 2.6.2
-    dev: false
-
-  /follow-redirects@1.15.3:
-    resolution: {integrity: sha512-1VzOtuEM8pC9SFU1E+8KfTjZyMztRsgEfwQl44z8A25uy13jSzTj6dyK2Df52iV0vgHCfBwLhDWevLn95w5v6Q==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
     dev: false
 
   /follow-redirects@1.15.6:
@@ -10633,11 +10623,11 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /statuspage.io@3.2.6:
-    resolution: {integrity: sha512-yIFoKUEst6J9YwJfAtvDvMG0TvLRvdF5LajVyGV/i+mVpHSg7sWXMfhJgJ99heMPMt8lnzglAO9H9yvdJGXwnw==}
+  /statuspage.io@3.2.8:
+    resolution: {integrity: sha512-Iif2m3ux69gbOHWgmJcNnGgMrRsXFigDB4CKc03q6pE8xBoQ6NMcf1IU73mPdYIL6rtTBv6UE+j0AfFQ5lywbA==}
     engines: {node: '>= 10.9'}
     dependencies:
-      axios: 1.6.1
+      axios: 1.7.2
     transitivePeerDependencies:
       - debug
     dev: false
