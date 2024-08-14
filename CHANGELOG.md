@@ -1,3 +1,10 @@
+# [1.197.0](https://github.com/hirosystems/explorer/compare/v1.196.1...v1.197.0) (2024-08-14)
+
+
+### Features
+
+* warning bar for non hiro networks ([a526b04](https://github.com/hirosystems/explorer/commit/a526b04c9c095e70a043bda3d0cc2325d7591259))
+
 ## [1.196.1](https://github.com/hirosystems/explorer/compare/v1.196.0...v1.196.1) (2024-08-14)
 
 
