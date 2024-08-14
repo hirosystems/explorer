@@ -13,7 +13,7 @@ import { getFadeAnimationStyle } from './consts';
 import { BlockListData } from './utils';
 
 export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
-  const bgColor = useColorModeValue('purple.100', 'slate.900'); // TODO: not in theme. remove
+  const bgColor = useColorModeValue('purple.100', 'slate.900');
 
   return (
     <Flex
