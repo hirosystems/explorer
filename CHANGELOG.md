@@ -1,3 +1,10 @@
+# [1.198.0](https://github.com/hirosystems/explorer/compare/v1.197.1...v1.198.0) (2024-08-16)
+
+
+### Features
+
+* added holders ([65383f0](https://github.com/hirosystems/explorer/commit/65383f0f5d13aba65a7399aeb642c877c9574b7e))
+
 ## [1.197.1](https://github.com/hirosystems/explorer/compare/v1.197.0...v1.197.1) (2024-08-14)
 
 
