@@ -3,7 +3,7 @@
 import React from 'react';
 
 import { Section } from '../../common/components/Section';
-import { filterToFormattedValueMap, filterToKeywordMap } from '../../common/queries/useSearchQuery';
+import { filterToFormattedValueMap, getKeywordByFilter } from '../../common/queries/useSearchQuery';
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { TxSearchResult } from './TxSearchResult';
@@ -23,20 +23,25 @@ export default function ({ filters }: FilterProps) {
           <Text fontSize={'sm'}>Search results for:</Text>
           {Object.keys(filters).map(key => {
             const value = filters[key];
+            const keyword = getKeywordByFilter(key);
             return (
               <Text key={key} fontSize={'sm'}>
-                <Text
-                  display="inline-block"
-                  bg="surfaceHighlight"
-                  borderRadius="md"
-                  py={1.5}
-                  whiteSpace="pre"
-                  textTransform={'uppercase'}
-                >
-                  {' '}
-                  {filterToKeywordMap[key]}{' '}
-                </Text>{' '}
-                {value ? filterToFormattedValueMap[key](value) : ''}
+                {!!keyword && (
+                  <Text
+                    display="inline-block"
+                    bg="surfaceHighlight"
+                    borderRadius="md"
+                    py={1.5}
+                    whiteSpace="pre"
+                    textTransform={'uppercase'}
+                  >
+                    {' '}
+                    {getKeywordByFilter(key)}{' '}
+                  </Text>
+                )}{' '}
+                {value && filterToFormattedValueMap[key]
+                  ? filterToFormattedValueMap[key](value)
+                  : value || ''}
               </Text>
             );
           })}

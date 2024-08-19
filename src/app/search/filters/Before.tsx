@@ -26,6 +26,7 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
   };
   return (
     <Formik
+      enableReinitialize
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={initialValues}

@@ -3,24 +3,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import Page from './PageClient';
 
-export default async function ({
-  searchParams: { startTime, endTime, fromAddress, toAddress },
-}: {
-  searchParams: {
-    startTime?: string;
-    endTime?: string;
-    fromAddress?: string;
-    toAddress?: string;
-  };
-}) {
-  return (
-    <Page
-      filters={{
-        fromAddress,
-        toAddress,
-        startTime,
-        endTime,
-      }}
-    />
+export default async function ({ searchParams }: { searchParams: Record<string, string> }) {
+  const filter = Object.fromEntries(
+    Object.entries(searchParams).filter(
+      ([key]) =>
+        ['startTime', 'endTime', 'fromAddress', 'toAddress'].includes(key) ||
+        key.startsWith('term_')
+    )
   );
+
+  return <Page filters={filter} />;
 }

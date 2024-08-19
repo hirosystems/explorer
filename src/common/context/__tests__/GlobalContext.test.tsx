@@ -107,7 +107,6 @@ describe('GlobalContext', () => {
 
     await waitFor(() => {
       const updatedNetworks = getContextField('networks');
-      console.log('Object.keys(updatedNetworks).length', Object.keys(updatedNetworks).length);
       expect(Object.keys(updatedNetworks).length).toBe(6);
       expect(updatedNetworks[customApiUrl].isCustomNetwork).toBe(true);
     });

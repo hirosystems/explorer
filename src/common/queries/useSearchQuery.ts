@@ -8,8 +8,10 @@ import {
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
+import { blur, focus } from '../../features/search/search-slice';
 import { useApi } from '../api/useApi';
 import { BTC_BNS_CONTRACT } from '../constants/constants';
+import { useAppDispatch } from '../state/hooks';
 import {
   AddressSearchResult,
   BlockSearchResult,
@@ -61,19 +63,27 @@ export async function searchByBnsName(api: ReturnType<typeof useApi>, bnsName: s
   } catch (e) {}
 }
 
-export type AdvancedSearchKeywords = 'FROM:' | 'TO:' | 'BEFORE:' | 'AFTER:';
+export type AdvancedSearchKeywords = 'FROM:' | 'TO:' | 'BEFORE:' | 'AFTER:' | 'TERM:';
 
 type AdvancedSearchConfig = Record<
   string,
-  { filter: string; type: string; transform: (value: string) => any }
+  { filter: string; type: string; transform: (value: string) => any; build: (value: any) => string }
 >;
 
-export const filterToKeywordMap: Record<string, AdvancedSearchKeywords> = {
-  fromAddress: 'FROM:',
-  toAddress: 'TO:',
-  endTime: 'BEFORE:',
-  startTime: 'AFTER:',
-};
+export function getKeywordByFilter(keyword: string) {
+  switch (keyword) {
+    case 'fromAddress':
+      return 'FROM:';
+    case 'toAddress':
+      return 'TO:';
+    case 'endTime':
+      return 'BEFORE:';
+    case 'startTime':
+      return 'AFTER:';
+    default:
+      return '';
+  }
+}
 
 export function formatTimestamp(value: string) {
   const utcDate = new UTCDate(Number(value) * 1000);
@@ -96,11 +106,13 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
     filter: 'fromAddress',
     type: 'address',
     transform: (value: string) => value,
+    build: (value: string) => value,
   },
   'TO:': {
     filter: 'toAddress',
     type: 'address',
     transform: (value: string) => value,
+    build: (value: string) => value,
   },
   'BEFORE:': {
     filter: 'endTime',
@@ -109,6 +121,13 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
       const [year, month, day] = value.split('-').map(Number);
       const utcDate = new UTCDate(year, month - 1, day, 23, 59, 59);
       return Math.floor(utcDate.getTime() / 1000);
+    },
+    build: (value: number) => {
+      const date = new Date(value * 1000);
+      const year = date.getUTCFullYear();
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(date.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     },
   },
   'AFTER:': {
@@ -119,6 +138,19 @@ export const advancedSearchConfig: AdvancedSearchConfig = {
       const utcDate = new UTCDate(year, month - 1, day, 0, 0, 0);
       return Math.floor(utcDate.getTime() / 1000);
     },
+    build: (value: number) => {
+      const date = new Date(value * 1000);
+      const year = date.getUTCFullYear();
+      const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+      const day = String(date.getUTCDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
+  },
+  'TERM:': {
+    filter: 'term',
+    type: 'string',
+    transform: (value: string) => value,
+    build: (value: string) => value,
   },
 };
 
@@ -129,27 +161,68 @@ export const advancedSearchKeywords: string[] = Object.keys(
 const splitRegex = new RegExp(`/ +/|(${advancedSearchKeywords.join('|')})`);
 
 export function parseAdvancedSearchQuery(id: string) {
-  const query: Record<string, string> = {};
+  const query: { filterName: string; filterValue: string }[] = [];
   const isAdvancedSearch = advancedSearchKeywords.some(term => id.includes(term));
   if (!isAdvancedSearch) return query;
+  const startsWithTerm = !advancedSearchKeywords.some(term => id.startsWith(term));
+  if (startsWithTerm) {
+    const term = id.split(splitRegex)[0].trim();
+    query.push({ filterName: 'term', filterValue: term });
+  }
   Object.entries(advancedSearchConfig).forEach(([key, config]) => {
     const index = id.indexOf(key);
     if (index !== -1) {
-      const value = id
+      const [filterValue, ...termValue] = id
         .slice(index + key.length)
         .split(splitRegex)[0]
-        .trim();
-      query[config.filter] = config.transform(value);
+        .trim()
+        .split(' ');
+      query.push({ filterName: config.filter, filterValue: config.transform(filterValue) });
+      if (termValue.length) {
+        query.push({ filterName: 'term', filterValue: termValue.join(' ') });
+      }
     }
   });
   return query;
 }
 
+export function buildAdvancedSearchQuery(query: Record<string, string | number | null>): string {
+  let searchTerm = '';
+  Object.entries(query).forEach(([filter, value]) => {
+    if (!value) return;
+    const keyword = getKeywordByFilter(filter);
+    if (!keyword) {
+      // term
+      searchTerm += `${value} `;
+    } else {
+      const config = advancedSearchConfig[keyword];
+      const transformedValue = config.build(value as string | number);
+      searchTerm += `${keyword}${transformedValue} `;
+    }
+  });
+  return searchTerm.trim();
+}
+
+export function getSearchPageUrl(searchTerm: string) {
+  const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
+  const searchQueryParams = new URLSearchParams();
+  let termCount = 0;
+  advancedSearchQuery.forEach(({ filterName, filterValue }) => {
+    if (filterName === 'term') {
+      searchQueryParams.append(`${filterName}_${++termCount}`, filterValue);
+    } else {
+      searchQueryParams.append(filterName, filterValue);
+    }
+  });
+  return `/search?${searchQueryParams.toString()}`;
+}
+
 export function useSearchQuery(id: string) {
+  const dispatch = useAppDispatch();
   const { searchApi, blocksApi, nonFungibleTokensApi } = useApi();
   const isBtcName = id.endsWith('.btc');
   const advancedSearchQuery = parseAdvancedSearchQuery(id);
-  const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
+  const isAdvancedSearch = advancedSearchQuery.length > 0;
   const api = useApi();
   return useQuery({
     queryKey: ['search', isAdvancedSearch ? JSON.stringify(advancedSearchQuery) : id],
@@ -157,23 +230,56 @@ export function useSearchQuery(id: string) {
       let foundResult: FoundResult | undefined = undefined;
       let notFoundResult: NotFoundResult | undefined = undefined;
       if (isAdvancedSearch) {
-        if (advancedSearchQuery.fromAddress?.endsWith('.btc')) {
-          advancedSearchQuery.fromAddress =
-            (await searchByBnsName(api, advancedSearchQuery.fromAddress))?.result.entity_id ||
-            advancedSearchQuery.fromAddress;
+        const hasTerm = advancedSearchQuery.some(({ filterName }) => filterName === 'term');
+        if (hasTerm) {
+          // not supported, return no results
+          notFoundResult = {
+            found: false,
+            result: {
+              entity_type: SearchResultType.InvalidTerm,
+            },
+            error: 'Not supported',
+          };
+          return notFoundResult;
         }
-        if (advancedSearchQuery.toAddress?.endsWith('.btc')) {
-          advancedSearchQuery.toAddress =
-            (await searchByBnsName(api, advancedSearchQuery.toAddress))?.result.entity_id ||
-            advancedSearchQuery.toAddress;
+        const fromFilter = advancedSearchQuery.find(
+          ({ filterName }) => filterName === 'fromAddress'
+        );
+        const toFilter = advancedSearchQuery.find(({ filterName }) => filterName === 'toAddress');
+        if (fromFilter?.filterValue?.endsWith('.btc')) {
+          fromFilter.filterValue =
+            (await searchByBnsName(api, fromFilter.filterValue))?.result.entity_id ||
+            fromFilter.filterValue;
         }
+        if (toFilter?.filterValue?.endsWith('.btc')) {
+          toFilter.filterValue =
+            (await searchByBnsName(api, toFilter.filterValue))?.result.entity_id ||
+            toFilter.filterValue;
+        }
+        const fromAddress = advancedSearchQuery.find(
+          ({ filterName }) => filterName === 'fromAddress'
+        )?.filterValue;
+        const toAddress = advancedSearchQuery.find(({ filterName }) => filterName === 'toAddress')
+          ?.filterValue;
+        const startTime = advancedSearchQuery.find(({ filterName }) => filterName === 'startTime')
+          ?.filterValue;
+        const endTime = advancedSearchQuery.find(({ filterName }) => filterName === 'endTime')
+          ?.filterValue;
+        const term = advancedSearchQuery
+          .filter(({ filterName }) => filterName === 'term')
+          .reduce((acc, { filterValue }) => acc + filterValue + ' ', '')
+          .trim();
+        // TODO: use term when it's supported
         const txsResponse = await api.transactionsApi.getTransactionList({
           limit: 5,
           offset: 0,
           unanchored: true,
           sortBy: GetTransactionListSortByEnum.burn_block_time,
           order: GetTransactionListOrderEnum.desc,
-          ...advancedSearchQuery,
+          ...(fromAddress && { fromAddress: fromAddress }),
+          ...(toAddress && { toAddress: toAddress }),
+          ...(startTime && { startTime: Number(startTime) }),
+          ...(endTime && { endTime: Number(endTime) }),
         });
         const txs = (txsResponse?.results as Transaction[]) || ([] as Transaction[]);
         foundResult = {
@@ -225,8 +331,15 @@ export function useSearchQuery(id: string) {
       }
 
       if (foundResult) {
+        if (foundResult.result.entity_type !== SearchResultType.TxList) {
+          // single result, blur and go to entity page directly
+          dispatch(blur());
+        } else {
+          dispatch(focus());
+        }
         return foundResult as FoundResult;
       } else if (notFoundResult) {
+        dispatch(focus());
         return notFoundResult as NotFoundResult;
       } else {
         return null;

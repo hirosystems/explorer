@@ -1,14 +1,21 @@
+import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
+import { useEffect } from 'react';
 
 import { Section } from '../../../common/components/Section';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
   advancedSearchConfig,
   filterToFormattedValueMap,
-  filterToKeywordMap,
+  getKeywordByFilter,
+  getSearchPageUrl,
   parseAdvancedSearchQuery,
   useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../../common/state/hooks';
+import { Network } from '../../../common/types/network';
+import { FoundResult, SearchResultType } from '../../../common/types/search-results';
+import { buildUrl } from '../../../common/utils/buildUrl';
 import { Box } from '../../../ui/Box';
 import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
@@ -33,22 +40,31 @@ function SearchResultHeader({
           <Text fontSize={'xs'} color="textSubdued">
             Search results for:
           </Text>
-          {Object.keys(advancedSearchQuery).map(key => (
-            <Text key={key} fontSize={'xs'} color="textSubdued">
-              <Text
-                display="inline-block"
-                bg="surfaceHighlight"
-                borderRadius="md"
-                py={1.5}
-                whiteSpace="pre"
-                textTransform={'uppercase'}
-              >
-                {' '}
-                {filterToKeywordMap[key]}{' '}
-              </Text>{' '}
-              {filterToFormattedValueMap[key](advancedSearchQuery[key])}
-            </Text>
-          ))}
+          {advancedSearchQuery.map(({ filterName, filterValue }) => {
+            const keyword = getKeywordByFilter(filterName);
+            const value =
+              filterValue && filterToFormattedValueMap[filterName]
+                ? filterToFormattedValueMap[filterName](filterValue)
+                : filterValue || '';
+            return (
+              <Text key={filterName} fontSize={'xs'} color="textSubdued">
+                {!!keyword && (
+                  <Text
+                    display="inline-block"
+                    bg="surfaceHighlight"
+                    borderRadius="md"
+                    py={1.5}
+                    whiteSpace="pre"
+                    textTransform={'uppercase'}
+                  >
+                    {' '}
+                    {getKeywordByFilter(filterName)}{' '}
+                  </Text>
+                )}{' '}
+                {value}
+              </Text>
+            );
+          })}
         </Flex>
       );
     } else {
@@ -87,6 +103,25 @@ function SearchResultHeader({
   }
 }
 
+function getSearchEntityUrl(
+  activeNetwork: Network,
+  result?: ReturnType<typeof useSearchQuery>['data']
+) {
+  if (!result || !result.found || result.result.entity_type === SearchResultType.TxList) {
+    return;
+  }
+  switch (result.result.entity_type) {
+    case SearchResultType.BlockHash:
+      return buildUrl(`/block/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
+    case SearchResultType.ContractAddress:
+    case SearchResultType.MempoolTxId:
+    case SearchResultType.TxId:
+      return buildUrl(`/tx/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
+    case SearchResultType.StandardAddress:
+      return buildUrl(`/address/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
+  }
+}
+
 export function SearchResultsCard({
   searchResponse,
 }: {
@@ -99,12 +134,20 @@ export function SearchResultsCard({
   const hasResults = !hasError && !!data?.found;
   const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
   const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
-  const searchQueryParams = new URLSearchParams();
-  Object.entries(advancedSearchQuery).forEach(([key, value]) => {
-    searchQueryParams.append(key, value);
-  });
+  const searchPageUrl = getSearchPageUrl(searchTerm);
+  const router = useRouter();
+  const activeNetwork = useGlobalContext().activeNetwork;
 
-  if (!isFocused) return null;
+  useEffect(() => {
+    const entityUrl = getSearchEntityUrl(activeNetwork, data);
+    if (entityUrl) {
+      router.push(entityUrl);
+    }
+  }, [activeNetwork, data, router]);
+
+  const isSearchPage = usePathname() === '/search';
+
+  if (!isFocused || isSearchPage) return null;
 
   const totalCount = data && 'metadata' in data.result ? data?.result?.metadata?.totalCount : 0;
 
@@ -139,12 +182,7 @@ export function SearchResultsCard({
         )}
       </Box>
       {totalCount > 5 && (
-        <ButtonLink
-          variant={'secondary'}
-          width={'full'}
-          href={`/search?${searchQueryParams.toString()}`}
-          mb={6}
-        >
+        <ButtonLink variant={'secondary'} width={'full'} href={searchPageUrl} mb={6}>
           View {totalCount} results
         </ButtonLink>
       )}

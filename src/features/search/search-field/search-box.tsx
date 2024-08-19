@@ -1,9 +1,11 @@
 'use client';
 
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
+import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
+import { buildAdvancedSearchQuery } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
@@ -14,12 +16,30 @@ import { Text } from '../../../ui/Text';
 import { clearSearchTerm, selectIsSearchFieldFocused, selectSearchTerm } from '../search-slice';
 import { SearchInput } from './search-input';
 
-export const SearchBox = React.memo(({ isFetching }: { isFetching: boolean }) => {
+export function SearchBox({ isFetching }: { isFetching: boolean }) {
   const dispatch = useAppDispatch();
   const searchTerm = useAppSelector(selectSearchTerm);
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
+  const params = new URLSearchParams(useSearchParams());
+  const filterParams: Record<string, string> = {};
+  params.forEach((value, filter) => {
+    if (
+      filter === 'fromAddress' ||
+      filter === 'toAddress' ||
+      filter === 'startTime' ||
+      filter === 'endTime' ||
+      filter.startsWith('term_')
+    ) {
+      filterParams[filter] = value;
+    }
+  });
+  const searchTermFromQueryParams = buildAdvancedSearchQuery(filterParams);
 
-  const [tempSearchTerm, setTempSearchTerm] = useState('');
+  const [tempSearchTerm, setTempSearchTerm] = useState(searchTermFromQueryParams);
+
+  useEffect(() => {
+    setTempSearchTerm(searchTermFromQueryParams);
+  }, [searchTermFromQueryParams]);
 
   useEffect(() => {
     dispatch(clearSearchTerm());
@@ -75,4 +95,4 @@ export const SearchBox = React.memo(({ isFetching }: { isFetching: boolean }) =>
       </Flex>
     </InputGroup>
   );
-});
+}

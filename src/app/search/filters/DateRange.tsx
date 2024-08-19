@@ -30,6 +30,7 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
   const searchParams = useSearchParams();
   return (
     <Formik
+      enableReinitialize
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={initialValues}

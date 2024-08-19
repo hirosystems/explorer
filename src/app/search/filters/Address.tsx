@@ -35,6 +35,7 @@ export function AddressFilter({
     fromAddress: defaultFromAddress,
     toAddress: defaultToAddress,
   };
+
   const { onOpen, onClose, isOpen } = useDisclosure();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -87,6 +88,7 @@ export function AddressFilter({
       <PopoverContent maxWidth={'275px'} bgColor={'surface'}>
         <Flex direction={'column'} gap={2} p={4}>
           <Formik
+            enableReinitialize
             validateOnChange={false}
             validateOnBlur={false}
             initialValues={initialValues}
