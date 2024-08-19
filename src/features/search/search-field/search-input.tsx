@@ -1,8 +1,9 @@
-import { red } from 'next/dist/lib/picocolors';
+import { router } from 'next/client';
+import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useState } from 'react';
 
-import { advancedSearchKeywords } from '../../../common/queries/useSearchQuery';
+import { advancedSearchKeywords, getSearchPageUrl } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
@@ -22,6 +23,10 @@ export function SearchInput({
   const [scrollLeft, setScrollLeft] = useState(0);
   const reg = new RegExp(`(${advancedSearchKeywords.join('|')})`, 'gi');
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
+  const router = useRouter();
+  const isSearchPage = usePathname() === '/search';
+  const searchPageUrl = getSearchPageUrl(tempSearchTerm);
+  const isAdvancedSearch = advancedSearchKeywords.some(term => tempSearchTerm.includes(term));
 
   return (
     <Flex position="relative" alignItems={'center'} maxW={'lg'} width={'full'} overflow="hidden">
@@ -69,12 +74,16 @@ export function SearchInput({
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            dispatch(setSearchTerm(tempSearchTerm));
+            if (isSearchPage && isAdvancedSearch) {
+              router.push(searchPageUrl);
+            } else {
+              dispatch(setSearchTerm(tempSearchTerm));
+            }
           }
         }}
         onChange={(e: React.FormEvent<HTMLInputElement>) => {
           const formattedValue = e.currentTarget.value.replace(reg, match => match.toUpperCase());
-          setTempSearchTerm(formattedValue);
+          setTempSearchTerm(formattedValue.trimStart());
         }}
         onScroll={(e: React.FormEvent<HTMLInputElement>) =>
           setScrollLeft(e.currentTarget.scrollLeft)

@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import { Badge } from '../../../common/components/Badge';
 import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
@@ -78,6 +78,10 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
   const [selectedFilterType, setSelectedFilterType] = useState<'dateRange' | 'before' | 'after'>(
     populatedFilter || 'dateRange'
   );
+
+  useEffect(() => {
+    setSelectedFilterType(populatedFilter || 'dateRange');
+  }, [populatedFilter]);
 
   return (
     <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>

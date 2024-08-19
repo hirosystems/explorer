@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { useSearchQuery } from '../../common/queries/useSearchQuery';
+import { parseAdvancedSearchQuery, useSearchQuery } from '../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../common/state/hooks';
 import { Box, BoxProps } from '../../ui/Box';
 import { SearchResultsCard } from './dropdown/search-results-card';
 import { SearchBox } from './search-field/search-box';
 import { selectSearchTerm } from './search-slice';
 
-export const Search: React.FC<BoxProps> = ({ ...props }) => {
+export function Search(props: BoxProps) {
   const searchTerm = useAppSelector(selectSearchTerm);
   const searchResponse = useSearchQuery(searchTerm);
 
@@ -17,4 +17,4 @@ export const Search: React.FC<BoxProps> = ({ ...props }) => {
       <SearchResultsCard searchResponse={searchResponse} />
     </Box>
   );
-};
+}

@@ -41,11 +41,21 @@ function Header({ txCount }: { txCount: number }) {
 
 export function TxSearchResult({ filters }: FilterProps) {
   const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
-  const response = useConfirmedTransactionsInfinite({
-    ...filters,
-    order: activeConfirmedTxsOrder,
-    sortBy: activeConfirmedTxsSort,
-  });
+  const hasTerm = Object.keys(filters).some(key => key.startsWith('term_'));
+  const filtersWithoutTerm = Object.fromEntries(
+    Object.entries(filters).filter(([key]) => !key.startsWith('term_'))
+  );
+  const response = useConfirmedTransactionsInfinite(
+    {
+      ...filtersWithoutTerm,
+      order: activeConfirmedTxsOrder,
+      sortBy: activeConfirmedTxsSort,
+    },
+    {
+      // TODO: allow term search when it's supported
+      enabled: !hasTerm,
+    }
+  );
   const txs = useInfiniteQueryResult<Transaction>(response);
 
   const { isLoading, isError } = response;
@@ -53,7 +63,7 @@ export function TxSearchResult({ filters }: FilterProps) {
   if (isLoading) {
     return <SkeletonGenericTransactionList />;
   }
-  if (isError || !txs?.length) {
+  if (isError || !txs?.length || hasTerm) {
     return <NoTxs />;
   }
 

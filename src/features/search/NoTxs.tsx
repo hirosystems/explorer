@@ -49,8 +49,9 @@ export function NoTxs() {
         No results found
       </Text>
       <Text fontSize={'sm'} color={'textSubdued'} lineHeight={'1.42em'}>
-        Try with a valid transaction ID, block hash, block height, address, token name, contract
-        name, or BNS name.
+        Please use a valid transaction ID, block hash, block height, address, token name, contract
+        name, BNS name, or date. Only these inputs are supported for now, but we are working on
+        adding more search capabilities.
       </Text>
     </Flex>
   );

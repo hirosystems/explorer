@@ -27,6 +27,7 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
   };
   return (
     <Formik
+      enableReinitialize
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={initialValues}

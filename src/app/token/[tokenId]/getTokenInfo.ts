@@ -150,7 +150,6 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
 
     await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
 
-    console.log('tokenInfo', tokenInfo);
     return tokenInfo;
   } catch (error) {
     console.error(error);
