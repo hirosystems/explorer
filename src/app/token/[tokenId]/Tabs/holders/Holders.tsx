@@ -2,6 +2,7 @@ import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
 
+import { AddressLink } from '../../../../../common/components/ExplorerLinks';
 import { ListFooter } from '../../../../../common/components/ListFooter';
 import { Section } from '../../../../../common/components/Section';
 import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
@@ -136,9 +137,9 @@ const HolderTableRow = ({
       </Td>
 
       <Td py={3} px={6}>
-        <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+        <AddressLink principal={address} whiteSpace="nowrap" fontSize="sm" color="textSubdued">
           {truncateMiddle(address)}
-        </Text>
+        </AddressLink>
       </Td>
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
@@ -230,7 +231,7 @@ const HoldersTableBase = ({
         isLoading={isFetchingNextPage}
         hasNextPage={hasNextPage}
         fetchNextPage={fetchNextPage}
-        label={'blocks'}
+        label={''}
       />
     </>
   );
