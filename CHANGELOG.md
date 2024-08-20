@@ -1,3 +1,10 @@
+## [1.198.2](https://github.com/hirosystems/explorer/compare/v1.198.1...v1.198.2) (2024-08-20)
+
+
+### Bug Fixes
+
+* fixed load more txt + added addr link ([6bd7978](https://github.com/hirosystems/explorer/commit/6bd79788e004b8bc39a571bd7f69ead38489573e))
+
 ## [1.198.1](https://github.com/hirosystems/explorer/compare/v1.198.0...v1.198.1) (2024-08-20)
 
 
