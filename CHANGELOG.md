@@ -1,3 +1,11 @@
+## [1.198.1](https://github.com/hirosystems/explorer/compare/v1.198.0...v1.198.1) (2024-08-20)
+
+
+### Bug Fixes
+
+* package.json to reduce vulnerabilities ([255446a](https://github.com/hirosystems/explorer/commit/255446a384825f6b79ebdd09414bf63071551e38))
+* snyk ([2ac3a4b](https://github.com/hirosystems/explorer/commit/2ac3a4b767507417f4f7f190a76d63960a881418))
+
 # [1.198.0](https://github.com/hirosystems/explorer/compare/v1.197.1...v1.198.0) (2024-08-16)
 
 
