@@ -1,3 +1,10 @@
+# [1.199.0](https://github.com/hirosystems/explorer/compare/v1.198.2...v1.199.0) (2024-08-21)
+
+
+### Features
+
+* added degen lab as signer ([fa1d98f](https://github.com/hirosystems/explorer/commit/fa1d98fe1efb2e8e01efc81398f5b111672559e8))
+
 ## [1.198.2](https://github.com/hirosystems/explorer/compare/v1.198.1...v1.198.2) (2024-08-20)
 
 
