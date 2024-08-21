@@ -1,3 +1,10 @@
+# [1.200.0](https://github.com/hirosystems/explorer/compare/v1.199.0...v1.200.0) (2024-08-21)
+
+
+### Features
+
+* added pc ([646ed0f](https://github.com/hirosystems/explorer/commit/646ed0ff4b59dc61663f362994ca92b3ee487232))
+
 # [1.199.0](https://github.com/hirosystems/explorer/compare/v1.198.2...v1.199.0) (2024-08-21)
 
 
