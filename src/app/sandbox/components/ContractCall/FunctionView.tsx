@@ -136,7 +136,6 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
         const functionParametersErrors = checkFunctionParameters(fn, values);
         const postConditionParametersErrors = checkPostConditionParameters(values);
         const errors = Object.assign({}, functionParametersErrors, postConditionParametersErrors);
-        console.log({ errors, numErrors: Object.keys(errors).length, values });
         return errors;
       }}
       onSubmit={async values => {

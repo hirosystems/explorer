@@ -1,5 +1,6 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
+import { useGlobalContext } from '../../../../../common/context/useGlobalContext';
 import { GenericResponseType } from '../../../../../common/hooks/useInfiniteQueryResult';
 import { TEN_MINUTES } from '../../../../../common/queries/query-stale-time';
 import { getNextPageParam } from '../../../../../common/utils/utils';
@@ -17,6 +18,7 @@ const DEFAULT_HOLDER_LIMIT = 20;
 const HOLDERS_QUERY_KEY = 'holders';
 
 const fetchHolders = async (
+  apiUrl: string,
   tokenId: string,
   pageParam: number,
   options: any
@@ -28,20 +30,18 @@ const fetchHolders = async (
     offset: offset.toString(),
   }).toString();
   const response = await fetch(
-    `https://api.dev.hiro.so/extended/v1/tokens/ft/${tokenId}/holders${
-      queryString ? `?${queryString}` : ''
-    }`
+    `${apiUrl}/extended/v1/tokens/ft/${tokenId}/holders${queryString ? `?${queryString}` : ''}`
   );
   return response.json();
 };
 
 export function useSuspenseFtHolders(fullyQualifiedTokenId: string, options: any = {}) {
-  //   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 
   return useSuspenseInfiniteQuery<HolderResponseType>({
     queryKey: [HOLDERS_QUERY_KEY, fullyQualifiedTokenId],
     queryFn: ({ pageParam }: { pageParam: number }) =>
-      fetchHolders(fullyQualifiedTokenId, pageParam, options),
+      fetchHolders(activeNetworkUrl, fullyQualifiedTokenId, pageParam, options),
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TEN_MINUTES,
@@ -51,11 +51,12 @@ export function useSuspenseFtHolders(fullyQualifiedTokenId: string, options: any
 }
 
 export function useSuspenseStxHolders(options: any = {}) {
-  //   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 
   return useSuspenseInfiniteQuery<HolderResponseType>({
     queryKey: [HOLDERS_QUERY_KEY, 'stx'],
-    queryFn: ({ pageParam }: { pageParam: number }) => fetchHolders('stx', pageParam, options),
+    queryFn: ({ pageParam }: { pageParam: number }) =>
+      fetchHolders(activeNetworkUrl, 'stx', pageParam, options),
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TEN_MINUTES,

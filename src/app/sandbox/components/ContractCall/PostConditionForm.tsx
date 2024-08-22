@@ -380,7 +380,7 @@ export function PostConditionForm({
   values,
   errors,
   formikSetFieldValue,
-  handleChange
+  handleChange,
 }: {
   values: FunctionFormikState;
   errors: FormikErrors<FunctionFormikState>;

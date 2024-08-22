@@ -359,7 +359,8 @@ function StxBlocksGroupedByBtcBlock({
   const { fetchNextPage, hasNextPage } = response;
   const additionalStxBlocks = useInfiniteQueryResult<Block | NakamotoBlock>(response);
 
-  const handleLoadMoreStxBlocks = useCallback(() => { // TODO: remove this comment
+  const handleLoadMoreStxBlocks = useCallback(() => {
+    // TODO: remove this comment
     setEnabled(true);
     if (hasNextPage) {
       fetchNextPage();
