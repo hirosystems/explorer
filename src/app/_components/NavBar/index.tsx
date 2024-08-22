@@ -59,6 +59,11 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
             label: <NavLabel>Signers</NavLabel>,
             href: buildUrl('/signers', activeNetwork),
           },
+          {
+            id: 'stacking',
+            label: <NavLabel>Stacking</NavLabel>,
+            href: buildUrl('/stacking', activeNetwork),
+          },
         ],
       },
       {
