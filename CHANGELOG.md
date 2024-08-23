@@ -1,3 +1,10 @@
+## [1.200.1](https://github.com/hirosystems/explorer/compare/v1.200.0...v1.200.1) (2024-08-23)
+
+
+### Bug Fixes
+
+* holders url ([87b415b](https://github.com/hirosystems/explorer/commit/87b415bf69c0796f31b8da3165ec371263c922a8))
+
 # [1.200.0](https://github.com/hirosystems/explorer/compare/v1.199.0...v1.200.0) (2024-08-21)
 
 
