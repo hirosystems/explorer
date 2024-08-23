@@ -1,7 +1,7 @@
 import { Box } from '@/ui/Box';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense, useMemo } from 'react';
 
 import { Section } from '../../common/components/Section';
 import { Flex } from '../../ui/Flex';
@@ -15,6 +15,10 @@ import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { mobileBorderCss } from '../signers/consts';
+import { useSuspensePoxSigners } from '../signers/data/useSigners';
+import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+import { useQueryClient } from '@tanstack/react-query';
+import { useGetStackersBySignerQuery } from '../signers/data/UseSignerAddresses';
 
 const StyledTable = styled(Table)`
   th {
@@ -173,6 +177,49 @@ interface ActivePoolsRowInfo {
 }
 
 const ActivePoolsTableBase = () => {
+  const { currentCycleId } = useSuspenseCurrentStackingCycle();
+
+  const {
+    data: { results: signers },
+  } = useSuspensePoxSigners(currentCycleId);
+
+  if (!signers) {
+    throw new Error('Signers data is not available');
+  }
+
+
+  const queryClient = useQueryClient();
+  const getQuery = useGetStackersBySignerQuery();
+  const signersStackersQueries = useMemo(() => {
+    return {
+      queries: signers.map(signer => {
+        return getQuery(currentCycleId, signer.signing_key);
+      }),
+      combine: (
+        response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
+      ) => response.map(r => r.data?.results ?? []),
+    };
+  }, [signers, getQuery, currentCycleId]);
+  const signersStackers = useQueries(signersStackersQueries, queryClient);
+  const signersData = useMemo(
+    () =>
+      signers
+        .map((signer, index) => {
+          return {
+            ...formatSignerRowData(signer, signersStackers[index]),
+          };
+        })
+        .sort((a, b) =>
+          votingPowerSortOrder === 'desc'
+            ? b.votingPowerPercentage - a.votingPowerPercentage
+            : a.votingPowerPercentage - b.votingPowerPercentage
+        ),
+    [signers, signersStackers, votingPowerSortOrder]
+  );
+
+
+  console.log({ signers });
+  
   const activePoolFakeData = {
     provider: 'Xverse',
     poxAddress: 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh',
