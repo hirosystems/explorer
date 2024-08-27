@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { FC, ReactNode, useState } from 'react';
 
 import { TabsContainer } from '../../../common/components/TabsContainer';
@@ -20,6 +20,7 @@ export const TxListTabsBase: FC<
 > = ({ confirmedList, mempoolList, showFilterButton = true, showValueMenu = true, ...props }) => {
   const principal = useParams().principal;
   const [tabIndex, setTabIndex] = useState(0);
+  const isHomePage = usePathname() === '/';
 
   return (
     <TabsContainer
@@ -43,9 +44,7 @@ export const TxListTabsBase: FC<
           width="auto"
         >
           {!!principal && <CSVDownloadButton address={principal as string} />}
-          {tabIndex === 1 && <MempoolTxsSortMenu />}
-          {showValueMenu && <ShowValueMenu />}
-          {showFilterButton && <FilterButton />}
+          {isHomePage && tabIndex === 1 && <MempoolTxsSortMenu />}
         </Flex>
       }
       {...props}

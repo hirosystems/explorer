@@ -103,6 +103,9 @@ export const theme = extendTheme({
   sizes: {
     4.5: '1.125rem',
   },
+  space: {
+    4.5: '1.125rem',
+  },
   borders: {
     '1px': '1px solid var(--stacks-colors-borderPrimary)',
     dark_1px: '1px solid var(--stacks-colors-borderSecondary)',

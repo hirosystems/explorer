@@ -1,3 +1,6 @@
+import { usePathname } from 'next/navigation';
+import * as React from 'react';
+
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
@@ -7,6 +10,9 @@ import { useMempoolTransactionsInfinite } from '../../common/queries/useMempoolT
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
+import { FilterButton } from '../txsFilterAndSort/FilterButton';
+import { ShowValueMenu } from '../txsFilterAndSort/ShowValueMenu';
+import { MempoolTxsSortMenu } from '../txsFilterAndSort/SortMenu';
 import { useFilterAndSortState } from '../txsFilterAndSort/useFilterAndSortState';
 import { FilteredTxs } from './FilteredTxs';
 import { MempoolTxListItem } from './ListItem/MempoolTxListItem';
@@ -14,12 +20,19 @@ import { SkeletonTxsList } from './SkeletonTxsList';
 
 interface MempoolTxsListProps {
   limit?: number;
+  showValueMenu?: boolean;
+  showFilterButton?: boolean;
 }
 
-function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
+function MempoolTxsListBase({
+  limit,
+  showValueMenu = true,
+  showFilterButton = true,
+}: MempoolTxsListProps) {
   const { activeMempoolTxsSort, activeMempoolTxsOrder } = useFilterAndSortState();
   const response = useMempoolTransactionsInfinite(activeMempoolTxsSort, activeMempoolTxsOrder);
   const txs = useInfiniteQueryResult<MempoolTransaction>(response, limit);
+  const isHomePage = usePathname() === '/';
 
   if (response.isLoading || response.isFetching) return <SkeletonTxsList />;
 
@@ -32,6 +45,13 @@ function MempoolTxsListBase({ limit }: MempoolTxsListProps) {
   }
   return (
     <Box pb={6}>
+      {(!isHomePage || showValueMenu || showFilterButton) && (
+        <Flex pt={4.5} pb={4} gap={2} flexWrap={'wrap'}>
+          {!isHomePage && <MempoolTxsSortMenu />}
+          {showValueMenu && <ShowValueMenu />}
+          {showFilterButton && <FilterButton />}
+        </Flex>
+      )}
       <FilteredTxs txs={txs} TxListItem={MempoolTxListItem} />
       <ListFooter
         isLoading={response.isFetchingNextPage}

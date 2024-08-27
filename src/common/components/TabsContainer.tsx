@@ -21,7 +21,7 @@ export const TabsContainer: FC<
 > = ({ setTabIndex, title, tabs, actions, ...props }) => (
   <Section title={title} {...props}>
     <Tabs isLazy onChange={index => setTabIndex?.(index)}>
-      <TabList width="full">
+      <TabList width="full" border={'none'} pb={1}>
         <Flex
           gap={4}
           direction={['column', 'column', 'row', 'row']}

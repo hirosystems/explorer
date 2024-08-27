@@ -1,5 +1,7 @@
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
@@ -10,7 +12,43 @@ import { DateFilter } from './Date';
 export interface FilterProps {
   filters: Record<string, string | undefined>;
 }
-export function Filters({ filters }: FilterProps) {
+
+function usePageUrlWithNoFilters() {
+  const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const currentQuery = new URLSearchParams(searchParams);
+
+  Object.keys(filterToFormattedValueMap).forEach(param => {
+    currentQuery.delete(param);
+  });
+
+  const queryString = currentQuery.toString();
+  return `${currentPath}${queryString ? `?${queryString}` : ''}`;
+}
+
+export function ClearFiltersButton({ filters }: FilterProps) {
+  const pageUrlWithNoFilters = usePageUrlWithNoFilters();
+  if (!Object.keys(filters).length) return null;
+  return (
+    <Flex gap={2} alignItems={'center'}>
+      <TextLink
+        href={pageUrlWithNoFilters}
+        variant={'secondary'}
+        width={'full'}
+        fontSize={'sm'}
+        fontWeight={'medium'}
+        display={'flex'}
+        gap={1.5}
+        color="textSubdued"
+      >
+        <Icon as={Backspace} size={4} />
+        <span>Clear all filters</span>
+      </TextLink>
+    </Flex>
+  );
+}
+
+export function FiltersWithWrapper({ filters }: FilterProps) {
   return (
     <Flex
       direction={'column'}
@@ -30,23 +68,7 @@ export function Filters({ filters }: FilterProps) {
             Filters
           </Text>
         </Flex>
-        {Object.keys(filters).length > 0 && (
-          <Flex gap={2} alignItems={'center'}>
-            <TextLink
-              href={'/search'}
-              variant={'secondary'}
-              width={'full'}
-              fontSize={'sm'}
-              fontWeight={'medium'}
-              display={'flex'}
-              gap={1.5}
-              color="textSubdued"
-            >
-              <Icon as={Backspace} size={4} />
-              <span>Clear all filters</span>
-            </TextLink>
-          </Flex>
-        )}
+        <ClearFiltersButton filters={filters} />
       </Flex>
       <Flex gap={2} mt={0.5} direction={['column', 'row']}>
         <AddressFilter

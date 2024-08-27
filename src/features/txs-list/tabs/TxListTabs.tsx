@@ -1,5 +1,6 @@
 'use client';
 
+import { FilterProps } from '../../../app/search/filters';
 import { FlexProps } from '../../../ui/Flex';
 import { ConfirmedTxsList } from '../ConfirmedTxsList';
 import { MempoolTxsList } from '../MempoolTxsList';
@@ -9,12 +10,31 @@ export function TxListTabs({
   limit,
   showFilterButton,
   showValueMenu,
+  filters,
   ...props
-}: { limit?: number; showFilterButton?: boolean; showValueMenu?: boolean } & FlexProps) {
+}: {
+  limit?: number;
+  showFilterButton?: boolean;
+  showValueMenu?: boolean;
+  filters?: Record<string, string | undefined>;
+} & FlexProps) {
   return (
     <TxListTabsBase
-      confirmedList={<ConfirmedTxsList limit={limit} />}
-      mempoolList={<MempoolTxsList limit={limit} />}
+      confirmedList={
+        <ConfirmedTxsList
+          filters={filters}
+          limit={limit}
+          showFilterButton={showFilterButton}
+          showValueMenu={showValueMenu}
+        />
+      }
+      mempoolList={
+        <MempoolTxsList
+          limit={limit}
+          showFilterButton={showFilterButton}
+          showValueMenu={showValueMenu}
+        />
+      }
       showFilterButton={showFilterButton}
       showValueMenu={showValueMenu}
       {...props}

@@ -7,7 +7,7 @@ import { filterToFormattedValueMap, getKeywordByFilter } from '../../common/quer
 import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { TxSearchResult } from './TxSearchResult';
-import { FilterProps, Filters } from './filters';
+import { FilterProps, FiltersWithWrapper } from './filters';
 
 export default function ({ filters }: FilterProps) {
   return (
@@ -46,7 +46,7 @@ export default function ({ filters }: FilterProps) {
             );
           })}
         </Flex>
-        <Filters filters={filters} />
+        <FiltersWithWrapper filters={filters} />
       </Flex>
       <Flex px={6} flexDirection={'column'}>
         <TxSearchResult filters={filters} />
