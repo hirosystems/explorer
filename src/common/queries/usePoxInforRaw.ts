@@ -60,7 +60,7 @@ export function useSuspensePoxInfoRaw() {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
   return useSuspenseQuery<PoxInfo>({
     queryKey: ['pox-info-raw'],
-    queryFn: () => fetch(`${activeNetworkUrl}/v2/pox`).then(res => res.json()), // TODO: update to use api.infoApi.getPoxInfoRaw({}),
+    queryFn: () => fetch(`${activeNetworkUrl}/v2/pox`).then(res => res.json()),
     staleTime: 30 * 60 * 1000,
   });
 }

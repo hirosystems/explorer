@@ -1,8 +1,9 @@
 dist/
 out/
 node_modules/
-tests/screenshots/*
+.env
 .env.local
+tests/screenshots/*
 .next
 .idea
 .DS_Store
@@ -15,7 +16,6 @@ yalc.lock
 .vercel
 yarn-error.log
 coverage
-.env
 
 # Sentry
 .sentryclirc

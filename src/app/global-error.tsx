@@ -1,26 +1,17 @@
 'use client';
 
+import { logError } from '@/common/utils/error-utils';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
 import { Section } from '../common/components/Section';
-import { useGlobalContext } from '../common/context/useGlobalContext';
 import { Box } from '../ui/Box';
 import { Grid } from '../ui/Grid';
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export default function GlobalError({ error }: { error: Error }) {
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error);
+    logError(error, 'global-error');
   }, [error]);
-
-  const network = useGlobalContext().activeNetwork;
 
   return (
     <html lang="en">

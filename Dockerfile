@@ -1,22 +1,14 @@
+# First stage.  This stage is responsible for installing dependencies and building the application.
+# The output of this stage is a built version of your Next.js app, which includes all the static assets and optimized files that will be served to users.
 FROM node:18-alpine AS build
 
-ARG REDIS_URL
-ARG SENTRY_AUTH_TOKEN
-ARG SENTRY_DSN
-ARG SENTRY_LOG_LEVEL=warn
-ARG NODE_ENV=production
-ARG X_API_KEY
-ARG CMS_URL
 ARG RELEASE_TAG_NAME
+ENV NEXT_PUBLIC_RELEASE_TAG_NAME=${RELEASE_TAG_NAME}
 
-# Build args for browser variables
-ARG NEXT_PUBLIC_MAINNET_API_SERVER
-ARG NEXT_PUBLIC_TESTNET_API_SERVER
-ARG NEXT_PUBLIC_LEGACY_EXPLORER_API_SERVER
-ARG NEXT_PUBLIC_DEPLOYMENT_URL
-ARG NEXT_PUBLIC_MAINNET_ENABLED
-ARG NEXT_PUBLIC_DEFAULT_POLLING_INTERVAL
+ARG NEXT_PUBLIC_SENTRY_DSN
+ENV NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
 
+ARG SENTRY_AUTH_TOKEN
 WORKDIR /app
 
 COPY . .
@@ -25,24 +17,17 @@ RUN npm install -g pnpm@8.9.1
 RUN pnpm i
 RUN pnpm build
 
+# This stage creates the final Docker image that will be used in production. It only contains the necessary runtime environment and the built application files from the first stage.
 FROM node:18-alpine
 
-ARG REDIS_URL
-ARG SENTRY_AUTH_TOKEN
-ARG SENTRY_DSN
-ARG SENTRY_LOG_LEVEL=warn
 ARG NODE_ENV=production
-
-# Set ENVs so they persist after image is built
-ENV NEXT_SHARP_PATH=/tmp/node_modules/sharp
-ENV REDIS_URL=${REDIS_URL}
-ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-ENV SENTRY_DSN=${SENTRY_DSN}
-ENV SENTRY_LOG_LEVEL=${SENTRY_LOG_LEVEL}
 ENV NODE_ENV=${NODE_ENV}
-ENV X_API_KEY=${X_API_KEY}
-ENV CMS_URL=${CMS_URL}
-ENV RELEASE_TAG_NAME=${RELEASE_TAG_NAME}
+
+ARG RELEASE_TAG_NAME
+ENV NEXT_PUBLIC_RELEASE_TAG_NAME=${RELEASE_TAG_NAME}
+
+ARG NEXT_PUBLIC_SENTRY_DSN
+ENV NEXT_PUBLIC_SENTRY_DSN=${NEXT_PUBLIC_SENTRY_DSN}
 
 WORKDIR /app
 

@@ -1,10 +1,8 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
 import { BigNumber } from 'bignumber.js';
 import { Form, Formik } from 'formik';
 import { NextPage } from 'next';
-import React from 'react';
 
 import { openSTXTransfer } from '@stacks/connect';
 

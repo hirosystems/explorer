@@ -2,7 +2,6 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { FC, ReactNode } from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';
