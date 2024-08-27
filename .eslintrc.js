@@ -19,4 +19,5 @@ module.exports = {
   rules: {
     'react-hooks/rules-of-hooks': 'error',
   },
+  ignorePatterns: ['next.config.js'],
 };

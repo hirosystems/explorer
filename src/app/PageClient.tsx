@@ -1,7 +1,9 @@
 'use client';
 
+import { logError } from '@/common/utils/error-utils';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
 
 import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
@@ -25,6 +27,7 @@ const HomePageBlockListDynamic = dynamic(
 const Home: NextPage = () => {
   const { activeNetwork } = useGlobalContext();
   const isNakamotoTestnet = useIsNakamotoTestnet();
+
   return (
     <>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>

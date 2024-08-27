@@ -59,7 +59,7 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -88,6 +88,12 @@ jobs:
           platforms: ${{ github.ref == 'refs/heads/main' && 'linux/amd64,linux/arm64' ||  'linux/amd64'  }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+          secrets: |
+            "sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}"
+          build-args: |
+            RELEASE_TAG_NAME=${{ steps.semantic.outputs.new_release_version }}
+            NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Deployment Info
         run: 'echo "::warning::Will deploy docker tag/digest: ${{ steps.docker_meta.outputs.version }}/${{ steps.docker_push.outputs.digest }}"'
