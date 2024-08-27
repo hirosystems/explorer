@@ -1,3 +1,10 @@
+# [1.201.0](https://github.com/hirosystems/explorer/compare/v1.200.1...v1.201.0) (2024-08-27)
+
+
+### Features
+
+* sync search bar with filters ([a1559c6](https://github.com/hirosystems/explorer/commit/a1559c66d72d6075cab141571ea1b971b321f497))
+
 ## [1.200.1](https://github.com/hirosystems/explorer/compare/v1.200.0...v1.200.1) (2024-08-23)
 
 
