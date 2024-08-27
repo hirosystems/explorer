@@ -1,15 +1,29 @@
-import dynamic from 'next/dynamic';
 import * as React from 'react';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { getTokenPrice } from '../getTokenPriceInfo';
-import Skeleton from './skeleton';
+import Page from './PageClient';
 
-const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
-export default async function () {
+export default async function ({
+  searchParams: { startTime, endTime, fromAddress, toAddress },
+}: {
+  searchParams: {
+    startTime?: string;
+    endTime?: string;
+    fromAddress?: string;
+    toAddress?: string;
+  };
+}) {
   const tokenPrice = await getTokenPrice();
-  return <Page tokenPrice={tokenPrice} />;
+  return (
+    <Page
+      tokenPrice={tokenPrice}
+      filters={{
+        fromAddress,
+        toAddress,
+        startTime,
+        endTime,
+      }}
+    />
+  );
 }

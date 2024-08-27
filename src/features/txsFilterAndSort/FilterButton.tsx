@@ -118,6 +118,7 @@ export const FilterButton = memo(() => {
             _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
             _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
             _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
+            flexShrink={0}
           >
             Filters {selectedFilters.length > 0 && `(${selectedFilters.length})`}
           </MenuButton>

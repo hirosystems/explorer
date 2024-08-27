@@ -54,6 +54,7 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
             _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
             _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
             _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
+            flexShrink={0}
           >
             <Box display="inline" fontWeight="normal" color={isOpen ? 'text' : 'textSubdued'}>
               Show:{' '}

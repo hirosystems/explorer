@@ -157,6 +157,7 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
                   burnCount={burnCount}
                 />
               }
+              borderBottom={'none'}
             />
             {eventsCount > 0 ? (
               <AccordionButton
