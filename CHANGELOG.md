@@ -1,3 +1,10 @@
+# [1.202.0](https://github.com/hirosystems/explorer/compare/v1.201.0...v1.202.0) (2024-08-28)
+
+
+### Features
+
+* add filters to txs page ([33ca7e7](https://github.com/hirosystems/explorer/commit/33ca7e73f394e4dd4a648001d3d8c6de1d04851d))
+
 # [1.201.0](https://github.com/hirosystems/explorer/compare/v1.200.1...v1.201.0) (2024-08-27)
 
 
