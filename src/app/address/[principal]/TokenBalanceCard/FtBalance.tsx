@@ -2,10 +2,13 @@
 
 import dynamic from 'next/dynamic';
 import * as React from 'react';
+import { useState } from 'react';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import { TwoColumnsListItemSkeleton } from '../../../../common/components/TwoColumnsListItemSkeleton';
+import { Box } from '../../../../ui/Box';
+import { Button } from '../../../../ui/Button';
 import { Grid } from '../../../../ui/Grid';
 import { Caption } from '../../../../ui/typography';
 
@@ -19,22 +22,41 @@ const TokenAssetListItem = dynamic(
   }
 );
 
+const ITEMS_PER_PAGE = 5;
+
 export const FtBalance: React.FC<{ balance: AddressBalanceResponse }> = ({ balance }) => {
-  const ft = Object.keys(balance.fungible_tokens).filter(
+  const ftWithCount = Object.keys(balance.fungible_tokens).filter(
     key => Number(balance.fungible_tokens[key]?.balance) > 0
   );
 
-  return ft.length > 0 ? (
-    <>
-      {ft.map((key, index, arr) => (
-        <TokenAssetListItem
-          amount={balance.fungible_tokens[key]?.balance || ''}
-          key={index}
-          token={key}
-          tokenType="fungible_tokens"
-        />
-      ))}
-    </>
+  const [visibleItemsCount, setVisibleItemsCount] = useState(ITEMS_PER_PAGE);
+
+  const handleLoadMore = () => {
+    setVisibleItemsCount(prevCount => Math.min(prevCount + ITEMS_PER_PAGE, ftWithCount.length));
+  };
+
+  const visibleFt = ftWithCount.slice(0, visibleItemsCount);
+
+  return ftWithCount.length > 0 ? (
+    <Box pb={4}>
+      <Box>
+        {visibleFt.map((key, index) => (
+          <TokenAssetListItem
+            amount={balance.fungible_tokens[key]?.balance || ''}
+            key={index}
+            token={key}
+            tokenType="fungible_tokens"
+          />
+        ))}
+      </Box>
+      {visibleItemsCount < ftWithCount.length && (
+        <Box width={'full'}>
+          <Button variant={'secondary'} onClick={() => handleLoadMore()} width={'full'}>
+            Load more
+          </Button>
+        </Box>
+      )}
+    </Box>
   ) : (
     <Grid minHeight="220px" textAlign="center" placeItems="center" padding="16px">
       <Caption>This account has no tokens.</Caption>
