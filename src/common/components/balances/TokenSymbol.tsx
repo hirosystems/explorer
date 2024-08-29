@@ -14,8 +14,8 @@ export function FtTokenSymbol({
   ftMetadata?: any;
   contractId: string;
 }) {
-  const { data: tokenMetadata } = useFtMetadata(contractId);
-  return <Caption>{tokenMetadata?.symbol || getTicker(asset).toUpperCase()}</Caption>;
+  // const { data: tokenMetadata } = useFtMetadata(contractId);
+  return <Caption>{/*tokenMetadata?.symbol || */ getTicker(asset).toUpperCase()}</Caption>;
 }
 
 export function NftTokenSymbol({ asset }: { asset: string }) {

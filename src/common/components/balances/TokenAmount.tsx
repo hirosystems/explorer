@@ -9,8 +9,8 @@ interface FtTokenAmountBaseProps {
   contractId: string;
 }
 export function FtTokenAmountBase({ amount, contractId }: FtTokenAmountBaseProps) {
-  const { data: tokenMetadata } = useFtMetadata(contractId);
-  return <>{ftDecimals(amount, tokenMetadata?.decimals || 0)}</>;
+  // const { data: tokenMetadata } = useFtMetadata(contractId);
+  return <>{ftDecimals(amount, /*tokenMetadata?.decimals || */ 0)}</>;
 }
 
 export function FtTokenAmount(props: FtTokenAmountBaseProps) {

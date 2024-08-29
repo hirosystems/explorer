@@ -13,9 +13,14 @@ interface NftAvatarProps {
 }
 
 export function NftAvatar({ token, contractId, firstNftValue, asset }: NftAvatarProps) {
-  const { data: tokenMetadata } = useNftMetadata(
-    { contractId, tokenId: Number(firstNftValue) },
-    { enabled: !!firstNftValue, retry: 1, retryDelay: 2000 }
+  // const { data: tokenMetadata } = useNftMetadata(
+  //   { contractId, tokenId: Number(firstNftValue) },
+  //   { enabled: !!firstNftValue, retry: 1, retryDelay: 2000 }
+  // );
+  return (
+    <TokenAvatar
+      metadataImageUrl={undefined /*tokenMetadata?.metadata?.cached_image*/}
+      asset={asset}
+    />
   );
-  return <TokenAvatar metadataImageUrl={tokenMetadata?.metadata?.cached_image} asset={asset} />;
 }
