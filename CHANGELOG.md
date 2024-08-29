@@ -1,3 +1,10 @@
+# [1.203.0](https://github.com/hirosystems/explorer/compare/v1.202.0...v1.203.0) (2024-08-29)
+
+
+### Features
+
+* holdings client side pagination ([f2f041c](https://github.com/hirosystems/explorer/commit/f2f041cfac8e912f9b062f757273a02b1229164d))
+
 # [1.202.0](https://github.com/hirosystems/explorer/compare/v1.201.0...v1.202.0) (2024-08-28)
 
 
