@@ -1,3 +1,10 @@
+## [1.203.1](https://github.com/hirosystems/explorer/compare/v1.203.0...v1.203.1) (2024-09-03)
+
+
+### Bug Fixes
+
+* search tx url ([bce1cbf](https://github.com/hirosystems/explorer/commit/bce1cbf20b6eb23ba1c4e5a8383793f7be12fc11))
+
 # [1.203.0](https://github.com/hirosystems/explorer/compare/v1.202.0...v1.203.0) (2024-08-29)
 
 
