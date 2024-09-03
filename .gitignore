@@ -15,6 +15,8 @@ yalc.lock
 .vercel
 yarn-error.log
 coverage
+.env
 
 # Sentry
 .sentryclirc
+.env.sentry-build-plugin
