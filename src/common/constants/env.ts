@@ -10,14 +10,18 @@ export const MAINNET_BTC_TX_BASE_URL =
   process.env.NEXT_PUBLIC_MAINNET_BTC_TX_BASE_URL || 'https://mempool.space/tx';
 export const MAINNET_BTC_ADDRESS_BASE_URL =
   process.env.NEXT_PUBLIC_MAINNET_BTC_ADDRESS_BASE_URL || 'https://mempool.space/address';
+
 export const DEFAULT_TESTNET_SERVER =
   process.env.NEXT_PUBLIC_TESTNET_API_SERVER || 'https://api.testnet.hiro.so';
 export const TESTNET_BTC_BLOCK_BASE_URL =
-  process.env.NEXT_PUBLIC_TESTNET_BTC_BLOCK_BASE_URL || 'https://mempool.space/testnet/block';
+  process.env.NEXT_PUBLIC_TESTNET_BTC_BLOCK_BASE_URL ||
+  'https://mempool.bitcoin.regtest.hiro.so/block';
 export const TESTNET_BTC_TX_BASE_URL =
-  process.env.NEXT_PUBLIC_TESTNET_BTC_TX_BASE_URL || 'https://mempool.space/testnet/tx';
+  process.env.NEXT_PUBLIC_TESTNET_BTC_TX_BASE_URL || 'https://mempool.bitcoin.regtest.hiro.so/tx';
 export const TESTNET_BTC_ADDRESS_BASE_URL =
-  process.env.NEXT_PUBLIC_TESTNET_BTC_ADDRESS_BASE_URL || 'https://mempool.space/testnet/address';
+  process.env.NEXT_PUBLIC_TESTNET_BTC_ADDRESS_BASE_URL ||
+  'https://mempool.bitcoin.regtest.hiro.so/address';
+
 export const VERSION = process.env.VERSION || process.env.VERSION || packageJson.version;
 export const X_API_KEY = process.env.X_API_KEY ?? process.env.X_API_KEY ?? '';
 export const RELEASE_TAG_NAME =
