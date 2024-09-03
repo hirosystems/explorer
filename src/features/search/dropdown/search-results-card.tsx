@@ -116,7 +116,7 @@ function getSearchEntityUrl(
     case SearchResultType.ContractAddress:
     case SearchResultType.MempoolTxId:
     case SearchResultType.TxId:
-      return buildUrl(`/tx/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
+      return buildUrl(`/txid/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
     case SearchResultType.StandardAddress:
       return buildUrl(`/address/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
   }
