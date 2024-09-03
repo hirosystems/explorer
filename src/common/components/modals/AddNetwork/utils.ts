@@ -32,9 +32,9 @@ export const buildCustomNetworkUrl = (url: string) => {
   const hostname = encodeURIComponent(urlObj.hostname);
   const port = encodeURIComponent(urlObj.port);
   const pathname = !urlObj?.pathname || urlObj.pathname === '/' ? '' : urlObj.pathname;
-  return `${hostname === 'localhost' ? 'http://' : 'https://'}${hostname}${port ? `:${port}` : ''}${
-    pathname || ''
-  }`;
+  return `${hostname.includes('localhost') ? 'http://' : 'https://'}${hostname}${
+    port ? `:${port}` : ''
+  }${pathname || ''}`;
 };
 
 export const fetchCustomNetworkId: (
