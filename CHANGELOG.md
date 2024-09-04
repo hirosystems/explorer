@@ -1,3 +1,10 @@
+## [1.203.2](https://github.com/hirosystems/explorer/compare/v1.203.1...v1.203.2) (2024-09-04)
+
+
+### Bug Fixes
+
+* tx row width ([6f98fda](https://github.com/hirosystems/explorer/commit/6f98fda295659907acf2890bad1ef9f5d716d5b1))
+
 ## [1.203.1](https://github.com/hirosystems/explorer/compare/v1.203.0...v1.203.1) (2024-09-03)
 
 
