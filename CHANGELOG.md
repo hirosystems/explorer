@@ -1,3 +1,15 @@
+# [1.204.0](https://github.com/hirosystems/explorer/compare/v1.203.2...v1.204.0) (2024-09-04)
+
+
+### Bug Fixes
+
+* localhost resolving to https ([3d75194](https://github.com/hirosystems/explorer/commit/3d751941c69b4a3e4ad40c0adb0121f1b8c48f4f))
+
+
+### Features
+
+* use regtest btc explorer for testnet ([970aa4e](https://github.com/hirosystems/explorer/commit/970aa4e86898fe603939ef6761b9e35d80a9fd39))
+
 ## [1.203.2](https://github.com/hirosystems/explorer/compare/v1.203.1...v1.203.2) (2024-09-04)
 
 
