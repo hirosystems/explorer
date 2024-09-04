@@ -24,7 +24,7 @@ interface TwoColumnsListProps extends FlexProps {
 export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
   ({ icon, leftContent, rightContent, hoverEffect = true, ...rest }) => {
     return (
-      <Box borderBottom="1px" _last={{ borderBottom: 'unset' }}>
+      <Box borderBottom="1px" _last={{ borderBottom: 'unset' }} width="full">
         <Flex
           flexGrow={1}
           gap={4}
