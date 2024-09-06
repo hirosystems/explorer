@@ -81,22 +81,26 @@ function SearchResultHeader({
           Tip: filter your search by using keywords.
         </Text>
         <Flex rowGap={2} columnGap={2.5} flexWrap={'wrap'}>
-          {Object.keys(advancedSearchConfig).map(key => (
-            <Text key={key} fontSize={'xs'}>
-              <Text
-                display="inline-block"
-                bg="surfaceHighlight"
-                borderRadius="md"
-                color="textSubdued"
-                py={1.5}
-                whiteSpace="pre"
-                textTransform={'uppercase'}
-              >
-                {' '}
-                {key} ({advancedSearchConfig[key].type}){' '}
+          {Object.keys(advancedSearchConfig).map(key => {
+            //skip term
+            if (key === 'TERM:') return null;
+            return (
+              <Text key={key} fontSize={'xs'}>
+                <Text
+                  display="inline-block"
+                  bg="surfaceHighlight"
+                  borderRadius="md"
+                  color="textSubdued"
+                  py={1.5}
+                  whiteSpace="pre"
+                  textTransform={'uppercase'}
+                >
+                  {' '}
+                  {key} ({advancedSearchConfig[key].type}){' '}
+                </Text>
               </Text>
-            </Text>
-          ))}
+            );
+          })}
         </Flex>
       </>
     );
