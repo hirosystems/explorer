@@ -1,3 +1,10 @@
+# [1.205.0](https://github.com/hirosystems/explorer/compare/v1.204.0...v1.205.0) (2024-09-06)
+
+
+### Features
+
+* hide search term ([52bf78e](https://github.com/hirosystems/explorer/commit/52bf78e5e14752a4e89643b82d49d2082d634d46))
+
 # [1.204.0](https://github.com/hirosystems/explorer/compare/v1.203.2...v1.204.0) (2024-09-04)
 
 
