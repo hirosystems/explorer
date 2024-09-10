@@ -3,9 +3,24 @@ import { Flex } from '@/ui/Flex';
 import { HStack } from '@/ui/HStack';
 import { Text } from '@/ui/Text';
 import { Divider, VStack } from '@chakra-ui/react';
+import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
+import { useSuspensePoxInfoRaw } from '@/common/queries/usePoxInforRaw';
 
 // Main Component
-const StackingCycle = () => {
+const StackingCycle2 = () => {
+  const {
+    nextRewardCycleId,
+    preparePhaseBurnBlockHeightStart,
+    rewardPhaseBurnBlockHeightStart,
+    displayPreparePhaseInfo,
+    approximateDaysTilNextCyclePreparePhase,
+    approximateDaysTilNextCycleRewardPhase,
+  } = useSuspenseNextStackingCycle();
+
+  const { data: poxInfo} = useSuspensePoxInfoRaw();
+  const nextCycleRewardPhaseBlockHeight = poxInfo.next_cycle.reward_phase_start_block_height;
+  
+
   return (
     <Flex
       direction={{ base: 'column', md: 'row' }}
