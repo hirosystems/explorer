@@ -6,6 +6,7 @@ import { PageTitle } from '../_components/PageTitle';
 import ActivePoolsTable from './ActivePools';
 import { MetricCards } from './MetricCards';
 import StackingCycle from './StackingCycle';
+import { StackingCycle2 } from './StackingCycle2';
 
 export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
@@ -14,6 +15,7 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <PageTitle>Stacking</PageTitle>
       </Flex>
       <StackingCycle />
+      <StackingCycle2 />
       <MetricCards />
       <ActivePoolsTable />
       {/* <StackingCycle2 />
