@@ -56,6 +56,13 @@ export const COLORS = {
     lilac: '#9985FF',
     limeGreen: '#C1D21B',
   },
+  sand: {
+    150: '#EAE8E6',
+    400: '#95918C',
+    500: '#777470',
+    800: '#2D2C2A',
+    1000: '#0C0C0D',
+  },
 };
 
 export const NEW_COLORS = {
