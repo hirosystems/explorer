@@ -1,13 +1,14 @@
+import { useSuspensePoxInfoRaw } from '@/common/queries/usePoxInforRaw';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
 import { HStack } from '@/ui/HStack';
 import { Text } from '@/ui/Text';
-import { Divider, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
+
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
-import { useSuspensePoxInfoRaw } from '@/common/queries/usePoxInforRaw';
 
 // Main Component
-const StackingCycle2 = () => {
+export const StackingCycle2 = () => {
   const {
     nextRewardCycleId,
     preparePhaseBurnBlockHeightStart,
@@ -17,29 +18,88 @@ const StackingCycle2 = () => {
     approximateDaysTilNextCycleRewardPhase,
   } = useSuspenseNextStackingCycle();
 
-  const { data: poxInfo} = useSuspensePoxInfoRaw();
+  const { data: poxInfo } = useSuspensePoxInfoRaw();
   const nextCycleRewardPhaseBlockHeight = poxInfo.next_cycle.reward_phase_start_block_height;
-  
+  const preparePhaseBlockLength = poxInfo.prepare_phase_block_length;
+  const rewardPhaseBlockLength = poxInfo.reward_phase_block_length;
+  const prepareCycleLength = poxInfo.prepare_cycle_length;
+  const rewardCycleLength = poxInfo.reward_cycle_length;
+  const preparePhaseStartBlockHeight = poxInfo.next_cycle.prepare_phase_start_block_height;
+  const blocksUntilPreparePhase = poxInfo.next_cycle.blocks_until_prepare_phase;
+  const blocksUntilRewardPhase = poxInfo.next_cycle.blocks_until_reward_phase;
+  const reward_phase_start_block_height = poxInfo.next_cycle.reward_phase_start_block_height;
+  const rewardPhaseStartBlockHeight = poxInfo.next_cycle.reward_phase_start_block_height;
+  const nextRewardCycleIn = poxInfo.next_reward_cycle_in;
+  console.log({
+    nextCycleRewardPhaseBlockHeight,
+    preparePhaseBlockLength,
+    rewardPhaseBlockLength,
+    prepareCycleLength,
+    rewardCycleLength,
+    preparePhaseStartBlockHeight,
+    blocksUntilPreparePhase,
+    blocksUntilRewardPhase,
+    reward_phase_start_block_height,
+    rewardPhaseStartBlockHeight,
+    nextRewardCycleIn,
+  });
+  // Ideally I can get the length of the cycle in blocks, then calculate progress by the number of blocks left until the next reward phase
 
   return (
-    <Flex
-      direction={{ base: 'column', md: 'row' }}
-      bg="white"
-      p={6}
-      borderRadius="lg"
-      boxShadow="lg"
-      position="relative"
-      overflow="hidden"
-    >
-      <CycleRewards />
-      <Divider orientation="vertical" mx={6} display={{ base: 'none', md: 'block' }} />
-      <CycleDiagram />
-      {/* <CurrentCycle /> */}
-      <Divider orientation="vertical" mx={6} display={{ base: 'none', md: 'block' }} />
+    <Flex bg="white" p={6} borderRadius="lg" boxShadow="lg" position="relative" overflow="hidden">
+      <Box w="full">
+        <CycleProgressBar
+          sections={[
+            { name: 'start', percentageMark: 0 },
+            { name: 'prepare phase', percentageMark: 75 },
+            { name: 'next reward phase', percentageMark: 100 },
+          ]}
+        />
+      </Box>
       {/* <NextCycle /> */}
     </Flex>
   );
 };
+
+interface Section {
+  name: string;
+  percentageMark: number;
+}
+
+function CycleProgressBar({ sections }: { sections: Section[] }) {
+  return (
+    <Box p={3} borderRadius="full" bg="gray" position="relative">
+      {/* {sections.map(section => {
+        return (
+          <Box
+            position="absolute"
+            key={section.name}
+            h={2}
+            w={2}
+            bg="purple.500"
+            borderRadius="full"
+            width={`${section.percentageMark}%`}
+          />
+        );
+      })} */}
+      {sections.map(section => {
+        return (
+          <Box
+            position="absolute"
+            right="-4px"
+            top="50%"
+            transform="translateY(-50%)"
+            h={2}
+            w={2}
+            bg="white"
+            borderRadius="full"
+            border="3px solid purple.500"
+          />
+        );
+      })}
+    </Box>
+  );
+}
 
 // Rewards Component
 const CycleRewards = () => {
@@ -223,6 +283,3 @@ const BlockInfo = () => {
     </VStack>
   );
 };
-
-export default StackingCycle;
-
