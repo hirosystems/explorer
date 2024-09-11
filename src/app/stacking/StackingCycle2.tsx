@@ -2,6 +2,7 @@ import { useSuspensePoxInfoRaw } from '@/common/queries/usePoxInforRaw';
 import { Box } from '@/ui/Box';
 import { Flex } from '@/ui/Flex';
 import { HStack } from '@/ui/HStack';
+import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import { VStack } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
@@ -59,17 +60,25 @@ export const StackingCycle2 = () => {
     <Flex
       bg="white"
       py={6}
-      pl={6}
+      pl={8}
       borderRadius="lg"
       boxShadow="lg"
       position="relative"
       overflow="hidden"
     >
-      <Flex bg="sand.500" h={200} w="full" alignItems="center">
+      <Flex bg="sand.500" h={200} w="full" alignItems="center" borderRadius="xl">
         <Box w="full">
           <CurrentCycleProgressBar
             start={{ name: 'start', percentageMark: 0 }}
             preparePhase={{ name: 'prepare phase', percentageMark: prepareCycleProgress }}
+            progressPercentage={progressPercentage}
+          />
+        </Box>
+      </Flex>
+      <Flex bg="sand.500" h={200} w="full" alignItems="center" borderRadius="xl">
+        <Box w="full">
+          <NextCycleProgressBar
+            start={{ name: 'start', percentageMark: 0 }}
             progressPercentage={progressPercentage}
           />
         </Box>
@@ -127,6 +136,8 @@ function CurrentCycleProgressBar({
     'preparePhase.percentageMark * containerWidth': preparePhase.percentageMark * containerWidth,
   });
 
+  const onePercentageWidth = containerWidth / 100;
+
   return (
     <Box>
       <Flex className="top-text" position="relative" w="full" h={4}>
@@ -134,7 +145,7 @@ function CurrentCycleProgressBar({
           position="absolute"
           left={`${start.percentageMark * containerWidth + progressBarPaddingWidth}px`}
         >
-          <Text>Start</Text>
+          <Text>Started</Text>
         </Box>
         <Box position="absolute" left={`${preparePhase.percentageMark * containerWidth}px`}>
           <Text>Prepare Phase</Text>
@@ -144,7 +155,7 @@ function CurrentCycleProgressBar({
         py={progressBarPadding}
         pl={progressBarPadding}
         // borderRadius="full"
-        borderStartRadius="full"
+        borderEndRadius="full"
         bg="sand.400"
         position="relative"
         ref={progressBarRef}
@@ -205,19 +216,112 @@ function CurrentCycleProgressBar({
         />
       </Box>
       <Flex className="bottom-text" position="relative" h={10}>
-        <Box
+        <Stack
+          gap={1}
           position="absolute"
           left={`${start.percentageMark * containerWidth + progressBarPaddingWidth}px`}
         >
           <Text>Start</Text>
-          <Text>Bitcoin block</Text>
+          <Text whiteSpace="nowrap">Bitcoin block</Text>
           <Text>Stacks block</Text>
-        </Box>
-        <Box position="absolute" left={`${preparePhase.percentageMark * containerWidth}px`}>
+        </Stack>
+        <Stack
+          gap={1}
+          position="absolute"
+          left={`${preparePhase.percentageMark * containerWidth}px`}
+        >
           <Text>Prepare Phase</Text>
           <Text>Bitcoin block</Text>
           <Text>Stacks block</Text>
+        </Stack>
+      </Flex>
+    </Box>
+  );
+}
+
+function NextCycleProgressBar({
+  start,
+  progressPercentage,
+}: {
+  start: Section;
+  progressPercentage: number;
+}) {
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState(0);
+
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        if (entry.target === progressBarRef.current) {
+          setContainerWidth(entry.contentRect.width);
+        }
+      }
+    });
+
+    const currentProgressBarRef = progressBarRef.current;
+
+    if (currentProgressBarRef) {
+      resizeObserver.observe(currentProgressBarRef);
+    }
+
+    return () => {
+      if (currentProgressBarRef) {
+        resizeObserver.unobserve(currentProgressBarRef);
+      }
+    };
+  }, []);
+
+  return (
+    <Box>
+      <Flex className="top-text" position="relative" w="full" h={4}>
+        <Box
+          position="absolute"
+          left={`${start.percentageMark * containerWidth + progressBarPaddingWidth}px`}
+        >
+          <Text>Starts</Text>
         </Box>
+      </Flex>
+      <Box
+        py={progressBarPadding}
+        pl={progressBarPadding}
+        // borderRadius="full"
+        borderEndRadius="full"
+        bg="sand.400"
+        position="relative"
+        ref={progressBarRef}
+        h={4}
+        w="full"
+      >
+        {/* <Box
+          bg="brand"
+          position="absolute"
+          left={0}
+          width={`${progressPercentage * containerWidth + progressBarPaddingWidth}px`}
+          borderRadius="full"
+          h="100%"
+          top={0}
+        /> */}
+        <Box
+          position="absolute"
+          left={`${start.percentageMark * containerWidth + progressBarPaddingWidth}px`}
+          top="50%"
+          transform="translateY(-50%)"
+          h={2}
+          w={2}
+          bg="white"
+          borderRadius="full"
+        />
+      </Box>
+      <Flex className="bottom-text" position="relative" h={10}>
+        <Stack
+          gap={1}
+          position="absolute"
+          left={`${start.percentageMark * containerWidth + progressBarPaddingWidth}px`}
+        >
+          <Text>Start</Text>
+          <Text whiteSpace="nowrap">Bitcoin block</Text>
+          <Text>Stacks block</Text>
+        </Stack>
       </Flex>
     </Box>
   );
