@@ -62,3 +62,9 @@ export const SUBNETS_PARENT_NETWORK_IDS = {
 };
 
 export const PAGE_MAX_WIDTH = '1280px';
+
+export const mobileBorderCss = {
+  '.has-horizontal-scroll &': {
+    borderRight: '2px solid var(--stacks-colors-borderPrimary)',
+  },
+};
