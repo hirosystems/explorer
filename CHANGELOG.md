@@ -1,3 +1,10 @@
+# [1.206.0](https://github.com/hirosystems/explorer/compare/v1.205.0...v1.206.0) (2024-09-13)
+
+
+### Features
+
+* added sentry ([426749b](https://github.com/hirosystems/explorer/commit/426749ba50be9728a95bfcc0cdd19e1813a2f901))
+
 # [1.205.0](https://github.com/hirosystems/explorer/compare/v1.204.0...v1.205.0) (2024-09-06)
 
 
