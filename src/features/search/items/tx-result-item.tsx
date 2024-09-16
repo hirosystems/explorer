@@ -27,6 +27,7 @@ export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
         css={css`
           border: none;
         `}
+        className={`search-bar-result-1`}
       />
     );
 
@@ -36,6 +37,7 @@ export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
       css={css`
         border: none;
       `}
+      className={`search-bar-result-1`}
     />
   );
 };

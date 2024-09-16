@@ -23,6 +23,7 @@ export function TxListResultItem({ result }: TxResultItemProps) {
               tx={tx}
               simple
               {...(i === txCount - 1 ? { borderBottom: 'none' } : {})}
+              className={`search-bar-result-${i + 1}`}
             />
           );
         })
