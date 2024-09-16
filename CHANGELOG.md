@@ -1,3 +1,10 @@
+# [1.207.0](https://github.com/hirosystems/explorer/compare/v1.206.0...v1.207.0) (2024-09-16)
+
+
+### Features
+
+* make epoch 3.0 the default block view ([b9f9e67](https://github.com/hirosystems/explorer/commit/b9f9e6727c62958fd775eacd00054d5f7c570b39))
+
 # [1.206.0](https://github.com/hirosystems/explorer/compare/v1.205.0...v1.206.0) (2024-09-13)
 
 
