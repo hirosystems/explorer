@@ -24,7 +24,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
   const { data: stxBalance } = useAccountStxBalance(principal);
   const colorMode = useColorMode().colorMode;
   return (
-    <AddressLink principal={principal}>
+    <AddressLink principal={principal} className={`search-bar-result-1`}>
       <ResultItemWrapper>
         <Flex alignItems="center">
           <Circle size={12}>

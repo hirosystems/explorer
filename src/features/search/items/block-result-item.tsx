@@ -25,6 +25,7 @@ export const BlockResultItem: React.FC<BlockResultItemProps> = ({ result }) => {
       css={css`
         border: none;
       `}
+      className={`search-bar-result-1`}
     />
   );
 };
