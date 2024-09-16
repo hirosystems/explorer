@@ -1,7 +1,7 @@
 'use client';
 
 import { Section } from '../common/components/Section';
-import { useIsNakamotoTestnet } from '../common/hooks/useIsNakamoto';
+import { useRenderNewBlockList } from '../common/hooks/useIsNakamoto';
 import { SkeletonTxsList } from '../features/txs-list/SkeletonTxsList';
 import { Grid } from '../ui/Grid';
 import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
@@ -11,7 +11,7 @@ import { SkeletonStatSection } from './_components/Stats/SkeletonStatSection';
 import { Wrapper } from './_components/Stats/Wrapper';
 
 export default function HomePageSkeleton() {
-  const isNakamotoTestnet = useIsNakamotoTestnet();
+  const renderNewBlockList = useRenderNewBlockList();
 
   return (
     <>
@@ -30,7 +30,7 @@ export default function HomePageSkeleton() {
         <Section title={'Transactions'}>
           <SkeletonTxsList />
         </Section>
-        {isNakamotoTestnet ? <HomePageBlockListSkeleton /> : <SkeletonBlockList />}
+        {renderNewBlockList ? <HomePageBlockListSkeleton /> : <SkeletonBlockList />}
       </Grid>
     </>
   );
