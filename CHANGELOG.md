@@ -1,3 +1,10 @@
+# [1.208.0](https://github.com/hirosystems/explorer/compare/v1.207.1...v1.208.0) (2024-09-17)
+
+
+### Features
+
+* blocks page improvements ([2fa09bf](https://github.com/hirosystems/explorer/commit/2fa09bf09339967f0422f37e9c3ab959bd40eb70))
+
 ## [1.207.1](https://github.com/hirosystems/explorer/compare/v1.207.0...v1.207.1) (2024-09-17)
 
 
