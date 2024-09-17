@@ -8,8 +8,8 @@ import {
   advancedSearchConfig,
   filterToFormattedValueMap,
   getKeywordByFilter,
-  getSearchPageUrl,
   parseAdvancedSearchQuery,
+  useSearchPageUrl,
   useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../../common/state/hooks';
@@ -138,7 +138,8 @@ export function SearchResultsCard({
   const hasResults = !hasError && !!data?.found;
   const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
   const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
-  const searchPageUrl = getSearchPageUrl(searchTerm);
+  const network = useGlobalContext().activeNetwork;
+  const searchPageUrl = useSearchPageUrl(searchTerm, network);
   const router = useRouter();
   const activeNetwork = useGlobalContext().activeNetwork;
 

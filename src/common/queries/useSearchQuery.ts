@@ -11,7 +11,9 @@ import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 import { blur, focus } from '../../features/search/search-slice';
 import { useApi } from '../api/useApi';
 import { BTC_BNS_CONTRACT } from '../constants/constants';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppDispatch } from '../state/hooks';
+import { Network } from '../types/network';
 import {
   AddressSearchResult,
   BlockSearchResult,
@@ -19,6 +21,7 @@ import {
   NotFoundResult,
   SearchResultType,
 } from '../types/search-results';
+import { buildUrl } from '../utils/buildUrl';
 import { isNumeric } from '../utils/utils';
 
 function blockToSearchResult(block: Block): FoundResult {
@@ -203,7 +206,7 @@ export function buildAdvancedSearchQuery(query: Record<string, string | number |
   return searchTerm.trim();
 }
 
-export function getSearchPageUrl(searchTerm: string) {
+export function useSearchPageUrl(searchTerm: string, network: Network) {
   const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
   const searchQueryParams = new URLSearchParams();
   let termCount = 0;
@@ -214,7 +217,10 @@ export function getSearchPageUrl(searchTerm: string) {
       searchQueryParams.append(filterName, filterValue);
     }
   });
-  return `/search?${searchQueryParams.toString()}`;
+  const hasQueryParams = searchQueryParams.toString().length > 0;
+  return `${buildUrl('/search', network)}${
+    hasQueryParams ? '&' : ''
+  }${searchQueryParams.toString()}`;
 }
 
 export function useSearchQuery(id: string) {
