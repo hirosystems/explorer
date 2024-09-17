@@ -43,8 +43,8 @@ export function useSuspenseBurnBlocks(
   const api = useApi();
   return useSuspenseInfiniteQuery({
     queryKey: queryKeyExtension
-      ? [BURN_BLOCKS_QUERY_KEY, queryKeyExtension]
-      : [BURN_BLOCKS_QUERY_KEY],
+      ? [BURN_BLOCKS_QUERY_KEY, limit, queryKeyExtension]
+      : [BURN_BLOCKS_QUERY_KEY, limit],
     queryFn: ({ pageParam }: { pageParam: number }) => {
       return api.burnBlocksApi.getBurnBlocks({
         limit,

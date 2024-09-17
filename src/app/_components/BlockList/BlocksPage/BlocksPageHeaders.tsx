@@ -74,13 +74,13 @@ function AverageStacksBlockTimeCard() {
 }
 
 function LastConfirmedBitcoinBlockCard() {
-  const response = useSuspenseBurnBlocks(1);
+  const response = useSuspenseBurnBlocks(2);
   const burnBlocks = useSuspenseInfiniteQueryResult<BurnBlock>(response);
-  const btcBlock = burnBlocks[0];
+  const btcBlock = burnBlocks[1];
   return (
     <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap">
-      <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
-        IN THE LAST CONFIRMED BITCOIN BLOCK
+      <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap" textTransform={'uppercase'}>
+        In the previous bitcoin block
       </Text>
       <Flex width="full" display="grid" gridTemplateColumns={['repeat(2, 50%)']}>
         <Stack gap={2}>
