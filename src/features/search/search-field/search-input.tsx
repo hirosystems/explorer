@@ -3,7 +3,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useState } from 'react';
 
-import { advancedSearchKeywords, getSearchPageUrl } from '../../../common/queries/useSearchQuery';
+import { useGlobalContext } from '../../../common/context/useGlobalContext';
+import { advancedSearchKeywords, useSearchPageUrl } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
@@ -25,7 +26,8 @@ export function SearchInput({
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
   const router = useRouter();
   const isSearchPage = usePathname() === '/search';
-  const searchPageUrl = getSearchPageUrl(tempSearchTerm);
+  const network = useGlobalContext().activeNetwork;
+  const searchPageUrl = useSearchPageUrl(tempSearchTerm, network);
   const isAdvancedSearch = advancedSearchKeywords.some(term => tempSearchTerm.includes(term));
 
   return (
