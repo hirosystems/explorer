@@ -1,3 +1,10 @@
+## [1.207.1](https://github.com/hirosystems/explorer/compare/v1.207.0...v1.207.1) (2024-09-17)
+
+
+### Bug Fixes
+
+* search page url ([3dcb6bf](https://github.com/hirosystems/explorer/commit/3dcb6bf8891eeef6f8f5af650a3e390f22210ce0))
+
 # [1.207.0](https://github.com/hirosystems/explorer/compare/v1.206.0...v1.207.0) (2024-09-16)
 
 
