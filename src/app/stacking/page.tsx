@@ -1,10 +1,10 @@
+import { Box } from '@/ui/Box';
 import dynamic from 'next/dynamic';
 
 import { getTokenPrice } from '../getTokenPriceInfo';
-import { SignersPageSkeleton } from '../signers/skeleton';
 
 const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <SignersPageSkeleton />, // TODO: replace this
+  loading: () => <Box>Loading...</Box>, // TODO: replace this
   ssr: false,
 });
 

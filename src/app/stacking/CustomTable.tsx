@@ -18,12 +18,8 @@ import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 
-const StyledTable = styled(CustomTable)`
-  th {
-    border-bottom: none;
-  }
-
-  tr:last-child td {
+const StyledTable = styled(Table)`
+  tr td {
     border-bottom: none;
   }
 `;
@@ -103,6 +99,9 @@ function TableRow({
 
   return (
     <Tr
+      _hover={{
+        backgroundColor: 'var(--stacks-colors-hoverBackground)',
+      }}
       style={{
         borderTop: isFirst ? 'none' : '',
         borderBottom: isLast ? 'none' : '',
@@ -113,7 +112,7 @@ function TableRow({
           key={`table-row-${rowIndex}-col-${colIndex}`}
           py={3}
           px={6}
-          sx={isFirst ? mobileBorderCss : {}}
+          sx={colIndex === 0 ? mobileBorderCss : {}}
         >
           {col.cellRenderer ? (
             col.cellRenderer(col.accessor(rowData[colIndex]))
@@ -142,7 +141,7 @@ export function TableLayout({
   sortColumn,
   sortDirection,
   topRight,
-}: TableProps) {
+}: CustomTableProps) {
   console.log({ columns, data });
 
   // if (!data || !Array.isArray(data)) {
@@ -150,37 +149,37 @@ export function TableLayout({
   // }
 
   return (
-    <Section title={title} topRight={topRight}>
+    <Section title={title} topRight={topRight} w="full">
       <ScrollableBox>
-        {/* <StyledTable width="full"> */}
-        <Table>
+        <StyledTable width="full">
+          {/* <Table> */}
           <Thead>
-            {columns?.map(col => (
+            {columns?.map((col, colIndex) => (
               <TableHeader
                 key={col.id}
                 columnDefinition={col}
                 headerTitle={col.header}
                 sortColumn={sortColumn}
                 sortDirection={sortDirection}
-                isFirst={col.id === '1'}
+                isFirst={colIndex === 0}
                 onSort={onSort}
               />
             ))}
           </Thead>
           <Tbody>
-            {data?.map((rowData, index) => (
+            {data?.map((rowData, rowIndex) => (
               <TableRow
-                key={index}
-                rowIndex={index}
+                key={rowIndex}
+                rowIndex={rowIndex}
                 rowData={rowData}
                 columns={columns}
-                isFirst={index === 0}
-                isLast={index === data.length - 1}
+                isFirst={rowIndex === 0}
+                isLast={rowIndex === data.length - 1}
               />
             ))}
           </Tbody>
-        </Table>
-        {/* </StyledTable> */}
+          {/* </Table> */}
+        </StyledTable>
       </ScrollableBox>
     </Section>
   );
@@ -194,7 +193,7 @@ export interface ColumnDefinition {
   cellRenderer?: (value: any) => React.ReactNode;
 }
 
-interface TableProps {
+export interface CustomTableProps {
   title?: string;
   topRight?: React.ReactNode;
   data: any[];
@@ -212,7 +211,7 @@ function CustomTable({
   onSort,
   sortColumn,
   sortDirection,
-}: TableProps) {
+}: CustomTableProps) {
   return (
     <ExplorerErrorBoundary
       // Wrapper={Section}
@@ -233,7 +232,6 @@ function CustomTable({
           sortDirection={sortDirection}
           topRight={topRight}
           title={title}
-          onSort={onSort}
         />
       </Suspense>
     </ExplorerErrorBoundary>

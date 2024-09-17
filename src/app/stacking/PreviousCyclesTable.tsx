@@ -1,8 +1,20 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import CustomTable, { ColumnDefinition } from './CustomTable';
+import { ColumnDefinition } from './CustomTable';
+import { CustomTableWithCursorPagination } from './CustomTableWithCursorPagination';
 
-type PreviousCyclesData = [number, string, string, number, number, number, string, string];
+type PreviousCyclesData = [
+  number,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+];
 
 export function PreviousCyclesTable() {
   const data: PreviousCyclesData[] = useMemo(
@@ -64,8 +76,19 @@ export function PreviousCyclesTable() {
     setSortDirection(newSortDirection);
   }, []);
 
+  // return (
+  //   <CustomTable
+  //     title="Previous Cycles"
+  //     topRight={null}
+  //     data={data}
+  //     columns={columns}
+  //     onSort={onSort}
+  //     sortColumn={sortColumn}
+  //     sortDirection={sortDirection}
+  //   />
+  // );
   return (
-    <CustomTable
+    <CustomTableWithCursorPagination
       title="Previous Cycles"
       topRight={null}
       data={data}
@@ -73,6 +96,8 @@ export function PreviousCyclesTable() {
       onSort={onSort}
       sortColumn={sortColumn}
       sortDirection={sortDirection}
+      pageSize={10}
+      fetchNextPage={() => {}}
     />
   );
 }
