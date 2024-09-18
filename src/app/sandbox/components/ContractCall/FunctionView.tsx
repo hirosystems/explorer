@@ -71,9 +71,10 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
   const [readOnlyValue, setReadonlyValue] = useState<ClarityValue[]>();
   const network = useStacksNetwork();
   const queryClient = useQueryClient();
+  const isReadOnly = fn.access === 'read_only';
 
   const initialPostConditionParameterValues: PostConditionParameters = {
-    postConditionMode: PostConditionMode.Deny,
+    postConditionMode: isReadOnly ? PostConditionMode.Allow : PostConditionMode.Deny,
     postConditionType: undefined,
     postConditionAddress: undefined,
     postConditionAmount: undefined,
@@ -251,6 +252,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                       </Text>
                       <Switch
                         id="post-condition-mode"
+                        isDisabled={isReadOnly}
                         onChange={() => {
                           setFieldValue(
                             'postConditionMode',
