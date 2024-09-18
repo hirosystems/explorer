@@ -1,3 +1,10 @@
+## [1.208.1](https://github.com/hirosystems/explorer/compare/v1.208.0...v1.208.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* **pc:** setting pc to allow for read only fns ([9793e0b](https://github.com/hirosystems/explorer/commit/9793e0bd76ed8276d9434db900f983d5a360124d))
+
 # [1.208.0](https://github.com/hirosystems/explorer/compare/v1.207.1...v1.208.0) (2024-09-17)
 
 
