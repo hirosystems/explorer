@@ -1,3 +1,8 @@
+import { Flex } from '@/ui/Flex';
+import { Icon } from '@/ui/Icon';
+import { Text } from '@/ui/Text';
+import BitcoinIcon from '@/ui/icons/BitcoinIcon';
+import StxIcon from '@/ui/icons/StxIcon';
 import { useCallback, useMemo, useState } from 'react';
 
 import { ColumnDefinition } from './CustomTable';
@@ -5,12 +10,18 @@ import { CustomTableWithCursorPagination } from './CustomTableWithCursorPaginati
 
 type PreviousCyclesData = [
   number,
+  {
+    bitcoin: number;
+    stx: number;
+  },
+  {
+    bitcoin: number;
+    stx: number;
+  },
   string,
   string,
   string,
-  string,
-  string,
-  string,
+  number,
   string,
   string,
   string,
@@ -21,12 +32,18 @@ export function PreviousCyclesTable() {
     () =>
       Array.from({ length: 10 }, (_, index) => index + 1).map((row, i) => [
         i,
-        'B 42,946 Stx 784,946', // TODO: perfect example to try cell renderer
-        'B 42,946 Stx 784,946',
+        {
+          bitcoin: 42946,
+          stx: 784946,
+        },
+        {
+          bitcoin: 42946,
+          stx: 784946,
+        },
         '22',
         '245',
         '67',
-        '118,432,860 STX ($12.3M)',
+        118432860,
         '35.1 BTC',
         '7.5%',
         '100,000 STX',
@@ -36,8 +53,46 @@ export function PreviousCyclesTable() {
   const columns: ColumnDefinition[] = useMemo(
     () => [
       { id: 'Cycle', header: 'Cycle', accessor: (val: any) => val, sortable: true },
-      { id: 'Started', header: 'Started', accessor: (val: any) => val, sortable: false },
-      { id: 'Ended', header: 'Ended', accessor: (val: any) => val, sortable: false },
+      {
+        id: 'Started',
+        header: 'Started',
+        accessor: (val: any) => val,
+        sortable: false,
+        cellRenderer: (val: any) => {
+          return (
+            <Flex gap={2}>
+              <Flex gap={1} alignItems="center">
+                <Icon as={BitcoinIcon} size={2} />
+                <Text fontSize="sm">{val.bitcoin}</Text>
+              </Flex>
+              <Flex gap={1} alignItems="center">
+                <Icon as={StxIcon} size={2} />
+                <Text fontSize="sm">{val.stx}</Text>
+              </Flex>
+            </Flex>
+          );
+        },
+      },
+      {
+        id: 'Ended',
+        header: 'Ended',
+        accessor: (val: any) => val,
+        sortable: false,
+        cellRenderer: (val: any) => {
+          return (
+            <Flex gap={2}>
+              <Flex gap={1} alignItems="center">
+                <Icon as={BitcoinIcon} size={2} />
+                <Text fontSize="sm">{val.bitcoin}</Text>
+              </Flex>
+              <Flex gap={1} alignItems="center">
+                <Icon as={StxIcon} size={2} />
+                <Text fontSize="sm">{val.stx}</Text>
+              </Flex>
+            </Flex>
+          );
+        },
+      },
       { id: 'Pools', header: 'Pools', accessor: (val: any) => val, sortable: true },
       {
         id: 'Solo Stackers',
@@ -56,6 +111,18 @@ export function PreviousCyclesTable() {
         header: 'Amount stacked',
         accessor: (val: any) => val,
         sortable: true,
+        cellRenderer: (val: any) => {
+          return (
+            <Flex gap={1} alignItems="center" flexWrap="nowrap">
+              <Text fontSize="sm" whiteSpace="nowrap">
+                {`${val} STX`}
+              </Text>
+              <Text fontSize="sm" color="textSubdued">
+                {`(12.3M)`}
+              </Text>
+            </Flex>
+          );
+        },
       },
       { id: 'Rewards', header: 'Rewards', accessor: (val: any) => val, sortable: true },
       { id: 'APY', header: 'APY', accessor: (val: any) => val, sortable: true },
@@ -76,17 +143,6 @@ export function PreviousCyclesTable() {
     setSortDirection(newSortDirection);
   }, []);
 
-  // return (
-  //   <CustomTable
-  //     title="Previous Cycles"
-  //     topRight={null}
-  //     data={data}
-  //     columns={columns}
-  //     onSort={onSort}
-  //     sortColumn={sortColumn}
-  //     sortDirection={sortDirection}
-  //   />
-  // );
   return (
     <CustomTableWithCursorPagination
       title="Previous Cycles"
@@ -97,7 +153,10 @@ export function PreviousCyclesTable() {
       sortColumn={sortColumn}
       sortDirection={sortDirection}
       pageSize={10}
-      fetchNextPage={() => {}}
+      fetchNextPage={async () => ({
+        data: [], // TODO: Replace with actual data fetching logic
+        nextCursor: null,
+      })}
     />
   );
 }

@@ -29,21 +29,45 @@ export const PaginationControl: React.FC<PaginationControlProps> = ({
       <Box py={2} px={4} h="full">
         <Flex alignItems="center" justifyContent="center">
           <Flex gap={1}>
-            <Button onClick={onPreviousPage} isDisabled={currentPage === 1} px={2} py={1}>
+            <Button
+              onClick={onPreviousPage}
+              isDisabled={currentPage === 1}
+              px={2}
+              py={1}
+              bg="sand.150"
+            >
               <Icon as={CaretDoubleLeft} size={4} />
             </Button>
-            <Button onClick={onPreviousPage} isDisabled={currentPage === 1} px={2} py={1}>
+            <Button
+              onClick={onPreviousPage}
+              isDisabled={currentPage === 1}
+              px={2}
+              py={1}
+              bg="sand.150"
+            >
               <Icon as={CaretLeft} size={4} />
             </Button>
           </Flex>
-          <Button mx={2} p={2} fontWeight="medium" fontSize="xs">
+          <Button mx={2} p={2} fontWeight="medium" fontSize="xs" bg="sand.150">
             {currentPage}
           </Button>
           <Flex gap={1}>
-            <Button onClick={onNextPage} isDisabled={currentPage === totalPages} px={2} py={1}>
+            <Button
+              onClick={onNextPage}
+              isDisabled={currentPage === totalPages}
+              px={2}
+              py={1}
+              bg="sand.150"
+            >
               <Icon as={CaretRight} size={4} />
             </Button>
-            <Button onClick={onNextPage} isDisabled={currentPage === totalPages} px={2} py={1}>
+            <Button
+              onClick={onNextPage}
+              isDisabled={currentPage === totalPages}
+              px={2}
+              py={1}
+              bg="sand.150"
+            >
               <Icon as={CaretDoubleRight} size={4} />
             </Button>
           </Flex>
@@ -66,7 +90,7 @@ export const PaginationControl: React.FC<PaginationControlProps> = ({
           <Text mr={4} fontSize="xs">
             of {totalPages} pages
           </Text>
-          <Button px={2} py={1} fontSize="xs">
+          <Button px={2} py={1} fontSize="xs" bg="sand.150" fontWeight="medium" color="sand.400">
             GO
           </Button>
         </Flex>

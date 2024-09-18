@@ -52,7 +52,17 @@ export const TableHeader = ({
   ) : null;
 
   return (
-    <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
+    <Th
+      py={3}
+      px={6}
+      border="none"
+      sx={isFirst ? mobileBorderCss : {}}
+      width="fit-content"
+      position={isFirst ? 'sticky' : 'unset'}
+      left={isFirst ? 0 : undefined}
+      zIndex={isFirst ? 'docked' : undefined}
+      bg="surface"
+    >
       {typeof headerTitle === 'string' ? (
         <Flex gap={1} alignItems="center">
           <Text
@@ -95,8 +105,6 @@ function TableRow({
   isFirst: boolean;
   isLast: boolean;
 }) {
-  const column = columns[rowIndex];
-
   return (
     <Tr
       _hover={{
@@ -113,6 +121,10 @@ function TableRow({
           py={3}
           px={6}
           sx={colIndex === 0 ? mobileBorderCss : {}}
+          position={colIndex === 0 ? 'sticky' : 'unset'}
+          left={colIndex === 0 ? 0 : undefined}
+          zIndex={colIndex === 0 ? 'docked' : undefined}
+          bg="surface"
         >
           {col.cellRenderer ? (
             col.cellRenderer(col.accessor(rowData[colIndex]))
@@ -142,17 +154,10 @@ export function TableLayout({
   sortDirection,
   topRight,
 }: CustomTableProps) {
-  console.log({ columns, data });
-
-  // if (!data || !Array.isArray(data)) {
-  //   return <Box>No data available</Box>; // Or any other appropriate fallback UI
-  // }
-
   return (
     <Section title={title} topRight={topRight} w="full">
       <ScrollableBox>
         <StyledTable width="full">
-          {/* <Table> */}
           <Thead>
             {columns?.map((col, colIndex) => (
               <TableHeader
@@ -178,7 +183,6 @@ export function TableLayout({
               />
             ))}
           </Tbody>
-          {/* </Table> */}
         </StyledTable>
       </ScrollableBox>
     </Section>
