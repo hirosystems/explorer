@@ -1,6 +1,6 @@
-import { Stack } from '@/ui/Stack';
 import React, { useEffect, useState } from 'react';
 
+import { Stack } from '../../ui/Stack';
 import { CustomTableProps } from './CustomTable';
 import { PaginationControl } from './PaginationControls';
 

@@ -1,8 +1,9 @@
-import { Flex } from '@/ui/Flex';
-import { Icon } from '@/ui/Icon';
-import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
 import { Plus } from '@phosphor-icons/react';
+
+import { Flex } from '../../ui/Flex';
+import { Icon } from '../../ui/Icon';
+import { Stack } from '../../ui/Stack';
+import { Text } from '../../ui/Text';
 
 export function FAQ() {
   return (

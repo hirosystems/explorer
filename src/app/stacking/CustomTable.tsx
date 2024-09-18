@@ -1,14 +1,14 @@
-import { mobileBorderCss } from '@/common/constants/constants';
-import { Box } from '@/ui/Box';
-import { Icon } from '@/ui/Icon';
-import { Table } from '@/ui/Table';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ArrowDown, ArrowUp, ArrowsDownUp } from '@phosphor-icons/react';
 import React, { Suspense } from 'react';
 
 import { Section } from '../../common/components/Section';
+import { mobileBorderCss } from '../../common/constants/constants';
+import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
+import { Icon } from '../../ui/Icon';
+import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
 import { Td } from '../../ui/Td';
 import { Text } from '../../ui/Text';
