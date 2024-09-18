@@ -19,9 +19,9 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <PageTitle>Stacking</PageTitle>
       </Flex> */}
       <Stack gap={3}>
-        <Flex justifyContent={'space-between'}>
+        <Flex flexWrap="wrap" gap={4} alignItems="center" justifyContent="space-between">
           <MetricCards />
-          <Flex gap={2}>
+          <Flex gap={2} flexWrap="nowrap">
             <PriceTag price={tokenPrice.btcPrice} token={'btc'} />
             <PriceTag price={tokenPrice.stxPrice} token={'stx'} />
           </Flex>
@@ -30,9 +30,13 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
           // gap={9} TODO: why isnt this working?
           gap="40px"
         >
-          <Grid templateColumns="5fr 2fr" gap={2} w="full">
+          <Grid templateColumns={['100%', '100%', '100%', '100%', '5fr 2fr']} gap={2} w="full">
             <PoxCycleDiagram />
-            <Grid templateRows="1fr auto" gap={3}>
+            <Grid
+              templateRows={['100%', '100%', '100%', '100%', '1fr auto']}
+              templateColumns={['100%', '1fr 1fr', '1fr 1fr', '1fr 1fr', '100%']}
+              gap={3}
+            >
               <StackersEarnings />
               <FAQ />
             </Grid>

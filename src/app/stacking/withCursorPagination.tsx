@@ -1,7 +1,7 @@
 import { Stack } from '@/ui/Stack';
 import React, { useEffect, useState } from 'react';
 
-import CustomTable, { CustomTableProps } from './CustomTable';
+import { CustomTableProps } from './CustomTable';
 import { PaginationControl } from './PaginationControls';
 
 interface CursorPaginationProps {
@@ -46,7 +46,7 @@ export function withCursorPagination<T extends CustomTableProps>(
 
     return (
       <Stack gap={0} alignItems="center" w="full">
-        <Component data={paginatedData} {...(props as T)} />
+        <Component {...(props as T)} data={paginatedData} />
         <PaginationControl
           currentPage={currentPage}
           totalPages={Math.ceil(data.length / pageSize)}
@@ -57,4 +57,3 @@ export function withCursorPagination<T extends CustomTableProps>(
     );
   };
 }
-

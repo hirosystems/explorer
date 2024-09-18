@@ -7,17 +7,7 @@ export type PriceTagToken = 'btc' | 'stx';
 
 export function PriceTag({ price, token }: { price: number; token: PriceTagToken }) {
   return (
-    <Flex
-      alignItems="center"
-      // bg="purple"
-      // bg="linear-gradient(to right, #f7931a 50%, #f1f1f1 50%)"
-      // bg="linear-gradient(81.89deg, #FF9100 11.28%, #ECEAE8 45.13%), linear-gradient(81.89deg, color(display-p3 1.000 0.596 0.208) 11.28%, color(display-p3 0.925 0.918 0.910) 45.13%)"
-      bg="transparent"
-      width="fit-content"
-      // boxShadow="0 2px 10px rgba(0, 0, 0, 0.1)"
-      // borderRadius="50px"
-      h={9}
-    >
+    <Flex alignItems="center" bg="transparent" width="fit-content" h={9}>
       <Flex
         justifyContent="center"
         position="relative"
@@ -28,7 +18,6 @@ export function PriceTag({ price, token }: { price: number; token: PriceTagToken
         color="white"
         fontSize="1.5rem"
         bg={token === 'btc' ? 'bitcoinOrange' : 'brand'}
-        // bg="transparent"
         borderRadius="50%"
       >
         {token === 'btc' ? <BitcoinLogo size={20} /> : <StxIcon size={12} />}
