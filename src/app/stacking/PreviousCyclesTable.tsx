@@ -1,10 +1,10 @@
-import { Flex } from '@/ui/Flex';
-import { Icon } from '@/ui/Icon';
-import { Text } from '@/ui/Text';
-import BitcoinIcon from '@/ui/icons/BitcoinIcon';
-import StxIcon from '@/ui/icons/StxIcon';
 import { useCallback, useMemo, useState } from 'react';
 
+import { Flex } from '../../ui/Flex';
+import { Icon } from '../../ui/Icon';
+import { Text } from '../../ui/Text';
+import BitcoinIcon from '../../ui/icons/BitcoinIcon';
+import StxIcon from '../../ui/icons/StxIcon';
 import { ColumnDefinition } from './CustomTable';
 import { CustomTableWithCursorPagination } from './CustomTableWithCursorPagination';
 

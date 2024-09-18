@@ -1,7 +1,8 @@
-import { Box } from '@/ui/Box';
-import BitcoinLogo from '@/ui/icons/BitcoinLogo';
-import StxIcon from '@/ui/icons/StxIcon';
 import { Flex, Text } from '@chakra-ui/react';
+
+import { Box } from '../../ui/Box';
+import BitcoinLogo from '../../ui/icons/BitcoinLogo';
+import StxIcon from '../../ui/icons/StxIcon';
 
 export type PriceTagToken = 'btc' | 'stx';
 

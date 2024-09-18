@@ -1,6 +1,6 @@
-import { NUM_SECONDS_IN_TEN_MINUTES } from '@/common/constants/constants';
-import { useBlockByHeight } from '@/common/queries/useBlockByHeight';
-import { useSuspensePoxInfoRaw } from '@/common/queries/usePoxInforRaw';
+import { NUM_SECONDS_IN_TEN_MINUTES } from '../../common/constants/constants';
+import { useBlockByHeight } from '../../common/queries/useBlockByHeight';
+import { useSuspensePoxInfoRaw } from '../../common/queries/usePoxInforRaw';
 
 export interface PoxCycleInfo {
   currentBurnChainBlockHeight: number;

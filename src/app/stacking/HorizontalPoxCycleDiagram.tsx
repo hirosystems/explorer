@@ -1,10 +1,10 @@
-import { Box } from '@/ui/Box';
-import { Flex } from '@/ui/Flex';
-import { Grid } from '@/ui/Grid';
-import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
 import { useEffect, useRef, useState } from 'react';
 
+import { Box } from '../../ui/Box';
+import { Flex } from '../../ui/Flex';
+import { Grid } from '../../ui/Grid';
+import { Stack } from '../../ui/Stack';
+import { Text } from '../../ui/Text';
 import { CycleInformation } from './CycleInformation';
 import { PoxCycleInfo } from './usePoxCycle';
 

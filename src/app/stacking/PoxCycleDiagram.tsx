@@ -1,5 +1,4 @@
-import { useBreakpointValue } from '@/ui/hooks/useBreakpointValue';
-
+import { useBreakpointValue } from '../../ui/hooks/useBreakpointValue';
 import { HorizontalPoxCycleDiagram } from './HorizontalPoxCycleDiagram';
 import { VerticalPoxCycleDiagram } from './VerticalPoxCycleDiagram';
 import { usePoxCycle } from './usePoxCycle';

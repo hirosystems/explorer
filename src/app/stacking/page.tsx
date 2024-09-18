@@ -1,6 +1,6 @@
-import { Box } from '@/ui/Box';
 import dynamic from 'next/dynamic';
 
+import { Box } from '../../ui/Box';
 import { getTokenPrice } from '../getTokenPriceInfo';
 
 const Page = dynamic(() => import('./PageClient'), {

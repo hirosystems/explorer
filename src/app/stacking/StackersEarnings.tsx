@@ -1,13 +1,13 @@
-import { Card } from '@/common/components/Card';
-import { Box } from '@/ui/Box';
-import { Flex } from '@/ui/Flex';
-import { Stack } from '@/ui/Stack';
-import { Tab } from '@/ui/Tab';
-import { TabList } from '@/ui/TabList';
-import { TabPanel } from '@/ui/TabPanel';
-import { TabPanels } from '@/ui/TabPanels';
-import { Tabs } from '@/ui/Tabs';
-import { Text } from '@/ui/Text';
+import { Card } from '../../common/components/Card';
+import { Box } from '../../ui/Box';
+import { Flex } from '../../ui/Flex';
+import { Stack } from '../../ui/Stack';
+import { Tab } from '../../ui/Tab';
+import { TabList } from '../../ui/TabList';
+import { TabPanel } from '../../ui/TabPanel';
+import { TabPanels } from '../../ui/TabPanels';
+import { Tabs } from '../../ui/Tabs';
+import { Text } from '../../ui/Text';
 
 function CustomTab({ children }: { children: React.ReactNode }) {
   return (

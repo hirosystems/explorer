@@ -1,9 +1,9 @@
-import { Card } from '@/common/components/Card';
-import { Flex } from '@/ui/Flex';
-import { Grid } from '@/ui/Grid';
-import { Icon } from '@/ui/Icon';
-import { Text } from '@/ui/Text';
 import { Info } from '@phosphor-icons/react';
+
+import { Card } from '../../common/components/Card';
+import { Flex } from '../../ui/Flex';
+import { Icon } from '../../ui/Icon';
+import { Text } from '../../ui/Text';
 
 const MetricCard = ({
   title,

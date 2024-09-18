@@ -1,8 +1,9 @@
-import { Flex } from '@/ui/Flex';
-import { Icon } from '@/ui/Icon';
-import { Text } from '@/ui/Text';
 import { VStack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
+
+import { Flex } from '../../ui/Flex';
+import { Icon } from '../../ui/Icon';
+import { Text } from '../../ui/Text';
 
 // Current Cycle Component
 export const CycleInformation = ({
