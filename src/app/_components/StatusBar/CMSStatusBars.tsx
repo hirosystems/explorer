@@ -9,11 +9,14 @@ import { StatusBarBase } from './StatusBarBase';
 
 export function CMSStatusBars({ statusBarContent }: { statusBarContent: IncidentContent | null }) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';
+  const networkUrl = useGlobalContext().activeNetworkKey;
   const incidentsToShow = !statusBarContent
     ? []
     : statusBarContent?.items?.filter(
         alert =>
-          (alert.fields.showOnTestnet && isTestnet) || (alert.fields.showOnMainnet && !isTestnet)
+          (alert.fields.showOnTestnet && isTestnet) ||
+          (alert.fields.showOnMainnet && !isTestnet) ||
+          networkUrl.includes(alert.fields.networkUrlSubstring)
       );
   const colorMode = useColorMode().colorMode;
   return (
