@@ -10,6 +10,7 @@ interface ContentType {
     impact: IncidentImpact;
     showOnMainnet: boolean;
     showOnTestnet: boolean;
+    networkUrlSubstring: string;
   };
 }
 
