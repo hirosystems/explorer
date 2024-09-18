@@ -1,3 +1,10 @@
+# [1.209.0](https://github.com/hirosystems/explorer/compare/v1.208.1...v1.209.0) (2024-09-18)
+
+
+### Features
+
+* allow matching cms alert by network url substring ([5652c94](https://github.com/hirosystems/explorer/commit/5652c944a2536a7b0424a84343d9557492c60638))
+
 ## [1.208.1](https://github.com/hirosystems/explorer/compare/v1.208.0...v1.208.1) (2024-09-18)
 
 
