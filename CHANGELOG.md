@@ -1,3 +1,10 @@
+## [1.209.1](https://github.com/hirosystems/explorer/compare/v1.209.0...v1.209.1) (2024-09-19)
+
+
+### Bug Fixes
+
+* block page controls padding ([8f7e5c7](https://github.com/hirosystems/explorer/commit/8f7e5c7b08c937efb0cda431514afadf32f900e9))
+
 # [1.209.0](https://github.com/hirosystems/explorer/compare/v1.208.1...v1.209.0) (2024-09-18)
 
 
