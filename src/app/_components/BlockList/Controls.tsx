@@ -21,7 +21,7 @@ export function ControlsLayout({
   children: ReactNode;
 } & FlexProps) {
   return (
-    <Flex direction={horizontal ? ['column', 'row'] : 'column'} gap={3} {...rest}>
+    <Flex direction={horizontal ? ['column', 'row'] : 'column'} gap={3} {...rest} py={5}>
       {children}
     </Flex>
   );
