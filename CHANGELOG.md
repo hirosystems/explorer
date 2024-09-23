@@ -1,3 +1,10 @@
+# [1.210.0](https://github.com/hirosystems/explorer/compare/v1.209.1...v1.210.0) (2024-09-23)
+
+
+### Features
+
+* add class name to search result ([e1c659c](https://github.com/hirosystems/explorer/commit/e1c659c79ea516b07b8a6ff6893ea548df380489))
+
 ## [1.209.1](https://github.com/hirosystems/explorer/compare/v1.209.0...v1.209.1) (2024-09-19)
 
 
