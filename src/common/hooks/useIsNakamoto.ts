@@ -5,7 +5,6 @@ export function useRenderNewBlockList() {
 
   const isMainnet = activeNetworkKey === 'https://api.hiro.so';
   const isTestnet = activeNetworkKey === 'https://api.testnet.hiro.so';
-  const isNakamotoTestnet = activeNetworkKey === 'https://api.nakamoto.testnet.hiro.so';
 
-  return !isMainnet && !isTestnet && !isNakamotoTestnet;
+  return !isMainnet && !isTestnet;
 }

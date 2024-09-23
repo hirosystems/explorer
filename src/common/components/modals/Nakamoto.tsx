@@ -20,7 +20,7 @@ export function NakamotoModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const nakamotoModalShown = localStorage.getItem('nakamoto25ModalShown');
+    const nakamotoModalShown = localStorage.getItem('nakamoto3ModalShown');
     try {
       const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
       // to run performance testing without the modal
@@ -28,14 +28,13 @@ export function NakamotoModal() {
         return;
       }
     } catch (e) {}
-    // TODO: temporarily disable the modal
-    // if (!nakamotoModalShown || nakamotoModalShown === 'false') {
-    //   setIsOpen(true);
-    // }
+    if (!nakamotoModalShown || nakamotoModalShown === 'false') {
+      setIsOpen(true);
+    }
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem('nakamoto25ModalShown', 'true');
+    localStorage.setItem('nakamoto3ModalShown', 'true');
     setIsOpen(false);
   };
 
@@ -66,28 +65,28 @@ export function NakamotoModal() {
               NAKAMOTO UPGRADE
             </Badge>
             <Text fontSize={'4xl'} textAlign={'center'}>
-              Nakamoto 2.5 is live on Mainnet! 🎉
+              Nakamoto 3.0 is live on Nakamoto Testnet
             </Text>
             <Image src={'/nakamoto.png'} alt={'Nakamoto'} />
             <ButtonLink
               variant={'primary'}
-              href={'/?chain=mainnet'}
+              href={'/?chain=testnet&api=https://api.nakamoto.testnet.hiro.so'}
               onClick={() => {
                 handleClose();
                 void queryClient.clear();
               }}
               _hover={{ textDecoration: 'none' }}
             >
-              Explore Nakamoto
+              Explore Nakamoto 3.0
             </ButtonLink>
             <ModalFooter borderTop={'1px'} width={'full'} justifyContent={'center'}>
               <TextLink
                 color={'purple.600'}
-                href={'https://docs.hiro.so/nakamoto'}
+                href={'https://stacks.org/nakamoto-hard-fork-block'}
                 fontSize={'sm'}
                 target={'_blank'}
               >
-                Learn more about Nakamoto ↗
+                Learn more about Nakamoto 3.0 ↗
               </TextLink>
             </ModalFooter>
           </Flex>
