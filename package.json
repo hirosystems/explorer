@@ -16,6 +16,7 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
     "test": "jest --env=jsdom",
+    "test:update-snapshots": "jest --updateSnapshot --env=jsdom",
     "test:unit": "jest --forceExit ./src",
     "prepare": "husky install"
   },

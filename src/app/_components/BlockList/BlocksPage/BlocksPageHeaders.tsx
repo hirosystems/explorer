@@ -6,6 +6,7 @@ import { BurnBlock, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { Card } from '../../../../common/components/Card';
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
+import { useRenderNewBlockList } from '../../../../common/hooks/useIsNakamoto';
 import { useSuspenseBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { useSuspenseBurnBlocks } from '../../../../common/queries/useBurnBlocksInfinite';
 import { Flex } from '../../../../ui/Flex';
@@ -114,6 +115,10 @@ export function BlocksPageHeaderLayout({
   averageStacksBlockTimeCard: ReactNode;
   lastConfirmedBitcoinBlockCard: ReactNode;
 } & React.ComponentProps<typeof Card>) {
+  const renderNewBlockList = useRenderNewBlockList();
+  if (renderNewBlockList) {
+    return null;
+  }
   return (
     <Card
       width="full"

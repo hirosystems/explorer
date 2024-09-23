@@ -95,15 +95,29 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             title={network.label}
             maxWidth="100%"
           >
-            {network.label === 'https://api.nakamoto.testnet.hiro.so'
-              ? 'Nakamoto Testnet'
-              : network.label}
+            {network.label}
           </Title>
           {network.isSubnet ? (
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               subnet
             </Badge>
-          ) : network.label === 'Stacks Testnet (Primary)' ? null : (
+          ) : network.label === 'Stacks Testnet (Primary)' ? null : network.label ===
+            'Nakamoto Testnet' ? (
+            <Badge
+              color={purpleBadgeColor}
+              bg={purpleBadgeBg}
+              px={'2'}
+              py={'1'}
+              fontSize={'xs'}
+              rounded={'full'}
+              border={'1px'}
+              borderColor={badgeBorder}
+              fontWeight={'medium'}
+              ml="8px"
+            >
+              Nakamoto 3.0
+            </Badge>
+          ) : (
             <Badge
               color={purpleBadgeColor}
               bg={purpleBadgeBg}
