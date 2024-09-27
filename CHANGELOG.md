@@ -1,3 +1,10 @@
+# [1.211.0](https://github.com/hirosystems/explorer/compare/v1.210.0...v1.211.0) (2024-09-27)
+
+
+### Features
+
+* use new block list for nakamoto testnet ([b6f0b06](https://github.com/hirosystems/explorer/commit/b6f0b06ecbe7ebe773f67c8f72990effbea83e7d))
+
 # [1.210.0](https://github.com/hirosystems/explorer/compare/v1.209.1...v1.210.0) (2024-09-23)
 
 
