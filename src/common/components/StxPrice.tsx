@@ -7,6 +7,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { Flex } from '../../ui/Flex';
+import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppSelector } from '../state/hooks';
 import { TransactionValueFilterTypes } from '../state/slices/transaction-value-filter-slice';
 import { getUsdValue } from '../utils/utils';
@@ -32,6 +33,15 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
     [historicalStxPrice, value]
   );
 
+  const bg = useColorModeValue('purple.200', 'purple.400');
+  const hoverBg = useColorModeValue('purple.300', 'purple.300');
+
+  const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
+
+  if (!isMainnet) {
+    return null;
+  }
+
   return (
     <Flex
       height="24px"
@@ -44,8 +54,8 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
       _focus={{ outline: 0 }}
       flexShrink={0}
       suppressHydrationWarning={true}
-      bg={useColorModeValue('purple.200', 'purple.400')}
-      _hover={{ bg: useColorModeValue('purple.300', 'purple.300') }}
+      bg={bg}
+      _hover={{ bg: hoverBg }}
       color={'black'}
     >
       {activeTransactionValueFilter === TransactionValueFilterTypes.CurrentValue

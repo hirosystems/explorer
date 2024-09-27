@@ -8,6 +8,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { Button } from '../../../ui/Button';
 import { Tooltip } from '../../../ui/Tooltip';
+import { useGlobalContext } from '../../context/useGlobalContext';
 import { getUsdValue } from '../../utils/utils';
 import { useStxPriceForTx } from './useStxPriceForTx';
 
@@ -40,6 +41,15 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
     [historicalStxPrice, value]
   );
 
+  const bg = useColorModeValue('purple.200', 'purple.400');
+  const hoverBg = useColorModeValue('purple.300', 'purple.300');
+
+  const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
+
+  if (!isMainnet) {
+    return null;
+  }
+
   return (
     <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
       <Button
@@ -50,8 +60,8 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
         _focus={{ outline: 0 }}
         flexShrink={0}
         suppressHydrationWarning={true}
-        bg={useColorModeValue('purple.200', 'purple.400')}
-        _hover={{ bg: useColorModeValue('purple.300', 'purple.300') }}
+        bg={bg}
+        _hover={{ bg: hoverBg }}
         color={'black'}
       >
         {showCurrentPriceForCompletedTransactions
