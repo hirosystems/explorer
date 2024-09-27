@@ -1,3 +1,10 @@
+## [1.211.1](https://github.com/hirosystems/explorer/compare/v1.211.0...v1.211.1) (2024-09-27)
+
+
+### Bug Fixes
+
+* 3.0 fast follows ([6ebeaab](https://github.com/hirosystems/explorer/commit/6ebeaab5de49dffe5cc58c0585070ecc2d9c13fa))
+
 # [1.211.0](https://github.com/hirosystems/explorer/compare/v1.210.0...v1.211.0) (2024-09-27)
 
 
