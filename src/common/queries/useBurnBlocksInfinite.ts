@@ -23,11 +23,12 @@ export function useBurnBlocks(
   const api = useApi();
   return useInfiniteQuery({
     queryKey: [BURN_BLOCKS_QUERY_KEY],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
+    queryFn: ({ pageParam }: { pageParam: number }) => {
       api.burnBlocksApi.getBurnBlocks({
         limit: DEFAULT_BURN_BLOCKS_LIMIT,
         offset: pageParam,
-      }),
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,

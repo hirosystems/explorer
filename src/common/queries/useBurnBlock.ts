@@ -12,7 +12,9 @@ import { useApi } from '../api/useApi';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
-export function useFetchBurnBlock(): (heightOrHash: string | number) => Promise<BurnBlock> {
+export function useFetchBurnBlock(): (
+  heightOrHash: string | number
+) => Promise<BurnBlock | undefined> {
   const api = useApi();
   const queryClient = useQueryClient();
 
@@ -25,11 +27,11 @@ export function useFetchBurnBlock(): (heightOrHash: string | number) => Promise<
     }
 
     // Fetch the data and update the cache
-    const fetchBurnBlock = async (): Promise<BurnBlock> => {
-      return api.burnBlocksApi.getBurnBlock({ heightOrHash });
+    const fetchBurnBlock = async (): Promise<BurnBlock | undefined> => {
+      return api.burnBlocksApi.getBurnBlock({ heightOrHash }).catch(() => undefined);
     };
 
-    return queryClient.fetchQuery<BurnBlock>({
+    return queryClient.fetchQuery<BurnBlock | undefined>({
       queryKey,
       queryFn: fetchBurnBlock,
       staleTime: Infinity,
@@ -45,7 +47,9 @@ export function useFetchMultipleBurnBlocks(): (
   return async (heightOrHashes: (string | number)[]) => {
     const burnBlockPromises = heightOrHashes.map(heightOrHash => fetchBurnBlock(heightOrHash));
 
-    return await Promise.all(burnBlockPromises);
+    return (await Promise.all(burnBlockPromises).then(burnBlocks =>
+      burnBlocks.filter(Boolean)
+    )) as BurnBlock[];
   };
 }
 
@@ -69,9 +73,11 @@ export function useBurnBlock(
   return useQuery({
     queryKey: ['burn-block', heightOrHash],
     queryFn: () =>
-      api.burnBlocksApi.getBurnBlock({
-        heightOrHash,
-      }),
+      api.burnBlocksApi
+        .getBurnBlock({
+          heightOrHash,
+        })
+        .catch(() => undefined),
     staleTime: Infinity,
     ...options,
   });
@@ -84,7 +90,7 @@ export function useSuspenseBurnBlock(
   const api = useApi();
   return useSuspenseQuery({
     queryKey: ['burn-block', heightOrHash],
-    queryFn: () => api.burnBlocksApi.getBurnBlock({ heightOrHash }),
+    queryFn: () => api.burnBlocksApi.getBurnBlock({ heightOrHash }).catch(() => undefined),
     staleTime: Infinity,
     ...options,
   });
