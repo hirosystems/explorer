@@ -46,22 +46,22 @@ export function Controls({ groupByBtc, liveUpdates, horizontal, ...rest }: Contr
           Group by Bitcoin block
         </FormLabel>
       </FormControl>
-      {/*<FormControl display="flex" alignItems="center" gap={3}>*/}
-      {/*  <Switch id="live-updates" {...liveUpdates} />*/}
-      {/*  <FormLabel*/}
-      {/*    htmlFor="live-updates"*/}
-      {/*    mb="0"*/}
-      {/*    mr={0}*/}
-      {/*    fontSize={'14px'}*/}
-      {/*    lineHeight={'1.5em'}*/}
-      {/*    fontWeight={400}*/}
-      {/*    textOverflow={'ellipsis'}*/}
-      {/*    overflow={'hidden'}*/}
-      {/*    whiteSpace={'nowrap'}*/}
-      {/*  >*/}
-      {/*    Live updates*/}
-      {/*  </FormLabel>*/}
-      {/*</FormControl>*/}
+      <FormControl display="flex" alignItems="center" gap={3}>
+        <Switch id="live-updates" {...liveUpdates} />
+        <FormLabel
+          htmlFor="live-updates"
+          mb="0"
+          mr={0}
+          fontSize={'14px'}
+          lineHeight={'1.5em'}
+          fontWeight={400}
+          textOverflow={'ellipsis'}
+          overflow={'hidden'}
+          whiteSpace={'nowrap'}
+        >
+          Live updates
+        </FormLabel>
+      </FormControl>
     </ControlsLayout>
   );
 }

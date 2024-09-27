@@ -65,6 +65,40 @@ exports[`BlockListWithControls renders correctly 1`] = `
               Group by Bitcoin block
             </label>
           </div>
+          <div
+            class="chakra-form-control css-guqklo"
+            role="group"
+          >
+            <label
+              class="chakra-switch css-1tv0hy9"
+            >
+              <input
+                aria-disabled="false"
+                aria-invalid="false"
+                class="chakra-switch__input"
+                id="live-updates"
+                style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; width: 1px; margin: -1px; padding: 0px; overflow: hidden; white-space: nowrap; position: absolute;"
+                type="checkbox"
+                value=""
+              />
+              <span
+                aria-hidden="true"
+                class="chakra-switch__track css-14qxnv8"
+              >
+                <span
+                  class="chakra-switch__thumb css-0"
+                />
+              </span>
+            </label>
+            <label
+              class="chakra-form__label css-11tytnr"
+              colo="textCaption"
+              for="live-updates"
+              id="field-:r1:-label"
+            >
+              Live updates
+            </label>
+          </div>
         </div>
         <div
           class="css-1g6pedm"
