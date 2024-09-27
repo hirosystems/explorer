@@ -1,3 +1,10 @@
+## [1.211.2](https://github.com/hirosystems/explorer/compare/v1.211.1...v1.211.2) (2024-09-27)
+
+
+### Bug Fixes
+
+* graceful failure when sortition ([4b08615](https://github.com/hirosystems/explorer/commit/4b086155e150c22935007373c5ccffe495a0e601))
+
 ## [1.211.1](https://github.com/hirosystems/explorer/compare/v1.211.0...v1.211.1) (2024-09-27)
 
 
