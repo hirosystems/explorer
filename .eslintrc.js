@@ -1,5 +1,9 @@
 module.exports = {
-  extends: ['plugin:react-hooks/recommended', 'plugin:@next/next/recommended'],
+  extends: [
+    "plugin:react-hooks/recommended",
+    "plugin:@next/next/recommended",
+    "plugin:storybook/recommended"
+  ],
   plugins: ['react', 'react-hooks'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
