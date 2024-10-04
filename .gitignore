@@ -20,3 +20,5 @@ coverage
 # Sentry
 .sentryclirc
 .env.sentry-build-plugin
+
+*storybook.log
