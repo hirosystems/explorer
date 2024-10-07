@@ -23,6 +23,7 @@ export const theme = extendTheme({
   colors: COLORS,
   semanticTokens: {
     colors: {
+      bitcoinOrange: '#FF9835',
       brand: '#FC6432',
       borderPrimary: {
         default: 'slate.250',

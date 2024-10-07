@@ -62,3 +62,15 @@ export const SUBNETS_PARENT_NETWORK_IDS = {
 };
 
 export const PAGE_MAX_WIDTH = '1280px';
+
+export const mobileBorderCss = {
+  '.has-horizontal-scroll &': {
+    borderRight: '2px solid var(--stacks-colors-borderPrimary)',
+  },
+};
+
+export const NUM_TEN_MINUTES_IN_DAY = (24 * 60) / 10; // ie approx number of 10 minute blocks in a day
+
+export const NUM_SECONDS_IN_A_DAY = 24 * 60 * 60;
+
+export const NUM_SECONDS_IN_TEN_MINUTES = 10 * 60;

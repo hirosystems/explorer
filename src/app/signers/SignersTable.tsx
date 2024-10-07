@@ -5,6 +5,7 @@ import React, { ReactNode, Suspense, useMemo, useState } from 'react';
 
 import { AddressLink } from '../../common/components/ExplorerLinks';
 import { Section } from '../../common/components/Section';
+import { mobileBorderCss } from '../../common/constants/constants';
 import { ApiResponseWithResultsOffset } from '../../common/types/api';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Flex } from '../../ui/Flex';
@@ -21,7 +22,6 @@ import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
-import { mobileBorderCss } from './consts';
 import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 import { SignersTableSkeleton } from './skeleton';
