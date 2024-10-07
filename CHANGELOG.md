@@ -1,3 +1,11 @@
+# [1.212.0](https://github.com/hirosystems/explorer/compare/v1.211.2...v1.212.0) (2024-10-07)
+
+
+### Features
+
+* pr template ([d92f394](https://github.com/hirosystems/explorer/commit/d92f394e8d6b2954911b0e1fd3620a745998f4ad))
+* setup storybook ([33e4707](https://github.com/hirosystems/explorer/commit/33e470737f230a1d38ab47cc9b90d9147a71c06f))
+
 ## [1.211.2](https://github.com/hirosystems/explorer/compare/v1.211.1...v1.211.2) (2024-09-27)
 
 
