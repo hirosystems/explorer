@@ -1,3 +1,10 @@
+## [1.212.3](https://github.com/hirosystems/explorer/compare/v1.212.2...v1.212.3) (2024-10-07)
+
+
+### Bug Fixes
+
+* storybook workflow ([b81c8d5](https://github.com/hirosystems/explorer/commit/b81c8d5ab2d724a0d3eabffe047bc68edacf226b))
+
 ## [1.212.2](https://github.com/hirosystems/explorer/compare/v1.212.1...v1.212.2) (2024-10-07)
 
 
