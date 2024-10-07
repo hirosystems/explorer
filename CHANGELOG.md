@@ -1,3 +1,10 @@
+# [1.213.0](https://github.com/hirosystems/explorer/compare/v1.212.3...v1.213.0) (2024-10-07)
+
+
+### Features
+
+* redeploy ([4e11e2a](https://github.com/hirosystems/explorer/commit/4e11e2abbf593082a52fbd3b3199256c1b55d15f))
+
 ## [1.212.3](https://github.com/hirosystems/explorer/compare/v1.212.2...v1.212.3) (2024-10-07)
 
 
