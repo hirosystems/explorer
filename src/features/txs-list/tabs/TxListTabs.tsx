@@ -1,6 +1,5 @@
 'use client';
 
-import { FilterProps } from '../../../app/search/filters';
 import { FlexProps } from '../../../ui/Flex';
 import { ConfirmedTxsList } from '../ConfirmedTxsList';
 import { MempoolTxsList } from '../MempoolTxsList';

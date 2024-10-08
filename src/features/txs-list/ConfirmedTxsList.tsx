@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
@@ -34,8 +32,6 @@ function ConfirmedTxsListBase({
   const response = useConfirmedTransactionsInfinite(filters);
   const txs = useInfiniteQueryResult<Transaction>(response, limit);
 
-  if (response.isLoading || response.isFetching) return <SkeletonTxsList />;
-
   return (
     <Box pb={6}>
       {!!filters && (
@@ -56,7 +52,13 @@ function ConfirmedTxsListBase({
           {showFilterButton && <FilterButton />}
         </Flex>
       )}
-      {!txs?.length ? <NoTxs /> : <FilteredTxs txs={txs} TxListItem={TxListItem} />}
+      {response.isLoading || response.isFetching ? (
+        <SkeletonTxsList />
+      ) : !txs?.length ? (
+        <NoTxs />
+      ) : (
+        <FilteredTxs txs={txs} TxListItem={TxListItem} />
+      )}
       <ListFooter
         isLoading={response.isFetchingNextPage}
         hasNextPage={response.hasNextPage}
