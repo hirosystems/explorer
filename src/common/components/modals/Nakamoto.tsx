@@ -20,7 +20,7 @@ export function NakamotoModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const nakamotoModalShown = localStorage.getItem('nakamoto3ModalShown');
+    const nakamotoModalShown = localStorage.getItem('nakamoto3PrimaryTestnetModalShown');
     try {
       const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
       // to run performance testing without the modal
@@ -34,7 +34,7 @@ export function NakamotoModal() {
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem('nakamoto3ModalShown', 'true');
+    localStorage.setItem('nakamoto3PrimaryTestnetModalShown', 'true');
     setIsOpen(false);
   };
 
@@ -65,12 +65,12 @@ export function NakamotoModal() {
               NAKAMOTO UPGRADE
             </Badge>
             <Text fontSize={'4xl'} textAlign={'center'}>
-              Nakamoto 3.0 is live on Nakamoto Testnet
+              Nakamoto 3.0 is live on Primary Testnet
             </Text>
             <Image src={'/nakamoto.png'} alt={'Nakamoto'} />
             <ButtonLink
               variant={'primary'}
-              href={'/?chain=testnet&api=https://api.nakamoto.testnet.hiro.so'}
+              href={'/?chain=testnet'}
               onClick={() => {
                 handleClose();
                 void queryClient.clear();
@@ -82,7 +82,7 @@ export function NakamotoModal() {
             <ModalFooter borderTop={'1px'} width={'full'} justifyContent={'center'}>
               <TextLink
                 color={'purple.600'}
-                href={'https://stacks.org/nakamoto-hard-fork-block'}
+                href={'https://stacks.org/core-developers-ship-release-candidate-2'}
                 fontSize={'sm'}
                 target={'_blank'}
               >
