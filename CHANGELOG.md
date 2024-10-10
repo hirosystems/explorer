@@ -1,3 +1,10 @@
+# [1.214.0](https://github.com/hirosystems/explorer/compare/v1.213.0...v1.214.0) (2024-10-10)
+
+
+### Features
+
+* nakamoto 3.0 primary testnet updates ([b964c21](https://github.com/hirosystems/explorer/commit/b964c2126154985dbdc3130286c32dc7fe811f45))
+
 # [1.213.0](https://github.com/hirosystems/explorer/compare/v1.212.3...v1.213.0) (2024-10-07)
 
 
