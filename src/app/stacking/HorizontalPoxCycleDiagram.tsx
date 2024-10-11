@@ -7,6 +7,7 @@ import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { CycleInformation } from './CycleInformation';
 import { PoxCycleInfo } from './usePoxCycle';
+import useResizeObserver from './useResizeObserver';
 
 export const HorizontalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
   const {
@@ -33,27 +34,8 @@ export const HorizontalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
               name="Current cycle"
               id={currentCycleId}
               stxStacked={currentCycleStackedStx}
+              cycleType="current"
             />
-            <Flex
-              gap={2}
-              bg="sand.150"
-              borderRadius="full"
-              p={2}
-              h="fit-content"
-              border="1px solid var(--stacks-colors-sand-175)"
-            >
-              <Flex
-                h={4}
-                w={4}
-                borderRadius="50%"
-                bg="green.400"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Box h={2} w={2} borderRadius="50%" bg="green.600"></Box>
-              </Flex>
-              <Text whiteSpace="nowrap">Ends in 9 days</Text>
-            </Flex>
           </Flex>
           <Box h={60} pt={6}>
             <CurrentCycleProgressBar
@@ -79,7 +61,12 @@ export const HorizontalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
       <Stack bg="sand.150" w="full" alignItems="center" borderRadius="2xl" pr={8} py={6}>
         <Box w="full">
           <Box pb={6} pl={8}>
-            <CycleInformation name="Next cycle" id={nextCycleId} stxStacked={nextCycleStackedStx} />
+            <CycleInformation
+              name="Next cycle"
+              id={nextCycleId}
+              stxStacked={nextCycleStackedStx}
+              cycleType="next"
+            />
           </Box>
           <Box h={60} pt={6}>
             <NextCycleProgressBar
@@ -122,29 +109,7 @@ function CurrentCycleProgressBar({
   progressPercentage: number;
 }) {
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
-
-  useEffect(() => {
-    const resizeObserver = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        if (entry.target === progressBarRef.current) {
-          setContainerWidth(entry.contentRect.width);
-        }
-      }
-    });
-
-    const currentProgressBarRef = progressBarRef.current;
-
-    if (currentProgressBarRef) {
-      resizeObserver.observe(currentProgressBarRef);
-    }
-
-    return () => {
-      if (currentProgressBarRef) {
-        resizeObserver.unobserve(currentProgressBarRef);
-      }
-    };
-  }, []);
+  const { width: containerWidth } = useResizeObserver(progressBarRef);
 
   return (
     <Stack gap={2}>
@@ -300,7 +265,7 @@ function NextCycleProgressBar({
   }, []);
 
   return (
-    <Stack gap={2}>
+    <Stack gap={2} w="full">
       <Flex className="top-text" position="relative" w="full" h={4}>
         <Box
           position="absolute"

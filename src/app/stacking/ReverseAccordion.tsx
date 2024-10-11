@@ -164,6 +164,7 @@ export function ReverseAccordion({ items }: { items: ReverseAccordionItem[] }) {
     <Box
       position="relative"
       height={`${totalHeight}px`}
+      w="full"
       ref={containerRef}
       className="REVERSE-ACCORDION"
     >

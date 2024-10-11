@@ -21,7 +21,7 @@ function CustomTab({ children }: { children: React.ReactNode }) {
 
 export function StackersEarnings() {
   return (
-    <Card p={5} bg="sand.50" border="1px solid var(--stacks-colors-sand-150)">
+    <Card p={5} bg="sand.50" border="1px solid var(--stacks-colors-sand-150)" w="full">
       <Flex>
         <Tabs>
           <TabList mb={4} p={0} border="none">
