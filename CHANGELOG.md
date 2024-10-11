@@ -1,3 +1,10 @@
+## [1.214.1](https://github.com/hirosystems/explorer/compare/v1.214.0...v1.214.1) (2024-10-11)
+
+
+### Bug Fixes
+
+* block time ([6e07645](https://github.com/hirosystems/explorer/commit/6e07645c81a3324521f733e54980ffbc105eb676))
+
 # [1.214.0](https://github.com/hirosystems/explorer/compare/v1.213.0...v1.214.0) (2024-10-10)
 
 
