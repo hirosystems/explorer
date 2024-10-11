@@ -30,6 +30,7 @@ export const VerticalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
             name="Current cycle"
             id={currentCycleId}
             stxStacked={currentCycleStackedStx}
+            cycleType="current"
           />
         </Flex>
         <Box pt={6}>
