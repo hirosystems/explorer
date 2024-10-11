@@ -45,7 +45,7 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
           ),
         }}
         rightContent={{
-          title: toRelativeTime(block.burn_block_time * 1000),
+          title: toRelativeTime(block.block_time * 1000),
           subtitle: truncateMiddle(block.hash),
         }}
         {...rest}

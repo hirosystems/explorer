@@ -37,7 +37,7 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
           key={block.hash}
           hash={block.hash}
           height={block.height}
-          timestamp={block.burn_block_time}
+          timestamp={block.block_time}
           txsCount={block.txs.length}
           icon={<Icon as={StxIcon} size={2.5} color={'white'} />}
         />

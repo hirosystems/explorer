@@ -21,7 +21,7 @@ const createBlockUIBlock = (block: NakamotoBlock): UIBlock => ({
   type: UIBlockType.Block,
   height: block.height,
   hash: block.hash,
-  timestamp: block.burn_block_time,
+  timestamp: block.block_time,
   txsCount: block.tx_count,
 });
 

@@ -30,6 +30,9 @@ export interface TxItemProps extends FlexProps {
 }
 
 const getTransactionTime = (tx: Transaction | MempoolTransaction) => {
+  if ((tx as any).block_time !== 'undefined' && (tx as any).block_time !== -1) {
+    return (tx as any).block_time;
+  }
   if (typeof (tx as any).burn_block_time !== 'undefined' && (tx as any).burn_block_time !== -1) {
     return (tx as any).burn_block_time;
   } else if ((tx as any).burn_block_time === -1) {
