@@ -238,7 +238,7 @@ function NextCycleProgressBar({
   start: Section;
   progressPercentageForNextCycle: number;
 }) {
-  console.log('NextCycleProgressBar', { start });
+  // console.log('NextCycleProgressBar', { start });
   const nextCycleStartPercentage = 0.25; // magic number for setting the location of the dot indicating the start of the next cycle
 
   const progressBarRef = useRef<HTMLDivElement>(null);

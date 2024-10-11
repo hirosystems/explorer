@@ -57,11 +57,11 @@ export function usePoxCycle(): PoxCycleInfo {
   const cycleBlockLength = rewardCycleLength;
   const progressInBlocks = cycleBlockLength - 1 - blocksUntilRewardPhase;
   const currentCycleBurnChainBlockHeightStart = currentBurnChainBlockHeight - progressInBlocks;
-  console.log({
-    currentCycleBurnChainBlockHeightStart,
-    currentBurnChainBlockHeight,
-    progressInBlocks,
-  });
+  // console.log({
+  //   currentCycleBurnChainBlockHeightStart,
+  //   currentBurnChainBlockHeight,
+  //   progressInBlocks,
+  // });
   //   const progressPercentageForCurrentCycle = progressInBlocks / cycleBlockLength;
   const progressPercentageForCurrentCycle = 0.15;
 
