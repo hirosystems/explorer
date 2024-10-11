@@ -11,8 +11,6 @@ import useResizeObserver from './useResizeObserver';
 
 const cardPaddingY = 3;
 const cardMarginBottom = 3;
-const cardTitleHeight = 20; // alternatively, we can calculate this with a ref
-// const cardHeight = cardTitleHeight + cardMarginBottom * 4 + cardPadding * 2 * 4;
 const cardOverlap = 10; // Amount of overlap between cards
 const onHoverRise = 40; // How much the card rises when hovered
 const extraRiseToShowContent = cardOverlap - 5;
@@ -27,7 +25,6 @@ function ReverseAccordionItem({
   link,
   linkLabel,
   index,
-  isLast,
   setIsExpanded,
   isExpanded,
   itemTitleRef,
@@ -39,7 +36,6 @@ function ReverseAccordionItem({
   link: string;
   linkLabel: string;
   index: number;
-  isLast: boolean;
   setIsExpanded: (index: number, state: boolean) => void;
   isExpanded: boolean;
   itemTitleRef: RefObject<HTMLDivElement>;
@@ -64,8 +60,6 @@ function ReverseAccordionItem({
       setTitleHeight(itemTitleRef.current.scrollHeight);
     }
   }, [text, isExpanded, isHovered, accordionWidth]);
-
-  // const topPosition = useMemo(() => index * (cardHeight - cardOverlap), [index, cardHeight]);
 
   return (
     <Stack
@@ -109,7 +103,6 @@ function ReverseAccordionItem({
             ref={itemTitleRef}
             height="fit-content"
             w="full"
-            // px={3}
           >
             <Text fontWeight="medium">{title}</Text>
             <Icon
@@ -182,7 +175,6 @@ export function ReverseAccordion({ items }: { items: ReverseAccordionItem[] }) {
           link={item.link}
           linkLabel={item.linkLabel}
           index={index}
-          isLast={index === items.length - 1}
           setIsExpanded={setIsExpanded}
           isExpanded={expandedIndex === index}
           itemTitleRef={itemTitleRefs.current[index]}
