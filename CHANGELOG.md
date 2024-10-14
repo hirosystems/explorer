@@ -1,3 +1,10 @@
+## [1.214.2](https://github.com/hirosystems/explorer/compare/v1.214.1...v1.214.2) (2024-10-14)
+
+
+### Bug Fixes
+
+* fixed filters resetting when clicking load more ([99ef416](https://github.com/hirosystems/explorer/commit/99ef416f8e06f77491efd06853e31dbfcc56e427))
+
 ## [1.214.1](https://github.com/hirosystems/explorer/compare/v1.214.0...v1.214.1) (2024-10-11)
 
 
