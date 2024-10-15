@@ -13,6 +13,7 @@ import { switchTheme } from './componentTheme/Switch';
 import { tabTheme } from './componentTheme/Tab';
 import { tagTheme } from './componentTheme/Tag';
 import { inter, openSauce } from './fonts';
+import { NEW_COLORS } from './new-colors';
 
 export const theme = extendTheme({
   config: {
@@ -20,7 +21,7 @@ export const theme = extendTheme({
     useSystemColorMode: false,
     cssVarPrefix: 'stacks',
   },
-  colors: COLORS,
+  colors: { ...COLORS, ...NEW_COLORS },
   semanticTokens: {
     colors: {
       brand: '#FC6432',
