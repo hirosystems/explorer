@@ -58,10 +58,13 @@ export const TxPage: React.FC<{
   children?: ReactNode;
 }> = ({ tx, contractId, txDetails, children }) => {
   const txStatus = getTransactionStatus(tx);
-  const { activeNetwork } = useGlobalContext();
+  const { activeNetwork, activeNetworkKey } = useGlobalContext();
+  const isMainnet = activeNetworkKey === 'https://api.hiro.so';
 
   const showBlocksVisualizer =
-    !activeNetwork.isSubnet && (txStatus === 'success_microblock' || txStatus === 'pending');
+    isMainnet &&
+    !activeNetwork.isSubnet &&
+    (txStatus === 'success_microblock' || txStatus === 'pending');
 
   return (
     <>
