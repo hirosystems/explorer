@@ -37,18 +37,9 @@ export const buildCustomNetworkUrl = (url: string) => {
   }${pathname || ''}`;
 };
 
-export const fetchCustomNetworkId: (
-  url: string,
-  isSubnet: boolean
-) => Promise<ChainID | undefined> = (url, isSubnet) => {
+export const fetchCustomNetworkId: (url: string) => Promise<ChainID | undefined> = url => {
   return fetchFromApi(url)(DEFAULT_V2_INFO_ENDPOINT)
     .then(res => res.json())
-    .then(res =>
-      !isSubnet
-        ? Object.values(ChainID).includes(res.network_id)
-          ? (res.network_id as ChainID)
-          : undefined
-        : res.network_id
-    )
+    .then(res => res.network_id)
     .catch();
 };

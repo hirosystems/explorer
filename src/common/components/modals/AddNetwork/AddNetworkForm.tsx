@@ -23,7 +23,7 @@ import { Text } from '../../../../ui/Text';
 import { NetworkIdModeMap } from '../../../constants/network';
 import { useGlobalContext } from '../../../context/useGlobalContext';
 import { useAppDispatch } from '../../../state/hooks';
-import { Network } from '../../../types/network';
+import { Network, NetworkModes } from '../../../types/network';
 import { getQueryParams } from '../../../utils/buildUrl';
 import { closeModal } from '../modal-slice';
 import { buildCustomNetworkUrl, fetchCustomNetworkId, validateUrl } from './utils';
@@ -70,10 +70,7 @@ export const AddNetworkForm: FC = () => {
           errors.url = networkUrlErrorMessage;
         } else {
           try {
-            const networkId = await fetchCustomNetworkId(
-              buildCustomNetworkUrl(values.url),
-              values.isSubnet
-            );
+            const networkId = await fetchCustomNetworkId(buildCustomNetworkUrl(values.url));
             if (!networkId) {
               errors.genericError = 'The API did not return a valid network_id.';
             }
@@ -130,7 +127,7 @@ export const AddNetworkForm: FC = () => {
         isSubnet,
       }) => {
         const networkUrl = buildCustomNetworkUrl(url);
-        const networkId = await fetchCustomNetworkId(networkUrl, isSubnet);
+        const networkId = await fetchCustomNetworkId(networkUrl);
 
         if (networkId) {
           const network: Network = {
@@ -140,7 +137,7 @@ export const AddNetworkForm: FC = () => {
             btcTxBaseUrl,
             btcAddressBaseUrl,
             networkId,
-            mode: NetworkIdModeMap[networkId],
+            mode: NetworkIdModeMap[networkId] ?? NetworkModes.Testnet,
             isCustomNetwork: true,
             isSubnet,
           };

@@ -64,7 +64,7 @@ export const nakamotoTestnetNetwork: Network = {
   btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
   btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
   btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
-  networkId: ChainID.Testnet,
+  networkId: 2147483904 as ChainID,
   mode: NetworkModes.Testnet,
   isCustomNetwork: true,
 };
