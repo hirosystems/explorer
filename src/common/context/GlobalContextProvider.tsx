@@ -225,7 +225,7 @@ export const GlobalContextProvider: FC<{
   useEffect(() => {
     const addCustomNetworkFromQuery = async () => {
       const networkUrl = buildCustomNetworkUrl(queryApiUrl);
-      const networkId = await fetchCustomNetworkId(networkUrl, false);
+      const networkId = await fetchCustomNetworkId(networkUrl);
       if (networkId) {
         const network: Network = {
           label: queryApiUrl,
@@ -236,7 +236,7 @@ export const GlobalContextProvider: FC<{
           btcAddressBaseUrl:
             queryBtcAddressBaseUrl || NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
           networkId,
-          mode: NetworkIdModeMap[networkId],
+          mode: NetworkIdModeMap[networkId] ?? NetworkModes.Testnet,
           isCustomNetwork: true,
           isSubnet: false,
         };

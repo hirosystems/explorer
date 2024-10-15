@@ -8,7 +8,8 @@ export const useStacksNetwork = (): StacksTestnet | StacksMainnet => {
   const selectedNetwork = useGlobalContext().activeNetwork;
   const apiServer = selectedNetwork.url;
   const networkMode = selectedNetwork.mode;
-  const Network = networkMode === NetworkModes.Testnet ? StacksTestnet : StacksMainnet;
+  const Network = networkMode === NetworkModes.Mainnet ? StacksMainnet : StacksTestnet; // default to testnet if network id / mode is not known
   const network = new Network({ url: apiServer, fetchFn: fetchWithApiKey });
+  network.chainId = selectedNetwork.networkId;
   return network;
 };

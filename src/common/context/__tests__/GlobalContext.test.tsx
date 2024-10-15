@@ -102,7 +102,7 @@ describe('GlobalContext', () => {
     expect(Object.keys(networks).length).toBe(5);
 
     await waitFor(() => {
-      expect(fetchCustomNetworkId).toHaveBeenCalledWith(customApiUrl, false);
+      expect(fetchCustomNetworkId).toHaveBeenCalledWith(customApiUrl);
     });
 
     await waitFor(() => {
