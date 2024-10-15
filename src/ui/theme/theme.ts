@@ -81,6 +81,17 @@ export const theme = extendTheme({
         _dark: 'white',
       },
     },
+    breakpoints: {
+      'mobile-xs': '320px',
+      'mobile-sm': '375px',
+      'mobile-md': '480px',
+      'mobile-lg': '768px',
+      xs: '1024px',
+      sm: '1280px',
+      md: '1440px',
+      lg: '1680px',
+      xl: '1920px',
+    },
   },
   styles: {
     global: (props: StyleFunctionProps) => ({
@@ -120,5 +131,16 @@ export const theme = extendTheme({
     Button: buttonTheme,
     Menu: menuTheme,
     Link: linkTheme,
+  },
+  breakpoints: {
+    'mobile-xs': '320px',
+    'mobile-sm': '375px',
+    'mobile-md': '480px',
+    'mobile-lg': '768px',
+    xs: '1024px',
+    sm: '1280px',
+    md: '1440px',
+    lg: '1680px',
+    xl: '1920px',
   },
 });
