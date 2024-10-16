@@ -116,7 +116,19 @@ export const theme = extendTheme({
     4.5: '1.125rem',
   },
   space: {
+    0: '0px',
+    1: '0.25rem', // 4px
+    2: '0.5rem', // 8px
+    3: '0.75rem', // 12px
+    4: '1rem', // 16px
     4.5: '1.125rem',
+    5: '1.25rem', // 20px
+    6: '1.5rem', // 24px
+    8: '2rem', // 32px
+    10: '2.5rem', // 40px
+    12: '3rem', // 48px
+    16: '4rem', // 64px
+    18: '4.5rem', // 72px
   },
   borders: {
     '1px': '1px solid var(--stacks-colors-borderPrimary)',
