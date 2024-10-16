@@ -110,6 +110,14 @@ export const theme = extendTheme({
     '1px': '1px solid var(--stacks-colors-borderPrimary)',
     dark_1px: '1px solid var(--stacks-colors-borderSecondary)',
   },
+  borderRadius: {
+    xxs: '2px',
+    xs: '4px',
+    sm: '6px',
+    md: '8px',
+    lg: '12px',
+    xl: '16px',
+  },
   components: {
     Switch: switchTheme,
     Checkbox: checkboxTheme,
