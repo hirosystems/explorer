@@ -81,6 +81,20 @@ export const theme = extendTheme({
         _dark: 'white',
       },
     },
+    shadows: {
+      elevation1: {
+        default: '0 2px 6px rgba(183, 180, 176, 0.2)',
+        _dark: '0 2px 6px rgba(0, 0, 0, 0.2)',
+      },
+      elevation2: {
+        default: '0 8px 16px rgba(183, 180, 176, 0.2)',
+        _dark: '0 8px 16px rgba(0, 0, 0, 0.2)',
+      },
+      elevation3: {
+        default: '0 16px 32px rgba(183, 180, 176, 0.2)',
+        _dark: '0 16px 32px rgba(0, 0, 0, 0.2)',
+      },
+    },
   },
   styles: {
     global: (props: StyleFunctionProps) => ({
