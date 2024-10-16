@@ -14,6 +14,14 @@ import { tabTheme } from './componentTheme/Tab';
 import { tagTheme } from './componentTheme/Tag';
 import { inter, openSauce } from './fonts';
 
+const borderRadius = {
+  xxs: '2px',
+  xs: '4px',
+  sm: '6px',
+  md: '8px',
+  lg: '12px',
+  xl: '16px',
+};
 export const theme = extendTheme({
   config: {
     initialColorMode: 'light',
@@ -82,11 +90,6 @@ export const theme = extendTheme({
       },
     },
   },
-  styles: {
-    global: (props: StyleFunctionProps) => ({
-      body: {},
-    }),
-  },
   lineHeights: {
     base: 1.15,
   },
@@ -110,6 +113,7 @@ export const theme = extendTheme({
     '1px': '1px solid var(--stacks-colors-borderPrimary)',
     dark_1px: '1px solid var(--stacks-colors-borderSecondary)',
   },
+  borderRadius,
   components: {
     Switch: switchTheme,
     Checkbox: checkboxTheme,
@@ -120,5 +124,15 @@ export const theme = extendTheme({
     Button: buttonTheme,
     Menu: menuTheme,
     Link: linkTheme,
+  },
+  styles: {
+    global: (props: StyleFunctionProps) => ({
+      body: {
+        ...Object.entries(borderRadius).reduce((acc, [key, value]) => {
+          (acc as any)[`--stacks-borderRadius-${key}`] = value;
+          return acc;
+        }, {}),
+      },
+    }),
   },
 });
