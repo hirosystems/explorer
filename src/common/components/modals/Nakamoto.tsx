@@ -20,7 +20,7 @@ export function NakamotoModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const nakamotoModalShown = localStorage.getItem('nakamoto3PrimaryTestnetModalShown');
+    const nakamotoModalShown = localStorage.getItem('nakamoto3ModalShown');
     try {
       const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
       // to run performance testing without the modal
@@ -34,7 +34,7 @@ export function NakamotoModal() {
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem('nakamoto3PrimaryTestnetModalShown', 'true');
+    localStorage.setItem('nakamoto3ModalShown', 'true');
     setIsOpen(false);
   };
 
