@@ -2,8 +2,6 @@ import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
-import { ChainID } from '@stacks/transactions';
-
 import { Badge } from '../../../common/components/Badge';
 import { DEFAULT_DEVNET_SERVER } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
@@ -36,26 +34,16 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
   const isTestnet = network.url === testnet;
   const isDevnet = network.url === DEFAULT_DEVNET_SERVER;
   const isDefault = isMainnet || isTestnet;
-  let itemNetworkId: ChainID.Mainnet | ChainID.Testnet = isMainnet
-    ? ChainID.Mainnet
-    : ChainID.Testnet;
 
-  const { data, error, isFetching } = useCustomNetworkApiInfo(network.url, {
+  const { error, isFetching } = useCustomNetworkApiInfo(network.url, {
     enabled: !!network.url && !isDefault,
   });
 
   const isDisabled = isFetching || !!error;
-
-  if (!isDefault && data) {
-    itemNetworkId = data?.network_id && parseInt(data.network_id.toString());
-  }
-
   const isActive = activeNetwork.url === network.url;
   const networkHref = buildUrl('/', network);
   const purpleBadgeColor = useColorModeValue('purple.600', 'purple.300');
   const purpleBadgeBg = useColorModeValue('purple.100', 'purple.900');
-  const greenBadgeColor = useColorModeValue('green.600', 'green.300');
-  const greenBadgeBg = useColorModeValue('green.100', 'green.900');
   const badgeBorder = useColorModeValue('purple.300', 'purple.700');
 
   const isNetworkRemovable = useMemo(
@@ -101,36 +89,6 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
               subnet
             </Badge>
-          ) : network.label === 'Stacks Testnet (Primary)' ? (
-            <Badge
-              color={purpleBadgeColor}
-              bg={purpleBadgeBg}
-              px={'2'}
-              py={'1'}
-              fontSize={'xs'}
-              rounded={'full'}
-              border={'1px'}
-              borderColor={badgeBorder}
-              fontWeight={'medium'}
-              ml="8px"
-            >
-              Nakamoto 3.0
-            </Badge>
-          ) : network.label === 'Nakamoto Testnet' ? (
-            <Badge
-              color={purpleBadgeColor}
-              bg={purpleBadgeBg}
-              px={'2'}
-              py={'1'}
-              fontSize={'xs'}
-              rounded={'full'}
-              border={'1px'}
-              borderColor={badgeBorder}
-              fontWeight={'medium'}
-              ml="8px"
-            >
-              Nakamoto 3.0
-            </Badge>
           ) : (
             <Badge
               color={purpleBadgeColor}
@@ -144,7 +102,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
               fontWeight={'medium'}
               ml="8px"
             >
-              Nakamoto
+              Nakamoto 3.0
             </Badge>
           )}
         </Flex>

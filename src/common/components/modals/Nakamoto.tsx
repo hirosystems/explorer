@@ -5,10 +5,11 @@ import {
   ModalFooter,
   ModalOverlay,
 } from '@chakra-ui/react';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { Badge } from '../../../ui/Badge';
+import { Icon } from '../../..//ui/Icon';
 import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
 import { Image } from '../../../ui/Image';
@@ -20,7 +21,7 @@ export function NakamotoModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const nakamotoModalShown = localStorage.getItem('nakamoto3PrimaryTestnetModalShown');
+    const nakamotoModalShown = localStorage.getItem('nakamoto3MainnetModalShown');
     try {
       const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
       // to run performance testing without the modal
@@ -34,7 +35,7 @@ export function NakamotoModal() {
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem('nakamoto3PrimaryTestnetModalShown', 'true');
+    localStorage.setItem('nakamoto3MainnetModalShown', 'true');
     setIsOpen(false);
   };
 
@@ -51,43 +52,34 @@ export function NakamotoModal() {
         />
         <ModalBody pt={'12'}>
           <Flex direction={'column'} alignItems={'center'} gap={'6'}>
-            <Badge
-              color={'purple.600'}
-              bg={'purple.100'}
-              px={'2'}
-              py={'1'}
-              fontSize={'xs'}
-              rounded={'full'}
-              border={'1px'}
-              borderColor={'purple.300'}
-              fontWeight={'medium'}
-            >
-              NAKAMOTO UPGRADE
-            </Badge>
             <Text fontSize={'4xl'} textAlign={'center'}>
-              Nakamoto 3.0 is live on Primary Testnet
+              Nakamoto 3.0 is live on Stacks Mainnet
             </Text>
-            <Image src={'/nakamoto.png'} alt={'Nakamoto'} />
+            <Image src={'/nakamoto-mainnet.png'} alt={'Nakamoto'} />
             <ButtonLink
               variant={'primary'}
-              href={'/?chain=testnet'}
+              href={'/'}
               onClick={() => {
                 handleClose();
                 void queryClient.clear();
               }}
               _hover={{ textDecoration: 'none' }}
+              bg="accent.stacks-500"
             >
-              Explore Nakamoto 3.0
+              Experience Fast Blocks and Bitcoin Finality
             </ButtonLink>
             <ModalFooter borderTop={'1px'} width={'full'} justifyContent={'center'}>
-              <TextLink
-                color={'purple.600'}
-                href={'https://stacks.org/core-developers-ship-release-candidate-2'}
-                fontSize={'sm'}
-                target={'_blank'}
-              >
-                Learn more about Nakamoto 3.0 ↗
-              </TextLink>
+              <Flex alignItems="center" gap={1}>
+                <TextLink
+                  color="accent.stacks-500"
+                  href={'https://stacks.org/Nakamoto'}
+                  fontSize={'sm'}
+                  target={'_blank'}
+                >
+                  Learn more about Nakamoto on Mainnet
+                </TextLink>
+                <Icon as={ArrowUpRight} size={3} color="accent.stacks-500" />
+              </Flex>
             </ModalFooter>
           </Flex>
         </ModalBody>
