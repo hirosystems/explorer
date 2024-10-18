@@ -6,7 +6,6 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { getTxTypeIcon } from '../../../common/components/TxIcon';
 import { TransactionType } from '../../../common/constants/constants';
-import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { getTxTitle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
@@ -17,7 +16,6 @@ import { PageTitleWithTags } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { StxBalance } from '../../address/[principal]/StxBalance';
 import { TokenBalanceCard } from '../../address/[principal]/TokenBalanceCard';
-import { BlocksVisualizer } from './BlocksVisualizer';
 import { ContractDetailsCard } from './Cards/ContractDetailsCard';
 import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
@@ -57,15 +55,6 @@ export const TxPage: React.FC<{
   txDetails: ReactNode;
   children?: ReactNode;
 }> = ({ tx, contractId, txDetails, children }) => {
-  const txStatus = getTransactionStatus(tx);
-  const { activeNetwork, activeNetworkKey } = useGlobalContext();
-  const isMainnet = activeNetworkKey === 'https://api.hiro.so';
-
-  const showBlocksVisualizer =
-    isMainnet &&
-    !activeNetwork.isSubnet &&
-    (txStatus === 'success_microblock' || txStatus === 'pending');
-
   return (
     <>
       <PageTitleWithTags
@@ -88,7 +77,6 @@ export const TxPage: React.FC<{
         <Flex direction={'column'} gap={7}>
           <TxAlerts tx={tx} />
           {txDetails}
-          {showBlocksVisualizer && <BlocksVisualizer />}
           {'events' in tx && <Events tx={tx} />}
           {children}
         </Flex>

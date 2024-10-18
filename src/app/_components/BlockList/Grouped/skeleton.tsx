@@ -6,13 +6,10 @@ import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
 import { SkeletonItem } from '../../../../ui/SkeletonItem';
 import { SkeletonText } from '../../../../ui/SkeletonText';
-import { Stack } from '../../../../ui/Stack';
-import { Text } from '../../../../ui/Text';
 import {
   BlocksPageBlockListLayout,
   BlocksPageControlsLayout,
 } from '../BlocksPage/BlocksPageBlockList';
-import { BlocksPageHeaderLayout } from '../BlocksPage/BlocksPageHeaders';
 import { ControlsLayout } from '../Controls';
 import { HomePageBlockListLayout, HomePageControlsLayout } from '../HomePage/HomePageBlockList';
 import { BlockListRowSkeleton } from '../Ungrouped/skeleton';
@@ -168,32 +165,6 @@ export function BlocksPageBlockListGroupedSkeleton() {
       numBurnBlockGroupsWithTxs={3}
       numTxsinBurnBlockGroupWithTxs={10}
       numBurnBlockGroupsWithoutTxs={0}
-    />
-  );
-}
-
-export function BlockPageHeaderSkeleton() {
-  return (
-    <Stack py={5} px={9} gap={3} alignItems="flex-start" flexWrap="nowrap" justifyContent="center">
-      <Text fontSize="xs" fontWeight="medium" whiteSpace="nowrap">
-        <SkeletonText noOfLines={1} height="14px" skeletonHeight="14px" width={80} />
-      </Text>
-      <Text fontSize="xl" fontWeight="medium" whiteSpace="nowrap" display="inline-block" mr={1}>
-        <SkeletonText noOfLines={1} height="14px" skeletonHeight="14px" width={40} />
-      </Text>
-      <Text fontSize="xs" fontWeight="medium" color="textSubdued">
-        <SkeletonText noOfLines={1} height="14px" skeletonHeight="14px" width={80} />
-      </Text>
-    </Stack>
-  );
-}
-
-export function BlockPageHeadersSkeleton() {
-  return (
-    <BlocksPageHeaderLayout
-      lastBlockCard={<BlockPageHeaderSkeleton />}
-      averageStacksBlockTimeCard={<BlockPageHeaderSkeleton />}
-      lastConfirmedBitcoinBlockCard={<BlockPageHeaderSkeleton />}
     />
   );
 }
