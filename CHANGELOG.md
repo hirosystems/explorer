@@ -1,3 +1,10 @@
+## [1.214.3](https://github.com/hirosystems/explorer/compare/v1.214.2...v1.214.3) (2024-10-18)
+
+
+### Bug Fixes
+
+* removed pending blocks ui from everything but mainnet ([ddbaa13](https://github.com/hirosystems/explorer/commit/ddbaa1379990c6869bcf112a7ab74a8e45020694))
+
 ## [1.214.2](https://github.com/hirosystems/explorer/compare/v1.214.1...v1.214.2) (2024-10-14)
 
 
