@@ -1,6 +1,6 @@
 import { useBreakpointValue } from '../../ui/hooks/useBreakpointValue';
-import { HorizontalPoxCycleDiagram } from './HorizontalPoxCycleDiagram';
 import { VerticalPoxCycleDiagram } from './VerticalPoxCycleDiagram';
+import { HorizontalPoxCycleDiagram } from './horizontal-pox-cycle-diagram/HorizontalPoxCycleDiagram';
 import { usePoxCycle } from './usePoxCycle';
 
 export const PoxCycleDiagram = () => {

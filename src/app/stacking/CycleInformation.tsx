@@ -38,6 +38,7 @@ function CountdownBadge({ daysLeft }: { daysLeft: number }) {
       tl.kill(); // Clean up the animation when the component unmounts
     };
   }, []);
+
   return (
     <Flex
       gap={2}
@@ -109,7 +110,7 @@ const StackedStxMetric = ({ stxStacked }: { stxStacked: number }) => {
   const stackedStxString = stxStacked.toLocaleString();
 
   return (
-    <Flex flexWrap="nowrap" alignItems="baseline">
+    <Flex flexWrap="wrap" alignItems="baseline">
       <Text fontSize="xl" whiteSpace="nowrap">
         {`${stackedStxString} STX`}
       </Text>

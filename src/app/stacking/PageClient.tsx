@@ -1,15 +1,16 @@
 'use client';
 
-import { Box } from '@/ui/Box';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
 import { Stack } from '../../ui/Stack';
 import { ActivePoolsTable } from './ActivePoolsTable';
+import { FAQ } from './FAQ';
 import { MetricCards } from './MetricCards';
 import { PoxCycleDiagram } from './PoxCycleDiagram';
 import { PreviousCyclesTable } from './PreviousCyclesTable';
 import { PriceTag } from './PriceTag';
+import { StackersEarnings } from './StackersEarnings';
 
 export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
@@ -31,16 +32,14 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
           w="full"
         >
           <Grid
-            templateColumns={['100%', '100%', '100%', '100%', '1fr 1fr']}
+            templateColumns={['100%', '100%', '100%', '100%', '7fr 2fr']}
             gap={2}
             w="full"
             maxW="full"
           >
+          
             <PoxCycleDiagram />
-            <Box backgroundColor="red" w="full" h="full">
-              Hello
-            </Box>
-            {/* <Grid
+            <Grid
               // templateRows={['100%', '100%', '100%', '100%', '1fr auto']}
               templateRows={['auto', 'auto', 'auto', 'auto', '1fr auto']}
               templateColumns={['100%', '1fr 1fr', '1fr 1fr', '1fr 1fr', '100%']}
@@ -50,7 +49,7 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
             >
               <StackersEarnings />
               <FAQ />
-            </Grid> */}
+            </Grid>
           </Grid>
           <ActivePoolsTable />
           <PreviousCyclesTable />
