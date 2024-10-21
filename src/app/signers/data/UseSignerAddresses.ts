@@ -11,25 +11,26 @@ export interface SignersStackersData {
   stacked_amount: string;
   pox_address: string;
 }
-
 export function useGetStackersBySignerQuery() {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+
   return (cycleId: number, signerKey: string) => ({
     queryKey: [SIGNER_ADDRESSES_QUERY_KEY, cycleId, signerKey],
     queryFn: () =>
       fetch(
         `${activeNetworkUrl}/extended/v2/pox/cycles/${cycleId}/signers/${signerKey}/stackers`
-      ).then(res => res.json()),
+      ).then(res => res.json()) as Promise<SignersStackersData>,
     staleTime: TWO_MINUTES,
     cacheTime: 15 * 60 * 1000,
     refetchOnWindowFocus: false,
+    enabled: !!cycleId && !!signerKey,
   });
 }
 
 export function useSuspenseSignerAddresses(cycleId: number, signerKey: string) {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 
-  return useSuspenseQuery<any>({
+  return useSuspenseQuery<SignersStackersData>({
     queryKey: [SIGNER_ADDRESSES_QUERY_KEY, cycleId, signerKey],
     queryFn: () =>
       fetch(`${activeNetworkUrl}/extended/v2/pox/cycles/${cycleId}/signers/${signerKey}`).then(

@@ -89,7 +89,14 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
   },
 };
 export const mobileBorderCss = {
-  '.has-horizontal-scroll &': {
-    borderRight: '2px solid var(--stacks-colors-borderPrimary)',
+  '.has-horizontal-scroll &:before': {
+    // Adds a border to the left of the first column
+    content: '""',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '2px',
+    height: 'full',
+    backgroundColor: 'borderPrimary',
   },
 };

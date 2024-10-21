@@ -1,14 +1,12 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
-import React, { ReactNode, Suspense, useMemo, useState } from 'react';
+import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
 
-import { AddressLink } from '../../common/components/ExplorerLinks';
+import { CopyButton } from '../../common/components/CopyButton';
 import { Section } from '../../common/components/Section';
-import { ApiResponseWithResultsOffset } from '../../common/types/api';
 import { truncateMiddle } from '../../common/utils/utils';
 import { Flex } from '../../ui/Flex';
-import { Show } from '../../ui/Show';
 import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
 import { Td } from '../../ui/Td';
@@ -19,10 +17,14 @@ import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+import { CycleFilter } from './CycleFilter';
 import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 import { mobileBorderCss } from './consts';
-import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
+import {
+  SignerMetricsSignerForCycle,
+  useGetSignerMetricsBySignerQuery,
+} from './data/signer-metrics-hooks';
 import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
 import { SignersTableSkeleton } from './skeleton';
 import { getSignerKeyName } from './utils';
@@ -37,8 +39,6 @@ const StyledTable = styled(Table)`
   }
 `;
 
-const NUM_OF_ADDRESSES_TO_SHOW = 1;
-
 export const SignersTableHeader = ({
   headerTitle,
   isFirst,
@@ -46,7 +46,16 @@ export const SignersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
+  <Th
+    py={3}
+    px={6}
+    border="none"
+    sx={isFirst ? mobileBorderCss : {}}
+    width="fit-content"
+    position={isFirst ? 'sticky' : 'unset'}
+    left={0}
+    bg="surface"
+  >
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -71,13 +80,27 @@ export const SignersTableHeader = ({
 );
 
 export const signersTableHeaders = [
-  '#',
   'Signer key',
   'Entity',
-  'Associated address',
+  '# of associated addresses',
   'Voting power',
   'STX stacked',
+  'Latency',
+  'Approved / Rejected / Missing',
 ];
+
+function formatSignerProposalMetric(metric: number): string {
+  if (isNaN(metric)) return '-';
+  if (metric === 0) return '0%';
+  if (metric === 1) return '100%';
+  return `${(metric * 100).toFixed(1)}%`;
+}
+
+function formatSignerLatency(latency: number, missing: number): string {
+  if (missing === 1 || isNaN(missing)) return '-';
+  if (latency === 0) return '0s';
+  return `${(latency / 1000).toFixed(2)}s`;
+}
 
 export const SignersTableHeaders = () => (
   <Tr>
@@ -101,14 +124,20 @@ const SignerTableRow = ({
   isFirst,
   isLast,
   signerKey,
-  votingPowerPercentage: votingPower,
+  votingPower,
   stxStaked,
-  stackers,
+  numStackers,
+  latency,
+  approved,
+  rejected,
+  missing,
 }: {
   index: number;
   isFirst: boolean;
   isLast: boolean;
 } & SignerRowInfo) => {
+  const [isSignerKeyHovered, setIsSignerKeyHovered] = useState(false);
+
   return (
     <Tr
       style={{
@@ -116,17 +145,27 @@ const SignerTableRow = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss}>
-        <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
-          {index + 1}
-        </Text>
-      </Td>
-
-      <Td py={3} px={6}>
-        <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-          <Show above="lg">{truncateMiddle(signerKey)}</Show>
-          <Show below="lg">{truncateMiddle(signerKey)}</Show>
-        </Text>
+      <Td py={3} px={6} sx={mobileBorderCss} position={'sticky'} left={0} bg="surface">
+        <Flex
+          gap={2}
+          alignItems="center"
+          onMouseEnter={() => setIsSignerKeyHovered(true)}
+          onMouseLeave={() => setIsSignerKeyHovered(false)}
+        >
+          <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
+            {truncateMiddle(signerKey)}
+          </Text>
+          <CopyButton
+            initialValue={signerKey}
+            aria-label={'copy signer key'}
+            size={5}
+            sx={{
+              opacity: isSignerKeyHovered ? 1 : 0,
+              position: 'relative',
+              transition: 'opacity 0.4s ease-in-out',
+            }}
+          />
+        </Flex>
       </Td>
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
@@ -134,30 +173,9 @@ const SignerTableRow = ({
         </Text>
       </Td>
       <Td py={3} px={6}>
-        <Flex textOverflow="ellipsis" overflow="hidden">
-          {stackers.slice(0, NUM_OF_ADDRESSES_TO_SHOW).map((stacker, index) => (
-            <React.Fragment key={stacker.stacker_address}>
-              <AddressLink
-                principal={stacker.stacker_address}
-                whiteSpace="nowrap"
-                fontSize="sm"
-                color="textSubdued"
-              >
-                {truncateMiddle(stacker.stacker_address, 5, 5)}
-              </AddressLink>
-              {index < stackers.length - 1 && (
-                <Text color="textSubdued" fontSize="sm">
-                  ,&nbsp;
-                </Text>
-              )}
-              {stackers && stackers.length > NUM_OF_ADDRESSES_TO_SHOW ? (
-                <Text color="textSubdued" fontSize="sm">
-                  &nbsp;+{stackers.length - NUM_OF_ADDRESSES_TO_SHOW}&nbsp;more
-                </Text>
-              ) : null}
-            </React.Fragment>
-          ))}
-        </Flex>
+        <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
+          {numStackers}
+        </Text>
       </Td>
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
@@ -167,6 +185,18 @@ const SignerTableRow = ({
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {Number(stxStaked.toFixed(0)).toLocaleString()}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {formatSignerLatency(latency, missing)}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {`${formatSignerProposalMetric(approved)} / ${formatSignerProposalMetric(
+            rejected
+          )} / ${formatSignerProposalMetric(missing)}`}
         </Text>
       </Td>
     </Tr>
@@ -179,21 +209,48 @@ export function SignersTableLayout({
   signersTableRows,
   votingPowerSortOrder,
   setVotingPowerSortOrder,
+  cycleFilterOnSubmitHandler,
+  selectedCycle,
+  currentCycleId,
 }: {
   numSigners: ReactNode;
   signersTableHeaders: ReactNode;
   signersTableRows: ReactNode;
   votingPowerSortOrder: VotingPowerSortOrder;
   setVotingPowerSortOrder: (order: VotingPowerSortOrder) => void;
+  cycleFilterOnSubmitHandler: (cycle: string) => void;
+  selectedCycle: string;
+  currentCycleId: string;
 }) {
   return (
     <Section
       title={numSigners}
       topRight={
-        <SortByVotingPowerFilter
-          setVotingPowerSortOrder={setVotingPowerSortOrder}
-          votingPowerSortOrder={votingPowerSortOrder}
-        />
+        <Flex gap={2} flexWrap="wrap">
+          <SortByVotingPowerFilter
+            setVotingPowerSortOrder={setVotingPowerSortOrder}
+            votingPowerSortOrder={votingPowerSortOrder}
+          />
+          <Flex
+            gap={2}
+            alignItems="center"
+            border="1px solid"
+            borderColor="borderPrimary"
+            px={4}
+            py={2}
+            borderRadius="md"
+            boxSizing="border-box"
+            h={10}
+            fontSize={'sm'}
+          >
+            <Text>Cycle:</Text>
+            <CycleFilter
+              onChange={cycleFilterOnSubmitHandler}
+              defaultCycleId={selectedCycle}
+              currentCycleId={currentCycleId}
+            />
+          </Flex>
+        </Flex>
       }
     >
       <ScrollableBox>
@@ -207,62 +264,82 @@ export function SignersTableLayout({
 }
 interface SignerRowInfo {
   signerKey: string;
-  votingPowerPercentage: number;
+  votingPower: number;
   stxStaked: number;
-  stackers: SignersStackersData[];
+  numStackers: number;
+  latency: number;
+  approved: number;
+  rejected: number;
+  missing: number;
 }
 
 function formatSignerRowData(
   singerInfo: SignerInfo,
-  stackers: SignersStackersData[]
+  signerMetrics: SignerMetricsSignerForCycle
 ): SignerRowInfo {
+  const totalProposals =
+    signerMetrics.proposals_accepted_count +
+    signerMetrics.proposals_rejected_count +
+    signerMetrics.proposals_missed_count;
   return {
     signerKey: singerInfo.signing_key,
-    votingPowerPercentage: singerInfo.weight_percent,
+    votingPower: singerInfo.weight_percent,
     stxStaked: parseFloat(singerInfo.stacked_amount) / 1_000_000,
-    stackers,
+    numStackers: singerInfo.pooled_stacker_count + singerInfo.solo_stacker_count,
+    latency: signerMetrics.average_response_time_ms,
+    approved: signerMetrics.proposals_accepted_count / totalProposals,
+    rejected: signerMetrics.proposals_rejected_count / totalProposals,
+    missing: signerMetrics.proposals_missed_count / totalProposals,
   };
 }
 
 const SignersTableBase = () => {
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
+  const [selectedCycle, setSelectedCycle] = useState<string>(currentCycleId.toString());
+
+  const cycleFilterOnSubmitHandler = useCallback(
+    (cycle: string) => {
+      setSelectedCycle(cycle);
+    },
+    [setSelectedCycle]
+  );
 
   const {
     data: { results: signers },
-  } = useSuspensePoxSigners(currentCycleId);
+  } = useSuspensePoxSigners(selectedCycle);
 
   if (!signers) {
     throw new Error('Signers data is not available');
   }
 
   const queryClient = useQueryClient();
-  const getQuery = useGetStackersBySignerQuery();
-  const signersStackersQueries = useMemo(() => {
+  const getSignerMetricsBySignerQuery = useGetSignerMetricsBySignerQuery();
+  const signersMetricsQueries = useMemo(() => {
     return {
       queries: signers.map(signer => {
-        return getQuery(currentCycleId, signer.signing_key);
+        return getSignerMetricsBySignerQuery(parseInt(selectedCycle), signer.signing_key);
       }),
-      combine: (
-        response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
-      ) => response.map(r => r.data?.results ?? []),
+      combine: (response: UseQueryResult<SignerMetricsSignerForCycle, Error>[]) =>
+        response.map(r => r.data ?? ({} as SignerMetricsSignerForCycle)),
     };
-  }, [signers, getQuery, currentCycleId]);
-  const signersStackers = useQueries(signersStackersQueries, queryClient);
+  }, [signers, getSignerMetricsBySignerQuery, selectedCycle]);
+  const signersMetrics = useQueries(signersMetricsQueries, queryClient);
+
   const signersData = useMemo(
     () =>
       signers
         .map((signer, index) => {
           return {
-            ...formatSignerRowData(signer, signersStackers[index]),
+            ...formatSignerRowData(signer, signersMetrics[index]),
           };
         })
         .sort((a, b) =>
           votingPowerSortOrder === 'desc'
-            ? b.votingPowerPercentage - a.votingPowerPercentage
-            : a.votingPowerPercentage - b.votingPowerPercentage
+            ? b.votingPower - a.votingPower
+            : a.votingPower - b.votingPower
         ),
-    [signers, signersStackers, votingPowerSortOrder]
+    [signers, signersMetrics, votingPowerSortOrder]
   );
 
   return (
@@ -280,6 +357,9 @@ const SignersTableBase = () => {
           isLast={i === signers.length - 1}
         />
       ))}
+      cycleFilterOnSubmitHandler={cycleFilterOnSubmitHandler}
+      selectedCycle={selectedCycle}
+      currentCycleId={currentCycleId.toString()}
     />
   );
 };

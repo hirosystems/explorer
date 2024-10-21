@@ -1,7 +1,7 @@
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
-import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
@@ -10,61 +10,84 @@ import { FormLabel } from '../../../ui/FormLabel';
 import { Stack } from '../../../ui/Stack';
 import { DateInput } from './DateInput';
 
-interface FormValues {
-  startTime: number | null;
-  endTime: number | null;
+type DateValue = number | undefined;
+
+export interface DatePickerRangeInputState {
+  startDate: DateValue;
+  endDate: DateValue;
 }
 
-interface DateRangeFormProps {
-  defaultStartTime: number | null;
-  defaultEndTime: number | null;
-  onClose: () => void;
+interface DatePickerRangeInputProps {
+  onSubmit: (values: DatePickerRangeInputState) => void;
+  initialStartDate?: DateValue;
+  initialEndDate?: DateValue;
+  label?: string;
+  key?: string;
 }
 
-export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: DateRangeFormProps) {
-  const initialValues: FormValues = {
-    startTime: defaultStartTime,
-    endTime: defaultEndTime,
+//   // TODO: move this to the search
+// function searchDatePickerRangeFormOnSubmitHandler({
+//   searchParams,
+//   router,
+//   onClose,
+// }: {
+//   searchParams: URLSearchParams;
+//   router: ReturnType<typeof useRouter>;
+//   onClose: () => void;
+// }) {
+//   return ({ startTime, endTime }: DateRangeFormValues) => {
+//     const params = new URLSearchParams(searchParams);
+//     const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
+//     const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
+//     if (startTimeTs) {
+//       params.set('startTime', startTimeTs);
+//     } else {
+//       params.delete('startTime');
+//     }
+//     if (endTimeTs) {
+//       params.set('endTime', endTimeTs);
+//     } else {
+//       params.delete('endTime');
+//     }
+//     router.push(`?${params.toString()}`, { scroll: false });
+//     onClose();
+//   };
+// }
+
+export function DatePickerRangeInput({
+  initialStartDate,
+  initialEndDate,
+  onSubmit,
+  label = 'Between:',
+  key,
+}: DatePickerRangeInputProps) {
+  const initialValues: DatePickerRangeInputState = {
+    startDate: initialStartDate,
+    endDate: initialEndDate,
   };
-  const router = useRouter();
-  const searchParams = useSearchParams();
   return (
     <Formik
       enableReinitialize
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={initialValues}
-      onSubmit={async ({ startTime, endTime }: FormValues) => {
-        const params = new URLSearchParams(searchParams);
-        const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
-        const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
-        if (startTimeTs) {
-          params.set('startTime', startTimeTs);
-        } else {
-          params.delete('startTime');
-        }
-        if (endTimeTs) {
-          params.set('endTime', endTimeTs);
-        } else {
-          params.delete('endTime');
-        }
-        router.push(`?${params.toString()}`, { scroll: false });
-        onClose();
+      onSubmit={({ startDate, endDate }: DatePickerRangeInputState) => {
+        onSubmit({ startDate, endDate });
       }}
+      key={key}
     >
       {() => (
         <Form>
           <Stack gap={4}>
             <Field name="startTime">
-              {({ form }: FieldProps<string, FormValues>) => (
+              {({ form }: FieldProps<string, DatePickerRangeInputState>) => (
                 <FormControl>
-                  <FormLabel>Between:</FormLabel>
+                  <FormLabel>{label}</FormLabel>
                   <DatePicker
                     selectsRange={true}
                     customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
                     onChange={dateRange => {
                       const [startDate, endDate] = dateRange;
-                      // console.log(startDate, endDate);
                       const utcStart = startDate
                         ? new UTCDate(
                             startDate.getUTCFullYear(),
@@ -89,10 +112,10 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
                       form.setFieldValue('startTime', utcStart);
                     }}
                     startDate={
-                      form.values.startTime ? new UTCDate(form.values.startTime * 1000) : undefined
+                      form.values.startDate ? new UTCDate(form.values.startDate * 1000) : undefined
                     }
                     endDate={
-                      form.values.endTime ? new UTCDate(form.values.endTime * 1000) : undefined
+                      form.values.endDate ? new UTCDate(form.values.endDate * 1000) : undefined
                     }
                     dateFormat="yyyy-MM-dd"
                   />
@@ -100,13 +123,13 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
               )}
             </Field>
           </Stack>
-          <Box mt={'16px'}>
+          <Box mt={4}>
             <Button
               width="100%"
               type="submit"
               fontSize={'sm'}
               variant={'secondary'}
-              height={'40px'}
+              height={10}
               color="textSubdued"
             >
               Apply

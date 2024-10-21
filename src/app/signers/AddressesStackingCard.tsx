@@ -20,7 +20,7 @@ export function AddressesStackingCardBase() {
 
   const {
     data: { results: currentCycleSigners },
-  } = useSuspensePoxSigners(currentCycleId);
+  } = useSuspensePoxSigners(currentCycleId.toString());
 
   if (!currentCycleSigners) {
     throw new Error('No stacking data available');
@@ -28,7 +28,7 @@ export function AddressesStackingCardBase() {
 
   const {
     data: { results: previousCycleSigners },
-  } = useSuspensePoxSigners(previousCycleId);
+  } = useSuspensePoxSigners(previousCycleId.toString());
 
   const queryClient = useQueryClient();
   const getQuery = useGetStackersBySignerQuery();
@@ -55,8 +55,14 @@ export function AddressesStackingCardBase() {
     };
   }, [previousCycleSigners, getQuery, previousCycleId]);
 
-  const currentCycleSignersStackers = useQueries(currentCycleSignersStackersQueries, queryClient);
-  const previousCycleSignersStackers = useQueries(previousCycleSignersStackersQueries, queryClient);
+  const currentCycleSignersStackers = useQueries({
+    queries: currentCycleSignersStackersQueries.queries,
+    combine: result => result.map(r => r.data ?? []),
+  });
+  const previousCycleSignersStackers = useQueries({
+    queries: previousCycleSignersStackersQueries.queries,
+    combine: result => result.map(r => r.data ?? []),
+  });
 
   const numCurrentCycleStackers = currentCycleSignersStackers.length;
   const numPreviousCycleStackers = previousCycleSignersStackers.length;

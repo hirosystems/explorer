@@ -38,7 +38,7 @@ export default function BlockPage({ params: { hash } }: any) {
   const { data: block } = useSuspenseBlockByHeightOrHash(hash, { refetchOnWindowFocus: true });
   const title = (block && `STX Block #${block.height.toLocaleString()}`) || '';
   const { isOpen, onToggle, onClose } = useDisclosure();
-
+  // const { data: signerMetricsBlock } = useSignerMetricsBlock(hash);
   return (
     <>
       <PageTitle>{title}</PageTitle>
@@ -65,6 +65,46 @@ export default function BlockPage({ params: { hash } }: any) {
                   value={<Value>{block.tenure_height}</Value>}
                 />
               )}
+              {/* <KeyValueHorizontal
+                label={'Signer Latency'}
+                value={
+                  <Value>
+                    {signerMetricsBlock?.signer_data
+                      ? `${signerMetricsBlock?.signer_data?.average_response_time_ms / 1_000}s`
+                      : '-'}
+                  </Value>
+                }
+              />
+              <KeyValueHorizontal
+                label={'Accepted Weight'}
+                value={
+                  <Value>
+                    {signerMetricsBlock?.signer_data
+                      ? `${signerMetricsBlock?.signer_data?.accepted_weight}%`
+                      : '-'}
+                  </Value>
+                }
+              />
+              <KeyValueHorizontal
+                label={'Rejected Weight'}
+                value={
+                  <Value>
+                    {signerMetricsBlock?.signer_data
+                      ? `${signerMetricsBlock?.signer_data?.rejected_weight}%`
+                      : '-'}
+                  </Value>
+                }
+              />
+              <KeyValueHorizontal
+                label={'Missing Weight'}
+                value={
+                  <Value>
+                    {signerMetricsBlock?.signer_data
+                      ? `${signerMetricsBlock?.signer_data?.missing_weight}%`
+                      : '-'}
+                  </Value>
+                }
+              /> */}
               {!block.canonical ? (
                 <KeyValueHorizontal
                   label={'Canonical'}
