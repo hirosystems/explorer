@@ -68,6 +68,9 @@ export const SignersTableSkeleton = () => {
       ))}
       votingPowerSortOrder={VotingPowerSortOrder.Asc}
       setVotingPowerSortOrder={() => {}}
+      cycleFilterOnSubmitHandler={() => {}}
+      selectedCycle={''}
+      currentCycleId={''}
     />
   );
 };

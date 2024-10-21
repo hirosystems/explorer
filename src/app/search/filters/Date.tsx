@@ -1,3 +1,4 @@
+import { Stack } from '@/ui/Stack';
 import { useColorModeValue } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useState } from 'react';
@@ -28,6 +29,7 @@ function FilterTypeButton({
   const purpleBadgeColor = useColorModeValue('purple.600', 'purple.300');
   const purpleBadgeBg = useColorModeValue('purple.100', 'purple.900');
   const badgeBorder = useColorModeValue('purple.300', 'purple.700');
+
   return (
     <Badge
       color={isSelected ? purpleBadgeColor : 'textSubdued'}
@@ -118,7 +120,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
         </Button>
       </PopoverTrigger>
       <PopoverContent maxWidth={'256px'} bgColor={'surface'}>
-        <Flex direction={'column'} gap={4} p={4}>
+        <Stack gap={4} p={4}>
           <Flex gap={'2'} flexWrap={'wrap'}>
             <FilterTypeButton
               isSelected={selectedFilterType === 'dateRange'}
@@ -156,7 +158,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
               onClose={onClose}
             />
           ) : null}
-        </Flex>
+        </Stack>
       </PopoverContent>
     </Popover>
   );

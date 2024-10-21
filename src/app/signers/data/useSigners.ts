@@ -10,15 +10,21 @@ export interface SignerInfo {
   stacked_amount: string;
   weight_percent: number;
   stacked_amount_percent: number;
+  pooled_stacker_count: number;
+  solo_stacker_count: number;
 }
-export function useSuspensePoxSigners(cycleId: number) {
+export function useSuspensePoxSigners(cycleId: string) {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 
-  return useSuspenseQuery<ApiResponseWithResultsOffset<SignerInfo>>({
+  return useSuspenseQuery<
+    ApiResponseWithResultsOffset<SignerInfo>,
+    Error,
+    ApiResponseWithResultsOffset<SignerInfo>
+  >({
     queryKey: ['signers', cycleId],
     queryFn: () =>
-      fetch(`${activeNetworkUrl}/extended/v2/pox/cycles/${cycleId}/signers`).then(res =>
-        res.json()
+      fetch(`${activeNetworkUrl}/extended/v2/pox/cycles/${cycleId}/signers`).then(
+        res => res.json() as Promise<ApiResponseWithResultsOffset<SignerInfo>>
       ),
     staleTime: TEN_MINUTES,
   });

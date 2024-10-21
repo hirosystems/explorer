@@ -26,7 +26,7 @@ export function Section({
     <Card px={px} height={'fit-content'} {...rest}>
       {title || TopRight ? (
         <Flex
-          alignItems={['flex-start', 'center']}
+          alignItems={'center'}
           justifyContent="space-between"
           borderBottom="1px"
           borderColor="borderSecondary"
@@ -36,12 +36,12 @@ export function Section({
           px={6}
           py={4}
           mx={-px}
-          direction={['column', 'row']}
           gap={4}
+          flexWrap="wrap"
         >
           {title ? (
             typeof title === 'string' ? (
-              <Text color={titleColor} fontWeight="medium">
+              <Text color={titleColor} fontWeight="medium" whiteSpace="nowrap">
                 {title}
               </Text>
             ) : (

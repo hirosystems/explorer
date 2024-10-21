@@ -51,7 +51,7 @@ export function SignersDistributionBase() {
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
   const {
     data: { results: signers },
-  } = useSuspensePoxSigners(currentCycleId);
+  } = useSuspensePoxSigners(currentCycleId.toString());
   const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
 
   return signers.length > 0 ? (
