@@ -78,7 +78,9 @@ export const signersTableHeaders = [
   'Voting power',
   'STX stacked',
   'Latency',
-  'Voting',
+  'Approved',
+  'Rejected',
+  'Missing',
 ];
 
 export const SignersTableHeaders = () => (
@@ -107,7 +109,9 @@ const SignerTableRow = ({
   stxStaked,
   stackers,
   latency,
-  voting,
+  approved,
+  rejected,
+  missing,
 }: {
   index: number;
   isFirst: boolean;
@@ -180,7 +184,17 @@ const SignerTableRow = ({
       </Td>
       <Td py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
-          {voting}
+          {approved}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {rejected}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {missing}
         </Text>
       </Td>
     </Tr>
@@ -225,7 +239,9 @@ interface SignerRowInfo {
   stxStaked: number;
   stackers: SignersStackersData[];
   latency: string; // TODO: get this from the API
-  voting: string; // TODO: get this from the API
+  approved: string; // TODO: get this from the API
+  rejected: string; // TODO: get this from the API
+  missing: string; // TODO: get this from the API
 }
 
 function formatSignerRowData(
@@ -238,7 +254,9 @@ function formatSignerRowData(
     stxStaked: parseFloat(singerInfo.stacked_amount) / 1_000_000,
     stackers,
     latency: '5 ms', // TODO: get this from the API
-    voting: '5/5/5', // TODO: get this from the API
+    approved: '78%', // TODO: get this from the API
+    rejected: '12%', // TODO: get this from the API
+    missing: '5%', // TODO: get this from the API
   };
 }
 
