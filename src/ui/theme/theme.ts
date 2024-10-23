@@ -82,6 +82,71 @@ export const theme = extendTheme({
         _dark: 'white',
       },
     },
+    shadows: {
+      elevation1: {
+        default: '0 2px 6px rgba(183, 180, 176, 0.2)',
+        _dark: '0 2px 6px rgba(0, 0, 0, 0.2)',
+      },
+      elevation2: {
+        default: '0 8px 16px rgba(183, 180, 176, 0.2)',
+        _dark: '0 8px 16px rgba(0, 0, 0, 0.2)',
+      },
+      elevation3: {
+        default: '0 16px 32px rgba(183, 180, 176, 0.2)',
+        _dark: '0 16px 32px rgba(0, 0, 0, 0.2)',
+      },
+    },
+    styles: {
+      global: (props: StyleFunctionProps) => ({
+        body: {},
+      }),
+    },
+    lineHeights: {
+      base: 1.15,
+    },
+    zIndices: {
+      tooltip: 10000,
+    },
+    fonts: {
+      body: inter.style.fontFamily,
+      heading: openSauce.style.fontFamily,
+    },
+    fontWeights: {
+      medium: 500,
+    },
+    sizes: {
+      4.5: '1.125rem',
+    },
+    space: {
+      0: '0px',
+      1: '0.25rem', // 4px
+      2: '0.5rem', // 8px
+      3: '0.75rem', // 12px
+      4: '1rem', // 16px
+      4.5: '1.125rem',
+      5: '1.25rem', // 20px
+      6: '1.5rem', // 24px
+      8: '2rem', // 32px
+      10: '2.5rem', // 40px
+      12: '3rem', // 48px
+      16: '4rem', // 64px
+      18: '4.5rem', // 72px
+    },
+    borders: {
+      '1px': '1px solid var(--stacks-colors-borderPrimary)',
+      dark_1px: '1px solid var(--stacks-colors-borderSecondary)',
+    },
+    components: {
+      Switch: switchTheme,
+      Checkbox: checkboxTheme,
+      Tabs: tabTheme,
+      Badge: badgeTheme,
+      Tag: tagTheme,
+      Input: inputTheme,
+      Button: buttonTheme,
+      Menu: menuTheme,
+      Link: linkTheme,
+    },
     breakpoints: {
       'mobile-xs': '320px',
       'mobile-sm': '375px',
@@ -93,67 +158,5 @@ export const theme = extendTheme({
       lg: '1680px',
       xl: '1920px',
     },
-  },
-  styles: {
-    global: (props: StyleFunctionProps) => ({
-      body: {},
-    }),
-  },
-  lineHeights: {
-    base: 1.15,
-  },
-  zIndices: {
-    tooltip: 10000,
-  },
-  fonts: {
-    body: inter.style.fontFamily,
-    heading: openSauce.style.fontFamily,
-  },
-  fontWeights: {
-    medium: 500,
-  },
-  sizes: {
-    4.5: '1.125rem',
-  },
-  space: {
-    0: '0px',
-    1: '0.25rem', // 4px
-    2: '0.5rem', // 8px
-    3: '0.75rem', // 12px
-    4: '1rem', // 16px
-    4.5: '1.125rem',
-    5: '1.25rem', // 20px
-    6: '1.5rem', // 24px
-    8: '2rem', // 32px
-    10: '2.5rem', // 40px
-    12: '3rem', // 48px
-    16: '4rem', // 64px
-    18: '4.5rem', // 72px
-  },
-  borders: {
-    '1px': '1px solid var(--stacks-colors-borderPrimary)',
-    dark_1px: '1px solid var(--stacks-colors-borderSecondary)',
-  },
-  components: {
-    Switch: switchTheme,
-    Checkbox: checkboxTheme,
-    Tabs: tabTheme,
-    Badge: badgeTheme,
-    Tag: tagTheme,
-    Input: inputTheme,
-    Button: buttonTheme,
-    Menu: menuTheme,
-    Link: linkTheme,
-  },
-  breakpoints: {
-    'mobile-xs': '320px',
-    'mobile-sm': '375px',
-    'mobile-md': '480px',
-    'mobile-lg': '768px',
-    xs: '1024px',
-    sm: '1280px',
-    md: '1440px',
-    lg: '1680px',
-    xl: '1920px',
   },
 });
