@@ -1,3 +1,10 @@
+## [1.216.1](https://github.com/hirosystems/explorer/compare/v1.216.0...v1.216.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* removed test code ([5ff5a68](https://github.com/hirosystems/explorer/commit/5ff5a68e84d01b49122cd1c364bfa0357c172d22))
+
 # [1.216.0](https://github.com/hirosystems/explorer/compare/v1.215.0...v1.216.0) (2024-10-23)
 
 
