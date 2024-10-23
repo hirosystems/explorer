@@ -1,4 +1,3 @@
-import { FormLabel } from '@/ui/FormLabel';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import DatePicker from 'react-datepicker';
@@ -7,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { FormControl } from '../../../ui/FormControl';
+import { FormLabel } from '../../../ui/FormLabel';
 import { Stack } from '../../../ui/Stack';
 import { DateInput } from './DateInput';
 

@@ -5,7 +5,7 @@ import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
 import { Box } from '../../ui/Box';
 import { SignerLegendItem } from './SignerDistributionLegend';
-import { SignerInfo } from './data/useSigners';
+import { PoxSigner } from './data/useSigners';
 import { getSignerKeyName } from './utils';
 
 declare type Dict<T = any> = Record<string, T>;
@@ -92,7 +92,7 @@ interface PieData {
 }
 
 interface SignersDistributionPieChartProps {
-  signers: SignerInfo[];
+  signers: PoxSigner[];
   onlyShowPublicSigners: boolean;
 }
 

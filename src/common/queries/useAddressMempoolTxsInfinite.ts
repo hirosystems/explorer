@@ -1,9 +1,10 @@
 import {
+  InfiniteData,
   UseInfiniteQueryResult,
+  UseSuspenseInfiniteQueryResult,
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { InfiniteData, UseSuspenseInfiniteQueryResult } from '@tanstack/react-query';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -13,13 +14,15 @@ import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
+const ADDRESS_MEMPOOL_TXS_INFINITE_QUERY_KEY = 'addressMempoolTxsInfinite';
+
 export function useAddressMempoolTxsInfinite(
   address?: string,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
   const api = useApi();
   return useInfiniteQuery({
-    queryKey: ['addressMempoolTxsInfinite', address],
+    queryKey: [ADDRESS_MEMPOOL_TXS_INFINITE_QUERY_KEY, address],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.transactionsApi.getMempoolTransactionList({
         address,
@@ -39,7 +42,7 @@ export function useSuspenseAddressMempoolTxsInfinite(
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
   const api = useApi();
   return useSuspenseInfiniteQuery({
-    queryKey: ['addressMempoolTxsInfinite', address],
+    queryKey: [ADDRESS_MEMPOOL_TXS_INFINITE_QUERY_KEY, address],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       api.transactionsApi.getMempoolTransactionList({
         address,

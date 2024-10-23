@@ -1,10 +1,10 @@
-import { FormLabel } from '@/ui/FormLabel';
-import { Input } from '@/ui/Input';
 import { Field, FieldProps, Form, Formik } from 'formik';
 
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { FormControl } from '../../../ui/FormControl';
+import { FormLabel } from '../../../ui/FormLabel';
+import { Input } from '../../../ui/Input';
 import { Stack } from '../../../ui/Stack';
 
 type Time = number | string | undefined;
