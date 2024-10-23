@@ -1,3 +1,10 @@
+# [1.216.0](https://github.com/hirosystems/explorer/compare/v1.215.0...v1.216.0) (2024-10-23)
+
+
+### Features
+
+* added elevation to design system ([27bb75e](https://github.com/hirosystems/explorer/commit/27bb75e43d95bedc6b7e78f7f197c9c7e31aa368))
+
 # [1.215.0](https://github.com/hirosystems/explorer/compare/v1.214.3...v1.215.0) (2024-10-23)
 
 
