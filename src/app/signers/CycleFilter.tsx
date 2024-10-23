@@ -3,16 +3,21 @@ import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { Field, Form, Formik } from 'formik';
 import { useCallback, useState } from 'react';
 
+import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+
 export function CycleFilter({
   onChange,
   defaultCycleId,
-  currentCycleId,
+  placeholder,
+  showOnlyInput = false,
 }: {
   onChange: (cycle: string) => void;
-  defaultCycleId: string;
-  currentCycleId: string;
+  defaultCycleId?: string;
+  placeholder?: string;
+  showOnlyInput?: boolean;
 }) {
-  const [cycleId, setCycleId] = useState(defaultCycleId);
+  const { currentCycleId } = useSuspenseCurrentStackingCycle();
+  const [cycleId, setCycleId] = useState(defaultCycleId ?? '');
 
   const handleCycleChange = useCallback(
     (newCycleId: string) => {
@@ -27,22 +32,25 @@ export function CycleFilter({
       {({ values, setFieldValue, submitForm }) => (
         <Form>
           <Flex alignItems="center" gap={1} h="full">
-            <IconButton
-              aria-label="Previous cycle"
-              icon={<CaretLeft />}
-              onClick={() => {
-                const newCycleId = String(Number(values.cycle) - 1);
-                setFieldValue('cycle', newCycleId);
-                submitForm();
-              }}
-              h={5}
-              w={5}
-            />
+            {!showOnlyInput && (
+              <IconButton
+                aria-label="Previous cycle"
+                icon={<CaretLeft />}
+                onClick={() => {
+                  const newCycleId = String(Number(values.cycle) - 1);
+                  setFieldValue('cycle', newCycleId);
+                  submitForm();
+                }}
+                isDisabled={!cycleId}
+                h={5}
+                w={5}
+              />
+            )}
             <Field name="cycle">
               {({ field }: any) => (
                 <Input
                   {...field}
-                  placeholder={defaultCycleId}
+                  placeholder={placeholder}
                   type="number"
                   textAlign="center"
                   onChange={e => {
@@ -58,18 +66,20 @@ export function CycleFilter({
                 />
               )}
             </Field>
-            <IconButton
-              aria-label="Next cycle"
-              icon={<CaretRight />}
-              onClick={() => {
-                const newCycleId = String(Number(values.cycle) + 1);
-                setFieldValue('cycle', newCycleId);
-                submitForm();
-              }}
-              isDisabled={cycleId === currentCycleId}
-              h={5}
-              w={5}
-            />
+            {!showOnlyInput && (
+              <IconButton
+                aria-label="Next cycle"
+                icon={<CaretRight />}
+                onClick={() => {
+                  const newCycleId = String(Number(values.cycle) + 1);
+                  setFieldValue('cycle', newCycleId);
+                  submitForm();
+                }}
+                isDisabled={!cycleId || cycleId === currentCycleId.toString()}
+                h={5}
+                w={5}
+              />
+            )}
           </Flex>
         </Form>
       )}

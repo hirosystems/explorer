@@ -6,7 +6,7 @@ import { Stack } from '../../ui/Stack';
 import { Text, TextProps } from '../../ui/Text';
 import { useColorMode } from '../../ui/hooks/useColorMode';
 import { getSignerDistributionPieChartColor } from './SignerDistributionPieChart';
-import { SignerInfo } from './data/useSigners';
+import { PoxSigner } from './data/useSigners';
 import { getSignerKeyName } from './utils';
 
 export function SignerLegendItem({
@@ -87,7 +87,7 @@ export function SignersDistributionLegend({
   signers,
   onlyShowPublicSigners,
 }: {
-  signers: SignerInfo[];
+  signers: PoxSigner[];
   onlyShowPublicSigners: boolean;
 }) {
   const knownSigners = useMemo(

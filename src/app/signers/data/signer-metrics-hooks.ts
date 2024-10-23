@@ -1,6 +1,3 @@
-import { TWO_MINUTES } from '@/common/queries/query-stale-time';
-import { ApiResponseWithResultsOffset } from '@/common/types/api';
-import { getNextPageParam } from '@/common/utils/utils';
 import {
   InfiniteData,
   UseInfiniteQueryResult,
@@ -9,6 +6,9 @@ import {
 } from '@tanstack/react-query';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
+import { TWO_MINUTES } from '../../../common/queries/query-stale-time';
+import { ApiResponseWithResultsOffset } from '../../../common/types/api';
+import { getNextPageParam } from '../../../common/utils/utils';
 
 const SIGNER_METRICS_STATUS_QUERY_KEY = 'signer-metrics-status';
 const SIGNER_METRICS_SIGNERS_FOR_CYCLE_QUERY_KEY = 'signer-metrics-signers-for-cycle';
@@ -70,14 +70,14 @@ export function useSignerMetricsStatus(signerKey: string) {
   });
 }
 
-const DEFAULT_LIST_LIMIT = 10;
+const DEFAULT_LIST_LIMIT = 100;
 
 const fetchSignersForCycle = async (
   apiUrl: string,
   cycleId: number,
   pageParam: number,
   options: any
-): Promise<ApiResponseWithResultsOffset<SignerMetricsSignerForCycle[]>> => {
+): Promise<ApiResponseWithResultsOffset<SignerMetricsSignerForCycle>> => {
   const limit = options.limit || DEFAULT_LIST_LIMIT;
   const offset = pageParam || 0;
   const queryString = new URLSearchParams({
@@ -89,16 +89,13 @@ const fetchSignersForCycle = async (
   );
   return response.json();
 };
-
 export function useSignerMetricsSignersForCycle(
   cycleId: number,
   options: any = {}
-): UseInfiniteQueryResult<
-  InfiniteData<ApiResponseWithResultsOffset<SignerMetricsSignerForCycle[]>>
-> {
+): UseInfiniteQueryResult<InfiniteData<ApiResponseWithResultsOffset<SignerMetricsSignerForCycle>>> {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
 
-  return useInfiniteQuery<ApiResponseWithResultsOffset<SignerMetricsSignerForCycle[]>>({
+  return useInfiniteQuery<ApiResponseWithResultsOffset<SignerMetricsSignerForCycle>>({
     queryKey: [SIGNER_METRICS_SIGNERS_FOR_CYCLE_QUERY_KEY, cycleId],
     queryFn: ({ pageParam }: { pageParam: number }) =>
       fetchSignersForCycle(activeNetworkUrl, cycleId, pageParam, options),
@@ -119,6 +116,20 @@ export function useSignerMetricsSignerForCycle(cycleId: number, signerKey: strin
       fetch(`${activeNetworkUrl}/signer-metrics/v1/cycles/${cycleId}/signers/${signerKey}`).then(
         res => res.json()
       ),
+  });
+}
+
+export function useGetSignerMetricsSignerForCycleQuery() {
+  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+  return (cycleId: number, signerKey: string) => ({
+    queryKey: [SIGNER_METRICS_SIGNER_FOR_CYCLE_QUERY_KEY, cycleId, signerKey],
+    queryFn: () =>
+      fetch(`${activeNetworkUrl}/signer-metrics/v1/cycles/${cycleId}/signers/${signerKey}`).then(
+        res => res.json() as Promise<SignerMetricsSignerForCycle>
+      ),
+    staleTime: TWO_MINUTES,
+    cacheTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
   });
 }
 

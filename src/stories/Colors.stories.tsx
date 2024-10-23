@@ -1,10 +1,10 @@
-import { Box } from '@/ui/Box';
-import { Flex } from '@/ui/Flex';
-import { Heading } from '@/ui/Heading';
-import { Stack } from '@/ui/Stack';
-import { Text } from '@/ui/Text';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { Box } from '../ui/Box';
+import { Flex } from '../ui/Flex';
+import { Heading } from '../ui/Heading';
+import { Stack } from '../ui/Stack';
+import { Text } from '../ui/Text';
 import { NEW_COLORS } from '../ui/theme/colors';
 
 const ColorSwatch = ({

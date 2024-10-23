@@ -1,8 +1,9 @@
-import { fetchFromApi } from '@/common/api/fetch';
-import { DEFAULT_V2_INFO_ENDPOINT } from '@/common/constants/constants';
 import { string } from 'yup';
 
 import { ChainID } from '@stacks/transactions';
+
+import { fetchFromApi } from '../../../api/fetch';
+import { DEFAULT_V2_INFO_ENDPOINT } from '../../../constants/constants';
 
 export async function validateUrl(
   missingErrorMessage: string,

@@ -16,9 +16,8 @@ import { SignerLegendItem, SignersDistributionLegendLayout } from './SignerDistr
 import { SignersHeaderLayout } from './SignersHeader';
 import { SignersMapComponentLayout } from './SignersMapComponent';
 import { SignersTableLayout, signersTableHeaders } from './SignersTable';
-import { VotingPowerSortOrder } from './SortByVotingPowerFilter';
 
-const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
+export const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
   const cols = Array.from({ length: numCols }, (_, i) => i + 1);
 
   return (
@@ -32,7 +31,7 @@ const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
   );
 };
 
-const TableHeaderSkeleton = () => (
+export const TableHeaderSkeleton = () => (
   <Th py={3} px={6}>
     <Flex
       bg="hoverBackground"
@@ -55,7 +54,7 @@ export const SignersTableSkeleton = () => {
 
   return (
     <SignersTableLayout
-      numSigners={<SkeletonItem width="30%" height="40px" />}
+      title={<SkeletonItem width="30%" height="40px" />}
       signersTableHeaders={
         <Tr>
           {numCols.map((_, i) => (
@@ -66,11 +65,6 @@ export const SignersTableSkeleton = () => {
       signersTableRows={numRows.map((_, i) => (
         <TableRowSkeleton numCols={signersTableHeaders.length} key={`table-row-skeleton-${i}`} />
       ))}
-      votingPowerSortOrder={VotingPowerSortOrder.Asc}
-      setVotingPowerSortOrder={() => {}}
-      cycleFilterOnSubmitHandler={() => {}}
-      selectedCycle={''}
-      currentCycleId={''}
     />
   );
 };

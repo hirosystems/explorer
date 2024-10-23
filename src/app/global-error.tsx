@@ -1,10 +1,10 @@
 'use client';
 
-import { logError } from '@/common/utils/error-utils';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
 import { Section } from '../common/components/Section';
+import { logError } from '../common/utils/error-utils';
 import { Box } from '../ui/Box';
 import { Grid } from '../ui/Grid';
 

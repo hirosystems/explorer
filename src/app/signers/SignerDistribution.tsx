@@ -1,6 +1,7 @@
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { useSuspenseInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
@@ -11,7 +12,7 @@ import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentSta
 import { SignersDistributionLegend } from './SignerDistributionLegend';
 import { SignersDistributionPieChart } from './SignerDistributionPieChart';
 import { SignersDistributionFilter } from './SignersDistributionFilter';
-import { useSuspensePoxSigners } from './data/useSigners';
+import { PoxSigner, useSuspensePoxSigners } from './data/useSigners';
 import { SignersDistributionSkeleton } from './skeleton';
 
 export function SignersDistributionLayout({
@@ -49,9 +50,12 @@ export function SignersDistributionLayout({
 
 export function SignersDistributionBase() {
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
-  const {
-    data: { results: signers },
-  } = useSuspensePoxSigners(currentCycleId.toString());
+
+  const signersResponse = useSuspensePoxSigners(currentCycleId, {
+    limit: 100,
+  });
+  const signers = useSuspenseInfiniteQueryResult<PoxSigner>(signersResponse);
+
   const [onlyShowPublicSigners, setOnlyShowPublicSigners] = useState(false);
 
   return signers.length > 0 ? (
