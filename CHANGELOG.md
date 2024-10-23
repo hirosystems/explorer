@@ -1,3 +1,12 @@
+# [1.215.0](https://github.com/hirosystems/explorer/compare/v1.214.3...v1.215.0) (2024-10-23)
+
+
+### Features
+
+* added breakpoints into our theme ([b3b1584](https://github.com/hirosystems/explorer/commit/b3b1584e7af0d49513411979c568ddbbb12fd758))
+* added new dsign sys colors ([d5c3ca0](https://github.com/hirosystems/explorer/commit/d5c3ca0c910aa1f9424f1d36cbb96c20b663b03e))
+* adding spacing to theme ([fe48bdb](https://github.com/hirosystems/explorer/commit/fe48bdbd4073da433a27549a3beab22fee13efbf))
+
 ## [1.214.3](https://github.com/hirosystems/explorer/compare/v1.214.2...v1.214.3) (2024-10-18)
 
 
