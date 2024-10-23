@@ -42,7 +42,6 @@ export default function BlockPage({ params: { hash } }: any) {
   return (
     <>
       <PageTitle>{title}</PageTitle>
-      <Text color="accent.bitcoin-700">{title}</Text>
       <TowColLayout>
         <Section title="Summary">
           <KeyValueHorizontal label={'Hash'} value={<Value>{hash}</Value>} copyValue={hash} />
