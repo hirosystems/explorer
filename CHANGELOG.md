@@ -1,3 +1,10 @@
+# [1.217.0](https://github.com/hirosystems/explorer/compare/v1.216.1...v1.217.0) (2024-10-23)
+
+
+### Features
+
+* added deploy note text about clarinet ([484d602](https://github.com/hirosystems/explorer/commit/484d602ac3d7d826439343c507cedea1cb5d343d))
+
 ## [1.216.1](https://github.com/hirosystems/explorer/compare/v1.216.0...v1.216.1) (2024-10-23)
 
 
