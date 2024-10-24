@@ -77,6 +77,10 @@ export const signersTableHeaders = [
   'Associated address',
   'Voting power',
   'STX stacked',
+  'Latency',
+  'Approved',
+  'Rejected',
+  'Missing',
 ];
 
 export const SignersTableHeaders = () => (
@@ -104,6 +108,10 @@ const SignerTableRow = ({
   votingPowerPercentage: votingPower,
   stxStaked,
   stackers,
+  latency,
+  approved,
+  rejected,
+  missing,
 }: {
   index: number;
   isFirst: boolean;
@@ -169,6 +177,26 @@ const SignerTableRow = ({
           {Number(stxStaked.toFixed(0)).toLocaleString()}
         </Text>
       </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {latency}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {approved}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {rejected}
+        </Text>
+      </Td>
+      <Td py={3} px={6}>
+        <Text whiteSpace="nowrap" fontSize="sm">
+          {missing}
+        </Text>
+      </Td>
     </Tr>
   );
 };
@@ -210,6 +238,10 @@ interface SignerRowInfo {
   votingPowerPercentage: number;
   stxStaked: number;
   stackers: SignersStackersData[];
+  latency: string; // TODO: get this from the API
+  approved: string; // TODO: get this from the API
+  rejected: string; // TODO: get this from the API
+  missing: string; // TODO: get this from the API
 }
 
 function formatSignerRowData(
@@ -221,6 +253,10 @@ function formatSignerRowData(
     votingPowerPercentage: singerInfo.weight_percent,
     stxStaked: parseFloat(singerInfo.stacked_amount) / 1_000_000,
     stackers,
+    latency: '5 ms', // TODO: get this from the API
+    approved: '78%', // TODO: get this from the API
+    rejected: '12%', // TODO: get this from the API
+    missing: '5%', // TODO: get this from the API
   };
 }
 
@@ -228,6 +264,7 @@ const SignersTableBase = () => {
   const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
   const { currentCycleId } = useSuspenseCurrentStackingCycle();
 
+  // TODO: supposedly the new signer endpoint will return all the data that I need so that I don't need to make an additional call for each signer to get their stackers. Waiting on the new endpoint to be deployed.
   const {
     data: { results: signers },
   } = useSuspensePoxSigners(currentCycleId);

@@ -38,6 +38,7 @@ export default function BlockPage({ params: { hash } }: any) {
   const { data: block } = useSuspenseBlockByHash(hash, { refetchOnWindowFocus: true });
   const title = (block && `STX Block #${block.height.toLocaleString()}`) || '';
   const { isOpen, onToggle, onClose } = useDisclosure();
+  // const { data: signersData } = useSuspenseSignersData(block.burn_block_hash); // TODO: Get from the API when the new signers endpoints are available
 
   return (
     <>
@@ -61,6 +62,14 @@ export default function BlockPage({ params: { hash } }: any) {
               <KeyValueHorizontal
                 label={'Transactions'}
                 value={<Value>{block.txs.length}</Value>}
+              />
+               <KeyValueHorizontal // TODO: Get from the API when the new signers endpoints are available
+                label={'Signer Latency'}
+                value={<Value>5 ms</Value>}
+              />
+               <KeyValueHorizontal
+                label={'Signer Voting'}
+                value={<Value>5/5/5</Value>}
               />
               {!block.canonical ? (
                 <KeyValueHorizontal
