@@ -1,3 +1,10 @@
+# [1.219.0](https://github.com/hirosystems/explorer/compare/v1.218.0...v1.219.0) (2024-10-24)
+
+
+### Features
+
+* added new design system for typography ([afb3f50](https://github.com/hirosystems/explorer/commit/afb3f50b43949508dcd88028c22c0f1a39b521ba))
+
 # [1.218.0](https://github.com/hirosystems/explorer/compare/v1.217.2...v1.218.0) (2024-10-24)
 
 
