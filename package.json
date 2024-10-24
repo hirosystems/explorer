@@ -121,6 +121,7 @@
     "@stacks/eslint-config": "2.0.0",
     "@stacks/prettier-config": "0.0.10",
     "@stacks/stacks-blockchain-api-types": "7.12.0",
+    "@storybook/addon-docs": "8.3.6",
     "@storybook/addon-essentials": "8.3.5",
     "@storybook/addon-interactions": "8.3.5",
     "@storybook/addon-links": "8.3.5",
