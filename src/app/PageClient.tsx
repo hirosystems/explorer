@@ -1,16 +1,13 @@
 'use client';
 
-import { logError } from '@/common/utils/error-utils';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 
-import { DEFAULT_BLOCKS_LIST_LIMIT, DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
+import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
-import { useRenderNewBlockList } from '../common/hooks/useIsNakamoto';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { Grid } from '../ui/Grid';
 import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
-import { UpdatedBlocksList } from './_components/BlockList/UpdatedBlockList';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
 
@@ -25,7 +22,6 @@ const HomePageBlockListDynamic = dynamic(
 
 const Home: NextPage = () => {
   const { activeNetwork } = useGlobalContext();
-  const renderNewBlockList = useRenderNewBlockList();
 
   return (
     <>
@@ -41,11 +37,7 @@ const Home: NextPage = () => {
           showFilterButton={false}
           showValueMenu={false}
         />
-        {renderNewBlockList ? (
-          <HomePageBlockListDynamic />
-        ) : (
-          <UpdatedBlocksList limit={DEFAULT_BLOCKS_LIST_LIMIT} />
-        )}
+        <HomePageBlockListDynamic />
       </Grid>
     </>
   );
