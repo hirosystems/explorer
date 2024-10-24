@@ -2,7 +2,8 @@
 
 import { StyleFunctionProps, extendTheme } from '@chakra-ui/react';
 
-import { COLORS } from './colors';
+import { CI_DEFAULT_BREAKPOINTS } from './breakpoints';
+import { COLORS, NEW_COLORS } from './colors';
 import { badgeTheme } from './componentTheme/Badge';
 import { buttonTheme } from './componentTheme/Button';
 import { checkboxTheme } from './componentTheme/Checkbox';
@@ -13,7 +14,6 @@ import { switchTheme } from './componentTheme/Switch';
 import { tabTheme } from './componentTheme/Tab';
 import { tagTheme } from './componentTheme/Tag';
 import { inter, openSauce } from './fonts';
-import { NEW_COLORS } from './new-colors';
 
 export const theme = extendTheme({
   config: {
@@ -149,14 +149,7 @@ export const theme = extendTheme({
     Link: linkTheme,
   },
   breakpoints: {
-    'mobile-xs': '320px',
-    'mobile-sm': '375px',
-    'mobile-md': '480px',
-    'mobile-lg': '768px',
-    xs: '1024px',
-    sm: '1280px',
-    md: '1440px',
-    lg: '1680px',
-    xl: '1920px',
+    ...CI_DEFAULT_BREAKPOINTS,
+    // ...NEW_BREAKPOINTS
   },
 });
