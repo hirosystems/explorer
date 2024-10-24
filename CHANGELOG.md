@@ -1,3 +1,10 @@
+## [1.217.1](https://github.com/hirosystems/explorer/compare/v1.217.0...v1.217.1) (2024-10-24)
+
+
+### Bug Fixes
+
+* fixed theme bug where theme was in semantic tokens ([ceb9029](https://github.com/hirosystems/explorer/commit/ceb9029e69a4c7dd779ced2c56b01423bf88a15e))
+
 # [1.217.0](https://github.com/hirosystems/explorer/compare/v1.216.1...v1.217.0) (2024-10-23)
 
 
