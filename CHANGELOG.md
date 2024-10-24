@@ -1,3 +1,10 @@
+## [1.219.1](https://github.com/hirosystems/explorer/compare/v1.219.0...v1.219.1) (2024-10-24)
+
+
+### Bug Fixes
+
+* fixed the add network bug ([ec313f2](https://github.com/hirosystems/explorer/commit/ec313f2a50de006b609d5f082c78b9f45e016f15))
+
 # [1.219.0](https://github.com/hirosystems/explorer/compare/v1.218.0...v1.219.0) (2024-10-24)
 
 
