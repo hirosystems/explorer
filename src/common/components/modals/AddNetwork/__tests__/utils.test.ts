@@ -26,4 +26,22 @@ describe('validateUrl', () => {
       message: invalidErrorMessage,
     });
   });
+  it('should return the invalid error message if the URL is invalid', async () => {
+    const invalidUrl = 'umbrel.local:3999';
+    const invalidErrorMessage = 'Invalid URL';
+    const result = await validateUrl('URL is missing', invalidErrorMessage, invalidUrl);
+    expect(result).toEqual({
+      isValid: false,
+      message: invalidErrorMessage,
+    });
+  });
+  it('should return the invalid error message if the URL is invalid', async () => {
+    const invalidUrl = '.local:3999';
+    const invalidErrorMessage = 'Invalid URL';
+    const result = await validateUrl('URL is missing', invalidErrorMessage, invalidUrl);
+    expect(result).toEqual({
+      isValid: false,
+      message: invalidErrorMessage,
+    });
+  });
 });

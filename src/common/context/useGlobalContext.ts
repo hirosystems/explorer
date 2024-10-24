@@ -2,8 +2,8 @@
 
 import { useContext } from 'react';
 
-import { GloablContext } from './GlobalContextProvider';
+import { GlobalContext } from './GlobalContextProvider';
 
 export const useGlobalContext = () => {
-  return useContext(GloablContext);
+  return useContext(GlobalContext);
 };

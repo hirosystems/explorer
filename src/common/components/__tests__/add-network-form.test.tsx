@@ -22,6 +22,16 @@ describe('buildCustomNetworkUrl', () => {
       url: 'https://some-custom-url.com/some/path',
       expectedOutput: 'https://some-custom-url.com/some/path',
     },
+    {
+      description: 'builds URL with path',
+      url: 'http://umbrel.local:3999',
+      expectedOutput: 'http://umbrel.local:3999',
+    },
+    {
+      description: 'builds URL with path',
+      url: 'ftp://umbrel.local:3999',
+      expectedOutput: 'https://umbrel.local:3999',
+    },
   ];
 
   cases.forEach(({ description, url, expectedOutput }) => {
