@@ -2,7 +2,8 @@
 
 import { StyleFunctionProps, extendTheme } from '@chakra-ui/react';
 
-import { CI_DEFAULT_BREAKPOINTS } from './breakpoints';
+import { BORDER_RADIUS } from './borderRadius';
+import { BREAKPOINTS } from './breakpoints';
 import { COLORS, NEW_COLORS } from './colors';
 import { badgeTheme } from './componentTheme/Badge';
 import { buttonTheme } from './componentTheme/Button';
@@ -13,16 +14,15 @@ import { menuTheme } from './componentTheme/Menu';
 import { switchTheme } from './componentTheme/Switch';
 import { tabTheme } from './componentTheme/Tab';
 import { tagTheme } from './componentTheme/Tag';
-import { inter, openSauce } from './fonts';
-
-const borderRadius = {
-  xxs: '2px',
-  xs: '4px',
-  sm: '6px',
-  md: '8px',
-  lg: '12px',
-  xl: '16px',
-};
+import { FONT_SIZES } from './fontSizes';
+import { FONT_WEIGHTS } from './fontWeights';
+import { instrumentSans, inter, matterMonoRegular, matterRegular, openSauce } from './fonts';
+import { LETTER_SPACINGS } from './letterSpacings';
+import { LINEHEIGHTS } from './lineHeights';
+import { SIZES } from './sizes';
+import { SPACE } from './space';
+import { TEXT_STYLES } from './textStyles';
+import { Z_INDEX } from './zIndex';
 
 export const theme = extendTheme({
   config: {
@@ -106,42 +106,41 @@ export const theme = extendTheme({
       _dark: '0 16px 32px rgba(0, 0, 0, 0.2)',
     },
   },
+  letterSpacings: {
+    ...LETTER_SPACINGS,
+  },
   lineHeights: {
-    base: 1.15,
+    ...LINEHEIGHTS,
   },
   zIndices: {
-    tooltip: 10000,
+    ...Z_INDEX,
   },
   fonts: {
     body: inter.style.fontFamily,
     heading: openSauce.style.fontFamily,
+    matter: matterRegular.style.fontFamily,
+    matterMono: matterMonoRegular.style.fontFamily,
+    instrument: instrumentSans.style.fontFamily,
+  },
+  fontSizes: {
+    ...FONT_SIZES,
   },
   fontWeights: {
-    medium: 500,
+    ...FONT_WEIGHTS,
   },
   sizes: {
-    4.5: '1.125rem',
+    ...SIZES,
   },
   space: {
-    0: '0px',
-    1: '0.25rem', // 4px
-    2: '0.5rem', // 8px
-    3: '0.75rem', // 12px
-    4: '1rem', // 16px
-    4.5: '1.125rem',
-    5: '1.25rem', // 20px
-    6: '1.5rem', // 24px
-    8: '2rem', // 32px
-    10: '2.5rem', // 40px
-    12: '3rem', // 48px
-    16: '4rem', // 64px
-    18: '4.5rem', // 72px
+    ...SPACE,
   },
   borders: {
     '1px': '1px solid var(--stacks-colors-borderPrimary)',
     dark_1px: '1px solid var(--stacks-colors-borderSecondary)',
   },
-  borderRadius,
+  radii: {
+    ...BORDER_RADIUS,
+  },
   components: {
     Switch: switchTheme,
     Checkbox: checkboxTheme,
@@ -154,17 +153,14 @@ export const theme = extendTheme({
     Link: linkTheme,
   },
   breakpoints: {
-    ...CI_DEFAULT_BREAKPOINTS,
-    // ...NEW_BREAKPOINTS
+    ...BREAKPOINTS,
+  },
+  textStyles: {
+    ...TEXT_STYLES,
   },
   styles: {
     global: (props: StyleFunctionProps) => ({
-      body: {
-        ...Object.entries(borderRadius).reduce((acc, [key, value]) => {
-          (acc as any)[`--stacks-borderRadius-${key}`] = value;
-          return acc;
-        }, {}),
-      },
+      body: {},
     }),
   },
 });
