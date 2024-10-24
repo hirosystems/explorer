@@ -1,3 +1,10 @@
+# [1.218.0](https://github.com/hirosystems/explorer/compare/v1.217.2...v1.218.0) (2024-10-24)
+
+
+### Features
+
+* wp ([288b2b6](https://github.com/hirosystems/explorer/commit/288b2b60a5ad08f4eb42c0d0ec5dc64849e8d926))
+
 ## [1.217.2](https://github.com/hirosystems/explorer/compare/v1.217.1...v1.217.2) (2024-10-24)
 
 
