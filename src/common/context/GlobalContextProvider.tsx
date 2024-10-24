@@ -50,7 +50,7 @@ interface Props {
   stacksApiSocketClientInfo: StacksApiSocketClientInfo | null;
 }
 
-export const GloablContext = createContext<Props>({
+export const GlobalContext = createContext<Props>({
   cookies: '',
   apiUrls: NetworkModeUrlMap,
   btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap,
@@ -263,7 +263,7 @@ export const GlobalContextProvider: FC<{
   } = useStacksApiSocketClient(activeNetworkKey);
 
   return (
-    <GloablContext.Provider
+    <GlobalContext.Provider
       value={{
         activeNetwork: networks[activeNetworkKey] || {},
         activeNetworkKey,
@@ -283,6 +283,6 @@ export const GlobalContextProvider: FC<{
       }}
     >
       {children}
-    </GloablContext.Provider>
+    </GlobalContext.Provider>
   );
 };

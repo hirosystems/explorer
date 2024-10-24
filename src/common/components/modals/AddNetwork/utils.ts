@@ -1,9 +1,8 @@
+import { fetchFromApi } from '@/common/api/fetch';
+import { DEFAULT_V2_INFO_ENDPOINT } from '@/common/constants/constants';
 import { string } from 'yup';
 
 import { ChainID } from '@stacks/transactions';
-
-import { fetchFromApi } from '../../../api/fetch';
-import { DEFAULT_V2_INFO_ENDPOINT } from '../../../constants/constants';
 
 export async function validateUrl(
   missingErrorMessage: string,
@@ -32,9 +31,10 @@ export const buildCustomNetworkUrl = (url: string) => {
   const hostname = encodeURIComponent(urlObj.hostname);
   const port = encodeURIComponent(urlObj.port);
   const pathname = !urlObj?.pathname || urlObj.pathname === '/' ? '' : urlObj.pathname;
-  return `${hostname.includes('localhost') ? 'http://' : 'https://'}${hostname}${
-    port ? `:${port}` : ''
-  }${pathname || ''}`;
+  const protocol =
+    urlObj.protocol === 'http:' || urlObj.protocol === 'https:' ? urlObj.protocol : 'https:';
+  const customUrl = `${protocol}//${hostname}${port ? `:${port}` : ''}${pathname || ''}`;
+  return customUrl;
 };
 
 export const fetchCustomNetworkId: (
