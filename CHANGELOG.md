@@ -1,3 +1,10 @@
+## [1.217.2](https://github.com/hirosystems/explorer/compare/v1.217.1...v1.217.2) (2024-10-24)
+
+
+### Bug Fixes
+
+* found the cause of the mobile bug ([25e6f86](https://github.com/hirosystems/explorer/commit/25e6f8679cc9b6934b372f6d229a14e109f57631))
+
 ## [1.217.1](https://github.com/hirosystems/explorer/compare/v1.217.0...v1.217.1) (2024-10-24)
 
 
