@@ -5,7 +5,7 @@ import { Stack } from '@/ui/Stack';
 import { Text } from '@/ui/Text';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { NEW_COLORS } from '../ui/theme/new-colors';
+import { NEW_COLORS } from '../ui/theme/colors';
 
 const ColorSwatch = ({
   title,

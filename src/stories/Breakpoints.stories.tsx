@@ -4,6 +4,7 @@ import { Box } from '../ui/Box';
 import { Stack } from '../ui/Stack';
 import { Text } from '../ui/Text';
 
+// TODO: This story will not work until the new breakpoints are turned on in theme.ts
 const BreakpointDemo = () => (
   <Stack spacing={4} align="stretch">
     <Box bg="blue.500" p={4}>
