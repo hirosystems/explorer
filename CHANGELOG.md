@@ -1,3 +1,10 @@
+# [1.220.0](https://github.com/hirosystems/explorer/compare/v1.219.1...v1.220.0) (2024-10-28)
+
+
+### Features
+
+* nakamoto 3.0 mainnet updates ([5ca9b8c](https://github.com/hirosystems/explorer/commit/5ca9b8c780d29a4a536b74671ee2fe41f9c974f9))
+
 ## [1.219.1](https://github.com/hirosystems/explorer/compare/v1.219.0...v1.219.1) (2024-10-24)
 
 
