@@ -1,3 +1,10 @@
+# [1.221.0](https://github.com/hirosystems/explorer/compare/v1.220.0...v1.221.0) (2024-10-29)
+
+
+### Features
+
+* updated signers ([92b9488](https://github.com/hirosystems/explorer/commit/92b9488d05a29deefc188e85467f68e5bf25f520))
+
 # [1.220.0](https://github.com/hirosystems/explorer/compare/v1.219.1...v1.220.0) (2024-10-28)
 
 
