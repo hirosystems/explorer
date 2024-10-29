@@ -55,6 +55,14 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
     poolOperator: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
     name: 'Xverse',
   },
+  '0x0302328212d5e430a8a880f8e2365a8f976ee50490ff030c106866c0b789eae91a': {
+    poolOperator: '',
+    name: 'Xverse',
+  },
+  '0x03b3b78738abbdc573cdcefd8200b1bca999e2f2fd8ecdf70c64ced1e4105437b7': {
+    poolOperator: '',
+    name: 'Xverse',
+  },
   '0x02b20a0603a409270d4421d89a831e8f7b2fa7c5f2d8872d7aa94737334d10c194': {
     poolOperator: 'SP3CPP71K21BKT8952BN0FFZQDEDKQ3BMB9M9J8X4',
     name: 'Luxor',
@@ -74,6 +82,10 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
   '0x0284df4505c6318a0017a7848aa0a95bf8cd3db697a89d2ec1978a027bece770ef': {
     poolOperator: '',
     name: 'Degen Lab',
+  },
+  '0x022150d4ea6dc60e75e162455553a92adea0a0f3000c192cc55d0bffed22c0a8e0': {
+    poolOperator: 'SP264M69DKHWD4NZS12R7WTMF073X19V3F6DVDYVP',
+    name: 'Asymmetric Research',
   },
 };
 export const mobileBorderCss = {

@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useRef } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
@@ -90,7 +90,6 @@ export function SignersDistributionLegend({
   signers: SignerInfo[];
   onlyShowPublicSigners: boolean;
 }) {
-  const numStackingDaoSigners = useRef(0);
   const knownSigners = useMemo(
     () =>
       signers
@@ -98,14 +97,23 @@ export function SignersDistributionLegend({
         .map(signer => {
           let name = getSignerKeyName(signer.signing_key);
           let nameWithoutStackingDao = removeStackingDaoFromName(name);
-          if (nameWithoutStackingDao !== name) {
-            numStackingDaoSigners.current += 1;
-          }
+
           return {
             value: signer.weight_percent,
             name: nameWithoutStackingDao,
           };
-        }),
+        })
+        .reduce(
+          (acc, curr) => {
+            const existingSigner = acc.find(s => s.name === curr.name);
+            if (existingSigner) {
+              existingSigner.value += curr.value;
+              return acc;
+            }
+            return [...acc, curr];
+          },
+          [] as { name: string; value: number }[]
+        ),
     [signers]
   );
   const unknownSigners = useMemo(
