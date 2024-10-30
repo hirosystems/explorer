@@ -10,7 +10,7 @@ import { Section } from '../../../common/components/Section';
 import { Timestamp } from '../../../common/components/Timestamp';
 import { Value } from '../../../common/components/Value';
 import '../../../common/components/loaders/skeleton-text';
-import { useSuspenseBlockByHash } from '../../../common/queries/useBlockByHash';
+import { useSuspenseBlockByHeightOrHash } from '../../../common/queries/useBlockByHash';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
@@ -35,7 +35,7 @@ const BlockTxsList = dynamic(
 );
 
 export default function BlockPage({ params: { hash } }: any) {
-  const { data: block } = useSuspenseBlockByHash(hash, { refetchOnWindowFocus: true });
+  const { data: block } = useSuspenseBlockByHeightOrHash(hash, { refetchOnWindowFocus: true });
   const title = (block && `STX Block #${block.height.toLocaleString()}`) || '';
   const { isOpen, onToggle, onClose } = useDisclosure();
 
@@ -58,10 +58,13 @@ export default function BlockPage({ params: { hash } }: any) {
                 }
               />
               <KeyValueHorizontal label={'Mined'} value={<Timestamp ts={block.block_time} />} />
-              <KeyValueHorizontal
-                label={'Transactions'}
-                value={<Value>{block.txs.length}</Value>}
-              />
+              <KeyValueHorizontal label={'Transactions'} value={<Value>{block.tx_count}</Value>} />
+              {block.tenure_height !== null && (
+                <KeyValueHorizontal
+                  label={'Tenure Height'}
+                  value={<Value>{block.tenure_height}</Value>}
+                />
+              )}
               {!block.canonical ? (
                 <KeyValueHorizontal
                   label={'Canonical'}
