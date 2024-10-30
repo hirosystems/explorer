@@ -3,6 +3,9 @@ import { UseSuspenseQueryOptions, useQuery, useSuspenseQuery } from '@tanstack/r
 import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useApi } from '../api/useApi';
+import { useGlobalContext } from '../context/useGlobalContext';
+
+const BLOCK_QUERY_KEY = 'block';
 
 export function useBlockByHash(
   hash?: string,
@@ -21,18 +24,24 @@ export function useBlockByHash(
   });
 }
 
-export function useSuspenseBlockByHash(
-  hash?: string,
-  options: Partial<Omit<UseSuspenseQueryOptions<any, any, Block, any>, 'queryKey'>> = {}
+// TODO: Use this until we update @stacks/stacks-blockchain-client
+interface BlockWithTenureHeight extends Block {
+  tenure_height: number | null;
+  tx_count: number;
+}
+
+export function useSuspenseBlockByHeightOrHash(
+  heightOrHash: string,
+  options: Partial<
+    Omit<UseSuspenseQueryOptions<any, any, BlockWithTenureHeight, any>, 'queryKey'>
+  > = {}
 ) {
-  const api = useApi();
-  if (!hash) throw new Error('Hash is required');
+  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+  if (!heightOrHash) throw new Error('Height or hash is required');
   return useSuspenseQuery({
-    queryKey: ['blockByHash', hash],
+    queryKey: [BLOCK_QUERY_KEY, heightOrHash],
     queryFn: () =>
-      api.blocksApi.getBlockByHash({
-        hash,
-      }),
+      fetch(`${activeNetworkUrl}/extended/v2/blocks/${heightOrHash}`).then(res => res.json()),
     staleTime: Infinity,
     ...options,
   });
