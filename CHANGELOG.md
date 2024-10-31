@@ -1,3 +1,10 @@
+## [1.221.1](https://github.com/hirosystems/explorer/compare/v1.221.0...v1.221.1) (2024-10-31)
+
+
+### Bug Fixes
+
+* fixed supply #s ([94d1343](https://github.com/hirosystems/explorer/commit/94d1343c2fd089189e805d49a27e50555c2c1446))
+
 # [1.221.0](https://github.com/hirosystems/explorer/compare/v1.220.0...v1.221.0) (2024-10-29)
 
 
