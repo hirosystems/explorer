@@ -1,3 +1,10 @@
+# [1.222.0](https://github.com/hirosystems/explorer/compare/v1.221.1...v1.222.0) (2024-10-31)
+
+
+### Features
+
+* added tenure height ([da1337e](https://github.com/hirosystems/explorer/commit/da1337ef40bc132a6f800dc27db9111e213042ca))
+
 ## [1.221.1](https://github.com/hirosystems/explorer/compare/v1.221.0...v1.221.1) (2024-10-31)
 
 
