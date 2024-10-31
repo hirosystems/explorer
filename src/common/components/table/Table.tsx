@@ -1,28 +1,18 @@
+import { Tooltip } from '@/ui/Tooltip';
 import { useColorModeValue } from '@chakra-ui/react';
-import styled from '@emotion/styled';
-import { ArrowDown, ArrowUp, ArrowsDownUp } from '@phosphor-icons/react';
+import { ArrowDown, ArrowUp, ArrowsDownUp, Info } from '@phosphor-icons/react';
 import React, { Suspense } from 'react';
 
-import { Section } from '../../common/components/Section';
-import { mobileBorderCss } from '../../common/constants/constants';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
-import { Table } from '../../ui/Table';
-import { Tbody } from '../../ui/Tbody';
-import { Td } from '../../ui/Td';
-import { Text } from '../../ui/Text';
-import { Th } from '../../ui/Th';
-import { Thead } from '../../ui/Thead';
-import { Tr } from '../../ui/Tr';
-import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
-import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
-
-const StyledTable = styled(Table)`
-  tr td {
-    border-bottom: none;
-  }
-`;
+import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
+import { Box } from '../../../ui/Box';
+import { Flex } from '../../../ui/Flex';
+import { Icon } from '../../../ui/Icon';
+import { Td } from '../../../ui/Td';
+import { Text } from '../../../ui/Text';
+import { Th } from '../../../ui/Th';
+import { Tr } from '../../../ui/Tr';
+import { mobileBorderCss } from '../../constants/constants';
+import { TableLayout } from './TableLayout';
 
 export const TableHeader = ({
   columnDefinition,
@@ -62,26 +52,38 @@ export const TableHeader = ({
       left={isFirst ? 0 : undefined}
       zIndex={isFirst ? 'docked' : undefined}
       bg="surface"
+      borderBottom="1px solid var(--stacks-colors-borderSecondary)"
     >
-      {typeof headerTitle === 'string' ? (
-        <Flex gap={1} alignItems="center">
+      {typeof headerTitle === 'string' ? ( // TODO: why not also use a custom renderer
+        <Flex gap={1.5} alignItems="center" py={4}>
           <Text
-            fontWeight="medium"
+            fontWeight="normal"
             whiteSpace="nowrap"
-            fontSize="xs"
+            fontSize="sm"
             color={colorVal}
             textTransform="none"
             letterSpacing="normal"
+            fontFamily="instrument"
           >
             {headerTitle}
           </Text>
+          {columnDefinition.tooltip && (
+            <Tooltip label={columnDefinition.tooltip}>
+              <Icon as={Info} size={4} />
+            </Tooltip>
+          )}
           {sortIcon && (
             <Box
               onClick={() => {
                 onSort?.(columnDefinition.id, sortDirection === 'asc' ? 'desc' : 'asc');
               }}
+              p={1}
+              bg="sand.150"
+              borderRadius="md"
             >
-              {sortIcon}
+              <Flex alignItems="center" justifyContent="center" h={4} w={4}>
+                {sortIcon}
+              </Flex>
             </Box>
           )}
         </Flex>
@@ -92,7 +94,7 @@ export const TableHeader = ({
   );
 };
 
-function TableRow({
+export function TableRow({
   rowData,
   columns,
   rowIndex,
@@ -120,7 +122,7 @@ function TableRow({
           key={`table-row-${rowIndex}-col-${colIndex}`}
           py={3}
           px={6}
-          sx={colIndex === 0 ? mobileBorderCss : {}}
+          sx={colIndex === 0 ? mobileBorderCss : {}} // TODO: this might not be the right style
           position={colIndex === 0 ? 'sticky' : 'unset'}
           left={colIndex === 0 ? 0 : undefined}
           zIndex={colIndex === 0 ? 'docked' : undefined}
@@ -145,77 +147,36 @@ function TableRow({
   );
 }
 
-export function TableLayout({
-  title,
-  data,
-  columns,
-  onSort,
-  sortColumn,
-  sortDirection,
-  topRight,
-}: CustomTableProps) {
-  return (
-    <Section title={title} topRight={topRight} w="full">
-      <ScrollableBox>
-        <StyledTable width="full">
-          <Thead>
-            {columns?.map((col, colIndex) => (
-              <TableHeader
-                key={col.id}
-                columnDefinition={col}
-                headerTitle={col.header}
-                sortColumn={sortColumn}
-                sortDirection={sortDirection}
-                isFirst={colIndex === 0}
-                onSort={onSort}
-              />
-            ))}
-          </Thead>
-          <Tbody>
-            {data?.map((rowData, rowIndex) => (
-              <TableRow
-                key={rowIndex}
-                rowIndex={rowIndex}
-                rowData={rowData}
-                columns={columns}
-                isFirst={rowIndex === 0}
-                isLast={rowIndex === data.length - 1}
-              />
-            ))}
-          </Tbody>
-        </StyledTable>
-      </ScrollableBox>
-    </Section>
-  );
-}
-
 export interface ColumnDefinition {
   id: string;
   header: string | React.ReactNode;
-  accessor: (row: any) => React.ReactNode;
+  tooltip?: string;
+  accessor: (value: any) => any;
   sortable?: boolean;
   cellRenderer?: (value: any) => React.ReactNode;
 }
 
-export interface CustomTableProps {
+export interface TableProps {
   title?: string;
   topRight?: React.ReactNode;
+  topLeft?: React.ReactNode;
   data: any[];
-  columns: ColumnDefinition[];
+  columnDefinitions: ColumnDefinition[];
   onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
   sortColumn?: string | null;
   sortDirection?: 'asc' | 'desc';
 }
 
-function CustomTable({
+export function Table({
   title,
   topRight,
+  topLeft,
   data,
-  columns,
+  columnDefinitions: columns,
   onSort,
   sortColumn,
   sortDirection,
-}: CustomTableProps) {
+}: TableProps) {
   return (
     <ExplorerErrorBoundary
       // Wrapper={Section}
@@ -230,16 +191,15 @@ function CustomTable({
       <Suspense fallback={<Box>Loading...</Box>}>
         <TableLayout
           data={data}
-          columns={columns}
+          columnDefinitions={columns}
           onSort={onSort}
           sortColumn={sortColumn}
           sortDirection={sortDirection}
           topRight={topRight}
+          topLeft={topLeft}
           title={title}
         />
       </Suspense>
     </ExplorerErrorBoundary>
   );
 }
-
-export default CustomTable;

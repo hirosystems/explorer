@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import CustomTable, { ColumnDefinition } from './CustomTable';
+import CustomTable, { ColumnDefinition } from '../../common/components/table/Table';
 
 type ActivePoolsData = [string, string, string, string, string, string, string];
 
