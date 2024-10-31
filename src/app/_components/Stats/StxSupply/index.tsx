@@ -1,8 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
-import { Infinity, Info } from '@phosphor-icons/react';
-import * as React from 'react';
+import { Info } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
@@ -12,20 +10,18 @@ import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Tooltip } from '../../../../ui/Tooltip';
-import { useStxSupply } from '../../../signers/data/useStxSupply';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
 function StxSupplyBase(props: GridProps) {
   const {
-    data: { total_stx, unlocked_stx },
+    data: { total_stx, unlocked_stx, total_stx_year_2050 },
   } = useSuspenseStxSupply();
-  const { circulatingSupply } = useStxSupply();
-  const circulatingSupplyNumber = circulatingSupply ? Number(circulatingSupply) : 0;
+  const circulatingSupplyNumber = unlocked_stx ? Number(unlocked_stx) : 0;
   const circulatingSupplyFormatted = numberToString(circulatingSupplyNumber);
-  const totalSupplyNumber = unlocked_stx ? Number(unlocked_stx) : 0;
+  const totalSupplyNumber = total_stx ? Number(total_stx) : 0;
   const totalSupplyFormatted = numberToString(totalSupplyNumber);
-  const maxSupplyBy2050Number = total_stx ? Number(total_stx) : 0;
+  const maxSupplyBy2050Number = total_stx_year_2050 ? Number(total_stx_year_2050) : 0;
   const maxSupplyBy2050Formatted = numberToString(maxSupplyBy2050Number);
   const percentageUnlocked = ((circulatingSupplyNumber / totalSupplyNumber) * 100).toFixed(1);
   const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
