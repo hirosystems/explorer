@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import CustomTable, { ColumnDefinition } from '../app/stacking/CustomTable';
+import { ColumnDefinition, Table } from '../common/components/table/Table';
 import { Box } from '../ui/Box';
 
-const meta: Meta<typeof CustomTable> = {
-  title: 'Components/CustomTable',
-  component: CustomTable,
+const meta: Meta<typeof Table> = {
+  title: 'Components/Table',
+  component: Table,
   parameters: {
     layout: 'centered',
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof CustomTable>;
+type Story = StoryObj<typeof Table>;
 
 // Sample data
 const sampleData = [
@@ -65,7 +65,7 @@ export const Default: Story = {
   args: {
     title: 'Users Table',
     data: sampleData,
-    columns: columns,
+    columnDefinitions: columns,
   },
 };
 

@@ -2,8 +2,8 @@ import { Button, Flex, Icon, Text } from '@chakra-ui/react';
 import { CaretDoubleLeft, CaretDoubleRight, CaretLeft, CaretRight } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Input } from '../../ui/Input';
+import { Box } from '../../../ui/Box';
+import { Input } from '../../../ui/Input';
 
 interface PaginationControlProps {
   currentPage: number;

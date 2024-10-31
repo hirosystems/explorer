@@ -5,6 +5,7 @@ import { Flex } from '../../ui/Flex';
 import { PageTitle } from '../_components/PageTitle';
 import { SignersHeader } from './SignersHeader';
 import SignersTable from './SignersTable';
+import { SignerTable2 } from './SignersTable2';
 
 export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
@@ -14,6 +15,7 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
       </Flex>
       <SignersHeader tokenPrice={tokenPrice} />
       <SignersTable />
+      <SignerTable2 />
     </>
   );
 }

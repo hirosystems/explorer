@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import { ColumnDefinition } from '../../common/components/table/Table';
+import { CustomTableWithCursorPagination } from '../../common/components/table/TableWithCursorPagination';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Text } from '../../ui/Text';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import StxIcon from '../../ui/icons/StxIcon';
-import { ColumnDefinition } from './CustomTable';
-import { CustomTableWithCursorPagination } from './CustomTableWithCursorPagination';
 
 type PreviousCyclesData = [
   number,
@@ -148,7 +148,7 @@ export function PreviousCyclesTable() {
       title="Previous Cycles"
       topRight={null}
       data={data}
-      columns={columns}
+      columnDefinitions={columns}
       onSort={onSort}
       sortColumn={sortColumn}
       sortDirection={sortDirection}

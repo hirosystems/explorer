@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Stack } from '../../ui/Stack';
-import { CustomTableProps } from './CustomTable';
+import { Stack } from '../../../ui/Stack';
+import { TableProps } from '../table/Table';
 import { PaginationControl } from './PaginationControls';
 
 interface CursorPaginationProps {
@@ -9,11 +9,9 @@ interface CursorPaginationProps {
   fetchNextPage: (cursor: string | null) => Promise<{ data: any[]; nextCursor: string | null }>;
 }
 
-type CustomTableWithPaginationProps = CustomTableProps & CursorPaginationProps;
+type CustomTableWithPaginationProps = TableProps & CursorPaginationProps;
 
-export function withCursorPagination<T extends CustomTableProps>(
-  Component: React.ComponentType<T>
-) {
+export function withCursorPagination<T extends TableProps>(Component: React.ComponentType<T>) {
   return function WrappedComponent({
     data,
     pageSize,
