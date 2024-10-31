@@ -1,0 +1,193 @@
+import { ColumnDefinition, Table } from '@/common/components/table/Table';
+import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
+import React, { useMemo, useState } from 'react';
+
+import { AddressLink } from '../../common/components/ExplorerLinks';
+import { ApiResponseWithResultsOffset } from '../../common/types/api';
+import { truncateMiddle } from '../../common/utils/utils';
+import { Flex } from '../../ui/Flex';
+import { Text } from '../../ui/Text';
+import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
+import { removeStackingDaoFromName } from './SignerDistributionLegend';
+import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
+import { SignersStackersData, useGetStackersBySignerQuery } from './data/UseSignerAddresses';
+import { SignerInfo, useSuspensePoxSigners } from './data/useSigners';
+import { getSignerKeyName } from './utils';
+
+const NUM_OF_ADDRESSES_TO_SHOW = 1;
+
+// export const SignersTableHeader = ({
+//   headerTitle,
+//   isFirst,
+// }: {
+//   headerTitle: string;
+//   isFirst: boolean;
+// }) => (
+//   <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
+//     <Flex
+//       bg="hoverBackground"
+//       px={2.5}
+//       py={2}
+//       borderRadius="md"
+//       justifyContent="center"
+//       alignItems="center"
+//       width="fit-content"
+//     >
+//       <Text
+//         fontWeight="medium"
+//         whiteSpace="nowrap"
+//         fontSize="xs"
+//         color={useColorModeValue('slate.700', 'slate.250')}
+//         textTransform="none"
+//         letterSpacing="normal"
+//       >
+//         {headerTitle}
+//       </Text>
+//     </Flex>
+//   </Th>
+// );
+
+function getEntityName(signerKey: string) {
+  const entityName = removeStackingDaoFromName(getSignerKeyName(signerKey));
+  return entityName === 'unknown' ? '-' : entityName;
+}
+
+type SignerRow = [number, string, string, SignersStackersData[], number, number];
+
+function formatSignerRowData(
+  index: number,
+  singerInfo: SignerInfo,
+  stackers: SignersStackersData[]
+): SignerRow {
+  return [
+    index, // index
+    singerInfo.signing_key, // signerKey
+    singerInfo.signing_key, // signerKey
+    stackers, // associatedAddress
+    singerInfo.weight_percent, // votingPower
+    parseFloat(singerInfo.stacked_amount) / 1_000_000, // stxStaked
+  ];
+}
+
+export const columnDefinitions: ColumnDefinition[] = [
+  {
+    id: 'index',
+    header: '#',
+    accessor: (index: number | undefined) => index,
+  },
+  {
+    id: 'signerKey',
+    header: 'Signer key',
+    accessor: (signerKey: string | undefined) => truncateMiddle(signerKey ?? ''),
+    sortable: true,
+  },
+  {
+    id: 'entity',
+    header: 'Entity',
+    accessor: (signerKey: string | undefined) => getEntityName(signerKey ?? ''),
+    sortable: true,
+  },
+  {
+    id: 'associatedAddress',
+    header: 'Associated address',
+    accessor: (stackers: SignersStackersData[] | undefined) => stackers,
+    cellRenderer: (stackers: SignersStackersData[] | undefined) => (
+      <Flex textOverflow="ellipsis" overflow="hidden">
+        {stackers?.slice(0, NUM_OF_ADDRESSES_TO_SHOW).map((stacker, index) => (
+          <React.Fragment key={stacker.stacker_address}>
+            <AddressLink
+              principal={stacker.stacker_address}
+              whiteSpace="nowrap"
+              fontSize="sm"
+              color="textSubdued"
+            >
+              {truncateMiddle(stacker.stacker_address, 5, 5)}
+            </AddressLink>
+            {index < stackers.length - 1 && (
+              <Text color="textSubdued" fontSize="sm">
+                ,&nbsp;
+              </Text>
+            )}
+            {stackers.length > NUM_OF_ADDRESSES_TO_SHOW ? (
+              <Text color="textSubdued" fontSize="sm">
+                &nbsp;+{stackers.length - NUM_OF_ADDRESSES_TO_SHOW}&nbsp;more
+              </Text>
+            ) : null}
+          </React.Fragment>
+        ))}
+      </Flex>
+    ),
+  },
+  {
+    id: 'votingPower',
+    header: 'Voting power',
+    accessor: (votingPower: number | undefined) => `${votingPower?.toFixed(2)}%`,
+    sortable: true,
+  },
+  {
+    id: 'stxStaked',
+    header: 'STX stacked',
+    accessor: (stxStaked: number | undefined) => Number(stxStaked?.toFixed(0)).toLocaleString(),
+    sortable: true,
+  },
+];
+
+export function SignerTable2() {
+  const [votingPowerSortOrder, setVotingPowerSortOrder] = useState(VotingPowerSortOrder.Desc);
+  const { currentCycleId } = useSuspenseCurrentStackingCycle();
+
+  // Get signers
+  const {
+    data: { results: signers },
+  } = useSuspensePoxSigners(currentCycleId);
+
+  if (!signers) {
+    throw new Error('Signers data is not available');
+  }
+
+  // Get signers' stackers
+  const queryClient = useQueryClient();
+  const getQuery = useGetStackersBySignerQuery();
+  const signersStackersQueries = useMemo(() => {
+    return {
+      queries: signers.map(signer => {
+        return getQuery(currentCycleId, signer.signing_key);
+      }),
+      combine: (
+        response: UseQueryResult<ApiResponseWithResultsOffset<SignersStackersData>, Error>[]
+      ) => response.map(r => r.data?.results ?? []),
+    };
+  }, [signers, getQuery, currentCycleId]);
+  const signersStackers = useQueries(signersStackersQueries, queryClient);
+
+  // Format signers data + sort
+  const signersData = useMemo(
+    () =>
+      signers
+        .map((signer, index) => formatSignerRowData(index, signer, signersStackers[index]))
+        .sort((a, b) => {
+          const aVotingPower = a[4];
+          const bVotingPower = b[4];
+          return votingPowerSortOrder === 'desc'
+            ? bVotingPower - aVotingPower
+            : aVotingPower - bVotingPower;
+        }),
+    [signers, signersStackers, votingPowerSortOrder]
+  );
+
+  return (
+    <Table
+      title="Signers"
+      data={signersData}
+      columnDefinitions={columnDefinitions}
+      onSort={() => {}}
+      sortColumn={null}
+      sortDirection={undefined}
+      topRight={
+        <SortByVotingPowerFilter
+          setVotingPowerSortOrder={setVotingPowerSortOrder}
+          votingPowerSortOrder={votingPowerSortOrder}
+      />}
+    />
+  );
+}

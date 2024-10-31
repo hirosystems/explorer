@@ -64,7 +64,6 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
                     customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
                     onChange={dateRange => {
                       const [startDate, endDate] = dateRange;
-                      console.log(startDate, endDate);
                       const utcStart = startDate
                         ? new UTCDate(
                             startDate.getUTCFullYear(),
