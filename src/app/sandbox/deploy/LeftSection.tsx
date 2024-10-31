@@ -131,14 +131,6 @@ export function LeftSection() {
             >
               Clarinet
             </TextLink>{' '}
-            or the{' '}
-            <TextLink
-              href="https://docs.hiro.so/stacks/platform/guides/deployment-plans"
-              target="_blank"
-              _hover={{ textDecoration: 'underline' }}
-            >
-              Hiro platform
-            </TextLink>{' '}
             instead.
           </Text>
         </Stack>
