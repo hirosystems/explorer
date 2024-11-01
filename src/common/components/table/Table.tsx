@@ -110,34 +110,34 @@ export function TableRow({
   return (
     <Tr
       _hover={{
-        backgroundColor: 'var(--stacks-colors-hoverBackground)',
+        bg: 'sand.150',
       }}
-      style={{
-        borderTop: isFirst ? 'none' : '',
-        borderBottom: isLast ? 'none' : '',
+      sx={{
+        '& > td:first-of-type': {
+          borderTopLeftRadius: '12px',
+          borderBottomLeftRadius: '12px',
+        },
+        '& > td:last-of-type': {
+          borderTopRightRadius: '12px',
+          borderBottomRightRadius: '12px',
+        },
       }}
     >
       {columns.map((col, colIndex) => (
         <Td
           key={`table-row-${rowIndex}-col-${colIndex}`}
-          py={3}
+          py={4}
           px={6}
           sx={colIndex === 0 ? mobileBorderCss : {}} // TODO: this might not be the right style
           position={colIndex === 0 ? 'sticky' : 'unset'}
           left={colIndex === 0 ? 0 : undefined}
           zIndex={colIndex === 0 ? 'docked' : undefined}
-          bg="surface"
+          bg="inherit"
         >
           {col.cellRenderer ? (
             col.cellRenderer(col.accessor(rowData[colIndex]))
           ) : (
-            <Text
-              whiteSpace="nowrap"
-              overflow="hidden"
-              textOverflow="ellipsis"
-              fontSize="sm"
-              pl={2}
-            >
+            <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
               {col.accessor(rowData[colIndex])}
             </Text>
           )}
@@ -160,7 +160,7 @@ export interface TableProps {
   title?: string;
   topRight?: React.ReactNode;
   topLeft?: React.ReactNode;
-  data: any[];
+  rowData: any[];
   columnDefinitions: ColumnDefinition[];
   onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
   sortColumn?: string | null;
@@ -171,7 +171,7 @@ export function Table({
   title,
   topRight,
   topLeft,
-  data,
+  rowData: data,
   columnDefinitions: columns,
   onSort,
   sortColumn,
@@ -190,7 +190,7 @@ export function Table({
     >
       <Suspense fallback={<Box>Loading...</Box>}>
         <TableLayout
-          data={data}
+          rowData={data}
           columnDefinitions={columns}
           onSort={onSort}
           sortColumn={sortColumn}

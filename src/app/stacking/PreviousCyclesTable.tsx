@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { ColumnDefinition } from '../../common/components/table/Table';
-import { CustomTableWithCursorPagination } from '../../common/components/table/TableWithCursorPagination';
+import { TableWithCursorPagination } from '../../common/components/table/TableWithCursorPagination';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { Text } from '../../ui/Text';
@@ -28,7 +28,7 @@ type PreviousCyclesData = [
 ];
 
 export function PreviousCyclesTable() {
-  const data: PreviousCyclesData[] = useMemo(
+  const rowData: PreviousCyclesData[] = useMemo(
     () =>
       Array.from({ length: 10 }, (_, index) => index + 1).map((row, i) => [
         i,
@@ -50,7 +50,7 @@ export function PreviousCyclesTable() {
       ]),
     []
   );
-  const columns: ColumnDefinition[] = useMemo(
+  const columnDefinitions: ColumnDefinition[] = useMemo(
     () => [
       { id: 'Cycle', header: 'Cycle', accessor: (val: any) => val, sortable: true },
       {
@@ -144,11 +144,11 @@ export function PreviousCyclesTable() {
   }, []);
 
   return (
-    <CustomTableWithCursorPagination
+    <TableWithCursorPagination
       title="Previous Cycles"
       topRight={null}
-      data={data}
-      columnDefinitions={columns}
+      rowData={rowData}
+      columnDefinitions={columnDefinitions}
       onSort={onSort}
       sortColumn={sortColumn}
       sortDirection={sortDirection}

@@ -64,7 +64,7 @@ const columns: ColumnDefinition[] = [
 export const Default: Story = {
   args: {
     title: 'Users Table',
-    data: sampleData,
+    rowData: sampleData,
     columnDefinitions: columns,
   },
 };
@@ -94,13 +94,13 @@ export const WithTopRight: Story = {
 export const EmptyTable: Story = {
   args: {
     ...Default.args,
-    data: [],
+    rowData: [],
   },
 };
 
 export const LongContent: Story = {
   args: {
     ...Default.args,
-    data: Array(20).fill(sampleData[0]),
+    rowData: Array(20).fill(sampleData[0]),
   },
 };

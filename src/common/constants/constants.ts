@@ -64,9 +64,20 @@ export const SUBNETS_PARENT_NETWORK_IDS = {
 export const PAGE_MAX_WIDTH = '1280px';
 
 export const mobileBorderCss = {
-  '.has-horizontal-scroll &': {
-    borderRight: '2px solid var(--stacks-colors-borderPrimary)',
+  // '.has-horizontal-scroll &': {
+  //   borderRight: '2px solid var(--stacks-colors-borderPrimary)',
+  // },
+  '.has-horizontal-scroll &:before': {
+    // Adds a border to the left of the first column
+    content: '""',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: '2px',
+    height: 'full',
+    backgroundColor: 'borderPrimary',
   },
+  bg: 'surface',
 };
 
 export const NUM_TEN_MINUTES_IN_DAY = (24 * 60) / 10; // ie approx number of 10 minute blocks in a day

@@ -9,6 +9,7 @@ import { Table } from '../../../ui/Table';
 import { Tbody } from '../../../ui/Tbody';
 import { Text } from '../../../ui/Text';
 import { Thead } from '../../../ui/Thead';
+import { Tr } from '../../../ui/Tr';
 import { Card } from '../Card';
 import { TableHeader, TableProps, TableRow } from './Table';
 
@@ -67,7 +68,7 @@ interface TableContainerProps extends FlexProps {
 
 function TableContainer({ topLeft, topRight, title, children, ...rest }: TableContainerProps) {
   return (
-    <Stack gap={7}>
+    <Stack gap={7} w="full">
       <TableContainerHeader topLeft={topLeft} topRight={topRight} title={title} />
       <Card h="fit-content" w="full" px={6} {...rest}>
         <Box position={'relative'}>{children}</Box>
@@ -78,7 +79,7 @@ function TableContainer({ topLeft, topRight, title, children, ...rest }: TableCo
 
 export function TableLayout({
   title,
-  data,
+  rowData: data,
   columnDefinitions: columns,
   onSort,
   sortColumn,
@@ -90,17 +91,19 @@ export function TableLayout({
       <ScrollableBox>
         <StyledTable width="full">
           <Thead>
-            {columns?.map((col, colIndex) => (
-              <TableHeader
-                key={col.id}
-                columnDefinition={col}
-                headerTitle={col.header}
-                sortColumn={sortColumn}
-                sortDirection={sortDirection}
-                isFirst={colIndex === 0}
-                onSort={onSort}
-              />
-            ))}
+            <Tr>
+              {columns?.map((col, colIndex) => (
+                <TableHeader
+                  key={col.id}
+                  columnDefinition={col}
+                  headerTitle={col.header}
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  isFirst={colIndex === 0}
+                  onSort={onSort}
+                />
+              ))}
+            </Tr>
           </Thead>
           <Tbody>
             {data?.map((rowData, rowIndex) => (

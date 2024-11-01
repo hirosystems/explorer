@@ -9,22 +9,22 @@ interface CursorPaginationProps {
   fetchNextPage: (cursor: string | null) => Promise<{ data: any[]; nextCursor: string | null }>;
 }
 
-type CustomTableWithPaginationProps = TableProps & CursorPaginationProps;
+type TableWithPaginationProps = TableProps & CursorPaginationProps;
 
 export function withCursorPagination<T extends TableProps>(Component: React.ComponentType<T>) {
   return function WrappedComponent({
-    data,
+    rowData,
     pageSize,
     fetchNextPage,
     ...props
-  }: CustomTableWithPaginationProps) {
+  }: TableWithPaginationProps) {
     const [currentPage, setCurrentPage] = useState(1);
-    const [paginatedData, setPaginatedData] = useState(data.slice(0, pageSize));
+    const [paginatedData, setPaginatedData] = useState(rowData.slice(0, pageSize));
     const [nextCursor, setNextCursor] = useState<string | null>(null);
 
     useEffect(() => {
-      setPaginatedData(data.slice(0, pageSize));
-    }, [data, pageSize]);
+      setPaginatedData(rowData.slice(0, pageSize));
+    }, [rowData, pageSize]);
 
     const handleNextPage = async () => {
       if (nextCursor) {
@@ -37,17 +37,17 @@ export function withCursorPagination<T extends TableProps>(Component: React.Comp
 
     const handlePreviousPage = () => {
       if (currentPage > 1) {
-        setPaginatedData(data.slice((currentPage - 2) * pageSize, (currentPage - 1) * pageSize));
+        setPaginatedData(rowData.slice((currentPage - 2) * pageSize, (currentPage - 1) * pageSize));
         setCurrentPage(currentPage - 1);
       }
     };
 
     return (
       <Stack gap={0} alignItems="center" w="full">
-        <Component {...(props as T)} data={paginatedData} />
+        <Component {...(props as T)} rowData={paginatedData} />
         <PaginationControl
           currentPage={currentPage}
-          totalPages={Math.ceil(data.length / pageSize)}
+          totalPages={Math.ceil(rowData.length / pageSize)}
           onNextPage={handleNextPage}
           onPreviousPage={handlePreviousPage}
         />

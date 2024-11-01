@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import CustomTable, { ColumnDefinition } from '../../common/components/table/Table';
+import { ColumnDefinition, Table } from '../../common/components/table/Table';
 
 type ActivePoolsData = [string, string, string, string, string, string, string];
 
 export function ActivePoolsTable() {
-  const data: ActivePoolsData[] = useMemo(
+  const rowData: ActivePoolsData[] = useMemo(
     () =>
       Array.from({ length: 10 }, (_, index) => index + 1).map(row => [
         'Xverse',
@@ -18,7 +18,7 @@ export function ActivePoolsTable() {
       ]),
     []
   );
-  const columns: ColumnDefinition[] = useMemo(
+  const columnDefinitions: ColumnDefinition[] = useMemo(
     () => [
       { id: 'Provider', header: 'Provider', accessor: (val: any) => val, sortable: true },
       { id: 'PoX Address', header: 'PoX Address', accessor: (val: any) => val, sortable: false },
@@ -49,11 +49,11 @@ export function ActivePoolsTable() {
   }, []);
 
   return (
-    <CustomTable
+    <Table
       title="Active Pools"
       topRight={null}
-      data={data}
-      columns={columns}
+      rowData={rowData}
+      columnDefinitions={columnDefinitions}
       onSort={onSort}
       sortColumn={sortColumn}
       sortDirection={sortDirection}

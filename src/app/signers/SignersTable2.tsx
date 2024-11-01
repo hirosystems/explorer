@@ -16,37 +16,6 @@ import { getSignerKeyName } from './utils';
 
 const NUM_OF_ADDRESSES_TO_SHOW = 1;
 
-// export const SignersTableHeader = ({
-//   headerTitle,
-//   isFirst,
-// }: {
-//   headerTitle: string;
-//   isFirst: boolean;
-// }) => (
-//   <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
-//     <Flex
-//       bg="hoverBackground"
-//       px={2.5}
-//       py={2}
-//       borderRadius="md"
-//       justifyContent="center"
-//       alignItems="center"
-//       width="fit-content"
-//     >
-//       <Text
-//         fontWeight="medium"
-//         whiteSpace="nowrap"
-//         fontSize="xs"
-//         color={useColorModeValue('slate.700', 'slate.250')}
-//         textTransform="none"
-//         letterSpacing="normal"
-//       >
-//         {headerTitle}
-//       </Text>
-//     </Flex>
-//   </Th>
-// );
-
 function getEntityName(signerKey: string) {
   const entityName = removeStackingDaoFromName(getSignerKeyName(signerKey));
   return entityName === 'unknown' ? '-' : entityName;
@@ -60,7 +29,7 @@ function formatSignerRowData(
   stackers: SignersStackersData[]
 ): SignerRow {
   return [
-    index, // index
+    index, // index TODO: find some way to be able to map each column to an index
     singerInfo.signing_key, // signerKey
     singerInfo.signing_key, // signerKey
     stackers, // associatedAddress
@@ -178,7 +147,7 @@ export function SignerTable2() {
   return (
     <Table
       title="Signers"
-      data={signersData}
+      rowData={signersData}
       columnDefinitions={columnDefinitions}
       onSort={() => {}}
       sortColumn={null}
@@ -187,7 +156,8 @@ export function SignerTable2() {
         <SortByVotingPowerFilter
           setVotingPowerSortOrder={setVotingPowerSortOrder}
           votingPowerSortOrder={votingPowerSortOrder}
-      />}
+        />
+      }
     />
   );
 }
