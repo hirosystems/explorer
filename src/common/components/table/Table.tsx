@@ -189,7 +189,7 @@ export function Table({
       tryAgainButton
     >
       <Suspense fallback={<Box>Loading...</Box>}>
-        <TableLayout
+        <TableLayout // TODO: Move this into this file
           rowData={data}
           columnDefinitions={columns}
           onSort={onSort}
