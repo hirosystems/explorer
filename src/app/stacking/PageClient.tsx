@@ -5,6 +5,7 @@ import { Flex } from '../../ui/Flex';
 import { Grid } from '../../ui/Grid';
 import { Stack } from '../../ui/Stack';
 import { ActivePoolsTable } from './ActivePoolsTable';
+import { BlocksTable } from './BlocksTable';
 import { FAQ } from './FAQ';
 import { MetricCards } from './MetricCards';
 import { PoxCycleDiagram } from './PoxCycleDiagram';
@@ -53,6 +54,7 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </Grid>
           <ActivePoolsTable />
           <PreviousCyclesTable />
+          <BlocksTable />
         </Stack>
       </Stack>
     </>

@@ -1,7 +1,7 @@
 import { Tooltip } from '@/ui/Tooltip';
 import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info } from '@phosphor-icons/react';
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { Box } from '../../../ui/Box';
@@ -14,7 +14,28 @@ import { Tr } from '../../../ui/Tr';
 import { mobileBorderCss } from '../../constants/constants';
 import { TableLayout } from './TableLayout';
 
-export const TableHeader = ({
+interface SortIconProps {
+  sortable: boolean | undefined;
+  sortColumn: string | undefined | null;
+  columnId: string;
+  sortDirection: 'asc' | 'desc' | undefined;
+  onSort: ((columnId: string, direction: 'asc' | 'desc') => void) | undefined;
+}
+
+function SortIcon({ sortable, sortColumn, columnId, sortDirection, onSort }: SortIconProps) {
+  if (!sortable) return null;
+  return (
+    <Icon
+      onClick={() => {
+        onSort?.(columnId, sortDirection === 'asc' ? 'desc' : 'asc');
+      }}
+      as={sortColumn !== columnId ? ArrowsDownUp : sortDirection === 'asc' ? ArrowUp : ArrowDown}
+      size={4}
+    />
+  );
+}
+
+export const TableHeader = <T,>({
   columnDefinition,
   sortColumn,
   sortDirection,
@@ -24,22 +45,12 @@ export const TableHeader = ({
 }: {
   sortColumn?: string | null;
   sortDirection?: 'asc' | 'desc';
-  columnDefinition: ColumnDefinition;
+  columnDefinition: ColumnDefinition<T>;
   headerTitle: string | React.ReactNode;
   isFirst: boolean;
   onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
 }) => {
   const colorVal = useColorModeValue('slate.700', 'slate.250');
-
-  const sortIcon = columnDefinition.sortable ? (
-    sortColumn !== columnDefinition.id ? (
-      <Icon as={ArrowsDownUp} size={4} />
-    ) : sortDirection === 'asc' ? (
-      <Icon as={ArrowUp} size={4} />
-    ) : (
-      <Icon as={ArrowDown} size={4} />
-    )
-  ) : null;
 
   return (
     <Th
@@ -53,6 +64,8 @@ export const TableHeader = ({
       zIndex={isFirst ? 'docked' : undefined}
       bg="surface"
       borderBottom="1px solid var(--stacks-colors-borderSecondary)"
+      role="columnheader"
+      aria-sort={sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}
     >
       {typeof headerTitle === 'string' ? ( // TODO: why not also use a custom renderer
         <Flex gap={1.5} alignItems="center" py={4}>
@@ -72,20 +85,13 @@ export const TableHeader = ({
               <Icon as={Info} size={4} />
             </Tooltip>
           )}
-          {sortIcon && (
-            <Box
-              onClick={() => {
-                onSort?.(columnDefinition.id, sortDirection === 'asc' ? 'desc' : 'asc');
-              }}
-              p={1}
-              bg="sand.150"
-              borderRadius="md"
-            >
-              <Flex alignItems="center" justifyContent="center" h={4} w={4}>
-                {sortIcon}
-              </Flex>
-            </Box>
-          )}
+          <SortIcon
+            sortable={columnDefinition.sortable}
+            sortColumn={sortColumn}
+            columnId={columnDefinition.id}
+            sortDirection={sortDirection}
+            onSort={onSort}
+          />
         </Flex>
       ) : (
         headerTitle
@@ -94,32 +100,35 @@ export const TableHeader = ({
   );
 };
 
-export function TableRow({
+export function TableRow<T>({
   rowData,
   columns,
   rowIndex,
   isFirst,
   isLast,
 }: {
-  rowData: any;
-  columns: ColumnDefinition[];
+  rowData: T[];
+  columns: ColumnDefinition<T>[];
   rowIndex: number;
   isFirst: boolean;
   isLast: boolean;
 }) {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <Tr
       _hover={{
-        bg: 'sand.150',
+        bg: isHovered ? 'sand.150' : 'inherit',
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       sx={{
         '& > td:first-of-type': {
-          borderTopLeftRadius: '12px',
-          borderBottomLeftRadius: '12px',
+          borderTopLeftRadius: 'xl',
+          borderBottomLeftRadius: 'xl',
         },
         '& > td:last-of-type': {
-          borderTopRightRadius: '12px',
-          borderBottomRightRadius: '12px',
+          borderTopRightRadius: 'xl',
+          borderBottomRightRadius: 'xl',
         },
       }}
     >
@@ -128,11 +137,14 @@ export function TableRow({
           key={`table-row-${rowIndex}-col-${colIndex}`}
           py={4}
           px={6}
-          sx={colIndex === 0 ? mobileBorderCss : {}} // TODO: this might not be the right style
+          sx={{
+            ...(colIndex === 0
+              ? { ...mobileBorderCss, bg: isHovered ? 'inherit' : 'surface' }
+              : {}),
+          }}
           position={colIndex === 0 ? 'sticky' : 'unset'}
           left={colIndex === 0 ? 0 : undefined}
           zIndex={colIndex === 0 ? 'docked' : undefined}
-          bg="inherit"
         >
           {col.cellRenderer ? (
             col.cellRenderer(col.accessor(rowData[colIndex]))
@@ -147,27 +159,27 @@ export function TableRow({
   );
 }
 
-export interface ColumnDefinition {
+export interface ColumnDefinition<T = any, R = any> {
   id: string;
   header: string | React.ReactNode;
   tooltip?: string;
-  accessor: (value: any) => any;
+  accessor: (value: T) => R;
   sortable?: boolean;
-  cellRenderer?: (value: any) => React.ReactNode;
+  cellRenderer?: (value: R) => React.ReactNode;
 }
 
-export interface TableProps {
+export interface TableProps<T> {
   title?: string;
   topRight?: React.ReactNode;
   topLeft?: React.ReactNode;
-  rowData: any[];
-  columnDefinitions: ColumnDefinition[];
+  rowData: T[];
+  columnDefinitions: ColumnDefinition<T>[];
   onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
   sortColumn?: string | null;
   sortDirection?: 'asc' | 'desc';
 }
 
-export function Table({
+export function Table<T>({
   title,
   topRight,
   topLeft,
@@ -176,7 +188,7 @@ export function Table({
   onSort,
   sortColumn,
   sortDirection,
-}: TableProps) {
+}: TableProps<T>) {
   return (
     <ExplorerErrorBoundary
       // Wrapper={Section}
@@ -189,6 +201,7 @@ export function Table({
       tryAgainButton
     >
       <Suspense fallback={<Box>Loading...</Box>}>
+        {/* <TableProvider initialData={data}> */}
         <TableLayout // TODO: Move this into this file
           rowData={data}
           columnDefinitions={columns}
@@ -199,6 +212,7 @@ export function Table({
           topLeft={topLeft}
           title={title}
         />
+        {/* </TableProvider> */}
       </Suspense>
     </ExplorerErrorBoundary>
   );

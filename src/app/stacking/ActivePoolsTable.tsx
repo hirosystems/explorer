@@ -20,10 +20,10 @@ export function ActivePoolsTable() {
   );
   const columnDefinitions: ColumnDefinition[] = useMemo(
     () => [
-      { id: 'Provider', header: 'Provider', accessor: (val: any) => val, sortable: true },
-      { id: 'PoX Address', header: 'PoX Address', accessor: (val: any) => val, sortable: false },
-      { id: 'Contract', header: 'Contract', accessor: (val: any) => val, sortable: false },
-      { id: 'Rewards in', header: 'Rewards in', accessor: (val: any) => val, sortable: false },
+      { id: 'Provider', header: 'Provider', accessor: val => val, sortable: true },
+      { id: 'PoX Address', header: 'PoX Address', accessor: val => val, sortable: false },
+      { id: 'Contract', header: 'Contract', accessor: val => val, sortable: false },
+      { id: 'Rewards in', header: 'Rewards in', accessor: val => val, sortable: false },
       {
         id: 'Stackers delegating',
         header: 'Stackers delegating',

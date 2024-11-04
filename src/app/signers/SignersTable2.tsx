@@ -21,7 +21,33 @@ function getEntityName(signerKey: string) {
   return entityName === 'unknown' ? '-' : entityName;
 }
 
-type SignerRow = [number, string, string, SignersStackersData[], number, number];
+enum SignerColumnIndex {
+  Index = 0,
+  SignerKey = 1,
+  Entity = 2,
+  AssociatedAddress = 3,
+  VotingPower = 4,
+  StxStaked = 5,
+}
+
+type SignerRowTypes = {
+  [SignerColumnIndex.Index]: number;
+  [SignerColumnIndex.SignerKey]: string;
+  [SignerColumnIndex.Entity]: string;
+  [SignerColumnIndex.AssociatedAddress]: SignersStackersData[];
+  [SignerColumnIndex.VotingPower]: number;
+  [SignerColumnIndex.StxStaked]: number;
+};
+
+// Update your SignerRow type to be more type-safe
+type SignerRow = [
+  SignerRowTypes[SignerColumnIndex.Index],
+  SignerRowTypes[SignerColumnIndex.SignerKey],
+  SignerRowTypes[SignerColumnIndex.Entity],
+  SignerRowTypes[SignerColumnIndex.AssociatedAddress],
+  SignerRowTypes[SignerColumnIndex.VotingPower],
+  SignerRowTypes[SignerColumnIndex.StxStaked],
+];
 
 function formatSignerRowData(
   index: number,
@@ -42,24 +68,24 @@ export const columnDefinitions: ColumnDefinition[] = [
   {
     id: 'index',
     header: '#',
-    accessor: (index: number | undefined) => index,
+    accessor: (val: SignerRowTypes[SignerColumnIndex.Index]) => val,
   },
   {
     id: 'signerKey',
     header: 'Signer key',
-    accessor: (signerKey: string | undefined) => truncateMiddle(signerKey ?? ''),
+    accessor: (val: SignerRowTypes[SignerColumnIndex.SignerKey]) => val,
     sortable: true,
   },
   {
     id: 'entity',
     header: 'Entity',
-    accessor: (signerKey: string | undefined) => getEntityName(signerKey ?? ''),
+    accessor: (val: SignerRowTypes[SignerColumnIndex.Entity]) => getEntityName(val),
     sortable: true,
   },
   {
     id: 'associatedAddress',
     header: 'Associated address',
-    accessor: (stackers: SignersStackersData[] | undefined) => stackers,
+    accessor: (val: SignerRowTypes[SignerColumnIndex.AssociatedAddress]) => val,
     cellRenderer: (stackers: SignersStackersData[] | undefined) => (
       <Flex textOverflow="ellipsis" overflow="hidden">
         {stackers?.slice(0, NUM_OF_ADDRESSES_TO_SHOW).map((stacker, index) => (
@@ -90,13 +116,14 @@ export const columnDefinitions: ColumnDefinition[] = [
   {
     id: 'votingPower',
     header: 'Voting power',
-    accessor: (votingPower: number | undefined) => `${votingPower?.toFixed(2)}%`,
+    accessor: (val: SignerRowTypes[SignerColumnIndex.VotingPower]) => `${val?.toFixed(2)}%`,
     sortable: true,
   },
   {
     id: 'stxStaked',
     header: 'STX stacked',
-    accessor: (stxStaked: number | undefined) => Number(stxStaked?.toFixed(0)).toLocaleString(),
+    accessor: (val: SignerRowTypes[SignerColumnIndex.StxStaked]) =>
+      Number(val?.toFixed(0)).toLocaleString(),
     sortable: true,
   },
 ];

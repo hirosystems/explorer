@@ -77,7 +77,7 @@ function TableContainer({ topLeft, topRight, title, children, ...rest }: TableCo
   );
 }
 
-export function TableLayout({
+export function TableLayout<T>({
   title,
   rowData: data,
   columnDefinitions: columns,
@@ -85,7 +85,7 @@ export function TableLayout({
   sortColumn,
   sortDirection,
   topRight,
-}: TableProps) {
+}: TableProps<T>) {
   return (
     <TableContainer title={title} topRight={topRight}>
       <ScrollableBox>
