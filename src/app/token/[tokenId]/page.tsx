@@ -6,7 +6,6 @@ import { getTokenInfo } from './getTokenInfo';
 
 const Page = dynamic(() => import('./PageClient'), {
   loading: () => <Skeleton />,
-  ssr: false,
 });
 
 export default async function ({

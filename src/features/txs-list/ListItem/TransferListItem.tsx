@@ -1,3 +1,5 @@
+'use client';
+
 import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import * as React from 'react';

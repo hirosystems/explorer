@@ -5,7 +5,7 @@ import { useSuspensePoxInfo } from '../../../../common/queries/usePoxInfo';
 import { DefaultView } from '../../components/ContractCall/DefaultView';
 import { SelectedContractView } from '../../components/ContractCall/SelectedContractView';
 
-export default function ContractCall({ params: { params } }: { params: { params: string[] } }) {
+export default function ContractCall({ params: { params } }: any) {
   const contractId = params?.[0] || undefined;
   const functionName = params?.[1] || undefined;
   const { data: poxInfo } = useSuspensePoxInfo();

@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowBendDownRight, Clock, WarningCircle } from '@phosphor-icons/react';
 import React, { FC } from 'react';
 
