@@ -1,3 +1,10 @@
+# [1.223.0](https://github.com/hirosystems/explorer/compare/v1.222.0...v1.223.0) (2024-11-06)
+
+
+### Features
+
+* upgrade nextjs ([d6b7708](https://github.com/hirosystems/explorer/commit/d6b7708720f9fbb8b480090d0cf95192badb1875))
+
 # [1.222.0](https://github.com/hirosystems/explorer/compare/v1.221.1...v1.222.0) (2024-10-31)
 
 
