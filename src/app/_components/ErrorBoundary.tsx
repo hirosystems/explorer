@@ -8,7 +8,11 @@ import { ErrorBox } from './ErrorBox';
 interface ErrorBoundaryProps<WrapperProps extends PropsWithChildren<Record<string, unknown>>> {
   Wrapper?: ComponentType<WrapperProps>;
   wrapperProps?: WrapperProps;
-  renderContent?: (error: ExplorerError) => ReactNode;
+  renderContent?: (
+    error: ExplorerError,
+    reset: () => void,
+    resetErrorBoundary: () => void
+  ) => ReactNode;
   children: ReactNode;
   tryAgainButton?: boolean;
   homeButton?: boolean;
@@ -30,7 +34,7 @@ export function ExplorerErrorBoundary<WrapperProps extends PropsWithChildren<unk
             return (
               <Wrapper {...wrapperProps}>
                 {renderContent ? (
-                  renderContent(error)
+                  renderContent(error, reset, resetErrorBoundary)
                 ) : (
                   <ErrorBox
                     error={error}

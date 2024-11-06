@@ -1,54 +1,67 @@
+import { ScrollableBox } from '@/app/_components/BlockList/ScrollableDiv';
+import { Tbody } from '@/ui/Tbody';
+import { Thead } from '@/ui/Thead';
 import { Tooltip } from '@/ui/Tooltip';
 import { useColorModeValue } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info } from '@phosphor-icons/react';
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
-import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
+import { Table as CUITable } from '../../../ui/Table';
 import { Td } from '../../../ui/Td';
 import { Text } from '../../../ui/Text';
 import { Th } from '../../../ui/Th';
 import { Tr } from '../../../ui/Tr';
 import { mobileBorderCss } from '../../constants/constants';
-import { TableLayout } from './TableLayout';
+import { TableContainer } from './TableContainer';
+import { TableSkeleton } from './TableSkeleton';
+
+const StyledTable = styled(CUITable)`
+  tr td {
+    border-bottom: none;
+  }
+`;
+
+type SortOrder = 'asc' | 'desc';
 
 interface SortIconProps {
   sortable: boolean | undefined;
   sortColumn: string | undefined | null;
   columnId: string;
-  sortDirection: 'asc' | 'desc' | undefined;
-  onSort: ((columnId: string, direction: 'asc' | 'desc') => void) | undefined;
+  sortOrder: SortOrder | undefined;
+  onSort: ((columnId: string, direction: SortOrder) => void) | undefined;
 }
 
-function SortIcon({ sortable, sortColumn, columnId, sortDirection, onSort }: SortIconProps) {
+function SortIcon({ sortable, sortColumn, columnId, sortOrder, onSort }: SortIconProps) {
   if (!sortable) return null;
   return (
     <Icon
       onClick={() => {
-        onSort?.(columnId, sortDirection === 'asc' ? 'desc' : 'asc');
+        onSort?.(columnId, sortOrder === 'asc' ? 'desc' : 'asc');
       }}
-      as={sortColumn !== columnId ? ArrowsDownUp : sortDirection === 'asc' ? ArrowUp : ArrowDown}
+      as={sortColumn !== columnId ? ArrowsDownUp : sortOrder === 'asc' ? ArrowUp : ArrowDown}
       size={4}
     />
   );
 }
 
-export const TableHeader = <T,>({
+export const TableHeader = <T extends unknown[]>({
   columnDefinition,
   sortColumn,
-  sortDirection,
+  sortOrder,
   headerTitle,
   isFirst,
   onSort,
 }: {
   sortColumn?: string | null;
-  sortDirection?: 'asc' | 'desc';
+  sortOrder?: SortOrder;
   columnDefinition: ColumnDefinition<T>;
   headerTitle: string | React.ReactNode;
   isFirst: boolean;
-  onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
+  onSort?: (columnId: string, direction: SortOrder) => void;
 }) => {
   const colorVal = useColorModeValue('slate.700', 'slate.250');
 
@@ -65,7 +78,7 @@ export const TableHeader = <T,>({
       bg="surface"
       borderBottom="1px solid var(--stacks-colors-borderSecondary)"
       role="columnheader"
-      aria-sort={sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}
+      aria-sort={sortOrder ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none'}
     >
       {typeof headerTitle === 'string' ? ( // TODO: why not also use a custom renderer
         <Flex gap={1.5} alignItems="center" py={4}>
@@ -89,7 +102,7 @@ export const TableHeader = <T,>({
             sortable={columnDefinition.sortable}
             sortColumn={sortColumn}
             columnId={columnDefinition.id}
-            sortDirection={sortDirection}
+            sortOrder={sortOrder}
             onSort={onSort}
           />
         </Flex>
@@ -100,14 +113,14 @@ export const TableHeader = <T,>({
   );
 };
 
-export function TableRow<T>({
+export function TableRow<T extends unknown[]>({
   rowData,
   columns,
   rowIndex,
   isFirst,
   isLast,
 }: {
-  rowData: T[];
+  rowData: T;
   columns: ColumnDefinition<T>[];
   rowIndex: number;
   isFirst: boolean;
@@ -147,10 +160,10 @@ export function TableRow<T>({
           zIndex={colIndex === 0 ? 'docked' : undefined}
         >
           {col.cellRenderer ? (
-            col.cellRenderer(col.accessor(rowData[colIndex]))
+            col.cellRenderer(col.accessor(rowData))
           ) : (
             <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-              {col.accessor(rowData[colIndex])}
+              {col.accessor(rowData)}
             </Text>
           )}
         </Td>
@@ -159,59 +172,99 @@ export function TableRow<T>({
   );
 }
 
-export interface ColumnDefinition<T = any, R = any> {
+export interface ColumnDefinition<T extends unknown[], R = string> {
   id: string;
   header: string | React.ReactNode;
   tooltip?: string;
-  accessor: (value: T) => R;
+  accessor: (row: T) => R;
   sortable?: boolean;
+  onSort?: (a: T, b: T) => number;
   cellRenderer?: (value: R) => React.ReactNode;
 }
 
-export interface TableProps<T> {
+export interface TableProps<T extends unknown[]> {
   title?: string;
   topRight?: React.ReactNode;
   topLeft?: React.ReactNode;
   rowData: T[];
   columnDefinitions: ColumnDefinition<T>[];
-  onSort?: (columnId: string, direction: 'asc' | 'desc') => void;
-  sortColumn?: string | null;
-  sortDirection?: 'asc' | 'desc';
 }
 
-export function Table<T>({
+export function Table<T extends unknown[]>({
   title,
   topRight,
   topLeft,
-  rowData: data,
-  columnDefinitions: columns,
-  onSort,
-  sortColumn,
-  sortDirection,
+  rowData,
+  columnDefinitions,
 }: TableProps<T>) {
+  const [sortColumnId, setSortColumnId] = useState<string | undefined>(undefined);
+  const [sortDirection, setSortDirection] = useState<SortOrder | undefined>(undefined);
+
+  const [sortedRowData, setSortedRowData] = useState(rowData);
+
+  const onSort = useCallback(
+    (columnId: string, sortOrder: SortOrder) => {
+      const columnDefinition = columnDefinitions.find(col => col.id === columnId);
+      if (!columnDefinition) {
+        throw new Error(`Column definition not found for columnId: ${columnId}`);
+      }
+      if (!columnDefinition.sortable) {
+        throw new Error(`Column ${columnId} is not sortable`);
+      }
+      if (!columnDefinition.onSort) {
+        throw new Error(`Column ${columnId} does not have an onSort function`);
+      }
+      setSortColumnId(columnId);
+      setSortDirection(sortOrder);
+      setSortedRowData(rowData.sort(columnDefinition.onSort));
+    },
+    [columnDefinitions, rowData]
+  );
+
   return (
     <ExplorerErrorBoundary
-      // Wrapper={Section}
-      // wrapperProps={{
-      //   title,
-      //   gridColumnStart: ['1', '1', '2'],
-      //   gridColumnEnd: ['2', '2', '3'],
-      //   minWidth: 0,
-      // }}
+      Wrapper={TableContainer}
       tryAgainButton
     >
-      <Suspense fallback={<Box>Loading...</Box>}>
+      <Suspense
+        fallback={
+          <TableSkeleton numColumns={columnDefinitions.length} numRows={rowData.length ?? null} />
+        }
+      >
         {/* <TableProvider initialData={data}> */}
-        <TableLayout // TODO: Move this into this file
-          rowData={data}
-          columnDefinitions={columns}
-          onSort={onSort}
-          sortColumn={sortColumn}
-          sortDirection={sortDirection}
-          topRight={topRight}
-          topLeft={topLeft}
-          title={title}
-        />
+        <TableContainer topRight={topRight} topLeft={topLeft} title={title}>
+          <ScrollableBox>
+            <StyledTable width="full">
+              <Thead>
+                <Tr>
+                  {columnDefinitions?.map((col, colIndex) => (
+                    <TableHeader
+                      key={col.id}
+                      columnDefinition={col}
+                      headerTitle={col.header}
+                      sortColumn={sortColumnId}
+                      sortOrder={sortDirection}
+                      isFirst={colIndex === 0}
+                      onSort={onSort}
+                    />
+                  ))}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {sortedRowData?.map((rowData, rowIndex) => (
+                  <TableRow
+                    key={rowIndex}
+                    rowIndex={rowIndex}
+                    rowData={rowData}
+                    columns={columnDefinitions}
+                    isFirst={rowIndex === 0}
+                    isLast={rowIndex === sortedRowData.length - 1}
+                  />
+                ))}
+              </Tbody>
+            </StyledTable>
+          </ScrollableBox>
+        </TableContainer>
         {/* </TableProvider> */}
       </Suspense>
     </ExplorerErrorBoundary>

@@ -17,13 +17,12 @@ enum BlocksColumnIndex {
 type BlocksRowTypes = {
   [BlocksColumnIndex.Height]: number;
   [BlocksColumnIndex.Hash]: string;
-  [BlocksColumnIndex.BlockTime]: string;
+  [BlocksColumnIndex.BlockTime]: number;
   [BlocksColumnIndex.BurnBlockHeight]: number;
   [BlocksColumnIndex.BurnBlockHash]: string;
-  [BlocksColumnIndex.BurnBlockTime]: string;
+  [BlocksColumnIndex.BurnBlockTime]: number;
 };
 
-// Update your SignerRow type to be more type-safe
 type BlocksRow = [
   BlocksRowTypes[BlocksColumnIndex.Height],
   BlocksRowTypes[BlocksColumnIndex.Hash],
@@ -33,7 +32,7 @@ type BlocksRow = [
   BlocksRowTypes[BlocksColumnIndex.BurnBlockTime],
 ];
 
-function formatRowData(blocks: NakamotoBlock[]) {
+function formatRowData(blocks: NakamotoBlock[]): BlocksRow[] {
   return blocks.map(block => [
     block.height,
     block.hash,
@@ -50,32 +49,50 @@ export function BlocksTable() {
     blocksResponse?.data?.pages[0]?.results ?? ([] as NakamotoBlock[]);
   const formattedRowData = formatRowData(rowData);
 
-  const columnDefinitions: ColumnDefinition[] = useMemo(() => {
+  const columnDefinitions: ColumnDefinition<BlocksRow>[] = useMemo(() => {
     return [
-      { id: 'height', header: 'height', accessor: val => val, sortable: true },
-      { id: 'hash', header: 'hash', accessor: val => truncateMiddle(val), sortable: false },
-      { id: 'block time', header: 'block time', accessor: val => val, sortable: true },
+      {
+        id: 'height',
+        header: 'height',
+        accessor: row => row[BlocksColumnIndex.Height].toString(),
+        sortable: true,
+        onSort: (a, b) => a[BlocksColumnIndex.Height] - b[BlocksColumnIndex.Height],
+      },
+      {
+        id: 'hash',
+        header: 'hash',
+        accessor: row => truncateMiddle(row[BlocksColumnIndex.Hash]),
+        sortable: false,
+      },
+      {
+        id: 'block time',
+        header: 'block time',
+        accessor: row => row[BlocksColumnIndex.BlockTime].toString(),
+        sortable: true,
+        onSort: (a, b) => a[BlocksColumnIndex.BlockTime] - b[BlocksColumnIndex.BlockTime],
+      },
       {
         id: 'burn block height',
         header: 'burn block height',
-        accessor: val => val,
+        accessor: row => row[BlocksColumnIndex.BurnBlockHeight].toString(),
         sortable: true,
+        onSort: (a, b) =>
+          a[BlocksColumnIndex.BurnBlockHeight] - b[BlocksColumnIndex.BurnBlockHeight],
       },
       {
         id: 'burn block hash',
         header: 'burn block hash',
-        accessor: val => truncateMiddle(val),
+        accessor: row => truncateMiddle(row[BlocksColumnIndex.BurnBlockHash]),
         sortable: false,
       },
-      { id: 'burn block time', header: 'burn block time', accessor: val => val, sortable: true },
+      {
+        id: 'burn block time',
+        header: 'burn block time',
+        accessor: row => row[BlocksColumnIndex.BurnBlockTime].toString(),
+        sortable: true,
+        onSort: (a, b) => a[BlocksColumnIndex.BurnBlockTime] - b[BlocksColumnIndex.BurnBlockTime],
+      },
     ];
   }, []);
-  return (
-    <Table
-      title="Blocks"
-      topRight={null}
-      rowData={formattedRowData}
-      columnDefinitions={columnDefinitions}
-    />
-  );
+  return <Table title="Blocks" rowData={formattedRowData} columnDefinitions={columnDefinitions} />;
 }

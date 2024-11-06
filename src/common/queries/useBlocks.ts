@@ -9,23 +9,13 @@ import { TWO_MINUTES } from './query-stale-time';
 
 const BLOCKS_QUERY_KEY = 'blocks';
 
-interface BlocksResponse {
-  limit: number;
-  offset: number;
-  total: number;
-  next_cursor: string | null;
-  prev_cursor: string | null;
-  cursor: string;
-  results: NakamotoBlock[];
-}
-
 const DEFAULT_BLOCKS_LIMIT = 20;
 
 const fetchBlocks = async (
   apiUrl: string,
   pageParam: string,
   options: any
-): Promise<ApiResponseWithCursorPagination<BlocksResponse>> => {
+): Promise<ApiResponseWithCursorPagination<NakamotoBlock>> => {
   const limit = options.limit || DEFAULT_BLOCKS_LIMIT;
   const cursor = pageParam || undefined;
   const queryString = new URLSearchParams(
@@ -44,7 +34,7 @@ const fetchBlocks = async (
 
 export function useBlocks(options: any = {}) {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
-  return useInfiniteQuery<ApiResponseWithCursorPagination<BlocksResponse>>({
+  return useInfiniteQuery<ApiResponseWithCursorPagination<NakamotoBlock>>({
     queryKey: [BLOCKS_QUERY_KEY],
     queryFn: ({ pageParam }) => fetchBlocks(activeNetworkUrl, pageParam as string, options),
     getNextPageParam: getNextPageCursorParam,
