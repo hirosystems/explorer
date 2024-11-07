@@ -1,3 +1,10 @@
+# [1.224.0](https://github.com/hirosystems/explorer/compare/v1.223.0...v1.224.0) (2024-11-07)
+
+
+### Features
+
+* explocot disable dangerouslyallowsvg ([c29b81b](https://github.com/hirosystems/explorer/commit/c29b81bdb38e84b6a115200953ed4439bf9434fa))
+
 # [1.223.0](https://github.com/hirosystems/explorer/compare/v1.222.0...v1.223.0) (2024-11-06)
 
 
