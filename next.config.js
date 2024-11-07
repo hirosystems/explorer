@@ -6,6 +6,7 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const nextConfig = {
   output: 'standalone',
   images: {
+    dangerouslyAllowSVG: false,
     remotePatterns: [
       {
         protocol: 'https',
