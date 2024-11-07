@@ -1,3 +1,10 @@
+# [1.226.0](https://github.com/hirosystems/explorer/compare/v1.225.0...v1.226.0) (2024-11-07)
+
+
+### Features
+
+* added signer updates ([48fbad2](https://github.com/hirosystems/explorer/commit/48fbad24f480aa2eac62b62a599c73cd48c44b0c))
+
 # [1.225.0](https://github.com/hirosystems/explorer/compare/v1.224.0...v1.225.0) (2024-11-07)
 
 
