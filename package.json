@@ -27,7 +27,7 @@
   "dependencies": {
     "@chakra-ui/anatomy": "2.2.2",
     "@chakra-ui/next-js": "2.2.0",
-    "@chakra-ui/react": "2.8.2",
+    "@chakra-ui/react": "3.1.0",
     "@chakra-ui/theme-tools": "2.1.2",
     "@contentful/rich-text-react-renderer": "15.21.2",
     "@contentful/rich-text-types": "16.5.2",
@@ -35,9 +35,8 @@
     "@emotion/cache": "11.11.0",
     "@emotion/core": "11.0.0",
     "@emotion/css": "11.11.2",
-    "@emotion/react": "11.11.1",
+    "@emotion/react": "11.13.3",
     "@emotion/server": "11.11.0",
-    "@emotion/styled": "11.11.0",
     "@hirosystems/token-metadata-api-client": "1.2.0",
     "@monaco-editor/react": "4.5.2",
     "@next/bundle-analyzer": "14.2.0",
@@ -70,7 +69,6 @@
     "eslint-plugin-import": "2.29.0",
     "express": "4.19.2",
     "formik": "2.4.3",
-    "framer-motion": "10.16.4",
     "http-status-codes": "2.3.0",
     "husky": "8.0.3",
     "ioredis": "5.3.2",
@@ -116,6 +114,7 @@
     "yup": "1.2.0"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^3.1.0",
     "@chromatic-com/storybook": "1.9.0",
     "@commitlint/config-conventional": "12.1.4",
     "@next/eslint-plugin-next": "14.0.3",

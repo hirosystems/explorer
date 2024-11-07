@@ -27,6 +27,9 @@ const nextConfig = {
       },
     ];
   },
+  experimental: {
+    optimizePackageImports: ['@chakra-ui/react'],
+  },
 };
 
 module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {
