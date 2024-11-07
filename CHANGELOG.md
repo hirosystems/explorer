@@ -1,3 +1,10 @@
+# [1.225.0](https://github.com/hirosystems/explorer/compare/v1.224.0...v1.225.0) (2024-11-07)
+
+
+### Features
+
+* remove img remote pattern ([ee430fd](https://github.com/hirosystems/explorer/commit/ee430fdac6b700d5553893e32f83befe48b9737d))
+
 # [1.224.0](https://github.com/hirosystems/explorer/compare/v1.223.0...v1.224.0) (2024-11-07)
 
 
