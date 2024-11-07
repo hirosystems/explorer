@@ -1,11 +1,10 @@
+import { Box, Stack } from '@chakra-ui/react';
 import { ReactNode, Suspense } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { formatSignerLatency, formatSignerProposalMetric } from '../../../app/signers/SignersTable';
 import { useSignerMetricsSignerForCycle } from '../../../app/signers/data/signer-metrics-hooks';
 import { Section } from '../../../common/components/Section';
-import { Box } from '../../../ui/Box';
-import { Stack } from '../../../ui/Stack';
 import { Caption } from '../../../ui/typography';
 import { useSuspenseCurrentStackingCycle } from '../../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { SignerKeyStatsSkeleton } from './skeleton';

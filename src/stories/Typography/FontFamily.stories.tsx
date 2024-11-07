@@ -1,12 +1,12 @@
+import { Stack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Heading } from '../../ui/Heading';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 
 // TODO: The fonts that are downloaded are not being used in the stroybook build
 const FontFamilyDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Font Families</Heading>
 
     <Text fontFamily="inter">Inter (Body): The quick brown fox jumps over the lazy dog</Text>
@@ -41,7 +41,7 @@ export const FontFamilies: Story = {
       source: {
         code: `
 const FontFamilyDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Font Families</Heading>
 
     <Text fontFamily='inter'>

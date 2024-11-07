@@ -1,7 +1,12 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
+import {
+  Box,
+  Icon,
+  ProgressCircleRoot as ProgressCircle,
+  ProgressCircleValueText,
+  Stack,
+} from '@chakra-ui/react';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
@@ -10,11 +15,6 @@ import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { useAddressConfirmedTxsWithTransfersInfinite } from '../../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { useCoreApiInfo } from '../../../../common/queries/useCoreApiInfo';
 import { getStackingStartBlockHeight } from '../../../../common/utils/accounts';
-import { Box } from '../../../../ui/Box';
-import { CircularProgress } from '../../../../ui/CircularProgress';
-import { CircularProgressLabel } from '../../../../ui/CircularProgressLabel';
-import { Icon } from '../../../../ui/Icon';
-import { Stack } from '../../../../ui/Stack';
 import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption, Title } from '../../../../ui/typography';
 
@@ -29,7 +29,6 @@ export const StackingPercentage = ({
   const { data } = useAddressConfirmedTxsWithTransfersInfinite(address);
   const firstPageTxs = data?.pages?.[0]?.results.map(txWithTransfers => txWithTransfers.tx);
   const stackingStartBlock = getStackingStartBlockHeight(firstPageTxs);
-  const progressColor = useColorModeValue('brand', 'purple.400');
 
   if (stackingStartBlock) {
     if (!stacksInfo) {
@@ -37,7 +36,7 @@ export const StackingPercentage = ({
         <Stack gap={2} py={4}>
           <Caption>Stacking progress</Caption>
           <Stack gap={2} alignItems="center">
-            <CircularProgress isIndeterminate color={progressColor} />
+            <ProgressCircle value={null} color="stackingPercentageProgressColor" />
             <Caption>Calculating...</Caption>
           </Stack>
         </Stack>
@@ -60,12 +59,21 @@ export const StackingPercentage = ({
         <Caption>Stacking progress</Caption>
         <Stack gap={2} alignItems="center">
           {isStacking ? (
-            <CircularProgress value={stackingPercentage} color={progressColor} size={'180px'}>
-              <CircularProgressLabel>{`${Math.round(stackingPercentage)}%`}</CircularProgressLabel>
-            </CircularProgress>
+            <ProgressCircle
+              value={stackingPercentage}
+              color="stackingPercentageProgressColor"
+              h={'180px'}
+              w={'180px'}
+            >
+              <ProgressCircleValueText>{`${Math.round(
+                stackingPercentage
+              )}%`}</ProgressCircleValueText>
+            </ProgressCircle>
           ) : (
-            <Circle mx="auto" size="48px" mb="16px" bg={'invert'}>
-              <Icon as={StxIcon} size={'24px'} color="white" />
+            <Circle mx="auto" h={12} w={12} mb="16px" bg={'invert'}>
+              <Icon h={6} w={6} color="white">
+                <StxIcon />
+              </Icon>
             </Circle>
           )}
           {isStacking ? (

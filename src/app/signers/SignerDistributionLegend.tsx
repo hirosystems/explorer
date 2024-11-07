@@ -1,10 +1,8 @@
+import { Box, ClientOnly, Flex, Stack, TextProps } from '@chakra-ui/react';
 import { ReactNode, useMemo } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { Stack } from '../../ui/Stack';
-import { Text, TextProps } from '../../ui/Text';
-import { useColorMode } from '../../ui/hooks/useColorMode';
+import { useColorMode } from '../../components/ui/color-mode';
+import { Text } from '../../ui/Text';
 import { getSignerDistributionPieChartColor } from './SignerDistributionPieChart';
 import { PoxSigner } from './data/useSigners';
 import { getSignerKeyName } from './utils';
@@ -19,40 +17,39 @@ export function SignerLegendItem({
   signerVotingPower: number | ReactNode;
   isKnownSigner?: boolean;
 } & TextProps) {
-  const colorMode = useColorMode();
+  const { colorMode } = useColorMode();
+
   return (
-    <Flex justifyContent="space-between" gap={2}>
-      <Flex direction="row" gap={2} alignItems="center">
-        <Box
-          height={2}
-          width={2}
-          borderRadius="50%"
-          backgroundColor={
-            typeof signerVotingPower === 'number'
-              ? getSignerDistributionPieChartColor(
-                  isKnownSigner,
-                  signerVotingPower,
-                  colorMode.colorMode
-                )
-              : 'textSubdued'
-          }
-        />
-        {typeof signerName === 'string' ? (
-          <Text fontSize="sm" {...rest}>
-            {signerName}
+    <ClientOnly>
+      <Flex justifyContent="space-between" gap={2}>
+        <Flex gap={2} alignItems="center">
+          <Box
+            height={2}
+            width={2}
+            borderRadius="50%"
+            backgroundColor={
+              typeof signerVotingPower === 'number'
+                ? getSignerDistributionPieChartColor(isKnownSigner, signerVotingPower, colorMode)
+                : 'textSubdued'
+            }
+          />
+          {typeof signerName === 'string' ? (
+            <Text fontSize="sm" {...rest}>
+              {signerName}
+            </Text>
+          ) : (
+            signerName
+          )}
+        </Flex>
+        {typeof signerVotingPower === 'number' ? (
+          <Text fontSize="sm" fontWeight="semibold" {...rest}>
+            {signerVotingPower.toFixed(2)}%
           </Text>
         ) : (
-          signerName
+          signerVotingPower
         )}
       </Flex>
-      {typeof signerVotingPower === 'number' ? (
-        <Text fontSize="sm" fontWeight="semibold" {...rest}>
-          {signerVotingPower.toFixed(2)}%
-        </Text>
-      ) : (
-        signerVotingPower
-      )}
-    </Flex>
+    </ClientOnly>
   );
 }
 

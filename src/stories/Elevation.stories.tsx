@@ -1,92 +1,68 @@
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Box } from '../ui/Box';
-import { Flex } from '../ui/Flex';
-import { Stack } from '../ui/Stack';
 import { Text } from '../ui/Text';
-import { useColorMode } from '../ui/hooks/useColorMode';
-import { theme } from '../ui/theme/theme';
+import { system } from '../ui/theme/theme';
 
 const customShadows = ['elevation1', 'elevation2', 'elevation3'];
 
 const ElevationDemo = () => {
-  const { colorMode } = useColorMode();
-
   return (
     <Stack gap={8}>
-      <Flex direction="column" gap={8} p={4}>
-        <Text fontSize="2xl" fontWeight="bold">
-          Elevation Showcase
-        </Text>
-        <Text fontSize="2xl" fontWeight="bold">
-          Chakra UI Default Elevations
-        </Text>
-        {Object.entries(theme.shadows).map(([elevationName, elevationValue]) => {
-          if (customShadows.includes(elevationName)) return null;
-          return (
-            <Flex key={elevationName} align="center" gap={4}>
-              <Box
-                width="200px"
-                height="100px"
-                bg={colorMode === 'light' ? 'white' : 'gray.800'}
-                boxShadow={elevationValue as string}
-                borderRadius="md"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color="black">{elevationName}</Text>
-              </Box>
-              <Text>{elevationValue as string}</Text>
-            </Flex>
-          );
-        })}
+      <Text fontSize="2xl" fontWeight="bold">
+        Elevation Showcase
+      </Text>
+      <Stack gap={8} p={4}>
         <Text fontSize="2xl" fontWeight="bold">
           Custom Elevations
         </Text>
-        {Object.entries(theme.shadows).map(([elevationName, elevationValue]) => {
-          if (!customShadows.includes(elevationName)) return null;
-          return (
-            <Flex key={elevationName} align="center" gap={4}>
-              <Box
-                width="200px"
-                height="100px"
-                bg={colorMode === 'light' ? 'white' : 'gray.800'}
-                boxShadow={(elevationValue as any).default}
-                borderRadius="md"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color="black">{elevationName}</Text>
-              </Box>
-              <Text>{(elevationValue as any)[colorMode === 'light' ? 'default' : '_dark']}</Text>
-            </Flex>
-          );
-        })}
-      </Flex>
-      <Flex direction="column" gap={8} bg="#211F1F" p={4}>
-        {Object.entries(theme.shadows).map(([elevationName, elevationValue]) => {
-          if (!customShadows.includes(elevationName)) return null;
-          return (
-            <Flex key={elevationName} align="center" gap={4}>
-              <Box
-                width="200px"
-                height="100px"
-                bg={'#211F1F'}
-                boxShadow={(elevationValue as any)._dark}
-                borderRadius="md"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color="white">{elevationName}</Text>
-              </Box>
-              <Text color="white">{(elevationValue as any)._dark}</Text>
-            </Flex>
-          );
-        })}
-      </Flex>
+        {Object.entries(system._config.theme?.tokens?.shadows ?? {}).map(
+          ([elevationName, elevationValue]) => {
+            if (!customShadows.includes(elevationName)) return null;
+            return (
+              <Flex key={elevationName} align="center" gap={4}>
+                <Box
+                  width="200px"
+                  height="100px"
+                  bg={'white'}
+                  boxShadow={(elevationValue as any)['default'].value}
+                  borderRadius="md"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text color="black">{elevationName}</Text>
+                </Box>
+                <Text>{(elevationValue as any)['default'].value}</Text>
+              </Flex>
+            );
+          }
+        )}
+      </Stack>
+      <Stack gap={8} bg="#211F1F" p={4}>
+        {Object.entries(system._config.theme?.tokens?.shadows ?? {}).map(
+          ([elevationName, elevationValue]) => {
+            if (!customShadows.includes(elevationName)) return null;
+            return (
+              <Flex key={elevationName} align="center" gap={4}>
+                <Box
+                  width="200px"
+                  height="100px"
+                  bg={'#211F1F'}
+                  boxShadow={(elevationValue as any)._dark.value}
+                  borderRadius="md"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Text color="white">{elevationName}</Text>
+                </Box>
+                <Text color="white">{(elevationValue as any)._dark.value}</Text>
+              </Flex>
+            );
+          }
+        )}
+      </Stack>
     </Stack>
   );
 };
@@ -101,7 +77,7 @@ const meta = {
         code: `
           //Showing ElevationDemo for light mode. For dark mode, use _dark instead of default.
    const ElevationDemo = () => (
-  <Stack spacing={8}>
+  <Stack gap={8}>
     <Text fontSize="2xl" fontWeight="bold">Elevation Showcase</Text>
     
     <Flex direction="column" gap={4}>

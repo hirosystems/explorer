@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Flex, Icon, useBreakpointValue } from '@chakra-ui/react';
 import { Clock } from '@phosphor-icons/react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -8,18 +9,14 @@ import { BtcStxBlockLinks } from '../../../../common/components/BtcStxBlockLinks
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { Value } from '../../../../common/components/Value';
 import { toRelativeTime } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
 import { Tooltip } from '../../../../ui/Tooltip';
-import { useMediaQuery } from '../../../../ui/hooks/useMediaQuery';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { useTxBlock } from '../useTxBlock';
 import { isInMempool, isInMicroblock } from '../utils';
 
 function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
   const { data: block } = useTxBlock(tx);
-  const [isOnTouchScreen] = useMediaQuery('(hover: none)');
+  const isOnTouchScreen = useBreakpointValue({ base: true, md: false }); // TODO: get rid of this. use css
 
   if (isInMempool(tx) || isInMicroblock(tx)) return null;
 
@@ -49,15 +46,19 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
           <Box>
             {isOnTouchScreen ? (
               <Flex alignItems="center">
-                <Icon as={Clock} size={4} mr="4px" />
+                <Icon h={4} w={4} mr={1}>
+                  <Clock />
+                </Icon>
                 <Value suppressHydrationWarning={true}>
                   {toRelativeTime(ts * 1000)} - {readableTs}
                 </Value>
               </Flex>
             ) : (
-              <Tooltip label={readableTs}>
+              <Tooltip content={readableTs}>
                 <Flex alignItems="center">
-                  <Icon as={Clock} size={4} mr="4px" />
+                  <Icon h={4} w={4} mr={1}>
+                    <Clock />
+                  </Icon>
                   <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
                 </Flex>
               </Tooltip>

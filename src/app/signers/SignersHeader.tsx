@@ -1,14 +1,10 @@
+import { Box, Flex, Grid, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { Grid } from '../../ui/Grid';
-import { Icon } from '../../ui/Icon';
 import { Link } from '../../ui/Link';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { CurrentCycleCard } from './CurrentCycleCard';
 import { NextCycleCard } from './NextCycleCard';
@@ -41,7 +37,7 @@ export function SignersHeaderLayout({
         <Box px={8}>{signerDistributionHeader}</Box>
         <Grid gridTemplateColumns={['100%', '100%', '100%', '100%', 'repeat(2, 1fr)']} gap={8}>
           <Box
-            height={['auto', 'auto', 550, 550, 550]}
+            h="auto"
             paddingBottom={[0, 0, 0, 0, 7]}
             paddingLeft={7}
             paddingRight={[7, 7, 7, 7, 0]}
@@ -59,7 +55,7 @@ export function SignersHeaderLayout({
         </Grid>
         <Box
           width="100%"
-          border="1px solid var(--stacks-colors-borderSecondary)"
+          border="1px solid var(--stacks-colors-border-secondary)"
           display={['none', 'none', 'none', 'none', 'block']}
         />
         <Stack width="full" height="100%" gap={4} pt={7} px={7}>
@@ -102,7 +98,9 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Link href="/" color="textSubdued" fontSize="xs" mr={1}>
             See Stacking historical data
           </Link>
-          <Icon as={ArrowRight} size={'12px'} color="textSubdued" />
+          <Icon h={3} w={3} color="textSubdued">
+            <ArrowRight />
+          </Icon>
         </Flex>
       }
       signersMap={<SignersMapComponent />}

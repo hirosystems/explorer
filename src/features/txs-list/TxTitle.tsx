@@ -1,10 +1,10 @@
+import { Box, Flex } from '@chakra-ui/react';
+
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TxLink } from '../../common/components/ExplorerLinks';
 import { StxPrice } from '../../common/components/StxPrice';
 import { getContractName, getFunctionName, microToStacksFormatted } from '../../common/utils/utils';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
 
 export const TxTitle = ({
   tx,

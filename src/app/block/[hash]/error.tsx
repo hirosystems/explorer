@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Grid, HStack, Stack } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../../../common/components/ErrorMessageLayout';
@@ -8,11 +9,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useError } from '../../../common/hooks/useError';
 import { ExplorerError } from '../../../common/types/Error';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { Box } from '../../../ui/Box';
 import { ButtonLink } from '../../../ui/ButtonLink';
-import { Flex } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
-import { HStack } from '../../../ui/HStack';
 import { PageTitle } from '../../_components/PageTitle';
 
 const defaultErrorMessage = 'Failed to fetch block';
@@ -25,10 +22,10 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
   const network = useGlobalContext().activeNetwork;
   const { errorName, errorStatusCode, errorMessage } = useError(error, defaultErrorMessage);
   return (
-    <Flex direction={'column'} mt="32px" gap="32px">
+    <Stack mt={8} gap={8}>
       <PageTitle>{defaultErrorMessage}</PageTitle>
       <Section>
-        <Grid placeItems="center" p="32px" minHeight="350px">
+        <Grid placeItems="center" p={8} minHeight="350px">
           <Box>
             <ErrorMessageLayout
               errorStatusCode={errorStatusCode}
@@ -37,12 +34,18 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink href={buildUrl('/', network)} mt="24px">
+                    <ButtonLink
+                      buttonProps={{ mt: 6 }}
+                      linkProps={{ href: buildUrl('/', network) }}
+                    >
                       Go home
                     </ButtonLink>
                   </Box>
                   <Box>
-                    <ButtonLink href={buildUrl('/blocks', network)} variant="secondary" mt="24px">
+                    <ButtonLink
+                      buttonProps={{ mt: 6, variant: 'secondary' }}
+                      linkProps={{ href: buildUrl('/blocks', network) }}
+                    >
                       All blocks
                     </ButtonLink>
                   </Box>
@@ -52,6 +55,6 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
           </Box>
         </Grid>
       </Section>
-    </Flex>
+    </Stack>
   );
 }

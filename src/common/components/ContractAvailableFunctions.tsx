@@ -1,5 +1,6 @@
 'use client';
 
+import { Flex } from '@chakra-ui/react';
 import { FC, useState } from 'react';
 
 import { ClarityAbiFunction } from '@stacks/transactions';
@@ -9,7 +10,6 @@ import { FunctionView } from '../../app/sandbox/components/ContractCall/Function
 import { useUser } from '../../app/sandbox/hooks/useUser';
 import { setUserData } from '../../app/sandbox/sandbox-slice';
 import { Button } from '../../ui/Button';
-import { Flex } from '../../ui/Flex';
 import { TextLink } from '../../ui/TextLink';
 import { Caption } from '../../ui/typography';
 import { useAppDispatch } from '../state/hooks';
@@ -26,7 +26,7 @@ export const ContractAvailableFunctions: FC<{
   return (
     <>
       {!isConnected ? (
-        <Flex alignItems={'center'} justifyContent={'center'} py={'24px'}>
+        <Flex alignItems={'center'} justifyContent={'center'} py={6}>
           <Button
             onClick={() =>
               connect({
@@ -49,7 +49,7 @@ export const ContractAvailableFunctions: FC<{
           }
           cancelButton={
             <TextLink onClick={() => setFunctionName('')}>
-              <Caption _hover={{ cursor: 'pointer', color: 'textTitle' }} mt="16px">
+              <Caption _hover={{ cursor: 'pointer', color: 'textTitle' }} mt={4}>
                 Cancel
               </Caption>
             </TextLink>

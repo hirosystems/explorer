@@ -1,13 +1,11 @@
+import { Box, Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
-import { Box } from '../../../ui/Box';
-import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
-import { Stack } from '../../../ui/Stack';
+import { Button } from '../../../components/ui/button';
+import { Field as ChakraField } from '../../../components/ui/field';
 import { DateInput } from './DateInput';
 
 interface FormValues {
@@ -49,8 +47,7 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
           <Stack gap={4}>
             <Field name="startTime">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl>
-                  <FormLabel>After:</FormLabel>
+                <ChakraField label="After:">
                   <DatePicker
                     customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
                     selected={
@@ -71,17 +68,17 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
                     }}
                     dateFormat="yyyy-MM-dd"
                   />
-                </FormControl>
+                </ChakraField>
               )}
             </Field>
           </Stack>
-          <Box mt={'16px'}>
+          <Box mt={4}>
             <Button
               width="100%"
               type="submit"
               fontSize={'sm'}
               variant={'secondary'}
-              height={'40px'}
+              height={10}
               color="textSubdued"
             >
               Apply

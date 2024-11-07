@@ -18,8 +18,8 @@ const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
   connect: sandboxSlice.reducer,
-  ...filterAndSortReducers,
   activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
+  ...filterAndSortReducers,
 });
 
 export const makeStore = () =>

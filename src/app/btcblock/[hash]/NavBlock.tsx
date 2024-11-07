@@ -1,9 +1,8 @@
+import { Flex, Icon } from '@chakra-ui/react';
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
 
 export enum NavDirection {
@@ -40,11 +39,9 @@ export function NavBlock({
       }
     >
       <Flex alignItems="center" justifyContent="center" height="100%" width="100%">
-        <Icon
-          as={direction === NavDirection.Forward ? ArrowRight : ArrowLeft}
-          size={4}
-          fill="var(--stacks-colors-slate-50)"
-        />
+        <Icon h={4} w={4} fill="var(--stacks-colors-slate-50)">
+          {direction === NavDirection.Forward ? <ArrowRight /> : <ArrowLeft />}
+        </Icon>
       </Flex>
     </Link>
   );

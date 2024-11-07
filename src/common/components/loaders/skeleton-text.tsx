@@ -1,6 +1,5 @@
-import * as React from 'react';
+import { Flex } from '@chakra-ui/react';
 
-import { Flex } from '../../../ui/Flex';
 import { Section } from '../Section';
 import { SkeletonBlock } from './skeleton-transaction';
 

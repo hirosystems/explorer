@@ -1,16 +1,14 @@
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { SignOut } from '@phosphor-icons/react';
 
 import { Card } from '../../../common/components/Card';
 import { useAppSelector } from '../../../common/state/hooks';
 import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
-import { Stack } from '../../../ui/Stack';
+import { Text } from '../../../ui/Text';
 import { Tooltip } from '../../../ui/Tooltip';
 import StxIcon from '../../../ui/icons/StxIcon';
-import { Caption, Text } from '../../../ui/typography';
+import { Caption } from '../../../ui/typography';
 import { TransactionsPanel } from '../components/TransactionsPanel';
 import { useUser } from '../hooks/useUser';
 import { selectShowRightPanel } from '../sandbox-slice';
@@ -46,7 +44,9 @@ export function RightPanel() {
                 color={'textTitle'}
                 gap={'8px'}
               >
-                <Icon as={StxIcon} size={'18px'} color="black" />
+                <Icon h={4.5} w={4.5} color="black">
+                  <StxIcon />
+                </Icon>
                 <Text fontWeight={600} fontSize={'24px'} display="block" position="relative">
                   {balance?.stx?.balance ? microToStacksFormatted(balance.stx.balance) : 0} STX
                 </Text>
@@ -63,13 +63,12 @@ export function RightPanel() {
                   position="relative"
                   ml="8px"
                 >
-                  <Tooltip placement="bottom" label="Sign out">
-                    <IconButton
-                      height={5}
-                      width={5}
-                      icon={<Icon as={SignOut} size={3.5} />}
-                      aria-label={'sign out'}
-                    />
+                  <Tooltip positioning={{ placement: 'bottom' }} content="Sign out">
+                    <IconButton height={5} width={5} aria-label={'sign out'}>
+                      <Icon h={3.5} w={3.5} color="icon">
+                        <SignOut />
+                      </Icon>
+                    </IconButton>
                   </Tooltip>
                 </Box>
               </Flex>

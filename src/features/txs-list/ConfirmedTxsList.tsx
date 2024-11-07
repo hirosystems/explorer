@@ -1,3 +1,5 @@
+import { Box, Flex } from '@chakra-ui/react';
+
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
@@ -7,8 +9,6 @@ import { DateFilter } from '../../app/search/filters/Date';
 import { ListFooter } from '../../common/components/ListFooter';
 import { useInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
 import { useConfirmedTransactionsInfinite } from '../../common/queries/useConfirmedTransactionsInfinite';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
 import { NoTxs } from '../search/NoTxs';
 import { FilterButton } from '../txsFilterAndSort/FilterButton';
 import { ShowValueMenu } from '../txsFilterAndSort/ShowValueMenu';
@@ -35,7 +35,12 @@ function ConfirmedTxsListBase({
   return (
     <Box pb={6}>
       {!!filters && (
-        <Flex borderBottom={'1px'} pb={4.5} gap={4} flexWrap={'wrap'}>
+        <Flex
+          borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
+          pb={4.5}
+          gap={4}
+          flexWrap={'wrap'}
+        >
           <Flex gap={2} flexWrap={'wrap'}>
             <AddressFilter
               defaultFromAddress={filters.fromAddress}

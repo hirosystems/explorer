@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Flex, Grid, Stack } from '@chakra-ui/react';
 import { BigNumber } from 'bignumber.js';
 import { Form, Formik } from 'formik';
 import { NextPage } from 'next';
@@ -11,13 +12,10 @@ import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
 import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
 import { useFeeTransfer } from '../../../common/queries/useFeeTransfer';
 import { microToStacks, stacksToMicro, validateStacksAddress } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
 import { Input } from '../../../ui/Input';
-import { Stack } from '../../../ui/Stack';
-import { Caption, Text, Title } from '../../../ui/typography';
+import { Text } from '../../../ui/Text';
+import { Caption, Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 
 const PageClient: NextPage = () => {

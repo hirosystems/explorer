@@ -1,6 +1,6 @@
+import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import '@testing-library/jest-dom';
 
-import { renderWithReduxProviders } from '../../../../common/utils/test-utils/renderWithReduxProvider';
 import { MobileNav } from '../MobileNav';
 
 describe('MobileNav', () => {
@@ -27,7 +27,7 @@ describe('MobileNav', () => {
 
     const mockClose = jest.fn();
 
-    const { asFragment } = renderWithReduxProviders(
+    const { asFragment } = renderWithChakraProviders(
       <MobileNav
         navItems={mockNavItems}
         close={mockClose}
@@ -37,6 +37,7 @@ describe('MobileNav', () => {
         }}
       />
     );
+
     expect(asFragment()).toMatchSnapshot();
   });
 });

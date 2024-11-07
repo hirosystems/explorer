@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import { Flex, FlexProps } from '@chakra-ui/react';
 
 import { useStxPrice } from '../../../../common/queries/useCurrentPrices';
 import {
@@ -8,7 +8,6 @@ import {
   getLocaleDecimalSeparator,
   getUsdValue,
 } from '../../../../common/utils/utils';
-import { Flex, FlexProps } from '../../../../ui/Flex';
 import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 

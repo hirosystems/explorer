@@ -1,5 +1,6 @@
 'use client';
 
+import { Flex, Icon } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 import { useParamsBlockHash } from '../../../app/block/[hash]/useParamsBlockHash';
@@ -8,8 +9,6 @@ import { Section } from '../../../common/components/Section';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
 import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
@@ -17,7 +16,7 @@ import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
 const StyledSection = styled(Section)`
   .key-value-vertical:not(:last-child) {
-    border-bottom: 1px solid var(--stacks-colors-borderSecondary);
+    border-bottom: 1px solid var(--stacks-colors-border-secondary);
   }
 `;
 
@@ -39,7 +38,9 @@ export function BitcoinAnchorDetailsBase() {
         value={
           <Link target="_blank" href={`${btcBlockBaseUrl}/${btcBlock.burn_block_height}`}>
             <Flex alignItems="center" gap={2}>
-              <Icon as={BitcoinIcon} size={5} />
+              <Icon h={5} w={5}>
+                <BitcoinIcon />
+              </Icon>
               <Text fontSize="sm" fontWeight="medium">
                 #{btcBlock.burn_block_height}
               </Text>

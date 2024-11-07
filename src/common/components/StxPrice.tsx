@@ -1,12 +1,11 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
-import { Flex } from '../../ui/Flex';
 import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppSelector } from '../state/hooks';
 import { TransactionValueFilterTypes } from '../state/slices/transaction-value-filter-slice';
@@ -33,9 +32,6 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
     [historicalStxPrice, value]
   );
 
-  const bg = useColorModeValue('purple.200', 'purple.400');
-  const hoverBg = useColorModeValue('purple.300', 'purple.300');
-
   const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
 
   if (!isMainnet) {
@@ -54,8 +50,8 @@ const StxPriceBase: FC<StxPriceProps> = ({ tx, value }) => {
       _focus={{ outline: 0 }}
       flexShrink={0}
       suppressHydrationWarning={true}
-      bg={bg}
-      _hover={{ bg: hoverBg }}
+      bg={'stxPrice.background'}
+      _hover={{ bg: 'purple.400' }}
       color={'black'}
     >
       {activeTransactionValueFilter === TransactionValueFilterTypes.CurrentValue

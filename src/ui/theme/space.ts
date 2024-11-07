@@ -39,20 +39,34 @@
 export const CURRENT_SPACE = {};
 
 export const NEW_SPACE = {
-  0: '0px',
-  1: '0.25rem', // 4px
-  2: '0.5rem', // 8px
-  3: '0.75rem', // 12px
-  4: '1rem', // 16px
-  4.5: '1.125rem',
-  5: '1.25rem', // 20px
-  6: '1.5rem', // 24px
-  8: '2rem', // 32px
-  10: '2.5rem', // 40px
-  12: '3rem', // 48px
-  16: '4rem', // 64px
-  18: '4.5rem', // 72px
-  30: '7.5rem', // 120px
+  0: { value: '0px' },
+  1: { value: '0.25rem' }, // 4px
+  2: { value: '0.5rem' }, // 8px
+  3: { value: '0.75rem' }, // 12px
+  4: { value: '1rem' }, // 16px
+  4.5: { value: '1.125rem' },
+  5: { value: '1.25rem' }, // 20px
+  6: { value: '1.5rem' }, // 24px
+  8: { value: '2rem' }, // 32px
+  10: { value: '2.5rem' }, // 40px
+  12: { value: '3rem' }, // 48px
+  16: { value: '4rem' }, // 64px
+  18: { value: '4.5rem' }, // 72px
+  20: { value: '5rem' }, // 80px
+  24: { value: '6rem' }, // 96px
+  28: { value: '7rem' }, // 112px
+  32: { value: '8rem' }, // 128px
+  36: { value: '9rem' }, // 144px
+  40: { value: '10rem' }, // 160px
+  44: { value: '11rem' }, // 176px
+  48: { value: '12rem' }, // 192px
+  52: { value: '13rem' }, // 208px
+  56: { value: '14rem' }, // 224px
+  60: { value: '15rem' }, // 240px
+  64: { value: '16rem' }, // 256px
+  72: { value: '18rem' }, // 288px
+  80: { value: '20rem' }, // 320px
+  96: { value: '24rem' }, // 384px
 };
 
 export const SPACE = {

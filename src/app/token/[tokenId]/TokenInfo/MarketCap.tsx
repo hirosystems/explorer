@@ -1,13 +1,12 @@
+import { Flex, StackProps } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { abbreviateNumber } from '../../../../common/utils/utils';
-import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
 import { StatSection } from '../../../_components/Stats/StatSection';
 import { TrendArrow } from './TrendArrow';
 
 export const MarketCap: FC<
-  GridProps & {
+  StackProps & {
     marketCap: number | null | undefined;
     tradingVolume24h: number | null | undefined;
     tradingVolumeChangePercentage24h: number | null | undefined;
@@ -18,7 +17,7 @@ export const MarketCap: FC<
   tradingVolumeChangePercentage24h,
   tradingVolume24h,
   marketCapOverride,
-  ...gridProps
+  ...stackProps
 }) => {
   return (
     <StatSection
@@ -39,7 +38,7 @@ export const MarketCap: FC<
           ) : null}
         </Flex>
       }
-      {...gridProps}
+      {...stackProps}
     />
   );
 };

@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { useNftMetadata } from '../../../../common/queries/useNftMetadata';
 import { TokenAvatar } from './TokenAvatar';
 

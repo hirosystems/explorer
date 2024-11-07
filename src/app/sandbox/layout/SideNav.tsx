@@ -1,12 +1,10 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Icon, Stack, StackProps } from '@chakra-ui/react';
+import { Drop } from '@phosphor-icons/react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { DropIcon } from '../../../common/components/icons/drop';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { Icon } from '../../../ui/Icon';
-import { Stack, StackProps } from '../../../ui/Stack';
 import ClarityIcon from '../../../ui/icons/ClarityIcon';
 import FunctionXIcon from '../../../ui/icons/FunctionX';
 import StxIcon from '../../../ui/icons/StxIcon';
@@ -17,33 +15,48 @@ export const SideNav: React.FC<StackProps> = () => {
   const network = useGlobalContext().activeNetwork;
   const pathname = usePathname();
   const { isConnected } = useUser();
-  const iconColor = useColorModeValue('black', 'white');
 
   return (
-    <Stack borderRight={'1px'} borderColor={useColorModeValue('slate.150', 'slate.900')} gap={'0'}>
+    <Stack borderRight={`1px solid var(--stacks-colors-border-secondary)`} gap={0}>
       <NavItem
         label={'Write & Deploy Contracts'}
         url={buildUrl(`/sandbox/deploy`, network)}
-        icon={<Icon as={ClarityIcon} size={5} color={iconColor} />}
+        icon={
+          <Icon h={5} w={5} color={'surfaceOpposite'}>
+            <ClarityIcon />
+          </Icon>
+        }
         isSelected={pathname?.startsWith('/sandbox/deploy')}
       />
       <NavItem
         label={'Call Functions'}
         url={buildUrl(`/sandbox/contract-call`, network)}
-        icon={<Icon as={FunctionXIcon} size={5} color={iconColor} />}
+        icon={
+          <Icon h={5} w={5} color={'surfaceOpposite'}>
+            <FunctionXIcon />
+          </Icon>
+        }
         isSelected={pathname?.startsWith('/sandbox/contract-call')}
       />
       <NavItem
         label={'STX Transfer'}
         url={buildUrl(`/sandbox/transfer`, network)}
-        icon={<Icon as={StxIcon} size={5} color={iconColor} />}
+        icon={
+          <Icon h={5} w={5} color={'surfaceOpposite'}>
+            <StxIcon />
+          </Icon>
+        }
         isSelected={pathname?.startsWith('/sandbox/transfer')}
       />
       {isConnected && network.mode === 'testnet' && (
         <NavItem
           label={'Testnet Faucet'}
           url={buildUrl(`/sandbox/faucet`, network)}
-          icon={<Icon as={DropIcon} size={5} color={iconColor} />}
+          icon={
+            <Icon h={5} w={5} color={'surfaceOpposite'}>
+              <Drop />
+            </Icon>
+          }
           isSelected={pathname?.startsWith('/sandbox/faucet')}
         />
       )}

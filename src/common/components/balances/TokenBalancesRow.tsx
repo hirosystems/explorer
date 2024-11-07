@@ -1,10 +1,9 @@
+import { HStack, StackProps } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import * as React from 'react';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
-import { HStack } from '../../../ui/HStack';
-import { StackProps } from '../../../ui/Stack';
 import { Value } from '../Value';
 
 interface TokenBalancesRowProps extends StackProps {

@@ -1,17 +1,34 @@
 'use client';
 
 import type { NextPage } from 'next';
+import React from 'react';
 
 import { Sip10Disclaimer } from '../../common/components/Sip10Disclaimer';
 import { PageTitle } from '../_components/PageTitle';
 import { TokensList } from './TokensList/TokensList';
 
-const TokensPage: NextPage = () => (
+export const TokensPageLayout = ({
+  title,
+  tokensList,
+  disclaimer,
+}: {
+  title: React.ReactNode;
+  tokensList: React.ReactNode;
+  disclaimer: React.ReactNode;
+}) => (
   <>
-    <PageTitle>Token Tracker</PageTitle>
-    <TokensList />
-    <Sip10Disclaimer />
+    {title}
+    {tokensList}
+    {disclaimer}
   </>
+);
+
+const TokensPage: NextPage = () => (
+  <TokensPageLayout
+    title={<PageTitle>Token Tracker</PageTitle>}
+    tokensList={<TokensList />}
+    disclaimer={<Sip10Disclaimer />}
+  />
 );
 
 export default TokensPage;

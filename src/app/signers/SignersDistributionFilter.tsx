@@ -1,6 +1,5 @@
-import { FormControl } from '../../ui/FormControl';
-import { FormLabel } from '../../ui/FormLabel';
-import { Switch } from '../../ui/Switch';
+import { Switch } from '../../components/ui/switch';
+import { Text } from '../../ui/Text';
 
 export function SignersDistributionFilter({
   onlyShowPublicSigners,
@@ -10,26 +9,16 @@ export function SignersDistributionFilter({
   setOnlyShowPublicSigners: (value: boolean) => void;
 }) {
   return (
-    <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
-      <Switch
-        id="only-show-public-signers"
-        onChange={() => {
-          setOnlyShowPublicSigners(!onlyShowPublicSigners);
-        }}
-        isChecked={onlyShowPublicSigners}
-      />
-      <FormLabel
-        htmlFor="only-show-public-signers"
-        m="0"
-        fontSize={'14px'}
-        lineHeight={'1.5em'}
-        fontWeight={400}
-        textOverflow={'ellipsis'}
-        overflow={'hidden'}
-        whiteSpace={'nowrap'}
-      >
+    <Switch
+      id="only-show-public-signers"
+      onCheckedChange={() => {
+        setOnlyShowPublicSigners(!onlyShowPublicSigners);
+      }}
+      checked={onlyShowPublicSigners}
+    >
+      <Text fontWeight={400} textOverflow={'ellipsis'} overflow={'hidden'} whiteSpace={'nowrap'}>
         Show only public signers
-      </FormLabel>
-    </FormControl>
+      </Text>
+    </Switch>
   );
 }

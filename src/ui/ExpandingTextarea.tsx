@@ -1,42 +1,43 @@
 'use client';
 
-import {
-  Textarea as CUITextarea,
-  TextareaProps as CUITextareaProps,
-  forwardRef,
-} from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { ClientOnly, Textarea, TextareaProps } from '@chakra-ui/react';
+import { forwardRef, useEffect, useRef } from 'react';
 
-export type ExpandingTextareaProps = CUITextareaProps;
-export const ExpandingTextarea = forwardRef<ExpandingTextareaProps, 'textarea'>(
-  ({ children, onInput, value, ...rest }, ref) => {
+export type ExpandingTextareaProps = TextareaProps;
+
+export const ExpandingTextarea = forwardRef<HTMLTextAreaElement, ExpandingTextareaProps>(
+  ({ children, onInput, value, placeholder, ...rest }, ref) => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => {
-      const textarea = textareaRef.current;
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
+    // Adjust the height of the textarea
+    const adjustHeight = () => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'; // Reset height to calculate scrollHeight
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Apply new height
       }
+    };
+
+    useEffect(() => {
+      adjustHeight(); // Adjust height whenever the component renders or value changes
     }, [value]);
 
     return (
-      <CUITextarea
-        ref={ref || textareaRef}
-        overflow={'hidden'}
-        rows={1}
-        resize={'none'}
-        px={3}
-        onInput={e => {
-          e.currentTarget.style.height = 'auto';
-          e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
-          onInput?.(e);
-        }}
-        value={value}
-        {...rest}
-      >
-        {children}
-      </CUITextarea>
+      // This is a client-only component because it depends on the client-side value of `value` and the `useEffect` hook to adjust the height of the textarea
+      <ClientOnly>
+        <Textarea
+          ref={ref || textareaRef}
+          width="100%"
+          resize={'none'} // Prevent manual resizing
+          px={3}
+          value={value}
+          placeholder={placeholder}
+          border="1px solid var(--stacks-colors-border-primary)"
+          borderRadius="md"
+          {...rest}
+        >
+          {children}
+        </Textarea>
+      </ClientOnly>
     );
   }
 );

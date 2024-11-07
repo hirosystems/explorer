@@ -1,7 +1,7 @@
 'use client';
 
 import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
-import { SkeletonItem } from '../../../ui/SkeletonItem';
+import { Skeleton } from '../../../components/ui/skeleton';
 import { Tr } from '../../../ui/Tr';
 import { TableHeaderSkeleton, TableRowSkeleton } from '../../signers/skeleton';
 import {
@@ -16,22 +16,10 @@ import { StackingHistoryTableLayout, stackingHistoryTableHeaders } from './Stack
 export const SignerKeyStatsSkeleton = () => {
   return (
     <SignerStatsLayout>
-      <SignerKeyStat
-        label={<SkeletonItem h={5} w="100%" />}
-        value={<SkeletonItem h={5} w="100%" />}
-      />
-      <SignerKeyStat
-        label={<SkeletonItem h={5} w="100%" />}
-        value={<SkeletonItem h={5} w="100%" />}
-      />
-      <SignerKeyStat
-        label={<SkeletonItem h={5} w="100%" />}
-        value={<SkeletonItem h={5} w="100%" />}
-      />
-      <SignerKeyStat
-        label={<SkeletonItem h={5} w="100%" />}
-        value={<SkeletonItem h={5} w="100%" />}
-      />
+      <SignerKeyStat label={<Skeleton h={5} w="100%" />} value={<Skeleton h={5} w="100%" />} />
+      <SignerKeyStat label={<Skeleton h={5} w="100%" />} value={<Skeleton h={5} w="100%" />} />
+      <SignerKeyStat label={<Skeleton h={5} w="100%" />} value={<Skeleton h={5} w="100%" />} />
+      <SignerKeyStat label={<Skeleton h={5} w="100%" />} value={<Skeleton h={5} w="100%" />} />
     </SignerStatsLayout>
   );
 };
@@ -66,7 +54,7 @@ export const AssociatedAddressesTableSkeleton = () => {
     <AssociatedAddressesTableLayout
       addresses={Array.from({ length: 10 }, (_, i) => (
         <AssociatedAddressListItemLayout isLast={i === 9} key={`associated-address-skeleton-${i}`}>
-          <SkeletonItem h={5} w="100%" />
+          <Skeleton h={5} w="100%" />
         </AssociatedAddressListItemLayout>
       ))}
       footer={null}
@@ -80,8 +68,8 @@ export const SignerSummarySkeleton = () => {
       {Array.from({ length: 5 }, (_, i) => (
         <KeyValueHorizontal
           key={`key-value-horizontal-skeleton-${i}`}
-          label={<SkeletonItem h={4} w={20} />}
-          value={<SkeletonItem h={4} w={40} />}
+          label={<Skeleton h={4} w={20} />}
+          value={<Skeleton h={4} w={40} />}
         />
       ))}
     </SignerSummaryLayout>

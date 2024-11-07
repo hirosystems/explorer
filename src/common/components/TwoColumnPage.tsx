@@ -1,9 +1,6 @@
+import { Grid, Stack } from '@chakra-ui/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
-
-import { Flex } from '../../ui/Flex';
-import { Grid } from '../../ui/Grid';
-import { Stack } from '../../ui/Stack';
 
 export const TwoColumnPage: React.FC<{
   title: ReactNode;

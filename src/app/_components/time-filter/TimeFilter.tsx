@@ -1,17 +1,11 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { Badge } from '../../../common/components/Badge';
+import { PopoverContent, PopoverRoot, PopoverTrigger } from '../../../components/ui/popover';
 import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
-import { Popover } from '../../../ui/Popover';
-import { PopoverContent } from '../../../ui/PopoverContent';
-import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { DatePickerInput, DatePickerValues } from './DatePickerInput';
 import { DatePickerRangeInput, DatePickerRangeInputState } from './DatePickerRangeInput';
 import { TimeInput, TimeInputState } from './TimeInput';
@@ -22,12 +16,7 @@ const cyclefilterToFormattedValueMap: Record<string, (value: string) => string> 
   startTime: (value: string) => value,
 };
 
-//   endTime: formatTimestamp,
-//   startTime: formatTimestamp,
-
 type TimeFilterType = 'range' | 'before' | 'after' | 'on' | null;
-
-type filterToFormattedValueMap = {};
 
 function FilterTypeButton({
   // TODO: move to separate file
@@ -39,15 +28,11 @@ function FilterTypeButton({
   setSelected?: () => void;
   children: ReactNode;
 }) {
-  const purpleBadgeColor = useColorModeValue('purple.600', 'purple.300');
-  const purpleBadgeBg = useColorModeValue('purple.100', 'purple.900');
-  const badgeBorder = useColorModeValue('purple.300', 'purple.700');
-
   return (
     <Badge
-      color={isSelected ? purpleBadgeColor : 'textSubdued'}
-      bg={isSelected ? purpleBadgeBg : undefined}
-      borderColor={isSelected ? badgeBorder : undefined}
+      color={isSelected ? 'timeFilter.text' : 'textSubdued'}
+      bg={isSelected ? 'timeFilter.background' : undefined}
+      borderColor={isSelected ? 'timeFilter.border' : undefined}
       px={2}
       py={1}
       fontSize={'xs'}
@@ -109,7 +94,7 @@ export function TimeFilter({
   formType,
   defaultButtonText = 'Date',
 }: DateFilterProps) {
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const [open, setOpen] = useState(false);
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime))
     ? undefined
     : Number(defaultStartTime);
@@ -163,42 +148,50 @@ export function TimeFilter({
   const datePickerRangeOnSubmitHandler = useMemo(
     () => (values: DatePickerRangeInputState) => {
       datePickerRangeOnSubmit?.(values);
-      onClose();
+      setOpen(false);
     },
-    [datePickerRangeOnSubmit, onClose]
+    [datePickerRangeOnSubmit, setOpen]
   );
 
   const dateInputRangeOnSubmitHandler = useMemo(
     () => (values: TimeRangeInputState) => {
       dateInputRangeOnSubmit?.(values);
-      onClose();
+      setOpen(false);
     },
-    [dateInputRangeOnSubmit, onClose]
+    [dateInputRangeOnSubmit, setOpen]
   );
 
   const datePickerOnSubmitHandler = useMemo(
     () => (values: DatePickerValues) => {
       datePickerOnSubmit?.(values);
-      onClose();
+      setOpen(false);
     },
-    [datePickerOnSubmit, onClose]
+    [datePickerOnSubmit, setOpen]
   );
 
   const timeInputOnSubmit = useMemo(
     () => (values: TimeInputState) => {
       timeInputOnSubmitHandler?.(values);
-      onClose();
+      setOpen(false);
     },
-    [timeInputOnSubmitHandler, onClose]
+    [timeInputOnSubmitHandler, setOpen]
   );
 
   return (
-    <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+    <PopoverRoot
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={e => setOpen(e.open)}
+    >
       <PopoverTrigger>
         <Button
           variant={'secondary'}
           fontSize={'sm'}
-          rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
+          rightIcon={
+            <Icon style={{ strokeWidth: '2px' }}>
+              <CaretDown />
+            </Icon>
+          }
           height={9}
           color={'textSubdued'}
         >
@@ -309,7 +302,7 @@ export function TimeFilter({
           ) : null}
         </Stack>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
   );
 }
 

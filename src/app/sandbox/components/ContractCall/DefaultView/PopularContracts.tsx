@@ -1,11 +1,10 @@
+import { HStack, Stack } from '@chakra-ui/react';
 import { ChartBar, CurrencyDollar, Signature } from '@phosphor-icons/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Circle } from '../../../../../common/components/Circle';
 import { ExplorerLink } from '../../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../../common/components/Section';
-import { HStack } from '../../../../../ui/HStack';
-import { Stack } from '../../../../../ui/Stack';
 import BitcoinIcon from '../../../../../ui/icons/BitcoinIcon';
 import { Caption, Title } from '../../../../../ui/typography';
 

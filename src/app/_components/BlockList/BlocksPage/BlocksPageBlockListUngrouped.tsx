@@ -1,10 +1,10 @@
 'use client';
 
+import { Box } from '@chakra-ui/react';
 import { Suspense, useMemo } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
-import { Box } from '../../../../ui/Box';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListUngrouped } from '../Ungrouped/BlockListUngrouped';

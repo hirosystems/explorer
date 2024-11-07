@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Flex, Table } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useMemo } from 'react';
 
@@ -9,14 +9,7 @@ import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useI
 import { useContractById } from '../../../../../common/queries/useContractById';
 import { useFtMetadata } from '../../../../../common/queries/useFtMetadata';
 import { ftDecimals, truncateMiddle } from '../../../../../common/utils/utils';
-import { Flex } from '../../../../../ui/Flex';
-import { Table } from '../../../../../ui/Table';
-import { Tbody } from '../../../../../ui/Tbody';
-import { Td } from '../../../../../ui/Td';
 import { Text } from '../../../../../ui/Text';
-import { Th } from '../../../../../ui/Th';
-import { Thead } from '../../../../../ui/Thead';
-import { Tr } from '../../../../../ui/Tr';
 import { ScrollableBox } from '../../../../_components/BlockList/ScrollableDiv';
 import { mobileBorderCss } from '../../../../_components/BlockList/consts';
 import { ExplorerErrorBoundary } from '../../../../_components/ErrorBoundary';
@@ -24,7 +17,7 @@ import { TokenInfoProps } from '../../types';
 import { HolderInfo, HolderResponseType, useSuspenseFtHolders } from '../data/useHolders';
 import { HoldersTableSkeleton } from './skeleton';
 
-const StyledTable = styled(Table)`
+const StyledTable = styled(Table.Root)`
   th {
     border-bottom: none;
   }
@@ -41,7 +34,13 @@ export const HoldersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
+  <Table.ColumnHeader
+    py={3}
+    px={6}
+    border="none"
+    css={isFirst ? mobileBorderCss : {}}
+    width="fit-content"
+  >
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -55,14 +54,14 @@ export const HoldersTableHeader = ({
         fontWeight="medium"
         whiteSpace="nowrap"
         fontSize="xs"
-        color={useColorModeValue('slate.700', 'slate.250')}
+        color={'table.header.text'}
         textTransform="none"
         letterSpacing="normal"
       >
         {headerTitle}
       </Text>
     </Flex>
-  </Th>
+  </Table.ColumnHeader>
 );
 
 type HeaderValue = '#' | 'Address' | 'Quantity' | 'Percentage' | 'Value';
@@ -75,7 +74,7 @@ export const holdersTableHeaders: HeaderValue[] = [
 ];
 
 export const HoldersTableHeaders = ({ hasPrice }: { hasPrice: boolean }) => (
-  <Tr>
+  <Table.Row>
     {holdersTableHeaders.map((header, i) => {
       return !hasPrice && header === 'Value' ? null : (
         <HoldersTableHeader
@@ -85,7 +84,7 @@ export const HoldersTableHeaders = ({ hasPrice }: { hasPrice: boolean }) => (
         />
       );
     })}
-  </Tr>
+  </Table.Row>
 );
 
 interface HolderRowInfo {
@@ -126,42 +125,42 @@ const HolderTableRow = ({
 } & HolderRowInfo) => {
   const hasPrice = !!!value;
   return (
-    <Tr
+    <Table.Row
       style={{
         borderTop: isFirst ? 'none' : '',
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss}>
+      <Table.Cell py={3} px={6} css={mobileBorderCss}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {index + 1}
         </Text>
-      </Td>
+      </Table.Cell>
 
-      <Td py={3} px={6}>
+      <Table.Cell py={3} px={6}>
         <AddressLink principal={address} whiteSpace="nowrap" fontSize="sm" color="textSubdued">
           {truncateMiddle(address)}
         </AddressLink>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {balance}
         </Text>
-      </Td>
+      </Table.Cell>
 
-      <Td py={3} px={6}>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {percentage}
         </Text>
-      </Td>
+      </Table.Cell>
       {hasPrice ? (
-        <Td py={3} px={6}>
+        <Table.Cell py={3} px={6}>
           <Text whiteSpace="nowrap" fontSize="sm">
             {value}
           </Text>
-        </Td>
+        </Table.Cell>
       ) : null}
-    </Tr>
+    </Table.Row>
   );
 };
 
@@ -178,8 +177,8 @@ export function HoldersTableLayout({
     <Section title={numHolders}>
       <ScrollableBox>
         <StyledTable width="full">
-          <Thead>{holdersTableHeaders}</Thead>
-          <Tbody>{holdersTableRows}</Tbody>
+          <Table.Header>{holdersTableHeaders}</Table.Header>
+          <Table.Body>{holdersTableRows}</Table.Body>
         </StyledTable>
       </ScrollableBox>
     </Section>

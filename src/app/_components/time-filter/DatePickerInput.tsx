@@ -1,13 +1,11 @@
+import { Box, Fieldset, Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { Box } from '../../../ui/Box';
+import { Field as ChakraField } from '../../../components/ui/field';
 import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
-import { Stack } from '../../../ui/Stack';
 import { DateInput } from './DateInput';
 
 type DateValue = number | undefined;
@@ -97,9 +95,9 @@ export function DatePickerInput({
         <Form>
           <Stack gap={4}>
             <Field name="date">
-              {({ field, form }: FieldProps<string, DatePickerValues>) => (
-                <FormControl>
-                  <FormLabel>{label}</FormLabel>
+              {({ form }: FieldProps<string, DatePickerValues>) => (
+                <Fieldset.Root>
+                  <ChakraField label={label} />
                   <DatePicker
                     customInput={<DateInput placeholder={placeholder} fontSize="sm" />}
                     selected={form.values.date ? new UTCDate(form.values.date * 1000) : undefined}
@@ -118,7 +116,7 @@ export function DatePickerInput({
                     }}
                     dateFormat="yyyy-MM-dd"
                   />
-                </FormControl>
+                </Fieldset.Root>
               )}
             </Field>
           </Stack>

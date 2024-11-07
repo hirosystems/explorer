@@ -1,11 +1,8 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 
-import { Circle } from '../../../../common/components/Circle';
-import { Box } from '../../../../ui/Box';
+import { SkeletonText } from '../../../..//components/ui/skeleton';
+import { Skeleton } from '../../../../components/ui/skeleton';
 import { Button } from '../../../../ui/Button';
-import { Flex } from '../../../../ui/Flex';
-import { SkeletonItem } from '../../../../ui/SkeletonItem';
-import { SkeletonText } from '../../../../ui/SkeletonText';
 import {
   BlocksPageBlockListLayout,
   BlocksPageControlsLayout,
@@ -27,7 +24,7 @@ function BitcoinHeaderSkeleton() {
 export function BlockListLoadMoreButtonSkeleton({ ...rest }) {
   return (
     <Box width="full" {...rest}>
-      <Button borderTop="1px solid var(--stacks-colors-borderPrimary)" width="full">
+      <Button borderTop="1px solid var(--stacks-colors-border-primary)" width="full">
         <SkeletonText noOfLines={1} width={60} />
       </Button>
     </Box>
@@ -36,32 +33,9 @@ export function BlockListLoadMoreButtonSkeleton({ ...rest }) {
 
 export function BurnBlockGroupFooterSkeleton() {
   return (
-    <Box borderTop="1px solid var(--stacks-colors-borderSecondary)" pt={4}>
+    <Box borderTop="1px solid var(--stacks-colors-border-secondary)" pt={4}>
       <SkeletonText noOfLines={1} width={60} />
     </Box>
-  );
-}
-
-function BlockCountSkeleton() {
-  // TODO: remove. use theme
-  const bgColor = useColorModeValue('purple.100', 'slate.900');
-
-  return (
-    <Flex
-      display={'flex'}
-      fontSize={'xs'}
-      bg={bgColor}
-      rounded={'full'}
-      px={2}
-      alignItems={'center'}
-      gap={1}
-      height={8}
-      width="fit-content"
-      mb={3}
-    >
-      <SkeletonText noOfLines={1} width={20} />
-      <Circle height={4.5} width={4.5} bg="surface" />
-    </Flex>
   );
 }
 
@@ -77,7 +51,7 @@ export function BlockListGridHeaderRowSkeleton() {
           justifyContent="center"
           alignItems="center"
           key={`burn-block-group-tx-header-skeleton-${colIndex}`}
-          width={20}
+          w="fit-content"
         >
           <SkeletonText noOfLines={1} width={20} />
         </Flex>
@@ -94,7 +68,7 @@ export function BurnBlockGroupSkeleton({
   minimized?: boolean;
 }) {
   return (
-    <Box border={'1px'} rounded={'lg'} p={4}>
+    <Box border="normal" rounded={'lg'} p={4}>
       <BitcoinHeaderSkeleton />
       <BurnBlockGroupGridLayout minimized={minimized}>
         {minimized || numTxs === 0 ? null : <BlockListGridHeaderRowSkeleton />}
@@ -107,7 +81,6 @@ export function BurnBlockGroupSkeleton({
           />
         ))}
       </BurnBlockGroupGridLayout>
-      <BlockCountSkeleton />
       <BurnBlockGroupFooterSkeleton />
     </Box>
   );
@@ -125,7 +98,7 @@ export function BurnBlockGroupListSkeleton({
   minimized?: boolean;
 }) {
   return (
-    <Flex flexDirection="column" gap={4} py={6} key="burn-block-group-list-skeleton">
+    <Stack gap={4} py={6} key="burn-block-group-list-skeleton">
       {numBurnBlockGroupsWithTxs
         ? Array.from({ length: numBurnBlockGroupsWithTxs }).map((_, i) => (
             <BurnBlockGroupSkeleton
@@ -144,7 +117,7 @@ export function BurnBlockGroupListSkeleton({
             />
           ))
         : null}
-    </Flex>
+    </Stack>
   );
 }
 
@@ -172,10 +145,10 @@ export function BlocksPageBlockListGroupedSkeleton() {
 function HomePageControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
     <HomePageControlsLayout>
-      <SkeletonItem height={5} width={'90px'} />
+      <Skeleton height={5} width={'90px'} />
       <ControlsLayout horizontal={horizontal}>
-        <SkeletonItem height={5} width={20} />
-        <SkeletonItem height={5} width={20} />
+        <Skeleton height={5} width={20} />
+        <Skeleton height={5} width={20} />
       </ControlsLayout>
     </HomePageControlsLayout>
   );
@@ -185,8 +158,8 @@ function BlocksPageControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
     <BlocksPageControlsLayout>
       <ControlsLayout horizontal={horizontal} gap={3}>
-        <SkeletonItem height={5} width={20} />
-        <SkeletonItem height={5} width={20} />
+        <Skeleton height={5} width={20} />
+        <Skeleton height={5} width={20} />
       </ControlsLayout>
     </BlocksPageControlsLayout>
   );
@@ -196,8 +169,8 @@ export function UpdateBarSkeleton() {
   return (
     <UpdateBarLayout>
       <Flex justifyContent="space-between" alignItems="center" width="full" height={4}>
-        <SkeletonItem height={4} width={40} />
-        <SkeletonItem height={4} width={40} />
+        <Skeleton height={4} width={40} />
+        <Skeleton height={4} width={40} />
       </Flex>
     </UpdateBarLayout>
   );

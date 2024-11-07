@@ -1,16 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { Box, Flex } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { PAGE_MAX_WIDTH } from '../../common/constants/constants';
 import { RELEASE_TAG_NAME } from '../../common/constants/env';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { buildUrl } from '../../common/utils/buildUrl';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
 import { Link, LinkProps } from '../../ui/Link';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 
 const FooterLink: FC<LinkProps> = ({ children, href, target, rel }) => {
   return (
@@ -22,9 +19,6 @@ const FooterLink: FC<LinkProps> = ({ children, href, target, rel }) => {
 
 export const Footer: FC = () => {
   const network = useGlobalContext().activeNetwork;
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
-  const colorMode = useColorMode().colorMode;
 
   return (
     <Box

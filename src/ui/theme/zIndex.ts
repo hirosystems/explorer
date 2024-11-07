@@ -16,7 +16,7 @@
 // };
 
 export const CURRENT_Z_INDEX = {
-  tooltip: 10000,
+  // tooltip: 10000,
 };
 
 export const Z_INDEX = {

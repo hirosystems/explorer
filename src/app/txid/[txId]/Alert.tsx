@@ -1,28 +1,18 @@
 'use client';
 
-import * as React from 'react';
-import { ReactNode } from 'react';
-
-import { Alert, AlertProps } from '../../../ui/Alert';
-import { AlertDescription } from '../../../ui/AlertDescription';
-import { AlertIcon } from '../../../ui/AlertIcon';
-
-interface AlertError {
-  name?: string;
-  message?: string;
-}
+import { Alert } from '@chakra-ui/react';
 
 export function AlertBase({
   status,
   message,
 }: {
-  status: AlertProps['status'];
-  message: string | ReactNode;
+  status: Alert.RootProps['status'];
+  message: string;
 }) {
   return (
-    <Alert status={status} rounded={'lg'} alignItems={'flexStart'}>
-      <AlertIcon />
-      <AlertDescription fontSize={'sm'}>{message}</AlertDescription>
-    </Alert>
+    <Alert.Root status={status} rounded={'lg'}>
+      <Alert.Indicator />
+      <Alert.Description fontSize={'sm'}>{message}</Alert.Description>
+    </Alert.Root>
   );
 }

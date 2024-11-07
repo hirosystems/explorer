@@ -1,12 +1,8 @@
+import { Grid, Table } from '@chakra-ui/react';
+
 import { ListFooter } from '../../../common/components/ListFooter';
-import { Grid } from '../../../ui/Grid';
-import { Table } from '../../../ui/Table';
 import { TableContainer } from '../../../ui/TableContainer';
-import { Tbody } from '../../../ui/Tbody';
 import { Text } from '../../../ui/Text';
-import { Th } from '../../../ui/Th';
-import { Thead } from '../../../ui/Thead';
-import { Tr } from '../../../ui/Tr';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { TokenRow } from '../TokenRow';
 import { useSuspenseTokens } from '../useTokens';
@@ -21,33 +17,37 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
 
   if (!allFtTokensDeduped.length) {
     return (
-      <Grid placeItems="center" px="16px" py="32px" width={'100%'} minHeight={'container.md'}>
+      <Grid placeItems="center" px="16px" py="32px" width={'100%'} minHeight={'768px'}>
         <Text fontSize={'sm'}>No tokens found</Text>
       </Grid>
     );
   }
   return (
     <TableContainer>
-      <Table variant="simple" overflowX={'auto'} __css={{ tableLayout: 'fixed', width: 'full' }}>
-        <Thead>
-          <Tr>
-            <Th padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
+      <Table.Root
+        layerStyle="simple" // TODO: v3 upgrade. This might be broken
+        overflowX={'auto'}
+        css={{ tableLayout: 'fixed', width: 'full' }}
+      >
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
               Token
-            </Th>
-            <Th padding={'10px'} display={['none', 'none', 'table-cell']}>
+            </Table.ColumnHeader>
+            <Table.ColumnHeader padding={'10px'} display={['none', 'none', 'table-cell']}>
               Tx ID
-            </Th>
-            <Th isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
+            </Table.ColumnHeader>
+            <Table.ColumnHeader width={'130px'} padding={'10px 16px 10px 20px'}>
               Total supply
-            </Th>
-          </Tr>
-        </Thead>
-        <Tbody>
+            </Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {allFtTokensDeduped.map(
             (ftToken, i) => !!ftToken.name && <TokenRow ftToken={ftToken} key={ftToken.tx_id} />
           )}
-        </Tbody>
-      </Table>
+        </Table.Body>
+      </Table.Root>
       <ListFooter
         isLoading={isLoading}
         hasNextPage={hasMore}

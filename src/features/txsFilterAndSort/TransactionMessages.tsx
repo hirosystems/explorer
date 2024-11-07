@@ -1,14 +1,11 @@
 'use client';
 
+import { Box, Flex, GridProps, Icon } from '@chakra-ui/react';
 import { XCircle } from '@phosphor-icons/react';
-import { Icon as IconType } from '@phosphor-icons/react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { GridProps } from '../../ui/Grid';
-import { Icon } from '../../ui/Icon';
-import { Text, Title } from '../../ui/typography';
+import { Text } from '../../ui/Text';
+import { Title } from '../../ui/typography';
 
 const MessageBase = ({
   title,
@@ -16,12 +13,18 @@ const MessageBase = ({
   description,
 }: {
   title: string;
-  icon: IconType;
+  icon: ReactNode;
   description?: string;
 }) => {
   return (
-    <Flex alignItems={'center'} flexDirection="column" p="32px">
-      <Box size={'72px'} borderRadius="50%" border="1px solid" borderColor="border" mb="20px">
+    <Flex alignItems={'center'} flexDirection="column" p={8}>
+      <Box
+        h={'72px'}
+        w={'72px'}
+        borderRadius="50%"
+        border={`1px solid var(--stacks-colors-border-secondary)`}
+        mb={5}
+      >
         <Flex
           justifyContent="center"
           alignItems="center"
@@ -29,11 +32,13 @@ const MessageBase = ({
           width="100%"
           color="textSubdued"
         >
-          <Icon as={icon} size={30} />
+          <Icon h={30} w={30}>
+            {icon}
+          </Icon>
         </Flex>
       </Box>
       <Box textAlign="center">
-        <Title mb="8px" fontSize="sm">
+        <Title mb={2} fontSize="sm">
           {title}
         </Title>
         {description ? (
@@ -47,14 +52,14 @@ const MessageBase = ({
 };
 
 export const NoTransactionsMessage: React.FC<GridProps> = ({ ...rest }) => (
-  <MessageBase title="No transactions" icon={XCircle} {...rest} />
+  <MessageBase title="No transactions" icon={<XCircle />} {...rest} />
 );
 
 export const AllTransactionsFilteredMessage: React.FC<GridProps> = ({ ...rest }) => (
   <MessageBase
     title="No transactions"
     description="Filters only apply to loaded transactions. Load more transactions to find transactions with your filter settings, or choose a different filter combination."
-    icon={XCircle}
+    icon={<XCircle />}
     {...rest}
   />
 );

@@ -1,24 +1,21 @@
 'use client';
 
+import { Box, Field as CUIField, Fieldset, Icon, Input, Stack } from '@chakra-ui/react';
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { promiseWrapper } from '../../../../common/utils/utils';
-import { Accordion } from '../../../../ui/Accordion';
-import { AccordionButton } from '../../../../ui/AccordionButton';
-import { AccordionItem } from '../../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../../ui/AccordionPanel';
-import { Box } from '../../../../ui/Box';
-import { Button } from '../../../../ui/Button';
-import { Checkbox } from '../../../../ui/Checkbox';
-import { FormControl } from '../../../../ui/FormControl';
-import { FormErrorMessage } from '../../../../ui/FormErrorMessage';
-import { FormLabel } from '../../../../ui/FormLabel';
-import { Icon } from '../../../../ui/Icon';
-import { Input } from '../../../../ui/Input';
-import { Stack } from '../../../../ui/Stack';
+import {
+  AccordionItem,
+  AccordionItemContent,
+  AccordionItemTrigger,
+  AccordionRoot,
+} from '../../../../components/ui/accordion';
+import { Button } from '../../../../components/ui/button';
+import { Checkbox } from '../../../../components/ui/checkbox';
+import { Field as ChakraField } from '../../../../components/ui/field';
 import { Text } from '../../../../ui/Text';
 import { NetworkIdModeMap } from '../../../constants/network';
 import { useGlobalContext } from '../../../context/useGlobalContext';
@@ -42,6 +39,8 @@ export const AddNetworkForm: FC = () => {
   const dispatch = useAppDispatch();
   const { addCustomNetwork } = useGlobalContext();
   const router = useRouter();
+  const [isBtcExplorerUrlsAccordionExpanded, setIsBtcExplorerUrlsAccordionExpanded] =
+    useState(false);
 
   return (
     <Formik
@@ -152,104 +151,114 @@ export const AddNetworkForm: FC = () => {
         dispatch(closeModal());
       }}
     >
-      {({ isValidating }) => (
+      {(
+        { isValidating } // TODO: upgrade to v3. This may be broken
+      ) => (
         <Form>
           <Stack gap={4}>
             <Field name="label">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl isInvalid={!!form.errors.label && !!form.touched.label}>
-                  <FormLabel>Name</FormLabel>
+                <ChakraField
+                  label="Label"
+                  invalid={!!form.errors.label && !!form.touched.label}
+                  errorText={form.errors.label}
+                >
                   <Input {...field} placeholder="My Stacks API" />
-                  <FormErrorMessage>{form.errors.label}</FormErrorMessage>
-                </FormControl>
+                </ChakraField>
               )}
             </Field>
             <Field name="url">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl isInvalid={!!form.errors.url && !!form.touched.url}>
-                  <FormLabel>Base URL</FormLabel>
+                <ChakraField
+                  label="URL"
+                  invalid={!!form.errors.url && !!form.touched.url}
+                  errorText={form.errors.url}
+                >
                   <Input {...field} placeholder="https://" />
-                  <FormErrorMessage>{form.errors.url}</FormErrorMessage>
-                </FormControl>
+                </ChakraField>
               )}
             </Field>
             <Field name="isSubnet">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl isInvalid={!!form.errors.isSubnet && !!form.touched.isSubnet}>
-                  <Checkbox variant={'outline'} {...field}>
+                <ChakraField
+                  invalid={!!form.errors.isSubnet && !!form.touched.isSubnet}
+                  errorText={form.errors.isSubnet}
+                >
+                  <Checkbox variant="outline" {...field}>
                     This is a subnet
                   </Checkbox>
-                  <FormErrorMessage>{form.errors.isSubnet}</FormErrorMessage>
-                </FormControl>
+                </ChakraField>
               )}
             </Field>
           </Stack>
-          <Accordion allowMultiple mt={'16px'}>
-            <AccordionItem borderBottom={'none'}>
-              {({ isExpanded }) => (
-                <Stack gap={4}>
-                  <AccordionButton paddingLeft={0} gap={2}>
-                    {isExpanded ? (
-                      <Icon as={CaretDown} w={3} h={3} />
-                    ) : (
-                      <Icon as={CaretRight} w={3} h={3} />
-                    )}{' '}
-                    <Text fontSize={'sm'}>BTC Explorer URLs</Text>
-                  </AccordionButton>
-                  <AccordionPanel>
-                    <Stack gap={4}>
-                      <Field name="btcBlockBaseUrl">
-                        {({ field, form }: FieldProps<string, FormValues>) => (
-                          <FormControl
-                            isInvalid={
-                              !!form.errors.btcBlockBaseUrl && !!form.touched.btcBlockBaseUrl
-                            }
-                          >
-                            <FormLabel>BTC Block Base URL</FormLabel>
-                            <Input {...field} placeholder="https://" />
-                            <FormErrorMessage>{form.errors.btcBlockBaseUrl}</FormErrorMessage>
-                          </FormControl>
-                        )}
-                      </Field>
-                      <Field name="btcTxBaseUrl">
-                        {({ field, form }: FieldProps<string, FormValues>) => (
-                          <FormControl
-                            isInvalid={!!form.errors.btcTxBaseUrl && !!form.touched.btcTxBaseUrl}
-                          >
-                            <FormLabel>BTC Transaction Base URL</FormLabel>
-                            <Input {...field} placeholder="https://" />
-                            <FormErrorMessage>{form.errors.btcTxBaseUrl}</FormErrorMessage>
-                          </FormControl>
-                        )}
-                      </Field>
-                      <Field name="btcAddressBaseUrl">
-                        {({ field, form }: FieldProps<string, FormValues>) => (
-                          <FormControl
-                            isInvalid={
-                              !!form.errors.btcAddressBaseUrl && !!form.touched.btcAddressBaseUrl
-                            }
-                          >
-                            <FormLabel>BTC Address Base URL</FormLabel>
-                            <Input {...field} placeholder="https://" />
-                            <FormErrorMessage>{form.errors.btcAddressBaseUrl}</FormErrorMessage>
-                          </FormControl>
-                        )}
-                      </Field>
-                    </Stack>
-                  </AccordionPanel>
-                </Stack>
-              )}
+          <AccordionRoot
+            multiple
+            mt={'16px'}
+            onValueChange={({ value }) => {
+              setIsBtcExplorerUrlsAccordionExpanded(value.includes('btc-explorer-urls'));
+            }}
+          >
+            <AccordionItem borderBottom={'none'} value="btc-explorer-urls">
+              <Stack gap={4}>
+                <AccordionItemTrigger paddingLeft={0} gap={2}>
+                  <Icon h={3} w={3}>
+                    {isBtcExplorerUrlsAccordionExpanded ? <CaretDown /> : <CaretRight />}
+                  </Icon>
+                  <Text fontSize={'sm'}>BTC Explorer URLs</Text>
+                </AccordionItemTrigger>
+                <AccordionItemContent>
+                  <Stack gap={4}>
+                    <Field name="btcBlockBaseUrl">
+                      {({ field, form }: FieldProps<string, FormValues>) => (
+                        <ChakraField
+                          label="BTC Block Base URL"
+                          invalid={!!form.errors.btcBlockBaseUrl && !!form.touched.btcBlockBaseUrl}
+                          errorText={form.errors.btcBlockBaseUrl}
+                        >
+                          <Input {...field} placeholder="https://" />
+                        </ChakraField>
+                      )}
+                    </Field>
+                    <Field name="btcTxBaseUrl">
+                      {({ field, form }: FieldProps<string, FormValues>) => (
+                        <ChakraField
+                          label="BTC Transaction Base URL"
+                          invalid={!!form.errors.btcTxBaseUrl && !!form.touched.btcTxBaseUrl}
+                          errorText={form.errors.btcTxBaseUrl}
+                        >
+                          <Input {...field} placeholder="https://" />
+                        </ChakraField>
+                      )}
+                    </Field>
+                    <Field name="btcAddressBaseUrl">
+                      {({ field, form }: FieldProps<string, FormValues>) => (
+                        <ChakraField
+                          label="BTC Address Base URL"
+                          invalid={
+                            !!form.errors.btcAddressBaseUrl && !!form.touched.btcAddressBaseUrl
+                          }
+                          errorText={form.errors.btcAddressBaseUrl}
+                        >
+                          <Input {...field} placeholder="https://" />
+                        </ChakraField>
+                      )}
+                    </Field>
+                  </Stack>
+                </AccordionItemContent>
+              </Stack>
             </AccordionItem>
-          </Accordion>
+          </AccordionRoot>
           <Field name="genericError">
             {({ form }: FieldProps<string, FormValues>) => (
-              <FormControl isInvalid={!!form.errors.genericError} style={{ marginTop: 0 }}>
-                <FormErrorMessage>{form.errors.genericError}</FormErrorMessage>
-              </FormControl>
+              <Fieldset.Root invalid={!!form.errors.genericError} style={{ marginTop: 0 }}>
+                <CUIField.Root>
+                  <CUIField.ErrorText>{form.errors.genericError}</CUIField.ErrorText>
+                </CUIField.Root>
+              </Fieldset.Root>
             )}
           </Field>
-          <Box mt={'16px'}>
-            <Button isLoading={isValidating} width="100%" type="submit">
+          <Box mt={4}>
+            <Button loading={isValidating} width="100%" type="submit">
               Add and select
             </Button>
           </Box>

@@ -1,13 +1,13 @@
-import { useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
+import { Box, ClientOnly, useBreakpointValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import L, { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvent } from 'react-leaflet';
 
-import { Box } from '../../ui/Box';
-import { useColorMode } from '../../ui/hooks/useColorMode';
+import { useColorMode, useColorModeValue } from '../../components/ui/color-mode';
 import { Continent } from './SignersMapComponent';
+import { SignersMapSkeleton } from './skeleton';
 
 const INITIAL_VIEW = {
   center: [20, 0],
@@ -334,55 +334,57 @@ export function SignersMap({
   const defaultIcon = useColorModeValue(defaultMarkerIconLight, defaultMarkerIconDark);
 
   return (
-    <StyledContainer>
-      <MapContainer
-        key={mapKey}
-        center={INITIAL_VIEW.center}
-        zoom={INITIAL_VIEW.zoom}
-        minZoom={1}
-        maxZoom={4}
-        scrollWheelZoom={false}
-        doubleClickZoom={false}
-        zoomControl={false}
-        dragging={false}
-        attributionControl={false}
-        style={{
-          height: '100%',
-          width: '100%',
-          backgroundColor: mapContainerBackgroundColor,
-          borderRadius: '0.75rem',
-        }}
-        bounds={BOUNDS}
-        maxBoundsViscosity={1.0}
-        maxBounds={BOUNDS}
-      >
-        <TileLayer url={mapUrl} noWrap={true} minZoom={1} maxZoom={4} bounds={BOUNDS} />
-        {signersLocation.map((node, index) => (
-          <Marker
-            key={index}
-            position={[node.lat, node.lng]}
-            icon={
-              activeContinent === getContinent(node.lat, node.lng) ||
-              (activeMarkerLatLng?.lat === node.lat && activeMarkerLatLng.lng === node.lng)
-                ? activeIcon
-                : defaultIcon
-            }
-            eventHandlers={{
-              click: () => handleMarkerClick(node.lat, node.lng),
-            }}
+    <ClientOnly fallback={<SignersMapSkeleton />}>
+      <StyledContainer>
+        <MapContainer
+          key={mapKey}
+          center={INITIAL_VIEW.center}
+          zoom={INITIAL_VIEW.zoom}
+          minZoom={1}
+          maxZoom={4}
+          scrollWheelZoom={false}
+          doubleClickZoom={false}
+          zoomControl={false}
+          dragging={false}
+          attributionControl={false}
+          style={{
+            height: '100%',
+            width: '100%',
+            backgroundColor: mapContainerBackgroundColor,
+            borderRadius: '0.75rem',
+          }}
+          bounds={BOUNDS}
+          maxBoundsViscosity={1.0}
+          maxBounds={BOUNDS}
+        >
+          <TileLayer url={mapUrl} noWrap={true} minZoom={1} maxZoom={4} bounds={BOUNDS} />
+          {signersLocation.map((node, index) => (
+            <Marker
+              key={index}
+              position={[node.lat, node.lng]}
+              icon={
+                activeContinent === getContinent(node.lat, node.lng) ||
+                (activeMarkerLatLng?.lat === node.lat && activeMarkerLatLng.lng === node.lng)
+                  ? activeIcon
+                  : defaultIcon
+              }
+              eventHandlers={{
+                click: () => handleMarkerClick(node.lat, node.lng),
+              }}
+            />
+          ))}
+          <ContinentZoomHandler
+            activeContinent={activeContinent}
+            setActiveMarkerLatLng={setActiveMarkerLatLng}
           />
-        ))}
-        <ContinentZoomHandler
-          activeContinent={activeContinent}
-          setActiveMarkerLatLng={setActiveMarkerLatLng}
-        />
-        <MarkerClickHandler markerLatLng={activeMarkerLatLng} />
-        <MapClickHandler
-          setActiveMarkerLatLng={setActiveMarkerLatLng}
-          setActiveContinent={setActiveContinent}
-        />
-      </MapContainer>
-    </StyledContainer>
+          <MarkerClickHandler markerLatLng={activeMarkerLatLng} />
+          <MapClickHandler
+            setActiveMarkerLatLng={setActiveMarkerLatLng}
+            setActiveContinent={setActiveContinent}
+          />
+        </MapContainer>
+      </StyledContainer>
+    </ClientOnly>
   );
 }
 

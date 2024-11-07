@@ -1,8 +1,7 @@
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { FC, ReactNode } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Flex, FlexProps } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { CopyButton } from './CopyButton';
 
@@ -46,12 +45,7 @@ export const KeyValueVertical: FC<KeyValueVerticalProps> = ({
         <Text fontSize="xs">{value}</Text>
         {copyValue && (
           <Box width={8}>
-            <CopyButton
-              className={'fancy-copy'}
-              initialValue={copyValue}
-              aria-label={'copy row'}
-              size={'40px'}
-            />
+            <CopyButton className={'fancy-copy'} initialValue={copyValue} aria-label={'copy row'} />
           </Box>
         )}
       </Flex>

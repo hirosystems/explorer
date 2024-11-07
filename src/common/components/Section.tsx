@@ -1,10 +1,8 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Flex, FlexProps } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { Card } from './Card';
 
@@ -21,15 +19,13 @@ export function Section({
   px = 6,
   ...rest
 }: SectionProps) {
-  const titleColor = useColorModeValue('slate.900', 'white'); // TODO: remove
   return (
     <Card px={px} height={'fit-content'} {...rest}>
       {title || TopRight ? (
         <Flex
           alignItems={'center'}
           justifyContent="space-between"
-          borderBottom="1px"
-          borderColor="borderSecondary"
+          borderBottom="1px solid var(--stacks-colors-border-secondary)"
           borderTopRightRadius="xl"
           borderTopLeftRadius="xl"
           flexShrink={0}
@@ -41,7 +37,7 @@ export function Section({
         >
           {title ? (
             typeof title === 'string' ? (
-              <Text color={titleColor} fontWeight="medium" whiteSpace="nowrap">
+              <Text color={'text'} fontWeight="medium" whiteSpace="nowrap">
                 {title}
               </Text>
             ) : (

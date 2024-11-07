@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { Options } from '@contentful/rich-text-react-renderer';
 import { BLOCKS, Block, INLINES, Inline, MARKS } from '@contentful/rich-text-types';
 import { ReactNode } from 'react';
@@ -11,7 +10,7 @@ import { TextLink } from '../../ui/TextLink';
 import { UnorderedList } from '../../ui/UnorderedList';
 
 export const getRichTextRenderOptions =
-  (colorMode: string, impact: IncidentImpact = IncidentImpact.None) =>
+  (impact: IncidentImpact = IncidentImpact.None) =>
   (): Options => {
     return {
       renderMark: {
@@ -39,7 +38,7 @@ export const getRichTextRenderOptions =
             rel={'noopener noreferrer'}
             textDecoration={'underline'}
             _hover={{ textDecoration: 'underline' }}
-            color={getColor(impact, colorMode)}
+            color={getColor(impact)}
           >
             {children}
           </TextLink>

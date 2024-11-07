@@ -1,5 +1,5 @@
+import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -14,7 +14,7 @@ describe('<Broadcast />', () => {
       receipt_time: Math.floor(hardcodedDate.getTime() / 1000),
     } as unknown as Transaction;
 
-    const { asFragment } = render(<Broadcast tx={mockTx} />);
+    const { asFragment } = renderWithChakraProviders(<Broadcast tx={mockTx} />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

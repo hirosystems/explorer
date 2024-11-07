@@ -1,15 +1,16 @@
-import { FungibleConditionCode, PostConditionType } from '@stacks/transactions';
+import { FungibleConditionCode, PostConditionMode, PostConditionType } from '@stacks/transactions';
 
 import { FunctionFormikState } from '../FunctionView';
 import { checkPostConditionParameters } from '../PostConditionForm';
 
 describe('checkPostConditionParameters', () => {
+  // TODO: fix this test
   it('should return no errors when post condition is not enabled', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: false,
+      postConditionMode: PostConditionMode.Allow,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: FungibleConditionCode.Equal,
-      postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+      postCondwitionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
       postConditionAmount: 12345,
       postConditionAssetAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
       postConditionAssetContractName: 'asset-contract-name',
@@ -21,7 +22,7 @@ describe('checkPostConditionParameters', () => {
 
   it('should return no errors when all values are correct', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: true,
+      postConditionMode: PostConditionMode.Deny,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: FungibleConditionCode.Equal,
       postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
@@ -36,7 +37,7 @@ describe('checkPostConditionParameters', () => {
 
   it('should return error if postConditionType is missing', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: true,
+      postConditionMode: PostConditionMode.Deny,
       postConditionType: undefined,
       postConditionConditionCode: FungibleConditionCode.Equal,
       postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
@@ -53,7 +54,7 @@ describe('checkPostConditionParameters', () => {
 
   it('should return error if postConditionConditionCode is missing', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: true,
+      postConditionMode: PostConditionMode.Deny,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: undefined,
       postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
@@ -70,7 +71,7 @@ describe('checkPostConditionParameters', () => {
 
   it('should return error for invalid Stacks address', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: true,
+      postConditionMode: PostConditionMode.Deny,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: FungibleConditionCode.Equal,
       postConditionAddress: 'INVALID_ADDRESS',
@@ -87,7 +88,7 @@ describe('checkPostConditionParameters', () => {
 
   it('should return error if postConditionAmount is not a valid number', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: true,
+      postConditionMode: PostConditionMode.Deny,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: FungibleConditionCode.Equal,
       postConditionAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
@@ -104,7 +105,7 @@ describe('checkPostConditionParameters', () => {
 
   it('should return multiple errors if there are multiple errors', () => {
     const pcValues: FunctionFormikState = {
-      isPostConditionEnabled: true,
+      postConditionMode: PostConditionMode.Deny,
       postConditionType: PostConditionType.Fungible,
       postConditionConditionCode: FungibleConditionCode.Equal,
       postConditionAddress: 'INVALID_ADDRESS',

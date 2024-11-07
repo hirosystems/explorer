@@ -1,3 +1,4 @@
+import { Box, Flex, Grid, HStack, Icon, Stack } from '@chakra-ui/react';
 import { ArrowElbowLeftDown } from '@phosphor-icons/react';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
@@ -8,12 +9,6 @@ import { Timestamp } from '../../../../common/components/Timestamp';
 import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Grid } from '../../../../ui/Grid';
-import { HStack } from '../../../../ui/HStack';
-import { Icon } from '../../../../ui/Icon';
-import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import StxIcon from '../../../../ui/icons/StxIcon';
@@ -32,7 +27,7 @@ const PADDING = 4;
 const GroupHeader = () => {
   return (
     <>
-      <Box position="sticky" left={0} bg="surface" pr={4} sx={mobileBorderCss}>
+      <Box position="sticky" left={0} bg="surface" pr={4} css={mobileBorderCss}>
         <ListHeader width="fit-content" bg="hoverBackground">
           Block height
         </ListHeader>
@@ -67,7 +62,11 @@ const StxBlockRow = ({
   isFirst?: boolean;
   isLast?: boolean;
 }) => {
-  const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined;
+  const icon = isFirst ? (
+    <Icon h={2.5} w={2.5} color={'white'}>
+      <StxIcon />
+    </Icon>
+  ) : undefined;
   return minimized ? (
     <>
       <Flex
@@ -75,11 +74,11 @@ const StxBlockRow = ({
         left={0}
         gap={2}
         fontSize="sm"
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         gridColumn="1 / 2"
         alignItems="center"
         zIndex="docked"
-        bg="surface"
+        // bg="surface"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
         <BlockLink hash={stxBlock.hash}>
@@ -90,7 +89,7 @@ const StxBlockRow = ({
       </Flex>
 
       <HStack
-        divider={<Caption>∙</Caption>}
+        separator={<Caption border="none">∙</Caption>}
         gap={1}
         whiteSpace="nowrap"
         gridColumn="3 / 4"
@@ -118,7 +117,7 @@ const StxBlockRow = ({
         bg="surface"
         gap={2}
         fontSize="sm"
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         alignItems="center"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
@@ -208,7 +207,10 @@ export function BurnBlockGroupGrid({
               isLast={i === stxBlocksToDisplay.length - 1 && numStxBlocksNotDisplayed <= 0}
             />
             {i < stxBlocksToDisplay.length - 1 && (
-              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+              <Box
+                gridColumn={'1/5'}
+                borderBottom={'1px solid var(--stacks-colors-border-secondary)'}
+              ></Box>
             )}
           </React.Fragment>
         ))}
@@ -254,12 +256,16 @@ function BitcoinHeader({
       pb={3}
       marginX={-PADDING}
       px={PADDING}
-      borderBottom={minimized ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+      borderBottom={minimized ? '1px solid var(--stacks-colors-border-primary)' : 'none'}
       flexWrap={'wrap'}
     >
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
-        <Icon as={ArrowElbowLeftDown} size={3.5} color="textSubdued" />
-        <Icon as={BitcoinIcon} size={4.5} />
+        <Icon h={3.5} w={3.5} color="textSubdued">
+          <ArrowElbowLeftDown />
+        </Icon>
+        <Icon h={4.5} w={4.5}>
+          <BitcoinIcon />
+        </Icon>
         <Flex height="full" alignItems="center">
           <ExplorerLink
             fontSize="sm"
@@ -272,7 +278,7 @@ function BitcoinHeader({
         </Flex>
       </Flex>
       <Box>
-        <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+        <HStack separator={<Caption border="none">∙</Caption>} gap={1} flexWrap={'wrap'}>
           <ExplorerLink
             fontSize="xs"
             color="textSubdued"
@@ -296,8 +302,8 @@ export function Footer({
   blocksCount: number | undefined;
 }) {
   return (
-    <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
-      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
+    <Box borderTop="1px solid var(--stacks-colors-border-secondary)">
+      <HStack separator={<Caption border="none">∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {blocksCount ? blocksCount : '-'} blocks
         </Text>
@@ -390,7 +396,7 @@ export function BurnBlockGroup({
   );
 
   return (
-    <Box border={'1px'} rounded={'lg'} p={PADDING}>
+    <Box border="1px solid var(--stacks-colors-border-primary)" rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />
       <ScrollableBox>
         <BurnBlockGroupGrid

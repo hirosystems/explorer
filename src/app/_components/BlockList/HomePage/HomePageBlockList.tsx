@@ -1,10 +1,10 @@
 'use client';
 
+import { Stack } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import { ReactNode, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
-import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
@@ -45,7 +45,13 @@ export function HomePageControlsLayout({
   children: ReactNode;
 }) {
   return (
-    <Stack gap={3} pb={6} marginX={-6} px={6} py={5} borderBottom={liveUpdates ? '1px' : 'none'}>
+    <Stack
+      gap={3}
+      pb={6}
+      marginX={-6}
+      px={6}
+      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-border-secondary)' : 'none'}
+    >
       {children}
     </Stack>
   );
@@ -69,7 +75,9 @@ function HomePageBlockListBase() {
   return (
     <HomePageBlockListLayout>
       <HomePageControlsLayout liveUpdates={liveUpdates}>
-        <Text fontWeight="medium">Recent Blocks</Text>
+        <Text fontWeight="medium" py={2}>
+          Recent Blocks
+        </Text>
         <Controls
           groupByBtc={{
             onChange: () => {
@@ -78,11 +86,11 @@ function HomePageBlockListBase() {
                 toggleLiveUpdates(true);
               }
             },
-            isChecked: groupedByBtc,
+            checked: groupedByBtc,
           }}
           liveUpdates={{
             onChange: () => toggleLiveUpdates(),
-            isChecked: liveUpdates,
+            checked: liveUpdates,
           }}
           padding={0}
           border="none"

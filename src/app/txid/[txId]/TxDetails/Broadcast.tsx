@@ -1,17 +1,14 @@
 'use client';
 
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import { Clock } from '@phosphor-icons/react';
 import { FC } from 'react';
-import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { Value } from '../../../../common/components/Value';
 import { toRelativeTime } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { isInMempool } from '../utils';
 
@@ -33,9 +30,11 @@ export const Broadcast: FC<{
       value={
         <>
           <Box>
-            <Tooltip label={readableTs}>
+            <Tooltip content={readableTs}>
               <Flex alignItems="center">
-                <Icon as={Clock} size={4} mr="4px" />
+                <Icon h={4} w={4} mr={1}>
+                  <Clock />
+                </Icon>
                 <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
               </Flex>
             </Tooltip>

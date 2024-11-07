@@ -1,7 +1,7 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
-import { CaretDown } from '@phosphor-icons/react';
+import { AccordionItemContent, Box, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
+import { CaretDown, Info } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
 
@@ -10,29 +10,24 @@ import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { Badge } from '../../../common/components/Badge';
 import { ExplorerLink } from '../../../common/components/ExplorerLinks';
 import { Section } from '../../../common/components/Section';
-import { InfoCircleIcon } from '../../../common/components/icons/info-circle';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useContractById } from '../../../common/queries/useContractById';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import {
+  AccordionItem,
+  AccordionItemTrigger,
+  AccordionRoot,
+} from '../../../components/ui/accordion';
 import { MempoolTxListItemMini } from '../../../features/txs-list/ListItem/MempoolTxListItemMini';
 import { TxListItemMini } from '../../../features/txs-list/ListItem/TxListItemMini';
 import { FilterButton } from '../../../features/txsFilterAndSort/FilterButton';
 import { AllTransactionsFilteredMessage } from '../../../features/txsFilterAndSort/TransactionMessages';
 import { useFilterAndSortState } from '../../../features/txsFilterAndSort/useFilterAndSortState';
-import { Accordion } from '../../../ui/Accordion';
-import { AccordionButton } from '../../../ui/AccordionButton';
-import { AccordionIcon } from '../../../ui/AccordionIcon';
-import { AccordionItem } from '../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../ui/AccordionPanel';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
-import { HStack } from '../../../ui/HStack';
-import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
-import { Stack } from '../../../ui/Stack';
+import { Text } from '../../../ui/Text';
 import FunctionXIcon from '../../../ui/icons/FunctionX';
-import { Caption, Text, Title } from '../../../ui/typography';
+import { Caption, Title } from '../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useUser } from '../hooks/useUser';
 import { setCodeBody, toggleRightPanel } from '../sandbox-slice';
@@ -43,32 +38,31 @@ const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const [loaded, setLoaded] = React.useState(false);
   const [clicked, setClicked] = React.useState(false);
   const dispatch = useAppDispatch();
-  const colorMode = useColorMode().colorMode;
   return loaded ? (
-    <Badge userSelect="none" color={`textCaption.${colorMode}`}>
+    <Badge userSelect="none" color={`text`}>
       Loaded!
     </Badge>
   ) : !clicked ? (
     <Badge
       userSelect="none"
-      _hover={{ cursor: 'pointer', color: `textTitle.${colorMode}` }}
-      color={`textCaption.${colorMode}`}
+      _hover={{ cursor: 'pointer', color: `textSubdued` }}
+      color={`text`}
       onClick={() => setClicked(true)}
     >
       Load in editor
     </Badge>
   ) : (
-    <Badge userSelect="none" color={`textCaption.${colorMode}`}>
+    <Badge userSelect="none" color={`text`}>
       <Flex>
         <Box
-          _hover={{ cursor: 'pointer', color: `textTitle.${colorMode}` }}
-          pr="8px"
+          _hover={{ cursor: 'pointer', color: `textSubdued` }}
+          pr={2}
           onClick={() => setClicked(false)}
         >
           Cancel
         </Box>
         <Box
-          _hover={{ cursor: 'pointer', color: `textTitle.${colorMode}` }}
+          _hover={{ cursor: 'pointer', color: `textSubdued` }}
           pl="8px"
           borderWidth="1px"
           onClick={() => {
@@ -96,7 +90,6 @@ const TxDetailsFunctions = ({
 }: any) => {
   const [fnsVisible, setFnsVisibility] = React.useState(false);
   const dispatch = useAppDispatch();
-  const colorMode = useColorMode().colorMode;
 
   return hasFunctionsAvailable ? (
     <>
@@ -115,21 +108,24 @@ const TxDetailsFunctions = ({
               userSelect="none"
               _hover={{
                 cursor: 'pointer',
-                color: `textTitle.${colorMode}`,
+                color: `textSubdued`,
               }}
-              color={`textCaption.${colorMode}`}
+              color={`text`}
             >
               Load contract
             </Badge>
           </ExplorerLink>
           <IconButton
-            size="24px"
+            size={6}
             onClick={() => {
               setFnsVisibility(s => !s);
             }}
-            icon={<CaretDown size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />}
             aria-label={'toggle function'}
-          />
+          >
+            <Icon h={4} w={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'}>
+              <CaretDown />
+            </Icon>
+          </IconButton>
         </HStack>
       </Flex>
       {fnsVisible ? (
@@ -138,24 +134,28 @@ const TxDetailsFunctions = ({
             return func.access !== 'private' ? (
               <Flex
                 borderBottomWidth={index === arr.length - 1 ? undefined : '1px'}
-                px="16px"
-                py="8px"
+                px={4}
+                py={2}
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Flex alignItems="center" color={`textCaption.${colorMode}`}>
+                <Flex alignItems="center" color={`text`}>
                   {func.access === 'read_only' ? (
-                    <InfoCircleIcon size="18px" />
+                    <Icon h={4.5} w={4.5}>
+                      <Info />
+                    </Icon>
                   ) : (
-                    <Icon as={FunctionXIcon} size="18px" />
+                    <Icon h={4.5} w={4.5}>
+                      <FunctionXIcon />
+                    </Icon>
                   )}
                   <Caption ml="4px">{func.name}</Caption>
                 </Flex>
                 {status === 'success' ? (
                   <ExplorerLink href={`/sandbox/contract-call/${contractId}/${func.name}`}>
                     <Badge
-                      _hover={{ color: `textTitle.${colorMode}`, cursor: 'pointer' }}
-                      color={`textCaption.${colorMode}`}
+                      _hover={{ color: `textSubdued`, cursor: 'pointer' }}
+                      color={`text`}
                       onClick={() => {
                         dispatch(toggleRightPanel());
                       }}
@@ -190,7 +190,7 @@ function TxDetailsBase({ tx }: { tx: Transaction }) {
 
   if (!contract)
     return (
-      <Text fontSize={'14px'} p={'20px'} align={'center'}>
+      <Text fontSize={'14px'} p={'20px'} textAlign={'center'}>
         Nothing to show
       </Text>
     );
@@ -253,23 +253,21 @@ export function TransactionsPanel() {
   const txList = React.useMemo(
     () =>
       filteredTxs.map(tx => (
-        <AccordionItem key={tx.tx_id} border={'none'}>
-          <Flex gap={'6px'}>
+        <AccordionItem key={tx.tx_id} border={'none'} value={tx.tx_id}>
+          <Flex gap={1.5}>
             <TxListItemMini tx={tx} />
-            <AccordionButton
+            <AccordionItemTrigger
               flexGrow={0}
               flexShrink={0}
               width={'30px'}
               ml={'auto'}
               p={0}
               justifyContent={'center'}
-            >
-              <AccordionIcon />
-            </AccordionButton>
+            />
           </Flex>
-          <AccordionPanel borderTopWidth="1px">
+          <AccordionItemContent borderTopWidth="1px">
             <TxDetails tx={tx} />
-          </AccordionPanel>
+          </AccordionItemContent>
         </AccordionItem>
       )),
     [filteredTxs]
@@ -279,16 +277,16 @@ export function TransactionsPanel() {
     <Section title={'Transactions'} topRight={<FilterButton />}>
       {pendingList}
       {filteredTxs?.length ? (
-        <Accordion allowMultiple>{txList}</Accordion>
+        <AccordionRoot multiple>{txList}</AccordionRoot>
       ) : hasTxButIsFiltered ? (
         <AllTransactionsFilteredMessage />
       ) : (
-        <Flex flexGrow={1} flexDirection="column" alignItems="center" justifyContent="center">
+        <Stack flexGrow={1} alignItems="center" justifyContent="center">
           <Stack textAlign="center">
             <Title>No Transactions</Title>
             <Caption>Your list of transactions will display here.</Caption>
           </Stack>
-        </Flex>
+        </Stack>
       )}
     </Section>
   );

@@ -1,3 +1,4 @@
+import { Box, Grid, HStack, Icon, Stack } from '@chakra-ui/react';
 import { QrCode, X } from '@phosphor-icons/react';
 import * as React from 'react';
 
@@ -5,12 +6,7 @@ import { Circle } from '../../../../common/components/Circle';
 import { Section } from '../../../../common/components/Section';
 import { useAccountBalance } from '../../../../common/queries/useAccountBalance';
 import { microToStacks } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { Grid } from '../../../../ui/Grid';
-import { HStack } from '../../../../ui/HStack';
-import { Icon } from '../../../../ui/Icon';
 import { IconButton } from '../../../../ui/IconButton';
-import { Stack } from '../../../../ui/Stack';
 import { Tooltip } from '../../../../ui/Tooltip';
 import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption } from '../../../../ui/typography';
@@ -51,15 +47,24 @@ function StxBalanceBase({ address }: StxBalanceProps) {
 
   const TopRight = (
     <Box position="relative">
-      <Tooltip label={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
+      <Tooltip content={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
         <IconButton
           position="absolute"
           top="-18px"
           right="-12px"
-          icon={qrShowing ? <X /> : <QrCode />}
           onClick={toggleViewQrCode}
           aria-label={'toggle view QR code'}
-        />
+        >
+          {qrShowing ? (
+            <Icon h={5} w={5} color="bg.inverted">
+              <X />
+            </Icon>
+          ) : (
+            <Icon h={5} w={5} color="bg.inverted">
+              <QrCode />
+            </Icon>
+          )}
+        </IconButton>
       </Tooltip>
     </Box>
   );
@@ -68,15 +73,17 @@ function StxBalanceBase({ address }: StxBalanceProps) {
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
         <Stack
-          sx={{
+          css={{
             '& > *:not(:last-child)': {
-              borderBottom: '1px',
+              borderBottom: '1px solid var(--stacks-colors-border-secondary)',
             },
           }}
         >
           <HStack gap={4} py={4}>
-            <Circle bg={'brand'} size={10}>
-              <Icon as={StxIcon} size={4} color="white" />
+            <Circle bg={'brand'} h={10} w={10}>
+              <Icon h={4} w={4} color="white">
+                <StxIcon />
+              </Icon>
             </Circle>
             <Stack gap={2}>
               <Caption>Total balance</Caption>
@@ -97,9 +104,9 @@ function StxBalanceBase({ address }: StxBalanceProps) {
           ) : null}
           {isStacking ? (
             <Box
-              sx={{
+              css={{
                 '& > *:not(:last-child)': {
-                  borderBottom: '1px',
+                  borderBottom: '1px solid var(--stacks-colors-border-secondary)',
                 },
               }}
             >
@@ -112,10 +119,10 @@ function StxBalanceBase({ address }: StxBalanceProps) {
           ) : null}
         </Stack>
       ) : (
-        <Grid placeItems="center" pt="32px" pb="24px" width="100%">
+        <Grid placeItems="center" pt={8} pb={6} width="full">
           <QRcode address={address} />
           <Caption
-            mt="16px"
+            mt={4}
             onClick={toggleViewQrCode}
             _hover={{
               cursor: 'pointer',

@@ -3,29 +3,35 @@
 exports[`<Broadcast /> renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-12erdbu"
+    class="kvh css-jzbmfg"
   >
     <div
-      class="css-zbihu4"
+      class="css-1di7ibd"
     >
       Broadcast
     </div>
     <div
-      class="css-1vv9c89"
+      class="css-1c4cfu2"
     >
       <div
         class="css-0"
       >
         <div
-          class="css-70qvj9"
+          class="chakra-tooltip__trigger css-yeouz0"
+          data-part="trigger"
+          data-scope="tooltip"
+          data-state="closed"
+          dir="ltr"
+          id="tooltip::r0::trigger"
         >
           <svg
-            class="chakra-icon css-1a87sgk"
+            aria-hidden="true"
+            class="chakra-icon css-2hj10t"
             fill="currentColor"
             focusable="false"
-            height="4"
+            height="1em"
             viewBox="0 0 256 256"
-            width="4"
+            width="1em"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
@@ -33,11 +39,104 @@ exports[`<Broadcast /> renders correctly 1`] = `
             />
           </svg>
           <span
-            class="chakra-text css-nvxyq8"
+            class="css-1yxge43"
           >
             2 years ago
           </span>
         </div>
+        <div
+          class="chakra-tooltip__positioner css-0"
+          data-part="positioner"
+          data-scope="tooltip"
+          dir="ltr"
+          id="tooltip::r0::popper"
+          style="position: absolute; isolation: isolate; min-width: max-content; top: 0px; left: 0px; transform: translate3d(0, -100vh, 0); z-index: var(--z-index);"
+        >
+          <div
+            class="chakra-tooltip__content css-et5xel"
+            data-part="content"
+            data-scope="tooltip"
+            data-state="closed"
+            dir="ltr"
+            hidden=""
+            id="tooltip::r0::content"
+            role="tooltip"
+            style="pointer-events: none;"
+          >
+            <div
+              class="chakra-tooltip__arrow css-1fss98u"
+              data-part="arrow"
+              data-scope="tooltip"
+              dir="ltr"
+              id="tooltip::r0::arrow"
+              style="position: absolute; --arrow-size-half: calc(var(--arrow-size) / 2); --arrow-offset: calc(var(--arrow-size-half) * -1);"
+            >
+              <div
+                class="chakra-tooltip__arrowTip css-oq2zrs"
+                data-part="arrow-tip"
+                data-scope="tooltip"
+                dir="ltr"
+                style="top: 0px; left: 0px; width: 100%; height: 100%; position: absolute; z-index: inherit;"
+              />
+            </div>
+            12:00:00 PM 1/1/2023
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1o675ti"
+    >
+      <div
+        class="css-0"
+        data-part="root"
+        data-scope="clipboard"
+        id="clip::r1:"
+      >
+        <button
+          aria-label="copy row"
+          class="chakra-button fancy-copy css-q5d2uy"
+          data-part="trigger"
+          data-scope="clipboard"
+          type="button"
+        >
+          <div
+            class="css-0"
+            data-part="indicator"
+            data-scope="clipboard"
+          >
+            <svg
+              fill="none"
+              height="1em"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                height="4"
+                rx="1"
+                ry="1"
+                width="8"
+                x="8"
+                y="2"
+              />
+              <path
+                d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+              />
+            </svg>
+          </div>
+          <div
+            class="css-1z119ai"
+            data-part="indicator"
+            data-scope="clipboard"
+          >
+            Copy
+          </div>
+        </button>
       </div>
     </div>
   </div>

@@ -1,19 +1,15 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { Badge, Spinner } from '@chakra-ui/react';
+import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
-import { Badge } from '../../../common/components/Badge';
+// import { Badge } from '../../../common/components/Badge';
 import { DEFAULT_DEVNET_SERVER } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useCustomNetworkApiInfo } from '../../../common/queries/useCustomNetworkApiInfo';
 import { Network } from '../../../common/types/network';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
-import { Spinner } from '../../../ui/Spinner';
-import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption, Title } from '../../../ui/typography';
 
@@ -29,7 +25,6 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
     removeCustomNetwork,
     apiUrls: { mainnet, testnet },
   } = useGlobalContext();
-  const colorMode = useColorMode().colorMode;
   const isMainnet = network.url === mainnet;
   const isTestnet = network.url === testnet;
   const isDevnet = network.url === DEFAULT_DEVNET_SERVER;
@@ -42,9 +37,6 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
   const isDisabled = isFetching || !!error;
   const isActive = activeNetwork.url === network.url;
   const networkHref = buildUrl('/', network);
-  const purpleBadgeColor = useColorModeValue('purple.600', 'purple.300');
-  const purpleBadgeBg = useColorModeValue('purple.100', 'purple.900');
-  const badgeBorder = useColorModeValue('purple.300', 'purple.700');
 
   const isNetworkRemovable = useMemo(
     () =>
@@ -86,21 +78,25 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             {network.label}
           </Title>
           {network.isSubnet ? (
-            <Badge bg={`bg4.${colorMode}`} ml="8px" color={`textCaption.${colorMode}`}>
+            <Badge
+              bg={'navbar.networkLabelBadgeBackground'}
+              ml={2}
+              color={'navbar.networkLabelBadge'}
+            >
               subnet
             </Badge>
           ) : (
             <Badge
-              color={purpleBadgeColor}
-              bg={purpleBadgeBg}
-              px={'2'}
-              py={'1'}
+              color={'navbar.networkLabelBadge'}
+              bg={'navbar.networkLabelBadgeBackground'}
+              px={2}
+              py={1}
               fontSize={'xs'}
               rounded={'full'}
-              border={'1px'}
-              borderColor={badgeBorder}
+              border="normal"
+              borderColor={'navbar.networkLabelBadgeBorder'}
               fontWeight={'medium'}
-              ml="8px"
+              ml={2}
             >
               Nakamoto 3.0
             </Badge>
@@ -121,24 +117,29 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
       </Stack>
       <Flex alignItems="center" position={'relative'}>
         {isFetching ? (
-          <Spinner size="18px" opacity={0.5} color={'#666'} data-testid="spinner" />
+          <Spinner h={4} w={4} opacity={0.5} color={'#666'} data-testid="spinner" />
         ) : !!error ? (
-          <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
+          <Caption color={`error`}>Offline</Caption>
         ) : isNetworkRemovable ? (
-          <Tooltip label="Remove network">
+          <Tooltip content="Remove network">
             <IconButton
               disabled={isDisabled}
               position="relative"
-              color={`textCaption.${colorMode}`}
-              size={'21px'}
-              icon={<Icon as={Trash} size={4} />}
+              color={'surfaceOpposite'}
+              size={5}
               onClick={() => removeCustomNetwork(network)}
               aria-label={'Remove network'}
-              _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
-            />
+              _hover={{ bg: 'whiteAlpha.400' }}
+            >
+              <Icon h={4} w={4}>
+                <Trash />
+              </Icon>
+            </IconButton>
           </Tooltip>
         ) : isActive ? (
-          <Box as={Check} color={`feedbackSuccess.${colorMode}`} size="18px" />
+          <Icon color={'icon'} h={4} w={4}>
+            <Check />
+          </Icon>
         ) : null}
       </Flex>
     </Flex>

@@ -1,11 +1,10 @@
 'use client';
 
+import { Box, Flex } from '@chakra-ui/react';
 import { Suspense, useMemo } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { Section } from '../../../../common/components/Section';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListGrouped } from '../Grouped/BlockListGrouped';
@@ -42,6 +41,7 @@ export function BlocksPageBlockListGrouped() {
     <ExplorerErrorBoundary
       Wrapper={Section}
       wrapperProps={{
+        title: 'Recent Blocks',
         gridColumnStart: ['1', '1', '2'],
         gridColumnEnd: ['2', '2', '3'],
         minWidth: 0,

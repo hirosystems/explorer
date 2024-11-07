@@ -1,5 +1,5 @@
 import { Card } from '../../../common/components/Card';
-import { SkeletonText } from '../../../ui/SkeletonText';
+import { SkeletonText } from '../../../components/ui/skeleton';
 
 export function RightPanelSkeleton() {
   return (
@@ -16,7 +16,7 @@ export function RightPanelSkeleton() {
       p={7}
       overflow="hidden"
     >
-      <SkeletonText noOfLines={50} spacing={4} />
+      <SkeletonText noOfLines={50} gap={4} />
     </Card>
   );
 }

@@ -1,11 +1,9 @@
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { CheckCircle, Warning } from '@phosphor-icons/react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Stack } from '../../../../ui/Stack';
 import { Caption, Pre } from '../../../../ui/typography';
 import { FunctionSummaryClarityValue } from './FunctionSummaryClarityValue';
 
@@ -34,7 +32,7 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
     return (
       <Box width="100%">
         <Pre>{value.type}</Pre>
-        <Stack mt="32px" gap={4} width="100%">
+        <Stack mt={8} gap={4} width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const isNestedType = Object.keys(value.value).includes('type');
@@ -43,11 +41,11 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
             return (
               <Box
                 borderBottom={!isLast ? '1px solid' : undefined}
-                pb={!isLast ? '16px' : undefined}
+                pb={!isLast ? 4 : undefined}
                 key={name}
                 width="100%"
               >
-                <Caption display="inline-block" mb="8px" fontSize={'14px'}>
+                <Caption display="inline-block" mb={2} fontSize={'sm'}>
                   {name}
                 </Caption>
                 <FunctionSummaryClarityValue
@@ -69,13 +67,17 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
       <Box width="100%">
         <Flex alignItems="center">
           {success ? (
-            <Box mr="8px" color={'feedbackSuccess'} as={CheckCircle} />
+            <Box mr={2} color={'success'}>
+              <CheckCircle />
+            </Box>
           ) : (
-            <Box mr="8px" color={'feedbackError'} as={Warning} />
+            <Box mr={2} color={'error'}>
+              <Warning />
+            </Box>
           )}
           <Pre>{hasType ? type : success ? 'Success' : 'Failed'}</Pre>
         </Flex>
-        <Stack mt="32px" gap={4} width="100%">
+        <Stack mt={8} gap={4} width="100%">
           <FunctionSummaryClarityValue
             btc={null}
             arg={{

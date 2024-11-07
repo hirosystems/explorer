@@ -1,12 +1,9 @@
 'use client';
 
+import { Flex, Icon, StackProps } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
-import * as React from 'react';
 import { useMemo } from 'react';
 
-import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
-import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
@@ -14,7 +11,7 @@ import { StackingCycle } from '../StackingCycle';
 import { StatSection } from '../StatSection';
 import { useSuspenseCurrentStackingCycle } from './useCurrentStackingCycle';
 
-function CurrentStackingCycleBase(props: GridProps) {
+function CurrentStackingCycleBase(props: StackProps) {
   const { currentCycleStackedSTX, blocksTilNextCycle, approximateDaysTilNextCycle } =
     useSuspenseCurrentStackingCycle();
   const currentCycleCaption = useMemo(() => {
@@ -24,14 +21,16 @@ function CurrentStackingCycleBase(props: GridProps) {
         <Text>Next cycle starts in</Text>
         &nbsp;
         <Tooltip
-          label={`Next cycle starts in ${blocksTilNextCycle} block${
+          content={`Next cycle starts in ${blocksTilNextCycle} block${
             blocksTilNextCycle !== 1 ? 's' : ''
           }. Calculation is based on ~10 minutes block time.`}
         >
           <Flex alignItems={'center'}>
             {approximateDaysTilNextCycle} day{approximateDaysTilNextCycle !== 1 ? 's' : ''}
             &nbsp;
-            <Icon as={Info} size={3} />
+            <Icon h={3} w={3}>
+              <Info />
+            </Icon>
           </Flex>
         </Tooltip>
       </Flex>
@@ -47,7 +46,7 @@ function CurrentStackingCycleBase(props: GridProps) {
   );
 }
 
-export function CurrentStackingCycle(props: GridProps) {
+export function CurrentStackingCycle(props: StackProps) {
   return (
     <ExplorerErrorBoundary
       renderContent={() => (

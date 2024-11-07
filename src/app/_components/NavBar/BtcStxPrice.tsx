@@ -1,12 +1,11 @@
 'use client';
 
+import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { usdFormatter } from '../../../common/utils/utils';
-import { Flex, FlexProps } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
@@ -32,7 +31,11 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <Flex gap={6} minWidth={'172px'}>
       <PriceContainer
-        icon={<Icon as={BitcoinIcon} size={4.5} />}
+        icon={
+          <Icon h={4.5} w={4.5}>
+            <BitcoinIcon />
+          </Icon>
+        }
         minWidth={'92px'}
         color={{ base: 'text', lg: 'slate.50' }}
       >
@@ -40,8 +43,10 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
       </PriceContainer>
       <PriceContainer
         icon={
-          <Circle size={'18px'} bg="brand" border={'none'}>
-            <Icon as={StxIcon} size={'10px'} color="white" />
+          <Circle h={4.5} w={4.5} bg="brand" border={'none'}>
+            <Icon h={2.5} w={2.5} color="white">
+              <StxIcon />
+            </Icon>
           </Circle>
         }
         minWidth={'56px'}

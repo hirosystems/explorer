@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Grid } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { useState } from 'react';
@@ -11,9 +12,7 @@ import {
 
 import { TwoColumnsListItemSkeleton } from '../../../../common/components/TwoColumnsListItemSkeleton';
 import { initBigNumber } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
-import { Grid } from '../../../../ui/Grid';
 import { Caption } from '../../../../ui/typography';
 
 const TokenAssetListItem = dynamic(
@@ -71,7 +70,7 @@ export const NftBalance: React.FC<{
       </Box>
       {visibleItemsCount < nftKeysWithCount.length && (
         <Box width={'full'}>
-          <Button variant={'secondary'} onClick={() => handleLoadMore()} width={'full'}>
+          <Button variant="secondary" onClick={() => handleLoadMore()} width={'full'}>
             Load more
           </Button>
         </Box>

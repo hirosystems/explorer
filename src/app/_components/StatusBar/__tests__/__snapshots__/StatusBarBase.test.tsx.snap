@@ -2,16 +2,17 @@
 
 exports[`StatusBarBase renders correctly (critical impact) 1`] = `
 <div
-  className="css-mxgyfo"
+  className="css-7dfb2o"
 >
   <div
     className="css-fevtbh"
   >
     <div
-      className="css-1x9ol3w"
+      className="css-w64dtj"
     >
       <svg
-        className="chakra-icon css-1fimugm"
+        aria-hidden={true}
+        className="chakra-icon css-1er7qg6"
         fill="currentColor"
         focusable={false}
         height="1em"
@@ -33,16 +34,17 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
 
 exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
 <div
-  className="css-mxgyfo"
+  className="css-7dfb2o"
 >
   <div
     className="css-fevtbh"
   >
     <div
-      className="css-1x9ol3w"
+      className="css-w64dtj"
     >
       <svg
-        className="chakra-icon css-cyiw0f"
+        aria-hidden={true}
+        className="chakra-icon css-18d4au9"
         fill="currentColor"
         focusable={false}
         height="1em"

@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, Grid, HStack, Icon, Stack } from '@chakra-ui/react';
 import { ArrowBendDownLeft, Clock } from '@phosphor-icons/react';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
@@ -9,15 +9,10 @@ import { Timestamp } from '../../../../common/components/Timestamp';
 import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { Flex, FlexProps } from '../../../../ui/Flex';
-import { Grid } from '../../../../ui/Grid';
-import { HStack } from '../../../../ui/HStack';
-import { Icon } from '../../../../ui/Icon';
-import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import StxIcon from '../../../../ui/icons/StxIcon';
+import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
@@ -34,7 +29,6 @@ interface BtcBlockRowProps {
   isFirst: boolean;
 }
 export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children: ReactNode }) {
-  const textColor = useColorModeValue('slate.700', 'slate.500');
   return (
     <Flex
       justifyContent="space-between"
@@ -43,7 +37,7 @@ export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children:
       mx={-6}
       height={14}
       backgroundColor="surfaceHighlight"
-      color={textColor}
+      color={'blockList.btcBlockRowText'}
       {...rest}
     >
       {children}
@@ -52,19 +46,22 @@ export function BtcBlockRowLayout({ children, ...rest }: FlexProps & { children:
 }
 
 export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBlockRowProps) {
-  const iconColor = useColorModeValue('slate.600', 'slate.800'); // TODO: not in theme. remove
   return (
     <>
       <HStack gap={1.5}>
         <Icon
-          as={ArrowBendDownLeft}
           transform={'rotate(90deg)'}
-          size={2.5}
-          color={iconColor}
+          h={2.5}
+          w={2.5}
+          color={'blockList.btcBlockRowIcon'}
           position={'relative'}
           bottom={'1px'}
-        />
-        <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
+        >
+          <ArrowBendDownLeft />
+        </Icon>
+        <Icon h={18} w={18} position={'relative'} bottom={'1px'}>
+          <BitcoinIcon />
+        </Icon>
         {isFirst ? (
           <Text fontSize="sm" color="textSubdued" fontWeight="medium">
             Next Bitcoin block
@@ -78,13 +75,15 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
       <Box>
         {isFirst ? (
           <Flex gap={1} alignItems="center">
-            <Icon as={Clock} size={4} color="iconSubdued" />
+            <Icon h={4} w={4} color="iconSubdued">
+              <Clock />
+            </Icon>
             <Text color="textSubdued" fontSize="xs">
               Unconfirmed
             </Text>
           </Flex>
         ) : (
-          <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+          <HStack separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>} fontSize={'xs'}>
             <ExplorerLink
               fontSize="xs"
               color={'textSubdued'}
@@ -118,7 +117,7 @@ const GroupHeader = () => {
         zIndex={'docked'}
         bg={'surface'}
         pr={4}
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
       >
         <ListHeader width="fit-content" bg="hoverBackground">
           Block height
@@ -160,7 +159,11 @@ function StxBlockRow({
   isFirst?: boolean;
   isLast?: boolean;
 }) {
-  const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : null;
+  const icon = isFirst ? (
+    <Icon h={2.5} w={2.5} color={'white'}>
+      <StxIcon />
+    </Icon>
+  ) : null;
   return minimized ? (
     <>
       <Flex
@@ -169,7 +172,7 @@ function StxBlockRow({
         alignItems="center"
         gridColumn="1 / 2"
         gap={2}
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         zIndex="docked"
         bg="surface"
       >
@@ -182,7 +185,7 @@ function StxBlockRow({
       </Flex>
 
       <HStack
-        divider={<>&nbsp;∙&nbsp;</>}
+        separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
         gap={1}
         whiteSpace="nowrap"
         color="textSubdued"
@@ -209,7 +212,7 @@ function StxBlockRow({
         gap={2}
         position="sticky"
         left={0}
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         zIndex="docked"
         bg="surface"
       >
@@ -300,7 +303,10 @@ function StxBlocksGrid({
               isLast={i === stxBlocksToDisplay.length - 1 && numStxBlocksNotDisplayed <= 0}
             />
             {i < stxBlocksToDisplay.length - 1 && (
-              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+              <Box
+                gridColumn={'1/5'}
+                borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
+              ></Box>
             )}
           </React.Fragment>
         ))}
@@ -360,7 +366,6 @@ function StxBlocksGroupedByBtcBlock({
   const additionalStxBlocks = useInfiniteQueryResult<Block | NakamotoBlock>(response);
 
   const handleLoadMoreStxBlocks = useCallback(() => {
-    // TODO: remove this comment
     setEnabled(true);
     if (hasNextPage) {
       fetchNextPage();

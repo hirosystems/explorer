@@ -1,16 +1,18 @@
 'use client';
 
+import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 
-import { IS_BROWSER } from '../../common/constants/constants';
+import { GlobalContextProvider } from '../../common/context/GlobalContextProvider';
 import { store } from '../../common/state/store';
 import { NetworkModes } from '../../common/types/network';
 import { removeTrailingSlash } from '../../common/utils/utils';
-import { UIProvider } from '../../ui/UIProvider';
+import { ColorModeProvider } from '../../components/ui/color-mode';
+import { system } from '../../ui/theme/theme';
 import { AppConfig } from './AppConfig';
 
 const queryClient = new QueryClient({
@@ -24,11 +26,15 @@ const queryClient = new QueryClient({
   },
 });
 
-export const Providers: FC<{ headerCookies: string | null; children: ReactNode }> = ({
+export const Providers = ({
   children,
-  headerCookies,
+  addedCustomNetworksCookie,
+  removedCustomNetworksCookie,
+}: {
+  children: ReactNode;
+  addedCustomNetworksCookie: string | undefined;
+  removedCustomNetworksCookie: string | undefined;
 }) => {
-  const cookies = headerCookies || (IS_BROWSER ? document?.cookie : '');
   const searchParams = useSearchParams();
   const chain = searchParams?.get('chain');
   const api = searchParams?.get('api');
@@ -38,19 +44,27 @@ export const Providers: FC<{ headerCookies: string | null; children: ReactNode }
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
   const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
+
   return (
-    <CookiesProvider>
-      <UIProvider cookies={cookies}>
-        <Provider store={store}>
-          <AppConfig
-            queryNetworkMode={queryNetworkMode}
-            queryApiUrl={queryApiUrl}
-            querySubnet={querySubnet}
-          >
-            <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-          </AppConfig>
-        </Provider>
-      </UIProvider>
-    </CookiesProvider>
+    <GlobalContextProvider
+      addedCustomNetworksCookie={addedCustomNetworksCookie}
+      removedCustomNetworksCookie={removedCustomNetworksCookie}
+    >
+      <CookiesProvider>
+        <ChakraProvider value={system}>
+          <ColorModeProvider>
+            <ReduxProvider store={store}>
+              <AppConfig // TODO: rename to something else like SessionProvider
+                queryNetworkMode={queryNetworkMode}
+                queryApiUrl={queryApiUrl}
+                querySubnet={querySubnet}
+              >
+                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+              </AppConfig>
+            </ReduxProvider>
+          </ColorModeProvider>
+        </ChakraProvider>
+      </CookiesProvider>
+    </GlobalContextProvider>
   );
 };

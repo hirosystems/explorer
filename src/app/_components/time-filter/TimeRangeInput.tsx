@@ -1,11 +1,9 @@
+import { Box, Fieldset, Stack } from '@chakra-ui/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 
-import { Box } from '../../../ui/Box';
+import { Field as ChakraField } from '../../../components/ui/field';
 import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
 import { Input } from '../../../ui/Input';
-import { Stack } from '../../../ui/Stack';
 
 type Time = number | string | undefined;
 
@@ -54,8 +52,8 @@ export function TimeRangeInput({
           <Stack gap={4}>
             <Field name="start">
               {({ field, form }: FieldProps<string, TimeRangeInputState>) => (
-                <FormControl>
-                  <FormLabel>{startLabel}</FormLabel>
+                <Fieldset.Root>
+                  <ChakraField label={startLabel} />
                   <Input
                     {...field}
                     value={values.startTime || ''}
@@ -63,13 +61,13 @@ export function TimeRangeInput({
                     placeholder={startPlaceholder}
                     type={type}
                   />
-                </FormControl>
+                </Fieldset.Root>
               )}
             </Field>
             <Field name="end">
               {({ field, form }: FieldProps<string, TimeRangeInputState>) => (
-                <FormControl>
-                  <FormLabel>{endLabel}</FormLabel>
+                <Fieldset.Root>
+                  <ChakraField label={endLabel} />
                   <Input
                     {...field}
                     value={values.endTime || ''}
@@ -77,7 +75,7 @@ export function TimeRangeInput({
                     placeholder={endPlaceholder}
                     type={type}
                   />
-                </FormControl>
+                </Fieldset.Root>
               )}
             </Field>
           </Stack>

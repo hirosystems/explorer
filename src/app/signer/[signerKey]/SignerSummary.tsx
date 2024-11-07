@@ -1,3 +1,4 @@
+import { Stack } from '@chakra-ui/react';
 import { ReactNode, Suspense } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
@@ -5,7 +6,6 @@ import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizonta
 import { Section } from '../../../common/components/Section';
 import { Value } from '../../../common/components/Value';
 import { microToStacksFormatted } from '../../../common/utils/utils';
-import { Stack } from '../../../ui/Stack';
 import { useSuspenseCurrentStackingCycle } from '../../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { getEntityName } from '../../signers/SignersTable';
 import { useSuspensePoxSigner } from '../../signers/data/UseSigner';

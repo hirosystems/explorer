@@ -2,31 +2,37 @@
 
 exports[`TokenRow renders correctly 1`] = `
 <table
-  className="chakra-table css-0"
+  className="chakra-table__root css-g8yqxe"
 >
   <tr
-    className="css-0"
+    className="chakra-table__row css-16kmb31"
   >
     <td
-      className="css-15d3wjr"
+      className="chakra-table__cell css-1bh4pks"
     >
       <div
         className="css-axw7ok"
       >
         <img
           alt="TT"
+          data-nimg="1"
+          decoding="async"
           height={36}
+          loading="lazy"
           onError={[Function]}
-          src="https://example.com/token.png"
+          onLoad={[Function]}
+          src="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75"
+          srcSet="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=48&q=75 1x, /_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75 2x"
           style={
             Object {
+              "color": "transparent",
               "marginRight": "16px",
             }
           }
           width={36}
         />
         <a
-          className="chakra-link css-hygcjl"
+          className="link css-zibos"
           href="/token/0x5678?chain=mainnet"
         >
           TestToken
@@ -36,13 +42,13 @@ exports[`TokenRow renders correctly 1`] = `
       </div>
     </td>
     <td
-      className="css-55yph6"
+      className="chakra-table__cell css-t35k1d"
     >
       <span
-        className="chakra-text css-q62vf"
+        className="css-1gy64qm"
       >
         <a
-          className="chakra-link css-0"
+          className="link css-m05bwu"
           href="/txid/0x1234?chain=mainnet"
         >
           0x1234
@@ -50,11 +56,10 @@ exports[`TokenRow renders correctly 1`] = `
       </span>
     </td>
     <td
-      className="css-1ttiw4m"
-      data-is-numeric={true}
+      className="chakra-table__cell css-nepgmf"
     >
       <span
-        className="chakra-text css-ae4fie"
+        className="css-1tzohq0"
       >
         1M
       </span>

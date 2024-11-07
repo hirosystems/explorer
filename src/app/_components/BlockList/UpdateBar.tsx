@@ -1,11 +1,9 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { ArrowCounterClockwise } from '@phosphor-icons/react';
 import { ReactNode, Suspense, useCallback, useRef } from 'react';
 
 import RelativeTimeDisplay from '../../../common/components/RelativeTimeDisplay';
 import { Button } from '../../../ui/Button';
-import { Flex, FlexProps } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 import { useBlockListContext } from './BlockListContext';
 import { UpdateBarSkeleton } from './Grouped/skeleton';
@@ -13,12 +11,10 @@ import { getFadeAnimationStyle } from './consts';
 import { BlockListData } from './utils';
 
 export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) {
-  const bgColor = useColorModeValue('purple.100', 'slate.900');
-
   return (
     <Flex
       justifyContent="space-between"
-      backgroundColor={bgColor}
+      backgroundColor={'blockList.updateBar.background'}
       mx={-6}
       px={6}
       py={2.5}
@@ -46,7 +42,6 @@ export function UpdateBarBase({
   latestBlocksCount?: number;
   latestBlock?: BlockListData;
 } & FlexProps) {
-  const textColor = useColorModeValue('slate.800', 'slate.400'); // TODO: not in theme. remove
   const lastClickTimeRef = useRef(0);
   const { isBlockListLoading } = useBlockListContext();
 
@@ -72,7 +67,7 @@ export function UpdateBarBase({
     <UpdateBarLayout {...rest}>
       <Text
         fontSize={'sm'}
-        color={textColor}
+        color={'blockList.updateBar.text'}
         textOverflow={'ellipsis'}
         overflow={'hidden'}
         whiteSpace={'nowrap'}
@@ -82,14 +77,11 @@ export function UpdateBarBase({
       >
         {text}
       </Text>
-      <Button variant="text" onClick={update}>
+      <Button onClick={update} variant="text">
         <Flex alignItems={'center'} gap={1.5}>
-          <Icon
-            color="buttonText"
-            as={ArrowCounterClockwise}
-            size={3}
-            transform={'rotate(0deg) scaleX(-1)'}
-          />
+          <Icon color="buttonText" h={3} w={3} transform={'rotate(0deg) scaleX(-1)'}>
+            <ArrowCounterClockwise />
+          </Icon>
           Update
         </Flex>
       </Button>

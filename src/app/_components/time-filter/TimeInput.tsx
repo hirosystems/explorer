@@ -1,11 +1,9 @@
+import { Box, Fieldset, Stack } from '@chakra-ui/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 
-import { Box } from '../../../ui/Box';
+import { Field as ChakraField } from '../../../components/ui/field';
 import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
 import { Input } from '../../../ui/Input';
-import { Stack } from '../../../ui/Stack';
 
 export type Time = string;
 
@@ -47,8 +45,8 @@ export function TimeInput({
           <Stack gap={4}>
             <Field name="time">
               {({ field, form }: FieldProps<string, TimeInputState>) => (
-                <FormControl>
-                  <FormLabel>{label}</FormLabel>
+                <Fieldset.Root>
+                  <ChakraField label={label} />
                   <Input
                     {...field}
                     value={values.time || ''}
@@ -56,7 +54,7 @@ export function TimeInput({
                     placeholder={placeholder}
                     type={type}
                   />
-                </FormControl>
+                </Fieldset.Root>
               )}
             </Field>
           </Stack>

@@ -1,9 +1,8 @@
+import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
-import { Flex, FlexProps } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
 
@@ -13,7 +12,9 @@ export const FunctionSummaryName: FC<
   return (
     <Flex width="100%" alignItems="center" justifyContent="space-between" {...rest}>
       <Flex>
-        <Icon as={FunctionXIcon} mr="8px" size="18px" />
+        <Icon mr="8px" h={4.5} w={4.5}>
+          <FunctionXIcon />
+        </Icon>
         <Text fontWeight="600" fontSize={'14px'}>
           {summary.function_name}
         </Text>

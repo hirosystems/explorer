@@ -1,82 +1,40 @@
-import { ColorMode, WithCSSVar, useColorMode, useTheme } from '@chakra-ui/react';
+import { Box, ClientOnly } from '@chakra-ui/react';
 import { useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
-import { Box } from '../../ui/Box';
+import { getColorWithOpacity } from '../../common/utils/color-utils';
+import { useColorMode } from '../../components/ui/color-mode';
+import { system } from '../../ui/theme/theme';
 import { SignerLegendItem } from './SignerDistributionLegend';
 import { PoxSigner } from './data/useSigners';
+import { PieChartSkeleton } from './skeleton';
 import { getSignerKeyName } from './utils';
-
-declare type Dict<T = any> = Record<string, T>;
-
-export function getColorWithOpacity(color: string, opacity: number) {
-  const rgb = hexToRgb(color);
-  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
-}
-
-export function hexToRgb(hex: string) {
-  hex = hex.replace(/^#/, '');
-
-  let bigint = parseInt(hex, 16);
-  let r = (bigint >> 16) & 255;
-  let g = (bigint >> 8) & 255;
-  let b = bigint & 255;
-
-  return { r, g, b };
-}
 
 export function getSignerDistributionPieChartColor(
   isKnownSigner: boolean,
   votingPowerPercentage: number,
-  colorMode: ColorMode
+  theme: string
 ) {
+  let color = '';
   if (!isKnownSigner) {
-    return colorMode === 'light'
-      ? 'var(--stacks-colors-slate-250)'
-      : 'var(--stacks-colors-slate-800)';
-  }
-  if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
-    return 'var(--stacks-colors-purple-200)';
+    color = theme === 'light' ? 'colors.slate.250' : 'colors.slate.800';
+  } else if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
+    color = 'colors.purple.200';
   } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
-    return 'var(--stacks-colors-purple-300)';
+    color = 'colors.purple.300';
   } else if (votingPowerPercentage >= 5 && votingPowerPercentage < 10) {
-    return 'var(--stacks-colors-purple-400)';
+    color = 'colors.purple.400';
   } else if (votingPowerPercentage >= 10 && votingPowerPercentage < 15) {
-    return 'var(--stacks-colors-purple-500)';
+    color = 'colors.purple.500';
   } else if (votingPowerPercentage >= 15 && votingPowerPercentage < 20) {
-    return 'var(--stacks-colors-purple-600)';
+    color = 'colors.purple.600';
   } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
-    return 'var(--stacks-colors-purple-700)';
+    color = 'colors.purple.700';
   } else if (votingPowerPercentage >= 25) {
-    return 'var(--stacks-colors-purple-800)';
+    color = 'colors.purple.800';
   }
-}
-
-function getSignerDistributionPieChartHex(
-  isKnownSigner: boolean,
-  votingPowerPercentage: number,
-  colorMode: ColorMode,
-  theme: WithCSSVar<Dict>
-) {
-  if (!isKnownSigner) {
-    return colorMode === 'light' ? theme.colors['slate'][250] : theme.colors['slate'][800];
-  }
-  if (votingPowerPercentage > 0 && votingPowerPercentage < 2) {
-    return theme.colors['purple'][200];
-  } else if (votingPowerPercentage >= 2 && votingPowerPercentage < 5) {
-    return theme.colors['purple'][300];
-  } else if (votingPowerPercentage >= 5 && votingPowerPercentage < 10) {
-    return theme.colors['purple'][400];
-  } else if (votingPowerPercentage >= 10 && votingPowerPercentage < 15) {
-    return theme.colors['purple'][500];
-  } else if (votingPowerPercentage >= 15 && votingPowerPercentage < 20) {
-    return theme.colors['purple'][600];
-  } else if (votingPowerPercentage >= 20 && votingPowerPercentage < 25) {
-    return theme.colors['purple'][700];
-  } else if (votingPowerPercentage >= 25) {
-    return theme.colors['purple'][800];
-  }
+  return system.token(color);
 }
 
 const startAngle = 0;
@@ -140,9 +98,9 @@ const renderCenterCustomizedLabel = ({
         textAnchor="middle"
         dominantBaseline="central"
         style={{
-          fill: 'var(--stacks-colors-textSubdued)',
-          fontSize: 'var(--stacks-fontSizes-sm)',
-          fontWeight: 'var(--stacks-fontWeights-sm)',
+          fill: 'var(--stacks-colors-text-subdued)',
+          fontSize: 'var(--stacks-font-sizes-sm)',
+          fontWeight: 'var(--stacks-font-weights-sm)',
         }}
       >
         Total Signers
@@ -154,8 +112,8 @@ const renderCenterCustomizedLabel = ({
         dominantBaseline="central"
         style={{
           fill: 'var(--stacks-colors-text)',
-          fontSize: 'var(--stacks-fontSizes-2xl)',
-          fontWeight: 'var(--stacks-fontWeights-medium)',
+          fontSize: 'var(--stacks-font-sizes-2xl)',
+          fontWeight: 'var(--stacks-font-weights-medium)',
         }}
       >
         {numSigners}
@@ -172,6 +130,8 @@ export function SignersDistributionPieChart({
     throw new Error('Signers data is not available');
   }
 
+  const { colorMode } = useColorMode();
+
   const pieData: PieData[] = useMemo(() => {
     const thresholdPercentage = 1;
     const knownSignersWithPercentageGreaterThanThreshold = signers
@@ -183,7 +143,8 @@ export function SignersDistributionPieChart({
       .map(signer => ({
         name: getSignerKeyName(signer.signing_key),
         value: signer.weight_percent,
-      }));
+      }))
+      .sort((a, b) => a.value - b.value);
     const unknownSignersWithPercentageGreaterThanThreshold = signers
       .filter(
         signer =>
@@ -193,7 +154,8 @@ export function SignersDistributionPieChart({
       .map(signer => ({
         name: 'Other signer',
         value: signer.weight_percent,
-      }));
+      }))
+      .sort((a, b) => a.value - b.value);
 
     let signersData = knownSignersWithPercentageGreaterThanThreshold;
 
@@ -203,8 +165,6 @@ export function SignersDistributionPieChart({
 
     return signersData;
   }, [signers, onlyShowPublicSigners]);
-  const colorMode = useColorMode().colorMode;
-  const theme = useTheme();
 
   const CustomTooltip = useCallback(
     ({ active, payload }: TooltipProps<any, any>) => {
@@ -274,11 +234,10 @@ export function SignersDistributionPieChart({
                 fill={
                   index === activeIndex
                     ? getColorWithOpacity(
-                        getSignerDistributionPieChartHex(
+                        getSignerDistributionPieChartColor(
                           entry.name !== 'Other signer',
                           entry.value,
-                          colorMode,
-                          theme
+                          colorMode
                         ),
                         0.8
                       )
@@ -300,8 +259,8 @@ export function SignersDistributionPieChart({
         })}
       </PieChart>
     ),
-    [pieData, activeIndices, colorMode, CustomTooltip, activeIndex, theme, signers]
+    [pieData, activeIndices, colorMode, CustomTooltip, activeIndex, signers]
   );
 
-  return pieChart;
+  return <ClientOnly fallback={<PieChartSkeleton />}>{pieChart}</ClientOnly>;
 }

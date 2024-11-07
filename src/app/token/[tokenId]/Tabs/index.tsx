@@ -6,14 +6,14 @@ import { useSuspenseContractById } from '../../../../common/queries/useContractB
 import { AddressConfirmedTxsList } from '../../../../features/txs-list/AddressConfirmedTxsList';
 import { AddressMempoolTxsList } from '../../../../features/txs-list/AddressMempoolTxsList';
 import { CodeEditor } from '../../../../ui/CodeEditor';
-import { TabsProps } from '../../../../ui/Tabs';
+import { TabsRootProps } from '../../../../ui/Tabs';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { sbtcDepositAddress } from '../consts';
 import { DeveloperData, TokenInfoProps } from '../types';
 import { Developers } from './Developers';
 import HoldersTable from './holders/Holders';
 
-interface TokenTabsProps extends Partial<TabsProps> {
+interface TokenTabsProps extends Partial<TabsRootProps> {
   tokenId: string;
   tokenInfo: TokenInfoProps;
   developerData?: DeveloperData;
@@ -28,16 +28,19 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
       tabs={[
         {
           title: 'Confirmed',
+          id: 'confirmed',
           content: <AddressConfirmedTxsList address={tokenId} />,
         },
         {
           title: 'Pending',
+          id: 'pending',
           content: <AddressMempoolTxsList address={tokenId} />,
         },
         ...(isSBTC
           ? [
               {
                 title: 'Confirmed Deposits',
+                id: 'confirmed-deposits',
                 content: <AddressConfirmedTxsList address={sbtcDepositAddress} />,
               },
             ]
@@ -46,6 +49,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           ? [
               {
                 title: 'Pending Deposits',
+                id: 'pending-deposits',
                 content: <AddressMempoolTxsList address={sbtcDepositAddress} />,
               },
             ]
@@ -54,6 +58,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           ? [
               {
                 title: 'Source code',
+                id: 'source',
                 content: <CodeEditor code={source} height={500} />,
               },
             ]
@@ -62,6 +67,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           ? [
               {
                 title: 'Available functions',
+                id: 'available-functions',
                 content: <ContractAvailableFunctions contractId={tokenId} contract={contract} />,
               },
             ]
@@ -70,6 +76,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           ? [
               {
                 title: 'Developers',
+                id: 'developers',
                 content: <Developers developerData={developerData} />,
               },
             ]
@@ -77,6 +84,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
 
         {
           title: 'Holders',
+          id: 'holders',
           content: <HoldersTable tokenId={tokenId} tokenInfo={tokenInfo} />,
         },
       ]}
@@ -86,7 +94,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
   );
 }
 
-export function Tabs(props: TokenTabsProps) {
+export function TokenTabs(props: TokenTabsProps) {
   return (
     <ExplorerErrorBoundary tryAgainButton>
       <TokenTabsBase {...props} />

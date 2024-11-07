@@ -1,15 +1,14 @@
 'use client';
 
+import { HStack, Icon, Stack } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import React from 'react';
 
 import { useFaucet } from '../../../common/queries/useFaucet';
 import { Button } from '../../../ui/Button';
-import { HStack } from '../../../ui/HStack';
-import { Icon } from '../../../ui/Icon';
-import { Stack } from '../../../ui/Stack';
+import { Text } from '../../../ui/Text';
 import StxIcon from '../../../ui/icons/StxIcon';
-import { Text, Title } from '../../../ui/typography';
+import { Title } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
 
 function getErrorMessage(error: any) {
@@ -59,7 +58,9 @@ const Faucet: NextPage = () => {
   };
   return (
     <Stack alignItems={'center'} mt={46} gap={6}>
-      <Icon as={StxIcon} size={10} />
+      <Icon h={10} w={10}>
+        <StxIcon />
+      </Icon>
       <Title>STX Faucet</Title>
       <Text fontSize={'sm'}>Need STX to test the network? The faucet can top you up!</Text>
       {!!errorMessage ? <Text color={'error'}>{errorMessage}</Text> : null}

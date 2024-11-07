@@ -1,26 +1,25 @@
 'use client';
 
-import {
-  TableContainer as CUITableContainer,
-  TableContainerProps as CUITableContainerProps,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+// source is from chakra v2. deprecated in chakra v3. TODO: remove
+import { Box, BoxProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-import { UIComponent } from './types';
-
-export type TableContainerProps = CUITableContainerProps & UIComponent;
-export const TableContainer = forwardRef<TableContainerProps, 'div'>(
-  ({ children, size, ...rest }, ref) => (
-    <CUITableContainer
+export const TableContainer = forwardRef<HTMLDivElement, BoxProps>((props, ref) => {
+  const { children, overflow, overflowX, className, ...rest } = props;
+  return (
+    <Box
       ref={ref}
-      width={size || rest.width}
-      height={size || rest.height}
-      minWidth={size || rest.minWidth}
-      minHeight={size || rest.minHeight}
+      className={`chakra-table__container ${className || ''}`}
+      display="block"
+      whiteSpace="nowrap"
+      WebkitOverflowScrolling="touch"
+      // @ts-ignore
+      overflowX={overflow ?? overflowX ?? 'auto'}
+      overflowY="hidden"
+      maxWidth="100%"
       {...rest}
     >
       {children}
-    </CUITableContainer>
-  )
-);
+    </Box>
+  );
+});

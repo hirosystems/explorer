@@ -1,3 +1,4 @@
+import { HStack } from '@chakra-ui/react';
 import { FC, memo, useMemo } from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
@@ -6,7 +7,6 @@ import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea } from '../../../common/components/transaction-item';
 import { getTransactionStatus } from '../../../common/utils/transactions';
-import { HStack } from '../../../ui/HStack';
 import { Caption, Title } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
@@ -34,10 +34,10 @@ export const MempoolTxListItemMini: FC<MempoolTxsListItemProps> = memo(({ tx }) 
     () => (
       <HStack
         as="span"
-        spacing={1.5}
+        gap={1.5}
         alignItems="center"
         flexWrap="wrap"
-        divider={<Caption>∙</Caption>}
+        separator={<Caption border="none">∙</Caption>}
         color={'textSubdued'}
       >
         <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>

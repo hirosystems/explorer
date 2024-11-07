@@ -1,9 +1,8 @@
+import { Box, Icon } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import { Suspense } from 'react';
 
 import { Card } from '../../common/components/Card';
-import { Box } from '../../ui/Box';
-import { Icon } from '../../ui/Icon';
 import { Text } from '../../ui/Text';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
@@ -22,7 +21,7 @@ export function NextCycleCardBase() {
   } = useSuspenseNextStackingCycle();
 
   const moreInfo = (
-    <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
+    <Text fontSize="xs" fontWeight="medium" color="textSubdued">
       {displayPreparePhaseInfo ? (
         <Box>
           <Text display="inline">
@@ -33,7 +32,9 @@ export function NextCycleCardBase() {
             &nbsp;
           </Text>
           <Text display="inline" whiteSpace="nowrap">
-            <Icon as={BitcoinIcon} size={3} />
+            <Icon h={3} w={3}>
+              <BitcoinIcon />
+            </Icon>
             &nbsp;{`#${preparePhaseBurnBlockHeightStart}`}
           </Text>
         </Box>
@@ -48,7 +49,9 @@ export function NextCycleCardBase() {
           &nbsp;
         </Text>
         <Text display="inline" whiteSpace="nowrap">
-          <Icon as={BitcoinIcon} size={3} />
+          <Icon h={3} w={3}>
+            <BitcoinIcon />
+          </Icon>
           &nbsp;{`#${rewardPhaseBurnBlockHeightStart}`}
         </Text>
       </Box>

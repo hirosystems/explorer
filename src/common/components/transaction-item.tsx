@@ -1,15 +1,11 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, HStack, Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { BoxProps } from '../../ui/Box';
-import { Flex, FlexProps } from '../../ui/Flex';
-import { HStack } from '../../ui/HStack';
-import { Icon } from '../../ui/Icon';
 import { Tooltip } from '../../ui/Tooltip';
 import { Caption, TextProps } from '../../ui/typography';
 import { toRelativeTime, truncateMiddle } from '../utils/utils';
@@ -64,7 +60,6 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
   <Flex display="inline-flex" position={'relative'} as="span" {...rest}>
     <ExplorerLink href={`/address/${encodeURIComponent(principal)}`}>
       <Caption
-        color={`links.${useColorMode().colorMode}`}
         _hover={{
           cursor: 'pointer',
           textDecoration: 'underline',
@@ -99,7 +94,9 @@ export const AddressArea = React.memo(
         <HStack flexWrap="nowrap" whiteSpace="nowrap">
           <PrincipalLink principal={tx.sender_address} />
           <Flex as="span">
-            <Icon as={ArrowRight} size={3} />
+            <Icon h={3} w={3}>
+              <ArrowRight />
+            </Icon>
           </Flex>
           <PrincipalLink principal={tx.token_transfer.recipient_address} />
         </HStack>
@@ -133,16 +130,17 @@ export const AddressArea = React.memo(
   }
 );
 
-export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
-  React.memo(props => {
-    const { tx } = props;
-    const relativeTimestamp = getRelativeTimestamp(tx);
-    const txTime = getTransactionTime(tx);
-    const date = new Date(txTime * 1000);
-    const dateString = date.toUTCString();
-
-    return <Tooltip label={dateString}>{relativeTimestamp}</Tooltip>;
-  });
+export const TxTimestamp = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+  const relativeTimestamp = getRelativeTimestamp(tx);
+  const txTime = getTransactionTime(tx);
+  const date = new Date(txTime * 1000);
+  const dateString = date.toUTCString();
+  return (
+    <Tooltip content={dateString}>
+      <Box>{relativeTimestamp}</Box>
+    </Tooltip>
+  );
+};
 
 export function Nonce({ nonceVal, ...rest }: TextProps & { nonceVal: number }) {
   return (

@@ -1,3 +1,4 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fireEvent, render } from '@testing-library/react';
 
@@ -5,7 +6,7 @@ import { ChainID } from '@stacks/transactions';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { Network, NetworkModes } from '../../../../common/types/network';
-import { useBreakpointValue } from '../../../../ui/hooks/useBreakpointValue';
+import { system } from '../../../../ui/theme/theme';
 import { NetworkLabel } from '../NetworkLabel';
 
 jest.mock('../../../../common/context/useGlobalContext', () => ({
@@ -16,20 +17,8 @@ jest.mock('../../../../common/context/useGlobalContext', () => ({
   }),
 }));
 
-jest.mock('@chakra-ui/react', () => {
-  const original = jest.requireActual('@chakra-ui/react');
-  return {
-    ...original,
-    useColorMode: jest.fn().mockReturnValue({ colorMode: 'light' }),
-  };
-});
-
 jest.mock('@tanstack/react-query', () => ({
   useQuery: jest.fn(),
-}));
-
-jest.mock('../../../../ui/hooks/useBreakpointValue', () => ({
-  useBreakpointValue: jest.fn().mockImplementation(() => true),
 }));
 
 const network: Network = {
@@ -71,8 +60,6 @@ describe('NetworkLabel', () => {
       error: null,
       isFetching: false,
     });
-
-    (useBreakpointValue as jest.Mock).mockReturnValue(true);
   });
 
   it('renders spinner while fetching custom network info', () => {
@@ -80,7 +67,11 @@ describe('NetworkLabel', () => {
       isFetching: true,
     });
 
-    const { getByTestId } = render(<NetworkLabel network={customNetwork} />);
+    const { getByTestId } = render(
+      <ChakraProvider value={system}>
+        <NetworkLabel network={customNetwork} />
+      </ChakraProvider>
+    );
     expect(getByTestId('spinner')).toBeInTheDocument();
   });
 
@@ -90,12 +81,20 @@ describe('NetworkLabel', () => {
       error: new Error('Failed fetching'),
     });
 
-    const { getByText } = render(<NetworkLabel network={customNetwork} />);
+    const { getByText } = render(
+      <ChakraProvider value={system}>
+        <NetworkLabel network={customNetwork} />
+      </ChakraProvider>
+    );
     expect(getByText('Offline')).toBeInTheDocument();
   });
 
   it('renders subnet badge for a subnet network', () => {
-    const { getByText } = render(<NetworkLabel network={subnetNetwork} />);
+    const { getByText } = render(
+      <ChakraProvider value={system}>
+        <NetworkLabel network={subnetNetwork} />
+      </ChakraProvider>
+    );
     expect(getByText('subnet')).toBeInTheDocument();
   });
 
@@ -107,7 +106,11 @@ describe('NetworkLabel', () => {
       apiUrls: { mainnet: 'mainnetUrl', testnet: 'testnetUrl' },
     });
 
-    const { getByLabelText } = render(<NetworkLabel network={customNetwork} />);
+    const { getByLabelText } = render(
+      <ChakraProvider value={system}>
+        <NetworkLabel network={customNetwork} />
+      </ChakraProvider>
+    );
     const button = getByLabelText('Remove network');
     fireEvent.click(button);
 

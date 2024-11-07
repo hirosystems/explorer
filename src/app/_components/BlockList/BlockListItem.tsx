@@ -1,3 +1,4 @@
+import { Flex, FlexProps } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import React from 'react';
 
@@ -6,7 +7,6 @@ import { Block } from '@stacks/stacks-blockchain-api-types';
 import { BtcStxBlockLinks } from '../../../common/components/BtcStxBlockLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
-import { Flex, FlexProps } from '../../../ui/Flex';
 import { Caption } from '../../../ui/typography';
 
 export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(

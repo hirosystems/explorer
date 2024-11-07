@@ -1,5 +1,5 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
-import * as React from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -7,8 +7,6 @@ import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { ListFooter } from '../../common/components/ListFooter';
 import { useInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
 import { useMempoolTransactionsInfinite } from '../../common/queries/useMempoolTransactionsInfinite';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { FilterButton } from '../txsFilterAndSort/FilterButton';
 import { ShowValueMenu } from '../txsFilterAndSort/ShowValueMenu';

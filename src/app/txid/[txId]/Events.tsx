@@ -1,7 +1,7 @@
 'use client';
 
-import { Code } from '@chakra-ui/react';
-import { ArrowRight, Icon as IconType, Plus, TextAlignLeft, Trash } from '@phosphor-icons/react';
+import { Box, Code, Flex, HStack, Icon } from '@chakra-ui/react';
+import { ArrowRight, Plus, TextAlignLeft, Trash } from '@phosphor-icons/react';
 import { FC, Fragment } from 'react';
 
 import { Transaction, TransactionEvent } from '@stacks/stacks-blockchain-api-types';
@@ -11,7 +11,6 @@ import { Circle } from '../../../common/components/Circle';
 import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { Section } from '../../../common/components/Section';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
-import { Pending } from '../../../common/components/status';
 import { useFtMetadata } from '../../../common/queries/useFtMetadata';
 import { useTxEventsByIdInfinite } from '../../../common/queries/useTxEventsByIdInfinite';
 import {
@@ -22,10 +21,6 @@ import {
   microToStacksFormatted,
   truncateMiddle,
 } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
-import { HStack } from '../../../ui/HStack';
-import { Icon } from '../../../ui/Icon';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { Caption } from '../../../ui/typography';
 import { SenderRecipient } from './SenderRecipient';
@@ -46,29 +41,33 @@ export const getTicker = (name: string) => {
   }
 };
 
-const getIcon = (type: string): IconType | null => {
+const getIcon = (type: string) => {
   switch (type) {
     case 'burn':
-      return Trash;
+      return <Trash />;
     case 'mint':
-      return Plus;
+      return <Plus />;
     case 'transfer':
-      return ArrowRight;
+      return <ArrowRight />;
     default:
       return null;
   }
 };
 
 function getEventIcon(event: TransactionEvent) {
-  if (event.event_type === 'smart_contract_log') return TextAlignLeft;
+  if (event.event_type === 'smart_contract_log') {
+    return <TextAlignLeft />;
+  }
 
   if (
     event.event_type === 'fungible_token_asset' ||
     event.event_type === 'non_fungible_token_asset'
-  )
+  ) {
+    const result = getIcon(event.asset.asset_event_type);
     return getIcon(event.asset.asset_event_type);
+  }
 
-  return StxIcon;
+  return <StxIcon />;
 }
 
 const getAssetAmounts = (event: TransactionEvent) => {
@@ -214,8 +213,10 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
     <TwoColsListItem
       icon={
         eventIcon ? (
-          <Circle size={4.5}>
-            <Icon as={eventIcon} size={2.5} />
+          <Circle h={4.5} w={4.5}>
+            <Icon h={2.5} w={2.5}>
+              {eventIcon}
+            </Icon>
           </Circle>
         ) : null
       }
@@ -223,7 +224,12 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
         title: name,
         subtitle: (
           <>
-            <HStack flexWrap="wrap" alignItems="center" gap={1} divider={<Caption>∙</Caption>}>
+            <HStack
+              flexWrap="wrap"
+              alignItems="center"
+              gap={1}
+              separator={<Caption border="none">∙</Caption>}
+            >
               {assetEventType ? <Caption fontWeight={'semibold'}>{assetEventType}</Caption> : null}
               {assetAmounts && (
                 <Caption>
@@ -239,7 +245,7 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
               {tokenType && <Caption>{tokenType}</Caption>}
             </HStack>
             {memo && (
-              <HStack flexWrap="nowrap" gap={1} divider={<Caption>∙</Caption>}>
+              <HStack flexWrap="nowrap" gap={1} separator={<Caption border="none">∙</Caption>}>
                 <Caption fontWeight={'semibold'}>Memo</Caption>
                 <Caption textOverflow={'ellipsis'} overflow={'hidden'} whiteSpace={'nowrap'}>
                   {memo}
@@ -276,14 +282,16 @@ export const Events: FC<EventsProps> = ({ tx }) => {
         <Box
           as="a"
           borderTopWidth="1px"
-          px="16px"
-          py="16px"
+          px={4}
+          py={4}
           _hover={{ color: 'textTitle', cursor: 'pointer' }}
           onClick={() => actions.hasNextPage && actions.fetchNextPage()}
         >
           {actions.isFetchingNextPage ? (
             <Flex alignItems="center" justifyContent="center">
-              <Box size="16px" as={Pending} mr="4px" />
+              <Box h={4} w={4} mr={1}>
+                {/* <Pending /> */}
+              </Box>
               Loading...
             </Flex>
           ) : actions.hasNextPage ? (

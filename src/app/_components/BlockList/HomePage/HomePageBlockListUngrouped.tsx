@@ -1,9 +1,9 @@
 'use client';
 
+import { Stack } from '@chakra-ui/react';
 import { Suspense, useMemo } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
-import { Flex } from '../../../../ui/Flex';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListUngrouped } from '../Ungrouped/BlockListUngrouped';
 import { HomePageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
@@ -17,10 +17,10 @@ function HomePageBlockListUngroupedBase() {
   return (
     <>
       {!liveUpdates && <UpdateBar onClick={updateBlockList} latestBlock={latestBlock} />}
-      <Flex flexDirection="column" gap={5}>
+      <Stack gap={5}>
         <BlockListUngrouped blockList={blockList} stxBlocksLimit={3} minimized={true} />
         <ListFooter href={'/blocks'} label={'blocks'} />
-      </Flex>
+      </Stack>
     </>
   );
 }

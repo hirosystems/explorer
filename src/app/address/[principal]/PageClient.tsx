@@ -1,11 +1,11 @@
 'use client';
 
+import { Grid, GridProps, Stack } from '@chakra-ui/react';
+
 import { useSuspenseAccountBalance } from '../../../common/queries/useAccountBalance';
 import { useAddressNonces } from '../../../common/queries/useAddressNonces';
 import { hasTokenBalance } from '../../../common/utils/accounts';
 import { AddressTxListTabs } from '../../../features/txs-list/tabs/AddressTxListTabs';
-import { Grid, GridProps } from '../../../ui/Grid';
-import { Stack } from '../../../ui/components';
 import { PageTitle } from '../../_components/PageTitle';
 import { AddressSummary } from './AddressSummary';
 import { StxBalance } from './StxBalance';

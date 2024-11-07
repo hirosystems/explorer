@@ -1,6 +1,7 @@
 'use client';
 
-import { Flex, FlexProps } from '../../ui/Flex';
+import { Flex, FlexProps } from '@chakra-ui/react';
+
 import { Tooltip } from '../../ui/Tooltip';
 import RelativeTimeDisplay from './RelativeTimeDisplay';
 import { Value } from './Value';
@@ -15,7 +16,7 @@ export function Timestamp({ ts, ...rest }: TimestampProps & FlexProps) {
     : '';
 
   return (
-    <Tooltip label={readableTimestamp}>
+    <Tooltip content={readableTimestamp}>
       <Flex alignItems="center" {...rest}>
         <Value suppressHydrationWarning={true}>
           <RelativeTimeDisplay timestampInMs={ts} />

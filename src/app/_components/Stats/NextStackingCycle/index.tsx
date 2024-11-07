@@ -1,12 +1,9 @@
 'use client';
 
+import { Flex, Icon, StackProps } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
-import * as React from 'react';
 import { useMemo } from 'react';
 
-import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
-import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
@@ -14,7 +11,7 @@ import { StackingCycle } from '../StackingCycle';
 import { StatSection } from '../StatSection';
 import { useSuspenseNextStackingCycle } from './useNextStackingCycle';
 
-function NextStackingCycleBase(props: GridProps) {
+function NextStackingCycleBase(props: StackProps) {
   const {
     nextCycleStackedSTX,
     approximateDaysTilNextCycleRewardPhase,
@@ -29,7 +26,7 @@ function NextStackingCycleBase(props: GridProps) {
         <Text>{displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in</Text>
         &nbsp;
         <Tooltip
-          label={`${displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in ${
+          content={`${displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in ${
             displayPreparePhaseInfo ? blocksTilNextCyclePreparePhase : blocksTilNextCycleRewardPhase
           } block${
             (displayPreparePhaseInfo
@@ -50,7 +47,9 @@ function NextStackingCycleBase(props: GridProps) {
               ? 's'
               : ''}
             &nbsp;
-            <Icon as={Info} size={3} />
+            <Icon h={3} w={3}>
+              <Info />
+            </Icon>
           </Flex>
         </Tooltip>
       </Flex>
@@ -72,7 +71,7 @@ function NextStackingCycleBase(props: GridProps) {
   );
 }
 
-export function NextStackingCycle(props: GridProps) {
+export function NextStackingCycle(props: StackProps) {
   return (
     <ExplorerErrorBoundary
       renderContent={() => (

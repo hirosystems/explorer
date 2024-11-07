@@ -1,6 +1,5 @@
+import { Box, BoxProps } from '@chakra-ui/react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
-
-import { Box, BoxProps } from '../../../ui/Box';
 
 // adds horizontal scrolling to its children if they overflow the container's width, and adds a class to the container when it has a horizontal scrollbar
 export function ScrollableBox({ children, ...rest }: BoxProps & { children: ReactNode }) {

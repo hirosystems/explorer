@@ -3,72 +3,70 @@
 exports[`DesktopNav should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="css-ffmerx"
+    class="css-cfrly1"
   >
     <div
       class="css-70qvj9"
     >
-      <div
-        aria-controls="popover-content-:r1:"
-        aria-expanded="false"
-        aria-haspopup="dialog"
-        class="css-j93dqc"
-        id="popover-trigger-:r1:"
-      >
-        <a
-          class="chakra-link css-1srd4ia"
-          href="#"
-        >
-          Sample Item 1
-        </a>
-        <svg
-          class="chakra-icon css-g16cky"
-          fill="currentColor"
-          focusable="false"
-          height="3.5"
-          viewBox="0 0 256 256"
-          width="3.5"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"
-          />
-        </svg>
-      </div>
-      <div
-        class="css-14g0vpv"
+      <button
+        class="chakra-hover-card__trigger css-0"
+        data-part="trigger"
+        data-scope="hover-card"
+        data-state="closed"
+        dir="ltr"
+        id="hover-card:1:trigger"
       >
         <div
-          class="chakra-popover__popper css-0"
-          style="visibility: hidden; position: absolute; min-width: max-content; inset: 0 auto auto 0;"
+          class="css-1bbsapt"
         >
-          <section
-            class="chakra-popover__content css-1fqoc9d"
-            id="popover-content-:r1:"
-            role="tooltip"
-            style="transform-origin: var(--popper-transform-origin); opacity: 0; visibility: hidden; transform: scale(0.95) translateZ(0);"
-            tabindex="-1"
-          />
+          <a
+            class="link css-140e6ww"
+            href="#"
+          >
+            Sample Item 1
+          </a>
+          <svg
+            aria-hidden="true"
+            class="chakra-icon css-tihp9m"
+            fill="currentColor"
+            focusable="false"
+            height="1em"
+            viewBox="0 0 256 256"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"
+            />
+          </svg>
         </div>
-      </div>
+      </button>
+      <div
+        class="css-17vz1nq"
+      />
     </div>
     <div
       class="css-70qvj9"
     >
-      <div
-        aria-controls="popover-content-:r3:"
-        aria-expanded="false"
-        aria-haspopup="dialog"
-        class="css-j93dqc"
-        id="popover-trigger-:r3:"
+      <button
+        class="chakra-hover-card__trigger css-0"
+        data-part="trigger"
+        data-scope="hover-card"
+        data-state="closed"
+        dir="ltr"
+        id="hover-card:2:trigger"
       >
-        <a
-          class="chakra-link css-1gplkz"
-          href="#"
+        <div
+          class="css-1bbsapt"
         >
-          Sample Item 2
-        </a>
-      </div>
+          <a
+            class="link css-ummhl2"
+            href="#"
+          >
+            Sample Item 2
+          </a>
+        </div>
+      </button>
     </div>
   </div>
 </DocumentFragment>

@@ -2,7 +2,6 @@ import { css } from '@emotion/react';
 import React from 'react';
 
 import { FoundResult } from '../../../common/types/search-results';
-import { Box } from '../../../ui/Box';
 import { MempoolTxListItem } from '../../txs-list/ListItem/MempoolTxListItem';
 import { TxListItem } from '../../txs-list/ListItem/TxListItem';
 

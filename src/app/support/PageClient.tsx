@@ -1,12 +1,11 @@
 'use client';
 
+import { Stack } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import * as React from 'react';
 import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { ListItem } from '../../ui/ListItem';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { TextLink } from '../../ui/TextLink';
 import { UnorderedList } from '../../ui/UnorderedList';

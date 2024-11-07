@@ -1,13 +1,11 @@
+import { Box, Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
-import { Box } from '../../../ui/Box';
+import { Field as ChakraField } from '../../../components/ui/field';
 import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
-import { Stack } from '../../../ui/Stack';
 import { DateInput } from './DateInput';
 
 interface FormValues {
@@ -57,14 +55,12 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
           <Stack gap={4}>
             <Field name="startTime">
               {({ form }: FieldProps<string, FormValues>) => (
-                <FormControl>
-                  <FormLabel>Between:</FormLabel>
+                <ChakraField label="Between:">
                   <DatePicker
                     selectsRange={true}
                     customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
                     onChange={dateRange => {
                       const [startDate, endDate] = dateRange;
-                      // console.log(startDate, endDate);
                       const utcStart = startDate
                         ? new UTCDate(
                             startDate.getUTCFullYear(),
@@ -96,7 +92,7 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
                     }
                     dateFormat="yyyy-MM-dd"
                   />
-                </FormControl>
+                </ChakraField>
               )}
             </Field>
           </Stack>

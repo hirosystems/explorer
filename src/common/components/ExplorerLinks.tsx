@@ -1,12 +1,12 @@
 'use client';
 
-import { forwardRef } from '@chakra-ui/react';
+import { Link, LinkProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-import { Link, LinkProps } from '../../ui/Link';
 import { useGlobalContext } from '../context/useGlobalContext';
 import { buildUrl } from '../utils/buildUrl';
 
-export const ExplorerLink = forwardRef<LinkProps & { openInNewTab?: boolean }, 'a'>(
+export const ExplorerLink = forwardRef<HTMLAnchorElement, LinkProps & { openInNewTab?: boolean }>(
   ({ href, openInNewTab, ...rest }, ref) => {
     const network = useGlobalContext().activeNetwork;
     return (
@@ -21,8 +21,8 @@ export const ExplorerLink = forwardRef<LinkProps & { openInNewTab?: boolean }, '
 );
 
 export const TxLink = forwardRef<
-  Partial<LinkProps> & { txId: string; openInNewTab?: boolean },
-  'a'
+  HTMLAnchorElement,
+  Partial<LinkProps> & { txId: string; openInNewTab?: boolean }
 >(({ txId, openInNewTab = false, ...rest }, ref) => {
   return (
     <ExplorerLink
@@ -34,30 +34,31 @@ export const TxLink = forwardRef<
   );
 });
 
-export const TokenLink = forwardRef<Partial<LinkProps> & { tokenId: string }, 'a'>(
+export const TokenLink = forwardRef<HTMLAnchorElement, Partial<LinkProps> & { tokenId: string }>(
   ({ tokenId, ...rest }, ref) => {
     return <ExplorerLink ref={ref} href={`/token/${encodeURIComponent(tokenId)}`} {...rest} />;
   }
 );
 
-export const MicroBlockLink = forwardRef<Partial<LinkProps> & { hash: string }, 'a'>(
+export const MicroBlockLink = forwardRef<HTMLAnchorElement, Partial<LinkProps> & { hash: string }>(
   ({ hash, ...rest }, ref) => {
     return <ExplorerLink ref={ref} href={`/microblock/${encodeURIComponent(hash)}`} {...rest} />;
   }
 );
 
-export const BlockLink = forwardRef<Partial<LinkProps> & { hash: string }, 'a'>(
+export const BlockLink = forwardRef<HTMLAnchorElement, Partial<LinkProps> & { hash: string }>(
   ({ hash, ...rest }, ref) => {
     return <ExplorerLink ref={ref} href={`/block/${encodeURIComponent(hash)}`} {...rest} />;
   }
 );
 
-export const AddressLink = forwardRef<Partial<LinkProps> & { principal: string }, 'a'>(
-  ({ principal, ...rest }, ref) => {
-    return principal.includes('.') ? (
-      <TxLink ref={ref} txId={principal} {...rest} />
-    ) : (
-      <ExplorerLink ref={ref} href={`/address/${encodeURIComponent(principal)}`} {...rest} />
-    );
-  }
-);
+export const AddressLink = forwardRef<
+  HTMLAnchorElement,
+  Partial<LinkProps> & { principal: string }
+>(({ principal, ...rest }, ref) => {
+  return principal.includes('.') ? (
+    <TxLink ref={ref} txId={principal} {...rest} />
+  ) : (
+    <ExplorerLink ref={ref} href={`/address/${encodeURIComponent(principal)}`} {...rest} />
+  );
+});

@@ -1,30 +1,23 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Table } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
 
-import { formatSignerLatency } from '../../../app/signers/SignersTable';
 import { StackingHistoryInfo, useSignerStackingHistory } from '../../../app/signers/data/UseSigner';
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
-import { Flex } from '../../../ui/Flex';
-import { Table } from '../../../ui/Table';
-import { Tbody } from '../../../ui/Tbody';
-import { Td } from '../../../ui/Td';
 import { Text } from '../../../ui/Text';
-import { Th } from '../../../ui/Th';
-import { Thead } from '../../../ui/Thead';
-import { Tr } from '../../../ui/Tr';
 import { ScrollableBox } from '../../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { CycleFilter } from '../../signers/CycleFilter';
+import { formatSignerLatency } from '../../signers/SignersTable';
 import { mobileBorderCss } from '../../signers/consts';
 import { CycleSortFilter, CycleSortOrder } from './CycleSortFilter';
 import { StackingHistoryTableSkeleton } from './skeleton';
 
-const StyledTable = styled(Table)`
+const StyledTable = styled(Table.Root)`
   th {
     border-bottom: none;
   }
@@ -35,11 +28,11 @@ const StyledTable = styled(Table)`
 `;
 
 const Header = ({ headerTitle, isFirst }: { headerTitle: string; isFirst: boolean }) => (
-  <Th
+  <Table.ColumnHeader
     py={3}
     px={6}
     border="none"
-    sx={isFirst ? mobileBorderCss : {}}
+    css={isFirst ? mobileBorderCss : {}}
     width="fit-content"
     position={isFirst ? 'sticky' : 'unset'}
     left={0}
@@ -58,14 +51,14 @@ const Header = ({ headerTitle, isFirst }: { headerTitle: string; isFirst: boolea
         fontWeight="medium"
         whiteSpace="nowrap"
         fontSize="xs"
-        color={useColorModeValue('slate.700', 'slate.250')}
+        color={'table.header.text'}
         textTransform="none"
         letterSpacing="normal"
       >
         {headerTitle}
       </Text>
     </Flex>
-  </Th>
+  </Table.ColumnHeader>
 );
 
 export const stackingHistoryTableHeaders = [
@@ -79,7 +72,7 @@ export const stackingHistoryTableHeaders = [
 ];
 
 const Headers = () => (
-  <Tr>
+  <Table.Row>
     {stackingHistoryTableHeaders.map((header, i) => (
       <Header
         key={`stacking-history-table-header-${header}`}
@@ -87,7 +80,7 @@ const Headers = () => (
         isFirst={i === 0}
       />
     ))}
-  </Tr>
+  </Table.Row>
 );
 
 const Row = ({
@@ -106,48 +99,48 @@ const Row = ({
   isLast: boolean;
 } & SignerRowInfo) => {
   return (
-    <Tr
+    <Table.Row
       style={{
         borderTop: isFirst ? 'none' : '',
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss} position={'sticky'} left={0} bg="surface">
+      <Table.Cell py={3} px={6} css={mobileBorderCss} position={'sticky'} left={0} bg="surface">
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {cycleid}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {`${votingPower.toFixed(2)}%`}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {stxStacked.toFixed(0).toLocaleString()}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {formatSignerLatency(latency, missing)}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {`${(approved * 100).toFixed(2)}%`}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {`${(rejected * 100).toFixed(2)}%`}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {`${(missing * 100).toFixed(2)}%`}
         </Text>
-      </Td>
-    </Tr>
+      </Table.Cell>
+    </Table.Row>
   );
 };
 
@@ -170,8 +163,8 @@ export function StackingHistoryTableLayout({
     <Section title={title} topRight={topRight} py={hasNextPage ? 0 : 6}>
       <ScrollableBox>
         <StyledTable width="full">
-          <Thead>{headers}</Thead>
-          <Tbody>{rows}</Tbody>
+          <Table.Header>{headers}</Table.Header>
+          <Table.Body>{rows}</Table.Body>
         </StyledTable>
       </ScrollableBox>
       <ListFooter
@@ -263,11 +256,13 @@ const StackingHistoryTableBase = ({ signerKey }: { signerKey: string }) => {
             fontSize={'sm'}
           >
             <Text>Cycle:</Text>
-            <CycleFilter
-              onChange={cycleFilterOnSubmitHandler}
-              placeholder={currentCycleId.toString()}
-              showOnlyInput={true}
-            />
+            <Box h="full">
+              <CycleFilter
+                onChange={cycleFilterOnSubmitHandler}
+                placeholder={currentCycleId.toString()}
+                showOnlyInput={true}
+              />
+            </Box>
           </Flex>
         </Flex>
       }

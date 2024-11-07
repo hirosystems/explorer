@@ -1,7 +1,7 @@
+import { Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Card } from '../../common/components/Card';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 
 export function StatCardBase({

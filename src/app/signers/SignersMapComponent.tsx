@@ -1,11 +1,8 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
-import { Box } from '../../ui/Box';
 import { Button } from '../../ui/Button';
-import { Flex } from '../../ui/Flex';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import SignersMap, { getContinent } from './SignersMap';
@@ -36,20 +33,20 @@ export function ContinentPill({
   activeContinent?: Continent | null;
 }) {
   const isActive = activeContinent === name;
-  const activeBackgroundColor = useColorModeValue('purple.100', 'slate.850');
-  const activeTextColor = useColorModeValue('purple.600', 'purple.400');
   return (
     <Button
       borderRadius="full"
-      border="1px"
       borderStyle="solid"
-      borderColor={isActive ? activeTextColor : 'var(--stacks-colors-borderSecondary)'}
-      backgroundColor={isActive ? activeBackgroundColor : 'surface'}
+      borderWidth={1}
+      borderColor={
+        isActive ? 'signers.continentPill.activeTextColor' : 'var(--stacks-colors-border-secondary)'
+      }
+      backgroundColor={isActive ? 'signers.continentPill.activeBackgroundColor' : 'surface'}
       onClick={onClick}
     >
       <Flex gap={2} alignItems="center">
         <Box
-          backgroundColor={isActive ? activeTextColor : 'slate.400'}
+          backgroundColor={isActive ? 'signers.continentPill.activeTextColor' : 'slate.400'}
           height={2}
           minHeight={2}
           width={2}
@@ -57,12 +54,15 @@ export function ContinentPill({
           borderRadius="50%"
         />
         <Flex alignItems="center" flexWrap="wrap">
-          <Text color={isActive ? activeTextColor : 'textSubdued'} fontWeight="medium">
+          <Text
+            color={isActive ? 'signers.continentPill.activeTextColor' : 'textSubdued'}
+            fontWeight="medium"
+          >
             {name}
           </Text>
           &nbsp;
           <Text
-            color={isActive ? activeTextColor : 'textSubdued'}
+            color={isActive ? 'signers.continentPill.activeTextColor' : 'textSubdued'}
             fontWeight="normal"
           >{`${numNodes} nodes (${percentageNodes.toFixed(2)}%)`}</Text>
         </Flex>

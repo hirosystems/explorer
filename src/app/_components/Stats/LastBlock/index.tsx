@@ -1,17 +1,13 @@
 'use client';
 
-import * as React from 'react';
+import { Box, Flex, Icon, StackProps } from '@chakra-ui/react';
 
 import { useSuspenseBlockListInfinite } from '../../../../common/queries/useBlockListInfinite';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
-import { Icon } from '../../../../ui/Icon';
 import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
-function LastBlockBase(props: GridProps) {
+function LastBlockBase(props: StackProps) {
   const { data: blocks } = useSuspenseBlockListInfinite();
   const lastBlockHeight = blocks?.pages?.[0]?.results?.[0]?.height;
   const lastBurnBlockHeight = blocks?.pages?.[0]?.results?.[0]?.burn_block_height;
@@ -30,7 +26,10 @@ function LastBlockBase(props: GridProps) {
           top={0.5}
           gap={1.5}
         >
-          <Icon as={BitcoinIcon} size={4.5} />#{lastBurnBlockHeight}
+          <Icon h={4.5} w={4.5}>
+            <BitcoinIcon />
+          </Icon>
+          #{lastBurnBlockHeight}
         </Flex>
       }
       caption={
@@ -43,7 +42,7 @@ function LastBlockBase(props: GridProps) {
   );
 }
 
-export function LastBlock(props: GridProps) {
+export function LastBlock(props: StackProps) {
   return (
     <ExplorerErrorBoundary
       Wrapper={Box}

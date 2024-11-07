@@ -1,4 +1,4 @@
-import { router } from 'next/client';
+import { Box, Flex } from '@chakra-ui/react';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useState } from 'react';
@@ -6,8 +6,6 @@ import { useState } from 'react';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { advancedSearchKeywords, useSearchPageUrl } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
 import { Input, InputProps } from '../../../ui/Input';
 import { Text } from '../../../ui/Text';
 import { blur, focus, selectIsSearchFieldFocused, setSearchTerm } from '../search-slice';
@@ -50,7 +48,7 @@ export function SearchInput({
         p={0}
         zIndex="docked"
         width={'full'}
-        sx={{
+        css={{
           caretColor: 'var(--stacks-colors-slate-50)',
           '::-webkit-search-cancel-button': {
             display: 'none',
@@ -64,7 +62,7 @@ export function SearchInput({
           border: 'none',
           outline: 'none',
           boxShadow: 'none',
-          '::placeholder': {
+          _placeholder: {
             color: 'slate.50',
           },
         }}
