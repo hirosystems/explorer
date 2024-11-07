@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { Flex, Table } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
 
@@ -12,14 +12,7 @@ import {
   useSuspenseInfiniteQueryResult,
 } from '../../common/hooks/useInfiniteQueryResult';
 import { truncateMiddle } from '../../common/utils/utils';
-import { Flex } from '../../ui/Flex';
-import { Table } from '../../ui/Table';
-import { Tbody } from '../../ui/Tbody';
-import { Td } from '../../ui/Td';
 import { Text } from '../../ui/Text';
-import { Th } from '../../ui/Th';
-import { Thead } from '../../ui/Thead';
-import { Tr } from '../../ui/Tr';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
@@ -35,7 +28,7 @@ import { PoxSigner, useSuspensePoxSigners } from './data/useSigners';
 import { SignersTableSkeleton } from './skeleton';
 import { getSignerKeyName } from './utils';
 
-const StyledTable = styled(Table)`
+const StyledTable = styled(Table.Root)`
   th {
     border-bottom: none;
   }
@@ -52,11 +45,11 @@ export const SignersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th
+  <Table.ColumnHeader
     py={3}
     px={6}
     border="none"
-    sx={isFirst ? mobileBorderCss : {}}
+    css={isFirst ? mobileBorderCss : {}}
     width="fit-content"
     position={isFirst ? 'sticky' : 'unset'}
     left={0}
@@ -75,14 +68,14 @@ export const SignersTableHeader = ({
         fontWeight="medium"
         whiteSpace="nowrap"
         fontSize="xs"
-        color={useColorModeValue('slate.700', 'slate.250')}
+        color={'table.header.text'}
         textTransform="none"
         letterSpacing="normal"
       >
         {headerTitle}
       </Text>
     </Flex>
-  </Th>
+  </Table.ColumnHeader>
 );
 
 export const signersTableHeaders = [
@@ -109,7 +102,7 @@ export function formatSignerLatency(latencyInMs: number, missing: number): strin
 }
 
 export const SignersTableHeaders = () => (
-  <Tr>
+  <Table.Row>
     {signersTableHeaders.map((header, i) => (
       <SignersTableHeader
         key={`signers-table-header-${header}`}
@@ -117,7 +110,7 @@ export const SignersTableHeaders = () => (
         isFirst={i === 0}
       />
     ))}
-  </Tr>
+  </Table.Row>
 );
 
 export function getEntityName(signerKey: string) {
@@ -145,13 +138,13 @@ export const SignerTableRow = ({
   const [isSignerKeyHovered, setIsSignerKeyHovered] = useState(false);
 
   return (
-    <Tr
+    <Table.Row
       style={{
         borderTop: isFirst ? 'none' : '',
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss} position={'sticky'} left={0} bg="surface">
+      <Table.Cell py={3} px={6} css={mobileBorderCss} position={'sticky'} left={0} bg="surface">
         <Flex
           gap={2}
           alignItems="center"
@@ -173,48 +166,49 @@ export const SignerTableRow = ({
           <CopyButton
             initialValue={signerKey}
             aria-label={'copy signer key'}
-            size={5}
-            sx={{
+            h={5}
+            w={5}
+            css={{
               opacity: isSignerKeyHovered ? 1 : 0,
               position: 'relative',
               transition: 'opacity 0.4s ease-in-out',
             }}
           />
         </Flex>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {getEntityName(signerKey)}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {numStackers}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {`${votingPower.toFixed(2)}%`}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {Number(stxStaked.toFixed(0)).toLocaleString()}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {formatSignerLatency(latency, missing)}
         </Text>
-      </Td>
-      <Td py={3} px={6}>
+      </Table.Cell>
+      <Table.Cell py={3} px={6}>
         <Text whiteSpace="nowrap" fontSize="sm">
           {`${formatSignerProposalMetric(approved)} / ${formatSignerProposalMetric(
             rejected
           )} / ${formatSignerProposalMetric(missing)}`}
         </Text>
-      </Td>
-    </Tr>
+      </Table.Cell>
+    </Table.Row>
   );
 };
 
@@ -233,8 +227,8 @@ export function SignersTableLayout({
     <Section title={title} topRight={topRight}>
       <ScrollableBox>
         <StyledTable width="full">
-          <Thead>{signersTableHeaders}</Thead>
-          <Tbody>{signersTableRows}</Tbody>
+          <Table.Header>{signersTableHeaders}</Table.Header>
+          <Table.Body>{signersTableRows}</Table.Body>
         </StyledTable>
       </ScrollableBox>
     </Section>

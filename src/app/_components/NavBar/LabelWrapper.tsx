@@ -1,5 +1,5 @@
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
+import { Box, Flex } from '@chakra-ui/react';
+
 import { Link } from '../../../ui/Link';
 import { NavItem } from './types';
 
@@ -20,7 +20,7 @@ export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
           rounded="md"
           color="text"
           width="full"
-          variant="noUnderline"
+          variant={'noUnderline'}
         >
           {label}
         </Link>

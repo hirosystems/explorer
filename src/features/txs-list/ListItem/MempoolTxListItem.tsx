@@ -1,3 +1,4 @@
+import { FlexProps, Stack } from '@chakra-ui/react';
 import { FC, memo, useMemo } from 'react';
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
@@ -8,8 +9,6 @@ import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/transaction-item';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
-import { FlexProps } from '../../../ui/Flex';
-import { Stack } from '../../../ui/Stack';
 import { Caption, Title } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
@@ -42,7 +41,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         as="span"
         gap={1.5}
         direction={['column', 'column', 'row', 'row', 'row']}
-        divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+        separator={
+          <Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">
+            ∙
+          </Caption>
+        }
         flexWrap="nowrap"
       >
         <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
@@ -62,7 +65,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
       <Stack
         as="span"
         direction={['column', 'column', 'row', 'row', 'row']}
-        divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+        separator={
+          <Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">
+            ∙
+          </Caption>
+        }
         flexWrap="wrap"
         gap={1.5}
       >
@@ -79,7 +86,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         as="span"
         gap={1.5}
         direction={['column', 'column', 'row', 'row', 'row']}
-        divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+        separator={
+          <Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">
+            ∙
+          </Caption>
+        }
         flexWrap="wrap"
       >
         {didFail ? (

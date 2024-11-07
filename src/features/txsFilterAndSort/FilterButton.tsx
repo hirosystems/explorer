@@ -1,17 +1,11 @@
 'use client';
 
-import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
+import { Flex, HStack, Icon, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
 
-import { Button } from '../../ui/Button';
-import { Checkbox, CheckboxProps } from '../../ui/Checkbox';
-import { HStack } from '../../ui/HStack';
-import { Icon } from '../../ui/Icon';
-import { Menu } from '../../ui/Menu';
-import { MenuButton } from '../../ui/MenuButton';
-import { MenuItem } from '../../ui/MenuItem';
-import { MenuList } from '../../ui/MenuList';
+import { Checkbox, CheckboxProps } from '../../components/ui/checkbox';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../components/ui/menu';
 import { Text } from '../../ui/Text';
 import ClarityIcon from '../../ui/icons/ClarityIcon';
 import CubeSparkleIcon from '../../ui/icons/CubeSparkleIcon';
@@ -38,6 +32,7 @@ function FilterItem({
       _hover={{ bg: 'none' }}
       _active={{ bg: 'none' }}
       _focus={{ bg: 'none' }}
+      value={value}
     >
       <HStack
         gap={2}
@@ -45,17 +40,12 @@ function FilterItem({
         width={'full'}
         px={4}
         py={3}
-        _hover={{ bg: useColorModeValue('slate.100', 'slate.800') }}
+        _hover={{ bg: 'filterButton.hoverBackground' }}
         rounded={'lg'}
       >
         {icon}
         <Text fontSize={'sm'}>{label}</Text>
-        <Checkbox
-          ml={'auto'}
-          isChecked={selectedFilters.includes(value)}
-          {...checkboxProps}
-          variant="outline"
-        />
+        <Checkbox ml={'auto'} checked={selectedFilters.includes(value)} {...checkboxProps} />
       </HStack>
     </MenuItem>
   );
@@ -78,107 +68,106 @@ export const FilterButton = memo(() => {
   }, [setIsFocused]);
   const isHoveredOrFocused = isHovered || isFocused;
 
-  const borderColor = useColorModeValue('slate.300', 'slate.900');
-
   const { setActiveFilters } = useFilterAndSortState();
 
-  const { value: selectedFilters, getCheckboxProps } = useCheckboxGroup({
+  const { value: selectedFilters, getItemProps: getCheckboxProps } = useCheckboxGroup({
     defaultValue: [],
-    onChange: (value: string[]) => {
+    onValueChange: (value: string[]) => {
       setActiveFilters(value);
     },
   });
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const onMenuSelect = useCallback(() => {
+    setIsMenuOpen(false);
+  }, [setIsMenuOpen]);
+
   return (
-    <Menu placement={'bottom-end'} closeOnSelect={false}>
-      {({ isOpen }) => (
-        <>
-          <MenuButton
-            as={Button}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            leftIcon={
-              <Icon
-                size={4}
-                as={FunnelSimple}
-                color={isHoveredOrFocused || isOpen ? 'text' : 'textSubdued'}
-              />
-            }
-            bg="surface"
-            color="textSubdued"
-            border={'1px'}
-            borderColor={borderColor}
-            fontWeight={'semibold'}
-            fontSize={'sm'}
-            _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
-            _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
-            _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
-            flexShrink={0}
-          >
-            Filters {selectedFilters.length > 0 && `(${selectedFilters.length})`}
-          </MenuButton>
-          <MenuList bg={'surface'}>
-            <FilterItem
-              label={'Coinbase'}
-              icon={<Icon as={CubeSparkleIcon} color={'text'} />}
-              value={'coinbase'}
-              selectedFilters={selectedFilters}
-              checkboxProps={getCheckboxProps({ value: 'coinbase' })}
-            />
-            {/*<FilterItem*/}
-            {/*  label={'Burn'}*/}
-            {/*  icon={<Icon as={Fire} color={'text'} />}*/}
-            {/*  value={'burn'}*/}
-            {/*  selectedFilters={selectedFilters}*/}
-            {/*  checkboxProps={getCheckboxProps({ value: 'burn' })}*/}
-            {/*/>*/}
-            <FilterItem
-              label={'Contract deploy'}
-              icon={<Icon as={ClarityIcon} color={'text'} />}
-              value={'smart_contract'}
-              selectedFilters={selectedFilters}
-              checkboxProps={getCheckboxProps({ value: 'smart_contract' })}
-            />
-            <FilterItem
-              label={'Function call'}
-              icon={<Icon as={FunctionXIcon} color={'text'} />}
-              value={'contract_call'}
-              selectedFilters={selectedFilters}
-              checkboxProps={getCheckboxProps({ value: 'contract_call' })}
-            />
-            {/*<FilterItem*/}
-            {/*  label={'Mint'}*/}
-            {/*  icon={<Icon as={CoinSparkleIcon} color={'text'} />}*/}
-            {/*  value={'mint'}*/}
-            {/*  selectedFilters={selectedFilters}*/}
-            {/*  checkboxProps={getCheckboxProps({ value: 'mint' })}*/}
-            {/*/>*/}
-            <FilterItem
-              label={'Tenure change'}
-              icon={<Icon as={ArrowBendDownRight} color={'text'} />}
-              value={'tenure_change'}
-              selectedFilters={selectedFilters}
-              checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
-            />
-            {/*<FilterItem*/}
-            {/*  label={'Tenure extension'}*/}
-            {/*  icon={<Icon as={ArrowBendDoubleUpLeft} color={'text'} transform={'rotate(180deg)'} />}*/}
-            {/*  value={'tenureExtension'}*/}
-            {/*  selectedFilters={selectedFilters}*/}
-            {/*  checkboxProps={getCheckboxProps({ value: 'tenureExtension' })}*/}
-            {/*/>*/}
-            <FilterItem
-              label={'Token transfer'}
-              icon={<Icon as={DiagonalArrowsIcon} color={'text'} />}
-              value={'token_transfer'}
-              selectedFilters={selectedFilters}
-              checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
-            />
-          </MenuList>
-        </>
-      )}
-    </Menu>
+    <MenuRoot
+      positioning={{ placement: 'bottom-end' }}
+      closeOnSelect={false}
+      onSelect={onMenuSelect}
+    >
+      <MenuTrigger
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        bg="surface"
+        color="textSubdued"
+        border="normal"
+        borderColor={'filterButton.borderColor'}
+        fontWeight={'semibold'}
+        fontSize={'sm'}
+        _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
+        _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
+        _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
+        flexShrink={0}
+      >
+        <Flex gap={1}>
+          <Icon h={4} w={4} color={isHoveredOrFocused || isMenuOpen ? 'text' : 'textSubdued'}>
+            <FunnelSimple />
+          </Icon>
+          <Text>Filters {selectedFilters.length > 0 && `(${selectedFilters.length})`}</Text>
+        </Flex>
+      </MenuTrigger>
+      <MenuContent bg={'surface'}>
+        <FilterItem
+          label={'Coinbase'}
+          icon={
+            <Icon color={'text'}>
+              <CubeSparkleIcon />
+            </Icon>
+          }
+          value={'coinbase'}
+          selectedFilters={selectedFilters}
+          checkboxProps={getCheckboxProps({ value: 'coinbase' })}
+        />
+        <FilterItem
+          label={'Contract deploy'}
+          icon={
+            <Icon color={'text'}>
+              <ClarityIcon />
+            </Icon>
+          }
+          value={'smart_contract'}
+          selectedFilters={selectedFilters}
+          checkboxProps={getCheckboxProps({ value: 'smart_contract' })}
+        />
+        <FilterItem
+          label={'Function call'}
+          icon={
+            <Icon color={'text'}>
+              <FunctionXIcon />
+            </Icon>
+          }
+          value={'contract_call'}
+          selectedFilters={selectedFilters}
+          checkboxProps={getCheckboxProps({ value: 'contract_call' })}
+        />
+        <FilterItem
+          label={'Tenure change'}
+          icon={
+            <Icon color={'text'}>
+              <ArrowBendDownRight />
+            </Icon>
+          }
+          value={'tenure_change'}
+          selectedFilters={selectedFilters}
+          checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
+        />
+        <FilterItem
+          label={'Token transfer'}
+          icon={
+            <Icon color={'text'}>
+              <DiagonalArrowsIcon />
+            </Icon>
+          }
+          value={'token_transfer'}
+          selectedFilters={selectedFilters}
+          checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
+        />
+      </MenuContent>
+    </MenuRoot>
   );
 });

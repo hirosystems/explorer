@@ -15,6 +15,7 @@ COPY . .
 
 RUN npm install -g pnpm@8.9.1
 RUN pnpm i
+RUN pnpm chakra typegen src/ui/theme/theme.ts
 RUN pnpm build
 
 # This stage creates the final Docker image that will be used in production. It only contains the necessary runtime environment and the built application files from the first stage.

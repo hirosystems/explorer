@@ -3,13 +3,19 @@
 import {
   IconButton as CUIIconButton,
   IconButtonProps as CUIIconButtonProps,
-  forwardRef,
+  RecipeVariantProps,
+  chakra,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
+import { iconButtonRecipe } from './theme/recipes/IconButtonRecipe';
 import { UIComponent } from './types';
 
-export type IconButtonProps = Omit<CUIIconButtonProps, 'size'> & UIComponent;
-export const IconButton = forwardRef<IconButtonProps, 'button'>(
+type IconButtonVariantProps = RecipeVariantProps<typeof iconButtonRecipe>;
+export type IconButtonProps = Omit<CUIIconButtonProps, 'size'> &
+  UIComponent &
+  IconButtonVariantProps;
+export const IconButtonBase = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ children, size, ...rest }, ref) => (
     <CUIIconButton
       ref={ref}
@@ -17,12 +23,14 @@ export const IconButton = forwardRef<IconButtonProps, 'button'>(
       height={size || rest.height}
       minWidth={size || rest.minWidth}
       minHeight={size || rest.minHeight}
-      bg={'transparent'}
+      bg={'transparent'} // TODO: these are in theme via recipe, but it's not working
       _hover={{ bg: 'rgba(255, 255, 255, 0.15)' }}
-      isRound
+      borderRadius={'full'}
       {...rest}
     >
       {children}
     </CUIIconButton>
   )
 );
+
+export const IconButton = chakra(IconButtonBase, iconButtonRecipe);

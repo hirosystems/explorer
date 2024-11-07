@@ -1,10 +1,9 @@
 'use client';
 
-import React from 'react';
+import { Flex } from '@chakra-ui/react';
 
 import { Section } from '../../common/components/Section';
 import { filterToFormattedValueMap, getKeywordByFilter } from '../../common/queries/useSearchQuery';
-import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { TxSearchResult } from './TxSearchResult';
 import { FilterProps, FiltersWithWrapper } from './filters';

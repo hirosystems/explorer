@@ -1,13 +1,9 @@
+import { Tabs } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { CodeEditor } from '../../../../ui/CodeEditor';
-import { Tab } from '../../../../ui/Tab';
-import { TabList } from '../../../../ui/TabList';
-import { TabPanel } from '../../../../ui/TabPanel';
-import { TabPanels } from '../../../../ui/TabPanels';
-import { Tabs } from '../../../../ui/Tabs';
 
 export const ContractTabs: FC<{
   contractId: string;
@@ -17,22 +13,18 @@ export const ContractTabs: FC<{
   if (!contract) return null;
 
   return (
-    <Tabs isLazy>
-      <TabList>
-        {source && <Tab>Source code</Tab>}
-        <Tab>Available functions</Tab>
-      </TabList>
-      <TabPanels>
-        {source && (
-          <TabPanel>
-            <CodeEditor code={source} />
-          </TabPanel>
-        )}
-        <TabPanel>
-          <ContractAvailableFunctions contractId={contractId} contract={contract} />
-        </TabPanel>
-      </TabPanels>
-    </Tabs>
+    <Tabs.Root lazyMount>
+      <Tabs.List>
+        {source && <Tabs.Trigger value="source">Source code</Tabs.Trigger>}
+        <Tabs.Trigger value="available-functions">Available functions</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="source">
+        <CodeEditor code={source || ''} />
+      </Tabs.Content>
+      <Tabs.Content value="available-functions">
+        <ContractAvailableFunctions contractId={contractId} contract={contract} />
+      </Tabs.Content>
+    </Tabs.Root>
   );
   return null;
 };

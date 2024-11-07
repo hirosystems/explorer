@@ -1,16 +1,14 @@
 'use client';
 
+import { Box, Grid, HStack } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
 import { Section } from '../common/components/Section';
 import { useGlobalContext } from '../common/context/useGlobalContext';
 import { buildUrl } from '../common/utils/buildUrl';
-import { Box } from '../ui/Box';
 import { Button } from '../ui/Button';
 import { ButtonLink } from '../ui/ButtonLink';
-import { Grid } from '../ui/Grid';
-import { HStack } from '../ui/HStack';
 import { PageTitle } from './_components/PageTitle';
 
 export default function Error({
@@ -41,12 +39,15 @@ export default function Error({
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink href={buildUrl('/', network)} mt="24px">
+                    <ButtonLink
+                      buttonProps={{ mt: 6 }}
+                      linkProps={{ href: buildUrl('/', network) }}
+                    >
                       Go home
                     </ButtonLink>
                   </Box>
                   <Box>
-                    <Button onClick={() => reset()} variant="secondary" mt="24px">
+                    <Button onClick={() => reset()} variant="secondary" mt={6}>
                       Try again
                     </Button>
                   </Box>

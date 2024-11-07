@@ -19,7 +19,9 @@ import { SPACE } from './space';
 // };
 
 export const CURRENT_SIZES = {
-  4.5: '1.125rem',
+  4.5: { value: '1.125rem' },
+  60: { value: '3.75rem' },
+  150: { value: '9.375rem' },
 };
 
 export const NEW_SIZES = {

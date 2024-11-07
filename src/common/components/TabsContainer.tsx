@@ -1,50 +1,51 @@
+import { Flex, FlexProps, Tabs } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
-import { Flex, FlexProps } from '../../ui/Flex';
-import { Tab } from '../../ui/Tab';
-import { TabList } from '../../ui/TabList';
-import { TabPanel } from '../../ui/TabPanel';
-import { TabPanels } from '../../ui/TabPanels';
-import { Tabs } from '../../ui/Tabs';
+import { TxListTab } from '../../features/txs-list/tabs/TxListTabsBase';
 import { Section } from './Section';
 
 export const TabsContainer: FC<
   {
-    setTabIndex?: (index: number) => void;
+    tabs: TxListTab[];
+    onTabChange?: (id: string) => void;
     title?: string | ReactNode;
-    tabs: {
-      title: string;
-      content: ReactNode;
-    }[];
     actions?: ReactNode;
   } & FlexProps
-> = ({ setTabIndex, title, tabs, actions, ...props }) => (
-  <Section title={title} {...props}>
-    <Tabs isLazy onChange={index => setTabIndex?.(index)}>
-      <TabList width="full" border={'none'} pb={1}>
-        <Flex
-          gap={4}
-          direction={['column', 'column', 'row', 'row']}
-          justifyContent={['flex-start', 'flex-start', 'space-between', 'space-between']}
-          alignItems={['flex-start', 'flex-start', 'center', 'center']}
-          width="full"
-          flexWrap="wrap"
-        >
-          <Flex width={'auto'}>
-            {tabs.map(tab => (
-              <Tab key={`${tab.title}-title`}>{tab.title}</Tab>
-            ))}
+> = ({ onTabChange, title, tabs, actions, ...props }) => {
+  return (
+    <Section title={title} {...props}>
+      <Tabs.Root
+        lazyMount
+        onValueChange={({ value: id }) => {
+          onTabChange?.(id);
+        }}
+        defaultValue={tabs[0].id}
+      >
+        <Tabs.List width="full" border={'none'} pb={1}>
+          <Flex
+            gap={4}
+            direction={['column', 'column', 'row', 'row']}
+            justifyContent={['flex-start', 'flex-start', 'space-between', 'space-between']}
+            alignItems={['flex-start', 'flex-start', 'center', 'center']}
+            width="full"
+            flexWrap="wrap"
+          >
+            <Flex width={'auto'}>
+              {tabs.map(tab => (
+                <Tabs.Trigger key={`${tab.id}-title`} value={tab.id}>
+                  {tab.title}
+                </Tabs.Trigger>
+              ))}
+            </Flex>
+            {actions}
           </Flex>
-          {actions}
-        </Flex>
-      </TabList>
-      <TabPanels>
+        </Tabs.List>
         {tabs.map(tab => (
-          <TabPanel key={`${tab.title}-content`} height={'100%'} py={4}>
+          <Tabs.Content key={`${tab.id}-content`} value={tab.id} h="full">
             {tab.content}
-          </TabPanel>
+          </Tabs.Content>
         ))}
-      </TabPanels>
-    </Tabs>
-  </Section>
-);
+      </Tabs.Root>
+    </Section>
+  );
+};

@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -13,8 +14,6 @@ import { FilteredTxs } from '../../../../features/txs-list/FilteredTxs';
 import { TxListItem } from '../../../../features/txs-list/ListItem/TxListItem';
 import { FilterButton } from '../../../../features/txsFilterAndSort/FilterButton';
 import { ShowValueMenu } from '../../../../features/txsFilterAndSort/ShowValueMenu';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
 interface BlockTxsListProps {

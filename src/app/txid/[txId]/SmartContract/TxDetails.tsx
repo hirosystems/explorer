@@ -1,3 +1,4 @@
+import { Box, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 
 import {
@@ -7,8 +8,6 @@ import {
 } from '@stacks/stacks-blockchain-api-types';
 
 import { Section } from '../../../../common/components/Section';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { BlockHash } from '../TxDetails/BlockHash';
 import { BlockHeight } from '../TxDetails/BlockHeight';
 import { ClarityVersion } from '../TxDetails/ClarityVersion';

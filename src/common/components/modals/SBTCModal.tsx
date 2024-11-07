@@ -1,20 +1,17 @@
-import {
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
-  Stack,
-} from '@chakra-ui/react';
+import { Flex, Icon, Image, Stack } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
-import { Icon } from '../../..//ui/Icon';
+import {
+  DialogBackdrop,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogRoot,
+} from '../../../components/ui/dialog';
 import { ButtonLink } from '../../../ui/ButtonLink';
-import { Flex } from '../../../ui/Flex';
-import { Image } from '../../../ui/Image';
-import { Modal } from '../../../ui/Modal';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 
@@ -43,15 +40,16 @@ export function SBTCModal() {
   const queryClient = useQueryClient();
 
   return (
-    <Modal title={'sBTC'} isOpen={isOpen} onClose={() => handleClose()}>
-      <ModalOverlay />
-      <ModalContent width={'762px'} maxWidth={'full'}>
-        <ModalCloseButton
+    <DialogRoot open={isOpen} onOpenChange={value => (!value.open ? handleClose() : null)}>
+      <DialogBackdrop />
+      <DialogContent width={'762px'} maxWidth={'full'}>
+        <DialogCloseTrigger
+          onClick={() => console.log('close trigger clicked')}
           _focus={{
             boxShadow: 'none',
           }}
         />
-        <ModalBody pt={12}>
+        <DialogBody pt={12}>
           <Stack alignItems={'center'} gap={6}>
             <Text fontSize={'4xl'} textAlign={'center'}>
               ✨ sBTC is here ✨
@@ -59,18 +57,27 @@ export function SBTCModal() {
             <Image src={'/sbtc.png'} alt={'sBTC'} />
             <Text>sBTC is live! You can now put your Bitcoin to work in DeFi apps.</Text>
             <ButtonLink
-              variant={'primary'}
-              href={'https://app.stacks.co/'}
-              onClick={() => {
-                handleClose();
-                void queryClient.clear();
+              buttonProps={{
+                variant: 'primary',
+                onClick: () => {
+                  handleClose();
+                  void queryClient.clear();
+                },
+                bg: 'accent.stacks-500',
+                _hover: {
+                  textDecoration: 'none',
+                },
               }}
-              _hover={{ textDecoration: 'none' }}
-              bg="accent.stacks-500"
+              linkProps={{ color: 'white', href: 'https://app.stacks.co/' }}
+              isExternal={true}
             >
               Mint sBTC
             </ButtonLink>
-            <ModalFooter borderTop={'1px'} width={'full'} justifyContent={'center'}>
+            <DialogFooter
+              borderTop={'1px solid var(--stacks-colors-border-primary)'}
+              width={'full'}
+              justifyContent={'center'}
+            >
               <Flex alignItems="center" gap={1}>
                 <TextLink
                   color="accent.stacks-500"
@@ -82,12 +89,14 @@ export function SBTCModal() {
                 >
                   See sBTC in the Explorer
                 </TextLink>
-                <Icon as={ArrowUpRight} size={3} color="accent.stacks-500" />
+                <Icon h={3} w={3} color="accent.stacks-500">
+                  <ArrowUpRight />
+                </Icon>
               </Flex>
-            </ModalFooter>
+            </DialogFooter>
           </Stack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+        </DialogBody>
+      </DialogContent>
+    </DialogRoot>
   );
 }

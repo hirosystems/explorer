@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import {
   Eye,
   GitCommit,
@@ -10,7 +11,6 @@ import {
 } from '@phosphor-icons/react';
 import { FC } from 'react';
 
-import { Flex } from '../../../../ui/Flex';
 import { DeveloperData } from '../types';
 import { DeveloperStat } from './DeveloperStat';
 
@@ -19,17 +19,17 @@ export const Developers: FC<{ developerData: DeveloperData }> = ({ developerData
     {
       value: developerData?.forks || 0,
       label: 'Forks',
-      icon: GitFork,
+      icon: <GitFork />,
     },
     {
       value: developerData?.stars || 0,
       label: 'Stars',
-      icon: Star,
+      icon: <Star />,
     },
     {
       value: developerData?.subscribers || 0,
       label: 'Subscribers',
-      icon: Eye,
+      icon: <Eye />,
     },
     {
       value: `${developerData?.closed_issues || 0} / ${developerData?.total_issues || 0}`,
@@ -39,27 +39,27 @@ export const Developers: FC<{ developerData: DeveloperData }> = ({ developerData
     {
       value: developerData?.pull_requests_merged || 0,
       label: 'PRs merged',
-      icon: GitMerge,
+      icon: <GitMerge />,
     },
     {
       value: developerData?.pull_request_contributors || 0,
       label: 'PR contributors',
-      icon: Users,
+      icon: <Users />,
     },
     {
       value: developerData?.commit_count_4_weeks || 0,
       label: 'Commits (4 weeks)',
-      icon: GitCommit,
+      icon: <GitCommit />,
     },
     {
       value: developerData?.code_additions_deletions_4_weeks?.additions || 0,
       label: 'Additions (4 weeks)',
-      icon: PlusSquare,
+      icon: <PlusSquare />,
     },
     {
       value: developerData?.code_additions_deletions_4_weeks?.deletions || 0,
       label: 'Deletions (4 weeks)',
-      icon: MinusSquare,
+      icon: <MinusSquare />,
     },
   ];
   return (

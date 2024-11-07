@@ -1,3 +1,5 @@
+import { Box, Flex } from '@chakra-ui/react';
+
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import { KeyValueHorizontal } from '../../../common/components/KeyValueHorizontal';
@@ -5,8 +7,6 @@ import { Section } from '../../../common/components/Section';
 import { Value } from '../../../common/components/Value';
 import { TokenBalancesRow } from '../../../common/components/balances/TokenBalancesRow';
 import { microToStacksFormatted } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
 
 interface AddressSummaryProps {
   principal: string;

@@ -1,13 +1,11 @@
 'use client';
 
+import { Box, HStack, Icon } from '@chakra-ui/react';
 import Editor, { Monaco } from '@monaco-editor/react';
 import { useCallback, useState } from 'react';
 
 import { claritySyntax } from '../../../common/constants/claritySyntax';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
-import { Box } from '../../../ui/Box';
-import { HStack } from '../../../ui/HStack';
-import { Icon } from '../../../ui/Icon';
 import ClarityIcon from '../../../ui/icons/ClarityIcon';
 import { Caption } from '../../../ui/typography';
 import { Toolbar } from '../components/Toolbar';
@@ -38,7 +36,9 @@ export function RightSection() {
   return (
     <>
       <HStack alignItems="center" borderBottomWidth="1px" color="white" pb={7}>
-        <Icon as={ClarityIcon} size={4} />
+        <Icon h={4} w={4}>
+          <ClarityIcon />
+        </Icon>
         <Caption transform="translateY(1px)" color="white">
           Clarity code editor
         </Caption>

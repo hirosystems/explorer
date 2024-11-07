@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { getIsSBTC } from '../../../../app/tokens/utils';
-import { Wrapper } from '../../../_components/Stats/Wrapper';
+import { StatsWrapper } from '../../../_components/Stats/StatsWrapper';
 import { TokenInfoProps } from '../types';
 import { MarketCap } from './MarketCap';
 import { Price } from './Price';
@@ -21,7 +21,7 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; tokenId: string }> = ({
     circulatingSupply && currentPrice ? circulatingSupply * currentPrice : undefined;
   return (
     <ErrorBoundary fallbackRender={() => null}>
-      <Wrapper>
+      <StatsWrapper>
         <Supply
           borderRightWidth={['0px', '0px', '1px', '1px']}
           circulatingSupply={circulatingSupply}
@@ -45,7 +45,7 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; tokenId: string }> = ({
           txId={tokenId}
           marketCapRank={isSBTC ? null : tokenInfo.extended?.marketCapRank}
         />
-      </Wrapper>
+      </StatsWrapper>
     </ErrorBoundary>
   );
 };

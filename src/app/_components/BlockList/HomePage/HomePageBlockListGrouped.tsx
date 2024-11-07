@@ -1,9 +1,9 @@
 'use client';
 
+import { Flex } from '@chakra-ui/react';
 import { Suspense, useMemo } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
-import { Flex } from '../../../../ui/Flex';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListGrouped } from '../Grouped/BlockListGrouped';
 import { HomePageBlockListGroupedSkeleton } from '../Grouped/skeleton';

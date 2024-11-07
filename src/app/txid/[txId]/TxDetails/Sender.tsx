@@ -1,5 +1,6 @@
 'use client';
 
+import { HStack, Icon } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { FC } from 'react';
 
@@ -7,8 +8,6 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
-import { HStack } from '../../../../ui/HStack';
-import { Icon } from '../../../../ui/Icon';
 import { getSenderName } from '../utils';
 
 export const Sender: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => (
@@ -16,7 +15,9 @@ export const Sender: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => 
     label={getSenderName(tx.tx_type)}
     value={
       <HStack>
-        <Icon as={ArrowUpRight} size={4} />
+        <Icon h={4} w={4}>
+          <ArrowUpRight />
+        </Icon>
         <ExplorerLink
           fontSize={'xs'}
           fontWeight={'medium'}

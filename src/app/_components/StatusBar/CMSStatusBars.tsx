@@ -1,10 +1,9 @@
+import { Stack } from '@chakra-ui/react';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { IncidentContent } from '../../../common/types/incidents';
 import { getRichTextRenderOptions } from '../../../common/utils/getRichTextRenderOptions';
-import { Flex } from '../../../ui/Flex';
-import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { StatusBarBase } from './StatusBarBase';
 
 export function CMSStatusBars({ statusBarContent }: { statusBarContent: IncidentContent | null }) {
@@ -16,12 +15,10 @@ export function CMSStatusBars({ statusBarContent }: { statusBarContent: Incident
         alert =>
           (alert.fields.showOnTestnet && isTestnet) ||
           (alert.fields.showOnMainnet && !isTestnet) ||
-          networkUrl.includes(alert.fields.networkUrlSubstring)
+          networkUrl?.includes(alert.fields.networkUrlSubstring)
       );
-  const colorMode = useColorMode().colorMode;
   return (
-    <Flex
-      direction={'column'}
+    <Stack
       _empty={{
         display: 'none',
       }}
@@ -32,16 +29,16 @@ export function CMSStatusBars({ statusBarContent }: { statusBarContent: Incident
             key={incident?.sys?.id}
             impact={incident?.fields?.impact}
             content={
-              <Flex direction={'column'} gap={2} flexGrow={1}>
+              <Stack gap={2} flexGrow={1}>
                 {documentToReactComponents(
                   incident?.fields?.content,
-                  getRichTextRenderOptions(colorMode, incident?.fields?.impact)()
+                  getRichTextRenderOptions(incident?.fields?.impact)()
                 )}
-              </Flex>
+              </Stack>
             }
           />
         );
       })}
-    </Flex>
+    </Stack>
   );
 }

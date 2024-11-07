@@ -1,31 +1,29 @@
 'use client';
 
-import { forwardRef, useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
+import { forwardRef } from 'react';
 
 import { Text, TextProps } from './Text';
 
 export * from './Text';
 
-export const Caption = forwardRef<TextProps, 'small'>((props, ref) => (
+export const Caption = forwardRef<HTMLParagraphElement, TextProps>((props, ref) => (
   <Text style={{ userSelect: 'none' }} fontSize="xs" display="inline-block" ref={ref} {...props} />
 ));
 
-export const Title = forwardRef<TextProps, 'span'>(({ as, ...props }, ref) => (
+export const Title = forwardRef<HTMLParagraphElement, TextProps>(({ as, ...props }, ref) => (
   <Text ref={ref} as={as} display="inline-block" fontWeight={'medium'} {...props} />
 ));
 
-export const Pre = forwardRef<TextProps, 'pre'>(({ as = 'pre', ...props }, ref) => (
+export const Pre = forwardRef<HTMLParagraphElement, TextProps>(({ as = 'pre', ...props }, ref) => (
   <Text
     display="inline-block"
     fontFamily={`"Fira Code", monospace`}
-    bg={`bg.${useColorMode().colorMode}`}
     borderRadius="8px"
     borderWidth="1px"
-    fontSize="12px"
+    fontSize="xs"
     boxShadow="low"
-    px="8px"
-    py="8px"
+    px={2}
+    py={2}
     ref={ref}
     {...props}
     style={{

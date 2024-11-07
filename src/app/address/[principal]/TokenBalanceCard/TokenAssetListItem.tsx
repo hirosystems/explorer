@@ -1,16 +1,16 @@
 'use client';
 
+import { FlexProps } from '@chakra-ui/react';
 import React from 'react';
 
 import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
 import { IntCV, hexToCV } from '@stacks/transactions';
 
-import { AddressLink, TokenLink, TxLink } from '../../../../common/components/ExplorerLinks';
+import { AddressLink, TokenLink } from '../../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../../common/components/TwoColumnsListItem';
 import { FtTokenAmount, NftTokenAmount } from '../../../../common/components/balances/TokenAmount';
 import { FtTokenSymbol, NftTokenSymbol } from '../../../../common/components/balances/TokenSymbol';
 import { getAssetNameParts, initBigNumber } from '../../../../common/utils/utils';
-import { FlexProps } from '../../../../ui/Flex';
 import { FtAvatar } from './FtAvatar';
 import { NftAvatar } from './NftAvatar';
 

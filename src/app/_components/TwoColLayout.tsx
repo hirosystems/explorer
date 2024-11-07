@@ -1,6 +1,5 @@
+import { Grid } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-
-import { Grid } from '../../ui/Grid';
 
 export function TowColLayout({ children }: { children: ReactNode }) {
   return (

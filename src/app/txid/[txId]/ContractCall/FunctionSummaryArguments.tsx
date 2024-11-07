@@ -1,12 +1,11 @@
-import { css } from '@emotion/react';
+import { Box, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Singleton } from '../../../../common/types/utils';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Pre, Text } from '../../../../ui/typography';
+import { Text } from '../../../../ui/Text';
+import { Pre } from '../../../../ui/typography';
 import { FunctionSummaryClarityValue } from './FunctionSummaryClarityValue';
 
 type FunctionArg = Singleton<
@@ -24,16 +23,16 @@ export const FunctionSummaryArguments: React.FC<{
         return (
           <Flex
             key={key}
-            gap={'16px'}
+            gap={4}
             direction={'column'}
-            pb={'16px'}
-            mb={'16px'}
-            css={css`
-              &:last-child {
-                margin-bottom: 0;
-                padding-bottom: 0;
-              }
-            `}
+            pb={4}
+            mb={4}
+            css={{
+              '&:last-child': {
+                marginBottom: 0,
+                paddingBottom: 0,
+              },
+            }}
           >
             <Flex alignItems="center">
               <Pre>{arg.name}</Pre>

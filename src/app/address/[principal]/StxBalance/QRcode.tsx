@@ -1,30 +1,32 @@
+import { useColorMode } from '@/components/ui/color-mode';
+import { Box, BoxProps, ClientOnly } from '@chakra-ui/react';
 import vkQr from '@vkontakte/vk-qr';
 import * as React from 'react';
 
-import { Box, BoxProps } from '../../../../ui/Box';
+export const QRcode = ({ address, ...rest }: { address: string } & BoxProps) => {
+  const { colorMode } = useColorMode();
 
-export const QRcode: React.FC<{ address: string } & BoxProps> = React.memo(
-  ({ address, ...rest }) => {
-    const qrSvg = React.useMemo(
-      () =>
-        vkQr.createQR(address, {
-          qrSize: 256,
-          isShowLogo: true,
-          logoData: '/stx-square.svg',
-          foregroundColor: 'invert',
-        }),
-      [address]
-    );
+  const qrSvg = React.useMemo(
+    () =>
+      vkQr.createQR(address, {
+        qrSize: 256,
+        isShowLogo: true,
+        logoData: '/stx-square.svg',
+        foregroundColor: colorMode === 'light' ? 'black' : 'white',
+      }),
+    [address, colorMode]
+  );
 
-    const qr = <Box dangerouslySetInnerHTML={{ __html: qrSvg }} />;
+  const qr = <Box dangerouslySetInnerHTML={{ __html: qrSvg }} />;
 
-    return (
+  return (
+    <ClientOnly>
       <Box position="relative" mx="auto" {...rest}>
         {qr}
         <Box position="absolute" left={0} top={0}>
           {qr}
         </Box>
       </Box>
-    );
-  }
-);
+    </ClientOnly>
+  );
+};

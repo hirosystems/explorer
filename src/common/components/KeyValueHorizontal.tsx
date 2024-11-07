@@ -1,9 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/react';
-import { css } from '@emotion/react';
+import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import { FC, ReactNode } from 'react';
 
-import { Flex, FlexProps } from '../../ui/Flex';
-import { Show } from '../../ui/Show';
 import { CopyButton } from './CopyButton';
 
 export interface KeyValueHorizontalProps {
@@ -13,7 +11,7 @@ export interface KeyValueHorizontalProps {
   labelProps?: FlexProps;
 }
 
-const rowStyle = css`
+const StyledFlexContainer = styled(Flex)`
   .fancy-copy {
     opacity: 0;
     position: relative;
@@ -22,6 +20,7 @@ const rowStyle = css`
       opacity 0.4s ease-in-out,
       right 0.4s ease-in-out;
   }
+
   &:hover {
     .fancy-copy {
       opacity: 1;
@@ -29,26 +28,23 @@ const rowStyle = css`
     }
   }
 `;
-
 export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
   label,
   value,
   copyValue,
   labelProps,
 }) => {
-  const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
-    <Flex
-      py={'16px'}
+    <StyledFlexContainer
+      py={4}
       alignItems={['flex-start', 'flex-start', 'center']}
-      css={rowStyle}
       gap={'10px'}
       flexWrap="nowrap"
-      minHeight={'73px'}
-      borderBottom={'1px'}
-      borderColor={borderColor}
+      minHeight={18}
+      borderBottom="1px solid var(--stacks-colors-border-secondary)"
       _last={{ borderBottom: 'unset' }}
       direction={['column', 'column', 'row']}
+      className="kvh"
     >
       <Flex
         fontSize={'12px'}
@@ -69,15 +65,10 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
         {value}
       </Flex>
       {copyValue && (
-        <Show above="lg">
-          <CopyButton
-            className={'fancy-copy'}
-            initialValue={copyValue}
-            aria-label={'copy row'}
-            size={'40px'}
-          />
-        </Show>
+        <Box hideBelow="lg">
+          <CopyButton className={'fancy-copy'} initialValue={copyValue} aria-label={'copy row'} />
+        </Box>
       )}
-    </Flex>
+    </StyledFlexContainer>
   );
 };

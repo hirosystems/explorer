@@ -1,5 +1,7 @@
 'use client';
 
+import { Box, Flex } from '@chakra-ui/react';
+
 import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { BurnBlockGroupGrid } from '../../../app/_components/BlockList/Grouped/BlockListGrouped';
@@ -12,8 +14,6 @@ import '../../../common/components/loaders/skeleton-text';
 import { useSuspenseInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useSuspenseBlocksByBurnBlock } from '../../../common/queries/useBlocksByBurnBlock';
 import { useBurnBlock, useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
 import { PageTitle } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { BitcoinAnchorDetails } from './BitcoinAnchorDetails';

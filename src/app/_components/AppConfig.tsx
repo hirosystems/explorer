@@ -1,5 +1,6 @@
 'use client';
 
+import { Box } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
@@ -22,10 +23,10 @@ export const AppConfig: React.FC<{
       <Text fontSize={'sm'}>
         You're viewing {querySubnet ? 'a subnet' : `the ${queryNetworkMode}`}
         {querySubnet || queryApiUrl ? (
-          <>
+          <Box>
             <br />
             {querySubnet || queryApiUrl}
-          </>
+          </Box>
         ) : null}{' '}
         Explorer
       </Text>,

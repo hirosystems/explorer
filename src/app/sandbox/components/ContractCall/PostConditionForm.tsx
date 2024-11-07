@@ -1,3 +1,4 @@
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { Field, FormikErrors } from 'formik';
 import { useMemo, useState } from 'react';
@@ -20,15 +21,8 @@ import {
 } from '@stacks/transactions';
 
 import { isUint128 } from '../../../../common/utils/number-utils';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../../../components/ui/menu';
 import { Input } from '../../../../ui/Input';
-import { Menu } from '../../../../ui/Menu';
-import { MenuButton } from '../../../../ui/MenuButton';
-import { MenuItem } from '../../../../ui/MenuItem';
-import { MenuList } from '../../../../ui/MenuList';
-import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { Caption } from '../../../../ui/typography';
 import { NonTupleValueType } from '../../types/values';
@@ -299,8 +293,8 @@ export function PostConditionConditionCodeMenu({
   const options = getPostConditionConditionCodeOptions(postConditionType);
 
   return (
-    <Menu>
-      <MenuButton
+    <MenuRoot>
+      <MenuTrigger
         type="button"
         onClick={e => {
           e.stopPropagation();
@@ -308,10 +302,12 @@ export function PostConditionConditionCodeMenu({
       >
         <Flex gap={1}>
           <Text>{selectedOption.label}</Text>
-          <Icon as={CaretDown} />
+          <Icon>
+            <CaretDown />
+          </Icon>
         </Flex>
-      </MenuButton>
-      <MenuList>
+      </MenuTrigger>
+      <MenuContent>
         {options.map(option => (
           <MenuItem
             key={option.label}
@@ -320,12 +316,13 @@ export function PostConditionConditionCodeMenu({
               setSelectedOption(option);
               onChange(option);
             }}
+            value={option.label}
           >
             {option.label}
           </MenuItem>
         ))}
-      </MenuList>
-    </Menu>
+      </MenuContent>
+    </MenuRoot>
   );
 }
 
@@ -344,9 +341,9 @@ export function PostConditionTypeMenu({ onChange }: { onChange: (option: any) =>
   );
 
   return (
-    <Menu>
+    <MenuRoot>
       <Flex gap={2} alignItems="center">
-        <MenuButton
+        <MenuTrigger
           type="button"
           onClick={e => {
             e.stopPropagation();
@@ -354,11 +351,13 @@ export function PostConditionTypeMenu({ onChange }: { onChange: (option: any) =>
         >
           <Flex gap={1}>
             <Text>{selectedOption.label}</Text>
-            <Icon as={CaretDown} />
+            <Icon>
+              <CaretDown />
+            </Icon>
           </Flex>
-        </MenuButton>
+        </MenuTrigger>
       </Flex>
-      <MenuList>
+      <MenuContent>
         {options.map(option => (
           <MenuItem
             key={option.label}
@@ -367,12 +366,13 @@ export function PostConditionTypeMenu({ onChange }: { onChange: (option: any) =>
               setSelectedOption(option);
               onChange(option);
             }}
+            value={option.label}
           >
             {option.label}
           </MenuItem>
         ))}
-      </MenuList>
-    </Menu>
+      </MenuContent>
+    </MenuRoot>
   );
 }
 

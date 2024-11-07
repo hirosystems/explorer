@@ -1,12 +1,11 @@
 'use client';
 
+import { Box, Grid } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
 import { Section } from '../common/components/Section';
 import { logError } from '../common/utils/error-utils';
-import { Box } from '../ui/Box';
-import { Grid } from '../ui/Grid';
 
 export default function GlobalError({ error }: { error: Error }) {
   useEffect(() => {
@@ -17,7 +16,7 @@ export default function GlobalError({ error }: { error: Error }) {
     <html lang="en">
       <body>
         <Section>
-          <Grid placeItems="center" p="32px" minHeight="350px">
+          <Grid placeItems="center" p={8} minHeight="350px">
             <Box>
               <ErrorMessageLayout
                 title="Something went wrong!"

@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Grid } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { useState } from 'react';
@@ -7,9 +8,7 @@ import { useState } from 'react';
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import { TwoColumnsListItemSkeleton } from '../../../../common/components/TwoColumnsListItemSkeleton';
-import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
-import { Grid } from '../../../../ui/Grid';
 import { Caption } from '../../../../ui/typography';
 
 const TokenAssetListItem = dynamic(
@@ -51,7 +50,7 @@ export const FtBalance: React.FC<{ balance: AddressBalanceResponse }> = ({ balan
       </Box>
       {visibleItemsCount < ftWithCount.length && (
         <Box width={'full'}>
-          <Button variant={'secondary'} onClick={() => handleLoadMore()} width={'full'}>
+          <Button variant="secondary" onClick={() => handleLoadMore()} width={'full'}>
             Load more
           </Button>
         </Box>

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import Image from 'next/image';
+import { useState } from 'react';
 
 import { DefaultTokenImage } from './DefaultTokenImage';
 
@@ -15,7 +16,7 @@ export const TokenImage = ({ url, alt }: { url: string; alt: string }) => {
     return <DefaultTokenImage asset={alt} />;
   }
   return (
-    <img
+    <Image
       width={36}
       height={36}
       src={imageUrl}

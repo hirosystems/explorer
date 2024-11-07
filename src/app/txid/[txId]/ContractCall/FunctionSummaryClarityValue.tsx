@@ -1,13 +1,14 @@
+import { Box, HStack } from '@chakra-ui/react';
+
 import { cvToJSON, hexToCV } from '@stacks/transactions';
 
 import { AddressLink, TxLink } from '../../../../common/components/ExplorerLinks';
 import { Value } from '../../../../common/components/Value';
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { microToStacksFormatted } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { HStack } from '../../../../ui/HStack';
+import { Text } from '../../../../ui/Text';
 import { TextLink } from '../../../../ui/TextLink';
-import { Caption, Text } from '../../../../ui/typography';
+import { Caption } from '../../../../ui/typography';
 
 const getPrettyClarityValueType = (type: any) => {
   if (type === 'bool' || type === 'int' || type === 'principal' || type === 'uint') {
@@ -43,9 +44,9 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
     additional = (
       <Box display="block" as="span">
         <Caption mb="4px">BTC address (converted)</Caption>
-        <Text target="_blank" as={TextLink} href={`${btcAddressBaseUrl}/${btc}`}>
+        <TextLink target="_blank" href={`${btcAddressBaseUrl}/${btc}`}>
           {btc}
-        </Text>
+        </TextLink>
       </Box>
     );
   }

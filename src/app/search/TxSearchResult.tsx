@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { Flex } from '@chakra-ui/react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -11,7 +11,6 @@ import { TxListItem } from '../../features/txs-list/ListItem/TxListItem';
 import { ShowValueMenu } from '../../features/txsFilterAndSort/ShowValueMenu';
 import { ConfirmedTxsSortMenu } from '../../features/txsFilterAndSort/SortMenu';
 import { useFilterAndSortState } from '../../features/txsFilterAndSort/useFilterAndSortState';
-import { Flex } from '../../ui/Flex';
 import { Text } from '../../ui/Text';
 import { FilterProps } from './filters';
 

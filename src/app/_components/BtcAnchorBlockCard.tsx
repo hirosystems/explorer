@@ -20,7 +20,7 @@ export function BtcAnchorBlockCardBase({ block }: { block?: Block }) {
         label={'Bitcoin block height'}
         value={
           <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${block.burn_block_height}`}>
-            <Text fontSize={'14px'} fontWeight={'medium'}>
+            <Text fontSize={'sm'} fontWeight={'medium'}>
               #{block.burn_block_height}
             </Text>
           </TextLink>
@@ -35,7 +35,7 @@ export function BtcAnchorBlockCardBase({ block }: { block?: Block }) {
             target="_blank"
             href={`${btcBlockBaseUrl}/${block.burn_block_hash.replace('0x', '')}`}
           >
-            <Text fontSize={'14px'} fontWeight={'medium'}>
+            <Text fontSize={'sm'} fontWeight={'medium'}>
               {truncateMiddle(block.burn_block_hash, 8)}
             </Text>
           </TextLink>
@@ -50,7 +50,7 @@ export function BtcAnchorBlockCardBase({ block }: { block?: Block }) {
             target="_blank"
             href={`${btcTxBaseUrl}/${block.miner_txid.replace('0x', '')}`}
           >
-            <Text fontSize={'14px'} fontWeight={'medium'}>
+            <Text fontSize={'sm'} fontWeight={'medium'}>
               {truncateMiddle(block.miner_txid, 8)}
             </Text>
           </TextLink>

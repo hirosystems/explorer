@@ -1,5 +1,5 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 import { useEffect } from 'react';
 
 import { Section } from '../../../common/components/Section';
@@ -14,12 +14,10 @@ import {
 } from '../../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../../common/state/hooks';
 import { Network } from '../../../common/types/network';
-import { FoundResult, SearchResultType } from '../../../common/types/search-results';
+import { SearchResultType } from '../../../common/types/search-results';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { Box } from '../../../ui/Box';
 import { ButtonLink } from '../../../ui/ButtonLink';
-import { Flex } from '../../../ui/Flex';
-import { Text } from '../../../ui/typography';
+import { Text } from '../../../ui/Text';
 import { NoTxs } from '../NoTxs';
 import { SearchResultItem } from '../items/search-result-item';
 import { selectIsSearchFieldFocused, selectSearchTerm } from '../search-slice';
@@ -161,7 +159,7 @@ export function SearchResultsCard({
       position={'absolute'}
       zIndex={'docked'}
       mt={4}
-      width={'container.md'}
+      width={'768px'}
       maxWidth={'full'}
       left={0}
     >
@@ -187,7 +185,11 @@ export function SearchResultsCard({
         )}
       </Box>
       {totalCount > 5 && (
-        <ButtonLink variant={'secondary'} width={'full'} href={searchPageUrl} mb={6}>
+        <ButtonLink
+          buttonProps={{ variant: 'secondary', width: 'full' }}
+          linkProps={{ href: searchPageUrl }}
+          mb={6}
+        >
           View {totalCount} results
         </ButtonLink>
       )}

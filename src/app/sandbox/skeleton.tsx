@@ -1,10 +1,6 @@
 'use client';
 
-import React from 'react';
-
-import { Flex } from '../../ui/Flex';
-import { SkeletonText } from '../../ui/SkeletonText';
-import { Spinner } from '../../ui/Spinner';
+import { Flex, Spinner } from '@chakra-ui/react';
 
 export default function Skeleton() {
   return (

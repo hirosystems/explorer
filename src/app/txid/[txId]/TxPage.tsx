@@ -1,4 +1,5 @@
-import { Check, CircleNotch, Icon, WarningCircle } from '@phosphor-icons/react';
+import { Icon, Stack } from '@chakra-ui/react';
+import { Check, CircleNotch, WarningCircle } from '@phosphor-icons/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
 
@@ -8,10 +9,7 @@ import { getTxTypeIcon } from '../../../common/components/TxIcon';
 import { TransactionType } from '../../../common/constants/constants';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { getTxTitle } from '../../../common/utils/utils';
-import { Flex } from '../../../ui/Flex';
-import { Tag } from '../../../ui/Tag';
-import { TagLabel } from '../../../ui/TagLabel';
-import { TagLeftIcon } from '../../../ui/TagLeftIcon';
+import { Tag } from '../../../components/ui/tag';
 import { PageTitleWithTags } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { StxBalance } from '../../address/[principal]/StxBalance';
@@ -30,13 +28,13 @@ const txTypeNamesMap = {
   tenure_change: 'Tenure change',
 };
 
-const txStatusIconMap: Record<string, Icon> = {
-  pending: CircleNotch,
-  success: Check,
-  success_anchor_block: Check,
-  non_canonical: WarningCircle,
-  failed: WarningCircle,
-  dropped: WarningCircle,
+const txStatusIconMap: Record<string, React.ReactNode> = {
+  pending: <CircleNotch />,
+  success: <Check />,
+  success_anchor_block: <Check />,
+  non_canonical: <WarningCircle />,
+  failed: <WarningCircle />,
+  dropped: <WarningCircle />,
 };
 
 const txStatusLabelMap = {
@@ -60,13 +58,23 @@ export const TxPage: React.FC<{
       <PageTitleWithTags
         tags={
           <>
-            <Tag>
-              <TagLeftIcon as={getTxTypeIcon(tx.tx_type)} />
-              <TagLabel>{txTypeNamesMap[tx.tx_type]}</TagLabel>
+            <Tag
+              startElement={
+                <Icon h={3.5} w={3.5}>
+                  {getTxTypeIcon(tx.tx_type)}
+                </Icon>
+              }
+            >
+              {txTypeNamesMap[tx.tx_type]}
             </Tag>
-            <Tag>
-              <TagLeftIcon as={txStatusIconMap[getTransactionStatus(tx)]} />
-              <TagLabel>{txStatusLabelMap[getTransactionStatus(tx)]}</TagLabel>
+            <Tag
+              startElement={
+                <Icon h={3.5} w={3.5}>
+                  {txStatusIconMap[getTransactionStatus(tx)]}
+                </Icon>
+              }
+            >
+              {txStatusLabelMap[getTransactionStatus(tx)]}
             </Tag>
           </>
         }
@@ -74,13 +82,13 @@ export const TxPage: React.FC<{
         {getTxTitle(tx)}
       </PageTitleWithTags>
       <TowColLayout>
-        <Flex direction={'column'} gap={7}>
+        <Stack gap={7}>
           <TxAlerts tx={tx} />
           {txDetails}
           {'events' in tx && <Events tx={tx} />}
           {children}
-        </Flex>
-        <Flex direction={'column'} gap={7}>
+        </Stack>
+        <Stack gap={7}>
           {contractId && <ContractDetailsCard contractId={contractId} />}
           <TxBtcAnchorBlockCard tx={tx} />
           {contractId && (
@@ -89,7 +97,7 @@ export const TxPage: React.FC<{
               <TokenBalanceCard address={contractId} />
             </>
           )}
-        </Flex>
+        </Stack>
       </TowColLayout>
     </>
   );

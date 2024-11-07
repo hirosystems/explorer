@@ -1,15 +1,11 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
+import { Box, Flex, HStack } from '@chakra-ui/react';
 
 import { PageTitle } from '../../../app/_components/PageTitle';
+import { SkeletonCircle } from '../../../components/ui/skeleton';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
-import { HStack } from '../../../ui/HStack';
-import { SkeletonCircle } from '../../../ui/SkeletonCircle';
-import { SkeletonItem } from '../../../ui/SkeletonItem';
+import { Skeleton } from '../../../ui/Skeleton';
 import { KeyValueHorizontal } from '../KeyValueHorizontal';
 import { Section } from '../Section';
 import { TwoColumnPage } from '../TwoColumnPage';
@@ -22,12 +18,12 @@ export const SkeletonBlock = () => (
   <TwoColsListItem
     icon={<SkeletonCircle width={'40px'} height={'40px'} />} // Takes time to load in...
     leftContent={{
-      title: <SkeletonItem width={'192px'} height={'15px'} />,
-      subtitle: <SkeletonItem width={'180px'} height={'12px'} />,
+      title: <Skeleton width={'192px'} height={'15px'} />,
+      subtitle: <Skeleton width={'180px'} height={'12px'} />,
     }}
     rightContent={{
-      title: <SkeletonItem width={'89px'} height={'14px'} />,
-      subtitle: <SkeletonItem width={'72px'} height={'12px'} />,
+      title: <Skeleton width={'89px'} height={'14px'} />,
+      subtitle: <Skeleton width={'72px'} height={'12px'} />,
     }}
   />
 );
@@ -50,48 +46,46 @@ const SkeletonTxidSummary = () => {
 };
 
 const SkeletonSummaryRow = () => {
-  const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
-    <Flex borderBottom="1px" borderColor={borderColor}>
+    <Flex borderBottom={`1px solid var(--stacks-colors-border-secondary)`}>
       <Flex>
         <Flex width={'140px'}>
           <Flex width={'70px'}>
-            <SkeletonItem height={'20px'} width={'full'} />
+            <Skeleton height={'20px'} width={'full'} />
           </Flex>
         </Flex>
         <Flex>
           <Flex width={'450px'}>
-            <SkeletonItem height={'20px'} width={'full'} />
+            <Skeleton height={'20px'} width={'full'} />
           </Flex>
         </Flex>
       </Flex>
     </Flex>
   );
 };
-const SkeletonSummaryRowShortContent = () => {
-  const borderColor = useColorModeValue('slate.150', 'slate.900');
+const SkeletonSummaryRowShortContent = (): JSX.Element => {
   return (
     <Flex
       flexDirection={['column', 'column', 'row']}
       py={['16px', '16px', '24px']}
       width="100%"
       alignItems={['unset', 'unset', 'center']}
+      px={4}
+      paddingLeft={0}
+      overflow="hidden"
       borderTopWidth="1px"
       borderBottomWidth="1px"
-      px={'16px'}
-      paddingLeft={'0'}
-      overflow="hidden"
-      borderColor={borderColor}
+      borderColor={'borderSecondary'}
     >
       <Flex>
         <Flex width={'140px'}>
           <Flex width={'70px'}>
-            <SkeletonItem height={'20px'} />
+            <Skeleton height={'20px'} />
           </Flex>
         </Flex>
         <Flex>
           <Flex width={'90px'}>
-            <SkeletonItem height={'20px'} />
+            <Skeleton height={'20px'} />
           </Flex>
         </Flex>
       </Flex>
@@ -103,10 +97,10 @@ const SkeletonTransactionTitle = () => {
   return (
     <Flex direction={'column'} gap={2} width={'full'} mt={10}>
       <HStack gap={2}>
-        <SkeletonItem height={6} />
+        <Skeleton height={6} />
       </HStack>
       <PageTitle mt={2}>
-        <SkeletonItem width={'300px'} height={'43px'} />
+        <Skeleton width={'300px'} height={'43px'} />
       </PageTitle>
     </Flex>
   );
@@ -129,21 +123,17 @@ export const SkeletonPageWithTagsAndTwoColumns = () => {
     <TwoColumnPage
       title={<SkeletonTransactionTitle />}
       leftContent={
-        <Section title={<SkeletonItem width={'200px'} height={'20px'} />}>
+        <Section title={<Skeleton width={'200px'} height={'20px'} />}>
           <Flex width="100%" flexDirection={['column', 'column', 'row']}>
             <Box width={['100%']}>
               {Array.from({ length: 20 }).map((_, i) => (
                 <KeyValueHorizontal
                   key={i}
-                  label={<SkeletonItem width={'100px'} height={'14px'} />}
+                  label={<Skeleton width={'100px'} height={'14px'} />}
                   value={
                     <Flex alignItems={'center'} width={'full'} flexGrow={1}>
                       <Value>
-                        <SkeletonItem
-                          width={`${randomWidth[i]}px`}
-                          maxWidth={'100%'}
-                          height={'14px'}
-                        />
+                        <Skeleton width={`${randomWidth[i]}px`} maxWidth={'100%'} height={'14px'} />
                       </Value>
                     </Flex>
                   }

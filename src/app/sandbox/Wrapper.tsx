@@ -1,5 +1,6 @@
 'use client';
 
+import { Flex, Grid, HStack, Icon } from '@chakra-ui/react';
 import { List, User } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -11,10 +12,6 @@ import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { useAppDispatch, useAppSelector } from '../../common/state/hooks';
 import { getQueryParams } from '../../common/utils/buildUrl';
 import { Button } from '../../ui/Button';
-import { Flex } from '../../ui/Flex';
-import { Grid } from '../../ui/Grid';
-import { HStack } from '../../ui/HStack';
-import { Icon } from '../../ui/Icon';
 import { IconButton } from '../../ui/IconButton';
 import { Caption } from '../../ui/typography';
 import { PageTitle } from '../_components/PageTitle';
@@ -71,18 +68,20 @@ export function Wrapper({ children }: { children: ReactNode }) {
           ) : (
             <HStack gap={6}>
               <HStack alignItems="center">
-                <Circle size={5}>
-                  <Icon as={User} size={3.5} />
+                <Circle h={5} w={5} color="borderSecondary">
+                  <Icon h={3.5} w={3.5} color="surfaceOpposite">
+                    <User />
+                  </Icon>
                 </Circle>
                 <Caption>{userData?.identityAddress}</Caption>
-              </HStack>
-              <HStack alignItems="center">
                 <IconButton
                   onClick={() => dispatch(toggleRightPanel())}
-                  icon={<List />}
                   aria-label={'Toggle right panel'}
-                  size={'4'}
-                />
+                  size={4}
+                  color="surfaceOpposite"
+                >
+                  <List />
+                </IconButton>
               </HStack>
             </HStack>
           )
@@ -91,7 +90,7 @@ export function Wrapper({ children }: { children: ReactNode }) {
         <Grid
           gridTemplateColumns={'var(--stacks-sizes-16) minmax(0, 1fr)'}
           gap={0}
-          minHeight={'container.md'}
+          minHeight={'768px'}
         >
           <SideNav />
           {isConnected ? children : <ConnectToStacks />}

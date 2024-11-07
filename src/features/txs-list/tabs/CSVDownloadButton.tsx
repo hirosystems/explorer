@@ -1,12 +1,10 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { Box, Icon } from '@chakra-ui/react';
 import { DownloadSimple } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { CSVDownload } from 'react-csv';
 
-import { Box } from '../../../ui/Box';
-import { Icon } from '../../../ui/Icon';
 import { CSVDownloadObjectType, useTxsCSVData } from './useTxsCSVData';
 
 export function CSVDownloadButton({ address }: { address: string }) {
@@ -22,23 +20,23 @@ export function CSVDownloadButton({ address }: { address: string }) {
     setTransactionData(formattedTxnData);
   };
 
-  const colorMode = useColorMode().colorMode;
-
   return (
     <Box position="relative" marginLeft={'auto'} alignSelf={'center'}>
       <Box
         as="button"
         alignItems="center"
-        color={`textCaption.${colorMode}`}
+        color={`text`}
         display="flex"
-        fontSize="12px"
+        fontSize="xs"
         _hover={{ cursor: 'pointer', color: 'textTitle' }}
         data-test="csv-download-button"
         onClick={downloadCSV}
         flexWrap={'nowrap'}
         whiteSpace={'nowrap'}
       >
-        <Icon as={DownloadSimple} mr="4px" color="currentColor" size="13px" strokeWidth={1.5} />
+        <Icon mr={1} color="currentColor" h={3} w={3} strokeWidth={1.5}>
+          <DownloadSimple />
+        </Icon>
         Export as CSV
       </Box>
       {!!transactionData.length && <CSVDownload data={transactionData} />}

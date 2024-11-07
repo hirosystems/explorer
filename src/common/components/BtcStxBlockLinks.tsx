@@ -1,10 +1,9 @@
 'use client';
 
+import { Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import { FC, Fragment } from 'react';
 
-import { Flex } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
 import { TextLink } from '../../ui/TextLink';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import StxIcon from '../../ui/icons/StxIcon';
@@ -29,16 +28,22 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
 
   return (
     <Flex flexWrap={'wrap'} alignItems={'center'} gap={1.5}>
-      <Circle size={'18px'} bg="purple.600">
-        <Icon as={StxIcon} size={2.5} color="white" />
+      <Circle h={4.5} w={4.5} bg="purple.600">
+        <Icon h={2.5} w={2.5} color="white">
+          <StxIcon />
+        </Icon>
       </Circle>
       <BlockLink hash={stxBlockHash} fontWeight={'medium'} fontSize={'sm'}>
         #{stxBlockHeight}
       </BlockLink>
       {btcBlockHeight && (
         <Fragment>
-          <Icon as={ArrowRight} size={4} color={'slate.700'} />
-          <Icon as={BitcoinIcon} size={4.5} />
+          <Icon h={4} w={4} color={'slate.700'}>
+            <ArrowRight />
+          </Icon>
+          <Icon h={4.5} w={4.5}>
+            <BitcoinIcon />
+          </Icon>
           <TextLink
             href={`${btcBlockBaseUrl}/${btcBlockHeight}`}
             target="_blank"

@@ -1,8 +1,6 @@
 import { FoundResult } from '../../../common/types/search-results';
-import { Box } from '../../../ui/Box';
 import { TxListItem } from '../../txs-list/ListItem/TxListItem';
 import { NoTxs } from '../NoTxs';
-import { SearchErrorMessage } from '../dropdown/error-message';
 
 interface TxResultItemProps {
   result: FoundResult;

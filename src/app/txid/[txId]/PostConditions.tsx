@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { Box, FlexProps, Grid, Icon } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import React from 'react';
 
@@ -27,10 +27,6 @@ import {
   truncateMiddle,
   validateStacksAddress,
 } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
-import { FlexProps } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
-import { Icon } from '../../../ui/Icon';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { Caption } from '../../../ui/typography';
 import { getTicker } from './Events';
@@ -82,17 +78,22 @@ const getPrettyCode = (
 };
 
 const ConditionAsset = ({ condition }: { condition: PostCondition }) => {
-  const colorMode = useColorMode().colorMode;
   switch (condition.type) {
     case 'fungible':
     case 'non_fungible':
       const assetId = constructPostConditionAssetId(condition.asset);
       const letter = getFirstLetterOfAsset(assetId);
-      return <Circle size={'48px'}>{letter.toUpperCase()}</Circle>;
+      return (
+        <Circle h={12} w={12}>
+          {letter.toUpperCase()}
+        </Circle>
+      );
     case 'stx':
       return (
-        <Circle size="48px" bg={`accent.${colorMode}`}>
-          <Icon as={StxIcon} size="20px" color="white" />
+        <Circle h={12} w={12}>
+          <Icon h={5} w={5} color="white">
+            <StxIcon />
+          </Icon>
         </Circle>
       );
   }

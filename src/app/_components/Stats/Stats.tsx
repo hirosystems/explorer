@@ -1,26 +1,31 @@
 'use client';
 
+import { FlexProps } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { FlexProps } from '../../../ui/Flex';
-import { SkeletonStatSection } from './SkeletonStatSection';
-import { Wrapper } from './Wrapper';
+import { StatsWrapper } from './StatsWrapper';
+import {
+  CurrentStackingCycleStatSkeleton,
+  LastBlockStatSkeleton,
+  NextStackingCycleStatSkeleton,
+  StxSupplyStatSkeleton,
+} from './skeleton';
 
 export const StxSupply = dynamic(() => import('./StxSupply').then(module => module.StxSupply), {
-  loading: () => <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />,
+  loading: () => StxSupplyStatSkeleton,
   ssr: false,
 });
 
 export const LastBlock = dynamic(() => import('./LastBlock').then(module => module.LastBlock), {
-  loading: () => <SkeletonStatSection borderRightWidth={['0px', '0px', '0px', '1px']} />,
+  loading: () => LastBlockStatSkeleton,
   ssr: false,
 });
 
 export const CurrentStackingCycle = dynamic(
   () => import('./CurrentStackingCycle').then(module => module.CurrentStackingCycle),
   {
-    loading: () => <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />,
+    loading: () => CurrentStackingCycleStatSkeleton,
     ssr: false,
   }
 );
@@ -28,7 +33,7 @@ export const CurrentStackingCycle = dynamic(
 export const NextStackingCycle = dynamic(
   () => import('./NextStackingCycle').then(module => module.NextStackingCycle),
   {
-    loading: () => <SkeletonStatSection />,
+    loading: () => NextStackingCycleStatSkeleton,
     ssr: false,
   }
 );
@@ -36,15 +41,28 @@ export const NextStackingCycle = dynamic(
 export function Stats(props: FlexProps) {
   return (
     <ErrorBoundary fallbackRender={() => null}>
-      <Wrapper {...props}>
-        <StxSupply borderRightWidth={['0px', '0px', '1px', '1px']} borderColor={'borderPrimary'} />
-        <LastBlock borderRightWidth={['0px', '0px', '0px', '1px']} borderColor={'borderPrimary'} />
+      <StatsWrapper {...props}>
+        <StxSupply
+          borderRight={[
+            'none',
+            'none',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
+          ]}
+        />
+        <LastBlock
+          borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-border-primary)']}
+        />
         <CurrentStackingCycle
-          borderRightWidth={['0px', '0px', '1px', '1px']}
-          borderColor={'borderPrimary'}
+          borderRight={[
+            'none',
+            'none',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
+          ]}
         />
         <NextStackingCycle />
-      </Wrapper>
+      </StatsWrapper>
     </ErrorBoundary>
   );
 }

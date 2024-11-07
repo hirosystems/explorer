@@ -1,12 +1,9 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
+import { FlexProps, Icon } from '@chakra-ui/react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { FlexProps } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
 import { TransactionType } from '../constants/constants';
 import { getTxTypeIcon } from './TxIcon';
 import { StyledBadge } from './status';
@@ -28,7 +25,9 @@ export function TxTypeTag({ type, ...rest }: TagProps) {
   const TypeIcon = getTxTypeIcon(type);
   return (
     <StyledBadge {...rest}>
-      <Icon size={'12px'} color="currentColor" as={TypeIcon} />
+      <Icon h={3} w={3} color="currentColor">
+        {TypeIcon}
+      </Icon>
       {txTypeNamesMap[type]}
     </StyledBadge>
   );

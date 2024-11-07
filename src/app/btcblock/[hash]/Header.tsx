@@ -1,8 +1,9 @@
 'use client';
 
+import { Flex } from '@chakra-ui/react';
+
 import { NavBlock, NavDirection } from '../../../app/btcblock/[hash]/NavBlock';
 import '../../../common/components/loaders/skeleton-text';
-import { Flex } from '../../../ui/Flex';
 import { PageTitle } from '../../_components/PageTitle';
 
 export function Header(

@@ -1,4 +1,4 @@
-import { Flex, IconButton, Input } from '@chakra-ui/react';
+import { Button, Flex, Icon, Input } from '@chakra-ui/react';
 import { CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { Field, Form, Formik } from 'formik';
 import { useCallback, useState } from 'react';
@@ -28,23 +28,32 @@ export function CycleFilter({
   );
 
   return (
-    <Formik initialValues={{ cycle: cycleId }} onSubmit={values => handleCycleChange(values.cycle)}>
+    <Formik
+      initialValues={{ cycle: cycleId }}
+      onSubmit={values => handleCycleChange(values.cycle)}
+      height="100%"
+    >
       {({ values, setFieldValue, submitForm }) => (
         <Form>
           <Flex alignItems="center" gap={1} h="full">
             {!showOnlyInput && (
-              <IconButton
+              <Button
                 aria-label="Previous cycle"
-                icon={<CaretLeft />}
                 onClick={() => {
                   const newCycleId = String(Number(values.cycle) - 1);
                   setFieldValue('cycle', newCycleId);
                   submitForm();
                 }}
-                isDisabled={!cycleId}
-                h={5}
-                w={5}
-              />
+                disabled={!cycleId}
+                h={4}
+                w={4}
+                backgroundColor="cycleFilter.iconButton.backgroundColor"
+                _hover={{ backgroundColor: 'cycleFilter.iconButton.hoverBackgroundColor' }}
+              >
+                <Icon h={4} w={4} color="text">
+                  <CaretLeft />
+                </Icon>
+              </Button>
             )}
             <Field name="cycle">
               {({ field }: any) => (
@@ -63,22 +72,38 @@ export function CycleFilter({
                   }}
                   w={'72px'}
                   h="full"
+                  css={{
+                    /* Hide the spinners in WebKit browsers (Chrome, Safari, Edge) */
+                    '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
+                      '-webkit-appearance': 'none',
+                      margin: 0,
+                    },
+                    /* Hide the spinners in Firefox */
+                    '&[type="number"]': {
+                      '-moz-appearance': 'textfield',
+                    },
+                  }}
                 />
               )}
             </Field>
             {!showOnlyInput && (
-              <IconButton
+              <Button
                 aria-label="Next cycle"
-                icon={<CaretRight />}
                 onClick={() => {
                   const newCycleId = String(Number(values.cycle) + 1);
                   setFieldValue('cycle', newCycleId);
                   submitForm();
                 }}
-                isDisabled={!cycleId || cycleId === currentCycleId.toString()}
-                h={5}
-                w={5}
-              />
+                disabled={!cycleId || cycleId === currentCycleId.toString()}
+                h={4}
+                w={4}
+                backgroundColor="cycleFilter.iconButton.backgroundColor"
+                _hover={{ backgroundColor: 'cycleFilter.iconButton.hoverBackgroundColor' }}
+              >
+                <Icon h={4} w={4} color="text">
+                  <CaretRight />
+                </Icon>
+              </Button>
             )}
           </Flex>
         </Form>

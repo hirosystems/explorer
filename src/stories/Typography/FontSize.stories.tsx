@@ -1,11 +1,11 @@
+import { Stack } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Heading } from '../../ui/Heading';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 
 const FontSizeDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Font Sizes</Heading>
     <Text fontSize="2xs">2xs (0.625rem): The quick brown fox jumps over the lazy dog</Text>
     <Text fontSize="xs">xs (0.75rem): The quick brown fox jumps over the lazy dog</Text>
@@ -43,7 +43,7 @@ export const FontSizes: Story = {
       source: {
         code: `
 const FontSizeDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Font Sizes</Heading>
     <Text fontSize="2xs">2xs (0.625rem): The quick brown fox jumps over the lazy dog</Text>
     <Text fontSize="xs">xs (0.75rem): The quick brown fox jumps over the lazy dog</Text>

@@ -1,17 +1,13 @@
 'use client';
 
+import { Flex, Group, Icon, Spinner } from '@chakra-ui/react';
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { buildAdvancedSearchQuery } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
-import { InputGroup } from '../../../ui/InputGroup';
-import { Spinner } from '../../../ui/Spinner';
 import { Text } from '../../../ui/Text';
 import { clearSearchTerm, selectIsSearchFieldFocused, selectSearchTerm } from '../search-slice';
 import { SearchInput } from './search-input';
@@ -48,14 +44,13 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
   const showClearButton = searchTerm !== '' && !isFetching;
 
   return (
-    <InputGroup>
+    <Group w="full">
       <Flex
         width="full"
         alignItems="center"
         gap={2}
         bgColor="whiteAlpha.200"
-        border="1px"
-        borderColor="whiteAlpha.600"
+        border="1px solid var(--stacks-colors-white-alpha-600)"
         borderRadius="xl"
         transitionProperty="border"
         backdropFilter={'blur(24px)'}
@@ -63,7 +58,9 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
           bgColor: 'whiteAlpha.300',
         }}
       >
-        <Icon as={MagnifyingGlass} size={4} color="white" ml={3} />
+        <Icon h={4} w={4} color="white" ml={3}>
+          <MagnifyingGlass />
+        </Icon>
         <SearchInput tempSearchTerm={tempSearchTerm} setTempSearchTerm={setTempSearchTerm} />
         {isFetching ? (
           <Spinner w={4} h={4} color="white" mr={3} />
@@ -72,7 +69,6 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
             bg="transparent"
             color="white"
             size={4}
-            icon={<Icon as={X} size={3} />}
             onClick={() => {
               setTempSearchTerm('');
               dispatch(clearSearchTerm());
@@ -80,7 +76,11 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
             aria-label={'Clear search bar'}
             _hover={{ bg: 'transparent' }}
             mr={3}
-          />
+          >
+            <Icon h={3} w={3}>
+              <X />
+            </Icon>
+          </IconButton>
         ) : tempSearchTerm === '' && isSearchFieldFocused ? (
           <Text
             color={'whiteAlpha.700'}
@@ -93,6 +93,6 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
           </Text>
         ) : null}
       </Flex>
-    </InputGroup>
+    </Group>
   );
 }

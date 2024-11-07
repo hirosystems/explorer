@@ -1,18 +1,12 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Flex, Icon } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { Badge } from '../../../common/components/Badge';
 import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
+import { PopoverContent, PopoverRoot, PopoverTrigger } from '../../../components/ui/popover';
 import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
-import { Popover } from '../../../ui/Popover';
-import { PopoverContent } from '../../../ui/PopoverContent';
-import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { AfterForm } from './After';
 import { BeforeForm } from './Before';
 import { DateRangeForm } from './DateRange';
@@ -26,20 +20,16 @@ function FilterTypeButton({
   setSelected?: () => void;
   children: ReactNode;
 }) {
-  const purpleBadgeColor = useColorModeValue('purple.600', 'purple.300');
-  const purpleBadgeBg = useColorModeValue('purple.100', 'purple.900');
-  const badgeBorder = useColorModeValue('purple.300', 'purple.700');
-
   return (
     <Badge
-      color={isSelected ? purpleBadgeColor : 'textSubdued'}
-      bg={isSelected ? purpleBadgeBg : undefined}
-      borderColor={isSelected ? badgeBorder : undefined}
+      color={isSelected ? 'timeFilter.text' : 'textSubdued'}
+      bg={isSelected ? 'timeFilter.background' : undefined}
+      borderColor={isSelected ? 'timeFilter.border' : undefined}
       px={'2'}
       py={'1'}
       fontSize={'xs'}
       rounded={'full'}
-      border={'1px'}
+      border="normal"
       fontWeight={'medium'}
       cursor={'pointer'}
       onClick={setSelected}
@@ -55,9 +45,9 @@ interface DateFilterProps {
 }
 
 export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps) {
-  const { onOpen, onClose, isOpen } = useDisclosure();
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime)) ? null : Number(defaultStartTime);
   const defaultEndTimeNumber = isNaN(Number(defaultEndTime)) ? null : Number(defaultEndTime);
+  const [open, setOpen] = useState(false);
 
   const populatedFilter =
     defaultStartTime && defaultEndTime
@@ -86,12 +76,20 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
   }, [populatedFilter]);
 
   return (
-    <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+    <PopoverRoot
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={e => setOpen(e.open)}
+    >
       <PopoverTrigger>
         <Button
           variant={'secondary'}
           fontSize={'sm'}
-          rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
+          rightIcon={
+            <Icon h={3.5} w={3.5} style={{ strokeWidth: '2px' }}>
+              <CaretDown />
+            </Icon>
+          }
           height={9}
           color={'textSubdued'}
         >
@@ -120,7 +118,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
         </Button>
       </PopoverTrigger>
       <PopoverContent maxWidth={'256px'} bgColor={'surface'}>
-        <Stack gap={4} p={4}>
+        <Flex direction={'column'} gap={4} p={4}>
           <Flex gap={'2'} flexWrap={'wrap'}>
             <FilterTypeButton
               isSelected={selectedFilterType === 'dateRange'}
@@ -145,21 +143,21 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
             <DateRangeForm
               defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
               defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-              onClose={onClose}
+              onClose={() => setOpen(false)}
             />
           ) : selectedFilterType === 'before' ? (
             <BeforeForm
               defaultEndTime={populatedFilter === 'before' ? defaultEndTimeNumber : null}
-              onClose={onClose}
+              onClose={() => setOpen(false)}
             />
           ) : selectedFilterType === 'after' ? (
             <AfterForm
               defaultStartTime={populatedFilter === 'after' ? defaultStartTimeNumber : null}
-              onClose={onClose}
+              onClose={() => setOpen(false)}
             />
           ) : null}
-        </Stack>
+        </Flex>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
   );
 }

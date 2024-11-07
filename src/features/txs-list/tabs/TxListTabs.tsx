@@ -1,6 +1,7 @@
 'use client';
 
-import { FlexProps } from '../../../ui/Flex';
+import { FlexProps } from '@chakra-ui/react';
+
 import { ConfirmedTxsList } from '../ConfirmedTxsList';
 import { MempoolTxsList } from '../MempoolTxsList';
 import { TxListTabsBase } from './TxListTabsBase';

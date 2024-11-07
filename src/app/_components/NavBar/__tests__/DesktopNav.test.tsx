@@ -1,6 +1,5 @@
+import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
-import React from 'react';
 
 import { DesktopNav } from '../DesktopNav';
 
@@ -26,7 +25,7 @@ describe('DesktopNav', () => {
       },
     ];
 
-    const { asFragment } = render(<DesktopNav navItems={mockNavItems} />);
+    const { asFragment } = renderWithChakraProviders(<DesktopNav navItems={mockNavItems} />);
     expect(asFragment()).toMatchSnapshot();
   });
 });

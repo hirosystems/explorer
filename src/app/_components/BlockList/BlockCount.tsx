@@ -1,10 +1,9 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
 import { memo } from 'react';
 
 import { Button } from '../../../ui/Button';
-import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
 
 export const BlockCount = memo(function ({
@@ -18,10 +17,6 @@ export const BlockCount = memo(function ({
   loadMoreStxBlocksHandler?: () => void;
   minimized?: boolean;
 }) {
-  const bgColor = useColorModeValue('purple.100', 'slate.900');
-  const bgColorHover = useColorModeValue('purple.200', 'slate.850');
-  const textColor = useColorModeValue('purple.600', 'purple.400');
-  const iconColor = useColorModeValue('purple.600', 'purple.200');
   const canLoadMore = !minimized && !isFirst;
 
   return (
@@ -32,34 +27,39 @@ export const BlockCount = memo(function ({
       px={2}
       width="fit-content"
       height={8}
-      bg={bgColor}
+      bg={'blockList.blockCount.background'}
       rounded="full"
       _hover={
         canLoadMore
           ? {
-              bg: bgColorHover,
+              bg: 'blockList.blockCount.backgroundHover',
             }
           : {
-              bg: bgColor,
+              bg: 'blockList.blockCount.background',
             }
       }
     >
       <Text
         display="flex"
-        color={canLoadMore ? textColor : 'text'}
+        color={canLoadMore ? 'blockList.blockCount.text' : 'text'}
         fontSize="xs"
+        fontWeight="semibold"
         alignItems="center"
         gap={1}
         _groupHover={
           canLoadMore
             ? {
-                textDecorationColor: textColor,
+                textDecorationColor: 'blockList.blockCount.text',
               }
             : {}
         }
       >
         +{count} {pluralize('block', count)}
-        {canLoadMore ? <Icon as={CaretDown} size={2.5} color={iconColor} /> : null}
+        {canLoadMore ? (
+          <Icon h={2.5} w={2.5} color={'blockList.blockCount.icon'}>
+            <CaretDown />
+          </Icon>
+        ) : null}
       </Text>
     </Button>
   );

@@ -11,12 +11,12 @@
 export const CURRENT_LETTER_SPACINGS = {};
 
 export const NEW_LETTER_SPACINGS = {
-  tighter: '-0.05em',
-  tight: '-0.025em',
-  normal: '0',
-  wide: '0.025em',
-  wider: '0.05em',
-  widest: '0.1em',
+  tighter: { value: '-0.05em' },
+  tight: { value: '-0.025em' },
+  normal: { value: '0' },
+  wide: { value: '0.025em' },
+  wider: { value: '0.05em' },
+  widest: { value: '0.1em' },
 };
 
 export const LETTER_SPACINGS = {

@@ -1,12 +1,10 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { memo } from 'react';
-import * as React from 'react';
 
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
 import { Section } from '../../../../common/components/Section';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { FunctionSummaryArguments } from './FunctionSummaryArguments';
 import { FunctionSummaryName } from './FunctionSummaryName';
 import { FunctionSummaryResult } from './FunctionSummaryResult';
@@ -19,7 +17,7 @@ export const FunctionSummary = memo<{
 }>(({ summary, result, btc, txStatus }) => {
   return (
     <Section title="Function called">
-      <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
+      <Flex px={4} width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']}>
           <KeyValueHorizontal
             label="Function"

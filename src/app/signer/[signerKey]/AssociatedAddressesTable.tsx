@@ -1,3 +1,4 @@
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { ReactNode, Suspense, useMemo } from 'react';
 
 import {
@@ -7,9 +8,6 @@ import {
 import { CopyButton } from '../../../common/components/CopyButton';
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
-import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
@@ -70,7 +68,6 @@ export const AssociatedAddressListItem = ({
         className={'fancy-copy'}
         initialValue={stacker.stacker_address}
         aria-label={'copy row'}
-        size={4}
         color="textSubdued"
       />
     </AssociatedAddressListItemLayout>

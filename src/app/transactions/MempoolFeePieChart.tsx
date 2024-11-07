@@ -1,4 +1,3 @@
-import { useColorModeValue, useTheme } from '@chakra-ui/react';
 import { Cell, Pie, PieChart } from 'recharts';
 
 const pieChartWidth = 215;
@@ -10,7 +9,6 @@ const renderCustomizedLabel = ({
   cy,
   midAngle,
   outerRadius,
-  color,
 }: {
   percent: number;
   x: number;
@@ -19,7 +17,6 @@ const renderCustomizedLabel = ({
   cy: number;
   midAngle: number;
   outerRadius: number;
-  color: string;
 }) => {
   if (!percent) return null; // Don't show zeros
   const RADIAN = Math.PI / 180;
@@ -30,10 +27,12 @@ const renderCustomizedLabel = ({
     <text
       x={newX}
       y={newY}
-      fill={color}
-      fontSize="var(--stacks-fontSizes-xs)"
       textAnchor="middle"
       dominantBaseline="central"
+      style={{
+        fill: 'var(--stacks-colors-text-subdued)',
+        fontSize: 'var(--stacks-font-sizes-xs)',
+      }}
     >
       {percent * 100 < 1 ? '<1%' : `${(percent * 100).toFixed(0)}%`}
     </text>
@@ -44,12 +43,10 @@ const renderCenterCustomizedLabel = ({
   label,
   cx,
   cy,
-  color,
 }: {
   label: string;
   cx: number;
   cy: number;
-  color: string;
 }) => {
   return (
     <text
@@ -58,9 +55,9 @@ const renderCenterCustomizedLabel = ({
       textAnchor="middle"
       dominantBaseline="central"
       style={{
-        fill: color,
-        fontSize: 'var(--stacks-fontSizes-xl)',
-        fontWeight: 'var(--stacks-fontWeights-medium)',
+        fill: 'var(--stacks-colors-text)',
+        fontSize: 'var(--stacks-font-sizes-xl)',
+        fontWeight: 'var(--stacks-font-weights-medium)',
       }}
     >
       {label}
@@ -75,7 +72,7 @@ export function getTxTypePieChartColor(txType: string) {
     case 'contract_call':
       return 'var(--stacks-colors-purple-850)';
     case 'smart_contract':
-      return 'var(--stacks-colors-others-limeGreen)';
+      return 'var(--stacks-colors-others-lime-green)';
     default:
       return 'purple';
   }
@@ -96,9 +93,6 @@ export function MempoolFeePieChart({
         value: (count / totalTxCount) * 100,
       };
     });
-  const textColor = useColorModeValue('black', 'white');
-  const theme = useTheme();
-  const secondaryTextColor = useColorModeValue(theme.colors.slate[700], theme.colors.slate[500]);
 
   return (
     <PieChart width={pieChartWidth} height={pieChartHeight}>
@@ -111,7 +105,11 @@ export function MempoolFeePieChart({
         cx="50%"
         cy="50%"
         labelLine={false}
-        label={props => renderCustomizedLabel({ ...props, color: secondaryTextColor })}
+        label={props =>
+          renderCustomizedLabel({
+            ...props,
+          })
+        }
         innerRadius={60}
         outerRadius={67}
       >
@@ -123,7 +121,6 @@ export function MempoolFeePieChart({
         label: `${totalTxCount} tx`,
         cx: pieChartWidth / 2,
         cy: pieChartHeight / 2,
-        color: textColor,
       })}
     </PieChart>
   );

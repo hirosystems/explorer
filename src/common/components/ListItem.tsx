@@ -1,8 +1,8 @@
+import { Flex, Stack } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
-import { Flex } from '../../ui/Flex';
-import { Stack } from '../../ui/Stack';
-import { Caption, Text, Title } from '../../ui/typography';
+import { Text } from '../../ui/Text';
+import { Caption, Title } from '../../ui/typography';
 
 export const ListItem: FC<{
   icon: ReactNode;
@@ -10,10 +10,10 @@ export const ListItem: FC<{
   subTitle: ReactNode;
   rightItem?: ReactNode;
 }> = ({ icon, title, subTitle, rightItem }) => (
-  <Flex justifyContent="space-between" alignItems="center" py="16px">
+  <Flex justifyContent="space-between" alignItems="center" py={4}>
     <Flex alignItems="center" width={'100%'} flexWrap={'nowrap'}>
       {icon}
-      <Stack ml="16px" spacing="8px" overflow={'hidden'} flex={'1'}>
+      <Stack ml={4} gap={2} overflow={'hidden'} flex={'1'}>
         <Title fontSize={14} whiteSpace={'normal'} overflowWrap={'break-word'}>
           {title}
         </Title>

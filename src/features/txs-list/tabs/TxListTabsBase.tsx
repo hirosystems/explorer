@@ -1,14 +1,18 @@
 'use client';
 
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { useParams, usePathname } from 'next/navigation';
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useMemo, useState } from 'react';
 
 import { TabsContainer } from '../../../common/components/TabsContainer';
-import { Flex, FlexProps } from '../../../ui/Flex';
-import { ShowValueMenu } from '../..//txsFilterAndSort/ShowValueMenu';
-import { FilterButton } from '../../txsFilterAndSort/FilterButton';
 import { MempoolTxsSortMenu } from '../../txsFilterAndSort/SortMenu';
 import { CSVDownloadButton } from './CSVDownloadButton';
+
+export type TxListTab = {
+  id: string;
+  title: string;
+  content: ReactNode;
+};
 
 export const TxListTabsBase: FC<
   {
@@ -18,23 +22,29 @@ export const TxListTabsBase: FC<
     showValueMenu?: boolean;
   } & FlexProps
 > = ({ confirmedList, mempoolList, showFilterButton = true, showValueMenu = true, ...props }) => {
+  const tabs = useMemo(
+    () => [
+      {
+        id: 'confirmed',
+        title: 'Confirmed',
+        content: confirmedList,
+      },
+      {
+        id: 'pending',
+        title: 'Pending',
+        content: mempoolList,
+      },
+    ],
+    [confirmedList, mempoolList]
+  );
   const principal = useParams().principal;
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabId, setTabId] = useState<string>(tabs[0].id);
   const isHomePage = usePathname() === '/';
 
   return (
     <TabsContainer
-      setTabIndex={setTabIndex}
-      tabs={[
-        {
-          title: 'Confirmed',
-          content: confirmedList,
-        },
-        {
-          title: 'Pending',
-          content: mempoolList,
-        },
-      ]}
+      tabs={tabs}
+      onTabChange={setTabId}
       actions={
         <Flex
           flexWrap={['wrap', 'wrap', 'nowrap', 'nowrap']}
@@ -44,7 +54,7 @@ export const TxListTabsBase: FC<
           width="auto"
         >
           {!!principal && <CSVDownloadButton address={principal as string} />}
-          {isHomePage && tabIndex === 1 && <MempoolTxsSortMenu />}
+          {isHomePage && tabId === 'pending' && <MempoolTxsSortMenu />}
         </Flex>
       }
       {...props}

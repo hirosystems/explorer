@@ -1,3 +1,4 @@
+import { HStack, Icon } from '@chakra-ui/react';
 import { ArrowDownRight } from '@phosphor-icons/react';
 import { FC } from 'react';
 
@@ -8,8 +9,6 @@ import {
 
 import { ExplorerLink } from '../../../../common/components/ExplorerLinks';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
-import { HStack } from '../../../../ui/HStack';
-import { Icon } from '../../../../ui/Icon';
 
 export const Recipient: FC<{ tx: TokenTransferTransaction | MempoolTokenTransferTransaction }> = ({
   tx,
@@ -18,9 +17,11 @@ export const Recipient: FC<{ tx: TokenTransferTransaction | MempoolTokenTransfer
     label={'Recipient'}
     value={
       <HStack>
-        <Icon as={ArrowDownRight} size={4} />
+        <Icon h={4} w={4}>
+          <ArrowDownRight />
+        </Icon>
         <ExplorerLink
-          fontSize={'14px'}
+          fontSize={'xs'}
           fontWeight={'medium'}
           href={`/address/${encodeURIComponent(tx.token_transfer.recipient_address)}`}
         >

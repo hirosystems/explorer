@@ -1,8 +1,8 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, screen } from '@testing-library/react';
+import { renderWithProviders } from '@/common/utils/test-utils/render-utils';
+import { Box } from '@chakra-ui/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { useParams as useParamsActual } from 'next/navigation';
 
-import { renderWithReduxProviders } from '../../../../common/utils/test-utils/renderWithReduxProvider';
 import { TxListTabsBase } from '../TxListTabsBase';
 
 jest.mock('next/navigation', () => ({
@@ -10,7 +10,6 @@ jest.mock('next/navigation', () => ({
   useParams: jest.fn(),
 }));
 
-const queryClient = new QueryClient();
 const useParams = useParamsActual as jest.MockedFunction<typeof useParamsActual>;
 
 describe('TxListTabs component', () => {
@@ -18,23 +17,27 @@ describe('TxListTabs component', () => {
     useParams.mockReset();
   });
 
-  it('renders correctly', () => {
+  it('renders correctly', async () => {
     useParams.mockReturnValue({ principal: 'test-address' });
 
-    const confirmedList = <div>Confirmed List</div>;
-    const mempoolList = <div>Mempool List</div>;
+    const confirmedList = <Box>Confirmed List</Box>;
+    const mempoolList = <Box>Mempool List</Box>;
 
-    renderWithReduxProviders(
-      <QueryClientProvider client={queryClient}>
-        <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
-      </QueryClientProvider>
+    const { getByText } = renderWithProviders(
+      <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
     );
 
     expect(screen.getByText('Confirmed List')).toBeInTheDocument();
 
-    const pendingTab = screen.getByRole('tab', { name: /Pending/i });
-    fireEvent.click(pendingTab);
-    expect(screen.getByText('Mempool List')).toBeInTheDocument();
+    const pendingTab = screen.getByRole('tab', { name: /pending/i });
+
+    await act(async () => {
+      pendingTab.click();
+    });
+
+    await waitFor(() => {
+      expect(getByText('Mempool List')).toBeVisible();
+    });
   });
 
   it('displays CSVDownloadButton if on address page', () => {
@@ -42,11 +45,7 @@ describe('TxListTabs component', () => {
     const confirmedList = <div>Confirmed List</div>;
     const mempoolList = <div>Mempool List</div>;
 
-    renderWithReduxProviders(
-      <QueryClientProvider client={queryClient}>
-        <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
-      </QueryClientProvider>
-    );
+    renderWithProviders(<TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />);
 
     expect(screen.getByRole('button', { name: /Export as CSV/i })).toBeInTheDocument();
   });
@@ -57,11 +56,7 @@ describe('TxListTabs component', () => {
     const confirmedList = <div>Confirmed List</div>;
     const mempoolList = <div>Mempool List</div>;
 
-    renderWithReduxProviders(
-      <QueryClientProvider client={queryClient}>
-        <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
-      </QueryClientProvider>
-    );
+    renderWithProviders(<TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />);
 
     expect(screen.queryByRole('button', { name: /Export as CSV/i })).not.toBeInTheDocument();
   });

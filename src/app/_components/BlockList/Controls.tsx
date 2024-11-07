@@ -1,10 +1,8 @@
+import { Field, Fieldset } from '@chakra-ui/react';
+import { Flex, FlexProps, StackProps } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
-import { Flex, FlexProps } from '../../../ui/Flex';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
-import { StackProps } from '../../../ui/Stack';
-import { Switch, SwitchProps } from '../../../ui/Switch';
+import { Switch, SwitchProps } from '../../../components/ui/switch';
 
 interface ControlsProps extends StackProps {
   groupByBtc: SwitchProps;
@@ -21,7 +19,7 @@ export function ControlsLayout({
   children: ReactNode;
 } & FlexProps) {
   return (
-    <Flex direction={horizontal ? ['column', 'row'] : 'column'} gap={3} {...rest} py={5}>
+    <Flex direction={horizontal ? ['column', 'row'] : 'column'} gap={3} {...rest}>
       {children}
     </Flex>
   );
@@ -30,38 +28,44 @@ export function ControlsLayout({
 export function Controls({ groupByBtc, liveUpdates, horizontal, ...rest }: ControlsProps) {
   return (
     <ControlsLayout horizontal={horizontal} {...rest}>
-      <FormControl display="flex" alignItems="center" gap={3} width="fit-content">
-        <Switch id="group-by-btc" {...groupByBtc} />
-        <FormLabel
-          htmlFor="group-by-btc"
-          mb="0"
-          mr={0}
-          fontSize={'14px'}
-          lineHeight={'1.5em'}
-          fontWeight={400}
-          textOverflow={'ellipsis'}
-          overflow={'hidden'}
-          whiteSpace={'nowrap'}
-        >
-          Group by Bitcoin block
-        </FormLabel>
-      </FormControl>
-      <FormControl display="flex" alignItems="center" gap={3}>
-        <Switch id="live-updates" {...liveUpdates} />
-        <FormLabel
-          htmlFor="live-updates"
-          mb="0"
-          mr={0}
-          fontSize={'14px'}
-          lineHeight={'1.5em'}
-          fontWeight={400}
-          textOverflow={'ellipsis'}
-          overflow={'hidden'}
-          whiteSpace={'nowrap'}
-        >
-          Live updates
-        </FormLabel>
-      </FormControl>
+      <Fieldset.Root w="fit-content">
+        <Field.Root display="flex" gap={3} w="fit-content">
+          <Switch {...groupByBtc}>
+            <Field.Label
+              htmlFor="group-by-btc"
+              mb="0"
+              mr={0}
+              fontSize={'14px'}
+              lineHeight={'1.5em'}
+              fontWeight={400}
+              textOverflow={'ellipsis'}
+              overflow={'hidden'}
+              whiteSpace={'nowrap'}
+            >
+              Group by Bitcoin block
+            </Field.Label>
+          </Switch>
+        </Field.Root>
+      </Fieldset.Root>
+      <Fieldset.Root w="fit-content">
+        <Field.Root display="flex" gap={3} w="fit-content">
+          <Switch {...liveUpdates}>
+            <Field.Label
+              htmlFor="live-updates"
+              mb="0"
+              mr={0}
+              fontSize={'14px'}
+              lineHeight={'1.5em'}
+              fontWeight={400}
+              textOverflow={'ellipsis'}
+              overflow={'hidden'}
+              whiteSpace={'nowrap'}
+            >
+              Live updates
+            </Field.Label>
+          </Switch>
+        </Field.Root>
+      </Fieldset.Root>
     </ControlsLayout>
   );
 }

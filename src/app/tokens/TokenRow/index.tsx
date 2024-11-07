@@ -1,14 +1,11 @@
-import { Icon } from '@chakra-ui/react';
+import { Flex, Icon, Table } from '@chakra-ui/react';
 import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { SealCheck, Warning } from '@phosphor-icons/react';
 import { FC } from 'react';
 
 import { TokenLink, TxLink } from '../../../common/components/ExplorerLinks';
 import { abbreviateNumber, getFtDecimalAdjustedBalance } from '../../../common/utils/utils';
-import { Flex } from '../../../ui/Flex';
-import { Td } from '../../../ui/Td';
 import { Text } from '../../../ui/Text';
-import { Tr } from '../../../ui/Tr';
 import { TokenAvatar } from '../../address/[principal]/TokenBalanceCard/TokenAvatar';
 import { getHasSBTCInName, getIsSBTC } from '../utils';
 
@@ -21,8 +18,8 @@ export const TokenRow: FC<{
   const isSBTC = getIsSBTC(ftToken.contract_principal);
 
   return (
-    <Tr>
-      <Td padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
+    <Table.Row>
+      <Table.Cell padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
         <Flex alignItems={'center'} gap={'8px'}>
           <TokenAvatar metadataImageUrl={ftToken.image_uri} asset={ftToken.symbol || 'FT'} />
           <TokenLink
@@ -43,7 +40,9 @@ export const TokenRow: FC<{
                 borderRadius="2xl"
                 border="1px solid var(--stacks-colors-green-500)"
               >
-                <Icon as={SealCheck} h={3} w={3} color="green.600" />
+                <Icon h={3} w={3} color="green.600">
+                  <SealCheck />
+                </Icon>
               </Flex>
             ) : (
               <Flex
@@ -53,19 +52,21 @@ export const TokenRow: FC<{
                 borderRadius="2xl"
                 border="1px solid var(--stacks-colors-red-500)"
               >
-                <Icon as={Warning} h={3} w={3} color="red.600" />
+                <Icon h={3} w={3} color="red.600">
+                  <Warning />
+                </Icon>
               </Flex>
             )
           ) : null}
         </Flex>
-      </Td>
-      <Td padding={'10px'} display={['none', 'none', 'table-cell']}>
-        <Text fontSize={'15px'} whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'}>
+      </Table.Cell>
+      <Table.Cell padding={'10px'} display={['none', 'none', 'table-cell']}>
+        <Text fontSize={'md'} whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'}>
           <TxLink txId={ftToken.tx_id}>{ftToken.tx_id}</TxLink>
         </Text>
-      </Td>
-      <Td isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
-        <Text whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'} fontSize={'15px'}>
+      </Table.Cell>
+      <Table.Cell width={'130px'} padding={'10px 16px 10px 20px'}>
+        <Text whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'} fontSize={'md'}>
           {ftToken.total_supply
             ? abbreviateNumber(
                 getFtDecimalAdjustedBalance(ftToken.total_supply, ftToken.decimals || 0),
@@ -73,7 +74,7 @@ export const TokenRow: FC<{
               )
             : 'N/A'}
         </Text>
-      </Td>
-    </Tr>
+      </Table.Cell>
+    </Table.Row>
   );
 };

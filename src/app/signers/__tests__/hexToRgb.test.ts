@@ -1,4 +1,4 @@
-import { hexToRgb } from '../SignerDistributionPieChart';
+import { hexToRgb } from '../../../common/utils/color-utils';
 
 describe('hexToRgb', () => {
   test('converts hex color #ffffff to RGB', () => {

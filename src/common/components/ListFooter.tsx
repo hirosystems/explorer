@@ -1,11 +1,10 @@
 'use client';
 
+import { Box, BoxProps, Icon } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import React from 'react';
 
-import { Box, BoxProps } from '../../ui/Box';
-import { Button } from '../../ui/Button';
-import { Icon } from '../../ui/Icon';
+import { Button } from '../../components/ui/button';
 import { ExplorerLink } from './ExplorerLinks';
 
 interface SectionFooterButtonPropsBase extends BoxProps {
@@ -26,10 +25,13 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
 }) => {
   if (href) {
     return (
-      <Box {...rest} width={'full'}>
-        <ExplorerLink href={href} mt={'auto'} width={'full'}>
-          <Button variant={'secondary'} width={'full'}>
-            View all recent {label} <Icon as={ArrowUpRight} size={4} />
+      <Box {...rest} width="full">
+        <ExplorerLink href={href} mt="auto" width="full" variant="noUnderline">
+          <Button variant="secondary" width="full">
+            View all recent {label}
+            <Icon h={4} w={4}>
+              <ArrowUpRight />
+            </Icon>
           </Button>
         </ExplorerLink>
       </Box>
@@ -37,8 +39,8 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
   }
   if (fetchNextPage && hasNextPage) {
     return (
-      <Box {...rest} width={'full'}>
-        <Button variant={'secondary'} onClick={() => fetchNextPage()} width={'full'}>
+      <Box {...rest} width="full">
+        <Button variant="secondary" onClick={() => fetchNextPage()} width="full">
           {isLoading ? 'Loading...' : `Load more ${label}`}
         </Button>
       </Box>

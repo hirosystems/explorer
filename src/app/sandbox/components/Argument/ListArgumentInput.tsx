@@ -1,13 +1,11 @@
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
 import { FieldArray } from 'formik';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { ClarityAbiTypeList } from '@stacks/transactions';
 
-import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import { ListValueType } from '../../types/values';
 import { getTuple } from '../../utils';
@@ -36,18 +34,11 @@ export const ListArgumentInput: FC<
     <FieldArray name={name}>
       {({ push, remove }) => (
         <Box>
-          <Text
-            fontSize="12px"
-            fontWeight="500"
-            display="block"
-            as={'label'}
-            htmlFor={name}
-            mb="8px"
-          >
+          <Text fontSize="12px" fontWeight="500" display="block" as={'label'} mb={4}>
             {name}
           </Text>
           {value.map((listItemValue, i) => (
-            <Flex mb="32px" alignItems={'center'} gap={'10px'}>
+            <Flex mb={8} alignItems={'center'} gap={2.5}>
               <Argument
                 name={`${name}.${i}`}
                 type={listItemsType}
@@ -55,13 +46,9 @@ export const ListArgumentInput: FC<
                 error={error}
                 value={listItemValue}
               />
-              <Icon
-                as={X}
-                size={3}
-                mt={'14px'}
-                style={{ cursor: 'pointer' }}
-                onClick={() => remove(i)}
-              />
+              <Icon h={3} w={3} mt={3.5} style={{ cursor: 'pointer' }} onClick={() => remove(i)}>
+                <X />
+              </Icon>
             </Flex>
           ))}
           <Button

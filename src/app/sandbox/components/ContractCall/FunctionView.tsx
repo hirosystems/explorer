@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Form, Formik, FormikErrors } from 'formik';
@@ -21,12 +22,8 @@ import { Section } from '../../../../common/components/Section';
 import { CONNECT_AUTH_ORIGIN } from '../../../../common/constants/env';
 import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
 import { showFn } from '../../../../common/utils/sandbox';
-import { Box } from '../../../../ui/Box';
+import { Switch } from '../../../../components/ui/switch';
 import { Button } from '../../../../ui/Button';
-import { Flex } from '../../../../ui/Flex';
-import { Icon } from '../../../../ui/Icon';
-import { Stack } from '../../../../ui/Stack';
-import { Switch } from '../../../../ui/Switch';
 import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
@@ -252,7 +249,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                       </Text>
                       <Switch
                         id="post-condition-mode"
-                        isDisabled={isReadOnly}
+                        disabled={isReadOnly}
                         onChange={() => {
                           setFieldValue(
                             'postConditionMode',
@@ -261,22 +258,20 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                               : PostConditionMode.Deny
                           );
                         }}
-                        isChecked={values.postConditionMode === PostConditionMode.Allow}
+                        checked={values.postConditionMode === PostConditionMode.Allow}
                       />
-                      <Tooltip
-                        label={
-                          <Box>
-                            Allow mode is less secure than Deny mode. Allow mode permits asset
-                            transfers that are not covered by post conditions. In Deny mode no other
-                            asset transfers are permitted besides those named in the post conditions
-                          </Box>
-                        }
-                      >
-                        <Icon as={Info} size={5} />
+                      <Tooltip content="Allow mode is less secure than Deny mode. Allow mode permits asset transfers that are not covered by post conditions. In Deny mode no other asset transfers are permitted besides those named in the post conditions">
+                        <Icon h={5} w={5}>
+                          <Info />
+                        </Icon>
                       </Tooltip>
                     </Flex>
                     {fn.args.length ? (
-                      <Stack mb="extra-loose" spacing="base" gap={4}>
+                      <Stack
+                        mb="extra-loose"
+                        // spacing="base" // upgrade v3. This may be broken
+                        gap={4}
+                      >
                         {fn.args.map(({ name, type }) => (
                           <Argument
                             handleChange={handleChange}
@@ -297,7 +292,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                         )}
                       </Stack>
                     ) : null}
-                    <Flex flexDirection="column" alignItems="center" justifyContent="center">
+                    <Stack alignItems="center" justifyContent="center">
                       <Button
                         type="submit"
                         onClick={e => {
@@ -308,7 +303,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                         Call function
                       </Button>
                       {cancelButton}
-                    </Flex>
+                    </Stack>
                   </Stack>
                 </Form>
               </Box>

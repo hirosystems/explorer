@@ -1,16 +1,12 @@
 'use client';
 
+import { Flex, Table } from '@chakra-ui/react';
+
 import { Card } from '../../common/components/Card';
+import { Skeleton, SkeletonCircle, SkeletonText } from '../../components/ui/skeleton';
 import { Button } from '../../ui/Button';
-import { Flex } from '../../ui/Flex';
-import { SkeletonCircle } from '../../ui/SkeletonCircle';
-import { SkeletonItem } from '../../ui/SkeletonItem';
-import { SkeletonText } from '../../ui/SkeletonText';
-import { Td } from '../../ui/Td';
-import { Th } from '../../ui/Th';
-import { Tr } from '../../ui/Tr';
 import { PageTitle } from '../_components/PageTitle';
-import { SkeletonStatSection } from '../_components/Stats/SkeletonStatSection';
+import { SkeletonStatSection } from '../_components/Stats/skeleton';
 import { SignersDistributionLayout } from './SignerDistribution';
 import { SignerLegendItem, SignersDistributionLegendLayout } from './SignerDistributionLegend';
 import { SignersHeaderLayout } from './SignersHeader';
@@ -21,18 +17,18 @@ export const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
   const cols = Array.from({ length: numCols }, (_, i) => i + 1);
 
   return (
-    <Tr>
+    <Table.Row>
       {cols.map((_, index) => (
-        <Td py={3} px={6} textAlign="center" key={`table-row-skeleton-${index}`}>
-          <SkeletonItem width="full" height="14px" />
-        </Td>
+        <Table.Cell py={3} px={6} textAlign="center" key={`table-row-skeleton-${index}`}>
+          <Skeleton width="full" height="14px" />
+        </Table.Cell>
       ))}
-    </Tr>
+    </Table.Row>
   );
 };
 
 export const TableHeaderSkeleton = () => (
-  <Th py={3} px={6}>
+  <Table.ColumnHeader py={3} px={6}>
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -43,7 +39,7 @@ export const TableHeaderSkeleton = () => (
     >
       <SkeletonText noOfLines={1} height="14px" />
     </Flex>
-  </Th>
+  </Table.ColumnHeader>
 );
 
 export const PieChartSkeleton = () => <SkeletonCircle size="150" />;
@@ -54,13 +50,13 @@ export const SignersTableSkeleton = () => {
 
   return (
     <SignersTableLayout
-      title={<SkeletonItem width="30%" height="40px" />}
+      title={<Skeleton width="30%" height="40px" />}
       signersTableHeaders={
-        <Tr>
+        <Table.Row>
           {numCols.map((_, i) => (
             <TableHeaderSkeleton key={`table-header-skeleton-${i}`} />
           ))}
-        </Tr>
+        </Table.Row>
       }
       signersTableRows={numRows.map((_, i) => (
         <TableRowSkeleton numCols={signersTableHeaders.length} key={`table-row-skeleton-${i}`} />
@@ -70,7 +66,7 @@ export const SignersTableSkeleton = () => {
 };
 
 export const SignersStatsSectionSkeleton = () => (
-  <Card>
+  <Card w={'full'}>
     <SkeletonStatSection />
   </Card>
 );
@@ -79,17 +75,17 @@ const SignersMapContinentPillSkeleton = () => {
   return (
     <Button
       borderRadius="full"
-      border="1px solid var(--stacks-colors-borderSecondary)"
+      border="1px solid var(--stacks-colors-border-secondary)"
       backgroundColor={'surface'}
       onClick={() => {}}
     >
-      <SkeletonItem height="14px" width={20} />
+      <Skeleton height="14px" width={20} />
     </Button>
   );
 };
 export const SignersMapSkeleton = () => (
   <SignersMapComponentLayout
-    map={<SkeletonItem height="100%" width="100%" borderRadius="xl" />}
+    map={<Skeleton height="100%" width="100%" borderRadius="xl" />}
     pills={[...Array(3)].map((_, i) => (
       <SignersMapContinentPillSkeleton key={`signer-map-continent-pill-${i}`} />
     ))}
@@ -121,13 +117,13 @@ export const SignersDistributionSkeleton = () => (
 
 export const SignersHeaderSkeleton = () => (
   <SignersHeaderLayout
-    stackingHeader={<SkeletonItem width="30%" height="14px" />}
+    stackingHeader={<Skeleton width="30%" height="14px" />}
     currentCycleCard={<SignersStatsSectionSkeleton />}
     stxStakedCard={<SignersStatsSectionSkeleton />}
     nextCycleCard={<SignersStatsSectionSkeleton />}
     signerDistribution={<SignersDistributionSkeleton />}
-    signerDistributionHeader={<SkeletonItem width="30%" height="14px" />}
-    historicalStackingDataLink={<SkeletonItem width="30%" height="14px" />}
+    signerDistributionHeader={<Skeleton width="30%" height="14px" />}
+    historicalStackingDataLink={<Skeleton width="30%" height="14px" />}
     signersMap={<SignersMapSkeleton />}
   />
 );
@@ -136,7 +132,7 @@ export function SignersPageSkeleton() {
   return (
     <>
       <PageTitle>
-        <SkeletonItem width={'400px'} height={'43px'} />
+        <Skeleton width={'400px'} height={'43px'} />
       </PageTitle>
       <SignersHeaderSkeleton />
       <SignersTableSkeleton />

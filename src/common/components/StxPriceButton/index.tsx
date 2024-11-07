@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -14,7 +13,7 @@ import { useStxPriceForTx } from './useStxPriceForTx';
 
 const initialTooltipContent = 'Displaying current value; Click to show value on day of txn';
 
-const tooltipContent = ['Current value', 'Estimated value on day of txn'];
+const tooltipContent = ['Current value', 'Estimated value on day of txn']; // TODO: add historical value
 
 interface StxPriceButtonProps {
   tx: Transaction | MempoolTransaction;
@@ -41,9 +40,6 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
     [historicalStxPrice, value]
   );
 
-  const bg = useColorModeValue('purple.200', 'purple.400');
-  const hoverBg = useColorModeValue('purple.300', 'purple.300');
-
   const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
 
   if (!isMainnet) {
@@ -51,17 +47,17 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
   }
 
   return (
-    <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
+    <Tooltip content={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
       <Button
         size={'xs'}
-        ml={'5px'}
+        ml={2}
         onClick={toggleStxPrice}
         fontSize={'xs'}
         _focus={{ outline: 0 }}
         flexShrink={0}
         suppressHydrationWarning={true}
-        bg={bg}
-        _hover={{ bg: hoverBg }}
+        bg={'stxPrice.background'}
+        _hover={{ bg: 'purple.300' }}
         color={'black'}
       >
         {showCurrentPriceForCompletedTransactions

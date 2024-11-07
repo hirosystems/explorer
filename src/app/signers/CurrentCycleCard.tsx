@@ -1,12 +1,10 @@
-import { useColorMode } from '@chakra-ui/react';
+import { Box, ClientOnly, Flex, Stack } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { Stack } from '../../ui/Stack';
+import { useColorMode } from '../../components/ui/color-mode';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
@@ -163,51 +161,47 @@ export function CurrentCycleCardBase() {
   );
 
   return (
-    <Card padding={6} height="100%" width="100%">
-      <Flex mb={3}>
-        <Box mr="16px">{pieChart}</Box>
-        <Stack gap={3}>
-          <Text fontSize={'xs'} fontWeight="medium" whiteSpace={'nowrap'}>
-            Current cycle
-          </Text>
-          <Box whiteSpace="nowrap">
-            <Text
-              fontSize="xl"
-              fontWeight="medium"
-              whiteSpace="nowrap"
-              display="inline-block"
-              mr={1}
-            >
-              {currentCycleId}
+    <ClientOnly>
+      <Card padding={6} height="100%" width="100%">
+        <Flex mb={3}>
+          <Box mr="16px">{pieChart}</Box>
+          <Stack gap={3}>
+            <Text fontSize={'xs'} fontWeight="medium" whiteSpace={'nowrap'}>
+              Current cycle
             </Text>
-            <Text
-              fontSize="md"
-              fontWeight="14px"
-              whiteSpace="nowrap"
-              display="inline-block"
-              color="textSubdued"
-            >
-              {`(${(currentCycleProgressPercentage * 100).toFixed(1)}%)`}
-            </Text>
-          </Box>
-        </Stack>
-      </Flex>
-      <Text
-        fontSize={'xs'}
-        whiteSpace="nowrap"
-        fontWeight="medium"
-        color="textSubdued"
-        lineHeight={4}
-      >
-        {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
-          'day',
-          approximateDaysSinceCurrentCycleStart
-        )} ago / Ends in ~${approximateDaysTilNextCycle} ${pluralize(
-          'day',
-          approximateDaysTilNextCycle
-        )}`}
-      </Text>
-    </Card>
+            <Box whiteSpace="nowrap">
+              <Text
+                fontSize="xl"
+                fontWeight="medium"
+                whiteSpace="nowrap"
+                display="inline-block"
+                mr={1}
+              >
+                {currentCycleId}
+              </Text>
+              <Text
+                fontSize="md"
+                fontWeight="14px"
+                whiteSpace="nowrap"
+                display="inline-block"
+                color="textSubdued"
+              >
+                {`(${(currentCycleProgressPercentage * 100).toFixed(1)}%)`}
+              </Text>
+            </Box>
+          </Stack>
+        </Flex>
+        <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="textSubdued">
+          {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
+            'day',
+            approximateDaysSinceCurrentCycleStart
+          )} ago / Ends in ~${approximateDaysTilNextCycle} ${pluralize(
+            'day',
+            approximateDaysTilNextCycle
+          )}`}
+        </Text>
+      </Card>
+    </ClientOnly>
   );
 }
 

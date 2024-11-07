@@ -1,5 +1,6 @@
 'use client';
 
+import { Box } from '@chakra-ui/react';
 import Editor, { EditorProps, Monaco } from '@monaco-editor/react';
 import { FrameCorners } from '@phosphor-icons/react';
 import Prism from 'prismjs';
@@ -10,7 +11,6 @@ import { defineTheme } from '../../app/sandbox/editor-config/define-theme';
 import { liftOff } from '../../app/sandbox/editor-config/init';
 import { configLanguage } from '../../app/sandbox/editor-config/language';
 import { claritySyntax } from '../../common/constants/claritySyntax';
-import { Box } from '../Box';
 import { IconButton } from '../IconButton';
 import { clarity } from './clarity';
 
@@ -70,8 +70,9 @@ const CodeEditorBase: FC<{ code: string } & Partial<EditorProps>> = ({
         position={'absolute'}
         bottom={0}
         right={0}
-        icon={<FrameCorners color={'white'} />}
-      ></IconButton>
+      >
+        <FrameCorners color={'white'} />
+      </IconButton>
     </Box>
   );
 };

@@ -1,11 +1,9 @@
 'use client';
 
+import { Grid, Stack, useBreakpointValue } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 import { ReactNode } from 'react';
 
-import { Grid } from '../../../ui/Grid';
-import { Stack } from '../../../ui/Stack';
-import { useBreakpointValue } from '../../../ui/hooks/useBreakpointValue';
 import { PageTitle } from '../../_components/PageTitle';
 import { AssociatedAddressesTable } from './AssociatedAddressesTable';
 import { SignerStats } from './SignerStats';

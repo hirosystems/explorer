@@ -1,13 +1,12 @@
-import React, { FC, ReactNode } from 'react';
+import { Box, Flex } from '@chakra-ui/react';
+import { FC, ReactNode } from 'react';
 
 import { ClarityAbiFunction, ClarityValue } from '@stacks/transactions';
 
 import { Section } from '../../../../common/components/Section';
 import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
 import { useCallReadOnlyFunction } from '../../../../common/queries/useCallReadOnlyFunction';
-import { Box } from '../../../../ui/Box';
 import { CodeEditor } from '../../../../ui/CodeEditor';
-import { Flex } from '../../../../ui/Flex';
 import { useUser } from '../../hooks/useUser';
 import { parseReadOnlyResponse } from '../../utils';
 

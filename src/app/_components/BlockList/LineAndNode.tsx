@@ -1,8 +1,7 @@
+import { Box, Flex } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
-import { Box } from '../../../ui/Box';
-import { Flex } from '../../../ui/Flex';
 
 export function LineAndNode({
   rowHeight,
@@ -28,7 +27,7 @@ export function LineAndNode({
           zIndex={0}
           bg="surface"
         >
-          <Circle size={4.5} bg="brand" border="none">
+          <Circle h={4.5} w={4.5} bg="brand" border="none">
             {icon}
           </Circle>
           <Box // the little bit of line needed to connect the icon to the other lines with nodes
@@ -37,7 +36,7 @@ export function LineAndNode({
             height={isLast ? '0%' : '20%'} // if it's the last line, don't draw the line at all
             width="1px"
             bg="brand"
-            border="1px solid var(---stacks-colors-borderPrimary)"
+            border="1px solid var(---stacks-colors-border-primary)"
           />
         </Flex>
       ) : (
@@ -57,7 +56,7 @@ export function LineAndNode({
             height={isLast ? '50%' : 'full'} // if it's the last line, only draw half of it
             width="1px"
             bg="brand"
-            border="1px solid var(---stacks-colors-borderPrimary)"
+            border="1px solid var(---stacks-colors-border-primary)"
           />
           <Box // the node
             position="absolute"

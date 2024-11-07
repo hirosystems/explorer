@@ -1,3 +1,4 @@
+import { Box, Flex } from '@chakra-ui/react';
 import * as React from 'react';
 
 import {
@@ -9,8 +10,6 @@ import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizo
 import { Section } from '../../../../common/components/Section';
 import { Value } from '../../../../common/components/Value';
 import { capitalize } from '../../../../common/utils/utils';
-import { Box } from '../../../../ui/Box';
-import { Flex } from '../../../../ui/Flex';
 import { BlockHash } from '../TxDetails/BlockHash';
 import { BlockHeight } from '../TxDetails/BlockHeight';
 import { Fees } from '../TxDetails/Fees';

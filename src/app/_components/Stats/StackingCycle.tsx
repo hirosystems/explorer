@@ -1,8 +1,7 @@
+import { Box, StackProps } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
 import { abbreviateNumber } from '../../../common/utils/utils';
-import { Box } from '../../../ui/Box';
-import { GridProps } from '../../../ui/Grid';
 import { StatSection } from './StatSection';
 
 export const StackingCycle: FC<
@@ -10,7 +9,7 @@ export const StackingCycle: FC<
     title: string;
     stackedSTX?: number;
     caption: ReactNode;
-  } & GridProps
+  } & StackProps
 > = ({ title, stackedSTX, caption, ...rest }) => {
   return (
     <StatSection

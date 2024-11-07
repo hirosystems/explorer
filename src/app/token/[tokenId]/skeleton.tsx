@@ -1,13 +1,11 @@
 'use client';
 
-import * as React from 'react';
-
 import { TabsContainer } from '../../../common/components/TabsContainer';
+import { Skeleton as SkeletonItem } from '../../../components/ui/skeleton';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
-import { SkeletonItem } from '../../../ui/SkeletonItem';
 import { PageTitle } from '../../_components/PageTitle';
-import { SkeletonStatSection } from '../../_components/Stats/SkeletonStatSection';
-import { Wrapper as StatsWrapper } from '../../_components/Stats/Wrapper';
+import { StatsWrapper } from '../../_components/Stats/StatsWrapper';
+import { SkeletonStatSection } from '../../_components/Stats/skeleton';
 
 export default function Skeleton() {
   return (
@@ -26,10 +24,12 @@ export default function Skeleton() {
         tabs={[
           {
             title: 'Confirmed',
+            id: 'confirmed',
             content: <SkeletonTxsList />,
           },
           {
             title: 'Pending',
+            id: 'pending',
             content: <SkeletonTxsList />,
           },
         ]}

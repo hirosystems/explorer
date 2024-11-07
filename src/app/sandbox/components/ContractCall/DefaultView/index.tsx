@@ -1,7 +1,6 @@
-import React, { FC } from 'react';
+import { Box, Grid } from '@chakra-ui/react';
+import { FC } from 'react';
 
-import { Box } from '../../../../../ui/Box';
-import { Grid } from '../../../../../ui/Grid';
 import { PopularContracts } from './PopularContracts';
 import { SearchContractsForm } from './SearchContractsForm';
 
@@ -17,7 +16,7 @@ export const DefaultView: FC<{
     <Box borderRightWidth="1px">
       <SearchContractsForm rootContractAddress={rootContractAddress} />
     </Box>
-    <Box p="16px">
+    <Box p={4}>
       <PopularContracts rootContractAddress={rootContractAddress} />
     </Box>
   </Grid>

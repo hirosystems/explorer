@@ -3,24 +3,25 @@
 exports[`MobileNav should render correctly 1`] = `
 <DocumentFragment>
   <div
-    class="chakra-stack css-tq63gn"
+    class="chakra-stack css-2nc1md"
   >
     <div
-      class="css-1uphlz8"
+      class="css-1oizwcu"
     >
       <a
-        class="chakra-link css-0"
+        class="link css-m05bwu"
         href="/?chain=mainnet"
+        title="Stacks Explorer"
       >
         <svg
+          aria-hidden="true"
           aria-label="Homepage"
-          class="chakra-icon css-8tz6rn"
+          class="chakra-icon css-z5cq41"
           fill="currentColor"
           focusable="false"
-          height="6"
-          title="Stacks Explorer"
+          height="1em"
           viewBox="0 0 25 25"
-          width="6"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -30,17 +31,17 @@ exports[`MobileNav should render correctly 1`] = `
       </a>
       <button
         aria-label="Close menu"
-        class="chakra-button css-12w4gwb"
+        class="chakra-button css-r8l8tx"
         type="button"
       >
         <svg
           aria-hidden="true"
-          class="chakra-icon css-8f6d4d"
+          class="chakra-icon css-17eptb3"
           fill="currentColor"
           focusable="false"
-          height="6"
+          height="1em"
           viewBox="0 0 256 256"
-          width="6"
+          width="1em"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -53,18 +54,16 @@ exports[`MobileNav should render correctly 1`] = `
       class="css-gg4vpm"
     >
       <div
-        class="css-blvggq"
+        class="css-18o7yjg"
       >
         <button
           aria-label="Change color mode"
-          class="chakra-button css-13w3vg7"
-          title="Toggle color mode"
+          class="chakra-button css-nfeibx"
+          title="Change the color mode to light"
           type="button"
         >
           <svg
-            aria-hidden="true"
             fill="currentColor"
-            focusable="false"
             height="1em"
             viewBox="0 0 256 256"
             width="1em"
@@ -77,14 +76,12 @@ exports[`MobileNav should render correctly 1`] = `
         </button>
         <button
           aria-label="Change color mode"
-          class="chakra-button css-13w3vg7"
-          title="Toggle color mode"
+          class="chakra-button css-nfeibx"
+          title="Change the color mode to dark"
           type="button"
         >
           <svg
-            aria-hidden="true"
             fill="currentColor"
-            focusable="false"
             height="1em"
             viewBox="0 0 256 256"
             width="1em"
@@ -97,18 +94,19 @@ exports[`MobileNav should render correctly 1`] = `
         </button>
       </div>
       <div
-        class="css-12oq351"
+        class="css-1pl563s"
       >
         <div
-          class="css-raw3ky"
+          class="css-epa2zj"
         >
           <svg
-            class="chakra-icon css-1reerss"
+            aria-hidden="true"
+            class="chakra-icon css-8y8mn2"
             fill="currentColor"
             focusable="false"
-            height="4.5"
+            height="1em"
             viewBox="0 0 19 19"
-            width="4.5"
+            width="1em"
             xmlns="http://www.w3.org/2000/svg"
           >
             <g
@@ -125,24 +123,25 @@ exports[`MobileNav should render correctly 1`] = `
             </g>
           </svg>
           <div
-            class="css-10g0yfj"
+            class="css-15bjhst"
           >
             N/A
           </div>
         </div>
         <div
-          class="css-1nqn6p7"
+          class="css-1wl0te6"
         >
           <div
-            class="css-1vx3qq4"
+            class="css-1gce386"
           >
             <svg
-              class="chakra-icon css-1yrqd6t"
+              aria-hidden="true"
+              class="chakra-icon css-5c067i"
               fill="currentColor"
               focusable="false"
-              height="10px"
+              height="1em"
               viewBox="0 0 25 25"
-              width="10px"
+              width="1em"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
@@ -151,7 +150,7 @@ exports[`MobileNav should render correctly 1`] = `
             </svg>
           </div>
           <div
-            class="css-10g0yfj"
+            class="css-15bjhst"
           >
             N/A
           </div>
@@ -162,7 +161,7 @@ exports[`MobileNav should render correctly 1`] = `
       class="chakra-stack css-j7qwjs"
     />
     <div
-      class="chakra-stack css-1pyx7hi"
+      class="chakra-stack css-1qgcuwo"
     />
   </div>
 </DocumentFragment>

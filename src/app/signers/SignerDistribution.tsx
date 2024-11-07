@@ -1,11 +1,8 @@
+import { Box, Flex, Grid, Stack } from '@chakra-ui/react';
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { useSuspenseInfiniteQueryResult } from '../../common/hooks/useInfiniteQueryResult';
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { Grid } from '../../ui/Grid';
-import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';

@@ -1,9 +1,9 @@
 'use client';
 
+import { Stack } from '@chakra-ui/react';
 import { ReactNode, useCallback, useRef } from 'react';
 
 import { Section } from '../../../../common/components/Section';
-import { Stack } from '../../../../ui/Stack';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { useBlockListContext } from '../BlockListContext';
 import { BlockListProvider } from '../BlockListProvider';
@@ -27,7 +27,7 @@ export function BlocksPageControlsLayout({
       marginX={-6}
       px={6}
       py={5}
-      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-border-primary)' : 'none'}
     >
       {children}
     </Stack>
@@ -60,11 +60,11 @@ function BlocksPageBlockListBase() {
                 toggleLiveUpdates(true);
               }
             },
-            isChecked: groupedByBtc,
+            checked: groupedByBtc,
           }}
           liveUpdates={{
             onChange: () => toggleLiveUpdates(),
-            isChecked: liveUpdates,
+            checked: liveUpdates,
           }}
           horizontal={true}
         />

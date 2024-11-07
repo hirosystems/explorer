@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Button, Flex, Icon, Stack } from '@chakra-ui/react';
 import { ArrowSquareOut, Toolbox, X } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
@@ -10,15 +11,9 @@ import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
 import { useRandomName } from '../../../common/hooks/useRandomName';
 import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
-import { Box } from '../../../ui/Box';
-import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
+import { InputGroup } from '../../../components/ui/input-group';
 import { IconButton } from '../../../ui/IconButton';
 import { Input } from '../../../ui/Input';
-import { InputGroup } from '../../../ui/InputGroup';
-import { InputRightElement } from '../../../ui/InputRightElement';
-import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { Tooltip } from '../../../ui/Tooltip';
@@ -59,32 +54,39 @@ export function LeftSection() {
             <InputGroup
               border="1px solid transparent"
               alignItems="center"
-              borderRadius="24px"
+              borderRadius="xl"
               position="relative"
-            >
-              <Input
-                value={contractName}
-                onChange={(e: any) => setContractName(e.target?.value as string)}
-                placeholder="Name your contract"
-                pr="84px"
-              />
-              <InputRightElement>
+              w="full"
+              endElement={
                 <IconButton
                   onClick={() => {
                     setContractName('');
                   }}
-                  icon={<Icon as={X} size={4} />}
                   aria-label={'clear contract name field'}
-                />
-              </InputRightElement>
+                >
+                  <Icon h={4} w={4} color="icon">
+                    <X />
+                  </Icon>
+                </IconButton>
+              }
+            >
+              <Input
+                value={contractName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setContractName(e.target?.value)
+                }
+                placeholder="Name your contract"
+                pr={21}
+                w="full"
+              />
             </InputGroup>
             <Box onClick={() => dispatch(toggleCodeToolbar())}>
-              <Tooltip label="Contract tools">
-                <IconButton
-                  icon={<Icon as={Toolbox} size={4} />}
-                  aria-label={'contract tools'}
-                  size={'40px'}
-                />
+              <Tooltip content="Contract tools">
+                <IconButton aria-label={'contract tools'} size={10}>
+                  <Icon h={4} w={4} color="icon">
+                    <Toolbox />
+                  </Icon>
+                </IconButton>
               </Tooltip>
             </Box>
           </Flex>
@@ -109,22 +111,26 @@ export function LeftSection() {
         <Stack gap={2}>
           <Button
             variant="secondary"
-            rightIcon={<ArrowSquareOut />}
             onClick={() => {
               const paramsBase64 = { name: contractName, sourceCode: codeBody };
               const state = btoa(JSON.stringify(paramsBase64));
-
               // 'state' param is used by Auth0 to forward the params after the login portal
               window.open(`https://platform.hiro.so/projects/import?state=${state}`);
             }}
             width="100%"
           >
-            Save Contract in Hiro Platform
+            <Flex gap={1} alignItems="center">
+              <Text>Save Contract in Hiro Platform</Text>
+              <Icon h={4} w={4}>
+                <ArrowSquareOut />
+              </Icon>
+            </Flex>
           </Button>
           <Text fontSize="xs" as="p">
             The sandbox doesn't support Clarity 3 deployments. To deploy a Clarity 3 contract,
             please use{' '}
             <TextLink
+              display="inline"
               href="https://docs.hiro.so/stacks/clarinet/guides/deploy-a-contract"
               target="_blank"
               _hover={{ textDecoration: 'underline' }}
@@ -133,6 +139,7 @@ export function LeftSection() {
             </TextLink>{' '}
             or the{' '}
             <TextLink
+              display="inline"
               href="https://docs.hiro.so/stacks/platform/guides/deployment-plans"
               target="_blank"
               _hover={{ textDecoration: 'underline' }}

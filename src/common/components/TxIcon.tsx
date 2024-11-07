@@ -1,12 +1,10 @@
+import { Flex, Icon, IconProps, useBreakpointValue } from '@chakra-ui/react';
 import { ArrowBendDownRight, Clock, WarningCircle } from '@phosphor-icons/react';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
 
-import { Flex } from '../../ui/Flex';
-import { Icon, IconProps } from '../../ui/Icon';
-import { useBreakpointValue } from '../../ui/hooks/useBreakpointValue';
 import ClarityIcon from '../../ui/icons/ClarityIcon';
 import CubeSparkleIcon from '../../ui/icons/CubeSparkleIcon';
 import DiagonalArrowsIcon from '../../ui/icons/DiagonalArrowsIcon';
@@ -15,22 +13,22 @@ import StxIcon from '../../ui/icons/StxIcon';
 import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 
-export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
+export const getTxTypeIcon = (txType: Transaction['tx_type']): ReactNode => {
   switch (txType) {
     case 'token_transfer':
-      return DiagonalArrowsIcon;
+      return <DiagonalArrowsIcon />;
 
     case 'smart_contract':
-      return ClarityIcon;
+      return <ClarityIcon />;
 
     case 'contract_call':
-      return FunctionXIcon;
+      return <FunctionXIcon />;
 
     case 'coinbase':
-      return CubeSparkleIcon;
+      return <CubeSparkleIcon />;
 
     case 'tenure_change':
-      return ArrowBendDownRight;
+      return <ArrowBendDownRight />;
 
     // sBTC-related transaction types
     // case 'tenure_extension':
@@ -43,7 +41,7 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
     //   CoinSparkleIcon;
 
     default:
-      return StxIcon;
+      return <StxIcon />;
   }
 };
 
@@ -101,11 +99,11 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
   }
 
   const icon =
-    txStatus === TransactionStatus.PENDING
-      ? Clock
-      : txStatus === TransactionStatus.FAILED
-        ? WarningCircle
-        : undefined;
+    txStatus === TransactionStatus.PENDING ? (
+      <Clock />
+    ) : txStatus === TransactionStatus.FAILED ? (
+      <WarningCircle />
+    ) : null;
   const color =
     txStatus === TransactionStatus.PENDING
       ? 'text'
@@ -118,22 +116,23 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
       height={`${statusBubbleCircleSize}px`}
       width={`${statusBubbleCircleSize}px`}
       position="absolute"
-      bottom={'0px'}
-      right={'0px'}
+      bottom={0}
+      right={0}
       bg="surface"
       transform="translate(35%, 35%)"
-      border={'1px'}
+      border="normal"
       rounded={'full'}
       alignItems={'center'}
       justifyContent={'center'}
     >
       <Icon
-        as={icon}
-        height={`${statusBubbleIconSize}px`}
-        width={`${statusBubbleIconSize}px`}
+        h={`${statusBubbleIconSize}px`}
+        w={`${statusBubbleIconSize}px`}
         color={color}
         bg={'surface'}
-      />
+      >
+        {icon}
+      </Icon>
     </Flex>
   );
 };
@@ -163,10 +162,10 @@ export const TxIcon: FC<
       height={`${convertFromCUIScaleToPx(circleSize as number)}px`}
       width={`${convertFromCUIScaleToPx(circleSize as number)}px`}
       position="relative"
-      bottom={'0px'}
-      right={'0px'}
+      bottom={0}
+      right={0}
       bg="surface"
-      border={'1px'}
+      border="1px solid var(--stacks-colors-border-secondary)"
       rounded={'full'}
       alignItems={'center'}
       justifyContent={'center'}
@@ -174,11 +173,12 @@ export const TxIcon: FC<
       {showTxStatusBubble && <StatusBubble txStatus={txStatus} />}
       {TxIcon && (
         <Icon
-          height={`${convertFromCUIScaleToPx(iconSize as number)}px`}
-          width={`${convertFromCUIScaleToPx(iconSize as number)}px`}
-          as={TxIcon}
+          h={`${convertFromCUIScaleToPx(iconSize as number)}px`}
+          w={`${convertFromCUIScaleToPx(iconSize as number)}px`}
           color={'text'}
-        />
+        >
+          {TxIcon}
+        </Icon>
       )}
     </Flex>
   );
