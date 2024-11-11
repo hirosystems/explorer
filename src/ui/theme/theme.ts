@@ -1,20 +1,19 @@
 'use client';
 
-import { createSystem, defaultConfig } from '@chakra-ui/react';
+import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 
 import { BORDER_RADIUS } from './borderRadius';
 import { BORDERS } from './borders';
 import { BREAKPOINTS } from './breakpoints';
 import { COLORS, NEW_COLORS } from './colors';
-import { badgeTheme } from './componentTheme/Badge';
-import { buttonRecipe, buttonTheme } from './componentTheme/Button';
-import { checkboxTheme } from './componentTheme/Checkbox';
-import { inputTheme } from './componentTheme/Input';
-import { linkTheme } from './componentTheme/Link';
-import { menuTheme } from './componentTheme/Menu';
-import { switchTheme } from './componentTheme/Switch';
-import { tabTheme } from './componentTheme/Tab';
-import { tagTheme } from './componentTheme/Tag';
+import { buttonRecipe } from './componentTheme/Button';
+import { checkboxSlotRecipe } from './componentTheme/Checkbox';
+import { inputSlotRecipe } from './componentTheme/Input';
+import { linkRecipe } from './componentTheme/Link';
+import { menuSlotRecipe } from './componentTheme/Menu';
+import { switchSlotRecipe } from './componentTheme/Switch';
+import { tabSlotRecipe } from './componentTheme/Tab';
+import { tagSlotRecipe } from './componentTheme/Tag';
 import { FONT_SIZES } from './fontSizes';
 import { FONT_WEIGHTS } from './fontWeights';
 import { FONTS } from './fonts';
@@ -24,33 +23,30 @@ import { SEMANTIC_TOKENS } from './semanticTokens';
 import { SHADOWS } from './shadows';
 import { SIZES } from './sizes';
 import { SPACE } from './space';
-import { TEXT_STYLES } from './textStyles';
 import { Z_INDEX } from './zIndex';
 
-export const system = createSystem(defaultConfig, {
+const explorerConfig = defineConfig({
+  cssVarsPrefix: 'stacks',
+  // useSystemColorMode: false,
+  // initialColorMode: 'light',
+});
+
+export const system = createSystem(defaultConfig, explorerConfig, {
   theme: {
-    useSystemColorMode: false,
-    initialColorMode: 'light',
-    cssVarPrefix: 'stacks',
     recipes: {
       button: buttonRecipe,
+      link: linkRecipe,
+    },
+    slotRecipes: {
+      checkbox: checkboxSlotRecipe,
+      input: inputSlotRecipe,
+      menu: menuSlotRecipe,
+      switch: switchSlotRecipe,
+      tab: tabSlotRecipe,
+      tag: tagSlotRecipe,
     },
     tokens: {
-      // components: {
-      //   Switch: switchTheme,
-      //   Checkbox: checkboxTheme,
-      //   Tabs: tabTheme,
-      //   Badge: badgeTheme,
-      //   Tag: tagTheme,
-      //   Input: inputTheme,
-      //   Button: buttonTheme,
-      //   Menu: menuTheme,
-      //   Link: linkTheme,
-      // },
       colors: { ...COLORS, ...NEW_COLORS },
-      semanticTokens: {
-        ...SEMANTIC_TOKENS,
-      },
       shadows: {
         ...SHADOWS,
       },
@@ -60,7 +56,7 @@ export const system = createSystem(defaultConfig, {
       lineHeights: {
         ...LINEHEIGHTS,
       },
-      zIndices: {
+      zIndex: {
         ...Z_INDEX,
       },
       fonts: {
@@ -75,7 +71,7 @@ export const system = createSystem(defaultConfig, {
       sizes: {
         ...SIZES,
       },
-      space: {
+      spacing: {
         ...SPACE,
       },
       borders: {
@@ -87,9 +83,12 @@ export const system = createSystem(defaultConfig, {
       breakpoints: {
         ...BREAKPOINTS,
       },
-      textStyles: {
-        ...TEXT_STYLES, // TODO: FIX?
-      },
+      // textStyles: {
+      //   ...TEXT_STYLES,
+      // },
+    },
+    semanticTokens: {
+      ...SEMANTIC_TOKENS,
     },
   },
 });

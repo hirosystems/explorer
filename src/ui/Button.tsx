@@ -1,8 +1,7 @@
 'use client';
 
-import { chakra, Button as CUIButton, ButtonProps as CUIButtonProps, forwardRef } from '@chakra-ui/react';
+import { chakra } from '@chakra-ui/react';
 
-import { UIComponent } from './types';
 import { buttonRecipe } from './theme/componentTheme/Button';
 
 // export type ButtonProps = CUIButtonProps & UIComponent;
@@ -12,4 +11,4 @@ import { buttonRecipe } from './theme/componentTheme/Button';
 //   </CUIButton>
 // ));
 
-export const Button = chakra("button", buttonRecipe)
+export const Button = chakra('button', buttonRecipe);

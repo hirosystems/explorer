@@ -1,7 +1,7 @@
 'use client';
 
-import { defineStyleConfig } from '@chakra-ui/react';
+import { defineRecipe } from '@chakra-ui/react';
 
-export const badgeTheme = defineStyleConfig({
-  baseStyle: {},
+export const badgeRecipe = defineRecipe({
+  base: {},
 });
