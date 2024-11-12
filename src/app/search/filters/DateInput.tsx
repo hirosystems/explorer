@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { Input } from '../../../ui/Input';
 

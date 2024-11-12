@@ -1,14 +1,10 @@
 'use client';
 
-import {
-  Textarea as CUITextarea,
-  TextareaProps as CUITextareaProps,
-  forwardRef,
-} from '@chakra-ui/react';
-import { useEffect, useRef } from 'react';
+import { Textarea as CUITextarea, TextareaProps as CUITextareaProps } from '@chakra-ui/react';
+import { forwardRef, useEffect, useRef } from 'react';
 
 export type ExpandingTextareaProps = CUITextareaProps;
-export const ExpandingTextarea = forwardRef<ExpandingTextareaProps, 'textarea'>(
+export const ExpandingTextarea = forwardRef<HTMLTextAreaElement, ExpandingTextareaProps>(
   ({ children, onInput, value, ...rest }, ref) => {
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 

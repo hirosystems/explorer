@@ -1,11 +1,12 @@
 'use client';
 
-import { Alert as CUIAlert, AlertProps as CUIAlertProps, forwardRef } from '@chakra-ui/react';
+import { AlertRoot as CUIAlert, AlertRootProps as CUIAlertRootProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type AlertProps = CUIAlertProps & UIComponent;
-export const Alert = forwardRef<AlertProps, 'div'>(({ children, size, ...rest }, ref) => (
+export type AlertProps = CUIAlertRootProps & UIComponent;
+export const Alert = forwardRef<HTMLDivElement, AlertProps>(({ children, size, ...rest }, ref) => (
   <CUIAlert
     ref={ref}
     width={size || rest.width}

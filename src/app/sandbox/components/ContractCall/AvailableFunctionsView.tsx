@@ -1,5 +1,5 @@
-import { forwardRef, useColorMode } from '@chakra-ui/react';
-import { FC } from 'react';
+import { useColorMode } from '@chakra-ui/react';
+import { FC, forwardRef } from 'react';
 
 import { Badge } from '../../../../common/components/Badge';
 import { ExplorerLink } from '../../../../common/components/ExplorerLinks';

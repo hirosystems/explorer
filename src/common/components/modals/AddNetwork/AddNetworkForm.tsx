@@ -7,9 +7,9 @@ import { FC } from 'react';
 
 import { promiseWrapper } from '../../../../common/utils/utils';
 import { Accordion } from '../../../../ui/Accordion';
-import { AccordionButton } from '../../../../ui/AccordionButton';
 import { AccordionItem } from '../../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../../ui/AccordionPanel';
+import { AccordionPanel } from '../../../../ui/AccordionItemContent';
+import { AccordionItemTrigger } from '../../../../ui/AccordionItemTrigger';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Checkbox } from '../../../../ui/Checkbox';
@@ -188,14 +188,14 @@ export const AddNetworkForm: FC = () => {
             <AccordionItem borderBottom={'none'}>
               {({ isExpanded }) => (
                 <Stack gap={4}>
-                  <AccordionButton paddingLeft={0} gap={2}>
+                  <AccordionItemTrigger paddingLeft={0} gap={2}>
                     {isExpanded ? (
                       <Icon as={CaretDown} w={3} h={3} />
                     ) : (
                       <Icon as={CaretRight} w={3} h={3} />
                     )}{' '}
                     <Text fontSize={'sm'}>BTC Explorer URLs</Text>
-                  </AccordionButton>
+                  </AccordionItemTrigger>
                   <AccordionPanel>
                     <Stack gap={4}>
                       <Field name="btcBlockBaseUrl">

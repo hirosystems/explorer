@@ -21,10 +21,10 @@ import { FilterButton } from '../../../features/txsFilterAndSort/FilterButton';
 import { AllTransactionsFilteredMessage } from '../../../features/txsFilterAndSort/TransactionMessages';
 import { useFilterAndSortState } from '../../../features/txsFilterAndSort/useFilterAndSortState';
 import { Accordion } from '../../../ui/Accordion';
-import { AccordionButton } from '../../../ui/AccordionButton';
 import { AccordionIcon } from '../../../ui/AccordionIcon';
 import { AccordionItem } from '../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../ui/AccordionPanel';
+import { AccordionPanel } from '../../../ui/AccordionItemContent';
+import { AccordionItemTrigger } from '../../../ui/AccordionItemTrigger';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
@@ -256,7 +256,7 @@ export function TransactionsPanel() {
         <AccordionItem key={tx.tx_id} border={'none'}>
           <Flex gap={'6px'}>
             <TxListItemMini tx={tx} />
-            <AccordionButton
+            <AccordionItemTrigger
               flexGrow={0}
               flexShrink={0}
               width={'30px'}
@@ -265,7 +265,7 @@ export function TransactionsPanel() {
               justifyContent={'center'}
             >
               <AccordionIcon />
-            </AccordionButton>
+            </AccordionItemTrigger>
           </Flex>
           <AccordionPanel borderTopWidth="1px">
             <TxDetails tx={tx} />

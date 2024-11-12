@@ -12,10 +12,10 @@ import { AddressArea } from '../../../common/components/transaction-item';
 import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useAddressTransactionEventsInfinite } from '../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { getAssetNameParts, microToStacksFormatted } from '../../../common/utils/utils';
-import { AccordionButton } from '../../../ui/AccordionButton';
 import { AccordionIcon } from '../../../ui/AccordionIcon';
 import { AccordionItem } from '../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../ui/AccordionPanel';
+import { AccordionPanel } from '../../../ui/AccordionItemContent';
+import { AccordionItemTrigger } from '../../../ui/AccordionItemTrigger';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
@@ -160,7 +160,7 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
               borderBottom={'none'}
             />
             {eventsCount > 0 ? (
-              <AccordionButton
+              <AccordionItemTrigger
                 flexGrow={0}
                 flexShrink={0}
                 width={8}
@@ -169,7 +169,7 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
                 justifyContent={'center'}
               >
                 <AccordionIcon />
-              </AccordionButton>
+              </AccordionItemTrigger>
             ) : null}
           </Flex>
           <AccordionPanel p={0}>

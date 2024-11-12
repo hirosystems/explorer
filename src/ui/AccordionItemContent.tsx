@@ -5,10 +5,10 @@ import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type AccordionItemProps = CUIAccordion.ItemProps & UIComponent;
-export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
+export type AccordionPanelProps = CUIAccordion.ItemBodyProps & UIComponent;
+export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(
   ({ children, size, ...rest }, ref) => (
-    <CUIAccordion.Item
+    <CUIAccordion.ItemContent
       ref={ref}
       width={size || rest.width}
       height={size || rest.height}
@@ -17,6 +17,6 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
       {...rest}
     >
       {children}
-    </CUIAccordion.Item>
+    </CUIAccordion.ItemContent>
   )
 );
