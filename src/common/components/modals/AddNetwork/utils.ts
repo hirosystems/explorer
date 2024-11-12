@@ -43,12 +43,6 @@ export const fetchCustomNetworkId: (
 ) => Promise<ChainID | undefined> = (url, isSubnet) => {
   return fetchFromApi(url)(DEFAULT_V2_INFO_ENDPOINT)
     .then(res => res.json())
-    .then(res =>
-      !isSubnet
-        ? Object.values(ChainID).includes(res.network_id)
-          ? (res.network_id as ChainID)
-          : undefined
-        : res.network_id
-    )
+    .then(res => res.network_id)
     .catch();
 };
