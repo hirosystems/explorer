@@ -1,3 +1,10 @@
+# [1.227.0](https://github.com/hirosystems/explorer/compare/v1.226.0...v1.227.0) (2024-11-12)
+
+
+### Features
+
+* allow custom network id ([eaf11cb](https://github.com/hirosystems/explorer/commit/eaf11cbef141b321d896b53bdc1873e55560043a))
+
 # [1.226.0](https://github.com/hirosystems/explorer/compare/v1.225.0...v1.226.0) (2024-11-07)
 
 
