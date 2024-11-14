@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { MempoolFeePriorities } from '@stacks/blockchain-api-client';
+import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types/generated';
 
 import { FilterMenu } from '../../common/components/FilterMenu';
 

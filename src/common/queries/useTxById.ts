@@ -7,21 +7,24 @@ import {
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_TX_EVENTS_LIMIT } from '../constants/constants';
 
 export function useTxById(
   txId?: string,
   options: any = {}
 ): UseQueryResult<Transaction | MempoolTransaction> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useQuery({
     queryKey: ['txById', txId],
-    queryFn: () => {
-      return api.transactionsApi.getTransactionById({
-        txId: txId!,
-        eventLimit: DEFAULT_TX_EVENTS_LIMIT,
-        eventOffset: 0,
+    queryFn: async () => {
+      if (!txId) return undefined;
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
+        params: {
+          path: { tx_id: txId },
+          query: { event_limit: DEFAULT_TX_EVENTS_LIMIT, event_offset: 0 },
+        },
       });
     },
     staleTime: Infinity,
@@ -34,14 +37,16 @@ export function useSuspenseTxById(
   txId: string,
   options: any = {}
 ): UseSuspenseQueryResult<Transaction | MempoolTransaction> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useSuspenseQuery({
     queryKey: ['txById', txId],
-    queryFn: () => {
-      return api.transactionsApi.getTransactionById({
-        txId,
-        eventLimit: DEFAULT_TX_EVENTS_LIMIT,
-        eventOffset: 0,
+    queryFn: async () => {
+      if (!txId) return undefined;
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
+        params: {
+          path: { tx_id: txId },
+          query: { event_limit: DEFAULT_TX_EVENTS_LIMIT, event_offset: 0 },
+        },
       });
     },
     staleTime: Infinity,

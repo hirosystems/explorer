@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 
-import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
+import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { UIBlockType, UISingleBlock } from '../types';
 import { useSubscribeBlocksUIBlock } from './useSubscribeBlocksUIBlock';

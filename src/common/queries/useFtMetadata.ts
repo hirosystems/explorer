@@ -6,16 +6,16 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 
-import { useApi } from '../api/useApi';
+import { useMetadataApi } from '../api/useApi';
 
 export function useFtMetadata(
   contractId?: string,
   options: any = {}
 ): UseQueryResult<FtMetadataResponse> {
-  const api = useApi();
+  const tokenMetadataApi = useMetadataApi();
   return useQuery({
     queryKey: ['ft-metadata', contractId],
-    queryFn: () => api.tokenMetadataApi?.getFtMetadata(contractId!),
+    queryFn: () => tokenMetadataApi?.getFtMetadata(contractId!),
     retry: false,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
@@ -28,10 +28,10 @@ export function useSuspenseFtMetadata(
   contractId: string,
   options: any = {}
 ): UseSuspenseQueryResult<FtMetadataResponse> {
-  const api = useApi();
+  const tokenMetadataApi = useMetadataApi();
   return useSuspenseQuery({
     queryKey: ['ft-metadata', contractId],
-    queryFn: () => api.tokenMetadataApi?.getFtMetadata(contractId),
+    queryFn: () => tokenMetadataApi?.getFtMetadata(contractId),
     retry: false,
     staleTime: Infinity,
     refetchOnWindowFocus: false,

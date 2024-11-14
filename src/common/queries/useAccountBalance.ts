@@ -1,56 +1,45 @@
-import {
-  UseQueryOptions,
-  UseSuspenseQueryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { ONE_MINUTE } from './query-stale-time';
 
 const ACCOUNT_BALANCE_QUERY_KEY = 'accountBalance';
 
-export function useAccountBalance(
-  address?: string,
-  options: Omit<UseQueryOptions<any, any, AddressBalanceResponse, any>, 'queryKey' | 'queryFn'> = {}
-) {
-  const api = useApi();
+export function useAccountBalance(address?: string) {
+  const apiClient = useApiClient();
   return useQuery({
     queryKey: [ACCOUNT_BALANCE_QUERY_KEY, address],
-    queryFn: () => {
+    queryFn: async () => {
       if (!address) return undefined;
-      const response = api.accountsApi.getAccountBalance({
-        principal: address,
-      });
-      return response;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v1/address/{principal}/balances',
+        {
+          params: { path: { principal: address } },
+        }
+      );
     },
     staleTime: ONE_MINUTE,
     enabled: !!address,
-    ...options,
   });
 }
 
-export function useSuspenseAccountBalance(
-  address?: string,
-  options: Omit<
-    UseSuspenseQueryOptions<any, any, AddressBalanceResponse, any>,
-    'queryKey' | 'queryFn'
-  > = {}
-) {
-  const api = useApi();
+export function useSuspenseAccountBalance(address?: string) {
+  const apiClient = useApiClient();
   if (!address) throw new Error('Address is required');
   return useSuspenseQuery({
     queryKey: [ACCOUNT_BALANCE_QUERY_KEY, address],
-    queryFn: () => {
-      const response = api.accountsApi.getAccountBalance({
-        principal: address,
-      });
-
-      return response;
+    queryFn: async () => {
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v1/address/{principal}/balances',
+        {
+          params: { path: { principal: address } },
+        }
+      );
     },
     staleTime: ONE_MINUTE,
-    ...options,
+    refetchOnWindowFocus: true, // keep account balance up to date when user switches back to tab
   });
 }

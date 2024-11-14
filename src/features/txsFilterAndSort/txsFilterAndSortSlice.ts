@@ -1,13 +1,16 @@
 import { PayloadAction, Reducer, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import {
-  GetMempoolTransactionListOrderByEnum,
-  GetMempoolTransactionListOrderEnum,
-  GetTransactionListOrderEnum,
-} from '@stacks/blockchain-api-client';
-import { GetTransactionListSortByEnum } from '@stacks/blockchain-api-client';
+import { operations } from '@stacks/blockchain-api-client/lib/generated/schema';
 
 import { RootState } from '../../common/state/store';
+
+type MempoolQuery = NonNullable<operations['get_mempool_transaction_list']['parameters']['query']>;
+type MempoolOrderBy = Exclude<MempoolQuery['order_by'], undefined>;
+type MempoolOrder = Exclude<MempoolQuery['order'], undefined>;
+
+type TxsQuery = NonNullable<operations['get_transaction_list']['parameters']['query']>;
+type TxSortBy = Exclude<TxsQuery['sort_by'], undefined>;
+type TxOrder = Exclude<TxsQuery['order'], undefined>;
 
 export enum TxFilterAndSortTypes {
   HomepageTxFilter = 'HomepageTxFilter',
@@ -23,19 +26,19 @@ export type TxFilters = { [key in TxFilterAndSortTypes]: TxFilterAndSortState };
 
 export interface TxFilterAndSortState {
   activeFilters: string[];
-  activeMempoolTxsSort: GetMempoolTransactionListOrderByEnum;
-  activeMempoolTxsOrder: GetMempoolTransactionListOrderEnum;
-  activeConfirmedTxsSort: GetTransactionListSortByEnum;
-  activeConfirmedTxsOrder: GetTransactionListOrderEnum;
+  activeMempoolTxsSort: MempoolOrderBy;
+  activeMempoolTxsOrder: MempoolOrder;
+  activeConfirmedTxsSort: TxSortBy;
+  activeConfirmedTxsOrder: TxOrder;
   isVisible: boolean;
 }
 
 export const initialState: TxFilterAndSortState = {
   activeFilters: [],
-  activeMempoolTxsSort: GetMempoolTransactionListOrderByEnum.age,
-  activeMempoolTxsOrder: GetMempoolTransactionListOrderEnum.desc,
-  activeConfirmedTxsSort: GetTransactionListSortByEnum.burn_block_time,
-  activeConfirmedTxsOrder: GetTransactionListOrderEnum.desc,
+  activeMempoolTxsSort: 'age',
+  activeMempoolTxsOrder: 'desc',
+  activeConfirmedTxsSort: 'burn_block_time',
+  activeConfirmedTxsOrder: 'desc',
   isVisible: false,
 };
 
@@ -48,26 +51,17 @@ const createSliceOptions = (filterType: TxFilterAndSortTypes) => ({
     },
     setMempoolTxsActiveSort: (
       state: TxFilterAndSortState,
-      action: PayloadAction<GetMempoolTransactionListOrderByEnum>
+      action: PayloadAction<MempoolOrderBy>
     ) => {
       state.activeMempoolTxsSort = action.payload;
     },
-    setMempoolTxsActiveOrder: (
-      state: TxFilterAndSortState,
-      action: PayloadAction<GetMempoolTransactionListOrderEnum>
-    ) => {
+    setMempoolTxsActiveOrder: (state: TxFilterAndSortState, action: PayloadAction<TxOrder>) => {
       state.activeMempoolTxsOrder = action.payload;
     },
-    setConfirmedTxsActiveSort: (
-      state: TxFilterAndSortState,
-      action: PayloadAction<GetTransactionListSortByEnum>
-    ) => {
+    setConfirmedTxsActiveSort: (state: TxFilterAndSortState, action: PayloadAction<TxSortBy>) => {
       state.activeConfirmedTxsSort = action.payload;
     },
-    setConfirmedTxsActiveOrder: (
-      state: TxFilterAndSortState,
-      action: PayloadAction<GetTransactionListOrderEnum>
-    ) => {
+    setConfirmedTxsActiveOrder: (state: TxFilterAndSortState, action: PayloadAction<TxOrder>) => {
       state.activeConfirmedTxsOrder = action.payload;
     },
   },

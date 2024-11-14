@@ -1,16 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { AddressStxBalanceResponse } from '@stacks/stacks-blockchain-api-types';
-
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { THREE_MINUTES } from './query-stale-time';
 
 export function useAccountStxBalance(principal: string) {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useQuery({
     queryKey: ['stx-balance', principal],
-    queryFn: () =>
-      api.accountsApi.getAccountStxBalance({ principal }) as Promise<AddressStxBalanceResponse>,
+    queryFn: async () => {
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/address/{principal}/stx', {
+        params: { path: { principal } },
+      });
+    },
     staleTime: THREE_MINUTES,
   });
 }

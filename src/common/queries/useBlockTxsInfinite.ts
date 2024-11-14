@@ -1,15 +1,15 @@
 import {
+  InfiniteData,
   UseInfiniteQueryResult,
-  UseSuspenseInfiniteQueryOptions,
   UseSuspenseInfiniteQueryResult,
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { InfiniteData } from '@tanstack/react-query';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { MAX_BLOCK_TRANSACTIONS_PER_CALL } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
@@ -19,15 +19,18 @@ export function useBlockTxsInfinite(
   blockHash?: string,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useInfiniteQuery({
     queryKey: ['blockTxsInfinite', blockHash],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getTransactionsByBlockHash({
-        blockHash: blockHash!,
-        limit: MAX_BLOCK_TRANSACTIONS_PER_CALL,
-        offset: pageParam || 0,
-      }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!blockHash) return undefined;
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/block/{block_hash}', {
+        params: {
+          path: { block_hash: blockHash },
+          query: { limit: MAX_BLOCK_TRANSACTIONS_PER_CALL, offset: pageParam || 0 },
+        },
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
@@ -40,15 +43,18 @@ export function useSuspenseBlockTxsInfinite(
   blockHash: string,
   options: any = {}
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useSuspenseInfiniteQuery({
     queryKey: ['blockTxsInfinite', blockHash],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getTransactionsByBlockHash({
-        blockHash,
-        limit: MAX_BLOCK_TRANSACTIONS_PER_CALL,
-        offset: pageParam || 0,
-      }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!blockHash) return undefined;
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/block/{block_hash}', {
+        params: {
+          path: { block_hash: blockHash },
+          query: { limit: MAX_BLOCK_TRANSACTIONS_PER_CALL, offset: pageParam || 0 },
+        },
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,

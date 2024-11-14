@@ -49,7 +49,7 @@
     "@reduxjs/toolkit": "1.9.7",
     "@sentry/nextjs": "8.26.0",
     "@stacks/auth": "6.15.0",
-    "@stacks/blockchain-api-client": "7.12.0",
+    "@stacks/blockchain-api-client": "8.2.2",
     "@stacks/common": "6.15.1-pr.0bcf867e.0+0bcf867e",
     "@stacks/connect": "7.7.1",
     "@stacks/connect-react": "22.4.2",
@@ -85,6 +85,8 @@
     "next": "14.2.13",
     "nookies": "2.5.2",
     "onigasm": "2.2.5",
+    "openapi-fetch": "0.13.0",
+    "openapi-typescript-helpers": "0.0.15",
     "pluralize": "8.0.0",
     "preact-render-to-string": "5.1.19",
     "prismjs": "1.29.0",
@@ -164,7 +166,8 @@
     "react-test-renderer": "18.2.0",
     "storybook": "8.3.5",
     "ts-unused-exports": "8.0.0",
-    "typescript": "5.3.2"
+    "typescript": "5.3.2",
+    "whatwg-fetch": "3.6.20"
   },
   "homepage": "https://explorer.hiro.so",
   "license": "MIT",

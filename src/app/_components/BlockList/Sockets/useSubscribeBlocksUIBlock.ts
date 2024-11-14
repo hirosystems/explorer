@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
-import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
+import { NakamotoBlock, StacksApiSocketClient } from '@stacks/blockchain-api-client';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 

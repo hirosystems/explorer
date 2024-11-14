@@ -1,11 +1,11 @@
+import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { useQuery } from '@tanstack/react-query';
 
-import { useApi } from '../api/useApi';
-
 export function useFeeTransfer() {
-  const api = useApi();
+  const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;
+
   return useQuery({
     queryKey: ['transfer-fees'],
-    queryFn: () => api.feesApi.getFeeTransfer(),
+    queryFn: () => fetch(`${activeNetworkUrl}/v2/fees/transfer`).then(res => res.json()),
   });
 }

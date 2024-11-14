@@ -1,7 +1,7 @@
 import { UseQueryResult, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import { BurnBlock, NakamotoBlockListResponse } from '@stacks/blockchain-api-client';
+import { BurnBlock, OperationResponse } from '@stacks/blockchain-api-client';
 
 import { useSuspenseInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import {
@@ -38,9 +38,13 @@ export function useBlocksGroupedInitialBlockList(blockListLimit: number) {
       queries: uniqueBtcBlocks.map(btcBlock => {
         return getQuery(btcBlock.burn_block_height, 10);
       }),
-      combine: (response: UseQueryResult<NakamotoBlockListResponse, Error>[]) => {
-        const result = response.flatMap(data => data.data?.results || []);
-        return result;
+      combine: (
+        response: UseQueryResult<
+          OperationResponse['/extended/v2/burn-blocks/{height_or_hash}/blocks'] | undefined,
+          Error
+        >[]
+      ) => {
+        return response.flatMap(data => data.data?.results || []);
       },
     };
   }, [uniqueBtcBlocks, getQuery]);

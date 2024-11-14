@@ -23,6 +23,7 @@ jest.mock('next/navigation', () => ({
 
 jest.mock('@stacks/blockchain-api-client', () => ({
   connectWebSocketClient: jest.fn(),
+  createClient: jest.fn(() => ({ use: jest.fn() })),
 }));
 
 jest.mock('../../components/modals/AddNetwork/utils', () => ({
@@ -70,6 +71,7 @@ describe('GlobalContext', () => {
         btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
         btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
         btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
+        apiClient={{ GET: () => {} }}
       >
         <GlobalContextTestComponent />
       </GlobalContextProvider>
@@ -93,6 +95,7 @@ describe('GlobalContext', () => {
         btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
         btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
         btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
+        apiClient={{ GET: () => {} }}
       >
         <GlobalContextTestComponent />
       </GlobalContextProvider>

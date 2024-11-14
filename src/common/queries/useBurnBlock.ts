@@ -8,14 +8,15 @@ import {
 
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
 export function useFetchBurnBlock(): (
   heightOrHash: string | number
 ) => Promise<BurnBlock | undefined> {
-  const api = useApi();
+  const apiClient = useApiClient();
   const queryClient = useQueryClient();
 
   return async (heightOrHash: string | number) => {
@@ -27,8 +28,15 @@ export function useFetchBurnBlock(): (
     }
 
     // Fetch the data and update the cache
-    const fetchBurnBlock = async (): Promise<BurnBlock | undefined> => {
-      return api.burnBlocksApi.getBurnBlock({ heightOrHash }).catch(() => undefined);
+    const fetchBurnBlock = async () => {
+      if (!heightOrHash) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/burn-blocks/{height_or_hash}',
+        {
+          params: { path: { height_or_hash: heightOrHash } },
+        }
+      );
     };
 
     return queryClient.fetchQuery<BurnBlock | undefined>({
@@ -53,31 +61,23 @@ export function useFetchMultipleBurnBlocks(): (
   };
 }
 
-export function useGetBurnBlockQuery() {
-  const api = useApi();
-  return (heightOrHash: string | number) => ({
-    queryKey: [BURN_BLOCKS_QUERY_KEY, heightOrHash],
-    queryFn: () =>
-      api.burnBlocksApi.getBurnBlock({
-        heightOrHash,
-      }),
-    cacheTime: 15 * 60 * 1000,
-  });
-}
-
 export function useBurnBlock(
   heightOrHash: number | string,
   options: any = {}
 ): UseQueryResult<BurnBlock> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useQuery({
     queryKey: ['burn-block', heightOrHash],
-    queryFn: () =>
-      api.burnBlocksApi
-        .getBurnBlock({
-          heightOrHash,
-        })
-        .catch(() => undefined),
+    queryFn: async () => {
+      if (!heightOrHash) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/burn-blocks/{height_or_hash}',
+        {
+          params: { path: { height_or_hash: heightOrHash } },
+        }
+      );
+    },
     staleTime: Infinity,
     ...options,
   });
@@ -87,10 +87,19 @@ export function useSuspenseBurnBlock(
   heightOrHash: number | string,
   options: any = {}
 ): UseSuspenseQueryResult<BurnBlock> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useSuspenseQuery({
     queryKey: ['burn-block', heightOrHash],
-    queryFn: () => api.burnBlocksApi.getBurnBlock({ heightOrHash }).catch(() => undefined),
+    queryFn: async () => {
+      if (!heightOrHash) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/burn-blocks/{height_or_hash}',
+        {
+          params: { path: { height_or_hash: heightOrHash } },
+        }
+      );
+    },
     staleTime: Infinity,
     ...options,
   });

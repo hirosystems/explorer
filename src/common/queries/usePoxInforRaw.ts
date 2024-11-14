@@ -2,8 +2,6 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { useGlobalContext } from '../context/useGlobalContext';
 
-// import {  } from '@stacks/stacks-blockchain-api-types'; // TODO: ask for PoxInfo type
-
 interface PoxInfo {
   contract_id: string;
   pox_activation_threshold_ustx: number;

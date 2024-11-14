@@ -1,8 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { BurnBlock } from '@stacks/blockchain-api-client';
-import { NakamotoBlock } from '@stacks/blockchain-api-client/src/generated/models';
+import { BurnBlock, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { useBlockListContext } from '../BlockListContext';
 import { useBlockListWebSocketUIBlock } from '../Sockets/useBlockListWebSocketUIBlock';

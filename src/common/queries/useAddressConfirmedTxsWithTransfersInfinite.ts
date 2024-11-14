@@ -12,7 +12,8 @@ import {
   AddressTransactionWithTransfers,
 } from '@stacks/stacks-blockchain-api-types';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
@@ -22,22 +23,29 @@ const ADDRESS_CONFIRMED_TXS_WITH_TRANSFERS_INFINITE_QUERY_KEY =
   'addressConfirmedTxsWithTransfersInfinite';
 
 export function useAddressConfirmedTxsWithTransfersInfinite(
-  address?: string,
+  principal?: string,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<AddressTransactionWithTransfers>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useInfiniteQuery({
-    queryKey: [ADDRESS_CONFIRMED_TXS_WITH_TRANSFERS_INFINITE_QUERY_KEY, address],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.accountsApi.getAccountTransactionsWithTransfers({
-        principal: address!,
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam || 0,
-      }),
+    queryKey: [ADDRESS_CONFIRMED_TXS_WITH_TRANSFERS_INFINITE_QUERY_KEY, principal],
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!principal) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v1/address/{principal}/transactions_with_transfers',
+        {
+          params: {
+            path: { principal },
+            query: { limit: DEFAULT_LIST_LIMIT, offset: pageParam || 0 },
+          },
+        }
+      );
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
-    enabled: !!address,
+    enabled: !!principal,
     ...options,
   });
 }
@@ -47,16 +55,22 @@ export function useAddressTransactionEventsInfinite(
   txId?: string,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<AddressTransactionEvent>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useInfiniteQuery({
     queryKey: [ADDRESS_CONFIRMED_TXS_WITH_TRANSFERS_INFINITE_QUERY_KEY, address, txId],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getAddressTransactionEvents({
-        address: address!,
-        txId: txId!,
-        limit: 5,
-        offset: pageParam || 0,
-      }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!address || !txId) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/addresses/{address}/transactions/{tx_id}/events',
+        {
+          params: {
+            path: { address, tx_id: txId },
+            query: { limit: DEFAULT_LIST_LIMIT, offset: pageParam || 0 },
+          },
+        }
+      );
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
@@ -69,29 +83,22 @@ export function useSuspenseAddressTransactionInfinite(
   address?: string,
   options: any = {}
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<AddressTransaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   if (!address) throw new Error('Address is required');
   return useSuspenseInfiniteQuery({
     queryKey: [ADDRESS_CONFIRMED_TXS_WITH_TRANSFERS_INFINITE_QUERY_KEY, address],
-    queryFn: ({ pageParam }: { pageParam: number }) => {
-      const response = api.transactionsApi
-        .getAddressTransactions({
-          address: address,
-          limit: DEFAULT_LIST_LIMIT,
-          offset: pageParam || 0,
-        })
-        .catch(error => {
-          if (error.status === 404) {
-            return {
-              limit: DEFAULT_LIST_LIMIT,
-              offset: pageParam || 0,
-              total: 0,
-              results: [],
-            } as GenericResponseType<AddressTransaction>;
-          }
-          throw new Error('Failed to fetch transactions.');
-        });
-      return response;
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!address) return undefined;
+      return await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v2/addresses/{address}/transactions',
+        {
+          params: {
+            path: { address },
+            query: { limit: DEFAULT_LIST_LIMIT, offset: pageParam || 0 },
+          },
+        }
+      );
     },
     getNextPageParam,
     initialPageParam: 0,
