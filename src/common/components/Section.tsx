@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import { ReactNode } from 'react';
 
 import { Box } from '../../ui/Box';

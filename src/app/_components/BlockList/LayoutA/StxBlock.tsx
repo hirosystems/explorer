@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import * as React from 'react';
 import { ReactNode, memo } from 'react';
 

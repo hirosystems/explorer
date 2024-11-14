@@ -1,5 +1,5 @@
-import { Link } from '@chakra-ui/next-js';
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
+import { NextLink } from '@/ui/NextLink';
 import { FC, ReactNode } from 'react';
 
 import { Tooltip } from '../../../ui/Tooltip';
@@ -14,8 +14,8 @@ export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean;
   const hoverBg = useColorModeValue(`slate.100`, `slate.900`);
   const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
-    <Tooltip placement="left" label={label} key={url}>
-      <Link
+    <Tooltip positioning={{ placement: 'left' }} content={label} key={url}>
+      <NextLink
         href={url}
         display={'flex'}
         bg={isSelected ? selectedBg : undefined}
@@ -30,7 +30,7 @@ export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean;
         }}
       >
         {icon}
-      </Link>
+      </NextLink>
     </Tooltip>
   );
 };

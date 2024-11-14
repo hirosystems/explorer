@@ -1,4 +1,4 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import { CaretDown, CaretUp } from '@phosphor-icons/react';
 import { FC } from 'react';
 

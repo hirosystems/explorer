@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import { ArrowBendDownLeft } from '@phosphor-icons/react';
 import { memo } from 'react';
 

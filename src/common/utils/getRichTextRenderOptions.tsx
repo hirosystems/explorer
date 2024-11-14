@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { Options } from '@contentful/rich-text-react-renderer';
 import { BLOCKS, Block, INLINES, Inline, MARKS } from '@contentful/rich-text-types';
 import { ReactNode } from 'react';

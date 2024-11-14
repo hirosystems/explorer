@@ -1,18 +1,13 @@
 'use client';
 
-import {
-  Tabs as CUITabs,
-  TabsProps as CUITabsProps,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+import { TabsRoot as CUITabs, TabsRootProps as CUITabsProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type TabsProps = CUITabsProps & UIComponent;
-export const Tabs = forwardRef<TabsProps, 'div'>(({ children, size, ...rest }, ref) => (
+export const Tabs = forwardRef<HTMLDivElement, TabsProps>(({ children, size, ...rest }, ref) => (
   <CUITabs
-    variant={'soft-rounded'}
     ref={ref}
     width={size || rest.width}
     height={size || rest.height}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
@@ -10,9 +10,9 @@ import { useAddressConfirmedTxsWithTransfersInfinite } from '../../../../common/
 import { useCoreApiInfo } from '../../../../common/queries/useCoreApiInfo';
 import { getStackingStartBlockHeight } from '../../../../common/utils/accounts';
 import { Box } from '../../../../ui/Box';
-import { ProgressCircle } from '../../../../ui/ProgressCircle';
-import { CircularProgressLabel } from '../../../../ui/CircularProgressLabel';
 import { Icon } from '../../../../ui/Icon';
+import { ProgressCircle } from '../../../../ui/ProgressCircle';
+import { ProgressCircleValueText } from '../../../../ui/ProgressCircleValueText';
 import { Stack } from '../../../../ui/Stack';
 import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption, Title } from '../../../../ui/typography';
@@ -36,7 +36,7 @@ export const StackingPercentage = ({
         <Stack gap={2} py={4}>
           <Caption>Stacking progress</Caption>
           <Stack gap={2} alignItems="center">
-            <ProgressCircle isIndeterminate color={progressColor} />
+            <ProgressCircle value={null} color={progressColor} />
             <Caption>Calculating...</Caption>
           </Stack>
         </Stack>
@@ -60,7 +60,9 @@ export const StackingPercentage = ({
         <Stack gap={2} alignItems="center">
           {isStacking ? (
             <ProgressCircle value={stackingPercentage} color={progressColor} size={'180px'}>
-              <CircularProgressLabel>{`${Math.round(stackingPercentage)}%`}</CircularProgressLabel>
+              <ProgressCircleValueText>{`${Math.round(
+                stackingPercentage
+              )}%`}</ProgressCircleValueText>
             </ProgressCircle>
           ) : (
             <Circle mx="auto" size="48px" mb="16px" bg={'invert'}>

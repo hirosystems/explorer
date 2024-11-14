@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
 
 import { Box, BoxProps } from '../../ui/Box';
@@ -17,14 +16,12 @@ function capitalizeFirstLetter(string: string) {
 export const ErrorMessageLayout: React.FC<
   { title: string; errorStatusCode?: number; message: string; action: any } & BoxProps
 > = ({ title, message, errorStatusCode, action }) => {
-  const colorMode = useColorMode().colorMode;
   return (
     <Box py="32px" textAlign="center">
       {errorStatusCode ? (
         <>
           <Circle size="72px" mx="auto" borderWidth={'1px'} mb={'14px'}>
             <Icon as={QuestionOctagon} size="24px" />
-            {/*<TbAlertOctagon size="72px" />*/}
           </Circle>
           <Text fontSize="32px" fontWeight="bold" color={'gray.600'}>
             {errorStatusCode}
@@ -33,7 +30,6 @@ export const ErrorMessageLayout: React.FC<
       ) : (
         <Circle size="72px" mx="auto" borderWidth={'1px'} mb={'14px'}>
           <Icon as={QuestionOctagon} size="24px" />
-          {/*<TbAlertOctagon size="72px" />*/}
         </Circle>
       )}
       <Text mb={'12px'} fontSize="16px">

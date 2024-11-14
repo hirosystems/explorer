@@ -1,16 +1,15 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
+import { FlexProps } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { TxLink } from '../../../../common/components/ExplorerLinks';
-import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
 import { StatSection } from '../../../_components/Stats/StatSection';
 
 export const Transaction: FC<
-  GridProps & { txId: string; marketCapRank: number | null | undefined }
-> = ({ marketCapRank, txId, ...gridProps }) => {
+  FlexProps & { txId: string; marketCapRank: number | null | undefined }
+> = ({ marketCapRank, txId, ...flexProps }) => {
   const colorMode = useColorMode().colorMode;
   return (
     <StatSection
@@ -32,7 +31,7 @@ export const Transaction: FC<
           Market Cap Rank: {marketCapRank || 'N/A'}
         </Flex>
       }
-      {...gridProps}
+      {...flexProps}
     />
   );
 };

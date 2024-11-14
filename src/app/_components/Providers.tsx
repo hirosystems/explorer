@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode } from 'react';
 import { CookiesProvider } from 'react-cookie';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 
 import { IS_BROWSER } from '../../common/constants/constants';
 import { store } from '../../common/state/store';
@@ -38,18 +38,34 @@ export const Providers: FC<{ headerCookies: string | null; children: ReactNode }
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
   const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
+  /*
+  TODO: rethink the order of the providers. 
+  Reasoning:
+QueryClientProvider - Should be high in the tree as it manages data fetching and caching that other providers might need
+ReduxProvider - Global state management that should be available to most other providers
+CookiesProvider - Cookie management that authentication and UI might need
+Connect - Authentication provider that might need access to state, queries, and cookies
+ChakraProvider - UI layer should be innermost as it primarily affects components and might need access to auth state, cookies, etc.
+This order ensures that each provider has access to the functionality it might depend on from providers above it in the tree.
+  */
   return (
     <CookiesProvider>
-      <UIProvider cookies={cookies}>
-        <Provider store={store}>
-          <AppConfig
+      <UIProvider
+        // TODO: rename to something else like ChakraProvider. The Provider only deals with things that we get from Chakra.
+        // cookies={cookies}
+        colorModeProps={{
+          defaultTheme: 'dark', // TODO: make this dynamic
+        }}
+      >
+        <ReduxProvider store={store}>
+          <AppConfig // TODO: rename to something else like SessionProvider
             queryNetworkMode={queryNetworkMode}
             queryApiUrl={queryApiUrl}
             querySubnet={querySubnet}
           >
             <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
           </AppConfig>
-        </Provider>
+        </ReduxProvider>
       </UIProvider>
     </CookiesProvider>
   );

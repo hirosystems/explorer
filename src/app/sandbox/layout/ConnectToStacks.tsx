@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import React, { FC } from 'react';
 
 import { useAppDispatch } from '../../../common/state/hooks';

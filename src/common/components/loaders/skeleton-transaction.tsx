@@ -1,7 +1,6 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 
 import { PageTitle } from '../../../app/_components/PageTitle';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';

@@ -1,4 +1,4 @@
-import { Link as NextLink } from '@chakra-ui/next-js';
+import { NextLink } from '@/ui/NextLink';
 import { ArrowSquareOut, Atom, ListChecks } from '@phosphor-icons/react';
 import React, { FC } from 'react';
 

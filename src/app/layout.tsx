@@ -22,7 +22,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <GlobalContextProvider headerCookies={headersList.get('cookie')}>
+        <GlobalContextProvider 
+        // TODO: this should be in providers
+        headerCookies={headersList.get('cookie')}> 
           <Providers headerCookies={headersList.get('cookie')}>
             <PageWrapper tokenPrice={tokenPrice} statusBarContent={statusBarContent}>
               {children}

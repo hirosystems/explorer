@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Text, TextProps } from '../../ui/Text';
+import { useColorModeValue } from '@/components/ui/color-mode';
 
 export function ListHeader({ children, ...textProps }: { children: ReactNode } & TextProps) {
   const color = useColorModeValue('slate.700', 'slate.250');

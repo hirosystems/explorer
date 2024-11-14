@@ -10,7 +10,6 @@ import { buildUrl } from '../../common/utils/buildUrl';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Link, LinkProps } from '../../ui/Link';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 
 const FooterLink: FC<LinkProps> = ({ children, href, target, rel }) => {
   return (
@@ -23,8 +22,6 @@ const FooterLink: FC<LinkProps> = ({ children, href, target, rel }) => {
 export const Footer: FC = () => {
   const network = useGlobalContext().activeNetwork;
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
-  const colorMode = useColorMode().colorMode;
 
   return (
     <Box

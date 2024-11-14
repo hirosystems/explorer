@@ -1,16 +1,17 @@
+import { useColorMode } from '@/components/ui/color-mode';
 import type { Meta, StoryObj } from '@storybook/react';
+import { useTheme } from 'next-themes';
 
 import { Box } from '../ui/Box';
 import { Flex } from '../ui/Flex';
 import { Stack } from '../ui/Stack';
 import { Text } from '../ui/Text';
-import { useColorMode } from '../ui/hooks/useColorMode';
-import { theme } from '../ui/theme/theme';
 
 const customShadows = ['elevation1', 'elevation2', 'elevation3'];
 
 const ElevationDemo = () => {
   const { colorMode } = useColorMode();
+  const theme = useTheme(); // TODO: v3 upgrade. this might be broken
 
   return (
     <Stack gap={8}>

@@ -1,4 +1,4 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import pluralize from 'pluralize';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';

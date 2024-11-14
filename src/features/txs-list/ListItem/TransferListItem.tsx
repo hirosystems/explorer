@@ -1,6 +1,5 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
-import * as React from 'react';
 import { FC, memo, useMemo } from 'react';
 
 import { AddressTransactionWithTransfers } from '@stacks/blockchain-api-client/lib/types';

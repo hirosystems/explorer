@@ -1,4 +1,3 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
@@ -16,6 +15,7 @@ import { Spinner } from '../../../ui/Spinner';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption, Title } from '../../../ui/typography';
+import { useColorModeValue } from '@/components/ui/color-mode';
 
 const ellipsisStyle: React.CSSProperties = {
   whiteSpace: 'nowrap',

@@ -1,18 +1,17 @@
 'use client';
 
 import {
-  InputRightElement as CUIInputRightElement,
-  InputElementProps as CUIInputRightElementProps,
-  forwardRef,
-  useColorMode,
+  TagStartElement as CUITagStartElement,
+  TagStartElementProps as CUITagStartElementProps,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type InputRightElementProps = CUIInputRightElementProps & UIComponent;
-export const InputRightElement = forwardRef<InputRightElementProps, 'div'>(
+export type TagStartElementProps = CUITagStartElementProps & UIComponent;
+export const TagStartElement = forwardRef<HTMLDivElement, TagStartElementProps>(
   ({ children, size, ...rest }, ref) => (
-    <CUIInputRightElement
+    <CUITagStartElement
       ref={ref}
       width={size || rest.width}
       height={size || rest.height}
@@ -21,6 +20,6 @@ export const InputRightElement = forwardRef<InputRightElementProps, 'div'>(
       {...rest}
     >
       {children}
-    </CUIInputRightElement>
+    </CUITagStartElement>
   )
 );

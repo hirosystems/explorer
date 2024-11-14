@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
 
@@ -40,7 +40,7 @@ export const HoldersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
+  <Th py={3} px={6} border="none" css={isFirst ? mobileBorderCss : {}} width="fit-content">
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -130,7 +130,7 @@ const HolderTableRow = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss}>
+      <Td py={3} px={6} css={mobileBorderCss}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {index + 1}
         </Text>

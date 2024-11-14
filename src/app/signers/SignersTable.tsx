@@ -1,8 +1,8 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
+import { useColorModeValue } from '../../components/ui/color-mode';
 
 import { CopyButton } from '../../common/components/CopyButton';
 import { ExplorerLink } from '../../common/components/ExplorerLinks';
@@ -24,7 +24,6 @@ import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { CycleFilter } from './CycleFilter';
-import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 import { mobileBorderCss } from './consts';
 import {
@@ -33,6 +32,7 @@ import {
 } from './data/signer-metrics-hooks';
 import { PoxSigner, useSuspensePoxSigners } from './data/useSigners';
 import { SignersTableSkeleton } from './skeleton';
+import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { getSignerKeyName } from './utils';
 
 const StyledTable = styled(Table)`
@@ -52,16 +52,10 @@ export const SignersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th
-    py={3}
-    px={6}
-    border="none"
-    sx={isFirst ? mobileBorderCss : {}}
-    width="fit-content"
-    position={isFirst ? 'sticky' : 'unset'}
+
+  <Th py={3} px={6} border="none" css={isFirst ? mobileBorderCss : {}} width="fit-content" position={isFirst ? 'sticky' : 'unset'}
     left={0}
-    bg="surface"
-  >
+    bg="surface">
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -151,7 +145,7 @@ export const SignerTableRow = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss} position={'sticky'} left={0} bg="surface">
+      <Td py={3} px={6} css={mobileBorderCss} position={'sticky'} left={0} bg="surface">
         <Flex
           gap={2}
           alignItems="center"
@@ -174,7 +168,7 @@ export const SignerTableRow = ({
             initialValue={signerKey}
             aria-label={'copy signer key'}
             size={5}
-            sx={{
+            css={{
               opacity: isSignerKeyHovered ? 1 : 0,
               position: 'relative',
               transition: 'opacity 0.4s ease-in-out',

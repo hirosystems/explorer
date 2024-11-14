@@ -1,17 +1,17 @@
 'use client';
 
 import {
-  TagRightIcon as CUITagRightIcon,
-  IconProps as CUITagRightIconProps,
-  forwardRef,
+  TagEndElement as CUITagEndElement,
+  TagEndElementProps as CUITagEndElementProps,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type TagRightIconProps = CUITagRightIconProps & UIComponent;
-export const TagRightIcon = forwardRef<TagRightIconProps, 'div'>(
+export type TagEndElementProps = CUITagEndElementProps & UIComponent;
+export const TagEndElement = forwardRef<HTMLDivElement, TagEndElementProps>(
   ({ children, size, ...rest }, ref) => (
-    <CUITagRightIcon
+    <CUITagEndElement
       ref={ref}
       width={size || rest.width}
       height={size || rest.height}
@@ -20,6 +20,6 @@ export const TagRightIcon = forwardRef<TagRightIconProps, 'div'>(
       {...rest}
     >
       {children}
-    </CUITagRightIcon>
+    </CUITagEndElement>
   )
 );

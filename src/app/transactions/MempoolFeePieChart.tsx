@@ -1,4 +1,5 @@
-import { useColorModeValue, useTheme } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
+import { useTheme } from 'next-themes';
 import { Cell, Pie, PieChart } from 'recharts';
 
 const pieChartWidth = 215;

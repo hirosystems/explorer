@@ -1,4 +1,5 @@
-import { StackDivider, VStack, useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
+import { StackSeparator, VStack } from '@chakra-ui/react';
 import {
   CaretCircleDoubleUp,
   CaretCircleDown,
@@ -78,8 +79,8 @@ function MempoolFeePriorityCard({
         </Text>
       </Flex>
       <VStack
-        divider={<StackDivider borderColor={borderColor} />}
-        spacing={4}
+        separator={<StackSeparator borderColor={borderColor} />}
+        gap={4}
         alignItems="flex-start"
       >
         <Box>
@@ -102,7 +103,7 @@ function MempoolFeePriorityCard({
         {isTxTypeFiltered ? null : (
           <VStack gap={3} alignItems="flex-start">
             <Tooltip
-              label={`Token transfer tx fee: ${
+              content={`Token transfer tx fee: ${
                 mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
               } STX`}
             >
@@ -119,7 +120,9 @@ function MempoolFeePriorityCard({
               </Flex>
             </Tooltip>
             <Tooltip
-              label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
+              content={`Contract call tx fee: ${
+                mempoolFeeContractCall / MICROSTACKS_IN_STACKS
+              } STX`}
             >
               <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
                 <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
@@ -134,7 +137,7 @@ function MempoolFeePriorityCard({
               </Flex>
             </Tooltip>
             <Tooltip
-              label={`Smart contract tx fee: ${
+              content={`Smart contract tx fee: ${
                 mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
               } STX`}
             >

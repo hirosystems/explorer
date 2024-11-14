@@ -1,4 +1,5 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
+import { Separator } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import React from 'react';
 
@@ -6,7 +7,6 @@ import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { Menu } from '../../../ui/Menu';
 import { MenuButton } from '../../../ui/MenuButton';
-import { MenuDivider } from '../../../ui/MenuDivider';
 import { MenuList } from '../../../ui/MenuList';
 import { LinksGroup } from './LinksGroup';
 import { TokenLinks } from './types';
@@ -18,7 +18,7 @@ export function LinksMenu(props: { links: TokenLinks }) {
       <MenuButton
         as={Button}
         backgroundColor={colorMode === 'light' ? 'white' : 'transparent'}
-        variant={colorMode === 'light' ? undefined : 'outline'}
+        variant={colorMode === 'light' ? undefined : 'outline'} // TODO: v3 upgrade. this might be broken
         color={'textTitle.light'}
         rightIcon={<Icon as={CaretDown} size="11px" color={'textCaption.light'} />}
         _hover={{ backgroundColor: colorMode === 'light' ? 'white' : 'transparent' }}
@@ -38,7 +38,7 @@ export function LinksMenu(props: { links: TokenLinks }) {
           <React.Fragment key={group.title}>
             <LinksGroup title={group.title} links={group.links} />
             {group.links.length > 0 && i < arr.length - 1 && arr[i + 1].links.length > 0 && (
-              <MenuDivider />
+              <Separator />
             )}
           </React.Fragment>
         ))}

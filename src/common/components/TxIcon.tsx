@@ -1,3 +1,4 @@
+import { useBreakpointValue } from '@chakra-ui/react';
 import { ArrowBendDownRight, Clock, WarningCircle } from '@phosphor-icons/react';
 import React, { FC } from 'react';
 
@@ -6,7 +7,6 @@ import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
 
 import { Flex } from '../../ui/Flex';
 import { Icon, IconProps } from '../../ui/Icon';
-import { useBreakpointValue } from '../../ui/hooks/useBreakpointValue';
 import ClarityIcon from '../../ui/icons/ClarityIcon';
 import CubeSparkleIcon from '../../ui/icons/CubeSparkleIcon';
 import DiagonalArrowsIcon from '../../ui/icons/DiagonalArrowsIcon';

@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import { CaretDown } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
 import { memo } from 'react';

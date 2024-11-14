@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { Info, Warning } from '@phosphor-icons/react';
 import { ReactNode, forwardRef } from 'react';
 import { IncidentImpact } from 'statuspage.io';
@@ -7,8 +6,8 @@ import { PAGE_MAX_WIDTH } from '../../../common/constants/constants';
 import { Box, BoxProps } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { getColor } from './utils';
+import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
 
 export const StatusBarBase = forwardRef<
   HTMLDivElement,

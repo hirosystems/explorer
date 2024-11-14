@@ -1,4 +1,4 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
@@ -8,7 +8,6 @@ import { useDebounce } from '../../../common/hooks/useDebounce';
 import { Icon } from '../../../ui/Icon';
 import { Input } from '../../../ui/Input';
 import { InputGroup } from '../../../ui/InputGroup';
-import { InputRightElement } from '../../../ui/InputRightElement';
 import { TokenTableSkeleton } from './TokenTableSkeleton';
 
 const TokenTable = dynamic(() => import('./TokenTable').then(module => module.TokenTable), {
@@ -28,10 +27,11 @@ export function TokensList() {
       gridColumnEnd={['2', '2', '3']}
       minWidth={0}
       topRight={
-        <InputGroup>
-          <InputRightElement pointerEvents="none">
-            <Icon as={MagnifyingGlass} color={`textCaption.${colorMode}`} />
-          </InputRightElement>
+        <InputGroup
+          endElement={
+            <Icon as={MagnifyingGlass} color={`textCaption.${colorMode}`} pointerEvents="none" />
+          }
+        >
           <Input
             variant={'outline'}
             type="text"

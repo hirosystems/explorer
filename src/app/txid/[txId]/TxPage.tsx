@@ -11,7 +11,7 @@ import { getTxTitle } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
 import { Tag } from '../../../ui/Tag';
 import { TagLabel } from '../../../ui/TagLabel';
-import { TagLeftIcon } from '../../../ui/TagLeftIcon';
+import { TagStartElement } from '../../../ui/TagStartElement';
 import { PageTitleWithTags } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { StxBalance } from '../../address/[principal]/StxBalance';
@@ -61,11 +61,11 @@ export const TxPage: React.FC<{
         tags={
           <>
             <Tag>
-              <TagLeftIcon as={getTxTypeIcon(tx.tx_type)} />
+              <TagStartElement as={getTxTypeIcon(tx.tx_type)} />
               <TagLabel>{txTypeNamesMap[tx.tx_type]}</TagLabel>
             </Tag>
             <Tag>
-              <TagLeftIcon as={txStatusIconMap[getTransactionStatus(tx)]} />
+              <TagStartElement as={txStatusIconMap[getTransactionStatus(tx)]} />
               <TagLabel>{txStatusLabelMap[getTransactionStatus(tx)]}</TagLabel>
             </Tag>
           </>

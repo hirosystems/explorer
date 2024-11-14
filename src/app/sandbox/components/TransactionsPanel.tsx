@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -36,6 +35,7 @@ import { Caption, Text, Title } from '../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useUser } from '../hooks/useUser';
 import { setCodeBody, toggleRightPanel } from '../sandbox-slice';
+import { useColorMode } from '@/components/ui/color-mode';
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const router = useRouter();

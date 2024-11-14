@@ -3,13 +3,13 @@
 import {
   FormControl as CUIFormControl,
   FormControlProps as CUIFormControlProps,
-  forwardRef,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type FormControlProps = CUIFormControlProps & UIComponent;
-export const FormControl = forwardRef<FormControlProps, 'div'>(
+export const FormControl = forwardRef<HTMLDivElement, FormControlProps>(
   ({ children, size, ...rest }, ref) => (
     <CUIFormControl
       ref={ref}

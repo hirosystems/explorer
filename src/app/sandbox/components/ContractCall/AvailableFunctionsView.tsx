@@ -1,4 +1,3 @@
-import { useColorMode } from '@chakra-ui/react';
 import { FC, forwardRef } from 'react';
 
 import { Badge } from '../../../../common/components/Badge';
@@ -13,6 +12,7 @@ import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import FunctionReadOnlyIcon from '../../../../ui/icons/FunctionReadOnly';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
+import { useColorMode } from '@/components/ui/color-mode';
 
 export const AbiFunction = forwardRef<
   {

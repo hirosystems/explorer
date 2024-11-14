@@ -1,6 +1,6 @@
 'use client';
 
-import { ColorMode, useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import { Moon, SunDim } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
 
@@ -10,7 +10,7 @@ export function ColorModeButton({
   colorModeOverride,
   ...rest
 }: {
-  colorModeOverride?: ColorMode;
+  colorModeOverride?: 'light' | 'dark';
 } & IconButtonProps) {
   const { colorMode, toggleColorMode, setColorMode } = useColorMode();
   const Icon = useMemo(
@@ -33,7 +33,6 @@ export function ColorModeButton({
   }, [colorModeOverride, setColorMode, toggleColorMode]);
   return (
     <IconButton
-      icon={<Icon />}
       onClick={onClick}
       color="white"
       title="Toggle color mode"
@@ -41,6 +40,8 @@ export function ColorModeButton({
         bg: 'hoverBackground',
       }}
       {...rest}
-    />
+    >
+      <Icon />
+    </IconButton>
   );
 }

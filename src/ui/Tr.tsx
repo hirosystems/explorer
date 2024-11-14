@@ -1,17 +1,13 @@
 'use client';
 
-import {
-  Tr as CUITr,
-  TableRowProps as CUITrProps,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+import { TableRow as CUITableRow, TableRowProps as CUITableRowProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type TrProps = CUITrProps & UIComponent;
-export const Tr = forwardRef<TrProps, 'tr'>(({ children, size, ...rest }, ref) => (
-  <CUITr
+export type TrProps = CUITableRowProps & UIComponent;
+export const Tr = forwardRef<HTMLTableRowElement, TrProps>(({ children, size, ...rest }, ref) => (
+  <CUITableRow
     ref={ref}
     width={size || rest.width}
     height={size || rest.height}
@@ -20,5 +16,5 @@ export const Tr = forwardRef<TrProps, 'tr'>(({ children, size, ...rest }, ref) =
     {...rest}
   >
     {children}
-  </CUITr>
+  </CUITableRow>
 ));

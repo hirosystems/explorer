@@ -1,10 +1,8 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 
 import { Flex, FlexProps } from '../../ui/Flex';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 
 export function Card(props: FlexProps) {
   const borderColor = useColorModeValue('slate.150', 'slate.900');

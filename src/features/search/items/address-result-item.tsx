@@ -1,4 +1,4 @@
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import React from 'react';
 
 import { Circle } from '../../../common/components/Circle';

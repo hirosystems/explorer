@@ -3,13 +3,13 @@
 import {
   FormErrorMessage as CUIFormErrorMessage,
   FormErrorMessageProps as CUIFormErrorMessageProps,
-  forwardRef,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type FormErrorMessageProps = CUIFormErrorMessageProps & UIComponent;
-export const FormErrorMessage = forwardRef<FormErrorMessageProps, 'div'>(
+export const FormErrorMessage = forwardRef<HTMLDivElement, FormErrorMessageProps>(
   ({ children, size, ...rest }, ref) => (
     <CUIFormErrorMessage
       ref={ref}

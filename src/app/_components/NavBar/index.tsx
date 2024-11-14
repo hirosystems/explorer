@@ -1,5 +1,6 @@
 'use client';
 
+import { useDisclosure } from '@chakra-ui/react';
 import { List, Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
@@ -17,7 +18,6 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Show } from '../../../ui/Show';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { DesktopNav } from './DesktopNav';
@@ -29,7 +29,7 @@ import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const { isOpen, onToggle } = useDisclosure();
+  const { open, onToggle } = useDisclosure();
   const { networks, activeNetwork } = useGlobalContext();
   const dispatch = useAppDispatch();
 
@@ -107,13 +107,10 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <BtcStxPrice tokenPrice={tokenPrice} />
         </Show>
         <Show below="lg">
-          <IconButton
-            onClick={onToggle}
-            icon={<Icon as={List} w={6} h={6} color={'white'} />}
-            variant={'ghost'}
-            aria-label={'Toggle Navigation'}
-          />
-          {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
+          <IconButton onClick={onToggle} variant={'ghost'} aria-label={'Toggle Navigation'}>
+            <Icon as={List} w={6} h={6} color={'white'} />
+          </IconButton>
+          {open && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
         </Show>
       </Flex>
     </Box>

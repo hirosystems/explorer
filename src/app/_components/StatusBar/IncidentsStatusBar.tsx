@@ -8,9 +8,9 @@ import { useUnresolvedIncidents } from '../../../common/queries/useUnresolvedInc
 import { Flex, FlexProps } from '../../../ui/Flex';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
-import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { StatusBarBase } from './StatusBarBase';
 import { getColor } from './utils';
+import { useColorMode } from '@/components/ui/color-mode';
 
 function IncidentsStatusBar(props: FlexProps) {
   const isTestnet = useGlobalContext().activeNetwork.mode === 'testnet';

@@ -1,11 +1,14 @@
 'use client';
 
-import { ProgressCircleRoot as CUIProgressCircleRoot } from '@chakra-ui/react';
+import {
+  ProgressCircleRoot as CUIProgressCircleRoot,
+  ProgressCircleRootProps as CUIProgressCircleRootProps,
+} from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type ProgressCircleProps = CUICircularProgressProps & UIComponent;
+export type ProgressCircleProps = CUIProgressCircleRootProps & UIComponent;
 export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
   ({ children, size, ...rest }, ref) => (
     <CUIProgressCircleRoot ref={ref} {...rest}>

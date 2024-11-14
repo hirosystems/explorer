@@ -17,7 +17,6 @@ import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Input } from '../../../ui/Input';
 import { InputGroup } from '../../../ui/InputGroup';
-import { InputRightElement } from '../../../ui/InputRightElement';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
@@ -61,14 +60,7 @@ export function LeftSection() {
               alignItems="center"
               borderRadius="24px"
               position="relative"
-            >
-              <Input
-                value={contractName}
-                onChange={(e: any) => setContractName(e.target?.value as string)}
-                placeholder="Name your contract"
-                pr="84px"
-              />
-              <InputRightElement>
+              endElement={
                 <IconButton
                   onClick={() => {
                     setContractName('');
@@ -76,7 +68,14 @@ export function LeftSection() {
                   icon={<Icon as={X} size={4} />}
                   aria-label={'clear contract name field'}
                 />
-              </InputRightElement>
+              }
+            >
+              <Input
+                value={contractName}
+                onChange={(e: any) => setContractName(e.target?.value as string)}
+                placeholder="Name your contract"
+                pr="84px"
+              />
             </InputGroup>
             <Box onClick={() => dispatch(toggleCodeToolbar())}>
               <Tooltip label="Contract tools">

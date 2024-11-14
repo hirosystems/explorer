@@ -3,14 +3,13 @@
 import {
   PopoverContent as CUIPopoverContent,
   PopoverContentProps as CUIPopoverContentProps,
-  forwardRef,
-  useColorMode,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type PopoverContentProps = CUIPopoverContentProps & UIComponent;
-export const PopoverContent = forwardRef<PopoverContentProps, 'section'>(
+export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
   ({ children, size, ...rest }, ref) => (
     <CUIPopoverContent
       ref={ref}

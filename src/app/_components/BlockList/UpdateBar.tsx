@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@chakra-ui/react';
+import { useColorModeValue } from '@/components/ui/color-mode';
 import { ArrowCounterClockwise } from '@phosphor-icons/react';
 import { ReactNode, Suspense, useCallback, useRef } from 'react';
 

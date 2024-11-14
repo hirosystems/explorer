@@ -1,4 +1,4 @@
-import { As, useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import { FC } from 'react';
 
 import { Flex, FlexProps } from '../../../../ui/Flex';
@@ -9,7 +9,7 @@ export const DeveloperStat: FC<
   {
     value: number | string;
     label: string;
-    icon: As | null;
+    icon: typeof Icon | null;
   } & FlexProps
 > = ({ value, label, icon, border, ...flexProps }) => {
   const colorMode = useColorMode().colorMode;

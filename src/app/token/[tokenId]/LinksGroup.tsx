@@ -1,5 +1,5 @@
 import { Icon } from '../../../ui/Icon';
-import { MenuGroup } from '../../../ui/MenuGroup';
+import { MenuItemGroup } from '../../../ui/MenuGroup';
 import { MenuItem } from '../../../ui/MenuItem';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
@@ -8,7 +8,7 @@ import { getLinkIcon, getUrlName, isExplorerLink } from './utils';
 export const LinksGroup = ({ title, links }: { title: string; links: string[] }) => {
   if (!links.length) return null;
   return (
-    <MenuGroup title={title}>
+    <MenuItemGroup title={title}>
       {links.map(link => {
         return (
           <MenuItem
@@ -25,6 +25,6 @@ export const LinksGroup = ({ title, links }: { title: string; links: string[] })
           </MenuItem>
         );
       })}
-    </MenuGroup>
+    </MenuItemGroup>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import { ArrowRight } from '@phosphor-icons/react';
 import * as React from 'react';
 

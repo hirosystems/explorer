@@ -1,21 +1,24 @@
 'use client';
 
-import { CacheProvider } from '@chakra-ui/next-js';
-import { ChakraProvider, ChakraProviderProps } from '@chakra-ui/react';
-import { FC } from 'react';
+import { ColorModeProviderProps } from '@/components/ui/color-mode';
+import { Provider } from '@/components/ui/provider';
 
-import { system } from './theme/theme';
-
-export interface UIProviderProps extends ChakraProviderProps {
-  cookies?: string;
-}
-export const UIProvider: FC<UIProviderProps> = ({ children }) => {
+// export interface UIProviderProps extends ChakraProviderProps {
+//   cookies?: string;
+// }
+export function UIProvider({
+  children,
+  colorModeProps,
+}: {
+  children: React.ReactNode;
+  colorModeProps: ColorModeProviderProps;
+}) {
   // const { cookies = '', children } = props;
   // const colorModeManager = cookieStorageManagerSSR(cookies);
   return (
-    <CacheProvider>
-      {/* <ChakraProvider colorModeManager={colorModeManager} theme={theme}> */}
-      <ChakraProvider value={system}>{children}</ChakraProvider>
-    </CacheProvider>
+    //   <CacheProvider>
+    //   <ChakraProvider colorModeManager={colorModeManager} theme={theme}>
+    // </CacheProvider>
+    <Provider {...colorModeProps}>{children}</Provider>
   );
-};
+}

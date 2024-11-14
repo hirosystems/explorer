@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { useColorMode } from '@/components/ui/color-mode';
 import { DownloadSimple } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import { CSVDownload } from 'react-csv';

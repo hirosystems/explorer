@@ -1,4 +1,5 @@
-import { ColorMode, WithCSSVar, useColorMode, useTheme } from '@chakra-ui/react';
+import { ColorMode, useColorMode } from '@/components/ui/color-mode';
+import { useTheme } from 'next-themes';
 import { useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
@@ -57,7 +58,7 @@ function getSignerDistributionPieChartHex(
   isKnownSigner: boolean,
   votingPowerPercentage: number,
   colorMode: ColorMode,
-  theme: WithCSSVar<Dict>
+  theme: any // TODO: v3 upgrade. this might be broken
 ) {
   if (!isKnownSigner) {
     return colorMode === 'light' ? theme.colors['slate'][250] : theme.colors['slate'][800];
@@ -203,8 +204,8 @@ export function SignersDistributionPieChart({
 
     return signersData;
   }, [signers, onlyShowPublicSigners]);
-  const colorMode = useColorMode().colorMode;
-  const theme = useTheme();
+  const colorMode = (useColorMode().colorMode ?? ('light' as ColorMode)) as ColorMode; // TODO: v3 upgrade. this might be broken
+  const theme = useTheme(); // TODO: v3 upgrade. this might be broken
 
   const CustomTooltip = useCallback(
     ({ active, payload }: TooltipProps<any, any>) => {

@@ -1,16 +1,12 @@
 'use client';
 
-import {
-  Image as CUIImage,
-  ImageProps as CUIImageProps,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+import { Image as CUIImage, ImageProps as CUIImageProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type ImageProps = CUIImageProps & UIComponent;
-export const Image = forwardRef<ImageProps, 'img'>(({ size, ...rest }, ref) => (
+export const Image = forwardRef<HTMLImageElement, ImageProps>(({ size, ...rest }, ref) => (
   <CUIImage
     ref={ref}
     width={size || rest.width}

@@ -2,7 +2,6 @@
 
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useSearchParams } from 'next/navigation';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { buildAdvancedSearchQuery } from '../../../common/queries/useSearchQuery';
@@ -10,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
-import { InputGroup } from '../../../ui/InputGroup';
+import { Group } from '../../../ui/InputGroup';
 import { Spinner } from '../../../ui/Spinner';
 import { Text } from '../../../ui/Text';
 import { clearSearchTerm, selectIsSearchFieldFocused, selectSearchTerm } from '../search-slice';
@@ -48,7 +47,7 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
   const showClearButton = searchTerm !== '' && !isFetching;
 
   return (
-    <InputGroup>
+    <Group>
       <Flex
         width="full"
         alignItems="center"
@@ -93,6 +92,6 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
           </Text>
         ) : null}
       </Flex>
-    </InputGroup>
+    </Group>
   );
 }

@@ -1,8 +1,5 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
-
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { FlexProps } from '../../ui/Flex';
