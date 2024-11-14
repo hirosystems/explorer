@@ -1,30 +1,18 @@
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { MempoolTransactionStatsResponse } from '@stacks/blockchain-api-client';
+import { OperationResponse } from '@stacks/blockchain-api-client';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { ONE_MINUTE } from './query-stale-time';
 
-export function useMempoolTransactionStats(options: any = {}) {
-  const api = useApi();
-  return useQuery<MempoolTransactionStatsResponse>({
+export function useSuspenseMempoolTransactionStats() {
+  const apiClient = useApiClient();
+  return useSuspenseQuery<OperationResponse['/extended/v1/tx/mempool/stats']>({
     queryKey: ['mempoolTransactionStats'],
-    queryFn: () => {
-      return api.transactionsApi.getMempoolTransactionStats();
+    queryFn: async () => {
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/mempool/stats');
     },
     staleTime: ONE_MINUTE,
-    ...options,
-  });
-}
-
-export function useSuspenseMempoolTransactionStats(options: any = {}) {
-  const api = useApi();
-  return useSuspenseQuery<MempoolTransactionStatsResponse>({
-    queryKey: ['mempoolTransactionStats'],
-    queryFn: () => {
-      return api.transactionsApi.getMempoolTransactionStats();
-    },
-    staleTime: ONE_MINUTE,
-    ...options,
   });
 }

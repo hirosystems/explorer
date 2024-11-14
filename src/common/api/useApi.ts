@@ -1,15 +1,17 @@
 'use client';
 
-import { Configuration as TokenMetadataApiConfiguration } from '@hirosystems/token-metadata-api-client';
+import {
+  Configuration as TokenMetadataApiConfiguration,
+  TokensApi,
+} from '@hirosystems/token-metadata-api-client';
 
 import { useGlobalContext } from '../context/useGlobalContext';
-import { apiClients, createConfig } from './client';
 
-export const useApi = () => {
+export const useMetadataApi = () => {
   const basePath = useGlobalContext().activeNetworkKey;
-  const apiConfig = createConfig(basePath);
-  const tokenMetadataApiConfig = new TokenMetadataApiConfiguration({
-    basePath,
-  });
-  return apiClients(apiConfig, tokenMetadataApiConfig);
+  return new TokensApi(
+    new TokenMetadataApiConfiguration({
+      basePath,
+    })
+  );
 };

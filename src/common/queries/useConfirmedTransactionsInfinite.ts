@@ -1,20 +1,9 @@
-import {
-  UseInfiniteQueryResult,
-  UseQueryOptions,
-  UseSuspenseInfiniteQueryResult,
-  UseSuspenseQueryOptions,
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-} from '@tanstack/react-query';
-import { InfiniteData } from '@tanstack/react-query';
+import { InfiniteData, UseInfiniteQueryResult, useInfiniteQuery } from '@tanstack/react-query';
 
-import {
-  GetTransactionListOrderEnum,
-  GetTransactionListSortByEnum,
-} from '@stacks/blockchain-api-client';
-import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
@@ -34,12 +23,12 @@ export function useConfirmedTransactionsInfinite(
     toAddress?: string;
     startTime?: number;
     endTime?: number;
-    order?: GetTransactionListOrderEnum;
-    sortBy?: GetTransactionListSortByEnum;
+    order?: 'asc' | 'desc' | undefined;
+    sortBy?: string;
   } = {},
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useInfiniteQuery({
     queryKey: [
       'confirmedTransactionsInfinite',
@@ -52,20 +41,28 @@ export function useConfirmedTransactionsInfinite(
     ],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       if (fromAddress?.endsWith('.btc')) {
-        fromAddress = (await searchByBnsName(api, fromAddress))?.result.entity_id || fromAddress;
+        fromAddress =
+          (await searchByBnsName(apiClient, fromAddress))?.result.entity_id || fromAddress;
       }
       if (toAddress?.endsWith('.btc')) {
-        toAddress = (await searchByBnsName(api, toAddress))?.result.entity_id || toAddress;
+        toAddress = (await searchByBnsName(apiClient, toAddress))?.result.entity_id || toAddress;
       }
-      return api.transactionsApi.getTransactionList({
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam,
-        fromAddress,
-        toAddress,
-        startTime,
-        endTime,
-        order,
-        sortBy,
+
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/', {
+        params: {
+          query: {
+            limit: DEFAULT_LIST_LIMIT,
+            offset: pageParam,
+            ...(fromAddress && { from_address: fromAddress }),
+            ...(toAddress && { to_address: toAddress }),
+            ...(startTime && { start_time: Number(startTime) }),
+            ...(endTime && { end_time: Number(endTime) }),
+            ...(sortBy && {
+              sort_by: sortBy as 'block_height' | 'burn_block_time' | 'fee' | undefined,
+            }),
+            order,
+          },
+        },
       });
     },
     initialPageParam: 0,
@@ -73,23 +70,5 @@ export function useConfirmedTransactionsInfinite(
     staleTime: TWO_MINUTES,
     refetchOnWindowFocus: true,
     ...options,
-  });
-}
-
-export function useSuspenseConfirmedTransactionsInfinite(): UseSuspenseInfiniteQueryResult<
-  InfiniteData<GenericResponseType<Transaction>>
-> {
-  const api = useApi();
-  return useSuspenseInfiniteQuery({
-    queryKey: ['confirmedTransactionsInfinite'],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getTransactionList({
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam,
-      }),
-    initialPageParam: 0,
-    getNextPageParam,
-    staleTime: TWO_MINUTES,
-    refetchOnWindowFocus: true,
   });
 }

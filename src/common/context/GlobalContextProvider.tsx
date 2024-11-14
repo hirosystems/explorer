@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 
+import { getApiClient } from '../../api/getApiClient';
 import {
   StacksApiSocketClientInfo,
   useStacksApiSocketClient,
@@ -48,6 +49,7 @@ interface Props {
   removeCustomNetwork: (network: Network) => void;
   networks: Record<string, Network>;
   stacksApiSocketClientInfo: StacksApiSocketClientInfo | null;
+  apiClient: ReturnType<typeof getApiClient>;
 }
 
 export const GlobalContext = createContext<Props>({
@@ -57,11 +59,12 @@ export const GlobalContext = createContext<Props>({
   btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap,
   btcAddressBaseUrls: NetworkModeBtcAddressBaseUrlMap,
   activeNetwork: mainnetNetwork,
-  activeNetworkKey: NetworkModeUrlMap[NetworkModes.Mainnet], // TODO: this is a confusing name as it's actually the url for the api based on the network...Why do we even need this when we have activeNetwork?
+  activeNetworkKey: NetworkModeUrlMap[NetworkModes.Mainnet],
   addCustomNetwork: (network: Network) => {},
   removeCustomNetwork: (network: Network) => {},
   networks: {},
   stacksApiSocketClientInfo: null,
+  apiClient: getApiClient(NetworkModeUrlMap[NetworkModes.Mainnet]),
 });
 
 export const GlobalContextProvider: FC<{
@@ -245,7 +248,7 @@ export const GlobalContextProvider: FC<{
     };
 
     if (queryApiUrl && !networks[queryApiUrl]) {
-      addCustomNetworkFromQuery();
+      void addCustomNetworkFromQuery();
     }
   }, [
     queryApiUrl,
@@ -280,6 +283,7 @@ export const GlobalContextProvider: FC<{
           connect: connectStacksApiSocket,
           disconnect: disconnectStacksApiSocket,
         },
+        apiClient: getApiClient(activeNetworkKey),
       }}
     >
       {children}

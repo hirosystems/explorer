@@ -32,7 +32,7 @@ export const NODE_ENV = process.env.NODE_ENV || '';
 export const RELEASE_TAG_NAME = process.env.NEXT_PUBLIC_RELEASE_TAG_NAME ?? '';
 export const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN || '';
 
-export const HIRO_HEADERS: HeadersInit = {
+export const HIRO_HEADERS = {
   'x-hiro-product': 'explorer',
   'x-hiro-version': RELEASE_TAG_NAME || packageJson.version,
 };

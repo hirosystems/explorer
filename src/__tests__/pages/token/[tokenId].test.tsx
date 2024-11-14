@@ -6,9 +6,8 @@ import { getTokenInfo } from '../../../app/token/[tokenId]/getTokenInfo';
 global.fetch = jest.fn();
 const fetch = global.fetch as jest.MockedFunction<any>;
 
-jest.mock('../../../common/api/client', () => ({
-  apiClients: jest.fn(),
-  createConfig: jest.fn(),
+jest.mock('../../../api/getApiClient', () => ({
+  getApiClient: jest.fn(),
 }));
 
 jest.mock('@hirosystems/token-metadata-api-client', () => ({

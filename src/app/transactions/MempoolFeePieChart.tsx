@@ -85,11 +85,7 @@ export function MempoolFeePieChart({
   filteredTxTypeCounts,
   totalTxCount,
 }: {
-  filteredTxTypeCounts: {
-    token_transfer: number;
-    smart_contract: number;
-    contract_call: number;
-  };
+  filteredTxTypeCounts: Record<string, number>;
   totalTxCount: number;
 }) {
   const pieData = Object.entries(filteredTxTypeCounts)

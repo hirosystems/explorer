@@ -7,20 +7,26 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { getErrorMessage } from '../../api/getErrorMessage';
+import { useApiClient } from '../../api/useApiClient';
 import { ContractWithParsedAbi } from '../types/contract';
 
 export function useContractById(
   contractId?: string,
   options: any = {}
 ): UseQueryResult<ContractWithParsedAbi> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useQuery({
     queryKey: ['contractById', contractId],
     queryFn: async () => {
-      const contract = await api.smartContractsApi.getContractById({
-        contractId: contractId!,
+      if (!contractId) return undefined;
+      const { data: contract, error } = await apiClient.GET('/extended/v1/contract/{contract_id}', {
+        params: { path: { contract_id: contractId } },
       });
+      if (error) {
+        throw new Error(getErrorMessage(error));
+      }
       return {
         ...contract,
         abi: contract.abi ? JSON.parse(contract.abi) : undefined,
@@ -36,14 +42,19 @@ export function useSuspenseContractById(
   contractId?: string,
   options: any = {}
 ): UseSuspenseQueryResult<ContractWithParsedAbi> {
-  const api = useApi();
+  const apiClient = useApiClient();
   if (!contractId) throw new Error('Contract ID is required');
   return useSuspenseQuery({
     queryKey: ['contractById', contractId],
     queryFn: async () => {
-      const contract = await api.smartContractsApi.getContractById({
-        contractId,
-      });
+      if (!contractId) return undefined;
+      const contract = await callApiWithErrorHandling(
+        apiClient,
+        '/extended/v1/contract/{contract_id}',
+        {
+          params: { path: { contract_id: contractId } },
+        }
+      );
       return {
         ...contract,
         abi: contract.abi ? JSON.parse(contract.abi) : undefined,

@@ -1,62 +1,33 @@
-import {
-  InfiniteData,
-  UseInfiniteQueryResult,
-  UseSuspenseInfiniteQueryResult,
-  useInfiniteQuery,
-  useSuspenseInfiniteQuery,
-} from '@tanstack/react-query';
+import { InfiniteData, UseInfiniteQueryResult, useInfiniteQuery } from '@tanstack/react-query';
 
-import {
-  GetMempoolTransactionListOrderByEnum,
-  GetMempoolTransactionListOrderEnum,
-} from '@stacks/blockchain-api-client';
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 
 export function useMempoolTransactionsInfinite(
-  sort: GetMempoolTransactionListOrderByEnum = GetMempoolTransactionListOrderByEnum.age,
-  order: GetMempoolTransactionListOrderEnum = GetMempoolTransactionListOrderEnum.asc
+  sort: 'age' | 'size' | 'fee' | undefined = 'age',
+  order: 'asc' | 'desc' | undefined = 'asc'
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useInfiniteQuery({
     queryKey: ['mempoolTransactionsInfinite', sort, order],
-    queryFn: ({ pageParam }) =>
-      api.transactionsApi.getMempoolTransactionList({
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam || 0,
-        order,
-        orderBy: sort,
-      }),
-    getNextPageParam,
-    initialPageParam: 0,
-    staleTime: TWO_MINUTES,
-    refetchOnMount: false,
-    retry: false,
-    refetchOnReconnect: false,
-    refetchInterval: false,
-    refetchIntervalInBackground: false,
-  });
-}
-
-export function useSuspenseMempoolTransactionsInfinite(
-  sort: GetMempoolTransactionListOrderByEnum = GetMempoolTransactionListOrderByEnum.age,
-  order: GetMempoolTransactionListOrderEnum = GetMempoolTransactionListOrderEnum.asc
-): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
-  const api = useApi();
-  return useSuspenseInfiniteQuery({
-    queryKey: ['mempoolTransactionsInfinite', sort, order],
-    queryFn: ({ pageParam }) =>
-      api.transactionsApi.getMempoolTransactionList({
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam || 0,
-        order,
-        orderBy: sort,
-      }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/mempool', {
+        params: {
+          query: {
+            limit: DEFAULT_LIST_LIMIT,
+            offset: pageParam || 0,
+            order,
+            order_by: sort,
+          },
+        },
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,

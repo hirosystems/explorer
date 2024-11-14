@@ -1,15 +1,18 @@
 'use client';
 
-import {
-  GetMempoolTransactionListOrderByEnum,
-  GetMempoolTransactionListOrderEnum,
-  GetTransactionListOrderEnum,
-  GetTransactionListSortByEnum,
-} from '@stacks/blockchain-api-client';
+import { operations } from '@stacks/blockchain-api-client/lib/generated/schema';
 
 import { useAppDispatch, useAppSelector } from '../../common/state/hooks';
 import { txFilterAndSort } from './txsFilterAndSortSlice';
 import { useFilterAndSortScope } from './useFilterAndSortScope';
+
+type MempoolQuery = NonNullable<operations['get_mempool_transaction_list']['parameters']['query']>;
+type MempoolOrderBy = Exclude<MempoolQuery['order_by'], undefined>;
+type MempoolOrder = Exclude<MempoolQuery['order'], undefined>;
+
+type TxsQuery = NonNullable<operations['get_transaction_list']['parameters']['query']>;
+type TxSortBy = Exclude<TxsQuery['sort_by'], undefined>;
+type TxOrder = Exclude<TxsQuery['order'], undefined>;
 
 export const useFilterAndSortState = () => {
   const dispatch = useAppDispatch();
@@ -19,19 +22,19 @@ export const useFilterAndSortState = () => {
     dispatch(txFilterAndSort[filterScope].actions.setActiveFilters(filters));
   };
 
-  const setMempoolTxsActiveSort = (sort: GetMempoolTransactionListOrderByEnum) => {
+  const setMempoolTxsActiveSort = (sort: MempoolOrderBy) => {
     dispatch(txFilterAndSort[filterScope].actions.setMempoolTxsActiveSort(sort));
   };
 
-  const setMempoolTxsActiveOrder = (order: GetMempoolTransactionListOrderEnum) => {
+  const setMempoolTxsActiveOrder = (order: MempoolOrder) => {
     dispatch(txFilterAndSort[filterScope].actions.setMempoolTxsActiveOrder(order));
   };
 
-  const setConfirmedTxsActiveSort = (sort: GetTransactionListSortByEnum) => {
+  const setConfirmedTxsActiveSort = (sort: TxSortBy) => {
     dispatch(txFilterAndSort[filterScope].actions.setConfirmedTxsActiveSort(sort));
   };
 
-  const setConfirmedTxsActiveOrder = (order: GetTransactionListOrderEnum) => {
+  const setConfirmedTxsActiveOrder = (order: TxOrder) => {
     dispatch(txFilterAndSort[filterScope].actions.setConfirmedTxsActiveOrder(order));
   };
 

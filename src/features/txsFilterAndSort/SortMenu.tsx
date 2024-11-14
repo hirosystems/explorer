@@ -1,49 +1,44 @@
 import { SortDescending } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
 
-import {
-  GetMempoolTransactionListOrderByEnum,
-  GetMempoolTransactionListOrderEnum,
-  GetTransactionListOrderEnum,
-  GetTransactionListSortByEnum,
-} from '@stacks/blockchain-api-client';
+import { operations } from '@stacks/blockchain-api-client/lib/generated/schema';
 
 import { FilterMenu } from '../../common/components/FilterMenu';
 import { useFilterAndSortState } from './useFilterAndSortState';
 
-function getMempoolTxsSortOptionLabel(
-  sort: GetMempoolTransactionListOrderByEnum,
-  order: GetMempoolTransactionListOrderEnum
-) {
+type MempoolQuery = NonNullable<operations['get_mempool_transaction_list']['parameters']['query']>;
+type MempoolOrderBy = Exclude<MempoolQuery['order_by'], undefined>;
+type MempoolOrder = Exclude<MempoolQuery['order'], undefined>;
+const MempoolOrderByVals: MempoolOrderBy[] = ['age', 'size', 'fee'];
+const MempoolOrderVals: MempoolOrder[] = ['asc', 'desc'];
+
+type TxsQuery = NonNullable<operations['get_transaction_list']['parameters']['query']>;
+type txSortBy = Exclude<TxsQuery['sort_by'], undefined>;
+type txOrder = Exclude<TxsQuery['order'], undefined>;
+const txSortByVals: txSortBy[] = ['block_height', 'fee', 'burn_block_time'];
+const txOrderVals: txOrder[] = ['asc', 'desc'];
+
+export function getMempoolTxsSortOptionLabel(sort: MempoolOrderBy, order: MempoolOrder) {
   switch (sort) {
-    case GetMempoolTransactionListOrderByEnum.age:
-      return order === GetMempoolTransactionListOrderEnum.asc ? 'Oldest first' : 'Newest first';
-    case GetMempoolTransactionListOrderByEnum.size:
-      return order === GetMempoolTransactionListOrderEnum.asc
-        ? 'Smallest size first'
-        : 'Biggest size first';
-    case GetMempoolTransactionListOrderByEnum.fee:
-      return order === GetMempoolTransactionListOrderEnum.asc
-        ? 'Lowest fee first'
-        : 'Highest fee first';
+    case 'age':
+      return order === 'asc' ? 'Oldest first' : 'Newest first';
+    case 'size':
+      return order === 'asc' ? 'Smallest size first' : 'Biggest size first';
+    case 'fee':
+      return order === 'asc' ? 'Lowest fee first' : 'Highest fee first';
   }
 }
 
-function getConfirmedTxsSortOptionLabel(
-  sort: GetTransactionListSortByEnum,
-  order: GetTransactionListOrderEnum
-) {
+function getConfirmedTxsSortOptionLabel(sort: string, order: 'asc' | 'desc' | undefined) {
   switch (sort) {
-    case GetTransactionListSortByEnum.block_height:
-      return order === GetTransactionListOrderEnum.asc
-        ? 'Lowest block height first'
-        : 'Highest block height first';
-    case GetTransactionListSortByEnum.fee:
-      return order === GetTransactionListOrderEnum.asc
-        ? 'Lowest transaction fee first'
-        : 'Highest transaction fee first';
-    case GetTransactionListSortByEnum.burn_block_time:
-      return order === GetTransactionListOrderEnum.asc ? 'Oldest first' : 'Newest first';
+    case 'block_height':
+      return order === 'asc' ? 'Lowest block height first' : 'Highest block height first';
+    case 'fee':
+      return order === 'asc' ? 'Lowest transaction fee first' : 'Highest transaction fee first';
+    case 'burn_block_time':
+      return order === 'asc' ? 'Oldest first' : 'Newest first';
+    default:
+      return '';
   }
 }
 
@@ -62,19 +57,14 @@ export function MempoolTxsSortMenu() {
 
   const menuItems = useMemo(
     () =>
-      Object.keys(GetMempoolTransactionListOrderByEnum).flatMap(sort =>
-        Object.keys(GetMempoolTransactionListOrderEnum)
-          .reverse()
-          .map(order => ({
-            onClick: () => {
-              setMempoolTxsActiveSort(sort as GetMempoolTransactionListOrderByEnum);
-              setMempoolTxsActiveOrder(order as GetMempoolTransactionListOrderEnum);
-            },
-            label: getMempoolTxsSortOptionLabel(
-              sort as GetMempoolTransactionListOrderByEnum,
-              order as GetMempoolTransactionListOrderEnum
-            ),
-          }))
+      MempoolOrderByVals.flatMap(sort =>
+        MempoolOrderVals.reverse().map(order => ({
+          onClick: () => {
+            setMempoolTxsActiveSort(sort);
+            setMempoolTxsActiveOrder(order);
+          },
+          label: getMempoolTxsSortOptionLabel(sort, order),
+        }))
       ),
     [setMempoolTxsActiveSort, setMempoolTxsActiveOrder]
   );
@@ -97,19 +87,14 @@ export function ConfirmedTxsSortMenu() {
 
   const menuItems = useMemo(
     () =>
-      Object.keys(GetTransactionListSortByEnum).flatMap(sort =>
-        Object.keys(GetTransactionListOrderEnum)
-          .reverse()
-          .map(order => ({
-            onClick: () => {
-              setConfirmedTxsActiveSort(sort as GetTransactionListSortByEnum);
-              setConfirmedTxsActiveOrder(order as GetTransactionListOrderEnum);
-            },
-            label: getConfirmedTxsSortOptionLabel(
-              sort as GetTransactionListSortByEnum,
-              order as GetTransactionListOrderEnum
-            ),
-          }))
+      txSortByVals.flatMap(sort =>
+        txOrderVals.reverse().map(order => ({
+          onClick: () => {
+            setConfirmedTxsActiveSort(sort);
+            setConfirmedTxsActiveOrder(order);
+          },
+          label: getConfirmedTxsSortOptionLabel(sort, order),
+        }))
       ),
     [setConfirmedTxsActiveSort, setConfirmedTxsActiveOrder]
   );

@@ -25,7 +25,7 @@ export function AddressPageLayout(props: GridProps) {
 }
 
 export default function AddressPage({ params: { principal } }: any) {
-  const { data: balance } = useSuspenseAccountBalance(principal, { refetchOnWindowFocus: true });
+  const { data: balance } = useSuspenseAccountBalance(principal);
   const { data: nonces } = useAddressNonces({ address: principal });
 
   const hasTokenBalances = hasTokenBalance(balance);

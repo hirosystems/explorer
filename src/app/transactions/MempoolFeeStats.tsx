@@ -7,8 +7,8 @@ import {
 } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
 
-import { MempoolFeePriorities } from '@stacks/blockchain-api-client/src/generated/models';
-import { MempoolFeePrioritiesAll } from '@stacks/blockchain-api-client/src/generated/models/MempoolFeePrioritiesAll';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types/generated';
 
 import { Card } from '../../common/components/Card';
 import { getTxTypeIcon } from '../../common/components/TxIcon';
@@ -30,7 +30,7 @@ import {
   mapTransactionTypeToFilterValue,
 } from './TransactionTypeFilterMenu';
 
-export const getFeePriorityIcon = (priority: keyof MempoolFeePrioritiesAll) => {
+export const getFeePriorityIcon = (priority: keyof MempoolFeePriorities['all']) => {
   switch (priority) {
     case 'no_priority':
       return <Icon as={MinusCircle} size={4} color="slate.600" />;
@@ -52,14 +52,16 @@ function MempoolFeePriorityCard({
   txTypeFilter,
 }: {
   mempoolFeeResponse: MempoolFeePriorities;
-  priority: keyof MempoolFeePrioritiesAll;
+  priority: keyof MempoolFeePriorities['all'];
   stxPrice: number;
   txTypeFilter: TransactionTypeFilterTypes;
 } & FlexProps) {
   const borderColor = useColorModeValue('slate.200', 'slate.800');
   const isTxTypeFiltered = txTypeFilter !== TransactionTypeFilterTypes.AverageForAllTransactions;
   const mempoolFeeAll = isTxTypeFiltered
-    ? mempoolFeeResponse?.[mapTransactionTypeToFilterValue(txTypeFilter)]?.[priority] || 0
+    ? mempoolFeeResponse?.[
+        mapTransactionTypeToFilterValue(txTypeFilter) as keyof MempoolFeePriorities
+      ]?.[priority] || 0
     : mempoolFeeResponse?.all?.[priority] || 0;
   const mempoolFeeTokenTransfer = mempoolFeeResponse?.token_transfer?.[priority] || 0;
   const mempoolFeeContractCall = mempoolFeeResponse?.contract_call?.[priority] || 0;
@@ -239,7 +241,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </Flex>
           <VStack gap={3} alignItems="flex-start">
             {Object.entries(filteredTxTypeCounts).map(([key, value]) => {
-              const icon = getTxTypeIcon(key as keyof typeof filteredTxTypeCounts);
+              const icon = getTxTypeIcon(key as Transaction['tx_type']);
               const text =
                 key === 'token_transfer'
                   ? 'Token transfer'

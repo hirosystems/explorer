@@ -8,7 +8,8 @@ import {
 
 import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useApi } from '../api/useApi';
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
@@ -20,15 +21,15 @@ export function useAddressMempoolTxsInfinite(
   address?: string,
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useInfiniteQuery({
     queryKey: [ADDRESS_MEMPOOL_TXS_INFINITE_QUERY_KEY, address],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getMempoolTransactionList({
-        address,
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam,
-      }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!address) return undefined;
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/mempool', {
+        params: { query: { address, limit: DEFAULT_LIST_LIMIT, offset: pageParam } },
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
@@ -40,15 +41,15 @@ export function useSuspenseAddressMempoolTxsInfinite(
   address?: string,
   options: any = {}
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<MempoolTransaction>>> {
-  const api = useApi();
+  const apiClient = useApiClient();
   return useSuspenseInfiniteQuery({
     queryKey: [ADDRESS_MEMPOOL_TXS_INFINITE_QUERY_KEY, address],
-    queryFn: ({ pageParam }: { pageParam: number }) =>
-      api.transactionsApi.getMempoolTransactionList({
-        address,
-        limit: DEFAULT_LIST_LIMIT,
-        offset: pageParam,
-      }),
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      if (!address) return undefined;
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/mempool', {
+        params: { query: { address, limit: DEFAULT_LIST_LIMIT, offset: pageParam } },
+      });
+    },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,

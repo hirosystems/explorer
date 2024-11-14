@@ -2,14 +2,14 @@
 
 import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import {
+  InfiniteData,
   UseInfiniteQueryResult,
   UseSuspenseInfiniteQueryResult,
   useInfiniteQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { InfiniteData } from '@tanstack/react-query';
 
-import { useApi } from '../api/useApi';
+import { useMetadataApi } from '../api/useApi';
 import { DEFAULT_LIST_LIMIT } from '../constants/constants';
 import { GenericResponseType } from '../hooks/useInfiniteQueryResult';
 import { getNextPageParam } from '../utils/utils';
@@ -31,7 +31,7 @@ export const useFtTokens = (
   },
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<FtBasicMetadataResponse>>> => {
-  const { tokenMetadataApi } = useApi();
+  const tokenMetadataApi = useMetadataApi();
   return useInfiniteQuery({
     queryKey: ['ftTokens', name, symbol, address, order_by, order],
     queryFn: ({ pageParam }: { pageParam: number }) =>
@@ -67,7 +67,7 @@ export const useSuspenseFtTokens = (
   },
   options: any = {}
 ): UseSuspenseInfiniteQueryResult<InfiniteData<GenericResponseType<FtBasicMetadataResponse>>> => {
-  const { tokenMetadataApi } = useApi();
+  const tokenMetadataApi = useMetadataApi();
   return useSuspenseInfiniteQuery({
     queryKey: ['ftTokens', name, symbol, address, order_by, order],
     queryFn: ({ pageParam }: { pageParam: number }) =>

@@ -1,17 +1,13 @@
 import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
 
-import {
-  GetTransactionListOrderEnum,
-  GetTransactionListSortByEnum,
-} from '@stacks/blockchain-api-client';
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
 
+import { callApiWithErrorHandling } from '../../api/callApiWithErrorHandling';
+import { useApiClient } from '../../api/useApiClient';
 import { blur, focus } from '../../features/search/search-slice';
-import { useApi } from '../api/useApi';
 import { BTC_BNS_CONTRACT } from '../constants/constants';
-import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppDispatch } from '../state/hooks';
 import { Network } from '../types/network';
 import {
@@ -49,18 +45,28 @@ function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundR
   };
 }
 
-export async function searchByBnsName(api: ReturnType<typeof useApi>, bnsName: string) {
+export async function searchByBnsName(apiClient: ReturnType<typeof useApiClient>, bnsName: string) {
   try {
-    const nftHistory = await api.nonFungibleTokensApi.getNftHistory({
-      assetIdentifier: BTC_BNS_CONTRACT,
-      value: cvToHex(
-        tupleCV({
-          ['name']: bufferCVFromString(bnsName.replace(new RegExp('.btc$'), '')),
-          ['namespace']: bufferCVFromString('btc'),
-        })
-      ),
-    });
-    if (nftHistory.results.length) {
+    const nftHistory = await callApiWithErrorHandling(
+      apiClient,
+      `/extended/v1/tokens/nft/history`,
+      {
+        params: {
+          query: {
+            asset_identifier: BTC_BNS_CONTRACT,
+            value: cvToHex(
+              tupleCV({
+                ['name']: bufferCVFromString(bnsName.replace(new RegExp('.btc$'), '')),
+                ['namespace']: bufferCVFromString('btc'),
+              })
+            ),
+            tx_metadata: false,
+          },
+        },
+      }
+    );
+
+    if (nftHistory?.results.length) {
       return nftHistoryToSearchResult(nftHistory.results[0], bnsName);
     }
   } catch (e) {}
@@ -180,7 +186,10 @@ export function parseAdvancedSearchQuery(id: string) {
         .split(splitRegex)[0]
         .trim()
         .split(' ');
-      query.push({ filterName: config.filter, filterValue: config.transform(filterValue) });
+      query.push({
+        filterName: config.filter,
+        filterValue: config.transform(filterValue),
+      });
       if (termValue.length) {
         query.push({ filterName: 'term', filterValue: termValue.join(' ') });
       }
@@ -225,11 +234,10 @@ export function useSearchPageUrl(searchTerm: string, network: Network) {
 
 export function useSearchQuery(id: string) {
   const dispatch = useAppDispatch();
-  const { searchApi, blocksApi, nonFungibleTokensApi } = useApi();
   const isBtcName = id.endsWith('.btc');
   const advancedSearchQuery = parseAdvancedSearchQuery(id);
   const isAdvancedSearch = advancedSearchQuery.length > 0;
-  const api = useApi();
+  const apiClient = useApiClient();
   return useQuery({
     queryKey: ['search', isAdvancedSearch ? JSON.stringify(advancedSearchQuery) : id],
     queryFn: async () => {
@@ -254,12 +262,12 @@ export function useSearchQuery(id: string) {
         const toFilter = advancedSearchQuery.find(({ filterName }) => filterName === 'toAddress');
         if (fromFilter?.filterValue?.endsWith('.btc')) {
           fromFilter.filterValue =
-            (await searchByBnsName(api, fromFilter.filterValue))?.result.entity_id ||
+            (await searchByBnsName(apiClient, fromFilter.filterValue))?.result.entity_id ||
             fromFilter.filterValue;
         }
         if (toFilter?.filterValue?.endsWith('.btc')) {
           toFilter.filterValue =
-            (await searchByBnsName(api, toFilter.filterValue))?.result.entity_id ||
+            (await searchByBnsName(apiClient, toFilter.filterValue))?.result.entity_id ||
             toFilter.filterValue;
         }
         const fromAddress = advancedSearchQuery.find(
@@ -276,16 +284,20 @@ export function useSearchQuery(id: string) {
           .reduce((acc, { filterValue }) => acc + filterValue + ' ', '')
           .trim();
         // TODO: use term when it's supported
-        const txsResponse = await api.transactionsApi.getTransactionList({
-          limit: 5,
-          offset: 0,
-          unanchored: true,
-          sortBy: GetTransactionListSortByEnum.burn_block_time,
-          order: GetTransactionListOrderEnum.desc,
-          ...(fromAddress && { fromAddress: fromAddress }),
-          ...(toAddress && { toAddress: toAddress }),
-          ...(startTime && { startTime: Number(startTime) }),
-          ...(endTime && { endTime: Number(endTime) }),
+        const txsResponse = await callApiWithErrorHandling(apiClient, '/extended/v1/tx/', {
+          params: {
+            query: {
+              limit: 5,
+              offset: 0,
+              unanchored: true,
+              order: 'desc',
+              sort_by: 'burn_block_time',
+              ...(fromAddress && { from_address: fromAddress }),
+              ...(toAddress && { to_address: toAddress }),
+              ...(startTime && { start_time: Number(startTime) }),
+              ...(endTime && { end_time: Number(endTime) }),
+            },
+          },
         });
         const txs = (txsResponse?.results as Transaction[]) || ([] as Transaction[]);
         foundResult = {
@@ -300,18 +312,28 @@ export function useSearchQuery(id: string) {
           },
         };
       } else if (isBtcName) {
-        foundResult = await searchByBnsName(api, id);
+        foundResult = await searchByBnsName(apiClient, id);
       } else if (isNumeric(id)) {
         // Fetch block height if numeric
         try {
-          const block = await blocksApi.getBlockByHeight({ height: parseInt(id) });
+          const height = parseInt(id);
+          const block = await callApiWithErrorHandling(
+            apiClient,
+            '/extended/v1/block/by_height/{height}',
+            {
+              params: { path: { height } },
+            }
+          );
           if (block) {
             foundResult = blockToSearchResult(block);
           }
         } catch (e) {}
       } else {
         try {
-          foundResult = (await searchApi.searchById({ id, includeMetadata: true })) as FoundResult; // TODO: The API needs to add the type
+          const data = await callApiWithErrorHandling(apiClient, '/extended/v1/search/{id}', {
+            params: { path: { id }, query: { include_metadata: true } },
+          });
+          foundResult = data as FoundResult;
         } catch (e: any) {
           try {
             const data = await e.json();

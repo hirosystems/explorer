@@ -3,7 +3,7 @@ import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import * as React from 'react';
 import { FC, memo, useMemo } from 'react';
 
-import { AddressTransactionWithTransfersFtTransfers } from '@stacks/blockchain-api-client';
+import { AddressTransactionWithTransfers } from '@stacks/blockchain-api-client/lib/types';
 
 import { getTicker } from '../../../app/txid/[txId]/Events';
 import { Circle } from '../../../common/components/Circle';
@@ -111,14 +111,14 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
 );
 
 export const TransferListItemWithMetaSymbol: FC<{
-  ftTransfer: AddressTransactionWithTransfersFtTransfers;
+  ftTransfer: NonNullable<AddressTransactionWithTransfers['ft_transfers']>[number];
   sender?: string;
   recipient?: string;
   isOriginator: boolean;
   type: string;
   index: number;
 }> = ({ ftTransfer, sender, recipient, isOriginator, type, index }) => {
-  const { asset, address, contract } = getAssetNameParts(ftTransfer.asset_identifier);
+  const { asset, address, contract } = getAssetNameParts(ftTransfer?.asset_identifier);
   const contractId = `${address}.${contract}`;
   const { data: ftMetadata } = useFtMetadata(contractId);
   const symbol = ftMetadata?.symbol || getTicker(asset).toUpperCase();
