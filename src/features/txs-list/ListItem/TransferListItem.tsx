@@ -75,7 +75,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
     const leftSubtitle = useMemo(
       () => (
         <HStack
-          spacing={1}
+          gap={1}
           alignItems="center"
           flexWrap="wrap"
           divider={<Caption>&nbsp;∙&nbsp;</Caption>}

@@ -33,7 +33,7 @@ function StxSupplyBase(props: GridProps) {
           Circulating Supply
           {isMainnet && (
             <Tooltip
-              label={`Year 2050 supply is ~${maxSupplyBy2050Formatted}, STX supply grows approx 0.3% annually thereafter in perpetuity.`}
+              content={`Year 2050 supply is ~${maxSupplyBy2050Formatted}, STX supply grows approx 0.3% annually thereafter in perpetuity.`}
             >
               <Flex alignItems={'center'}>
                 &nbsp;

@@ -1,3 +1,4 @@
+import { useDisclosure } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowUpRight, CaretDown } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -15,7 +16,6 @@ import { PopoverContent } from '../../../ui/PopoverContent';
 import { PopoverTrigger } from '../../../ui/PopoverTrigger';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 
 interface AddressFilterProps {
   defaultFromAddress?: string;
@@ -36,14 +36,14 @@ export function AddressFilter({
     toAddress: defaultToAddress,
   };
 
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const { onOpen, onClose, open } = useDisclosure();
   const searchParams = useSearchParams();
   const router = useRouter();
   return (
-    <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+    <Popover placement={'bottom-start'} isOpen={open} onOpen={onOpen} onClose={onClose}>
       <PopoverTrigger>
         <Button
-          variant={'secondary'}
+          visual="secondary"
           fontSize={'sm'}
           rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
           height={9}
@@ -119,7 +119,7 @@ export function AddressFilter({
                           {...field}
                           placeholder="STX Address"
                           fontSize={'sm'}
-                          sx={{
+                          css={{
                             '::placeholder': {
                               color: 'textSubdued',
                             },
@@ -136,7 +136,7 @@ export function AddressFilter({
                           {...field}
                           placeholder="STX Address"
                           fontSize={'sm'}
-                          sx={{
+                          css={{
                             '::placeholder': {
                               color: 'textSubdued',
                             },
@@ -152,7 +152,7 @@ export function AddressFilter({
                     width="100%"
                     type="submit"
                     fontSize={'sm'}
-                    variant={'secondary'}
+                    visual={'secondary'}
                     height={'40px'}
                     color="textSubdued"
                   >

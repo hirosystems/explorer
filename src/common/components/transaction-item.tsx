@@ -133,7 +133,7 @@ export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransac
     const date = new Date(txTime * 1000);
     const dateString = date.toUTCString();
 
-    return <Tooltip label={dateString}>{relativeTimestamp}</Tooltip>;
+    return <Tooltip content={dateString}>{relativeTimestamp}</Tooltip>;
   });
 
 export function Nonce({ nonceVal, ...rest }: TextProps & { nonceVal: number }) {

@@ -51,7 +51,7 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
   }
 
   return (
-    <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
+    <Tooltip content={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
       <Button
         size={'xs'}
         ml={'5px'}

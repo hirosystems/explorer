@@ -63,13 +63,10 @@ export function RightPanel() {
                   position="relative"
                   ml="8px"
                 >
-                  <Tooltip placement="bottom" label="Sign out">
-                    <IconButton
-                      height={5}
-                      width={5}
-                      icon={<Icon as={SignOut} size={3.5} />}
-                      aria-label={'sign out'}
-                    />
+                  <Tooltip positioning={{ placement: 'bottom' }} content="Sign out">
+                    <IconButton height={5} width={5} aria-label={'sign out'}>
+                      <Icon as={SignOut} size={3.5} />
+                    </IconButton>
                   </Tooltip>
                 </Box>
               </Flex>

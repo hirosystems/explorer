@@ -102,7 +102,7 @@ const meta = {
         code: `
           //Showing ElevationDemo for light mode. For dark mode, use _dark instead of default.
    const ElevationDemo = () => (
-  <Stack spacing={8}>
+  <Stack gap={8}>
     <Text fontSize="2xl" fontWeight="bold">Elevation Showcase</Text>
     
     <Flex direction="column" gap={4}>

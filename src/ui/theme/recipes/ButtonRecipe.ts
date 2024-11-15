@@ -53,7 +53,7 @@ export const buttonRecipe = defineRecipe({
     },
   },
   variants: {
-    type: {
+    visual: {
       primary: {
         fontWeight: 'semibold',
         fontSize: 'sm',
@@ -77,6 +77,6 @@ export const buttonRecipe = defineRecipe({
     },
   },
   defaultVariants: {
-    type: 'primary',
+    visual: 'primary',
   },
 });

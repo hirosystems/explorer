@@ -3,7 +3,7 @@
 import { Button as CUIButton, ButtonProps as CUIButtonProps, chakra } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
-import { buttonRecipe } from './theme/componentTheme/Button';
+import { buttonRecipe } from './theme/recipes/ButtonRecipe';
 import { UIComponent } from './types';
 
 export type ButtonProps = CUIButtonProps & UIComponent;

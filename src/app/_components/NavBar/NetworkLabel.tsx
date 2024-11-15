@@ -1,3 +1,4 @@
+import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
@@ -15,7 +16,6 @@ import { Spinner } from '../../../ui/Spinner';
 import { Stack } from '../../../ui/Stack';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption, Title } from '../../../ui/typography';
-import { useColorModeValue } from '@/components/ui/color-mode';
 
 const ellipsisStyle: React.CSSProperties = {
   whiteSpace: 'nowrap',
@@ -125,17 +125,18 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
         ) : !!error ? (
           <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
         ) : isNetworkRemovable ? (
-          <Tooltip label="Remove network">
+          <Tooltip content="Remove network">
             <IconButton
               disabled={isDisabled}
               position="relative"
               color={`textCaption.${colorMode}`}
               size={'21px'}
-              icon={<Icon as={Trash} size={4} />}
               onClick={() => removeCustomNetwork(network)}
               aria-label={'Remove network'}
               _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
-            />
+            >
+              <Icon as={Trash} size={4} />
+            </IconButton>
           </Tooltip>
         ) : isActive ? (
           <Box as={Check} color={`feedbackSuccess.${colorMode}`} size="18px" />

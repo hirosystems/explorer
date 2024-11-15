@@ -5,7 +5,7 @@ import { Flex } from '../../../ui/Flex';
 import { Tag } from '../../../ui/Tag';
 import { TagLabel } from '../../../ui/TagLabel';
 import { PageTitle, PageTitleWithTags } from '../../_components/PageTitle';
-import { Tabs } from './Tabs';
+import { TokenTabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
 import { TokenInfoProps } from './types';
 
@@ -41,7 +41,7 @@ export default function PageClient({
         {/*{!!tokenInfo.extended?.links && <LinksMenu links={tokenInfo.extended.links} />}*/}
       </Flex>
       <TokenInfo tokenInfo={tokenInfo} txId={tokenId} />
-      <Tabs
+      <TokenTabs
         tokenId={tokenId}
         developerData={
           !!tokenInfo.extended?.links?.repos?.length ? tokenInfo.extended?.developerData : undefined

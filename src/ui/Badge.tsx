@@ -3,7 +3,7 @@
 import { Badge as CUIBadge, BadgeProps as CUIRBadgeProps, chakra } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
-import { badgeRecipe } from './theme/componentTheme/Badge';
+import { badgeRecipe } from './theme/recipes/BadgeRecipe';
 import { UIComponent } from './types';
 
 export type BadgeProps = CUIRBadgeProps & UIComponent;

@@ -1,7 +1,6 @@
 'use client';
-
+// TODO: review this when finished and remove unused components or components that aren't doing anything useful
 export * from './Accordion';
-export * from './AccordionIcon';
 export * from './AccordionItem';
 export * from './AccordionItemContent';
 export * from './AccordionItemTrigger';
@@ -19,11 +18,8 @@ export * from './Icon';
 export * from './IconButton';
 export * from './Input';
 export * from './InputGroup';
-export * from './InputLeftElement';
-export * from './InputRightElement';
 export * from './Menu';
 export * from './MenuButton';
-export * from './MenuDivider';
 export * from './MenuGroup';
 export * from './MenuItem';
 export * from './MenuList';
@@ -41,7 +37,6 @@ export * from './Table';
 export * from './TableContainer';
 export * from './TabList';
 export * from './TabPanel';
-export * from './TabPanels';
 export * from './Tabs';
 export * from './Tbody';
 export * from './Td';

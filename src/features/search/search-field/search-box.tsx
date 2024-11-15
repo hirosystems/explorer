@@ -71,7 +71,6 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
             bg="transparent"
             color="white"
             size={4}
-            icon={<Icon as={X} size={3} />}
             onClick={() => {
               setTempSearchTerm('');
               dispatch(clearSearchTerm());
@@ -79,7 +78,9 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
             aria-label={'Clear search bar'}
             _hover={{ bg: 'transparent' }}
             mr={3}
-          />
+          >
+            <Icon as={X} size={3} />
+          </IconButton>
         ) : tempSearchTerm === '' && isSearchFieldFocused ? (
           <Text
             color={'whiteAlpha.700'}

@@ -1,5 +1,6 @@
 'use client';
 
+import { useColorMode } from '@/components/ui/color-mode';
 import { CaretDown } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -35,7 +36,6 @@ import { Caption, Text, Title } from '../../../ui/typography';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useUser } from '../hooks/useUser';
 import { setCodeBody, toggleRightPanel } from '../sandbox-slice';
-import { useColorMode } from '@/components/ui/color-mode';
 
 const LoadButton = ({ codeBody }: { codeBody: string }) => {
   const router = useRouter();
@@ -127,9 +127,10 @@ const TxDetailsFunctions = ({
             onClick={() => {
               setFnsVisibility(s => !s);
             }}
-            icon={<CaretDown size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />}
             aria-label={'toggle function'}
-          />
+          >
+            <Icon as={CaretDown} size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />
+          </IconButton>
         </HStack>
       </Flex>
       {fnsVisible ? (

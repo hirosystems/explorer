@@ -65,9 +65,10 @@ export function LeftSection() {
                   onClick={() => {
                     setContractName('');
                   }}
-                  icon={<Icon as={X} size={4} />}
                   aria-label={'clear contract name field'}
-                />
+                >
+                  <Icon as={X} size={4} />
+                </IconButton>
               }
             >
               <Input
@@ -78,12 +79,10 @@ export function LeftSection() {
               />
             </InputGroup>
             <Box onClick={() => dispatch(toggleCodeToolbar())}>
-              <Tooltip label="Contract tools">
-                <IconButton
-                  icon={<Icon as={Toolbox} size={4} />}
-                  aria-label={'contract tools'}
-                  size={'40px'}
-                />
+              <Tooltip content="Contract tools">
+                <IconButton aria-label={'contract tools'} size={'40px'}>
+                  <Icon as={Toolbox} size={4} />
+                </IconButton>
               </Tooltip>
             </Box>
           </Flex>
@@ -99,7 +98,7 @@ export function LeftSection() {
                     })
               }
               width="100%"
-              variant={'primary'}
+              visual={'primary'}
             >
               {isConnected ? 'Deploy' : 'Connect Stacks Wallet'}
             </Button>
@@ -107,7 +106,7 @@ export function LeftSection() {
         </Stack>
         <Stack gap={2}>
           <Button
-            variant="secondary"
+            visual="secondary"
             rightIcon={<ArrowSquareOut />}
             onClick={() => {
               const paramsBase64 = { name: contractName, sourceCode: codeBody };

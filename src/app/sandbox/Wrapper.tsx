@@ -79,10 +79,11 @@ export function Wrapper({ children }: { children: ReactNode }) {
               <HStack alignItems="center">
                 <IconButton
                   onClick={() => dispatch(toggleRightPanel())}
-                  icon={<List />}
                   aria-label={'Toggle right panel'}
                   size={'4'}
-                />
+                >
+                  <List />
+                </IconButton>
               </HStack>
             </HStack>
           )

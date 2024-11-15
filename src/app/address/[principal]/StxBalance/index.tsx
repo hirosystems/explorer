@@ -51,15 +51,16 @@ function StxBalanceBase({ address }: StxBalanceProps) {
 
   const TopRight = (
     <Box position="relative">
-      <Tooltip label={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
+      <Tooltip content={`${qrShowing ? 'Hide' : 'Show'} QR code`}>
         <IconButton
           position="absolute"
           top="-18px"
           right="-12px"
-          icon={qrShowing ? <X /> : <QrCode />}
           onClick={toggleViewQrCode}
           aria-label={'toggle view QR code'}
-        />
+        >
+          {qrShowing ? <X /> : <QrCode />}
+        </IconButton>
       </Tooltip>
     </Box>
   );

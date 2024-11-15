@@ -55,7 +55,7 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
                 </Value>
               </Flex>
             ) : (
-              <Tooltip label={readableTs}>
+              <Tooltip content={readableTs}>
                 <Flex alignItems="center">
                   <Icon as={Clock} size={4} mr="4px" />
                   <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>

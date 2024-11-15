@@ -2,7 +2,6 @@
 
 import { Question } from '@phosphor-icons/react';
 import { FC } from 'react';
-import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -30,12 +29,13 @@ export const NonCanonical: FC<{
           </Box>
           <IconButton
             ml="8px"
-            icon={<Icon as={Question} />}
             as="a"
             href="https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#committing-to-a-chain-tip"
             target="_blank"
             aria-label={'sip-001'}
-          />
+          >
+            <Icon as={Question} />
+          </IconButton>
         </Flex>
       }
     />

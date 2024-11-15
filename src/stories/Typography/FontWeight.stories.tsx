@@ -5,7 +5,7 @@ import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 
 const FontWeightDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Font Weights</Heading>
 
     <Text fontWeight="thin">Thin (100): The quick brown fox jumps over the lazy dog</Text>
@@ -42,7 +42,7 @@ export const FontWeights: Story = {
       source: {
         code: `
 const FontWeightDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Font Weights</Heading>
     
     <Text fontWeight="thin">Thin (100): The quick brown fox jumps over the lazy dog</Text>

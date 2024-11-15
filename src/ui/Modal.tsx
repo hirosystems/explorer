@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  Modal as CUIModal,
-  ModalProps as CUIModalProps,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { closeModal } from '../common/components/modals/modal-slice';
@@ -34,14 +25,14 @@ export const Modal: FC<ModalProps> = ({
     dispatch(closeModal());
   };
   return (
-    <CUIModal onClose={onClose} {...rest}>
-      <ModalOverlay />
-      <ModalContent pb={'var(--stacks-space-4)'}>
-        {title && <ModalHeader>{title}</ModalHeader>}
-        <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
+    <Dialog.Root onClose={onClose} {...rest}>
+      <Dialog.Backdrop />
+      <Dialog.Content pb={'var(--stacks-space-4)'}>
+        {title && <Dialog.Header>{title}</Dialog.Header>}
+        <Dialog.CloseTrigger />
+        <Dialog.Body>{children}</Dialog.Body>
         {!!primaryAction || !!secondaryAction ? (
-          <ModalFooter>
+          <Dialog.Footer>
             {primaryAction && (
               <Button colorScheme="blue" mr={3} onClick={primaryAction.onClick}>
                 {primaryAction.label}
@@ -52,9 +43,9 @@ export const Modal: FC<ModalProps> = ({
                 {secondaryAction.label}
               </Button>
             )}
-          </ModalFooter>
+          </Dialog.Footer>
         ) : null}
-      </ModalContent>
-    </CUIModal>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 };

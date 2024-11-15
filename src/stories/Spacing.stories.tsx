@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useTheme } from 'next-themes';
 
 import { Box } from '../ui/Box';
 import { Flex } from '../ui/Flex';
 import { Stack } from '../ui/Stack';
 import { Text } from '../ui/Text';
-import { theme } from '../ui/theme/theme';
 
 const SpacingDemo = ({ space, value }: { space: string; value: string }) => (
-  <Stack align="start" spacing={2}>
+  <Stack align="start" gap={2}>
     <Flex gap={4} align="center">
       <Box w={value} h="24px" bg="blue.500" />
       <Text fontSize="sm" fontWeight="bold">
@@ -18,16 +18,19 @@ const SpacingDemo = ({ space, value }: { space: string; value: string }) => (
   </Stack>
 );
 
-const SpacingShowcase = () => (
-  <Stack align="stretch" spacing={8}>
-    <Text fontSize="2xl" fontWeight="bold">
-      Theme Spacing
-    </Text>
-    {Object.entries(theme.space).map(([space, value]) => (
-      <SpacingDemo key={space} space={space} value={(value as string).toString()} />
-    ))}
-  </Stack>
-);
+const SpacingShowcase = () => {
+  const { theme } = useTheme();
+  return (
+    <Stack align="stretch" gap={8}>
+      <Text fontSize="2xl" fontWeight="bold">
+        Theme Spacing
+      </Text>
+      {Object.entries(theme?.space ?? {}).map(([space, value]) => (
+        <SpacingDemo key={space} space={space} value={(value as string).toString()} />
+      ))}
+    </Stack>
+  );
+};
 
 const meta = {
   title: 'Theme/Spacing',
@@ -38,7 +41,7 @@ const meta = {
       source: {
         code: `
   // Example SpacingDemo for spacing 4. See w={4}
-  <Stack align="start" spacing={2}>
+  <Stack align="start" gap={2}>
     <Flex gap={4} align="center">
       <Box w={4} h="24px" bg="blue.500" />
       <Text fontSize="sm" fontWeight="bold">

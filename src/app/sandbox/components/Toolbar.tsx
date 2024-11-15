@@ -69,7 +69,7 @@ export const Sample = () => {
 export const Toolbar: React.FC<any> = () => {
   const codeBody = useAppSelector(selectCodeBody);
   const dispatch = useAppDispatch();
-  const { onCopy, hasCopied } = useClipboard(codeBody);
+  const { setValue: onCopy, copied } = useClipboard({ value: codeBody });
 
   const showCodeToolbar = useAppSelector(selectShowCodeToolbar);
   return showCodeToolbar ? (
@@ -89,19 +89,16 @@ export const Toolbar: React.FC<any> = () => {
         <Sample />
       </Flex>
       <HStack ml="auto">
-        <Box onClick={onCopy}>
-          <Tooltip label={hasCopied ? 'Copied!' : 'Copy contract code'}>
-            <IconButton
-              icon={<Icon as={CopySimple} size={4} color={'white'} />}
-              aria-label={'copy'}
-            />
+        <Box onClick={() => onCopy(codeBody)}>
+          <Tooltip content={copied ? 'Copied!' : 'Copy contract code'}>
+            <IconButton aria-label={'copy'}>
+              <Icon as={CopySimple} size={4} color={'white'} />
+            </IconButton>
           </Tooltip>
         </Box>
-        <IconButton
-          icon={<Icon as={X} size={4} color={'white'} />}
-          onClick={() => dispatch(toggleCodeToolbar())}
-          aria-label={'close'}
-        />
+        <IconButton onClick={() => dispatch(toggleCodeToolbar())} aria-label={'close'}>
+          <Icon as={X} size={4} color={'white'} />
+        </IconButton>
       </HStack>
     </Flex>
   ) : null;

@@ -65,7 +65,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
   );
 }
 
-export function Tabs(props: TokenTabsProps) {
+export function TokenTabs(props: TokenTabsProps) {
   return (
     <ExplorerErrorBoundary tryAgainButton>
       <TokenTabsBase {...props} />

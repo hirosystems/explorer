@@ -7,17 +7,18 @@ import { Tooltip } from '../../ui/Tooltip';
 
 export const CopyButton: FC<IconButtonProps & { initialValue: string }> = memo(
   ({ initialValue, ...rest }) => {
-    const { onCopy, hasCopied } = useClipboard(initialValue);
+    const { setValue: onCopy, copied } = useClipboard({ value: initialValue }); // TODO: this may be broken
     return (
-      <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'}>
+      <Tooltip content={copied ? 'Copied!' : 'Copy to clipboard'}>
         <IconButton
-          icon={<CopySimple strokeWidth={1.75} size={'20px'} />}
-          onClick={onCopy}
+          onClick={() => onCopy(initialValue)}
           height={'auto'}
           _focus={{ background: 'none' }}
           _hover={{ background: 'bg4' }}
           {...rest}
-        />
+        >
+          <CopySimple strokeWidth={1.75} size={'20px'} />
+        </IconButton>
       </Tooltip>
     );
   }

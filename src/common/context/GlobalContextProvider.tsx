@@ -37,7 +37,7 @@ function filterNetworks(
   );
 }
 
-interface Props {
+interface GlobalContext {
   cookies: string;
   apiUrls: Record<NetworkModes, string>;
   btcBlockBaseUrls: Record<NetworkModes, string>;
@@ -52,7 +52,7 @@ interface Props {
   apiClient: ReturnType<typeof getApiClient>;
 }
 
-export const GlobalContext = createContext<Props>({
+export const GlobalContext = createContext<GlobalContext>({
   cookies: '',
   apiUrls: NetworkModeUrlMap,
   btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap,

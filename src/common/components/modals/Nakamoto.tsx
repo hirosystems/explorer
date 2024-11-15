@@ -1,10 +1,4 @@
-import {
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 import { ArrowUpRight } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -13,7 +7,6 @@ import { Icon } from '../../..//ui/Icon';
 import { ButtonLink } from '../../../ui/ButtonLink';
 import { Flex } from '../../../ui/Flex';
 import { Image } from '../../../ui/Image';
-import { Modal } from '../../../ui/Modal';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 
@@ -42,22 +35,22 @@ export function NakamotoModal() {
   const queryClient = useQueryClient();
 
   return (
-    <Modal title={'Nakamoto'} isOpen={isOpen} onClose={() => handleClose()}>
-      <ModalOverlay />
-      <ModalContent width={'762px'} maxWidth={'full'}>
-        <ModalCloseButton
+    <Dialog.Root open={isOpen} onExitComplete={() => handleClose()}>
+      <Dialog.Backdrop />
+      <Dialog.Content width={'762px'} maxWidth={'full'}>
+        <Dialog.CloseTrigger
           _focus={{
             boxShadow: 'none',
           }}
         />
-        <ModalBody pt={'12'}>
+        <Dialog.Body pt={'12'}>
           <Flex direction={'column'} alignItems={'center'} gap={'6'}>
             <Text fontSize={'4xl'} textAlign={'center'}>
               Nakamoto 3.0 is live on Stacks Mainnet
             </Text>
             <Image src={'/nakamoto-mainnet.png'} alt={'Nakamoto'} />
             <ButtonLink
-              variant={'primary'}
+              visual={'primary'}
               href={'/'}
               onClick={() => {
                 handleClose();
@@ -68,7 +61,7 @@ export function NakamotoModal() {
             >
               Experience Fast Blocks and Bitcoin Finality
             </ButtonLink>
-            <ModalFooter borderTop={'1px'} width={'full'} justifyContent={'center'}>
+            <Dialog.Footer borderTop={'1px'} width={'full'} justifyContent={'center'}>
               <Flex alignItems="center" gap={1}>
                 <TextLink
                   color="accent.stacks-500"
@@ -80,10 +73,10 @@ export function NakamotoModal() {
                 </TextLink>
                 <Icon as={ArrowUpRight} size={3} color="accent.stacks-500" />
               </Flex>
-            </ModalFooter>
+            </Dialog.Footer>
           </Flex>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+        </Dialog.Body>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

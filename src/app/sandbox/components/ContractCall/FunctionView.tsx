@@ -252,7 +252,7 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                       </Text>
                       <Switch
                         id="post-condition-mode"
-                        isDisabled={isReadOnly}
+                        disabled={isReadOnly}
                         onChange={() => {
                           setFieldValue(
                             'postConditionMode',
@@ -263,20 +263,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                         }}
                         isChecked={values.postConditionMode === PostConditionMode.Allow}
                       />
-                      <Tooltip
-                        label={
-                          <Box>
-                            Allow mode is less secure than Deny mode. Allow mode permits asset
-                            transfers that are not covered by post conditions. In Deny mode no other
-                            asset transfers are permitted besides those named in the post conditions
-                          </Box>
-                        }
-                      >
+                      <Tooltip content="Allow mode is less secure than Deny mode. Allow mode permits asset transfers that are not covered by post conditions. In Deny mode no other asset transfers are permitted besides those named in the post conditions">
                         <Icon as={Info} size={5} />
                       </Tooltip>
                     </Flex>
                     {fn.args.length ? (
-                      <Stack mb="extra-loose" spacing="base" gap={4}>
+                      <Stack
+                        mb="extra-loose"
+                        // spacing="base" // upgrade v3. This may be broken
+                        gap={4}
+                      >
                         {fn.args.map(({ name, type }) => (
                           <Argument
                             handleChange={handleChange}

@@ -1,4 +1,3 @@
-import { Divider } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
 import { useEffect } from 'react';
 
@@ -57,7 +56,9 @@ export function MobileNav({
     >
       <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
         <Logo />
-        <IconButton onClick={close} icon={<Icon as={X} size={6} />} aria-label={'Close menu'} />
+        <IconButton onClick={close} aria-label={'Close menu'}>
+          <Icon as={X} size={6} />
+        </IconButton>
       </Flex>
       <Flex justifyContent={'space-between'}>
         <Flex gap={3}>
@@ -78,7 +79,7 @@ export function MobileNav({
         </Flex>
         <BtcStxPrice tokenPrice={tokenPrice} />
       </Flex>
-      <Stack divider={<Divider borderColor="border" />}>
+      <Stack separator={<Separator borderColor="border" />}>
         {explorerNavItems?.map((navItem, i) => (
           <>
             <LabelWrapper {...navItem} />
@@ -86,7 +87,7 @@ export function MobileNav({
           </>
         ))}
       </Stack>
-      <Stack spacing={3}>{networkNavItems?.map(navItem => <LabelWrapper {...navItem} />)}</Stack>
+      <Stack gap={3}>{networkNavItems?.map(navItem => <LabelWrapper {...navItem} />)}</Stack>
     </Stack>
   );
 }
