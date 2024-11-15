@@ -20,7 +20,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const tokenPrice = await getTokenPrice();
   const statusBarContent = await getStatusBarContent();
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
         <GlobalContextProvider 
         // TODO: this should be in providers

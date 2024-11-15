@@ -1,3 +1,5 @@
+import { useColorMode } from '@/components/ui/color-mode';
+import { Flex } from '@chakra-ui/react';
 import { FC, forwardRef } from 'react';
 
 import { Badge } from '../../../../common/components/Badge';
@@ -6,20 +8,18 @@ import { Section } from '../../../../common/components/Section';
 import { ArrowRightIcon } from '../../../../common/components/icons/arrow-right';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { showFn } from '../../../../common/utils/sandbox';
-import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import FunctionReadOnlyIcon from '../../../../ui/icons/FunctionReadOnly';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
-import { useColorMode } from '@/components/ui/color-mode';
 
 export const AbiFunction = forwardRef<
+  HTMLDivElement,
   {
     abiFn: { access: string; name: string };
     onClick?: () => void;
-  },
-  'div'
+  }
 >(({ abiFn, onClick }, ref) => {
   const colorMode = useColorMode().colorMode;
   return (

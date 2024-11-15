@@ -69,7 +69,7 @@ function StxBalanceBase({ address }: StxBalanceProps) {
     <Section title={qrShowing ? 'Address QR code' : 'STX Balance'} topRight={TopRight}>
       {!qrShowing ? (
         <Stack
-          sx={{
+          css={{
             '& > *:not(:last-child)': {
               borderBottom: '1px',
             },
@@ -98,7 +98,7 @@ function StxBalanceBase({ address }: StxBalanceProps) {
           ) : null}
           {isStacking ? (
             <Box
-              sx={{
+              css={{
                 '& > *:not(:last-child)': {
                   borderBottom: '1px',
                 },

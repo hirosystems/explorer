@@ -3,6 +3,7 @@ import { XCircle } from '@phosphor-icons/react';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { Button } from '../../ui/Button';
+// import { Button } from '@chakra-ui/react';
 import { ButtonLink } from '../../ui/ButtonLink';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
@@ -50,7 +51,7 @@ export function ErrorBox({
           </ButtonLink>
         )}
         {tryAgainButton && (
-          <Button onClick={() => reset()} variant="secondary" size={'xs'} fontSize={'12px'}>
+          <Button onClick={() => reset()} visual="secondary" size={'xs'} fontSize={'12px'}>
             Try again
           </Button>
         )}

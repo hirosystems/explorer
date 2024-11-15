@@ -18,7 +18,7 @@ export function CMSStatusBars({ statusBarContent }: { statusBarContent: Incident
           (alert.fields.showOnMainnet && !isTestnet) ||
           networkUrl.includes(alert.fields.networkUrlSubstring)
       );
-  const colorMode = useColorMode().colorMode;
+  const colorMode = useColorMode().colorMode || 'light'; // TODO: upgrade v3. This may be broken
   return (
     <Flex
       direction={'column'}

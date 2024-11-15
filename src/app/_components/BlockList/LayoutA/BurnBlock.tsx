@@ -60,7 +60,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
           </Text>
         </TextLink>
       </HStack>
-      <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+      <HStack separator={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
         <Box>{truncateMiddle(hash, 3)}</Box>
         {timestamp && <Timestamp ts={timestamp} />}
       </HStack>

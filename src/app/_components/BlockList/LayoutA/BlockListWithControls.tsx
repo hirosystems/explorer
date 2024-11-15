@@ -49,12 +49,12 @@ export function BlockListWithControls({
             onChange: () => {
               setGroupedByBtc(!groupedByBtc);
             },
-            isChecked: groupedByBtc,
-            isDisabled: true,
+            checked: groupedByBtc,
+            disabled: true,
           }}
           liveUpdates={{
             onChange: toggleLiveUpdates,
-            isChecked: liveUpdates,
+            checked: liveUpdates,
           }}
           horizontal={horizontalControls}
         />

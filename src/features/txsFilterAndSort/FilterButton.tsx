@@ -2,13 +2,12 @@
 
 import { useColorModeValue } from '@/components/ui/color-mode';
 // TODO: v3 upgrade. this might be broken
-import { useCheckboxGroup } from '@chakra-ui/react';
+import { Checkbox, CheckboxRootProps, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
 
 import { Button } from '../../ui/Button';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
-import { Checkbox, CheckboxProps } from '../../ui/Checkbox';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
 import { Menu } from '../../ui/Menu';
@@ -33,7 +32,7 @@ function FilterItem({
   icon: ReactNode;
   value: string;
   selectedFilters: (string | number)[];
-  checkboxProps: CheckboxProps;
+  checkboxProps: CheckboxRootProps;
 }) {
   return (
     <MenuItem
@@ -54,9 +53,10 @@ function FilterItem({
       >
         {icon}
         <Text fontSize={'sm'}>{label}</Text>
-        <Checkbox
+        <Checkbox.Root
+          // TODO: v3 upgrade. this might be broken
           ml={'auto'}
-          isChecked={selectedFilters.includes(value)}
+          checked={selectedFilters.includes(value)}
           {...checkboxProps}
           variant="outline"
         />

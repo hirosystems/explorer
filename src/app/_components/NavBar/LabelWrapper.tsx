@@ -1,6 +1,7 @@
+import { Link } from '@chakra-ui/react';
+
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { Link } from '../../../ui/Link';
 import { NavItem } from './types';
 
 export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
@@ -14,14 +15,7 @@ export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
       }}
     >
       {href ? (
-        <Link
-          href={href}
-          display="block"
-          rounded="md"
-          color="text"
-          width="full"
-          variant="noUnderline"
-        >
+        <Link href={href} display="block" rounded="md" color="text" width="full" type="noUnderline">
           {label}
         </Link>
       ) : (

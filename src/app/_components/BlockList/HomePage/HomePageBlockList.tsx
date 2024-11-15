@@ -78,11 +78,11 @@ function HomePageBlockListBase() {
                 toggleLiveUpdates(true);
               }
             },
-            isChecked: groupedByBtc,
+            checked: groupedByBtc,
           }}
           liveUpdates={{
             onChange: () => toggleLiveUpdates(),
-            isChecked: liveUpdates,
+            checked: liveUpdates,
           }}
           padding={0}
           border="none"

@@ -8,8 +8,8 @@ import { UIComponent } from './types';
 
 export type ButtonProps = CUIButtonProps & UIComponent;
 export const ButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, ...rest }, ref) => (
-    <CUIButton ref={ref} {...rest}>
+  ({ children, ...buttonProps }, ref) => (
+    <CUIButton ref={ref} {...buttonProps}>
       {children}
     </CUIButton>
   )

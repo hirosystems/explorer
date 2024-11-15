@@ -1,15 +1,25 @@
 'use client';
 
-import { Text as CUIText, TextProps as CUITextProps } from '@chakra-ui/react';
+import { Link, LinkProps, Text, TextProps } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
-import { UIComponent } from './types';
-
-export type TextLinkProps = CUITextProps & UIComponent;
+export type TextLinkProps = TextProps & LinkProps;
 export const TextLink = forwardRef<HTMLParagraphElement, TextLinkProps>(
-  ({ children, ...rest }, ref) => (
-    <CUIText as={'a'} ref={ref} {...rest}>
-      {children}
-    </CUIText>
+  ({ children, href, target, ...textProps }, ref) => (
+    <Text ref={ref} {...textProps}>
+      <Link href={href} target={target}>
+        {children}
+      </Link>
+    </Text>
   )
 );
+
+// 'use client';
+
+// import { Text as CUIText, TextProps as CUITextProps, forwardRef } from '@chakra-ui/react';
+
+// export const TextLink = forwardRef<CUITextProps, 'a'>(({ children, ...rest }, ref) => (
+//   <CUIText as={'a'} ref={ref} {...rest}>
+//     {children}
+//   </CUIText>
+// ));

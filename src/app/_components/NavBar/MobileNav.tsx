@@ -1,3 +1,4 @@
+import { Separator } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
 import { useEffect } from 'react';
 
@@ -83,7 +84,7 @@ export function MobileNav({
         {explorerNavItems?.map((navItem, i) => (
           <>
             <LabelWrapper {...navItem} />
-            {i === explorerNavItems.length - 1 && <Divider borderColor="border" />}
+            {i === explorerNavItems.length - 1 && <Separator borderColor="border" />}
           </>
         ))}
       </Stack>

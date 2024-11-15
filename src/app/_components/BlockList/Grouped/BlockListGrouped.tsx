@@ -32,7 +32,7 @@ const PADDING = 4;
 const GroupHeader = () => {
   return (
     <>
-      <Box position="sticky" left={0} bg="surface" pr={4} sx={mobileBorderCss}>
+      <Box position="sticky" left={0} bg="surface" pr={4} css={mobileBorderCss}>
         <ListHeader width="fit-content" bg="hoverBackground">
           Block height
         </ListHeader>
@@ -75,7 +75,7 @@ const StxBlockRow = ({
         left={0}
         gap={2}
         fontSize="sm"
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         gridColumn="1 / 2"
         alignItems="center"
         zIndex="docked"
@@ -90,7 +90,7 @@ const StxBlockRow = ({
       </Flex>
 
       <HStack
-        divider={<Caption>∙</Caption>}
+        separator={<Caption>∙</Caption>}
         gap={1}
         whiteSpace="nowrap"
         gridColumn="3 / 4"
@@ -118,7 +118,7 @@ const StxBlockRow = ({
         bg="surface"
         gap={2}
         fontSize="sm"
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         alignItems="center"
       >
         <LineAndNode rowHeight={14} width={6} icon={icon} isLast={isLast} />
@@ -272,7 +272,7 @@ function BitcoinHeader({
         </Flex>
       </Flex>
       <Box>
-        <HStack divider={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+        <HStack separator={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
           <ExplorerLink
             fontSize="xs"
             color="textSubdued"
@@ -297,7 +297,7 @@ export function Footer({
 }) {
   return (
     <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
-      <HStack divider={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
+      <HStack separator={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {blocksCount ? blocksCount : '-'} blocks
         </Text>

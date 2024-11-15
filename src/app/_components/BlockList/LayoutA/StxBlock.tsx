@@ -29,7 +29,7 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
       borderLeft={icon ? undefined : '1px'}
       borderColor={borderColor}
       position="relative"
-      __css={{
+      css={{
         '>div': {
           borderTop: '1px',
         },
@@ -80,7 +80,7 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
             </Text>
           </BlockLink>
         </Flex>
-        <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color={secondaryTextColor}>
+        <HStack separator={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color={secondaryTextColor}>
           <Box>{truncateMiddle(hash, 3)}</Box>
           {txsCount !== undefined ? <Box>{txsCount} txn</Box> : null}
           <Timestamp ts={timestamp} />

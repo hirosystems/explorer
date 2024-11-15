@@ -1,9 +1,9 @@
 'use client';
 
-import { defineSlotRecipe, checkboxAnatomy } from '@chakra-ui/react';
+import { defineSlotRecipe } from '@chakra-ui/react';
 
 export const checkboxSlotRecipe = defineSlotRecipe({
-  slots: checkboxAnatomy.keys(),
+  slots: ['root', 'control', 'label'], // TODO: upgrade v3. Why isn't this typed? Why isn't the checkbox anatomy exported? export { checkboxAnatomy } from "@ark-ui/react/checkbox"
   base: {},
   variants: {
     visual: {
@@ -23,9 +23,9 @@ export const checkboxSlotRecipe = defineSlotRecipe({
             bg: 'surface',
             borderColor: { base: 'slate.300', _dark: 'slate.700' },
           },
-          label: {
-            fontSize: 'sm',
-          },
+        },
+        label: {
+          fontSize: 'sm',
         },
       },
     },

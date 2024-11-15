@@ -82,7 +82,7 @@ export function UpdateBarBase({
       >
         {text}
       </Text>
-      <Button variant="text" onClick={update}>
+      <Button onClick={update}>
         <Flex alignItems={'center'} gap={1.5}>
           <Icon
             color="buttonText"

@@ -1,26 +1,26 @@
-'use client';
+// 'use client';
 
-import type { RecipeVariantProps } from '@chakra-ui/react';
-import { chakra, useSlotRecipe } from '@chakra-ui/react';
+// import type { RecipeVariantProps } from '@chakra-ui/react';
+// import { chakra, useSlotRecipe } from '@chakra-ui/react';
 
-import { checkboxSlotRecipe } from './theme/recipes/CheckboxRecipe';
+// import { checkboxSlotRecipe } from './theme/recipes/CheckboxRecipe';
 
-type CheckboxVariantProps = RecipeVariantProps<typeof checkboxSlotRecipe>;
+// type CheckboxVariantProps = RecipeVariantProps<typeof checkboxSlotRecipe>;
 
-export interface CheckboxProps extends React.PropsWithChildren<CheckboxVariantProps> {}
+// export interface CheckboxProps extends React.PropsWithChildren<CheckboxVariantProps> {}
 
-export const Checkbox = (props: CheckboxProps) => {
-  const recipe = useSlotRecipe({ recipe: checkboxSlotRecipe });
-  const [recipeProps, restProps] = recipe.splitVariantProps(props);
-  const styles = recipe(recipeProps);
+// export const Checkbox = (props: CheckboxProps) => {
+//   const recipe = useSlotRecipe({ recipe: checkboxSlotRecipe }) as ReturnType<typeof useSlotRecipe>;
+//   const [recipeProps, restProps] = (recipe as any).splitVariantProps(props);
+//   const styles = recipe(recipeProps);
 
-  return (
-    <chakra.label css={styles.root}>
-      <chakra.input type="checkbox" css={styles.control} {...restProps} />
-      <chakra.span css={styles.label}>Checkbox Label</chakra.span>
-    </chakra.label>
-  );
-};
+//   return (
+//     <chakra.label css={styles.root}>
+//       <chakra.input type="checkbox" css={styles.control} {...restProps} />
+//       <chakra.span css={styles.label}>Checkbox Label</chakra.span>
+//     </chakra.label>
+//   );
+// };
 
 // 'use client';
 
