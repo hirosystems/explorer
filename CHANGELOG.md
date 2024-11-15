@@ -1,3 +1,10 @@
+# [1.228.0](https://github.com/hirosystems/explorer/compare/v1.227.0...v1.228.0) (2024-11-15)
+
+
+### Features
+
+* added signer id page ([1486573](https://github.com/hirosystems/explorer/commit/148657325300fd9c96d2ea49ae59aa4edc57177c))
+
 # [1.227.0](https://github.com/hirosystems/explorer/compare/v1.226.0...v1.227.0) (2024-11-12)
 
 
