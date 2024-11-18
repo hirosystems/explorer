@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
@@ -22,7 +22,7 @@ export const Loading: FC = () => {
           <SkeletonItem height={'15px'} />
         </Box>
       </Td>
-      <Td isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
+      <Td width={'130px'} padding={'10px 16px 10px 20px'}>
         <Box maxWidth={'70px'} marginLeft={'auto'}>
           <SkeletonItem height={'15px'} />
         </Box>

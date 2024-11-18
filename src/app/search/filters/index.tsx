@@ -33,7 +33,7 @@ export function ClearFiltersButton({ filters }: FilterProps) {
     <Flex gap={2} alignItems={'center'}>
       <TextLink
         href={pageUrlWithNoFilters}
-        variant={'secondary'}
+        visual={'secondary'} // TODO: upgrade v3. This may be broken
         width={'full'}
         fontSize={'sm'}
         fontWeight={'medium'}

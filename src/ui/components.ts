@@ -9,7 +9,6 @@ export * from './Button';
 export * from './CodeEditor';
 export * from './Collapsible';
 export * from './Flex';
-export * from './FormControl';
 export * from './FormErrorMessage';
 export * from './FormLabel';
 export * from './Grid';

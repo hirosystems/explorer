@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Box } from '../ui/Box';
 import { Flex } from '../ui/Flex';
 import { Text } from '../ui/Text';
-import { theme } from '../ui/theme/theme';
+import { system } from '../ui/theme/theme';
 
 const BorderRadiusDemo = () => {
   return (
@@ -11,7 +11,7 @@ const BorderRadiusDemo = () => {
       <Text fontSize="2xl" fontWeight="bold">
         Border Radius Showcase
       </Text>
-      {Object.entries(theme.radii).map(([size, value]) => (
+      {Object.entries(system._config.theme?.tokens?.radii ?? {}).map(([size, value]) => (
         <Flex key={size} align="center" gap={4}>
           <Box width="100px" height="100px" bg="blue.500" borderRadius={size} />
           <Text>

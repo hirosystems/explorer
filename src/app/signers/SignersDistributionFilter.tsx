@@ -16,7 +16,7 @@ export function SignersDistributionFilter({
         onChange={() => {
           setOnlyShowPublicSigners(!onlyShowPublicSigners);
         }}
-        isChecked={onlyShowPublicSigners}
+        checked={onlyShowPublicSigners}
       />
       <FormLabel
         htmlFor="only-show-public-signers"

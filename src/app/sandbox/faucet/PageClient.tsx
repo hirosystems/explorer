@@ -3,13 +3,8 @@
 import { NextPage } from 'next';
 import React from 'react';
 
-import { Badge } from '../../../common/components/Badge';
-import { DropIcon } from '../../../common/components/icons/drop';
 import { useFaucet } from '../../../common/queries/useFaucet';
-import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
@@ -77,7 +72,7 @@ const Faucet: NextPage = () => {
       ) : null}
       <Stack gap={4}>
         <Button
-          variant={'primary'}
+          visual={'primary'}
           mx="auto"
           onClick={() => !!stxAddress && runFaucetStx({ address: stxAddress })}
         >
@@ -86,7 +81,7 @@ const Faucet: NextPage = () => {
         <Button
           size={'xs'}
           fontSize={'xs'}
-          variant={'secondary'}
+          visual={'secondary'}
           onClick={() => handleStackingRequest()}
         >
           {getStackingLabel()}

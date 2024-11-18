@@ -1,10 +1,10 @@
+import { ColorMode, useColorMode } from '@/components/ui/color-mode';
 import { ReactNode, useMemo } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';
 import { Text, TextProps } from '../../ui/Text';
-import { useColorMode} from '@/components/ui/color-mode';
 import { getSignerDistributionPieChartColor } from './SignerDistributionPieChart';
 import { PoxSigner } from './data/useSigners';
 import { getSignerKeyName } from './utils';
@@ -32,7 +32,7 @@ export function SignerLegendItem({
               ? getSignerDistributionPieChartColor(
                   isKnownSigner,
                   signerVotingPower,
-                  colorMode.colorMode
+                  colorMode.colorMode || ('light' as ColorMode) // TODO: upgrade v3. This may be broken
                 )
               : 'textSubdued'
           }

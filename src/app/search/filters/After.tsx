@@ -80,7 +80,7 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
               width="100%"
               type="submit"
               fontSize={'sm'}
-              variant={'secondary'}
+              visual={'secondary'}
               height={'40px'}
               color="textSubdued"
             >

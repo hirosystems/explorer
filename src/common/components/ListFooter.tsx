@@ -28,7 +28,7 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
     return (
       <Box {...rest} width={'full'}>
         <ExplorerLink href={href} mt={'auto'} width={'full'}>
-          <Button variant={'secondary'} width={'full'}>
+          <Button visual={'secondary'} width={'full'}>
             View all recent {label} <Icon as={ArrowUpRight} size={4} />
           </Button>
         </ExplorerLink>
@@ -38,7 +38,7 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
   if (fetchNextPage && hasNextPage) {
     return (
       <Box {...rest} width={'full'}>
-        <Button variant={'secondary'} onClick={() => fetchNextPage()} width={'full'}>
+        <Button visual={'secondary'} onClick={() => fetchNextPage()} width={'full'}>
           {isLoading ? 'Loading...' : `Load more ${label}`}
         </Button>
       </Box>

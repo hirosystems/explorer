@@ -55,7 +55,7 @@ interface DateFilterProps {
 }
 
 export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps) {
-  const { onOpen, onClose, isOpen } = useDisclosure();
+  const { onOpen, onClose, open } = useDisclosure();
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime)) ? null : Number(defaultStartTime);
   const defaultEndTimeNumber = isNaN(Number(defaultEndTime)) ? null : Number(defaultEndTime);
 
@@ -89,7 +89,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
     <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
       <PopoverTrigger>
         <Button
-          variant={'secondary'}
+          visual={'secondary'}
           fontSize={'sm'}
           rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
           height={9}

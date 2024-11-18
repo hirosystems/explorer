@@ -1,5 +1,6 @@
 'use client';
 
+import { useBreakpointValue } from '@chakra-ui/react';
 import { Clock } from '@phosphor-icons/react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
@@ -12,14 +13,13 @@ import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
 import { Tooltip } from '../../../../ui/Tooltip';
-import { useMediaQuery } from '../../../../ui/hooks/useMediaQuery';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 import { useTxBlock } from '../useTxBlock';
 import { isInMempool, isInMicroblock } from '../utils';
 
 function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
   const { data: block } = useTxBlock(tx);
-  const [isOnTouchScreen] = useMediaQuery('(hover: none)');
+  const isOnTouchScreen = useBreakpointValue({ base: true, md: false });
 
   if (isInMempool(tx) || isInMicroblock(tx)) return null;
 

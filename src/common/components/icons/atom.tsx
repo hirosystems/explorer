@@ -1,9 +1,8 @@
+import { Icon, IconProps } from '@chakra-ui/react';
 import React from 'react';
 
-import { Box, BoxProps } from '../../../ui/Box';
-
-export const AtomIcon: React.FC<BoxProps> = props => (
-  <Box
+export const AtomIcon: React.FC<IconProps> = props => (
+  <Icon
     as="svg"
     width="44"
     height="44"
@@ -25,5 +24,5 @@ export const AtomIcon: React.FC<BoxProps> = props => (
       d="M12 2a4 10 0 0 0 -4 10a4 10 0 0 0 4 10a4 10 0 0 0 4 -10a4 10 0 0 0 -4 -10"
       transform="rotate(-45 12 12)"
     />
-  </Box>
+  </Icon>
 );

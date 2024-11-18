@@ -1,31 +1,31 @@
 import { useColorMode } from '@/components/ui/color-mode';
-import { Separator } from '@chakra-ui/react';
+import { Menu, Separator } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import React from 'react';
 
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
-import { Menu } from '../../../ui/Menu';
-import { MenuButton } from '../../../ui/MenuButton';
-import { MenuList } from '../../../ui/MenuList';
 import { LinksGroup } from './LinksGroup';
 import { TokenLinks } from './types';
 
 export function LinksMenu(props: { links: TokenLinks }) {
   const colorMode = useColorMode().colorMode;
+
   return (
-    <Menu>
-      <MenuButton
+    <Menu.Root>
+      <Menu.Trigger
         as={Button}
         backgroundColor={colorMode === 'light' ? 'white' : 'transparent'}
-        variant={colorMode === 'light' ? undefined : 'outline'} // TODO: v3 upgrade. this might be broken
+        layerStyle={colorMode === 'light' ? undefined : 'outline'} // TODO: v3 upgrade. this might be broken
         color={'textTitle.light'}
-        rightIcon={<Icon as={CaretDown} size="11px" color={'textCaption.light'} />}
         _hover={{ backgroundColor: colorMode === 'light' ? 'white' : 'transparent' }}
       >
-        Links
-      </MenuButton>
-      <MenuList>
+        <Flex alignItems="center" justifyContent="space-between" gap={2}>
+          Links
+          <Icon as={CaretDown} size="11px" color={'textCaption.light'} />
+        </Flex>
+      </Menu.Trigger>
+      <Menu.Content>
         {[
           { title: 'Websites', links: props.links.websites },
           { title: 'Blockchain', links: props.links.blockchain },
@@ -42,7 +42,7 @@ export function LinksMenu(props: { links: TokenLinks }) {
             )}
           </React.Fragment>
         ))}
-      </MenuList>
-    </Menu>
+      </Menu.Content>
+    </Menu.Root>
   );
 }

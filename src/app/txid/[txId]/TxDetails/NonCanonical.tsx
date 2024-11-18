@@ -1,5 +1,6 @@
 'use client';
 
+import { IconButton, Link } from '@chakra-ui/react';
 import { Question } from '@phosphor-icons/react';
 import { FC } from 'react';
 
@@ -10,7 +11,6 @@ import { TransactionStatus } from '../../../../common/constants/constants';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
-import { IconButton } from '../../../../ui/IconButton';
 
 export const NonCanonical: FC<{
   tx: Transaction | MempoolTransaction;
@@ -27,15 +27,14 @@ export const NonCanonical: FC<{
           <Box>
             Transaction is in a non-canonical fork. It has been orphaned by the canonical chain.
           </Box>
-          <IconButton
-            ml="8px"
-            as="a"
+          <Link
             href="https://github.com/stacksgov/sips/blob/main/sips/sip-001/sip-001-burn-election.md#committing-to-a-chain-tip"
-            target="_blank"
-            aria-label={'sip-001'}
+            target="_blank" // TODO: upgrade to v3. This might be broken
           >
-            <Icon as={Question} />
-          </IconButton>
+            <IconButton ml="8px" aria-label={'sip-001'}>
+              <Icon as={Question} />
+            </IconButton>
+          </Link>
         </Flex>
       }
     />

@@ -1,11 +1,6 @@
 'use client';
 
-import * as React from 'react';
-import { ReactNode } from 'react';
-
-import { Alert, AlertProps } from '../../../ui/Alert';
-import { AlertDescription } from '../../../ui/AlertDescription';
-import { AlertIcon } from '../../../ui/AlertIcon';
+import { Alert } from '@chakra-ui/react';
 
 interface AlertError {
   name?: string;
@@ -16,13 +11,13 @@ export function AlertBase({
   status,
   message,
 }: {
-  status: AlertProps['status'];
-  message: string | ReactNode;
+  status: Alert.RootProps['status'];
+  message: string;
 }) {
   return (
-    <Alert status={status} rounded={'lg'} alignItems={'flexStart'}>
-      <AlertIcon />
-      <AlertDescription fontSize={'sm'}>{message}</AlertDescription>
-    </Alert>
+    // TODO: upgrade to v3. This might be broken
+    <Alert.Root status={status} rounded={'lg'}>
+      <Alert.Description fontSize={'sm'}>{message}</Alert.Description>
+    </Alert.Root>
   );
 }

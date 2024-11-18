@@ -1,17 +1,16 @@
+import { Flex, FlexProps } from '@chakra-ui/react';
 import { FC } from 'react';
 
-import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
 import { StatSection } from '../../../_components/Stats/StatSection';
 import { TrendArrow } from './TrendArrow';
 
 export const Price: FC<
-  GridProps & {
+  FlexProps & {
     currentPrice: number | null | undefined;
     priceChangePercentage24h: number | null | undefined;
     currentPriceInBtc: number | null | undefined;
   }
-> = ({ currentPrice, priceChangePercentage24h, currentPriceInBtc, ...gridProps }) => {
+> = ({ currentPrice, priceChangePercentage24h, currentPriceInBtc, ...flexProps }) => {
   return (
     <StatSection
       title="Price"
@@ -26,7 +25,7 @@ export const Price: FC<
           {currentPriceInBtc ? `${currentPriceInBtc.toFixed(8)} BTC` : 'N/A'}
         </Flex>
       }
-      {...gridProps}
+      {...flexProps}
     />
   );
 };

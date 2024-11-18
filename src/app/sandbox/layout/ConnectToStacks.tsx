@@ -1,5 +1,5 @@
 import { useColorModeValue } from '@/components/ui/color-mode';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { useAppDispatch } from '../../../common/state/hooks';
 import { Button } from '../../../ui/Button';
@@ -37,7 +37,7 @@ export const ConnectToStacks: FC = () => {
           }
           width="100%"
           height={8}
-          variant="secondary"
+          visual="secondary"
         >
           Connect Stacks Wallet
         </Button>

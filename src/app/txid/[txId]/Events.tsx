@@ -223,7 +223,7 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
         title: name,
         subtitle: (
           <>
-            <HStack flexWrap="wrap" alignItems="center" gap={1} divider={<Caption>∙</Caption>}>
+            <HStack flexWrap="wrap" alignItems="center" gap={1} separator={<Caption>∙</Caption>}>
               {assetEventType ? <Caption fontWeight={'semibold'}>{assetEventType}</Caption> : null}
               {assetAmounts && (
                 <Caption>
@@ -239,7 +239,7 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
               {tokenType && <Caption>{tokenType}</Caption>}
             </HStack>
             {memo && (
-              <HStack flexWrap="nowrap" gap={1} divider={<Caption>∙</Caption>}>
+              <HStack flexWrap="nowrap" gap={1} separator={<Caption>∙</Caption>}>
                 <Caption fontWeight={'semibold'}>Memo</Caption>
                 <Caption textOverflow={'ellipsis'} overflow={'hidden'} whiteSpace={'nowrap'}>
                   {memo}

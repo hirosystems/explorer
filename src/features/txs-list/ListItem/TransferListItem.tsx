@@ -1,4 +1,5 @@
 import { useColorModeValue } from '@/components/ui/color-mode';
+import { useBreakpointValue } from '@chakra-ui/react';
 import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import { FC, memo, useMemo } from 'react';
 
@@ -12,7 +13,6 @@ import { useFtMetadata } from '../../../common/queries/useFtMetadata';
 import { ftDecimals, getAssetNameParts } from '../../../common/utils/utils';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
-import { useBreakpointValue } from '../../../ui/hooks/useBreakpointValue';
 import { Caption } from '../../../ui/typography';
 
 interface TransferListItemProps {
@@ -78,7 +78,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
           gap={1}
           alignItems="center"
           flexWrap="wrap"
-          divider={<Caption>&nbsp;∙&nbsp;</Caption>}
+          separator={<Caption>&nbsp;∙&nbsp;</Caption>}
         >
           <Caption>Transfer</Caption>
           <Caption>{type}</Caption>
