@@ -1,5 +1,5 @@
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
 import { Flex } from '../../../ui/Flex';
@@ -33,7 +33,7 @@ export function ClearFiltersButton({ filters }: FilterProps) {
     <Flex gap={2} alignItems={'center'}>
       <TextLink
         href={pageUrlWithNoFilters}
-        visual={'secondary'} // TODO: upgrade v3. This may be broken
+        // color={'secondary'} // TODO: upgrade v3. This may be broken
         width={'full'}
         fontSize={'sm'}
         fontWeight={'medium'}

@@ -84,7 +84,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
             </Text>
           </Flex>
         ) : (
-          <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+          <HStack separator={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
             <ExplorerLink
               fontSize="xs"
               color={'textSubdued'}
@@ -118,7 +118,7 @@ const GroupHeader = () => {
         zIndex={'docked'}
         bg={'surface'}
         pr={4}
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
       >
         <ListHeader width="fit-content" bg="hoverBackground">
           Block height
@@ -169,7 +169,7 @@ function StxBlockRow({
         alignItems="center"
         gridColumn="1 / 2"
         gap={2}
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         zIndex="docked"
         bg="surface"
       >
@@ -182,7 +182,7 @@ function StxBlockRow({
       </Flex>
 
       <HStack
-        divider={<>&nbsp;∙&nbsp;</>}
+        separator={<>&nbsp;∙&nbsp;</>}
         gap={1}
         whiteSpace="nowrap"
         color="textSubdued"
@@ -209,7 +209,7 @@ function StxBlockRow({
         gap={2}
         position="sticky"
         left={0}
-        sx={mobileBorderCss}
+        css={mobileBorderCss}
         zIndex="docked"
         bg="surface"
       >

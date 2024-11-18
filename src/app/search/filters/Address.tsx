@@ -1,4 +1,4 @@
-import { useDisclosure } from '@chakra-ui/react';
+import { Field as CUIField, Fieldset, useDisclosure } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowUpRight, CaretDown } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -8,8 +8,6 @@ import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { ExpandingTextarea } from '../../../ui/ExpandingTextarea';
 import { Flex } from '../../../ui/Flex';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
 import { Icon } from '../../../ui/Icon';
 import { Popover } from '../../../ui/Popover';
 import { PopoverContent } from '../../../ui/PopoverContent';
@@ -112,37 +110,45 @@ export function AddressFilter({
               <Form>
                 <Stack gap={4}>
                   <Field name="fromAddress">
-                    {({ field, form }: FieldProps<string, FormValues>) => (
-                      <FormControl>
-                        <FormLabel>From:</FormLabel>
-                        <ExpandingTextarea
-                          {...field}
-                          placeholder="STX Address"
-                          fontSize={'sm'}
-                          css={{
-                            '::placeholder': {
-                              color: 'textSubdued',
-                            },
-                          }}
-                        />
-                      </FormControl>
+                    {(
+                      { field, form }: FieldProps<string, FormValues> // TODO: upgrade to v3. This may be broken
+                    ) => (
+                      <Fieldset.Root>
+                        <CUIField.Root>
+                          <CUIField.Label>From:</CUIField.Label>
+                          <CUIField.ErrorText>{form.errors.fromAddress}</CUIField.ErrorText>
+                          <ExpandingTextarea
+                            {...field} // TODO: upgrade to v3. This may be broken
+                            placeholder="STX Address"
+                            fontSize={'sm'}
+                            css={{
+                              '::placeholder': {
+                                color: 'textSubdued',
+                              },
+                            }}
+                          />
+                        </CUIField.Root>
+                      </Fieldset.Root>
                     )}
                   </Field>
                   <Field name="toAddress">
                     {({ field, form }: FieldProps<string, FormValues>) => (
-                      <FormControl>
-                        <FormLabel>To:</FormLabel>
-                        <ExpandingTextarea
-                          {...field}
-                          placeholder="STX Address"
-                          fontSize={'sm'}
-                          css={{
-                            '::placeholder': {
-                              color: 'textSubdued',
-                            },
-                          }}
-                        />
-                      </FormControl>
+                      <Fieldset.Root>
+                        <CUIField.Root>
+                          <CUIField.Label>To:</CUIField.Label>
+                          <CUIField.ErrorText>{form.errors.toAddress}</CUIField.ErrorText>
+                          <ExpandingTextarea
+                            {...field} // TODO: upgrade to v3. This may be broken
+                            placeholder="STX Address"
+                            fontSize={'sm'}
+                            css={{
+                              '::placeholder': {
+                                color: 'textSubdued',
+                              },
+                            }}
+                          />
+                        </CUIField.Root>
+                      </Fieldset.Root>
                     )}
                   </Field>
                 </Stack>

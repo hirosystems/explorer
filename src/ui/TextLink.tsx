@@ -1,7 +1,9 @@
 'use client';
 
-import { Link, LinkProps, Text, TextProps } from '@chakra-ui/react';
+import { Text, TextProps } from '@chakra-ui/react';
 import { forwardRef } from 'react';
+
+import { Link, LinkProps } from './Link';
 
 export type TextLinkProps = TextProps & LinkProps;
 export const TextLink = forwardRef<HTMLParagraphElement, TextLinkProps>(

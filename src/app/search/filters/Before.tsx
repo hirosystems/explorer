@@ -1,3 +1,4 @@
+import { Field as CUIField, Fieldset } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -5,8 +6,6 @@ import DatePicker from 'react-datepicker';
 
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
 import { Stack } from '../../../ui/Stack';
 import { DateInput } from './DateInput';
 
@@ -47,28 +46,34 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
         <Form>
           <Stack gap={4}>
             <Field name="endTime">
-              {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl>
-                  <FormLabel>Before:</FormLabel>
-                  <DatePicker
-                    customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
-                    selected={form.values.endTime ? new UTCDate(form.values.endTime * 1000) : null}
-                    onChange={date => {
-                      if (date) {
-                        const utcEnd = new UTCDate(
-                          date.getUTCFullYear(),
-                          date.getUTCMonth(),
-                          date.getUTCDate(),
-                          23,
-                          59,
-                          59
-                        );
-                        form.setFieldValue('endTime', utcEnd.getTime() / 1000);
+              {(
+                { field, form }: FieldProps<string, FormValues> // TODO: upgrade to v3. This may be broken.
+              ) => (
+                <Fieldset.Root>
+                  <CUIField.Root>
+                    <CUIField.Label>Before:</CUIField.Label>
+                    <DatePicker
+                      customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
+                      selected={
+                        form.values.endTime ? new UTCDate(form.values.endTime * 1000) : null
                       }
-                    }}
-                    dateFormat="yyyy-MM-dd"
-                  />
-                </FormControl>
+                      onChange={date => {
+                        if (date) {
+                          const utcEnd = new UTCDate(
+                            date.getUTCFullYear(),
+                            date.getUTCMonth(),
+                            date.getUTCDate(),
+                            23,
+                            59,
+                            59
+                          );
+                          form.setFieldValue('endTime', utcEnd.getTime() / 1000);
+                        }
+                      }}
+                      dateFormat="yyyy-MM-dd"
+                    />
+                  </CUIField.Root>
+                </Fieldset.Root>
               )}
             </Field>
           </Stack>

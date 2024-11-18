@@ -86,9 +86,10 @@ export const FilterButton = memo(() => {
 
   const { setActiveFilters } = useFilterAndSortState();
 
-  const { value: selectedFilters, getCheckboxProps } = useCheckboxGroup({ // TODO: v3 upgrade. this might be broken
+  const { value: selectedFilters, getItemProps } = useCheckboxGroup({
+    // TODO: v3 upgrade. this might be broken
     defaultValue: [],
-    onChange: (value: string[]) => {
+    onValueChange: (value: string[]) => {
       setActiveFilters(value);
     },
   });
@@ -132,35 +133,35 @@ export const FilterButton = memo(() => {
           icon={<Icon as={CubeSparkleIcon} color={'text'} />}
           value={'coinbase'}
           selectedFilters={selectedFilters}
-          checkboxProps={getCheckboxProps({ value: 'coinbase' })}
+          checkboxProps={getItemProps({ value: 'coinbase' })}
         />
         {/*<FilterItem*/}
         {/*  label={'Burn'}*/}
         {/*  icon={<Icon as={Fire} color={'text'} />}*/}
         {/*  value={'burn'}*/}
         {/*  selectedFilters={selectedFilters}*/}
-        {/*  checkboxProps={getCheckboxProps({ value: 'burn' })}*/}
+        {/*  checkboxProps={getItemProps({ value: 'burn' })}*/}
         {/*/>*/}
         <FilterItem
           label={'Contract deploy'}
           icon={<Icon as={ClarityIcon} color={'text'} />}
           value={'smart_contract'}
           selectedFilters={selectedFilters}
-          checkboxProps={getCheckboxProps({ value: 'smart_contract' })}
+          checkboxProps={getItemProps({ value: 'smart_contract' })}
         />
         <FilterItem
           label={'Function call'}
           icon={<Icon as={FunctionXIcon} color={'text'} />}
           value={'contract_call'}
           selectedFilters={selectedFilters}
-          checkboxProps={getCheckboxProps({ value: 'contract_call' })}
+          checkboxProps={getItemProps({ value: 'contract_call' })}
         />
         {/*<FilterItem*/}
         {/*  label={'Mint'}*/}
         {/*  icon={<Icon as={CoinSparkleIcon} color={'text'} />}*/}
         {/*  value={'mint'}*/}
         {/*  selectedFilters={selectedFilters}*/}
-        {/*  checkboxProps={getCheckboxProps({ value: 'mint' })}*/}
+        {/*  checkboxProps={getItemProps({ value: 'mint' })}*/}
         {/*/>*/}
         {activeNetworkUrl.indexOf('naka') !== -1 ? (
           <FilterItem
@@ -168,7 +169,7 @@ export const FilterButton = memo(() => {
             icon={<Icon as={ArrowBendDownRight} color={'text'} />}
             value={'tenure_change'}
             selectedFilters={selectedFilters}
-            checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
+            checkboxProps={getItemProps({ value: 'tenure_change' })}
           />
         ) : null}
         {/*<FilterItem*/}
@@ -176,14 +177,14 @@ export const FilterButton = memo(() => {
         {/*  icon={<Icon as={ArrowBendDoubleUpLeft} color={'text'} transform={'rotate(180deg)'} />}*/}
         {/*  value={'tenureExtension'}*/}
         {/*  selectedFilters={selectedFilters}*/}
-        {/*  checkboxProps={getCheckboxProps({ value: 'tenureExtension' })}*/}
+        {/*  checkboxProps={getItemProps({ value: 'tenureExtension' })}*/}
         {/*/>*/}
         <FilterItem
           label={'Token transfer'}
           icon={<Icon as={DiagonalArrowsIcon} color={'text'} />}
           value={'token_transfer'}
           selectedFilters={selectedFilters}
-          checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
+          checkboxProps={getItemProps({ value: 'token_transfer' })}
         />
       </MenuList>
     </Menu>

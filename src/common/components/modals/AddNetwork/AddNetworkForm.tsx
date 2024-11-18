@@ -1,6 +1,6 @@
 'use client';
 
-import { Accordion, Checkbox } from '@chakra-ui/react';
+import { Accordion, Field as CUIField, Checkbox, Fieldset, Input } from '@chakra-ui/react';
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -9,11 +9,8 @@ import { FC, useState } from 'react';
 import { promiseWrapper } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
-import { FormControl } from '../../../../ui/FormControl';
 import { FormErrorMessage } from '../../../../ui/FormErrorMessage';
-import { FormLabel } from '../../../../ui/FormLabel';
 import { Icon } from '../../../../ui/Icon';
-import { Input } from '../../../../ui/Input';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import { NetworkIdModeMap } from '../../../constants/network';
@@ -150,35 +147,41 @@ export const AddNetworkForm: FC = () => {
         dispatch(closeModal());
       }}
     >
-      {({ isValidating }) => (
+      {(
+        { isValidating } // TODO: upgrade to v3. This may be broken
+      ) => (
         <Form>
           <Stack gap={4}>
             <Field name="label">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl isInvalid={!!form.errors.label && !!form.touched.label}>
-                  <FormLabel>Name</FormLabel>
-                  <Input {...field} placeholder="My Stacks API" />
-                  <FormErrorMessage>{form.errors.label}</FormErrorMessage>
-                </FormControl>
+                <Fieldset.Root invalid={!!form.errors.label && !!form.touched.label}>
+                  <CUIField.Root>
+                    <CUIField.Label>Label</CUIField.Label>
+                    <CUIField.ErrorText>{form.errors.label}</CUIField.ErrorText>
+                    <Input {...field} placeholder="My Stacks API" />
+                  </CUIField.Root>
+                </Fieldset.Root>
               )}
             </Field>
             <Field name="url">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl isInvalid={!!form.errors.url && !!form.touched.url}>
-                  <FormLabel>Base URL</FormLabel>
-                  <Input {...field} placeholder="https://" />
-                  <FormErrorMessage>{form.errors.url}</FormErrorMessage>
-                </FormControl>
+                <Fieldset.Root invalid={!!form.errors.url && !!form.touched.url}>
+                  <CUIField.Root>
+                    <CUIField.Label>URL</CUIField.Label>
+                    <CUIField.ErrorText>{form.errors.url}</CUIField.ErrorText>
+                    <Input {...field} placeholder="https://" />
+                  </CUIField.Root>
+                </Fieldset.Root>
               )}
             </Field>
             <Field name="isSubnet">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <FormControl isInvalid={!!form.errors.isSubnet && !!form.touched.isSubnet}>
+                <Fieldset.Root invalid={!!form.errors.isSubnet && !!form.touched.isSubnet}>
                   <Checkbox.Root variant="outline" {...field}>
                     This is a subnet
                   </Checkbox.Root>
                   <FormErrorMessage>{form.errors.isSubnet}</FormErrorMessage>
-                </FormControl>
+                </Fieldset.Root>
               )}
             </Field>
           </Stack>
@@ -203,39 +206,43 @@ export const AddNetworkForm: FC = () => {
                   <Stack gap={4}>
                     <Field name="btcBlockBaseUrl">
                       {({ field, form }: FieldProps<string, FormValues>) => (
-                        <FormControl
-                          isInvalid={
-                            !!form.errors.btcBlockBaseUrl && !!form.touched.btcBlockBaseUrl
-                          }
+                        <Fieldset.Root
+                          invalid={!!form.errors.btcBlockBaseUrl && !!form.touched.btcBlockBaseUrl}
                         >
-                          <FormLabel>BTC Block Base URL</FormLabel>
-                          <Input {...field} placeholder="https://" />
-                          <FormErrorMessage>{form.errors.btcBlockBaseUrl}</FormErrorMessage>
-                        </FormControl>
+                          <CUIField.Root>
+                            <CUIField.Label>BTC Block Base URL</CUIField.Label>
+                            <CUIField.ErrorText>{form.errors.btcBlockBaseUrl}</CUIField.ErrorText>
+                            <Input {...field} placeholder="https://" />
+                          </CUIField.Root>
+                        </Fieldset.Root>
                       )}
                     </Field>
                     <Field name="btcTxBaseUrl">
                       {({ field, form }: FieldProps<string, FormValues>) => (
-                        <FormControl
-                          isInvalid={!!form.errors.btcTxBaseUrl && !!form.touched.btcTxBaseUrl}
+                        <Fieldset.Root
+                          invalid={!!form.errors.btcTxBaseUrl && !!form.touched.btcTxBaseUrl}
                         >
-                          <FormLabel>BTC Transaction Base URL</FormLabel>
-                          <Input {...field} placeholder="https://" />
-                          <FormErrorMessage>{form.errors.btcTxBaseUrl}</FormErrorMessage>
-                        </FormControl>
+                          <CUIField.Root>
+                            <CUIField.Label>BTC Transaction Base URL</CUIField.Label>
+                            <CUIField.ErrorText>{form.errors.btcTxBaseUrl}</CUIField.ErrorText>
+                            <Input {...field} placeholder="https://" />
+                          </CUIField.Root>
+                        </Fieldset.Root>
                       )}
                     </Field>
                     <Field name="btcAddressBaseUrl">
                       {({ field, form }: FieldProps<string, FormValues>) => (
-                        <FormControl
-                          isInvalid={
+                        <Fieldset.Root
+                          invalid={
                             !!form.errors.btcAddressBaseUrl && !!form.touched.btcAddressBaseUrl
                           }
                         >
-                          <FormLabel>BTC Address Base URL</FormLabel>
-                          <Input {...field} placeholder="https://" />
-                          <FormErrorMessage>{form.errors.btcAddressBaseUrl}</FormErrorMessage>
-                        </FormControl>
+                          <CUIField.Root>
+                            <CUIField.Label>BTC Address Base URL</CUIField.Label>
+                            <CUIField.ErrorText>{form.errors.btcAddressBaseUrl}</CUIField.ErrorText>
+                            <Input {...field} placeholder="https://" />
+                          </CUIField.Root>
+                        </Fieldset.Root>
                       )}
                     </Field>
                   </Stack>
@@ -245,9 +252,11 @@ export const AddNetworkForm: FC = () => {
           </Accordion.Root>
           <Field name="genericError">
             {({ form }: FieldProps<string, FormValues>) => (
-              <FormControl isInvalid={!!form.errors.genericError} style={{ marginTop: 0 }}>
-                <FormErrorMessage>{form.errors.genericError}</FormErrorMessage>
-              </FormControl>
+              <Fieldset.Root invalid={!!form.errors.genericError} style={{ marginTop: 0 }}>
+                <CUIField.Root>
+                  <CUIField.ErrorText>{form.errors.genericError}</CUIField.ErrorText>
+                </CUIField.Root>
+              </Fieldset.Root>
             )}
           </Field>
           <Box mt={'16px'}>
