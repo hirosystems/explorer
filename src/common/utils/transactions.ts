@@ -15,12 +15,7 @@ export function getTransactionStatus(tx: Transaction | MempoolTransaction) {
     }
   } else if (tx?.tx_status === 'abort_by_response' || tx?.tx_status === 'abort_by_post_condition') {
     return TransactionStatus.FAILED;
-  } else if (
-    tx?.tx_status === 'dropped_replace_across_fork' ||
-    tx?.tx_status === 'dropped_replace_by_fee' ||
-    tx?.tx_status === 'dropped_stale_garbage_collect' ||
-    tx?.tx_status === 'dropped_too_expensive'
-  ) {
+  } else if (tx?.tx_status.startsWith('dropped_')) {
     return TransactionStatus.DROPPED;
   }
   return TransactionStatus.PENDING;
