@@ -1,11 +1,11 @@
 import { Circle } from '@phosphor-icons/react';
 import React from 'react';
 
+import { SkeletonText } from '../../../../components/ui/skeleton';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
-import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
 import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
 import { LineAndNode } from '../LineAndNode';

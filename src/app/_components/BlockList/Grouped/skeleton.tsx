@@ -1,10 +1,10 @@
+import { SkeletonText } from '../../../..//components/ui/skeleton';
 import { Circle } from '../../../../common/components/Circle';
 import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
-import { SkeletonItem } from '../../../../ui/SkeletonItem';
-import { SkeletonText } from '../../../../ui/SkeletonText';
+import { Skeleton } from '../../../../ui/Skeleton';
 import {
   BlocksPageBlockListLayout,
   BlocksPageControlsLayout,
@@ -171,10 +171,10 @@ export function BlocksPageBlockListGroupedSkeleton() {
 function HomePageControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
     <HomePageControlsLayout>
-      <SkeletonItem height={5} width={'90px'} />
+      <Skeleton height={5} width={'90px'} />
       <ControlsLayout horizontal={horizontal}>
-        <SkeletonItem height={5} width={20} />
-        <SkeletonItem height={5} width={20} />
+        <Skeleton height={5} width={20} />
+        <Skeleton height={5} width={20} />
       </ControlsLayout>
     </HomePageControlsLayout>
   );
@@ -184,8 +184,8 @@ function BlocksPageControlsSkeleton({ horizontal }: { horizontal?: boolean }) {
   return (
     <BlocksPageControlsLayout>
       <ControlsLayout horizontal={horizontal} gap={3}>
-        <SkeletonItem height={5} width={20} />
-        <SkeletonItem height={5} width={20} />
+        <Skeleton height={5} width={20} />
+        <Skeleton height={5} width={20} />
       </ControlsLayout>
     </BlocksPageControlsLayout>
   );
@@ -195,8 +195,8 @@ export function UpdateBarSkeleton() {
   return (
     <UpdateBarLayout>
       <Flex justifyContent="space-between" alignItems="center" width="full" height={4}>
-        <SkeletonItem height={4} width={40} />
-        <SkeletonItem height={4} width={40} />
+        <Skeleton height={4} width={40} />
+        <Skeleton height={4} width={40} />
       </Flex>
     </UpdateBarLayout>
   );

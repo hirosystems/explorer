@@ -1,0 +1,1581 @@
+.
+├── CHANGELOG.md
+├── CODE_OF_CONDUCT.md
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── codecov.yml
+├── commitlint.config.js
+├── common.d.ts
+├── coverage
+│   ├── clover.xml
+│   ├── coverage-final.json
+│   ├── lcov-report
+│   │   ├── base.css
+│   │   ├── block-navigation.js
+│   │   ├── favicon.png
+│   │   ├── index.html
+│   │   ├── prettify.css
+│   │   ├── prettify.js
+│   │   ├── sort-arrow-sprite.png
+│   │   ├── sorter.js
+│   │   └── src
+│   │       ├── app
+│   │       │   ├── PageClient.tsx.html
+│   │       │   ├── _components
+│   │       │   │   ├── Analytics.tsx.html
+│   │       │   │   ├── AppConfig.tsx.html
+│   │       │   │   ├── BlockList
+│   │       │   │   │   ├── AnimatedBlockAndMicroblocksItem.tsx.html
+│   │       │   │   │   ├── BlockAndMicroblocksItem.tsx.html
+│   │       │   │   │   ├── BlockListItem.tsx.html
+│   │       │   │   │   ├── Controls.tsx.html
+│   │       │   │   │   ├── LayoutA
+│   │       │   │   │   │   ├── BlockCount.tsx.html
+│   │       │   │   │   │   ├── BlockListWithControls.tsx.html
+│   │       │   │   │   │   ├── Blocks.tsx.html
+│   │       │   │   │   │   ├── BurnBlock.tsx.html
+│   │       │   │   │   │   ├── NonPaginated.tsx.html
+│   │       │   │   │   │   ├── Paginated.tsx.html
+│   │       │   │   │   │   ├── Provider.tsx.html
+│   │       │   │   │   │   ├── StxBlock.tsx.html
+│   │       │   │   │   │   ├── UpdateBar.tsx.html
+│   │       │   │   │   │   ├── consts.ts.html
+│   │       │   │   │   │   ├── context.ts.html
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   ├── mocks.ts.html
+│   │       │   │   │   │   ├── useBlockList.ts.html
+│   │       │   │   │   │   ├── useBlockListWebSocket.ts.html
+│   │       │   │   │   │   ├── useInitialBlockList.ts.html
+│   │       │   │   │   │   └── usePaginatedBlockList.ts.html
+│   │       │   │   │   ├── MicroblockListItem.tsx.html
+│   │       │   │   │   ├── SkeletonBlockList.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── index.tsx.html
+│   │       │   │   │   ├── types.ts.html
+│   │       │   │   │   └── useSubscribeBlocks.ts.html
+│   │       │   │   ├── BtcAnchorBlockCard.tsx.html
+│   │       │   │   ├── ErrorBoundary.tsx.html
+│   │       │   │   ├── ErrorBox.tsx.html
+│   │       │   │   ├── Footer.tsx.html
+│   │       │   │   ├── GA.tsx.html
+│   │       │   │   ├── NavBar
+│   │       │   │   │   ├── BtcStxPrice.tsx.html
+│   │       │   │   │   ├── ColorModeButton.tsx.html
+│   │       │   │   │   ├── DesktopNav.tsx.html
+│   │       │   │   │   ├── DesktopSubNav.tsx.html
+│   │       │   │   │   ├── Logo.tsx.html
+│   │       │   │   │   ├── MobileNav.tsx.html
+│   │       │   │   │   ├── MobileNavItem.tsx.html
+│   │       │   │   │   ├── NavLabel.tsx.html
+│   │       │   │   │   ├── NetworkLabel.tsx.html
+│   │       │   │   │   ├── NetworkModeBanner.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── index.tsx.html
+│   │       │   │   ├── NetworkModeToast.tsx.html
+│   │       │   │   ├── PageTitle.tsx.html
+│   │       │   │   ├── PageWrapper.tsx.html
+│   │       │   │   ├── Providers.tsx.html
+│   │       │   │   ├── Stats
+│   │       │   │   │   ├── CurrentStackingCycle
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   ├── index.tsx.html
+│   │       │   │   │   │   └── useCurrentStackingCycle.ts.html
+│   │       │   │   │   ├── LastBlock
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   └── index.tsx.html
+│   │       │   │   │   ├── NextStackingCycle
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   ├── index.tsx.html
+│   │       │   │   │   │   └── useNextStackingCycle.ts.html
+│   │       │   │   │   ├── SkeletonStatSection.tsx.html
+│   │       │   │   │   ├── StackingCycle.tsx.html
+│   │       │   │   │   ├── StatSection.tsx.html
+│   │       │   │   │   ├── Stats.tsx.html
+│   │       │   │   │   ├── StxSupply
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   └── index.tsx.html
+│   │       │   │   │   ├── Wrapper.tsx.html
+│   │       │   │   │   └── index.html
+│   │       │   │   ├── StatusBar
+│   │       │   │   │   ├── IncidentsStatusBar.tsx.html
+│   │       │   │   │   ├── StatusBarBase.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── index.tsx.html
+│   │       │   │   │   └── utils.ts.html
+│   │       │   │   ├── TwoColLayout.tsx.html
+│   │       │   │   └── index.html
+│   │       │   ├── address
+│   │       │   │   └── [principal]
+│   │       │   │       ├── AddressSummary.tsx.html
+│   │       │   │       ├── PageClient.tsx.html
+│   │       │   │       ├── StxBalance
+│   │       │   │       │   ├── BalanceItem.tsx.html
+│   │       │   │       │   ├── QRcode.tsx.html
+│   │       │   │       │   ├── StackingPercentage.tsx.html
+│   │       │   │       │   ├── index.html
+│   │       │   │       │   └── index.tsx.html
+│   │       │   │       ├── TokenBalanceCard
+│   │       │   │       │   ├── DefaultTokenImage.tsx.html
+│   │       │   │       │   ├── FtAvatar.tsx.html
+│   │       │   │       │   ├── FtBalance.tsx.html
+│   │       │   │       │   ├── NftAvatar.tsx.html
+│   │       │   │       │   ├── NftBalance.tsx.html
+│   │       │   │       │   ├── TokenAssetListItem.tsx.html
+│   │       │   │       │   ├── TokenAvatar.tsx.html
+│   │       │   │       │   ├── TokenImage.tsx.html
+│   │       │   │       │   ├── TokenVideo.tsx.html
+│   │       │   │       │   ├── index.html
+│   │       │   │       │   ├── index.tsx.html
+│   │       │   │       │   └── useImageUrl.ts.html
+│   │       │   │       ├── Wrapper.tsx.html
+│   │       │   │       ├── index.html
+│   │       │   │       ├── layout.tsx.html
+│   │       │   │       ├── page.tsx.html
+│   │       │   │       └── skeleton.tsx.html
+│   │       │   ├── block
+│   │       │   │   └── [hash]
+│   │       │   │       ├── BlockBtcAnchorBlockCard.tsx.html
+│   │       │   │       ├── PageClient.tsx.html
+│   │       │   │       ├── error.tsx.html
+│   │       │   │       ├── index.html
+│   │       │   │       ├── layout.tsx.html
+│   │       │   │       ├── page.tsx.html
+│   │       │   │       ├── skeleton.tsx.html
+│   │       │   │       ├── tx-lists
+│   │       │   │       │   ├── BlockTxsList.tsx.html
+│   │       │   │       │   └── index.html
+│   │       │   │       └── useParamsBlockHash.ts.html
+│   │       │   ├── blocks
+│   │       │   │   ├── PageClient.tsx.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── layout.tsx.html
+│   │       │   │   ├── page.tsx.html
+│   │       │   │   └── skeleton.tsx.html
+│   │       │   ├── error.tsx.html
+│   │       │   ├── getTokenPriceInfo.ts.html
+│   │       │   ├── global-error.tsx.html
+│   │       │   ├── index.html
+│   │       │   ├── layout.tsx.html
+│   │       │   ├── microblock
+│   │       │   │   └── [hash]
+│   │       │   │       ├── PageClient.tsx.html
+│   │       │   │       ├── index.html
+│   │       │   │       ├── layout.tsx.html
+│   │       │   │       ├── page.tsx.html
+│   │       │   │       └── tx-lists
+│   │       │   │           ├── MicroblockTxsList.tsx.html
+│   │       │   │           └── index.html
+│   │       │   ├── page.tsx.html
+│   │       │   ├── sandbox
+│   │       │   │   ├── Wrapper.tsx.html
+│   │       │   │   ├── components
+│   │       │   │   │   ├── Argument
+│   │       │   │   │   │   ├── ListArgumentInput.tsx.html
+│   │       │   │   │   │   ├── PrimitiveArgumentInput.tsx.html
+│   │       │   │   │   │   ├── TupleArgumentInput.tsx.html
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   ├── index.tsx.html
+│   │       │   │   │   │   └── types.ts.html
+│   │       │   │   │   ├── ContractCall
+│   │       │   │   │   │   ├── AvailableFunctionsView.tsx.html
+│   │       │   │   │   │   ├── DefaultView
+│   │       │   │   │   │   │   ├── PopularContracts.tsx.html
+│   │       │   │   │   │   │   ├── SearchContractsForm.tsx.html
+│   │       │   │   │   │   │   ├── index.html
+│   │       │   │   │   │   │   └── index.tsx.html
+│   │       │   │   │   │   ├── FunctionView.tsx.html
+│   │       │   │   │   │   ├── PluralizedCaption.tsx.html
+│   │       │   │   │   │   ├── ReadOnlyField.tsx.html
+│   │       │   │   │   │   ├── SelectedContractView.tsx.html
+│   │       │   │   │   │   └── index.html
+│   │       │   │   │   ├── Toolbar.tsx.html
+│   │       │   │   │   ├── TransactionsPanel.tsx.html
+│   │       │   │   │   └── index.html
+│   │       │   │   ├── contract-call
+│   │       │   │   │   └── [[...params]]
+│   │       │   │   │       ├── PageClient.tsx.html
+│   │       │   │   │       ├── index.html
+│   │       │   │   │       └── page.tsx.html
+│   │       │   │   ├── deploy
+│   │       │   │   │   ├── LeftSection.tsx.html
+│   │       │   │   │   ├── PageClient.tsx.html
+│   │       │   │   │   ├── RightSection.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── page.tsx.html
+│   │       │   │   ├── editor-config
+│   │       │   │   │   ├── autocomplete.ts.html
+│   │       │   │   │   ├── clarity-reference.ts.html
+│   │       │   │   │   ├── define-theme.ts.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── init.ts.html
+│   │       │   │   │   └── language.ts.html
+│   │       │   │   ├── faucet
+│   │       │   │   │   ├── PageClient.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── page.tsx.html
+│   │       │   │   ├── hooks
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── useUser.ts.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── layout
+│   │       │   │   │   ├── ConnectToStacks.tsx.html
+│   │       │   │   │   ├── NavItem.tsx.html
+│   │       │   │   │   ├── RightPanel.tsx.html
+│   │       │   │   │   ├── RightPanelSkeleton.tsx.html
+│   │       │   │   │   ├── SideNav.tsx.html
+│   │       │   │   │   └── index.html
+│   │       │   │   ├── layout.tsx.html
+│   │       │   │   ├── sandbox-slice.ts.html
+│   │       │   │   ├── skeleton.tsx.html
+│   │       │   │   ├── transfer
+│   │       │   │   │   ├── PageClient.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── page.tsx.html
+│   │       │   │   └── utils.ts.html
+│   │       │   ├── skeleton.tsx.html
+│   │       │   ├── token
+│   │       │   │   └── [tokenId]
+│   │       │   │       ├── LinksGroup.tsx.html
+│   │       │   │       ├── LinksMenu.tsx.html
+│   │       │   │       ├── PageClient.tsx.html
+│   │       │   │       ├── Tabs
+│   │       │   │       │   ├── DeveloperStat.tsx.html
+│   │       │   │       │   ├── Developers.tsx.html
+│   │       │   │       │   ├── index.html
+│   │       │   │       │   └── index.tsx.html
+│   │       │   │       ├── TokenInfo
+│   │       │   │       │   ├── MarketCap.tsx.html
+│   │       │   │       │   ├── Price.tsx.html
+│   │       │   │       │   ├── Supply.tsx.html
+│   │       │   │       │   ├── Transaction.tsx.html
+│   │       │   │       │   ├── TrendArrow.tsx.html
+│   │       │   │       │   ├── index.html
+│   │       │   │       │   └── index.tsx.html
+│   │       │   │       ├── error.tsx.html
+│   │       │   │       ├── getTokenInfo.ts.html
+│   │       │   │       ├── index.html
+│   │       │   │       ├── layout.tsx.html
+│   │       │   │       ├── page.tsx.html
+│   │       │   │       ├── skeleton.tsx.html
+│   │       │   │       └── utils.ts.html
+│   │       │   ├── tokens
+│   │       │   │   ├── PageClient.tsx.html
+│   │       │   │   ├── TokenRow
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── index.tsx.html
+│   │       │   │   │   └── loading.tsx.html
+│   │       │   │   ├── TokensList
+│   │       │   │   │   ├── TokenTable.tsx.html
+│   │       │   │   │   ├── TokenTableSkeleton.tsx.html
+│   │       │   │   │   ├── TokensList.tsx.html
+│   │       │   │   │   └── index.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── layout.tsx.html
+│   │       │   │   ├── page.tsx.html
+│   │       │   │   ├── skeleton.tsx.html
+│   │       │   │   └── useTokens.ts.html
+│   │       │   ├── transactions
+│   │       │   │   ├── MempoolFeeStats.tsx.html
+│   │       │   │   ├── PageClient.tsx.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── layout.tsx.html
+│   │       │   │   ├── page.tsx.html
+│   │       │   │   └── skeleton.tsx.html
+│   │       │   └── txid
+│   │       │       └── [txId]
+│   │       │           ├── Alert.tsx.html
+│   │       │           ├── BlocksVisualizer.tsx.html
+│   │       │           ├── Cards
+│   │       │           │   ├── ContractDetailsCard.tsx.html
+│   │       │           │   ├── TxBtcAnchorBlockCard.tsx.html
+│   │       │           │   └── index.html
+│   │       │           ├── CoinbasePage
+│   │       │           │   ├── TxDetails.tsx.html
+│   │       │           │   ├── index.html
+│   │       │           │   └── index.tsx.html
+│   │       │           ├── ContractCall
+│   │       │           │   ├── FunctionSummary.tsx.html
+│   │       │           │   ├── FunctionSummaryArguments.tsx.html
+│   │       │           │   ├── FunctionSummaryClarityValue.tsx.html
+│   │       │           │   ├── FunctionSummaryName.tsx.html
+│   │       │           │   ├── FunctionSummaryResult.tsx.html
+│   │       │           │   ├── TxDetails.tsx.html
+│   │       │           │   ├── index.html
+│   │       │           │   └── index.tsx.html
+│   │       │           ├── Events.tsx.html
+│   │       │           ├── PageClient.tsx.html
+│   │       │           ├── PoisonMicroblock
+│   │       │           │   ├── TxDetails.tsx.html
+│   │       │           │   ├── index.html
+│   │       │           │   └── index.tsx.html
+│   │       │           ├── PostConditions.tsx.html
+│   │       │           ├── SenderRecipient.tsx.html
+│   │       │           ├── SmartContract
+│   │       │           │   ├── ContractTabs.tsx.html
+│   │       │           │   ├── SmartContract.tsx.html
+│   │       │           │   ├── SmartContractTx.tsx.html
+│   │       │           │   ├── TxDetails.tsx.html
+│   │       │           │   └── index.html
+│   │       │           ├── TenureChange
+│   │       │           │   ├── TxDetails.tsx.html
+│   │       │           │   ├── index.html
+│   │       │           │   └── index.tsx.html
+│   │       │           ├── TokenTransfer
+│   │       │           │   ├── TxDetails.tsx.html
+│   │       │           │   ├── index.html
+│   │       │           │   └── index.tsx.html
+│   │       │           ├── Tx.tsx.html
+│   │       │           ├── TxAlerts.tsx.html
+│   │       │           ├── TxDetails
+│   │       │           │   ├── Amount.tsx.html
+│   │       │           │   ├── BlockHash.tsx.html
+│   │       │           │   ├── BlockHeight.tsx.html
+│   │       │           │   ├── Broadcast.tsx.html
+│   │       │           │   ├── ClarityVersion.tsx.html
+│   │       │           │   ├── ContractName.tsx.html
+│   │       │           │   ├── Fees.tsx.html
+│   │       │           │   ├── ID.tsx.html
+│   │       │           │   ├── Memo.tsx.html
+│   │       │           │   ├── NonCanonical.tsx.html
+│   │       │           │   ├── Nonce.tsx.html
+│   │       │           │   ├── Recipient.tsx.html
+│   │       │           │   ├── Sender.tsx.html
+│   │       │           │   └── index.html
+│   │       │           ├── TxPage.tsx.html
+│   │       │           ├── error.tsx.html
+│   │       │           ├── index.html
+│   │       │           ├── layout.tsx.html
+│   │       │           ├── page.tsx.html
+│   │       │           ├── skeleton.tsx.html
+│   │       │           ├── useParamsTxId.ts.html
+│   │       │           ├── useTxBlock.ts.html
+│   │       │           └── utils.ts.html
+│   │       ├── common
+│   │       │   ├── api
+│   │       │   │   ├── client.ts.html
+│   │       │   │   ├── fetch.ts.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── useApi.ts.html
+│   │       │   │   └── utils.ts.html
+│   │       │   ├── components
+│   │       │   │   ├── Badge.tsx.html
+│   │       │   │   ├── BtcStxBlockLinks.tsx.html
+│   │       │   │   ├── Card.tsx.html
+│   │       │   │   ├── Circle.tsx.html
+│   │       │   │   ├── ContractAvailableFunctions.tsx.html
+│   │       │   │   ├── CopyButton.tsx.html
+│   │       │   │   ├── ErrorMessageLayout.tsx.html
+│   │       │   │   ├── ExplorerLinks.tsx.html
+│   │       │   │   ├── FilterMenu.tsx.html
+│   │       │   │   ├── KeyValueHorizontal.tsx.html
+│   │       │   │   ├── KeyValueVertical.tsx.html
+│   │       │   │   ├── ListFooter.tsx.html
+│   │       │   │   ├── ListItem.tsx.html
+│   │       │   │   ├── Section.tsx.html
+│   │       │   │   ├── StxPrice.tsx.html
+│   │       │   │   ├── StxPriceButton
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── index.tsx.html
+│   │       │   │   │   └── useStxPriceForTx.ts.html
+│   │       │   │   ├── TabsContainer.tsx.html
+│   │       │   │   ├── Timestamp.tsx.html
+│   │       │   │   ├── TwoColumnPage.tsx.html
+│   │       │   │   ├── TwoColumnsListItem.tsx.html
+│   │       │   │   ├── TwoColumnsListItemSkeleton.tsx.html
+│   │       │   │   ├── TxIcon.tsx.html
+│   │       │   │   ├── TxTypeTag.tsx.html
+│   │       │   │   ├── Value.tsx.html
+│   │       │   │   ├── balances
+│   │       │   │   │   ├── TokenAmount.tsx.html
+│   │       │   │   │   ├── TokenBalancesRow.tsx.html
+│   │       │   │   │   ├── TokenSymbol.tsx.html
+│   │       │   │   │   └── index.html
+│   │       │   │   ├── contract-source.tsx.html
+│   │       │   │   ├── icons
+│   │       │   │   │   ├── _base.tsx.html
+│   │       │   │   │   ├── arrow-left.tsx.html
+│   │       │   │   │   ├── arrow-right.tsx.html
+│   │       │   │   │   ├── atom.tsx.html
+│   │       │   │   │   ├── chevron-down.tsx.html
+│   │       │   │   │   ├── clock.tsx.html
+│   │       │   │   │   ├── copy.tsx.html
+│   │       │   │   │   ├── drop.tsx.html
+│   │       │   │   │   ├── external-link.tsx.html
+│   │       │   │   │   ├── failed.tsx.html
+│   │       │   │   │   ├── filter.tsx.html
+│   │       │   │   │   ├── fungible-token.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── info-circle.tsx.html
+│   │       │   │   │   ├── info.tsx.html
+│   │       │   │   │   ├── loader-quarter.tsx.html
+│   │       │   │   │   ├── microblock.tsx.html
+│   │       │   │   │   ├── stx-nexus.tsx.html
+│   │       │   │   │   ├── tools.tsx.html
+│   │       │   │   │   └── transfer.tsx.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── loaders
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── skeleton-text.tsx.html
+│   │       │   │   │   └── skeleton-transaction.tsx.html
+│   │       │   │   ├── meta
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── transactions.tsx.html
+│   │       │   │   ├── modals
+│   │       │   │   │   ├── AddNetwork
+│   │       │   │   │   │   ├── AddNetworkForm.tsx.html
+│   │       │   │   │   │   ├── index.html
+│   │       │   │   │   │   ├── index.tsx.html
+│   │       │   │   │   │   └── utils.ts.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── modal-slice.ts.html
+│   │       │   │   │   └── unlocking-schedule.tsx.html
+│   │       │   │   ├── status.tsx.html
+│   │       │   │   └── transaction-item.tsx.html
+│   │       │   ├── constants
+│   │       │   │   ├── claritySyntax.ts.html
+│   │       │   │   ├── constants.ts.html
+│   │       │   │   ├── contracts
+│   │       │   │   │   ├── hello-world-contract.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── kv-store.tsx.html
+│   │       │   │   │   ├── status.tsx.html
+│   │       │   │   │   └── stream.tsx.html
+│   │       │   │   ├── env.ts.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── meta.ts.html
+│   │       │   │   └── network.ts.html
+│   │       │   ├── context
+│   │       │   │   ├── GlobalContext.tsx.html
+│   │       │   │   ├── index.html
+│   │       │   │   └── useAppContext.ts.html
+│   │       │   ├── hooks
+│   │       │   │   ├── index.html
+│   │       │   │   ├── useDebounce.ts.html
+│   │       │   │   ├── useError.ts.html
+│   │       │   │   ├── useInfiniteQueryResult.ts.html
+│   │       │   │   ├── useIsNakamoto.ts.html
+│   │       │   │   ├── useRandomName.tsx.html
+│   │       │   │   └── useStacksNetwork.ts.html
+│   │       │   ├── mockData
+│   │       │   │   ├── index.html
+│   │       │   │   └── txsData.ts.html
+│   │       │   ├── queries
+│   │       │   │   ├── index.html
+│   │       │   │   ├── query-stale-time.ts.html
+│   │       │   │   ├── usMempoolFee.ts.html
+│   │       │   │   ├── useAccountBalance.ts.html
+│   │       │   │   ├── useAccountStxBalance.ts.html
+│   │       │   │   ├── useAddressConfirmedTxsWithTransfersInfinite.ts.html
+│   │       │   │   ├── useAddressMempoolTxsInfinite.ts.html
+│   │       │   │   ├── useAddressNonces.ts.html
+│   │       │   │   ├── useBlockByHash.ts.html
+│   │       │   │   ├── useBlockByHeight.ts.html
+│   │       │   │   ├── useBlockListInfinite.ts.html
+│   │       │   │   ├── useBlockTxsInfinite.ts.html
+│   │       │   │   ├── useBlocksByBurnBlock.ts.html
+│   │       │   │   ├── useBurnBlocks.ts.html
+│   │       │   │   ├── useCallReadOnlyFunction.ts.html
+│   │       │   │   ├── useConfirmedTransactionsInfinite.ts.html
+│   │       │   │   ├── useContractById.ts.html
+│   │       │   │   ├── useContractFtMetadata.ts.html
+│   │       │   │   ├── useCoreApiInfo.ts.html
+│   │       │   │   ├── useCurrentPrices.ts.html
+│   │       │   │   ├── useCustomNetworkApiInfo.ts.html
+│   │       │   │   ├── useFaucet.ts.html
+│   │       │   │   ├── useFeeTransfer.ts.html
+│   │       │   │   ├── useFtMetadata.ts.html
+│   │       │   │   ├── useFtTokens.ts.html
+│   │       │   │   ├── useMempoolTransactionsInfinite.ts.html
+│   │       │   │   ├── useMicroblockByHash.ts.html
+│   │       │   │   ├── useNftHistory.ts.html
+│   │       │   │   ├── useNftHoldings.ts.html
+│   │       │   │   ├── useNftMetadata.ts.html
+│   │       │   │   ├── usePoxInfo.ts.html
+│   │       │   │   ├── usePoxInforRaw.ts.html
+│   │       │   │   ├── useSearchById.ts.html
+│   │       │   │   ├── useSearchQuery.ts.html
+│   │       │   │   ├── useStxSupply.ts.html
+│   │       │   │   ├── useTxById.ts.html
+│   │       │   │   ├── useTxEventsByIdInfinite.ts.html
+│   │       │   │   └── useUnresolvedIncidents.ts.html
+│   │       │   ├── state
+│   │       │   │   ├── hooks.ts.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── slices
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── transaction-value-filter-slice.ts.html
+│   │       │   │   └── store.ts.html
+│   │       │   ├── styles
+│   │       │   │   ├── hover.ts.html
+│   │       │   │   └── index.html
+│   │       │   ├── types
+│   │       │   │   ├── index.html
+│   │       │   │   ├── network.ts.html
+│   │       │   │   └── search-results.ts.html
+│   │       │   └── utils
+│   │       │       ├── accounts.ts.html
+│   │       │       ├── analytics.ts.html
+│   │       │       ├── buildUrl.ts.html
+│   │       │       ├── cache-client.ts.html
+│   │       │       ├── fetchWithApiKey.ts.html
+│   │       │       ├── head.ts.html
+│   │       │       ├── index.html
+│   │       │       ├── sandbox.ts.html
+│   │       │       ├── string-utils.ts.html
+│   │       │       ├── test-utils
+│   │       │       │   ├── index.html
+│   │       │       │   ├── matchMedia.mock.ts.html
+│   │       │       │   └── renderWithReduxProvider.tsx.html
+│   │       │       ├── transactions.ts.html
+│   │       │       ├── url-utils.ts.html
+│   │       │       ├── utils.ts.html
+│   │       │       └── validateUrl.ts.html
+│   │       ├── features
+│   │       │   ├── search
+│   │       │   │   ├── Search.tsx.html
+│   │       │   │   ├── dropdown
+│   │       │   │   │   ├── error-message.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── search-results-card.tsx.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── items
+│   │       │   │   │   ├── address-result-item.tsx.html
+│   │       │   │   │   ├── block-result-item.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── result-item-wrapper.tsx.html
+│   │       │   │   │   ├── search-result-item.tsx.html
+│   │       │   │   │   └── tx-result-item.tsx.html
+│   │       │   │   ├── search-field
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   ├── search-box.tsx.html
+│   │       │   │   │   └── search-input.tsx.html
+│   │       │   │   ├── search-slice.ts.html
+│   │       │   │   └── useSearch.ts.html
+│   │       │   ├── txs-list
+│   │       │   │   ├── AddressConfirmedTxsList.tsx.html
+│   │       │   │   ├── AddressMempoolTxsList.tsx.html
+│   │       │   │   ├── ConfirmedTxsList.tsx.html
+│   │       │   │   ├── FilteredTxs.tsx.html
+│   │       │   │   ├── ListItem
+│   │       │   │   │   ├── FtTransfers.tsx.html
+│   │       │   │   │   ├── MempoolTxListItem.tsx.html
+│   │       │   │   │   ├── MempoolTxListItemMini.tsx.html
+│   │       │   │   │   ├── NftTransfers.tsx.html
+│   │       │   │   │   ├── StxTransfers.tsx.html
+│   │       │   │   │   ├── TransferListItem.tsx.html
+│   │       │   │   │   ├── TxListItem.tsx.html
+│   │       │   │   │   ├── TxListItemMini.tsx.html
+│   │       │   │   │   ├── TxWithTransferListItem.tsx.html
+│   │       │   │   │   └── index.html
+│   │       │   │   ├── MempoolTxsList.tsx.html
+│   │       │   │   ├── SkeletonTxsList.tsx.html
+│   │       │   │   ├── TxTitle.tsx.html
+│   │       │   │   ├── index.html
+│   │       │   │   ├── tabs
+│   │       │   │   │   ├── AddressTxListTabs.tsx.html
+│   │       │   │   │   ├── CSVDownloadButton.tsx.html
+│   │       │   │   │   ├── TxListTabs.tsx.html
+│   │       │   │   │   ├── TxListTabsBase.tsx.html
+│   │       │   │   │   ├── index.html
+│   │       │   │   │   └── useTxsCSVData.ts.html
+│   │       │   │   └── utils.ts.html
+│   │       │   └── txsFilterAndSort
+│   │       │       ├── FilterButton.tsx.html
+│   │       │       ├── ShowValueMenu.tsx.html
+│   │       │       ├── SortMenu.tsx.html
+│   │       │       ├── TransactionMessages.tsx.html
+│   │       │       ├── index.html
+│   │       │       ├── txsFilterAndSortSlice.ts.html
+│   │       │       ├── useFilterAndSortScope.ts.html
+│   │       │       └── useFilterAndSortState.tsx.html
+│   │       ├── index.html
+│   │       ├── middleware.ts.html
+│   │       └── ui
+│   │           ├── Accordion.tsx.html
+│   │           ├── AccordionButton.tsx.html
+│   │           ├── AccordionIcon.tsx.html
+│   │           ├── AccordionItem.tsx.html
+│   │           ├── AccordionPanel.tsx.html
+│   │           ├── Alert.tsx.html
+│   │           ├── AlertDescription.tsx.html
+│   │           ├── AlertIcon.tsx.html
+│   │           ├── AlertTitle.tsx.html
+│   │           ├── Badge.tsx.html
+│   │           ├── Box.tsx.html
+│   │           ├── Button.tsx.html
+│   │           ├── ButtonLink.tsx.html
+│   │           ├── Checkbox.tsx.html
+│   │           ├── ChevronIcon.tsx.html
+│   │           ├── CircularProgress.tsx.html
+│   │           ├── CircularProgressLabel.tsx.html
+│   │           ├── CodeEditor
+│   │           │   ├── clarity.tsx.html
+│   │           │   ├── index.html
+│   │           │   └── index.tsx.html
+│   │           ├── Collapse.tsx.html
+│   │           ├── ExclamationMarkCircleIcon.tsx.html
+│   │           ├── Fade.tsx.html
+│   │           ├── Flex.tsx.html
+│   │           ├── FormControl.tsx.html
+│   │           ├── FormErrorMessage.tsx.html
+│   │           ├── FormLabel.tsx.html
+│   │           ├── Grid.tsx.html
+│   │           ├── HStack.tsx.html
+│   │           ├── Heading.tsx.html
+│   │           ├── Hide.tsx.html
+│   │           ├── Icon.tsx.html
+│   │           ├── IconButton.tsx.html
+│   │           ├── Image.tsx.html
+│   │           ├── Input.tsx.html
+│   │           ├── InputGroup.tsx.html
+│   │           ├── InputLeftElement.tsx.html
+│   │           ├── InputRightElement.tsx.html
+│   │           ├── Link.tsx.html
+│   │           ├── ListItem.tsx.html
+│   │           ├── Menu.tsx.html
+│   │           ├── MenuButton.tsx.html
+│   │           ├── MenuDivider.tsx.html
+│   │           ├── MenuGroup.tsx.html
+│   │           ├── MenuItem.tsx.html
+│   │           ├── MenuList.tsx.html
+│   │           ├── Modal.tsx.html
+│   │           ├── Popover.tsx.html
+│   │           ├── PopoverContent.tsx.html
+│   │           ├── PopoverTrigger.tsx.html
+│   │           ├── Select.tsx.html
+│   │           ├── Show.tsx.html
+│   │           ├── SkeletonCircle.tsx.html
+│   │           ├── SkeletonItem.tsx.html
+│   │           ├── SkeletonText.tsx.html
+│   │           ├── Spinner.tsx.html
+│   │           ├── Stack.tsx.html
+│   │           ├── Switch.tsx.html
+│   │           ├── Tab.tsx.html
+│   │           ├── TabList.tsx.html
+│   │           ├── TabPanel.tsx.html
+│   │           ├── TabPanels.tsx.html
+│   │           ├── Table.tsx.html
+│   │           ├── TableContainer.tsx.html
+│   │           ├── Tabs.tsx.html
+│   │           ├── Tag.tsx.html
+│   │           ├── TagCloseButton.tsx.html
+│   │           ├── TagLabel.tsx.html
+│   │           ├── TagLeftIcon.tsx.html
+│   │           ├── TagRightIcon.tsx.html
+│   │           ├── Tbody.tsx.html
+│   │           ├── Td.tsx.html
+│   │           ├── Text.tsx.html
+│   │           ├── TextLink.tsx.html
+│   │           ├── Tfoot.tsx.html
+│   │           ├── Th.tsx.html
+│   │           ├── Thead.tsx.html
+│   │           ├── Tooltip.tsx.html
+│   │           ├── Tr.tsx.html
+│   │           ├── UIProvider.tsx.html
+│   │           ├── UnorderedList.tsx.html
+│   │           ├── breakpoints.ts.html
+│   │           ├── components.ts.html
+│   │           ├── hooks
+│   │           │   ├── index.html
+│   │           │   ├── useBreakpointValue.ts.html
+│   │           │   ├── useColorMode.tsx.html
+│   │           │   ├── useDisclosure.tsx.html
+│   │           │   └── useMediaQuery.tsx.html
+│   │           ├── icons
+│   │           │   ├── BitcoinIcon.tsx.html
+│   │           │   ├── CheckIcon.tsx.html
+│   │           │   ├── ClarityIcon.tsx.html
+│   │           │   ├── CloseIcon.tsx.html
+│   │           │   ├── CodeIcon.tsx.html
+│   │           │   ├── CoinSparkleIcon.tsx.html
+│   │           │   ├── CopyIcon.tsx.html
+│   │           │   ├── CubeSparkleIcon.tsx.html
+│   │           │   ├── DiagonalArrowsIcon.tsx.html
+│   │           │   ├── FilterIcon.tsx.html
+│   │           │   ├── FunctionIcon.tsx.html
+│   │           │   ├── FunctionX.tsx.html
+│   │           │   ├── QrCodeIcon.tsx.html
+│   │           │   ├── QuestionOctagon.tsx.html
+│   │           │   ├── Spinner.tsx.html
+│   │           │   ├── StxIcon.tsx.html
+│   │           │   ├── TripleOpenParentheses.tsx.html
+│   │           │   ├── WalletIcon.tsx.html
+│   │           │   ├── index.html
+│   │           │   └── index.ts.html
+│   │           ├── index.html
+│   │           ├── theme
+│   │           │   ├── colors.ts.html
+│   │           │   ├── componentTheme
+│   │           │   │   ├── Badge.ts.html
+│   │           │   │   ├── Button.ts.html
+│   │           │   │   ├── Checkbox.ts.html
+│   │           │   │   ├── Input.ts.html
+│   │           │   │   ├── Menu.ts.html
+│   │           │   │   ├── Switch.ts.html
+│   │           │   │   ├── Tab.ts.html
+│   │           │   │   ├── Tag.ts.html
+│   │           │   │   └── index.html
+│   │           │   ├── fonts
+│   │           │   │   ├── index.html
+│   │           │   │   └── index.ts.html
+│   │           │   ├── index.html
+│   │           │   └── theme.ts.html
+│   │           └── typography.tsx.html
+│   └── lcov.info
+├── directory_structure.txt
+├── docs
+│   ├── getting-started.md
+│   ├── how-to-guides
+│   │   ├── build-explorer.md
+│   │   └── stacks explorer sandbox
+│   └── overview.md
+├── e2e
+│   ├── addresses-test-vector.ts
+│   ├── block-utils.ts
+│   ├── blocks-test-vector.ts
+│   ├── filters.spec.ts
+│   ├── mocks.ts
+│   ├── page-address.spec.ts
+│   ├── page-block.spec.ts
+│   ├── page-blocks.spec.ts
+│   ├── page-homepage.spec.ts
+│   ├── page-txid.spec.ts
+│   └── transactions-test-vector.ts
+├── explorer-image.png
+├── jest.config.js
+├── jest.setup.js
+├── localhost-switch.gif
+├── next-env.d.ts
+├── next.config.js
+├── now.json
+├── package.json
+├── playwright.config.ts
+├── pnpm-lock.yaml
+├── public
+│   ├── StacksExplorer-OG.jpg
+│   ├── active-marker-icon-dark.svg
+│   ├── active-marker-icon-light.svg
+│   ├── clarity-repl.wasm
+│   ├── clarity_repl.wasm
+│   ├── clarity_repl_bg.wasm
+│   ├── default-marker-icon-dark.svg
+│   ├── default-marker-icon-light.svg
+│   ├── exact-marker.svg
+│   ├── explorer-og.png
+│   ├── metaverse-bg.png
+│   ├── nakamoto-mainnet.png
+│   ├── nakamoto.png
+│   ├── no-txs.svg
+│   ├── onigasm.wasm
+│   ├── robots.txt
+│   ├── skeleton-transaction.png
+│   ├── static
+│   │   ├── favicon-failed.png
+│   │   ├── favicon-pending.png
+│   │   ├── favicon-success.png
+│   │   └── favicon.png
+│   ├── stx-circle.svg
+│   └── stx-square.svg
+├── pull_request_template.md
+├── sentry.client.config.ts
+├── src
+│   ├── __tests__
+│   │   └── pages
+│   │       └── token
+│   │           └── [tokenId].test.tsx
+│   ├── app
+│   │   ├── PageClient.tsx
+│   │   ├── _components
+│   │   │   ├── AppConfig.tsx
+│   │   │   ├── BlockList
+│   │   │   │   ├── BlockAndMicroblocksItem.tsx
+│   │   │   │   ├── BlockCount.tsx
+│   │   │   │   ├── BlockListContext.ts
+│   │   │   │   ├── BlockListItem.tsx
+│   │   │   │   ├── BlockListProvider.tsx
+│   │   │   │   ├── BlocksPage
+│   │   │   │   │   ├── BlocksPageBlockList.tsx
+│   │   │   │   │   ├── BlocksPageBlockListGrouped.tsx
+│   │   │   │   │   └── BlocksPageBlockListUngrouped.tsx
+│   │   │   │   ├── Controls.tsx
+│   │   │   │   ├── Grouped
+│   │   │   │   │   ├── BlockListGrouped.tsx
+│   │   │   │   │   └── skeleton.tsx
+│   │   │   │   ├── HomePage
+│   │   │   │   │   ├── HomePageBlockList.tsx
+│   │   │   │   │   ├── HomePageBlockListGrouped.tsx
+│   │   │   │   │   └── HomePageBlockListUngrouped.tsx
+│   │   │   │   ├── LayoutA
+│   │   │   │   │   ├── BlockListWithControls.tsx
+│   │   │   │   │   ├── Blocks.tsx
+│   │   │   │   │   ├── BurnBlock.tsx
+│   │   │   │   │   ├── NonPaginated.tsx
+│   │   │   │   │   ├── StxBlock.tsx
+│   │   │   │   │   ├── __tests__
+│   │   │   │   │   │   ├── BlockListWithControls.test.tsx
+│   │   │   │   │   │   ├── __snapshots__
+│   │   │   │   │   │   │   └── BlockListWithControls.test.tsx.snap
+│   │   │   │   │   │   ├── useBlockList.test.tsx
+│   │   │   │   │   │   └── usePaginatedBlockList.test.tsx
+│   │   │   │   │   ├── mocks.ts
+│   │   │   │   │   ├── useBlockList.ts
+│   │   │   │   │   ├── useInitialBlockList.ts
+│   │   │   │   │   └── usePaginatedBlockList.ts
+│   │   │   │   ├── LineAndNode.tsx
+│   │   │   │   ├── MicroblockListItem.tsx
+│   │   │   │   ├── ScrollableDiv.tsx
+│   │   │   │   ├── Sockets
+│   │   │   │   │   ├── use-stacks-api-socket-client.ts
+│   │   │   │   │   ├── useBlockListWebSocket.ts
+│   │   │   │   │   ├── useBlockListWebSocketUIBlock.ts
+│   │   │   │   │   ├── useSubscribeBlocks.ts
+│   │   │   │   │   └── useSubscribeBlocksUIBlock.ts
+│   │   │   │   ├── Ungrouped
+│   │   │   │   │   ├── BlockListUngrouped.tsx
+│   │   │   │   │   └── skeleton.tsx
+│   │   │   │   ├── UpdateBar.tsx
+│   │   │   │   ├── __tests__
+│   │   │   │   │   ├── MicroblockListItem.test.tsx
+│   │   │   │   │   ├── __snapshots__
+│   │   │   │   │   │   └── MicroblockListItem.test.tsx.snap
+│   │   │   │   │   └── generateBlockList.test.tsx
+│   │   │   │   ├── consts.ts
+│   │   │   │   ├── data
+│   │   │   │   │   ├── useAverageBlockTimes.ts
+│   │   │   │   │   ├── useBlocksPageBlockListGrouped.tsx
+│   │   │   │   │   ├── useBlocksPageBlockListUngrouped.ts
+│   │   │   │   │   ├── useBlocksPageGroupedInitialBlockList.ts
+│   │   │   │   │   ├── useBlocksPageUngroupedInitialBlockList.ts
+│   │   │   │   │   ├── useHomePageBlockList.ts
+│   │   │   │   │   ├── useHomePageInitialBlockList.ts
+│   │   │   │   │   └── utils.ts
+│   │   │   │   ├── types.ts
+│   │   │   │   └── utils.ts
+│   │   │   ├── BtcAnchorBlockCard.tsx
+│   │   │   ├── ErrorBoundary.tsx
+│   │   │   ├── ErrorBox.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── ListHeader.tsx
+│   │   │   ├── NavBar
+│   │   │   │   ├── BtcStxPrice.tsx
+│   │   │   │   ├── ColorModeButton.tsx
+│   │   │   │   ├── DesktopNav.tsx
+│   │   │   │   ├── LabelWrapper.tsx
+│   │   │   │   ├── Logo.tsx
+│   │   │   │   ├── MobileNav.tsx
+│   │   │   │   ├── NavLabel.tsx
+│   │   │   │   ├── NetworkLabel.tsx
+│   │   │   │   ├── NetworkModeBanner.tsx
+│   │   │   │   ├── __tests__
+│   │   │   │   │   ├── DesktopNav.test.tsx
+│   │   │   │   │   ├── MobileNav.test.tsx
+│   │   │   │   │   ├── NetworkLabel.test.tsx
+│   │   │   │   │   └── __snapshots__
+│   │   │   │   │       ├── DesktopNav.test.tsx.snap
+│   │   │   │   │       └── MobileNav.test.tsx.snap
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── types.ts
+│   │   │   ├── NetworkModeToast.tsx
+│   │   │   ├── PageTitle.tsx
+│   │   │   ├── PageWrapper.tsx
+│   │   │   ├── Providers.tsx
+│   │   │   ├── Stats
+│   │   │   │   ├── CurrentStackingCycle
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── useCurrentStackingCycle.ts
+│   │   │   │   ├── LastBlock
+│   │   │   │   │   └── index.tsx
+│   │   │   │   ├── NextStackingCycle
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── useNextStackingCycle.ts
+│   │   │   │   ├── SkeletonStatSection.tsx
+│   │   │   │   ├── StackingCycle.tsx
+│   │   │   │   ├── StatSection.tsx
+│   │   │   │   ├── Stats.tsx
+│   │   │   │   ├── StxSupply
+│   │   │   │   │   └── index.tsx
+│   │   │   │   └── Wrapper.tsx
+│   │   │   ├── StatusBar
+│   │   │   │   ├── CMSStatusBars.tsx
+│   │   │   │   ├── IncidentsStatusBar.tsx
+│   │   │   │   ├── NonHiroNetworkWarningBar.tsx
+│   │   │   │   ├── StatusBarBase.tsx
+│   │   │   │   ├── __tests__
+│   │   │   │   │   ├── StatusBar.test.ts
+│   │   │   │   │   ├── StatusBarBase.test.tsx
+│   │   │   │   │   ├── __snapshots__
+│   │   │   │   │   │   └── StatusBarBase.test.tsx.snap
+│   │   │   │   │   ├── isHiroSubdomain.test.ts
+│   │   │   │   │   └── useUnresolvedIncidents.test.tsx
+│   │   │   │   └── utils.ts
+│   │   │   └── TwoColLayout.tsx
+│   │   ├── address
+│   │   │   └── [principal]
+│   │   │       ├── AddressSummary.tsx
+│   │   │       ├── PageClient.tsx
+│   │   │       ├── StxBalance
+│   │   │       │   ├── BalanceItem.tsx
+│   │   │       │   ├── QRcode.tsx
+│   │   │       │   ├── StackingPercentage.tsx
+│   │   │       │   └── index.tsx
+│   │   │       ├── TokenBalanceCard
+│   │   │       │   ├── DefaultTokenImage.tsx
+│   │   │       │   ├── FtAvatar.tsx
+│   │   │       │   ├── FtBalance.tsx
+│   │   │       │   ├── NftAvatar.tsx
+│   │   │       │   ├── NftBalance.tsx
+│   │   │       │   ├── TokenAssetListItem.tsx
+│   │   │       │   ├── TokenAvatar.tsx
+│   │   │       │   ├── TokenImage.tsx
+│   │   │       │   ├── TokenVideo.tsx
+│   │   │       │   ├── index.tsx
+│   │   │       │   └── useImageUrl.ts
+│   │   │       ├── layout.tsx
+│   │   │       ├── page.tsx
+│   │   │       └── skeleton.tsx
+│   │   ├── block
+│   │   │   └── [hash]
+│   │   │       ├── BlockBtcAnchorBlockCard.tsx
+│   │   │       ├── PageClient.tsx
+│   │   │       ├── error.tsx
+│   │   │       ├── layout.tsx
+│   │   │       ├── page.tsx
+│   │   │       ├── skeleton.tsx
+│   │   │       ├── tx-lists
+│   │   │       │   └── BlockTxsList.tsx
+│   │   │       └── useParamsBlockHash.ts
+│   │   ├── blocks
+│   │   │   ├── PageClient.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── skeleton.tsx
+│   │   ├── btcblock
+│   │   │   └── [hash]
+│   │   │       ├── BitcoinAnchorDetails.tsx
+│   │   │       ├── Header.tsx
+│   │   │       ├── NavBlock.tsx
+│   │   │       ├── PageClient.tsx
+│   │   │       ├── page.tsx
+│   │   │       └── skeleton.tsx
+│   │   ├── error.tsx
+│   │   ├── getStatusBarContent.ts
+│   │   ├── getTokenPriceInfo.ts
+│   │   ├── global-error.tsx
+│   │   ├── global.css
+│   │   ├── instrumentation.ts
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── sandbox
+│   │   │   ├── Wrapper.tsx
+│   │   │   ├── components
+│   │   │   │   ├── Argument
+│   │   │   │   │   ├── ListArgumentInput.tsx
+│   │   │   │   │   ├── PrimitiveArgumentInput.tsx
+│   │   │   │   │   ├── TupleArgumentInput.tsx
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── types.ts
+│   │   │   │   ├── ContractCall
+│   │   │   │   │   ├── AvailableFunctionsView.tsx
+│   │   │   │   │   ├── DefaultView
+│   │   │   │   │   │   ├── PopularContracts.tsx
+│   │   │   │   │   │   ├── SearchContractsForm.tsx
+│   │   │   │   │   │   └── index.tsx
+│   │   │   │   │   ├── FunctionView.tsx
+│   │   │   │   │   ├── PluralizedCaption.tsx
+│   │   │   │   │   ├── PostConditionForm.tsx
+│   │   │   │   │   ├── ReadOnlyField.tsx
+│   │   │   │   │   ├── SelectedContractView.tsx
+│   │   │   │   │   └── __tests__
+│   │   │   │   │       └── PostConditionForm.test.ts
+│   │   │   │   ├── Toolbar.tsx
+│   │   │   │   └── TransactionsPanel.tsx
+│   │   │   ├── contract-call
+│   │   │   │   └── [[...params]]
+│   │   │   │       ├── PageClient.tsx
+│   │   │   │       └── page.tsx
+│   │   │   ├── deploy
+│   │   │   │   ├── LeftSection.tsx
+│   │   │   │   ├── PageClient.tsx
+│   │   │   │   ├── RightSection.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── editor-config
+│   │   │   │   ├── autocomplete.ts
+│   │   │   │   ├── clarity-reference.ts
+│   │   │   │   ├── define-theme.ts
+│   │   │   │   ├── init.ts
+│   │   │   │   └── language.ts
+│   │   │   ├── faucet
+│   │   │   │   ├── PageClient.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── hooks
+│   │   │   │   └── useUser.ts
+│   │   │   ├── layout
+│   │   │   │   ├── ConnectToStacks.tsx
+│   │   │   │   ├── NavItem.tsx
+│   │   │   │   ├── RightPanel.tsx
+│   │   │   │   ├── RightPanelSkeleton.tsx
+│   │   │   │   └── SideNav.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── sandbox-slice.ts
+│   │   │   ├── skeleton.tsx
+│   │   │   ├── transfer
+│   │   │   │   ├── PageClient.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── types
+│   │   │   │   └── values.ts
+│   │   │   └── utils.ts
+│   │   ├── search
+│   │   │   ├── PageClient.tsx
+│   │   │   ├── TxSearchResult.tsx
+│   │   │   ├── filters
+│   │   │   │   ├── Address.tsx
+│   │   │   │   ├── After.tsx
+│   │   │   │   ├── Before.tsx
+│   │   │   │   ├── Date.tsx
+│   │   │   │   ├── DateInput.tsx
+│   │   │   │   ├── DateRange.tsx
+│   │   │   │   └── index.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── skeleton.tsx
+│   │   ├── signer
+│   │   │   └── [signerKey]
+│   │   │       └── PageClient.tsx
+│   │   ├── signers
+│   │   │   ├── AddressesStackingCard.tsx
+│   │   │   ├── CurrentCycleCard.tsx
+│   │   │   ├── NextCycleCard.tsx
+│   │   │   ├── PageClient.tsx
+│   │   │   ├── ProgressBar.tsx
+│   │   │   ├── SignerDistribution.tsx
+│   │   │   ├── SignerDistributionHeader.tsx
+│   │   │   ├── SignerDistributionLegend.tsx
+│   │   │   ├── SignerDistributionPieChart.tsx
+│   │   │   ├── SignersDistributionFilter.tsx
+│   │   │   ├── SignersHeader.tsx
+│   │   │   ├── SignersMap.tsx
+│   │   │   ├── SignersMapComponent.tsx
+│   │   │   ├── SignersTable.tsx
+│   │   │   ├── SortByVotingPowerFilter.tsx
+│   │   │   ├── StatsCardBase.tsx
+│   │   │   ├── StxStackedCard.tsx
+│   │   │   ├── TotalStackedCard.tsx
+│   │   │   ├── __tests__
+│   │   │   │   └── hexToRgb.test.ts
+│   │   │   ├── consts.ts
+│   │   │   ├── data
+│   │   │   │   ├── UseSignerAddresses.ts
+│   │   │   │   ├── useSigners.ts
+│   │   │   │   └── useStxSupply.ts
+│   │   │   ├── page.tsx
+│   │   │   ├── skeleton.tsx
+│   │   │   ├── useSignerLocations.ts
+│   │   │   └── utils.ts
+│   │   ├── skeleton.tsx
+│   │   ├── stxPrice
+│   │   │   └── route.ts
+│   │   ├── support
+│   │   │   ├── PageClient.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── skeleton.tsx
+│   │   ├── token
+│   │   │   └── [tokenId]
+│   │   │       ├── LinksGroup.tsx
+│   │   │       ├── LinksMenu.tsx
+│   │   │       ├── PageClient.tsx
+│   │   │       ├── Tabs
+│   │   │       │   ├── DeveloperStat.tsx
+│   │   │       │   ├── Developers.tsx
+│   │   │       │   ├── data
+│   │   │       │   │   └── useHolders.ts
+│   │   │       │   ├── holders
+│   │   │       │   │   ├── Holders.tsx
+│   │   │       │   │   └── skeleton.tsx
+│   │   │       │   └── index.tsx
+│   │   │       ├── TokenInfo
+│   │   │       │   ├── MarketCap.tsx
+│   │   │       │   ├── Price.tsx
+│   │   │       │   ├── Supply.tsx
+│   │   │       │   ├── Transaction.tsx
+│   │   │       │   ├── TrendArrow.tsx
+│   │   │       │   └── index.tsx
+│   │   │       ├── __tests__
+│   │   │       │   └── utils.test.ts
+│   │   │       ├── error.tsx
+│   │   │       ├── getTokenInfo.ts
+│   │   │       ├── layout.tsx
+│   │   │       ├── page.tsx
+│   │   │       ├── skeleton.tsx
+│   │   │       ├── types.ts
+│   │   │       └── utils.ts
+│   │   ├── tokens
+│   │   │   ├── PageClient.tsx
+│   │   │   ├── TokenRow
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── loading.tsx
+│   │   │   ├── TokensList
+│   │   │   │   ├── TokenTable.tsx
+│   │   │   │   ├── TokenTableSkeleton.tsx
+│   │   │   │   └── TokensList.tsx
+│   │   │   ├── __tests__
+│   │   │   │   ├── TokenRow.test.tsx
+│   │   │   │   ├── __snapshots__
+│   │   │   │   │   └── TokenRow.test.tsx.snap
+│   │   │   │   └── useTokens.test.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   ├── skeleton.tsx
+│   │   │   └── useTokens.ts
+│   │   ├── transactions
+│   │   │   ├── MempoolFeePieChart.tsx
+│   │   │   ├── MempoolFeeStats.tsx
+│   │   │   ├── PageClient.tsx
+│   │   │   ├── TransactionTypeFilterMenu.tsx
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── skeleton.tsx
+│   │   └── txid
+│   │       └── [txId]
+│   │           ├── Alert.tsx
+│   │           ├── Cards
+│   │           │   ├── ContractDetailsCard.tsx
+│   │           │   └── TxBtcAnchorBlockCard.tsx
+│   │           ├── CoinbasePage
+│   │           │   ├── TxDetails.tsx
+│   │           │   └── index.tsx
+│   │           ├── ContractCall
+│   │           │   ├── FunctionSummary.tsx
+│   │           │   ├── FunctionSummaryArguments.tsx
+│   │           │   ├── FunctionSummaryClarityValue.tsx
+│   │           │   ├── FunctionSummaryName.tsx
+│   │           │   ├── FunctionSummaryResult.tsx
+│   │           │   ├── TxDetails.tsx
+│   │           │   ├── index.tsx
+│   │           │   └── value.spec.ts
+│   │           ├── Events.tsx
+│   │           ├── PageClient.tsx
+│   │           ├── PoisonMicroblock
+│   │           │   ├── TxDetails.tsx
+│   │           │   └── index.tsx
+│   │           ├── PostConditions.tsx
+│   │           ├── SenderRecipient.tsx
+│   │           ├── SmartContract
+│   │           │   ├── ContractTabs.tsx
+│   │           │   ├── SmartContract.tsx
+│   │           │   ├── SmartContractTx.tsx
+│   │           │   └── TxDetails.tsx
+│   │           ├── TenureChange
+│   │           │   ├── TxDetails.tsx
+│   │           │   └── index.tsx
+│   │           ├── TokenTransfer
+│   │           │   ├── TxDetails.tsx
+│   │           │   └── index.tsx
+│   │           ├── Tx.tsx
+│   │           ├── TxAlerts.tsx
+│   │           ├── TxDetails
+│   │           │   ├── Amount.tsx
+│   │           │   ├── BlockHash.tsx
+│   │           │   ├── BlockHeight.tsx
+│   │           │   ├── Broadcast.tsx
+│   │           │   ├── ClarityVersion.tsx
+│   │           │   ├── ContractName.tsx
+│   │           │   ├── Fees.tsx
+│   │           │   ├── ID.tsx
+│   │           │   ├── Memo.tsx
+│   │           │   ├── NonCanonical.tsx
+│   │           │   ├── Nonce.tsx
+│   │           │   ├── Recipient.tsx
+│   │           │   ├── Sender.tsx
+│   │           │   └── __tests__
+│   │           │       ├── Broadcast.test.tsx
+│   │           │       └── __snapshots__
+│   │           │           └── Broadcast.test.tsx.snap
+│   │           ├── TxPage.tsx
+│   │           ├── error.tsx
+│   │           ├── layout.tsx
+│   │           ├── page.tsx
+│   │           ├── skeleton.tsx
+│   │           ├── useParamsTxId.ts
+│   │           ├── useTxBlock.ts
+│   │           └── utils.ts
+│   ├── common
+│   │   ├── api
+│   │   │   ├── client.ts
+│   │   │   ├── fetch.ts
+│   │   │   ├── useApi.ts
+│   │   │   └── utils.ts
+│   │   ├── components
+│   │   │   ├── Badge.tsx
+│   │   │   ├── BtcStxBlockLinks.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Circle.tsx
+│   │   │   ├── ContractAvailableFunctions.tsx
+│   │   │   ├── CopyButton.tsx
+│   │   │   ├── ErrorMessageLayout.tsx
+│   │   │   ├── ExplorerLinks.tsx
+│   │   │   ├── FilterMenu.tsx
+│   │   │   ├── KeyValueHorizontal.tsx
+│   │   │   ├── KeyValueVertical.tsx
+│   │   │   ├── ListFooter.tsx
+│   │   │   ├── ListItem.tsx
+│   │   │   ├── RelativeTimeDisplay.tsx
+│   │   │   ├── Section.tsx
+│   │   │   ├── Sip10Disclaimer.tsx
+│   │   │   ├── StxPrice.tsx
+│   │   │   ├── StxPriceButton
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── useStxPriceForTx.ts
+│   │   │   ├── TabsContainer.tsx
+│   │   │   ├── Timestamp.tsx
+│   │   │   ├── TwoColumnPage.tsx
+│   │   │   ├── TwoColumnsListItem.tsx
+│   │   │   ├── TwoColumnsListItemSkeleton.tsx
+│   │   │   ├── TxIcon.tsx
+│   │   │   ├── TxTypeTag.tsx
+│   │   │   ├── Value.tsx
+│   │   │   ├── __tests__
+│   │   │   │   ├── TabsContainer.test.tsx
+│   │   │   │   └── add-network-form.test.tsx
+│   │   │   ├── balances
+│   │   │   │   ├── TokenAmount.tsx
+│   │   │   │   ├── TokenBalancesRow.tsx
+│   │   │   │   └── TokenSymbol.tsx
+│   │   │   ├── contract-source.tsx
+│   │   │   ├── icons
+│   │   │   │   ├── _base.tsx
+│   │   │   │   ├── arrow-left.tsx
+│   │   │   │   ├── arrow-right.tsx
+│   │   │   │   ├── atom.tsx
+│   │   │   │   ├── chevron-down.tsx
+│   │   │   │   ├── copy.tsx
+│   │   │   │   ├── drop.tsx
+│   │   │   │   ├── external-link.tsx
+│   │   │   │   ├── filter.tsx
+│   │   │   │   ├── fungible-token.tsx
+│   │   │   │   ├── info-circle.tsx
+│   │   │   │   ├── info.tsx
+│   │   │   │   ├── loader-quarter.tsx
+│   │   │   │   ├── microblock.tsx
+│   │   │   │   ├── tools.tsx
+│   │   │   │   └── transfer.tsx
+│   │   │   ├── loaders
+│   │   │   │   ├── RightBox.tsx
+│   │   │   │   ├── consts.ts
+│   │   │   │   ├── skeleton-text.tsx
+│   │   │   │   └── skeleton-transaction.tsx
+│   │   │   ├── meta
+│   │   │   │   └── transactions.tsx
+│   │   │   ├── modals
+│   │   │   │   ├── AddNetwork
+│   │   │   │   │   ├── AddNetworkForm.tsx
+│   │   │   │   │   ├── __tests__
+│   │   │   │   │   │   └── utils.test.ts
+│   │   │   │   │   ├── index.tsx
+│   │   │   │   │   └── utils.ts
+│   │   │   │   ├── Nakamoto.tsx
+│   │   │   │   └── modal-slice.ts
+│   │   │   ├── status.tsx
+│   │   │   └── transaction-item.tsx
+│   │   ├── constants
+│   │   │   ├── claritySyntax.ts
+│   │   │   ├── constants.ts
+│   │   │   ├── contracts
+│   │   │   │   ├── hello-world-contract.tsx
+│   │   │   │   ├── kv-store.tsx
+│   │   │   │   ├── status.tsx
+│   │   │   │   └── stream.tsx
+│   │   │   ├── env.ts
+│   │   │   ├── meta.ts
+│   │   │   └── network.ts
+│   │   ├── context
+│   │   │   ├── GlobalContextProvider.tsx
+│   │   │   ├── __tests__
+│   │   │   │   └── GlobalContext.test.tsx
+│   │   │   └── useGlobalContext.ts
+│   │   ├── hooks
+│   │   │   ├── useDebounce.ts
+│   │   │   ├── useError.ts
+│   │   │   ├── useInfiniteQueryResult.ts
+│   │   │   ├── usePage.ts
+│   │   │   ├── useRandomName.tsx
+│   │   │   └── useStacksNetwork.ts
+│   │   ├── mockData
+│   │   │   └── txsData.ts
+│   │   ├── queries
+│   │   │   ├── __tests__
+│   │   │   │   └── useSearchQuery.ts
+│   │   │   ├── query-stale-time.ts
+│   │   │   ├── useAccountBalance.ts
+│   │   │   ├── useAccountStxBalance.ts
+│   │   │   ├── useAddressConfirmedTxsWithTransfersInfinite.ts
+│   │   │   ├── useAddressMempoolTxsInfinite.ts
+│   │   │   ├── useAddressNonces.ts
+│   │   │   ├── useBlockByHash.ts
+│   │   │   ├── useBlockByHeight.ts
+│   │   │   ├── useBlockListInfinite.ts
+│   │   │   ├── useBlockTxsInfinite.ts
+│   │   │   ├── useBlocksByBurnBlock.ts
+│   │   │   ├── useBurnBlock.ts
+│   │   │   ├── useBurnBlocksInfinite.ts
+│   │   │   ├── useCallReadOnlyFunction.ts
+│   │   │   ├── useConfirmedTransactionsInfinite.ts
+│   │   │   ├── useContractById.ts
+│   │   │   ├── useContractFtMetadata.ts
+│   │   │   ├── useCoreApiInfo.ts
+│   │   │   ├── useCurrentPrices.ts
+│   │   │   ├── useCustomNetworkApiInfo.ts
+│   │   │   ├── useFaucet.ts
+│   │   │   ├── useFeeTransfer.ts
+│   │   │   ├── useFtMetadata.ts
+│   │   │   ├── useFtTokens.ts
+│   │   │   ├── useMempoolFee.ts
+│   │   │   ├── useMempoolTransactionsInfinite.ts
+│   │   │   ├── useMempoolTxStats.ts
+│   │   │   ├── useMicroblockByHash.ts
+│   │   │   ├── useNftHistory.ts
+│   │   │   ├── useNftHoldings.ts
+│   │   │   ├── useNftMetadata.ts
+│   │   │   ├── usePoxInfo.ts
+│   │   │   ├── usePoxInforRaw.ts
+│   │   │   ├── useSearchById.ts
+│   │   │   ├── useSearchQuery.ts
+│   │   │   ├── useStxSupply.ts
+│   │   │   ├── useTxById.ts
+│   │   │   ├── useTxEventsByIdInfinite.ts
+│   │   │   └── useUnresolvedIncidents.ts
+│   │   ├── state
+│   │   │   ├── hooks.ts
+│   │   │   ├── slices
+│   │   │   │   └── transaction-value-filter-slice.ts
+│   │   │   └── store.ts
+│   │   ├── styles
+│   │   │   └── hover.ts
+│   │   ├── types
+│   │   │   ├── Error.ts
+│   │   │   ├── ReadOnlyResponse.ts
+│   │   │   ├── api.ts
+│   │   │   ├── contract.ts
+│   │   │   ├── incidents.ts
+│   │   │   ├── lunarCrush.ts
+│   │   │   ├── network.ts
+│   │   │   ├── search-results.ts
+│   │   │   ├── tokenPrice.ts
+│   │   │   ├── tx.ts
+│   │   │   └── utils.ts
+│   │   └── utils
+│   │       ├── __tests__
+│   │       │   ├── string-utils.spec.ts
+│   │       │   ├── utils.spec.ts
+│   │       │   └── validateUrl.test.ts
+│   │       ├── accounts.ts
+│   │       ├── buildUrl.ts
+│   │       ├── cache-client.ts
+│   │       ├── error-utils.ts
+│   │       ├── fetchWithApiKey.ts
+│   │       ├── getRichTextRenderOptions.tsx
+│   │       ├── head.ts
+│   │       ├── network-utils.ts
+│   │       ├── number-utils.ts
+│   │       ├── sandbox.ts
+│   │       ├── string-utils.ts
+│   │       ├── test-utils
+│   │       │   ├── matchMedia.mock.ts
+│   │       │   └── renderWithReduxProvider.tsx
+│   │       ├── time-utils.ts
+│   │       ├── transactions.ts
+│   │       ├── url-utils.ts
+│   │       ├── utils.ts
+│   │       └── validateUrl.ts
+│   ├── components
+│   │   └── ui
+│   │       ├── color-mode.tsx
+│   │       ├── provider.tsx
+│   │       └── skeleton.tsx
+│   ├── features
+│   │   ├── search
+│   │   │   ├── NoTxs.tsx
+│   │   │   ├── Search.tsx
+│   │   │   ├── dropdown
+│   │   │   │   ├── SearchSkeleton.tsx
+│   │   │   │   ├── error-message.tsx
+│   │   │   │   └── search-results-card.tsx
+│   │   │   ├── items
+│   │   │   │   ├── address-result-item.tsx
+│   │   │   │   ├── block-result-item.tsx
+│   │   │   │   ├── result-item-wrapper.tsx
+│   │   │   │   ├── search-result-item.tsx
+│   │   │   │   ├── tx-list-result-item.tsx
+│   │   │   │   └── tx-result-item.tsx
+│   │   │   ├── search-field
+│   │   │   │   ├── search-box.tsx
+│   │   │   │   └── search-input.tsx
+│   │   │   └── search-slice.ts
+│   │   ├── txs-list
+│   │   │   ├── AddressConfirmedTxsList.tsx
+│   │   │   ├── AddressMempoolTxsList.tsx
+│   │   │   ├── ConfirmedTxsList.tsx
+│   │   │   ├── FilteredTxs.tsx
+│   │   │   ├── ListItem
+│   │   │   │   ├── MempoolTxListItem.tsx
+│   │   │   │   ├── MempoolTxListItemMini.tsx
+│   │   │   │   ├── TransferListItem.tsx
+│   │   │   │   ├── TxListItem.tsx
+│   │   │   │   ├── TxListItemMini.tsx
+│   │   │   │   └── TxWithTransferListItem.tsx
+│   │   │   ├── MempoolTxsList.tsx
+│   │   │   ├── SkeletonTxsList.tsx
+│   │   │   ├── TxTitle.tsx
+│   │   │   ├── tabs
+│   │   │   │   ├── AddressTxListTabs.tsx
+│   │   │   │   ├── CSVDownloadButton.tsx
+│   │   │   │   ├── TxListTabs.tsx
+│   │   │   │   ├── TxListTabsBase.tsx
+│   │   │   │   ├── __tests__
+│   │   │   │   │   ├── TxListTabs.test.tsx
+│   │   │   │   │   ├── __snapshots__
+│   │   │   │   │   │   └── useTxsCSVData.spec.tsx.snap
+│   │   │   │   │   └── useTxsCSVData.spec.tsx
+│   │   │   │   └── useTxsCSVData.ts
+│   │   │   └── utils.ts
+│   │   └── txsFilterAndSort
+│   │       ├── FilterButton.tsx
+│   │       ├── ShowValueMenu.tsx
+│   │       ├── SortMenu.tsx
+│   │       ├── TransactionMessages.tsx
+│   │       ├── txsFilterAndSortSlice.ts
+│   │       ├── useFilterAndSortScope.ts
+│   │       └── useFilterAndSortState.tsx
+│   ├── stories
+│   │   ├── BorderRadius.stories.tsx
+│   │   ├── Breakpoints.stories.tsx
+│   │   ├── Button.stories.ts
+│   │   ├── Colors.stories.tsx
+│   │   ├── Elevation.stories.tsx
+│   │   ├── Spacing.stories.tsx
+│   │   └── Typography
+│   │       ├── FontFamily.stories.tsx
+│   │       ├── FontSize.stories.tsx
+│   │       ├── FontWeight.stories.tsx
+│   │       └── TextStyle.stories.tsx
+│   └── ui
+│       ├── Accordion.tsx
+│       ├── AccordionItem.tsx
+│       ├── AccordionItemContent.tsx
+│       ├── AccordionItemTrigger.tsx
+│       ├── AlertTitle.tsx
+│       ├── Badge.tsx
+│       ├── Box.tsx
+│       ├── Button.tsx
+│       ├── ButtonLink.tsx
+│       ├── Checkbox.tsx
+│       ├── ChevronIcon.tsx
+│       ├── CodeEditor
+│       │   ├── clarity.tsx
+│       │   └── index.tsx
+│       ├── Collapsible.tsx
+│       ├── ExclamationMarkCircleIcon.tsx
+│       ├── ExpandingTextarea.tsx
+│       ├── Flex.tsx
+│       ├── FormErrorMessage.tsx
+│       ├── Grid.tsx
+│       ├── HStack.tsx
+│       ├── Heading.tsx
+│       ├── Hide.tsx
+│       ├── Icon.tsx
+│       ├── IconButton.tsx
+│       ├── Image.tsx
+│       ├── Input.tsx
+│       ├── InputGroup.tsx
+│       ├── Link.tsx
+│       ├── ListItem.tsx
+│       ├── Menu.tsx
+│       ├── MenuButton.tsx
+│       ├── MenuGroup.tsx
+│       ├── MenuItem.tsx
+│       ├── MenuList.tsx
+│       ├── MenuSeparator.tsx
+│       ├── Modal.tsx
+│       ├── NextLink.tsx
+│       ├── ProgressCircle.tsx
+│       ├── ProgressCircleValueText.tsx
+│       ├── Select.tsx
+│       ├── Skeleton.tsx
+│       ├── Spinner.tsx
+│       ├── Stack.tsx
+│       ├── Switch.tsx
+│       ├── Tab.tsx
+│       ├── TabList.tsx
+│       ├── TabPanel.tsx
+│       ├── Table.tsx
+│       ├── TableContainer.tsx
+│       ├── Tabs.tsx
+│       ├── Tag.tsx
+│       ├── TagLabel.tsx
+│       ├── TagRightIcon.tsx
+│       ├── TagStartElement.tsx
+│       ├── Tbody.tsx
+│       ├── Td.tsx
+│       ├── Text.tsx
+│       ├── TextLink.tsx
+│       ├── Tfoot.tsx
+│       ├── Th.tsx
+│       ├── Thead.tsx
+│       ├── Tooltip.tsx
+│       ├── Tr.tsx
+│       ├── UnorderedList.tsx
+│       ├── components.ts
+│       ├── icons
+│       │   ├── BitcoinIcon.tsx
+│       │   ├── ClarityIcon.tsx
+│       │   ├── CoinSparkleIcon.tsx
+│       │   ├── CubeSparkleIcon.tsx
+│       │   ├── DiagonalArrowsIcon.tsx
+│       │   ├── FunctionReadOnly.tsx
+│       │   ├── FunctionX.tsx
+│       │   ├── QuestionOctagon.tsx
+│       │   ├── StxIcon.tsx
+│       │   ├── TripleOpenParentheses.tsx
+│       │   └── WalletIcon.tsx
+│       ├── theme
+│       │   ├── borderRadius.ts
+│       │   ├── borders.ts
+│       │   ├── breakpoints.ts
+│       │   ├── colors.ts
+│       │   ├── fontSizes.ts
+│       │   ├── fontWeights.ts
+│       │   ├── fonts
+│       │   │   ├── index.ts
+│       │   │   ├── matter-mono-regular.woff
+│       │   │   ├── matter-mono-regular.woff2
+│       │   │   ├── matter-regular.woff
+│       │   │   ├── matter-regular.woff2
+│       │   │   ├── opensaucesans-medium-webfont.woff
+│       │   │   ├── opensaucesans-medium-webfont.woff2
+│       │   │   ├── opensaucesans-regular-webfont.woff
+│       │   │   └── opensaucesans-regular-webfont.woff2
+│       │   ├── fonts.ts
+│       │   ├── letterSpacings.ts
+│       │   ├── lineHeights.ts
+│       │   ├── recipes
+│       │   │   ├── BadgeRecipe.ts
+│       │   │   ├── ButtonRecipe.ts
+│       │   │   ├── CheckboxRecipe.ts
+│       │   │   ├── InputRecipe.ts
+│       │   │   ├── LinkRecipe.ts
+│       │   │   ├── MenuRecipe.ts
+│       │   │   ├── SwitchRecipe.ts
+│       │   │   ├── TabRecipe.ts
+│       │   │   └── TagRecipe.ts
+│       │   ├── semanticTokens.ts
+│       │   ├── shadows.ts
+│       │   ├── sizes.ts
+│       │   ├── space.ts
+│       │   ├── textStyles.ts
+│       │   ├── theme.ts
+│       │   └── zIndex.ts
+│       ├── types.ts
+│       └── typography.tsx
+└── tsconfig.json
+
+236 directories, 1343 files

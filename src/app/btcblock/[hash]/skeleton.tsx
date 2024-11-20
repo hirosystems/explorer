@@ -14,7 +14,7 @@ import { Section } from '../../../common/components/Section';
 import '../../../common/components/loaders/skeleton-text';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
-import { SkeletonItem } from '../../../ui/SkeletonItem';
+import { Skeleton } from '../../../ui/Skeleton';
 import { TowColLayout } from '../../_components/TwoColLayout';
 
 const StyledSection = styled(Section)`
@@ -25,12 +25,12 @@ const StyledSection = styled(Section)`
 
 export function BitcoinAnchorDetailsSkeleton() {
   return (
-    <StyledSection title={<SkeletonItem width={20} height={5} />}>
+    <StyledSection title={<Skeleton width={20} height={5} />}>
       {Array.from({ length: 7 }).map((_, rowIndex) => (
         <KeyValueVertical
           className="key-value-vertical"
-          label={<SkeletonItem width={20} height={4} />}
-          value={<SkeletonItem width={40} height={10} />}
+          label={<Skeleton width={20} height={4} />}
+          value={<Skeleton width={40} height={10} />}
           key={`key-value-vertical-${rowIndex}`}
         />
       ))}
@@ -42,10 +42,10 @@ export function BlockPageSkeleton() {
   return (
     <>
       <Flex mt={20}>
-        <SkeletonItem width={400} height={10} />
+        <Skeleton width={400} height={10} />
       </Flex>
       <TowColLayout>
-        <Section title={<SkeletonItem width={20} height={5} />}>
+        <Section title={<Skeleton width={20} height={5} />}>
           <Box py={2}>
             <ScrollableBox pt={3}>
               <BurnBlockGroupGridLayout minimized={false}>

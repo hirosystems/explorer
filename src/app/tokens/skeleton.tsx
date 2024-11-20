@@ -7,7 +7,7 @@ import { useColorMode } from '../../components/ui/color-mode';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { InputGroup } from '../../ui/InputGroup';
-import { SkeletonItem } from '../../ui/SkeletonItem';
+import { Skeleton } from '../../ui/Skeleton';
 import { PageTitle } from '../_components/PageTitle';
 import { TokenTableSkeleton } from './TokensList/TokenTableSkeleton';
 
@@ -16,7 +16,7 @@ export default function Skeleton() {
   return (
     <Flex direction={'column'} mt="32px" gap="32px">
       <PageTitle>
-        <SkeletonItem width={'400px'} height={'43px'} />
+        <Skeleton width={'400px'} height={'43px'} />
       </PageTitle>
       <Section
         title={'Tokens'}
@@ -31,7 +31,7 @@ export default function Skeleton() {
               </Icon>
             }
           >
-            <SkeletonItem width={'200px'} height={'40px'} />
+            <Skeleton width={'200px'} height={'40px'} />
           </InputGroup>
         }
       >

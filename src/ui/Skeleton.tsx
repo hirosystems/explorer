@@ -6,9 +6,16 @@ import { forwardRef } from 'react';
 import { UIComponent } from './types';
 
 export type SkeletonProps = CUISkeletonProps & UIComponent;
-export const SkeletonItem = forwardRef<HTMLDivElement, SkeletonProps>(
+export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
   ({ children, size, ...rest }, ref) => (
-    <CUISkeleton ref={ref} {...rest}>
+    <CUISkeleton
+      ref={ref}
+      width={size || rest.width}
+      height={size || rest.height}
+      minWidth={size || rest.minWidth}
+      minHeight={size || rest.minHeight}
+      {...rest}
+    >
       {children}
     </CUISkeleton>
   )

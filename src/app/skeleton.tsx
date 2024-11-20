@@ -1,6 +1,7 @@
 'use client';
 
 import { Box } from '@chakra-ui/react';
+
 import { Section } from '../common/components/Section';
 import { SkeletonTxsList } from '../features/txs-list/SkeletonTxsList';
 import { Grid } from '../ui/Grid';
@@ -12,7 +13,7 @@ import { Wrapper } from './_components/Stats/Wrapper';
 export default function HomePageSkeleton() {
   return (
     <Box>
-      {/* <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
+      <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
       <Wrapper>
         <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />
         <SkeletonStatSection borderRightWidth={['0px', '0px', '0px', '1px']} />
@@ -28,7 +29,7 @@ export default function HomePageSkeleton() {
           <SkeletonTxsList />
         </Section>
         <HomePageBlockListSkeleton />
-      </Grid> */}
+      </Grid>
     </Box>
   );
 }
