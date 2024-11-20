@@ -23,7 +23,6 @@ export * from './MenuItem';
 export * from './MenuList';
 export * from './Modal';
 export * from './Select';
-export * from './Show';
 export * from './Spinner';
 export * from './Stack';
 export * from './Switch';
