@@ -41,7 +41,7 @@ export const ListArgumentInput: FC<
             fontWeight="500"
             display="block"
             as={'label'}
-            htmlFor={name}
+            htmlFor={name} // TODO: upgrade to v3. this may be broken
             mb="8px"
           >
             {name}
@@ -55,13 +55,9 @@ export const ListArgumentInput: FC<
                 error={error}
                 value={listItemValue}
               />
-              <Icon
-                as={X}
-                size={3}
-                mt={'14px'}
-                style={{ cursor: 'pointer' }}
-                onClick={() => remove(i)}
-              />
+              <Icon size={3} mt={'14px'} style={{ cursor: 'pointer' }} onClick={() => remove(i)}>
+                <X />
+              </Icon>
             </Flex>
           ))}
           <Button

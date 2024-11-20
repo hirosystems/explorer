@@ -20,7 +20,11 @@ export function BlockListRowSkeleton({
   isLast?: boolean;
   isFirst?: boolean;
 }) {
-  const icon = isFirst ? <Icon as={Circle} size={2.5} fill="borderPrimary" /> : null;
+  const icon = isFirst ? (
+    <Icon size={2.5} fill="borderPrimary">
+      <Circle />
+    </Icon>
+  ) : null;
   return minimized ? (
     <>
       <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
@@ -29,7 +33,7 @@ export function BlockListRowSkeleton({
       </Flex>
 
       <HStack
-        divider={<>&nbsp;∙&nbsp;</>}
+        separator={<>&nbsp;∙&nbsp;</>}
         gap={1}
         whiteSpace="nowrap"
         color="textSubdued"

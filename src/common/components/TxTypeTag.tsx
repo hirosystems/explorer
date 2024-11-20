@@ -25,7 +25,9 @@ export function TxTypeTag({ type, ...rest }: TagProps) {
   const TypeIcon = getTxTypeIcon(type);
   return (
     <StyledBadge {...rest}>
-      <Icon size={'12px'} color="currentColor" as={TypeIcon} />
+      <Icon size={'12px'} color="currentColor">
+        {TypeIcon}
+      </Icon>
       {txTypeNamesMap[type]}
     </StyledBadge>
   );

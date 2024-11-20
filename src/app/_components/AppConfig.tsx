@@ -9,6 +9,7 @@ import { useAppSelector } from '../../common/state/hooks';
 import { NetworkMode } from '../../common/types/network';
 import { Text } from '../../ui/Text';
 import { selectUserSession } from '../sandbox/sandbox-slice';
+import { Box } from '@chakra-ui/react';
 
 export const AppConfig: React.FC<{
   queryNetworkMode: NetworkMode;
@@ -22,10 +23,10 @@ export const AppConfig: React.FC<{
       <Text fontSize={'sm'}>
         You're viewing {querySubnet ? 'a subnet' : `the ${queryNetworkMode}`}
         {querySubnet || queryApiUrl ? (
-          <>
+          <Box>
             <br />
             {querySubnet || queryApiUrl}
-          </>
+          </Box>
         ) : null}{' '}
         Explorer
       </Text>,

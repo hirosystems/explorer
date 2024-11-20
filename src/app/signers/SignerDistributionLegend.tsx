@@ -1,6 +1,6 @@
-import { ColorMode, useColorMode } from '@/components/ui/color-mode';
 import { ReactNode, useMemo } from 'react';
 
+import { ColorMode, useColorMode } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';

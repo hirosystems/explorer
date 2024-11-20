@@ -1,8 +1,8 @@
-import { useColorMode } from '@/components/ui/color-mode';
-import { Menu, Separator } from '@chakra-ui/react';
+import { Flex, Menu, Separator } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import React from 'react';
 
+import { useColorMode } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { LinksGroup } from './LinksGroup';
@@ -22,7 +22,9 @@ export function LinksMenu(props: { links: TokenLinks }) {
       >
         <Flex alignItems="center" justifyContent="space-between" gap={2}>
           Links
-          <Icon as={CaretDown} size="11px" color={'textCaption.light'} />
+          <Icon size="11px" color={'textCaption.light'}>
+            <CaretDown />
+          </Icon>
         </Flex>
       </Menu.Trigger>
       <Menu.Content>

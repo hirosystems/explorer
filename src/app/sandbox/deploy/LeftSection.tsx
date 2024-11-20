@@ -67,7 +67,9 @@ export function LeftSection() {
                   }}
                   aria-label={'clear contract name field'}
                 >
-                  <Icon as={X} size={4} />
+                  <Icon size={4}>
+                    <X />
+                  </Icon>
                 </IconButton>
               }
             >
@@ -81,7 +83,9 @@ export function LeftSection() {
             <Box onClick={() => dispatch(toggleCodeToolbar())}>
               <Tooltip content="Contract tools">
                 <IconButton aria-label={'contract tools'} size={'40px'}>
-                  <Icon as={Toolbox} size={4} />
+                  <Icon size={4}>
+                    <Toolbox />
+                  </Icon>
                 </IconButton>
               </Tooltip>
             </Box>

@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
-import { NextLink } from '@/ui/NextLink';
 import { FC, ReactNode } from 'react';
 
+import { useColorModeValue } from '../../../components/ui/color-mode';
+import { NextLink } from '../../../ui/NextLink';
 import { Tooltip } from '../../../ui/Tooltip';
 
 export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean; url: string }> = ({

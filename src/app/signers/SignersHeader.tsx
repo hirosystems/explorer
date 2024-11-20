@@ -102,7 +102,9 @@ export function SignersHeader({ tokenPrice }: { tokenPrice: TokenPrice }) {
           <Link href="/" color="textSubdued" fontSize="xs" mr={1}>
             See Stacking historical data
           </Link>
-          <Icon as={ArrowRight} size={'12px'} color="textSubdued" />
+          <Icon size={'12px'} color="textSubdued">
+            <ArrowRight />
+          </Icon>
         </Flex>
       }
       signersMap={<SignersMapComponent />}

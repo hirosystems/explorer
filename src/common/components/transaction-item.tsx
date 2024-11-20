@@ -1,11 +1,11 @@
 'use client';
 
-import { useColorMode } from '@/components/ui/color-mode';
 import { ArrowRight } from '@phosphor-icons/react';
 import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { useColorMode } from '../../components/ui/color-mode';
 import { BoxProps } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
@@ -91,7 +91,9 @@ export const AddressArea = React.memo(
         <HStack flexWrap="nowrap" whiteSpace="nowrap">
           <PrincipalLink principal={tx.sender_address} />
           <Flex as="span">
-            <Icon as={ArrowRight} size={3} />
+            <Icon size={3}>
+              <ArrowRight />
+            </Icon>
           </Flex>
           <PrincipalLink principal={tx.token_transfer.recipient_address} />
         </HStack>

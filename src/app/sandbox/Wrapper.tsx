@@ -72,7 +72,9 @@ export function Wrapper({ children }: { children: ReactNode }) {
             <HStack gap={6}>
               <HStack alignItems="center">
                 <Circle size={5}>
-                  <Icon as={User} size={3.5} />
+                  <Icon size={3.5}>
+                    <User />
+                  </Icon>
                 </Circle>
                 <Caption>{userData?.identityAddress}</Caption>
               </HStack>

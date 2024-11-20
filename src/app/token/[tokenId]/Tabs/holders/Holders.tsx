@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
 
@@ -8,6 +7,7 @@ import { Section } from '../../../../../common/components/Section';
 import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
 import { useContractById } from '../../../../../common/queries/useContractById';
 import { truncateMiddle } from '../../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../../components/ui/color-mode';
 import { Flex } from '../../../../../ui/Flex';
 import { Table } from '../../../../../ui/Table';
 import { Tbody } from '../../../../../ui/Tbody';

@@ -59,7 +59,9 @@ const Faucet: NextPage = () => {
   };
   return (
     <Stack alignItems={'center'} mt={46} gap={6}>
-      <Icon as={StxIcon} size={10} />
+      <Icon as={StxIcon} size={10}>
+        <StxIcon />
+      </Icon>
       <Title>STX Faucet</Title>
       <Text fontSize={'sm'}>Need STX to test the network? The faucet can top you up!</Text>
       {!!errorMessage ? <Text color={'error'}>{errorMessage}</Text> : null}

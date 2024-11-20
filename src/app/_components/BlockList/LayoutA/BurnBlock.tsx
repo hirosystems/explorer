@@ -1,10 +1,10 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import { ArrowBendDownLeft } from '@phosphor-icons/react';
 import { memo } from 'react';
 
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Flex, FlexProps } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
@@ -39,14 +39,17 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
     >
       <HStack gap={1.5}>
         <Icon
-          as={ArrowBendDownLeft}
           transform={'rotate(90deg)'}
           size={2.5}
           color={iconColor}
           position={'relative'}
           bottom={'1px'}
-        />
-        <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
+        >
+          <ArrowBendDownLeft />
+        </Icon>
+        <Icon size={18} position={'relative'} bottom={'1px'}>
+          <BitcoinIcon />
+        </Icon>
         <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${hash.replace('0x', '')}`}>
           <Text
             fontSize={'sm'}

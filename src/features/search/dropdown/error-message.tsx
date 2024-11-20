@@ -9,7 +9,9 @@ import { Caption } from '../../../ui/typography';
 export const SearchErrorMessage: React.FC<{ message: string }> = React.memo(({ message }) => (
   <Flex gap={4} alignItems={'center'}>
     <Circle size={12}>
-      <Icon as={Warning} size="4" />
+      <Icon size="4">
+        <Warning />
+      </Icon>
     </Circle>
     <Caption lineHeight="22px" wordBreak="break-word">
       {message}

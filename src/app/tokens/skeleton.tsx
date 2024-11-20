@@ -1,9 +1,9 @@
 'use client';
 
-import { useColorMode } from '@/components/ui/color-mode';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 
 import { Section } from '../../common/components/Section';
+import { useColorMode } from '../../components/ui/color-mode';
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
 import { InputGroup } from '../../ui/InputGroup';
@@ -26,7 +26,9 @@ export default function Skeleton() {
         topRight={
           <InputGroup
             endElement={
-              <Icon as={MagnifyingGlass} color={`textCaption.${colorMode}`} pointerEvents="none" />
+              <Icon color={`textCaption.${colorMode}`} pointerEvents="none">
+                <MagnifyingGlass />
+              </Icon>
             }
           >
             <SkeletonItem width={'200px'} height={'40px'} />

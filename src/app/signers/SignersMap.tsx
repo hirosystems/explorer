@@ -5,8 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvent } from 'react-leaflet';
 
+import { useColorMode, useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
-import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
 import { Continent } from './SignersMapComponent';
 
 const INITIAL_VIEW = {

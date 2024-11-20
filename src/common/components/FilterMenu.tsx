@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import { CaretDown, Icon as IconType } from '@phosphor-icons/react';
 import { ReactNode, isValidElement, useCallback, useState } from 'react';
 
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Icon } from '../../ui/Icon';
 import { Menu } from '../../ui/Menu';
@@ -49,7 +49,9 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
         flexShrink={0}
       >
         {leftIcon ? ( // TODO: v3 upgrade. this might be broken. left and right icons
-          <Icon as={leftIcon} size={4} color={isMenuOpen ? 'text' : 'textSubdued'} />
+          <Icon size={4} color={isMenuOpen ? 'text' : 'textSubdued'}>
+            {leftIcon}
+          </Icon>
         ) : null}
         <Box display="inline" fontWeight="normal" color={isMenuOpen ? 'text' : 'textSubdued'}>
           Show:{' '}
@@ -57,7 +59,9 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
         <Box display="inline" fontWeight="normal" color={'text'}>
           {filterLabelValue}
         </Box>
-        <Icon as={CaretDown} size={3} color="text" />
+        <Icon size={3} color="text">
+          <CaretDown />
+        </Icon>
       </MenuButton>
       <MenuList fontSize={'sm'} padding="8px">
         {isMenuItemArray(menuItems)

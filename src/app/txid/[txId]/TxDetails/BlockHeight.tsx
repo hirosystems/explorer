@@ -49,7 +49,9 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
           <Box>
             {isOnTouchScreen ? (
               <Flex alignItems="center">
-                <Icon as={Clock} size={4} mr="4px" />
+                <Icon size={4} mr="4px">
+                  <Clock />
+                </Icon>
                 <Value suppressHydrationWarning={true}>
                   {toRelativeTime(ts * 1000)} - {readableTs}
                 </Value>
@@ -57,7 +59,9 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
             ) : (
               <Tooltip content={readableTs}>
                 <Flex alignItems="center">
-                  <Icon as={Clock} size={4} mr="4px" />
+                  <Icon size={4} mr="4px">
+                    <Clock />
+                  </Icon>
                   <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
                 </Flex>
               </Tooltip>

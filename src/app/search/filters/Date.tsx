@@ -1,17 +1,13 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
-import { useDisclosure } from '@chakra-ui/react';
+import { Popover, useDisclosure } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { Badge } from '../../../common/components/Badge';
 import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { Popover } from '../../../ui/Popover';
-import { PopoverContent } from '../../../ui/PopoverContent';
-import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { AfterForm } from './After';
 import { BeforeForm } from './Before';
@@ -86,12 +82,21 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
   }, [populatedFilter]);
 
   return (
-    <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-      <PopoverTrigger>
+    <Popover.Root
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={onOpen}
+      onExitComplete={onClose}
+    >
+      <Popover.Trigger>
         <Button
           visual={'secondary'}
           fontSize={'sm'}
-          rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
+          rightIcon={
+            <Icon size={3.5} style={{ strokeWidth: '2px' }}>
+              <CaretDown />
+            </Icon>
+          }
           height={9}
           color={'textSubdued'}
         >
@@ -118,9 +123,9 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
             )}
           </Flex>
         </Button>
-      </PopoverTrigger>
-      <PopoverContent maxWidth={'256px'} bgColor={'surface'}>
-        <Stack gap={4} p={4}>
+      </Popover.Trigger>
+      <Popover.Content maxWidth={'256px'} bgColor={'surface'}>
+        <Flex direction={'column'} gap={4} p={4}>
           <Flex gap={'2'} flexWrap={'wrap'}>
             <FilterTypeButton
               isSelected={selectedFilterType === 'dateRange'}
@@ -158,8 +163,8 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
               onClose={onClose}
             />
           ) : null}
-        </Stack>
-      </PopoverContent>
-    </Popover>
+        </Flex>
+      </Popover.Content>
+    </Popover.Root>
   );
 }

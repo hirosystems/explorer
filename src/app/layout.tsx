@@ -4,7 +4,6 @@ import { headers } from 'next/headers';
 import { ReactNode } from 'react';
 
 import { meta } from '../common/constants/meta';
-import { GlobalContextProvider } from '../common/context/GlobalContextProvider';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getStatusBarContent } from './getStatusBarContent';
@@ -22,15 +21,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <GlobalContextProvider 
-        // TODO: this should be in providers
-        headerCookies={headersList.get('cookie')}> 
-          <Providers headerCookies={headersList.get('cookie')}>
-            <PageWrapper tokenPrice={tokenPrice} statusBarContent={statusBarContent}>
-              {children}
-            </PageWrapper>
-          </Providers>
-        </GlobalContextProvider>
+        <Providers headerCookies={headersList.get('cookie')}>
+          <PageWrapper tokenPrice={tokenPrice} statusBarContent={statusBarContent}>
+            {children}
+          </PageWrapper>
+        </Providers>
       </body>
       <GoogleAnalytics gaId="G-NB2VBT0KY2" />
       <GoogleTagManager gtmId="GTM-W534HQ4X" />

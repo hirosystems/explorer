@@ -1,8 +1,8 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import { FlexProps } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { TxLink } from '../../../../common/components/ExplorerLinks';
+import { useColorMode } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { StatSection } from '../../../_components/Stats/StatSection';

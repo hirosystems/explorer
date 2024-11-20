@@ -71,7 +71,9 @@ export function NakamotoModal() {
                 >
                   Learn more about Nakamoto on Mainnet
                 </TextLink>
-                <Icon as={ArrowUpRight} size={3} color="accent.stacks-500" />
+                <Icon as={ArrowUpRight} size={3} color="accent.stacks-500">
+                  <ArrowUpRight />
+                </Icon>
               </Flex>
             </Dialog.Footer>
           </Flex>

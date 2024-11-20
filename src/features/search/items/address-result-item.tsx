@@ -1,4 +1,3 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import React from 'react';
 
 import { Circle } from '../../../common/components/Circle';
@@ -6,6 +5,7 @@ import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { useAccountStxBalance } from '../../../common/queries/useAccountStxBalance';
 import { FoundResult } from '../../../common/types/search-results';
 import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
+import { useColorMode } from '../../../components/ui/color-mode';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import WalletIcon from '../../../ui/icons/WalletIcon';

@@ -1,6 +1,6 @@
 import { useBreakpointValue } from '@chakra-ui/react';
 import { ArrowBendDownRight, Clock, WarningCircle } from '@phosphor-icons/react';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 import { TransactionType } from '@stacks/stacks-blockchain-api-types/generated';
@@ -15,22 +15,23 @@ import StxIcon from '../../ui/icons/StxIcon';
 import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 
-export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
+export const getTxTypeIcon = (txType: Transaction['tx_type']): ReactNode => {
+  // TODO: upgrade to v3. This may be broken
   switch (txType) {
     case 'token_transfer':
-      return DiagonalArrowsIcon;
+      return DiagonalArrowsIcon as any as ReactNode;
 
     case 'smart_contract':
-      return ClarityIcon;
+      return ClarityIcon as any as ReactNode;
 
     case 'contract_call':
-      return FunctionXIcon;
+      return FunctionXIcon as any as ReactNode;
 
     case 'coinbase':
-      return CubeSparkleIcon;
+      return CubeSparkleIcon as any as ReactNode;
 
     case 'tenure_change':
-      return ArrowBendDownRight;
+      return ArrowBendDownRight as any as ReactNode;
 
     // sBTC-related transaction types
     // case 'tenure_extension':
@@ -43,7 +44,7 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): FC => {
     //   CoinSparkleIcon;
 
     default:
-      return StxIcon;
+      return StxIcon as any as ReactNode;
   }
 };
 
@@ -101,11 +102,11 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
   }
 
   const icon =
-    txStatus === TransactionStatus.PENDING
-      ? Clock
-      : txStatus === TransactionStatus.FAILED
-        ? WarningCircle
-        : undefined;
+    txStatus === TransactionStatus.PENDING ? (
+      <Clock />
+    ) : txStatus === TransactionStatus.FAILED ? (
+      <WarningCircle />
+    ) : null;
   const color =
     txStatus === TransactionStatus.PENDING
       ? 'text'
@@ -128,12 +129,13 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
       justifyContent={'center'}
     >
       <Icon
-        as={icon}
         height={`${statusBubbleIconSize}px`}
         width={`${statusBubbleIconSize}px`}
         color={color}
         bg={'surface'}
-      />
+      >
+        {icon}
+      </Icon>
     </Flex>
   );
 };
@@ -176,9 +178,10 @@ export const TxIcon: FC<
         <Icon
           height={`${convertFromCUIScaleToPx(iconSize as number)}px`}
           width={`${convertFromCUIScaleToPx(iconSize as number)}px`}
-          as={TxIcon}
           color={'text'}
-        />
+        >
+          {TxIcon}
+        </Icon>
       )}
     </Flex>
   );

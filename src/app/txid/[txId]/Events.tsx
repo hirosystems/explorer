@@ -215,7 +215,9 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
       icon={
         eventIcon ? (
           <Circle size={4.5}>
-            <Icon as={eventIcon} size={2.5} />
+            <Icon as={eventIcon} size={2.5}>
+              {eventIcon}
+            </Icon>
           </Circle>
         ) : null
       }

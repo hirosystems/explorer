@@ -37,7 +37,9 @@ function StxSupplyBase(props: GridProps) {
             >
               <Flex alignItems={'center'}>
                 &nbsp;
-                <Icon as={Info} size={4} />
+                <Icon size={4}>
+                  <Info />
+                </Icon>
               </Flex>
             </Tooltip>
           )}

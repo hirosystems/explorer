@@ -1,4 +1,4 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -12,6 +12,7 @@ import FunctionXIcon from '../../../ui/icons/FunctionX';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { useUser } from '../hooks/useUser';
 import { NavItem } from './NavItem';
+import { Icon } from '@types'
 
 export const SideNav: React.FC<StackProps> = () => {
   const network = useGlobalContext().activeNetwork;
@@ -24,26 +25,42 @@ export const SideNav: React.FC<StackProps> = () => {
       <NavItem
         label={'Write & Deploy Contracts'}
         url={buildUrl(`/sandbox/deploy`, network)}
-        icon={<Icon as={ClarityIcon} size={5} color={iconColor} />}
+        icon={
+          <Icon size={5} color={iconColor}>
+            <ClarityIcon />
+          </Icon>
+        }
         isSelected={pathname?.startsWith('/sandbox/deploy')}
       />
       <NavItem
         label={'Call Functions'}
         url={buildUrl(`/sandbox/contract-call`, network)}
-        icon={<Icon as={FunctionXIcon} size={5} color={iconColor} />}
+        icon={
+          <Icon size={5} color={iconColor}>
+            <FunctionXIcon />
+          </Icon>
+        }
         isSelected={pathname?.startsWith('/sandbox/contract-call')}
       />
       <NavItem
         label={'STX Transfer'}
         url={buildUrl(`/sandbox/transfer`, network)}
-        icon={<Icon as={StxIcon} size={5} color={iconColor} />}
+        icon={
+          <Icon size={5} color={iconColor}>
+            <StxIcon />
+          </Icon>
+        }
         isSelected={pathname?.startsWith('/sandbox/transfer')}
       />
       {isConnected && network.mode === 'testnet' && (
         <NavItem
           label={'Testnet Faucet'}
           url={buildUrl(`/sandbox/faucet`, network)}
-          icon={<Icon as={DropIcon} size={5} color={iconColor} />}
+          icon={
+            <Icon size={5} color={iconColor}>
+              <DropIcon />
+            </Icon>
+          }
           isSelected={pathname?.startsWith('/sandbox/faucet')}
         />
       )}

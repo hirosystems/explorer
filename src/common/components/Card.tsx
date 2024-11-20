@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorModeValue } from '@/components/ui/color-mode';
+import { useColorModeValue } from '../../components/ui/color-mode';
 
 import { Flex, FlexProps } from '../../ui/Flex';
 

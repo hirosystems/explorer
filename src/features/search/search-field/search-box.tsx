@@ -62,7 +62,9 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
           bgColor: 'whiteAlpha.300',
         }}
       >
-        <Icon as={MagnifyingGlass} size={4} color="white" ml={3} />
+        <Icon size={4} color="white" ml={3}>
+          <MagnifyingGlass />
+        </Icon>
         <SearchInput tempSearchTerm={tempSearchTerm} setTempSearchTerm={setTempSearchTerm} />
         {isFetching ? (
           <Spinner w={4} h={4} color="white" mr={3} />
@@ -79,7 +81,9 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
             _hover={{ bg: 'transparent' }}
             mr={3}
           >
-            <Icon as={X} size={3} />
+            <Icon size={3}>
+              <X />
+            </Icon>
           </IconButton>
         ) : tempSearchTerm === '' && isSearchFieldFocused ? (
           <Text

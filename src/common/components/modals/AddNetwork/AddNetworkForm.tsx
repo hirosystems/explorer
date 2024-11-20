@@ -195,11 +195,9 @@ export const AddNetworkForm: FC = () => {
             <Accordion.Item borderBottom={'none'} value="btc-explorer-urls">
               <Stack gap={4}>
                 <Accordion.ItemTrigger paddingLeft={0} gap={2}>
-                  <Icon
-                    as={isBtcExplorerUrlsAccordionExpanded ? CaretDown : CaretRight}
-                    w={3}
-                    h={3}
-                  />
+                  <Icon size={3}>
+                    {isBtcExplorerUrlsAccordionExpanded ? <CaretDown /> : <CaretRight />}
+                  </Icon>
                   <Text fontSize={'sm'}>BTC Explorer URLs</Text>
                 </Accordion.ItemTrigger>
                 <Accordion.ItemContent>

@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorModeValue } from '@/components/ui/color-mode';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
 
@@ -8,6 +7,7 @@ import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { NakamotoModal } from '../../common/components/modals/Nakamoto';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Footer } from './Footer';
@@ -23,7 +23,7 @@ const StyledWrapper = styled(Box)<{ bg: string }>`
   min-height: 100vh;
   overflow-x: hidden;
   overflow: hidden;
-  display: flex; /* Assuming 'direction' is meant to be flex-direction */
+  display: flex;
   flex-direction: column;
   position: relative;
   background: ${props => props.bg};
@@ -65,7 +65,7 @@ export function PageWrapper({
 }) {
   const statusBarBg = useColorModeValue('black', 'white');
   return (
-    <>
+    <Box>
       <Flex
         direction={'column'}
         width={'100%'}
@@ -96,6 +96,6 @@ export function PageWrapper({
       </WrapperWithBg>
       <AddNetworkModal />
       <NetworkModeToast />
-    </>
+    </Box>
   );
 }

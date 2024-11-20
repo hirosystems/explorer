@@ -60,11 +60,11 @@ function BlocksPageBlockListBase() {
                 toggleLiveUpdates(true);
               }
             },
-            isChecked: groupedByBtc,
+            checked: groupedByBtc,
           }}
           liveUpdates={{
             onChange: () => toggleLiveUpdates(),
-            isChecked: liveUpdates,
+            checked: liveUpdates,
           }}
           horizontal={true}
         />

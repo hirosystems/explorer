@@ -67,7 +67,11 @@ const StxBlockRow = ({
   isFirst?: boolean;
   isLast?: boolean;
 }) => {
-  const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : undefined;
+  const icon = isFirst ? (
+    <Icon size={2.5} color={'white'}>
+      <StxIcon />
+    </Icon>
+  ) : undefined;
   return minimized ? (
     <>
       <Flex
@@ -258,8 +262,12 @@ function BitcoinHeader({
       flexWrap={'wrap'}
     >
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
-        <Icon as={ArrowElbowLeftDown} size={3.5} color="textSubdued" />
-        <Icon as={BitcoinIcon} size={4.5} />
+        <Icon size={3.5} color="textSubdued">
+          <ArrowElbowLeftDown />
+        </Icon>
+        <Icon size={4.5}>
+          <BitcoinIcon />
+        </Icon>
         <Flex height="full" alignItems="center">
           <ExplorerLink
             fontSize="sm"

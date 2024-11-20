@@ -2,7 +2,6 @@
 
 import { Clock } from '@phosphor-icons/react';
 import { FC } from 'react';
-import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -35,7 +34,9 @@ export const Broadcast: FC<{
           <Box>
             <Tooltip content={readableTs}>
               <Flex alignItems="center">
-                <Icon as={Clock} size={4} mr="4px" />
+                <Icon size={4} mr="4px">
+                  <Clock />
+                </Icon>
                 <Value suppressHydrationWarning={true}>{toRelativeTime(ts * 1000)}</Value>
               </Flex>
             </Tooltip>

@@ -1,4 +1,4 @@
-import { ColorMode, useColorMode } from '@/components/ui/color-mode';
+import { ColorMode, useColorMode } from '../../components/ui/color-mode';
 import { useTheme } from 'next-themes';
 import { useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, Tooltip, TooltipProps } from 'recharts';

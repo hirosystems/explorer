@@ -10,6 +10,7 @@ import { Grid } from '../ui/Grid';
 import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
+import { Box } from '@chakra-ui/react';
 
 const HomePageBlockListDynamic = dynamic(
   () =>
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
   const { activeNetwork } = useGlobalContext();
 
   return (
-    <>
+    <Box>
       <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
       {!activeNetwork.isSubnet && <Stats />}
       <Grid
@@ -38,8 +39,8 @@ const Home: NextPage = () => {
           showValueMenu={false}
         />
         <HomePageBlockListDynamic />
-      </Grid>
-    </>
+      </Grid> 
+    </Box>
   );
 };
 

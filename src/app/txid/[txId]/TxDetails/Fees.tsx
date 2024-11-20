@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@/components/ui/color-mode';
+import { useColorMode } from '../../../../components/ui/color-mode';
 import { FC } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';

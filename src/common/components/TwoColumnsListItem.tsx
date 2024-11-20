@@ -4,7 +4,6 @@ import { FC, ReactNode, memo } from 'react';
 
 import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
-import { Show } from '../../ui/Show';
 import { Text } from '../../ui/Text';
 import { leftLineCss } from '../styles/hover';
 
@@ -35,7 +34,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
           display={['none', 'none', 'flex', 'flex', 'flex']}
           {...rest}
         >
-          <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
+          <Box hideBelow="lg">{icon && <Box>{icon}</Box>}</Box>
           <Flex width="full" gap={2} direction="column" overflow="hidden">
             <Flex
               width="full"
@@ -53,7 +52,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                   fontWeight="semibold"
                   display="flex"
                 >
-                  <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
+                  <Box hideFrom="lg">{icon && <Box>{icon}</Box>}</Box>
                   {leftContent.title}
                 </Text>
               )}
@@ -101,7 +100,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 fontWeight="semibold"
                 display="flex"
               >
-                <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
+                <Box hideFrom="lg">{icon && <Box>{icon}</Box>}</Box>
                 {leftContent.title}
               </Text>
             )}

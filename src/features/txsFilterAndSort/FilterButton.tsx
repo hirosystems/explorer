@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorModeValue } from '@/components/ui/color-mode';
 // TODO: v3 upgrade. this might be broken
 import { Checkbox, CheckboxRootProps, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
@@ -8,6 +7,7 @@ import { ReactNode, memo, useCallback, useState } from 'react';
 
 import { Button } from '../../ui/Button';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
 import { Menu } from '../../ui/Menu';
@@ -108,11 +108,9 @@ export const FilterButton = memo(() => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         leftIcon={
-          <Icon
-            size={4}
-            as={FunnelSimple}
-            color={isHoveredOrFocused || isMenuOpen ? 'text' : 'textSubdued'}
-          />
+          <Icon size={4} color={isHoveredOrFocused || isMenuOpen ? 'text' : 'textSubdued'}>
+            <FunnelSimple />
+          </Icon>
         }
         bg="surface"
         color="textSubdued"
@@ -130,7 +128,11 @@ export const FilterButton = memo(() => {
       <MenuList bg={'surface'}>
         <FilterItem
           label={'Coinbase'}
-          icon={<Icon as={CubeSparkleIcon} color={'text'} />}
+          icon={
+            <Icon color={'text'}>
+              <CubeSparkleIcon />
+            </Icon>
+          }
           value={'coinbase'}
           selectedFilters={selectedFilters}
           checkboxProps={getItemProps({ value: 'coinbase' })}
@@ -144,14 +146,22 @@ export const FilterButton = memo(() => {
         {/*/>*/}
         <FilterItem
           label={'Contract deploy'}
-          icon={<Icon as={ClarityIcon} color={'text'} />}
+          icon={
+            <Icon color={'text'}>
+              <ClarityIcon />
+            </Icon>
+          }
           value={'smart_contract'}
           selectedFilters={selectedFilters}
           checkboxProps={getItemProps({ value: 'smart_contract' })}
         />
         <FilterItem
           label={'Function call'}
-          icon={<Icon as={FunctionXIcon} color={'text'} />}
+          icon={
+            <Icon color={'text'}>
+              <FunctionXIcon />
+            </Icon>
+          }
           value={'contract_call'}
           selectedFilters={selectedFilters}
           checkboxProps={getItemProps({ value: 'contract_call' })}
@@ -166,7 +176,11 @@ export const FilterButton = memo(() => {
         {activeNetworkUrl.indexOf('naka') !== -1 ? (
           <FilterItem
             label={'Tenure change'}
-            icon={<Icon as={ArrowBendDownRight} color={'text'} />}
+            icon={
+              <Icon color={'text'}>
+                <ArrowBendDownRight />
+              </Icon>
+            }
             value={'tenure_change'}
             selectedFilters={selectedFilters}
             checkboxProps={getItemProps({ value: 'tenure_change' })}
@@ -181,7 +195,11 @@ export const FilterButton = memo(() => {
         {/*/>*/}
         <FilterItem
           label={'Token transfer'}
-          icon={<Icon as={DiagonalArrowsIcon} color={'text'} />}
+          icon={
+            <Icon color={'text'}>
+              <DiagonalArrowsIcon />
+            </Icon>
+          }
           value={'token_transfer'}
           selectedFilters={selectedFilters}
           checkboxProps={getItemProps({ value: 'token_transfer' })}

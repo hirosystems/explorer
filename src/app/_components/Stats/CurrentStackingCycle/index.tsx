@@ -30,7 +30,9 @@ function CurrentStackingCycleBase(props: GridProps) {
           <Flex alignItems={'center'}>
             {approximateDaysTilNextCycle} day{approximateDaysTilNextCycle !== 1 ? 's' : ''}
             &nbsp;
-            <Icon as={Info} size={3} />
+            <Icon size={3}>
+              <Info />
+            </Icon>
           </Flex>
         </Tooltip>
       </Flex>

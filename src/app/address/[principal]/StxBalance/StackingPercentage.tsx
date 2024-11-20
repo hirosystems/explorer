@@ -1,7 +1,5 @@
 'use client';
 
-import { useColorModeValue } from '@/components/ui/color-mode';
-
 import { AddressBalanceResponse } from '@stacks/stacks-blockchain-api-types';
 
 import { Circle } from '../../../../common/components/Circle';
@@ -9,6 +7,7 @@ import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { useAddressConfirmedTxsWithTransfersInfinite } from '../../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { useCoreApiInfo } from '../../../../common/queries/useCoreApiInfo';
 import { getStackingStartBlockHeight } from '../../../../common/utils/accounts';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Icon } from '../../../../ui/Icon';
 import { ProgressCircle } from '../../../../ui/ProgressCircle';
@@ -66,7 +65,9 @@ export const StackingPercentage = ({
             </ProgressCircle>
           ) : (
             <Circle mx="auto" size="48px" mb="16px" bg={'invert'}>
-              <Icon as={StxIcon} size={'24px'} color="white" />
+              <Icon size={'24px'} color="white">
+                <StxIcon />
+              </Icon>
             </Circle>
           )}
           {isStacking ? (

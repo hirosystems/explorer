@@ -1,9 +1,9 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import { css } from '@emotion/react';
 import { FC, ReactNode } from 'react';
 
+import { useColorModeValue } from '../../components/ui/color-mode';
+import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
-import { Show } from '../../ui/Show';
 import { CopyButton } from './CopyButton';
 
 export interface KeyValueHorizontalProps {
@@ -69,14 +69,14 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
         {value}
       </Flex>
       {copyValue && (
-        <Show above="lg">
+        <Box hideBelow="lg">
           <CopyButton
             className={'fancy-copy'}
             initialValue={copyValue}
             aria-label={'copy row'}
             size={'40px'}
           />
-        </Show>
+        </Box>
       )}
     </Flex>
   );

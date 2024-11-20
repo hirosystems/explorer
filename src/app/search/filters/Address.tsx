@@ -1,4 +1,4 @@
-import { Field as CUIField, Fieldset, useDisclosure } from '@chakra-ui/react';
+import { Field as CUIField, Fieldset, Popover, useDisclosure } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowUpRight, CaretDown } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -9,9 +9,6 @@ import { Button } from '../../../ui/Button';
 import { ExpandingTextarea } from '../../../ui/ExpandingTextarea';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { Popover } from '../../../ui/Popover';
-import { PopoverContent } from '../../../ui/PopoverContent';
-import { PopoverTrigger } from '../../../ui/PopoverTrigger';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 
@@ -38,12 +35,21 @@ export function AddressFilter({
   const searchParams = useSearchParams();
   const router = useRouter();
   return (
-    <Popover placement={'bottom-start'} isOpen={open} onOpen={onOpen} onClose={onClose}>
-      <PopoverTrigger>
+    <Popover.Root
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={onOpen}
+      onExitComplete={onClose}
+    >
+      <Popover.Trigger>
         <Button
           visual="secondary"
           fontSize={'sm'}
-          rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
+          rightIcon={
+            <Icon size={3.5} style={{ strokeWidth: '2px' }}>
+              <CaretDown />
+            </Icon>
+          }
           height={9}
           color={'textSubdued'}
         >
@@ -57,7 +63,9 @@ export function AddressFilter({
             )}
             {!!defaultFromAddress && (
               <Flex alignItems={'center'} color={'text'}>
-                <Icon as={ArrowDownRight} size={3} />
+                <Icon size={3}>
+                  <ArrowDownRight />
+                </Icon>
                 <Text>
                   {defaultFromAddress.length > 10
                     ? truncateMiddle(defaultFromAddress, 3)
@@ -72,7 +80,9 @@ export function AddressFilter({
             )}
             {!!defaultToAddress && (
               <Flex alignItems={'center'} color={'text'}>
-                <Icon as={ArrowUpRight} size={3} />
+                <Icon size={3}>
+                  <ArrowUpRight />
+                </Icon>
                 <Text>
                   {defaultToAddress.length > 10
                     ? truncateMiddle(defaultToAddress, 3)
@@ -82,8 +92,8 @@ export function AddressFilter({
             )}
           </Flex>
         </Button>
-      </PopoverTrigger>
-      <PopoverContent maxWidth={'275px'} bgColor={'surface'}>
+      </Popover.Trigger>
+      <Popover.Content maxWidth={'275px'} bgColor={'surface'}>
         <Flex direction={'column'} gap={2} p={4}>
           <Formik
             enableReinitialize
@@ -169,7 +179,7 @@ export function AddressFilter({
             )}
           </Formik>
         </Flex>
-      </PopoverContent>
-    </Popover>
+      </Popover.Content>
+    </Popover.Root>
   );
 }

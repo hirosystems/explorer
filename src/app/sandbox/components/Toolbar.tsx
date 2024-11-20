@@ -106,12 +106,16 @@ export const Toolbar: React.FC<any> = () => {
         <Box onClick={() => onCopy(codeBody)}>
           <Tooltip content={copied ? 'Copied!' : 'Copy contract code'}>
             <IconButton aria-label={'copy'}>
-              <Icon as={CopySimple} size={4} color={'white'} />
+              <Icon size={4} color={'white'}>
+                <CopySimple />
+              </Icon>
             </IconButton>
           </Tooltip>
         </Box>
         <IconButton onClick={() => dispatch(toggleCodeToolbar())} aria-label={'close'}>
-          <Icon as={X} size={4} color={'white'} />
+          <Icon size={4} color={'white'}>
+            <X />
+          </Icon>
         </IconButton>
       </HStack>
     </Flex>

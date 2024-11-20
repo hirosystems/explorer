@@ -16,7 +16,9 @@ export const NetworkModeBanner: FC = () => {
   return (
     <Badge bg="white" border={'none'}>
       <Flex alignItems="center" as={'span'}>
-        <Icon as={Flask} color={'black'} size={4} />
+        <Icon color={'black'} size={4}>
+          <Flask />
+        </Icon>
         <Text color={'black'} whiteSpace={'nowrap'} as={'span'}>
           {capitalize(networkMode)}
         </Text>

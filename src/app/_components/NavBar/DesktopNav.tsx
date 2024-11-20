@@ -1,23 +1,27 @@
+import { Popover } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
-import { Popover } from '../../../ui/Popover';
-import { PopoverContent } from '../../../ui/PopoverContent';
-import { PopoverTrigger } from '../../../ui/PopoverTrigger';
 import { LabelWrapper } from './LabelWrapper';
 import { NavItem } from './types';
 
 export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
+  const [isNavHovered, setIsNavHovered] = useState(false);
   return (
     <Flex gap={6}>
       {navItems.map(navItem => (
         <Flex key={navItem.id} alignItems={'center'}>
-          <Popover trigger={'hover'} placement={'bottom-start'} isLazy>
-            <PopoverTrigger>
+          <Popover.Root
+            onOpenChange={value => setIsNavHovered(value.open)}
+            open={isNavHovered}
+            positioning={{ placement: 'bottom-start' }}
+            lazyMount
+          >
+            <Popover.Trigger>
               <Flex
                 gap={1.5}
                 border={
@@ -42,12 +46,16 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                 >
                   {navItem.label}
                 </Link>
-                {navItem.children && <Icon as={CaretDown} size={3.5} color={'white'} />}
+                {navItem.children && (
+                  <Icon size={3.5} color={'white'}>
+                    <CaretDown />
+                  </Icon>
+                )}
               </Flex>
-            </PopoverTrigger>
+            </Popover.Trigger>
             {navItem.children && (
               <Box h="full" w="full" zIndex="popover">
-                <PopoverContent
+                <Popover.Content
                   boxShadow={'xl'}
                   bg="surface"
                   rounded={'xl'}
@@ -60,10 +68,10 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                   {navItem.children.map(child => (
                     <LabelWrapper {...child} key={child.id} />
                   ))}
-                </PopoverContent>
+                </Popover.Content>
               </Box>
             )}
-          </Popover>
+          </Popover.Root>
         </Flex>
       ))}
     </Flex>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useColorMode } from '@/components/ui/color-mode';
 import { Moon, SunDim } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';
 
+import { useColorMode } from '../../../components/ui/color-mode';
 import { IconButton, IconButtonProps } from '../../../ui/IconButton';
 
 export function ColorModeButton({

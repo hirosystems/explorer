@@ -77,7 +77,9 @@ function StxBalanceBase({ address }: StxBalanceProps) {
         >
           <HStack gap={4} py={4}>
             <Circle bg={'brand'} size={10}>
-              <Icon as={StxIcon} size={4} color="white" />
+              <Icon size={4} color="white">
+                <StxIcon />
+              </Icon>
             </Circle>
             <Stack gap={2}>
               <Caption>Total balance</Caption>

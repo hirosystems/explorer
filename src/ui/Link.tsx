@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Link as CUILink,
-  LinkProps as CUILinkProps,
-  RecipeVariantProps,
-  chakra,
-} from '@chakra-ui/react';
+import { Link as CUILink, LinkProps as CUILinkProps, RecipeVariantProps } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 import { linkRecipe } from './theme/recipes/LinkRecipe';
@@ -21,4 +16,5 @@ export const LinkBase = forwardRef<HTMLAnchorElement, LinkProps>(
   )
 );
 
-export const Link = chakra(LinkBase, linkRecipe);
+// export const Link = chakra(LinkBase, linkRecipe);
+export const Link = LinkBase;

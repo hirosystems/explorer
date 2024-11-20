@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import { useBreakpointValue } from '@chakra-ui/react';
 import { ArrowDown, ArrowUp } from '@phosphor-icons/react';
 import { FC, memo, useMemo } from 'react';
@@ -11,6 +10,7 @@ import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { PrincipalLink } from '../../../common/components/transaction-item';
 import { useFtMetadata } from '../../../common/queries/useFtMetadata';
 import { ftDecimals, getAssetNameParts } from '../../../common/utils/utils';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { Caption } from '../../../ui/typography';
@@ -62,11 +62,15 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
       () =>
         isOriginator ? (
           <Circle bg={iconBg} size={circleSize}>
-            <Icon as={ArrowUp} size={iconSize} color={iconColor} />
+            <Icon size={iconSize} color={iconColor}>
+              <ArrowUp />
+            </Icon>
           </Circle>
         ) : (
           <Circle bg={iconBg} size={circleSize}>
-            <Icon as={ArrowDown} size={iconSize} color={iconColor} />
+            <Icon size={iconSize} color={iconColor}>
+              <ArrowDown />
+            </Icon>
           </Circle>
         ),
       [iconBg, iconColor, circleSize, iconSize, isOriginator]

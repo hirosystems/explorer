@@ -21,7 +21,9 @@ export const ErrorMessageLayout: React.FC<
       {errorStatusCode ? (
         <>
           <Circle size="72px" mx="auto" borderWidth={'1px'} mb={'14px'}>
-            <Icon as={QuestionOctagon} size="24px" />
+            <Icon size="24px">
+              <QuestionOctagon />
+            </Icon>
           </Circle>
           <Text fontSize="32px" fontWeight="bold" color={'gray.600'}>
             {errorStatusCode}
@@ -29,7 +31,9 @@ export const ErrorMessageLayout: React.FC<
         </>
       ) : (
         <Circle size="72px" mx="auto" borderWidth={'1px'} mb={'14px'}>
-          <Icon as={QuestionOctagon} size="24px" />
+          <Icon size="24px">
+            <QuestionOctagon />
+          </Icon>
         </Circle>
       )}
       <Text mb={'12px'} fontSize="16px">

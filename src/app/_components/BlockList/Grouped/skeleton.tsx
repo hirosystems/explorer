@@ -1,6 +1,5 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
-
 import { Circle } from '../../../../common/components/Circle';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';

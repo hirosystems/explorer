@@ -3,11 +3,11 @@ import { ReactNode, forwardRef } from 'react';
 import { IncidentImpact } from 'statuspage.io';
 
 import { PAGE_MAX_WIDTH } from '../../../common/constants/constants';
+import { useColorMode, useColorModeValue } from '../../../components/ui/color-mode';
 import { Box, BoxProps } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { getColor } from './utils';
-import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
 
 export const StatusBarBase = forwardRef<
   HTMLDivElement,
@@ -18,9 +18,13 @@ export const StatusBarBase = forwardRef<
   const borderColor = useColorModeValue('slate.850', 'slate.250');
   const icon =
     !impact || impact === IncidentImpact.None ? (
-      <Icon as={Info} color={getColor(impact, colorMode)} />
+      <Icon color={getColor(impact, colorMode)}>
+        <Info />
+      </Icon>
     ) : (
-      <Icon as={Warning} color={getColor(impact, colorMode)} />
+      <Icon color={getColor(impact, colorMode)}>
+        <Warning />
+      </Icon>
     );
   return (
     <Box ref={ref} borderTop={`1px`} borderColor={borderColor} py={3} {...boxProps}>

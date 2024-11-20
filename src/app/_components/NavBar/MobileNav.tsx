@@ -58,7 +58,9 @@ export function MobileNav({
       <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
         <Logo />
         <IconButton onClick={close} aria-label={'Close menu'}>
-          <Icon as={X} size={6} />
+          <Icon size={6}>
+            <X />
+          </Icon>
         </IconButton>
       </Flex>
       <Flex justifyContent={'space-between'}>

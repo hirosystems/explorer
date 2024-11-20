@@ -42,7 +42,7 @@ const LeftSubtitle: FC<{
     gap={1}
     alignItems="center"
     flexWrap="wrap"
-    divider={<Caption>∙</Caption>}
+    separator={<Caption>∙</Caption>}
   >
     <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
     {!!transferCount && (

@@ -41,7 +41,9 @@ export function ClearFiltersButton({ filters }: FilterProps) {
         gap={1.5}
         color="textSubdued"
       >
-        <Icon as={Backspace} size={4} />
+        <Icon size={4}>
+          <Backspace />
+        </Icon>
         <span>Clear all filters</span>
       </TextLink>
     </Flex>
@@ -63,7 +65,9 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
     >
       <Flex justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'} color={'text'}>
-          <Icon as={FunnelSimple} size={4} />
+          <Icon size={4}>
+            <FunnelSimple />
+          </Icon>
           <Text fontSize={'sm'} fontWeight={'medium'} lineHeight={'1.43em'}>
             Filters
           </Text>

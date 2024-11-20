@@ -1,7 +1,6 @@
 'use client';
 
-import { XCircle } from '@phosphor-icons/react';
-import { Icon as IconType } from '@phosphor-icons/react';
+import { Icon as IconType, XCircle } from '@phosphor-icons/react';
 import React from 'react';
 
 import { Box } from '../../ui/Box';
@@ -29,7 +28,7 @@ const MessageBase = ({
           width="100%"
           color="textSubdued"
         >
-          <Icon as={icon} size={30} />
+          <Icon size={30}>{icon}</Icon>
         </Flex>
       </Box>
       <Box textAlign="center">

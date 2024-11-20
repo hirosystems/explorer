@@ -1,4 +1,3 @@
-import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
@@ -8,6 +7,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useCustomNetworkApiInfo } from '../../../common/queries/useCustomNetworkApiInfo';
 import { Network } from '../../../common/types/network';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import { useColorMode, useColorModeValue } from '../../../components/ui/color-mode';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
@@ -135,7 +135,9 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
               aria-label={'Remove network'}
               _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
             >
-              <Icon as={Trash} size={4} />
+              <Icon size={4}>
+                <Trash />
+              </Icon>
             </IconButton>
           </Tooltip>
         ) : isActive ? (

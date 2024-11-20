@@ -305,7 +305,9 @@ export function PostConditionConditionCodeMenu({
       >
         <Flex gap={1}>
           <Text>{selectedOption.label}</Text>
-          <Icon as={CaretDown} />
+          <Icon>
+            <CaretDown />
+          </Icon>
         </Flex>
       </Menu.Trigger>
       <Menu.Content>
@@ -352,7 +354,9 @@ export function PostConditionTypeMenu({ onChange }: { onChange: (option: any) =>
         >
           <Flex gap={1}>
             <Text>{selectedOption.label}</Text>
-            <Icon as={CaretDown} />
+            <Icon as={CaretDown}>
+              <CaretDown />
+            </Icon>
           </Flex>
         </Menu.Trigger>
       </Flex>

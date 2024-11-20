@@ -1,5 +1,4 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
-
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 

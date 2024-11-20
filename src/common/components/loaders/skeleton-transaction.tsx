@@ -1,8 +1,7 @@
 'use client';
 
-import { useColorModeValue } from '@/components/ui/color-mode';
-
 import { PageTitle } from '../../../app/_components/PageTitle';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';

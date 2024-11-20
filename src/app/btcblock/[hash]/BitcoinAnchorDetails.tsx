@@ -39,7 +39,9 @@ export function BitcoinAnchorDetailsBase() {
         value={
           <Link target="_blank" href={`${btcBlockBaseUrl}/${btcBlock.burn_block_height}`}>
             <Flex alignItems="center" gap={2}>
-              <Icon as={BitcoinIcon} size={5} />
+              <Icon size={5}>
+                <BitcoinIcon />
+              </Icon>
               <Text fontSize="sm" fontWeight="medium">
                 #{btcBlock.burn_block_height}
               </Text>

@@ -1,11 +1,10 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
-import * as React from 'react';
 import { ReactNode, memo } from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { BlockLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';

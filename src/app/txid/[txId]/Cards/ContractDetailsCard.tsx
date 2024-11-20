@@ -45,7 +45,9 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
         <Flex borderBottomWidth="1px" py="16px" justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
             <Circle>
-              <Icon as={Code} color={'textTitle'} position="relative" size={4} />
+              <Icon color={'textTitle'} position="relative" size={4}>
+                <Code />
+              </Icon>
             </Circle>
             <Box ml="16px">
               <Title mb="8px" display="block" mt="0" as="h4">
@@ -58,25 +60,33 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
         <Stack gap={2} py="16px">
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={FunctionXIcon} size={5} />
+              <Icon size={5}>
+                <FunctionXIcon />
+              </Icon>
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.functions || []} label="function" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={Atom} size={5} />
+              <Icon size={5}>
+                <Atom />
+              </Icon>
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.variables || []} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={ListChecks} size={5} />
+              <Icon size={5}>
+                <ListChecks />
+              </Icon>
             </Box>
             <PluralizedItem ml="8px" array={contract?.abi?.maps || []} label="map" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={CirclesFour} size={5} />
+              <Icon size={5}>
+                <CirclesFour />
+              </Icon>
             </Box>
             <PluralizedItem
               ml="8px"

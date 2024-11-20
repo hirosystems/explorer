@@ -1,9 +1,9 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import pluralize from 'pluralize';
 import { Suspense, useCallback, useMemo, useState } from 'react';
 import { Cell, Pie, PieChart, Sector, SectorProps } from 'recharts';
 
 import { Card } from '../../common/components/Card';
+import { useColorMode } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';

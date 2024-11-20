@@ -1,4 +1,3 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import { Flex } from '@chakra-ui/react';
 import { FC, forwardRef } from 'react';
 
@@ -8,6 +7,7 @@ import { Section } from '../../../../common/components/Section';
 import { ArrowRightIcon } from '../../../../common/components/icons/arrow-right';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { showFn } from '../../../../common/utils/sandbox';
+import { useColorMode } from '../../../../components/ui/color-mode';
 import { Grid } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
@@ -37,9 +37,13 @@ export const AbiFunction = forwardRef<
         <Flex alignItems="center">
           <Grid placeItems="center" borderWidth="1px" borderRadius="100%" size="32px">
             {abiFn.access === 'read_only' ? (
-              <Icon as={FunctionXIcon} size={4} />
+              <Icon size={4}>
+                <FunctionXIcon />
+              </Icon>
             ) : (
-              <Icon as={FunctionReadOnlyIcon} size={5} />
+              <Icon size={5}>
+                <FunctionReadOnlyIcon />
+              </Icon>
             )}
           </Grid>
           <Text fontSize="14px" fontFamily={`"Fira Code", monospace`} ml="16px" fontWeight="500">

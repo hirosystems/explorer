@@ -1,8 +1,8 @@
 'use client';
 
-import { useColorMode } from '@/components/ui/color-mode';
 import { forwardRef } from 'react';
 
+import { useColorMode } from '..//components/ui/color-mode';
 import { Text, TextProps } from './Text';
 
 export * from './Text';

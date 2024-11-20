@@ -3,7 +3,6 @@ import { XCircle } from '@phosphor-icons/react';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { Button } from '../../ui/Button';
-// import { Button } from '@chakra-ui/react';
 import { ButtonLink } from '../../ui/ButtonLink';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
@@ -35,7 +34,9 @@ export function ErrorBox({
       padding="10px"
       {...flexProps}
     >
-      <Icon as={XCircle} size={6} />
+      <Icon size={6}>
+        <XCircle />
+      </Icon>
       <Flex direction={'column'} alignItems={'center'} gap={'4px'}>
         <Text color={`error`} fontSize={14}>
           {errorName}

@@ -1,4 +1,3 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { FC } from 'react';
@@ -13,6 +12,7 @@ import { Input } from '../../../../../ui/Input';
 import { Stack } from '../../../../../ui/Stack';
 import { TextLink } from '../../../../../ui/TextLink';
 import { Caption, Text, Title } from '../../../../../ui/typography';
+import { useColorMode } from '../../../../../components/ui/color-mode';
 
 export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
   rootContractAddress,

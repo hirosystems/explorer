@@ -33,7 +33,9 @@ export function NextCycleCardBase() {
             &nbsp;
           </Text>
           <Text display="inline" whiteSpace="nowrap">
-            <Icon as={BitcoinIcon} size={3} />
+            <Icon size={3}>
+              <BitcoinIcon />
+            </Icon>
             &nbsp;{`#${preparePhaseBurnBlockHeightStart}`}
           </Text>
         </Box>
@@ -48,7 +50,9 @@ export function NextCycleCardBase() {
           &nbsp;
         </Text>
         <Text display="inline" whiteSpace="nowrap">
-          <Icon as={BitcoinIcon} size={3} />
+          <Icon size={3}>
+            <BitcoinIcon />
+          </Icon>
           &nbsp;{`#${rewardPhaseBurnBlockHeightStart}`}
         </Text>
       </Box>

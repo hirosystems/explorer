@@ -1,6 +1,7 @@
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Button } from '../../ui/Button';
 import { Flex } from '../../ui/Flex';
@@ -10,7 +11,6 @@ import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import SignersMap, { getContinent } from './SignersMap';
 import { SignersMapSkeleton } from './skeleton';
 import { useSignersLocation } from './useSignerLocations';
-import { useColorModeValue } from '@/components/ui/color-mode';
 
 export enum Continent {
   NorthAmerica = 'North America',

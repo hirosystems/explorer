@@ -1,6 +1,6 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
+import { useColorMode } from '../../../components/ui/color-mode';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { IncidentContent } from '../../../common/types/incidents';
 import { getRichTextRenderOptions } from '../../../common/utils/getRichTextRenderOptions';

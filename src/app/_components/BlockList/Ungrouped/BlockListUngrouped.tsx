@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@/components/ui/color-mode';
 import { ArrowBendDownLeft, Clock } from '@phosphor-icons/react';
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
@@ -9,6 +8,7 @@ import { Timestamp } from '../../../../common/components/Timestamp';
 import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Flex, FlexProps } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
@@ -57,14 +57,17 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
     <>
       <HStack gap={1.5}>
         <Icon
-          as={ArrowBendDownLeft}
           transform={'rotate(90deg)'}
           size={2.5}
           color={iconColor}
           position={'relative'}
           bottom={'1px'}
-        />
-        <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
+        >
+          <ArrowBendDownLeft />
+        </Icon>
+        <Icon size={18} position={'relative'} bottom={'1px'}>
+          <BitcoinIcon />
+        </Icon>
         {isFirst ? (
           <Text fontSize="sm" color="textSubdued" fontWeight="medium">
             Next Bitcoin block
@@ -78,7 +81,9 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
       <Box>
         {isFirst ? (
           <Flex gap={1} alignItems="center">
-            <Icon as={Clock} size={4} color="iconSubdued" />
+            <Icon size={4} color="iconSubdued">
+              <Clock />
+            </Icon>
             <Text color="textSubdued" fontSize="xs">
               Unconfirmed
             </Text>

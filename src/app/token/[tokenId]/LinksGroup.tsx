@@ -1,7 +1,7 @@
-import { NextLink } from '@/ui/NextLink';
 import { Menu } from '@chakra-ui/react';
 
 import { Icon } from '../../../ui/Icon';
+import { NextLink } from '../../../ui/NextLink';
 import { Text } from '../../../ui/Text';
 import { getLinkIcon, getUrlName, isExplorerLink } from './utils';
 
@@ -19,7 +19,9 @@ export const LinksGroup = ({ title, links }: { title: string; links: string[] })
             value={link}
           >
             <NextLink href={link} target={!isExplorerLink(link) ? '_blank' : undefined}>
-              <Icon as={getLinkIcon(link)} color="currentColor" size="12px" />
+              <Icon color="currentColor" size="12px">
+                {getLinkIcon(link)}
+              </Icon>
               <Text fontSize={'14px'} lineHeight={'1em'}>
                 {getUrlName(link)}
               </Text>

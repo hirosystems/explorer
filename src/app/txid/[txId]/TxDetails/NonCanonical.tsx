@@ -32,7 +32,9 @@ export const NonCanonical: FC<{
             target="_blank" // TODO: upgrade to v3. This might be broken
           >
             <IconButton ml="8px" aria-label={'sip-001'}>
-              <Icon as={Question} />
+              <Icon>
+                <Question />
+              </Icon>
             </IconButton>
           </Link>
         </Flex>

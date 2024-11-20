@@ -46,7 +46,9 @@ export function RightPanel() {
                 color={'textTitle'}
                 gap={'8px'}
               >
-                <Icon as={StxIcon} size={'18px'} color="black" />
+                <Icon size={'18px'} color="black">
+                  <StxIcon />
+                </Icon>
                 <Text fontWeight={600} fontSize={'24px'} display="block" position="relative">
                   {balance?.stx?.balance ? microToStacksFormatted(balance.stx.balance) : 0} STX
                 </Text>
@@ -65,7 +67,9 @@ export function RightPanel() {
                 >
                   <Tooltip positioning={{ placement: 'bottom' }} content="Sign out">
                     <IconButton height={5} width={5} aria-label={'sign out'}>
-                      <Icon as={SignOut} size={3.5} />
+                      <Icon size={3.5}>
+                        <SignOut />
+                      </Icon>
                     </IconButton>
                   </Tooltip>
                 </Box>

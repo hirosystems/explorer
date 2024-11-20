@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorMode } from '@/components/ui/color-mode';
 import { Accordion } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useContractById } from '../../../common/queries/useContractById';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import { useColorMode } from '../../../components/ui/color-mode';
 import { MempoolTxListItemMini } from '../../../features/txs-list/ListItem/MempoolTxListItemMini';
 import { TxListItemMini } from '../../../features/txs-list/ListItem/TxListItemMini';
 import { FilterButton } from '../../../features/txsFilterAndSort/FilterButton';
@@ -125,7 +125,9 @@ const TxDetailsFunctions = ({
             }}
             aria-label={'toggle function'}
           >
-            <Icon as={CaretDown} size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />
+            <Icon size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'}>
+              <CaretDown />
+            </Icon>
           </IconButton>
         </HStack>
       </Flex>
@@ -142,9 +144,13 @@ const TxDetailsFunctions = ({
               >
                 <Flex alignItems="center" color={`textCaption.${colorMode}`}>
                   {func.access === 'read_only' ? (
-                    <InfoCircleIcon size="18px" />
+                    <Icon size="18px">
+                      <InfoCircleIcon />
+                    </Icon>
                   ) : (
-                    <Icon as={FunctionXIcon} size="18px" />
+                    <Icon size="18px">
+                      <FunctionXIcon />
+                    </Icon>
                   )}
                   <Caption ml="4px">{func.name}</Caption>
                 </Flex>

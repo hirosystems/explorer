@@ -1,7 +1,7 @@
-import { useColorMode } from '@/components/ui/color-mode';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useTheme } from 'next-themes';
 
+import { useColorMode } from '../components/ui/color-mode';
 import { Box } from '../ui/Box';
 import { Flex } from '../ui/Flex';
 import { Stack } from '../ui/Stack';

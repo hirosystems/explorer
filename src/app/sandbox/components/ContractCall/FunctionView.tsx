@@ -261,10 +261,12 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                               : PostConditionMode.Deny
                           );
                         }}
-                        isChecked={values.postConditionMode === PostConditionMode.Allow}
+                        checked={values.postConditionMode === PostConditionMode.Allow}
                       />
                       <Tooltip content="Allow mode is less secure than Deny mode. Allow mode permits asset transfers that are not covered by post conditions. In Deny mode no other asset transfers are permitted besides those named in the post conditions">
-                        <Icon as={Info} size={5} />
+                        <Icon size={5}>
+                          <Info />
+                        </Icon>
                       </Tooltip>
                     </Flex>
                     {fn.args.length ? (

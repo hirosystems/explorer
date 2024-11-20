@@ -49,7 +49,9 @@ function NextStackingCycleBase(props: GridProps) {
               ? 's'
               : ''}
             &nbsp;
-            <Icon as={Info} size={3} />
+            <Icon size={3}>
+              <Info />
+            </Icon>
           </Flex>
         </Tooltip>
       </Flex>
