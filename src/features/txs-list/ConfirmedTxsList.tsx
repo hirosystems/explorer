@@ -59,13 +59,13 @@ function ConfirmedTxsListBase({
       ) : (
         <FilteredTxs txs={txs} TxListItem={TxListItem} />
       )}
-      <ListFooter
+      {/* <ListFooter
         isLoading={response.isFetchingNextPage}
         hasNextPage={response.hasNextPage}
         href={limit ? '/transactions' : undefined}
         fetchNextPage={limit ? undefined : response.fetchNextPage}
         label={'transactions'}
-      />
+      /> */}
     </Box>
   );
 }

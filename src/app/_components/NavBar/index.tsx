@@ -99,27 +99,27 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   return (
     <Box width="full">
-      <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
+      <Flex alignItems="center" flex={{ base: 1 }} gap={6} position="relative">
+        <Logo color="white" />
         <Search />
-        <Box hideBelow="lg">
+        <Flex hideBelow="lg">
           <NetworkModeBanner />
-        </Box>
-        <Box hideBelow="lg">
+        </Flex>
+        <Flex hideBelow="lg">
           <Flex gap={3}>
-            <Logo color="white" />
             <ColorModeButton aria-label={'Change color mode'} />
             <DesktopNav navItems={navItems} />
           </Flex>
-          <BtcStxPrice tokenPrice={tokenPrice} />
-        </Box>
-        <Box hideFrom="lg">
+        </Flex>
+        <BtcStxPrice tokenPrice={tokenPrice} />
+        <Flex hideFrom="lg">
           <IconButton onClick={onToggle} variant={'ghost'} aria-label={'Toggle Navigation'}>
             <Icon w={6} h={6} color={'white'}>
               <List />
             </Icon>
           </IconButton>
           {open && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
-        </Box>
+        </Flex>
       </Flex>
     </Box>
   );

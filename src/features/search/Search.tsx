@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-import { parseAdvancedSearchQuery, useSearchQuery } from '../../common/queries/useSearchQuery';
+import { useSearchQuery } from '../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../common/state/hooks';
 import { Box, BoxProps } from '../../ui/Box';
 import { SearchResultsCard } from './dropdown/search-results-card';
@@ -13,8 +11,8 @@ export function Search(props: BoxProps) {
 
   return (
     <Box flexGrow={1} maxWidth={'474px'} mr={'auto'} {...props}>
-      {/* <SearchBox isFetching={searchResponse.isFetching} /> */}
-      {/* <SearchResultsCard searchResponse={searchResponse} /> */}
+      <SearchBox isFetching={searchResponse.isFetching} />
+      <SearchResultsCard searchResponse={searchResponse} />
     </Box>
   );
 }

@@ -47,14 +47,13 @@ export function SearchBox({ isFetching }: { isFetching: boolean }) {
   const showClearButton = searchTerm !== '' && !isFetching;
 
   return (
-    <Group>
+    <Group w="full">
       <Flex
         width="full"
         alignItems="center"
         gap={2}
         bgColor="whiteAlpha.200"
-        border="1px"
-        borderColor="whiteAlpha.600"
+        border="1px solid var(--stacks-colors-white-alpha-600)"
         borderRadius="xl"
         transitionProperty="border"
         backdropFilter={'blur(24px)'}

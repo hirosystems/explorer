@@ -1,38 +1,37 @@
-import { Popover } from '@chakra-ui/react';
+import { Box, HoverCard } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 
-import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
 import { LabelWrapper } from './LabelWrapper';
 import { NavItem } from './types';
+import { HoverCardRoot, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
 
 export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
-  const [isNavHovered, setIsNavHovered] = useState(false);
   return (
     <Flex gap={6}>
       {navItems.map(navItem => (
         <Flex key={navItem.id} alignItems={'center'}>
-          <Popover.Root
-            onOpenChange={value => setIsNavHovered(value.open)}
-            open={isNavHovered}
+          <HoverCardRoot
             positioning={{ placement: 'bottom-start' }}
             lazyMount
+            id={navItem.id}
           >
-            <Popover.Trigger>
+            <HoverCardTrigger>
               <Flex
                 gap={1.5}
                 border={
                   navItem.id === 'network'
-                    ? '1px solid var(--stacks-colors-whiteAlpha-600)'
+                    ? '1px solid var(--stacks-colors-white-alpha-600)'
                     : undefined
                 }
                 bg={navItem.id === 'network' ? 'whiteAlpha.200' : undefined}
                 px={navItem.id === 'network' ? 3 : undefined}
                 py={navItem.id === 'network' ? 1.5 : undefined}
                 rounded={navItem.id === 'network' ? 'full' : undefined}
+                alignItems="center"
               >
                 <Link
                   href={navItem.href ?? '#'}
@@ -52,10 +51,10 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                   </Icon>
                 )}
               </Flex>
-            </Popover.Trigger>
+            </HoverCardTrigger>
             {navItem.children && (
-              <Box h="full" w="full" zIndex="popover">
-                <Popover.Content
+              <Box h="full" w="full">
+                <HoverCardContent
                   boxShadow={'xl'}
                   bg="surface"
                   rounded={'xl'}
@@ -68,10 +67,10 @@ export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
                   {navItem.children.map(child => (
                     <LabelWrapper {...child} key={child.id} />
                   ))}
-                </Popover.Content>
+                </HoverCardContent>
               </Box>
             )}
-          </Popover.Root>
+          </HoverCardRoot>
         </Flex>
       ))}
     </Flex>

@@ -1,5 +1,6 @@
 'use client';
 
+import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
 
@@ -65,7 +66,7 @@ export function PageWrapper({
 }) {
   const statusBarBg = useColorModeValue('black', 'white');
   return (
-    <Box>
+    <>
       <Flex
         direction={'column'}
         width={'100%'}
@@ -82,20 +83,24 @@ export function PageWrapper({
         <Flex
           mx="auto"
           width="full"
-          maxWidth="container.xl"
+          maxWidth="breakpoint-xl"
           flexDirection="column"
           p={6}
           minHeight={'100vh'}
         >
           <NavBar tokenPrice={tokenPrice} />
-          <Flex direction={'column'} mt={10} mb={8} gap={7}>
+          <Stack
+            mt={10}
+            mb={8}
+            gap={7} // TODO: not sure I like putting these spacing styles here
+          >
             {children}
-          </Flex>
+          </Stack>
           <Footer />
         </Flex>
       </WrapperWithBg>
       <AddNetworkModal />
       <NetworkModeToast />
-    </Box>
+    </>
   );
 }

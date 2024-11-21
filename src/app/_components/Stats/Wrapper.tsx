@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { Card } from '../../../common/components/Card';
 import { FlexProps } from '../../../ui/Flex';
 
-export function Wrapper({ children, ...props }: { children: ReactNode } & FlexProps) {
+export function Wrapper({ children, ...props }: { children: ReactNode } & FlexProps) { // TODO: this needs a better name
   return (
     <Card
       display={'grid'}
