@@ -23,7 +23,7 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
 
   if (isInMempool(tx) || isInMicroblock(tx)) return null;
 
-  const ts = tx.burn_block_time;
+  const ts = tx.block_time || tx.burn_block_time;
   if (!ts) return null;
 
   const readableTs = `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(
