@@ -1,3 +1,10 @@
+# [1.229.0](https://github.com/hirosystems/explorer/compare/v1.228.0...v1.229.0) (2024-11-26)
+
+
+### Features
+
+* use block time in tx page ([71922ce](https://github.com/hirosystems/explorer/commit/71922cee2601275e858d0d828f544aa04e91023a))
+
 # [1.228.0](https://github.com/hirosystems/explorer/compare/v1.227.0...v1.228.0) (2024-11-15)
 
 
