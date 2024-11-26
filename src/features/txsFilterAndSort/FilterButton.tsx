@@ -4,7 +4,6 @@ import { useCheckboxGroup, useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
 import { ReactNode, memo, useCallback, useState } from 'react';
 
-import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { Button } from '../../ui/Button';
 import { Checkbox, CheckboxProps } from '../../ui/Checkbox';
 import { HStack } from '../../ui/HStack';
@@ -90,8 +89,6 @@ export const FilterButton = memo(() => {
     },
   });
 
-  const activeNetworkUrl = useGlobalContext().activeNetworkKey;
-
   return (
     <Menu placement={'bottom-end'} closeOnSelect={false}>
       {({ isOpen }) => (
@@ -158,15 +155,13 @@ export const FilterButton = memo(() => {
             {/*  selectedFilters={selectedFilters}*/}
             {/*  checkboxProps={getCheckboxProps({ value: 'mint' })}*/}
             {/*/>*/}
-            {activeNetworkUrl.indexOf('naka') !== -1 ? (
-              <FilterItem
-                label={'Tenure change'}
-                icon={<Icon as={ArrowBendDownRight} color={'text'} />}
-                value={'tenure_change'}
-                selectedFilters={selectedFilters}
-                checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
-              />
-            ) : null}
+            <FilterItem
+              label={'Tenure change'}
+              icon={<Icon as={ArrowBendDownRight} color={'text'} />}
+              value={'tenure_change'}
+              selectedFilters={selectedFilters}
+              checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
+            />
             {/*<FilterItem*/}
             {/*  label={'Tenure extension'}*/}
             {/*  icon={<Icon as={ArrowBendDoubleUpLeft} color={'text'} transform={'rotate(180deg)'} />}*/}
