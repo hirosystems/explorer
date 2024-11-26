@@ -1,3 +1,10 @@
+# [1.230.0](https://github.com/hirosystems/explorer/compare/v1.229.0...v1.230.0) (2024-11-26)
+
+
+### Features
+
+* display tenure change filter ([bfffa9a](https://github.com/hirosystems/explorer/commit/bfffa9ab95dd3fb2bed88aae5523ae9be3eff3da))
+
 # [1.229.0](https://github.com/hirosystems/explorer/compare/v1.228.0...v1.229.0) (2024-11-26)
 
 
