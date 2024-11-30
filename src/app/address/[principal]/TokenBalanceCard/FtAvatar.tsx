@@ -12,8 +12,13 @@ interface FtAvatarProps {
 }
 
 export function FtAvatar({ token, contractId }: FtAvatarProps) {
-  const { data: tokenMetadata } = useFtMetadata(contractId);
+  // const { data: tokenMetadata } = useFtMetadata(contractId);
 
   const { asset } = getAssetNameParts(token);
-  return <TokenAvatar metadataImageUrl={tokenMetadata?.metadata?.cached_image} asset={asset} />;
+  return (
+    <TokenAvatar
+      metadataImageUrl={undefined /*tokenMetadata?.metadata?.cached_image*/}
+      asset={asset}
+    />
+  );
 }
