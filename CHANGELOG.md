@@ -1,3 +1,10 @@
+# [1.232.0](https://github.com/hirosystems/explorer/compare/v1.231.0...v1.232.0) (2024-12-02)
+
+
+### Features
+
+* display dropped label for all dropped tx statuses ([d51e042](https://github.com/hirosystems/explorer/commit/d51e042a3b15eec1aeb7fc3e2cae38e6df03b7e4))
+
 # [1.231.0](https://github.com/hirosystems/explorer/compare/v1.230.0...v1.231.0) (2024-12-02)
 
 
