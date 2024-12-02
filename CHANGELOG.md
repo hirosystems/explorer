@@ -1,3 +1,10 @@
+# [1.231.0](https://github.com/hirosystems/explorer/compare/v1.230.0...v1.231.0) (2024-12-02)
+
+
+### Features
+
+* upgrade api layer ([4b625d4](https://github.com/hirosystems/explorer/commit/4b625d4c70d8f27357f3add391cb638d9f839d3a))
+
 # [1.230.0](https://github.com/hirosystems/explorer/compare/v1.229.0...v1.230.0) (2024-11-26)
 
 
