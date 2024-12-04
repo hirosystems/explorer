@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { ReactNode } from 'react';
 
 import { Alert, AlertProps } from '../../../ui/Alert';
 import { AlertDescription } from '../../../ui/AlertDescription';
@@ -11,9 +12,15 @@ interface AlertError {
   message?: string;
 }
 
-export function AlertBase({ status, message }: { status: AlertProps['status']; message: string }) {
+export function AlertBase({
+  status,
+  message,
+}: {
+  status: AlertProps['status'];
+  message: string | ReactNode;
+}) {
   return (
-    <Alert status={status} rounded={'lg'}>
+    <Alert status={status} rounded={'lg'} alignItems={'flexStart'}>
       <AlertIcon />
       <AlertDescription fontSize={'sm'}>{message}</AlertDescription>
     </Alert>
