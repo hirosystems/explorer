@@ -18,6 +18,7 @@ import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
 import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
 import StxIcon from '../../../../ui/icons/StxIcon';
+import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
 import { BlockCount } from '../BlockCount';
 import { useBlockListContext } from '../BlockListContext';
@@ -89,7 +90,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
             </Text>
           </Flex>
         ) : (
-          <HStack separator={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+          <HStack separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>} fontSize={'xs'}>
             <ExplorerLink
               fontSize="xs"
               color={'textSubdued'}
@@ -165,7 +166,11 @@ function StxBlockRow({
   isFirst?: boolean;
   isLast?: boolean;
 }) {
-  const icon = isFirst ? <Icon as={StxIcon} size={2.5} color={'white'} /> : null;
+  const icon = isFirst ? (
+    <Icon size={2.5} color={'white'}>
+      <StxIcon />
+    </Icon>
+  ) : null;
   return minimized ? (
     <>
       <Flex
@@ -187,7 +192,7 @@ function StxBlockRow({
       </Flex>
 
       <HStack
-        separator={<>&nbsp;∙&nbsp;</>}
+        separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
         gap={1}
         whiteSpace="nowrap"
         color="textSubdued"
@@ -365,7 +370,6 @@ function StxBlocksGroupedByBtcBlock({
   const additionalStxBlocks = useInfiniteQueryResult<Block | NakamotoBlock>(response);
 
   const handleLoadMoreStxBlocks = useCallback(() => {
-    // TODO: remove this comment
     setEnabled(true);
     if (hasNextPage) {
       fetchNextPage();

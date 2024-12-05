@@ -31,27 +31,36 @@ import { defineSlotRecipe } from '@chakra-ui/react';
 //   },
 // });
 
-export const tabSlotRecipe = defineSlotRecipe({
+export const tabsSlotRecipe = defineSlotRecipe({
   className: 'tab',
-  slots: ['root', 'tabpanel', 'tablist', 'tab'],
+  slots: ['root', 'list', 'trigger', 'content'],
   base: {
     root: {
       minWidth: 0,
     },
-    tabpanel: {},
-    tablist: {
-      py: '6',
-      borderBottom: '1px',
-      borderColor: { base: 'slate.150', _dark: 'slate.900' },
+    list: {
+      py: 6,
     },
-    tab: {
-      color: 'slate.700',
+    content: {},
+    trigger: {
+      color: '{colors.slate.700}',
       borderRadius: 'lg',
-      fontSize: 'sm',
+      fontSize: 'md',
+      fontWeight: 'semibold',
+      border: 'none',
+      '--indicator-color': 'transparent !important',
       _selected: {
-        bg: { base: 'slate.150', _dark: 'slate.900' },
-        color: { base: 'slate.900', _dark: 'slate.50' },
+        bg: { base: '{colors.slate.150}', _dark: '{colors.slate.900}' },
+        color: { base: '{colors.slate.900}', _dark: '{colors.slate.50}' },
       },
     },
+  },
+  variants: {
+    variant: {
+      primary: {},
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
   },
 });

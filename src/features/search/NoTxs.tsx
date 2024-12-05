@@ -19,12 +19,12 @@ export function NoTxs() {
         justifyContent="center"
         width={'72px'}
         height={'72px'}
-        border={'1px'}
+        border="normal"
         rounded={'full'}
         mb={3}
       >
         <Flex
-          border={'1px'}
+          border="normal"
           borderColor={'transparent'}
           width={'18px'}
           height={'18px'}

@@ -9,6 +9,7 @@ import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Text } from '../../../../ui/Text';
+import { Caption } from '../../../../ui/typography';
 
 interface ListItemProps {
   height: number | string;
@@ -79,7 +80,11 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
             </Text>
           </BlockLink>
         </Flex>
-        <HStack separator={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color={secondaryTextColor}>
+        <HStack
+          separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
+          fontSize={'12px'}
+          color={secondaryTextColor}
+        >
           <Box>{truncateMiddle(hash, 3)}</Box>
           {txsCount !== undefined ? <Box>{txsCount} txn</Box> : null}
           <Timestamp ts={timestamp} />

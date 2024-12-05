@@ -42,7 +42,7 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
                     </ButtonLink>
                   </Box>
                   <Box>
-                    <ButtonLink href={buildUrl('/tokens', network)} visual="secondary" mt="24px">
+                    <ButtonLink href={buildUrl('/tokens', network)} variant="secondary" mt="24px">
                       All tokens
                     </ButtonLink>
                   </Box>

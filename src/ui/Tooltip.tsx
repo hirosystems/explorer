@@ -1,27 +1,25 @@
 'use client';
 
-import {
-  TooltipRoot as CUITooltip,
-  TooltipArrowProps as CUITooltipArrowProps,
-  TooltipRootProps as CUITooltipProps,
-} from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
-export type TooltipProps = CUITooltipProps;
-export const Tooltip = forwardRef<HTMLDivElement, TooltipProps & CUITooltipArrowProps>(
-  ({ children, ...rest }, ref) => (
-    <CUITooltip
+import {
+  Tooltip as SnippetTooltip,
+  TooltipProps as SnippetTooltipProps,
+} from '../components/ui/tooltip';
+
+export type TooltipProps = SnippetTooltipProps;
+export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(({ children, ...rest }, ref) => {
+  return (
+    <SnippetTooltip
       positioning={{ placement: 'top' }}
-      hasArrow
-      arrowSize={10}
-      p={2}
-      borderRadius={'md'}
-      bg={'invert'}
+      showArrow
+      openDelay={0}
+      closeDelay={0}
       ref={ref}
-      closeOnClick={false}
+      closeOnClick={false} // This is broken in chakra-ui
       {...rest}
     >
       {children}
-    </CUITooltip>
-  )
-);
+    </SnippetTooltip>
+  );
+});

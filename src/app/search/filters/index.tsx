@@ -61,7 +61,7 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
       pb={6}
       boxShadow={'0px 4px 10px 2px rgba(0, 0, 0, 0.03)'}
       rounded={'xl'}
-      border={'1px'}
+      border="normal"
     >
       <Flex justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'} color={'text'}>

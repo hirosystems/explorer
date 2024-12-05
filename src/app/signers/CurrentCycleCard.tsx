@@ -197,7 +197,6 @@ export function CurrentCycleCardBase() {
         whiteSpace="nowrap"
         fontWeight="medium"
         color="textSubdued"
-        lineHeight={4}
       >
         {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
           'day',

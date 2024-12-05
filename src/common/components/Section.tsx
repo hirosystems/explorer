@@ -21,15 +21,14 @@ export function Section({
   px = 6,
   ...rest
 }: SectionProps) {
-  const titleColor = useColorModeValue('slate.900', 'white'); // TODO: remove
+  const titleColor = useColorModeValue('slate.900', 'white');
   return (
     <Card px={px} height={'fit-content'} {...rest}>
       {title || TopRight ? (
         <Flex
           alignItems={'center'}
           justifyContent="space-between"
-          borderBottom="1px"
-          borderColor="borderSecondary"
+          borderBottom="1px solid var(--stacks-colors-border-secondary)"
           borderTopRightRadius="xl"
           borderTopLeftRadius="xl"
           flexShrink={0}

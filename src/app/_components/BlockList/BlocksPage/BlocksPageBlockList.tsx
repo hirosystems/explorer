@@ -27,7 +27,7 @@ export function BlocksPageControlsLayout({
       marginX={-6}
       px={6}
       py={5}
-      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-border-primary)' : 'none'}
     >
       {children}
     </Stack>

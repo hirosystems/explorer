@@ -40,43 +40,48 @@ import { defineRecipe } from '@chakra-ui/react';
 // });
 
 export const buttonRecipe = defineRecipe({
-  base: {
-    padding: '0 !important',
-    border: 'none',
-    background: 'none',
-    fontWeight: 'medium',
-    fontSize: 'sm',
-    color: 'buttonText',
-    height: 'auto',
-    _hover: {
-      textDecoration: 'underline',
-    },
-  },
+  base: {},
   variants: {
-    visual: {
+    variant: {
       primary: {
         fontWeight: 'semibold',
-        fontSize: 'sm',
-        color: { base: 'white', _dark: 'black' },
-        bgColor: { base: 'purple.600', _dark: 'purple.400' },
+        fontSize: 'lg',
+        color: { base: '{colors.neutral.white}', _dark: '{colors.neutral.black}' },
+        bg: { base: '{colors.purple.600}', _dark: '{colors.purple.400}' },
+        textDecoration: 'none',
         _hover: {
-          bgColor: { base: 'purple.700', _dark: 'purple.500' },
+          textDecoration: 'none',
+          bg: { base: '{colors.purple.700}', _dark: '{colors.purple.500}' },
         },
       },
       secondary: {
         height: 12,
         fontWeight: 'medium',
         fontSize: 'sm',
-        color: { base: 'slate.900', _dark: 'slate.50' },
-        border: '1px',
-        bgColor: { base: 'white', _dark: 'black' },
+        color: { base: '{colors.neutral.black}', _dark: '{colors.neutral.white}' },
+        border: '1px solid {colors.borderSecondary}',
+        bg: { base: '{colors.neutral.white}', _dark: '{colors.neutral.black}' },
+        textDecoration: 'none',
         _hover: {
-          bgColor: { base: 'slate.200', _dark: 'slate.900' },
+          textDecoration: 'none',
+          bg: { base: '{colors.slate.200}', _dark: '{colors.slate.900}' },
+        },
+      },
+      text: {
+        padding: '0 !important',
+        border: 'none',
+        background: 'none',
+        fontWeight: 'medium',
+        fontSize: 'sm',
+        color: 'buttonText',
+        height: 'auto',
+        _hover: {
+          textDecoration: 'underline',
         },
       },
     },
   },
   defaultVariants: {
-    visual: 'primary',
+    variant: 'primary',
   },
 });

@@ -4,7 +4,6 @@ import { FC } from 'react';
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { CodeEditor } from '../../../../ui/CodeEditor';
-import { Tab } from '../../../../ui/Tab';
 
 export const ContractTabs: FC<{
   contractId: string;
@@ -17,7 +16,7 @@ export const ContractTabs: FC<{
     <Tabs.Root lazyMount>
       <Tabs.List>
         {source && <Tabs.Trigger value="source">Source code</Tabs.Trigger>}
-        <Tab>Available functions</Tab>
+        <Tabs.Trigger value="available-functions">Available functions</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="source">
         <CodeEditor code={source || ''} />

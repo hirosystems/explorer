@@ -1,4 +1,5 @@
-import { Check, CircleNotch, Icon, WarningCircle } from '@phosphor-icons/react';
+import { Icon } from '@chakra-ui/react';
+import { Check, CircleNotch, WarningCircle } from '@phosphor-icons/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
 
@@ -8,10 +9,8 @@ import { getTxTypeIcon } from '../../../common/components/TxIcon';
 import { TransactionType } from '../../../common/constants/constants';
 import { getTransactionStatus } from '../../../common/utils/transactions';
 import { getTxTitle } from '../../../common/utils/utils';
+import { Tag } from '../../../components/ui/tag';
 import { Flex } from '../../../ui/Flex';
-import { Tag } from '../../../ui/Tag';
-import { TagLabel } from '../../../ui/TagLabel';
-import { TagStartElement } from '../../../ui/TagStartElement';
 import { PageTitleWithTags } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { StxBalance } from '../../address/[principal]/StxBalance';
@@ -30,13 +29,13 @@ const txTypeNamesMap = {
   tenure_change: 'Tenure change',
 };
 
-const txStatusIconMap: Record<string, Icon> = {
-  pending: CircleNotch,
-  success: Check,
-  success_anchor_block: Check,
-  non_canonical: WarningCircle,
-  failed: WarningCircle,
-  dropped: WarningCircle,
+const txStatusIconMap: Record<string, React.ReactNode> = {
+  pending: <CircleNotch />,
+  success: <Check />,
+  success_anchor_block: <Check />,
+  non_canonical: <WarningCircle />,
+  failed: <WarningCircle />,
+  dropped: <WarningCircle />,
 };
 
 const txStatusLabelMap = {
@@ -60,13 +59,11 @@ export const TxPage: React.FC<{
       <PageTitleWithTags
         tags={
           <>
-            <Tag>
-              <TagStartElement as={getTxTypeIcon(tx.tx_type)} />
-              <TagLabel>{txTypeNamesMap[tx.tx_type]}</TagLabel>
+            <Tag startElement={<Icon>{getTxTypeIcon(tx.tx_type)}</Icon>}>
+              {txTypeNamesMap[tx.tx_type]}
             </Tag>
-            <Tag>
-              <TagStartElement as={txStatusIconMap[getTransactionStatus(tx)]} />
-              <TagLabel>{txStatusLabelMap[getTransactionStatus(tx)]}</TagLabel>
+            <Tag startElement={<Icon>{txStatusIconMap[getTransactionStatus(tx)]}</Icon>}>
+              {txStatusLabelMap[getTransactionStatus(tx)]}
             </Tag>
           </>
         }

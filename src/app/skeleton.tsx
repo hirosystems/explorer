@@ -18,19 +18,19 @@ export default function HomePageSkeleton() {
             borderRight={[
               'none',
               'none',
-              '1px solid var(--stacks-colors-borderPrimary)',
-              '1px solid var(--stacks-colors-borderPrimary)',
+              '1px solid var(--stacks-colors-border-primary)',
+              '1px solid var(--stacks-colors-border-primary)',
             ]}
           />
           <SkeletonStatSection
-            borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-borderPrimary)']}
+            borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-border-primary)']}
           />
           <SkeletonStatSection
             borderRight={[
               'none',
               'none',
-              '1px solid var(--stacks-colors-borderPrimary)',
-              '1px solid var(--stacks-colors-borderPrimary)',
+              '1px solid var(--stacks-colors-border-primary)',
+              '1px solid var(--stacks-colors-border-primary)',
             ]}
           />
           <SkeletonStatSection />

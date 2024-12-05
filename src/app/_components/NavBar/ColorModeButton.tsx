@@ -13,15 +13,19 @@ export function ColorModeButton({
   colorModeOverride?: 'light' | 'dark';
 } & IconButtonProps) {
   const { colorMode, toggleColorMode, setColorMode } = useColorMode();
-  const Icon = useMemo(
+  const icon = useMemo(
     () =>
-      colorModeOverride
-        ? colorModeOverride === 'light'
-          ? SunDim
-          : Moon
-        : colorMode === 'light'
-          ? SunDim
-          : Moon,
+      colorModeOverride ? (
+        colorModeOverride === 'light' ? (
+          <SunDim />
+        ) : (
+          <Moon />
+        )
+      ) : colorMode === 'light' ? (
+        <SunDim />
+      ) : (
+        <Moon />
+      ),
     [colorMode, colorModeOverride]
   );
   const onClick = useCallback(() => {
@@ -34,14 +38,15 @@ export function ColorModeButton({
   return (
     <IconButton
       onClick={onClick}
-      color="white"
       title="Toggle color mode"
+      color="white"
       _hover={{
         bg: 'hoverBackground',
+        color: colorMode === 'light' ? 'black' : 'white',
       }}
       {...rest}
     >
-      <Icon />
+      {icon}
     </IconButton>
   );
 }

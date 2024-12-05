@@ -82,7 +82,7 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
               width="100%"
               type="submit"
               fontSize={'sm'}
-              visual={'secondary'}
+              variant={'secondary'}
               height={'40px'}
               color="textSubdued"
             >

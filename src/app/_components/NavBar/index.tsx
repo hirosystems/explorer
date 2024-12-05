@@ -105,13 +105,11 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
         <Flex hideBelow="lg">
           <NetworkModeBanner />
         </Flex>
-        <Flex hideBelow="lg">
-          <Flex gap={3}>
-            <ColorModeButton aria-label={'Change color mode'} />
-            <DesktopNav navItems={navItems} />
-          </Flex>
+        <Flex hideBelow="lg" gap={3}>
+          <ColorModeButton aria-label={'Change color mode'} />
+          <DesktopNav navItems={navItems} />
+          <BtcStxPrice tokenPrice={tokenPrice} />
         </Flex>
-        <BtcStxPrice tokenPrice={tokenPrice} />
         <Flex hideFrom="lg">
           <IconButton onClick={onToggle} variant={'ghost'} aria-label={'Toggle Navigation'}>
             <Icon w={6} h={6} color={'white'}>

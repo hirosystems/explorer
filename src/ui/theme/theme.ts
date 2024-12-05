@@ -17,16 +17,19 @@ import { inputSlotRecipe } from './recipes/InputRecipe';
 import { linkRecipe } from './recipes/LinkRecipe';
 import { menuSlotRecipe } from './recipes/MenuRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
-import { tabSlotRecipe } from './recipes/TabRecipe';
+import { tabsSlotRecipe } from './recipes/TabsRecipe';
 import { tagSlotRecipe } from './recipes/TagRecipe';
 import { SEMANTIC_TOKENS } from './semanticTokens';
 import { SHADOWS } from './shadows';
 import { SIZES } from './sizes';
 import { SPACE } from './space';
 import { Z_INDEX } from './zIndex';
+import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
+import { badgeRecipe } from './recipes/BadgeRecipe';
 
 const explorerConfig = defineConfig({
   cssVarsPrefix: 'stacks',
+  // strictTokens: true, // enforces the usage of only design tokens
   // useSystemColorMode: false,
   // initialColorMode: 'light',
 });
@@ -36,14 +39,16 @@ export const system = createSystem(defaultConfig, explorerConfig, {
     recipes: {
       button: buttonRecipe,
       link: linkRecipe,
+      badge: badgeRecipe,
     },
     slotRecipes: {
       checkbox: checkboxSlotRecipe,
       input: inputSlotRecipe,
       menu: menuSlotRecipe,
       switch: switchSlotRecipe,
-      tab: tabSlotRecipe,
+      tabs: tabsSlotRecipe,
       tag: tagSlotRecipe,
+      tooltip: tooltipSlotRecipe,
     },
     tokens: {
       colors: { ...COLORS, ...NEW_COLORS },

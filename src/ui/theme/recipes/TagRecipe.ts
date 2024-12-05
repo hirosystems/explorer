@@ -2,32 +2,33 @@
 
 import { defineSlotRecipe } from '@chakra-ui/react';
 
-// const multiStyleConfigHelpers = createMultiStyleConfigHelpers(tagAnatomy.keys);
-
-// const baseStyle = multiStyleConfigHelpers.definePartsStyle(props => ({
-//   label: {
-//     fontSize: 'xs',
-//   },
-//   container: {
-//     rounded: 'full',
-//     bg: 'whiteAlpha.400',
-//     color: 'white',
-//   },
-// }));
-
-// export const tagTheme = multiStyleConfigHelpers.defineMultiStyleConfig({ baseStyle });
-
 export const tagSlotRecipe = defineSlotRecipe({
-  className: 'tag',
-  slots: ['label', 'container'],
-  base: {
-    label: {
-      fontSize: 'xs',
+  className: 'chakra-tag',
+  slots: ['label', 'root', 'closeTrigger', 'startElement', 'endElement'],
+  base: {},
+  variants: {
+    variant: {
+      primary: {
+        label: {
+          fontSize: 'xs',
+        },
+        root: {
+          rounded: 'full',
+          bg: 'whiteAlpha.400',
+          color: 'white',
+          alignItems: 'center',
+          display: 'flex',
+          flexWrap: 'nowrap',
+          px: 2,
+        },
+        startElement: {
+          alignItems: 'center',
+          display: 'flex',
+        },
+      },
     },
-    container: {
-      rounded: 'full',
-      bg: 'whiteAlpha.400',
-      color: 'white',
-    },
+  },
+  defaultVariants: {
+    variant: 'primary',
   },
 });

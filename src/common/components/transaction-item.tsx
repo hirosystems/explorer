@@ -6,14 +6,14 @@ import * as React from 'react';
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useColorMode } from '../../components/ui/color-mode';
-import { BoxProps } from '../../ui/Box';
+import { Tooltip } from '../../ui/tooltip';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
-import { Tooltip } from '../../ui/Tooltip';
 import { Caption, TextProps } from '../../ui/typography';
 import { toRelativeTime, truncateMiddle } from '../utils/utils';
 import { ExplorerLink } from './ExplorerLinks';
+import { Box } from '@chakra-ui/react';
 
 export interface TxItemProps extends FlexProps {
   tx: Transaction | MempoolTransaction;
@@ -127,16 +127,17 @@ export const AddressArea = React.memo(
   }
 );
 
-export const TxTimestamp: React.FC<BoxProps & { tx: Transaction | MempoolTransaction }> =
-  React.memo(props => {
-    const { tx } = props;
-    const relativeTimestamp = getRelativeTimestamp(tx);
-    const txTime = getTransactionTime(tx);
-    const date = new Date(txTime * 1000);
-    const dateString = date.toUTCString();
-
-    return <Tooltip content={dateString}>{relativeTimestamp}</Tooltip>;
-  });
+export const TxTimestamp = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
+  const relativeTimestamp = getRelativeTimestamp(tx);
+  const txTime = getTransactionTime(tx);
+  const date = new Date(txTime * 1000);
+  const dateString = date.toUTCString();
+  return (
+    <Tooltip content={dateString}>
+      <Box>{relativeTimestamp}</Box>
+    </Tooltip>
+  );
+};
 
 export function Nonce({ nonceVal, ...rest }: TextProps & { nonceVal: number }) {
   return (

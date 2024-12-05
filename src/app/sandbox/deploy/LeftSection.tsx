@@ -1,5 +1,6 @@
 'use client';
 
+import { InputGroup } from '@/components/ui/input-group';
 import { ArrowSquareOut, Toolbox, X } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
@@ -16,7 +17,6 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Input } from '../../../ui/Input';
-import { InputGroup } from '../../../ui/InputGroup';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
@@ -58,8 +58,9 @@ export function LeftSection() {
             <InputGroup
               border="1px solid transparent"
               alignItems="center"
-              borderRadius="24px"
+              borderRadius="xl"
               position="relative"
+              w="full"
               endElement={
                 <IconButton
                   onClick={() => {
@@ -67,7 +68,7 @@ export function LeftSection() {
                   }}
                   aria-label={'clear contract name field'}
                 >
-                  <Icon size={4}>
+                  <Icon size={4} color='icon'>
                     <X />
                   </Icon>
                 </IconButton>
@@ -77,13 +78,14 @@ export function LeftSection() {
                 value={contractName}
                 onChange={(e: any) => setContractName(e.target?.value as string)}
                 placeholder="Name your contract"
-                pr="84px"
+                pr={21}
+                w="full"
               />
             </InputGroup>
             <Box onClick={() => dispatch(toggleCodeToolbar())}>
               <Tooltip content="Contract tools">
-                <IconButton aria-label={'contract tools'} size={'40px'}>
-                  <Icon size={4}>
+                <IconButton aria-label={'contract tools'} size={10}>
+                  <Icon size={4} color="icon">
                     <Toolbox />
                   </Icon>
                 </IconButton>
@@ -102,7 +104,7 @@ export function LeftSection() {
                     })
               }
               width="100%"
-              visual={'primary'}
+              variant={'primary'}
             >
               {isConnected ? 'Deploy' : 'Connect Stacks Wallet'}
             </Button>
@@ -110,7 +112,7 @@ export function LeftSection() {
         </Stack>
         <Stack gap={2}>
           <Button
-            visual="secondary"
+            variant="secondary"
             rightIcon={<ArrowSquareOut />}
             onClick={() => {
               const paramsBase64 = { name: contractName, sourceCode: codeBody };
@@ -127,6 +129,7 @@ export function LeftSection() {
             The sandbox doesn't support Clarity 3 deployments. To deploy a Clarity 3 contract,
             please use{' '}
             <TextLink
+              display="inline"
               href="https://docs.hiro.so/stacks/clarinet/guides/deploy-a-contract"
               target="_blank"
               _hover={{ textDecoration: 'underline' }}
@@ -135,6 +138,7 @@ export function LeftSection() {
             </TextLink>{' '}
             or the{' '}
             <TextLink
+              display="inline"
               href="https://docs.hiro.so/stacks/platform/guides/deployment-plans"
               target="_blank"
               _hover={{ textDecoration: 'underline' }}

@@ -21,7 +21,6 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
   const network = useGlobalContext().activeNetwork;
   const { colorMode } = useColorMode();
 
-  debugger;
   return (
     <Formik
       validateOnChange={false}
@@ -118,7 +117,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
                 color={colorMode === 'light' ? '#000000' : '#FFFFFF'}
               />
               <Box>
-                <Button onClick={() => handleSubmit()} visual="primary">
+                <Button onClick={() => handleSubmit()} variant="primary">
                   Get contract
                 </Button>
               </Box>

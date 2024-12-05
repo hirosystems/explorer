@@ -39,7 +39,7 @@ export function SortByVotingPowerFilter({
     <FilterMenu
       filterLabel={() => getSortOptionLabel(votingPowerSortOrder)}
       menuItems={menuItems}
-      leftIcon={SortDescending}
+      leftIcon={<SortDescending />}
     />
   );
 }

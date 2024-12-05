@@ -52,7 +52,7 @@ export function ErrorBox({
           </ButtonLink>
         )}
         {tryAgainButton && (
-          <Button onClick={() => reset()} visual="secondary" size={'xs'} fontSize={'12px'}>
+          <Button onClick={() => reset()} variant="secondary" size={'xs'} fontSize={'12px'}>
             Try again
           </Button>
         )}

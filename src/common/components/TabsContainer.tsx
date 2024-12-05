@@ -1,22 +1,21 @@
 import { Tabs } from '@chakra-ui/react';
 import { FC, ReactNode } from 'react';
 
+import { TxListTab } from '../../features/txs-list/tabs/TxListTabsBase';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { Section } from './Section';
 
 export const TabsContainer: FC<
   {
-    setTabIndex?: (index: number) => void;
+    setTabId: (id: string) => void;
+    tabId: string;
     title?: string | ReactNode;
-    tabs: {
-      title: string;
-      content: ReactNode;
-    }[];
+    tabs: TxListTab[];
     actions?: ReactNode;
   } & FlexProps
-> = ({ setTabIndex, title, tabs, actions, ...props }) => (
+> = ({ setTabId, tabId, title, tabs, actions, ...props }) => (
   <Section title={title} {...props}>
-    <Tabs.Root lazyMount onValueChange={({ value: index }) => setTabIndex?.(Number(index))}>
+    <Tabs.Root lazyMount onValueChange={({ value: id }) => setTabId?.(id)} value={tabId}>
       <Tabs.List width="full" border={'none'} pb={1}>
         <Flex
           gap={4}
@@ -28,7 +27,7 @@ export const TabsContainer: FC<
         >
           <Flex width={'auto'}>
             {tabs.map(tab => (
-              <Tabs.Trigger key={`${tab.title}-title`} value={tab.title}>
+              <Tabs.Trigger key={`${tab.id}-title`} value={tab.id}>
                 {tab.title}
               </Tabs.Trigger>
             ))}
@@ -37,7 +36,7 @@ export const TabsContainer: FC<
         </Flex>
       </Tabs.List>
       {tabs.map(tab => (
-        <Tabs.Content key={`${tab.title}-content`} value={tab.title}>
+        <Tabs.Content key={`${tab.id}-content`} value={tab.id}>
           {tab.content}
         </Tabs.Content>
       ))}

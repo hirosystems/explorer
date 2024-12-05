@@ -74,7 +74,7 @@ const Faucet: NextPage = () => {
       ) : null}
       <Stack gap={4}>
         <Button
-          visual={'primary'}
+          variant={'primary'}
           mx="auto"
           onClick={() => !!stxAddress && runFaucetStx({ address: stxAddress })}
         >
@@ -83,7 +83,7 @@ const Faucet: NextPage = () => {
         <Button
           size={'xs'}
           fontSize={'xs'}
-          visual={'secondary'}
+          variant={'secondary'}
           onClick={() => handleStackingRequest()}
         >
           {getStackingLabel()}

@@ -3,11 +3,11 @@
 import { defineSlotRecipe } from '@chakra-ui/react';
 
 export const checkboxSlotRecipe = defineSlotRecipe({
-  slots: ['root', 'control', 'label'], // TODO: upgrade v3. Why isn't this typed? Why isn't the checkbox anatomy exported? export { checkboxAnatomy } from "@ark-ui/react/checkbox"
+  slots: ['root', 'control', 'label', 'indicator', 'group'],
   base: {},
   variants: {
-    visual: {
-      outline: {
+    variant: {
+      primary: {
         control: {
           bg: 'surface',
           borderColor: { base: 'slate.300', _dark: 'slate.700' },
@@ -29,5 +29,8 @@ export const checkboxSlotRecipe = defineSlotRecipe({
         },
       },
     },
+  },
+  defaultVariants: {
+    variant: 'primary',
   },
 });

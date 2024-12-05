@@ -236,12 +236,12 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           borderRight={[
             'none',
             'none',
-            '1px solid var(--stacks-colors-borderPrimary)',
-            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
           ]}
           borderBottom={[
-            '1px solid var(--stacks-colors-borderPrimary)',
-            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
             'none',
             'none',
           ]}

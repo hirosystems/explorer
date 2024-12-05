@@ -16,22 +16,21 @@ import { TransactionStatus } from '../constants/constants';
 import { TxStatus } from '../types/tx';
 
 export const getTxTypeIcon = (txType: Transaction['tx_type']): ReactNode => {
-  // TODO: upgrade to v3. This may be broken
   switch (txType) {
     case 'token_transfer':
-      return DiagonalArrowsIcon as any as ReactNode;
+      return <DiagonalArrowsIcon />;
 
     case 'smart_contract':
-      return ClarityIcon as any as ReactNode;
+      return <ClarityIcon />;
 
     case 'contract_call':
-      return FunctionXIcon as any as ReactNode;
+      return <FunctionXIcon />;
 
     case 'coinbase':
-      return CubeSparkleIcon as any as ReactNode;
+      return <CubeSparkleIcon />;
 
     case 'tenure_change':
-      return ArrowBendDownRight as any as ReactNode;
+      return <ArrowBendDownRight />;
 
     // sBTC-related transaction types
     // case 'tenure_extension':
@@ -44,7 +43,7 @@ export const getTxTypeIcon = (txType: Transaction['tx_type']): ReactNode => {
     //   CoinSparkleIcon;
 
     default:
-      return StxIcon as any as ReactNode;
+      return <StxIcon />;
   }
 };
 
@@ -119,11 +118,11 @@ const StatusBubble: React.FC<{ txStatus?: TxStatus }> = ({ txStatus }) => {
       height={`${statusBubbleCircleSize}px`}
       width={`${statusBubbleCircleSize}px`}
       position="absolute"
-      bottom={'0px'}
-      right={'0px'}
+      bottom={0}
+      right={0}
       bg="surface"
       transform="translate(35%, 35%)"
-      border={'1px'}
+      border="normal"
       rounded={'full'}
       alignItems={'center'}
       justifyContent={'center'}
@@ -165,10 +164,10 @@ export const TxIcon: FC<
       height={`${convertFromCUIScaleToPx(circleSize as number)}px`}
       width={`${convertFromCUIScaleToPx(circleSize as number)}px`}
       position="relative"
-      bottom={'0px'}
-      right={'0px'}
+      bottom={0}
+      right={0}
       bg="surface"
-      border={'1px'}
+      border="1px solid var(--stacks-colors-border-secondary)"
       rounded={'full'}
       alignItems={'center'}
       justifyContent={'center'}

@@ -17,7 +17,7 @@ import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
 const StyledSection = styled(Section)`
   .key-value-vertical:not(:last-child) {
-    border-bottom: 1px solid var(--stacks-colors-borderSecondary);
+    border-bottom: 1px solid var(--stacks-colors-border-secondary);
   }
 `;
 

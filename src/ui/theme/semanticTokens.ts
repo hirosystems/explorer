@@ -2,46 +2,49 @@ export const SEMANTIC_TOKENS = {
   colors: {
     brand: { value: '#FC6432' },
     borderPrimary: {
-      value: { base: '{slate.250}', _dark: '{slate.850}' },
+      value: { base: '{colors.slate.250}', _dark: '{colors.slate.850}' },
     },
     borderSecondary: {
-      value: { base: '{slate.150}', _dark: '{slate.900}' },
+      value: { base: '{colors.slate.150}', _dark: '{colors.slate.900}' },
     },
     error: {
-      value: { base: '{red.600}', _dark: '{red.500}' },
+      value: { base: '{colors.red.600}', _dark: '{colors.red.500}' },
     },
     success: {
-      value: { base: '{green.600}', _dark: '{green.500}' },
+      value: { base: '{colors.green.600}', _dark: '{colors.green.500}' },
     },
     surface: {
-      value: { base: '{white}', _dark: '{black}' },
+      value: { base: '{colors.white}', _dark: '{colors.black}' },
+    },
+    surfaceOpposite: {
+      value: { base: '{colors.black}', _dark: '{colors.white}' },
     },
     surfaceHighlight: {
-      value: { base: '{slate.150}', _dark: '{slate.900}' },
+      value: { base: '{colors.slate.150}', _dark: '{colors.slate.900}' },
     },
     text: {
-      value: { base: '{slate.900}', _dark: '{slate.50}' },
+      value: { base: '{colors.slate.900}', _dark: '{colors.slate.50}' },
     },
     textSubdued: {
-      value: { base: '{slate.700}', _dark: '{slate.600}' },
+      value: { base: '{colors.slate.700}', _dark: '{colors.slate.600}' },
     },
     buttonText: {
-      value: { base: '{brand}', _dark: '{purple.400}' },
+      value: { base: '{colors.brand}', _dark: '{colors.purple.400}' },
     },
     interactive: {
-      value: { base: '{purple.600}', _dark: '{purple.400}' },
+      value: { base: '{colors.purple.600}', _dark: '{colors.purple.400}' },
     },
     hoverBackground: {
-      value: { base: '{slate.150}', _dark: '{slate.850}' },
+      value: { base: '{colors.slate.150}', _dark: '{colors.slate.850}' },
     },
     icon: {
-      value: { base: '{slate.900}', _dark: '{slate.50}' },
+      value: { base: '{colors.slate.900}', _dark: '{colors.slate.50}' },
     },
     iconSubdued: {
-      value: { base: '{slate.700}', _dark: '{slate.600}' },
+      value: { base: '{colors.slate.700}', _dark: '{colors.slate.600}' },
     },
     invert: {
-      value: { base: '{black}', _dark: '{white}' },
+      value: { base: '{colors.black}', _dark: '{colors.white}' },
     },
   },
 };

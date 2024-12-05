@@ -78,7 +78,7 @@ const SignersMapContinentPillSkeleton = () => {
   return (
     <Button
       borderRadius="full"
-      border="1px solid var(--stacks-colors-borderSecondary)"
+      border="1px solid var(--stacks-colors-border-secondary)"
       backgroundColor={'surface'}
       onClick={() => {}}
     >

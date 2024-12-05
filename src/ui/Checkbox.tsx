@@ -1,37 +1,31 @@
-// 'use client';
+'use client';
 
-// import type { RecipeVariantProps } from '@chakra-ui/react';
-// import { chakra, useSlotRecipe } from '@chakra-ui/react';
+import type { HTMLChakraProps, RecipeVariantProps } from '@chakra-ui/react';
+import {
+  CheckboxControlProps as CUICheckboxControlProps,
+  CheckboxLabelProps as CUICheckboxLabelProps,
+  CheckboxRootProps as CUICheckboxRootProps,
+  createSlotRecipeContext,
+} from '@chakra-ui/react';
 
-// import { checkboxSlotRecipe } from './theme/recipes/CheckboxRecipe';
+import { checkboxSlotRecipe } from './theme/recipes/CheckboxRecipe';
 
-// type CheckboxVariantProps = RecipeVariantProps<typeof checkboxSlotRecipe>;
+const { withProvider, withContext } = createSlotRecipeContext({
+  recipe: checkboxSlotRecipe,
+});
 
-// export interface CheckboxProps extends React.PropsWithChildren<CheckboxVariantProps> {}
+export type CheckboxRootProps = HTMLChakraProps<
+  'label',
+  RecipeVariantProps<typeof checkboxSlotRecipe>
+> &
+  CUICheckboxRootProps;
+export const CheckboxRoot = withProvider<HTMLLabelElement, CheckboxRootProps>('label', 'root');
 
-// export const Checkbox = (props: CheckboxProps) => {
-//   const recipe = useSlotRecipe({ recipe: checkboxSlotRecipe }) as ReturnType<typeof useSlotRecipe>;
-//   const [recipeProps, restProps] = (recipe as any).splitVariantProps(props);
-//   const styles = recipe(recipeProps);
+export type CheckboxControlProps = HTMLChakraProps<'input'> & CUICheckboxControlProps;
+export const CheckboxControl = withContext<HTMLInputElement, CheckboxControlProps>(
+  'input',
+  'control'
+);
 
-//   return (
-//     <chakra.label css={styles.root}>
-//       <chakra.input type="checkbox" css={styles.control} {...restProps} />
-//       <chakra.span css={styles.label}>Checkbox Label</chakra.span>
-//     </chakra.label>
-//   );
-// };
-
-// 'use client';
-
-// import {
-//   Checkbox as CUICheckbox,
-//   CheckboxProps as CUICheckboxProps,
-//   forwardRef,
-// } from '@chakra-ui/react';
-// export type CheckboxProps = CUICheckboxProps;
-// export const Checkbox = forwardRef<CheckboxProps, 'input'>(({ children, ...rest }, ref) => (
-//   <CUICheckbox ref={ref} {...rest}>
-//     {children}
-//   </CUICheckbox>
-// ));
+export type CheckboxLabelProps = HTMLChakraProps<'span'> & CUICheckboxLabelProps;
+export const CheckboxLabel = withContext<HTMLSpanElement, CheckboxLabelProps>('span', 'label');

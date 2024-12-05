@@ -1,15 +1,16 @@
 'use client';
 
-import { CaretRight } from '@phosphor-icons/react';
-import * as React from 'react';
+import { Flex } from '@chakra-ui/react';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
-import { Box } from '../../ui/Box';
 import { CodeEditor } from '../../ui/CodeEditor';
+import { Caption } from '../../ui/typography';
 import { useContractById } from '../queries/useContractById';
-import { Badge } from './Badge';
 import { TxLink } from './ExplorerLinks';
 import { Section } from './Section';
+import { ArrowSquareOut } from '@phosphor-icons/react';
+import { Icon } from '@/ui/Icon';
+
 
 function ContractSourceBase({ txContractId }: { txContractId: string }) {
   const { data: txContract } = useContractById(txContractId);
@@ -19,15 +20,15 @@ function ContractSourceBase({ txContractId }: { txContractId: string }) {
     <Section
       title={'Source code'}
       topRight={
-        <TxLink txId={txContractId} _hover={{ bg: '#eee', cursor: 'pointer' }} target="_blank">
-          <Badge
-            bg={'bgAlt'}
-            labelProps={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap' }}
-            border={'none'}
-          >
-            View deployment
-            <Box as={CaretRight} ml="4px" size="14px" display={'inline'} />
-          </Badge>
+        <TxLink txId={txContractId} color={'accent'} target="_blank">
+          <Flex alignItems="center" gap={'8px'}>
+            <Caption transform="translateY(1px)" color="currentColor">
+              View deployment
+            </Caption>
+            <Icon size={4}>
+              <ArrowSquareOut />
+            </Icon>
+          </Flex>
         </TxLink>
       }
     >

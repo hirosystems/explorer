@@ -7,6 +7,7 @@ import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
+import { Caption } from '../../../../ui/typography';
 import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
 import { LineAndNode } from '../LineAndNode';
 import { BtcBlockRowLayout, StxBlocksGridLayout } from './BlockListUngrouped';
@@ -33,7 +34,7 @@ export function BlockListRowSkeleton({
       </Flex>
 
       <HStack
-        separator={<>&nbsp;∙&nbsp;</>}
+        separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
         gap={1}
         whiteSpace="nowrap"
         color="textSubdued"

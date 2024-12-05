@@ -50,7 +50,7 @@ export function NakamotoModal() {
             </Text>
             <Image src={'/nakamoto-mainnet.png'} alt={'Nakamoto'} />
             <ButtonLink
-              visual={'primary'}
+              variant={'primary'}
               href={'/'}
               onClick={() => {
                 handleClose();

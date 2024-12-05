@@ -1,13 +1,13 @@
 'use client';
 
 import { PageTitle } from '../../../app/_components/PageTitle';
+import { SkeletonCircle } from '../../../components/ui/skeleton';
 import { useColorModeValue } from '../../../components/ui/color-mode';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
 import { Skeleton } from '../../../ui/Skeleton';
-import { SkeletonCircle } from '../../../ui/SkeletonCircle';
 import { KeyValueHorizontal } from '../KeyValueHorizontal';
 import { Section } from '../Section';
 import { TwoColumnPage } from '../TwoColumnPage';

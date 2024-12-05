@@ -1,20 +1,16 @@
 'use client';
 
-// TODO: v3 upgrade. this might be broken
-import { Checkbox, CheckboxRootProps, useCheckboxGroup } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
-import { ReactNode, memo, useCallback, useState } from 'react';
+import { ReactNode, memo, useCallback, useMemo, useState } from 'react';
 
 import { Button } from '../../ui/Button';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
+import { Checkbox } from '../../components/ui/checkbox';
 import { useColorModeValue } from '../../components/ui/color-mode';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../components/ui/menu';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
-import { Menu } from '../../ui/Menu';
-import { MenuButton } from '../../ui/MenuButton';
-import { MenuItem } from '../../ui/MenuItem';
-import { MenuList } from '../../ui/MenuList';
-import { Text } from '../../ui/Text';
 import ClarityIcon from '../../ui/icons/ClarityIcon';
 import CubeSparkleIcon from '../../ui/icons/CubeSparkleIcon';
 import DiagonalArrowsIcon from '../../ui/icons/DiagonalArrowsIcon';
@@ -25,14 +21,14 @@ function FilterItem({
   label,
   icon,
   value,
-  selectedFilters,
-  checkboxProps,
+  isSelected,
+  onSelect,
 }: {
   label: string;
   icon: ReactNode;
   value: string;
-  selectedFilters: (string | number)[];
-  checkboxProps: CheckboxRootProps;
+  isSelected: boolean;
+  onSelect: () => void;
 }) {
   return (
     <MenuItem
@@ -53,13 +49,7 @@ function FilterItem({
       >
         {icon}
         <Text fontSize={'sm'}>{label}</Text>
-        <Checkbox.Root
-          // TODO: v3 upgrade. this might be broken
-          ml={'auto'}
-          checked={selectedFilters.includes(value)}
-          {...checkboxProps}
-          variant="outline"
-        />
+        <Checkbox ml={'auto'} checked={isSelected} onCheckedChange={onSelect} />
       </HStack>
     </MenuItem>
   );
@@ -86,13 +76,33 @@ export const FilterButton = memo(() => {
 
   const { setActiveFilters } = useFilterAndSortState();
 
-  const { value: selectedFilters, getItemProps } = useCheckboxGroup({
-    // TODO: v3 upgrade. this might be broken
-    defaultValue: [],
-    onValueChange: (value: string[]) => {
-      setActiveFilters(value);
-    },
-  });
+  // const { value: selectedFilters, getItemProps } = useCheckboxGroup({
+  //   // TODO: v3 upgrade. this might be broken
+  //   defaultValue: [],
+  //   onValueChange: (value: string[]) => {
+  //     setActiveFilters(value);
+  //   },
+  // });
+  const [isCoinbaseFilterSelected, setIsCoinbaseFilterSelected] = useState(false);
+  const [isContractDeployFilterSelected, setIsContractDeployFilterSelected] = useState(false);
+  const [isContractCallFilterSelected, setIsContractCallFilterSelected] = useState(false);
+  const [isTenureChangeFilterSelected, setIsTenureChangeFilterSelected] = useState(false);
+  const [isTokenTransferFilterSelected, setIsTokenTransferFilterSelected] = useState(false);
+  const numSelectedFilters = useMemo(() => {
+    return [
+      isCoinbaseFilterSelected,
+      isContractDeployFilterSelected,
+      isContractCallFilterSelected,
+      isTenureChangeFilterSelected,
+      isTokenTransferFilterSelected,
+    ].filter(Boolean).length;
+  }, [
+    isCoinbaseFilterSelected,
+    isContractDeployFilterSelected,
+    isContractCallFilterSelected,
+    isTenureChangeFilterSelected,
+    isTokenTransferFilterSelected,
+  ]);
 
   const activeNetworkUrl = useGlobalContext().activeNetworkKey;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -101,20 +111,19 @@ export const FilterButton = memo(() => {
   }, [setIsMenuOpen]);
 
   return (
-    <Menu positioning={{ placement: 'bottom-end' }} closeOnSelect={false} onSelect={onMenuSelect}>
-      <MenuButton
+    <MenuRoot
+      positioning={{ placement: 'bottom-end' }}
+      closeOnSelect={false}
+      onSelect={onMenuSelect}
+    >
+      <MenuTrigger
         onFocus={handleFocus}
         onBlur={handleBlur}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        leftIcon={
-          <Icon size={4} color={isHoveredOrFocused || isMenuOpen ? 'text' : 'textSubdued'}>
-            <FunnelSimple />
-          </Icon>
-        }
         bg="surface"
         color="textSubdued"
-        border={'1px'}
+        border="normal"
         borderColor={borderColor}
         fontWeight={'semibold'}
         fontSize={'sm'}
@@ -123,9 +132,14 @@ export const FilterButton = memo(() => {
         _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
         flexShrink={0}
       >
-        Filters {selectedFilters.length > 0 && `(${selectedFilters.length})`}
-      </MenuButton>
-      <MenuList bg={'surface'}>
+        <Flex gap={1}>
+          <Icon size={4} color={isHoveredOrFocused || isMenuOpen ? 'text' : 'textSubdued'}>
+            <FunnelSimple />
+          </Icon>
+          <Text>Filters {numSelectedFilters > 0 && `(${numSelectedFilters})`}</Text>
+        </Flex>
+      </MenuTrigger>
+      <MenuContent bg={'surface'}>
         <FilterItem
           label={'Coinbase'}
           icon={
@@ -134,8 +148,8 @@ export const FilterButton = memo(() => {
             </Icon>
           }
           value={'coinbase'}
-          selectedFilters={selectedFilters}
-          checkboxProps={getItemProps({ value: 'coinbase' })}
+          isSelected={isCoinbaseFilterSelected}
+          onSelect={() => setIsCoinbaseFilterSelected(!isCoinbaseFilterSelected)}
         />
         {/*<FilterItem*/}
         {/*  label={'Burn'}*/}
@@ -152,8 +166,8 @@ export const FilterButton = memo(() => {
             </Icon>
           }
           value={'smart_contract'}
-          selectedFilters={selectedFilters}
-          checkboxProps={getItemProps({ value: 'smart_contract' })}
+          isSelected={isContractDeployFilterSelected}
+          onSelect={() => setIsContractDeployFilterSelected(!isContractDeployFilterSelected)}
         />
         <FilterItem
           label={'Function call'}
@@ -163,8 +177,8 @@ export const FilterButton = memo(() => {
             </Icon>
           }
           value={'contract_call'}
-          selectedFilters={selectedFilters}
-          checkboxProps={getItemProps({ value: 'contract_call' })}
+          isSelected={isContractCallFilterSelected}
+          onSelect={() => setIsContractCallFilterSelected(!isContractCallFilterSelected)}
         />
         {/*<FilterItem*/}
         {/*  label={'Mint'}*/}
@@ -182,8 +196,8 @@ export const FilterButton = memo(() => {
               </Icon>
             }
             value={'tenure_change'}
-            selectedFilters={selectedFilters}
-            checkboxProps={getItemProps({ value: 'tenure_change' })}
+            isSelected={isTenureChangeFilterSelected}
+            onSelect={() => setIsTenureChangeFilterSelected(!isTenureChangeFilterSelected)}
           />
         ) : null}
         {/*<FilterItem*/}
@@ -201,10 +215,10 @@ export const FilterButton = memo(() => {
             </Icon>
           }
           value={'token_transfer'}
-          selectedFilters={selectedFilters}
-          checkboxProps={getItemProps({ value: 'token_transfer' })}
+          isSelected={isTokenTransferFilterSelected}
+          onSelect={() => setIsTokenTransferFilterSelected(!isTokenTransferFilterSelected)}
         />
-      </MenuList>
-    </Menu>
+      </MenuContent>
+    </MenuRoot>
   );
 });

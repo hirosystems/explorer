@@ -1,11 +1,11 @@
 'use client';
 
-import { useColorModeValue } from '../../components/ui/color-mode';
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Tooltip } from '../../../ui/Tooltip';
 import { useGlobalContext } from '../../context/useGlobalContext';

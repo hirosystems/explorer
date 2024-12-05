@@ -13,8 +13,8 @@ export const StxSupply = dynamic(() => import('./StxSupply').then(module => modu
       borderRight={[
         'none',
         'none',
-        '1px solid var(--stacks-colors-borderPrimary)',
-        '1px solid var(--stacks-colors-borderPrimary)',
+        '1px solid var(--stacks-colors-border-primary)',
+        '1px solid var(--stacks-colors-border-primary)',
       ]}
     />
   ),
@@ -24,7 +24,7 @@ export const StxSupply = dynamic(() => import('./StxSupply').then(module => modu
 export const LastBlock = dynamic(() => import('./LastBlock').then(module => module.LastBlock), {
   loading: () => (
     <SkeletonStatSection
-      borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-borderPrimary)']}
+      borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-border-primary)']}
     />
   ),
   ssr: false,
@@ -38,8 +38,8 @@ export const CurrentStackingCycle = dynamic(
         borderRight={[
           'none',
           'none',
-          '1px solid var(--stacks-colors-borderPrimary)',
-          '1px solid var(--stacks-colors-borderPrimary)',
+          '1px solid var(--stacks-colors-border-primary)',
+          '1px solid var(--stacks-colors-border-primary)',
         ]}
       />
     ),
@@ -63,19 +63,19 @@ export function Stats(props: FlexProps) {
           borderRight={[
             'none',
             'none',
-            '1px solid var(--stacks-colors-borderPrimary)',
-            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
           ]}
         />
         <LastBlock
-          borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-borderPrimary)']}
+          borderRight={['none', 'none', 'none', '1px solid var(--stacks-colors-border-primary)']}
         />
         <CurrentStackingCycle
           borderRight={[
             'none',
             'none',
-            '1px solid var(--stacks-colors-borderPrimary)',
-            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
           ]}
         />
         <NextStackingCycle />

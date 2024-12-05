@@ -46,7 +46,7 @@ export default function Error({
                     </ButtonLink>
                   </Box>
                   <Box>
-                    <Button onClick={() => reset()} visual="secondary" mt="24px">
+                    <Button onClick={() => reset()} variant="secondary" mt="24px">
                       Try again
                     </Button>
                   </Box>

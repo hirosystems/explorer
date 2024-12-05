@@ -43,7 +43,7 @@ export function AddressFilter({
     >
       <Popover.Trigger>
         <Button
-          visual="secondary"
+          variant="secondary"
           fontSize={'sm'}
           rightIcon={
             <Icon size={3.5} style={{ strokeWidth: '2px' }}>
@@ -168,7 +168,7 @@ export function AddressFilter({
                     width="100%"
                     type="submit"
                     fontSize={'sm'}
-                    visual={'secondary'}
+                    variant={'secondary'}
                     height={'40px'}
                     color="textSubdued"
                   >

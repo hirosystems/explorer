@@ -35,7 +35,6 @@ export const SkeletonText = React.forwardRef<HTMLDivElement, SkeletonTextProps>(
             height="4"
             key={index}
             {...props}
-            _last={{ maxW: "80%" }}
             {...rest}
           />
         ))}

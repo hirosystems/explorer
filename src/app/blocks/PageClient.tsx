@@ -22,13 +22,13 @@ export function BlocksPageLayout({
   blocksPageHeaders,
   blocksList,
 }: {
-  title: string;
+  title: React.ReactNode;
   blocksPageHeaders: React.ReactNode;
   blocksList: React.ReactNode;
 }) {
   return (
     <>
-      <PageTitle>{title}</PageTitle>
+      {title}
       {blocksPageHeaders}
       {blocksList}
     </>
@@ -38,7 +38,7 @@ export function BlocksPageLayout({
 const BlocksPage: NextPage = () => {
   return (
     <BlocksPageLayout
-      title={'Recent blocks'}
+      title={<PageTitle>Recent blocks</PageTitle>}
       blocksPageHeaders={null}
       blocksList={<BlocksPageBlockListDynamic />}
     />

@@ -43,7 +43,7 @@ export function ContinentPill({
       borderRadius="full"
       border="1px"
       borderStyle="solid"
-      borderColor={isActive ? activeTextColor : 'var(--stacks-colors-borderSecondary)'}
+      borderColor={isActive ? activeTextColor : 'var(--stacks-colors-border-secondary)'}
       backgroundColor={isActive ? activeBackgroundColor : 'surface'}
       onClick={onClick}
     >

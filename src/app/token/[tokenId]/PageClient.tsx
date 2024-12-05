@@ -1,9 +1,8 @@
 'use client';
 
 import { Sip10Disclaimer } from '../../../common/components/Sip10Disclaimer';
+import { Tag } from '../../../components/ui/tag';
 import { Flex } from '../../../ui/Flex';
-import { Tag } from '../../../ui/Tag';
-import { TagLabel } from '../../../ui/TagLabel';
 import { PageTitle, PageTitleWithTags } from '../../_components/PageTitle';
 import { TokenTabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
@@ -26,9 +25,7 @@ export default function PageClient({
         {!!categories.length ? (
           <PageTitleWithTags
             tags={categories.map(category => (
-              <Tag key={category}>
-                <TagLabel>{category}</TagLabel>
-              </Tag>
+              <Tag key={category}>{category}</Tag>
             ))}
           >
             {name} ({symbol})

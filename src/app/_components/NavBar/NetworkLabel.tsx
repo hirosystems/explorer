@@ -97,7 +97,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
               py={'1'}
               fontSize={'xs'}
               rounded={'full'}
-              border={'1px'}
+              border="normal"
               borderColor={badgeBorder}
               fontWeight={'medium'}
               ml="8px"
@@ -129,11 +129,11 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
             <IconButton
               disabled={isDisabled}
               position="relative"
-              color={`textCaption.${colorMode}`}
-              size={'21px'}
+              color={'surfaceOpposite'}
+              size={5}
               onClick={() => removeCustomNetwork(network)}
               aria-label={'Remove network'}
-              _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
+              _hover={{ bg: 'whiteAlpha.400' }}
             >
               <Icon size={4}>
                 <Trash />

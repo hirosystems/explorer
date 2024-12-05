@@ -1,6 +1,6 @@
 import { ReactNode, useMemo } from 'react';
 
-import { ColorMode, useColorMode } from '../../components/ui/color-mode';
+import { useColorMode } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';
@@ -19,7 +19,7 @@ export function SignerLegendItem({
   signerVotingPower: number | ReactNode;
   isKnownSigner?: boolean;
 } & TextProps) {
-  const colorMode = useColorMode();
+  const { colorMode } = useColorMode();
   return (
     <Flex justifyContent="space-between" gap={2}>
       <Flex direction="row" gap={2} alignItems="center">
@@ -32,7 +32,8 @@ export function SignerLegendItem({
               ? getSignerDistributionPieChartColor(
                   isKnownSigner,
                   signerVotingPower,
-                  colorMode.colorMode || ('light' as ColorMode) // TODO: upgrade v3. This may be broken
+                  colorMode || 'light',
+                  false
                 )
               : 'textSubdued'
           }

@@ -1,15 +1,16 @@
 'use client';
 
-import { Accordion, Field as CUIField, Checkbox, Fieldset, Input } from '@chakra-ui/react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Accordion, Field as CUIField, Fieldset, Input } from '@chakra-ui/react';
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 
 import { promiseWrapper } from '../../../../common/utils/utils';
+import { Field as ChakraField } from '../../../../components/ui/field';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
-import { FormErrorMessage } from '../../../../ui/FormErrorMessage';
 import { Icon } from '../../../../ui/Icon';
 import { Stack } from '../../../../ui/Stack';
 import { Text } from '../../../../ui/Text';
@@ -154,34 +155,36 @@ export const AddNetworkForm: FC = () => {
           <Stack gap={4}>
             <Field name="label">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <Fieldset.Root invalid={!!form.errors.label && !!form.touched.label}>
-                  <CUIField.Root>
-                    <CUIField.Label>Label</CUIField.Label>
-                    <CUIField.ErrorText>{form.errors.label}</CUIField.ErrorText>
-                    <Input {...field} placeholder="My Stacks API" />
-                  </CUIField.Root>
-                </Fieldset.Root>
+                <ChakraField
+                  label="Label"
+                  invalid={!!form.errors.label && !!form.touched.label}
+                  errorText={form.errors.label}
+                >
+                  <Input {...field} placeholder="My Stacks API" />
+                </ChakraField>
               )}
             </Field>
             <Field name="url">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <Fieldset.Root invalid={!!form.errors.url && !!form.touched.url}>
-                  <CUIField.Root>
-                    <CUIField.Label>URL</CUIField.Label>
-                    <CUIField.ErrorText>{form.errors.url}</CUIField.ErrorText>
-                    <Input {...field} placeholder="https://" />
-                  </CUIField.Root>
-                </Fieldset.Root>
+                <ChakraField
+                  label="URL"
+                  invalid={!!form.errors.url && !!form.touched.url}
+                  errorText={form.errors.url}
+                >
+                  <Input {...field} placeholder="https://" />
+                </ChakraField>
               )}
             </Field>
             <Field name="isSubnet">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <Fieldset.Root invalid={!!form.errors.isSubnet && !!form.touched.isSubnet}>
-                  <Checkbox.Root variant="outline" {...field}>
+                <ChakraField
+                  invalid={!!form.errors.isSubnet && !!form.touched.isSubnet}
+                  errorText={form.errors.isSubnet}
+                >
+                  <Checkbox variant="outline" {...field}>
                     This is a subnet
-                  </Checkbox.Root>
-                  <FormErrorMessage>{form.errors.isSubnet}</FormErrorMessage>
-                </Fieldset.Root>
+                  </Checkbox>
+                </ChakraField>
               )}
             </Field>
           </Stack>
@@ -204,43 +207,37 @@ export const AddNetworkForm: FC = () => {
                   <Stack gap={4}>
                     <Field name="btcBlockBaseUrl">
                       {({ field, form }: FieldProps<string, FormValues>) => (
-                        <Fieldset.Root
+                        <ChakraField
+                          label="BTC Block Base URL"
                           invalid={!!form.errors.btcBlockBaseUrl && !!form.touched.btcBlockBaseUrl}
+                          errorText={form.errors.btcBlockBaseUrl}
                         >
-                          <CUIField.Root>
-                            <CUIField.Label>BTC Block Base URL</CUIField.Label>
-                            <CUIField.ErrorText>{form.errors.btcBlockBaseUrl}</CUIField.ErrorText>
-                            <Input {...field} placeholder="https://" />
-                          </CUIField.Root>
-                        </Fieldset.Root>
+                          <Input {...field} placeholder="https://" />
+                        </ChakraField>
                       )}
                     </Field>
                     <Field name="btcTxBaseUrl">
                       {({ field, form }: FieldProps<string, FormValues>) => (
-                        <Fieldset.Root
+                        <ChakraField
+                          label="BTC Transaction Base URL"
                           invalid={!!form.errors.btcTxBaseUrl && !!form.touched.btcTxBaseUrl}
+                          errorText={form.errors.btcTxBaseUrl}
                         >
-                          <CUIField.Root>
-                            <CUIField.Label>BTC Transaction Base URL</CUIField.Label>
-                            <CUIField.ErrorText>{form.errors.btcTxBaseUrl}</CUIField.ErrorText>
-                            <Input {...field} placeholder="https://" />
-                          </CUIField.Root>
-                        </Fieldset.Root>
+                          <Input {...field} placeholder="https://" />
+                        </ChakraField>
                       )}
                     </Field>
                     <Field name="btcAddressBaseUrl">
                       {({ field, form }: FieldProps<string, FormValues>) => (
-                        <Fieldset.Root
+                        <ChakraField
+                          label="BTC Address Base URL"
                           invalid={
                             !!form.errors.btcAddressBaseUrl && !!form.touched.btcAddressBaseUrl
                           }
+                          errorText={form.errors.btcAddressBaseUrl}
                         >
-                          <CUIField.Root>
-                            <CUIField.Label>BTC Address Base URL</CUIField.Label>
-                            <CUIField.ErrorText>{form.errors.btcAddressBaseUrl}</CUIField.ErrorText>
-                            <Input {...field} placeholder="https://" />
-                          </CUIField.Root>
-                        </Fieldset.Root>
+                          <Input {...field} placeholder="https://" />
+                        </ChakraField>
                       )}
                     </Field>
                   </Stack>
@@ -257,7 +254,7 @@ export const AddNetworkForm: FC = () => {
               </Fieldset.Root>
             )}
           </Field>
-          <Box mt={'16px'}>
+          <Box mt={4}>
             <Button isLoading={isValidating} width="100%" type="submit">
               Add and select
             </Button>

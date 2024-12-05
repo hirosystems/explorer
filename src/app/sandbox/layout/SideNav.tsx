@@ -12,7 +12,6 @@ import FunctionXIcon from '../../../ui/icons/FunctionX';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { useUser } from '../hooks/useUser';
 import { NavItem } from './NavItem';
-import { Icon } from '@types'
 
 export const SideNav: React.FC<StackProps> = () => {
   const network = useGlobalContext().activeNetwork;

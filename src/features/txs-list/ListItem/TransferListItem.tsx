@@ -82,7 +82,7 @@ export const TransferListItem: FC<TransferListItemProps> = memo(
           gap={1}
           alignItems="center"
           flexWrap="wrap"
-          separator={<Caption>&nbsp;∙&nbsp;</Caption>}
+          separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
         >
           <Caption>Transfer</Caption>
           <Caption>{type}</Caption>

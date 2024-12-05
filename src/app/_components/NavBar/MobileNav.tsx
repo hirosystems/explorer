@@ -11,6 +11,7 @@ import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { LabelWrapper } from './LabelWrapper';
 import { Logo } from './Logo';
+import { NavLabel } from './NavLabel';
 import { NavItem } from './types';
 
 export function MobileNav({
@@ -26,7 +27,10 @@ export function MobileNav({
     event.preventDefault();
   };
 
-  const explorerNavItems = navItems.find(navItem => navItem.id === 'explore')?.children;
+  const exploreNavItems = navItems.find(navItem => navItem.id === 'explore')?.children;
+  const sandboxNavItem = navItems.find(navItem => navItem.id === 'sandbox');
+  sandboxNavItem && (sandboxNavItem.label = <NavLabel>Sandbox</NavLabel>);
+  const nonNetworkNavItems = exploreNavItems?.concat(sandboxNavItem ?? []);
   const networkNavItems = navItems.find(navItem => navItem.id === 'network')?.children;
 
   // Disable scrolling when the menu is open
@@ -56,9 +60,9 @@ export function MobileNav({
       overflow="scroll"
     >
       <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
-        <Logo />
+        <Logo color="surfaceOpposite" />
         <IconButton onClick={close} aria-label={'Close menu'}>
-          <Icon size={6}>
+          <Icon size={6} color="surfaceOpposite">
             <X />
           </Icon>
         </IconButton>
@@ -83,10 +87,10 @@ export function MobileNav({
         <BtcStxPrice tokenPrice={tokenPrice} />
       </Flex>
       <Stack separator={<Separator borderColor="border" />}>
-        {explorerNavItems?.map((navItem, i) => (
+        {nonNetworkNavItems?.map((navItem, i) => (
           <>
             <LabelWrapper {...navItem} />
-            {i === explorerNavItems.length - 1 && <Separator borderColor="border" />}
+            {i === nonNetworkNavItems.length - 1 && <Separator borderColor="border" />}
           </>
         ))}
       </Stack>

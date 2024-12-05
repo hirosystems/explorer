@@ -41,7 +41,7 @@ export function SignersHeaderLayout({
         <Box px={8}>{signerDistributionHeader}</Box>
         <Grid gridTemplateColumns={['100%', '100%', '100%', '100%', 'repeat(2, 1fr)']} gap={8}>
           <Box
-            height={['auto', 'auto', 550, 550, 550]}
+            h='auto'
             paddingBottom={[0, 0, 0, 0, 7]}
             paddingLeft={7}
             paddingRight={[7, 7, 7, 7, 0]}
@@ -59,7 +59,7 @@ export function SignersHeaderLayout({
         </Grid>
         <Box
           width="100%"
-          border="1px solid var(--stacks-colors-borderSecondary)"
+          border="1px solid var(--stacks-colors-border-secondary)"
           display={['none', 'none', 'none', 'none', 'block']}
         />
         <Stack width="full" height="100%" gap={4} pt={7} px={7}>

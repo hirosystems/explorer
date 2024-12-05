@@ -104,7 +104,9 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
               <Caption transform="translateY(1px)" color="currentColor">
                 View deployment
               </Caption>
-              <ArrowSquareOut size={4} />
+              <Icon size={4}>
+                <ArrowSquareOut />
+              </Icon>
             </Flex>
           </TxLink>
         </Grid>

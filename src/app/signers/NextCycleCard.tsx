@@ -22,7 +22,7 @@ export function NextCycleCardBase() {
   } = useSuspenseNextStackingCycle();
 
   const moreInfo = (
-    <Text lineHeight={4} fontSize="xs" fontWeight="medium" color="textSubdued">
+    <Text fontSize="xs" fontWeight="medium" color="textSubdued">
       {displayPreparePhaseInfo ? (
         <Box>
           <Text display="inline">

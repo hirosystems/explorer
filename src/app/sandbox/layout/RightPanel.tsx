@@ -67,7 +67,7 @@ export function RightPanel() {
                 >
                   <Tooltip positioning={{ placement: 'bottom' }} content="Sign out">
                     <IconButton height={5} width={5} aria-label={'sign out'}>
-                      <Icon size={3.5}>
+                      <Icon size={3.5} color="icon">
                         <SignOut />
                       </Icon>
                     </IconButton>

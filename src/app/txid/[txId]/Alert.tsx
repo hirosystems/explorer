@@ -2,11 +2,6 @@
 
 import { Alert } from '@chakra-ui/react';
 
-interface AlertError {
-  name?: string;
-  message?: string;
-}
-
 export function AlertBase({
   status,
   message,
@@ -15,8 +10,8 @@ export function AlertBase({
   message: string;
 }) {
   return (
-    // TODO: upgrade to v3. This might be broken
     <Alert.Root status={status} rounded={'lg'}>
+      <Alert.Indicator/>
       <Alert.Description fontSize={'sm'}>{message}</Alert.Description>
     </Alert.Root>
   );

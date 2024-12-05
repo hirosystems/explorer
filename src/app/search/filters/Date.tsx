@@ -35,7 +35,7 @@ function FilterTypeButton({
       py={'1'}
       fontSize={'xs'}
       rounded={'full'}
-      border={'1px'}
+      border="normal"
       fontWeight={'medium'}
       cursor={'pointer'}
       onClick={setSelected}
@@ -90,7 +90,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
     >
       <Popover.Trigger>
         <Button
-          visual={'secondary'}
+          variant={'secondary'}
           fontSize={'sm'}
           rightIcon={
             <Icon size={3.5} style={{ strokeWidth: '2px' }}>

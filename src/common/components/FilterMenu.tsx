@@ -1,13 +1,11 @@
-import { CaretDown, Icon as IconType } from '@phosphor-icons/react';
+import { Flex } from '@chakra-ui/react';
+import { CaretDown } from '@phosphor-icons/react';
 import { ReactNode, isValidElement, useCallback, useState } from 'react';
 
 import { useColorModeValue } from '../../components/ui/color-mode';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../components/ui/menu';
 import { Box } from '../../ui/Box';
 import { Icon } from '../../ui/Icon';
-import { Menu } from '../../ui/Menu';
-import { MenuButton } from '../../ui/MenuButton';
-import { MenuItem } from '../../ui/MenuItem';
-import { MenuList } from '../../ui/MenuList';
 
 interface MenuItem {
   onClick: () => void;
@@ -17,7 +15,7 @@ interface MenuItem {
 interface FilterMenuProps {
   filterLabel: string | (() => string);
   menuItems: MenuItem[] | ReactNode[];
-  leftIcon?: IconType;
+  leftIcon?: ReactNode;
 }
 
 function isMenuItemArray(items: any[]): items is { label: string; onClick: () => void }[] {
@@ -36,34 +34,36 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
     setIsMenuOpen(false);
   }, []);
   return (
-    <Menu onSelect={menuOnSelect}>
-      <MenuButton
+    <MenuRoot onSelect={menuOnSelect}>
+      <MenuTrigger
         fontSize={'sm'}
         bg="surface"
         fontWeight={'semibold'}
-        border={'1px'}
+        border="normal"
         borderColor={borderColor}
         _hover={{ color: 'text', backgroundColor: 'borderPrimary' }}
         _active={{ color: 'text', backgroundColor: 'borderPrimary' }}
         _focus={{ color: 'text', backgroundColor: 'borderPrimary' }}
         flexShrink={0}
       >
-        {leftIcon ? ( // TODO: v3 upgrade. this might be broken. left and right icons
-          <Icon size={4} color={isMenuOpen ? 'text' : 'textSubdued'}>
-            {leftIcon}
+        <Flex gap={1} alignItems="center">
+          {leftIcon ? ( // TODO: v3 upgrade. this might be broken. left and right icons
+            <Icon size={4} color={isMenuOpen ? 'text' : 'textSubdued'}>
+              {leftIcon}
+            </Icon>
+          ) : null}
+          <Box display="inline" fontWeight="normal" color={isMenuOpen ? 'text' : 'textSubdued'}>
+            Show:{' '}
+          </Box>
+          <Box display="inline" fontWeight="normal" color={'text'}>
+            {filterLabelValue}
+          </Box>
+          <Icon size={3} color="text">
+            <CaretDown />
           </Icon>
-        ) : null}
-        <Box display="inline" fontWeight="normal" color={isMenuOpen ? 'text' : 'textSubdued'}>
-          Show:{' '}
-        </Box>
-        <Box display="inline" fontWeight="normal" color={'text'}>
-          {filterLabelValue}
-        </Box>
-        <Icon size={3} color="text">
-          <CaretDown />
-        </Icon>
-      </MenuButton>
-      <MenuList fontSize={'sm'} padding="8px">
+        </Flex>
+      </MenuTrigger>
+      <MenuContent fontSize={'sm'} padding="8px">
         {isMenuItemArray(menuItems)
           ? menuItems.map(({ label, onClick }) => (
               <MenuItem color={'text'} onClick={onClick} key={label} value={label}>
@@ -73,7 +73,7 @@ export function FilterMenu({ filterLabel, menuItems, leftIcon }: FilterMenuProps
           : isReactNodeArray(menuItems)
             ? menuItems
             : null}
-      </MenuList>
-    </Menu>
+      </MenuContent>
+    </MenuRoot>
   );
 }

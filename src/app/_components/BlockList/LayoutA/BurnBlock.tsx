@@ -1,6 +1,7 @@
 import { ArrowBendDownLeft } from '@phosphor-icons/react';
 import { memo } from 'react';
 
+import { Caption } from '../../../..//ui/typography';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
@@ -63,7 +64,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
           </Text>
         </TextLink>
       </HStack>
-      <HStack separator={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+      <HStack separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>} fontSize={'xs'}>
         <Box>{truncateMiddle(hash, 3)}</Box>
         {timestamp && <Timestamp ts={timestamp} />}
       </HStack>

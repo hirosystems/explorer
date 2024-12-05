@@ -51,7 +51,7 @@ export const FtBalance: React.FC<{ balance: AddressBalanceResponse }> = ({ balan
       </Box>
       {visibleItemsCount < ftWithCount.length && (
         <Box width={'full'}>
-          <Button visual="secondary" onClick={() => handleLoadMore()} width={'full'}>
+          <Button variant="secondary" onClick={() => handleLoadMore()} width={'full'}>
             Load more
           </Button>
         </Box>

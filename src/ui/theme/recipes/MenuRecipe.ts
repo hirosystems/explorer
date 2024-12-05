@@ -55,10 +55,9 @@ import { defineSlotRecipe } from '@chakra-ui/react';
 
 export const menuSlotRecipe = defineSlotRecipe({
   className: 'menu',
-  slots: ['button', 'list', 'item'],
+  slots: ['item', 'itemIndicator', 'content', 'positioner', 'separator', 'indicator', 'trigger', 'itemGroup', 'arrow', 'arrowTip', 'contextTrigger', 'itemGroupLabel', 'itemText', 'triggerItem'],
   base: {
-    button: {
-      // type: 'button',
+    trigger: {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -80,12 +79,10 @@ export const menuSlotRecipe = defineSlotRecipe({
         bgColor: { base: 'purple.700', _dark: 'purple.500' },
       },
     },
-    // this will style the MenuList component
-    list: {
+    content: {
       border: 'borderPrimary',
       bg: 'surface',
     },
-    // this will style the MenuItem and MenuItemOption components
     item: {
       padding: '2 3',
       borderRadius: '10px',

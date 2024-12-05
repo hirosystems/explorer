@@ -94,7 +94,7 @@ const StxBlockRow = ({
       </Flex>
 
       <HStack
-        separator={<Caption>∙</Caption>}
+        separator={<Caption border="none">∙</Caption>}
         gap={1}
         whiteSpace="nowrap"
         gridColumn="3 / 4"
@@ -258,7 +258,7 @@ function BitcoinHeader({
       pb={3}
       marginX={-PADDING}
       px={PADDING}
-      borderBottom={minimized ? '1px solid var(--stacks-colors-borderPrimary)' : 'none'}
+      borderBottom={minimized ? '1px solid var(--stacks-colors-border-primary)' : 'none'}
       flexWrap={'wrap'}
     >
       <Flex alignItems={'center'} gap={1.5} flexWrap={'nowrap'}>
@@ -280,7 +280,7 @@ function BitcoinHeader({
         </Flex>
       </Flex>
       <Box>
-        <HStack separator={<Caption>∙</Caption>} gap={1} flexWrap={'wrap'}>
+        <HStack separator={<Caption border="none">∙</Caption>} gap={1} flexWrap={'wrap'}>
           <ExplorerLink
             fontSize="xs"
             color="textSubdued"
@@ -304,8 +304,8 @@ export function Footer({
   blocksCount: number | undefined;
 }) {
   return (
-    <Box borderTop="1px solid var(--stacks-colors-borderSecondary)">
-      <HStack separator={<Caption>∙</Caption>} gap={1} pt={4} flexWrap="wrap">
+    <Box borderTop="1px solid var(--stacks-colors-border-secondary)">
+      <HStack separator={<Caption border="none">∙</Caption>} gap={1} pt={4} flexWrap="wrap">
         <Text color="textSubdued" fontSize="xs" whiteSpace="nowrap">
           {blocksCount ? blocksCount : '-'} blocks
         </Text>
@@ -398,7 +398,7 @@ export function BurnBlockGroup({
   );
 
   return (
-    <Box border={'1px'} rounded={'lg'} p={PADDING}>
+    <Box border="1px solid var(--stacks-colors-border-primary)" rounded={'lg'} p={PADDING}>
       <BitcoinHeader btcBlock={btcBlock} minimized={minimized} isFirst={isFirst} />
       <ScrollableBox>
         <BurnBlockGroupGrid

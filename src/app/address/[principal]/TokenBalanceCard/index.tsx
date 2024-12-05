@@ -45,7 +45,7 @@ function TokenBalanceCardBase({ address, ...rest }: TokenBalanceCardProps) {
 
   return (
     <Section title="Holdings" {...rest}>
-      <Tabs.Root lazyMount>
+      <Tabs.Root lazyMount defaultValue="tokens">
         <Tabs.List>
           <Tabs.Trigger value="tokens">Tokens</Tabs.Trigger>
           <Tabs.Trigger value="collectibles">Collectibles</Tabs.Trigger>

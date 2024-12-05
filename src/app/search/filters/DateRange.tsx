@@ -110,7 +110,7 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
               width="100%"
               type="submit"
               fontSize={'sm'}
-              visual={'secondary'}
+              variant={'secondary'}
               height={'40px'}
               color="textSubdued"
             >

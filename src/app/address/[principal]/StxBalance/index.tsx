@@ -59,7 +59,15 @@ function StxBalanceBase({ address }: StxBalanceProps) {
           onClick={toggleViewQrCode}
           aria-label={'toggle view QR code'}
         >
-          {qrShowing ? <X /> : <QrCode />}
+          {qrShowing ? (
+            <Icon size={5} color="bg.inverted">
+              <X />
+            </Icon>
+          ) : (
+            <Icon size={5} color="bg.inverted">
+              <QrCode />
+            </Icon>
+          )}
         </IconButton>
       </Tooltip>
     </Box>
@@ -115,10 +123,10 @@ function StxBalanceBase({ address }: StxBalanceProps) {
           ) : null}
         </Stack>
       ) : (
-        <Grid placeItems="center" pt="32px" pb="24px" width="100%">
+        <Grid placeItems="center" pt={8} pb={6} width="full">
           <QRcode address={address} />
           <Caption
-            mt="16px"
+            mt={4}
             onClick={toggleViewQrCode}
             _hover={{
               cursor: 'pointer',
