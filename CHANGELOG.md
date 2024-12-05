@@ -1,3 +1,10 @@
+# [1.233.0](https://github.com/hirosystems/explorer/compare/v1.232.0...v1.233.0) (2024-12-05)
+
+
+### Features
+
+* why did my tx fail ([a443ca0](https://github.com/hirosystems/explorer/commit/a443ca0e8776a9a0ce7fcb09a6b52828e007e194))
+
 # [1.232.0](https://github.com/hirosystems/explorer/compare/v1.231.0...v1.232.0) (2024-12-02)
 
 
