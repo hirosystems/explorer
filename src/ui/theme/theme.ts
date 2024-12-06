@@ -31,7 +31,6 @@ const explorerConfig = defineConfig({
   cssVarsPrefix: 'stacks',
   // strictTokens: true, // enforces the usage of only design tokens
   // useSystemColorMode: false,
-  // initialColorMode: 'light',
 });
 
 const themeConfig = {
