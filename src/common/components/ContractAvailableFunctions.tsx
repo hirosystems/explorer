@@ -26,7 +26,7 @@ export const ContractAvailableFunctions: FC<{
   return (
     <>
       {!isConnected ? (
-        <Flex alignItems={'center'} justifyContent={'center'} py={'24px'}>
+        <Flex alignItems={'center'} justifyContent={'center'} py={6}>
           <Button
             onClick={() =>
               connect({
@@ -49,7 +49,7 @@ export const ContractAvailableFunctions: FC<{
           }
           cancelButton={
             <TextLink onClick={() => setFunctionName('')}>
-              <Caption _hover={{ cursor: 'pointer', color: 'textTitle' }} mt="16px">
+              <Caption _hover={{ cursor: 'pointer', color: 'textTitle' }} mt={4}>
                 Cancel
               </Caption>
             </TextLink>

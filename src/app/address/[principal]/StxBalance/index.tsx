@@ -79,7 +79,7 @@ function StxBalanceBase({ address }: StxBalanceProps) {
         <Stack
           css={{
             '& > *:not(:last-child)': {
-              borderBottom: '1px',
+              borderBottom: '1px solid var(--stacks-colors-border-secondary)',
             },
           }}
         >
@@ -110,7 +110,7 @@ function StxBalanceBase({ address }: StxBalanceProps) {
             <Box
               css={{
                 '& > *:not(:last-child)': {
-                  borderBottom: '1px',
+                  borderBottom: '1px solid var(--stacks-colors-border-secondary)',
                 },
               }}
             >

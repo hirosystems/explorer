@@ -13,6 +13,7 @@ import { LabelWrapper } from './LabelWrapper';
 import { Logo } from './Logo';
 import { NavLabel } from './NavLabel';
 import { NavItem } from './types';
+import { ColorModeButton2 } from './ColorModeButton2';
 
 export function MobileNav({
   tokenPrice,
@@ -69,18 +70,18 @@ export function MobileNav({
       </Flex>
       <Flex justifyContent={'space-between'}>
         <Flex gap={3}>
-          <ColorModeButton
+          <ColorModeButton2
+            colorMode="light"
             aria-label={'Change color mode'}
             color="invert"
             borderWidth={'1px'}
-            colorModeOverride="light"
             borderRadius="xl"
           />
-          <ColorModeButton
+          <ColorModeButton2
+            colorMode="dark"
             aria-label={'Change color mode'}
             color="invert"
             borderWidth={'1px'}
-            colorModeOverride="dark"
             borderRadius="xl"
           />
         </Flex>

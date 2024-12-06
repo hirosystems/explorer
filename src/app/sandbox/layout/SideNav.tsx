@@ -1,10 +1,10 @@
-import { useColorModeValue } from '../../../components/ui/color-mode';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import { DropIcon } from '../../../common/components/icons/drop';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Icon } from '../../../ui/Icon';
 import { Stack, StackProps } from '../../../ui/Stack';
 import ClarityIcon from '../../../ui/icons/ClarityIcon';
@@ -20,7 +20,7 @@ export const SideNav: React.FC<StackProps> = () => {
   const iconColor = useColorModeValue('black', 'white');
 
   return (
-    <Stack borderRight={'1px'} borderColor={useColorModeValue('slate.150', 'slate.900')} gap={'0'}>
+    <Stack borderRight={`1px solid ${useColorModeValue('slate.150', 'slate.900')}`} gap={'0'}>
       <NavItem
         label={'Write & Deploy Contracts'}
         url={buildUrl(`/sandbox/deploy`, network)}

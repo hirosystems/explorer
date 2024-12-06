@@ -8,6 +8,7 @@ import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { AddressFilter } from './Address';
 import { DateFilter } from './Date';
+import { Stack } from '@chakra-ui/react';
 
 export interface FilterProps {
   filters: Record<string, string | undefined>;
@@ -52,8 +53,7 @@ export function ClearFiltersButton({ filters }: FilterProps) {
 
 export function FiltersWithWrapper({ filters }: FilterProps) {
   return (
-    <Flex
-      direction={'column'}
+    <Stack
       gap={4}
       pt={5}
       pl={6}
@@ -81,6 +81,6 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
         />
         <DateFilter defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
       </Flex>
-    </Flex>
+    </Stack>
   );
 }

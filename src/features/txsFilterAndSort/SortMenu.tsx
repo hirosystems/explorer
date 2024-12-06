@@ -101,5 +101,7 @@ export function ConfirmedTxsSortMenu() {
     [setConfirmedTxsActiveSort, setConfirmedTxsActiveOrder]
   );
 
-  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={SortDescending} />;
+  return (
+    <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={<SortDescending />} />
+  );
 }

@@ -8,7 +8,6 @@ export default function BlocksPageSkeleton() {
   return (
     <BlocksPageLayout
       title={<PageTitle>Recent Blocks</PageTitle>}
-      blocksPageHeaders={null}
       blocksList={<BlocksPageBlockListSkeleton />}
     />
   );

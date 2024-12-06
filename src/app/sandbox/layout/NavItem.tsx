@@ -19,8 +19,7 @@ export const NavItem: FC<{ label: string; icon: ReactNode; isSelected?: boolean;
         href={url}
         display={'flex'}
         bg={isSelected ? selectedBg : undefined}
-        borderBottom="1px"
-        borderColor={borderColor}
+        borderBottom={`1px solid ${borderColor}`}
         width={16}
         height={16}
         alignItems="center"

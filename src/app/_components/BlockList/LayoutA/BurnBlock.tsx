@@ -28,7 +28,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
     <Flex
       justifyContent={'space-between'}
       alignItems={'center'}
-      borderBottom={'1px'}
+      borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
       pl={4}
       pr={8}
       height={14}

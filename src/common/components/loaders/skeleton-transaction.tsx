@@ -50,7 +50,7 @@ const SkeletonTxidSummary = () => {
 const SkeletonSummaryRow = () => {
   const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
-    <Flex borderBottom="1px" borderColor={borderColor}>
+    <Flex borderBottom={`1px solid ${borderColor}`}>
       <Flex>
         <Flex width={'140px'}>
           <Flex width={'70px'}>
@@ -66,7 +66,7 @@ const SkeletonSummaryRow = () => {
     </Flex>
   );
 };
-const SkeletonSummaryRowShortContent = () => {
+const SkeletonSummaryRowShortContent = (): JSX.Element => {
   const borderColor = useColorModeValue('slate.150', 'slate.900');
   return (
     <Flex

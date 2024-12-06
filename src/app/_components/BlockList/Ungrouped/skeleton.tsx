@@ -86,7 +86,7 @@ export function StxBlocksGridSkeleton({
               isFirst={i === 0}
             />
             {i < numBlocks - 1 && (
-              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+              <Box gridColumn={'1/5'} borderBottom={`1px solid var(--stacks-colors-border-secondary)`}></Box>
             )}
           </React.Fragment>
         ))}

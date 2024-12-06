@@ -1,12 +1,10 @@
 import { Stack } from '@chakra-ui/react';
 
 import { SkeletonText } from '../../../..//components/ui/skeleton';
-import { Circle } from '../../../../common/components/Circle';
-import { useColorModeValue } from '../../../../components/ui/color-mode';
+import { Skeleton } from '../../../../components/ui/skeleton';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
-import { Skeleton } from '../../../../ui/Skeleton';
 import {
   BlocksPageBlockListLayout,
   BlocksPageControlsLayout,
@@ -184,8 +182,8 @@ export function BlocksPageBlockListSkeleton() {
   return (
     <BlocksPageBlockListLayout>
       <BlocksPageControlsSkeleton horizontal />
-      <UpdateBarSkeleton />
-      <BlocksPageBlockListGroupedSkeleton />
+      {/* <UpdateBarSkeleton />
+      <BlocksPageBlockListGroupedSkeleton /> */}
     </BlocksPageBlockListLayout>
   );
 }

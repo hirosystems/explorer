@@ -1,16 +1,17 @@
-import { Field as CUIField, Fieldset, Popover, useDisclosure } from '@chakra-ui/react';
+import { Flex, Stack, Text } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowUpRight, CaretDown } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { truncateMiddle } from '../../../common/utils/utils';
+import { Field as ChakraField } from '../../../components/ui/field';
+import { PopoverContent, PopoverRoot, PopoverTrigger } from '../../../components/ui/popover';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { ExpandingTextarea } from '../../../ui/ExpandingTextarea';
-import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { Stack } from '../../../ui/Stack';
-import { Text } from '../../../ui/Text';
+import { useState } from 'react';
+
 
 interface AddressFilterProps {
   defaultFromAddress?: string;
@@ -30,18 +31,13 @@ export function AddressFilter({
     fromAddress: defaultFromAddress,
     toAddress: defaultToAddress,
   };
+  const [open, setOpen] = useState(false);
 
-  const { onOpen, onClose, open } = useDisclosure();
   const searchParams = useSearchParams();
   const router = useRouter();
   return (
-    <Popover.Root
-      positioning={{ placement: 'bottom-start' }}
-      open={open}
-      onOpenChange={onOpen}
-      onExitComplete={onClose}
-    >
-      <Popover.Trigger>
+    <PopoverRoot positioning={{ placement: 'bottom-start' }} open={open} onOpenChange={(e) => setOpen(e.open)}>
+      <PopoverTrigger>
         <Button
           variant="secondary"
           fontSize={'sm'}
@@ -92,9 +88,9 @@ export function AddressFilter({
             )}
           </Flex>
         </Button>
-      </Popover.Trigger>
-      <Popover.Content maxWidth={'275px'} bgColor={'surface'}>
-        <Flex direction={'column'} gap={2} p={4}>
+      </PopoverTrigger>
+      <PopoverContent maxWidth={'275px'} bgColor={'surface'}>
+        <Stack gap={2} p={4}>
           <Formik
             enableReinitialize
             validateOnChange={false}
@@ -113,7 +109,7 @@ export function AddressFilter({
                 params.set('toAddress', toAddress);
               }
               router.push(`?${params.toString()}`, { scroll: false });
-              onClose();
+              setOpen(false);
             }}
           >
             {({ isValidating }) => (
@@ -123,53 +119,53 @@ export function AddressFilter({
                     {(
                       { field, form }: FieldProps<string, FormValues> // TODO: upgrade to v3. This may be broken
                     ) => (
-                      <Fieldset.Root>
-                        <CUIField.Root>
-                          <CUIField.Label>From:</CUIField.Label>
-                          <CUIField.ErrorText>{form.errors.fromAddress}</CUIField.ErrorText>
-                          <ExpandingTextarea
-                            {...field} // TODO: upgrade to v3. This may be broken
-                            placeholder="STX Address"
-                            fontSize={'sm'}
-                            css={{
-                              '::placeholder': {
-                                color: 'textSubdued',
-                              },
-                            }}
-                          />
-                        </CUIField.Root>
-                      </Fieldset.Root>
+                      <ChakraField
+                        invalid={!!form.errors.fromAddress}
+                        errorText={form.errors.fromAddress}
+                        label="From:"
+                      >
+                        <ExpandingTextarea
+                          {...field} // TODO: upgrade to v3. This may be broken
+                          placeholder="STX Address"
+                          fontSize={'sm'}
+                          css={{
+                            '::placeholder': {
+                              color: 'textSubdued',
+                            },
+                          }}
+                        />
+                      </ChakraField>
                     )}
                   </Field>
                   <Field name="toAddress">
                     {({ field, form }: FieldProps<string, FormValues>) => (
-                      <Fieldset.Root>
-                        <CUIField.Root>
-                          <CUIField.Label>To:</CUIField.Label>
-                          <CUIField.ErrorText>{form.errors.toAddress}</CUIField.ErrorText>
-                          <ExpandingTextarea
-                            {...field} // TODO: upgrade to v3. This may be broken
-                            placeholder="STX Address"
-                            fontSize={'sm'}
-                            css={{
-                              '::placeholder': {
-                                color: 'textSubdued',
-                              },
-                            }}
-                          />
-                        </CUIField.Root>
-                      </Fieldset.Root>
+                      <ChakraField
+                        invalid={!!form.errors.toAddress}
+                        errorText={form.errors.toAddress}
+                        label="To:"
+                      >
+                        <ExpandingTextarea
+                          {...field} // TODO: upgrade to v3. This may be broken
+                          placeholder="STX Address"
+                          fontSize={'sm'}
+                          css={{
+                            '::placeholder': {
+                              color: 'textSubdued',
+                            },
+                          }}
+                        />
+                      </ChakraField>
                     )}
                   </Field>
                 </Stack>
-                <Box mt={'16px'}>
+                <Box mt={4}>
                   <Button
                     isLoading={isValidating}
                     width="100%"
                     type="submit"
                     fontSize={'sm'}
                     variant={'secondary'}
-                    height={'40px'}
+                    height={10}
                     color="textSubdued"
                   >
                     Apply
@@ -178,8 +174,8 @@ export function AddressFilter({
               </Form>
             )}
           </Formik>
-        </Flex>
-      </Popover.Content>
-    </Popover.Root>
+        </Stack>
+      </PopoverContent>
+    </PopoverRoot>
   );
 }

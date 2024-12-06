@@ -13,6 +13,7 @@ import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import FunctionReadOnlyIcon from '../../../../ui/icons/FunctionReadOnly';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
+import { ArrowRight } from '@phosphor-icons/react';
 
 export const AbiFunction = forwardRef<
   HTMLDivElement,
@@ -35,7 +36,7 @@ export const AbiFunction = forwardRef<
     >
       <Flex alignItems="center">
         <Flex alignItems="center">
-          <Grid placeItems="center" borderWidth="1px" borderRadius="100%" size="32px">
+          <Grid placeItems="center" borderWidth="1px" borderRadius="100%" size={8}>
             {abiFn.access === 'read_only' ? (
               <Icon size={4}>
                 <FunctionXIcon />
@@ -46,17 +47,19 @@ export const AbiFunction = forwardRef<
               </Icon>
             )}
           </Grid>
-          <Text fontSize="14px" fontFamily={`"Fira Code", monospace`} ml="16px" fontWeight="500">
+          <Text fontSize="14px" fontFamily={`"Fira Code", monospace`} ml={4} fontWeight="500">
             {abiFn.name}
           </Text>
         </Flex>
         {abiFn.access === 'read_only' && (
-          <Badge ml="16px" bg={`bg.${colorMode}`} color={`textCaption.${colorMode}`}>
+          <Badge ml={4} bg={`bg.${colorMode}`} color={`textCaption.${colorMode}`}>
             {abiFn.access}
           </Badge>
         )}
       </Flex>
-      <ArrowRightIcon width={'18px'} />
+      <Icon size={4}>
+        <ArrowRight />
+      </Icon>
     </Flex>
   );
 });

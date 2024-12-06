@@ -2,7 +2,7 @@
 
 import { forwardRef } from 'react';
 
-import { Button, ButtonProps } from './Button';
+import { Button, ButtonProps } from '../components/ui/button';
 import { NextLink, NextLinkProps } from './NextLink';
 
 export type ButtonLinkProps = ButtonProps & NextLinkProps;

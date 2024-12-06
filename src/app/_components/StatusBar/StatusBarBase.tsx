@@ -27,7 +27,7 @@ export const StatusBarBase = forwardRef<
       </Icon>
     );
   return (
-    <Box ref={ref} borderTop={`1px`} borderColor={borderColor} py={3} {...boxProps}>
+    <Box ref={ref} borderTop={`1px solid ${borderColor}`} py={3} {...boxProps}>
       <Box width={'100%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
         <Flex
           maxWidth={PAGE_MAX_WIDTH}

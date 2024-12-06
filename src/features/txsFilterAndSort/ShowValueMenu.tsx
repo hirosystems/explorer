@@ -41,5 +41,5 @@ export function ShowValueMenu() {
     [activeTransactionValueFilter]
   );
 
-  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={CurrencyDollar} />;
+  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={<CurrencyDollar/>} />;
 }

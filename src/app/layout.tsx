@@ -1,6 +1,6 @@
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
 import { meta } from '../common/constants/meta';
@@ -15,14 +15,30 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const headersList = headers();
+  const themeCookie = cookies().get('stacks-explorer-theme')?.value || 'light';
+  const addedCustomNetworksCookie = cookies().get('addedCustomNetworks')?.value;
+  const removedCustomNetworksCookie = cookies().get('removedCustomNetworks')?.value;
+  console.log('rootlayout', {
+    themeCookie,
+    addedCustomNetworksCookie,
+    removedCustomNetworksCookie,
+  });
+
   const tokenPrice = await getTokenPrice();
   const statusBarContent = await getStatusBarContent();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers headerCookies={headersList.get('cookie')}>
-          <PageWrapper tokenPrice={tokenPrice} statusBarContent={statusBarContent}>
+        <Providers
+          themeCookie={themeCookie}
+          addedCustomNetworksCookie={addedCustomNetworksCookie}
+          removedCustomNetworksCookie={removedCustomNetworksCookie}
+        >
+          <PageWrapper
+            tokenPrice={tokenPrice}
+            statusBarContent={statusBarContent}
+            themeCookie={themeCookie}
+          >
             {children}
           </PageWrapper>
         </Providers>

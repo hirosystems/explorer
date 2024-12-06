@@ -1,38 +1,54 @@
 'use client';
 
-import { Textarea as CUITextarea, TextareaProps as CUITextareaProps } from '@chakra-ui/react';
-import { forwardRef, useEffect, useRef } from 'react';
+import { Textarea, TextareaProps, chakra } from '@chakra-ui/react';
+import { forwardRef, useCallback, useEffect, useRef } from 'react';
+import AutoResize from "react-textarea-autosize"
 
-export type ExpandingTextareaProps = CUITextareaProps;
+const StyledAutoResize = chakra(AutoResize)
+
+export type ExpandingTextareaProps = TextareaProps;
+
 export const ExpandingTextarea = forwardRef<HTMLTextAreaElement, ExpandingTextareaProps>(
-  ({ children, onInput, value, ...rest }, ref) => {
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  ({ children, onInput, value, placeholder, ...rest }, ref) => {
+    // const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => {
-      const textarea = textareaRef.current;
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
-      }
-    }, [value]);
+    // const adjustHeight = useCallback(() => {
+    //   const textarea = textareaRef.current;
+    //   if (!textarea) return;
+    //   textarea.style.height = 'auto';
+    //   textarea.style.height = `${textarea.scrollHeight}px`;
+    // }, []);
 
-    return (
-      <CUITextarea
-        ref={ref || textareaRef}
+    // useEffect(() => {
+    //   adjustHeight();
+    //   const timer = setTimeout(adjustHeight, 100);
+    //   return () => clearTimeout(timer);
+    // }, [value, adjustHeight]);
+
+    return ( // TODO: fix this 
+      <StyledAutoResize
+        // ref={ref || textareaRef}
+        width="100%"
         overflow={'hidden'}
         rows={1}
         resize={'none'}
         px={3}
-        onInput={e => {
-          e.currentTarget.style.height = 'auto';
-          e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
-          onInput?.(e);
+        lineHeight="inherit"
+        css={{  // Add this separate prop
+          '&::placeholder': {
+            textAlign: 'center',
+          }
         }}
         value={value}
+        // h="auto"
+        minH={10}
+        border="1px solid var(--stacks-colors-border-primary)"
+        borderRadius="md"
+        placeholder={placeholder}
         {...rest}
       >
         {children}
-      </CUITextarea>
+      </StyledAutoResize>
     );
   }
 );

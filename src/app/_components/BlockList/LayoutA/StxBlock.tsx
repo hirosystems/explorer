@@ -26,12 +26,11 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
   return (
     <Box
       pl={4}
-      borderLeft={icon ? undefined : '1px'}
-      borderColor={borderColor}
+      borderLeft={icon ? undefined : `1px solid ${borderColor}`}
       position="relative"
       css={{
         '>div': {
-          borderTop: '1px',
+          borderTop: `1px solid ${borderColor}`,
         },
         '&:first-child >div': {
           borderTop: 'none',

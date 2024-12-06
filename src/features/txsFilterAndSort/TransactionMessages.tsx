@@ -19,8 +19,8 @@ const MessageBase = ({
   description?: string;
 }) => {
   return (
-    <Flex alignItems={'center'} flexDirection="column" p="32px">
-      <Box size={'72px'} borderRadius="50%" border="1px solid" borderColor="border" mb="20px">
+    <Flex alignItems={'center'} flexDirection="column" p={8}>
+      <Box size={'72px'} borderRadius="50%" border={`1px solid var(--stacks-colors-border-secondary)`} mb={5}>
         <Flex
           justifyContent="center"
           alignItems="center"
@@ -32,7 +32,7 @@ const MessageBase = ({
         </Flex>
       </Box>
       <Box textAlign="center">
-        <Title mb="8px" fontSize="sm">
+        <Title mb={2} fontSize="sm">
           {title}
         </Title>
         {description ? (

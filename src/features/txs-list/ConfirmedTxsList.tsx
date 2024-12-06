@@ -35,7 +35,7 @@ function ConfirmedTxsListBase({
   return (
     <Box pb={6}>
       {!!filters && (
-        <Flex borderBottom={'1px'} pb={4.5} gap={4} flexWrap={'wrap'}>
+        <Flex borderBottom={`1px solid var(--stacks-colors-border-secondary)`} pb={4.5} gap={4} flexWrap={'wrap'}>
           <Flex gap={2} flexWrap={'wrap'}>
             <AddressFilter
               defaultFromAddress={filters.fromAddress}

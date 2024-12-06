@@ -145,7 +145,7 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
   return (
     <AccordionItem
       border={'none'}
-      borderBottom={'1px'}
+      borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
       _last={{ borderBottom: 'unset' }}
       value={tx.tx_id}
     >

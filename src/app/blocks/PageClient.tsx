@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 
 import { BlocksPageBlockListSkeleton } from '../_components/BlockList/Grouped/skeleton';
 import { PageTitle } from '../_components/PageTitle';
+import BlocksPageSkeleton from './skeleton';
 
 const BlocksPageBlockListDynamic = dynamic(
   () =>
@@ -19,27 +20,24 @@ const BlocksPageBlockListDynamic = dynamic(
 
 export function BlocksPageLayout({
   title,
-  blocksPageHeaders,
   blocksList,
 }: {
   title: React.ReactNode;
-  blocksPageHeaders: React.ReactNode;
   blocksList: React.ReactNode;
 }) {
   return (
     <>
       {title}
-      {blocksPageHeaders}
       {blocksList}
     </>
   );
 }
 
 const BlocksPage: NextPage = () => {
+  return <BlocksPageSkeleton />;
   return (
     <BlocksPageLayout
       title={<PageTitle>Recent blocks</PageTitle>}
-      blocksPageHeaders={null}
       blocksList={<BlocksPageBlockListDynamic />}
     />
   );

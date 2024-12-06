@@ -8,9 +8,8 @@ import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { NakamotoModal } from '../../common/components/modals/Nakamoto';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { useColorModeValue } from '../../components/ui/color-mode';
+import { useColorMode, useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
@@ -19,86 +18,85 @@ import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatus
 import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
 
 const StyledWrapper = styled(Box)<{ bg: string }>`
-  font-variant-ligatures: no-contextual;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   max-width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
   background: ${props => props.bg};
   background-repeat: no-repeat, repeat;
   background-size:
     100% 530px,
     100% 100%;
+  font-variant-ligatures: no-contextual;
 `;
 
-function WrapperWithBg({ children }: { children: ReactNode }) {
-  const bgColor = useColorModeValue(
-    `linear-gradient(
+const darkBg = `linear-gradient(
        29.53deg, 
        #9528F7 2.94%, 
        #522DE7 39.91%, 
        #221A71 76.87%, 
        #0F102B 93.08%
-     ), white`,
-    `linear-gradient(
+     ), black`;
+const lightBg = `linear-gradient(
        29.53deg, 
        #9528F7 2.94%, 
        #522DE7 39.91%, 
        #221A71 76.87%, 
        #0F102B 93.08%
-     ), black`
-  );
+     ), white`;
+
+function WrapperWithBg({ children, themeCookie }: { children: ReactNode; themeCookie: string }) {
+  const { colorMode } = useColorMode();
+  const bgColor = colorMode
+    ? colorMode === 'light'
+      ? lightBg
+      : darkBg
+    : themeCookie
+      ? themeCookie === 'light'
+        ? lightBg
+        : darkBg
+      : lightBg;
 
   return <StyledWrapper bg={bgColor}>{children}</StyledWrapper>;
 }
 
 export function PageWrapper({
-  tokenPrice,
   children,
+  tokenPrice,
   statusBarContent,
+  themeCookie,
 }: {
-  tokenPrice: TokenPrice;
   children: ReactNode;
+  tokenPrice: TokenPrice;
   statusBarContent: IncidentContent | null;
+  themeCookie: string;
 }) {
   const statusBarBg = useColorModeValue('black', 'white');
   return (
     <>
-      <Flex
-        direction={'column'}
-        width={'100%'}
-        top={'0'}
-        backdropFilter={'blur(10px)'}
-        background={statusBarBg}
-      >
+      <Stack width={'100%'} top={'0'} backdropFilter={'blur(10px)'} bg={statusBarBg}>
         <NonHiroNetworkWarningBar />
         <IncidentsStatusBarWithErrorBoundary />
         <CMSStatusBars statusBarContent={statusBarContent} />
-      </Flex>
+      </Stack>
       <NakamotoModal />
-      <WrapperWithBg>
-        <Flex
-          mx="auto"
-          width="full"
-          maxWidth="breakpoint-xl"
-          flexDirection="column"
-          p={6}
-          minHeight={'100vh'}
-        >
+      <WrapperWithBg themeCookie={themeCookie}>
+        <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
           <NavBar tokenPrice={tokenPrice} />
           <Stack
             mt={10}
             mb={8}
-            gap={7} // TODO: not sure I like putting these spacing styles here
+            gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
           >
             {children}
           </Stack>
           <Footer />
-        </Flex>
+        </Stack>
       </WrapperWithBg>
+
       <AddNetworkModal />
       <NetworkModeToast />
     </>
