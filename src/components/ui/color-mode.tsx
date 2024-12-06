@@ -5,10 +5,11 @@ import { ClientOnly, IconButton, Skeleton } from '@chakra-ui/react';
 import { Moon, SunDim } from '@phosphor-icons/react';
 import type { ThemeProviderProps } from 'next-themes';
 import { ThemeProvider, useTheme } from 'next-themes';
-import { cookies } from 'next/headers';
 import * as React from 'react';
 import { useCallback } from 'react';
 import { useCookies } from 'react-cookie';
+
+import { IS_BROWSER } from '../../common/constants/constants';
 
 export interface ColorModeProviderProps extends ThemeProviderProps {}
 

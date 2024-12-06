@@ -1,10 +1,7 @@
+import { Box, Flex, Stack, Text } from '@chakra-ui/react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { useTheme } from 'next-themes';
 
-import { Box } from '../ui/Box';
-import { Flex } from '../ui/Flex';
-import { Stack } from '../ui/Stack';
-import { Text } from '../ui/Text';
+import { system } from '../ui/theme/theme';
 
 const SpacingDemo = ({ space, value }: { space: string; value: string }) => (
   <Stack align="start" gap={2}>
@@ -19,14 +16,13 @@ const SpacingDemo = ({ space, value }: { space: string; value: string }) => (
 );
 
 const SpacingShowcase = () => {
-  const { theme } = useTheme();
   return (
     <Stack align="stretch" gap={8}>
       <Text fontSize="2xl" fontWeight="bold">
         Theme Spacing
       </Text>
-      {Object.entries(theme?.space ?? {}).map(([space, value]) => (
-        <SpacingDemo key={space} space={space} value={(value as string).toString()} />
+      {Object.entries(system._config.theme?.tokens?.spacing ?? {}).map(([space, value]) => (
+        <SpacingDemo key={space} space={space} value={value.value.toString()} />
       ))}
     </Stack>
   );
