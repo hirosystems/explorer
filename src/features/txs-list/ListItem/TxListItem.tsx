@@ -1,18 +1,14 @@
-import { TxIcon } from '@/common/components/TxIcon';
-import { getTransactionStatus } from '@/common/utils/transactions';
-import { Box } from '@/ui/Box';
-import { Icon as IconUI } from '@/ui/Icon';
-import { Tooltip } from '@/ui/Tooltip';
-import { Info } from '@phosphor-icons/react';
 import { FC, ReactNode, memo } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TxLink } from '../../../common/components/ExplorerLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
+import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/transaction-item';
+import { getTransactionStatus } from '../../../common/utils/transactions';
 import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
-import { Flex, FlexProps } from '../../../ui/Flex';
+import { FlexProps } from '../../../ui/Flex';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
 import { Caption } from '../../../ui/typography';

@@ -1,7 +1,5 @@
 'use client';
 
-import { ColorModeProvider } from '@/components/ui/color-mode';
-import { system } from '@/ui/theme/theme';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -13,6 +11,8 @@ import { GlobalContextProvider } from '../../common/context/GlobalContextProvide
 import { store } from '../../common/state/store';
 import { NetworkModes } from '../../common/types/network';
 import { removeTrailingSlash } from '../../common/utils/utils';
+import { ColorModeProvider } from '../../components/ui/color-mode';
+import { system } from '../../ui/theme/theme';
 import { AppConfig } from './AppConfig';
 
 const queryClient = new QueryClient({
@@ -53,21 +53,21 @@ export const Providers = ({
       addedCustomNetworksCookie={addedCustomNetworksCookie}
       removedCustomNetworksCookie={removedCustomNetworksCookie}
     >
-        <CookiesProvider>
-          <ChakraProvider value={system}>
-            <ColorModeProvider defaultTheme="light" forcedTheme={'light'}>
-              <ReduxProvider store={store}>
-                <AppConfig // TODO: rename to something else like SessionProvider
-                  queryNetworkMode={queryNetworkMode}
-                  queryApiUrl={queryApiUrl}
-                  querySubnet={querySubnet}
-                >
-                  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-                </AppConfig>
-              </ReduxProvider>
-            </ColorModeProvider>
-          </ChakraProvider>
-        </CookiesProvider>
+      <CookiesProvider>
+        <ChakraProvider value={system}>
+          <ColorModeProvider >
+            <ReduxProvider store={store}>
+              <AppConfig // TODO: rename to something else like SessionProvider
+                queryNetworkMode={queryNetworkMode}
+                queryApiUrl={queryApiUrl}
+                querySubnet={querySubnet}
+              >
+                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+              </AppConfig>
+            </ReduxProvider>
+          </ColorModeProvider>
+        </ChakraProvider>
+      </CookiesProvider>
     </GlobalContextProvider>
   );
 };

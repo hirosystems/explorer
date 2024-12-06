@@ -1,8 +1,8 @@
 import vkQr from '@vkontakte/vk-qr';
 import * as React from 'react';
 
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box, BoxProps } from '../../../../ui/Box';
-import { useColorModeValue } from '@/components/ui/color-mode';
 
 export const QRcode = ({ address, ...rest }: { address: string } & BoxProps) => {
   const qrCodeColor = useColorModeValue('black', 'white');

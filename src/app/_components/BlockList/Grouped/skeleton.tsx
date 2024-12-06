@@ -179,11 +179,11 @@ export function UpdateBarSkeleton() {
 }
 
 export function BlocksPageBlockListSkeleton() {
-  return (
+  return ( // TODO: fix this loading state
     <BlocksPageBlockListLayout>
       <BlocksPageControlsSkeleton horizontal />
-      {/* <UpdateBarSkeleton />
-      <BlocksPageBlockListGroupedSkeleton /> */}
+      <UpdateBarSkeleton />
+      <BlocksPageBlockListGroupedSkeleton />
     </BlocksPageBlockListLayout>
   );
 }

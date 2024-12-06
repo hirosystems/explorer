@@ -1,16 +1,15 @@
 'use client';
 
 import { Flex } from '@chakra-ui/react';
+import { ArrowSquareOut } from '@phosphor-icons/react';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
 import { CodeEditor } from '../../ui/CodeEditor';
+import { Icon } from '../../ui/Icon';
 import { Caption } from '../../ui/typography';
 import { useContractById } from '../queries/useContractById';
 import { TxLink } from './ExplorerLinks';
 import { Section } from './Section';
-import { ArrowSquareOut } from '@phosphor-icons/react';
-import { Icon } from '@/ui/Icon';
-
 
 function ContractSourceBase({ txContractId }: { txContractId: string }) {
   const { data: txContract } = useContractById(txContractId);

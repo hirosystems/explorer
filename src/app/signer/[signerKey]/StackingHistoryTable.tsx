@@ -1,13 +1,12 @@
 'use client';
 
-import { formatSignerLatency } from '@/app/signers/SignersTable';
-import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
 
 import { StackingHistoryInfo, useSignerStackingHistory } from '../../../app/signers/data/UseSigner';
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Flex } from '../../../ui/Flex';
 import { Table } from '../../../ui/Table';
 import { Tbody } from '../../../ui/Tbody';
@@ -20,6 +19,7 @@ import { ScrollableBox } from '../../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { CycleFilter } from '../../signers/CycleFilter';
+import { formatSignerLatency } from '../../signers/SignersTable';
 import { mobileBorderCss } from '../../signers/consts';
 import { CycleSortFilter, CycleSortOrder } from './CycleSortFilter';
 import { StackingHistoryTableSkeleton } from './skeleton';

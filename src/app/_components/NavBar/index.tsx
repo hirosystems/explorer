@@ -1,6 +1,5 @@
 'use client';
 
-import { Search } from '@/features/search/Search';
 import { IconButton, useDisclosure } from '@chakra-ui/react';
 import { List, Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
@@ -13,6 +12,7 @@ import { Network } from '../../../common/types/network';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { capitalize } from '../../../common/utils/utils';
+import { Search } from '../../../features/search/Search';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';

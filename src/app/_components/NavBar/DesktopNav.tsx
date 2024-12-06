@@ -1,24 +1,24 @@
-import { Box, HoverCard } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { FC } from 'react';
 
+import {
+  HoverCardContent,
+  HoverCardRoot,
+  HoverCardTrigger,
+} from '../../../components/ui/hover-card';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Link } from '../../../ui/Link';
 import { LabelWrapper } from './LabelWrapper';
 import { NavItem } from './types';
-import { HoverCardRoot, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
 
 export const DesktopNav: FC<{ navItems: NavItem[] }> = ({ navItems }) => {
   return (
     <Flex gap={6}>
       {navItems.map(navItem => (
         <Flex key={navItem.id} alignItems={'center'}>
-          <HoverCardRoot
-            positioning={{ placement: 'bottom-start' }}
-            lazyMount
-            id={navItem.id}
-          >
+          <HoverCardRoot positioning={{ placement: 'bottom-start' }} lazyMount id={navItem.id}>
             <HoverCardTrigger>
               <Flex
                 gap={1.5}

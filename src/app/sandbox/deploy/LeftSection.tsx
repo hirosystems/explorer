@@ -1,6 +1,5 @@
 'use client';
 
-import { InputGroup } from '@/components/ui/input-group';
 import { ArrowSquareOut, Toolbox, X } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useState } from 'react';
@@ -11,6 +10,7 @@ import { CONNECT_AUTH_ORIGIN } from '../../../common/constants/env';
 import { useRandomName } from '../../../common/hooks/useRandomName';
 import { useStacksNetwork } from '../../../common/hooks/useStacksNetwork';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import { InputGroup } from '../../../components/ui/input-group';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
@@ -68,7 +68,7 @@ export function LeftSection() {
                   }}
                   aria-label={'clear contract name field'}
                 >
-                  <Icon size={4} color='icon'>
+                  <Icon size={4} color="icon">
                     <X />
                   </Icon>
                 </IconButton>

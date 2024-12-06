@@ -1,6 +1,5 @@
 'use client';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import { Accordion, Field as CUIField, Fieldset, Input } from '@chakra-ui/react';
 import { CaretDown, CaretRight } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik, FormikErrors } from 'formik';
@@ -8,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
 
 import { promiseWrapper } from '../../../../common/utils/utils';
+import { Checkbox } from '../../../../components/ui/checkbox';
 import { Field as ChakraField } from '../../../../components/ui/field';
 import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
