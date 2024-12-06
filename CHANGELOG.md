@@ -1,3 +1,10 @@
+# [1.235.0](https://github.com/hirosystems/explorer/compare/v1.234.0...v1.235.0) (2024-12-06)
+
+
+### Features
+
+* remove nakamoto modal ([1ecf200](https://github.com/hirosystems/explorer/commit/1ecf20028ac6e4a7852f4632741f2445d29332e1))
+
 # [1.234.0](https://github.com/hirosystems/explorer/compare/v1.233.0...v1.234.0) (2024-12-06)
 
 
