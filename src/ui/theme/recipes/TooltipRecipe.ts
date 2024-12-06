@@ -13,6 +13,7 @@ export const tooltipSlotRecipe = defineSlotRecipe({
           borderRadius: 'md',
           bg: 'invert',
           display: 'flex',
+          maxWidth: 'max-content',
         },
       },
     },

@@ -8,6 +8,7 @@ import {
 } from '../components/ui/tooltip';
 
 export type TooltipProps = SnippetTooltipProps;
+// Having two files named Tooltip and tooltip could cause issues with the build
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(({ children, ...rest }, ref) => {
   return (
     <SnippetTooltip

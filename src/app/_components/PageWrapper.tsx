@@ -59,6 +59,7 @@ function WrapperWithBg({ children, themeCookie }: { children: ReactNode; themeCo
         ? lightBg
         : darkBg
       : lightBg;
+  // const bgColor = colorMode === 'light' ? lightBg : darkBg;
 
   return <StyledWrapper bg={bgColor}>{children}</StyledWrapper>;
 }

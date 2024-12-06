@@ -11,6 +11,7 @@ import { FONT_WEIGHTS } from './fontWeights';
 import { FONTS } from './fonts';
 import { LETTER_SPACINGS } from './letterSpacings';
 import { LINEHEIGHTS } from './lineHeights';
+import { badgeRecipe } from './recipes/BadgeRecipe';
 import { buttonRecipe } from './recipes/ButtonRecipe';
 import { checkboxSlotRecipe } from './recipes/CheckboxRecipe';
 import { inputSlotRecipe } from './recipes/InputRecipe';
@@ -19,13 +20,12 @@ import { menuSlotRecipe } from './recipes/MenuRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
 import { tabsSlotRecipe } from './recipes/TabsRecipe';
 import { tagSlotRecipe } from './recipes/TagRecipe';
+import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
 import { SEMANTIC_TOKENS } from './semanticTokens';
 import { SHADOWS } from './shadows';
 import { SIZES } from './sizes';
 import { SPACE } from './space';
 import { Z_INDEX } from './zIndex';
-import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
-import { badgeRecipe } from './recipes/BadgeRecipe';
 
 const explorerConfig = defineConfig({
   cssVarsPrefix: 'stacks',
@@ -34,7 +34,7 @@ const explorerConfig = defineConfig({
   // initialColorMode: 'light',
 });
 
-export const system = createSystem(defaultConfig, explorerConfig, {
+const themeConfig = {
   theme: {
     recipes: {
       button: buttonRecipe,
@@ -96,4 +96,6 @@ export const system = createSystem(defaultConfig, explorerConfig, {
       ...SEMANTIC_TOKENS,
     },
   },
-});
+};
+
+export const system = createSystem(defaultConfig, explorerConfig, themeConfig);
