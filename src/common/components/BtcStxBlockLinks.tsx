@@ -30,15 +30,21 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
   return (
     <Flex flexWrap={'wrap'} alignItems={'center'} gap={1.5}>
       <Circle size={'18px'} bg="purple.600">
-        <Icon as={StxIcon} size={2.5} color="white" />
+        <Icon size={2.5} color="white">
+          <StxIcon />
+        </Icon>
       </Circle>
       <BlockLink hash={stxBlockHash} fontWeight={'medium'} fontSize={'sm'}>
         #{stxBlockHeight}
       </BlockLink>
       {btcBlockHeight && (
         <Fragment>
-          <Icon as={ArrowRight} size={4} color={'slate.700'} />
-          <Icon as={BitcoinIcon} size={4.5} />
+          <Icon size={4} color={'slate.700'}>
+            <ArrowRight />
+          </Icon>
+          <Icon size={4.5}>
+            <BitcoinIcon />
+          </Icon>
           <TextLink
             href={`${btcBlockBaseUrl}/${btcBlockHeight}`}
             target="_blank"

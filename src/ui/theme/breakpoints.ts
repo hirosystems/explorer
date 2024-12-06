@@ -18,15 +18,15 @@ export const CURRENT_BREAKPOINTS = {};
    If we extended all of our responsive styling arrays then writing responsive styles would become much more tedious, as we would need to add breakpoint variables for each of the breakpoints we want to support.
    Or we would have to start using the var names in the breakpoints object in the responsive styling arrays. But this would also mena that we would have to change all the responsive styles in our app. */
 export const NEW_BREAKPOINTS = {
-  'mobile-xs': '320px',
-  'mobile-sm': '375px',
-  'mobile-md': '480px',
-  'mobile-lg': '768px',
-  xs: '1024px',
-  sm: '1280px',
-  md: '1440px',
-  lg: '1680px',
-  xl: '1920px',
+  'mobile-xs': { value: '320px' },
+  'mobile-sm': { value: '375px' },
+  'mobile-md': { value: '480px' },
+  'mobile-lg': { value: '768px' },
+  xs: { value: '1024px' },
+  sm: { value: '1280px' },
+  md: { value: '1440px' },
+  lg: { value: '1680px' },
+  xl: { value: '1920px' },
 };
 
 export const BREAKPOINTS = {

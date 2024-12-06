@@ -215,7 +215,9 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
       icon={
         eventIcon ? (
           <Circle size={4.5}>
-            <Icon as={eventIcon} size={2.5} />
+            <Icon as={eventIcon} size={2.5}>
+              {eventIcon}
+            </Icon>
           </Circle>
         ) : null
       }
@@ -223,7 +225,12 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
         title: name,
         subtitle: (
           <>
-            <HStack flexWrap="wrap" alignItems="center" gap={1} divider={<Caption>∙</Caption>}>
+            <HStack
+              flexWrap="wrap"
+              alignItems="center"
+              gap={1}
+              separator={<Caption border="none">∙</Caption>}
+            >
               {assetEventType ? <Caption fontWeight={'semibold'}>{assetEventType}</Caption> : null}
               {assetAmounts && (
                 <Caption>
@@ -239,7 +246,7 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
               {tokenType && <Caption>{tokenType}</Caption>}
             </HStack>
             {memo && (
-              <HStack flexWrap="nowrap" gap={1} divider={<Caption>∙</Caption>}>
+              <HStack flexWrap="nowrap" gap={1} separator={<Caption border="none">∙</Caption>}>
                 <Caption fontWeight={'semibold'}>Memo</Caption>
                 <Caption textOverflow={'ellipsis'} overflow={'hidden'} whiteSpace={'nowrap'}>
                   {memo}

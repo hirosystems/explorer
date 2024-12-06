@@ -1,9 +1,9 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowCounterClockwise } from '@phosphor-icons/react';
 import { ReactNode, Suspense, useCallback, useRef } from 'react';
 
 import RelativeTimeDisplay from '../../../common/components/RelativeTimeDisplay';
-import { Button } from '../../../ui/Button';
+import { Button } from '../../../components/ui/button';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Flex, FlexProps } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
@@ -82,14 +82,11 @@ export function UpdateBarBase({
       >
         {text}
       </Text>
-      <Button variant="text" onClick={update}>
+      <Button onClick={update} variant="text">
         <Flex alignItems={'center'} gap={1.5}>
-          <Icon
-            color="buttonText"
-            as={ArrowCounterClockwise}
-            size={3}
-            transform={'rotate(0deg) scaleX(-1)'}
-          />
+          <Icon color="buttonText" size={3} transform={'rotate(0deg) scaleX(-1)'}>
+            <ArrowCounterClockwise />
+          </Icon>
           Update
         </Flex>
       </Button>

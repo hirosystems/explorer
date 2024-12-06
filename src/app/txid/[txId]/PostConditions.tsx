@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
 import pluralize from 'pluralize';
 import React from 'react';
 
@@ -27,6 +26,7 @@ import {
   truncateMiddle,
   validateStacksAddress,
 } from '../../../common/utils/utils';
+import { useColorMode } from '../../../components/ui/color-mode';
 import { Box } from '../../../ui/Box';
 import { FlexProps } from '../../../ui/Flex';
 import { Grid } from '../../../ui/Grid';
@@ -92,7 +92,9 @@ const ConditionAsset = ({ condition }: { condition: PostCondition }) => {
     case 'stx':
       return (
         <Circle size="48px" bg={`accent.${colorMode}`}>
-          <Icon as={StxIcon} size="20px" color="white" />
+          <Icon as={StxIcon} size="20px" color="white">
+            {StxIcon}
+          </Icon>
         </Circle>
       );
   }

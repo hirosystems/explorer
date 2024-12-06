@@ -1,11 +1,12 @@
 'use client';
 
-import { Icon as CUIIcon, IconProps as CUIIconProps, forwardRef } from '@chakra-ui/react';
+import { Icon as CUIIcon, IconProps as CUIIconProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type IconProps = CUIIconProps & UIComponent;
-export const Icon = forwardRef<IconProps, 'div'>(({ children, size, ...rest }, ref) => (
+export const Icon = forwardRef<SVGSVGElement, IconProps>(({ children, size, ...rest }, ref) => (
   <CUIIcon
     ref={ref}
     size={size}

@@ -1,13 +1,15 @@
 'use client';
 
-import { Link } from '@chakra-ui/next-js';
-import { forwardRef } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-import { Button, ButtonProps } from './Button';
+import { Button, ButtonProps } from '../components/ui/button';
+import { NextLink, NextLinkProps } from './NextLink';
 
-export type ButtonLink = ButtonProps;
-export const ButtonLink = forwardRef<ButtonProps, 'a'>(({ children, ...rest }, ref) => (
-  <Button as={Link} {...rest}>
-    {children}
-  </Button>
-));
+export type ButtonLinkProps = ButtonProps & NextLinkProps;
+export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
+  ({ children, ...buttonProps }, ref) => (
+    <Button asChild {...buttonProps}>
+      <NextLink ref={ref}>{children}</NextLink>
+    </Button>
+  )
+);

@@ -11,6 +11,7 @@ import {
 import { FC } from 'react';
 
 import { Flex } from '../../../../ui/Flex';
+import { Icon } from '../../../../ui/Icon';
 import { DeveloperData } from '../types';
 import { DeveloperStat } from './DeveloperStat';
 
@@ -68,7 +69,7 @@ export const Developers: FC<{ developerData: DeveloperData }> = ({ developerData
         <DeveloperStat
           value={value}
           label={label}
-          icon={icon}
+          icon={icon as typeof Icon}
           flex={['0 0 calc(50% - 20px)', '0 0 calc(50% - 20px)', '0 0 calc(33.33% - 20px)']}
           borderRightWidth={[
             (index + 1) % 2 !== 0 && index < developerStat.length - 1 ? '1px' : '0px',

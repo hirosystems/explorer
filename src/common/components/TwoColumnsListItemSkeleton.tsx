@@ -1,6 +1,4 @@
-import { SkeletonText } from '@chakra-ui/react';
-
-import { SkeletonCircle } from '../../ui/SkeletonCircle';
+import { SkeletonCircle, SkeletonText } from '../../components/ui/skeleton';
 import { TwoColsListItem } from './TwoColumnsListItem';
 
 export function TwoColumnsListItemSkeleton({
@@ -18,22 +16,14 @@ export function TwoColumnsListItemSkeleton({
 }) {
   return (
     <TwoColsListItem
-      icon={icon && <SkeletonCircle width={10} height={10} />}
+      icon={icon && <SkeletonCircle w={10} height={10} />}
       leftContent={{
-        title: leftContentTitle ? (
-          <SkeletonText noOfLines={1} skeletonHeight="1em" width={64} />
-        ) : null,
-        subtitle: leftContentSubtitle ? (
-          <SkeletonText noOfLines={1} skeletonHeight="1em" width={80} />
-        ) : null,
+        title: leftContentTitle ? <SkeletonText noOfLines={1} h="1em" w={64} /> : null,
+        subtitle: leftContentSubtitle ? <SkeletonText noOfLines={1} h="1em" w={80} /> : null,
       }}
       rightContent={{
-        title: rightContentTitle ? (
-          <SkeletonText noOfLines={1} skeletonHeight="1em" width={52} />
-        ) : null,
-        subtitle: rightContentSubtitle ? (
-          <SkeletonText noOfLines={1} skeletonHeight="1em" width={32} />
-        ) : null,
+        title: rightContentTitle ? <SkeletonText noOfLines={1} h="1em" w={52} /> : null,
+        subtitle: rightContentSubtitle ? <SkeletonText noOfLines={1} h="1em" w={32} /> : null,
       }}
     />
   );

@@ -1,4 +1,3 @@
-import { useColorMode, useColorModeValue } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
@@ -8,6 +7,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useCustomNetworkApiInfo } from '../../../common/queries/useCustomNetworkApiInfo';
 import { Network } from '../../../common/types/network';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import { useColorMode, useColorModeValue } from '../../../components/ui/color-mode';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
@@ -97,7 +97,7 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
               py={'1'}
               fontSize={'xs'}
               rounded={'full'}
-              border={'1px'}
+              border="normal"
               borderColor={badgeBorder}
               fontWeight={'medium'}
               ml="8px"
@@ -125,17 +125,20 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
         ) : !!error ? (
           <Caption color={`feedbackError.${colorMode}`}>Offline</Caption>
         ) : isNetworkRemovable ? (
-          <Tooltip label="Remove network">
+          <Tooltip content="Remove network">
             <IconButton
               disabled={isDisabled}
               position="relative"
-              color={`textCaption.${colorMode}`}
-              size={'21px'}
-              icon={<Icon as={Trash} size={4} />}
+              color={'surfaceOpposite'}
+              size={5}
               onClick={() => removeCustomNetwork(network)}
               aria-label={'Remove network'}
-              _hover={{ bg: 'rgba(255, 255, 255, 0.25)' }}
-            />
+              _hover={{ bg: 'whiteAlpha.400' }}
+            >
+              <Icon size={4}>
+                <Trash />
+              </Icon>
+            </IconButton>
           </Tooltip>
         ) : isActive ? (
           <Box as={Check} color={`feedbackSuccess.${colorMode}`} size="18px" />

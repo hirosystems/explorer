@@ -1,5 +1,4 @@
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
-import * as React from 'react';
 
 import { Flex } from '../../ui/Flex';
 import { Icon } from '../../ui/Icon';
@@ -20,12 +19,12 @@ export function NoTxs() {
         justifyContent="center"
         width={'72px'}
         height={'72px'}
-        border={'1px'}
+        border="normal"
         rounded={'full'}
         mb={3}
       >
         <Flex
-          border={'1px'}
+          border="normal"
           borderColor={'transparent'}
           width={'18px'}
           height={'18px'}
@@ -34,15 +33,12 @@ export function NoTxs() {
           justifyContent="center"
           left={'-2px'}
         >
-          <Icon
-            as={MagnifyingGlass}
-            size={6}
-            color="textSubdued"
-            position={'absolute'}
-            top={'-2px'}
-            left={'-2px'}
-          />
-          <Icon as={X} size={2.5} color="textSubdued" margin={'auto'} />
+          <Icon size={6} color="textSubdued" position={'absolute'} top={'-2px'} left={'-2px'}>
+            <MagnifyingGlass />
+          </Icon>
+          <Icon size={2.5} color="textSubdued" margin={'auto'}>
+            <X />
+          </Icon>
         </Flex>
       </Flex>
       <Text fontSize={'md'} color={'text'} mb={2} fontWeight={'medium'} lineHeight={'1.5em'}>

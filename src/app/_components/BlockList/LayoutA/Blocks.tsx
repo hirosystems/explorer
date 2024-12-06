@@ -30,7 +30,9 @@ export function Blocks({
                 txsCount={block.txsCount}
                 icon={
                   isFirstStxBlockInBurnBlock ? (
-                    <Icon as={StxIcon} size={2.5} color={'white'} />
+                    <Icon size={2.5} color={'white'}>
+                      <StxIcon />
+                    </Icon>
                   ) : undefined
                 }
               />

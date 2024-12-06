@@ -1,10 +1,11 @@
 'use client';
 
-import { Menu as CUIMenu, MenuProps as CUIMenuProps, forwardRef } from '@chakra-ui/react';
+import { MenuRoot as CUIMenu, MenuRootProps as CUIMenuProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type MenuProps = CUIMenuProps & UIComponent;
-export const Menu = forwardRef<MenuProps, 'div'>(({ children, ...rest }, ref) => (
+export const Menu = forwardRef<HTMLDivElement, MenuProps>(({ children, ...rest }, ref) => (
   <CUIMenu {...rest}>{children}</CUIMenu>
 ));

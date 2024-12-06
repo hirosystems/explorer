@@ -1,17 +1,17 @@
 'use client';
 
-import { forwardRef } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-import { Input } from '../../../ui/Input';
+import { Input, InputProps } from '../../../ui/Input';
 
-export const DateInput = forwardRef((props, ref) => (
+export const DateInput = forwardRef<HTMLInputElement, InputProps>((inputProps, ref) => (
   <Input
-    sx={{
+    css={{
       '::placeholder': {
         color: 'textSubdued',
       },
     }}
     ref={ref}
-    {...props}
+    {...inputProps}
   />
 ));

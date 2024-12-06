@@ -1,6 +1,5 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
 
@@ -12,6 +11,7 @@ import {
   useSuspenseInfiniteQueryResult,
 } from '../../common/hooks/useInfiniteQueryResult';
 import { truncateMiddle } from '../../common/utils/utils';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Flex } from '../../ui/Flex';
 import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
@@ -56,7 +56,7 @@ export const SignersTableHeader = ({
     py={3}
     px={6}
     border="none"
-    sx={isFirst ? mobileBorderCss : {}}
+    css={isFirst ? mobileBorderCss : {}}
     width="fit-content"
     position={isFirst ? 'sticky' : 'unset'}
     left={0}
@@ -151,7 +151,7 @@ export const SignerTableRow = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss} position={'sticky'} left={0} bg="surface">
+      <Td py={3} px={6} css={mobileBorderCss} position={'sticky'} left={0} bg="surface">
         <Flex
           gap={2}
           alignItems="center"
@@ -174,7 +174,7 @@ export const SignerTableRow = ({
             initialValue={signerKey}
             aria-label={'copy signer key'}
             size={5}
-            sx={{
+            css={{
               opacity: isSignerKeyHovered ? 1 : 0,
               position: 'relative',
               transition: 'opacity 0.4s ease-in-out',

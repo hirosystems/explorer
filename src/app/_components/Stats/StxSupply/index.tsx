@@ -1,5 +1,6 @@
 'use client';
 
+import { FlexProps } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
@@ -7,13 +8,12 @@ import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
 import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
-function StxSupplyBase(props: GridProps) {
+function StxSupplyBase(props: FlexProps) {
   const {
     data: { total_stx, unlocked_stx, total_stx_year_2050 },
   } = useSuspenseStxSupply();
@@ -33,11 +33,13 @@ function StxSupplyBase(props: GridProps) {
           Circulating Supply
           {isMainnet && (
             <Tooltip
-              label={`Year 2050 supply is ~${maxSupplyBy2050Formatted}, STX supply grows approx 0.3% annually thereafter in perpetuity.`}
+              content={`Year 2050 supply is ~${maxSupplyBy2050Formatted}, STX supply grows approx 0.3% annually thereafter in perpetuity.`}
             >
               <Flex alignItems={'center'}>
                 &nbsp;
-                <Icon as={Info} size={4} />
+                <Icon size={4}>
+                  <Info />
+                </Icon>
               </Flex>
             </Tooltip>
           )}
@@ -60,7 +62,7 @@ function StxSupplyBase(props: GridProps) {
   );
 }
 
-export function StxSupply(props: GridProps) {
+export function StxSupply(props: FlexProps) {
   return (
     <ExplorerErrorBoundary
       Wrapper={Box}

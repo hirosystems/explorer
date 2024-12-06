@@ -70,8 +70,9 @@ const CodeEditorBase: FC<{ code: string } & Partial<EditorProps>> = ({
         position={'absolute'}
         bottom={0}
         right={0}
-        icon={<FrameCorners color={'white'} />}
-      ></IconButton>
+      >
+        <FrameCorners color={'white'} />
+      </IconButton>
     </Box>
   );
 };

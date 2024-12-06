@@ -1,6 +1,5 @@
-import { useColorMode } from '@chakra-ui/react';
 import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { TokenLink, TxLink } from '../../../common/components/ExplorerLinks';
 import { numberToString } from '../../../common/utils/utils';
@@ -13,9 +12,8 @@ import { TokenAvatar } from '../../address/[principal]/TokenBalanceCard/TokenAva
 export const TokenRow: FC<{
   ftToken: FtBasicMetadataResponse;
 }> = ({ ftToken }) => {
-  const colorMode = useColorMode().colorMode;
   const name = ftToken.name || 'FT Token';
-  // `${ftToken.contract_principal}::${name}`
+
   return (
     <Tr>
       <Td padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
@@ -37,7 +35,7 @@ export const TokenRow: FC<{
           <TxLink txId={ftToken.tx_id}>{ftToken.tx_id}</TxLink>
         </Text>
       </Td>
-      <Td isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
+      <Td width={'130px'} padding={'10px 16px 10px 20px'}>
         <Text whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'} fontSize={'15px'}>
           {numberToString(ftToken.total_supply ? Number(ftToken.total_supply) : 0)}
         </Text>

@@ -3,10 +3,9 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
+import { Field as ChakraField } from '../../../components/ui/field';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
 import { Stack } from '../../../ui/Stack';
 import { DateInput } from './DateInput';
 
@@ -56,15 +55,16 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
         <Form>
           <Stack gap={4}>
             <Field name="startTime">
-              {({ form }: FieldProps<string, FormValues>) => (
-                <FormControl>
-                  <FormLabel>Between:</FormLabel>
+              {(
+                { form }: FieldProps<string, FormValues> // TODO: upgrade to v3. This may be broken.
+              ) => (
+                <ChakraField label="Between:">
                   <DatePicker
                     selectsRange={true}
                     customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
                     onChange={dateRange => {
                       const [startDate, endDate] = dateRange;
-                      // console.log(startDate, endDate);
+                      console.log(startDate, endDate);
                       const utcStart = startDate
                         ? new UTCDate(
                             startDate.getUTCFullYear(),
@@ -96,7 +96,7 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
                     }
                     dateFormat="yyyy-MM-dd"
                   />
-                </FormControl>
+                </ChakraField>
               )}
             </Field>
           </Stack>

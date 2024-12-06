@@ -1,3 +1,4 @@
+import { useBreakpointValue } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fireEvent, render } from '@testing-library/react';
 
@@ -5,7 +6,6 @@ import { ChainID } from '@stacks/transactions';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { Network, NetworkModes } from '../../../../common/types/network';
-import { useBreakpointValue } from '../../../../ui/hooks/useBreakpointValue';
 import { NetworkLabel } from '../NetworkLabel';
 
 jest.mock('../../../../common/context/useGlobalContext', () => ({

@@ -1,8 +1,9 @@
 'use client';
 
-import { forwardRef } from '@chakra-ui/react';
+import { chakra } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
-import { Box, BoxProps } from './Box';
+import { BoxProps } from './Box';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -10,7 +11,7 @@ interface ChevronPropsBase {
   size: string;
   direction?: Direction;
 }
-type ChevronProps = ChevronPropsBase & Omit<BoxProps, 'direction'>;
+type ChevronProps = ChevronPropsBase & Omit<BoxProps, 'direction'> & React.SVGProps<SVGSVGElement>;
 
 const rotate = (direction: Direction = 'right') => {
   switch (direction) {
@@ -27,11 +28,10 @@ const rotate = (direction: Direction = 'right') => {
   }
 };
 
-export const ChevronIcon = forwardRef<ChevronProps, 'div'>(
+export const ChevronIcon = forwardRef<SVGSVGElement, ChevronProps>(
   ({ direction, size = '16px', style = {}, ...props }, ref) => (
-    <Box
+    <chakra.svg
       ref={ref}
-      as={'svg'}
       width={size}
       height={size}
       viewBox="0 0 16 16"
@@ -42,6 +42,6 @@ export const ChevronIcon = forwardRef<ChevronProps, 'div'>(
         fill="currentColor"
         d="M4.7 7.367l3.3 3.3 3.3-3.3-.943-.943L8 8.78 5.643 6.424l-.943.943z"
       />
-    </Box>
+    </chakra.svg>
   )
 );

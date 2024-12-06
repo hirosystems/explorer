@@ -1,11 +1,8 @@
 'use client';
 
 import { FC, ReactNode } from 'react';
-import * as React from 'react';
 
-import { Box } from '../../../ui/Box';
 import { Flex, FlexProps } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
 import { Text } from '../../../ui/Text';
 
 export const StatSection: FC<

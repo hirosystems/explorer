@@ -3,7 +3,7 @@ import { FungibleConditionCode, PostConditionType } from '@stacks/transactions';
 import { FunctionFormikState } from '../FunctionView';
 import { checkPostConditionParameters } from '../PostConditionForm';
 
-describe('checkPostConditionParameters', () => {
+describe('checkPostConditionParameters', () => { // TODO: fix this test
   it('should return no errors when post condition is not enabled', () => {
     const pcValues: FunctionFormikState = {
       isPostConditionEnabled: false,

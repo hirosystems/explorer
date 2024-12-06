@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode, Suspense, useState } from 'react';
 
 import { Card } from '../../common/components/Card';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Button } from '../../ui/Button';
 import { Flex } from '../../ui/Flex';
@@ -41,9 +41,7 @@ export function ContinentPill({
   return (
     <Button
       borderRadius="full"
-      border="1px"
-      borderStyle="solid"
-      borderColor={isActive ? activeTextColor : 'var(--stacks-colors-borderSecondary)'}
+      border={`1px solid ${isActive ? activeTextColor : 'var(--stacks-colors-border-secondary)'}`}
       backgroundColor={isActive ? activeBackgroundColor : 'surface'}
       onClick={onClick}
     >

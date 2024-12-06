@@ -1,11 +1,11 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Tooltip } from '../../../ui/Tooltip';
 import { useGlobalContext } from '../../context/useGlobalContext';
@@ -51,7 +51,7 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
   }
 
   return (
-    <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
+    <Tooltip content={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
       <Button
         size={'xs'}
         ml={'5px'}

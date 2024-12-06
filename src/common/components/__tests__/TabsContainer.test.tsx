@@ -6,15 +6,18 @@ import { TabsContainer } from '../TabsContainer';
 const tabs = [
   {
     title: 'Tab 1',
+    id: 'tab-1',
     content: 'Tab 1 content',
   },
   {
     title: 'Tab 2',
+    id: 'tab-2',
     content: 'Tab 2 content',
   },
 ];
 
 describe('TabsContainer', () => {
+  // TODO: fix this test
   it('renders tabs with correct title', () => {
     const { getAllByRole } = render(<TabsContainer tabs={tabs} />);
     const tabList = getAllByRole('tab');

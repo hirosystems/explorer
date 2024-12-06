@@ -39,7 +39,7 @@ export function CycleSortFilter({
     <FilterMenu
       filterLabel={() => getSortOptionLabel(cycleSortOrder)}
       menuItems={menuItems}
-      leftIcon={SortDescending}
+      leftIcon={<SortDescending />}
     />
   );
 }

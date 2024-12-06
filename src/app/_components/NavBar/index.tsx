@@ -1,5 +1,6 @@
 'use client';
 
+import { IconButton, useDisclosure } from '@chakra-ui/react';
 import { List, Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
@@ -15,9 +16,6 @@ import { Search } from '../../../features/search/Search';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
-import { IconButton } from '../../../ui/IconButton';
-import { Show } from '../../../ui/Show';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { DesktopNav } from './DesktopNav';
@@ -29,7 +27,7 @@ import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
-  const { isOpen, onToggle } = useDisclosure();
+  const { open, onToggle } = useDisclosure();
   const { networks, activeNetwork } = useGlobalContext();
   const dispatch = useAppDispatch();
 
@@ -79,7 +77,15 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
           {
             id: 'add-network',
             label: (
-              <NavLabel icon={<Icon as={Plus} size={4} color={'text'} />}>Add a network</NavLabel>
+              <NavLabel
+                icon={
+                  <Icon size={4} color={'text'}>
+                    <Plus />
+                  </Icon>
+                }
+              >
+                Add a network
+              </NavLabel>
             ),
             onClick: () => {
               dispatch(openModal(MODALS.ADD_NETWORK));
@@ -93,28 +99,25 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   return (
     <Box width="full">
-      <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
+      <Flex alignItems="center" flex={{ base: 1 }} gap={6} position="relative">
         <Logo color="white" />
         <Search />
-        <Show above="lg">
+        <Flex hideBelow="lg">
           <NetworkModeBanner />
-        </Show>
-        <Show above="lg">
-          <Flex gap={3}>
-            <ColorModeButton aria-label={'Change color mode'} />
-            <DesktopNav navItems={navItems} />
-          </Flex>
+        </Flex>
+        <Flex hideBelow="lg" gap={3}>
+          <ColorModeButton aria-label={'Change color mode'} />
+          <DesktopNav navItems={navItems} />
           <BtcStxPrice tokenPrice={tokenPrice} />
-        </Show>
-        <Show below="lg">
-          <IconButton
-            onClick={onToggle}
-            icon={<Icon as={List} w={6} h={6} color={'white'} />}
-            variant={'ghost'}
-            aria-label={'Toggle Navigation'}
-          />
-          {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
-        </Show>
+        </Flex>
+        <Flex hideFrom="lg">
+          <IconButton onClick={onToggle} variant={'ghost'} aria-label={'Toggle Navigation'}>
+            <Icon w={6} h={6} color={'white'}>
+              <List />
+            </Icon>
+          </IconButton>
+          {open && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
+        </Flex>
       </Flex>
     </Box>
   );

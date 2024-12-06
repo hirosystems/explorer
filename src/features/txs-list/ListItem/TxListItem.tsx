@@ -38,7 +38,15 @@ const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
   <Stack
     as="span"
     direction={['column', 'column', 'row', 'row', 'row']}
-    divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+    separator={
+      <Caption
+        border="none"
+        className="separator"
+        display={['none', 'none', 'inline', 'inline', 'inline']}
+      >
+        ∙
+      </Caption>
+    }
     flexWrap="wrap"
     gap={1.5}
   >
@@ -57,7 +65,11 @@ const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
     <Stack
       as="span"
       direction={['column', 'column', 'row', 'row', 'row']}
-      divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+      separator={
+        <Caption border="none" display={['none', 'none', 'inline', 'inline', 'inline']}>
+          ∙
+        </Caption>
+      }
       flexWrap="wrap"
       gap={1.5}
       alignItems="center"
@@ -81,7 +93,11 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
       as="span"
       gap={1.5}
       direction={['column', 'column', 'row', 'row', 'row']}
-      divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+      separator={
+        <Caption border="none" display={['none', 'none', 'inline', 'inline', 'inline']}>
+          ∙
+        </Caption>
+      }
       flexWrap="wrap"
     >
       {didFail ? (
@@ -92,7 +108,11 @@ const RightSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
         <Stack
           as="span"
           direction={['column', 'column', 'row', 'row', 'row']}
-          divider={<Caption display={['none', 'none', 'inline', 'inline', 'inline']}>∙</Caption>}
+          separator={
+            <Caption border="none" display={['none', 'none', 'inline', 'inline', 'inline']}>
+              ∙
+            </Caption>
+          }
           flexWrap="wrap"
           gap={1.5}
         >

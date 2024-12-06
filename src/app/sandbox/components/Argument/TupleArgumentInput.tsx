@@ -1,12 +1,11 @@
-import React, { FC } from 'react';
+import { Text } from '@chakra-ui/react';
+import { FC } from 'react';
 
 import { ClarityAbiTypeTuple, getTypeString, isClarityAbiOptional } from '@stacks/transactions';
 
 import { Box } from '../../../../ui/Box';
 import { HStack } from '../../../../ui/HStack';
 import { Input } from '../../../../ui/Input';
-import { Stack } from '../../../../ui/Stack';
-import { Text } from '../../../../ui/Text';
 import { Caption } from '../../../../ui/typography';
 import { TupleValueType } from '../../types/values';
 import { CommonArgumentInputProps } from './types';
@@ -30,7 +29,7 @@ export const TupleArgumentInput: FC<
               fontWeight="500"
               display="block"
               as={'label'}
-              htmlFor={name}
+              htmlFor={name} // TODO: upgrade v3. This may be broken. Fix
               mb="8px"
             >
               ({name}): {tupleEntry.name}

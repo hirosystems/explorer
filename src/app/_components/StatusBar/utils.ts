@@ -1,6 +1,9 @@
 import { IncidentImpact } from 'statuspage.io';
 
-export const getColor = (incidentImpact: IncidentImpact, colorMode: string) => {
+export const getColor = (
+  incidentImpact: IncidentImpact,
+  colorMode: string | undefined = 'light'
+) => {
   switch (incidentImpact) {
     case IncidentImpact.Critical:
     case IncidentImpact.Major:

@@ -1,7 +1,6 @@
 'use client';
 
 import { Info } from '@phosphor-icons/react';
-import * as React from 'react';
 import { useMemo } from 'react';
 
 import { Flex } from '../../../../ui/Flex';
@@ -24,14 +23,16 @@ function CurrentStackingCycleBase(props: GridProps) {
         <Text>Next cycle starts in</Text>
         &nbsp;
         <Tooltip
-          label={`Next cycle starts in ${blocksTilNextCycle} block${
+          content={`Next cycle starts in ${blocksTilNextCycle} block${
             blocksTilNextCycle !== 1 ? 's' : ''
           }. Calculation is based on ~10 minutes block time.`}
         >
           <Flex alignItems={'center'}>
             {approximateDaysTilNextCycle} day{approximateDaysTilNextCycle !== 1 ? 's' : ''}
             &nbsp;
-            <Icon as={Info} size={3} />
+            <Icon size={3}>
+              <Info />
+            </Icon>
           </Flex>
         </Tooltip>
       </Flex>

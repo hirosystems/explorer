@@ -1,31 +1,33 @@
-import { useColorMode } from '@chakra-ui/react';
+import { Flex, Menu, Separator } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import React from 'react';
 
+import { useColorMode } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
-import { Menu } from '../../../ui/Menu';
-import { MenuButton } from '../../../ui/MenuButton';
-import { MenuDivider } from '../../../ui/MenuDivider';
-import { MenuList } from '../../../ui/MenuList';
 import { LinksGroup } from './LinksGroup';
 import { TokenLinks } from './types';
 
 export function LinksMenu(props: { links: TokenLinks }) {
   const colorMode = useColorMode().colorMode;
+
   return (
-    <Menu>
-      <MenuButton
+    <Menu.Root>
+      <Menu.Trigger
         as={Button}
         backgroundColor={colorMode === 'light' ? 'white' : 'transparent'}
-        variant={colorMode === 'light' ? undefined : 'outline'}
+        layerStyle={colorMode === 'light' ? undefined : 'outline'} // TODO: v3 upgrade. this might be broken
         color={'textTitle.light'}
-        rightIcon={<Icon as={CaretDown} size="11px" color={'textCaption.light'} />}
         _hover={{ backgroundColor: colorMode === 'light' ? 'white' : 'transparent' }}
       >
-        Links
-      </MenuButton>
-      <MenuList>
+        <Flex alignItems="center" justifyContent="space-between" gap={2}>
+          Links
+          <Icon size="11px" color={'textCaption.light'}>
+            <CaretDown />
+          </Icon>
+        </Flex>
+      </Menu.Trigger>
+      <Menu.Content>
         {[
           { title: 'Websites', links: props.links.websites },
           { title: 'Blockchain', links: props.links.blockchain },
@@ -38,11 +40,11 @@ export function LinksMenu(props: { links: TokenLinks }) {
           <React.Fragment key={group.title}>
             <LinksGroup title={group.title} links={group.links} />
             {group.links.length > 0 && i < arr.length - 1 && arr[i + 1].links.length > 0 && (
-              <MenuDivider />
+              <Separator />
             )}
           </React.Fragment>
         ))}
-      </MenuList>
-    </Menu>
+      </Menu.Content>
+    </Menu.Root>
   );
 }

@@ -1,11 +1,11 @@
 'use client';
 
-import { useColorModeValue } from '@chakra-ui/react';
 import { FC, useMemo } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { ExplorerErrorBoundary } from '../../app/_components/ErrorBoundary';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Flex } from '../../ui/Flex';
 import { useGlobalContext } from '../context/useGlobalContext';
 import { useAppSelector } from '../state/hooks';

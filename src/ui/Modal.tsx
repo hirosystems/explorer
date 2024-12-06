@@ -1,32 +1,38 @@
 'use client';
 
-import {
-  Modal as CUIModal,
-  ModalProps as CUIModalProps,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/react';
+import { DialogRootProps } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { closeModal } from '../common/components/modals/modal-slice';
 import { useAppDispatch } from '../common/state/hooks';
+import {
+  DialogBackdrop,
+  DialogBody,
+  DialogCloseTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogRoot,
+  DialogTitle,
+  DialogTrigger,
+} from '../components/ui/dialog';
 import { Button } from './Button';
 
-export type ModalProps = Omit<CUIModalProps, 'onClose'> & {
-  title: string;
+export type ModalProps = Omit<DialogRootProps, 'children'> & {
+  title: React.ReactNode;
+  body: React.ReactNode;
+  trigger?: React.ReactNode;
   primaryAction?: { label: string; onClick: () => void };
   secondaryAction?: { label: string; onClick: () => void };
   onClose?: () => void;
 };
 export const Modal: FC<ModalProps> = ({
-  children,
+  open,
+  title,
+  body,
+  trigger,
   primaryAction,
   secondaryAction,
-  title,
   ...rest
 }) => {
   const dispatch = useAppDispatch();
@@ -34,14 +40,19 @@ export const Modal: FC<ModalProps> = ({
     dispatch(closeModal());
   };
   return (
-    <CUIModal onClose={onClose} {...rest}>
-      <ModalOverlay />
-      <ModalContent pb={'var(--stacks-space-4)'}>
-        {title && <ModalHeader>{title}</ModalHeader>}
-        <ModalCloseButton />
-        <ModalBody>{children}</ModalBody>
+    <DialogRoot open={open} closeOnInteractOutside={true} {...rest}>
+      {trigger && <DialogTrigger>{trigger}</DialogTrigger>}
+      <DialogBackdrop />
+      <DialogContent>
+        {title && (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogCloseTrigger onClick={onClose} />
+          </DialogHeader>
+        )}
+        <DialogBody>{body}</DialogBody>
         {!!primaryAction || !!secondaryAction ? (
-          <ModalFooter>
+          <DialogFooter>
             {primaryAction && (
               <Button colorScheme="blue" mr={3} onClick={primaryAction.onClick}>
                 {primaryAction.label}
@@ -52,9 +63,9 @@ export const Modal: FC<ModalProps> = ({
                 {secondaryAction.label}
               </Button>
             )}
-          </ModalFooter>
+          </DialogFooter>
         ) : null}
-      </ModalContent>
-    </CUIModal>
+      </DialogContent>
+    </DialogRoot>
   );
 };

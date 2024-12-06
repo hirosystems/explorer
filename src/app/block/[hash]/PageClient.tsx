@@ -1,6 +1,6 @@
 'use client';
 
-import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
+import { Dialog, useDisclosure } from '@chakra-ui/react';
 import { Question, X } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
 
@@ -17,7 +17,6 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
 import { Text } from '../../../ui/Text';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 import { PageTitle } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { BlockBtcAnchorBlockCard } from './BlockBtcAnchorBlockCard';
@@ -37,7 +36,8 @@ const BlockTxsList = dynamic(
 export default function BlockPage({ params: { hash } }: any) {
   const { data: block } = useSuspenseBlockByHeightOrHash(hash);
   const title = (block && `STX Block #${block.height.toLocaleString()}`) || '';
-  const { isOpen, onToggle, onClose } = useDisclosure();
+  const { open, onToggle } = useDisclosure();
+
   return (
     <>
       <PageTitle>{title}</PageTitle>
@@ -70,24 +70,25 @@ export default function BlockPage({ params: { hash } }: any) {
                   value={
                     <Flex gap={2}>
                       <Value>False</Value>
-                      <Icon as={Question} size={4} color="iconSubdued" onClick={onToggle} />
-                      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-                        <ModalOverlay />
-                        <ModalContent>
+                      <Icon size={4} color="iconSubdued" onClick={onToggle}>
+                        <Question />
+                      </Icon>
+                      <Dialog.Root open={open} placement="center">
+                        <Dialog.Backdrop />
+                        <Dialog.Content>
                           <Flex flexDirection="column" p={6} gap={4}>
                             <Flex justifyContent="space-between">
                               <Flex gap={2} alignItems="center">
-                                <Icon
-                                  as={Question}
-                                  size={6}
-                                  color="iconSubdued"
-                                  onClick={onToggle}
-                                />
+                                <Icon size={6} color="iconSubdued" onClick={onToggle}>
+                                  <Question />
+                                </Icon>
                                 <Text fontSize={20} fontWeight="medium">
                                   Non-Canonical Blocks
                                 </Text>
                               </Flex>
-                              <Icon as={X} size={6} color="iconSubdued" onClick={onToggle} />
+                              <Icon size={6} color="iconSubdued" onClick={onToggle}>
+                                <X />
+                              </Icon>
                             </Flex>
                             <Box>
                               <Stack gap={5}>
@@ -108,8 +109,8 @@ export default function BlockPage({ params: { hash } }: any) {
                               </Stack>
                             </Box>
                           </Flex>
-                        </ModalContent>
-                      </Modal>
+                        </Dialog.Content>
+                      </Dialog.Root>
                     </Flex>
                   }
                 />

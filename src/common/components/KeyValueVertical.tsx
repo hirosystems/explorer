@@ -46,12 +46,7 @@ export const KeyValueVertical: FC<KeyValueVerticalProps> = ({
         <Text fontSize="xs">{value}</Text>
         {copyValue && (
           <Box width={8}>
-            <CopyButton
-              className={'fancy-copy'}
-              initialValue={copyValue}
-              aria-label={'copy row'}
-              size={'40px'}
-            />
+            <CopyButton className={'fancy-copy'} initialValue={copyValue} aria-label={'copy row'} />
           </Box>
         )}
       </Flex>

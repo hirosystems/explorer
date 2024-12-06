@@ -1,6 +1,6 @@
 'use client';
 
-import { useBreakpointValue } from '@/ui/hooks/useBreakpointValue';
+import { useBreakpointValue } from '@chakra-ui/react';
 import { useParams } from 'next/navigation';
 import { ReactNode } from 'react';
 

@@ -27,6 +27,12 @@ const nextConfig = {
       },
     ];
   },
+  experimental: {
+    optimizePackageImports: ['@chakra-ui/react'],
+  },
+  images: {
+    domains: ['assets.hiro.so'],
+  },
 };
 
 module.exports = withSentryConfig(withBundleAnalyzer(nextConfig), {

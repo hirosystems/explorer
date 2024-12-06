@@ -34,7 +34,9 @@ export function ErrorBox({
       padding="10px"
       {...flexProps}
     >
-      <Icon as={XCircle} size={6} />
+      <Icon size={6}>
+        <XCircle />
+      </Icon>
       <Flex direction={'column'} alignItems={'center'} gap={'4px'}>
         <Text color={`error`} fontSize={14}>
           {errorName}

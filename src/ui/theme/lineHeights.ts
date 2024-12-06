@@ -10,21 +10,21 @@
 // };
 
 export const CURRENT_LINEHEIGHTS = {
-  base: 1.15,
+  base: { value: 1.15 },
 };
 
 export const NEW_LINEHEIGHTS = {
-  normal: 'normal', // default
-  none: '1', // default
-  tighter: '1.15', // custom
-  tight: '1.2', // custom
-  shorter: '1.25', // default
-  snug: '1.3', // custom
-  short: '1.375', // default
-  medium: '1.4', // custom
-  base: '1.5', // default
-  tall: '1.625', // default
-  taller: '2', // default
+  normal: { value: 'normal' }, // default
+  none: { value: '1' }, // default
+  tighter: { value: '1.15' }, // custom
+  tight: { value: '1.2' }, // custom
+  shorter: { value: '1.25' }, // default
+  snug: { value: '1.3' }, // custom
+  short: { value: '1.375' }, // default
+  medium: { value: '1.4' }, // custom
+  base: { value: '1.5' }, // default
+  tall: { value: '1.625' }, // default
+  taller: { value: '2' }, // default
 };
 
 export const LINEHEIGHTS = {

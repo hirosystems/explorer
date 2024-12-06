@@ -1,16 +1,15 @@
 import { FC } from 'react';
 
 import { numberToString } from '../../../../common/utils/utils';
-import { Flex } from '../../../../ui/Flex';
-import { GridProps } from '../../../../ui/Grid';
+import { Flex, FlexProps } from '../../../../ui/Flex';
 import { StatSection } from '../../../_components/Stats/StatSection';
 
 export const Supply: FC<
-  GridProps & {
+  FlexProps & {
     circulatingSupply: number | null | undefined;
     totalSupply: number | null | undefined;
   }
-> = ({ circulatingSupply, totalSupply, ...gridProps }) => {
+> = ({ circulatingSupply, totalSupply, ...flexProps }) => {
   return (
     <StatSection
       title="Circulating Supply"
@@ -21,7 +20,7 @@ export const Supply: FC<
           Total Supply: {totalSupply ? numberToString(totalSupply) : 'N/A'}
         </Flex>
       }
-      {...gridProps}
+      {...flexProps}
     />
   );
 };

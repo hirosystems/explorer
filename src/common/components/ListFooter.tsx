@@ -29,7 +29,10 @@ export const ListFooter: React.FC<SectionFooterButtonPropsBase> = ({
       <Box {...rest} width={'full'}>
         <ExplorerLink href={href} mt={'auto'} width={'full'}>
           <Button variant={'secondary'} width={'full'}>
-            View all recent {label} <Icon as={ArrowUpRight} size={4} />
+            View all recent {label}
+            <Icon size={4}>
+              <ArrowUpRight />
+            </Icon>
           </Button>
         </ExplorerLink>
       </Box>

@@ -1,24 +1,14 @@
-import { useClipboard } from '@chakra-ui/react';
-import { CopySimple } from '@phosphor-icons/react';
-import { FC, memo } from 'react';
+import { IconButtonProps } from '@chakra-ui/react';
 
-import { IconButton, IconButtonProps } from '../../ui/IconButton';
-import { Tooltip } from '../../ui/Tooltip';
+import { ClipboardIconButton, ClipboardRoot } from '../../components/ui/clipboard';
 
-export const CopyButton: FC<IconButtonProps & { initialValue: string }> = memo(
-  ({ initialValue, ...rest }) => {
-    const { onCopy, hasCopied } = useClipboard(initialValue);
-    return (
-      <Tooltip label={hasCopied ? 'Copied!' : 'Copy to clipboard'}>
-        <IconButton
-          icon={<CopySimple strokeWidth={1.75} size={'20px'} />}
-          onClick={onCopy}
-          height={'auto'}
-          _focus={{ background: 'none' }}
-          _hover={{ background: 'bg4' }}
-          {...rest}
-        />
-      </Tooltip>
-    );
-  }
-);
+export const CopyButton = ({
+  initialValue,
+  ...rest
+}: { initialValue: string } & IconButtonProps) => {
+  return (
+    <ClipboardRoot value={initialValue} timeout={750}>
+      <ClipboardIconButton bg="transparent" h={5} w={5} {...rest} />
+    </ClipboardRoot>
+  );
+};

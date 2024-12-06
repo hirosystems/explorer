@@ -18,7 +18,9 @@ export const Recipient: FC<{ tx: TokenTransferTransaction | MempoolTokenTransfer
     label={'Recipient'}
     value={
       <HStack>
-        <Icon as={ArrowDownRight} size={4} />
+        <Icon size={4}>
+          <ArrowDownRight />
+        </Icon>
         <ExplorerLink
           fontSize={'14px'}
           fontWeight={'medium'}

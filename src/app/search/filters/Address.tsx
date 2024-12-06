@@ -1,21 +1,16 @@
+import { Flex, Stack, Text } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowUpRight, CaretDown } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 import { truncateMiddle } from '../../../common/utils/utils';
+import { Field as ChakraField } from '../../../components/ui/field';
+import { PopoverContent, PopoverRoot, PopoverTrigger } from '../../../components/ui/popover';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { ExpandingTextarea } from '../../../ui/ExpandingTextarea';
-import { Flex } from '../../../ui/Flex';
-import { FormControl } from '../../../ui/FormControl';
-import { FormLabel } from '../../../ui/FormLabel';
 import { Icon } from '../../../ui/Icon';
-import { Popover } from '../../../ui/Popover';
-import { PopoverContent } from '../../../ui/PopoverContent';
-import { PopoverTrigger } from '../../../ui/PopoverTrigger';
-import { Stack } from '../../../ui/Stack';
-import { Text } from '../../../ui/Text';
-import { useDisclosure } from '../../../ui/hooks/useDisclosure';
 
 interface AddressFilterProps {
   defaultFromAddress?: string;
@@ -35,17 +30,25 @@ export function AddressFilter({
     fromAddress: defaultFromAddress,
     toAddress: defaultToAddress,
   };
+  const [open, setOpen] = useState(false);
 
-  const { onOpen, onClose, isOpen } = useDisclosure();
   const searchParams = useSearchParams();
   const router = useRouter();
   return (
-    <Popover placement={'bottom-start'} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
+    <PopoverRoot
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={e => setOpen(e.open)}
+    >
       <PopoverTrigger>
         <Button
-          variant={'secondary'}
+          variant="secondary"
           fontSize={'sm'}
-          rightIcon={<Icon as={CaretDown} style={{ strokeWidth: '2px' }} />}
+          rightIcon={
+            <Icon size={3.5} style={{ strokeWidth: '2px' }}>
+              <CaretDown />
+            </Icon>
+          }
           height={9}
           color={'textSubdued'}
         >
@@ -59,7 +62,9 @@ export function AddressFilter({
             )}
             {!!defaultFromAddress && (
               <Flex alignItems={'center'} color={'text'}>
-                <Icon as={ArrowDownRight} size={3} />
+                <Icon size={3}>
+                  <ArrowDownRight />
+                </Icon>
                 <Text>
                   {defaultFromAddress.length > 10
                     ? truncateMiddle(defaultFromAddress, 3)
@@ -74,7 +79,9 @@ export function AddressFilter({
             )}
             {!!defaultToAddress && (
               <Flex alignItems={'center'} color={'text'}>
-                <Icon as={ArrowUpRight} size={3} />
+                <Icon size={3}>
+                  <ArrowUpRight />
+                </Icon>
                 <Text>
                   {defaultToAddress.length > 10
                     ? truncateMiddle(defaultToAddress, 3)
@@ -86,7 +93,7 @@ export function AddressFilter({
         </Button>
       </PopoverTrigger>
       <PopoverContent maxWidth={'275px'} bgColor={'surface'}>
-        <Flex direction={'column'} gap={2} p={4}>
+        <Stack gap={2} p={4}>
           <Formik
             enableReinitialize
             validateOnChange={false}
@@ -105,55 +112,63 @@ export function AddressFilter({
                 params.set('toAddress', toAddress);
               }
               router.push(`?${params.toString()}`, { scroll: false });
-              onClose();
+              setOpen(false);
             }}
           >
             {({ isValidating }) => (
               <Form>
                 <Stack gap={4}>
                   <Field name="fromAddress">
-                    {({ field, form }: FieldProps<string, FormValues>) => (
-                      <FormControl>
-                        <FormLabel>From:</FormLabel>
+                    {(
+                      { field, form }: FieldProps<string, FormValues> // TODO: upgrade to v3. This may be broken
+                    ) => (
+                      <ChakraField
+                        invalid={!!form.errors.fromAddress}
+                        errorText={form.errors.fromAddress}
+                        label="From:"
+                      >
                         <ExpandingTextarea
-                          {...field}
+                          {...field} // TODO: upgrade to v3. This may be broken
                           placeholder="STX Address"
                           fontSize={'sm'}
-                          sx={{
+                          css={{
                             '::placeholder': {
                               color: 'textSubdued',
                             },
                           }}
                         />
-                      </FormControl>
+                      </ChakraField>
                     )}
                   </Field>
                   <Field name="toAddress">
                     {({ field, form }: FieldProps<string, FormValues>) => (
-                      <FormControl>
-                        <FormLabel>To:</FormLabel>
+                      <ChakraField
+                        invalid={!!form.errors.toAddress}
+                        errorText={form.errors.toAddress}
+                        label="To:"
+                      >
                         <ExpandingTextarea
-                          {...field}
+                          {...field} // TODO: upgrade to v3. This may be broken
                           placeholder="STX Address"
                           fontSize={'sm'}
-                          sx={{
+                          css={{
                             '::placeholder': {
                               color: 'textSubdued',
                             },
                           }}
                         />
-                      </FormControl>
+                      </ChakraField>
                     )}
                   </Field>
                 </Stack>
-                <Box mt={'16px'}>
+                <Box mt={4}>
                   <Button
                     isLoading={isValidating}
                     width="100%"
                     type="submit"
                     fontSize={'sm'}
                     variant={'secondary'}
-                    height={'40px'}
+                    height={10}
                     color="textSubdued"
                   >
                     Apply
@@ -162,8 +177,8 @@ export function AddressFilter({
               </Form>
             )}
           </Formik>
-        </Flex>
+        </Stack>
       </PopoverContent>
-    </Popover>
+    </PopoverRoot>
   );
 }

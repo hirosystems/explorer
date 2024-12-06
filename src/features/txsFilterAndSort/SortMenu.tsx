@@ -69,7 +69,9 @@ export function MempoolTxsSortMenu() {
     [setMempoolTxsActiveSort, setMempoolTxsActiveOrder]
   );
 
-  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={SortDescending} />;
+  return (
+    <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={<SortDescending />} />
+  );
 }
 
 export function ConfirmedTxsSortMenu() {
@@ -99,5 +101,7 @@ export function ConfirmedTxsSortMenu() {
     [setConfirmedTxsActiveSort, setConfirmedTxsActiveOrder]
   );
 
-  return <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={SortDescending} />;
+  return (
+    <FilterMenu filterLabel={filterLabel} menuItems={menuItems} leftIcon={<SortDescending />} />
+  );
 }

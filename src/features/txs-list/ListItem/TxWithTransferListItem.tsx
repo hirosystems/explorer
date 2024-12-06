@@ -12,10 +12,11 @@ import { AddressArea } from '../../../common/components/transaction-item';
 import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { useAddressTransactionEventsInfinite } from '../../../common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { getAssetNameParts, microToStacksFormatted } from '../../../common/utils/utils';
-import { AccordionButton } from '../../../ui/AccordionButton';
-import { AccordionIcon } from '../../../ui/AccordionIcon';
-import { AccordionItem } from '../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../ui/AccordionPanel';
+import {
+  AccordionItem,
+  AccordionItemContent,
+  AccordionItemTrigger,
+} from '../../../components/ui/accordion';
 import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
@@ -42,7 +43,7 @@ const LeftSubtitle: FC<{
     gap={1}
     alignItems="center"
     flexWrap="wrap"
-    divider={<Caption>∙</Caption>}
+    separator={<Caption border="none">∙</Caption>}
   >
     <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
     {!!transferCount && (
@@ -142,41 +143,40 @@ export const TxWithTransferListItem: FC<TxWithTransferListItemProps> = ({
   const burnCount = (events?.ft?.burn || 0) + (events?.nft?.burn || 0) + (events?.stx?.burn || 0);
   const eventsCount = transferCount + mintCount + burnCount;
   return (
-    <AccordionItem border={'none'} borderBottom={'1px'} _last={{ borderBottom: 'unset' }}>
-      {({ isExpanded }) => (
-        <>
-          <Flex gap={1.5}>
-            <TxListItem
+    <AccordionItem
+      border={'none'}
+      borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
+      _last={{ borderBottom: 'unset' }}
+      value={tx.tx_id}
+    >
+      <Flex gap={1.5}>
+        <TxListItem
+          tx={tx}
+          key={`txs-list-item-${tx.tx_id}`}
+          leftSubtitle={
+            <LeftSubtitle
               tx={tx}
-              key={`txs-list-item-${tx.tx_id}`}
-              leftSubtitle={
-                <LeftSubtitle
-                  tx={tx}
-                  transferCount={transferCount}
-                  mintCount={mintCount}
-                  burnCount={burnCount}
-                />
-              }
-              borderBottom={'none'}
+              transferCount={transferCount}
+              mintCount={mintCount}
+              burnCount={burnCount}
             />
-            {eventsCount > 0 ? (
-              <AccordionButton
-                flexGrow={0}
-                flexShrink={0}
-                width={8}
-                ml={'auto'}
-                p={0}
-                justifyContent={'center'}
-              >
-                <AccordionIcon />
-              </AccordionButton>
-            ) : null}
-          </Flex>
-          <AccordionPanel p={0}>
-            {isExpanded && <TxEvents address={address} txId={tx.tx_id} />}
-          </AccordionPanel>
-        </>
-      )}
+          }
+          borderBottom={'none'}
+        />
+        {eventsCount > 0 ? (
+          <AccordionItemTrigger
+            flexGrow={0}
+            flexShrink={0}
+            width={8}
+            ml={'auto'}
+            p={0}
+            justifyContent={'center'}
+          />
+        ) : null}
+      </Flex>
+      <AccordionItemContent p={0}>
+        <TxEvents address={address} txId={tx.tx_id} />
+      </AccordionItemContent>
     </AccordionItem>
   );
 };

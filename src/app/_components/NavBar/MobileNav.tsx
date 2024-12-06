@@ -1,4 +1,4 @@
-import { Divider } from '@chakra-ui/react';
+import { Separator } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
 import { useEffect } from 'react';
 
@@ -9,8 +9,10 @@ import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
+import { ColorModeButton2 } from './ColorModeButton2';
 import { LabelWrapper } from './LabelWrapper';
 import { Logo } from './Logo';
+import { NavLabel } from './NavLabel';
 import { NavItem } from './types';
 
 export function MobileNav({
@@ -26,7 +28,10 @@ export function MobileNav({
     event.preventDefault();
   };
 
-  const explorerNavItems = navItems.find(navItem => navItem.id === 'explore')?.children;
+  const exploreNavItems = navItems.find(navItem => navItem.id === 'explore')?.children;
+  const sandboxNavItem = navItems.find(navItem => navItem.id === 'sandbox');
+  sandboxNavItem && (sandboxNavItem.label = <NavLabel>Sandbox</NavLabel>);
+  const nonNetworkNavItems = exploreNavItems?.concat(sandboxNavItem ?? []);
   const networkNavItems = navItems.find(navItem => navItem.id === 'network')?.children;
 
   // Disable scrolling when the menu is open
@@ -56,37 +61,41 @@ export function MobileNav({
       overflow="scroll"
     >
       <Flex justifyContent={'space-between'} alignItems={'center'} height={10}>
-        <Logo />
-        <IconButton onClick={close} icon={<Icon as={X} size={6} />} aria-label={'Close menu'} />
+        <Logo color="surfaceOpposite" />
+        <IconButton onClick={close} aria-label={'Close menu'}>
+          <Icon size={6} color="surfaceOpposite">
+            <X />
+          </Icon>
+        </IconButton>
       </Flex>
       <Flex justifyContent={'space-between'}>
         <Flex gap={3}>
-          <ColorModeButton
+          <ColorModeButton2
+            colorMode="light"
             aria-label={'Change color mode'}
             color="invert"
             borderWidth={'1px'}
-            colorModeOverride="light"
             borderRadius="xl"
           />
-          <ColorModeButton
+          <ColorModeButton2
+            colorMode="dark"
             aria-label={'Change color mode'}
             color="invert"
             borderWidth={'1px'}
-            colorModeOverride="dark"
             borderRadius="xl"
           />
         </Flex>
         <BtcStxPrice tokenPrice={tokenPrice} />
       </Flex>
-      <Stack divider={<Divider borderColor="border" />}>
-        {explorerNavItems?.map((navItem, i) => (
+      <Stack separator={<Separator borderColor="border" />}>
+        {nonNetworkNavItems?.map((navItem, i) => (
           <>
             <LabelWrapper {...navItem} />
-            {i === explorerNavItems.length - 1 && <Divider borderColor="border" />}
+            {i === nonNetworkNavItems.length - 1 && <Separator borderColor="border" />}
           </>
         ))}
       </Stack>
-      <Stack spacing={3}>{networkNavItems?.map(navItem => <LabelWrapper {...navItem} />)}</Stack>
+      <Stack gap={3}>{networkNavItems?.map(navItem => <LabelWrapper {...navItem} />)}</Stack>
     </Stack>
   );
 }

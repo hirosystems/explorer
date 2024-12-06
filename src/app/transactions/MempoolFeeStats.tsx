@@ -1,4 +1,4 @@
-import { StackDivider, VStack, useColorModeValue } from '@chakra-ui/react';
+import { StackSeparator, VStack } from '@chakra-ui/react';
 import {
   CaretCircleDoubleUp,
   CaretCircleDown,
@@ -16,6 +16,7 @@ import { useSuspenseMempoolFee } from '../../common/queries/useMempoolFee';
 import { useSuspenseMempoolTransactionStats } from '../../common/queries/useMempoolTxStats';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { MICROSTACKS_IN_STACKS, capitalize, getUsdValue } from '../../common/utils/utils';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
@@ -33,13 +34,29 @@ import {
 export const getFeePriorityIcon = (priority: keyof MempoolFeePriorities['all']) => {
   switch (priority) {
     case 'no_priority':
-      return <Icon as={MinusCircle} size={4} color="slate.600" />;
+      return (
+        <Icon size={4} color="slate.600">
+          <MinusCircle />
+        </Icon>
+      );
     case 'low_priority':
-      return <Icon as={CaretCircleDown} size={4} color="red.600" />;
+      return (
+        <Icon size={4} color="red.600">
+          <CaretCircleDown />
+        </Icon>
+      );
     case 'medium_priority':
-      return <Icon as={CaretCircleUp} size={4} color="orange.600" />;
+      return (
+        <Icon size={4} color="orange.600">
+          <CaretCircleUp />
+        </Icon>
+      );
     case 'high_priority':
-      return <Icon as={CaretCircleDoubleUp} size={4} color="green.600" />;
+      return (
+        <Icon size={4} color="green.600">
+          <CaretCircleDoubleUp />
+        </Icon>
+      );
     default:
       throw new Error('Invalid priority');
   }
@@ -78,8 +95,8 @@ function MempoolFeePriorityCard({
         </Text>
       </Flex>
       <VStack
-        divider={<StackDivider borderColor={borderColor} />}
-        spacing={4}
+        separator={<StackSeparator borderColor={borderColor} />}
+        gap={4}
         alignItems="flex-start"
       >
         <Box>
@@ -102,12 +119,14 @@ function MempoolFeePriorityCard({
         {isTxTypeFiltered ? null : (
           <VStack gap={3} alignItems="flex-start">
             <Tooltip
-              label={`Token transfer tx fee: ${
+              content={`Token transfer tx fee: ${
                 mempoolFeeTokenTransfer / MICROSTACKS_IN_STACKS
               } STX`}
             >
               <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
-                <Icon as={getTxTypeIcon('token_transfer')} size={3.5} mr={2} />
+                <Icon size={3.5} mr={2}>
+                  {getTxTypeIcon('token_transfer')}
+                </Icon>
                 <Box
                   fontSize="12px"
                   style={{ fontVariantNumeric: 'tabular-nums' }}
@@ -119,10 +138,14 @@ function MempoolFeePriorityCard({
               </Flex>
             </Tooltip>
             <Tooltip
-              label={`Contract call tx fee: ${mempoolFeeContractCall / MICROSTACKS_IN_STACKS} STX`}
+              content={`Contract call tx fee: ${
+                mempoolFeeContractCall / MICROSTACKS_IN_STACKS
+              } STX`}
             >
               <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
-                <Icon as={getTxTypeIcon('contract_call')} size={3.5} mr={2} />
+                <Icon size={3.5} mr={2}>
+                  {getTxTypeIcon('contract_call')}
+                </Icon>
                 <Box
                   fontSize="12px"
                   style={{ fontVariantNumeric: 'tabular-nums' }}
@@ -134,12 +157,14 @@ function MempoolFeePriorityCard({
               </Flex>
             </Tooltip>
             <Tooltip
-              label={`Smart contract tx fee: ${
+              content={`Smart contract tx fee: ${
                 mempoolFeeSmartContract / MICROSTACKS_IN_STACKS
               } STX`}
             >
               <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} color="textSubdued">
-                <Icon as={getTxTypeIcon('smart_contract')} size={3.5} mr={2} />
+                <Icon size={3.5} mr={2}>
+                  {getTxTypeIcon('smart_contract')}
+                </Icon>
                 <Box
                   fontSize="12px"
                   style={{ fontVariantNumeric: 'tabular-nums' }}
@@ -211,12 +236,12 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
           borderRight={[
             'none',
             'none',
-            '1px solid var(--stacks-colors-borderPrimary)',
-            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
           ]}
           borderBottom={[
-            '1px solid var(--stacks-colors-borderPrimary)',
-            '1px solid var(--stacks-colors-borderPrimary)',
+            '1px solid var(--stacks-colors-border-primary)',
+            '1px solid var(--stacks-colors-border-primary)',
             'none',
             'none',
           ]}
@@ -255,7 +280,9 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
               return (
                 <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
                   <Box size="9px" borderRadius="50%" mr={2} backgroundColor={bg} />
-                  <Icon as={icon} size={3.5} mr={2} color={textColor} />
+                  <Icon size={3.5} mr={2} color={textColor}>
+                    {icon}
+                  </Icon>
                   <Text suppressHydrationWarning color={textColor} fontSize="12px">
                     {text ? `${value} ${text}` : null}
                   </Text>

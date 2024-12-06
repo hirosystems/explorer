@@ -1,6 +1,6 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Text, TextProps } from '../../ui/Text';
 
 export function ListHeader({ children, ...textProps }: { children: ReactNode } & TextProps) {

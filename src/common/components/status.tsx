@@ -59,7 +59,7 @@ export const TxStatusLabel: React.FC<StatusProps> = ({ status, ...rest }) => {
   const label = labelMap[status];
   return (
     <StyledBadge>
-      <Icon as={IconComponent} size={3} />
+      <Icon size={3}>{IconComponent}</Icon>
       {label}
     </StyledBadge>
   );

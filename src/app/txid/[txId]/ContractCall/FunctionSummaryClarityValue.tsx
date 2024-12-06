@@ -43,9 +43,9 @@ const TupleResult = ({ tuple, isPoxAddr, btc }: any) => {
     additional = (
       <Box display="block" as="span">
         <Caption mb="4px">BTC address (converted)</Caption>
-        <Text target="_blank" as={TextLink} href={`${btcAddressBaseUrl}/${btc}`}>
+        <TextLink target="_blank" href={`${btcAddressBaseUrl}/${btc}`}>
           {btc}
-        </Text>
+        </TextLink>
       </Box>
     );
   }

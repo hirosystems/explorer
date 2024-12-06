@@ -1,12 +1,12 @@
-import { useBreakpointValue, useColorModeValue } from '@chakra-ui/react';
+import { useBreakpointValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import L, { LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MapContainer, Marker, TileLayer, useMap, useMapEvent } from 'react-leaflet';
 
+import { useColorMode, useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 import { Continent } from './SignersMapComponent';
 
 const INITIAL_VIEW = {
