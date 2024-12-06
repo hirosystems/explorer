@@ -20,19 +20,19 @@ import { TextLink } from '../../../ui/TextLink';
 export function NakamotoModal() {
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    const nakamotoModalShown = localStorage.getItem('nakamoto3MainnetModalShown');
-    try {
-      const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
-      // to run performance testing without the modal
-      if (dismissQueryParam === 'nakamoto') {
-        return;
-      }
-    } catch (e) {}
-    if (!nakamotoModalShown || nakamotoModalShown === 'false') {
-      setIsOpen(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const nakamotoModalShown = localStorage.getItem('nakamoto3MainnetModalShown');
+  //   try {
+  //     const dismissQueryParam = new URLSearchParams(window.location.search).get('dismiss');
+  //     // to run performance testing without the modal
+  //     if (dismissQueryParam === 'nakamoto') {
+  //       return;
+  //     }
+  //   } catch (e) {}
+  //   if (!nakamotoModalShown || nakamotoModalShown === 'false') {
+  //     setIsOpen(true);
+  //   }
+  // }, []);
 
   const handleClose = () => {
     localStorage.setItem('nakamoto3MainnetModalShown', 'true');
