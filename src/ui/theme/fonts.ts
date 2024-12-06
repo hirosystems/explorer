@@ -1,4 +1,5 @@
-export const FONTS = { // TODO: this might not work
+export const FONTS = {
+  // TODO: this might not work
   body: { value: 'Inter, sans-serif' },
   //   body: inter.style.fontFamily,
   heading: { value: 'Open Sauce, sans-serif' },

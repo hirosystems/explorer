@@ -40,11 +40,7 @@ export const Modal: FC<ModalProps> = ({
     dispatch(closeModal());
   };
   return (
-    <DialogRoot
-      open={open}
-      closeOnInteractOutside={true}
-      {...rest}
-    >
+    <DialogRoot open={open} closeOnInteractOutside={true} {...rest}>
       {trigger && <DialogTrigger>{trigger}</DialogTrigger>}
       <DialogBackdrop />
       <DialogContent>

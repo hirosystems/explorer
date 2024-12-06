@@ -1,5 +1,6 @@
 'use client';
 
+import { Group } from '@chakra-ui/react';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 
 import { Section } from '../../common/components/Section';
@@ -9,7 +10,6 @@ import { Icon } from '../../ui/Icon';
 import { PageTitle } from '../_components/PageTitle';
 import { TokensPageLayout } from './PageClient';
 import { TokenTableSkeleton } from './TokensList/TokenTableSkeleton';
-import { Group } from '@chakra-ui/react';
 
 export default function TokensPageSkeleton() {
   const colorMode = useColorMode().colorMode;
@@ -25,11 +25,11 @@ export default function TokensPageSkeleton() {
           minWidth={0}
           topRight={
             <Group
-              // endElement={ // TODO: fix this
-              //   <Icon color={`textCaption.${colorMode}`} pointerEvents="none">
-              //     <MagnifyingGlass />
-              //   </Icon>
-              // }
+            // endElement={ // TODO: fix this
+            //   <Icon color={`textCaption.${colorMode}`} pointerEvents="none">
+            //     <MagnifyingGlass />
+            //   </Icon>
+            // }
             >
               <Skeleton width={'200px'} height={'40px'} />
             </Group>

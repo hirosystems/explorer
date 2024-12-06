@@ -212,7 +212,10 @@ export function BurnBlockGroupGrid({
               isLast={i === stxBlocksToDisplay.length - 1 && numStxBlocksNotDisplayed <= 0}
             />
             {i < stxBlocksToDisplay.length - 1 && (
-              <Box gridColumn={'1/5'} borderBottom={'1px solid var(--stacks-colors-border-secondary)'}></Box>
+              <Box
+                gridColumn={'1/5'}
+                borderBottom={'1px solid var(--stacks-colors-border-secondary)'}
+              ></Box>
             )}
           </React.Fragment>
         ))}

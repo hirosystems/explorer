@@ -42,7 +42,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         as="span"
         gap={1.5}
         direction={['column', 'column', 'row', 'row', 'row']}
-        separator={<Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">∙</Caption>}
+        separator={
+          <Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">
+            ∙
+          </Caption>
+        }
         flexWrap="nowrap"
       >
         <Caption fontWeight="semibold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
@@ -62,7 +66,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
       <Stack
         as="span"
         direction={['column', 'column', 'row', 'row', 'row']}
-        separator={<Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">∙</Caption>}
+        separator={
+          <Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">
+            ∙
+          </Caption>
+        }
         flexWrap="wrap"
         gap={1.5}
       >
@@ -79,7 +87,11 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         as="span"
         gap={1.5}
         direction={['column', 'column', 'row', 'row', 'row']}
-        separator={<Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">∙</Caption>}
+        separator={
+          <Caption display={['none', 'none', 'inline', 'inline', 'inline']} border="none">
+            ∙
+          </Caption>
+        }
         flexWrap="wrap"
       >
         {didFail ? (

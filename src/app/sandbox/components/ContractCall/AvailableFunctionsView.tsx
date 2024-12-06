@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/react';
+import { ArrowRight } from '@phosphor-icons/react';
 import { FC, forwardRef } from 'react';
 
 import { Badge } from '../../../../common/components/Badge';
@@ -13,7 +14,6 @@ import { Icon } from '../../../../ui/Icon';
 import { Text } from '../../../../ui/Text';
 import FunctionReadOnlyIcon from '../../../../ui/icons/FunctionReadOnly';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
-import { ArrowRight } from '@phosphor-icons/react';
 
 export const AbiFunction = forwardRef<
   HTMLDivElement,

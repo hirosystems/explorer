@@ -1,5 +1,6 @@
 'use client';
 
+import { Box } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
@@ -9,7 +10,6 @@ import { useAppSelector } from '../../common/state/hooks';
 import { NetworkMode } from '../../common/types/network';
 import { Text } from '../../ui/Text';
 import { selectUserSession } from '../sandbox/sandbox-slice';
-import { Box } from '@chakra-ui/react';
 
 export const AppConfig: React.FC<{
   queryNetworkMode: NetworkMode;

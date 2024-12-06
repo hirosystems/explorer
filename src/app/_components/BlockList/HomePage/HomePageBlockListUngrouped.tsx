@@ -5,10 +5,10 @@ import { Suspense, useMemo } from 'react';
 
 import { ListFooter } from '../../../../common/components/ListFooter';
 import { useBlockListContext } from '../BlockListContext';
+import { BlockListUngrouped } from '../Ungrouped/BlockListUngrouped';
 import { HomePageBlockListUngroupedSkeleton } from '../Ungrouped/skeleton';
 import { UpdateBar } from '../UpdateBar';
 import { useHomePageBlockList } from '../data/useHomePageBlockList';
-import { BlockListUngrouped } from '../Ungrouped/BlockListUngrouped';
 
 function HomePageBlockListUngroupedBase() {
   const { liveUpdates } = useBlockListContext();

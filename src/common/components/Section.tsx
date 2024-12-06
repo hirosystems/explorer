@@ -1,8 +1,8 @@
 'use client';
 
-import { useColorModeValue } from '../../components/ui/color-mode';
 import { ReactNode } from 'react';
 
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { Text } from '../../ui/Text';

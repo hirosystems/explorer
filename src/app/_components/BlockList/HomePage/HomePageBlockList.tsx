@@ -45,7 +45,14 @@ export function HomePageControlsLayout({
   children: ReactNode;
 }) {
   return (
-    <Stack gap={3} pb={6} marginX={-6} px={6} py={5} borderBottom={liveUpdates ? '1px solid var(--stacks-colors-border-secondary)' : 'none'}>
+    <Stack
+      gap={3}
+      pb={6}
+      marginX={-6}
+      px={6}
+      py={5}
+      borderBottom={liveUpdates ? '1px solid var(--stacks-colors-border-secondary)' : 'none'}
+    >
       {children}
     </Stack>
   );

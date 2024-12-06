@@ -192,12 +192,7 @@ export function CurrentCycleCardBase() {
           </Box>
         </Stack>
       </Flex>
-      <Text
-        fontSize={'xs'}
-        whiteSpace="nowrap"
-        fontWeight="medium"
-        color="textSubdued"
-      >
+      <Text fontSize={'xs'} whiteSpace="nowrap" fontWeight="medium" color="textSubdued">
         {`Started ~${approximateDaysSinceCurrentCycleStart} ${pluralize(
           'day',
           approximateDaysSinceCurrentCycleStart

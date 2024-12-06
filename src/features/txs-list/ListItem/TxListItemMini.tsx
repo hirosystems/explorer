@@ -26,7 +26,13 @@ const LeftTitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
 ));
 
 const LeftSubtitle: FC<{ tx: Transaction }> = memo(({ tx }) => (
-  <HStack as="span" gap="4px" alignItems="center" flexWrap="wrap" separator={<Caption border="none">∙</Caption>}>
+  <HStack
+    as="span"
+    gap="4px"
+    alignItems="center"
+    flexWrap="wrap"
+    separator={<Caption border="none">∙</Caption>}
+  >
     <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>
     <AddressArea tx={tx} />
   </HStack>

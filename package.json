@@ -25,8 +25,8 @@
   "version": "1.0.0",
   "author": "Hiro Systems PBC (formerly Blockstack PBC)",
   "dependencies": {
-    "@chakra-ui/anatomy": "2.2.2",
-    "@chakra-ui/react": "latest",
+    "@chakra-ui/anatomy": "2.3.4",
+    "@chakra-ui/react": "3.2.3",
     "@chakra-ui/theme-tools": "2.1.2",
     "@contentful/rich-text-react-renderer": "15.21.2",
     "@contentful/rich-text-types": "16.5.2",

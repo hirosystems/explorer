@@ -5,6 +5,7 @@ import React, { FC } from 'react';
 import { useGlobalContext } from '../../../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../../../common/utils/buildUrl';
 import { onPaste, validateStacksAddress } from '../../../../../common/utils/utils';
+import { useColorMode } from '../../../../../components/ui/color-mode';
 import { Box } from '../../../../../ui/Box';
 import { Button } from '../../../../../ui/Button';
 import { Flex } from '../../../../../ui/Flex';
@@ -12,7 +13,6 @@ import { Input } from '../../../../../ui/Input';
 import { Stack } from '../../../../../ui/Stack';
 import { TextLink } from '../../../../../ui/TextLink';
 import { Caption, Text, Title } from '../../../../../ui/typography';
-import { useColorMode } from '../../../../../components/ui/color-mode';
 
 export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
   rootContractAddress,

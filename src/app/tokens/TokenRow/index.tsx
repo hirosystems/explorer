@@ -35,7 +35,7 @@ export const TokenRow: FC<{
           <TxLink txId={ftToken.tx_id}>{ftToken.tx_id}</TxLink>
         </Text>
       </Td>
-      <Td  width={'130px'} padding={'10px 16px 10px 20px'}>
+      <Td width={'130px'} padding={'10px 16px 10px 20px'}>
         <Text whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'} fontSize={'15px'}>
           {numberToString(ftToken.total_supply ? Number(ftToken.total_supply) : 0)}
         </Text>

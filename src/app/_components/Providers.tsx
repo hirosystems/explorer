@@ -55,7 +55,7 @@ export const Providers = ({
     >
       <CookiesProvider>
         <ChakraProvider value={system}>
-          <ColorModeProvider forcedTheme={'light'} defaultTheme="light">
+          <ColorModeProvider>
             <ReduxProvider store={store}>
               <AppConfig // TODO: rename to something else like SessionProvider
                 queryNetworkMode={queryNetworkMode}

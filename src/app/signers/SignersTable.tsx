@@ -2,7 +2,6 @@
 
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
-import { useColorModeValue } from '../../components/ui/color-mode';
 
 import { CopyButton } from '../../common/components/CopyButton';
 import { ExplorerLink } from '../../common/components/ExplorerLinks';
@@ -12,6 +11,7 @@ import {
   useSuspenseInfiniteQueryResult,
 } from '../../common/hooks/useInfiniteQueryResult';
 import { truncateMiddle } from '../../common/utils/utils';
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Flex } from '../../ui/Flex';
 import { Table } from '../../ui/Table';
 import { Tbody } from '../../ui/Tbody';
@@ -24,6 +24,7 @@ import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseCurrentStackingCycle } from '../_components/Stats/CurrentStackingCycle/useCurrentStackingCycle';
 import { CycleFilter } from './CycleFilter';
+import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { SortByVotingPowerFilter, VotingPowerSortOrder } from './SortByVotingPowerFilter';
 import { mobileBorderCss } from './consts';
 import {
@@ -32,7 +33,6 @@ import {
 } from './data/signer-metrics-hooks';
 import { PoxSigner, useSuspensePoxSigners } from './data/useSigners';
 import { SignersTableSkeleton } from './skeleton';
-import { removeStackingDaoFromName } from './SignerDistributionLegend';
 import { getSignerKeyName } from './utils';
 
 const StyledTable = styled(Table)`
@@ -52,10 +52,16 @@ export const SignersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-
-  <Th py={3} px={6} border="none" css={isFirst ? mobileBorderCss : {}} width="fit-content" position={isFirst ? 'sticky' : 'unset'}
+  <Th
+    py={3}
+    px={6}
+    border="none"
+    css={isFirst ? mobileBorderCss : {}}
+    width="fit-content"
+    position={isFirst ? 'sticky' : 'unset'}
     left={0}
-    bg="surface">
+    bg="surface"
+  >
     <Flex
       bg="hoverBackground"
       px={2.5}

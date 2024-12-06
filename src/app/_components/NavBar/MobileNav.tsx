@@ -9,11 +9,11 @@ import { IconButton } from '../../../ui/IconButton';
 import { Stack } from '../../../ui/Stack';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
+import { ColorModeButton2 } from './ColorModeButton2';
 import { LabelWrapper } from './LabelWrapper';
 import { Logo } from './Logo';
 import { NavLabel } from './NavLabel';
 import { NavItem } from './types';
-import { ColorModeButton2 } from './ColorModeButton2';
 
 export function MobileNav({
   tokenPrice,

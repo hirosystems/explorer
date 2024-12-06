@@ -20,7 +20,12 @@ const MessageBase = ({
 }) => {
   return (
     <Flex alignItems={'center'} flexDirection="column" p={8}>
-      <Box size={'72px'} borderRadius="50%" border={`1px solid var(--stacks-colors-border-secondary)`} mb={5}>
+      <Box
+        size={'72px'}
+        borderRadius="50%"
+        border={`1px solid var(--stacks-colors-border-secondary)`}
+        mb={5}
+      >
         <Flex
           justifyContent="center"
           alignItems="center"

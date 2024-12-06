@@ -179,7 +179,8 @@ export function UpdateBarSkeleton() {
 }
 
 export function BlocksPageBlockListSkeleton() {
-  return ( // TODO: fix this loading state
+  return (
+    // TODO: fix this loading state
     <BlocksPageBlockListLayout>
       <BlocksPageControlsSkeleton horizontal />
       <UpdateBarSkeleton />

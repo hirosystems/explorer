@@ -34,7 +34,6 @@ export function BlocksPageLayout({
 }
 
 const BlocksPage: NextPage = () => {
-  return <BlocksPageSkeleton />;
   return (
     <BlocksPageLayout
       title={<PageTitle>Recent blocks</PageTitle>}

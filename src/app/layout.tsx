@@ -3,7 +3,6 @@ import { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
-import { IS_BROWSER } from '../common/constants/constants';
 import { meta } from '../common/constants/meta';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
@@ -29,7 +28,8 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const statusBarContent = await getStatusBarContent();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={IS_BROWSER ? '' : themeCookie}>
+      {/* <body className={IS_BROWSER ? '' : themeCookie}> */}
+      <body>
         <Providers
           themeCookie={themeCookie}
           addedCustomNetworksCookie={addedCustomNetworksCookie}

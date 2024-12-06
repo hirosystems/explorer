@@ -1,19 +1,19 @@
 'use client';
 
+import { Box } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import * as React from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useColorMode } from '../../components/ui/color-mode';
-import { Tooltip } from '../../ui/tooltip';
 import { Flex, FlexProps } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
+import { Tooltip } from '../../ui/tooltip';
 import { Caption, TextProps } from '../../ui/typography';
 import { toRelativeTime, truncateMiddle } from '../utils/utils';
 import { ExplorerLink } from './ExplorerLinks';
-import { Box } from '@chakra-ui/react';
 
 export interface TxItemProps extends FlexProps {
   tx: Transaction | MempoolTransaction;

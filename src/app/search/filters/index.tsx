@@ -1,3 +1,4 @@
+import { Stack } from '@chakra-ui/react';
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
@@ -8,7 +9,6 @@ import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
 import { AddressFilter } from './Address';
 import { DateFilter } from './Date';
-import { Stack } from '@chakra-ui/react';
 
 export interface FilterProps {
   filters: Record<string, string | undefined>;

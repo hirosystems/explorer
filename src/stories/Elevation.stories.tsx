@@ -11,32 +11,6 @@ const ElevationDemo = () => {
       <Text fontSize="2xl" fontWeight="bold">
         Elevation Showcase
       </Text>
-      {/* <Stack gap={8} p={4}>
-        <Text fontSize="2xl" fontWeight="bold">
-          Chakra UI Default Elevations
-        </Text>
-        {Object.entries(system._config.theme?.tokens?.shadows ?? {}).map(([elevationName, elevationValue]) => {
-          if (customShadows.includes(elevationName)) return null;
-          console.log('elevationName', elevationName, 'elevationValue', elevationValue);
-          return (
-            <Flex key={elevationName} align="center" gap={4}>
-              <Box
-                width="200px"
-                height="100px"
-                bg={colorMode === 'light' ? 'white' : 'gray.800'}
-                boxShadow={elevationValue.default}
-                borderRadius="md"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Text color="black">{elevationName}</Text>
-              </Box>
-              <Text>{elevationValue.default}</Text>
-            </Flex>
-          );
-        })}
-      </Stack> */}
       <Stack gap={8} p={4}>
         <Text fontSize="2xl" fontWeight="bold">
           Custom Elevations

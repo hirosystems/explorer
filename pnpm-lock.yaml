@@ -13,10 +13,10 @@ overrides:
 
 dependencies:
   '@chakra-ui/anatomy':
-    specifier: 2.2.2
-    version: 2.2.2
+    specifier: 2.3.4
+    version: 2.3.4
   '@chakra-ui/react':
-    specifier: latest
+    specifier: ^3.2.3
     version: 3.2.3(@emotion/react@11.13.3)(react-dom@18.2.0)(react@18.2.0)
   '@chakra-ui/theme-tools':
     specifier: 2.1.2
@@ -2324,6 +2324,10 @@ packages:
 
   /@chakra-ui/anatomy@2.2.2:
     resolution: {integrity: sha512-MV6D4VLRIHr4PkW4zMyqfrNS1mPlCTiCXwvYGtDFQYr+xHFfonhAuf9WjsSc0nyp2m0OdkSLnzmVKkZFLo25Tg==}
+    dev: false
+
+  /@chakra-ui/anatomy@2.3.4:
+    resolution: {integrity: sha512-fFIYN7L276gw0Q7/ikMMlZxP7mvnjRaWJ7f3Jsf9VtDOi6eAYIBRrhQe6+SZ0PGmoOkRaBc7gSE5oeIbgFFyrw==}
     dev: false
 
   /@chakra-ui/cli@3.1.0(@chakra-ui/react@3.2.3):

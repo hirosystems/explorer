@@ -155,7 +155,8 @@ export function SignersDistributionPieChart({
       .map(signer => ({
         name: getSignerKeyName(signer.signing_key),
         value: signer.weight_percent,
-      })).sort((a, b) => a.value - b.value);
+      }))
+      .sort((a, b) => a.value - b.value);
     const unknownSignersWithPercentageGreaterThanThreshold = signers
       .filter(
         signer =>
@@ -165,7 +166,8 @@ export function SignersDistributionPieChart({
       .map(signer => ({
         name: 'Other signer',
         value: signer.weight_percent,
-      })).sort((a, b) => a.value - b.value);
+      }))
+      .sort((a, b) => a.value - b.value);
 
     let signersData = knownSignersWithPercentageGreaterThanThreshold;
 

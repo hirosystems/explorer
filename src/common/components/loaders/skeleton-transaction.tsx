@@ -1,8 +1,8 @@
 'use client';
 
 import { PageTitle } from '../../../app/_components/PageTitle';
-import { SkeletonCircle } from '../../../components/ui/skeleton';
 import { useColorModeValue } from '../../../components/ui/color-mode';
+import { SkeletonCircle } from '../../../components/ui/skeleton';
 import { SkeletonTxsList } from '../../../features/txs-list/SkeletonTxsList';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';

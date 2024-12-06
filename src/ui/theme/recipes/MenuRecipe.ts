@@ -4,7 +4,22 @@ import { defineSlotRecipe } from '@chakra-ui/react';
 
 export const menuSlotRecipe = defineSlotRecipe({
   className: 'menu',
-  slots: ['item', 'itemIndicator', 'content', 'positioner', 'separator', 'indicator', 'trigger', 'itemGroup', 'arrow', 'arrowTip', 'contextTrigger', 'itemGroupLabel', 'itemText', 'triggerItem'],
+  slots: [
+    'item',
+    'itemIndicator',
+    'content',
+    'positioner',
+    'separator',
+    'indicator',
+    'trigger',
+    'itemGroup',
+    'arrow',
+    'arrowTip',
+    'contextTrigger',
+    'itemGroupLabel',
+    'itemText',
+    'triggerItem',
+  ],
   base: {
     trigger: {
       display: 'inline-flex',

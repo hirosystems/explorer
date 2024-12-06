@@ -4,11 +4,11 @@ import { Flex, Text } from '@chakra-ui/react';
 import { ArrowBendDownRight, FunnelSimple } from '@phosphor-icons/react';
 import { ReactNode, memo, useCallback, useMemo, useState } from 'react';
 
-import { Button } from '../../ui/Button';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { Checkbox } from '../../components/ui/checkbox';
 import { useColorModeValue } from '../../components/ui/color-mode';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../../components/ui/menu';
+import { Button } from '../../ui/Button';
 import { HStack } from '../../ui/HStack';
 import { Icon } from '../../ui/Icon';
 import ClarityIcon from '../../ui/icons/ClarityIcon';

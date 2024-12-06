@@ -1,9 +1,9 @@
+import { Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Flex } from '../../ui/Flex';
 import { HStack } from '../../ui/HStack';
 import { Heading, HeadingProps } from '../../ui/Heading';
-import { Stack } from '@chakra-ui/react';
 
 export function PageTitle({ children, ...props }: { children: ReactNode } & HeadingProps) {
   return (

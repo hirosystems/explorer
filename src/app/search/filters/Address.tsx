@@ -2,6 +2,7 @@ import { Flex, Stack, Text } from '@chakra-ui/react';
 import { ArrowDownRight, ArrowUpRight, CaretDown } from '@phosphor-icons/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 import { truncateMiddle } from '../../../common/utils/utils';
 import { Field as ChakraField } from '../../../components/ui/field';
@@ -10,8 +11,6 @@ import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
 import { ExpandingTextarea } from '../../../ui/ExpandingTextarea';
 import { Icon } from '../../../ui/Icon';
-import { useState } from 'react';
-
 
 interface AddressFilterProps {
   defaultFromAddress?: string;
@@ -36,7 +35,11 @@ export function AddressFilter({
   const searchParams = useSearchParams();
   const router = useRouter();
   return (
-    <PopoverRoot positioning={{ placement: 'bottom-start' }} open={open} onOpenChange={(e) => setOpen(e.open)}>
+    <PopoverRoot
+      positioning={{ placement: 'bottom-start' }}
+      open={open}
+      onOpenChange={e => setOpen(e.open)}
+    >
       <PopoverTrigger>
         <Button
           variant="secondary"

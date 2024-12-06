@@ -225,7 +225,12 @@ const Item: FC<{ event: TransactionEvent }> = ({ event }) => {
         title: name,
         subtitle: (
           <>
-            <HStack flexWrap="wrap" alignItems="center" gap={1} separator={<Caption border="none">∙</Caption>}>
+            <HStack
+              flexWrap="wrap"
+              alignItems="center"
+              gap={1}
+              separator={<Caption border="none">∙</Caption>}
+            >
               {assetEventType ? <Caption fontWeight={'semibold'}>{assetEventType}</Caption> : null}
               {assetAmounts && (
                 <Caption>

@@ -39,7 +39,7 @@ const Header = ({ headerTitle, isFirst }: { headerTitle: string; isFirst: boolea
     py={3}
     px={6}
     border="none"
-    sx={isFirst ? mobileBorderCss : {}}
+    css={isFirst ? mobileBorderCss : {}}
     width="fit-content"
     position={isFirst ? 'sticky' : 'unset'}
     left={0}
@@ -112,7 +112,7 @@ const Row = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss} position={'sticky'} left={0} bg="surface">
+      <Td py={3} px={6} css={mobileBorderCss} position={'sticky'} left={0} bg="surface">
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {cycleid}
         </Text>

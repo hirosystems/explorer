@@ -1,6 +1,6 @@
 'use client';
 
-import { chakra, HTMLChakraProps } from '@chakra-ui/react';
+import { HTMLChakraProps, chakra } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
 export const ExclamationMarkCircleIcon = forwardRef<SVGSVGElement, HTMLChakraProps<'svg'>>(

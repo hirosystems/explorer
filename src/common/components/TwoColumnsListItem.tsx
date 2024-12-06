@@ -66,7 +66,7 @@ const TwoColsListItemLargeScreen = ({
       <Flex hideBelow="lg" width="fit-content">
         {icon && <Box>{icon}</Box>}
       </Flex>
-      <Stack gap={2} overflow="hidden" w='full'>
+      <Stack gap={2} overflow="hidden" w="full">
         <Flex width="full" minWidth="0" justifyContent="space-between" flexWrap="wrap" gap={2}>
           {leftContent?.title && (
             <Text alignItems="center" gap={1.5} fontSize="sm" fontWeight="semibold" display="flex">

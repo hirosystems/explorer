@@ -1,5 +1,6 @@
 'use client';
 
+import { Box, Flex, Stack, Text } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { Form, Formik, FormikErrors } from 'formik';
@@ -21,13 +22,9 @@ import { Section } from '../../../../common/components/Section';
 import { CONNECT_AUTH_ORIGIN } from '../../../../common/constants/env';
 import { useStacksNetwork } from '../../../../common/hooks/useStacksNetwork';
 import { showFn } from '../../../../common/utils/sandbox';
-import { Box } from '../../../../ui/Box';
+import { Switch } from '../../../../components/ui/switch';
 import { Button } from '../../../../ui/Button';
-import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
-import { Stack } from '../../../../ui/Stack';
-import { Switch } from '../../../../ui/Switch';
-import { Text } from '../../../../ui/Text';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { ListValueType, NonTupleValueType, TupleValueType, ValueType } from '../../types/values';
 import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '../../utils';

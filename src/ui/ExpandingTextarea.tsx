@@ -2,9 +2,9 @@
 
 import { Textarea, TextareaProps, chakra } from '@chakra-ui/react';
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
-import AutoResize from "react-textarea-autosize"
+import AutoResize from 'react-textarea-autosize';
 
-const StyledAutoResize = chakra(AutoResize)
+const StyledAutoResize = chakra(AutoResize);
 
 export type ExpandingTextareaProps = TextareaProps;
 
@@ -25,7 +25,8 @@ export const ExpandingTextarea = forwardRef<HTMLTextAreaElement, ExpandingTextar
     //   return () => clearTimeout(timer);
     // }, [value, adjustHeight]);
 
-    return ( // TODO: fix this 
+    return (
+      // TODO: fix this
       <StyledAutoResize
         // ref={ref || textareaRef}
         width="100%"
@@ -34,10 +35,11 @@ export const ExpandingTextarea = forwardRef<HTMLTextAreaElement, ExpandingTextar
         resize={'none'}
         px={3}
         lineHeight="inherit"
-        css={{  // Add this separate prop
+        css={{
+          // Add this separate prop
           '&::placeholder': {
             textAlign: 'center',
-          }
+          },
         }}
         value={value}
         // h="auto"

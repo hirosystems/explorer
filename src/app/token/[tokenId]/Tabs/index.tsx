@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { TabsContainer } from '../../../../common/components/TabsContainer';
 import { useSuspenseContractById } from '../../../../common/queries/useContractById';

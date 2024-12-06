@@ -4,8 +4,8 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
-import { Field as ChakraField } from '../../../components/ui/field';
 import { Button } from '../../../components/ui/button';
+import { Field as ChakraField } from '../../../components/ui/field';
 import { DateInput } from './DateInput';
 
 interface FormValues {
@@ -45,9 +45,7 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
         <Form>
           <Stack gap={4}>
             <Field name="endTime">
-              {(
-                { field, form }: FieldProps<string, FormValues> 
-              ) => (
+              {({ field, form }: FieldProps<string, FormValues>) => (
                 <ChakraField label="Before:">
                   <DatePicker
                     customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}

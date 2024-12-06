@@ -11,7 +11,7 @@ export function AlertBase({
 }) {
   return (
     <Alert.Root status={status} rounded={'lg'}>
-      <Alert.Indicator/>
+      <Alert.Indicator />
       <Alert.Description fontSize={'sm'}>{message}</Alert.Description>
     </Alert.Root>
   );

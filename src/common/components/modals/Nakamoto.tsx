@@ -61,7 +61,11 @@ export function NakamotoModal() {
             >
               Experience Fast Blocks and Bitcoin Finality
             </ButtonLink>
-            <Dialog.Footer borderTop={`1px solid var(--stacks-colors-border-secondary)`} width={'full'} justifyContent={'center'}>
+            <Dialog.Footer
+              borderTop={`1px solid var(--stacks-colors-border-secondary)`}
+              width={'full'}
+              justifyContent={'center'}
+            >
               <Flex alignItems="center" gap={1}>
                 <TextLink
                   color="accent.stacks-500"
