@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalOverlay } from '@chakra-ui/react';
+import { Dialog, useDisclosure } from '@chakra-ui/react';
 import { Question, X } from '@phosphor-icons/react';
 
 import { Box } from '../../ui/Box';
@@ -8,10 +8,9 @@ import { Link } from '../../ui/Link';
 import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
-import { useDisclosure } from '../../ui/hooks/useDisclosure';
 
 export function SignerDistributionHeader({ signerTitle }: { signerTitle: string }) {
-  const { isOpen, onToggle, onClose } = useDisclosure();
+  const { open, onToggle } = useDisclosure();
 
   return (
     <Flex direction="row" height="auto" alignItems="center">
@@ -19,21 +18,27 @@ export function SignerDistributionHeader({ signerTitle }: { signerTitle: string 
         <Text fontSize="xs" fontWeight="semibold">
           {signerTitle}
         </Text>
-        <Tooltip label="What's a Signer?">
-          <Icon as={Question} size={4} color="iconSubdued" onClick={onToggle} />
+        <Tooltip content="What's a Signer?">
+          <Icon size={4} color="iconSubdued" onClick={onToggle}>
+            <Question />
+          </Icon>
         </Tooltip>
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
-          <ModalOverlay />
-          <ModalContent>
+        <Dialog.Root open={open} placement="center">
+          <Dialog.Backdrop />
+          <Dialog.Content>
             <Flex flexDirection="column" p={6} gap={4}>
               <Flex justifyContent="space-between">
                 <Flex gap={2} alignItems="center">
-                  <Icon as={Question} size={6} color="iconSubdued" onClick={onToggle} />
+                  <Icon size={6} color="iconSubdued" onClick={onToggle}>
+                    <Question />
+                  </Icon>
                   <Text fontSize={20} fontWeight="medium">
                     What's a Signer?
                   </Text>
                 </Flex>
-                <Icon as={X} size={6} color="iconSubdued" onClick={onToggle} />
+                <Icon size={6} color="iconSubdued" onClick={onToggle}>
+                  <X />
+                </Icon>
               </Flex>
               <Box>
                 <Stack gap={10}>
@@ -70,8 +75,8 @@ export function SignerDistributionHeader({ signerTitle }: { signerTitle: string 
                 </Stack>
               </Box>
             </Flex>
-          </ModalContent>
-        </Modal>
+          </Dialog.Content>
+        </Dialog.Root>
       </Flex>
     </Flex>
   );

@@ -5,7 +5,7 @@ import { Stack } from '../../ui/Stack';
 import { Text } from '../../ui/Text';
 
 const TextStyleDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Text Styles</Heading>
 
     <Text textStyle="text-regular-xs">
@@ -84,7 +84,7 @@ export const TextStyles: Story = {
       source: {
         code: `
 const TextStyleDemo = () => (
-  <Stack align="stretch" spacing={4}>
+  <Stack align="stretch" gap={4}>
     <Heading size="md">Text Styles</Heading>
     
     <Text textStyle="text-regular-xs">text-regular-xs: The quick brown fox jumps over the lazy dog</Text>

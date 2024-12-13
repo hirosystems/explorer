@@ -1,6 +1,7 @@
+import { Text } from '@chakra-ui/react';
 import { X } from '@phosphor-icons/react';
 import { FieldArray } from 'formik';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { ClarityAbiTypeList } from '@stacks/transactions';
 
@@ -8,7 +9,6 @@ import { Box } from '../../../../ui/Box';
 import { Button } from '../../../../ui/Button';
 import { Flex } from '../../../../ui/Flex';
 import { Icon } from '../../../../ui/Icon';
-import { Text } from '../../../../ui/Text';
 import { ListValueType } from '../../types/values';
 import { getTuple } from '../../utils';
 import { Argument } from './index';
@@ -41,7 +41,7 @@ export const ListArgumentInput: FC<
             fontWeight="500"
             display="block"
             as={'label'}
-            htmlFor={name}
+            htmlFor={name} // TODO: upgrade to v3. this may be broken
             mb="8px"
           >
             {name}
@@ -55,13 +55,9 @@ export const ListArgumentInput: FC<
                 error={error}
                 value={listItemValue}
               />
-              <Icon
-                as={X}
-                size={3}
-                mt={'14px'}
-                style={{ cursor: 'pointer' }}
-                onClick={() => remove(i)}
-              />
+              <Icon size={3} mt={'14px'} style={{ cursor: 'pointer' }} onClick={() => remove(i)}>
+                <X />
+              </Icon>
             </Flex>
           ))}
           <Button

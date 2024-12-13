@@ -1,12 +1,13 @@
 import { Circle } from '@phosphor-icons/react';
 import React from 'react';
 
+import { SkeletonText } from '../../../../components/ui/skeleton';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Icon } from '../../../../ui/Icon';
-import { SkeletonText } from '../../../../ui/SkeletonText';
 import { Stack } from '../../../../ui/Stack';
+import { Caption } from '../../../../ui/typography';
 import { BlockListGridHeaderRowSkeleton } from '../Grouped/skeleton';
 import { LineAndNode } from '../LineAndNode';
 import { BtcBlockRowLayout, StxBlocksGridLayout } from './BlockListUngrouped';
@@ -20,7 +21,11 @@ export function BlockListRowSkeleton({
   isLast?: boolean;
   isFirst?: boolean;
 }) {
-  const icon = isFirst ? <Icon as={Circle} size={2.5} fill="borderPrimary" /> : null;
+  const icon = isFirst ? (
+    <Icon size={2.5} fill="borderPrimary">
+      <Circle />
+    </Icon>
+  ) : null;
   return minimized ? (
     <>
       <Flex alignItems="center" gridColumn="1 / 2" gap={2}>
@@ -29,7 +34,7 @@ export function BlockListRowSkeleton({
       </Flex>
 
       <HStack
-        divider={<>&nbsp;∙&nbsp;</>}
+        separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
         gap={1}
         whiteSpace="nowrap"
         color="textSubdued"
@@ -81,7 +86,10 @@ export function StxBlocksGridSkeleton({
               isFirst={i === 0}
             />
             {i < numBlocks - 1 && (
-              <Box gridColumn={'1/5'} borderBottom={'1px'} borderColor="borderSecondary"></Box>
+              <Box
+                gridColumn={'1/5'}
+                borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
+              ></Box>
             )}
           </React.Fragment>
         ))}

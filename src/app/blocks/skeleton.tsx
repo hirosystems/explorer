@@ -1,13 +1,13 @@
 'use client';
 
 import { BlocksPageBlockListSkeleton } from '../_components/BlockList/Grouped/skeleton';
+import { PageTitle } from '../_components/PageTitle';
 import { BlocksPageLayout } from './PageClient';
 
 export default function BlocksPageSkeleton() {
   return (
     <BlocksPageLayout
-      title="Recent Blocks"
-      blocksPageHeaders={null}
+      title={<PageTitle>Recent Blocks</PageTitle>}
       blocksList={<BlocksPageBlockListSkeleton />}
     />
   );

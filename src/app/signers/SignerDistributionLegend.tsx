@@ -1,10 +1,10 @@
 import { ReactNode, useMemo } from 'react';
 
+import { useColorMode } from '../../components/ui/color-mode';
 import { Box } from '../../ui/Box';
 import { Flex } from '../../ui/Flex';
 import { Stack } from '../../ui/Stack';
 import { Text, TextProps } from '../../ui/Text';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 import { getSignerDistributionPieChartColor } from './SignerDistributionPieChart';
 import { PoxSigner } from './data/useSigners';
 import { getSignerKeyName } from './utils';
@@ -19,7 +19,7 @@ export function SignerLegendItem({
   signerVotingPower: number | ReactNode;
   isKnownSigner?: boolean;
 } & TextProps) {
-  const colorMode = useColorMode();
+  const { colorMode } = useColorMode();
   return (
     <Flex justifyContent="space-between" gap={2}>
       <Flex direction="row" gap={2} alignItems="center">
@@ -32,7 +32,8 @@ export function SignerLegendItem({
               ? getSignerDistributionPieChartColor(
                   isKnownSigner,
                   signerVotingPower,
-                  colorMode.colorMode
+                  colorMode || 'light',
+                  false
                 )
               : 'textSubdued'
           }

@@ -1,5 +1,4 @@
 import { usePathname, useRouter } from 'next/navigation';
-import * as React from 'react';
 import { useEffect } from 'react';
 
 import { Section } from '../../../common/components/Section';
@@ -14,7 +13,7 @@ import {
 } from '../../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../../common/state/hooks';
 import { Network } from '../../../common/types/network';
-import { FoundResult, SearchResultType } from '../../../common/types/search-results';
+import { SearchResultType } from '../../../common/types/search-results';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Box } from '../../../ui/Box';
 import { ButtonLink } from '../../../ui/ButtonLink';

@@ -1,18 +1,15 @@
 'use client';
 
-import {
-  ListProps as CUIListProps,
-  UnorderedList as CUIUnorderedList,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+import { ListRoot as CUIList, ListRootProps as CUIListProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
 export type UnorderedListProps = CUIListProps & UIComponent;
-export const UnorderedList = forwardRef<UnorderedListProps, 'ul'>(
+export const UnorderedList = forwardRef<HTMLUListElement, UnorderedListProps>(
   ({ children, size, ...rest }, ref) => (
-    <CUIUnorderedList
+    <CUIList
+      as="ul"
       ref={ref}
       width={size || rest.width}
       height={size || rest.height}
@@ -21,6 +18,6 @@ export const UnorderedList = forwardRef<UnorderedListProps, 'ul'>(
       {...rest}
     >
       {children}
-    </CUIUnorderedList>
+    </CUIList>
   )
 );

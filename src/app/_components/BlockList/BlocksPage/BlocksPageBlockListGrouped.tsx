@@ -42,6 +42,7 @@ export function BlocksPageBlockListGrouped() {
     <ExplorerErrorBoundary
       Wrapper={Section}
       wrapperProps={{
+        title: 'Recent Blocks',
         gridColumnStart: ['1', '1', '2'],
         gridColumnEnd: ['2', '2', '3'],
         minWidth: 0,

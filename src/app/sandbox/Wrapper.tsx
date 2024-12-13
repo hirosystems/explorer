@@ -71,18 +71,20 @@ export function Wrapper({ children }: { children: ReactNode }) {
           ) : (
             <HStack gap={6}>
               <HStack alignItems="center">
-                <Circle size={5}>
-                  <Icon as={User} size={3.5} />
+                <Circle size={5} color="borderSecondary">
+                  <Icon size={3.5} color="surfaceOpposite">
+                    <User />
+                  </Icon>
                 </Circle>
                 <Caption>{userData?.identityAddress}</Caption>
-              </HStack>
-              <HStack alignItems="center">
                 <IconButton
                   onClick={() => dispatch(toggleRightPanel())}
-                  icon={<List />}
                   aria-label={'Toggle right panel'}
-                  size={'4'}
-                />
+                  size={4}
+                  color="surfaceOpposite"
+                >
+                  <List />
+                </IconButton>
               </HStack>
             </HStack>
           )

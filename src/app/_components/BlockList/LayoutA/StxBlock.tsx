@@ -1,15 +1,15 @@
-import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
 import { ReactNode, memo } from 'react';
 
 import { Circle } from '../../../../common/components/Circle';
 import { BlockLink } from '../../../../common/components/ExplorerLinks';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { truncateMiddle } from '../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
 import { Text } from '../../../../ui/Text';
+import { Caption } from '../../../../ui/typography';
 
 interface ListItemProps {
   height: number | string;
@@ -26,12 +26,11 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
   return (
     <Box
       pl={4}
-      borderLeft={icon ? undefined : '1px'}
-      borderColor={borderColor}
+      borderLeft={icon ? undefined : `1px solid ${borderColor}`}
       position="relative"
-      __css={{
+      css={{
         '>div': {
-          borderTop: '1px',
+          borderTop: `1px solid ${borderColor}`,
         },
         '&:first-child >div': {
           borderTop: 'none',
@@ -80,7 +79,11 @@ export const StxBlock = memo(function ({ timestamp, height, hash, txsCount, icon
             </Text>
           </BlockLink>
         </Flex>
-        <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'12px'} color={secondaryTextColor}>
+        <HStack
+          separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>}
+          fontSize={'12px'}
+          color={secondaryTextColor}
+        >
           <Box>{truncateMiddle(hash, 3)}</Box>
           {txsCount !== undefined ? <Box>{txsCount} txn</Box> : null}
           <Timestamp ts={timestamp} />

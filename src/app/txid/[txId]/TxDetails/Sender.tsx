@@ -16,7 +16,9 @@ export const Sender: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => 
     label={getSenderName(tx.tx_type)}
     value={
       <HStack>
-        <Icon as={ArrowUpRight} size={4} />
+        <Icon size={4}>
+          <ArrowUpRight />
+        </Icon>
         <ExplorerLink
           fontSize={'xs'}
           fontWeight={'medium'}

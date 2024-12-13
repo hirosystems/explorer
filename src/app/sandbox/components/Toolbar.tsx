@@ -1,9 +1,9 @@
 'use client';
 
-import { useClipboard } from '@chakra-ui/react';
+import { Select, createListCollection, useClipboard } from '@chakra-ui/react';
 import { useMonaco } from '@monaco-editor/react';
 import { CopySimple, X } from '@phosphor-icons/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { helloWorldContract } from '../../../common/constants/contracts/hello-world-contract';
 import { kvStoreContract } from '../../../common/constants/contracts/kv-store';
@@ -15,7 +15,6 @@ import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
-import { Select } from '../../../ui/Select';
 import { Tooltip } from '../../../ui/Tooltip';
 import { Caption } from '../../../ui/typography';
 import { useUser } from '../hooks/useUser';
@@ -26,50 +25,65 @@ import {
   toggleCodeToolbar,
 } from '../sandbox-slice';
 
+const contracts = createListCollection({
+  items: [
+    { label: helloWorldContract.name, value: helloWorldContract.source },
+    { label: kvStoreContract.name, value: kvStoreContract.source },
+    { label: statusContract.name, value: statusContract.source },
+    { label: streamContract.name, value: streamContract.source },
+  ],
+});
 export const Sample = () => {
   const { stxAddress } = useUser();
   const dispatch = useAppDispatch();
   const monaco = useMonaco();
+  const [selectedContract, setSelectedContract] = useState<string[]>([]);
 
   return (
-    <Select
+    <Select.Root
       name="codeBody"
-      placeholder="Choose from sample"
-      onChange={e => {
-        dispatch(setCodeBody({ codeBody: e.target.value.trim() }));
-        if (monaco) {
-          const model = monaco.editor.getModels();
-          model[0].setValue(e.target.value.trim());
-        }
-      }}
       flexGrow={1}
       bg={'white'}
       color={`black`}
       fontSize={'sm'}
+      collection={contracts}
+      value={selectedContract}
+      onValueChange={e => {
+        dispatch(setCodeBody({ codeBody: e.value.trim() }));
+        if (monaco) {
+          const model = monaco.editor.getModels();
+          model[0].setValue(e.value.trim());
+        }
+        setSelectedContract(e.value);
+      }}
     >
-      {[helloWorldContract, kvStoreContract, statusContract, streamContract].map(
-        ({ name, source }, key: number) => (
-          <option
-            key={name}
-            label={name}
-            value={
-              key === 0
-                ? source.replace('SM2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQVX8X0G', stxAddress as string)
-                : source
-            }
+      <Select.Trigger>
+        <Select.ValueText placeholder="Choose from sample" />
+      </Select.Trigger>
+      <Select.Content>
+        {contracts.items.map(({ label, value }, key) => (
+          <Select.Item
+            item={{
+              label,
+              value:
+                key === 0
+                  ? value.replace('SM2J6ZY48GV1EZ5V2V5RB9MP66SW86PYKKQVX8X0G', stxAddress as string)
+                  : value,
+            }}
+            key={value}
           >
-            {name}
-          </option>
-        )
-      )}
-    </Select>
+            {label}
+          </Select.Item>
+        ))}
+      </Select.Content>
+    </Select.Root>
   );
 };
 
 export const Toolbar: React.FC<any> = () => {
   const codeBody = useAppSelector(selectCodeBody);
   const dispatch = useAppDispatch();
-  const { onCopy, hasCopied } = useClipboard(codeBody);
+  const { setValue: onCopy, copied } = useClipboard({ value: codeBody });
 
   const showCodeToolbar = useAppSelector(selectShowCodeToolbar);
   return showCodeToolbar ? (
@@ -89,19 +103,20 @@ export const Toolbar: React.FC<any> = () => {
         <Sample />
       </Flex>
       <HStack ml="auto">
-        <Box onClick={onCopy}>
-          <Tooltip label={hasCopied ? 'Copied!' : 'Copy contract code'}>
-            <IconButton
-              icon={<Icon as={CopySimple} size={4} color={'white'} />}
-              aria-label={'copy'}
-            />
+        <Box onClick={() => onCopy(codeBody)}>
+          <Tooltip content={copied ? 'Copied!' : 'Copy contract code'}>
+            <IconButton aria-label={'copy'}>
+              <Icon size={4} color={'white'}>
+                <CopySimple />
+              </Icon>
+            </IconButton>
           </Tooltip>
         </Box>
-        <IconButton
-          icon={<Icon as={X} size={4} color={'white'} />}
-          onClick={() => dispatch(toggleCodeToolbar())}
-          aria-label={'close'}
-        />
+        <IconButton onClick={() => dispatch(toggleCodeToolbar())} aria-label={'close'}>
+          <Icon size={4} color={'white'}>
+            <X />
+          </Icon>
+        </IconButton>
       </HStack>
     </Flex>
   ) : null;

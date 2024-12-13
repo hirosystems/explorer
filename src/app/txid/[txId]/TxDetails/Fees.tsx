@@ -9,8 +9,8 @@ import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizo
 import { StxPriceButton } from '../../../../common/components/StxPriceButton';
 import { Value } from '../../../../common/components/Value';
 import { microToStacksFormatted } from '../../../../common/utils/utils';
+import { useColorMode } from '../../../../components/ui/color-mode';
 import { Flex } from '../../../../ui/Flex';
-import { useColorMode } from '../../../../ui/hooks/useColorMode';
 
 export const Fees: FC<{ tx: Transaction | MempoolTransaction }> = ({ tx }) => {
   const stxValue = microToStacksFormatted(tx.fee_rate);

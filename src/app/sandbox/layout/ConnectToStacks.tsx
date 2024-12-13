@@ -1,7 +1,7 @@
-import { useColorModeValue } from '@chakra-ui/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { useAppDispatch } from '../../../common/state/hooks';
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Flex } from '../../../ui/Flex';
 import { Stack } from '../../../ui/Stack';

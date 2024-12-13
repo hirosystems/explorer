@@ -1,30 +1,34 @@
+import { Menu } from '@chakra-ui/react';
+
 import { Icon } from '../../../ui/Icon';
-import { MenuGroup } from '../../../ui/MenuGroup';
-import { MenuItem } from '../../../ui/MenuItem';
+import { NextLink } from '../../../ui/NextLink';
 import { Text } from '../../../ui/Text';
-import { TextLink } from '../../../ui/TextLink';
 import { getLinkIcon, getUrlName, isExplorerLink } from './utils';
 
 export const LinksGroup = ({ title, links }: { title: string; links: string[] }) => {
   if (!links.length) return null;
   return (
-    <MenuGroup title={title}>
+    <Menu.ItemGroup title={title}>
       {links.map(link => {
         return (
-          <MenuItem
+          <Menu.Item
+            // TODO: upgrade v3. This may be broken
             key={link}
-            as={TextLink}
-            href={link}
+            asChild
             gap={'5px'}
-            target={!isExplorerLink(link) ? '_blank' : undefined}
+            value={link}
           >
-            <Icon as={getLinkIcon(link)} color="currentColor" size="12px" />
-            <Text fontSize={'14px'} lineHeight={'1em'}>
-              {getUrlName(link)}
-            </Text>
-          </MenuItem>
+            <NextLink href={link} target={!isExplorerLink(link) ? '_blank' : undefined}>
+              <Icon color="currentColor" size="12px">
+                {getLinkIcon(link)}
+              </Icon>
+              <Text fontSize={'14px'} lineHeight={'1em'}>
+                {getUrlName(link)}
+              </Text>
+            </NextLink>
+          </Menu.Item>
         );
       })}
-    </MenuGroup>
+    </Menu.ItemGroup>
   );
 };

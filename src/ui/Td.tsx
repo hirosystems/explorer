@@ -1,17 +1,13 @@
 'use client';
 
-import {
-  Td as CUITd,
-  TableCellProps as CUITdProps,
-  forwardRef,
-  useColorMode,
-} from '@chakra-ui/react';
+import { TableCell as CUITableCell, TableCellProps as CUITableCellProps } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type TdProps = CUITdProps & UIComponent;
-export const Td = forwardRef<TdProps, 'td'>(({ children, size, ...rest }, ref) => (
-  <CUITd
+export type TdProps = CUITableCellProps & UIComponent;
+export const Td = forwardRef<HTMLTableCellElement, TdProps>(({ children, size, ...rest }, ref) => (
+  <CUITableCell
     ref={ref}
     width={size || rest.width}
     height={size || rest.height}
@@ -20,5 +16,5 @@ export const Td = forwardRef<TdProps, 'td'>(({ children, size, ...rest }, ref) =
     {...rest}
   >
     {children}
-  </CUITd>
+  </CUITableCell>
 ));

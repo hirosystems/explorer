@@ -34,7 +34,7 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
     return (
       <Box width="100%">
         <Pre>{value.type}</Pre>
-        <Stack mt="32px" gap={4} width="100%">
+        <Stack mt={8} gap={4} width="100%">
           {Object.keys(value.value).map((name: string, index: number) => {
             const isLast = Object.keys(value.value).length <= index + 1;
             const isNestedType = Object.keys(value.value).includes('type');
@@ -47,7 +47,7 @@ export const FunctionSummaryResult = ({ result }: FunctionSummaryResultProps) =>
                 key={name}
                 width="100%"
               >
-                <Caption display="inline-block" mb="8px" fontSize={'14px'}>
+                <Caption display="inline-block" mb={2} fontSize={'14px'}>
                   {name}
                 </Caption>
                 <FunctionSummaryClarityValue

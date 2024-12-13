@@ -38,7 +38,9 @@ export function RightSection() {
   return (
     <>
       <HStack alignItems="center" borderBottomWidth="1px" color="white" pb={7}>
-        <Icon as={ClarityIcon} size={4} />
+        <Icon as={ClarityIcon} size={4}>
+          <ClarityIcon />
+        </Icon>
         <Caption transform="translateY(1px)" color="white">
           Clarity code editor
         </Caption>

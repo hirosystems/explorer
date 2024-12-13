@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import * as React from 'react';
 
 import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -19,7 +18,7 @@ export const FunctionSummary = memo<{
 }>(({ summary, result, btc, txStatus }) => {
   return (
     <Section title="Function called">
-      <Flex px="16px" width="100%" flexDirection={['column', 'column', 'row']}>
+      <Flex px={4} width="100%" flexDirection={['column', 'column', 'row']}>
         <Box width={['100%']}>
           <KeyValueHorizontal
             label="Function"

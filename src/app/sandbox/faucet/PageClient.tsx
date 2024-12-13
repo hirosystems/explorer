@@ -3,13 +3,8 @@
 import { NextPage } from 'next';
 import React from 'react';
 
-import { Badge } from '../../../common/components/Badge';
-import { DropIcon } from '../../../common/components/icons/drop';
 import { useFaucet } from '../../../common/queries/useFaucet';
-import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
@@ -64,7 +59,9 @@ const Faucet: NextPage = () => {
   };
   return (
     <Stack alignItems={'center'} mt={46} gap={6}>
-      <Icon as={StxIcon} size={10} />
+      <Icon as={StxIcon} size={10}>
+        <StxIcon />
+      </Icon>
       <Title>STX Faucet</Title>
       <Text fontSize={'sm'}>Need STX to test the network? The faucet can top you up!</Text>
       {!!errorMessage ? <Text color={'error'}>{errorMessage}</Text> : null}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
+import { Accordion } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -15,16 +15,12 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useContractById } from '../../../common/queries/useContractById';
 import { useAppDispatch } from '../../../common/state/hooks';
 import { buildUrl } from '../../../common/utils/buildUrl';
+import { useColorMode } from '../../../components/ui/color-mode';
 import { MempoolTxListItemMini } from '../../../features/txs-list/ListItem/MempoolTxListItemMini';
 import { TxListItemMini } from '../../../features/txs-list/ListItem/TxListItemMini';
 import { FilterButton } from '../../../features/txsFilterAndSort/FilterButton';
 import { AllTransactionsFilteredMessage } from '../../../features/txsFilterAndSort/TransactionMessages';
 import { useFilterAndSortState } from '../../../features/txsFilterAndSort/useFilterAndSortState';
-import { Accordion } from '../../../ui/Accordion';
-import { AccordionButton } from '../../../ui/AccordionButton';
-import { AccordionIcon } from '../../../ui/AccordionIcon';
-import { AccordionItem } from '../../../ui/AccordionItem';
-import { AccordionPanel } from '../../../ui/AccordionPanel';
 import { Box } from '../../../ui/Box';
 import { Flex } from '../../../ui/Flex';
 import { HStack } from '../../../ui/HStack';
@@ -127,9 +123,12 @@ const TxDetailsFunctions = ({
             onClick={() => {
               setFnsVisibility(s => !s);
             }}
-            icon={<CaretDown size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'} />}
             aria-label={'toggle function'}
-          />
+          >
+            <Icon size={4} transform={!fnsVisible ? 'none' : 'rotate(180deg)'}>
+              <CaretDown />
+            </Icon>
+          </IconButton>
         </HStack>
       </Flex>
       {fnsVisible ? (
@@ -145,9 +144,13 @@ const TxDetailsFunctions = ({
               >
                 <Flex alignItems="center" color={`textCaption.${colorMode}`}>
                   {func.access === 'read_only' ? (
-                    <InfoCircleIcon size="18px" />
+                    <Icon size="18px">
+                      <InfoCircleIcon />
+                    </Icon>
                   ) : (
-                    <Icon as={FunctionXIcon} size="18px" />
+                    <Icon size="18px">
+                      <FunctionXIcon />
+                    </Icon>
                   )}
                   <Caption ml="4px">{func.name}</Caption>
                 </Flex>
@@ -190,7 +193,7 @@ function TxDetailsBase({ tx }: { tx: Transaction }) {
 
   if (!contract)
     return (
-      <Text fontSize={'14px'} p={'20px'} align={'center'}>
+      <Text fontSize={'14px'} p={'20px'} textAlign={'center'}>
         Nothing to show
       </Text>
     );
@@ -253,24 +256,23 @@ export function TransactionsPanel() {
   const txList = React.useMemo(
     () =>
       filteredTxs.map(tx => (
-        <AccordionItem key={tx.tx_id} border={'none'}>
+        <Accordion.Item key={tx.tx_id} border={'none'} value={tx.tx_id}>
           <Flex gap={'6px'}>
             <TxListItemMini tx={tx} />
-            <AccordionButton
+            <Accordion.ItemTrigger
+              // TODO: upgrade v3. This may be broken
               flexGrow={0}
               flexShrink={0}
               width={'30px'}
               ml={'auto'}
               p={0}
               justifyContent={'center'}
-            >
-              <AccordionIcon />
-            </AccordionButton>
+            />
           </Flex>
-          <AccordionPanel borderTopWidth="1px">
+          <Accordion.ItemContent borderTopWidth="1px">
             <TxDetails tx={tx} />
-          </AccordionPanel>
-        </AccordionItem>
+          </Accordion.ItemContent>
+        </Accordion.Item>
       )),
     [filteredTxs]
   );
@@ -279,7 +281,7 @@ export function TransactionsPanel() {
     <Section title={'Transactions'} topRight={<FilterButton />}>
       {pendingList}
       {filteredTxs?.length ? (
-        <Accordion allowMultiple>{txList}</Accordion>
+        <Accordion.Root multiple>{txList}</Accordion.Root>
       ) : hasTxButIsFiltered ? (
         <AllTransactionsFilteredMessage />
       ) : (

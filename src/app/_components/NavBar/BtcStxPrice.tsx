@@ -32,7 +32,11 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <Flex gap={6} minWidth={'172px'}>
       <PriceContainer
-        icon={<Icon as={BitcoinIcon} size={4.5} />}
+        icon={
+          <Icon size={4.5}>
+            <BitcoinIcon />
+          </Icon>
+        }
         minWidth={'92px'}
         color={{ base: 'text', lg: 'slate.50' }}
       >
@@ -41,7 +45,9 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
       <PriceContainer
         icon={
           <Circle size={'18px'} bg="brand" border={'none'}>
-            <Icon as={StxIcon} size={'10px'} color="white" />
+            <Icon size={'10px'} color="white">
+              <StxIcon />
+            </Icon>
           </Circle>
         }
         minWidth={'56px'}

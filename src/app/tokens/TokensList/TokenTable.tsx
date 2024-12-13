@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Grid } from '../../../ui/Grid';
 import { Table } from '../../../ui/Table';
@@ -29,7 +27,11 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
   }
   return (
     <TableContainer>
-      <Table variant="simple" overflowX={'auto'} __css={{ tableLayout: 'fixed', width: 'full' }}>
+      <Table
+        layerStyle="simple" // TODO: v3 upgrade. This might be broken
+        overflowX={'auto'}
+        css={{ tableLayout: 'fixed', width: 'full' }}
+      >
         <Thead>
           <Tr>
             <Th padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
@@ -38,7 +40,7 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
             <Th padding={'10px'} display={['none', 'none', 'table-cell']}>
               Tx ID
             </Th>
-            <Th isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
+            <Th width={'130px'} padding={'10px 16px 10px 20px'}>
               Total supply
             </Th>
           </Tr>

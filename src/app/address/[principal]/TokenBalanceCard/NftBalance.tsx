@@ -71,7 +71,7 @@ export const NftBalance: React.FC<{
       </Box>
       {visibleItemsCount < nftKeysWithCount.length && (
         <Box width={'full'}>
-          <Button variant={'secondary'} onClick={() => handleLoadMore()} width={'full'}>
+          <Button variant="secondary" onClick={() => handleLoadMore()} width={'full'}>
             Load more
           </Button>
         </Box>

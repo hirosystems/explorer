@@ -1,5 +1,6 @@
+import { Stack } from '@chakra-ui/react';
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
 import { Flex } from '../../../ui/Flex';
@@ -33,7 +34,7 @@ export function ClearFiltersButton({ filters }: FilterProps) {
     <Flex gap={2} alignItems={'center'}>
       <TextLink
         href={pageUrlWithNoFilters}
-        variant={'secondary'}
+        // color={'secondary'} // TODO: upgrade v3. This may be broken
         width={'full'}
         fontSize={'sm'}
         fontWeight={'medium'}
@@ -41,7 +42,9 @@ export function ClearFiltersButton({ filters }: FilterProps) {
         gap={1.5}
         color="textSubdued"
       >
-        <Icon as={Backspace} size={4} />
+        <Icon size={4}>
+          <Backspace />
+        </Icon>
         <span>Clear all filters</span>
       </TextLink>
     </Flex>
@@ -50,8 +53,7 @@ export function ClearFiltersButton({ filters }: FilterProps) {
 
 export function FiltersWithWrapper({ filters }: FilterProps) {
   return (
-    <Flex
-      direction={'column'}
+    <Stack
       gap={4}
       pt={5}
       pl={6}
@@ -59,11 +61,13 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
       pb={6}
       boxShadow={'0px 4px 10px 2px rgba(0, 0, 0, 0.03)'}
       rounded={'xl'}
-      border={'1px'}
+      border="normal"
     >
       <Flex justifyContent={'space-between'}>
         <Flex gap={2} alignItems={'center'} color={'text'}>
-          <Icon as={FunnelSimple} size={4} />
+          <Icon size={4}>
+            <FunnelSimple />
+          </Icon>
           <Text fontSize={'sm'} fontWeight={'medium'} lineHeight={'1.43em'}>
             Filters
           </Text>
@@ -77,6 +81,6 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
         />
         <DateFilter defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
       </Flex>
-    </Flex>
+    </Stack>
   );
 }

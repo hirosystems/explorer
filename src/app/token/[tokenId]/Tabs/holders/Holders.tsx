@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense } from 'react';
 
@@ -8,6 +7,7 @@ import { Section } from '../../../../../common/components/Section';
 import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
 import { useContractById } from '../../../../../common/queries/useContractById';
 import { truncateMiddle } from '../../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../../components/ui/color-mode';
 import { Flex } from '../../../../../ui/Flex';
 import { Table } from '../../../../../ui/Table';
 import { Tbody } from '../../../../../ui/Tbody';
@@ -40,7 +40,7 @@ export const HoldersTableHeader = ({
   headerTitle: string;
   isFirst: boolean;
 }) => (
-  <Th py={3} px={6} border="none" sx={isFirst ? mobileBorderCss : {}} width="fit-content">
+  <Th py={3} px={6} border="none" css={isFirst ? mobileBorderCss : {}} width="fit-content">
     <Flex
       bg="hoverBackground"
       px={2.5}
@@ -130,7 +130,7 @@ const HolderTableRow = ({
         borderBottom: isLast ? 'none' : '',
       }}
     >
-      <Td py={3} px={6} sx={mobileBorderCss}>
+      <Td py={3} px={6} css={mobileBorderCss}>
         <Text whiteSpace="nowrap" fontSize="sm" pl={2}>
           {index + 1}
         </Text>

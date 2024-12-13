@@ -37,7 +37,7 @@ export function LineAndNode({
             height={isLast ? '0%' : '20%'} // if it's the last line, don't draw the line at all
             width="1px"
             bg="brand"
-            border="1px solid var(---stacks-colors-borderPrimary)"
+            border="1px solid var(---stacks-colors-border-primary)"
           />
         </Flex>
       ) : (
@@ -57,7 +57,7 @@ export function LineAndNode({
             height={isLast ? '50%' : 'full'} // if it's the last line, only draw half of it
             width="1px"
             bg="brand"
-            border="1px solid var(---stacks-colors-borderPrimary)"
+            border="1px solid var(---stacks-colors-border-primary)"
           />
           <Box // the node
             position="absolute"

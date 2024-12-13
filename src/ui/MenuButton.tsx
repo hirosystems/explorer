@@ -1,12 +1,10 @@
 'use client';
 
 import {
-  MenuButton as CUIMenuButton,
-  MenuButtonProps as CUIMenuButtonProps,
-  forwardRef,
-  useColorMode,
+  MenuTrigger as CUIMenuButton,
+  MenuTriggerProps as CUIMenuButtonProps,
 } from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { ReactNode, forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
@@ -14,7 +12,7 @@ export type MenuButtonProps = CUIMenuButtonProps &
   UIComponent & {
     leftIcon?: ReactNode | null;
   };
-export const MenuButton = forwardRef<MenuButtonProps, 'button'>(
+export const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ children, size, ...rest }, ref) => (
     <CUIMenuButton
       ref={ref}

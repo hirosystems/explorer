@@ -1,17 +1,16 @@
 'use client';
 
 import {
-  Th as CUITh,
-  TableColumnHeaderProps as CUIThProps,
-  forwardRef,
-  useColorMode,
+  TableColumnHeader as CUITableColumnHeader,
+  TableColumnHeaderProps as CUITableColumnHeaderProps,
 } from '@chakra-ui/react';
+import { forwardRef } from 'react';
 
 import { UIComponent } from './types';
 
-export type ThProps = CUIThProps & UIComponent;
-export const Th = forwardRef<ThProps, 'th'>(({ children, size, ...rest }, ref) => (
-  <CUITh
+export type ThProps = CUITableColumnHeaderProps & UIComponent;
+export const Th = forwardRef<HTMLTableCellElement, ThProps>(({ children, size, ...rest }, ref) => (
+  <CUITableColumnHeader
     ref={ref}
     width={size || rest.width}
     height={size || rest.height}
@@ -20,5 +19,5 @@ export const Th = forwardRef<ThProps, 'th'>(({ children, size, ...rest }, ref) =
     {...rest}
   >
     {children}
-  </CUITh>
+  </CUITableColumnHeader>
 ));

@@ -34,10 +34,10 @@ export const MempoolTxListItemMini: FC<MempoolTxsListItemProps> = memo(({ tx }) 
     () => (
       <HStack
         as="span"
-        spacing={1.5}
+        gap={1.5}
         alignItems="center"
         flexWrap="wrap"
-        divider={<Caption>∙</Caption>}
+        separator={<Caption border="none">∙</Caption>}
         color={'textSubdued'}
       >
         <Caption fontWeight="bold">{getTransactionTypeLabel(tx.tx_type)}</Caption>

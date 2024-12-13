@@ -1,4 +1,3 @@
-import { router } from 'next/client';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useState } from 'react';
@@ -50,7 +49,7 @@ export function SearchInput({
         p={0}
         zIndex="docked"
         width={'full'}
-        sx={{
+        css={{
           caretColor: 'var(--stacks-colors-slate-50)',
           '::-webkit-search-cancel-button': {
             display: 'none',
@@ -64,7 +63,7 @@ export function SearchInput({
           border: 'none',
           outline: 'none',
           boxShadow: 'none',
-          '::placeholder': {
+          _placeholder: {
             color: 'slate.50',
           },
         }}

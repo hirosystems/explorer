@@ -1,12 +1,9 @@
 'use client';
 
-import React from 'react';
-
 import { Section } from '../../common/components/Section';
-import { SkeletonBlockList } from '../../common/components/loaders/skeleton-text';
 import { SkeletonBlock } from '../../common/components/loaders/skeleton-transaction';
 import { Flex } from '../../ui/Flex';
-import { SkeletonItem as SkeletonElement } from '../../ui/SkeletonItem';
+import { Skeleton as SkeletonElement } from '../../ui/Skeleton';
 import { PageTitle } from '../_components/PageTitle';
 
 export default function Skeleton() {

@@ -2,6 +2,7 @@
 
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
+import { ReactNode } from 'react';
 
 import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
@@ -20,26 +21,49 @@ const HomePageBlockListDynamic = dynamic(
   }
 );
 
-const Home: NextPage = () => {
-  const { activeNetwork } = useGlobalContext();
-
+export function HomePageLayout({
+  title,
+  stats,
+  txListTabs,
+  blockList,
+}: {
+  title: ReactNode;
+  stats: ReactNode;
+  txListTabs: ReactNode;
+  blockList: ReactNode;
+}) {
   return (
     <>
-      <PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>
-      {!activeNetwork.isSubnet && <Stats />}
+      {title}
+      {stats}
       <Grid
         gap="7"
         width="full"
         gridTemplateColumns={['100%', '100%', '100%', 'minmax(0, 0.6fr) minmax(0, 0.4fr)']}
       >
+        {txListTabs}
+        {blockList}
+      </Grid>
+    </>
+  );
+}
+
+const Home: NextPage = () => {
+  const { activeNetwork } = useGlobalContext();
+
+  return (
+    <HomePageLayout
+      title={<PageTitle data-test="homepage-title">Stacks Explorer</PageTitle>}
+      stats={!activeNetwork.isSubnet && <Stats />}
+      txListTabs={
         <TxListTabs
           limit={DEFAULT_LIST_LIMIT_SMALL}
           showFilterButton={false}
           showValueMenu={false}
         />
-        <HomePageBlockListDynamic />
-      </Grid>
-    </>
+      }
+      blockList={<HomePageBlockListDynamic />}
+    />
   );
 };
 

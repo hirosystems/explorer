@@ -1,10 +1,11 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { ArrowBendDownLeft } from '@phosphor-icons/react';
 import { memo } from 'react';
 
+import { Caption } from '../../../..//ui/typography';
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { truncateMiddle } from '../../../../common/utils/utils';
+import { useColorModeValue } from '../../../../components/ui/color-mode';
 import { Box } from '../../../../ui/Box';
 import { Flex, FlexProps } from '../../../../ui/Flex';
 import { HStack } from '../../../../ui/HStack';
@@ -27,7 +28,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
     <Flex
       justifyContent={'space-between'}
       alignItems={'center'}
-      borderBottom={'1px'}
+      borderBottom={`1px solid var(--stacks-colors-border-secondary)`}
       pl={4}
       pr={8}
       height={14}
@@ -39,14 +40,17 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
     >
       <HStack gap={1.5}>
         <Icon
-          as={ArrowBendDownLeft}
           transform={'rotate(90deg)'}
           size={2.5}
           color={iconColor}
           position={'relative'}
           bottom={'1px'}
-        />
-        <Icon as={BitcoinIcon} size={18} position={'relative'} bottom={'1px'} />
+        >
+          <ArrowBendDownLeft />
+        </Icon>
+        <Icon size={18} position={'relative'} bottom={'1px'}>
+          <BitcoinIcon />
+        </Icon>
         <TextLink as="a" target="_blank" href={`${btcBlockBaseUrl}/${hash.replace('0x', '')}`}>
           <Text
             fontSize={'sm'}
@@ -60,7 +64,7 @@ export const BurnBlock = memo(function ({ timestamp, height, hash, ...flexProps 
           </Text>
         </TextLink>
       </HStack>
-      <HStack divider={<>&nbsp;∙&nbsp;</>} fontSize={'xs'}>
+      <HStack separator={<Caption border="none">&nbsp;∙&nbsp;</Caption>} fontSize={'xs'}>
         <Box>{truncateMiddle(hash, 3)}</Box>
         {timestamp && <Timestamp ts={timestamp} />}
       </HStack>

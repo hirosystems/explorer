@@ -40,11 +40,9 @@ export function NavBlock({
       }
     >
       <Flex alignItems="center" justifyContent="center" height="100%" width="100%">
-        <Icon
-          as={direction === NavDirection.Forward ? ArrowRight : ArrowLeft}
-          size={4}
-          fill="var(--stacks-colors-slate-50)"
-        />
+        <Icon size={4} fill="var(--stacks-colors-slate-50)">
+          {direction === NavDirection.Forward ? <ArrowRight /> : <ArrowLeft />}
+        </Icon>
       </Flex>
     </Link>
   );

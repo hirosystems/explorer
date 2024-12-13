@@ -20,7 +20,7 @@ export const LabelWrapper = ({ label, href, onClick }: NavItem) => {
           rounded="md"
           color="text"
           width="full"
-          variant="noUnderline"
+          variant={'noUnderline'}
         >
           {label}
         </Link>

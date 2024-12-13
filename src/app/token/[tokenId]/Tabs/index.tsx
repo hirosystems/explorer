@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { ContractAvailableFunctions } from '../../../../common/components/ContractAvailableFunctions';
 import { TabsContainer } from '../../../../common/components/TabsContainer';
 import { useSuspenseContractById } from '../../../../common/queries/useContractById';
@@ -19,21 +21,27 @@ interface TokenTabsProps extends Partial<TabsProps> {
 export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsProps) {
   const { data: contract } = useSuspenseContractById(tokenId);
   const source = contract?.source_code;
+  const [tabId, setTabId] = useState('confirmed');
   return (
     <TabsContainer
+      tabId={tabId}
+      setTabId={setTabId}
       tabs={[
         {
           title: 'Confirmed',
+          id: 'confirmed',
           content: <AddressConfirmedTxsList address={tokenId} />,
         },
         {
           title: 'Pending',
+          id: 'pending',
           content: <AddressMempoolTxsList address={tokenId} />,
         },
         ...(!!source
           ? [
               {
                 title: 'Source code',
+                id: 'source',
                 content: <CodeEditor code={source} height={500} />,
               },
             ]
@@ -42,6 +50,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           ? [
               {
                 title: 'Available functions',
+                id: 'available-functions',
                 content: <ContractAvailableFunctions contractId={tokenId} contract={contract} />,
               },
             ]
@@ -50,12 +59,14 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
           ? [
               {
                 title: 'Developers',
+                id: 'developers',
                 content: <Developers developerData={developerData} />,
               },
             ]
           : []),
         {
           title: 'Holders',
+          id: 'holders',
           content: <HoldersTable tokenId={tokenId} tokenInfo={tokenInfo} />,
         },
       ]}
@@ -65,7 +76,7 @@ export function TokenTabsBase({ tokenId, tokenInfo, developerData }: TokenTabsPr
   );
 }
 
-export function Tabs(props: TokenTabsProps) {
+export function TokenTabs(props: TokenTabsProps) {
   return (
     <ExplorerErrorBoundary tryAgainButton>
       <TokenTabsBase {...props} />

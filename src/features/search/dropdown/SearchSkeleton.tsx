@@ -1,8 +1,6 @@
-import * as React from 'react';
-
 import { Circle } from '../../../common/components/Circle';
 import { Flex } from '../../../ui/Flex';
-import { SkeletonItem } from '../../../ui/SkeletonItem';
+import { Skeleton } from '../../../ui/Skeleton';
 import { Spinner } from '../../../ui/Spinner';
 import { Caption } from '../../../ui/typography';
 
@@ -13,7 +11,7 @@ export function SearchSkeleton() {
         <Spinner color={'textSubdued'} />
       </Circle>
       <Caption lineHeight="22px" wordBreak="break-word">
-        <SkeletonItem width={'180px'} height={'12px'} />
+        <Skeleton width={'180px'} height={'12px'} />
       </Caption>
     </Flex>
   );

@@ -1,8 +1,8 @@
-import { useColorModeValue } from '@chakra-ui/react';
 import { CaretDown } from '@phosphor-icons/react';
 import pluralize from 'pluralize';
 import { memo } from 'react';
 
+import { useColorModeValue } from '../../../components/ui/color-mode';
 import { Button } from '../../../ui/Button';
 import { Icon } from '../../../ui/Icon';
 import { Text } from '../../../ui/Text';
@@ -59,7 +59,11 @@ export const BlockCount = memo(function ({
         }
       >
         +{count} {pluralize('block', count)}
-        {canLoadMore ? <Icon as={CaretDown} size={2.5} color={iconColor} /> : null}
+        {canLoadMore ? (
+          <Icon size={2.5} color={iconColor}>
+            <CaretDown />
+          </Icon>
+        ) : null}
       </Text>
     </Button>
   );

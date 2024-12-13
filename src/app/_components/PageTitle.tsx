@@ -1,3 +1,4 @@
+import { Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Flex } from '../../ui/Flex';
@@ -22,9 +23,9 @@ export function PageTitle({ children, ...props }: { children: ReactNode } & Head
 
 export function PageTitleWithTags({ children, tags }: { children: ReactNode; tags?: ReactNode }) {
   return (
-    <Flex direction={'column'} gap={2} mt={10}>
+    <Stack gap={2} mt={10}>
       <HStack gap={2}>{tags}</HStack>
       <PageTitle mt={2}>{children}</PageTitle>
-    </Flex>
+    </Stack>
   );
 }

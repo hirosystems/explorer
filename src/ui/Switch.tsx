@@ -1,26 +1,29 @@
 'use client';
 
+import type { HTMLChakraProps, RecipeVariantProps } from '@chakra-ui/react';
 import {
   Switch as CUISwitch,
-  SwitchProps as CUISwitchProps,
-  forwardRef,
-  useColorMode,
+  SwitchControlProps as CUISwitchControlProps,
+  SwitchLabelProps as CUISwitchLabelProps,
+  SwitchRootProps as CUISwitchRootProps,
+  createSlotRecipeContext,
 } from '@chakra-ui/react';
 
-import { UIComponent } from './types';
+import { switchSlotRecipe } from './theme/recipes/SwitchRecipe';
 
-export type SwitchProps = CUISwitchProps & UIComponent;
-export const Switch = forwardRef<SwitchProps, 'div'>(({ children, size, ...rest }, ref) => (
-  <CUISwitch
-    ref={ref}
-    width={size || rest.width}
-    height={size || rest.height}
-    minWidth={size || rest.minWidth}
-    minHeight={size || rest.minHeight}
-    position={'relative'}
-    top={'1px'}
-    {...rest}
-  >
-    {children}
-  </CUISwitch>
-));
+const { withProvider, withContext } = createSlotRecipeContext({
+  recipe: switchSlotRecipe,
+});
+
+export type SwitchRootProps = HTMLChakraProps<
+  'label',
+  RecipeVariantProps<typeof switchSlotRecipe>
+> &
+  CUISwitchRootProps;
+export const SwitchRoot = withProvider<HTMLInputElement, SwitchRootProps>('input', 'root');
+
+export type SwitchControlProps = HTMLChakraProps<'span'> & CUISwitchControlProps;
+export const SwitchControl = withContext<HTMLSpanElement, SwitchControlProps>('span', 'control');
+
+export type SwitchLabelProps = HTMLChakraProps<'span'> & CUISwitchLabelProps;
+export const SwitchLabel = withContext<HTMLSpanElement, SwitchLabelProps>('span', 'label');

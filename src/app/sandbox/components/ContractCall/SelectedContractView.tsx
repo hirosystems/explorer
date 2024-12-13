@@ -1,4 +1,3 @@
-import { Link as NextLink } from '@chakra-ui/next-js';
 import { ArrowSquareOut, Atom, ListChecks } from '@phosphor-icons/react';
 import React, { FC } from 'react';
 
@@ -18,6 +17,7 @@ import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { Grid } from '../../../../ui/Grid';
 import { Icon } from '../../../../ui/Icon';
+import { NextLink } from '../../../../ui/NextLink';
 import { Stack } from '../../../../ui/Stack';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
 import { Caption, Title } from '../../../../ui/typography';
@@ -52,7 +52,9 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
             <Caption transform="translateY(1px)" color="currentColor">
               Go to transaction
             </Caption>
-            <Icon as={ArrowSquareOut} ml="8px" color="currentColor" size="16px" />
+            <Icon ml="8px" color="currentColor" size="16px">
+              <ArrowSquareOut />
+            </Icon>
           </Flex>
         </TxLink>
       }
@@ -75,25 +77,33 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
         <Stack p="16px">
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={FunctionXIcon} size={5} />
+              <Icon size={5}>
+                <FunctionXIcon />
+              </Icon>
             </Box>
             <PluralizedCaption ml="8px" array={abi?.functions} label="function" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={Atom} size="20px" />
+              <Icon size={5}>
+                <Atom />
+              </Icon>
             </Box>
             <PluralizedCaption ml="8px" array={abi?.variables} label="variable" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={ListChecks} size={5} />
+              <Icon size={5}>
+                <ListChecks />
+              </Icon>
             </Box>
             <PluralizedCaption ml="8px" array={abi?.maps} label="map" />
           </Flex>
           <Flex alignItems="center">
             <Box opacity={0.6} size="20px">
-              <Icon as={FungibleTokenIcon} size="20px" />
+              <Icon size={5}>
+                <FungibleTokenIcon />
+              </Icon>
             </Box>
             <PluralizedCaption
               ml="8px"

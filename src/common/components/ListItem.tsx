@@ -13,7 +13,7 @@ export const ListItem: FC<{
   <Flex justifyContent="space-between" alignItems="center" py="16px">
     <Flex alignItems="center" width={'100%'} flexWrap={'nowrap'}>
       {icon}
-      <Stack ml="16px" spacing="8px" overflow={'hidden'} flex={'1'}>
+      <Stack ml="16px" gap="8px" overflow={'hidden'} flex={'1'}>
         <Title fontSize={14} whiteSpace={'normal'} overflowWrap={'break-word'}>
           {title}
         </Title>

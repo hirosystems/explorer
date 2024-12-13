@@ -3,8 +3,8 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { IncidentContent } from '../../../common/types/incidents';
 import { getRichTextRenderOptions } from '../../../common/utils/getRichTextRenderOptions';
+import { useColorMode } from '../../../components/ui/color-mode';
 import { Flex } from '../../../ui/Flex';
-import { useColorMode } from '../../../ui/hooks/useColorMode';
 import { StatusBarBase } from './StatusBarBase';
 
 export function CMSStatusBars({ statusBarContent }: { statusBarContent: IncidentContent | null }) {
@@ -18,7 +18,7 @@ export function CMSStatusBars({ statusBarContent }: { statusBarContent: Incident
           (alert.fields.showOnMainnet && !isTestnet) ||
           networkUrl.includes(alert.fields.networkUrlSubstring)
       );
-  const colorMode = useColorMode().colorMode;
+  const colorMode = useColorMode().colorMode || 'light'; // TODO: upgrade v3. This may be broken
   return (
     <Flex
       direction={'column'}

@@ -1,10 +1,5 @@
-'use client';
-
-import { useColorModeValue } from '@chakra-ui/react';
-import * as React from 'react';
-
+import { useColorModeValue } from '../../components/ui/color-mode';
 import { Flex, FlexProps } from '../../ui/Flex';
-import { useColorMode } from '../../ui/hooks/useColorMode';
 
 export function Card(props: FlexProps) {
   const borderColor = useColorModeValue('slate.150', 'slate.900');
@@ -13,7 +8,7 @@ export function Card(props: FlexProps) {
       flexDirection="column"
       borderRadius="xl"
       bg={useColorModeValue('white', 'black')}
-      border={'1px'}
+      border="normal"
       borderColor={borderColor}
       boxShadow={'0px 1px 2px 0px var(--stacks-colors-blackAlpha-50)'}
       {...props}

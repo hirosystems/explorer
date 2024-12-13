@@ -13,7 +13,9 @@ export const FunctionSummaryName: FC<
   return (
     <Flex width="100%" alignItems="center" justifyContent="space-between" {...rest}>
       <Flex>
-        <Icon as={FunctionXIcon} mr="8px" size="18px" />
+        <Icon mr="8px" size="18px">
+          <FunctionXIcon />
+        </Icon>
         <Text fontWeight="600" fontSize={'14px'}>
           {summary.function_name}
         </Text>

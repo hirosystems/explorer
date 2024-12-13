@@ -1,6 +1,5 @@
 'use client';
 
-import cookie from 'cookie';
 import { useSearchParams } from 'next/navigation';
 import { FC, ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -37,8 +36,7 @@ function filterNetworks(
   );
 }
 
-interface Props {
-  cookies: string;
+interface GlobalContext {
   apiUrls: Record<NetworkModes, string>;
   btcBlockBaseUrls: Record<NetworkModes, string>;
   btcTxBaseUrls: Record<NetworkModes, string>;
@@ -52,8 +50,7 @@ interface Props {
   apiClient: ReturnType<typeof getApiClient>;
 }
 
-export const GlobalContext = createContext<Props>({
-  cookies: '',
+export const GlobalContext = createContext<GlobalContext>({
   apiUrls: NetworkModeUrlMap,
   btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap,
   btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap,
@@ -68,11 +65,10 @@ export const GlobalContext = createContext<Props>({
 });
 
 export const GlobalContextProvider: FC<{
-  headerCookies: string | null;
+  addedCustomNetworksCookie: string | undefined;
+  removedCustomNetworksCookie: string | undefined;
   children: ReactNode;
-}> = ({ headerCookies, children }) => {
-  const cookies = headerCookies || (IS_BROWSER ? document?.cookie : '');
-
+}> = ({ addedCustomNetworksCookie, removedCustomNetworksCookie, children }) => {
   // Parsing search params
   const searchParams = useSearchParams();
   const chain = searchParams?.get('chain');
@@ -101,10 +97,10 @@ export const GlobalContextProvider: FC<{
     throw new Error('test error');
 
   const addedCustomNetworks: Record<string, Network> = JSON.parse(
-    cookie.parse(cookies || '').addedCustomNetworks || '{}'
+    addedCustomNetworksCookie || '{}'
   );
   const removedCustomNetworks: Record<string, Network> = JSON.parse(
-    cookie.parse(cookies || '').removedCustomNetworks || '{}'
+    removedCustomNetworksCookie || '{}'
   );
   const [_, setAddedCustomNetworksCookie] = useCookies(['addedCustomNetworks']);
   const [__, setRemovedCustomNetworksCookie] = useCookies(['removedCustomNetworks']);
@@ -270,7 +266,6 @@ export const GlobalContextProvider: FC<{
       value={{
         activeNetwork: networks[activeNetworkKey] || {},
         activeNetworkKey,
-        cookies,
         apiUrls: NetworkModeUrlMap, // TODO: If this is a constant, why is it in context?
         btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap, // TODO: If this is a constant, why is it in context?
         btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap, // TODO: If this is a constant, why is it in context?

@@ -1,34 +1,33 @@
-import * as React from 'react';
 import { FC } from 'react';
 
 import { GridProps } from '../../../ui/Grid';
-import { SkeletonItem } from '../../../ui/SkeletonItem';
+import { Skeleton } from '../../../ui/Skeleton';
 import { Text } from '../../../ui/Text';
 import { StatSection } from './StatSection';
 
 export const SkeletonStatSection: FC<GridProps> = props => (
   <StatSection
     title={
-      <SkeletonItem height={'full'} width={'75%'}>
+      <Skeleton height={'full'} width={'75%'}>
         <Text fontSize={'xs'} width={24}>
           -
         </Text>
-      </SkeletonItem>
+      </Skeleton>
     }
     bodyMainText={
-      <SkeletonItem>
+      <Skeleton>
         <Text fontSize={'xl'} width={24}>
           -
         </Text>
-      </SkeletonItem>
+      </Skeleton>
     }
     bodySecondaryText={null}
     caption={
-      <SkeletonItem height={'full'} width={'90%'}>
+      <Skeleton height={'full'} width={'90%'}>
         <Text fontSize={'xs'} width={24}>
           -
         </Text>
-      </SkeletonItem>
+      </Skeleton>
     }
     borderColor={'borderPrimary'}
     {...props}

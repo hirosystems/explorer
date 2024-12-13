@@ -1,7 +1,6 @@
 'use client';
 
 import { Info } from '@phosphor-icons/react';
-import * as React from 'react';
 import { useMemo } from 'react';
 
 import { Flex } from '../../../../ui/Flex';
@@ -29,7 +28,7 @@ function NextStackingCycleBase(props: GridProps) {
         <Text>{displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in</Text>
         &nbsp;
         <Tooltip
-          label={`${displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in ${
+          content={`${displayPreparePhaseInfo ? 'Prepare' : 'Reward'} phase starts in ${
             displayPreparePhaseInfo ? blocksTilNextCyclePreparePhase : blocksTilNextCycleRewardPhase
           } block${
             (displayPreparePhaseInfo
@@ -50,7 +49,9 @@ function NextStackingCycleBase(props: GridProps) {
               ? 's'
               : ''}
             &nbsp;
-            <Icon as={Info} size={3} />
+            <Icon size={3}>
+              <Info />
+            </Icon>
           </Flex>
         </Tooltip>
       </Flex>

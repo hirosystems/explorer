@@ -1,8 +1,8 @@
 'use client';
 
+import { SkeletonText } from '../../../../../components/ui/skeleton';
 import { Flex } from '../../../../../ui/Flex';
-import { SkeletonItem } from '../../../../../ui/SkeletonItem';
-import { SkeletonText } from '../../../../../ui/SkeletonText';
+import { Skeleton } from '../../../../../ui/Skeleton';
 import { Td } from '../../../../../ui/Td';
 import { Th } from '../../../../../ui/Th';
 import { Tr } from '../../../../../ui/Tr';
@@ -15,7 +15,7 @@ const TableRowSkeleton = ({ numCols }: { numCols: number }) => {
     <Tr>
       {cols.map((_, index) => (
         <Td py={3} px={6} textAlign="center" key={`table-row-skeleton-${index}`}>
-          <SkeletonItem width="full" height="14px" />
+          <Skeleton width="full" height="14px" />
         </Td>
       ))}
     </Tr>
@@ -43,7 +43,7 @@ export const HoldersTableSkeleton = () => {
 
   return (
     <HoldersTableLayout
-      numHolders={<SkeletonItem width="15%" height={5} />}
+      numHolders={<Skeleton width="15%" height={5} />}
       holdersTableHeaders={
         <Tr>
           {numCols.map((_, i) => (
