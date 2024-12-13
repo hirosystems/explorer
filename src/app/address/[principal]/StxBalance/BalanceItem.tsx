@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 
-import { useSuspenseStxPrice } from '../../../../common/queries/useCurrentPrices';
+import { useStxPrice } from '../../../../common/queries/useCurrentPrices';
 import {
   formatStacksAmount,
   getLocaleDecimalSeparator,
@@ -13,7 +13,7 @@ import { Text } from '../../../../ui/Text';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
 
 function UsdBalanceBase({ balance }: { balance: number }) {
-  const { data: stxPrice } = useSuspenseStxPrice();
+  const { data: stxPrice } = useStxPrice();
   const usdBalance = getUsdValue(balance, stxPrice);
 
   if (!usdBalance) {
