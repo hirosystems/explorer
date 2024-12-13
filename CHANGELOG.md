@@ -1,3 +1,10 @@
+# [1.236.0](https://github.com/hirosystems/explorer/compare/v1.235.0...v1.236.0) (2024-12-13)
+
+
+### Features
+
+* add nansen to signers key map ([0797319](https://github.com/hirosystems/explorer/commit/0797319e9b0ac5dfec82038e7ab4e2ef74303c00))
+
 # [1.235.0](https://github.com/hirosystems/explorer/compare/v1.234.0...v1.235.0) (2024-12-06)
 
 
