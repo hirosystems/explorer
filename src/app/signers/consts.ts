@@ -90,7 +90,7 @@ export const SIGNER_KEY_MAP: Record<string, { poolOperator: string; name: string
   '0x03815f036a90512671911fd66cca53dd88d421beaa3253083635f267dc614ee888': {
     poolOperator: 'SMNDR0TBKJRFGGD87M5AAKYFG4BM7W87YVM5QZJP',
     name: 'Nansen',
-  }
+  },
 };
 export const mobileBorderCss = {
   '.has-horizontal-scroll &:before': {
