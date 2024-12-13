@@ -1,3 +1,10 @@
+## [1.236.1](https://github.com/hirosystems/explorer/compare/v1.236.0...v1.236.1) (2024-12-13)
+
+
+### Bug Fixes
+
+* remove stxprice suspense ([33824db](https://github.com/hirosystems/explorer/commit/33824db9806bc6c65dabb38c7a64f178e16c1bbd))
+
 # [1.236.0](https://github.com/hirosystems/explorer/compare/v1.235.0...v1.236.0) (2024-12-13)
 
 
