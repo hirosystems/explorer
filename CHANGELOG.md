@@ -1,3 +1,10 @@
+# [1.238.0](https://github.com/hirosystems/explorer/compare/v1.237.0...v1.238.0) (2024-12-17)
+
+
+### Features
+
+* remove naka testnet ([892fd67](https://github.com/hirosystems/explorer/commit/892fd67e9d548e5e5369cb876cb3fef59143ad87))
+
 # [1.237.0](https://github.com/hirosystems/explorer/compare/v1.236.2...v1.237.0) (2024-12-17)
 
 
