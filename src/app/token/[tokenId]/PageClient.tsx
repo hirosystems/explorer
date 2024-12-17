@@ -92,7 +92,7 @@ export default function PageClient({
           </Flex>
         </Box>
       )}
-      <TokenInfo tokenInfo={tokenInfo} txId={tokenId} />
+      <TokenInfo tokenInfo={tokenInfo} tokenId={tokenId} />
       <Tabs
         tokenId={tokenId}
         developerData={
