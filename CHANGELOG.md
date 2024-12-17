@@ -1,3 +1,10 @@
+# [1.237.0](https://github.com/hirosystems/explorer/compare/v1.236.2...v1.237.0) (2024-12-17)
+
+
+### Features
+
+* added confirmed and pending deposits ([b67ecb8](https://github.com/hirosystems/explorer/commit/b67ecb82a407be0df6405c4d575b5bbecc7d0054))
+
 ## [1.236.2](https://github.com/hirosystems/explorer/compare/v1.236.1...v1.236.2) (2024-12-17)
 
 
