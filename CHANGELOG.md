@@ -1,3 +1,10 @@
+## [1.238.1](https://github.com/hirosystems/explorer/compare/v1.238.0...v1.238.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* fixed sbtc circulating supply ([ed936f2](https://github.com/hirosystems/explorer/commit/ed936f2f83f206b872639422dc459d02e0f57c08))
+
 # [1.238.0](https://github.com/hirosystems/explorer/compare/v1.237.0...v1.238.0) (2024-12-17)
 
 
