@@ -1,21 +1,25 @@
-import { useColorMode } from '@chakra-ui/react';
+import { Icon } from '@chakra-ui/react';
 import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
-import React, { FC } from 'react';
+import { SealCheck, Warning } from '@phosphor-icons/react';
+import { FC } from 'react';
 
 import { TokenLink, TxLink } from '../../../common/components/ExplorerLinks';
-import { numberToString } from '../../../common/utils/utils';
+import { abbreviateNumber, getFtDecimalAdjustedBalance } from '../../../common/utils/utils';
 import { Flex } from '../../../ui/Flex';
 import { Td } from '../../../ui/Td';
 import { Text } from '../../../ui/Text';
 import { Tr } from '../../../ui/Tr';
 import { TokenAvatar } from '../../address/[principal]/TokenBalanceCard/TokenAvatar';
+import { getHasSBTCInName, getIsSBTC } from '../utils';
 
 export const TokenRow: FC<{
   ftToken: FtBasicMetadataResponse;
 }> = ({ ftToken }) => {
-  const colorMode = useColorMode().colorMode;
   const name = ftToken.name || 'FT Token';
-  // `${ftToken.contract_principal}::${name}`
+
+  const hasSBTCInName = getHasSBTCInName(name, ftToken.symbol ?? '');
+  const isSBTC = getIsSBTC(ftToken.contract_principal);
+
   return (
     <Tr>
       <Td padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
@@ -30,6 +34,29 @@ export const TokenRow: FC<{
           >
             {name} {ftToken.symbol ? `(${ftToken.symbol})` : null}
           </TokenLink>
+          {hasSBTCInName ? (
+            isSBTC ? (
+              <Flex
+                px={1.5}
+                py={1}
+                bg="green.300"
+                borderRadius="2xl"
+                border="1px solid var(--stacks-colors-green-500)"
+              >
+                <Icon as={SealCheck} h={3} w={3} color="green.600" />
+              </Flex>
+            ) : (
+              <Flex
+                px={1.5}
+                py={1}
+                bg="red.200"
+                borderRadius="2xl"
+                border="1px solid var(--stacks-colors-red-500)"
+              >
+                <Icon as={Warning} h={3} w={3} color="red.600" />
+              </Flex>
+            )
+          ) : null}
         </Flex>
       </Td>
       <Td padding={'10px'} display={['none', 'none', 'table-cell']}>
@@ -39,7 +66,12 @@ export const TokenRow: FC<{
       </Td>
       <Td isNumeric width={'130px'} padding={'10px 16px 10px 20px'}>
         <Text whiteSpace={'nowrap'} textOverflow={'ellipsis'} overflow={'hidden'} fontSize={'15px'}>
-          {numberToString(ftToken.total_supply ? Number(ftToken.total_supply) : 0)}
+          {ftToken.total_supply
+            ? abbreviateNumber(
+                getFtDecimalAdjustedBalance(ftToken.total_supply, ftToken.decimals || 0),
+                2
+              )
+            : 'N/A'}
         </Text>
       </Td>
     </Tr>

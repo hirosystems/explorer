@@ -4,7 +4,7 @@ import { Info } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useSuspenseStxSupply } from '../../../../common/queries/useStxSupply';
-import { numberToString } from '../../../../common/utils/utils';
+import { abbreviateNumber } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
@@ -18,11 +18,11 @@ function StxSupplyBase(props: GridProps) {
     data: { total_stx, unlocked_stx, total_stx_year_2050 },
   } = useSuspenseStxSupply();
   const circulatingSupplyNumber = unlocked_stx ? Number(unlocked_stx) : 0;
-  const circulatingSupplyFormatted = numberToString(circulatingSupplyNumber);
+  const circulatingSupplyFormatted = abbreviateNumber(circulatingSupplyNumber);
   const totalSupplyNumber = total_stx ? Number(total_stx) : 0;
-  const totalSupplyFormatted = numberToString(totalSupplyNumber);
+  const totalSupplyFormatted = abbreviateNumber(totalSupplyNumber);
   const maxSupplyBy2050Number = total_stx_year_2050 ? Number(total_stx_year_2050) : 0;
-  const maxSupplyBy2050Formatted = numberToString(maxSupplyBy2050Number);
+  const maxSupplyBy2050Formatted = abbreviateNumber(maxSupplyBy2050Number);
   const percentageUnlocked = ((circulatingSupplyNumber / totalSupplyNumber) * 100).toFixed(1);
   const isMainnet = useGlobalContext().activeNetwork.mode === 'mainnet';
 

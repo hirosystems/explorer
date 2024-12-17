@@ -1,5 +1,6 @@
-import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { useQuery } from '@tanstack/react-query';
+
+import { useGlobalContext } from '../context/useGlobalContext';
 
 export function useFeeTransfer() {
   const { url: activeNetworkUrl } = useGlobalContext().activeNetwork;

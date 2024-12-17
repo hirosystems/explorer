@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Grid } from '../../../ui/Grid';
 import { Table } from '../../../ui/Table';
@@ -20,6 +18,7 @@ interface TokenTableBaseProps {
 function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
   const { allFtTokensDeduped, isLoading, hasMore, loadMore } =
     useSuspenseTokens(debouncedSearchTerm);
+
   if (!allFtTokensDeduped.length) {
     return (
       <Grid placeItems="center" px="16px" py="32px" width={'100%'} minHeight={'container.md'}>

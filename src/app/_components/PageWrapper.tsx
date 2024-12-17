@@ -88,7 +88,7 @@ export function PageWrapper({
           minHeight={'100vh'}
         >
           <NavBar tokenPrice={tokenPrice} />
-          <Flex direction={'column'} mt={10} mb={8} gap={7}>
+          <Flex direction={'column'} mt={30} mb={8} gap={7}>
             {children}
           </Flex>
           <Footer />

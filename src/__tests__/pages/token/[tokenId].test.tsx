@@ -68,6 +68,7 @@ describe('getTokenInfo', () => {
         name: 'NAME',
         symbol: 'SYMBOL',
         totalSupply: null,
+        circulatingSupply: null,
       },
       extended: {
         categories: [],

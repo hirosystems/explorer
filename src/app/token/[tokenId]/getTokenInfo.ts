@@ -1,12 +1,15 @@
+import { ContractResponse } from '@/common/types/tx';
 import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 
 import { LUNAR_CRUSH_API_KEY } from '../../../common/constants/env';
 import { LunarCrushCoin } from '../../../common/types/lunarCrush';
 import { getCacheClient } from '../../../common/utils/cache-client';
 import { getApiUrl } from '../../../common/utils/network-utils';
+import { getFtDecimalAdjustedBalance } from '../../../common/utils/utils';
+import { HolderResponseType } from './Tabs/data/useHolders';
 import { BasicTokenInfo, DeveloperData, TokenInfoProps, TokenLinks } from './types';
 
-async function getToken(tokenId: string): Promise<LunarCrushCoin | undefined> {
+async function getTokenInfoFromLunarCrush(tokenId: string): Promise<LunarCrushCoin | undefined> {
   try {
     return await (
       await fetch(`https://lunarcrush.com/api4/public/coins/${tokenId}/v1`, {
@@ -31,7 +34,41 @@ async function getCachedTokenInfo(tokenId: string) {
   }
 }
 
-async function getBasicTokenInfo(
+async function getCirculatingSupplyFromHoldersEndpoint(apiUrl: string, tokenId: string) {
+  const contractInfoResponse = await fetch(`${apiUrl}/extended/v1/contract/${tokenId}`);
+  if (!contractInfoResponse.ok) {
+    console.error('Failed to fetch contract info');
+    return null;
+  }
+  const contractInfo: ContractResponse = await contractInfoResponse.json();
+  if (!contractInfo.abi) {
+    console.error('No ABI found for token');
+    return null;
+  }
+  const abi = JSON.parse(contractInfo.abi);
+  if (!abi?.fungible_tokens || abi.fungible_tokens.length === 0) {
+    console.error('No fungible tokens found in ABI');
+    return null;
+  }
+  const ftName = abi.fungible_tokens[0].name;
+  const fullyQualifiedTokenId = `${tokenId}::${ftName}`;
+  const holdersResponse = await fetch(
+    `${apiUrl}/extended/v1/tokens/ft/${fullyQualifiedTokenId}/holders`
+  );
+  if (!holdersResponse.ok) {
+    console.error('Failed to fetch holders info');
+    return null;
+  }
+  const holdersInfo: HolderResponseType = await holdersResponse.json();
+  if (!holdersInfo?.total_supply) {
+    console.error('No total supply found in holders info');
+    return null;
+  }
+  const holdersCirculatingSupply = holdersInfo.total_supply;
+  return holdersCirculatingSupply;
+}
+
+async function getBasicTokenInfoFromStacksApi(
   tokenId: string,
   chain: string,
   api?: string
@@ -44,38 +81,41 @@ async function getBasicTokenInfo(
       throw new Error('Unable to fetch token info for this request');
     }
 
-    console.log('[debug] cache miss, fetching ', `${apiUrl}/metadata/v1/ft/${tokenId}`);
-
     const tokenMetadataResponse = await fetch(`${apiUrl}/metadata/v1/ft/${tokenId}`);
-
     const tokenMetadata: FtMetadataResponse = await tokenMetadataResponse.json();
 
     const tokenName = tokenMetadata?.name;
     const tokenSymbol = tokenMetadata?.symbol;
+    const tokenDecimals = tokenMetadata?.decimals;
 
     if (!tokenName || !tokenSymbol) {
       throw new Error('token not found');
     }
 
+    const holdersCirculatingSupply = await getCirculatingSupplyFromHoldersEndpoint(apiUrl, tokenId);
+
     return {
       name: tokenMetadata?.metadata?.name || tokenName,
       symbol: tokenSymbol,
       totalSupply:
-        tokenMetadata?.total_supply && tokenMetadata?.decimals
-          ? Number(
-              BigInt(tokenMetadata?.total_supply) / BigInt(Math.pow(10, tokenMetadata?.decimals))
-            )
+        tokenMetadata?.total_supply && tokenDecimals
+          ? getFtDecimalAdjustedBalance(tokenMetadata?.total_supply, tokenDecimals)
           : null,
+      circulatingSupply: holdersCirculatingSupply
+        ? getFtDecimalAdjustedBalance(holdersCirculatingSupply, tokenDecimals || 0)
+        : null,
+      imageUri: tokenMetadata?.image_uri,
     };
   } catch (error) {
     console.error(error);
   }
 }
 
-async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenInfo) {
+async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInfo: BasicTokenInfo) {
   try {
-    const tokenInfoResponse = await getToken(tokenId);
+    const tokenInfoResponse = await getTokenInfoFromLunarCrush(tokenId);
     if (!tokenInfoResponse || tokenInfoResponse?.error) {
+      console.error('token not found in LunarCrush');
       return {
         basic: basicTokenInfo,
       };
@@ -85,8 +125,12 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
     const symbol = tokenInfoResponse?.data?.symbol || basicTokenInfo.symbol || null;
     const categories: string[] = [];
 
-    const circulatingSupply = tokenInfoResponse?.data?.circulating_supply || null;
     const totalSupply = basicTokenInfo.totalSupply || null;
+    const circulatingSupplyFromBasicTokenInfo = basicTokenInfo.circulatingSupply || null;
+    const circulatingSupply =
+      tokenInfoResponse?.data?.circulating_supply || circulatingSupplyFromBasicTokenInfo || null;
+    // const circulatingSupply = tokenInfoResponse?.data?.circulating_supply || null;
+    const imageUri = basicTokenInfo.imageUri || undefined;
 
     const currentPrice = tokenInfoResponse?.data?.price || null;
     const currentPriceInBtc = tokenInfoResponse?.data?.price_btc || null;
@@ -126,6 +170,8 @@ async function getDetailedTokenInfo(tokenId: string, basicTokenInfo: BasicTokenI
         name,
         symbol,
         totalSupply,
+        imageUri,
+        circulatingSupply,
       },
       extended: {
         categories,
@@ -177,12 +223,12 @@ export async function getTokenInfo(
       return cachedTokenInfo;
     }
 
-    const basicTokenInfo = await getBasicTokenInfo(tokenId, chain, api);
+    const basicTokenInfo = await getBasicTokenInfoFromStacksApi(tokenId, chain, api);
     if (!basicTokenInfo) {
       return {};
     }
 
-    const detailedTokenInfo = await getDetailedTokenInfo(tokenId, basicTokenInfo);
+    const detailedTokenInfo = await getDetailedTokenInfoFromLunarCrush(tokenId, basicTokenInfo);
     return detailedTokenInfo;
   } catch (error) {
     console.error(error);

@@ -2,7 +2,6 @@ import { useColorMode } from '@chakra-ui/react';
 import { FC } from 'react';
 
 import { TxLink } from '../../../../common/components/ExplorerLinks';
-import { numberToString } from '../../../../common/utils/utils';
 import { Box } from '../../../../ui/Box';
 import { Flex } from '../../../../ui/Flex';
 import { GridProps } from '../../../../ui/Grid';
