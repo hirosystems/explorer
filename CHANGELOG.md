@@ -1,3 +1,10 @@
+## [1.236.2](https://github.com/hirosystems/explorer/compare/v1.236.1...v1.236.2) (2024-12-17)
+
+
+### Bug Fixes
+
+* fixed sbtc page ([e4a68bb](https://github.com/hirosystems/explorer/commit/e4a68bb29bac9af052328aa21d937c41a65c6b93))
+
 ## [1.236.1](https://github.com/hirosystems/explorer/compare/v1.236.0...v1.236.1) (2024-12-13)
 
 
