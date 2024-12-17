@@ -1,6 +1,7 @@
 import { ContractResponse } from '@/common/types/tx';
 import { FtMetadataResponse } from '@hirosystems/token-metadata-api-client';
 
+import { getIsSBTC } from '../../../app/tokens/utils';
 import { LUNAR_CRUSH_API_KEY } from '../../../common/constants/env';
 import { LunarCrushCoin } from '../../../common/types/lunarCrush';
 import { getCacheClient } from '../../../common/utils/cache-client';
@@ -121,15 +122,17 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
       };
     }
 
+    const isSBTC = getIsSBTC(tokenId);
+
     const name = tokenInfoResponse?.data?.name || basicTokenInfo.name || null;
     const symbol = tokenInfoResponse?.data?.symbol || basicTokenInfo.symbol || null;
     const categories: string[] = [];
 
     const totalSupply = basicTokenInfo.totalSupply || null;
     const circulatingSupplyFromBasicTokenInfo = basicTokenInfo.circulatingSupply || null;
-    const circulatingSupply =
-      tokenInfoResponse?.data?.circulating_supply || circulatingSupplyFromBasicTokenInfo || null;
-    // const circulatingSupply = tokenInfoResponse?.data?.circulating_supply || null;
+    const circulatingSupply = isSBTC
+      ? circulatingSupplyFromBasicTokenInfo // LunarCrush is returning an incorrect circulating supply for SBTC. Use the circulating supply from the holders endpoint on Stacks API instead.
+      : tokenInfoResponse?.data?.circulating_supply || circulatingSupplyFromBasicTokenInfo || null;
     const imageUri = basicTokenInfo.imageUri || undefined;
 
     const currentPrice = tokenInfoResponse?.data?.price || null;
