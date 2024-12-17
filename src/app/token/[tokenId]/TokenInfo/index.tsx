@@ -14,7 +14,10 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; txId: string }> = ({ tok
       <Wrapper>
         <Supply
           borderRightWidth={['0px', '0px', '1px', '1px']}
-          circulatingSupply={tokenInfo.extended?.circulatingSupply}
+          circulatingSupply={
+            tokenInfo.basic?.circulatingSupply || tokenInfo.extended?.circulatingSupply
+            // tokenInfo.extended?.circulatingSupply
+          }
           totalSupply={tokenInfo.basic?.totalSupply}
         />
         <Price

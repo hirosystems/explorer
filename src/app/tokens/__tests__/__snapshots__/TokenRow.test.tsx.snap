@@ -56,7 +56,7 @@ exports[`TokenRow renders correctly 1`] = `
       <span
         className="chakra-text css-ae4fie"
       >
-        1.00M
+        1M
       </span>
     </td>
   </tr>

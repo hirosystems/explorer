@@ -1,13 +1,14 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense, useMemo } from 'react';
 
 import { AddressLink } from '../../../../../common/components/ExplorerLinks';
 import { ListFooter } from '../../../../../common/components/ListFooter';
 import { Section } from '../../../../../common/components/Section';
 import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
 import { useContractById } from '../../../../../common/queries/useContractById';
-import { truncateMiddle } from '../../../../../common/utils/utils';
+import { useFtMetadata } from '../../../../../common/queries/useFtMetadata';
+import { ftDecimals, truncateMiddle } from '../../../../../common/utils/utils';
 import { Flex } from '../../../../../ui/Flex';
 import { Table } from '../../../../../ui/Table';
 import { Tbody } from '../../../../../ui/Tbody';
@@ -98,11 +99,12 @@ function generateHolderRowInfo(
   address: string,
   balance: number,
   totalSupply: number,
-  tokenPrice: number | null | undefined
+  tokenPrice: number | null | undefined,
+  decimals: number | undefined
 ): HolderRowInfo {
   return {
     address,
-    balance: balance.toLocaleString(),
+    balance: ftDecimals(balance, decimals || 0).toLocaleString(),
     percentage: `${((balance / totalSupply) * 100).toFixed(2).toLocaleString()}%`,
     value:
       typeof tokenPrice === 'number' ? (balance * tokenPrice).toFixed(2).toLocaleString() : 'N/A',
@@ -199,6 +201,9 @@ const HoldersTableBase = ({
   const { isFetchingNextPage, fetchNextPage, hasNextPage } = response;
   const { total: totalNumHolders, total_supply: totalSupply } = response.data.pages[0];
   const holderBalances = useSuspenseInfiniteQueryResult<HolderInfo, HolderResponseType>(response);
+  const filteredHolderBalances = holderBalances.filter(holder => holder.balance !== '0');
+  const { data: tokenMetadata } = useFtMetadata(contract?.contract_id);
+  const decimals = useMemo(() => tokenMetadata?.decimals, [tokenMetadata]);
 
   if (!holderBalances || !totalNumHolders || !totalSupply) {
     throw new Error('Holders data is not available');
@@ -209,7 +214,7 @@ const HoldersTableBase = ({
       <HoldersTableLayout
         numHolders={<Text fontWeight="medium">{totalNumHolders.toLocaleString()} Holders</Text>}
         holdersTableHeaders={<HoldersTableHeaders hasPrice={!!tokenPrice} />}
-        holdersTableRows={holderBalances.map((holder, i) => {
+        holdersTableRows={filteredHolderBalances.map((holder, i) => {
           const { address, balance } = holder;
           return (
             <HolderTableRow
@@ -219,7 +224,8 @@ const HoldersTableBase = ({
                 address,
                 parseInt(balance),
                 parseInt(totalSupply),
-                tokenPrice
+                tokenPrice,
+                decimals
               )}
               isFirst={i === 0}
               isLast={i === holderBalances.length - 1}

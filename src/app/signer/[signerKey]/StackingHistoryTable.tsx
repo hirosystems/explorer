@@ -1,10 +1,10 @@
 'use client';
 
-import { formatSignerLatency } from '@/app/signers/SignersTable';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode, Suspense, useCallback, useMemo, useState } from 'react';
 
+import { formatSignerLatency } from '../../../app/signers/SignersTable';
 import { StackingHistoryInfo, useSignerStackingHistory } from '../../../app/signers/data/UseSigner';
 import { ListFooter } from '../../../common/components/ListFooter';
 import { Section } from '../../../common/components/Section';

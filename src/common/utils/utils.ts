@@ -231,11 +231,17 @@ export function initBigNumber(num: string | number | BigNumber) {
   return BigNumber.isBigNumber(num) ? num : new BigNumber(num);
 }
 
+export const getFtDecimalAdjustedBalance = (
+  value: number | string | BigNumber,
+  decimals: number
+): number => {
+  return initBigNumber(value).shiftedBy(-decimals).toNumber();
+};
+
 export const ftDecimals = (value: number | string | BigNumber, decimals: number) => {
-  return initBigNumber(value)
-    .shiftedBy(-decimals)
-    .toNumber()
-    .toLocaleString('en-US', { maximumFractionDigits: decimals });
+  return getFtDecimalAdjustedBalance(value, decimals).toLocaleString('en-US', {
+    maximumFractionDigits: decimals,
+  });
 };
 
 export function getLocaleDecimalSeparator() {
@@ -286,25 +292,46 @@ export function getNextPageParam(lastPage?: GenericResponseType<any>) {
   return sum;
 }
 
-export const numberToString = (value: number) => {
+const maxDecimals = 20; // just some arbitrarily large number to preserve precision
+const formatNumber = (num: number, divisor: number, suffix: string, decimals?: number) => {
+  // If decimals is undefined, don't limit decimal places
+  if (decimals == null) {
+    return `${(num / divisor)
+      .toLocaleString(undefined, { maximumFractionDigits: maxDecimals })
+      .replace(/\.0+$/, '')}${suffix}`;
+  }
+
+  if (num < 1 / Math.pow(10, decimals)) {
+    const magnitude = Math.ceil(Math.abs(Math.log10(num))); // find the magnitude of the number, ie the # of decimal places needed to reach the first significant digit
+    return num.toFixed(magnitude + decimals - 1).replace(/\.0+$/, ''); // add decimals - 1 to get the correct number of decimal places
+  }
+
+  // Remove trailing zeros and decimal point if all decimals are zero
+  return `${parseFloat((num / divisor).toFixed(decimals))
+    .toLocaleString(undefined, { maximumFractionDigits: maxDecimals })
+    .replace(/\.0+$/, '')}${suffix}`;
+};
+
+export const abbreviateNumber = (value: number, decimals?: number) => {
   const mil = 1e6;
   const bil = 1e9;
   const tril = 1e12;
   const quadril = 1e15;
 
   if (value >= quadril) {
-    return `${(value / quadril).toFixed(2)}Q`;
+    return formatNumber(value, quadril, 'Q', 2);
   }
   if (value >= tril) {
-    return `${(value / tril).toFixed(2)}T`;
+    return formatNumber(value, tril, 'T', 2);
   }
   if (value >= bil) {
-    return `${(value / bil).toFixed(2)}B`;
+    return formatNumber(value, bil, 'B', 2);
   }
   if (value >= mil) {
-    return `${(value / mil).toFixed(2)}M`;
+    return formatNumber(value, mil, 'M', 2);
   }
-  return value.toLocaleString();
+
+  return formatNumber(value, 1, '', decimals);
 };
 
 export function microStxToStx(microStx: string | number): number | string {

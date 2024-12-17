@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { numberToString } from '../../common/utils/utils';
+import { abbreviateNumber } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { StatCardBase } from './StatsCardBase';
@@ -31,7 +31,7 @@ export function StxStackedCardBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   return (
     <StatCardBase
       statTitle="STX stacked"
-      statValue={numberToString(stackedSupply)}
+      statValue={abbreviateNumber(stackedSupply)}
       moreInfo={
         moreInfo ? (
           <Text

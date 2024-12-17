@@ -28,6 +28,8 @@ export interface BasicTokenInfo {
   name: string | null;
   symbol: string | null;
   totalSupply: number | null;
+  circulatingSupply: number | null;
+  imageUri: string | undefined;
 }
 
 export interface TokenInfoProps {

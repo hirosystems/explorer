@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 
 import { Card } from '../../common/components/Card';
-import { numberToString } from '../../common/utils/utils';
+import { abbreviateNumber } from '../../common/utils/utils';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { StatCardBase } from './StatsCardBase';
 import { useStxSupply } from './data/useStxSupply';
@@ -18,7 +18,7 @@ export function TotalStackedCardBase() {
     <StatCardBase
       statTitle="Total stacked"
       statValue={stxStackedPercentageFormatted}
-      moreInfo={`of ${numberToString(circulatingSupply)} circulating supply`}
+      moreInfo={`of ${abbreviateNumber(circulatingSupply)} circulating supply`}
     />
   );
 }
