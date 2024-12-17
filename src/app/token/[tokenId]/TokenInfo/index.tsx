@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
+import { getIsSBTC } from '../../../../app/tokens/utils';
 import { Wrapper } from '../../../_components/Stats/Wrapper';
 import { TokenInfoProps } from '../types';
 import { MarketCap } from './MarketCap';
@@ -12,14 +13,18 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; tokenId: string }> = ({
   tokenInfo,
   tokenId,
 }) => {
+  const circulatingSupply =
+    tokenInfo?.extended?.circulatingSupply || tokenInfo?.basic?.circulatingSupply;
+  const currentPrice = tokenInfo?.extended?.currentPrice;
+  const isSBTC = getIsSBTC(tokenId);
+  const sBTCMarketCapOverride = // LunarCrush is returning an incorrect circulating supply for SBTC, resulting in an incorrect market cap. Manually overriding it here.
+    circulatingSupply && currentPrice ? circulatingSupply * currentPrice : undefined;
   return (
     <ErrorBoundary fallbackRender={() => null}>
       <Wrapper>
         <Supply
           borderRightWidth={['0px', '0px', '1px', '1px']}
-          circulatingSupply={
-            tokenInfo.basic?.circulatingSupply || tokenInfo.extended?.circulatingSupply
-          }
+          circulatingSupply={circulatingSupply}
           totalSupply={tokenInfo.basic?.totalSupply}
         />
         <Price
@@ -34,6 +39,7 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; tokenId: string }> = ({
           tradingVolume24h={tokenInfo.extended?.tradingVolume24h}
           tradingVolumeChangePercentage24h={tokenInfo.extended?.tradingVolumeChangePercentage24h}
           borderRightWidth={['0px', '0px', '1px', '1px']}
+          marketCapOverride={isSBTC ? sBTCMarketCapOverride : undefined}
         />
         <Transaction txId={tokenId} marketCapRank={tokenInfo.extended?.marketCapRank} />
       </Wrapper>
