@@ -20,7 +20,6 @@ import {
   NetworkModeUrlMap,
   devnetNetwork,
   mainnetNetwork,
-  nakamotoTestnetNetwork,
   oldTestnetNetwork,
   testnetNetwork,
 } from '../constants/network';
@@ -116,7 +115,6 @@ export const GlobalContextProvider: FC<{
       {
         [mainnetNetwork.url]: mainnetNetwork,
         [testnetNetwork.url]: testnetNetwork,
-        [nakamotoTestnetNetwork.url]: nakamotoTestnetNetwork,
         [oldTestnetNetwork.url]: oldTestnetNetwork,
         [devnetNetwork.url]: devnetNetwork,
         ...addedCustomNetworks,

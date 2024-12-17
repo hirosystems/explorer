@@ -1,3 +1,4 @@
+import { getIsSBTC } from '@/app/tokens/utils';
 import { FC } from 'react';
 
 import { Flex } from '../../../../ui/Flex';
@@ -10,20 +11,32 @@ export const Price: FC<
     currentPrice: number | null | undefined;
     priceChangePercentage24h: number | null | undefined;
     currentPriceInBtc: number | null | undefined;
+    tokenId: string;
   }
-> = ({ currentPrice, priceChangePercentage24h, currentPriceInBtc, ...gridProps }) => {
+> = ({ currentPrice, priceChangePercentage24h, currentPriceInBtc, tokenId, ...gridProps }) => {
+  const isSBTC = getIsSBTC(tokenId);
   return (
     <StatSection
       title="Price"
-      bodyMainText={currentPrice ? `$${currentPrice}` : 'N/A'}
+      bodyMainText={
+        currentPrice
+          ? `$${parseFloat(currentPrice.toFixed(2)).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}`
+          : 'N/A'
+      }
       bodySecondaryText={
-        priceChangePercentage24h ? (
-          <TrendArrow change={priceChangePercentage24h} size={'16px'} />
-        ) : null
+        priceChangePercentage24h ? <TrendArrow change={priceChangePercentage24h} size={4} /> : null
       }
       caption={
-        <Flex fontSize={'12px'} fontWeight="500" alignItems={'center'} gap={'6px'}>
-          {currentPriceInBtc ? `${currentPriceInBtc.toFixed(8)} BTC` : 'N/A'}
+        <Flex fontSize={'12px'} fontWeight="500" alignItems={'center'} gap={1.5}>
+          {isSBTC
+            ? null
+            : currentPriceInBtc
+              ? `${parseFloat(currentPriceInBtc.toFixed(8)).toLocaleString(undefined, {
+                  maximumFractionDigits: 8,
+                })} BTC`
+              : 'N/A'}
         </Flex>
       }
       {...gridProps}

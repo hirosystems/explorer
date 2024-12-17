@@ -3,11 +3,6 @@ import { useSearchParams as useSearchParamsActual } from 'next/navigation';
 import { useContext } from 'react';
 
 import { fetchCustomNetworkId } from '../../components/modals/AddNetwork/utils';
-import {
-  NetworkModeBtcAddressBaseUrlMap,
-  NetworkModeBtcBlockBaseUrlMap,
-  NetworkModeBtcTxBaseUrlMap,
-} from '../../constants/network';
 import { GlobalContext, GlobalContextProvider } from '../GlobalContextProvider';
 
 const useSearchParams = useSearchParamsActual as jest.MockedFunction<typeof useSearchParamsActual>;
@@ -44,11 +39,6 @@ const GlobalContextTestComponent = () => {
   );
 };
 
-const apiUrls = {
-  mainnet: 'https://api.hiro.so',
-  testnet: 'https://api.testnet.hiro.so',
-};
-
 const getContextField = (fieldId: string) => {
   return JSON.parse(screen.getByTestId(fieldId).innerHTML);
 };
@@ -65,14 +55,7 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <GlobalContextProvider
-        headerCookies={''}
-        apiUrls={apiUrls}
-        btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
-        btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
-        btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
-        apiClient={{ GET: () => {} }}
-      >
+      <GlobalContextProvider headerCookies={''}>
         <GlobalContextTestComponent />
       </GlobalContextProvider>
     );
@@ -89,20 +72,13 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <GlobalContextProvider
-        headerCookies={''}
-        apiUrls={apiUrls}
-        btcBlockBaseUrls={NetworkModeBtcBlockBaseUrlMap}
-        btcTxBaseUrls={NetworkModeBtcTxBaseUrlMap}
-        btcAddressBaseUrls={NetworkModeBtcAddressBaseUrlMap}
-        apiClient={{ GET: () => {} }}
-      >
+      <GlobalContextProvider headerCookies={''}>
         <GlobalContextTestComponent />
       </GlobalContextProvider>
     );
 
     const networks = getContextField('networks');
-    expect(Object.keys(networks).length).toBe(5);
+    expect(Object.keys(networks).length).toBe(4);
 
     await waitFor(() => {
       expect(fetchCustomNetworkId).toHaveBeenCalledWith(customApiUrl, false);
@@ -110,7 +86,7 @@ describe('GlobalContext', () => {
 
     await waitFor(() => {
       const updatedNetworks = getContextField('networks');
-      expect(Object.keys(updatedNetworks).length).toBe(6);
+      expect(Object.keys(updatedNetworks).length).toBe(5);
       expect(updatedNetworks[customApiUrl].isCustomNetwork).toBe(true);
     });
   });
