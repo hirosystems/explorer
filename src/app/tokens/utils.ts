@@ -1,3 +1,5 @@
+import { sbtcContractAddress } from '../token/[tokenId]/consts';
+
 export const getHasSBTCInName = (name: string, symbol: string) => {
   if (!name || !symbol) {
     return false;
@@ -8,5 +10,5 @@ export const getIsSBTC = (contractPrincipal: string) => {
   if (!contractPrincipal) {
     return false;
   }
-  return contractPrincipal === 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token';
+  return contractPrincipal === sbtcContractAddress;
 };
