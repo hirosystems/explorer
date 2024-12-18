@@ -1,3 +1,10 @@
+## [1.239.1](https://github.com/hirosystems/explorer/compare/v1.239.0...v1.239.1) (2024-12-18)
+
+
+### Bug Fixes
+
+* faucet request fixed ([300a596](https://github.com/hirosystems/explorer/commit/300a5962bc7fbf9b16be0fc10834b7d5345b8a0a))
+
 # [1.239.0](https://github.com/hirosystems/explorer/compare/v1.238.2...v1.239.0) (2024-12-18)
 
 
