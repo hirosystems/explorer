@@ -3,13 +3,8 @@
 import { NextPage } from 'next';
 import React from 'react';
 
-import { Badge } from '../../../common/components/Badge';
-import { DropIcon } from '../../../common/components/icons/drop';
 import { useFaucet } from '../../../common/queries/useFaucet';
-import { Box } from '../../../ui/Box';
 import { Button } from '../../../ui/Button';
-import { Flex } from '../../../ui/Flex';
-import { Grid } from '../../../ui/Grid';
 import { HStack } from '../../../ui/HStack';
 import { Icon } from '../../../ui/Icon';
 import { Stack } from '../../../ui/Stack';
@@ -44,7 +39,7 @@ const Faucet: NextPage = () => {
     if (stackingIndex <= 3) {
       setIndex(i => ++i);
       if (stackingIndex === 3 && !!stxAddress) {
-        void runFaucetStx({ address: stxAddress, staking: true });
+        void runFaucetStx({ address: stxAddress, stacking: true });
       }
     }
   };
