@@ -1,5 +1,6 @@
 'use client';
 
+import { SBTCModal } from '@/common/components/modals/SBTCModal';
 import { useColorModeValue } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
@@ -77,7 +78,8 @@ export function PageWrapper({
         <IncidentsStatusBarWithErrorBoundary />
         <CMSStatusBars statusBarContent={statusBarContent} />
       </Flex>
-      <NakamotoModal />
+      {/* <NakamotoModal /> */}
+      <SBTCModal />
       <WrapperWithBg>
         <Flex
           mx="auto"
