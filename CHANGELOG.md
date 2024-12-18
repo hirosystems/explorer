@@ -1,3 +1,10 @@
+# [1.239.0](https://github.com/hirosystems/explorer/compare/v1.238.2...v1.239.0) (2024-12-18)
+
+
+### Features
+
+* sbtc modal ([65697a1](https://github.com/hirosystems/explorer/commit/65697a163a5cf7b2050cb111a10008e8b73533e5))
+
 ## [1.238.2](https://github.com/hirosystems/explorer/compare/v1.238.1...v1.238.2) (2024-12-18)
 
 
