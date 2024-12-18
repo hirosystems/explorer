@@ -1,3 +1,10 @@
+## [1.238.2](https://github.com/hirosystems/explorer/compare/v1.238.1...v1.238.2) (2024-12-18)
+
+
+### Bug Fixes
+
+* overriding marketcap ([88898ff](https://github.com/hirosystems/explorer/commit/88898ff4b45b825caef53158e4db0319a173d612))
+
 ## [1.238.1](https://github.com/hirosystems/explorer/compare/v1.238.0...v1.238.1) (2024-12-17)
 
 
