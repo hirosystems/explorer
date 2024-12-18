@@ -1,3 +1,10 @@
+# [1.240.0](https://github.com/hirosystems/explorer/compare/v1.239.1...v1.240.0) (2024-12-18)
+
+
+### Features
+
+* added sbtc to top of tokens list ([40fd66c](https://github.com/hirosystems/explorer/commit/40fd66cf5c4a2ccd562d8578b2ebe72aac568144))
+
 ## [1.239.1](https://github.com/hirosystems/explorer/compare/v1.239.0...v1.239.1) (2024-12-18)
 
 
