@@ -8,6 +8,7 @@ import {
   useSuspenseInfiniteQueryResult,
 } from '../../common/hooks/useInfiniteQueryResult';
 import { useFtTokens, useSuspenseFtTokens } from '../../common/queries/useFtTokens';
+import { sbtcContractAddress } from '../token/[tokenId]/consts';
 
 export const useSuspenseTokens = (
   debouncedSearchTerm: string
@@ -33,25 +34,44 @@ export const useSuspenseTokens = (
     { enabled: searchByAddress }
   );
 
+  const shouldAddSbtc = useMemo(() => !debouncedSearchTerm, [debouncedSearchTerm]); // Only add sBTC if no search term is provided. If sbtc is searched, it will be added by default. If a search term that is not sbtc is provided, sbtc should not be added.
+  const sbtcResponse = useFtTokens({ address: sbtcContractAddress }, { enabled: shouldAddSbtc });
+
   const ftTokensSearchedByName =
     useSuspenseInfiniteQueryResult<FtBasicMetadataResponse>(searchByNameResponse);
   const ftTokensSearchedBySymbol =
     useInfiniteQueryResult<FtBasicMetadataResponse>(searchBySymbolResponse);
   const ftTokensSearchedByAddress =
     useInfiniteQueryResult<FtBasicMetadataResponse>(searchByAddressResponse);
+  const sbtc = useInfiniteQueryResult<FtBasicMetadataResponse>(sbtcResponse);
 
   const allFtTokensDeduped = useMemo(() => {
     const allFtTokens = [
       ...ftTokensSearchedByName,
       ...ftTokensSearchedBySymbol,
       ...ftTokensSearchedByAddress,
+      ...(shouldAddSbtc ? sbtc : []),
     ];
     const uniqueFtTokens = new Map<string, FtBasicMetadataResponse>();
     allFtTokens.forEach(ftToken => {
       uniqueFtTokens.set(ftToken.tx_id, ftToken);
     });
-    return Array.from(uniqueFtTokens.values());
-  }, [ftTokensSearchedByAddress, ftTokensSearchedByName, ftTokensSearchedBySymbol]);
+    return Array.from(uniqueFtTokens.values()).sort((a, b) => {
+      // First check for sBTC
+      if (shouldAddSbtc) {
+        if (a.tx_id === sbtc[0]?.tx_id) return -1;
+        if (b.tx_id === sbtc[0]?.tx_id) return 1;
+      }
+      // Then do alphabetical comparison
+      return (a.name ?? '').localeCompare(b.name ?? '');
+    });
+  }, [
+    ftTokensSearchedByAddress,
+    ftTokensSearchedByName,
+    ftTokensSearchedBySymbol,
+    sbtc,
+    shouldAddSbtc,
+  ]);
 
   const loadMore = useCallback(() => {
     void searchByNameResponse.fetchNextPage();

@@ -1,8 +1,5 @@
 'use client';
 
-import { useColorMode } from '@chakra-ui/react';
-import * as React from 'react';
-
 import { Table } from '../../../ui/Table';
 import { TableContainer } from '../../../ui/TableContainer';
 import { Tbody } from '../../../ui/Tbody';
@@ -12,7 +9,6 @@ import { Tr } from '../../../ui/Tr';
 import { Loading as TokenRowLoading } from '../TokenRow/loading';
 
 export function TokenTableSkeleton() {
-  const colorMode = useColorMode().colorMode;
   return (
     <TableContainer>
       <Table variant="simple" __css={{ tableLayout: 'fixed', width: 'full' }}>
