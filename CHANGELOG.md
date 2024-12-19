@@ -1,3 +1,10 @@
+## [1.240.2](https://github.com/hirosystems/explorer/compare/v1.240.1...v1.240.2) (2024-12-19)
+
+
+### Bug Fixes
+
+* changed the link and text ([025dd89](https://github.com/hirosystems/explorer/commit/025dd899574c7d55f4954f78332be2a2d2f7683a))
+
 ## [1.240.1](https://github.com/hirosystems/explorer/compare/v1.240.0...v1.240.1) (2024-12-19)
 
 
