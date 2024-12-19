@@ -74,11 +74,13 @@ export function SBTCModal() {
               <Flex alignItems="center" gap={1}>
                 <TextLink
                   color="accent.stacks-500"
-                  href={'https://www.stacks.co/sbtc'}
+                  href={
+                    'https://explorer.hiro.so/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?chain=mainnet'
+                  }
                   fontSize={'sm'}
                   target={'_blank'}
                 >
-                  Learn more about sBTC
+                  See sBTC in the Explorer
                 </TextLink>
                 <Icon as={ArrowUpRight} size={3} color="accent.stacks-500" />
               </Flex>
