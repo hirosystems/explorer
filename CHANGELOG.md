@@ -1,3 +1,10 @@
+## [1.240.1](https://github.com/hirosystems/explorer/compare/v1.240.0...v1.240.1) (2024-12-19)
+
+
+### Bug Fixes
+
+* fixed pending tx receipt time ([8971b2d](https://github.com/hirosystems/explorer/commit/8971b2ddfefd023db28beaf5f339d989225bed0e))
+
 # [1.240.0](https://github.com/hirosystems/explorer/compare/v1.239.1...v1.240.0) (2024-12-18)
 
 
