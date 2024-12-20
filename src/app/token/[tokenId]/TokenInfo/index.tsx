@@ -41,7 +41,10 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; tokenId: string }> = ({
           borderRightWidth={['0px', '0px', '1px', '1px']}
           marketCapOverride={isSBTC ? sBTCMarketCapOverride : undefined}
         />
-        <Transaction txId={tokenId} marketCapRank={tokenInfo.extended?.marketCapRank} />
+        <Transaction
+          txId={tokenId}
+          marketCapRank={isSBTC ? null : tokenInfo.extended?.marketCapRank}
+        />
       </Wrapper>
     </ErrorBoundary>
   );
