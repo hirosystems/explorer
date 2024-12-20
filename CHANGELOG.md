@@ -1,3 +1,10 @@
+## [1.240.3](https://github.com/hirosystems/explorer/compare/v1.240.2...v1.240.3) (2024-12-20)
+
+
+### Bug Fixes
+
+* set sbtc marketcap rank to n/a ([2ed5db4](https://github.com/hirosystems/explorer/commit/2ed5db46991063c7b6a6c74230ffbd871b579d1f))
+
 ## [1.240.2](https://github.com/hirosystems/explorer/compare/v1.240.1...v1.240.2) (2024-12-19)
 
 
