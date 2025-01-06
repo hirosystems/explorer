@@ -1,3 +1,10 @@
+# [1.241.0](https://github.com/hirosystems/explorer/compare/v1.240.3...v1.241.0) (2025-01-06)
+
+
+### Features
+
+* removed the sbtc modal ([c89a780](https://github.com/hirosystems/explorer/commit/c89a780518d7d61bda23c418e1931ccb9bac30eb))
+
 ## [1.240.3](https://github.com/hirosystems/explorer/compare/v1.240.2...v1.240.3) (2024-12-20)
 
 
