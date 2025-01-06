@@ -79,7 +79,7 @@ export function PageWrapper({
         <CMSStatusBars statusBarContent={statusBarContent} />
       </Flex>
       {/* <NakamotoModal /> */}
-      <SBTCModal />
+      {/* <SBTCModal /> */}
       <WrapperWithBg>
         <Flex
           mx="auto"
