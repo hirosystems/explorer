@@ -1,3 +1,10 @@
+# [1.242.0](https://github.com/hirosystems/explorer/compare/v1.241.0...v1.242.0) (2025-01-10)
+
+
+### Features
+
+* risky tokens banner ([1e276a4](https://github.com/hirosystems/explorer/commit/1e276a4aae5870ae0dec19a77cbcc24a24117898))
+
 # [1.241.0](https://github.com/hirosystems/explorer/compare/v1.240.3...v1.241.0) (2025-01-06)
 
 
