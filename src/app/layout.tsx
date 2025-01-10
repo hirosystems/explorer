@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 
 import { meta } from '../common/constants/meta';
 import { GlobalContextProvider } from '../common/context/GlobalContextProvider';
+import { loadBanditState } from '../common/utils/bandit';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getStatusBarContent } from './getStatusBarContent';
@@ -19,6 +20,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const headersList = headers();
   const tokenPrice = await getTokenPrice();
   const statusBarContent = await getStatusBarContent();
+  loadBanditState();
   return (
     <html lang="en">
       <body>
