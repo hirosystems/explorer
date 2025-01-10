@@ -3,6 +3,7 @@
 import { getHasSBTCInName, getIsSBTC } from '@/app/tokens/utils';
 import { Box, Icon, Image, Link, Stack, Text } from '@chakra-ui/react';
 import { SealCheck, Warning } from '@phosphor-icons/react';
+import { useMemo } from 'react';
 
 import { Sip10Disclaimer } from '../../../common/components/Sip10Disclaimer';
 import { Flex } from '../../../ui/Flex';
@@ -12,6 +13,8 @@ import { PageTitle } from '../../_components/PageTitle';
 import { Tabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
 import { TokenInfoProps } from './types';
+
+const RISKY_TOKENS = ['SP1J45NVEGQ7ZA4M57TGF0RAB00TMYCYG00X8EF5B.granite-btc'];
 
 export default function PageClient({
   tokenId,
@@ -25,6 +28,49 @@ export default function PageClient({
   const categories = tokenInfo.extended?.categories || [];
   const hasSBTCInName = getHasSBTCInName(name ?? '', symbol ?? '');
   const isSBTC = getIsSBTC(tokenId);
+  const isRisky = RISKY_TOKENS.includes(tokenId);
+  const showWarning = isRisky || (hasSBTCInName && !isSBTC);
+  const warningMessage = useMemo(() => {
+    if (isRisky) {
+      return (
+        <Box borderRadius="xl" bg="red.200" p={4}>
+          <Flex gap={2}>
+            <Icon as={Warning} h={4} w={4} color="red.600" />
+            <Text fontSize="sm" display="inline">
+              <Text as="span" fontWeight="bold">
+                Warning:&nbsp;
+              </Text>
+              This token may be a scam. Engaging with unverified tokens could result in loss of
+              funds.
+            </Text>
+          </Flex>
+        </Box>
+      );
+    }
+    if (hasSBTCInName && !isSBTC) {
+      return (
+        <Box borderRadius="xl" bg="red.200" p={4}>
+          <Flex gap={2}>
+            <Icon as={Warning} h={4} w={4} color="red.600" />
+            <Text fontSize="sm" display="inline">
+              <Text as="span" fontWeight="bold">
+                Warning:&nbsp;
+              </Text>
+              This is not{' '}
+              <Link
+                href="https://explorer.hiro.so/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?chain=mainnet"
+                isExternal
+              >
+                the official sBTC token
+              </Link>{' '}
+              and may be a scam. Engaging with unverified tokens could result in loss of funds.
+            </Text>
+          </Flex>
+        </Box>
+      );
+    }
+    return null;
+  }, [hasSBTCInName, isRisky, isSBTC]);
   return (
     <>
       <Stack gap={2}>
@@ -56,7 +102,7 @@ export default function PageClient({
               </Flex>
             </Tag>
           )}
-          {hasSBTCInName && !isSBTC && (
+          {!!warningMessage && (
             <Tag
               color="red.600"
               bg="red.200"
@@ -72,26 +118,7 @@ export default function PageClient({
           )}
         </Flex>
       </Stack>
-      {hasSBTCInName && !isSBTC && (
-        <Box borderRadius="xl" bg="red.200" p={4}>
-          <Flex gap={2}>
-            <Icon as={Warning} h={4} w={4} color="red.600" />
-            <Text fontSize="sm" display="inline">
-              <Text as="span" fontWeight="bold">
-                Warning:&nbsp;
-              </Text>
-              This is not{' '}
-              <Link
-                href="https://explorer.hiro.so/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?chain=mainnet"
-                isExternal
-              >
-                the official sBTC token
-              </Link>{' '}
-              and may be a scam. Engaging with unverified tokens could result in loss of funds.
-            </Text>
-          </Flex>
-        </Box>
-      )}
+      {warningMessage}
       <TokenInfo tokenInfo={tokenInfo} tokenId={tokenId} />
       <Tabs
         tokenId={tokenId}
