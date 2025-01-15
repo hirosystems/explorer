@@ -2,7 +2,7 @@
 
 import { Clock } from '@phosphor-icons/react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { BtcStxBlockLinks } from '../../../../common/components/BtcStxBlockLinks';
 import { KeyValueHorizontal } from '../../../../common/components/KeyValueHorizontal';
@@ -14,11 +14,15 @@ import { Icon } from '../../../../ui/Icon';
 import { Tooltip } from '../../../../ui/Tooltip';
 import { useMediaQuery } from '../../../../ui/hooks/useMediaQuery';
 import { ExplorerErrorBoundary } from '../../../_components/ErrorBoundary';
-import { useTxBlock } from '../useTxBlock';
 import { isInMempool, isInMicroblock } from '../utils';
 
-function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
-  const { data: block } = useTxBlock(tx);
+function BlockHeightBase({
+  tx,
+  txBlock: block,
+}: {
+  tx: Transaction | MempoolTransaction;
+  txBlock?: Block;
+}) {
   const [isOnTouchScreen] = useMediaQuery('(hover: none)');
 
   if (isInMempool(tx) || isInMicroblock(tx)) return null;
@@ -70,10 +74,16 @@ function BlockHeightBase({ tx }: { tx: Transaction | MempoolTransaction }) {
   );
 }
 
-export function BlockHeight({ tx }: { tx: Transaction | MempoolTransaction }) {
+export function BlockHeight({
+  tx,
+  txBlock,
+}: {
+  tx: Transaction | MempoolTransaction;
+  txBlock?: Block;
+}) {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <BlockHeightBase tx={tx} />
+      <BlockHeightBase tx={tx} txBlock={txBlock} />
     </ExplorerErrorBoundary>
   );
 }

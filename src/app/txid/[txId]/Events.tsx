@@ -1,5 +1,3 @@
-'use client';
-
 import { Code } from '@chakra-ui/react';
 import { ArrowRight, Icon as IconType, Plus, TextAlignLeft, Trash } from '@phosphor-icons/react';
 import { FC, Fragment } from 'react';
@@ -12,6 +10,7 @@ import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { Section } from '../../../common/components/Section';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { Pending } from '../../../common/components/status';
+import { DEFAULT_TX_EVENTS_LIMIT } from '../../../common/constants/constants';
 import { useFtMetadata } from '../../../common/queries/useFtMetadata';
 import { useTxEventsByIdInfinite } from '../../../common/queries/useTxEventsByIdInfinite';
 import {
@@ -259,7 +258,19 @@ interface EventsProps {
 }
 
 export const Events: FC<EventsProps> = ({ tx }) => {
-  const { data, ...actions } = useTxEventsByIdInfinite(tx.tx_id);
+  const initialData = {
+    pages: [
+      {
+        results: tx.events,
+        total: tx.event_count,
+        limit: DEFAULT_TX_EVENTS_LIMIT,
+        offset: 0,
+      },
+    ],
+    pageParams: [0],
+  };
+
+  const { data, ...actions } = useTxEventsByIdInfinite(tx.tx_id, undefined, initialData);
 
   if (tx.event_count === 0) return null;
 

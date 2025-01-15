@@ -1,5 +1,3 @@
-'use client';
-
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useSearchParams } from 'next/navigation';
 import * as React from 'react';

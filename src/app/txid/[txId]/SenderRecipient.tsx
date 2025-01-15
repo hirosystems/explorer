@@ -1,5 +1,3 @@
-'use client';
-
 import { ArrowRight } from '@phosphor-icons/react';
 import React from 'react';
 

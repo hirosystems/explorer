@@ -1,5 +1,3 @@
-'use client';
-
 import { forwardRef, useColorMode } from '@chakra-ui/react';
 import * as React from 'react';
 

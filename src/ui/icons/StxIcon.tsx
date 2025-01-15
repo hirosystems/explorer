@@ -1,5 +1,3 @@
-'use client';
-
 import { Icon, IconBase, IconWeight } from '@phosphor-icons/react';
 import { ReactElement, forwardRef } from 'react';
 

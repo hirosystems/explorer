@@ -1,5 +1,3 @@
-'use client';
-
 import { Show as CUIShow, ShowProps as CUIShowProps } from '@chakra-ui/react';
 import { FC } from 'react';
 

@@ -69,14 +69,12 @@ export const KeyValueHorizontal: FC<KeyValueHorizontalProps> = ({
         {value}
       </Flex>
       {copyValue && (
-        <Show above="lg">
-          <CopyButton
-            className={'fancy-copy'}
-            initialValue={copyValue}
-            aria-label={'copy row'}
-            size={'40px'}
-          />
-        </Show>
+        <CopyButton
+          className={'fancy-copy above-lg'}
+          initialValue={copyValue}
+          aria-label={'copy row'}
+          size={'40px'}
+        />
       )}
     </Flex>
   );

@@ -10,7 +10,8 @@ import { getNextPageParam } from '../utils/utils';
 
 export function useTxEventsByIdInfinite(
   txId: string,
-  options: any = {}
+  options: any = {},
+  initialData?: InfiniteData<GenericResponseType<TransactionEvent>>
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<TransactionEvent>>> {
   const apiClient = useApiClient();
   return useInfiniteQuery({
@@ -32,6 +33,8 @@ export function useTxEventsByIdInfinite(
     staleTime: Infinity,
     getNextPageParam,
     initialPageParam: 0,
+    initialData,
+    // manual: true,
     ...options,
   });
 }

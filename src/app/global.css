@@ -1,7 +1,7 @@
 html,
 body {
   height: 100%;
-  color: var(--stacks-colors-text)
+  color: var(--stacks-colors-text);
 }
 
 .prism-code *::selection {
@@ -80,4 +80,18 @@ body {
 
 .react-datepicker-wrapper {
   width: 100%;
+}
+
+.above-lg {
+  display: inherit;
+  @media (max-width: 62em) {
+    display: none;
+  }
+}
+
+.below-lg {
+  display: none;
+  @media (max-width: 62em) {
+    display: inherit;
+  }
 }

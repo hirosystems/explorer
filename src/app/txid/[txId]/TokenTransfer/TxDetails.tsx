@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import {
+  Block,
   MempoolTokenTransferTransaction,
   TokenTransferTransaction,
 } from '@stacks/stacks-blockchain-api-types';
@@ -21,9 +22,10 @@ import { Sender } from '../TxDetails/Sender';
 
 interface TxDetailsProps {
   tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
+  txBlock?: Block;
 }
 
-export const TxDetails: React.FC<TxDetailsProps> = ({ tx }) => {
+export const TxDetails: React.FC<TxDetailsProps> = ({ tx, txBlock }) => {
   return (
     <>
       <Section title="Summary">
@@ -35,7 +37,7 @@ export const TxDetails: React.FC<TxDetailsProps> = ({ tx }) => {
             <ID tx={tx} />
             <Fees tx={tx} />
             <Nonce tx={tx} />
-            <BlockHeight tx={tx} />
+            <BlockHeight tx={tx} txBlock={txBlock} />
             <BlockHash tx={tx} />
             <Memo tx={tx} />
             <NonCanonical tx={tx} />

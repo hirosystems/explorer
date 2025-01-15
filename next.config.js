@@ -4,6 +4,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const nextConfig = {
+  logging: {
+    fetches: {
+      hmrRefreshes: true,
+      fullUrl: true,
+    },
+  },
   output: 'standalone',
   async headers() {
     return [

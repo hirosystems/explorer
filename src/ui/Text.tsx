@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Text as CUIText,
   TextProps as CUITextProps,

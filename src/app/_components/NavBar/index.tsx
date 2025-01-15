@@ -1,5 +1,4 @@
-'use client';
-
+import { useTheme } from '@chakra-ui/react';
 import { List, Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
@@ -17,7 +16,9 @@ import { Flex } from '../../../ui/Flex';
 import { Icon } from '../../../ui/Icon';
 import { IconButton } from '../../../ui/IconButton';
 import { Show } from '../../../ui/Show';
+import { useBreakpointValue } from '../../../ui/hooks/useBreakpointValue';
 import { useDisclosure } from '../../../ui/hooks/useDisclosure';
+import styles from '../../styles.module.css';
 import { BtcStxPrice } from './BtcStxPrice';
 import { ColorModeButton } from './ColorModeButton';
 import { DesktopNav } from './DesktopNav';
@@ -96,17 +97,13 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
       <Flex alignItems={'center'} flex={{ base: 1 }} gap={6} position={'relative'}>
         <Logo color="white" />
         <Search />
-        <Show above="lg">
-          <NetworkModeBanner />
-        </Show>
-        <Show above="lg">
-          <Flex gap={3}>
-            <ColorModeButton aria-label={'Change color mode'} />
-            <DesktopNav navItems={navItems} />
-          </Flex>
-          <BtcStxPrice tokenPrice={tokenPrice} />
-        </Show>
-        <Show below="lg">
+        <NetworkModeBanner className={'above-lg'} />
+        <Flex gap={3} className={'above-lg'}>
+          <ColorModeButton aria-label={'Change color mode'} />
+          <DesktopNav navItems={navItems} />
+        </Flex>
+        <BtcStxPrice tokenPrice={tokenPrice} className="above-lg" />
+        <Box className={'below-lg'}>
           <IconButton
             onClick={onToggle}
             icon={<Icon as={List} w={6} h={6} color={'white'} />}
@@ -114,7 +111,7 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
             aria-label={'Toggle Navigation'}
           />
           {isOpen && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
-        </Show>
+        </Box>
       </Flex>
     </Box>
   );

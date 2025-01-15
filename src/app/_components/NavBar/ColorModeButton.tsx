@@ -1,5 +1,3 @@
-'use client';
-
 import { ColorMode, useColorMode } from '@chakra-ui/react';
 import { Moon, SunDim } from '@phosphor-icons/react';
 import { useCallback, useMemo } from 'react';

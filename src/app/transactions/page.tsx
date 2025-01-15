@@ -14,7 +14,10 @@ export default async function ({
     toAddress?: string;
   };
 }) {
-  const tokenPrice = await getTokenPrice();
+  const tokenPrice = {
+    stxPrice: 123,
+    btcPrice: 123,
+  };
   return (
     <Page
       tokenPrice={tokenPrice}

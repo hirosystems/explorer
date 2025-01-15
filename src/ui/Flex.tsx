@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Flex as CUIFlex,
   FlexProps as CUIFlexProps,

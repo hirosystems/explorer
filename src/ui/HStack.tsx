@@ -1,5 +1,3 @@
-'use client';
-
 import {
   HStack as CUIHStack,
   StackProps as CUIHStackProps,

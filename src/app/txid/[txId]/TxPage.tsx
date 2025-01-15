@@ -2,7 +2,7 @@ import { Check, CircleNotch, Icon, WarningCircle } from '@phosphor-icons/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Block, MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { getTxTypeIcon } from '../../../common/components/TxIcon';
 import { TransactionType } from '../../../common/constants/constants';
@@ -54,7 +54,8 @@ export const TxPage: React.FC<{
   contractId?: string;
   txDetails: ReactNode;
   children?: ReactNode;
-}> = ({ tx, contractId, txDetails, children }) => {
+  txBlock?: Block;
+}> = ({ tx, contractId, txDetails, txBlock, children }) => {
   return (
     <>
       <PageTitleWithTags
@@ -82,7 +83,7 @@ export const TxPage: React.FC<{
         </Flex>
         <Flex direction={'column'} gap={7}>
           {contractId && <ContractDetailsCard contractId={contractId} />}
-          <TxBtcAnchorBlockCard tx={tx} />
+          <TxBtcAnchorBlockCard tx={tx} txBlock={txBlock} />
           {contractId && (
             <>
               <StxBalance address={contractId} />

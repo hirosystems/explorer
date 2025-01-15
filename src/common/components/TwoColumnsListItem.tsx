@@ -1,5 +1,3 @@
-'use client';
-
 import { FC, ReactNode, memo } from 'react';
 
 import { Box } from '../../ui/Box';
@@ -35,7 +33,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
           display={['none', 'none', 'flex', 'flex', 'flex']}
           {...rest}
         >
-          <Show above="lg">{icon && <Box>{icon}</Box>}</Show>
+          {icon && <Box className={'above-lg'}>{icon}</Box>}
           <Flex width="full" gap={2} direction="column" overflow="hidden">
             <Flex
               width="full"
@@ -53,7 +51,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                   fontWeight="semibold"
                   display="flex"
                 >
-                  <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
+                  <Box className={'below-lg'}>{icon && <Box>{icon}</Box>}</Box>
                   {leftContent.title}
                 </Text>
               )}
@@ -101,7 +99,7 @@ export const TwoColsListItem: FC<TwoColumnsListProps> = memo(
                 fontWeight="semibold"
                 display="flex"
               >
-                <Show below="lg">{icon && <Box>{icon}</Box>}</Show>
+                {icon && <Box className={'below-lg'}>{icon}</Box>}
                 {leftContent.title}
               </Text>
             )}

@@ -9,6 +9,13 @@ const Page = dynamic(() => import('./PageClient'), {
 });
 
 export default async function () {
-  const tokenPrice = await getTokenPrice();
-  return <Page tokenPrice={tokenPrice} />;
+  // const tokenPrice = await getTokenPrice();
+  return (
+    <Page
+      tokenPrice={{
+        stxPrice: 123,
+        btcPrice: 123,
+      }}
+    />
+  );
 }

@@ -1,5 +1,3 @@
-'use client';
-
 import { ReactNode } from 'react';
 
 import { Circle } from '../../../common/components/Circle';
@@ -26,11 +24,11 @@ function PriceContainer({
   );
 }
 
-function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
+function BtcStxPriceBase({ tokenPrice, ...flexProps }: { tokenPrice: TokenPrice } & FlexProps) {
   const formattedBtcPrice = tokenPrice.btcPrice ? usdFormatter.format(tokenPrice.btcPrice) : '';
   const formattedStxPrice = tokenPrice.stxPrice ? usdFormatter.format(tokenPrice.stxPrice) : '';
   return (
-    <Flex gap={6} minWidth={'172px'}>
+    <Flex gap={6} minWidth={'172px'} {...flexProps}>
       <PriceContainer
         icon={<Icon as={BitcoinIcon} size={4.5} />}
         minWidth={'92px'}
@@ -53,10 +51,10 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
   );
 }
 
-export function BtcStxPrice({ tokenPrice }: { tokenPrice: TokenPrice }) {
+export function BtcStxPrice({ tokenPrice, ...flexProps }: { tokenPrice: TokenPrice } & FlexProps) {
   return (
     <ExplorerErrorBoundary renderContent={() => null}>
-      <BtcStxPriceBase tokenPrice={tokenPrice} />
+      <BtcStxPriceBase tokenPrice={tokenPrice} {...flexProps} />
     </ExplorerErrorBoundary>
   );
 }

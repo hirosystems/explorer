@@ -7,6 +7,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { Button } from '../../../ui/Button';
+import { Spinner } from '../../../ui/Spinner';
 import { Tooltip } from '../../../ui/Tooltip';
 import { useGlobalContext } from '../../context/useGlobalContext';
 import { getUsdValue } from '../../utils/utils';
@@ -50,6 +51,10 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
     return null;
   }
 
+  const price = showCurrentPriceForCompletedTransactions
+    ? currentPriceFormatted
+    : historicalPriceFormatted;
+
   return (
     <Tooltip label={initialRender ? initialTooltipContent : tooltipContent[tooltipContentIndex]}>
       <Button
@@ -64,9 +69,7 @@ const StxPriceButtonBase: FC<StxPriceButtonProps> = ({ tx, value }) => {
         _hover={{ bg: hoverBg }}
         color={'black'}
       >
-        {showCurrentPriceForCompletedTransactions
-          ? currentPriceFormatted
-          : historicalPriceFormatted}
+        {price === 'N/A' ? <Spinner w={3} h={3} color={'slate.500'} /> : price}
       </Button>
     </Tooltip>
   );

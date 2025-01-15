@@ -17,7 +17,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const headersList = headers();
-  const tokenPrice = await getTokenPrice();
+  const tokenPrice = {
+    stxPrice: 123,
+    btcPrice: 123,
+  };
   const statusBarContent = await getStatusBarContent();
   return (
     <html lang="en">
