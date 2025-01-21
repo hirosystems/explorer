@@ -1,5 +1,4 @@
-import { Badge, Spinner } from '@chakra-ui/react';
-import { Flex, Icon, Stack } from '@chakra-ui/react';
+import { Badge, Flex, Icon, Spinner, Stack } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
@@ -77,28 +76,13 @@ export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
           >
             {network.label}
           </Title>
-          {network.isSubnet ? (
+          {network.isSubnet && (
             <Badge
               bg={'navbar.networkLabelBadgeBackground'}
               ml={2}
               color={'navbar.networkLabelBadge'}
             >
               subnet
-            </Badge>
-          ) : (
-            <Badge
-              color={'navbar.networkLabelBadge'}
-              bg={'navbar.networkLabelBadgeBackground'}
-              px={2}
-              py={1}
-              fontSize={'xs'}
-              rounded={'full'}
-              border="normal"
-              borderColor={'navbar.networkLabelBadgeBorder'}
-              fontWeight={'medium'}
-              ml={2}
-            >
-              Nakamoto 3.0
             </Badge>
           )}
         </Flex>
