@@ -40,7 +40,7 @@ const txStatusIconMap: Record<string, React.ReactNode> = {
 const txStatusLabelMap = {
   pending: 'In mempool',
   success: 'Confirmed',
-  success_anchor_block: 'Confirmed in anchor block',
+  success_anchor_block: 'Confirmed in block',
   success_microblock: 'Included in microblock',
   non_canonical: 'Non-canonical (orphaned)',
   failed: 'Failed',
