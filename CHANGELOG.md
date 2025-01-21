@@ -1,3 +1,10 @@
+# [1.243.0](https://github.com/hirosystems/explorer/compare/v1.242.0...v1.243.0) (2025-01-21)
+
+
+### Features
+
+* upgrade to chakra v3 ([0cef405](https://github.com/hirosystems/explorer/commit/0cef40508f80e6fb716de5fe32d24edef3bc16a5))
+
 # [1.242.0](https://github.com/hirosystems/explorer/compare/v1.241.0...v1.242.0) (2025-01-10)
 
 
