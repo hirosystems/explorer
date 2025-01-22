@@ -19,9 +19,11 @@ import { SPACE } from './space';
 // };
 
 export const CURRENT_SIZES = {
-  4.5: { value: '1.125rem' },
-  60: { value: '3.75rem' },
-  150: { value: '9.375rem' },
+  3.5: { value: '0.875rem' }, // 14px
+  4.5: { value: '1.125rem' }, // 18px
+  18: { value: '4.5rem' }, // 72px
+  60: { value: '3.75rem' }, // 60px
+  150: { value: '9.375rem' }, // 150px
 };
 
 export const NEW_SIZES = {

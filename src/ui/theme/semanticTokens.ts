@@ -243,6 +243,20 @@ export const CURRENT_SEMANTIC_TOKENS = {
         },
       },
     },
+    stacksSmiley: {
+      eyeColor: {
+        value: { base: '#FD6112', _dark: '#141414' },
+      },
+      circleColor: {
+        value: { base: '#F7F6F5', _dark: '#0C0C0D' },
+      },
+      linearGradientColor: {
+        value: { base: '#E5E0DC', _dark: '#3C3A38' },
+      },
+    },
+    stacksNameAndLogo: {
+      value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-50}' },
+    },
   },
 };
 
