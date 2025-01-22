@@ -43,6 +43,7 @@ export const NEW_SPACE = {
   1: { value: '0.25rem' }, // 4px
   2: { value: '0.5rem' }, // 8px
   3: { value: '0.75rem' }, // 12px
+  3.5: { value: '0.875rem' }, // 14px
   4: { value: '1rem' }, // 16px
   4.5: { value: '1.125rem' },
   5: { value: '1.25rem' }, // 20px

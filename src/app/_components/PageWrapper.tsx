@@ -1,5 +1,6 @@
 'use client';
 
+import { isRedesignUrl } from '@/common/utils/url-utils';
 import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
@@ -11,6 +12,7 @@ import { TokenPrice } from '../../common/types/tokenPrice';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
+import { NewFooter } from './NewFooter';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
 import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
@@ -82,6 +84,7 @@ export function PageWrapper({
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
 }) {
+  const redesignUrl = isRedesignUrl();
   return (
     <>
       <Stack width={'100%'} top={0} backdropFilter={'blur(10px)'} bg={'surfaceOpposite'}>
@@ -99,7 +102,7 @@ export function PageWrapper({
           >
             {children}
           </Stack>
-          <Footer />
+          {redesignUrl ? <NewFooter /> : <Footer />}
         </Stack>
       </WrapperWithBg>
 
