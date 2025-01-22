@@ -272,7 +272,7 @@ export function MempoolFeeStats({ tokenPrice }: { tokenPrice: TokenPrice }) {
               const bg = getTxTypePieChartColor(key);
 
               return (
-                <Flex gap={0.5} alignItems={'center'} justifyContent={'center'}>
+                <Flex gap={0.5} alignItems={'center'} justifyContent={'center'} key={key}>
                   <Box h={2.5} w={2.5} borderRadius="50%" mr={2} backgroundColor={bg} />
                   <Icon
                     h={3.5}

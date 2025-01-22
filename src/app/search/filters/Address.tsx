@@ -39,7 +39,7 @@ export function AddressFilter({
       open={open}
       onOpenChange={e => setOpen(e.open)}
     >
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button
           variant="secondary"
           fontSize={'sm'}
