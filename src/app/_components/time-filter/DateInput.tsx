@@ -9,6 +9,7 @@ export const DateInput = forwardRef<HTMLInputElement, InputProps>((inputProps, r
     css={{
       '::placeholder': {
         color: 'textSubdued',
+        fontSize: 'sm',
       },
       border: '1px solid var(--stacks-colors-border-primary)',
     }}

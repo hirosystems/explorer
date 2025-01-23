@@ -1,6 +1,6 @@
 import { Accordion, HStack } from '@chakra-ui/react';
+import { CaretDown } from '@phosphor-icons/react';
 import * as React from 'react';
-import { LuChevronDown } from 'react-icons/lu';
 
 interface AccordionItemTriggerProps extends Accordion.ItemTriggerProps {
   indicatorPlacement?: 'start' | 'end';
@@ -13,7 +13,7 @@ export const AccordionItemTrigger = React.forwardRef<HTMLButtonElement, Accordio
       <Accordion.ItemTrigger {...rest} ref={ref}>
         {indicatorPlacement === 'start' && (
           <Accordion.ItemIndicator rotate={{ base: '-90deg', _open: '0deg' }}>
-            <LuChevronDown />
+            <CaretDown />
           </Accordion.ItemIndicator>
         )}
         <HStack gap="4" flex="1" textAlign="start" width="full">
@@ -21,7 +21,7 @@ export const AccordionItemTrigger = React.forwardRef<HTMLButtonElement, Accordio
         </HStack>
         {indicatorPlacement === 'end' && (
           <Accordion.ItemIndicator>
-            <LuChevronDown />
+            <CaretDown />
           </Accordion.ItemIndicator>
         )}
       </Accordion.ItemTrigger>
@@ -32,10 +32,10 @@ export const AccordionItemTrigger = React.forwardRef<HTMLButtonElement, Accordio
 interface AccordionItemContentProps extends Accordion.ItemContentProps {}
 
 export const AccordionItemContent = React.forwardRef<HTMLDivElement, AccordionItemContentProps>(
-  function AccordionItemContent(props, ref) {
+  function AccordionItemContent({ ...rest }, ref) {
     return (
-      <Accordion.ItemContent>
-        <Accordion.ItemBody {...props} ref={ref} />
+      <Accordion.ItemContent {...rest} ref={ref}>
+        <Accordion.ItemBody {...rest} ref={ref} />
       </Accordion.ItemContent>
     );
   }

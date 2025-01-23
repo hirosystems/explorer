@@ -7,12 +7,14 @@ import { ReactNode } from 'react';
 import { useCookies } from 'react-cookie';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
+import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Footer } from './Footer';
 import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
+import { NavBar as NewNavBar } from './NewNavBar/NavBar';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
 import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
@@ -84,7 +86,8 @@ export function PageWrapper({
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
 }) {
-  const redesignUrl = isRedesignUrl();
+  const isRedesign = isRedesignUrl();
+
   return (
     <>
       <Stack width={'100%'} top={0} backdropFilter={'blur(10px)'} bg={'surfaceOpposite'}>
@@ -94,7 +97,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          <NavBar tokenPrice={tokenPrice} />
+          {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
           <Stack
             marginTop={'120px'} // TODO: setting this to 30 doesn't work. fix this
             mb={8}
@@ -102,11 +105,11 @@ export function PageWrapper({
           >
             {children}
           </Stack>
-          {redesignUrl ? <NewFooter /> : <Footer />}
+          {isRedesign ? <NewFooter /> : <Footer />}
         </Stack>
       </WrapperWithBg>
-
       <AddNetworkModal />
+      <AddNetworkModalNew />
       <NetworkModeToast />
     </>
   );

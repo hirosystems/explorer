@@ -10,12 +10,31 @@ const BorderRadiusDemo = () => {
       <Text fontSize="2xl" fontWeight="bold">
         Border Radius Showcase
       </Text>
-      {Object.entries(system._config.theme?.tokens?.radii ?? {}).map(([size, value]) => (
-        <Flex key={size} align="center" gap={4}>
-          <Box width="100px" height="100px" bg="blue.500" borderRadius={size} />
-          <Text>{`${size}: ${value.value}`}</Text>
-        </Flex>
-      ))}
+      <Text fontSize="2xl" fontWeight="bold">
+        Chakra UI Default Border Radii
+      </Text>
+      {Object.entries(system._config.theme?.tokens?.radii ?? {}).map(([size, value]) => {
+        if (size === 'redesign') {
+          return null;
+        }
+        return (
+          <Flex key={size} align="center" gap={4}>
+            <Box width="100px" height="100px" bg="blue.500" borderRadius={size} />
+            <Text>{`${size}: ${value.value}`}</Text>
+          </Flex>
+        );
+      })}
+      <Text fontSize="2xl" fontWeight="bold">
+        Redesign Border Radii
+      </Text>
+      {Object.entries(system._config.theme?.tokens?.radii?.redesign ?? {}).map(([size, value]) => {
+        return (
+          <Flex key={size} align="center" gap={4}>
+            <Box width="100px" height="100px" bg="blue.500" borderRadius={size} />
+            <Text>{`${size}: ${value.value}`}</Text>
+          </Flex>
+        );
+      })}
     </Stack>
   );
 };

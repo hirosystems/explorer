@@ -174,7 +174,7 @@ export const NewFooter = () => {
       py={6}
       px={xPadding}
       border="1px solid"
-      borderColor="newBorderSecondary"
+      borderColor="redesignBorderSecondary"
       borderRadius="lg"
       position="relative"
       gap={0}

@@ -1,8 +1,8 @@
+import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@/common/constants/env';
 import { Badge, Flex, Icon, Spinner, Stack } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { FC, useMemo } from 'react';
 
-// import { Badge } from '../../../common/components/Badge';
 import { DEFAULT_DEVNET_SERVER } from '../../../common/constants/constants';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useCustomNetworkApiInfo } from '../../../common/queries/useCustomNetworkApiInfo';
@@ -19,13 +19,9 @@ const ellipsisStyle: React.CSSProperties = {
 };
 
 export const NetworkLabel: FC<{ network: Network }> = ({ network }) => {
-  const {
-    activeNetwork,
-    removeCustomNetwork,
-    apiUrls: { mainnet, testnet },
-  } = useGlobalContext();
-  const isMainnet = network.url === mainnet;
-  const isTestnet = network.url === testnet;
+  const { activeNetwork, removeCustomNetwork } = useGlobalContext();
+  const isMainnet = network.url === DEFAULT_MAINNET_SERVER;
+  const isTestnet = network.url === DEFAULT_TESTNET_SERVER;
   const isDevnet = network.url === DEFAULT_DEVNET_SERVER;
   const isDefault = isMainnet || isTestnet;
 

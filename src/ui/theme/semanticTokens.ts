@@ -116,6 +116,9 @@ export const CURRENT_SEMANTIC_TOKENS = {
       listIconHoverBg: {
         value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-700}' },
       },
+      dropdownBg: {
+        value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
+      },
       // this is the same as the time filter
       networkLabelBadge: {
         value: { base: '{colors.purple.600}', _dark: '{colors.purple.300}' },
@@ -262,10 +265,10 @@ export const CURRENT_SEMANTIC_TOKENS = {
 
 export const NEW_SEMANTIC_TOKENS = {
   colors: {
-    newBorderPrimary: {
+    redesignBorderPrimary: {
       value: { base: '{colors.neutral.sand-300}', _dark: '{colors.neutral.sand-600}' },
     },
-    newBorderSecondary: {
+    redesignBorderSecondary: {
       value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
     },
     borderTertiary: {
@@ -296,7 +299,7 @@ export const NEW_SEMANTIC_TOKENS = {
       value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
     },
     iconError: {
-      value: { base: '{colors.feedback.red.500}', _dark: '{colors.feedback.red.400}' },
+      value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
     },
     // TODO: find and replace all the uses of the non-namespaced icon semantic color variables
     // icon: {
@@ -459,9 +462,24 @@ export const NEW_SEMANTIC_TOKENS = {
   },
 };
 
+const SHADOWS = {
+  elevation1: {
+    value: { base: '{shadows.elevation1Light}', _dark: '{shadows.elevation1Dark}' },
+  },
+  elevation2: {
+    value: { base: '{shadows.elevation2Light}', _dark: '{shadows.elevation2Dark}' },
+  },
+  elevation3: {
+    value: { base: '{shadows.elevation3Light}', _dark: '{shadows.elevation3Dark}' },
+  },
+};
+
 export const SEMANTIC_TOKENS = {
   colors: {
     ...CURRENT_SEMANTIC_TOKENS.colors,
     ...NEW_SEMANTIC_TOKENS.colors,
+  },
+  shadows: {
+    ...SHADOWS,
   },
 };

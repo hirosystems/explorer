@@ -11,7 +11,11 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    backgroundColor: { control: 'color' },
+    size: { control: 'select', options: ['small', 'big'] },
+    variant: {
+      control: 'select',
+      options: ['redesignPrimary', 'redesignSecondary', 'redesignTertiary', 'redesignWarning'],
+    },
   },
   args: { onClick: fn() },
 } satisfies Meta<typeof Button>;
@@ -21,14 +25,28 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    variant: 'primary',
     children: 'Primary Button',
+    variant: 'redesignPrimary',
   },
 };
 
 export const Secondary: Story = {
   args: {
     children: 'Secondary Button',
-    variant: 'secondary',
+    variant: 'redesignSecondary',
+  },
+};
+
+export const Tertiary: Story = {
+  args: {
+    children: 'Tertiary Button',
+    variant: 'redesignTertiary',
+  },
+};
+
+export const Warning: Story = {
+  args: {
+    children: 'Warning Button',
+    variant: 'redesignWarning',
   },
 };

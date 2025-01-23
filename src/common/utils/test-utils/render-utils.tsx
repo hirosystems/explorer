@@ -27,6 +27,10 @@ import {
   initialState as modalSliceInitialState,
 } from '../../components/modals/modal-slice';
 import {
+  currencySlice,
+  initialState as currencySliceInitialState,
+} from '../../state/slices/currency-slice';
+import {
   initialState as activeTransactionValueFilterInitialState,
   activeTransactionValueFilterSlice,
 } from '../../state/slices/transaction-value-filter-slice';
@@ -123,6 +127,7 @@ export function renderWithReduxProviders(
       modal: modalSliceInitialState,
       search: searchSliceInitialState,
       connect: sandboxSliceInitialState,
+      currency: currencySliceInitialState,
       activeTransactionValueFilter: activeTransactionValueFilterInitialState,
       ...Object.keys(TxFilterAndSortTypes).reduce(
         (acc, filterType) => ({ ...acc, [filterType]: filterSliceInitialState }),
@@ -135,6 +140,7 @@ export function renderWithReduxProviders(
         search: searchSlice.reducer,
         connect: sandboxSlice.reducer,
         activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
+        currency: currencySlice.reducer,
         ...filterAndSortReducers,
       },
       preloadedState,

@@ -111,7 +111,7 @@ export function SearchInput({
         {tempSearchTerm
           ?.toString()
           ?.split(new RegExp(`(${advancedSearchKeywords.join('|')})`, 'g'))
-          ?.map((segment, index) =>
+          ?.map((segment: string, index: number) =>
             advancedSearchKeywords.includes(segment) ? (
               <Text
                 key={index}
