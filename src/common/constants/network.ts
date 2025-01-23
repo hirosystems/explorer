@@ -58,28 +58,6 @@ export const testnetNetwork: Network = {
   mode: NetworkModes.Testnet,
 };
 
-export const nakamotoTestnetNetwork: Network = {
-  label: 'Nakamoto Testnet',
-  url: 'https://api.nakamoto.testnet.hiro.so',
-  btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
-  btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
-  btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
-  networkId: ChainID.Testnet,
-  mode: NetworkModes.Testnet,
-  isCustomNetwork: true,
-};
-
-export const oldTestnetNetwork: Network = {
-  label: 'Stacks Testnet (Archive)',
-  url: 'https://api.old.testnet.hiro.so',
-  btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
-  btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
-  btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
-  networkId: ChainID.Testnet,
-  mode: NetworkModes.Testnet,
-  isCustomNetwork: true,
-};
-
 export const devnetNetwork: Network = {
   label: 'Devnet',
   url: DEFAULT_DEVNET_SERVER,

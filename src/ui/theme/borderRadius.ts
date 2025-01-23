@@ -15,17 +15,18 @@
 
 export const CURRENT_BORDER_RADIUS = {};
 
-// I don't think we should use this as the same values are represented in the theme by default, and changing the naming convention will just break things and require us to fix it in a bunch of places.
 export const NEW_BORDER_RADIUS = {
-  xxs: { value: '2px' },
-  xs: { value: '4px' },
-  sm: { value: '6px' },
-  md: { value: '8px' },
-  lg: { value: '12px' },
-  xl: { value: '16px' },
+  redesign: {
+    xxs: { value: '2px' },
+    xs: { value: '4px' },
+    sm: { value: '6px' },
+    md: { value: '8px' },
+    lg: { value: '12px' },
+    xl: { value: '16px' },
+  },
 };
 
 export const BORDER_RADIUS = {
-  //   ...NEW_BORDER_RADIUS, // TODO: BREAKING CHANGE!
+  ...NEW_BORDER_RADIUS,
   ...CURRENT_BORDER_RADIUS,
 };

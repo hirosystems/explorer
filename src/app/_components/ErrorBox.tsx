@@ -46,12 +46,12 @@ export function ErrorBox({
       </Flex>
       <Flex gap="16px">
         {homeButton && (
-          <ButtonLink href={buildUrl('/', network)} size={'xs'} fontSize={'12px'}>
+          <ButtonLink href={buildUrl('/', network)} fontSize={'xs'}>
             Go home
           </ButtonLink>
         )}
         {tryAgainButton && (
-          <Button onClick={() => reset()} variant="secondary" size={'xs'} fontSize={'12px'}>
+          <Button onClick={() => reset()} variant="secondary" fontSize={'xs'}>
             Try again
           </Button>
         )}

@@ -35,6 +35,7 @@ export function AddressFilter({
   const router = useRouter();
   return (
     <PopoverRoot
+      id={'address-filter-popover'}
       positioning={{ placement: 'bottom-start' }}
       open={open}
       onOpenChange={e => setOpen(e.open)}

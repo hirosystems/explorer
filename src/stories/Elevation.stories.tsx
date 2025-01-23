@@ -4,8 +4,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Text } from '../ui/Text';
 import { system } from '../ui/theme/theme';
 
-const customShadows = ['elevation1', 'elevation2', 'elevation3'];
-
 const ElevationDemo = () => {
   return (
     <Stack gap={8}>
@@ -18,14 +16,14 @@ const ElevationDemo = () => {
         </Text>
         {Object.entries(system._config.theme?.tokens?.shadows ?? {}).map(
           ([elevationName, elevationValue]) => {
-            if (!customShadows.includes(elevationName)) return null;
+            if (elevationName.toLowerCase().includes('dark')) return null;
             return (
               <Flex key={elevationName} align="center" gap={4}>
                 <Box
                   width="200px"
                   height="100px"
                   bg={'white'}
-                  boxShadow={(elevationValue as any)['default'].value}
+                  boxShadow={elevationValue.value as any}
                   borderRadius="md"
                   display="flex"
                   alignItems="center"
@@ -33,23 +31,23 @@ const ElevationDemo = () => {
                 >
                   <Text color="black">{elevationName}</Text>
                 </Box>
-                <Text>{(elevationValue as any)['default'].value}</Text>
+                <Text>{elevationValue.value as any}</Text>
               </Flex>
             );
           }
         )}
       </Stack>
-      <Stack gap={8} bg="#211F1F" p={4}>
+      <Stack gap={8} bg="#211F1F" p={4} className="dark">
         {Object.entries(system._config.theme?.tokens?.shadows ?? {}).map(
           ([elevationName, elevationValue]) => {
-            if (!customShadows.includes(elevationName)) return null;
+            if (elevationName.toLowerCase().includes('light')) return null;
             return (
               <Flex key={elevationName} align="center" gap={4}>
                 <Box
                   width="200px"
                   height="100px"
                   bg={'#211F1F'}
-                  boxShadow={(elevationValue as any)._dark.value}
+                  boxShadow={elevationValue.value as any}
                   borderRadius="md"
                   display="flex"
                   alignItems="center"
@@ -57,7 +55,7 @@ const ElevationDemo = () => {
                 >
                   <Text color="white">{elevationName}</Text>
                 </Box>
-                <Text color="white">{(elevationValue as any)._dark.value}</Text>
+                <Text color="white">{elevationValue.value as any}</Text>
               </Flex>
             );
           }

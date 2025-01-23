@@ -16,8 +16,41 @@ export const tooltipSlotRecipe = defineSlotRecipe({
           maxWidth: 'max-content',
         },
       },
+      redesignPrimary: {
+        content: {
+          fontSize: 'xs',
+          fontWeight: 'medium',
+          color: '{colors.neutral.sand-50}',
+          bg: '{colors.neutral.sand-600} !important',
+          borderColor: '{colors.neutral.sand-600} !important',
+          boxShadow: '{shadows.elevation1} !important',
+        },
+        arrow: {
+          bg: 'transparent',
+          borderColor: 'transparent',
+        },
+        arrowTip: {
+          bg: '{colors.neutral.sand-600} !important',
+          borderColor: '{colors.neutral.sand-600} !important',
+        },
+      },
+    },
+    size: {
+      sm: {
+        content: {
+          py: 1.5,
+          px: 2,
+        },
+      },
+      lg: {
+        content: {
+          py: 2,
+          px: 3,
+        },
+      },
     },
   },
+
   defaultVariants: {
     variant: 'primary',
   },

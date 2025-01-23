@@ -51,6 +51,7 @@ export const NEW_SPACE = {
   8: { value: '2rem' }, // 32px
   10: { value: '2.5rem' }, // 40px
   12: { value: '3rem' }, // 48px
+  15: { value: '3.75rem' }, // 60px
   16: { value: '4rem' }, // 64px
   18: { value: '4.5rem' }, // 72px
   20: { value: '5rem' }, // 80px

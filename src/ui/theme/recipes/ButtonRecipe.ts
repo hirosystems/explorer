@@ -44,6 +44,130 @@ export const buttonRecipe = defineRecipe({
           bg: 'none',
         },
       },
+      wrapper: {
+        padding: '0 !important',
+        border: 'none',
+        background: 'none',
+        h: 'fit-content',
+        w: 'fit-content',
+        minW: 'fit-content',
+        minH: 'fit-content',
+        _hover: {
+          textDecoration: 'underline',
+          bg: 'none',
+        },
+      },
+      redesignPrimary: {
+        borderRadius: 'redesign.md', // base
+        color: {
+          base: '{colors.neutral.sand-50}',
+          _dark: '{colors.neutral.sand-1000}',
+        },
+        bg: {
+          base: '{colors.neutral.sand-700}',
+          _dark: '{colors.neutral.sand-50}',
+        },
+        _hover: {
+          bg: {
+            base: '{colors.neutral.sand-1000}',
+            _dark: '{colors.neutral.sand-200}',
+          },
+        },
+        _disabled: {
+          color: {
+            base: '{colors.neutral.sand-200}',
+            _dark: '{colors.neutral.sand-300}',
+          },
+          bg: {
+            base: '{colors.neutral.sand-400}',
+            _dark: '{colors.neutral.sand-500}',
+          },
+        },
+      },
+      redesignSecondary: {
+        borderRadius: 'redesign.md', // base
+        color: {
+          base: '{colors.neutral.sand-50}',
+          _dark: '{colors.neutral.sand-1000}',
+        },
+        bg: {
+          base: '{colors.neutral.sand-500}',
+          _dark: '{colors.neutral.sand-300}',
+        },
+        _hover: {
+          bg: {
+            base: '{colors.neutral.sand-600}',
+            _dark: '{colors.neutral.sand-400}',
+          },
+        },
+        _disabled: {
+          color: {
+            base: '{colors.neutral.sand-100}',
+            _dark: '{colors.neutral.sand-400}',
+          },
+          bg: {
+            base: '{colors.neutral.sand-300}',
+            _dark: '{colors.neutral.sand-600}',
+          },
+        },
+      },
+      redesignTertiary: {
+        borderRadius: 'redesign.md', // base
+        border: '2px solid {colors.redesignBorderSecondary}', // TODO: check this works
+        color: 'textSecondary',
+        bg: {
+          base: '{colors.neutral.sand-50}',
+          _dark: '{colors.neutral.sand-1000}',
+        },
+        _hover: {
+          bg: {
+            base: '{colors.neutral.sand-200}',
+            _dark: '{colors.neutral.sand-700}',
+          },
+          border: 'none',
+        },
+        _disabled: {
+          color: {
+            base: '{colors.neutral.sand-300}',
+            _dark: '{colors.neutral.sand-500}',
+          },
+        },
+      },
+      redesignWarning: {
+        borderRadius: 'redesign.md', // base
+        color: '{colors.neutral.sand-50}',
+        bg: {
+          base: '{colors.feedback.red-500}',
+          _dark: '{colors.feedback.red-500}',
+        },
+        _hover: {
+          bg: '{colors.feedback.red-600}',
+        },
+        _disabled: {
+          color: {
+            base: '{colors.neutral.sand-500}',
+            _dark: '{colors.neutral.sand-300}',
+          },
+          bg: {
+            base: '{colors.feedback.red-300}',
+            _dark: '{colors.feedback.red-600}',
+          },
+        },
+      },
+    },
+    size: {
+      small: {
+        fontSize: 'xs',
+        fontWeight: 'medium',
+        py: 2,
+        px: 3,
+      },
+      big: {
+        fontSize: 'sm',
+        fontWeight: 'medium',
+        py: 3,
+        px: 4,
+      },
     },
   },
   defaultVariants: {

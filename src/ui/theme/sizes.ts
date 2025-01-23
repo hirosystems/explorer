@@ -4,26 +4,34 @@ import { SPACE } from './space';
 // export const CI_DEFAULT_SIZES = {
 //   //   ...theme.space, // imports all the space values
 //   full: '100%',
-//   '3xs': '14rem',
-//   '2xs': '16rem',
-//   xs: '20rem',
-//   sm: '24rem',
-//   md: '28rem',
-//   lg: '32rem',
-//   xl: '36rem',
-//   '2xl': '42rem',
-//   '3xl': '48rem',
-//   '4xl': '56rem',
-//   '5xl': '64rem',
-//   '6xl': '72rem',
+//   '3xs': '14rem', // 224px
+//   '2xs': '16rem', // 256px
+//   xs: '20rem',    // 320px
+//   sm: '24rem',    // 384px
+//   md: '28rem',    // 448px
+//   lg: '32rem',    // 512px
+//   xl: '36rem',    // 576px
+//   '2xl': '42rem', // 672px
+//   '3xl': '48rem', // 768px
+//   '4xl': '56rem', // 896px
+//   '5xl': '64rem', // 1024px
+//   '6xl': '72rem', // 1152px
 // };
 
 export const CURRENT_SIZES = {
   3.5: { value: '0.875rem' }, // 14px
   4.5: { value: '1.125rem' }, // 18px
   18: { value: '4.5rem' }, // 72px
-  60: { value: '3.75rem' }, // 60px
-  150: { value: '9.375rem' }, // 150px
+  5.5: { value: '1.375rem' }, // 22px
+  13: { value: '3.25rem' }, // 52px
+  13.5: { value: '3.375rem' }, // 54px
+  14: { value: '3.5rem' }, // 56px
+  14.5: { value: '3.625rem' }, // 58px
+  15: { value: '3.75rem' }, // 60px
+  17: { value: '4.25rem' }, // 68px
+  50: { value: '12.5rem' }, // 200px
+  60: { value: '15rem' }, // 240px
+  150: { value: '37.5rem' }, // 600px
 };
 
 export const NEW_SIZES = {

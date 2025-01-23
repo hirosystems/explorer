@@ -77,6 +77,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
 
   return (
     <PopoverRoot
+      id={'date-filter-popover'}
       positioning={{ placement: 'bottom-start' }}
       open={open}
       onOpenChange={e => setOpen(e.open)}

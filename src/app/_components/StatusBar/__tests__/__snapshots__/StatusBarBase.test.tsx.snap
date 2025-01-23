@@ -11,8 +11,8 @@ exports[`StatusBarBase renders correctly (critical impact) 1`] = `
       className="css-w64dtj"
     >
       <svg
-        aria-hidden={true}
-        className="chakra-icon css-1er7qg6"
+        aria-hidden="true"
+        className="chakra-icon css-g1anr8"
         fill="currentColor"
         focusable={false}
         height="1em"
@@ -43,8 +43,8 @@ exports[`StatusBarBase renders correctly (non-critical impact) 1`] = `
       className="css-w64dtj"
     >
       <svg
-        aria-hidden={true}
-        className="chakra-icon css-18d4au9"
+        aria-hidden="true"
+        className="chakra-icon css-8xo9w8"
         fill="currentColor"
         focusable={false}
         height="1em"

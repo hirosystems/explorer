@@ -27,7 +27,7 @@
   "author": "Hiro Systems PBC (formerly Blockstack PBC)",
   "dependencies": {
     "@chakra-ui/anatomy": "2.3.4",
-    "@chakra-ui/react": "3.3.1",
+    "@chakra-ui/react": "3.5.1",
     "@chakra-ui/theme-tools": "2.1.2",
     "@contentful/rich-text-react-renderer": "15.21.2",
     "@contentful/rich-text-types": "16.5.2",
@@ -83,6 +83,7 @@
     "monaco-vscode-textmate-theme-converter": "0.1.7",
     "monacode": "0.3.1",
     "morgan": "1.10.0",
+    "motion": "12.0.6",
     "next": "14.2.13",
     "next-themes": "0.4.4",
     "nookies": "2.5.2",

@@ -14,6 +14,7 @@ import { LINEHEIGHTS } from './lineHeights';
 import { badgeRecipe } from './recipes/BadgeRecipe';
 import { buttonRecipe } from './recipes/ButtonRecipe';
 import { checkboxSlotRecipe } from './recipes/CheckboxRecipe';
+import { dialogSlotRecipe } from './recipes/DialogRecipe';
 import { iconButtonRecipe } from './recipes/IconButtonRecipe';
 import { inputRecipe } from './recipes/InputRecipe';
 import { linkRecipe } from './recipes/LinkRecipe';
@@ -50,6 +51,7 @@ const themeConfig = {
       tabs: tabsSlotRecipe,
       tag: tagSlotRecipe,
       tooltip: tooltipSlotRecipe,
+      dialog: dialogSlotRecipe,
     },
     tokens: {
       colors: { ...COLORS, ...NEW_COLORS },

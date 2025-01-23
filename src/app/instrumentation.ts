@@ -6,6 +6,8 @@ export function register() {
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
   Sentry.init({
+    enabled: process.env.NODE_ENV !== 'development',
+
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 
     environment: process.env.NODE_ENV || 'production', // Set the environment
