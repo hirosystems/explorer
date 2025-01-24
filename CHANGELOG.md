@@ -1,3 +1,10 @@
+# [1.245.0](https://github.com/hirosystems/explorer/compare/v1.244.0...v1.245.0) (2025-01-24)
+
+
+### Features
+
+* added new semantic tokens ([be1bca2](https://github.com/hirosystems/explorer/commit/be1bca25ecb9fe988d247ab68986301733dd60df))
+
 # [1.244.0](https://github.com/hirosystems/explorer/compare/v1.243.0...v1.244.0) (2025-01-23)
 
 
