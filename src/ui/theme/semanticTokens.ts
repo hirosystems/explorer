@@ -25,6 +25,9 @@ export const SEMANTIC_TOKENS = {
     surfaceHighlight: {
       value: { base: '{colors.slate.150}', _dark: '{colors.slate.900}' },
     },
+    surfaceTertiary: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.black}' },
+    },
     text: {
       value: { base: '{colors.slate.900}', _dark: '{colors.slate.50}' },
     },
@@ -86,6 +89,17 @@ export const SEMANTIC_TOKENS = {
       },
     },
     navbar: {
+      logo: {
+        icon: {
+          value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+        },
+        bg: {
+          value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+        },
+      },
+      dropdownBg: {
+        value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
+      },
       // this is the same as the time filter
       networkLabelBadge: {
         value: { base: '{colors.purple.600}', _dark: '{colors.purple.300}' },

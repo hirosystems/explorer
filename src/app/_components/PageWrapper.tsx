@@ -9,7 +9,7 @@ import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { Footer } from './Footer';
-import { NavBar } from './NavBar';
+import { NavBar } from './NewNavBar/NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
