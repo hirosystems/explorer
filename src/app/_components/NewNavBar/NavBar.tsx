@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Flex, Icon, useDisclosure } from '@chakra-ui/react';
+import { Flex, Icon, useDisclosure } from '@chakra-ui/react';
 import { Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
@@ -12,11 +12,12 @@ import { Network } from '../../../common/types/network';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { capitalize } from '../../../common/utils/utils';
+import { FeePopover } from './FeePopover';
 import { Logo } from './Logo';
 import { NavLabel } from './NavLabel';
 import { NetworkLabel } from './NetworkLabel';
-import { PagesHoverCard } from './PagesHoverCard';
 import PagesSlidingMenu from './PagesSlidingMenu';
+import { SettingsPopover } from './SettingsPopover';
 import { NavItem } from './types';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
@@ -91,26 +92,34 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   );
 
   return (
-    <Flex width="full" h={20} alignItems="center" border="1px solid" borderColor="surface">
-      <Flex alignItems="center" gap={6} justifyContent="space-between">
-        <Box>
-          <Logo size={10} />
-          <PagesHoverCard />
-          <PagesSlidingMenu width={50} />
-        </Box>
-        <FeeMenu />
-        {/* <Search /> */}
-        {/* <Flex hideBelow="lg">
+    <Flex
+      width="full"
+      h={20}
+      alignItems="center"
+      border="1px solid"
+      borderColor="surface"
+      justifyContent="space-between"
+    >
+      <Flex alignItems="center" gap={6}>
+        <Logo size={10} />
+        <PagesSlidingMenu width={50} />
+      </Flex>
+      <Flex gap={4}>
+        <FeePopover />
+        <SettingsPopover />
+      </Flex>
+      {/* <Search /> */}
+      {/* <Flex hideBelow="lg">
           <NetworkModeBanner />
         </Flex>
         <Flex hideBelow="lg" gap={3} alignItems="center">
           <DesktopColorModeButton aria-label={'Change color mode'} />
           <DesktopNav navItems={navItems} />
         </Flex> */}
-        {/* <Box hideBelow="lg">
+      {/* <Box hideBelow="lg">
           <BtcStxPrice tokenPrice={tokenPrice} />
         </Box> */}
-        {/* <Flex hideFrom="lg">
+      {/* <Flex hideFrom="lg">
           <IconButton onClick={onToggle} variant={'ghost'} aria-label={'Toggle Navigation'}>
             <Icon w={6} h={6} color={'white'}>
               <List />
@@ -118,7 +127,6 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
           </IconButton>
           {open && <MobileNav tokenPrice={tokenPrice} navItems={navItems} close={onToggle} />}
         </Flex> */}
-      </Flex>
     </Flex>
   );
 }

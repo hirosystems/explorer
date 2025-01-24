@@ -22,7 +22,6 @@ import { NavLabel } from './NavLabel';
 import { NetworkLabel } from './NetworkLabel';
 import { NetworkModeBanner } from './NetworkModeBanner';
 import { NavItem } from './types';
-import { PagesPopover } from './PagesPopover';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { open, onToggle } = useDisclosure();
@@ -99,7 +98,6 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
     <Box width="full">
       <Flex alignItems="center" flex={{ base: 1 }} gap={6} position="relative">
         <Logo color="white" />
-        <PagesPopover />
         <Search />
         <Flex hideBelow="lg">
           <NetworkModeBanner />

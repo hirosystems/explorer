@@ -161,6 +161,7 @@ const SlidingMenu = ({ width }: { width: number }) => {
         <Box className="content" ref={contentRef} px={2} pb={2}>
           {mainPages.map(page => (
             <Flex
+              key={page.id}
               className={`page-link-to-${page.id}`}
               alignItems={'center'}
               borderRadius="xl"
@@ -198,7 +199,7 @@ const SlidingMenu = ({ width }: { width: number }) => {
           <Separator py={2} color="newBorderSecondary" />
           <Stack gap={2} px={3} py={2}>
             {secondaryPages.map(page => (
-              <Flex justifyContent="space-between">
+              <Flex justifyContent="space-between" key={page.id}>
                 <Link href={page.href} w="full" variant="noUnderline">
                   <Text
                     fontSize="xs"

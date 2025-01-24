@@ -97,6 +97,11 @@ export const CURRENT_SEMANTIC_TOKENS = {
           value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
         },
       },
+      control: {
+        bg: {
+          value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-900}' },
+        },
+      },
       menu: {
         bg: {
           value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-900}' },
@@ -247,6 +252,48 @@ export const NEW_SEMANTIC_TOKENS = {
     },
     iconPrimary: {
       value: { base: '{colors.black}', _dark: '{colors.neutral.sand-100}' },
+    },
+    iconSecondary: {
+      value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
+    },
+    iconTertiary: {
+      value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
+    },
+    iconInvert: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    },
+    iconError: {
+      value: { base: '{colors.red.500}', _dark: '{colors.red.400}' },
+    },
+    surfacePrimary: {
+      value: { base: '{colors.neutral.sand-150}', _dark: '{colors.neutral.sand-900}' },
+    },
+    surfaceSecondary: {
+      value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
+    },
+    surfaceTertiary: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    },
+    surfaceFourth: {
+      value: { base: '{colors.white}', _dark: '{colors.neutral.sand-800}' },
+    },
+    surfaceFifth: {
+      value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
+    },
+    surfaceInvert: {
+      value: { base: '{colors.neutral.sand-800}', _dark: '{colors.neutral.sand-100}' },
+    },
+    textInvert: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    },
+    textPrimary: {
+      value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+    },
+    textSecondary: {
+      value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
+    },
+    textTertiary: {
+      value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
     },
   },
 };
