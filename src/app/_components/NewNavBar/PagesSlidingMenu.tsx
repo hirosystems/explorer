@@ -1,9 +1,11 @@
+import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { buildUrl } from '@/common/utils/buildUrl';
 import { NextLink } from '@/ui/NextLink';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Icon, Link, Separator, Stack } from '@chakra-ui/react';
 import { ArrowRight, CaretUpDown, List } from '@phosphor-icons/react';
-import { usePathname } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 const mainPages = [
   {
@@ -17,14 +19,34 @@ const mainPages = [
     href: '/transactions',
   },
   {
-    id: 'tokens',
-    label: 'Tokens',
-    href: '/tokens',
+    id: 'mempool',
+    label: 'Mempool',
+    href: '/mempool',
+  },
+  {
+    id: 'stacking',
+    label: 'Stacking',
+    href: '/stacking',
   },
   {
     id: 'signers',
     label: 'Signers',
     href: '/signers',
+  },
+  {
+    id: 'tokens',
+    label: 'Tokens',
+    href: '/tokens',
+  },
+  {
+    id: 'nfts',
+    label: 'NFTs',
+    href: '/nfts',
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics',
+    href: '/analytics',
   },
 ];
 
@@ -33,11 +55,17 @@ const secondaryPages = [
     id: 'sandbox',
     label: 'Sandbox',
     href: '/sandbox',
+    shortcut: 'S',
   },
   {
-    id: 'get-help',
-    label: 'Get Help',
-    href: '/get-help',
+    id: 'status-center',
+    label: 'Status Center',
+    href: '/status-center',
+  },
+  {
+    id: 'support',
+    label: 'Support',
+    href: '/support',
   },
 ];
 
@@ -58,12 +86,29 @@ const SlidingMenu = ({ width }: { width: number }) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const path = usePathname();
   const pageName = getPageNameFromPath(path);
-  console.log({
-    isHovered,
-    height: isHovered
-      ? `${contentRef?.current?.scrollHeight}px`
-      : `${triggerRef?.current?.scrollHeight}px`,
-  });
+  const network = useGlobalContext().activeNetwork;
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check if the menu is open
+      if (isHovered) {
+        // Check if the 'S' key is pressed
+        if (event.key.toLowerCase() === 's') {
+          event.preventDefault(); // Prevent default behavior if necessary
+          router.push('/sandbox/deploy');
+        }
+      }
+    };
+
+    // Add event listener for keydown
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isHovered, router]);
 
   return (
     <Box position="relative" h={10} minWidth={width}>
@@ -72,14 +117,15 @@ const SlidingMenu = ({ width }: { width: number }) => {
         onMouseLeave={() => setIsHovered(false)}
         style={{
           overflow: 'hidden',
-          transition: 'height 1s ease',
+          transition: 'height 0.5s ease',
           height:
             isHovered && contentRef?.current?.scrollHeight && triggerRef?.current?.scrollHeight
               ? `${contentRef?.current?.scrollHeight + triggerRef?.current?.scrollHeight}px`
               : `${triggerRef?.current?.scrollHeight}px`,
         }}
         position={'absolute'}
-        bg="navbar.dropdownBg"
+        zIndex="dropdown"
+        bg="navbar.menu.bg"
         borderRadius="xl"
       >
         <Box
@@ -89,8 +135,7 @@ const SlidingMenu = ({ width }: { width: number }) => {
           h={10}
           minWidth={width}
           alignItems="center"
-          py={2}
-          px={3}
+          p={2}
         >
           <Flex gap={6} alignItems="center" justifyContent="space-between">
             <Flex gap={2}>
@@ -99,9 +144,8 @@ const SlidingMenu = ({ width }: { width: number }) => {
                 w={8}
                 alignItems="center"
                 justifyContent="center"
-                border="1px solid"
-                borderRadius="xl"
-                borderColor="borderSubdued"
+                borderRadius="lg"
+                bg={isHovered ? 'navbar.listIconHoverBg' : 'transparent'}
               >
                 <Icon h={4} w={4}>
                   <List />
@@ -114,11 +158,7 @@ const SlidingMenu = ({ width }: { width: number }) => {
             </Icon>
           </Flex>
         </Box>
-        <Box
-          className="content"
-          ref={contentRef}
-        >
-          {' '}
+        <Box className="content" ref={contentRef} px={2} pb={2}>
           {mainPages.map(page => (
             <Flex
               className={`page-link-to-${page.id}`}
@@ -126,17 +166,22 @@ const SlidingMenu = ({ width }: { width: number }) => {
               borderRadius="xl"
               width="full"
               _hover={{
-                bg: { base: 'transparent', lg: 'hoverBackground' },
+                bg: 'navbar.menu.menuItem.bg',
               }}
               p={3}
             >
-              <NextLink key={page.id} href={page.href} variant="noUnderline" w="full">
+              <NextLink
+                key={page.id}
+                href={buildUrl(page.href, network)}
+                variant="noUnderline"
+                w="full"
+              >
                 <Flex justifyContent="space-between" alignItems="center">
                   <Text fontSize="sm">{page.label}</Text>
                   <Icon
                     h={3}
                     w={3}
-                    color="black"
+                    color="iconPrimary"
                     opacity={0}
                     css={{
                       [`.page-link-to-${page.id}:hover &`]: {
@@ -150,14 +195,30 @@ const SlidingMenu = ({ width }: { width: number }) => {
               </NextLink>
             </Flex>
           ))}
-          <Separator py={2} />
+          <Separator py={2} color="newBorderSecondary" />
           <Stack gap={2} px={3} py={2}>
             {secondaryPages.map(page => (
-              <Link href={page.href} w="full">
-                <Text fontSize="xs" color="textSubdued">
-                  {page.label}
-                </Text>
-              </Link>
+              <Flex justifyContent="space-between">
+                <Link href={page.href} w="full" variant="noUnderline">
+                  <Text
+                    fontSize="xs"
+                    color="textSubdued"
+                    fontWeight="medium"
+                    _hover={{
+                      color: 'text',
+                    }}
+                  >
+                    {page.label}
+                  </Text>
+                </Link>
+                {page.shortcut && (
+                  <Box px={2} py={1} bg="navbar.menu.menuItem.bg" borderRadius="lg">
+                    <Text fontSize="xs" color="textSubdued" fontWeight="medium">
+                      {page.shortcut}
+                    </Text>
+                  </Box>
+                )}
+              </Flex>
             ))}
           </Stack>
         </Box>

@@ -1,7 +1,7 @@
 'use client';
 
-import { Box, Flex, Icon, IconButton, useDisclosure } from '@chakra-ui/react';
-import { List, Plus } from '@phosphor-icons/react';
+import { Box, Flex, Icon, useDisclosure } from '@chakra-ui/react';
+import { Plus } from '@phosphor-icons/react';
 import { useMemo } from 'react';
 
 import { openModal } from '../../../common/components/modals/modal-slice';
@@ -12,18 +12,12 @@ import { Network } from '../../../common/types/network';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { capitalize } from '../../../common/utils/utils';
-import { Search } from '../../../features/search/Search';
-import { BtcStxPrice } from './BtcStxPrice';
-import { DesktopColorModeButton } from './DesktopColorModeButton';
-import { DesktopNav } from './DesktopNav';
 import { Logo } from './Logo';
-import { MobileNav } from './MobileNav';
 import { NavLabel } from './NavLabel';
 import { NetworkLabel } from './NetworkLabel';
-import { NetworkModeBanner } from './NetworkModeBanner';
 import { PagesHoverCard } from './PagesHoverCard';
-import { NavItem } from './types';
 import PagesSlidingMenu from './PagesSlidingMenu';
+import { NavItem } from './types';
 
 export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
   const { open, onToggle } = useDisclosure();
@@ -98,10 +92,13 @@ export function NavBar({ tokenPrice }: { tokenPrice: TokenPrice }) {
 
   return (
     <Flex width="full" h={20} alignItems="center" border="1px solid" borderColor="surface">
-      <Flex alignItems="center" gap={6}>
-        <Logo size={10} />
-        <PagesHoverCard />
-        <PagesSlidingMenu width={50} />
+      <Flex alignItems="center" gap={6} justifyContent="space-between">
+        <Box>
+          <Logo size={10} />
+          <PagesHoverCard />
+          <PagesSlidingMenu width={50} />
+        </Box>
+        <FeeMenu />
         {/* <Search /> */}
         {/* <Flex hideBelow="lg">
           <NetworkModeBanner />
