@@ -13,12 +13,14 @@ import {
   TransactionValueFilterState,
   activeTransactionValueFilterSlice,
 } from './slices/transaction-value-filter-slice';
+import { currencySlice, CurrencyState } from './slices/currency.slice';
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
   connect: sandboxSlice.reducer,
   activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
+  currency: currencySlice.reducer,
   ...filterAndSortReducers,
 });
 
@@ -42,6 +44,7 @@ export interface RootState extends TxFilters {
   search: SearchState;
   connect: ConnectState;
   activeTransactionValueFilter: TransactionValueFilterState;
+  currency: CurrencyState;
 }
 
 export type AppDispatch = ReturnType<typeof makeStore>['dispatch'];

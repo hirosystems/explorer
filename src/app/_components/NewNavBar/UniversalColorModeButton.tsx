@@ -8,11 +8,13 @@ import { useCallback } from 'react';
 import { useColorMode } from '../../../components/ui/color-mode';
 import { IconButton, IconButtonProps } from '../../../ui/IconButton';
 
-export function MobileColorModeButton({
+export function UniversalColorModeButton({
   colorMode,
+  iconSize,
   ...rest
 }: {
   colorMode: 'light' | 'dark';
+  iconSize: number;
 } & IconButtonProps) {
   const { setColorMode } = useColorMode();
 
@@ -21,7 +23,7 @@ export function MobileColorModeButton({
   }, [setColorMode, colorMode]);
 
   return (
-    <ClientOnly fallback={<SkeletonCircle size={5} />}>
+    <ClientOnly fallback={<SkeletonCircle size={iconSize} />}>
       <IconButton
         onClick={onClick}
         title={`Change the color mode to ${colorMode}`}
@@ -32,7 +34,7 @@ export function MobileColorModeButton({
         }}
         {...rest}
       >
-        {colorMode === 'light' ? <SunDim /> : <Moon />}
+        {colorMode === 'light' ? <SunDim size={'16px'} /> : <Moon size={'16px'} />}
       </IconButton>
     </ClientOnly>
   );

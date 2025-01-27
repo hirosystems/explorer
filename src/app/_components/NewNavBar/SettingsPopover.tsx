@@ -4,6 +4,7 @@ import { GearFine } from '@phosphor-icons/react';
 import { useState } from 'react';
 
 import { ThemeSetting } from './ThemeSetting';
+import { CurrencySetting } from './CurrencySetting';
 
 export const SettingsPopover = () => {
   const [open, setOpen] = useState(false);
@@ -35,14 +36,18 @@ export const SettingsPopover = () => {
         </Flex>
       </PopoverTrigger>
       <PopoverContent
-        w="fit-content"
+        // w="fit-content"
+        w='252px'
+        p={4}
         borderRadius="xl"
         borderTopRightRadius="none"
         border="none"
-        bg="navbar.menu.bg"
+        bg="surfacePrimary"
       >
-        <Stack separator={<Separator />}>
+        <Stack separator={<Separator my={3} borderColor='newBorderSecondary'/>}>
           <ThemeSetting />
+          <CurrencySetting />
+          <NetworkSettings />
         </Stack>
       </PopoverContent>
     </PopoverRoot>
