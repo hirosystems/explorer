@@ -9,3 +9,9 @@ const isImage = (url: string): boolean => {
   const extension = urlWithoutParams.split('.').pop();
   return !!extension && ['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(extension);
 };
+
+export const isRedesignUrl = (): boolean => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const redesignParam = queryParams.get('redesign');
+  return !!redesignParam;
+};

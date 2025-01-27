@@ -1,5 +1,3 @@
-'use client';
-
 import { defineRecipe } from '@chakra-ui/react';
 
 export const linkRecipe = defineRecipe({
