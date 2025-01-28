@@ -3,8 +3,9 @@ import { Flex, Icon, Separator, Stack } from '@chakra-ui/react';
 import { GearFine } from '@phosphor-icons/react';
 import { useState } from 'react';
 
-import { ThemeSetting } from './ThemeSetting';
 import { CurrencySetting } from './CurrencySetting';
+import { NetworkSetting } from './NetworkSetting';
+import { ThemeSetting } from './ThemeSetting';
 
 export const SettingsPopover = () => {
   const [open, setOpen] = useState(false);
@@ -29,6 +30,7 @@ export const SettingsPopover = () => {
           px={3}
           bg="surfacePrimary"
           borderRadius="lg"
+          borderBottomRadius={open ? 'none' : 'lg'}
         >
           <Icon h={4} w={4} color="iconSecondary">
             <GearFine />
@@ -36,18 +38,17 @@ export const SettingsPopover = () => {
         </Flex>
       </PopoverTrigger>
       <PopoverContent
-        // w="fit-content"
-        w='252px'
+        w="fit-content"
         p={4}
         borderRadius="xl"
         borderTopRightRadius="none"
         border="none"
         bg="surfacePrimary"
       >
-        <Stack separator={<Separator my={3} borderColor='newBorderSecondary'/>}>
+        <Stack separator={<Separator my={3} borderColor="newBorderSecondary" />}>
           <ThemeSetting />
           <CurrencySetting />
-          <NetworkSettings />
+          <NetworkSetting />
         </Stack>
       </PopoverContent>
     </PopoverRoot>

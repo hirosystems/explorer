@@ -1,7 +1,7 @@
 'use client';
 
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import { Currency, setCurrency } from '@/common/state/slices/currency.slice';
+import { useAppDispatch } from '@/common/state/hooks';
+import { Currency, setCurrency, useCurrency } from '@/common/state/slices/currency.slice';
 import { Text } from '@/ui/Text';
 import { Box, Flex, IconButton } from '@chakra-ui/react';
 import { CurrencyBtc, CurrencyDollarSimple, CurrencyEur, CurrencyGbp } from '@phosphor-icons/react';
@@ -20,9 +20,9 @@ function getCurrencyIcon(currency: Currency) {
 
 export const CurrencySetting = () => {
   const dispatch = useAppDispatch();
-  const selectedCurrency = useAppSelector(state => state.currency.currency);
+  const selectedCurrency = useCurrency();
   return (
-    <Flex justifyContent="space-between">
+    <Flex justifyContent="space-between" gap={4}>
       <Box>
         <Text color="textPrimary" fontSize="xs">
           Currency

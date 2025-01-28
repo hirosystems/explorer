@@ -1,5 +1,6 @@
 'use client';
 
+import { ReduxStateInitializer } from '@/common/state/ReduxStateInitializer';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -54,13 +55,18 @@ export const Providers = ({
         <ChakraProvider value={system}>
           <ColorModeProvider>
             <ReduxProvider store={store}>
-              <AppConfig // TODO: rename to something else like SessionProvider
-                queryNetworkMode={queryNetworkMode}
-                queryApiUrl={queryApiUrl}
-                querySubnet={querySubnet}
+              <ReduxStateInitializer
+                addedCustomNetworksCookie={addedCustomNetworksCookie}
+                removedCustomNetworksCookie={removedCustomNetworksCookie}
               >
-                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-              </AppConfig>
+                <AppConfig // TODO: rename to something else like SessionProvider
+                  queryNetworkMode={queryNetworkMode}
+                  queryApiUrl={queryApiUrl}
+                  querySubnet={querySubnet}
+                >
+                  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+                </AppConfig>
+              </ReduxStateInitializer>
             </ReduxProvider>
           </ColorModeProvider>
         </ChakraProvider>

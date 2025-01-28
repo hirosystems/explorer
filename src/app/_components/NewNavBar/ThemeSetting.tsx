@@ -11,7 +11,7 @@ import { SunDim } from '@phosphor-icons/react';
 export const ThemeSetting = () => {
   const { colorMode } = useColorMode();
   return (
-    <Flex justifyContent="space-between">
+    <Flex justifyContent="space-between" gap={4}>
       <Box>
         <Text color="textPrimary" fontSize="xs">
           Theme
