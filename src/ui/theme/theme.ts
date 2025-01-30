@@ -15,7 +15,7 @@ import { badgeRecipe } from './recipes/BadgeRecipe';
 import { buttonRecipe } from './recipes/ButtonRecipe';
 import { checkboxSlotRecipe } from './recipes/CheckboxRecipe';
 import { iconButtonRecipe } from './recipes/IconButtonRecipe';
-import { inputSlotRecipe } from './recipes/InputRecipe';
+import { inputRecipe } from './recipes/InputRecipe';
 import { linkRecipe } from './recipes/LinkRecipe';
 import { menuSlotRecipe } from './recipes/MenuRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
@@ -41,10 +41,10 @@ const themeConfig = {
       link: linkRecipe,
       badge: badgeRecipe,
       iconButton: iconButtonRecipe,
+      input: inputRecipe,
     },
     slotRecipes: {
       checkbox: checkboxSlotRecipe,
-      input: inputSlotRecipe,
       menu: menuSlotRecipe,
       switch: switchSlotRecipe,
       tabs: tabsSlotRecipe,

@@ -1,25 +1,38 @@
-import { defineSlotRecipe } from '@chakra-ui/react';
+'use client';
 
-export const inputSlotRecipe = defineSlotRecipe({
+import { defineRecipe } from '@chakra-ui/react';
+
+export const inputRecipe = defineRecipe({
   className: 'input',
-  slots: ['root', 'field'],
-  base: {
-    root: {
-      bg: 'blue.500',
-      _hover: {
-        '& .checkbox__label': { color: 'white' },
-      },
-    },
-  },
+  base: {},
   variants: {
-    visual: {
-      outline: {
-        field: {
-          fontSize: 'sm',
-          borderColor: 'borderPrimary',
-          _placeholder: {
-            color: { base: '{colors.slate.600}', _dark: '{colors.slate.500}' },
-          },
+    variant: {
+      primary: {
+        bg: 'surfaceTertiary',
+        borderColor: 'borderPrimary',
+        borderRadius: 'md',
+        color: 'textPrimary',
+        _hover: {
+          '& .checkbox__label': { color: 'white' },
+        },
+        _focus: {
+          outline: 'none',
+        },
+        _focusVisible: {
+          borderColor: { base: '{colors.accent.stacks-200}', _dark: '{colors.accent.stacks-700}' },
+          borderWidth: '2px',
+        },
+        _disabled: {
+          bg: 'surfaceSecondary',
+          borderColor: 'borderSecondary',
+          color: 'textTertiary',
+        },
+        _placeholder: {
+          color: 'textSecondary',
+        },
+        _invalid: {
+          borderColor: 'feedback.red-500',
+          borderWidth: '2px',
         },
       },
     },
