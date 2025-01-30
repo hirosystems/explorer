@@ -1,13 +1,5 @@
 'use client';
 
-// import { Input as CUIInput, InputProps as CUIInputProps } from '@chakra-ui/react';
-// import { forwardRef } from 'react';
-// export type InputProps = CUIInputProps;
-// export const Input = forwardRef<HTMLInputElement, InputProps>(({ children, ...rest }, ref) => (
-//   <CUIInput ref={ref} {...rest}>
-//     {children}
-//   </CUIInput>
-// ));
 import {
   Input as CUIInput,
   InputProps as CUIInputProps,
@@ -16,11 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { forwardRef } from 'react';
 
-import { inputSlotRecipe } from './theme/recipes/InputRecipe';
+import { inputRecipe } from './theme/recipes/InputRecipe';
 
-// Usually for slot recipes there is a snippet but not for this one...
-
-type InputVariantProps = RecipeVariantProps<typeof inputSlotRecipe>;
+type InputVariantProps = RecipeVariantProps<typeof inputRecipe>;
 export type InputProps = CUIInputProps & InputVariantProps;
 
 export const InputBase = forwardRef<HTMLInputElement, InputProps>(
@@ -31,4 +21,4 @@ export const InputBase = forwardRef<HTMLInputElement, InputProps>(
   )
 );
 
-export const Input = chakra(InputBase, inputSlotRecipe);
+export const Input = chakra(InputBase, inputRecipe);

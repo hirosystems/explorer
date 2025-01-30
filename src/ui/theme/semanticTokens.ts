@@ -62,6 +62,7 @@ export const CURRENT_SEMANTIC_TOKENS = {
         },
       },
     },
+    // TODO: In a lot of cases, this object notation can be used in-line, so we can remove all of these and just use the object notation. But perhaps we wait to do this until after the redesign
     blockList: {
       btcBlockRowText: {
         value: { base: '{colors.slate.700}', _dark: '{colors.slate.500}' },
@@ -95,6 +96,11 @@ export const CURRENT_SEMANTIC_TOKENS = {
         },
         bg: {
           value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+        },
+      },
+      control: {
+        bg: {
+          value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-900}' },
         },
       },
       menu: {
@@ -242,11 +248,199 @@ export const CURRENT_SEMANTIC_TOKENS = {
 
 export const NEW_SEMANTIC_TOKENS = {
   colors: {
+    newBorderPrimary: {
+      value: { base: '{colors.neutral.sand-300}', _dark: '{colors.neutral.sand-600}' },
+    },
     newBorderSecondary: {
       value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
     },
+    borderTertiary: {
+      value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
+    },
+    // TODO: find and replace all the uses of the non-namespaced border semantic color variables
+    // border: {
+    //   primary: {
+    //     value: { base: '{colors.neutral.sand-300}', _dark: '{colors.neutral.sand-600}' },
+    //   },
+    //   secondary: {
+    //     value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
+    //   },
+    //   tertiary: {
+    //     value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
+    //   },
+    // },
     iconPrimary: {
-      value: { base: '{colors.black}', _dark: '{colors.neutral.sand-100}' },
+      value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+    },
+    iconSecondary: {
+      value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
+    },
+    iconTertiary: {
+      value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
+    },
+    iconInvert: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    },
+    iconError: {
+      value: { base: '{colors.feedback.red.500}', _dark: '{colors.feedback.red.400}' },
+    },
+    // TODO: find and replace all the uses of the non-namespaced icon semantic color variables
+    // icon: {
+    //   primary: {
+    //     value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+    //   },
+    //   secondary: {
+    //     value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
+    //   },
+    //   tertiary: {
+    //     value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
+    //   },
+    //   invert: {
+    //     value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    //   },
+    //   error: {
+    //     value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
+    //   },
+    // },
+    surfacePrimary: {
+      value: { base: '{colors.neutral.sand-150}', _dark: '{colors.neutral.sand-900}' },
+    },
+    surfaceSecondary: {
+      value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
+    },
+    surfaceTertiary: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    },
+    surfaceFourth: {
+      value: { base: '{colors.white}', _dark: '{colors.neutral.sand-800}' },
+    },
+    surfaceFifth: {
+      value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
+    },
+    surfaceInvert: {
+      value: { base: '{colors.neutral.sand-800}', _dark: '{colors.neutral.sand-100}' },
+    },
+    // TODO: find and replace all the uses of the non-namespaced surface semantic color variables
+    // surface: {
+    //   primary: {
+    //     value: { base: '{colors.neutral.sand-150}', _dark: '{colors.neutral.sand-900}' },
+    //   },
+    //   secondary: {
+    //     value: { base: '{colors.neutral.sand-100}', _dark: '{colors.neutral.sand-950}' },
+    //   },
+    //   tertiary: {
+    //     value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    //   },
+    //   fourth: {
+    //     value: { base: '{colors.white}', _dark: '{colors.neutral.sand-800}' },
+    //   },
+    //   fifth: {
+    //     value: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
+    //   },
+    //   invert: {
+    //     value: { base: '{colors.neutral.sand-800}', _dark: '{colors.neutral.sand-100}' },
+    //   },
+    // },
+    textPrimary: {
+      value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+    },
+    textSecondary: {
+      value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
+    },
+    textTertiary: {
+      value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
+    },
+    textInteractiveHover: {
+      value: { base: '{colors.accent.stacks-600}', _dark: '{colors.accent.stacks-400}' },
+    },
+    textInvert: {
+      value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    },
+    textError: {
+      value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
+    },
+    // TODO: find and replace all the uses of the non-namespaced text semantic color variables
+    // text: {
+    //   primary: {
+    //     value: { base: '{colors.neutral.sand-1000}', _dark: '{colors.neutral.sand-100}' },
+    //   },
+    //   secondary: {
+    //     value: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-400}' },
+    //   },
+    //   tertiary: {
+    //     value: { base: '{colors.neutral.sand-400}', _dark: '{colors.neutral.sand-500}' },
+    //   },
+    //   interactive: {
+    //     value: { base: '{colors.accent.stacks-600}', _dark: '{colors.accent.stacks-400}' },
+    //   },
+    //   invert: {
+    //     value: { base: '{colors.neutral.sand-50}', _dark: '{colors.neutral.sand-1000}' },
+    //   },
+    //   error: {
+    //     value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
+    //   },
+    // },
+    signerHealth: {
+      lowSurface: {
+        value: { base: '{colors.feedback.red-100}', _dark: '{colors.feedback.red-900}' },
+      },
+      lowAccent: {
+        value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-200}' },
+      },
+      mediumSurface: {
+        value: { base: '{colors.feedback.yellow-100}', _dark: '{colors.feedback.yellow-900}' },
+      },
+      mediumAccent: {
+        value: { base: '{colors.feedback.yellow-700}', _dark: '{colors.feedback.yellow-200}' },
+      },
+      highSurface: {
+        value: { base: '{colors.feedback.green-100}', _dark: '{colors.feedback.green-900}' },
+      },
+      highAccent: {
+        value: { base: '{colors.feedback.green-600}', _dark: '{colors.feedback.green-200}' },
+      },
+    },
+    signerProposal: {
+      approved: {
+        value: { base: '{colors.feedback.green-500}', _dark: '{colors.feedback.green-400}' },
+      },
+      rejected: {
+        value: { base: '{colors.feedback.red-500}', _dark: '{colors.feedback.red-400}' },
+      },
+    },
+    transactionStatus: {
+      failed: {
+        value: { base: '{colors.feedback.red-150}', _dark: '{colors.feedback.red-900}' },
+      },
+      pending: {
+        value: { base: '{colors.feedback.bronze-200}', _dark: '{colors.feedback.bronze-900}' },
+      },
+      confirmed: {
+        value: { base: '{colors.feedback.green-150}', _dark: '{colors.feedback.green-900}' },
+      },
+    },
+    transactionTypes: {
+      contractCall: {
+        value: { base: '{colors.secondary.moss-200}', _dark: '{colors.secondary.moss-400}' },
+      },
+      contractDeploy: {
+        value: { base: '{colors.secondary.lime-200}', _dark: '{colors.secondary.lime-400}' },
+      },
+      tokenTransfer: {
+        value: { base: '{colors.secondary.peach-200}', _dark: '{colors.secondary.peach-400}' },
+      },
+      tenureStart: {
+        value: {
+          base: '{colors.secondary.blood-orange-200}',
+          _dark: '{colors.secondary.blood-orange-400}',
+        },
+      },
+      tenureExtension: {
+        value: { base: '{colors.secondary.pink-200}', _dark: '{colors.secondary.pink-400}' },
+      },
+      tenureChange: {
+        value: { base: '{colors.secondary.butter-200}', _dark: '{colors.secondary.butter-400}' },
+      },
     },
   },
 };
