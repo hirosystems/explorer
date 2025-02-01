@@ -1,3 +1,10 @@
+# [1.246.0](https://github.com/hirosystems/explorer/compare/v1.245.0...v1.246.0) (2025-02-01)
+
+
+### Features
+
+* updated theme semantic and color tokens, and input recipe ([98f2713](https://github.com/hirosystems/explorer/commit/98f27130fd9c8d804b4ef118f64594c1d84e20e7))
+
 # [1.245.0](https://github.com/hirosystems/explorer/compare/v1.244.0...v1.245.0) (2025-01-24)
 
 
