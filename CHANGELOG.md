@@ -1,3 +1,10 @@
+# [1.247.0](https://github.com/hirosystems/explorer/compare/v1.246.0...v1.247.0) (2025-02-03)
+
+
+### Features
+
+* marked zBTC as safe ([3a6901d](https://github.com/hirosystems/explorer/commit/3a6901d411a843118ba270315e1cf72a962bf2ef))
+
 # [1.246.0](https://github.com/hirosystems/explorer/compare/v1.245.0...v1.246.0) (2025-02-01)
 
 
