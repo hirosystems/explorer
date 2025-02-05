@@ -58,14 +58,12 @@ export const TableHeader = <T extends unknown[]>({
   isFirst: boolean;
   onSort?: (columnId: string, direction: SortOrder) => void;
 }) => {
-  const colorVal = useColorModeValue('slate.700', 'slate.250');
-
   return (
-    <Th
+    <ChakraTable.Header
       py={3}
       px={6}
       border="none"
-      sx={isFirst ? mobileBorderCss : {}}
+      css={isFirst ? mobileBorderCss : {}}
       width="fit-content"
       position={isFirst ? 'sticky' : 'unset'}
       left={isFirst ? 0 : undefined}
@@ -81,7 +79,10 @@ export const TableHeader = <T extends unknown[]>({
             fontWeight="normal"
             whiteSpace="nowrap"
             fontSize="sm"
-            color={colorVal}
+            color={{
+              _light: 'slate.700',
+              _dark: 'slate.250',
+            }}
             textTransform="none"
             letterSpacing="normal"
             fontFamily="instrument"
@@ -89,8 +90,10 @@ export const TableHeader = <T extends unknown[]>({
             {headerTitle}
           </Text>
           {columnDefinition.tooltip && (
-            <Tooltip label={columnDefinition.tooltip}>
-              <Icon as={Info} size={4} />
+            <Tooltip content={columnDefinition.tooltip}>
+              <Icon as={Info} h={4} w={4} >
+              <Info/>
+              </Icon>
             </Tooltip>
           )}
           <SortIcon
@@ -104,7 +107,7 @@ export const TableHeader = <T extends unknown[]>({
       ) : (
         headerTitle
       )}
-    </Th>
+    </ChakraTable.Header>
   );
 };
 
@@ -123,13 +126,13 @@ export function TableRow<T extends unknown[]>({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   return (
-    <Tr
+    <ChakraTable.Row
       _hover={{
         bg: isHovered ? 'sand.150' : 'inherit',
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      sx={{
+      css={{
         '& > td:first-of-type': {
           borderTopLeftRadius: 'xl',
           borderBottomLeftRadius: 'xl',
@@ -141,11 +144,11 @@ export function TableRow<T extends unknown[]>({
       }}
     >
       {columns.map((col, colIndex) => (
-        <Td
+        <ChakraTable.Cell
           key={`table-row-${rowIndex}-col-${colIndex}`}
           py={4}
           px={6}
-          sx={{
+          css={{
             ...(colIndex === 0
               ? { ...mobileBorderCss, bg: isHovered ? 'inherit' : 'surface' }
               : {}),
@@ -161,9 +164,9 @@ export function TableRow<T extends unknown[]>({
               {col.accessor(rowData)}
             </Text>
           )}
-        </Td>
+        </ChakraTable.Cell>
       ))}
-    </Tr>
+    </ChakraTable.Row>
   );
 }
 
@@ -230,8 +233,8 @@ export function Table<T extends unknown[]>({
         <TableContainer topRight={topRight} topLeft={topLeft} title={title}>
           <ScrollableBox>
             <StyledTable width="full">
-              <Thead>
-                <Tr>
+              <ChakraTable.Header>
+                <ChakraTable.Row>
                   {columnDefinitions?.map((col, colIndex) => (
                     <TableHeader
                       key={col.id}
@@ -243,9 +246,9 @@ export function Table<T extends unknown[]>({
                       onSort={onSort}
                     />
                   ))}
-                </Tr>
-              </Thead>
-              <Tbody>
+                </ChakraTable.Row>
+              </ChakraTable.Header>
+              <ChakraTable.Body>
                 {sortedRowData?.map((rowData, rowIndex) => (
                   <TableRow
                     key={rowIndex}
@@ -256,7 +259,7 @@ export function Table<T extends unknown[]>({
                     isLast={rowIndex === sortedRowData.length - 1}
                   />
                 ))}
-              </Tbody>
+              </ChakraTable.Body>
             </StyledTable>
           </ScrollableBox>
         </TableContainer>
