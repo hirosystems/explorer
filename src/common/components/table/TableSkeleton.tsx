@@ -1,4 +1,4 @@
-import { SkeletonItem } from '@/ui/SkeletonItem';
+import { Skeleton} from '@/components/ui/skeleton';
 import { useMemo } from 'react';
 
 import { ColumnDefinition, Table } from './Table';
@@ -10,9 +10,9 @@ function getDefaultSkeletonColumnDefinition<T extends unknown[]>(
 ): ColumnDefinition<T, string> {
   return {
     id,
-    header: header ?? <SkeletonItem height="20px" width="20px" />,
+    header: header ?? <Skeleton height="20px" width="20px" />,
     accessor: val => '',
-    cellRenderer: cellRenderer ?? ((val: string) => <SkeletonItem height="20px" width="20px" />),
+    cellRenderer: cellRenderer ?? ((val: string) => <Skeleton height="20px" width="20px" />),
   };
 }
 

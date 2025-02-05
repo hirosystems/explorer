@@ -1,6 +1,4 @@
-import { Box } from '@/ui/Box';
-import { Flex, FlexProps } from '@/ui/Flex';
-import { Stack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, Stack } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 import { Text } from '../../../ui/Text';
@@ -15,8 +13,6 @@ function Toolbar({
   topRight?: ReactNode;
   title?: string | ReactNode;
 }) {
-  const titleColor = useColorModeValue('slate.900', 'white');
-
   if (!title && !topLeft && !topRight) {
     return null;
   }
@@ -31,7 +27,7 @@ function Toolbar({
         gap={4}
       >
         {title ? (
-          <Text color={titleColor} fontWeight="normal" fontSize="3.5xl">
+          <Text color={{_light: 'slate.900', _dark: 'white'}} fontWeight="normal" fontSize="3.5xl">
             {title}
           </Text>
         ) : topLeft ? (
