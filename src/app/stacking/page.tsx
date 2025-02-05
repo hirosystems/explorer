@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 
-import { Box } from '../../ui/Box';
+import { Box } from '@chakra-ui/react';
 import { getTokenPrice } from '../getTokenPriceInfo';
 
 const Page = dynamic(() => import('./PageClient'), {

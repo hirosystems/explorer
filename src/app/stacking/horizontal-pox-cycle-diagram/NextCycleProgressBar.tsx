@@ -1,12 +1,9 @@
-import { Flex } from '@/ui/Flex';
-import { Icon } from '@/ui/Icon';
+import { Text } from '@/ui/Text';
 import BitcoinIcon from '@/ui/icons/BitcoinIcon';
 import StxIcon from '@/ui/icons/StxIcon';
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { useRef } from 'react';
 
-import { Box } from '../../../ui/Box';
-import { Stack } from '../../../ui/Stack';
-import { Text } from '../../../ui/Text';
 import useResizeObserver from '../useResizeObserver';
 import { Section } from './HorizontalPoxCycleDiagram';
 import {

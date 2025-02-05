@@ -1,9 +1,8 @@
+import { Text } from '@/ui/Text';
+import { Flex, Icon } from '@chakra-ui/react';
 import { Info } from '@phosphor-icons/react';
 
 import { Card } from '../../common/components/Card';
-import { Flex } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
-import { Text } from '../../ui/Text';
 
 const MetricCard = ({
   title,
@@ -19,7 +18,9 @@ const MetricCard = ({
       <Flex gap={3}>
         <Flex gap={1} alignItems="center">
           <Text whiteSpace="nowrap">{title}</Text>
-          <Icon as={Info} size={4} />
+          <Icon h={4} w={4}>
+            <Info />
+          </Icon>
         </Flex>
         <Flex gap={2} alignItems="center">
           <Text whiteSpace="nowrap" fontSize="md" fontWeight="bold">

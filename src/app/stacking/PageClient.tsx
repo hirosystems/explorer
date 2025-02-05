@@ -1,9 +1,7 @@
 'use client';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { Flex } from '../../ui/Flex';
-import { Grid } from '../../ui/Grid';
-import { Stack } from '../../ui/Stack';
+import { Flex, Grid, Stack } from '@chakra-ui/react';
 import { ActivePoolsTable } from './ActivePoolsTable';
 import { BlocksTable } from './BlocksTable';
 import { FAQ } from './FAQ';

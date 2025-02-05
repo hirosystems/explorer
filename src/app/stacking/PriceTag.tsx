@@ -1,7 +1,7 @@
-import { Flex } from '@/ui/Flex';
+import { Flex } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import { Text } from '../../ui/Text';
+import { Text } from '@/ui/Text';
 
 // import bitcoinPriceTagFragmentLight from '../../ui/icons/bitcoin-price-tag-fragment-light.svg';
 

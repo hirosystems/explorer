@@ -1,11 +1,9 @@
-import { Box, VStack } from '@chakra-ui/react';
+import { Box, Stack, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import gsap from 'gsap';
 import { useEffect, useRef } from 'react';
 
-import { Flex } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
-import { Text } from '../../ui/Text';
+import { Text } from '@/ui/Text';
 
 function CountdownBadge({ daysLeft }: { daysLeft: number }) {
   const outerDotRef = useRef<HTMLDivElement>(null);
@@ -87,7 +85,7 @@ export const CycleInformation = ({
 }) => {
   return (
     <Flex w="full">
-      <VStack align="start" gap={4} w="full">
+      <Stack align="start" gap={4} w="full">
         <Flex justifyContent="space-between" w="full" h={10}>
           <Text fontSize="xl" fontWeight="400">
             {name}
@@ -101,7 +99,7 @@ export const CycleInformation = ({
           <Icon as={ArrowRight} size={6} weight="bold" />
         </Flex>
         <StackedStxMetric stxStacked={stxStacked} />
-      </VStack>
+      </Stack>
     </Flex>
   );
 };

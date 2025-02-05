@@ -1,25 +1,17 @@
 import { ScrollableBox } from '@/app/_components/BlockList/ScrollableDiv';
-import { Tbody } from '@/ui/Tbody';
-import { Thead } from '@/ui/Thead';
 import { Tooltip } from '@/ui/Tooltip';
-import { useColorModeValue } from '@chakra-ui/react';
+import { Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info } from '@phosphor-icons/react';
 import React, { Suspense, useCallback, useState } from 'react';
 
+import { Text } from '@/ui/Text';
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
-import { Flex } from '../../../ui/Flex';
-import { Icon } from '../../../ui/Icon';
-import { Table as CUITable } from '../../../ui/Table';
-import { Td } from '../../../ui/Td';
-import { Text } from '../../../ui/Text';
-import { Th } from '../../../ui/Th';
-import { Tr } from '../../../ui/Tr';
 import { mobileBorderCss } from '../../constants/constants';
 import { TableContainer } from './TableContainer';
 import { TableSkeleton } from './TableSkeleton';
 
-const StyledTable = styled(CUITable)`
+const StyledTable = styled(ChakraTable.Root)`
   tr td {
     border-bottom: none;
   }
@@ -43,8 +35,11 @@ function SortIcon({ sortable, sortColumn, columnId, sortOrder, onSort }: SortIco
         onSort?.(columnId, sortOrder === 'asc' ? 'desc' : 'asc');
       }}
       as={sortColumn !== columnId ? ArrowsDownUp : sortOrder === 'asc' ? ArrowUp : ArrowDown}
-      size={4}
-    />
+      h={4}
+      w={4}
+    >
+      {sortColumn !== columnId ? <ArrowsDownUp/> : sortOrder === 'asc' ? <ArrowUp/> : <ArrowDown/>}
+    </Icon>
   );
 }
 

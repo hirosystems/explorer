@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Flex } from '../../ui/Flex';
-import { Stack } from '../../ui/Stack';
-import { Text } from '../../ui/Text';
+import { Text } from '@/ui/Text';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { CycleInformation } from './CycleInformation';
 import { PoxCycleInfo } from './usePoxCycle';
 

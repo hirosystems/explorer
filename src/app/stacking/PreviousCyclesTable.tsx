@@ -1,10 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import { Text } from '@/ui/Text';
+import { Flex, Icon } from '@chakra-ui/react';
 import { ColumnDefinition } from '../../common/components/table/Table';
 import { TableWithCursorPagination } from '../../common/components/table/TableWithCursorPagination';
-import { Flex } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
-import { Text } from '../../ui/Text';
 import BitcoinIcon from '../../ui/icons/BitcoinIcon';
 import StxIcon from '../../ui/icons/StxIcon';
 

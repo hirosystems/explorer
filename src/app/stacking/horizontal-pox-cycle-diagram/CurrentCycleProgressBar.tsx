@@ -1,12 +1,9 @@
-import { Flex } from '@/ui/Flex';
-import { Icon } from '@/ui/Icon';
+import { Text } from '@/ui/Text';
 import BitcoinIcon from '@/ui/icons/BitcoinIcon';
 import StxIcon from '@/ui/icons/StxIcon';
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { useRef } from 'react';
 
-import { Box } from '../../../ui/Box';
-import { Stack } from '../../../ui/Stack';
-import { Text } from '../../../ui/Text';
 import useResizeObserver from '../useResizeObserver';
 import { Section } from './HorizontalPoxCycleDiagram';
 import {
@@ -126,7 +123,9 @@ export function CurrentCycleProgressBar({
           </Text>
         </Box>
         <Flex gap={1}>
-          <Icon as={BitcoinIcon} size={4} position={'relative'} bottom={'1px'} />
+          <Icon h={4} w={4} position={'relative'} bottom={'1px'}>
+            <BitcoinIcon />
+          </Icon>
           <Text whiteSpace="nowrap" fontSize="xs">
             #{start.bitcoinBlockNumber}
           </Text>
@@ -135,7 +134,9 @@ export function CurrentCycleProgressBar({
           Bitcoin block {start.bitcoinBlockNumber}
         </Text> */}
         <Flex gap={1}>
-          <Icon as={StxIcon} size={4} position={'relative'} bottom={'1px'} />
+          <Icon h={4} w={4} position={'relative'} bottom={'1px'}>
+            <StxIcon />
+          </Icon>
           <Text whiteSpace="nowrap" fontSize="xs">
             #{start.stacksBlockNumber}
           </Text>
@@ -156,7 +157,9 @@ export function CurrentCycleProgressBar({
           </Text>
         </Box>
         <Flex gap={1}>
-          <Icon as={BitcoinIcon} size={4} position={'relative'} bottom={'1px'} />
+          <Icon h={4} w={4} position={'relative'} bottom={'1px'}>
+            <BitcoinIcon />
+          </Icon>
           <Text whiteSpace="nowrap" fontSize="xs">
             #{preparePhase.bitcoinBlockNumber}
           </Text>
@@ -165,7 +168,9 @@ export function CurrentCycleProgressBar({
           Bitcoin block {preparePhase.bitcoinBlockNumber}
         </Text> */}
         <Flex gap={1}>
-          <Icon as={StxIcon} size={4} position={'relative'} bottom={'1px'} />
+          <Icon h={4} w={4} position={'relative'} bottom={'1px'}>
+            <StxIcon />
+          </Icon>
           <Text whiteSpace="nowrap" fontSize="xs">
             #{preparePhase.stacksBlockNumber}
           </Text>

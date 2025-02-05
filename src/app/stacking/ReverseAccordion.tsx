@@ -1,12 +1,9 @@
 import { Plus, X } from '@phosphor-icons/react';
 import { RefObject, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box } from '../../ui/Box';
-import { Button } from '../../ui/Button';
-import { Flex } from '../../ui/Flex';
-import { Icon } from '../../ui/Icon';
-import { Stack } from '../../ui/Stack';
-import { Text } from '../../ui/Text';
+import { Button } from '@/ui/Button';
+import { Text } from '@/ui/Text';
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import useResizeObserver from './useResizeObserver';
 
 const cardPaddingY = 3;
