@@ -1,9 +1,9 @@
 'use client';
 
+import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 import { Flex } from '@chakra-ui/react';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { TxListTabs } from '../../features/txs-list/tabs/TxListTabs';
 import { PageTitle } from '../_components/PageTitle';
 import { FilterProps } from '../search/filters';
 import { MempoolFeeStatsWithErrorBoundary } from './MempoolFeeStats';

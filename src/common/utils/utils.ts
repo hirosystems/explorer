@@ -55,6 +55,19 @@ export const validateStacksAddress = (stacksAddress?: string): boolean => {
   }
 };
 
+export const validateStacksContractId = (contractId?: string): boolean => {
+  try {
+    if (!contractId) return false;
+    const [address, contract, ...rest] = contractId.split('.');
+    if (!address || !contract) return false;
+    if (rest.length > 0) return false;
+    c32addressDecode(address);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 export function shortenHex(hex: string, length = 4) {
   return `${hex.substring(0, length + 2)}…${hex.substring(hex.length - length)}`;
 }
@@ -74,17 +87,17 @@ export const truncateMiddle = (input: string, offset = 5, contractOffest = 0): s
   // for contracts
   if (input.includes('.')) {
     const parts = input.split('.');
-    const start = parts[0]?.substr(0, offset);
-    const end = parts[0]?.substr(parts[0].length - offset, parts[0].length);
+    const start = parts[0]?.substring(0, offset);
+    const end = parts[0]?.substring(parts[0].length - offset, parts[0].length);
     const contract =
       contractOffest && contractOffest < parts[1].length
-        ? `${parts[1]?.substr(0, contractOffest)}...`
+        ? `${parts[1]?.substring(0, contractOffest)}...`
         : parts[1];
     return `${start}…${end}.${contract}`;
   } else {
     // everything else
-    const start = input?.substr(0, offset);
-    const end = input?.substr(input.length - offset, input.length);
+    const start = input?.substring(0, offset);
+    const end = input?.substring(input.length - offset, input.length);
     return `${start}…${end}`;
   }
 };

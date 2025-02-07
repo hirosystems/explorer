@@ -187,8 +187,8 @@ export const NEW_COLORS = {
     'bronze-900': { value: '#713E0C' },
   },
   secondary: {
-    'moss-200': { value: '#d3d6c4' },
-    'moss-400': { value: '#bdc2a6' },
+    'moss-200': { value: '#b8d47e' },
+    'moss-400': { value: '#97bd4a' },
     'lime-200': { value: '#e6f07f' },
     'lime-400': { value: '#d4e523' },
     'pink-200': { value: '#df8ed4' },
@@ -197,7 +197,7 @@ export const NEW_COLORS = {
     'peach-400': { value: '#ff8761' },
     'butter-200': { value: '#faf884' },
     'butter-400': { value: '#f8f65b' },
-    'blood-orange-600': { value: '#fc6432' },
-    'blood-orange-900': { value: '#cc4900' },
+    'blood-orange-200': { value: '#fc6432' },
+    'blood-orange-400': { value: '#cc4900' },
   },
 };
