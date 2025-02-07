@@ -2,6 +2,9 @@
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
 import { TxPageFilters } from '@/app/transactions/page';
+import { CompressedTxTableData } from '@/app/transactions/utils';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
@@ -31,6 +34,7 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
+import { TX_TABLE_PAGE_SIZE } from './consts';
 
 export enum TxTableColumns {
   Transaction = 'transaction',
@@ -227,10 +231,16 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-export function TxsTable({ filters }: { filters: TxPageFilters }) {
+export function TxsTable({
+  filters,
+  initialData,
+}: {
+  filters: TxPageFilters;
+  initialData: GenericResponseType<CompressedTxTableData>;
+}) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: TX_TABLE_PAGE_SIZE,
   });
 
   const handlePageChange = useCallback((page: PaginationState) => {
@@ -245,8 +255,9 @@ export function TxsTable({ filters }: { filters: TxPageFilters }) {
     pagination.pageIndex * pagination.pageSize,
     { ...filters },
     {
-      placeholderData: (keepPreviousData: InfiniteData<unknown, unknown> | undefined) =>
-        keepPreviousData,
+      placeholderData: (previousData: unknown) => previousData,
+      initialData: () => (pagination.pageIndex === 0 ? initialData : undefined),
+      staleTime: THIRTY_SECONDS,
     }
   );
   const { total, results: txs = [] } = data || {};
@@ -319,19 +330,10 @@ export function TxsTable({ filters }: { filters: TxPageFilters }) {
     [filteredTxs]
   );
 
-  // Because we don't want to show the loading state during pagination, we use this to get an initial load state
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  useEffect(() => {
-    if (data) {
-      setIsInitialLoad(false);
-    }
-  }, [data]);
-
   return (
     <Table
       data={rowData}
       columns={columns}
-      isLoading={isInitialLoad}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
       scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
       pagination={{

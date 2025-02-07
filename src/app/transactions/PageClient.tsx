@@ -3,6 +3,7 @@
 import { TxTableFilters } from '@/common/components/table/filters/TxTableFilters';
 import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFitlersModal';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { isRedesignUrl } from '@/common/utils/url-utils';
 import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 import { Text } from '@/ui/Text';
@@ -13,6 +14,7 @@ import { TokenPrice } from '../../common/types/tokenPrice';
 import { PageTitle } from '../_components/PageTitle';
 import { TxPageFilters } from './page';
 import { MempoolFeeStatsSkeleton } from './skeleton';
+import { CompressedTxTableData } from './utils';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),
@@ -25,9 +27,11 @@ const MempoolFeeStatsDynamic = dynamic(
 export default function ({
   tokenPrice,
   filters,
+  initialTxTableData,
 }: {
   tokenPrice: TokenPrice;
   filters: TxPageFilters;
+  initialTxTableData: GenericResponseType<CompressedTxTableData>;
 }) {
   const isRedesign = isRedesignUrl();
 
@@ -48,7 +52,7 @@ export default function ({
               </Text>
               <Stack gap={5}>
                 <TxTableFilters filters={filters} />
-                <TxsTable filters={filters} />
+                <TxsTable filters={filters} initialData={initialTxTableData} />
                 <TxTableFiltersModal filters={filters} />
               </Stack>
             </Stack>
