@@ -31,6 +31,12 @@ export const linkRecipe = defineRecipe({
           textDecoration: 'underline',
         },
       },
+      tableLink: {
+        textDecoration: 'underline',
+        _hover: {
+          color: 'textInteractiveHover',
+        },
+      },
     },
   },
   defaultVariants: {
