@@ -5,7 +5,8 @@ import { UpdateTableBannerRow } from '@/common/components/table/table-examples/T
 import { Box, Stack } from '@chakra-ui/react';
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Suspense } from 'react';
+import { PaginationState } from '@tanstack/react-table';
+import { Suspense, useState } from 'react';
 
 import {
   getSimpleTableColumnDefinitions,
@@ -25,6 +26,8 @@ interface TableStoryArgs extends TableProps<unknown> {
   hasError?: boolean;
   isLoading?: boolean;
   pinFirstColumn?: boolean;
+  hasPagination?: boolean;
+  pageSize?: number;
 }
 
 const meta: Meta<TableStoryArgs> = {
@@ -92,6 +95,14 @@ const meta: Meta<TableStoryArgs> = {
       control: 'boolean',
       description: 'Toggle error visibility',
     },
+    hasPagination: {
+      control: 'boolean',
+      description: 'Toggle pagination visibility',
+    },
+    pageSize: {
+      control: 'number',
+      description: 'Set the page size',
+    },
   },
   decorators: [
     (Story, { args }) => {
@@ -130,22 +141,47 @@ export const SimpleTable: Story = {
       );
     }
 
-    return (
-      <Table
-        tableContainerWrapper={
-          args.hasTableContainerWrapper
-            ? table => <TableContainer>{table}</TableContainer>
-            : undefined
-        }
-        columns={getSimpleTableColumnDefinitions(
-          args.hasSorting ?? false,
-          args.pinFirstColumn ?? false
-        )}
-        data={args.isEmpty ? [] : args.showSkeleton ? [] : simpleTableRowData}
-        hasScrollIndicator={args.hasScrollIndicator}
-        isLoading={args.isLoading}
-      />
-    );
+    const SimpleTableComponent = () => {
+      const [pageIndex, setPageIndex] = useState(0);
+      const [pageSize, setPageSize] = useState(args.pageSize ?? 3);
+      const totalRows = simpleTableRowData.length;
+
+      return (
+        <Table
+          tableContainerWrapper={
+            args.hasTableContainerWrapper
+              ? table => <TableContainer>{table}</TableContainer>
+              : undefined
+          }
+          columns={getSimpleTableColumnDefinitions(
+            args.hasSorting ?? false,
+            args.pinFirstColumn ?? false
+          )}
+          data={args.isEmpty ? [] : args.showSkeleton ? [] : simpleTableRowData}
+          hasScrollIndicator={args.hasScrollIndicator}
+          isLoading={args.isLoading}
+          pagination={
+            args.hasPagination
+              ? {
+                  manualPagination: false,
+                  pageIndex,
+                  pageSize,
+                  totalRows,
+                  onPageChange: (page: PaginationState) => {
+                    setPageIndex(page.pageIndex);
+                    setPageSize(page.pageSize);
+                  },
+                  onPageSizeChange: (pageSize: PaginationState) => {
+                    setPageSize(pageSize.pageSize);
+                  },
+                }
+              : undefined
+          }
+        />
+      );
+    };
+
+    return <SimpleTableComponent />;
   },
 };
 
@@ -159,29 +195,56 @@ export const TxTable: Story = {
       );
     }
 
-    return (
-      <Table
-        tableContainerWrapper={
-          args.hasTableContainerWrapper
-            ? table => <TableContainer>{table}</TableContainer>
-            : undefined
-        }
-        columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
-        data={args.isEmpty ? [] : storybookTxTableRowData}
-        bannerRow={args.bannerRow ? <UpdateTableBannerRow /> : undefined}
-        isLoading={args.isLoading}
-        suspenseWrapper={
-          args.hasSuspenseWrapper
-            ? table => (
-                <Suspense fallback={<TableSkeleton numRows={10} numColumns={5} />}>
-                  {table}
-                </Suspense>
-              )
-            : undefined
-        }
-        hasScrollIndicator={args.hasScrollIndicator}
-        error={args.hasError ? (args.error ? args.error : 'An error occurred') : undefined}
-      />
-    );
+    const TxTableComponent = () => {
+      const [pageIndex, setPageIndex] = useState(0);
+      const [pageSize, setPageSize] = useState(args.pageSize ?? 5);
+      const totalRows = storybookTxTableRowData.length;
+
+      return (
+        <>
+          <Table
+            tableContainerWrapper={
+              args.hasTableContainerWrapper
+                ? table => <TableContainer>{table}</TableContainer>
+                : undefined
+            }
+            columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
+            data={args.isEmpty ? [] : storybookTxTableRowData}
+            bannerRow={args.bannerRow ? <UpdateTableBannerRow /> : undefined}
+            isLoading={args.isLoading}
+            suspenseWrapper={
+              args.hasSuspenseWrapper
+                ? table => (
+                    <Suspense fallback={<TableSkeleton numRows={10} numColumns={5} />}>
+                      {table}
+                    </Suspense>
+                  )
+                : undefined
+            }
+            hasScrollIndicator={args.hasScrollIndicator}
+            error={args.hasError ? (args.error ? args.error : 'An error occurred') : undefined}
+            pagination={
+              args.hasPagination
+                ? {
+                    manualPagination: false,
+                    pageIndex,
+                    pageSize,
+                    totalRows,
+                    onPageChange: (page: PaginationState) => {
+                      setPageIndex(page.pageIndex);
+                      setPageSize(page.pageSize);
+                    },
+                    onPageSizeChange: (pageSize: PaginationState) => {
+                      setPageSize(pageSize.pageSize);
+                    },
+                  }
+                : undefined
+            }
+          />
+        </>
+      );
+    };
+
+    return <TxTableComponent />;
   },
 };

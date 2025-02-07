@@ -1,4 +1,4 @@
 #storybook-root {
-    width: 100% !important;
-  }
-  
+  width: 100% !important;
+  background-color: var(--stacks-colors-surface-tertiary);
+}

@@ -3,7 +3,7 @@ import { Box, HStack } from '@chakra-ui/react';
 import { BurnBlock } from '@stacks/blockchain-api-client';
 
 import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
-import { useBurnBlocks } from '../../../common/queries/useBurnBlocksInfinite';
+import { useBurnBlocksInfinite } from '../../../common/queries/useBurnBlocksInfinite';
 import { BURN_BLOCKS_QUERY_KEY_EXTENSION } from '../BlockList/consts';
 import { BtcBlock, NewestBtcBlock } from './BtcBlock';
 import { NewBlockPlaceholder } from './NewBlockPlaceholder';
@@ -23,7 +23,7 @@ function FadingOverlay() {
 }
 
 export function RecentBtcBlocks() {
-  const response = useBurnBlocks(7, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
+  const response = useBurnBlocksInfinite(7, {}, BURN_BLOCKS_QUERY_KEY_EXTENSION);
   const { refetch } = response;
   const btcBlocks = useInfiniteQueryResult<BurnBlock>(response);
   const newestBtcBlock = btcBlocks[0];
