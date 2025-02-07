@@ -141,15 +141,15 @@ export function TablePaginationControls({
             css={{
               // Hide the spinner buttons
               '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
+                WebkitAppearance: 'none',
                 margin: 0,
               },
               '&[type=number]': {
-                '-moz-appearance': 'textfield',
+                MozAppearance: 'textfield',
               },
             }}
           />
-          <Text textStyle="text-regular-xs" color="textTertiary">
+          <Text fontSize="xs" color="textTertiary">
             of {pageCount > 1000 ? '1000+' : pageCount} pages
           </Text>
         </Flex>

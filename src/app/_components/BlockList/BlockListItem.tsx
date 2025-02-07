@@ -6,7 +6,11 @@ import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { BtcStxBlockLinks } from '../../../common/components/BtcStxBlockLinks';
 import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
-import { addSepBetweenStrings, toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
+import {
+  addSepBetweenStrings,
+  toRelativeTime,
+  truncateMiddleDeprecated,
+} from '../../../common/utils/utils';
 import { Caption } from '../../../ui/typography';
 
 export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
@@ -46,7 +50,7 @@ export const BlockListItem: React.FC<{ block: Block } & FlexProps> = React.memo(
         }}
         rightContent={{
           title: toRelativeTime(block.block_time * 1000),
-          subtitle: truncateMiddle(block.hash),
+          subtitle: truncateMiddleDeprecated(block.hash),
         }}
         {...rest}
       />

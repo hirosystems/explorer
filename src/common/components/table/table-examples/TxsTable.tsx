@@ -1,24 +1,25 @@
 'use client';
 
-import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
-import { useConfirmedTransactionsInfinite } from '@/common/queries/useConfirmedTransactionsInfinite';
+import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
+import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
-  truncateMiddle,
-  validateStacksAddress,
+  truncateHex,
   validateStacksContractId,
 } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
-import { Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
+import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
-import { ColumnDef } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { InfiniteData } from '@tanstack/react-query';
+import { ColumnDef, PaginationState } from '@tanstack/react-table';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Table } from '../Table';
 import { TableContainer } from '../TableContainer';
+import { TableScrollIndicator } from '../TableScrollIndicatorWrapper';
 import {
   AddressLinkCellRenderer,
   FeeCellRenderer,
@@ -45,9 +46,9 @@ export interface TxTableData {
   [TxTableColumns.Transaction]: TxTableTransactionColumnData;
   [TxTableColumns.TxId]: string;
   [TxTableColumns.TxType]: Transaction['tx_type'];
-  [TxTableColumns.From]: string;
+  [TxTableColumns.From]: TxTableAddressColumnData;
   [TxTableColumns.ArrowRight]: JSX.Element;
-  [TxTableColumns.To]: string;
+  [TxTableColumns.To]: TxTableAddressColumnData;
   [TxTableColumns.Fee]: string;
   [TxTableColumns.Amount]: number;
   [TxTableColumns.BlockTime]: number;
@@ -65,6 +66,13 @@ export interface TxTableTransactionColumnData {
   smartContract?: {
     contractId?: string;
   };
+  txId: string;
+  blockHeight: number;
+}
+
+export interface TxTableAddressColumnData {
+  address: string;
+  isContract: boolean;
 }
 
 export function formatBlockTime(timestamp: number): string {
@@ -93,7 +101,7 @@ export function getToAddress(tx: Transaction): string {
     return tx.coinbase_payload?.alt_recipient ?? '';
   }
   if (tx.tx_type === 'tenure_change') {
-    return '-';
+    return '';
   }
   return '';
 }
@@ -105,79 +113,34 @@ export function getAmount(tx: Transaction): number {
   return 0;
 }
 
-const transactionColumnSortingFn = (
-  rowA: { getValue: (columnId: string) => unknown },
-  rowB: { getValue: (columnId: string) => unknown },
-  columnId: string
-) => {
-  const dataA = rowA.getValue(columnId) as TxTableTransactionColumnData;
-  const dataB = rowB.getValue(columnId) as TxTableTransactionColumnData;
-
-  // For contract calls, sort by function name then contract name
-  if (dataA.txType === 'contract_call' && dataB.txType === 'contract_call') {
-    // First compare by function name
-    if (dataA.functionName && dataB.functionName) {
-      const functionNameComparison = dataA.functionName.localeCompare(dataB.functionName);
-      if (functionNameComparison !== 0) return functionNameComparison;
-    } else if (dataA.functionName) {
-      return -1;
-    } else if (dataB.functionName) {
-      return 1;
-    }
-
-    // If function names are equal or both undefined, compare by contract name
-    if (dataA.contractName && dataB.contractName) {
-      return dataA.contractName.localeCompare(dataB.contractName);
-    } else if (dataA.contractName) {
-      return -1;
-    } else if (dataB.contractName) {
-      return 1;
-    }
-  }
-
-  // For token transfers and coinbase, sort by amount
-  if (
-    (dataA.txType === 'token_transfer' || dataA.txType === 'coinbase') &&
-    (dataB.txType === 'token_transfer' || dataB.txType === 'coinbase')
-  ) {
-    const amountA = parseFloat(dataA.amount || '0');
-    const amountB = parseFloat(dataB.amount || '0');
-    return amountA - amountB;
-  }
-
-  // If different types, sort by type
-  if (dataA.txType && dataB.txType && dataA.txType !== dataB.txType) {
-    return dataA.txType.localeCompare(dataB.txType);
-  }
-
-  return 0;
-};
-
 export const columns: ColumnDef<TxTableData>[] = [
   {
     id: TxTableColumns.Transaction,
     header: 'Transaction',
     accessorKey: TxTableColumns.Transaction,
     cell: info => TransactionTitleCellRenderer(info.getValue() as TxTableTransactionColumnData),
-    sortingFn: transactionColumnSortingFn,
+    enableSorting: false,
   },
   {
     id: TxTableColumns.TxId,
     header: 'ID',
     accessorKey: TxTableColumns.TxId,
-    cell: info => TxLinkCellRenderer(truncateMiddle(info.getValue() as string, 4)),
+    cell: info => TxLinkCellRenderer(truncateHex(info.getValue() as string, 4, 5, false)),
+    enableSorting: false,
   },
   {
     id: TxTableColumns.TxType,
     header: 'Type',
     accessorKey: TxTableColumns.TxType,
-    cell: ({ getValue }) => <TxTypeCellRenderer txType={getValue() as string} />,
+    cell: info => <TxTypeCellRenderer txType={info.getValue() as string} />,
+    enableSorting: false,
   },
   {
     id: TxTableColumns.From,
     header: 'From',
     accessorKey: TxTableColumns.From,
-    cell: info => AddressLinkCellRenderer(truncateMiddle(info.getValue() as string, 4)),
+    cell: info => AddressLinkCellRenderer(info.getValue() as TxTableAddressColumnData),
+    enableSorting: false,
   },
   {
     id: TxTableColumns.ArrowRight,
@@ -190,29 +153,26 @@ export const columns: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.To,
     header: 'To',
     accessorKey: TxTableColumns.To,
-    cell: info =>
-      AddressLinkCellRenderer(
-        validateStacksAddress(info.getValue() as string) ||
-          validateStacksContractId(info.getValue() as string)
-          ? truncateMiddle(info.getValue() as string, 4)
-          : (info.getValue() as string)
-      ),
+    cell: info => AddressLinkCellRenderer(info.getValue() as TxTableAddressColumnData),
+    enableSorting: false,
   },
   {
     id: TxTableColumns.Fee,
     header: 'Fee',
     accessorKey: TxTableColumns.Fee,
-    cell: info => FeeCellRenderer(microToStacksFormatted(info.getValue() as string)),
+    cell: info => FeeCellRenderer(info.getValue() as string),
+    enableSorting: false,
   },
   {
     id: TxTableColumns.BlockTime,
     header: 'Timestamp',
     accessorKey: TxTableColumns.BlockTime,
     cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
+    enableSorting: false,
   },
 ];
 
-export function UpdateTableBannerRow() {
+export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   const numColumns = Object.keys(TxTableColumns).length;
 
   return (
@@ -227,6 +187,9 @@ export function UpdateTableBannerRow() {
           borderBottomRightRadius: 'redesign.md',
         },
       }}
+      onClick={onClick}
+      cursor="pointer"
+      className="group"
     >
       <ChakraTable.Cell colSpan={numColumns} py={2} px={1}>
         <Flex
@@ -238,27 +201,75 @@ export function UpdateTableBannerRow() {
           borderRadius="redesign.lg"
           h={12}
         >
-          <Text fontSize="sm" fontWeight="medium" color="textSecondary">
-            New transactions have come in. Update list
-          </Text>
-          <Icon h={3.5} w={3.5} color="iconTertiary">
+          <Box display="inline-flex">
+            <Text fontSize="sm" fontWeight="medium" color="textSecondary">
+              New transactions have come in.
+            </Text>
+            &nbsp;
+            <Text
+              fontSize="sm"
+              fontWeight="medium"
+              color="textSecondary"
+              _groupHover={{ color: 'textPrimary' }}
+            >
+              Update list
+            </Text>
+          </Box>
+          <Icon h={3.5} w={3.5} color="iconTertiary" _groupHover={{ color: 'iconSecondary' }}>
             <ArrowsClockwise />
           </Icon>
         </Flex>
       </ChakraTable.Cell>
     </ChakraTable.Row>
   );
-}
+};
 
 export function TxsTable() {
-  const response = useConfirmedTransactionsInfinite();
-  const txs = useInfiniteQueryResult<Transaction>(response, 100);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const handlePageChange = useCallback((page: PaginationState) => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: page.pageIndex,
+    }));
+  }, []);
+
+  const { data, refetch } = useConfirmedTransactions(
+    pagination.pageSize,
+    pagination.pageIndex * pagination.pageSize,
+    {},
+    {
+      placeholderData: (keepPreviousData: InfiniteData<unknown, unknown> | undefined) =>
+        keepPreviousData,
+    }
+  );
+  const { total, results: txs = [] } = data || {};
+
+  const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
+  const [newTxsAvailable, setNewTxsAvailable] = useState(false);
+  useSubscribeTxs(isSubscriptionActive, tx => {
+    // Waiting 5 seconds to let the API catch up to the websocket
+    setTimeout(() => {
+      setNewTxsAvailable(true);
+    }, 5000);
+    setIsSubscriptionActive(false);
+  });
+
+  useEffect(() => {
+    if (!newTxsAvailable) {
+      setIsSubscriptionActive(true);
+    }
+  }, [newTxsAvailable]);
 
   const rowData: TxTableData[] = useMemo(
     () =>
       txs.map(tx => {
         const to = getToAddress(tx);
         const amount = getAmount(tx);
+
         return {
           [TxTableColumns.Transaction]: {
             amount: microToStacksFormatted(amount),
@@ -275,12 +286,20 @@ export function TxsTable() {
             tenureChangePayload: {
               cause: tx.tx_type === 'tenure_change' ? tx.tenure_change_payload?.cause : undefined,
             },
+            txId: tx.tx_id,
+            blockHeight: tx.block_height,
           },
           [TxTableColumns.TxId]: tx.tx_id,
           [TxTableColumns.TxType]: tx.tx_type,
-          [TxTableColumns.From]: tx.sender_address,
+          [TxTableColumns.From]: {
+            address: tx.sender_address,
+            isContract: validateStacksContractId(tx.sender_address),
+          },
           [TxTableColumns.ArrowRight]: <ArrowRight />,
-          [TxTableColumns.To]: to,
+          [TxTableColumns.To]: {
+            address: to,
+            isContract: validateStacksContractId(to),
+          },
           [TxTableColumns.Fee]: tx.fee_rate,
           [TxTableColumns.Amount]: amount,
           [TxTableColumns.BlockTime]: tx.block_time,
@@ -289,12 +308,38 @@ export function TxsTable() {
     [txs]
   );
 
+  // Because we don't want to show the loading state during pagination, we use this to get an initial load state
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  useEffect(() => {
+    if (txs.length > 0) {
+      setIsInitialLoad(false);
+    }
+  }, [txs]);
+
   return (
     <Table
       data={rowData}
       columns={columns}
-      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
-      isLoading={response.isLoading}
+      isLoading={isInitialLoad}
+      tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
+      scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
+      pagination={{
+        manualPagination: true,
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        totalRows: total || 0,
+        onPageChange: handlePageChange,
+      }}
+      bannerRow={
+        newTxsAvailable && pagination.pageIndex === 0 ? (
+          <UpdateTableBannerRow
+            onClick={() => {
+              setNewTxsAvailable(false);
+              refetch();
+            }}
+          />
+        ) : null
+      }
     />
   );
 }

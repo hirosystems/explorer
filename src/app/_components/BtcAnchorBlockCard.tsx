@@ -5,7 +5,7 @@ import { Block } from '@stacks/stacks-blockchain-api-types';
 import { KeyValueVertical } from '../../common/components/KeyValueVertical';
 import { Section } from '../../common/components/Section';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
-import { truncateMiddle } from '../../common/utils/utils';
+import { truncateMiddleDeprecated } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { TextLink } from '../../ui/TextLink';
 
@@ -36,7 +36,7 @@ export function BtcAnchorBlockCardBase({ block }: { block?: Block }) {
             href={`${btcBlockBaseUrl}/${block.burn_block_hash.replace('0x', '')}`}
           >
             <Text fontSize={'sm'} fontWeight={'medium'}>
-              {truncateMiddle(block.burn_block_hash, 8)}
+              {truncateMiddleDeprecated(block.burn_block_hash, 8)}
             </Text>
           </TextLink>
         }
@@ -51,7 +51,7 @@ export function BtcAnchorBlockCardBase({ block }: { block?: Block }) {
             href={`${btcTxBaseUrl}/${block.miner_txid.replace('0x', '')}`}
           >
             <Text fontSize={'sm'} fontWeight={'medium'}>
-              {truncateMiddle(block.miner_txid, 8)}
+              {truncateMiddleDeprecated(block.miner_txid, 8)}
             </Text>
           </TextLink>
         }

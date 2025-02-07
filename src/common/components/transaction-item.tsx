@@ -8,7 +8,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { Tooltip } from '../../ui/Tooltip';
 import { Caption, TextProps } from '../../ui/typography';
-import { toRelativeTime, truncateMiddle } from '../utils/utils';
+import { toRelativeTime, truncateMiddleDeprecated } from '../utils/utils';
 import { ExplorerLink } from './ExplorerLinks';
 
 export interface TxItemProps extends FlexProps {
@@ -66,7 +66,7 @@ export const PrincipalLink: React.FC<FlexProps & { principal: string }> = ({
         }}
         textDecoration="none"
       >
-        {truncateMiddle(principal)}
+        {truncateMiddleDeprecated(principal)}
       </Caption>
     </ExplorerLink>
   </Flex>

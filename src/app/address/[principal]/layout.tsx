@@ -2,13 +2,13 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { ReactNode } from 'react';
 
 import { meta } from '../../../common/constants/meta';
-import { truncateMiddle } from '../../../common/utils/utils';
+import { truncateMiddleDeprecated } from '../../../common/utils/utils';
 
 export async function generateMetadata(
   { params }: any,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const title = `STX Address - ${truncateMiddle(params?.principal)}`;
+  const title = `STX Address - ${truncateMiddleDeprecated(params?.principal)}`;
   return Promise.resolve({
     ...meta,
     title,
