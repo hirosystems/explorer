@@ -30,7 +30,7 @@ export const RedesignModal: FC<ModalProps> = ({ open, title, body, trigger, ...r
     >
       {trigger && <Dialog.Trigger>{trigger}</Dialog.Trigger>}
       <Dialog.Backdrop />
-      <DialogContent>
+      <DialogContent pb={12} px={6}>
         <Dialog.CloseTrigger w="full" display="flex" justifyContent="flex-end" alignItems="center">
           <Button onClick={onClose} variant="wrapper">
             <Icon h={5} w={5} color="iconPrimary">

@@ -25,7 +25,7 @@ export const NEW_LINEHEIGHTS = {
     medium: { value: '1.4' }, // custom
     base: { value: '1.5' }, // default
     tall: { value: '1.625' }, // default
-    taller: { value: '2' }, // default}
+    taller: { value: '2' }, // default
   },
 };
 

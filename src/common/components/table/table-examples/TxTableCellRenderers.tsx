@@ -59,7 +59,7 @@ export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
           {getTxTypeIcon(txType)}
         </Icon>
       </Flex>
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary" whiteSpace="nowrap">
+      <Text textStyle="text-medium-xs" color="textPrimary" whiteSpace="nowrap">
         {getTxTypeLabel(txType)}
       </Text>
     </Flex>
@@ -99,6 +99,7 @@ export const AddressLinkCellRenderer = (value: TxTableAddressColumnData) => {
           _hover={{
             color: 'textInteractiveHover',
           }}
+          fontFamily="var(--font-matter-mono)"
         >
           {getContractName(address)}
         </EllipsisText>
@@ -154,7 +155,7 @@ export const TimeStampCellRenderer = (value: string) => {
         bg: 'surfaceTertiary',
       }}
     >
-      <EllipsisText fontSize="xs" fontFamily="mono">
+      <EllipsisText fontSize="xs" fontFamily="var(--font-matter-mono)">
         {value}
       </EllipsisText>
     </Flex>

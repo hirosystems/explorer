@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import { Field as ChakraField } from '../../../components/ui/field';
 import { Button } from '../../../ui/Button';
 import { DateInput } from './DateInput';
+import { DATE_PICKER_CSS } from './consts';
 
 interface FormValues {
   startTime: number | null;
@@ -52,7 +53,7 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
     >
       {() => (
         <Form>
-          <Stack gap={4}>
+          <Stack gap={4} css={DATE_PICKER_CSS}>
             <Field name="startTime">
               {({ form }: FieldProps<string, FormValues>) => (
                 <ChakraField label="Between:">

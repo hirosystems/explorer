@@ -1,9 +1,10 @@
 'use client';
 
+import { checkboxAnatomy } from '@ark-ui/react';
 import { defineSlotRecipe } from '@chakra-ui/react';
 
 export const checkboxSlotRecipe = defineSlotRecipe({
-  slots: ['root', 'control', 'label', 'indicator', 'group'],
+  slots: [...checkboxAnatomy.keys()],
   base: {},
   variants: {
     variant: {
@@ -26,6 +27,25 @@ export const checkboxSlotRecipe = defineSlotRecipe({
         },
         label: {
           fontSize: 'sm',
+        },
+      },
+      redesignPrimary: {
+        control: {
+          color: 'iconInvert',
+          borderColor: 'redesignBorderPrimary',
+          bg: 'surfaceTertiary',
+          borderRadius: 'redesign.xs',
+          _focus: {
+            outline: 'none',
+            boxShadow: {
+              base: '0 0 0 2px var(--stacks-colors-accent-stacks-300)',
+              _dark: '0 0 0 2px var(--stacks-colors-accent-stacks-600)',
+            },
+          },
+          _checked: {
+            bg: 'surfaceInvert',
+            borderColor: 'surfaceInvert',
+          },
         },
       },
     },
