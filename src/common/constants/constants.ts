@@ -25,6 +25,7 @@ export enum MODALS {
   ADD_NETWORK = 'modals/add-network',
   ADD_NETWORK_NEW = 'modals/add-network-new',
   NAKAMOTO = 'modals/nakamoto',
+  TxsTableFilters = 'modals/txs-table-filters',
 }
 
 export const withApiServer = (apiServer: string) => (path?: string) =>

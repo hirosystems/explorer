@@ -58,6 +58,7 @@ export const buttonRecipe = defineRecipe({
         },
       },
       redesignPrimary: {
+        fontFamily: 'var(--font-instrument-sans)',
         borderRadius: 'redesign.md', // base
         color: {
           base: '{colors.neutral.sand-50}',
@@ -85,6 +86,7 @@ export const buttonRecipe = defineRecipe({
         },
       },
       redesignSecondary: {
+        fontFamily: 'var(--font-instrument-sans)',
         borderRadius: 'redesign.md', // base
         color: {
           base: '{colors.neutral.sand-50}',

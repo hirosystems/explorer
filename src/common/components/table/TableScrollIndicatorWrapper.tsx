@@ -76,14 +76,13 @@ export function TableScrollIndicator({ children, ...rest }: BoxProps & { childre
           className="scroll-indicator"
           aria-hidden="true"
         >
-          <Box w={2} h="full" bg="surface"></Box>
+          <Box w={2} h="full" bg="surfaceTertiary"></Box>
           <Flex
             position="relative"
             top="50%"
             transform="translateY(-50%)"
             bg="surfacePrimary"
             borderRadius="redesign.xs"
-            zIndex="overlay"
             h="full"
             alignItems="center"
             justifyContent="center"

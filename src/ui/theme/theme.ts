@@ -20,9 +20,11 @@ import { inputRecipe } from './recipes/InputRecipe';
 import { kbdRecipe } from './recipes/KbdRecipe';
 import { linkRecipe } from './recipes/LinkRecipe';
 import { menuSlotRecipe } from './recipes/MenuRecipe';
+import { popoverSlotRecipe } from './recipes/PopoverRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
 import { tabsSlotRecipe } from './recipes/TabsRecipe';
 import { tagSlotRecipe } from './recipes/TagRecipe';
+import { textareaRecipe } from './recipes/TextareaRecipe';
 import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
 import { SEMANTIC_TOKENS } from './semanticTokens';
 import { SIZES } from './sizes';
@@ -45,6 +47,7 @@ const themeConfig = {
       iconButton: iconButtonRecipe,
       input: inputRecipe,
       kbd: kbdRecipe,
+      textarea: textareaRecipe,
     },
     slotRecipes: {
       checkbox: checkboxSlotRecipe,
@@ -54,6 +57,7 @@ const themeConfig = {
       tag: tagSlotRecipe,
       tooltip: tooltipSlotRecipe,
       dialog: dialogSlotRecipe,
+      popover: popoverSlotRecipe,
     },
     tokens: {
       colors: { ...COLORS, ...NEW_COLORS },
