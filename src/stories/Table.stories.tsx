@@ -1,5 +1,6 @@
 import { Table, TableProps } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
+import { TableScrollIndicator } from '@/common/components/table/TableScrollIndicatorWrapper';
 import { TableSkeleton } from '@/common/components/table/TableSkeleton';
 import { UpdateTableBannerRow } from '@/common/components/table/table-examples/TxsTable';
 import { Box, Stack } from '@chakra-ui/react';
@@ -21,6 +22,7 @@ interface TableStoryArgs extends TableProps<unknown> {
   isEmpty?: boolean;
   hasSorting?: boolean;
   hasTableContainerWrapper?: boolean;
+  hasTableScrollIndicatorWrapper?: boolean;
   showSkeleton?: boolean;
   hasSuspenseWrapper?: boolean;
   hasError?: boolean;
@@ -57,7 +59,7 @@ const meta: Meta<TableStoryArgs> = {
     hasTableContainerWrapper: true,
   },
   argTypes: {
-    hasScrollIndicator: {
+    hasTableScrollIndicatorWrapper: {
       control: 'boolean',
     },
     pinFirstColumn: {
@@ -130,7 +132,6 @@ type Story = StoryObj<TableStoryArgs>;
 export const SimpleTable: Story = {
   args: {
     hasSorting: true,
-    hasScrollIndicator: true,
   },
   render: args => {
     if (args.showSkeleton) {
@@ -158,7 +159,11 @@ export const SimpleTable: Story = {
             args.pinFirstColumn ?? false
           )}
           data={args.isEmpty ? [] : args.showSkeleton ? [] : simpleTableRowData}
-          hasScrollIndicator={args.hasScrollIndicator}
+          scrollIndicatorWrapper={
+            args.hasTableScrollIndicatorWrapper
+              ? table => <TableScrollIndicator>{table}</TableScrollIndicator>
+              : undefined
+          }
           isLoading={args.isLoading}
           pagination={
             args.hasPagination
@@ -210,7 +215,7 @@ export const TxTable: Story = {
             }
             columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
             data={args.isEmpty ? [] : storybookTxTableRowData}
-            bannerRow={args.bannerRow ? <UpdateTableBannerRow /> : undefined}
+            bannerRow={args.bannerRow ? <UpdateTableBannerRow onClick={() => {}} /> : undefined}
             isLoading={args.isLoading}
             suspenseWrapper={
               args.hasSuspenseWrapper
@@ -221,7 +226,11 @@ export const TxTable: Story = {
                   )
                 : undefined
             }
-            hasScrollIndicator={args.hasScrollIndicator}
+            scrollIndicatorWrapper={
+              args.hasTableScrollIndicatorWrapper
+                ? table => <TableScrollIndicator>{table}</TableScrollIndicator>
+                : undefined
+            }
             error={args.hasError ? (args.error ? args.error : 'An error occurred') : undefined}
             pagination={
               args.hasPagination

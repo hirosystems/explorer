@@ -8,7 +8,7 @@ import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/transaction-item';
 import { getTransactionStatus } from '../../../common/utils/transactions';
-import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
+import { MICROSTACKS_IN_STACKS, truncateMiddleDeprecated } from '../../../common/utils/utils';
 import { Caption, Title } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
 import { getTransactionTypeLabel } from '../utils';
@@ -73,7 +73,7 @@ export const MempoolTxListItem: FC<MempoolTxsListItemProps> = memo(({ tx, ...res
         flexWrap="wrap"
         gap={1.5}
       >
-        <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
+        <TxLink txId={tx.tx_id}>{truncateMiddleDeprecated(tx.tx_id)}</TxLink>
         <TxTimestamp tx={tx} />
       </Stack>
     ),

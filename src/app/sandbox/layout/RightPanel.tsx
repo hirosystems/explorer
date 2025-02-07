@@ -3,7 +3,7 @@ import { SignOut } from '@phosphor-icons/react';
 
 import { Card } from '../../../common/components/Card';
 import { useAppSelector } from '../../../common/state/hooks';
-import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
+import { microToStacksFormatted, truncateMiddleDeprecated } from '../../../common/utils/utils';
 import { IconButton } from '../../../ui/IconButton';
 import { Text } from '../../../ui/Text';
 import { Tooltip } from '../../../ui/Tooltip';
@@ -54,7 +54,9 @@ export function RightPanel() {
             </Stack>
             {stxAddress && (
               <Flex textAlign="right" justifyContent="flex-end" alignItems="center">
-                <Caption _hover={{ cursor: 'pointer' }}>{truncateMiddle(stxAddress, 12)}</Caption>
+                <Caption _hover={{ cursor: 'pointer' }}>
+                  {truncateMiddleDeprecated(stxAddress, 12)}
+                </Caption>
                 <Box
                   _hover={{ cursor: 'pointer' }}
                   onClick={() => {

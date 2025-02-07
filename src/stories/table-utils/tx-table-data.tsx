@@ -5,7 +5,7 @@ import {
   getToAddress,
   columns as txTableTanstackColumns,
 } from '@/common/components/table/table-examples/TxsTable';
-import { microToStacksFormatted } from '@/common/utils/utils';
+import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { ArrowRight } from '@phosphor-icons/react';
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -963,8 +963,8 @@ export const storybookTxTableData: Transaction[] = [
 ];
 
 export const storybookTxTableRowData: TxTableData[] = storybookTxTableData.map(tx => {
-  const to = getToAddress(tx as Transaction);
-  const amount = getAmount(tx as Transaction);
+  const to = getToAddress(tx);
+  const amount = getAmount(tx);
   return {
     [TxTableColumns.Transaction]: {
       amount: microToStacksFormatted(amount),
@@ -972,12 +972,26 @@ export const storybookTxTableRowData: TxTableData[] = storybookTxTableData.map(t
       contractName: tx.tx_type === 'contract_call' ? tx.contract_call?.contract_id : undefined,
       txType: tx.tx_type,
       status: tx.tx_status,
+      txId: tx.tx_id,
+      blockHeight: tx.block_height,
+      smartContract: {
+        contractId: tx.tx_type === 'smart_contract' ? tx.smart_contract?.contract_id : undefined,
+      },
+      tenureChangePayload: {
+        cause: tx.tx_type === 'tenure_change' ? tx.tenure_change_payload?.cause : undefined,
+      },
     },
     [TxTableColumns.TxId]: tx.tx_id,
     [TxTableColumns.TxType]: tx.tx_type,
-    [TxTableColumns.From]: tx.sender_address,
+    [TxTableColumns.From]: {
+      address: tx.sender_address,
+      isContract: validateStacksContractId(tx.sender_address),
+    },
     [TxTableColumns.ArrowRight]: <ArrowRight />,
-    [TxTableColumns.To]: to,
+    [TxTableColumns.To]: {
+      address: to,
+      isContract: validateStacksContractId(to),
+    },
     [TxTableColumns.Fee]: tx.fee_rate,
     [TxTableColumns.Amount]: amount,
     [TxTableColumns.BlockTime]: tx.block_time,

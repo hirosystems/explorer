@@ -1,4 +1,4 @@
-import { truncateMiddle } from '@/common/utils/utils';
+import { truncateMiddleDeprecated } from '@/common/utils/utils';
 import { Box, Flex, StackProps } from '@chakra-ui/react';
 import { FC } from 'react';
 
@@ -19,7 +19,7 @@ export const Transaction: FC<
           color={'text'}
           _hover={{ textDecoration: 'underline' }}
         >
-          <TxLink txId={txId}>{truncateMiddle(txId, 4)}</TxLink>
+          <TxLink txId={txId}>{truncateMiddleDeprecated(txId, 4)}</TxLink>
         </Box>
       }
       bodySecondaryText={null}

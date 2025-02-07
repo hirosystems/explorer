@@ -68,9 +68,81 @@ export const validateStacksContractId = (contractId?: string): boolean => {
   }
 };
 
-export function shortenHex(hex: string, length = 4) {
+export function shortenHexDeprecated(hex: string, length = 4) {
   return `${hex.substring(0, length + 2)}…${hex.substring(hex.length - length)}`;
 }
+
+export function truncateHex(
+  input: string,
+  startLength: number,
+  endLength: number,
+  includePrefix = true
+) {
+  if (!input) return '';
+
+  if (!input.startsWith('0x')) {
+    return input;
+  }
+
+  return `${input.substring(0, includePrefix ? startLength + 2 : startLength)}…${input.substring(
+    input.length - endLength
+  )}`;
+}
+
+/**
+ * truncateMiddle
+ *
+ * @param {string} input - the string to truncate
+ * @param {number} startLength - the number of chars to keep on the start
+ * @param {number} endLength - the number of chars to keep on the end
+ */
+export const truncateMiddle = (input: string, startLength: number, endLength: number): string => {
+  if (!input) return '';
+  const start = input?.substring(0, startLength);
+  const end = input?.substring(input.length - endLength, input.length);
+  return `${start}…${end}`;
+};
+
+export const truncateContractName = (
+  input: string,
+  startLength?: number,
+  endLength?: number
+): string => {
+  if (!input) return '';
+  if (!startLength) return input;
+  const truncatedContent = !endLength
+    ? `${input?.substring(0, startLength)}...`
+    : input?.substring(0, startLength) +
+      '…' +
+      input?.substring(input.length - endLength, input.length);
+  if (truncatedContent.length > input.length) {
+    return input;
+  }
+  return truncatedContent;
+};
+
+export const truncateStxAddress = (input: string, startLength = 4, endLength = 5): string => {
+  if (!input || !validateStacksAddress(input)) return '';
+
+  return truncateMiddle(input, startLength, endLength);
+};
+
+export const truncateStxContractId = (
+  input: string,
+  startLength = 4,
+  endLength = 5,
+  startContractLength?: number,
+  endContractLength?: number
+): string => {
+  if (!input || !validateStacksContractId(input)) return '';
+
+  const [address, contractName] = input.split('.');
+  return `${truncateMiddle(address, startLength, endLength)}.${truncateContractName(
+    contractName,
+    startContractLength,
+    endContractLength
+  )}`;
+};
 
 /**
  * truncateMiddle
@@ -78,11 +150,11 @@ export function shortenHex(hex: string, length = 4) {
  * @param {string} input - the string to truncate
  * @param {number} offset - the number of chars to keep on either end
  */
-export const truncateMiddle = (input: string, offset = 5, contractOffest = 0): string => {
+export const truncateMiddleDeprecated = (input: string, offset = 5, contractOffest = 0): string => {
   if (!input) return '';
   // hashes
   if (input.startsWith('0x')) {
-    return shortenHex(input, offset);
+    return shortenHexDeprecated(input, offset);
   }
   // for contracts
   if (input.includes('.')) {
@@ -111,7 +183,7 @@ export function truncateText(text: string, limit: number) {
   return truncatedText;
 }
 
-export const formatStacksAmount = (amountInStacks: number): string => {
+export const formatStacksAmount = (amountInStacks: string | number): string => {
   return amountInStacks.toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 6,

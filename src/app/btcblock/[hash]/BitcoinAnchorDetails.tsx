@@ -9,7 +9,7 @@ import { Section } from '../../../common/components/Section';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useBlockByHash } from '../../../common/queries/useBlockByHash';
 import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
-import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
+import { toRelativeTime, truncateMiddleDeprecated } from '../../../common/utils/utils';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
@@ -64,7 +64,7 @@ export function BitcoinAnchorDetailsBase() {
             href={`${btcBlockBaseUrl}/${btcBlock.burn_block_hash.replace('0x', '')}`}
           >
             <Text fontSize="sm" fontWeight="medium">
-              {truncateMiddle(btcBlock.burn_block_hash, 8)}
+              {truncateMiddleDeprecated(btcBlock.burn_block_hash, 8)}
             </Text>
           </Link>
         }
@@ -80,7 +80,7 @@ export function BitcoinAnchorDetailsBase() {
               href={`${btcTxBaseUrl}/${stxBlock.miner_txid.replace('0x', '')}`}
             >
               <Text fontSize={'sm'} fontWeight={'medium'}>
-                {truncateMiddle(stxBlock.miner_txid, 8)}
+                {truncateMiddleDeprecated(stxBlock.miner_txid, 8)}
               </Text>
             </TextLink>
           }

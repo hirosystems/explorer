@@ -1,7 +1,9 @@
 'use client';
 
+import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
+import { isRedesignUrl } from '@/common/utils/url-utils';
 import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
-import { Flex } from '@chakra-ui/react';
+import { ClientOnly, Flex } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
@@ -18,6 +20,7 @@ const MempoolFeeStatsDynamic = dynamic(
 );
 
 export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & FilterProps) {
+  const isRedesign = isRedesignUrl();
   return (
     <>
       <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
@@ -25,6 +28,7 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
       </Flex>
       <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
       <TxListTabs filters={filters} />
+      <ClientOnly>{isRedesign ? <TxsTable /> : null}</ClientOnly>
     </>
   );
 }

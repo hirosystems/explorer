@@ -5,7 +5,7 @@ import {
   getFunctionName,
   getMemoString,
   microToStacksFormatted,
-  truncateMiddle,
+  truncateMiddleDeprecated,
 } from '../../utils/utils';
 
 export const getTxErrorMessage = (tx: Transaction | MempoolTransaction): string | undefined => {
@@ -51,7 +51,7 @@ export const getOgTitle = (tx: Transaction | MempoolTransaction) => {
         tx.tx_status !== 'pending' && ` for block #${(tx as Transaction).block_height}`
       }`;
     case 'poison_microblock':
-      return truncateMiddle(tx.tx_id);
+      return truncateMiddleDeprecated(tx.tx_id);
   }
 };
 
@@ -59,9 +59,9 @@ export const getDescription = (tx: Transaction | MempoolTransaction) => {
   switch (tx.tx_type) {
     case 'token_transfer': {
       const amount = `${microToStacksFormatted(tx.token_transfer.amount)} STX`;
-      return `This transaction transferred ${amount} from ${truncateMiddle(
+      return `This transaction transferred ${amount} from ${truncateMiddleDeprecated(
         tx.sender_address
-      )} to ${truncateMiddle(tx.token_transfer.recipient_address)}${
+      )} to ${truncateMiddleDeprecated(tx.token_transfer.recipient_address)}${
         tx.token_transfer.memo
           ? ` with the message "${getMemoString(tx.token_transfer.memo)}".`
           : '.'
@@ -70,7 +70,7 @@ export const getDescription = (tx: Transaction | MempoolTransaction) => {
     case 'smart_contract': {
       const contract = getContractId(tx);
       const contractName = contract && getContractName(contract);
-      return `This transaction deployed a smart contract with the name '${contractName}' from the address ${truncateMiddle(
+      return `This transaction deployed a smart contract with the name '${contractName}' from the address ${truncateMiddleDeprecated(
         tx.sender_address,
         8
       )}.${
@@ -85,7 +85,7 @@ export const getDescription = (tx: Transaction | MempoolTransaction) => {
       const functionName = getFunctionName(tx);
       const contract = getContractId(tx);
       return `This transaction called the public function '${functionName}' from the contract ${
-        contract && truncateMiddle(contract)
+        contract && truncateMiddleDeprecated(contract)
       }.${
         tx.tx_status !== 'success' && tx.tx_status !== 'pending' ? ` ${getTxErrorMessage(tx)}` : ''
       }${

@@ -8,7 +8,7 @@ import { Section } from '../../../../../common/components/Section';
 import { useSuspenseInfiniteQueryResult } from '../../../../../common/hooks/useInfiniteQueryResult';
 import { useContractById } from '../../../../../common/queries/useContractById';
 import { useFtMetadata } from '../../../../../common/queries/useFtMetadata';
-import { ftDecimals, truncateMiddle } from '../../../../../common/utils/utils';
+import { ftDecimals, truncateMiddleDeprecated } from '../../../../../common/utils/utils';
 import { Text } from '../../../../../ui/Text';
 import { ScrollableBox } from '../../../../_components/BlockList/ScrollableDiv';
 import { mobileBorderCss } from '../../../../_components/BlockList/consts';
@@ -139,7 +139,7 @@ const HolderTableRow = ({
 
       <Table.Cell py={3} px={6}>
         <AddressLink principal={address} whiteSpace="nowrap" fontSize="sm" color="textSubdued">
-          {truncateMiddle(address)}
+          {truncateMiddleDeprecated(address)}
         </AddressLink>
       </Table.Cell>
       <Table.Cell py={3} px={6}>
