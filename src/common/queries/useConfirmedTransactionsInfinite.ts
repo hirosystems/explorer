@@ -75,6 +75,10 @@ export function useConfirmedTransactionsInfinite(
   });
 }
 
+interface Options {
+  initialData?: GenericResponseType<Transaction>;
+}
+
 export function useConfirmedTransactions(
   limit = DEFAULT_LIST_LIMIT,
   offset = 0,
@@ -84,7 +88,7 @@ export function useConfirmedTransactions(
   const apiClient = useApiClient();
   return useQuery({
     queryKey: [
-      'confirmedTransactionsInfinite',
+      'confirmedTransactions',
       limit,
       offset,
       fromAddress,
