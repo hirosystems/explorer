@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import { Button } from '../../../components/ui/button';
 import { Field as ChakraField } from '../../../components/ui/field';
 import { DateInput } from './DateInput';
+import { DATE_PICKER_CSS } from './consts';
 
 interface FormValues {
   endTime: number | null;
@@ -43,7 +44,7 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
     >
       {() => (
         <Form>
-          <Stack gap={4}>
+          <Stack gap={4} css={DATE_PICKER_CSS}>
             <Field name="endTime">
               {({ field, form }: FieldProps<string, FormValues>) => (
                 <ChakraField label="Before:">

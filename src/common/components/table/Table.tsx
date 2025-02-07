@@ -126,57 +126,53 @@ export type TableProps<T> = {
 
 const ErrorTable = ({ error }: { error: string }) => {
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
-      <Stack alignItems="center" gap={3}>
-        <Icon h={8} w={8} color="iconError">
-          <WarningOctagon />
-        </Icon>
-        <Text fontSize="md" fontWeight="medium" color="textError">
-          {error ?? 'An error occurred'}
-        </Text>
-      </Stack>
-    </Flex>
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1} gap={3}>
+      <Icon h={8} w={8} color="iconError">
+        <WarningOctagon />
+      </Icon>
+      <Text fontSize="md" fontWeight="medium" color="textError">
+        {error ?? 'An error occurred'}
+      </Text>
+    </Stack>
   );
 };
 
 const EmptyFilteredTable = () => {
   // This isn't used now, but the plan is to use this once I start implementing filtering
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
-      <Stack alignItems="center" gap={6}>
-        <Icon h={16} w={16}>
-          <StacksFrowneyIcon />
-        </Icon>
-        <Stack gap={2} alignItems="center">
-          <Text fontSize="2xl" fontWeight="medium" color="textPrimary">
-            No results found
-          </Text>
-          <Text fontSize="md" color="textSecondary">
-            Try modifying filters applied.
-          </Text>
-        </Stack>
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1} gap={6}>
+      <Icon h={16} w={16}>
+        <StacksFrowneyIcon />
+      </Icon>
+      <Stack gap={2} alignItems="center">
+        <Text fontSize="2xl" fontWeight="medium" color="textPrimary">
+          No results found
+        </Text>
+        <Text fontSize="md" color="textSecondary">
+          Try modifying filters applied.
+        </Text>
       </Stack>
-    </Flex>
+    </Stack>
   );
 };
 
 const EmptyTable = ({ message }: { message?: string }) => {
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1}>
       <Text fontSize="2xl" color="textPrimary">
         {message ?? 'No results found'}
       </Text>
-    </Flex>
+    </Stack>
   );
 };
 
 const LoadingTable = () => {
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1}>
       <Icon h={16} w={16}>
         <Spinner size="md" />
       </Icon>
-    </Flex>
+    </Stack>
   );
 };
 
@@ -282,17 +278,13 @@ export function Table<T>({
         '& td': {
           borderBottom: 'none',
         },
-        '& tbody': {
-          position: 'relative',
-          top: 2, // adds a gap between the header and the body
-        },
       }}
       overflowX="auto"
       className="table-root"
     >
       <ChakraTable.Header>
         {table.getHeaderGroups().map(headerGroup => (
-          <ChakraTable.Row key={headerGroup.id}>
+          <ChakraTable.Row key={headerGroup.id} bg="transparent">
             {headerGroup.headers.map((header, columnIndex) => {
               const { column } = header;
               const sortDirection = column.getIsSorted();
@@ -308,8 +300,8 @@ export function Table<T>({
                     base: 2,
                     lg: getTableCellPadding(columns),
                   }}
-                  border="none"
-                  borderBottom="1px solid var(--stacks-colors-surface-secondary)"
+                  borderBottom="1px solid"
+                  borderColor="redesignBorderSecondary"
                   width="fit-content"
                   role="columnheader"
                   aria-sort={
@@ -324,9 +316,11 @@ export function Table<T>({
                     py={1}
                     pl={1}
                     pr={1.5}
-                    _hover={{
-                      bg: 'surfaceSecondary',
-                    }}
+                    {...(header.column.getCanSort() && {
+                      _hover: {
+                        bg: 'surfaceSecondary',
+                      },
+                    })}
                     borderRadius="redesign.md"
                     className="column-header-content group"
                     cursor={header.column.getCanSort() ? 'pointer' : 'default'}
@@ -351,9 +345,11 @@ export function Table<T>({
                             color: 'textPrimary',
                           },
                         }}
-                        _groupHover={{
-                          color: 'textPrimary',
-                        }}
+                        {...(header.column.getCanSort() && {
+                          _groupHover: {
+                            color: 'textPrimary',
+                          },
+                        })}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                       </Text>
@@ -380,10 +376,12 @@ export function Table<T>({
         ))}
       </ChakraTable.Header>
       <ChakraTable.Body>
+        <ChakraTable.Row key={'empty-gap-row'} bg="transparent" h={2} />
         {bannerRow}
         {table.getRowModel().rows.map((row, rowIndex) => (
           <ChakraTable.Row
             key={row.id}
+            bg="transparent"
             css={{
               '& > td:first-of-type': {
                 borderTopLeftRadius: 'redesign.md',

@@ -3,15 +3,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { getTokenPrice } from '../getTokenPriceInfo';
 import Page from './PageClient';
 
+export interface TxPageFilters {
+  startTime?: string;
+  endTime?: string;
+  fromAddress?: string;
+  toAddress?: string;
+}
+
 export default async function ({
   searchParams: { startTime, endTime, fromAddress, toAddress },
 }: {
-  searchParams: {
-    startTime?: string;
-    endTime?: string;
-    fromAddress?: string;
-    toAddress?: string;
-  };
+  searchParams: TxPageFilters;
 }) {
   const tokenPrice = await getTokenPrice();
   return (

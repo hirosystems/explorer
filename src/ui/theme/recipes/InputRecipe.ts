@@ -37,9 +37,9 @@ export const inputRecipe = defineRecipe({
       },
       redesignPrimary: {
         bg: 'surfaceTertiary',
-        borderColor: 'borderPrimary',
+        borderColor: 'redesignBorderPrimary',
         borderRadius: 'redesign.md',
-        borderWidth: '1px',
+        borderWidth: '2px',
         color: 'textPrimary',
         _hover: {
           '& .checkbox__label': { color: 'white' },

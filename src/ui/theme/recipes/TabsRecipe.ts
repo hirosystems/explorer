@@ -33,6 +33,17 @@ export const tabsSlotRecipe = defineSlotRecipe({
 
   variants: {
     size: {
+      redesignSm: {
+        trigger: {
+          py: '1',
+          px: '2',
+          textStyle: 'text-medium-xs',
+          borderRadius: 'redesign.sm',
+        },
+        label: {
+          lineHeight: 'comfortable',
+        },
+      },
       redesignMd: {
         trigger: {
           py: '1',
@@ -181,6 +192,59 @@ export const tabsSlotRecipe = defineSlotRecipe({
         content: {
           focusVisibleRing: 'inside',
           _horizontal: {
+            width: '100%',
+          },
+          _vertical: {
+            height: '100%',
+          },
+        },
+        indicator: {
+          zIndex: -1,
+        },
+      },
+      redesignPrimary: {
+        root: {},
+        list: {
+          display: 'inline-flex',
+          position: 'relative',
+          isolation: 'isolate',
+          p: '0',
+          _horizontal: {
+            flexDirection: 'row',
+          },
+          _vertical: {
+            flexDirection: 'column',
+          },
+        },
+        trigger: {
+          outline: '0',
+          display: 'flex',
+          alignItems: 'center',
+          fontWeight: 'medium',
+          position: 'relative',
+          cursor: 'button',
+          color: 'textSecondary',
+          fontFamily: 'var(--font-instrument-sans)',
+          whiteSpace: 'nowrap',
+          _disabled: {
+            cursor: 'not-allowed',
+            _active: { bg: 'initial' },
+          },
+          _selected: {
+            color: 'textInvert',
+            background: 'surfaceInvert',
+          },
+          _hover: {
+            '&:not([data-selected]):hover': {
+              background: 'surfaceTertiary',
+              color: 'textPrimary',
+            },
+          },
+        },
+        content: {
+          focusVisibleRing: 'inside',
+          _horizontal: {
+            flex: '0 0 100%',
             width: '100%',
           },
           _vertical: {

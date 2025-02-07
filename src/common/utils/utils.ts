@@ -41,6 +41,16 @@ dayjs.updateLocale('en', {
 export const MICROSTACKS_IN_STACKS = 1000000;
 
 /**
+ * validateBnsName
+ *
+ * @param {String} name - the BNS name to validate
+ */
+export const validateBnsName = (name?: string): boolean => {
+  if (!name) return false;
+  return name.endsWith('.btc');
+};
+
+/**
  * validateStacksAddress
  *
  * @param {String} stacksAddress - the STX address to validate
