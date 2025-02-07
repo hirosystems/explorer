@@ -28,7 +28,7 @@
   "dependencies": {
     "@ark-ui/react": "4.9.2",
     "@chakra-ui/anatomy": "2.3.4",
-    "@chakra-ui/react": "3.8.1",
+    "@chakra-ui/react": "3.12.0",
     "@chakra-ui/theme-tools": "2.2.6",
     "@contentful/rich-text-react-renderer": "15.21.2",
     "@contentful/rich-text-types": "16.5.2",

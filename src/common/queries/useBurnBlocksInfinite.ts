@@ -17,7 +17,7 @@ import { TWO_MINUTES } from './query-stale-time';
 
 export const BURN_BLOCKS_QUERY_KEY = 'burnBlocks';
 
-export function useBurnBlocks(
+export function useBurnBlocksInfinite(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
   options: any = {},
   queryKeyExtension?: string
@@ -57,6 +57,33 @@ export function useSuspenseBurnBlocks(
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
+    ...options,
+  });
+}
+
+export function useBurnBlocks(
+  limit = DEFAULT_BURN_BLOCKS_LIMIT,
+  offset?: number,
+  options: any = {},
+  queryKeyExtension?: string
+): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
+  const apiClient = useApiClient();
+  return useInfiniteQuery({
+    queryKey: [
+      BURN_BLOCKS_QUERY_KEY,
+      limit,
+      ...(offset ? [offset] : []),
+      ...(queryKeyExtension ? [queryKeyExtension] : []),
+    ],
+    queryFn: async () => {
+      return await callApiWithErrorHandling(apiClient, '/extended/v2/burn-blocks/', {
+        params: { query: { limit, offset } },
+      });
+    },
+    getNextPageParam,
+    initialPageParam: 0,
+    staleTime: TWO_MINUTES,
+    placeholderData: keepPreviousData => keepPreviousData,
     ...options,
   });
 }

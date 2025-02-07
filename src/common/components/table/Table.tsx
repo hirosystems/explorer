@@ -7,9 +7,11 @@ import {
   Column,
   ColumnDef,
   ColumnPinningState,
+  PaginationState,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -17,6 +19,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { TableContainer } from './TableContainer';
+import { TablePaginationControls } from './TablePaginationControls';
 import { ScrollIndicatorWrapper } from './TableScrollIndicatorWrapper';
 
 declare module '@tanstack/react-table' {
@@ -105,6 +108,14 @@ export type TableProps<T> = {
   hasScrollIndicator?: boolean;
   bannerRow?: React.ReactElement<typeof ChakraTable.Row>;
   error?: string;
+  pagination?: {
+    manualPagination: boolean;
+    pageIndex: number;
+    pageSize: number;
+    totalRows: number;
+    onPageChange: (pagination: PaginationState) => void;
+    onPageSizeChange?: (pageSize: PaginationState) => void;
+  };
 };
 
 const ErrorTable = ({ error }: { error: string }) => {
@@ -190,6 +201,7 @@ export function Table<T>({
   hasScrollIndicator,
   bannerRow,
   error,
+  pagination,
 }: TableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
@@ -199,9 +211,16 @@ export function Table<T>({
   const table = useReactTable({
     data: tableData,
     columns,
+    rowCount: pagination?.manualPagination ? pagination.totalRows : undefined, //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       sorting,
       columnPinning,
+      ...(pagination && {
+        pagination: {
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+        },
+      }),
     },
     onSortingChange: async updater => {
       if (typeof updater === 'function') {
@@ -217,6 +236,15 @@ export function Table<T>({
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    ...(pagination?.manualPagination ? {} : { getPaginationRowModel: getPaginationRowModel() }),
+    manualPagination: pagination?.manualPagination ?? false,
+    onPaginationChange: pagination
+      ? updater => {
+          const newPagination =
+            typeof updater === 'function' ? updater(table.getState().pagination) : updater;
+          pagination.onPageChange(newPagination);
+        }
+      : undefined,
   });
 
   useEffect(() => {
@@ -384,7 +412,18 @@ export function Table<T>({
 
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
-      {content}
+      <Stack gap={0} alignItems="center" w="full" className="table-content-container">
+        {content}
+        {pagination && (
+          <TablePaginationControls
+            pageIndex={pagination.pageIndex}
+            pageSize={pagination.pageSize}
+            totalRows={pagination.totalRows}
+            onPageChange={pagination.onPageChange}
+            onPageSizeChange={pagination.onPageSizeChange}
+          />
+        )}
+      </Stack>
     </ExplorerErrorBoundary>
   );
 }
