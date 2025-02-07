@@ -448,17 +448,14 @@ export const NEW_SEMANTIC_TOKENS = {
       tokenTransfer: {
         value: { base: '{colors.secondary.peach-200}', _dark: '{colors.secondary.peach-400}' },
       },
-      tenureStart: {
+      tenureChange: {
+        value: { base: '{colors.secondary.pink-200}', _dark: '{colors.secondary.pink-400}' },
+      },
+      coinbase: {
         value: {
           base: '{colors.secondary.blood-orange-200}',
           _dark: '{colors.secondary.blood-orange-400}',
         },
-      },
-      tenureExtension: {
-        value: { base: '{colors.secondary.pink-200}', _dark: '{colors.secondary.pink-400}' },
-      },
-      tenureChange: {
-        value: { base: '{colors.secondary.butter-200}', _dark: '{colors.secondary.butter-400}' },
       },
     },
   },

@@ -1,10 +1,8 @@
-import { ChakraProvider, defaultSystem } from '@chakra-ui/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
 import type { Preview } from '@storybook/react';
 import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import React, { useEffect } from 'react';
 
-import { DesktopColorModeButton } from '../src/app/_components/NavBar/DesktopColorModeButton';
 import { Providers } from '../src/app/_components/Providers';
 import {
   instrumentSans,
@@ -13,6 +11,7 @@ import {
   matterRegular,
   openSauce,
 } from '../src/common/fonts';
+import './preview.css';
 
 const preview: Preview = {
   globalTypes: {
@@ -67,7 +66,7 @@ const preview: Preview = {
           <main
             className={`${inter.variable} ${instrumentSans.variable} ${openSauce.variable} ${matterRegular.variable} ${matterMonoRegular.variable}`}
           >
-            <Story />
+            <Story w="100%" className="preview-story" />
           </main>
         </Providers>
       );
