@@ -119,7 +119,9 @@ export function NextCycleProgressBar({
           </Text>
         </Box>
         <Flex gap={1}>
-          <Icon as={BitcoinIcon} size={4} position={'relative'} bottom={'1px'} />
+          <Icon  h={4} w={4} position={'relative'} bottom={'1px'}>
+            <BitcoinIcon />
+          </Icon>
           <Text whiteSpace="nowrap" fontSize="xs">
             #{start.bitcoinBlockNumber}
           </Text>
@@ -128,7 +130,9 @@ export function NextCycleProgressBar({
           Bitcoin block {start.bitcoinBlockNumber}
         </Text> */}
         <Flex gap={1}>
-          <Icon as={StxIcon} size={4} position={'relative'} bottom={'1px'} />
+          <Icon  h={4} w={4} position={'relative'} bottom={'1px'}>
+            <StxIcon />
+          </Icon>
           <Text whiteSpace="nowrap" fontSize="xs">
             #{start.stacksBlockNumber}
           </Text>

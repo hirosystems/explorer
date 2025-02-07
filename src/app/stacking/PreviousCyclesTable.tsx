@@ -61,11 +61,15 @@ export function PreviousCyclesTable() {
           return (
             <Flex gap={2}>
               <Flex gap={1} alignItems="center">
-                <Icon as={BitcoinIcon} size={2} />
+                <Icon h={2} w={2}>
+                  <BitcoinIcon />
+                </Icon>
                 <Text fontSize="sm">{val.bitcoin}</Text>
               </Flex>
               <Flex gap={1} alignItems="center">
-                <Icon as={StxIcon} size={2} />
+                <Icon h={2} w={2}>
+                  <StxIcon />
+                </Icon>
                 <Text fontSize="sm">{val.stx}</Text>
               </Flex>
             </Flex>
@@ -81,11 +85,15 @@ export function PreviousCyclesTable() {
           return (
             <Flex gap={2}>
               <Flex gap={1} alignItems="center">
-                <Icon as={BitcoinIcon} size={2} />
+                <Icon  h={2} w={2}>
+                  <BitcoinIcon />
+                </Icon>
                 <Text fontSize="sm">{val.bitcoin}</Text>
               </Flex>
               <Flex gap={1} alignItems="center">
-                <Icon as={StxIcon} size={2} />
+                <Icon  h={2} w={2}>
+                  <StxIcon />
+                </Icon>
                 <Text fontSize="sm">{val.stx}</Text>
               </Flex>
             </Flex>

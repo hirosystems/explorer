@@ -1,11 +1,11 @@
 import { ScrollableBox } from '@/app/_components/BlockList/ScrollableDiv';
+import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import { Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info } from '@phosphor-icons/react';
 import React, { Suspense, useCallback, useState } from 'react';
 
-import { Text } from '@/ui/Text';
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { mobileBorderCss } from '../../constants/constants';
 import { TableContainer } from './TableContainer';
@@ -34,11 +34,16 @@ function SortIcon({ sortable, sortColumn, columnId, sortOrder, onSort }: SortIco
       onClick={() => {
         onSort?.(columnId, sortOrder === 'asc' ? 'desc' : 'asc');
       }}
-      as={sortColumn !== columnId ? ArrowsDownUp : sortOrder === 'asc' ? ArrowUp : ArrowDown}
       h={4}
       w={4}
     >
-      {sortColumn !== columnId ? <ArrowsDownUp/> : sortOrder === 'asc' ? <ArrowUp/> : <ArrowDown/>}
+      {sortColumn !== columnId ? (
+        <ArrowsDownUp />
+      ) : sortOrder === 'asc' ? (
+        <ArrowUp />
+      ) : (
+        <ArrowDown />
+      )}
     </Icon>
   );
 }
@@ -91,8 +96,8 @@ export const TableHeader = <T extends unknown[]>({
           </Text>
           {columnDefinition.tooltip && (
             <Tooltip content={columnDefinition.tooltip}>
-              <Icon as={Info} h={4} w={4} >
-              <Info/>
+              <Icon h={4} w={4}>
+                <Info />
               </Icon>
             </Tooltip>
           )}
@@ -220,10 +225,7 @@ export function Table<T extends unknown[]>({
   );
 
   return (
-    <ExplorerErrorBoundary
-      Wrapper={TableContainer}
-      tryAgainButton
-    >
+    <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
       <Suspense
         fallback={
           <TableSkeleton numColumns={columnDefinitions.length} numRows={rowData.length ?? null} />

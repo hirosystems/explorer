@@ -1,5 +1,5 @@
 import { NUM_SECONDS_IN_TEN_MINUTES } from '../../common/constants/constants';
-import { useBlockByHeight } from '../../common/queries/useBlockByHeight';
+import { useBlockByHeightOrHash } from '../../common/queries/useBlockByHash';
 import { useSuspensePoxInfoRaw } from '../../common/queries/usePoxInforRaw';
 
 export interface PoxCycleInfo {
@@ -33,7 +33,7 @@ export function usePoxCycle(): PoxCycleInfo {
   const { data: poxInfo } = useSuspensePoxInfoRaw();
 
   const currentBurnChainBlockHeight = poxInfo.current_burnchain_block_height;
-  const { data: currentBlockData } = useBlockByHeight(currentBurnChainBlockHeight);
+  const { data: currentBlockData } = useBlockByHeightOrHash(currentBurnChainBlockHeight.toString());
   const currentBlockDate = currentBlockData?.block_time_iso
     ? new Date(currentBlockData.block_time_iso)
     : undefined;

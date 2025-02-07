@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Box, Flex, Grid, Stack } from '@chakra-ui/react';
+import { Box, Flex, Grid, GridProps, Stack } from '@chakra-ui/react';
 import { CycleInformation } from '../CycleInformation';
 import { PoxCycleInfo } from '../usePoxCycle';
 import { useResizeObserver } from '../useResizeObserver';
@@ -11,7 +11,7 @@ const sizePadding = 4;
 const progressBarSize = 2 + 2 + 2 + 15 + 4;
 const size = sizePadding * 2 + progressBarSize;
 
-export const HorizontalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
+export const HorizontalPoxCycleDiagram = ({ data, ...gridProps }: { data: PoxCycleInfo } & GridProps) => {
   const {
     currentCycleId,
     prepareCycleProgress,
@@ -53,7 +53,7 @@ export const HorizontalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
   console.log({ progressBarBottom });
 
   return (
-    <Grid templateColumns="2fr 1fr" w="full" h="full" className="pox-cycle-diagram">
+    <Grid templateColumns="2fr 1fr" w="full" h="full" className="pox-cycle-diagram" {...gridProps}>
       <Stack bg="sand.150" w="full" alignItems="center" borderRadius="2xl" pl={8} py={6}>
         <Stack w="full" h="full" className="cycle-section-container">
           <Flex pr={8}>

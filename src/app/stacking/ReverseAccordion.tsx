@@ -1,9 +1,9 @@
-import { Plus, X } from '@phosphor-icons/react';
-import { RefObject, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
+import { Plus, X } from '@phosphor-icons/react';
+import { RefObject, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import useResizeObserver from './useResizeObserver';
 
 const cardPaddingY = 3;
@@ -102,11 +102,9 @@ function ReverseAccordionItem({
             w="full"
           >
             <Text fontWeight="medium">{title}</Text>
-            <Icon
-              as={isExpanded ? X : Plus}
-              onClick={() => (isExpanded ? setIsExpanded(index, false) : null)}
-              size={4}
-            />
+            <Icon onClick={() => (isExpanded ? setIsExpanded(index, false) : null)} h={4} w={4}>
+              {isExpanded ? <X /> : <Plus />}
+            </Icon>
           </Flex>
         </Flex>
         <Flex ref={contentRef} height="fit-content" flexDirection="column" gap={4} px={3} pb={3}>

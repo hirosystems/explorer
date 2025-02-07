@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { Text } from '@/ui/Text';
-import { Box, Flex, Stack } from '@chakra-ui/react';
+import { Box, Flex, Stack, StackProps } from '@chakra-ui/react';
 import { CycleInformation } from './CycleInformation';
 import { PoxCycleInfo } from './usePoxCycle';
 
-export const VerticalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
+export const VerticalPoxCycleDiagram = ({ data, ...stackProps }: { data: PoxCycleInfo } & StackProps) => {
   const {
     currentCycleId,
     currentCycleStackedStx,
@@ -21,7 +21,7 @@ export const VerticalPoxCycleDiagram = ({ data }: { data: PoxCycleInfo }) => {
   } = data;
 
   return (
-    <Stack bg="sand.150" w="full" alignItems="center" borderRadius="2xl" pl={8} py={6}>
+    <Stack bg="sand.150" w="full" alignItems="center" borderRadius="2xl" pl={8} py={6} {...stackProps}>
       <Box w="full">
         <Flex pb={6} pr={8} justifyContent="space-between">
           <CycleInformation

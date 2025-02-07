@@ -7,21 +7,22 @@ import { useApiClient } from '../../api/useApiClient';
 
 const BLOCK_QUERY_KEY = 'block';
 
-export function useBlockByHash(
-  hash?: string,
+export function useBlockByHeightOrHash(
+  heightOrHash?: string,
   options: Partial<Omit<UseSuspenseQueryOptions<any, any, Block, any>, 'queryKey'>> = {}
 ) {
   const apiClient = useApiClient();
+  if (!heightOrHash) throw new Error('Height or hash is required');
   return useQuery({
-    queryKey: ['blockByHash', hash],
+    queryKey: [BLOCK_QUERY_KEY, heightOrHash],
     queryFn: async () => {
-      if (!hash) return undefined;
+      if (!heightOrHash) return undefined;
       return await callApiWithErrorHandling(apiClient, '/extended/v2/blocks/{height_or_hash}', {
-        params: { path: { height_or_hash: hash } },
+        params: { path: { height_or_hash: heightOrHash } },
       });
     },
     staleTime: Infinity,
-    enabled: !!hash,
+    enabled: !!heightOrHash,
     ...options,
   });
 }

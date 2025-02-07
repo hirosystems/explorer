@@ -1,9 +1,8 @@
-import { Button, Flex, Icon, Text } from '@chakra-ui/react';
+import { Input } from '@/ui/Input';
+import { Text } from '@/ui/Text';
+import { Box, Button, Flex, Icon } from '@chakra-ui/react';
 import { CaretDoubleLeft, CaretDoubleRight, CaretLeft, CaretRight } from '@phosphor-icons/react';
 import React, { useState } from 'react';
-
-import { Box } from '../../../ui/Box';
-import { Input } from '../../../ui/Input';
 
 interface PaginationControlProps {
   currentPage: number;
@@ -32,21 +31,25 @@ export const PaginationControl: React.FC<PaginationControlProps> = ({
           <Flex gap={1}>
             <Button
               onClick={onPreviousPage}
-              isDisabled={currentPage === 1}
+              disabled={currentPage === 1}
               px={2}
               py={1}
               bg="sand.150"
             >
-              <Icon as={CaretDoubleLeft} size={4} />
+              <Icon  h={4} w={4}>
+                <CaretDoubleLeft />
+              </Icon>
             </Button>
             <Button
               onClick={onPreviousPage}
-              isDisabled={currentPage === 1}
+              disabled={currentPage === 1}
               px={2}
               py={1}
               bg="sand.150"
             >
-              <Icon as={CaretLeft} size={4} />
+              <Icon  h={4} w={4}>
+                <CaretLeft />
+              </Icon>
             </Button>
           </Flex>
           <Button mx={2} p={2} fontWeight="medium" fontSize="xs" bg="sand.150">
@@ -55,21 +58,25 @@ export const PaginationControl: React.FC<PaginationControlProps> = ({
           <Flex gap={1}>
             <Button
               onClick={onNextPage}
-              isDisabled={currentPage === totalPages}
+              disabled={currentPage === totalPages}
               px={2}
               py={1}
               bg="sand.150"
             >
-              <Icon as={CaretRight} size={4} />
+              <Icon  h={4} w={4}>
+                <CaretRight />
+              </Icon>
             </Button>
             <Button
               onClick={onNextPage}
-              isDisabled={currentPage === totalPages}
+              disabled={currentPage === totalPages}
               px={2}
               py={1}
               bg="sand.150"
             >
-              <Icon as={CaretDoubleRight} size={4} />
+              <Icon h={4} w={4}>
+                <CaretDoubleRight />
+              </Icon>
             </Button>
           </Flex>
         </Flex>

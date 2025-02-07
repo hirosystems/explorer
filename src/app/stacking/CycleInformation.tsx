@@ -1,9 +1,8 @@
-import { Box, Stack, Flex, Icon } from '@chakra-ui/react';
+import { Text } from '@/ui/Text';
+import { Box, Flex, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 import gsap from 'gsap';
 import { useEffect, useRef } from 'react';
-
-import { Text } from '@/ui/Text';
 
 function CountdownBadge({ daysLeft }: { daysLeft: number }) {
   const outerDotRef = useRef<HTMLDivElement>(null);
@@ -96,7 +95,9 @@ export const CycleInformation = ({
           <Text fontSize={40} fontWeight="400">
             {id}
           </Text>
-          <Icon as={ArrowRight} size={6} weight="bold" />
+          <Icon h={6} w={6} color="iconPrimary">
+            <ArrowRight weight="bold" />
+          </Icon>
         </Flex>
         <StackedStxMetric stxStacked={stxStacked} />
       </Stack>
@@ -113,7 +114,7 @@ const StackedStxMetric = ({ stxStacked }: { stxStacked: number }) => {
         {`${stackedStxString} STX`}
       </Text>
       &nbsp;
-      <Text as="span" fontSize="xl" fontWeight="bold" color="textSubdued" whiteSpace="nowrap">
+      <Text fontSize="xl" fontWeight="bold" color="textSubdued" whiteSpace="nowrap">
         ($124.3M)
       </Text>
       &nbsp;

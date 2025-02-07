@@ -1,6 +1,6 @@
+import { Stack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
-import { Stack } from '../../../ui/Stack';
 import { TableProps } from '../table/Table';
 import { PaginationControl } from './PaginationControls';
 
