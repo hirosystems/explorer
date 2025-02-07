@@ -1,7 +1,7 @@
 import FungibleTokenIcon from '@/ui/icons/FungibleTokenIcon';
 import { Box, Flex, Grid, Icon, Stack } from '@chakra-ui/react';
 import { ArrowSquareOut, Atom, ListChecks } from '@phosphor-icons/react';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { ClarityAbiFunction } from '@stacks/transactions';
 
@@ -12,7 +12,7 @@ import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useAppSelector } from '../../../../common/state/hooks';
 import { ContractWithParsedAbi } from '../../../../common/types/contract';
 import { buildUrl } from '../../../../common/utils/buildUrl';
-import { truncateMiddle } from '../../../../common/utils/utils';
+import { truncateMiddleDeprecated } from '../../../../common/utils/utils';
 import { NextLink } from '../../../../ui/NextLink';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
 import { Caption, Title } from '../../../../ui/typography';
@@ -52,7 +52,10 @@ const ContractInfo: FC<ContractInfoProps> = ({ contract: { contract_id, abi } })
               <Title mb={2} display="block" mt="0" as="h3">
                 {contract_id.split('.')[1]}
               </Title>
-              <Caption display="block"> {truncateMiddle(contract_id.split('.')[0], 8)}</Caption>
+              <Caption display="block">
+                {' '}
+                {truncateMiddleDeprecated(contract_id.split('.')[0], 8)}
+              </Caption>
             </Box>
           </Flex>
         </Flex>

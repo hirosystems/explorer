@@ -8,7 +8,7 @@ import { TxLink } from '../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../common/components/Section';
 import { RightBoxSkeleton } from '../../../../common/components/loaders/RightBox';
 import { useContractById } from '../../../../common/queries/useContractById';
-import { getContractName, truncateMiddle } from '../../../../common/utils/utils';
+import { getContractName, truncateMiddleDeprecated } from '../../../../common/utils/utils';
 import { Text, TextProps } from '../../../../ui/Text';
 import FunctionXIcon from '../../../../ui/icons/FunctionX';
 import { Caption, Title } from '../../../../ui/typography';
@@ -49,7 +49,7 @@ function ContractDetailsCardBase({ contractId }: ContractDetailsCardProps) {
               <Title mb="8px" display="block" mt="0" as="h4">
                 {getContractName(contractId)}
               </Title>
-              <Caption display="block">{truncateMiddle(contract?.tx_id, 8)}</Caption>
+              <Caption display="block">{truncateMiddleDeprecated(contract?.tx_id, 8)}</Caption>
             </Box>
           </Flex>
         </Flex>

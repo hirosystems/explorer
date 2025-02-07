@@ -24,7 +24,7 @@ import {
   capitalize,
   ftDecimals,
   microStxToStx,
-  truncateMiddle,
+  truncateMiddleDeprecated,
   validateStacksAddress,
 } from '../../../common/utils/utils';
 import StxIcon from '../../../ui/icons/StxIcon';
@@ -162,7 +162,7 @@ const Condition = ({
           {condition.type === 'stx' && <StxPriceButton tx={tx} value={Number(condition.amount)} />}
         </>
       }
-      subTitle={truncateMiddle(getAddressValue(condition), 8)}
+      subTitle={truncateMiddleDeprecated(getAddressValue(condition), 8)}
     />
   );
 };

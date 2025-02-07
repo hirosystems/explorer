@@ -1,19 +1,35 @@
 import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
-import { getContractName, truncateMiddle } from '@/common/utils/utils';
-import { Text } from '@/ui/Text';
+import {
+  formatStacksAmount,
+  getContractName,
+  microToStacksFormatted,
+  truncateStxAddress,
+} from '@/common/utils/utils';
+import { Text, TextProps } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
+import MicroStxIcon from '@/ui/icons/MicroStxIcon';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Flex, Icon } from '@chakra-ui/react';
 import { ArrowsLeftRight, Clock, Cube, PhoneCall, Question, XCircle } from '@phosphor-icons/react';
 
-import { MempoolTransactionStatus, TransactionStatus } from '@stacks/stacks-blockchain-api-types';
+import {
+  MempoolTransactionStatus,
+  Transaction,
+  TransactionStatus,
+} from '@stacks/stacks-blockchain-api-types';
 
-import { TxTableTransactionColumnData } from './TxsTable';
+import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
 
-export const defaultCellRenderer = (value: string) => {
+const EllipsisText = ({ children, ...textProps }: { children: React.ReactNode } & TextProps) => {
   return (
-    <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-      {String(value)}
+    <Text
+      whiteSpace="nowrap"
+      overflow="hidden"
+      textOverflow="ellipsis"
+      fontSize="sm"
+      {...textProps}
+    >
+      {children}
     </Text>
   );
 };
@@ -99,32 +115,62 @@ export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
 export const TxLinkCellRenderer = (value: string) => {
   return (
     <TxLink txId={value} variant="tableLink">
-      <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-        {value}
-      </Text>
+      <EllipsisText>{value}</EllipsisText>
     </TxLink>
   );
 };
 
-export const AddressLinkCellRenderer = (value: string) => {
-  return (
-    <AddressLink principal={value} variant="tableLink">
-      <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-        {value}
-      </Text>
+export const AddressLinkCellRenderer = (value: TxTableAddressColumnData) => {
+  const { address, isContract } = value;
+  return address && isContract ? (
+    <Flex
+      gap={1}
+      alignItems="center"
+      bg="surfacePrimary"
+      borderRadius="md"
+      py={0.5}
+      px={1}
+      w="fit-content"
+      _groupHover={{
+        bg: 'surfaceTertiary',
+      }}
+    >
+      <Icon h={3} w={3} color="iconPrimary">
+        <ClarityIcon />
+      </Icon>
+      <AddressLink principal={address} variant="tableLink">
+        <EllipsisText
+          textStyle="text-regular-xs"
+          color="textPrimary"
+          _hover={{
+            color: 'textInteractiveHover',
+          }}
+        >
+          {getContractName(address)}
+        </EllipsisText>
+      </AddressLink>
+    </Flex>
+  ) : address && !isContract ? (
+    <AddressLink principal={address} variant="tableLink">
+      <EllipsisText fontSize="sm">{truncateStxAddress(address)}</EllipsisText>
     </AddressLink>
+  ) : (
+    <EllipsisText fontSize="sm">-</EllipsisText>
   );
 };
 
 export const FeeCellRenderer = (value: string) => {
+  const stx = microToStacksFormatted(value);
+  const microStx = formatStacksAmount(value);
+
   return (
-    <Flex alignItems="center" gap={1}>
+    <Flex alignItems="center" justifyContent="flex-end" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
-        <StxIcon />
+        {stx.length > microStx.length ? <MicroStxIcon /> : <StxIcon />}
       </Icon>
-      <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-        {value} STX
-      </Text>
+      <EllipsisText fontSize="sm">
+        {stx.length > microStx.length ? `${microStx} µSTX` : `${stx} STX`}
+      </EllipsisText>
     </Flex>
   );
 };
@@ -135,25 +181,28 @@ export const AmountCellRenderer = (value: number) => {
       <Icon h={3} w={3} color="textSecondary">
         <StxIcon />
       </Icon>
-      <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-        {value} STX
-      </Text>
+      <EllipsisText fontSize="sm">{value} STX</EllipsisText>
     </Flex>
   );
 };
 
 export const TimeStampCellRenderer = (value: string) => {
   return (
-    <Flex alignItems="center" justifyContent="center" bg="surfacePrimary" borderRadius="sm" p={1.5}>
-      <Text
-        whiteSpace="nowrap"
-        overflow="hidden"
-        textOverflow="ellipsis"
-        fontSize="xs"
-        fontFamily="mono"
-      >
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      bg="surfacePrimary"
+      borderRadius="md"
+      py={0.5}
+      px={1}
+      w="fit-content"
+      _groupHover={{
+        bg: 'surfaceTertiary',
+      }}
+    >
+      <EllipsisText fontSize="xs" fontFamily="mono">
         {value}
-      </Text>
+      </EllipsisText>
     </Flex>
   );
 };
@@ -235,59 +284,27 @@ const StatusTag = ({ status }: { status: TransactionStatus | MempoolTransactionS
   );
 };
 
+const txTextMap: Record<Transaction['tx_type'], (data: TxTableTransactionColumnData) => string> = {
+  contract_call: (data: TxTableTransactionColumnData) => data.functionName ?? '',
+  token_transfer: (data: TxTableTransactionColumnData) => `Send ${data.amount} STX`,
+  tenure_change: (data: TxTableTransactionColumnData) =>
+    `Tenure ${data.tenureChangePayload?.cause} (#${data.blockHeight})`,
+  coinbase: (data: TxTableTransactionColumnData) => `Block #${data.blockHeight}`,
+  smart_contract: (data: TxTableTransactionColumnData) =>
+    getContractName(data.smartContract?.contractId ?? ''),
+  poison_microblock: (data: TxTableTransactionColumnData) => '',
+};
+
 export const TransactionTitleCellRenderer = (value: TxTableTransactionColumnData) => {
-  const { functionName, contractName, txType, status, amount, tenureChangePayload, smartContract } =
-    value;
+  const { txType, status, txId } = value;
 
-  let content: React.ReactNode = null;
-  if (txType === 'contract_call') {
-    content = (
-      <Flex gap={1}>
-        <Text fontSize="sm" fontWeight="medium" color="textPrimary" whiteSpace="nowrap">
-          {functionName}
-        </Text>
-        <Flex gap={1} alignItems="center" bg="surfacePrimary" borderRadius="md" px={1.5} py={0.5}>
-          <Icon h={3} w={3} color="iconSecondary">
-            <ClarityIcon />
-          </Icon>
-          <Text fontSize="xs" fontWeight="medium" color="textSecondary" whiteSpace="nowrap">
-            {getContractName(contractName ?? '')}
-          </Text>
-        </Flex>
-      </Flex>
-    );
-  }
-  if (txType === 'token_transfer') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        {amount} STX
-      </Text>
-    );
-  }
+  const text = txType ? txTextMap[txType as keyof typeof txTextMap](value) : '';
 
-  if (txType === 'tenure_change') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        Tenure {tenureChangePayload?.cause}
-      </Text>
-    );
-  }
-
-  if (txType === 'coinbase') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        Coinbase
-      </Text>
-    );
-  }
-
-  if (txType === 'smart_contract') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        {truncateMiddle(smartContract?.contractId ?? '')}
-      </Text>
-    );
-  }
+  let content = (
+    <TxLink txId={txId} variant="tableLink">
+      <EllipsisText textStyle="text-medium-sm">{text}</EllipsisText>
+    </TxLink>
+  );
 
   if (status && status !== 'success') {
     return (

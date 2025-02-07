@@ -11,7 +11,7 @@ import {
   useInfiniteQueryResult,
   useSuspenseInfiniteQueryResult,
 } from '../../common/hooks/useInfiniteQueryResult';
-import { truncateMiddle } from '../../common/utils/utils';
+import { truncateMiddleDeprecated } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { ScrollableBox } from '../_components/BlockList/ScrollableDiv';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
@@ -160,7 +160,7 @@ export const SignerTableRow = ({
             href={`/signer/${signerKey}`}
           >
             <Text fontSize="sm" whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
-              {truncateMiddle(signerKey)}
+              {truncateMiddleDeprecated(signerKey)}
             </Text>
           </ExplorerLink>
           <CopyButton

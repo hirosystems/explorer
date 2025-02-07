@@ -2,7 +2,7 @@ import { Box, BoxProps, Flex, Icon, VisuallyHidden } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 
-export function ScrollIndicatorWrapper({ children, ...rest }: BoxProps & { children: ReactNode }) {
+export function TableScrollIndicator({ children, ...rest }: BoxProps & { children: ReactNode }) {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
   const [isScrolledToEnd, setIsScrolledToEnd] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -26,24 +26,32 @@ export function ScrollIndicatorWrapper({ children, ...rest }: BoxProps & { child
     const debouncedCheckForScroll = debounce(checkForScroll, 150);
     const debouncedCheckScrollPosition = debounce(checkScrollPosition, 150);
 
-    // Initial checks without debouncing
+    // Initial checks with a small delay to ensure content is rendered
     checkForScroll();
     checkScrollPosition();
 
+    const resizeObserver = new ResizeObserver(() => {
+      debouncedCheckForScroll();
+      debouncedCheckScrollPosition();
+    });
+
+    if (divRef.current) {
+      resizeObserver.observe(divRef.current);
+    }
+
     const element = divRef.current;
     element?.addEventListener('scroll', debouncedCheckScrollPosition);
-    window.addEventListener('resize', debouncedCheckForScroll);
 
     return () => {
       element?.removeEventListener('scroll', debouncedCheckScrollPosition);
-      window.removeEventListener('resize', debouncedCheckForScroll);
       debouncedCheckForScroll.cancel?.();
       debouncedCheckScrollPosition.cancel?.();
+      resizeObserver.disconnect();
     };
   }, []);
 
   return (
-    <Box position="relative" className="scroll-indicator-positioner">
+    <Box position="relative" className="scroll-indicator-positioner" w="full">
       <Box
         ref={divRef}
         overflowX={'auto'}

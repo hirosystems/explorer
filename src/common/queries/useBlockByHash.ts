@@ -1,4 +1,4 @@
-import { UseSuspenseQueryOptions, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 import { Block } from '@stacks/stacks-blockchain-api-types';
 

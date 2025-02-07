@@ -8,7 +8,7 @@ import { BlockLink, ExplorerLink } from '../../../../common/components/ExplorerL
 import { Timestamp } from '../../../../common/components/Timestamp';
 import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQueryResult';
 import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
-import { truncateMiddle } from '../../../../common/utils/utils';
+import { truncateMiddleDeprecated } from '../../../../common/utils/utils';
 import { Text } from '../../../../ui/Text';
 import BitcoinCircleIcon from '../../../../ui/icons/BitcoinCircleIcon';
 import StxIcon from '../../../../ui/icons/StxIcon';
@@ -90,7 +90,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
               href={`/btcblock/${hash}`}
               whiteSpace={'nowrap'}
             >
-              {truncateMiddle(hash, 6)}
+              {truncateMiddleDeprecated(hash, 6)}
             </ExplorerLink>
             {timestamp && <Timestamp ts={timestamp} />}
           </HStack>
@@ -194,7 +194,7 @@ function StxBlockRow({
       >
         <BlockLink hash={hash}>
           <Text color="textSubdued" fontWeight="medium" fontSize="xs" whiteSpace="nowrap">
-            {truncateMiddle(hash, 3)}
+            {truncateMiddleDeprecated(hash, 3)}
           </Text>
         </BlockLink>
         {txsCount !== undefined ? (
