@@ -4,13 +4,11 @@ import { ReactElement, forwardRef } from 'react';
 interface StacksSmileyIconWeightProps {
   circleColor: string;
   linearGradientColor: string;
-  laserEyesOn?: boolean;
 }
 
 const createWeight = ({
   circleColor,
   linearGradientColor,
-  laserEyesOn,
 }: StacksSmileyIconWeightProps): ReactElement => (
   <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="34" cy="34" r="28" fill={circleColor} />
@@ -50,22 +48,22 @@ const createWeight = ({
         stroke-linejoin="round"
       />
     </g>
-    <g filter={laserEyesOn ? 'url(#filter3_d_2985_1972)' : ''}>
+    <g className="laser-eye-1">
       <circle
         cx="22.0763"
         cy="34.5868"
         r="2.59441"
         transform="rotate(-26.1044 22.0763 34.5868)"
-        fill={laserEyesOn ? '#FD6112' : '#141414'}
+        fill="#141414"
       />
     </g>
-    <g filter={laserEyesOn ? 'url(#filter4_d_2985_1972)' : ''}>
+    <g className="laser-eye-2">
       <circle
         cx="41.3654"
         cy="25.1358"
         r="2.59441"
         transform="rotate(-26.1044 41.3654 25.1358)"
-        fill={laserEyesOn ? '#FD6112' : '#141414'}
+        fill="#141414"
       />
     </g>
     <path
@@ -274,9 +272,9 @@ interface StacksSmileyIconProps extends StacksSmileyIconWeightProps {
 }
 
 export const StacksSmileyIcon = forwardRef<SVGSVGElement, StacksSmileyIconProps>((props, ref) => {
-  const { circleColor, linearGradientColor, laserEyesOn, weight = 'regular', ...restProps } = props;
+  const { circleColor, linearGradientColor, weight = 'regular', ...restProps } = props;
   const weightFn = weights.get(weight);
-  const weightElement = weightFn?.({ circleColor, linearGradientColor, laserEyesOn });
+  const weightElement = weightFn?.({ circleColor, linearGradientColor });
 
   if (!weightElement) return null;
 
