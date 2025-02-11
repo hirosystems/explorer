@@ -1,3 +1,10 @@
+# [1.248.0](https://github.com/hirosystems/explorer/compare/v1.247.0...v1.248.0) (2025-02-11)
+
+
+### Features
+
+* footer redesign done ([81ce14b](https://github.com/hirosystems/explorer/commit/81ce14b3750d700014029aa325c77d322077a7a8))
+
 # [1.247.0](https://github.com/hirosystems/explorer/compare/v1.246.0...v1.247.0) (2025-02-03)
 
 
