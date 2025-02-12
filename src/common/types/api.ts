@@ -7,3 +7,13 @@ export interface ApiResponseWithResultsOffset<Data> {
   total: number;
   results: Data[];
 }
+
+export interface ApiResponseWithCursorPagination<Data> {
+  limit: number;
+  offset: number;
+  total: number;
+  next_cursor: string | null;
+  prev_cursor: string | null;
+  cursor: string;
+  results: Data[];
+}
