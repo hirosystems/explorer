@@ -140,19 +140,23 @@ export function SearchResultsCard({
   const searchPageUrl = useSearchPageUrl(searchTerm, network);
   const router = useRouter();
   const activeNetwork = useGlobalContext().activeNetwork;
+  const entityUrl = getSearchEntityUrl(activeNetwork, data);
 
   useEffect(() => {
-    const entityUrl = getSearchEntityUrl(activeNetwork, data);
     if (entityUrl) {
       router.push(entityUrl);
     }
-  }, [activeNetwork, data, router]);
+  }, [activeNetwork, data, entityUrl, router]);
 
   const isSearchPage = usePathname() === '/search';
 
   if (!isFocused || isSearchPage) return null;
 
   const totalCount = data && 'metadata' in data.result ? data?.result?.metadata?.totalCount : 0;
+
+  if (entityUrl) {
+    return null;
+  }
 
   return (
     <Section
