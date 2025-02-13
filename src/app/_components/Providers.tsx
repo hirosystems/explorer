@@ -46,12 +46,12 @@ export const Providers = ({
   const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
 
   return (
-    <GlobalContextProvider
-      addedCustomNetworksCookie={addedCustomNetworksCookie}
-      removedCustomNetworksCookie={removedCustomNetworksCookie}
-    >
-      <CookiesProvider>
-        <ChakraProvider value={system}>
+    <ChakraProvider value={system}>
+      <GlobalContextProvider
+        addedCustomNetworksCookie={addedCustomNetworksCookie}
+        removedCustomNetworksCookie={removedCustomNetworksCookie}
+      >
+        <CookiesProvider>
           <ColorModeProvider>
             <ReduxProvider store={store}>
               <AppConfig // TODO: rename to something else like SessionProvider
@@ -63,8 +63,8 @@ export const Providers = ({
               </AppConfig>
             </ReduxProvider>
           </ColorModeProvider>
-        </ChakraProvider>
-      </CookiesProvider>
-    </GlobalContextProvider>
+        </CookiesProvider>
+      </GlobalContextProvider>
+    </ChakraProvider>
   );
 };

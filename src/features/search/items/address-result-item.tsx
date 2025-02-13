@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Icon } from '@chakra-ui/react';
 import React from 'react';
 
 import { Circle } from '../../../common/components/Circle';
@@ -25,7 +25,9 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
       <ResultItemWrapper>
         <Flex alignItems="center">
           <Circle h={12} w={12}>
-            <WalletIcon size={4} />
+            <Icon h={4} w={4}>
+              <WalletIcon />
+            </Icon>
           </Circle>
           <Box ml={4}>
             <Title display="block" mb="4px" className={'search-result-title'}>
