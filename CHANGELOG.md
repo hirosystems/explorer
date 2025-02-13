@@ -1,3 +1,10 @@
+## [1.248.1](https://github.com/hirosystems/explorer/compare/v1.248.0...v1.248.1) (2025-02-13)
+
+
+### Bug Fixes
+
+* search: return null when entity url exists ([8be18e6](https://github.com/hirosystems/explorer/commit/8be18e68b1894300ef9c1a11dd277f8d4e7ab002))
+
 # [1.248.0](https://github.com/hirosystems/explorer/compare/v1.247.0...v1.248.0) (2025-02-11)
 
 
