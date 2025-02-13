@@ -10,7 +10,6 @@ import {
   useStacksApiSocketClient,
 } from '../../app/_components/BlockList/Sockets/use-stacks-api-socket-client';
 import { buildCustomNetworkUrl, fetchCustomNetworkId } from '../components/modals/AddNetwork/utils';
-import { IS_BROWSER } from '../constants/constants';
 import {
   NetworkIdModeMap,
   NetworkModeBtcAddressBaseUrlMap,
@@ -19,7 +18,6 @@ import {
   NetworkModeUrlMap,
   devnetNetwork,
   mainnetNetwork,
-  oldTestnetNetwork,
   testnetNetwork,
 } from '../constants/network';
 import { ONE_HOUR } from '../queries/query-stale-time';
@@ -36,10 +34,6 @@ function filterNetworks(
 }
 
 interface GlobalContext {
-  apiUrls: Record<NetworkModes, string>;
-  btcBlockBaseUrls: Record<NetworkModes, string>;
-  btcTxBaseUrls: Record<NetworkModes, string>;
-  btcAddressBaseUrls: Record<NetworkModes, string>;
   activeNetwork: Network;
   activeNetworkKey: string;
   addCustomNetwork: (network: Network) => void;
@@ -50,10 +44,6 @@ interface GlobalContext {
 }
 
 export const GlobalContext = createContext<GlobalContext>({
-  apiUrls: NetworkModeUrlMap,
-  btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap,
-  btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap,
-  btcAddressBaseUrls: NetworkModeBtcAddressBaseUrlMap,
   activeNetwork: mainnetNetwork,
   activeNetworkKey: NetworkModeUrlMap[NetworkModes.Mainnet],
   addCustomNetwork: (network: Network) => {},
@@ -72,7 +62,6 @@ export const GlobalContextProvider: FC<{
   const searchParams = useSearchParams();
   const chain = searchParams?.get('chain');
   const api = searchParams?.get('api');
-  const subnet = searchParams?.get('subnet');
   const btcBlockBaseUrl = searchParams?.get('btcBlockBaseUrl');
   const btcTxBaseUrl = searchParams?.get('btcTxBaseUrl');
   const btcAddressBaseUrl = searchParams?.get('btcAddressBaseUrl');
@@ -81,7 +70,6 @@ export const GlobalContextProvider: FC<{
   const queryNetworkMode = ((Array.isArray(chain) ? chain[0] : chain) ||
     NetworkModes.Mainnet) as NetworkModes;
   const queryApiUrl = removeTrailingSlash(Array.isArray(api) ? api[0] : api);
-  const querySubnet = Array.isArray(subnet) ? subnet[0] : subnet;
   const queryBtcBlockBaseUrl = Array.isArray(btcBlockBaseUrl)
     ? btcBlockBaseUrl[0]
     : btcBlockBaseUrl;
@@ -89,11 +77,7 @@ export const GlobalContextProvider: FC<{
   const queryBtcAddressBaseUrl = Array.isArray(btcAddressBaseUrl)
     ? btcAddressBaseUrl[0]
     : btcAddressBaseUrl;
-  const activeNetworkKey = querySubnet || queryApiUrl || NetworkModeUrlMap[queryNetworkMode];
-
-  // TODO: is this needed anymore?
-  if (IS_BROWSER && (window as any)?.location?.search?.includes('err=1'))
-    throw new Error('test error');
+  const activeNetworkKey = queryApiUrl || NetworkModeUrlMap[queryNetworkMode];
 
   const addedCustomNetworks: Record<string, Network> = JSON.parse(
     addedCustomNetworksCookie || '{}'
@@ -104,32 +88,13 @@ export const GlobalContextProvider: FC<{
   const [_, setAddedCustomNetworksCookie] = useCookies(['addedCustomNetworks']);
   const [__, setRemovedCustomNetworksCookie] = useCookies(['removedCustomNetworks']);
 
-  const isUrlPassedSubnet = !!querySubnet;
-
   const [networks, setNetworks] = useState<Record<string, Network>>(
     filterNetworks(
       {
         [mainnetNetwork.url]: mainnetNetwork,
         [testnetNetwork.url]: testnetNetwork,
-        [oldTestnetNetwork.url]: oldTestnetNetwork,
         [devnetNetwork.url]: devnetNetwork,
         ...addedCustomNetworks,
-        ...(isUrlPassedSubnet
-          ? {
-              [querySubnet]: {
-                isSubnet: true,
-                url: querySubnet,
-                btcBlockBaseUrl:
-                  queryBtcBlockBaseUrl || NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
-                btcTxBaseUrl: queryBtcTxBaseUrl || NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
-                btcAddressBaseUrl:
-                  queryBtcAddressBaseUrl || NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
-                label: 'subnet',
-                networkId: 1,
-                mode: NetworkModes.Mainnet,
-              } as Network,
-            }
-          : {}),
       },
       removedCustomNetworks
     )
@@ -263,20 +228,17 @@ export const GlobalContextProvider: FC<{
     <GlobalContext.Provider
       value={{
         activeNetwork: networks[activeNetworkKey] || {},
-        activeNetworkKey,
-        apiUrls: NetworkModeUrlMap, // TODO: If this is a constant, why is it in context?
-        btcBlockBaseUrls: NetworkModeBtcBlockBaseUrlMap, // TODO: If this is a constant, why is it in context?
-        btcTxBaseUrls: NetworkModeBtcTxBaseUrlMap, // TODO: If this is a constant, why is it in context?
-        btcAddressBaseUrls: NetworkModeBtcAddressBaseUrlMap, // TODO: If this is a constant, why is it in context?
+        activeNetworkKey, // TODO: rename this to activeNetworkUrl. activeNetwork should be used instead of activeNetworkKey as having the information in both places is redundant
         addCustomNetwork,
         removeCustomNetwork,
         networks,
+        apiClient: getApiClient(activeNetworkKey),
+
         stacksApiSocketClientInfo: {
           client: stacksApiSocketClient,
           connect: connectStacksApiSocket,
           disconnect: disconnectStacksApiSocket,
         },
-        apiClient: getApiClient(activeNetworkKey),
       }}
     >
       {children}
