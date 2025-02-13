@@ -1,3 +1,10 @@
+# [1.249.0](https://github.com/hirosystems/explorer/compare/v1.248.1...v1.249.0) (2025-02-13)
+
+
+### Features
+
+* fixed chakra provider missing/single child issue ([eefd2a7](https://github.com/hirosystems/explorer/commit/eefd2a7155cd97850495d68b98c44465bffb0233))
+
 ## [1.248.1](https://github.com/hirosystems/explorer/compare/v1.248.0...v1.248.1) (2025-02-13)
 
 
