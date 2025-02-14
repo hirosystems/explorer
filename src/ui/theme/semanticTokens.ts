@@ -1,3 +1,5 @@
+import { SHADOWS } from './shadows';
+
 export const CURRENT_SEMANTIC_TOKENS = {
   colors: {
     brand: { value: '#FC6432' },
@@ -459,18 +461,6 @@ export const NEW_SEMANTIC_TOKENS = {
         value: { base: '{colors.secondary.butter-200}', _dark: '{colors.secondary.butter-400}' },
       },
     },
-  },
-};
-
-const SHADOWS = {
-  elevation1: {
-    value: { base: '{shadows.elevation1Light}', _dark: '{shadows.elevation1Dark}' },
-  },
-  elevation2: {
-    value: { base: '{shadows.elevation2Light}', _dark: '{shadows.elevation2Dark}' },
-  },
-  elevation3: {
-    value: { base: '{shadows.elevation3Light}', _dark: '{shadows.elevation3Dark}' },
   },
 };
 

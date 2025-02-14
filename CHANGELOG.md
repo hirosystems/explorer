@@ -1,3 +1,10 @@
+# [1.250.0](https://github.com/hirosystems/explorer/compare/v1.249.0...v1.250.0) (2025-02-14)
+
+
+### Features
+
+* added redesigned navbar ([cd90fb7](https://github.com/hirosystems/explorer/commit/cd90fb7bf500ab1c761ab9a75414b6d7b8c1a4a5))
+
 # [1.249.0](https://github.com/hirosystems/explorer/compare/v1.248.1...v1.249.0) (2025-02-13)
 
 

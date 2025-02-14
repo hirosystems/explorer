@@ -19,7 +19,7 @@ import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
 import { TxAlerts } from './TxAlerts';
 
-const txTypeNamesMap = {
+export const txTypeNamesMap = {
   [TransactionType.SMART_CONTRACT]: 'Contract deploy',
   [TransactionType.CONTRACT_CALL]: 'Function call',
   [TransactionType.TOKEN_TRANSFER]: 'Token transfer',

@@ -23,6 +23,7 @@ export const NEW_BORDER_RADIUS = {
     md: { value: '8px' },
     lg: { value: '12px' },
     xl: { value: '16px' },
+    xxl: { value: '18px' },
   },
 };
 

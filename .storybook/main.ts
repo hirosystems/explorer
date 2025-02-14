@@ -8,10 +8,17 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@chromatic-com/storybook',
     '@storybook/addon-interactions',
+    'storybook-addon-next-router',
   ],
   framework: {
     name: '@storybook/nextjs',
     options: {},
   },
+  staticDirs: [
+    {
+      from: '../src/ui/theme/fonts',
+      to: 'src/ui/theme/fonts',
+    },
+  ],
 };
 export default config;

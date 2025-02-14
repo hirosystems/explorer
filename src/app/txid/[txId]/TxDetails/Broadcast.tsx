@@ -20,9 +20,15 @@ export const Broadcast: FC<{
   const ts = tx.receipt_time;
   if (!ts) return null;
 
-  const readableTs = `${new Date(ts * 1000).toLocaleTimeString()} ${new Date(
-    ts * 1000
-  ).toLocaleDateString()}`;
+  const readableTs = `${new Date(ts * 1000).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  })} ${new Date(ts * 1000).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })}`;
 
   return (
     <KeyValueHorizontal

@@ -1,70 +1,21 @@
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata } from 'next';
-import { Instrument_Sans, Inter } from 'next/font/google';
-import localFont from 'next/font/local';
 import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
 
 import { meta } from '../common/constants/meta';
+import {
+  instrumentSans,
+  inter,
+  matterMonoRegular,
+  matterRegular,
+  openSauce,
+} from '../common/fonts';
 import { PageWrapper } from './_components/PageWrapper';
 import { Providers } from './_components/Providers';
 import { getStatusBarContent } from './getStatusBarContent';
 import { getTokenPrice } from './getTokenPriceInfo';
 import './global.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-const instrumentSans = Instrument_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-instrument-sans',
-});
-
-const openSauce = localFont({
-  src: [
-    {
-      path: '../ui/theme/fonts/opensaucesans-medium-webfont.woff2',
-      weight: '500',
-    },
-    {
-      path: '../ui/theme/fonts/opensaucesans-regular-webfont.woff2',
-      weight: '400',
-    },
-  ],
-  variable: '--font-open-sauce',
-});
-
-const matterRegular = localFont({
-  src: [
-    {
-      path: '../ui/theme/fonts/matter-regular.woff',
-      weight: '500',
-    },
-    {
-      path: '../ui/theme/fonts/matter-regular.woff2',
-      weight: '400',
-    },
-  ],
-  variable: '--font-matter',
-});
-
-const matterMonoRegular = localFont({
-  src: [
-    {
-      path: '../ui/theme/fonts/matter-mono-regular.woff',
-      weight: '500',
-    },
-    {
-      path: '../ui/theme/fonts/matter-mono-regular.woff2',
-      weight: '400',
-    },
-  ],
-  variable: '--font-matter-mono',
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   return Promise.resolve(meta);

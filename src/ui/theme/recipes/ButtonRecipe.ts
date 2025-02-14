@@ -112,19 +112,20 @@ export const buttonRecipe = defineRecipe({
         },
       },
       redesignTertiary: {
-        borderRadius: 'redesign.md', // base
-        border: '2px solid {colors.redesignBorderSecondary}', // TODO: check this works
-        color: 'textSecondary',
-        bg: {
-          base: '{colors.neutral.sand-50}',
-          _dark: '{colors.neutral.sand-1000}',
-        },
+        py: 1.5,
+        px: 2,
+        border: '2px solid var(--stacks-colors-redesign-border-secondary)',
+        borderRadius: 'md',
+        background: 'transparent',
+        fontWeight: 'medium',
+        fontSize: 'md',
+        lineHeight: 'normal',
+        color: { base: '{colors.neutral.sand-600}', _dark: '{colors.neutral.sand-150}' },
+        height: 'auto',
+        display: 'flex',
+        alignItems: 'end',
         _hover: {
-          bg: {
-            base: '{colors.neutral.sand-200}',
-            _dark: '{colors.neutral.sand-700}',
-          },
-          border: 'none',
+          background: { base: '{colors.neutral.sand-200}', _dark: '{colors.neutral.sand-700}' },
         },
         _disabled: {
           color: {
@@ -159,8 +160,6 @@ export const buttonRecipe = defineRecipe({
       small: {
         fontSize: 'xs',
         fontWeight: 'medium',
-        py: 2,
-        px: 3,
       },
       big: {
         fontSize: 'sm',

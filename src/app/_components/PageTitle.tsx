@@ -5,7 +5,15 @@ import { Heading, HeadingProps } from '../../ui/Heading';
 
 export function PageTitle({ children, ...props }: { children: ReactNode } & HeadingProps) {
   return (
-    <Heading as="h1" fontWeight={'medium'} fontSize="4xl" mb={0} color={'slate.50'} {...props}>
+    <Heading
+      as="h1"
+      fontWeight={'medium'}
+      fontSize="4xl"
+      mb={0}
+      color={'slate.50'}
+      fontFamily={'var(--font-matter-mono)'}
+      {...props}
+    >
       {children}
     </Heading>
   );
