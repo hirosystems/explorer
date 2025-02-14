@@ -17,6 +17,7 @@ import { checkboxSlotRecipe } from './recipes/CheckboxRecipe';
 import { dialogSlotRecipe } from './recipes/DialogRecipe';
 import { iconButtonRecipe } from './recipes/IconButtonRecipe';
 import { inputRecipe } from './recipes/InputRecipe';
+import { kbdRecipe } from './recipes/KbdRecipe';
 import { linkRecipe } from './recipes/LinkRecipe';
 import { menuSlotRecipe } from './recipes/MenuRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
@@ -24,7 +25,6 @@ import { tabsSlotRecipe } from './recipes/TabsRecipe';
 import { tagSlotRecipe } from './recipes/TagRecipe';
 import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
 import { SEMANTIC_TOKENS } from './semanticTokens';
-import { SHADOWS } from './shadows';
 import { SIZES } from './sizes';
 import { SPACE } from './space';
 import { Z_INDEX } from './zIndex';
@@ -43,6 +43,7 @@ const themeConfig = {
       badge: badgeRecipe,
       iconButton: iconButtonRecipe,
       input: inputRecipe,
+      kbd: kbdRecipe,
     },
     slotRecipes: {
       checkbox: checkboxSlotRecipe,
@@ -55,9 +56,6 @@ const themeConfig = {
     },
     tokens: {
       colors: { ...COLORS, ...NEW_COLORS },
-      shadows: {
-        ...SHADOWS,
-      },
       letterSpacings: {
         ...LETTER_SPACINGS,
       },

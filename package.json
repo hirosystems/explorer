@@ -134,6 +134,7 @@
     "@storybook/addon-links": "8.3.5",
     "@storybook/addon-onboarding": "8.3.5",
     "@storybook/blocks": "8.3.5",
+    "@storybook/experimental-nextjs-vite": "8.5.2",
     "@storybook/nextjs": "8.3.5",
     "@storybook/react": "8.3.5",
     "@storybook/test": "8.3.5",
@@ -171,6 +172,7 @@
     "prettier": "3.1.0",
     "react-test-renderer": "18.2.0",
     "storybook": "8.3.5",
+    "storybook-addon-next-router": "4.0.2",
     "ts-unused-exports": "8.0.0",
     "typescript": "5.3.2",
     "whatwg-fetch": "3.6.20"
