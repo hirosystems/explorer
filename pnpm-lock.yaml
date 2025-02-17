@@ -329,6 +329,9 @@ devDependencies:
   '@storybook/addon-onboarding':
     specifier: 8.3.5
     version: 8.3.5(react@18.2.0)(storybook@8.3.5)
+  '@storybook/addon-viewport':
+    specifier: ^8.5.6
+    version: 8.5.6(storybook@8.3.5)
   '@storybook/blocks':
     specifier: 8.3.5
     version: 8.3.5(react-dom@18.2.0)(react@18.2.0)(storybook@8.3.5)
@@ -6652,6 +6655,15 @@ packages:
     resolution: {integrity: sha512-FSWydoPiVWFXEittG7O1YgvuaqoU9Vb+qoq9XfP/hvQHHMDcMZvC40JaV8AnJeTXaM7ngIjcn9XDEfGbFfOzXw==}
     peerDependencies:
       storybook: ^8.3.5
+    dependencies:
+      memoizerific: 1.11.3
+      storybook: 8.3.5
+    dev: true
+
+  /@storybook/addon-viewport@8.5.6(storybook@8.3.5):
+    resolution: {integrity: sha512-i0PJN587K9GMViXJr9Mb4cFF7ZiGvFpk215xRgtC33Pv7mIp8yRjbjNgi3TgEfDe4GQFQ1hKoisqk/pjs9quXg==}
+    peerDependencies:
+      storybook: ^8.5.6
     dependencies:
       memoizerific: 1.11.3
       storybook: 8.3.5

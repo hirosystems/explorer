@@ -4,6 +4,7 @@ import type { Preview } from '@storybook/react';
 import React from 'react';
 
 import { system } from '../src/ui/theme/theme';
+import './preview.css'
 
 const preview: Preview = {
   parameters: {
@@ -18,7 +19,7 @@ const preview: Preview = {
   decorators: [
     Story => (
       <ChakraProvider value={system}>
-        <Story />
+        <Story w='100%' className='preview-story'/>
       </ChakraProvider>
     ),
     withThemeByClassName({

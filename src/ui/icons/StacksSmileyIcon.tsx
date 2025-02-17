@@ -19,9 +19,9 @@ const createWeight = ({
         cy="34"
         r="19.8028"
         stroke="url(#paint0_linear_2985_1972)"
-        stroke-width="16.3943"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="16.3943"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <g filter="url(#filter1_b_2985_1972)">
@@ -31,10 +31,10 @@ const createWeight = ({
         cy="34"
         r="13.5737"
         stroke="url(#paint2_linear_2985_1972)"
-        stroke-opacity="0.4"
-        stroke-width="16.3943"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeOpacity="0.4"
+        strokeWidth="16.3943"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <g filter="url(#filter2_b_2985_1972)">
@@ -44,9 +44,9 @@ const createWeight = ({
         cy="34.0001"
         r="7.37684"
         stroke="url(#paint4_linear_2985_1972)"
-        stroke-width="14.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="14.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
     <g className="laser-eye-1">
@@ -68,8 +68,8 @@ const createWeight = ({
       />
     </g>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M27.1724 46.4874C26.8909 45.913 25.9464 45.8929 25.372 46.1744V46.1744C24.2155 46.741 22.8187 46.2629 22.2521 45.1065C21.6854 43.95 22.1636 42.5532 23.32 41.9866C24.4764 41.4199 25.8733 41.8981 26.4399 43.0545V43.0545C26.7414 43.6699 27.6336 44.3781 28.249 44.0766L46.3034 35.2301C46.9187 34.9286 46.9058 33.7902 46.6043 33.1749V33.1749C46.0376 32.0185 46.5158 30.6216 47.6722 30.055C48.8286 29.4883 50.2255 29.9665 50.7921 31.1229C51.3588 32.2793 50.8806 33.6762 49.7242 34.2428V34.2428C49.1498 34.5242 48.587 35.2829 48.8685 35.8572L49.1722 36.4771C49.4356 37.0146 49.2134 37.6639 48.6759 37.9273L28.9267 47.6042C28.3891 47.8676 27.7397 47.6453 27.4763 47.1077L27.1724 46.4874Z"
       fill="#141414"
     />
@@ -81,9 +81,9 @@ const createWeight = ({
         width="74.8706"
         height="74.8706"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feGaussianBlur in="BackgroundImageFix" stdDeviation="4.71764" />
         <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_2985_1972" />
         <feBlend
@@ -100,9 +100,9 @@ const createWeight = ({
         width="62.4121"
         height="62.4123"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feGaussianBlur in="BackgroundImageFix" stdDeviation="4.71764" />
         <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_2985_1972" />
         <feBlend
@@ -119,9 +119,9 @@ const createWeight = ({
         width="48.1245"
         height="48.1242"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feGaussianBlur in="BackgroundImageFix" stdDeviation="4.71764" />
         <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_2985_1972" />
         <feBlend
@@ -138,9 +138,9 @@ const createWeight = ({
         width="41.1899"
         height="41.19"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -175,9 +175,9 @@ const createWeight = ({
         width="41.1899"
         height="41.19"
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
-        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
           in="SourceAlpha"
           type="matrix"
@@ -213,8 +213,8 @@ const createWeight = ({
         y2="6"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.276042" stop-color="#FC6432" stop-opacity="0.69" />
-        <stop offset="0.526042" stop-color={linearGradientColor} stop-opacity="0.44" />
+        <stop offset="0.276042" stopColor="#FC6432" stopOpacity="0.69" />
+        <stop offset="0.526042" stopColor={linearGradientColor} stopOpacity="0.44" />
       </linearGradient>
       <linearGradient
         id="paint1_linear_2985_1972"
@@ -224,8 +224,8 @@ const createWeight = ({
         y2="12.2291"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.276042" stop-color="#FC6432" stop-opacity="0.69" />
-        <stop offset="0.526042" stop-color={linearGradientColor} stop-opacity="0.34" />
+        <stop offset="0.276042" stopColor="#FC6432" stopOpacity="0.69" />
+        <stop offset="0.526042" stopColor={linearGradientColor} stopOpacity="0.34" />
       </linearGradient>
       <linearGradient
         id="paint2_linear_2985_1972"
@@ -235,8 +235,8 @@ const createWeight = ({
         y2="12.2291"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.276042" stop-color="#FC6432" stop-opacity="0.69" />
-        <stop offset="0.526042" stop-color={linearGradientColor} stop-opacity="0.34" />
+        <stop offset="0.276042" stopColor="#FC6432" stopOpacity="0.69" />
+        <stop offset="0.526042" stopColor={linearGradientColor} stopOpacity="0.34" />
       </linearGradient>
       <linearGradient
         id="paint3_linear_2985_1972"
@@ -246,8 +246,8 @@ const createWeight = ({
         y2="19.3732"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.276042" stop-color="#FC6432" stop-opacity="0.69" />
-        <stop offset="0.629036" stop-color={linearGradientColor} stop-opacity="0.34" />
+        <stop offset="0.276042" stopColor="#FC6432" stopOpacity="0.69" />
+        <stop offset="0.629036" stopColor={linearGradientColor} stopOpacity="0.34" />
       </linearGradient>
       <linearGradient
         id="paint4_linear_2985_1972"
@@ -257,8 +257,8 @@ const createWeight = ({
         y2="19.3732"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0.276042" stop-color="#FC6432" stop-opacity="0.69" />
-        <stop offset="0.526042" stop-color={linearGradientColor} stop-opacity="0.34" />
+        <stop offset="0.276042" stopColor="#FC6432" stopOpacity="0.69" />
+        <stop offset="0.526042" stopColor={linearGradientColor} stopOpacity="0.34" />
       </linearGradient>
     </defs>
   </svg>

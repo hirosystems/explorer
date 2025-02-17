@@ -165,6 +165,7 @@ export const NEW_COLORS = {
     'blue-500': { value: '#2c8dff' },
     'blue-600': { value: '#0070dd' },
     'red-100': { value: '#ffe9e9' },
+    'red-150': { value: '#FFD3D3' },
     'red-200': { value: '#ffcaca' },
     'red-300': { value: '#ff9da0' },
     'red-400': { value: '#f06e76' },
