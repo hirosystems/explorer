@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
-import { advancedSearchKeywords, useSearchPageUrl } from '../../../common/queries/useSearchQuery';
+import { advancedSearchKeywords, getSearchPageUrl } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
 import { Input, InputProps } from '../../../ui/Input';
 import { Text } from '../../../ui/Text';
@@ -25,7 +25,7 @@ export function SearchInput({
   const router = useRouter();
   const isSearchPage = usePathname() === '/search';
   const network = useGlobalContext().activeNetwork;
-  const searchPageUrl = useSearchPageUrl(tempSearchTerm, network);
+  const searchPageUrl = getSearchPageUrl(tempSearchTerm, network);
   const isAdvancedSearch = advancedSearchKeywords.some(term => tempSearchTerm.includes(term));
 
   return (

@@ -10,6 +10,7 @@ export interface SearchState {
   // This is used to store the scroll position of the search preview to programmatically scroll it to match the hidden search input
   searchPreviewScrollLeft: number;
   isFocused: boolean;
+  quickNavUrl: string;
 }
 
 export const initialState: SearchState = {
@@ -17,6 +18,7 @@ export const initialState: SearchState = {
   tempSearchTerm: '',
   searchPreviewScrollLeft: 0,
   isFocused: false,
+  quickNavUrl: '',
 };
 
 export const searchSlice = createSlice({
@@ -42,6 +44,9 @@ export const searchSlice = createSlice({
     blur: state => {
       state.isFocused = false;
     },
+    setQuickNavUrl: (state, action: PayloadAction<string>) => {
+      state.quickNavUrl = action.payload;
+    },
   },
 });
 
@@ -52,6 +57,7 @@ export const {
   clearSearchTerm,
   focus,
   blur,
+  setQuickNavUrl,
 } = searchSlice.actions;
 
 const selectSearch = (state: RootState) => state.search;
@@ -66,3 +72,4 @@ export const selectIsSearchFieldFocused = createSelector(
   [selectSearch],
   search => search.isFocused
 );
+export const selectQuickNavUrl = createSelector([selectSearch], search => search.quickNavUrl);

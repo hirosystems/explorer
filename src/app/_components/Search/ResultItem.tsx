@@ -16,6 +16,7 @@ import {
   ContractDeployTxs,
   TokenTransferTxs,
 } from '../../../common/types/tx';
+import { buildUrl } from '../../../common/utils/buildUrl';
 import {
   getContractName,
   microToStacksFormatted,
@@ -70,11 +71,19 @@ function ResultItemIcon({ type }: { type?: 'arrow' | 'enter' | undefined }) {
   return null;
 }
 
-export function ResultItem({ value }: { value: string }) {
+export function ResultItem({
+  value,
+  url,
+  iconType = 'arrow',
+}: {
+  value: string;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
     <ResultItemWrapper>
-      <SearchLink href={'#'}>{value}</SearchLink>
-      <ResultItemIcon type={'arrow'} />
+      <SearchLink href={url}>{value}</SearchLink>
+      <ResultItemIcon type={iconType} />
     </ResultItemWrapper>
   );
 }
@@ -82,9 +91,11 @@ export function ResultItem({ value }: { value: string }) {
 function TxResultItem({
   tx,
   children,
+  iconType = 'arrow',
 }: {
   tx: Transaction | MempoolTransaction;
   children: ReactNode;
+  iconType?: 'arrow' | 'enter';
 }) {
   return (
     <ResultItemWrapper>
@@ -100,15 +111,23 @@ function TxResultItem({
           }
         />
       </Flex>
-      <ResultItemIcon type={'arrow'} />
+      <ResultItemIcon type={iconType} />
     </ResultItemWrapper>
   );
 }
 
-export function TokenTransferResultItem({ tx }: { tx: TokenTransferTxs }) {
+export function TokenTransferResultItem({
+  tx,
+  url,
+  iconType = 'arrow',
+}: {
+  tx: TokenTransferTxs;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
-    <TxResultItem tx={tx}>
-      <SearchLink href={'#'}>{microToStacksFormatted(tx.token_transfer.amount)} STX</SearchLink>
+    <TxResultItem tx={tx} iconType={iconType}>
+      <SearchLink href={url}>{microToStacksFormatted(tx.token_transfer.amount)} STX</SearchLink>
       <Flex gap={1.5} alignItems={'center'}>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
           {truncateMiddle(tx.sender_address, 4)}
@@ -124,10 +143,18 @@ export function TokenTransferResultItem({ tx }: { tx: TokenTransferTxs }) {
   );
 }
 
-export function ContractDeployResultItem({ tx }: { tx: ContractDeployTxs }) {
+export function ContractDeployResultItem({
+  tx,
+  url,
+  iconType = 'arrow',
+}: {
+  tx: ContractDeployTxs;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
     <TxResultItem tx={tx}>
-      <SearchLink href={'#'}>{getContractName(tx.smart_contract.contract_id)}</SearchLink>
+      <SearchLink href={url}>{getContractName(tx.smart_contract.contract_id)}</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddle(tx.tx_id, 4)}
       </Text>
@@ -135,10 +162,18 @@ export function ContractDeployResultItem({ tx }: { tx: ContractDeployTxs }) {
   );
 }
 
-export function ContractCallResultItem({ tx }: { tx: ContractCallTxs }) {
+export function ContractCallResultItem({
+  tx,
+  url,
+  iconType = 'arrow',
+}: {
+  tx: ContractCallTxs;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
     <TxResultItem tx={tx}>
-      <SearchLink href={'#'}>{tx.contract_call.function_name}</SearchLink>
+      <SearchLink href={url}>{tx.contract_call.function_name}</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddle(tx.tx_id, 4)}
       </Text>
@@ -146,10 +181,18 @@ export function ContractCallResultItem({ tx }: { tx: ContractCallTxs }) {
   );
 }
 
-export function CoinbaseResultItem({ tx }: { tx: CoinbaseTxs }) {
+export function CoinbaseResultItem({
+  tx,
+  url,
+  iconType = 'arrow',
+}: {
+  tx: CoinbaseTxs;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
     <TxResultItem tx={tx}>
-      <SearchLink href={'#'}>Coinbase</SearchLink>
+      <SearchLink href={url}>Coinbase</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddle(tx.tx_id, 4)}
       </Text>
@@ -159,12 +202,16 @@ export function CoinbaseResultItem({ tx }: { tx: CoinbaseTxs }) {
 
 export function TenureChangeResultItem({
   tx,
+  url,
+  iconType = 'arrow',
 }: {
   tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
+  url: string;
+  iconType?: 'arrow' | 'enter';
 }) {
   return (
     <TxResultItem tx={tx}>
-      <SearchLink href={'#'}>Tenure Change</SearchLink>
+      <SearchLink href={url}>Tenure Change</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
         {truncateMiddle(tx.tx_id, 4)}
       </Text>
@@ -172,25 +219,45 @@ export function TenureChangeResultItem({
   );
 }
 
-export function BnsResultItem({ bns, address }: { bns: string; address: string }) {
+export function BnsResultItem({
+  bns,
+  address,
+  url,
+  iconType = 'arrow',
+}: {
+  bns: string;
+  address: string;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
     <ResultItemWrapper>
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
-        <SearchLink href={'#'}>{bns}</SearchLink>
+        <SearchLink href={url}>{bns}</SearchLink>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
           {truncateMiddle(address, 5)}
         </Text>
       </Flex>
-      <ResultItemIcon type={'arrow'} />
+      <ResultItemIcon type={iconType} />
     </ResultItemWrapper>
   );
 }
 
-export function BlockResultItem({ height, hash }: { height: number; hash: string }) {
+export function BlockResultItem({
+  height,
+  hash,
+  url,
+  iconType = 'arrow',
+}: {
+  height: number;
+  hash: string;
+  url: string;
+  iconType?: 'arrow' | 'enter';
+}) {
   return (
     <ResultItemWrapper py={2.5}>
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
-        <TextLink href={'#'}>
+        <SearchLink href={url}>
           <Flex
             alignItems={'center'}
             gap={1.5}
@@ -219,12 +286,12 @@ export function BlockResultItem({ height, hash }: { height: number; hash: string
               #{height}
             </Text>
           </Flex>
-        </TextLink>
+        </SearchLink>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
           {truncateMiddle(hash, 4)}
         </Text>
       </Flex>
-      <ResultItemIcon type={'arrow'} />
+      <ResultItemIcon type={iconType} />
     </ResultItemWrapper>
   );
 }
