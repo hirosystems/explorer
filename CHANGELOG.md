@@ -1,3 +1,10 @@
+# [1.251.0](https://github.com/hirosystems/explorer/compare/v1.250.0...v1.251.0) (2025-02-20)
+
+
+### Features
+
+* redesign - add search to nav ([4088ef0](https://github.com/hirosystems/explorer/commit/4088ef0c6d412f580a947fdf725b0122f6490d34))
+
 # [1.250.0](https://github.com/hirosystems/explorer/compare/v1.249.0...v1.250.0) (2025-02-14)
 
 
