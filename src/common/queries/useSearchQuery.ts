@@ -1,5 +1,6 @@
 import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
+import { useLocalStorage } from 'web-api-hooks';
 
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
@@ -13,6 +14,7 @@ import { Network } from '../types/network';
 import {
   AddressSearchResult,
   BlockSearchResult,
+  BnsSearchResult,
   FoundResult,
   NotFoundResult,
   SearchResultType,
@@ -34,9 +36,9 @@ function blockToSearchResult(block: Block): FoundResult {
 }
 
 function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundResult {
-  const blockResult: AddressSearchResult = {
+  const blockResult: BnsSearchResult = {
     entity_id: nftHistoryEntry.recipient,
-    entity_type: SearchResultType.StandardAddress,
+    entity_type: SearchResultType.BnsAddress,
     display_name: bnsName,
   };
   return {
@@ -215,7 +217,7 @@ export function buildAdvancedSearchQuery(query: Record<string, string | number |
   return searchTerm.trim();
 }
 
-export function useSearchPageUrl(searchTerm: string, network: Network) {
+export function getSearchPageUrl(searchTerm: string, network: Network) {
   const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
   const searchQueryParams = new URLSearchParams();
   let termCount = 0;
@@ -232,7 +234,25 @@ export function useSearchPageUrl(searchTerm: string, network: Network) {
   }${searchQueryParams.toString()}`;
 }
 
-export function useSearchQuery(id: string) {
+const RECENT_RESULTS_KEY = 'recentResults';
+const RECENT_RESULTS_LIMIT = 3;
+
+export function updateRecentResultsLocalStorage(resultItem: FoundResult) {
+  const lastFoundResults = JSON.parse(localStorage.getItem(RECENT_RESULTS_KEY) || '[]');
+  const filteredResults = lastFoundResults.filter(
+    (result: FoundResult) => result.result.entity_id !== resultItem.result.entity_id
+  );
+  localStorage.setItem(
+    RECENT_RESULTS_KEY,
+    JSON.stringify([resultItem, ...filteredResults].slice(0, RECENT_RESULTS_LIMIT))
+  );
+}
+
+export function getRecentResultsLocalStorage() {
+  return JSON.parse(localStorage.getItem(RECENT_RESULTS_KEY) || '[]');
+}
+
+export function useSearchQuery(id: string, isRedesign?: boolean) {
   const dispatch = useAppDispatch();
   const isBtcName = id.endsWith('.btc');
   const advancedSearchQuery = parseAdvancedSearchQuery(id);
@@ -358,8 +378,15 @@ export function useSearchQuery(id: string) {
         }
       }
 
+      if (foundResult && isRedesign) {
+        updateRecentResultsLocalStorage(foundResult);
+      }
+
       if (foundResult) {
         if (foundResult.result.entity_type !== SearchResultType.TxList) {
+          if (isRedesign) {
+            return foundResult as FoundResult;
+          }
           // single result, blur and go to entity page directly
           dispatch(blur());
         } else {

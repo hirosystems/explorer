@@ -8,8 +8,8 @@ import {
   advancedSearchConfig,
   filterToFormattedValueMap,
   getKeywordByFilter,
+  getSearchPageUrl,
   parseAdvancedSearchQuery,
-  useSearchPageUrl,
   useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
 import { useAppSelector } from '../../../common/state/hooks';
@@ -105,7 +105,7 @@ function SearchResultHeader({
   }
 }
 
-function getSearchEntityUrl(
+export function getSearchEntityUrl(
   activeNetwork: Network,
   result?: ReturnType<typeof useSearchQuery>['data']
 ) {
@@ -120,6 +120,7 @@ function getSearchEntityUrl(
     case SearchResultType.TxId:
       return buildUrl(`/txid/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
     case SearchResultType.StandardAddress:
+    case SearchResultType.BnsAddress:
       return buildUrl(`/address/${encodeURIComponent(result.result.entity_id)}`, activeNetwork);
   }
 }
@@ -137,7 +138,7 @@ export function SearchResultsCard({
   const advancedSearchQuery = parseAdvancedSearchQuery(searchTerm);
   const isAdvancedSearch = Object.keys(advancedSearchQuery).length > 0;
   const network = useGlobalContext().activeNetwork;
-  const searchPageUrl = useSearchPageUrl(searchTerm, network);
+  const searchPageUrl = getSearchPageUrl(searchTerm, network);
   const router = useRouter();
   const activeNetwork = useGlobalContext().activeNetwork;
   const entityUrl = getSearchEntityUrl(activeNetwork, data);

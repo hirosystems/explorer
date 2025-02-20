@@ -7,6 +7,7 @@ export enum SearchResultType {
   MempoolTxId = 'mempool_tx_id',
   BlockHash = 'block_hash',
   StandardAddress = 'standard_address',
+  BnsAddress = 'bns_address',
   ContractAddress = 'contract_address',
   UnknownHash = 'unknown_hash',
   InvalidTerm = 'invalid_term',
@@ -17,6 +18,7 @@ export interface FoundResult {
   found: true;
   result:
     | AddressSearchResult
+    | BnsSearchResult
     | ContractSearchResult
     | TxSearchResult
     | MempoolTxSearchResult
@@ -29,6 +31,7 @@ export interface NotFoundResult {
   result: {
     entity_type:
       | SearchResultType.StandardAddress
+      | SearchResultType.BnsAddress
       | SearchResultType.ContractAddress
       | SearchResultType.UnknownHash
       | SearchResultType.InvalidTerm;
@@ -45,6 +48,13 @@ export interface AddressSearchResult {
   metadata?: any;
 }
 
+export interface BnsSearchResult {
+  entity_type: SearchResultType.BnsAddress;
+  entity_id: string;
+  display_name: string;
+  metadata?: any;
+}
+
 export interface ContractSearchResult {
   entity_type: SearchResultType.ContractAddress;
   entity_id: string;
@@ -55,7 +65,7 @@ export interface ContractSearchResult {
 export interface TxSearchResult {
   entity_type: SearchResultType.TxId;
   entity_id: string;
-  tx_data: Partial<Transaction>;
+  tx_data: Transaction;
   metadata?: any;
 }
 

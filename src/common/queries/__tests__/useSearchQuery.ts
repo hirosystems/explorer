@@ -2,8 +2,8 @@ import { Network } from '../../types/network';
 import {
   advancedSearchConfig,
   buildAdvancedSearchQuery,
+  getSearchPageUrl,
   parseAdvancedSearchQuery,
-  useSearchPageUrl,
 } from '../useSearchQuery';
 
 const STX_ADDRESS_1 = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM';
@@ -107,13 +107,13 @@ describe('buildAdvancedSearchQuery', () => {
 
 describe('getSearchPageUrl', () => {
   test('should return a URL with a single advanced search parameter', () => {
-    const result = useSearchPageUrl(`FROM:${STX_ADDRESS_1}`, {} as Network);
+    const result = getSearchPageUrl(`FROM:${STX_ADDRESS_1}`, {} as Network);
     expect(result).toBe(`/search?chain=mainnet&fromAddress=${encodeURIComponent(STX_ADDRESS_1)}`);
   });
 
   test('should return a URL with multiple advanced search parameters', () => {
     const searchTerm = `FROM:${STX_ADDRESS_1} TO:${STX_ADDRESS_2} BEFORE:2023-07-21`;
-    const result = useSearchPageUrl(searchTerm, {} as Network);
+    const result = getSearchPageUrl(searchTerm, {} as Network);
     expect(result).toBe(
       `/search?chain=mainnet&fromAddress=${encodeURIComponent(
         STX_ADDRESS_1
@@ -122,13 +122,13 @@ describe('getSearchPageUrl', () => {
   });
 
   test('should correctly handle an empty search term', () => {
-    const result = useSearchPageUrl('', {} as Network);
+    const result = getSearchPageUrl('', {} as Network);
     expect(result).toBe('/search?chain=mainnet');
   });
 
   test('should ignore spaces between advanced search terms', () => {
     const searchTerm = `FROM:${STX_ADDRESS_1}   TO:${STX_ADDRESS_2}   BEFORE:2023-07-21 `;
-    const result = useSearchPageUrl(searchTerm, {} as Network);
+    const result = getSearchPageUrl(searchTerm, {} as Network);
     expect(result).toBe(
       `/search?chain=mainnet&fromAddress=${encodeURIComponent(
         STX_ADDRESS_1

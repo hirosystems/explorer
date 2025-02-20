@@ -19,6 +19,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ result }) =>
     case SearchResultType.TxId:
       return <TxResultItem result={result} />;
     case SearchResultType.StandardAddress:
+    case SearchResultType.BnsAddress:
       return <AddressResultItem result={result} />;
     case SearchResultType.TxList:
       return <TxListResultItem result={result} />;

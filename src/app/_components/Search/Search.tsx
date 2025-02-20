@@ -1,8 +1,8 @@
-import { Box, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
-import { ArrowRight, Command, Info, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
+import { Flex, HStack, Icon, Stack, StackProps } from '@chakra-ui/react';
+import { ArrowRight, Command, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -10,16 +10,29 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
   advancedSearchConfig,
   advancedSearchKeywords,
-  useSearchPageUrl,
+  getRecentResultsLocalStorage,
+  getSearchPageUrl,
+  updateRecentResultsLocalStorage,
+  useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
+import {
+  BlockSearchResult,
+  BnsSearchResult,
+  SearchResult,
+  SearchResultType,
+} from '../../../common/types/search-results';
+import { getSearchEntityUrl } from '../../../features/search/dropdown/search-results-card';
 import {
   blur,
   clearSearchTerm,
   focus,
   selectIsSearchFieldFocused,
+  selectQuickNavUrl,
   selectSearchPreviewScrollLeft,
+  selectSearchTerm,
   selectTempSearchTerm,
+  setQuickNavUrl,
   setSearchPreviewScrollLeft,
   setSearchTerm,
   setTempSearchTerm,
@@ -119,13 +132,13 @@ function QuickLinks() {
       p={4}
       fontFamily="var(--font-instrument-sans)"
       gap={2}
-      borderBottomLeftRadius={4.5}
-      borderBottomRightRadius={4.5}
+      borderBottomLeftRadius="redesign.xxl"
+      borderBottomRightRadius="redesign.xxl"
     >
       <Text fontSize={'xs'} color={'textSecondary'} lineHeight={'base'}>
         Quick links
       </Text>
-      <Flex gap={2}>
+      <Flex gap={2} flexWrap="wrap">
         <QuickLinkButton>sBTC</QuickLinkButton>
         <QuickLinkButton>Blocks</QuickLinkButton>
         <QuickLinkButton>Mempool</QuickLinkButton>
@@ -136,56 +149,112 @@ function QuickLinks() {
   );
 }
 
-type RecentResult =
-  | Transaction
-  | MempoolTransaction
-  | { bns: string; address: string }
-  | { height: number; hash: string }
-  | string;
-
-function RecentResults({ recentResults }: { recentResults: RecentResult[] }) {
+function SearchResults({
+  title,
+  recentResults,
+  iconType = 'arrow',
+  ...stackProps
+}: {
+  title?: string;
+  recentResults: SearchResult[];
+  iconType?: 'arrow' | 'enter';
+} & StackProps) {
+  const network = useGlobalContext().activeNetwork;
+  if (!recentResults.length) {
+    return null;
+  }
   return (
-    <Stack px={4} fontFamily="var(--font-instrument-sans)" gap={2}>
-      <Text fontSize={'xs'} color={'textSecondary'} lineHeight={'base'}>
-        Recent results
-      </Text>
+    <Stack px={4} fontFamily="var(--font-instrument-sans)" gap={2} {...stackProps}>
+      {title && (
+        <Text fontSize={'xs'} color={'textSecondary'} lineHeight={'base'}>
+          {title}
+        </Text>
+      )}
       <Stack gap={1}>
         {recentResults.map((recentResultItem, index) => {
-          if (typeof recentResultItem === 'string') {
-            return <ResultItem key={index} value={recentResultItem} />;
-          }
-          if ('bns' in recentResultItem) {
+          const searchEntityUrl = getSearchEntityUrl(network, recentResultItem) || '#';
+          if (recentResultItem.result.entity_type === SearchResultType.BnsAddress) {
+            const bnsResult = recentResultItem.result as BnsSearchResult;
             return (
               <BnsResultItem
                 key={index}
-                bns={recentResultItem.bns}
-                address={recentResultItem.address}
+                bns={bnsResult.display_name}
+                address={bnsResult.entity_id}
+                url={searchEntityUrl}
+                iconType={iconType}
               />
             );
           }
-          if ('height' in recentResultItem) {
+          if (recentResultItem.result.entity_type === SearchResultType.BlockHash) {
+            const blockResult = recentResultItem.result as BlockSearchResult;
             return (
               <BlockResultItem
                 key={index}
-                height={recentResultItem.height}
-                hash={recentResultItem.hash}
+                height={blockResult.block_data.height!}
+                hash={blockResult.entity_id}
+                url={searchEntityUrl}
+                iconType={iconType}
               />
             );
           }
-          if ('tx_type' in recentResultItem && recentResultItem.tx_type === 'token_transfer') {
-            return <TokenTransferResultItem key={index} tx={recentResultItem} />;
+          if (recentResultItem.result.entity_type === SearchResultType.TxId) {
+            const txType = recentResultItem.result.metadata?.tx_type;
+            switch (txType) {
+              case 'token_transfer':
+                return (
+                  <TokenTransferResultItem
+                    key={index}
+                    tx={recentResultItem.result.metadata}
+                    url={searchEntityUrl}
+                    iconType={iconType}
+                  />
+                );
+              case 'contract_call':
+                return (
+                  <ContractCallResultItem
+                    key={index}
+                    tx={recentResultItem.result.metadata}
+                    url={searchEntityUrl}
+                    iconType={iconType}
+                  />
+                );
+              case 'smart_contract':
+                return (
+                  <ContractDeployResultItem
+                    key={index}
+                    tx={recentResultItem.result.metadata}
+                    url={searchEntityUrl}
+                    iconType={iconType}
+                  />
+                );
+              case 'coinbase':
+                return (
+                  <CoinbaseResultItem
+                    key={index}
+                    tx={recentResultItem.result.metadata}
+                    url={searchEntityUrl}
+                    iconType={iconType}
+                  />
+                );
+              case 'tenure_change':
+                return (
+                  <TenureChangeResultItem
+                    key={index}
+                    tx={recentResultItem.result.metadata}
+                    url={searchEntityUrl}
+                    iconType={iconType}
+                  />
+                );
+              default:
+                return null;
+            }
           }
-          if ('tx_type' in recentResultItem && recentResultItem.tx_type === 'contract_call') {
-            return <ContractCallResultItem key={index} tx={recentResultItem} />;
-          }
-          if ('tx_type' in recentResultItem && recentResultItem.tx_type === 'smart_contract') {
-            return <ContractDeployResultItem key={index} tx={recentResultItem} />;
-          }
-          if ('tx_type' in recentResultItem && recentResultItem.tx_type === 'coinbase') {
-            return <CoinbaseResultItem key={index} tx={recentResultItem} />;
-          }
-          if ('tx_type' in recentResultItem && recentResultItem.tx_type === 'tenure_change') {
-            return <TenureChangeResultItem key={index} tx={recentResultItem} />;
+          if (recentResultItem.result.entity_type === SearchResultType.TxList) {
+            const searchTerm = recentResultItem.result.entity_id;
+            const searchPageUrl = getSearchPageUrl(searchTerm, network);
+            return (
+              <ResultItem key={index} url={searchPageUrl} value={searchTerm} iconType={iconType} />
+            );
           }
           return null;
         })}
@@ -232,7 +301,9 @@ function HiddenSearchField(props: InputProps) {
         boxShadow: 'none',
       }}
       onFocus={() => dispatch(focus())}
-      onBlur={() => setTimeout(() => dispatch(blur()), 200)}
+      onBlur={() => {
+        setTimeout(() => dispatch(blur()), 200);
+      }}
       {...props}
     />
   );
@@ -344,24 +415,54 @@ function SearchPreview() {
   );
 }
 
-function SearchInput() {
+function SearchInput({ searchTermFromQueryParams = '' }) {
   const dispatch = useAppDispatch();
   const tempSearchTerm = useAppSelector(selectTempSearchTerm);
+  const searchTerm = useAppSelector(selectSearchTerm);
   const reg = new RegExp(`(${advancedSearchKeywords.join('|')})`, 'gi');
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
   const router = useRouter();
   const isSearchPage = usePathname() === '/search';
   const network = useGlobalContext().activeNetwork;
-  const searchPageUrl = useSearchPageUrl(tempSearchTerm, network);
+  const searchPageUrl = getSearchPageUrl(tempSearchTerm, network);
   const isAdvancedSearch = advancedSearchKeywords.some(term => tempSearchTerm.includes(term));
+  const quickNavUrl = useAppSelector(selectQuickNavUrl);
+
+  const searchResponse = useSearchQuery(searchTerm, true);
+  const searchEntityUrl = getSearchEntityUrl(network, searchResponse.data);
+
+  useEffect(() => {
+    setTempSearchTerm(searchTermFromQueryParams);
+  }, [searchTermFromQueryParams]);
 
   const handleSearch = useCallback(() => {
-    if (isSearchPage && isAdvancedSearch) {
+    if (isAdvancedSearch) {
+      updateRecentResultsLocalStorage({
+        found: true,
+        result: {
+          entity_type: SearchResultType.TxList,
+          entity_id: tempSearchTerm,
+          txs: [],
+        },
+      });
       router.push(searchPageUrl);
+      dispatch(blur());
+    } else if (!!quickNavUrl && quickNavUrl === searchEntityUrl) {
+      router.push(searchEntityUrl);
+      dispatch(blur());
     } else {
+      dispatch(focus());
       dispatch(setSearchTerm(tempSearchTerm));
     }
-  }, [dispatch, isAdvancedSearch, isSearchPage, router, searchPageUrl, tempSearchTerm]);
+  }, [
+    dispatch,
+    isAdvancedSearch,
+    quickNavUrl,
+    router,
+    searchEntityUrl,
+    searchPageUrl,
+    tempSearchTerm,
+  ]);
 
   return (
     <DoubleGradientBorderWrapper>
@@ -380,7 +481,6 @@ function SearchInput() {
             placeholder={isSearchFieldFocused ? '' : 'Explore'}
             onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
               if (e.key === 'Enter') {
-                e.preventDefault();
                 handleSearch();
               }
             }}
@@ -389,6 +489,7 @@ function SearchInput() {
                 return match.toUpperCase();
               });
               dispatch(setTempSearchTerm(formattedValue.trimStart()));
+              dispatch(setQuickNavUrl(''));
             }}
             onScroll={(e: React.FormEvent<HTMLInputElement>) =>
               dispatch(setSearchPreviewScrollLeft(e.currentTarget.scrollLeft))
@@ -408,23 +509,40 @@ export function Search({
   recentResults = [],
 }: {
   searchTermFromQueryParams?: string;
-  recentResults: RecentResult[];
+  recentResults: SearchResult[];
 }) {
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
 
+  const searchTerm = useAppSelector(selectSearchTerm);
+  const searchResponse = useSearchQuery(searchTerm, true);
+  const isLoading = searchResponse.isLoading;
+
   return (
     <HStack width="full" position={'relative'} zIndex={1}>
-      <SearchInput />
+      <SearchInput searchTermFromQueryParams={searchTermFromQueryParams} />
       {isSearchFieldFocused && (
         <SearchResultsWrapper>
-          <Stack gap={6}>
-            <Stack px={4} gap={3} pt={16}>
-              <KeywordsPreview />
-              <DocsLink />
+          {isLoading ? null : searchResponse && searchResponse.data ? (
+            <Stack pt={18}>
+              <SearchResults
+                recentResults={[searchResponse.data]}
+                iconType={'enter'}
+                px={3}
+                pb={4}
+              />
             </Stack>
-            <RecentResults recentResults={recentResults} />
-          </Stack>
-          <QuickLinks />
+          ) : (
+            <>
+              <Stack gap={6}>
+                <Stack px={4} gap={3} pt={16}>
+                  <KeywordsPreview />
+                  <DocsLink />
+                </Stack>
+                <SearchResults title={'Recent results'} recentResults={recentResults} />
+              </Stack>
+              <QuickLinks />
+            </>
+          )}
         </SearchResultsWrapper>
       )}
     </HStack>
