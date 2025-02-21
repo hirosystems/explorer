@@ -1,3 +1,11 @@
+## [1.252.1](https://github.com/hirosystems/explorer/compare/v1.252.0...v1.252.1) (2025-02-21)
+
+
+### Bug Fixes
+
+* sandbox header font size and add error message ([26b3794](https://github.com/hirosystems/explorer/commit/26b37943eb6fb1e97a39e11ab83024ce544547f5))
+* status bar styling ([a42a94f](https://github.com/hirosystems/explorer/commit/a42a94f1961169f8680fa894ec2fbc357d12ce4f))
+
 # [1.252.0](https://github.com/hirosystems/explorer/compare/v1.251.0...v1.252.0) (2025-02-21)
 
 
