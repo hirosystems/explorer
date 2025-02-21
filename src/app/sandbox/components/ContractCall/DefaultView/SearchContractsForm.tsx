@@ -45,7 +45,7 @@ export const SearchContractsForm: FC<{ rootContractAddress: string }> = ({
           <Stack p={6}>
             {/* <Box as="form"> */}
             <Stack gap={4}>
-              <Title fontSize={6}>Call a contract</Title>
+              <Title fontSize={'2xl'}>Call a contract</Title>
               <Text fontSize={'sm'}>
                 Manually enter contract details below, or load a contract from your transactions to
                 see available functions.
