@@ -1,3 +1,10 @@
+# [1.252.0](https://github.com/hirosystems/explorer/compare/v1.251.0...v1.252.0) (2025-02-21)
+
+
+### Features
+
+* add anchor tx link to btc block page ([343e753](https://github.com/hirosystems/explorer/commit/343e753e0ce49b1f03d36a18aaf876432c0647ea))
+
 # [1.251.0](https://github.com/hirosystems/explorer/compare/v1.250.0...v1.251.0) (2025-02-20)
 
 
