@@ -7,10 +7,12 @@ import { useParamsBlockHash } from '../../../app/block/[hash]/useParamsBlockHash
 import { KeyValueVertical } from '../../../common/components/KeyValueVertical';
 import { Section } from '../../../common/components/Section';
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
+import { useBlockByHash } from '../../../common/queries/useBlockByHash';
 import { useSuspenseBurnBlock } from '../../../common/queries/useBurnBlock';
 import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
+import { TextLink } from '../../../ui/TextLink';
 import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
@@ -23,6 +25,10 @@ const StyledSection = styled(Section)`
 export function BitcoinAnchorDetailsBase() {
   const { data: btcBlock } = useSuspenseBurnBlock(useParamsBlockHash(), {
     refetchOnWindowFocus: true,
+  });
+  const stxBlockHash = btcBlock?.stacks_blocks?.[0];
+  const { data: stxBlock } = useBlockByHash(stxBlockHash, {
+    enabled: !!stxBlockHash,
   });
 
   const { btcBlockBaseUrl, btcTxBaseUrl } = useGlobalContext().activeNetwork;
@@ -64,21 +70,23 @@ export function BitcoinAnchorDetailsBase() {
         }
         copyValue={btcBlock.burn_block_hash}
       />
-      <KeyValueVertical
-        className="key-value-vertical"
-        label={'Anchor transaction ID'}
-        value={
-          <Link
-            target="_blank"
-            href={`${btcTxBaseUrl}/${btcBlock.burn_block_hash.replace('0x', '')}`}
-          >
-            <Text fontSize="sm" fontWeight="medium">
-              {truncateMiddle(btcBlock.burn_block_hash, 8)}
-            </Text>
-          </Link>
-        }
-        copyValue={btcBlock.burn_block_hash}
-      />
+      {!!stxBlock?.miner_txid && (
+        <KeyValueVertical
+          label={'Anchor transaction ID'}
+          value={
+            <TextLink
+              as="a"
+              target="_blank"
+              href={`${btcTxBaseUrl}/${stxBlock.miner_txid.replace('0x', '')}`}
+            >
+              <Text fontSize={'sm'} fontWeight={'medium'}>
+                {truncateMiddle(stxBlock.miner_txid, 8)}
+              </Text>
+            </TextLink>
+          }
+          copyValue={stxBlock.miner_txid}
+        />
+      )}
       <KeyValueVertical
         className="key-value-vertical"
         label={'Timestamp'}
