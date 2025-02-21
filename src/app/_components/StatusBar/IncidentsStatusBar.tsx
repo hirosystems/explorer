@@ -16,6 +16,9 @@ function IncidentsStatusBar(props: StackProps) {
   const incidents = unresolvedIncidentsResponse?.incidents;
   const statusBarRef = useRef<HTMLDivElement | null>(null);
 
+  if (!incidents?.length) {
+    return null;
+  }
   return (
     <Stack {...props}>
       {incidents?.map(({ name, impact }) => {
