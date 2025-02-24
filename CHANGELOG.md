@@ -1,3 +1,10 @@
+## [1.252.2](https://github.com/hirosystems/explorer/compare/v1.252.1...v1.252.2) (2025-02-24)
+
+
+### Bug Fixes
+
+* remove save contract in platform ([7ba7866](https://github.com/hirosystems/explorer/commit/7ba78662ec4dc66a2f3193bed173621174c857df))
+
 ## [1.252.1](https://github.com/hirosystems/explorer/compare/v1.252.0...v1.252.1) (2025-02-21)
 
 
