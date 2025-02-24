@@ -109,23 +109,6 @@ export function LeftSection() {
           </Stack>
         </Stack>
         <Stack gap={2}>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              const paramsBase64 = { name: contractName, sourceCode: codeBody };
-              const state = btoa(JSON.stringify(paramsBase64));
-              // 'state' param is used by Auth0 to forward the params after the login portal
-              window.open(`https://platform.hiro.so/projects/import?state=${state}`);
-            }}
-            width="100%"
-          >
-            <Flex gap={1} alignItems="center">
-              <Text>Save Contract in Hiro Platform</Text>
-              <Icon h={4} w={4}>
-                <ArrowSquareOut />
-              </Icon>
-            </Flex>
-          </Button>
           <Text fontSize="xs" as="p">
             The sandbox doesn't support Clarity 3 deployments. To deploy a Clarity 3 contract,
             please use{' '}
