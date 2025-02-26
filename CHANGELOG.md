@@ -1,3 +1,10 @@
+## [1.252.3](https://github.com/hirosystems/explorer/compare/v1.252.2...v1.252.3) (2025-02-26)
+
+
+### Bug Fixes
+
+* page title font ([6f0575f](https://github.com/hirosystems/explorer/commit/6f0575fe01063ef6d4cc16056eadcc9cfc03bffc))
+
 ## [1.252.2](https://github.com/hirosystems/explorer/compare/v1.252.1...v1.252.2) (2025-02-24)
 
 
