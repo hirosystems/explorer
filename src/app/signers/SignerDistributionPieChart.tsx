@@ -41,8 +41,8 @@ const startAngle = 0;
 const endAngle = -(360 - startAngle);
 const innerRadius = 70;
 const outerRadius = 100;
-const pieChartWidth = 220;
-const pieChartHeight = 220;
+export const singersPieChartWidth = 220;
+export const signersPieChartHeight = 220;
 
 interface PieData {
   name: string;
@@ -208,7 +208,7 @@ export function SignersDistributionPieChart({
 
   const pieChart = useMemo(
     () => (
-      <PieChart width={pieChartWidth} height={pieChartHeight}>
+      <PieChart width={singersPieChartWidth} height={signersPieChartHeight}>
         <Pie
           paddingAngle={2}
           startAngle={startAngle}
@@ -254,8 +254,8 @@ export function SignersDistributionPieChart({
         <Tooltip content={<CustomTooltip />} />
         {renderCenterCustomizedLabel({
           numSigners: signers.length,
-          cx: pieChartWidth / 2,
-          cy: pieChartHeight / 2,
+          cx: singersPieChartWidth / 2,
+          cy: signersPieChartHeight / 2,
         })}
       </PieChart>
     ),

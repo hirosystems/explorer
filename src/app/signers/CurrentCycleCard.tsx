@@ -85,10 +85,10 @@ export function CurrentCycleCardBase() {
   const pieChart = useMemo(
     () => (
       <Box
-        width={pieChartWidth}
-        height={pieChartHeight}
-        minWidth={pieChartWidth}
-        minHeight={pieChartHeight}
+        width={`${pieChartWidth}px`}
+        height={`${pieChartHeight}px`}
+        minWidth={`${pieChartWidth}px`}
+        minHeight={`${pieChartHeight}px`}
       >
         <PieChart width={pieChartWidth} height={pieChartHeight}>
           <defs>
@@ -164,7 +164,7 @@ export function CurrentCycleCardBase() {
     <ClientOnly>
       <Card padding={6} height="100%" width="100%">
         <Flex mb={3}>
-          <Box mr="16px">{pieChart}</Box>
+          <Box mr={4}>{pieChart}</Box>
           <Stack gap={3}>
             <Text fontSize={'xs'} fontWeight="medium" whiteSpace={'nowrap'}>
               Current cycle

@@ -9,6 +9,7 @@ import { PageTitle } from '../_components/PageTitle';
 import { SkeletonStatSection } from '../_components/Stats/skeleton';
 import { SignersDistributionLayout } from './SignerDistribution';
 import { SignerLegendItem, SignersDistributionLegendLayout } from './SignerDistributionLegend';
+import { signersPieChartHeight, singersPieChartWidth } from './SignerDistributionPieChart';
 import { SignersHeaderLayout } from './SignersHeader';
 import { SignersMapComponentLayout } from './SignersMapComponent';
 import { SignersTableLayout, signersTableHeaders } from './SignersTable';
@@ -42,7 +43,9 @@ export const TableHeaderSkeleton = () => (
   </Table.ColumnHeader>
 );
 
-export const PieChartSkeleton = () => <SkeletonCircle size="150" />;
+export const PieChartSkeleton = () => (
+  <SkeletonCircle h={signersPieChartHeight} w={singersPieChartWidth} />
+);
 
 export const SignersTableSkeleton = () => {
   const numRows = Array.from({ length: 10 }, (_, i) => i + 1);
