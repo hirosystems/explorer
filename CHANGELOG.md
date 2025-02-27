@@ -1,3 +1,10 @@
+## [1.252.4](https://github.com/hirosystems/explorer/compare/v1.252.3...v1.252.4) (2025-02-27)
+
+
+### Bug Fixes
+
+* fixed some signers page ui bugs ([7a28acc](https://github.com/hirosystems/explorer/commit/7a28acc2ea88ee603df070026d939d2b349ca791))
+
 ## [1.252.3](https://github.com/hirosystems/explorer/compare/v1.252.2...v1.252.3) (2025-02-26)
 
 
