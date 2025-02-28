@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 
 import { BlocksPageBlockListSkeleton } from '../_components/BlockList/Grouped/skeleton';
 import { PageTitle } from '../_components/PageTitle';
+import { BlocksTable } from '@/common/components/table/table-examples/BlocksTable';
 
 const BlocksPageBlockListDynamic = dynamic(
   () =>
@@ -36,7 +37,8 @@ const BlocksPage: NextPage = () => {
   return (
     <BlocksPageLayout
       title={<PageTitle>Recent blocks</PageTitle>}
-      blocksList={<BlocksPageBlockListDynamic />}
+      // blocksList={<BlocksPageBlockListDynamic />}
+      blocksList={<BlocksTable />}
     />
   );
 };

@@ -282,7 +282,7 @@ export function TxsTable() {
           [TxTableColumns.Fee]: tx.fee_rate,
           [TxTableColumns.Amount]: amount,
           [TxTableColumns.BlockTime]: tx.block_time,
-        } as TxTableData;
+        };
       }),
     [txs]
   );
