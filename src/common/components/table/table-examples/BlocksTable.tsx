@@ -2,8 +2,8 @@
 
 import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
 import { useBurnBlocks } from '@/common/queries/useBurnBlocksInfinite';
-import { ColumnDef } from '@tanstack/react-table';
-import { useMemo } from 'react';
+import { ColumnDef, PaginationState } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
 
 import { BurnBlock } from '@stacks/stacks-blockchain-api-types';
 
@@ -101,11 +101,18 @@ export function BlocksTable() {
     [burnBlocks]
   );
 
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  })
+
   return (
     <Table
       data={rowData}
       columns={columns}
-      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
+      tableContainerWrapper={table => (
+        <TableContainer pagination={pagination}>{table}</TableContainer>
+      )}
       isLoading={response.isLoading}
     />
   );
