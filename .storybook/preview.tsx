@@ -57,7 +57,7 @@ const preview: Preview = {
           if (docsStory) {
             docsStory.setAttribute(
               'style',
-              `background-color: ${selectedTheme === 'dark' ? '#0C0C0D' : '#EAE8E6'} !important;`
+              `background-color: ${selectedTheme === 'dark' ? '#0C0C0D' : '#fff'} !important;`
             );
           }
         }
