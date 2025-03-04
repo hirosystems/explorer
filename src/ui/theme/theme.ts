@@ -27,6 +27,7 @@ import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
 import { SEMANTIC_TOKENS } from './semanticTokens';
 import { SIZES } from './sizes';
 import { SPACE } from './space';
+import { TEXT_STYLES } from './textStyles';
 import { Z_INDEX } from './zIndex';
 
 const explorerConfig = defineConfig({
@@ -89,12 +90,12 @@ const themeConfig = {
       breakpoints: {
         ...BREAKPOINTS,
       },
-      // textStyles: {
-      //   ...TEXT_STYLES,
-      // },
     },
     semanticTokens: {
       ...SEMANTIC_TOKENS,
+    },
+    textStyles: {
+      ...TEXT_STYLES,
     },
   },
 };

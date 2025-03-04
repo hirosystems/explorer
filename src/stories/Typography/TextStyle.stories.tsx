@@ -63,6 +63,12 @@ const TextStyleDemo = () => (
     <Text textStyle="heading-xl">heading-xl: The quick brown fox jumps over the lazy dog</Text>
     <Text textStyle="heading-2xl">heading-2xl: The quick brown fox jumps over the lazy dog</Text>
     <Text textStyle="heading-3xl">heading-3xl: The quick brown fox jumps over the lazy dog</Text>
+
+    <Text textStyle="text-mono-xs">text-mono-xs: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-sm">text-mono-sm: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-md">text-mono-md: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-lg">text-mono-lg: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-xl">text-mono-xl: The quick brown fox jumps over the lazy dog</Text>
   </Stack>
 );
 
@@ -112,6 +118,12 @@ const TextStyleDemo = () => (
     <Text textStyle="heading-xl">heading-xl: The quick brown fox jumps over the lazy dog</Text>
     <Text textStyle="heading-2xl">heading-2xl: The quick brown fox jumps over the lazy dog</Text>
     <Text textStyle="heading-3xl">heading-3xl: The quick brown fox jumps over the lazy dog</Text>
+    
+    <Text textStyle="text-mono-xs">text-mono-xs: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-sm">text-mono-sm: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-md">text-mono-md: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-lg">text-mono-lg: The quick brown fox jumps over the lazy dog</Text>
+    <Text textStyle="text-mono-xl">text-mono-xl: The quick brown fox jumps over the lazy dog</Text>
   </Stack>
 );
         `,
