@@ -1,3 +1,10 @@
+# [1.253.0](https://github.com/hirosystems/explorer/compare/v1.252.5...v1.253.0) (2025-03-04)
+
+
+### Features
+
+* tabs ([a808075](https://github.com/hirosystems/explorer/commit/a808075f589854cb50b03b52413b0751ca22e682))
+
 ## [1.252.5](https://github.com/hirosystems/explorer/compare/v1.252.4...v1.252.5) (2025-03-04)
 
 
