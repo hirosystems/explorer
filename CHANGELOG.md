@@ -1,3 +1,10 @@
+## [1.252.5](https://github.com/hirosystems/explorer/compare/v1.252.4...v1.252.5) (2025-03-04)
+
+
+### Bug Fixes
+
+* text styles ([c0ee7bf](https://github.com/hirosystems/explorer/commit/c0ee7bf64290e9113235d4853082b484cb1addaf))
+
 ## [1.252.4](https://github.com/hirosystems/explorer/compare/v1.252.3...v1.252.4) (2025-02-27)
 
 
