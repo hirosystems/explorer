@@ -1,137 +1,252 @@
-export const TEXT_STYLES = {
+import { defineTextStyles } from '@chakra-ui/react';
+
+export const TEXT_STYLES = defineTextStyles({
   // Regular Variants
   'text-regular-xs': {
-    fontSize: 'xs',
-    fontWeight: 'regular',
-    letterSpacing: 'wide',
-    lineHeight: 'compact',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'xs',
+      fontWeight: 'regular',
+      letterSpacing: 'slight',
+      lineHeight: 'snug',
+    },
   },
   'text-regular-sm': {
-    fontSize: 'sm',
-    fontWeight: 'regular',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'sm',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
   },
   'text-regular-md': {
-    fontSize: 'md',
-    fontWeight: 'regular',
-    letterSpacing: 'normal',
-    lineHeight: 'compact',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'md',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'base',
+    },
   },
   'text-regular-lg': {
-    fontSize: 'lg',
-    fontWeight: 'regular',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'lg',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'snug',
+    },
   },
   'text-regular-xl': {
-    fontSize: 'xl',
-    fontWeight: 'regular',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'xl',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
   },
 
   // Medium Variants
   'text-medium-xs': {
-    fontSize: 'xs',
-    fontWeight: 'medium',
-    letterSpacing: 'wide',
-    lineHeight: 'compact',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'xs',
+      fontWeight: 'medium',
+      letterSpacing: 'slight',
+      lineHeight: 'snug',
+    },
   },
   'text-medium-sm': {
-    fontSize: 'sm',
-    fontWeight: 'medium',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'sm',
+      fontWeight: 'medium',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
   },
   'text-medium-md': {
-    fontSize: 'md',
-    fontWeight: 'medium',
-    letterSpacing: 'normal',
-    lineHeight: 'relaxed',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'md',
+      fontWeight: 'medium',
+      letterSpacing: 'normal',
+      lineHeight: 'base',
+    },
   },
   'text-medium-lg': {
-    fontSize: 'lg',
-    fontWeight: 'medium',
-    letterSpacing: 'normal',
-    lineHeight: 'compact',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'lg',
+      fontWeight: 'medium',
+      letterSpacing: 'normal',
+      lineHeight: 'snug',
+    },
   },
   'text-medium-xl': {
-    fontSize: 'xl',
-    fontWeight: 'medium',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'xl',
+      fontWeight: 'medium',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
   },
 
   // Semi-bold Variants
   'text-semibold-xs': {
-    fontSize: 'xs',
-    fontWeight: 'semibold',
-    letterSpacing: 'wide',
-    lineHeight: 'compact',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'xs',
+      fontWeight: 'semibold',
+      letterSpacing: 'slight',
+      lineHeight: 'snug',
+    },
   },
   'text-semibold-sm': {
-    fontSize: 'sm',
-    fontWeight: 'semibold',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'sm',
+      fontWeight: 'semibold',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
   },
   'text-semibold-md': {
-    fontSize: 'md',
-    fontWeight: 'semibold',
-    letterSpacing: 'normal',
-    lineHeight: 'relaxed',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'md',
+      fontWeight: 'semibold',
+      letterSpacing: 'normal',
+      lineHeight: 'base',
+    },
   },
   'text-semibold-lg': {
-    fontSize: 'lg',
-    fontWeight: 'semibold',
-    letterSpacing: 'normal',
-    lineHeight: 'compact',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'lg',
+      fontWeight: 'semibold',
+      letterSpacing: 'normal',
+      lineHeight: 'snug',
+    },
   },
   'text-semibold-xl': {
-    fontSize: 'xl',
-    fontWeight: 'semibold',
-    letterSpacing: 'normal',
-    lineHeight: 'comfortable',
+    value: {
+      fontFamily: 'var(--font-instrument-sans)',
+      fontSize: 'xl',
+      fontWeight: 'semibold',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
   },
 
   // Heading Variants
   'heading-xs': {
-    fontSize: 'xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tight',
-    lineHeight: 'spacious',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: 'xl',
+      fontWeight: 'regular',
+      letterSpacing: 'tight',
+      lineHeight: 'slightlyTight',
+    },
   },
   'heading-sm': {
-    fontSize: '2xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tight',
-    lineHeight: 'base',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: '2xl',
+      fontWeight: 'regular',
+      letterSpacing: 'tight',
+      lineHeight: 'slightlyTight',
+    },
   },
   'heading-md': {
-    fontSize: '3.5xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tighter',
-    lineHeight: 'base',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: '3.5xl',
+      fontWeight: 'regular',
+      letterSpacing: 'tighter',
+      lineHeight: 'semiTight',
+    },
   },
   'heading-lg': {
-    fontSize: '4.5xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tighter',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: '4.5xl',
+      fontWeight: 'regular',
+      letterSpacing: 'semiTight',
+    },
   },
   'heading-xl': {
-    fontSize: '5xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tighter',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: '5xl',
+      fontWeight: 'regular',
+      letterSpacing: 'semiTight',
+    },
   },
   'heading-2xl': {
-    fontSize: '6xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tighter',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: '6xl',
+      fontWeight: 'regular',
+      letterSpacing: 'veryTight',
+    },
   },
   'heading-3xl': {
-    fontSize: '6.5xl',
-    fontWeight: 'regular',
-    letterSpacing: 'tighter',
+    value: {
+      fontFamily: 'var(--font-matter)',
+      fontSize: '6.5xl',
+      fontWeight: 'regular',
+      letterSpacing: 'veryTight',
+    },
   },
-};
+
+  // Mono Variants
+  'text-mono-xs': {
+    value: {
+      fontFamily: 'var(--font-matter-mono)',
+      fontSize: 'xs',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'snug',
+    },
+  },
+  'text-mono-sm': {
+    value: {
+      fontFamily: 'var(--font-matter-mono)',
+      fontSize: 'sm',
+      fontWeight: 'regular',
+      letterSpacing: 'slight',
+      lineHeight: 'medium',
+    },
+  },
+  'text-mono-md': {
+    value: {
+      fontFamily: 'var(--font-matter-mono)',
+      fontSize: 'md',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'base',
+    },
+  },
+  'text-mono-lg': {
+    value: {
+      fontFamily: 'var(--font-matter-mono)',
+      fontSize: 'lg',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'snug',
+    },
+  },
+  'text-mono-xl': {
+    value: {
+      fontFamily: 'var(--font-matter-mono)',
+      fontSize: 'xl',
+      fontWeight: 'regular',
+      letterSpacing: 'normal',
+      lineHeight: 'medium',
+    },
+  },
+});
