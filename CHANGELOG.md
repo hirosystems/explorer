@@ -1,3 +1,10 @@
+# [1.254.0](https://github.com/hirosystems/explorer/compare/v1.253.0...v1.254.0) (2025-03-05)
+
+
+### Features
+
+* added droid token to scams ([5409a42](https://github.com/hirosystems/explorer/commit/5409a4275b0b282f93aa17b3b192fff1e1f57b52))
+
 # [1.253.0](https://github.com/hirosystems/explorer/compare/v1.252.5...v1.253.0) (2025-03-04)
 
 
