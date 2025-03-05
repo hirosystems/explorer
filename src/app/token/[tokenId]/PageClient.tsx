@@ -15,7 +15,10 @@ import { TokenTabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
 import { TokenInfoProps } from './types';
 
-const RISKY_TOKENS = ['SP1J45NVEGQ7ZA4M57TGF0RAB00TMYCYG00X8EF5B.granite-btc'];
+const RISKY_TOKENS = [
+  'SP1J45NVEGQ7ZA4M57TGF0RAB00TMYCYG00X8EF5B.granite-btc',
+  'SP2EEV5QBZA454MSMW9W3WJNRXVJF36VPV17FFKYH.DROID',
+];
 const legitsBTCDerivatives = ['SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N.zsbtc-token'];
 
 const WarningMessage = ({ text }: { text: string | ReactNode }) => {
