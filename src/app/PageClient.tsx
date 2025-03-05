@@ -8,10 +8,8 @@ import { ReactNode } from 'react';
 import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
-import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
 import { PageTitle } from './_components/PageTitle';
 import { Stats } from './_components/Stats/Stats';
-import HomePageSkeleton from './skeleton';
 
 const HomePageBlockListDynamic = dynamic(
   () =>

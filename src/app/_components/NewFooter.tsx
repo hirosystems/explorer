@@ -105,7 +105,7 @@ const TopFooterContent = () => {
       <Box hideFrom="lg" className="top-footer-content-hide-from-lg">
         <Grid templateColumns={['repeat(2, 1fr)', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={4}>
           {rightSideLinks.concat(leftSideLinks).map(link => (
-            <ExplorerLink href={link.href} fontWeight="medium" fontSize="xs">
+            <ExplorerLink key={link.label} href={link.href} fontWeight="medium" fontSize="xs">
               {link.label}
             </ExplorerLink>
           ))}
