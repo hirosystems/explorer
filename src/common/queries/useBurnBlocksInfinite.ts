@@ -41,6 +41,8 @@ export function useSuspenseBurnBlocks(
 
 export function useBurnBlocks(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
+  offset = 0,
+  cursor = '',
   options: any = {},
   queryKeyExtension?: string
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {

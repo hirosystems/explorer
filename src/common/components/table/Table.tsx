@@ -18,12 +18,22 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { TableContainer } from './TableContainer';
 import { ScrollIndicatorWrapper } from './TableScrollIndicatorWrapper';
+import { TablePaginationControls } from './TablePaginationControls';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends unknown, TValue> {
     tooltip?: string;
     isPinned?: 'left' | 'right' | false;
   }
+}
+
+interface TablePaginationContextType {
+  pageIndex: number;
+  pageSize: number;
+  pageCount: number;
+  totalRows: number;
+  setPageIndex: (index: number) => void;
+  setPageSize: (size: number) => void;
 }
 
 const getCommonPinningStyles = <T,>(column: Column<T>) => {
@@ -108,6 +118,14 @@ export type TableProps<T> = {
   hasScrollIndicator?: boolean;
   bannerRow?: React.ReactElement<typeof ChakraTable.Row>;
   error?: string;
+  pagination?: {
+    pageIndex: number;
+    pageSize: number;
+    pageCount: number;
+    totalRows: number;
+    onPageChange: (pageIndex: number) => void;
+    onPageSizeChange?: (pageSize: number) => void;
+  };
 };
 
 const ErrorTable = ({ error }: { error: string }) => {
@@ -193,6 +211,7 @@ export function Table<T>({
   hasScrollIndicator,
   bannerRow,
   error,
+  pagination,
 }: TableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
@@ -205,6 +224,10 @@ export function Table<T>({
     state: {
       sorting,
       columnPinning,
+      pagination: {
+        pageIndex: 0,
+        pageSize: 10,
+      },
     },
     onSortingChange: async updater => {
       if (typeof updater === 'function') {
@@ -220,6 +243,7 @@ export function Table<T>({
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    manualPagination: true, // Enable manual pagination
   });
 
   useEffect(() => {
@@ -381,6 +405,16 @@ export function Table<T>({
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
       {content}
+      {pagination && (
+        <TablePaginationControls 
+          pageIndex={pagination.pageIndex}
+          pageSize={pagination.pageSize}
+          pageCount={pagination.pageCount}
+          totalRows={pagination.totalRows}
+          onPageChange={pagination.onPageChange}
+          onPageSizeChange={pagination.onPageSizeChange}
+        />
+      )}
     </ExplorerErrorBoundary>
   );
 }

@@ -78,6 +78,13 @@ export const columns: ColumnDef<BlocksTableData>[] = [
 ];
 
 export function BlocksTable() {
+
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 20,
+  });
+  
+
   const response = useBurnBlocks(20);
   const burnBlocks = useInfiniteQueryResult<BurnBlock>(response, 100);
 
