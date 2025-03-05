@@ -1,3 +1,10 @@
+## [1.254.1](https://github.com/hirosystems/explorer/compare/v1.254.0...v1.254.1) (2025-03-05)
+
+
+### Reverts
+
+* Revert "feat: added droid token to scams" ([9a6a281](https://github.com/hirosystems/explorer/commit/9a6a281347b020883394fb7a27b94e1abc3d9a30))
+
 # [1.254.0](https://github.com/hirosystems/explorer/compare/v1.253.0...v1.254.0) (2025-03-05)
 
 
