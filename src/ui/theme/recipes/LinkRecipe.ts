@@ -37,8 +37,45 @@ export const linkRecipe = defineRecipe({
           color: 'textInteractiveHover',
         },
       },
+      buttonLink: {
+        textDecoration: 'none',
+        fontFamily: 'var(--font-instrument-sans)',
+        color: 'textPrimary',
+        borderBottom: '2px solid var(--stacks-colors-redesign-border-secondary)',
+        _hover: {
+          textDecoration: 'none',
+          borderBottomColor: 'redesignBorderPrimary',
+        },
+        _disabled: {
+          textDecoration: 'none',
+          color: 'textTertiary',
+        },
+      },
+    },
+    size: {
+      sm: {},
+      lg: {},
     },
   },
+  // temporarily using the `compoundVariants` to avoid overriding base styles for old design
+  compoundVariants: [
+    {
+      variant: 'buttonLink',
+      size: 'sm',
+      css: {
+        textStyle: 'text-medium-xs',
+        lineHeight: 'snug',
+      },
+    },
+    {
+      variant: 'buttonLink',
+      size: 'lg',
+      css: {
+        textStyle: 'text-medium-sm',
+        lineHeight: 'taller',
+      },
+    },
+  ],
   defaultVariants: {
     variant: 'underline',
   },

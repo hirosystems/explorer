@@ -3,7 +3,7 @@
 import { Box, Flex, Icon, StackProps } from '@chakra-ui/react';
 
 import { useSuspenseBlockListInfinite } from '../../../../common/queries/useBlockListInfinite';
-import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../../../ui/icons/BitcoinCircleIcon';
 import { ExplorerErrorBoundary } from '../../ErrorBoundary';
 import { StatSection } from '../StatSection';
 
@@ -27,7 +27,7 @@ function LastBlockBase(props: StackProps) {
           gap={1.5}
         >
           <Icon h={4.5} w={4.5}>
-            <BitcoinIcon />
+            <BitcoinCircleIcon />
           </Icon>
           #{lastBurnBlockHeight}
         </Flex>
