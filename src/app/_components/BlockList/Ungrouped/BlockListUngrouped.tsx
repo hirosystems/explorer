@@ -10,7 +10,7 @@ import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQuer
 import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Text } from '../../../../ui/Text';
-import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../../../ui/icons/BitcoinCircleIcon';
 import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
@@ -60,7 +60,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
           <ArrowBendDownLeft />
         </Icon>
         <Icon h={18} w={18} position={'relative'} bottom={'1px'}>
-          <BitcoinIcon />
+          <BitcoinCircleIcon />
         </Icon>
         {isFirst ? (
           <Text fontSize="sm" color="textSubdued" fontWeight="medium">

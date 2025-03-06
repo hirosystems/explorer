@@ -112,7 +112,7 @@ dependencies:
     specifier: 5.8.4
     version: 5.8.4(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-table':
-    specifier: ^8.21.2
+    specifier: 8.21.2
     version: 8.21.2(react-dom@18.2.0)(react@18.2.0)
   '@tippyjs/react':
     specifier: 4.2.6
@@ -7172,6 +7172,15 @@ packages:
       storybook: 8.3.5
     dev: true
 
+  /@storybook/addon-viewport@8.5.6(storybook@8.3.5):
+    resolution: {integrity: sha512-i0PJN587K9GMViXJr9Mb4cFF7ZiGvFpk215xRgtC33Pv7mIp8yRjbjNgi3TgEfDe4GQFQ1hKoisqk/pjs9quXg==}
+    peerDependencies:
+      storybook: ^8.5.6
+    dependencies:
+      memoizerific: 1.11.3
+      storybook: 8.3.5
+    dev: true
+
   /@storybook/addons@6.5.16(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-p3DqQi+8QRL5k7jXhXmJZLsE/GqHqyY6PcoA1oNTJr0try48uhTGUOYkgzmqtDaa/qPFO5LP+xCPzZXckGtquQ==}
     peerDependencies:
@@ -7218,13 +7227,6 @@ packages:
       telejson: 6.0.8
       ts-dedent: 2.2.0
       util-deprecate: 1.0.2
-  /@storybook/addon-viewport@8.5.6(storybook@8.3.5):
-    resolution: {integrity: sha512-i0PJN587K9GMViXJr9Mb4cFF7ZiGvFpk215xRgtC33Pv7mIp8yRjbjNgi3TgEfDe4GQFQ1hKoisqk/pjs9quXg==}
-    peerDependencies:
-      storybook: ^8.5.6
-    dependencies:
-      memoizerific: 1.11.3
-      storybook: 8.3.5
     dev: true
 
   /@storybook/blocks@8.3.5(react-dom@18.2.0)(react@18.2.0)(storybook@8.3.5):

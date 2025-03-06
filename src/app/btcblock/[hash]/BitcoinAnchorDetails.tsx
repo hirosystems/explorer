@@ -13,7 +13,7 @@ import { toRelativeTime, truncateMiddle } from '../../../common/utils/utils';
 import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
-import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../../ui/icons/BitcoinCircleIcon';
 import { ExplorerErrorBoundary } from '../../_components/ErrorBoundary';
 
 const StyledSection = styled(Section)`
@@ -45,7 +45,7 @@ export function BitcoinAnchorDetailsBase() {
           <Link target="_blank" href={`${btcBlockBaseUrl}/${btcBlock.burn_block_height}`}>
             <Flex alignItems="center" gap={2}>
               <Icon h={5} w={5}>
-                <BitcoinIcon />
+                <BitcoinCircleIcon />
               </Icon>
               <Text fontSize="sm" fontWeight="medium">
                 #{btcBlock.burn_block_height}
