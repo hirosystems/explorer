@@ -1,7 +1,8 @@
+import { VERIFIED_TOKENS } from '@/app/token/[tokenId]/PageClient';
 import { Flex, Icon, Table } from '@chakra-ui/react';
 import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { SealCheck, Warning } from '@phosphor-icons/react';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { TokenLink, TxLink } from '../../../common/components/ExplorerLinks';
 import { abbreviateNumber, getFtDecimalAdjustedBalance } from '../../../common/utils/utils';
@@ -17,6 +18,40 @@ export const TokenRow: FC<{
   const hasSBTCInName = getHasSBTCInName(name, ftToken.symbol ?? '');
   const isSBTC = getIsSBTC(ftToken.contract_principal);
 
+  const tokenBadge = useMemo(() => {
+    if (isSBTC || VERIFIED_TOKENS.includes(ftToken.contract_principal)) {
+      return (
+        <Flex
+          px={1.5}
+          py={1}
+          bg="green.300"
+          borderRadius="2xl"
+          border="1px solid var(--stacks-colors-green-500)"
+        >
+          <Icon h={3} w={3} color="green.600">
+            <SealCheck />
+          </Icon>
+        </Flex>
+      );
+    }
+    if (hasSBTCInName && !isSBTC) {
+      return (
+        <Flex
+          px={1.5}
+          py={1}
+          bg="red.200"
+          borderRadius="2xl"
+          border="1px solid var(--stacks-colors-red-500)"
+        >
+          <Icon h={3} w={3} color="red.600">
+            <Warning />
+          </Icon>
+        </Flex>
+      );
+    }
+    return null;
+  }, [ftToken.contract_principal, hasSBTCInName, isSBTC]);
+
   return (
     <Table.Row>
       <Table.Cell padding={'10px 20px 10px 16px'} width={['auto', 'auto', '30%']}>
@@ -31,33 +66,7 @@ export const TokenRow: FC<{
           >
             {name} {ftToken.symbol ? `(${ftToken.symbol})` : null}
           </TokenLink>
-          {hasSBTCInName ? (
-            isSBTC ? (
-              <Flex
-                px={1.5}
-                py={1}
-                bg="green.300"
-                borderRadius="2xl"
-                border="1px solid var(--stacks-colors-green-500)"
-              >
-                <Icon h={3} w={3} color="green.600">
-                  <SealCheck />
-                </Icon>
-              </Flex>
-            ) : (
-              <Flex
-                px={1.5}
-                py={1}
-                bg="red.200"
-                borderRadius="2xl"
-                border="1px solid var(--stacks-colors-red-500)"
-              >
-                <Icon h={3} w={3} color="red.600">
-                  <Warning />
-                </Icon>
-              </Flex>
-            )
-          ) : null}
+          {tokenBadge}
         </Flex>
       </Table.Cell>
       <Table.Cell padding={'10px'} display={['none', 'none', 'table-cell']}>

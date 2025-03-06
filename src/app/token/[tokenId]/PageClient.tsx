@@ -17,6 +17,7 @@ import { TokenInfoProps } from './types';
 
 const RISKY_TOKENS = ['SP1J45NVEGQ7ZA4M57TGF0RAB00TMYCYG00X8EF5B.granite-btc'];
 const legitsBTCDerivatives = ['SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N.zsbtc-token'];
+export const VERIFIED_TOKENS = ['SP2EEV5QBZA454MSMW9W3WJNRXVJF36VPV17FFKYH.DROID'];
 
 const WarningMessage = ({ text }: { text: string | ReactNode }) => {
   return (
@@ -101,7 +102,7 @@ export default function PageClient({
           <PageTitle>
             {name} ({symbol})
           </PageTitle>
-          {isSBTC && (
+          {(isSBTC || VERIFIED_TOKENS.includes(tokenId)) && (
             <Tag
               color="green.600"
               bg="green.300"
