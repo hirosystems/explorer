@@ -8,7 +8,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xs',
       fontWeight: 'regular',
       letterSpacing: 'slight',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-regular-sm': {
@@ -17,7 +17,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'sm',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
   'text-regular-md': {
@@ -26,7 +26,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'md',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'base',
+      lineHeight: 'redesign.base',
     },
   },
   'text-regular-lg': {
@@ -35,7 +35,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'lg',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-regular-xl': {
@@ -44,7 +44,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xl',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
 
@@ -55,7 +55,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xs',
       fontWeight: 'medium',
       letterSpacing: 'slight',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-medium-sm': {
@@ -64,7 +64,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'sm',
       fontWeight: 'medium',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
   'text-medium-md': {
@@ -73,7 +73,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'md',
       fontWeight: 'medium',
       letterSpacing: 'normal',
-      lineHeight: 'base',
+      lineHeight: 'redesign.base',
     },
   },
   'text-medium-lg': {
@@ -82,7 +82,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'lg',
       fontWeight: 'medium',
       letterSpacing: 'normal',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-medium-xl': {
@@ -91,7 +91,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xl',
       fontWeight: 'medium',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
 
@@ -102,7 +102,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xs',
       fontWeight: 'semibold',
       letterSpacing: 'slight',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-semibold-sm': {
@@ -111,7 +111,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'sm',
       fontWeight: 'semibold',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
   'text-semibold-md': {
@@ -120,7 +120,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'md',
       fontWeight: 'semibold',
       letterSpacing: 'normal',
-      lineHeight: 'base',
+      lineHeight: 'redesign.base',
     },
   },
   'text-semibold-lg': {
@@ -129,7 +129,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'lg',
       fontWeight: 'semibold',
       letterSpacing: 'normal',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-semibold-xl': {
@@ -138,7 +138,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xl',
       fontWeight: 'semibold',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
 
@@ -149,7 +149,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xl',
       fontWeight: 'regular',
       letterSpacing: 'tight',
-      lineHeight: 'slightlyTight',
+      lineHeight: 'redesign.slightlyTight',
     },
   },
   'heading-sm': {
@@ -158,7 +158,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: '2xl',
       fontWeight: 'regular',
       letterSpacing: 'tight',
-      lineHeight: 'slightlyTight',
+      lineHeight: 'redesign.slightlyTight',
     },
   },
   'heading-md': {
@@ -167,7 +167,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: '3.5xl',
       fontWeight: 'regular',
       letterSpacing: 'tighter',
-      lineHeight: 'semiTight',
+      lineHeight: 'redesign.semiTight',
     },
   },
   'heading-lg': {
@@ -175,7 +175,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontFamily: 'var(--font-matter)',
       fontSize: '4.5xl',
       fontWeight: 'regular',
-      letterSpacing: 'semiTight',
+      letterSpacing: 'redesign.semiTight',
     },
   },
   'heading-xl': {
@@ -183,7 +183,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontFamily: 'var(--font-matter)',
       fontSize: '5xl',
       fontWeight: 'regular',
-      letterSpacing: 'semiTight',
+      letterSpacing: 'redesign.semiTight',
     },
   },
   'heading-2xl': {
@@ -191,7 +191,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontFamily: 'var(--font-matter)',
       fontSize: '6xl',
       fontWeight: 'regular',
-      letterSpacing: 'veryTight',
+      letterSpacing: 'redesign.veryTight',
     },
   },
   'heading-3xl': {
@@ -199,7 +199,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontFamily: 'var(--font-matter)',
       fontSize: '6.5xl',
       fontWeight: 'regular',
-      letterSpacing: 'veryTight',
+      letterSpacing: 'redesign.veryTight',
     },
   },
 
@@ -210,7 +210,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xs',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-mono-sm': {
@@ -219,7 +219,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'sm',
       fontWeight: 'regular',
       letterSpacing: 'slight',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
   'text-mono-md': {
@@ -228,7 +228,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'md',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'base',
+      lineHeight: 'redesign.base',
     },
   },
   'text-mono-lg': {
@@ -237,7 +237,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'lg',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'snug',
+      lineHeight: 'redesign.snug',
     },
   },
   'text-mono-xl': {
@@ -246,7 +246,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontSize: 'xl',
       fontWeight: 'regular',
       letterSpacing: 'normal',
-      lineHeight: 'medium',
+      lineHeight: 'redesign.medium',
     },
   },
 });

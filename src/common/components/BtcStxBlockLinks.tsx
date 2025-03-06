@@ -5,7 +5,7 @@ import { ArrowRight } from '@phosphor-icons/react';
 import { FC, Fragment } from 'react';
 
 import { TextLink } from '../../ui/TextLink';
-import BitcoinIcon from '../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../ui/icons/BitcoinCircleIcon';
 import StxIcon from '../../ui/icons/StxIcon';
 import { useGlobalContext } from '../context/useGlobalContext';
 import { Circle } from './Circle';
@@ -42,7 +42,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
             <ArrowRight />
           </Icon>
           <Icon h={4.5} w={4.5}>
-            <BitcoinIcon />
+            <BitcoinCircleIcon />
           </Icon>
           <TextLink
             href={`${btcBlockBaseUrl}/${btcBlockHeight}`}

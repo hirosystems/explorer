@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import { Circle } from '../../../common/components/Circle';
 import { TokenPrice } from '../../../common/types/tokenPrice';
 import { usdFormatter } from '../../../common/utils/utils';
-import BitcoinIcon from '../../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../../ui/icons/BitcoinCircleIcon';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { ExplorerErrorBoundary } from '../ErrorBoundary';
 
@@ -33,7 +33,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
       <PriceContainer
         icon={
           <Icon h={4.5} w={4.5}>
-            <BitcoinIcon />
+            <BitcoinCircleIcon />
           </Icon>
         }
         minWidth={'92px'}
