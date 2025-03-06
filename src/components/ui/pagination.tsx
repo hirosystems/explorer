@@ -50,7 +50,6 @@ const variantMap: Record<PaginationVariant, ButtonVariantMap> = {
 export const PaginationRoot = React.forwardRef<HTMLDivElement, PaginationRootProps>(
   function PaginationRoot(props, ref) {
     const { size = 'sm', variant = 'outline', getHref, ...rest } = props;
-    console.log('paginationroot', { size, variant, getHref, rest });
     return (
       <RootPropsProvider value={{ size, variantMap: variantMap[variant], getHref }}>
         <ChakraPagination.Root ref={ref} type={getHref ? 'link' : 'button'} {...rest} />
@@ -197,8 +196,7 @@ export const PaginationItems = (props: React.HTMLAttributes<HTMLElement>) => {
   return (
     // @ts-ignore
     <ChakraPagination.Context>
-      {({ pages, ...rest }) => {
-        console.log('pages', pages, rest);
+      {({ pages }) => {
         return pages.map((page, index) => {
           return page.type === 'ellipsis' ? (
             <PaginationEllipsis key={index} index={index} {...props} />

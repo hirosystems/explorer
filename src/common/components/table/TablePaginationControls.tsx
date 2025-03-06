@@ -7,15 +7,16 @@ import {
 } from '@/components/ui/pagination';
 import { Text } from '@/ui/Text';
 import { Button, Flex, Grid, HStack, Input, Separator } from '@chakra-ui/react';
+import { PaginationState } from '@tanstack/react-table';
 import { useCallback, useState } from 'react';
 
 interface TablePaginationControlsProps {
-  pageIndex: number;
-  pageSize: number;
-  pageCount: number;
-  totalRows?: number;
-  onPageChange: (pageIndex: number) => void;
-  onPageSizeChange?: (pageSize: number) => void;
+  pageIndex: number; // the current page index
+  pageSize: number; // the current page size, how many rows per page
+  pageCount: number; // the total number of pages
+  totalRows: number; // the total number of rows
+  onPageChange: (page: PaginationState) => void; // the callback to handle page indexchange
+  onPageSizeChange?: (page: PaginationState) => void; // the callback to handle page size change
 }
 
 export function TablePaginationControls({
@@ -24,16 +25,14 @@ export function TablePaginationControls({
   pageCount,
   totalRows,
   onPageChange,
-  onPageSizeChange,
 }: TablePaginationControlsProps) {
   const handlePageChange = useCallback(
     (pageChangeDetails: PageChangeDetails) => {
-      onPageChange(pageChangeDetails.page - 1); // Convert from 1-based to 0-based
+      onPageChange({ pageIndex: pageChangeDetails.page - 1, pageSize: pageChangeDetails.pageSize }); // Convert from 1-based to 0-based
     },
     [onPageChange]
   );
   const [inputValue, setInputValue] = useState<string>('');
-  console.log('tablepaginationcontrols', { pageIndex, pageSize, pageCount, totalRows });
 
   return (
     <Grid
@@ -49,10 +48,11 @@ export function TablePaginationControls({
     >
       <Flex alignItems="center" gap={4} px={4} py={2}>
         <PaginationRoot
-          page={pageIndex + 1}
-          count={pageCount}
-          onPageChange={handlePageChange}
-          siblingCount={1}
+          page={pageIndex + 1} // the current page index, +1 because the pagination component is 1-based
+          pageSize={pageSize} // the current page size, how many rows per page
+          count={totalRows} // the total number of rows
+          siblingCount={1} // the number of sibling pages to show on either side of the current page
+          onPageChange={handlePageChange} // the callback to handle page index change
         >
           <HStack gap={4}>
             <PaginationPrevTrigger px={2} py={1} h="fit-content" />

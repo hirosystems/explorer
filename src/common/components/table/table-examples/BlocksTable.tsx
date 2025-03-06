@@ -80,7 +80,7 @@ export const columns: ColumnDef<BlocksTableData>[] = [
 export function BlocksTable() {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 10,
   });
 
   const response = useBurnBlocks(pagination.pageSize, pagination.pageIndex * pagination.pageSize);
@@ -91,17 +91,10 @@ export function BlocksTable() {
     : 0;
   const totalRows = response.data?.pages[0].total || 0;
 
-  const handlePageChange = useCallback((newPageIndex: number) => {
+  const handlePageChange = useCallback((page: PaginationState) => {
     setPagination(prev => ({
       ...prev,
-      pageIndex: newPageIndex,
-    }));
-  }, []);
-
-  const handlePageSizeChange = useCallback((newPageSize: number) => {
-    setPagination(prev => ({
-      pageIndex: 0, // Reset to first page when changing page size
-      pageSize: newPageSize,
+      pageIndex: page.pageIndex,
     }));
   }, []);
 
@@ -142,12 +135,12 @@ export function BlocksTable() {
       // isLoading={response.isLoading}
       isLoading={isInitialLoad}
       pagination={{
+        manualPagination: true,
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
         pageCount,
         totalRows,
         onPageChange: handlePageChange,
-        onPageSizeChange: handlePageSizeChange,
       }}
     />
   );

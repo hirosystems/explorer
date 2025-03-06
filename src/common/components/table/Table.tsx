@@ -112,12 +112,13 @@ export type TableProps<T> = {
   bannerRow?: React.ReactElement<typeof ChakraTable.Row>;
   error?: string;
   pagination?: {
+    manualPagination: boolean;
     pageIndex: number;
     pageSize: number;
     pageCount: number;
-    totalRows?: number;
-    onPageChange: (pageIndex: number) => void;
-    onPageSizeChange?: (pageSize: number) => void;
+    totalRows: number;
+    onPageChange: (pagination: PaginationState) => void;
+    onPageSizeChange?: (pageSize: PaginationState) => void;
   };
 };
 
@@ -205,29 +206,25 @@ export function Table<T>({
   bannerRow,
   error,
   pagination,
-}
-: TableProps<T>) {
+}: TableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
 
   const columnPinning = useMemo(() => getColumnPinningState(columns), [columns]);
 
-  const [innerPagination, setInnerPagination] = React.useState<PaginationState>({
-    pageIndex:== 0,
-    pageSize: 5,
-  });
-
   const table = useReactTable({
     data: tableData,
     columns,
+    rowCount: pagination?.manualPagination ? pagination.totalRows : undefined, //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       sorting,
       columnPinning,
-      // pagination: {
-      //   pageIndex: pagination?.pageIndex ?? 0,
-      //   pageSize: pagination?.pageSize ?? 0,
-      // },
-      pagination,
+      ...(pagination && {
+        pagination: {
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
+        },
+      }),
     },
     onSortingChange: async updater => {
       if (typeof updater === 'function') {
@@ -243,15 +240,16 @@ export function Table<T>({
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    // manualPagination: pagination ? true : false,
-    // onPaginationChange: (updater) => {
-    //   if (typeof updater === 'function') {
-    //     const newPagination = updater(pagination);
-    //     setPagination(newPagination);
-    //   }
-    // },
-    onPaginationChange: setPagination,
+
+    getPaginationRowModel: pagination?.manualPagination ? undefined : getPaginationRowModel(),
+    manualPagination: pagination?.manualPagination ?? false,
+    onPaginationChange: pagination
+      ? updater => {
+          const newPagination =
+            typeof updater === 'function' ? updater(table.getState().pagination) : updater;
+          pagination.onPageChange(newPagination);
+        }
+      : undefined,
   });
 
   useEffect(() => {
@@ -410,13 +408,6 @@ export function Table<T>({
     content = suspenseWrapper(content);
   }
 
-  console.log({
-    pageCount: Math.ceil(tableData.length / pagination.pageSize),
-    pageIndex: pagination.pageIndex,
-    pageSize: pagination.pageSize,
-    totalRows: tableData.length,
-  });
-
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
       <Stack gap={0} alignItems="center" w="full" className="table-container">
@@ -425,14 +416,10 @@ export function Table<T>({
           <TablePaginationControls
             pageIndex={pagination.pageIndex}
             pageSize={pagination.pageSize}
-            pageCount={Math.ceil(tableData.length / pagination.pageSize)}
-            totalRows={tableData.length}
-            onPageChange={pageIndex => setPagination({ ...pagination, pageIndex })}
-            // onPageSizeChange={pageSize => setPagination({ ...pagination, pageSize })}
-            // pageCount={pagination.pageCount}
-            // totalRows={pagination.totalRows}
-            // onPageChange={pagination.onPageChange}
-            // onPageSizeChange={pagination.onPageSizeChange}
+            pageCount={pagination.pageCount}
+            totalRows={pagination.totalRows}
+            onPageChange={pagination.onPageChange}
+            onPageSizeChange={pagination.onPageSizeChange}
           />
         )}
       </Stack>
