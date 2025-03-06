@@ -10,7 +10,7 @@ import { useInfiniteQueryResult } from '../../../../common/hooks/useInfiniteQuer
 import { useBlocksByBurnBlock } from '../../../../common/queries/useBlocksByBurnBlock';
 import { truncateMiddle } from '../../../../common/utils/utils';
 import { Text } from '../../../../ui/Text';
-import BitcoinIcon from '../../../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../../../ui/icons/BitcoinCircleIcon';
 import StxIcon from '../../../../ui/icons/StxIcon';
 import { Caption } from '../../../../ui/typography';
 import { ListHeader } from '../../ListHeader';
@@ -264,7 +264,7 @@ function BitcoinHeader({
           <ArrowElbowLeftDown />
         </Icon>
         <Icon h={4.5} w={4.5}>
-          <BitcoinIcon />
+          <BitcoinCircleIcon />
         </Icon>
         <Flex height="full" alignItems="center">
           <ExplorerLink

@@ -7,9 +7,11 @@ import { ReactNode } from 'react';
 
 import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
+import { isRedesignUrl } from '../common/utils/url-utils';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { HomePageBlockListSkeleton } from './_components/BlockList/Grouped/skeleton';
 import { PageTitle } from './_components/PageTitle';
+import { RecentBlocks } from './_components/RecentBlocks/RecentBlocks';
 import { Stats } from './_components/Stats/Stats';
 import HomePageSkeleton from './skeleton';
 
@@ -33,8 +35,10 @@ export function HomePageLayout({
   txListTabs: ReactNode;
   blockList: ReactNode;
 }) {
+  const isRedesign = isRedesignUrl();
   return (
     <>
+      {isRedesign && <RecentBlocks />}
       {title}
       {stats}
       <Grid

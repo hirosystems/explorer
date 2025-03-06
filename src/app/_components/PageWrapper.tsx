@@ -57,17 +57,20 @@ function WrapperWithBg({
 }) {
   const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
   const isServer = typeof window === 'undefined';
-  const bgColor = isServer
-    ? serverThemeCookie
-      ? serverThemeCookie === 'light'
-        ? lightBg
-        : darkBg
-      : lightBg
-    : clientThemeCookie['stacks-explorer-theme']
-      ? clientThemeCookie['stacks-explorer-theme'] === 'light'
-        ? lightBg
-        : darkBg
-      : lightBg;
+  const isRedesign = isRedesignUrl();
+  const bgColor = isRedesign
+    ? 'surfaceTertiary'
+    : isServer
+      ? serverThemeCookie
+        ? serverThemeCookie === 'light'
+          ? lightBg
+          : darkBg
+        : lightBg
+      : clientThemeCookie['stacks-explorer-theme']
+        ? clientThemeCookie['stacks-explorer-theme'] === 'light'
+          ? lightBg
+          : darkBg
+        : lightBg;
   return (
     <StyledWrapper bg={bgColor} className="wrapper-with-bg">
       {children}
