@@ -1,6 +1,6 @@
 'use client';
 
-import type { ButtonProps, TextProps } from '@chakra-ui/react';
+import type { ButtonProps, HTMLChakraProps, TextProps } from '@chakra-ui/react';
 import {
   Button,
   Pagination as ChakraPagination,
@@ -62,7 +62,7 @@ export const PaginationEllipsis = React.forwardRef<HTMLDivElement, ChakraPaginat
   function PaginationEllipsis(props, ref) {
     return (
       <ChakraPagination.Ellipsis ref={ref} {...props} asChild>
-        <Button as="span" minW={10} bg="transparent" cursor="default">
+        <Button as="span" minW={8} bg="transparent" cursor="default">
           <Stack position="relative" h={4} w={4}>
             <Icon color="textTertiary" h={4} w={4} bottom={-1} position="absolute" left={0}>
               <DotsThree />
@@ -92,7 +92,7 @@ export const PaginationItem = React.forwardRef<HTMLButtonElement, ChakraPaginati
 
     return (
       <ChakraPagination.Item ref={ref} {...props} asChild>
-        <Button role="group" bg={current ? 'surfacePrimary' : 'transparent'} minW={10}>
+        <Button role="group" bg={current ? 'surfacePrimary' : 'transparent'}>
           <Text
             fontSize="xs"
             fontWeight="medium"
@@ -192,16 +192,56 @@ export const PaginationNextTrigger = React.forwardRef<
   );
 });
 
-export const PaginationItems = (props: React.HTMLAttributes<HTMLElement>) => {
+export interface PaginationItemsProps extends React.HTMLAttributes<HTMLElement> {
+  ellipsisProps?: HTMLChakraProps<'div'>;
+  itemProps?: Omit<HTMLChakraProps<'button'>, 'type' | 'value'>;
+}
+
+export const PaginationItems = (props: PaginationItemsProps) => {
+  const { ellipsisProps, itemProps, ...commonProps } = props;
   return (
     // @ts-ignore
     <ChakraPagination.Context>
       {({ pages }) => {
+        if (pages.length <= 5) {
+          let lastPage: { type: 'page'; value: number };
+          return pages.map((page, index) => {
+            if (page.type !== 'ellipsis') {
+              const item = (
+                <PaginationItem
+                  key={index}
+                  type="page"
+                  value={page.value}
+                  {...commonProps}
+                  {...(itemProps || {})}
+                />
+              );
+              lastPage = page;
+              return item;
+            } else {
+              return (
+                <PaginationItem
+                  key={index}
+                  type="page"
+                  value={lastPage.value + 1}
+                  {...commonProps}
+                  {...(itemProps || {})}
+                />
+              );
+            }
+          });
+        }
         return pages.map((page, index) => {
           return page.type === 'ellipsis' ? (
-            <PaginationEllipsis key={index} index={index} {...props} />
+            <PaginationEllipsis key={index} index={index} {...commonProps} {...ellipsisProps} />
           ) : (
-            <PaginationItem key={index} type="page" value={page.value} {...props} />
+            <PaginationItem
+              key={index}
+              type="page"
+              value={page.value}
+              {...commonProps}
+              {...(itemProps || {})}
+            />
           );
         });
       }}

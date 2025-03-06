@@ -27,6 +27,7 @@ interface TableStoryArgs extends TableProps<unknown> {
   isLoading?: boolean;
   pinFirstColumn?: boolean;
   hasPagination?: boolean;
+  pageSize?: number;
 }
 
 const meta: Meta<TableStoryArgs> = {
@@ -98,6 +99,10 @@ const meta: Meta<TableStoryArgs> = {
       control: 'boolean',
       description: 'Toggle pagination visibility',
     },
+    pageSize: {
+      control: 'number',
+      description: 'Set the page size',
+    },
   },
   decorators: [
     (Story, { args }) => {
@@ -138,8 +143,7 @@ export const SimpleTable: Story = {
 
     const SimpleTableComponent = () => {
       const [pageIndex, setPageIndex] = useState(0);
-      const [pageSize, setPageSize] = useState(3);
-      const pageCount = Math.ceil(simpleTableRowData.length / pageSize);
+      const [pageSize, setPageSize] = useState(args.pageSize ?? 3);
       const totalRows = simpleTableRowData.length;
 
       return (
@@ -162,7 +166,6 @@ export const SimpleTable: Story = {
                   manualPagination: false,
                   pageIndex,
                   pageSize,
-                  pageCount,
                   totalRows,
                   onPageChange: (page: PaginationState) => {
                     setPageIndex(page.pageIndex);
@@ -194,8 +197,7 @@ export const TxTable: Story = {
 
     const TxTableComponent = () => {
       const [pageIndex, setPageIndex] = useState(0);
-      const [pageSize, setPageSize] = useState(5);
-      const pageCount = Math.ceil(storybookTxTableRowData.length / pageSize);
+      const [pageSize, setPageSize] = useState(args.pageSize ?? 5);
       const totalRows = storybookTxTableRowData.length;
 
       return (
@@ -227,7 +229,6 @@ export const TxTable: Story = {
                     manualPagination: false,
                     pageIndex,
                     pageSize,
-                    pageCount,
                     totalRows,
                     onPageChange: (page: PaginationState) => {
                       setPageIndex(page.pageIndex);

@@ -86,9 +86,6 @@ export function BlocksTable() {
   const response = useBurnBlocks(pagination.pageSize, pagination.pageIndex * pagination.pageSize);
   const burnBlocks = useInfiniteQueryResult<BurnBlock>(response, pagination.pageSize);
 
-  const pageCount = response.data?.pages[0]?.total
-    ? Math.ceil(response.data?.pages[0].total / pagination.pageSize)
-    : 0;
   const totalRows = response.data?.pages[0].total || 0;
 
   const handlePageChange = useCallback((page: PaginationState) => {
@@ -120,7 +117,6 @@ export function BlocksTable() {
 
   // Because we don't want to show the loading state during pagination, we use this to get an initial load state
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-
   useEffect(() => {
     if (burnBlocks.length > 0) {
       setIsInitialLoad(false);
@@ -132,13 +128,11 @@ export function BlocksTable() {
       data={rowData}
       columns={columns}
       tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
-      // isLoading={response.isLoading}
       isLoading={isInitialLoad}
       pagination={{
         manualPagination: true,
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
-        pageCount,
         totalRows,
         onPageChange: handlePageChange,
       }}

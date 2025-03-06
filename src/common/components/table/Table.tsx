@@ -115,7 +115,6 @@ export type TableProps<T> = {
     manualPagination: boolean;
     pageIndex: number;
     pageSize: number;
-    pageCount: number;
     totalRows: number;
     onPageChange: (pagination: PaginationState) => void;
     onPageSizeChange?: (pageSize: PaginationState) => void;
@@ -416,7 +415,6 @@ export function Table<T>({
           <TablePaginationControls
             pageIndex={pagination.pageIndex}
             pageSize={pagination.pageSize}
-            pageCount={pagination.pageCount}
             totalRows={pagination.totalRows}
             onPageChange={pagination.onPageChange}
             onPageSizeChange={pagination.onPageSizeChange}

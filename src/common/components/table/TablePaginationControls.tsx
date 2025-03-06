@@ -13,7 +13,6 @@ import { useCallback, useState } from 'react';
 interface TablePaginationControlsProps {
   pageIndex: number; // the current page index
   pageSize: number; // the current page size, how many rows per page
-  pageCount: number; // the total number of pages
   totalRows: number; // the total number of rows
   onPageChange: (page: PaginationState) => void; // the callback to handle page indexchange
   onPageSizeChange?: (page: PaginationState) => void; // the callback to handle page size change
@@ -22,17 +21,21 @@ interface TablePaginationControlsProps {
 export function TablePaginationControls({
   pageIndex,
   pageSize,
-  pageCount,
   totalRows,
   onPageChange,
 }: TablePaginationControlsProps) {
+  const [inputValue, setInputValue] = useState<string>('');
+  const pageCount = Math.ceil(totalRows / pageSize);
+
   const handlePageChange = useCallback(
     (pageChangeDetails: PageChangeDetails) => {
+      if (pageChangeDetails.page > pageCount) {
+        return;
+      }
       onPageChange({ pageIndex: pageChangeDetails.page - 1, pageSize: pageChangeDetails.pageSize }); // Convert from 1-based to 0-based
     },
-    [onPageChange]
+    [onPageChange, pageCount]
   );
-  const [inputValue, setInputValue] = useState<string>('');
 
   return (
     <Grid
@@ -46,7 +49,12 @@ export function TablePaginationControls({
       gridTemplateColumns={{ base: '1fr', lg: 'auto 1px auto' }}
       gridTemplateRows={{ base: 'auto auto auto', lg: 'auto' }}
     >
-      <Flex alignItems="center" gap={4} px={4} py={2}>
+      <Flex
+        alignItems="center"
+        justifyContent="center"
+        px={{ base: 3, lg: 4 }}
+        py={{ base: 3, lg: 2 }}
+      >
         <PaginationRoot
           page={pageIndex + 1} // the current page index, +1 because the pagination component is 1-based
           pageSize={pageSize} // the current page size, how many rows per page
@@ -54,12 +62,41 @@ export function TablePaginationControls({
           siblingCount={1} // the number of sibling pages to show on either side of the current page
           onPageChange={handlePageChange} // the callback to handle page index change
         >
-          <HStack gap={4}>
-            <PaginationPrevTrigger px={2} py={1} h="fit-content" />
+          <HStack gap={{ base: 1, lg: 4 }}>
+            <PaginationPrevTrigger
+              px={2}
+              py={1}
+              minW={8}
+              maxW={8}
+              minH={{ base: 8, lg: 6 }}
+              maxH={{ base: 8, lg: 6 }}
+            />
             <HStack gap={1}>
-              <PaginationItems />
+              <PaginationItems
+                itemProps={{
+                  minW: 8,
+                  maxW: 8,
+                  minH: 8,
+                  maxH: 8,
+                  border: 'none',
+                }}
+                ellipsisProps={{
+                  minW: 8,
+                  maxW: 8,
+                  minH: 8,
+                  maxH: 8,
+                  border: 'none',
+                }}
+              />
             </HStack>
-            <PaginationNextTrigger px={2} py={1} h="fit-content" />
+            <PaginationNextTrigger
+              px={2}
+              py={1}
+              maxW={8}
+              minW={8}
+              minH={{ base: 8, lg: 6 }}
+              maxH={{ base: 8, lg: 6 }}
+            />
           </HStack>
         </PaginationRoot>
       </Flex>
@@ -72,7 +109,7 @@ export function TablePaginationControls({
         borderWidth="1px"
       />
 
-      <Flex gap={4} px={4} py={2} alignItems="center" justifyContent="center">
+      <Flex gap={4} px={4} py={{ base: 3, lg: 2 }} alignItems="center" justifyContent="center">
         <Flex gap={2} alignItems="center">
           <Input
             variant="redesignPrimary"
@@ -104,19 +141,16 @@ export function TablePaginationControls({
           </Text>
         </Flex>
         <Button
-          bg="surfacePrimary"
-          p={1}
+          py={1.5}
+          px={3}
           onClick={() => {
             handlePageChange({ page: Number(inputValue), pageSize });
             setInputValue('');
           }}
-          h="fit-content"
-          w="fit-content"
           variant="redesignSecondary"
+          size="small"
         >
-          <Text fontSize="xs" color="var(--stacks-colors-neutral-sand-400)" borderRadius="sm">
-            GO
-          </Text>
+          Go
         </Button>
       </Flex>
     </Grid>
