@@ -7,9 +7,11 @@ import {
   Column,
   ColumnDef,
   ColumnPinningState,
+  PaginationState,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -17,23 +19,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { TableContainer } from './TableContainer';
-import { ScrollIndicatorWrapper } from './TableScrollIndicatorWrapper';
 import { TablePaginationControls } from './TablePaginationControls';
+import { ScrollIndicatorWrapper } from './TableScrollIndicatorWrapper';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends unknown, TValue> {
     tooltip?: string;
     isPinned?: 'left' | 'right' | false;
   }
-}
-
-interface TablePaginationContextType {
-  pageIndex: number;
-  pageSize: number;
-  pageCount: number;
-  totalRows: number;
-  setPageIndex: (index: number) => void;
-  setPageSize: (size: number) => void;
 }
 
 const getCommonPinningStyles = <T,>(column: Column<T>) => {
@@ -122,7 +115,7 @@ export type TableProps<T> = {
     pageIndex: number;
     pageSize: number;
     pageCount: number;
-    totalRows: number;
+    totalRows?: number;
     onPageChange: (pageIndex: number) => void;
     onPageSizeChange?: (pageSize: number) => void;
   };
@@ -212,11 +205,17 @@ export function Table<T>({
   bannerRow,
   error,
   pagination,
-}: TableProps<T>) {
+}
+: TableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
 
   const columnPinning = useMemo(() => getColumnPinningState(columns), [columns]);
+
+  const [innerPagination, setInnerPagination] = React.useState<PaginationState>({
+    pageIndex:== 0,
+    pageSize: 5,
+  });
 
   const table = useReactTable({
     data: tableData,
@@ -224,10 +223,11 @@ export function Table<T>({
     state: {
       sorting,
       columnPinning,
-      pagination: {
-        pageIndex: 0,
-        pageSize: 10,
-      },
+      // pagination: {
+      //   pageIndex: pagination?.pageIndex ?? 0,
+      //   pageSize: pagination?.pageSize ?? 0,
+      // },
+      pagination,
     },
     onSortingChange: async updater => {
       if (typeof updater === 'function') {
@@ -243,7 +243,15 @@ export function Table<T>({
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    manualPagination: true, // Enable manual pagination
+    getPaginationRowModel: getPaginationRowModel(),
+    // manualPagination: pagination ? true : false,
+    // onPaginationChange: (updater) => {
+    //   if (typeof updater === 'function') {
+    //     const newPagination = updater(pagination);
+    //     setPagination(newPagination);
+    //   }
+    // },
+    onPaginationChange: setPagination,
   });
 
   useEffect(() => {
@@ -402,19 +410,32 @@ export function Table<T>({
     content = suspenseWrapper(content);
   }
 
+  console.log({
+    pageCount: Math.ceil(tableData.length / pagination.pageSize),
+    pageIndex: pagination.pageIndex,
+    pageSize: pagination.pageSize,
+    totalRows: tableData.length,
+  });
+
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
-      {content}
-      {pagination && (
-        <TablePaginationControls 
-          pageIndex={pagination.pageIndex}
-          pageSize={pagination.pageSize}
-          pageCount={pagination.pageCount}
-          totalRows={pagination.totalRows}
-          onPageChange={pagination.onPageChange}
-          onPageSizeChange={pagination.onPageSizeChange}
-        />
-      )}
+      <Stack gap={0} alignItems="center" w="full" className="table-container">
+        {content}
+        {pagination && (
+          <TablePaginationControls
+            pageIndex={pagination.pageIndex}
+            pageSize={pagination.pageSize}
+            pageCount={Math.ceil(tableData.length / pagination.pageSize)}
+            totalRows={tableData.length}
+            onPageChange={pageIndex => setPagination({ ...pagination, pageIndex })}
+            // onPageSizeChange={pageSize => setPagination({ ...pagination, pageSize })}
+            // pageCount={pagination.pageCount}
+            // totalRows={pagination.totalRows}
+            // onPageChange={pagination.onPageChange}
+            // onPageSizeChange={pagination.onPageSizeChange}
+          />
+        )}
+      </Stack>
     </ExplorerErrorBoundary>
   );
 }

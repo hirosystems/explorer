@@ -41,24 +41,29 @@ export function useSuspenseBurnBlocks(
 
 export function useBurnBlocks(
   limit = DEFAULT_BURN_BLOCKS_LIMIT,
-  offset = 0,
-  cursor = '',
+  offset?: number,
+  cursor?: string,
   options: any = {},
   queryKeyExtension?: string
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
   const apiClient = useApiClient();
   return useInfiniteQuery({
-    queryKey: queryKeyExtension
-      ? [BURN_BLOCKS_QUERY_KEY, limit, queryKeyExtension]
-      : [BURN_BLOCKS_QUERY_KEY, limit],
-    queryFn: async ({ pageParam }: { pageParam: number }) => {
+    queryKey: [
+      BURN_BLOCKS_QUERY_KEY,
+      limit,
+      ...(offset ? [offset] : []),
+      ...(cursor ? [cursor] : []),
+      ...(queryKeyExtension ? [queryKeyExtension] : []),
+    ],
+    queryFn: async () => {
       return await callApiWithErrorHandling(apiClient, '/extended/v2/burn-blocks/', {
-        params: { query: { limit, offset: pageParam } },
+        params: { query: { limit, offset, cursor } },
       });
     },
     getNextPageParam,
     initialPageParam: 0,
     staleTime: TWO_MINUTES,
+    placeholderData: keepPreviousData => keepPreviousData,
     ...options,
   });
 }

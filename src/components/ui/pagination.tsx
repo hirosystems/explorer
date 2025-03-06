@@ -4,12 +4,14 @@ import type { ButtonProps, TextProps } from '@chakra-ui/react';
 import {
   Button,
   Pagination as ChakraPagination,
-  IconButton,
+  Icon,
+  Stack,
   createContext,
   usePaginationContext,
 } from '@chakra-ui/react';
+import { CaretLeft, CaretRight, DotsThree } from '@phosphor-icons/react';
 import * as React from 'react';
-import { HiChevronLeft, HiChevronRight, HiMiniEllipsisHorizontal } from 'react-icons/hi2';
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
 
 import { Text } from '../../ui/Text';
 import { LinkButton } from './link-button';
@@ -38,6 +40,7 @@ export interface PaginationRootProps extends Omit<ChakraPagination.RootProps, 't
   getHref?: (page: number) => string;
 }
 
+// TODO: probably don't want to use this
 const variantMap: Record<PaginationVariant, ButtonVariantMap> = {
   outline: { default: 'ghost', ellipsis: 'plain', current: 'outline' },
   solid: { default: 'outline', ellipsis: 'outline', current: 'solid' },
@@ -47,6 +50,7 @@ const variantMap: Record<PaginationVariant, ButtonVariantMap> = {
 export const PaginationRoot = React.forwardRef<HTMLDivElement, PaginationRootProps>(
   function PaginationRoot(props, ref) {
     const { size = 'sm', variant = 'outline', getHref, ...rest } = props;
+    console.log('paginationroot', { size, variant, getHref, rest });
     return (
       <RootPropsProvider value={{ size, variantMap: variantMap[variant], getHref }}>
         <ChakraPagination.Root ref={ref} type={getHref ? 'link' : 'button'} {...rest} />
@@ -57,11 +61,14 @@ export const PaginationRoot = React.forwardRef<HTMLDivElement, PaginationRootPro
 
 export const PaginationEllipsis = React.forwardRef<HTMLDivElement, ChakraPagination.EllipsisProps>(
   function PaginationEllipsis(props, ref) {
-    const { size, variantMap } = useRootProps();
     return (
       <ChakraPagination.Ellipsis ref={ref} {...props} asChild>
-        <Button as="span" variant={variantMap.ellipsis} size={size}>
-          <HiMiniEllipsisHorizontal />
+        <Button as="span" minW={10} bg="transparent" cursor="default">
+          <Stack position="relative" h={4} w={4}>
+            <Icon color="textTertiary" h={4} w={4} bottom={-1} position="absolute" left={0}>
+              <DotsThree />
+            </Icon>
+          </Stack>
         </Button>
       </ChakraPagination.Ellipsis>
     );
@@ -86,8 +93,16 @@ export const PaginationItem = React.forwardRef<HTMLButtonElement, ChakraPaginati
 
     return (
       <ChakraPagination.Item ref={ref} {...props} asChild>
-        <Button variant={variant} size={size}>
-          {props.value}
+        <Button role="group" bg={current ? 'surfacePrimary' : 'transparent'} minW={10}>
+          <Text
+            fontSize="xs"
+            fontWeight="medium"
+            color={current ? 'textPrimary' : 'textTertiary'}
+            _groupHover={{ color: 'textPrimary' }}
+            borderRadius="sm"
+          >
+            {props.value}
+          </Text>
         </Button>
       </ChakraPagination.Item>
     );
@@ -115,9 +130,25 @@ export const PaginationPrevTrigger = React.forwardRef<
 
   return (
     <ChakraPagination.PrevTrigger ref={ref} asChild {...props}>
-      <IconButton variant={variantMap.default} size={size}>
-        <HiChevronLeft />
-      </IconButton>
+      <Button
+        bg={previousPage ? 'surfaceInvert' : 'var(--stacks-colors-neutral-sand-150)'}
+        _hover={{
+          bg: previousPage
+            ? {
+                base: 'var(--stacks-colors-neutral-sand-1000)',
+                _dark: 'var(--stacks-colors-neutral-white)',
+              }
+            : 'var(--stacks-colors-neutral-sand-150)',
+        }}
+      >
+        <Icon
+          h={4}
+          w={4}
+          color={previousPage ? 'iconInvert' : 'var(--stacks-colors-neutral-sand-400)'}
+        >
+          <CaretLeft />
+        </Icon>
+      </Button>
     </ChakraPagination.PrevTrigger>
   );
 });
@@ -143,9 +174,21 @@ export const PaginationNextTrigger = React.forwardRef<
 
   return (
     <ChakraPagination.NextTrigger ref={ref} asChild {...props}>
-      <IconButton variant={variantMap.default} size={size}>
-        <HiChevronRight />
-      </IconButton>
+      <Button
+        bg={nextPage ? 'surfaceInvert' : 'var(--stacks-colors-neutral-sand-150)'}
+        _hover={{
+          bg: nextPage
+            ? {
+                base: 'var(--stacks-colors-neutral-sand-1000)',
+                _dark: 'var(--stacks-colors-neutral-white)',
+              }
+            : 'var(--stacks-colors-neutral-sand-150)',
+        }}
+      >
+        <Icon h={4} w={4} color={nextPage ? 'iconInvert' : 'var(--stacks-colors-neutral-sand-400)'}>
+          <CaretRight />
+        </Icon>
+      </Button>
     </ChakraPagination.NextTrigger>
   );
 });
@@ -154,15 +197,16 @@ export const PaginationItems = (props: React.HTMLAttributes<HTMLElement>) => {
   return (
     // @ts-ignore
     <ChakraPagination.Context>
-      {({ pages }) =>
-        pages.map((page, index) => {
+      {({ pages, ...rest }) => {
+        console.log('pages', pages, rest);
+        return pages.map((page, index) => {
           return page.type === 'ellipsis' ? (
             <PaginationEllipsis key={index} index={index} {...props} />
           ) : (
             <PaginationItem key={index} type="page" value={page.value} {...props} />
           );
-        })
-      }
+        });
+      }}
     </ChakraPagination.Context>
   );
 };
@@ -188,3 +232,9 @@ export const PaginationPageText = React.forwardRef<HTMLParagraphElement, PageTex
     );
   }
 );
+
+export interface PageChangeDetails {
+  // This should be exported from Chakra UI
+  page: number;
+  pageSize: number;
+}

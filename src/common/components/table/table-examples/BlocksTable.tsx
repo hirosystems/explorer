@@ -3,7 +3,7 @@
 import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
 import { useBurnBlocks } from '@/common/queries/useBurnBlocksInfinite';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BurnBlock } from '@stacks/stacks-blockchain-api-types';
 
@@ -78,15 +78,32 @@ export const columns: ColumnDef<BlocksTableData>[] = [
 ];
 
 export function BlocksTable() {
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 20,
   });
-  
 
-  const response = useBurnBlocks(20);
-  const burnBlocks = useInfiniteQueryResult<BurnBlock>(response, 100);
+  const response = useBurnBlocks(pagination.pageSize, pagination.pageIndex * pagination.pageSize);
+  const burnBlocks = useInfiniteQueryResult<BurnBlock>(response, pagination.pageSize);
+
+  const pageCount = response.data?.pages[0]?.total
+    ? Math.ceil(response.data?.pages[0].total / pagination.pageSize)
+    : 0;
+  const totalRows = response.data?.pages[0].total || 0;
+
+  const handlePageChange = useCallback((newPageIndex: number) => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: newPageIndex,
+    }));
+  }, []);
+
+  const handlePageSizeChange = useCallback((newPageSize: number) => {
+    setPagination(prev => ({
+      pageIndex: 0, // Reset to first page when changing page size
+      pageSize: newPageSize,
+    }));
+  }, []);
 
   const rowData: BlocksTableData[] = useMemo(
     () =>
@@ -108,19 +125,30 @@ export function BlocksTable() {
     [burnBlocks]
   );
 
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  })
+  // Because we don't want to show the loading state during pagination, we use this to get an initial load state
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    if (burnBlocks.length > 0) {
+      setIsInitialLoad(false);
+    }
+  }, [burnBlocks]);
 
   return (
     <Table
       data={rowData}
       columns={columns}
-      tableContainerWrapper={table => (
-        <TableContainer pagination={pagination}>{table}</TableContainer>
-      )}
-      isLoading={response.isLoading}
+      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
+      // isLoading={response.isLoading}
+      isLoading={isInitialLoad}
+      pagination={{
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        pageCount,
+        totalRows,
+        onPageChange: handlePageChange,
+        onPageSizeChange: handlePageSizeChange,
+      }}
     />
   );
 }

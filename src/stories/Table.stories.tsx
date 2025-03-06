@@ -1,8 +1,15 @@
 import { Table, TableProps } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
+import { TablePaginationControls } from '@/common/components/table/TablePaginationControls';
 import { TableSkeleton } from '@/common/components/table/TableSkeleton';
 import { UpdateTableBannerRow } from '@/common/components/table/table-examples/TxsTable';
-import { Box, Stack } from '@chakra-ui/react';
+import {
+  PaginationItems,
+  PaginationNextTrigger,
+  PaginationPrevTrigger,
+  PaginationRoot,
+} from '@/components/ui/pagination';
+import { Box, HStack, Stack } from '@chakra-ui/react';
 import { MINIMAL_VIEWPORTS } from '@storybook/addon-viewport';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Suspense } from 'react';
@@ -25,6 +32,7 @@ interface TableStoryArgs extends TableProps<unknown> {
   hasError?: boolean;
   isLoading?: boolean;
   pinFirstColumn?: boolean;
+  hasPagination?: boolean;
 }
 
 const meta: Meta<TableStoryArgs> = {
@@ -92,15 +100,18 @@ const meta: Meta<TableStoryArgs> = {
       control: 'boolean',
       description: 'Toggle error visibility',
     },
+    hasPagination: {
+      control: 'boolean',
+      description: 'Toggle pagination visibility',
+    },
   },
   decorators: [
     (Story, { args }) => {
       return (
         <Box
           w={'100vw'}
-          h={'100vh'}
-          bg="gray.50"
-          overflow="hidden"
+          h={'100%'}
+          bg="surfaceFourth"
           border="1px solid"
           borderColor="redesignBorderPrimary"
           className="not-story-book-root"
@@ -160,29 +171,48 @@ export const TxTable: Story = {
       );
     }
 
+    // const pageSize = 5;
+    // const pageCount = Math.ceil(storybookTxTableRowData.length / pageSize);
+
     return (
-      <Table
-        tableContainerWrapper={
-          args.hasTableContainerWrapper
-            ? table => <TableContainer>{table}</TableContainer>
-            : undefined
-        }
-        columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
-        data={args.isEmpty ? [] : storybookTxTableRowData}
-        bannerRow={args.bannerRow ? <UpdateTableBannerRow /> : undefined}
-        isLoading={args.isLoading}
-        suspenseWrapper={
-          args.hasSuspenseWrapper
-            ? table => (
-                <Suspense fallback={<TableSkeleton numRows={10} numColumns={5} />}>
-                  {table}
-                </Suspense>
-              )
-            : undefined
-        }
-        hasScrollIndicator={args.hasScrollIndicator}
-        error={args.hasError ? (args.error ? args.error : 'An error occurred') : undefined}
-      />
+      <>
+        <Table
+          tableContainerWrapper={
+            args.hasTableContainerWrapper
+              ? table => <TableContainer>{table}</TableContainer>
+              : undefined
+          }
+          columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
+          data={args.isEmpty ? [] : storybookTxTableRowData}
+          bannerRow={args.bannerRow ? <UpdateTableBannerRow /> : undefined}
+          isLoading={args.isLoading}
+          suspenseWrapper={
+            args.hasSuspenseWrapper
+              ? table => (
+                  <Suspense fallback={<TableSkeleton numRows={10} numColumns={5} />}>
+                    {table}
+                  </Suspense>
+                )
+              : undefined
+          }
+          hasScrollIndicator={args.hasScrollIndicator}
+          error={args.hasError ? (args.error ? args.error : 'An error occurred') : undefined}
+          // pagination={args.hasPagination ? {
+          //   pageIndex: 0,
+          //   pageSize,
+          //   pageCount,
+          //   onPageChange: () => {},
+          //   onPageSizeChange: () => {},
+          // } : undefined}
+        />
+        <TablePaginationControls
+          pageIndex={0}
+          pageSize={5}
+          pageCount={10}
+          onPageChange={() => {}}
+          onPageSizeChange={() => {}}
+        />
+      </>
     );
   },
 };

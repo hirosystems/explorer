@@ -1,44 +1,12 @@
-import { Box, Flex, FlexProps, Stack } from '@chakra-ui/react';
-import { PaginationState } from '@tanstack/react-table';
+import { Box, FlexProps, Stack } from '@chakra-ui/react';
 
 import { Card } from '../Card';
-import {
-  PaginationItem,
-  PaginationNextTrigger,
-  PaginationPrevTrigger,
-  PaginationRoot,
-} from '@/components/ui/pagination';
 
-interface TableContainerProps extends FlexProps {
-  pagination?: PaginationState;
-}
+interface TableContainerProps extends FlexProps {}
 
-const TablePaginationContainer = ({ pagination }: { pagination: PaginationState }) => {
+export function TableContainer({ children, ...rest }: TableContainerProps) {
   return (
-    <Flex
-      alignItems="center"
-      justifyContent="space-between"
-      w="fit-content"
-      px={4}
-      py={2}
-      borderBottomLeftRadius="md"
-      borderBottomRightRadius="md"
-      border="1px solid"
-      borderTop="none"
-      borderColor="redesignBorderSecondary"
-    >
-      <PaginationRoot>
-        <PaginationPrevTrigger />
-        <PaginationItem />
-        <PaginationNextTrigger />
-      </PaginationRoot>
-    </Flex>
-  );
-};
-
-export function TableContainer({ children, pagination, ...rest }: TableContainerProps) {
-  return (
-    <Stack gap={0} alignItems="center">
+    <Stack gap={0} alignItems="center" w="full">
       <Card
         h="fit-content"
         w="full"
@@ -57,7 +25,6 @@ export function TableContainer({ children, pagination, ...rest }: TableContainer
           {children}
         </Box>
       </Card>
-      {pagination && <TablePaginationContainer pagination={pagination} />}
     </Stack>
   );
 }
