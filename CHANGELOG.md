@@ -1,3 +1,10 @@
+# [1.255.0](https://github.com/hirosystems/explorer/compare/v1.254.2...v1.255.0) (2025-03-06)
+
+
+### Features
+
+* added table component ([b8a2329](https://github.com/hirosystems/explorer/commit/b8a2329d327b3ce3f15a32cd90b69f2eeed22ed4))
+
 ## [1.254.2](https://github.com/hirosystems/explorer/compare/v1.254.1...v1.254.2) (2025-03-06)
 
 
