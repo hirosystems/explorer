@@ -1,3 +1,10 @@
+## [1.254.2](https://github.com/hirosystems/explorer/compare/v1.254.1...v1.254.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* listed droid as verified token ([c88d986](https://github.com/hirosystems/explorer/commit/c88d986343909429e28ca70201db7d25faa0f2df))
+
 ## [1.254.1](https://github.com/hirosystems/explorer/compare/v1.254.0...v1.254.1) (2025-03-05)
 
 
