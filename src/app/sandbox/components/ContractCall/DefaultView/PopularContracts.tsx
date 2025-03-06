@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { Circle } from '../../../../../common/components/Circle';
 import { ExplorerLink } from '../../../../../common/components/ExplorerLinks';
 import { Section } from '../../../../../common/components/Section';
-import BitcoinIcon from '../../../../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../../../../ui/icons/BitcoinCircleIcon';
 import { Caption, Title } from '../../../../../ui/typography';
 
 const defaultContracts = (address: string) => [
@@ -13,7 +13,7 @@ const defaultContracts = (address: string) => [
     name: 'pox-4',
     address,
     description: '',
-    icon: BitcoinIcon,
+    icon: BitcoinCircleIcon,
   },
   {
     name: 'bns',

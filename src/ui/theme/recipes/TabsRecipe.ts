@@ -86,11 +86,13 @@ export const tabsSlotRecipe = defineSlotRecipe({
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
+          flexWrap: 'wrap',
         },
         list: {
           display: 'inline-flex',
           position: 'relative',
           isolation: 'isolate',
+          p: '0',
           _horizontal: {
             flexDirection: 'row',
           },
@@ -126,6 +128,7 @@ export const tabsSlotRecipe = defineSlotRecipe({
         content: {
           focusVisibleRing: 'inside',
           _horizontal: {
+            flex: '0 0 100%',
             width: '100%',
           },
           _vertical: {

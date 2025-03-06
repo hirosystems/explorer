@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 
 import { Card } from '../../common/components/Card';
 import { Text } from '../../ui/Text';
-import BitcoinIcon from '../../ui/icons/BitcoinIcon';
+import BitcoinCircleIcon from '../../ui/icons/BitcoinCircleIcon';
 import { ExplorerErrorBoundary } from '../_components/ErrorBoundary';
 import { useSuspenseNextStackingCycle } from '../_components/Stats/NextStackingCycle/useNextStackingCycle';
 import { StatCardBase } from './StatsCardBase';
@@ -33,7 +33,7 @@ export function NextCycleCardBase() {
           </Text>
           <Text display="inline" whiteSpace="nowrap">
             <Icon h={3} w={3}>
-              <BitcoinIcon />
+              <BitcoinCircleIcon />
             </Icon>
             &nbsp;{`#${preparePhaseBurnBlockHeightStart}`}
           </Text>
@@ -50,7 +50,7 @@ export function NextCycleCardBase() {
         </Text>
         <Text display="inline" whiteSpace="nowrap">
           <Icon h={3} w={3}>
-            <BitcoinIcon />
+            <BitcoinCircleIcon />
           </Icon>
           &nbsp;{`#${rewardPhaseBurnBlockHeightStart}`}
         </Text>
