@@ -11,7 +11,6 @@ export function ScrollIndicatorWrapper({ children, ...rest }: BoxProps & { child
     const checkForScroll = () => {
       if (divRef.current) {
         const { scrollWidth, clientWidth } = divRef.current;
-        console.log('checking for scroll');
         setHasHorizontalScroll(scrollWidth > clientWidth);
       }
     };
@@ -20,12 +19,10 @@ export function ScrollIndicatorWrapper({ children, ...rest }: BoxProps & { child
       if (divRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = divRef.current;
         // Add small buffer (1px) for floating point precision
-        console.log('checking scroll position');
         setIsScrolledToEnd(Math.abs(scrollWidth - clientWidth - scrollLeft) <= 1);
       }
     };
 
-    // Debounce the handlers with a 150ms delay
     const debouncedCheckForScroll = debounce(checkForScroll, 150);
     const debouncedCheckScrollPosition = debounce(checkScrollPosition, 150);
 
@@ -40,7 +37,6 @@ export function ScrollIndicatorWrapper({ children, ...rest }: BoxProps & { child
     return () => {
       element?.removeEventListener('scroll', debouncedCheckScrollPosition);
       window.removeEventListener('resize', debouncedCheckForScroll);
-      // Clean up any pending timeouts
       debouncedCheckForScroll.cancel?.();
       debouncedCheckScrollPosition.cancel?.();
     };

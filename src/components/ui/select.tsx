@@ -80,7 +80,6 @@ export const SelectValueText = React.forwardRef<HTMLSpanElement, SelectValueText
     const { children, ...rest } = props;
     return (
       <ChakraSelect.ValueText {...rest} ref={ref}>
-        {/* @ts-ignore */}
         <ChakraSelect.Context>
           {select => {
             const items = select.selectedItems;
