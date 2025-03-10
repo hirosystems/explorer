@@ -1,3 +1,10 @@
+## [1.255.1](https://github.com/hirosystems/explorer/compare/v1.255.0...v1.255.1) (2025-03-10)
+
+
+### Bug Fixes
+
+* fixed small button recipe ([39512af](https://github.com/hirosystems/explorer/commit/39512afa8630b7f7521484b94bd18c636242fe9d))
+
 # [1.255.0](https://github.com/hirosystems/explorer/compare/v1.254.2...v1.255.0) (2025-03-06)
 
 
