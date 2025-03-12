@@ -1,9 +1,7 @@
-import { SkeletonCircle } from '@/components/ui/skeleton';
-import { ClientOnly, Flex } from '@chakra-ui/react';
 import { Cell, Pie, PieChart } from 'recharts';
 
-const pieChartWidth = 215;
-const pieChartHeight = 200;
+export const pieChartWidth = 215;
+export const pieChartHeight = 200;
 
 const renderCustomizedLabel = ({
   percent,
@@ -97,47 +95,34 @@ export function MempoolFeePieChart({
     });
 
   return (
-    <ClientOnly
-      fallback={
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          width={pieChartWidth}
-          height={pieChartHeight}
-        >
-          <SkeletonCircle width={134} height={134} />
-        </Flex>
-      }
-    >
-      <PieChart width={pieChartWidth} height={pieChartHeight} id="mempool-fee-pie-chart">
-        <Pie
-          paddingAngle={3}
-          startAngle={0}
-          data={pieData}
-          dataKey="value"
-          nameKey="name"
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={props =>
-            renderCustomizedLabel({
-              ...props,
-            })
-          }
-          innerRadius={60}
-          outerRadius={67}
-        >
-          {pieData &&
-            pieData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={getTxTypePieChartColor(entry.name)} stroke="none" />
-            ))}
-        </Pie>
-        {renderCenterCustomizedLabel({
-          label: `${totalTxCount} tx`,
-          cx: pieChartWidth / 2,
-          cy: pieChartHeight / 2,
-        })}
-      </PieChart>
-    </ClientOnly>
+    <PieChart width={pieChartWidth} height={pieChartHeight} id="mempool-fee-pie-chart">
+      <Pie
+        paddingAngle={3}
+        startAngle={0}
+        data={pieData}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        labelLine={false}
+        label={props =>
+          renderCustomizedLabel({
+            ...props,
+          })
+        }
+        innerRadius={60}
+        outerRadius={67}
+      >
+        {pieData &&
+          pieData.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getTxTypePieChartColor(entry.name)} stroke="none" />
+          ))}
+      </Pie>
+      {renderCenterCustomizedLabel({
+        label: `${totalTxCount} tx`,
+        cx: pieChartWidth / 2,
+        cy: pieChartHeight / 2,
+      })}
+    </PieChart>
   );
 }

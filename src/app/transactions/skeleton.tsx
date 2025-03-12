@@ -1,41 +1,129 @@
 'use client';
 
-import { TabsContainer } from '../../common/components/TabsContainer';
-import { Skeleton as SkeletonItem } from '../../components/ui/skeleton';
-import { SkeletonTxsList } from '../../features/txs-list/SkeletonTxsList';
-import { PageTitle } from '../_components/PageTitle';
-import { StatsWrapper } from '../_components/Stats/StatsWrapper';
-import { SkeletonStatSection } from '../_components/Stats/skeleton';
+import { getTxTypeIcon } from '@/common/components/TxIcon';
+import { Flex, FlexProps } from '@chakra-ui/react';
 
-export default function Skeleton() {
+import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types/generated';
+
+import {
+  SkeletonCircle,
+  Skeleton as SkeletonItem,
+  SkeletonText,
+} from '../../components/ui/skeleton';
+import { pieChartHeight, pieChartWidth } from './MempoolFeePieChart';
+import {
+  MempoolFeePieChartSectionLayout,
+  MempoolFeeStatLineLayout,
+} from './MempoolFeePieChartSection';
+import {
+  MempoolFeePriorityCardLayout,
+  MempoolFeePriorityCardTitleLayout,
+  MempoolFeePriorityCardTransactionTypeFeeStatLineLayout,
+  MempoolFeePriorityCardsLayout,
+} from './MempoolFeePriorityCardsSection';
+import { MempoolFeeStatsLayout } from './MempoolFeeStats';
+import { TransactionTypeFilterTypes } from './TransactionTypeFilterMenu';
+
+const MempoolFeeStatLineSkeleton = () => {
+  return (
+    <MempoolFeeStatLineLayout
+      icon={<SkeletonItem width={'2.5px'} height={'2.5px'} borderRadius={'50%'} />}
+      text={<SkeletonItem width={'100px'} height={'10px'} />}
+      dotBg={'gray.200'}
+    />
+  );
+};
+
+export const MempoolFeeStatLinesSkeleton = () => {
   return (
     <>
-      <PageTitle>
-        <SkeletonItem width={'400px'} height={'43px'} />
-      </PageTitle>
-      <StatsWrapper>
-        <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />
-        <SkeletonStatSection borderRightWidth={['0px', '0px', '0px', '1px']} />
-        <SkeletonStatSection borderRightWidth={['0px', '0px', '1px', '1px']} />
-        <SkeletonStatSection />
-      </StatsWrapper>
+      <MempoolFeeStatLineSkeleton />
+      <MempoolFeeStatLineSkeleton />
+      <MempoolFeeStatLineSkeleton />
+    </>
+  );
+};
 
-      <TabsContainer
-        tabs={[
-          {
-            title: 'Confirmed',
-            id: 'confirmed',
-            content: <SkeletonTxsList />,
-          },
-          {
-            title: 'Pending',
-            id: 'pending',
-            content: <SkeletonTxsList />,
-          },
-        ]}
-        actions={null}
-        gridColumnEnd={'3'}
+export const MempoolFeePieChartSectionSkeleton = () => {
+  return (
+    <MempoolFeePieChartSectionLayout
+      pieChart={<MempoolFeePieChartSkeleton />}
+      statLines={<MempoolFeeStatLinesSkeleton />}
+    />
+  );
+};
+
+export const MempoolFeePieChartSkeleton = () => {
+  return (
+    <Flex justifyContent="center" alignItems="center" width={pieChartWidth} height={pieChartHeight}>
+      <SkeletonCircle width={134} height={134} />
+    </Flex>
+  );
+};
+
+const MempoolFeePriorityCardTransactionTypeFeeStatLinesSkeleton = () => {
+  return (
+    <>
+      <MempoolFeePriorityCardTransactionTypeFeeStatLineLayout
+        icon={getTxTypeIcon('token_transfer')}
+        fee={<SkeletonItem width={'100px'} height={'10px'} />}
+        tooltipContent={null}
+      />
+      <MempoolFeePriorityCardTransactionTypeFeeStatLineLayout
+        icon={getTxTypeIcon('contract_call')}
+        fee={<SkeletonItem width={'100px'} height={'10px'} />}
+        tooltipContent={null}
+      />
+      <MempoolFeePriorityCardTransactionTypeFeeStatLineLayout
+        icon={getTxTypeIcon('smart_contract')}
+        fee={<SkeletonItem width={'100px'} height={'10px'} />}
+        tooltipContent={null}
       />
     </>
   );
-}
+};
+
+export const MempoolFeePriorityCardSkeleton = ({
+  priority,
+}: {
+  priority: keyof MempoolFeePriorities['all'];
+} & FlexProps) => {
+  return (
+    <MempoolFeePriorityCardLayout
+      title={<MempoolFeePriorityCardTitleLayout priority={priority} />}
+      mainText={<SkeletonText width={25} height={6} noOfLines={1} />}
+      secondaryText={<SkeletonItem width={12} height={5} />}
+      txTypeFeeStatLines={<MempoolFeePriorityCardTransactionTypeFeeStatLinesSkeleton />}
+    />
+  );
+};
+
+export const MempoolFeePriorityCardsSkeleton = () => {
+  return (
+    <>
+      <MempoolFeePriorityCardSkeleton priority={'no_priority'} />
+      <MempoolFeePriorityCardSkeleton priority={'low_priority'} />
+      <MempoolFeePriorityCardSkeleton priority={'medium_priority'} />
+      <MempoolFeePriorityCardSkeleton priority={'high_priority'} />
+    </>
+  );
+};
+
+export const MempoolFeePriorityCardsSectionSkeleton = () => {
+  return (
+    <MempoolFeePriorityCardsLayout
+      transactionType={TransactionTypeFilterTypes.AverageForAllTransactions}
+      setTransactionType={() => {}}
+      mempoolFeePriorityCards={<MempoolFeePriorityCardsSkeleton />}
+    />
+  );
+};
+
+export const MempoolFeeStatsSkeleton = () => {
+  return (
+    <MempoolFeeStatsLayout
+      mempoolFeePieChartSection={<MempoolFeePieChartSectionSkeleton />}
+      mempoolFeePriorityCardsSection={<MempoolFeePriorityCardsSectionSkeleton />}
+    />
+  );
+};
