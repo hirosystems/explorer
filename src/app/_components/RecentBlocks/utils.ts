@@ -12,5 +12,5 @@ export function formatTimestamp(timestamp: number) {
   const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
   const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-  return `${hours}:${paddedMinutes}:${paddedSeconds} ${ampm} UTC`;
+  return `${hours}:${paddedMinutes}:${paddedSeconds} ${ampm} (UTC)`;
 }
