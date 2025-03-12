@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { StacksApiSocketClient } from '@stacks/blockchain-api-client';
 
@@ -12,17 +12,17 @@ export interface StacksApiSocketClientInfo {
 }
 
 export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientInfo {
-  const [socketClient, setSocketClient] = useState<StacksApiSocketClient | null>(null);
+  const socketClientRef = useRef<StacksApiSocketClient | null>(null);
   const isSocketClientConnecting = useRef(false);
 
   const disconnect = useCallback(() => {
-    if (socketClient?.socket.connected) {
-      socketClient?.socket.removeAllListeners();
-      socketClient?.socket.close();
-      setSocketClient(null);
+    if (socketClientRef.current?.socket.connected) {
+      socketClientRef.current.socket.removeAllListeners();
+      socketClientRef.current.socket.close();
+      socketClientRef.current = null;
       isSocketClientConnecting.current = false;
     }
-  }, [socketClient]);
+  }, []);
 
   const connect = useCallback(
     async (
@@ -30,14 +30,14 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
       handleError?: (client: StacksApiSocketClient | null) => void
     ) => {
       if (!apiUrl) return;
-      if (socketClient?.socket.connected || isSocketClientConnecting.current) {
+      if (socketClientRef.current?.socket.connected || isSocketClientConnecting.current) {
         return;
       }
       try {
         isSocketClientConnecting.current = true;
         const client = await StacksApiSocketClient.connect({ url: apiUrl });
         client.socket.on('connect', () => {
-          setSocketClient(client);
+          socketClientRef.current = client;
           handleOnConnect?.(client);
         });
         client.socket.on('disconnect', () => {
@@ -55,11 +55,11 @@ export function useStacksApiSocketClient(apiUrl: string): StacksApiSocketClientI
         disconnect();
       }
     },
-    [apiUrl, socketClient, disconnect]
+    [apiUrl, disconnect]
   );
 
   return {
-    client: socketClient,
+    client: socketClientRef.current,
     connect,
     disconnect,
   };
