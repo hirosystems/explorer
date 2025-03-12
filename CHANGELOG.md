@@ -1,3 +1,10 @@
+# [1.256.0](https://github.com/hirosystems/explorer/compare/v1.255.1...v1.256.0) (2025-03-12)
+
+
+### Features
+
+* redesign - homepage - recent-blocks: btc ([887ae93](https://github.com/hirosystems/explorer/commit/887ae93b21ff9634973a76b7c9105cf378bf2e68))
+
 ## [1.255.1](https://github.com/hirosystems/explorer/compare/v1.255.0...v1.255.1) (2025-03-10)
 
 
