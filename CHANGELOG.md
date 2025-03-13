@@ -1,3 +1,10 @@
+# [1.257.0](https://github.com/hirosystems/explorer/compare/v1.256.0...v1.257.0) (2025-03-13)
+
+
+### Features
+
+* fixed hydration mismatch issue ([cf3c59a](https://github.com/hirosystems/explorer/commit/cf3c59abc2b67689bb56015f0c8405d6e440f3f8))
+
 # [1.256.0](https://github.com/hirosystems/explorer/compare/v1.255.1...v1.256.0) (2025-03-12)
 
 
