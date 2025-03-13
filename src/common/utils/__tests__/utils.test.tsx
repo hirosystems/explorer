@@ -9,6 +9,7 @@ jest.mock('@phosphor-icons/react', () => ({
   PhoneCall: () => <div data-testid="phone-call">PhoneCall</div>,
   Cube: () => <div data-testid="cube">Cube</div>,
   Question: () => <div data-testid="question">Question</div>,
+  PlusMinus: () => <div data-testid="plus-minus">PlusMinus</div>,
 }));
 
 jest.mock('@/ui/icons/TransferIcon', () => () => (
@@ -80,6 +81,10 @@ describe('getTxTypeLabel', () => {
     expect(getTxTypeLabel('coinbase')).toBe('Coinbase');
   });
 
+  test('should return Average for all', () => {
+    expect(getTxTypeLabel('all')).toBe('Average');
+  });
+
   test('should return Unknown for unknown transaction type', () => {
     expect(getTxTypeLabel('unknown_type')).toBe('Unknown');
   });
@@ -108,6 +113,12 @@ describe('getTxTypeIcon', () => {
     const icon = getTxTypeIcon('tenure_change');
     render(<>{icon}</>);
     expect(screen.getByTestId('cube')).toBeInTheDocument();
+  });
+
+  test('should return PlusMinus icon for all', () => {
+    const icon = getTxTypeIcon('all');
+    render(<>{icon}</>);
+    expect(screen.getByTestId('plus-minus')).toBeInTheDocument();
   });
 
   test('should return Question icon for unknown transaction type', () => {
