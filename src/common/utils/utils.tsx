@@ -1,6 +1,6 @@
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { ArrowsLeftRight, Cube, PhoneCall, Question } from '@phosphor-icons/react';
+import { ArrowsLeftRight, Cube, PhoneCall, PlusMinus, Question } from '@phosphor-icons/react';
 import BigNumber from 'bignumber.js';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
@@ -484,6 +484,8 @@ export function getTxTypeIcon(txType: string) {
       return <ClarityIcon />;
     case 'tenure_change':
       return <Cube />;
+    case 'all':
+      return <PlusMinus weight="bold" />;
     default:
       return <Question />;
   }
@@ -501,6 +503,8 @@ export function getTxTypeLabel(txType: string) {
       return 'Tenure Change';
     case 'coinbase':
       return 'Coinbase';
+    case 'all':
+      return 'Average';
     default:
       return 'Unknown';
   }
@@ -523,13 +527,15 @@ export function getTxTypeColor(txType: string) {
   }
 }
 
-export function semanticTokenToCssVar(token: string): string {
-  if (!token) return '';
-
-  const kebabCase = token
+function toKebabCase(str: string) {
+  return str
     .replace(/\./g, '-')
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .toLowerCase();
+}
 
+export function semanticTokenToCssVar(token: string): string {
+  if (!token) return '';
+  const kebabCase = toKebabCase(token);
   return `var(--stacks-colors-${kebabCase})`;
 }

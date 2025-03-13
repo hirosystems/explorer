@@ -28,7 +28,6 @@ const INNER_RADIUS = 100;
 const LINE_WIDTH = 7;
 const OUTER_RADIUS = INNER_RADIUS + LINE_WIDTH;
 const LIST_MIN_WIDTH = 239;
-const CONTAINER_BREAKPOINT = LIST_MIN_WIDTH + PIE_CHART_WIDTH;
 const PERCENTAGE_BOX_WIDTH = 40;
 const PERCENTAGE_BOX_HEIGHT = 20;
 const TOOLTIP_OFFSET_X = 15;
@@ -430,39 +429,24 @@ export function TxCountChart() {
 
   return (
     <ClientOnly fallback={<LoadingSkeleton />}>
-      <Flex
-        width="100%"
-        css={{
-          containerType: 'inline-size',
-          containerName: 'chart',
-        }}
-      >
-        <HStack
+      <Flex width="100%">
+        <Flex
           width="100%"
           justifyContent="space-between"
           alignItems="center"
           gap={4}
           ref={containerRef}
-          css={{
-            [`@container chart (max-width: ${CONTAINER_BREAKPOINT}px)`]: {
-              flexDirection: 'column-reverse',
-              alignItems: 'center',
-            },
-          }}
+          flexWrap="wrap-reverse"
         >
           <TypesList
             data={pieData}
             hoveredItem={hoveredItem}
             onItemHover={handleListItemHover}
-            css={{
-              minW: `${LIST_MIN_WIDTH}px`,
-              flexShrink: '1',
-              [`@container chart (max-width: ${CONTAINER_BREAKPOINT}px)`]: {
-                width: '100%',
-                minWidth: '100%',
-                marginBottom: '16px',
-              },
-            }}
+            minWidth={`${LIST_MIN_WIDTH}px`}
+            flexShrink="1"
+            flexGrow="1"
+            flexBasis="fit-content"
+            mb={4}
           />
 
           <Stack
@@ -470,6 +454,7 @@ export function TxCountChart() {
             width={PIE_CHART_WIDTH}
             height={PIE_CHART_HEIGHT}
             position="relative"
+            mx="auto"
           >
             <CenterDisplay
               value={centerDisplayValue}
@@ -487,7 +472,7 @@ export function TxCountChart() {
               showTooltip={showTooltip}
             />
           </Stack>
-        </HStack>
+        </Flex>
       </Flex>
     </ClientOnly>
   );

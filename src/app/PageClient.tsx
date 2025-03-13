@@ -9,6 +9,7 @@ import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
 import { isRedesignUrl } from '../common/utils/url-utils';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
+import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
 import { PageTitle } from './_components/PageTitle';
 import { RecentBlocks } from './_components/RecentBlocks/RecentBlocks';
@@ -43,7 +44,11 @@ export function HomePageLayout({
           <MempoolSection />
         </Flex>
       )}
-
+      {isRedesign && (
+        <Flex flex="0 0 50%">
+          <FeeSection />
+        </Flex>
+      )}
       {title}
       {stats}
       <Grid
