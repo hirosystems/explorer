@@ -1,3 +1,6 @@
+import ClarityIcon from '@/ui/icons/ClarityIcon';
+import TransferIcon from '@/ui/icons/TransferIcon';
+import { ArrowsLeftRight, Cube, PhoneCall, Question } from '@phosphor-icons/react';
 import BigNumber from 'bignumber.js';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
@@ -469,4 +472,64 @@ export function promiseWrapper<T, Args extends any[]>(
       }
     });
   };
+}
+
+export function getTxTypeIcon(txType: string) {
+  switch (txType) {
+    case 'token_transfer':
+      return <TransferIcon />;
+    case 'contract_call':
+      return <PhoneCall />;
+    case 'smart_contract':
+      return <ClarityIcon />;
+    case 'tenure_change':
+      return <Cube />;
+    default:
+      return <Question />;
+  }
+}
+
+export function getTxTypeLabel(txType: string) {
+  switch (txType) {
+    case 'token_transfer':
+      return 'Token Transfer';
+    case 'contract_call':
+      return 'Contract Call';
+    case 'smart_contract':
+      return 'Contract Deploy';
+    case 'tenure_change':
+      return 'Tenure Change';
+    case 'coinbase':
+      return 'Coinbase';
+    default:
+      return 'Unknown';
+  }
+}
+
+export function getTxTypeColor(txType: string) {
+  switch (txType) {
+    case 'token_transfer':
+      return 'transactionTypes.tokenTransfer';
+    case 'contract_call':
+      return 'transactionTypes.contractCall';
+    case 'smart_contract':
+      return 'transactionTypes.contractDeploy';
+    case 'tenure_change':
+      return 'transactionTypes.tenureChange';
+    case 'coinbase':
+      return 'transactionTypes.coinbase';
+    default:
+      return 'transactionTypes.tokenTransfer';
+  }
+}
+
+export function semanticTokenToCssVar(token: string): string {
+  if (!token) return '';
+
+  const kebabCase = token
+    .replace(/\./g, '-')
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase();
+
+  return `var(--stacks-colors-${kebabCase})`;
 }

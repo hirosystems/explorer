@@ -1,6 +1,6 @@
 'use client';
 
-import { Grid } from '@chakra-ui/react';
+import { Flex, Grid } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { ReactNode } from 'react';
@@ -9,6 +9,7 @@ import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
 import { isRedesignUrl } from '../common/utils/url-utils';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
+import { MempoolSection } from './_components/MempoolSection';
 import { PageTitle } from './_components/PageTitle';
 import { RecentBlocks } from './_components/RecentBlocks/RecentBlocks';
 import { Stats } from './_components/Stats/Stats';
@@ -37,6 +38,12 @@ export function HomePageLayout({
   return (
     <>
       {isRedesign && <RecentBlocks />}
+      {isRedesign && (
+        <Flex flex="0 0 50%">
+          <MempoolSection />
+        </Flex>
+      )}
+
       {title}
       {stats}
       <Grid
