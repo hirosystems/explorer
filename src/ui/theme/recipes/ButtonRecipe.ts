@@ -31,6 +31,8 @@ export const buttonRecipe = defineRecipe({
           bg: { base: '{colors.slate.200}', _dark: '{colors.slate.900}' },
         },
       },
+
+      // todo: keep old text variant, use redesign prefix
       text: {
         padding: '0 !important',
         border: 'none',

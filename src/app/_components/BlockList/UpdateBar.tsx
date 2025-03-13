@@ -14,7 +14,7 @@ export function UpdateBarLayout({ children, ...rest }: { children: ReactNode }) 
   return (
     <Flex
       justifyContent="space-between"
-      backgroundColor={'blockList.updateBar.background'}
+      backgroundColor={{ base: '{colors.purple.100}', _dark: '{colors.slate.900}' }}
       mx={-6}
       px={6}
       py={2.5}

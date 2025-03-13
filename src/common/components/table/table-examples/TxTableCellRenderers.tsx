@@ -1,5 +1,11 @@
 import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
-import { getContractName, truncateMiddle } from '@/common/utils/utils';
+import {
+  getContractName,
+  getTxTypeColor,
+  getTxTypeIcon,
+  getTxTypeLabel,
+  truncateMiddle,
+} from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import StxIcon from '@/ui/icons/StxIcon';
@@ -17,53 +23,6 @@ export const defaultCellRenderer = (value: string) => {
     </Text>
   );
 };
-
-function getTxTypeIcon(txType: string) {
-  switch (txType) {
-    case 'token_transfer':
-      return <ArrowsLeftRight style={{ transform: 'rotate(-60deg)' }} />;
-    case 'contract_call':
-      return <PhoneCall />;
-    case 'smart_contract':
-      return <ClarityIcon />;
-    case 'tenure_change':
-      return <Cube />;
-    default:
-      return <Question />;
-  }
-}
-
-function getTxTypeLabel(txType: string) {
-  switch (txType) {
-    case 'token_transfer':
-      return 'Token Transfer';
-    case 'contract_call':
-      return 'Contract Call';
-    case 'smart_contract':
-      return 'Contract Deploy';
-    case 'tenure_change':
-      return 'Tenure Change';
-    case 'coinbase':
-      return 'Coinbase';
-    default:
-      return 'Unknown';
-  }
-}
-
-function getTxTypeColor(txType: string) {
-  switch (txType) {
-    case 'token_transfer':
-      return 'transactionTypes.tokenTransfer';
-    case 'contract_call':
-      return 'transactionTypes.contractCall';
-    case 'smart_contract':
-      return 'transactionTypes.contractDeploy';
-    case 'tenure_change':
-      return 'transactionTypes.tenureChange';
-    case 'coinbase':
-      return 'transactionTypes.coinbase';
-  }
-}
 
 export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
   return (

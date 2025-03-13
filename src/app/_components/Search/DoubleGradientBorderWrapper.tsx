@@ -39,11 +39,11 @@ const innerBorderWidth = 1;
 const innerBorderCommonStyle = {
   content: '""',
   position: 'absolute',
-  top: `-${innerBorderWidth}px`,
-  left: `-${innerBorderWidth}px`,
-  right: `-${innerBorderWidth}px`,
-  bottom: `-${innerBorderWidth}px`,
-  borderRadius: `calc(var(--stacks-radii-redesign-lg) + ${innerBorderWidth}px)`,
+  top: '-1px',
+  left: '-1px',
+  right: '-1px',
+  bottom: '-1px',
+  borderRadius: '0.563rem', //todo: check if can use formula
   zIndex: 2,
   transition,
 };
