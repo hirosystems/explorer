@@ -1,4 +1,4 @@
-import { Box, PopoverRootProps, Stack } from '@chakra-ui/react';
+import { Box, Stack } from '@chakra-ui/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -46,13 +46,7 @@ export function AddressFilter({
         setOpen(e.open);
       }}
     >
-      <GooseNeckPopoverTrigger
-        asChild
-        open={open}
-        gooseNeckHeight={9}
-        gooseNeckAdjustment={0}
-        placement="bottom-start"
-      >
+      <GooseNeckPopoverTrigger open={open}>
         <Text textStyle="text-medium-sm">From/To</Text>
       </GooseNeckPopoverTrigger>
       <GooseNeckPopoverContent maxW={'275px'} bgColor={'surfacePrimary'} placement="bottom-start">
