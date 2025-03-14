@@ -11,6 +11,7 @@ import { PageTitle } from '../_components/PageTitle';
 import { FilterProps } from '../search/filters';
 import { MempoolFeeStatsSkeleton } from './skeleton';
 import { AddressFilter } from '@/common/components/table/AddressFilter';
+import { DateFilter } from '@/common/components/table/DateFilter';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),
@@ -31,7 +32,11 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
       </Flex> */}
       {/* <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
       <TxListTabs filters={filters} /> */}
+      <Flex gap={2}>
       <AddressFilter />
+      <DateFilter />
+
+      </Flex>
       <TxsTable />
       {/* <ClientOnly>{isRedesign ? <TxsTable /> : null}</ClientOnly> */}
     </>
