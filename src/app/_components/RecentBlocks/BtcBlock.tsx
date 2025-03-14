@@ -25,14 +25,21 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         bg: 'var(--stacks-colors-accent-bitcoin-500)',
         '& .block-height': { textDecoration: 'underline' },
         '& .stacks-blocks-count': { color: 'textPrimary' },
+        '& .caret-icon': { background: 'surfaceSecondary', color: 'iconPrimary' },
       }}
       cursor={'pointer'}
+      align={'stretch'}
       asChild
     >
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         target={'_blank'}
-        rel="noreferrer"
+        _hover={{ textDecoration: 'none' }}
+        aria-label={`Bitcoin block ${burnBlock.burn_block_height} mined at ${formatTimestamp(
+          burnBlock.burn_block_time
+        )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        role="listitem"
+        tabIndex={0}
       >
         <Stack
           position="relative"
@@ -41,11 +48,10 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
           p={3}
           bg="surfacePrimary"
           borderRadius="redesign.lg"
-          flex="0 0 auto"
         >
-          <Stack gap={4}>
+          <Stack gap={4} justifyContent={'space-between'} flex={1}>
             <Stack gap={2}>
-              <HStack gap={0} justifyContent={'space-between'}>
+              <HStack gap={0} justifyContent={'space-between'} align={'stretch'}>
                 <HStack
                   gap={1.5}
                   px={1.5}
@@ -53,23 +59,36 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   borderRadius={'redesign.sm'}
                   bg={'surfaceSecondary'}
                 >
-                  <Icon w={4} h={4}>
+                  <Icon w={4} h={4} aria-hidden="true">
                     <BitcoinCircleIcon />
                   </Icon>
                   <Text textStyle={'text-mono-sm'} color={'textPrimary'} className={'block-height'}>
                     #{burnBlock.burn_block_height}
                   </Text>
                 </HStack>
-                <Icon w={4} h={4} color={'iconTertiary'}>
+                <Icon
+                  w={7}
+                  h={'auto'}
+                  color={'iconTertiary'}
+                  borderRadius={'redesign.sm'}
+                  px={1.5}
+                  py={1}
+                  className={'caret-icon'}
+                  aria-hidden="true"
+                >
                   <CaretRight />
                 </Icon>
               </HStack>
-              <Text textStyle={'text-medium-xs'} color={'textSecondary'}>
+              <Text
+                textStyle={'text-medium-xs'}
+                color={'textSecondary'}
+                aria-label={`Block timestamp: ${formatTimestamp(burnBlock.burn_block_time)}`}
+              >
                 {formatTimestamp(burnBlock.burn_block_time)}
               </Text>
             </Stack>
             <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfaceSecondary'}>
-              <Icon w={4} h={4} color={'iconTertiary'}>
+              <Icon w={4} h={4} color={'iconTertiary'} aria-hidden="true">
                 <StxSquareIcon />
               </Icon>
               <Text
@@ -77,6 +96,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                 color={'textSecondary'}
                 className={'stacks-blocks-count'}
                 whiteSpace={'nowrap'}
+                aria-label={`${burnBlock.stacks_blocks.length} Stacks blocks in this Bitcoin block`}
               >
                 {burnBlock.stacks_blocks.length} Stacks blocks
               </Text>
@@ -102,13 +122,21 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
       _hover={{
         bg: 'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-25), var(--stacks-colors-alpha-bitcoin-200-alpha-25))',
         '& .block-height': { textDecoration: 'underline' },
+        '& .caret-icon': { background: 'surfacePrimary', color: 'iconPrimary' },
       }}
       role={'group'}
+      align={'stretch'}
     >
       <Link
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         target={'_blank'}
         rel="noreferrer"
+        _hover={{ textDecoration: 'none' }}
+        aria-label={`Newest Bitcoin block ${burnBlock.burn_block_height} mined at ${formatTimestamp(
+          burnBlock.burn_block_time
+        )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        role="listitem"
+        tabIndex={0}
       >
         <Flex
           bg={
@@ -119,6 +147,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
           _hover={{
             bg: 'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-60), var(--stacks-colors-alpha-bitcoin-200-alpha-60))',
           }}
+          align="stretch"
         >
           <Flex
             bg={
@@ -132,21 +161,20 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
               gap={0}
               minW={BTC_BLOCK_MIN_WIDTH}
               p={3}
-              bg="surfacePrimary"
+              bg="surfaceTertiary"
               borderRadius="redesign.lg"
-              flex="0 0 auto"
             >
               <Stack gap={4}>
                 <Stack gap={2}>
-                  <HStack gap={0} justifyContent={'space-between'}>
+                  <HStack gap={0} justifyContent={'space-between'} align={'stretch'}>
                     <HStack
                       gap={1.5}
                       px={1.5}
                       py={1}
                       borderRadius={'redesign.sm'}
-                      bg={'surfaceSecondary'}
+                      bg={'surfacePrimary'}
                     >
-                      <Icon w={4} h={4}>
+                      <Icon w={4} h={4} aria-hidden="true">
                         <BitcoinCircleIcon />
                       </Icon>
                       <Text
@@ -157,19 +185,37 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                         #{burnBlock.burn_block_height}
                       </Text>
                     </HStack>
-                    <Icon w={4} h={4} color={'iconTertiary'}>
+                    <Icon
+                      w={7}
+                      h={'auto'}
+                      color={'iconTertiary'}
+                      borderRadius={'redesign.sm'}
+                      px={1.5}
+                      py={1}
+                      className={'caret-icon'}
+                      aria-hidden="true"
+                    >
                       <CaretRight />
                     </Icon>
                   </HStack>
-                  <Text textStyle={'text-medium-xs'} color={'textSecondary'}>
+                  <Text
+                    textStyle={'text-medium-xs'}
+                    color={'textSecondary'}
+                    aria-label={`Block timestamp: ${formatTimestamp(burnBlock.burn_block_time)}`}
+                  >
                     {formatTimestamp(burnBlock.burn_block_time)}
                   </Text>
                 </Stack>
-                <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfaceSecondary'}>
-                  <Icon w={4} h={4} color={'iconTertiary'}>
+                <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfacePrimary'}>
+                  <Icon w={4} h={4} color={'iconTertiary'} aria-hidden="true">
                     <StxSquareIcon />
                   </Icon>
-                  <Text textStyle={'text-medium-xs'} color={'textPrimary'} whiteSpace={'nowrap'}>
+                  <Text
+                    textStyle={'text-medium-xs'}
+                    color={'textPrimary'}
+                    whiteSpace={'nowrap'}
+                    aria-label={`${burnBlock.stacks_blocks.length} Stacks blocks in this Bitcoin block`}
+                  >
                     {burnBlock.stacks_blocks.length} Stacks blocks
                   </Text>
                 </HStack>

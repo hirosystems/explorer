@@ -1,6 +1,8 @@
-import { Box, Icon, Stack } from '@chakra-ui/react';
+import { Box, Icon, Stack, StackProps } from '@chakra-ui/react';
 import { ArrowsClockwise } from '@phosphor-icons/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { Block, NakamotoBlock } from '@stacks/blockchain-api-client';
 
 import { Text } from '../../../ui/Text';
 import { useSubscribeBlocks } from '../BlockList/Sockets/useSubscribeBlocks';
@@ -9,29 +11,39 @@ import { BTC_BLOCK_MIN_WIDTH, EMPTY_BTC_BLOCK_WIDTH } from './consts';
 export function NewBlockPlaceholder({
   newestBtcBlockHeight,
   refetch,
+  boxShadow,
+  ...stackProps
 }: {
   newestBtcBlockHeight: number;
   refetch: () => void;
-}) {
+} & StackProps) {
   const [hasNewBlocks, setHasNewBlocks] = useState(false);
+  const [socketEnabled, setSocketEnabled] = useState(true);
   const lastBlockHeightRef = useRef(newestBtcBlockHeight);
 
-  const sub = useSubscribeBlocks(true, block => {
-    if (block.burn_block_height > lastBlockHeightRef.current) {
+  const handleNewBlock = useCallback((block: NakamotoBlock | Block) => {
+    if (block.height > lastBlockHeightRef.current) {
       setHasNewBlocks(true);
-      sub.current?.unsubscribe();
+      setSocketEnabled(false);
     }
-  });
+  }, []);
+
+  useSubscribeBlocks(socketEnabled, handleNewBlock);
 
   useEffect(() => {
     lastBlockHeightRef.current = newestBtcBlockHeight;
     setHasNewBlocks(false);
   }, [newestBtcBlockHeight]);
 
+  const handleUpdate = useCallback(() => {
+    refetch();
+    setHasNewBlocks(false);
+    setSocketEnabled(true);
+  }, [refetch]);
+
   return (
     <Stack
       width={hasNewBlocks ? BTC_BLOCK_MIN_WIDTH : EMPTY_BTC_BLOCK_WIDTH}
-      border="1px dashed var(--stacks-colors-accent-bitcoin-500)"
       flex="0 0 auto"
       alignItems="center"
       justifyContent="center"
@@ -40,10 +52,27 @@ export function NewBlockPlaceholder({
       borderRadius={hasNewBlocks ? 'redesign.lg' : 'redesign.xs'}
       transition="all 0.2s ease-in-out"
       cursor={hasNewBlocks ? 'pointer' : 'default'}
-      onClick={hasNewBlocks ? refetch : undefined}
-      boxShadow={hasNewBlocks ? '0px 4px 12px 0px rgba(255, 145, 0, 0.25)' : undefined}
+      onClick={hasNewBlocks ? handleUpdate : undefined}
+      boxShadow={hasNewBlocks ? boxShadow : undefined}
+      role={hasNewBlocks ? 'button' : 'none'}
+      aria-label={
+        hasNewBlocks ? 'New blocks available. Click to update.' : 'Placeholder for new blocks'
+      }
+      aria-live="polite"
+      tabIndex={hasNewBlocks ? 0 : -1}
+      onKeyDown={e => {
+        if (hasNewBlocks && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          handleUpdate();
+        }
+      }}
+      {...stackProps}
     >
-      <Box opacity={hasNewBlocks ? 1 : 0} transition="opacity 0.2s ease-in-out">
+      <Box
+        opacity={hasNewBlocks ? 1 : 0}
+        transition="opacity 0.2s ease-in-out"
+        aria-hidden={!hasNewBlocks}
+      >
         <Text textStyle="text-medium-sm" color="textTertiary" textAlign="center" lineClamp={2}>
           New blocks have been mined.
         </Text>
@@ -56,7 +85,7 @@ export function NewBlockPlaceholder({
           justifyContent="center"
         >
           Update
-          <Icon w={3.5} h={3.5}>
+          <Icon w={3.5} h={3.5} aria-hidden="true">
             <ArrowsClockwise />
           </Icon>
         </Text>

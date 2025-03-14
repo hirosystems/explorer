@@ -158,6 +158,10 @@ export const NEW_COLORS = {
     'bitcoin-500-alpha-40': { value: 'rgba(255, 139, 0, 0.4)' },
     'bitcoin-500-alpha-60': { value: 'rgba(255, 139, 0, 0.6)' },
     'bitcoin-500-alpha-75': { value: 'rgba(255, 139, 0, 0.75)' },
+    'stacks-500-alpha-30': { value: 'rgba(252, 100, 50, 0.3)' },
+    'stacks-500-alpha-50': { value: 'rgba(252, 100, 50, 0.5)' },
+    'stacks-300-alpha-30': { value: 'rgba(255, 165, 127, 0.3)' },
+    'stacks-300-alpha-50': { value: 'rgba(255, 165, 127, 0.5)' },
   },
   feedback: {
     'green-100': { value: '#0070dd' },
