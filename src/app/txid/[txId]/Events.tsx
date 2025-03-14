@@ -19,7 +19,7 @@ import {
   ftDecimals,
   getAssetNameParts,
   microToStacksFormatted,
-  truncateMiddle,
+  truncateMiddleDeprecated,
 } from '../../../common/utils/utils';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { Caption } from '../../../ui/typography';
@@ -118,7 +118,7 @@ const getParticipants = (event: TransactionEvent) => {
           return event.asset.recipient ? (
             <Caption>
               <AddressLink principal={event.asset.recipient}>
-                {truncateMiddle(event.asset.recipient)}
+                {truncateMiddleDeprecated(event.asset.recipient)}
               </AddressLink>
             </Caption>
           ) : null;
@@ -128,7 +128,7 @@ const getParticipants = (event: TransactionEvent) => {
     return (
       <Caption>
         <AddressLink principal={event.stx_lock_event.locked_address}>
-          {truncateMiddle(event.stx_lock_event.locked_address)}
+          {truncateMiddleDeprecated(event.stx_lock_event.locked_address)}
         </AddressLink>
       </Caption>
     );

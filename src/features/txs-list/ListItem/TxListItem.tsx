@@ -8,7 +8,7 @@ import { TwoColsListItem } from '../../../common/components/TwoColumnsListItem';
 import { TxIcon } from '../../../common/components/TxIcon';
 import { AddressArea, Nonce, TxTimestamp } from '../../../common/components/transaction-item';
 import { getTransactionStatus } from '../../../common/utils/transactions';
-import { MICROSTACKS_IN_STACKS, truncateMiddle } from '../../../common/utils/utils';
+import { MICROSTACKS_IN_STACKS, truncateMiddleDeprecated } from '../../../common/utils/utils';
 import { Text } from '../../../ui/Text';
 import { Caption } from '../../../ui/typography';
 import { TxTitle } from '../TxTitle';
@@ -74,7 +74,7 @@ const RightTitle: FC<{ tx: Transaction }> = memo(({ tx }) => {
       alignItems={['normal', 'normal', 'center', 'center', 'center']}
       height={['auto', 'auto', '6', '6', '6']}
     >
-      <TxLink txId={tx.tx_id}>{truncateMiddle(tx.tx_id)}</TxLink>
+      <TxLink txId={tx.tx_id}>{truncateMiddleDeprecated(tx.tx_id)}</TxLink>
       <TxTimestamp tx={tx} />
     </Stack>
   );

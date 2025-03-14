@@ -1,14 +1,20 @@
 import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
-import { getContractName, truncateMiddle } from '@/common/utils/utils';
+import {
+  formatStacksAmount,
+  getContractName,
+  microToStacksFormatted,
+  truncateStxAddress,
+} from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
+import MicroStxIcon from '@/ui/icons/MicroStxIcon';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Flex, Icon } from '@chakra-ui/react';
 import { ArrowsLeftRight, Clock, Cube, PhoneCall, Question, XCircle } from '@phosphor-icons/react';
 
 import { MempoolTransactionStatus, TransactionStatus } from '@stacks/stacks-blockchain-api-types';
 
-import { TxTableTransactionColumnData } from './TxsTable';
+import { TxTableAddressColumnData, TxTableTransactionColumnData } from './TxsTable';
 
 export const defaultCellRenderer = (value: string) => {
   return (
@@ -106,24 +112,63 @@ export const TxLinkCellRenderer = (value: string) => {
   );
 };
 
-export const AddressLinkCellRenderer = (value: string) => {
-  return (
-    <AddressLink principal={value} variant="tableLink">
+export const AddressLinkCellRenderer = (value: TxTableAddressColumnData) => {
+  const { address, isContract } = value;
+  return address && isContract ? (
+    <Flex
+      gap={1}
+      alignItems="center"
+      bg="surfacePrimary"
+      borderRadius="md"
+      py={0.5}
+      px={1}
+      w="fit-content"
+      _groupHover={{
+        bg: 'surfaceTertiary',
+      }}
+    >
+      <Icon h={3} w={3} color="iconSecondary">
+        <ClarityIcon />
+      </Icon>
+      <AddressLink principal={address} variant="tableLink">
+        <Text
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+          textStyle="text-regular-xs"
+          color="textSecondary"
+          _hover={{
+            color: 'textInteractiveHover',
+          }}
+        >
+          {getContractName(address)}
+        </Text>
+      </AddressLink>
+    </Flex>
+  ) : address && !isContract ? (
+    <AddressLink principal={address} variant="tableLink">
       <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-        {value}
+        {truncateStxAddress(address)}
       </Text>
     </AddressLink>
+  ) : (
+    <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
+      -
+    </Text>
   );
 };
 
 export const FeeCellRenderer = (value: string) => {
+  const stx = microToStacksFormatted(value);
+  const microStx = formatStacksAmount(value);
+
   return (
     <Flex alignItems="center" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
-        <StxIcon />
+        {stx.length > microStx.length ? <MicroStxIcon /> : <StxIcon />}
       </Icon>
       <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis" fontSize="sm">
-        {value} STX
+        {stx.length > microStx.length ? `${microStx} µSTX` : `${stx} STX`}
       </Text>
     </Flex>
   );
@@ -144,7 +189,18 @@ export const AmountCellRenderer = (value: number) => {
 
 export const TimeStampCellRenderer = (value: string) => {
   return (
-    <Flex alignItems="center" justifyContent="center" bg="surfacePrimary" borderRadius="sm" p={1.5}>
+    <Flex
+      alignItems="center"
+      justifyContent="center"
+      bg="surfacePrimary"
+      borderRadius="md"
+      py={0.5}
+      px={1}
+      w="fit-content"
+      _groupHover={{
+        bg: 'surfaceTertiary',
+      }}
+    >
       <Text
         whiteSpace="nowrap"
         overflow="hidden"
@@ -236,58 +292,42 @@ const StatusTag = ({ status }: { status: TransactionStatus | MempoolTransactionS
 };
 
 export const TransactionTitleCellRenderer = (value: TxTableTransactionColumnData) => {
-  const { functionName, contractName, txType, status, amount, tenureChangePayload, smartContract } =
-    value;
+  const {
+    functionName,
+    txType,
+    status,
+    amount,
+    tenureChangePayload,
+    smartContract,
+    txId,
+    blockHeight,
+  } = value;
 
-  let content: React.ReactNode = null;
-  if (txType === 'contract_call') {
-    content = (
-      <Flex gap={1}>
-        <Text fontSize="sm" fontWeight="medium" color="textPrimary" whiteSpace="nowrap">
-          {functionName}
-        </Text>
-        <Flex gap={1} alignItems="center" bg="surfacePrimary" borderRadius="md" px={1.5} py={0.5}>
-          <Icon h={3} w={3} color="iconSecondary">
-            <ClarityIcon />
-          </Icon>
-          <Text fontSize="xs" fontWeight="medium" color="textSecondary" whiteSpace="nowrap">
-            {getContractName(contractName ?? '')}
-          </Text>
-        </Flex>
-      </Flex>
-    );
-  }
-  if (txType === 'token_transfer') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        {amount} STX
-      </Text>
-    );
-  }
+  const text =
+    txType === 'contract_call'
+      ? functionName
+      : txType === 'token_transfer'
+        ? `Send ${amount} STX`
+        : txType === 'tenure_change'
+          ? `Tenure ${tenureChangePayload?.cause} (#${blockHeight})`
+          : txType === 'coinbase'
+            ? `Block #${blockHeight}`
+            : txType === 'smart_contract'
+              ? getContractName(smartContract?.contractId ?? '')
+              : '';
 
-  if (txType === 'tenure_change') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        Tenure {tenureChangePayload?.cause}
+  let content = (
+    <TxLink txId={txId} variant="tableLink">
+      <Text
+        whiteSpace="nowrap"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        textStyle="text-medium-sm"
+      >
+        {text}
       </Text>
-    );
-  }
-
-  if (txType === 'coinbase') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        Coinbase
-      </Text>
-    );
-  }
-
-  if (txType === 'smart_contract') {
-    content = (
-      <Text fontSize="sm" fontWeight="medium" color="textPrimary">
-        {truncateMiddle(smartContract?.contractId ?? '')}
-      </Text>
-    );
-  }
+    </TxLink>
+  );
 
   if (status && status !== 'success') {
     return (

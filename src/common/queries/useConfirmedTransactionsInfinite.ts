@@ -1,4 +1,10 @@
-import { InfiniteData, UseInfiniteQueryResult, useInfiniteQuery } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  UseInfiniteQueryResult,
+  UseQueryResult,
+  useInfiniteQuery,
+  useQuery,
+} from '@tanstack/react-query';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -10,22 +16,17 @@ import { getNextPageParam } from '../utils/utils';
 import { TWO_MINUTES } from './query-stale-time';
 import { searchByBnsName } from './useSearchQuery';
 
+type FilterProps = {
+  fromAddress?: string;
+  toAddress?: string;
+  startTime?: number;
+  endTime?: number;
+  order?: 'asc' | 'desc' | undefined;
+  sortBy?: string;
+};
+
 export function useConfirmedTransactionsInfinite(
-  {
-    fromAddress,
-    toAddress,
-    startTime,
-    endTime,
-    order,
-    sortBy,
-  }: {
-    fromAddress?: string;
-    toAddress?: string;
-    startTime?: number;
-    endTime?: number;
-    order?: 'asc' | 'desc' | undefined;
-    sortBy?: string;
-  } = {},
+  { fromAddress, toAddress, startTime, endTime, order, sortBy }: FilterProps = {},
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<Transaction>>> {
   const apiClient = useApiClient();
@@ -67,6 +68,57 @@ export function useConfirmedTransactionsInfinite(
     },
     initialPageParam: 0,
     getNextPageParam,
+    staleTime: TWO_MINUTES,
+    refetchOnWindowFocus: true,
+    ...options,
+  });
+}
+
+export function useConfirmedTransactions(
+  limit = DEFAULT_LIST_LIMIT,
+  offset = 0,
+  { fromAddress, toAddress, startTime, endTime, order, sortBy }: FilterProps = {},
+  options: any = {}
+): UseQueryResult<GenericResponseType<Transaction>> {
+  const apiClient = useApiClient();
+  return useQuery({
+    queryKey: [
+      'confirmedTransactionsInfinite',
+      limit,
+      offset,
+      fromAddress,
+      toAddress,
+      startTime,
+      endTime,
+      order,
+      sortBy,
+    ],
+    queryFn: async () => {
+      if (fromAddress?.endsWith('.btc')) {
+        fromAddress =
+          (await searchByBnsName(apiClient, fromAddress))?.result.entity_id || fromAddress;
+      }
+      if (toAddress?.endsWith('.btc')) {
+        toAddress = (await searchByBnsName(apiClient, toAddress))?.result.entity_id || toAddress;
+      }
+
+      return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/', {
+        params: {
+          query: {
+            limit: limit || DEFAULT_LIST_LIMIT,
+            offset,
+            ...(fromAddress && { from_address: fromAddress }),
+            ...(toAddress && { to_address: toAddress }),
+            ...(startTime && { start_time: Number(startTime) }),
+            ...(endTime && { end_time: Number(endTime) }),
+            ...(sortBy && {
+              sort_by: sortBy as 'block_height' | 'burn_block_time' | 'fee' | undefined,
+            }),
+            order,
+          },
+        },
+      });
+    },
     staleTime: TWO_MINUTES,
     refetchOnWindowFocus: true,
     ...options,

@@ -20,7 +20,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { TableContainer } from './TableContainer';
 import { TablePaginationControls } from './TablePaginationControls';
-import { ScrollIndicatorWrapper } from './TableScrollIndicatorWrapper';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends unknown, TValue> {
@@ -103,10 +102,10 @@ export type TableProps<T> = {
   columns: ColumnDef<T>[];
   onSort?: (columnId: string, sortDirection: 'asc' | 'desc' | undefined) => Promise<T[]>;
   isLoading?: boolean;
-  suspenseWrapper?: (table: React.ReactNode) => React.ReactNode;
-  tableContainerWrapper?: (table: React.ReactNode) => React.ReactNode;
-  hasScrollIndicator?: boolean;
-  bannerRow?: React.ReactElement<typeof ChakraTable.Row>;
+  suspenseWrapper?: (table: JSX.Element) => JSX.Element;
+  tableContainerWrapper?: (table: JSX.Element) => JSX.Element;
+  scrollIndicatorWrapper?: (table: JSX.Element) => JSX.Element;
+  bannerRow?: React.ReactElement<typeof ChakraTable.Row> | null;
   error?: string;
   pagination?: {
     manualPagination: boolean;
@@ -196,13 +195,13 @@ export function Table<T>({
   columns,
   onSort,
   isLoading,
-  suspenseWrapper,
-  tableContainerWrapper,
-  hasScrollIndicator,
+  suspenseWrapper = (table: JSX.Element) => table,
+  tableContainerWrapper = (table: JSX.Element) => table,
+  scrollIndicatorWrapper = (table: JSX.Element) => table,
   bannerRow,
   error,
   pagination,
-}: TableProps<T>) {
+}: TableProps<T>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
 
@@ -211,7 +210,7 @@ export function Table<T>({
   const table = useReactTable({
     data: tableData,
     columns,
-    rowCount: pagination?.manualPagination ? pagination.totalRows : undefined, //no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
+    ...(pagination?.manualPagination ? { rowCount: pagination.totalRows } : {}), // no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       sorting,
       columnPinning,
@@ -236,15 +235,21 @@ export function Table<T>({
     },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    ...(pagination?.manualPagination ? {} : { getPaginationRowModel: getPaginationRowModel() }),
     manualPagination: pagination?.manualPagination ?? false,
-    onPaginationChange: pagination
-      ? updater => {
-          const newPagination =
-            typeof updater === 'function' ? updater(table.getState().pagination) : updater;
-          pagination.onPageChange(newPagination);
+    ...(pagination
+      ? pagination?.manualPagination
+        ? {}
+        : { getPaginationRowModel: getPaginationRowModel() }
+      : {}),
+    ...(pagination && !pagination.manualPagination
+      ? {
+          onPaginationChange: updater => {
+            const newPagination =
+              typeof updater === 'function' ? updater(table.getState().pagination) : updater;
+            pagination.onPageChange(newPagination);
+          },
         }
-      : undefined,
+      : {}),
   });
 
   useEffect(() => {
@@ -252,15 +257,15 @@ export function Table<T>({
   }, [data]);
 
   if (error) {
-    return <ErrorTable error={error} />;
+    return tableContainerWrapper(<ErrorTable error={error} />);
   }
 
   if (isLoading) {
-    return <LoadingTable />;
+    return tableContainerWrapper(<LoadingTable />);
   }
 
   if (tableData.length === 0) {
-    return <EmptyTable />;
+    return tableContainerWrapper(<EmptyTable />);
   }
 
   let content: React.ReactNode = (
@@ -272,7 +277,7 @@ export function Table<T>({
         },
         '& tbody': {
           position: 'relative',
-          top: 2,
+          top: 2, // adds a gap between the header and the body
         },
       }}
       overflowX="auto"
@@ -288,7 +293,7 @@ export function Table<T>({
                 <ChakraTable.ColumnHeader
                   key={header.id}
                   css={{ ...getCommonPinningStyles(column) }}
-                  py={3}
+                  py={[2, 2, 2, `clamp(12px, calc(48px / ${columns.length}), 16px)`]}
                   px={[2, 2, 2, `clamp(12px, calc(48px / ${columns.length}), 16px)`]}
                   border="none"
                   borderBottom="1px solid var(--stacks-colors-surface-secondary)"
@@ -398,17 +403,7 @@ export function Table<T>({
     </ChakraTable.Root>
   );
 
-  if (hasScrollIndicator) {
-    content = <ScrollIndicatorWrapper>{content}</ScrollIndicatorWrapper>;
-  }
-
-  if (tableContainerWrapper) {
-    content = tableContainerWrapper(content);
-  }
-
-  if (suspenseWrapper) {
-    content = suspenseWrapper(content);
-  }
+  content = tableContainerWrapper(scrollIndicatorWrapper(suspenseWrapper(content)));
 
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>

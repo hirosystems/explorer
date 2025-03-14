@@ -4,7 +4,7 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import { truncateMiddle } from '../../../common/utils/utils';
+import { truncateMiddleDeprecated } from '../../../common/utils/utils';
 import { Field as ChakraField } from '../../../components/ui/field';
 import { PopoverContent, PopoverRoot, PopoverTrigger } from '../../../components/ui/popover';
 import { Button } from '../../../ui/Button';
@@ -67,7 +67,7 @@ export function AddressFilter({
                 </Icon>
                 <Text>
                   {defaultFromAddress.length > 10
-                    ? truncateMiddle(defaultFromAddress, 3)
+                    ? truncateMiddleDeprecated(defaultFromAddress, 3)
                     : defaultFromAddress}
                 </Text>
               </Flex>
@@ -84,7 +84,7 @@ export function AddressFilter({
                 </Icon>
                 <Text>
                   {defaultToAddress.length > 10
-                    ? truncateMiddle(defaultToAddress, 3)
+                    ? truncateMiddleDeprecated(defaultToAddress, 3)
                     : defaultToAddress}
                 </Text>
               </Flex>

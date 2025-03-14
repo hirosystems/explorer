@@ -5,7 +5,7 @@ import { Circle } from '../../../common/components/Circle';
 import { AddressLink } from '../../../common/components/ExplorerLinks';
 import { useAccountStxBalance } from '../../../common/queries/useAccountStxBalance';
 import { FoundResult } from '../../../common/types/search-results';
-import { microToStacksFormatted, truncateMiddle } from '../../../common/utils/utils';
+import { microToStacksFormatted, truncateMiddleDeprecated } from '../../../common/utils/utils';
 import WalletIcon from '../../../ui/icons/WalletIcon';
 import { Caption, Title } from '../../../ui/typography';
 import { ResultItemWrapper } from './result-item-wrapper';
@@ -18,7 +18,7 @@ export const AddressResultItem: React.FC<AddressResultItemProps> = ({ result }) 
   const principal = result.result.entity_id;
   const displayName =
     result.result.entity_type === 'standard_address' ? result.result.display_name : '';
-  const truncatedPrincipal = truncateMiddle(principal, 4);
+  const truncatedPrincipal = truncateMiddleDeprecated(principal, 4);
   const { data: stxBalance } = useAccountStxBalance(principal);
   return (
     <AddressLink principal={principal} className={`search-bar-result-1`}>

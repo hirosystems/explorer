@@ -1,6 +1,5 @@
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { ArrowRight, KeyReturn } from '@phosphor-icons/react';
-import * as React from 'react';
 import { ReactNode } from 'react';
 
 import {
@@ -16,14 +15,12 @@ import {
   ContractDeployTxs,
   TokenTransferTxs,
 } from '../../../common/types/tx';
-import { buildUrl } from '../../../common/utils/buildUrl';
 import {
   getContractName,
   microToStacksFormatted,
-  truncateMiddle,
+  truncateMiddleDeprecated,
 } from '../../../common/utils/utils';
 import { Text } from '../../../ui/Text';
-import { TextLink } from '../../../ui/TextLink';
 import StxIcon from '../../../ui/icons/StxIcon';
 import { SearchLink } from './SearchLink';
 import { TxTag } from './TxTag';
@@ -130,13 +127,13 @@ export function TokenTransferResultItem({
       <SearchLink href={url}>{microToStacksFormatted(tx.token_transfer.amount)} STX</SearchLink>
       <Flex gap={1.5} alignItems={'center'}>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-          {truncateMiddle(tx.sender_address, 4)}
+          {truncateMiddleDeprecated(tx.sender_address, 4)}
         </Text>
         <Icon h={4} w={4} color={'textTertiary'}>
           <ArrowRight />
         </Icon>
         <Text fontSize={'sm'} color={'textSecondary'} whiteSpace={'nowrap'}>
-          {truncateMiddle(tx.token_transfer.recipient_address, 4)}
+          {truncateMiddleDeprecated(tx.token_transfer.recipient_address, 4)}
         </Text>
       </Flex>
     </TxResultItem>
@@ -156,7 +153,7 @@ export function ContractDeployResultItem({
     <TxResultItem tx={tx}>
       <SearchLink href={url}>{getContractName(tx.smart_contract.contract_id)}</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-        {truncateMiddle(tx.tx_id, 4)}
+        {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
     </TxResultItem>
   );
@@ -175,7 +172,7 @@ export function ContractCallResultItem({
     <TxResultItem tx={tx}>
       <SearchLink href={url}>{tx.contract_call.function_name}</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-        {truncateMiddle(tx.tx_id, 4)}
+        {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
     </TxResultItem>
   );
@@ -194,7 +191,7 @@ export function CoinbaseResultItem({
     <TxResultItem tx={tx}>
       <SearchLink href={url}>Coinbase</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-        {truncateMiddle(tx.tx_id, 4)}
+        {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
     </TxResultItem>
   );
@@ -213,7 +210,7 @@ export function TenureChangeResultItem({
     <TxResultItem tx={tx}>
       <SearchLink href={url}>Tenure Change</SearchLink>
       <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-        {truncateMiddle(tx.tx_id, 4)}
+        {truncateMiddleDeprecated(tx.tx_id, 4)}
       </Text>
     </TxResultItem>
   );
@@ -235,7 +232,7 @@ export function BnsResultItem({
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
         <SearchLink href={url}>{bns}</SearchLink>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-          {truncateMiddle(address, 5)}
+          {truncateMiddleDeprecated(address, 5)}
         </Text>
       </Flex>
       <ResultItemIcon type={iconType} />
@@ -288,7 +285,7 @@ export function BlockResultItem({
           </Flex>
         </SearchLink>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
-          {truncateMiddle(hash, 4)}
+          {truncateMiddleDeprecated(hash, 4)}
         </Text>
       </Flex>
       <ResultItemIcon type={iconType} />

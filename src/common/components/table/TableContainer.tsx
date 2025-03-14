@@ -6,27 +6,21 @@ interface TableContainerProps extends FlexProps {}
 
 export function TableContainer({ children, ...rest }: TableContainerProps) {
   return (
-    <Stack gap={0} alignItems="center" w="full">
-      <Card
-        h="fit-content"
-        w="full"
-        px={3}
-        pb={3}
-        pt={0}
-        borderColor="redesignBorderSecondary"
-        className="table-container-card"
-        {...rest}
-      >
-        <Box
-          overflowX="auto"
-          overflowY="hidden"
-          h="full"
-          w="full"
-          className="table-scroll-container"
-        >
-          {children}
-        </Box>
-      </Card>
-    </Stack>
+    <Card
+      h="fit-content"
+      w="full"
+      px={{ base: 3, lg: 4 }}
+      pb={{ base: 3, lg: 4 }}
+      pt={0.5}
+      borderColor="redesignBorderSecondary"
+      className="table-container-card"
+      alignItems="center"
+      justifyContent="center"
+      {...rest}
+    >
+      <Box overflowX="auto" overflowY="hidden" h="full" w="full" className="table-scroll-container">
+        {children}
+      </Box>
+    </Card>
   );
 }
