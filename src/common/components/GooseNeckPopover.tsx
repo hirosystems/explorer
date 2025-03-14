@@ -37,6 +37,7 @@ export const GooseNeckPopoverContent = React.forwardRef<
           borderTopLeftRadius={placement === 'bottom-start' ? 'none' : 'redesign.lg'}
           borderTopRightRadius={placement === 'bottom-end' ? 'none' : 'redesign.lg'}
           boxShadow="none"
+          bg="surfacePrimary"
         >
           {props.children}
         </ChakraPopover.Content>

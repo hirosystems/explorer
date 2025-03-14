@@ -1,16 +1,16 @@
-import { Flex, Icon } from '@chakra-ui/react';
-import { CaretDown } from '@phosphor-icons/react';
+import { AfterForm } from '@/app/search/filters/After';
+import { BeforeForm } from '@/app/search/filters/Before';
+import { DateRangeForm } from '@/app/search/filters/DateRange';
+import { Flex } from '@chakra-ui/react';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { Badge } from '../../../common/components/Badge';
-import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
-import { PopoverContent, PopoverRoot, PopoverTrigger } from '../../../components/ui/popover';
-import { Button } from '../../../ui/Button';
 import { Text } from '../../../ui/Text';
-import { GooseNeckPopoverContent, GooseNeckPopoverRoot, GooseNeckPopoverTrigger } from '../GooseNeckPopover';
-import { DateRangeForm } from '@/app/search/filters/DateRange';
-import { BeforeForm } from '@/app/search/filters/Before';
-import { AfterForm } from '@/app/search/filters/After';
+import {
+  GooseNeckPopoverContent,
+  GooseNeckPopoverRoot,
+  GooseNeckPopoverTrigger,
+} from '../GooseNeckPopover';
 
 function FilterTypeButton({
   isSelected,
@@ -83,9 +83,8 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
       open={open}
       onOpenChange={e => setOpen(e.open)}
     >
-      <GooseNeckPopoverTrigger  open={open} >
-      <Text textStyle="text-medium-sm">Date</Text>
-
+      <GooseNeckPopoverTrigger open={open}>
+        <Text textStyle="text-medium-sm">Date</Text>
       </GooseNeckPopoverTrigger>
       <GooseNeckPopoverContent maxWidth={'256px'} bgColor={'surfacePrimary'}>
         <Flex direction={'column'} gap={4} p={4}>
