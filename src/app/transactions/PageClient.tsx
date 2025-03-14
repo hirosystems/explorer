@@ -1,17 +1,17 @@
 'use client';
 
+import { AddressFilter } from '@/common/components/table/AddressFilter';
+import { DateFilter } from '@/common/components/table/DateFilter';
+import { ValueBasisFilter } from '@/common/components/table/ValueBasisFilter';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { isRedesignUrl } from '@/common/utils/url-utils';
-import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
-import { ClientOnly, Flex } from '@chakra-ui/react';
+import { Text } from '@/ui/Text';
+import { Flex } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { PageTitle } from '../_components/PageTitle';
 import { FilterProps } from '../search/filters';
 import { MempoolFeeStatsSkeleton } from './skeleton';
-import { AddressFilter } from '@/common/components/table/AddressFilter';
-import { DateFilter } from '@/common/components/table/DateFilter';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),
@@ -32,10 +32,31 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
       </Flex> */}
       {/* <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
       <TxListTabs filters={filters} /> */}
-      <Flex gap={2}>
-      <AddressFilter />
-      <DateFilter />
-
+      <Flex justifyContent={'space-between'} flexWrap={'wrap'} gap={4} h={7}>
+        <Flex gap={2} alignItems={'center'} h='full'>
+          <Text textStyle="text-regular-sm" color="textSecondary">
+            Filter:
+          </Text>
+          <Flex gap={3}>
+            <AddressFilter />
+            <DateFilter />
+            <TransactionTypeFilter />
+          </Flex>
+        </Flex>
+        <Flex gap={4} h='full'>
+          <Flex gap={2} alignItems={'center'}>
+            <Text textStyle="text-regular-sm" color="textSecondary">
+              Show:
+            </Text>
+            <ValueBasisFilter />
+          </Flex>
+          {/* <Flex gap={2} alignItems={'center'}>
+            <Text textStyle="text-regular-sm" color="textSecondary">
+              Sort by:
+            </Text>
+            <ValueBasisFilter />
+          </Flex> */}
+        </Flex>
       </Flex>
       <TxsTable />
       {/* <ClientOnly>{isRedesign ? <TxsTable /> : null}</ClientOnly> */}
