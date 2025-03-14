@@ -32,7 +32,8 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
       {/* <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
       <TxListTabs filters={filters} /> */}
       <AddressFilter />
-      <ClientOnly>{isRedesign ? <TxsTable /> : null}</ClientOnly>
+      <TxsTable />
+      {/* <ClientOnly>{isRedesign ? <TxsTable /> : null}</ClientOnly> */}
     </>
   );
 }
