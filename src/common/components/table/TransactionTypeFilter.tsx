@@ -8,7 +8,13 @@ import CubeSparkleIcon from '@/ui/icons/CubeSparkleIcon';
 import DiagonalArrowsIcon from '@/ui/icons/DiagonalArrowsIcon';
 import FunctionXIcon from '@/ui/icons/FunctionX';
 import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
-import { ArrowBendDownRight, Question } from '@phosphor-icons/react';
+import {
+  ArrowBendDownRight,
+  ArrowsCounterClockwise,
+  Cube,
+  PhoneCall,
+  Question,
+} from '@phosphor-icons/react';
 import { ReactNode, useState } from 'react';
 
 import {
@@ -57,7 +63,7 @@ const CheckboxItem = ({
         {icon}
       </Icon>
       <Text
-        textStyle="text-regular-sm"
+        textStyle="text-medium-sm"
         color={checked ? 'textPrimary' : 'textSecondary'}
         _groupHover={{ color: 'textPrimary' }}
       >
@@ -116,12 +122,20 @@ export function TransactionTypeFilter() {
       <GooseNeckPopoverContent w="fit-content" minW={'190px'}>
         <Stack gap={1.5} px={1.5} pt={2} pb={3}>
           <CheckboxItem
-            label={'Coinbase'}
-            icon={<CubeSparkleIcon />}
-            value={'coinbase'}
+            label={'Token transfer'}
+            icon={<DiagonalArrowsIcon />}
+            value={'token_transfer'}
             selectedFilters={selectedFilters}
-            checkboxProps={getCheckboxProps({ value: 'coinbase' })}
+            checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
           />
+          <CheckboxItem
+            label={'Contract call'}
+            icon={<PhoneCall />}
+            value={'contract_call'}
+            selectedFilters={selectedFilters}
+            checkboxProps={getCheckboxProps({ value: 'contract_call' })}
+          />
+
           <CheckboxItem
             label={'Contract deploy'}
             icon={<ClarityIcon />}
@@ -129,29 +143,24 @@ export function TransactionTypeFilter() {
             selectedFilters={selectedFilters}
             checkboxProps={getCheckboxProps({ value: 'smart_contract' })}
           />
-          <CheckboxItem
-            label={'Function call'}
-            icon={<FunctionXIcon />}
-            value={'contract_call'}
-            selectedFilters={selectedFilters}
-            checkboxProps={getCheckboxProps({ value: 'contract_call' })}
-          />
+
           <CheckboxItem
             label={'Tenure change'}
-            icon={<ArrowBendDownRight />}
+            icon={<ArrowsCounterClockwise />}
             value={'tenure_change'}
             selectedFilters={selectedFilters}
             checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
           />
           <CheckboxItem
-            label={'Token transfer'}
-            icon={<DiagonalArrowsIcon />}
-            value={'token_transfer'}
+            label={'Coinbase'}
+            icon={<Cube />}
+            value={'coinbase'}
             selectedFilters={selectedFilters}
-            checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
+            checkboxProps={getCheckboxProps({ value: 'coinbase' })}
           />
+
           <Box pt={1.5} px={1.5}>
-            <Button w='full' variant="redesignSecondary" size="sm" onClick={() => setOpen(false)}>
+            <Button w="full" variant="redesignSecondary" size="sm" onClick={() => setOpen(false)}>
               Apply
             </Button>
           </Box>
