@@ -1,17 +1,71 @@
-import { useAppDispatch, useAppSelector } from '@/common/state/hooks';
-import {
-  TransactionValueFilterTypes,
-  setTransactionValueFilter,
-} from '@/common/state/slices/transaction-value-filter-slice';
+import { TransactionValueFilterTypes } from '@/common/state/slices/transaction-value-filter-slice';
+import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
+import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
+import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
-import { Stack } from '@chakra-ui/react';
-import { useCallback, useMemo, useState } from 'react';
+import ClarityIcon from '@/ui/icons/ClarityIcon';
+import CubeSparkleIcon from '@/ui/icons/CubeSparkleIcon';
+import DiagonalArrowsIcon from '@/ui/icons/DiagonalArrowsIcon';
+import FunctionXIcon from '@/ui/icons/FunctionX';
+import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
+import { ArrowBendDownRight, Question } from '@phosphor-icons/react';
+import { ReactNode, useState } from 'react';
 
 import {
   GooseNeckPopoverContent,
   GooseNeckPopoverRoot,
   GooseNeckPopoverTrigger,
 } from '../GooseNeckPopover';
+
+function getFilterIcon(filter: string) {
+  switch (filter) {
+    case 'coinbase':
+      return <CubeSparkleIcon />;
+    case 'smart_contract':
+      return <ClarityIcon />;
+    case 'contract_call':
+      return <FunctionXIcon />;
+    case 'tenure_change':
+      return <ArrowBendDownRight />;
+    case 'contract_deploy':
+      return <ClarityIcon />;
+    case 'token_transfer':
+      return <DiagonalArrowsIcon />;
+    default:
+      return <Question />;
+  }
+}
+
+const CheckboxItem = ({
+  label,
+  icon,
+  value,
+  selectedFilters,
+  checkboxProps,
+}: {
+  label: string;
+  icon: ReactNode;
+  value: string;
+  selectedFilters: (string | number)[];
+  checkboxProps: CheckboxProps;
+}) => {
+  const checked = selectedFilters.includes(value);
+  return (
+    <HStack gap={2} p={1.5} _hover={{ bg: 'surfaceTertiary' }} rounded={'md'} className="group">
+      <Checkbox checked={checked} {...checkboxProps} variant="redesignPrimary" />
+      <Icon h={4} w={4} color="iconSecondary" _groupHover={{ color: 'iconPrimary' }}>
+        {icon}
+      </Icon>
+      <Text
+        textStyle="text-regular-sm"
+        color={checked ? 'textPrimary' : 'textSecondary'}
+        _groupHover={{ color: 'textPrimary' }}
+      >
+        {label}
+      </Text>
+    </HStack>
+  );
+};
 
 function getActiveTransactionValueFilterLabel(
   activeTransactionValueFilter: TransactionValueFilterTypes
@@ -30,38 +84,77 @@ function getActiveTransactionValueFilterLabel(
 export function TransactionTypeFilter() {
   const [open, setOpen] = useState(false);
 
+  const { setActiveFilters, activeFilters } = useFilterAndSortState();
+
   const { value: selectedFilters, getItemProps: getCheckboxProps } = useCheckboxGroup({
     defaultValue: [],
     onValueChange: (value: string[]) => {
       setActiveFilters(value);
     },
   });
-  
+
+  console.log({ activeFilters });
+
   return (
     <GooseNeckPopoverRoot
-      id={'value-basis-filter-popover'}
-      positioning={{ placement: 'bottom-end' }}
+      id={'transaction-type-filter-popover'}
       open={open}
       onOpenChange={e => setOpen(e.open)}
     >
-      <GooseNeckPopoverTrigger open={open} placement="bottom-end">
-        <Text textStyle="text-medium-sm">{filterLabelValue}</Text>
-      </GooseNeckPopoverTrigger>
-      <GooseNeckPopoverContent placement="bottom-end" w="fit-content" minW={'190px'}>
-        <Stack gap={2.5} p={3} alignItems={'flex-end'}>
-          {menuItems.map(item => (
-            <Text
-              key={item.label}
-              onClick={item.onClick}
-              textStyle="text-medium-sm"
-              color="textSecondary"
-              _hover={{ color: 'textPrimary' }}
-              cursor={'pointer'}
-              whiteSpace={'nowrap'}
-            >
-              {item.label}
-            </Text>
-          ))}
+      <GooseNeckPopoverTrigger
+        open={open}
+        triggerText={
+          <Text
+            textStyle="text-medium-sm"
+            color="textSecondary"
+            _groupHover={{ color: 'textPrimary' }}
+          >
+            Transaction type
+          </Text>
+        }
+      />
+      <GooseNeckPopoverContent w="fit-content" minW={'190px'}>
+        <Stack gap={1.5} px={1.5} pt={2} pb={3}>
+          <CheckboxItem
+            label={'Coinbase'}
+            icon={<CubeSparkleIcon />}
+            value={'coinbase'}
+            selectedFilters={selectedFilters}
+            checkboxProps={getCheckboxProps({ value: 'coinbase' })}
+          />
+          <CheckboxItem
+            label={'Contract deploy'}
+            icon={<ClarityIcon />}
+            value={'smart_contract'}
+            selectedFilters={selectedFilters}
+            checkboxProps={getCheckboxProps({ value: 'smart_contract' })}
+          />
+          <CheckboxItem
+            label={'Function call'}
+            icon={<FunctionXIcon />}
+            value={'contract_call'}
+            selectedFilters={selectedFilters}
+            checkboxProps={getCheckboxProps({ value: 'contract_call' })}
+          />
+          <CheckboxItem
+            label={'Tenure change'}
+            icon={<ArrowBendDownRight />}
+            value={'tenure_change'}
+            selectedFilters={selectedFilters}
+            checkboxProps={getCheckboxProps({ value: 'tenure_change' })}
+          />
+          <CheckboxItem
+            label={'Token transfer'}
+            icon={<DiagonalArrowsIcon />}
+            value={'token_transfer'}
+            selectedFilters={selectedFilters}
+            checkboxProps={getCheckboxProps({ value: 'token_transfer' })}
+          />
+          <Box pt={1.5} px={1.5}>
+            <Button w='full' variant="redesignSecondary" size="sm" onClick={() => setOpen(false)}>
+              Apply
+            </Button>
+          </Box>
         </Stack>
       </GooseNeckPopoverContent>
     </GooseNeckPopoverRoot>

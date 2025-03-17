@@ -53,6 +53,9 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
     gooseNeckHeight?: number;
     gooseNeckAdjustment?: number;
     placement?: 'bottom-start' | 'bottom-end'; // Chakra should be exporting these types
+    triggerText?: ReactNode;
+    triggerIcon?: ReactNode;
+    hasIcon?: boolean;
   }
 >(function GooseNeckPopoverTrigger(props, ref) {
   const {
@@ -60,6 +63,9 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
     gooseNeckHeight,
     gooseNeckAdjustment,
     placement = 'bottom-start',
+    triggerText,
+    triggerIcon,
+    hasIcon = true,
     ...buttonProps
   } = props;
 
@@ -81,11 +87,17 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
         cursor="pointer"
         w="fit-content"
       >
-        {props.children}
+        {triggerText ? triggerText : props.children}
 
-        <Icon color="iconPrimary" h={3} w={3}>
-          {open ? <CaretUp /> : <CaretDown />}
-        </Icon>
+        {hasIcon ? (
+          triggerIcon ? (
+            triggerIcon
+          ) : (
+            <Icon color="iconSecondary" _groupHover={{ color: 'iconPrimary' }} h={3} w={3}>
+              {open ? <CaretUp /> : <CaretDown />}
+            </Icon>
+          )
+        ) : null}
 
         {open && (
           <Icon
