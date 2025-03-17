@@ -1,3 +1,10 @@
+# [1.260.0](https://github.com/hirosystems/explorer/compare/v1.259.0...v1.260.0) (2025-03-17)
+
+
+### Features
+
+* added table pagination ([9f8d6b4](https://github.com/hirosystems/explorer/commit/9f8d6b46aff9a72a9437503fd50e6e01e933b2be))
+
 # [1.259.0](https://github.com/hirosystems/explorer/compare/v1.258.0...v1.259.0) (2025-03-17)
 
 
