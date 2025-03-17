@@ -12,6 +12,7 @@ import dynamic from 'next/dynamic';
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { FilterProps } from '../search/filters';
 import { MempoolFeeStatsSkeleton } from './skeleton';
+import { TransactionTypeFilter } from '@/common/components/table/TransactionTypeFilter';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),

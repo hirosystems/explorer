@@ -28,6 +28,25 @@ export const checkboxSlotRecipe = defineSlotRecipe({
           fontSize: 'sm',
         },
       },
+      redesignPrimary: {
+        control: {
+          borderColor: 'borderPrimary',
+          bg: 'surfaceTertiary',
+          borderRadius: 'xs',
+          _focus: {
+            outline: 'none',
+            boxShadow: '0 0 0 2px',
+            boxShadowColor: {base: 'var(--stacks-colors-accent-stacks-300)', _dark: 'var(--stacks-colors-accent-stacks-600)'},
+          },
+          _checked: {
+            bg: 'surfaceInvert',
+            borderColor: 'surfaceInvert',
+          },
+          indicator: {
+            color: 'surfaceInvert',
+          },
+        },
+      },
     },
   },
   defaultVariants: {

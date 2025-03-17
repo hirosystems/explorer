@@ -83,9 +83,18 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
       open={open}
       onOpenChange={e => setOpen(e.open)}
     >
-      <GooseNeckPopoverTrigger open={open}>
-        <Text textStyle="text-medium-sm">Date</Text>
-      </GooseNeckPopoverTrigger>
+      <GooseNeckPopoverTrigger
+        open={open}
+        triggerText={
+          <Text
+            textStyle="text-medium-sm"
+            color="textSecondary"
+            _groupHover={{ color: 'textPrimary' }}
+          >
+            Date
+          </Text>
+        }
+      />
       <GooseNeckPopoverContent maxWidth={'256px'} bgColor={'surfacePrimary'}>
         <Flex direction={'column'} gap={4} p={4}>
           <Flex gap={'2'} flexWrap={'wrap'}>
