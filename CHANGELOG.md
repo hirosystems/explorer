@@ -1,3 +1,10 @@
+# [1.259.0](https://github.com/hirosystems/explorer/compare/v1.258.0...v1.259.0) (2025-03-17)
+
+
+### Features
+
+* redesign - homepage - recent-blocks: stx ([c9c39bb](https://github.com/hirosystems/explorer/commit/c9c39bb4c9fe891638b7e7fd0dd898ab175aa5de))
+
 # [1.258.0](https://github.com/hirosystems/explorer/compare/v1.257.0...v1.258.0) (2025-03-13)
 
 
