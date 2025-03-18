@@ -1,12 +1,13 @@
-import { Box, Stack } from '@chakra-ui/react';
+import { truncateMiddle, truncateStxAddress, validateStacksAddress } from '@/common/utils/utils';
+import { Field as ChakraField } from '@/components/ui/field';
+import { Button } from '@/ui/Button';
+import { Input } from '@/ui/Input';
+import { Text } from '@/ui/Text';
+import { Box, Flex, Stack } from '@chakra-ui/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { Field as ChakraField } from '../../../components/ui/field';
-import { Button } from '../../../ui/Button';
-import { ExpandingTextarea } from '../../../ui/ExpandingTextarea';
-import { Text } from '../../../ui/Text';
 import {
   GooseNeckPopoverContent,
   GooseNeckPopoverRoot,
@@ -23,19 +24,78 @@ interface FormValues {
   toAddress: string;
 }
 
+const TRUNCATE_THRESHOLD = 15;
+
 export function AddressFilter({
   defaultToAddress = '',
   defaultFromAddress = '',
 }: AddressFilterProps) {
-  const initialValues: FormValues = {
-    // TODO: why can't I just collect these values from the search params
-    fromAddress: defaultFromAddress,
-    toAddress: defaultToAddress,
-  };
+  const [toAddress, setToAddress] = useState(defaultToAddress);
+  const [fromAddress, setFromAddress] = useState(defaultFromAddress);
+
   const [open, setOpen] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  useEffect(() => {
+    const fromAddress = searchParams.get('fromAddress');
+    const toAddress = searchParams.get('toAddress');
+    setFromAddress(fromAddress || '');
+    setToAddress(toAddress || '');
+  }, [searchParams]);
+
+  const triggerText =
+    fromAddress || toAddress
+      ? (open: boolean) => (
+          <Flex gap={1.5}>
+            {fromAddress && (
+              <>
+                <Text
+                  textStyle="text-medium-sm"
+                  color={open ? 'textPrimary' : 'textSecondary'}
+                  _groupHover={{ color: 'textPrimary' }}
+                >
+                  From:
+                </Text>
+                <Text textStyle="text-medium-sm" color="textPrimary">
+                  {validateStacksAddress(fromAddress)
+                    ? truncateStxAddress(fromAddress)
+                    : fromAddress.length > TRUNCATE_THRESHOLD
+                      ? truncateMiddle(fromAddress, 4, 5)
+                      : fromAddress}
+                </Text>
+              </>
+            )}
+            {toAddress && (
+              <>
+                <Text
+                  textStyle="text-medium-sm"
+                  color={open ? 'textPrimary' : 'textSecondary'}
+                  _groupHover={{ color: 'textPrimary' }}
+                >
+                  To:
+                </Text>
+                <Text textStyle="text-medium-sm" color="textPrimary">
+                  {validateStacksAddress(toAddress)
+                    ? truncateStxAddress(toAddress)
+                    : toAddress.length > TRUNCATE_THRESHOLD
+                      ? truncateMiddle(toAddress, 4, 5)
+                      : toAddress}
+                </Text>
+              </>
+            )}
+          </Flex>
+        )
+      : (open: boolean) => (
+          <Text
+            textStyle="text-medium-sm"
+            color={open ? 'textPrimary' : 'textSecondary'}
+            _groupHover={{ color: 'textPrimary' }}
+          >
+            From/To
+          </Text>
+        );
 
   return (
     <GooseNeckPopoverRoot
@@ -46,16 +106,17 @@ export function AddressFilter({
         setOpen(e.open);
       }}
     >
-      <GooseNeckPopoverTrigger open={open}>
-        <Text textStyle="text-medium-sm">From/To</Text>
-      </GooseNeckPopoverTrigger>
+      <GooseNeckPopoverTrigger open={open} triggerText={triggerText} />
       <GooseNeckPopoverContent maxW={'275px'} bgColor={'surfacePrimary'} placement="bottom-start">
         <Stack gap={2} p={4}>
           <Formik
             enableReinitialize
             validateOnChange={false}
             validateOnBlur={false}
-            initialValues={initialValues}
+            initialValues={{
+              fromAddress,
+              toAddress,
+            }}
             onSubmit={async ({ fromAddress, toAddress }) => {
               const params = new URLSearchParams(searchParams);
               if (!fromAddress) {
@@ -86,15 +147,13 @@ export function AddressFilter({
                           </Text>
                         }
                       >
-                        <ExpandingTextarea
+                        <Input
                           {...field}
+                          variant="redesignPrimary"
                           placeholder="STX Address"
-                          fontSize={'sm'}
-                          css={{
-                            '::placeholder': {
-                              color: 'textSubdued',
-                            },
-                          }}
+                          size="big"
+                          autoComplete="off"
+                          data-form-type="other"
                         />
                       </ChakraField>
                     )}
@@ -110,15 +169,13 @@ export function AddressFilter({
                           </Text>
                         }
                       >
-                        <ExpandingTextarea
+                        <Input
                           {...field}
+                          variant="redesignPrimary"
                           placeholder="STX Address"
-                          fontSize={'sm'}
-                          css={{
-                            '::placeholder': {
-                              color: 'textSubdued',
-                            },
-                          }}
+                          size="big"
+                          autoComplete="off"
+                          data-form-type="other"
                         />
                       </ChakraField>
                     )}

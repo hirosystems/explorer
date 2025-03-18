@@ -29,6 +29,7 @@ import { SIZES } from './sizes';
 import { SPACE } from './space';
 import { TEXT_STYLES } from './textStyles';
 import { Z_INDEX } from './zIndex';
+import { textareaRecipe } from './recipes/TextareaRecipe';
 
 const explorerConfig = defineConfig({
   cssVarsPrefix: 'stacks',
@@ -45,6 +46,7 @@ const themeConfig = {
       iconButton: iconButtonRecipe,
       input: inputRecipe,
       kbd: kbdRecipe,
+      textarea: textareaRecipe,
     },
     slotRecipes: {
       checkbox: checkboxSlotRecipe,

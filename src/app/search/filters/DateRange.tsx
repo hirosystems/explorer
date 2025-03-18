@@ -1,12 +1,11 @@
-import { Box, Stack } from '@chakra-ui/react';
+import { Field as ChakraField } from '@/components/ui/field';
+import { Button } from '@/ui/Button';
+import { Input } from '@/ui/Input';
+import { Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
-
-import { Field as ChakraField } from '../../../components/ui/field';
-import { Button } from '../../../ui/Button';
-import { DateInput } from './DateInput';
 
 interface FormValues {
   startTime: number | null;
@@ -19,13 +18,18 @@ interface DateRangeFormProps {
   onClose: () => void;
 }
 
-export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: DateRangeFormProps) {
+export function DateRangeForm({
+  defaultStartTime,
+  defaultEndTime,
+  onClose,
+}: DateRangeFormProps) {
   const initialValues: FormValues = {
     startTime: defaultStartTime,
     endTime: defaultEndTime,
   };
   const router = useRouter();
   const searchParams = useSearchParams();
+
   return (
     <Formik
       enableReinitialize
@@ -52,62 +56,57 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
     >
       {() => (
         <Form>
-          <Stack gap={4}>
+          <Stack gap={4} w="full">
             <Field name="startTime">
               {({ form }: FieldProps<string, FormValues>) => (
-                <ChakraField label="Between:">
-                  <DatePicker
-                    selectsRange={true}
-                    customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
-                    onChange={dateRange => {
-                      const [startDate, endDate] = dateRange;
-                      const utcStart = startDate
-                        ? new UTCDate(
-                            startDate.getUTCFullYear(),
-                            startDate.getUTCMonth(),
-                            startDate.getUTCDate(),
-                            0,
-                            0,
-                            0
-                          ).getTime() / 1000
-                        : null;
-                      const utcEnd = endDate
-                        ? new UTCDate(
-                            endDate.getUTCFullYear(),
-                            endDate.getUTCMonth(),
-                            endDate.getUTCDate(),
-                            23,
-                            59,
-                            59
-                          ).getTime() / 1000
-                        : null;
-                      form.setFieldValue('endTime', utcEnd);
-                      form.setFieldValue('startTime', utcStart);
-                    }}
-                    startDate={
-                      form.values.startTime ? new UTCDate(form.values.startTime * 1000) : undefined
-                    }
-                    endDate={
-                      form.values.endTime ? new UTCDate(form.values.endTime * 1000) : undefined
-                    }
-                    dateFormat="yyyy-MM-dd"
-                  />
+                <ChakraField>
+                  <Stack gap={4} w="full">
+                    <DatePicker
+                      selectsRange={true}
+                      customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
+                      onChange={dateRange => {
+                        const [startDate, endDate] = dateRange;
+                        const utcStart = startDate
+                          ? new UTCDate(
+                              startDate.getUTCFullYear(),
+                              startDate.getUTCMonth(),
+                              startDate.getUTCDate(),
+                              0,
+                              0,
+                              0
+                            ).getTime() / 1000
+                          : null;
+                        const utcEnd = endDate
+                          ? new UTCDate(
+                              endDate.getUTCFullYear(),
+                              endDate.getUTCMonth(),
+                              endDate.getUTCDate(),
+                              23,
+                              59,
+                              59
+                            ).getTime() / 1000
+                          : null;
+                        form.setFieldValue('endTime', utcEnd);
+                        form.setFieldValue('startTime', utcStart);
+                      }}
+                      startDate={
+                        form.values.startTime
+                          ? new UTCDate(form.values.startTime * 1000)
+                          : undefined
+                      }
+                      endDate={
+                        form.values.endTime ? new UTCDate(form.values.endTime * 1000) : undefined
+                      }
+                      dateFormat="yyyy-MM-dd"
+                    />
+                  </Stack>
                 </ChakraField>
               )}
             </Field>
-          </Stack>
-          <Box mt={'16px'}>
-            <Button
-              width="100%"
-              type="submit"
-              fontSize={'sm'}
-              variant={'secondary'}
-              height={'40px'}
-              color="textSubdued"
-            >
+            <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
               Apply
             </Button>
-          </Box>
+          </Stack>
         </Form>
       )}
     </Formik>

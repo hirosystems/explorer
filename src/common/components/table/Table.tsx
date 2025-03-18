@@ -126,57 +126,53 @@ export type TableProps<T> = {
 
 const ErrorTable = ({ error }: { error: string }) => {
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
-      <Stack alignItems="center" gap={3}>
-        <Icon h={8} w={8} color="iconError">
-          <WarningOctagon />
-        </Icon>
-        <Text fontSize="md" fontWeight="medium" color="textError">
-          {error ?? 'An error occurred'}
-        </Text>
-      </Stack>
-    </Flex>
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1} gap={3}>
+      <Icon h={8} w={8} color="iconError">
+        <WarningOctagon />
+      </Icon>
+      <Text fontSize="md" fontWeight="medium" color="textError">
+        {error ?? 'An error occurred'}
+      </Text>
+    </Stack>
   );
 };
 
 const EmptyFilteredTable = () => {
   // This isn't used now, but the plan is to use this once I start implementing filtering
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
-      <Stack alignItems="center" gap={6}>
-        <Icon h={16} w={16}>
-          <StacksFrowneyIcon />
-        </Icon>
-        <Stack gap={2} alignItems="center">
-          <Text fontSize="2xl" fontWeight="medium" color="textPrimary">
-            No results found
-          </Text>
-          <Text fontSize="md" color="textSecondary">
-            Try modifying filters applied.
-          </Text>
-        </Stack>
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1} gap={6}>
+      <Icon h={16} w={16}>
+        <StacksFrowneyIcon />
+      </Icon>
+      <Stack gap={2} alignItems="center">
+        <Text fontSize="2xl" fontWeight="medium" color="textPrimary">
+          No results found
+        </Text>
+        <Text fontSize="md" color="textSecondary">
+          Try modifying filters applied.
+        </Text>
       </Stack>
-    </Flex>
+    </Stack>
   );
 };
 
 const EmptyTable = ({ message }: { message?: string }) => {
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1}>
       <Text fontSize="2xl" color="textPrimary">
         {message ?? 'No results found'}
       </Text>
-    </Flex>
+    </Stack>
   );
 };
 
 const LoadingTable = () => {
   return (
-    <Flex justifyContent="center" alignItems="center" h="full" w="full">
+    <Stack justifyContent="center" alignItems="center" h="full" w="full" flex={1}>
       <Icon h={16} w={16}>
         <Spinner size="md" />
       </Icon>
-    </Flex>
+    </Stack>
   );
 };
 
@@ -208,6 +204,7 @@ export function Table<T>({
   bannerRow,
   error,
   pagination,
+  tableProps,
 }: TableProps<T>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);

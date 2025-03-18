@@ -1,4 +1,5 @@
 import { TransactionValueFilterTypes } from '@/common/state/slices/transaction-value-filter-slice';
+import { capitalize } from '@/common/utils/utils';
 import { Checkbox, CheckboxProps } from '@/components/ui/checkbox';
 import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Button } from '@/ui/Button';
@@ -99,7 +100,15 @@ export function TransactionTypeFilter() {
     },
   });
 
-  console.log({ activeFilters });
+  const areFiltersActive = activeFilters.length > 0;
+  const triggerTextPrefix = areFiltersActive ? 'Type: ' : 'Type';
+  const firstActiveFilter = activeFilters[0];
+  const firstActiveFilterFormatted = firstActiveFilter ? firstActiveFilter.replace(/_/g, ' ') : '';
+  const otherActiveFilters = activeFilters.slice(1);
+  const triggerTextSuffix =
+    activeFilters.length > 1
+      ? `${capitalize(firstActiveFilterFormatted)}, +${otherActiveFilters.length}`
+      : capitalize(firstActiveFilterFormatted);
 
   return (
     <GooseNeckPopoverRoot
@@ -109,15 +118,22 @@ export function TransactionTypeFilter() {
     >
       <GooseNeckPopoverTrigger
         open={open}
-        triggerText={
-          <Text
-            textStyle="text-medium-sm"
-            color="textSecondary"
-            _groupHover={{ color: 'textPrimary' }}
-          >
-            Transaction type
-          </Text>
-        }
+        triggerText={open => (
+          <>
+            <Text
+              textStyle="text-medium-sm"
+              color={open ? 'textPrimary' : 'textSecondary'}
+              _groupHover={{ color: 'textPrimary' }}
+            >
+              {triggerTextPrefix}
+            </Text>
+            {areFiltersActive && (
+              <Text textStyle="text-medium-sm" color="textPrimary">
+                {triggerTextSuffix}
+              </Text>
+            )}
+          </>
+        )}
       />
       <GooseNeckPopoverContent w="fit-content" minW={'190px'}>
         <Stack gap={1.5} px={1.5} pt={2} pb={3}>
