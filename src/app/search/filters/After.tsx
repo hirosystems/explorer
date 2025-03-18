@@ -1,12 +1,12 @@
-import { Box, Stack } from '@chakra-ui/react';
+import { Input } from '@/ui/Input';
+import { Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
-import { Button } from '../../../components/ui/button';
+import { Button } from '@/ui/Button';
 import { Field as ChakraField } from '../../../components/ui/field';
-import { DateInput } from './DateInput';
 
 interface FormValues {
   startTime: number | null;
@@ -23,6 +23,7 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
   const initialValues: FormValues = {
     startTime: defaultStartTime,
   };
+
   return (
     <Formik
       enableReinitialize
@@ -47,9 +48,9 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
           <Stack gap={4}>
             <Field name="startTime">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <ChakraField label="After:">
+                <ChakraField>
                   <DatePicker
-                    customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
+                    customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
                     selected={
                       form.values.startTime ? new UTCDate(form.values.startTime * 1000) : undefined
                     }
@@ -72,18 +73,9 @@ export function AfterForm({ defaultStartTime, onClose }: DateFilterProps) {
               )}
             </Field>
           </Stack>
-          <Box mt={4}>
-            <Button
-              width="100%"
-              type="submit"
-              fontSize={'sm'}
-              variant={'secondary'}
-              height={10}
-              color="textSubdued"
-            >
-              Apply
-            </Button>
-          </Box>
+          <Button width="100%" type="submit" size="small" variant={'redesignSecondary'} mt={4}>
+            Apply
+          </Button>
         </Form>
       )}
     </Formik>

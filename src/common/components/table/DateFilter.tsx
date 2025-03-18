@@ -1,44 +1,17 @@
 import { AfterForm } from '@/app/search/filters/After';
 import { BeforeForm } from '@/app/search/filters/Before';
 import { DateRangeForm } from '@/app/search/filters/DateRange';
-import { Flex } from '@chakra-ui/react';
-import { ReactNode, useEffect, useState } from 'react';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
+import { UTCDate } from '@date-fns/utc';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Badge } from '../../../common/components/Badge';
 import { Text } from '../../../ui/Text';
 import {
   GooseNeckPopoverContent,
   GooseNeckPopoverRoot,
   GooseNeckPopoverTrigger,
 } from '../GooseNeckPopover';
-
-function FilterTypeButton({
-  isSelected,
-  setSelected,
-  children,
-}: {
-  isSelected?: boolean;
-  setSelected?: () => void;
-  children: ReactNode;
-}) {
-  return (
-    <Badge
-      color={isSelected ? 'timeFilter.text' : 'textSubdued'}
-      bg={isSelected ? 'timeFilter.background' : undefined}
-      borderColor={isSelected ? 'timeFilter.border' : undefined}
-      px={'2'}
-      py={'1'}
-      fontSize={'xs'}
-      rounded={'full'}
-      border="normal"
-      fontWeight={'medium'}
-      cursor={'pointer'}
-      onClick={setSelected}
-    >
-      {children}
-    </Badge>
-  );
-}
 
 interface DateFilterProps {
   defaultStartTime?: string;
@@ -59,22 +32,68 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
           ? 'before'
           : null;
 
-  const buttonText =
-    populatedFilter === 'dateRange'
-      ? 'Date range:'
-      : populatedFilter === 'before'
-        ? 'Before:'
-        : populatedFilter === 'after'
-          ? 'After:'
-          : 'Date';
-
-  const [selectedFilterType, setSelectedFilterType] = useState<'dateRange' | 'before' | 'after'>(
-    populatedFilter || 'dateRange'
+  const searchParams = useSearchParams();
+  const [startTime, setStartTime] = useState<UTCDate | null>(
+    defaultStartTimeNumber ? new UTCDate(defaultStartTimeNumber * 1000) : null
+  );
+  const [endTime, setEndTime] = useState<UTCDate | null>(
+    defaultEndTimeNumber ? new UTCDate(defaultEndTimeNumber * 1000) : null
   );
 
   useEffect(() => {
-    setSelectedFilterType(populatedFilter || 'dateRange');
-  }, [populatedFilter]);
+    const startTime = searchParams.get('startTime');
+    const endTime = searchParams.get('endTime');
+    setStartTime(startTime ? new UTCDate(Number(startTime) * 1000) : null);
+    setEndTime(endTime ? new UTCDate(Number(endTime) * 1000) : null);
+  }, [searchParams]);
+
+  const isDateSet = startTime || endTime;
+  const triggerTextPrefix = isDateSet ? 'Date: ' : 'Date';
+  const triggerTextSuffix =
+    startTime && endTime
+      ? `Between ${startTime.toLocaleDateString()} - ${endTime.toLocaleDateString()}`
+      : startTime
+        ? `After ${startTime.toLocaleDateString()}`
+        : endTime
+          ? `Before ${endTime.toLocaleDateString()}`
+          : '';
+
+  const tabs = useMemo(
+    () => [
+      {
+        id: 'between',
+        title: 'Between',
+        content: (
+          <DateRangeForm
+            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
+            onClose={() => setOpen(false)}
+          />
+        ),
+      },
+      {
+        id: 'before',
+        title: 'Before',
+        content: (
+          <BeforeForm
+            defaultEndTime={populatedFilter === 'before' ? defaultEndTimeNumber : null}
+            onClose={() => setOpen(false)}
+          />
+        ),
+      },
+      {
+        id: 'after',
+        title: 'After',
+        content: (
+          <AfterForm
+            defaultStartTime={populatedFilter === 'after' ? defaultStartTimeNumber : null}
+            onClose={() => setOpen(false)}
+          />
+        ),
+      },
+    ],
+    [defaultStartTimeNumber, defaultEndTimeNumber, populatedFilter]
+  );
 
   return (
     <GooseNeckPopoverRoot
@@ -85,56 +104,38 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
     >
       <GooseNeckPopoverTrigger
         open={open}
-        triggerText={
-          <Text
-            textStyle="text-medium-sm"
-            color="textSecondary"
-            _groupHover={{ color: 'textPrimary' }}
-          >
-            Date
-          </Text>
-        }
+        triggerText={open => (
+          <>
+            <Text
+              textStyle="text-medium-sm"
+              color={open ? 'textPrimary' : 'textSecondary'}
+              _groupHover={{ color: 'textPrimary' }}
+            >
+              {triggerTextPrefix}
+            </Text>
+            {isDateSet && (
+              <Text textStyle="text-medium-sm" color="textPrimary">
+                {triggerTextSuffix}
+              </Text>
+            )}
+          </>
+        )}
       />
-      <GooseNeckPopoverContent maxWidth={'256px'} bgColor={'surfacePrimary'}>
-        <Flex direction={'column'} gap={4} p={4}>
-          <Flex gap={'2'} flexWrap={'wrap'}>
-            <FilterTypeButton
-              isSelected={selectedFilterType === 'dateRange'}
-              setSelected={() => setSelectedFilterType('dateRange')}
-            >
-              Date range
-            </FilterTypeButton>
-            <FilterTypeButton
-              isSelected={selectedFilterType === 'before'}
-              setSelected={() => setSelectedFilterType('before')}
-            >
-              Before
-            </FilterTypeButton>
-            <FilterTypeButton
-              isSelected={selectedFilterType === 'after'}
-              setSelected={() => setSelectedFilterType('after')}
-            >
-              After
-            </FilterTypeButton>
-          </Flex>
-          {selectedFilterType === 'dateRange' ? (
-            <DateRangeForm
-              defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
-              defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-              onClose={() => setOpen(false)}
-            />
-          ) : selectedFilterType === 'before' ? (
-            <BeforeForm
-              defaultEndTime={populatedFilter === 'before' ? defaultEndTimeNumber : null}
-              onClose={() => setOpen(false)}
-            />
-          ) : selectedFilterType === 'after' ? (
-            <AfterForm
-              defaultStartTime={populatedFilter === 'after' ? defaultStartTimeNumber : null}
-              onClose={() => setOpen(false)}
-            />
-          ) : null}
-        </Flex>
+      <GooseNeckPopoverContent maxWidth={'256px'} bgColor={'surfacePrimary'} p={3}>
+        <TabsRoot defaultValue={tabs[0].id} size="redesignSm" variant="redesignPrimary">
+          <TabsList mb={4}>
+            {tabs.map(tab => (
+              <TabsTrigger key={tab.id} value={tab.id}>
+                {tab.title}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {tabs.map(tab => (
+            <TabsContent key={`${tab.id}-content`} value={tab.id}>
+              {tab.content}
+            </TabsContent>
+          ))}
+        </TabsRoot>
       </GooseNeckPopoverContent>
     </GooseNeckPopoverRoot>
   );

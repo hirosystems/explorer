@@ -62,9 +62,15 @@ export function ValueBasisFilter() {
       open={open}
       onOpenChange={e => setOpen(e.open)}
     >
-      <GooseNeckPopoverTrigger open={open} placement="bottom-end">
-        <Text textStyle="text-medium-sm">{filterLabelValue}</Text>
-      </GooseNeckPopoverTrigger>
+      <GooseNeckPopoverTrigger
+        open={open}
+        placement="bottom-end"
+        triggerText={open => (
+          <Text textStyle="text-medium-sm" color={open ? 'textPrimary' : 'textSecondary'}>
+            {filterLabelValue}
+          </Text>
+        )}
+      />
       <GooseNeckPopoverContent placement="bottom-end" w="fit-content" minW={'190px'}>
         <Stack gap={2.5} p={3} alignItems={'flex-end'}>
           {menuItems.map(item => (

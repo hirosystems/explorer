@@ -2,6 +2,7 @@ import { CurvedCornerIcon } from '@/ui/icons/CurvedCornerIcon';
 import { Popover as ChakraPopover, Flex, Icon, PopoverRootProps, Portal } from '@chakra-ui/react';
 import { CaretDown, CaretUp } from '@phosphor-icons/react';
 import * as React from 'react';
+import { ReactNode } from 'react';
 
 interface PopoverContentProps extends ChakraPopover.ContentProps {
   portalled?: boolean;
@@ -49,11 +50,11 @@ export const GooseNeckPopoverContent = React.forwardRef<
 export const GooseNeckPopoverTrigger = React.forwardRef<
   HTMLButtonElement,
   ChakraPopover.TriggerProps & {
-    open?: boolean;
+    open: boolean;
     gooseNeckHeight?: number;
     gooseNeckAdjustment?: number;
     placement?: 'bottom-start' | 'bottom-end'; // Chakra should be exporting these types
-    triggerText?: ReactNode;
+    triggerText?: (open: boolean) => ReactNode;
     triggerIcon?: ReactNode;
     hasIcon?: boolean;
   }
@@ -87,13 +88,13 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
         cursor="pointer"
         w="fit-content"
       >
-        {triggerText ? triggerText : props.children}
+        {triggerText ? triggerText(open) : props.children}
 
         {hasIcon ? (
           triggerIcon ? (
             triggerIcon
           ) : (
-            <Icon color="iconSecondary" _groupHover={{ color: 'iconPrimary' }} h={3} w={3}>
+            <Icon color={open ? 'iconPrimary' : 'iconSecondary'} _groupHover={{ color: 'iconPrimary' }} h={3} w={3}>
               {open ? <CaretUp /> : <CaretDown />}
             </Icon>
           )
