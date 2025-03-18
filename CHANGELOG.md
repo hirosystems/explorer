@@ -1,3 +1,10 @@
+# [1.261.0](https://github.com/hirosystems/explorer/compare/v1.260.0...v1.261.0) (2025-03-18)
+
+
+### Features
+
+* redesign - homepage - mempool stats section ([2e02686](https://github.com/hirosystems/explorer/commit/2e0268626bc2e91d69a7503d2b83d89d9c3f2edb))
+
 # [1.260.0](https://github.com/hirosystems/explorer/compare/v1.259.0...v1.260.0) (2025-03-17)
 
 
