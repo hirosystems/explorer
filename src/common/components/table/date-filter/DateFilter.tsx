@@ -98,7 +98,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
 
   return (
     <GooseNeckPopoverRoot
-      id={'date-filter-popover'}
+      id={'date-filter-popover-redesign'}
       positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
       open={open}
       onOpenChange={e => setOpen(e.open)}

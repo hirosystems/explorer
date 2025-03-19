@@ -99,7 +99,7 @@ export function AddressFilter({
         );
   return (
     <GooseNeckPopoverRoot
-      id={'address-filter-popover'}
+      id={'address-filter-popover-redesign'}
       positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
       open={open}
       onOpenChange={e => {
