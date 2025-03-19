@@ -19,7 +19,7 @@ interface DateFilterProps {
 
 const GOOSENECK_ADJUSTMENT = 4;
 
-export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps) {
+export function DateFilter({ defaultStartTime, defaultEndTime, onFilterChange }: DateFilterProps) {
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime)) ? null : Number(defaultStartTime);
   const defaultEndTimeNumber = isNaN(Number(defaultEndTime)) ? null : Number(defaultEndTime);
   const [open, setOpen] = useState(false);

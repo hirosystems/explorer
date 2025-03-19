@@ -25,19 +25,21 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
 
   return (
     <>
-      <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
+      {/* <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
         <PageTitle>Transactions</PageTitle>
       </Flex>
       <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
-      <TxListTabs filters={filters} />
-      <ClientOnly>
+      <TxListTabs filters={filters} /> */}
+      <TxTableFilters filters={filters} />
+      <TxsTable filters={filters} />
+      {/* <ClientOnly>
         {isRedesign ? (
           <>
             <TxTableFilters filters={filters} />
             <TxsTable filters={filters} />
           </>
         ) : null}
-      </ClientOnly>
+      </ClientOnly> */}
     </>
   );
 }
