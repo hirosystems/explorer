@@ -60,5 +60,65 @@ export const menuSlotRecipe = defineSlotRecipe({
       },
     },
   },
-  variants: {},
+  variants: {
+    variant: {
+      redesignPrimary: {
+        trigger: {
+          textStyle: 'heading-sm',
+          color: 'textSecondary',
+          display: 'inline-flex',
+          gap: 2,
+          borderRadius: 'redesign.lg',
+          px: 3,
+          py: 1.5,
+          bgColor: 'surfacePrimary',
+          justifyContent: 'space-between',
+          boxShadow: 'none',
+          _open: {
+            boxShadow: 'elevation1',
+          },
+          _closed: {
+            boxShadow: 'none',
+          },
+          _hover: {
+            color: 'textPrimary',
+            bgColor: 'surfacePrimary',
+          },
+          _active: {
+            border: 'none',
+            outline: 'none',
+          },
+          _focus: {
+            border: 'none',
+            outline: 'none',
+          },
+          _focusVisible: {
+            border: 'none',
+            outline: 'none',
+          },
+        },
+        content: {
+          bgColor: 'surfacePrimary',
+          color: 'textSecondary',
+          borderRadius: 'redesign.lg',
+          boxShadow: 'none',
+          _open: {
+            boxShadow: 'elevation1',
+          },
+          _closed: {
+            boxShadow: 'none',
+          },
+        },
+        item: {
+          textStyle: 'heading-sm',
+          color: 'textSecondary',
+          bgColor: 'transparent',
+          _hover: {
+            color: 'textPrimary',
+            bgColor: 'transparent',
+          },
+        },
+      },
+    },
+  },
 });
