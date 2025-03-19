@@ -136,7 +136,7 @@ export const SimpleTable: Story = {
   render: args => {
     if (args.showSkeleton) {
       return (
-        <TableContainer>
+        <TableContainer minHeight="500px">
           <TableSkeleton numRows={10} numColumns={5} />
         </TableContainer>
       );
@@ -151,7 +151,7 @@ export const SimpleTable: Story = {
         <Table
           tableContainerWrapper={
             args.hasTableContainerWrapper
-              ? table => <TableContainer>{table}</TableContainer>
+              ? table => <TableContainer minHeight="500px">{table}</TableContainer>
               : undefined
           }
           columns={getSimpleTableColumnDefinitions(
@@ -194,7 +194,7 @@ export const TxTable: Story = {
   render: args => {
     if (args.showSkeleton) {
       return (
-        <TableContainer>
+        <TableContainer minHeight="500px">
           <TableSkeleton numRows={10} numColumns={5} />
         </TableContainer>
       );
@@ -210,7 +210,7 @@ export const TxTable: Story = {
           <Table
             tableContainerWrapper={
               args.hasTableContainerWrapper
-                ? table => <TableContainer>{table}</TableContainer>
+                ? table => <TableContainer minHeight="500px">{table}</TableContainer>
                 : undefined
             }
             columns={getStorybookTxTableTanstackColumns(args.hasSorting, args.pinFirstColumn)}
