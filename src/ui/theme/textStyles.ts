@@ -166,7 +166,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontFamily: 'var(--font-matter)',
       fontSize: '3.5xl',
       fontWeight: 'regular',
-      letterSpacing: 'tighter',
+      letterSpacing: 'redesign.semiTight',
       lineHeight: 'redesign.semiTight',
     },
   },
