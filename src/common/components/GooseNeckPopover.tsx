@@ -1,5 +1,12 @@
 import { CurvedCornerIcon } from '@/ui/icons/CurvedCornerIcon';
-import { Popover as ChakraPopover, Flex, Icon, PopoverRootProps, Portal } from '@chakra-ui/react';
+import {
+  Box,
+  Popover as ChakraPopover,
+  Flex,
+  Icon,
+  PopoverRootProps,
+  Portal,
+} from '@chakra-ui/react';
 import { CaretDown, CaretUp } from '@phosphor-icons/react';
 import * as React from 'react';
 import { ReactNode } from 'react';
@@ -9,6 +16,21 @@ interface PopoverContentProps extends ChakraPopover.ContentProps {
   portalRef?: React.RefObject<HTMLElement>;
 }
 
+type Placement = 'bottom-start' | 'bottom-end';
+
+interface PositioningOptions {
+  /**
+   * The initial placement of the floating element
+   */
+  placement?: Placement;
+  /**
+   * The offset of the floating element
+   */
+  offset?: {
+    mainAxis?: number;
+  };
+}
+
 export const GooseNeckPopoverRoot = (props: PopoverRootProps) => {
   return (
     <ChakraPopover.Root
@@ -16,7 +38,9 @@ export const GooseNeckPopoverRoot = (props: PopoverRootProps) => {
       positioning={{
         ...props.positioning,
         placement: props?.positioning?.placement ?? 'bottom-start',
-        gutter: props?.positioning?.gutter ?? -1,
+        offset: props?.positioning?.offset ?? {
+          mainAxis: 0,
+        },
       }}
     />
   );
@@ -24,7 +48,7 @@ export const GooseNeckPopoverRoot = (props: PopoverRootProps) => {
 
 export const GooseNeckPopoverContent = React.forwardRef<
   HTMLDivElement,
-  PopoverContentProps & { placement?: 'bottom-start' | 'bottom-end' }
+  PopoverContentProps & PositioningOptions
 >(function GooseNeckPopoverContent(props, ref) {
   const { portalled = true, portalRef, placement = 'bottom-start', ...rest } = props;
   return (
@@ -47,28 +71,22 @@ export const GooseNeckPopoverContent = React.forwardRef<
   );
 });
 
+const curvedCornerSize = 4;
+
 export const GooseNeckPopoverTrigger = React.forwardRef<
   HTMLButtonElement,
   ChakraPopover.TriggerProps & {
     open: boolean;
-    gooseNeckHeight?: number;
-    gooseNeckAdjustment?: number;
-    placement?: 'bottom-start' | 'bottom-end'; // Chakra should be exporting these types
     triggerText?: (open: boolean) => ReactNode;
     triggerIcon?: ReactNode;
     hasIcon?: boolean;
+    positioning?: PositioningOptions;
   }
 >(function GooseNeckPopoverTrigger(props, ref) {
-  const {
-    open,
-    gooseNeckHeight,
-    gooseNeckAdjustment,
-    placement = 'bottom-start',
-    triggerText,
-    triggerIcon,
-    hasIcon = true,
-    ...buttonProps
-  } = props;
+  const { open, positioning, triggerText, triggerIcon, hasIcon = true } = props;
+
+  const placement = positioning?.placement ?? 'bottom-start';
+  const mainAxis = positioning?.offset?.mainAxis ?? 0;
 
   return (
     <ChakraPopover.Trigger>
@@ -80,7 +98,6 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
         py={1.5}
         px={4}
         gap={1.5}
-        h={10}
         alignItems="center"
         justifyContent="center"
         position="relative"
@@ -94,25 +111,44 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
           triggerIcon ? (
             triggerIcon
           ) : (
-            <Icon color={open ? 'iconPrimary' : 'iconSecondary'} _groupHover={{ color: 'iconPrimary' }} h={3} w={3}>
+            <Icon
+              color={open ? 'iconPrimary' : 'iconSecondary'}
+              _groupHover={{ color: 'iconPrimary' }}
+              h={3}
+              w={3}
+            >
               {open ? <CaretUp /> : <CaretDown />}
             </Icon>
           )
         ) : null}
 
         {open && (
-          <Icon
-            color="var(--stacks-colors-surface-primary)"
+          <Box
+            className="gooseneck"
             position="absolute"
-            bottom={'-1px'}
-            left={placement === 'bottom-start' ? undefined : `${-4 * 4 + 1}px`}
-            right={placement === 'bottom-end' ? undefined : `${-4 * 4 + 1}px`}
-            transform={placement === 'bottom-start' ? 'rotateY(180deg)' : 'none'}
-            h={4}
-            w={4}
+            height={mainAxis / 4} // dividing by 4 to account for the fact that the popover root's positioning.offset.mainAxis does not seem to abide my chakra ui's normal scaling of input (*4)
+            bottom={-mainAxis / 4}
+            left={0}
+            bg="surfacePrimary"
+            w="100%"
           >
-            <CurvedCornerIcon />
-          </Icon>
+            <Icon
+              color="surfacePrimary"
+              position="absolute"
+              bottom={'-1px'}
+              left={
+                placement === 'bottom-start' ? undefined : `${-1 * (curvedCornerSize * 4) + 1}px`
+              }
+              right={
+                placement === 'bottom-end' ? undefined : `${-1 * (curvedCornerSize * 4) + 1}px`
+              }
+              transform={placement === 'bottom-start' ? 'rotateY(180deg)' : 'none'}
+              h={curvedCornerSize}
+              w={curvedCornerSize}
+            >
+              <CurvedCornerIcon />
+            </Icon>
+          </Box>
         )}
       </Flex>
     </ChakraPopover.Trigger>

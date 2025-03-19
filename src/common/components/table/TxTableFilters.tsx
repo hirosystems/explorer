@@ -7,16 +7,19 @@ import { ValueBasisFilter } from '@/common/components/table/ValueBasisFilter';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 
-export const TxTableFilters = () => {
+export const TxTableFilters = ({ filters }: { filters: Record<string, string | undefined> }) => {
   return (
-    <Flex justifyContent={'space-between'} flexWrap={'wrap'} gap={4} h={7}>
+    <Flex justifyContent={'space-between'} flexWrap={'wrap'} gap={4}>
       <Flex gap={2} alignItems={'center'} h="full">
         <Text textStyle="text-regular-sm" color="textSecondary">
           Filter:
         </Text>
         <Flex gap={3}>
-          <AddressFilter />
-          <DateFilter />
+          <AddressFilter
+            defaultFromAddress={filters.fromAddress}
+            defaultToAddress={filters.toAddress}
+          />
+          <DateFilter defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
           <TransactionTypeFilter />
         </Flex>
       </Flex>

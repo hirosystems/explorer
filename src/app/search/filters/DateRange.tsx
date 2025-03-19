@@ -18,11 +18,7 @@ interface DateRangeFormProps {
   onClose: () => void;
 }
 
-export function DateRangeForm({
-  defaultStartTime,
-  defaultEndTime,
-  onClose,
-}: DateRangeFormProps) {
+export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: DateRangeFormProps) {
   const initialValues: FormValues = {
     startTime: defaultStartTime,
     endTime: defaultEndTime,

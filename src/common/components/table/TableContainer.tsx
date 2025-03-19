@@ -18,7 +18,14 @@ export function TableContainer({ children, ...rest }: TableContainerProps) {
       justifyContent="flex-start"
       {...rest}
     >
-      <Stack overflowX="auto" overflowY="hidden" h="full" w="full" className="table-container-scroll-wrapper" flex={1}>
+      <Stack
+        overflowX="auto"
+        overflowY="hidden"
+        h="full"
+        w="full"
+        className="table-container-scroll-wrapper"
+        flex={1}
+      >
         {children}
       </Stack>
     </Card>

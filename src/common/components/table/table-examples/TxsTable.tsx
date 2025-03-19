@@ -251,11 +251,11 @@ export function TxsTable({ filters }: { filters: Record<string, string | undefin
   const { activeFilters } = useFilterAndSortState();
   const filteredTxs = useMemo(
     () =>
-      activeFilters.length === 0
-        ? txs
-        : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
+      activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
     [txs, activeFilters]
   );
+
+  const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -340,7 +340,7 @@ export function TxsTable({ filters }: { filters: Record<string, string | undefin
         onPageChange: handlePageChange,
       }}
       bannerRow={
-        newTxsAvailable && pagination.pageIndex === 0 ? (
+        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
           <UpdateTableBannerRow
             onClick={() => {
               setNewTxsAvailable(false);

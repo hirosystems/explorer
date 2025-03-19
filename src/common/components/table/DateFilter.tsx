@@ -18,6 +18,8 @@ interface DateFilterProps {
   defaultEndTime?: string;
 }
 
+const GOOSENECK_ADJUSTMENT = 4;
+
 export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps) {
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime)) ? null : Number(defaultStartTime);
   const defaultEndTimeNumber = isNaN(Number(defaultEndTime)) ? null : Number(defaultEndTime);
@@ -98,7 +100,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
   return (
     <GooseNeckPopoverRoot
       id={'date-filter-popover'}
-      positioning={{ placement: 'bottom-start' }}
+      positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
       open={open}
       onOpenChange={e => setOpen(e.open)}
     >
@@ -120,6 +122,7 @@ export function DateFilter({ defaultStartTime, defaultEndTime }: DateFilterProps
             )}
           </>
         )}
+        positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
       />
       <GooseNeckPopoverContent maxWidth={'256px'} bgColor={'surfacePrimary'} p={3}>
         <TabsRoot defaultValue={tabs[0].id} size="redesignSm" variant="redesignPrimary">

@@ -25,6 +25,7 @@ interface FormValues {
 }
 
 const TRUNCATE_THRESHOLD = 15;
+const GOOSENECK_ADJUSTMENT = 4;
 
 export function AddressFilter({
   defaultToAddress = '',
@@ -96,17 +97,20 @@ export function AddressFilter({
             From/To
           </Text>
         );
-
   return (
     <GooseNeckPopoverRoot
       id={'address-filter-popover'}
-      positioning={{ placement: 'bottom-start' }}
+      positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
       open={open}
       onOpenChange={e => {
         setOpen(e.open);
       }}
     >
-      <GooseNeckPopoverTrigger open={open} triggerText={triggerText} />
+      <GooseNeckPopoverTrigger
+        open={open}
+        triggerText={triggerText}
+        positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
+      />
       <GooseNeckPopoverContent maxW={'275px'} bgColor={'surfacePrimary'} placement="bottom-start">
         <Stack gap={2} p={4}>
           <Formik
@@ -154,6 +158,7 @@ export function AddressFilter({
                           size="big"
                           autoComplete="off"
                           data-form-type="other"
+                          data-disable-extensions="true"
                         />
                       </ChakraField>
                     )}
@@ -176,6 +181,7 @@ export function AddressFilter({
                           size="big"
                           autoComplete="off"
                           data-form-type="other"
+                          data-disable-extensions="true"
                         />
                       </ChakraField>
                     )}
