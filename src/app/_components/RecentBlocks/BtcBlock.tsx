@@ -110,11 +110,14 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
 
 export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
   const network = useGlobalContext().activeNetwork;
+
   return (
     <Flex
-      bg={
-        'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-15), var(--stacks-colors-alpha-bitcoin-200-alpha-15))'
-      }
+      bg={{
+        base: 'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-15), var(--stacks-colors-alpha-bitcoin-200-alpha-15))',
+        _dark:
+          'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-600-alpha-15), var(--stacks-colors-alpha-stacks-600-alpha-15))',
+      }}
       padding={`${RING_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-lg) + ${BORDER_WIDTH + RING_WIDTH * 2}px)`}
       my={`-${RING_WIDTH * 2}px`}
@@ -139,9 +142,11 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         tabIndex={0}
       >
         <Flex
-          bg={
-            'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-40), var(--stacks-colors-alpha-bitcoin-200-alpha-40))'
-          }
+          bg={{
+            base: 'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-40), var(--stacks-colors-alpha-bitcoin-200-alpha-40))',
+            _dark:
+              'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-600-alpha-40), var(--stacks-colors-alpha-stacks-600-alpha-40))',
+          }}
           padding={`${RING_WIDTH}px`}
           borderRadius={`calc(var(--stacks-radii-redesign-lg) + ${BORDER_WIDTH + RING_WIDTH}px)`}
           _hover={{
@@ -150,9 +155,11 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
           align="stretch"
         >
           <Flex
-            bg={
-              'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-75), var(--stacks-colors-accent-stacks-400))'
-            }
+            bg={{
+              base: 'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-75), var(--stacks-colors-alpha-stacks-400))',
+              _dark:
+                'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-600-alpha-75), var(--stacks-colors-alpha-stacks-500))',
+            }}
             padding={`${BORDER_WIDTH}px`}
             borderRadius={`calc(var(--stacks-radii-redesign-lg) + ${BORDER_WIDTH}px)`}
           >
