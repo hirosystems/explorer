@@ -23,13 +23,13 @@ import { menuSlotRecipe } from './recipes/MenuRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
 import { tabsSlotRecipe } from './recipes/TabsRecipe';
 import { tagSlotRecipe } from './recipes/TagRecipe';
+import { textareaRecipe } from './recipes/TextareaRecipe';
 import { tooltipSlotRecipe } from './recipes/TooltipRecipe';
 import { SEMANTIC_TOKENS } from './semanticTokens';
 import { SIZES } from './sizes';
 import { SPACE } from './space';
 import { TEXT_STYLES } from './textStyles';
 import { Z_INDEX } from './zIndex';
-import { textareaRecipe } from './recipes/TextareaRecipe';
 
 const explorerConfig = defineConfig({
   cssVarsPrefix: 'stacks',

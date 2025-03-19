@@ -24,24 +24,7 @@ import {
   GooseNeckPopoverTrigger,
 } from '../GooseNeckPopover';
 
-function getFilterIcon(filter: string) {
-  switch (filter) {
-    case 'coinbase':
-      return <CubeSparkleIcon />;
-    case 'smart_contract':
-      return <ClarityIcon />;
-    case 'contract_call':
-      return <FunctionXIcon />;
-    case 'tenure_change':
-      return <ArrowBendDownRight />;
-    case 'contract_deploy':
-      return <ClarityIcon />;
-    case 'token_transfer':
-      return <DiagonalArrowsIcon />;
-    default:
-      return <Question />;
-  }
-}
+const GOOSENECK_ADJUSTMENT = 4;
 
 const CheckboxItem = ({
   label,
@@ -115,6 +98,7 @@ export function TransactionTypeFilter() {
       id={'transaction-type-filter-popover'}
       open={open}
       onOpenChange={e => setOpen(e.open)}
+      positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
     >
       <GooseNeckPopoverTrigger
         open={open}
@@ -134,6 +118,7 @@ export function TransactionTypeFilter() {
             )}
           </>
         )}
+        positioning={{ placement: 'bottom-start', offset: { mainAxis: GOOSENECK_ADJUSTMENT } }}
       />
       <GooseNeckPopoverContent w="fit-content" minW={'190px'}>
         <Stack gap={1.5} px={1.5} pt={2} pb={3}>

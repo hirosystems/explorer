@@ -149,7 +149,6 @@ export const tabsSlotRecipe = defineSlotRecipe({
         indicator: {
           zIndex: -1,
         },
-
       },
       icons: {
         root: {
@@ -261,7 +260,6 @@ export const tabsSlotRecipe = defineSlotRecipe({
         indicator: {
           zIndex: -1,
         },
-
       },
     },
   },

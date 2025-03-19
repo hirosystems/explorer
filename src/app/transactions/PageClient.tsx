@@ -3,12 +3,12 @@
 import { TxTableFilters } from '@/common/components/table/TxTableFilters';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { isRedesignUrl } from '@/common/utils/url-utils';
+import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
 import { FilterProps } from '../search/filters';
 import { MempoolFeeStatsSkeleton } from './skeleton';
-import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),
@@ -29,7 +29,7 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
       </Flex> */}
       {/* <MempoolFeeStatsDynamic tokenPrice={tokenPrice} /> */}
       {/* <TxListTabs filters={filters} /> */}
-      <TxTableFilters />
+      <TxTableFilters filters={filters} />
       <TxsTable filters={filters} />
       {/* <ClientOnly>{isRedesign ? <TxsTable /> : null}</ClientOnly> */}
     </>
