@@ -1,7 +1,7 @@
 'use client';
 
 import { AddressFilter } from '@/common/components/table/AddressFilter';
-import { DateFilter } from '@/common/components/table/DateFilter';
+import { DateFilter } from '@/common/components/table/date-filter/DateFilter';
 import { TransactionTypeFilter } from '@/common/components/table/TransactionTypeFilter';
 import { ValueBasisFilter } from '@/common/components/table/ValueBasisFilter';
 import { Text } from '@/ui/Text';

@@ -1,12 +1,11 @@
-import { Box, Stack } from '@chakra-ui/react';
+import { Field as ChakraField } from '@/components/ui/field';
+import { Button } from '@/ui/Button';
+import { Input } from '@/ui/Input';
+import { Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
-
-import { Button } from '../../../components/ui/button';
-import { Field as ChakraField } from '../../../components/ui/field';
-import { DateInput } from './DateInput';
 
 interface FormValues {
   endTime: number | null;
@@ -46,9 +45,9 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
           <Stack gap={4}>
             <Field name="endTime">
               {({ field, form }: FieldProps<string, FormValues>) => (
-                <ChakraField label="Before:">
+                <ChakraField>
                   <DatePicker
-                    customInput={<DateInput placeholder="YYYY-MM-DD" fontSize={'sm'} />}
+                    customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
                     selected={form.values.endTime ? new UTCDate(form.values.endTime * 1000) : null}
                     onChange={date => {
                       if (date) {
@@ -69,18 +68,9 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
               )}
             </Field>
           </Stack>
-          <Box mt={'16px'}>
-            <Button
-              width="100%"
-              type="submit"
-              fontSize={'sm'}
-              variant={'secondary'}
-              height={'40px'}
-              color="textSubdued"
-            >
-              Apply
-            </Button>
-          </Box>
+          <Button width="100%" type="submit" size="small" variant={'redesignSecondary'} mt={4}>
+            Apply
+          </Button>
         </Form>
       )}
     </Formik>
