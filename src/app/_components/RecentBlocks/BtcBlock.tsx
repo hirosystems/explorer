@@ -1,3 +1,4 @@
+import { useColorMode } from '@/components/ui/color-mode';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 
@@ -110,11 +111,36 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
 
 export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
   const network = useGlobalContext().activeNetwork;
+
+  const { colorMode } = useColorMode();
+  const strokeGradientStart =
+    colorMode === 'light'
+      ? 'var(--stacks-colors-alpha-bitcoin-500-alpha-75)'
+      : 'var(--stacks-colors-alpha-bitcoin-600-alpha-75)';
+  const strokeGradientEnd =
+    colorMode === 'light'
+      ? 'var(--stacks-colors-alpha-stacks-400)'
+      : 'var(--stacks-colors-alpha-stacks-500)';
+  const middleRingGradientStart =
+    colorMode === 'light'
+      ? 'var(--stacks-colors-alpha-bitcoin-500-alpha-40)'
+      : 'var(--stacks-colors-alpha-bitcoin-600-alpha-40)';
+  const middleRingGradientEnd =
+    colorMode === 'light'
+      ? 'var(--stacks-colors-alpha-bitcoin-200-alpha-40)'
+      : 'var(--stacks-colors-alpha-stacks-600-alpha-40)';
+  const outerRingGradientStart =
+    colorMode === 'light'
+      ? 'var(--stacks-colors-alpha-bitcoin-500-alpha-15)'
+      : 'var(--stacks-colors-alpha-bitcoin-600-alpha-15)';
+  const outerRingGradientEnd =
+    colorMode === 'light'
+      ? 'var(--stacks-colors-alpha-bitcoin-200-alpha-15)'
+      : 'var(--stacks-colors-alpha-stacks-600-alpha-15)';
+
   return (
     <Flex
-      bg={
-        'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-15), var(--stacks-colors-alpha-bitcoin-200-alpha-15))'
-      }
+      bg={`linear-gradient(to bottom, ${outerRingGradientStart}, ${outerRingGradientEnd})`}
       padding={`${RING_WIDTH}px`}
       borderRadius={`calc(var(--stacks-radii-redesign-lg) + ${BORDER_WIDTH + RING_WIDTH * 2}px)`}
       my={`-${RING_WIDTH * 2}px`}
@@ -139,9 +165,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         tabIndex={0}
       >
         <Flex
-          bg={
-            'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-40), var(--stacks-colors-alpha-bitcoin-200-alpha-40))'
-          }
+          bg={`linear-gradient(to bottom, ${middleRingGradientStart}, ${middleRingGradientEnd})`}
           padding={`${RING_WIDTH}px`}
           borderRadius={`calc(var(--stacks-radii-redesign-lg) + ${BORDER_WIDTH + RING_WIDTH}px)`}
           _hover={{
@@ -150,9 +174,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
           align="stretch"
         >
           <Flex
-            bg={
-              'linear-gradient(to bottom, var(--stacks-colors-alpha-bitcoin-500-alpha-75), var(--stacks-colors-accent-stacks-400))'
-            }
+            bg={`linear-gradient(to bottom, ${strokeGradientStart}, ${strokeGradientEnd})`}
             padding={`${BORDER_WIDTH}px`}
             borderRadius={`calc(var(--stacks-radii-redesign-lg) + ${BORDER_WIDTH}px)`}
           >

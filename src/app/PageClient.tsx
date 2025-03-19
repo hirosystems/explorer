@@ -11,6 +11,7 @@ import { isRedesignUrl } from '../common/utils/url-utils';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
+import { NetworkOverview } from './_components/NetworkOverview/NetworkOverview';
 import { PageTitle } from './_components/PageTitle';
 import { RecentBlocks } from './_components/RecentBlocks/RecentBlocks';
 import { Stats } from './_components/Stats/Stats';
@@ -47,6 +48,11 @@ export function HomePageLayout({
       {isRedesign && (
         <Flex flex="0 0 50%">
           <FeeSection />
+        </Flex>
+      )}
+      {isRedesign && (
+        <Flex flex="0 0 50%" w={'50%'}>
+          <NetworkOverview />
         </Flex>
       )}
       {title}
