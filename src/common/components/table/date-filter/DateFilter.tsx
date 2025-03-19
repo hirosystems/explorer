@@ -1,17 +1,16 @@
 import { AfterForm } from '@/app/search/filters/After';
 import { BeforeForm } from '@/app/search/filters/Before';
 import { DateRangeForm } from '@/app/search/filters/DateRange';
-import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
-import { UTCDate } from '@date-fns/utc';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-
-import { Text } from '../../../ui/Text';
 import {
   GooseNeckPopoverContent,
   GooseNeckPopoverRoot,
   GooseNeckPopoverTrigger,
-} from '../GooseNeckPopover';
+} from '@/common/components/GooseNeckPopover';
+import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
+import { Text } from '@/ui/Text';
+import { UTCDate } from '@date-fns/utc';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 interface DateFilterProps {
   defaultStartTime?: string;
