@@ -15,10 +15,14 @@ interface FormValues {
 interface DateRangeFormProps {
   defaultStartTime: number | null;
   defaultEndTime: number | null;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
-export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: DateRangeFormProps) {
+export function BetweenDatePicker({
+  defaultStartTime,
+  defaultEndTime,
+  onClose,
+}: DateRangeFormProps) {
   const initialValues: FormValues = {
     startTime: defaultStartTime,
     endTime: defaultEndTime,
@@ -47,7 +51,7 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
           params.delete('endTime');
         }
         router.push(`?${params.toString()}`, { scroll: false });
-        onClose();
+        onClose?.();
       }}
     >
       {() => (
@@ -56,46 +60,42 @@ export function DateRangeForm({ defaultStartTime, defaultEndTime, onClose }: Dat
             <Field name="startTime">
               {({ form }: FieldProps<string, FormValues>) => (
                 <ChakraField>
-                  <Stack gap={4} w="full">
-                    <DatePicker
-                      selectsRange={true}
-                      customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
-                      onChange={dateRange => {
-                        const [startDate, endDate] = dateRange;
-                        const utcStart = startDate
-                          ? new UTCDate(
-                              startDate.getUTCFullYear(),
-                              startDate.getUTCMonth(),
-                              startDate.getUTCDate(),
-                              0,
-                              0,
-                              0
-                            ).getTime() / 1000
-                          : null;
-                        const utcEnd = endDate
-                          ? new UTCDate(
-                              endDate.getUTCFullYear(),
-                              endDate.getUTCMonth(),
-                              endDate.getUTCDate(),
-                              23,
-                              59,
-                              59
-                            ).getTime() / 1000
-                          : null;
-                        form.setFieldValue('endTime', utcEnd);
-                        form.setFieldValue('startTime', utcStart);
-                      }}
-                      startDate={
-                        form.values.startTime
-                          ? new UTCDate(form.values.startTime * 1000)
-                          : undefined
-                      }
-                      endDate={
-                        form.values.endTime ? new UTCDate(form.values.endTime * 1000) : undefined
-                      }
-                      dateFormat="yyyy-MM-dd"
-                    />
-                  </Stack>
+                  <DatePicker
+                    selectsRange={true}
+                    customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
+                    onChange={dateRange => {
+                      const [startDate, endDate] = dateRange;
+                      const utcStart = startDate
+                        ? new UTCDate(
+                            startDate.getUTCFullYear(),
+                            startDate.getUTCMonth(),
+                            startDate.getUTCDate(),
+                            0,
+                            0,
+                            0
+                          ).getTime() / 1000
+                        : null;
+                      const utcEnd = endDate
+                        ? new UTCDate(
+                            endDate.getUTCFullYear(),
+                            endDate.getUTCMonth(),
+                            endDate.getUTCDate(),
+                            23,
+                            59,
+                            59
+                          ).getTime() / 1000
+                        : null;
+                      form.setFieldValue('endTime', utcEnd);
+                      form.setFieldValue('startTime', utcStart);
+                    }}
+                    startDate={
+                      form.values.startTime ? new UTCDate(form.values.startTime * 1000) : undefined
+                    }
+                    endDate={
+                      form.values.endTime ? new UTCDate(form.values.endTime * 1000) : undefined
+                    }
+                    dateFormat="yyyy-MM-dd"
+                  />
                 </ChakraField>
               )}
             </Field>

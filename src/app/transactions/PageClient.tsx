@@ -11,6 +11,8 @@ import { TokenPrice } from '../../common/types/tokenPrice';
 import { PageTitle } from '../_components/PageTitle';
 import { FilterProps } from '../search/filters';
 import { MempoolFeeStatsSkeleton } from './skeleton';
+import { TxTableFiltersModal } from '@/common/components/table/TxTableFitlersModal';
+import { TxPageFilters } from './page';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),
@@ -20,7 +22,7 @@ const MempoolFeeStatsDynamic = dynamic(
   }
 );
 
-export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & FilterProps) {
+export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & TxPageFilters) {
   const isRedesign = isRedesignUrl();
 
   return (
@@ -40,6 +42,9 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
           </>
         ) : null}
       </ClientOnly> */}
+      <TxTableFiltersModal
+      filters={filters}
+      />
     </>
   );
 }

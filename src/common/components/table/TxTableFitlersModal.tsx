@@ -1,41 +1,53 @@
+import { TxPageFilters } from '@/app/transactions/page';
 import { useOpenedModal } from '@/common/components/modals/modal-slice';
 import { MODALS } from '@/common/constants/constants';
-import {
-  AccordionItem,
-  AccordionItemContent,
-  AccordionItemTrigger,
-  AccordionRoot,
-} from '@/components/ui/accordion';
+import { AccordionRoot } from '@/components/ui/accordion';
 import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
-const TxTableFiltersModalBody = () => (
-  <Stack gap={4}>
-    <AccordionRoot
-      multiple
-      mt={4}
-      // onValueChange={({ value }) => {
-      //   setIsBtcExplorerUrlsAccordionExpanded(value.includes('btc-explorer-urls'));
-      // }}
-    >
-      <AccordionItem borderBottom={'none'} value="btc-explorer-urls">
-        <AccordionItemTrigger paddingLeft={0} gap={2}>
-          {/* <Icon h={3} w={3}>
-                    {isBtcExplorerUrlsAccordionExpanded ? <CaretDown /> : <CaretRight />}
-                  </Icon> */}
-          <Text fontSize={'sm'}>BTC Explorer URLs</Text>
-        </AccordionItemTrigger>
-        <AccordionItemContent>
-            
-        </AccordionItemContent>
-      </AccordionItem>
-    </AccordionRoot>
-  </Stack>
-);
+import { AddressFilterAccordionItem } from './address-filter/AddressFilterAccordionItem';
+import { DateFilterAccordionItem } from './date-filter/DateFilterAccordionItem';
+import { TransactionTypeFilterAccordionItem } from './transaction-type-filter/TransactionTypeFilterAccordionItem';
 
-export const TxTableFiltersModal = () => {
+const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
+  const [tabs, setTabs] = useState<string[]>([]);
+  const { startTime, endTime, fromAddress, toAddress } = filters;
+  return (
+    <Stack gap={4}>
+      <AccordionRoot
+        multiple
+        mt={4}
+        defaultValue={undefined}
+        onValueChange={({ value }) => {
+          setTabs(value);
+        }}
+      >
+        <Stack gap={4}>
+          <DateFilterAccordionItem
+            id="date-filter-accordion-item"
+            defaultStartTime={startTime}
+            defaultEndTime={endTime}
+            open={tabs.includes('date-filter-accordion-item')}
+        />
+        <AddressFilterAccordionItem
+          id="address-filter-accordion-item"
+          defaultFromAddress={fromAddress}
+          defaultToAddress={toAddress}
+            open={tabs.includes('address-filter-accordion-item')}
+          />
+          <TransactionTypeFilterAccordionItem
+            id="transaction-type-filter-accordion-item"
+            open={tabs.includes('transaction-type-filter-accordion-item')}
+          />
+        </Stack>
+      </AccordionRoot>
+    </Stack>
+  );
+};
+
+export const TxTableFiltersModal = ({ filters }: { filters: TxPageFilters }) => {
   const modal = useOpenedModal();
   const open = useMemo(() => modal === MODALS.TxsTableFilters, [modal]);
 
@@ -47,7 +59,7 @@ export const TxTableFiltersModal = () => {
           Filter
         </Text>
       }
-      body={<TxTableFiltersModalBody />}
+      body={<TxTableFiltersModalBody filters={filters} />}
     />
   );
 };

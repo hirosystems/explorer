@@ -114,7 +114,6 @@ export function PageWrapper({
       <AddNetworkModal />
       <AddNetworkModalNew />
       <NetworkModeToast />
-      <TxTableFiltersModal />
     </>
   );
 }

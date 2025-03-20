@@ -1,27 +1,30 @@
 'use client';
 
-import { AddressFilter } from '@/common/components/table/AddressFilter';
-import { TransactionTypeFilter } from '@/common/components/table/TransactionTypeFilter';
-import { ValueBasisFilter } from '@/common/components/table/ValueBasisFilter';
-import { DateFilter } from '@/common/components/table/date-filter/DateFilter';
+import { AddressFilterPopover } from '@/common/components/table/address-filter/AddressFilterPopover';
+import { DateFilterPopover } from '@/common/components/table/date-filter/DateFilterPopover';
+import { TransactionTypeFilterPopover } from '@/common/components/table/transaction-type-filter/TransactionTypeFilterPopover';
+import { ValueBasisFilterPopover } from '@/common/components/table/value-basis-filter/ValueBasisPopover';
 import { MODALS } from '@/common/constants/constants';
+import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
-import { useAppDispatch } from '@/common/state/hooks';
+
 import { openModal } from '../modals/modal-slice';
 
 export const TxTableFilters = ({ filters }: { filters: Record<string, string | undefined> }) => {
   const dispatch = useAppDispatch();
+  const { fromAddress, toAddress, startTime, endTime } = filters;
 
   return (
     <Flex justifyContent={'space-between'} flexWrap={'wrap'} gap={4}>
-      <Button display={{ base: 'flex', md: 'none' }}
+      <Button
+        display={{ base: 'flex', md: 'none' }}
         onClick={() => dispatch(openModal(MODALS.TxsTableFilters))}
         variant="redesignTertiary"
         size="small"
-        w='full'
+        w="full"
       >
         <Flex gap={1.5} alignItems={'center'}>
           <Text textStyle="text-regular-sm" color="textSecondary">
@@ -37,12 +40,9 @@ export const TxTableFilters = ({ filters }: { filters: Record<string, string | u
           Filter
         </Text>
         <Flex gap={3}>
-          <AddressFilter
-            defaultFromAddress={filters.fromAddress}
-            defaultToAddress={filters.toAddress}
-          />
-          <DateFilter defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
-          <TransactionTypeFilter />
+          <AddressFilterPopover defaultFromAddress={fromAddress} defaultToAddress={toAddress} />
+          <DateFilterPopover defaultStartTime={startTime} defaultEndTime={endTime} />
+          <TransactionTypeFilterPopover />
         </Flex>
       </Flex>
       <Flex gap={4} h="full">
@@ -50,7 +50,7 @@ export const TxTableFilters = ({ filters }: { filters: Record<string, string | u
           <Text textStyle="text-regular-sm" color="textSecondary">
             Show:
           </Text>
-          <ValueBasisFilter />
+          <ValueBasisFilterPopover />
         </Flex>
       </Flex>
     </Flex>

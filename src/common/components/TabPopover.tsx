@@ -7,9 +7,7 @@ import {
   PopoverRootProps,
   Portal,
 } from '@chakra-ui/react';
-import { CaretDown, CaretUp } from '@phosphor-icons/react';
 import * as React from 'react';
-import { ReactNode } from 'react';
 
 interface PopoverContentProps extends ChakraPopover.ContentProps {
   portalled?: boolean;
@@ -18,7 +16,7 @@ interface PopoverContentProps extends ChakraPopover.ContentProps {
 
 type Placement = 'bottom-start' | 'bottom-end';
 
-interface PositioningOptions {
+export interface PositioningOptions {
   /**
    * The initial placement of the floating element
    */
@@ -31,7 +29,7 @@ interface PositioningOptions {
   };
 }
 
-export const GooseNeckPopoverRoot = (props: PopoverRootProps) => {
+export const TabPopoverRoot = (props: PopoverRootProps) => {
   return (
     <ChakraPopover.Root
       {...props}
@@ -46,7 +44,7 @@ export const GooseNeckPopoverRoot = (props: PopoverRootProps) => {
   );
 };
 
-export const GooseNeckPopoverContent = React.forwardRef<
+export const TabPopoverContent = React.forwardRef<
   HTMLDivElement,
   PopoverContentProps & PositioningOptions
 >(function GooseNeckPopoverContent(props, ref) {
@@ -73,54 +71,22 @@ export const GooseNeckPopoverContent = React.forwardRef<
 
 const curvedCornerSize = 4;
 
-export const GooseNeckPopoverTrigger = React.forwardRef<
+export const TabPopoverTrigger = React.forwardRef<
   HTMLButtonElement,
   ChakraPopover.TriggerProps & {
     open: boolean;
-    triggerText?: (open: boolean) => ReactNode;
-    triggerIcon?: ReactNode;
-    hasIcon?: boolean;
     positioning?: PositioningOptions;
   }
 >(function GooseNeckPopoverTrigger(props, ref) {
-  const { open, positioning, triggerText, triggerIcon, hasIcon = true } = props;
+  const { open, positioning, ...triggerProps } = props;
 
   const placement = positioning?.placement ?? 'bottom-start';
   const mainAxis = positioning?.offset?.mainAxis ?? 0;
 
   return (
-    <ChakraPopover.Trigger>
-      <Flex
-        bg="surfacePrimary"
-        borderRadius="redesign.lg"
-        borderTopRadius="redesign.lg"
-        borderBottomRadius={open ? 'none' : 'redesign.lg'}
-        py={1.5}
-        px={4}
-        gap={1.5}
-        alignItems="center"
-        justifyContent="center"
-        position="relative"
-        className="group"
-        cursor="pointer"
-        w="fit-content"
-      >
-        {triggerText ? triggerText(open) : props.children}
-
-        {hasIcon ? (
-          triggerIcon ? (
-            triggerIcon
-          ) : (
-            <Icon
-              color={open ? 'iconPrimary' : 'iconSecondary'}
-              _groupHover={{ color: 'iconPrimary' }}
-              h={3}
-              w={3}
-            >
-              {open ? <CaretUp /> : <CaretDown />}
-            </Icon>
-          )
-        ) : null}
+    <ChakraPopover.Trigger {...triggerProps}>
+      <Flex position="relative">
+        {props.children}
 
         {open && (
           <Box
@@ -155,9 +121,8 @@ export const GooseNeckPopoverTrigger = React.forwardRef<
   );
 });
 
-export const PopoverTitle = ChakraPopover.Title;
-export const PopoverDescription = ChakraPopover.Description;
-export const PopoverFooter = ChakraPopover.Footer;
-export const PopoverHeader = ChakraPopover.Header;
-export const PopoverRoot = ChakraPopover.Root;
-export const PopoverBody = ChakraPopover.Body;
+export const TabPopoverTitle = ChakraPopover.Title;
+export const TabPopoverDescription = ChakraPopover.Description;
+export const TabPopoverFooter = ChakraPopover.Footer;
+export const TabPopoverHeader = ChakraPopover.Header;
+export const TabPopoverBody = ChakraPopover.Body;

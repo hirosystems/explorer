@@ -13,9 +13,9 @@ interface FormValues {
 
 interface DateRangeFormProps {
   defaultEndTime: number | null;
-  onClose: () => void;
+  onClose?: () => void;
 }
-export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFormProps) {
+export function BeforeDatePicker({ defaultEndTime = Date.now(), onClose }: DateRangeFormProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialValues: FormValues = {
@@ -37,7 +37,7 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
           params.delete('endTime');
         }
         router.push(`?${params.toString()}`, { scroll: false });
-        onClose();
+        onClose?.();
       }}
     >
       {() => (
@@ -67,10 +67,10 @@ export function BeforeForm({ defaultEndTime = Date.now(), onClose }: DateRangeFo
                 </ChakraField>
               )}
             </Field>
-          </Stack>
-          <Button width="100%" type="submit" size="small" variant={'redesignSecondary'} mt={4}>
+          <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
             Apply
           </Button>
+          </Stack>
         </Form>
       )}
     </Formik>
