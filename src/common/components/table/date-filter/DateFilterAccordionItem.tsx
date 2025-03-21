@@ -16,6 +16,8 @@ export const DateFilterAccordionItem = ({
   id: string;
   defaultStartTime?: string;
   defaultEndTime?: string;
+  setStartTime?: (startTime: string) => void;
+  setEndTime?: (endTime: string) => void;
   open: boolean;
 }) => {
   return (
@@ -40,7 +42,12 @@ export const DateFilterAccordionItem = ({
         borderTopRadius={'none'}
         p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
       >
-        <DateFilterTabs defaultStartTime={defaultStartTime} defaultEndTime={defaultEndTime} />
+        <DateFilterTabs
+          defaultStartTime={defaultStartTime}
+          defaultEndTime={defaultEndTime}
+          setStartTime={setStartTime}
+          setEndTime={setEndTime}
+        />
       </AccordionItemContent>
     </AccordionItem>
   );

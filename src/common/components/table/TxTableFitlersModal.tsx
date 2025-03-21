@@ -2,6 +2,7 @@ import { TxPageFilters } from '@/app/transactions/page';
 import { useOpenedModal } from '@/common/components/modals/modal-slice';
 import { MODALS } from '@/common/constants/constants';
 import { AccordionRoot } from '@/components/ui/accordion';
+import { Button } from '@/ui/Button';
 import { RedesignModal } from '@/ui/RedesignModal';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
@@ -11,9 +12,15 @@ import { AddressFilterAccordionItem } from './address-filter/AddressFilterAccord
 import { DateFilterAccordionItem } from './date-filter/DateFilterAccordionItem';
 import { TransactionTypeFilterAccordionItem } from './transaction-type-filter/TransactionTypeFilterAccordionItem';
 
+const applyAllFiltersHandler = () => {};
+
 const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
   const [tabs, setTabs] = useState<string[]>([]);
   const { startTime, endTime, fromAddress, toAddress } = filters;
+  const [startTime, setStartTime] = useState<string | null>(startTime);
+  const [endTime, setEndTime] = useState<string | null>(endTime);
+  const [fromAddress, setFromAddress] = useState<string | null>(fromAddress);
+  const [toAddress, setToAddress] = useState<string | null>(toAddress);
   return (
     <Stack gap={4}>
       <AccordionRoot
@@ -30,17 +37,25 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
             defaultStartTime={startTime}
             defaultEndTime={endTime}
             open={tabs.includes('date-filter-accordion-item')}
-        />
-        <AddressFilterAccordionItem
-          id="address-filter-accordion-item"
-          defaultFromAddress={fromAddress}
-          defaultToAddress={toAddress}
+            setStartTime={setStartTime}
+            setEndTime={setEndTime}
+          />
+          <AddressFilterAccordionItem
+            id="address-filter-accordion-item"
+            defaultFromAddress={fromAddress}
+            defaultToAddress={toAddress}
             open={tabs.includes('address-filter-accordion-item')}
+            setFromAddress={setFromAddress}
+            setToAddress={setToAddress}
           />
           <TransactionTypeFilterAccordionItem
             id="transaction-type-filter-accordion-item"
             open={tabs.includes('transaction-type-filter-accordion-item')}
+            setActiveFilters={setActiveFilters}
           />
+          <Button w="fit-content" variant="redesignSecondary" size="sm" onClick={() => {}}>
+            Apply filters
+          </Button>
         </Stack>
       </AccordionRoot>
     </Stack>

@@ -17,6 +17,29 @@ interface FormValues {
   toAddress: string;
 }
 
+export function useAddressFilterSubmitHandler({
+  fromAddress,
+  toAddress,
+}: FormValues) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  return async ({ fromAddress, toAddress }: FormValues) => {
+    const params = new URLSearchParams(searchParams);
+    if (!fromAddress) {
+      params.delete('fromAddress');
+    } else {
+      params.set('fromAddress', fromAddress);
+    }
+    if (!toAddress) {
+      params.delete('toAddress');
+    } else {
+      params.set('toAddress', toAddress);
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+}
+
 export function AddressFilterForm({
   defaultToAddress = '',
   defaultFromAddress = '',
