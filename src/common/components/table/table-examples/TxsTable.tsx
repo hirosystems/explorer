@@ -30,7 +30,7 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
-
+import { TxPageFilters } from '@/app/transactions/page';
 export enum TxTableColumns {
   Transaction = 'transaction',
   TxId = 'txId',
@@ -225,7 +225,7 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-export function TxsTable({ filters }: { filters: Record<string, string | undefined> }) {
+export function TxsTable({ filters }: { filters: TxPageFilters }) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,

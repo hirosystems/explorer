@@ -15,12 +15,31 @@ interface DateRangeFormProps {
   defaultEndTime: number | null;
   onClose?: () => void;
 }
-export function BeforeDatePicker({ defaultEndTime = Date.now(), onClose }: DateRangeFormProps) {
+
+export function useBeforeDatePickerSubmitHandler() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  return async ({ endTime }: FormValues) => {
+    const params = new URLSearchParams(searchParams);
+    const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
+    params.delete('startTime');
+    if (endTimeTs) {
+      params.set('endTime', endTimeTs);
+    } else {
+      params.delete('endTime');
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+}
+
+export function BeforeDatePicker({ defaultEndTime = Date.now(), onClose }: DateRangeFormProps) {
   const initialValues: FormValues = {
     endTime: defaultEndTime,
   };
+
+  const onBeforeDatePickerSubmitHandler = useBeforeDatePickerSubmitHandler();
+
   return (
     <Formik
       enableReinitialize
@@ -28,15 +47,7 @@ export function BeforeDatePicker({ defaultEndTime = Date.now(), onClose }: DateR
       validateOnBlur={false}
       initialValues={initialValues}
       onSubmit={async ({ endTime }: FormValues) => {
-        const params = new URLSearchParams(searchParams);
-        const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
-        params.delete('startTime');
-        if (endTimeTs) {
-          params.set('endTime', endTimeTs);
-        } else {
-          params.delete('endTime');
-        }
-        router.push(`?${params.toString()}`, { scroll: false });
+        onBeforeDatePickerSubmitHandler({ endTime });
         onClose?.();
       }}
     >
@@ -67,9 +78,9 @@ export function BeforeDatePicker({ defaultEndTime = Date.now(), onClose }: DateR
                 </ChakraField>
               )}
             </Field>
-          <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
-            Apply
-          </Button>
+            <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
+              Apply
+            </Button>
           </Stack>
         </Form>
       )}

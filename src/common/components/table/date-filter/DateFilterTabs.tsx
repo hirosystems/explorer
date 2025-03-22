@@ -1,8 +1,7 @@
-import { AfterDatePicker } from '@/common/components/table/date-filter/AfterDatePicker';
-import { BeforeDatePicker } from '@/common/components/table/date-filter/BeforeDatePicker';
-import { BetweenDatePicker } from '@/common/components/table/date-filter/BetweenDatePicker';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { useMemo } from 'react';
+
+import { UnifiedDatePicker } from './UnifiedDatePicker';
 
 interface DateFilterProps {
   defaultStartTime?: string;
@@ -29,19 +28,31 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onClose }: Da
         id: 'between',
         title: 'Between',
         content: (
-          <BetweenDatePicker
+          <UnifiedDatePicker
+            mode="between"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
             onClose={onClose}
           />
+          // <BetweenDatePicker
+          //   defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+          //   defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
+          //   onClose={onClose}
+          // />
         ),
       },
       {
         id: 'before',
         title: 'Before',
         content: (
-          <BeforeDatePicker
-            defaultEndTime={populatedFilter === 'before' ? defaultEndTimeNumber : null}
+          // <BeforeDatePicker
+          //   defaultEndTime={populatedFilter === 'before' ? defaultEndTimeNumber : null}
+          //   onClose={onClose}
+          // />
+          <UnifiedDatePicker
+            mode="before"
+            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
             onClose={onClose}
           />
         ),
@@ -50,8 +61,14 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onClose }: Da
         id: 'after',
         title: 'After',
         content: (
-          <AfterDatePicker
-            defaultStartTime={populatedFilter === 'after' ? defaultStartTimeNumber : null}
+          // <AfterDatePicker
+          //   defaultStartTime={populatedFilter === 'after' ? defaultStartTimeNumber : null}
+          //   onClose={onClose}
+          // />
+          <UnifiedDatePicker
+            mode="after"
+            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
             onClose={onClose}
           />
         ),

@@ -7,6 +7,8 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
+import { useTxTableFilters } from '../TxTableFilterContext';
+
 interface FormValues {
   startTime: number | null;
 }
@@ -16,12 +18,30 @@ interface DateFilterProps {
   onClose?: () => void;
 }
 
-export function AfterDatePicker({ defaultStartTime, onClose }: DateFilterProps) {
+export function useAfterDatePickerSubmitHandler() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  return async ({ startTime }: FormValues) => {
+    const params = new URLSearchParams(searchParams);
+    const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
+    if (startTimeTs) {
+      params.set('startTime', startTimeTs);
+    } else {
+      params.delete('startTime');
+    }
+    params.delete('endTime');
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+}
+
+export function AfterDatePicker({ defaultStartTime, onClose }: DateFilterProps) {
   const initialValues: FormValues = {
     startTime: defaultStartTime,
   };
+
+  const onAfterDatePickerSubmitHandler = useAfterDatePickerSubmitHandler();
+
   return (
     <Formik
       enableReinitialize
@@ -29,15 +49,7 @@ export function AfterDatePicker({ defaultStartTime, onClose }: DateFilterProps) 
       validateOnBlur={false}
       initialValues={initialValues}
       onSubmit={async ({ startTime }: FormValues) => {
-        const params = new URLSearchParams(searchParams);
-        const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
-        if (startTimeTs) {
-          params.set('startTime', startTimeTs);
-        } else {
-          params.delete('startTime');
-        }
-        params.delete('endTime');
-        router.push(`?${params.toString()}`, { scroll: false });
+        onAfterDatePickerSubmitHandler({ startTime });
         onClose?.();
       }}
     >
@@ -70,9 +82,9 @@ export function AfterDatePicker({ defaultStartTime, onClose }: DateFilterProps) 
                 </ChakraField>
               )}
             </Field>
-          <Button width="100%" type="submit" size="small" variant={'redesignSecondary'} >
-            Apply
-          </Button>
+              <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
+                Apply
+              </Button>
           </Stack>
         </Form>
       )}

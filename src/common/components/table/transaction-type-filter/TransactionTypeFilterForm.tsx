@@ -8,7 +8,7 @@ import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowsCounterClockwise, Cube, PhoneCall } from '@phosphor-icons/react';
 import { ReactNode, useEffect } from 'react';
 
-const CheckboxItem = ({
+export const CheckboxItem = ({
   label,
   icon,
   value,
@@ -43,7 +43,7 @@ export function TransactionTypeFilterForm({
   onSubmit,
   open,
 }: {
-  onSubmit: () => void;
+  onSubmit?: () => void;
   open: boolean;
 }) {
   const { activeFilters, setActiveFilters } = useFilterAndSortState();
@@ -112,7 +112,7 @@ export function TransactionTypeFilterForm({
           size="sm"
           onClick={() => {
             setActiveFilters(selectedFilters);
-            onSubmit();
+            onSubmit?.();
           }}
         >
           Apply

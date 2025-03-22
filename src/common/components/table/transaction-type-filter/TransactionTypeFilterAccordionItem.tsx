@@ -4,8 +4,8 @@ import {
   AccordionItemTrigger,
 } from '@/components/ui/accordion';
 
-import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';
-import { TransactionTypeFilterTriggerText } from './TransactionTypeFilterTriggerText';
+import { TransactionTypeFilterFormMobile } from './TransactionTypeFilterFormMobile';
+import { TransactionTypeFilterTriggerTextMobile } from './TransactionTypeFilterTriggerTextMobile';
 
 export const TransactionTypeFilterAccordionItem = ({ id, open }: { id: string; open: boolean }) => {
   return (
@@ -18,7 +18,7 @@ export const TransactionTypeFilterAccordionItem = ({ id, open }: { id: string; o
         w="full"
         p={3}
       >
-        <TransactionTypeFilterTriggerText open={open} />
+        <TransactionTypeFilterTriggerTextMobile open={open} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
@@ -26,7 +26,7 @@ export const TransactionTypeFilterAccordionItem = ({ id, open }: { id: string; o
         borderTopRadius={'none'}
         p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
       >
-        <TransactionTypeFilterForm onSubmit={() => {}} open={open} />
+        <TransactionTypeFilterFormMobile />
       </AccordionItemContent>
     </AccordionItem>
   );

@@ -7,6 +7,8 @@ import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import DatePicker from 'react-datepicker';
 
+import { useTxTableFilters } from '../TxTableFilterContext';
+
 interface FormValues {
   startTime: number | null;
   endTime: number | null;
@@ -18,6 +20,28 @@ interface DateRangeFormProps {
   onClose?: () => void;
 }
 
+export function useBetweenDatePickerSubmitHandler() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  return async ({ startTime, endTime }: FormValues) => {
+    const params = new URLSearchParams(searchParams);
+    const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
+    const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
+    if (startTimeTs) {
+      params.set('startTime', startTimeTs);
+    } else {
+      params.delete('startTime');
+    }
+    if (endTimeTs) {
+      params.set('endTime', endTimeTs);
+    } else {
+      params.delete('endTime');
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+}
+
 export function BetweenDatePicker({
   defaultStartTime,
   defaultEndTime,
@@ -27,8 +51,8 @@ export function BetweenDatePicker({
     startTime: defaultStartTime,
     endTime: defaultEndTime,
   };
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  
+  const onBetweenDatePickerSubmitHandler = useBetweenDatePickerSubmitHandler();
 
   return (
     <Formik
@@ -37,20 +61,7 @@ export function BetweenDatePicker({
       validateOnBlur={false}
       initialValues={initialValues}
       onSubmit={async ({ startTime, endTime }: FormValues) => {
-        const params = new URLSearchParams(searchParams);
-        const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
-        const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
-        if (startTimeTs) {
-          params.set('startTime', startTimeTs);
-        } else {
-          params.delete('startTime');
-        }
-        if (endTimeTs) {
-          params.set('endTime', endTimeTs);
-        } else {
-          params.delete('endTime');
-        }
-        router.push(`?${params.toString()}`, { scroll: false });
+        onBetweenDatePickerSubmitHandler({ startTime, endTime });
         onClose?.();
       }}
     >
@@ -99,9 +110,9 @@ export function BetweenDatePicker({
                 </ChakraField>
               )}
             </Field>
-            <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
-              Apply
-            </Button>
+              <Button width="100%" type="submit" size="small" variant={'redesignSecondary'}>
+                Apply
+              </Button>
           </Stack>
         </Form>
       )}

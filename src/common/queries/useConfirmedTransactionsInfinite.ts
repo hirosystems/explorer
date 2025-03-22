@@ -19,8 +19,8 @@ import { searchByBnsName } from './useSearchQuery';
 type FilterProps = {
   fromAddress?: string;
   toAddress?: string;
-  startTime?: number;
-  endTime?: number;
+  startTime?: string;
+  endTime?: string;
   type?: string[];
   order?: 'asc' | 'desc' | undefined;
   sortBy?: string;

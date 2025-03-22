@@ -22,7 +22,7 @@ const MempoolFeeStatsDynamic = dynamic(
   }
 );
 
-export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & TxPageFilters) {
+export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice, filters: TxPageFilters }) {
   const isRedesign = isRedesignUrl();
 
   return (

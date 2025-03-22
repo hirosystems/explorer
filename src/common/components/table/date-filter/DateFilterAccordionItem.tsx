@@ -16,8 +16,6 @@ export const DateFilterAccordionItem = ({
   id: string;
   defaultStartTime?: string;
   defaultEndTime?: string;
-  setStartTime?: (startTime: string) => void;
-  setEndTime?: (endTime: string) => void;
   open: boolean;
 }) => {
   return (
@@ -45,8 +43,6 @@ export const DateFilterAccordionItem = ({
         <DateFilterTabs
           defaultStartTime={defaultStartTime}
           defaultEndTime={defaultEndTime}
-          setStartTime={setStartTime}
-          setEndTime={setEndTime}
         />
       </AccordionItemContent>
     </AccordionItem>

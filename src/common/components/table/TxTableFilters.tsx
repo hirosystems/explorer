@@ -12,8 +12,9 @@ import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 
 import { openModal } from '../modals/modal-slice';
+import { TxPageFilters } from '@/app/transactions/page';
 
-export const TxTableFilters = ({ filters }: { filters: Record<string, string | undefined> }) => {
+export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
   const dispatch = useAppDispatch();
   const { fromAddress, toAddress, startTime, endTime } = filters;
 
