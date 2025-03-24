@@ -39,8 +39,6 @@ export function TxTableFilterProvider({
 }) {
   const { activeFilters } = useFilterAndSortState();
 
-  console.log('TxTableFilterProvider', {filterProps});
-
   const [filters, setFilters] = useState<TxTableFilterState>({
     addresses: { fromAddress: filterProps.fromAddress, toAddress: filterProps.toAddress },
     dates: { startTime: filterProps.startTime, endTime: filterProps.endTime },

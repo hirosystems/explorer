@@ -1,17 +1,14 @@
 import { Field as ChakraField } from '@/components/ui/field';
-import { Button } from '@/ui/Button';
 import { Input } from '@/ui/Input';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
-import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useTxTableFilters } from '../TxTableFilterContext';
+import { useTxTableFilters } from '../../TxTableFilterContext';
 
 interface AddressFilterProps {
   defaultFromAddress?: string;
   defaultToAddress?: string;
-  onSubmit?: (values: FormValues) => void;
 }
 
 interface FormValues {
@@ -19,38 +16,11 @@ interface FormValues {
   toAddress: string;
 }
 
-export function useAddressFilterSubmitHandler() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  return async ({ fromAddress, toAddress }: FormValues) => {
-    const params = new URLSearchParams(searchParams);
-    if (!fromAddress) {
-      params.delete('fromAddress');
-    } else {
-      params.set('fromAddress', fromAddress);
-    }
-    if (!toAddress) {
-      params.delete('toAddress');
-    } else {
-      params.set('toAddress', toAddress);
-    }
-    router.push(`?${params.toString()}`, { scroll: false });
-  };
-}
-
-export function AddressFilterForm({
+export function AddressFilterFormMobile({
   defaultToAddress = '',
   defaultFromAddress = '',
-  onSubmit,
 }: AddressFilterProps) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  const onAddressFilterSubmitHandler = useAddressFilterSubmitHandler();
-
-  const { updateAddressFilters } = useTxTableFilters() || {}; // This is for the mobile apply button design
-  const hideApplyButton = !!updateAddressFilters;
+  const { updateAddressFilters } = useTxTableFilters() || {};
 
   return (
     <Formik
@@ -61,12 +31,9 @@ export function AddressFilterForm({
         fromAddress: defaultFromAddress,
         toAddress: defaultToAddress,
       }}
-      onSubmit={async ({ fromAddress, toAddress }) => {
-        onAddressFilterSubmitHandler({ fromAddress, toAddress });
-        onSubmit?.({ fromAddress, toAddress });
-      }}
+      onSubmit={() => {}}
     >
-      {({ isValidating }) => (
+      {({}) => (
         <Form>
           <Stack gap={4}>
             <Field name="fromAddress">
@@ -93,6 +60,7 @@ export function AddressFilterForm({
                         fromAddress: e.target.value,
                         toAddress: form.values.toAddress,
                       });
+                      form.setFieldValue('fromAddress', e.target.value);
                     }}
                   />
                 </ChakraField>
@@ -122,24 +90,13 @@ export function AddressFilterForm({
                         fromAddress: form.values.fromAddress,
                         toAddress: e.target.value,
                       });
+                      form.setFieldValue('toAddress', e.target.value);
                     }}
                   />
                 </ChakraField>
               )}
             </Field>
           </Stack>
-          {!hideApplyButton && (
-            <Button
-              isLoading={isValidating}
-              width="full"
-              type="submit"
-              size={'small'}
-              variant={'redesignSecondary'}
-              mt={4}
-            >
-              Apply
-            </Button>
-          )}
         </Form>
       )}
     </Formik>

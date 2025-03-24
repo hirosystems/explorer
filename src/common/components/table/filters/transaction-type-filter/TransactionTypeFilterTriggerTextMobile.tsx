@@ -2,7 +2,7 @@ import { capitalize } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 
-import { useTxTableFilters } from '../TxTableFilterContext';
+import { useTxTableFilters } from '../../TxTableFilterContext';
 
 export function TransactionTypeFilterTriggerTextMobile({ open }: { open: boolean }) {
   const { filters } = useTxTableFilters() || {};

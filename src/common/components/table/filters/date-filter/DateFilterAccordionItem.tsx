@@ -43,6 +43,7 @@ export const DateFilterAccordionItem = ({
         <DateFilterTabs
           defaultStartTime={defaultStartTime}
           defaultEndTime={defaultEndTime}
+          isMobile={true}
         />
       </AccordionItemContent>
     </AccordionItem>

@@ -4,7 +4,7 @@ import {
   AccordionItemTrigger,
 } from '@/components/ui/accordion';
 
-import { AddressFilterForm } from './AddressFilterForm';
+import { AddressFilterFormMobile } from './AddressFilterFormMobile';
 import { AddressFilterTriggerText } from './AddressFilterTriggerText';
 
 export const AddressFilterAccordionItem = ({
@@ -40,7 +40,7 @@ export const AddressFilterAccordionItem = ({
         borderTopRadius={'none'}
         p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
       >
-        <AddressFilterForm
+        <AddressFilterFormMobile
           defaultFromAddress={defaultFromAddress}
           defaultToAddress={defaultToAddress}
         />

@@ -1,9 +1,10 @@
 'use client';
 
-import { AddressFilterPopover } from '@/common/components/table/address-filter/AddressFilterPopover';
-import { DateFilterPopover } from '@/common/components/table/date-filter/DateFilterPopover';
-import { TransactionTypeFilterPopover } from '@/common/components/table/transaction-type-filter/TransactionTypeFilterPopover';
-import { ValueBasisFilterPopover } from '@/common/components/table/value-basis-filter/ValueBasisPopover';
+import { TxPageFilters } from '@/app/transactions/page';
+import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
+import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
+import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
+import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisPopover';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,6 @@ import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 
 import { openModal } from '../modals/modal-slice';
-import { TxPageFilters } from '@/app/transactions/page';
 
 export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
   const dispatch = useAppDispatch();

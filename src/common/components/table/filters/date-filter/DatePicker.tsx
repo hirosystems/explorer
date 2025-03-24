@@ -5,7 +5,7 @@ import { Stack } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
-import DatePicker from 'react-datepicker';
+import ReactDatePicker from 'react-datepicker';
 
 type DateFilterMode = 'after' | 'before' | 'between';
 
@@ -14,7 +14,7 @@ interface FormValues {
   endTime: number | null;
 }
 
-interface UnifiedDatePickerProps {
+export interface DatePickerProps {
   mode: DateFilterMode;
   defaultStartTime?: number | null;
   defaultEndTime?: number | null;
@@ -56,75 +56,77 @@ const handleDateChange = (
     form.setFieldValue('startTime', utcStart);
   }
 
-  if (mode === 'between' && utcStart && utcEnd) {
+  if (mode === 'between') {
     form.setFieldValue('endTime', utcEnd);
     form.setFieldValue('startTime', utcStart);
   }
 };
 
-export const useHandleSubmit = (mode: DateFilterMode) => {
+export const getDateFilterParams = (
+  params: URLSearchParams,
+  startTime: number | null,
+  endTime: number | null
+) => {
+  const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
+  const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
+  const mode = startTime && endTime ? 'between' : startTime ? 'after' : 'before';
+
+  if (mode === 'before') {
+    if (endTimeTs) {
+      params.set('endTime', endTimeTs);
+    } else {
+      params.delete('endTime');
+    }
+    params.delete('startTime');
+    return params;
+  }
+  if (mode === 'after') {
+    if (startTimeTs) {
+      params.set('startTime', startTimeTs);
+    } else {
+      params.delete('startTime');
+    }
+    params.delete('endTime');
+    return params;
+  }
+  if (mode === 'between') {
+    if (startTimeTs) {
+      params.set('startTime', startTimeTs);
+    } else {
+      params.delete('startTime');
+    }
+    if (endTimeTs) {
+      params.set('endTime', endTimeTs);
+    } else {
+      params.delete('endTime');
+    }
+    return params;
+  }
+  return params;
+};
+
+export const useDateFilterSubmitHandler = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  if (mode === 'before') {
-    return async ({ endTime }: FormValues) => {
-      const params = new URLSearchParams(searchParams);
-      const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
-      if (endTimeTs) {
-        params.set('endTime', endTimeTs);
-      } else {
-        params.delete('endTime');
-      }
-      params.delete('startTime');
-      router.push(`?${params.toString()}`, { scroll: false });
-    };
-  }
-
-  if (mode === 'after') {
-    return async ({ startTime }: FormValues) => {
-      const params = new URLSearchParams(searchParams);
-      const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
-      if (startTimeTs) {
-        params.set('startTime', startTimeTs);
-      } else {
-        params.delete('startTime');
-      }
-      params.delete('endTime');
-      router.push(`?${params.toString()}`, { scroll: false });
-    };
-  }
-
-  if (mode === 'between') {
-    return async ({ startTime, endTime }: FormValues) => {
-      const params = new URLSearchParams(searchParams);
-      const startTimeTs = startTime ? Math.floor(startTime).toString() : undefined;
-      const endTimeTs = endTime ? Math.floor(endTime).toString() : undefined;
-      if (startTimeTs) {
-        params.set('startTime', startTimeTs);
-      } else {
-        params.delete('startTime');
-      }
-      if (endTimeTs) {
-        params.set('endTime', endTimeTs);
-      } else {
-        params.delete('endTime');
-      }
-      router.push(`?${params.toString()}`, { scroll: false });
-    };
-  }
+  return async ({ startTime, endTime }: FormValues) => {
+    const params = new URLSearchParams(searchParams);
+    const paramsWithDateFilter = getDateFilterParams(params, startTime, endTime);
+    router.push(`?${paramsWithDateFilter.toString()}`, { scroll: false });
+  };
 };
 
-export function UnifiedDatePicker({
+export function DatePicker({
   mode,
   defaultStartTime = null,
   defaultEndTime = null,
   onClose,
-}: UnifiedDatePickerProps) {
+}: DatePickerProps) {
   const initialValues: FormValues = {
     startTime: mode !== 'before' ? defaultStartTime : null,
     endTime: mode !== 'after' ? defaultEndTime : null,
   };
-  const handleSubmit = useHandleSubmit(mode);
+  const handleSubmit = useDateFilterSubmitHandler();
 
   return (
     <Formik
@@ -144,13 +146,22 @@ export function UnifiedDatePicker({
               <Field name="startTime" gap={0}>
                 {({ form }: FieldProps<string, FormValues>) => (
                   <ChakraField>
-                    <DatePicker
-                      customInput={<Input placeholder="Start Date" variant="redesignPrimary" />}
+                    <ReactDatePicker
+                      customInput={
+                        <Input
+                          placeholder="Start Date"
+                          variant="redesignPrimary"
+                          autoComplete="off"
+                        />
+                      }
                       selected={
                         form.values.startTime ? new UTCDate(form.values.startTime * 1000) : null
                       }
                       onChange={date => handleDateChange(form, mode, date, null)}
                       dateFormat="yyyy-MM-dd"
+                      popperProps={{
+                        strategy: 'fixed',
+                      }}
                     />
                   </ChakraField>
                 )}
@@ -161,13 +172,22 @@ export function UnifiedDatePicker({
               <Field name="endTime" gap={0}>
                 {({ form }: FieldProps<string, FormValues>) => (
                   <ChakraField>
-                    <DatePicker
-                      customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
+                    <ReactDatePicker
+                      customInput={
+                        <Input
+                          placeholder="YYYY-MM-DD"
+                          variant="redesignPrimary"
+                          autoComplete="off"
+                        />
+                      }
                       selected={
                         form.values.endTime ? new UTCDate(form.values.endTime * 1000) : null
                       }
                       onChange={date => handleDateChange(form, mode, null, date)}
                       dateFormat="yyyy-MM-dd"
+                      popperProps={{
+                        strategy: 'fixed',
+                      }}
                     />
                   </ChakraField>
                 )}
@@ -178,33 +198,18 @@ export function UnifiedDatePicker({
               <Field name="between" gap={0}>
                 {({ form }: FieldProps<string, FormValues>) => (
                   <ChakraField gap={0}>
-                    <DatePicker
+                    <ReactDatePicker
                       selectsRange={true}
-                      customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
+                      customInput={
+                        <Input
+                          placeholder="YYYY-MM-DD"
+                          variant="redesignPrimary"
+                          autoComplete="off"
+                        />
+                      }
                       onChange={dateRange => {
                         const [startDate, endDate] = dateRange;
-                        const utcStart = startDate
-                          ? new UTCDate(
-                              startDate.getUTCFullYear(),
-                              startDate.getUTCMonth(),
-                              startDate.getUTCDate(),
-                              0,
-                              0,
-                              0
-                            ).getTime() / 1000
-                          : null;
-                        const utcEnd = endDate
-                          ? new UTCDate(
-                              endDate.getUTCFullYear(),
-                              endDate.getUTCMonth(),
-                              endDate.getUTCDate(),
-                              23,
-                              59,
-                              59
-                            ).getTime() / 1000
-                          : null;
-                        form.setFieldValue('endTime', utcEnd);
-                        form.setFieldValue('startTime', utcStart);
+                        handleDateChange(form, mode, startDate, endDate);
                       }}
                       startDate={
                         form.values.startTime

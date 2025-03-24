@@ -4,7 +4,7 @@ import { Stack, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowsCounterClockwise, Cube, PhoneCall } from '@phosphor-icons/react';
 import { useEffect } from 'react';
 
-import { useTxTableFilters } from '../TxTableFilterContext';
+import { useTxTableFilters } from '../../TxTableFilterContext';
 import { CheckboxItem } from './TransactionTypeFilterForm';
 
 export function TransactionTypeFilterFormMobile() {
@@ -15,10 +15,11 @@ export function TransactionTypeFilterFormMobile() {
   });
 
   useEffect(() => {
-    const unappliedFilters = selectedFilters.filter(
-      selectedFilter => !filters?.transactionTypes.includes(selectedFilter)
-    );
-    if (unappliedFilters.length > 0) {
+    const unappliedFilters =
+      selectedFilters.length !== filters?.transactionTypes.length ||
+      selectedFilters.filter(selectedFilter => !filters?.transactionTypes.includes(selectedFilter))
+        .length > 0;
+    if (unappliedFilters) {
       updateTransactionTypes?.(selectedFilters);
     }
   }, [selectedFilters, filters, updateTransactionTypes]);

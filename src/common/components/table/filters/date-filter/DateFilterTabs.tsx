@@ -1,15 +1,22 @@
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { useMemo } from 'react';
 
-import { UnifiedDatePicker } from './UnifiedDatePicker';
+import { DatePicker } from './DatePicker';
+import { DatePickerMobile } from './DatePickerMobile';
 
 interface DateFilterProps {
   defaultStartTime?: string;
   defaultEndTime?: string;
   onClose?: () => void;
+  isMobile?: boolean;
 }
 
-export function DateFilterTabs({ defaultStartTime, defaultEndTime, onClose }: DateFilterProps) {
+export function DateFilterTabs({
+  defaultStartTime,
+  defaultEndTime,
+  onClose,
+  isMobile,
+}: DateFilterProps) {
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime)) ? null : Number(defaultStartTime);
   const defaultEndTimeNumber = isNaN(Number(defaultEndTime)) ? null : Number(defaultEndTime);
 
@@ -27,29 +34,32 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onClose }: Da
       {
         id: 'between',
         title: 'Between',
-        content: (
-          <UnifiedDatePicker
+        content: isMobile ? (
+          <DatePickerMobile
+            mode="between"
+            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
+          />
+        ) : (
+          <DatePicker
             mode="between"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
             onClose={onClose}
           />
-          // <BetweenDatePicker
-          //   defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
-          //   defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-          //   onClose={onClose}
-          // />
         ),
       },
       {
         id: 'before',
         title: 'Before',
-        content: (
-          // <BeforeDatePicker
-          //   defaultEndTime={populatedFilter === 'before' ? defaultEndTimeNumber : null}
-          //   onClose={onClose}
-          // />
-          <UnifiedDatePicker
+        content: isMobile ? (
+          <DatePickerMobile
+            mode="before"
+            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
+          />
+        ) : (
+          <DatePicker
             mode="before"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
@@ -60,12 +70,14 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onClose }: Da
       {
         id: 'after',
         title: 'After',
-        content: (
-          // <AfterDatePicker
-          //   defaultStartTime={populatedFilter === 'after' ? defaultStartTimeNumber : null}
-          //   onClose={onClose}
-          // />
-          <UnifiedDatePicker
+        content: isMobile ? (
+          <DatePickerMobile
+            mode="after"
+            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
+            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
+          />
+        ) : (
+          <DatePicker
             mode="after"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
@@ -74,7 +86,7 @@ export function DateFilterTabs({ defaultStartTime, defaultEndTime, onClose }: Da
         ),
       },
     ],
-    [defaultStartTimeNumber, defaultEndTimeNumber, populatedFilter, onClose]
+    [defaultStartTimeNumber, defaultEndTimeNumber, populatedFilter, onClose, isMobile]
   );
 
   return (

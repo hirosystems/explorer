@@ -2,7 +2,7 @@ import { useAppSelector } from '@/common/state/hooks';
 import { Text } from '@/ui/Text';
 import { useCallback } from 'react';
 
-import { TableTabPopover } from '../TableTabPopover';
+import { TableTabPopover } from '../../TableTabPopover';
 import { ValueBasisFilterForm, getActiveTransactionValueFilterLabel } from './ValueBasisFilterForm';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;

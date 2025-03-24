@@ -5,20 +5,14 @@ import { UTCDate } from '@date-fns/utc';
 import { Field, FieldProps, Form, Formik, FormikProps } from 'formik';
 import DatePicker from 'react-datepicker';
 
-import { useTxTableFilters } from '../TxTableFilterContext';
+import { useTxTableFilters } from '../../TxTableFilterContext';
+import { DatePickerProps } from './DatePicker';
 
 type DateFilterMode = 'after' | 'before' | 'between';
 
 interface FormValues {
   startTime: number | null;
   endTime: number | null;
-}
-
-interface UnifiedDatePickerProps {
-  mode: DateFilterMode;
-  defaultStartTime?: number | null;
-  defaultEndTime?: number | null;
-  onClose?: () => void;
 }
 
 const useHandleDateChange = () => {
@@ -53,24 +47,27 @@ const useHandleDateChange = () => {
 
     if (mode === 'before' && utcEnd) {
       updateDateFilters?.({ endTime: utcEnd.toString(), startTime: undefined });
+      form.setFieldValue('endTime', utcEnd);
     }
 
     if (mode === 'after' && utcStart) {
       updateDateFilters?.({ startTime: utcStart.toString(), endTime: undefined });
+      form.setFieldValue('startTime', utcStart);
     }
 
-    if (mode === 'between' && utcStart && utcEnd) {
-      updateDateFilters?.({ startTime: utcStart.toString(), endTime: utcEnd.toString() });
+    if (mode === 'between') {
+      updateDateFilters?.({ startTime: utcStart?.toString(), endTime: utcEnd?.toString() });
+      form.setFieldValue('startTime', utcStart);
+      form.setFieldValue('endTime', utcEnd);
     }
   };
 };
 
-export function UnifiedDatePickerMobile({
+export function DatePickerMobile({
   mode,
   defaultStartTime = null,
   defaultEndTime = null,
-  onClose,
-}: UnifiedDatePickerProps) {
+}: DatePickerProps) {
   const initialValues: FormValues = {
     startTime: mode !== 'before' ? defaultStartTime : null,
     endTime: mode !== 'after' ? defaultEndTime : null,
@@ -83,9 +80,7 @@ export function UnifiedDatePickerMobile({
       validateOnChange={false}
       validateOnBlur={false}
       initialValues={initialValues}
-      onSubmit={async (values: FormValues) => {
-        onClose?.();
-      }}
+      onSubmit={() => {}}
     >
       {() => (
         <Form>
@@ -93,14 +88,23 @@ export function UnifiedDatePickerMobile({
             {mode === 'after' && (
               <Field name="startTime" gap={0}>
                 {({ form }: FieldProps<string, FormValues>) => (
-                  <ChakraField>
+                  <ChakraField gap={0}>
                     <DatePicker
-                      customInput={<Input placeholder="Start Date" variant="redesignPrimary" />}
+                      customInput={
+                        <Input
+                          placeholder="Start Date"
+                          variant="redesignPrimary"
+                          autoComplete="off"
+                        />
+                      }
                       selected={
                         form.values.startTime ? new UTCDate(form.values.startTime * 1000) : null
                       }
                       onChange={date => handleDateChange(form, mode, date, null)}
                       dateFormat="yyyy-MM-dd"
+                      popperProps={{
+                        strategy: 'fixed',
+                      }}
                     />
                   </ChakraField>
                 )}
@@ -110,14 +114,25 @@ export function UnifiedDatePickerMobile({
             {mode === 'before' && (
               <Field name="endTime" gap={0}>
                 {({ form }: FieldProps<string, FormValues>) => (
-                  <ChakraField>
+                  <ChakraField gap={0}>
                     <DatePicker
-                      customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
+                      customInput={
+                        <Input
+                          placeholder="YYYY-MM-DD"
+                          variant="redesignPrimary"
+                          autoComplete="off"
+                        />
+                      }
                       selected={
                         form.values.endTime ? new UTCDate(form.values.endTime * 1000) : null
                       }
-                      onChange={date => handleDateChange(form, mode, null, date)}
+                      onChange={date => {
+                        handleDateChange(form, mode, null, date);
+                      }}
                       dateFormat="yyyy-MM-dd"
+                      popperProps={{
+                        strategy: 'fixed',
+                      }}
                     />
                   </ChakraField>
                 )}
@@ -130,31 +145,16 @@ export function UnifiedDatePickerMobile({
                   <ChakraField gap={0}>
                     <DatePicker
                       selectsRange={true}
-                      customInput={<Input placeholder="YYYY-MM-DD" variant="redesignPrimary" />}
+                      customInput={
+                        <Input
+                          placeholder="YYYY-MM-DD"
+                          variant="redesignPrimary"
+                          autoComplete="off"
+                        />
+                      }
                       onChange={dateRange => {
                         const [startDate, endDate] = dateRange;
-                        const utcStart = startDate
-                          ? new UTCDate(
-                              startDate.getUTCFullYear(),
-                              startDate.getUTCMonth(),
-                              startDate.getUTCDate(),
-                              0,
-                              0,
-                              0
-                            ).getTime() / 1000
-                          : null;
-                        const utcEnd = endDate
-                          ? new UTCDate(
-                              endDate.getUTCFullYear(),
-                              endDate.getUTCMonth(),
-                              endDate.getUTCDate(),
-                              23,
-                              59,
-                              59
-                            ).getTime() / 1000
-                          : null;
-                        form.setFieldValue('endTime', utcEnd);
-                        form.setFieldValue('startTime', utcStart);
+                        handleDateChange(form, mode, startDate, endDate);
                       }}
                       startDate={
                         form.values.startTime
