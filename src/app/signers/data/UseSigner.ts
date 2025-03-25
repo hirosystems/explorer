@@ -16,6 +16,8 @@ import {
 
 const SIGNER_QUERY_KEY = 'signer';
 
+type SignerMetricsSignerForCycleWithCycleId = SignerMetricsSignerForCycle & { cycleid: number };
+
 export interface SignerInfo {
   signing_key: string;
   signer_address: string;
@@ -83,23 +85,27 @@ export function useSignerStackingHistory(signerKey: string, selectedCycle?: stri
   }, [signerStackingHistory]);
 
   const signerStackingHistoryFiltered = useMemo(() => {
-    return signerStackingHistory
-      .filter(
-        (data): data is SignerMetricsSignerForCycle | undefined =>
-          data !== null && data !== undefined
-      )
-      .filter((r): r is SignerMetricsSignerForCycle => {
-        if (r && 'error' in r) {
-          return false;
+    return signerStackingHistory.reduce<SignerMetricsSignerForCycleWithCycleId[]>(
+      (acc, signerData, index) => {
+        if (!signerData) {
+          return acc;
         }
-        return true;
-      })
-      .map((r, index) => ({
-        ...(r as SignerMetricsSignerForCycle),
-        cycleid: cyclesToQuery[index],
-      }));
+  
+        if ("error" in signerData) {
+          return acc;
+        }
+  
+        acc.push({
+          ...signerData,
+          cycleid: cyclesToQuery[index],
+        });
+  
+        return acc;
+      },
+      []
+    );
   }, [signerStackingHistory, cyclesToQuery]);
-
+  
   const fetchNextPage = useCallback(() => {
     setOffset(prev => prev + DEFAULT_LIST_LIMIT);
   }, []);
