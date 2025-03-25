@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react';
 
-import { TableTabPopover } from '../../TableTabPopover';
+import { TableTabPopover } from '../TableTabPopover';
 import { DateFilterTabs } from './DateFilterTabs';
 import { DateFilterTriggerText } from './DateFilterTriggerText';
 

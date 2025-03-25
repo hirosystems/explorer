@@ -7,11 +7,14 @@ import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 
-import { AddressFilterAccordionItem } from './filters/address-filter/AddressFilterAccordionItem';
-import { DateFilterAccordionItem } from './filters/date-filter/DateFilterAccordionItem';
-import { TransactionTypeFilterAccordionItem } from './filters/transaction-type-filter/TransactionTypeFilterAccordionItem';
+import { AddressFilterAccordionItem } from './address-filter/AddressFilterAccordionItem';
+import { DateFilterAccordionItem } from './date-filter/DateFilterAccordionItem';
+import { TransactionTypeFilterAccordionItem } from './transaction-type-filter/TransactionTypeFilterAccordionItem';
 
-type AccordionItem = 'date-filter-accordion-item' | 'address-filter-accordion-item' | 'transaction-type-filter-accordion-item';
+type AccordionItem =
+  | 'date-filter-accordion-item'
+  | 'address-filter-accordion-item'
+  | 'transaction-type-filter-accordion-item';
 
 const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
   const {
@@ -38,19 +41,31 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
           defaultStartTime={defaultStartTime}
           defaultEndTime={defaultEndTime}
           open={accordions.includes('date-filter-accordion-item')}
-          onSubmit={() => setAccordions(accordions.filter(accordion => accordion !== 'date-filter-accordion-item'))}
+          onSubmit={() =>
+            setAccordions(
+              accordions.filter(accordion => accordion !== 'date-filter-accordion-item')
+            )
+          }
         />
         <AddressFilterAccordionItem
           id="address-filter-accordion-item"
           defaultFromAddress={defaultFromAddress}
           defaultToAddress={defaultToAddress}
           open={accordions.includes('address-filter-accordion-item')}
-          onSubmit={() => setAccordions(accordions.filter(accordion => accordion !== 'address-filter-accordion-item'))}
+          onSubmit={() =>
+            setAccordions(
+              accordions.filter(accordion => accordion !== 'address-filter-accordion-item')
+            )
+          }
         />
         <TransactionTypeFilterAccordionItem
           id="transaction-type-filter-accordion-item"
           open={accordions.includes('transaction-type-filter-accordion-item')}
-          onSubmit={() => setAccordions(accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item'))}
+          onSubmit={() =>
+            setAccordions(
+              accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item')
+            )
+          }
         />
       </Stack>
     </AccordionRoot>

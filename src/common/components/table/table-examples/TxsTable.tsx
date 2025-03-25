@@ -1,6 +1,7 @@
 'use client';
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
+import { TxPageFilters } from '@/app/transactions/page';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
@@ -30,7 +31,7 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
-import { TxPageFilters } from '@/app/transactions/page';
+
 export enum TxTableColumns {
   Transaction = 'transaction',
   TxId = 'txId',

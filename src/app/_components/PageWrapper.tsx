@@ -18,7 +18,7 @@ import { NavBar as NewNavBar } from './NewNavBar/NavBar';
 import { CMSStatusBars } from './StatusBar/CMSStatusBars';
 import { IncidentsStatusBarWithErrorBoundary } from './StatusBar/IncidentsStatusBar';
 import { NonHiroNetworkWarningBar } from './StatusBar/NonHiroNetworkWarningBar';
-import { TxTableFiltersModal } from '@/common/components/table/TxTableFitlersModal';
+
 const StyledWrapper = styled(Stack)<{ bg: string }>`
   position: relative;
   max-width: 100vw;

@@ -7,7 +7,15 @@ import {
 import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';
 import { TransactionTypeFilterTriggerText } from './TransactionTypeFilterTriggerText';
 
-export const TransactionTypeFilterAccordionItem = ({ id, open, onSubmit }: { id: string; open: boolean, onSubmit?: () => void }) => {
+export const TransactionTypeFilterAccordionItem = ({
+  id,
+  open,
+  onSubmit,
+}: {
+  id: string;
+  open: boolean;
+  onSubmit?: () => void;
+}) => {
   return (
     <AccordionItem borderBottom={'none'} value={id}>
       <AccordionItemTrigger

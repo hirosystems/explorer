@@ -12,7 +12,7 @@ import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 
-import { openModal } from '../modals/modal-slice';
+import { openModal } from '../../modals/modal-slice';
 
 export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
   const dispatch = useAppDispatch();
