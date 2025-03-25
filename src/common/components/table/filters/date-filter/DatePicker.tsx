@@ -18,7 +18,7 @@ export interface DatePickerProps {
   mode: DateFilterMode;
   defaultStartTime?: number | null;
   defaultEndTime?: number | null;
-  onClose?: () => void;
+  onSubmit?: () => void;
 }
 
 const handleDateChange = (
@@ -120,7 +120,7 @@ export function DatePicker({
   mode,
   defaultStartTime = null,
   defaultEndTime = null,
-  onClose,
+  onSubmit,
 }: DatePickerProps) {
   const initialValues: FormValues = {
     startTime: mode !== 'before' ? defaultStartTime : null,
@@ -136,7 +136,7 @@ export function DatePicker({
       initialValues={initialValues}
       onSubmit={async (values: FormValues) => {
         handleSubmit?.(values);
-        onClose?.();
+        onSubmit?.();
       }}
     >
       {() => (

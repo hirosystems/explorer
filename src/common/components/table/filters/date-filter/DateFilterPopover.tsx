@@ -28,7 +28,7 @@ export function DateFilterPopover({ defaultStartTime, defaultEndTime }: DateFilt
           <DateFilterTabs
             defaultStartTime={defaultStartTime}
             defaultEndTime={defaultEndTime}
-            onClose={() => setOpen(false)}
+            onSubmit={() => setOpen(false)}
           />
         </Box>
       )}

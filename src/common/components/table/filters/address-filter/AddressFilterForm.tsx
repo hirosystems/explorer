@@ -6,8 +6,6 @@ import { Stack } from '@chakra-ui/react';
 import { Field, FieldProps, Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { useTxTableFilters } from '../../TxTableFilterContext';
-
 interface AddressFilterProps {
   defaultFromAddress?: string;
   defaultToAddress?: string;
@@ -54,9 +52,6 @@ export function AddressFilterForm({
   onSubmit,
 }: AddressFilterProps) {
   const onAddressFilterSubmitHandler = useAddressFilterSubmitHandler();
-
-  const { updateAddressFilters } = useTxTableFilters() || {}; // This is for the mobile apply button design
-  const hideApplyButton = !!updateAddressFilters;
 
   return (
     <Formik
@@ -122,18 +117,16 @@ export function AddressFilterForm({
               )}
             </Field>
           </Stack>
-          {!hideApplyButton && (
-            <Button
-              isLoading={isValidating}
-              width="full"
-              type="submit"
-              size={'small'}
-              variant={'redesignSecondary'}
-              mt={4}
-            >
-              Apply
-            </Button>
-          )}
+          <Button
+            isLoading={isValidating}
+            width="full"
+            type="submit"
+            size={'small'}
+            variant={'redesignSecondary'}
+            mt={4}
+          >
+            Apply
+          </Button>
         </Form>
       )}
     </Formik>

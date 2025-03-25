@@ -12,11 +12,13 @@ export const DateFilterAccordionItem = ({
   defaultStartTime,
   defaultEndTime,
   open,
+  onSubmit,
 }: {
   id: string;
   defaultStartTime?: string;
   defaultEndTime?: string;
   open: boolean;
+  onSubmit: () => void;
 }) => {
   return (
     <AccordionItem borderBottom={'none'} value={id}>
@@ -43,7 +45,7 @@ export const DateFilterAccordionItem = ({
         <DateFilterTabs
           defaultStartTime={defaultStartTime}
           defaultEndTime={defaultEndTime}
-          isMobile={true}
+          onSubmit={onSubmit}
         />
       </AccordionItemContent>
     </AccordionItem>

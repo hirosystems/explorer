@@ -2,21 +2,14 @@ import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { useMemo } from 'react';
 
 import { DatePicker } from './DatePicker';
-import { DatePickerMobile } from './DatePickerMobile';
 
 interface DateFilterProps {
   defaultStartTime?: string;
   defaultEndTime?: string;
-  onClose?: () => void;
-  isMobile?: boolean;
+  onSubmit?: () => void;
 }
 
-export function DateFilterTabs({
-  defaultStartTime,
-  defaultEndTime,
-  onClose,
-  isMobile,
-}: DateFilterProps) {
+export function DateFilterTabs({ defaultStartTime, defaultEndTime, onSubmit }: DateFilterProps) {
   const defaultStartTimeNumber = isNaN(Number(defaultStartTime)) ? null : Number(defaultStartTime);
   const defaultEndTimeNumber = isNaN(Number(defaultEndTime)) ? null : Number(defaultEndTime);
 
@@ -34,59 +27,41 @@ export function DateFilterTabs({
       {
         id: 'between',
         title: 'Between',
-        content: isMobile ? (
-          <DatePickerMobile
-            mode="between"
-            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
-            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-          />
-        ) : (
+        content: (
           <DatePicker
             mode="between"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-            onClose={onClose}
+            onSubmit={onSubmit}
           />
         ),
       },
       {
         id: 'before',
         title: 'Before',
-        content: isMobile ? (
-          <DatePickerMobile
-            mode="before"
-            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
-            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-          />
-        ) : (
+        content: (
           <DatePicker
             mode="before"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-            onClose={onClose}
+            onSubmit={onSubmit}
           />
         ),
       },
       {
         id: 'after',
         title: 'After',
-        content: isMobile ? (
-          <DatePickerMobile
-            mode="after"
-            defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
-            defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-          />
-        ) : (
+        content: (
           <DatePicker
             mode="after"
             defaultStartTime={populatedFilter === 'dateRange' ? defaultStartTimeNumber : null}
             defaultEndTime={populatedFilter === 'dateRange' ? defaultEndTimeNumber : null}
-            onClose={onClose}
+            onSubmit={onSubmit}
           />
         ),
       },
     ],
-    [defaultStartTimeNumber, defaultEndTimeNumber, populatedFilter, onClose, isMobile]
+    [defaultStartTimeNumber, defaultEndTimeNumber, populatedFilter, onSubmit]
   );
 
   return (
