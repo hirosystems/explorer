@@ -32,7 +32,7 @@ function BtcStxPriceBase({ tokenPrice }: { tokenPrice: TokenPrice }) {
     <Flex gap={6} minWidth={'172px'}>
       <PriceContainer
         icon={
-          <Icon h={4.5} w={4.5}>
+          <Icon h={4.5} w={4.5} color="accent.bitcoin-500">
             <BitcoinCircleIcon />
           </Icon>
         }

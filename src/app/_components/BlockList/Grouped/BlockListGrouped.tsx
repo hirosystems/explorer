@@ -263,7 +263,7 @@ function BitcoinHeader({
         <Icon h={3.5} w={3.5} color="textSubdued">
           <ArrowElbowLeftDown />
         </Icon>
-        <Icon h={4.5} w={4.5}>
+        <Icon h={4.5} w={4.5} color="accent.bitcoin-500">
           <BitcoinCircleIcon />
         </Icon>
         <Flex height="full" alignItems="center">
