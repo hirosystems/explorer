@@ -1,3 +1,10 @@
+## [1.262.1](https://github.com/hirosystems/explorer/compare/v1.262.0...v1.262.1) (2025-03-25)
+
+
+### Bug Fixes
+
+* fixed the signer cycle mapping bug ([15f6a44](https://github.com/hirosystems/explorer/commit/15f6a44ae2cd84dbe6c74bf5eae145abb15afce8))
+
 # [1.262.0](https://github.com/hirosystems/explorer/compare/v1.261.0...v1.262.0) (2025-03-19)
 
 
