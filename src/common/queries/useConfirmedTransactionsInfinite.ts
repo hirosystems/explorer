@@ -75,6 +75,10 @@ export function useConfirmedTransactionsInfinite(
   });
 }
 
+interface Options {
+  initialData?: GenericResponseType<Transaction>;
+}
+
 export function useConfirmedTransactions(
   limit = DEFAULT_LIST_LIMIT,
   offset = 0,

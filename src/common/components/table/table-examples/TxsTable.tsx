@@ -1,7 +1,7 @@
 'use client';
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
-import { TxPageFilters } from '@/app/transactions/page';
+import { CompressedTxTableData, TxPageFilters } from '@/app/transactions/page';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
@@ -31,6 +31,7 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 
 export enum TxTableColumns {
   Transaction = 'transaction',
@@ -226,7 +227,9 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-export function TxsTable({ filters }: { filters: TxPageFilters }) {
+export const TX_TABLE_PAGE_SIZE = 50;
+
+export function TxsTable({ filters, initialData }: { filters: TxPageFilters, initialData: GenericResponseType<CompressedTxTableData> }) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -246,6 +249,7 @@ export function TxsTable({ filters }: { filters: TxPageFilters }) {
     {
       placeholderData: (keepPreviousData: InfiniteData<unknown, unknown> | undefined) =>
         keepPreviousData,
+      initialData: initialData,
     }
   );
   const { total, results: txs = [] } = data || {};
