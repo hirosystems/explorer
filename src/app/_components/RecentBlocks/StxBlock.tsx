@@ -75,7 +75,7 @@ export function StxBlockGroup({
               align={'center'}
             >
               <HStack borderRadius={'redesign.sm'}>
-                <Icon w={4} h={4}>
+                <Icon w={4} h={4} color="accent.bitcoin-500">
                   <BitcoinCircleIcon />
                 </Icon>
                 <Text textStyle={'text-mono-sm'} color={'textPrimary'} className={'block-height'}>

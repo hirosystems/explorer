@@ -32,7 +32,7 @@ export function NextCycleCardBase() {
             &nbsp;
           </Text>
           <Text display="inline" whiteSpace="nowrap">
-            <Icon h={3} w={3}>
+            <Icon h={3} w={3} color="accent.bitcoin-500">
               <BitcoinCircleIcon />
             </Icon>
             &nbsp;{`#${preparePhaseBurnBlockHeightStart}`}
@@ -49,7 +49,7 @@ export function NextCycleCardBase() {
           &nbsp;
         </Text>
         <Text display="inline" whiteSpace="nowrap">
-          <Icon h={3} w={3}>
+          <Icon h={3} w={3} color="accent.bitcoin-500">
             <BitcoinCircleIcon />
           </Icon>
           &nbsp;{`#${rewardPhaseBurnBlockHeightStart}`}

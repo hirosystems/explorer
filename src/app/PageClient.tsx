@@ -14,6 +14,7 @@ import { MempoolSection } from './_components/MempoolSection';
 import { NetworkOverview } from './_components/NetworkOverview/NetworkOverview';
 import { PageTitle } from './_components/PageTitle';
 import { RecentBlocks } from './_components/RecentBlocks/RecentBlocks';
+import { StackingSection } from './_components/StackingSection/StackingSection';
 import { Stats } from './_components/Stats/Stats';
 
 const HomePageBlockListDynamic = dynamic(
@@ -53,6 +54,11 @@ export function HomePageLayout({
       {isRedesign && (
         <Flex flex="0 0 50%" w={'50%'}>
           <NetworkOverview />
+        </Flex>
+      )}
+      {isRedesign && (
+        <Flex flex="0 0 50%" w="50%">
+          <StackingSection />
         </Flex>
       )}
       {title}

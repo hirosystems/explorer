@@ -148,7 +148,7 @@ export const TEXT_STYLES = defineTextStyles({
       fontFamily: 'var(--font-matter)',
       fontSize: 'xl',
       fontWeight: 'regular',
-      letterSpacing: 'tight',
+      letterSpacing: 'slightlyTight',
       lineHeight: 'redesign.slightlyTight',
     },
   },

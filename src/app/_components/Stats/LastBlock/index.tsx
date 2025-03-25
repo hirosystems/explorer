@@ -26,7 +26,7 @@ function LastBlockBase(props: StackProps) {
           top={0.5}
           gap={1.5}
         >
-          <Icon h={4.5} w={4.5}>
+          <Icon h={4.5} w={4.5} color="accent.bitcoin-500">
             <BitcoinCircleIcon />
           </Icon>
           #{lastBurnBlockHeight}

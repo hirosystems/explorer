@@ -41,7 +41,7 @@ export const BtcStxBlockLinks: FC<BtcStxBlockLinksProps> = ({
           <Icon h={4} w={4} color={'slate.700'}>
             <ArrowRight />
           </Icon>
-          <Icon h={4.5} w={4.5}>
+          <Icon h={4.5} w={4.5} color="accent.bitcoin-500">
             <BitcoinCircleIcon />
           </Icon>
           <TextLink

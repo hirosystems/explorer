@@ -59,7 +59,7 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   borderRadius={'redesign.sm'}
                   bg={'surfaceSecondary'}
                 >
-                  <Icon w={4} h={4} aria-hidden="true">
+                  <Icon w={4} h={4} aria-hidden="true" color="accent.bitcoin-500">
                     <BitcoinCircleIcon />
                   </Icon>
                   <Text textStyle={'text-mono-sm'} color={'textPrimary'} className={'block-height'}>
@@ -181,7 +181,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                       borderRadius={'redesign.sm'}
                       bg={'surfacePrimary'}
                     >
-                      <Icon w={4} h={4} aria-hidden="true">
+                      <Icon w={4} h={4} aria-hidden="true" color="accent.bitcoin-500">
                         <BitcoinCircleIcon />
                       </Icon>
                       <Text
