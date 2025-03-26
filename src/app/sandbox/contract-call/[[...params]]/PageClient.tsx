@@ -1,5 +1,7 @@
 'use client';
 
+import { use } from 'react';
+
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { useContractById } from '../../../../common/queries/useContractById';
 import { useSuspensePoxInfo } from '../../../../common/queries/usePoxInfo';
@@ -7,9 +9,10 @@ import { truncateMiddleDeprecated } from '../../../../common/utils/utils';
 import { DefaultView } from '../../components/ContractCall/DefaultView';
 import { SelectedContractView } from '../../components/ContractCall/SelectedContractView';
 
-export default function ContractCall({ params: { params } }: { params: { params: string[] } }) {
-  const contractId = params?.[0] || undefined;
-  const functionName = params?.[1] || undefined;
+export default function ContractCall(props: { params: Promise<{ params: string[] }> }) {
+  const pageParams = use(props.params).params;
+  const contractId = pageParams?.[0] || undefined;
+  const functionName = pageParams?.[1] || undefined;
   const { data: poxInfo } = useSuspensePoxInfo();
   const { data: contract, isFetching } = useContractById(contractId);
 

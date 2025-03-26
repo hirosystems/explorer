@@ -10,11 +10,11 @@ export interface TxPageFilters {
   toAddress?: string;
 }
 
-export default async function ({
-  searchParams: { startTime, endTime, fromAddress, toAddress },
-}: {
-  searchParams: TxPageFilters;
-}) {
+export default async function (props: { searchParams: Promise<TxPageFilters> }) {
+  const searchParams = await props.searchParams;
+
+  const { startTime, endTime, fromAddress, toAddress } = searchParams;
+
   const tokenPrice = await getTokenPrice();
   return (
     <Page

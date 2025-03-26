@@ -1,69 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TokenRow renders correctly 1`] = `
-<table
-  className="chakra-table__root css-g8yqxe"
->
-  <tr
-    className="chakra-table__row css-16kmb31"
+<DocumentFragment>
+  <table
+    class="chakra-table__root css-g8yqxe"
   >
-    <td
-      className="chakra-table__cell css-1bh4pks"
-    >
-      <div
-        className="css-axw7ok"
+    <tbody>
+      <tr
+        class="chakra-table__row css-16kmb31"
       >
-        <img
-          alt="TT"
-          data-nimg="1"
-          decoding="async"
-          height={36}
-          loading="lazy"
-          onError={[Function]}
-          onLoad={[Function]}
-          src="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75"
-          srcSet="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=48&q=75 1x, /_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75 2x"
-          style={
-            Object {
-              "color": "transparent",
-              "marginRight": "16px",
-            }
-          }
-          width={36}
-        />
-        <a
-          className="link css-zibos"
-          href="/token/0x5678?chain=mainnet"
+        <td
+          class="chakra-table__cell css-1bh4pks"
         >
-          TestToken
-           
-          (TT)
-        </a>
-      </div>
-    </td>
-    <td
-      className="chakra-table__cell css-t35k1d"
-    >
-      <span
-        className="css-1gy64qm"
-      >
-        <a
-          className="link css-m05bwu"
-          href="/txid/0x1234?chain=mainnet"
+          <div
+            class="css-axw7ok"
+          >
+            <img
+              alt="TT"
+              data-nimg="1"
+              decoding="async"
+              height="36"
+              loading="lazy"
+              src="http://localhost/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75"
+              srcset="/_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=48&q=75 1x, /_next/image?url=https%3A%2F%2Fexample.com%2Ftoken.png&w=96&q=75 2x"
+              style="color: transparent; margin-right: 16px;"
+              width="36"
+            />
+            <a
+              class="link css-zibos"
+              href="/token/0x5678?chain=mainnet"
+            >
+              TestToken (TT)
+            </a>
+          </div>
+        </td>
+        <td
+          class="chakra-table__cell css-t35k1d"
         >
-          0x1234
-        </a>
-      </span>
-    </td>
-    <td
-      className="chakra-table__cell css-nepgmf"
-    >
-      <span
-        className="css-1tzohq0"
-      >
-        1M
-      </span>
-    </td>
-  </tr>
-</table>
+          <span
+            class="css-1gy64qm"
+          >
+            <a
+              class="link css-m05bwu"
+              href="/txid/0x1234?chain=mainnet"
+            >
+              0x1234
+            </a>
+          </span>
+        </td>
+        <td
+          class="chakra-table__cell css-nepgmf"
+        >
+          <span
+            class="css-1tzohq0"
+          >
+            1M
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</DocumentFragment>
 `;

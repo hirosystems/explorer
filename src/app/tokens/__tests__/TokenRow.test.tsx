@@ -1,6 +1,7 @@
 import { ChakraProvider, Table } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import renderer from 'react-test-renderer';
+import '@testing-library/jest-dom';
+import { render } from '@testing-library/react';
 
 import { system } from '../../../ui/theme/theme';
 import { TokenRow } from '../TokenRow';
@@ -16,20 +17,19 @@ const tokenMetadata = {
 };
 
 describe('TokenRow', () => {
-  const queryClient = new QueryClient();
-
   it('renders correctly', () => {
-    const tree = renderer
-      .create(
-        <QueryClientProvider client={queryClient}>
-          <ChakraProvider value={system}>
-            <Table.Root>
-              <TokenRow ftToken={tokenMetadata} />
-            </Table.Root>
-          </ChakraProvider>
-        </QueryClientProvider>
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const queryClient = new QueryClient();
+
+    const { asFragment } = render(
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider value={system}>
+          <Table.Root>
+            <TokenRow ftToken={tokenMetadata} />
+          </Table.Root>
+        </ChakraProvider>
+      </QueryClientProvider>
+    );
+
+    expect(asFragment()).toMatchSnapshot();
   });
 });

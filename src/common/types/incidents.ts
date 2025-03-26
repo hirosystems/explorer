@@ -1,6 +1,5 @@
 import { Document } from '@contentful/rich-text-types';
-import { ContentfulCollection } from 'contentful';
-import { ContentTypeSys } from 'contentful/dist/types/types/content-type';
+import { ContentTypeSys, ContentfulCollection } from 'contentful';
 import { IncidentImpact } from 'statuspage.io';
 
 interface ContentType {

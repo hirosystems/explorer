@@ -1,7 +1,8 @@
 import { renderWithProviders } from '@/common/utils/test-utils/render-utils';
 import { Box } from '@chakra-ui/react';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import { useParams as useParamsActual } from 'next/navigation';
+import { act } from 'react';
 
 import { TxListTabsBase } from '../TxListTabsBase';
 
@@ -23,41 +24,57 @@ describe('TxListTabs component', () => {
     const confirmedList = <Box>Confirmed List</Box>;
     const mempoolList = <Box>Mempool List</Box>;
 
-    const { getByText } = renderWithProviders(
-      <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
-    );
+    let utils;
+    await act(async () => {
+      utils = renderWithProviders(
+        <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
+      );
+    });
 
-    expect(screen.getByText('Confirmed List')).toBeInTheDocument();
-
-    const pendingTab = screen.getByRole('tab', { name: /pending/i });
+    await waitFor(() => {
+      expect(screen.getByText('Confirmed List')).toBeInTheDocument();
+    });
 
     await act(async () => {
+      const pendingTab = screen.getByRole('tab', { name: /pending/i });
       pendingTab.click();
     });
 
     await waitFor(() => {
-      expect(getByText('Mempool List')).toBeVisible();
+      expect(utils.getByText('Mempool List')).toBeVisible();
     });
   });
 
-  it('displays CSVDownloadButton if on address page', () => {
+  it('displays CSVDownloadButton if on address page', async () => {
     useParams.mockReturnValue({ principal: 'test-address' });
     const confirmedList = <div>Confirmed List</div>;
     const mempoolList = <div>Mempool List</div>;
 
-    renderWithProviders(<TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />);
+    await act(async () => {
+      renderWithProviders(
+        <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
+      );
+    });
 
-    expect(screen.getByRole('button', { name: /Export as CSV/i })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /Export as CSV/i })).toBeInTheDocument();
+    });
   });
 
-  it('does not display CSVDownloadButton if not on address page', () => {
+  it('does not display CSVDownloadButton if not on address page', async () => {
     useParams.mockReturnValue({});
 
     const confirmedList = <div>Confirmed List</div>;
     const mempoolList = <div>Mempool List</div>;
 
-    renderWithProviders(<TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />);
+    await act(async () => {
+      renderWithProviders(
+        <TxListTabsBase confirmedList={confirmedList} mempoolList={mempoolList} />
+      );
+    });
 
-    expect(screen.queryByRole('button', { name: /Export as CSV/i })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: /Export as CSV/i })).not.toBeInTheDocument();
+    });
   });
 });

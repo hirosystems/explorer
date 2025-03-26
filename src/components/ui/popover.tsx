@@ -5,7 +5,7 @@ import { CloseButton } from './close-button';
 
 interface PopoverContentProps extends ChakraPopover.ContentProps {
   portalled?: boolean;
-  portalRef?: React.RefObject<HTMLElement>;
+  portalRef?: React.RefObject<HTMLElement | null>;
 }
 
 export const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(

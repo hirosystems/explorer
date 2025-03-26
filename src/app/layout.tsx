@@ -22,9 +22,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const themeCookie = cookies().get('stacks-explorer-theme')?.value || 'light';
-  const addedCustomNetworksCookie = cookies().get('addedCustomNetworks')?.value;
-  const removedCustomNetworksCookie = cookies().get('removedCustomNetworks')?.value;
+  const cookieStore = await cookies();
+  const themeCookie = cookieStore.get('stacks-explorer-theme')?.value || 'light';
+  const addedCustomNetworksCookie = cookieStore.get('addedCustomNetworks')?.value;
+  const removedCustomNetworksCookie = cookieStore.get('removedCustomNetworks')?.value;
 
   const tokenPrice = await getTokenPrice();
   const statusBarContent = await getStatusBarContent();

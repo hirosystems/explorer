@@ -1,3 +1,5 @@
+'use client';
+
 import dynamic from 'next/dynamic';
 
 import { SignerKeyPageSkeleton } from './skeleton';
@@ -7,6 +9,6 @@ const Page = dynamic(() => import('./PageClient'), {
   ssr: false,
 });
 
-export default async function () {
+export default function SignerKeyPage() {
   return <Page />;
 }
