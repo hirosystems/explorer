@@ -83,7 +83,6 @@ export function TableScrollIndicator({ children, ...rest }: BoxProps & { childre
             transform="translateY(-50%)"
             bg="surfacePrimary"
             borderRadius="redesign.xs"
-            zIndex="overlay"
             h="full"
             alignItems="center"
             justifyContent="center"

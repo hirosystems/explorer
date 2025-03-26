@@ -19,8 +19,9 @@ import { searchByBnsName } from './useSearchQuery';
 type FilterProps = {
   fromAddress?: string;
   toAddress?: string;
-  startTime?: number;
-  endTime?: number;
+  startTime?: string;
+  endTime?: string;
+  type?: string[];
   order?: 'asc' | 'desc' | undefined;
   sortBy?: string;
 };
@@ -74,16 +75,21 @@ export function useConfirmedTransactionsInfinite(
   });
 }
 
+interface Options {
+  initialData?: GenericResponseType<Transaction>;
+}
+
 export function useConfirmedTransactions(
   limit = DEFAULT_LIST_LIMIT,
   offset = 0,
-  { fromAddress, toAddress, startTime, endTime, order, sortBy }: FilterProps = {},
+  { fromAddress, toAddress, startTime, endTime, type, order, sortBy }: FilterProps = {},
   options: any = {}
 ): UseQueryResult<GenericResponseType<Transaction>> {
   const apiClient = useApiClient();
+  console.log('useConfirmedTransactions', { limit, offset });
   return useQuery({
     queryKey: [
-      'confirmedTransactionsInfinite',
+      'confirmedTransactions',
       limit,
       offset,
       fromAddress,

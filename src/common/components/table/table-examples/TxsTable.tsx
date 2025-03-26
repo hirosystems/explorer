@@ -1,12 +1,14 @@
 'use client';
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
+import { CompressedTxTableData, TxPageFilters } from '@/app/transactions/page';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
   truncateHex,
   validateStacksContractId,
 } from '@/common/utils/utils';
+import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
@@ -29,6 +31,9 @@ import {
   TxLinkCellRenderer,
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
+import { TX_TABLE_PAGE_SIZE } from './consts';
 
 export enum TxTableColumns {
   Transaction = 'transaction',
@@ -224,10 +229,10 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-export function TxsTable() {
+export function TxsTable({ filters, initialData }: { filters: TxPageFilters, initialData: GenericResponseType<CompressedTxTableData> }) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: TX_TABLE_PAGE_SIZE,
   });
 
   const handlePageChange = useCallback((page: PaginationState) => {
@@ -240,13 +245,22 @@ export function TxsTable() {
   const { data, refetch } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
-    {},
+    { ...filters },
     {
-      placeholderData: (keepPreviousData: InfiniteData<unknown, unknown> | undefined) =>
-        keepPreviousData,
+      placeholderData: (previousData: unknown) => previousData,
+      initialData: () => pagination.pageIndex === 0 ? initialData : undefined,
+      staleTime: THIRTY_SECONDS,
     }
   );
   const { total, results: txs = [] } = data || {};
+  const { activeFilters } = useFilterAndSortState();
+  const filteredTxs = useMemo(
+    () =>
+      activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
+    [txs, activeFilters]
+  );
+
+  const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -266,7 +280,7 @@ export function TxsTable() {
 
   const rowData: TxTableData[] = useMemo(
     () =>
-      txs.map(tx => {
+      filteredTxs.map(tx => {
         const to = getToAddress(tx);
         const amount = getAmount(tx);
 
@@ -305,22 +319,13 @@ export function TxsTable() {
           [TxTableColumns.BlockTime]: tx.block_time,
         };
       }),
-    [txs]
+    [filteredTxs]
   );
-
-  // Because we don't want to show the loading state during pagination, we use this to get an initial load state
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  useEffect(() => {
-    if (txs.length > 0) {
-      setIsInitialLoad(false);
-    }
-  }, [txs]);
 
   return (
     <Table
       data={rowData}
       columns={columns}
-      isLoading={isInitialLoad}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
       scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
       pagination={{
@@ -331,7 +336,7 @@ export function TxsTable() {
         onPageChange: handlePageChange,
       }}
       bannerRow={
-        newTxsAvailable && pagination.pageIndex === 0 ? (
+        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
           <UpdateTableBannerRow
             onClick={() => {
               setNewTxsAvailable(false);
