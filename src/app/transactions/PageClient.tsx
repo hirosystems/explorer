@@ -35,7 +35,7 @@ export default function ({ tokenPrice, filters }: { tokenPrice: TokenPrice } & F
       <ClientOnly>
         {isRedesign ? (
           <Stack gap={24}>
-            <Overview />
+            {/* <Overview /> */}
             <Stack gap={8}>
               <Text fontSize="3.5xl" color="textPrimary">
                 Latest transactions
