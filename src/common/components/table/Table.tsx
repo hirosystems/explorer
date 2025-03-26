@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
 import { TableContainer } from './TableContainer';

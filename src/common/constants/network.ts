@@ -1,4 +1,4 @@
-import { ChainID } from '@stacks/transactions';
+import { ChainId } from '@stacks/network';
 
 import { Network, NetworkModes } from '../types/network';
 import { DEFAULT_DEVNET_SERVER } from './constants';
@@ -13,9 +13,9 @@ import {
   TESTNET_BTC_TX_BASE_URL,
 } from './env';
 
-export const NetworkIdModeMap: { [key in ChainID]: NetworkModes } = {
-  [ChainID.Mainnet]: NetworkModes.Mainnet,
-  [ChainID.Testnet]: NetworkModes.Testnet,
+export const NetworkIdModeMap: { [key in ChainId]: NetworkModes } = {
+  [ChainId.Mainnet]: NetworkModes.Mainnet,
+  [ChainId.Testnet]: NetworkModes.Testnet,
 };
 
 export const NetworkModeUrlMap: Record<NetworkModes, string> = {
@@ -44,7 +44,7 @@ export const mainnetNetwork: Network = {
   btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Mainnet],
   btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Mainnet],
   btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Mainnet],
-  networkId: ChainID.Mainnet,
+  networkId: ChainId.Mainnet,
   mode: NetworkModes.Mainnet,
 };
 
@@ -54,7 +54,7 @@ export const testnetNetwork: Network = {
   btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
   btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
   btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
-  networkId: ChainID.Testnet,
+  networkId: ChainId.Testnet,
   mode: NetworkModes.Testnet,
 };
 
@@ -64,7 +64,7 @@ export const devnetNetwork: Network = {
   btcBlockBaseUrl: NetworkModeBtcBlockBaseUrlMap[NetworkModes.Testnet],
   btcTxBaseUrl: NetworkModeBtcTxBaseUrlMap[NetworkModes.Testnet],
   btcAddressBaseUrl: NetworkModeBtcAddressBaseUrlMap[NetworkModes.Testnet],
-  networkId: ChainID.Testnet,
+  networkId: ChainId.Testnet,
   mode: NetworkModes.Testnet,
   isCustomNetwork: true,
 };

@@ -2,7 +2,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import { fireEvent, render } from '@testing-library/react';
 
-import { ChainID } from '@stacks/transactions';
+import { ChainId } from '@stacks/network';
 
 import { useGlobalContext } from '../../../../common/context/useGlobalContext';
 import { Network, NetworkModes } from '../../../../common/types/network';
@@ -25,7 +25,7 @@ const network: Network = {
   label: 'Mainnet',
   url: 'mainnetUrl',
   mode: NetworkModes.Mainnet,
-  networkId: ChainID.Mainnet,
+  networkId: ChainId.Mainnet,
   btcBlockBaseUrl: 'btcBlockBaseUrl',
   btcTxBaseUrl: 'btcTxBaseUrl',
   btcAddressBaseUrl: 'btcAddressBaseUrl',
@@ -36,7 +36,7 @@ const customNetwork = {
   url: 'customUrl',
   isCustomNetwork: true,
   mode: NetworkModes.Testnet,
-  networkId: ChainID.Testnet,
+  networkId: ChainId.Testnet,
   btcBlockBaseUrl: 'btcBlockBaseUrl',
   btcTxBaseUrl: 'btcTxBaseUrl',
   btcAddressBaseUrl: 'btcAddressBaseUrl',
@@ -47,7 +47,7 @@ const subnetNetwork = {
   url: 'subnetUrl',
   isSubnet: true,
   mode: NetworkModes.Testnet,
-  networkId: ChainID.Testnet,
+  networkId: ChainId.Testnet,
   btcBlockBaseUrl: 'btcBlockBaseUrl',
   btcTxBaseUrl: 'btcTxBaseUrl',
   btcAddressBaseUrl: 'btcAddressBaseUrl',

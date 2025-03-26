@@ -90,22 +90,22 @@ export function useSignerStackingHistory(signerKey: string, selectedCycle?: stri
         if (!signerData) {
           return acc;
         }
-  
-        if ("error" in signerData) {
+
+        if ('error' in signerData) {
           return acc;
         }
-  
+
         acc.push({
           ...signerData,
           cycleid: cyclesToQuery[index],
         });
-  
+
         return acc;
       },
       []
     );
   }, [signerStackingHistory, cyclesToQuery]);
-  
+
   const fetchNextPage = useCallback(() => {
     setOffset(prev => prev + DEFAULT_LIST_LIMIT);
   }, []);

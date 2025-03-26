@@ -4,10 +4,8 @@ import { ReactNode } from 'react';
 import { meta } from '../../../common/constants/meta';
 import { truncateMiddleDeprecated } from '../../../common/utils/utils';
 
-export async function generateMetadata(
-  { params }: any,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(props: any, parent: ResolvingMetadata): Promise<Metadata> {
+  const params = await props.params;
   const title = `STX Block - ${truncateMiddleDeprecated(params?.hash)}`;
   return Promise.resolve({
     ...meta,

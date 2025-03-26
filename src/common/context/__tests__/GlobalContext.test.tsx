@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { useSearchParams as useSearchParamsActual } from 'next/navigation';
 import { useContext } from 'react';
+import { CookiesProvider } from 'react-cookie';
 
 import { fetchCustomNetworkId } from '../../components/modals/AddNetwork/utils';
 import { GlobalContext, GlobalContextProvider } from '../GlobalContextProvider';
@@ -55,9 +56,11 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
-        <GlobalContextTestComponent />
-      </GlobalContextProvider>
+      <CookiesProvider>
+        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+          <GlobalContextTestComponent />
+        </GlobalContextProvider>
+      </CookiesProvider>
     );
 
     expect(screen.getByText('Global Context Test')).toBeInTheDocument();
@@ -72,9 +75,11 @@ describe('GlobalContext', () => {
       },
     } as any);
     render(
-      <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
-        <GlobalContextTestComponent />
-      </GlobalContextProvider>
+      <CookiesProvider>
+        <GlobalContextProvider addedCustomNetworksCookie={''} removedCustomNetworksCookie={''}>
+          <GlobalContextTestComponent />
+        </GlobalContextProvider>
+      </CookiesProvider>
     );
 
     const networks = getContextField('networks');

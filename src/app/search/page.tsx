@@ -3,7 +3,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import Page from './PageClient';
 
-export default async function ({ searchParams }: { searchParams: Record<string, string> }) {
+export default async function (props: { searchParams: Promise<Record<string, string>> }) {
+  const searchParams = await props.searchParams;
   const filters = Object.fromEntries(
     Object.entries(searchParams).filter(
       ([key]) =>
