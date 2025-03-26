@@ -1,4 +1,4 @@
-import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
+import { renderWithProviders } from '@/common/utils/test-utils/render-utils';
 import '@testing-library/jest-dom';
 
 import { MobileNav } from '../MobileNav';
@@ -27,7 +27,7 @@ describe('MobileNav', () => {
 
     const mockClose = jest.fn();
 
-    const { asFragment } = renderWithChakraProviders(
+    const { asFragment } = renderWithProviders(
       <MobileNav
         navItems={mockNavItems}
         close={mockClose}

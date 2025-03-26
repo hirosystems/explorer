@@ -1,6 +1,6 @@
 import { useMempoolFee } from '@/common/queries/useMempoolFee';
-import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
+import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';

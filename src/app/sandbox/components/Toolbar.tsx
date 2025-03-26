@@ -29,7 +29,6 @@ export const Sample = () => {
 
   return (
     <NativeSelectRoot
-      placeholder="Choose from sample"
       onChange={e => {
         dispatch(
           setCodeBody({
@@ -48,7 +47,7 @@ export const Sample = () => {
       color={`black`}
       fontSize={'sm'}
     >
-      <NativeSelectField placeholder="Choose from sample">
+      <NativeSelectField>
         {[helloWorldContract, kvStoreContract, statusContract, streamContract].map(
           ({ name, source }, key: number) => (
             <option

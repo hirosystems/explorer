@@ -1,7 +1,7 @@
-import { system } from '@/ui/theme/theme';
-import { ChakraProvider } from '@chakra-ui/react';
+import { renderWithChakraProviders } from '@/common/utils/test-utils/render-utils';
 import '@testing-library/jest-dom';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 
 import { TabsContainer } from '../TabsContainer';
 
@@ -19,49 +19,47 @@ const tabs = [
 ];
 
 describe('TabsContainer', () => {
-  it('renders tabs with correct title', () => {
-    const { getAllByRole } = render(
-      <ChakraProvider value={system}>
-        <TabsContainer tabs={tabs} />
-      </ChakraProvider>
-    );
-    const tabList = getAllByRole('tab');
+  it('renders tabs with correct title', async () => {
+    let utils;
+    await act(async () => {
+      utils = renderWithChakraProviders(<TabsContainer tabs={tabs} />);
+    });
+
+    const tabList = utils.getAllByRole('tab');
     expect(tabList).toHaveLength(2);
     expect(tabList[0]).toHaveTextContent('Tab 1');
     expect(tabList[1]).toHaveTextContent('Tab 2');
   });
 
   it('displays correct tab content when a tab is clicked', async () => {
-    function TestWrapper() {
-      return (
-        <ChakraProvider value={system}>
-          <TabsContainer tabs={tabs} />
-        </ChakraProvider>
-      );
-    }
-    const { getByText } = render(
-      <ChakraProvider value={system}>
-        <TestWrapper />
-      </ChakraProvider>
-    );
+    let utils;
+    await act(async () => {
+      utils = renderWithChakraProviders(<TabsContainer tabs={tabs} />);
+    });
+
+    // Initial state check
     expect(screen.getByText('Tab 1 content')).toBeVisible();
 
-    const tab1 = screen.getByRole('tab', { name: /tab 1/i });
     const tab2 = screen.getByRole('tab', { name: /tab 2/i });
 
+    // Click on tab 2
     await act(async () => {
-      await tab2.click();
+      tab2.click();
     });
+
     await waitFor(() => {
-      expect(getByText('Tab 2 content')).toBeVisible();
+      expect(utils.getByText('Tab 2 content')).toBeVisible();
     });
-    expect(getByText('Tab 2 content')).toBeVisible();
+
+    // Click on tab 1
+    const tab1 = screen.getByRole('tab', { name: /tab 1/i });
 
     await act(async () => {
       tab1.click();
     });
+
     await waitFor(() => {
-      expect(getByText('Tab 1 content')).toBeVisible();
+      expect(utils.getByText('Tab 1 content')).toBeVisible();
     });
   });
 });

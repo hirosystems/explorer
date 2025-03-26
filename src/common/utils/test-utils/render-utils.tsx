@@ -4,7 +4,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { RenderOptions } from '@testing-library/react';
 import { render } from '@testing-library/react';
-import React, { PropsWithChildren, ReactElement } from 'react';
+import React, { type JSX, PropsWithChildren, ReactElement } from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';
 
 import {
@@ -88,11 +89,13 @@ function AllProviders({ children, store, queryClient }: ProvidersProps) {
   const testQueryClient = queryClient ?? createDefaultQueryClient();
 
   return (
-    <Provider store={testStore}>
-      <QueryClientProvider client={testQueryClient}>
-        <ChakraProvider value={system}>{children}</ChakraProvider>
-      </QueryClientProvider>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={testStore}>
+        <QueryClientProvider client={testQueryClient}>
+          <ChakraProvider value={system}>{children}</ChakraProvider>
+        </QueryClientProvider>
+      </Provider>
+    </CookiesProvider>
   );
 }
 

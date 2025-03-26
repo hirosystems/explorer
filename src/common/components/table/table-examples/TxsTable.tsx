@@ -15,7 +15,7 @@ import { UTCDate } from '@date-fns/utc';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
 import { InfiniteData } from '@tanstack/react-query';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 

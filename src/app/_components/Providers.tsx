@@ -47,11 +47,11 @@ export const Providers = ({
 
   return (
     <ChakraProvider value={system}>
-      <GlobalContextProvider
-        addedCustomNetworksCookie={addedCustomNetworksCookie}
-        removedCustomNetworksCookie={removedCustomNetworksCookie}
-      >
-        <CookiesProvider>
+      <CookiesProvider>
+        <GlobalContextProvider
+          addedCustomNetworksCookie={addedCustomNetworksCookie}
+          removedCustomNetworksCookie={removedCustomNetworksCookie}
+        >
           <ColorModeProvider>
             <ReduxProvider store={store}>
               <AppConfig // TODO: rename to something else like SessionProvider
@@ -63,8 +63,8 @@ export const Providers = ({
               </AppConfig>
             </ReduxProvider>
           </ColorModeProvider>
-        </CookiesProvider>
-      </GlobalContextProvider>
+        </GlobalContextProvider>
+      </CookiesProvider>
     </ChakraProvider>
   );
 };

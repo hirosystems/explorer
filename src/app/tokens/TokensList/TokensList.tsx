@@ -1,3 +1,5 @@
+'use client';
+
 import { Icon, Input } from '@chakra-ui/react';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import dynamic from 'next/dynamic';
