@@ -5,7 +5,7 @@ interface StacksNameAndLogoIconWeightProps {
   color: string;
 }
 
-const createWeight = ({ color }: StacksNameAndLogoIconWeightProps): ReactElement => (
+const createWeight = ({ color }: StacksNameAndLogoIconWeightProps): ReactElement<any> => (
   <>
     <path
       fillRule="evenodd"

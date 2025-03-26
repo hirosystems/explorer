@@ -3,16 +3,18 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { getTokenPrice } from '../getTokenPriceInfo';
 import Page from './PageClient';
 
-export default async function ({
-  searchParams: { startTime, endTime, fromAddress, toAddress },
-}: {
-  searchParams: {
+export default async function (props: {
+  searchParams: Promise<{
     startTime?: string;
     endTime?: string;
     fromAddress?: string;
     toAddress?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
+
+  const { startTime, endTime, fromAddress, toAddress } = searchParams;
+
   const tokenPrice = await getTokenPrice();
   return (
     <Page

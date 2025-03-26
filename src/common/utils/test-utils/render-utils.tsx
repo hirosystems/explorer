@@ -4,7 +4,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { RenderOptions } from '@testing-library/react';
 import { render } from '@testing-library/react';
-import React, { PropsWithChildren, ReactElement } from 'react';
+import React, { type JSX, PropsWithChildren, ReactElement } from 'react';
+import { CookiesProvider } from 'react-cookie';
 import { Provider } from 'react-redux';
 
 import {
@@ -88,16 +89,18 @@ function AllProviders({ children, store, queryClient }: ProvidersProps) {
   const testQueryClient = queryClient ?? createDefaultQueryClient();
 
   return (
-    <Provider store={testStore}>
-      <QueryClientProvider client={testQueryClient}>
-        <ChakraProvider value={system}>{children}</ChakraProvider>
-      </QueryClientProvider>
-    </Provider>
+    <CookiesProvider>
+      <Provider store={testStore}>
+        <QueryClientProvider client={testQueryClient}>
+          <ChakraProvider value={system}>{children}</ChakraProvider>
+        </QueryClientProvider>
+      </Provider>
+    </CookiesProvider>
   );
 }
 
 export function renderWithProviders(
-  ui: React.ReactElement,
+  ui: React.ReactElement<any>,
   {
     preloadedState,
     store = createDefaultStore(preloadedState),
@@ -121,7 +124,7 @@ export function ReduxProvider({ children, store }: ProvidersProps) {
 }
 
 export function renderWithReduxProviders(
-  ui: React.ReactElement,
+  ui: React.ReactElement<any>,
   {
     preloadedState = {
       modal: modalSliceInitialState,
@@ -167,6 +170,6 @@ export function ChakraProviderWrapper({ children }: { children: React.ReactNode 
 }
 
 export const renderWithChakraProviders = (
-  ui: ReactElement,
+  ui: ReactElement<any>,
   options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { wrapper: ChakraProviderWrapper, ...options });

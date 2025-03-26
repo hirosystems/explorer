@@ -5,7 +5,6 @@ import { SignersPageSkeleton } from './skeleton';
 
 const Page = dynamic(() => import('./PageClient'), {
   loading: () => <SignersPageSkeleton />,
-  ssr: false,
 });
 
 export default async function () {

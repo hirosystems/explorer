@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Flex, HStack } from '@chakra-ui/react';
+import type { JSX } from 'react';
 
 import { PageTitle } from '../../../app/_components/PageTitle';
 import { SkeletonCircle } from '../../../components/ui/skeleton';

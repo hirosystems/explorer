@@ -10,7 +10,7 @@ interface StacksSmileyIconWeightProps {
 const createWeight = ({
   circleColor,
   linearGradientColor,
-}: StacksSmileyIconWeightProps): ReactElement => (
+}: StacksSmileyIconWeightProps): ReactElement<any> => (
   <svg viewBox="0 0 68 68" fill="none" className="stacks-smiley">
     <circle cx="34" cy="34" r="28" fill={circleColor} />
     <g filter="url(#filter0_b_2985_1972)">

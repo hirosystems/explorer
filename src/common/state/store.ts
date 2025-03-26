@@ -18,7 +18,7 @@ import {
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
   search: searchSlice.reducer,
-  connect: sandboxSlice.reducer,
+  // connect: sandboxSlice.reducer,
   activeTransactionValueFilter: activeTransactionValueFilterSlice.reducer,
   currency: currencySlice.reducer,
   ...filterAndSortReducers,

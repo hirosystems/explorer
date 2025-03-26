@@ -12,7 +12,6 @@ import { BTC_BNS_CONTRACT } from '../constants/constants';
 import { useAppDispatch } from '../state/hooks';
 import { Network } from '../types/network';
 import {
-  AddressSearchResult,
   BlockSearchResult,
   BnsSearchResult,
   FoundResult,
