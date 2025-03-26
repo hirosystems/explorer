@@ -1,3 +1,10 @@
+# [1.264.0](https://github.com/hirosystems/explorer/compare/v1.263.0...v1.264.0) (2025-03-26)
+
+
+### Features
+
+* redesign - homepage - stacking section ([e94c8ec](https://github.com/hirosystems/explorer/commit/e94c8ecb1e6b2320be828be616b91dbfe35f7f5d))
+
 # [1.263.0](https://github.com/hirosystems/explorer/compare/v1.262.1...v1.263.0) (2025-03-26)
 
 
