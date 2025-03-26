@@ -1,4 +1,5 @@
 export const ONE_SECOND = 1000;
+export const THIRTY_SECONDS = 30 * ONE_SECOND;
 export const ONE_MINUTE = 60 * ONE_SECOND;
 export const TWO_MINUTES = 2 * ONE_MINUTE;
 export const THREE_MINUTES = 3 * ONE_MINUTE;

@@ -9,7 +9,7 @@ import { microToStacksFormatted, validateStacksContractId } from '@/common/utils
 import { ArrowRight } from '@phosphor-icons/react';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Transaction } from '@stacks/blockchain-api-client';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 export const getStorybookTxTableTanstackColumns = (
   hasSorting?: boolean,

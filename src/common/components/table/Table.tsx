@@ -204,7 +204,6 @@ export function Table<T>({
   bannerRow,
   error,
   pagination,
-  tableProps,
 }: TableProps<T>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);

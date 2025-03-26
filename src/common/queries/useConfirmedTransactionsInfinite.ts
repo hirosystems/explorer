@@ -86,9 +86,10 @@ export function useConfirmedTransactions(
   options: any = {}
 ): UseQueryResult<GenericResponseType<Transaction>> {
   const apiClient = useApiClient();
+  console.log('useConfirmedTransactions', { limit, offset });
   return useQuery({
     queryKey: [
-      'confirmedTransactionsInfinite',
+      'confirmedTransactions',
       limit,
       offset,
       fromAddress,

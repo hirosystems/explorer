@@ -12,6 +12,7 @@ import {
 
 import { getTokenPrice } from '../getTokenPriceInfo';
 import Page from './PageClient';
+import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
 
 export interface TxPageFilters {
   startTime?: string;
@@ -104,7 +105,7 @@ export default async function ({
   searchParams: TxPageFilters;
 }) {
   const params = new URLSearchParams({
-    limit: `50`, // TODO: use a const later
+    limit: `${TX_TABLE_PAGE_SIZE}`,
     offset: '0',
     ...(startTime && { start_time: startTime }),
     ...(endTime && { end_time: endTime }),
@@ -113,18 +114,11 @@ export default async function ({
   });
   const apiUrl = api ? api : getApiUrl(chain || 'mainnet');
   const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`);
-  console.log('transactions page', { response });
-  if (!response.ok) {
-    const error = await response.json();
-    console.error('API Error:', error);
-  }
   const data = await response.json();
-  console.log('transactions page', { data });
   const compressedData = {
     ...data,
     results: compressTransactions(data.results),
   };
-  console.log('transactions page', { compressedData });
 
   const tokenPrice = await getTokenPrice();
   return (
@@ -136,7 +130,7 @@ export default async function ({
         startTime,
         endTime,
       }}
-      txTableData={compressedData}
+      initialTxTableData={compressedData}
     />
   );
 }

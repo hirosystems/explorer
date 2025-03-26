@@ -3,13 +3,16 @@
 import { TxTableFilters } from '@/common/components/table/filters/TxTableFilters';
 import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFitlersModal';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
+import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { isRedesignUrl } from '@/common/utils/url-utils';
+import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
+import { ClientOnly, Flex } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
+import { PageTitle } from '../_components/PageTitle';
 import { CompressedTxTableData, TxPageFilters } from './page';
 import { MempoolFeeStatsSkeleton } from './skeleton';
-import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 
 const MempoolFeeStatsDynamic = dynamic(
   () => import('./MempoolFeeStats').then(mod => mod.MempoolFeeStats),
@@ -22,18 +25,17 @@ const MempoolFeeStatsDynamic = dynamic(
 export default function ({
   tokenPrice,
   filters,
-  txTableData,
+  initialTxTableData,
 }: {
   tokenPrice: TokenPrice;
   filters: TxPageFilters;
-  txTableData: GenericResponseType<CompressedTxTableData>;
+  initialTxTableData: GenericResponseType<CompressedTxTableData>;
 }) {
   const isRedesign = isRedesignUrl();
-  console.log({ txTableData });
 
   return (
     <>
-      {/* <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
+      <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
         <PageTitle>Transactions</PageTitle>
       </Flex>
       <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
@@ -42,14 +44,11 @@ export default function ({
         {isRedesign ? (
           <>
             <TxTableFilters filters={filters} />
-            <TxsTable filters={filters} />
+            <TxsTable filters={filters} initialData={initialTxTableData} />
             <TxTableFiltersModal filters={filters} />
           </>
         ) : null}
-      </ClientOnly> */}
-      <TxTableFilters filters={filters} />
-      <TxsTable filters={filters} initialData={txTableData} />
-      <TxTableFiltersModal filters={filters} />
+      </ClientOnly>
     </>
   );
 }
