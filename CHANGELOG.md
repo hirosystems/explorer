@@ -1,3 +1,10 @@
+# [1.263.0](https://github.com/hirosystems/explorer/compare/v1.262.1...v1.263.0) (2025-03-26)
+
+
+### Features
+
+* redesign - homepage - network overview ([7da5350](https://github.com/hirosystems/explorer/commit/7da5350057ca8b8041f244ba48cc1281a7d12030))
+
 ## [1.262.1](https://github.com/hirosystems/explorer/compare/v1.262.0...v1.262.1) (2025-03-25)
 
 
