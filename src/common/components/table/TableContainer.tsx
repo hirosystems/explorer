@@ -1,4 +1,4 @@
-import { Box, FlexProps, Stack } from '@chakra-ui/react';
+import { FlexProps, Stack } from '@chakra-ui/react';
 
 import { Card } from '../Card';
 
@@ -7,7 +7,7 @@ interface TableContainerProps extends FlexProps {}
 export function TableContainer({ children, ...rest }: TableContainerProps) {
   return (
     <Card
-      h="fit-content"
+      h="full"
       w="full"
       px={{ base: 3, lg: 4 }}
       pb={{ base: 3, lg: 4 }}
@@ -15,12 +15,20 @@ export function TableContainer({ children, ...rest }: TableContainerProps) {
       borderColor="redesignBorderSecondary"
       className="table-container-card"
       alignItems="center"
-      justifyContent="center"
+      justifyContent="flex-start"
+      bg="transparent"
       {...rest}
     >
-      <Box overflowX="auto" overflowY="hidden" h="full" w="full" className="table-scroll-container">
+      <Stack
+        overflowX="auto"
+        overflowY="hidden"
+        h="full"
+        w="full"
+        className="table-container-scroll-wrapper"
+        flex={1}
+      >
         {children}
-      </Box>
+      </Stack>
     </Card>
   );
 }

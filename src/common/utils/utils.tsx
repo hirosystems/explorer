@@ -1,6 +1,6 @@
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { ArrowsLeftRight, Cube, PhoneCall, PlusMinus, Question } from '@phosphor-icons/react';
+import { ArrowsClockwise, Cube, PhoneCall, PlusMinus, Question } from '@phosphor-icons/react';
 import BigNumber from 'bignumber.js';
 import { c32addressDecode } from 'c32check';
 import dayjs from 'dayjs';
@@ -42,6 +42,16 @@ dayjs.updateLocale('en', {
 });
 
 export const MICROSTACKS_IN_STACKS = 1000000;
+
+/**
+ * validateBnsName
+ *
+ * @param {String} name - the BNS name to validate
+ */
+export const validateBnsName = (name?: string): boolean => {
+  if (!name) return false;
+  return name.endsWith('.btc');
+};
 
 /**
  * validateStacksAddress
@@ -483,6 +493,8 @@ export function getTxTypeIcon(txType: string) {
     case 'smart_contract':
       return <ClarityIcon />;
     case 'tenure_change':
+      return <ArrowsClockwise />;
+    case 'coinbase':
       return <Cube />;
     case 'all':
       return <PlusMinus weight="bold" />;

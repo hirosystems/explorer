@@ -130,6 +130,7 @@ export function TablePaginationControls({
             onChange={e => setInputValue(e.target.value)}
             minW={12}
             maxW={12}
+            px={1.5}
             h={6}
             type="number"
             onKeyDown={e => {

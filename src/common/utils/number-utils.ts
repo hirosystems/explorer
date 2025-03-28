@@ -4,3 +4,7 @@ export function isUint128(value: number | bigint): boolean {
   // value <= Number(maxUint128);
   return typeof value === 'number' && Number.isInteger(value) && value >= 0;
 }
+
+export function isStringNumber(value: string): boolean {
+  return !isNaN(Number(value));
+}

@@ -1,12 +1,14 @@
 'use client';
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
+import { TxPageFilters } from '@/app/transactions/page';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
   truncateHex,
   validateStacksContractId,
 } from '@/common/utils/utils';
+import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
@@ -177,6 +179,7 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
 
   return (
     <ChakraTable.Row
+      bg="transparent"
       css={{
         '& > td:first-of-type': {
           borderTopLeftRadius: 'redesign.md',
@@ -196,7 +199,7 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
           alignItems="center"
           justifyContent="center"
           gap={1.5}
-          boxShadow="0px 4px 12px 0px color(display-p3 0.9882 0.3922 0.1961 / 0.25), 0px 4px 12px 0px rgba(255, 85, 18, 0.25)"
+          boxShadow="0px 4px 4px 0px rgba(252, 100, 50, 0.25), 0px 4px 4px 0px rgba(255, 85, 18, 0.25)"
           border="1px dashed var(--stacks-colors-accent-stacks-500)"
           borderRadius="redesign.lg"
           h={12}
@@ -224,7 +227,7 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-export function TxsTable() {
+export function TxsTable({ filters }: { filters: TxPageFilters }) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -240,13 +243,21 @@ export function TxsTable() {
   const { data, refetch } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
-    {},
+    { ...filters },
     {
       placeholderData: (keepPreviousData: InfiniteData<unknown, unknown> | undefined) =>
         keepPreviousData,
     }
   );
   const { total, results: txs = [] } = data || {};
+  const { activeFilters } = useFilterAndSortState();
+  const filteredTxs = useMemo(
+    () =>
+      activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
+    [txs, activeFilters]
+  );
+
+  const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -266,7 +277,7 @@ export function TxsTable() {
 
   const rowData: TxTableData[] = useMemo(
     () =>
-      txs.map(tx => {
+      filteredTxs.map(tx => {
         const to = getToAddress(tx);
         const amount = getAmount(tx);
 
@@ -305,16 +316,16 @@ export function TxsTable() {
           [TxTableColumns.BlockTime]: tx.block_time,
         };
       }),
-    [txs]
+    [filteredTxs]
   );
 
   // Because we don't want to show the loading state during pagination, we use this to get an initial load state
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   useEffect(() => {
-    if (txs.length > 0) {
+    if (data) {
       setIsInitialLoad(false);
     }
-  }, [txs]);
+  }, [data]);
 
   return (
     <Table
@@ -331,7 +342,7 @@ export function TxsTable() {
         onPageChange: handlePageChange,
       }}
       bannerRow={
-        newTxsAvailable && pagination.pageIndex === 0 ? (
+        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
           <UpdateTableBannerRow
             onClick={() => {
               setNewTxsAvailable(false);
