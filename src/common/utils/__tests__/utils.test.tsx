@@ -1,9 +1,7 @@
-import ClarityIcon from '@/ui/icons/ClarityIcon';
-import { ArrowsLeftRight, Cube, PhoneCall, Question } from '@phosphor-icons/react';
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 
-import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel, semanticTokenToCssVar } from '../utils';
+import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '../transactions';
+import { semanticTokenToCssVar } from '../utils';
 
 jest.mock('@phosphor-icons/react', () => ({
   PhoneCall: () => <div data-testid="phone-call">PhoneCall</div>,

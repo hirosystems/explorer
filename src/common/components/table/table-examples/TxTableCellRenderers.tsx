@@ -2,12 +2,10 @@ import { AddressLink, TxLink } from '@/common/components/ExplorerLinks';
 import {
   formatStacksAmount,
   getContractName,
-  getTxTypeColor,
-  getTxTypeIcon,
-  getTxTypeLabel,
   microToStacksFormatted,
   truncateStxAddress,
 } from '@/common/utils/utils';
+import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { Text, TextProps } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
