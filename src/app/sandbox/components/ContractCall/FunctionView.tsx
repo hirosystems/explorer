@@ -266,12 +266,8 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                         </Icon>
                       </Tooltip>
                     </Flex>
-                    {fn.args.length ? (
-                      <Stack
-                        mb="extra-loose"
-                        // spacing="base" // upgrade v3. This may be broken
-                        gap={4}
-                      >
+                    {fn.args.length && (
+                      <>
                         {fn.args.map(({ name, type }) => (
                           <Argument
                             handleChange={handleChange}
@@ -282,16 +278,16 @@ export const FunctionView: FC<FunctionViewProps> = ({ fn, contractId, cancelButt
                             value={values[name]}
                           />
                         ))}
-                        {fn.access === 'public' && (
-                          <PostConditionForm
-                            values={values}
-                            errors={errors}
-                            formikSetFieldValue={setFieldValue}
-                            handleChange={handleChange}
-                          />
-                        )}
-                      </Stack>
-                    ) : null}
+                      </>
+                    )}
+                    {fn.access === 'public' && (
+                      <PostConditionForm
+                        values={values}
+                        errors={errors}
+                        formikSetFieldValue={setFieldValue}
+                        handleChange={handleChange}
+                      />
+                    )}
                     <Stack alignItems="center" justifyContent="center">
                       <Button
                         type="submit"
