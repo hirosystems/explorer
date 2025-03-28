@@ -1,11 +1,9 @@
 import { useMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
 import {
   capitalize,
-  getTxTypeColor,
-  getTxTypeIcon,
-  getTxTypeLabel,
   semanticTokenToCssVar,
 } from '@/common/utils/utils';
+import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { SkeletonCircle } from '@/components/ui/skeleton';
 import { Text } from '@/ui/Text';
 import { NEW_BORDER_RADIUS } from '@/ui/theme/borderRadius';
