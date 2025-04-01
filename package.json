@@ -103,7 +103,7 @@
     "@storybook/addon-interactions": "8.6.9",
     "@storybook/addon-links": "8.6.9",
     "@storybook/addon-onboarding": "8.6.9",
-    "@storybook/addon-viewport": "^8.6.9",
+    "@storybook/addon-viewport": "8.6.11",
     "@storybook/blocks": "8.6.9",
     "@storybook/experimental-nextjs-vite": "8.6.9",
     "@storybook/nextjs": "8.6.9",
