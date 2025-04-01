@@ -1,3 +1,16 @@
+# [1.265.0](https://github.com/hirosystems/explorer/compare/v1.264.0...v1.265.0) (2025-04-01)
+
+
+### Bug Fixes
+
+* fixed pc bug ([b2ca10a](https://github.com/hirosystems/explorer/commit/b2ca10a98ff43a226556e4ec9e20d732da10020f))
+* pnpm-lock ([e791b8f](https://github.com/hirosystems/explorer/commit/e791b8f385a7ea4efb859a0ba837015a80176130))
+
+
+### Features
+
+* added table filters ([7612213](https://github.com/hirosystems/explorer/commit/7612213e0c4b408e38615a1719daf6276ec754f9))
+
 # [1.264.0](https://github.com/hirosystems/explorer/compare/v1.263.0...v1.264.0) (2025-03-26)
 
 
