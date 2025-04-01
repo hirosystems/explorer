@@ -1,3 +1,10 @@
+# [1.266.0](https://github.com/hirosystems/explorer/compare/v1.265.0...v1.266.0) (2025-04-01)
+
+
+### Features
+
+* added tx page overview section ([972171f](https://github.com/hirosystems/explorer/commit/972171f1e222bbfe413734c3a776a1508d33b7e1))
+
 # [1.265.0](https://github.com/hirosystems/explorer/compare/v1.264.0...v1.265.0) (2025-04-01)
 
 
