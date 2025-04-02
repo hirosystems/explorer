@@ -1,4 +1,6 @@
 import { Alert as ChakraAlert } from '@/components/ui/alert';
+import { Link } from '@/ui/Link';
+import { Text } from '@/ui/Text';
 import { Clock, Question, XCircle } from '@phosphor-icons/react';
 
 export type AlertStatus = 'neutral' | 'warning' | 'error';
@@ -21,7 +23,7 @@ export function Alert({
 }: {
   status: AlertStatus;
   title?: string;
-  description: string;
+  description: string | React.ReactNode;
 }) {
   return (
     <ChakraAlert
@@ -67,7 +69,22 @@ export function TenureAlert() {
   return (
     <Alert
       status="neutral"
-      description="A tenure is the period during which an individual miner is authorized to produce new blocks for the Stacks blockchain. Tenures change roughly every Bitcoin block when new miners are randomly elected, with Signers validating tenure changes or extensions to ensure secure transitions. Learn more."
+      description={
+        <Text>
+          A tenure is the period during which an individual miner is authorized to produce new
+          blocks for the Stacks blockchain. Tenures change roughly every Bitcoin block when new
+          miners are randomly elected, with Signers validating tenure changes or extensions to
+          ensure secure transitions.{' '}
+          <Link
+            href="https://www.hiro.so/blog/understanding-nakamotos-fast-blocks-on-stacks"
+            target="_blank"
+            textDecorationColor="textPrimary"
+          >
+            Learn more
+          </Link>
+          .
+        </Text>
+      }
     />
   );
 }
