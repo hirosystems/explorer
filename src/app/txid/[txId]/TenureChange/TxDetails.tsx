@@ -26,7 +26,7 @@ export const TxDetails: React.FC<TxDetailsProps> = ({ tx }) => {
   const tenureChangePayload: Record<string, string | number> = tx.tenure_change_payload || {};
   return (
     <>
-      <Section title="Summary">
+      <Section title="Summary" className="tx-details-summary">
         <Flex width="100%" flexDirection={['column', 'column', 'row']}>
           <Box width={['100%']}>
             <Sender tx={tx} />

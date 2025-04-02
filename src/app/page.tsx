@@ -1,8 +1,11 @@
 import { FeeSection } from '@/app/_components/FeeSection';
 import { MempoolSection } from '@/app/_components/MempoolSection';
-import { getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
+import { DEFAULT_MAINNET_SERVER } from '@/common/constants/env';
+import { NetworkModes } from '@/common/types/network';
+import { logError } from '@/common/utils/error-utils';
+import { SampleTxsFeeEstimate, getSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
+import { getApiUrl } from '@/common/utils/network-utils';
 import { Flex, Stack } from '@chakra-ui/react';
-import { generateStacksUnsignedTransaction } from '@leather.io/stacks';
 
 import { NetworkOverview } from './_components/NetworkOverview/NetworkOverview';
 import { RecentBlocksSection } from './_components/RecentBlocks/RecentBlocks';
@@ -10,45 +13,69 @@ import { StackingSection } from './_components/StackingSection/StackingSection';
 import { TxsSection } from './_components/TxsSection';
 import { HomePageDataProvider } from './context';
 import {
+  RecentBlocks,
+  UIMempoolStats,
+  UIStackingCycle,
   fetchCurrentStackingCycle,
   fetchRecentBlocks,
   fetchRecentUITxs,
   fetchUIMempoolStats,
 } from './data';
+import { CommonSearchParams } from './transactions/page';
+import { CompressedTxTableData } from './transactions/utils';
 
-export default async function HomeRedesign(props: {
-  searchParams: Promise<Record<string, string>>;
-}) {
-  const searchParams = await props.searchParams;
-  const chain = searchParams?.chain || 'mainnet';
-  const api = searchParams?.api;
-  const isSSRDisabled = searchParams?.ssr === 'false';
+interface HomeSearchParams extends CommonSearchParams {
+  ssr?: string;
+}
 
-  const stacksAPIRequests = isSSRDisabled
-    ? []
-    : ([
-        fetchRecentBlocks(chain, api),
-        fetchCurrentStackingCycle(chain, api),
-        fetchRecentUITxs(chain, api),
-        fetchUIMempoolStats(chain, api),
-        getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', api),
-      ] as const);
+export default async function HomeRedesign(props: { searchParams: Promise<HomeSearchParams> }) {
+  const {
+    chain = NetworkModes.Mainnet,
+    api = DEFAULT_MAINNET_SERVER,
+    ssr = 'true',
+  } = await props.searchParams;
+  const apiUrl = getApiUrl(chain, api);
+  const isSSRDisabled = ssr === 'false';
 
-  const stacksAPIResults = await Promise.all(stacksAPIRequests);
+  let recentBlocks: RecentBlocks | undefined;
+  let stackingCycle: UIStackingCycle | undefined;
+  let initialTxTableData: CompressedTxTableData | undefined;
+  let mempoolStats: UIMempoolStats | undefined;
+  let feeEstimates: SampleTxsFeeEstimate | undefined;
 
-  const [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, sampleTxsFeeEstimate] =
-    isSSRDisabled
+  try {
+    const stacksAPIRequests = isSSRDisabled
+      ? []
+      : ([
+          fetchRecentBlocks(chain, api),
+          fetchCurrentStackingCycle(chain, api),
+          fetchRecentUITxs(chain, api),
+          fetchUIMempoolStats(chain, api),
+          getSampleTxsFeeEstimate(chain as 'mainnet' | 'testnet', apiUrl),
+        ] as const);
+
+    const stacksAPIResults = await Promise.all(stacksAPIRequests);
+
+    [recentBlocks, stackingCycle, initialTxTableData, mempoolStats, feeEstimates] = isSSRDisabled
       ? ([undefined, undefined, undefined, undefined, undefined] as const)
       : stacksAPIResults;
+  } catch (error) {
+    logError(
+      error as Error,
+      'Home page server-side fetch for initial data',
+      {
+        apiUrl,
+        chain,
+        recentBlocks,
+        stackingCycle,
+        mempoolStats,
+        feeEstimates,
+        isSSRDisabled,
+      },
+      'error'
+    );
+  }
 
-  const feeEstimates = sampleTxsFeeEstimate
-    ? {
-        tokenTransferFees: sampleTxsFeeEstimate.tokenTransferFees,
-        contractCallFees: sampleTxsFeeEstimate.contractCallFees,
-        contractDeployFees: sampleTxsFeeEstimate.contractDeployFees,
-        averageFees: sampleTxsFeeEstimate.averageFees,
-      }
-    : undefined;
   return (
     <HomePageDataProvider
       initialRecentBlocks={recentBlocks}
@@ -57,13 +84,19 @@ export default async function HomeRedesign(props: {
       feeEstimates={feeEstimates}
       isSSRDisabled={isSSRDisabled}
     >
-      <Stack gap={[16, 18, 20, 24]}>
+      <Stack gap={{ base: 16, md: 18, lg: 20, xl: 24 }}>
         <RecentBlocksSection />
-        <Flex gap={[20, 20, 20, 2]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
+        <Flex
+          gap={{ base: 20, md: 20, lg: 20, xl: 2 }}
+          flexDirection={{ base: 'column', '2xl': 'row' }}
+        >
           <StackingSection />
           <NetworkOverview />
         </Flex>
-        <Flex gap={[20, 20, 20, 2]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
+        <Flex
+          gap={{ base: 20, md: 20, lg: 20, xl: 2 }}
+          flexDirection={{ base: 'column', '2xl': 'row' }}
+        >
           <TxsSection initialTxTableData={initialTxTableData} />
           <Flex gap={4} flexDirection={['column', 'column', 'column', 'column', 'column']} flex={1}>
             <MempoolSection

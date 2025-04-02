@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import {
   MempoolSmartContractTransaction,
   SmartContractTransaction,
@@ -13,7 +11,7 @@ import { TxPage } from '../TxPage';
 import { ContractTabs } from './ContractTabs';
 import { TxDetails } from './TxDetails';
 
-export function SmartContractTx({
+export default function SmartContractTx({
   tx,
 }: {
   tx: SmartContractTransaction | MempoolSmartContractTransaction;

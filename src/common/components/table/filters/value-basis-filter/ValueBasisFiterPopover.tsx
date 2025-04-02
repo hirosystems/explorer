@@ -1,13 +1,13 @@
 import { useAppSelector } from '@/common/state/hooks';
-import { Text } from '@/ui/Text';
 import { useCallback } from 'react';
 
-import { FilterTabPopover } from '../FilterTabPopover';
+import { FilterTabPopover, getFilterTabPopoverContainerProps } from '../FilterTabPopover';
+import { FilterTrigger } from '../FilterTrigger';
 import { ValueBasisFilterForm, getActiveTransactionValueFilterLabel } from './ValueBasisFilterForm';
 
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
-export function ValueBasisFilterPopover() {
+export function ValueBasisFilterPopover({ idExtension = '' }: { idExtension?: string }) {
   const activeTransactionValueFilter = useAppSelector(
     state => state.activeTransactionValueFilter.activeTransactionValueFilter
   );
@@ -21,12 +21,20 @@ export function ValueBasisFilterPopover() {
 
   return (
     <FilterTabPopover
-      id={'value-basis-filter-popover'}
-      positioning={{ placement: 'bottom-end', offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT } }}
+      id={`value-basis-filter-popover${idExtension ? `-${idExtension}` : ''}`}
+      positioning={{
+        placement: 'bottom-end',
+        offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT },
+        sameWidth: true,
+      }}
       trigger={(open, setOpen) => (
-        <Text textStyle="text-medium-sm" color={open ? 'textPrimary' : 'textSecondary'}>
-          {filterLabelValue}
-        </Text>
+        <FilterTrigger
+          prefix=""
+          value={filterLabelValue}
+          open={open}
+          setOpen={setOpen}
+          containerProps={getFilterTabPopoverContainerProps}
+        />
       )}
       content={(open, setOpen) => (
         <ValueBasisFilterForm
@@ -35,7 +43,6 @@ export function ValueBasisFilterPopover() {
           }}
         />
       )}
-      contentProps={{ minW: '180px' }}
     />
   );
 }

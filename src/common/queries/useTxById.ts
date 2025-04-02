@@ -16,10 +16,12 @@ export function useTxById(
   options: any = {}
 ): UseQueryResult<Transaction | MempoolTransaction> {
   const apiClient = useApiClient();
+
   return useQuery({
     queryKey: ['txById', txId],
     queryFn: async () => {
       if (!txId) return undefined;
+
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         params: {
           path: { tx_id: txId },
@@ -38,10 +40,12 @@ export function useSuspenseTxById(
   options: any = {}
 ): UseSuspenseQueryResult<Transaction | MempoolTransaction> {
   const apiClient = useApiClient();
+
   return useSuspenseQuery({
     queryKey: ['txById', txId],
     queryFn: async () => {
       if (!txId) return undefined;
+
       return await callApiWithErrorHandling(apiClient, '/extended/v1/tx/{tx_id}', {
         params: {
           path: { tx_id: txId },
