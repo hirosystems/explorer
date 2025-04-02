@@ -1,16 +1,24 @@
 import { CopyButtonRedesign } from '@/common/components/CopyButton';
-import { AddressLink } from '@/common/components/ExplorerLinks';
+import { AddressLink, BlockLink } from '@/common/components/ExplorerLinks';
 import { formatBlockTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
+import { capitalize } from '@/common/utils/utils';
 import { Badge, BlockHeightBadge, DefaultBadgeLabel, TransactionStatusBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import { Flex, Icon, Stack } from '@chakra-ui/react';
+import { Box, Flex, Icon, Stack, Table } from '@chakra-ui/react';
+import React from 'react';
 
-import { TokenTransferTransaction } from '@stacks/stacks-blockchain-api-types';
+import {
+  MempoolTenureChangeTransaction,
+  MempoolTokenTransferTransaction,
+  MempoolTransaction,
+  TenureChangeTransaction,
+  TokenTransferTransaction,
+  Transaction,
+} from '@stacks/stacks-blockchain-api-types';
 
 import { useTxIdPageData } from '../TxIdPageContext';
-import { useTxValueBasisAdjustedStxPrice } from './useValueBasisAdjustedPrice';
 
 function SummaryItemLabel({ label }: { label: string }) {
   return (
@@ -20,151 +28,373 @@ function SummaryItemLabel({ label }: { label: string }) {
   );
 }
 
-function SummaryItemValue({ value }: { value: string }) {
-  return (
+function SummaryItemValue({
+  value,
+  valueRenderer,
+  label,
+  showCopyButton,
+}: {
+  value: string;
+  valueRenderer?: (value: string) => React.ReactNode;
+  label: string;
+  showCopyButton?: boolean;
+}) {
+  const content = valueRenderer ? (
+    valueRenderer(value)
+  ) : (
     <Text textStyle="text-regular-sm" color="textPrimary" wordBreak="break-all">
       {value}
     </Text>
   );
+  return (
+    <Flex gap={2} alignItems="center">
+      {content}
+      {showCopyButton && (
+        <CopyButtonRedesign
+          initialValue={value}
+          aria-label={`copy ${label} value`}
+          iconProps={{
+            height: 3.5,
+            width: 3.5,
+          }}
+          buttonProps={{
+            p: 1.5,
+          }}
+        />
+      )}
+    </Flex>
+  );
 }
 
-function PriceSummaryItemValue({
-  tx,
-  tokenAmount,
-}: {
-  tx: TokenTransferTransaction;
-  tokenAmount: string;
-}) {
+function PriceSummaryItemValue({ value }: { value: string }) {
   const { stxPrice } = useTxIdPageData();
-  const valueBasisAdjustedUsdValue = useTxValueBasisAdjustedStxPrice(tx, Number(tokenAmount));
-  const currentUsdValue = `$${stxPrice * Number(tokenAmount)}`;
-  const usdValue = valueBasisAdjustedUsdValue || currentUsdValue;
+  const usdValue = stxPrice * Number(value);
 
   return (
     <Flex gap={1.5} alignItems="center">
       <Icon h={3.5} w={3.5} color="iconPrimary">
         <StacksIconThin />
       </Icon>
-      {tokenAmount} STX
+      {value} STX
       <CopyButtonRedesign
-        initialValue={tokenAmount}
+        initialValue={value}
         aria-label={`copy stx price`}
-        height={3.5}
-        width={3.5}
-        color="iconSecondary"
+        iconProps={{
+          height: 3.5,
+          width: 3.5,
+        }}
+        buttonProps={{
+          p: 1.5,
+        }}
       />
       <Text textStyle="text-regular-sm" color="textSecondary">
         /
       </Text>
       <Text textStyle="text-regular-sm" color="textSecondary">
-        {usdValue}
+        ${usdValue}
       </Text>
       <CopyButtonRedesign
         initialValue={usdValue.toString()}
         aria-label={`copy usd price`}
-        height={3.5}
-        width={3.5}
-        color="iconSecondary"
+        iconProps={{
+          height: 3.5,
+          width: 3.5,
+        }}
+        buttonProps={{
+          p: 1.5,
+        }}
       />
     </Flex>
   );
 }
 
-function SummaryItem({
+export function SummaryItem({
   label,
   value,
   valueRenderer,
-  copyable,
+  showCopyButton,
 }: {
   label: string;
   value: string;
   valueRenderer?: (value: string) => React.ReactNode;
-  copyable?: boolean;
+  showCopyButton?: boolean;
 }) {
   return (
-    <Flex alignItems={['flex-start', 'center']} p={3} gap={2.5} flexDirection={['column', 'row']}>
-      <Flex minW={30}>
-        <SummaryItemLabel label={label} />
-      </Flex>
-      <Flex gap={2} alignItems="center">
-        {valueRenderer ? valueRenderer(value) : <SummaryItemValue value={value} />}
-        {copyable && (
-          <CopyButtonRedesign
-            initialValue={value}
-            aria-label={`copy ${label} value`}
-            height={3.5}
-            width={3.5}
-            color="iconSecondary"
+    <>
+      <Table.Row
+        hideBelow="md"
+        className="group"
+        bg="transparent"
+        css={{
+          '& > td:first-of-type': {
+            borderTopLeftRadius: 'redesign.md',
+            borderBottomLeftRadius: 'redesign.md',
+          },
+          '& > td:last-of-type': {
+            borderTopRightRadius: 'redesign.md',
+            borderBottomRightRadius: 'redesign.md',
+          },
+        }}
+      >
+        <Table.Cell
+          _groupHover={{
+            bg: 'surfacePrimary',
+          }}
+          border="none"
+        >
+          <SummaryItemLabel label={label} />
+        </Table.Cell>
+        <Table.Cell
+          _groupHover={{
+            bg: 'surfacePrimary',
+          }}
+          border="none"
+        >
+          <SummaryItemValue
+            value={value}
+            label={label}
+            valueRenderer={valueRenderer}
+            showCopyButton={showCopyButton}
           />
-        )}
-      </Flex>
-    </Flex>
+        </Table.Cell>
+      </Table.Row>
+      <Table.Row
+        hideFrom="md"
+        className="group"
+        bg="transparent"
+        css={{
+          '& > td:first-of-type': {
+            borderTopLeftRadius: 'redesign.md',
+            borderBottomLeftRadius: 'redesign.md',
+          },
+          '& > td:last-of-type': {
+            borderTopRightRadius: 'redesign.md',
+            borderBottomRightRadius: 'redesign.md',
+          },
+        }}
+      >
+        <Table.Cell
+          _groupHover={{
+            bg: 'surfacePrimary',
+          }}
+          border="none"
+        >
+          <Stack gap={1.5}>
+            <SummaryItemLabel label={label} />
+            <SummaryItemValue
+              value={value}
+              label={label}
+              valueRenderer={valueRenderer}
+              showCopyButton={showCopyButton}
+            />
+          </Stack>
+        </Table.Cell>
+      </Table.Row>
+    </>
   );
 }
 
-export function TokenTransferTxSummary({ tx }: { tx: TokenTransferTransaction }) {
+function isConfirmedTx<T extends Transaction, U extends MempoolTransaction>(tx: T | U): tx is T {
+  return 'block_height' in tx && tx.block_height !== undefined;
+}
+
+export function TokenTransferTxSummaryItems({
+  tx,
+}: {
+  tx: TokenTransferTransaction | MempoolTokenTransferTransaction;
+}) {
   return (
-    <Stack className="tx-details-summary">
-      <SummaryItem label="ID" value={tx.tx_id} copyable />
+    <>
+      <SummaryItem label="ID" value={tx.tx_id} showCopyButton />
       <SummaryItem
         label="Status"
         value={tx.tx_status}
         valueRenderer={value => <TransactionStatusBadge tx={tx} />}
-        copyable
+        showCopyButton
       />
-      <SummaryItem
-        label="Amount"
-        value={getAmount(tx).toString()}
-        valueRenderer={value => <PriceSummaryItemValue tx={tx} tokenAmount={value} />}
-      />
+      {isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx) && (
+        <SummaryItem
+          label="Amount"
+          value={getAmount(tx).toString()}
+          valueRenderer={value => <PriceSummaryItemValue value={value} />}
+        />
+      )}
       <SummaryItem
         label="From"
         value={tx.sender_address}
         valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all">
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
             {value}
           </AddressLink>
         )}
-        copyable
+        showCopyButton
       />
       <SummaryItem
         label="To"
         value={getToAddress(tx)}
         valueRenderer={value => (
-          <AddressLink principal={value} wordBreak="break-all">
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
             {value}
           </AddressLink>
         )}
-        copyable
+        showCopyButton
       />
-      <SummaryItem
-        label="Timestamp"
-        value={formatBlockTime(tx.block_time)}
-        valueRenderer={value => (
-          <Badge variant="solid">
-            <DefaultBadgeLabel label={value} />
-          </Badge>
-        )}
-        copyable
-      />
+      {isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx) && (
+        <SummaryItem
+          label="Timestamp"
+          value={formatBlockTime(tx.block_time)}
+          valueRenderer={value => (
+            <Badge variant="solid">
+              <DefaultBadgeLabel label={value} />
+            </Badge>
+          )}
+          showCopyButton
+        />
+      )}
       <SummaryItem
         label="Fee"
         value={tx.fee_rate}
-        valueRenderer={value => <PriceSummaryItemValue tx={tx} tokenAmount={value} />}
+        valueRenderer={value => <PriceSummaryItemValue value={value} />}
       />
-      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} copyable />
+      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
+      {isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx) && (
+        <SummaryItem
+          label="Block height"
+          value={tx.block_height?.toString() || ''}
+          showCopyButton
+          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+        />
+      )}
+      {isConfirmedTx<TokenTransferTransaction, MempoolTokenTransferTransaction>(tx) && (
+        <SummaryItem
+          label="Bitcoin Anchor"
+          value={tx.burn_block_height?.toString() || ''}
+          showCopyButton
+          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+        />
+      )}
+    </>
+  );
+}
+
+export const TenureChangeTxSummaryItems = ({
+  tx,
+}: {
+  tx: TenureChangeTransaction | MempoolTenureChangeTransaction;
+}) => {
+  return (
+    <>
+      <SummaryItem label="ID" value={tx.tx_id} showCopyButton />
       <SummaryItem
-        label="Block height"
-        value={tx.block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+        label="Status"
+        value={tx.tx_status}
+        valueRenderer={value => <TransactionStatusBadge tx={tx} />}
+        showCopyButton
       />
       <SummaryItem
-        label="Bitcoin Anchor"
-        value={tx.burn_block_height?.toString() || ''}
-        copyable
-        valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+        label="From"
+        value={tx.sender_address}
+        valueRenderer={value => (
+          <AddressLink principal={value} wordBreak="break-all" variant="tableLink">
+            {value}
+          </AddressLink>
+        )}
+        showCopyButton
       />
-    </Stack>
+      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+        <SummaryItem
+          label="Timestamp"
+          value={formatBlockTime(tx.block_time)}
+          valueRenderer={value => (
+            <Badge variant="solid">
+              <DefaultBadgeLabel label={value} />
+            </Badge>
+          )}
+          showCopyButton
+        />
+      )}
+      <SummaryItem
+        label="Fee"
+        value={tx.fee_rate}
+        valueRenderer={value => <PriceSummaryItemValue value={value} />}
+      />
+      <SummaryItem label="Nonce" value={tx.nonce?.toString() || ''} showCopyButton />
+      <SummaryItem label="Cause" value={capitalize(tx.tenure_change_payload?.cause || '')} />
+      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+        <SummaryItem
+          label="Block height"
+          value={tx.block_height?.toString() || ''}
+          showCopyButton
+          valueRenderer={value => <BlockHeightBadge blockType="stx" blockHeight={Number(value)} />}
+        />
+      )}
+      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+        <SummaryItem
+          label="Block hash"
+          value={tx.block_hash?.toString() || ''}
+          showCopyButton
+          valueRenderer={value => (
+            <BlockLink hash={value} wordBreak="break-all">
+              {value}
+            </BlockLink>
+          )}
+        />
+      )}
+      {isConfirmedTx<TenureChangeTransaction, MempoolTenureChangeTransaction>(tx) && (
+        <SummaryItem
+          label="Bitcoin Anchor"
+          value={tx.burn_block_height?.toString() || ''}
+          showCopyButton
+          valueRenderer={value => <BlockHeightBadge blockType="btc" blockHeight={Number(value)} />}
+        />
+      )}
+      <SummaryItem
+        label="Tenure consensus hash"
+        value={tx.tenure_change_payload?.tenure_consensus_hash || ''}
+        showCopyButton
+      />
+      <SummaryItem
+        label="Burn view consensus hash"
+        value={tx.tenure_change_payload?.burn_view_consensus_hash || ''}
+        showCopyButton
+      />
+      <SummaryItem
+        label="Previous tenure consensus hash"
+        value={tx.tenure_change_payload?.prev_tenure_consensus_hash || ''}
+        showCopyButton
+      />
+      <SummaryItem
+        label="Previous tenure end"
+        value={tx.tenure_change_payload?.previous_tenure_end || ''}
+        showCopyButton
+      />
+      <SummaryItem
+        label="Previous tenure blocks"
+        value={tx.tenure_change_payload?.previous_tenure_blocks?.toString() || ''}
+        showCopyButton
+      />
+      <SummaryItem
+        label="Pubkey hash"
+        value={tx.tenure_change_payload?.pubkey_hash || ''}
+        showCopyButton
+      />
+    </>
+  );
+};
+
+export function TxSummary({ tx }: { tx: Transaction | MempoolTransaction }) {
+  let summaryContent;
+  if (tx.tx_type === 'coinbase') summaryContent = null;
+  if (tx.tx_type === 'token_transfer') summaryContent = <TokenTransferTxSummaryItems tx={tx} />;
+  if (tx.tx_type === 'contract_call') summaryContent = null;
+  if (tx.tx_type === 'smart_contract') summaryContent = null;
+  if (tx.tx_type === 'tenure_change') summaryContent = <TenureChangeTxSummaryItems tx={tx} />;
+
+  return (
+    <Box borderRadius="redesign.xl" border="1px solid" borderColor="redesignBorderSecondary" p={3}>
+      <Table.Root w="full">
+        <Table.Body className="tx-details-summary">{summaryContent}</Table.Body>
+      </Table.Root>
+    </Box>
   );
 }

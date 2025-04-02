@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 import { useTxIdPageData } from './TxIdPageContext';
 import { getTxTag } from './page-data';
+import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 import Skeleton from './skeleton';
 
@@ -25,11 +26,6 @@ const SmartContractTx = dynamic(() => import('./SmartContract/SmartContractTx'),
   ssr: false,
 });
 
-const TenureChangePage = dynamic(() => import('./TenureChange'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
 const SmartContract = dynamic(() => import('./SmartContract/SmartContract'), {
   loading: () => <Skeleton />,
   ssr: false,
@@ -41,6 +37,11 @@ const PoisonMicroblock = dynamic(() => import('./PoisonMicroblock'), {
 });
 
 const TokenTransferPage = dynamic(() => import('./TokenTransfer'), {
+  loading: () => <Skeleton />,
+  ssr: false,
+});
+
+const TenureChangePage = dynamic(() => import('./TenureChange'), {
   loading: () => <Skeleton />,
   ssr: false,
 });
@@ -79,6 +80,7 @@ function TransactionIdPage() {
   if (tx?.tx_type === 'token_transfer' && isRedesign) return <TokenTransferPageRedesign tx={tx} />;
   if (tx?.tx_type === 'token_transfer') return <TokenTransferPage tx={tx} />;
 
+  if (tx?.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
   if (tx?.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
   if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
