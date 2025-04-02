@@ -1,11 +1,12 @@
 'use client';
 
-import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
-import { TxPageFilters } from '@/app/transactions/page';
 import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
-import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
+import {
+  getAddressConfirmedTxsWithTransfersQueryKey,
+  useAddressConfirmedTxsWithTransfers,
+} from '@/common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
 import { validateStacksContractId } from '@/common/utils/utils';
@@ -15,16 +16,15 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
-import { useFilterAndSortState } from '../../../../features/txsFilterAndSort/useFilterAndSortState';
 import { ScrollIndicator } from '../../ScrollIndicator';
 import { AddressLinkCellRenderer } from '../CommonTableCellRenderers';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
-import { UpdateTableBannerRow } from '../UpdateTableBannerRow';
 import {
+  EventsCellRenderer,
   FeeCellRenderer,
   IconCellRenderer,
   TimeStampCellRenderer,
@@ -35,8 +35,8 @@ import {
 import { TX_TABLE_PAGE_SIZE } from './consts';
 import { TxTableColumns } from './types';
 
-export interface TxTableData {
-  [TxTableColumns.Transaction]: Transaction | MempoolTransaction;
+export interface AddressTxTableData {
+  [TxTableColumns.Transaction]: Transaction;
   [TxTableColumns.TxId]: string;
   [TxTableColumns.TxType]: Transaction['tx_type'];
   [TxTableColumns.From]: TxTableAddressColumnData;
@@ -45,7 +45,7 @@ export interface TxTableData {
   [TxTableColumns.Fee]: string;
   [TxTableColumns.Amount]: number;
   [TxTableColumns.BlockTime]: number;
-  [TxTableColumns.Events]?: Transaction | MempoolTransaction;
+  [TxTableColumns.Events]: Transaction;
 }
 
 export interface TxTableAddressColumnData {
@@ -53,12 +53,12 @@ export interface TxTableAddressColumnData {
   isContract: boolean;
 }
 
-export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
+export const defaultColumnDefinitions: ColumnDef<AddressTxTableData>[] = [
   {
     id: TxTableColumns.Transaction,
     header: 'Transaction',
     accessorKey: TxTableColumns.Transaction,
-    cell: info => TransactionTitleCellRenderer(info.getValue() as Transaction | MempoolTransaction),
+    cell: info => TransactionTitleCellRenderer(info.getValue() as Transaction),
     enableSorting: false,
   },
   {
@@ -101,7 +101,7 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
   },
   {
     id: TxTableColumns.Fee,
-    header: ({ header }: { header: Header<TxTableData, unknown> }) => (
+    header: ({ header }: { header: Header<AddressTxTableData, unknown> }) => (
       <Flex alignItems="center" justifyContent="flex-end" w="full">
         <DefaultTableColumnHeader header={header}>Fee</DefaultTableColumnHeader>
       </Flex>
@@ -116,7 +116,7 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
   },
   {
     id: TxTableColumns.BlockTime,
-    header: ({ header }: { header: Header<TxTableData, unknown> }) => (
+    header: ({ header }: { header: Header<AddressTxTableData, unknown> }) => (
       <Flex alignItems="center" justifyContent="flex-end" w="full">
         <DefaultTableColumnHeader header={header}>Timestamp</DefaultTableColumnHeader>
       </Flex>
@@ -135,43 +135,32 @@ export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
       tooltip: 'Timestamps are shown in your local timezone',
     },
   },
+  {
+    id: TxTableColumns.Events,
+    header: 'Events',
+    accessorKey: TxTableColumns.Events,
+    cell: info => EventsCellRenderer(info.getValue() as Transaction),
+    enableSorting: false,
+  },
 ];
 
-export interface TxsTableProps {
+export interface AddressTxsTableProps {
+  principal: string;
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
   disablePagination?: boolean;
-  columnDefinitions?: ColumnDef<TxTableData>[];
+  columnDefinitions?: ColumnDef<AddressTxTableData>[];
   pageSize?: number;
-  filters?: TxPageFilters;
   onTotalChange?: (total: number) => void;
-  tableContainer?: (table: JSX.Element) => JSX.Element;
-  disableBannerRow?: boolean;
 }
 
-const DEFAULT_FILTERS: TxPageFilters = {
-  fromAddress: '',
-  toAddress: '',
-  startTime: '',
-  endTime: '',
-  transactionType: [],
-};
-
-export const defaultTableContainer = (table: JSX.Element) => (
-  <TableContainer minH="500px">{table}</TableContainer>
-);
-
-export function TxsTable({
-  filters = DEFAULT_FILTERS,
+export function AddressTxsTable({
+  principal,
   initialData,
   disablePagination = false,
   columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
   onTotalChange,
-  tableContainer,
-  disableBannerRow = false,
-}: TxsTableProps) {
-  const { activeConfirmedTxsSort, activeConfirmedTxsOrder } = useFilterAndSortState();
-
+}: AddressTxsTableProps) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize,
@@ -189,8 +178,6 @@ export function TxsTable({
 
   const isCacheSetWithInitialData = useRef(false);
 
-  const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
-
   /**
    * HACK: react query's cache is taking precedence over the initial data, which is causing hydration errors
    * Setting the gcTime to 0 prevents this from happening but it also prevents us from caching requests as the user paginates through the table
@@ -198,49 +185,27 @@ export function TxsTable({
    * By explicitly setting the cache for the first page with initial data, we guarantee the table will use the initial data from the server and behave as expected
    */
   if (isCacheSetWithInitialData.current === false && initialData) {
-    const queryKey = [
-      'confirmedTransactions',
+    const queryKey = getAddressConfirmedTxsWithTransfersQueryKey(
+      principal,
       pagination.pageSize,
-      pagination.pageIndex * pagination.pageSize,
-      ...(fromAddress ? [{ fromAddress }] : []),
-      ...(toAddress ? [{ toAddress }] : []),
-      ...(startTime ? [{ startTime }] : []),
-      ...(endTime ? [{ endTime }] : []),
-      ...(activeConfirmedTxsOrder ? [{ order: activeConfirmedTxsOrder }] : []),
-      ...(activeConfirmedTxsSort ? [{ sortBy: activeConfirmedTxsSort }] : []),
-      ...(transactionType ? [{ transactionType }] : []),
-    ];
+      pagination.pageIndex * pagination.pageSize
+    );
     queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
   }
 
   // fetch data
-  let { data, refetch, isFetching, isLoading } = useConfirmedTransactions(
+  let { data, refetch, isFetching, isLoading } = useAddressConfirmedTxsWithTransfers(
+    principal,
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
-    {
-      ...filters,
-      order: activeConfirmedTxsOrder,
-      sortBy: activeConfirmedTxsSort,
-    },
     {
       staleTime: THIRTY_SECONDS,
       gcTime: THIRTY_SECONDS,
     }
   );
 
-  // Reset pagination when filters change
-  useEffect(() => {
-    setPagination(prev => ({
-      ...prev,
-      pageIndex: 0,
-    }));
-  }, [filters]);
-
   const { total, results: txs = [] } = data || {};
-  const isTableFiltered = Object.values(filters).some(
-    filterValue => filterValue != null && filterValue !== '' && filterValue?.length !== 0
-  );
 
   useEffect(() => {
     if (onTotalChange && typeof total === 'number') {
@@ -248,36 +213,20 @@ export function TxsTable({
     }
   }, [total, onTotalChange]);
 
-  const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
-
-  const [newTxsAvailable, setNewTxsAvailable] = useState(false);
-
-  useSubscribeTxs(isSubscriptionActive, tx => {
-    // Waiting 5 seconds to let the API catch up to the websocket
-    setTimeout(() => {
-      setNewTxsAvailable(true);
-    }, 5000);
-    setIsSubscriptionActive(false);
-  });
-  useEffect(() => {
-    if (!newTxsAvailable) {
-      setIsSubscriptionActive(true);
-    }
-  }, [newTxsAvailable]);
-
-  const rowData: TxTableData[] = useMemo(
+  const rowData: AddressTxTableData[] = useMemo(
     () =>
       txs.map(tx => {
-        const to = getToAddress(tx);
-        const amount = getAmount(tx);
+        const transaction = tx.tx;
+        const amount = getAmount(transaction);
+        const to = getToAddress(transaction);
 
         return {
-          [TxTableColumns.Transaction]: tx,
-          [TxTableColumns.TxId]: tx.tx_id,
-          [TxTableColumns.TxType]: tx.tx_type,
+          [TxTableColumns.Transaction]: transaction,
+          [TxTableColumns.TxId]: transaction.tx_id,
+          [TxTableColumns.TxType]: transaction.tx_type,
           [TxTableColumns.From]: {
-            address: tx.sender_address,
-            isContract: validateStacksContractId(tx.sender_address),
+            address: transaction.sender_address,
+            isContract: validateStacksContractId(transaction.sender_address),
           },
           [TxTableColumns.ArrowRight]: (
             <Icon color="iconTertiary">
@@ -288,10 +237,10 @@ export function TxsTable({
             address: to,
             isContract: validateStacksContractId(to),
           },
-          [TxTableColumns.Fee]: tx.fee_rate,
+          [TxTableColumns.Fee]: transaction.fee_rate,
           [TxTableColumns.Amount]: amount,
-          [TxTableColumns.BlockTime]: tx.block_time,
-          [TxTableColumns.Events]: tx,
+          [TxTableColumns.BlockTime]: transaction.block_time,
+          [TxTableColumns.Events]: transaction,
         };
       }),
     [txs]
@@ -301,7 +250,7 @@ export function TxsTable({
     <Table
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
-      tableContainerWrapper={tableContainer ? table => tableContainer(table) : undefined}
+      tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
       scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
@@ -314,21 +263,8 @@ export function TxsTable({
               onPageChange: handlePageChange,
             }
       }
-      bannerRow={
-        !disableBannerRow && newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
-          <UpdateTableBannerRow
-            onClick={() => {
-              setNewTxsAvailable(false);
-              refetch();
-            }}
-            colSpan={Object.keys(TxTableColumns).length}
-            message="New transactions have come in. Update list"
-          />
-        ) : null
-      }
       isLoading={isLoading}
       isFetching={isFetching}
-      isFiltered={isTableFiltered}
     />
   );
 }
