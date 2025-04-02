@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 import { useTxIdPageData } from './TxIdPageContext';
 import { getTxTag } from './page-data';
+import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 import Skeleton from './skeleton';
@@ -83,6 +84,7 @@ function TransactionIdPage() {
   if (tx?.tx_type === 'tenure_change' && isRedesign) return <TenureChangePageRedesign tx={tx} />;
   if (tx?.tx_type === 'tenure_change') return <TenureChangePage tx={tx} />;
 
+  if (tx?.tx_type === 'coinbase' && isRedesign) return <CoinbasePageRedesign tx={tx} />;
   if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 
   if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
