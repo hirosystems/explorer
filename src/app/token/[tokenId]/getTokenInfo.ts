@@ -208,8 +208,6 @@ export async function getTokenInfo(
       throw new Error('cannot fetch token info for this request');
     }
 
-    console.log('[debug] fetching token info');
-
     const basicTokenInfo = await getBasicTokenInfoFromStacksApi(tokenId, chain, api);
     if (!basicTokenInfo) {
       console.error('token not found in Stacks API', tokenId, chain, api);

@@ -1,9 +1,11 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
+import { DEFAULT_MAINNET_SERVER } from '@/common/constants/env';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { formatDateShort } from '@/common/utils/date-utils';
+import { fetchSampleTxsFeeEstimate } from '@/common/utils/fee-utils';
 import { abbreviateNumber } from '@/common/utils/utils';
 import { NextLink } from '@/ui/NextLink';
 import { Text } from '@/ui/Text';
@@ -11,9 +13,9 @@ import { Tooltip } from '@/ui/Tooltip';
 import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
 import ProgressDot from '@/ui/icons/ProgressDot';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
-import StxIcon from '@/ui/icons/StxIcon';
 import StxSquareIcon from '@/ui/icons/StxSquareIcon';
 import { Box, BoxProps, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 import { SSRDisabledMessage } from '../SSRDisabledMessage';
 
@@ -294,6 +296,12 @@ function BlocksSection() {
 }
 
 export function StackingSection() {
+  useEffect(() => {
+    async function fetchData() {
+      const feeEstimates = await fetchSampleTxsFeeEstimate('mainnet', DEFAULT_MAINNET_SERVER);
+    }
+    fetchData();
+  }, []);
   const { isSSRDisabled } = useHomePageData();
   return (
     <Stack gap={4} flex={1}>

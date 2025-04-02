@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import {
   MempoolTokenTransferTransaction,
   TokenTransferTransaction,
@@ -8,7 +6,7 @@ import {
 import { TxPage } from '../TxPage';
 import { TxDetails } from './TxDetails';
 
-export function TokenTransferPage({
+export default function TokenTransferPage({
   tx,
 }: {
   tx: TokenTransferTransaction | MempoolTokenTransferTransaction;

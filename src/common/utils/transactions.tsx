@@ -2,13 +2,10 @@
 
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { ArrowsClockwise, Cube, PhoneCall, Question } from '@phosphor-icons/react';
+import { ArrowsClockwise, Clock, Cube, PhoneCall, Question, XCircle } from '@phosphor-icons/react';
+import { CheckCircle } from '@phosphor-icons/react/dist/ssr';
 
-import {
-  MempoolTransaction,
-  Transaction,
-  TransactionType,
-} from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatus } from '../constants/constants';
 
@@ -78,4 +75,68 @@ export function getTxTypeColor(txType: string) {
     default:
       return 'transactionTypes.tokenTransfer';
   }
+}
+
+const TX_STATUS_ICONS = {
+  [TransactionStatus.PENDING]: <Clock />,
+  [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: <CheckCircle />,
+  [TransactionStatus.SUCCESS_MICROBLOCK]: <CheckCircle />,
+  [TransactionStatus.NON_CANONICAL]: <CheckCircle />,
+  [TransactionStatus.FAILED]: <XCircle />,
+  [TransactionStatus.DROPPED]: <XCircle />,
+  default: <Question />,
+};
+
+export function getTxStatusIcon(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  const icon = TX_STATUS_ICONS[txStatus] || TX_STATUS_ICONS.default;
+  return icon;
+}
+
+const TX_STATUS_ICON_COLORS = {
+  [TransactionStatus.PENDING]: 'feedback.bronze-600',
+  [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: 'feedback.green-500',
+  [TransactionStatus.SUCCESS_MICROBLOCK]: 'feedback.green-500',
+  [TransactionStatus.NON_CANONICAL]: 'feedback.green-500',
+  [TransactionStatus.FAILED]: 'iconError',
+  [TransactionStatus.DROPPED]: 'iconError',
+  default: 'iconError',
+};
+
+export function getTxStatusIconColor(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  const iconColor = TX_STATUS_ICON_COLORS[txStatus] || TX_STATUS_ICON_COLORS.default;
+  return iconColor;
+}
+
+const TX_STATUS_BG_COLORS = {
+  [TransactionStatus.PENDING]: 'transactionStatus.pending',
+  [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: 'transactionStatus.confirmed',
+  [TransactionStatus.SUCCESS_MICROBLOCK]: 'transactionStatus.confirmed',
+  [TransactionStatus.NON_CANONICAL]: 'transactionStatus.confirmed',
+  [TransactionStatus.FAILED]: 'transactionStatuses.failed',
+  [TransactionStatus.DROPPED]: 'transactionStatuses.failed',
+  default: 'surfacePrimary',
+};
+
+export function getTxStatusBgColor(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  const bgColor = TX_STATUS_BG_COLORS[txStatus] || TX_STATUS_BG_COLORS.default;
+  return bgColor;
+}
+
+const TX_STATUS_LABELS = {
+  [TransactionStatus.PENDING]: 'Pending',
+  [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: 'Confirmed',
+  [TransactionStatus.SUCCESS_MICROBLOCK]: 'Confirmed',
+  [TransactionStatus.NON_CANONICAL]: 'Confirmed',
+  [TransactionStatus.FAILED]: 'Failed',
+  [TransactionStatus.DROPPED]: 'Failed',
+  default: 'Unknown',
+};
+
+export function getTxStatusLabel(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  const label = TX_STATUS_LABELS[txStatus] || TX_STATUS_LABELS.default;
+  return label;
 }

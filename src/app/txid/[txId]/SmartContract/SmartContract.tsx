@@ -8,7 +8,7 @@ import { TxPage } from '../TxPage';
 import { ContractTabs } from './ContractTabs';
 import { TxDetails } from './TxDetails';
 
-export function SmartContract({ contractId }: { contractId: string }) {
+export default function SmartContract({ contractId }: { contractId: string }) {
   const { data: contract } = useContractById(contractId);
   const { data: tx } = useTxById(contract?.tx_id);
   const source = contract?.source_code;

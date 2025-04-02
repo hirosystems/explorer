@@ -1,3 +1,4 @@
+import { stacksAPIFetch } from '@/api/stacksAPIFetch';
 import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { fetchBnsAddress } from '@/common/queries/bns-queries';
@@ -59,7 +60,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     });
     const fetchUrl = `${apiUrl}/extended/v1/tx/?${params.toString()}`;
 
-    const response = await fetch(fetchUrl, {
+    const response = await stacksAPIFetch(fetchUrl, {
       next: {
         revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
       },
@@ -75,7 +76,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   } catch (error) {
     logError(
       error as Error,
-      'Transaction page server-side fetch for initialTxTableData',
+      'Transaction page server-side fetch for initial data',
       {
         api,
         chain,

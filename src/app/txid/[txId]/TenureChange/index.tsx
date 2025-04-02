@@ -8,7 +8,7 @@ import {
 import { TxPage } from '../TxPage';
 import { TxDetails } from './TxDetails';
 
-export function TenureChangePage({
+export default function TenureChangePage({
   tx,
 }: {
   tx: TenureChangeTransaction | MempoolTenureChangeTransaction;

@@ -11,7 +11,7 @@ import { TxPage } from '../TxPage';
 import { FunctionSummary } from './FunctionSummary';
 import { TxDetails } from './TxDetails';
 
-export function ContractCallPage({
+export default function ContractCallPage({
   tx,
 }: {
   tx: ContractCallTransaction | MempoolContractCallTransaction;
