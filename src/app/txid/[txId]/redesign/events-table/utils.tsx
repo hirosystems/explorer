@@ -1,5 +1,5 @@
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { Fire, Question, Sparkle } from '@phosphor-icons/react';
+import { Fire, Lock, Question, Sparkle, TextAlignLeft } from '@phosphor-icons/react';
 
 import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
 
@@ -28,55 +28,45 @@ export function getToAddress(event: TransactionEvent): string {
   return 'uncovered case';
 }
 
-export function getAsset(event: TransactionEvent): string {
-  if (event.event_type === 'stx_asset') {
-    return event.event_type;
+export function getAssetType(event: TransactionEvent): string {
+  if (event.event_type === 'smart_contract_log') {
+    return 'Contract log';
   }
-
+  if (event.event_type === 'stx_lock') {
+    return 'STX lock';
+  }
+  if (event.event_type === 'stx_asset') {
+    return 'STX token';
+  }
+  if (event.event_type === 'fungible_token_asset') {
+    return 'Fungible token';
+  }
+  if (event.event_type === 'non_fungible_token_asset') {
+    return 'Non fungible token';
+  }
   return 'uncovered case';
 }
 
-export function getEventType(event: TransactionEvent): TransactionEvent['event_type'] {
-  if (event.event_type) {
-    return event.event_type;
-  }
+export type ExtendedTransactionEventAssetType = TransactionEventAssetType | 'stx_lock' | 'print';
 
-  return EMPTY_VALUE as TransactionEvent['event_type'];
-}
-
-export function getAssetEventType(event: TransactionEvent): TransactionEventAssetType {
+export function getAssetEventType(event: TransactionEvent): ExtendedTransactionEventAssetType {
   if ('asset' in event && event.asset.asset_event_type) {
+    // covers TransactionEventFungibleAsset and TransactionEventNonFungibleAsset
     return event.asset.asset_event_type as TransactionEventAssetType;
+  }
+  if ('contract_log' in event) {
+    // covers TransactionEventSmartContractLog
+    return event.contract_log.topic as 'print';
+  }
+  if ('stx_lock' in event) {
+    // covers TransactionEventSTXLock
+    return 'stx_lock';
   }
 
   return EMPTY_VALUE as TransactionEventAssetType;
 }
 
-export function getEventTypeColValue(event: TransactionEvent): string {
-  if (event.event_type) {
-    return event.event_type;
-  }
-
-  return EMPTY_VALUE;
-}
-
-export function getAssetEventTypeIcon(assetEventType: TransactionEventAssetType): React.ReactNode {
-  if (assetEventType === 'mint') {
-    return <Sparkle />;
-  }
-  // if (assetEventType === 'print') { // TODO: does this even exist?
-  //   return <TextAlignLeft />;
-  // }
-  if (assetEventType === 'burn') {
-    return <Fire />;
-  }
-  if (assetEventType === 'transfer') {
-    return <TransferIcon />;
-  }
-  return <Question />;
-}
-
-export function getAssetEventTypeLabel(assetEventType: TransactionEventAssetType): string {
+export function getAssetEventTypeLabel(assetEventType: ExtendedTransactionEventAssetType): string {
   if (assetEventType === 'mint') {
     return 'Mint';
   }
@@ -86,25 +76,46 @@ export function getAssetEventTypeLabel(assetEventType: TransactionEventAssetType
   if (assetEventType === 'transfer') {
     return 'Transfer';
   }
-  return 'Unknown';
-}
-
-export function getEventTypeLabel(eventType: TransactionEvent['event_type']): string {
-  if (eventType === 'stx_asset') {
-    return 'STX token';
+  if (assetEventType === 'stx_lock') {
+    return 'STX lock';
   }
-  if (eventType === 'fungible_token_asset') {
-    return 'Fungible token';
-  }
-  if (eventType === 'non_fungible_token_asset') {
-    return 'Non-fungible token';
+  if (assetEventType === 'print') {
+    return 'Print';
   }
   return 'Unknown';
 }
 
-export function getAssetLabel(asset: string): string {
-  if (asset === 'stx_asset') {
+export function getAssetEventTypeIcon(
+  assetEventType: ExtendedTransactionEventAssetType
+): React.ReactNode {
+  if (assetEventType === 'mint') {
+    return <Sparkle />;
+  }
+  if (assetEventType === 'burn') {
+    return <Fire />;
+  }
+  if (assetEventType === 'transfer') {
+    return <TransferIcon />;
+  }
+  if (assetEventType === 'stx_lock') {
+    return <Lock />;
+  }
+  if (assetEventType === 'print') {
+    return <TextAlignLeft />;
+  }
+  return <Question />;
+}
+
+export function getAsset(event: TransactionEvent): string {
+  if (event.event_type === 'smart_contract_log') {
+    return EMPTY_VALUE; // could be the contract id
+  }
+  if (event.event_type === 'stx_lock') {
     return 'STX';
   }
-  return asset;
+  if ('asset' in event) {
+    return event.asset.asset_id ?? EMPTY_VALUE;
+  }
+
+  return EMPTY_VALUE;
 }

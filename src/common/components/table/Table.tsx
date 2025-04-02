@@ -2,7 +2,6 @@ import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StacksFrowneyIcon from '@/ui/icons/StacksFrowneyIcon';
 import {
-  Box,
   Table as ChakraTable,
   TableRootProps as ChakraTableRootProps,
   Flex,
@@ -136,6 +135,8 @@ export type TableProps<T> = {
     onPageSizeChange?: (pageSize: PaginationState) => void;
   };
   tableProps?: ChakraTableRootProps;
+  emptyTableUi?: React.ReactElement;
+  emptyFilteredTableUi?: React.ReactElement;
 };
 
 const ErrorTable = ({ error }: { error: string }) => {
@@ -230,6 +231,8 @@ export function Table<T>({
   error,
   pagination,
   tableProps,
+  emptyTableUi,
+  emptyFilteredTableUi,
 }: TableProps<T>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
@@ -298,9 +301,9 @@ export function Table<T>({
 
   if (!isLoading && !isFetching && tableData.length === 0) {
     if (isFiltered) {
-      return tableContainerWrapper(<EmptyFilteredTable />);
+      return tableContainerWrapper(emptyFilteredTableUi ?? <EmptyFilteredTable />);
     }
-    return tableContainerWrapper(<EmptyTable />);
+    return tableContainerWrapper(emptyTableUi ?? <EmptyTable />);
   }
 
   let content: React.ReactNode = (
@@ -360,9 +363,6 @@ export function Table<T>({
                     w="full"
                     gap={1.5}
                     alignItems="center"
-                    py={1}
-                    pl={1}
-                    pr={1.5}
                     justifyContent={
                       header.column.columnDef.meta?.textAlign === 'right'
                         ? 'flex-end'

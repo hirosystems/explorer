@@ -18,7 +18,8 @@ export function Pre({ children }: { children: string }) {
       px={{ base: 3, md: 1.5 }}
       py={3}
       gap={2}
-      h="100%"
+      h="full"
+      w="full"
       maxHeight={{ base: isExpanded ? 'none' : '100px', md: isExpanded ? 'none' : '150px' }}
       overflow="hidden"
     >
@@ -36,8 +37,7 @@ export function Pre({ children }: { children: string }) {
       <Flex flexDirection={{ base: 'column', md: 'row' }} w="fit-content" gap={1.5}>
         <Button
           onClick={toggleExpand}
-          variant="unstyled"
-          bg="surfacePrimary"
+          variant="redesignPrimary"
           borderRadius="redesign.sm"
           minWidth="0"
           h="fit-content"
@@ -47,7 +47,7 @@ export function Pre({ children }: { children: string }) {
           justifyContent="center"
           p={1.5}
         >
-          <Icon color="iconSecondary" _hover={{ color: 'iconPrimary' }} h={3.5} w={3.5}>
+          <Icon color="iconInvert" h={3.5} w={3.5}>
             <ArrowsOutSimple />
           </Icon>
         </Button>
@@ -56,18 +56,12 @@ export function Pre({ children }: { children: string }) {
           initialValue={children}
           buttonProps={{
             p: 1.5,
-            _hover: {
-              bg: 'surfacePrimary',
-            },
-            bg: 'surfacePrimary',
+            variant: 'redesignPrimary',
           }}
           iconProps={{
             height: 3.5,
             width: 3.5,
-            color: 'iconSecondary',
-            _hover: {
-              color: 'iconPrimary',
-            },
+            color: 'iconInvert',
           }}
         />
       </Flex>

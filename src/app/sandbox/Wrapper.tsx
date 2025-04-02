@@ -19,7 +19,7 @@ import { useUser } from './hooks/useUser';
 import { ConnectToStacks } from './layout/ConnectToStacks';
 import { RightPanelSkeleton } from './layout/RightPanelSkeleton';
 import { SideNav } from './layout/SideNav';
-import { selectShowRightPanel, setUserData, toggleRightPanel } from './sandbox-slice';
+import { selectShowRightPanel, toggleRightPanel } from './sandbox-slice';
 
 const RightPanel = dynamic(() => import('./layout/RightPanel').then(mod => mod.RightPanel), {
   ssr: false,

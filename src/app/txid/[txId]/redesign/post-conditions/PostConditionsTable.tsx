@@ -1,3 +1,4 @@
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import {
   AddressLinkCellRenderer,
   AddressLinkCellRendererProps,
@@ -6,6 +7,7 @@ import {
 import { Table } from '@/common/components/table/Table';
 import { DefaultTableColumnHeader } from '@/common/components/table/TableComponents';
 import { validateStacksContractId } from '@/common/utils/utils';
+import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 import { ColumnDef, Header } from '@tanstack/react-table';
 
@@ -172,5 +174,18 @@ export function PostConditionsTable({
   tx: ContractCallTransaction | MempoolContractCallTransaction;
 }) {
   const rowData = getRowData(tx);
-  return <Table columns={columnDefinitions} data={rowData} />;
+  return (
+    <Table
+      columns={columnDefinitions}
+      data={rowData}
+      emptyTableUi={
+        <Flex alignItems="center" justifyContent="center">
+          <Text textStyle="text-regular-sm" color="textTertiary">
+            No post-conditions to show
+          </Text>
+        </Flex>
+      }
+      scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
+    />
+  );
 }
