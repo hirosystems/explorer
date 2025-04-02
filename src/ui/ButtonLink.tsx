@@ -45,23 +45,11 @@ const ButtonLinkBase = forwardRef<HTMLAnchorElement, ButtonLinkProps>(
     );
 
     return isExternal ? (
-      <Link
-        ref={ref}
-        {...linkProps}
-        variant="buttonLink"
-        // h={buttonLinkSize === 'big' ? 6 : 5}
-        w="fit-content"
-      >
+      <Link ref={ref} variant="buttonLink" w="fit-content" {...linkProps}>
         {content}
       </Link>
     ) : (
-      <NextLink
-        ref={ref}
-        {...linkProps}
-        variant="buttonLink"
-        // h={buttonLinkSize === 'big' ? 6 : 5}
-        w="fit-content"
-      >
+      <NextLink ref={ref} variant="buttonLink" w="fit-content" {...linkProps}>
         {content}
       </NextLink>
     );

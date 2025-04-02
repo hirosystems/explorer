@@ -23,7 +23,6 @@ export const buttonRecipe = defineRecipe({
         fontSize: 'sm',
         color: { base: '{colors.neutral.black}', _dark: '{colors.neutral.white}' },
         border: '1px solid {colors.borderSecondary}',
-        // bg: { base: '{colors.neutral.white}', _dark: '{colors.neutral.black}' },
         bg: 'surface',
         textDecoration: 'none',
         _hover: {
@@ -59,7 +58,7 @@ export const buttonRecipe = defineRecipe({
       },
       redesignPrimary: {
         fontFamily: 'var(--font-instrument-sans)',
-        borderRadius: 'redesign.md', // base
+        borderRadius: 'redesign.md',
         color: {
           base: '{colors.neutral.sand-50}',
           _dark: '{colors.neutral.sand-1000}',
@@ -87,7 +86,7 @@ export const buttonRecipe = defineRecipe({
       },
       redesignSecondary: {
         fontFamily: 'var(--font-instrument-sans)',
-        borderRadius: 'redesign.md', // base
+        borderRadius: 'redesign.md',
         color: {
           base: '{colors.neutral.sand-50}',
           _dark: '{colors.neutral.sand-1000}',
@@ -137,7 +136,7 @@ export const buttonRecipe = defineRecipe({
         },
       },
       redesignWarning: {
-        borderRadius: 'redesign.md', // base
+        borderRadius: 'redesign.md',
         color: '{colors.neutral.sand-50}',
         bg: {
           base: '{colors.feedback.red-500}',

@@ -9,6 +9,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 import { Events } from './Events';
 import { FunctionCalled } from './function-called/FunctionCalled';
 import { PostConditions } from './post-conditions/PostConditions';
+import { Source } from './source/Source';
 import { TxSummary } from './tx-summary/TxSummary';
 
 function TabTriggerComponent({
@@ -209,14 +210,8 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
             <Events tx={tx} />
           </TabsContentContainer>
         </TabsContent>
-        <TabsContent
-          key={TransactionIdPageTab.SourceCode}
-          value={TransactionIdPageTab.SourceCode}
-          w="100%"
-        >
-          <TabsContentContainer>
-            <Text>Source code</Text> {/* TODO: add source code */}
-          </TabsContentContainer>
+        <TabsContent key="sourceCode" value="sourceCode" w="100%">
+          <Source tx={tx} />
         </TabsContent>
       </>
     );
