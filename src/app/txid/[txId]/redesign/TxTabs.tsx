@@ -1,5 +1,8 @@
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
+import { DEFAULT_LIST_LIMIT } from '@/common/constants/constants';
+import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
+import { useAddressConfirmedTxsWithTransfers } from '@/common/queries/useAddressConfirmedTxsWithTransfersInfinite';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Flex, Grid, Stack, StackProps } from '@chakra-ui/react';
@@ -9,9 +12,11 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 
 import { DetailsCard } from './DetailsCard';
 import { Events } from './Events';
+import { AvailableFunctions } from './function-called/AvailableFunctions';
 import { FunctionCalled } from './function-called/FunctionCalled';
 import { PostConditions } from './post-conditions/PostConditions';
 import { Source } from './source/Source';
+import { Transactions } from './transactions/Transactions';
 import { TxSummary } from './tx-summary/TxSummary';
 
 function TabTriggerComponent({
@@ -79,15 +84,24 @@ enum TransactionIdPageTab {
   FunctionCall = 'functionCall',
   PostConditions = 'postConditions',
   SourceCode = 'sourceCode',
+  AvailableFunctions = 'availableFunctions',
+  Transactions = 'transactions',
 }
 
-function getTabsTriggersByTransactionType(
-  tx: Transaction | MempoolTransaction,
-  selectedTab: TransactionIdPageTab,
-  setSelectedTab: (tab: TransactionIdPageTab) => void
-) {
+function TabsTriggersByTransactionType({
+  tx,
+  selectedTab,
+  setSelectedTab,
+  txCount,
+}: {
+  tx: Transaction | MempoolTransaction;
+  selectedTab: TransactionIdPageTab;
+  setSelectedTab: (tab: TransactionIdPageTab) => void;
+  txCount: number;
+}) {
   const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
   const numPostConditions = 'post_conditions' in tx ? tx.post_conditions.length : 0;
+
   if (tx.tx_type === 'token_transfer') {
     return (
       <>
@@ -159,12 +173,50 @@ function getTabsTriggersByTransactionType(
     return null;
   }
   if (tx.tx_type === 'smart_contract') {
-    return null;
+    return (
+      <>
+        <TabTriggerComponent
+          key={TransactionIdPageTab.Overview}
+          label="Overview"
+          value={TransactionIdPageTab.Overview}
+          isActive={selectedTab === TransactionIdPageTab.Overview}
+          onClick={() => setSelectedTab(TransactionIdPageTab.Overview)}
+        />
+        <TabTriggerComponent
+          key={TransactionIdPageTab.AvailableFunctions}
+          label={'Available functions'}
+          value={TransactionIdPageTab.AvailableFunctions}
+          isActive={selectedTab === TransactionIdPageTab.AvailableFunctions}
+          onClick={() => setSelectedTab(TransactionIdPageTab.AvailableFunctions)}
+        />
+        <TabTriggerComponent
+          key={TransactionIdPageTab.Transactions}
+          label={`Transactions ${txCount > 0 ? `(${txCount})` : ''}`}
+          value={TransactionIdPageTab.Transactions}
+          isActive={selectedTab === TransactionIdPageTab.Transactions}
+          onClick={() => setSelectedTab(TransactionIdPageTab.Transactions)}
+        />
+        <TabTriggerComponent
+          key={TransactionIdPageTab.PostConditions}
+          label={`Post-conditions ${numPostConditions > 0 ? `(${numPostConditions})` : ''}`}
+          value={TransactionIdPageTab.PostConditions}
+          isActive={selectedTab === TransactionIdPageTab.PostConditions}
+          onClick={() => setSelectedTab(TransactionIdPageTab.PostConditions)}
+        />
+        <TabTriggerComponent
+          key={TransactionIdPageTab.SourceCode}
+          label={'Source code'}
+          value={TransactionIdPageTab.SourceCode}
+          isActive={selectedTab === TransactionIdPageTab.SourceCode}
+          onClick={() => setSelectedTab(TransactionIdPageTab.SourceCode)}
+        />
+      </>
+    );
   }
   return null;
 }
 
-function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
+function TabsContentByTransactionType({ tx }: { tx: Transaction | MempoolTransaction }) {
   if (tx.tx_type === 'token_transfer') {
     return (
       <>
@@ -229,13 +281,72 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
     return null;
   }
   if (tx.tx_type === 'smart_contract') {
-    return null;
+    return (
+      <>
+        <TabsContent
+          key={TransactionIdPageTab.Overview}
+          value={TransactionIdPageTab.Overview}
+          w="100%"
+        >
+          <Grid templateColumns={{ base: '1fr', md: '75% 25%' }} gap={2}>
+            <TabsContentContainer>
+              <TxSummary tx={tx} />
+            </TabsContentContainer>
+
+            <DetailsCard tx={tx as Transaction} />
+          </Grid>
+        </TabsContent>
+        <TabsContent
+          key={TransactionIdPageTab.AvailableFunctions}
+          value={TransactionIdPageTab.AvailableFunctions}
+          w="100%"
+        >
+          <AvailableFunctions tx={tx} />
+        </TabsContent>
+        <TabsContent
+          key={TransactionIdPageTab.Transactions}
+          value={TransactionIdPageTab.Transactions}
+          w="100%"
+        >
+          <Transactions tx={tx} />
+        </TabsContent>
+        <TabsContent
+          key={TransactionIdPageTab.PostConditions}
+          value={TransactionIdPageTab.PostConditions}
+          w="100%"
+        >
+          <PostConditions tx={tx} />
+        </TabsContent>
+        <TabsContent key={TransactionIdPageTab.Events} value={TransactionIdPageTab.Events} w="100%">
+          <TabsContentContainer>
+            <Events tx={tx} />
+          </TabsContentContainer>
+        </TabsContent>
+        <TabsContent key="sourceCode" value="sourceCode" w="100%">
+          <Source tx={tx} />
+        </TabsContent>
+      </>
+    );
   }
   return null;
 }
 
 export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   const [selectedTab, setSelectedTab] = useState(TransactionIdPageTab.Overview);
+
+  let { data } = useAddressConfirmedTxsWithTransfers(
+    'smart_contract' in tx ? tx.smart_contract.contract_id : '',
+    DEFAULT_LIST_LIMIT,
+    0,
+    {
+      staleTime: THIRTY_SECONDS,
+      gcTime: THIRTY_SECONDS,
+      enabled: 'smart_contract' in tx && !!tx.smart_contract?.contract_id, // Disabling this query if tx is not a smart contract tx
+    }
+  );
+
+  const txCount = data?.total || 0;
+
   return (
     <TabsRoot
       variant="primary"
@@ -254,7 +365,14 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
         rowGap={2}
       >
         <ScrollIndicator>
-          <TabsList>{getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}</TabsList>
+          <TabsList>
+            <TabsTriggersByTransactionType
+              tx={tx}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+              txCount={txCount}
+            />
+          </TabsList>
         </ScrollIndicator>
 
         {tx.tx_type === 'token_transfer' && (
@@ -264,7 +382,7 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
           </Flex>
         )}
       </Flex>
-      {getTabsContentByTransactionType(tx)}
+      <TabsContentByTransactionType tx={tx} />
     </TabsRoot>
   );
 };
