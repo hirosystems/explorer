@@ -1,5 +1,6 @@
 import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
 import { getApiUrl } from '@/common/utils/network-utils';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { getTokenPrice } from '../getTokenPriceInfo';
@@ -30,7 +31,13 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     ...(toAddress && { recipient_address: toAddress }),
   });
   const apiUrl = api ? api : getApiUrl(chain || 'mainnet');
-  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`);
+
+  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`, {
+    next: {
+      revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
+    },
+  });
+
   const data = await response.json();
   const compressedData = {
     ...data,
@@ -38,6 +45,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   };
 
   const tokenPrice = await getTokenPrice();
+
   return (
     <Page
       tokenPrice={tokenPrice}

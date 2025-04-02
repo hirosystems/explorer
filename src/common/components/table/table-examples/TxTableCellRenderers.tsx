@@ -155,7 +155,11 @@ export const TimeStampCellRenderer = (value: string) => {
         bg: 'surfaceTertiary',
       }}
     >
-      <EllipsisText fontSize="xs" fontFamily="var(--font-matter-mono)">
+      <EllipsisText
+        fontSize="xs"
+        fontFamily="var(--font-matter-mono)"
+        suppressHydrationWarning={true}
+      >
         {value}
       </EllipsisText>
     </Flex>

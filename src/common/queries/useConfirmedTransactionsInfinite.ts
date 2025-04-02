@@ -91,12 +91,12 @@ export function useConfirmedTransactions(
       'confirmedTransactions',
       limit,
       offset,
-      fromAddress,
-      toAddress,
-      startTime,
-      endTime,
-      order,
-      sortBy,
+      ...(fromAddress ? [{ fromAddress }] : []),
+      ...(toAddress ? [{ toAddress }] : []),
+      ...(startTime ? [{ startTime }] : []),
+      ...(endTime ? [{ endTime }] : []),
+      ...(order ? [{ order }] : []),
+      ...(sortBy ? [{ sortBy }] : []),
     ],
     queryFn: async () => {
       if (fromAddress?.endsWith('.btc')) {
@@ -124,8 +124,6 @@ export function useConfirmedTransactions(
         },
       });
     },
-    staleTime: TWO_MINUTES,
-    refetchOnWindowFocus: true,
     ...options,
   });
 }
