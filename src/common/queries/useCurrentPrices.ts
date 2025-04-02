@@ -1,14 +1,8 @@
 'use client';
 
-import {
-  QueryFunctionContext,
-  UseQueryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query';
+import { QueryFunctionContext, UseQueryOptions } from '@tanstack/react-query';
 
 import { useGlobalContext } from '../context/useGlobalContext';
-import { ONE_HOUR } from './query-stale-time';
 
 const getHistoricalStxPrice = async ({ queryKey }: QueryFunctionContext) => {
   const [_, blockBurnTime] = queryKey;
