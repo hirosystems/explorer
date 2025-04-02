@@ -278,6 +278,7 @@ export function TxsTable({
     {
       placeholderData: (previousData: unknown) => previousData,
       staleTime: THIRTY_SECONDS,
+      gcTime: THIRTY_SECONDS,
     }
   );
 
