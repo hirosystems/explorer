@@ -30,6 +30,7 @@ export const CURRENT_SIZES = {
   15: { value: '3.75rem' }, // 60px
   17: { value: '4.25rem' }, // 68px
   25: { value: '6.25rem' }, // 100px
+  30: { value: '7.5rem' }, // 120px
   50: { value: '12.5rem' }, // 200px
   60: { value: '15rem' }, // 240px
   150: { value: '37.5rem' }, // 600px
