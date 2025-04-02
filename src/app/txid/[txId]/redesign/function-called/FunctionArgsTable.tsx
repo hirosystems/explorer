@@ -60,8 +60,10 @@ export function FunctionArgsTable({
   const args = getContractCallTxFunctionArgs(tx);
   const formattedArgs = args.map(arg => formatClarityValue(arg));
   return (
-    <ScrollIndicator>
-      <Table columns={columnDefinitions} data={formattedArgs} />
-    </ScrollIndicator>
+    <Table
+      columns={columnDefinitions}
+      data={formattedArgs}
+      scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
+    />
   );
 }

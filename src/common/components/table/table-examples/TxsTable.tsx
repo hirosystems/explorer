@@ -20,11 +20,11 @@ import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { useFilterAndSortState } from '../../../../features/txsFilterAndSort/useFilterAndSortState';
 import { ScrollIndicator } from '../../ScrollIndicator';
+import { AddressLinkCellRenderer } from '../CommonTableCellRenderers';
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
 import {
-  AddressLinkCellRenderer,
   FeeCellRenderer,
   IconCellRenderer,
   TimeStampCellRenderer,
