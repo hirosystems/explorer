@@ -26,11 +26,12 @@ export function useClearAllTxTableFiltersHandler() {
 }
 
 export function areAnyTxTableFiltersActive(filters: TxTableFilters) {
-  return Object.keys(filters).some(filter => {
+  const result = Object.keys(filters).some(filter => {
     const value = filters[filter as keyof TxTableFilters];
     if (Array.isArray(value)) {
       return value.length > 0;
     }
     return value !== '';
   });
+  return result;
 }

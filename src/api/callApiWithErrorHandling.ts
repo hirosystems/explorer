@@ -26,6 +26,7 @@ export async function callApiWithErrorHandling<Endpoint extends PathsWithMethod<
   const { error, data } = await apiClient.GET(apiUrl, apiParams as any);
 
   if (error) {
+    console.log('callApiWithErrorHandling is happening on the server',{ error, apiUrl, apiParams});
     const errorObj = new Error(getErrorMessage(error));
     logError(errorObj, ERROR_TRANSACTION_NAME, { apiUrl, apiParams });
     throw errorObj;

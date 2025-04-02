@@ -70,12 +70,14 @@ export function createSampleContractDeployOptions(
 }
 
 export async function generateSampleTxs(network: StacksNetworkName) {
+  console.log('making unsigned txs requests');
   const [tokenTransferTx, contractCallTx, contractDeployTx] = await Promise.all([
     generateStacksUnsignedTransaction(createSampleTokenTransferOptions(network)),
     generateStacksUnsignedTransaction(createSampleContractCallOptions(network)),
     generateStacksUnsignedTransaction(createSampleContractDeployOptions(network)),
   ]);
 
+  console.log('unsigned txs requests made');
   return {
     tokenTransferTx,
     contractCallTx,
@@ -83,7 +85,18 @@ export async function generateSampleTxs(network: StacksNetworkName) {
   };
 }
 
-async function getStacksFeeEstimate(unsignedTx: StacksTransactionWire, chain: string, api: string) {
+export interface TxFeeEstimate {
+  no_priority: number;
+  low_priority: number;
+  medium_priority: number;
+  high_priority: number;
+}
+
+async function getStacksFeeEstimate(
+  unsignedTx: StacksTransactionWire,
+  chain: string,
+  api: string
+): Promise<TxFeeEstimate> {
   const txByteLength = getEstimatedUnsignedStacksTxByteLength(unsignedTx);
   const txPayload = getSerializedUnsignedStacksTxPayload(unsignedTx);
 
@@ -112,13 +125,26 @@ async function getStacksFeeEstimate(unsignedTx: StacksTransactionWire, chain: st
   };
 }
 
-async function fetchSampleTxsFeeEstimate(chain: StacksNetworkName, api: string) {
+export interface SampleTxsFeeEstimate {
+  tokenTransferFees: TxFeeEstimate;
+  contractCallFees: TxFeeEstimate;
+  contractDeployFees: TxFeeEstimate;
+  averageFees: TxFeeEstimate;
+}
+
+export async function fetchSampleTxsFeeEstimate(
+  chain: StacksNetworkName,
+  api: string
+): Promise<SampleTxsFeeEstimate> {
+  console.log('making unsigned txs requests');
   const { tokenTransferTx, contractCallTx, contractDeployTx } = await generateSampleTxs(chain);
+  console.log('making fee requests');
   const [tokenTransferFees, contractCallFees, contractDeployFees] = await Promise.all([
     getStacksFeeEstimate(tokenTransferTx, chain, api),
     getStacksFeeEstimate(contractCallTx, chain, api),
     getStacksFeeEstimate(contractDeployTx, chain, api),
   ]);
+  console.log('fee requests made');
 
   const averageFees = {
     no_priority: 0,

@@ -15,7 +15,7 @@ import {
   RECENT_STX_BLOCKS_COUNT,
 } from './_components/RecentBlocks/consts';
 import { TXS_LIST_SIZE } from './consts';
-import { compressTransactions } from './transactions/utils';
+import { CompressedTxTableData, compressTransactions } from './transactions/utils';
 
 export type UIBtcBlock = Pick<
   BurnBlock,
@@ -268,7 +268,10 @@ export async function fetchRecentTxs(chain: string, api?: string) {
   return response;
 }
 
-export async function fetchRecentUITxs(chain: string, api?: string) {
+export async function fetchRecentUITxs(
+  chain: string,
+  api?: string
+): Promise<CompressedTxTableData> {
   const response = await fetchRecentTxs(chain, api);
   const data = await response.json();
   return {

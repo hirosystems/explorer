@@ -75,7 +75,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   } catch (error) {
     logError(
       error as Error,
-      'Transaction page server-side fetch for initialTxTableData',
+      'Transaction page server-side fetch for initial data',
       {
         api,
         chain,

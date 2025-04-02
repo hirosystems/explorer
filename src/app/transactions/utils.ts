@@ -1,6 +1,7 @@
 import {
   CoinbaseTransaction,
   ContractCallTransaction,
+  MempoolTransaction,
   SmartContractTransaction,
   TenureChangeTransaction,
   TokenTransferTransaction,
@@ -80,4 +81,30 @@ export function compressTransactions(transactions: Transaction[]): CompressedTxT
 
     return minimalTx;
   });
+}
+
+export function getToAddress(tx: Transaction | MempoolTransaction): string {
+  if (tx.tx_type === 'token_transfer') {
+    return tx.token_transfer?.recipient_address;
+  }
+  if (tx.tx_type === 'smart_contract') {
+    return tx.smart_contract?.contract_id;
+  }
+  if (tx.tx_type === 'contract_call') {
+    return tx.contract_call?.contract_id;
+  }
+  if (tx.tx_type === 'coinbase') {
+    return tx.coinbase_payload?.alt_recipient ?? '';
+  }
+  if (tx.tx_type === 'tenure_change') {
+    return '';
+  }
+  return '';
+}
+
+export function getAmount(tx: Transaction): number {
+  if (tx.tx_type === 'token_transfer') {
+    return Number(tx.token_transfer?.amount);
+  }
+  return 0;
 }

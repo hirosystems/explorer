@@ -9,7 +9,9 @@ export const getCurrentBtcPrice = async (): Promise<number> =>
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
     },
   })
-    .then(res => res.json())
+    .then(res => {
+      return res.json();
+    })
     .then(data => data?.data?.price || 0);
 
 export const getCurrentStxPrice = async (): Promise<number> =>
@@ -20,7 +22,9 @@ export const getCurrentStxPrice = async (): Promise<number> =>
       Authorization: `Bearer ${LUNAR_CRUSH_API_KEY}`,
     },
   })
-    .then(res => res.json())
+    .then(res => {
+      return res.json();
+    })
     .then(data => data?.data?.price || 0);
 
 export async function getTokenPrice(): Promise<TokenPrice> {
