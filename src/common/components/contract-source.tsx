@@ -14,6 +14,7 @@ function ContractSourceBase({ txContractId }: { txContractId: string }) {
   const { data: txContract } = useContractById(txContractId);
   const source = txContract?.source_code;
   if (!source) return null;
+
   return (
     <Section
       title={'Source code'}
