@@ -40,7 +40,6 @@ export function useTxEventsByIdInfinite(
   options: any = {}
 ): UseInfiniteQueryResult<InfiniteData<GenericResponseType<TransactionEvent>>> {
   const apiClient = useApiClient();
-
   return useInfiniteQuery({
     queryKey: [TX_EVENTS_BY_ID_QUERY_KEY, txId],
     queryFn: async ({ pageParam }: { pageParam?: number }) => {
