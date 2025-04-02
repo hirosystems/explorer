@@ -4,6 +4,16 @@ import { ListValueType, ValueType } from '@/app/sandbox/types/values';
 import { Select } from '@/common/components/Select';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { logError } from '@/common/utils/error-utils';
+import {
+  ListValueType,
+  NonTupleValueType,
+  TupleValueType,
+  ValueType,
+} from '@/app/sandbox/types/values';
+import { encodeOptional, encodeOptionalTuple, encodeTuple, getTuple } from '@/app/sandbox/utils';
+import { Select } from '@/common/components/Select';
+import { CONNECT_AUTH_ORIGIN } from '@/common/constants/env';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { InvalidFunctionType, getInvalidFunctionType, showFn } from '@/common/utils/sandbox';
 import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
@@ -13,6 +23,17 @@ import { Form, Formik, FormikErrors } from 'formik';
 import { FC, useMemo, useState } from 'react';
 
 import { ClarityAbiFunction, ClarityValue, PostConditionMode } from '@stacks/transactions';
+import { asciiToBytes, bytesToHex } from '@stacks/common';
+import { openContractCall } from '@stacks/connect';
+import {
+  ClarityAbiFunction,
+  ClarityValue,
+  PostConditionMode,
+  encodeAbiClarityValue,
+  isClarityAbiList,
+  isClarityAbiOptional,
+  listCV,
+} from '@stacks/transactions';
 
 import { Alert } from '../Alert';
 import { Argument } from './Argument';
@@ -32,6 +53,12 @@ import {
   extractPostConditionParams,
   initialPostConditionParameterValues,
 } from './function-call-post-condition-params-utils';
+  PostConditionParameters,
+  checkFunctionParameters,
+  checkPostConditionParameters,
+  getPostCondition,
+  isPostConditionParameter,
+} from './post-condition-utils';
 
 interface FunctionCallFormProps {
   fnAbi: ClarityAbiFunction;
@@ -67,7 +94,6 @@ export const FunctionCallForm: FC<FunctionCallFormProps> = ({
   );
 
   if (!showFn(contractId, fnAbi)) {
-    // TODO: introduce private badge
     const invalidFunctionType = getInvalidFunctionType(contractId, fnAbi);
     return (
       <Alert
