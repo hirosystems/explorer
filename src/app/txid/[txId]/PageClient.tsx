@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { useTxIdPageData } from './TxIdPageContext';
 import { getTxTag } from './page-data';
 import { CoinbasePage as CoinbasePageRedesign } from './redesign/CoinbasePage';
+import { ContractCallPage as ContractCallPageRedesign } from './redesign/ContractCallPage';
 import { TenureChangePage as TenureChangePageRedesign } from './redesign/TenureChangePage';
 import { TokenTransferPage as TokenTransferPageRedesign } from './redesign/TokenTransferPage';
 import Skeleton from './skeleton';
@@ -87,6 +88,7 @@ function TransactionIdPage() {
   if (tx?.tx_type === 'coinbase' && isRedesign) return <CoinbasePageRedesign tx={tx} />;
   if (tx?.tx_type === 'coinbase') return <CoinbasePage tx={tx} />;
 
+  if (tx?.tx_type === 'contract_call' && isRedesign) return <ContractCallPageRedesign tx={tx} />;
   if (tx?.tx_type === 'contract_call') return <ContractCallPage tx={tx} />;
 
   if (tx?.tx_type === 'poison_microblock') return <PoisonMicroblock tx={tx} />;

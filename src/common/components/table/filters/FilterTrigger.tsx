@@ -57,7 +57,7 @@ export const FilterTrigger = ({
             {prefix}
           </Text>
           {value && (
-            <Text textStyle="text-medium-sm" color="textPrimary">
+            <Text textStyle="text-medium-sm" color="textPrimary" whiteSpace="nowrap">
               {value}
             </Text>
           )}

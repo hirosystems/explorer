@@ -2,7 +2,7 @@ import { Box, BoxProps, Flex, Icon, VisuallyHidden } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
 
-export function TableScrollIndicator({ children, ...rest }: BoxProps & { children: ReactNode }) {
+export function ScrollIndicator({ children, ...rest }: BoxProps & { children: ReactNode }) {
   const [hasHorizontalScroll, setHasHorizontalScroll] = useState(false);
   const [isScrolledToEnd, setIsScrolledToEnd] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -69,6 +69,7 @@ export function TableScrollIndicator({ children, ...rest }: BoxProps & { childre
         }
         aria-label={hasHorizontalScroll ? 'Content with horizontal scroll' : 'Content'}
         role="region"
+        minWidth={0}
         {...rest}
       >
         {children}
