@@ -293,12 +293,15 @@ export function useSearchQuery(id: string, isRedesign?: boolean) {
         const fromAddress = advancedSearchQuery.find(
           ({ filterName }) => filterName === 'fromAddress'
         )?.filterValue;
-        const toAddress = advancedSearchQuery.find(({ filterName }) => filterName === 'toAddress')
-          ?.filterValue;
-        const startTime = advancedSearchQuery.find(({ filterName }) => filterName === 'startTime')
-          ?.filterValue;
-        const endTime = advancedSearchQuery.find(({ filterName }) => filterName === 'endTime')
-          ?.filterValue;
+        const toAddress = advancedSearchQuery.find(
+          ({ filterName }) => filterName === 'toAddress'
+        )?.filterValue;
+        const startTime = advancedSearchQuery.find(
+          ({ filterName }) => filterName === 'startTime'
+        )?.filterValue;
+        const endTime = advancedSearchQuery.find(
+          ({ filterName }) => filterName === 'endTime'
+        )?.filterValue;
         const term = advancedSearchQuery
           .filter(({ filterName }) => filterName === 'term')
           .reduce((acc, { filterValue }) => acc + filterValue + ' ', '')
