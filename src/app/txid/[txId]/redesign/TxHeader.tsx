@@ -1,6 +1,12 @@
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { getToAddress } from '@/common/utils/transaction-utils';
-import { getTxTitle, truncateHex, truncateStxAddress } from '@/common/utils/utils';
+import {
+  getTxTitle,
+  truncateHex,
+  truncateStxAddress,
+  truncateStxContractId,
+  validateStacksContractId,
+} from '@/common/utils/utils';
 import { TransactionStatusBadge, TransactionTypeBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
@@ -51,13 +57,18 @@ const TxIdBadge = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
 };
 
 const AddressBadge = ({ address }: { address: string }) => {
+  const isContract = validateStacksContractId(address);
   return address ? (
-    <Badge value={truncateStxAddress(address)} copiedText={`Address copied to clipboard`} />
+    <Badge
+      value={isContract ? truncateStxContractId(address) : truncateStxAddress(address)}
+      copiedText={`Address copied to clipboard`}
+    />
   ) : null;
 };
 
 const FromToBadges = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
   const toAddress = getToAddress(tx);
+  console.log('FromToBadges', { toAddress });
   return (
     <Flex gap={1} alignItems="center">
       <AddressBadge address={tx.sender_address} />

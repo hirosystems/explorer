@@ -1,6 +1,6 @@
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { Table, TableProps } from '@/common/components/table/Table';
 import { TableContainer } from '@/common/components/table/TableContainer';
-import { TableScrollIndicator } from '@/common/components/table/TableScrollIndicatorWrapper';
 import { TableSkeleton } from '@/common/components/table/TableSkeleton';
 import { UpdateTableBannerRow } from '@/common/components/table/table-examples/TxsTable';
 import { Box, Stack } from '@chakra-ui/react';
@@ -161,7 +161,7 @@ export const SimpleTable: Story = {
           data={args.isEmpty ? [] : args.showSkeleton ? [] : simpleTableRowData}
           scrollIndicatorWrapper={
             args.hasTableScrollIndicatorWrapper
-              ? table => <TableScrollIndicator>{table}</TableScrollIndicator>
+              ? table => <ScrollIndicator>{table}</ScrollIndicator>
               : undefined
           }
           isLoading={args.isLoading}
@@ -228,7 +228,7 @@ export const TxTable: Story = {
             }
             scrollIndicatorWrapper={
               args.hasTableScrollIndicatorWrapper
-                ? table => <TableScrollIndicator>{table}</TableScrollIndicator>
+                ? table => <ScrollIndicator>{table}</ScrollIndicator>
                 : undefined
             }
             error={args.hasError ? (args.error ? args.error : 'An error occurred') : undefined}
