@@ -1,11 +1,13 @@
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Flex, Stack, StackProps } from '@chakra-ui/react';
+import { Flex, Grid, Stack, StackProps } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { DetailsCard } from './DetailsCard';
 import { Events } from './Events';
 import { FunctionCalled } from './function-called/FunctionCalled';
 import { PostConditions } from './post-conditions/PostConditions';
@@ -187,9 +189,13 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           value={TransactionIdPageTab.Overview}
           w="100%"
         >
-          <TabsContentContainer>
-            <TxSummary tx={tx} />
-          </TabsContentContainer>
+          <Grid templateColumns={{ base: '1fr', md: '75% 25%' }} gap={2}>
+            <TabsContentContainer>
+              <TxSummary tx={tx} />
+            </TabsContentContainer>
+
+            <DetailsCard tx={tx as Transaction} />
+          </Grid>
         </TabsContent>
         <TabsContent
           key={TransactionIdPageTab.FunctionCall}
@@ -239,10 +245,11 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       borderRadius="redesign.xl"
       w="full"
     >
-      <Flex justifyContent={'space-between'} w="full">
-        <TabsList flexWrap={'wrap'}>
-          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
-        </TabsList>
+      <Flex justifyContent={'space-between'} w="full" gap={2}>
+        <ScrollIndicator>
+          <TabsList>{getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}</TabsList>
+        </ScrollIndicator>
+
         {tx.tx_type === 'token_transfer' && (
           <Flex alignItems={'center'} gap={2}>
             <Text textStyle="text-regular-sm">Show:</Text>

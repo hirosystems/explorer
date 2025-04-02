@@ -1,4 +1,8 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import {
+  CopyButtonRedesign,
+  DEFAULT_BUTTON_STYLING,
+  DEFAULT_ICON_STYLING,
+} from '@/common/components/CopyButton';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 
@@ -26,9 +30,11 @@ export const FunctionResultNonTuple = ({ tx }: { tx: ContractCallTransaction }) 
         iconProps={{
           height: 3.5,
           width: 3.5,
+          ...DEFAULT_ICON_STYLING,
         }}
         buttonProps={{
           p: 1.5,
+          ...DEFAULT_BUTTON_STYLING,
         }}
       />
     </Flex>

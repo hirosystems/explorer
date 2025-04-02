@@ -1,4 +1,8 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import {
+  CopyButtonRedesign,
+  DEFAULT_BUTTON_STYLING,
+  DEFAULT_ICON_STYLING,
+} from '@/common/components/CopyButton';
 import { microToStacks, microToStacksFormatted, usdFormatter } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
@@ -40,10 +44,12 @@ export function SummaryItemValue({
           initialValue={value}
           aria-label={`copy ${label} value`}
           iconProps={{
+            ...DEFAULT_ICON_STYLING,
             height: 3.5,
             width: 3.5,
           }}
           buttonProps={{
+            ...DEFAULT_BUTTON_STYLING,
             p: 1.5,
           }}
         />
@@ -70,10 +76,12 @@ export function PriceSummaryItemValue({ value }: { value: string }) {
         initialValue={value}
         aria-label={`copy stx price`}
         iconProps={{
+          ...DEFAULT_ICON_STYLING,
           height: 3.5,
           width: 3.5,
         }}
         buttonProps={{
+          ...DEFAULT_BUTTON_STYLING,
           p: 1.5,
         }}
       />
@@ -87,10 +95,12 @@ export function PriceSummaryItemValue({ value }: { value: string }) {
         initialValue={formattedUsdValue}
         aria-label={`copy usd price`}
         iconProps={{
+          ...DEFAULT_ICON_STYLING,
           height: 3.5,
           width: 3.5,
         }}
         buttonProps={{
+          ...DEFAULT_BUTTON_STYLING,
           p: 1.5,
         }}
       />
