@@ -68,6 +68,10 @@ function getTabsTriggersByTransactionType(
   setSelectedTab: (tab: string) => void
 ) {
   if (tx.tx_type === 'token_transfer') {
+<<<<<<< HEAD
+=======
+    // TODO: get the # of events and add that to the events label
+>>>>>>> d30c5ecb (feat: first draft of the token transfer id page)
     return (
       <>
         <TabTriggerComponent
