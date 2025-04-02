@@ -1,3 +1,10 @@
+# [1.267.0](https://github.com/hirosystems/explorer/compare/v1.266.0...v1.267.0) (2025-04-02)
+
+
+### Features
+
+* added tx page ssr ([7d61584](https://github.com/hirosystems/explorer/commit/7d615845dbbb11feb6dba8be57c12f6c55b69720))
+
 # [1.266.0](https://github.com/hirosystems/explorer/compare/v1.265.0...v1.266.0) (2025-04-01)
 
 
