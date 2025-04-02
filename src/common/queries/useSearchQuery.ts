@@ -13,7 +13,6 @@ import { BTC_BNS_CONTRACT } from '../constants/constants';
 import { useAppDispatch } from '../state/hooks';
 import { Network } from '../types/network';
 import {
-  AddressSearchResult,
   BlockSearchResult,
   BnsSearchResult,
   FoundResult,
@@ -36,7 +35,7 @@ function blockToSearchResult(block: Block): FoundResult {
   };
 }
 
-function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundResult {
+export function nftHistoryToSearchResult(nftHistoryEntry: any, bnsName: string): FoundResult {
   const blockResult: BnsSearchResult = {
     entity_id: nftHistoryEntry.recipient,
     entity_type: SearchResultType.BnsAddress,
@@ -249,11 +248,13 @@ export function updateRecentResultsLocalStorage(resultItem: FoundResult) {
   );
 }
 
-export function getRecentResultsLocalStorage() {
-  if (typeof window === 'undefined') {
+export function useRecentResultsLocalStorage() {
+  try {
+    const recentResultsJson = localStorage.getItem(RECENT_RESULTS_KEY) || '[]';
+    return JSON.parse(recentResultsJson) as FoundResult[];
+  } catch (e) {
     return [];
   }
-  return JSON.parse(localStorage.getItem(RECENT_RESULTS_KEY) || '[]');
 }
 
 export function useSearchQuery(id: string, isRedesign?: boolean) {

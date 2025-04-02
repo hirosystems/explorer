@@ -3,12 +3,7 @@
 import { Input } from '@/ui/Input';
 import { Box, Flex, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
 import { List } from '@phosphor-icons/react';
-import { useSearchParams } from 'next/navigation';
 
-import {
-  buildAdvancedSearchQuery,
-  getRecentResultsLocalStorage,
-} from '../../../common/queries/useSearchQuery';
 import { Search } from '../Search/Search';
 import { FeePopover } from './FeePopover';
 import { Logo } from './Logo';
@@ -16,27 +11,7 @@ import { MobileNavPage } from './MobileNavPage';
 import { PagesSlidingMenu } from './PagesSlidingMenu';
 import { SettingsPopover } from './SettingsPopover';
 
-function useFilterParams() {
-  const params = new URLSearchParams(useSearchParams());
-  const filterParams: Record<string, string> = {};
-  params.forEach((value, filter) => {
-    if (
-      filter === 'fromAddress' ||
-      filter === 'toAddress' ||
-      filter === 'startTime' ||
-      filter === 'endTime' ||
-      filter.startsWith('term_')
-    ) {
-      filterParams[filter] = value;
-    }
-  });
-  return filterParams;
-}
-
 const DesktopNavBar = (props: any) => {
-  const searchTermFromQueryParams = buildAdvancedSearchQuery(useFilterParams());
-  const recentResults = getRecentResultsLocalStorage();
-
   return (
     <Flex
       width="full"
@@ -51,10 +26,7 @@ const DesktopNavBar = (props: any) => {
         <PagesSlidingMenu />
       </Flex>
       <Flex flexGrow={1} flexShrink={1} maxWidth="507px">
-        <Search
-          searchTermFromQueryParams={searchTermFromQueryParams}
-          recentResults={recentResults}
-        />
+        <Search />
       </Flex>
       <Flex gap={4}>
         <FeePopover />

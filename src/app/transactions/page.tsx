@@ -1,6 +1,6 @@
 import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
+import { fetchBnsAddress } from '@/common/queries/bns-queries';
 import { getApiUrl } from '@/common/utils/network-utils';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { getTokenPrice } from '../getTokenPriceInfo';
@@ -21,18 +21,27 @@ export interface TxPageSearchParams extends TxPageFilters {
 
 export default async function (props: { searchParams: Promise<TxPageSearchParams> }) {
   const searchParams = await props.searchParams;
-  const { startTime, endTime, fromAddress, toAddress, chain, api } = searchParams;
+  const { startTime, endTime, chain, api, fromAddress, toAddress } = searchParams;
+
+  const apiUrl = getApiUrl(chain || '', api);
+  let bnsAddress;
+  if (apiUrl && fromAddress?.endsWith('.btc')) {
+    bnsAddress = await fetchBnsAddress(apiUrl, fromAddress);
+  }
+  if (apiUrl && toAddress?.endsWith('.btc')) {
+    bnsAddress = await fetchBnsAddress(apiUrl, toAddress);
+  }
+
   const params = new URLSearchParams({
     limit: `${TX_TABLE_PAGE_SIZE}`,
     offset: '0',
     ...(startTime && { start_time: startTime }),
     ...(endTime && { end_time: endTime }),
-    ...(fromAddress && { sender_address: fromAddress }),
-    ...(toAddress && { recipient_address: toAddress }),
+    ...(fromAddress && { from_address: bnsAddress || fromAddress }),
+    ...(toAddress && { to_address: bnsAddress || toAddress }),
   });
-  const apiUrl = api ? api : getApiUrl(chain || 'mainnet');
-
-  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`, {
+  const fetchUrl = `${apiUrl}/extended/v1/tx/?${params.toString()}`;
+  const response = await fetch(fetchUrl, {
     next: {
       revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
     },

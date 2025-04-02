@@ -1,5 +1,3 @@
-'use client';
-
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TxStatus } from '../types/tx';

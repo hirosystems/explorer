@@ -1,18 +1,18 @@
+import { useFilterParams } from '@/common/utils/search-param-utils';
 import { Flex, HStack, Icon, Stack, StackProps } from '@chakra-ui/react';
 import { ArrowRight, Command, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { ReactNode, useCallback, useEffect } from 'react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
-
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import {
   advancedSearchConfig,
   advancedSearchKeywords,
-  getRecentResultsLocalStorage,
+  buildAdvancedSearchQuery,
   getSearchPageUrl,
   updateRecentResultsLocalStorage,
+  useRecentResultsLocalStorage,
   useSearchQuery,
 } from '../../../common/queries/useSearchQuery';
 import { useAppDispatch, useAppSelector } from '../../../common/state/hooks';
@@ -504,15 +504,11 @@ function SearchInput({ searchTermFromQueryParams = '' }) {
   );
 }
 
-export function Search({
-  searchTermFromQueryParams = '',
-  recentResults = [],
-}: {
-  searchTermFromQueryParams?: string;
-  recentResults: SearchResult[];
-}) {
-  const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
+export function Search() {
+  const searchTermFromQueryParams = buildAdvancedSearchQuery(useFilterParams());
+  const recentResults = useRecentResultsLocalStorage();
 
+  const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
   const searchTerm = useAppSelector(selectSearchTerm);
   const searchResponse = useSearchQuery(searchTerm, true);
   const isLoading = searchResponse.isLoading;
