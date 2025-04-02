@@ -3,7 +3,10 @@
 import { defineRecipe } from '@chakra-ui/react';
 
 export const buttonRecipe = defineRecipe({
-  base: {},
+  base: {
+    // h: 'auto', // TODO: have to overwrite chakra ui's stupid base button styles
+    // w: 'auto',
+  },
   variants: {
     variant: {
       primary: {
