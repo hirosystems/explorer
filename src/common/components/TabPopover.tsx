@@ -83,7 +83,7 @@ export const TabPopoverContent = React.forwardRef<
         <ChakraPopover.Content
           {...rest}
           ref={ref}
-          zIndex="docked"
+          zIndex="popover"
           borderRadius="redesign.lg"
           borderTopLeftRadius={
             props.positioning?.placement === 'bottom-start' ? 'none' : 'redesign.lg'

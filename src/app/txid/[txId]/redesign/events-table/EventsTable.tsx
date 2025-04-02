@@ -3,7 +3,6 @@
 import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { AddressLinkCellRenderer } from '@/common/components/table/CommonTableCellRenderers';
 import { Table } from '@/common/components/table/Table';
-import { TableContainer } from '@/common/components/table/TableContainer';
 import { FeeCellRenderer } from '@/common/components/table/table-examples/TxTableCellRenderers';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
@@ -15,19 +14,15 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { TransactionEvent, TransactionEventAssetType } from '@stacks/stacks-blockchain-api-types';
-
 import { AssetEventTypeCellRenderer, IndexCellRenderer } from './EventsTableCellRenderers';
 import { EVENTS_TABLE_PAGE_SIZE } from './consts';
 import { EventsTableFilters } from './filters/useEventsTableFilters';
-import { EventsTableColumns } from './types';
 import {
+  ExtendedTransactionEventAssetType,
   getAmount,
   getAsset,
   getAssetEventType,
-  getAssetLabel,
-  getEventType,
-  getEventTypeLabel,
+  getAssetType,
   getFromAddress,
   getToAddress,
 } from './utils';
@@ -38,24 +33,26 @@ export interface EventsTableAddressColumnData {
   isContract: boolean;
 }
 
+export enum EventsTableColumns {
+  Index = 'index',
+  AssetEventType = 'asset-event-type',
+  Asset = 'asset',
+  AssetType = 'asset-type',
+  Amount = 'amount',
+  From = 'from',
+  ArrowRight = 'arrow-right',
+  To = 'to',
+}
+
 export interface EventsTableData {
   [EventsTableColumns.Index]: number;
-  [EventsTableColumns.EventType]: TransactionEvent['event_type'];
+  [EventsTableColumns.AssetEventType]: ExtendedTransactionEventAssetType;
   [EventsTableColumns.Asset]: string;
-  [EventsTableColumns.AssetEventType]: TransactionEventAssetType;
+  [EventsTableColumns.AssetType]: string;
   [EventsTableColumns.Amount]: number;
   [EventsTableColumns.From]: EventsTableAddressColumnData;
   [EventsTableColumns.ArrowRight]: JSX.Element;
   [EventsTableColumns.To]: EventsTableAddressColumnData;
-}
-
-export interface EventsTableEventColumnData {
-  eventType: TransactionEvent['event_type'];
-  asset: string;
-  assetType: TransactionEventAssetType;
-  amount: string;
-  from: string;
-  to: string;
 }
 
 export interface TxTableAddressColumnData {
@@ -66,7 +63,7 @@ export interface TxTableAddressColumnData {
 export const defaultColumnDefinitions: ColumnDef<EventsTableData>[] = [
   {
     id: EventsTableColumns.Index,
-    header: 'Index',
+    header: '#',
     accessorKey: EventsTableColumns.Index,
     cell: info => <IndexCellRenderer index={info.getValue() as number} />,
     enableSorting: false,
@@ -76,7 +73,9 @@ export const defaultColumnDefinitions: ColumnDef<EventsTableData>[] = [
     header: 'Event',
     accessorKey: EventsTableColumns.AssetEventType,
     cell: info => (
-      <AssetEventTypeCellRenderer assetEventType={info.getValue() as TransactionEventAssetType} />
+      <AssetEventTypeCellRenderer
+        assetEventType={info.getValue() as ExtendedTransactionEventAssetType}
+      />
     ),
     enableSorting: false,
   },
@@ -84,14 +83,14 @@ export const defaultColumnDefinitions: ColumnDef<EventsTableData>[] = [
     id: EventsTableColumns.Asset,
     header: 'Asset',
     accessorKey: EventsTableColumns.Asset,
-    cell: info => getAssetLabel(info.getValue() as string),
+    cell: info => info.getValue() as string,
     enableSorting: false,
   },
   {
-    id: EventsTableColumns.EventType,
-    header: 'Type',
-    accessorKey: EventsTableColumns.EventType,
-    cell: info => getEventTypeLabel(info.getValue() as TransactionEvent['event_type']),
+    id: EventsTableColumns.AssetType,
+    header: 'Asset Type',
+    accessorKey: EventsTableColumns.AssetType,
+    cell: info => info.getValue() as string,
     enableSorting: false,
   },
   {
@@ -209,15 +208,15 @@ export function EventsTable({
         const to = getToAddress(event);
         const from = getFromAddress(event);
         const amount = getAmount(event);
-        const asset = getAsset(event);
         const assetEventType = getAssetEventType(event);
-        const eventType = getEventType(event);
+        const asset = getAsset(event);
+        const assetType = getAssetType(event);
 
         return {
           [EventsTableColumns.Index]: index + 1,
           [EventsTableColumns.AssetEventType]: assetEventType,
           [EventsTableColumns.Asset]: asset,
-          [EventsTableColumns.EventType]: eventType,
+          [EventsTableColumns.AssetType]: assetType,
           [EventsTableColumns.Amount]: amount,
           [EventsTableColumns.From]: {
             address: from,
@@ -241,7 +240,6 @@ export function EventsTable({
     <Table
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
-      tableContainerWrapper={table => <TableContainer>{table}</TableContainer>}
       scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
@@ -256,6 +254,7 @@ export function EventsTable({
       }
       isLoading={isLoading}
       isFetching={isFetching}
+      isFiltered={isTableFiltered}
     />
   );
 }

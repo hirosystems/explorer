@@ -1,10 +1,45 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import {
+  CopyButtonRedesign,
+  ExtendedButtonProps,
+  ExtendedIconProps,
+} from '@/common/components/CopyButton';
 import { microToStacks, microToStacksFormatted, usdFormatter } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon, Stack, Table } from '@chakra-ui/react';
 
 import { useTxIdPageData } from '../../TxIdPageContext';
+
+export const DEFAULT_BUTTON_STYLING: ExtendedButtonProps = {
+  bg: (copied: boolean) => (copied ? 'surfaceInvert' : 'transparent'),
+  _groupHover: (copied: boolean) => ({ bg: copied ? 'surfaceInvert' : 'surfaceTertiary' }),
+  _hover: (copied: boolean) => ({ bg: copied ? 'surfaceInvert' : 'surfaceFifth !important' }),
+  css: {
+    '&:hover .icon': { color: 'iconPrimary' },
+  },
+};
+
+export const DEFAULT_ICON_STYLING: ExtendedIconProps = {
+  color: (copied: boolean) => (copied ? 'iconInvert !important' : 'iconSecondary'),
+};
+
+export function RowCopyButton({ value, ariaLabel }: { value: string; ariaLabel: string }) {
+  return (
+    <CopyButtonRedesign
+      initialValue={value}
+      aria-label={ariaLabel}
+      iconProps={{
+        ...DEFAULT_ICON_STYLING,
+        height: 3.5,
+        width: 3.5,
+      }}
+      buttonProps={{
+        ...DEFAULT_BUTTON_STYLING,
+        p: 1.5,
+      }}
+    />
+  );
+}
 
 export function SummaryItemLabel({ label }: { label: string }) {
   return (
@@ -35,19 +70,7 @@ export function SummaryItemValue({
   return (
     <Flex gap={2} alignItems="center">
       {content}
-      {showCopyButton && (
-        <CopyButtonRedesign
-          initialValue={value}
-          aria-label={`copy ${label} value`}
-          iconProps={{
-            height: 3.5,
-            width: 3.5,
-          }}
-          buttonProps={{
-            p: 1.5,
-          }}
-        />
-      )}
+      {showCopyButton && <RowCopyButton value={value} ariaLabel={`copy ${label} value`} />}
     </Flex>
   );
 }
@@ -66,34 +89,14 @@ export function PriceSummaryItemValue({ value }: { value: string }) {
         <StacksIconThin />
       </Icon>
       {formattedValue} STX
-      <CopyButtonRedesign
-        initialValue={value}
-        aria-label={`copy stx price`}
-        iconProps={{
-          height: 3.5,
-          width: 3.5,
-        }}
-        buttonProps={{
-          p: 1.5,
-        }}
-      />
+      <RowCopyButton value={value} ariaLabel={`copy stx price`} />
       <Text textStyle="text-regular-sm" color="textSecondary">
         /
       </Text>
       <Text textStyle="text-regular-sm" color="textSecondary">
         {formattedUsdValue}
       </Text>
-      <CopyButtonRedesign
-        initialValue={formattedUsdValue}
-        aria-label={`copy usd price`}
-        iconProps={{
-          height: 3.5,
-          width: 3.5,
-        }}
-        buttonProps={{
-          p: 1.5,
-        }}
-      />
+      <RowCopyButton value={formattedUsdValue} ariaLabel={`copy usd price`} />
     </Flex>
   );
 }

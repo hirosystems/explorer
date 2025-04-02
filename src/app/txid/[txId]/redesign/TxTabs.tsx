@@ -1,11 +1,13 @@
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
 import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisFiterPopover';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
-import { Flex, Stack, StackProps } from '@chakra-ui/react';
+import { Flex, Grid, Stack, StackProps } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
+import { DetailsCard } from './DetailsCard';
 import { Events } from './Events';
 import { FunctionCalled } from './function-called/FunctionCalled';
 import { PostConditions } from './post-conditions/PostConditions';
@@ -33,7 +35,7 @@ function TabTriggerComponent({
       w="100%"
       maxW="100%"
       gap={2}
-      flexDir={'column'}
+      flexDirection={'column'}
       className={`group`}
       background={isActive ? 'surfacePrimary' : 'none'}
       py={1}
@@ -119,21 +121,23 @@ function getTabsTriggersByTransactionType(
         />
         <TabTriggerComponent
           key={TransactionIdPageTab.FunctionCall}
-          label={'Function call'}
+          label={'Function called'}
           value={TransactionIdPageTab.FunctionCall}
           isActive={selectedTab === TransactionIdPageTab.FunctionCall}
           onClick={() => setSelectedTab(TransactionIdPageTab.FunctionCall)}
         />
         <TabTriggerComponent
           key={TransactionIdPageTab.PostConditions}
-          label={`Post-conditions ${numPostConditions > 0 ? `(${numPostConditions})` : ''}`}
+          label={`Post-conditions`}
+          secondaryLabel={numPostConditions > 0 ? `(${numPostConditions})` : ''}
           value={TransactionIdPageTab.PostConditions}
           isActive={selectedTab === TransactionIdPageTab.PostConditions}
           onClick={() => setSelectedTab(TransactionIdPageTab.PostConditions)}
         />
         <TabTriggerComponent
           key={TransactionIdPageTab.Events}
-          label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
+          label={`Events`}
+          secondaryLabel={numTxEvents > 0 ? `(${numTxEvents})` : ''}
           value={TransactionIdPageTab.Events}
           isActive={selectedTab === TransactionIdPageTab.Events}
           onClick={() => setSelectedTab(TransactionIdPageTab.Events)}
@@ -187,9 +191,13 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           value={TransactionIdPageTab.Overview}
           w="100%"
         >
-          <TabsContentContainer>
-            <TxSummary tx={tx} />
-          </TabsContentContainer>
+          <Grid templateColumns={{ base: '1fr', md: '75% 25%' }} gap={2}>
+            <TabsContentContainer>
+              <TxSummary tx={tx} />
+            </TabsContentContainer>
+
+            <DetailsCard tx={tx as Transaction} />
+          </Grid>
         </TabsContent>
         <TabsContent
           key={TransactionIdPageTab.FunctionCall}
@@ -206,9 +214,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           <PostConditions tx={tx} />
         </TabsContent>
         <TabsContent key={TransactionIdPageTab.Events} value={TransactionIdPageTab.Events} w="100%">
-          <TabsContentContainer>
-            <Events tx={tx} />
-          </TabsContentContainer>
+          <Events tx={tx} />
         </TabsContent>
         <TabsContent key="sourceCode" value="sourceCode" w="100%">
           <Source tx={tx} />
@@ -236,13 +242,21 @@ export const TxTabs = ({ tx }: { tx: Transaction | MempoolTransaction }) => {
       size="redesignMd"
       defaultValue={TransactionIdPageTab.Overview}
       gap={2}
+      rowGap={2}
       borderRadius="redesign.xl"
       w="full"
     >
-      <Flex justifyContent={'space-between'} w="full">
-        <TabsList flexWrap={'wrap'}>
-          {getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}
-        </TabsList>
+      <Flex
+        justifyContent={'space-between'}
+        w="full"
+        gap={2}
+        flexDirection={{ base: 'column', sm: 'row' }}
+        rowGap={2}
+      >
+        <ScrollIndicator>
+          <TabsList>{getTabsTriggersByTransactionType(tx, selectedTab, setSelectedTab)}</TabsList>
+        </ScrollIndicator>
+
         {tx.tx_type === 'token_transfer' && (
           <Flex alignItems={'center'} gap={2}>
             <Text textStyle="text-regular-sm">Show:</Text>

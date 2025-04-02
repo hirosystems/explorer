@@ -8,11 +8,9 @@ import { ClarityAbiFunction } from '@stacks/transactions';
 import { AbiFunction } from '../../app/sandbox/components/ContractCall/AvailableFunctionsView';
 import { FunctionView } from '../../app/sandbox/components/ContractCall/FunctionView';
 import { useUser } from '../../app/sandbox/hooks/useUser';
-import { setUserData } from '../../app/sandbox/sandbox-slice';
 import { Button } from '../../ui/Button';
 import { TextLink } from '../../ui/TextLink';
 import { Caption } from '../../ui/typography';
-import { useAppDispatch } from '../state/hooks';
 import { ContractWithParsedAbi } from '../types/contract';
 import { showFn } from '../utils/sandbox';
 
@@ -21,7 +19,6 @@ export const ContractAvailableFunctions: FC<{
   contract: ContractWithParsedAbi;
 }> = ({ contractId, contract }) => {
   const { isConnected, connect } = useUser();
-  const dispatch = useAppDispatch();
   const [functionName, setFunctionName] = useState('');
   return (
     <>

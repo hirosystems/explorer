@@ -1,4 +1,4 @@
-import { CopyButtonRedesign } from '@/common/components/CopyButton';
+import { RowCopyButton } from '@/app/txid/[txId]/redesign/tx-summary/SummaryItem';
 import { Text } from '@/ui/Text';
 import { Flex } from '@chakra-ui/react';
 
@@ -20,17 +20,7 @@ export const FunctionResultNonTuple = ({ tx }: { tx: ContractCallTransaction }) 
       <Text textStyle="text-regular-sm" color="textPrimary">
         {type}
       </Text>
-      <CopyButtonRedesign
-        initialValue={`${value} ${type}`}
-        aria-label={`copy function result`}
-        iconProps={{
-          height: 3.5,
-          width: 3.5,
-        }}
-        buttonProps={{
-          p: 1.5,
-        }}
-      />
+      <RowCopyButton value={`${value} ${type}`} ariaLabel={`copy function result`} />
     </Flex>
   );
 };

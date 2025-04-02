@@ -22,6 +22,7 @@ import { kbdRecipe } from './recipes/KbdRecipe';
 import { linkRecipe } from './recipes/LinkRecipe';
 import { menuSlotRecipe } from './recipes/MenuRecipe';
 import { popoverSlotRecipe } from './recipes/PopoverRecipe';
+import { selectSlotRecipe } from './recipes/SelectRecipe';
 import { switchSlotRecipe } from './recipes/SwitchRecipe';
 import { tabsSlotRecipe } from './recipes/TabsRecipe';
 import { tagSlotRecipe } from './recipes/TagRecipe';
@@ -60,6 +61,7 @@ const themeConfig = {
       dialog: dialogSlotRecipe,
       popover: popoverSlotRecipe,
       alert: alertSlotRecipe,
+      select: selectSlotRecipe,
     },
     tokens: {
       colors: { ...COLORS, ...NEW_COLORS },

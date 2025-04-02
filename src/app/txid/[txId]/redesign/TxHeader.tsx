@@ -1,7 +1,12 @@
 import { useIsInViewport } from '@/common/hooks/useIsInViewport';
 import { getToAddress } from '@/common/utils/transaction-utils';
 import { getTxTitle, getTxTypeColor } from '@/common/utils/transactions';
-import { truncateHex, truncateStxAddress, validateStacksContractId } from '@/common/utils/utils';
+import {
+  truncateHex,
+  truncateStxAddress,
+  truncateStxContractId,
+  validateStacksContractId,
+} from '@/common/utils/utils';
 import { TransactionStatusBadge, TransactionTypeBadge } from '@/ui/Badge';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
@@ -64,8 +69,8 @@ const AddressBadge = ({ address }: { address: string }) => {
   const isContract = validateStacksContractId(address);
   return address ? (
     <Badge
-      value={truncateStxAddress(address)}
       copyValue={address}
+      value={isContract ? truncateStxContractId(address) : truncateStxAddress(address)}
       copiedText={`Address copied to clipboard`}
     />
   ) : null;
