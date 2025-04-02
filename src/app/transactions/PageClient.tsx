@@ -36,29 +36,42 @@ export default function ({
   const isRedesign = useIsRedesignUrl();
 
   return (
-    <>
-      <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
-        <PageTitle>Transactions</PageTitle>
-      </Flex>
-      <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
-      <TxListTabs filters={filters as Record<string, string | undefined>} />
-      <ClientOnly>
-        {isRedesign ? (
-          <Stack gap={24} fontFamily="var(--font-instrument-sans)">
-            {/* <Overview /> */}
-            <Stack gap={8}>
-              <Text textStyle="heading-md" color="textPrimary">
-                Latest transactions
-              </Text>
-              <Stack gap={5}>
-                <TxTableFilters filters={filters} />
-                <TxsTable filters={filters} initialData={initialTxTableData} />
-                <TxTableFiltersModal filters={filters} />
-              </Stack>
-            </Stack>
-          </Stack>
-        ) : null}
-      </ClientOnly>
-    </>
+    <Stack gap={24} fontFamily="var(--font-instrument-sans)">
+    {/* <Overview /> */}
+    <Stack gap={8}>
+      <Text textStyle="heading-md" color="textPrimary">
+        Latest transactions
+      </Text>
+      <Stack gap={5}>
+        <TxTableFilters filters={filters} />
+        <TxsTable filters={filters} initialData={initialTxTableData} />
+        <TxTableFiltersModal filters={filters} />
+      </Stack>
+    </Stack>
+  </Stack>
+    // <>
+    //   <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
+    //     <PageTitle>Transactions</PageTitle>
+    //   </Flex>
+    //   <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
+    //   <TxListTabs filters={filters as Record<string, string | undefined>} />
+    //   <ClientOnly>
+    //     {isRedesign ? (
+    //       <Stack gap={24} fontFamily="var(--font-instrument-sans)">
+    //         {/* <Overview /> */}
+    //         <Stack gap={8}>
+    //           <Text textStyle="heading-md" color="textPrimary">
+    //             Latest transactions
+    //           </Text>
+    //           <Stack gap={5}>
+    //             <TxTableFilters filters={filters} />
+    //             <TxsTable filters={filters} initialData={initialTxTableData} />
+    //             <TxTableFiltersModal filters={filters} />
+    //           </Stack>
+    //         </Stack>
+    //       </Stack>
+    //     ) : null}
+    //   </ClientOnly>
+    // </>
   );
 }
