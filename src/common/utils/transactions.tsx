@@ -93,7 +93,7 @@ export function getTxStatusIcon(tx: Transaction | MempoolTransaction) {
   return icon;
 }
 
-const TX_STATUS_ICON_COLORS = {
+export const TX_STATUS_ICON_COLORS = {
   [TransactionStatus.PENDING]: 'feedback.bronze-600',
   [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: 'feedback.green-500',
   [TransactionStatus.SUCCESS_MICROBLOCK]: 'feedback.green-500',
@@ -109,7 +109,7 @@ export function getTxStatusIconColor(tx: Transaction | MempoolTransaction) {
   return iconColor;
 }
 
-const TX_STATUS_BG_COLORS = {
+export const TX_STATUS_BG_COLORS = {
   [TransactionStatus.PENDING]: 'transactionStatus.pending',
   [TransactionStatus.SUCCESS_ANCHOR_BLOCK]: 'transactionStatus.confirmed',
   [TransactionStatus.SUCCESS_MICROBLOCK]: 'transactionStatus.confirmed',
@@ -139,4 +139,10 @@ export function getTxStatusLabel(tx: Transaction | MempoolTransaction) {
   const txStatus = getTransactionStatus(tx);
   const label = TX_STATUS_LABELS[txStatus] || TX_STATUS_LABELS.default;
   return label;
+}
+
+export function isConfirmedTx<T extends Transaction, U extends MempoolTransaction>(
+  tx: T | U
+): tx is T {
+  return 'block_height' in tx && tx.block_height !== undefined;
 }

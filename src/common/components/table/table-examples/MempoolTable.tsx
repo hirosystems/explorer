@@ -2,8 +2,8 @@
 
 import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
 import { CompressedMempoolTxTableData } from '@/app/transactions/utils';
-import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
-import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { ScrollIndicator } from '@/common/components/ScrollIndicator';
+import { GenericResponseType, useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
 import { useMempoolTransactionsInfinite } from '@/common/queries/useMempoolTransactionsInfinite';
 import { formatTimestamp, formatTimestampToRelativeTime } from '@/common/utils/time-utils';
 import { getAmount, getToAddress } from '@/common/utils/transaction-utils';
@@ -15,12 +15,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import { MempoolTransaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Table } from '../Table';
 import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
-import { TableScrollIndicator } from '../TableScrollIndicatorWrapper';
 import { TxTableFilters } from '../tx-table/useTxTableFilters';
 import {
   AddressLinkCellRenderer,
@@ -299,7 +298,7 @@ export function MempoolTable({
       data={rowData}
       columns={columnDefinitions ?? defaultColumnDefinitions}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
-      scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
+      scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
       pagination={
         disablePagination
           ? undefined

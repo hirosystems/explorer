@@ -149,8 +149,14 @@ export const DefaultBadge = forwardRef<
   }
 >(({ children, icon, label, ...rest }, ref) => {
   return (
-    <Badge ref={ref} {...rest} variant="outline" content={label ? 'iconAndLabel' : 'iconOnly'}>
-      <Flex alignItems="center" gap={1.5}>
+    <Badge
+      ref={ref}
+      variant="outline"
+      {...rest}
+      content={label ? 'iconAndLabel' : 'iconOnly'}
+      w="fit-content"
+    >
+      <Flex alignItems="center" gap={1.5} w="fit-content">
         {icon}
         {label}
       </Flex>

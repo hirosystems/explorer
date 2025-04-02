@@ -1,7 +1,14 @@
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StacksFrowneyIcon from '@/ui/icons/StacksFrowneyIcon';
-import { Table as ChakraTable, Flex, Icon, Spinner, Stack } from '@chakra-ui/react';
+import {
+  Table as ChakraTable,
+  TableRootProps as ChakraTableRootProps,
+  Flex,
+  Icon,
+  Spinner,
+  Stack,
+} from '@chakra-ui/react';
 import { ArrowDown, ArrowUp, ArrowsDownUp, Info, WarningOctagon } from '@phosphor-icons/react';
 import {
   Column,
@@ -125,6 +132,7 @@ export type TableProps<T> = {
     onPageChange: (pagination: PaginationState) => void;
     onPageSizeChange?: (pageSize: PaginationState) => void;
   };
+  tableProps?: ChakraTableRootProps;
 };
 
 const ErrorTable = ({ error }: { error: string }) => {
@@ -199,6 +207,12 @@ export const getColumnPinningState = <T,>(columns: ColumnDef<T>[]): ColumnPinnin
   return { left, right };
 };
 
+export const defaultColumnSizing = {
+  size: undefined,
+  minSize: undefined,
+  maxSize: undefined,
+};
+
 export function Table<T>({
   data,
   columns,
@@ -212,6 +226,7 @@ export function Table<T>({
   bannerRow,
   error,
   pagination,
+  tableProps,
 }: TableProps<T>): JSX.Element {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [tableData, setTableData] = useState(data);
@@ -221,6 +236,7 @@ export function Table<T>({
   const table = useReactTable({
     data: tableData,
     columns,
+    defaultColumn: defaultColumnSizing,
     ...(pagination?.manualPagination ? { rowCount: pagination.totalRows } : {}), // no need to pass pageCount or rowCount with client-side pagination as it is calculated automatically
     state: {
       sorting,
@@ -294,6 +310,8 @@ export function Table<T>({
       }}
       overflowX="auto"
       className="table-root"
+      tableLayout="auto"
+      {...tableProps}
     >
       <ChakraTable.Header>
         {table.getHeaderGroups().map(headerGroup => (
@@ -316,7 +334,6 @@ export function Table<T>({
                   }}
                   borderBottom="1px solid"
                   borderColor="redesignBorderSecondary"
-                  width="full"
                   role="columnheader"
                   aria-sort={
                     sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'
@@ -332,11 +349,7 @@ export function Table<T>({
                       ? `${header.column.columnDef.maxSize}px`
                       : undefined
                   }
-                  w={
-                    header.column.columnDef.size
-                      ? `${header.column.columnDef.size}px`
-                      : 'auto !important'
-                  }
+                  w={header.column.columnDef.size ? `${header.column.columnDef.size}px` : 'auto'}
                   boxSizing="border-box"
                 >
                   <Flex
@@ -423,11 +436,7 @@ export function Table<T>({
                   maxW={
                     cell.column.columnDef.maxSize ? `${cell.column.columnDef.maxSize}px` : undefined
                   }
-                  w={
-                    cell.column.columnDef.size
-                      ? `${cell.column.columnDef.size}px`
-                      : 'auto !important'
-                  }
+                  w={cell.column.columnDef.size ? `${cell.column.columnDef.size}px` : undefined}
                   boxSizing="border-box"
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -445,18 +454,23 @@ export function Table<T>({
 
   return (
     <ExplorerErrorBoundary Wrapper={TableContainer} tryAgainButton>
-      <Stack gap={0} alignItems="center" w="full" className="table-content-container">
-        {content}
-        {pagination && pageCount > 1 && (
-          <TablePaginationControls
-            pageIndex={pagination.pageIndex}
-            pageSize={pagination.pageSize}
-            totalRows={pagination.totalRows}
-            onPageChange={pagination.onPageChange}
-            onPageSizeChange={pagination.onPageSizeChange}
-          />
-        )}
-      </Stack>
+      {pagination && pageCount > 1 ? (
+        // Stack is meant to center the pagination controls underneath the table
+        <Stack gap={0} alignItems="center" w="full" className="table-content-container">
+          {content}
+          {pagination && pageCount > 1 && (
+            <TablePaginationControls
+              pageIndex={pagination.pageIndex}
+              pageSize={pagination.pageSize}
+              totalRows={pagination.totalRows}
+              onPageChange={pagination.onPageChange}
+              onPageSizeChange={pagination.onPageSizeChange}
+            />
+          )}
+        </Stack>
+      ) : (
+        content
+      )}
     </ExplorerErrorBoundary>
   );
 }
