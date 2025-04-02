@@ -7,7 +7,7 @@ import { ReactNode } from 'react';
 
 import { DEFAULT_LIST_LIMIT_SMALL } from '../common/constants/constants';
 import { useGlobalContext } from '../common/context/useGlobalContext';
-import { isRedesignUrl } from '../common/utils/url-utils';
+import { useIsRedesignUrl } from '../common/utils/url-utils';
 import { TxListTabs } from '../features/txs-list/tabs/TxListTabs';
 import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
@@ -37,7 +37,7 @@ export function HomePageLayout({
   txListTabs: ReactNode;
   blockList: ReactNode;
 }) {
-  const isRedesign = isRedesignUrl();
+  const isRedesign = useIsRedesignUrl();
   return (
     <>
       {isRedesign && <RecentBlocks />}

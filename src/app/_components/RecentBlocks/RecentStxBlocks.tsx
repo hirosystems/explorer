@@ -1,19 +1,24 @@
-import { useBlockListInfinite } from '@/common/queries/useBlockListInfinite';
+import { useHomePageData } from '@/app/home-redesign/context';
+import { UIStxBlock } from '@/app/home-redesign/data';
+import { useBlockList } from '@/common/queries/useBlockListInfinite';
 import { HStack } from '@chakra-ui/react';
 import { useMemo } from 'react';
 
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
-import { useInfiniteQueryResult } from '../../../common/hooks/useInfiniteQueryResult';
 import { FadingOverlay } from './FadingOverlay';
 import { NewBlockPlaceholder } from './NewBlockPlaceholder';
 import { StxBlockGroup } from './StxBlock';
-import { BLOCK_HEIGHT } from './consts';
+import { BLOCK_HEIGHT, RECENT_STX_BLOCKS_COUNT } from './consts';
 
 export function RecentStxBlocks() {
-  const response = useBlockListInfinite(10);
-  const { refetch } = response;
-  const stxBlocks = useInfiniteQueryResult<Block>(response);
+  const recentStxBlocks = useHomePageData().initialRecentBlocks.stxBlocks;
+
+  const { data: stxBlocksData, refetch } = useBlockList(RECENT_STX_BLOCKS_COUNT, {
+    initialData: recentStxBlocks,
+    manual: true,
+  });
+  const stxBlocks = stxBlocksData?.results || [];
 
   const stxBlocksByBurnBlockHeight = useMemo(() => {
     const groupedByBurnBlockHeight = stxBlocks.reduce(
@@ -21,10 +26,10 @@ export function RecentStxBlocks() {
         if (!acc[block.burn_block_height]) {
           acc[block.burn_block_height] = [];
         }
-        acc[block.burn_block_height].push(block);
+        acc[block.burn_block_height].push({ tx_count: block?.txs?.length || 0, ...block });
         return acc;
       },
-      {} as Record<number, Block[]>
+      {} as Record<number, UIStxBlock[]>
     );
 
     Object.keys(groupedByBurnBlockHeight).forEach(burnHeight => {
@@ -42,10 +47,17 @@ export function RecentStxBlocks() {
 
   const newestStxBlockHeight = stxBlocks[0]?.height;
 
+  if (!newestStxBlockHeight) {
+    return null;
+  }
+
   return (
     <HStack gap={3} h={BLOCK_HEIGHT} position={'relative'} align={'normal'} flexGrow={1}>
       <NewBlockPlaceholder
-        newestBtcBlockHeight={newestStxBlockHeight || Infinity}
+        newestBlockHeight={newestStxBlockHeight || Infinity}
+        isNewBlock={(block, lastBlockHeight) => {
+          return block.height > lastBlockHeight;
+        }}
         refetch={refetch}
         border="1px dashed var(--stacks-colors-accent-stacks-500)"
         boxShadow={'0px 4px 12px 0px rgba(255, 85, 18, 0.25)'}

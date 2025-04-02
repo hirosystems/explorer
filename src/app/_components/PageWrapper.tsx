@@ -1,6 +1,6 @@
 'use client';
 
-import { isRedesignUrl } from '@/common/utils/url-utils';
+import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
@@ -57,7 +57,7 @@ function WrapperWithBg({
 }) {
   const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
   const isServer = typeof window === 'undefined';
-  const isRedesign = isRedesignUrl();
+  const isRedesign = useIsRedesignUrl();
   const bgColor = isRedesign
     ? 'surfaceTertiary'
     : isServer
@@ -89,7 +89,7 @@ export function PageWrapper({
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
 }) {
-  const isRedesign = isRedesignUrl();
+  const isRedesign = useIsRedesignUrl();
 
   return (
     <>
