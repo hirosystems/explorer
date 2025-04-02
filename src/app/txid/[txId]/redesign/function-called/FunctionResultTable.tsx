@@ -59,8 +59,10 @@ export function FunctionResultsTable({ tx }: { tx: ContractCallTransaction }) {
   const result = tx.tx_result;
   const formattedResult = formatFunctionResult(result);
   return (
-    <ScrollIndicator>
-      <Table columns={columnDefinitions} data={formattedResult} />
-    </ScrollIndicator>
+    <Table
+      columns={columnDefinitions}
+      data={formattedResult}
+      scrollIndicatorWrapper={table => <ScrollIndicator>{table}</ScrollIndicator>}
+    />
   );
 }

@@ -71,47 +71,6 @@ export const IndexCellRenderer = ({ index }: { index: number }) => {
   );
 };
 
-export const AddressLinkCellRenderer = (value: EventsTableAddressColumnData) => {
-  // TODO: shared with TxTable AddressLinkCellRenderer
-  const { address, isContract } = value;
-  return address && isContract ? (
-    <Flex
-      gap={1}
-      alignItems="center"
-      bg="surfacePrimary"
-      borderRadius="redesign.md"
-      py={0.5}
-      px={1}
-      w="fit-content"
-      _groupHover={{
-        bg: 'surfaceTertiary',
-      }}
-    >
-      <Icon h={3} w={3} color="iconPrimary">
-        <ClarityIcon />
-      </Icon>
-      <AddressLink principal={address} variant="tableLink">
-        <EllipsisText
-          textStyle="text-regular-xs"
-          color="textPrimary"
-          _hover={{
-            color: 'textInteractiveHover',
-          }}
-          fontFamily="var(--font-matter-mono)"
-        >
-          {getContractName(address)}
-        </EllipsisText>
-      </AddressLink>
-    </Flex>
-  ) : address && !isContract ? (
-    <AddressLink principal={address} variant="tableLink">
-      <EllipsisText fontSize="sm">{truncateStxAddress(address)}</EllipsisText>
-    </AddressLink>
-  ) : (
-    <EllipsisText fontSize="sm">-</EllipsisText>
-  );
-};
-
 export const AmountCellRenderer = (value: number) => {
   return (
     <Flex alignItems="center" gap={1}>

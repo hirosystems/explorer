@@ -10,6 +10,7 @@ import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-t
 import { Events } from './Events';
 import { TxSummary } from './TxSummary';
 import { FunctionCalled } from './function-called/FunctionCalled';
+import { PostConditions } from './post-conditions/PostConditions';
 
 function TabTriggerComponent({
   label,
@@ -79,6 +80,7 @@ function getTabsTriggersByTransactionType(
   setSelectedTab: (tab: string) => void
 ) {
   const numTxEvents = 'event_count' in tx ? tx.event_count : 0;
+  const numPostConditions = 'post_conditions' in tx ? tx.post_conditions.length : 0;
   if (tx.tx_type === 'token_transfer') {
     return (
       <>
@@ -103,39 +105,39 @@ function getTabsTriggersByTransactionType(
     return (
       <>
         <TabTriggerComponent
-          key={TransactionIdPageTab.Overview}
+          key="overview"
           label="Overview"
-          value={TransactionIdPageTab.Overview}
-          isActive={selectedTab === TransactionIdPageTab.Overview}
-          onClick={() => setSelectedTab(TransactionIdPageTab.Overview)}
+          value="overview"
+          isActive={selectedTab === 'overview'}
+          onClick={() => setSelectedTab('overview')}
         />
         <TabTriggerComponent
-          key={TransactionIdPageTab.FunctionCall}
+          key="functionCall"
           label={'Function call'}
-          value={TransactionIdPageTab.FunctionCall}
-          isActive={selectedTab === TransactionIdPageTab.FunctionCall}
-          onClick={() => setSelectedTab(TransactionIdPageTab.FunctionCall)}
+          value="functionCall"
+          isActive={selectedTab === 'functionCall'}
+          onClick={() => setSelectedTab('functionCall')}
         />
         <TabTriggerComponent
-          key={TransactionIdPageTab.PostConditions}
-          label={`Post-conditions ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`} // TODO: add count
-          value={TransactionIdPageTab.PostConditions}
-          isActive={selectedTab === TransactionIdPageTab.PostConditions}
-          onClick={() => setSelectedTab(TransactionIdPageTab.PostConditions)}
+          key="postConditions"
+          label={`Post-conditions ${numPostConditions > 0 ? `(${numPostConditions})` : ''}`}
+          value="postConditions"
+          isActive={selectedTab === 'postConditions'}
+          onClick={() => setSelectedTab('postConditions')}
         />
         <TabTriggerComponent
-          key={TransactionIdPageTab.Events}
+          key="events"
           label={`Events ${numTxEvents > 0 ? `(${numTxEvents})` : ''}`}
-          value={TransactionIdPageTab.Events}
-          isActive={selectedTab === TransactionIdPageTab.Events}
-          onClick={() => setSelectedTab(TransactionIdPageTab.Events)}
+          value="events"
+          isActive={selectedTab === 'events'}
+          onClick={() => setSelectedTab('events')}
         />
         <TabTriggerComponent
-          key={TransactionIdPageTab.SourceCode}
+          key="sourceCode"
           label={'Source code'}
-          value={TransactionIdPageTab.SourceCode}
-          isActive={selectedTab === TransactionIdPageTab.SourceCode}
-          onClick={() => setSelectedTab(TransactionIdPageTab.SourceCode)}
+          value="sourceCode"
+          isActive={selectedTab === 'sourceCode'}
+          onClick={() => setSelectedTab('sourceCode')}
         />
       </>
     );
@@ -181,9 +183,7 @@ function getTabsContentByTransactionType(tx: Transaction | MempoolTransaction) {
           <FunctionCalled tx={tx} />
         </TabsContent>
         <TabsContent key="postConditions" value="postConditions" w="100%">
-          <TabsContentContainer>
-            <Text>Post-conditions</Text> {/* TODO: add post-conditions */}
-          </TabsContentContainer>
+          <PostConditions tx={tx} />
         </TabsContent>
         <TabsContent key="events" value="events" w="100%">
           <TabsContentContainer>

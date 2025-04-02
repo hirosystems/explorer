@@ -26,6 +26,9 @@ export const badgeRecipe = defineRecipe({
       iconOnly: {
         p: 1,
       },
+      label: {
+        p: 1.5,
+      },
     },
     size: {},
   },
