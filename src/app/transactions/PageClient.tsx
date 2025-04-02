@@ -4,7 +4,7 @@ import { TxTableFilters } from '@/common/components/table/filters/TxTableFilters
 import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFitlersModal';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
-import { isRedesignUrl } from '@/common/utils/url-utils';
+import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 import { Text } from '@/ui/Text';
 import { ClientOnly, Flex, Stack } from '@chakra-ui/react';
@@ -33,7 +33,7 @@ export default function ({
   filters: TxPageFilters;
   initialTxTableData: GenericResponseType<CompressedTxTableData>;
 }) {
-  const isRedesign = isRedesignUrl();
+  const isRedesign = useIsRedesignUrl();
 
   return (
     <>

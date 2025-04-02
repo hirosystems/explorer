@@ -9,31 +9,36 @@ import { useSubscribeBlocks } from '../BlockList/Sockets/useSubscribeBlocks';
 import { BTC_BLOCK_MIN_WIDTH, EMPTY_BTC_BLOCK_WIDTH } from './consts';
 
 export function NewBlockPlaceholder({
-  newestBtcBlockHeight,
+  newestBlockHeight,
   refetch,
   boxShadow,
+  isNewBlock,
   ...stackProps
 }: {
-  newestBtcBlockHeight: number;
+  newestBlockHeight: number;
   refetch: () => void;
+  isNewBlock: (block: NakamotoBlock | Block, lastBlockHeight: number) => boolean;
 } & StackProps) {
   const [hasNewBlocks, setHasNewBlocks] = useState(false);
   const [socketEnabled, setSocketEnabled] = useState(true);
-  const lastBlockHeightRef = useRef(newestBtcBlockHeight);
+  const lastBlockHeightRef = useRef(newestBlockHeight);
 
-  const handleNewBlock = useCallback((block: NakamotoBlock | Block) => {
-    if (block.height > lastBlockHeightRef.current) {
-      setHasNewBlocks(true);
-      setSocketEnabled(false);
-    }
-  }, []);
+  const handleNewBlock = useCallback(
+    (block: NakamotoBlock | Block) => {
+      if (isNewBlock(block, lastBlockHeightRef.current)) {
+        setHasNewBlocks(true);
+        setSocketEnabled(false);
+      }
+    },
+    [isNewBlock]
+  );
 
   useSubscribeBlocks(socketEnabled, handleNewBlock);
 
   useEffect(() => {
-    lastBlockHeightRef.current = newestBtcBlockHeight;
+    lastBlockHeightRef.current = newestBlockHeight;
     setHasNewBlocks(false);
-  }, [newestBtcBlockHeight]);
+  }, [newestBlockHeight]);
 
   const handleUpdate = useCallback(() => {
     refetch();
