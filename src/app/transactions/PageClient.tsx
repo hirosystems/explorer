@@ -34,6 +34,7 @@ export default function ({
   initialTxTableData: GenericResponseType<CompressedTxTableData>;
 }) {
   const isRedesign = isRedesignUrl();
+  // console.log('ssr control test');
 
   return (
     <>
