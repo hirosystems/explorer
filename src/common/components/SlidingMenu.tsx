@@ -29,7 +29,7 @@ export const SlidingMenu = ({
   const isControlled = controlledIsOpen !== undefined;
   const isOpen = isControlled ? controlledIsOpen : uncontrolledIsOpen;
 
-  useEffect(() => {
+  useEffect(() => { // this is the culprit
     if (triggerRef.current) {
       setMenuTriggerHeight(triggerRef.current.offsetHeight);
     }

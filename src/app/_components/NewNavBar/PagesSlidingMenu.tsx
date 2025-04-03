@@ -22,8 +22,6 @@ const getPageLabelFromPath = (path: string): PrimaryPageLabel => {
   return 'Menu';
 };
 
-const triggerHeight = 10;
-
 export const PagesSlidingMenu = ({ width }: { width: number }) => {
   const [isOpen, setIsOpen] = useState(false);
   const path = usePathname();

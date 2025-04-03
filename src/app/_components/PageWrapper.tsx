@@ -98,7 +98,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {/* <NewNavBar /> */}
+          <NewNavBar />
           <Stack
             marginTop={isRedesign ? '50px' : '120px'}
             mb={8}
