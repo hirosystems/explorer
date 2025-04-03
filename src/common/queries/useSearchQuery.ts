@@ -249,6 +249,9 @@ export function updateRecentResultsLocalStorage(resultItem: FoundResult) {
 }
 
 export function getRecentResultsLocalStorage() {
+  if (typeof window === 'undefined') {
+    return [];
+  }
   return JSON.parse(localStorage.getItem(RECENT_RESULTS_KEY) || '[]');
 }
 
