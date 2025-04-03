@@ -100,7 +100,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
+          {/* {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />} */}
           <Stack
             marginTop={'120px'} // TODO: setting this to 30 doesn't work. fix this
             mb={8}
@@ -108,7 +108,7 @@ export function PageWrapper({
           >
             {children}
           </Stack>
-          {isRedesign ? <NewFooter /> : <Footer />}
+          {/* {isRedesign ? <NewFooter /> : <Footer />} */}
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />
