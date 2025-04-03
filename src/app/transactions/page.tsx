@@ -30,7 +30,18 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     ...(toAddress && { recipient_address: toAddress }),
   });
   const apiUrl = api ? api : getApiUrl(chain || 'mainnet');
-  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`);
+  const startTimeRequest = new Date();
+  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`, {
+    next: {
+      revalidate: 10,
+    },
+  });
+  const endTimeRequest = new Date();
+  console.log(
+    'Time taken to fetch transactions:',
+    endTimeRequest.getTime() - startTimeRequest.getTime(),
+    'ms'
+  );
   const data = await response.json();
   const compressedData = {
     ...data,
