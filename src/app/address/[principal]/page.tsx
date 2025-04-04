@@ -1,13 +1,9 @@
-'use client';
+import AddressPage from './PageClient';
 
-import dynamic from 'next/dynamic';
-import * as React from 'react';
+type AddressIdPageParams = { principal: string };
 
-import Skeleton from './skeleton';
-
-const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
-export default Page;
+export default async function (props: { params: Promise<AddressIdPageParams> }) {
+  const { params } = props;
+  const { principal } = await params;
+  return <AddressPage principal={principal} />;
+}

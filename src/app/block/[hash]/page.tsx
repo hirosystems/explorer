@@ -1,13 +1,9 @@
-'use client';
+import BlockPage from './PageClient';
 
-import dynamic from 'next/dynamic';
-import * as React from 'react';
+type BlockPageParams = { hash: string };
 
-import Skeleton from './skeleton';
-
-const Page = dynamic(() => import('./PageClient'), {
-  loading: () => <Skeleton />,
-  ssr: false,
-});
-
-export default Page;
+export default async function (props: { params: Promise<BlockPageParams> }) {
+  const { params } = props;
+  const { hash } = await params;
+  return <BlockPage hash={hash} />;
+}

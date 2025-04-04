@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Flex } from '@chakra-ui/react';
+import { use } from 'react';
 
 import { NakamotoBlock } from '@stacks/blockchain-api-client';
 
@@ -18,8 +19,10 @@ import { PageTitle } from '../../_components/PageTitle';
 import { TowColLayout } from '../../_components/TwoColLayout';
 import { BitcoinAnchorDetails } from './BitcoinAnchorDetails';
 
-export default function BitcoinBlockPage({ params: { hash } }: any) {
-  const { data: btcBlock } = useSuspenseBurnBlock(hash);
+export default function BitcoinBlockPage(props: { params: Promise<{ hash: string }> }) {
+  const pageParams = use(props.params);
+  const hash = pageParams?.hash || undefined;
+  const { data: btcBlock } = useSuspenseBurnBlock(hash || '');
   const btcBlockHeight = btcBlock?.burn_block_height;
 
   const { data: prevBlock, isError: isPrevBlockError } = useBurnBlock(btcBlockHeight - 1);
