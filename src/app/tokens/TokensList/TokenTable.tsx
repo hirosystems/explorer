@@ -43,9 +43,9 @@ function TokenTableBase({ debouncedSearchTerm }: TokenTableBaseProps) {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {allFtTokensDeduped.map(
-            (ftToken, i) => !!ftToken.name && <TokenRow ftToken={ftToken} key={ftToken.tx_id} />
-          )}
+          {allFtTokensDeduped.map((ftToken, i) => (
+            <TokenRow ftToken={ftToken} key={ftToken.tx_id} />
+          ))}
         </Table.Body>
       </Table.Root>
       <ListFooter
