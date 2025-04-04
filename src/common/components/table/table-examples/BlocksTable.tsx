@@ -1,7 +1,7 @@
 'use client';
 
 import { useInfiniteQueryResult } from '@/common/hooks/useInfiniteQueryResult';
-import { useBurnBlocks } from '@/common/queries/useBurnBlocksInfinite';
+import { useBurnBlocksInfinite } from '@/common/queries/useBurnBlocksInfinite';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -83,7 +83,10 @@ export function BlocksTable() {
     pageSize: 10,
   });
 
-  const response = useBurnBlocks(pagination.pageSize, pagination.pageIndex * pagination.pageSize);
+  const response = useBurnBlocksInfinite(
+    pagination.pageSize,
+    pagination.pageIndex * pagination.pageSize
+  );
   const burnBlocks = useInfiniteQueryResult<BurnBlock>(response, pagination.pageSize);
 
   const totalRows = response.data?.pages[0].total || 0;

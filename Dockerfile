@@ -13,7 +13,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install -g pnpm@8.9.1
+RUN npm install -g pnpm@8.11.0
 RUN pnpm i
 RUN pnpm chakra typegen src/ui/theme/theme.ts
 RUN pnpm build

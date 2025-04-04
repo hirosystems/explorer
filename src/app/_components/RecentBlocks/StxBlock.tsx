@@ -1,7 +1,8 @@
-import { Flex, HStack, Icon, Stack, StackProps, StackSeparator } from '@chakra-ui/react';
-import { CaretRight, Circle, CircleDashed, Dot } from '@phosphor-icons/react';
+import { UIStxBlock } from '@/app/home-redesign/data';
+import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
+import { CaretRight, Circle } from '@phosphor-icons/react';
 
-import { Block } from '@stacks/blockchain-api-client';
+import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
@@ -9,7 +10,7 @@ import { Link } from '../../../ui/Link';
 import { Text } from '../../../ui/Text';
 import BitcoinCircleIcon from '../../../ui/icons/BitcoinCircleIcon';
 import StxSquareIcon from '../../../ui/icons/StxSquareIcon';
-import { BORDER_WIDTH, BTC_BLOCK_MIN_WIDTH, RING_WIDTH, SMALL_RING_WIDTH } from './consts';
+import { BORDER_WIDTH, BTC_BLOCK_MIN_WIDTH, SMALL_RING_WIDTH } from './consts';
 import { formatTimestamp } from './utils';
 
 export function StxBlockGroup({
@@ -20,7 +21,7 @@ export function StxBlockGroup({
 }: {
   btcBlockHeight: number;
   btcBlockTime: number;
-  stxBlocks: Block[];
+  stxBlocks: UIStxBlock[];
   newestStxBlockHeight: number;
 }) {
   const network = useGlobalContext().activeNetwork;
@@ -105,9 +106,9 @@ export function StxBlockGroup({
         <HStack>
           {stxBlocks.map(stxBlock =>
             stxBlock.height === newestStxBlockHeight ? (
-              <NewestStxBlock stxBlock={stxBlock} />
+              <NewestStxBlock key={stxBlock.hash} stxBlock={stxBlock} />
             ) : (
-              <StxBlock stxBlock={stxBlock} />
+              <StxBlock key={stxBlock.hash} stxBlock={stxBlock} />
             )
           )}
         </HStack>
@@ -116,7 +117,7 @@ export function StxBlockGroup({
   );
 }
 
-export function StxBlock({ stxBlock }: { stxBlock: Block }) {
+export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
   const network = useGlobalContext().activeNetwork;
 
   return (
@@ -203,9 +204,9 @@ export function StxBlock({ stxBlock }: { stxBlock: Block }) {
               <Text
                 textStyle={'text-medium-xs'}
                 color={'textSecondary'}
-                aria-label={`${stxBlock.txs.length} transactions in this block`}
+                aria-label={`${stxBlock.tx_count} transactions in this block`}
               >
-                {stxBlock.txs.length} tx{stxBlock.txs.length > 1 ? 's' : ''}
+                {stxBlock.tx_count} tx{stxBlock.tx_count > 1 ? 's' : ''}
               </Text>
             </HStack>
           </Stack>
@@ -215,7 +216,7 @@ export function StxBlock({ stxBlock }: { stxBlock: Block }) {
   );
 }
 
-export function NewestStxBlock({ stxBlock }: { stxBlock: Block }) {
+export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
   const network = useGlobalContext().activeNetwork;
 
   return (
@@ -297,7 +298,7 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: Block }) {
                   {formatTimestamp(stxBlock.block_time)}
                 </Text>
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'}>
-                  {stxBlock.txs.length} tx{stxBlock.txs.length > 1 ? 's' : ''}
+                  {stxBlock.tx_count} tx{stxBlock.tx_count > 1 ? 's' : ''}
                 </Text>
               </HStack>
             </Stack>

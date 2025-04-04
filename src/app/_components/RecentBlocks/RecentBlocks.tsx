@@ -1,3 +1,5 @@
+'use client';
+
 import { HStack, Icon, VisuallyHidden } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 

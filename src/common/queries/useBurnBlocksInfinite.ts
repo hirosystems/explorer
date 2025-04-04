@@ -1,8 +1,10 @@
 import {
   InfiniteData,
   UseInfiniteQueryResult,
+  UseQueryResult,
   UseSuspenseInfiniteQueryResult,
   useInfiniteQuery,
+  useQuery,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
 
@@ -66,9 +68,9 @@ export function useBurnBlocks(
   offset?: number,
   options: any = {},
   queryKeyExtension?: string
-): UseInfiniteQueryResult<InfiniteData<GenericResponseType<BurnBlock>>> {
+): UseQueryResult<GenericResponseType<BurnBlock>> {
   const apiClient = useApiClient();
-  return useInfiniteQuery({
+  return useQuery({
     queryKey: [
       BURN_BLOCKS_QUERY_KEY,
       limit,
@@ -80,10 +82,7 @@ export function useBurnBlocks(
         params: { query: { limit, offset } },
       });
     },
-    getNextPageParam,
-    initialPageParam: 0,
     staleTime: TWO_MINUTES,
-    placeholderData: keepPreviousData => keepPreviousData,
     ...options,
   });
 }

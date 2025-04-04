@@ -11,11 +11,12 @@ const ERROR_TRANSACTION_NAME = 'api-call-error';
 
 type ExtractPath<Endpoint extends keyof paths> = paths[Endpoint];
 
-type ApiParams<Endpoint extends keyof paths> = ExtractPath<Endpoint> extends {
-  get: { parameters: infer Params };
-}
-  ? { params: Params }
-  : { params?: never };
+type ApiParams<Endpoint extends keyof paths> =
+  ExtractPath<Endpoint> extends {
+    get: { parameters: infer Params };
+  }
+    ? { params: Params }
+    : { params?: never };
 
 export async function callApiWithErrorHandling<Endpoint extends PathsWithMethod<paths, 'get'>>(
   apiClient: ReturnType<typeof useApiClient>,
