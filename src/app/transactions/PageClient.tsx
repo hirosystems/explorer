@@ -5,13 +5,11 @@ import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFi
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { isRedesignUrl } from '@/common/utils/url-utils';
-import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 import { Text } from '@/ui/Text';
-import { ClientOnly, Flex, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { PageTitle } from '../_components/PageTitle';
 import { TxPageFilters } from './page';
 import { MempoolFeeStatsSkeleton } from './skeleton';
 import { CompressedTxTableData } from './utils';
@@ -36,29 +34,18 @@ export default function ({
   const isRedesign = isRedesignUrl();
 
   return (
-    <>
-      <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
-        <PageTitle>Transactions</PageTitle>
-      </Flex>
-      <MempoolFeeStatsDynamic tokenPrice={tokenPrice} />
-      <TxListTabs filters={filters as Record<string, string | undefined>} />
-      <ClientOnly>
-        {isRedesign ? (
-          <Stack gap={24} fontFamily="var(--font-instrument-sans)">
-            {/* <Overview /> */}
-            <Stack gap={8}>
-              <Text textStyle="heading-md" color="textPrimary">
-                Latest transactions
-              </Text>
-              <Stack gap={5}>
-                <TxTableFilters filters={filters} />
-                <TxsTable filters={filters} initialData={initialTxTableData} />
-                <TxTableFiltersModal filters={filters} />
-              </Stack>
-            </Stack>
-          </Stack>
-        ) : null}
-      </ClientOnly>
-    </>
+    <Stack gap={24} fontFamily="var(--font-instrument-sans)">
+      {/* <Overview /> */}
+      <Stack gap={8}>
+        <Text textStyle="heading-md" color="textPrimary">
+          Latest transactions
+        </Text>
+        <Stack gap={5}>
+          <TxTableFilters filters={filters} />
+          <TxsTable filters={filters} initialData={initialTxTableData} />
+          <TxTableFiltersModal filters={filters} />
+        </Stack>
+      </Stack>
+    </Stack>
   );
 }
