@@ -1,3 +1,10 @@
+# [1.268.0](https://github.com/hirosystems/explorer/compare/v1.267.0...v1.268.0) (2025-04-04)
+
+
+### Features
+
+* added scam tokens + fixed nextjs 15 migration regresssion ([c2f1141](https://github.com/hirosystems/explorer/commit/c2f1141b1f81702aad09ccf7840d4084fd7c3798))
+
 # [1.267.0](https://github.com/hirosystems/explorer/compare/v1.266.0...v1.267.0) (2025-04-02)
 
 
