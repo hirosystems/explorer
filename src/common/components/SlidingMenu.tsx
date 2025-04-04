@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { useCallback, useRef, useState } from 'react';
 
 export const SlidingMenu = ({
   menuTrigger,
@@ -11,6 +11,7 @@ export const SlidingMenu = ({
   onOpenChange,
   height,
   width,
+  triggerHeight,
 }: {
   height?: number;
   width: number;
@@ -21,19 +22,13 @@ export const SlidingMenu = ({
   menuSlidingMenuProps?: BoxProps;
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
+  triggerHeight: number;
 } & BoxProps) => {
   const triggerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [menuTriggerHeight, setMenuTriggerHeight] = useState(0);
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const isControlled = controlledIsOpen !== undefined;
   const isOpen = isControlled ? controlledIsOpen : uncontrolledIsOpen;
-
-  useEffect(() => { // this is the culprit
-    if (triggerRef.current) {
-      setMenuTriggerHeight(triggerRef.current.offsetHeight);
-    }
-  }, []);
 
   const setIsOpen = useCallback(
     (value: boolean) => {
@@ -46,7 +41,7 @@ export const SlidingMenu = ({
   );
 
   return (
-    <Box position="relative" h={height ?? 'full'} minWidth={width} ref={triggerRef}>
+    <Box position="relative" h={triggerHeight} minWidth={width} ref={triggerRef}>
       <Box
         className="sliding-menu"
         onMouseEnter={() => {
@@ -60,9 +55,9 @@ export const SlidingMenu = ({
         overflow="hidden"
         transition="height 0.5s ease"
         height={
-          isOpen && contentRef?.current?.scrollHeight
-            ? `${contentRef?.current?.scrollHeight + menuTriggerHeight}px`
-            : `${menuTriggerHeight}px`
+          !isOpen
+            ? `${triggerHeight * 4}px`
+            : `${contentRef?.current?.scrollHeight ?? 0 + triggerHeight * 4}px`
         }
         position="absolute"
         zIndex="dropdown"
@@ -71,15 +66,16 @@ export const SlidingMenu = ({
         boxShadow={isOpen ? 'var(--stacks-shadows-elevation2)' : 'none'}
         {...menuSlidingMenuProps}
       >
-        <Box
+        <Flex
           className="menu-trigger"
-          h={`${menuTriggerHeight}px`}
-          minWidth={width}
-          boxSizing="border-box"
+          alignItems='center'
+          // h={`${triggerHeight}px`}
+          // minWidth={width}
+          // boxSizing="border-box"
           {...menuTriggerProps}
         >
           {menuTrigger}
-        </Box>
+        </Flex>
         <Box className="menu-content" ref={contentRef} {...menuContentProps}>
           {menuContent}
         </Box>

@@ -55,20 +55,8 @@ function WrapperWithBg({
 }) {
   const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
   const isServer = typeof window === 'undefined';
-  const isRedesign = useIsRedesignUrl();
-  const bgColor = isRedesign
-    ? 'surfaceTertiary'
-    : isServer
-      ? serverThemeCookie
-        ? serverThemeCookie === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg
-      : clientThemeCookie['stacks-explorer-theme']
-        ? clientThemeCookie['stacks-explorer-theme'] === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg;
+  const bgColor = 'surfaceTertiary';
+
   return (
     <StyledWrapper bg={bgColor} className="wrapper-with-bg">
       {children}
@@ -106,7 +94,7 @@ export function PageWrapper({
           >
             {children}
           </Stack>
-          {/* <NewFooter /> */}
+          <NewFooter />
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />
