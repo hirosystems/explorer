@@ -24,7 +24,7 @@ export function AddressPageLayout(props: GridProps) {
   );
 }
 
-export default function AddressPage({ params: { principal } }: any) {
+export default function AddressPage({ principal }: { principal: string }) {
   const { data: balance } = useSuspenseAccountBalance(principal);
   const { data: nonces } = useAddressNonces({ address: principal });
 

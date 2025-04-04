@@ -13,11 +13,8 @@ import { Text } from '../../../ui/Text';
 import { PageTitle } from '../../_components/PageTitle';
 import { TokenTabs } from './Tabs';
 import { TokenInfo } from './TokenInfo';
+import { RISKY_TOKENS, VERIFIED_TOKENS, legitsBTCDerivatives } from './consts';
 import { TokenInfoProps } from './types';
-
-const RISKY_TOKENS = ['SP1J45NVEGQ7ZA4M57TGF0RAB00TMYCYG00X8EF5B.granite-btc'];
-const legitsBTCDerivatives = ['SP2VCQJGH7PHP2DJK7Z0V48AGBHQAW3R3ZW1QF4N.zsbtc-token'];
-export const VERIFIED_TOKENS = ['SP2EEV5QBZA454MSMW9W3WJNRXVJF36VPV17FFKYH.DROID'];
 
 const WarningMessage = ({ text }: { text: string | ReactNode }) => {
   return (
@@ -83,7 +80,7 @@ export default function PageClient({
     }
 
     return null;
-  }, [hasSBTCInName, isRisky, isSBTC]);
+  }, [hasSBTCInName, isRisky, isSBTC, tokenId]);
 
   return (
     <>

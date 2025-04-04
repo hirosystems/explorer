@@ -1,6 +1,9 @@
 'use client';
 
-import { FlexProps } from '@chakra-ui/react';
+import { RISKY_NFTS } from '@/app/token/[tokenId]/consts';
+import { isRiskyNFTContract } from '@/app/token/[tokenId]/utils';
+import { Flex, FlexProps, Icon } from '@chakra-ui/react';
+import { Warning } from '@phosphor-icons/react';
 import React from 'react';
 
 import { NonFungibleTokenHolding } from '@stacks/stacks-blockchain-api-types/generated';
@@ -72,7 +75,21 @@ export const TokenAssetListItem: React.FC<TokenAssetListItemProps> = ({
           ) : (
             <FtTokenAmount amount={amount} contractId={contractId} />
           ),
-        subtitle: null,
+        subtitle:
+          tokenType === 'non_fungible_tokens' &&
+          (isRiskyNFTContract(contractId) || RISKY_NFTS.includes(contractId)) ? (
+            <Flex
+              px={1.5}
+              py={1}
+              bg="red.200"
+              borderRadius="2xl"
+              border="1px solid var(--stacks-colors-red-500)"
+            >
+              <Icon h={3} w={3} color="red.600">
+                <Warning />
+              </Icon>
+            </Flex>
+          ) : null,
       }}
     />
   );

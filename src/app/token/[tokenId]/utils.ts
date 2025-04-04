@@ -1,6 +1,8 @@
+import { validateStacksContractId } from '@/common/utils/utils';
 import { ArrowSquareOut, DiscordLogo, TelegramLogo, TwitterLogo } from '@phosphor-icons/react';
 
 import StxIcon from '../../../ui/icons/StxIcon';
+import { RISKY_NFT_RULES } from './consts';
 
 export const isExplorerLink = (url: string) => {
   return url.includes('explorer.stacks.co') || url.includes('explorer.hiro.so');
@@ -30,3 +32,14 @@ export const getLinkIcon = (url: string) => {
   }
   return ArrowSquareOut;
 };
+
+/**
+ * Checks if a contract name matches any of the risky NFT patterns
+ * @param contractName The contract name to check
+ * @returns True if the contract name matches any risky pattern, false otherwise
+ */
+export function isRiskyNFTContract(contractName: string): boolean {
+  if (!contractName || !validateStacksContractId(contractName)) return false;
+
+  return RISKY_NFT_RULES.some(rule => rule.test(contractName));
+}

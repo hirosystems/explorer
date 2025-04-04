@@ -30,7 +30,7 @@ const BlockTxsList = dynamic(
   }
 );
 
-export default function BlockPage({ params: { hash } }: any) {
+export default function BlockPage({ hash }: { hash: string }) {
   const { data: block } = useSuspenseBlockByHeightOrHash(hash);
   const title = (block && `STX Block #${block.height.toLocaleString()}`) || '';
   const { open, onToggle } = useDisclosure();

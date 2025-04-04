@@ -1,4 +1,4 @@
-import { VERIFIED_TOKENS } from '@/app/token/[tokenId]/PageClient';
+import { RISKY_TOKENS, VERIFIED_TOKENS } from '@/app/token/[tokenId]/consts';
 import { Flex, Icon, Table } from '@chakra-ui/react';
 import { FtBasicMetadataResponse } from '@hirosystems/token-metadata-api-client';
 import { SealCheck, Warning } from '@phosphor-icons/react';
@@ -34,7 +34,7 @@ export const TokenRow: FC<{
         </Flex>
       );
     }
-    if (hasSBTCInName && !isSBTC) {
+    if ((hasSBTCInName && !isSBTC) || RISKY_TOKENS.includes(ftToken.contract_principal)) {
       return (
         <Flex
           px={1.5}
