@@ -4,14 +4,11 @@ import { isRedesignUrl } from '@/common/utils/url-utils';
 import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
-import { useCookies } from 'react-cookie';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { Footer } from './Footer';
-import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
 import { NavBar as NewNavBar } from './NewNavBar/NavBar';
@@ -55,22 +52,8 @@ function WrapperWithBg({
   children: ReactNode;
   serverThemeCookie: string;
 }) {
-  const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
-  const isServer = typeof window === 'undefined';
-  const isRedesign = isRedesignUrl();
-  const bgColor = isRedesign
-    ? 'surfaceTertiary'
-    : isServer
-      ? serverThemeCookie
-        ? serverThemeCookie === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg
-      : clientThemeCookie['stacks-explorer-theme']
-        ? clientThemeCookie['stacks-explorer-theme'] === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg;
+  const bgColor = 'surfaceTertiary';
+
   return (
     <StyledWrapper bg={bgColor} className="wrapper-with-bg">
       {children}
@@ -100,7 +83,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
+          <NewNavBar />
           <Stack
             marginTop={'120px'} // TODO: setting this to 30 doesn't work. fix this
             mb={8}
@@ -108,7 +91,7 @@ export function PageWrapper({
           >
             {children}
           </Stack>
-          {isRedesign ? <NewFooter /> : <Footer />}
+          <NewFooter />
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />
