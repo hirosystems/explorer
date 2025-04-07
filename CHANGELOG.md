@@ -1,3 +1,10 @@
+# [1.269.0](https://github.com/hirosystems/explorer/compare/v1.268.0...v1.269.0) (2025-04-07)
+
+
+### Features
+
+* homepage - ssr - recent blocks ([621a310](https://github.com/hirosystems/explorer/commit/621a31033dc60b6a0ee16842124ec101951da388))
+
 # [1.268.0](https://github.com/hirosystems/explorer/compare/v1.267.0...v1.268.0) (2025-04-04)
 
 
