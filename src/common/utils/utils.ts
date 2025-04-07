@@ -413,20 +413,24 @@ export const abbreviateNumber = (value: number, decimals?: number) => {
   const tril = 1e12;
   const quadril = 1e15;
 
-  if (value >= quadril) {
-    return formatNumber(value, quadril, 'Q', 2);
-  }
-  if (value >= tril) {
-    return formatNumber(value, tril, 'T', 2);
-  }
-  if (value >= bil) {
-    return formatNumber(value, bil, 'B', 2);
-  }
-  if (value >= mil) {
-    return formatNumber(value, mil, 'M', 2);
+  const isNegative = value < 0;
+  const absValue = Math.abs(value);
+
+  let result;
+
+  if (absValue >= quadril) {
+    result = formatNumber(absValue, quadril, 'Q', decimals ?? 2);
+  } else if (absValue >= tril) {
+    result = formatNumber(absValue, tril, 'T', decimals ?? 2);
+  } else if (absValue >= bil) {
+    result = formatNumber(absValue, bil, 'B', decimals ?? 2);
+  } else if (absValue >= mil) {
+    result = formatNumber(absValue, mil, 'M', decimals ?? 2);
+  } else {
+    result = formatNumber(absValue, 1, '', decimals);
   }
 
-  return formatNumber(value, 1, '', decimals);
+  return isNegative ? '-' + result : result;
 };
 
 export function microStxToStx(microStx: string | number): number | string {

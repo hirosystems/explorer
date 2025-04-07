@@ -2,10 +2,8 @@ import { Timeframe } from '@/common/components/TimeframeSelector';
 import { createContext, useContext, useState } from 'react';
 
 export enum Chart {
-  dailyTransactions = 'Daily transactions',
+  dailyTransactions = 'Transactions',
   blocksMined = 'Blocks mined',
-  contractsDeployed = 'Contracts deployed',
-  activeAddresses = 'Active addresses',
 }
 
 interface NetworkOverviewContextType {
