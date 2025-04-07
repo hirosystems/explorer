@@ -17,12 +17,12 @@ export function SectionHeader() {
         <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
           Network Overview
         </Text>
-        <TimeframeSelector
+        {/* <TimeframeSelector
           selectedTimeframe={selectedTimeframe}
           setSelectedTimeframe={setSelectedTimeframe}
-        />
+        /> */}
       </HStack>
-      <Link
+      {/* <Link
         href={buildUrl('/', network)}
         variant={'buttonLink'}
         size={'lg'}
@@ -34,7 +34,7 @@ export function SectionHeader() {
         <Icon w={3.5} h={3.5} aria-hidden="true">
           <ArrowRight />
         </Icon>
-      </Link>
+      </Link> */}
     </HStack>
   );
 }

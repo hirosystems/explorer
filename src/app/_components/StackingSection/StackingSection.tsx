@@ -1,3 +1,9 @@
+'use client';
+
+import { useHomePageData } from '@/app/home-redesign/context';
+import { formatDateShort } from '@/common/date-utils';
+import { MICROSTACKS_IN_STACKS, abbreviateNumber } from '@/common/utils/utils';
+import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
@@ -63,11 +69,11 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 }
 
 function CycleHeader() {
+  const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
-    <Stack gap="3">
+    <Stack gap="2">
       <HStack justify={'space-between'} align={'flex-start'}>
         <Text textStyle={'heading-xs'}>Current cycle</Text>
-
         <HStack
           borderRadius={'redesign.lg'}
           gap={2}
@@ -80,7 +86,9 @@ function CycleHeader() {
           <Icon w="4" h="4" color={'feedback.green-500'}>
             <ProgressDot />
           </Icon>
-          <Text textStyle={'heading-xs'}>Ends in 9 days</Text>
+          <Text textStyle={'heading-xs'}>
+            Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
+          </Text>
         </HStack>
       </HStack>
       <HStack
@@ -93,26 +101,31 @@ function CycleHeader() {
         width="fit-content"
       >
         <Text textStyle={'heading-lg'} lineHeight={'redesign.none'}>
-          123
+          {cycleId}
         </Text>
-        <Icon w="6" h="6">
+        {/* <Icon w="6" h="6">
           <ArrowRight />
-        </Icon>
+        </Icon> */}
       </HStack>
     </Stack>
   );
 }
 
 function StxStats() {
+  const {
+    stackingCycle: { stackedStx },
+    stxPrice,
+  } = useHomePageData();
+  const stackedStxUsdValueFormatted = `$${Math.round(stxPrice * stackedStx).toLocaleString()}`;
   return (
     <HStack color="textPrimary">
       <Icon w="4.5" h="4.5">
         <StxIcon />
       </Icon>
       <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
-        451,363,561 STX{' '}
+        ${abbreviateNumber(stackedStx)} STX{' '}
         <Text color="textSecondary" display={'inline'}>
-          / $1.1M
+          / {stackedStxUsdValueFormatted}
         </Text>{' '}
         stacked
       </Text>
@@ -121,6 +134,9 @@ function StxStats() {
 }
 
 function CycleProgress() {
+  const {
+    stackingCycle: { approximateStartTimestamp, approximateEndTimestamp, progressPercentage },
+  } = useHomePageData();
   return (
     <Stack gap={4}>
       <Stack gap={1}>
@@ -132,7 +148,7 @@ function CycleProgress() {
             Ends
           </Text>
         </HStack>
-        <ProgressBar percentage={50} />
+        <ProgressBar percentage={progressPercentage} />
       </Stack>
       <HStack justify={'space-between'}>
         <Text
@@ -143,7 +159,7 @@ function CycleProgress() {
           px={2}
           py={1}
         >
-          5 Sept.
+          ~ {formatDateShort(approximateStartTimestamp)}
         </Text>
         <Text
           textStyle={'text-medium-xs'}
@@ -153,7 +169,7 @@ function CycleProgress() {
           px={2}
           py={0.5}
         >
-          12 Sept.
+          ~ {formatDateShort(approximateEndTimestamp)}
         </Text>
       </HStack>
     </Stack>
@@ -199,15 +215,18 @@ function BlockInfo({
 }
 
 function BlocksSection() {
+  const {
+    stackingCycle: { startBlockHeight, endBlockHeight },
+  } = useHomePageData();
   return (
     <HStack justify={'space-between'} align={'flex-start'}>
       <Flex gap={1.5} flexWrap={'wrap'}>
-        <BlockInfo blockHeight="#2222222" type="bitcoin" />
-        <BlockInfo blockHeight="#1111111" type="stacks" />
+        <BlockInfo blockHeight={`~#${startBlockHeight}`} type="bitcoin" />
+        {/* <BlockInfo blockHeight="#1111111" type="stacks" /> */}
       </Flex>
       <Flex gap={1.5} flexWrap={'wrap'} justify={'flex-end'}>
-        <BlockInfo blockHeight="#2222222" type="bitcoin" isActive={false} />
-        <BlockInfo blockHeight="#1111111" type="stacks" isActive={false} />
+        <BlockInfo blockHeight={`~#${endBlockHeight}`} type="bitcoin" />
+        {/* <BlockInfo blockHeight="#1111111" type="stacks" isActive={false} /> */}
       </Flex>
     </HStack>
   );
@@ -215,14 +234,35 @@ function BlocksSection() {
 
 export function StackingSection() {
   return (
-    <Stack borderRadius={'redesign.xl'} w="100%" bg="surfacePrimary" p="6" gap={6}>
-      <Stack gap="4">
-        <CycleHeader />
-        <StxStats />
-      </Stack>
-      <Stack gap={4}>
-        <CycleProgress />
-        <BlocksSection />
+    <Stack w="100%" gap={4} flex={1}>
+      <HStack align="center" justify={'space-between'}>
+        <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
+          Stacking
+        </Text>
+        {/* <Link
+          href={'#'}
+          variant={'buttonLink'}
+          size={'lg'}
+          aria-label="View analytics"
+          display="inline-flex"
+          gap={1}
+          mr={3}
+        >
+          View Stacking data
+          <Icon w={3.5} h={3.5} aria-hidden="true">
+            <ArrowRight />
+          </Icon>
+        </Link> */}
+      </HStack>
+      <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" p="6" gap={6}>
+        <Stack gap={2.5}>
+          <CycleHeader />
+          <StxStats />
+        </Stack>
+        <Stack gap={3}>
+          <CycleProgress />
+          <BlocksSection />
+        </Stack>
       </Stack>
     </Stack>
   );

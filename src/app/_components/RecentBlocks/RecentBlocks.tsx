@@ -1,6 +1,7 @@
 'use client';
 
-import { HStack, Icon, VisuallyHidden } from '@chakra-ui/react';
+import { Text } from '@/ui/Text';
+import { HStack, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
@@ -16,7 +17,10 @@ export function RecentBlocks() {
   const network = useGlobalContext().activeNetwork;
 
   return (
-    <section aria-label="Recent blocks">
+    <Stack aria-label="Recent blocks" gap={4}>
+      <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
+        Recent blocks
+      </Text>
       <TabsRoot
         variant={'primary'}
         size={'redesignMd'}
@@ -83,6 +87,6 @@ export function RecentBlocks() {
           </Icon>
         </Link>
       </TabsRoot>
-    </section>
+    </Stack>
   );
 }
