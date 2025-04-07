@@ -1,3 +1,8 @@
+'use client';
+
+import { useHomePageData } from '@/app/home-redesign/context';
+import { formatDateShort } from '@/common/utils/date-utils';
+import { abbreviateNumber } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
@@ -5,7 +10,6 @@ import ProgressDot from '@/ui/icons/ProgressDot';
 import StxIcon from '@/ui/icons/StxIcon';
 import StxSquareIcon from '@/ui/icons/StxSquareIcon';
 import { Box, BoxProps, Flex, HStack, Icon, Stack } from '@chakra-ui/react';
-import { ArrowRight } from '@phosphor-icons/react';
 
 function ProgressKnob({ diameter, ...boxProps }: { diameter: number } & BoxProps) {
   return (
@@ -63,13 +67,13 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 }
 
 function CycleHeader() {
+  const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
-    <Stack gap="3">
-      <HStack justify={'space-between'} align={'flex-start'}>
+    <Stack gap="2">
+      <HStack justify={'space-between'} align={['center', 'flex-start']}>
         <Text textStyle={'heading-xs'}>Current cycle</Text>
-
         <HStack
-          borderRadius={'redesign.lg'}
+          borderRadius={['redesign.md', 'redesign.lg']}
           gap={2}
           color="textPrimary"
           boxShadow={'elevation1'}
@@ -80,11 +84,13 @@ function CycleHeader() {
           <Icon w="4" h="4" color={'feedback.green-500'}>
             <ProgressDot />
           </Icon>
-          <Text textStyle={'heading-xs'}>Ends in 9 days</Text>
+          <Text textStyle={['text-medium-sm', 'heading-xs']}>
+            Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
+          </Text>
         </HStack>
       </HStack>
       <HStack
-        borderRadius={'redesign.2xl'}
+        borderRadius={['redesign.xl', 'redesign.2xl']}
         gap={1.5}
         color="textPrimary"
         bg="surfaceTertiary"
@@ -92,27 +98,28 @@ function CycleHeader() {
         py="2"
         width="fit-content"
       >
-        <Text textStyle={'heading-lg'} lineHeight={'redesign.none'}>
-          123
+        <Text textStyle={['heading-md', 'heading-lg']} lineHeight={'redesign.none'}>
+          {cycleId}
         </Text>
-        <Icon w="6" h="6">
-          <ArrowRight />
-        </Icon>
       </HStack>
     </Stack>
   );
 }
 
 function StxStats() {
+  const {
+    stackingCycle: { stackedStx },
+    stxPrice,
+  } = useHomePageData();
   return (
-    <HStack color="textPrimary">
+    <HStack color="textPrimary" gap={[0.5, 1]}>
       <Icon w="4.5" h="4.5">
         <StxIcon />
       </Icon>
       <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
-        451,363,561 STX{' '}
+        ${abbreviateNumber(stackedStx, 1)} STX{' '}
         <Text color="textSecondary" display={'inline'}>
-          / $1.1M
+          / ${abbreviateNumber(Math.round(stxPrice * stackedStx), 1)}
         </Text>{' '}
         stacked
       </Text>
@@ -121,6 +128,9 @@ function StxStats() {
 }
 
 function CycleProgress() {
+  const {
+    stackingCycle: { approximateStartTimestamp, approximateEndTimestamp, progressPercentage },
+  } = useHomePageData();
   return (
     <Stack gap={4}>
       <Stack gap={1}>
@@ -132,7 +142,7 @@ function CycleProgress() {
             Ends
           </Text>
         </HStack>
-        <ProgressBar percentage={50} />
+        <ProgressBar percentage={progressPercentage} />
       </Stack>
       <HStack justify={'space-between'}>
         <Text
@@ -143,7 +153,7 @@ function CycleProgress() {
           px={2}
           py={1}
         >
-          5 Sept.
+          ~ {formatDateShort(approximateStartTimestamp)}
         </Text>
         <Text
           textStyle={'text-medium-xs'}
@@ -153,7 +163,7 @@ function CycleProgress() {
           px={2}
           py={0.5}
         >
-          12 Sept.
+          ~ {formatDateShort(approximateEndTimestamp)}
         </Text>
       </HStack>
     </Stack>
@@ -199,15 +209,16 @@ function BlockInfo({
 }
 
 function BlocksSection() {
+  const {
+    stackingCycle: { startBlockHeight, endBlockHeight },
+  } = useHomePageData();
   return (
     <HStack justify={'space-between'} align={'flex-start'}>
       <Flex gap={1.5} flexWrap={'wrap'}>
-        <BlockInfo blockHeight="#2222222" type="bitcoin" />
-        <BlockInfo blockHeight="#1111111" type="stacks" />
+        <BlockInfo blockHeight={`~#${startBlockHeight}`} type="bitcoin" />
       </Flex>
       <Flex gap={1.5} flexWrap={'wrap'} justify={'flex-end'}>
-        <BlockInfo blockHeight="#2222222" type="bitcoin" isActive={false} />
-        <BlockInfo blockHeight="#1111111" type="stacks" isActive={false} />
+        <BlockInfo blockHeight={`~#${endBlockHeight}`} type="bitcoin" />
       </Flex>
     </HStack>
   );
@@ -215,14 +226,21 @@ function BlocksSection() {
 
 export function StackingSection() {
   return (
-    <Stack borderRadius={'redesign.xl'} w="100%" bg="surfacePrimary" p="6" gap={6}>
-      <Stack gap="4">
-        <CycleHeader />
-        <StxStats />
-      </Stack>
-      <Stack gap={4}>
-        <CycleProgress />
-        <BlocksSection />
+    <Stack w="100%" gap={4} flex={1}>
+      <HStack align="center" justify={'space-between'}>
+        <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
+          Stacking
+        </Text>
+      </HStack>
+      <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
+        <Stack gap={2.5}>
+          <CycleHeader />
+          <StxStats />
+        </Stack>
+        <Stack gap={3}>
+          <CycleProgress />
+          <BlocksSection />
+        </Stack>
       </Stack>
     </Stack>
   );

@@ -44,7 +44,6 @@ describe('removeTrailingSlash', () => {
 });
 
 describe('abbreviateNumber', () => {
-  // Test regular numbers (no abbreviation needed)
   test('handles regular numbers', () => {
     expect(abbreviateNumber(0)).toBe('0');
     expect(abbreviateNumber(1)).toBe('1');
@@ -55,7 +54,6 @@ describe('abbreviateNumber', () => {
     expect(abbreviateNumber(999999)).toBe('999,999');
   });
 
-  // // Test millions
   test('handles millions correctly', () => {
     expect(abbreviateNumber(1000000)).toBe('1M');
     expect(abbreviateNumber(1100000)).toBe('1.1M');
@@ -66,7 +64,6 @@ describe('abbreviateNumber', () => {
     expect(abbreviateNumber(999900000)).toBe('999.9M');
   });
 
-  // // Test billions
   test('handles billions correctly', () => {
     expect(abbreviateNumber(1000000000)).toBe('1B');
     expect(abbreviateNumber(1100000000)).toBe('1.1B');
@@ -76,7 +73,6 @@ describe('abbreviateNumber', () => {
     expect(abbreviateNumber(999900000000)).toBe('999.9B');
   });
 
-  // // Test trillions
   test('handles trillions correctly', () => {
     expect(abbreviateNumber(1000000000000)).toBe('1T');
     expect(abbreviateNumber(1100000000000)).toBe('1.1T');
@@ -84,7 +80,6 @@ describe('abbreviateNumber', () => {
     expect(abbreviateNumber(9900000000000)).toBe('9.9T');
   });
 
-  // Test decimal numbers
   test('handles decimal numbers correctly', () => {
     expect(abbreviateNumber(1.23)).toBe('1.23');
     expect(abbreviateNumber(1.2345)).toBe('1.2345');
@@ -92,7 +87,6 @@ describe('abbreviateNumber', () => {
     expect(abbreviateNumber(1000000.23)).toBe('1M');
   });
 
-  // Test small numbers
   test('handles small numbers correctly', () => {
     expect(abbreviateNumber(0.1)).toBe('0.1');
     expect(abbreviateNumber(0.01)).toBe('0.01');
@@ -100,35 +94,42 @@ describe('abbreviateNumber', () => {
     expect(abbreviateNumber(0.0001)).toBe('0.0001');
   });
 
-  // Test edge cases
   test('handles edge cases correctly', () => {
-    expect(abbreviateNumber(999999999)).toBe('1,000M'); // TODO: fix. This should round up to 1B
-    expect(abbreviateNumber(999499999)).toBe('999.5M'); // Should stay in millions
-    expect(abbreviateNumber(1000000000000000)).toBe('1Q'); // Quadrillion
+    expect(abbreviateNumber(999999999)).toBe('1,000M');
+    expect(abbreviateNumber(999499999)).toBe('999.5M');
+    expect(abbreviateNumber(1000000000000000)).toBe('1Q');
     expect(abbreviateNumber(0)).toBe('0');
   });
 
-  // test('handles negative numbers correctly', () => {
-  //   expect(abbreviateNumber(-1000000)).toBe('-1M'); // TODO: fix. This should be -1M
-  //   expect(abbreviateNumber(-1000000000)).toBe('-1B'); // TODO: fix. This should be -1B
-  // });
+  test('handles custom decimal', () => {
+    expect(abbreviateNumber(1234567, 0)).toBe('1M');
+    expect(abbreviateNumber(1234567, 1)).toBe('1.2M');
+    expect(abbreviateNumber(1234567, 3)).toBe('1.235M');
 
-  // Test with specific decimal places
-  // test('handles custom decimal places correctly', () => {
-  //   expect(abbreviateNumber(1234567, 3)).toBe('1.235M'); // TODO: fix. We should be able to pass in a decimal argument that does something when the number is >= 1M
-  //   expect(abbreviateNumber(1234567, 1)).toBe('1.23M');
-  //   expect(abbreviateNumber(1234567, 0)).toBe('1M');
-  //   expect(abbreviateNumber(1234.5678, 2)).toBe('1,234.57');
-  // });
+    expect(abbreviateNumber(1234567890, 0)).toBe('1B');
+    expect(abbreviateNumber(1234567890, 1)).toBe('1.2B');
+    expect(abbreviateNumber(1234567890, 3)).toBe('1.235B');
 
-  // Test number formatting
+    expect(abbreviateNumber(1234567890123, 0)).toBe('1T');
+    expect(abbreviateNumber(1234567890123, 1)).toBe('1.2T');
+    expect(abbreviateNumber(1234567890123, 3)).toBe('1.235T');
+
+    expect(abbreviateNumber(1234567890123456, 0)).toBe('1Q');
+    expect(abbreviateNumber(1234567890123456, 1)).toBe('1.2Q');
+    expect(abbreviateNumber(1234567890123456, 3)).toBe('1.235Q');
+  });
+
+  test('handles negative numbers correctly', () => {
+    expect(abbreviateNumber(-1000000)).toBe('-1M');
+    expect(abbreviateNumber(-1000000000)).toBe('-1B');
+  });
+
   test('formats numbers with correct separators', () => {
     expect(abbreviateNumber(1234567890)).toBe('1.23B');
     expect(abbreviateNumber(1234567)).toBe('1.23M');
     expect(abbreviateNumber(12345)).toBe('12,345');
   });
 
-  // Test trailing zeros
   test('handles trailing zeros correctly', () => {
     expect(abbreviateNumber(1000000.0)).toBe('1M');
     expect(abbreviateNumber(1100000.0)).toBe('1.1M');

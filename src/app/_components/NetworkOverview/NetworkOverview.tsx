@@ -1,3 +1,6 @@
+'use client';
+
+import { useHomePageData } from '@/app/home-redesign/context';
 import { useColorMode } from '@/components/ui/color-mode';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
@@ -14,50 +17,32 @@ import {
 import { SectionHeader } from './SectionHeader';
 
 function NetworkOverviewChart() {
+  const {
+    initialRecentBlocks: { stxBlocksCountPerBtcBlock },
+  } = useHomePageData();
   const { selectedChart, setSelectedChart } = useNetworkOverviewContext();
   const { colorMode } = useColorMode();
 
-  const chartDataStub = useMemo(() => {
-    const today = new Date();
+  const chartData = useMemo(() => {
+    return stxBlocksCountPerBtcBlock.map(item => {
+      const date = new Date(Number(item.burn_block_time) * 1000);
 
-    return Array.from({ length: 36 }, (_, i) => {
-      const minutesFromMidnight = i * 40;
-      const hours = Math.floor(minutesFromMidnight / 60);
-      const minutes = minutesFromMidnight % 60;
-
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
       const isPM = hours >= 12 && hours < 24;
       const displayHour = hours % 12 === 0 ? 12 : hours % 12;
-
       const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
       const timeString = `${displayHour}:${formattedMinutes} ${isPM ? 'PM' : 'AM'}`;
-
-      const date = new Date(today);
-      date.setHours(hours);
-      date.setMinutes(minutes);
-
-      const position = i / 36;
-      const sineWave = Math.sin(position * Math.PI * 2);
-      const upwardTrend = position * 0.4;
-      const randomFactor = 0.2;
-
-      const baseTransactions = 1250 * (1 + upwardTrend) + sineWave * 600;
-      const baseBlocks = 125 * (1 + upwardTrend) + sineWave * 50;
-      const baseContracts = 60 * (1 + upwardTrend) + sineWave * 25;
-      const baseAddresses = 2250 * (1 + upwardTrend) + sineWave * 800;
 
       return {
         time: timeString,
         date: date,
         fullDate: date.toISOString(),
-        dailyTransactions: Math.floor(
-          baseTransactions * (1 + (Math.random() - 0.5) * randomFactor)
-        ),
-        blocksMined: Math.floor(baseBlocks * (1 + (Math.random() - 0.5) * randomFactor)),
-        contractsDeployed: Math.floor(baseContracts * (1 + (Math.random() - 0.5) * randomFactor)),
-        activeAddresses: Math.floor(baseAddresses * (1 + (Math.random() - 0.5) * randomFactor)),
+        blocksMined: item.stx_blocks_count,
+        dailyTransactions: item.total_tx_count,
       };
     });
-  }, []);
+  }, [stxBlocksCountPerBtcBlock]);
 
   const getChartConfig = (chartType: Chart) => {
     const commonColors = {
@@ -65,7 +50,10 @@ function NetworkOverviewChart() {
         colorMode === 'light'
           ? 'var(--stacks-colors-accent-stacks-400)'
           : 'var(--stacks-colors-accent-stacks-500)',
-      gradientStart: colorMode === 'light' ? '#f2d1c4' : '#4C2510',
+      gradientStart:
+        colorMode === 'light'
+          ? 'var(--stacks-colors-accent-stacks-200)'
+          : 'var(--stacks-colors-accent-stacks-700)',
       gradientEnd: colorMode === 'light' ? '#F3EFEC' : '#1C1815',
     };
 
@@ -75,28 +63,14 @@ function NetworkOverviewChart() {
         ...commonColors,
         name: 'Transactions',
         valueFormatter: (value: number) => value.toLocaleString(),
-        subtitle: '2,307',
+        subtitle: chartData.reduce((sum, item) => sum + item.dailyTransactions, 0).toLocaleString(),
       },
       [Chart.blocksMined]: {
         dataKey: 'blocksMined',
         ...commonColors,
         name: 'Blocks',
         valueFormatter: (value: number) => value.toLocaleString(),
-        subtitle: '241',
-      },
-      [Chart.contractsDeployed]: {
-        dataKey: 'contractsDeployed',
-        ...commonColors,
-        name: 'Contracts',
-        valueFormatter: (value: number) => value.toLocaleString(),
-        subtitle: '2,234',
-      },
-      [Chart.activeAddresses]: {
-        dataKey: 'activeAddresses',
-        ...commonColors,
-        name: 'Addresses',
-        valueFormatter: (value: number) => value.toLocaleString(),
-        subtitle: '4,352',
+        subtitle: chartData.reduce((sum, item) => sum + item.blocksMined, 0).toLocaleString(),
       },
     };
 
@@ -106,14 +80,13 @@ function NetworkOverviewChart() {
   const renderAreaChart = (chartType: Chart) => {
     const config = getChartConfig(chartType);
     const gradientId = 'chartGradient';
-
     const lineColor = 'var(--stacks-colors-redesign-border-secondary)';
 
     return (
       <Box height={48} width="100%">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={chartDataStub}
+            data={chartData}
             key={`area-chart-${chartType}`}
             margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
           >
@@ -140,11 +113,12 @@ function NetworkOverviewChart() {
               axisLine={{ stroke: lineColor }}
               tickLine={false}
               interval="preserveStartEnd"
-              minTickGap={24}
+              minTickGap={10}
               tick={{
                 color: 'var(--stacks-colors-text-secondary)',
                 fill: 'var(--stacks-colors-text-secondary)',
               }}
+              tickCount={6}
               style={{
                 fontFamily: 'var(--font-matter-mono)',
                 fontSize: 'var(--stacks-font-sizes-xs)',
@@ -223,7 +197,7 @@ function NetworkOverviewChart() {
               textAlign="left"
               _groupHover={{ color: chartType === selectedChart ? 'textPrimary' : 'textSecondary' }}
             >
-              {getChartConfig(chartType).subtitle}
+              {getChartConfig(chartType)?.subtitle}
             </Text>
           </TabsTrigger>
         ))}
@@ -240,7 +214,7 @@ function NetworkOverviewChart() {
 export function NetworkOverview() {
   return (
     <NetworkOverviewContextProvider>
-      <Stack w={'100%'} gap={4}>
+      <Stack w={'100%'} gap={4} flex={1}>
         <SectionHeader />
         <NetworkOverviewChart />
       </Stack>

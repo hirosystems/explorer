@@ -102,7 +102,7 @@ export function PageWrapper({
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
           {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
           <Stack
-            marginTop={'120px'} // TODO: setting this to 30 doesn't work. fix this
+            marginTop={isRedesign ? '50px' : '120px'}
             mb={8}
             gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
           >
