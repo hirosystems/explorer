@@ -1,22 +1,15 @@
 'use client';
 
-import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
 import { TxPageFilters } from '@/app/transactions/page';
 import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
-import {
-  microToStacksFormatted,
-  truncateHex,
-  validateStacksContractId,
-} from '@/common/utils/utils';
+import { microToStacksFormatted, truncateHex, validateStacksContractId } from '@/common/utils/utils';
 import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
-import { UTCDate } from '@date-fns/utc';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
-import { InfiniteData } from '@tanstack/react-query';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -82,15 +75,15 @@ export interface TxTableAddressColumnData {
 }
 
 export function formatBlockTime(timestamp: number): string {
-  const date = new UTCDate(timestamp * 1000);
-  const year = date.getUTCFullYear();
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const day = String(date.getUTCDate()).padStart(2, '0');
-  const hours = String(date.getUTCHours()).padStart(2, '0');
-  const minutes = String(date.getUTCMinutes()).padStart(2, '0');
-  const seconds = String(date.getUTCSeconds()).padStart(2, '0');
+  const date = new Date(timestamp * 1000);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
 
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds} (UTC)`;
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 export function getToAddress(tx: Transaction): string {
@@ -174,6 +167,7 @@ export const columns: ColumnDef<TxTableData>[] = [
     header: 'Timestamp',
     accessorKey: TxTableColumns.BlockTime,
     cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
+
     enableSorting: false,
   },
 ];
@@ -238,6 +232,31 @@ export function TxsTable({
   filters: TxPageFilters;
   initialData: GenericResponseType<CompressedTxTableData>;
 }) {
+  useEffect(() => {
+    console.log({ initialData });
+    // const txIds = initialData.results.map(tx => tx.tx_id);
+    // const duplicates = txIds.reduce((acc, txId, index) => {
+    //   const duplicateIndices = txIds
+    //     .map((id, i) => id === txId ? i : -1)
+    //     .filter(i => i !== -1 && i !== index);
+
+    //   if (duplicateIndices.length > 0) {
+    //     acc.push({
+    //       txId,
+    //       indices: [index, ...duplicateIndices]
+    //     });
+    //   }
+    //   return acc;
+    // }, [] as {txId: string, indices: number[]}[]);
+
+    // if (duplicates.length > 0) {
+    //   console.log('Found duplicate transactions:');
+    //   duplicates.forEach(({txId, indices}) => {
+    //     console.log(`TxId ${txId} found at indices:`, indices);
+    //   });
+    // }
+  }, [initialData]);
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: TX_TABLE_PAGE_SIZE,
@@ -260,6 +279,11 @@ export function TxsTable({
       staleTime: THIRTY_SECONDS,
     }
   );
+
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
+
   const { total, results: txs = [] } = data || {};
   const { activeFilters } = useFilterAndSortState();
   const filteredTxs = useMemo(
@@ -270,21 +294,21 @@ export function TxsTable({
 
   const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
-  const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
-  const [newTxsAvailable, setNewTxsAvailable] = useState(false);
-  useSubscribeTxs(isSubscriptionActive, tx => {
-    // Waiting 5 seconds to let the API catch up to the websocket
-    setTimeout(() => {
-      setNewTxsAvailable(true);
-    }, 5000);
-    setIsSubscriptionActive(false);
-  });
+  // const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
+  // const [newTxsAvailable, setNewTxsAvailable] = useState(false);
+  // useSubscribeTxs(isSubscriptionActive, tx => {
+  //   // Waiting 5 seconds to let the API catch up to the websocket
+  //   setTimeout(() => {
+  //     setNewTxsAvailable(true);
+  //   }, 5000);
+  //   setIsSubscriptionActive(false);
+  // });
 
-  useEffect(() => {
-    if (!newTxsAvailable) {
-      setIsSubscriptionActive(true);
-    }
-  }, [newTxsAvailable]);
+  // useEffect(() => {
+  //   if (!newTxsAvailable) {
+  //     setIsSubscriptionActive(true);
+  //   }
+  // }, [newTxsAvailable]);
 
   const rowData: TxTableData[] = useMemo(
     () =>
@@ -343,16 +367,16 @@ export function TxsTable({
         totalRows: total || 0,
         onPageChange: handlePageChange,
       }}
-      bannerRow={
-        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
-          <UpdateTableBannerRow
-            onClick={() => {
-              setNewTxsAvailable(false);
-              refetch();
-            }}
-          />
-        ) : null
-      }
+      // bannerRow={
+      //   newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
+      //     <UpdateTableBannerRow
+      //       onClick={() => {
+      //         setNewTxsAvailable(false);
+      //         refetch();
+      //       }}
+      //     />
+      //   ) : null
+      // }
     />
   );
 }

@@ -48,13 +48,13 @@ const DesktopNavBar = (props: any) => {
     >
       <Flex alignItems="center" gap={4} h="full">
         <Logo logoSize={10} />
-        <PagesSlidingMenu width={50} />
+        {/* <PagesSlidingMenu width={50} /> */}
       </Flex>
       <Flex flexGrow={1} flexShrink={1} maxWidth="507px">
-        <Search
+        {/* <Search
           searchTermFromQueryParams={searchTermFromQueryParams}
           recentResults={recentResults}
-        />
+        /> */}
       </Flex>
       <Flex gap={4}>
         <FeePopover />
