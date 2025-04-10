@@ -1,3 +1,10 @@
+# [1.270.0](https://github.com/hirosystems/explorer/compare/v1.269.0...v1.270.0) (2025-04-10)
+
+
+### Features
+
+* homepage - ssr - stacking and network overview section ([3de7b51](https://github.com/hirosystems/explorer/commit/3de7b512ba94c0c2001fb597d2942f8b91a2772f))
+
 # [1.269.0](https://github.com/hirosystems/explorer/compare/v1.268.0...v1.269.0) (2025-04-07)
 
 
