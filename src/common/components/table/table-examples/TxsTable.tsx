@@ -3,15 +3,18 @@
 import { TxPageFilters } from '@/app/transactions/page';
 import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
-import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
-import { microToStacksFormatted, truncateHex, validateStacksContractId } from '@/common/utils/utils';
+import {
+  microToStacksFormatted,
+  truncateHex,
+  validateStacksContractId,
+} from '@/common/utils/utils';
 import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
-import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -28,6 +31,7 @@ import {
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
 import { TX_TABLE_PAGE_SIZE } from './consts';
+import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 
 export enum TxTableColumns {
   Transaction = 'transaction',
@@ -232,31 +236,6 @@ export function TxsTable({
   filters: TxPageFilters;
   initialData: GenericResponseType<CompressedTxTableData>;
 }) {
-  useEffect(() => {
-    console.log({ initialData });
-    // const txIds = initialData.results.map(tx => tx.tx_id);
-    // const duplicates = txIds.reduce((acc, txId, index) => {
-    //   const duplicateIndices = txIds
-    //     .map((id, i) => id === txId ? i : -1)
-    //     .filter(i => i !== -1 && i !== index);
-
-    //   if (duplicateIndices.length > 0) {
-    //     acc.push({
-    //       txId,
-    //       indices: [index, ...duplicateIndices]
-    //     });
-    //   }
-    //   return acc;
-    // }, [] as {txId: string, indices: number[]}[]);
-
-    // if (duplicates.length > 0) {
-    //   console.log('Found duplicate transactions:');
-    //   duplicates.forEach(({txId, indices}) => {
-    //     console.log(`TxId ${txId} found at indices:`, indices);
-    //   });
-    // }
-  }, [initialData]);
-
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: TX_TABLE_PAGE_SIZE,
@@ -269,20 +248,38 @@ export function TxsTable({
     }));
   }, []);
 
-  const { data, refetch } = useConfirmedTransactions(
+  const { data, refetch, isLoading } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
     { ...filters },
     {
-      placeholderData: (previousData: unknown) => previousData,
+      // queryKey: [
+      //   'tx-table',
+      //   pagination.pageSize,
+      //   pagination.pageIndex * pagination.pageSize,
+      //   filters.fromAddress,
+      //   filters.toAddress,
+      //   filters.startTime,
+      //   filters.endTime,
+      // ],
+      // Don't use placeholderData as it can cause hydration issues
+      // placeholderData: (previousData: unknown) => previousData,
       initialData: () => (pagination.pageIndex === 0 ? initialData : undefined),
+      // Prevent automatic refetching on mount
+      // staleTime: Infinity, // THIRTY_SECONDS,
       staleTime: THIRTY_SECONDS,
+      // cacheTime: 0,
+      gcTime: 0,
+      // Only refetch when explicitly triggered
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     }
   );
 
   useEffect(() => {
-    console.log({ data });
-  }, [data]);
+    console.log({ initialData, data });
+    // }, [initialData, data]);
+  }, []);
 
   const { total, results: txs = [] } = data || {};
   const { activeFilters } = useFilterAndSortState();
@@ -293,6 +290,14 @@ export function TxsTable({
   );
 
   const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
+
+  // Add a render counter
+  const renderCount = useRef(0);
+
+  useEffect(() => {
+    renderCount.current += 1;
+    console.log(`TxsTable rendered ${renderCount.current} times`);
+  });
 
   // const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   // const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -367,6 +372,7 @@ export function TxsTable({
         totalRows: total || 0,
         onPageChange: handlePageChange,
       }}
+      isLoading={isLoading}
       // bannerRow={
       //   newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
       //     <UpdateTableBannerRow

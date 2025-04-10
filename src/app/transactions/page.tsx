@@ -31,11 +31,12 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   });
   const apiUrl = api ? api : getApiUrl(chain || 'mainnet');
   const startTimeRequest = new Date();
-  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`, {
-    // next: {
-    //   revalidate: 10,
-    // },
-  });
+  // const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`, {
+  //   next: {
+  //     revalidate: 10,
+  //   },
+  // });
+  const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`);
   const endTimeRequest = new Date();
   console.log(
     'Time taken to fetch transactions:',

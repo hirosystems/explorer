@@ -2,6 +2,7 @@
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useSearchParams } from 'next/navigation';
 import { ReactNode } from 'react';
 import { CookiesProvider } from 'react-cookie';
@@ -59,7 +60,10 @@ export const Providers = ({
                 queryApiUrl={queryApiUrl}
                 querySubnet={querySubnet}
               >
-                <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+                <QueryClientProvider client={queryClient}>
+                  <ReactQueryDevtools initialIsOpen={true} />
+                  {children}
+                </QueryClientProvider>
               </AppConfig>
             </ReduxProvider>
           </ColorModeProvider>
