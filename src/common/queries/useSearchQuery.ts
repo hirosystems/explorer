@@ -1,6 +1,7 @@
+'use client';
+
 import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
-import { useLocalStorage } from 'web-api-hooks';
 
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';
@@ -238,6 +239,8 @@ const RECENT_RESULTS_KEY = 'recentResults';
 const RECENT_RESULTS_LIMIT = 3;
 
 export function updateRecentResultsLocalStorage(resultItem: FoundResult) {
+  //if (typeof window === 'undefined') return;
+
   const lastFoundResults = JSON.parse(localStorage.getItem(RECENT_RESULTS_KEY) || '[]');
   const filteredResults = lastFoundResults.filter(
     (result: FoundResult) => result.result.entity_id !== resultItem.result.entity_id
@@ -249,6 +252,8 @@ export function updateRecentResultsLocalStorage(resultItem: FoundResult) {
 }
 
 export function getRecentResultsLocalStorage() {
+  if (typeof window === 'undefined') return [];
+
   return JSON.parse(localStorage.getItem(RECENT_RESULTS_KEY) || '[]');
 }
 

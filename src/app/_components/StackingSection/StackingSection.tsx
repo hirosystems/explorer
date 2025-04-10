@@ -69,7 +69,7 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 function CycleHeader() {
   const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
-    <Stack gap="2">
+    <Stack gap="2" flex="1" height="100%" alignSelf="stretch">
       <HStack justify={'space-between'} align={['center', 'flex-start']}>
         <Text textStyle={'heading-xs'}>Current cycle</Text>
         <HStack
@@ -226,12 +226,10 @@ function BlocksSection() {
 
 export function StackingSection() {
   return (
-    <Stack w="100%" gap={4} flex={1}>
-      <HStack align="center" justify={'space-between'}>
-        <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
-          Stacking
-        </Text>
-      </HStack>
+    <Stack gap={4} flex={1}>
+      <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
+        Stacking
+      </Text>
       <Stack borderRadius={'redesign.xl'} bg="surfacePrimary" px={[4, 6]} py={[5, 6]} gap={6}>
         <Stack gap={2.5}>
           <CycleHeader />

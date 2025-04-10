@@ -1,10 +1,10 @@
 import {
-  TxTableColumns,
   TxTableData,
   getAmount,
   getToAddress,
   columns as txTableTanstackColumns,
 } from '@/common/components/table/table-examples/TxsTable';
+import { TxTableColumns } from '@/common/components/table/table-examples/types';
 import { microToStacksFormatted, validateStacksContractId } from '@/common/utils/utils';
 import { ArrowRight } from '@phosphor-icons/react';
 import { ColumnDef } from '@tanstack/react-table';

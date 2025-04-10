@@ -1,5 +1,6 @@
 'use client';
 
+import { PAGE_MAX_WIDTH } from '@/common/constants/constants';
 import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
@@ -99,7 +100,13 @@ export function PageWrapper({
         <CMSStatusBars statusBarContent={statusBarContent} />
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
-        <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
+        <Stack
+          mx="auto"
+          width="full"
+          maxWidth={isRedesign ? '1920px' : PAGE_MAX_WIDTH}
+          p={6}
+          minHeight={'100vh'}
+        >
           {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
           <Stack
             marginTop={isRedesign ? '50px' : '120px'}

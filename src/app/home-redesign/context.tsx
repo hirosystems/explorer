@@ -2,13 +2,24 @@
 
 import { ReactNode, createContext, useContext } from 'react';
 
-import { RecentBlocks, UIStackingCycle } from './data';
+import { MempoolFeePriorities } from '@stacks/stacks-blockchain-api-types';
+
+import { RecentBlocks, UIMempoolStats, UIStackingCycle } from './data';
 
 interface HomePageDataContextType {
   stxPrice: number;
   initialRecentBlocks: RecentBlocks;
   stackingCycle: UIStackingCycle;
+  mempoolFee: MempoolFeePriorities;
+  mempoolStats: UIMempoolStats;
 }
+
+const DEFAULT_MEMPOOL_FEE = {
+  no_priority: 0,
+  low_priority: 0,
+  medium_priority: 0,
+  high_priority: 0,
+};
 
 const DEFAULT_HOME_PAGE_DATA: HomePageDataContextType = {
   stxPrice: 0,
@@ -39,6 +50,20 @@ const DEFAULT_HOME_PAGE_DATA: HomePageDataContextType = {
     startBlockHeight: 0,
     endBlockHeight: 0,
   },
+  mempoolFee: {
+    all: DEFAULT_MEMPOOL_FEE,
+    token_transfer: DEFAULT_MEMPOOL_FEE,
+    smart_contract: DEFAULT_MEMPOOL_FEE,
+    contract_call: DEFAULT_MEMPOOL_FEE,
+  },
+  mempoolStats: {
+    tx_type_counts: {
+      token_transfer: 0,
+      smart_contract: 0,
+      contract_call: 0,
+      poison_microblock: 0,
+    },
+  },
 };
 
 const HomePageDataContext = createContext<HomePageDataContextType>(DEFAULT_HOME_PAGE_DATA);
@@ -48,6 +73,8 @@ interface HomePageDataProviderProps {
   stxPrice?: number;
   initialRecentBlocks?: RecentBlocks;
   stackingCycle?: UIStackingCycle;
+  mempoolFee?: MempoolFeePriorities;
+  mempoolStats?: UIMempoolStats;
 }
 
 export function HomePageDataProvider({
@@ -55,11 +82,15 @@ export function HomePageDataProvider({
   stxPrice = DEFAULT_HOME_PAGE_DATA.stxPrice,
   initialRecentBlocks = DEFAULT_HOME_PAGE_DATA.initialRecentBlocks,
   stackingCycle = DEFAULT_HOME_PAGE_DATA.stackingCycle,
+  mempoolFee = DEFAULT_HOME_PAGE_DATA.mempoolFee,
+  mempoolStats = DEFAULT_HOME_PAGE_DATA.mempoolStats,
 }: HomePageDataProviderProps) {
   const contextValue = {
     stxPrice,
     initialRecentBlocks,
     stackingCycle,
+    mempoolFee,
+    mempoolStats,
   };
 
   return (

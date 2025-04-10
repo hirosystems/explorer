@@ -16,7 +16,6 @@ import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { UTCDate } from '@date-fns/utc';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
-import { InfiniteData } from '@tanstack/react-query';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -35,18 +34,7 @@ import {
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
 import { TX_TABLE_PAGE_SIZE } from './consts';
-
-export enum TxTableColumns {
-  Transaction = 'transaction',
-  TxId = 'txId',
-  TxType = 'txType',
-  From = 'from',
-  ArrowRight = 'arrowRight',
-  To = 'to',
-  Fee = 'fee',
-  Amount = 'amount',
-  BlockTime = 'blockTime',
-}
+import { TxTableColumns } from './types';
 
 export interface TxTableData {
   [TxTableColumns.Transaction]: TxTableTransactionColumnData;
@@ -231,16 +219,24 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
+export interface TxsTableProps {
+  filters: TxPageFilters;
+  initialData: GenericResponseType<CompressedTxTableData>;
+  disablePagination?: boolean;
+  displayColumns?: TxTableColumns[];
+  pageSize?: number;
+}
+
 export function TxsTable({
   filters,
   initialData,
-}: {
-  filters: TxPageFilters;
-  initialData: GenericResponseType<CompressedTxTableData>;
-}) {
+  disablePagination = false,
+  displayColumns,
+  pageSize = TX_TABLE_PAGE_SIZE,
+}: TxsTableProps) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: TX_TABLE_PAGE_SIZE,
+    pageSize,
   });
 
   const handlePageChange = useCallback((page: PaginationState) => {
@@ -260,6 +256,16 @@ export function TxsTable({
       staleTime: THIRTY_SECONDS,
     }
   );
+
+  const tableColumns = useMemo(() => {
+    if (!displayColumns || displayColumns.length === 0) {
+      return columns;
+    }
+    return displayColumns
+      .map(columnId => columns.find(col => col.id === columnId))
+      .filter(Boolean) as ColumnDef<TxTableData>[];
+  }, [displayColumns]);
+
   const { total, results: txs = [] } = data || {};
   const { activeFilters } = useFilterAndSortState();
   const filteredTxs = useMemo(
@@ -333,16 +339,20 @@ export function TxsTable({
   return (
     <Table
       data={rowData}
-      columns={columns}
+      columns={tableColumns}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
       scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
-      pagination={{
-        manualPagination: true,
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
-        totalRows: total || 0,
-        onPageChange: handlePageChange,
-      }}
+      pagination={
+        disablePagination
+          ? undefined
+          : {
+              manualPagination: true,
+              pageIndex: pagination.pageIndex,
+              pageSize: pagination.pageSize,
+              totalRows: total || 0,
+              onPageChange: handlePageChange,
+            }
+      }
       bannerRow={
         newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
           <UpdateTableBannerRow
