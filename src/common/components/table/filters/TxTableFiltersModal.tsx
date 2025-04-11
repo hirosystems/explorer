@@ -28,7 +28,7 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
   return (
     <AccordionRoot
       multiple
-      mt={4}
+      mt={0}
       defaultValue={undefined}
       value={accordions}
       onValueChange={({ value }) => {

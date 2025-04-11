@@ -4,10 +4,9 @@ import { TxPageFilters } from '@/app/transactions/page';
 import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
-import { ValueBasisFilterPopover } from '@/common/components/table/filters/value-basis-filter/ValueBasisPopover';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui/Button';
 import { Text } from '@/ui/Text';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
@@ -21,18 +20,19 @@ const MobileOpenFilterModalButton = () => {
   return (
     <Button
       display={{ base: 'flex', md: 'none' }}
+      py={1.5}
+      px={4}
       onClick={() => dispatch(openModal(MODALS.TxsTableFilters))}
       variant="redesignTertiary"
-      size="big"
       w="full"
       h={10}
     >
       <Flex gap={1.5} alignItems={'center'}>
-        <Text textStyle="text-regular-sm" color="textSecondary">
+        <Text textStyle="text-medium-sm" color="textSecondary">
           Filter
         </Text>
-        <Icon h={3.5} w={3.5}>
-          <Funnel />
+        <Icon h={3.5} w={3.5} color="iconSecondary">
+          <Funnel weight="bold" />
         </Icon>
       </Flex>
     </Button>

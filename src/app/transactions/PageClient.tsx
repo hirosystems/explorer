@@ -1,7 +1,7 @@
 'use client';
 
 import { TxTableFilters } from '@/common/components/table/filters/TxTableFilters';
-import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFitlersModal';
+import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFiltersModal';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { useIsRedesignUrl } from '@/common/utils/url-utils';

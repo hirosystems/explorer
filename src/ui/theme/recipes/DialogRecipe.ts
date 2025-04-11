@@ -35,8 +35,8 @@ export const dialogSlotRecipe = defineSlotRecipe({
         backdrop: {
           backdropFilter: 'blur(4px)',
           bg: {
-            _light: 'black.alpha.200',
-            _dark: 'black.alpha.500',
+            _light: 'alpha.black-alpha-200',
+            _dark: 'alpha.black-alpha-500',
           },
         },
       },

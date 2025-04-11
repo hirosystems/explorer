@@ -2,9 +2,13 @@
 
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { Cube, PhoneCall, PlusMinus, Question } from '@phosphor-icons/react';
+import { ArrowsClockwise, Cube, PhoneCall, Question } from '@phosphor-icons/react';
 
-import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
+import {
+  MempoolTransaction,
+  Transaction,
+  TransactionType,
+} from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatus } from '../constants/constants';
 
@@ -34,9 +38,9 @@ export function getTxTypeIcon(txType: string) {
     case 'smart_contract':
       return <ClarityIcon />;
     case 'tenure_change':
+      return <ArrowsClockwise />;
+    case 'coinbase':
       return <Cube />;
-    case 'all':
-      return <PlusMinus weight="bold" />;
     default:
       return <Question />;
   }
@@ -45,17 +49,15 @@ export function getTxTypeIcon(txType: string) {
 export function getTxTypeLabel(txType: string) {
   switch (txType) {
     case 'token_transfer':
-      return 'Token Transfer';
+      return 'Token transfer';
     case 'contract_call':
-      return 'Contract Call';
+      return 'Contract call';
     case 'smart_contract':
-      return 'Contract Deploy';
+      return 'Contract deploy';
     case 'tenure_change':
-      return 'Tenure Change';
+      return 'Tenure change';
     case 'coinbase':
       return 'Coinbase';
-    case 'all':
-      return 'Average';
     default:
       return 'Unknown';
   }
