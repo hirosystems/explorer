@@ -32,22 +32,11 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   });
   const apiUrl = api ? api : getApiUrl(chain || 'mainnet');
 
-  // TODO: remove
-  const startTimeRequest = new Date();
-
   const response = await fetch(`${apiUrl}/extended/v1/tx/?${params.toString()}`, {
     next: {
       revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
     },
   });
-
-  // TODO: remove
-  const endTimeRequest = new Date();
-  console.log(
-    'Time taken to fetch transactions:',
-    endTimeRequest.getTime() - startTimeRequest.getTime(),
-    'ms'
-  );
 
   const data = await response.json();
   const compressedData = {
@@ -58,10 +47,6 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   const tokenPrice = await getTokenPrice();
 
   const queryClient = new QueryClient();
-
-  queryClient.removeQueries({
-    queryKey: ['confirmedTransactions'],
-  });
 
   // Prefetch the query and store it in the query cache
   await queryClient.prefetchQuery({

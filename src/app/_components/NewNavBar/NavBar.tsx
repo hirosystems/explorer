@@ -51,10 +51,10 @@ const DesktopNavBar = (props: any) => {
         <PagesSlidingMenu />
       </Flex>
       <Flex flexGrow={1} flexShrink={1} maxWidth="507px">
-        {/* <Search
+        <Search
           searchTermFromQueryParams={searchTermFromQueryParams}
           recentResults={recentResults}
-        /> */}
+        />
       </Flex>
       <Flex gap={4}>
         <FeePopover />

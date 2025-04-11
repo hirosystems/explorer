@@ -124,8 +124,6 @@ export function useConfirmedTransactions(
         },
       });
     },
-    // staleTime: TWO_MINUTES,
-    // refetchOnWindowFocus: true,
     ...options,
   });
 }

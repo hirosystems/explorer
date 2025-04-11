@@ -260,11 +260,9 @@ export const TransactionTitleCellRenderer = (value: TxTableTransactionColumnData
   const text = txType ? txTextMap[txType as keyof typeof txTextMap](value) : '';
 
   let content = (
-    // <TxLink txId={txId} variant="tableLink">
-    <EllipsisText textStyle="text-medium-sm">{text}</EllipsisText>
-    // <EllipsisText textStyle="text-medium-sm">{status}</EllipsisText>
-
-    // </TxLink>
+    <TxLink txId={txId} variant="tableLink">
+      <EllipsisText textStyle="text-medium-sm">{text}</EllipsisText>
+    </TxLink>
   );
 
   if (status && status !== 'success') {

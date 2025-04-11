@@ -169,8 +169,7 @@ export const columns: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.BlockTime,
     header: 'Timestamp',
     accessorKey: TxTableColumns.BlockTime,
-    cell: info => TimeStampCellRenderer(info.getValue() as string),
-    // cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
+    cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
     enableSorting: false,
   },
 ];
@@ -241,7 +240,7 @@ export function TxsTable({ filters }: { filters: TxPageFilters }) {
     }));
   }, []);
 
-  const { data, refetch, isLoading } = useConfirmedTransactions(
+  const { data, refetch } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
     { ...filters },
@@ -335,7 +334,6 @@ export function TxsTable({ filters }: { filters: TxPageFilters }) {
         totalRows: total || 0,
         onPageChange: handlePageChange,
       }}
-      isLoading={isLoading}
       bannerRow={
         newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
           <UpdateTableBannerRow
