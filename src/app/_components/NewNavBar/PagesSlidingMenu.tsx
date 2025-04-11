@@ -25,7 +25,7 @@ const getPageLabelFromPath = (path: string): PrimaryPageLabel => {
 const navbarPagesSlidingMenuWidth = 50;
 const triggerHeight = 10;
 
-export const PagesSlidingMenu = ({ width }: { width: number }) => {
+export const PagesSlidingMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const path = usePathname();
   const pageLabel = getPageLabelFromPath(path);
@@ -52,7 +52,7 @@ export const PagesSlidingMenu = ({ width }: { width: number }) => {
 
   return (
     <SlidingMenu
-      width={width}
+      width={navbarPagesSlidingMenuWidth}
       triggerHeight={triggerHeight}
       menuTrigger={
         <Flex gap={6} alignItems="center" justifyContent="space-between">
