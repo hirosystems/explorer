@@ -1,5 +1,5 @@
 import { Box, BoxProps } from '@chakra-ui/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 export const SlidingMenu = ({
   menuTrigger,
@@ -9,11 +9,11 @@ export const SlidingMenu = ({
   menuSlidingMenuProps,
   isOpen: controlledIsOpen,
   onOpenChange,
-  height,
-  width,
+  triggerWidth,
+  triggerHeight,
 }: {
-  height?: number;
-  width: number;
+  triggerWidth: number;
+  triggerHeight: number;
   menuTrigger: React.ReactNode;
   menuTriggerProps?: BoxProps;
   menuContent: React.ReactNode;
@@ -22,18 +22,10 @@ export const SlidingMenu = ({
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
 } & BoxProps) => {
-  const triggerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [menuTriggerHeight, setMenuTriggerHeight] = useState(0);
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const isControlled = controlledIsOpen !== undefined;
   const isOpen = isControlled ? controlledIsOpen : uncontrolledIsOpen;
-
-  useEffect(() => {
-    if (triggerRef.current) {
-      setMenuTriggerHeight(triggerRef.current.offsetHeight);
-    }
-  }, []);
 
   const setIsOpen = useCallback(
     (value: boolean) => {
@@ -46,7 +38,7 @@ export const SlidingMenu = ({
   );
 
   return (
-    <Box position="relative" h={height ?? 'full'} minWidth={width} ref={triggerRef}>
+    <Box position="relative" h={triggerHeight} minWidth={triggerWidth}>
       <Box
         className="sliding-menu"
         onMouseEnter={() => {
@@ -60,9 +52,9 @@ export const SlidingMenu = ({
         overflow="hidden"
         transition="height 0.5s ease"
         height={
-          isOpen && contentRef?.current?.scrollHeight
-            ? `${contentRef?.current?.scrollHeight + menuTriggerHeight}px`
-            : `${menuTriggerHeight}px`
+          !isOpen
+            ? `${triggerHeight * 4}px`
+            : `${contentRef?.current?.scrollHeight ?? 0 + triggerHeight * 4}px`
         }
         position="absolute"
         zIndex="dropdown"
@@ -73,9 +65,8 @@ export const SlidingMenu = ({
       >
         <Box
           className="menu-trigger"
-          h={`${menuTriggerHeight}px`}
-          minWidth={width}
-          boxSizing="border-box"
+          display="flex" // menuTriggerProps doesn't match FlexProps so this has to be a Box
+          alignItems="center"
           {...menuTriggerProps}
         >
           {menuTrigger}
