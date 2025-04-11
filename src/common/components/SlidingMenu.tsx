@@ -68,7 +68,7 @@ export const SlidingMenu = ({
       >
         <Flex
           className="menu-trigger"
-          alignItems='center'
+          alignItems="center"
           // h={`${triggerHeight}px`}
           // minWidth={width}
           // boxSizing="border-box"

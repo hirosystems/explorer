@@ -155,7 +155,11 @@ export const TimeStampCellRenderer = (value: string) => {
         bg: 'surfaceTertiary',
       }}
     >
-      <EllipsisText fontSize="xs" fontFamily="var(--font-matter-mono)" suppressHydrationWarning={true}>
+      <EllipsisText
+        fontSize="xs"
+        fontFamily="var(--font-matter-mono)"
+        suppressHydrationWarning={true}
+      >
         {value}
       </EllipsisText>
     </Flex>
@@ -257,8 +261,8 @@ export const TransactionTitleCellRenderer = (value: TxTableTransactionColumnData
 
   let content = (
     // <TxLink txId={txId} variant="tableLink">
-      <EllipsisText textStyle="text-medium-sm">{text}</EllipsisText>
-      // <EllipsisText textStyle="text-medium-sm">{status}</EllipsisText>
+    <EllipsisText textStyle="text-medium-sm">{text}</EllipsisText>
+    // <EllipsisText textStyle="text-medium-sm">{status}</EllipsisText>
 
     // </TxLink>
   );

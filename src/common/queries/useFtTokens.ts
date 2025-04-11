@@ -78,7 +78,12 @@ export const useSuspenseFtTokens = (
         pageParam,
         DEFAULT_LIST_LIMIT,
         order_by,
-        order
+        order,
+        {
+          query: {
+            valid_metadata_only: true,
+          },
+        }
       ),
     getNextPageParam,
     initialPageParam: 0,

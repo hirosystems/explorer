@@ -1,8 +1,8 @@
 'use client';
 
+import { useSubscribeTxs } from '@/app/_components/BlockList/Sockets/useSubscribeTxs';
 import { TxPageFilters } from '@/app/transactions/page';
-import { CompressedTxTableData } from '@/app/transactions/utils';
-import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
 import {
   microToStacksFormatted,
@@ -14,7 +14,7 @@ import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
 import { ColumnDef, PaginationState } from '@tanstack/react-table';
-import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -31,7 +31,6 @@ import {
   TxTypeCellRenderer,
 } from './TxTableCellRenderers';
 import { TX_TABLE_PAGE_SIZE } from './consts';
-import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 
 export enum TxTableColumns {
   Transaction = 'transaction',
@@ -170,8 +169,8 @@ export const columns: ColumnDef<TxTableData>[] = [
     id: TxTableColumns.BlockTime,
     header: 'Timestamp',
     accessorKey: TxTableColumns.BlockTime,
-    cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
-
+    cell: info => TimeStampCellRenderer(info.getValue() as string),
+    // cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
     enableSorting: false,
   },
 ];
@@ -229,13 +228,7 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
   );
 };
 
-export function TxsTable({
-  filters,
-  initialData,
-}: {
-  filters: TxPageFilters;
-  initialData: GenericResponseType<CompressedTxTableData>;
-}) {
+export function TxsTable({ filters }: { filters: TxPageFilters }) {
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: TX_TABLE_PAGE_SIZE,
@@ -253,33 +246,11 @@ export function TxsTable({
     pagination.pageIndex * pagination.pageSize,
     { ...filters },
     {
-      // queryKey: [
-      //   'tx-table',
-      //   pagination.pageSize,
-      //   pagination.pageIndex * pagination.pageSize,
-      //   filters.fromAddress,
-      //   filters.toAddress,
-      //   filters.startTime,
-      //   filters.endTime,
-      // ],
-      // Don't use placeholderData as it can cause hydration issues
-      // placeholderData: (previousData: unknown) => previousData,
-      initialData: () => (pagination.pageIndex === 0 ? initialData : undefined),
-      // Prevent automatic refetching on mount
-      // staleTime: Infinity, // THIRTY_SECONDS,
+      placeholderData: (previousData: unknown) => previousData,
       staleTime: THIRTY_SECONDS,
-      // cacheTime: 0,
-      gcTime: 0,
-      // Only refetch when explicitly triggered
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
+      gcTime: THIRTY_SECONDS,
     }
   );
-
-  useEffect(() => {
-    console.log({ initialData, data });
-    // }, [initialData, data]);
-  }, []);
 
   const { total, results: txs = [] } = data || {};
   const { activeFilters } = useFilterAndSortState();
@@ -291,29 +262,21 @@ export function TxsTable({
 
   const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
-  // Add a render counter
-  const renderCount = useRef(0);
-
-  useEffect(() => {
-    renderCount.current += 1;
-    console.log(`TxsTable rendered ${renderCount.current} times`);
+  const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
+  const [newTxsAvailable, setNewTxsAvailable] = useState(false);
+  useSubscribeTxs(isSubscriptionActive, tx => {
+    // Waiting 5 seconds to let the API catch up to the websocket
+    setTimeout(() => {
+      setNewTxsAvailable(true);
+    }, 5000);
+    setIsSubscriptionActive(false);
   });
 
-  // const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
-  // const [newTxsAvailable, setNewTxsAvailable] = useState(false);
-  // useSubscribeTxs(isSubscriptionActive, tx => {
-  //   // Waiting 5 seconds to let the API catch up to the websocket
-  //   setTimeout(() => {
-  //     setNewTxsAvailable(true);
-  //   }, 5000);
-  //   setIsSubscriptionActive(false);
-  // });
-
-  // useEffect(() => {
-  //   if (!newTxsAvailable) {
-  //     setIsSubscriptionActive(true);
-  //   }
-  // }, [newTxsAvailable]);
+  useEffect(() => {
+    if (!newTxsAvailable) {
+      setIsSubscriptionActive(true);
+    }
+  }, [newTxsAvailable]);
 
   const rowData: TxTableData[] = useMemo(
     () =>
@@ -373,16 +336,16 @@ export function TxsTable({
         onPageChange: handlePageChange,
       }}
       isLoading={isLoading}
-      // bannerRow={
-      //   newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
-      //     <UpdateTableBannerRow
-      //       onClick={() => {
-      //         setNewTxsAvailable(false);
-      //         refetch();
-      //       }}
-      //     />
-      //   ) : null
-      // }
+      bannerRow={
+        newTxsAvailable && pagination.pageIndex === 0 && !isTableFiltered ? (
+          <UpdateTableBannerRow
+            onClick={() => {
+              setNewTxsAvailable(false);
+              refetch();
+            }}
+          />
+        ) : null
+      }
     />
   );
 }
