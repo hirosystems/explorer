@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { Box, BoxProps } from '@chakra-ui/react';
 import { useCallback, useRef, useState } from 'react';
 
 export const SlidingMenu = ({
@@ -9,12 +9,11 @@ export const SlidingMenu = ({
   menuSlidingMenuProps,
   isOpen: controlledIsOpen,
   onOpenChange,
-  height,
-  width,
+  triggerWidth,
   triggerHeight,
 }: {
-  height?: number;
-  width: number;
+  triggerWidth: number;
+  triggerHeight: number;
   menuTrigger: React.ReactNode;
   menuTriggerProps?: BoxProps;
   menuContent: React.ReactNode;
@@ -22,9 +21,7 @@ export const SlidingMenu = ({
   menuSlidingMenuProps?: BoxProps;
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
-  triggerHeight: number;
 } & BoxProps) => {
-  const triggerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
   const isControlled = controlledIsOpen !== undefined;
@@ -41,7 +38,7 @@ export const SlidingMenu = ({
   );
 
   return (
-    <Box position="relative" h={triggerHeight} minWidth={width} ref={triggerRef}>
+    <Box position="relative" h={triggerHeight} minWidth={triggerWidth}>
       <Box
         className="sliding-menu"
         onMouseEnter={() => {
@@ -67,12 +64,9 @@ export const SlidingMenu = ({
         {...menuSlidingMenuProps}
       >
         <Box
-          display="flex" // menuTriggerProps doesn't match FlexProps
           className="menu-trigger"
+          display="flex" // menuTriggerProps doesn't match FlexProps so this has to be a Box
           alignItems="center"
-          // h={`${triggerHeight}px`}
-          // minWidth={width}
-          // boxSizing="border-box"
           {...menuTriggerProps}
         >
           {menuTrigger}

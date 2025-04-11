@@ -52,7 +52,7 @@ export const PagesSlidingMenu = () => {
 
   return (
     <SlidingMenu
-      width={navbarPagesSlidingMenuWidth}
+      triggerWidth={navbarPagesSlidingMenuWidth}
       triggerHeight={triggerHeight}
       menuTrigger={
         <Flex gap={6} alignItems="center" justifyContent="space-between">
