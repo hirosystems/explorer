@@ -167,14 +167,7 @@ export const FeePopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
       boxShadow={{ base: 'none', lg: isOpen ? 'var(--stacks-shadows-elevation2)' : 'none' }}
     >
       <Tabs.Root defaultValue={tabs[0].id}>
-        <Tabs.List
-          w="full"
-          border={'none'}
-          mb={4}
-          p={0}
-          overflowX={{ base: 'auto', lg: 'hidden' }}
-          minHeight={'auto'}
-        >
+        <Tabs.List w="full" border={'none'} mb={4} p={0} minHeight={'auto'}>
           {tabs.map(tab => (
             <Tabs.Trigger
               key={`${tab.id}-title`}
