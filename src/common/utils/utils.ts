@@ -388,7 +388,10 @@ export function getNextPageParam(lastPage?: GenericResponseType<any>) {
 }
 
 const maxDecimals = 20; // just some arbitrarily large number to preserve precision
-const formatNumber = (num: number, divisor: number, suffix: string, decimals?: number) => {
+export const formatNumber = (num: number, divisor: number, suffix: string, decimals?: number) => {
+  if (num === 0) {
+    return `0${suffix}`;
+  }
   // If decimals is undefined, don't limit decimal places
   if (decimals == null) {
     return `${(num / divisor)

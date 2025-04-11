@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '../transactions';
-import { semanticTokenToCssVar } from '../utils';
+import { formatNumber, semanticTokenToCssVar } from '../utils';
 
 jest.mock('@phosphor-icons/react', () => ({
   PhoneCall: () => <div data-testid="phone-call">PhoneCall</div>,
@@ -123,5 +123,27 @@ describe('getTxTypeIcon', () => {
     const icon = getTxTypeIcon('unknown_type');
     render(<>{icon}</>);
     expect(screen.getByTestId('question')).toBeInTheDocument();
+  });
+});
+
+describe('formatNumber', () => {
+  test('should return "0suffix" when num is 0', () => {
+    expect(formatNumber(0, 1, 'B')).toBe('0B');
+    expect(formatNumber(0, 1000, 'K')).toBe('0K');
+    expect(formatNumber(0, 1000000, 'M', 2)).toBe('0M');
+  });
+
+  test('should format with decimals when provided', () => {
+    expect(formatNumber(1234567, 1000000, 'M', 2)).toBe('1.23M');
+    expect(formatNumber(5432100, 1000000, 'M', 2)).toBe('5.43M');
+    expect(formatNumber(1234, 1000, 'K', 1)).toBe('1.2K');
+    expect(formatNumber(9876, 1000, 'K', 3)).toBe('9.876K');
+  });
+
+  test('should format without specific decimal places when decimals is undefined', () => {
+    const result = formatNumber(1234.5678, 1000, 'K');
+    expect(result).toContain('1.2');
+    expect(result).toContain('K');
+    expect(result).not.toContain('.0K');
   });
 });
