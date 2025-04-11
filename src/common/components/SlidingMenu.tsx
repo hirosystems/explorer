@@ -66,7 +66,8 @@ export const SlidingMenu = ({
         boxShadow={isOpen ? 'var(--stacks-shadows-elevation2)' : 'none'}
         {...menuSlidingMenuProps}
       >
-        <Flex
+        <Box
+          display="flex" // menuTriggerProps doesn't match FlexProps
           className="menu-trigger"
           alignItems="center"
           // h={`${triggerHeight}px`}
@@ -75,7 +76,7 @@ export const SlidingMenu = ({
           {...menuTriggerProps}
         >
           {menuTrigger}
-        </Flex>
+        </Box>
         <Box className="menu-content" ref={contentRef} {...menuContentProps}>
           {menuContent}
         </Box>

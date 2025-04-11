@@ -29,6 +29,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    triggerHeight: 10,
     height: 10,
     width: 200,
     menuTrigger: 'Hover me',
