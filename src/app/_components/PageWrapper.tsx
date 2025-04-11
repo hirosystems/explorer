@@ -1,6 +1,6 @@
 'use client';
 
-import { isRedesignUrl } from '@/common/utils/url-utils';
+import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
@@ -57,7 +57,7 @@ function WrapperWithBg({
 }) {
   const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
   const isServer = typeof window === 'undefined';
-  const isRedesign = isRedesignUrl();
+  const isRedesign = useIsRedesignUrl();
   const bgColor = isRedesign
     ? 'surfaceTertiary'
     : isServer
@@ -89,7 +89,7 @@ export function PageWrapper({
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
 }) {
-  const isRedesign = isRedesignUrl();
+  const isRedesign = useIsRedesignUrl();
 
   return (
     <>
@@ -100,15 +100,15 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {/* {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />} */}
+          {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
           <Stack
-            marginTop={'120px'} // TODO: setting this to 30 doesn't work. fix this
+            marginTop={isRedesign ? '50px' : '120px'}
             mb={8}
             gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
           >
             {children}
           </Stack>
-          {/* {isRedesign ? <NewFooter /> : <Footer />} */}
+          {isRedesign ? <NewFooter /> : <Footer />}
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />
