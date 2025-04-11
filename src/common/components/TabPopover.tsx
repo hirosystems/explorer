@@ -63,7 +63,7 @@ export const TabPopoverTrigger = React.forwardRef<
 
         {open && (
           <Box
-            className="gooseneck"
+            className="tab"
             position="absolute"
             height={mainAxis / 4} // dividing by 4 to account for the fact that the popover root's positioning.offset.mainAxis does not seem to abide my chakra ui's normal scaling of input (*4)
             bottom={-mainAxis / 4}

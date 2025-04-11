@@ -1,5 +1,9 @@
-import { PopoverContent, PopoverRoot, PopoverTrigger } from '@/components/ui/popover';
-import { CurvedCornerIcon } from '@/ui/icons/CurvedCornerIcon';
+import {
+  PositioningOptions,
+  TabPopoverContent,
+  TabPopoverRoot,
+  TabPopoverTrigger,
+} from '@/common/components/TabPopover';
 import { Box, Flex, Icon, Separator, Stack } from '@chakra-ui/react';
 import { GearFine, X } from '@phosphor-icons/react';
 import { useState } from 'react';
@@ -29,30 +33,26 @@ export const SettingsPopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
   );
 };
 
-const gooseNeckHeight = 14; // Increases the height of the popover trigger to meet the lowered popover content
-const gooseNeckAdjustment = 8; // Moves the popover content down
+const POSITIONING: PositioningOptions = {
+  placement: 'bottom-end',
+  offset: {
+    mainAxis: 8,
+  },
+};
 
 export const SettingsPopover = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <PopoverRoot
+    <TabPopoverRoot
       id="settings-popover"
-      positioning={{
-        placement: 'bottom-end',
-        offset: {
-          mainAxis: gooseNeckAdjustment,
-        },
-      }}
+      positioning={POSITIONING}
       open={open}
       onOpenChange={e => setOpen(e.open)}
       unstyled
     >
-      <PopoverTrigger>
+      <TabPopoverTrigger open={open} positioning={POSITIONING}>
         <Box
-          position="relative"
-          height={open ? gooseNeckHeight : 10}
-          transform={open ? `translateY(${gooseNeckAdjustment}px)` : 'none'}
           bg="surfacePrimary"
           borderRadius="redesign.lg"
           borderBottomRadius={open ? 'none' : 'redesign.lg'}
@@ -64,24 +64,11 @@ export const SettingsPopover = () => {
               {open ? <X /> : <GearFine />}
             </Icon>
           </Flex>
-          {open && (
-            <Icon
-              color="var(--stacks-colors-surface-primary)"
-              position="absolute"
-              bottom={'-1px'}
-              left={`${-4 * 4 + 1}px`}
-              h={4}
-              w={4}
-            >
-              <CurvedCornerIcon />
-            </Icon>
-          )}
         </Box>
-      </PopoverTrigger>
-      <PopoverContent zIndex="docked">
-        {/* TODO: needing to set zIndex to docked to fix the issue where the popover is not showing up because the zindex is set to auto is most likely a bug on Chakra UI */}
+      </TabPopoverTrigger>
+      <TabPopoverContent positioning={POSITIONING}>
         <SettingsPopoverContent isOpen={open} />
-      </PopoverContent>
-    </PopoverRoot>
+      </TabPopoverContent>
+    </TabPopoverRoot>
   );
 };

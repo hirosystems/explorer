@@ -1,7 +1,11 @@
-import { PopoverContent, PopoverRoot, PopoverTrigger } from '@/components/ui/popover';
+import {
+  PositioningOptions,
+  TabPopoverContent,
+  TabPopoverRoot,
+  TabPopoverTrigger,
+} from '@/common/components/TabPopover';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
-import { CurvedCornerIcon } from '@/ui/icons/CurvedCornerIcon';
 import StxIcon from '@/ui/icons/StxIcon';
 import { Box, Flex, Icon, Separator, Stack, Tabs } from '@chakra-ui/react';
 import { CaretDown, CaretUp, Info, Lightning } from '@phosphor-icons/react';
@@ -224,21 +228,25 @@ export const FeePopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
   );
 };
 
+const POSITIONING: PositioningOptions = {
+  placement: 'bottom-end',
+  offset: {
+    mainAxis: 8,
+  },
+};
+
 export const FeePopover = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <PopoverRoot
+    <TabPopoverRoot
       id="fee-popover"
-      positioning={{
-        placement: 'bottom-end',
-        gutter: 0,
-      }}
+      positioning={POSITIONING}
       open={open}
       onOpenChange={e => setOpen(e.open)}
       unstyled
     >
-      <PopoverTrigger>
+      <TabPopoverTrigger open={open} positioning={POSITIONING}>
         <Flex
           bg="surfacePrimary"
           borderRadius="redesign.lg"
@@ -250,7 +258,6 @@ export const FeePopover = () => {
           h={10}
           alignItems="center"
           justifyContent="center"
-          position="relative"
           className="group"
           cursor="pointer"
         >
@@ -272,24 +279,11 @@ export const FeePopover = () => {
           <Icon color="textSecondary" _groupHover={{ color: 'textPrimary' }} h={3} w={3}>
             {open ? <CaretUp /> : <CaretDown />}
           </Icon>
-          {open && (
-            <Icon
-              color="var(--stacks-colors-surface-primary)"
-              position="absolute"
-              bottom={'-1px'}
-              left={`${-4 * 4 + 1}px`}
-              h={4}
-              w={4}
-            >
-              <CurvedCornerIcon />
-            </Icon>
-          )}
         </Flex>
-      </PopoverTrigger>
-      <PopoverContent zIndex="docked">
-        {/* TODO: needing to set zIndex to docked to fix the issue where the popover is not showing up because the zindex is set to auto is most likely a bug on Chakra UI */}
+      </TabPopoverTrigger>
+      <TabPopoverContent positioning={POSITIONING}>
         <FeePopoverContent isOpen={open} />
-      </PopoverContent>
-    </PopoverRoot>
+      </TabPopoverContent>
+    </TabPopoverRoot>
   );
 };
