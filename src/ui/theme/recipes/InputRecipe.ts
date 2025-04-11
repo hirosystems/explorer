@@ -39,7 +39,7 @@ export const inputRecipe = defineRecipe({
         bg: 'surfaceTertiary',
         borderColor: 'redesignBorderPrimary',
         borderRadius: 'redesign.md',
-        borderWidth: '2px',
+        borderWidth: '1px',
         color: 'textPrimary',
         _hover: {
           '& .checkbox__label': { color: 'white' },
@@ -49,7 +49,7 @@ export const inputRecipe = defineRecipe({
         },
         _focusVisible: {
           borderColor: { base: '{colors.accent.stacks-200}', _dark: '{colors.accent.stacks-700}' },
-          borderWidth: '2px',
+          borderWidth: '1px',
         },
         _disabled: {
           bg: 'surfaceSecondary',
@@ -61,7 +61,7 @@ export const inputRecipe = defineRecipe({
         },
         _invalid: {
           borderColor: 'feedback.red-500',
-          borderWidth: '2px',
+          borderWidth: '1px',
         },
       },
     },

@@ -50,6 +50,9 @@ const DATE_PICKER_CSS = {
     px: 2,
     pb: 0,
   },
+  '& .react-datepicker-wrapper, .react-datepicker__input-container': {
+    width: 'full',
+  },
   '& .react-datepicker__month': {
     backgroundColor: 'surfaceTertiary',
     margin: 0,
@@ -268,7 +271,6 @@ export function DatePicker({
                           placeholder="Start Date"
                           variant="redesignPrimary"
                           autoComplete="off"
-                          width={DATE_PICKER_WIDTH}
                         />
                       }
                       selected={
@@ -303,7 +305,6 @@ export function DatePicker({
                           placeholder="YYYY-MM-DD"
                           variant="redesignPrimary"
                           autoComplete="off"
-                          width={DATE_PICKER_WIDTH}
                         />
                       }
                       selected={
@@ -339,7 +340,6 @@ export function DatePicker({
                           placeholder="YYYY-MM-DD"
                           variant="redesignPrimary"
                           autoComplete="off"
-                          width={DATE_PICKER_WIDTH}
                         />
                       }
                       onChange={dateRange => {

@@ -52,7 +52,7 @@ export const TxTypeCellRenderer = ({ txType }: { txType: string }) => {
         alignItems="center"
         justifyContent="center"
         p={1}
-        borderRadius="sm"
+        borderRadius="redesign.sm"
         bg={getTxTypeColor(txType)}
       >
         <Icon h={3} w={3} color="neutral.sand-1000">
@@ -81,7 +81,7 @@ export const AddressLinkCellRenderer = (value: TxTableAddressColumnData) => {
       gap={1}
       alignItems="center"
       bg="surfacePrimary"
-      borderRadius="md"
+      borderRadius="redesign.md"
       py={0.5}
       px={1}
       w="fit-content"
