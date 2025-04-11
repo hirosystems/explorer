@@ -78,7 +78,7 @@ export function RecentBlocks() {
           size={'lg'}
           mr={'auto'}
           display={['inline', 'none']}
-          ml={3}
+          ml={[0, 3]}
           aria-label="View all blockchain blocks"
         >
           View all blocks

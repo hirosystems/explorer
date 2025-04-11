@@ -7,7 +7,7 @@ const weights = new Map<IconWeight, ReactElement>([
   [
     'regular',
     <>
-      <circle cx="7" cy="7" r="7" fill="currentColor" fill-opacity="0.3" />
+      <circle cx="7" cy="7" r="7" fill="currentColor" fillOpacity="0.3" />
       <circle cx="7" cy="7" r="3" fill="currentColor" />
     </>,
   ],

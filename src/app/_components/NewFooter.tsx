@@ -170,7 +170,6 @@ export const NewFooter = () => {
   return (
     <Stack
       width="100%"
-      maxWidth={PAGE_MAX_WIDTH}
       py={6}
       px={xPadding}
       border="1px solid"

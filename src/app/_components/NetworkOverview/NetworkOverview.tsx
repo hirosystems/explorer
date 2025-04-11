@@ -214,7 +214,7 @@ function NetworkOverviewChart() {
 export function NetworkOverview() {
   return (
     <NetworkOverviewContextProvider>
-      <Stack w={'100%'} gap={4} flex={1}>
+      <Stack gap={4} flex={1}>
         <SectionHeader />
         <NetworkOverviewChart />
       </Stack>

@@ -1,3 +1,6 @@
+'use client';
+
+import { useHomePageData } from '@/app/home-redesign/context';
 import { useMempoolFee } from '@/common/queries/useMempoolFee';
 import { getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
@@ -92,8 +95,8 @@ function FeeData({ title, ustxValue }: { title: ReactNode; ustxValue: number }) 
 }
 
 function FeeTabs() {
-  const { data: mempoolFeeResponse } = useMempoolFee();
-  const availableTxTypeFees = Object.keys(mempoolFeeResponse || {}) as MempoolFeeResponseKey[];
+  const { mempoolFee } = useHomePageData();
+  const availableTxTypeFees = Object.keys(mempoolFee || {}) as MempoolFeeResponseKey[];
   return (
     <TabsRoot variant={'primary'} size={'redesignMd'} defaultValue={'all'} gap="4">
       <Stack gap={4} w="100%">
@@ -112,13 +115,10 @@ function FeeTabs() {
             {availableTxTypeFees.map(txType => (
               <TabsContent key={txType} value={txType}>
                 <Flex gap={2} flexWrap={'wrap'}>
-                  <FeeData
-                    title="Low"
-                    ustxValue={mempoolFeeResponse?.[txType]?.low_priority || 0}
-                  />
+                  <FeeData title="Low" ustxValue={mempoolFee?.[txType]?.low_priority || 0} />
                   <FeeData
                     title="Standard"
-                    ustxValue={mempoolFeeResponse?.[txType]?.medium_priority || 0}
+                    ustxValue={mempoolFee?.[txType]?.medium_priority || 0}
                   />
                   <FeeData
                     title={
@@ -129,7 +129,7 @@ function FeeTabs() {
                         </Icon>
                       </Flex>
                     }
-                    ustxValue={mempoolFeeResponse?.[txType]?.high_priority || 0}
+                    ustxValue={mempoolFee?.[txType]?.high_priority || 0}
                   />
                 </Flex>
               </TabsContent>
@@ -144,19 +144,11 @@ function FeeTabs() {
   );
 }
 
-function TxCountSection() {
+export function FeeSection() {
   return (
     <Stack align="space-between" bg="surfaceSecondary" borderRadius={'xl'} p="6" gap="4">
       <SectionHeader />
       <FeeTabs />
-    </Stack>
-  );
-}
-
-export function FeeSection() {
-  return (
-    <Stack w={['100%', '100%', '50%']}>
-      <TxCountSection />
     </Stack>
   );
 }
