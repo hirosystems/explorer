@@ -1,3 +1,10 @@
+## [1.270.1](https://github.com/hirosystems/explorer/compare/v1.270.0...v1.270.1) (2025-04-13)
+
+
+### Bug Fixes
+
+* handling zero in formatNumber ([51c2de9](https://github.com/hirosystems/explorer/commit/51c2de99e0254734a720635bf88d7aa4c4af2767))
+
 # [1.270.0](https://github.com/hirosystems/explorer/compare/v1.269.0...v1.270.0) (2025-04-10)
 
 
