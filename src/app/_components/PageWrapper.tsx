@@ -10,8 +10,6 @@ import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { Footer } from './Footer';
-import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
 import { NavBar as NewNavBar } from './NewNavBar/NavBar';
@@ -100,7 +98,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
+          <NewNavBar />
           <Stack
             marginTop={isRedesign ? '50px' : '120px'}
             mb={8}
@@ -108,7 +106,7 @@ export function PageWrapper({
           >
             {children}
           </Stack>
-          {isRedesign ? <NewFooter /> : <Footer />}
+          <NewFooter />
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />
