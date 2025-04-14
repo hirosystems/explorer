@@ -1,3 +1,10 @@
+# [1.272.0](https://github.com/hirosystems/explorer/compare/v1.271.0...v1.272.0) (2025-04-14)
+
+
+### Features
+
+* fixed the scroll ([2c2f6e5](https://github.com/hirosystems/explorer/commit/2c2f6e53cb773544a66e36c3e808052203ae811d))
+
 # [1.271.0](https://github.com/hirosystems/explorer/compare/v1.270.1...v1.271.0) (2025-04-14)
 
 
