@@ -1,3 +1,10 @@
+# [1.271.0](https://github.com/hirosystems/explorer/compare/v1.270.1...v1.271.0) (2025-04-14)
+
+
+### Features
+
+* refactored code to use tabpopover ([cb94ce3](https://github.com/hirosystems/explorer/commit/cb94ce348453eef1247c4d863028c958ce4edc85))
+
 ## [1.270.1](https://github.com/hirosystems/explorer/compare/v1.270.0...v1.270.1) (2025-04-13)
 
 
