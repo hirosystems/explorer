@@ -1,24 +1,19 @@
+import { TokenPrice } from '@/common/types/tokenPrice';
 import { Text } from '@/ui/Text';
 import { Box, Flex, Icon, Stack, useDisclosure } from '@chakra-ui/react';
 import { CaretLeft, CaretRight, X } from '@phosphor-icons/react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect } from 'react';
 
-import { FeePopoverContent } from './FeePopover';
 import { SharedMobileNavBar } from './NavBar';
 import { PrimaryPageLink, SecondaryPageLink } from './PagesLinks';
+import { Prices } from './Prices';
 import { SettingsPopoverContent } from './SettingsPopover';
 import { primaryPages, secondaryPages } from './consts';
 
 const topOpacityDuration = 0.3;
 
-const MobileContentTop = ({
-  isFeesMenuOpen,
-  isSettingsMenuOpen,
-}: {
-  isFeesMenuOpen: boolean;
-  isSettingsMenuOpen: boolean;
-}) => {
+const MobileContentTop = ({ isSettingsMenuOpen }: { isSettingsMenuOpen: boolean }) => {
   return (
     <Box position="relative">
       <AnimatePresence>
@@ -26,8 +21,8 @@ const MobileContentTop = ({
           key="pages"
           initial={{ opacity: 1 }}
           animate={{
-            opacity: isFeesMenuOpen || isSettingsMenuOpen ? 0 : 1,
-            pointerEvents: isFeesMenuOpen || isSettingsMenuOpen ? 'none' : 'auto',
+            opacity: isSettingsMenuOpen ? 0 : 1,
+            pointerEvents: isSettingsMenuOpen ? 'none' : 'auto',
           }}
           exit={{
             opacity: 0,
@@ -40,25 +35,6 @@ const MobileContentTop = ({
             {primaryPages.map(page => (
               <PrimaryPageLink page={page} />
             ))}
-          </Box>
-        </motion.div>
-
-        <motion.div
-          key="fees-menu"
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: isFeesMenuOpen ? 1 : 0,
-            pointerEvents: isFeesMenuOpen ? 'auto' : 'none',
-          }}
-          exit={{
-            opacity: 0,
-          }}
-          transition={{
-            opacity: { duration: topOpacityDuration },
-          }}
-        >
-          <Box position="absolute" top={0} left={0} w="full">
-            <FeePopoverContent />
           </Box>
         </motion.div>
 
@@ -91,15 +67,13 @@ const bottomOpacityDuration = 0.3;
 const bottomXYDuration = 0.3;
 
 const MobileContentBottom = ({
-  isFeesMenuOpen,
   isSettingsMenuOpen,
-  toggleFeesMenu,
   toggleSettingsMenu,
+  tokenPrices,
 }: {
-  isFeesMenuOpen: boolean;
   isSettingsMenuOpen: boolean;
-  toggleFeesMenu: () => void;
   toggleSettingsMenu: () => void;
+  tokenPrices: TokenPrice;
 }) => {
   return (
     <AnimatePresence mode="wait">
@@ -108,9 +82,9 @@ const MobileContentBottom = ({
           key={'bottom-menus'}
           initial={{ opacity: 1 }}
           animate={{
-            opacity: isFeesMenuOpen || isSettingsMenuOpen ? 0 : 1,
-            y: isFeesMenuOpen || isSettingsMenuOpen ? 100 : 0,
-            pointerEvents: isFeesMenuOpen || isSettingsMenuOpen ? 'none' : 'auto',
+            opacity: isSettingsMenuOpen ? 0 : 1,
+            y: isSettingsMenuOpen ? 100 : 0,
+            pointerEvents: isSettingsMenuOpen ? 'none' : 'auto',
           }}
           exit={{
             opacity: 0,
@@ -122,36 +96,7 @@ const MobileContentBottom = ({
         >
           <Stack gap={4} position="absolute" bottom={0} left={0} w="full">
             <Stack gap={2}>
-              <Flex
-                bg="surfacePrimary"
-                borderRadius="redesign.lg"
-                px={4}
-                gap={3}
-                h={14}
-                alignItems="center"
-                justifyContent="space-between"
-                onClick={toggleFeesMenu}
-                cursor="pointer"
-              >
-                <Flex alignItems="baseline" gap={2}>
-                  <Text fontSize="md" color="textSecondary">
-                    Fees:
-                  </Text>
-                  <Text fontSize="md" fontFamily="var(--font-matter-mono)">
-                    0.18 STX
-                  </Text>
-                </Flex>
-                <motion.div // this is for sending the caret right icon to the left when the menu is opened
-                  key={'fees-menu-button-caret-right'}
-                  animate={{ x: isFeesMenuOpen ? -200 : 0, opacity: isFeesMenuOpen ? 0 : 1 }}
-                  transition={{
-                    opacity: { duration: bottomOpacityDuration },
-                    x: { duration: bottomXYDuration },
-                  }}
-                >
-                  <Icon>{isFeesMenuOpen ? <CaretLeft /> : <CaretRight />}</Icon>
-                </motion.div>
-              </Flex>
+              <Prices tokenPrices={tokenPrices} />
               <Flex
                 bg="surfacePrimary"
                 borderRadius="redesign.lg"
@@ -193,9 +138,9 @@ const MobileContentBottom = ({
           key={'go-back'}
           initial={{ opacity: 0 }}
           animate={{
-            opacity: isFeesMenuOpen || isSettingsMenuOpen ? 1 : 0,
-            pointerEvents: isFeesMenuOpen || isSettingsMenuOpen ? 'auto' : 'none',
-            y: isFeesMenuOpen || isSettingsMenuOpen ? 0 : -10,
+            opacity: isSettingsMenuOpen ? 1 : 0,
+            pointerEvents: isSettingsMenuOpen ? 'auto' : 'none',
+            y: isSettingsMenuOpen ? 0 : -10,
           }}
           exit={{ opacity: 0 }}
           transition={{ duration: bottomOpacityDuration }}
@@ -211,13 +156,13 @@ const MobileContentBottom = ({
             gap={1}
             h={14}
             alignItems="center"
-            onClick={isFeesMenuOpen ? toggleFeesMenu : toggleSettingsMenu}
+            onClick={toggleSettingsMenu}
           >
             <motion.div
               key={'go-back-button-caret-left'}
               animate={{
-                x: isSettingsMenuOpen || isFeesMenuOpen ? 0 : 200,
-                opacity: isSettingsMenuOpen || isFeesMenuOpen ? 1 : 0,
+                x: isSettingsMenuOpen ? 0 : 200,
+                opacity: isSettingsMenuOpen ? 1 : 0,
               }}
               transition={{
                 opacity: { duration: bottomOpacityDuration },
@@ -240,27 +185,14 @@ const MobileContentBottom = ({
   );
 };
 
-export const MobileNavPage = ({ onClose }: { onClose: () => void }) => {
-  const {
-    open: isFeesMenuOpen,
-    onToggle: toggleFeesMenu,
-    onClose: closeFeesMenuOpen,
-  } = useDisclosure();
-  const {
-    open: isSettingsMenuOpen,
-    onToggle: toggleSettingsMenu,
-    onClose: closeSettingsMenuOpen,
-  } = useDisclosure();
-
-  // only one menu can be open at a time
-  useEffect(() => {
-    if (isFeesMenuOpen) {
-      closeSettingsMenuOpen();
-    }
-    if (isSettingsMenuOpen) {
-      closeFeesMenuOpen();
-    }
-  }, [isFeesMenuOpen, isSettingsMenuOpen, closeSettingsMenuOpen, closeFeesMenuOpen]);
+export const MobileNavPage = ({
+  onClose,
+  tokenPrices,
+}: {
+  onClose: () => void;
+  tokenPrices: TokenPrice;
+}) => {
+  const { open: isSettingsMenuOpen, onToggle: toggleSettingsMenu } = useDisclosure();
 
   const handleScroll = (event: Event) => {
     event.preventDefault();
@@ -294,11 +226,10 @@ export const MobileNavPage = ({ onClose }: { onClose: () => void }) => {
     >
       <SharedMobileNavBar onIconClick={onClose} icon={<X />} />
       <Stack justifyContent="space-between" height="full">
-        <MobileContentTop isFeesMenuOpen={isFeesMenuOpen} isSettingsMenuOpen={isSettingsMenuOpen} />
+        <MobileContentTop isSettingsMenuOpen={isSettingsMenuOpen} />
         <MobileContentBottom
-          isFeesMenuOpen={isFeesMenuOpen}
+          tokenPrices={tokenPrices}
           isSettingsMenuOpen={isSettingsMenuOpen}
-          toggleFeesMenu={toggleFeesMenu}
           toggleSettingsMenu={toggleSettingsMenu}
         />
       </Stack>

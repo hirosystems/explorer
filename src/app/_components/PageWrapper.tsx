@@ -100,7 +100,7 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />}
+          {isRedesign ? <NewNavBar tokenPrices={tokenPrice} /> : <NavBar tokenPrice={tokenPrice} />}
           <Stack
             marginTop={isRedesign ? '50px' : '120px'}
             mb={8}

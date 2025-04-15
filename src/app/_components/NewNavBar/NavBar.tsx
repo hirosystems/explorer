@@ -1,17 +1,18 @@
 'use client';
 
+import { TokenPrice } from '@/common/types/tokenPrice';
 import { Input } from '@/ui/Input';
 import { Box, Flex, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
 import { List } from '@phosphor-icons/react';
 
 import { Search } from '../Search/Search';
-import { FeePopover } from './FeePopover';
 import { Logo } from './Logo';
 import { MobileNavPage } from './MobileNavPage';
 import { PagesSlidingMenu } from './PagesSlidingMenu';
+import { Prices } from './Prices';
 import { SettingsPopover } from './SettingsPopover';
 
-const DesktopNavBar = (props: any) => {
+const DesktopNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & FlexProps) => {
   return (
     <Flex
       width="full"
@@ -29,7 +30,7 @@ const DesktopNavBar = (props: any) => {
         <Search />
       </Flex>
       <Flex gap={4}>
-        <FeePopover />
+        <Prices tokenPrices={tokenPrices} />
         <SettingsPopover />
       </Flex>
     </Flex>
@@ -88,22 +89,22 @@ export const SharedMobileNavBar = ({ onIconClick, icon, ...props }: SharedMobile
   );
 };
 
-const MobileNavBar = (props: any) => {
+const MobileNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & FlexProps) => {
   const { open, onToggle } = useDisclosure();
 
   return (
     <>
       <SharedMobileNavBar onIconClick={onToggle} icon={<List />} {...props} />
-      {open && <MobileNavPage onClose={onToggle} />}
+      {open && <MobileNavPage onClose={onToggle} tokenPrices={tokenPrices} />}
     </>
   );
 };
 
-export function NavBar() {
+export function NavBar({ tokenPrices }: { tokenPrices: TokenPrice }) {
   return (
     <Box fontFamily="var(--font-instrument-sans)">
-      <DesktopNavBar hideBelow="lg" />
-      <MobileNavBar hideFrom="lg" />
+      <DesktopNavBar hideBelow="lg" tokenPrices={tokenPrices} />
+      <MobileNavBar hideFrom="lg" tokenPrices={tokenPrices} />
     </Box>
   );
 }
