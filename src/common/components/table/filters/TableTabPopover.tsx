@@ -1,29 +1,28 @@
 import {
   CURVED_CORNER_SIZE,
-  PositioningOptions,
   TabPopoverContent,
   TabPopoverRoot,
   TabPopoverTrigger,
 } from '@/common/components/TabPopover';
+import { PopoverRootProps } from '@ark-ui/react';
 import { Box, Flex, Icon, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
 import { CaretDown, CaretUp } from '@phosphor-icons/react';
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 interface TableTabPopoverProps {
   id: string;
-  positioning?: PositioningOptions;
+  positioning?: PopoverRootProps['positioning'];
   trigger: (open: boolean, setOpen: (open: boolean) => void) => ReactNode;
   content: (open: boolean, setOpen: (open: boolean) => void) => ReactNode;
   triggerProps?: PopoverTriggerProps;
   contentProps?: PopoverContentProps;
 }
 
-const DEFAULT_POSITIONING: PositioningOptions = {
+const DEFAULT_POSITIONING: PopoverRootProps['positioning'] = {
   placement: 'bottom-start',
   offset: { mainAxis: 0, crossAxis: 0 },
+  sameWidth: true,
 };
-
-const EXTRA_WIDTH = 1; // a little extra width to make the transition from the curved corner to the content smoother
 
 export function TableTabPopover({
   id,
@@ -34,7 +33,6 @@ export function TableTabPopover({
   contentProps,
 }: TableTabPopoverProps) {
   const [open, setOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
 
   return (
     <TabPopoverRoot
@@ -46,7 +44,7 @@ export function TableTabPopover({
       }}
       variant="redesignPrimary"
     >
-      <TabPopoverTrigger open={open} positioning={positioning} ref={triggerRef} {...triggerProps}>
+      <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps}>
         <Flex
           alignItems={'center'}
           gap={1}
@@ -77,13 +75,9 @@ export function TableTabPopover({
       </TabPopoverTrigger>
       <TabPopoverContent
         bgColor={'surfacePrimary'}
+        minWidth={'fit-content'}
+        marginRight={-(CURVED_CORNER_SIZE + 1)}
         positioning={positioning ?? DEFAULT_POSITIONING}
-        minWidth="fit-content"
-        w={
-          triggerRef.current
-            ? triggerRef.current.offsetWidth + (CURVED_CORNER_SIZE + EXTRA_WIDTH) * 4
-            : 'fit-content'
-        }
         {...contentProps}
       >
         <>

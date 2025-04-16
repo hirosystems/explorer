@@ -83,12 +83,12 @@ const AddressFilterField = ({
       <Input
         {...field}
         variant="redesignPrimary"
-        minW={40}
         placeholder="STX Address"
         size="big"
         autoComplete="off"
         data-form-type="other"
         data-disable-extensions="true"
+        minW={40}
       />
     </ChakraField>
   );

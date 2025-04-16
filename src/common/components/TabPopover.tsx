@@ -14,32 +14,8 @@ interface PopoverContentProps extends ChakraPopover.ContentProps {
   portalRef?: React.RefObject<HTMLElement>;
 }
 
-type Placement = 'bottom-start' | 'bottom-end';
-
-export interface PositioningOptions {
-  /**
-   * The initial placement of the floating element
-   */
-  placement?: Placement;
-  /**
-   * The offset of the floating element
-   */
-  offset?: {
-    mainAxis?: number;
-    crossAxis?: number;
-  };
-}
-
 export const TabPopoverRoot = (props: PopoverRootProps) => {
-  return (
-    <ChakraPopover.Root
-      {...props}
-      positioning={{
-        placement: props?.positioning?.placement ?? undefined,
-        offset: props?.positioning?.offset ?? undefined,
-      }}
-    />
-  );
+  return <ChakraPopover.Root {...props} positioning={props?.positioning} />;
 };
 
 export const CURVED_CORNER_SIZE = 4;
@@ -48,7 +24,7 @@ export const TabPopoverTrigger = React.forwardRef<
   HTMLButtonElement,
   ChakraPopover.TriggerProps & {
     open: boolean;
-    positioning?: PositioningOptions;
+    positioning?: PopoverRootProps['positioning'];
   }
 >(function TabPopoverTrigger(props, ref) {
   const { open, positioning, ...triggerProps } = props;
@@ -97,7 +73,7 @@ export const TabPopoverTrigger = React.forwardRef<
 export const TabPopoverContent = React.forwardRef<
   HTMLDivElement,
   PopoverContentProps & {
-    positioning?: PositioningOptions;
+    positioning?: PopoverRootProps['positioning'];
   }
 >(function TabPopoverContent(props, ref) {
   const { portalled = true, portalRef, ...rest } = props;
@@ -117,6 +93,7 @@ export const TabPopoverContent = React.forwardRef<
           }
           boxShadow="none"
           bg="surfacePrimary"
+          width="auto"
         >
           {props.children}
         </ChakraPopover.Content>
