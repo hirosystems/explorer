@@ -221,7 +221,7 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
 
 export interface TxsTableProps {
   filters: TxPageFilters;
-  initialData: GenericResponseType<CompressedTxTableData>;
+  initialData: GenericResponseType<CompressedTxTableData> | undefined;
   disablePagination?: boolean;
   displayColumns?: TxTableColumns[];
   pageSize?: number;
@@ -257,7 +257,7 @@ export function TxsTable({
    * React query's initial data prop does not behave as expected. While it enables us to use the initial data for the first page, the initial data prop makes the logic required to replace initial data when it becomes stale difficult
    * By explicitly setting the cache for the first page with initial data, we guarantee the table will use the initial data from the server and behave as expected
    */
-  if (isCacheSetWithInitialData.current === false) {
+  if (isCacheSetWithInitialData.current === false && initialData) {
     const queryKey = [
       'confirmedTransactions',
       pagination.pageSize,

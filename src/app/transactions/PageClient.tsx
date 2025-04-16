@@ -31,7 +31,7 @@ export default function ({
 }: {
   tokenPrice: TokenPrice;
   filters: TxPageFilters;
-  initialTxTableData: GenericResponseType<CompressedTxTableData>;
+  initialTxTableData: GenericResponseType<CompressedTxTableData> | undefined;
 }) {
   const isRedesign = useIsRedesignUrl();
 

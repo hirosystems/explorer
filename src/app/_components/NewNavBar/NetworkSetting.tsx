@@ -1,3 +1,5 @@
+'use client';
+
 import { openModal } from '@/common/components/modals/modal-slice';
 import { DEFAULT_DEVNET_SERVER, MODALS } from '@/common/constants/constants';
 import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@/common/constants/env';
@@ -9,7 +11,7 @@ import { buildUrl } from '@/common/utils/buildUrl';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
-import { Flex, Icon, IconButton, Stack } from '@chakra-ui/react';
+import { ClientOnly, Flex, Icon, IconButton, Stack } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
 
@@ -109,6 +111,7 @@ const NetworkLabel = ({ network }: { network: Network }) => {
       borderRadius="redesign.md"
       key={network.url}
       className="group"
+      suppressHydrationWarning
     >
       <Stack
         gap={3}
@@ -200,9 +203,13 @@ export const NetworkSetting = () => {
           Network
         </Text>
         <Stack gap={1.5} w="full">
-          {Object.entries(networks).map(([url, network]) => (
-            <NetworkLabel key={network.url} network={network} />
-          ))}
+          <ClientOnly>
+            {' '}
+            {/* prevents hydration mismatch */}
+            {Object.entries(networks).map(([url, network]) => (
+              <NetworkLabel key={network.url} network={network} />
+            ))}
+          </ClientOnly>
         </Stack>
       </Stack>
       <Button
