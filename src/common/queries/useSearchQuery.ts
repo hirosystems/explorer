@@ -1,6 +1,7 @@
+'use client';
+
 import { UTCDate } from '@date-fns/utc';
 import { useQuery } from '@tanstack/react-query';
-import { useLocalStorage } from 'web-api-hooks';
 
 import { Block, Transaction } from '@stacks/stacks-blockchain-api-types';
 import { bufferCVFromString, cvToHex, tupleCV } from '@stacks/transactions';

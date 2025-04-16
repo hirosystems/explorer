@@ -84,7 +84,7 @@ function NetworkOverviewChart() {
 
     return (
       <Box height={48} width="100%">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={200}>
           <AreaChart
             data={chartData}
             key={`area-chart-${chartType}`}
@@ -214,7 +214,7 @@ function NetworkOverviewChart() {
 export function NetworkOverview() {
   return (
     <NetworkOverviewContextProvider>
-      <Stack w={'100%'} gap={4} flex={1}>
+      <Stack gap={4} flex={1}>
         <SectionHeader />
         <NetworkOverviewChart />
       </Stack>

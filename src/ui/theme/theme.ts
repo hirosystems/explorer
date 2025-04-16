@@ -91,15 +91,15 @@ const themeConfig = {
       radii: {
         ...BORDER_RADIUS,
       },
-      breakpoints: {
-        ...BREAKPOINTS,
-      },
     },
     semanticTokens: {
       ...SEMANTIC_TOKENS,
     },
     textStyles: {
       ...TEXT_STYLES,
+    },
+    breakpoints: {
+      ...BREAKPOINTS,
     },
   },
 };

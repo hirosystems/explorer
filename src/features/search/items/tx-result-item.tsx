@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import React from 'react';
 
 import { FoundResult } from '../../../common/types/search-results';
@@ -23,9 +22,9 @@ export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
     return (
       <TxListItem
         tx={transaction}
-        css={css`
-          border: none;
-        `}
+        css={{
+          border: 'none',
+        }}
         className={`search-bar-result-1`}
       />
     );
@@ -33,9 +32,9 @@ export const TxResultItem: React.FC<TxResultItemProps> = ({ result }) => {
   return (
     <MempoolTxListItem
       tx={transaction}
-      css={css`
-        border: none;
-      `}
+      css={{
+        border: 'none',
+      }}
       className={`search-bar-result-1`}
     />
   );
