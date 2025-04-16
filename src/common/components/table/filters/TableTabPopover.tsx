@@ -1,4 +1,5 @@
 import {
+  CURVED_CORNER_SIZE,
   PositioningOptions,
   TabPopoverContent,
   TabPopoverRoot,
@@ -6,7 +7,7 @@ import {
 } from '@/common/components/TabPopover';
 import { Box, Flex, Icon, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
 import { CaretDown, CaretUp } from '@phosphor-icons/react';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 
 interface TableTabPopoverProps {
   id: string;
@@ -31,6 +32,7 @@ export function TableTabPopover({
   contentProps,
 }: TableTabPopoverProps) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   return (
     <TabPopoverRoot
@@ -42,7 +44,7 @@ export function TableTabPopover({
       }}
       variant="redesignPrimary"
     >
-      <TabPopoverTrigger open={open} positioning={positioning} {...triggerProps}>
+      <TabPopoverTrigger open={open} positioning={positioning} ref={triggerRef} {...triggerProps}>
         <Flex
           alignItems={'center'}
           gap={1}
@@ -74,7 +76,12 @@ export function TableTabPopover({
       <TabPopoverContent
         bgColor={'surfacePrimary'}
         positioning={positioning ?? DEFAULT_POSITIONING}
-        w="fit-content"
+        minWidth="fit-content"
+        w={
+          triggerRef.current
+            ? triggerRef.current.offsetWidth + (CURVED_CORNER_SIZE + 1) * 4
+            : 'fit-content'
+        }
         {...contentProps}
       >
         <>

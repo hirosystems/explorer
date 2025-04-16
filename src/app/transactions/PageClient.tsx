@@ -4,14 +4,11 @@ import { TxTableFilters } from '@/common/components/table/filters/TxTableFilters
 import { TxTableFiltersModal } from '@/common/components/table/filters/TxTableFiltersModal';
 import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
-import { useIsRedesignUrl } from '@/common/utils/url-utils';
-import { TxListTabs } from '@/features/txs-list/tabs/TxListTabs';
 import { Text } from '@/ui/Text';
-import { ClientOnly, Flex, Stack } from '@chakra-ui/react';
+import { Stack } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { PageTitle } from '../_components/PageTitle';
 import { TxPageFilters } from './page';
 import { MempoolFeeStatsSkeleton } from './skeleton';
 import { CompressedTxTableData } from './utils';

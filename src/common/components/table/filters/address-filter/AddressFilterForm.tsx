@@ -83,6 +83,7 @@ const AddressFilterField = ({
       <Input
         {...field}
         variant="redesignPrimary"
+        minW={40}
         placeholder="STX Address"
         size="big"
         autoComplete="off"
