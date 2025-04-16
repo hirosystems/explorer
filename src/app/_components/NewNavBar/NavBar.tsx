@@ -5,7 +5,6 @@ import { Input } from '@/ui/Input';
 import { Box, Flex, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
 import { List } from '@phosphor-icons/react';
 
-import { Search } from '../Search/Search';
 import { Logo } from './Logo';
 import { MobileNavPage } from './MobileNavPage';
 import { PagesSlidingMenu } from './PagesSlidingMenu';
@@ -27,7 +26,7 @@ const DesktopNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & 
         <PagesSlidingMenu />
       </Flex>
       <Flex flexGrow={1} flexShrink={1} maxWidth="507px">
-        <Search />
+        {/* <Search /> */}
       </Flex>
       <Flex gap={4}>
         <Prices tokenPrices={tokenPrices} />
