@@ -130,8 +130,6 @@ export const FeeStats = ({ stxPriceInUsd, id }: { stxPriceInUsd: string; id: Fee
 type Fee = 'average' | 'transfer' | 'contract-deploy' | 'contract-call';
 
 export const FeePopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
-  // const { data: mempoolFeeResponse } = useMempoolFee();
-
   const tabs = useMemo(
     () => [
       {
@@ -237,7 +235,6 @@ export const FeePopover = () => {
       positioning={POSITIONING}
       open={open}
       onOpenChange={e => setOpen(e.open)}
-      unstyled
     >
       <TabPopoverTrigger open={open} positioning={POSITIONING}>
         <Flex

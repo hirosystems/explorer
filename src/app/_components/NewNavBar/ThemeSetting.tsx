@@ -1,3 +1,5 @@
+'use client';
+
 import { useColorMode } from '@/components/ui/color-mode';
 import { Text } from '@/ui/Text';
 import { Box, ClientOnly, Flex, Icon } from '@chakra-ui/react';
