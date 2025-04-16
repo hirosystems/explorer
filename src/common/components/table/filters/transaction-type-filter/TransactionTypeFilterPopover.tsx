@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, PopoverTriggerProps } from '@chakra-ui/react';
 
 import { TableTabPopover } from '../TableTabPopover';
 import { TransactionTypeFilterForm } from './TransactionTypeFilterForm';

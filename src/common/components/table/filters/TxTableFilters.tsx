@@ -20,6 +20,7 @@ const MobileOpenFilterModalButton = () => {
   return (
     <Button
       display={{ base: 'flex', md: 'none' }}
+      alignItems={'center'}
       py={1.5}
       px={4}
       onClick={() => dispatch(openModal(MODALS.TxsTableFilters))}
@@ -45,11 +46,11 @@ export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
   return (
     <Flex flexWrap={'wrap'} gap={4}>
       <MobileOpenFilterModalButton />
-      <Flex display={{ base: 'none', md: 'flex' }} gap={2} alignItems={'center'} h="full">
+      <Flex display={{ base: 'none', md: 'flex' }} gap={3} alignItems={'center'} h="full">
         <Text textStyle="text-regular-sm" color="textSecondary">
           Filter:
         </Text>
-        <Flex gap={3}>
+        <Flex gap={3} h={7}>
           <TransactionTypeFilterPopover />
           <DateFilterPopover defaultStartTime={startTime} defaultEndTime={endTime} />
           <AddressFilterPopover defaultFromAddress={fromAddress} defaultToAddress={toAddress} />
