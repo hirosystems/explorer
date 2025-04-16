@@ -1,3 +1,10 @@
+## [1.274.2](https://github.com/hirosystems/explorer/compare/v1.274.1...v1.274.2) (2025-04-16)
+
+
+### Bug Fixes
+
+* fixed address filters ([8dbb76d](https://github.com/hirosystems/explorer/commit/8dbb76db7136002f21e651dd1501202ef82934d6))
+
 ## [1.274.1](https://github.com/hirosystems/explorer/compare/v1.274.0...v1.274.1) (2025-04-16)
 
 
