@@ -1,3 +1,5 @@
+'use client';
+
 import { TxPageFilters } from '@/app/transactions/page';
 import { useOpenedModal } from '@/common/components/modals/modal-slice';
 import { MODALS } from '@/common/constants/constants';

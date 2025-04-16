@@ -1,3 +1,5 @@
+'use client';
+
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { Link } from '@/ui/Link';
@@ -15,7 +17,7 @@ function SectionHeader() {
         Mempool
       </Text>
       <Link
-        href={buildUrl('/mempool', network)}
+        href={buildUrl('/transactions', network)}
         variant={'buttonLink'}
         size={'lg'}
         display={['none', 'inline']}
@@ -37,6 +39,9 @@ function TxCountSection() {
       borderRadius={'xl'}
       p="6"
       pl={['6', '6', '8']}
+      flex="1"
+      height="100%"
+      alignSelf="stretch"
     >
       <TxCountChart />
     </HStack>
@@ -45,12 +50,9 @@ function TxCountSection() {
 
 export function MempoolSection() {
   return (
-    <Stack gap={2} w={['100%', '100%', '50%']}>
-      <Stack gap={5}>
-        <SectionHeader />
-        <TxCountSection />
-      </Stack>
-      {/* TODO: Fee section */}
+    <Stack gap={4} flex={1} height="100%">
+      <SectionHeader />
+      <TxCountSection />
     </Stack>
   );
 }

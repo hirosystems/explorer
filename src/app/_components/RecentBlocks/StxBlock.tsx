@@ -87,6 +87,7 @@ export function StxBlockGroup({
                 textStyle={'text-medium-xs'}
                 color={'textSecondary'}
                 lineHeight={'redesign.shorter'}
+                suppressHydrationWarning
               >
                 {formatTimestamp(btcBlockTime)}
               </Text>
@@ -197,7 +198,8 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
               <Text
                 textStyle={'text-medium-xs'}
                 color={'textSecondary'}
-                aria-label={`Block timestamp: ${formatTimestamp(stxBlock.burn_block_time)}`}
+                aria-label={`Block timestamp: ${stxBlock.burn_block_time}`}
+                suppressHydrationWarning
               >
                 {formatTimestamp(stxBlock.burn_block_time)}
               </Text>
@@ -294,7 +296,7 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 }
                 align={'center'}
               >
-                <Text textStyle={'text-medium-xs'} color={'textSecondary'}>
+                <Text textStyle={'text-medium-xs'} color={'textSecondary'} suppressHydrationWarning>
                   {formatTimestamp(stxBlock.block_time)}
                 </Text>
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'}>

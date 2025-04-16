@@ -1,14 +1,21 @@
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
+import { FIVE_MINUTES, ONE_HOUR, ONE_MINUTE } from '@/common/queries/query-stale-time';
 import { getApiUrl } from '@/common/utils/network-utils';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
-import { totalmem } from 'os';
 
-import { Block, BurnBlock } from '@stacks/stacks-blockchain-api-types';
+import {
+  Block,
+  BurnBlock,
+  MempoolFeePriorities,
+  MempoolTransactionStatsResponse,
+} from '@stacks/stacks-blockchain-api-types';
 
 import {
   RECENT_BTC_BLOCKS_COUNT,
   RECENT_STX_BLOCKS_COUNT,
 } from '../_components/RecentBlocks/consts';
+import { compressTransactions } from '../transactions/utils';
+import { TXS_LIST_SIZE } from './consts';
 
 export type UIBtcBlock = Pick<
   BurnBlock,
@@ -21,6 +28,8 @@ export type UIStxBlock = Pick<
 > & {
   tx_count: number;
 };
+
+export type UIMempoolStats = Pick<MempoolTransactionStatsResponse, 'tx_type_counts'>;
 
 export interface RecentBlocks {
   btcBlocks: GenericResponseType<UIBtcBlock[]>;
@@ -45,21 +54,79 @@ export interface UIStackingCycle {
   endBlockHeight: number;
 }
 
-export function fetchRecentBtcBlocks(chain: string, api?: string) {
+export async function fetchRecentBtcBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  return fetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`).then(res => res.json());
+  const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: FIVE_MINUTES / 60,
+      tags: ['btc-blocks'],
+    },
+  });
+  return response.json();
 }
 
-export function fetchRecentStxBlocks(chain: string, api?: string) {
+export async function fetchRecentStxBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  return fetch(`${apiUrl}/extended/v1/block/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`).then(res =>
-    res.json()
+  const response = await fetch(
+    `${apiUrl}/extended/v1/block/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`,
+    {
+      cache: 'force-cache',
+      next: {
+        revalidate: ONE_MINUTE / 60,
+        tags: ['stx-blocks'],
+      },
+    }
   );
+  return response.json();
 }
 
-export function fetchStackingCycleData(chain: string, api?: string) {
+export async function fetchStackingCycleData(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
-  return fetch(`${apiUrl}/v2/pox`).then(res => res.json());
+  const response = await fetch(`${apiUrl}/v2/pox`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: ONE_HOUR / 60,
+      tags: ['stacking'],
+    },
+  });
+  return response.json();
+}
+
+export async function fetchRecentTxs(chain: string, api?: string) {
+  const apiUrl = getApiUrl(chain, api);
+  const response = await fetch(`${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: ONE_MINUTE / 60,
+      tags: ['transactions'],
+    },
+  });
+  return response;
+}
+
+export async function fetchMempoolStats(chain: string, api?: string) {
+  const apiUrl = getApiUrl(chain, api);
+  const response = await fetch(`${apiUrl}/extended/v1/tx/mempool/stats`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: FIVE_MINUTES / 60,
+      tags: ['mempool-stats'],
+    },
+  });
+  return response;
+}
+
+export async function fetchMempoolFee(chain: string, api?: string): Promise<MempoolFeePriorities> {
+  const apiUrl = getApiUrl(chain, api);
+  const response = await fetch(`${apiUrl}/extended/v2/mempool/fees`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: FIVE_MINUTES / 60,
+      tags: ['mempool-fee'],
+    },
+  });
+  return response.json();
 }
 
 export async function fetchCurrentStackingCycle(
@@ -156,5 +223,22 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
       ),
     },
     stxBlocksCountPerBtcBlock,
+  };
+}
+
+export async function fetchRecentUITxs(chain: string, api?: string) {
+  const response = await fetchRecentTxs(chain, api);
+  const data = await response.json();
+  return {
+    ...data,
+    results: compressTransactions(data.results),
+  };
+}
+
+export async function fetchUIMempoolStats(chain: string, api?: string): Promise<UIMempoolStats> {
+  const response = await fetchMempoolStats(chain, api);
+  const mempoolStats = await response.json();
+  return {
+    tx_type_counts: mempoolStats.tx_type_counts,
   };
 }

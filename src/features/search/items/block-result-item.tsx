@@ -1,4 +1,3 @@
-import { css } from '@emotion/react';
 import React from 'react';
 
 import { Block } from '@stacks/stacks-blockchain-api-types';
@@ -22,9 +21,9 @@ export const BlockResultItem: React.FC<BlockResultItemProps> = ({ result }) => {
         } as Block
       }
       p={0}
-      css={css`
-        border: none;
-      `}
+      css={{
+        border: 'none',
+      }}
       className={`search-bar-result-1`}
     />
   );

@@ -35,9 +35,9 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         href={buildUrl(`/btcblock/${burnBlock.burn_block_hash}`, network)}
         target={'_blank'}
         _hover={{ textDecoration: 'none' }}
-        aria-label={`Bitcoin block ${burnBlock.burn_block_height} mined at ${formatTimestamp(
+        aria-label={`Bitcoin block ${burnBlock.burn_block_height} mined at ${
           burnBlock.burn_block_time
-        )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        } with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
         tabIndex={0}
       >
@@ -82,7 +82,8 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
               <Text
                 textStyle={'text-medium-xs'}
                 color={'textSecondary'}
-                aria-label={`Block timestamp: ${formatTimestamp(burnBlock.burn_block_time)}`}
+                aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
+                suppressHydrationWarning
               >
                 {formatTimestamp(burnBlock.burn_block_time)}
               </Text>
@@ -135,9 +136,7 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
         target={'_blank'}
         rel="noreferrer"
         _hover={{ textDecoration: 'none' }}
-        aria-label={`Newest Bitcoin block ${burnBlock.burn_block_height} mined at ${formatTimestamp(
-          burnBlock.burn_block_time
-        )} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
+        aria-label={`Newest Bitcoin block ${burnBlock.burn_block_height} mined at ${burnBlock.burn_block_time} with ${burnBlock.stacks_blocks.length} Stacks blocks`}
         role="listitem"
         tabIndex={0}
       >
@@ -208,7 +207,8 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                   <Text
                     textStyle={'text-medium-xs'}
                     color={'textSecondary'}
-                    aria-label={`Block timestamp: ${formatTimestamp(burnBlock.burn_block_time)}`}
+                    aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
+                    suppressHydrationWarning
                   >
                     {formatTimestamp(burnBlock.burn_block_time)}
                   </Text>

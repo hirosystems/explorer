@@ -1,3 +1,5 @@
+'use client';
+
 import { Box, Icon, Stack, StackProps } from '@chakra-ui/react';
 import { ArrowsClockwise } from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';

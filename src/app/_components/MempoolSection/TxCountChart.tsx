@@ -1,3 +1,4 @@
+import { useHomePageData } from '@/app/home-redesign/context';
 import { useMempoolTransactionStats } from '@/common/queries/useMempoolTxStats';
 import { getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { capitalize, semanticTokenToCssVar } from '@/common/utils/utils';
@@ -17,8 +18,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Cell, Pie, PieChart, Tooltip, TooltipProps } from 'recharts';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 
-const PIE_CHART_WIDTH = 300;
-const PIE_CHART_HEIGHT = 300;
+const PIE_CHART_WIDTH = 250;
+const PIE_CHART_HEIGHT = 250;
 const INNER_RADIUS = 100;
 const LINE_WIDTH = 7;
 const OUTER_RADIUS = INNER_RADIUS + LINE_WIDTH;
@@ -380,14 +381,14 @@ function useTransactionData(data?: { tx_type_counts: Record<string, number> }) {
 }
 
 export function TxCountChart() {
-  const { data, isLoading } = useMempoolTransactionStats();
-  const { totalTxCount, pieData } = useTransactionData(data);
+  const { mempoolStats } = useHomePageData();
+  const { totalTxCount, pieData } = useTransactionData(mempoolStats);
   const [hoveredItem, setHoveredItem] = useState<TransactionTypeData | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [showTooltip, setShowTooltip] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnter = (data: PieSectorDataItem, index: number) => {
+  const handleMouseEnter = (_: PieSectorDataItem, index: number) => {
     setHoveredItem(pieData[index]);
     setShowTooltip(true);
   };
@@ -413,7 +414,7 @@ export function TxCountChart() {
     setShowTooltip(false);
   };
 
-  if (isLoading || !pieData.length) {
+  if (!pieData.length) {
     return <LoadingSkeleton />;
   }
 

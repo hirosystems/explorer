@@ -16,7 +16,7 @@ const weights = new Map<IconWeight, ReactElement>([
         cy="32"
         r="32"
         fill="url(#paint0_linear_4954_36475)"
-        fill-opacity="0.9"
+        fillOpacity="0.9"
       />
       <foreignObject x="-3.16404" y="-3.66404" width="71.3281" height="71.3283">
         <div></div>
@@ -27,7 +27,7 @@ const weights = new Map<IconWeight, ReactElement>([
         cy="32.0001"
         r="24.881"
         fill="url(#paint1_linear_4954_36475)"
-        fill-opacity="0.9"
+        fillOpacity="0.9"
       />
       <foreignObject x="5.00002" y="4.50051" width="55" height="54.9992">
         <div></div>
@@ -38,7 +38,7 @@ const weights = new Map<IconWeight, ReactElement>([
         cy="32.0001"
         r="16.7164"
         fill="url(#paint2_linear_4954_36475)"
-        fill-opacity="0.9"
+        fillOpacity="0.9"
       />
       <circle
         cx="18.4633"
