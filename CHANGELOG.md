@@ -1,3 +1,10 @@
+## [1.274.1](https://github.com/hirosystems/explorer/compare/v1.274.0...v1.274.1) (2025-04-16)
+
+
+### Bug Fixes
+
+* fixed tests ([07d8090](https://github.com/hirosystems/explorer/commit/07d8090a88a99f2868faf5a02f614d1c7bde6679))
+
 # [1.274.0](https://github.com/hirosystems/explorer/compare/v1.273.0...v1.274.0) (2025-04-16)
 
 
