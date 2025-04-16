@@ -7,7 +7,9 @@ jest.mock('@phosphor-icons/react', () => ({
   PhoneCall: () => <div data-testid="phone-call">PhoneCall</div>,
   Cube: () => <div data-testid="cube">Cube</div>,
   Question: () => <div data-testid="question">Question</div>,
-  PlusMinus: () => <div data-testid="plus-minus">PlusMinus</div>,
+  TransferIcon: () => <div data-testid="transfer-icon">TransferIcon</div>,
+  ClarityIcon: () => <div data-testid="clarity-icon">ClarityIcon</div>,
+  ArrowsClockwise: () => <div data-testid="arrows-clockwise">ArrowsClockwise</div>,
 }));
 
 jest.mock('@/ui/icons/TransferIcon', () => () => (
@@ -60,27 +62,23 @@ describe('getTxTypeColor', () => {
 
 describe('getTxTypeLabel', () => {
   test('should return correct label for token_transfer', () => {
-    expect(getTxTypeLabel('token_transfer')).toBe('Token Transfer');
+    expect(getTxTypeLabel('token_transfer')).toBe('Token transfer');
   });
 
   test('should return correct label for contract_call', () => {
-    expect(getTxTypeLabel('contract_call')).toBe('Contract Call');
+    expect(getTxTypeLabel('contract_call')).toBe('Contract call');
   });
 
   test('should return correct label for smart_contract', () => {
-    expect(getTxTypeLabel('smart_contract')).toBe('Contract Deploy');
+    expect(getTxTypeLabel('smart_contract')).toBe('Contract deploy');
   });
 
   test('should return correct label for tenure_change', () => {
-    expect(getTxTypeLabel('tenure_change')).toBe('Tenure Change');
+    expect(getTxTypeLabel('tenure_change')).toBe('Tenure change');
   });
 
   test('should return correct label for coinbase', () => {
     expect(getTxTypeLabel('coinbase')).toBe('Coinbase');
-  });
-
-  test('should return Average for all', () => {
-    expect(getTxTypeLabel('all')).toBe('Average');
   });
 
   test('should return Unknown for unknown transaction type', () => {
@@ -107,22 +105,28 @@ describe('getTxTypeIcon', () => {
     expect(screen.getByTestId('clarity-icon')).toBeInTheDocument();
   });
 
-  test('should return Cube icon for tenure_change', () => {
+  test('should return ArrowsClockwise icon for tenure_change', () => {
     const icon = getTxTypeIcon('tenure_change');
     render(<>{icon}</>);
-    expect(screen.getByTestId('cube')).toBeInTheDocument();
-  });
-
-  test('should return PlusMinus icon for all', () => {
-    const icon = getTxTypeIcon('all');
-    render(<>{icon}</>);
-    expect(screen.getByTestId('plus-minus')).toBeInTheDocument();
+    expect(screen.getByTestId('arrows-clockwise')).toBeInTheDocument();
   });
 
   test('should return Question icon for unknown transaction type', () => {
     const icon = getTxTypeIcon('unknown_type');
     render(<>{icon}</>);
     expect(screen.getByTestId('question')).toBeInTheDocument();
+  });
+
+  test('should return Cube icon for coinbase', () => {
+    const icon = getTxTypeIcon('coinbase');
+    render(<>{icon}</>);
+    expect(screen.getByTestId('cube')).toBeInTheDocument();
+  });
+
+  test('should return TransferIcon icon for token_transfer', () => {
+    const icon = getTxTypeIcon('token_transfer');
+    render(<>{icon}</>);
+    expect(screen.getByTestId('transfer-icon')).toBeInTheDocument();
   });
 });
 
