@@ -1,3 +1,10 @@
+# [1.274.0](https://github.com/hirosystems/explorer/compare/v1.273.0...v1.274.0) (2025-04-16)
+
+
+### Features
+
+* addressed tx page feedback ([f9e5d60](https://github.com/hirosystems/explorer/commit/f9e5d60dcea828464df68bf222c9addb2ae55881))
+
 # [1.273.0](https://github.com/hirosystems/explorer/compare/v1.272.0...v1.273.0) (2025-04-15)
 
 
