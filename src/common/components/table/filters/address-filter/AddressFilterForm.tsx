@@ -88,6 +88,7 @@ const AddressFilterField = ({
         autoComplete="off"
         data-form-type="other"
         data-disable-extensions="true"
+        minW={40}
       />
     </ChakraField>
   );

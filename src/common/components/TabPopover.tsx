@@ -14,42 +14,17 @@ interface PopoverContentProps extends ChakraPopover.ContentProps {
   portalRef?: React.RefObject<HTMLElement>;
 }
 
-type Placement = 'bottom-start' | 'bottom-end';
-
-export interface PositioningOptions {
-  /**
-   * The initial placement of the floating element
-   */
-  placement?: Placement;
-  /**
-   * The offset of the floating element
-   */
-  offset?: {
-    mainAxis?: number;
-    crossAxis?: number;
-  };
-}
-
 export const TabPopoverRoot = (props: PopoverRootProps) => {
-  return (
-    <ChakraPopover.Root
-      {...props}
-      positioning={{
-        placement: props?.positioning?.placement ?? undefined,
-        offset: props?.positioning?.offset ?? undefined,
-      }}
-      unstyled // disables chakra ui's default styling
-    />
-  );
+  return <ChakraPopover.Root {...props} positioning={props?.positioning} />;
 };
 
-const curvedCornerSize = 4;
+export const CURVED_CORNER_SIZE = 4;
 
 export const TabPopoverTrigger = React.forwardRef<
   HTMLButtonElement,
   ChakraPopover.TriggerProps & {
     open: boolean;
-    positioning?: PositioningOptions;
+    positioning?: PopoverRootProps['positioning'];
   }
 >(function TabPopoverTrigger(props, ref) {
   const { open, positioning, ...triggerProps } = props;
@@ -58,7 +33,7 @@ export const TabPopoverTrigger = React.forwardRef<
   const mainAxis = positioning?.offset?.mainAxis ?? 0;
 
   return (
-    <ChakraPopover.Trigger {...triggerProps}>
+    <ChakraPopover.Trigger {...triggerProps} ref={ref}>
       <Flex position="relative">
         {props.children}
 
@@ -77,14 +52,14 @@ export const TabPopoverTrigger = React.forwardRef<
               position="absolute"
               bottom={'-1px'}
               left={
-                placement === 'bottom-start' ? undefined : `${-1 * (curvedCornerSize * 4) + 1}px`
+                placement === 'bottom-start' ? undefined : `${-1 * (CURVED_CORNER_SIZE * 4) + 1}px`
               }
               right={
-                placement === 'bottom-end' ? undefined : `${-1 * (curvedCornerSize * 4) + 1}px`
+                placement === 'bottom-end' ? undefined : `${-1 * (CURVED_CORNER_SIZE * 4) + 1}px`
               }
               transform={placement === 'bottom-start' ? 'rotateY(180deg)' : 'none'}
-              h={curvedCornerSize}
-              w={curvedCornerSize}
+              h={CURVED_CORNER_SIZE}
+              w={CURVED_CORNER_SIZE}
             >
               <CurvedCornerIcon />
             </Icon>
@@ -98,7 +73,7 @@ export const TabPopoverTrigger = React.forwardRef<
 export const TabPopoverContent = React.forwardRef<
   HTMLDivElement,
   PopoverContentProps & {
-    positioning?: PositioningOptions;
+    positioning?: PopoverRootProps['positioning'];
   }
 >(function TabPopoverContent(props, ref) {
   const { portalled = true, portalRef, ...rest } = props;
@@ -118,6 +93,7 @@ export const TabPopoverContent = React.forwardRef<
           }
           boxShadow="none"
           bg="surfacePrimary"
+          width="auto"
         >
           {props.children}
         </ChakraPopover.Content>

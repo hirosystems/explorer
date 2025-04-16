@@ -1,25 +1,27 @@
 import {
-  PositioningOptions,
+  CURVED_CORNER_SIZE,
   TabPopoverContent,
   TabPopoverRoot,
   TabPopoverTrigger,
 } from '@/common/components/TabPopover';
+import { PopoverRootProps } from '@ark-ui/react';
 import { Box, Flex, Icon, PopoverContentProps, PopoverTriggerProps } from '@chakra-ui/react';
 import { CaretDown, CaretUp } from '@phosphor-icons/react';
 import { ReactNode, useState } from 'react';
 
 interface TableTabPopoverProps {
   id: string;
-  positioning?: PositioningOptions;
+  positioning?: PopoverRootProps['positioning'];
   trigger: (open: boolean, setOpen: (open: boolean) => void) => ReactNode;
   content: (open: boolean, setOpen: (open: boolean) => void) => ReactNode;
   triggerProps?: PopoverTriggerProps;
   contentProps?: PopoverContentProps;
 }
 
-const DEFAULT_POSITIONING: PositioningOptions = {
+const DEFAULT_POSITIONING: PopoverRootProps['positioning'] = {
   placement: 'bottom-start',
   offset: { mainAxis: 0, crossAxis: 0 },
+  sameWidth: true,
 };
 
 export function TableTabPopover({
@@ -73,8 +75,9 @@ export function TableTabPopover({
       </TabPopoverTrigger>
       <TabPopoverContent
         bgColor={'surfacePrimary'}
+        minWidth={'fit-content'}
+        marginRight={-(CURVED_CORNER_SIZE + 1)}
         positioning={positioning ?? DEFAULT_POSITIONING}
-        w="fit-content"
         {...contentProps}
       >
         <>

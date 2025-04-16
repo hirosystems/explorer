@@ -1,10 +1,9 @@
 import {
-  PositioningOptions,
   TabPopoverContent,
   TabPopoverRoot,
   TabPopoverTrigger,
 } from '@/common/components/TabPopover';
-import { Box, Flex, Icon, Separator, Stack } from '@chakra-ui/react';
+import { Box, Flex, Icon, PopoverRootProps, Separator, Stack } from '@chakra-ui/react';
 import { GearFine, X } from '@phosphor-icons/react';
 import { useState } from 'react';
 
@@ -33,7 +32,7 @@ export const SettingsPopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
   );
 };
 
-const POSITIONING: PositioningOptions = {
+const POSITIONING: PopoverRootProps['positioning'] = {
   placement: 'bottom-end',
   offset: {
     mainAxis: 8,
