@@ -20,7 +20,11 @@ export function AddressFilterPopover({
   return (
     <TableTabPopover
       id={`address-filter-popover-redesign${idExtension ? `-${idExtension}` : ''}`}
-      positioning={{ placement: 'bottom-start', offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT } }}
+      positioning={{
+        placement: 'bottom-start',
+        offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT },
+        sameWidth: true,
+      }}
       trigger={(open, setOpen) => (
         <AddressFilterTriggerText
           defaultFromAddress={defaultFromAddress}

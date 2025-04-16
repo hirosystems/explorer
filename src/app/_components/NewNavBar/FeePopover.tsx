@@ -1,5 +1,4 @@
 import {
-  PositioningOptions,
   TabPopoverContent,
   TabPopoverRoot,
   TabPopoverTrigger,
@@ -7,7 +6,7 @@ import {
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import StxIcon from '@/ui/icons/StxIcon';
-import { Box, Flex, Icon, Separator, Stack, Tabs } from '@chakra-ui/react';
+import { Box, Flex, Icon, PopoverRootProps, Separator, Stack, Tabs } from '@chakra-ui/react';
 import { CaretDown, CaretUp, Info, Lightning } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
 
@@ -219,7 +218,7 @@ export const FeePopoverContent = ({ isOpen }: { isOpen?: boolean }) => {
   );
 };
 
-const POSITIONING: PositioningOptions = {
+const POSITIONING: PopoverRootProps['positioning'] = {
   placement: 'bottom-end',
   offset: {
     mainAxis: 8,

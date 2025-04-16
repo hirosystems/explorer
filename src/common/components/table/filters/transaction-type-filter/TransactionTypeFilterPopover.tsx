@@ -10,7 +10,11 @@ export function TransactionTypeFilterPopover() {
   return (
     <TableTabPopover
       id={'transaction-type-filter-popover'}
-      positioning={{ placement: 'bottom-start', offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT } }}
+      positioning={{
+        placement: 'bottom-start',
+        offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT },
+        sameWidth: true,
+      }}
       trigger={(open, setOpen) => <TransactionTypeFilterTriggerText open={open} />}
       content={(open, setOpen) => (
         <Box px={1.5} pt={2} pb={3}>

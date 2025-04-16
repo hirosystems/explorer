@@ -15,7 +15,11 @@ export function DateFilterPopover({ defaultStartTime, defaultEndTime }: DateFilt
   return (
     <TableTabPopover
       id={'date-filter-popover-redesign'}
-      positioning={{ placement: 'bottom-start', offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT } }}
+      positioning={{
+        placement: 'bottom-start',
+        offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT },
+        sameWidth: true,
+      }}
       trigger={(open, setOpen) => (
         <DateFilterTriggerText
           defaultStartTime={defaultStartTime}
