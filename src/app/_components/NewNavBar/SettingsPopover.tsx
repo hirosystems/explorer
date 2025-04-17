@@ -49,7 +49,7 @@ export const SettingsPopover = () => {
       positioning={POSITIONING}
       open={open}
       onOpenChange={e => setOpen(e.open)}
-      unstyled
+      // unstyled
     >
       <TabPopoverTrigger open={open} positioning={POSITIONING}>
         <Box

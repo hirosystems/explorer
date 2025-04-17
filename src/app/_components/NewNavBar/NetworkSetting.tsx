@@ -11,7 +11,7 @@ import { buildUrl } from '@/common/utils/buildUrl';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
-import { Flex, Icon, IconButton, Stack } from '@chakra-ui/react';
+import { Flex, Icon, IconButton, Stack, ClientOnly } from '@chakra-ui/react';
 import { Check, Trash } from '@phosphor-icons/react';
 import { useMemo, useState } from 'react';
 
@@ -205,9 +205,11 @@ export const NetworkSetting = () => {
           Network
         </Text>
         <Stack gap={1.5} w="full">
-          {Object.entries(networks).map(([url, network]) => (
-            <NetworkLabel key={network.url} network={network} />
-          ))}
+          <ClientOnly>
+            {Object.entries(networks).map(([url, network]) => (
+              <NetworkLabel key={network.url} network={network} />
+            ))}
+          </ClientOnly>
         </Stack>
       </Stack>
       <Button
