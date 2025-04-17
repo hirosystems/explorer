@@ -23,7 +23,7 @@ const DesktopNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & 
     >
       <Flex alignItems="center" gap={4} h="full">
         <Logo logoSize={10} />
-        <PagesSlidingMenu />
+        {/* <PagesSlidingMenu /> */}
       </Flex>
       <Flex flexGrow={1} flexShrink={1} maxWidth="507px">
         {/* <Search /> */}
