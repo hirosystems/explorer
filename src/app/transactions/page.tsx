@@ -6,6 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { getTokenPrice } from '../getTokenPriceInfo';
 import Page from './PageClient';
 import { compressTransactions } from './utils';
+import { NetworkModes } from '@/common/types/network';
 
 export interface TxPageFilters {
   startTime?: string;
@@ -23,7 +24,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   const searchParams = await props.searchParams;
   const { startTime, endTime, chain, api, fromAddress, toAddress } = searchParams;
 
-  const apiUrl = getApiUrl(chain || '', api);
+  const apiUrl = getApiUrl(chain || NetworkModes.Mainnet, api);
   let bnsAddress;
   if (apiUrl && fromAddress?.endsWith('.btc')) {
     bnsAddress = await fetchBnsAddress(apiUrl, fromAddress);
