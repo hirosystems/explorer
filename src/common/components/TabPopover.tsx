@@ -38,6 +38,7 @@ export const TabPopoverRoot = (props: PopoverRootProps) => {
         placement: props?.positioning?.placement ?? undefined,
         offset: props?.positioning?.offset ?? undefined,
       }}
+      unstyled // disables chakra ui's default styling
     />
   );
 };
