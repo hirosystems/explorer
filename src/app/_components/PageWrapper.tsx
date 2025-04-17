@@ -58,19 +58,20 @@ function WrapperWithBg({
   const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
   const isServer = typeof window === 'undefined';
   const isRedesign = useIsRedesignUrl();
-  const bgColor = isRedesign
-    ? 'surfaceTertiary'
-    : isServer
-      ? serverThemeCookie
-        ? serverThemeCookie === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg
-      : clientThemeCookie['stacks-explorer-theme']
-        ? clientThemeCookie['stacks-explorer-theme'] === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg;
+  // const bgColor = isRedesign
+  //   ? 'surfaceTertiary'
+  //   : isServer
+  //     ? serverThemeCookie
+  //       ? serverThemeCookie === 'light'
+  //         ? lightBg
+  //         : darkBg
+  //       : lightBg
+  //     : clientThemeCookie['stacks-explorer-theme']
+  //       ? clientThemeCookie['stacks-explorer-theme'] === 'light'
+  //         ? lightBg
+  //         : darkBg
+  //       : lightBg;
+  const bgColor ='surfaceTertiary';
   return (
     <StyledWrapper bg={bgColor} className="wrapper-with-bg">
       {children}
@@ -100,15 +101,18 @@ export function PageWrapper({
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
         <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {isRedesign ? <NewNavBar tokenPrices={tokenPrice} /> : <NavBar tokenPrice={tokenPrice} />}
+          {/* {isRedesign ? <NewNavBar /> : <NavBar tokenPrice={tokenPrice} />} */}
+          <NewNavBar />
           <Stack
-            marginTop={isRedesign ? '50px' : '120px'}
+            // marginTop={isRedesign ? '50px' : '120px'}
+            marginTop={'50px'}
             mb={8}
             gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
           >
             {children}
           </Stack>
-          {isRedesign ? <NewFooter /> : <Footer />}
+          {/* {isRedesign ? <NewFooter /> : <Footer />} */}
+          <NewFooter />
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />
