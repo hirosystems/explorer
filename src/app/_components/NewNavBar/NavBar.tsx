@@ -10,6 +10,7 @@ import { MobileNavPage } from './MobileNavPage';
 import { PagesSlidingMenu } from './PagesSlidingMenu';
 import { Prices } from './Prices';
 import { SettingsPopover } from './SettingsPopover';
+import { Search } from '../Search/Search';
 
 const DesktopNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & FlexProps) => {
   return (
