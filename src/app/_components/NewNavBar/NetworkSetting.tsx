@@ -1,3 +1,5 @@
+'use client';
+
 import { openModal } from '@/common/components/modals/modal-slice';
 import { DEFAULT_DEVNET_SERVER, MODALS } from '@/common/constants/constants';
 import { DEFAULT_MAINNET_SERVER, DEFAULT_TESTNET_SERVER } from '@/common/constants/env';
@@ -94,6 +96,8 @@ const NetworkLabel = ({ network }: { network: Network }) => {
   );
 
   const [isDeletingNetwork, setIsDeletingNetwork] = useState(false);
+
+  console.log({network, isActiveNetwork, isDisabled, isNetworkRemovable})
 
   return (
     <Link
@@ -192,6 +196,7 @@ const NetworkLabel = ({ network }: { network: Network }) => {
 export const NetworkSetting = () => {
   const dispatch = useAppDispatch();
   const { networks } = useGlobalContext();
+  console.log({networks})
 
   return (
     <Stack gap={4}>
