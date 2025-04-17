@@ -1,5 +1,6 @@
 import { TX_TABLE_PAGE_SIZE } from '@/common/components/table/table-examples/consts';
 import { fetchBnsAddress } from '@/common/queries/bns-queries';
+import { NetworkModes } from '@/common/types/network';
 import { getApiUrl } from '@/common/utils/network-utils';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -23,7 +24,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   const searchParams = await props.searchParams;
   const { startTime, endTime, chain, api, fromAddress, toAddress } = searchParams;
 
-  const apiUrl = getApiUrl(chain || '', api);
+  const apiUrl = getApiUrl(chain || NetworkModes.Mainnet, api);
   let bnsAddress;
   if (apiUrl && fromAddress?.endsWith('.btc')) {
     bnsAddress = await fetchBnsAddress(apiUrl, fromAddress);
