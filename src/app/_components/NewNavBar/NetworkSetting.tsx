@@ -113,6 +113,7 @@ const NetworkLabel = ({ network }: { network: Network }) => {
       borderRadius="redesign.md"
       key={network.url}
       className="group"
+      suppressHydrationWarning
     >
       <Stack
         gap={3}
@@ -205,7 +206,7 @@ export const NetworkSetting = () => {
           Network
         </Text>
         <Stack gap={1.5} w="full">
-          <ClientOnly>
+          <ClientOnly> {/* prevents hydration mismatch */}
             {Object.entries(networks).map(([url, network]) => (
               <NetworkLabel key={network.url} network={network} />
             ))}
