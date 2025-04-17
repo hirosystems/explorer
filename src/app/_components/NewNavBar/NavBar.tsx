@@ -30,7 +30,7 @@ const DesktopNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & 
       </Flex>
       <Flex gap={4}>
         {/* <Prices tokenPrices={tokenPrices} /> */}
-        {/* <SettingsPopover /> */}
+        <SettingsPopover />
       </Flex>
     </Flex>
   );
