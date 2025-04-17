@@ -157,13 +157,13 @@ export const columns: ColumnDef<TxTableData>[] = [
     cell: info => FeeCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
-  // {
-  //   id: TxTableColumns.BlockTime,
-  //   header: 'Timestamp',
-  //   accessorKey: TxTableColumns.BlockTime,
-  //   cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
-  //   enableSorting: false,
-  // },
+  {
+    id: TxTableColumns.BlockTime,
+    header: 'Timestamp',
+    accessorKey: TxTableColumns.BlockTime,
+    cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
+    enableSorting: false,
+  },
 ];
 
 export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
