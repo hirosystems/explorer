@@ -1,3 +1,10 @@
+# [1.275.0](https://github.com/hirosystems/explorer/compare/v1.274.2...v1.275.0) (2025-04-17)
+
+
+### Features
+
+* removed fees widget and added prices ([5b03eb7](https://github.com/hirosystems/explorer/commit/5b03eb7296d831a2eaa2a049a53c5ff3b60cddca))
+
 ## [1.274.2](https://github.com/hirosystems/explorer/compare/v1.274.1...v1.274.2) (2025-04-16)
 
 
