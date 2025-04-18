@@ -1,3 +1,10 @@
+## [1.275.1](https://github.com/hirosystems/explorer/compare/v1.275.0...v1.275.1) (2025-04-18)
+
+
+### Bug Fixes
+
+* fixed token list ([f207427](https://github.com/hirosystems/explorer/commit/f207427941448d60737422f267fc83a401bdcf69))
+
 # [1.275.0](https://github.com/hirosystems/explorer/compare/v1.274.2...v1.275.0) (2025-04-17)
 
 
