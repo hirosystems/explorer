@@ -76,7 +76,7 @@ export function SignersMapComponentLayout({ map, pills }: { map: ReactNode; pill
     <Card height="100%" width="100%" p={6}>
       <Stack height="100%" width="100%" gap={6}>
         <Box flex="1" minHeight={0} width="100%" borderRadius="xl">
-          {/* {map} */}
+          {map}
         </Box>
         <Flex flexWrap="wrap" gap={3}>
           {pills}
