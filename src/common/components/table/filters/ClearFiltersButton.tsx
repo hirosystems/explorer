@@ -69,9 +69,12 @@ export function ClearFiltersButton({ filters }: { filters: TxPageFilters }) {
       onClick={clearFilters}
       variant="redesignTertiary"
       size="small"
+      boxSizing="border-box"
+      alignItems="center"
+      h="full"
     >
       <Flex gap={1.5} alignItems={'center'}>
-        <Text fontSize={'sm'} fontWeight={'medium'} color="textSecondary">
+        <Text textStyle="text-medium-sm" color="textSecondary">
           Clear all filters
         </Text>
         <Icon h={3} w={3} color="iconSecondary">

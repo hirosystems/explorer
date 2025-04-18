@@ -46,6 +46,7 @@ export const CheckboxItem = ({
         textStyle="text-medium-sm"
         color={checkboxProps.checked ? 'textPrimary' : 'textSecondary'}
         _groupHover={{ color: 'textPrimary' }}
+        whiteSpace="nowrap"
       >
         {label}
       </Text>
