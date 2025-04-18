@@ -1,3 +1,10 @@
+## [1.275.2](https://github.com/hirosystems/explorer/compare/v1.275.1...v1.275.2) (2025-04-18)
+
+
+### Bug Fixes
+
+* hydration mismatch and tx page filtering bug ([843a38d](https://github.com/hirosystems/explorer/commit/843a38dbd6ba27f81d7e73d6c4024c58dd3c32b6))
+
 ## [1.275.1](https://github.com/hirosystems/explorer/compare/v1.275.0...v1.275.1) (2025-04-18)
 
 
