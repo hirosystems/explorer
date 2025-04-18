@@ -224,11 +224,13 @@ export function SignersTableLayout({
   signersTableRows: ReactNode;
 }) {
   return (
-    <Section title={title} topRight={topRight}>
+    // <Section title={title} topRight={topRight}>
+    <Section title={title} topRight={null}>
+
       <ScrollableBox>
         <StyledTable width="full">
-          <Table.Header>{signersTableHeaders}</Table.Header>
-          <Table.Body>{signersTableRows}</Table.Body>
+          {/* <Table.Header>{signersTableHeaders}</Table.Header> */}
+          {/* <Table.Body>{signersTableRows}</Table.Body> */}
         </StyledTable>
       </ScrollableBox>
     </Section>
@@ -277,36 +279,36 @@ const SignersTableBase = () => {
     [setSelectedCycle]
   );
 
-  const signersResponse = useSuspensePoxSigners(parseInt(selectedCycle), {
-    limit: 100,
-  });
-  const signers = useSuspenseInfiniteQueryResult<PoxSigner>(signersResponse);
+  // const signersResponse = useSuspensePoxSigners(parseInt(selectedCycle), {
+  //   limit: 100,
+  // });
+  // const signers = useSuspenseInfiniteQueryResult<PoxSigner>(signersResponse);
 
-  if (!signers) {
-    throw new Error('Signers data is not available');
-  }
+  // if (!signers) {
+  //   throw new Error('Signers data is not available');
+  // }
 
-  const signersMetricsResponse = useSignerMetricsSignersForCycle(parseInt(selectedCycle), {
-    limit: 100,
-  });
+  // const signersMetricsResponse = useSignerMetricsSignersForCycle(parseInt(selectedCycle), {
+  //   limit: 100,
+  // });
 
-  const signersMetrics =
-    useInfiniteQueryResult<SignerMetricsSignerForCycle>(signersMetricsResponse);
+  // const signersMetrics =
+  //   useInfiniteQueryResult<SignerMetricsSignerForCycle>(signersMetricsResponse);
 
-  const signersData = useMemo(() => {
-    return signers
-      .map(signer => {
-        const metrics =
-          signersMetrics.find(m => m.signer_key === signer.signing_key) ||
-          ({} as SignerMetricsSignerForCycle);
-        return formatSignerRowData(signer, metrics);
-      })
-      .sort((a, b) =>
-        votingPowerSortOrder === 'desc'
-          ? b.votingPower - a.votingPower
-          : a.votingPower - b.votingPower
-      );
-  }, [signers, signersMetrics, votingPowerSortOrder]);
+  // const signersData = useMemo(() => {
+  //   return signers
+  //     .map(signer => {
+  //       const metrics =
+  //         signersMetrics.find(m => m.signer_key === signer.signing_key) ||
+  //         ({} as SignerMetricsSignerForCycle);
+  //       return formatSignerRowData(signer, metrics);
+  //     })
+  //     .sort((a, b) =>
+  //       votingPowerSortOrder === 'desc'
+  //         ? b.votingPower - a.votingPower
+  //         : a.votingPower - b.votingPower
+  //     );
+  // }, [signers, signersMetrics, votingPowerSortOrder]);
 
   return (
     <SignersTableLayout
@@ -333,17 +335,17 @@ const SignersTableBase = () => {
           </Flex>
         </Flex>
       }
-      title={<Text fontWeight="medium">{signersData.length} Active Signers</Text>}
-      signersTableHeaders={<SignersTableHeaders />}
-      signersTableRows={signersData.map((signer, i) => (
-        <SignerTableRow
-          key={`signers-table-row-${signer.signerKey}`}
-          index={i}
-          {...signersData[i]}
-          isFirst={i === 0}
-          isLast={i === signers.length - 1}
-        />
-      ))}
+      // title={<Text fontWeight="medium">{signersData.length} Active Signers</Text>}
+      // signersTableHeaders={<SignersTableHeaders />}
+      // signersTableRows={signersData.map((signer, i) => (
+      //   <SignerTableRow
+      //     key={`signers-table-row-${signer.signerKey}`}
+      //     index={i}
+      //     {...signersData[i]}
+      //     isFirst={i === 0}
+      //     isLast={i === signers.length - 1}
+      //   />
+      // ))}
     />
   );
 };

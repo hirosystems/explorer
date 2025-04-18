@@ -13,7 +13,7 @@ export default function ({ tokenPrice }: { tokenPrice: TokenPrice }) {
       <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
         <PageTitle>Signers</PageTitle>
       </Flex>
-      <SignersHeader tokenPrice={tokenPrice} />
+      {/* <SignersHeader tokenPrice={tokenPrice} /> */}
       <SignersTable />
     </>
   );
