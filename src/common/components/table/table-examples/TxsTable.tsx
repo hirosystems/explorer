@@ -366,7 +366,7 @@ export function TxsTable({
       data={rowData}
       columns={tableColumns}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
-      scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
+      // scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
       pagination={
         disablePagination
           ? undefined

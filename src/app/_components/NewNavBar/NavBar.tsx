@@ -5,12 +5,12 @@ import { Input } from '@/ui/Input';
 import { Box, Flex, FlexProps, Icon, useDisclosure } from '@chakra-ui/react';
 import { List } from '@phosphor-icons/react';
 
-import { Search } from '../Search/Search';
 import { Logo } from './Logo';
 import { MobileNavPage } from './MobileNavPage';
 import { PagesSlidingMenu } from './PagesSlidingMenu';
 import { Prices } from './Prices';
 import { SettingsPopover } from './SettingsPopover';
+import { Search } from '../Search/Search';
 
 const DesktopNavBar = ({ tokenPrices, ...props }: { tokenPrices: TokenPrice } & FlexProps) => {
   return (
