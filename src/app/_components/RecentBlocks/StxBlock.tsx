@@ -1,4 +1,4 @@
-import { UIStxBlock } from '@/app/home-redesign/data';
+import { UIStxBlock } from '@/app/data';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
 
