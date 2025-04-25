@@ -110,6 +110,7 @@ export type TableProps<T> = {
   columns: ColumnDef<T>[];
   onSort?: (columnId: string, sortDirection: 'asc' | 'desc' | undefined) => Promise<T[]>;
   isLoading?: boolean;
+  isFetching?: boolean;
   suspenseWrapper?: (table: JSX.Element) => JSX.Element;
   tableContainerWrapper?: (table: JSX.Element) => JSX.Element;
   scrollIndicatorWrapper?: (table: JSX.Element) => JSX.Element;
@@ -199,6 +200,7 @@ export function Table<T>({
   columns,
   onSort,
   isLoading,
+  isFetching,
   suspenseWrapper = (table: JSX.Element) => table,
   tableContainerWrapper = (table: JSX.Element) => table,
   scrollIndicatorWrapper = (table: JSX.Element) => table,
@@ -257,18 +259,20 @@ export function Table<T>({
   });
 
   useEffect(() => {
-    setTableData(data);
-  }, [data]);
+    if (!isLoading && !isFetching) {
+      setTableData(data);
+    }
+  }, [data, isLoading, isFetching]);
 
   if (error) {
     return tableContainerWrapper(<ErrorTable error={error} />);
   }
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return tableContainerWrapper(<LoadingTable />);
   }
 
-  if (tableData.length === 0) {
+  if (!isLoading && !isFetching && tableData.length === 0) {
     return tableContainerWrapper(<EmptyTable />);
   }
 
