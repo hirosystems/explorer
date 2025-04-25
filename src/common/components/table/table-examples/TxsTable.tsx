@@ -224,15 +224,23 @@ export const UpdateTableBannerRow = ({ onClick }: { onClick: () => void }) => {
 };
 
 export interface TxsTableProps {
-  filters: TxPageFilters;
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
   disablePagination?: boolean;
   columnDefinitions?: ColumnDef<TxTableData>[];
   pageSize?: number;
+  filters?: TxPageFilters;
 }
 
+const DEFAULT_FILTERS: TxPageFilters = {
+  fromAddress: '',
+  toAddress: '',
+  startTime: '',
+  endTime: '',
+  transactionType: [],
+};
+
 export function TxsTable({
-  filters,
+  filters = DEFAULT_FILTERS,
   initialData,
   disablePagination = false,
   columnDefinitions,
@@ -256,6 +264,7 @@ export function TxsTable({
   const isCacheSetWithInitialData = useRef(false);
 
   const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
+
   /**
    * HACK: react query's cache is taking precedence over the initial data, which is causing hydration errors
    * Setting the gcTime to 0 prevents this from happening but it also prevents us from caching requests as the user paginates through the table
@@ -278,7 +287,7 @@ export function TxsTable({
   }
 
   // fetch data
-  let { data, refetch, isFetching } = useConfirmedTransactions(
+  let { data, refetch, isFetching, isLoading } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
     { ...filters },
@@ -385,7 +394,8 @@ export function TxsTable({
           />
         ) : null
       }
-      isLoading={isFetching}
+      isLoading={isLoading}
+      isFetching={isFetching}
     />
   );
 }

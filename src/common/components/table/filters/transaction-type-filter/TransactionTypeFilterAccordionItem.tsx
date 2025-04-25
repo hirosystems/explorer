@@ -1,3 +1,4 @@
+import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import {
   AccordionItem,
   AccordionItemContent,
@@ -11,13 +12,13 @@ export const TransactionTypeFilterAccordionItem = ({
   id,
   open,
   onSubmit,
-  defaultTransactionType,
 }: {
   id: string;
   open: boolean;
-  onSubmit?: () => void;
-  defaultTransactionType: string[] | undefined;
+  onSubmit: (transactionType: string[]) => void;
 }) => {
+  const { transactionType } = useTxTableFilters();
+
   return (
     <AccordionItem borderBottom={'none'} value={id}>
       <AccordionItemTrigger
@@ -28,10 +29,7 @@ export const TransactionTypeFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <TransactionTypeFilterTriggerText
-          open={open}
-          defaultTransactionType={defaultTransactionType}
-        />
+        <TransactionTypeFilterTriggerText open={open} transactionType={transactionType} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
@@ -42,7 +40,7 @@ export const TransactionTypeFilterAccordionItem = ({
         <TransactionTypeFilterForm
           open={open}
           onSubmit={onSubmit}
-          defaultTransactionType={defaultTransactionType}
+          defaultTransactionType={transactionType}
         />
       </AccordionItemContent>
     </AccordionItem>

@@ -4,22 +4,22 @@ import { TableTabPopover } from '../TableTabPopover';
 import { AddressFilterForm } from './AddressFilterForm';
 import { AddressFilterTriggerText } from './AddressFilterTriggerText';
 
-interface AddressFilterPopoverProps {
-  defaultFromAddress?: string;
-  defaultToAddress?: string;
-  idExtension?: string;
-}
-
 const TAB_HEIGHT_ADJUSTMENT = 4;
 
 export function AddressFilterPopover({
-  defaultToAddress = '',
-  defaultFromAddress = '',
   idExtension = '',
-}: AddressFilterPopoverProps) {
+  defaultFromAddress = '',
+  defaultToAddress = '',
+  onSubmit,
+}: {
+  idExtension?: string;
+  defaultFromAddress?: string;
+  defaultToAddress?: string;
+  onSubmit: (fromAddress: string, toAddress: string) => void;
+}) {
   return (
     <TableTabPopover
-      id={`address-filter-popover-redesign${idExtension ? `-${idExtension}` : ''}`}
+      id={`address-filter-popover${idExtension ? `-${idExtension}` : ''}`}
       positioning={{
         placement: 'bottom-start',
         offset: { mainAxis: TAB_HEIGHT_ADJUSTMENT },
@@ -27,19 +27,20 @@ export function AddressFilterPopover({
       }}
       trigger={(open, setOpen) => (
         <AddressFilterTriggerText
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
           open={open}
+          fromAddress={defaultFromAddress}
+          toAddress={defaultToAddress}
         />
       )}
       content={(open, setOpen) => (
         <Box p={3}>
           <AddressFilterForm
-            defaultFromAddress={defaultFromAddress}
-            defaultToAddress={defaultToAddress}
-            onSubmit={() => {
+            onSubmit={(fromAddress: string, toAddress: string) => {
+              onSubmit(fromAddress, toAddress);
               setOpen(false);
             }}
+            defaultFromAddress={defaultFromAddress}
+            defaultToAddress={defaultToAddress}
           />
         </Box>
       )}

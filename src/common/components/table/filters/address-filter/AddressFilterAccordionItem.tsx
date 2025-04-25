@@ -1,3 +1,4 @@
+import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import {
   AccordionItem,
   AccordionItemContent,
@@ -9,17 +10,15 @@ import { AddressFilterTriggerText } from './AddressFilterTriggerText';
 
 export const AddressFilterAccordionItem = ({
   id,
-  defaultFromAddress,
-  defaultToAddress,
   open,
   onSubmit,
 }: {
   id: string;
-  defaultFromAddress?: string;
-  defaultToAddress?: string;
   open: boolean;
-  onSubmit?: () => void;
+  onSubmit?: (fromAddress: string, toAddress: string) => void;
 }) => {
+  const { fromAddress, toAddress } = useTxTableFilters();
+
   return (
     <AccordionItem borderBottom={'none'} value={id} aria-label="Address filter options">
       <AccordionItemTrigger
@@ -30,11 +29,7 @@ export const AddressFilterAccordionItem = ({
         w="full"
         p={3}
       >
-        <AddressFilterTriggerText
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
-          open={open}
-        />
+        <AddressFilterTriggerText fromAddress={fromAddress} toAddress={toAddress} open={open} />
       </AccordionItemTrigger>
       <AccordionItemContent
         bg="surfacePrimary"
@@ -43,8 +38,8 @@ export const AddressFilterAccordionItem = ({
         p={1.5} // I think there is a bug on Chakra that's causing the padding here to be applied to 2 divs surrounding the content
       >
         <AddressFilterForm
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
+          defaultFromAddress={fromAddress}
+          defaultToAddress={toAddress}
           onSubmit={onSubmit}
         />
       </AccordionItemContent>

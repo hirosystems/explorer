@@ -1,60 +1,46 @@
 import { formatDate, parseUTCDate } from '@/common/utils/time-utils';
-import { UTCDate } from '@date-fns/utc';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { FilterTriggerText } from '../FilterTriggerText';
 
 export const DateFilterTriggerText = ({
-  defaultStartTime,
-  defaultEndTime,
   open,
+  startTime,
+  endTime,
 }: {
-  defaultStartTime?: string;
-  defaultEndTime?: string;
   open: boolean;
+  startTime: string;
+  endTime: string;
 }) => {
-  const searchParams = useSearchParams();
-  const [startTime, setStartTime] = useState<UTCDate | null>(
-    defaultStartTime ? parseUTCDate(defaultStartTime) : null
-  );
-  const [endTime, setEndTime] = useState<UTCDate | null>(
-    defaultEndTime ? parseUTCDate(defaultEndTime) : null
-  );
-
-  useEffect(() => {
-    const startTime = searchParams.get('startTime');
-    const endTime = searchParams.get('endTime');
-    setStartTime(startTime ? parseUTCDate(startTime) : null);
-    setEndTime(endTime ? parseUTCDate(endTime) : null);
-  }, [searchParams]);
+  const parsedStartTime = parseUTCDate(startTime);
+  const parsedEndTime = parseUTCDate(endTime);
 
   const isDateSet = startTime || endTime;
   const triggerTextPrefix = isDateSet ? 'Date:' : 'Date';
   const triggerTextSuffix = useMemo(() => {
-    if (startTime && endTime) {
+    if (parsedStartTime && parsedEndTime) {
       return `Between ${formatDate(
-        startTime,
+        parsedStartTime,
         { month: '2-digit', day: '2-digit', year: 'numeric' },
         'en-CA'
-      )} - ${formatDate(endTime, { month: '2-digit', day: '2-digit', year: 'numeric' }, 'en-CA')}`;
+      )} - ${formatDate(parsedEndTime, { month: '2-digit', day: '2-digit', year: 'numeric' }, 'en-CA')}`;
     }
-    if (startTime) {
+    if (parsedStartTime) {
       return `After ${formatDate(
-        startTime,
+        parsedStartTime,
         { month: '2-digit', day: '2-digit', year: 'numeric' },
         'en-CA'
       )}`;
     }
-    if (endTime) {
+    if (parsedEndTime) {
       return `Before ${formatDate(
-        endTime,
+        parsedEndTime,
         { month: '2-digit', day: '2-digit', year: 'numeric' },
         'en-CA'
       )}`;
     }
     return '';
-  }, [startTime, endTime]);
+  }, [parsedStartTime, parsedEndTime]);
 
   return (
     <FilterTriggerText

@@ -1,33 +1,19 @@
 import { truncateMiddle, truncateStxAddress, validateStacksAddress } from '@/common/utils/utils';
 import { Flex } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
 import { FilterTriggerText } from '../FilterTriggerText';
 
 const TRUNCATE_THRESHOLD = 15;
 
 export const AddressFilterTriggerText = ({
-  defaultToAddress,
-  defaultFromAddress,
+  toAddress,
+  fromAddress,
   open,
 }: {
-  defaultToAddress?: string;
-  defaultFromAddress?: string;
+  toAddress?: string;
+  fromAddress?: string;
   open: boolean;
 }) => {
-  const [toAddress, setToAddress] = useState(defaultToAddress);
-  const [fromAddress, setFromAddress] = useState(defaultFromAddress);
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const fromAddress = searchParams.get('fromAddress');
-    const toAddress = searchParams.get('toAddress');
-    setFromAddress(fromAddress || '');
-    setToAddress(toAddress || '');
-  }, [searchParams]);
-
   if (fromAddress || toAddress) {
     return (
       <Flex gap={1.5}>

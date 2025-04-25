@@ -5,31 +5,7 @@ import ClarityIcon from '@/ui/icons/ClarityIcon';
 import DiagonalArrowsIcon from '@/ui/icons/DiagonalArrowsIcon';
 import { Box, HStack, Icon, Stack, useCheckboxGroup } from '@chakra-ui/react';
 import { ArrowsCounterClockwise, Cube, PhoneCall } from '@phosphor-icons/react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { ReactNode, useEffect, useRef } from 'react';
-
-export const getTransactionTypeFilterParams = (
-  searchParams: URLSearchParams,
-  transactionType: string[]
-) => {
-  if (!transactionType) {
-    searchParams.delete('transactionType');
-  } else {
-    searchParams.set('transactionType', transactionType.join(','));
-  }
-  return searchParams;
-};
-
-export function useTransactionTypeFilterSubmitHandler() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  return async (transactionType: string[]) => {
-    const params = new URLSearchParams(searchParams);
-    const paramsWithTransactionTypeFilter = getTransactionTypeFilterParams(params, transactionType);
-    router.push(`?${paramsWithTransactionTypeFilter.toString()}`, { scroll: false });
-  };
-}
 
 export const CheckboxItem = ({
   label,
@@ -78,39 +54,34 @@ export const CheckboxItem = ({
 };
 
 export function TransactionTypeFilterForm({
-  defaultTransactionType,
   onSubmit,
   open,
+  defaultTransactionType,
 }: {
-  defaultTransactionType: string[] | undefined;
-  onSubmit?: () => void;
+  onSubmit?: (transactionType: string[]) => void;
   open: boolean;
+  defaultTransactionType: string[];
 }) {
   const prevOpenRef = useRef(open);
-  const onTransactionTypeFilterSubmitHandler = useTransactionTypeFilterSubmitHandler();
   const {
     value: selectedFilters,
     getItemProps: getCheckboxProps,
     toggleValue: toggleSelectedFilter,
     setValue: setSelectedFilters,
-  } = useCheckboxGroup({});
+  } = useCheckboxGroup();
 
-  // Syncs the selected filters with the search params. If the search params are cleared, the selected filters are cleared
-  const searchParams = useSearchParams();
+  // Syncs the selected filters with the defaultTransactionType prop
   useEffect(() => {
-    const transactionType = searchParams.get('transactionType');
-    setSelectedFilters(transactionType ? transactionType.split(',') : []);
-  }, [searchParams, setSelectedFilters]);
+    setSelectedFilters(defaultTransactionType || []);
+  }, [defaultTransactionType, setSelectedFilters]);
 
   // Resets the selected filters when the form is closed
   useEffect(() => {
-    // Only reset the selected filters when the form is closed after being opened
     if (prevOpenRef.current && !open) {
-      const transactionType = searchParams.get('transactionType');
-      setSelectedFilters(transactionType ? transactionType.split(',') : []);
+      setSelectedFilters(defaultTransactionType || []);
     }
     prevOpenRef.current = open;
-  }, [open, setSelectedFilters, searchParams]);
+  }, [open, setSelectedFilters, defaultTransactionType]);
 
   return (
     <Stack gap={1.5}>
@@ -158,8 +129,7 @@ export function TransactionTypeFilterForm({
           variant="redesignSecondary"
           size="small"
           onClick={() => {
-            onTransactionTypeFilterSubmitHandler(selectedFilters);
-            onSubmit?.();
+            onSubmit?.(selectedFilters);
           }}
         >
           Apply
