@@ -5,48 +5,7 @@ import { Input } from '@/ui/Input';
 import { Text } from '@/ui/Text';
 import { Stack } from '@chakra-ui/react';
 import { Field, FieldInputProps, FieldProps, Form, Formik, FormikProps } from 'formik';
-import { useRouter, useSearchParams } from 'next/navigation';
 import * as Yup from 'yup';
-
-interface AddressFilterProps {
-  defaultFromAddress?: string;
-  defaultToAddress?: string;
-  onSubmit?: (values: FormValues) => void;
-}
-
-interface FormValues {
-  fromAddress: string;
-  toAddress: string;
-}
-
-export const getAddressFilterParams = (
-  searchParams: URLSearchParams,
-  fromAddress: string,
-  toAddress: string
-) => {
-  if (!fromAddress) {
-    searchParams.delete('fromAddress');
-  } else {
-    searchParams.set('fromAddress', fromAddress);
-  }
-  if (!toAddress) {
-    searchParams.delete('toAddress');
-  } else {
-    searchParams.set('toAddress', toAddress);
-  }
-  return searchParams;
-};
-
-export function useAddressFilterSubmitHandler() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  return async ({ fromAddress, toAddress }: FormValues) => {
-    const params = new URLSearchParams(searchParams);
-    const paramsWithAddressFilter = getAddressFilterParams(params, fromAddress, toAddress);
-    router.push(`?${paramsWithAddressFilter.toString()}`, { scroll: false });
-  };
-}
 
 const AddressValidationSchema = Yup.object().shape({
   fromAddress: Yup.string().test(
@@ -94,12 +53,24 @@ const AddressFilterField = ({
   );
 };
 
+interface FormValues {
+  fromAddress: string;
+  toAddress: string;
+}
+
 export function AddressFilterForm({
   defaultToAddress = '',
   defaultFromAddress = '',
   onSubmit,
-}: AddressFilterProps) {
-  const onAddressFilterSubmitHandler = useAddressFilterSubmitHandler();
+}: {
+  defaultFromAddress?: string;
+  defaultToAddress?: string;
+  onSubmit?: (fromAddress: string, toAddress: string) => void;
+}) {
+  const initialValues: FormValues = {
+    fromAddress: defaultFromAddress,
+    toAddress: defaultToAddress,
+  };
 
   return (
     <Formik
@@ -107,13 +78,9 @@ export function AddressFilterForm({
       validateOnChange={false}
       validateOnBlur={false}
       validationSchema={AddressValidationSchema}
-      initialValues={{
-        fromAddress: defaultFromAddress,
-        toAddress: defaultToAddress,
-      }}
-      onSubmit={async ({ fromAddress, toAddress }) => {
-        onAddressFilterSubmitHandler({ fromAddress, toAddress });
-        onSubmit?.({ fromAddress, toAddress });
+      initialValues={initialValues}
+      onSubmit={({ fromAddress, toAddress }) => {
+        onSubmit?.(fromAddress, toAddress);
       }}
     >
       {({ isValidating }) => (

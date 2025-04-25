@@ -1,7 +1,7 @@
 'use client';
 
-import { TxPageFilters } from '@/app/transactions/page';
 import { useOpenedModal } from '@/common/components/modals/modal-slice';
+import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import { MODALS } from '@/common/constants/constants';
 import { AccordionRoot } from '@/components/ui/accordion';
 import { RedesignModal } from '@/ui/RedesignModal';
@@ -18,15 +18,18 @@ type AccordionItem =
   | 'address-filter-accordion-item'
   | 'transaction-type-filter-accordion-item';
 
-const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
-  const {
-    startTime: defaultStartTime,
-    endTime: defaultEndTime,
-    fromAddress: defaultFromAddress,
-    toAddress: defaultToAddress,
-    transactionType: defaultTransactionType,
-  } = filters;
+const TxTableFiltersModalBody = () => {
   const [accordions, setAccordions] = useState<AccordionItem[]>([]);
+  const {
+    transactionType,
+    startTime,
+    endTime,
+    fromAddress,
+    toAddress,
+    transactionTypeFilterHandler,
+    dateFilterHandler,
+    addressFilterHandler,
+  } = useTxTableFilters();
 
   return (
     <AccordionRoot
@@ -42,41 +45,39 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
         <TransactionTypeFilterAccordionItem
           id="transaction-type-filter-accordion-item"
           open={accordions.includes('transaction-type-filter-accordion-item')}
-          onSubmit={() =>
+          onSubmit={(transactionType: string[]) => {
+            transactionTypeFilterHandler(transactionType);
             setAccordions(
               accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item')
-            )
-          }
-          defaultTransactionType={defaultTransactionType}
+            );
+          }}
         />
         <DateFilterAccordionItem
           id="date-filter-accordion-item"
-          defaultStartTime={defaultStartTime}
-          defaultEndTime={defaultEndTime}
           open={accordions.includes('date-filter-accordion-item')}
-          onSubmit={() =>
+          onSubmit={(startTime?: number, endTime?: number) => {
+            dateFilterHandler(startTime, endTime);
             setAccordions(
               accordions.filter(accordion => accordion !== 'date-filter-accordion-item')
-            )
-          }
+            );
+          }}
         />
         <AddressFilterAccordionItem
           id="address-filter-accordion-item"
-          defaultFromAddress={defaultFromAddress}
-          defaultToAddress={defaultToAddress}
           open={accordions.includes('address-filter-accordion-item')}
-          onSubmit={() =>
+          onSubmit={(fromAddress: string, toAddress: string) => {
+            addressFilterHandler(fromAddress, toAddress);
             setAccordions(
               accordions.filter(accordion => accordion !== 'address-filter-accordion-item')
-            )
-          }
+            );
+          }}
         />
       </Stack>
     </AccordionRoot>
   );
 };
 
-export const TxTableFiltersModal = ({ filters }: { filters: TxPageFilters }) => {
+export const TxTableFiltersModal = () => {
   const modal = useOpenedModal();
   const open = useMemo(() => modal === MODALS.TxsTableFilters, [modal]);
 
@@ -88,7 +89,7 @@ export const TxTableFiltersModal = ({ filters }: { filters: TxPageFilters }) => 
           Filter
         </Text>
       }
-      body={<TxTableFiltersModalBody filters={filters} />}
+      body={<TxTableFiltersModalBody />}
     />
   );
 };

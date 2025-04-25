@@ -7,7 +7,7 @@ import { TransactionTypeFilterTriggerText } from '../TransactionTypeFilterTrigge
 describe('TransactionTypeFilterTriggerText', () => {
   test('displays Contract deploy label when smart_contract filter is active', () => {
     renderWithChakraProviders(
-      <TransactionTypeFilterTriggerText open={false} defaultTransactionType={['smart_contract']} />
+      <TransactionTypeFilterTriggerText open={false} transactionType={['smart_contract']} />
     );
     expect(screen.getByText('Contract deploy')).toBeInTheDocument();
     expect(screen.getByText('Type:')).toBeInTheDocument();

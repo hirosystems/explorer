@@ -57,6 +57,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
       ...(transactionType && { type: transactionType }),
     });
     const fetchUrl = `${apiUrl}/extended/v1/tx/?${params.toString()}`;
+
     const response = await fetch(fetchUrl, {
       next: {
         revalidate: 20, // nextjs caches the response for 20s (about 2-3 blocks)
@@ -92,11 +93,11 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
   return (
     <Page
       filters={{
-        fromAddress,
-        toAddress,
-        startTime,
-        endTime,
-        transactionType: transactionType ? transactionType.split(',') : undefined,
+        fromAddress: fromAddress || '',
+        toAddress: toAddress || '',
+        startTime: startTime || '',
+        endTime: endTime || '',
+        transactionType: transactionType ? transactionType.split(',') : [],
       }}
       initialTxTableData={initialTxTableData}
     />

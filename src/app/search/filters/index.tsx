@@ -1,5 +1,9 @@
 import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
+import {
+  useAddressFilterHandler,
+  useDateFilterHandler,
+} from '@/common/components/table/filters/table-filters-utils';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
 import { Backspace, FunnelSimple } from '@phosphor-icons/react';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -7,8 +11,6 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { filterToFormattedValueMap } from '../../../common/queries/useSearchQuery';
 import { Text } from '../../../ui/Text';
 import { TextLink } from '../../../ui/TextLink';
-import { AddressFilter } from './Address';
-import { DateFilter } from './Date';
 
 export interface FilterProps {
   filters: Record<string, string | undefined>;
@@ -34,7 +36,6 @@ export function ClearFiltersButton({ filters }: FilterProps) {
     <Flex gap={2} alignItems={'center'}>
       <TextLink
         href={pageUrlWithNoFilters}
-        // color={'secondary'}
         width={'full'}
         fontSize={'sm'}
         fontWeight={'medium'}
@@ -52,6 +53,9 @@ export function ClearFiltersButton({ filters }: FilterProps) {
 }
 
 export function FiltersWithWrapper({ filters }: FilterProps) {
+  const addressFilterHandler = useAddressFilterHandler(false);
+  const dateFilterHandler = useDateFilterHandler(false);
+
   return (
     <Stack
       gap={4}
@@ -78,8 +82,13 @@ export function FiltersWithWrapper({ filters }: FilterProps) {
         <AddressFilterPopover
           defaultFromAddress={filters.fromAddress}
           defaultToAddress={filters.toAddress}
+          onSubmit={addressFilterHandler}
         />
-        <DateFilterPopover defaultStartTime={filters.startTime} defaultEndTime={filters.endTime} />
+        <DateFilterPopover
+          defaultStartTime={filters.startTime}
+          defaultEndTime={filters.endTime}
+          onSubmit={dateFilterHandler}
+        />
       </Flex>
     </Stack>
   );

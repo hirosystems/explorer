@@ -1,9 +1,9 @@
 'use client';
 
-import { TxPageFilters } from '@/app/transactions/page';
 import { AddressFilterPopover } from '@/common/components/table/filters/address-filter/AddressFilterPopover';
 import { DateFilterPopover } from '@/common/components/table/filters/date-filter/DateFilterPopover';
 import { TransactionTypeFilterPopover } from '@/common/components/table/filters/transaction-type-filter/TransactionTypeFilterPopover';
+import { useTxTableFilters } from '@/common/components/table/tx-table/useTxTableFilters';
 import { MODALS } from '@/common/constants/constants';
 import { useAppDispatch } from '@/common/state/hooks';
 import { Button } from '@/ui/Button';
@@ -12,7 +12,7 @@ import { Flex, Icon } from '@chakra-ui/react';
 import { Funnel } from '@phosphor-icons/react';
 
 import { openModal } from '../../modals/modal-slice';
-import { ClearFiltersButton } from './ClearFiltersButton';
+import { ClearTxTableFiltersButton } from '../tx-table/ClearTxTableFiltersButton';
 
 const MobileOpenFilterModalButton = () => {
   const dispatch = useAppDispatch();
@@ -40,8 +40,17 @@ const MobileOpenFilterModalButton = () => {
   );
 };
 
-export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
-  const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
+export const TxTableFilters = () => {
+  const {
+    transactionType,
+    fromAddress,
+    toAddress,
+    startTime,
+    endTime,
+    addressFilterHandler,
+    dateFilterHandler,
+    transactionTypeFilterHandler,
+  } = useTxTableFilters();
 
   return (
     <Flex flexWrap={'wrap'} gap={4}>
@@ -51,10 +60,21 @@ export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <TransactionTypeFilterPopover defaultTransactionType={transactionType} />
-          <DateFilterPopover defaultStartTime={startTime} defaultEndTime={endTime} />
-          <AddressFilterPopover defaultFromAddress={fromAddress} defaultToAddress={toAddress} />
-          <ClearFiltersButton filters={filters} />
+          <TransactionTypeFilterPopover
+            defaultTransactionType={transactionType}
+            onSubmit={transactionTypeFilterHandler}
+          />
+          <DateFilterPopover
+            defaultStartTime={startTime}
+            defaultEndTime={endTime}
+            onSubmit={dateFilterHandler}
+          />
+          <AddressFilterPopover
+            defaultFromAddress={fromAddress}
+            defaultToAddress={toAddress}
+            onSubmit={addressFilterHandler}
+          />
+          <ClearTxTableFiltersButton />
         </Flex>
       </Flex>
     </Flex>
