@@ -13,9 +13,9 @@ import {
 import {
   RECENT_BTC_BLOCKS_COUNT,
   RECENT_STX_BLOCKS_COUNT,
-} from '../_components/RecentBlocks/consts';
-import { compressTransactions } from '../transactions/utils';
+} from './_components/RecentBlocks/consts';
 import { TXS_LIST_SIZE } from './consts';
+import { compressTransactions } from './transactions/utils';
 
 export type UIBtcBlock = Pick<
   BurnBlock,
