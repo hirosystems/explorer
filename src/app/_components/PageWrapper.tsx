@@ -1,17 +1,13 @@
 'use client';
 
-import { useIsRedesignUrl } from '@/common/utils/url-utils';
 import { Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { ReactNode } from 'react';
-import { useCookies } from 'react-cookie';
 
 import { AddNetworkModal } from '../../common/components/modals/AddNetwork';
 import { AddNetworkModalNew } from '../../common/components/modals/AddNetworkNew';
 import { IncidentContent } from '../../common/types/incidents';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { Footer } from './Footer';
-import { NavBar } from './NavBar';
 import { NetworkModeToast } from './NetworkModeToast';
 import { NewFooter } from './NewFooter';
 import { NavBar as NewNavBar } from './NewNavBar/NavBar';
@@ -33,46 +29,9 @@ const StyledWrapper = styled(Stack)<{ bg: string }>`
   font-variant-ligatures: no-contextual;
 `;
 
-const darkBg = `linear-gradient(
-       29.53deg, 
-       #9528F7 2.94%, 
-       #522DE7 39.91%, 
-       #221A71 76.87%, 
-       #0F102B 93.08%
-     ), black`;
-const lightBg = `linear-gradient(
-       29.53deg, 
-       #9528F7 2.94%, 
-       #522DE7 39.91%, 
-       #221A71 76.87%, 
-       #0F102B 93.08%
-     ), white`;
-
-function WrapperWithBg({
-  children,
-  serverThemeCookie,
-}: {
-  children: ReactNode;
-  serverThemeCookie: string;
-}) {
-  const [clientThemeCookie] = useCookies(['stacks-explorer-theme']);
-  const isServer = typeof window === 'undefined';
-  const isRedesign = useIsRedesignUrl();
-  const bgColor = isRedesign
-    ? 'surfaceTertiary'
-    : isServer
-      ? serverThemeCookie
-        ? serverThemeCookie === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg
-      : clientThemeCookie['stacks-explorer-theme']
-        ? clientThemeCookie['stacks-explorer-theme'] === 'light'
-          ? lightBg
-          : darkBg
-        : lightBg;
+function WrapperWithBg({ children }: { children: ReactNode; serverThemeCookie: string }) {
   return (
-    <StyledWrapper bg={bgColor} className="wrapper-with-bg">
+    <StyledWrapper bg={'surfaceTertiary'} className="wrapper-with-bg">
       {children}
     </StyledWrapper>
   );
@@ -89,8 +48,6 @@ export function PageWrapper({
   statusBarContent: IncidentContent | null;
   serverThemeCookie: string;
 }) {
-  const isRedesign = useIsRedesignUrl();
-
   return (
     <>
       <Stack width={'100%'} top={0} backdropFilter={'blur(10px)'} bg={'surfaceOpposite'}>
@@ -99,16 +56,16 @@ export function PageWrapper({
         <CMSStatusBars statusBarContent={statusBarContent} />
       </Stack>
       <WrapperWithBg serverThemeCookie={serverThemeCookie}>
-        <Stack mx="auto" width="full" maxWidth="breakpoint-xl" p={6} minHeight={'100vh'}>
-          {isRedesign ? <NewNavBar tokenPrices={tokenPrice} /> : <NavBar tokenPrice={tokenPrice} />}
+        <Stack mx="auto" width="full" maxWidth="breakpoint-2xl" p={6} minHeight={'100vh'}>
+          <NewNavBar tokenPrices={tokenPrice} />
           <Stack
-            marginTop={isRedesign ? '50px' : '120px'}
+            marginTop={'50px'}
             mb={8}
             gap={7} // TODO: not sure I like putting these spacing styles here. This forces all pages to use fragments. This gap creates the space between the major components on the page.
           >
             {children}
           </Stack>
-          {isRedesign ? <NewFooter /> : <Footer />}
+          <NewFooter />
         </Stack>
       </WrapperWithBg>
       <AddNetworkModal />

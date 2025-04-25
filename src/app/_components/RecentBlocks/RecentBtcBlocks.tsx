@@ -1,4 +1,4 @@
-import { useHomePageData } from '@/app/home-redesign/context';
+import { useHomePageData } from '@/app/context';
 import { HStack } from '@chakra-ui/react';
 
 import { useBurnBlocks } from '../../../common/queries/useBurnBlocksInfinite';

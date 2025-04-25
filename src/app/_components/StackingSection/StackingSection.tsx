@@ -1,6 +1,6 @@
 'use client';
 
-import { useHomePageData } from '@/app/home-redesign/context';
+import { useHomePageData } from '@/app/context';
 import { formatDateShort } from '@/common/utils/date-utils';
 import { abbreviateNumber } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';

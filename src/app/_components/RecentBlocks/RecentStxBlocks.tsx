@@ -1,5 +1,5 @@
-import { useHomePageData } from '@/app/home-redesign/context';
-import { UIStxBlock } from '@/app/home-redesign/data';
+import { useHomePageData } from '@/app/context';
+import { UIStxBlock } from '@/app/data';
 import { useBlockList } from '@/common/queries/useBlockListInfinite';
 import { HStack } from '@chakra-ui/react';
 import { useMemo } from 'react';

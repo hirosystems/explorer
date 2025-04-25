@@ -10,7 +10,7 @@ exports[`TokenRow renders correctly 1`] = `
         class="chakra-table__row css-16kmb31"
       >
         <td
-          class="chakra-table__cell css-1bh4pks"
+          class="chakra-table__cell css-dmkp9b"
         >
           <div
             class="css-axw7ok"
@@ -35,7 +35,7 @@ exports[`TokenRow renders correctly 1`] = `
           </div>
         </td>
         <td
-          class="chakra-table__cell css-t35k1d"
+          class="chakra-table__cell css-1tgiags"
         >
           <span
             class="css-1gy64qm"
