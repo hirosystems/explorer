@@ -1,12 +1,4 @@
-import {
-  getTxStatusBgColor,
-  getTxStatusIcon,
-  getTxStatusLabel,
-  getTxTypeColor,
-  getTxTypeIcon,
-  getTxTypeLabel,
-} from '@/common/utils/transactions';
-import { capitalize } from '@/common/utils/utils';
+import { getTxStatusBgColor, getTxStatusIcon, getTxStatusIconColor, getTxStatusLabel, getTxTypeColor, getTxTypeIcon, getTxTypeLabel } from '@/common/utils/transactions';
 import { Text } from '@/ui/Text';
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 
@@ -16,8 +8,14 @@ export const TransactionTypeBadge = ({ tx, ...rest }: { tx: Transaction } & Flex
   return (
     <Badge
       icon={
-        <Flex p={1} alignItems="center" justifyContent="center" bg={getTxTypeColor(tx.tx_type)} borderRadius="redesign.sm">
-          <Icon h={3} w={3} >
+        <Flex
+          p={1}
+          alignItems="center"
+          justifyContent="center"
+          bg={getTxTypeColor(tx.tx_type)}
+          borderRadius="redesign.sm"
+        >
+          <Icon h={3} w={3}>
             {getTxTypeIcon(tx.tx_type)}
           </Icon>
         </Flex>
@@ -31,7 +29,7 @@ export const TransactionTypeBadge = ({ tx, ...rest }: { tx: Transaction } & Flex
 export const TransactionStatusBadge = ({ tx, ...rest }: { tx: Transaction } & FlexProps) => {
   return (
     <Badge
-      icon={getTxStatusIcon(tx.tx_status)}
+      icon={<Icon h={3.5} w={3.5} color={getTxStatusIconColor(tx)}>{getTxStatusIcon(tx)}</Icon>}
       label={getTxStatusLabel(tx)}
       bg={getTxStatusBgColor(tx)}
       {...rest}

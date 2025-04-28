@@ -1,12 +1,12 @@
-import { getToAddress, getTxTitle } from '@/common/utils/transactions';
-import { truncateHex, truncateStxAddress } from '@/common/utils/utils';
+import { getTxTitle, truncateHex, truncateStxAddress } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import { Flex, Icon, Stack } from '@chakra-ui/react';
-import { ArrowLeft, ArrowRight } from '@phosphor-icons/react';
+import { ArrowRight } from '@phosphor-icons/react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { TransactionStatusBadge, TransactionTypeBadge } from './Badge';
+import { getToAddress } from '@/common/components/table/table-examples/TxsTable';
 
 export const TxHeader = ({ tx }: { tx: Transaction }) => {
   return (

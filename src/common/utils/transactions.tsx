@@ -2,7 +2,8 @@
 
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import TransferIcon from '@/ui/icons/TransferIcon';
-import { ArrowsClockwise, Cube, PhoneCall, Question } from '@phosphor-icons/react';
+import { ArrowsClockwise, Clock, Cube, PhoneCall, Question, XCircle } from '@phosphor-icons/react';
+import { CheckCircle } from '@phosphor-icons/react/dist/ssr';
 
 import { MempoolTransaction, Transaction } from '@stacks/stacks-blockchain-api-types';
 
@@ -73,5 +74,85 @@ export function getTxTypeColor(txType: string) {
       return 'transactionTypes.coinbase';
     default:
       return 'transactionTypes.tokenTransfer';
+  }
+}
+
+export function getTxStatusIcon(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  switch (txStatus) {
+    case TransactionStatus.PENDING:
+      return <Clock />;
+    case TransactionStatus.SUCCESS_ANCHOR_BLOCK:
+      return <CheckCircle />;
+    case TransactionStatus.SUCCESS_MICROBLOCK:
+      return <CheckCircle />;
+    case TransactionStatus.NON_CANONICAL:
+      return <CheckCircle />;
+    case TransactionStatus.FAILED:
+      return <XCircle />;
+    case TransactionStatus.DROPPED:
+      return <XCircle />;
+    default:
+      return <Question />;
+  }
+}
+
+export function getTxStatusIconColor(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  switch (txStatus) {
+    case TransactionStatus.PENDING:
+      return 'feedback.bronze-600';
+    case TransactionStatus.SUCCESS_ANCHOR_BLOCK:
+      return 'feedback.green-500';
+    case TransactionStatus.SUCCESS_MICROBLOCK:
+      return 'feedback.green-500';
+    case TransactionStatus.NON_CANONICAL:
+      return 'feedback.green-500';
+    case TransactionStatus.FAILED:
+      return 'iconError';
+    case TransactionStatus.DROPPED:
+      return 'iconError';
+    default:
+      return 'iconError';
+  }
+}
+
+export function getTxStatusBgColor(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  switch (txStatus) {
+    case TransactionStatus.PENDING:
+      return 'transactionStatus.pending';
+    case TransactionStatus.SUCCESS_ANCHOR_BLOCK:
+      return 'transactionStatus.confirmed';
+    case TransactionStatus.SUCCESS_MICROBLOCK:
+      return 'transactionStatus.confirmed';
+    case TransactionStatus.NON_CANONICAL:
+      return 'transactionStatus.confirmed';
+    case TransactionStatus.FAILED:
+      return 'transactionStatuses.failed';
+    case TransactionStatus.DROPPED:
+      return 'transactionStatuses.failed';
+    default:
+      return 'surfacePrimary';
+  }
+}
+
+export function getTxStatusLabel(tx: Transaction | MempoolTransaction) {
+  const txStatus = getTransactionStatus(tx);
+  switch (txStatus) {
+    case TransactionStatus.PENDING:
+      return 'Pending';
+    case TransactionStatus.SUCCESS_ANCHOR_BLOCK:
+      return 'Confirmed';
+    case TransactionStatus.SUCCESS_MICROBLOCK:
+      return 'Confirmed';
+    case TransactionStatus.NON_CANONICAL:
+      return 'Confirmed';
+    case TransactionStatus.FAILED:
+      return 'Failed';
+    case TransactionStatus.DROPPED:
+      return 'Failed';
+    default:
+      return 'Unknown';
   }
 }
