@@ -22,5 +22,7 @@ export default async function (props: {
 
   const tokenInfo = await getTokenInfo(tokenId, chain, api);
 
+  console.log('server', { tokenInfo });
+
   return <Page tokenId={tokenId} tokenInfo={tokenInfo} />;
 }
