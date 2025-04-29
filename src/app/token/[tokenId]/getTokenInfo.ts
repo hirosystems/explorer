@@ -121,8 +121,8 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
       console.error('token not found in LunarCrush'); // TODO: actually log the error
       return {
         basic: basicTokenInfo,
-      }
-      // return null; 
+      };
+      // return null;
     }
 
     const isSBTC = getIsSBTC(tokenId);
@@ -201,7 +201,7 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
     };
 
     await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
-    console.log('server', { tokenInfo, apiKey: LUNAR_CRUSH_API_KEY});
+    console.log('server', { tokenInfo });
     return tokenInfo;
   } catch (error) {
     console.error(error);

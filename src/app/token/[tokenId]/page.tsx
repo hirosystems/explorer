@@ -11,6 +11,7 @@ export default async function (props: {
   params: Promise<{ tokenId: string }>;
   searchParams: Promise<{ chain: string; api: string }>;
 }) {
+  console.log('server', { apiKey: process.env.LUNAR_CRUSH_API_KEY });
   const searchParams = await props.searchParams;
 
   const { chain, api } = searchParams;
@@ -20,6 +21,6 @@ export default async function (props: {
   const { tokenId } = params;
 
   const tokenInfo = await getTokenInfo(tokenId, chain, api);
-  
+
   return <Page tokenId={tokenId} tokenInfo={tokenInfo} />;
 }
