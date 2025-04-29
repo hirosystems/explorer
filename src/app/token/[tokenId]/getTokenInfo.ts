@@ -114,34 +114,37 @@ async function getBasicTokenInfoFromStacksApi(
 
 async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInfo: BasicTokenInfo) {
   try {
-    const tokenInfoResponse = await getTokenInfoFromLunarCrush(tokenId);
-    if (!tokenInfoResponse || tokenInfoResponse?.error) {
-      console.error('token not found in LunarCrush');
+    const lunarCrushResponse = await getTokenInfoFromLunarCrush(tokenId);
+    const lunarCrushError = lunarCrushResponse?.error;
+    const lunarCrushData = lunarCrushResponse?.data;
+    if (!lunarCrushResponse || lunarCrushError || !lunarCrushData) {
+      console.error('token not found in LunarCrush'); // TODO: actually log the error
       return {
         basic: basicTokenInfo,
-      };
+      }
+      // return null; 
     }
 
     const isSBTC = getIsSBTC(tokenId);
 
-    const name = tokenInfoResponse?.data?.name || basicTokenInfo.name || null;
-    const symbol = tokenInfoResponse?.data?.symbol || basicTokenInfo.symbol || null;
+    const name = lunarCrushData?.name || basicTokenInfo.name || null;
+    const symbol = lunarCrushData?.symbol || basicTokenInfo.symbol || null;
     const categories: string[] = [];
 
     const totalSupply = basicTokenInfo.totalSupply || null;
     const circulatingSupplyFromBasicTokenInfo = basicTokenInfo.circulatingSupply || null;
     const circulatingSupply = isSBTC
       ? circulatingSupplyFromBasicTokenInfo // LunarCrush is returning an incorrect circulating supply for SBTC. Use the circulating supply from the holders endpoint on Stacks API instead.
-      : tokenInfoResponse?.data?.circulating_supply || circulatingSupplyFromBasicTokenInfo || null;
+      : lunarCrushData?.circulating_supply || circulatingSupplyFromBasicTokenInfo || null;
     const imageUri = basicTokenInfo.imageUri || undefined;
 
-    const currentPrice = tokenInfoResponse?.data?.price || null;
-    const currentPriceInBtc = tokenInfoResponse?.data?.price_btc || null;
-    const priceChangePercentage24h = tokenInfoResponse?.data?.percent_change_24h || null;
+    const currentPrice = lunarCrushData?.price || null;
+    const currentPriceInBtc = lunarCrushData?.price_btc || null;
+    const priceChangePercentage24h = lunarCrushData?.percent_change_24h || null;
     const priceInBtcChangePercentage24h = null;
 
-    const marketCap = tokenInfoResponse?.data?.market_cap || null;
-    const tradingVolume24h = tokenInfoResponse?.data?.volume_24h || null;
+    const marketCap = lunarCrushData?.market_cap || null;
+    const tradingVolume24h = lunarCrushData?.volume_24h || null;
     const tradingVolumeChangePercentage24h = null;
     const developerData: DeveloperData = {
       forks: null,
@@ -166,7 +169,7 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
       social: [],
     };
 
-    const marketCapRank = tokenInfoResponse?.data?.market_cap_rank || null;
+    const marketCapRank = lunarCrushData?.market_cap_rank || null;
 
     const tokenInfo = {
       basic: {
@@ -198,7 +201,7 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
     };
 
     await getCacheClient().set(tokenId, JSON.stringify(tokenInfo), 'EX', 60 * 10); // expires in 10 minutes
-    console.log('server', { tokenInfo });
+    console.log('server', { tokenInfo, apiKey: LUNAR_CRUSH_API_KEY});
     return tokenInfo;
   } catch (error) {
     console.error(error);
@@ -206,6 +209,13 @@ async function getDetailedTokenInfoFromLunarCrush(tokenId: string, basicTokenInf
       basic: basicTokenInfo,
     };
   }
+}
+
+function mergeTokenInfo(basicTokenInfo: BasicTokenInfo, lunarCrushData: LunarCrushCoin) {
+  return {
+    basic: basicTokenInfo,
+    extended: lunarCrushData,
+  };
 }
 
 export async function getTokenInfo(
