@@ -19,6 +19,7 @@ export const TokenInfo: FC<{ tokenInfo: TokenInfoProps; tokenId: string }> = ({
   const isSBTC = getIsSBTC(tokenId);
   const sBTCMarketCapOverride = // LunarCrush is returning an incorrect circulating supply for SBTC, resulting in an incorrect market cap. Manually overriding it here.
     circulatingSupply && currentPrice ? circulatingSupply * currentPrice : undefined;
+  console.log({ tokenInfo, isSBTC, sBTCMarketCapOverride, circulatingSupply, currentPrice });
   return (
     <ErrorBoundary fallbackRender={() => null}>
       <StatsWrapper>
