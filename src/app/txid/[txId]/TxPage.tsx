@@ -20,6 +20,7 @@ import { TxBtcAnchorBlockCard } from './Cards/TxBtcAnchorBlockCard';
 import { Events } from './Events';
 import { TxAlerts } from './TxAlerts';
 import { TxHeader } from './redesign/TxHeader';
+import { TxTabs } from './redesign/TxTabs';
 
 export const txTypeNamesMap = {
   [TransactionType.SMART_CONTRACT]: 'Contract deploy',
@@ -86,6 +87,7 @@ export const TxPage: React.FC<{
         {getTxTitle(tx)}
       </PageTitleWithTags>
       <TxHeader tx={tx} />
+      <TxTabs tx={tx} />
       <TowColLayout>
         <Stack gap={7}>
           <TxAlerts tx={tx} />
