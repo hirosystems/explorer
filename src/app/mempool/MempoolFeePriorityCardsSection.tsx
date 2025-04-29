@@ -13,7 +13,7 @@ import { Card } from '../../common/components/Card';
 import { getTxTypeIcon } from '../../common/components/TxIcon';
 import { useSuspenseMempoolFee } from '../../common/queries/useMempoolFee';
 import { TokenPrice } from '../../common/types/tokenPrice';
-import { MICROSTACKS_IN_STACKS, capitalize, getUsdValue } from '../../common/utils/utils';
+import { MICROSTACKS_IN_STACKS, getUsdValue } from '../../common/utils/utils';
 import { Text } from '../../ui/Text';
 import { Tooltip } from '../../ui/Tooltip';
 import {
@@ -117,12 +117,27 @@ export function MempoolFeePriorityCardLayout({
   );
 }
 
-export const MempoolFeePriorityCardTitleLayout = ({
+function mapMempoolFeePriorityToTitle(priority: keyof MempoolFeePriorities['all']) {
+  switch (priority) {
+    case 'no_priority':
+      return 'No Priority';
+    case 'low_priority':
+      return 'Lowest';
+    case 'medium_priority':
+      return 'Medium';
+    case 'high_priority':
+      return 'Highest';
+    default:
+      return 'Unknown Priority';
+  }
+}
+
+export const MempoolFeePriorityCardTitle = ({
   priority,
 }: {
   priority: keyof MempoolFeePriorities['all'];
 }) => {
-  const title = capitalize(priority.replaceAll('_', ' '));
+  const title = mapMempoolFeePriorityToTitle(priority);
 
   return (
     <Flex gap={2}>
@@ -155,7 +170,7 @@ function MempoolFeePriorityCard({
   const mempoolFeeContractCall = mempoolFeeResponse?.contract_call?.[priority] || 0;
   const mempoolFeeSmartContract = mempoolFeeResponse?.smart_contract?.[priority] || 0;
 
-  const titleContent = <MempoolFeePriorityCardTitleLayout priority={priority} />;
+  const titleContent = <MempoolFeePriorityCardTitle priority={priority} />;
 
   const mainText = (
     <Text
@@ -227,12 +242,6 @@ export const MempoolFeePriorityCards = ({
     <>
       <MempoolFeePriorityCard
         mempoolFeeResponse={filteredMempoolFeeResponse}
-        priority={'no_priority'}
-        stxPrice={tokenPrice.stxPrice}
-        txTypeFilter={transactionType}
-      />
-      <MempoolFeePriorityCard
-        mempoolFeeResponse={filteredMempoolFeeResponse}
         priority={'low_priority'}
         stxPrice={tokenPrice.stxPrice}
         txTypeFilter={transactionType}
@@ -279,7 +288,7 @@ export function MempoolFeePriorityCardsLayout({
             letterSpacing="-0.12px"
             marginBottom={[5, 5, 0, 0]}
           >
-            CURRENT FEE RATES
+            FEES PAID IN CURRENT PENDING TRANSACTIONS
           </Box>
         </Flex>
         <Flex justifyContent={['center', 'center', 'flex-end']}>
@@ -294,12 +303,12 @@ export function MempoolFeePriorityCardsLayout({
           gap={3}
           display={'grid'}
           gridColumnStart={'1'}
-          gridColumnEnd={['3', '3', '4']}
+          gridColumnEnd={'3'}
           gridTemplateColumns={[
             '100%',
             '100%',
             'minmax(0, 1fr) minmax(0, 1fr)',
-            'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)',
+            'minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)',
           ]}
           width="100%"
         >
