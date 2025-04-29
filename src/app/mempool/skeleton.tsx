@@ -17,7 +17,7 @@ import {
 } from './MempoolFeePieChartSection';
 import {
   MempoolFeePriorityCardLayout,
-  MempoolFeePriorityCardTitleLayout,
+  MempoolFeePriorityCardTitle,
   MempoolFeePriorityCardTransactionTypeFeeStatLineLayout,
   MempoolFeePriorityCardsLayout,
 } from './MempoolFeePriorityCardsSection';
@@ -90,7 +90,7 @@ export const MempoolFeePriorityCardSkeleton = ({
 } & FlexProps) => {
   return (
     <MempoolFeePriorityCardLayout
-      title={<MempoolFeePriorityCardTitleLayout priority={priority} />}
+      title={<MempoolFeePriorityCardTitle priority={priority} />}
       mainText={<SkeletonText width={25} height={6} noOfLines={1} />}
       secondaryText={<SkeletonItem width={12} height={5} />}
       txTypeFeeStatLines={<MempoolFeePriorityCardTransactionTypeFeeStatLinesSkeleton />}
@@ -101,7 +101,6 @@ export const MempoolFeePriorityCardSkeleton = ({
 export const MempoolFeePriorityCardsSkeleton = () => {
   return (
     <>
-      <MempoolFeePriorityCardSkeleton priority={'no_priority'} />
       <MempoolFeePriorityCardSkeleton priority={'low_priority'} />
       <MempoolFeePriorityCardSkeleton priority={'medium_priority'} />
       <MempoolFeePriorityCardSkeleton priority={'high_priority'} />

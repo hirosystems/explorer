@@ -6,7 +6,6 @@ import { logError } from '@/common/utils/error-utils';
 import { getApiUrl } from '@/common/utils/network-utils';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { getTokenPrice } from '../getTokenPriceInfo';
 import Page from './PageClient';
 import { CompressedTxTableData, compressTransactions } from './utils';
 
@@ -91,11 +90,8 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
     }
   }
 
-  const tokenPrice = await getTokenPrice();
-
   return (
     <Page
-      tokenPrice={tokenPrice}
       filters={{
         fromAddress,
         toAddress,

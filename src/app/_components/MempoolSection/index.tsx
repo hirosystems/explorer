@@ -17,7 +17,7 @@ function SectionHeader() {
         Mempool
       </Text>
       <Link
-        href={buildUrl('/transactions', network)}
+        href={buildUrl('/mempool', network)}
         variant={'buttonLink'}
         size={'lg'}
         display={['none', 'inline']}
