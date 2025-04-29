@@ -1,3 +1,10 @@
+## [1.275.3](https://github.com/hirosystems/explorer/compare/v1.275.2...v1.275.3) (2025-04-29)
+
+
+### Bug Fixes
+
+* tab popover width ([8d93cb0](https://github.com/hirosystems/explorer/commit/8d93cb0af27638a8c6cbc8f52e81f4fc7396ce04))
+
 ## [1.275.2](https://github.com/hirosystems/explorer/compare/v1.275.1...v1.275.2) (2025-04-18)
 
 
