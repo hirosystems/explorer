@@ -29,13 +29,11 @@ const rightSideLinks: Link[] = [
     label: 'sBTC',
     href: '/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token',
   },
+  // {
+  //   label: 'Stacking',
+  //   href: '/stacking',
+  // },
   {
-    // This page is not implemented yet
-    label: 'Stacking',
-    href: '/stacking',
-  },
-  {
-    // This page is not implemented yet
     label: 'Mempool',
     href: '/mempool',
   },
@@ -47,16 +45,14 @@ const rightSideLinks: Link[] = [
     label: 'Tokens',
     href: '/tokens',
   },
-  {
-    // This page is not implemented yet
-    label: 'NFTs',
-    href: '/nfts',
-  },
-  {
-    // This page is not implemented yet
-    label: 'Analytics',
-    href: '/analytics',
-  },
+  // {
+  //   label: 'NFTs',
+  //   href: '/nfts',
+  // },
+  // {
+  //   label: 'Analytics',
+  //   href: '/analytics',
+  // },
   {
     label: 'Search',
     href: '/search',
@@ -69,7 +65,7 @@ const leftSideLinks: Link[] = [
     href: '/sandbox/deploy',
   },
   {
-    label: 'Status Center',
+    label: 'Status center',
     href: 'https://status.hiro.so/',
   },
   {
@@ -152,7 +148,7 @@ const BottomLinks = () => {
     <Flex gap={6} flexWrap="wrap" rowGap={3}>
       <Flex gap={1.5} alignItems="center" flexWrap="nowrap">
         <HiroIcon h={4} w={4} color="var(--stacks-colors-icon-tertiary)" />
-        <Text fontSize="xs" color="textSecondary" whiteSpace="nowrap">
+        <Text fontSize="xs" color="textSecondary">
           This Stacks Explorer is built and maintained by{' '}
           <BottomLink href="https://www.hiro.so" text="Hiro" />
         </Text>
@@ -178,6 +174,7 @@ export const NewFooter = () => {
       position="relative"
       gap={0}
       justifyContent="center"
+      fontFamily="instrument"
     >
       <Link href="https://stacks.co">
         <StacksSmiley
