@@ -37,7 +37,7 @@ export const Prices = ({ tokenPrices }: { tokenPrices: TokenPrice }) => {
         borderRadius="redesign.sm"
         bg="surfacePrimary"
       >
-        <Icon h={3} w={3} color="accent.bitcoin-600">
+        <Icon h={3.5} w={3.5} color="accent.bitcoin-600">
           <BitcoinIcon />
         </Icon>
         <Text

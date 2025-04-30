@@ -326,6 +326,8 @@ function StartElement() {
   );
 }
 
+const isCommandKActive = false;
+
 function EndElement({ handleSearch }: { handleSearch: () => void }) {
   const dispatch = useAppDispatch();
   const isSearchFieldFocused = useAppSelector(selectIsSearchFieldFocused);
@@ -358,7 +360,7 @@ function EndElement({ handleSearch }: { handleSearch: () => void }) {
             </Icon>
           </>
         ) : null
-      ) : (
+      ) : isCommandKActive ? (
         <Kbd>
           <Icon h={3.5} w={3}>
             <Command />
@@ -367,7 +369,7 @@ function EndElement({ handleSearch }: { handleSearch: () => void }) {
             K
           </Text>
         </Kbd>
-      )}
+      ) : null}
     </Flex>
   );
 }
