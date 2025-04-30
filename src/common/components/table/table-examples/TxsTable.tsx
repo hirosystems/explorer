@@ -16,12 +16,13 @@ import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ColumnDef, PaginationState } from '@tanstack/react-table';
+import { ColumnDef, Header, PaginationState } from '@tanstack/react-table';
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Transaction } from '@stacks/stacks-blockchain-api-types';
 
 import { Table } from '../Table';
+import { DefaultTableColumnHeader } from '../TableComponents';
 import { TableContainer } from '../TableContainer';
 import { TableScrollIndicator } from '../TableScrollIndicatorWrapper';
 import {
@@ -152,14 +153,22 @@ export const columns: ColumnDef<TxTableData>[] = [
   },
   {
     id: TxTableColumns.Fee,
-    header: 'Fee',
+    header: ({ header }: { header: Header<TxTableData, unknown> }) => (
+      <Flex alignItems="center" justifyContent="flex-end" w="full">
+        <DefaultTableColumnHeader header={header}>Fee</DefaultTableColumnHeader>
+      </Flex>
+    ),
     accessorKey: TxTableColumns.Fee,
     cell: info => FeeCellRenderer(info.getValue() as string),
     enableSorting: false,
   },
   {
     id: TxTableColumns.BlockTime,
-    header: 'Timestamp',
+    header: ({ header }: { header: Header<TxTableData, unknown> }) => (
+      <Flex alignItems="center" justifyContent="flex-end" w="full">
+        <DefaultTableColumnHeader header={header}>Timestamp</DefaultTableColumnHeader>
+      </Flex>
+    ),
     accessorKey: TxTableColumns.BlockTime,
     cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
     enableSorting: false,

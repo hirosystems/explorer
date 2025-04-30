@@ -18,6 +18,7 @@ import {
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { ExplorerErrorBoundary } from '../../../app/_components/ErrorBoundary';
+import { DefaultTableColumnHeader } from './TableComponents';
 import { TableContainer } from './TableContainer';
 import { TablePaginationControls } from './TablePaginationControls';
 
@@ -302,7 +303,7 @@ export function Table<T>({
                   }}
                   borderBottom="1px solid"
                   borderColor="redesignBorderSecondary"
-                  width="fit-content"
+                  width="full"
                   role="columnheader"
                   aria-sort={
                     sortDirection ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'
@@ -310,7 +311,7 @@ export function Table<T>({
                   minH={13}
                 >
                   <Flex
-                    w="fit-content"
+                    w="full"
                     gap={1.5}
                     alignItems="center"
                     py={1}
@@ -332,27 +333,9 @@ export function Table<T>({
                     }}
                   >
                     {typeof header.column.columnDef.header === 'string' ? (
-                      <Text
-                        fontWeight="medium"
-                        whiteSpace="nowrap"
-                        fontSize="sm"
-                        color={'textSecondary'}
-                        textTransform="none"
-                        letterSpacing="normal"
-                        fontFamily="instrument"
-                        css={{
-                          '& .column-header-content:hover': {
-                            color: 'textPrimary',
-                          },
-                        }}
-                        {...(header.column.getCanSort() && {
-                          _groupHover: {
-                            color: 'textPrimary',
-                          },
-                        })}
-                      >
+                      <DefaultTableColumnHeader header={header}>
                         {flexRender(header.column.columnDef.header, header.getContext())}
-                      </Text>
+                      </DefaultTableColumnHeader>
                     ) : (
                       flexRender(header.column.columnDef.header, header.getContext())
                     )}
