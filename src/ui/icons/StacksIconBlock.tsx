@@ -1,0 +1,53 @@
+'use client';
+
+import { IconBase, IconProps, IconWeight } from '@phosphor-icons/react';
+import { ReactElement, forwardRef } from 'react';
+
+type StxIconBlockVariant = 'primary' | 'secondary';
+
+const getWeights = (variant: StxIconBlockVariant = 'primary') =>
+  new Map<IconWeight, ReactElement>([
+    [
+      'regular',
+      <>
+        <rect
+          fill={variant === 'primary' ? '#fc6432' : '#221f20'}
+          y="0"
+          width="16"
+          height="16"
+          rx="4.444"
+          ry="4.444"
+        />
+        <g>
+          <path
+            fill="#fff"
+            d="M6.509,6.358l-.002.004c-.01.023-.033.038-.065.038h-2.257c-.137.02-.244.135-.244.281v.478c0,.151.119.281.278.281h7.568c.152,0,.278-.123.278-.281v-.478c0-.151-.119-.281-.278-.281h-2.224c-.028,0-.051-.013-.067-.043v-.003c-.015-.023-.013-.053.003-.075l.002-.003,1.455-2.199c.048-.079.062-.186.012-.282-.046-.099-.148-.155-.247-.155h-.566c-.087,0-.182.043-.234.129l-1.687,2.57c-.029.04-.072.064-.12.064h-.213c-.051,0-.092-.022-.119-.063l-1.697-2.569h0c-.055-.081-.142-.127-.233-.127h-.566c-.099,0-.195.051-.246.147-.051.092-.043.201.012.287v.002s1.454,2.192,1.454,2.192c.019.029.019.06.006.082l-.002.004Z"
+          />
+          <path
+            fill="#fff"
+            d="M8.307,9.785l1.613,2.441c.052.085.147.129.234.129h.566c.103,0,.196-.058.245-.146.051-.091.045-.206-.012-.29h0s-1.448-2.191-1.448-2.191c-.018-.027-.02-.055-.005-.084.018-.03.043-.044.068-.044h2.215c.152,0,.278-.123.278-.281v-.478c0-.151-.119-.281-.278-.281h-7.568c-.152,0-.278.123-.278.281v.478c0,.151.119.281.278.281h2.219c.035,0,.054.014.065.038l.002.005c.016.03.012.057-.002.077l-.002.003-1.455,2.199c-.048.08-.062.187-.011.284.049.093.143.153.246.153h.566c.094,0,.178-.046.229-.123l1.697-2.568c.027-.041.069-.063.119-.063h.213c.048,0,.092.024.121.065l.086.115h0Z"
+          />
+        </g>
+      </>,
+    ],
+  ]);
+
+// Block: Enclosed in a square shape to represent a Stacks block
+const StxIconBlock = forwardRef<SVGSVGElement, IconProps & { variant?: StxIconBlockVariant }>(
+  (props, ref) => {
+    const { variant = 'primary', ...rest } = props;
+    return (
+      <IconBase
+        ref={ref}
+        {...rest}
+        weights={getWeights(variant)}
+        viewBox={'0 0 16 16'}
+        fill="none"
+      />
+    );
+  }
+);
+
+StxIconBlock.displayName = 'StacksIconBlock';
+
+export default StxIconBlock;
