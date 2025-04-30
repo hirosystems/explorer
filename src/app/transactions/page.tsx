@@ -21,9 +21,7 @@ export interface CommonSearchParams {
   api?: string;
 }
 
-export interface TxPageSearchParams
-  extends TxPageFilters,
-    CommonSearchParams {}
+export interface TxPageSearchParams extends TxPageFilters, CommonSearchParams {}
 
 export default async function (props: { searchParams: Promise<TxPageSearchParams> }) {
   const searchParams = await props.searchParams;

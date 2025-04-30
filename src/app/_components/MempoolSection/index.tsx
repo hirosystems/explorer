@@ -4,7 +4,7 @@ import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { Link } from '@/ui/Link';
 import { Text } from '@/ui/Text';
-import { HStack, Icon, Stack } from '@chakra-ui/react';
+import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { ArrowRight } from '@phosphor-icons/react';
 
 import { TxCountChart } from './TxCountChart';
@@ -22,10 +22,12 @@ function SectionHeader() {
         size={'lg'}
         display={['none', 'inline']}
       >
-        View mempool
-        <Icon w={3.5} h={3.5}>
-          <ArrowRight />
-        </Icon>
+        <Flex gap={1.5} alignItems="center">
+          View mempool
+          <Icon w={3.5} h={3.5}>
+            <ArrowRight />
+          </Icon>
+        </Flex>
       </Link>
     </HStack>
   );
