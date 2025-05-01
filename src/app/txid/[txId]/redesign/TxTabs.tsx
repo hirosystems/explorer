@@ -1,4 +1,5 @@
 import { formatBlockTime, getAmount, getToAddress } from '@/app/transactions/utils';
+import { CopyButton } from '@/common/components/CopyButton';
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from '@/ui/Tabs';
 import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
@@ -97,33 +98,54 @@ function TabsContentContainer({ children }: { children: React.ReactNode }) {
   );
 }
 
-function OverviewKeyValueItem({ key, value }: { key: string; value: string }) {
+function OverviewKeyValueItem({
+  label,
+  value,
+  copyable,
+}: {
+  label: string;
+  value: string;
+  copyable?: boolean;
+}) {
   return (
     <Flex alignItems="center" p={3}>
       <Text minWidth={50} textStyle="text-medium-sm" color="textSecondary">
-        {key}
+        {label}
       </Text>
       <Text textStyle="text-regular-sm" color="textPrimary">
         {value}
       </Text>
+      {copyable && (
+        <CopyButton
+          initialValue={value}
+          aria-label={`copy ${label} value`}
+          h={3.5}
+          w={3.5}
+          // css={{
+          //   opacity: isSignerKeyHovered ? 1 : 0,
+          //   position: 'relative',
+          //   transition: 'opacity 0.4s ease-in-out',
+          // }}
+        />
+      )}
     </Flex>
   );
 }
 
-function TokenTransferOverviewContent(tx: TokenTransferTransaction) {
+function TokenTransferOverviewContent({ tx }: { tx: TokenTransferTransaction }) {
   return (
     <Stack>
-      <OverviewKeyValueItem key="ID" value={tx.tx_id} />
-      <OverviewKeyValueItem key="Amount" value={getAmount(tx).toString()} />
-      <OverviewKeyValueItem key="From" value={tx.sender_address} />
-      <OverviewKeyValueItem key="To" value={getToAddress(tx)} />
-      <OverviewKeyValueItem key="Timestamp" value={formatBlockTime(tx.block_time)} />
-      <OverviewKeyValueItem key="Fee" value={tx.fee_rate} />
-      {/* <OverviewKeyValueItem key="Memo" value={tx.} /> */}
-      <OverviewKeyValueItem key="Nonce" value={tx.nonce?.toString() || ''} />
-      <OverviewKeyValueItem key="Block height" value={tx.block_height?.toString() || ''} />
-      {/* <OverviewKeyValueItem key="Tenure height" value={tx.} /> */}
-      <OverviewKeyValueItem key="Bitcoin Anchor" value={tx.burn_block_height?.toString() || ''} />
+      <OverviewKeyValueItem label="ID" value={tx.tx_id} copyable />
+      <OverviewKeyValueItem label="Amount" value={getAmount(tx).toString()} />
+      <OverviewKeyValueItem label="From" value={tx.sender_address} />
+      <OverviewKeyValueItem label="To" value={getToAddress(tx)} />
+      <OverviewKeyValueItem label="Timestamp" value={formatBlockTime(tx.block_time)} />
+      <OverviewKeyValueItem label="Fee" value={tx.fee_rate} />
+      {/* <OverviewKeyValueItem label="Memo" value={tx.} /> */}
+      <OverviewKeyValueItem label="Nonce" value={tx.nonce?.toString() || ''} />
+      <OverviewKeyValueItem label="Block height" value={tx.block_height?.toString() || ''} />
+      {/* <OverviewKeyValueItem label="Tenure height" value={tx.} /> */}
+      <OverviewKeyValueItem label="Bitcoin Anchor" value={tx.burn_block_height?.toString() || ''} />
     </Stack>
   );
 }
