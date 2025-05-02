@@ -1,5 +1,5 @@
 import { useFilterParams } from '@/common/utils/search-param-utils';
-import { Flex, HStack, Icon, Stack, StackProps } from '@chakra-ui/react';
+import { Flex, HStack, Icon, Link, Stack, StackProps } from '@chakra-ui/react';
 import { ArrowRight, Command, KeyReturn, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
@@ -52,7 +52,6 @@ import {
   TenureChangeResultItem,
   TokenTransferResultItem,
 } from './ResultItem';
-import { SearchLink } from './SearchLink';
 
 export function SearchResultsWrapper({ children }: { children: ReactNode }) {
   return (
@@ -96,36 +95,25 @@ function KeywordsPreview() {
   );
 }
 
-function DocsLink() {
+function QuickLinkButton({ children, href }: { children: ReactNode; href: string }) {
   return (
-    <SearchLink
-      width={'fit-content'}
-      lineHeight={'base'}
-      textDecoration={'none'}
-      color={'textSecondary'}
-      fontSize={'xs'}
-      borderBottom={'1px solid'}
-      _hover={{
-        color: 'textInteractiveHover',
-      }}
-    >
-      Learn more about search syntax
-    </SearchLink>
-  );
-}
-
-function QuickLinkButton({ children }: { children: ReactNode }) {
-  return (
-    <Button variant={'redesignTertiary'} size={'small'}>
-      {children}
-      <Icon w={3.5} h={3.5}>
-        <ArrowRight />
-      </Icon>
-    </Button>
+    <Link href={href} variant="noUnderline">
+      <Button variant={'redesignTertiary'} size={'small'} alignItems="center">
+        <Text textStyle="text-medium-xs" color="textSecondary">
+          {children}
+        </Text>
+        <Icon w={3.5} h={3.5}>
+          <ArrowRight />
+        </Icon>
+      </Button>
+    </Link>
   );
 }
 
 function QuickLinks() {
+  const network = useGlobalContext().activeNetwork;
+  const isMainnet = network.mode === 'mainnet';
+
   return (
     <Stack
       backgroundColor={'surfacePrimary'}
@@ -139,11 +127,14 @@ function QuickLinks() {
         Quick links
       </Text>
       <Flex gap={2} flexWrap="wrap">
-        <QuickLinkButton>sBTC</QuickLinkButton>
-        <QuickLinkButton>Blocks</QuickLinkButton>
-        <QuickLinkButton>Mempool</QuickLinkButton>
-        <QuickLinkButton>Stacking</QuickLinkButton>
-        <QuickLinkButton>Transactions</QuickLinkButton>
+        {isMainnet && (
+          <QuickLinkButton href={'/token/SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token?cha'}>
+            sBTC
+          </QuickLinkButton>
+        )}
+        <QuickLinkButton href={'/blocks'}>Blocks</QuickLinkButton>
+        <QuickLinkButton href={'/transactions'}>Transactions</QuickLinkButton>
+        <QuickLinkButton href={'/signers'}>Signers</QuickLinkButton>
       </Flex>
     </Stack>
   );
@@ -532,7 +523,6 @@ export function Search() {
               <Stack gap={6}>
                 <Stack px={4} gap={3} pt={16}>
                   <KeywordsPreview />
-                  <DocsLink />
                 </Stack>
                 <SearchResults title={'Recent results'} recentResults={recentResults} />
               </Stack>
