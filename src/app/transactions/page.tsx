@@ -9,23 +9,30 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Page from './PageClient';
 import { CompressedTxTableData, compressTransactions } from './utils';
 
-export interface TxPageFilters {
-  startTime?: string;
-  endTime?: string;
-  fromAddress?: string;
-  toAddress?: string;
-}
-
 export interface CommonSearchParams {
   chain?: string;
   api?: string;
 }
 
-export interface TxPageSearchParams extends TxPageFilters, CommonSearchParams {}
+export interface TxPageSearchParams extends CommonSearchParams {
+  startTime?: string;
+  endTime?: string;
+  fromAddress?: string;
+  toAddress?: string;
+  transactionType?: string;
+}
+
+export interface TxPageFilters {
+  startTime?: string;
+  endTime?: string;
+  fromAddress?: string;
+  toAddress?: string;
+  transactionType?: string[];
+}
 
 export default async function (props: { searchParams: Promise<TxPageSearchParams> }) {
   const searchParams = await props.searchParams;
-  const { startTime, endTime, chain, api, fromAddress, toAddress } = searchParams;
+  const { startTime, endTime, chain, api, fromAddress, toAddress, transactionType } = searchParams;
 
   const apiUrl = getApiUrl(chain || NetworkModes.Mainnet, api);
 
@@ -47,6 +54,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
       ...(endTime && { end_time: endTime }),
       ...(fromAddress && { from_address: bnsAddress || fromAddress }),
       ...(toAddress && { to_address: bnsAddress || toAddress }),
+      ...(transactionType && { type: transactionType }),
     });
     const fetchUrl = `${apiUrl}/extended/v1/tx/?${params.toString()}`;
     const response = await fetch(fetchUrl, {
@@ -74,6 +82,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
         toAddress,
         startTime,
         endTime,
+        transactionType,
         initialTxTableData,
       },
       'error'
@@ -87,6 +96,7 @@ export default async function (props: { searchParams: Promise<TxPageSearchParams
         toAddress,
         startTime,
         endTime,
+        transactionType: transactionType ? transactionType.split(',') : undefined,
       }}
       initialTxTableData={initialTxTableData}
     />

@@ -41,7 +41,7 @@ const MobileOpenFilterModalButton = () => {
 };
 
 export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
-  const { fromAddress, toAddress, startTime, endTime } = filters;
+  const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
 
   return (
     <Flex flexWrap={'wrap'} gap={4}>
@@ -51,7 +51,7 @@ export const TxTableFilters = ({ filters }: { filters: TxPageFilters }) => {
           Filter:
         </Text>
         <Flex gap={3} h={7}>
-          <TransactionTypeFilterPopover />
+          <TransactionTypeFilterPopover defaultTransactionType={transactionType} />
           <DateFilterPopover defaultStartTime={startTime} defaultEndTime={endTime} />
           <AddressFilterPopover defaultFromAddress={fromAddress} defaultToAddress={toAddress} />
           <ClearFiltersButton filters={filters} />

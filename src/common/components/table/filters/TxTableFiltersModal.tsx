@@ -24,6 +24,7 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
     endTime: defaultEndTime,
     fromAddress: defaultFromAddress,
     toAddress: defaultToAddress,
+    transactionType: defaultTransactionType,
   } = filters;
   const [accordions, setAccordions] = useState<AccordionItem[]>([]);
 
@@ -38,7 +39,7 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
       }}
     >
       <Stack gap={4}>
-      <TransactionTypeFilterAccordionItem
+        <TransactionTypeFilterAccordionItem
           id="transaction-type-filter-accordion-item"
           open={accordions.includes('transaction-type-filter-accordion-item')}
           onSubmit={() =>
@@ -46,6 +47,7 @@ const TxTableFiltersModalBody = ({ filters }: { filters: TxPageFilters }) => {
               accordions.filter(accordion => accordion !== 'transaction-type-filter-accordion-item')
             )
           }
+          defaultTransactionType={defaultTransactionType}
         />
         <DateFilterAccordionItem
           id="date-filter-accordion-item"

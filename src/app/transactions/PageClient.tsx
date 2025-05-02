@@ -27,7 +27,12 @@ export default function ({
     <Stack gap={24} fontFamily="var(--font-instrument-sans)">
       {/* <Overview /> */}
       <Stack gap={8}>
-        <Flex justifyContent={'space-between'} alignItems={'flex-end'}>
+        <Flex
+          justifyContent={'space-between'}
+          alignItems={{ base: 'flex-start', md: 'flex-end' }}
+          flexDirection={{ base: 'column', md: 'row' }}
+          gap={4}
+        >
           <Text textStyle="heading-md" color="textPrimary">
             Latest transactions
           </Text>
