@@ -260,7 +260,7 @@ export function TxsTable({
 
   const isCacheSetWithInitialData = useRef(false);
 
-  const { fromAddress, toAddress, startTime, endTime } = filters;
+  const { fromAddress, toAddress, startTime, endTime, transactionType } = filters;
   /**
    * HACK: react query's cache is taking precedence over the initial data, which is causing hydration errors
    * Setting the gcTime to 0 prevents this from happening but it also prevents us from caching requests as the user paginates through the table
@@ -276,11 +276,13 @@ export function TxsTable({
       ...(toAddress ? [{ toAddress }] : []),
       ...(startTime ? [{ startTime }] : []),
       ...(endTime ? [{ endTime }] : []),
+      ...(transactionType ? [{ transactionType }] : []),
     ];
     queryClient.setQueryData(queryKey, initialData);
     isCacheSetWithInitialData.current = true;
   }
 
+  // fetch data
   let { data, refetch } = useConfirmedTransactions(
     pagination.pageSize,
     pagination.pageIndex * pagination.pageSize,
@@ -292,24 +294,26 @@ export function TxsTable({
     }
   );
 
-  const tableColumns = useMemo(() => {
-    if (!displayColumns || displayColumns.length === 0) {
-      return columns;
-    }
-    return displayColumns
-      .map(columnId => columns.find(col => col.id === columnId))
-      .filter(Boolean) as ColumnDef<TxTableData>[];
-  }, [displayColumns]);
+  // Reset pagination when filters change
+  useEffect(() => {
+    setPagination(prev => ({
+      ...prev,
+      pageIndex: 0,
+    }));
+  }, [filters]);
 
   const { total, results: txs = [] } = data || {};
-  const { activeFilters } = useFilterAndSortState();
-  const filteredTxs = useMemo(
-    () =>
-      activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
-    [txs, activeFilters]
-  );
+  const isTableFiltered = Object.values(filters).some(v => v != null && v !== '');
 
-  const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
+  // filter data based on active filters, ie transaction type
+  // const { activeFilters } = useFilterAndSortState();
+  // const filteredTxs = useMemo(
+  //   () =>
+  //     activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
+  //   [txs, activeFilters]
+  // );
+
+  // const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
 
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
@@ -320,7 +324,6 @@ export function TxsTable({
     }, 5000);
     setIsSubscriptionActive(false);
   });
-
   useEffect(() => {
     if (!newTxsAvailable) {
       setIsSubscriptionActive(true);
@@ -329,7 +332,7 @@ export function TxsTable({
 
   const rowData: TxTableData[] = useMemo(
     () =>
-      filteredTxs.map(tx => {
+      txs.map(tx => {
         const to = getToAddress(tx);
         const amount = getAmount(tx);
 
@@ -368,8 +371,18 @@ export function TxsTable({
           [TxTableColumns.BlockTime]: tx.block_time,
         };
       }),
-    [filteredTxs]
+    [txs]
   );
+
+  // filter columns based on displayColumns
+  const tableColumns = useMemo(() => {
+    if (!displayColumns || displayColumns.length === 0) {
+      return columns;
+    }
+    return displayColumns
+      .map(columnId => columns.find(col => col.id === columnId))
+      .filter(Boolean) as ColumnDef<TxTableData>[];
+  }, [displayColumns]);
 
   return (
     <Table
