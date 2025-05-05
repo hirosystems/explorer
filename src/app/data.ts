@@ -1,5 +1,6 @@
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { FIVE_MINUTES, ONE_HOUR, ONE_MINUTE } from '@/common/queries/query-stale-time';
+import { PoxInfo } from '@/common/queries/usePoxInforRaw';
 import { getApiUrl } from '@/common/utils/network-utils';
 import { MICROSTACKS_IN_STACKS } from '@/common/utils/utils';
 
@@ -50,8 +51,11 @@ export interface UIStackingCycle {
   approximateStartTimestamp: number;
   approximateEndTimestamp: number;
   rewardCycleLength: number;
-  startBlockHeight: number;
-  endBlockHeight: number;
+  startBurnBlockHeight: number;
+  startBurnBlockHash: string;
+  startStacksBlockHeight: number;
+  startStacksBlockHash: string;
+  endBurnBlockHeight: number;
 }
 
 export async function fetchRecentBtcBlocks(chain: string, api?: string) {
@@ -81,7 +85,7 @@ export async function fetchRecentStxBlocks(chain: string, api?: string) {
   return response.json();
 }
 
-export async function fetchStackingCycleData(chain: string, api?: string) {
+export async function fetchStackingCycleData(chain: string, api?: string): Promise<PoxInfo> {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/v2/pox`, {
     cache: 'force-cache',
@@ -93,16 +97,37 @@ export async function fetchStackingCycleData(chain: string, api?: string) {
   return response.json();
 }
 
-export async function fetchRecentTxs(chain: string, api?: string) {
+export async function fetchStacksBlock(
+  blockHeightOrHash: string | number,
+  chain: string,
+  api?: string
+): Promise<Block> {
   const apiUrl = getApiUrl(chain, api);
-  const response = await fetch(`${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`, {
+  const fetchUrl = `${apiUrl}/extended/v2/blocks/${blockHeightOrHash}`;
+  const response = await fetch(fetchUrl, {
     cache: 'force-cache',
     next: {
-      revalidate: ONE_MINUTE / 60,
-      tags: ['transactions'],
+      revalidate: ONE_HOUR / 60,
+      tags: ['stacking'],
     },
   });
-  return response;
+  return response.json();
+}
+
+export async function fetchBurnBlock(
+  heightOrHash: string | number,
+  chain: string,
+  api?: string
+): Promise<BurnBlock> {
+  const apiUrl = getApiUrl(chain, api);
+  const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/${heightOrHash}`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: ONE_HOUR / 60,
+      tags: ['stacking'],
+    },
+  });
+  return response.json();
 }
 
 export async function fetchMempoolStats(chain: string, api?: string) {
@@ -163,9 +188,20 @@ export async function fetchCurrentStackingCycle(
 
   const rewardCycleLength = poxData.reward_cycle_length || 0;
 
-  const startBlockHeight =
+  const startBurnBlockHeight =
     current_burnchain_block_height - (reward_cycle_length - next_reward_cycle_in);
-  const endBlockHeight = current_burnchain_block_height + next_reward_cycle_in;
+  const endBurnBlockHeight = current_burnchain_block_height + next_reward_cycle_in;
+
+  // fetch the burn block in order to get its hash and the first stacks block hash
+  const startBurnBlock = await fetchBurnBlock(startBurnBlockHeight, chain, api);
+  const startBurnBlockHash = startBurnBlock.burn_block_hash;
+  const firstStacksBlockHashInStartBurnBlock =
+    startBurnBlock.stacks_blocks?.[startBurnBlock.stacks_blocks?.length - 1];
+
+  // fetch the start stacks block
+  const startStacksBlock = await fetchStacksBlock(firstStacksBlockHashInStartBurnBlock, chain, api);
+  const startStacksBlockHeight = startStacksBlock.height;
+  const startStacksBlockHash = startStacksBlock.hash;
 
   return {
     cycleId,
@@ -176,8 +212,11 @@ export async function fetchCurrentStackingCycle(
     approximateStartTimestamp,
     approximateEndTimestamp,
     rewardCycleLength,
-    startBlockHeight,
-    endBlockHeight,
+    startBurnBlockHeight,
+    startBurnBlockHash,
+    startStacksBlockHeight,
+    startStacksBlockHash,
+    endBurnBlockHeight,
   };
 }
 
@@ -224,6 +263,18 @@ export async function fetchRecentBlocks(chain: string, api?: string): Promise<Re
     },
     stxBlocksCountPerBtcBlock,
   };
+}
+
+export async function fetchRecentTxs(chain: string, api?: string) {
+  const apiUrl = getApiUrl(chain, api);
+  const response = await fetch(`${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`, {
+    cache: 'force-cache',
+    next: {
+      revalidate: ONE_MINUTE / 60,
+      tags: ['transactions'],
+    },
+  });
+  return response;
 }
 
 export async function fetchRecentUITxs(chain: string, api?: string) {

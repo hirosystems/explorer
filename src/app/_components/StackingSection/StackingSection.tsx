@@ -1,8 +1,11 @@
 'use client';
 
 import { useHomePageData } from '@/app/context';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { buildUrl } from '@/common/utils/buildUrl';
 import { formatDateShort } from '@/common/utils/date-utils';
 import { abbreviateNumber } from '@/common/utils/utils';
+import { NextLink } from '@/ui/NextLink';
 import { Text } from '@/ui/Text';
 import { Tooltip } from '@/ui/Tooltip';
 import BitcoinCircleIcon from '@/ui/icons/BitcoinCircleIcon';
@@ -117,7 +120,7 @@ function StxStats() {
         <StxIcon />
       </Icon>
       <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
-        ${abbreviateNumber(stackedStx, 1)} STX{' '}
+        {abbreviateNumber(stackedStx, 1)} STX{' '}
         <Text color="textSecondary" display={'inline'}>
           / ${abbreviateNumber(Math.round(stxPrice * stackedStx), 1)}
         </Text>{' '}
@@ -171,15 +174,19 @@ function CycleProgress() {
 }
 
 function BlockInfo({
-  blockHeight,
+  height,
+  hash,
   isActive = true,
   type,
 }: {
-  blockHeight: string;
+  height: number;
+  hash?: string;
   isActive?: boolean;
   type: 'bitcoin' | 'stacks';
 }) {
-  return (
+  const network = useGlobalContext().activeNetwork;
+
+  let content = (
     <HStack gap={1.5} px={1.5} py={1} borderRadius={'redesign.xs'} bg={'surfaceSecondary'}>
       <Icon
         w={3.5}
@@ -190,7 +197,7 @@ function BlockInfo({
             ? type === 'bitcoin'
               ? 'accent.bitcoin-500'
               : 'accent.stacks-500'
-            : { base: 'neutral.sand-400', _dark: 'neutral.sand-500' }
+            : 'iconTertiary'
         }
       >
         {type === 'bitcoin' ? <BitcoinCircleIcon /> : <StxSquareIcon />}
@@ -200,25 +207,42 @@ function BlockInfo({
         color={isActive ? 'textPrimary' : 'textSecondary'}
         className={'block-height'}
         lineHeight={'redesign.normal'}
-        aria-label={`Block height: ${blockHeight.replace('#', '')}`}
+        aria-label={`Block height: ${height}`}
       >
-        {blockHeight}
+        {`#${height}`}
       </Text>
     </HStack>
   );
+
+  if (isActive) {
+    content = (
+      <NextLink href={buildUrl(`${type === 'bitcoin' ? 'btcblock' : 'block'}/${hash}`, network)}>
+        {content}
+      </NextLink>
+    );
+  }
+
+  return content;
 }
 
 function BlocksSection() {
   const {
-    stackingCycle: { startBlockHeight, endBlockHeight },
+    stackingCycle: {
+      startBurnBlockHeight,
+      startBurnBlockHash,
+      startStacksBlockHeight,
+      startStacksBlockHash,
+      endBurnBlockHeight,
+    },
   } = useHomePageData();
   return (
     <HStack justify={'space-between'} align={'flex-start'}>
       <Flex gap={1.5} flexWrap={'wrap'}>
-        <BlockInfo blockHeight={`~#${startBlockHeight}`} type="bitcoin" />
+        <BlockInfo height={startBurnBlockHeight} hash={startBurnBlockHash} type="bitcoin" />
+        <BlockInfo height={startStacksBlockHeight} hash={startStacksBlockHash} type="stacks" />
       </Flex>
       <Flex gap={1.5} flexWrap={'wrap'} justify={'flex-end'}>
-        <BlockInfo blockHeight={`~#${endBlockHeight}`} type="bitcoin" />
+        <BlockInfo height={endBurnBlockHeight} type="bitcoin" isActive={false} />
       </Flex>
     </HStack>
   );
