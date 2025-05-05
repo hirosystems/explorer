@@ -9,7 +9,7 @@ import {
 import { Text, TextProps } from '@/ui/Text';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
-import StxIcon from '@/ui/icons/StxIcon';
+import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
 import { Clock, Question, XCircle } from '@phosphor-icons/react';
 
@@ -121,7 +121,7 @@ export const FeeCellRenderer = (value: string) => {
   return (
     <Flex alignItems="center" justifyContent="flex-end" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
-        {stx.length > microStx.length ? <MicroStxIcon /> : <StxIcon />}
+        {stx.length > microStx.length ? <MicroStxIcon /> : <StacksIconThin />}
       </Icon>
       <EllipsisText fontSize="sm">
         {stx.length > microStx.length ? `${microStx} µSTX` : `${stx} STX`}
@@ -134,7 +134,7 @@ export const AmountCellRenderer = (value: number) => {
   return (
     <Flex alignItems="center" gap={1}>
       <Icon h={3} w={3} color="textSecondary">
-        <StxIcon />
+        <StacksIconThin />
       </Icon>
       <EllipsisText fontSize="sm">{value} STX</EllipsisText>
     </Flex>
