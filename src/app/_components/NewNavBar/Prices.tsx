@@ -2,7 +2,7 @@ import { TokenPrice } from '@/common/types/tokenPrice';
 import { usdFormatter } from '@/common/utils/utils';
 import { Text } from '@/ui/Text';
 import BitcoinIcon from '@/ui/icons/BitcoinIcon';
-import StxIcon from '@/ui/icons/StxIcon';
+import StacksIconThin from '@/ui/icons/StacksIconThin';
 import { Flex, Icon } from '@chakra-ui/react';
 
 export const Prices = ({ tokenPrices }: { tokenPrices: TokenPrice }) => {
@@ -19,7 +19,7 @@ export const Prices = ({ tokenPrices }: { tokenPrices: TokenPrice }) => {
         bg="surfacePrimary"
       >
         <Icon h={3} w={3} color="iconPrimary">
-          <StxIcon />
+          <StacksIconThin />
         </Icon>
         <Text
           textStyle={{ base: 'text-regular-sm', lg: 'text-regular-xs' }}
