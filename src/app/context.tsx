@@ -47,8 +47,11 @@ const DEFAULT_HOME_PAGE_DATA: HomePageDataContextType = {
     approximateStartTimestamp: 0,
     approximateEndTimestamp: 0,
     rewardCycleLength: 0,
-    startBlockHeight: 0,
-    endBlockHeight: 0,
+    startBurnBlockHeight: 0,
+    startBurnBlockHash: '',
+    startStacksBlockHeight: 0,
+    startStacksBlockHash: '',
+    endBurnBlockHeight: 0,
   },
   mempoolFee: {
     all: DEFAULT_MEMPOOL_FEE,
