@@ -1,3 +1,4 @@
+import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight } from '@phosphor-icons/react';
 
@@ -10,7 +11,6 @@ import { Text } from '../../../ui/Text';
 import BitcoinCircleIcon from '../../../ui/icons/BitcoinCircleIcon';
 import StxSquareIcon from '../../../ui/icons/StxSquareIcon';
 import { BORDER_WIDTH, BTC_BLOCK_MIN_WIDTH, RING_WIDTH } from './consts';
-import { formatTimestamp } from './utils';
 
 export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
   const network = useGlobalContext().activeNetwork;
@@ -85,7 +85,9 @@ export function BtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                 aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
                 suppressHydrationWarning
               >
-                {formatTimestamp(burnBlock.burn_block_time)}
+                {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
+                  useLocalTime: true,
+                })}
               </Text>
             </Stack>
             <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfaceSecondary'}>
@@ -210,7 +212,9 @@ export function NewestBtcBlock({ burnBlock }: { burnBlock: BurnBlock }) {
                     aria-label={`Block timestamp: ${burnBlock.burn_block_time}`}
                     suppressHydrationWarning
                   >
-                    {formatTimestamp(burnBlock.burn_block_time)}
+                    {formatTimestampTo12HourTime(burnBlock.burn_block_time, {
+                      useLocalTime: true,
+                    })}
                   </Text>
                 </Stack>
                 <HStack gap={1.5} p={2} borderRadius={'redesign.md'} bg={'surfacePrimary'}>

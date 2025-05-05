@@ -4,8 +4,6 @@ import { useBlockList } from '@/common/queries/useBlockListInfinite';
 import { HStack } from '@chakra-ui/react';
 import { useMemo } from 'react';
 
-import { Block } from '@stacks/stacks-blockchain-api-types';
-
 import { FadingOverlay } from './FadingOverlay';
 import { NewBlockPlaceholder } from './NewBlockPlaceholder';
 import { StxBlockGroup } from './StxBlock';
