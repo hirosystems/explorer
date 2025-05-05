@@ -1,8 +1,7 @@
 import { UIStxBlock } from '@/app/data';
+import { formatTimestampTo12HourTime } from '@/common/utils/time-utils';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
-
-import { Block } from '@stacks/stacks-blockchain-api-types';
 
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
@@ -11,7 +10,6 @@ import { Text } from '../../../ui/Text';
 import BitcoinCircleIcon from '../../../ui/icons/BitcoinCircleIcon';
 import StxSquareIcon from '../../../ui/icons/StxSquareIcon';
 import { BORDER_WIDTH, BTC_BLOCK_MIN_WIDTH, SMALL_RING_WIDTH } from './consts';
-import { formatTimestamp } from './utils';
 
 export function StxBlockGroup({
   btcBlockHeight,
@@ -89,7 +87,9 @@ export function StxBlockGroup({
                 lineHeight={'redesign.shorter'}
                 suppressHydrationWarning
               >
-                {formatTimestamp(btcBlockTime)}
+                {formatTimestampTo12HourTime(btcBlockTime, {
+                  useLocalTime: true,
+                })}
               </Text>
               <Text
                 textStyle={'text-medium-xs'}
@@ -201,7 +201,9 @@ export function StxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 aria-label={`Block timestamp: ${stxBlock.burn_block_time}`}
                 suppressHydrationWarning
               >
-                {formatTimestamp(stxBlock.burn_block_time)}
+                {formatTimestampTo12HourTime(stxBlock.burn_block_time, {
+                  useLocalTime: true,
+                })}
               </Text>
               <Text
                 textStyle={'text-medium-xs'}
@@ -297,7 +299,9 @@ export function NewestStxBlock({ stxBlock }: { stxBlock: UIStxBlock }) {
                 align={'center'}
               >
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'} suppressHydrationWarning>
-                  {formatTimestamp(stxBlock.block_time)}
+                  {formatTimestampTo12HourTime(stxBlock.block_time, {
+                    useLocalTime: true,
+                  })}
                 </Text>
                 <Text textStyle={'text-medium-xs'} color={'textSecondary'}>
                   {stxBlock.tx_count} tx{stxBlock.tx_count > 1 ? 's' : ''}

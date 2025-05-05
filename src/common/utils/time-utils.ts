@@ -28,3 +28,25 @@ export const formatDate = (
 ): string => {
   return date.toLocaleDateString(locale, options);
 };
+
+export function formatTimestampTo12HourTime(
+  timestamp: number,
+  options?: { useLocalTime?: boolean }
+) {
+  const date = new Date(timestamp * 1000);
+
+  let hours = options?.useLocalTime ? date.getHours() : date.getUTCHours();
+  let minutes = options?.useLocalTime ? date.getMinutes() : date.getUTCMinutes();
+  let seconds = options?.useLocalTime ? date.getSeconds() : date.getUTCSeconds();
+
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+
+  const paddedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+  const tzLabel = options?.useLocalTime ? '' : ' (UTC)';
+
+  return `${hours}:${paddedMinutes}:${paddedSeconds} ${ampm}${tzLabel}`;
+}
