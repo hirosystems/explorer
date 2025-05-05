@@ -253,6 +253,7 @@ export function TxsTable({
       ...prev,
       pageIndex: page.pageIndex,
     }));
+    window?.scrollTo(0, 0); // Smooth scroll to top
   }, []);
 
   const queryClient = useQueryClient();
