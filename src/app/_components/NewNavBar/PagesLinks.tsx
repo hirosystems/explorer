@@ -52,7 +52,6 @@ export const SecondaryPageLink = ({
   onClick?: () => void;
 }) => {
   return (
-    <Flex justifyContent="space-between">
       <Link href={page.href} variant="noUnderline" onClick={onClick}>
         <Text
           fontSize={{ base: 'md', lg: 'xs' }}
@@ -65,6 +64,5 @@ export const SecondaryPageLink = ({
           {page.label}
         </Text>
       </Link>
-    </Flex>
   );
 };
