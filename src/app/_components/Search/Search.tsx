@@ -312,7 +312,6 @@ function HiddenSearchField(props: InputProps) {
 function StartElement() {
   return (
     <Flex
-      // bg={'surfaceSecondary'}
       bg={
         'linear-gradient(to right, var(--stacks-colors-surface-secondary) 0%, var(--stacks-colors-surface-secondary) 70%, transparent 100%)'
       }
@@ -325,18 +324,6 @@ function StartElement() {
       justifyContent={'center'}
       position={'relative'}
     >
-      {/* <Box
-        className="fade-overlay"
-        position={'absolute'}
-        right={-4}
-        top={0}
-        bottom={0}
-        w={4}
-        bg={
-          'linear-gradient(to right, var(--stacks-colors-surface-secondary) 0%, var(--stacks-colors-surface-secondary) 80%, transparent 100%)'
-        }
-      /> */}
-
       <Icon className={'search-icon'} h={4} w={4} color={'iconSecondary'}>
         <MagnifyingGlass />
       </Icon>
