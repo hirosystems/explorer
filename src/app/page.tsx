@@ -1,14 +1,11 @@
-import { TxsTable } from '@/common/components/table/table-examples/TxsTable';
-import { TxTableColumns } from '@/common/components/table/table-examples/types';
-import { Text } from '@/ui/Text';
 import { Flex, Stack } from '@chakra-ui/react';
 
 import { FeeSection } from './_components/FeeSection';
 import { MempoolSection } from './_components/MempoolSection';
 import { NetworkOverview } from './_components/NetworkOverview/NetworkOverview';
-import { RecentBlocks } from './_components/RecentBlocks/RecentBlocks';
+import { RecentBlocksSection } from './_components/RecentBlocks/RecentBlocks';
 import { StackingSection } from './_components/StackingSection/StackingSection';
-import { TXS_LIST_SIZE } from './consts';
+import { TxsSection } from './_components/TxsSection';
 import { HomePageDataProvider } from './context';
 import {
   fetchCurrentStackingCycle,
@@ -43,30 +40,13 @@ export default async function HomeRedesign(props: {
       mempoolFee={mempoolFee}
     >
       <Stack gap={[16, 18, 20, 24]}>
-        <RecentBlocks />
+        <RecentBlocksSection />
         <Flex gap={[20, 20, 20, 2]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
           <StackingSection />
           <NetworkOverview />
         </Flex>
         <Flex gap={[20, 20, 20, 2]} flexDirection={['column', 'column', 'column', 'column', 'row']}>
-          <Stack gap={4} flex={1} maxWidth={['100%', '100%', '100%', '100%', '50%']}>
-            <Text whiteSpace={'nowrap'} textStyle="heading-md" color="textPrimary">
-              Latest transactions
-            </Text>
-            <TxsTable
-              filters={{}}
-              initialData={initialTxTableData}
-              disablePagination
-              pageSize={TXS_LIST_SIZE}
-              displayColumns={[
-                TxTableColumns.Transaction,
-                TxTableColumns.TxType,
-                TxTableColumns.TxId,
-                TxTableColumns.From,
-                TxTableColumns.BlockTime,
-              ]}
-            />
-          </Stack>
+          <TxsSection initialTxTableData={initialTxTableData} />
           <Flex gap={4} flexDirection={['column', 'column', 'column', 'column', 'column']} flex={1}>
             <MempoolSection />
             <FeeSection />

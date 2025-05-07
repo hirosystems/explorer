@@ -39,10 +39,13 @@ export const linkRecipe = defineRecipe({
         },
       },
       buttonLink: {
-        textDecoration: 'none',
+        p: '0 !important',
+        pb: '0.5 !important',
+        textDecoration: 'none !important',
         fontFamily: 'var(--font-instrument-sans)',
         color: 'textPrimary',
-        borderBottom: '2px solid var(--stacks-colors-redesign-border-secondary)',
+        borderBottom: '2px solid',
+        borderColor: 'redesignBorderSecondary',
         _hover: {
           textDecoration: 'none',
           borderBottomColor: 'redesignBorderPrimary',

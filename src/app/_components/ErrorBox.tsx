@@ -4,7 +4,7 @@ import { XCircle } from '@phosphor-icons/react';
 import { useGlobalContext } from '../../common/context/useGlobalContext';
 import { buildUrl } from '../../common/utils/buildUrl';
 import { Button } from '../../ui/Button';
-import { ButtonLink } from '../../ui/ButtonLink';
+import { DeprecatedButtonLink } from '../../ui/DeprecatedButtonLink';
 import { Text } from '../../ui/Text';
 
 export function ErrorBox({
@@ -46,9 +46,9 @@ export function ErrorBox({
       </Flex>
       <Flex gap="16px">
         {homeButton && (
-          <ButtonLink href={buildUrl('/', network)} fontSize={'xs'}>
+          <DeprecatedButtonLink href={buildUrl('/', network)} fontSize={'xs'}>
             Go home
-          </ButtonLink>
+          </DeprecatedButtonLink>
         )}
         {tryAgainButton && (
           <Button onClick={() => reset()} variant="secondary" fontSize={'xs'}>
