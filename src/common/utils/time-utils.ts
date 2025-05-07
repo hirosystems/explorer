@@ -1,4 +1,5 @@
 import { UTCDate } from '@date-fns/utc';
+import { format } from 'date-fns';
 
 import { isStringNumber } from './number-utils';
 
@@ -28,3 +29,12 @@ export const formatDate = (
 ): string => {
   return date.toLocaleDateString(locale, options);
 };
+
+export function formatTimeStamp(
+  timestamp: number,
+  formatString: string = 'yyyy-MM-dd HH:mm:ss'
+): string {
+  const date = new Date(timestamp * 1000);
+  const formatted = format(date, formatString);
+  return formatted;
+}
