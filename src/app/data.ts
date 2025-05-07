@@ -57,9 +57,9 @@ export interface UIStackingCycle {
 export async function fetchRecentBtcBlocks(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v2/burn-blocks/?limit=30&offset=0`, {
-    cache: 'force-cache',
+    cache: 'default',
     next: {
-      revalidate: FIVE_MINUTES / 60,
+      revalidate: 300, // 5 minutes
       tags: ['btc-blocks'],
     },
   });
@@ -71,9 +71,9 @@ export async function fetchRecentStxBlocks(chain: string, api?: string) {
   const response = await fetch(
     `${apiUrl}/extended/v1/block/?limit=${RECENT_STX_BLOCKS_COUNT}&offset=0`,
     {
-      cache: 'force-cache',
+      cache: 'default',
       next: {
-        revalidate: ONE_MINUTE / 60,
+        revalidate: 10, // 10 seconds
         tags: ['stx-blocks'],
       },
     }
@@ -84,9 +84,9 @@ export async function fetchRecentStxBlocks(chain: string, api?: string) {
 export async function fetchStackingCycleData(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/v2/pox`, {
-    cache: 'force-cache',
+    cache: 'default',
     next: {
-      revalidate: ONE_HOUR / 60,
+      revalidate: 60, // 60 seconds
       tags: ['stacking'],
     },
   });
@@ -96,9 +96,9 @@ export async function fetchStackingCycleData(chain: string, api?: string) {
 export async function fetchRecentTxs(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v1/tx/?limit=${TXS_LIST_SIZE}&offset=0`, {
-    cache: 'force-cache',
+    cache: 'default',
     next: {
-      revalidate: ONE_MINUTE / 60,
+      revalidate: 10, // 10 seconds
       tags: ['transactions'],
     },
   });
@@ -108,9 +108,9 @@ export async function fetchRecentTxs(chain: string, api?: string) {
 export async function fetchMempoolStats(chain: string, api?: string) {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v1/tx/mempool/stats`, {
-    cache: 'force-cache',
+    cache: 'default',
     next: {
-      revalidate: FIVE_MINUTES / 60,
+      revalidate: 10, // 10 seconds
       tags: ['mempool-stats'],
     },
   });
@@ -120,9 +120,9 @@ export async function fetchMempoolStats(chain: string, api?: string) {
 export async function fetchMempoolFee(chain: string, api?: string): Promise<MempoolFeePriorities> {
   const apiUrl = getApiUrl(chain, api);
   const response = await fetch(`${apiUrl}/extended/v2/mempool/fees`, {
-    cache: 'force-cache',
+    cache: 'default',
     next: {
-      revalidate: FIVE_MINUTES / 60,
+      revalidate: 10, // 10 seconds
       tags: ['mempool-fee'],
     },
   });

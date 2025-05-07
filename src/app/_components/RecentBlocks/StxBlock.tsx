@@ -2,8 +2,6 @@ import { UIStxBlock } from '@/app/data';
 import { Flex, HStack, Icon, Stack } from '@chakra-ui/react';
 import { CaretRight, Circle } from '@phosphor-icons/react';
 
-import { Block } from '@stacks/stacks-blockchain-api-types';
-
 import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { buildUrl } from '../../../common/utils/buildUrl';
 import { Link } from '../../../ui/Link';

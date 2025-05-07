@@ -1,4 +1,5 @@
 import { UTCDate } from '@date-fns/utc';
+import { format, formatDistanceToNow } from 'date-fns';
 
 import { isStringNumber } from './number-utils';
 
@@ -28,3 +29,18 @@ export const formatDate = (
 ): string => {
   return date.toLocaleDateString(locale, options);
 };
+
+export function formatTimestamp(
+  timestampInSeconds: number,
+  formatString: string = 'yyyy-MM-dd HH:mm:ss'
+): string {
+  const date = new Date(timestampInSeconds * 1000);
+  const formatted = format(date, formatString);
+  return formatted;
+}
+
+export function formatTimestampToRelativeTime(timestampInSeconds: number): string {
+  const date = new Date(timestampInSeconds * 1000);
+  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+  return relativeTime;
+}

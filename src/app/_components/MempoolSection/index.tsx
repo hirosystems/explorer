@@ -2,10 +2,9 @@
 
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
-import { Link } from '@/ui/Link';
+import { ButtonLink } from '@/ui/ButtonLink';
 import { Text } from '@/ui/Text';
-import { HStack, Icon, Stack } from '@chakra-ui/react';
-import { ArrowRight } from '@phosphor-icons/react';
+import { HStack, Stack } from '@chakra-ui/react';
 
 import { TxCountChart } from './TxCountChart';
 
@@ -16,17 +15,13 @@ function SectionHeader() {
       <Text textStyle="heading-md" color="textPrimary">
         Mempool
       </Text>
-      <Link
-        href={buildUrl('/transactions', network)}
-        variant={'buttonLink'}
-        size={'lg'}
-        display={['none', 'inline']}
+      <ButtonLink
+        href={buildUrl('/mempool', network)}
+        buttonLinkSize="big"
+        display={{ base: 'none', sm: 'inline' }}
       >
         View mempool
-        <Icon w={3.5} h={3.5}>
-          <ArrowRight />
-        </Icon>
-      </Link>
+      </ButtonLink>
     </HStack>
   );
 }
@@ -49,10 +44,18 @@ function TxCountSection() {
 }
 
 export function MempoolSection() {
+  const network = useGlobalContext().activeNetwork;
   return (
-    <Stack gap={4} flex={1} height="100%">
+    <Stack gap={6} flex={1} height="100%">
       <SectionHeader />
       <TxCountSection />
+      <ButtonLink
+        href={buildUrl('/mempool', network)}
+        buttonLinkSize="big"
+        display={{ base: 'inline', sm: 'none' }}
+      >
+        View mempool
+      </ButtonLink>
     </Stack>
   );
 }

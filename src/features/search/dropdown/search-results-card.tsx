@@ -16,7 +16,7 @@ import { useAppSelector } from '../../../common/state/hooks';
 import { Network } from '../../../common/types/network';
 import { SearchResultType } from '../../../common/types/search-results';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { ButtonLink } from '../../../ui/ButtonLink';
+import { DeprecatedButtonLink } from '../../../ui/DeprecatedButtonLink';
 import { Text } from '../../../ui/Text';
 import { NoTxs } from '../NoTxs';
 import { SearchResultItem } from '../items/search-result-item';
@@ -190,13 +190,9 @@ export function SearchResultsCard({
         )}
       </Box>
       {totalCount > 5 && (
-        <ButtonLink
-          buttonProps={{ variant: 'secondary', width: 'full' }}
-          linkProps={{ href: searchPageUrl }}
-          mb={6}
-        >
+        <DeprecatedButtonLink href={searchPageUrl} buttonLinkSize="small" mb={6}>
           View {totalCount} results
-        </ButtonLink>
+        </DeprecatedButtonLink>
       )}
     </Section>
   );
