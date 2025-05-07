@@ -9,7 +9,7 @@ import { useGlobalContext } from '../../../common/context/useGlobalContext';
 import { useError } from '../../../common/hooks/useError';
 import { ExplorerError } from '../../../common/types/Error';
 import { buildUrl } from '../../../common/utils/buildUrl';
-import { ButtonLink } from '../../../ui/ButtonLink';
+import { DeprecatedButtonLink } from '../../../ui/DeprecatedButtonLink';
 import { PageTitle } from '../../_components/PageTitle';
 
 const defaultErrorMessage = 'Failed to fetch transaction';
@@ -34,20 +34,17 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink
-                      buttonProps={{ mt: 6 }}
-                      linkProps={{ href: buildUrl('/', network) }}
-                    >
+                    <DeprecatedButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
                       Go home
-                    </ButtonLink>
+                    </DeprecatedButtonLink>
                   </Box>
                   <Box>
-                    <ButtonLink
-                      buttonProps={{ mt: 6, variant: 'secondary' }}
-                      linkProps={{ href: buildUrl('/transactions', network) }}
+                    <DeprecatedButtonLink
+                      href={buildUrl('/transactions', network)}
+                      buttonLinkSize="small"
                     >
                       All transactions
-                    </ButtonLink>
+                    </DeprecatedButtonLink>
                   </Box>
                 </HStack>
               }
