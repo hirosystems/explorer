@@ -59,7 +59,7 @@ export function BtcBlockRowContent({ timestamp, height, hash, isFirst }: BtcBloc
         >
           <ArrowBendDownLeft />
         </Icon>
-        <Icon h={18} w={18} position={'relative'} bottom={'1px'} color="accent.bitcoin-500">
+        <Icon h={4.5} w={4.5} position={'relative'} bottom={'1px'} color="accent.bitcoin-500">
           <BitcoinCircleIcon />
         </Icon>
         {isFirst ? (
