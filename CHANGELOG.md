@@ -1,3 +1,10 @@
+# [1.276.0](https://github.com/hirosystems/explorer/compare/v1.275.3...v1.276.0) (2025-05-07)
+
+
+### Features
+
+* sign bot commits ([#2168](https://github.com/hirosystems/explorer/issues/2168)) ([ecd4a8a](https://github.com/hirosystems/explorer/commit/ecd4a8aeaea3e07f87fac23554dafbba25ca2aa6))
+
 ## [1.275.3](https://github.com/hirosystems/explorer/compare/v1.275.2...v1.275.3) (2025-04-29)
 
 
