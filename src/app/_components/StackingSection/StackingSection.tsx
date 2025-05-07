@@ -69,9 +69,15 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 function CycleHeader() {
   const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
-    <Flex gap="2" height="100%" justify={'space-between'} alignItems={'start'} flexWrap={'wrap'}>
+    <Flex
+      gap="2"
+      height="100%"
+      justify={'space-between'}
+      alignItems={'start'}
+      flexDirection={{ base: 'column', sm: 'row' }}
+    >
       <Stack justify={'space-between'}>
-        <Text textStyle={'heading-xs'} fontStyle={'var(--font-matter-mono'}>
+        <Text textStyle={'heading-xs'} fontFamily="var(--font-matter)" whiteSpace={'nowrap'}>
           Current cycle
         </Text>
         <Flex
@@ -83,7 +89,11 @@ function CycleHeader() {
           py="2"
           width="fit-content"
         >
-          <Text textStyle={'heading-lg'} lineHeight={'redesign.none'}>
+          <Text
+            textStyle={['heading-md', 'heading-lg']}
+            fontFamily="var(--font-matter)"
+            lineHeight={'redesign.none'}
+          >
             {cycleId}
           </Text>
         </Flex>
@@ -102,7 +112,11 @@ function CycleHeader() {
         <Icon w="4" h="4" color={'feedback.green-500'}>
           <ProgressDot />
         </Icon>
-        <Text textStyle={'heading-xs'} whiteSpace={'nowrap'}>
+        <Text
+          textStyle={['text-medium-sm', 'heading-xs']}
+          fontFamily="var(--font-matter)"
+          whiteSpace={'nowrap'}
+        >
           Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
         </Text>
       </Flex>
@@ -121,14 +135,14 @@ function StxStats() {
         <Icon w="4.5" h="4.5">
           <StxIcon />
         </Icon>
-        <Text whiteSpace={'nowrap'} textStyle={'heading-sm'}>
+        <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
           ${abbreviateNumber(stackedStx, 1)} STX
         </Text>
       </Flex>
       &nbsp;
       <Flex alignItems={'center'} gap={0.5}>
         <Text
-          textStyle={'heading-sm'}
+          textStyle={['heading-xs', 'heading-sm']}
           color="textSecondary"
           display={'inline'}
           whiteSpace={'nowrap'}
@@ -136,7 +150,7 @@ function StxStats() {
           / ${abbreviateNumber(Math.round(stxPrice * stackedStx), 1)}
         </Text>
         &nbsp;
-        <Text whiteSpace={'nowrap'} textStyle={'heading-sm'}>
+        <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
           stacked
         </Text>
       </Flex>
