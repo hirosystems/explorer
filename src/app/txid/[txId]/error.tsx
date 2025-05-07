@@ -35,17 +35,13 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
                 <HStack gap={4}>
                   <Box>
                     <ButtonLink
-                      buttonProps={{ mt: 6 }}
-                      linkProps={{ href: buildUrl('/', network) }}
+                      href={buildUrl('/', network)} buttonLinkSize="small"
                     >
                       Go home
                     </ButtonLink>
                   </Box>
                   <Box>
-                    <ButtonLink
-                      buttonProps={{ mt: 6, variant: 'secondary' }}
-                      linkProps={{ href: buildUrl('/transactions', network) }}
-                    >
+                    <ButtonLink href={buildUrl('/transactions', network)} buttonLinkSize="small">
                       All transactions
                     </ButtonLink>
                   </Box>

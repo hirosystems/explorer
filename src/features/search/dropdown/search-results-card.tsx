@@ -191,8 +191,8 @@ export function SearchResultsCard({
       </Box>
       {totalCount > 5 && (
         <ButtonLink
-          buttonProps={{ variant: 'secondary', width: 'full' }}
-          linkProps={{ href: searchPageUrl }}
+          href={searchPageUrl}
+          buttonLinkSize="small"
           mb={6}
         >
           View {totalCount} results

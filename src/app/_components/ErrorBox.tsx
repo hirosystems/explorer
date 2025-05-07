@@ -1,11 +1,10 @@
+import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { buildUrl } from '@/common/utils/buildUrl';
+import { Button } from '@/ui/Button';
+import { ButtonLink } from '@/ui/ButtonLink';
+import { Text } from '@/ui/Text';
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { XCircle } from '@phosphor-icons/react';
-
-import { useGlobalContext } from '../../common/context/useGlobalContext';
-import { buildUrl } from '../../common/utils/buildUrl';
-import { Button } from '../../ui/Button';
-import { ButtonLink } from '../../ui/ButtonLink';
-import { Text } from '../../ui/Text';
 
 export function ErrorBox({
   error,
@@ -46,12 +45,12 @@ export function ErrorBox({
       </Flex>
       <Flex gap="16px">
         {homeButton && (
-          <ButtonLink href={buildUrl('/', network)} fontSize={'xs'}>
+          <ButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
             Go home
           </ButtonLink>
         )}
         {tryAgainButton && (
-          <Button onClick={() => reset()} variant="secondary" fontSize={'xs'}>
+          <Button onClick={() => reset()} variant="secondary" buttonLinkSize="small">
             Try again
           </Button>
         )}
