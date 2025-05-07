@@ -19,6 +19,7 @@ function SectionHeader() {
         href={buildUrl('/mempool', network)}
         buttonLinkSize="big"
         display={['none', 'inline']}
+        mr={2}
       >
         View mempool
       </ButtonLink>

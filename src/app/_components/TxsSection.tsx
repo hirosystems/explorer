@@ -96,6 +96,7 @@ export const TxsSection = ({ initialTxTableData }: { initialTxTableData: any }) 
           href={buildUrl('/transactions', network)}
           buttonLinkSize="big"
           display={{ base: 'none', sm: 'inline' }}
+          mr={2}
         >
           View all transactions
         </ButtonLink>
