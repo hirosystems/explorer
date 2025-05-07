@@ -1,8 +1,6 @@
 'use client';
 
-import { Box, Grid, HStack, Stack } from '@chakra-ui/react';
-import { useEffect } from 'react';
-
+import { PageTitle } from '@/app/_components/PageTitle';
 import { ErrorMessageLayout } from '@/common/components/ErrorMessageLayout';
 import { Section } from '@/common/components/Section';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
@@ -10,7 +8,8 @@ import { useError } from '@/common/hooks/useError';
 import { ExplorerError } from '@/common/types/Error';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { ButtonLink } from '@/ui/ButtonLink';
-import { PageTitle } from '@/app/_components/PageTitle';
+import { Box, Grid, HStack, Stack } from '@chakra-ui/react';
+import { useEffect } from 'react';
 
 const defaultErrorMessage = 'Failed to fetch block';
 

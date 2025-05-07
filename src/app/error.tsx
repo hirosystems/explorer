@@ -1,14 +1,14 @@
 'use client';
 
-import { Box, Grid, HStack } from '@chakra-ui/react';
-import { useEffect } from 'react';
-
 import { ErrorMessageLayout } from '@/common/components/ErrorMessageLayout';
 import { Section } from '@/common/components/Section';
 import { useGlobalContext } from '@/common/context/useGlobalContext';
 import { buildUrl } from '@/common/utils/buildUrl';
 import { Button } from '@/ui/Button';
 import { ButtonLink } from '@/ui/ButtonLink';
+import { Box, Grid, HStack } from '@chakra-ui/react';
+import { useEffect } from 'react';
+
 import { PageTitle } from './_components/PageTitle';
 
 export default function Error({
@@ -39,10 +39,7 @@ export default function Error({
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink
-                      href={buildUrl('/', network)}
-                      buttonLinkSize="small"
-                    >
+                    <ButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
                       Go home
                     </ButtonLink>
                   </Box>

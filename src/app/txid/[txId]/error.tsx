@@ -34,9 +34,7 @@ export default function Error({ error }: { error: ExplorerError; reset: () => vo
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink
-                      href={buildUrl('/', network)} buttonLinkSize="small"
-                    >
+                    <ButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
                       Go home
                     </ButtonLink>
                   </Box>

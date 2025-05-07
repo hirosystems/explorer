@@ -44,7 +44,7 @@ export function RecentBlocks() {
         aria-label="Block view options"
       >
         <HStack gap={0} pb={4} w={'100%'}>
-          <TabsLabel as="span" id="tab-group-label">
+          <TabsLabel as="span" id="tab-group-label" whiteSpace={'nowrap !important'}>
             View by:
           </TabsLabel>
           <TabsList aria-labelledby="tab-group-label">
