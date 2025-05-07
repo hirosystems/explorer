@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/common/state/hooks';
-import { setQuickNavUrl } from '@/features/search/search-slice';
+import { blur, setQuickNavUrl } from '@/features/search/search-slice';
 import { Flex, FlexProps, Icon } from '@chakra-ui/react';
 import { ArrowRight, KeyReturn } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
@@ -86,9 +86,15 @@ export function ResultItem({
   url: string;
   iconType?: 'arrow' | 'enter';
 }) {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   return (
-    <ResultItemWrapper onClick={() => router.push(url)}>
+    <ResultItemWrapper
+      onClick={() => {
+        dispatch(blur());
+        router.push(url);
+      }}
+    >
       <SearchItemTitle>{value}</SearchItemTitle>
       <ResultItemIcon type={iconType} />
     </ResultItemWrapper>
@@ -115,7 +121,12 @@ function TxResultItem({
   }, [dispatch, url]);
   const router = useRouter();
   return (
-    <ResultItemWrapper onClick={() => router.push(url)}>
+    <ResultItemWrapper
+      onClick={() => {
+        dispatch(blur());
+        router.push(url);
+      }}
+    >
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
         {children}
         <TxTag
@@ -242,8 +253,14 @@ export function BnsResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
-    <ResultItemWrapper onClick={() => router.push(url)}>
+    <ResultItemWrapper
+      onClick={() => {
+        dispatch(blur());
+        router.push(url);
+      }}
+    >
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
         <SearchItemTitle href={url}>{bns}</SearchItemTitle>
         <Text fontSize={'sm'} color={'textPrimary'} whiteSpace={'nowrap'}>
@@ -267,8 +284,15 @@ export function BlockResultItem({
   iconType?: 'arrow' | 'enter';
 }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
-    <ResultItemWrapper py={2.5} onClick={() => router.push(url)}>
+    <ResultItemWrapper
+      py={2.5}
+      onClick={() => {
+        dispatch(blur());
+        router.push(url);
+      }}
+    >
       <Flex gap={4} flex={'1 1 auto'} minWidth={0}>
         <SearchItemTitle href={url}>
           <Flex
