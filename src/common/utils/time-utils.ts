@@ -1,4 +1,5 @@
 import { UTCDate } from '@date-fns/utc';
+import { format, formatDistanceToNow } from 'date-fns';
 
 import { isStringNumber } from './number-utils';
 
@@ -30,10 +31,10 @@ export const formatDate = (
 };
 
 export function formatTimestampTo12HourTime(
-  timestamp: number,
+  timestampInSeconds: number,
   options?: { useLocalTime?: boolean }
 ) {
-  const date = new Date(timestamp * 1000);
+  const date = new Date(timestampInSeconds * 1000);
 
   let hours = options?.useLocalTime ? date.getHours() : date.getUTCHours();
   let minutes = options?.useLocalTime ? date.getMinutes() : date.getUTCMinutes();
@@ -49,4 +50,19 @@ export function formatTimestampTo12HourTime(
   const tzLabel = options?.useLocalTime ? '' : ' (UTC)';
 
   return `${hours}:${paddedMinutes}:${paddedSeconds} ${ampm}${tzLabel}`;
+}
+
+export function formatTimestamp(
+  timestampInSeconds: number,
+  formatString: string = 'yyyy-MM-dd HH:mm:ss'
+): string {
+  const date = new Date(timestampInSeconds * 1000);
+  const formatted = format(date, formatString);
+  return formatted;
+}
+
+export function formatTimestampToRelativeTime(timestampInSeconds: number): string {
+  const date = new Date(timestampInSeconds * 1000);
+  const relativeTime = formatDistanceToNow(date, { addSuffix: true });
+  return relativeTime;
 }

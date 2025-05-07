@@ -72,40 +72,58 @@ function ProgressBar({ percentage }: { percentage?: number }) {
 function CycleHeader() {
   const { approximateDaysTilNextCycle, cycleId } = useHomePageData().stackingCycle;
   return (
-    <Stack gap="2" flex="1" height="100%" alignSelf="stretch">
-      <HStack justify={'space-between'} align={['center', 'flex-start']}>
-        <Text textStyle={'heading-xs'}>Current cycle</Text>
-        <HStack
-          borderRadius={['redesign.md', 'redesign.lg']}
-          gap={2}
-          color="textPrimary"
-          boxShadow={'elevation1'}
-          px="3"
-          border={'1px solid'}
-          borderColor={'redesignBorderSecondary'}
-        >
-          <Icon w="4" h="4" color={'feedback.green-500'}>
-            <ProgressDot />
-          </Icon>
-          <Text textStyle={['text-medium-sm', 'heading-xs']}>
-            Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
-          </Text>
-        </HStack>
-      </HStack>
-      <HStack
-        borderRadius={['redesign.xl', 'redesign.2xl']}
-        gap={1.5}
-        color="textPrimary"
-        bg="surfaceTertiary"
-        px="4"
-        py="2"
-        width="fit-content"
-      >
-        <Text textStyle={['heading-md', 'heading-lg']} lineHeight={'redesign.none'}>
-          {cycleId}
+    <Flex
+      gap="2"
+      height="100%"
+      justify={'space-between'}
+      alignItems={'start'}
+      flexDirection={{ base: 'column', sm: 'row' }}
+    >
+      <Stack justify={'space-between'}>
+        <Text textStyle={'heading-xs'} fontFamily="var(--font-matter)" whiteSpace={'nowrap'}>
+          Current cycle
         </Text>
-      </HStack>
-    </Stack>
+        <Flex
+          borderRadius={['redesign.xl', 'redesign.2xl']}
+          gap={1.5}
+          color="textPrimary"
+          bg="surfaceTertiary"
+          px="4"
+          py="2"
+          width="fit-content"
+        >
+          <Text
+            textStyle={['heading-md', 'heading-lg']}
+            fontFamily="var(--font-matter)"
+            lineHeight={'redesign.none'}
+          >
+            {cycleId}
+          </Text>
+        </Flex>
+      </Stack>
+      <Flex
+        borderRadius={['redesign.md', 'redesign.lg']}
+        gap={2}
+        color="textPrimary"
+        boxShadow={'elevation1'}
+        px={3}
+        py={1}
+        border={'1px solid'}
+        borderColor={'redesignBorderSecondary'}
+        alignItems={'center'}
+      >
+        <Icon w="4" h="4" color={'feedback.green-500'}>
+          <ProgressDot />
+        </Icon>
+        <Text
+          textStyle={['text-medium-sm', 'heading-xs']}
+          fontFamily="var(--font-matter)"
+          whiteSpace={'nowrap'}
+        >
+          Ends in ~{approximateDaysTilNextCycle} day{approximateDaysTilNextCycle > 1 ? 's' : ''}
+        </Text>
+      </Flex>
+    </Flex>
   );
 }
 
@@ -115,18 +133,31 @@ function StxStats() {
     stxPrice,
   } = useHomePageData();
   return (
-    <HStack color="textPrimary" gap={[0.5, 1]}>
-      <Icon w="4.5" h="4.5">
-        <StxIcon />
-      </Icon>
-      <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
-        {abbreviateNumber(stackedStx, 1)} STX{' '}
-        <Text color="textSecondary" display={'inline'}>
+    <Flex flexWrap={'wrap'}>
+      <Flex alignItems={'center'} gap={0.5}>
+        <Icon w="4.5" h="4.5">
+          <StxIcon />
+        </Icon>
+        <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
+          ${abbreviateNumber(stackedStx, 1)} STX
+        </Text>
+      </Flex>
+      &nbsp;
+      <Flex alignItems={'center'} gap={0.5}>
+        <Text
+          textStyle={['heading-xs', 'heading-sm']}
+          color="textSecondary"
+          display={'inline'}
+          whiteSpace={'nowrap'}
+        >
           / ${abbreviateNumber(Math.round(stxPrice * stackedStx), 1)}
-        </Text>{' '}
-        stacked
-      </Text>
-    </HStack>
+        </Text>
+        &nbsp;
+        <Text whiteSpace={'nowrap'} textStyle={['heading-xs', 'heading-sm']}>
+          stacked
+        </Text>
+      </Flex>
+    </Flex>
   );
 }
 

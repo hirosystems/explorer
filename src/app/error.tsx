@@ -1,14 +1,14 @@
 'use client';
 
+import { ErrorMessageLayout } from '@/common/components/ErrorMessageLayout';
+import { Section } from '@/common/components/Section';
+import { useGlobalContext } from '@/common/context/useGlobalContext';
+import { buildUrl } from '@/common/utils/buildUrl';
+import { Button } from '@/ui/Button';
+import { DeprecatedButtonLink } from '@/ui/DeprecatedButtonLink';
 import { Box, Grid, HStack } from '@chakra-ui/react';
 import { useEffect } from 'react';
 
-import { ErrorMessageLayout } from '../common/components/ErrorMessageLayout';
-import { Section } from '../common/components/Section';
-import { useGlobalContext } from '../common/context/useGlobalContext';
-import { buildUrl } from '../common/utils/buildUrl';
-import { Button } from '../ui/Button';
-import { ButtonLink } from '../ui/ButtonLink';
 import { PageTitle } from './_components/PageTitle';
 
 export default function Error({
@@ -39,12 +39,9 @@ export default function Error({
               action={
                 <HStack gap={4}>
                   <Box>
-                    <ButtonLink
-                      buttonProps={{ mt: 6 }}
-                      linkProps={{ href: buildUrl('/', network) }}
-                    >
+                    <DeprecatedButtonLink href={buildUrl('/', network)} buttonLinkSize="small">
                       Go home
-                    </ButtonLink>
+                    </DeprecatedButtonLink>
                   </Box>
                   <Box>
                     <Button onClick={() => reset()} variant="secondary" mt={6}>

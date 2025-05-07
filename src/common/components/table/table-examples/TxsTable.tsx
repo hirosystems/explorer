@@ -6,12 +6,12 @@ import { CompressedTxTableData } from '@/app/transactions/utils';
 import { GenericResponseType } from '@/common/hooks/useInfiniteQueryResult';
 import { THIRTY_SECONDS } from '@/common/queries/query-stale-time';
 import { useConfirmedTransactions } from '@/common/queries/useConfirmedTransactionsInfinite';
+import { formatTimestamp } from '@/common/utils/time-utils';
 import {
   microToStacksFormatted,
   truncateHex,
   validateStacksContractId,
 } from '@/common/utils/utils';
-import { useFilterAndSortState } from '@/features/txsFilterAndSort/useFilterAndSortState';
 import { Text } from '@/ui/Text';
 import { Box, Table as ChakraTable, Flex, Icon } from '@chakra-ui/react';
 import { ArrowRight, ArrowsClockwise } from '@phosphor-icons/react';
@@ -70,18 +70,6 @@ export interface TxTableAddressColumnData {
   isContract: boolean;
 }
 
-export function formatBlockTime(timestamp: number): string {
-  const date = new Date(timestamp * 1000);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-}
-
 export function getToAddress(tx: Transaction): string {
   if (tx.tx_type === 'token_transfer') {
     return tx.token_transfer?.recipient_address;
@@ -108,7 +96,7 @@ export function getAmount(tx: Transaction): number {
   return 0;
 }
 
-export const columns: ColumnDef<TxTableData>[] = [
+export const defaultColumnDefinitions: ColumnDef<TxTableData>[] = [
   {
     id: TxTableColumns.Transaction,
     header: 'Transaction',
@@ -170,7 +158,7 @@ export const columns: ColumnDef<TxTableData>[] = [
       </Flex>
     ),
     accessorKey: TxTableColumns.BlockTime,
-    cell: info => TimeStampCellRenderer(formatBlockTime(info.getValue() as number)),
+    cell: info => TimeStampCellRenderer(formatTimestamp(info.getValue() as number)),
     enableSorting: false,
   },
 ];
@@ -232,7 +220,7 @@ export interface TxsTableProps {
   filters: TxPageFilters;
   initialData: GenericResponseType<CompressedTxTableData> | undefined;
   disablePagination?: boolean;
-  displayColumns?: TxTableColumns[];
+  columnDefinitions?: ColumnDef<TxTableData>[];
   pageSize?: number;
 }
 
@@ -240,7 +228,7 @@ export function TxsTable({
   filters,
   initialData,
   disablePagination = false,
-  displayColumns,
+  columnDefinitions,
   pageSize = TX_TABLE_PAGE_SIZE,
 }: TxsTableProps) {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -305,16 +293,6 @@ export function TxsTable({
   const { total, results: txs = [] } = data || {};
   const isTableFiltered = Object.values(filters).some(v => v != null && v !== '');
 
-  // filter data based on active filters, ie transaction type
-  // const { activeFilters } = useFilterAndSortState();
-  // const filteredTxs = useMemo(
-  //   () =>
-  //     activeFilters.length === 0 ? txs : txs?.filter(tx => activeFilters.includes(tx.tx_type)),
-  //   [txs, activeFilters]
-  // );
-
-  // const isTableFiltered = activeFilters.length > 0 || Object.keys(filters)?.length > 0;
-
   const [isSubscriptionActive, setIsSubscriptionActive] = useState(false);
   const [newTxsAvailable, setNewTxsAvailable] = useState(false);
   useSubscribeTxs(isSubscriptionActive, tx => {
@@ -374,20 +352,10 @@ export function TxsTable({
     [txs]
   );
 
-  // filter columns based on displayColumns
-  const tableColumns = useMemo(() => {
-    if (!displayColumns || displayColumns.length === 0) {
-      return columns;
-    }
-    return displayColumns
-      .map(columnId => columns.find(col => col.id === columnId))
-      .filter(Boolean) as ColumnDef<TxTableData>[];
-  }, [displayColumns]);
-
   return (
     <Table
       data={rowData}
-      columns={tableColumns}
+      columns={columnDefinitions ?? defaultColumnDefinitions}
       tableContainerWrapper={table => <TableContainer minH="500px">{table}</TableContainer>}
       scrollIndicatorWrapper={table => <TableScrollIndicator>{table}</TableScrollIndicator>}
       pagination={

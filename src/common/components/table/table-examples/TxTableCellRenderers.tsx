@@ -7,6 +7,7 @@ import {
   truncateStxAddress,
 } from '@/common/utils/utils';
 import { Text, TextProps } from '@/ui/Text';
+import { Tooltip } from '@/ui/Tooltip';
 import ClarityIcon from '@/ui/icons/ClarityIcon';
 import MicroStxIcon from '@/ui/icons/MicroStxIcon';
 import StacksIconThin from '@/ui/icons/StacksIconThin';
@@ -141,8 +142,8 @@ export const AmountCellRenderer = (value: number) => {
   );
 };
 
-export const TimeStampCellRenderer = (value: string) => {
-  return (
+export const TimeStampCellRenderer = (value: string, tooltip?: string) => {
+  const content = (
     <Flex
       alignItems="center"
       justifyContent="flex-end"
@@ -164,6 +165,12 @@ export const TimeStampCellRenderer = (value: string) => {
       </EllipsisText>
     </Flex>
   );
+
+  if (tooltip) {
+    return <Tooltip content={tooltip}>{content}</Tooltip>;
+  }
+
+  return content;
 };
 
 export const IconCellRenderer = (value: React.ReactNode) => {
