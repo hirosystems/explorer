@@ -1,3 +1,10 @@
+## [1.276.1](https://github.com/hirosystems/explorer/compare/v1.276.0...v1.276.1) (2025-05-08)
+
+
+### Bug Fixes
+
+* fixed btc icon size ([01ac1da](https://github.com/hirosystems/explorer/commit/01ac1dae9f8f22cdf447d3ba794e101d1d6260c5))
+
 # [1.276.0](https://github.com/hirosystems/explorer/compare/v1.275.3...v1.276.0) (2025-05-07)
 
 
