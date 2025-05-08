@@ -83,7 +83,5 @@ const recentResults = [
 ];
 
 export const Primary: Story = {
-  args: {
-    recentResults,
-  },
+  args: {},
 };
